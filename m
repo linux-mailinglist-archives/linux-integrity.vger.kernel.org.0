@@ -2,58 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 675A5EC48
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Apr 2019 23:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B47EC49
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Apr 2019 23:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729534AbfD2Vrx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 Apr 2019 17:47:53 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:33117 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729341AbfD2Vrw (ORCPT
+        id S1729543AbfD2Vry (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 Apr 2019 17:47:54 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46452 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729533AbfD2Vrx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 Apr 2019 17:47:52 -0400
-Received: by mail-pf1-f194.google.com with SMTP id z28so684069pfk.0;
-        Mon, 29 Apr 2019 14:47:51 -0700 (PDT)
+        Mon, 29 Apr 2019 17:47:53 -0400
+Received: by mail-pg1-f196.google.com with SMTP id n2so5780569pgg.13;
+        Mon, 29 Apr 2019 14:47:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tiAA+ScOqrpgokB/bI2A0TI/jwnpVeqj9LdR6JH5rDY=;
-        b=QO+jToI9AspTW//i/bLjwWVqcRVIcXqgLo6xASBAZLLLLcFmer2JhKYttxWPUS5fmR
-         35RdRZUXW4IPlwPcRzdc0vbiiyPgRgGJL4Equ0dNPMdKlDFLzfBEs6N+THH9VEDMrRgF
-         wLwYgiVyr1HHGqf+n/n9sufufg5Xq5nKac5PmTC4hiAbJcJq3LaGBopVuXuAAmsnWin8
-         jE0PrIn8kIBtoO/f/TuwGtA7DajxWZ69rOVbRhUYY1YNtDKB2TbgUTecoNVbSVJlEs03
-         GD+SFGu3vBvVqYQpRdyYzrvYqbgZAhLn2wbdmx2kdqr1PDVkSYCDJ073O2u4GQGUnzck
-         vOqA==
+        bh=2t239L7s8Jpz4BJcRnXzFB8xlH6Q+7IBVrC0omZ+eM8=;
+        b=Z6rmpTKN87HmmpMJxAU8VNq3T9zrkpJB/8GgR4Fbe7MNvdBf7pvLPXh30/YUi5PfWI
+         pelqSEa4nKxFA5ujmL0jD3T4qPtT6//MEYg8mhXEgxg1jfSDc56R8pI05rYenNIbHDsb
+         6j2q25wQfU9ji48lZLWzp/H9y8XtVM4C33dlMLAb1cOii4BEWvy6MmSgGkvnlUQI8lc8
+         C5rVNUb4euCZcUrNrNbgDbwW+95xDtafAMJiuF6Z3xrYqvUGak2cli+GqM6v2011YcP9
+         N2kExtGOS8T4MJG7CYkDe3nC48L210VvRBHGRhFv6x+TsjS11NVCVLmNkvDNthgpPyjb
+         bGbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tiAA+ScOqrpgokB/bI2A0TI/jwnpVeqj9LdR6JH5rDY=;
-        b=FeQx762VaLFsH4vyfsj9xKpz5svm1Z4UlzCF+uG7xC/yh9Hv9zatnmdgV9cMEDNjg6
-         DIZtaEwOLcER+RWJYtSYN/7YafyXq4O9FeYa0SeP3AOW4L2eyJxA8i2Kl3hQjIpbdRdB
-         anAA1DoOYqHP+vJux8QE8Mqx0ov71qCC774aWptPGXd+Qpp/0zEouozWU77XgHoHy5Tq
-         gBby2XFeEjTiiEJ+SAao5d/RWEnAksQTvwFKC1knRR0sr9zRePZ8Of7FZgDdN4Cc3CHI
-         QHOin1907++jQR6TlX8xAEbaQGrcceU+Fhts4OKnadhKWJJsmThO96P/0CJ/nqpqWeci
-         ofXQ==
-X-Gm-Message-State: APjAAAUmfieqMnkNI3/DnYtffN3Gomke1C3lEYc1FFPMEi6eTGp2lwX/
-        P6IdPvsPXQSGJvCEpW8ccIFuqlSgUYU=
-X-Google-Smtp-Source: APXvYqz4aE8Jf2gWOZfB26bgGisMVRY08iPh62yu86FZmHRZNA1Yc+0YNknkY8kW7xLjaUdxzzPP8w==
-X-Received: by 2002:a62:2a44:: with SMTP id q65mr33131002pfq.226.1556574471359;
-        Mon, 29 Apr 2019 14:47:51 -0700 (PDT)
+        bh=2t239L7s8Jpz4BJcRnXzFB8xlH6Q+7IBVrC0omZ+eM8=;
+        b=H/gdi6/d308qpe8sYbtSSOvErbKgxQYS/+q9FSoBC4YU9G66Havie8/9KNu+nae6qJ
+         /7frSLz95cABjabj6Jt6u2oSPLx6QpTAABKsiywPPA3tZB5TFD5MXjMjxg0gyM7Lo2xd
+         dmRJGFWb7ojkZJkeuWx86PM/JNysx3yvUhp2bXBz1iQV0ZnjUpqJVsqE7JbLjR1j9bE7
+         FAswwvlZPS8J+0J0SoFeKT9pqxipjpeoHrPRZa2eyIVr3EU9DdQ1p/nh6LlYvwk8HOpR
+         50LL3cuOGG8x41m3hx4Fed+t8VjYbfGdb0Sw1bHTcYL7QRgsfRq9RlmfL9mMrc4B6E1A
+         fTGA==
+X-Gm-Message-State: APjAAAWNGiH8dmktt/3OkT6x6OKz8jvqmsal+bpTTxDvdVU2NekoQRfF
+        JPmEoYr6DW6BnAbfCqn6t8LXRbTPYWE=
+X-Google-Smtp-Source: APXvYqxE08yrbx73yKN40LZmc8jwSD+97+3LuZyJMiRw1GAaoDobYCgOeh7WoQrueIiSqQ9qDQYlnQ==
+X-Received: by 2002:a63:fa46:: with SMTP id g6mr62610333pgk.382.1556574472952;
+        Mon, 29 Apr 2019 14:47:52 -0700 (PDT)
 Received: from prsriva-linux.corp.microsoft.com ([2001:4898:80e8:9:445d:9822:2ddb:fb8c])
-        by smtp.gmail.com with ESMTPSA id f66sm1941623pfg.55.2019.04.29.14.47.50
+        by smtp.gmail.com with ESMTPSA id f66sm1941623pfg.55.2019.04.29.14.47.51
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 14:47:50 -0700 (PDT)
+        Mon, 29 Apr 2019 14:47:51 -0700 (PDT)
 From:   Prakhar Srivastava <prsriva02@gmail.com>
 X-Google-Original-From: Prakhar Srivastava
 To:     linux-integrity@vger.kernel.org,
         linux-secuirty-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     zohar@linux.ibm.com, ebiederm@xmission.com, vgoyal@redhat.com,
         nayna@linux.ibm.com, Prakhar Srivastava <prsriva02@gmail.com>
-Subject: [PATCH v3 1/4] added a new ima policy func buffer_check, and ima hook to measure the buffer hash into ima
-Date:   Mon, 29 Apr 2019 14:47:40 -0700
-Message-Id: <20190429214743.4625-2-prsriva02@gmail.com>
+Subject: [PATCH v3 2/4] add the buffer to the xattr
+Date:   Mon, 29 Apr 2019 14:47:41 -0700
+Message-Id: <20190429214743.4625-3-prsriva02@gmail.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190429214743.4625-1-prsriva02@gmail.com>
 References: <20190429214743.4625-1-prsriva02@gmail.com>
@@ -66,204 +66,112 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Prakhar Srivastava <prsriva02@gmail.com>
 
-added a new ima policy func buffer_check, and ima hook to
- measure the buffer hash into ima logs.
+add the buffer to the xattr for a buffer case
 
 Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
 ---
- Documentation/ABI/testing/ima_policy |  1 +
- include/linux/ima.h                  |  5 ++
- security/integrity/ima/ima.h         |  1 +
- security/integrity/ima/ima_api.c     |  1 +
- security/integrity/ima/ima_main.c    | 89 ++++++++++++++++++++++++++++
- security/integrity/ima/ima_policy.c  |  8 +++
- 6 files changed, 105 insertions(+)
+ security/integrity/ima/ima_main.c         | 37 ++++++++++++++++++++---
+ security/integrity/ima/ima_template_lib.c |  3 +-
+ security/integrity/integrity.h            |  1 +
+ 3 files changed, 35 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index 74c6702de74e..12cfe3ff2dea 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -29,6 +29,7 @@ Description:
- 		base: 	func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK]
- 				[FIRMWARE_CHECK]
- 				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
-+				[BUFFER_CHECK]
- 			mask:= [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
- 			       [[^]MAY_EXEC]
- 			fsmagic:= hex value
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index dc12fbcf484c..f0abade74707 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -26,6 +26,8 @@ extern int ima_read_file(struct file *file, enum kernel_read_file_id id);
- extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 			      enum kernel_read_file_id id);
- extern void ima_post_path_mknod(struct dentry *dentry);
-+extern void ima_buffer_check(const void *buff, int size,
-+				const char *eventname);
- 
- #ifdef CONFIG_IMA_KEXEC
- extern void ima_add_kexec_buffer(struct kimage *image);
-@@ -92,6 +94,9 @@ static inline void ima_post_path_mknod(struct dentry *dentry)
- 	return;
- }
- 
-+static inline void ima_buffer_check(const void *buff, int size,
-+		const char *eventname)
-+{}
- #endif /* CONFIG_IMA */
- 
- #ifndef CONFIG_IMA_KEXEC
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index d213e835c498..de70df132575 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -184,6 +184,7 @@ static inline unsigned long ima_hash_key(u8 *digest)
- 	hook(KEXEC_KERNEL_CHECK)	\
- 	hook(KEXEC_INITRAMFS_CHECK)	\
- 	hook(POLICY_CHECK)		\
-+	hook(BUFFER_CHECK)		\
- 	hook(MAX_CHECK)
- #define __ima_hook_enumify(ENUM)	ENUM,
- 
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index c7505fb122d4..cb3f67b366f1 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -169,6 +169,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
-  *		subj=, obj=, type=, func=, mask=, fsmagic=
-  *	subj,obj, and type: are LSM specific.
-  *	func: FILE_CHECK | BPRM_CHECK | CREDS_CHECK | MMAP_CHECK | MODULE_CHECK
-+ *	| BUFFER_CHECK
-  *	mask: contains the permission mask
-  *	fsmagic: hex value
-  *
 diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 357edd140c09..3db3f3966ac7 100644
+index 3db3f3966ac7..7362952ab273 100644
 --- a/security/integrity/ima/ima_main.c
 +++ b/security/integrity/ima/ima_main.c
-@@ -576,6 +576,95 @@ int ima_load_data(enum kernel_load_data_id id)
- 	return 0;
+@@ -603,16 +603,37 @@ static int process_buffer_measurement(const void *buff, int size,
+ 		struct ima_digest_data hdr;
+ 		char digest[IMA_MAX_DIGEST_SIZE];
+ 	} hash;
++		struct buffer_xattr {
++		enum evm_ima_xattr_type type;
++		u16 buff_length;
++		unsigned char buff[0];
++	};
++
+ 	int violation = 0;
+ 	int pcr = CONFIG_IMA_MEASURE_PCR_IDX;
++	struct buffer_xattr *buffer_event_data = NULL;
++	int alloc_length = 0;
++	int action = 0;
+ 
+ 	if (!buff || size ==  0 || !eventname)
+ 		goto err_out;
+ 
+-	if (ima_get_action(NULL, cred, secid, 0, BUFFER_CHECK, &pcr)
+-		!= IMA_MEASURE)
++	action = ima_get_action(NULL, cred, secid, 0, BUFFER_CHECK, &pcr);
++	if (!(action & IMA_AUDIT) && !(action & IMA_MEASURE))
++		goto err_out;
++
++	alloc_length = sizeof(struct buffer_xattr) + size;
++	buffer_event_data = kzalloc(alloc_length, GFP_KERNEL);
++	if (!buffer_event_data)
+ 		goto err_out;
+ 
++	buffer_event_data->type = IMA_XATTR_BUFFER;
++	buffer_event_data->buff_length = size;
++	memcpy(buffer_event_data->buff, buff, size);
++
++	event_data.xattr_value = (struct evm_ima_xattr_data *)buffer_event_data;
++	event_data.xattr_len = alloc_length;
++
+ 	memset(iint, 0, sizeof(*iint));
+ 	memset(&hash, 0, sizeof(hash));
+ 
+@@ -630,17 +651,23 @@ static int process_buffer_measurement(const void *buff, int size,
+ 	if (ret < 0)
+ 		goto err_out;
+ 
+-	ret = ima_store_template(entry, violation, NULL,
++	if (action & IMA_MEASURE)
++		ret = ima_store_template(entry, violation, NULL,
+ 					buff, pcr);
++
+ 	if (ret < 0) {
+ 		ima_free_template_entry(entry);
+ 		goto err_out;
+ 	}
+ 
+-	return 0;
++	if (action & IMA_AUDIT)
++		ima_audit_measurement(iint, event_data.filename);
++
++	ret = 0;
+ 
+ err_out:
+-	pr_err("Error in adding buffer measure: %d\n", ret);
++	kfree(buffer_event_data);
++	pr_debug("%s return: %d\n", __func__, ret);
+ 	return ret;
  }
  
-+/*
-+ * process_buffer_measurement - Measure the buffer passed to ima log.
-+ * (Instead of using the file hash the buffer hash is used).
-+ * @buff - The buffer that needs to be added to the log
-+ * @size - size of buffer(in bytes)
-+ * @eventname - this is eventname used for the various buffers
-+ * that can be measured.
-+ *
-+ * The buffer passed is added to the ima logs.
-+ * If the sig template is used, then the sig field contains the buffer.
-+ *
-+ * On success return 0.
-+ * On error cases surface errors from ima calls.
-+ */
-+static int process_buffer_measurement(const void *buff, int size,
-+				const char *eventname, const struct cred *cred,
-+				u32 secid)
-+{
-+	int ret = -EINVAL;
-+	struct ima_template_entry *entry = NULL;
-+	struct integrity_iint_cache tmp_iint, *iint = &tmp_iint;
-+	struct ima_event_data event_data = {iint, NULL, NULL,
-+					    NULL, 0, NULL};
-+	struct {
-+		struct ima_digest_data hdr;
-+		char digest[IMA_MAX_DIGEST_SIZE];
-+	} hash;
-+	int violation = 0;
-+	int pcr = CONFIG_IMA_MEASURE_PCR_IDX;
-+
-+	if (!buff || size ==  0 || !eventname)
-+		goto err_out;
-+
-+	if (ima_get_action(NULL, cred, secid, 0, BUFFER_CHECK, &pcr)
-+		!= IMA_MEASURE)
-+		goto err_out;
-+
-+	memset(iint, 0, sizeof(*iint));
-+	memset(&hash, 0, sizeof(hash));
-+
-+	event_data.filename = eventname;
-+
-+	iint->ima_hash = &hash.hdr;
-+	iint->ima_hash->algo = ima_hash_algo;
-+	iint->ima_hash->length = hash_digest_size[ima_hash_algo];
-+
-+	ret = ima_calc_buffer_hash(buff, size, iint->ima_hash);
-+	if (ret < 0)
-+		goto err_out;
-+
-+	ret = ima_alloc_init_template(&event_data, &entry);
-+	if (ret < 0)
-+		goto err_out;
-+
-+	ret = ima_store_template(entry, violation, NULL,
-+					buff, pcr);
-+	if (ret < 0) {
-+		ima_free_template_entry(entry);
-+		goto err_out;
-+	}
-+
-+	return 0;
-+
-+err_out:
-+	pr_err("Error in adding buffer measure: %d\n", ret);
-+	return ret;
-+}
-+
-+/**
-+ * ima_buffer_check - based on policy, collect & store buffer measurement
-+ * @buf: pointer to buffer
-+ * @size: size of buffer
-+ * @eventname: event name identifier
-+ *
-+ * Buffers can only be measured, not appraised.  The buffer identifier
-+ * is used as the measurement list entry name (eg. boot_cmdline).
-+ */
-+void ima_buffer_check(const void *buf, int size, const char *eventname)
-+{
-+	u32 secid;
-+
-+	if (buf && size != 0 && eventname) {
-+		security_task_getsecid(current, &secid);
-+		process_buffer_measurement(buf, size, eventname,
-+				current_cred(), secid);
-+	}
-+}
-+
-+
- static int __init init_ima(void)
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index 513b457ae900..d22de3d8fcd9 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -383,7 +383,8 @@ int ima_eventsig_init(struct ima_event_data *event_data,
  {
- 	int error;
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index e0cc323f948f..b12551ed191c 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -291,6 +291,12 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- {
- 	int i;
+ 	struct evm_ima_xattr_data *xattr_value = event_data->xattr_value;
  
-+	// Incase of BUFFER_CHECK, Inode is NULL
-+	if (!inode) {
-+		if ((rule->flags & IMA_FUNC) && (rule->func == func))
-+			return true;
-+		return false;
-+	}
- 	if ((rule->flags & IMA_FUNC) &&
- 	    (rule->func != func && func != POST_SETATTR))
- 		return false;
-@@ -869,6 +875,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 				entry->func = KEXEC_INITRAMFS_CHECK;
- 			else if (strcmp(args[0].from, "POLICY_CHECK") == 0)
- 				entry->func = POLICY_CHECK;
-+			else if (strcmp(args[0].from, "BUFFER_CHECK") == 0)
-+				entry->func = BUFFER_CHECK;
- 			else
- 				result = -EINVAL;
- 			if (!result)
+-	if ((!xattr_value) || (xattr_value->type != EVM_IMA_XATTR_DIGSIG))
++	if ((!xattr_value) || !((xattr_value->type == EVM_IMA_XATTR_DIGSIG) ||
++		(xattr_value->type == IMA_XATTR_BUFFER)))
+ 		return 0;
+ 
+ 	return ima_write_template_field_data(xattr_value, event_data->xattr_len,
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 7de59f44cba3..14ef904f091d 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -74,6 +74,7 @@ enum evm_ima_xattr_type {
+ 	EVM_IMA_XATTR_DIGSIG,
+ 	IMA_XATTR_DIGEST_NG,
+ 	EVM_XATTR_PORTABLE_DIGSIG,
++	IMA_XATTR_BUFFER,
+ 	IMA_XATTR_LAST
+ };
+ 
 -- 
 2.19.1
 
