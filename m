@@ -2,38 +2,39 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC3F12016
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 May 2019 18:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DD612024
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 May 2019 18:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726338AbfEBQ0i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 May 2019 12:26:38 -0400
-Received: from sonic308-8.consmr.mail.bf2.yahoo.com ([74.6.130.47]:33911 "EHLO
+        id S1726300AbfEBQ3F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 May 2019 12:29:05 -0400
+Received: from sonic308-8.consmr.mail.bf2.yahoo.com ([74.6.130.47]:45791 "EHLO
         sonic308-8.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726329AbfEBQ0i (ORCPT
+        by vger.kernel.org with ESMTP id S1726283AbfEBQ3F (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 May 2019 12:26:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1556814397; bh=4PgbqVnvHOQkUk3YG4PidmP1RHiYRTKxgvCKv2qGFds=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=NlEn64f9wIy74YHwaX7rTyoZLz1CsP60rIouktR01XF/phcxjejrFpEyeT9lWPf/fV1EP8aXKwxBx6uNnJ58KN/1U9S2dXBpKCMiiMBTM+4T2y8vaRVt+PwmRLMXfjCPjLIOmaqKx7NYfBAnk2onWmepVdD2B8C5XFiuTAmJCY5h04ZK+eDUzlM6qqHHfWH7o86YKudh/5N+iyAxTGQ7jp7IFqk8rZIXCzy0GN73Ev/y8RL9SQW+tKCrViF7lL746c+sqn9kdfrOc8dTiouweqg5l7jn4IvLBrIJex+g1twLTBGdhghzc8jgCmdl1sGZuefsMVzxRlOGILsm2RFSiA==
-X-YMail-OSG: v1ft5gMVM1kVZeTpHCyFvDoJ6nhxxeayX7D1x3kizyyCsuGnYX.uALbteJM6lzS
- X1gi51Qt8bQacimWdA9VvgwHHf4D5u.Pm6KEokoPLMdGI9FSlYyekFocVqUwoQrZG1U5.i1QW_qR
- Pe.ydTnqpI_EYa1sAYxhJMK0qZnuGdr_6IKHmG3Ch4OBeX0MRynJQdv4_iHBmgrlCoG1x087OOmG
- 9Svy4nD8VCyAlrRvRr_sRITOettukAimLiOXgf2tkFLDJGPWE.Q40nS9trkoo61b_D5Qibg7Ocnu
- mGnr7vS5EI2sv5zpI81LF4sleXeS3EHX_2LQarviZfpqwZ6gGekavlqH6mXcC342AnKwSiS.tXL7
- DPpN_P6e4z.ybisQKyN4cyowL3ACXZkQXpQjTLftjjk_gumjj_fmdFpImlsHXfhkX8.fndVQ0W.k
- InDW.AvkYlzJ7HVbIDxaAG0iFnli9lp99rblsVyh5z1auqbhizyPmD7_6zeHt0.xOAiCWEJ4vmsn
- lwaluspgwfNkxU1WDSpdBlKqvL9YT.Wnuz2OO8mXROxPDaAM8aAOnEuIt3DPH6LjA9LZ0suDoOWL
- ODIxr2e40AStAo8A4O1bfxtWG3FJJZkHVf1Gad_Jql1ysoZbDJS10L3QIkKg2hHVTitS2MjsyHGn
- UST6VHDMXFCEdzsRRV6VkyNsZDmXoHRBWYD9jR7HF5rMb_x6rOBCoePPCnd.tIUSz4Vi5aRu.KkN
- O0ZTT4WPEyGExim0Kkp3b8DD9TY1EJwvUsUoU3BDznDhkSy8p7dQbwK5ACaDRVXix2xhIbKtN7Lm
- HFzoUMYqeCSA_8ZOxHnrREZg1TEyWfjZvoegIDgO2ez6J0zu1LGNNqRsmIwEQkHkpaGQ_HPACZNs
- D.Ig067Cs55LtsmgE7rDOexn4t_Uo36e9LcoAJ2PUwMQgPF47GEJXX_n1g94Pje5FbfaK6Eg2sVe
- mk1zmhfnFqaWgLkVnCrwWkGW8Bl.L7YMJwQsLKb7ewF342utHEk._xTHUM1i3PIStbHiw.6l73rq
- P2l.MxMvbE.CmZE6gW42Kn4vr9vZVDjLOz_zyKUt7bYqGvZKs6KSI9.kD6yY3_Y9EGLc.3bsPnsb
- 19pWRYv4QIHeDuBFn7Md0kSFv7xODdGoeG2YKJDxztfPsAAxLhSHhf0ZDlnS0JCsEtfjaGg6oXen
- rnJsLBtlPipw_FlPL8sahzSy9DwCK_Q--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.bf2.yahoo.com with HTTP; Thu, 2 May 2019 16:26:37 +0000
+        Thu, 2 May 2019 12:29:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1556814543; bh=H2HJJesMA20BcYlJ+IOaax9VIeLCiinnSIhrnVVMHXE=; h=From:Subject:To:Cc:References:Date:In-Reply-To:From:Subject; b=KlNxglbHKJOisGlvlPTmrXU+egzI9pXzdY9co9OQCrQIAyfXMaKzspmvgGItp8d5W8O7cmUhkQmDXSb1FHfjLaehQUCwZtPhC+1LqV2h1GGzMuOrsHvn2KtQPr2xLFbzaerZStbnGPtU4mzd4NZQvhRSHxqxSJZRsFWfH4BHOs79n9oqorgzsEJMa0oMOEF3xud07AJ6ZGEQ1AJ4ybF79s1Lc9JrIPBmoD3D545rx8lptLpWCmfT7YS64cqTqn2xd8EBE3uBva5ReVUNM5Y1+W37/uTEntbWtUevesUnp+3uUDjIzxbBUS4nWuJlKNs21pC2Km59lowKwBJP8FTaOw==
+X-YMail-OSG: KTxj1FUVM1mLqkxD6A.OYugj.k8xCJODq.rjAJmhegyCATWb6r2dAuIZjCJR3Mz
+ wbgoL4DCYzB27TxZ78xDMyJupXa1Y3M9ROGneF3Q8U.O3mbGGHUc_wxnXewhtsWWDlBTThcdrPXT
+ bQdlCg.99Ds_4rpJSiO40mACqAGTU51nT.dF29EZQFJYzVHA8HuJk0OjUG4LwEs2M1Ur2eDea23y
+ bCoFpbF6IDq8OmslgvdQQFXIVbET0KYeHSFaP19qL7Ku1Cs5V8Bw7Ow4gzt8Aq9R32FSrP22Q9u6
+ dqf1mZLKVcKPXUCf5mO9bX_u20E0vL4eq6WSWCfht20fe2K2Z05cWmShpdOkIVlQw2ZMiWvtpPIM
+ lVherVpi04Hb9kQhsDDlMQ65raphU0t2l09Q1CXle.gREWoo9ceYOP5rGt71x3EVsaSelbLUoY_a
+ jLpVsWg9.EYsxy0fDdpsNIdY0Vlt8tLvL6Z1VZciaonhTHSTdv9ni.3QYWnGKkbFpT6EsZ6KJBP2
+ AppPJDGh82inBJqCmNBGFpjP5om0aDTuX_8brYDTXzmZQbb0xmMRlKppwV4kN4r672i2u.9Weq9t
+ i5m5aQj5qJqhjWAM85EsHZ429Hz9KLso2vnydrkcWpwvDJ_6nkmGPaWD89m.aFuoFdseNR0rFwef
+ jpi5Nu9yR4.LNoTC4AMs1ROel.5tAUFP4ZJiL_Pb9j3O8_XWwWx0hiY8xTRowgCR1HjmFGpCgtdy
+ DyVgzD9lGG9OGTmjGA6ZMX0.vOX2BmZnZMKpS2V1_gRhObhwQ404H3lsRzGYWfR.3QT_jzx8gITg
+ W01U4uwnOh1f_ZFW1ytq5trh8f4TtzQfbvyYICC7D9.qAx5GWeHF55LCJf9O.l81F9TcQZax1mmE
+ aqawpk7sKdGTY8XQZomVyiPGbw0v391uelBU.JpQK.GcQSLD0cy6PTJrv73dsBLlzeJDl3bER73V
+ oawUN2yM4kjBjsTVrSnS2oagktVBSTseB6g57sEWrCpbcm90A6kwL9wtK.Zev6R_1vZrNiF21gvh
+ XPGhdWlG603NAzY2.1_3nEAplhVTcbIHON7.gA70AW4vOFI5lQetDoQ6_uWrJboC6QcJ52xfm23_
+ q49EX5GuVmd9OD.NpbICukcA4E8Q_FCH_2swnfSN5pmHfZSfY4wVgggnBOFfuOfowreS8FJOHbo3
+ Llyw.duZKK.dVunulCC.DA1fz9JNEuafa
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.bf2.yahoo.com with HTTP; Thu, 2 May 2019 16:29:03 +0000
 Received: from c-67-169-65-224.hsd1.ca.comcast.net (EHLO [192.168.0.103]) ([67.169.65.224])
-          by smtp414.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID c5863758f5d33a2aa8aed50d6f642b99;
-          Thu, 02 May 2019 16:26:36 +0000 (UTC)
+          by smtp402.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 1fa7d2e534e1a0e9e92015fab12bde34;
+          Thu, 02 May 2019 16:29:00 +0000 (UTC)
+From:   Casey Schaufler <casey@schaufler-ca.com>
 Subject: Re: [PATCH] kexec_buffer measure
 To:     Mimi Zohar <zohar@linux.ibm.com>,
         prakhar srivastava <prsriva02@gmail.com>
@@ -45,9 +46,8 @@ Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
 References: <CAEFn8qKkXgxUKtribbtFwvG9NykGQo10jQ5Du_i9wJz-wKreOA@mail.gmail.com>
  <1555978681.4914.305.camel@linux.ibm.com>
  <1556812101.4134.28.camel@linux.ibm.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Message-ID: <a30f7742-8368-be0c-4bab-28bcce0966aa@schaufler-ca.com>
-Date:   Thu, 2 May 2019 09:26:34 -0700
+Message-ID: <7af61ebe-28a8-799c-fe47-d72f247494ed@schaufler-ca.com>
+Date:   Thu, 2 May 2019 09:28:57 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
@@ -77,11 +77,10 @@ On 5/2/2019 8:48 AM, Mimi Zohar wrote:
 >> kexec boot command line, but will you ever want to verify or audit log
 >> the boot command line hash?????Perhaps LSMs would be interested in the
 >> boot command line. ??Should this be an LSM hook?
->  From an LSM perspective, is there any interest in the boot command line?
+>   From an LSM perspective, is there any interest in the boot command line?
 
 I can imagine an LSM that cares about the command line,
-but I have an interest in it for any work I have in progress.
+but I don't have interest in it for any work I have in progress.
 
->
 > Mimi
 >
