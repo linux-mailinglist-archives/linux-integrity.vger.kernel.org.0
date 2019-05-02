@@ -2,79 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBC410349
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 May 2019 01:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C3611383
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 May 2019 08:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbfD3XYq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Apr 2019 19:24:46 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:36968 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726086AbfD3XYq (ORCPT
+        id S1726186AbfEBGps (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 May 2019 02:45:48 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39582 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725772AbfEBGps (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Apr 2019 19:24:46 -0400
-Received: by mail-io1-f68.google.com with SMTP id a23so13753920iot.4
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Apr 2019 16:24:46 -0700 (PDT)
+        Thu, 2 May 2019 02:45:48 -0400
+Received: by mail-wm1-f66.google.com with SMTP id n25so1071498wmk.4;
+        Wed, 01 May 2019 23:45:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NOYR2KhGhZxyg8lu/GHuX/TFhKe+D8ltW1/3GJ59UFc=;
-        b=WbRfaE6UGT3VK/yxlTLxooQrKvs+QGkNF9jGn5kjVq3kxzbzCm3mZHAh+LlUWlJzpp
-         7YtEqKUaIAl4iJagxsqSo0qddRTZAYCoUVdsArvNuzb4mAz93lDqFYQ/HVWYiRPuk/+P
-         +/wyaDExYTJo2Cpq/8KQgMChUR4Grx/I9k746VJPEy91ci7yMZjn5J3c1d0pKtl3V19x
-         6CjBVdTtz43Nx9Twv6I8P1692mDgqYS+Rt68inGULKFLY4BrH3riRVowNHyEqtnrWCw4
-         6BM0Q8ahoNqXQEZMFqwwCXo57dY9/jrSKFjYyYgny4ni4QAAI0x12HKS+AP0cVMIvSbQ
-         QRqw==
+        bh=Q5TbwoEekfcdWv0mvvbYsS+6EAW/pbX53UiDfesuTQE=;
+        b=NkDrQqdzsz7vqv7J7Z+qWoH4I7sKeTclvlPsys8BOFZ/pGQEYnXZiqU468Xukcb5ej
+         EaTL3lS7Ua692kp9CFF3u5r8eLdUc9fAq9fA2aMWDK22JbzSO6AvHTTUOTiUcg5mb8hv
+         n7afcTWrB5ZVtZLFViHCYbdHOwFb2ujoIWMc23aM9q3zlVlfdqYktm8mshhlYmhvtA/u
+         n4D2ltETl+EXDtC2UY+W71va/YDbalvSMIpcC4oidwuT0LzdvKhS62Xkc6PklohFVSjl
+         b9H9uGD+Ao4lz/rzP/fvn2hWFSaH7iawNpgUJsrD5NcEyDRVqpmovOAQiU8NViCtYGx/
+         uoRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NOYR2KhGhZxyg8lu/GHuX/TFhKe+D8ltW1/3GJ59UFc=;
-        b=trqrqxT0SSzPJChsh0yWaU1AsGq7uVbyiSpQAU0XWmObDpiNiPg1SzJROhK3gKJbot
-         Pu2/bI0EMQuc2CvkeF17r8+Vn0MBpgZX+J+BE8Y+REKKfwG2eMDgTZS3/d1KHXOijkkx
-         aZP/RkIM5I/s9a1B3aODmL88RMhZSNX8haDnw6pGw+Sywek7G7dgkyLavQAIP37myn0Z
-         Xlm6reRev9apfyBnAe0hHW+OnDlXjcRU27qbPT0HzRUpVglx5zclQf06hfb6e5kb6Em/
-         5OHUni9hH/lVpUSfY4fRCl4vHqoWWeqFZhCtHwCiFxJ1rsGdZR2wbuyqoBXkReuaPV2L
-         3vQw==
-X-Gm-Message-State: APjAAAWNEJHQVsKvfnAypVGQdGUKGF2dAJOq7+4vxVUWRg1Qpf5zm7la
-        PnclfAgsazKFrSMAAY5zRqneiq3mTt9nPK0xSAxoWQ==
-X-Google-Smtp-Source: APXvYqwiByU5lsNFstnrJDn/z+lsOfVffLD1j2ViGyf97eSUA3WHGXbAxyNduI8Ob3W0cZnBN0qx3TJYoPHpfQCK4lk=
-X-Received: by 2002:a6b:e20e:: with SMTP id z14mr1884246ioc.169.1556666685452;
- Tue, 30 Apr 2019 16:24:45 -0700 (PDT)
+        bh=Q5TbwoEekfcdWv0mvvbYsS+6EAW/pbX53UiDfesuTQE=;
+        b=g8IAIl0WWRn+WHDcxtHYRiAGtj5/IfR0TXZS0ryOrD49gyhe6wRgdrs0M6+14/jUZJ
+         8fH7pxpPIU9b9vazSVZd65lPqhykTKUl/oCdSCVBcoJiXaGAQyr/eI1rnPNKUYeCFrEA
+         bUYkncPPafA1dnwnNNUTe32Z0CAGZx29t1no782TC3HEffv4vOqKSVLHpJA9MRCPObr4
+         1mdWl1wtthTFlc7sZZ2QPwW6r056PTMgMhjrCwzoWL2NMFxCdtFHSVzDmt89D0uAi2pT
+         KXMh6SzJFaoY6BkYUW3KbPrY/rnSZ7NPvY1GvK5iw7mp9pGT/sKhDTJHUa8Pz9lJ6Wf0
+         BMSg==
+X-Gm-Message-State: APjAAAX3HU9T9aAYouzmyaGIeeRR4+7EOCb5grskSa9eoJJ1apiYav/x
+        4On8jp/NVkeJ2KIbrN87srDFNVjwxhOCE7bSC/k=
+X-Google-Smtp-Source: APXvYqxacmpdifyZqaQ70wlBxsip7duNZrsQz8yyYGYo8OFOM9BWyr7LJEEvIFkHeyZpTzKAL1znrY1h3nxxfQ8EWdM=
+X-Received: by 2002:a1c:f719:: with SMTP id v25mr1087705wmh.90.1556779545217;
+ Wed, 01 May 2019 23:45:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <f9ad2e46-e458-6c78-76da-b85db4601ee3@linux.microsoft.com>
- <CACdnJuuhiQQ8Uq1A_qfidCLVPVQ_3Ty_Kqg+tQPDx2z3P0Yp9w@mail.gmail.com>
- <6373c67f-ea2f-ae1d-0343-4bb774f1d52f@linux.microsoft.com>
- <CACdnJusXEq=7LXB=Ry0zH4CTRkQLHPC+5DnP07yXi0TNPeCYTw@mail.gmail.com>
- <b4f9cc9d-bded-fb0a-1d53-40fa1460ddec@linux.microsoft.com>
- <CACdnJuuK=BqaHLDFU0+zXk539gobvaJFUpHuNL7nYZcpw8E0ZA@mail.gmail.com>
- <93b9433f-cc99-c1fe-f7d1-bc8d26fd4dc1@linux.microsoft.com>
- <CACdnJuvpe6_O8jPb-2pBPqgAZ7J1NbuPvbOO4kDd4d80k8p8OA@mail.gmail.com> <0dc4e73c-00a8-5023-7065-3b21483a8a14@linux.microsoft.com>
-In-Reply-To: <0dc4e73c-00a8-5023-7065-3b21483a8a14@linux.microsoft.com>
-From:   Matthew Garrett <mjg59@google.com>
-Date:   Tue, 30 Apr 2019 16:24:34 -0700
-Message-ID: <CACdnJusCP5F4B=ybV0rfgrETfFAGE_MDeS44xEJVPKJ1s8rX=g@mail.gmail.com>
-Subject: Re: linux-tpmdd self signed kernel failing to boot with secreboot on
-To:     Jordan Hand <jorhand@linux.microsoft.com>
+References: <20190227202658.197113-1-matthewgarrett@google.com>
+ <20190227202658.197113-3-matthewgarrett@google.com> <CAJzaN5pUJoOCz5-ZDSnTb6dbVPuy0QwmFD0CeofAGK+bRQx0og@mail.gmail.com>
+ <CACdnJutpBPAX6TOGgs3Ng2v_cC5hAf-3pHThESvjQ9vbvQeVkA@mail.gmail.com> <CACdnJuvYAfFboej4e5jQ=iwhb-5Pi7BgSKEWGqJ0q=uarCoOfQ@mail.gmail.com>
+In-Reply-To: <CACdnJuvYAfFboej4e5jQ=iwhb-5Pi7BgSKEWGqJ0q=uarCoOfQ@mail.gmail.com>
+From:   Bartosz Szczepanek <barteks7r@gmail.com>
+Date:   Thu, 2 May 2019 08:45:34 +0200
+Message-ID: <CAJzaN5ofshg4KseGhOL2LSLDQNoAHC6Ve25gpgWU69bEfBq1fw@mail.gmail.com>
+Subject: Re: [PATCH V5 2/4] tpm: Reserve the TPM final events table
+To:     Matthew Garrett <mjg59@google.com>
 Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 4:00 PM Jordan Hand <jorhand@linux.microsoft.com> wrote:
+Second patch tries to unmap "mapping" which is not declared. I'm on
+top of jjs/master and your TPM_MEMREMAP patches are already there, so
+the first patch applied cleanly. Using it, kernel still panicked on
+boot:
 
-> No. The only print messages I get are from efi_printk. And they don't
-> show up like normal kernel logs do during boot. The purple grub screen
-> hangs and the efi_printk messages just print over the top of it.
->
-> Although now I'm wondering if the efi_printk messages I added after
-> efi_exit_boot_services just aren't showing up because I've exited boot
-> services and can no longer call that function (seems reasonable).
-
-Ah, yes, any attempt to efi_printk() after efi_exit_boot_services() is
-likely to end badly! In that case can you try the patch in
-https://lore.kernel.org/linux-integrity/CACdnJuvYAfFboej4e5jQ=iwhb-5Pi7BgSKEWGqJ0q=uarCoOfQ@mail.gmail.com/T/#m4326297b6aa5ec27948325eb22736871b8aca998
-?
+EFI stub: Booting Linux Kernel...
+EFI stub: EFI_RNG_PROTOCOL unavailable, no randomness supplied
+EFI stub: Using DTB from configuration table
+EFI stub: Exiting boot services and installing virtual address map...
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x420f5162]
+[    0.000000] Linux version 5.1.0-rc2+ (root@localhost.localdomain)
+(gcc version 7.3.1 20180712 (Red Hat 7.3.1-6) (GCC)) #78 SMP Wed May 1
+01:05:38 EDT 2019
+[    0.000000] earlycon: pl11 at MMIO 0x0000000402020000 (options '115200n8')
+[    0.000000] printk: bootconsole [pl11] enabled
+[    0.000000] efi: Getting EFI parameters from FDT:
+[    0.000000] efi: EFI v2.60 by Cavium Inc.
+TX2-FW-Release-7.2-build_08-0-g14f8c5bf8a Apr 15 2019 18:51:41
+[    0.000000] efi:  TPMFinalLog=0xed5f0000  SMBIOS=0xfad90000  SMBIOS
+3.0=0xed530000  ACPI 2.0=0xeda90000  ESRT=0xfafdb218
+MEMATTR=0xf8489018  TPMEventLog=0xedaa9018  MEMRESERVE=0xedaa8018
+[    0.000000] Unhandled fault at 0xffff7dfffe77a018
+[    0.000000] Mem abort info:
+[    0.000000]   ESR = 0x96000003
+[    0.000000]   Exception class = DABT (current EL), IL = 32 bits
+[    0.000000]   SET = 0, FnV = 0
+[    0.000000]   EA = 0, S1PTW = 0
+[    0.000000] Data abort info:
+[    0.000000]   ISV = 0, ISS = 0x00000003
+[    0.000000]   CM = 0, WnR = 0
+[    0.000000] swapper pgtable: 4k pages, 48-bit VAs, pgdp = (____ptrval____)
+[    0.000000] [ffff7dfffe77a018] pgd=0000000081b12003
+[    0.000000] ------------[ cut here ]------------
+[    0.000000] kernel BUG at arch/arm64/mm/fault.c:189!
+[    0.000000] Internal error: Oops - BUG: 0 [#1] SMP
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.1.0-rc2+ #78
+[    0.000000] pstate: 60400089 (nZCv daIf +PAN -UAO)
+[    0.000000] pc : show_pte+0x1d0/0x1f0
+[    0.000000] lr : show_pte+0x88/0x1f0
+[    0.000000] sp : ffff000011533b30
+[    0.000000] x29: ffff000011533b30 x28: ffff0000115473c0
+[    0.000000] x27: ffff000011542500 x26: ffff7dfffe73a010
+[    0.000000] x25: 0000000000000018 x24: 0000000000000025
+[    0.000000] x23: 00000000000000fb x22: ffff0000117fc000
+[    0.000000] x21: ffff000010f32000 x20: ffffffffffffffff
+[    0.000000] x19: ffff7dfffe77a018 x18: ffffffffffffffff
+[    0.000000] x17: 0000000000000000 x16: 0000000000000000
+[    0.000000] x15: ffff00001153d708 x14: ffff00001172f420
+[    0.000000] x13: ffff00001172f069 x12: ffff000011568000
+[    0.000000] x11: ffff000011533800 x10: ffff000011533800
+[    0.000000] x9 : ffff00001153ef58 x8 : 303030303030303d
+[    0.000000] x7 : 646770205d383130 x6 : ffff00001172e7ff
+[    0.000000] x5 : 0000000000000000 x4 : 0000000000000000
+[    0.000000] x3 : 0000000000000000 x2 : 0000000000000000
+[    0.000000] x1 : 0000000081b12000 x0 : 0000000000000ff8
+[    0.000000] Process swapper (pid: 0, stack limit = 0x(____ptrval____))
+[    0.000000] Call trace:
+[    0.000000]  show_pte+0x1d0/0x1f0
+[    0.000000]  do_mem_abort+0xa8/0xb0
+[    0.000000]  el1_da+0x20/0xc4
+[    0.000000]  efi_tpm_eventlog_init+0xe8/0x268
+[    0.000000]  efi_config_parse_tables+0x180/0x29c
+[    0.000000]  uefi_init+0x1d0/0x22c
+[    0.000000]  efi_init+0x90/0x180
+[    0.000000]  setup_arch+0x1f4/0x5fc
+[    0.000000]  start_kernel+0x90/0x51c
+[    0.000000] Code: 910d6000 94030b20 17ffffe6 d503201f (d4210000)
+[    0.000000] random: get_random_bytes called from
+print_oops_end_marker+0x54/0x70 with crng_init=0
+[    0.000000] ---[ end trace 0000000000000000 ]---
+[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
+[    0.000000] ---[ end Kernel panic - not syncing: Attempted to kill
+the idle task! ]---
