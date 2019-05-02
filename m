@@ -2,157 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D61D9121A5
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 May 2019 20:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8982612340
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 May 2019 22:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726249AbfEBSHy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 May 2019 14:07:54 -0400
-Received: from mail-io1-f43.google.com ([209.85.166.43]:37546 "EHLO
-        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726279AbfEBSHy (ORCPT
+        id S1726691AbfEBUZV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 May 2019 16:25:21 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38100 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726492AbfEBUZU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 May 2019 14:07:54 -0400
-Received: by mail-io1-f43.google.com with SMTP id j14so2493990ioj.4
-        for <linux-integrity@vger.kernel.org>; Thu, 02 May 2019 11:07:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GYG9gid407fSTqcR1sS3MZsK+2t2f3wkYcvKU9idh/0=;
-        b=A+QWwBszn7IF2LsKKt3bA3qQRVC/8fct9y1/eeeTerQbYsFvHI5zMXlu0aXk0vVrOn
-         naL1Cr/tW58pQnINfGsDF0f4zD6E+P9VbbGdX8UWDESHru5uUOisJRcRKRD6lm5isO0W
-         Pr5sUw6blHQXdjdhrkIHtdlPx1Jn+jxWk3VK77O9RL8eMM0dZlB7cqt9QqRV5rp4pfPR
-         Hji3D//QPGXHr1OE9zBRF8CRHbw3l+50PAGEC01dnKXD2BIsOMb/eLhiaOizBOuW8AX6
-         FUoYZXIFvT9DDpNoK4pm9QYPumEx0ejBOAlENzXSBV4o7Uruy2SZoW1w3oN+GxjGtNKk
-         YqLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GYG9gid407fSTqcR1sS3MZsK+2t2f3wkYcvKU9idh/0=;
-        b=eLrfvy+KAW5/wRfqGesJ6QzGVUWi53eVoA8nUeur0fn0q6WE/0F4ff9zc7ZMFDa5rl
-         XwJei5IsrS+lKSUVr32E/MwCnN2P4co0EMThMpTcpQ0upD/HI8XHJE8QIJQKpYfYRry2
-         mGWmroEq7o0Wrc4Njm/NhG5xm2/QFX0gPCnr1qqeIC9HCq91nSEKHNzWh4SKAnDi62Ah
-         /llJJWlUME1wPwOsqrCsLyQakClWErbeHCmNBCnGF0hAzwPOTSBQHh3GfIQvqRi5i3UW
-         Krs1AjtWpMsExX5Oas2Tdb0YbGGu2L1yYJ/XtgZFwkFQ4qYiH8ZMzhOliM18MJaTwion
-         2dwQ==
-X-Gm-Message-State: APjAAAVemHbZFNwa2zqeJrdxIB1SwsbS181XyXQNBkYlFjRHezyH4dxO
-        9swAco9sNfeDhxwds0bhSRBUc5VsyshVJ9TPo1GGtQ==
-X-Google-Smtp-Source: APXvYqwPhkHRZZHAu5m0YdmhCF98yH9zmIk5u4ncpmop4ullUZT7lAZNqW2xxhBaiplIU0vZnvNIyaNtfhLTtvTUb2Y=
-X-Received: by 2002:a6b:e20e:: with SMTP id z14mr3597345ioc.169.1556820473380;
- Thu, 02 May 2019 11:07:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190227202658.197113-1-matthewgarrett@google.com>
- <20190227202658.197113-3-matthewgarrett@google.com> <CAJzaN5pUJoOCz5-ZDSnTb6dbVPuy0QwmFD0CeofAGK+bRQx0og@mail.gmail.com>
- <CACdnJutpBPAX6TOGgs3Ng2v_cC5hAf-3pHThESvjQ9vbvQeVkA@mail.gmail.com>
- <CACdnJuvYAfFboej4e5jQ=iwhb-5Pi7BgSKEWGqJ0q=uarCoOfQ@mail.gmail.com> <CAJzaN5ofshg4KseGhOL2LSLDQNoAHC6Ve25gpgWU69bEfBq1fw@mail.gmail.com>
-In-Reply-To: <CAJzaN5ofshg4KseGhOL2LSLDQNoAHC6Ve25gpgWU69bEfBq1fw@mail.gmail.com>
-From:   Matthew Garrett <mjg59@google.com>
-Date:   Thu, 2 May 2019 11:07:42 -0700
-Message-ID: <CACdnJutMC2GBiXYUnFze+E-cigwb1gOK_wRfyWp77XQhTJuw9A@mail.gmail.com>
-Subject: Re: [PATCH V5 2/4] tpm: Reserve the TPM final events table
-To:     Bartosz Szczepanek <barteks7r@gmail.com>
+        Thu, 2 May 2019 16:25:20 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42KLxJu067505
+        for <linux-integrity@vger.kernel.org>; Thu, 2 May 2019 16:25:19 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2s84ma6pmg-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 02 May 2019 16:25:18 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 2 May 2019 21:25:17 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 2 May 2019 21:25:12 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x42KPBvU32702678
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 May 2019 20:25:11 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BD6A35205A;
+        Thu,  2 May 2019 20:25:11 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.95.175])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id C86155204F;
+        Thu,  2 May 2019 20:25:10 +0000 (GMT)
+Subject: Re: [PATCH V2 3/4] IMA: Optionally make use of filesystem-provided
+ hashes
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Matthew Garrett <mjg59@google.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
 Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
-Content-Type: multipart/mixed; boundary="0000000000004c18a80587eb8349"
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-fsdevel@vger.kernel.org, miklos@szeredi.hu,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 02 May 2019 16:25:00 -0400
+In-Reply-To: <CACdnJusKM74vZ=zg+0fe50gNRVaDPCdw9mfbbq45yTqnZfZX5w@mail.gmail.com>
+References: <20190226215034.68772-1-matthewgarrett@google.com>
+         <20190226215034.68772-4-matthewgarrett@google.com>
+         <1551369834.10911.195.camel@linux.ibm.com>
+         <1551377110.10911.202.camel@linux.ibm.com>
+         <CACdnJutfCxzQDeFzXmZ9f8UrnqNScErkBJd2Yu+VEoy4nBhBCA@mail.gmail.com>
+         <1551391154.10911.210.camel@linux.ibm.com>
+         <CACdnJuuRLDj+6OTohfTVzqXp1K7U3efVXXuFfBfhk3CiUBEMiQ@mail.gmail.com>
+         <CACdnJutPWEtDMS6YUXF0ykq7gKgQRNk6Fw=aHivHz6+NTodsgA@mail.gmail.com>
+         <1551731553.10911.510.camel@linux.ibm.com>
+         <CACdnJutWRB1up6wO3aWJJah3p8k+FY6xEfjw8ETHT69Vvsz8GQ@mail.gmail.com>
+         <1551791930.31706.41.camel@linux.ibm.com>
+         <CACdnJuvfzvZaU3CHtvVAP6vj_-rnWeTyAKjmRj8QGt7WAmjicQ@mail.gmail.com>
+         <1551815469.31706.132.camel@linux.ibm.com>
+         <CACdnJuvhu2iepghLm4-w2XVKH+TVT1JAY=vtKtf733UXPSBPaA@mail.gmail.com>
+         <1551875418.31706.158.camel@linux.ibm.com>
+         <CACdnJuvRuagNTidkq3d4g_OwfzqcALtd=g1-5LDzr2aBA1zV6w@mail.gmail.com>
+         <1551911937.31706.217.camel@linux.ibm.com>
+         <CACdnJut9T0xE-Q+ZAfqaRMUeBX=7w+cYE5Y7Ls1PdH-bJfv8MQ@mail.gmail.com>
+         <1551923650.31706.258.camel@linux.ibm.com>
+         <CACdnJuv+d2qEc+vQosmDOzdu57Jjpjq9-CZEy8epz0ob5mptsA@mail.gmail.com>
+         <1551991690.31706.416.camel@linux.ibm.com>
+         <CACdnJuvkA6M_fu3+BARH2AMHksTXbvWmRyK9ZaxcH-xZMq4G2g@mail.gmail.com>
+         <CACdnJuv2zV1OnbVaHqkB2UU=dAEzzffajAFg_xsgXRMvuZ5fTw@mail.gmail.com>
+         <1554416328.24612.11.camel@HansenPartnership.com>
+         <CACdnJutZzJu7FxcLWasyvx9BLQJeGrA=7WA389JL8ixFJ6Skrg@mail.gmail.com>
+         <1554417315.24612.15.camel@HansenPartnership.com>
+         <CACdnJuutKe+i8KLUmPWjbFOWfrO2FzYVPjYZGgEatFmZWkw=UA@mail.gmail.com>
+         <1554431217.24612.37.camel@HansenPartnership.com>
+         <CACdnJut_vN9pJXq-j9fEO1CFZ-Aq83cO2LiFmep=Fn9_NOKhWQ@mail.gmail.com>
+         <CACdnJusKM74vZ=zg+0fe50gNRVaDPCdw9mfbbq45yTqnZfZX5w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19050220-0028-0000-0000-00000369AF3F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19050220-0029-0000-0000-000024291BD2
+Message-Id: <1556828700.4134.128.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-02_12:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=988 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905020128
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---0000000000004c18a80587eb8349
-Content-Type: text/plain; charset="UTF-8"
+[Cc'ing Roberto]
 
-Sorry, how about this one? I was confused by why I wasn't hitting
-this, but on closer examination it turns out that my system populates
-the final event log with 0 events which means we never hit this
-codepath :(
+Hi Matthew,
 
---0000000000004c18a80587eb8349
-Content-Type: text/x-patch; charset="US-ASCII"; name="fix_log.diff"
-Content-Disposition: attachment; filename="fix_log.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jv6yoxc70>
-X-Attachment-Id: f_jv6yoxc70
+On Mon, 2019-04-29 at 15:51 -0700, Matthew Garrett wrote:
+> Mimi, anything else I can do here?
 
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZmlybXdhcmUvZWZpL3RwbS5jIGIvZHJpdmVycy9maXJtd2Fy
-ZS9lZmkvdHBtLmMKaW5kZXggMmNjYWE2NjYxYWFmLi5kYjBmZGFhOWM2NjYgMTAwNjQ0Ci0tLSBh
-L2RyaXZlcnMvZmlybXdhcmUvZWZpL3RwbS5jCisrKyBiL2RyaXZlcnMvZmlybXdhcmUvZWZpL3Rw
-bS5jCkBAIC0yOCw2ICsyOCw3IEBAIHN0YXRpYyBpbnQgdHBtMl9jYWxjX2V2ZW50X2xvZ19zaXpl
-KHZvaWQgKmRhdGEsIGludCBjb3VudCwgdm9pZCAqc2l6ZV9pbmZvKQogCQlpZiAoZXZlbnRfc2l6
-ZSA9PSAwKQogCQkJcmV0dXJuIC0xOwogCQlzaXplICs9IGV2ZW50X3NpemU7CisJCWNvdW50LS07
-CiAJfQogCiAJcmV0dXJuIHNpemU7CkBAIC00MSw2ICs0Miw3IEBAIGludCBfX2luaXQgZWZpX3Rw
-bV9ldmVudGxvZ19pbml0KHZvaWQpCiAJc3RydWN0IGxpbnV4X2VmaV90cG1fZXZlbnRsb2cgKmxv
-Z190Ymw7CiAJc3RydWN0IGVmaV90Y2cyX2ZpbmFsX2V2ZW50c190YWJsZSAqZmluYWxfdGJsOwog
-CXVuc2lnbmVkIGludCB0Ymxfc2l6ZTsKKwlpbnQgcmV0ID0gMDsKIAogCWlmIChlZmkudHBtX2xv
-ZyA9PSBFRklfSU5WQUxJRF9UQUJMRV9BRERSKSB7CiAJCS8qCkBAIC02MCwxMCArNjIsOSBAQCBp
-bnQgX19pbml0IGVmaV90cG1fZXZlbnRsb2dfaW5pdCh2b2lkKQogCiAJdGJsX3NpemUgPSBzaXpl
-b2YoKmxvZ190YmwpICsgbG9nX3RibC0+c2l6ZTsKIAltZW1ibG9ja19yZXNlcnZlKGVmaS50cG1f
-bG9nLCB0Ymxfc2l6ZSk7Ci0JZWFybHlfbWVtdW5tYXAobG9nX3RibCwgc2l6ZW9mKCpsb2dfdGJs
-KSk7CiAKIAlpZiAoZWZpLnRwbV9maW5hbF9sb2cgPT0gRUZJX0lOVkFMSURfVEFCTEVfQUREUikK
-LQkJcmV0dXJuIDA7CisJCWdvdG8gb3V0OwogCiAJZmluYWxfdGJsID0gZWFybHlfbWVtcmVtYXAo
-ZWZpLnRwbV9maW5hbF9sb2csIHNpemVvZigqZmluYWxfdGJsKSk7CiAKQEAgLTcxLDE3ICs3Miwy
-MCBAQCBpbnQgX19pbml0IGVmaV90cG1fZXZlbnRsb2dfaW5pdCh2b2lkKQogCQlwcl9lcnIoIkZh
-aWxlZCB0byBtYXAgVFBNIEZpbmFsIEV2ZW50IExvZyB0YWJsZSBAIDB4JWx4XG4iLAogCQkgICAg
-ICAgZWZpLnRwbV9maW5hbF9sb2cpOwogCQllZmkudHBtX2ZpbmFsX2xvZyA9IEVGSV9JTlZBTElE
-X1RBQkxFX0FERFI7Ci0JCXJldHVybiAtRU5PTUVNOworCQlyZXQgPSAtRU5PTUVNOworCQlnb3Rv
-IG91dDsKIAl9CiAKIAl0Ymxfc2l6ZSA9IHRwbTJfY2FsY19ldmVudF9sb2dfc2l6ZShmaW5hbF90
-YmwtPmV2ZW50cywKIAkJCQkJICAgIGZpbmFsX3RibC0+bnJfZXZlbnRzLAotCQkJCQkgICAgKHZv
-aWQgKillZmkudHBtX2xvZyk7CisJCQkJCSAgICBsb2dfdGJsLT5sb2cpOwogCW1lbWJsb2NrX3Jl
-c2VydmUoKHVuc2lnbmVkIGxvbmcpZmluYWxfdGJsLAogCQkJIHRibF9zaXplICsgc2l6ZW9mKCpm
-aW5hbF90YmwpKTsKIAllYXJseV9tZW11bm1hcChmaW5hbF90YmwsIHNpemVvZigqZmluYWxfdGJs
-KSk7CiAJZWZpX3RwbV9maW5hbF9sb2dfc2l6ZSA9IHRibF9zaXplOwogCi0JcmV0dXJuIDA7Citv
-dXQ6CisJZWFybHlfbWVtdW5tYXAobG9nX3RibCwgc2l6ZW9mKCpsb2dfdGJsKSk7CisJcmV0dXJu
-IHJldDsKIH0KIApkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC90cG1fZXZlbnRsb2cuaCBiL2lu
-Y2x1ZGUvbGludXgvdHBtX2V2ZW50bG9nLmgKaW5kZXggZGNjYzk3ZTYxMzVjLi4xOTBhMzM5Njhh
-OTEgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUvbGludXgvdHBtX2V2ZW50bG9nLmgKKysrIGIvaW5jbHVk
-ZS9saW51eC90cG1fZXZlbnRsb2cuaApAQCAtMTU4LDcgKzE1OCw2IEBAIHN0YXRpYyBpbmxpbmUg
-aW50IF9fY2FsY190cG0yX2V2ZW50X3NpemUoc3RydWN0IHRjZ19wY3JfZXZlbnQyX2hlYWQgKmV2
-ZW50LAogewogCXN0cnVjdCB0Y2dfZWZpX3NwZWNpZF9ldmVudF9oZWFkICplZmlzcGVjaWQ7CiAJ
-c3RydWN0IHRjZ19ldmVudF9maWVsZCAqZXZlbnRfZmllbGQ7Ci0Jdm9pZCAqbWFwcGluZyA9IE5V
-TEw7CiAJaW50IG1hcHBpbmdfc2l6ZTsKIAl2b2lkICptYXJrZXI7CiAJdm9pZCAqbWFya2VyX3N0
-YXJ0OwpAQCAtMTc2LDkgKzE3NSw5IEBAIHN0YXRpYyBpbmxpbmUgaW50IF9fY2FsY190cG0yX2V2
-ZW50X3NpemUoc3RydWN0IHRjZ19wY3JfZXZlbnQyX2hlYWQgKmV2ZW50LAogCS8qIE1hcCB0aGUg
-ZXZlbnQgaGVhZGVyICovCiAJaWYgKGRvX21hcHBpbmcpIHsKIAkJbWFwcGluZ19zaXplID0gbWFy
-a2VyIC0gbWFya2VyX3N0YXJ0OwotCQltYXBwaW5nID0gZWFybHlfbWVtcmVtYXAoKHVuc2lnbmVk
-IGxvbmcpbWFya2VyX3N0YXJ0LAorCQlldmVudCA9IGVhcmx5X21lbXJlbWFwKCh1bnNpZ25lZCBs
-b25nKW1hcmtlcl9zdGFydCwKIAkJCQkJIG1hcHBpbmdfc2l6ZSk7Ci0JCWlmICghbWFwcGluZykg
-eworCQlpZiAoIWV2ZW50KSB7CiAJCQlzaXplID0gMDsKIAkJCWdvdG8gb3V0OwogCQl9CkBAIC0x
-OTksOSArMTk4LDkgQEAgc3RhdGljIGlubGluZSBpbnQgX19jYWxjX3RwbTJfZXZlbnRfc2l6ZShz
-dHJ1Y3QgdGNnX3Bjcl9ldmVudDJfaGVhZCAqZXZlbnQsCiAJCWlmIChkb19tYXBwaW5nKSB7CiAJ
-CQllYXJseV9tZW11bm1hcChtYXBwaW5nLCBtYXBwaW5nX3NpemUpOwogCQkJbWFwcGluZ19zaXpl
-ID0gbWFya2VyIC0gbWFya2VyX3N0YXJ0ICsgaGFsZ19zaXplOwotCQkJbWFwcGluZyA9IGVhcmx5
-X21lbXJlbWFwKCh1bnNpZ25lZCBsb25nKW1hcmtlcl9zdGFydCwKKwkJCWV2ZW50ID0gZWFybHlf
-bWVtcmVtYXAoKHVuc2lnbmVkIGxvbmcpbWFya2VyX3N0YXJ0LAogCQkJCQkJIG1hcHBpbmdfc2l6
-ZSk7Ci0JCQlpZiAoIW1hcHBpbmcpIHsKKwkJCWlmICghZXZlbnQpIHsKIAkJCQlzaXplID0gMDsK
-IAkJCQlnb3RvIG91dDsKIAkJCX0KQEAgLTIxOSw5ICsyMTgsOSBAQCBzdGF0aWMgaW5saW5lIGlu
-dCBfX2NhbGNfdHBtMl9ldmVudF9zaXplKHN0cnVjdCB0Y2dfcGNyX2V2ZW50Ml9oZWFkICpldmVu
-dCwKIAkJCQlpZiAoZG9fbWFwcGluZykgewogCQkJCQllYXJseV9tZW11bm1hcChtYXBwaW5nLCBt
-YXBwaW5nX3NpemUpOwogCQkJCQltYXBwaW5nX3NpemUgPSBtYXJrZXIgLSBtYXJrZXJfc3RhcnQ7
-Ci0JCQkJCW1hcHBpbmcgPSBlYXJseV9tZW1yZW1hcCgodW5zaWduZWQgbG9uZyltYXJrZXJfc3Rh
-cnQsCisJCQkJCWV2ZW50ID0gZWFybHlfbWVtcmVtYXAoKHVuc2lnbmVkIGxvbmcpbWFya2VyX3N0
-YXJ0LAogCQkJCQkJICAgICAgbWFwcGluZ19zaXplKTsKLQkJCQkJaWYgKCFtYXBwaW5nKSB7CisJ
-CQkJCWlmICghZXZlbnQpIHsKIAkJCQkJCXNpemUgPSAwOwogCQkJCQkJZ290byBvdXQ7CiAJCQkJ
-CX0KQEAgLTI0MywxMSArMjQyLDExIEBAIHN0YXRpYyBpbmxpbmUgaW50IF9fY2FsY190cG0yX2V2
-ZW50X3NpemUoc3RydWN0IHRjZ19wY3JfZXZlbnQyX2hlYWQgKmV2ZW50LAogCSAqIHdlIGRvbid0
-IG5lZWQgdG8gbWFwIGl0CiAJICovCiAJaWYgKGRvX21hcHBpbmcpIHsKLQkJZWFybHlfbWVtdW5t
-YXAobWFya2VyX3N0YXJ0LCBtYXBwaW5nX3NpemUpOworCQllYXJseV9tZW11bm1hcChldmVudCwg
-bWFwcGluZ19zaXplKTsKIAkJbWFwcGluZ19zaXplICs9IHNpemVvZihldmVudF9maWVsZC0+ZXZl
-bnRfc2l6ZSk7Ci0JCW1hcHBpbmcgPSBlYXJseV9tZW1yZW1hcCgodW5zaWduZWQgbG9uZyltYXJr
-ZXJfc3RhcnQsCi0JCQkJCSBtYXBwaW5nX3NpemUpOwotCQlpZiAoIW1hcHBpbmcpIHsKKwkJZXZl
-bnQgPSBlYXJseV9tZW1yZW1hcCgodW5zaWduZWQgbG9uZyltYXJrZXJfc3RhcnQsCisJCQkJICAg
-ICAgIG1hcHBpbmdfc2l6ZSk7CisJCWlmICghZXZlbnQpIHsKIAkJCXNpemUgPSAwOwogCQkJZ290
-byBvdXQ7CiAJCX0KQEAgLTI1Nyw4ICsyNTYsNiBAQCBzdGF0aWMgaW5saW5lIGludCBfX2NhbGNf
-dHBtMl9ldmVudF9zaXplKHN0cnVjdCB0Y2dfcGNyX2V2ZW50Ml9oZWFkICpldmVudCwKIAkJKyBl
-dmVudF9maWVsZC0+ZXZlbnRfc2l6ZTsKIAlzaXplID0gbWFya2VyIC0gbWFya2VyX3N0YXJ0Owog
-Ci0JaWYgKChldmVudC0+ZXZlbnRfdHlwZSA9PSAwKSAmJiAoZXZlbnRfZmllbGQtPmV2ZW50X3Np
-emUgPT0gMCkpCi0JCXNpemUgPSAwOwogb3V0OgogCWlmIChkb19tYXBwaW5nKQogCQllYXJseV9t
-ZW11bm1hcChtYXBwaW5nLCBtYXBwaW5nX3NpemUpOwo=
---0000000000004c18a80587eb8349--
+Trying to remember where we were ...  The last issue, as I recall, is
+somehow annotating the measurement list to indicate the source of the
+file hash.
+
+One solution might be:
+
+Suppose instead of re-using the "d-ng" for the vfs hash, you defined a
+new field named d-vfs.  Instead of the "ima-ng" or "d-ng|n-ng", the
+template name could be "d-vfs|n-ng".
+
+Intermixing of template formats is not a problem.  IMA already
+supports multiple templates in the same list for carrying the
+measurement list across kexec.  (There are no guarantees that the
+current measurement list and the kexec'ed kernel will be the same
+template format.)  The template format is currently defined at compile
+time, with a run time option of changing it.
+
+The issue then becomes how to dynamically switch between template formats, based on fields.
+
+Mimi
+
