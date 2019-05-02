@@ -2,45 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B73411410
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 May 2019 09:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8BD11576
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 May 2019 10:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726278AbfEBHWJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 May 2019 03:22:09 -0400
-Received: from mga05.intel.com ([192.55.52.43]:12074 "EHLO mga05.intel.com"
+        id S1726011AbfEBIco (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 May 2019 04:32:44 -0400
+Received: from mga06.intel.com ([134.134.136.31]:47842 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725795AbfEBHWJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 May 2019 03:22:09 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1725905AbfEBIcn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 2 May 2019 04:32:43 -0400
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 May 2019 00:22:08 -0700
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 May 2019 01:32:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,420,1549958400"; 
-   d="scan'208";a="342704860"
+X-IronPort-AV: E=Sophos;i="5.60,421,1549958400"; 
+   d="scan'208";a="145370147"
 Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.189])
-  by fmsmga006.fm.intel.com with ESMTP; 02 May 2019 00:22:05 -0700
-Date:   Thu, 2 May 2019 10:22:05 +0300
+  by fmsmga008.fm.intel.com with ESMTP; 02 May 2019 01:32:40 -0700
+Date:   Thu, 2 May 2019 11:32:40 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Jonas Witschel <diabonas@gmx.de>
-Cc:     Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Tadeusz Struk <tadeusz.struk@intel.com>, grawity@gmail.com,
-        James.Bottomley@hansenpartnership.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4] tpm: fix an invalid condition in tpm_common_poll
-Message-ID: <20190502072205.GF14532@linux.intel.com>
-References: <155371155820.17863.10580533125620125669.stgit@tstruk-mobl1.jf.intel.com>
- <20190328123428.GF7094@linux.intel.com>
- <b29aaf62-2ea0-d6c6-32ee-44bc3fe8f03f@intel.com>
- <20190408120138.GA951@gandi.net>
- <20190409134421.GD9759@linux.intel.com>
- <e9cfa3db-42d7-4e1c-a371-2c810f911dab@gmx.de>
+To:     Bartosz Szczepanek <bsz@semihalf.com>
+Cc:     Matthew Garrett <matthewgarrett@google.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        roberto.sassu@huawei.com, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tweek@google.com,
+        Matthew Garrett <mjg59@google.com>
+Subject: Re: [PATCH V5 2/4] tpm: Reserve the TPM final events table
+Message-ID: <20190502083240.GJ14532@linux.intel.com>
+References: <20190227202658.197113-1-matthewgarrett@google.com>
+ <20190227202658.197113-3-matthewgarrett@google.com>
+ <CAJzaN5pUJoOCz5-ZDSnTb6dbVPuy0QwmFD0CeofAGK+bRQx0og@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e9cfa3db-42d7-4e1c-a371-2c810f911dab@gmx.de>
+In-Reply-To: <CAJzaN5pUJoOCz5-ZDSnTb6dbVPuy0QwmFD0CeofAGK+bRQx0og@mail.gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -48,25 +45,18 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Apr 23, 2019 at 10:54:47PM +0200, Jonas Witschel wrote:
-> On 2019-04-09 15:44, Jarkko Sakkinen wrote:
-> > On Mon, Apr 08, 2019 at 02:01:38PM +0200, Thibaut Sautereau wrote:
-> >> [...]
-> >> What's the status of this patch now? It's needed in linux-5.0.y as TPM
-> >> 2.0 support is currently broken with those stable kernels without this
-> >> commit.
-> > 
-> > part of a PR.
-> > 
-> > https://lore.kernel.org/linux-integrity/20190329115544.GA27351@linux.intel.com/
-> 
-> It appears that the final version of the patch that was merged to
-> Linus's tree [1] does not include the "Cc: stable@vger.kernel.org" tag.
-> If I understand correctly, this means that the patch will not be
-> automatically included in the -stable tree without further action. Is
-> there a specific reason not to apply this patch to 5.0.x, or did the tag
+On Tue, Apr 30, 2019 at 03:07:09PM +0200, Bartosz Szczepanek wrote:
+> I may be a little late with this comment, but I've just tested these
+> patches on aarch64 platform (from the top of jjs/master) and got
+> kernel panic ("Unable to handle kernel read", full log at the end of
+> mail). I think there's problem with below call to
+> tpm2_calc_event_log_size(), where physical address of efi.tpm_log is
+> passed as (void *) and never remapped:
 
-It is my mistake. What I can do is to post it manually to stable.
-I promise to do it as soon as it reaches the mainline.
+Not late. This is not part of any PR yet. Thank you for the
+feedback!
+
+Matthew, can you send an updated version of the whole patch set
+with fixes to this issue and also reordering of the includes?
 
 /Jarkko
