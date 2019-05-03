@@ -2,23 +2,24 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C29291280B
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 May 2019 08:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A12129AF
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 May 2019 10:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726835AbfECGvu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 May 2019 02:51:50 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32924 "EHLO huawei.com"
+        id S1726729AbfECIRf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 May 2019 04:17:35 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32925 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726182AbfECGvu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 May 2019 02:51:50 -0400
+        id S1726402AbfECIRf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 3 May 2019 04:17:35 -0400
 Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 1F5BFADAC147873D12BC;
-        Fri,  3 May 2019 07:51:49 +0100 (IST)
+        by Forcepoint Email with ESMTP id 473A4A2470EF0BC824E1;
+        Fri,  3 May 2019 09:17:34 +0100 (IST)
 Received: from [10.204.65.144] (10.204.65.144) by smtpsuk.huawei.com
  (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Fri, 3 May
- 2019 07:51:45 +0100
+ 2019 09:17:33 +0100
 Subject: Re: [PATCH V2 3/4] IMA: Optionally make use of filesystem-provided
  hashes
+From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>,
         Matthew Garrett <mjg59@google.com>
 CC:     James Bottomley <James.Bottomley@hansenpartnership.com>,
@@ -41,16 +42,16 @@ References: <20190226215034.68772-1-matthewgarrett@google.com>
  <1556828700.4134.128.camel@linux.ibm.com>
  <CACdnJutAw02Hq=NDeHoSsZAh2D95EBag_U8GYoSfNJ7eM61OxQ@mail.gmail.com>
  <1556838167.7067.9.camel@linux.ibm.com>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <6fc66a58-2d34-e8cc-ee01-ec04c85196eb@huawei.com>
-Date:   Fri, 3 May 2019 08:51:46 +0200
+ <6fc66a58-2d34-e8cc-ee01-ec04c85196eb@huawei.com>
+Message-ID: <8e806482-2f55-8c9e-ab95-a3ba4c728535@huawei.com>
+Date:   Fri, 3 May 2019 10:17:39 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.3.0
 MIME-Version: 1.0
-In-Reply-To: <1556838167.7067.9.camel@linux.ibm.com>
+In-Reply-To: <6fc66a58-2d34-e8cc-ee01-ec04c85196eb@huawei.com>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.204.65.144]
 X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
@@ -58,30 +59,35 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/3/2019 1:02 AM, Mimi Zohar wrote:
-> On Thu, 2019-05-02 at 15:37 -0700, Matthew Garrett wrote:
->> On Thu, May 2, 2019 at 1:25 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
->>> Suppose instead of re-using the "d-ng" for the vfs hash, you defined a
->>> new field named d-vfs.  Instead of the "ima-ng" or "d-ng|n-ng", the
->>> template name could be "d-vfs|n-ng".
+On 5/3/2019 8:51 AM, Roberto Sassu wrote:
+> On 5/3/2019 1:02 AM, Mimi Zohar wrote:
+>> On Thu, 2019-05-02 at 15:37 -0700, Matthew Garrett wrote:
+>>> On Thu, May 2, 2019 at 1:25 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>>>> Suppose instead of re-using the "d-ng" for the vfs hash, you defined a
+>>>> new field named d-vfs.  Instead of the "ima-ng" or "d-ng|n-ng", the
+>>>> template name could be "d-vfs|n-ng".
+>>>
+>>> Is it legitimate to redefine d-ng such that if the hash comes from the
+>>> filesystem it adds an additional prefix? This will only occur if the
+>>> admin has explicitly enabled the trusted_vfs option, so we wouldn't
+>>> break any existing configurations. Otherwise, I'll look for the
+>>> cleanest approach for making this dynamic.
 >>
->> Is it legitimate to redefine d-ng such that if the hash comes from the
->> filesystem it adds an additional prefix? This will only occur if the
->> admin has explicitly enabled the trusted_vfs option, so we wouldn't
->> break any existing configurations. Otherwise, I'll look for the
->> cleanest approach for making this dynamic.
+>> I would assume modifying d-ng would break existing attestation
+>> servers.
 > 
-> I would assume modifying d-ng would break existing attestation
-> servers.
+> Yes, I would also prefer to avoid modification of d-ng.
+> 
+> 
+>> Perhaps instead of making the template format dynamic based on fields,
+>> as I suggested above, define a per policy rule template format option.
+> 
+> This should not be too complicated. The template to use will be returned
+> by ima_get_action() to process_measurement().
 
-Yes, I would also prefer to avoid modification of d-ng.
+Some time ago I made some patches:
 
-
-> Perhaps instead of making the template format dynamic based on fields,
-> as I suggested above, define a per policy rule template format option.
-
-This should not be too complicated. The template to use will be returned
-by ima_get_action() to process_measurement().
+https://sourceforge.net/p/linux-ima/mailman/message/31655784/
 
 Roberto
 
