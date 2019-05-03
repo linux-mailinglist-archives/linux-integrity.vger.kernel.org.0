@@ -2,106 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D724F12785
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 May 2019 08:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C29291280B
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 May 2019 08:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726297AbfECGMP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 May 2019 02:12:15 -0400
-Received: from mga11.intel.com ([192.55.52.93]:46409 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725775AbfECGMP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 May 2019 02:12:15 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 May 2019 23:12:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,424,1549958400"; 
-   d="scan'208";a="147784716"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.189])
-  by orsmga003.jf.intel.com with ESMTP; 02 May 2019 23:12:10 -0700
-Date:   Fri, 3 May 2019 09:12:09 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Matthew Garrett <mjg59@google.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Bartosz Szczepanek <bsz@semihalf.com>,
+        id S1726835AbfECGvu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 May 2019 02:51:50 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32924 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726182AbfECGvu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 3 May 2019 02:51:50 -0400
+Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 1F5BFADAC147873D12BC;
+        Fri,  3 May 2019 07:51:49 +0100 (IST)
+Received: from [10.204.65.144] (10.204.65.144) by smtpsuk.huawei.com
+ (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Fri, 3 May
+ 2019 07:51:45 +0100
+Subject: Re: [PATCH V2 3/4] IMA: Optionally make use of filesystem-provided
+ hashes
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Matthew Garrett <mjg59@google.com>
+CC:     James Bottomley <James.Bottomley@hansenpartnership.com>,
         linux-integrity <linux-integrity@vger.kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>
-Subject: Re: [PATCH V5 2/4] tpm: Reserve the TPM final events table
-Message-ID: <20190503061209.GA5630@linux.intel.com>
-References: <20190227202658.197113-1-matthewgarrett@google.com>
- <20190227202658.197113-3-matthewgarrett@google.com>
- <CAJzaN5pUJoOCz5-ZDSnTb6dbVPuy0QwmFD0CeofAGK+bRQx0og@mail.gmail.com>
- <CACdnJutpBPAX6TOGgs3Ng2v_cC5hAf-3pHThESvjQ9vbvQeVkA@mail.gmail.com>
- <CAKv+Gu9PF4u=-7QL4e36Q3S5kC4+5Z=yLYHLT9jE+eNY7YUV7A@mail.gmail.com>
- <CACdnJuvDuw0X9iwEqOu7EjM5ca1f+n7f=xqzrTPS9PyrmqKNHQ@mail.gmail.com>
- <20190503060218.GA28048@gmail.com>
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        <linux-fsdevel@vger.kernel.org>, <miklos@szeredi.hu>
+References: <20190226215034.68772-1-matthewgarrett@google.com>
+ <1551923650.31706.258.camel@linux.ibm.com>
+ <CACdnJuv+d2qEc+vQosmDOzdu57Jjpjq9-CZEy8epz0ob5mptsA@mail.gmail.com>
+ <1551991690.31706.416.camel@linux.ibm.com>
+ <CACdnJuvkA6M_fu3+BARH2AMHksTXbvWmRyK9ZaxcH-xZMq4G2g@mail.gmail.com>
+ <CACdnJuv2zV1OnbVaHqkB2UU=dAEzzffajAFg_xsgXRMvuZ5fTw@mail.gmail.com>
+ <1554416328.24612.11.camel@HansenPartnership.com>
+ <CACdnJutZzJu7FxcLWasyvx9BLQJeGrA=7WA389JL8ixFJ6Skrg@mail.gmail.com>
+ <1554417315.24612.15.camel@HansenPartnership.com>
+ <CACdnJuutKe+i8KLUmPWjbFOWfrO2FzYVPjYZGgEatFmZWkw=UA@mail.gmail.com>
+ <1554431217.24612.37.camel@HansenPartnership.com>
+ <CACdnJut_vN9pJXq-j9fEO1CFZ-Aq83cO2LiFmep=Fn9_NOKhWQ@mail.gmail.com>
+ <CACdnJusKM74vZ=zg+0fe50gNRVaDPCdw9mfbbq45yTqnZfZX5w@mail.gmail.com>
+ <1556828700.4134.128.camel@linux.ibm.com>
+ <CACdnJutAw02Hq=NDeHoSsZAh2D95EBag_U8GYoSfNJ7eM61OxQ@mail.gmail.com>
+ <1556838167.7067.9.camel@linux.ibm.com>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <6fc66a58-2d34-e8cc-ee01-ec04c85196eb@huawei.com>
+Date:   Fri, 3 May 2019 08:51:46 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190503060218.GA28048@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1556838167.7067.9.camel@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.204.65.144]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, May 03, 2019 at 08:02:18AM +0200, Ingo Molnar wrote:
+On 5/3/2019 1:02 AM, Mimi Zohar wrote:
+> On Thu, 2019-05-02 at 15:37 -0700, Matthew Garrett wrote:
+>> On Thu, May 2, 2019 at 1:25 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>>> Suppose instead of re-using the "d-ng" for the vfs hash, you defined a
+>>> new field named d-vfs.  Instead of the "ima-ng" or "d-ng|n-ng", the
+>>> template name could be "d-vfs|n-ng".
+>>
+>> Is it legitimate to redefine d-ng such that if the hash comes from the
+>> filesystem it adds an additional prefix? This will only occur if the
+>> admin has explicitly enabled the trusted_vfs option, so we wouldn't
+>> break any existing configurations. Otherwise, I'll look for the
+>> cleanest approach for making this dynamic.
 > 
-> * Matthew Garrett <mjg59@google.com> wrote:
-> 
-> > On Thu, May 2, 2019 at 12:15 AM Ard Biesheuvel
-> > <ard.biesheuvel@linaro.org> wrote:
-> > >
-> > > (+ Ingo)
-> > >
-> > > On Tue, 30 Apr 2019 at 21:52, Matthew Garrett <mjg59@google.com> wrote:
-> > > >
-> > > > On Tue, Apr 30, 2019 at 6:07 AM Bartosz Szczepanek <bsz@semihalf.com> wrote:
-> > > > >
-> > > > > I may be a little late with this comment, but I've just tested these
-> > > > > patches on aarch64 platform (from the top of jjs/master) and got
-> > > > > kernel panic ("Unable to handle kernel read", full log at the end of
-> > > > > mail). I think there's problem with below call to
-> > > > > tpm2_calc_event_log_size(), where physical address of efi.tpm_log is
-> > > > > passed as (void *) and never remapped:
-> > > >
-> > > > Yes, it looks like this is just broken. Can you try with the attached patch?
-> > >
-> > > I'm a bit uncomfortable with EFI code that is obviously broken and
-> > > untested being queued for the next merge window in another tree.
-> > 
-> > The patchset was Cc:ed to linux-efi@. Is there anything else I should
-> > have done to ensure you picked it up rather than Jarkko?
-> 
-> That's not the workflow rule the Linux kernel is using, if Cc:-ing a 
-> patchset was the only condition for upstream inclusion then we'd have a 
-> *LOT* of crap in the Linux kernel.
-> 
-> Just applying those EFI changes without even as much as an Acked-by from 
-> the EFI maintainers is a *totally* unacceptable workflow.
-> 
-> Please revert/rebase and re-try this on the proper submission channels.
-> 
-> Meanwhile the broken code is NAK-ed by me:
-> 
->    Nacked-by: Ingo Molnar <mingo@kernel.org>
+> I would assume modifying d-ng would break existing attestation
+> servers.
 
-There must be some kind of misconception here. None of the changes have
-been submitted so far. They are only in my master branch. They briefly
-went to linux-next through my next branch but as soon as issues were
-reported I wiped them off from there (which happened like 2-3 weeks
-ago). They haven't been part off any of my PR's.
+Yes, I would also prefer to avoid modification of d-ng.
 
-There is nothing to revert.
 
-/Jarkko
+> Perhaps instead of making the template format dynamic based on fields,
+> as I suggested above, define a per policy rule template format option.
+
+This should not be too complicated. The template to use will be returned
+by ima_get_action() to process_measurement().
+
+Roberto
+
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
