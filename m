@@ -2,95 +2,178 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A12129AF
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 May 2019 10:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E27C12CAF
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 May 2019 13:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbfECIRf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 May 2019 04:17:35 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32925 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726402AbfECIRf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 May 2019 04:17:35 -0400
-Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 473A4A2470EF0BC824E1;
-        Fri,  3 May 2019 09:17:34 +0100 (IST)
-Received: from [10.204.65.144] (10.204.65.144) by smtpsuk.huawei.com
- (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Fri, 3 May
- 2019 09:17:33 +0100
-Subject: Re: [PATCH V2 3/4] IMA: Optionally make use of filesystem-provided
- hashes
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Matthew Garrett <mjg59@google.com>
-CC:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        <linux-fsdevel@vger.kernel.org>, <miklos@szeredi.hu>
-References: <20190226215034.68772-1-matthewgarrett@google.com>
- <1551923650.31706.258.camel@linux.ibm.com>
- <CACdnJuv+d2qEc+vQosmDOzdu57Jjpjq9-CZEy8epz0ob5mptsA@mail.gmail.com>
- <1551991690.31706.416.camel@linux.ibm.com>
- <CACdnJuvkA6M_fu3+BARH2AMHksTXbvWmRyK9ZaxcH-xZMq4G2g@mail.gmail.com>
- <CACdnJuv2zV1OnbVaHqkB2UU=dAEzzffajAFg_xsgXRMvuZ5fTw@mail.gmail.com>
- <1554416328.24612.11.camel@HansenPartnership.com>
- <CACdnJutZzJu7FxcLWasyvx9BLQJeGrA=7WA389JL8ixFJ6Skrg@mail.gmail.com>
- <1554417315.24612.15.camel@HansenPartnership.com>
- <CACdnJuutKe+i8KLUmPWjbFOWfrO2FzYVPjYZGgEatFmZWkw=UA@mail.gmail.com>
- <1554431217.24612.37.camel@HansenPartnership.com>
- <CACdnJut_vN9pJXq-j9fEO1CFZ-Aq83cO2LiFmep=Fn9_NOKhWQ@mail.gmail.com>
- <CACdnJusKM74vZ=zg+0fe50gNRVaDPCdw9mfbbq45yTqnZfZX5w@mail.gmail.com>
- <1556828700.4134.128.camel@linux.ibm.com>
- <CACdnJutAw02Hq=NDeHoSsZAh2D95EBag_U8GYoSfNJ7eM61OxQ@mail.gmail.com>
- <1556838167.7067.9.camel@linux.ibm.com>
- <6fc66a58-2d34-e8cc-ee01-ec04c85196eb@huawei.com>
-Message-ID: <8e806482-2f55-8c9e-ab95-a3ba4c728535@huawei.com>
-Date:   Fri, 3 May 2019 10:17:39 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1727508AbfECLqw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 May 2019 07:46:52 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:38818 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726377AbfECLqv (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 3 May 2019 07:46:51 -0400
+Received: by mail-ed1-f67.google.com with SMTP id w11so5654656edl.5;
+        Fri, 03 May 2019 04:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=SUzz8Pj0c+WsqXtdVpJDOr7+714Bl6dV3H6hlHSl0LM=;
+        b=BLYsTAEQbWzcmkgKtrINtG//3ZRMga0gWmXJLigpWRHQ4USXwWTqw1l8wD0qzh20hD
+         JUWYn3ZkWjxkO3haBqi9UEgZM/jGJ4aL284bYTv3yHTW05lXjfANyUaMCCxUVghy2eCL
+         iLpfJWRFUZM9wKRYuBwNlEK80YYvdiwcK1atJ47vspLKa6HLVWE+n19owJq/CiSWA5v6
+         WjH9Qa/LnMokZmyzka7CrERdr2lXN4c1Q4ItUKc7ttZeUTAAhycVcuzp9EbPny+52X/m
+         doMI6moqWm6T+8oSWhSHB6c30bMPctIaTjxqwmV1OyJ/2EaXDWhrEZxBNGVxCfCePzCn
+         whIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=SUzz8Pj0c+WsqXtdVpJDOr7+714Bl6dV3H6hlHSl0LM=;
+        b=bql5bwZvQqeWh7673VRmM4U2mTVgvfDK5kSkoXiG32I0QQrtMhhZBpnw7CKem7owQv
+         1U9FHOpyj/FXkwbLr0vyEfSW+iEm1CNFZ1vj/Icc07XgaSWfja8WAQVtVDAvAqLGXw4n
+         2ncPyKM3uESdj52zCQzz3uv83Nc3kG93kEgjRRAR5X8RqrBCX/iEtqIUCQZE+LEshVP7
+         08UPelbS3F1RBy9oit6D5jOs8OFuOf45Qh5PFlNau8WLL8b57XA5es8JNCTYpC4b8Pa0
+         f4XBy76kFk743mlLXqER4lr5KtCcDkBZ9Felf4f3lMiaFoxQPeaAkh6hB1nsUvsTg2MA
+         7psg==
+X-Gm-Message-State: APjAAAVFXiYpRPlcHLwMh4AeUaDJm3SGzSe6NF6hUQpysd2x2IfAoJiH
+        ueZovU70rq5Z3+BldCrHtYLHk8n93Xm4nVavLxs4skT4A8aorg==
+X-Google-Smtp-Source: APXvYqzI2yRSX1xo2ruyfnRuglypC4T2+7PoJVl/qekpcw1bEuTrwQXLJp0KS8WKs2z1Ktr2lHiCBJTu5Koglbaa7kc=
+X-Received: by 2002:a50:9785:: with SMTP id e5mr7740641edb.94.1556884009023;
+ Fri, 03 May 2019 04:46:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <6fc66a58-2d34-e8cc-ee01-ec04c85196eb@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.204.65.144]
-X-CFilter-Loop: Reflected
+From:   Elena Reshetova <elena.reshetova@gmail.com>
+Date:   Fri, 3 May 2019 14:46:38 +0300
+Message-ID: <CALrft9-KhB8WZpZHoyd3uDN-ryX=pnSV6=5QEvZAe2YCV9aBYA@mail.gmail.com>
+Subject: [ANNOUNCE][CFP] Linux Security Summit Europe 2019
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/3/2019 8:51 AM, Roberto Sassu wrote:
-> On 5/3/2019 1:02 AM, Mimi Zohar wrote:
->> On Thu, 2019-05-02 at 15:37 -0700, Matthew Garrett wrote:
->>> On Thu, May 2, 2019 at 1:25 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
->>>> Suppose instead of re-using the "d-ng" for the vfs hash, you defined a
->>>> new field named d-vfs.  Instead of the "ima-ng" or "d-ng|n-ng", the
->>>> template name could be "d-vfs|n-ng".
->>>
->>> Is it legitimate to redefine d-ng such that if the hash comes from the
->>> filesystem it adds an additional prefix? This will only occur if the
->>> admin has explicitly enabled the trusted_vfs option, so we wouldn't
->>> break any existing configurations. Otherwise, I'll look for the
->>> cleanest approach for making this dynamic.
->>
->> I would assume modifying d-ng would break existing attestation
->> servers.
-> 
-> Yes, I would also prefer to avoid modification of d-ng.
-> 
-> 
->> Perhaps instead of making the template format dynamic based on fields,
->> as I suggested above, define a per policy rule template format option.
-> 
-> This should not be too complicated. The template to use will be returned
-> by ima_get_action() to process_measurement().
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+                            ANNOUNCEMENT AND CALL FOR PARTICIPATION
+                                LINUX SECURITY SUMMIT EUROPE 2019
 
-Some time ago I made some patches:
+                                        31 October =E2=80=93 1 November
+                                                Lyon, France
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
 
-https://sourceforge.net/p/linux-ima/mailman/message/31655784/
+DESCRIPTION
 
-Roberto
+The Linux Security Summit (LSS) is a technical forum for collaboration
+between Linux developers, researchers, and end users. Its primary aim is to
+foster community efforts in analyzing and solving Linux security challenges=
+.
 
--- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+This year, for the second time, the Linux Security Summit is going to
+be also held in Europe (LSS-EU) in order to facilitate broader participatio=
+n
+in Linux security development.
+Similar to LSS-North America, LSS-EU provides a unique opportunity for to h=
+ave
+discussions and networking opportunities with key people in the Linux kerne=
+l
+security community, present your work and ideas and affect the future direc=
+tion
+of Linux security.
+
+The program committee currently seeks proposals for:
+
+    * Refereed Presentations:
+        45 minutes in length.
+
+    * Panel Discussion Topics:
+        45 minutes in length.
+
+    * Short Topics:
+        30 minutes in total, including at least 10 minutes discussion.
+
+    * BoF Sessions.
+
+    * Tutorials *NEW for 2019*:
+        90 minutes in length.
+        Tutorial sessions should be focused on advanced Linux security defe=
+nse
+        topics within areas such as the kernel, compiler, and security-rela=
+ted
+        libraries. Priority will be given to tutorials created for
+this conference.
+
+Topic areas include, but are not limited to:
+
+    * Kernel self-protection
+    * Access control
+    * Cryptography and key management
+    * Integrity control
+    * Hardware Security
+    * Iot and embedded security
+    * Virtualization and containers
+    * System-specific system hardening
+    * Case studies
+    * Security tools
+    * Security UX
+    * Emerging technologies, threats & techniques
+
+Proposals should be submitted via:
+ https://linuxfoundation.smapply.io/prog/lss_eu_2019/
+
+DATES
+
+ * CFP Close: Wednesday , July 31, 2019
+ * CFP Notifications: Friday, August 9, 2019
+ * Schedule Announced: Monday, August 19, 2019
+ * Event: October 31 =E2=80=93 November 1, 2019
+
+
+WHO SHOULD ATTEND
+
+ We're seeking a diverse range of attendees, and welcome participation by
+ people involved in Linux security development, operations, and research.
+
+ The LSS is a unique global event which provides the opportunity to present
+ and discuss your work or research with key Linux security community member=
+s
+ and maintainers. It?s also useful for those who wish to keep up with the
+ latest in Linux security development, and to provide input to the
+ development process.
+
+WEB SITE
+
+ https://events.linuxfoundation.org/events/linux-security-summit-europe-201=
+9/
+
+TWITTER
+
+ For event updates and announcements, follow:
+
+ https://twitter.com/LinuxSecSummit
+
+PROGRAM COMMITTEE
+
+ The program committee for LSS-EU 2019 is:
+
+    * Elena Reshetova, Intel
+    * James Morris, Microsoft
+    * Serge Hallyn, Cisco
+    * Paul Moore, Cisco
+    * Stephen Smalley, NSA
+    * John Johansen, Canonical
+    * Kees Cook, Google
+    * Casey Schaufler, Intel
+    * Mimi Zohar, IBM
+    * David A. Wheeler, Institute for Defense Analyses
+
+The program committee may be contacted as a group via email:
+ lss-pc () lists.linuxfoundation.org
