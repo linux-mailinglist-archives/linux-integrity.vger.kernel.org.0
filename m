@@ -2,88 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DB314AC1
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 May 2019 15:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D50C14AF2
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 May 2019 15:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726095AbfEFNR7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 May 2019 09:17:59 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:39364 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726094AbfEFNR6 (ORCPT
+        id S1725853AbfEFNcO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 May 2019 09:32:14 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47648 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725813AbfEFNcN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 May 2019 09:17:58 -0400
-Received: by mail-lf1-f66.google.com with SMTP id z124so2978627lfd.6
-        for <linux-integrity@vger.kernel.org>; Mon, 06 May 2019 06:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=QVT5o2K6/T5zLL35om1EwXW18M/KI6lG6aQFJ/qM2gA=;
-        b=VPsNkqKNiVylTtcTcopQKxzFBPEbn51Gf6/pFeguiezsIzKcUpDaf3f/g1bt8lvtAl
-         GjFQNCH7yj1d31t60n3pcBFNblNMtRiGxQfwmZ3MHsJUohM94mevTMJ5IuyEFBHw6ESg
-         KAmep8KLr2b2f1h9naKG4J35UIPYfwQNnaTK/0rMPDBs6Vh569uYzQWaZVgjekwaTkKI
-         O5Gs2TSA8QfpPz0FJJcNknCXrk+53GNTCcTxudcCulgVWwpwKuQgeoA/lpt9KeiaFTbk
-         pZme4awbRDuWEV8RalGYt1au5fviJPzMqMf+9F27qOos0Z6Pe57nkNvsB0IyuSIJ38nA
-         svVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=QVT5o2K6/T5zLL35om1EwXW18M/KI6lG6aQFJ/qM2gA=;
-        b=ODs+xnkIvu53k5TBT6imG5KfHbrc2FGDuRKXHJ7wyDx+UMMgSgM9PFi0peFvUfSHZ2
-         kWfk77fIvPQlXmb4Vh7aSU0fMKdP/Iuk9xxduCmW+tfnjHY/uiWF/9n5vtcdmBwjakZT
-         Kq2UwTriyfXq8lf/iNbhfjk4W1EZFKeuKWlkiEJdNIuPuKf64zztwwQcAUn4Ho7VNGnF
-         4WwxaGBi1kGqvP2hZjerlGlCO5cwfYvbNC/5JLK1iyUbcYrQedgkFAPJGTK3HQeXmrWX
-         /H3xrAijiy7+ednOCaLdtdHQ2NLDhi8Dn4TmAmQUxI3n3zyQ0B2yOyepwM/9WzyaRdLp
-         H9wA==
-X-Gm-Message-State: APjAAAW+/ifcf5UkD+kG9p3hyl1HjmA6t7I9aN34imIZlzxCab9VrBe9
-        flv9ORyA47WRN1xxMVo0wL9kUGkm0G69sHGl6/c=
-X-Google-Smtp-Source: APXvYqxpF5YhWukRzprxiPxJVyQDgchQwhcq0FucV8Api0+yuNQ06cSJc2rCYGrkNBEDuPhVKtRhYFGRqsVFQE8dpNU=
-X-Received: by 2002:a19:6a18:: with SMTP id u24mr8216440lfu.165.1557148676798;
- Mon, 06 May 2019 06:17:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190410145659.26347-1-janne.karhunen@gmail.com>
- <1554987784.7843.40.camel@linux.ibm.com> <CAE=NcrY_nwjdPoD+hk90CW93LTDattY_g-qQcqFQa=Xb7M+wPA@mail.gmail.com>
- <CAE=NcraxAJum=Uk77BoPXVkBDk3rwmXh80mLxy6pxrtUW_hpQg@mail.gmail.com>
- <1556805843.4134.15.camel@linux.ibm.com> <CAE=Ncrb4unTxeU=2jLb-KTqKXpK98vGFbrOxdcnjdfD_Ddk8ug@mail.gmail.com>
- <1556884105.4754.18.camel@linux.ibm.com>
-In-Reply-To: <1556884105.4754.18.camel@linux.ibm.com>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Mon, 6 May 2019 16:17:45 +0300
-Message-ID: <CAE=Ncrbjq4MEZL5b6A6n8q2REsb_vG-TFMh54A+dgpQ8an4tyQ@mail.gmail.com>
-Subject: Re: [PATCH] integrity: make 'sync' update the inode integrity state
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+        Mon, 6 May 2019 09:32:13 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x46DRtW3036261
+        for <linux-integrity@vger.kernel.org>; Mon, 6 May 2019 09:32:13 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2samgev1g6-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 06 May 2019 09:32:12 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 6 May 2019 14:32:10 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 6 May 2019 14:32:08 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x46DW77N48890068
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 May 2019 13:32:07 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2F4015204F;
+        Mon,  6 May 2019 13:32:07 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.95.145])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 77A2852057;
+        Mon,  6 May 2019 13:32:06 +0000 (GMT)
+Subject: Friendly reminder
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity <linux-integrity@vger.kernel.org>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Date:   Mon, 06 May 2019 09:31:55 -0400
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19050613-0020-0000-0000-00000339D20E
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19050613-0021-0000-0000-0000218C6737
+Message-Id: <1557149515.14288.145.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-06_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905060117
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, May 3, 2019 at 2:48 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+Hi -
 
-> > > [1] f02a9ad1f15d ("fs: handle inode->i_version more efficiently")
-> >
-> > Thank you. I wasn't aware of this and it makes sense,
->
-> The question is whether this impacts your current set of patches?  We
-> really need to take this discussion back to the mailing list.  I've
-> responded to my original post with this info.
+A number of people have recently joined this mailing list wanting to
+contribute - participate in discussions, provide bugs fixes, and/or
+add new features.  This is also a good reminder for seasoned kernel
+developers as well.  Like with any community, Linux kernel development
+defines certain conventions.  At minimum to participate in the
+discussions, please find a mailer that doesn't mangle posts; and
+remember to trim and inline/bottom post responses.
 
-Hmm, if we add the iversion query as you suggested the function can be
-added as a polling point just about anywhere. I added it in there now.
+To fix bugs or submit new features to the linux-integrity subsystem
+please read the kernel documentation [1,2] to understand the
+process and expectations.  Patches pertaining to IMA, EVM, "trusted"
+keys and "encrypted" keys, are upstreamed via the linux-security
+tree.  Please make sure any patches posted, apply cleanly to the next-
+integrity branch [3] or the next-queued-testing branch immediately
+before, during, and after the open window.
 
-I sent the current state of the upstream port as a new patch with a
-proper topic. The mm page scanning code is so rough that it is still
-omitted, let's continue the discussion from the core plumbing first. I
-did not adopt to your function naming changes yet as the scope of the
-work is now much wider, plain 'ima_file_sync' may be misleading as we
-also follow the data as it's being written.
+For those submitting new features, please pay special attention to the
+section titled "3) Separate your changes". [1]  Before posting patches
+to the mailing list, please review your patches line by line, just as
+people reviewing patches do.  The easier it is to read and review the
+patches, the more likely they will be reviewed/upstreamed.
 
-Before you ask, the reason why it now does the periodic measurements
-of the files as they are written instead of doing 'mod_delayed_work'
-timer kicking is that the 'mod_delayed_work' seems quite heavy. Now
-there is almost no added latency to the 'write()' loop, just random
-measurements with freely definable intervals.
+Before extending IMA/EVM, please consider the security/integrity
+implications of the proposed new feature, not only in the context of
+your environment, but the bigger picture - how others are currently
+using existing features.  Remember changes may never break userspace
+[4] and, additionally for the linux-integrity subsystem, userspace
+expectations.
 
+Most importantly, reviewing patches should not only be the
+maintainer's responsibility, it simply doesn't scale very well, but is
+the community's responsibility.  You don't need to be a subject expert
+to review/comment on patches.  Patches can be reviewed at multiple
+levels - patch descriptions, coding style, security, integrity, etc.  
+Please take the time to review and comment on other people's patches.
 
---
-Janne
+Thanks!
+
+Mimi
+
+[1] Documentation/process/submitting-patches.rst
+[2] Documentation/process/submit-checklist.rst
+[3] next-integrity branch (https://git.kernel.org/pub/scm/linux/kernel
+/git/zohar/linux-integrity.git)
+[4] Linus' edict "Never break userspace"
+
