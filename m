@@ -2,196 +2,188 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FADF1545E
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 May 2019 21:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D0615B16
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 May 2019 07:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbfEFTU3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 May 2019 15:20:29 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:40739 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726379AbfEFTUX (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 May 2019 15:20:23 -0400
-Received: by mail-ed1-f65.google.com with SMTP id e56so16391497ede.7
-        for <linux-integrity@vger.kernel.org>; Mon, 06 May 2019 12:20:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xCEOfP6RU+Gi012NBQNwokWykodrMshPYU6zq/Z/KZY=;
-        b=qm9WwefTgIVd/AuxC2X/UkSXNHeXEUJIucqVKEb9qzx4dXtes0/cjgCt2cJ48DgCRy
-         el1Uv1BBkymRxv+k4F+24XVkboutPvSRpH2Yz7B4fj9uBPWaNpKlQP+RRzmbSXmBaZqt
-         8pJmQ0YW8tZWKmv8basi9LO/7bWgpXd7tZGdr+SA46tG9+a2akFmXmTjNctab92bIsLN
-         P8N9jCs86CbK79QgFOvWYl5bpf/TPDgs54/HMYBbLGjaBj3qdGoLHOZsQFUbb13CEf51
-         bJdxh8C3cLyYXKlxmB40Jor4cx97gNP3bR7GM2rIdIVHk1xxXTltHcwLSn+IfibV8E6/
-         lr1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xCEOfP6RU+Gi012NBQNwokWykodrMshPYU6zq/Z/KZY=;
-        b=n3DxVxzpGu9HP8+wqOeG4P/yKEjPGNgcac3zTvtOvyBHj0XFfWsxQ/fZ3vyR+vxmwb
-         XiZEPWfDAzXBhP3bNVwDK78MCVQqAVeLimC5yDXWvJGDJookeNQl//eJdsHjQ/fDQ2Ry
-         KRrjudcm1hOPh065ojoZ6QeD89L0xFKCXE7klvjWLgMWMGNr/4nfwWzeJ5RyWXxD8MEr
-         XiScoyRFNkEGgzwbsooT6DjAVrvKcqlfFCo+6hlYTQFx/r6VbkxB+r0E/vP5lCoZeSrk
-         tymM/zf01ELPP/DPN3srYo2/SNNLGqYIq1VlwY0HxU3DT8WUFaWnkNMKWOiadFBD0Psn
-         20KA==
-X-Gm-Message-State: APjAAAXjv4e0bQfDEK5LxLLWEm5eGPxOcII/DJGJHQemdctyhnjvgMWV
-        Um71YYbI/wQZ19DT5OKcPukEGefBlJzx4PMSfa4=
-X-Google-Smtp-Source: APXvYqwwW8R3mPN+12OrIBYktTLJSDqTG2StpnlYYtwsbwkaEu9XkYeZXx9+yBNTJKa4QrDYsy1hlA==
-X-Received: by 2002:a50:95d6:: with SMTP id x22mr11190387eda.89.1557170421485;
-        Mon, 06 May 2019 12:20:21 -0700 (PDT)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
-        by smtp.gmail.com with ESMTPSA id l6sm1758248eja.91.2019.05.06.12.20.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 May 2019 12:20:19 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id b10so17257417wmj.4;
-        Mon, 06 May 2019 12:20:18 -0700 (PDT)
-X-Received: by 2002:a1c:4d04:: with SMTP id o4mr7992563wmh.126.1557170418422;
- Mon, 06 May 2019 12:20:18 -0700 (PDT)
+        id S1728348AbfEGFvd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 May 2019 01:51:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59386 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728946AbfEGFjw (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 7 May 2019 01:39:52 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A292A21530;
+        Tue,  7 May 2019 05:39:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557207591;
+        bh=O2/NA3AYa+PTWrpy6a/5bj3br+ITj7oov1QcxhdukG4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nr7Bsw1zgbsC/9QnxMWQTfx+7uZBEUiCWXSZiZvKP2NmO7eenl1A285VeBoaBLyn8
+         6uG0xsTlV9W2NlXE/fRxKKyFkJYpAAxtyRtr/nkaDxuGgzqRT1EwznT5zjQkaB+8fF
+         JZ1dJbogFI2RrT1TAxeQ/kDPl045wEEXzviokEJs=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Goldwyn Rodrigues <rgoldwyn@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sasha Levin <alexander.levin@microsoft.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 41/95] ima: open a new file instance if no read permissions
+Date:   Tue,  7 May 2019 01:37:30 -0400
+Message-Id: <20190507053826.31622-41-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190507053826.31622-1-sashal@kernel.org>
+References: <20190507053826.31622-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20190227202658.197113-1-matthewgarrett@google.com>
- <20190227202658.197113-3-matthewgarrett@google.com> <CAJzaN5pUJoOCz5-ZDSnTb6dbVPuy0QwmFD0CeofAGK+bRQx0og@mail.gmail.com>
- <CACdnJutpBPAX6TOGgs3Ng2v_cC5hAf-3pHThESvjQ9vbvQeVkA@mail.gmail.com>
- <CACdnJuvYAfFboej4e5jQ=iwhb-5Pi7BgSKEWGqJ0q=uarCoOfQ@mail.gmail.com>
- <CAJzaN5ofshg4KseGhOL2LSLDQNoAHC6Ve25gpgWU69bEfBq1fw@mail.gmail.com> <CACdnJutMC2GBiXYUnFze+E-cigwb1gOK_wRfyWp77XQhTJuw9A@mail.gmail.com>
-In-Reply-To: <CACdnJutMC2GBiXYUnFze+E-cigwb1gOK_wRfyWp77XQhTJuw9A@mail.gmail.com>
-From:   Bartosz Szczepanek <bsz@semihalf.com>
-Date:   Mon, 6 May 2019 21:20:06 +0200
-X-Gmail-Original-Message-ID: <CAJzaN5pyjZp5A1Qcd0PRfo=zYjBeTuh6dA1nH2mS0s4Gu0b0BA@mail.gmail.com>
-Message-ID: <CAJzaN5pyjZp5A1Qcd0PRfo=zYjBeTuh6dA1nH2mS0s4Gu0b0BA@mail.gmail.com>
-Subject: Re: [PATCH V5 2/4] tpm: Reserve the TPM final events table
-To:     Matthew Garrett <mjg59@google.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
-Content-Type: multipart/mixed; boundary="000000000000a5911e05883cfd42"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---000000000000a5911e05883cfd42
-Content-Type: text/plain; charset="UTF-8"
+From: Goldwyn Rodrigues <rgoldwyn@suse.de>
 
-Nope, it doesn't work. It compiled (after correcting one more leftover
-mapping), but panicked the same way.
+[ Upstream commit a408e4a86b36bf98ad15b9ada531cf0e5118ac67 ]
 
-I've came up with a set of changes that make it working in my setup,
-see attached patch. There was a problem with passing already remapped
-address to tpm2_calc_event_log_size(), which tried to remap it for
-second time. Few more adjustments were needed in remap-as-you-go code
-so that new address is used consequently. Also, I've removed remapping
-digest itself because it was never used.
+Open a new file instance as opposed to changing file->f_mode when
+the file is not readable.  This is done to accomodate overlayfs
+stacked file operations change.  The real struct file is hidden
+behind the overlays struct file.  So, any file->f_mode manipulations are
+not reflected on the real struct file.  Open the file again in read mode
+if original file cannot be read, read and calculate the hash.
 
-I'm not certain these changes make it 100% correct, but it worked on
-35 events I had in final log. Its ending seems fine now:
-> [root@localhost ~]# hexdump -C /sys/kernel/security/tpm0/binary_bios_measurements | tail
-> 00003720  42 6f 6f 74 20 53 65 72  76 69 63 65 73 20 49 6e  |Boot Services In|
-> 00003730  76 6f 63 61 74 69 6f 6e  05 00 00 00 07 00 00 80  |vocation........|
-> 00003740  02 00 00 00 04 00 47 55  45 dd c9 78 d7 bf d0 36  |......GUE..x...6|
-> 00003750  fa cc 7e 2e 98 7f 48 18  9f 0d 0b 00 b5 4f 75 42  |..~...H......OuB|
-> 00003760  cb d8 72 a8 1a 9d 9d ea  83 9b 2b 8d 74 7c 7e bd  |..r.......+.t|~.|
-> 00003770  5e a6 61 5c 40 f4 2f 44  a6 db eb a0 28 00 00 00  |^.a\@./D....(...|
-> 00003780  45 78 69 74 20 42 6f 6f  74 20 53 65 72 76 69 63  |Exit Boot Servic|
-> 00003790  65 73 20 52 65 74 75 72  6e 65 64 20 77 69 74 68  |es Returned with|
-> 000037a0  20 53 75 63 63 65 73 73                           | Success|
-> 000037a8
+Signed-off-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
+Cc: stable@vger.kernel.org (linux-4.19)
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Sasha Levin <alexander.levin@microsoft.com>
+---
+ security/integrity/ima/ima_crypto.c | 54 ++++++++++++++++++-----------
+ 1 file changed, 34 insertions(+), 20 deletions(-)
 
-Still, some refactoring could help here as __calc_tpm2_event_size has
-grown and its logic became hard to follow. IMO it's far too complex
-for inline function.
+diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
+index cb041af9eddb..af680b5b678a 100644
+--- a/security/integrity/ima/ima_crypto.c
++++ b/security/integrity/ima/ima_crypto.c
+@@ -232,7 +232,7 @@ static int ima_calc_file_hash_atfm(struct file *file,
+ {
+ 	loff_t i_size, offset;
+ 	char *rbuf[2] = { NULL, };
+-	int rc, read = 0, rbuf_len, active = 0, ahash_rc = 0;
++	int rc, rbuf_len, active = 0, ahash_rc = 0;
+ 	struct ahash_request *req;
+ 	struct scatterlist sg[1];
+ 	struct ahash_completion res;
+@@ -279,11 +279,6 @@ static int ima_calc_file_hash_atfm(struct file *file,
+ 					  &rbuf_size[1], 0);
+ 	}
+ 
+-	if (!(file->f_mode & FMODE_READ)) {
+-		file->f_mode |= FMODE_READ;
+-		read = 1;
+-	}
+-
+ 	for (offset = 0; offset < i_size; offset += rbuf_len) {
+ 		if (!rbuf[1] && offset) {
+ 			/* Not using two buffers, and it is not the first
+@@ -322,8 +317,6 @@ static int ima_calc_file_hash_atfm(struct file *file,
+ 	/* wait for the last update request to complete */
+ 	rc = ahash_wait(ahash_rc, &res);
+ out3:
+-	if (read)
+-		file->f_mode &= ~FMODE_READ;
+ 	ima_free_pages(rbuf[0], rbuf_size[0]);
+ 	ima_free_pages(rbuf[1], rbuf_size[1]);
+ out2:
+@@ -358,7 +351,7 @@ static int ima_calc_file_hash_tfm(struct file *file,
+ {
+ 	loff_t i_size, offset = 0;
+ 	char *rbuf;
+-	int rc, read = 0;
++	int rc;
+ 	SHASH_DESC_ON_STACK(shash, tfm);
+ 
+ 	shash->tfm = tfm;
+@@ -379,11 +372,6 @@ static int ima_calc_file_hash_tfm(struct file *file,
+ 	if (!rbuf)
+ 		return -ENOMEM;
+ 
+-	if (!(file->f_mode & FMODE_READ)) {
+-		file->f_mode |= FMODE_READ;
+-		read = 1;
+-	}
+-
+ 	while (offset < i_size) {
+ 		int rbuf_len;
+ 
+@@ -400,8 +388,6 @@ static int ima_calc_file_hash_tfm(struct file *file,
+ 		if (rc)
+ 			break;
+ 	}
+-	if (read)
+-		file->f_mode &= ~FMODE_READ;
+ 	kfree(rbuf);
+ out:
+ 	if (!rc)
+@@ -442,6 +428,8 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ {
+ 	loff_t i_size;
+ 	int rc;
++	struct file *f = file;
++	bool new_file_instance = false, modified_flags = false;
+ 
+ 	/*
+ 	 * For consistency, fail file's opened with the O_DIRECT flag on
+@@ -453,15 +441,41 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ 		return -EINVAL;
+ 	}
+ 
+-	i_size = i_size_read(file_inode(file));
++	/* Open a new file instance in O_RDONLY if we cannot read */
++	if (!(file->f_mode & FMODE_READ)) {
++		int flags = file->f_flags & ~(O_WRONLY | O_APPEND |
++				O_TRUNC | O_CREAT | O_NOCTTY | O_EXCL);
++		flags |= O_RDONLY;
++		f = dentry_open(&file->f_path, flags, file->f_cred);
++		if (IS_ERR(f)) {
++			/*
++			 * Cannot open the file again, lets modify f_flags
++			 * of original and continue
++			 */
++			pr_info_ratelimited("Unable to reopen file for reading.\n");
++			f = file;
++			f->f_flags |= FMODE_READ;
++			modified_flags = true;
++		} else {
++			new_file_instance = true;
++		}
++	}
++
++	i_size = i_size_read(file_inode(f));
+ 
+ 	if (ima_ahash_minsize && i_size >= ima_ahash_minsize) {
+-		rc = ima_calc_file_ahash(file, hash);
++		rc = ima_calc_file_ahash(f, hash);
+ 		if (!rc)
+-			return 0;
++			goto out;
+ 	}
+ 
+-	return ima_calc_file_shash(file, hash);
++	rc = ima_calc_file_shash(f, hash);
++out:
++	if (new_file_instance)
++		fput(f);
++	else if (modified_flags)
++		f->f_flags &= ~FMODE_READ;
++	return rc;
+ }
+ 
+ /*
+-- 
+2.20.1
 
-Attached patch should be applied on top of jjs/master.
-
-Bartosz
-
---000000000000a5911e05883cfd42
-Content-Type: text/x-patch; charset="US-ASCII"; name="eventlog_fix.diff"
-Content-Disposition: attachment; filename="eventlog_fix.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jvcqvyjp0>
-X-Attachment-Id: f_jvcqvyjp0
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZmlybXdhcmUvZWZpL3RwbS5jIGIvZHJpdmVycy9maXJtd2Fy
-ZS9lZmkvdHBtLmMKaW5kZXggZmU0ODE1MGYwNmQxLi4yYzkxMmVhMDgxNjYgMTAwNjQ0Ci0tLSBh
-L2RyaXZlcnMvZmlybXdhcmUvZWZpL3RwbS5jCisrKyBiL2RyaXZlcnMvZmlybXdhcmUvZWZpL3Rw
-bS5jCkBAIC0yOCw2ICsyOCw3IEBAIHN0YXRpYyBpbnQgdHBtMl9jYWxjX2V2ZW50X2xvZ19zaXpl
-KHZvaWQgKmRhdGEsIGludCBjb3VudCwgdm9pZCAqc2l6ZV9pbmZvKQogCQlpZiAoZXZlbnRfc2l6
-ZSA9PSAwKQogCQkJcmV0dXJuIC0xOwogCQlzaXplICs9IGV2ZW50X3NpemU7CisJCWNvdW50LS07
-CiAJfQogCiAJcmV0dXJuIHNpemU7CkBAIC00MSw2ICs0Miw3IEBAIGludCBfX2luaXQgZWZpX3Rw
-bV9ldmVudGxvZ19pbml0KHZvaWQpCiAJc3RydWN0IGxpbnV4X2VmaV90cG1fZXZlbnRsb2cgKmxv
-Z190Ymw7CiAJc3RydWN0IGVmaV90Y2cyX2ZpbmFsX2V2ZW50c190YWJsZSAqZmluYWxfdGJsOwog
-CXVuc2lnbmVkIGludCB0Ymxfc2l6ZTsKKwlpbnQgcmV0ID0gMDsKIAogCWlmIChlZmkudHBtX2xv
-ZyA9PSBFRklfSU5WQUxJRF9UQUJMRV9BRERSKSB7CiAJCS8qCkBAIC02MCwxMCArNjIsOSBAQCBp
-bnQgX19pbml0IGVmaV90cG1fZXZlbnRsb2dfaW5pdCh2b2lkKQogCiAJdGJsX3NpemUgPSBzaXpl
-b2YoKmxvZ190YmwpICsgbG9nX3RibC0+c2l6ZTsKIAltZW1ibG9ja19yZXNlcnZlKGVmaS50cG1f
-bG9nLCB0Ymxfc2l6ZSk7Ci0JZWFybHlfbWVtdW5tYXAobG9nX3RibCwgc2l6ZW9mKCpsb2dfdGJs
-KSk7CiAKIAlpZiAoZWZpLnRwbV9maW5hbF9sb2cgPT0gRUZJX0lOVkFMSURfVEFCTEVfQUREUikK
-LQkJcmV0dXJuIDA7CisJCWdvdG8gb3V0OwogCiAJZmluYWxfdGJsID0gZWFybHlfbWVtcmVtYXAo
-ZWZpLnRwbV9maW5hbF9sb2csIHNpemVvZigqZmluYWxfdGJsKSk7CiAKQEAgLTcxLDE3ICs3Miwy
-MiBAQCBpbnQgX19pbml0IGVmaV90cG1fZXZlbnRsb2dfaW5pdCh2b2lkKQogCQlwcl9lcnIoIkZh
-aWxlZCB0byBtYXAgVFBNIEZpbmFsIEV2ZW50IExvZyB0YWJsZSBAIDB4JWx4XG4iLAogCQkgICAg
-ICAgZWZpLnRwbV9maW5hbF9sb2cpOwogCQllZmkudHBtX2ZpbmFsX2xvZyA9IEVGSV9JTlZBTElE
-X1RBQkxFX0FERFI7Ci0JCXJldHVybiAtRU5PTUVNOworCQlyZXQgPSAtRU5PTUVNOworCQlnb3Rv
-IG91dDsKIAl9CiAKLQl0Ymxfc2l6ZSA9IHRwbTJfY2FsY19ldmVudF9sb2dfc2l6ZShmaW5hbF90
-YmwtPmV2ZW50cywKKwl0Ymxfc2l6ZSA9IHRwbTJfY2FsY19ldmVudF9sb2dfc2l6ZShlZmkudHBt
-X2ZpbmFsX2xvZworCQkJCQkgICAgKyBzaXplb2YoZmluYWxfdGJsLT52ZXJzaW9uKQorCQkJCQkg
-ICAgKyBzaXplb2YoZmluYWxfdGJsLT5ucl9ldmVudHMpLAogCQkJCQkgICAgZmluYWxfdGJsLT5u
-cl9ldmVudHMsCi0JCQkJCSAgICAodm9pZCAqKWVmaS50cG1fbG9nKTsKKwkJCQkJICAgIGxvZ190
-YmwtPmxvZyk7CiAJbWVtYmxvY2tfcmVzZXJ2ZSgodW5zaWduZWQgbG9uZylmaW5hbF90YmwsCiAJ
-CQkgdGJsX3NpemUgKyBzaXplb2YoKmZpbmFsX3RibCkpOwogCWVhcmx5X21lbXVubWFwKGZpbmFs
-X3RibCwgc2l6ZW9mKCpmaW5hbF90YmwpKTsKIAllZmlfdHBtX2ZpbmFsX2xvZ19zaXplID0gdGJs
-X3NpemU7CiAKLQlyZXR1cm4gMDsKK291dDoKKwllYXJseV9tZW11bm1hcChsb2dfdGJsLCBzaXpl
-b2YoKmxvZ190YmwpKTsKKwlyZXR1cm4gcmV0OwogfQogCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xp
-bnV4L3RwbV9ldmVudGxvZy5oIGIvaW5jbHVkZS9saW51eC90cG1fZXZlbnRsb2cuaAppbmRleCAw
-Y2EyN2JjMDUzYWYuLjYzMjM4Yzg0ZGMwYiAxMDA2NDQKLS0tIGEvaW5jbHVkZS9saW51eC90cG1f
-ZXZlbnRsb2cuaAorKysgYi9pbmNsdWRlL2xpbnV4L3RwbV9ldmVudGxvZy5oCkBAIC0xODUsOCAr
-MTg1LDEyIEBAIHN0YXRpYyBpbmxpbmUgaW50IF9fY2FsY190cG0yX2V2ZW50X3NpemUoc3RydWN0
-IHRjZ19wY3JfZXZlbnQyX2hlYWQgKmV2ZW50LAogCQkJc2l6ZSA9IDA7CiAJCQlnb3RvIG91dDsK
-IAkJfQorCX0gZWxzZSB7CisJCW1hcHBpbmcgPSBtYXJrZXJfc3RhcnQ7CiAJfQogCisJZXZlbnQg
-PSAoc3RydWN0IHRjZ19wY3JfZXZlbnQyX2hlYWQgKiltYXBwaW5nOworCiAJZWZpc3BlY2lkID0g
-KHN0cnVjdCB0Y2dfZWZpX3NwZWNpZF9ldmVudF9oZWFkICopZXZlbnRfaGVhZGVyLT5ldmVudDsK
-IAogCS8qIENoZWNrIGlmIGV2ZW50IGlzIG1hbGZvcm1lZC4gKi8KQEAgLTIwMSwzNCArMjA1LDI0
-IEBAIHN0YXRpYyBpbmxpbmUgaW50IF9fY2FsY190cG0yX2V2ZW50X3NpemUoc3RydWN0IHRjZ19w
-Y3JfZXZlbnQyX2hlYWQgKmV2ZW50LAogCQkvKiBNYXAgdGhlIGRpZ2VzdCdzIGFsZ29yaXRobSBp
-ZGVudGlmaWVyICovCiAJCWlmIChkb19tYXBwaW5nKSB7CiAJCQlUUE1fTUVNVU5NQVAobWFwcGlu
-ZywgbWFwcGluZ19zaXplKTsKLQkJCW1hcHBpbmdfc2l6ZSA9IG1hcmtlciAtIG1hcmtlcl9zdGFy
-dCArIGhhbGdfc2l6ZTsKLQkJCW1hcHBpbmcgPSBUUE1fTUVNUkVNQVAoKHVuc2lnbmVkIGxvbmcp
-bWFya2VyX3N0YXJ0LAotCQkJCQkgICAgICAgbWFwcGluZ19zaXplKTsKKwkJCW1hcHBpbmdfc2l6
-ZSA9IGhhbGdfc2l6ZTsKKwkJCW1hcHBpbmcgPSBUUE1fTUVNUkVNQVAoKHVuc2lnbmVkIGxvbmcp
-bWFya2VyLAorCQkJCQkgICAgIG1hcHBpbmdfc2l6ZSk7CiAJCQlpZiAoIW1hcHBpbmcpIHsKIAkJ
-CQlzaXplID0gMDsKIAkJCQlnb3RvIG91dDsKIAkJCX0KKwkJfSBlbHNlIHsKKwkJCW1hcHBpbmcg
-PSBtYXJrZXI7CiAJCX0KIAotCQltZW1jcHkoJmhhbGcsIG1hcmtlciwgaGFsZ19zaXplKTsKKwkJ
-bWVtY3B5KCZoYWxnLCBtYXBwaW5nLCBoYWxnX3NpemUpOwogCQltYXJrZXIgPSBtYXJrZXIgKyBo
-YWxnX3NpemU7CiAKIAkJZm9yIChqID0gMDsgaiA8IGVmaXNwZWNpZC0+bnVtX2FsZ3M7IGorKykg
-ewogCQkJaWYgKGhhbGcgPT0gZWZpc3BlY2lkLT5kaWdlc3Rfc2l6ZXNbal0uYWxnX2lkKSB7CiAJ
-CQkJbWFya2VyICs9CiAJCQkJCWVmaXNwZWNpZC0+ZGlnZXN0X3NpemVzW2pdLmRpZ2VzdF9zaXpl
-OwotCi0JCQkJLyogTWFwIHRoZSBkaWdlc3QgY29udGVudCBpdHNlbGYgKi8KLQkJCQlpZiAoZG9f
-bWFwcGluZykgewotCQkJCQlUUE1fTUVNVU5NQVAobWFwcGluZywgbWFwcGluZ19zaXplKTsKLQkJ
-CQkJbWFwcGluZ19zaXplID0gbWFya2VyIC0gbWFya2VyX3N0YXJ0OwotCQkJCQltYXBwaW5nID0g
-VFBNX01FTVJFTUFQKCh1bnNpZ25lZCBsb25nKW1hcmtlcl9zdGFydCwKLQkJCQkJCQkgICAgICAg
-bWFwcGluZ19zaXplKTsKLQkJCQkJaWYgKCFtYXBwaW5nKSB7Ci0JCQkJCQlzaXplID0gMDsKLQkJ
-CQkJCWdvdG8gb3V0OwotCQkJCQl9Ci0JCQkJfQogCQkJCWJyZWFrOwogCQkJfQogCQl9CkBAIC0y
-MzksMjMgKzIzMywyNSBAQCBzdGF0aWMgaW5saW5lIGludCBfX2NhbGNfdHBtMl9ldmVudF9zaXpl
-KHN0cnVjdCB0Y2dfcGNyX2V2ZW50Ml9oZWFkICpldmVudCwKIAkJfQogCX0KIAotCWV2ZW50X2Zp
-ZWxkID0gKHN0cnVjdCB0Y2dfZXZlbnRfZmllbGQgKiltYXJrZXI7Ci0KIAkvKgogCSAqIE1hcCB0
-aGUgZXZlbnQgc2l6ZSAtIHdlIGRvbid0IHJlYWQgZnJvbSB0aGUgZXZlbnQgaXRzZWxmLCBzbwog
-CSAqIHdlIGRvbid0IG5lZWQgdG8gbWFwIGl0CiAJICovCiAJaWYgKGRvX21hcHBpbmcpIHsKLQkJ
-VFBNX01FTVVOTUFQKG1hcmtlcl9zdGFydCwgbWFwcGluZ19zaXplKTsKKwkJVFBNX01FTVVOTUFQ
-KG1hcHBpbmcsIG1hcHBpbmdfc2l6ZSk7CiAJCW1hcHBpbmdfc2l6ZSArPSBzaXplb2YoZXZlbnRf
-ZmllbGQtPmV2ZW50X3NpemUpOwotCQltYXBwaW5nID0gVFBNX01FTVJFTUFQKCh1bnNpZ25lZCBs
-b25nKW1hcmtlcl9zdGFydCwKKwkJbWFwcGluZyA9IFRQTV9NRU1SRU1BUCgodW5zaWduZWQgbG9u
-ZyltYXJrZXIsCiAJCQkJICAgICAgIG1hcHBpbmdfc2l6ZSk7CiAJCWlmICghbWFwcGluZykgewog
-CQkJc2l6ZSA9IDA7CiAJCQlnb3RvIG91dDsKIAkJfQorCX0gZWxzZSB7CisJCW1hcHBpbmcgPSBt
-YXJrZXI7CiAJfQogCisJZXZlbnRfZmllbGQgPSAoc3RydWN0IHRjZ19ldmVudF9maWVsZCAqKW1h
-cHBpbmc7CisKIAltYXJrZXIgPSBtYXJrZXIgKyBzaXplb2YoZXZlbnRfZmllbGQtPmV2ZW50X3Np
-emUpCiAJCSsgZXZlbnRfZmllbGQtPmV2ZW50X3NpemU7CiAJc2l6ZSA9IG1hcmtlciAtIG1hcmtl
-cl9zdGFydDsK
---000000000000a5911e05883cfd42--
