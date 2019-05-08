@@ -2,136 +2,199 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2823A17396
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 May 2019 10:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF7517850
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 May 2019 13:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726521AbfEHIYa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 May 2019 04:24:30 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:38477 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726481AbfEHIYa (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 May 2019 04:24:30 -0400
-Received: by mail-vs1-f67.google.com with SMTP id v9so4339218vse.5
-        for <linux-integrity@vger.kernel.org>; Wed, 08 May 2019 01:24:30 -0700 (PDT)
+        id S1727525AbfEHL3W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 May 2019 07:29:22 -0400
+Received: from mail-eopbgr730080.outbound.protection.outlook.com ([40.107.73.80]:59424
+        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725778AbfEHL3W (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 8 May 2019 07:29:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XNonYk8/ihexURqWmbVWGo+HlXE5x3mb0fn10s1rhqQ=;
-        b=NCJGCMhKpS7Nhq/WlWT49Dtmz49HBFEsfHuLJFyUR7lU7KrMSRbEg5CxmzO2MYJYAc
-         xeTN36amdNGYTYJcDBGer9V9C59ZmERZ814kwtqfK1+2l3beltuBS2EBTwo2kQ9rU39r
-         RxT3GqRpQuluDKyof/1SKJz3cvlP8m/dXmvHfAu5yzWo82mFctlVQWntst4XRWOzOPVw
-         pT0eC6YSnaSl4yILqf+YIau2ag0dZA0fAHDEdr3/OOzOk1GCM6ac31g5+xSm3J9KG3XW
-         6K2sZ28EunqXWhvUgwN4V6aDhQP8XPfopzGQDynU3l2hP3w2aC3ch8IfGiLu/yOgCROn
-         V77w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XNonYk8/ihexURqWmbVWGo+HlXE5x3mb0fn10s1rhqQ=;
-        b=dRwUojiuADm4hSrcd254s5H4LQCKjAbUqYxC45QXU+CKneEEIhqaBIF253BZfNJJy0
-         siGXk3NmqDilXW/AWmEBz7nU1NR5V2WirMGqJZKt+ttfXJ7jgDhIMWeH9KyJNJ72BZ6K
-         AH/bZGHdh6UdUNGcAFZtH7wkEqKjdwVOcyaGlhNugKEjlS2K9wGhOl1VPQX1jCtcQ+dw
-         dqNvACpZQ8Rnh/XagPRkggklkgVsKkqxOe678PPp9nMNmzdoYbiN7anHNl/3lTucGyP1
-         w44hAFEF6GHnwKTeUuQQWvwdUY3JdvatsA1lvjWnCMjAwLdLWTr7zU/J7CCA7aNU12jo
-         +Kag==
-X-Gm-Message-State: APjAAAVhZGWhfbfu9b3bxztAbNmwh4DjXdph6ZrosonII1UOQREvgDi6
-        g48VopMyRm1zFzh46XAXgiVDSiQv4357eoDQnM1QgQ==
-X-Google-Smtp-Source: APXvYqzvqdfI/hjY2GupzJ4hQmeRb6kwfQPT4h75YLOR9fvCTVxVuStyB4lVkDgiLkIc9vXwMXKH+beoO6ciJweK3Yw=
-X-Received: by 2002:a67:fa95:: with SMTP id f21mr19250315vsq.180.1557303869534;
- Wed, 08 May 2019 01:24:29 -0700 (PDT)
+ d=analog.onmicrosoft.com; s=selector1-analog-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9mREEcazEV2TFx5JIFnH3pAzE1JX52Mxgf7Nke2hFVA=;
+ b=qQfQKlBUhqrL+3Zq0CNfpq26DFQMQ47XeDeoOQghyt8YnFxihdOyu/uqLTp4Va2PKJok0DnLUK74RKCRbvROk2XuKOdS1aEBpBZ7S2HyRHxL7vRH6SPzukskQpsFHAO8LtN/Vyu7cA1xYW8YkqaoD+LlmFfxVsALjqdbrsDXj/c=
+Received: from MWHPR03CA0030.namprd03.prod.outlook.com (2603:10b6:301:3b::19)
+ by DM5PR03MB3132.namprd03.prod.outlook.com (2603:10b6:4:3c::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1878.20; Wed, 8 May
+ 2019 11:29:15 +0000
+Received: from SN1NAM02FT031.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e44::207) by MWHPR03CA0030.outlook.office365.com
+ (2603:10b6:301:3b::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1878.20 via Frontend
+ Transport; Wed, 8 May 2019 11:29:14 +0000
+Authentication-Results: spf=pass (sender IP is 137.71.25.57)
+ smtp.mailfrom=analog.com; lists.freedesktop.org; dkim=none (message not
+ signed) header.d=none;lists.freedesktop.org; dmarc=bestguesspass action=none
+ header.from=analog.com;
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.57 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.57; helo=nwd2mta2.analog.com;
+Received: from nwd2mta2.analog.com (137.71.25.57) by
+ SN1NAM02FT031.mail.protection.outlook.com (10.152.72.116) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1856.11
+ via Frontend Transport; Wed, 8 May 2019 11:29:13 +0000
+Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
+        by nwd2mta2.analog.com (8.13.8/8.13.8) with ESMTP id x48BTCgt016944
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Wed, 8 May 2019 04:29:12 -0700
+Received: from saturn.analog.com (10.50.1.244) by NWD2HUBCAS7.ad.analog.com
+ (10.64.69.107) with Microsoft SMTP Server id 14.3.408.0; Wed, 8 May 2019
+ 07:29:11 -0400
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>, <linux-omap@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <devel@driverdev.osuosl.org>,
+        <linux-usb@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-fbdev@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <gregkh@linuxfoundation.org>, <andriy.shevchenko@linux.intel.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH 00/16] treewide: fix match_string() helper when array size
+Date:   Wed, 8 May 2019 14:28:25 +0300
+Message-ID: <20190508112842.11654-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20190415155636.32748-1-sashal@kernel.org> <20190507174020.GH1747@sasha-vm>
- <CAFA6WYPk5Bm11RfaC72g_C8rnMQEPyp-MhtopmDM3Of31v1Z_w@mail.gmail.com> <20190508080232.vzdyvmrqx2apfvlf@holly.lan>
-In-Reply-To: <20190508080232.vzdyvmrqx2apfvlf@holly.lan>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 8 May 2019 13:54:18 +0530
-Message-ID: <CAFA6WYP206hVoqkKcbEvLP9O7ZAOLLru3OZPbVDO95Me=euFnA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] ftpm: a firmware based TPM driver
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Sasha Levin <sashal@kernel.org>, peterhuewe@gmx.de,
-        jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca, corbet@lwn.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@microsoft.com, thiruan@microsoft.com,
-        bryankel@microsoft.com, tee-dev@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.57;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(1496009)(376002)(136003)(346002)(396003)(39860400002)(2980300002)(189003)(199004)(336012)(48376002)(6666004)(16586007)(316002)(426003)(356004)(107886003)(2441003)(50226002)(7696005)(51416003)(54906003)(2906002)(478600001)(110136005)(486006)(47776003)(7636002)(44832011)(106002)(50466002)(2616005)(476003)(8676002)(70206006)(246002)(70586007)(4326008)(2201001)(7416002)(26005)(1076003)(186003)(8936002)(77096007)(5660300002)(36756003)(126002)(53416004)(305945005)(86362001)(14444005)(921003)(83996005)(2101003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR03MB3132;H:nwd2mta2.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail11.analog.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c32e2cbb-fe64-4c66-7a5d-08d6d3a86664
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4709054)(2017052603328);SRVR:DM5PR03MB3132;
+X-MS-TrafficTypeDiagnostic: DM5PR03MB3132:
+X-Microsoft-Antispam-PRVS: <DM5PR03MB3132F0B0976A4F2194522684F9320@DM5PR03MB3132.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 0031A0FFAF
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: j/srRMWDBUltVscxVeW1javD8vK/cachSroUu+/Gbw1dTf/SvbBrFyW07ykT1LHxgf7JFm8qQ93W9eBvUwKDflyO8jAEvFHYdehNb6EHWUlpktuzMPEP4dqtYdoUQPJZJheiLPDUHbBGHPrVF+8TL5mDHJaN5ynPAEYsTTkWak369JERGg4vdXLCAeUTNR0/5p+fpFpKdjOGClAHWrD4fgHBh7O9/Ww1YzfpFB5/ShVxDtLKjt6j5yDaAZJVnp6EeWEY3bKP4Xa20OdzBmuebRIP54BdhQLWgxOFaNRtwz2dquRxZGpNeP4PgyojuMA1RloHq4JkY9VStd6NE4AnfhNTuZyPUNrsaLk3IJ1WIYcn7pLDJzCGmOSiZuodj5CqDCxvmc9nwLsca/AMvRwPw64pvgq4xuPYVpmZdqdwNAA=
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2019 11:29:13.4642
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c32e2cbb-fe64-4c66-7a5d-08d6d3a86664
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.57];Helo=[nwd2mta2.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR03MB3132
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 8 May 2019 at 13:32, Daniel Thompson <daniel.thompson@linaro.org> wrote:
->
-> On Wed, May 08, 2019 at 10:11:54AM +0530, Sumit Garg wrote:
-> > + TEE ML
-> >
-> > Hi Sasha,
-> >
-> > Firstly apologies for my comments here as I recently joined
-> > linux-integrity ML so I don't have other patches in my inbox. Also, it
-> > would be nice if you could cc TEE ML in future patches, so that people
-> > are aware of such interesting use-cases and may provide some feedback.
->
-> If this kind is desire exists then shouldn't it be captured in
-> MAINTAINERS?
->
+The intent of this patch series is to make a case for fixing the
+match_string() string helper.
 
-Makes sense, will send a patch to capture it in MAINTAINERS file.
+The doc-string of the `__sysfs_match_string()` helper mentions that `n`
+(the size of the given array) should be:
+ * @n: number of strings in the array or -1 for NULL terminated arrays
 
--Sumit
+However, this is not the case.
+The helper stops on the first NULL in the array, regardless of whether -1
+is provided or not.
 
->
-> Daniel.
->
-> >
-> > On Tue, 7 May 2019 at 23:10, Sasha Levin <sashal@kernel.org> wrote:
-> > >
-> > > On Mon, Apr 15, 2019 at 11:56:34AM -0400, Sasha Levin wrote:
-> > > >From: "Sasha Levin (Microsoft)" <sashal@kernel.org>
-> > > >
-> > > >Changes since v2:
-> > > >
-> > > > - Drop the devicetree bindings patch (we don't add any new ones).
-> > > > - More code cleanups based on Jason Gunthorpe's review.
-> > > >
-> > > >Sasha Levin (2):
-> > > >  ftpm: firmware TPM running in TEE
-> > > >  ftpm: add documentation for ftpm driver
-> > >
-> > > Ping? Does anyone have any objections to this?
-> > >
-> >
-> > From [PATCH v3 1/2] ftpm: firmware TPM running in TEE:
-> >
-> > > +static const struct of_device_id of_ftpm_tee_ids[] = {
-> > > + { .compatible = "microsoft,ftpm" },
-> > > + { }
-> > > +};
-> > > +MODULE_DEVICE_TABLE(of, of_ftpm_tee_ids);
-> > > +
-> > > +static struct platform_driver ftpm_tee_driver = {
-> > > + .driver = {
-> > > + .name = DRIVER_NAME,
-> > > + .of_match_table = of_match_ptr(of_ftpm_tee_ids),
-> > > + },
-> > > + .probe = ftpm_tee_probe,
-> > > + .remove = ftpm_tee_remove,
-> > > +};
-> > > +
-> > > +module_platform_driver(ftpm_tee_driver);
-> >
-> > Here this fTPM driver (seems to communicate with OP-TEE based TA)
-> > should register on TEE bus [1] rather than platform bus as its actual
-> > dependency is on TEE driver rather than using deferred probe to meet
-> > its dependency. Have a look at OP-TEE based RNG driver here [2].
-> >
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0fc1db9d105915021260eb241661b8e96f5c0f1a
-> > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5fe8b1cc6a03c46b3061e808256d39dcebd0d0f0
-> >
-> > -Sumit
-> >
-> > > --
-> > > Thanks,
-> > > Sasha
+There are some advantages to allowing this behavior (NULL elements within
+in the array). One example, is to allow reserved registers as NULL in an
+array.
+One example in the series is patch:
+   x86/mtrr: use new match_string() helper + add gaps == minor fix
+which uses a "?" string for values that are reserved/don't care.
+
+Since the change is a bit big, the change was coupled with renaming
+match_string() -> __match_string().
+The new match_string() helper (resulted here) does an ARRAY_SIZE() over the
+array, which is useful when the array is static. 
+
+Also, this way of doing things is a way to go through all the users of this
+helpers and check that nothing goes wrong, and notify them about the change
+to match_string().
+It's a way of grouping changes in a manage-able way.
+
+The first patch is important, the others can be dropped.
+
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+
+Alexandru Ardelean (16):
+  lib: fix match_string() helper when array size is positive
+  treewide: rename match_string() -> __match_string()
+  lib,treewide: add new match_string() helper/macro
+  powerpc/xmon: use new match_string() helper/macro
+  ALSA: oxygen: use new match_string() helper/macro
+  x86/mtrr: use new match_string() helper + add gaps == minor fix
+  device connection: use new match_string() helper/macro
+  cpufreq/intel_pstate: remove NULL entry + use match_string()
+  mmc: sdhci-xenon: use new match_string() helper/macro
+  pinctrl: armada-37xx: use new match_string() helper/macro
+  mm/vmpressure.c: use new match_string() helper/macro
+  rdmacg: use new match_string() helper/macro
+  drm/edid: use new match_string() helper/macro
+  staging: gdm724x: use new match_string() helper/macro
+  video: fbdev: pxafb: use new match_string() helper/macro
+  sched: debug: use new match_string() helper/macro
+
+ arch/powerpc/xmon/xmon.c                         |  2 +-
+ arch/x86/kernel/cpu/mtrr/if.c                    | 10 ++++++----
+ drivers/ata/pata_hpt366.c                        |  2 +-
+ drivers/ata/pata_hpt37x.c                        |  2 +-
+ drivers/base/devcon.c                            |  2 +-
+ drivers/base/property.c                          |  2 +-
+ drivers/clk/bcm/clk-bcm2835.c                    |  4 +---
+ drivers/clk/clk.c                                |  4 ++--
+ drivers/clk/rockchip/clk.c                       |  4 ++--
+ drivers/cpufreq/intel_pstate.c                   |  9 ++++-----
+ drivers/gpio/gpiolib-of.c                        |  2 +-
+ drivers/gpu/drm/drm_edid_load.c                  |  2 +-
+ drivers/gpu/drm/drm_panel_orientation_quirks.c   |  2 +-
+ drivers/gpu/drm/i915/intel_pipe_crc.c            |  2 +-
+ drivers/ide/hpt366.c                             |  2 +-
+ drivers/mfd/omap-usb-host.c                      |  2 +-
+ drivers/mmc/host/sdhci-xenon-phy.c               | 12 ++++++------
+ drivers/net/wireless/intel/iwlwifi/mvm/debugfs.c |  2 +-
+ drivers/pci/pcie/aer.c                           |  2 +-
+ drivers/phy/tegra/xusb.c                         |  2 +-
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c      |  4 ++--
+ drivers/pinctrl/pinmux.c                         |  2 +-
+ drivers/power/supply/ab8500_btemp.c              |  2 +-
+ drivers/power/supply/ab8500_charger.c            |  2 +-
+ drivers/power/supply/ab8500_fg.c                 |  2 +-
+ drivers/power/supply/abx500_chargalg.c           |  2 +-
+ drivers/power/supply/charger-manager.c           |  4 ++--
+ drivers/staging/gdm724x/gdm_tty.c                |  3 +--
+ drivers/usb/common/common.c                      |  4 ++--
+ drivers/usb/typec/class.c                        |  8 +++-----
+ drivers/usb/typec/tps6598x.c                     |  2 +-
+ drivers/vfio/vfio.c                              |  4 +---
+ drivers/video/fbdev/pxafb.c                      |  4 ++--
+ fs/ubifs/auth.c                                  |  4 ++--
+ include/linux/string.h                           | 11 ++++++++++-
+ kernel/cgroup/rdma.c                             |  2 +-
+ kernel/sched/debug.c                             |  2 +-
+ kernel/trace/trace.c                             |  2 +-
+ lib/string.c                                     | 13 ++++++++-----
+ mm/mempolicy.c                                   |  2 +-
+ mm/vmpressure.c                                  |  4 ++--
+ security/apparmor/lsm.c                          |  4 ++--
+ security/integrity/ima/ima_main.c                |  2 +-
+ sound/firewire/oxfw/oxfw.c                       |  2 +-
+ sound/pci/oxygen/oxygen_mixer.c                  |  2 +-
+ sound/soc/codecs/max98088.c                      |  2 +-
+ sound/soc/codecs/max98095.c                      |  2 +-
+ sound/soc/soc-dapm.c                             |  2 +-
+ 48 files changed, 88 insertions(+), 82 deletions(-)
+
+-- 
+2.17.1
+
