@@ -2,95 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 749081903C
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 May 2019 20:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A1319580
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 May 2019 01:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726711AbfEISdu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 May 2019 14:33:50 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:40788 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726658AbfEISdu (ORCPT
+        id S1726219AbfEIXBV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 May 2019 19:01:21 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44588 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726698AbfEIXBU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 May 2019 14:33:50 -0400
-Received: by mail-ot1-f67.google.com with SMTP id w6so3227522otl.7
-        for <linux-integrity@vger.kernel.org>; Thu, 09 May 2019 11:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6LDuh9KBtjyZgSBqOPlt4ghOhYRTyR7+OimbX5fXjTc=;
-        b=m7MZm5jn+yUTyqYeKP+3U2AfIk2e/Jl7gRlj1d0vNElu89qzzwPGU4WFh2pRN3iGK8
-         6NkXYiIaZxmWqTWtDTsXMCjBrxg3Wi+ON8VLjl28KeXWmZ1yCAk7U2iA9U5wOLGpVrf6
-         4C4jvycCm53aEaILky7UnN3UKRuEHLH4DYCjk6kbWNpnMsPw3O4PTkZ34RDNe5jWnbck
-         UmNUnENCXk7ZL3MZ1rYS34gPy7dbedYHUod/vucgxDHzv2UGKYZZ9m/Ped5rsgK+BFk/
-         Fy+UM5SnDsH5pIswj8zYSyHMqUWESF+i8+t6ovRwRYGQ/c3kpcWuWIDJlTrTTBHJz/6S
-         zOfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6LDuh9KBtjyZgSBqOPlt4ghOhYRTyR7+OimbX5fXjTc=;
-        b=S1Z82S3Mri4Oe2CQYZ+PDq4fuM7vNmi12ABvwCYRZEGbzAKHF5J00seIuHhncftrZ4
-         3KgBD0FA8TSj91n6Byal4KsYJM2yGlVIe0z1Bh1mR2AhLFigacVqFgxJPE8F8GUxQ6G7
-         WTTueEsdEVgvFs1Iz90ECjRCMBZyc2U58vEB6wfU1Nb3iKF+87GU1lSUU9LEcTsgQP6U
-         2ygFvToXenRSYRpO3ehqz1JJ/PeX5WUWvnk6AUlBDFEdk7o68K8tUqTBHWLaF4u4XsAG
-         9jV8YmfmiUKdSl+UTzGcerEqWwZgUHnbwxTJBnrJWDnseDcXOraGgSFxv4HWyAS7tMXy
-         W9VQ==
-X-Gm-Message-State: APjAAAXZeUYV1wZqSm1tPK+NhO8t0i7IG/Zegx/yih7ajnKY58dJ9Itk
-        RMyvMNTZJ9xx7+ly4wjCQKOQUQ==
-X-Google-Smtp-Source: APXvYqyC+t5IsIZRkPqBYoKSelJuMnV/D1ZbE+b+3mQahrODmHmWzUUCjlIwBfKd2Oj/f6iFjJVnEg==
-X-Received: by 2002:a9d:7c88:: with SMTP id q8mr151513otn.167.1557426829720;
-        Thu, 09 May 2019 11:33:49 -0700 (PDT)
-Received: from [192.168.1.5] (072-182-052-210.res.spectrum.com. [72.182.52.210])
-        by smtp.googlemail.com with ESMTPSA id j1sm1034165otl.43.2019.05.09.11.33.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 May 2019 11:33:49 -0700 (PDT)
-Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
- ram disk
-To:     Roberto Sassu <roberto.sassu@huawei.com>, viro@zeniv.linux.org.uk
-Cc:     linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.vnet.ibm.com,
-        silviu.vlasceanu@huawei.com, dmitry.kasatkin@huawei.com,
-        takondra@cisco.com, kamensky@cisco.com, hpa@zytor.com,
-        arnd@arndb.de, james.w.mcmechan@gmail.com
-References: <20190509112420.15671-1-roberto.sassu@huawei.com>
-From:   Rob Landley <rob@landley.net>
-Message-ID: <fca8e601-1144-1bb8-c007-518651f624a5@landley.net>
-Date:   Thu, 9 May 2019 13:34:13 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190509112420.15671-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        Thu, 9 May 2019 19:01:20 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x49MpjtM088667
+        for <linux-integrity@vger.kernel.org>; Thu, 9 May 2019 19:01:19 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2scuydb262-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 09 May 2019 19:01:19 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Fri, 10 May 2019 00:01:16 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 10 May 2019 00:01:11 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x49N1AMv42991828
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 May 2019 23:01:10 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 53B33A405C;
+        Thu,  9 May 2019 23:01:10 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 904E9A406B;
+        Thu,  9 May 2019 23:01:08 +0000 (GMT)
+Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 May 2019 23:01:08 +0000 (GMT)
+Subject: Re: [PATCH v10 09/12] ima: Implement support for module-style
+ appended signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>
+Date:   Thu, 09 May 2019 19:01:08 -0400
+In-Reply-To: <20190418035120.2354-10-bauerman@linux.ibm.com>
+References: <20190418035120.2354-1-bauerman@linux.ibm.com>
+         <20190418035120.2354-10-bauerman@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19050923-0008-0000-0000-000002E51248
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19050923-0009-0000-0000-000022519B3D
+Message-Id: <1557442868.10635.87.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-09_02:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905090130
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/9/19 6:24 AM, Roberto Sassu wrote:
-> This patch set aims at solving the following use case: appraise files from
-> the initial ram disk. To do that, IMA checks the signature/hash from the
-> security.ima xattr. Unfortunately, this use case cannot be implemented
-> currently, as the CPIO format does not support xattrs.
-> 
-> This proposal consists in marshaling pathnames and xattrs in a file called
-> .xattr-list. They are unmarshaled by the CPIO parser after all files have
-> been extracted.
+Hi Thiago,
 
-So it's in-band signalling that has a higher peak memory requirement.
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index fca7a3f23321..a7a20a8c15c1 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -1144,6 +1144,12 @@ void ima_delete_rules(void)
+>  	}
+>  }
+>  
+> +#define __ima_hook_stringify(str)	(#str),
+> +
+> +const char *const func_tokens[] = {
+> +	__ima_hooks(__ima_hook_stringify)
+> +};
+> +
+>  #ifdef	CONFIG_IMA_READ_POLICY
+>  enum {
+>  	mask_exec = 0, mask_write, mask_read, mask_append
+> @@ -1156,12 +1162,6 @@ static const char *const mask_tokens[] = {
+>  	"MAY_APPEND"
+>  };
+>  
+> -#define __ima_hook_stringify(str)	(#str),
+> -
+> -static const char *const func_tokens[] = {
+> -	__ima_hooks(__ima_hook_stringify)
+> -};
+> -
+>  void *ima_policy_start(struct seq_file *m, loff_t *pos)
+>  {
+>  	loff_t l = *pos;
 
-> The difference with another proposal
-> (https://lore.kernel.org/patchwork/cover/888071/) is that xattrs can be
-> included in an image without changing the image format, as opposed to
-> defining a new one. As seen from the discussion, if a new format has to be
-> defined, it should fix the issues of the existing format, which requires
-> more time.
+Is moving this something left over from previous versions or there is
+a need for this change?
 
-So you've explicitly chosen _not_ to address Y2038 while you're there.
+Other than this, the patch looks good.
 
-Rob
+Mimi
+
