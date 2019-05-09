@@ -2,56 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BA217CA2
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 May 2019 16:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BE2188EB
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 May 2019 13:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726747AbfEHOyS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 May 2019 10:54:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51436 "EHLO mx1.suse.de"
+        id S1725892AbfEIL1e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 May 2019 07:27:34 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32927 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726602AbfEHOyS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 May 2019 10:54:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 540ACACE1;
-        Wed,  8 May 2019 14:54:17 +0000 (UTC)
-Subject: Re: setfattr to set security.ima fails with error "Invalid argument"
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>
-References: <b1107806-26b5-4518-724f-9aab0b86668b@linux.microsoft.com>
-From:   Ignaz Forster <iforster@suse.de>
-Message-ID: <0f7ed36d-8d8c-8a2a-189f-1c45b22652c2@suse.de>
-Date:   Wed, 8 May 2019 16:54:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1725872AbfEIL1d (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 9 May 2019 07:27:33 -0400
+Received: from lhreml703-cah.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id EE505197B016B0870572;
+        Thu,  9 May 2019 12:27:31 +0100 (IST)
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.154)
+ by smtpsuk.huawei.com (10.201.108.44) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Thu, 9 May 2019 12:27:25 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <viro@zeniv.linux.org.uk>
+CC:     <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zohar@linux.vnet.ibm.com>,
+        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
+        <takondra@cisco.com>, <kamensky@cisco.com>, <hpa@zytor.com>,
+        <arnd@arndb.de>, <rob@landley.net>, <james.w.mcmechan@gmail.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 0/3] initramfs: add support for xattrs in the initial ram disk
+Date:   Thu, 9 May 2019 13:24:17 +0200
+Message-ID: <20190509112420.15671-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <b1107806-26b5-4518-724f-9aab0b86668b@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.204.65.154]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Am 03.05.19 um 23:59 Uhr schrieb Lakshmi Ramasubramanian:
-> When trying to set security.ima extended attribute on any file I get 
-> error "Invalid argument".
-> 
-> setfattr -n security.ima -v foo /boot/vmlinuz-4.18.0-17-generic
-> setfattr: /boot/vmlinuz-4.18.0-17-generic: Invalid argument
+This patch set aims at solving the following use case: appraise files from
+the initial ram disk. To do that, IMA checks the signature/hash from the
+security.ima xattr. Unfortunately, this use case cannot be implemented
+currently, as the CPIO format does not support xattrs.
 
-"foo" is not a valid value.
-If you just want to test setting *any* value you may try 
-"0sBAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxg==".
+This proposal consists in marshaling pathnames and xattrs in a file called
+.xattr-list. They are unmarshaled by the CPIO parser after all files have
+been extracted.
 
-> If I try any other name for the extended, say, foo I see error 
-> "Operation not supported".
-> 
-> setfattr -n foo -v bar /boot/vmlinuz-4.18.0-17-generic
-> setfattr: /boot/vmlinuz-4.18.0-17-generic: Operation not supported
+The difference from v1 (https://lkml.org/lkml/2018/11/22/1182) is that all
+xattrs are stored in a single file and not per file (solves the file name
+limitation issue, as it is not necessary to add a suffix to files
+containing xattrs).
 
-You need to use a namespace, see `man 7 xattr` for more information 
-about extended attributes.
+The difference with another proposal
+(https://lore.kernel.org/patchwork/cover/888071/) is that xattrs can be
+included in an image without changing the image format, as opposed to
+defining a new one. As seen from the discussion, if a new format has to be
+defined, it should fix the issues of the existing format, which requires
+more time.
 
-Ignaz
+To fulfill both requirements, adding support for xattrs in a short time and
+defining a new image format properly, this patch set takes an incremental
+approach: it introduces a parser of xattrs that can be used either if
+xattrs are in a regular file or directly added to the image (this patch set
+reuses patch 9/15 of the existing proposal); in addition, it introduces a
+wrapper of the xattr parser, to read xattrs from a file.
+
+The changes introduced by this patch set don't cause any compatibility
+issue: kernels without the xattr parser simply extracts .xattr-list and
+don't unmarshal xattrs; kernels with the xattr parser don't unmarshal
+xattrs if .xattr-list is not found in the image.
+
+From the kernel space perspective, backporting this functionality to older
+kernels should be very easy. It is sufficient to add a call to the new
+function do_readxattrs(). From the user space perspective, no change is
+required for the use case. A new dracut module (module-setup.sh) will
+execute:
+
+getfattr --absolute-names -d -P -R -e hex -m security.ima \
+    <file list> | xattr.awk -b > ${initdir}/.xattr-list
+
+where xattr.awk is the script that marshals xattrs (see patch 3/3). The
+same can be done with the initramfs-tools ram disk generator.
+
+Changelog
+
+v1:
+
+- move xattr unmarshaling to CPIO parser
+
+
+Mimi Zohar (1):
+  initramfs: set extended attributes
+
+Roberto Sassu (2):
+  fs: add ksys_lsetxattr() wrapper
+  initramfs: introduce do_readxattrs()
+
+ fs/xattr.c               |   9 ++-
+ include/linux/syscalls.h |   3 +
+ init/initramfs.c         | 152 ++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 161 insertions(+), 3 deletions(-)
+
+-- 
+2.17.1
+
