@@ -2,91 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6461A55B
-	for <lists+linux-integrity@lfdr.de>; Sat, 11 May 2019 00:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5556F1A560
+	for <lists+linux-integrity@lfdr.de>; Sat, 11 May 2019 00:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728047AbfEJWiE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 May 2019 18:38:04 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34786 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728049AbfEJWh7 (ORCPT
+        id S1728179AbfEJWjJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 May 2019 18:39:09 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52354 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728029AbfEJWjJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 May 2019 18:37:59 -0400
-Received: by mail-pf1-f194.google.com with SMTP id n19so3944198pfa.1;
-        Fri, 10 May 2019 15:37:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pYzIDdOTRwO65NdizYfpyEQ5dTtiEK69uQtVOuzEYqI=;
-        b=UUQhdumzD9b5p2zhHSlGdfcKIBwD6/zTIi+Swjo4qnscsSfa7EHxRwWneSwXNWFNIS
-         Xfq9mRFm6jf3OumMOcoGkYLqOCFexT42JZ6Nll4EnYURL2W0OiOYgSW1bxmwkEs41Gsy
-         k5jLbVUUSY1HkA6ILWuFXhNcWtF+6kU8SA8d1E/NSEkoxG6yLomMi+PFUmJZU4hhuKGz
-         rf198bOnrBJnITupC99aoANMsnRDaNxo8xV4o4TUMQrtK+tvybKPAzFK+6kR5dKgrIMw
-         2dlQM6gGQR80LmGPyBBYoW76tVB2QXnKhRK7AUJk97dpzBS1WKjqefOj84n5POSQ0JN4
-         tf5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pYzIDdOTRwO65NdizYfpyEQ5dTtiEK69uQtVOuzEYqI=;
-        b=CZk/zA8NO5UM889h5LXeRs/GfHDErezLeJxdjUKd8lFrjfi2JmnjceadCjb2uT4QKw
-         nJtAZ4zOqgT8RPQOp7smOjycCFTQjgEJ1GRB8wM08MdVN75mAi3TSRmW7sPQGmTQdsUR
-         T9f7hGkVo2rqW+aLFFg7LenVeNFvNUoRLsKayhpOxYaPN4kZNqykqZmHrN8TdHF4hL+t
-         PaXjJnN8A9NgVyxvraOv+gRbZefExrWKgTEIo+fOoRTu56d1tB+DEWp2/BooY5LjKWoc
-         fkeF6utvuJAe1460YUg7j6UjAB4PO5drWYnQUOXY7EWqTIgvsuYPiglr4sdXQXC2bZu5
-         7J6g==
-X-Gm-Message-State: APjAAAUHn8HEeKUDhe5AZx+0uWwCMTeB8Zs9kenXYnqvdVfUHgkJQ5EB
-        81SspVETPWbZJSVMBRxzmT/vyVCZokM=
-X-Google-Smtp-Source: APXvYqxrdDf0YONK+/+mdOzYixpMoTJODFTIHOMdzCJ3pwx4Ds4toOexA6ae1KE1KfganUQbRnP5ow==
-X-Received: by 2002:a65:4649:: with SMTP id k9mr16733096pgr.239.1557527878915;
-        Fri, 10 May 2019 15:37:58 -0700 (PDT)
-Received: from prsriva-linux.corp.microsoft.com ([2001:4898:80e8:a:1d1b:db59:93e9:eab5])
-        by smtp.gmail.com with ESMTPSA id r74sm12459430pfa.71.2019.05.10.15.37.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 May 2019 15:37:58 -0700 (PDT)
-From:   Prakhar Srivastava <prsriva02@gmail.com>
-X-Google-Original-From: Prakhar Srivastava
-To:     linux-integrity@vger.kernel.org,
-        inux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zohar@linux.ibm.com, ebiederm@xmission.com, vgoyal@redhat.com,
-        prsriva@microsoft.com, Prakhar Srivastava <prsriva02@gmail.com>
-Subject: [PATCH 3/3 v5] call ima_kexec_cmdline from kexec_file_load path
-Date:   Fri, 10 May 2019 15:37:44 -0700
-Message-Id: <20190510223744.10154-4-prsriva02@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190510223744.10154-1-prsriva02@gmail.com>
-References: <20190510223744.10154-1-prsriva02@gmail.com>
-MIME-Version: 1.0
+        Fri, 10 May 2019 18:39:09 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4AMahRC022317
+        for <linux-integrity@vger.kernel.org>; Fri, 10 May 2019 18:39:07 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2sdessqa9h-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 10 May 2019 18:39:07 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Fri, 10 May 2019 23:39:05 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 10 May 2019 23:38:58 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4AMcvKk47251620
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 May 2019 22:38:57 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7DA052076;
+        Fri, 10 May 2019 22:38:57 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.110.96])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E99D752077;
+        Fri, 10 May 2019 22:38:54 +0000 (GMT)
+Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Rob Landley <rob@landley.net>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        viro@zeniv.linux.org.uk
+Cc:     linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.vnet.ibm.com,
+        silviu.vlasceanu@huawei.com, dmitry.kasatkin@huawei.com,
+        takondra@cisco.com, kamensky@cisco.com, hpa@zytor.com,
+        arnd@arndb.de, james.w.mcmechan@gmail.com
+Date:   Fri, 10 May 2019 18:38:44 -0400
+In-Reply-To: <3a9d717e-0e12-9d62-a3cf-afb7a5dbf166@landley.net>
+References: <20190509112420.15671-1-roberto.sassu@huawei.com>
+         <fca8e601-1144-1bb8-c007-518651f624a5@landley.net>
+         <bf0d02fc-d6ce-ef1d-bb7d-7ca14432c6fd@huawei.com>
+         <1557488971.10635.102.camel@linux.ibm.com>
+         <3a9d717e-0e12-9d62-a3cf-afb7a5dbf166@landley.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19051022-0008-0000-0000-000002E570DA
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19051022-0009-0000-0000-00002251FEE0
+Message-Id: <1557527924.10635.157.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-10_15:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=920 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905100143
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Prakhar Srivastava <prsriva02@gmail.com>
+On Fri, 2019-05-10 at 15:46 -0500, Rob Landley wrote:
+> On 5/10/19 6:49 AM, Mimi Zohar wrote:
+> > On Fri, 2019-05-10 at 08:56 +0200, Roberto Sassu wrote:
+> >> On 5/9/2019 8:34 PM, Rob Landley wrote:
+> >>> On 5/9/19 6:24 AM, Roberto Sassu wrote:
+> > 
+> >>>> The difference with another proposal
+> >>>> (https://lore.kernel.org/patchwork/cover/888071/) is that xattrs can be
+> >>>> included in an image without changing the image format, as opposed to
+> >>>> defining a new one. As seen from the discussion, if a new format has to be
+> >>>> defined, it should fix the issues of the existing format, which requires
+> >>>> more time.
+> >>>
+> >>> So you've explicitly chosen _not_ to address Y2038 while you're there.
+> >>
+> >> Can you be more specific?
+> > 
+> > Right, this patch set avoids incrementing the CPIO magic number and
+> > the resulting changes required (eg. increasing the timestamp field
+> > size), by including a file with the security xattrs in the CPIO.  In
+> > either case, including the security xattrs in the initramfs header or
+> > as a separate file, the initramfs, itself, needs to be signed.
+> 
+> The /init binary in the initramfs runs as root and launches all other processes
+> on the system. Presumably it can write any xattrs it wants to, and doesn't need
+> any extra permissions granted to it to do so. But as soon as you start putting
+> xattrs on _other_ files within the initramfs that are _not_ necessarily running
+> as PID 1, _that's_ when the need to sign the initramfs comes in?
+> 
+> Presumably the signing occurs on the gzipped file. How does that affect the cpio
+> parsing _after_ it's decompressed? Why would that be part of _this_ patch?
 
-To measure the cmldine args used in case of soft reboot. Call the 
-ima hook defined in [PATCH 1/3 v5]:"add a new ima hook and policy to measure the cmdline"
+The signing and verification of the initramfs is a separate issue, not
+part of this patch set.  The only reason for mentioning it here was to
+say that both methods of including the security xattrs require the
+initramfs be signed.  Just as the kernel image needs to be signed and
+verified, the initramfs should be too.
 
-Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
----
- kernel/kexec_file.c | 2 ++
- 1 file changed, 2 insertions(+)
+Mimi
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index f1d0e00a3971..e779bcf674a0 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -241,6 +241,8 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 			ret = -EINVAL;
- 			goto out;
- 		}
-+
-+		ima_kexec_cmdline(image->cmdline_buf, image->cmdline_buf_len - 1);
- 	}
- 
- 	/* Call arch image load handlers */
--- 
-2.20.1
 
