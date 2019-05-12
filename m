@@ -2,92 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFBB1AC3E
-	for <lists+linux-integrity@lfdr.de>; Sun, 12 May 2019 14:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFA11ACCD
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 May 2019 17:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbfELMxP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 12 May 2019 08:53:15 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47368 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726605AbfELMxK (ORCPT
+        id S1726547AbfELPbZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 12 May 2019 11:31:25 -0400
+Received: from isilmar-4.linta.de ([136.243.71.142]:52230 "EHLO
+        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726355AbfELPbY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 12 May 2019 08:53:10 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4CCpXbB086188
-        for <linux-integrity@vger.kernel.org>; Sun, 12 May 2019 08:53:09 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2seb9pcuky-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Sun, 12 May 2019 08:53:09 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Sun, 12 May 2019 13:53:06 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Sun, 12 May 2019 13:53:01 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4CCr0bW60817534
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 12 May 2019 12:53:00 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 786AE42047;
-        Sun, 12 May 2019 12:53:00 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83C6442041;
-        Sun, 12 May 2019 12:52:58 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.95.158])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 12 May 2019 12:52:58 +0000 (GMT)
-Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
- ram disk
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     viro@zeniv.linux.org.uk, linux-security-module@vger.kernel.org,
+        Sun, 12 May 2019 11:31:24 -0400
+Received: from light.dominikbrodowski.net (isilmar.linta [10.0.0.1])
+        by isilmar-4.linta.de (Postfix) with ESMTPS id 73CE5200611;
+        Sun, 12 May 2019 15:31:22 +0000 (UTC)
+Received: by light.dominikbrodowski.net (Postfix, from userid 1000)
+        id 3642120920; Sun, 12 May 2019 17:31:05 +0200 (CEST)
+Date:   Sun, 12 May 2019 17:31:05 +0200
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     hpa@zytor.com, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>, viro@zeniv.linux.org.uk,
+        linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
         linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org, zohar@linux.vnet.ibm.com,
         silviu.vlasceanu@huawei.com, dmitry.kasatkin@huawei.com,
-        takondra@cisco.com, kamensky@cisco.com, hpa@zytor.com,
-        arnd@arndb.de, rob@landley.net, james.w.mcmechan@gmail.com
-Date:   Sun, 12 May 2019 08:52:47 -0400
-In-Reply-To: <20190512091748.s6fvy2f5p2a2o6ja@isilmar-4.linta.de>
-References: <20190509112420.15671-1-roberto.sassu@huawei.com>
-         <20190512091748.s6fvy2f5p2a2o6ja@isilmar-4.linta.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19051212-0028-0000-0000-0000036CD1EF
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051212-0029-0000-0000-0000242C5BDA
-Message-Id: <1557665567.10635.222.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-12_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=907 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905120097
+        takondra@cisco.com, kamensky@cisco.com, arnd@arndb.de,
+        rob@landley.net, james.w.mcmechan@gmail.com
+Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Message-ID: <20190512153105.GA25254@light.dominikbrodowski.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1557665567.10635.222.camel@linux.ibm.com>
+ <4E92753A-04BD-4018-A3A4-5E3E4242D8B9@zytor.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, 2019-05-12 at 11:17 +0200, Dominik Brodowski wrote:
-> On Thu, May 09, 2019 at 01:24:17PM +0200, Roberto Sassu wrote:
-> > This proposal consists in marshaling pathnames and xattrs in a file called
-> > .xattr-list. They are unmarshaled by the CPIO parser after all files have
-> > been extracted.
+On Sun, May 12, 2019 at 03:18:16AM -0700, hpa@zytor.com wrote:
+> > Couldn't this parsing of the .xattr-list file and the setting of the xattrs
+> > be done equivalently by the initramfs' /init? Why is kernel involvement
+> > actually required here?
 > 
-> Couldn't this parsing of the .xattr-list file and the setting of the xattrs
-> be done equivalently by the initramfs' /init? Why is kernel involvement
-> actually required here?
+> There are a lot of things that could/should be done that way...
 
-It's too late.  The /init itself should be signed and verified.
+Indeed... so why not try to avoid adding more such "things", and keeping
+them in userspace (or in a fork_usermode_blob)?
 
-Mimi
 
+On Sun, May 12, 2019 at 08:52:47AM -0400, Mimi Zohar wrote:
+> It's too late.  The /init itself should be signed and verified.
+
+Could you elaborate a bit more about the threat model, and why deferring
+this to the initramfs is too late?
+
+Thanks,
+	Dominik
