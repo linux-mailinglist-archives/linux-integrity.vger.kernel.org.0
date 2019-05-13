@@ -2,54 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7C81BC36
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2019 19:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8041BC52
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2019 19:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731655AbfEMRvR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 May 2019 13:51:17 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:32864 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728006AbfEMRvQ (ORCPT
+        id S1731933AbfEMRw5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 May 2019 13:52:57 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:38397 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728290AbfEMRwy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 May 2019 13:51:16 -0400
-Received: by mail-qk1-f196.google.com with SMTP id k189so8598225qkc.0;
-        Mon, 13 May 2019 10:51:15 -0700 (PDT)
+        Mon, 13 May 2019 13:52:54 -0400
+Received: by mail-qt1-f196.google.com with SMTP id d13so8666308qth.5;
+        Mon, 13 May 2019 10:52:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:date:to:cc:subject:message-id:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=B5lit/bpHedf80sYMuDGoqL+WRq05MQP3LUFocwmKj8=;
-        b=CRwAAJf3B+Jo51AmiQSTmmu3WgVp0umKtiWWhm4Zdu3fy2wFPHoSVZUGsizrpVaAIh
-         s/+98ifo0DoxHThLPk4bOL9ovM7HpqFUhXaFVzfx/QrCKsXrak8E09gN8+CE5uL8Dp9k
-         6B8fNz6u1rTw49VozW7Pb2GnBGpepAfJ32vmQ2Sbhq0CITX4WkpJAhCNLGDMK94eFpiK
-         jc/0fazbh4Xbfpo6zIoAJOGCSp1dgvFV20j8JtWbwHci4zmYQEH4mEETSqWdr9YCEOhg
-         otmS0DBS/EIxlza6hVC4g6yB8IL9YHawZiD8QWOtutuZsomFueyeNDV/HH7D5luHtEmM
-         /4yQ==
+        bh=LDbQfP6zFs00yM0BuuWdblWsKRTzaG/CBEDU7dZNmDs=;
+        b=O5I4PGBL5IzNYv6Bq/wm2zwG3SzvtCI2bDBMnnKtCWU0zVguqAGvTiJ9H4ctz0WqRh
+         4KziU4mHqSiT3VK5ukyN08yx59j3RYqONk0TPJLRrMIXEAFhx35GId04T+JshsoNnNXs
+         ubteBEW//t4bbkFCBV5zGY67+Z6gdacDMWmER+n0KV1C46NO4T8LVDx7O/LTqgpKk3EJ
+         xuNhwFmg9f0Qq3EjrwraZaKcniI9ZyalKzUU0B/hmBBgZ4L3ykSSTJ/+D4rs+avO+7g5
+         pZY4bZBPBUyq0Eh6vkpBM4qHmbmPulnD4CwSjneTocgEfWVvfhzQZlV21f/srvzi1Wlg
+         lSNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=B5lit/bpHedf80sYMuDGoqL+WRq05MQP3LUFocwmKj8=;
-        b=s1R3ihEdsyb0sG5WE1JaKUcsxZcz+05gVDxOkgT9gUudjT6HwnsoyE9+cbakAurkM5
-         57yOrjOsNzv6Qag1FU/chwbF/xFeOKZyAqEOLY81FYuJBdq11HM8Acdi9VKUZ5xiTGGB
-         Illx1/0CMIpNhjBPmwXYJ2JYTRoJxqjeijeoFu9s3XCvgg7TSIBlUlSliB2KlwX9Gwww
-         si4gRr2tN5Zc/Af+HQrvV1y6AG6r8Pa//pUn507bjBGVpp8O7Y/NW/CIMXvt9Hzt7xm9
-         sQCMDvS7nqA9Nyfd5/XS/jxVmtqzS8d0wvP2uwfjGndZqVh/XxSbD0+iNFCZeYiEZezH
-         ZLwg==
-X-Gm-Message-State: APjAAAV1F0xUW2TTWQnz3oqAr+qUoKUJ0Bl/kXqkmNM6tea+qS/Hvq9+
-        qfUSagq9hLF7dTl42nOBQjc=
-X-Google-Smtp-Source: APXvYqyUY4w+Wla+84iQJR/Vcix/G59nt8meXFZPkm5FNlnAxOtDGQqdF6ARumPV661FXzBhGawm6A==
-X-Received: by 2002:a05:620a:132b:: with SMTP id p11mr21779997qkj.304.1557769874664;
-        Mon, 13 May 2019 10:51:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=LDbQfP6zFs00yM0BuuWdblWsKRTzaG/CBEDU7dZNmDs=;
+        b=BijamBKAfPXojnU2tMM113PwHjGmPEPcP65nJgGQeOhVnsh4Lm7cKDp6eELCzqPVoH
+         QcZ2/zxpaWRFXNktdn78kfKCFQ4WqFaKTyDtcSAsmwPibGPdbpgTTznNtHf/QGabOo59
+         8xCchLRKMBMre2sH8oe1+cfjvuzSExyxWFPYKeu35d8vYN7eyxPGS1Fi2EjVkk0s62mS
+         vQezI4zTbZcHKaAyEjpV3SUkgiEy4BP4A72LyrA/lGCyxgB4+bjiTDos+CdXqBV1aNVs
+         uV1EpFmrc7jDA71BPALQ2vOcWywkbw+tzrLLxciW7Y4vwca1EGLYgLHv+7tFmH/p2+sK
+         ZoDw==
+X-Gm-Message-State: APjAAAUtMBycQ5wMd8FHjW3jD4vcTNMhSOEt9gTqW2hwZ4o1j0f/Qx/K
+        EU2a2eopI9mV5j4kdyQ8alA=
+X-Google-Smtp-Source: APXvYqxQ4jtZobe2yh+82a4z1VRak83xYjV5aZ6fxvr1TTTEUQbtS1OcsUXJPViceQ5Ph2wxhZcB9g==
+X-Received: by 2002:a0c:9679:: with SMTP id 54mr12480342qvy.168.1557769972483;
+        Mon, 13 May 2019 10:52:52 -0700 (PDT)
 Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id o44sm10222002qto.36.2019.05.13.10.51.13
+        by smtp.gmail.com with ESMTPSA id t124sm7183371qkh.29.2019.05.13.10.52.52
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 May 2019 10:51:14 -0700 (PDT)
-From:   Arvind Sankar <nivedita@alum.mit.edu>
-X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
-Date:   Mon, 13 May 2019 13:51:12 -0400
+        Mon, 13 May 2019 10:52:52 -0700 (PDT)
+Date:   Mon, 13 May 2019 13:52:50 -0400
+From:   Arvind Sankar <niveditas98@gmail.com>
 To:     Arvind Sankar <niveditas98@gmail.com>
 Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
         Rob Landley <rob@landley.net>, linux-kernel@vger.kernel.org,
@@ -57,7 +56,7 @@ Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
         linux-integrity@vger.kernel.org, initramfs@vger.kernel.org
 Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
  ram disk
-Message-ID: <20190513175111.GB69717@rani.riverdale.lan>
+Message-ID: <20190513175250.GC69717@rani.riverdale.lan>
 References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
  <20190512194322.GA71658@rani.riverdale.lan>
  <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
@@ -117,8 +116,8 @@ On Mon, May 13, 2019 at 01:20:08PM -0400, Arvind Sankar wrote:
 > just cannot be used on an IMA-enabled system, or it can but it leaves
 > the initramfs unverified and we're trying to fix that? I had assumed the
 > latter.
-Oooh, it's done not by starting IMA later, but by loading a default
-policy that ignores the initramfs?
+Oooh, it's done not by starting IMA appraisal later, but by loading a
+default policy to ignore initramfs?
 > > > 
 > > > So you made broken infrastructure that's causing you problems. Sounds unfortunate.
 > > 
