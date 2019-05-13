@@ -2,178 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 304EA1B650
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2019 14:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B8F1B671
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2019 14:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729970AbfEMMrA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 May 2019 08:47:00 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32934 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729976AbfEMMrA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 May 2019 08:47:00 -0400
-Received: from LHREML713-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 5B80448035ABDDE81A3F;
-        Mon, 13 May 2019 13:46:58 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.36) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 13 May
- 2019 13:46:57 +0100
-Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
- ram disk
-To:     Rob Landley <rob@landley.net>,
-        Arvind Sankar <niveditas98@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <initramfs@vger.kernel.org>
-References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
- <20190512194322.GA71658@rani.riverdale.lan>
- <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
- <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
-Date:   Mon, 13 May 2019 14:47:04 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
-MIME-Version: 1.0
-In-Reply-To: <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+        id S1730036AbfEMMyf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 May 2019 08:54:35 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:45675 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730009AbfEMMyf (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 13 May 2019 08:54:35 -0400
+Received: by mail-lf1-f65.google.com with SMTP id n22so8935268lfe.12;
+        Mon, 13 May 2019 05:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=7xC8cHLyDzMeqQGy8UoBhK9uZfRCQ70OtqLrwiRwxH4=;
+        b=ZRLHqJPUCy779ZIwEg4SU+jBhX8GeRUY9h7FW+0OFtBhRIEsIePzNqL3nWZj5KNUzb
+         6YJ4pvay0OhNcDpFNGdgB2zs2l+ccbMydF0LN45RIhDR2Cgtfu/y3xkIZM1hlw9wrQ2t
+         vigEvORCYpVrSgIlTJ+cznCLdvaaXMH8knBq6el0oGE/YX9RHbKoOSxDSw1rIjsGJy0q
+         V3qwJoYbAE7gx1PtXSwCVeDstRD2ttTt2NJueEOFsRAwD4U+UJ+l4O/GVIM4FZVHL8W7
+         rpwkSYDXX3bQtPE+Ml9a+q62s0eewEbsw8/PbrQm9yZV9L2K+kprZkSL92nInsYZHYqA
+         BChg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7xC8cHLyDzMeqQGy8UoBhK9uZfRCQ70OtqLrwiRwxH4=;
+        b=MCxdCG1j2w+YMppSDz9qCV55sMzN04VjTokHfdDKDSMhxDeLsKwy4tkECyBV9kxW8A
+         Ns10z6XW4ZfYkTxFDa0arpfWedC75f61fUlDuUCwPV8+kfuJBsSxtTBX1LFBGZTh2KNl
+         e0CrX24p4P59L9s+E+nAHNV6SJPwX9MmJxyxyjGKu8LzV5lvcVAMABDguyhmSOAeuJ+b
+         gO3UOuagTwB6uAOrhna9QnCOpLjwC8imwrk7KXnh/0VgQp9kkEzEc/dg8zusoLig11J3
+         N74+3+XxSklYRybYziCUxcBPGmjG9ccugg3EcijZ9Z8KLk9RfEw/bPnB15QlA790EYnX
+         2jOQ==
+X-Gm-Message-State: APjAAAXY617gioZliUeznMwykkqhQNw9Mt55hLxqvoRP3S9zmBxlkWXH
+        ze7PmzqEjPWVnrvFhWeaeR19Hnhr/ZA=
+X-Google-Smtp-Source: APXvYqwKJcWo6k5z8t6NBmvrYXE6cVCOoGrqOCLde7xchy3MGCBB1I7YqTtoHFh5enXY9AqeGsD3tg==
+X-Received: by 2002:ac2:5337:: with SMTP id f23mr12268247lfh.52.1557752072545;
+        Mon, 13 May 2019 05:54:32 -0700 (PDT)
+Received: from localhost.localdomain (mobile-user-2e84ba-11.dhcp.inet.fi. [46.132.186.11])
+        by smtp.gmail.com with ESMTPSA id t22sm3202924lje.58.2019.05.13.05.54.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 13 May 2019 05:54:31 -0700 (PDT)
+From:   Janne Karhunen <janne.karhunen@gmail.com>
+To:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, zohar@linux.ibm.com
+Cc:     Janne Karhunen <janne.karhunen@gmail.com>
+Subject: [PATCH 0/5] integrity: improve ima measurement accuracy
+Date:   Mon, 13 May 2019 15:53:49 +0300
+Message-Id: <20190513125354.23126-1-janne.karhunen@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/13/2019 11:07 AM, Rob Landley wrote:
-> 
-> 
-> On 5/13/19 2:49 AM, Roberto Sassu wrote:
->> On 5/12/2019 9:43 PM, Arvind Sankar wrote:
->>> On Sun, May 12, 2019 at 05:05:48PM +0000, Rob Landley wrote:
->>>> On 5/12/19 7:52 AM, Mimi Zohar wrote:
->>>>> On Sun, 2019-05-12 at 11:17 +0200, Dominik Brodowski wrote:
->>>>>> On Thu, May 09, 2019 at 01:24:17PM +0200, Roberto Sassu wrote:
->>>>>>> This proposal consists in marshaling pathnames and xattrs in a file called
->>>>>>> .xattr-list. They are unmarshaled by the CPIO parser after all files have
->>>>>>> been extracted.
->>>>>>
->>>>>> Couldn't this parsing of the .xattr-list file and the setting of the xattrs
->>>>>> be done equivalently by the initramfs' /init? Why is kernel involvement
->>>>>> actually required here?
->>>>>
->>>>> It's too late.  The /init itself should be signed and verified.
->>>>
->>>> If the initramfs cpio.gz image was signed and verified by the extractor, how is
->>>> the init in it _not_ verified?
->>>>
->>>> Ro
->>>
->>> Wouldn't the below work even before enforcing signatures on external
->>> initramfs:
->>> 1. Create an embedded initramfs with an /init that does the xattr
->>> parsing/setting. This will be verified as part of the kernel image
->>> signature, so no new code required.
->>> 2. Add a config option/boot parameter to panic the kernel if an external
->>> initramfs attempts to overwrite anything in the embedded initramfs. This
->>> prevents overwriting the embedded /init even if the external initramfs
->>> is unverified.
->>
->> Unfortunately, it wouldn't work. IMA is already initialized and it would
->> verify /init in the embedded initial ram disk.
-> 
-> So you made broken infrastructure that's causing you problems. Sounds unfortunate.
+By default the linux integrity subsystem measures a file only
+when a file is being closed. While this certainly provides
+low overhead as the re-measurements are never done, it also
+makes sure the system has zero means to recover from a crash
+or a power outage when operating in 'appraise' mode. 
 
-The idea is to be able to verify anything that is accessed, as soon as
-rootfs is available, without distinction between embedded or external
-initial ram disk.
+This patch series adds two new IMA api functions to retrigger
+the measurements as the files change. Synchronous variant
+should be invoked from less performance sensitive locations
+such as sync|msync|truncate where the user is expecting some
+latency, and the asynchronous variant can be called from
+performance sensitive locations such as direct write or mmio.
 
-Also, requiring an embedded initramfs for xattrs would be an issue for
-systems that use it for other purposes.
+Asynchronous variant is mostly 'out of the way' on write hot
+paths, each file write is only checking that we have a cmwq
+work entry pending to re-calculate the file measurement later
+on. Re-measurement latencies are build time tunables and the
+latencies are automatically raised for very large files.
 
+While this does not provide absolutely perfect tolerance to
+system resets, for most reasonable embedded system workloads
+it can be tuned to achieve really high measurement accurancy
+with the measurements being accurate 99.9%+ of the day.
 
->> The only reason why
->> opening .xattr-list works is that IMA is not yet initialized
->> (late_initcall vs rootfs_initcall).
-> 
-> Launching init before enabling ima is bad because... you didn't think of it?
+Janne Karhunen (5):
+  integrity: keep the integrity state of open files up to date
+  integrity: update the file measurement on truncate
+  integrity: update the file measurement on write
+  integrity: measure the file on sync
+  integrity: measure the file on msync
 
-No, because /init can potentially compromise the integrity of the
-system.
-
-
->> Allowing a kernel with integrity enforcement to parse the CPIO image
->> without verifying it first is the weak point.
-> 
-> If you don't verify the CPIO image then in theory it could have anything in it,
-> yes. You seem to believe that signing individual files is more secure than
-> signing the archive. This is certainly a point of view.
-
-As I wrote above, signing the CPIO image would be more secure, if this
-option is available. However, a disadvantage would be that you have to
-sign the CPIO image every time a file changes.
-
-
->> However, extracted files
->> are not used, and before they are used they are verified. At the time
->> they are verified, they (included /init) must already have a signature
->> or otherwise access would be denied.
-> 
-> You build infrastructure that works a certain way, the rest of the system
-> doesn't fit your assumptions, so you need to change the rest of the system to
-> fit your assumptions.
-
-Requiring file metadata to make decisions seems reasonable. Also
-mandatory access controls do that. The objective of this patch set is to
-have uniform behavior regardless of the filesystem used.
-
-
->> This scheme relies on the ability of the kernel to not be corrupted in
->> the event it parses a malformed CPIO image.
-> 
-> I'm unaware of any buffer overruns or wild pointer traversals in the cpio
-> extraction code. You can fill up all physical memory with initramfs and lock the
-> system hard, though.
-> 
-> It still only parses them at boot time before launching PID 1, right? So you
-> have a local physical exploit and you're trying to prevent people from working
-> around your Xbox copy protection without a mod chip?
-
-What do you mean exactly?
-
-
->> Mimi suggested to use
->> digital signatures to prevent this issue, but it cannot be used in all
->> scenarios, since conventional systems generate the initial ram disk
->> locally.
-> 
-> So you use a proprietary init binary you can't rebuild from source, and put it
-> in a cpio where /dev/urandom is a file with known contents? Clearly, not
-> exploitable at all. (And we update the initramfs.cpio but not the kernel because
-> clearly keeping the kernel up to date is less important to security...)
-
-By signing the CPIO image, the kernel wouldn't even attempt to parse it,
-as the image would be rejected by the boot loader if the signature is
-invalid.
-
-
-> Whatever happened to https://lwn.net/Articles/532778/ ? Modules are signed
-> in-band in the file, but you need xattrs for some reason?
-
-Appending just the signature would be possible. It won't work if you
-have multiple metadata for the same file.
-
-Also appending the signature alone won't solve the parsing issue. Still,
-the kernel has to parse something that could be malformed.
-
-Roberto
-
-
->> Roberto
-> 
-> Rob
-> 
+ fs/namei.c                            |   5 +-
+ fs/open.c                             |   3 +
+ fs/read_write.c                       |  11 ++-
+ fs/sync.c                             |   3 +
+ include/linux/ima.h                   |  12 +++
+ mm/msync.c                            |   7 ++
+ security/integrity/ima/Kconfig        |  20 +++++
+ security/integrity/ima/ima_appraise.c |   6 +-
+ security/integrity/ima/ima_main.c     | 103 +++++++++++++++++++++++++-
+ security/integrity/integrity.h        |   6 ++
+ 10 files changed, 171 insertions(+), 5 deletions(-)
 
 -- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+2.17.1
+
