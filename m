@@ -2,79 +2,95 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B56331B25E
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2019 11:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07B21B592
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2019 14:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727826AbfEMJJp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 May 2019 05:09:45 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32933 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727305AbfEMJJo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 May 2019 05:09:44 -0400
-Received: from LHREML713-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 65554E80839DF2F7883E
-        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2019 10:09:43 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.36) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 13 May
- 2019 10:09:38 +0100
-Subject: Re: Whitelisting with IMA
-To:     m3hm00d <f.m3hm00d@gmail.com>, <linux-integrity@vger.kernel.org>
-References: <CAL8qiskDtYJ0NY3u+zV3YBMR4Qs_YcHSHZ61per5jwZ3n54r8A@mail.gmail.com>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <c4adc9d7-9244-1cbe-693c-2f090851d804@huawei.com>
-Date:   Mon, 13 May 2019 11:09:45 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
-MIME-Version: 1.0
-In-Reply-To: <CAL8qiskDtYJ0NY3u+zV3YBMR4Qs_YcHSHZ61per5jwZ3n54r8A@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+        id S1729692AbfEMMNK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 May 2019 08:13:10 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47532 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727830AbfEMMNJ (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 13 May 2019 08:13:09 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4DCAjUu128395
+        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2019 08:13:07 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sf6akd2qr-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2019 08:12:01 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 13 May 2019 13:08:49 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 13 May 2019 13:08:45 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4DC8iT146268554
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 May 2019 12:08:44 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0727A405B;
+        Mon, 13 May 2019 12:08:44 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A9BA3A4054;
+        Mon, 13 May 2019 12:08:43 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.80.35])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 13 May 2019 12:08:43 +0000 (GMT)
+Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Rob Landley <rob@landley.net>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Arvind Sankar <niveditas98@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        initramfs@vger.kernel.org
+Date:   Mon, 13 May 2019 08:08:33 -0400
+In-Reply-To: <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
+References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
+         <20190512194322.GA71658@rani.riverdale.lan>
+         <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
+         <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19051312-4275-0000-0000-0000033434AC
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19051312-4276-0000-0000-00003843B06F
+Message-Id: <1557749313.10635.309.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-13_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905130086
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/12/2019 11:37 AM, m3hm00d wrote:
-> tldr: Is there some way to ask IMA not to open (execute) unknown binaries
+On Mon, 2019-05-13 at 04:07 -0500, Rob Landley wrote:
+
+> > Allowing a kernel with integrity enforcement to parse the CPIO image
+> > without verifying it first is the weak point.
 > 
-> Hi all,
-> 
-> I saw some comments on RFC for WhiteEgret LSM. Someone on the same
-> thread said that IMA could be used for whitelisting as well. Based on
-> a couple of hours with IMA, it seems to me that IMA can only stop
-> execution of (altered) binaries whose hash/sign was earlier measured.
+> If you don't verify the CPIO image then in theory it could have anything in it,
+> yes. You seem to believe that signing individual files is more secure than
+> signing the archive. This is certainly a point of view.
 
-Hi
+Nobody is claiming that signing and verifying individual files is more
+secure.  We are saying that in some environments BOTH are needed.  In
+many environments today the initramfs IS being signed and verified.
 
-I'm developing an extension (IMA Digest Lists) to allow access to files
-depending on a white list (for example digests in RPM headers). I will
-publish a new version soon. For the concept, please have a look at:
+Unfortunately not all environments can sign the initramfs today,
+because the initramfs is not distributed with the kernel image, but
+generated on the target system.
 
-https://github.com/euleros/linux/wiki/IMA-Digest-Lists-Extension
-https://github.com/euleros/digest-list-tools/wiki/Architecture
+Mimi
 
-
-> If a user installs a new (unknown) application, it seems like IMA is
-> going to allow that application to run since IMA can't find any
-> integrity loss since IMA doesn't have any 'good' value against the new
-> application. Is this correct? Or is there some other option to ask IMA
-> not to execute any unknown binary?
-
-If appraisal is enabled, and the application has no signature/HMAC,
-access would be denied. If the application is installed by a package
-manager, probably files will have a HMAC and access would be granted
-unless the IMA policy requires signatures.
-
-Roberto
-
-
-> Kind regards,
-> m3hm00d
-> 
-
--- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
