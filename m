@@ -2,56 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3601B673
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2019 14:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8E51B677
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2019 14:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730038AbfEMMyh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 May 2019 08:54:37 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:45678 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730009AbfEMMyg (ORCPT
+        id S1730041AbfEMMyi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 May 2019 08:54:38 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:42426 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730034AbfEMMyi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 May 2019 08:54:36 -0400
-Received: by mail-lf1-f66.google.com with SMTP id n22so8935347lfe.12;
-        Mon, 13 May 2019 05:54:35 -0700 (PDT)
+        Mon, 13 May 2019 08:54:38 -0400
+Received: by mail-lf1-f68.google.com with SMTP id w23so8956919lfc.9;
+        Mon, 13 May 2019 05:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=LjPAYO25HnG81opjamBBgEbx9PUeCpkb7T1gwi9hG6g=;
-        b=jAXX4HRirUwXmIVh3LlnRNtm4pIeOVVWBXb6ZQQm4YK6pckouVme1WoqH5vTD/ePqT
-         yss83cEb22XXu2BesfkOh4mXarqfi/25Tp5grKdZ/PGOi9s7V/vESTmWfFItR8m6tPoR
-         KlxRA19J4cgOxCrepI3MLMOTrIUYbYyr38QAUOlBV3oCFxfaBPmSjICTYi6Gjqq3Q/2T
-         7QiKmRiuyVvXzqz6ONN4heFOczQ3LTrnYHpcpv1QQgga0emjH0VChzayctCqvk1vEm1P
-         gjF7Q+jMpOlo68meZl3n5KNj0uDI7CxTiQdNpif3ngpn+5BhFe+4YfPLuFRd6c9N/+2N
-         8tDw==
+        bh=YDGj9rVkvE8XZld5lFXG+QIkeDeoJDurNDlY5dYrCpo=;
+        b=XE04hlQkBchBUXgcGRWR4Jw6UPX9mcLpmQGKBKbZg8hioEveJttbj6pIDs5U43zi4f
+         MnIG+a1pWRqCQHD93XoA0aXixI/0+g3ExLqNQt9orbk/pnyLnn9IDmsT1FdrNDVVtjm4
+         3BSc0ouTluJwoihs10/h4PC5oWS7LcPsnazpgs6T16A4keFqk5ciw0P7AhYQUcMjmxIA
+         fubKyAkGp2w54elwmf/8HYycLlWIe5vichCHGDLgYe3x39fIhfIcDFhyxXcnnY9Vhs87
+         tLcXmARbjkdvyPmML3lJp54lZkQvdMLhapTpOXuzPoRNLOqF/Mf/12/BCqgUd+Sp9urF
+         135g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=LjPAYO25HnG81opjamBBgEbx9PUeCpkb7T1gwi9hG6g=;
-        b=PYIm0lthcrBglRijgYNp30Aczkc0sdwm0NJWYQi9FMsQ48sN0McEzdw3BenkeDliD3
-         vOBaVnHB6BFkuIkhjdsbiFscMylaTne60VSQqewvKhvBcy02E9UKj5o89dUi4WjmlsrR
-         TWZ4VMRgBM6aav3UNQj12ok+lxuRRyN+qsA4SdJ2mj/d8SrJjZjXlHfD16lc60nIFDji
-         A9m16MbDDizmvxOW2iPLCeFfOM9l9FbtpQPZieJMSSX7RBEPw4tGuJCA/Vuh2ZrIXPE/
-         Ww3VVLRhdhwxApWnls3DgtLWl6nuj9XTMEHVRgT5NVVlVa+0PsHllle26rk6a7BEwalb
-         Y2qQ==
-X-Gm-Message-State: APjAAAX9fmyIkFx0Ud5+JjYqnqmvosrSaPpBSmwQXB/i6nQjGXg7FbYe
-        a6elhQsYD3x2weAbHSVDCjHMHi+li9c=
-X-Google-Smtp-Source: APXvYqyHN8sFommx6hIklyDSBzX2LyTRZXRP3Ug6RKD/z+h4Vs8O0FWOnds29AEWU+9iy+hm+ozYuA==
-X-Received: by 2002:ac2:4357:: with SMTP id o23mr14356615lfl.146.1557752074707;
-        Mon, 13 May 2019 05:54:34 -0700 (PDT)
+        bh=YDGj9rVkvE8XZld5lFXG+QIkeDeoJDurNDlY5dYrCpo=;
+        b=ZHL7O30hNhUFz73OmANpoFoqdicotyil4qHYzQbPrO/cKe1nrYrIGRUouyc4aW3U/o
+         9pbUkvTCSFAQa4+DRFr3Iq7TG9R7ciMB1jN5j7tT5iUgksDZ7kfraq4FlfuIYO6Wu1ln
+         6ISqhY8tZ5oZAoLd0NKFwPFIfC10MHqg2NN2TwukUzBTqEQ0gkC4Y4xUzDKImfAbPB4f
+         OoUh3DY0NaYCicgzexkbpFjoBqRIUnsvGzLkpJSvyT5RuXdZFCfrdNfPNSMWjctPktYo
+         149V+ZpuHIjpYwL7gskQkEJwO/bZ/5iYcet3H/KcTTkYtARt2YyxuoYIhj+8sce28bHK
+         FSMg==
+X-Gm-Message-State: APjAAAVPhlLjUs0UvUwMOHk9vGnQQD77A7hgcUQrtDKiZdnFgCGhZCr2
+        6/NjbCHLbHv9+KAX2nMS9z+QPB7Z1r8=
+X-Google-Smtp-Source: APXvYqzDO3AdUUpn1HJ9XHgficGSyDLCnABfId/VCfp8rMP+P4CjdKQj8qmGU1J0hA6BzHMdvS3Q8Q==
+X-Received: by 2002:ac2:528f:: with SMTP id q15mr12733938lfm.37.1557752075897;
+        Mon, 13 May 2019 05:54:35 -0700 (PDT)
 Received: from localhost.localdomain (mobile-user-2e84ba-11.dhcp.inet.fi. [46.132.186.11])
-        by smtp.gmail.com with ESMTPSA id t22sm3202924lje.58.2019.05.13.05.54.33
+        by smtp.gmail.com with ESMTPSA id t22sm3202924lje.58.2019.05.13.05.54.34
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 May 2019 05:54:34 -0700 (PDT)
+        Mon, 13 May 2019 05:54:35 -0700 (PDT)
 From:   Janne Karhunen <janne.karhunen@gmail.com>
 To:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, zohar@linux.ibm.com
 Cc:     Janne Karhunen <janne.karhunen@gmail.com>,
         Konsta Karsisto <konsta.karsisto@gmail.com>
-Subject: [PATCH 2/5] integrity: update the file measurement on truncate
-Date:   Mon, 13 May 2019 15:53:51 +0300
-Message-Id: <20190513125354.23126-3-janne.karhunen@gmail.com>
+Subject: [PATCH 3/5] integrity: update the file measurement on write
+Date:   Mon, 13 May 2019 15:53:52 +0300
+Message-Id: <20190513125354.23126-4-janne.karhunen@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190513125354.23126-1-janne.karhunen@gmail.com>
 References: <20190513125354.23126-1-janne.karhunen@gmail.com>
@@ -60,49 +60,50 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Let IMA know when a file is being opened with truncate
-or truncated directly.
+When a file is being written, mark the file for IMA for delayed
+re-measurement.
 
 Depends on commit c8213962517e ("integrity: keep the integrity state of open files up to date")'
 
 Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
 Signed-off-by: Konsta Karsisto <konsta.karsisto@gmail.com>
 ---
- fs/namei.c | 5 ++++-
- fs/open.c  | 3 +++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ fs/read_write.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index dede0147b3f6..31303063143b 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3418,8 +3418,11 @@ static int do_last(struct nameidata *nd,
- 		goto out;
- opened:
- 	error = ima_file_check(file, op->acc_mode);
--	if (!error && will_truncate)
-+	if (!error && will_truncate) {
- 		error = handle_truncate(file);
-+		if (!error)
-+			ima_file_update(file);
-+	}
- out:
- 	if (unlikely(error > 0)) {
- 		WARN_ON(1);
-diff --git a/fs/open.c b/fs/open.c
-index 0285ce7dbd51..a2771b787383 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -62,6 +62,9 @@ int do_truncate(struct dentry *dentry, loff_t length, unsigned int time_attrs,
- 	/* Note any delegations or leases have already been broken: */
- 	ret = notify_change(dentry, &newattrs, NULL);
- 	inode_unlock(dentry->d_inode);
+diff --git a/fs/read_write.c b/fs/read_write.c
+index 177ccc3d405a..bfe10d6dc135 100644
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -20,6 +20,7 @@
+ #include <linux/compat.h>
+ #include <linux/mount.h>
+ #include <linux/fs.h>
++#include <linux/ima.h>
+ #include "internal.h"
+ 
+ #include <linux/uaccess.h>
+@@ -481,12 +482,18 @@ static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t
+ static ssize_t __vfs_write(struct file *file, const char __user *p,
+ 			   size_t count, loff_t *pos)
+ {
++	ssize_t sz;
 +
-+	if (filp)
-+		ima_file_update(filp);
- 	return ret;
+ 	if (file->f_op->write)
+-		return file->f_op->write(file, p, count, pos);
++		sz = file->f_op->write(file, p, count, pos);
+ 	else if (file->f_op->write_iter)
+-		return new_sync_write(file, p, count, pos);
++		sz = new_sync_write(file, p, count, pos);
+ 	else
+ 		return -EINVAL;
++
++	if (sz >= 1)
++		ima_delayed_update(file);
++	return sz;
  }
  
+ ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
 -- 
 2.17.1
 
