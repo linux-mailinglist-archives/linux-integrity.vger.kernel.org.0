@@ -2,181 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7BE1BF59
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 00:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F008F1BF61
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 00:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726706AbfEMWGd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 May 2019 18:06:33 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:38103 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726705AbfEMWGc (ORCPT
+        id S1726598AbfEMWJb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 May 2019 18:09:31 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40568 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726567AbfEMWJb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 May 2019 18:06:32 -0400
-Received: by mail-it1-f196.google.com with SMTP id i63so1609658ita.3
-        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2019 15:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JIx3h0Mt9J+/lEWG7UoB4dTDXrEgdUjpPED38EFg7mE=;
-        b=iEelTsof+PDlHfZHmpCsN1rfQAIAXGmSyIh/ZEbPdRedDgxTFdUqLg7anbmYK8zGgN
-         mz8ec7r6euQ3VdSjSndqQ+ytzbNVB+gjBfW8lG6QX3FwNyK/tEc1Dk16ORUDOgNmv/0C
-         4vLbedTDkGwHilbifp4a9lVkTsWEGkEMtJJd73f0KAXfI+Xet0TkUTeP433yvMpHTQi9
-         O9J36p+2xqo2BqojOCPSot1JMnD43wgjzsgdNKLKub4yrbwbLpC7SeabpGWTsm4GIjR9
-         hsCs+/3nZwxaS3FHvCsJLQ0bkls0A64xkM7XrdDtyDIyk3wEp1t49+RTCwdpUbVR8Ygc
-         ZXYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JIx3h0Mt9J+/lEWG7UoB4dTDXrEgdUjpPED38EFg7mE=;
-        b=CAA6fZNjWEQSkkCYxbVCYdc1kklqMLeDCSj4cT+CvbZOrdg1zkBLCM3bYcNsPs1rOg
-         qpeD2wC30JaRdZgazlKeD0a2+UVka4ZD9XJaH8QrqTI1XP0TNKej+bMVfWcwyHE6EfR7
-         5RCz8MMIAvPS04N1KZfEF8efSdWWltud3dXAKx4lG3FzEc2xIiO0MBUXXewyNFHK1nFa
-         p3qBubbiG9AtjmI3Pp8vYZU5spxURX+vQp5AeJPbRTKWJ+rVVaguNN8e913FOTEocq8E
-         dMQf84CgkpVLS9kC2UC+53w3a3/hFCTKDBmCLTT4m6OgKnC9+3n8Sh6qzzz2HM5bU787
-         cINQ==
-X-Gm-Message-State: APjAAAVCwWXpXpxu0Jgqxy17X3ovnQHmhc70u4QYSdIPsHK8DIpXC3/G
-        BgfmQTJC6jEX8XVgBKlgfxfi0ioe2DmF1dA+jRtE1g==
-X-Google-Smtp-Source: APXvYqyeWORWwpXBJ61AzFsQrkbSqVFYb7aklN+03gAJ1CLO/PtiZlpv881bgIm/MBUK2g/zQpMyW1Aj2ZZ6sboXIko=
-X-Received: by 2002:a24:e046:: with SMTP id c67mr66255ith.16.1557785191476;
- Mon, 13 May 2019 15:06:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190402181505.25037-1-cclaudio@linux.ibm.com>
- <CACdnJuumhkqTb4+1=QBiLmbW4xd3wW=MZu6Tj_KdaoTMhCN+Tg@mail.gmail.com>
- <4ce5e057-0702-b0d5-7bb2-cea5b22e2efa@linux.ibm.com> <CACdnJusBm93zwDqTXTx_QYsg1-aGUAAHm_qq8Lcx3TvGTxdmbg@mail.gmail.com>
- <2208f156-d441-3082-2f4c-8030c84ef788@linux.ibm.com> <CACdnJuu8OqMrSs0esOmf=ro9n00aYEQ-nikAh6v6sk+YAQw4cQ@mail.gmail.com>
- <d79f47f8-9006-3a47-2bdc-58012cef5c7e@linux.ibm.com> <CACdnJuv_5A1_6CH1+Jn7SCrmW8Y6JuzsMmJoc1=_vn0nKdYMjQ@mail.gmail.com>
- <28bfc0a7-9ae5-2c99-e472-ea53f856bafc@linux.ibm.com> <CACdnJuvpUKiX5UgSOrzh+B9y68zKm+Bzu1c8KFJHd8diz=sm2Q@mail.gmail.com>
- <e845d9f5-00bb-e68d-9d24-da802dd05549@linux.ibm.com>
-In-Reply-To: <e845d9f5-00bb-e68d-9d24-da802dd05549@linux.ibm.com>
-From:   Matthew Garrett <mjg59@google.com>
-Date:   Mon, 13 May 2019 15:06:20 -0700
-Message-ID: <CACdnJutaDXsi5N-npinkzYfikFCGFDpZk52uVArf4JRxU9WFLw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Enabling secure boot on PowerNV systems
-To:     Claudio Carvalho <cclaudio@linux.ibm.com>
-Cc:     linuxppc-dev@ozlabs.org, linux-efi <linux-efi@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Peter Jones <pjones@redhat.com>
+        Mon, 13 May 2019 18:09:31 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4DM2kG1011843
+        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2019 18:09:29 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sfe14f5tv-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2019 18:09:29 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 13 May 2019 23:09:27 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 13 May 2019 23:09:24 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4DM9Np452166906
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 May 2019 22:09:23 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34A1A4C046;
+        Mon, 13 May 2019 22:09:23 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F045D4C044;
+        Mon, 13 May 2019 22:09:21 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.110.120])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 13 May 2019 22:09:21 +0000 (GMT)
+Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Arvind Sankar <nivedita@alum.mit.edu>
+Cc:     Arvind Sankar <niveditas98@gmail.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Rob Landley <rob@landley.net>, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org
+Date:   Mon, 13 May 2019 18:09:11 -0400
+In-Reply-To: <20190513184744.GA12386@rani.riverdale.lan>
+References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
+         <20190512194322.GA71658@rani.riverdale.lan>
+         <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
+         <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
+         <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
+         <20190513172007.GA69717@rani.riverdale.lan>
+         <20190513175250.GC69717@rani.riverdale.lan>
+         <1557772584.4969.62.camel@linux.ibm.com>
+         <20190513184744.GA12386@rani.riverdale.lan>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19051322-0008-0000-0000-000002E646B0
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19051322-0009-0000-0000-00002252DD3F
+Message-Id: <1557785351.4969.94.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-13_14:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905130147
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, May 10, 2019 at 2:31 PM Claudio Carvalho <cclaudio@linux.ibm.com> wrote:
-> On 4/10/19 2:36 PM, Matthew Garrett wrote:
-> > I don't see the benefit in attempting to maintain compatibility with
-> > existing tooling unless you're going to be *completely* compatible
-> > with existing tooling. That means supporting dbx and dbt.
+On Mon, 2019-05-13 at 14:47 -0400, Arvind Sankar wrote:
+> On Mon, May 13, 2019 at 02:36:24PM -0400, Mimi Zohar wrote:
+> > 
+> > > > How does this work today then? Is it actually the case that initramfs
+> > > > just cannot be used on an IMA-enabled system, or it can but it leaves
+> > > > the initramfs unverified and we're trying to fix that? I had assumed the
+> > > > latter.
+> > > Oooh, it's done not by starting IMA appraisal later, but by loading a
+> > > default policy to ignore initramfs?
+> > 
+> > Right, when rootfs is a tmpfs filesystem, it supports xattrs, allowing
+> > for finer grained policies to be defined.  This patch set would allow
+> > a builtin IMA appraise policy to be defined which includes tmpfs.
 
-(snip)
+Clarification: finer grain IMA policy rules are normally defined in
+terms of LSM labels.  The LSMs need to enabled, before writing IMA
+policy rules in terms of the LSM labels.
 
-> In OS secure boot domain (work in progress):
-> - The skiroot container is verified as part of firmware secure boot.
-> - Skiroot uses UEFI-like secure variables (PK, KEK and db) to verify OS
-> kernels. Only X.509 certificates will be supported for these secure variables.
+> > 
+> Ok, but wouldn't my idea still work? Leave the default compiled-in
+> policy set to not appraise initramfs. The embedded /init sets all the
+> xattrs, changes the policy to appraise tmpfs, and then exec's the real
+> init? Then everything except the embedded /init and the file with the
+> xattrs will be appraised, and the embedded /init was verified as part of
+> the kernel image signature. The only additional kernel change needed
+> then is to add a config option to the kernel to disallow overwriting the
+> embedded initramfs (or at least the embedded /init).
 
-You don't support hashes? If so, this isn't compatible with UEFI
-Secure Boot and we shouldn't try to make it look like UEFI Secure
-Boot.
+Yes and no.  The current IMA design allows a builtin policy to be
+specified on the boot command line ("ima_policy="), so that it exists
+from boot, and allows it to be replaced once with a custom policy.
+ After that, assuming that CONFIG_IMA_WRITE_POLICY is configured,
+additional rules may be appended.  As your embedded /init solution
+already replaces the builtin policy, the IMA policy couldn't currently
+be replaced a second time with a custom policy based on LSM labels.
 
-> How about dbx and dbt?
->
-> The db keys will be used to verify only OS kernels via kexecs initiated by
-> petitboot. So we only need the dbx to revoke kernel images, either via
-> certs or hashes. Currently, the kernel loads certs and hashes from the dbx
-> to the system blacklist keyring. The revoked certs are checked during pkcs7
-> signature verification and loading of keys. However, there doesn't appear
-> to be any verification against blacklisted hashes. Should kernel images be
-> revoked only by keys and not hashes? We tried to find published revoked
-> kernel lists but couldn't find any. How is kernel image revocation handled
-> in practice?
+Mimi
 
-Hash-based revocation is in active use in the UEFI world - to the best
-of my knowledge, all existing dbx entries are hashes with the
-exception of the invalidation of the Microsoft Windows 2010 CA.
-
-> Also, we didn't see the shim or kernel loading anything from dbt.
-
-dbt is currently only used for validation at the firmware level - the
-way grub and kernel signatures are currently managed means it doesn't
-make a huge amount of sense to use it in shim, but it would probably
-be reasonable to extend shim's validation to include dbt.
-
-> > So I do the following:
-> >
-> > 1) Boot
-> > 2) Extend the contents of db
-> > 3) Extend the contents of db again
-> > 4) Read back the contents of db through efivarfs
-> > 5) Reboot
-> > 6) Read back the contents of db through efivarfs
-> >
-> > Is what I see in (4) and (6) the same? Does it contain the values form
-> > both extensions?
->
-> In (2) and (3) the extensions are added to the update queue, which is
-> processed only in (5) by firmware. So, in (4) you should see the db content
-> without the extensions.
-
-Ok, this is not what we expect from UEFI systems. I'm strongly against
-providing what looks like the same ABI on multiple platforms but
-carrying subtle differences between those platforms - it's guaranteed
-to break tooling in unexpected ways.
-
-> In (5), firmware (skiboot) will process the update queue. The extensions
-> will be applied only if *all* of them are valid and pass signature
-> verification. Only in this case should you be able to see the extensions in
-> (6). If any of the extensions fail, firmware will discard all of them,
-> clear the queue, and do the proper logging.
-
-I believe that this is also a violation of expectations.
-
-> > Why would the intermediate level organisations not just have entries
-> > in db?
->
-> Because that seems to add more complexity than having three levels (PK, KEK
-> and db).
->
-> Typically, the intermediate level organisations (or KEK) are used to
-> authorize new additions to db. However, if we also have them in the db, who
-> would authorize the new additions to db. If that would be the intermediate
-> level organisation entries now in the db, it seems we would need to
-> implement a mechanism to determine which entries are for authorizing new
-> additions and which are for kernel signature verification. If that would be
-> the PK, we'd be burdening the PK owner to sign every new db addition if the
-> platform is owned by a company that has intermediate level organizations.
-
-Ok, in this scenario I don't understand why you wouldn't just want the
-intermediates in PK. Or, put another way - if you have a business
-justification for three layers of hierarchy, what do you do when
-someone has a business justification for four? The three layer
-hierarchy represents the weirdness of the PC industry where you have
-Microsoft needing to be in KEK (because they need to be able to issue
-updates to machines from multiple vendors) but not wanting to be in PK
-(because vendors don't want Microsoft to have ultimate control over
-their systems). If it weren't for this conflict, we'd just have a two
-layer hierarchy, and if some other aspect of the market had evolved
-over time we'd have a four layer hierarchy.
-
->
-> >  The main reason we don't do it this way in UEFI is because we
-> > need to support dbx, and if you're not supporting dbx I'm not sure I
-> > see the benefit.
->
-> I'm not sure I understand your question.  We would be using dbx to prevent
-> kernels from being loaded. How is that related to having three levels in
-> the key hierarchy (PK, KEK and db)?
-
-dbx entries come from Microsoft, so we need the KEK layer so Microsoft
-can update dbx. If Microsoft didn't need to update dbx then we'd leave
-Microsoft out of KEK, and then KEK and PK would be the same and we'd
-be able to get rid of KEK.
