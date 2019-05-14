@@ -2,110 +2,267 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A26301CAAF
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 16:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4601CB7C
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 17:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726025AbfENOq3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 May 2019 10:46:29 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59706 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725901AbfENOq3 (ORCPT
+        id S1726261AbfENPMG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 May 2019 11:12:06 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:33553 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726179AbfENPMG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 May 2019 10:46:29 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4EEk2h7108775
-        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 10:46:28 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2sfy7s1k0q-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 10:46:27 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 14 May 2019 15:46:22 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 14 May 2019 15:46:18 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4EEkI5I49545464
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 May 2019 14:46:18 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8AC9AE045;
-        Tue, 14 May 2019 14:46:17 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF28CAE04D;
-        Tue, 14 May 2019 14:46:16 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.80.29])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 May 2019 14:46:16 +0000 (GMT)
-Subject: Re: [PATCH 3/3 v5] call ima_kexec_cmdline from kexec_file_load path
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        inux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     ebiederm@xmission.com, vgoyal@redhat.com, prsriva@microsoft.com,
-        Dave Young <dyoung@redhat.com>
-Date:   Tue, 14 May 2019 10:46:06 -0400
-In-Reply-To: <20190510223744.10154-4-prsriva02@gmail.com>
-References: <20190510223744.10154-1-prsriva02@gmail.com>
-         <20190510223744.10154-4-prsriva02@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19051414-0020-0000-0000-0000033C9621
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051414-0021-0000-0000-0000218F528F
-Message-Id: <1557845166.4139.53.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-14_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905140105
+        Tue, 14 May 2019 11:12:06 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 66so15577703otq.0
+        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 08:12:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FrpMwftM+Mr1Vog1ubFtZ/Eq4Iaee6jzdfGfMeP7N9s=;
+        b=pJmHxmx6dWkcghgKrC5HPlV8gxpzuFwGHMNwCUJPC0PmpEocXwk43PwXNOGP/Zuore
+         Mzg4B6hN0i1zDBRzZ6wiPlBU3Sqg8zyZ9m7eEmWFNj/RMGSJ75tEYa24hRm3M5rhcaZQ
+         sOV/dSTJMCCpduTyjh83RvfxFLSQl0uoMErJbnnICChcreDI+l2OBZ28+ax9c/3k1PET
+         +Ci8OHc6VhQgMa1phIs1yh0ddmWHTZysZDx9MwL//nKTf/IO9EsQL8Fq24/gY1DfPHX4
+         lfVobhVcqf3JcdHfND1D/KCa33MaF1cxMWFY+9wfcGVw91uCSBzOaDlQohfHx+v5HvSB
+         KI2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FrpMwftM+Mr1Vog1ubFtZ/Eq4Iaee6jzdfGfMeP7N9s=;
+        b=K9HhqMUFZFjt7r5i/vkpvGppfSWdnYF6thJ0NT5s4hD0ZKox0rnwdh0niaM/i18xqt
+         t6G8tpBy6ecwaen5XDcaJu8a2e9iL3iDFVZrQKDJTePpwvrRknicsjSIpAOSpR1dnjPw
+         7K5dDQWdDBJoMvRTA2ntulgughaWhGhruOpngMCpjLc3R2hSX8QnsYE5ntDGXzhpR9qa
+         95Ydgo3QZ/hD3tbRvsEpdVU99kzwNmhhbGHF7P6joyGq3kHpbJeOZSi2xmq+8ZRqUPzW
+         lwTnPGzO7p8ehOdrcpzH0LrXXJeNRUmpMEz4NHk2YpkicMzAFa//BZr6350qQZBORzcg
+         F5VQ==
+X-Gm-Message-State: APjAAAWFnEsZoY1wZag+SWcFsyD4Wj3eLK5jTnDsjclDSbS5qXpo4+s6
+        3eoFDObnJkoNAFd51+gcMeZ9wWwV73M=
+X-Google-Smtp-Source: APXvYqxBE5qHNnI7jn0KhYXZ0u5z/o8iGkGomskLiMImbtrPbRrmdb7eWuAKzghEbo9h6QlD10Q6tw==
+X-Received: by 2002:a9d:826:: with SMTP id 35mr21646474oty.114.1557846725044;
+        Tue, 14 May 2019 08:12:05 -0700 (PDT)
+Received: from [192.168.1.5] (072-182-052-210.res.spectrum.com. [72.182.52.210])
+        by smtp.googlemail.com with ESMTPSA id q205sm6338464oih.17.2019.05.14.08.12.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 May 2019 08:12:04 -0700 (PDT)
+Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Arvind Sankar <niveditas98@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        initramfs@vger.kernel.org
+References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
+ <20190512194322.GA71658@rani.riverdale.lan>
+ <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
+ <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
+ <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
+ <49965ffd-dd57-ffe5-4a2f-73cdfb387848@landley.net>
+ <de91ef53-6bb3-b937-8773-5f6b34e1acb7@huawei.com>
+From:   Rob Landley <rob@landley.net>
+Message-ID: <6dcf4759-de65-d427-03c7-4b3df361da18@landley.net>
+Date:   Tue, 14 May 2019 10:12:37 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <de91ef53-6bb3-b937-8773-5f6b34e1acb7@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Cc'ing Dave Young]
-
-On Fri, 2019-05-10 at 15:37 -0700, Prakhar Srivastava wrote:
-> From: Prakhar Srivastava <prsriva02@gmail.com>
-
-The "From" line above should only appear when the patch author and the
-sender differ.  You can create the patches under one id and post them
-from another id.  Something is still wrong.
-
+On 5/14/19 6:52 AM, Roberto Sassu wrote:
+> On 5/14/2019 8:06 AM, Rob Landley wrote:
+>> On 5/13/19 7:47 AM, Roberto Sassu wrote:
+>>> On 5/13/2019 11:07 AM, Rob Landley wrote:
+>>>>>> Wouldn't the below work even before enforcing signatures on external
+>>>>>> initramfs:
+>>>>>> 1. Create an embedded initramfs with an /init that does the xattr
+>>>>>> parsing/setting. This will be verified as part of the kernel image
+>>>>>> signature, so no new code required.
+>>>>>> 2. Add a config option/boot parameter to panic the kernel if an external
+>>>>>> initramfs attempts to overwrite anything in the embedded initramfs. This
+>>>>>> prevents overwriting the embedded /init even if the external initramfs
+>>>>>> is unverified.
+>>>>>
+>>>>> Unfortunately, it wouldn't work. IMA is already initialized and it would
+>>>>> verify /init in the embedded initial ram disk.
+>>>>
+>>>> So you made broken infrastructure that's causing you problems. Sounds
+>>>> unfortunate.
+>>>
+>>> The idea is to be able to verify anything that is accessed, as soon as
+>>> rootfs is available, without distinction between embedded or external
+>>> initial ram disk.
+>>
+>> If /init is in the internal one and you can't overwrite files with an external
+>> one, all your init has to be is something that applies the xattrs, enables your
+>> paranoia mode, and then execs something else.
 > 
-> To measure the cmldine args used in case of soft reboot. Call the 
-> ima hook defined in [PATCH 1/3 v5]:"add a new ima hook and policy to measure the cmdline"
+> Shouldn't file metadata be handled by the same code that extracts the
+> content? Instead, file content is extracted by the kernel, and we are
+> adding another step to the boot process, to execute a new binary with a
+> link to libc.
+
+I haven't made a dynamically linked initramfs in years (except a couple for
+testing purposes). But then I don't deploy glibc, so...
+
+> From the perspective of a remote verifier that checks the software
+> running on the system, would it be easier to check less than 150 lines
+> of code, or a CPIO image containing a binary + libc?
+
+https://github.com/torvalds/linux/blob/master/tools/include/nolibc/nolibc.h
+
+(I have a todo item to add sh4 and m68k and ppc and such sections to that, but
+see "I've needed to resubmit
+http://lkml.iu.edu/hypermail/linux/kernel/1709.1/03561.html for a couple years
+now but it works for me locally and dealing with linux-kernel is just no fun
+anymore"...)
+
+>> You can totally use initramfs for lots of purposes simultaneously.
 > 
-> Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
+> Yes, I agree. However, adding an initramfs to initialize another
+> initramfs when you can simply extract file content and metadata with the
+> same parser, this for me it is difficult to justify.
 
-> ---
->  kernel/kexec_file.c | 2 ++
->  1 file changed, 2 insertions(+)
+You just said it's simpler to modify the kernel than do a thing you can already
+do in userspace. You realize that, right?
+
+>>>>> The only reason why
+>>>>> opening .xattr-list works is that IMA is not yet initialized
+>>>>> (late_initcall vs rootfs_initcall).
+>>>>
+>>>> Launching init before enabling ima is bad because... you didn't think of it?
+>>>
+>>> No, because /init can potentially compromise the integrity of the
+>>> system.
+>>
+>> Which isn't a problem if it was statically linked in the kernel, or if your
+>> external cpio.gz was signed. You want a signed binary but don't want the
+>> signature _in_ the binary...
 > 
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index f1d0e00a3971..e779bcf674a0 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -241,6 +241,8 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
->  			ret = -EINVAL;
->  			goto out;
->  		}
-> +
-> +		ima_kexec_cmdline(image->cmdline_buf, image->cmdline_buf_len - 1);
->  	}
->  
->  	/* Call arch image load handlers */
+> It is not just for binaries. How you would deal with arbitrary file
+> formats?
 
-Much better!
+I'm confused, are you saying that /init can/should be an arbitrary file format,
+or that a cpio statically linked into the kernel can't contain files in
+arbitrary formats?
 
-Mimi
+>> Which is why there's a cpio in the kernel and an external cpio loaded via the
+>> old initrd mechanism and BOTH files wind up in the cpio and there's a way to
+>> make it O_EXCL so it can't overwrite, and then the /init binary inside the
+>> kernel's cpio can do any other weird verification you need to do before anything
+>> else gets a chance to run so why are you having ring 0 kernel code read a file
+>> out of the filesystem and act upon it?
+> 
+> The CPIO parser already invokes many system calls.
 
+The one in the kernel doesn't call system calls, no. Once userspace is running
+it can do what it likes. The one statically linked into the kernel was set up by
+the same people who built the kernel; if you're letting arbitrary kernels run on
+your system it's kinda over already from a security context?
+
+>> If it's in the file's contents you get uniform behavior regardless of the
+>> filesystem used. And "mandatory access controls do that" is basically restating
+>> what _I_ said in the paragraph above.
+> 
+> As I said, that does not work with arbitrary file formats.
+
+an /init binary can parse your .inbandsignalling file to apply xattrs to
+arbitrary files before handing off to something else, and a cpio.gz statically
+linked into the kernel can contain arbitrary files.
+
+>> The "infrastructure you have that works a certain way" is called "mandatory
+>> access controls". Good to know. Your patch changes the rest of the system to
+>> match the assumptions of the new code, because changing those assumptions
+>> appears literally unthinkable.
+> 
+> All I want to do is to have the same behavior as if there is no initial
+> ram disk. And given that inode-based MACs read the labels from xattrs,
+> the assumption that the system provides xattrs even in the inital ram
+> disk seems reasonable.
+
+There was a previous proposal for a new revision of cpio that I don't remember
+particularly objecting to? Which did things that can't trivially be done in
+userspace?
+
+>>> What do you mean exactly?
+>>
+>> That you're not remotely the first person to do this?
+>>
+>> You're attempting to prevent anyone from running third party code on your system
+>> without buying a license from you first. You're creating a system with no user
+>> serviceable parts, that only runs authorized software from the Apple Store or
+>> other walled garden. No sideloading allowed.
+> 
+> This is one use case. The main purpose of IMA is to preserve the
+> integrity of the Trusted Computing Base (TCB, the critical part of the
+> system), or to detect integrity violations without enforcement. This is
+> done by ensuring that the software comes from the vendor. Applications
+> owned by users are allowed to run, as the Discrectionary Access Control
+> (DAC) prevents attacks to the TCB. I'm working on a more advanced scheme
+> that relies on MAC.
+
+Sure, same general idea as Apple's lobbying against "right to repair".
+
+https://appleinsider.com/articles/19/03/18/california-reintroduces-right-to-repair-bill-after-previous-effort-failed
+
+The vendor can prevent any unauthorized software from running on the device, or
+even retroactively remove older software to force upgrades:
+
+https://www.macrumors.com/2019/05/13/adobe-creative-cloud-legal-action-older-apps/
+
+Or anything else, of course:
+
+https://www.zdnet.com/article/why-amazon-is-within-its-rights-to-remove-access-to-your-kindle-books/
+
+*shrug* Your choice, of course...
+
+>> So you have _more_ assumptions tripping you up. Great. So add a signature in a
+>> format your bootloader doesn't recognize, since it's the kernel that should
+>> verify it, not your bootloader?
+>>
+>> It sounds like your problem is bureaucratic, not technical.
+> 
+> The boot loader verifies the CPIO image, when this is possible. The
+> kernel verifies individual files when the CPIO image is not signed.
+> 
+> If a remote verifier wants to verify the measurement of the CPIO image,
+> and he only has reference digests for each file, he has to build the
+> CPIO image with files reference digests were calculated from, and in the
+> same way it was done by the system target of the evaluation.
+
+And your init program can parse your .inbandsignaling file to put the xattrs on
+the files and then poke the "now enforce" button.
+
+>>>> Whatever happened to https://lwn.net/Articles/532778/ ? Modules are signed
+>>>> in-band in the file, but you need xattrs for some reason?
+>>>
+>>> Appending just the signature would be possible. It won't work if you
+>>> have multiple metadata for the same file.
+>>
+>> Call the elf sections SIG1 SIG2 SIG3, or have a section full of keyword=value
+>> strings? How is this a hard problem?
+>>
+>>> Also appending the signature alone won't solve the parsing issue. Still,
+>>> the kernel has to parse something that could be malformed.
+>>
+>> Your new in-band signaling file you're making xattrs from could be malformed,
+>> one of the xattrs you add could be "banana=aaaaaaaaaaaaaaaaaaaaaaaaaaa..." going
+>> on for 12 megabytes...
+> 
+> ksys_lsetxattr() checks the limits.
+
+Not if it caused an oom error extracting your .inbandsignaling file before it
+got consumed. (The kernel has to parse something that could be malformed and
+that's bad reading ELF information like linux has done loading binaries since
+1996, but it's ok for xattrs with a system call?)
+
+*shrug* I've made my opinion clear and don't think this thread is useful at this
+point, I'm not the maintainer with merge authority, so I'm gonna mute it now.
+
+Rob
