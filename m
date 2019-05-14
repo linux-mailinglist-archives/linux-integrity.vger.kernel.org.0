@@ -2,111 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 171AA1CDF1
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 19:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0851CDFB
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 19:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726562AbfENR2B (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 May 2019 13:28:01 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:38926 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726272AbfENR2B (ORCPT
+        id S1726945AbfENRaB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 May 2019 13:30:01 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42140 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726272AbfENRaA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 May 2019 13:28:01 -0400
-Received: by mail-it1-f196.google.com with SMTP id 9so74888itf.4
-        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 10:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f4i/GfwYocR2/h6tdfoUE0F7syQf1P0LjuLXxtwtP3o=;
-        b=u/A+mSJrb+oVXP3Y7eZLK9mBLNbY3jp7svhJhW+o+gdAbQJHHsutvNm1/vhuGaBHWT
-         QXpkdrjGjRuyajkIxjGrhTBU3CN8jBZvQ/M/8q9rSTXTSXc0tS3ezkSxg+G68JNB8Clo
-         EtkP8o14SnGdn7nOkaM2CAgF9RfcKD8c8wXbh1x/PrImmlzWZpkTCK86hjNs8DtzqNF+
-         aRDA3BZubGjTCHxvio8IMeiBUxWceRMnJwitZlv5EY7dcKT17tDPdAj5gEoqSL8Pyl0T
-         FufqsQeosRA+0ijK85BwLAdGStJkOLTNNZaKd5tBaIGyTsOeM+zrTyTvSOR8SN8ivpyw
-         jTaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f4i/GfwYocR2/h6tdfoUE0F7syQf1P0LjuLXxtwtP3o=;
-        b=riEI0tJNSm3fZHOEC+V6TAoVl2oYgXljRJaXAPCD4DlrgoP8tSh04gPRvl2ix1ZE8l
-         wX3ZM3zH+mBAefR/uiFf6UcjKCHKlP9CbeR+cnc7HpAhsI+OMCPV8Q3KW1Mh7vR3o7m6
-         pSh92aqdACFydu4rZLMFJrb/7XowtFtTgYDHW/mK9gtKf6kqmD2z7gGaXP4ukcv9bNnW
-         RzxTXG412505LeKjW2QOGJuB6W655FRePS18zOcpB+cq86RdYI9MNPsXhQrXkAIyMKNw
-         obxu93iEh0PFU+rn+s67xWGcAf/Amkc7DJe5Xa9kS374iZKGTtW+VQf8tf1feMv0Y9Rn
-         5OlA==
-X-Gm-Message-State: APjAAAUE3rm2S+kP4ZFEzOXqBtjOn6DFEUK2ChY0kvu0p7tkr8kMvryW
-        GJuYe/0txKHibT4zHiACNZDK7BG3mxYYwxSD7VE=
-X-Google-Smtp-Source: APXvYqzVnmjGM8v4iTl2MQXaKczfj4Epkmjsx9X5GEQGh8/Bk6/GKM2FLQtwSJdVgAHeqbonRan/jSRSQnnzY8fkbq4=
-X-Received: by 2002:a02:63c7:: with SMTP id j190mr24269848jac.143.1557854880226;
- Tue, 14 May 2019 10:28:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAL8qiskDtYJ0NY3u+zV3YBMR4Qs_YcHSHZ61per5jwZ3n54r8A@mail.gmail.com>
- <c4adc9d7-9244-1cbe-693c-2f090851d804@huawei.com>
-In-Reply-To: <c4adc9d7-9244-1cbe-693c-2f090851d804@huawei.com>
-From:   m3hm00d <f.m3hm00d@gmail.com>
-Date:   Tue, 14 May 2019 17:27:48 +0000
-Message-ID: <CAL8qis=yNGkogCVFZwNYCG-Y8ErPdQYf+Ffpbba4QOZNMBUn2Q@mail.gmail.com>
-Subject: Re: Whitelisting with IMA
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     linux-integrity@vger.kernel.org
+        Tue, 14 May 2019 13:30:00 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4EHMVBK038904
+        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 13:29:59 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2sfyg5yqfn-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 13:29:59 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Tue, 14 May 2019 18:29:57 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 14 May 2019 18:29:55 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4EHTsUG55705608
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 May 2019 17:29:54 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2317CA405F;
+        Tue, 14 May 2019 17:29:54 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47FC2A4054;
+        Tue, 14 May 2019 17:29:53 +0000 (GMT)
+Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 14 May 2019 17:29:53 +0000 (GMT)
+Subject: Re: [PATCH 0/2] public key: IMA signer logging: Log public key of
+ IMA Signature signer in IMA log
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi <nramas@linux.microsoft.com>,
+        Linux Integrity <linux-integrity@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Cc:     Balaji Balasubramanyan <balajib@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>
+Date:   Tue, 14 May 2019 13:29:52 -0400
+In-Reply-To: <6b69f115-96cf-890a-c92b-0b2b05798357@linux.microsoft.com>
+References: <6b69f115-96cf-890a-c92b-0b2b05798357@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19051417-0028-0000-0000-0000036DA362
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19051417-0029-0000-0000-0000242D3648
+Message-Id: <1557854992.4139.69.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-14_10:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905140120
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, May 13, 2019 at 9:09 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> On 5/12/2019 11:37 AM, m3hm00d wrote:
-> > tldr: Is there some way to ask IMA not to open (execute) unknown binaries
-> >
-> > Hi all,
-> >
-> > I saw some comments on RFC for WhiteEgret LSM. Someone on the same
-> > thread said that IMA could be used for whitelisting as well. Based on
-> > a couple of hours with IMA, it seems to me that IMA can only stop
-> > execution of (altered) binaries whose hash/sign was earlier measured.
->
-> Hi
->
-> I'm developing an extension (IMA Digest Lists) to allow access to files
-> depending on a white list (for example digests in RPM headers). I will
-> publish a new version soon. For the concept, please have a look at:
->
-> https://github.com/euleros/linux/wiki/IMA-Digest-Lists-Extension
-> https://github.com/euleros/digest-list-tools/wiki/Architecture
->
+On Tue, 2019-05-14 at 10:14 -0700, Lakshmi wrote:
+> The motive behind this patch series is to measure the public key
+> of the IMA signature signer in the IMA log.
+> 
+> The IMA signature of the file, logged using ima-sig template, contains
+> the key identifier of the key that was used to generate the signature.
+> But outside the client machine this key id is not sufficient to
+> uniquely determine which key the signature corresponds to.
+> Providing the public key of the signer in the IMA log would
+> allow, for example, an attestation service to securely verify
+> if the key used to generate the IMA signature is a valid and
+> trusted one, and that the key has not been revoked or expired.
+> 
+> An attestation service would just need to maintain a list of
+> valid public keys and using the data from the IMA log can attest
+> the system files loaded on the client machine.
+> 
+> To achieve the above the patch series does the following:
+>    - Adds a new method in asymmetric_key_subtype to query
+>      the public key of the given key
+>    - Adds a new IMA template namely "ima-sigkey" to store\read
+>      the public key of the IMA signature signer. This template
+>      extends the existing template "ima-sig"
 
-Hi there,
+Why duplicate the certificate info on each record in the measurement
+list?  Why not add the certificate info once, as the key is loaded
+onto the .ima and .platform keyrings?
 
-Interesting idea. Will definitely look it over.
-
-> > If a user installs a new (unknown) application, it seems like IMA is
-> > going to allow that application to run since IMA can't find any
-> > integrity loss since IMA doesn't have any 'good' value against the new
-> > application. Is this correct? Or is there some other option to ask IMA
-> > not to execute any unknown binary?
->
-> If appraisal is enabled, and the application has no signature/HMAC,
-> access would be denied. If the application is installed by a package
-> manager, probably files will have a HMAC and access would be granted
-> unless the IMA policy requires signatures.
->
-
-Turns out I was passing `ima_policy=tcb` to kernel. That's (probably)
-why no appraisal was happening and even new (unknown) scripts kept
-running. After some reading, I changed it to `ima_policy=appraise_tcb`
-but the system won't allow me to login now (error saying 'Incorrect
-login' or something like that). The best sources of info on IMA for me
-were gentoo wiki and project page on soureforge. Could you please
-guide me to a more thorough documentation meant for
-users/administrators and other people wanting to learn more about
-IMA/EVM?
+Mimi
 
 
-> Roberto
+> 
+> Lakshmi (2):
+>    add support for querying public key from a given key
+>    add a new template ima-sigkey to store/read the public, key of ima
+>      signature signer
+> 
+>   .../admin-guide/kernel-parameters.txt         |  2 +-
+>   Documentation/crypto/asymmetric-keys.txt      |  1 +
+>   Documentation/security/IMA-templates.rst      |  5 +-
+>   crypto/asymmetric_keys/public_key.c           |  7 +++
+>   crypto/asymmetric_keys/signature.c            | 24 +++++++++
+>   include/crypto/public_key.h                   |  1 +
+>   include/keys/asymmetric-subtype.h             |  3 ++
+>   security/integrity/digsig.c                   | 54 +++++++++++++++++--
+>   security/integrity/digsig_asymmetric.c        | 44 +++++++++++++++
+>   security/integrity/ima/Kconfig                |  3 ++
+>   security/integrity/ima/ima_template.c         |  3 ++
+>   security/integrity/ima/ima_template_lib.c     | 43 +++++++++++++++
+>   security/integrity/ima/ima_template_lib.h     |  4 ++
+>   security/integrity/integrity.h                | 29 +++++++++-
+>   14 files changed, 216 insertions(+), 7 deletions(-)
+> 
 
-Kind regards,
-m3hm00d
