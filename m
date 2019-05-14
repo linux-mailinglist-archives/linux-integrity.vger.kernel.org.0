@@ -2,120 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F008F1BF61
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 00:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8031C193
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 06:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726598AbfEMWJb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 May 2019 18:09:31 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40568 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726567AbfEMWJb (ORCPT
+        id S1725935AbfENExc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 May 2019 00:53:32 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42417 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725562AbfENExb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 May 2019 18:09:31 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4DM2kG1011843
-        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2019 18:09:29 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2sfe14f5tv-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2019 18:09:29 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 13 May 2019 23:09:27 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 13 May 2019 23:09:24 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4DM9Np452166906
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 May 2019 22:09:23 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34A1A4C046;
-        Mon, 13 May 2019 22:09:23 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F045D4C044;
-        Mon, 13 May 2019 22:09:21 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.110.120])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 13 May 2019 22:09:21 +0000 (GMT)
-Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
- ram disk
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Arvind Sankar <nivedita@alum.mit.edu>
-Cc:     Arvind Sankar <niveditas98@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Rob Landley <rob@landley.net>, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org
-Date:   Mon, 13 May 2019 18:09:11 -0400
-In-Reply-To: <20190513184744.GA12386@rani.riverdale.lan>
-References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
-         <20190512194322.GA71658@rani.riverdale.lan>
-         <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
-         <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
-         <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
-         <20190513172007.GA69717@rani.riverdale.lan>
-         <20190513175250.GC69717@rani.riverdale.lan>
-         <1557772584.4969.62.camel@linux.ibm.com>
-         <20190513184744.GA12386@rani.riverdale.lan>
+        Tue, 14 May 2019 00:53:31 -0400
+Received: by mail-pf1-f196.google.com with SMTP id 13so8421724pfw.9;
+        Mon, 13 May 2019 21:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LkOJ6KXC11/Y4FBi0TytGsBTIahyfqyZdKmtY1CFDQ0=;
+        b=So8Ue2Gc8rZSW5pW2l+Y2rKJ16D/6JWtXp5P/568wGipRi/2wpNuT8/3PqHOxVJwKJ
+         7osnBCp7xvJlIE1ybL/+9Deox4alkHIXQtcH0Z39A/IMRflTKgN/xIsD2fGi9PztBTHp
+         CzNf8XLulv42j5oUDgThNxCuEnG88a7by9j4JCOxNEbSyEVZuoWJyJf2/OvqdA7P91KC
+         NpH9/Y8PCsUYJ+ef+MyKi+EF51Ks1l67le4roy04+hnDYKbWqcHMvL9kh29qJiipLAHy
+         ngniRGoa6okI1WVwFnrPDtG38cKtkRRNTNagzoOJHmWBsd+BZwtYx/+aok8A2edI4Fh4
+         42yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LkOJ6KXC11/Y4FBi0TytGsBTIahyfqyZdKmtY1CFDQ0=;
+        b=DO3nXupkVfHqNM3V1Q7lmJtk3HdIsBQ+OLB1Kwq5s1FmrV2uZzdPsol62VjeG9R6D3
+         3EeJwUh5Bjtoc+kmMiflCc7R0BBmV3DpPRjcp+n0EjdR6+Y2Nnc+FoL0+sB3ILGlQsuy
+         5kAGOz+KHP86Eh4MZuNYr7uPUHiuD1NuWowiWhah6L+ka8mugVq9H3w08Oao6htb3rV9
+         TR35cwPlxuCRKUSjOhkKa2QZgk5bjurFfd5r2khppkWvcxmhIjno5+IrYuvtGr7E4TaV
+         R0HL+8p88R66e5i406i2514Rz1SU9MR8lJ90BGaM9hxpFUQE3ZnMnwDM64TjaWlE1TfZ
+         GO9A==
+X-Gm-Message-State: APjAAAVZjegWofu9m5jNKbnj89wJyJzUNxJP+qe4yyB122sesLpa/Ms4
+        pSl5bEzPUhNbr+NAwkNLWeIOul4PesZZtQT9hvw=
+X-Google-Smtp-Source: APXvYqz7xa2SkDRvZ5t+Uh8iZ0NKcv/Uh538AeL3a11JV6tjOrZWkN/RQkSc+BT6rlX8yOrJoR204s8WMB4p9+UnHhg=
+X-Received: by 2002:aa7:95bb:: with SMTP id a27mr26957930pfk.30.1557809611110;
+ Mon, 13 May 2019 21:53:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190510223744.10154-1-prsriva02@gmail.com> <20190510223744.10154-2-prsriva02@gmail.com>
+ <1557766592.4969.22.camel@linux.ibm.com>
+In-Reply-To: <1557766592.4969.22.camel@linux.ibm.com>
+From:   prakhar srivastava <prsriva02@gmail.com>
+Date:   Mon, 13 May 2019 21:53:44 -0700
+Message-ID: <CAEFn8qJNzG5scBcdVbrXpY7ZEbku+yNbMZn3M=JUW8nNZbGKoQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3 v5] add a new ima hook and policy to measure the cmdline
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        inux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ebiederm@xmission.com, vgoyal@redhat.com,
+        Prakhar Srivastava <prsriva@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19051322-0008-0000-0000-000002E646B0
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051322-0009-0000-0000-00002252DD3F
-Message-Id: <1557785351.4969.94.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-13_14:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905130147
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-05-13 at 14:47 -0400, Arvind Sankar wrote:
-> On Mon, May 13, 2019 at 02:36:24PM -0400, Mimi Zohar wrote:
-> > 
-> > > > How does this work today then? Is it actually the case that initramfs
-> > > > just cannot be used on an IMA-enabled system, or it can but it leaves
-> > > > the initramfs unverified and we're trying to fix that? I had assumed the
-> > > > latter.
-> > > Oooh, it's done not by starting IMA appraisal later, but by loading a
-> > > default policy to ignore initramfs?
-> > 
-> > Right, when rootfs is a tmpfs filesystem, it supports xattrs, allowing
-> > for finer grained policies to be defined.  This patch set would allow
-> > a builtin IMA appraise policy to be defined which includes tmpfs.
+On Mon, May 13, 2019 at 9:56 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> On Fri, 2019-05-10 at 15:37 -0700, Prakhar Srivastava wrote:
+>
+> > +/*
+> > + * process_buffer_measurement - Measure the buffer passed to ima log.
+>
+> "passed to ima log" is unnecessary.
+>
+> > + * (Instead of using the file hash use the buffer hash).
+>
+> This comment, if needed, belongs in the text description area below,
+> not here.
+>
+> > + * @buf - The buffer that needs to be added to the log
+> > + * @size - size of buffer(in bytes)
+> > + * @eventname - event name to be used for buffer.
+>
+> Missing are the other fields.
+>
+> > + *
+> > + * The buffer passed is added to the ima log.
+> > + *
+> > + * On success return 0.
+> > + * On error cases surface errors from ima calls.
+>
+> Only IMA-appraise returns errors to the caller.  There's no point in
+> returning an error.
+>
+>
+> > + */
+> > +static int process_buffer_measurement(const void *buf, int size,
+> > +                             const char *eventname, const struct cred *cred,
+> > +                             u32 secid)
+>
+> This should be "static void".
+>
+> > +{
+> > +
+> > +     if (action & IMA_MEASURE)
+> > +             ret = ima_store_template(entry, violation, NULL, buf, pcr);
+> > +
+> > +     if (action & IMA_AUDIT)
+> > +             ima_audit_measurement(iint, event_data.filename);
+>
+> The cover letter and patch description say this patch set is limited
+> to measuring the boot command line - IMA-measurement.
+>  ima_audit_measurement() adds file hashes in the audit log, which can
+> be used for security analytics and/or forensics.  This is part of IMA-
+> audit.  The call to ima_audit_measurement() is inappropriate.
+>
+To clarify, in one of the previous versions you mentioned it
+might be helpful to add audit.
+I might have misunderstood you, but i will remove the
+audit_measurement and make other corrections.
+Thankyou for your feedback.
 
-Clarification: finer grain IMA policy rules are normally defined in
-terms of LSM labels.  The LSMs need to enabled, before writing IMA
-policy rules in terms of the LSM labels.
-
-> > 
-> Ok, but wouldn't my idea still work? Leave the default compiled-in
-> policy set to not appraise initramfs. The embedded /init sets all the
-> xattrs, changes the policy to appraise tmpfs, and then exec's the real
-> init? Then everything except the embedded /init and the file with the
-> xattrs will be appraised, and the embedded /init was verified as part of
-> the kernel image signature. The only additional kernel change needed
-> then is to add a config option to the kernel to disallow overwriting the
-> embedded initramfs (or at least the embedded /init).
-
-Yes and no.  The current IMA design allows a builtin policy to be
-specified on the boot command line ("ima_policy="), so that it exists
-from boot, and allows it to be replaced once with a custom policy.
- After that, assuming that CONFIG_IMA_WRITE_POLICY is configured,
-additional rules may be appended.  As your embedded /init solution
-already replaces the builtin policy, the IMA policy couldn't currently
-be replaced a second time with a custom policy based on LSM labels.
-
-Mimi
-
+- Thanks,
+Prakhar Srivastava
+ Mimi
