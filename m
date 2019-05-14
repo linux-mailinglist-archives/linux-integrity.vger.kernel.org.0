@@ -2,103 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 806981CFB9
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 21:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15F21CFBD
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 21:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726036AbfENTSf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 May 2019 15:18:35 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:48764 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726013AbfENTSf (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 May 2019 15:18:35 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id EEA368EE109;
-        Tue, 14 May 2019 12:18:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1557861514;
-        bh=kEo/SVpo1ALfduxjBL6j4BgvcDYrykkEFotN47vMdpo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FYrdoogoLnISQM1Gna4zR8dFz0m1XqoyYVy6MoFrTEVnU1hi7m7DSZV3h/A2XZcZK
-         HsqRkNweLASCPrYAmWtU/51Zax8vrUpzjyu751TcYxE1QZc61MAVSntV/NhaZG+E5j
-         phj1QTEdYcMFyulxVm8BeM7Q6aZReGPxpRKST4Lk=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QdQKJpAzFTsY; Tue, 14 May 2019 12:18:33 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.68.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 4F2438EE0ED;
-        Tue, 14 May 2019 12:18:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1557861513;
-        bh=kEo/SVpo1ALfduxjBL6j4BgvcDYrykkEFotN47vMdpo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=JeEEo+NfnkowNE+9caNm6hsbGtn0T6bU8NF+hBTf94ux0+YI/Yfe8OsASW6MhvDb3
-         wtySyGjG0MToAmT+lQFezolyaeD/lHNHpWchGwk0XgpylgDu2zsE3rXzmufIdJJEXa
-         ko7T09bgCGxuMzfgUSW2rrqIqCefgkntCBg38DTI=
-Message-ID: <1557861511.3378.19.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
- ram disk
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andy Lutomirski <luto@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Rob Landley <rob@landley.net>,
-        Arvind Sankar <niveditas98@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        initramfs@vger.kernel.org
-Date:   Tue, 14 May 2019 12:18:31 -0700
-In-Reply-To: <CALCETrV3b205L38xqPr6QqwGn6-vxQdPoJGUygJJpgM-JqqXfQ@mail.gmail.com>
-References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
-         <20190512194322.GA71658@rani.riverdale.lan>
-         <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
-         <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
-         <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
-         <CALCETrV3b205L38xqPr6QqwGn6-vxQdPoJGUygJJpgM-JqqXfQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726013AbfENTTH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 May 2019 15:19:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51812 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725916AbfENTTH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 May 2019 15:19:07 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 451A1AFA7;
+        Tue, 14 May 2019 19:19:05 +0000 (UTC)
+Subject: Re: [PATCH v2 0/3] LTP reproducer on broken IMA on overlayfs
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Fabian Vogt <FVogt@suse.com>,
+        Marcus Meissner <meissner@suse.com>,
+        linux-integrity@vger.kernel.org, ltp@lists.linux.it
+References: <20190405165225.27216-1-pvorel@suse.cz>
+ <20190514121213.GA28655@dell5510>
+From:   Ignaz Forster <iforster@suse.de>
+Message-ID: <bf41c3b5-baf4-ba7a-2136-dabbbb817473@suse.de>
+Date:   Tue, 14 May 2019 21:19:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190514121213.GA28655@dell5510>
+Content-Type: multipart/mixed;
+ boundary="------------49C997E5FF1975606F3D768B"
+Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2019-05-14 at 08:19 -0700, Andy Lutomirski wrote:
-> On Mon, May 13, 2019 at 5:47 AM Roberto Sassu <roberto.sassu@huawei.c
-> om> wrote:
-> > On 5/13/2019 11:07 AM, Rob Landley wrote:
-[...]
-> > > > The only reason why opening .xattr-list works is that IMA is
-> > > > not yet initialized (late_initcall vs rootfs_initcall).
-> > > 
-> > > Launching init before enabling ima is bad because... you didn't
-> > > think of it?
-> > 
-> > No, because /init can potentially compromise the integrity of the
-> > system.
-> 
-> I think Rob is right here.  If /init was statically built into the
-> kernel image, it has no more ability to compromise the kernel than
-> anything else in the kernel.  What's the problem here?
+This is a multi-part message in MIME format.
+--------------49C997E5FF1975606F3D768B
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The specific problem is that unless you own the kernel signing key,
-which is really untrue for most distribution consumers because the
-distro owns the key, you cannot build the initrd statically into the
-kernel.  You can take the distro signed kernel, link it with the initrd
-then resign the combination with your key, provided you insert your key
-into the MoK variables as a trusted secure boot key, but the distros
-have been unhappy recommending this as standard practice.
+Hi Petr,
 
-If our model for security is going to be to link the kernel and the
-initrd statically to give signature protection over the aggregate then
-we need to figure out how to execute this via the distros.  If we
-accept that the split model, where the distro owns and signs the kernel
-but the machine owner builds and is responsible for the initrd, then we
-need to explore split security models like this proposal.
+Am 14.05.19 um 14:12 Uhr schrieb Petr Vorel:
+> Could you, please, share your setup?
 
-James
+The system was installed with IMA and EVM enabled during installation, 
+using the following kernel parameters:
+"ima_policy=appraise_tcb ima_appraise=fix evm=fix"
 
+The EVM key was generated in the live system before starting the actual 
+installation and copied into the installed system later.
+
+See the attached installation notes for an openSUSE system (which should 
+also be usable on other distributions).
+
+> ima_policy=appraise_tcb kernel parameter and loading IMA and EVM keys over
+> dracut-ima scripts?
+
+Exactly.
+
+> (IMA appraisal and EVM using digital signatures? I guess
+> using hashes for IMA appraisal would work as well).
+
+I focused on hashes, as those are more relevant for the overlayfs use 
+case I was thinking of.
+
+Ignaz
+
+--------------49C997E5FF1975606F3D768B
+Content-Type: text/plain; charset=UTF-8;
+ name="IMA_EVM.txt"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="IMA_EVM.txt"
+
+TWFudWFsIElNQSAvIEVWTSBpbnN0YWxsYXRpb246CiogVXNlIGEgbmV0IGluc3RhbGwgaW1h
+Z2UgKHNvbWUgb2YgdGhlIG5lY2Vzc2FyeSBwYWNrYWdlcyBhcmUgbm90IGF2YWlsYWJsZSBp
+biBEVkQgaW1hZ2UpCiogQm9vdCBpbnN0YWxsIHN5c3RlbSB3aXRoICJpbWFfcG9saWN5PWFw
+cHJhaXNlX3RjYiBpbWFfYXBwcmFpc2U9Zml4IGV2bT1maXgiIChmb3IgSU1BIG1lYXN1cmVt
+ZW50LCBJTUEgYXBwcmFpc2FsIGFuZCBFVk0gcHJvdGVjdGlvbikKKiBQcm9jZWVkIHdpdGgg
+aW5zdGFsbGF0aW9uIHVudGlsIHN1bW1hcnkgc2NyZWVuLCBidXQgZG8gbm90IHN0YXJ0IHRo
+ZSBpbnN0YWxsYXRpb24geWV0CiogUmVtb3ZlICJldm09Zml4IiBmcm9tIGtlcm5lbCBib290
+IHBhcmFtZXRlcnMKKiBDaGFuZ2Uga2VybmVsIGJvb3QgcGFyYW1ldGVyICJpbWFfYXBwcmFp
+c2U9Zml4IiB0byAiaW1hX2FwcHJhaXNlPWFwcHJhaXNlX3RjYiIKKiBTZWxlY3QgcGFja2Fn
+ZSAiZHJhY3V0LWltYSIgKHJlcXVpcmVkIGZvciBlYXJseSBib290IEVWTSBzdXBwb3J0KSBm
+b3IgaW5zdGFsbGF0aW9uCiogQ2hhbmdlIHRvIGEgY29uc29sZSB3aW5kb3cKKiBta2RpciAv
+ZXRjL2tleXMKKiAvYmluL2tleWN0bCBhZGQgdXNlciBrbWstdXNlciAiYGRkIGlmPS9kZXYv
+dXJhbmRvbSBicz0xIGNvdW50PTMyIDI+L2Rldi9udWxsYCIgQHUKKiAvYmluL2tleWN0bCBw
+aXBlIGAvYmluL2tleWN0bCBzZWFyY2ggQHUgdXNlciBrbWstdXNlcmAgPiAvZXRjL2tleXMv
+a21rLXVzZXIuYmxvYgoqIC9iaW4va2V5Y3RsIGFkZCBlbmNyeXB0ZWQgZXZtLWtleSAibmV3
+IHVzZXI6a21rLXVzZXIgNjQiIEB1CiogL2Jpbi9rZXljdGwgcGlwZSBgL2Jpbi9rZXljdGwg
+c2VhcmNoIEB1IGVuY3J5cHRlZCBldm0ta2V5YCA+L2V0Yy9rZXlzL2V2bS5ibG9iCiogY2F0
+IDw8RU5EID4vZXRjL3N5c2NvbmZpZy9tYXN0ZXJrZXkKTUFTVEVSS0VZVFlQRT0idXNlciIK
+TUFTVEVSS0VZPSIvZXRjL2tleXMva21rLXVzZXIuYmxvYiIKRU5ECiogY2F0IDw8RU5EID4v
+ZXRjL3N5c2NvbmZpZy9ldm0KRVZNS0VZPSIvZXRjL2tleXMvZXZtLmJsb2IiCkVORAoqIG1v
+dW50IC10IHNlY3VyaXR5ZnMgc2VjdXJpdHkgL3N5cy9rZXJuZWwvc2VjdXJpdHkKKiBlY2hv
+IDEgPi9zeXMva2VybmVsL3NlY3VyaXR5L2V2bQoqIEdvIGJhY2sgdG8gdGhlIGluc3RhbGxh
+dGlvbiBzdW1tYXJ5IHNjcmVlbiBhbmQgc3RhcnQgdGhlIGluc3RhbGxhdGlvbgoqIER1cmlu
+ZyB0aGUgaW5zdGFsbGF0aW9uIGV4ZWN1dGUgdGhlIGZvbGxvd2luZyBjb21tYW5kcyBmcm9t
+IHRoZSBjb25zb2xlOgoqIGNwIC1yIC9ldGMva2V5cyAvbW50L2V0Yy8KKiBjcCAvZXRjL3N5
+c2NvbmZpZy97ZXZtLG1hc3RlcmtleX0gL21udC9ldGMvc3lzY29uZmlnLw==
+--------------49C997E5FF1975606F3D768B--
