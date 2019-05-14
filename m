@@ -2,122 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 887291C832
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 14:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1A81C841
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 14:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbfENMJt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 May 2019 08:09:49 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44346 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726036AbfENMJs (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 May 2019 08:09:48 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4EC3maZ033661
-        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 08:09:47 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2sftyh6kv1-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 08:09:47 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 14 May 2019 13:09:44 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 14 May 2019 13:09:39 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4EC9c1l55050322
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 May 2019 12:09:38 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3DD0C42052;
-        Tue, 14 May 2019 12:09:38 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 175C14204B;
-        Tue, 14 May 2019 12:09:36 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.80.29])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 May 2019 12:09:35 +0000 (GMT)
-Subject: Re: [PATCH v10 09/12] ima: Implement support for module-style
- appended signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>
-Date:   Tue, 14 May 2019 08:09:25 -0400
-In-Reply-To: <20190418035120.2354-10-bauerman@linux.ibm.com>
-References: <20190418035120.2354-1-bauerman@linux.ibm.com>
-         <20190418035120.2354-10-bauerman@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19051412-0020-0000-0000-0000033C871A
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051412-0021-0000-0000-0000218F42B3
-Message-Id: <1557835765.4139.9.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-14_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905140089
+        id S1726336AbfENMMQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 May 2019 08:12:16 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33778 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726036AbfENMMQ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 May 2019 08:12:16 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 02EBBAF32;
+        Tue, 14 May 2019 12:12:15 +0000 (UTC)
+Date:   Tue, 14 May 2019 14:12:13 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Ignaz Forster <iforster@suse.de>
+Cc:     Fabian Vogt <FVogt@suse.com>, Marcus Meissner <meissner@suse.com>,
+        linux-integrity@vger.kernel.org, ltp@lists.linux.it
+Subject: Re: [PATCH v2 0/3] LTP reproducer on broken IMA on overlayfs
+Message-ID: <20190514121213.GA28655@dell5510>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20190405165225.27216-1-pvorel@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190405165225.27216-1-pvorel@suse.cz>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Thiago,
+Hi Mimi, Ignaz,
 
-On Thu, 2019-04-18 at 00:51 -0300, Thiago Jung Bauermann wrote:
-> 
-> @@ -326,6 +356,10 @@ int ima_appraise_measurement(enum ima_hooks func,
->         case INTEGRITY_UNKNOWN:
->                 break;
->         case INTEGRITY_NOXATTRS:        /* No EVM protected xattrs. */
-> +               /* It's fine not to have xattrs when using a modsig. */
-> +               if (try_modsig)
-> +                       break;
-> +               /* fall through */
->         case INTEGRITY_NOLABEL:         /* No security.evm xattr. */
->                 cause = "missing-HMAC";
->                 goto out;
-> @@ -340,6 +374,14 @@ int ima_appraise_measurement(enum ima_hooks func,
->                 rc = xattr_verify(func, iint, xattr_value, xattr_len, &status,
->                                   &cause);
->  
-> +       /*
-> +        * If we have a modsig and either no imasig or the imasig's key isn't
-> +        * known, then try verifying the modsig.
-> +        */
-> +       if (status != INTEGRITY_PASS && try_modsig &&
-> +           (!xattr_value || rc == -ENOKEY))
-> +               rc = modsig_verify(func, modsig, &status, &cause);
+Mimi, could you please have a second look on this [4] patchset? We've had a
+discussion about second patch [5], I can drop it if you don't like it, but
+that's not a main concern about this test. More important is whether the
+testcase looks valid for you. It's about overlayfs broken in IMA+EVM,
+which is currently broken on mainline.
+There is different reproducer (C code) for a slightly different scenario,
+but I'm not going to port it before this got merged.
 
-EVM protects other security xattrs, not just security.ima, if they
-exist.  As a result, evm_verifyxattr() could pass based on the other
-security xattrs.
+Ignaz, could you please test this patchset? Could you, please, share your setup?
+ima_policy=appraise_tcb kernel parameter and loading IMA and EVM keys over
+dracut-ima scripts? (IMA appraisal and EVM using digital signatures? I guess
+using hashes for IMA appraisal would work as well).
 
-Mimi
+Kind regards,
+Petr
 
-> +
->  out:
->         /*
->          * File signatures on some filesystems can not be properly verified.
+> this is a second version of patch demonstrating a bug on overlayfs when
+> combining IMA with EVM. There is ongoing work made by Ignaz Forster and
+> Fabian Vogt [1] [2], IMA only behavior was already fixed [3].
 
+> Main patch is the last one (previous are just a cleanup and not changed).
+
+> [1] https://www.spinics.net/lists/linux-integrity/msg05926.html
+> [2] https://www.spinics.net/lists/linux-integrity/msg03593.html
+> [3] https://patchwork.kernel.org/patch/10776231/
+
+[4] https://patchwork.ozlabs.org/project/ltp/list/?series=101213&state=*
+[5] https://patchwork.ozlabs.org/patch/1078553/
