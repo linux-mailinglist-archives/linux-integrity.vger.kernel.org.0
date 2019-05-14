@@ -2,129 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0851CDFB
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 19:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1041CE30
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 19:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbfENRaB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 May 2019 13:30:01 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42140 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726272AbfENRaA (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 May 2019 13:30:00 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4EHMVBK038904
-        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 13:29:59 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2sfyg5yqfn-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 13:29:59 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 14 May 2019 18:29:57 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 14 May 2019 18:29:55 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4EHTsUG55705608
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 May 2019 17:29:54 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2317CA405F;
-        Tue, 14 May 2019 17:29:54 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47FC2A4054;
-        Tue, 14 May 2019 17:29:53 +0000 (GMT)
-Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 May 2019 17:29:53 +0000 (GMT)
-Subject: Re: [PATCH 0/2] public key: IMA signer logging: Log public key of
- IMA Signature signer in IMA log
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi <nramas@linux.microsoft.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Cc:     Balaji Balasubramanyan <balajib@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>
-Date:   Tue, 14 May 2019 13:29:52 -0400
-In-Reply-To: <6b69f115-96cf-890a-c92b-0b2b05798357@linux.microsoft.com>
-References: <6b69f115-96cf-890a-c92b-0b2b05798357@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19051417-0028-0000-0000-0000036DA362
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051417-0029-0000-0000-0000242D3648
-Message-Id: <1557854992.4139.69.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-14_10:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905140120
+        id S1726272AbfENRok (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 May 2019 13:44:40 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32941 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726229AbfENRok (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 May 2019 13:44:40 -0400
+Received: from LHREML711-CAH.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 9D28C725DEC5245686F9;
+        Tue, 14 May 2019 18:44:38 +0100 (IST)
+Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
+ (10.201.108.34) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 14 May
+ 2019 18:44:35 +0100
+Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+To:     Arvind Sankar <nivedita@alum.mit.edu>
+CC:     Rob Landley <rob@landley.net>,
+        Arvind Sankar <niveditas98@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-api@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <initramfs@vger.kernel.org>
+References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
+ <20190512194322.GA71658@rani.riverdale.lan>
+ <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
+ <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
+ <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
+ <49965ffd-dd57-ffe5-4a2f-73cdfb387848@landley.net>
+ <de91ef53-6bb3-b937-8773-5f6b34e1acb7@huawei.com>
+ <20190514152704.GB37109@rani.riverdale.lan>
+ <20190514155739.GA70223@rani.riverdale.lan>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <ca622341-5ea2-895e-8b82-7181a709c104@huawei.com>
+Date:   Tue, 14 May 2019 19:44:42 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
+MIME-Version: 1.0
+In-Reply-To: <20190514155739.GA70223@rani.riverdale.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.220.96.108]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2019-05-14 at 10:14 -0700, Lakshmi wrote:
-> The motive behind this patch series is to measure the public key
-> of the IMA signature signer in the IMA log.
+On 5/14/2019 5:57 PM, Arvind Sankar wrote:
+> On Tue, May 14, 2019 at 11:27:04AM -0400, Arvind Sankar wrote:
+>> It's also much easier to change/customize it for the end
+>> system's requirements rather than setting the process in stone by
+>> putting it inside the kernel.
 > 
-> The IMA signature of the file, logged using ima-sig template, contains
-> the key identifier of the key that was used to generate the signature.
-> But outside the client machine this key id is not sufficient to
-> uniquely determine which key the signature corresponds to.
-> Providing the public key of the signer in the IMA log would
-> allow, for example, an attestation service to securely verify
-> if the key used to generate the IMA signature is a valid and
-> trusted one, and that the key has not been revoked or expired.
-> 
-> An attestation service would just need to maintain a list of
-> valid public keys and using the data from the IMA log can attest
-> the system files loaded on the client machine.
-> 
-> To achieve the above the patch series does the following:
->    - Adds a new method in asymmetric_key_subtype to query
->      the public key of the given key
->    - Adds a new IMA template namely "ima-sigkey" to store\read
->      the public key of the IMA signature signer. This template
->      extends the existing template "ima-sig"
+> As an example, if you allow unverified external initramfs, it seems to
+> me that it can try to play games that wouldn't be prevented by the
+> in-kernel code: setup /dev in a weird way to try to trick /init, or more
+> easily, replace /init by /bin/sh so you get a shell prompt while only
+> the initramfs is loaded. It's easy to imagine that a system would want
+> to lock itself down to prevent abuses like this.
 
-Why duplicate the certificate info on each record in the measurement
-list?  Why not add the certificate info once, as the key is loaded
-onto the .ima and .platform keyrings?
-
-Mimi
+Yes, these issues should be addressed. But the purpose of this patch set
+is simply to set xattrs. And existing protection mechanisms can be
+improved later when the basic functionality is there.
 
 
-> 
-> Lakshmi (2):
->    add support for querying public key from a given key
->    add a new template ima-sigkey to store/read the public, key of ima
->      signature signer
-> 
->   .../admin-guide/kernel-parameters.txt         |  2 +-
->   Documentation/crypto/asymmetric-keys.txt      |  1 +
->   Documentation/security/IMA-templates.rst      |  5 +-
->   crypto/asymmetric_keys/public_key.c           |  7 +++
->   crypto/asymmetric_keys/signature.c            | 24 +++++++++
->   include/crypto/public_key.h                   |  1 +
->   include/keys/asymmetric-subtype.h             |  3 ++
->   security/integrity/digsig.c                   | 54 +++++++++++++++++--
->   security/integrity/digsig_asymmetric.c        | 44 +++++++++++++++
->   security/integrity/ima/Kconfig                |  3 ++
->   security/integrity/ima/ima_template.c         |  3 ++
->   security/integrity/ima/ima_template_lib.c     | 43 +++++++++++++++
->   security/integrity/ima/ima_template_lib.h     |  4 ++
->   security/integrity/integrity.h                | 29 +++++++++-
->   14 files changed, 216 insertions(+), 7 deletions(-)
-> 
+> So you might already want an embedded initramfs that can be trusted and
+> that can't be overwritten by an external one even outside the
+> security.ima stuff.
 
+The same problems exist also the root filesystem. These should be solved
+regardless of the filesystem used, for remote attestation and for local
+enforcement.
+
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
