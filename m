@@ -2,106 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C15F21CFBD
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 21:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D021CFEE
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 21:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726013AbfENTTH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 May 2019 15:19:07 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51812 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725916AbfENTTH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 May 2019 15:19:07 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 451A1AFA7;
-        Tue, 14 May 2019 19:19:05 +0000 (UTC)
-Subject: Re: [PATCH v2 0/3] LTP reproducer on broken IMA on overlayfs
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Fabian Vogt <FVogt@suse.com>,
-        Marcus Meissner <meissner@suse.com>,
-        linux-integrity@vger.kernel.org, ltp@lists.linux.it
-References: <20190405165225.27216-1-pvorel@suse.cz>
- <20190514121213.GA28655@dell5510>
-From:   Ignaz Forster <iforster@suse.de>
-Message-ID: <bf41c3b5-baf4-ba7a-2136-dabbbb817473@suse.de>
-Date:   Tue, 14 May 2019 21:19:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726151AbfENTa6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 May 2019 15:30:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43044 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726013AbfENTa6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 May 2019 15:30:58 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A88E72166E;
+        Tue, 14 May 2019 19:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557862258;
+        bh=cyXxdgq0F2t90JBOcGzbeklzMW8c+K7Ei2TXT3ToKrM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BpNFZy533it3ZIsnDGBCnls8/TxWyoZvg3cM5MFnPQRONBnReOpNFJqy9e+BQNWz7
+         x+2ZOkPwj0eQX18pfHivmlgzxFY7xQrWV1imJqKlSzwgnb7oHaWK01am/xSQycoPyI
+         +YL3b62XR0rli8g+FabtK/NNsDkB6fqFe3snFFFY=
+Date:   Tue, 14 May 2019 15:30:56 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, corbet@lwn.net,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@microsoft.com,
+        thiruan@microsoft.com, bryankel@microsoft.com
+Subject: Re: [PATCH v3 0/2] ftpm: a firmware based TPM driver
+Message-ID: <20190514193056.GN11972@sasha-vm>
+References: <20190415155636.32748-1-sashal@kernel.org>
+ <20190507174020.GH1747@sasha-vm>
+ <20190508124436.GE7642@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20190514121213.GA28655@dell5510>
-Content-Type: multipart/mixed;
- boundary="------------49C997E5FF1975606F3D768B"
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20190508124436.GE7642@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------49C997E5FF1975606F3D768B
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Wed, May 08, 2019 at 03:44:36PM +0300, Jarkko Sakkinen wrote:
+>On Tue, May 07, 2019 at 01:40:20PM -0400, Sasha Levin wrote:
+>> On Mon, Apr 15, 2019 at 11:56:34AM -0400, Sasha Levin wrote:
+>> > From: "Sasha Levin (Microsoft)" <sashal@kernel.org>
+>> >
+>> > Changes since v2:
+>> >
+>> > - Drop the devicetree bindings patch (we don't add any new ones).
+>> > - More code cleanups based on Jason Gunthorpe's review.
+>> >
+>> > Sasha Levin (2):
+>> >  ftpm: firmware TPM running in TEE
+>> >  ftpm: add documentation for ftpm driver
+>>
+>> Ping? Does anyone have any objections to this?
+>
+>Sorry I've been on vacation week before last week and last week
+>I was extremely busy because I had been on vacation. This in
+>my TODO list. Will look into it tomorrow in detail.
+>
+>Apologies for the delay with this!
 
-Hi Petr,
+Hi Jarkko,
 
-Am 14.05.19 um 14:12 Uhr schrieb Petr Vorel:
-> Could you, please, share your setup?
+If there aren't any big objections to this, can we get it merged in?
+We'll be happy to address any comments that come up.
 
-The system was installed with IMA and EVM enabled during installation, 
-using the following kernel parameters:
-"ima_policy=appraise_tcb ima_appraise=fix evm=fix"
-
-The EVM key was generated in the live system before starting the actual 
-installation and copied into the installed system later.
-
-See the attached installation notes for an openSUSE system (which should 
-also be usable on other distributions).
-
-> ima_policy=appraise_tcb kernel parameter and loading IMA and EVM keys over
-> dracut-ima scripts?
-
-Exactly.
-
-> (IMA appraisal and EVM using digital signatures? I guess
-> using hashes for IMA appraisal would work as well).
-
-I focused on hashes, as those are more relevant for the overlayfs use 
-case I was thinking of.
-
-Ignaz
-
---------------49C997E5FF1975606F3D768B
-Content-Type: text/plain; charset=UTF-8;
- name="IMA_EVM.txt"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="IMA_EVM.txt"
-
-TWFudWFsIElNQSAvIEVWTSBpbnN0YWxsYXRpb246CiogVXNlIGEgbmV0IGluc3RhbGwgaW1h
-Z2UgKHNvbWUgb2YgdGhlIG5lY2Vzc2FyeSBwYWNrYWdlcyBhcmUgbm90IGF2YWlsYWJsZSBp
-biBEVkQgaW1hZ2UpCiogQm9vdCBpbnN0YWxsIHN5c3RlbSB3aXRoICJpbWFfcG9saWN5PWFw
-cHJhaXNlX3RjYiBpbWFfYXBwcmFpc2U9Zml4IGV2bT1maXgiIChmb3IgSU1BIG1lYXN1cmVt
-ZW50LCBJTUEgYXBwcmFpc2FsIGFuZCBFVk0gcHJvdGVjdGlvbikKKiBQcm9jZWVkIHdpdGgg
-aW5zdGFsbGF0aW9uIHVudGlsIHN1bW1hcnkgc2NyZWVuLCBidXQgZG8gbm90IHN0YXJ0IHRo
-ZSBpbnN0YWxsYXRpb24geWV0CiogUmVtb3ZlICJldm09Zml4IiBmcm9tIGtlcm5lbCBib290
-IHBhcmFtZXRlcnMKKiBDaGFuZ2Uga2VybmVsIGJvb3QgcGFyYW1ldGVyICJpbWFfYXBwcmFp
-c2U9Zml4IiB0byAiaW1hX2FwcHJhaXNlPWFwcHJhaXNlX3RjYiIKKiBTZWxlY3QgcGFja2Fn
-ZSAiZHJhY3V0LWltYSIgKHJlcXVpcmVkIGZvciBlYXJseSBib290IEVWTSBzdXBwb3J0KSBm
-b3IgaW5zdGFsbGF0aW9uCiogQ2hhbmdlIHRvIGEgY29uc29sZSB3aW5kb3cKKiBta2RpciAv
-ZXRjL2tleXMKKiAvYmluL2tleWN0bCBhZGQgdXNlciBrbWstdXNlciAiYGRkIGlmPS9kZXYv
-dXJhbmRvbSBicz0xIGNvdW50PTMyIDI+L2Rldi9udWxsYCIgQHUKKiAvYmluL2tleWN0bCBw
-aXBlIGAvYmluL2tleWN0bCBzZWFyY2ggQHUgdXNlciBrbWstdXNlcmAgPiAvZXRjL2tleXMv
-a21rLXVzZXIuYmxvYgoqIC9iaW4va2V5Y3RsIGFkZCBlbmNyeXB0ZWQgZXZtLWtleSAibmV3
-IHVzZXI6a21rLXVzZXIgNjQiIEB1CiogL2Jpbi9rZXljdGwgcGlwZSBgL2Jpbi9rZXljdGwg
-c2VhcmNoIEB1IGVuY3J5cHRlZCBldm0ta2V5YCA+L2V0Yy9rZXlzL2V2bS5ibG9iCiogY2F0
-IDw8RU5EID4vZXRjL3N5c2NvbmZpZy9tYXN0ZXJrZXkKTUFTVEVSS0VZVFlQRT0idXNlciIK
-TUFTVEVSS0VZPSIvZXRjL2tleXMva21rLXVzZXIuYmxvYiIKRU5ECiogY2F0IDw8RU5EID4v
-ZXRjL3N5c2NvbmZpZy9ldm0KRVZNS0VZPSIvZXRjL2tleXMvZXZtLmJsb2IiCkVORAoqIG1v
-dW50IC10IHNlY3VyaXR5ZnMgc2VjdXJpdHkgL3N5cy9rZXJuZWwvc2VjdXJpdHkKKiBlY2hv
-IDEgPi9zeXMva2VybmVsL3NlY3VyaXR5L2V2bQoqIEdvIGJhY2sgdG8gdGhlIGluc3RhbGxh
-dGlvbiBzdW1tYXJ5IHNjcmVlbiBhbmQgc3RhcnQgdGhlIGluc3RhbGxhdGlvbgoqIER1cmlu
-ZyB0aGUgaW5zdGFsbGF0aW9uIGV4ZWN1dGUgdGhlIGZvbGxvd2luZyBjb21tYW5kcyBmcm9t
-IHRoZSBjb25zb2xlOgoqIGNwIC1yIC9ldGMva2V5cyAvbW50L2V0Yy8KKiBjcCAvZXRjL3N5
-c2NvbmZpZy97ZXZtLG1hc3RlcmtleX0gL21udC9ldGMvc3lzY29uZmlnLw==
---------------49C997E5FF1975606F3D768B--
+--
+Thanks,
+Sasha
