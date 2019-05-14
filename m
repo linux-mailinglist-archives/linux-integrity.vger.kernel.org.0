@@ -2,115 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D36331CAA6
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 16:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26301CAAF
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2019 16:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726009AbfENOoL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 May 2019 10:44:11 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:39743 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726013AbfENOoL (ORCPT
+        id S1726025AbfENOq3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 May 2019 10:46:29 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59706 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725901AbfENOq3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 May 2019 10:44:11 -0400
-Received: by mail-qk1-f195.google.com with SMTP id z128so10431156qkb.6;
-        Tue, 14 May 2019 07:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=MK/EeSYeIjxF8YTDVcELY66892EK1YJmsPeFgAgfrjM=;
-        b=qFdfOb2sfefv9BKhBFjgSIS+uytVFyTYQ01SS/qtY0zqykm8VlTLnzSLtzv7QxzVth
-         Un7eDsop3VKZJC1EVd6XQpNfWig7m6h2m69LtD0Y5JLiiTr04ZS0LEWa7FjLql/o3qHl
-         O7HVDtrCJDu7HTU8+WIMJdMxzEreKcply4xEir4+Pv1PClq2/Gcu6WNG4NDBJuK3VSZa
-         2eWFbELeMgW2NQ06TCD4S95CPB0dl3sK1becx5Cf0gM8+0W5lLRqw6P2+vPwbQcqMgl8
-         W2lYGRotHkH389BRu9YrUNYuioMiZFGvkiJfKEBfRZBe5j/iZzUTy5QB/vcHsTWMgq5t
-         /OrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=MK/EeSYeIjxF8YTDVcELY66892EK1YJmsPeFgAgfrjM=;
-        b=n1dehGjbpQoYTxOTZowrc24AuLMmTi8H6Ep3ikekGaApmG/Xw4+9olSaq5Gw9+ce+L
-         N9eGG/K+Z0nPr8zdnHOS3eMQhWvZfVfH7crOx4UCvjJxiW51nLHY/9ADRu2Viv8OTasI
-         osKofXo3PZZaUgktc98071oeN3Vt1XJhdC+74aLmtXzXczQZFSGdc6eMirGx5ovbdx53
-         RnNnu4+688hniVb5Ol5zoAduuyq4ZPE5RzZbQesXGdY+WdNFUdKa55N53uCyOWJLFWo3
-         m5CHrf56v+u/gLp/HZxA4aL/Q+jNFQIKnB+6NzXJvSYOtU0ssD7M0/tEb2yd5QaNsQwo
-         Ojhg==
-X-Gm-Message-State: APjAAAWJpoHgUsfH4tZj0vq6smNBtWroRhITQtp8uAcS64YCAFcz4DqS
-        0ksg3EEPsmgOktdOyTC73P4=
-X-Google-Smtp-Source: APXvYqyOJRF/R0s6XEjfz+HFqZXUy/U3dE0Nq2kon+YZAEx3Nx+C5qxM5rRFpkNMj/j57uhOGWxe4Q==
-X-Received: by 2002:a37:495:: with SMTP id 143mr27573670qke.106.1557845049750;
-        Tue, 14 May 2019 07:44:09 -0700 (PDT)
-Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id d64sm5449740qke.55.2019.05.14.07.44.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 May 2019 07:44:09 -0700 (PDT)
-From:   Arvind Sankar <nivedita@alum.mit.edu>
-X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
-Date:   Tue, 14 May 2019 10:44:07 -0400
-To:     Rob Landley <rob@landley.net>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Arvind Sankar <niveditas98@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        initramfs@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Message-ID: <20190514144406.GA37109@rani.riverdale.lan>
-References: <20190512194322.GA71658@rani.riverdale.lan>
- <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
- <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
- <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
- <20190513172007.GA69717@rani.riverdale.lan>
- <20190513175250.GC69717@rani.riverdale.lan>
- <1557772584.4969.62.camel@linux.ibm.com>
- <20190513184744.GA12386@rani.riverdale.lan>
- <1557785351.4969.94.camel@linux.ibm.com>
- <66b57ae5-bb5a-c008-8490-2c90e050fc65@landley.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Tue, 14 May 2019 10:46:29 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4EEk2h7108775
+        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 10:46:28 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sfy7s1k0q-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 10:46:27 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Tue, 14 May 2019 15:46:22 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 14 May 2019 15:46:18 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4EEkI5I49545464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 May 2019 14:46:18 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8AC9AE045;
+        Tue, 14 May 2019 14:46:17 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF28CAE04D;
+        Tue, 14 May 2019 14:46:16 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.80.29])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 14 May 2019 14:46:16 +0000 (GMT)
+Subject: Re: [PATCH 3/3 v5] call ima_kexec_cmdline from kexec_file_load path
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        inux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ebiederm@xmission.com, vgoyal@redhat.com, prsriva@microsoft.com,
+        Dave Young <dyoung@redhat.com>
+Date:   Tue, 14 May 2019 10:46:06 -0400
+In-Reply-To: <20190510223744.10154-4-prsriva02@gmail.com>
+References: <20190510223744.10154-1-prsriva02@gmail.com>
+         <20190510223744.10154-4-prsriva02@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <66b57ae5-bb5a-c008-8490-2c90e050fc65@landley.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-TM-AS-GCONF: 00
+x-cbid: 19051414-0020-0000-0000-0000033C9621
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19051414-0021-0000-0000-0000218F528F
+Message-Id: <1557845166.4139.53.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-14_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905140105
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, May 14, 2019 at 01:06:45AM -0500, Rob Landley wrote:
-> On 5/13/19 5:09 PM, Mimi Zohar wrote:
-> >> Ok, but wouldn't my idea still work? Leave the default compiled-in
-> >> policy set to not appraise initramfs. The embedded /init sets all the
-> >> xattrs, changes the policy to appraise tmpfs, and then exec's the real
-> >> init? Then everything except the embedded /init and the file with the
-> >> xattrs will be appraised, and the embedded /init was verified as part of
-> >> the kernel image signature. The only additional kernel change needed
-> >> then is to add a config option to the kernel to disallow overwriting the
-> >> embedded initramfs (or at least the embedded /init).
-> > 
-> > Yes and no.  The current IMA design allows a builtin policy to be
-> > specified on the boot command line ("ima_policy="), so that it exists
-> > from boot, and allows it to be replaced once with a custom policy.
-> >  After that, assuming that CONFIG_IMA_WRITE_POLICY is configured,
-> > additional rules may be appended.  As your embedded /init solution
-> > already replaces the builtin policy, the IMA policy couldn't currently
-> > be replaced a second time with a custom policy based on LSM labels.
-> 
-> So your design assumption you're changing other code to work around in that
-> instance is the policy can only be replaced once rather than having a "finalize"
-> option when it's set, making it immutable from then on.
-> 
-> Rob
-I agree it would be better to have a finalize option. Outside of my
-idea, it seems the current setup would make it so while developing an
-IMA policy you need to keep rebooting to test your changes?
+[Cc'ing Dave Young]
 
-I'd suggest having a knob that starts out unrestricted, and can be
-one-way changed to append-only or immutable. This seems like a good idea
-even if you decide the embedded image is too much trouble or unworkable
-for other reasons.
+On Fri, 2019-05-10 at 15:37 -0700, Prakhar Srivastava wrote:
+> From: Prakhar Srivastava <prsriva02@gmail.com>
+
+The "From" line above should only appear when the patch author and the
+sender differ.  You can create the patches under one id and post them
+from another id.  Something is still wrong.
+
+> 
+> To measure the cmldine args used in case of soft reboot. Call the 
+> ima hook defined in [PATCH 1/3 v5]:"add a new ima hook and policy to measure the cmdline"
+> 
+> Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
+
+> ---
+>  kernel/kexec_file.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index f1d0e00a3971..e779bcf674a0 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -241,6 +241,8 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+>  			ret = -EINVAL;
+>  			goto out;
+>  		}
+> +
+> +		ima_kexec_cmdline(image->cmdline_buf, image->cmdline_buf_len - 1);
+>  	}
+>  
+>  	/* Call arch image load handlers */
+
+Much better!
+
+Mimi
+
