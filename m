@@ -2,115 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E711E673
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2019 03:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3011E6CB
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2019 04:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbfEOBAE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 May 2019 21:00:04 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:38370 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbfEOBAD (ORCPT
+        id S1726218AbfEOCCa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 May 2019 22:02:30 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:40299 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbfEOCC3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 May 2019 21:00:03 -0400
-Received: by mail-qk1-f196.google.com with SMTP id a64so483108qkg.5;
-        Tue, 14 May 2019 18:00:03 -0700 (PDT)
+        Tue, 14 May 2019 22:02:29 -0400
+Received: by mail-vs1-f66.google.com with SMTP id c24so640587vsp.7
+        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2019 19:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ARePknXMvJpXvkpoMG1JARn0M1Qc8PURXSCKZdxSijk=;
-        b=QX+LrZZzP+4rPSDGbeSgFAq0eoC1Lo+cmLh4Oq7MYgTx/7p9ppXtdty8AC4ax/fDB3
-         jHULiwA5JLFBUXX7ZA3w1zv0McPj6CIZ1bOqxtaJpPKImg4IoVm5fc7/H7Nn8GfMh8Ys
-         e6CZRo6DhGufLF3uxJ24gMBfPuqL+BekVOoekmVnStGfcZev9BmBPY/VRR/AlsF+v847
-         JijjqOPAjkdCSndncJ8T1JUpQttqXX2jv4usRxSy+ByKnnDCfJT0ECyqrbTAqCh9xdFv
-         aGERs20TySYoyaWj2Y6tUPoQiotMlxCC1GvMwMYOloaPqGCAQ9HYZuejFog5QTTH47WW
-         XBOg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AxA0x4PyivVs2YLv3eXq9QQMTB5geMHM8Hexc+yQ7mo=;
+        b=dXjwoQpnVsDqYDrL0Cnicd2MotWpdOFr7GH9DOjbDlq67I4sZGEfis+5EBw95xXMvF
+         IbOJ8aq5o2OSe/E7ekC9qYayFL/4Wjs7wGz4Vkxxeyhz7svrgu3CUlX0qU6XlLarlsQE
+         XLWo7ChQkbI13KqRlSEnD8eB0HxjVgLq5LeTWAevPIARzl9nozOucpkTw+LRMnlA7+18
+         /O/337lLvdFHIcpZmhd14DxEzXu03cShUorZmYGRMoofO+96lypySevQRzuJXtRpwv2S
+         sGVTvHKEtLmNl/s4FHPbSoCR0/QUdyBpjEvrq0s48VL5Xh62HHKjEgOThv0ACml6uYjh
+         ncvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ARePknXMvJpXvkpoMG1JARn0M1Qc8PURXSCKZdxSijk=;
-        b=MB+tOx8MGNf7ouZUuekaT34KPy1RrZZO64NxpxTM8EKQZxxfCPjs4omHCTkKMBCQnV
-         2f3kpjdqGdciGpO8BcEYqcdJurtee3HMWD6F37f+9wxG2hEuBj1mBq2fiw9qf5Dlp8NC
-         ijH1AbVrYmwCvB5PSCe4MRRslKcrWIPsGeFOtXaIQudwmnghWsZOBb3j/cpZL87zvLLA
-         KZZjjzElwgbKBqoW3iaBCiKX1G8mYn7IPod5mHeJ+GRT3kUn7Y4ZakDGaroN2eVrlssW
-         2Wmx9ye2BNjrTUJ1mvsWnzcpEc4DRIigstPyoP4B9ZumIzewt1NtVAE8g17NSDB7j2UX
-         qKcg==
-X-Gm-Message-State: APjAAAW9fyKdjOJrhY2LQU9qcPWdGprC7jyLmhxXjyTgo7wuKOznMvpc
-        qEgq0CtQGNWrhHJhHnqA6aFnQnFOKTg=
-X-Google-Smtp-Source: APXvYqxO7/iKCArGqp6drBcdLkZILOYgHxFYMbD6i4ZPSN1nU4yXvrhmAabjBuBag/Zj0WjbRHkabw==
-X-Received: by 2002:ae9:f818:: with SMTP id x24mr30059222qkh.329.1557882002597;
-        Tue, 14 May 2019 18:00:02 -0700 (PDT)
-Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id f7sm290540qth.41.2019.05.14.18.00.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 May 2019 18:00:02 -0700 (PDT)
-From:   Arvind Sankar <nivedita@alum.mit.edu>
-X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
-Date:   Tue, 14 May 2019 21:00:00 -0400
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
-        Rob Landley <rob@landley.net>,
-        Arvind Sankar <niveditas98@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        initramfs@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Message-ID: <20190515005959.GC88615@rani.riverdale.lan>
-References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
- <20190512194322.GA71658@rani.riverdale.lan>
- <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
- <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
- <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
- <49965ffd-dd57-ffe5-4a2f-73cdfb387848@landley.net>
- <de91ef53-6bb3-b937-8773-5f6b34e1acb7@huawei.com>
- <20190514152704.GB37109@rani.riverdale.lan>
- <20190514155739.GA70223@rani.riverdale.lan>
- <ca622341-5ea2-895e-8b82-7181a709c104@huawei.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AxA0x4PyivVs2YLv3eXq9QQMTB5geMHM8Hexc+yQ7mo=;
+        b=NHR1W4FG9fwfBJnD0+qo60jP4+wQw+W7sMa6DszRoPxrhkaXTm38C3FHRcesmsuHoP
+         5DMHZHWCFUSferOrqxHwizn7wq4TJ4ywQF0RTDiv2OwJxDCscy4cRQ177jNv8hCgb+XO
+         w1sT+gmi0J26REHON2IC3RvQ6VSgg5fvbZmKldKSSlJy629pVA52jQwfZ199A1KWsWmC
+         +NypxCppsnzn4i1GGfSqpBLUoUE+VWMjw/iqtTd2WR1QLf6iSU4N7nD0FX9YQoOrVE1K
+         NRfjERn/zdTqVaD+XRA8co9lhHFXuYNJ4ALQFbQ8+IwbYVSNFws0uSozZ2dE64DWSP8O
+         2Omg==
+X-Gm-Message-State: APjAAAV6vRiCkI9hQpXGhN+hJZUDxcBB/+2S2ZMRc/BFyxCiQdyfNx/x
+        bmH59peo2vv8CB75cAmA4TnewevcyfKoUjj8LALrBA==
+X-Google-Smtp-Source: APXvYqxIRDuESb28VHPDBf2noVQZmbwLgfSNzYuspFpDWguKCT7rP6ucq1S57/0nWplSsbRvDowflcDST1f72rVZ2Dk=
+X-Received: by 2002:a67:2781:: with SMTP id n123mr1212734vsn.141.1557885748720;
+ Tue, 14 May 2019 19:02:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ca622341-5ea2-895e-8b82-7181a709c104@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190415155636.32748-1-sashal@kernel.org> <20190507174020.GH1747@sasha-vm>
+ <20190508124436.GE7642@linux.intel.com> <20190514193056.GN11972@sasha-vm>
+In-Reply-To: <20190514193056.GN11972@sasha-vm>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 15 May 2019 07:32:17 +0530
+Message-ID: <CAFA6WYM06E0y9o6+CLNPe48spiL=UDEqoGsidMbk1dBa5Rbmkg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] ftpm: a firmware based TPM driver
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        peterhuewe@gmx.de, jgg@ziepe.ca, corbet@lwn.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@microsoft.com, thiruan@microsoft.com,
+        bryankel@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, May 14, 2019 at 07:44:42PM +0200, Roberto Sassu wrote:
-> On 5/14/2019 5:57 PM, Arvind Sankar wrote:
-> > On Tue, May 14, 2019 at 11:27:04AM -0400, Arvind Sankar wrote:
-> >> It's also much easier to change/customize it for the end
-> >> system's requirements rather than setting the process in stone by
-> >> putting it inside the kernel.
-> > 
-> > As an example, if you allow unverified external initramfs, it seems to
-> > me that it can try to play games that wouldn't be prevented by the
-> > in-kernel code: setup /dev in a weird way to try to trick /init, or more
-> > easily, replace /init by /bin/sh so you get a shell prompt while only
-> > the initramfs is loaded. It's easy to imagine that a system would want
-> > to lock itself down to prevent abuses like this.
-> 
-> Yes, these issues should be addressed. But the purpose of this patch set
-> is simply to set xattrs. And existing protection mechanisms can be
-> improved later when the basic functionality is there.
-> 
-Yeah but it's much easier to enhance it when it lives in userspace and
-can be tailored to a particular system's requirements. Eg a lot of the
-issues will disappear if you don't have to allow for external initramfs
-at all, so those systems can have a very simple embedded /init that
-doesn't have to do much.
-> 
-> > So you might already want an embedded initramfs that can be trusted and
-> > that can't be overwritten by an external one even outside the
-> > security.ima stuff.
-> 
-> The same problems exist also the root filesystem. These should be solved
-> regardless of the filesystem used, for remote attestation and for local
-> enforcement.
-> 
-> -- 
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Bo PENG, Jian LI, Yanli SHI
+On Wed, 15 May 2019 at 01:00, Sasha Levin <sashal@kernel.org> wrote:
+>
+> On Wed, May 08, 2019 at 03:44:36PM +0300, Jarkko Sakkinen wrote:
+> >On Tue, May 07, 2019 at 01:40:20PM -0400, Sasha Levin wrote:
+> >> On Mon, Apr 15, 2019 at 11:56:34AM -0400, Sasha Levin wrote:
+> >> > From: "Sasha Levin (Microsoft)" <sashal@kernel.org>
+> >> >
+> >> > Changes since v2:
+> >> >
+> >> > - Drop the devicetree bindings patch (we don't add any new ones).
+> >> > - More code cleanups based on Jason Gunthorpe's review.
+> >> >
+> >> > Sasha Levin (2):
+> >> >  ftpm: firmware TPM running in TEE
+> >> >  ftpm: add documentation for ftpm driver
+> >>
+> >> Ping? Does anyone have any objections to this?
+> >
+> >Sorry I've been on vacation week before last week and last week
+> >I was extremely busy because I had been on vacation. This in
+> >my TODO list. Will look into it tomorrow in detail.
+> >
+> >Apologies for the delay with this!
+>
+> Hi Jarkko,
+>
+> If there aren't any big objections to this, can we get it merged in?
+> We'll be happy to address any comments that come up.
 
+I guess you have missed or ignored this comment [1]. Please address it.
+
+[1] https://lkml.org/lkml/2019/5/8/11
+
+-Sumit
+
+>
+> --
+> Thanks,
+> Sasha
