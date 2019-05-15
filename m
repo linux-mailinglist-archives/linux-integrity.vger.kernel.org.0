@@ -2,111 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A991E9E9
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2019 10:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9D91F16F
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2019 13:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726487AbfEOIOv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 May 2019 04:14:51 -0400
-Received: from mga17.intel.com ([192.55.52.151]:42327 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbfEOIOv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 May 2019 04:14:51 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 May 2019 01:14:50 -0700
-X-ExtLoop1: 1
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.189])
-  by orsmga002.jf.intel.com with ESMTP; 15 May 2019 01:14:46 -0700
-Date:   Wed, 15 May 2019 11:14:55 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, corbet@lwn.net,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@microsoft.com,
-        thiruan@microsoft.com, bryankel@microsoft.com
-Subject: Re: [PATCH v3 2/2] ftpm: add documentation for ftpm driver
-Message-ID: <20190515081455.GB7708@linux.intel.com>
-References: <20190415155636.32748-1-sashal@kernel.org>
- <20190415155636.32748-3-sashal@kernel.org>
+        id S1730931AbfEOLTS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 May 2019 07:19:18 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32942 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730926AbfEOLTS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 15 May 2019 07:19:18 -0400
+Received: from LHREML714-CAH.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 140A8AC54039E2847CA4;
+        Wed, 15 May 2019 12:19:16 +0100 (IST)
+Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
+ (10.201.108.37) with Microsoft SMTP Server (TLS) id 14.3.408.0; Wed, 15 May
+ 2019 12:19:06 +0100
+Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+To:     Arvind Sankar <nivedita@alum.mit.edu>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+CC:     Rob Landley <rob@landley.net>, Andy Lutomirski <luto@kernel.org>,
+        "Arvind Sankar" <niveditas98@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Linux API" <linux-api@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        <initramfs@vger.kernel.org>,
+        "Silviu Vlasceanu" <Silviu.Vlasceanu@huawei.com>
+References: <dca50ee1-62d8-2256-6fdb-9a786e6cea5a@landley.net>
+ <20190512194322.GA71658@rani.riverdale.lan>
+ <3fe0e74b-19ca-6081-3afe-e05921b1bfe6@huawei.com>
+ <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
+ <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
+ <CALCETrV3b205L38xqPr6QqwGn6-vxQdPoJGUygJJpgM-JqqXfQ@mail.gmail.com>
+ <1557861511.3378.19.camel@HansenPartnership.com>
+ <4da3dbda-bb76-5d71-d5c5-c03d98350ab0@landley.net>
+ <1557878052.2873.6.camel@HansenPartnership.com>
+ <20190515005221.GB88615@rani.riverdale.lan>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <a138af12-d983-453e-f0b2-661a80b7e837@huawei.com>
+Date:   Wed, 15 May 2019 13:19:04 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190415155636.32748-3-sashal@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190515005221.GB88615@rani.riverdale.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.220.96.108]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Apr 15, 2019 at 11:56:36AM -0400, Sasha Levin wrote:
-> This patch adds basic documentation to describe the new fTPM driver.
+On 5/15/2019 2:52 AM, Arvind Sankar wrote:
+> On Tue, May 14, 2019 at 04:54:12PM -0700, James Bottomley wrote:
+>> On Tue, 2019-05-14 at 18:39 -0500, Rob Landley wrote:
+>>> On 5/14/19 2:18 PM, James Bottomley wrote:
+>>>>> I think Rob is right here.  If /init was statically built into
+>>>>> the kernel image, it has no more ability to compromise the kernel
+>>>>> than anything else in the kernel.  What's the problem here?
+>>>>
+>>>> The specific problem is that unless you own the kernel signing key,
+>>>> which is really untrue for most distribution consumers because the
+>>>> distro owns the key, you cannot build the initrd statically into
+>>>> the kernel.  You can take the distro signed kernel, link it with
+>>>> the initrd then resign the combination with your key, provided you
+>>>> insert your key into the MoK variables as a trusted secure boot
+>>>> key, but the distros have been unhappy recommending this as
+>>>> standard practice.
+>>>>
+>>>> If our model for security is going to be to link the kernel and the
+>>>> initrd statically to give signature protection over the aggregate
+>>>> then we need to figure out how to execute this via the distros.  If
+>>>> we accept that the split model, where the distro owns and signs the
+>>>> kernel but the machine owner builds and is responsible for the
+>>>> initrd, then we need to explore split security models like this
+>>>> proposal.
+>>>
+>>> You can have a built-in and an external initrd? The second extracts
+>>> over the first? (I know because once upon a time conflicting files
+>>> would append. It sounds like the desired behavior here is O_EXCL fail
+>>> and move on.)
+>>
+>> Technically yes, because the first initrd could find the second by some
+>> predefined means, extract it to a temporary directory and do a
+>> pivot_root() and then the second would do some stuff, find the real
+>> root and do a pivot_root() again.  However, while possible, wouldn't it
+>> just add to the rendezvous complexity without adding any benefits? even
+>> if the first initrd is built and signed by the distro and the second is
+>> built by you, the first has to verify the second somehow.  I suppose
+>> the second could be tar extracted, which would add xattrs, if that's
+>> the goal?
+>>
+>> James
+>>
+> You can specify multiple initrd's to the boot loader, and they get
+> loaded in sequence into memory and parsed by the kernel before /init is
+> launched. Currently I believe later ones will overwrite the earlier
+> ones, which is why we've been talking about adding an option to prevent
+> that. You don't have to mess with manually finding/parsing initramfs's
+> which wouldn't even be feasible since you may not have the drivers
+> loaded yet to access the device/filesystem on which they live.
 > 
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> Signed-off-by: Sasha Levin (Microsoft) <sashal@kernel.org>
-> ---
->  Documentation/security/tpm/index.rst        |  1 +
->  Documentation/security/tpm/tpm_ftpm_tee.rst | 31 +++++++++++++++++++++
->  2 files changed, 32 insertions(+)
->  create mode 100644 Documentation/security/tpm/tpm_ftpm_tee.rst
-> 
-> diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
-> index af77a7bbb070..15783668644f 100644
-> --- a/Documentation/security/tpm/index.rst
-> +++ b/Documentation/security/tpm/index.rst
-> @@ -4,4 +4,5 @@ Trusted Platform Module documentation
->  
->  .. toctree::
->  
-> +   tpm_ftpm_tee
->     tpm_vtpm_proxy
-> diff --git a/Documentation/security/tpm/tpm_ftpm_tee.rst b/Documentation/security/tpm/tpm_ftpm_tee.rst
-> new file mode 100644
-> index 000000000000..29c2f8b5ed10
-> --- /dev/null
-> +++ b/Documentation/security/tpm/tpm_ftpm_tee.rst
-> @@ -0,0 +1,31 @@
-> +=============================================
-> +Firmware TPM Driver
-> +=============================================
-> +
-> +| Authors:
-> +| Thirupathaiah Annapureddy <thiruan@microsoft.com>
-> +| Sasha Levin <sashal@kernel.org>
-> +
-> +This document describes the firmware Trusted Platform Module (fTPM)
-> +device driver.
-> +
-> +Introduction
-> +============
-> +
-> +This driver is a shim for a firmware implemented in ARM's TrustZone
-> +environment. The driver allows programs to interact with the TPM in the same
-> +way the would interact with a hardware TPM.
-> +
-> +Design
-> +======
-> +
-> +The driver acts as a thin layer that passes commands to and from a TPM
-> +implemented in firmware. The driver itself doesn't contain much logic and is
-> +used more like a dumb pipe between firmware and kernel/userspace.
-> +
-> +The firmware itself is based on the following paper:
-> +https://www.microsoft.com/en-us/research/wp-content/uploads/2017/06/ftpm1.pdf
-> +
-> +When the driver is loaded it will expose ``/dev/tpmX`` character devices to
-> +userspace which will enable userspace to communicate with the firmware tpm
-> +through this device.
-> -- 
-> 2.19.1
-> 
+> Once that's done, the embedded /init is just going to do in userspace
+> wht the current patch does in the kernel. So all the files in the
+> external initramfs(es) would need to have IMA signatures via the special
+> xattr file.
 
-Actually this would a better place at least with some words to describe
-what is TEE. I'm, for example, confused whether there is only single TEE
-in existence always used with TZ or is this some MS specific TEE.
+So, the scheme you are proposing is not equivalent: using the distro key
+to verify signatures, compared to adding a new user key to verify the
+initramfs he builds. Why would it be necessary for the user to share
+responsibility with the distro, if the only files he uses come from the
+distro?
 
-Otherwise, looks legit.
 
-/Jarkko
+> Note that if you want the flexibility to be able to load one or both of
+> two external initramfs's, the current in-kernel proposal wouldn't be
+> enough -- the xattr specification would have to be more flexible (eg
+> reading .xattr-list* to allow each initramfs to specifiy its own
+> xattrs. This sort of enhancement would be much easier to handle with the
+> userspace variant.
+
+Yes, the alternative solution is to parse .xattr-list at the time it is
+extracted. The .xattr-list of each initramfs will be processed. Also,
+the CPIO parser doesn't have to reopen the file after all other files
+have been extracted.
+
+Roberto
+
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
