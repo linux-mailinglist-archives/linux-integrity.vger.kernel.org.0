@@ -2,25 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C84BB20555
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 May 2019 13:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF6420837
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 May 2019 15:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728538AbfEPLmv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 May 2019 07:42:51 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32944 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727973AbfEPLmv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 May 2019 07:42:51 -0400
-Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id A54C148E50E23ECD1918;
-        Thu, 16 May 2019 12:42:48 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Thu, 16 May
- 2019 12:42:42 +0100
+        id S1726742AbfEPNb6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 May 2019 09:31:58 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40658 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727553AbfEPNby (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 16 May 2019 09:31:54 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4GDQw1F107316
+        for <linux-integrity@vger.kernel.org>; Thu, 16 May 2019 09:31:53 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2sh8f1hb4m-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 16 May 2019 09:31:52 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 16 May 2019 14:31:50 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 16 May 2019 14:31:46 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4GDVjWR52035654
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 May 2019 13:31:45 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1DBFFAE056;
+        Thu, 16 May 2019 13:31:45 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 63E07AE045;
+        Thu, 16 May 2019 13:31:43 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.95.230])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 16 May 2019 13:31:43 +0000 (GMT)
 Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
  ram disk
-To:     Arvind Sankar <nivedita@alum.mit.edu>
-CC:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Arvind Sankar <nivedita@alum.mit.edu>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Mehmet Kayaalp <mkayaalp@linux.ibm.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         Rob Landley <rob@landley.net>,
         Andy Lutomirski <luto@kernel.org>,
         Arvind Sankar <niveditas98@gmail.com>,
@@ -28,121 +54,75 @@ CC:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         Linux API <linux-api@vger.kernel.org>,
         Linux FS Devel <linux-fsdevel@vger.kernel.org>,
         linux-integrity <linux-integrity@vger.kernel.org>,
-        <initramfs@vger.kernel.org>,
+        initramfs@vger.kernel.org,
         Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-References: <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
- <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
- <CALCETrV3b205L38xqPr6QqwGn6-vxQdPoJGUygJJpgM-JqqXfQ@mail.gmail.com>
- <1557861511.3378.19.camel@HansenPartnership.com>
- <4da3dbda-bb76-5d71-d5c5-c03d98350ab0@landley.net>
- <1557878052.2873.6.camel@HansenPartnership.com>
- <20190515005221.GB88615@rani.riverdale.lan>
- <a138af12-d983-453e-f0b2-661a80b7e837@huawei.com>
- <20190515160834.GA81614@rani.riverdale.lan>
- <ce65240a-4df6-8ebc-8360-c01451e724f0@huawei.com>
- <20190516052934.GA68777@rani.riverdale.lan>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <ac930347-9a36-0e84-1f93-cd98e63de403@huawei.com>
-Date:   Thu, 16 May 2019 13:42:28 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
-MIME-Version: 1.0
+Date:   Thu, 16 May 2019 09:31:32 -0400
 In-Reply-To: <20190516052934.GA68777@rani.riverdale.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+References: <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
+         <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
+         <CALCETrV3b205L38xqPr6QqwGn6-vxQdPoJGUygJJpgM-JqqXfQ@mail.gmail.com>
+         <1557861511.3378.19.camel@HansenPartnership.com>
+         <4da3dbda-bb76-5d71-d5c5-c03d98350ab0@landley.net>
+         <1557878052.2873.6.camel@HansenPartnership.com>
+         <20190515005221.GB88615@rani.riverdale.lan>
+         <a138af12-d983-453e-f0b2-661a80b7e837@huawei.com>
+         <20190515160834.GA81614@rani.riverdale.lan>
+         <ce65240a-4df6-8ebc-8360-c01451e724f0@huawei.com>
+         <20190516052934.GA68777@rani.riverdale.lan>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19051613-0020-0000-0000-0000033D5A54
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19051613-0021-0000-0000-000021902221
+Message-Id: <1558013492.4581.97.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-16_11:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905160090
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/16/2019 7:29 AM, Arvind Sankar wrote:
-> On Wed, May 15, 2019 at 07:06:52PM +0200, Roberto Sassu wrote:
->> On 5/15/2019 6:08 PM, Arvind Sankar wrote:
->>> On Wed, May 15, 2019 at 01:19:04PM +0200, Roberto Sassu wrote:
->>>> On 5/15/2019 2:52 AM, Arvind Sankar wrote:
->>> I don't understand what you mean? The IMA hashes are signed by some key,
->>> but I don't see how what that key is needs to be different between the
->>> two proposals. If the only files used are from the distro, in my scheme
->>> as well you can use the signatures and key provided by the distro. If
->>> they're not, then in your scheme as well you would have to allow for a
->>> local signing key to be used. Both schemes are using the same
->>> .xattr-list file, no?
->>
->> I was referring to James's proposal to load an external initramfs from
->> the embedded initramfs. If the embedded initramfs opens the external
->> initramfs when IMA is enabled, the external initramfs needs to be
->> signed with a local signing key. But I read your answer that this
->> wouldn't be feasible. You have to specify all initramfs in the boot
->> loader configuration.
->>
->> I think deferring IMA initialization is not the safest approach, as it
->> cannot be guaranteed for all possible scenarios that there won't be any
->> file read before /init is executed.
->>
->> But if IMA is enabled, there is the problem of who signs .xattr-list.
->> There should be a local signing key that it is not necessary if the user
->> only accesses distro files.
->>
+On Thu, 2019-05-16 at 01:29 -0400, Arvind Sankar wrote:
+
 > I think that's a separate issue. If you want to allow people to be able
 > to put files onto the system that will be IMA verified, they need to
 > have some way to locally sign them whether it's inside an initramfs or
 > on a real root filesystem.
 
-Yes. But this shouldn't be a requirement. If I have only files signed by
-the distro, I should be able to do appraisal without a local signing
-key.
+Anyone building their own kernel can build their own key into the
+kernel image.  Another option is to build the kernel with  
+CONFIG_SYSTEM_EXTRA_CERTIFICATE enabled, allowing an additional
+certificate to be inserted into the kernel image post build.  The
+additional certificate will be loaded onto the builtin kernel keyring.
+ Certificates signed with the private key can then be added to the IMA
+keyring.  By modifying the kernel image, the kernel image obviously
+needs to be resigned.  Additional patches "Certificate insertion
+support for x86 bzImages" were posted, but have not been upstreamed.
 
-I made an IMA extension called IMA Digest Lists, that extracts reference
-digests from RPM headers and performs appraisal based on the loaded
-white lists.  The only keys that must be in the kernel for signature
-verification are the PGP keys of the distro (plus the public key for the
-RPM parser, which at the moment is different).
+This patch set adds the security xattrs needed by IMA.
 
-.xattr-list is generated by my custom dracut module and contains the
-signature of the digest lists and the parser.
+Mimi
 
 
->>> Right, I guess this would be sort of the minimal "modification" to the
->>> CPIO format to allow it to support xattrs.
->>
->> I would try to do it without modification of the CPIO format. However,
->> at the time .xattr-list is parsed (in do_copy() before .xattr-list is
->> closed), it is not guaranteed that all files are extracted. These must
->> be created before xattrs are added, but the file type must be correct,
->> otherwise clean_path() removes the existing file with xattrs.
->>
->> Roberto
->>
->> -- 
->> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
->> Managing Director: Bo PENG, Jian LI, Yanli SHI
-> 
-> Right by "modification" in quotes I meant the format is actually the
-> same, but the kernel now interprets it a bit differently.
-> 
-> Regarding the order you don't have to handle that in the kernel. The
-> kernel CPIO format is already restricted in that directories have to be
-> specified before the files that contain them for example. It can very
-> well be restricted so that an .xattr-list can only specify xattrs for
-> files that were already extracted, else you bail out with an error. The
-> archive creation tooling can easily handle that. If someone wants to
-> shoot themselves in the foot by trying to add more files/replace
-> existing files after the .xattr-list its ok, the IMA policy will prevent
-> such files from being accessed and they can fix the archive for the next
-> boot.
+ 
 
-Unfortunately, dracut sorts the files before adding them to the CPIO
-image (.xattr-list is at the beginning). I could move xattrs from the
-existing file to the file with different mode, but this makes the code
-more complex. I think it is better to call do_readxattrs() after files
-are extracted, or when .xattr-list is going to be replaced by another
-one in the next initramfs.
 
-Roberto
 
--- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+
+
+
+
+
+
+
+
+
+
