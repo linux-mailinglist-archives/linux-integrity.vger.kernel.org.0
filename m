@@ -2,144 +2,166 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 189A61FECA
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 May 2019 07:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08CE1FFF3
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 May 2019 09:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbfEPF3k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 May 2019 01:29:40 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:37772 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725975AbfEPF3j (ORCPT
+        id S1726604AbfEPHGT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 May 2019 03:06:19 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:38280 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726319AbfEPHGS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 May 2019 01:29:39 -0400
-Received: by mail-qt1-f196.google.com with SMTP id o7so2524146qtp.4;
-        Wed, 15 May 2019 22:29:38 -0700 (PDT)
+        Thu, 16 May 2019 03:06:18 -0400
+Received: by mail-vs1-f68.google.com with SMTP id x184so602757vsb.5
+        for <linux-integrity@vger.kernel.org>; Thu, 16 May 2019 00:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zPhYJs6tUAai5DYwqxdzu4CT68FsA8mRHrqOPfi0tng=;
-        b=BwK3/SkNEbeGhGHCPGal9aJRSkD0A6WMfMZmrfxhorPWHZIuGfJ6oXMKbK0kb0zvVU
-         D27Njyax//0BOR7gwqhtcKZ2m76gvtEX6jxGBXtl9Mi/SuXebH0yAIX5Xd56M6zT3y1V
-         d9pn2SGP+LtldqLQtL1HtwP4BkzySpUJ/v+Ol4j2OxL4D/T4YVY5tGr/RWp/FbICHKdp
-         3Ud3DnOgarX7XpiOupCX76X8+pqlz0F3cRSZKIsSurjzBk1/+XQysRfe+RYCkrPW2ceD
-         rHiMz1UTvypR3++jK+jbvF9RIC10pz7L4+EkjOFhpyWyBIR6OycxO9zDcvRjksngMXxw
-         E81Q==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3tuyRdp1kiTY23EHvc9NEBL/dfI6XqAQnryU6YgN88k=;
+        b=VXisOUaRMulel+iyFbX21Xi2jHYGI6moKFyX5kvQe7al8mpkl0q80RJl6c5kjnsh1h
+         yWGuLg1y5NZPcm7p+Cw47rCHhC+0XjiL8ZxQniuJ0M8kQmjlD3hcn2PsQw+7K/Wr92xt
+         Ym9VT+hZVUxX6HKFvEbHNWvSD5ZzczOTri+dD3Q/TaQAj+RpiCw/TJFip78oFa1mAnjw
+         eY6fVaVTm8jK+vUgj6YSwGVV5STazrNbXYDN8soNzs9QjR+a4N/WdtBXU1Sll2PyYtuz
+         qe0rorZxQjBQriGR++jFIqbXLslnfOZxl+HPeTqApkxq1TtXLr4ASaBy8bbTSaXK+evi
+         p8Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zPhYJs6tUAai5DYwqxdzu4CT68FsA8mRHrqOPfi0tng=;
-        b=cHTmP8vdZ/gJRtR8sP+sdhXeBXKbL2scyeZqsP8bOXTWQNRxfs6tOyaWt/yNDDvJQr
-         o4OWFsbrpGgVmGMpqEJG/etANjyUPwqhIQG9vORZXsRNdHpQwbOrpU77Sk9kfykqV2X3
-         ZRGE29GQw7bCIjPODeCSLzCzrRJB2IPvmCXd4sJPGVLfRuKH+fU7pdU0xlzui3r6btGB
-         CStche/duJuTPdXCZTpR+/3HDdYdJdtH0VQmlNV3CISeHL81djkDXx0EaMSf2RoGZKge
-         0XvEQ7uogzv6gK812gc41/NHNGW6xJ23zIMQIbd6hdWLusFK68aA/WtbI0p7Tv5iEioq
-         6Osw==
-X-Gm-Message-State: APjAAAX++K/GKJU3jkFBcWql2iYiL1Mh2HZ4Iv0YpkTQJX5xppTxlB20
-        woRH6nNVfzfk5b7yVMrYK+iGYtxMqqM=
-X-Google-Smtp-Source: APXvYqxV9mBmwmYVkzFISxUjwBj5hupH87klIJjbMyAvtWYLe6nRJtk/xKH4tyjuK03pUxI+QGiQjg==
-X-Received: by 2002:ac8:fdd:: with SMTP id f29mr40426005qtk.17.1557984577991;
-        Wed, 15 May 2019 22:29:37 -0700 (PDT)
-Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id d64sm2120328qke.55.2019.05.15.22.29.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 May 2019 22:29:37 -0700 (PDT)
-From:   Arvind Sankar <nivedita@alum.mit.edu>
-X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
-Date:   Thu, 16 May 2019 01:29:35 -0400
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Rob Landley <rob@landley.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arvind Sankar <niveditas98@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        initramfs@vger.kernel.org,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: Re: [PATCH v2 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Message-ID: <20190516052934.GA68777@rani.riverdale.lan>
-References: <4f522e28-29c8-5930-5d90-e0086b503613@landley.net>
- <f7bc547c-61f4-1a17-735c-7e8df97d7965@huawei.com>
- <CALCETrV3b205L38xqPr6QqwGn6-vxQdPoJGUygJJpgM-JqqXfQ@mail.gmail.com>
- <1557861511.3378.19.camel@HansenPartnership.com>
- <4da3dbda-bb76-5d71-d5c5-c03d98350ab0@landley.net>
- <1557878052.2873.6.camel@HansenPartnership.com>
- <20190515005221.GB88615@rani.riverdale.lan>
- <a138af12-d983-453e-f0b2-661a80b7e837@huawei.com>
- <20190515160834.GA81614@rani.riverdale.lan>
- <ce65240a-4df6-8ebc-8360-c01451e724f0@huawei.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3tuyRdp1kiTY23EHvc9NEBL/dfI6XqAQnryU6YgN88k=;
+        b=kgfVplwREWlw0SZoymOfLjLt1w6YWePp3TeGZNjFlgJ1INbURX+g90cdzr+9Pj2TOW
+         47EBgC3ceJyHYreIwatcnxyKQ1aq/8X97kNExGc1wXutv0D9kihCrVVcgP+uYSThoK9a
+         Udn7sxUuMeQdli7JupGZVzJg6snYPm6ABlDYXc0AvUQeX8Fv9kVZWF2VuS7kz2cINOB/
+         Aaz/GRMdPNMLMMIFDyEHZljqNn7Bc11+ziKyynFxE3sEuKFuJI667deTJMxrXuNCnRyy
+         ad7z72HSnuXokr9MoV/JOv2g7Bh2GBAUbI+v1qI6g/0pAY/XhnQFjCnvGMCJE9zXPIiW
+         PPUQ==
+X-Gm-Message-State: APjAAAXVvU2lInjNugKJPFW9+FPrtaPtuyA0VRHXzTcRAuIpy7e2Sr3A
+        Ppd3kzDFwbBMci+QZFyesYmRgkUz187OSGylU+Qn+w==
+X-Google-Smtp-Source: APXvYqyViiR+25Q5khqd7QCbhk03N20cWs1hjwkUwhl4DGOsX3b3Ue0RL6+ZKESk/A7zZpAsuR5BcBvLLt4soUS7uOA=
+X-Received: by 2002:a67:2781:: with SMTP id n123mr5270839vsn.141.1557990377174;
+ Thu, 16 May 2019 00:06:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ce65240a-4df6-8ebc-8360-c01451e724f0@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190415155636.32748-1-sashal@kernel.org> <20190507174020.GH1747@sasha-vm>
+ <20190508124436.GE7642@linux.intel.com> <20190514193056.GN11972@sasha-vm>
+ <CAFA6WYM06E0y9o6+CLNPe48spiL=UDEqoGsidMbk1dBa5Rbmkg@mail.gmail.com> <CY4PR21MB0279339E8B0A15414C8F9E14BC0A0@CY4PR21MB0279.namprd21.prod.outlook.com>
+In-Reply-To: <CY4PR21MB0279339E8B0A15414C8F9E14BC0A0@CY4PR21MB0279.namprd21.prod.outlook.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 16 May 2019 12:36:05 +0530
+Message-ID: <CAFA6WYMvuF+tAA_GmkVg=FTvuuAhMuM=um7kakq=YARaP8un5Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] ftpm: a firmware based TPM driver
+To:     Thirupathaiah Annapureddy <thiruan@microsoft.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "corbet@lwn.net" <corbet@lwn.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Microsoft Linux Kernel List <linux-kernel@microsoft.com>,
+        "Bryan Kelly (CSI)" <bryankel@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 15, 2019 at 07:06:52PM +0200, Roberto Sassu wrote:
-> On 5/15/2019 6:08 PM, Arvind Sankar wrote:
-> > On Wed, May 15, 2019 at 01:19:04PM +0200, Roberto Sassu wrote:
-> >> On 5/15/2019 2:52 AM, Arvind Sankar wrote:
-> > I don't understand what you mean? The IMA hashes are signed by some key,
-> > but I don't see how what that key is needs to be different between the
-> > two proposals. If the only files used are from the distro, in my scheme
-> > as well you can use the signatures and key provided by the distro. If
-> > they're not, then in your scheme as well you would have to allow for a
-> > local signing key to be used. Both schemes are using the same
-> > .xattr-list file, no?
-> 
-> I was referring to James's proposal to load an external initramfs from
-> the embedded initramfs. If the embedded initramfs opens the external
-> initramfs when IMA is enabled, the external initramfs needs to be
-> signed with a local signing key. But I read your answer that this
-> wouldn't be feasible. You have to specify all initramfs in the boot
-> loader configuration.
-> 
-> I think deferring IMA initialization is not the safest approach, as it
-> cannot be guaranteed for all possible scenarios that there won't be any
-> file read before /init is executed.
-> 
-> But if IMA is enabled, there is the problem of who signs .xattr-list.
-> There should be a local signing key that it is not necessary if the user
-> only accesses distro files.
-> 
-I think that's a separate issue. If you want to allow people to be able
-to put files onto the system that will be IMA verified, they need to
-have some way to locally sign them whether it's inside an initramfs or
-on a real root filesystem.
-> 
-> > Right, I guess this would be sort of the minimal "modification" to the
-> > CPIO format to allow it to support xattrs.
-> 
-> I would try to do it without modification of the CPIO format. However,
-> at the time .xattr-list is parsed (in do_copy() before .xattr-list is
-> closed), it is not guaranteed that all files are extracted. These must
-> be created before xattrs are added, but the file type must be correct,
-> otherwise clean_path() removes the existing file with xattrs.
-> 
-> Roberto
-> 
-> -- 
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Bo PENG, Jian LI, Yanli SHI
+On Thu, 16 May 2019 at 06:30, Thirupathaiah Annapureddy
+<thiruan@microsoft.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Sumit Garg <sumit.garg@linaro.org>
+> > Sent: Tuesday, May 14, 2019 7:02 PM
+> > To: Sasha Levin <sashal@kernel.org>
+> > Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>; peterhuewe@gmx.de;
+> > jgg@ziepe.ca; corbet@lwn.net; Linux Kernel Mailing List <linux-
+> > kernel@vger.kernel.org>; linux-doc@vger.kernel.org; linux-
+> > integrity@vger.kernel.org; Microsoft Linux Kernel List <linux-
+> > kernel@microsoft.com>; Thirupathaiah Annapureddy <thiruan@microsoft.com>;
+> > Bryan Kelly (CSI) <bryankel@microsoft.com>
+> > Subject: Re: [PATCH v3 0/2] ftpm: a firmware based TPM driver
+> >
+> > On Wed, 15 May 2019 at 01:00, Sasha Levin <sashal@kernel.org> wrote:
+> > >
+> > > On Wed, May 08, 2019 at 03:44:36PM +0300, Jarkko Sakkinen wrote:
+> > > >On Tue, May 07, 2019 at 01:40:20PM -0400, Sasha Levin wrote:
+> > > >> On Mon, Apr 15, 2019 at 11:56:34AM -0400, Sasha Levin wrote:
+> > > >> > From: "Sasha Levin (Microsoft)" <sashal@kernel.org>
+> > > >> >
+> > > >> > Changes since v2:
+> > > >> >
+> > > >> > - Drop the devicetree bindings patch (we don't add any new ones).
+> > > >> > - More code cleanups based on Jason Gunthorpe's review.
+> > > >> >
+> > > >> > Sasha Levin (2):
+> > > >> >  ftpm: firmware TPM running in TEE
+> > > >> >  ftpm: add documentation for ftpm driver
+> > > >>
+> > > >> Ping? Does anyone have any objections to this?
+> > > >
+> > > >Sorry I've been on vacation week before last week and last week
+> > > >I was extremely busy because I had been on vacation. This in
+> > > >my TODO list. Will look into it tomorrow in detail.
+> > > >
+> > > >Apologies for the delay with this!
+> > >
+> > > Hi Jarkko,
+> > >
+> > > If there aren't any big objections to this, can we get it merged in?
+> > > We'll be happy to address any comments that come up.
+> >
+> > I guess you have missed or ignored this comment [1]. Please address it.
+> >
+> > [1]
+> > https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%
+> > 2Flkml%2F2019%2F5%2F8%2F11&amp;data=01%7C01%7Cthiruan%40microsoft.com%7Cf2a
+> > 80c7b94434329eaee08d6d8d962b1%7C72f988bf86f141af91ab2d7cd011db47%7C1&amp;sd
+> > ata=hyJRc23NwEFLDuaIMkbSCGetd%2BObQWiAg%2BJtMMR6z9U%3D&amp;reserved=0
+> >
+> > -Sumit
+>
+> Thanks for reviewing and adding comments.
+>
+> We tried to use TEE bus framework you suggested for fTPM enumeration.
+> We were not able to pass the TCG Logs collected by the boot loaders.
+>
+> Currently there are 3 ways to pass TCG Logs based on the code
+> in drivers/char/tpm/eventlog:
+>
+> 1. ACPI Table
+> 2. EFI Table
+> 3. OF Device node properties
+>
+> Our ARM system is booting using U-boot and Device Tree.
+> So ACPI/EFI table mechanism to pass TCG2 logs won't be applicable.
+> We needed to use OF device node properties to pass TCG2 Logs.
+> TEE bus enumeration framework does not work for our use case due to the above.
 
-Right by "modification" in quotes I meant the format is actually the
-same, but the kernel now interprets it a bit differently.
+Firstly let me clarify that this framework is intended to communicate
+with TEE based services/devices rather than boot loader. And in this
+case fTPM being a TEE based service, so this framework should be used.
 
-Regarding the order you don't have to handle that in the kernel. The
-kernel CPIO format is already restricted in that directories have to be
-specified before the files that contain them for example. It can very
-well be restricted so that an .xattr-list can only specify xattrs for
-files that were already extracted, else you bail out with an error. The
-archive creation tooling can easily handle that. If someone wants to
-shoot themselves in the foot by trying to add more files/replace
-existing files after the .xattr-list its ok, the IMA policy will prevent
-such files from being accessed and they can fix the archive for the next
-boot.
+>
+> Is it possible to add flexibility in TEE bus enumeration framework to support
+> platform specific properties through OF nodes or ACPI?
+>
+
+As you mentioned above, TCG logs are collected by boot loader. So it
+should find a way to pass them to Linux.
+
+How about if boot loader register these TCG logs with fTPM TA which
+could be fetched during fTPM driver probe or new api like
+tpm_read_log_tee()? This is something similar to what I used in
+optee-rng [1] driver to fetch RNG properties.
+
+[1] https://github.com/torvalds/linux/blob/master/drivers/char/hw_random/optee-rng.c#L176
+
+-Sumit
+
+> >
+> > >
+> > > --
+> > > Thanks,
+> > > Sasha
