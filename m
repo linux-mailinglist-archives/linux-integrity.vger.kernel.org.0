@@ -2,83 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5387B21148
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 02:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF0221197
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 03:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbfEQAal (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 May 2019 20:30:41 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40924 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726738AbfEQAal (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 May 2019 20:30:41 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4H0RH4t025772
-        for <linux-integrity@vger.kernel.org>; Thu, 16 May 2019 20:30:40 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2shhtc9a7e-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 16 May 2019 20:30:39 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 17 May 2019 01:30:37 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 17 May 2019 01:30:33 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4H0UWJM43974822
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 May 2019 00:30:32 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB9AEA4062;
-        Fri, 17 May 2019 00:30:32 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ADCA5A4065;
-        Fri, 17 May 2019 00:30:31 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.80.98])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 17 May 2019 00:30:31 +0000 (GMT)
+        id S1727338AbfEQBHI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 May 2019 21:07:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54282 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726575AbfEQBHI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 16 May 2019 21:07:08 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CD29E206BF;
+        Fri, 17 May 2019 01:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558055228;
+        bh=4DUCsxJB0P9y4uOwgcf8Xi5dNUQ3fc1vHdZYEzrIwbU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f8J2bsdIyo8UyT4mccVemyc8q2rMD9rOK6lk7aXTlqC22ULFCP6xkwmty+tMJEBEt
+         gMY5Wiww5H5fVUVM32vBZfEtPQXFgB0rvqjS6viwrfYv01Ux0x+5zWKs1Mljt4VWcy
+         PqhYzAj2Odp9tn+sScnBqd0LxKscWe+LbjI3hLN4=
+Date:   Thu, 16 May 2019 21:07:06 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        dmitry.kasatkin@huawei.com, linux-integrity@vger.kernel.org,
+        linux-doc@vger.kernel.org, stable@vger.kernel.org
 Subject: Re: [PATCH 3/4] ima: don't ignore INTEGRITY_UNKNOWN EVM status
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Sasha Levin <sashal@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        dmitry.kasatkin@huawei.com
-Cc:     linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        stable@vger.kernel.org
-Date:   Thu, 16 May 2019 20:30:20 -0400
-In-Reply-To: <20190517001001.9BEF620848@mail.kernel.org>
+Message-ID: <20190517010706.GA11972@sasha-vm>
 References: <20190516161257.6640-3-roberto.sassu@huawei.com>
-         <20190517001001.9BEF620848@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+ <20190517001001.9BEF620848@mail.kernel.org>
+ <1558053020.4507.32.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19051700-0008-0000-0000-000002E786DE
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051700-0009-0000-0000-000022542EB9
-Message-Id: <1558053020.4507.32.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-16_19:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=908 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905170002
+In-Reply-To: <1558053020.4507.32.camel@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-05-17 at 00:10 +0000, Sasha Levin wrote:
-> 
-> How should we proceed with this patch?
+On Thu, May 16, 2019 at 08:30:20PM -0400, Mimi Zohar wrote:
+>On Fri, 2019-05-17 at 00:10 +0000, Sasha Levin wrote:
+>>
+>> How should we proceed with this patch?
+>
+>Yikes!  This was posted earlier today.  I haven't even had a chance to
+>look at it yet.  Similarly for "[PATCH 4/4] ima: only audit failed
+>appraisal verifications".
 
-Yikes! Â This was posted earlier today. Â I haven't even had a chance to
-look at it yet. Â Similarly for "[PATCH 4/4] ima: only audit failed
-appraisal verifications".
+Hi Mimi,
 
-Mimi
+This is just a very early warning, it doesn't mean it's going in -stable
+any time soon :)
 
+I find that giving this alert now results in more responses as people
+still have this patch + context in their mind. If we sent alerts such as
+these before we actually add patches to -stable people tend to respond
+less as usually they have moved to work on something else.
+
+--
+Thanks,
+Sasha
