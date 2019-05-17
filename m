@@ -2,351 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAFE21F9C
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 23:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1352921FC6
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 23:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729124AbfEQVZK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 May 2019 17:25:10 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:35023 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729074AbfEQVZK (ORCPT
+        id S1727264AbfEQVjn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 May 2019 17:39:43 -0400
+Received: from mail-vk1-f201.google.com ([209.85.221.201]:43002 "EHLO
+        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728481AbfEQVjX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 May 2019 17:25:10 -0400
-Received: by mail-qt1-f202.google.com with SMTP id z7so1346175qtj.2
-        for <linux-integrity@vger.kernel.org>; Fri, 17 May 2019 14:25:10 -0700 (PDT)
+        Fri, 17 May 2019 17:39:23 -0400
+Received: by mail-vk1-f201.google.com with SMTP id n198so3089089vke.9
+        for <linux-integrity@vger.kernel.org>; Fri, 17 May 2019 14:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=tPAbrtlGE6SuoqUuOjDsdEAArkm68YXQYVAiqtSOAZs=;
-        b=jh7U/j5BgZBhUOx9yl9O7MwACSVwrD3EoNOq7ZdaPjiBiXN51yhX3NeOGC0bbj3WAC
-         YrOjq6y1FyVgL+wg0uRn90womExArFt+llVOF/OC2tsWlCXCYAwR7PtDTi67LKSTPlEe
-         autijAWOcakdawpkFPCdNPVqtUb+t4gBmQyXfDv0gFzlwzg0J8c3s1AJgCckhW7D6O2K
-         S53fc367Gj2LVLicKqIsvfKCiHCRL8y8EqTxXBCCudwUiIGbMcbRMr2CWrAwQiHPtcvB
-         Ps2W8l7NkuzLINTyQ9TIstddfn8PBqDG8yIbiZgx9fPI/aKfCXZyokylLJRZT5E48Rsm
-         QWWQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=CxlinLSdgStAZj8ZYyY8C5jglK14sBrM48vYUM57nQk=;
+        b=Lr1hshRLI8bkkP5XQ+UnqbvtSIn4+GxIHNrUKo5knOvGtLVWvllhbmL/P7SFVq0q3G
+         oySlkP3VC/FArrDJIA9lERGu11efUk2HE1iv+rtqxt5h25S7olLYbSifqxp2Pm5Sa14n
+         eJG55mOsEM7FGWG36vVTPIvS49vJRvB2AnCjRfPc+2yd0Vqq9usi7KTHCKhCd0IyT4PR
+         qBfAxm/5OnPt9nlgrr+zu3mJDsmaWzAe27XN5d6ZwKQ4qa8VeYXAmd15kiS/0jyawOr0
+         9nYCnuQt/oEVdCzXELQw2AWQANdTpFx0IkvBjyPIam8tKwuieV42gWQlnehz57Ep/F18
+         7Wag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=tPAbrtlGE6SuoqUuOjDsdEAArkm68YXQYVAiqtSOAZs=;
-        b=dWJfqDeFOSBoTS+Ewnnw4ZxptGo8zLS+WoBaEJnkdmfr8JPtKyEn+JdhJelE0ivan2
-         Wod4ridfZ0NIrCODcdWjhR3LMIV68/QukGpe0m0IkitrA2QTBEnXeDqCVfCH1P9W8y3P
-         d4tcc8GRZn4z+xZ8iB9xfbcrwXOnzgFI8rNwzJhqdga2L5ywMlnJ+v8at13Dw0dDg6pJ
-         4JPYEIqmcbIdtE39vw4p4ZgW/VaseYPHDh/3JEJz3eZw8RKpRE70VyWFV5Pl/5HHm1BM
-         VyVXGZjttIVlPLDAdcyUSdpU5F2bd3cCEXR1HqLqRd19NlKH+Oqp1ibq8T5xON8cZx46
-         h+Lg==
-X-Gm-Message-State: APjAAAUR+8zVb9eLXEb9WtAk9ogv9IzjoAelGUmwD1j3Pw911VuZe1Xy
-        PGfMboe+36WCCJCL0nVbZgIPqMaVfpEx/Kb6uy90bw218YeNrxaG3ynf5UX0uGKcx8xvM2kiv+l
-        39bJfFdslGWUTniXnaR3pmoUj8aQQkUO1xyAaHrasuYv1h9dg0k5Aqe9Y+lxFy3FU+5Bc/rgw7y
-        sMqdQ3JRHQK+Ywr+vqqMM=
-X-Google-Smtp-Source: APXvYqxRFNt6eymUuKmN2k8dumIGj8/uQlQWvb2F+3c6UbTkSgdKUSJpGycLaog4F7DreHCpp4oaqTKvIZRwOTMcSj+liw==
-X-Received: by 2002:ac8:384f:: with SMTP id r15mr49326766qtb.290.1558128309570;
- Fri, 17 May 2019 14:25:09 -0700 (PDT)
-Date:   Fri, 17 May 2019 14:24:48 -0700
-In-Reply-To: <20190517212448.14256-1-matthewgarrett@google.com>
-Message-Id: <20190517212448.14256-7-matthewgarrett@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=CxlinLSdgStAZj8ZYyY8C5jglK14sBrM48vYUM57nQk=;
+        b=C1o8Cu+kdJfIQjJahtUv2VkYPVpDI2mvZMdBZ4lHwWw9MzlHIZUkvrCj57tZSLmBm1
+         57Db6TcMyK4PwsVxMYfxZuz2F8rx9bf3a8umIjGZAd7ncBHWAz6CcqiRYNNyP3R72gt2
+         4U2sxS/bKAJZTmO9PRz0dFk60p7oKMXYZ+wOy8fKBVygaK/xntZnwMdwnq23X/CigaZZ
+         P+SPK5T6hOCpjzU1QIbrBBl2hLHIUt4zuWuwGqzMcDm8IkYRPch8bbq0PTq4f5gCHfHW
+         QTYOhAkvqsREFqnHps4TgquXQcnbfMQ7nJiPB7SWH31aPXAfHswDtQWHQZ/9EPxsyYeJ
+         Ujvw==
+X-Gm-Message-State: APjAAAUSNi26avX5DlZn7VgXK0YJVkPWJB+zkM+eiZ/9a+cPGl0nftV2
+        Xcc3fKIJcH1HS9y4A1qW4KKaLul0VAZ5utmS4/BCo58iWgcuZ+PQ70g2CEmGMslu90YG7a2qTVg
+        Fe4c1idIcYy30GlpnSSlIqbR0dVwzyffbOwIA9d6hToAq0vqIzQBA6gzcUvtOdhgppGybhPBEz3
+        dP5A9EdDdcisKDf38H8DE=
+X-Google-Smtp-Source: APXvYqwIDbPWP1gGpGqX0HDPWX3Ohrqk6UfCTZUEHeW8kUGSBX2WSMELoI3iXY6X+cwOujb0YKqTVixq1iTSqpDOz3RSCw==
+X-Received: by 2002:ab0:5a07:: with SMTP id l7mr22035272uad.78.1558129161944;
+ Fri, 17 May 2019 14:39:21 -0700 (PDT)
+Date:   Fri, 17 May 2019 14:39:14 -0700
+Message-Id: <20190517213918.26045-1-matthewgarrett@google.com>
 Mime-Version: 1.0
-References: <20190517212448.14256-1-matthewgarrett@google.com>
 X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-Subject: [PATCH V3 6/6] IMA: Allow profiles to define the desired IMA template
+Subject: [PATCH V6 0/4] Add support for crypto agile TPM event logs
 From:   Matthew Garrett <matthewgarrett@google.com>
 To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.vnet.ibm.com, dmitry.kasatkin@gmail.com,
-        miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>
+Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
+        roberto.sassu@huawei.com, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tweek@google.com, bsz@semihalf.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Admins may wish to log different measurements using different IMA
-templates. Add support for overriding the default template on a per-rule
-basis.
+Updated with the fixes from Bartosz and the header fixes folded in.
+Bartosz, my machine still doesn't generate any final event log entries -
+are you able to give this a test and make sure it's good?
 
-Signed-off-by: Matthew Garrett <mjg59@google.com>
----
- Documentation/ABI/testing/ima_policy  |  3 ++-
- security/integrity/ima/ima.h          |  7 +++++--
- security/integrity/ima/ima_api.c      |  7 +++++--
- security/integrity/ima/ima_appraise.c |  2 +-
- security/integrity/ima/ima_main.c     |  9 ++++++---
- security/integrity/ima/ima_policy.c   | 24 ++++++++++++++++++++++--
- security/integrity/ima/ima_template.c | 10 ++++++++--
- security/integrity/integrity.h        |  1 +
- 8 files changed, 50 insertions(+), 13 deletions(-)
-
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index 6a517282068d..f707ef7eda88 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -24,7 +24,7 @@ Description:
- 				[euid=] [fowner=] [fsname=] [subtype=]]
- 			lsm:	[[subj_user=] [subj_role=] [subj_type=]
- 				 [obj_user=] [obj_role=] [obj_type=]]
--			option:	[[appraise_type=] [permit_directio]
-+			option:	[[appraise_type=] [template=] [permit_directio]
- 			         [trust_vfs]]
- 
- 		base: 	func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK]
-@@ -41,6 +41,7 @@ Description:
- 			fowner:= decimal value
- 		lsm:  	are LSM specific
- 		option:	appraise_type:= [imasig]
-+			template:= name of an IMA template type (eg, d-ng)
- 			pcr:= decimal value
- 			permit_directio:= allow directio accesses
- 			trust_vfs:= trust VFS-provided hash values
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index d99b867bdc53..29a71c2e6cfa 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -148,6 +148,7 @@ int ima_init_crypto(void);
- void ima_putc(struct seq_file *m, void *data, int datalen);
- void ima_print_digest(struct seq_file *m, u8 *digest, u32 size);
- struct ima_template_desc *ima_template_desc_current(void);
-+struct ima_template_desc *lookup_template_desc(const char *name);
- int ima_restore_measurement_entry(struct ima_template_entry *entry);
- int ima_restore_measurement_list(loff_t bufsize, void *buf);
- int ima_measurements_show(struct seq_file *m, void *v);
-@@ -194,7 +195,8 @@ enum ima_hooks {
- 
- /* LIM API function definitions */
- int ima_get_action(struct inode *inode, const struct cred *cred, u32 secid,
--		   int mask, enum ima_hooks func, int *pcr);
-+		   int mask, enum ima_hooks func, int *pcr,
-+		   struct ima_template_desc **template_desc);
- int ima_must_measure(struct inode *inode, int mask, enum ima_hooks func);
- int ima_collect_measurement(struct integrity_iint_cache *iint,
- 			    struct file *file, void *buf, loff_t size,
-@@ -215,7 +217,8 @@ const char *ima_d_path(const struct path *path, char **pathbuf, char *filename);
- 
- /* IMA policy related functions */
- int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
--		     enum ima_hooks func, int mask, int flags, int *pcr);
-+		     enum ima_hooks func, int mask, int flags, int *pcr,
-+		     struct ima_template_desc **template_desc);
- void ima_init_policy(void);
- void ima_update_policy(void);
- void ima_update_policy_flag(void);
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 55bafce3d9c0..457b071669ff 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -164,6 +164,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
-  *        MAY_APPEND)
-  * @func: caller identifier
-  * @pcr: pointer filled in if matched measure policy sets pcr=
-+ * @template_desc: pointer filled in if matched measure policy sets template=
-  *
-  * The policy is defined in terms of keypairs:
-  *		subj=, obj=, type=, func=, mask=, fsmagic=
-@@ -176,13 +177,15 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
-  *
-  */
- int ima_get_action(struct inode *inode, const struct cred *cred, u32 secid,
--		   int mask, enum ima_hooks func, int *pcr)
-+		   int mask, enum ima_hooks func, int *pcr,
-+		   struct ima_template_desc **template_desc)
- {
- 	int flags = IMA_MEASURE | IMA_AUDIT | IMA_APPRAISE | IMA_HASH;
- 
- 	flags &= ima_policy_flag;
- 
--	return ima_match_policy(inode, cred, secid, func, mask, flags, pcr);
-+	return ima_match_policy(inode, cred, secid, func, mask, flags, pcr,
-+				template_desc);
- }
- 
- /*
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index 5fb7127bbe68..2f6536ab69e8 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -57,7 +57,7 @@ int ima_must_appraise(struct inode *inode, int mask, enum ima_hooks func)
- 
- 	security_task_getsecid(current, &secid);
- 	return ima_match_policy(inode, current_cred(), secid, func, mask,
--				IMA_APPRAISE | IMA_HASH, NULL);
-+				IMA_APPRAISE | IMA_HASH, NULL, NULL);
- }
- 
- static int ima_fix_xattr(struct dentry *dentry,
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 357edd140c09..f23069d9e43d 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -174,7 +174,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
- {
- 	struct inode *inode = file_inode(file);
- 	struct integrity_iint_cache *iint = NULL;
--	struct ima_template_desc *template_desc;
-+	struct ima_template_desc *template_desc = NULL;
- 	char *pathbuf = NULL;
- 	char filename[NAME_MAX];
- 	const char *pathname = NULL;
-@@ -192,7 +192,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	 * bitmask based on the appraise/audit/measurement policy.
- 	 * Included is the appraise submask.
- 	 */
--	action = ima_get_action(inode, cred, secid, mask, func, &pcr);
-+	action = ima_get_action(inode, cred, secid, mask, func, &pcr,
-+				&template_desc);
- 	violation_check = ((func == FILE_CHECK || func == MMAP_CHECK) &&
- 			   (ima_policy_flag & IMA_MEASURE));
- 	if (!action && !violation_check)
-@@ -275,7 +276,9 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 		goto out_locked;
- 	}
- 
--	template_desc = ima_template_desc_current();
-+	if (!template_desc)
-+		template_desc = ima_template_desc_current();
-+
- 	if ((action & IMA_APPRAISE_SUBMASK) ||
- 		    strcmp(template_desc->name, IMA_TEMPLATE_IMA_NAME) != 0)
- 		/* read 'security.ima' */
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index c293cbc6c578..33c52466bc8a 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -82,6 +82,7 @@ struct ima_rule_entry {
- 	} lsm[MAX_LSM_RULES];
- 	char *fsname;
- 	char *subtype;
-+	struct ima_template_desc *template;
- };
- 
- /*
-@@ -403,6 +404,7 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
-  * @func: IMA hook identifier
-  * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC)
-  * @pcr: set the pcr to extend
-+ * @template_desc: the template that should be used for this rule
-  *
-  * Measure decision based on func/mask/fsmagic and LSM(subj/obj/type)
-  * conditions.
-@@ -412,7 +414,8 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
-  * than writes so ima_match_policy() is classical RCU candidate.
-  */
- int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
--		     enum ima_hooks func, int mask, int flags, int *pcr)
-+		     enum ima_hooks func, int mask, int flags, int *pcr,
-+		     struct ima_template_desc **template_desc)
- {
- 	struct ima_rule_entry *entry;
- 	int action = 0, actmask = flags | (flags << 1);
-@@ -444,6 +447,9 @@ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
- 		if ((pcr) && (entry->flags & IMA_PCR))
- 			*pcr = entry->pcr;
- 
-+		if (template_desc && entry->flags & IMA_TEMPLATE)
-+			*template_desc = entry->template;
-+
- 		if (!actmask)
- 			break;
- 	}
-@@ -681,7 +687,7 @@ enum {
- 	Opt_uid_gt, Opt_euid_gt, Opt_fowner_gt,
- 	Opt_uid_lt, Opt_euid_lt, Opt_fowner_lt,
- 	Opt_appraise_type, Opt_permit_directio,
--	Opt_pcr, Opt_trust_vfs, Opt_err
-+	Opt_pcr, Opt_trust_vfs, Opt_template, Opt_err
- };
- 
- static const match_table_t policy_tokens = {
-@@ -717,6 +723,7 @@ static const match_table_t policy_tokens = {
- 	{Opt_permit_directio, "permit_directio"},
- 	{Opt_pcr, "pcr=%s"},
- 	{Opt_trust_vfs, "trust_vfs"},
-+	{Opt_template, "template=%s"},
- 	{Opt_err, NULL}
- };
- 
-@@ -770,6 +777,7 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 	char *from;
- 	char *p;
- 	bool uid_token;
-+	struct ima_template_desc *template_desc;
- 	int result = 0;
- 
- 	ab = integrity_audit_log_start(audit_context(), GFP_KERNEL,
-@@ -1079,6 +1087,16 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 			else
- 				entry->flags |= IMA_PCR;
- 
-+			break;
-+		case Opt_template:
-+			ima_log_string(ab, "template", args[0].from);
-+			template_desc = lookup_template_desc(args[0].from);
-+			if (!template_desc) {
-+				result = -EINVAL;
-+			} else {
-+				entry->template = template_desc;
-+				entry->flags |= IMA_TEMPLATE;
-+			}
- 			break;
- 		case Opt_err:
- 			ima_log_string(ab, "UNKNOWN", p);
-@@ -1358,6 +1376,8 @@ int ima_policy_show(struct seq_file *m, void *v)
- 			}
- 		}
- 	}
-+	if (entry->flags & IMA_TEMPLATE)
-+		seq_printf(m, "template=%s ", entry->template->name);
- 	if (entry->flags & IMA_DIGSIG_REQUIRED)
- 		seq_puts(m, "appraise_type=imasig ");
- 	if (entry->flags & IMA_PERMIT_DIRECTIO)
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 78bd8fea8b35..aea95754d523 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -50,7 +50,6 @@ static const struct ima_template_field supported_fields[] = {
- #define MAX_TEMPLATE_NAME_LEN 15
- 
- static struct ima_template_desc *ima_template;
--static struct ima_template_desc *lookup_template_desc(const char *name);
- static int template_desc_init_fields(const char *template_fmt,
- 				     const struct ima_template_field ***fields,
- 				     int *num_fields);
-@@ -111,7 +110,7 @@ static int __init ima_template_fmt_setup(char *str)
- }
- __setup("ima_template_fmt=", ima_template_fmt_setup);
- 
--static struct ima_template_desc *lookup_template_desc(const char *name)
-+struct ima_template_desc *lookup_template_desc(const char *name)
- {
- 	struct ima_template_desc *template_desc;
- 	int found = 0;
-@@ -120,6 +119,13 @@ static struct ima_template_desc *lookup_template_desc(const char *name)
- 	list_for_each_entry_rcu(template_desc, &defined_templates, list) {
- 		if ((strcmp(template_desc->name, name) == 0) ||
- 		    (strcmp(template_desc->fmt, name) == 0)) {
-+			/*
-+			 * template_desc_init_fields() will return immediately
-+			 * if the template is already initialised
-+			 */
-+			template_desc_init_fields(template_desc->fmt,
-+						  &(template_desc->fields),
-+						  &(template_desc->num_fields));
- 			found = 1;
- 			break;
- 		}
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 9d74119bcdfd..9f647b04fc23 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -37,6 +37,7 @@
- #define EVM_IMMUTABLE_DIGSIG	0x08000000
- #define IMA_FAIL_UNVERIFIABLE_SIGS	0x10000000
- #define IMA_TRUST_VFS		0x20000000
-+#define IMA_TEMPLATE		0x40000000
- 
- #define IMA_DO_MASK		(IMA_MEASURE | IMA_APPRAISE | IMA_AUDIT | \
- 				 IMA_HASH | IMA_APPRAISE_SUBMASK)
--- 
-2.21.0.1020.gf2820cf01a-goog
 
