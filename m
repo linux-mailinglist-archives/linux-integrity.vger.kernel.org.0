@@ -2,90 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6D421F76
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 23:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC8121F8E
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 23:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728249AbfEQVQ5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 May 2019 17:16:57 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:39511 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728203AbfEQVQ4 (ORCPT
+        id S1727533AbfEQVYz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 May 2019 17:24:55 -0400
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:47179 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727205AbfEQVYz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 May 2019 17:16:56 -0400
-Received: by mail-oi1-f195.google.com with SMTP id v2so6178751oie.6
-        for <linux-integrity@vger.kernel.org>; Fri, 17 May 2019 14:16:56 -0700 (PDT)
+        Fri, 17 May 2019 17:24:55 -0400
+Received: by mail-qk1-f201.google.com with SMTP id l185so1966726qkd.14
+        for <linux-integrity@vger.kernel.org>; Fri, 17 May 2019 14:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=E2H9E8ynXEsa3QuvJM4S/38HaYT5LjHH75EOqiq4bas=;
-        b=HwpC4RrWhmVT2sRECgJy6qj4/VU5z3EioWa4gwjjVsUl7jx0XN/rPuOnEi6NhYrZ2p
-         F1zjTFDItG03H+5lRuQ6zyijuZDYz9b+wXrJyshH+ix8Vfmvxo5/vcTrWlI4n5tnBiWx
-         8LnqSWEna/zgdRZlB569dAnzMWBe1JzuL1m6C+p21hStLtZyu2JAiXnVe0VAQ7kn6LsK
-         E4WyjiheJBZrsyo2mI2o+hmJr4ceNC+4/Rs6tvPC4bweoNEYcXUXDGjVlJTy6mZKTHXu
-         jOucgFyRAwEUEsOPgwJcwAHcOsLwmGWLDUCDsO4Vr8KrVNIa7uplWoeTca22GrU9TLrt
-         GN+Q==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=HB+0pzs2H+PqPuc5KLht6uXFIm1Vk/TwRK9m9FPAxYg=;
+        b=lfi2YKKxO6izIXsbXWpCBlCQvzTvT0j8k2+Uqu9osKrVQn04h5TUEGjxg99LZAZmOr
+         //V9xKFuCayFrShdfG/JGUQV+cgW4T77q/yMrKT7sHyfLe3caBW3eOhKDI1AOIt/jlWb
+         odT3DE5AX7ggFkqSjPpCBeDvRg+mLWB84sm8F63g+/jzv1aG0lQSZPb8HsJo8Qkz05i7
+         MOi5SeegJxnX9w82DS2sTieoNbepZU6FIX5fyh0lgzvykOVWgaStIVY1uU54Z+L67keE
+         2rrpXPboKfmeIc2khePuQvyXFdOibht7K8bg2kZ79kgi6nVhdD5YnPT3277Ity1iKnko
+         xnFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=E2H9E8ynXEsa3QuvJM4S/38HaYT5LjHH75EOqiq4bas=;
-        b=bZ+P9jeu2J55koRcbwd6QWzgYLkT27Fnuzk4/nEoVozwCFjKa11z8Fbpp+9CiuVRkC
-         6vchNTaQ6o3QpfcvPP7urXgWUKUqt9iNoNkkkvxyH0M3SjiiyuUyP+73nXM5DMdKUbaI
-         yI+XouZAevf/W7SQgVO7MVfru018zjP3tWuvHdYNMyqHstP8EGM2phzkSWxboy0elBwM
-         1Y6qH0i8M1EdLJO6205An9m2EnOgFlcOML5XyVIFADJ6iQnFvYeu/nDuXQ/nGVIzPzVL
-         rykViDJMJ0G+EiN4gfjkeeco9fHvMOcyO0bdDoN5DbRYFOydZFkd1jbC6x0w6tiCGJUB
-         iDZQ==
-X-Gm-Message-State: APjAAAWEP1jrW71gMt2xYBsTww2qrBsunidGXlr81qq5vjBJhbzquEgO
-        +73gm51wzut2RAbPia5+1c6ofQ==
-X-Google-Smtp-Source: APXvYqySaxA8Ue4p1Miit+toZFZg3BakSoFRI3b4Xx15JMWDxpnkVOH27XxQnYKZoy9nFEinxmBHqA==
-X-Received: by 2002:a05:6808:a08:: with SMTP id n8mr11031oij.20.1558127816024;
-        Fri, 17 May 2019 14:16:56 -0700 (PDT)
-Received: from [192.168.1.5] (072-182-052-210.res.spectrum.com. [72.182.52.210])
-        by smtp.googlemail.com with ESMTPSA id g102sm3352444otg.59.2019.05.17.14.16.54
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 17 May 2019 14:16:55 -0700 (PDT)
-Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
-To:     hpa@zytor.com, Roberto Sassu <roberto.sassu@huawei.com>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=HB+0pzs2H+PqPuc5KLht6uXFIm1Vk/TwRK9m9FPAxYg=;
+        b=rPeALV7sHk5HPJP2zF8R4JJeEik7tdKpIXgP6jt+LObHlAC1SI4IIkAQgl2RbVZb+k
+         cRt4kIN0S3zi86UNECJ7HS0/t2S8ErcPADQyZwZc5XctBL0FaNQcS+mZ4hmvj4xMYamo
+         V/QNZsslENV0iL6Qqpsb+vg8CrBkWpszzGU/WyYUqoG8cxgxfqFcyMevirUA65LzC5hQ
+         TdOd+jiwY4758xL82VQJB85ZnbPxMvGT5SN2mAUzMpu+ONP7LvW0FO0Ivg+KGdbqIKez
+         F0O2K4p93eTUDLm4NYUHN4j7aXtcLd6ppYgveMfS/6va7pfgMjsfiaYvxjumYRqxAyEQ
+         deRA==
+X-Gm-Message-State: APjAAAWpCE3h5mzcZTWsgQ61MnXQ137wyEa2IhomE2oVDrRIBD9Qm5qG
+        9G7xDi+wNBqQytMGs9KLQBPX6RoQ3qhKWKbklyxId+whE7zUib6wMK3aW4SpfsMOlKi+eDSAkSO
+        Dq870sKI8+kmqY1M7ZNSdK4Ljsenu7uZYIzrQZuX5LW7FsDuz99L1kiZu0KWZREO1kVMP31iJ7c
+        urpKF/Y9qw3QdYO7qwfCg=
+X-Google-Smtp-Source: APXvYqynBa4Ia/HCGvB/s4ykvY7rpQ2Vbp0Lij6GV9CGDYwlRGF2Gt6bNHdp3bng2puR6ZhwJbsp9QPJHRD9Yabuv06Uig==
+X-Received: by 2002:a0c:9283:: with SMTP id b3mr10140494qvb.229.1558128294610;
+ Fri, 17 May 2019 14:24:54 -0700 (PDT)
+Date:   Fri, 17 May 2019 14:24:42 -0700
+Message-Id: <20190517212448.14256-1-matthewgarrett@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
+Subject: [PATCH V3 0/6] IMA: Support asking the VFS for a file hash
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     zohar@linux.vnet.ibm.com, dmitry.kasatkin@gmail.com,
+        miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
         viro@zeniv.linux.org.uk
-Cc:     linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.vnet.ibm.com,
-        silviu.vlasceanu@huawei.com, dmitry.kasatkin@huawei.com,
-        takondra@cisco.com, kamensky@cisco.com, arnd@arndb.de,
-        james.w.mcmechan@gmail.com, niveditas98@gmail.com
-References: <20190517165519.11507-1-roberto.sassu@huawei.com>
- <20190517165519.11507-3-roberto.sassu@huawei.com>
- <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
-From:   Rob Landley <rob@landley.net>
-Message-ID: <591c0770-7a82-3d45-e5b2-7ed347db812a@landley.net>
-Date:   Fri, 17 May 2019 16:17:31 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/17/19 3:18 PM, hpa@zytor.com wrote:
-> Ok... I just realized this does not work for a modular initramfs, composed at load time from multiple files, which is a very real problem. Should be easy enough to deal with: instead of one large file, use one companion file per source file, perhaps something like filename..xattrs (suggesting double dots to make it less likely to conflict with a "real" file.) No leading dot, as it makes it more likely that archivers will sort them before the file proper.
-> 
-> A side benefit is that the format can be simpler as there is no need to encode the filename.
-> 
-> A technically cleaner solution still, but which would need archiver modifications, would be to encode the xattrs as an optionally nameless file (just an empty string) with a new file mode value, immediately following the original file. The advantage there is that the archiver itself could support xattrs and other extended metadata (which has been requested elsewhere); the disadvantage obviously is that that it requires new support in the archiver. However, at least it ought to be simpler since it is still a higher protocol level than the cpio archive itself.
-> 
-> There's already one special case in cpio, which is the "!!!TRAILER!!!" filename; although I don't think it is part of the formal spec, to the extent there is one, I would expect that in practice it is always encoded with a mode of 0, which incidentally could be used to unbreak the case where such a filename actually exists. So one way to support such extended metadata would be to set mode to 0 and use the filename to encode the type of metadata. I wonder how existing GNU or BSD cpio (the BSD one is better maintained these days) would deal with reading such a file; it would at least not be a regression if it just read it still, possibly with warnings. It could also be possible to use bits 17:16 in the mode, which are traditionally always zero (mode_t being 16 bits), but I believe are present in most or all of the cpio formats for historical reasons. It might be accepted better by existing implementations to use one of these high bits combined with S_IFREG, I dont know.
-> 
+Updated to add a new template type and to allow templates to be
+configured per-rule. This allows additional information about the source
+of the hash to be provided without breaking any existing deployments.
 
-I'll happily modify toybox cpio to understand xattrs (compress and decompress),
-the android guys do a lot with xattrs already. I tapped out of _this_ discussion
-from disgust with the proposed encoding.
 
-Rob
