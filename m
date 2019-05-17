@@ -2,68 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF0221197
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 03:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BC1211C3
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 03:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbfEQBHI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 May 2019 21:07:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54282 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726575AbfEQBHI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 May 2019 21:07:08 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CD29E206BF;
-        Fri, 17 May 2019 01:07:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558055228;
-        bh=4DUCsxJB0P9y4uOwgcf8Xi5dNUQ3fc1vHdZYEzrIwbU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f8J2bsdIyo8UyT4mccVemyc8q2rMD9rOK6lk7aXTlqC22ULFCP6xkwmty+tMJEBEt
-         gMY5Wiww5H5fVUVM32vBZfEtPQXFgB0rvqjS6viwrfYv01Ux0x+5zWKs1Mljt4VWcy
-         PqhYzAj2Odp9tn+sScnBqd0LxKscWe+LbjI3hLN4=
-Date:   Thu, 16 May 2019 21:07:06 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        dmitry.kasatkin@huawei.com, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 3/4] ima: don't ignore INTEGRITY_UNKNOWN EVM status
-Message-ID: <20190517010706.GA11972@sasha-vm>
-References: <20190516161257.6640-3-roberto.sassu@huawei.com>
- <20190517001001.9BEF620848@mail.kernel.org>
- <1558053020.4507.32.camel@linux.ibm.com>
+        id S1727126AbfEQB3c (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 May 2019 21:29:32 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:60864 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726839AbfEQB3c (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 16 May 2019 21:29:32 -0400
+Received: from [10.200.157.26] (unknown [131.107.147.154])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 51CAE20110AD;
+        Thu, 16 May 2019 18:29:31 -0700 (PDT)
+Subject: Re: [PATCH 0/2] public key: IMA signer logging: Log public key of IMA
+ Signature signer in IMA log
+To:     Ken Goldman <kgold@linux.ibm.com>,
+        Linux Integrity <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Cc:     Balaji Balasubramanyan <balajib@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>
+References: <6b69f115-96cf-890a-c92b-0b2b05798357@linux.microsoft.com>
+ <750fdb9f-fc9b-24bf-42c3-32156ecdc16f@linux.ibm.com>
+From:   Lakshmi <nramas@linux.microsoft.com>
+Message-ID: <9c944ba6-f520-96e1-3631-1e21bbc4c327@linux.microsoft.com>
+Date:   Thu, 16 May 2019 18:29:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
+In-Reply-To: <750fdb9f-fc9b-24bf-42c3-32156ecdc16f@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1558053020.4507.32.camel@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 16, 2019 at 08:30:20PM -0400, Mimi Zohar wrote:
->On Fri, 2019-05-17 at 00:10 +0000, Sasha Levin wrote:
->>
->> How should we proceed with this patch?
->
->Yikes!  This was posted earlier today.  I haven't even had a chance to
->look at it yet.  Similarly for "[PATCH 4/4] ima: only audit failed
->appraisal verifications".
+On 5/16/19 7:34 AM, Ken Goldman wrote:
 
-Hi Mimi,
+>> But outside the client machine this key id is not sufficient to
+>> uniquely determine which key the signature corresponds to.
+> 
+> Why is this not sufficient?
+> 
+> In my implementation, I create a lookup table at the attestation service 
+> that maps the 4-byte IMA log key identifier to the signing public key.
+> 
+> Are you concerned about collisions?Â  Something else?
 
-This is just a very early warning, it doesn't mean it's going in -stable
-any time soon :)
+Yes - the concern is collision.
 
-I find that giving this alert now results in more responses as people
-still have this patch + context in their mind. If we sent alerts such as
-these before we actually add patches to -stable people tend to respond
-less as usually they have moved to work on something else.
+The "Subject Key Identifier" (SKI) for no two certificate can be the 
+same. But since we are using only the last 4 bytes of the SKI it can 
+collide. That's mainly the reason I want to log the entire public key.
 
---
+> 
+> Are you suggesting that the client supply the verification public key 
+> and that the verifier trust it?Â  Wouldn't that make the log self signed?
+> 
+> How would the verifier determine that the key from the IMA log is valid 
+> / trusted / not revoked from the log itself?
+
+IMA log is backed by the TPM. So if the public key is added to the IMA 
+log the attestation service can validate the key information.
+I am not sure if that answers your question.
+
+> 
+> A minor question here.
+> 
+> Are you proposing that the IMA log contain a single ima-sigkey entry per 
+> public key followed by ima-sig entries?
+> 
+> Or are you proposing that ima-sig be replaced by ima-sigkey, and that 
+> each event would contain both the signature and the public key?
+> 
+> If the latter, this could add 25M to a server's 100K log.Â  Would that 
+> increase in size concern anyone?Â  Could it be a concern on the other 
+> end, an IoT device with limited memory?
+
+Mimi had raised the same concern. I will update my implementation to 
+include the certification information in the IMA log only once per key - 
+when that key is added to the IMA or Platform keyring.
+
 Thanks,
-Sasha
+  -lakshmi
+
