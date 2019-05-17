@@ -2,57 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BC021ACE
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 17:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8038521C17
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 18:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728632AbfEQPlI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 May 2019 11:41:08 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40064 "EHLO mx1.suse.de"
+        id S1727827AbfEQQ7D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 May 2019 12:59:03 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32951 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729000AbfEQPlI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 May 2019 11:41:08 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5D4BBACF5;
-        Fri, 17 May 2019 15:41:07 +0000 (UTC)
-Date:   Fri, 17 May 2019 17:41:05 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Ignaz Forster <iforster@suse.de>, Fabian Vogt <FVogt@suse.com>,
-        Marcus Meissner <meissner@suse.com>,
-        linux-integrity@vger.kernel.org, ltp@lists.linux.it
-Subject: Re: [PATCH v2 0/3] LTP reproducer on broken IMA on overlayfs
-Message-ID: <20190517154105.GB11796@dell5510>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20190405165225.27216-1-pvorel@suse.cz>
- <20190514121213.GA28655@dell5510>
- <1557889279.4581.14.camel@linux.ibm.com>
- <20190515120853.GA22992@dell5510>
- <1558044649.4507.10.camel@linux.ibm.com>
- <20190517075057.GA12489@dell5510>
- <1558090823.4507.50.camel@linux.ibm.com>
+        id S1727370AbfEQQ7C (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 17 May 2019 12:59:02 -0400
+Received: from lhreml707-cah.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id DD288D5C50E3A877CF75;
+        Fri, 17 May 2019 17:59:00 +0100 (IST)
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.154)
+ by smtpsuk.huawei.com (10.201.108.48) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Fri, 17 May 2019 17:58:52 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <viro@zeniv.linux.org.uk>
+CC:     <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zohar@linux.vnet.ibm.com>,
+        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
+        <takondra@cisco.com>, <kamensky@cisco.com>, <hpa@zytor.com>,
+        <arnd@arndb.de>, <rob@landley.net>, <james.w.mcmechan@gmail.com>,
+        <niveditas98@gmail.com>, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v3 0/2] initramfs: add support for xattrs in the initial ram disk
+Date:   Fri, 17 May 2019 18:55:17 +0200
+Message-ID: <20190517165519.11507-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1558090823.4507.50.camel@linux.ibm.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Type: text/plain
+X-Originating-IP: [10.204.65.154]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+This patch set aims at solving the following use case: appraise files from
+the initial ram disk. To do that, IMA checks the signature/hash from the
+security.ima xattr. Unfortunately, this use case cannot be implemented
+currently, as the CPIO format does not support xattrs.
 
-> On Fri, 2019-05-17 at 09:50 +0200, Petr Vorel wrote:
+This proposal consists in marshaling pathnames and xattrs in a file called
+.xattr-list. They are unmarshaled by the CPIO parser after all files have
+been extracted, or before the next ram disk is processed.
 
-> > If it's ok for you and it's a valid test do you give an ack?
+The difference from v1 (https://lkml.org/lkml/2018/11/22/1182) is that all
+xattrs are stored in a single file and not per file (solves the file name
+limitation issue, as it is not necessary to add a suffix to files
+containing xattrs).
 
-> Of course!  Thanks!
-Thanks! I'll add also Ignaz's description (create README.md in IMA folder),
-thus probably send a v3 to ML first, but not expecting to get much review :).
+The difference with another proposal
+(https://lore.kernel.org/patchwork/cover/888071/) is that xattrs can be
+included in an image without changing the image format, as opposed to
+defining a new one. As seen from the discussion, if a new format has to be
+defined, it should fix the issues of the existing format, which requires
+more time.
 
-> Mimi
+To fulfill both requirements, adding support for xattrs in a short time and
+defining a new image format properly, this patch set takes an incremental
+approach: it introduces a parser of xattrs that can be used either if
+xattrs are in a regular file or directly added to the image (this patch set
+reuses patch 9/15 of the existing proposal); in addition, it introduces a
+wrapper of the xattr parser, to read xattrs from a file.
 
-Kind regards,
-Petr
+The changes introduced by this patch set don't cause any compatibility
+issue: kernels without the xattr parser simply extracts .xattr-list and
+don't unmarshal xattrs; kernels with the xattr parser don't unmarshal
+xattrs if .xattr-list is not found in the image.
+
+From the kernel space perspective, backporting this functionality to older
+kernels should be very easy. It is sufficient to add two calls to the new
+function do_readxattrs(). From the user space perspective, no change is
+required for the use case. A new dracut module (module-setup.sh) will
+execute:
+
+getfattr --absolute-names -d -h -R -e hex -m security.ima \
+    <file list> | xattr.awk -b > ${initdir}/.xattr-list
+
+where xattr.awk is the script that marshals xattrs (see patch 3/3). The
+same can be done with the initramfs-tools ram disk generator.
+
+Changelog
+
+v2:
+- replace ksys_lsetxattr() with kern_path() and vfs_setxattr()
+  (suggested by Jann Horn)
+- replace ksys_open()/ksys_read()/ksys_close() with
+  filp_open()/kernel_read()/fput()
+  (suggested by Jann Horn)
+- use path variable instead of name_buf in do_readxattrs()
+- set last byte of str to 0 in do_readxattrs()
+- call do_readxattrs() in do_name() before replacing an existing
+  .xattr-list
+- pass pathname to do_setxattrs()
+
+
+Mimi Zohar (1):
+  initramfs: set extended attributes
+
+Roberto Sassu (1):
+  initramfs: introduce do_readxattrs()
+
+ init/initramfs.c | 170 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 168 insertions(+), 2 deletions(-)
+
+-- 
+2.17.1
 
