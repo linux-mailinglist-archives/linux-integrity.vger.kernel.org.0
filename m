@@ -2,93 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A8E214CE
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 09:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1582E21767
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2019 13:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727926AbfEQHvA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 May 2019 03:51:00 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44110 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727865AbfEQHvA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 May 2019 03:51:00 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 7BADDAF59;
-        Fri, 17 May 2019 07:50:59 +0000 (UTC)
-Date:   Fri, 17 May 2019 09:50:58 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
+        id S1728315AbfEQLAl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 May 2019 07:00:41 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43378 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727689AbfEQLAl (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 17 May 2019 07:00:41 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4HAvMDK117876
+        for <linux-integrity@vger.kernel.org>; Fri, 17 May 2019 07:00:40 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2sht7eku1w-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 17 May 2019 07:00:39 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Fri, 17 May 2019 12:00:38 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 17 May 2019 12:00:35 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4HB0Z6e42663944
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 May 2019 11:00:35 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E424642063;
+        Fri, 17 May 2019 11:00:34 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D178A42052;
+        Fri, 17 May 2019 11:00:33 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.80.67])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 17 May 2019 11:00:33 +0000 (GMT)
+Subject: Re: [PATCH v2 0/3] LTP reproducer on broken IMA on overlayfs
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>
 Cc:     Ignaz Forster <iforster@suse.de>, Fabian Vogt <FVogt@suse.com>,
         Marcus Meissner <meissner@suse.com>,
         linux-integrity@vger.kernel.org, ltp@lists.linux.it
-Subject: Re: [PATCH v2 0/3] LTP reproducer on broken IMA on overlayfs
-Message-ID: <20190517075057.GA12489@dell5510>
-Reply-To: Petr Vorel <pvorel@suse.cz>
+Date:   Fri, 17 May 2019 07:00:23 -0400
+In-Reply-To: <20190517075057.GA12489@dell5510>
 References: <20190405165225.27216-1-pvorel@suse.cz>
- <20190514121213.GA28655@dell5510>
- <1557889279.4581.14.camel@linux.ibm.com>
- <20190515120853.GA22992@dell5510>
- <1558044649.4507.10.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1558044649.4507.10.camel@linux.ibm.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+         <20190514121213.GA28655@dell5510> <1557889279.4581.14.camel@linux.ibm.com>
+         <20190515120853.GA22992@dell5510> <1558044649.4507.10.camel@linux.ibm.com>
+         <20190517075057.GA12489@dell5510>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19051711-0008-0000-0000-000002E7AEE3
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19051711-0009-0000-0000-0000225458BE
+Message-Id: <1558090823.4507.50.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-17_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=687 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905170073
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+On Fri, 2019-05-17 at 09:50 +0200, Petr Vorel wrote:
+> 
+> If it's ok for you and it's a valid test do you give an ack?
 
-> > But what is strange to me is that it continues to execute second line. return 1 [2]
-> > should cause ROD() to quit with TBROK [3].
-> > Maybe that ROD in test1() should be replaced EXPECT_PASS.
+Of course!  Thanks!
 
-> With just the first patch of Ignaz's path set [1] and the TPM 2.0 test
-> [2], there aren't any errors.  Without [1], it's now failing with the
-> correct name.  I'm now seeing:
-I guess, that justifies [1] to be merged into kernel.
-
-> evm_overlay 1 TINFO: $TMPDIR is on tmpfs => run on loop device
-> evm_overlay 1 TINFO: Formatting /dev/loop0 with ext3 extra opts=''
-> evm_overlay 1 TINFO: overwrite file in overlay
-> tst_rod: Failed to open 'mntpoint/merged/foo1.txt' for writing: Permission denied
-> evm_overlay 1 TFAIL: echo overlay > mntpoint/merged/foo1.txt failed unexpectedly
-That still does not explain, why test doesn't exit before this last line.
-I'll have a closer look into it. But as I wrote, I'll make these changes:
-
-diff --git testcases/kernel/security/integrity/ima/tests/evm_overlay.sh testcases/kernel/security/integrity/ima/tests/evm_overlay.sh
-index 08ec1ea37..1d05b9e1c 100755
---- testcases/kernel/security/integrity/ima/tests/evm_overlay.sh
-+++ testcases/kernel/security/integrity/ima/tests/evm_overlay.sh
-@@ -40,7 +40,7 @@ test1()
- 	local file="foo1.txt"
- 
- 	tst_res TINFO "overwrite file in overlay"
--	ROD echo lower \> $lower/$file
-+	EXPECT_PASS echo lower \> $lower/$file
- 	EXPECT_PASS echo overlay \> $merged/$file
- }
- 
-@@ -49,7 +49,7 @@ test2()
- 	local file="foo2.txt"
- 
- 	tst_res TINFO "append file in overlay"
--	ROD echo lower \> $lower/$file
-+	EXPECT_PASS echo lower \> $lower/$file
- 	EXPECT_PASS echo overlay \>\> $merged/$file
- }
- 
----
-If it's ok for you and it's a valid test do you give an ack?
-
-Kind regards,
-Petr
-
-> Mimi
-
-> [1] https://www.spinics.net/lists/linux-integrity/msg05926.html
-> [2] https://lore.kernel.org/linux-integrity/1558041162.3971.2.camel@linux.ibm.com/T/#u
+Mimi
 
