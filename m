@@ -2,100 +2,350 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A08222138
-	for <lists+linux-integrity@lfdr.de>; Sat, 18 May 2019 04:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A765221C2
+	for <lists+linux-integrity@lfdr.de>; Sat, 18 May 2019 07:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727808AbfERCPb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 May 2019 22:15:31 -0400
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:35914 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727765AbfERCPb (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 May 2019 22:15:31 -0400
-Received: by mail-yw1-f65.google.com with SMTP id e68so3493856ywf.3
-        for <linux-integrity@vger.kernel.org>; Fri, 17 May 2019 19:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=e/Re8JNkMMZS5vb+q48mFRH1gM+SXPJbTk6PEc7g9q4=;
-        b=TaT9fKi7fztMIo4wYsgTLZDMnxKQdpEqwKs28V2zcIpqmFTLAKns45HPPfCE5WngUb
-         /cjUP/dtAXmL/O2bc96thZrQHaWxU6ZtLzswD7p9cBMORrNKTnWGpz0PM1j9bBl69Lbz
-         mujkZe1Ja74zvbfU2kEu2rit4TTS1EcCBAV+T5XByRj11EEwm7k4hj7NpeDumKkpXjYk
-         Pof24nksP+mkg9BlqfvxkCflkBHCuKtRxV77HbRrclQZEzBnnAR5Zs8Uk/kK2wivODdS
-         MPW/elYrHw4itfDNH92HuXJVCV+YcqPJ7f77k5+LhM8UqkUZt+NPYDfSScblabao+j28
-         xvKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=e/Re8JNkMMZS5vb+q48mFRH1gM+SXPJbTk6PEc7g9q4=;
-        b=fXkMWziaAMP4XB1NlcPEQJc0MhcICTV02jUb1O7SzMLVaj4445tLZp/tjdBe+O7BJI
-         aGltKNG6G1TpoM66uIba2BQqSJSze/UQXWv7uNBuXdvpXAkJdUTDMIED/ayhtJiKtsSE
-         5dFYLWdaPAv09G3uqA+Orthxcl34+7XiYpDVKpQimrJ0zYCcK9RZUpDK8I87Q0OOSUpS
-         ePgA7EfJDSEHgl42GPPFnE8mlHNo9L48W2hGB7ukN0RaNl9jBYOXgWBbOEFh4kbqaJRO
-         XVcpIhyEUpgKSTHbwZY/H7rKnHYhQ8S0XZcATrJS4Nli8x3D562wqROOOYZ6BEYGkTHH
-         plEQ==
-X-Gm-Message-State: APjAAAXd9MM2u8dmJ+mYEa1JFCDh4fk31Hm+IlBSvAIhra0NN7P7DtJn
-        /EUzpxg/YzMs1AW9vKLc2OeOMQ==
-X-Google-Smtp-Source: APXvYqwRQOdT2dPGlb54WwSW65T5Xzg/Y07ZThJYNzxMvkjGyvfuFPRNe52MRH3TF3M7IMuEtXBv+g==
-X-Received: by 2002:a81:3bd5:: with SMTP id i204mr22821560ywa.254.1558145730321;
-        Fri, 17 May 2019 19:15:30 -0700 (PDT)
-Received: from [192.168.43.9] ([172.56.6.82])
-        by smtp.googlemail.com with ESMTPSA id f129sm2902432ywe.35.2019.05.17.19.15.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 17 May 2019 19:15:29 -0700 (PDT)
-Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
-To:     "H. Peter Anvin" <hpa@zytor.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        viro@zeniv.linux.org.uk
-Cc:     linux-security-module@vger.kernel.org,
+        id S1726056AbfERFuD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 18 May 2019 01:50:03 -0400
+Received: from mga06.intel.com ([134.134.136.31]:23785 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725468AbfERFuD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 18 May 2019 01:50:03 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 May 2019 22:49:58 -0700
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 17 May 2019 22:49:54 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1hRsED-0005px-KE; Sat, 18 May 2019 13:49:53 +0800
+Date:   Sat, 18 May 2019 13:49:34 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     kbuild-all@01.org, viro@zeniv.linux.org.uk,
+        linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
         linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org, zohar@linux.vnet.ibm.com,
         silviu.vlasceanu@huawei.com, dmitry.kasatkin@huawei.com,
-        takondra@cisco.com, kamensky@cisco.com, arnd@arndb.de,
-        james.w.mcmechan@gmail.com, niveditas98@gmail.com
-References: <20190517165519.11507-1-roberto.sassu@huawei.com>
- <20190517165519.11507-3-roberto.sassu@huawei.com>
- <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
- <69ef1f55-9fc1-7ee0-371f-3dbc77551dc0@zytor.com>
-From:   Rob Landley <rob@landley.net>
-Message-ID: <a0afd58f-c682-66b5-7478-c405a179d72a@landley.net>
-Date:   Fri, 17 May 2019 21:16:04 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        takondra@cisco.com, kamensky@cisco.com, hpa@zytor.com,
+        arnd@arndb.de, rob@landley.net, james.w.mcmechan@gmail.com,
+        niveditas98@gmail.com, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
+Message-ID: <201905181320.40kqTTSD%lkp@intel.com>
+References: <20190517165519.11507-3-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <69ef1f55-9fc1-7ee0-371f-3dbc77551dc0@zytor.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190517165519.11507-3-roberto.sassu@huawei.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/17/19 4:41 PM, H. Peter Anvin wrote:
-> On 5/17/19 1:18 PM, hpa@zytor.com wrote:
->>
->> Ok... I just realized this does not work for a modular initramfs, composed at load time from multiple files, which is a very real problem. Should be easy enough to deal with: instead of one large file, use one companion file per source file, perhaps something like filename..xattrs (suggesting double dots to make it less likely to conflict with a "real" file.) No leading dot, as it makes it more likely that archivers will sort them before the file proper.
->>
->> A side benefit is that the format can be simpler as there is no need to encode the filename.
->>
->> A technically cleaner solution still, but which would need archiver modifications, would be to encode the xattrs as an optionally nameless file (just an empty string) with a new file mode value, immediately following the original file. The advantage there is that the archiver itself could support xattrs and other extended metadata (which has been requested elsewhere); the disadvantage obviously is that that it requires new support in the archiver. However, at least it ought to be simpler since it is still a higher protocol level than the cpio archive itself.
->>
->> There's already one special case in cpio, which is the "!!!TRAILER!!!" filename; although I don't think it is part of the formal spec, to the extent there is one, I would expect that in practice it is always encoded with a mode of 0, which incidentally could be used to unbreak the case where such a filename actually exists. So one way to support such extended metadata would be to set mode to 0 and use the filename to encode the type of metadata. I wonder how existing GNU or BSD cpio (the BSD one is better maintained these days) would deal with reading such a file; it would at least not be a regression if it just read it still, possibly with warnings. It could also be possible to use bits 17:16 in the mode, which are traditionally always zero (mode_t being 16 bits), but I believe are present in most or all of the cpio formats for historical reasons. It might be accepted better by existing implementations to use one of these high bits combined with S_IFREG, I dont know.
->
-> 
-> Correction: it's just !!!TRAILER!!!.
+Hi Roberto,
 
-We documented it as "TRAILER!!!" without leading !!!, and that its purpose is to
-flush hardlinks:
+Thank you for the patch! Perhaps something to improve:
 
-  https://www.kernel.org/doc/Documentation/early-userspace/buffer-format.txt
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.1 next-20190517]
+[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
 
-That's what toybox cpio has been producing. Kernel consumes it just fine. Just
-checked busybox cpio and that's what they're producing as well...
+url:    https://github.com/0day-ci/linux/commits/Roberto-Sassu/initramfs-set-extended-attributes/20190518-055846
+reproduce:
+        # apt-get install sparse
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
-Rob
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+
+   init/initramfs.c:24:45: sparse: sparse: incorrect type in argument 2 (different address spaces) @@    expected char const [noderef] <asn:1> *buf @@    got f] <asn:1> *buf @@
+   init/initramfs.c:24:45: sparse:    expected char const [noderef] <asn:1> *buf
+   init/initramfs.c:24:45: sparse:    got char const *p
+   init/initramfs.c:115:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@    expected char const [noderef] <asn:1> *filename @@    got n:1> *filename @@
+   init/initramfs.c:115:36: sparse:    expected char const [noderef] <asn:1> *filename
+   init/initramfs.c:115:36: sparse:    got char *filename
+   init/initramfs.c:303:24: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *name @@    got n:1> *name @@
+   init/initramfs.c:303:24: sparse:    expected char const [noderef] <asn:1> *name
+   init/initramfs.c:303:24: sparse:    got char *path
+   init/initramfs.c:305:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *pathname @@    got n:1> *pathname @@
+   init/initramfs.c:305:36: sparse:    expected char const [noderef] <asn:1> *pathname
+   init/initramfs.c:305:36: sparse:    got char *path
+   init/initramfs.c:307:37: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *pathname @@    got n:1> *pathname @@
+   init/initramfs.c:307:37: sparse:    expected char const [noderef] <asn:1> *pathname
+   init/initramfs.c:307:37: sparse:    got char *path
+   init/initramfs.c:317:43: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *oldname @@    got n:1> *oldname @@
+   init/initramfs.c:317:43: sparse:    expected char const [noderef] <asn:1> *oldname
+   init/initramfs.c:317:43: sparse:    got char *old
+   init/initramfs.c:317:48: sparse: sparse: incorrect type in argument 2 (different address spaces) @@    expected char const [noderef] <asn:1> *newname @@    got char char const [noderef] <asn:1> *newname @@
+   init/initramfs.c:317:48: sparse:    expected char const [noderef] <asn:1> *newname
+   init/initramfs.c:317:48: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:404:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *name @@    got n:1> *name @@
+   init/initramfs.c:404:25: sparse:    expected char const [noderef] <asn:1> *name
+   init/initramfs.c:404:25: sparse:    got char *
+>> init/initramfs.c:490:32: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *name @@    got char char const [noderef] <asn:1> *name @@
+   init/initramfs.c:490:32: sparse:    expected char const [noderef] <asn:1> *name
+   init/initramfs.c:490:32: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:500:41: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *filename @@    got char char const [noderef] <asn:1> *filename @@
+   init/initramfs.c:500:41: sparse:    expected char const [noderef] <asn:1> *filename
+   init/initramfs.c:500:41: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:512:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *pathname @@    got char char const [noderef] <asn:1> *pathname @@
+   init/initramfs.c:512:28: sparse:    expected char const [noderef] <asn:1> *pathname
+   init/initramfs.c:512:28: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:513:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *filename @@    got char char const [noderef] <asn:1> *filename @@
+   init/initramfs.c:513:28: sparse:    expected char const [noderef] <asn:1> *filename
+   init/initramfs.c:513:28: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:514:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *filename @@    got char char const [noderef] <asn:1> *filename @@
+   init/initramfs.c:514:28: sparse:    expected char const [noderef] <asn:1> *filename
+   init/initramfs.c:514:28: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:519:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *filename @@    got char char const [noderef] <asn:1> *filename @@
+   init/initramfs.c:519:36: sparse:    expected char const [noderef] <asn:1> *filename
+   init/initramfs.c:519:36: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:520:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *filename @@    got char char const [noderef] <asn:1> *filename @@
+   init/initramfs.c:520:36: sparse:    expected char const [noderef] <asn:1> *filename
+   init/initramfs.c:520:36: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:521:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *filename @@    got char char const [noderef] <asn:1> *filename @@
+   init/initramfs.c:521:36: sparse:    expected char const [noderef] <asn:1> *filename
+   init/initramfs.c:521:36: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:552:32: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *oldname @@    got n:1> *oldname @@
+   init/initramfs.c:552:32: sparse:    expected char const [noderef] <asn:1> *oldname
+   init/initramfs.c:552:32: sparse:    got char *
+   init/initramfs.c:552:53: sparse: sparse: incorrect type in argument 2 (different address spaces) @@    expected char const [noderef] <asn:1> *newname @@    got char char const [noderef] <asn:1> *newname @@
+   init/initramfs.c:552:53: sparse:    expected char const [noderef] <asn:1> *newname
+   init/initramfs.c:552:53: sparse:    got char *static [toplevel] [assigned] collected
+   init/initramfs.c:553:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected char const [noderef] <asn:1> *filename @@    got char char const [noderef] <asn:1> *filename @@
+   init/initramfs.c:553:21: sparse:    expected char const [noderef] <asn:1> *filename
+   init/initramfs.c:553:21: sparse:    got char *static [toplevel] [assigned] collected
+
+vim +490 init/initramfs.c
+
+   310	
+   311	static int __init maybe_link(void)
+   312	{
+   313		if (nlink >= 2) {
+   314			char *old = find_link(major, minor, ino, mode, collected);
+   315			if (old) {
+   316				clean_path(collected, 0);
+ > 317				return (ksys_link(old, collected) < 0) ? -1 : 1;
+   318			}
+   319		}
+   320		return 0;
+   321	}
+   322	
+   323	struct xattr_hdr {
+   324		char c_size[8]; /* total size including c_size field */
+   325		char c_data[];  /* <name>\0<value> */
+   326	};
+   327	
+   328	static int __init __maybe_unused do_setxattrs(char *pathname)
+   329	{
+   330		char *buf = xattr_buf;
+   331		char *bufend = buf + xattr_len;
+   332		struct xattr_hdr *hdr;
+   333		char str[sizeof(hdr->c_size) + 1];
+   334		struct path path;
+   335	
+   336		if (!xattr_len)
+   337			return 0;
+   338	
+   339		str[sizeof(hdr->c_size)] = 0;
+   340	
+   341		while (buf < bufend) {
+   342			char *xattr_name, *xattr_value;
+   343			unsigned long xattr_entry_size;
+   344			unsigned long xattr_name_size, xattr_value_size;
+   345			int ret;
+   346	
+   347			if (buf + sizeof(hdr->c_size) > bufend) {
+   348				error("malformed xattrs");
+   349				break;
+   350			}
+   351	
+   352			hdr = (struct xattr_hdr *)buf;
+   353			memcpy(str, hdr->c_size, sizeof(hdr->c_size));
+   354			ret = kstrtoul(str, 16, &xattr_entry_size);
+   355			buf += xattr_entry_size;
+   356			if (ret || buf > bufend || !xattr_entry_size) {
+   357				error("malformed xattrs");
+   358				break;
+   359			}
+   360	
+   361			xattr_name = hdr->c_data;
+   362			xattr_name_size = strnlen(xattr_name,
+   363						xattr_entry_size - sizeof(hdr->c_size));
+   364			if (xattr_name_size == xattr_entry_size - sizeof(hdr->c_size)) {
+   365				error("malformed xattrs");
+   366				break;
+   367			}
+   368	
+   369			xattr_value = xattr_name + xattr_name_size + 1;
+   370			xattr_value_size = buf - xattr_value;
+   371	
+   372			ret = kern_path(pathname, 0, &path);
+   373			if (!ret) {
+   374				ret = vfs_setxattr(path.dentry, xattr_name, xattr_value,
+   375						   xattr_value_size, 0);
+   376	
+   377				path_put(&path);
+   378			}
+   379	
+   380			pr_debug("%s: %s size: %lu val: %s (ret: %d)\n", pathname,
+   381				 xattr_name, xattr_value_size, xattr_value, ret);
+   382		}
+   383	
+   384		return 0;
+   385	}
+   386	
+   387	struct path_hdr {
+   388		char p_size[10]; /* total size including p_size field */
+   389		char p_data[];   /* <path>\0<xattrs> */
+   390	};
+   391	
+   392	static int __init do_readxattrs(void)
+   393	{
+   394		struct path_hdr hdr;
+   395		char *path = NULL;
+   396		char str[sizeof(hdr.p_size) + 1];
+   397		unsigned long file_entry_size;
+   398		size_t size, path_size, total_size;
+   399		struct kstat st;
+   400		struct file *file;
+   401		loff_t pos;
+   402		int ret;
+   403	
+   404		ret = vfs_lstat(XATTR_LIST_FILENAME, &st);
+   405		if (ret < 0)
+   406			return ret;
+   407	
+   408		total_size = st.size;
+   409	
+   410		file = filp_open(XATTR_LIST_FILENAME, O_RDONLY, 0);
+   411		if (IS_ERR(file))
+   412			return PTR_ERR(file);
+   413	
+   414		pos = file->f_pos;
+   415	
+   416		while (total_size) {
+   417			size = kernel_read(file, (char *)&hdr, sizeof(hdr), &pos);
+   418			if (size != sizeof(hdr)) {
+   419				ret = -EIO;
+   420				goto out;
+   421			}
+   422	
+   423			total_size -= size;
+   424	
+   425			str[sizeof(hdr.p_size)] = 0;
+   426			memcpy(str, hdr.p_size, sizeof(hdr.p_size));
+   427			ret = kstrtoul(str, 16, &file_entry_size);
+   428			if (ret < 0)
+   429				goto out;
+   430	
+   431			file_entry_size -= sizeof(sizeof(hdr.p_size));
+   432			if (file_entry_size > total_size) {
+   433				ret = -EINVAL;
+   434				goto out;
+   435			}
+   436	
+   437			path = vmalloc(file_entry_size);
+   438			if (!path) {
+   439				ret = -ENOMEM;
+   440				goto out;
+   441			}
+   442	
+   443			size = kernel_read(file, path, file_entry_size, &pos);
+   444			if (size != file_entry_size) {
+   445				ret = -EIO;
+   446				goto out_free;
+   447			}
+   448	
+   449			total_size -= size;
+   450	
+   451			path_size = strnlen(path, file_entry_size);
+   452			if (path_size == file_entry_size) {
+   453				ret = -EINVAL;
+   454				goto out_free;
+   455			}
+   456	
+   457			xattr_buf = path + path_size + 1;
+   458			xattr_len = file_entry_size - path_size - 1;
+   459	
+   460			ret = do_setxattrs(path);
+   461			vfree(path);
+   462			path = NULL;
+   463	
+   464			if (ret < 0)
+   465				break;
+   466		}
+   467	out_free:
+   468		vfree(path);
+   469	out:
+   470		fput(file);
+   471	
+   472		if (ret < 0)
+   473			error("Unable to parse xattrs");
+   474	
+   475		return ret;
+   476	}
+   477	
+   478	static __initdata int wfd;
+   479	
+   480	static int __init do_name(void)
+   481	{
+   482		state = SkipIt;
+   483		next_state = Reset;
+   484		if (strcmp(collected, "TRAILER!!!") == 0) {
+   485			free_hash();
+   486			return 0;
+   487		} else if (strcmp(collected, XATTR_LIST_FILENAME) == 0) {
+   488			struct kstat st;
+   489	
+ > 490			if (!vfs_lstat(collected, &st))
+   491				do_readxattrs();
+   492		}
+   493		clean_path(collected, mode);
+   494		if (S_ISREG(mode)) {
+   495			int ml = maybe_link();
+   496			if (ml >= 0) {
+   497				int openflags = O_WRONLY|O_CREAT;
+   498				if (ml != 1)
+   499					openflags |= O_TRUNC;
+   500				wfd = ksys_open(collected, openflags, mode);
+   501	
+   502				if (wfd >= 0) {
+   503					ksys_fchown(wfd, uid, gid);
+   504					ksys_fchmod(wfd, mode);
+   505					if (body_len)
+   506						ksys_ftruncate(wfd, body_len);
+   507					vcollected = kstrdup(collected, GFP_KERNEL);
+   508					state = CopyFile;
+   509				}
+   510			}
+   511		} else if (S_ISDIR(mode)) {
+   512			ksys_mkdir(collected, mode);
+   513			ksys_chown(collected, uid, gid);
+   514			ksys_chmod(collected, mode);
+   515			dir_add(collected, mtime);
+   516		} else if (S_ISBLK(mode) || S_ISCHR(mode) ||
+   517			   S_ISFIFO(mode) || S_ISSOCK(mode)) {
+   518			if (maybe_link() == 0) {
+   519				ksys_mknod(collected, mode, rdev);
+   520				ksys_chown(collected, uid, gid);
+   521				ksys_chmod(collected, mode);
+   522				do_utime(collected, mtime);
+   523			}
+   524		}
+   525		return 0;
+   526	}
+   527	
+
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
