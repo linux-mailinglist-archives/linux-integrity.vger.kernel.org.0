@@ -2,208 +2,370 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECD822409
-	for <lists+linux-integrity@lfdr.de>; Sat, 18 May 2019 18:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BACD22771
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 May 2019 19:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729526AbfERQMn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 18 May 2019 12:12:43 -0400
-Received: from mail-it1-f194.google.com ([209.85.166.194]:55200 "EHLO
-        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728337AbfERQMm (ORCPT
+        id S1725959AbfESREU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 19 May 2019 13:04:20 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:32960 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725777AbfESRET (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 18 May 2019 12:12:42 -0400
-Received: by mail-it1-f194.google.com with SMTP id a190so16625524ite.4
-        for <linux-integrity@vger.kernel.org>; Sat, 18 May 2019 09:12:42 -0700 (PDT)
+        Sun, 19 May 2019 13:04:19 -0400
+Received: by mail-vs1-f65.google.com with SMTP id y6so7617673vsb.0
+        for <linux-integrity@vger.kernel.org>; Sun, 19 May 2019 10:04:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NUYaBpI7HtM+jFnabamgjA4IxjSWFzxdWp6kmm3cyvc=;
-        b=mIEuqgFsXiDW3fTmdpRG+x6vjSNL10IgQt/XYQCA3tvAVqhB7QGkBxHPCI8wxwDhNd
-         LKhT/cUnMNci9N1bDfqzL1yn8/f8bRZj27gZzeRWqddEubo6SN4yvRpclKXOZMz5xKUq
-         5Jy0L71fygPiUrbWvc/eNo4ajwTAUj4ROThEKRkR+Wv3qIFs2Yax6JCqkAcALdbSrrhk
-         WixeukZ6A7rXQIIZ9adTcNBIRr66Pun66C+sC6rAy6XWix2BA/oWWbHiorYXcrJmzbUr
-         5C07cBiMW18gR75dHA5Mn8Jww09N2/+p29DRtnNsM/qqTrha/L3WWKTRqa3+fK63gTJd
-         qIcw==
+        bh=Tc0fiEW/TMEpCT/sZt+FfJG/eOf9P+8yjFxRdGtiS8A=;
+        b=jRgX/5SeseLZS0LfpMzCJfLY5zBnXI0oIxZ12thMryPtMQ0y3rgUnwL4+0faPSoQKu
+         to+W/6AeHrkZmBIsL/hNc8mm1I9OsubJsDu4hYR9oAQb6cxOHVw9upnzoX/uZpsi1vO1
+         NqpnYVOE7Z/hzwk2F6AA7djcRgrbh6weyDuQPudUEc0nGn8MA08TZ+XlEHKIIovwGSuq
+         Wnl2r7O1/E22wMWWXcKr5LBzxHAAmm7dfAM4YOeZTKIdSdvJb93Q2on8VcP/bXMzwStS
+         wzy5gj6qDN2ZVYvk+TI5MHQ6cgSKD12XxzCJUCp2Lh5wCGqUt+q/RnOry8nC/o+2Qiuo
+         sWUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NUYaBpI7HtM+jFnabamgjA4IxjSWFzxdWp6kmm3cyvc=;
-        b=lkaqUv6qXG1XCQZ5m4G1a48cCzh48+m114WlNa64wfHyia1AhZL/nlTRAySaCXZFFU
-         AWEpJhe0ArrXJcE6byloCT53ygGKvOjmQ8J0FnvaCQ5V20ZrGy2sdF1SqZRD8wyQfdzv
-         6CaW5klbRQF+lbUAua92jKhzL1fYZDhXQ/kq+N3t2sC2+3xvlPjeuyDmEVnkv5brnwAa
-         iVoM4eLLYdIdFtcUROk735eCUQjQNErveG2iDD9vFWJAGcrZaZsvEUwrcmn+kY7eE3Cp
-         Rb4sMGuuxgU3v/WWuOnpbgZ67Umejo9vrftH5mVVAJ4od69lXZmCUGh0V5U5Wd5Q68pJ
-         Rp5Q==
-X-Gm-Message-State: APjAAAVWZvXp+lsEZYZXv9weiYfzSMVWQJdFhMmzIs9+lugkxO1QP8Sa
-        +6ze08cLwTvUx5ToRYAzOS5pFrD+XqwhSMS5GaRgyA==
-X-Google-Smtp-Source: APXvYqwUL20YHqglcJVp2NUVYSoE87eqr/iSK2JugWCY2czDEEDb0iLbCV5bCK7vWFO/qjW7HnckzFSJVyUOyW4coOE=
-X-Received: by 2002:a24:ca84:: with SMTP id k126mr4027300itg.104.1558195961792;
- Sat, 18 May 2019 09:12:41 -0700 (PDT)
+        bh=Tc0fiEW/TMEpCT/sZt+FfJG/eOf9P+8yjFxRdGtiS8A=;
+        b=I5O/da4nuKx9mSBawQ2EY7nm80v5x1YLSL6qJwK/2Fsbsz9i+5JobIw3dsfigxpk4o
+         5R0oq5k64Anh89hKKrt1O5xVq24K2/MFyYbP/gsTfeOW2iU7N3MtXKj45uimFLuu8T2f
+         ext7Okk8Br0hOIgZtOWwgvSrZKULjiywzsscZJRVjhyfVXKtT5Atz0hePItcz+YuhXmH
+         CzOz6r8fwMqUyHX4gVNsckWL2KWGxUhIE5F8GNMWt+Z/0y+3M+2Pfy80oKWANiqgnT8s
+         dJT/gmb4g4dumM2xVwUfwZUrojZ004MRmQUqBQju24VdbfavbmH9PEAGLYuZ+LFXoKYP
+         VKOA==
+X-Gm-Message-State: APjAAAU/es3GWtF0QJcsHLQXboScf2o0HCmd7BF67JR9o53/VLJqLeWh
+        Lxp1R2Ja0higVBSvr2MV0G4cLsQ+fmnmF3S1HzUUvA==
+X-Google-Smtp-Source: APXvYqy0RZvFe4IrHh0Ksmp9NnZ/bVl0VWPfQl6jiMukeONdA3/UsxRusRR3gUk0BLv9Itc+E2Jb+G6CbRKdAgthQ5U=
+X-Received: by 2002:a67:2781:: with SMTP id n123mr14357741vsn.141.1558259173973;
+ Sun, 19 May 2019 02:46:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190517213918.26045-1-matthewgarrett@google.com> <20190517213918.26045-5-matthewgarrett@google.com>
-In-Reply-To: <20190517213918.26045-5-matthewgarrett@google.com>
-From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Date:   Sat, 18 May 2019 18:12:29 +0200
-Message-ID: <CAKv+Gu935UN8D5pkD8S9G-7=06JmsN66RdXVOCMaJfcLz=37ew@mail.gmail.com>
-Subject: Re: [PATCH V6 4/4] efi: Attempt to get the TCG2 event log in the boot stub
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        =?UTF-8?Q?Peter_H=C3=BCwe?= <peterhuewe@gmx.de>,
+References: <20190415155636.32748-1-sashal@kernel.org> <20190507174020.GH1747@sasha-vm>
+ <20190508124436.GE7642@linux.intel.com> <20190514193056.GN11972@sasha-vm>
+ <CAFA6WYM06E0y9o6+CLNPe48spiL=UDEqoGsidMbk1dBa5Rbmkg@mail.gmail.com>
+ <CY4PR21MB0279339E8B0A15414C8F9E14BC0A0@CY4PR21MB0279.namprd21.prod.outlook.com>
+ <CAFA6WYMvuF+tAA_GmkVg=FTvuuAhMuM=um7kakq=YARaP8un5Q@mail.gmail.com>
+ <CY4PR21MB02790D399645EFCA02FBE124BC0A0@CY4PR21MB0279.namprd21.prod.outlook.com>
+ <CAFA6WYMsQ53L=Ge5_yX+mvQNgKQRxPq=GxAn6zCksaDU18aTtw@mail.gmail.com> <CY4PR21MB02798F18412AD6BDB74DC8A1BC0B0@CY4PR21MB0279.namprd21.prod.outlook.com>
+In-Reply-To: <CY4PR21MB02798F18412AD6BDB74DC8A1BC0B0@CY4PR21MB0279.namprd21.prod.outlook.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Sun, 19 May 2019 15:16:01 +0530
+Message-ID: <CAFA6WYOU_JRxZg_b0685BG2veiBj-ZwC9QLPfieGkQojqo0+7A@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] ftpm: a firmware based TPM driver
+To:     Thirupathaiah Annapureddy <thiruan@microsoft.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "corbet@lwn.net" <corbet@lwn.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thiebaud Weksteen <tweek@google.com>,
-        Bartosz Szczepanek <bsz@semihalf.com>,
-        Matthew Garrett <mjg59@google.com>
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Microsoft Linux Kernel List <linux-kernel@microsoft.com>,
+        "Bryan Kelly (CSI)" <bryankel@microsoft.com>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 17 May 2019 at 23:39, Matthew Garrett <matthewgarrett@google.com> wrote:
+On Fri, 17 May 2019 at 22:53, Thirupathaiah Annapureddy
+<thiruan@microsoft.com> wrote:
 >
-> From: Matthew Garrett <mjg59@google.com>
 >
-> Right now we only attempt to obtain the SHA1-only event log. The
-> protocol also supports a crypto agile log format, which contains digests
-> for all algorithms in use. Attempt to obtain this first, and fall back
-> to obtaining the older format if the system doesn't support it. This is
-> lightly complicated by the event sizes being variable (as we don't know
-> in advance which algorithms are in use), and the interface giving us
-> back a pointer to the start of the final entry rather than a pointer to
-> the end of the log - as a result, we need to parse the final entry to
-> figure out its length in order to know how much data to copy up to the
-> OS.
 >
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > -----Original Message-----
+> > From: Sumit Garg <sumit.garg@linaro.org>
+> > Sent: Thursday, May 16, 2019 11:57 PM
+> > To: Thirupathaiah Annapureddy <thiruan@microsoft.com>
+> > Cc: Sasha Levin <sashal@kernel.org>; Jarkko Sakkinen
+> > <jarkko.sakkinen@linux.intel.com>; peterhuewe@gmx.de; jgg@ziepe.ca;
+> > corbet@lwn.net; Linux Kernel Mailing List <linux-kernel@vger.kernel.org>;
+> > linux-doc@vger.kernel.org; linux-integrity@vger.kernel.org; Microsoft Linux
+> > Kernel List <linux-kernel@microsoft.com>; Bryan Kelly (CSI)
+> > <bryankel@microsoft.com>; Rob Herring <robh+dt@kernel.org>
+> > Subject: Re: [PATCH v3 0/2] ftpm: a firmware based TPM driver
+> >
+> > + Rob
+> >
+> > On Fri, 17 May 2019 at 00:54, Thirupathaiah Annapureddy
+> > <thiruan@microsoft.com> wrote:
+> > >
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Sumit Garg <sumit.garg@linaro.org>
+> > > > Sent: Thursday, May 16, 2019 12:06 AM
+> > > > To: Thirupathaiah Annapureddy <thiruan@microsoft.com>
+> > > > Cc: Sasha Levin <sashal@kernel.org>; Jarkko Sakkinen
+> > > > <jarkko.sakkinen@linux.intel.com>; peterhuewe@gmx.de; jgg@ziepe.ca;
+> > > > corbet@lwn.net; Linux Kernel Mailing List <linux-
+> > kernel@vger.kernel.org>;
+> > > > linux-doc@vger.kernel.org; linux-integrity@vger.kernel.org; Microsoft
+> > Linux
+> > > > Kernel List <linux-kernel@microsoft.com>; Bryan Kelly (CSI)
+> > > > <bryankel@microsoft.com>
+> > > > Subject: Re: [PATCH v3 0/2] ftpm: a firmware based TPM driver
+> > > >
+> > > > On Thu, 16 May 2019 at 06:30, Thirupathaiah Annapureddy
+> > > > <thiruan@microsoft.com> wrote:
+> > > > >
+> > > > >
+> > > > >
+> > > > > > -----Original Message-----
+> > > > > > From: Sumit Garg <sumit.garg@linaro.org>
+> > > > > > Sent: Tuesday, May 14, 2019 7:02 PM
+> > > > > > To: Sasha Levin <sashal@kernel.org>
+> > > > > > Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>;
+> > > > peterhuewe@gmx.de;
+> > > > > > jgg@ziepe.ca; corbet@lwn.net; Linux Kernel Mailing List <linux-
+> > > > > > kernel@vger.kernel.org>; linux-doc@vger.kernel.org; linux-
+> > > > > > integrity@vger.kernel.org; Microsoft Linux Kernel List <linux-
+> > > > > > kernel@microsoft.com>; Thirupathaiah Annapureddy
+> > > > <thiruan@microsoft.com>;
+> > > > > > Bryan Kelly (CSI) <bryankel@microsoft.com>
+> > > > > > Subject: Re: [PATCH v3 0/2] ftpm: a firmware based TPM driver
+> > > > > >
+> > > > > > On Wed, 15 May 2019 at 01:00, Sasha Levin <sashal@kernel.org>
+> > wrote:
+> > > > > > >
+> > > > > > > On Wed, May 08, 2019 at 03:44:36PM +0300, Jarkko Sakkinen wrote:
+> > > > > > > >On Tue, May 07, 2019 at 01:40:20PM -0400, Sasha Levin wrote:
+> > > > > > > >> On Mon, Apr 15, 2019 at 11:56:34AM -0400, Sasha Levin wrote:
+> > > > > > > >> > From: "Sasha Levin (Microsoft)" <sashal@kernel.org>
+> > > > > > > >> >
+> > > > > > > >> > Changes since v2:
+> > > > > > > >> >
+> > > > > > > >> > - Drop the devicetree bindings patch (we don't add any new
+> > > > ones).
+> > > > > > > >> > - More code cleanups based on Jason Gunthorpe's review.
+> > > > > > > >> >
+> > > > > > > >> > Sasha Levin (2):
+> > > > > > > >> >  ftpm: firmware TPM running in TEE
+> > > > > > > >> >  ftpm: add documentation for ftpm driver
+> > > > > > > >>
+> > > > > > > >> Ping? Does anyone have any objections to this?
+> > > > > > > >
+> > > > > > > >Sorry I've been on vacation week before last week and last week
+> > > > > > > >I was extremely busy because I had been on vacation. This in
+> > > > > > > >my TODO list. Will look into it tomorrow in detail.
+> > > > > > > >
+> > > > > > > >Apologies for the delay with this!
+> > > > > > >
+> > > > > > > Hi Jarkko,
+> > > > > > >
+> > > > > > > If there aren't any big objections to this, can we get it merged
+> > in?
+> > > > > > > We'll be happy to address any comments that come up.
+> > > > > >
+> > > > > > I guess you have missed or ignored this comment [1]. Please address
+> > it.
+> > > > > >
+> > > > > > [1]
+> > > > > >
+> > > >
+> > https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%
+> > > > > >
+> > > >
+> > 2Flkml%2F2019%2F5%2F8%2F11&amp;data=01%7C01%7Cthiruan%40microsoft.com%7Cf2a
+> > > > > >
+> > > >
+> > 80c7b94434329eaee08d6d8d962b1%7C72f988bf86f141af91ab2d7cd011db47%7C1&amp;sd
+> > > > > >
+> > ata=hyJRc23NwEFLDuaIMkbSCGetd%2BObQWiAg%2BJtMMR6z9U%3D&amp;reserved=0
+> > > > > >
+> > > > > > -Sumit
+> > > > >
+> > > > > Thanks for reviewing and adding comments.
+> > > > >
+> > > > > We tried to use TEE bus framework you suggested for fTPM enumeration.
+> > > > > We were not able to pass the TCG Logs collected by the boot loaders.
+> > > > >
+> > > > > Currently there are 3 ways to pass TCG Logs based on the code
+> > > > > in drivers/char/tpm/eventlog:
+> > > > >
+> > > > > 1. ACPI Table
+> > > > > 2. EFI Table
+> > > > > 3. OF Device node properties
+> > > > >
+> > > > > Our ARM system is booting using U-boot and Device Tree.
+> > > > > So ACPI/EFI table mechanism to pass TCG2 logs won't be applicable.
+> > > > > We needed to use OF device node properties to pass TCG2 Logs.
+> > > > > TEE bus enumeration framework does not work for our use case due to
+> > the
+> > > > above.
+> > > >
+> > > > Firstly let me clarify that this framework is intended to communicate
+> > > > with TEE based services/devices rather than boot loader. And in this
+> > > > case fTPM being a TEE based service, so this framework should be used.
+> > > >
+> > > It does not work for our use case. We gave enough justification so far.
+> > > TEE bus enumeration needs to be flexible to support our use case and
+> > > more future use cases.
+> > >
+> >
+> > TEE based services are virtual devices which could be very well be
+> > aware about the platform and device driver could easily query these
+> > devices for platform specific properties. In case of firmware TPM as a
+> > TEE based service, it could easily store the event logs generated
+> > during PCR extend operations which could be fetched at runtime. But a
+> > real TPM device doesn't possess that storage capability leading to
+> > software managing these event logs.
+> >
+> > > > >
+> > > > > Is it possible to add flexibility in TEE bus enumeration framework to
+> > > > support
+> > > > > platform specific properties through OF nodes or ACPI?
+> > > > >
+> > > >
+> > > > As you mentioned above, TCG logs are collected by boot loader. So it
+> > > > should find a way to pass them to Linux.
+> > > >
+> > > > How about if boot loader register these TCG logs with fTPM TA which
+> > > > could be fetched during fTPM driver probe or new api like
+> > > > tpm_read_log_tee()?
+> > >
+> > > And then how does fTPM driver pass TCG Logs to the TPM framework?
+> > > It requires changes to the upstream TPM framework to ask the driver
+> > > explicitly for the TCG Logs.
+> >
+> > My suggestion was to add 4th way to pass TCG logs as follows:
+> >
+> > --- a/drivers/char/tpm/eventlog/common.c
+> > +++ b/drivers/char/tpm/eventlog/common.c
+> > @@ -95,6 +95,10 @@ static int tpm_read_log(struct tpm_chip *chip)
+> >         if (rc != -ENODEV)
+> >                 return rc;
+> >
+> > +       rc = tpm_read_log_tee(chip);
+> > +       if (rc != -ENODEV)
+> > +               return rc;
+> > +
+> >         return tpm_read_log_of(chip);
+> >  }
+> > --- /dev/null
+> > +++ b/drivers/char/tpm/eventlog/tee.c
+> > @@ -0,0 +1,43 @@
+> > <snip>
+> > +int tpm_read_log_tee(struct tpm_chip *chip)
+> > +{
+> > +       struct tpm_bios_log *log;
+> > +       struct ftpm_tee_private *pvt_data;
+> > +
+> > +       log = &chip->log;
+> > +       if (!strcmp(chip->dev.bus->name, tee_bus_type.name))
+> > +               pvt_data = dev_get_drvdata(chip->dev.parent);
+> > +       else
+> > +               return -ENODEV;
+> > +
+> > +       // Here you could simply do an invoke command to fetch the TCG
+> > logs.
+> > +
+> > +       if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> > +               return EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
+> > +       return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
+> > +}
+>
+> But I do not see a need for this 4th method if TEE bus enumeration framework supports flexibility.
 
-This signoff doesn't belong here I think?
+If there is a way to fetch event logs buffer at runtime from TPM
+device then why should we rely on DT or ACPI stuff?
 
-> ---
->  drivers/firmware/efi/libstub/tpm.c | 57 ++++++++++++++++++++----------
->  1 file changed, 39 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/firmware/efi/libstub/tpm.c b/drivers/firmware/efi/libstub/tpm.c
-> index 5bd04f75d8d6..b3f30448e454 100644
-> --- a/drivers/firmware/efi/libstub/tpm.c
-> +++ b/drivers/firmware/efi/libstub/tpm.c
-> @@ -8,8 +8,13 @@
->   *     Thiebaud Weksteen <tweek@google.com>
->   */
->  #include <linux/efi.h>
-> -#include <linux/tpm_eventlog.h>
->  #include <asm/efi.h>
-> +/*
-> + * KASAN redefines memcpy() in a way that isn't available in the EFI stub.
-> + * We need to include asm/efi.h before linux/tpm_eventlog.h in order to avoid
-> + * the wrong memcpy() being referenced.
-> + */
-> +#include <linux/tpm_eventlog.h>
+> The problem is with the TEE bus enumeration.
 >
 
-Please drop this hunk. I just sent out a patch to fix this properly.
+See my response below.
 
->  #include "efistub.h"
+> >
+> > >
+> > > Note that this also requires changes to the fTPM TA that has been
+> > existing for few years.
+> > >
+> >
+> > That's not a sane reason to avoid implementing generic stuff.
 >
-> @@ -57,7 +62,7 @@ void efi_enable_reset_attack_mitigation(efi_system_table_t *sys_table_arg)
+> Exactly, TEE bus enumeration framework need to support generic stuff that is expected
+> of a bus driver. You are expecting everything else to be generic enough, but not TEE bus enumeration.
 >
->  #endif
+
+I guess you are missing the basic TEE bus view. It is an
+auto-discoverable bus where TAs as devices are detected automatically.
+It is similar to USB, PCI etc. busses. But in case of Platform, I2C,
+SPI etc. which are NOT auto-discoverable busses, devices are described
+in the hardware description language (ACPI or DT).
+
+Like in case of TPM, when acting as an I2C based device is represented
+via a DT node (see section: "2.4 Device population" in
+Documentation/devicetree/usage-model.txt). And device specific
+properties are retrieved from corresponding device DT node. But in
+case of TPM being a TEE based device, detected automatically, you
+won't have a device DT node to describe its properties but rather
+those properties need to derived from the device automatically.
+
+So in summary, it doesn't seems possible to support TEE devices
+detected automatically and have properties described in DT unless you
+hard code DT node path in the driver to provide those properties which
+doesn't looks like a generic solution.
+
+> > As there
+> > could be other fTPM implementations and specific DT nodes for each
+> > which might not be maintainable. BTW, in current implementation also I
+> > don't find DT bindings corresponding to DT node used in this
+> > patch-set.
+> >
+> > > Is it not possible to add flexibility in TEE bus enumeration framework to
+> > > support platform specific properties through OF nodes or ACPI?
+> > >
+> >
+> > TEE bus framework was designed specifically to avoid OF nodes or ACPI
+> > properties. As devices could be intelligent enough to be queried for
+> > required properties.
 >
-> -static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
-> +void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
->  {
->         efi_guid_t tcg2_guid = EFI_TCG2_PROTOCOL_GUID;
->         efi_guid_t linux_eventlog_guid = LINUX_EFI_TPM_EVENT_LOG_GUID;
-> @@ -67,6 +72,7 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
->         unsigned long first_entry_addr, last_entry_addr;
->         size_t log_size, last_entry_size;
->         efi_bool_t truncated;
-> +       int version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
->         void *tcg2_protocol = NULL;
+> Is there an expectation that TEE bus enumerated devices to be intelligent?
+> If so, this is another limitation of TEE bus enumeration.
+> Please fix these limitations to make TEE bus enumeration
+> scalable and flexible for future use cases.
 >
->         status = efi_call_early(locate_protocol, &tcg2_guid, NULL,
-> @@ -74,14 +80,20 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
->         if (status != EFI_SUCCESS)
->                 return;
->
-> -       status = efi_call_proto(efi_tcg2_protocol, get_event_log, tcg2_protocol,
-> -                               EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2,
-> -                               &log_location, &log_last_entry, &truncated);
-> -       if (status != EFI_SUCCESS)
-> -               return;
-> +       status = efi_call_proto(efi_tcg2_protocol, get_event_log,
-> +                               tcg2_protocol, version, &log_location,
-> +                               &log_last_entry, &truncated);
-> +
-> +       if (status != EFI_SUCCESS || !log_location) {
-> +               version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-> +               status = efi_call_proto(efi_tcg2_protocol, get_event_log,
-> +                                       tcg2_protocol, version, &log_location,
-> +                                       &log_last_entry, &truncated);
-> +               if (status != EFI_SUCCESS || !log_location)
-> +                       return;
-> +
-> +       }
->
-> -       if (!log_location)
-> -               return;
->         first_entry_addr = (unsigned long) log_location;
->
->         /*
-> @@ -96,8 +108,23 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
->                  * We need to calculate its size to deduce the full size of
->                  * the logs.
->                  */
-> -               last_entry_size = sizeof(struct tcpa_event) +
-> -                       ((struct tcpa_event *) last_entry_addr)->event_size;
-> +               if (version == EFI_TCG2_EVENT_LOG_FORMAT_TCG_2) {
-> +                       /*
-> +                        * The TCG2 log format has variable length entries,
-> +                        * and the information to decode the hash algorithms
-> +                        * back into a size is contained in the first entry -
-> +                        * pass a pointer to the final entry (to calculate its
-> +                        * size) and the first entry (so we know how long each
-> +                        * digest is)
-> +                        */
-> +                       last_entry_size =
-> +                               __calc_tpm2_event_size((void *)last_entry_addr,
-> +                                                   (void *)(long)log_location,
-> +                                                   false);
-> +               } else {
-> +                       last_entry_size = sizeof(struct tcpa_event) +
-> +                          ((struct tcpa_event *) last_entry_addr)->event_size;
-> +               }
->                 log_size = log_last_entry - log_location + last_entry_size;
->         }
->
-> @@ -114,7 +141,7 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
->
->         memset(log_tbl, 0, sizeof(*log_tbl) + log_size);
->         log_tbl->size = log_size;
-> -       log_tbl->version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-> +       log_tbl->version = version;
->         memcpy(log_tbl->log, (void *) first_entry_addr, log_size);
->
->         status = efi_call_early(install_configuration_table,
-> @@ -126,9 +153,3 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
->  err_free:
->         efi_call_early(free_pool, log_tbl);
->  }
-> -
-> -void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
-> -{
-> -       /* Only try to retrieve the logs in 1.2 format. */
-> -       efi_retrieve_tpm2_eventlog_1_2(sys_table_arg);
-> -}
-> --
-> 2.21.0.1020.gf2820cf01a-goog
->
+
+It's not a limitation but rather a feature of TEE devices being
+auto-discoverable rather being described via DT or ACPI.
+
+-Sumit
+
+> >
+> > > Devices enumerated by buses such as i2c can read platform specific
+> > properties.
+> >
+> > i2c devices are real hardware which could be platform agnostic, so you
+> > need to have platform specific properties.
+> >
+> > -Sumit
+> >
+> > > With this flexibility added, more future use cases through TEE bus.
+> > >
+> > >
+> > > > This is something similar to what I used in
+> > > > optee-rng [1] driver to fetch RNG properties.
+> > > >
+> > > > [1]
+> > > >
+> > https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.co
+> > > >
+> > m%2Ftorvalds%2Flinux%2Fblob%2Fmaster%2Fdrivers%2Fchar%2Fhw_random%2Foptee-
+> > > >
+> > rng.c%23L176&amp;data=02%7C01%7Cthiruan%40microsoft.com%7Cd37438eaf4f9483e4
+> > > >
+> > 0c708d6d9ccfe0c%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C63693587179549
+> > > >
+> > 3006&amp;sdata=As9sC45Bl7sZdJKOq0sHz6GmXttMxS80Nn5yvN4vqng%3D&amp;reserved=
+> > > > 0
+> > > >
+> > > > -Sumit
+> > > >
+> > > > > >
+> > > > > > >
+> > > > > > > --
+> > > > > > > Thanks,
+> > > > > > > Sasha
