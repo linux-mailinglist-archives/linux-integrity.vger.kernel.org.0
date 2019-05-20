@@ -2,66 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D134D242B9
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2019 23:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E815242D4
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2019 23:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727177AbfETVUo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 May 2019 17:20:44 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37304 "EHLO
+        id S1726111AbfETV1O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 May 2019 17:27:14 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47166 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726823AbfETVUn (ORCPT
+        by vger.kernel.org with ESMTP id S1726164AbfETV1O (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 May 2019 17:20:43 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4KL1tbe004277
-        for <linux-integrity@vger.kernel.org>; Mon, 20 May 2019 17:20:42 -0400
+        Mon, 20 May 2019 17:27:14 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4KLMfCJ128335
+        for <linux-integrity@vger.kernel.org>; Mon, 20 May 2019 17:27:13 -0400
 Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2sm0x6ev79-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2sm1qbd776-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 20 May 2019 17:20:42 -0400
+        for <linux-integrity@vger.kernel.org>; Mon, 20 May 2019 17:27:12 -0400
 Received: from localhost
         by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 20 May 2019 22:20:40 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        Mon, 20 May 2019 22:27:11 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
         by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 20 May 2019 22:20:38 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4KLKbil60686518
+        Mon, 20 May 2019 22:27:07 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4KLR6hR37814350
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 May 2019 21:20:37 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24E49AE051;
-        Mon, 20 May 2019 21:20:37 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE5F9AE04D;
-        Mon, 20 May 2019 21:20:35 +0000 (GMT)
+        Mon, 20 May 2019 21:27:06 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 834614C04E;
+        Mon, 20 May 2019 21:27:06 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EFBA04C044;
+        Mon, 20 May 2019 21:27:04 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.80.80.109])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 May 2019 21:20:35 +0000 (GMT)
-Subject: Re: [PATCH 4/4] ima: only audit failed appraisal verifications
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 20 May 2019 21:27:04 +0000 (GMT)
+Subject: Re: [PATCH V3 6/6] IMA: Allow profiles to define the desired IMA
+ template
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        dmitry.kasatkin@huawei.com, mjg59@google.com
-Cc:     linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
-        stable@vger.kernel.org
-Date:   Mon, 20 May 2019 17:20:25 -0400
-In-Reply-To: <20190516161257.6640-4-roberto.sassu@huawei.com>
-References: <20190516161257.6640-1-roberto.sassu@huawei.com>
-         <20190516161257.6640-4-roberto.sassu@huawei.com>
+To:     Matthew Garrett <mjg59@google.com>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        prakhar srivastava <prsriva02@gmail.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, miklos@szeredi.hu,
+        linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Date:   Mon, 20 May 2019 17:26:54 -0400
+In-Reply-To: <CACdnJutPywtoyjykDnfX_gazfo_iQ9TCFPYgK60PcOFFFy39YQ@mail.gmail.com>
+References: <20190517212448.14256-1-matthewgarrett@google.com>
+         <20190517212448.14256-7-matthewgarrett@google.com>
+         <1558136840.4507.91.camel@linux.ibm.com>
+         <CACdnJutPywtoyjykDnfX_gazfo_iQ9TCFPYgK60PcOFFFy39YQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-x-cbid: 19052021-0020-0000-0000-0000033EB794
+x-cbid: 19052021-0020-0000-0000-0000033EB7E7
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052021-0021-0000-0000-00002191919C
-Message-Id: <1558387225.4039.78.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-20_08:,,
+x-cbparentid: 19052021-0021-0000-0000-0000219191F3
+Message-Id: <1558387614.4039.84.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-20_09:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
@@ -73,39 +79,20 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2019-05-16 at 18:12 +0200, Roberto Sassu wrote:
-> This patch ensures that integrity_audit_msg() is called only when the
-> status is not INTEGRITY_PASS.
+On Mon, 2019-05-20 at 13:59 -0700, Matthew Garrett wrote:
+> On Fri, May 17, 2019 at 4:47 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > Matthew, I'm going to ask you to separate out this patch from this
+> > patch set.  Roberto, Thiago, Prakhar, I'm going to ask you to review
+> > Matthew's patch.  I'm expecting all of the patchsets will be re-posted
+> > based on it.
 > 
-> Fixes: 8606404fa555c ("ima: digital signature verification support")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Cc: stable@vger.kernel.org
-> ---
->  security/integrity/ima/ima_appraise.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index a32ed5d7afd1..f5f4506bcb8e 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -359,8 +359,9 @@ int ima_appraise_measurement(enum ima_hooks func,
->  			status = INTEGRITY_PASS;
->  		}
->  
-> -		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
-> -				    op, cause, rc, 0);
-> +		if (status != INTEGRITY_PASS)
-> +			integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode,
-> +					    filename, op, cause, rc, 0);
+> Would you like something along these lines merged before reviewing the
+> rest of them, or is adding the ima-vfs-ng template and allowing admins
+> to configure it as default sufficient?
 
-For some reason, the integrity verification has failed.  In some
-specific cases, we'll let it pass, but do we really want to remove any
-indication that it failed in all cases?
+This patch is really independent of the patch set.  I'd really like it
+as a separate, independent patch in case it needs to be back ported.
+ It will also make it easier to review.
 
 Mimi
-
-
->  	} else {
->  		ima_cache_flags(iint, func);
->  	}
 
