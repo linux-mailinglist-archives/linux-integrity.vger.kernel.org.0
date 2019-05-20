@@ -2,52 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC29022CB0
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2019 09:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5021E22E30
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2019 10:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730494AbfETHK6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 May 2019 03:10:58 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41020 "EHLO mx1.suse.de"
+        id S1731064AbfETIRA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 May 2019 04:17:00 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32954 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729518AbfETHK5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 May 2019 03:10:57 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 56767AD5C;
-        Mon, 20 May 2019 07:10:56 +0000 (UTC)
-Date:   Mon, 20 May 2019 09:10:55 +0200
-From:   Johannes Thumshirn <jthumshirn@suse.de>
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.vnet.ibm.com,
-        dmitry.kasatkin@gmail.com, miklos@szeredi.hu,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Matthew Garrett <mjg59@google.com>
-Subject: Re: [PATCH V3 1/6] VFS: Add a call to obtain a file's hash
-Message-ID: <20190520071055.GB4985@x250>
-References: <20190517212448.14256-1-matthewgarrett@google.com>
- <20190517212448.14256-2-matthewgarrett@google.com>
+        id S1729496AbfETIRA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 20 May 2019 04:17:00 -0400
+Received: from LHREML714-CAH.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 7536EA16AA066197D4C3;
+        Mon, 20 May 2019 09:16:58 +0100 (IST)
+Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
+ (10.201.108.37) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 20 May
+ 2019 09:16:52 +0100
+Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
+To:     Arvind Sankar <nivedita@alum.mit.edu>
+CC:     <hpa@zytor.com>, <viro@zeniv.linux.org.uk>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zohar@linux.vnet.ibm.com>,
+        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
+        <takondra@cisco.com>, <kamensky@cisco.com>, <arnd@arndb.de>,
+        <rob@landley.net>, <james.w.mcmechan@gmail.com>,
+        <niveditas98@gmail.com>
+References: <20190517165519.11507-1-roberto.sassu@huawei.com>
+ <20190517165519.11507-3-roberto.sassu@huawei.com>
+ <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
+ <20190517210219.GA5998@rani.riverdale.lan>
+ <20190517211014.GA9198@rani.riverdale.lan>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <cee53f00-a216-0666-0774-0f3ebf1b1292@huawei.com>
+Date:   Mon, 20 May 2019 10:16:58 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190517212448.14256-2-matthewgarrett@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190517211014.GA9198@rani.riverdale.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.220.96.108]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, May 17, 2019 at 02:24:43PM -0700, Matthew Garrett wrote:
-> + * vfs_gethash - obtain a file's hash
-[...]
-> +int vfs_get_hash(struct file *file, enum hash_algo hash, uint8_t *buf,
+On 5/17/2019 11:10 PM, Arvind Sankar wrote:
+> On Fri, May 17, 2019 at 05:02:20PM -0400, Arvind Sankar wrote:
+>> On Fri, May 17, 2019 at 01:18:11PM -0700, hpa@zytor.com wrote:
+>>>
+>>> Ok... I just realized this does not work for a modular initramfs, composed at load time from multiple files, which is a very real problem. Should be easy enough to deal with: instead of one large file, use one companion file per source file, perhaps something like filename..xattrs (suggesting double dots to make it less likely to conflict with a "real" file.) No leading dot, as it makes it more likely that archivers will sort them before the file proper.
+>> This version of the patch was changed from the previous one exactly to deal with this case --
+>> it allows for the bootloader to load multiple initramfs archives, each
+>> with its own .xattr-list file, and to have that work properly.
+>> Could you elaborate on the issue that you see?
+> Roberto, are you missing a changelog entry for v2->v3 change?
 
-Nit: the kernel-doc says it's called vfs_gethash(), but the function is called
-vfs_get_hash().
+The changelog for v1->v2 is missing.
+
+Thanks
+
+Roberto
+
 -- 
-Johannes Thumshirn                            SUSE Labs Filesystems
-jthumshirn@suse.de                                +49 911 74053 689
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
-Key fingerprint = EC38 9CAB C2C4 F25D 8600 D0D0 0393 969D 2D76 0850
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
