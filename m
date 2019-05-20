@@ -2,97 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E815242D4
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2019 23:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3452E243F5
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2019 01:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbfETV1O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 May 2019 17:27:14 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47166 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726164AbfETV1O (ORCPT
+        id S1727077AbfETXP3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 May 2019 19:15:29 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37908 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726357AbfETXP3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 May 2019 17:27:14 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4KLMfCJ128335
-        for <linux-integrity@vger.kernel.org>; Mon, 20 May 2019 17:27:13 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2sm1qbd776-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 20 May 2019 17:27:12 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 20 May 2019 22:27:11 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 20 May 2019 22:27:07 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4KLR6hR37814350
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 May 2019 21:27:06 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 834614C04E;
-        Mon, 20 May 2019 21:27:06 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EFBA04C044;
-        Mon, 20 May 2019 21:27:04 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.80.109])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 May 2019 21:27:04 +0000 (GMT)
-Subject: Re: [PATCH V3 6/6] IMA: Allow profiles to define the desired IMA
- template
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Matthew Garrett <mjg59@google.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        prakhar srivastava <prsriva02@gmail.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, miklos@szeredi.hu,
-        linux-fsdevel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Date:   Mon, 20 May 2019 17:26:54 -0400
-In-Reply-To: <CACdnJutPywtoyjykDnfX_gazfo_iQ9TCFPYgK60PcOFFFy39YQ@mail.gmail.com>
-References: <20190517212448.14256-1-matthewgarrett@google.com>
-         <20190517212448.14256-7-matthewgarrett@google.com>
-         <1558136840.4507.91.camel@linux.ibm.com>
-         <CACdnJutPywtoyjykDnfX_gazfo_iQ9TCFPYgK60PcOFFFy39YQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Mon, 20 May 2019 19:15:29 -0400
+Received: from [10.200.157.26] (unknown [131.107.160.154])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AB7B620B7192;
+        Mon, 20 May 2019 16:15:28 -0700 (PDT)
+From:   Lakshmi <nramas@linux.microsoft.com>
+Subject: Re: [PATCH 0/2] public key: IMA signer logging: Log public key of IMA
+ Signature signer in IMA log
+To:     Ken Goldman <kgold@linux.ibm.com>,
+        Linux Integrity <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Cc:     Balaji Balasubramanyan <balajib@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        jorhand@linux.microsoft.com
+References: <6b69f115-96cf-890a-c92b-0b2b05798357@linux.microsoft.com>
+ <750fdb9f-fc9b-24bf-42c3-32156ecdc16f@linux.ibm.com>
+ <9c944ba6-f520-96e1-3631-1e21bbc4c327@linux.microsoft.com>
+ <0b5ae493-6564-40e9-343b-e6781c229a25@linux.ibm.com>
+Message-ID: <54663a75-a601-ae6c-8068-bc2c3923a948@linux.microsoft.com>
+Date:   Mon, 20 May 2019 16:15:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <0b5ae493-6564-40e9-343b-e6781c229a25@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19052021-0020-0000-0000-0000033EB7E7
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052021-0021-0000-0000-0000219191F3
-Message-Id: <1558387614.4039.84.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-20_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905200132
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-05-20 at 13:59 -0700, Matthew Garrett wrote:
-> On Fri, May 17, 2019 at 4:47 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > Matthew, I'm going to ask you to separate out this patch from this
-> > patch set.  Roberto, Thiago, Prakhar, I'm going to ask you to review
-> > Matthew's patch.  I'm expecting all of the patchsets will be re-posted
-> > based on it.
+On 5/17/19 7:41 AM, Ken Goldman wrote:
+
+Hi Ken,
+
+Apologize for the delay in responding.
+
+> Since a platform typically uses only a few signing keys, 4 bytes makes 
+> the chance of a collision quite small.  The collision would have to be 
+> within the same log, not global.
 > 
-> Would you like something along these lines merged before reviewing the
-> rest of them, or is adding the ima-vfs-ng template and allowing admins
-> to configure it as default sufficient?
+> In that worst case, the verifier would have to try two keys.  It's a
+> slight performance penalty, but does anything break?
 
-This patch is really independent of the patch set.  I'd really like it
-as a separate, independent patch in case it needs to be back ported.
- It will also make it easier to review.
+Problem Statement:
+- If the attestation service has to re-validate the signature reported 
+in the IMA log, the service has to maintain the hash\signature of all 
+the binaries deployed on all the client nodes. This approach will not 
+scale for large cloud deployments.
+- Possibility of collision of "Key Ids" is non-zero
+- In the service if the "Key Id" alone is used to verify using a map of
+"Key Id" to "Signing Key(s)", the service cannot determine if the 
+trusted signing key was indeed used by the client for signature 
+validation (Due to "Key Id" collision issue or malicious signature).
 
-Mimi
+Proposed Solution:
+- The service receives known\trusted signing key(s) from a trusted 
+source (that is different from the client machines)
+- The clients measure the keys in key rings such as IMA, Platform, 
+BuiltIn Trusted, etc. as early as possible in the boot sequence.
+- Leave all IMA measurements the same - i.e., we don't log public keys 
+in the IMA log for each file, but just use what is currently available 
+in IMA.
 
+Impact:
+- The service can verify that the keyrings have only known\trusted keys.
+- The service can cross check the "key id" with the key rings measured.
+- The look up of keys using the key id would be simpler and faster on 
+the service side.
+- It can also handle collision of Key Ids.
+
+Note that the following is a key assumption:
+
+- Only keys signed by a key in the "BuiltIn Trusted Keyring" can be 
+added to IMA\Platform keyrings.
+
+
+Thanks,
+  -lakshmi
