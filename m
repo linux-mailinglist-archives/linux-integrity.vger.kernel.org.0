@@ -2,179 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFF92424E
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2019 22:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A102425D
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2019 22:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbfETUzS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 May 2019 16:55:18 -0400
-Received: from mail-pg1-f202.google.com ([209.85.215.202]:56991 "EHLO
-        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726979AbfETUzQ (ORCPT
+        id S1725989AbfETU7l (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 May 2019 16:59:41 -0400
+Received: from mail-it1-f193.google.com ([209.85.166.193]:39881 "EHLO
+        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfETU7l (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 May 2019 16:55:16 -0400
-Received: by mail-pg1-f202.google.com with SMTP id r191so7454474pgr.23
-        for <linux-integrity@vger.kernel.org>; Mon, 20 May 2019 13:55:16 -0700 (PDT)
+        Mon, 20 May 2019 16:59:41 -0400
+Received: by mail-it1-f193.google.com with SMTP id 9so1274343itf.4
+        for <linux-integrity@vger.kernel.org>; Mon, 20 May 2019 13:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2S/gHsQaO08L1k/kaLAgP/iaI6c/d06OZBDkdH1Ekx0=;
-        b=bn7WHiENp+Jgwq76sRokv6v0WVMG7P/MdlQ0xYiJJeuGCup45bH514LUOM4BaBFOuw
-         hIy6lnvtRfymw2xIt/dCmLB5QS6fGxTOlZYBEXpo0fOw05p1vzBfpNRMnKilxoy8UJmN
-         RundMf4Zidiv5pdMqiDJvIqlfmZe4p5XNL2Bn1ZR7Dqmvkh6yYJEVYefZZAvfG0DAdhn
-         WVNDbeYz1YoQ3AbvTdCoacQlkFj8rWvYmubnWoAplDxM0LIxIKMh5grd4dEY/YsLNvRf
-         rvu7FgRa2sS22ddDAmespjdjtj/wHQO2czYud2euSGrg99uYS6zQvwMyGrquZxSrhL+P
-         d4xA==
+        bh=oDbtrkAn+1X/+6QAPGA7azScNJ8+AfBKHdkpeyBfaAs=;
+        b=URsGLiTS87uMxjVortgbvlWNpWU1BKAlnTtN6iqJokKOYobND8XdHNJd37JypSqXx8
+         6kVbW6mvNu63+SGe4gcIMu0d85gebGUfzQNr8T0Ttry1EbjqpIFlCumGBD5BP0vxUFCY
+         5AS5yL477wJgd0A2pVp6NZI3xtkwmD4ETIj2baBBiN+qUbj+RUuPSgWFdWgkClsfTe6N
+         zDGLP46vd+hZrcO/y+C1M+sUsLvM11nRg3ZRQaYN3umZjt+qoPXElhSITYSMjL6UcQUm
+         fzh+aZ07YmHQQ+n4VDoMAWyc5OK+sUxYy5tXWLRsR9ABYEKI51/HWcsN+xi6tZNFKMbo
+         0tWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=2S/gHsQaO08L1k/kaLAgP/iaI6c/d06OZBDkdH1Ekx0=;
-        b=nSgMg807v/T2sG55+KtHNgSGpOOEFa1gdfzqp5xUCfSC5nI8hYL/y+2Cuxo2Y97Xb7
-         OhhuCUJoB23gXwAE0pCBX5s0yJJvow+J4q2nNS7S5rbj94dRHWRZGpiIrV01ysf099fA
-         +YacNoD6+VPtsjbfEk46prJl9Ra23AMHUU2mXXRAyux38RGitj9m423siMWncuM0ftpW
-         BcTKIGQKMKvXE1PMhd4/Oau1QoJfZ/YFXTiQszUVmzjLGmKaHD2QZkq+384RXOLh4HvF
-         j1etspMMmPTWHjNlGQ0YzGgM2kdbze+OJ1+LxhZDaRpCRJDlqFjzYVnnfxer8+0PYIwK
-         idwQ==
-X-Gm-Message-State: APjAAAU5urIyxv7toDgjUHUeWXJzWTX4A7UhaTNrxquOpwTERV4pCxgF
-        CD3Tc6X/rRTpCG5B8utIGHjgrCua+BTKmLlIEjQW1zBvS8nzALxpqi95LnRYl7PEeo/q5l6XVNc
-        5YLSXSv/qk4xYEMOx6Q7oO+G2Fd2VUpAgIcgV+paUGX4p60dDsxwkKi7acAaJ8pqnVvF6WqcB/i
-        HRD0GFr9un0/VCmaSeFyA=
-X-Google-Smtp-Source: APXvYqzXluYerRenEIporaBqlL0VKRUEYZ6bb//DTlFcuJIwvPvXL8WLmsndEpl+oa5KGu6dGG7EK4vv+klAAzBgskcu3w==
-X-Received: by 2002:a63:1061:: with SMTP id 33mr51272273pgq.328.1558385715691;
- Mon, 20 May 2019 13:55:15 -0700 (PDT)
-Date:   Mon, 20 May 2019 13:55:01 -0700
-In-Reply-To: <20190520205501.177637-1-matthewgarrett@google.com>
-Message-Id: <20190520205501.177637-5-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190520205501.177637-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-Subject: [PATCH V7 4/4] efi: Attempt to get the TCG2 event log in the boot stub
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
-        roberto.sassu@huawei.com, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tweek@google.com, bsz@semihalf.com,
-        Matthew Garrett <mjg59@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oDbtrkAn+1X/+6QAPGA7azScNJ8+AfBKHdkpeyBfaAs=;
+        b=gT/8SqAtWfKXzM/mGg8bk1cTHOrTuY0qqCIhZ1hDjzOkNykCLfVj1KbkVYVFYmBh3P
+         f3YudWNbyN+7z5N6uzFejPWEO88ziPji7KljzgaCBpITrqkRMvIucbyyGvpvhdVN2wq+
+         a0crfG3TXN2gYCWudRWDohXcfzbkpSplGoSjDGkBZbGCm192/yvfiOZoxvyghnsjkrLD
+         TcFNo614Lg9/CkoetF8ourNVPVueEQcN4V8NuHWhJNID2EqwP//VUhBxB8Tz28w7+MBU
+         llBA0wrisjX58l4gj9rLImdrPn1IVsVwUd4jbKxBd/NSWxtTeB4RaHS7yA2CaOks28Fs
+         3wJw==
+X-Gm-Message-State: APjAAAXzzKyfl3KPb5+uTYCTrdjcffDZgTSNwVXK4jcheckyuZeUfZ7h
+        L5JRSkPj8bookYg9Cp0+EgIKEb3b0l9RAK7wX3b1Rg==
+X-Google-Smtp-Source: APXvYqxkjSIeuumxaK1MzS8+Ijo/uhqZYvCMemsPoCqGyeDTpvZS5/GJDjvBPamdgpAcQa8DeEz68v5Zhqb8LElLYr4=
+X-Received: by 2002:a24:a943:: with SMTP id x3mr953454iti.64.1558385980416;
+ Mon, 20 May 2019 13:59:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190517212448.14256-1-matthewgarrett@google.com>
+ <20190517212448.14256-7-matthewgarrett@google.com> <1558136840.4507.91.camel@linux.ibm.com>
+In-Reply-To: <1558136840.4507.91.camel@linux.ibm.com>
+From:   Matthew Garrett <mjg59@google.com>
+Date:   Mon, 20 May 2019 13:59:28 -0700
+Message-ID: <CACdnJutPywtoyjykDnfX_gazfo_iQ9TCFPYgK60PcOFFFy39YQ@mail.gmail.com>
+Subject: Re: [PATCH V3 6/6] IMA: Allow profiles to define the desired IMA template
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        prakhar srivastava <prsriva02@gmail.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, miklos@szeredi.hu,
+        linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Matthew Garrett <mjg59@google.com>
+On Fri, May 17, 2019 at 4:47 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> Matthew, I'm going to ask you to separate out this patch from this
+> patch set.  Roberto, Thiago, Prakhar, I'm going to ask you to review
+> Matthew's patch.  I'm expecting all of the patchsets will be re-posted
+> based on it.
 
-Right now we only attempt to obtain the SHA1-only event log. The
-protocol also supports a crypto agile log format, which contains digests
-for all algorithms in use. Attempt to obtain this first, and fall back
-to obtaining the older format if the system doesn't support it. This is
-lightly complicated by the event sizes being variable (as we don't know
-in advance which algorithms are in use), and the interface giving us
-back a pointer to the start of the final entry rather than a pointer to
-the end of the log - as a result, we need to parse the final entry to
-figure out its length in order to know how much data to copy up to the
-OS.
-
-Signed-off-by: Matthew Garrett <mjg59@google.com>
----
- drivers/firmware/efi/libstub/tpm.c | 50 ++++++++++++++++++++----------
- 1 file changed, 33 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/firmware/efi/libstub/tpm.c b/drivers/firmware/efi/libstub/tpm.c
-index 5bd04f75d8d6..6b3b507a54eb 100644
---- a/drivers/firmware/efi/libstub/tpm.c
-+++ b/drivers/firmware/efi/libstub/tpm.c
-@@ -57,7 +57,7 @@ void efi_enable_reset_attack_mitigation(efi_system_table_t *sys_table_arg)
- 
- #endif
- 
--static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
-+void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
- {
- 	efi_guid_t tcg2_guid = EFI_TCG2_PROTOCOL_GUID;
- 	efi_guid_t linux_eventlog_guid = LINUX_EFI_TPM_EVENT_LOG_GUID;
-@@ -67,6 +67,7 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- 	unsigned long first_entry_addr, last_entry_addr;
- 	size_t log_size, last_entry_size;
- 	efi_bool_t truncated;
-+	int version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
- 	void *tcg2_protocol = NULL;
- 
- 	status = efi_call_early(locate_protocol, &tcg2_guid, NULL,
-@@ -74,14 +75,20 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- 	if (status != EFI_SUCCESS)
- 		return;
- 
--	status = efi_call_proto(efi_tcg2_protocol, get_event_log, tcg2_protocol,
--				EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2,
--				&log_location, &log_last_entry, &truncated);
--	if (status != EFI_SUCCESS)
--		return;
-+	status = efi_call_proto(efi_tcg2_protocol, get_event_log,
-+				tcg2_protocol, version, &log_location,
-+				&log_last_entry, &truncated);
-+
-+	if (status != EFI_SUCCESS || !log_location) {
-+		version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-+		status = efi_call_proto(efi_tcg2_protocol, get_event_log,
-+					tcg2_protocol, version, &log_location,
-+					&log_last_entry, &truncated);
-+		if (status != EFI_SUCCESS || !log_location)
-+			return;
-+
-+	}
- 
--	if (!log_location)
--		return;
- 	first_entry_addr = (unsigned long) log_location;
- 
- 	/*
-@@ -96,8 +103,23 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- 		 * We need to calculate its size to deduce the full size of
- 		 * the logs.
- 		 */
--		last_entry_size = sizeof(struct tcpa_event) +
--			((struct tcpa_event *) last_entry_addr)->event_size;
-+		if (version == EFI_TCG2_EVENT_LOG_FORMAT_TCG_2) {
-+			/*
-+			 * The TCG2 log format has variable length entries,
-+			 * and the information to decode the hash algorithms
-+			 * back into a size is contained in the first entry -
-+			 * pass a pointer to the final entry (to calculate its
-+			 * size) and the first entry (so we know how long each
-+			 * digest is)
-+			 */
-+			last_entry_size =
-+				__calc_tpm2_event_size((void *)last_entry_addr,
-+						    (void *)(long)log_location,
-+						    false);
-+		} else {
-+			last_entry_size = sizeof(struct tcpa_event) +
-+			   ((struct tcpa_event *) last_entry_addr)->event_size;
-+		}
- 		log_size = log_last_entry - log_location + last_entry_size;
- 	}
- 
-@@ -114,7 +136,7 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- 
- 	memset(log_tbl, 0, sizeof(*log_tbl) + log_size);
- 	log_tbl->size = log_size;
--	log_tbl->version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-+	log_tbl->version = version;
- 	memcpy(log_tbl->log, (void *) first_entry_addr, log_size);
- 
- 	status = efi_call_early(install_configuration_table,
-@@ -126,9 +148,3 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- err_free:
- 	efi_call_early(free_pool, log_tbl);
- }
--
--void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
--{
--	/* Only try to retrieve the logs in 1.2 format. */
--	efi_retrieve_tpm2_eventlog_1_2(sys_table_arg);
--}
--- 
-2.21.0.1020.gf2820cf01a-goog
-
+Would you like something along these lines merged before reviewing the
+rest of them, or is adding the ima-vfs-ng template and allowing admins
+to configure it as default sufficient?
