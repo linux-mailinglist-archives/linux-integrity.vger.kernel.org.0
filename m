@@ -2,24 +2,25 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDD322F34
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2019 10:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2002308D
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2019 11:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730411AbfETIrb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 May 2019 04:47:31 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32955 "EHLO huawei.com"
+        id S1730503AbfETJju (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 May 2019 05:39:50 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32956 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727499AbfETIrb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 May 2019 04:47:31 -0400
+        id S1727720AbfETJju (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 20 May 2019 05:39:50 -0400
 Received: from LHREML714-CAH.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 4BE9A91FD6E0516857B2;
-        Mon, 20 May 2019 09:47:29 +0100 (IST)
+        by Forcepoint Email with ESMTP id 4A75E6FA85003A8236AE;
+        Mon, 20 May 2019 10:39:48 +0100 (IST)
 Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
  (10.201.108.37) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 20 May
- 2019 09:47:21 +0100
+ 2019 10:39:40 +0100
 Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
-To:     <hpa@zytor.com>, <viro@zeniv.linux.org.uk>
-CC:     <linux-security-module@vger.kernel.org>,
+To:     Arvind Sankar <nivedita@alum.mit.edu>,
+        "H. Peter Anvin" <hpa@zytor.com>
+CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
         <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
         <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <zohar@linux.vnet.ibm.com>,
@@ -30,13 +31,16 @@ CC:     <linux-security-module@vger.kernel.org>,
 References: <20190517165519.11507-1-roberto.sassu@huawei.com>
  <20190517165519.11507-3-roberto.sassu@huawei.com>
  <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
+ <20190517210219.GA5998@rani.riverdale.lan>
+ <d48f35a1-aab1-2f20-2e91-5e81a84b107f@zytor.com>
+ <20190517221731.GA11358@rani.riverdale.lan>
 From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <2fbe55dc-2f4a-e476-79d0-06931b4f1dee@huawei.com>
-Date:   Mon, 20 May 2019 10:47:27 +0200
+Message-ID: <7bdca169-7a01-8c55-40e4-a832e876a0e5@huawei.com>
+Date:   Mon, 20 May 2019 11:39:46 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.3.0
 MIME-Version: 1.0
-In-Reply-To: <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
+In-Reply-To: <20190517221731.GA11358@rani.riverdale.lan>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -47,198 +51,70 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/17/2019 10:18 PM, hpa@zytor.com wrote:
-> On May 17, 2019 9:55:19 AM PDT, Roberto Sassu <roberto.sassu@huawei.com> wrote:
->> This patch adds support for an alternative method to add xattrs to
->> files in
->> the rootfs filesystem. Instead of extracting them directly from the ram
->> disk image, they are extracted from a regular file called .xattr-list,
->> that
->> can be added by any ram disk generator available today. The file format
->> is:
+On 5/18/2019 12:17 AM, Arvind Sankar wrote:
+> On Fri, May 17, 2019 at 02:47:31PM -0700, H. Peter Anvin wrote:
+>> On 5/17/19 2:02 PM, Arvind Sankar wrote:
+>>> On Fri, May 17, 2019 at 01:18:11PM -0700, hpa@zytor.com wrote:
+>>>>
+>>>> Ok... I just realized this does not work for a modular initramfs, composed at load time from multiple files, which is a very real problem. Should be easy enough to deal with: instead of one large file, use one companion file per source file, perhaps something like filename..xattrs (suggesting double dots to make it less likely to conflict with a "real" file.) No leading dot, as it makes it more likely that archivers will sort them before the file proper.
+>>> This version of the patch was changed from the previous one exactly to deal with this case --
+>>> it allows for the bootloader to load multiple initramfs archives, each
+>>> with its own .xattr-list file, and to have that work properly.
+>>> Could you elaborate on the issue that you see?
+>>>
 >>
->> <file #N data len (ASCII, 10 chars)><file #N path>\0
->> <xattr #N data len (ASCII, 8 chars)><xattr #N name>\0<xattr #N value>
+>> Well, for one thing, how do you define "cpio archive", each with its own
+>> .xattr-list file? Second, that would seem to depend on the ordering, no,
+>> in which case you depend critically on .xattr-list file following the
+>> files, which most archivers won't do.
 >>
->> .xattr-list can be generated by executing:
+>> Either way it seems cleaner to have this per file; especially if/as it
+>> can be done without actually mucking up the format.
 >>
->> $ getfattr --absolute-names -d -h -R -e hex -m - \
->>       <file list> | xattr.awk -b > ${initdir}/.xattr-list
+>> I need to run, but I'll post a more detailed explanation of what I did
+>> in a little bit.
 >>
->> where the content of the xattr.awk script is:
+>> 	-hpa
 >>
->> #! /usr/bin/awk -f
->> {
->>   if (!length($0)) {
->>     printf("%.10x%s\0", len, file);
->>     for (x in xattr) {
->>       printf("%.8x%s\0", xattr_len[x], x);
->>       for (i = 0; i < length(xattr[x]) / 2; i++) {
->>         printf("%c", strtonum("0x"substr(xattr[x], i * 2 + 1, 2)));
->>       }
->>     }
->>     i = 0;
->>     delete xattr;
->>     delete xattr_len;
->>     next;
->>   };
->>   if (i == 0) {
->>     file=$3;
->>     len=length(file) + 8 + 1;
->>   }
->>   if (i > 0) {
->>     split($0, a, "=");
->>     xattr[a[1]]=substr(a[2], 3);
->>     xattr_len[a[1]]=length(a[1]) + 1 + 8 + length(xattr[a[1]]) / 2;
->>     len+=xattr_len[a[1]];
->>   };
->>   i++;
->> }
->>
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->> ---
->> init/initramfs.c | 99 ++++++++++++++++++++++++++++++++++++++++++++++++
->> 1 file changed, 99 insertions(+)
->>
->> diff --git a/init/initramfs.c b/init/initramfs.c
->> index 0c6dd1d5d3f6..6ec018c6279a 100644
->> --- a/init/initramfs.c
->> +++ b/init/initramfs.c
->> @@ -13,6 +13,8 @@
->> #include <linux/namei.h>
->> #include <linux/xattr.h>
->>
->> +#define XATTR_LIST_FILENAME ".xattr-list"
->> +
->> static ssize_t __init xwrite(int fd, const char *p, size_t count)
->> {
->> 	ssize_t out = 0;
->> @@ -382,6 +384,97 @@ static int __init __maybe_unused do_setxattrs(char
->> *pathname)
->> 	return 0;
->> }
->>
->> +struct path_hdr {
->> +	char p_size[10]; /* total size including p_size field */
->> +	char p_data[];   /* <path>\0<xattrs> */
->> +};
->> +
->> +static int __init do_readxattrs(void)
->> +{
->> +	struct path_hdr hdr;
->> +	char *path = NULL;
->> +	char str[sizeof(hdr.p_size) + 1];
->> +	unsigned long file_entry_size;
->> +	size_t size, path_size, total_size;
->> +	struct kstat st;
->> +	struct file *file;
->> +	loff_t pos;
->> +	int ret;
->> +
->> +	ret = vfs_lstat(XATTR_LIST_FILENAME, &st);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	total_size = st.size;
->> +
->> +	file = filp_open(XATTR_LIST_FILENAME, O_RDONLY, 0);
->> +	if (IS_ERR(file))
->> +		return PTR_ERR(file);
->> +
->> +	pos = file->f_pos;
->> +
->> +	while (total_size) {
->> +		size = kernel_read(file, (char *)&hdr, sizeof(hdr), &pos);
->> +		if (size != sizeof(hdr)) {
->> +			ret = -EIO;
->> +			goto out;
->> +		}
->> +
->> +		total_size -= size;
->> +
->> +		str[sizeof(hdr.p_size)] = 0;
->> +		memcpy(str, hdr.p_size, sizeof(hdr.p_size));
->> +		ret = kstrtoul(str, 16, &file_entry_size);
->> +		if (ret < 0)
->> +			goto out;
->> +
->> +		file_entry_size -= sizeof(sizeof(hdr.p_size));
->> +		if (file_entry_size > total_size) {
->> +			ret = -EINVAL;
->> +			goto out;
->> +		}
->> +
->> +		path = vmalloc(file_entry_size);
->> +		if (!path) {
->> +			ret = -ENOMEM;
->> +			goto out;
->> +		}
->> +
->> +		size = kernel_read(file, path, file_entry_size, &pos);
->> +		if (size != file_entry_size) {
->> +			ret = -EIO;
->> +			goto out_free;
->> +		}
->> +
->> +		total_size -= size;
->> +
->> +		path_size = strnlen(path, file_entry_size);
->> +		if (path_size == file_entry_size) {
->> +			ret = -EINVAL;
->> +			goto out_free;
->> +		}
->> +
->> +		xattr_buf = path + path_size + 1;
->> +		xattr_len = file_entry_size - path_size - 1;
->> +
->> +		ret = do_setxattrs(path);
->> +		vfree(path);
->> +		path = NULL;
->> +
->> +		if (ret < 0)
->> +			break;
->> +	}
->> +out_free:
->> +	vfree(path);
->> +out:
->> +	fput(file);
->> +
->> +	if (ret < 0)
->> +		error("Unable to parse xattrs");
->> +
->> +	return ret;
->> +}
->> +
->> static __initdata int wfd;
->>
->> static int __init do_name(void)
->> @@ -391,6 +484,11 @@ static int __init do_name(void)
->> 	if (strcmp(collected, "TRAILER!!!") == 0) {
->> 		free_hash();
->> 		return 0;
->> +	} else if (strcmp(collected, XATTR_LIST_FILENAME) == 0) {
->> +		struct kstat st;
->> +
->> +		if (!vfs_lstat(collected, &st))
->> +			do_readxattrs();
->> 	}
->> 	clean_path(collected, mode);
->> 	if (S_ISREG(mode)) {
->> @@ -562,6 +660,7 @@ static char * __init unpack_to_rootfs(char *buf,
->> unsigned long len)
->> 		buf += my_inptr;
->> 		len -= my_inptr;
->> 	}
->> +	do_readxattrs();
->> 	dir_utime();
->> 	kfree(name_buf);
->> 	kfree(symlink_buf);
+> Not sure what you mean by how do I define it? Each cpio archive will
+> contain its own .xattr-list file with signatures for the files within
+> it, that was the idea.
 > 
-> Ok... I just realized this does not work for a modular initramfs, composed at load time from multiple files, which is a very real problem. Should be easy enough to deal with: instead of one large file, use one companion file per source file, perhaps something like filename..xattrs (suggesting double dots to make it less likely to conflict with a "real" file.) No leading dot, as it makes it more likely that archivers will sort them before the file proper.
+> You need to review the code more closely I think -- it does not depend
+> on the .xattr-list file following the files to which it applies.
+> 
+> The code first extracts .xattr-list as though it was a regular file. If
+> a later dupe shows up (presumably from a second archive, although the
+> patch will actually allow a second one in the same archive), it will
+> then process the existing .xattr-list file and apply the attributes
+> listed within it. It then will proceed to read the second one and
+> overwrite the first one with it (this is the normal behaviour in the
+> kernel cpio parser). At the end once all the archives have been
+> extracted, if there is an .xattr-list file in the rootfs it will be
+> parsed (it would've been the last one encountered, which hasn't been
+> parsed yet, just extracted).
+> 
+> Regarding the idea to use the high 16 bits of the mode field in
+> the header that's another possibility. It would just require additional
+> support in the program that actually creates the archive though, which
+> the current patch doesn't.
 
-Version 1 of the patch set worked exactly in this way. However, Rob
-pointed out that this would be a problem if file names plus the suffix
-exceed 255 characters.
+Yes, for adding signatures for a subset of files, no changes to the ram
+disk generator are necessary. Everything is done by a custom module. To
+support a generic use case, it would be necessary to modify the
+generator to execute getfattr and the awk script after files have been
+placed in the temporary directory.
+
+If I understood the new proposal correctly, it would be task for cpio to
+read file metadata after the content and create a new record for each
+file with mode 0x18000, type of metadata encoded in the file name and
+metadata as file content. I don't know how easy it would be to modify
+cpio. Probably the amount of changes would be reasonable.
+
+The kernel will behave in a similar way. It will call do_readxattrs() in
+do_copy() for each file. Since the only difference between the current
+and the new proposal would be two additional calls to do_readxattrs() in
+do_name() and unpack_to_rootfs(), maybe we could support both.
 
 Roberto
 
