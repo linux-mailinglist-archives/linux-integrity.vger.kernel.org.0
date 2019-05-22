@@ -2,113 +2,193 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B078726CBD
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 21:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8ED270CB
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 22:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732014AbfEVThF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 May 2019 15:37:05 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:40032 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731471AbfEVThF (ORCPT
+        id S1729691AbfEVU2L (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 May 2019 16:28:11 -0400
+Received: from alln-iport-7.cisco.com ([173.37.142.94]:60032 "EHLO
+        alln-iport-7.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728761AbfEVU2K (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 May 2019 15:37:05 -0400
-Received: from [10.200.157.26] (unknown [131.107.160.154])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E438020B7186;
-        Wed, 22 May 2019 12:37:03 -0700 (PDT)
-Subject: Re: [PATCH 0/2] public key: IMA signer logging: Log public key of IMA
- Signature signer in IMA log
-To:     Ken Goldman <kgold@linux.ibm.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Cc:     Balaji Balasubramanyan <balajib@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        jorhand@linux.microsoft.com
-References: <6b69f115-96cf-890a-c92b-0b2b05798357@linux.microsoft.com>
- <750fdb9f-fc9b-24bf-42c3-32156ecdc16f@linux.ibm.com>
- <9c944ba6-f520-96e1-3631-1e21bbc4c327@linux.microsoft.com>
- <0b5ae493-6564-40e9-343b-e6781c229a25@linux.ibm.com>
- <54663a75-a601-ae6c-8068-bc2c3923a948@linux.microsoft.com>
- <b1a2edc1-45c7-7a9f-7a77-e252b2f85a64@linux.ibm.com>
-From:   Lakshmi <nramas@linux.microsoft.com>
-Message-ID: <2bf6f51f-a55b-9f7d-0e50-25d92fc95e8b@linux.microsoft.com>
-Date:   Wed, 22 May 2019 12:37:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Wed, 22 May 2019 16:28:10 -0400
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 May 2019 16:28:09 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=5573; q=dns/txt; s=iport;
+  t=1558556889; x=1559766489;
+  h=mime-version:content-transfer-encoding:to:from:
+   in-reply-to:cc:references:message-id:subject:date;
+  bh=5ZVlBUw1vSKJZaYc/jBoJa7SC61n5XMCpHwyOOfomTQ=;
+  b=DTcF023b2YqWzj+cGnhQVeqLAT5ehX0PvJ+ox6pEqTTNMzULRYZiJxsQ
+   vNHKvjRr5/9yQvBO6EXKvbw+2MF9BOXMm9+8dYkfyV+Ozka2yROrrYn1C
+   Sv98hrdeHvQkKrZyAPXnlx3540njlcrUMImzhw+RBYK9zqedQBDqcRS7k
+   4=;
+X-IronPort-AV: E=Sophos;i="5.60,500,1549929600"; 
+   d="scan'208";a="274622354"
+Received: from rcdn-core-4.cisco.com ([173.37.93.155])
+  by alln-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 22 May 2019 20:21:02 +0000
+Received: from localhost ([10.156.154.45])
+        by rcdn-core-4.cisco.com (8.15.2/8.15.2) with ESMTP id x4MKL2YY023597;
+        Wed, 22 May 2019 20:21:02 GMT
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <b1a2edc1-45c7-7a9f-7a77-e252b2f85a64@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+To:     Arvind Sankar <nivedita@alum.mit.edu>,
+        Rob Landley <rob@landley.net>,
+        Roberto Sassu <roberto.sassu@huawei.com>, hpa@zytor.com
+From:   Taras Kondratiuk <takondra@cisco.com>
+In-Reply-To: <3839583c-5466-6573-3048-0da7e6778c88@landley.net>
+Cc:     viro@zeniv.linux.org.uk, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.vnet.ibm.com,
+        silviu.vlasceanu@huawei.com, dmitry.kasatkin@huawei.com,
+        kamensky@cisco.com, arnd@arndb.de, james.w.mcmechan@gmail.com,
+        niveditas98@gmail.com
+References: <20190517165519.11507-1-roberto.sassu@huawei.com>
+ <20190517165519.11507-3-roberto.sassu@huawei.com>
+ <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
+ <20190517210219.GA5998@rani.riverdale.lan>
+ <d48f35a1-aab1-2f20-2e91-5e81a84b107f@zytor.com>
+ <20190517221731.GA11358@rani.riverdale.lan>
+ <7bdca169-7a01-8c55-40e4-a832e876a0e5@huawei.com>
+ <9C5B9F98-2067-43D3-B149-57613F38DCD4@zytor.com>
+ <3839583c-5466-6573-3048-0da7e6778c88@landley.net>
+Message-ID: <155855646075.4574.2642646033980450856@takondra-t460s>
+User-Agent: alot/0.6
+Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
+Date:   Wed, 22 May 2019 13:21:00 -0700
+X-Outbound-SMTP-Client: 10.156.154.45, [10.156.154.45]
+X-Outbound-Node: rcdn-core-4.cisco.com
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/22/19 11:57 AM, Ken Goldman wrote:
+Quoting Rob Landley (2019-05-22 12:26:43)
+> =
 
-> 
-> 1 - How is your solution - including a public key with each event - 
-> related to this issue?
-This a change from my earlier proposal. In the new proposal I am making 
-the public key is not included with each event. The data included in 
-each IMA event does not change. For instance, when IMA signature 
-validation is selected (ima-sig template, for instance), each event will 
-have the IMA signature (which includes the 4 Byte Key Identifier and the 
-Signature)
+> =
 
-> 2 - I don't understand how a large cloud affects scale.  Wouldn't the 
-> verifier would typically be checking known machines - those of their 
-> enterprise - not every machine on the cloud?
-> 
-> Can't we assume a typical attestation use case has a fairly locked down 
-> OS with a limited number of applications.
-Yes - the attestation service (verifier) will be attesting only client 
-machines known to the enterprise. But such clients could be running 
-different versions of the OS and the kernel modules.
-We cannot assume that this would be a limited set. Therefore, 
-maintaining the hash\signature of all such components, for all versions 
-of the components, and re-validating that in the service is not a 
-scalable solution.
+> On 5/22/19 11:17 AM, hpa@zytor.com wrote:
+> > On May 20, 2019 2:39:46 AM PDT, Roberto Sassu <roberto.sassu@huawei.com=
+> wrote:
+> >> On 5/18/2019 12:17 AM, Arvind Sankar wrote:
+> >>> On Fri, May 17, 2019 at 02:47:31PM -0700, H. Peter Anvin wrote:
+> >>>> On 5/17/19 2:02 PM, Arvind Sankar wrote:
+> >>>>> On Fri, May 17, 2019 at 01:18:11PM -0700, hpa@zytor.com wrote:
+> >>>>>>
+> >>>>>> Ok... I just realized this does not work for a modular initramfs,
+> >> composed at load time from multiple files, which is a very real
+> >> problem. Should be easy enough to deal with: instead of one large file,
+> >> use one companion file per source file, perhaps something like
+> >> filename..xattrs (suggesting double dots to make it less likely to
+> >> conflict with a "real" file.) No leading dot, as it makes it more
+> >> likely that archivers will sort them before the file proper.
+> >>>>> This version of the patch was changed from the previous one exactly
+> >> to deal with this case --
+> >>>>> it allows for the bootloader to load multiple initramfs archives,
+> >> each
+> >>>>> with its own .xattr-list file, and to have that work properly.
+> >>>>> Could you elaborate on the issue that you see?
+> >>>>>
+> >>>>
+> >>>> Well, for one thing, how do you define "cpio archive", each with its
+> >> own
+> >>>> .xattr-list file? Second, that would seem to depend on the ordering,
+> >> no,
+> >>>> in which case you depend critically on .xattr-list file following
+> >> the
+> >>>> files, which most archivers won't do.
+> >>>>
+> >>>> Either way it seems cleaner to have this per file; especially if/as
+> >> it
+> >>>> can be done without actually mucking up the format.
+> >>>>
+> >>>> I need to run, but I'll post a more detailed explanation of what I
+> >> did
+> >>>> in a little bit.
+> >>>>
+> >>>>    -hpa
+> >>>>
+> >>> Not sure what you mean by how do I define it? Each cpio archive will
+> >>> contain its own .xattr-list file with signatures for the files within
+> >>> it, that was the idea.
+> >>>
+> >>> You need to review the code more closely I think -- it does not
+> >> depend
+> >>> on the .xattr-list file following the files to which it applies.
+> >>>
+> >>> The code first extracts .xattr-list as though it was a regular file.
+> >> If
+> >>> a later dupe shows up (presumably from a second archive, although the
+> >>> patch will actually allow a second one in the same archive), it will
+> >>> then process the existing .xattr-list file and apply the attributes
+> >>> listed within it. It then will proceed to read the second one and
+> >>> overwrite the first one with it (this is the normal behaviour in the
+> >>> kernel cpio parser). At the end once all the archives have been
+> >>> extracted, if there is an .xattr-list file in the rootfs it will be
+> >>> parsed (it would've been the last one encountered, which hasn't been
+> >>> parsed yet, just extracted).
+> >>>
+> >>> Regarding the idea to use the high 16 bits of the mode field in
+> >>> the header that's another possibility. It would just require
+> >> additional
+> >>> support in the program that actually creates the archive though,
+> >> which
+> >>> the current patch doesn't.
+> >>
+> >> Yes, for adding signatures for a subset of files, no changes to the ram
+> >> disk generator are necessary. Everything is done by a custom module. To
+> >> support a generic use case, it would be necessary to modify the
+> >> generator to execute getfattr and the awk script after files have been
+> >> placed in the temporary directory.
+> >>
+> >> If I understood the new proposal correctly, it would be task for cpio
+> >> to
+> >> read file metadata after the content and create a new record for each
+> >> file with mode 0x18000, type of metadata encoded in the file name and
+> >> metadata as file content. I don't know how easy it would be to modify
+> >> cpio. Probably the amount of changes would be reasonable.
+> =
 
-Instead, we want the IMA sub-system on the clients to do the signature 
-validation (As it is done today). In addition to that, the clients will 
-log the public keys from keyrings such as IMA, Platform, and BuiltIn 
-Trusted Keys - this will be done only once and not in each IMA event 
-(This is a change from my earlier proposal).
+> I could make toybox cpio do it in a weekend, and could probably throw a p=
+atch at
+> usr/gen_init_cpio.c while I'm at it. I prototyped something like that a c=
+ouple
+> years ago, it's not hard.
+> =
 
-Using this data the service will verify that the clients used only 
-trusted key(s) for signature validation.
+> The real question is scripts/gen_initramfs_list.sh and the text format it
+> produces. We can currently generate cpio files with different ownership a=
+nd
+> permissions than the host system can represent (when not building as root=
+, on a
+> filesystem that may not support xattrs or would get unhappy about conflic=
+ting
+> selinux annotations). We work around it by having the metadata represented
+> textually in the initramfs_list file gen_initramfs_list.sh produces and
+> gen_init_cpio.c consumes.
+> =
 
-> 
-> Like I said, it should be rare.  In the worst case, can't the service 
-> tell by trying both keys?If the service is validating the signature again it can try all the 
-keys. But we don't want to take that approach - instead we want to 
-verify the keys used by the client.
+> xattrs are a terrible idea the Macintosh invented so Finder could remembe=
+r where
+> you moved a file's icon in its folder without having to modify the file, =
+and
+> then things like OS/2 copied it and Windows picked it up from there and w=
+ent "Of
+> course, this is a security mechanism!" and... sigh.
+> =
 
-> 
-> I thought your solution was to change the IMA measurements, adding the 
-> public key to each entry with a new template?  Did I misunderstand, or 
-> do you have a new proposal?
-I have a new proposal as described above. Sorry if I had confused you.
+> This is "data that is not data", it's metadata of unbounded size. It seem=
+s like
+> it should go in gen_initramfs_list.sh but as what, keyword=3Dvalue pairs =
+that
+> might have embedded newlines in them? A base64 encoding? Something else?
 
-
-> How does this solve the collision issue?  If there are two keys with the 
-> same key ID, isn't there still a collision?
-Like I have said above, the client will log all the keys from the 
-relevant keyrings (IMA, Platform, etc.) The service will verify that 
-they are all known\trusted keys - which gives the assurance that the IMA 
-signature validation done by the client was performed using trusted 
-signing key(s).
-
-
-> I understand how the client keyring is used in IMA to check file
-> signatures, but how is that related to the attestation service?
-In my new proposal, the keys in the client keyrings will be logged in 
-the IMA log. The attestation service will verify that they are 
-known\trusted keys.
-
-Thanks,
-  -lakshmi
+I the previous try to add xattrs to cpio I've used hex encoding in
+gen_initramfs_list.sh:
+https://lkml.org/lkml/2018/1/24/851 - gen_init_cpio: set extended attribute=
+s for newcx format
+https://lkml.org/lkml/2018/1/24/852 - gen_initramfs_list.sh: add -x option =
+to enable newcx format
