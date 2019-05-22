@@ -2,170 +2,218 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D61426A4D
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 20:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E4326ED6
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 21:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728533AbfEVS5h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 May 2019 14:57:37 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37716 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728734AbfEVS5h (ORCPT
+        id S1731852AbfEVT0E (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 May 2019 15:26:04 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:45293 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731840AbfEVT0D (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 May 2019 14:57:37 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4MIuqLB142834
-        for <linux-integrity@vger.kernel.org>; Wed, 22 May 2019 14:57:35 -0400
-Received: from e36.co.us.ibm.com (e36.co.us.ibm.com [32.97.110.154])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2snbb8a1n3-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 22 May 2019 14:57:35 -0400
-Received: from localhost
-        by e36.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <kgold@linux.ibm.com>;
-        Wed, 22 May 2019 19:57:34 +0100
-Received: from b03cxnp07028.gho.boulder.ibm.com (9.17.130.15)
-        by e36.co.us.ibm.com (192.168.1.136) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 22 May 2019 19:57:31 +0100
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4MIvUDL38338724
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 May 2019 18:57:30 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D5DB6A054;
-        Wed, 22 May 2019 18:57:30 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DC0596A04F;
-        Wed, 22 May 2019 18:57:29 +0000 (GMT)
-Received: from [9.2.202.76] (unknown [9.2.202.76])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 22 May 2019 18:57:29 +0000 (GMT)
-Subject: Re: [PATCH 0/2] public key: IMA signer logging: Log public key of IMA
- Signature signer in IMA log
-To:     Lakshmi <nramas@linux.microsoft.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Cc:     Balaji Balasubramanyan <balajib@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        jorhand@linux.microsoft.com
-References: <6b69f115-96cf-890a-c92b-0b2b05798357@linux.microsoft.com>
- <750fdb9f-fc9b-24bf-42c3-32156ecdc16f@linux.ibm.com>
- <9c944ba6-f520-96e1-3631-1e21bbc4c327@linux.microsoft.com>
- <0b5ae493-6564-40e9-343b-e6781c229a25@linux.ibm.com>
- <54663a75-a601-ae6c-8068-bc2c3923a948@linux.microsoft.com>
-From:   Ken Goldman <kgold@linux.ibm.com>
-Date:   Wed, 22 May 2019 14:57:28 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+        Wed, 22 May 2019 15:26:03 -0400
+Received: by mail-ot1-f67.google.com with SMTP id t24so3134607otl.12
+        for <linux-integrity@vger.kernel.org>; Wed, 22 May 2019 12:26:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ewqKT8bg+GlNvY1OOB7hliqi09oPFaNl8uDtycn8IEs=;
+        b=XAvqPPZEoSxSai//AanqhMiByOerVUTFMO73VF3TBU/mQxESN3HSR5+8AFmpT1Fne/
+         5awv4yOF0Jjtj0irCoAW2zAZmqpXdykPyR9hf3GhWeWF//j9JuyFWMjHwJDxG/K2udT8
+         njAD5vUNkb+1XkiCPrEUKygr9MUdswUEUsqoRRmvjUCd4XaCWPEIvxbPNtrevCnVIchU
+         bFS2XIiaAHK616aAazWSdLCFwlMmu39L0xxxY/LjwPNNkIJT23VbgOHNpZZkwtqoX5RW
+         ZvbA9fDYAGlWWZDW9m//S37TJr/H+nR8pacFLxUbbofKyNkSBgG4XSFxKzFpRxrHDlVs
+         VKhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ewqKT8bg+GlNvY1OOB7hliqi09oPFaNl8uDtycn8IEs=;
+        b=TA8oycPROjBWEBPg7eakF8uWBb7CA6Qy7lPeAMM0dbtLZ9MDALlkUOrZIE4g2xntkq
+         QZ/m/WkzpRItxdo0L89h+AuNjv7j0gltQ8/5xz4532EIUoLksg6fMphtOpw9L5aFz6VZ
+         1oFbIXj+a0hMjCxd+CDn2kGbA4YfRgSrjoOLfk4giS8KwvI9d1Qtg4qxAfXIIzmVN7pg
+         vj0HGLp757fAR3CzTtIa39yNIDJ4ZK/2KOEp/LocEwkyi9Bk0o5f8K5wFWe+nG3simzh
+         B4z8Gmq1HVV3MbY4nRELGOR5ixHutWGxG4T4jCXf5Mq9TdHMO3/g1wAYV/lHNEctO0uM
+         qw/g==
+X-Gm-Message-State: APjAAAVC0wnQI/0Fn0yf3qeMElGDCjThutcN5raboYk7dLRNdUlN9lvv
+        4nLIVcXbCA+YaFDe5RBy8njr3Q==
+X-Google-Smtp-Source: APXvYqwF1jORb8TOhDGfqbcMG9dQkinGDO6QrFqO1Wiq5VBykQAkW6XmyAVRZb76ov2DZIPk+Jz8MA==
+X-Received: by 2002:a9d:4a84:: with SMTP id i4mr45623913otf.148.1558553162179;
+        Wed, 22 May 2019 12:26:02 -0700 (PDT)
+Received: from [192.168.1.5] (072-182-052-210.res.spectrum.com. [72.182.52.210])
+        by smtp.googlemail.com with ESMTPSA id x64sm9746168oia.32.2019.05.22.12.26.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 May 2019 12:26:01 -0700 (PDT)
+Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
+To:     hpa@zytor.com, Roberto Sassu <roberto.sassu@huawei.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>
+Cc:     viro@zeniv.linux.org.uk, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.vnet.ibm.com,
+        silviu.vlasceanu@huawei.com, dmitry.kasatkin@huawei.com,
+        takondra@cisco.com, kamensky@cisco.com, arnd@arndb.de,
+        james.w.mcmechan@gmail.com, niveditas98@gmail.com
+References: <20190517165519.11507-1-roberto.sassu@huawei.com>
+ <20190517165519.11507-3-roberto.sassu@huawei.com>
+ <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
+ <20190517210219.GA5998@rani.riverdale.lan>
+ <d48f35a1-aab1-2f20-2e91-5e81a84b107f@zytor.com>
+ <20190517221731.GA11358@rani.riverdale.lan>
+ <7bdca169-7a01-8c55-40e4-a832e876a0e5@huawei.com>
+ <9C5B9F98-2067-43D3-B149-57613F38DCD4@zytor.com>
+From:   Rob Landley <rob@landley.net>
+Message-ID: <3839583c-5466-6573-3048-0da7e6778c88@landley.net>
+Date:   Wed, 22 May 2019 14:26:43 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <54663a75-a601-ae6c-8068-bc2c3923a948@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <9C5B9F98-2067-43D3-B149-57613F38DCD4@zytor.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19052218-0020-0000-0000-00000EEECF45
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011144; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01207093; UDB=6.00633905; IPR=6.00988068;
- MB=3.00027007; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-22 18:57:33
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052218-0021-0000-0000-000065ED7215
-Message-Id: <b1a2edc1-45c7-7a9f-7a77-e252b2f85a64@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-22_10:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905220132
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/20/2019 7:15 PM, Lakshmi wrote:
-> On 5/17/19 7:41 AM, Ken Goldman wrote:
-> 
-> Hi Ken,
-> 
-> Apologize for the delay in responding.
-> 
->> Since a platform typically uses only a few signing keys, 4 bytes makes 
->> the chance of a collision quite small.  The collision would have to be 
->> within the same log, not global.
+
+
+On 5/22/19 11:17 AM, hpa@zytor.com wrote:
+> On May 20, 2019 2:39:46 AM PDT, Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>> On 5/18/2019 12:17 AM, Arvind Sankar wrote:
+>>> On Fri, May 17, 2019 at 02:47:31PM -0700, H. Peter Anvin wrote:
+>>>> On 5/17/19 2:02 PM, Arvind Sankar wrote:
+>>>>> On Fri, May 17, 2019 at 01:18:11PM -0700, hpa@zytor.com wrote:
+>>>>>>
+>>>>>> Ok... I just realized this does not work for a modular initramfs,
+>> composed at load time from multiple files, which is a very real
+>> problem. Should be easy enough to deal with: instead of one large file,
+>> use one companion file per source file, perhaps something like
+>> filename..xattrs (suggesting double dots to make it less likely to
+>> conflict with a "real" file.) No leading dot, as it makes it more
+>> likely that archivers will sort them before the file proper.
+>>>>> This version of the patch was changed from the previous one exactly
+>> to deal with this case --
+>>>>> it allows for the bootloader to load multiple initramfs archives,
+>> each
+>>>>> with its own .xattr-list file, and to have that work properly.
+>>>>> Could you elaborate on the issue that you see?
+>>>>>
+>>>>
+>>>> Well, for one thing, how do you define "cpio archive", each with its
+>> own
+>>>> .xattr-list file? Second, that would seem to depend on the ordering,
+>> no,
+>>>> in which case you depend critically on .xattr-list file following
+>> the
+>>>> files, which most archivers won't do.
+>>>>
+>>>> Either way it seems cleaner to have this per file; especially if/as
+>> it
+>>>> can be done without actually mucking up the format.
+>>>>
+>>>> I need to run, but I'll post a more detailed explanation of what I
+>> did
+>>>> in a little bit.
+>>>>
+>>>> 	-hpa
+>>>>
+>>> Not sure what you mean by how do I define it? Each cpio archive will
+>>> contain its own .xattr-list file with signatures for the files within
+>>> it, that was the idea.
+>>>
+>>> You need to review the code more closely I think -- it does not
+>> depend
+>>> on the .xattr-list file following the files to which it applies.
+>>>
+>>> The code first extracts .xattr-list as though it was a regular file.
+>> If
+>>> a later dupe shows up (presumably from a second archive, although the
+>>> patch will actually allow a second one in the same archive), it will
+>>> then process the existing .xattr-list file and apply the attributes
+>>> listed within it. It then will proceed to read the second one and
+>>> overwrite the first one with it (this is the normal behaviour in the
+>>> kernel cpio parser). At the end once all the archives have been
+>>> extracted, if there is an .xattr-list file in the rootfs it will be
+>>> parsed (it would've been the last one encountered, which hasn't been
+>>> parsed yet, just extracted).
+>>>
+>>> Regarding the idea to use the high 16 bits of the mode field in
+>>> the header that's another possibility. It would just require
+>> additional
+>>> support in the program that actually creates the archive though,
+>> which
+>>> the current patch doesn't.
 >>
->> In that worst case, the verifier would have to try two keys.  It's a
->> slight performance penalty, but does anything break?
+>> Yes, for adding signatures for a subset of files, no changes to the ram
+>> disk generator are necessary. Everything is done by a custom module. To
+>> support a generic use case, it would be necessary to modify the
+>> generator to execute getfattr and the awk script after files have been
+>> placed in the temporary directory.
+>>
+>> If I understood the new proposal correctly, it would be task for cpio
+>> to
+>> read file metadata after the content and create a new record for each
+>> file with mode 0x18000, type of metadata encoded in the file name and
+>> metadata as file content. I don't know how easy it would be to modify
+>> cpio. Probably the amount of changes would be reasonable.
+
+I could make toybox cpio do it in a weekend, and could probably throw a patch at
+usr/gen_init_cpio.c while I'm at it. I prototyped something like that a couple
+years ago, it's not hard.
+
+The real question is scripts/gen_initramfs_list.sh and the text format it
+produces. We can currently generate cpio files with different ownership and
+permissions than the host system can represent (when not building as root, on a
+filesystem that may not support xattrs or would get unhappy about conflicting
+selinux annotations). We work around it by having the metadata represented
+textually in the initramfs_list file gen_initramfs_list.sh produces and
+gen_init_cpio.c consumes.
+
+xattrs are a terrible idea the Macintosh invented so Finder could remember where
+you moved a file's icon in its folder without having to modify the file, and
+then things like OS/2 copied it and Windows picked it up from there and went "Of
+course, this is a security mechanism!" and... sigh.
+
+This is "data that is not data", it's metadata of unbounded size. It seems like
+it should go in gen_initramfs_list.sh but as what, keyword=value pairs that
+might have embedded newlines in them? A base64 encoding? Something else?
+
+>> The kernel will behave in a similar way. It will call do_readxattrs()
+>> in
+>> do_copy() for each file. Since the only difference between the current
+>> and the new proposal would be two additional calls to do_readxattrs()
+>> in
+>> do_name() and unpack_to_rootfs(), maybe we could support both.
+>>
+>> Roberto
 > 
-> Problem Statement:
-> - If the attestation service has to re-validate the signature reported 
-> in the IMA log, the service has to maintain the hash\signature of all 
-> the binaries deployed on all the client nodes. This approach will not 
-> scale for large cloud deployments.
+> The nice thing with explicit metadata is that it doesn't have to contain the filename per se, and each file is self-contained. There is a reason why each cpio header starts with the magic number: each cpio record is formally independent and can be processed in isolation.  The TRAILER!!! thing is a huge wart in the format, although in practice TRAILER!!! always has a mode of 0 and so can be distinguished from an actual file.
 
-1 - How is your solution - including a public key with each event - 
-related to this issue?
+Not adding the requirement that the cpio.gz must be generated as root from a
+filesystem with the same users and selinux rules as the target system would be nice.
 
-2 - I don't understand how a large cloud affects scale.  Wouldn't the 
-verifier would typically be checking known machines - those of their 
-enterprise - not every machine on the cloud?
+> The use of mode 0x18000 for metadata allows for optional backwards compatibility for extraction; for encoding this can be handled with very simple postprocessing.
 
-Can't we assume a typical attestation use case has a fairly locked down 
-OS with a limited number of applications.
+The representation within the cpio file was never a huge deal to me. 0x18000
+sounds fine for that.
 
-> - Possibility of collision of "Key Ids" is non-zero
-> - In the service if the "Key Id" alone is used to verify using a map of
-> "Key Id" to "Signing Key(s)", the service cannot determine if the 
-> trusted signing key was indeed used by the client for signature 
-> validation (Due to "Key Id" collision issue or malicious signature).
-
-Like I said, it should be rare.  In the worst case, can't the service 
-tell by trying both keys?
-
+> So my suggestion would be to have mode 0x18000 indicate extended file metadata, with the filename of the form:
 > 
-> Proposed Solution:
-> - The service receives known\trusted signing key(s) from a trusted 
-> source (that is different from the client machines)
-> - The clients measure the keys in key rings such as IMA, Platform, 
-> BuiltIn Trusted, etc. as early as possible in the boot sequence.
-> - Leave all IMA measurements the same - i.e., we don't log public keys 
-> in the IMA log for each file, but just use what is currently available 
-> in IMA.
-
-I thought your solution was to change the IMA measurements, adding the 
-public key to each entry with a new template?  Did I misunderstand, or 
-do you have a new proposal?
-
+> optional_filename!XXXXX!
 > 
-> Impact:
-> - The service can verify that the keyrings have only known\trusted keys.
+> ... where XXXXX indicates the type of metadata (e.g. !XATTR!). The optional_filename prefix allows an unaware decoder to extract to a well-defined name; simple postprocessing would be able to either remove (for size) or add (for compatibility) this prefix. It would be an error for this prefix, if present, to not match the name of the previous file.
 
-If the service already has trusted keys from a trusted source, why do 
-they have to come from the client at all?
+I'd suggest METADATA!!! to look like TRAILER!!!. (METADATA!!!XXXXX! if you
+really think a keyword=value pair store is _not_ universal and we're going to
+invent entire new _categories_ of this side channel nonsense.)
 
-> - The service can cross check the "key id" with the key rings measured.
-> - The look up of keys using the key id would be simpler and faster on 
-> the service side.
-> - It can also handle collision of Key Ids.
+And extracting conflicting filenames is presumably already covered, it either
+replaces or the new one fails to create the file and the extractor moves on.
+(You need a working error recovery path that skips the right amount of data so
+you can handle the next file properly, but you should have that anyway.)
 
-How does this solve the collision issue?  If there are two keys with the 
-same key ID, isn't there still a collision?
-
-> 
-> Note that the following is a key assumption:
-> 
-> - Only keys signed by a key in the "BuiltIn Trusted Keyring" can be 
-> added to IMA\Platform keyrings.
-
-I understand how the client keyring is used in IMA to check file
-signatures, but how is that related to the attestation service?
-
-> 
-> 
-> Thanks,
->   -lakshmi
-> 
-
+Rob
