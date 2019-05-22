@@ -2,134 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6139D266D9
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 17:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90ACC2673E
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 17:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729707AbfEVP1w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 May 2019 11:27:52 -0400
-Received: from uhil19pa13.eemsg.mail.mil ([214.24.21.86]:26062 "EHLO
-        uhil19pa13.eemsg.mail.mil" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729583AbfEVP1v (ORCPT
+        id S1729644AbfEVPtX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 May 2019 11:49:23 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:37794 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729375AbfEVPtX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 May 2019 11:27:51 -0400
-X-EEMSG-check-017: 400963448|UHIL19PA13_EEMSG_MP11.csd.disa.mil
-Received: from emsm-gh1-uea10.ncsc.mil ([214.29.60.2])
-  by uhil19pa13.eemsg.mail.mil with ESMTP/TLS/DHE-RSA-AES256-SHA256; 22 May 2019 15:27:48 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tycho.nsa.gov; i=@tycho.nsa.gov; q=dns/txt;
-  s=tycho.nsa.gov; t=1558538869; x=1590074869;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=MzLDIBsdBjlk88XXupJDSIduMBxEg/Gwh+QsPHNSZVw=;
-  b=MThWWckyKFZ2dK2ucP7RQtS2c1Mk7wmFh5DwOy4QYvV/1EZlar/sspnW
-   rrxI0nN6yhG9haip5TjQoG2tw0g361202egCFCuX8BkGc/CgW5GSKKV33
-   5LP1Iv+mCJx2ObuaQ5gPqlPyPuN6qjQP48goQiw9WCxKV+rrY/oT6lMRK
-   COxBf0S7jBepF3mLS30OaZ0K81fSVW8rRalI9WEaYYSWJ04zaq/lKJQLJ
-   xsg8d26udvBmPXa+XR2zaGzUoSp7prNMpqEx6y7R/PSrfN0VrbBe6EhvS
-   Qc8gvAYLnXpe5A91KMzNQDeKJS6epeZn4ByOrjQRFxD0fUpchTX/7VmxU
-   g==;
-X-IronPort-AV: E=Sophos;i="5.60,499,1549929600"; 
-   d="scan'208";a="23983789"
-IronPort-PHdr: =?us-ascii?q?9a23=3A0TM+0BWwV0jac4DY6DLRe8u4JpbV8LGtZVwlr6?=
- =?us-ascii?q?E/grcLSJyIuqrYZRWDuqdThVPEFb/W9+hDw7KP9fy5ACpZuMzK4C5KWacPfi?=
- =?us-ascii?q?dNsd8RkQ0kDZzNImzAB9muURYHGt9fXkRu5XCxPBsdMs//Y1rPvi/6tmZKSV?=
- =?us-ascii?q?3wOgVvO+v6BJPZgdip2OCu4Z3TZBhDiCagbb9oIxi6sBjdutMLjYd/NKo9xR?=
- =?us-ascii?q?jEr3pVcOlK2G1kIk6ekQzh7cmq5p5j9CpQu/Ml98FeVKjxYro1Q79FAjk4Km?=
- =?us-ascii?q?45/MLkuwXNQguJ/XscT34ZkgFUDAjf7RH1RYn+vy3nvedgwiaaPMn2TbcpWT?=
- =?us-ascii?q?S+6qpgVRHlhDsbOzM/7WrakdJ7gr5Frx29phx/24/Ub5+TNPpiZaPWYNcWSX?=
- =?us-ascii?q?NcUspNSyBNB4WxYIUVD+oFIO1WsY/zqVUTphe6HAWhBOfixjpOi3Tr36M1zv?=
- =?us-ascii?q?4hHBnb0gI+EdIAsHfaotv7O6gdU++60KbGwC7fb/5Vwzrx9JTEfx4jrPyKQL?=
- =?us-ascii?q?l+cdDRyU4qFw7dk1uQtZLqPyuV1usTtWiQ8vduVee1hG4jrwF+vDiuzdorh4?=
- =?us-ascii?q?nSm40V0UvJ9Tl5wYkpJd24T1R3Ydi/EJRKrS2aOIx2Qt07TmxupS00yaUGtI?=
- =?us-ascii?q?amcCUFx5kr3R7SZ+Gdf4SW7R/vSvydLSp+iXl4YrywnQyy/lKlyuDkU8m010?=
- =?us-ascii?q?tFoTRdn9nXs3ANywTT6s+aSvth5kuh2SiA1wTU6uxcPUA7j7DbK588wr4rjJ?=
- =?us-ascii?q?YTrUTCETP2mEXxlqOWcFkr+vO05Oj9Z7Xmp5ucO5d1igH4LKsuhtSyDfk3Pw?=
- =?us-ascii?q?UBRWSW+fmw2Kf98UD2XrlGlOA6nrHcsJ/AJMQboqC5AxVS0oYm8xu/FCqp0M?=
- =?us-ascii?q?8DkHkbLFNKZBKHj4/zN1HIO/D3F+2zg1urkDd13/zGJKHuAo3RLnjfl7fsZb?=
- =?us-ascii?q?d860lcyAUp19BS/JZUCrAHIPLuVU79rt3YAQQ8MwCu3+nnD9B93JsEWW2TGq?=
- =?us-ascii?q?+ZLL/SsViQ6+ItOeaMYokVtyjnJ/gm/fHul385mUIbfaa325sac3+4HvF8LE?=
- =?us-ascii?q?WYZXrgmMsOEWAPvgAmVuzllEWCUSJPZ3a1R688/is0CJ+iDYrYXoCimqGB3C?=
- =?us-ascii?q?OiEp1TYWBGDUqMHmnye4qYXPcMbTqYItV9nTwcSbihV4gh2AmqtA/7zbpnM+?=
- =?us-ascii?q?XV9jQZtZLlyNh6+eLTlQsz9TxoD8WQyH+NT25qkWMSXTM2375woVZ7ylid1a?=
- =?us-ascii?q?h0mftYFcZc5/lRSAc1KYbcz/BmC9D1Qg/BetaJSFC7QtSpGD0xVcw+zMMTY0?=
- =?us-ascii?q?ZnGtWikhDC0zOvA78SirOLGZg0/bzH0njvKMZy1WzG2LMij1Y4WMtPM3Ophq?=
- =?us-ascii?q?pl+wjUHY7JnBbRq6H/UKUZ3Wb/82eK1yLarkZYWRRYVaTDQGBZZ0HT69/+4x?=
- =?us-ascii?q?WGB52nD7IqeihI086fLKZMIonrhFNASbHgMc7efmS8nU+/AB+JwvWHa4+8Py?=
- =?us-ascii?q?0F1TjZIFANjgRW+HGBLwV4DSCk8EzECzk7Lk7ie0Ph96FFrXq/SkIlh1WRY1?=
- =?us-ascii?q?ZJy6u++hlTg+eVDfwUwORX628atzxoEQPljJrtAN2aql8kJfgNbA=3D=3D?=
-X-IPAS-Result: =?us-ascii?q?A2CBAwBkaeVc/wHyM5BlHAEBAQQBAQcEAQGBZYFnKoE2B?=
- =?us-ascii?q?TKEO5NaBoE1iU6Jb4UugWcJAQEBAQEBAQEBNAECAQGEQAKCMSM4EwEDAQEBB?=
- =?us-ascii?q?AEBAQEDAQFsKII6KQGCZwEFIw8BBUEQCxgCAiYCAlcGAQwIAQGCXz+BdxSoQ?=
- =?us-ascii?q?IEvhUeDJoFGgQwoi1EXeIEHgTiCaz6EKgKDIoJYBIs0jyyNUQmCD4IRkG8GG?=
- =?us-ascii?q?4IejESHUC2MMIEnljwhgVcrCAIYCCEPgyiQbCMDgTYBAY1qAQE?=
-Received: from tarius.tycho.ncsc.mil ([144.51.242.1])
-  by EMSM-GH1-UEA10.NCSC.MIL with ESMTP; 22 May 2019 15:27:47 +0000
-Received: from moss-pluto.infosec.tycho.ncsc.mil (moss-pluto [192.168.25.131])
-        by tarius.tycho.ncsc.mil (8.14.4/8.14.4) with ESMTP id x4MFRl2A016015;
-        Wed, 22 May 2019 11:27:47 -0400
-Subject: Re: sleep in selinux_audit_rule_init
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>, paul@paul-moore.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <CAE=NcrYsfQ2ijJJMEyTFoWnFqF2qGS=B2JNsVaE8WUNcGS7D9Q@mail.gmail.com>
- <e8dcc9a2-594d-f81a-32a7-e18f591c6062@tycho.nsa.gov>
- <4a725f06-8244-8264-a911-df7ca1c66789@tycho.nsa.gov>
- <1558530022.4347.11.camel@linux.ibm.com>
- <4db98b76-8637-edf6-c7df-3e244be0f11e@tycho.nsa.gov>
- <1558533420.4347.30.camel@linux.ibm.com>
-From:   Stephen Smalley <sds@tycho.nsa.gov>
-Message-ID: <1432f617-424e-044c-4f78-47f1100262ae@tycho.nsa.gov>
-Date:   Wed, 22 May 2019 11:27:47 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <1558533420.4347.30.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Wed, 22 May 2019 11:49:23 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4MFiHYZ119357;
+        Wed, 22 May 2019 15:49:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2018-07-02; bh=yzxtf1+H6ONIfRF6EGsdKncjQkKme48riHWFYanUkMs=;
+ b=OZ8KNAz58KLnLwaRxRD9UZUQ+PKTZIdXZAM8KsDPY/ISkaI2tJ556JLm8r9ainHMOkxG
+ ljOEzmXE31dnszjUti4fyZHTzAorfD/bxbDOSYvUV/YLgKKcHpMgp03oReWwnB2jjHb9
+ brBl9kFSzYQhvJWyphHLWCLgeth7V1J4r1as3V6eH4IOw3yVB5Jt9RUhE64wzbhunYXp
+ iKadU3XGUYD1GcA2GZTEACJZsRjTWOtQWOkMC5SbDlrkgBOQDjA7z3Wzae09HwejiYhK
+ Nxq/9/6QW3n2bVOq36voAHJkE+r6mEV9war6nL9viZ4fw6rRq10uGWpchLM/xIwJfIKu Pw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2smsk54ru8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 May 2019 15:49:20 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4MFliEq002159;
+        Wed, 22 May 2019 15:49:20 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2smsguxa87-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 May 2019 15:49:19 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4MFnJnr010437;
+        Wed, 22 May 2019 15:49:19 GMT
+Received: from anon-dhcp-171.1015granger.net (/68.61.232.219)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 22 May 2019 15:49:18 +0000
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: CAP_SYS_ADMIN requirement for updating IMA metadata
+From:   Chuck Lever <chuck.lever@oracle.com>
+In-Reply-To: <1558538361.4347.35.camel@linux.ibm.com>
+Date:   Wed, 22 May 2019 11:49:12 -0400
+Cc:     linux-integrity@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E66FAD82-34EF-45A2-9EDD-FD69541B36C5@oracle.com>
+References: <6FC12520-1B2F-46E8-B9B5-05FEA3147688@oracle.com>
+ <1558538361.4347.35.camel@linux.ibm.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9264 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905220111
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9264 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905220111
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/22/19 9:57 AM, Mimi Zohar wrote:
-> On Wed, 2019-05-22 at 09:16 -0400, Stephen Smalley wrote:
->> On 5/22/19 9:00 AM, Mimi Zohar wrote:
->>> On Wed, 2019-05-22 at 08:41 -0400, Stephen Smalley wrote:
->>>> Another potentially worrisome aspect of the current
->>>> ima_lsm_update_rules() logic is that it does a BUG_ON() if the attempt
->>>> to update the rule fails, which could occur if e.g. one had an IMA
->>>> policy rule based on a given domain/type and that domain/type were
->>>> removed from policy (e.g. via policy module removal).  Contrast with the
->>>> handling in audit_dupe_lsm_field().  The existing ima_lsm_update_rules()
->>>> logic could also yield a BUG_ON upon transient memory allocation failure.
->>>
->>> The original design was based on the assumption that SELinux labels
->>> could not be removed, only new ones could be added.  Sounds like that
->>> isn't the case any longer.
->>
->> That's never really been the case for SELinux; it has always been
->> possible to reload with a policy that renders previously valid security
->> contexts invalid.  What has changed over time is the ability of SELinux
->> to gracefully handle the situation where a security context is rendered
->> invalid upon a policy reload and then later restored to validity via a
->> subsequent policy reload (e.g. removing a policy module and then
->> re-adding it), but even that deferred mapping of contexts support has
->> been around since 2008.
->>
->> What you are likely thinking of is the conventional practice of
->> distributions, which is generally to not remove domains/types from their
->> policy or to at least retain a type alias for compatibility reasons.
->> But that's just a convention, not guaranteed by any mechanism, and users
->> are free to remove policy modules.
-> 
-> Ok.  The question is then how should IMA handle missing domains/types.
->   Just dropping IMA policy rules doesn't sound safe, nor does skipping
-> rules in case the domains/types are restored.
 
-You can just do what audit_dupe_lsm_field() does.  It effectively 
-disables the rule upon the invalidation (which makes sense, since it can 
-no longer match anything since nothing can have that domain/type) but 
-retains the string value so it can later re-activate the rule if the 
-domain/type becomes valid again later.
+
+> On May 22, 2019, at 11:19 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+>=20
+> On Wed, 2019-05-22 at 10:54 -0400, Chuck Lever wrote:
+>> Hi Mimi-
+>>=20
+>> I'm working on a section of draft-ietf-nfsv4-integrity-measurement =
+that
+>> discusses what kind of access permission is necessary to update a =
+file's
+>> IMA metadata. This is needed because every NFS operation has an =
+associated
+>> user ID -- an NFS server implementer needs to know which users are =
+allowed
+>> to alter the IMA metadata.
+>>=20
+>> On Linux, because the metadata is stored in "security.ima", =
+CAP_SYS_ADMIN
+>> is required.
+>>=20
+>> But on other NFS server implementations (ones that might not have a
+>> capabilities system), IMA metadata could be stored via a mechanism =
+that
+>> does not require any special permission.
+>>=20
+>> And, it seems to me that if a user can alter the file content, there =
+is
+>> no additional harm in her being allowed to update the IMA metadata.
+>>=20
+>> Is there an architectural reason, other than that Linux stores IMA =
+metadata
+>> in a security.* xattr, for requiring a superuser privilege to update =
+IMA
+>> metadata?
+>=20
+> security.ima may contain either a file hash or signature.   The file
+> hash should be protected via security.evm.[1]  Allowing anyone to
+> update the file hash would defeat its purpose.
+
+I wasn't thinking that anyone would be allowed to update the hash, but
+rather that a typical non-Linux NFS server might allow the file's owner
+to update it, for example, since it might store IMA metadata via a
+mechanism that does not require privilege.
+
+If privilege is a requirement, then the draft has to state it and a non-
+Linux NFS server implementation itself will have to enforce the =
+privilege
+requirement explicitly. (For Linux that is done by the VFS's xattr code,
+not by the NFS server implementation).
+
+I need to understand this better so I can write it up in the draft.
+Can you further explain what "defeat its purpose" means?
+
+- If the hash is altered, the effect is the same as if the file content
+is altered.
+
+- If the hash is altered, security.evm (which is not exposed via NFS)
+would allow a local (non-NFS) accessor to notice the specific problem.
+
+Seems like the file content is protected in these cases even if the
+hash is altered arbitrarily. ie, unwanted alteration is detected and
+then someone has to restore the file content and hash.
+
+What am I missing?
+
+
+> Mimi
+>=20
+> [1] Refer to Roberto's proposed change "[PATCH 3/4] ima: don't ignore
+> INTEGRITY_UNKNOWN EVM status"
+
+Hm. I didn't entirely understand the patch description. Even so, what
+concerns me is that EVM metadata is not exposed to NFS clients in the
+current Linux NFS implementation. For NFS, then, either:
+
+- a Linux server (or any server that has a local IMA implementation)
+will have to validate an unsigned hash locally, and then the underlying
+network transport will have to guarantee hash integrity during transit
+via GSS krb5i, for example
+
+or
+
+- the the IMA metadata (here I mean what is stored in security.ima)
+will have to be cryptographically signed such that the signature
+is also stored in that metadata and not in security.evm so that it
+is visible to NFS clients
+
+Currently the draft assumes that the only deployment mode with NFS
+will be the latter option.
+
+
+--
+Chuck Lever
+
+
+
