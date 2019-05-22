@@ -2,106 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E1926400
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 14:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ACA26435
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 15:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729018AbfEVMsJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 May 2019 08:48:09 -0400
-Received: from mail-lf1-f44.google.com ([209.85.167.44]:46145 "EHLO
-        mail-lf1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728468AbfEVMsJ (ORCPT
+        id S1728744AbfEVNAk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 May 2019 09:00:40 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48726 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728584AbfEVNAk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 May 2019 08:48:09 -0400
-Received: by mail-lf1-f44.google.com with SMTP id l26so1570318lfh.13;
-        Wed, 22 May 2019 05:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=so71oic5MNIX7UjYg22Fsgw/dMesIEcibwby9XO5GTI=;
-        b=utCS5nYhGEkR2JR3EAZkNkrWLGoW27eJ/PBlcxtnG5HFzwfyGptkVIy3ACk38lw4c4
-         a3H0QmzBRjeYQF3oxoN+8AN2139+lF1xtgncfhWoQ60DNRJpoRa7uQOtUuAhamNRJ1Mp
-         OKJjIUJS+x3/JN8/IlzbuvUcAJR81yW+1YB84mVZbImfzB2APSQSjWwHALi/waWxEHEv
-         tawij3+d8+WnZNPzjyH/Q2YW26xBqhb9xwUqvGVFMvSZ95vfbHXpbdkcFjOxkOpd4xRS
-         G7Hu/2UvjByOQnXGHW+c5aNZFvsZECFn0zBRCa8b0m71iIAVqIXR6A75vvKMlt5EZr3m
-         wrIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=so71oic5MNIX7UjYg22Fsgw/dMesIEcibwby9XO5GTI=;
-        b=hddc6MmTb5Yt6RB93bIw4T9hS7yYlhGR7OTDMj8m9OewYr5J05QWPNgllhrsq9Nqrs
-         zhvVaq9HqTzS+A8ipzx1pANLXZrAwszokYMT1K4NoW3G1Qld7ieboT8UuBGVmpI461a0
-         JNRGwMqUy2Bb6BIlJrk/FA5npZpfuPI79LHW9etivk0KRiKXzEfZuRCi1ojm9bIL+mNq
-         s9GFfWbawiVEif6BoE4jtggku2PmLOwzLjrAYF8kkzmCrYBalLUNXCUA5Kb/gnIxj0UN
-         clu6jTRe2jr053Ys27MkY0xedw+Jy7AynMEkZngNmcjwwQWEv82dRppuSO5H+62Q9UiG
-         mSQQ==
-X-Gm-Message-State: APjAAAXMzu0naY1Qg8vWAxtQMMus3EEIUxDhi9qUuy7N77L3b2jBYpTU
-        yKSIcWIuw77MyBJ43PyQ6SC8nEgu1YcR0tHJ7v0kVPNC
-X-Google-Smtp-Source: APXvYqwzDfk4kNjAfP29X+kRRtnaoRyTk6YdxZTTablGYCpU/aZycMdsVR2PokNKy8EsYn0X2l5mlmBTKkVS4DCxaMw=
-X-Received: by 2002:ac2:5bc1:: with SMTP id u1mr41093255lfn.111.1558529287306;
- Wed, 22 May 2019 05:48:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAE=NcrYsfQ2ijJJMEyTFoWnFqF2qGS=B2JNsVaE8WUNcGS7D9Q@mail.gmail.com>
- <e8dcc9a2-594d-f81a-32a7-e18f591c6062@tycho.nsa.gov>
-In-Reply-To: <e8dcc9a2-594d-f81a-32a7-e18f591c6062@tycho.nsa.gov>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Wed, 22 May 2019 15:47:55 +0300
-Message-ID: <CAE=NcraenhB3eFtvhhdxkySxRw5puOEFYZ9FXdaaFgNsjsvHUQ@mail.gmail.com>
+        Wed, 22 May 2019 09:00:40 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4MCw9i4074396
+        for <linux-integrity@vger.kernel.org>; Wed, 22 May 2019 09:00:39 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sn68x9y2w-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 22 May 2019 09:00:38 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 22 May 2019 14:00:37 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 22 May 2019 14:00:34 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4MD0XD061669532
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 May 2019 13:00:33 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A131C11C066;
+        Wed, 22 May 2019 13:00:33 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D85F411C052;
+        Wed, 22 May 2019 13:00:32 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.110.204])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 May 2019 13:00:32 +0000 (GMT)
 Subject: Re: sleep in selinux_audit_rule_init
-To:     Stephen Smalley <sds@tycho.nsa.gov>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, paul@paul-moore.com,
-        linux-integrity@vger.kernel.org,
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stephen Smalley <sds@tycho.nsa.gov>,
+        Janne Karhunen <janne.karhunen@gmail.com>, paul@paul-moore.com
+Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
+Date:   Wed, 22 May 2019 09:00:22 -0400
+In-Reply-To: <4a725f06-8244-8264-a911-df7ca1c66789@tycho.nsa.gov>
+References: <CAE=NcrYsfQ2ijJJMEyTFoWnFqF2qGS=B2JNsVaE8WUNcGS7D9Q@mail.gmail.com>
+         <e8dcc9a2-594d-f81a-32a7-e18f591c6062@tycho.nsa.gov>
+         <4a725f06-8244-8264-a911-df7ca1c66789@tycho.nsa.gov>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19052213-0008-0000-0000-000002E9487C
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19052213-0009-0000-0000-0000225602FC
+Message-Id: <1558530022.4347.11.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-22_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905220095
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 22, 2019 at 3:20 PM Stephen Smalley <sds@tycho.nsa.gov> wrote:
+On Wed, 2019-05-22 at 08:41 -0400, Stephen Smalley wrote:
+> Another potentially worrisome aspect of the current 
+> ima_lsm_update_rules() logic is that it does a BUG_ON() if the attempt 
+> to update the rule fails, which could occur if e.g. one had an IMA 
+> policy rule based on a given domain/type and that domain/type were 
+> removed from policy (e.g. via policy module removal).  Contrast with the 
+> handling in audit_dupe_lsm_field().  The existing ima_lsm_update_rules() 
+> logic could also yield a BUG_ON upon transient memory allocation failure.
 
-> > I managed to hit a following BUG, looks like ima can call
-> > selinux_audit_rule_init that can sleep in rcu critical section in
-> > ima_match_policy():
-> >
-> > __might_sleep
-> > kmem_cache_alloc_trace
-> > selinux_audit_rule_init <<< kzalloc (.. GFP_KERNEL)
-> > security_audit_rule_init
-> > ima_match_policy <<< list_for_each_entry_rcu
-> > ima_get_action
-> > process_measurement
-> > ima_file_check
-> > path_openat
-> > do_filp_open
-> > ..
-> >
-> > I guess this is the ima_match_rules() calling ima_lsm_update_rules()
-> > when it concludes that the selinux policy may have been reloaded.
-> >
-> > The easy way for me to fix my own butt in this regard is to change the
-> > selinux allocation not to wait, but Paul would you be OK with such
-> > change? The alternative looks like a pretty big change in the ima?
->
-> This is perhaps a sign of a deeper bug in IMA; if they are in the middle
-> of matching against their policy rules, then they shouldn't be
-> updating/modifying those rules in the middle of match processing?  How
-> is that safe under RCU?
+The original design was based on the assumption that SELinux labels
+could not be removed, only new ones could be added.  Sounds like that
+isn't the case any longer.
 
-Heh indeed...
+Mimi
 
-
-> If you look at how the audit subsystem deals with the same problem, they
-> have a callback (audit_update_lsm_rules) that is called upon an AVC
-> reset (hence upon a policy reload) and can update all of their rules at
-> that time, not lazily during matching.  Since that time, a more general
-> notifier mechanism was added, register_lsm_notifier(), and is used by
-> infiniband to update its state upon policy changes.
-
-I guess the same approach could work here. I'll see how that would
-look like exactly..
-
-
---
-Janne
