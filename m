@@ -2,115 +2,198 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0E9267F2
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 18:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F139268FD
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 19:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730018AbfEVQSz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 May 2019 12:18:55 -0400
-Received: from terminus.zytor.com ([198.137.202.136]:59405 "EHLO
-        mail.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728638AbfEVQSz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 May 2019 12:18:55 -0400
-Received: from [IPv6:2607:fb90:3635:972:9c5a:d1ae:8e8f:2fe7] ([IPv6:2607:fb90:3635:972:9c5a:d1ae:8e8f:2fe7])
-        (authenticated bits=0)
-        by mail.zytor.com (8.15.2/8.15.2) with ESMTPSA id x4MGIdpA3692384
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Wed, 22 May 2019 09:18:40 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com x4MGIdpA3692384
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2019051801; t=1558541921;
-        bh=luHnu8/JMpI0wULaC++B/hvrgAGxTmtVWSgg46F+QLk=;
-        h=Date:In-Reply-To:References:Subject:To:CC:From:From;
-        b=xs/vEushcxReVdh/8g68Ic5EU0WidpTQJoNKzhKXTrehDSUxqizAS16k/S4DuKB1E
-         IIHyOkuW1wZfO09+WE/+XDKVAYVNgKzmzYsRiBPvP5ee//WRZhhTEGa/fhMhtRhWPW
-         kMuvzHcRcrKLGJ/HCparWiKhvDJ43vD4x+x71+8gj78HgvtqfOhFs5jtJkViqnyDNV
-         EmWwfqu/gQXCyD7SEqyfRavhklH+YjMptpT5RuCONJIjjV77bncOv+K3eFjyEZUvsg
-         QTEwDixFxXfgNGsPNMtmxIISM9jACHD2Uwyzh5Ga7+M5CtoqIM6MrVgW1pEqAcxz5E
-         owufomrAHnACQ==
-Date:   Wed, 22 May 2019 09:18:36 -0700
-User-Agent: K-9 Mail for Android
-In-Reply-To: <a0afd58f-c682-66b5-7478-c405a179d72a@landley.net>
-References: <20190517165519.11507-1-roberto.sassu@huawei.com> <20190517165519.11507-3-roberto.sassu@huawei.com> <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com> <69ef1f55-9fc1-7ee0-371f-3dbc77551dc0@zytor.com> <a0afd58f-c682-66b5-7478-c405a179d72a@landley.net>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S1729554AbfEVRWj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 May 2019 13:22:39 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32961 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727365AbfEVRWj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 22 May 2019 13:22:39 -0400
+Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 05CF417966E92720806F;
+        Wed, 22 May 2019 18:22:37 +0100 (IST)
+Received: from [10.204.65.201] (10.204.65.201) by smtpsuk.huawei.com
+ (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Wed, 22 May
+ 2019 18:22:31 +0100
 Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
-To:     Rob Landley <rob@landley.net>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        viro@zeniv.linux.org.uk
-CC:     linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.vnet.ibm.com,
-        silviu.vlasceanu@huawei.com, dmitry.kasatkin@huawei.com,
-        takondra@cisco.com, kamensky@cisco.com, arnd@arndb.de,
-        james.w.mcmechan@gmail.com, niveditas98@gmail.com
-From:   hpa@zytor.com
-Message-ID: <FAF78781-2684-4482-9D4D-445B91C15E97@zytor.com>
+To:     <hpa@zytor.com>, Arvind Sankar <nivedita@alum.mit.edu>
+CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zohar@linux.vnet.ibm.com>,
+        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
+        <takondra@cisco.com>, <kamensky@cisco.com>, <arnd@arndb.de>,
+        <rob@landley.net>, <james.w.mcmechan@gmail.com>,
+        <niveditas98@gmail.com>
+References: <20190517165519.11507-1-roberto.sassu@huawei.com>
+ <20190517165519.11507-3-roberto.sassu@huawei.com>
+ <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
+ <20190517210219.GA5998@rani.riverdale.lan>
+ <d48f35a1-aab1-2f20-2e91-5e81a84b107f@zytor.com>
+ <20190517221731.GA11358@rani.riverdale.lan>
+ <7bdca169-7a01-8c55-40e4-a832e876a0e5@huawei.com>
+ <9C5B9F98-2067-43D3-B149-57613F38DCD4@zytor.com>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <2ceb1f01-88fb-d383-daee-e38348a2f075@huawei.com>
+Date:   Wed, 22 May 2019 19:22:37 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
+MIME-Version: 1.0
+In-Reply-To: <9C5B9F98-2067-43D3-B149-57613F38DCD4@zytor.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.204.65.201]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On May 17, 2019 7:16:04 PM PDT, Rob Landley <rob@landley=2Enet> wrote:
->On 5/17/19 4:41 PM, H=2E Peter Anvin wrote:
->> On 5/17/19 1:18 PM, hpa@zytor=2Ecom wrote:
+On 5/22/2019 6:17 PM, hpa@zytor.com wrote:
+> On May 20, 2019 2:39:46 AM PDT, Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>> On 5/18/2019 12:17 AM, Arvind Sankar wrote:
+>>> On Fri, May 17, 2019 at 02:47:31PM -0700, H. Peter Anvin wrote:
+>>>> On 5/17/19 2:02 PM, Arvind Sankar wrote:
+>>>>> On Fri, May 17, 2019 at 01:18:11PM -0700, hpa@zytor.com wrote:
+>>>>>>
+>>>>>> Ok... I just realized this does not work for a modular initramfs,
+>> composed at load time from multiple files, which is a very real
+>> problem. Should be easy enough to deal with: instead of one large file,
+>> use one companion file per source file, perhaps something like
+>> filename..xattrs (suggesting double dots to make it less likely to
+>> conflict with a "real" file.) No leading dot, as it makes it more
+>> likely that archivers will sort them before the file proper.
+>>>>> This version of the patch was changed from the previous one exactly
+>> to deal with this case --
+>>>>> it allows for the bootloader to load multiple initramfs archives,
+>> each
+>>>>> with its own .xattr-list file, and to have that work properly.
+>>>>> Could you elaborate on the issue that you see?
+>>>>>
+>>>>
+>>>> Well, for one thing, how do you define "cpio archive", each with its
+>> own
+>>>> .xattr-list file? Second, that would seem to depend on the ordering,
+>> no,
+>>>> in which case you depend critically on .xattr-list file following
+>> the
+>>>> files, which most archivers won't do.
+>>>>
+>>>> Either way it seems cleaner to have this per file; especially if/as
+>> it
+>>>> can be done without actually mucking up the format.
+>>>>
+>>>> I need to run, but I'll post a more detailed explanation of what I
+>> did
+>>>> in a little bit.
+>>>>
+>>>> 	-hpa
+>>>>
+>>> Not sure what you mean by how do I define it? Each cpio archive will
+>>> contain its own .xattr-list file with signatures for the files within
+>>> it, that was the idea.
 >>>
->>> Ok=2E=2E=2E I just realized this does not work for a modular initramfs=
-,
->composed at load time from multiple files, which is a very real
->problem=2E Should be easy enough to deal with: instead of one large file,
->use one companion file per source file, perhaps something like
->filename=2E=2Exattrs (suggesting double dots to make it less likely to
->conflict with a "real" file=2E) No leading dot, as it makes it more
->likely that archivers will sort them before the file proper=2E
+>>> You need to review the code more closely I think -- it does not
+>> depend
+>>> on the .xattr-list file following the files to which it applies.
 >>>
->>> A side benefit is that the format can be simpler as there is no need
->to encode the filename=2E
+>>> The code first extracts .xattr-list as though it was a regular file.
+>> If
+>>> a later dupe shows up (presumably from a second archive, although the
+>>> patch will actually allow a second one in the same archive), it will
+>>> then process the existing .xattr-list file and apply the attributes
+>>> listed within it. It then will proceed to read the second one and
+>>> overwrite the first one with it (this is the normal behaviour in the
+>>> kernel cpio parser). At the end once all the archives have been
+>>> extracted, if there is an .xattr-list file in the rootfs it will be
+>>> parsed (it would've been the last one encountered, which hasn't been
+>>> parsed yet, just extracted).
 >>>
->>> A technically cleaner solution still, but which would need archiver
->modifications, would be to encode the xattrs as an optionally nameless
->file (just an empty string) with a new file mode value, immediately
->following the original file=2E The advantage there is that the archiver
->itself could support xattrs and other extended metadata (which has been
->requested elsewhere); the disadvantage obviously is that that it
->requires new support in the archiver=2E However, at least it ought to be
->simpler since it is still a higher protocol level than the cpio archive
->itself=2E
->>>
->>> There's already one special case in cpio, which is the
->"!!!TRAILER!!!" filename; although I don't think it is part of the
->formal spec, to the extent there is one, I would expect that in
->practice it is always encoded with a mode of 0, which incidentally
->could be used to unbreak the case where such a filename actually
->exists=2E So one way to support such extended metadata would be to set
->mode to 0 and use the filename to encode the type of metadata=2E I wonder
->how existing GNU or BSD cpio (the BSD one is better maintained these
->days) would deal with reading such a file; it would at least not be a
->regression if it just read it still, possibly with warnings=2E It could
->also be possible to use bits 17:16 in the mode, which are traditionally
->always zero (mode_t being 16 bits), but I believe are present in most
->or all of the cpio formats for historical reasons=2E It might be accepted
->better by existing implementations to use one of these high bits
->combined with S_IFREG, I dont know=2E
+>>> Regarding the idea to use the high 16 bits of the mode field in
+>>> the header that's another possibility. It would just require
+>> additional
+>>> support in the program that actually creates the archive though,
+>> which
+>>> the current patch doesn't.
 >>
->>=20
->> Correction: it's just !!!TRAILER!!!=2E
->
->We documented it as "TRAILER!!!" without leading !!!, and that its
->purpose is to
->flush hardlinks:
->
->https://www=2Ekernel=2Eorg/doc/Documentation/early-userspace/buffer-forma=
-t=2Etxt
->
->That's what toybox cpio has been producing=2E Kernel consumes it just
->fine=2E Just
->checked busybox cpio and that's what they're producing as well=2E=2E=2E
->
->Rob
+>> Yes, for adding signatures for a subset of files, no changes to the ram
+>> disk generator are necessary. Everything is done by a custom module. To
+>> support a generic use case, it would be necessary to modify the
+>> generator to execute getfattr and the awk script after files have been
+>> placed in the temporary directory.
+>>
+>> If I understood the new proposal correctly, it would be task for cpio
+>> to
+>> read file metadata after the content and create a new record for each
+>> file with mode 0x18000, type of metadata encoded in the file name and
+>> metadata as file content. I don't know how easy it would be to modify
+>> cpio. Probably the amount of changes would be reasonable.
+>>
+>> The kernel will behave in a similar way. It will call do_readxattrs()
+>> in
+>> do_copy() for each file. Since the only difference between the current
+>> and the new proposal would be two additional calls to do_readxattrs()
+>> in
+>> do_name() and unpack_to_rootfs(), maybe we could support both.
+>>
+>> Roberto
+> 
+> The nice thing with explicit metadata is that it doesn't have to contain the filename per se, and each file is self-contained. There is a reason why each cpio header starts with the magic number: each cpio record is formally independent and can be processed in isolation.  The TRAILER!!! thing is a huge wart in the format, although in practice TRAILER!!! always has a mode of 0 and so can be distinguished from an actual file.
+> 
+> The use of mode 0x18000 for metadata allows for optional backwards compatibility for extraction; for encoding this can be handled with very simple postprocessing.
+> 
+> So my suggestion would be to have mode 0x18000 indicate extended file metadata, with the filename of the form:
+> 
+> optional_filename!XXXXX!
+> 
+> ... where XXXXX indicates the type of metadata (e.g. !XATTR!). The optional_filename prefix allows an unaware decoder to extract to a well-defined name; simple postprocessing would be able to either remove (for size) or add (for compatibility) this prefix. It would be an error for this prefix, if present, to not match the name of the previous file.
 
-Yes, TRAILER!!! is correct=2E Somehow I managed to get it wrong twice=2E
---=20
-Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
+Actually, I defined '..metadata..' as special name to indicate that the
+file contains metadata. Then, the content of the file is a set of:
+
+struct metadata_hdr {
+         char c_size[8];     /* total size including c_size field */
+         char c_version;     /* header version */
+         char c_type;        /* metadata type */
+         char c_metadata[];  /* metadata */
+} __packed;
+
+init/initramfs.c now has a specific parser for c_type. Currently, I
+implemented a parser for xattrs, which expects data in the format:
+
+<xattr #N name>\0<xattr #N value>
+
+I checked if it is possible to use bit 17:16 to identify files with
+metadata, but both the cpio and the kernel use unsigned short.
+
+I already modified gen_init_cpio and cpio. I modify at run-time the list
+of files to be included in the image by adding a temporary file, that
+each time is set with the xattrs of the previously processed file.
+
+The output of cpio -t looks like:
+
+--
+.
+..metadata..
+bin
+..metadata..
+dev
+..metadata..
+dev/console
+..metadata..
+--
+
+Would it be ok? If you prefer that I add the format to the file name or
+you/anyone has a comment about this proposal, please let me know so that
+I make the changes before sending a new version of the patch set.
+
+Thanks
+
+Roberto
+
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
