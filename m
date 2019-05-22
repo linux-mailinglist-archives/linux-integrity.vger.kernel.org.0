@@ -2,169 +2,173 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90ACC2673E
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 17:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44F7267E9
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 18:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729644AbfEVPtX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 May 2019 11:49:23 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:37794 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729375AbfEVPtX (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 May 2019 11:49:23 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4MFiHYZ119357;
-        Wed, 22 May 2019 15:49:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2018-07-02; bh=yzxtf1+H6ONIfRF6EGsdKncjQkKme48riHWFYanUkMs=;
- b=OZ8KNAz58KLnLwaRxRD9UZUQ+PKTZIdXZAM8KsDPY/ISkaI2tJ556JLm8r9ainHMOkxG
- ljOEzmXE31dnszjUti4fyZHTzAorfD/bxbDOSYvUV/YLgKKcHpMgp03oReWwnB2jjHb9
- brBl9kFSzYQhvJWyphHLWCLgeth7V1J4r1as3V6eH4IOw3yVB5Jt9RUhE64wzbhunYXp
- iKadU3XGUYD1GcA2GZTEACJZsRjTWOtQWOkMC5SbDlrkgBOQDjA7z3Wzae09HwejiYhK
- Nxq/9/6QW3n2bVOq36voAHJkE+r6mEV9war6nL9viZ4fw6rRq10uGWpchLM/xIwJfIKu Pw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2smsk54ru8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 May 2019 15:49:20 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4MFliEq002159;
-        Wed, 22 May 2019 15:49:20 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2smsguxa87-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 May 2019 15:49:19 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4MFnJnr010437;
-        Wed, 22 May 2019 15:49:19 GMT
-Received: from anon-dhcp-171.1015granger.net (/68.61.232.219)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 22 May 2019 15:49:18 +0000
+        id S1729803AbfEVQRv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 May 2019 12:17:51 -0400
+Received: from terminus.zytor.com ([198.137.202.136]:48639 "EHLO
+        mail.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728638AbfEVQRu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 22 May 2019 12:17:50 -0400
+Received: from [IPv6:2607:fb90:3635:972:9c5a:d1ae:8e8f:2fe7] ([IPv6:2607:fb90:3635:972:9c5a:d1ae:8e8f:2fe7])
+        (authenticated bits=0)
+        by mail.zytor.com (8.15.2/8.15.2) with ESMTPSA id x4MGHSn03691732
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Wed, 22 May 2019 09:17:30 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com x4MGHSn03691732
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2019051801; t=1558541852;
+        bh=B44ya3o9B6nqq6f/Jtd+b4WU9Xx+2DYOyzI8sYcDzls=;
+        h=Date:In-Reply-To:References:Subject:To:CC:From:From;
+        b=uiMj7ouDv0CJJx/tuZx6jO74+sdp1REU90ooSB5Z2URjHChSQMIkPIXIgJMaLqcHa
+         bgEb0yw6vbjDRwDz/Zr6gDDaS+dL3mG1tPZRFlc022fMDsV52ZkgTF1ddn0xI3z4Em
+         HuOBuls8ENM4Tcuc7zIgk48oTAtnymU9JL0g09dmlanScR1N1Gz1kpJ5cDziwPUff0
+         mfjYAwaA8ljFJzgZOFWvwzAtpRjKvEfVBrDqv/QKMMt6KYfHWtAD2Cvqt038kxD+WO
+         0nGzFStMwoRl+WNfWH7w8+nXamRR8ZYWrNivWRM6y53fGfep7+6iEaik56YK0htho6
+         oOVdD/InCq6wA==
+Date:   Wed, 22 May 2019 09:17:24 -0700
+User-Agent: K-9 Mail for Android
+In-Reply-To: <7bdca169-7a01-8c55-40e4-a832e876a0e5@huawei.com>
+References: <20190517165519.11507-1-roberto.sassu@huawei.com> <20190517165519.11507-3-roberto.sassu@huawei.com> <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com> <20190517210219.GA5998@rani.riverdale.lan> <d48f35a1-aab1-2f20-2e91-5e81a84b107f@zytor.com> <20190517221731.GA11358@rani.riverdale.lan> <7bdca169-7a01-8c55-40e4-a832e876a0e5@huawei.com>
+MIME-Version: 1.0
 Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: CAP_SYS_ADMIN requirement for updating IMA metadata
-From:   Chuck Lever <chuck.lever@oracle.com>
-In-Reply-To: <1558538361.4347.35.camel@linux.ibm.com>
-Date:   Wed, 22 May 2019 11:49:12 -0400
-Cc:     linux-integrity@vger.kernel.org
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <E66FAD82-34EF-45A2-9EDD-FD69541B36C5@oracle.com>
-References: <6FC12520-1B2F-46E8-B9B5-05FEA3147688@oracle.com>
- <1558538361.4347.35.camel@linux.ibm.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9264 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905220111
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9264 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905220111
+Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>
+CC:     viro@zeniv.linux.org.uk, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.vnet.ibm.com,
+        silviu.vlasceanu@huawei.com, dmitry.kasatkin@huawei.com,
+        takondra@cisco.com, kamensky@cisco.com, arnd@arndb.de,
+        rob@landley.net, james.w.mcmechan@gmail.com, niveditas98@gmail.com
+From:   hpa@zytor.com
+Message-ID: <9C5B9F98-2067-43D3-B149-57613F38DCD4@zytor.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-> On May 22, 2019, at 11:19 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
->=20
-> On Wed, 2019-05-22 at 10:54 -0400, Chuck Lever wrote:
->> Hi Mimi-
+On May 20, 2019 2:39:46 AM PDT, Roberto Sassu <roberto=2Esassu@huawei=2Ecom=
+> wrote:
+>On 5/18/2019 12:17 AM, Arvind Sankar wrote:
+>> On Fri, May 17, 2019 at 02:47:31PM -0700, H=2E Peter Anvin wrote:
+>>> On 5/17/19 2:02 PM, Arvind Sankar wrote:
+>>>> On Fri, May 17, 2019 at 01:18:11PM -0700, hpa@zytor=2Ecom wrote:
+>>>>>
+>>>>> Ok=2E=2E=2E I just realized this does not work for a modular initram=
+fs,
+>composed at load time from multiple files, which is a very real
+>problem=2E Should be easy enough to deal with: instead of one large file,
+>use one companion file per source file, perhaps something like
+>filename=2E=2Exattrs (suggesting double dots to make it less likely to
+>conflict with a "real" file=2E) No leading dot, as it makes it more
+>likely that archivers will sort them before the file proper=2E
+>>>> This version of the patch was changed from the previous one exactly
+>to deal with this case --
+>>>> it allows for the bootloader to load multiple initramfs archives,
+>each
+>>>> with its own =2Exattr-list file, and to have that work properly=2E
+>>>> Could you elaborate on the issue that you see?
+>>>>
+>>>
+>>> Well, for one thing, how do you define "cpio archive", each with its
+>own
+>>> =2Exattr-list file? Second, that would seem to depend on the ordering,
+>no,
+>>> in which case you depend critically on =2Exattr-list file following
+>the
+>>> files, which most archivers won't do=2E
+>>>
+>>> Either way it seems cleaner to have this per file; especially if/as
+>it
+>>> can be done without actually mucking up the format=2E
+>>>
+>>> I need to run, but I'll post a more detailed explanation of what I
+>did
+>>> in a little bit=2E
+>>>
+>>> 	-hpa
+>>>
+>> Not sure what you mean by how do I define it? Each cpio archive will
+>> contain its own =2Exattr-list file with signatures for the files within
+>> it, that was the idea=2E
 >>=20
->> I'm working on a section of draft-ietf-nfsv4-integrity-measurement =
-that
->> discusses what kind of access permission is necessary to update a =
-file's
->> IMA metadata. This is needed because every NFS operation has an =
-associated
->> user ID -- an NFS server implementer needs to know which users are =
-allowed
->> to alter the IMA metadata.
+>> You need to review the code more closely I think -- it does not
+>depend
+>> on the =2Exattr-list file following the files to which it applies=2E
 >>=20
->> On Linux, because the metadata is stored in "security.ima", =
-CAP_SYS_ADMIN
->> is required.
+>> The code first extracts =2Exattr-list as though it was a regular file=
+=2E
+>If
+>> a later dupe shows up (presumably from a second archive, although the
+>> patch will actually allow a second one in the same archive), it will
+>> then process the existing =2Exattr-list file and apply the attributes
+>> listed within it=2E It then will proceed to read the second one and
+>> overwrite the first one with it (this is the normal behaviour in the
+>> kernel cpio parser)=2E At the end once all the archives have been
+>> extracted, if there is an =2Exattr-list file in the rootfs it will be
+>> parsed (it would've been the last one encountered, which hasn't been
+>> parsed yet, just extracted)=2E
 >>=20
->> But on other NFS server implementations (ones that might not have a
->> capabilities system), IMA metadata could be stored via a mechanism =
-that
->> does not require any special permission.
->>=20
->> And, it seems to me that if a user can alter the file content, there =
-is
->> no additional harm in her being allowed to update the IMA metadata.
->>=20
->> Is there an architectural reason, other than that Linux stores IMA =
-metadata
->> in a security.* xattr, for requiring a superuser privilege to update =
-IMA
->> metadata?
->=20
-> security.ima may contain either a file hash or signature.   The file
-> hash should be protected via security.evm.[1]  Allowing anyone to
-> update the file hash would defeat its purpose.
+>> Regarding the idea to use the high 16 bits of the mode field in
+>> the header that's another possibility=2E It would just require
+>additional
+>> support in the program that actually creates the archive though,
+>which
+>> the current patch doesn't=2E
+>
+>Yes, for adding signatures for a subset of files, no changes to the ram
+>disk generator are necessary=2E Everything is done by a custom module=2E =
+To
+>support a generic use case, it would be necessary to modify the
+>generator to execute getfattr and the awk script after files have been
+>placed in the temporary directory=2E
+>
+>If I understood the new proposal correctly, it would be task for cpio
+>to
+>read file metadata after the content and create a new record for each
+>file with mode 0x18000, type of metadata encoded in the file name and
+>metadata as file content=2E I don't know how easy it would be to modify
+>cpio=2E Probably the amount of changes would be reasonable=2E
+>
+>The kernel will behave in a similar way=2E It will call do_readxattrs()
+>in
+>do_copy() for each file=2E Since the only difference between the current
+>and the new proposal would be two additional calls to do_readxattrs()
+>in
+>do_name() and unpack_to_rootfs(), maybe we could support both=2E
+>
+>Roberto
 
-I wasn't thinking that anyone would be allowed to update the hash, but
-rather that a typical non-Linux NFS server might allow the file's owner
-to update it, for example, since it might store IMA metadata via a
-mechanism that does not require privilege.
+The nice thing with explicit metadata is that it doesn't have to contain t=
+he filename per se, and each file is self-contained=2E There is a reason wh=
+y each cpio header starts with the magic number: each cpio record is formal=
+ly independent and can be processed in isolation=2E  The TRAILER!!! thing i=
+s a huge wart in the format, although in practice TRAILER!!! always has a m=
+ode of 0 and so can be distinguished from an actual file=2E
 
-If privilege is a requirement, then the draft has to state it and a non-
-Linux NFS server implementation itself will have to enforce the =
-privilege
-requirement explicitly. (For Linux that is done by the VFS's xattr code,
-not by the NFS server implementation).
+The use of mode 0x18000 for metadata allows for optional backwards compati=
+bility for extraction; for encoding this can be handled with very simple po=
+stprocessing=2E
 
-I need to understand this better so I can write it up in the draft.
-Can you further explain what "defeat its purpose" means?
+So my suggestion would be to have mode 0x18000 indicate extended file meta=
+data, with the filename of the form:
 
-- If the hash is altered, the effect is the same as if the file content
-is altered.
+optional_filename!XXXXX!
 
-- If the hash is altered, security.evm (which is not exposed via NFS)
-would allow a local (non-NFS) accessor to notice the specific problem.
+=2E=2E=2E where XXXXX indicates the type of metadata (e=2Eg=2E !XATTR!)=2E=
+ The optional_filename prefix allows an unaware decoder to extract to a wel=
+l-defined name; simple postprocessing would be able to either remove (for s=
+ize) or add (for compatibility) this prefix=2E It would be an error for thi=
+s prefix, if present, to not match the name of the previous file=2E
 
-Seems like the file content is protected in these cases even if the
-hash is altered arbitrarily. ie, unwanted alteration is detected and
-then someone has to restore the file content and hash.
-
-What am I missing?
-
-
-> Mimi
->=20
-> [1] Refer to Roberto's proposed change "[PATCH 3/4] ima: don't ignore
-> INTEGRITY_UNKNOWN EVM status"
-
-Hm. I didn't entirely understand the patch description. Even so, what
-concerns me is that EVM metadata is not exposed to NFS clients in the
-current Linux NFS implementation. For NFS, then, either:
-
-- a Linux server (or any server that has a local IMA implementation)
-will have to validate an unsigned hash locally, and then the underlying
-network transport will have to guarantee hash integrity during transit
-via GSS krb5i, for example
-
-or
-
-- the the IMA metadata (here I mean what is stored in security.ima)
-will have to be cryptographically signed such that the signature
-is also stored in that metadata and not in security.evm so that it
-is visible to NFS clients
-
-Currently the draft assumes that the only deployment mode with NFS
-will be the latter option.
+I do agree that the delayed processing of an =2Exattr-list as you describe=
+ ought to work even with a modular initramfs=2E
 
 
---
-Chuck Lever
-
-
-
+--=20
+Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
