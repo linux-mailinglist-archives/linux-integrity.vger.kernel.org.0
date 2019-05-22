@@ -2,299 +2,170 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 123C2269AD
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 20:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D61426A4D
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 May 2019 20:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbfEVSNs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 May 2019 14:13:48 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:57200 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729506AbfEVSNq (ORCPT
+        id S1728533AbfEVS5h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 May 2019 14:57:37 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37716 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728734AbfEVS5h (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 May 2019 14:13:46 -0400
-Received: by mail-vk1-f201.google.com with SMTP id q139so1232380vkq.23
-        for <linux-integrity@vger.kernel.org>; Wed, 22 May 2019 11:13:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=1Alsu9xQddUZwK4MUO0Ms0F6c5A3p78CyoojTq2bN0g=;
-        b=QeYvLb7V1IFnmx2qy7BdWOi0slKXBSnW0pOrIKUHrD0ocLNAyDL271LceAzvZmxJ01
-         YXO5PTdwpXkONhW3IMzwW2cDtLaijEffYUE2JHnYGFs8W+xQl0CZ6CaZjCfeS8o2FhVl
-         vW9Y4eJkuu6j1gFcqCrPq0Ej9cKvYAjsx0lFOp63YxiSNxChkLtMPEHtuxBDj6yYt7mc
-         I+336lhFkkd2zgwwFvuaffsWV0EiXw1rqbtd54D8o1CDw4pEadV7SUxMfj79cBzLBn7i
-         xXwVdBAuPuNHHBj64E4AjfQR3A4BsOamTtqsHo8JCv1rWUBflMAl3QMFWPCzvFvt8IQV
-         P4sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=1Alsu9xQddUZwK4MUO0Ms0F6c5A3p78CyoojTq2bN0g=;
-        b=llzhPFjBaqWy+FDDWmworWRw24Oo/OKd2p8l7Noxg3872z9DgXK0zjntAGPp5khDC5
-         TxjS1RYwLMMtXnIVfHoNtikKuyzyNHJgtlAeJg1VgDFmlfNR2fOfLkEq6Oh7GBfuT/hh
-         FpVvFUsRGHgLzdsQzwjP1LDuCsWOAaZqfLDzomfTocS3d6yFf1ojQ9DCrKLhJ4vctcm5
-         MW7mxxBrUI7+RskeY6yzC/4uCgs2x8R1DC+zJPHJ1rO4VwIHZJ88HYq4xjlw0Z7smawA
-         MAs8+07Ee3TJfRU77cOYGklhOi1qZgtyA8/MbdejuE5D3X+TN48qXIOWIiayqOKceWch
-         F2Vg==
-X-Gm-Message-State: APjAAAVxLjqN2UgCgOteb/25GAuAOKbnp0cTMjLrxmiRLyyup4L5nl/F
-        4Q3MZNiJI/4WE89ZGhmLsDGYr/3QogYQ1CNorT0kjmwwTI+FGb1QRvIzVLX20lUtXZMVIoy/cLy
-        cTXCiT52BmstdMuSoGUQi62G8xm3muwBq8HCovquwsWQja+J/Ra12sJe3NvzBGXqAJZE7SHWk1T
-        K6omXCPOqufyVre7b0JJo=
-X-Google-Smtp-Source: APXvYqxZwXiXefVAFyWja8aGzYttQxCkJJ7UNJaoGUxZzb/3Dfe44mM8N/KT05DIZJ9zwmN1LsbD3C44HTLhj+s+7tAvXg==
-X-Received: by 2002:ab0:448:: with SMTP id 66mr21610101uav.29.1558548824430;
- Wed, 22 May 2019 11:13:44 -0700 (PDT)
-Date:   Wed, 22 May 2019 11:13:27 -0700
-In-Reply-To: <20190522181327.71980-1-matthewgarrett@google.com>
-Message-Id: <20190522181327.71980-6-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190522181327.71980-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-Subject: [PATCH V4 5/5] IMA: Add a ima-vfs-sig measurement template
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.vnet.ibm.com, dmitry.kasatkin@gmail.com,
-        miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 22 May 2019 14:57:37 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4MIuqLB142834
+        for <linux-integrity@vger.kernel.org>; Wed, 22 May 2019 14:57:35 -0400
+Received: from e36.co.us.ibm.com (e36.co.us.ibm.com [32.97.110.154])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2snbb8a1n3-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 22 May 2019 14:57:35 -0400
+Received: from localhost
+        by e36.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <kgold@linux.ibm.com>;
+        Wed, 22 May 2019 19:57:34 +0100
+Received: from b03cxnp07028.gho.boulder.ibm.com (9.17.130.15)
+        by e36.co.us.ibm.com (192.168.1.136) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 22 May 2019 19:57:31 +0100
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4MIvUDL38338724
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 May 2019 18:57:30 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D5DB6A054;
+        Wed, 22 May 2019 18:57:30 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DC0596A04F;
+        Wed, 22 May 2019 18:57:29 +0000 (GMT)
+Received: from [9.2.202.76] (unknown [9.2.202.76])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 22 May 2019 18:57:29 +0000 (GMT)
+Subject: Re: [PATCH 0/2] public key: IMA signer logging: Log public key of IMA
+ Signature signer in IMA log
+To:     Lakshmi <nramas@linux.microsoft.com>,
+        Linux Integrity <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Cc:     Balaji Balasubramanyan <balajib@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        jorhand@linux.microsoft.com
+References: <6b69f115-96cf-890a-c92b-0b2b05798357@linux.microsoft.com>
+ <750fdb9f-fc9b-24bf-42c3-32156ecdc16f@linux.ibm.com>
+ <9c944ba6-f520-96e1-3631-1e21bbc4c327@linux.microsoft.com>
+ <0b5ae493-6564-40e9-343b-e6781c229a25@linux.ibm.com>
+ <54663a75-a601-ae6c-8068-bc2c3923a948@linux.microsoft.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+Date:   Wed, 22 May 2019 14:57:28 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <54663a75-a601-ae6c-8068-bc2c3923a948@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19052218-0020-0000-0000-00000EEECF45
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011144; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01207093; UDB=6.00633905; IPR=6.00988068;
+ MB=3.00027007; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-22 18:57:33
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19052218-0021-0000-0000-000065ED7215
+Message-Id: <b1a2edc1-45c7-7a9f-7a77-e252b2f85a64@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-22_10:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905220132
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Admins may wish to know whether measurements were sourced from the VFS
-or calculated by IMA, so we should provide an additional tag to indicate
-that. However, doing this by default would potentially break existing
-log parsing pipelines, so add a new template type rather than changing
-the default behaviour.
+On 5/20/2019 7:15 PM, Lakshmi wrote:
+> On 5/17/19 7:41 AM, Ken Goldman wrote:
+> 
+> Hi Ken,
+> 
+> Apologize for the delay in responding.
+> 
+>> Since a platform typically uses only a few signing keys, 4 bytes makes 
+>> the chance of a collision quite small.  The collision would have to be 
+>> within the same log, not global.
+>>
+>> In that worst case, the verifier would have to try two keys.  It's a
+>> slight performance penalty, but does anything break?
+> 
+> Problem Statement:
+> - If the attestation service has to re-validate the signature reported 
+> in the IMA log, the service has to maintain the hash\signature of all 
+> the binaries deployed on all the client nodes. This approach will not 
+> scale for large cloud deployments.
 
-Signed-off-by: Matthew Garrett <mjg59@google.com>
----
- security/integrity/ima/Kconfig            |  7 ++++-
- security/integrity/ima/ima.h              |  2 +-
- security/integrity/ima/ima_api.c          |  6 +++-
- security/integrity/ima/ima_crypto.c       |  7 +++--
- security/integrity/ima/ima_template.c     |  3 ++
- security/integrity/ima/ima_template_lib.c | 37 +++++++++++++++++++++--
- security/integrity/ima/ima_template_lib.h |  2 ++
- security/integrity/integrity.h            |  1 +
- 8 files changed, 57 insertions(+), 8 deletions(-)
+1 - How is your solution - including a public key with each event - 
+related to this issue?
 
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index a18f8c6d13b5..d2c7623d1dde 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -69,12 +69,16 @@ choice
- 	  hash, defined as 20 bytes, and a null terminated pathname,
- 	  limited to 255 characters.  The 'ima-ng' measurement list
- 	  template permits both larger hash digests and longer
--	  pathnames.
-+	  pathnames. The 'ima-vfs-ng' measurement list template includes
-+	  an additional vfs: tag if the measurement was sourced directly
-+	  from the filesystem.
- 
- 	config IMA_TEMPLATE
- 		bool "ima"
- 	config IMA_NG_TEMPLATE
- 		bool "ima-ng (default)"
-+	config IMA_VFS_NG_TEMPLATE
-+	        bool "ima-vfs-ng"
- 	config IMA_SIG_TEMPLATE
- 		bool "ima-sig"
- endchoice
-@@ -85,6 +89,7 @@ config IMA_DEFAULT_TEMPLATE
- 	default "ima" if IMA_TEMPLATE
- 	default "ima-ng" if IMA_NG_TEMPLATE
- 	default "ima-sig" if IMA_SIG_TEMPLATE
-+	default "ima-vfs-ng" if IMA_VFS_NG_TEMPLATE
- 
- choice
- 	prompt "Default integrity hash algorithm"
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index cdaffe6c8a8d..d99b867bdc53 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -134,7 +134,7 @@ int ima_add_template_entry(struct ima_template_entry *entry, int violation,
- 			   const char *op, struct inode *inode,
- 			   const unsigned char *filename);
- int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash,
--		       bool trust_vfs);
-+		       bool *trust_vfs);
- int ima_calc_buffer_hash(const void *buf, loff_t len,
- 			 struct ima_digest_data *hash);
- int ima_calc_field_array_hash(struct ima_field_data *field_data,
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 0def9cf43549..55bafce3d9c0 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -231,7 +231,7 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 	if (buf)
- 		result = ima_calc_buffer_hash(buf, size, &hash.hdr);
- 	else
--		result = ima_calc_file_hash(file, &hash.hdr, trust_vfs);
-+		result = ima_calc_file_hash(file, &hash.hdr, &trust_vfs);
- 
- 	if (result && result != -EBADF && result != -EINVAL)
- 		goto out;
-@@ -247,6 +247,10 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 	memcpy(iint->ima_hash, &hash, length);
- 	iint->version = i_version;
- 
-+	/* Record whether we got this measurement from the VFS or not */
-+	if (trust_vfs)
-+		set_bit(IMA_TRUSTED_VFS, &iint->atomic_flags);
-+
- 	/* Possibly temporary failure due to type of read (eg. O_DIRECT) */
- 	if (!result)
- 		iint->flags |= IMA_COLLECTED;
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 1c83d23d21a6..209c1bf836c1 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -406,7 +406,7 @@ static int ima_calc_file_shash(struct file *file, struct ima_digest_data *hash)
-  * shash.
-  */
- int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash,
--		       bool trust_vfs)
-+		       bool *trust_vfs)
- {
- 	loff_t i_size;
- 	int rc;
-@@ -431,7 +431,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash,
- 	 * filesystem is trusted, ask the VFS if it can obtain the
- 	 * hash without us having to calculate it ourself.
- 	 */
--	if (trust_vfs && !ima_force_hash &&
-+	if (*trust_vfs == true && !ima_force_hash &&
- 	    !(inode->i_sb->s_iflags & SB_I_UNTRUSTED_MOUNTER)) {
- 		hash->length = hash_digest_size[hash->algo];
- 		rc = vfs_get_hash(file, hash->algo, hash->digest, hash->length);
-@@ -439,6 +439,9 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash,
- 			return 0;
- 	}
- 
-+	/* If we're here then we're not using the VFS to obtain the hash */
-+	*trust_vfs = false;
-+
- 	/* Open a new file instance in O_RDONLY if we cannot read */
- 	if (!(file->f_mode & FMODE_READ)) {
- 		int flags = file->f_flags & ~(O_WRONLY | O_APPEND |
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index b631b8bc7624..78bd8fea8b35 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -25,6 +25,7 @@ enum header_fields { HDR_PCR, HDR_DIGEST, HDR_TEMPLATE_NAME,
- static struct ima_template_desc builtin_templates[] = {
- 	{.name = IMA_TEMPLATE_IMA_NAME, .fmt = IMA_TEMPLATE_IMA_FMT},
- 	{.name = "ima-ng", .fmt = "d-ng|n-ng"},
-+	{.name = "ima-vfs-ng", .fmt = "d-vng|n-ng"},
- 	{.name = "ima-sig", .fmt = "d-ng|n-ng|sig"},
- 	{.name = "", .fmt = ""},	/* placeholder for a custom format */
- };
-@@ -41,6 +42,8 @@ static const struct ima_template_field supported_fields[] = {
- 	 .field_show = ima_show_template_digest_ng},
- 	{.field_id = "n-ng", .field_init = ima_eventname_ng_init,
- 	 .field_show = ima_show_template_string},
-+	{.field_id = "d-vng", .field_init = ima_eventdigest_vfs_ng_init,
-+	 .field_show = ima_show_template_digest_ng},
- 	{.field_id = "sig", .field_init = ima_eventsig_init,
- 	 .field_show = ima_show_template_sig},
- };
-diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-index 26f71c5805f0..6defb0620f8d 100644
---- a/security/integrity/ima/ima_template_lib.c
-+++ b/security/integrity/ima/ima_template_lib.c
-@@ -224,7 +224,9 @@ int ima_parse_buf(void *bufstartp, void *bufendp, void **bufcurp,
- }
- 
- static int ima_eventdigest_init_common(u8 *digest, u32 digestsize, u8 hash_algo,
--				       struct ima_field_data *field_data)
-+				       struct ima_event_data *event_data,
-+				       struct ima_field_data *field_data,
-+				       bool from_vfs)
- {
- 	/*
- 	 * digest formats:
-@@ -237,6 +239,9 @@ static int ima_eventdigest_init_common(u8 *digest, u32 digestsize, u8 hash_algo,
- 	enum data_formats fmt = DATA_FMT_DIGEST;
- 	u32 offset = 0;
- 
-+	if (from_vfs)
-+		offset += snprintf(buffer, 5, "vfs:");
-+
- 	if (hash_algo < HASH_ALGO__LAST) {
- 		fmt = DATA_FMT_DIGEST_WITH_ALGO;
- 		offset += snprintf(buffer, CRYPTO_MAX_ALG_NAME + 1, "%s",
-@@ -302,7 +307,7 @@ int ima_eventdigest_init(struct ima_event_data *event_data,
- 	cur_digestsize = hash.hdr.length;
- out:
- 	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
--					   HASH_ALGO__LAST, field_data);
-+			       HASH_ALGO__LAST, event_data, field_data, false);
- }
- 
- /*
-@@ -323,7 +328,33 @@ int ima_eventdigest_ng_init(struct ima_event_data *event_data,
- 	hash_algo = event_data->iint->ima_hash->algo;
- out:
- 	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
--					   hash_algo, field_data);
-+				     hash_algo, event_data, field_data, false);
-+}
-+
-+/*
-+ * This function is identical to ima_eventdigest_ng_init but tags events whose
-+ * digest came from the VFS
-+ */
-+int ima_eventdigest_vfs_ng_init(struct ima_event_data *event_data,
-+				struct ima_field_data *field_data)
-+{
-+	u8 *cur_digest = NULL, hash_algo = HASH_ALGO_SHA1;
-+	u32 cur_digestsize = 0;
-+	bool vfs = false;
-+
-+	if (test_bit(IMA_TRUSTED_VFS, &event_data->iint->atomic_flags))
-+		vfs = true;
-+
-+	if (event_data->violation)	/* recording a violation. */
-+		goto out;
-+
-+	cur_digest = event_data->iint->ima_hash->digest;
-+	cur_digestsize = event_data->iint->ima_hash->length;
-+
-+	hash_algo = event_data->iint->ima_hash->algo;
-+out:
-+	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
-+				       hash_algo, event_data, field_data, vfs);
- }
- 
- static int ima_eventname_init_common(struct ima_event_data *event_data,
-diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
-index 6a3d8b831deb..3f320299e0a0 100644
---- a/security/integrity/ima/ima_template_lib.h
-+++ b/security/integrity/ima/ima_template_lib.h
-@@ -38,6 +38,8 @@ int ima_eventname_init(struct ima_event_data *event_data,
- 		       struct ima_field_data *field_data);
- int ima_eventdigest_ng_init(struct ima_event_data *event_data,
- 			    struct ima_field_data *field_data);
-+int ima_eventdigest_vfs_ng_init(struct ima_event_data *event_data,
-+				struct ima_field_data *field_data);
- int ima_eventname_ng_init(struct ima_event_data *event_data,
- 			  struct ima_field_data *field_data);
- int ima_eventsig_init(struct ima_event_data *event_data,
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index a03f859c1602..9d74119bcdfd 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -68,6 +68,7 @@
- #define IMA_CHANGE_ATTR		2
- #define IMA_DIGSIG		3
- #define IMA_MUST_MEASURE	4
-+#define IMA_TRUSTED_VFS		5
- 
- enum evm_ima_xattr_type {
- 	IMA_XATTR_DIGEST = 0x01,
--- 
-2.21.0.1020.gf2820cf01a-goog
+2 - I don't understand how a large cloud affects scale.  Wouldn't the 
+verifier would typically be checking known machines - those of their 
+enterprise - not every machine on the cloud?
+
+Can't we assume a typical attestation use case has a fairly locked down 
+OS with a limited number of applications.
+
+> - Possibility of collision of "Key Ids" is non-zero
+> - In the service if the "Key Id" alone is used to verify using a map of
+> "Key Id" to "Signing Key(s)", the service cannot determine if the 
+> trusted signing key was indeed used by the client for signature 
+> validation (Due to "Key Id" collision issue or malicious signature).
+
+Like I said, it should be rare.  In the worst case, can't the service 
+tell by trying both keys?
+
+> 
+> Proposed Solution:
+> - The service receives known\trusted signing key(s) from a trusted 
+> source (that is different from the client machines)
+> - The clients measure the keys in key rings such as IMA, Platform, 
+> BuiltIn Trusted, etc. as early as possible in the boot sequence.
+> - Leave all IMA measurements the same - i.e., we don't log public keys 
+> in the IMA log for each file, but just use what is currently available 
+> in IMA.
+
+I thought your solution was to change the IMA measurements, adding the 
+public key to each entry with a new template?  Did I misunderstand, or 
+do you have a new proposal?
+
+> 
+> Impact:
+> - The service can verify that the keyrings have only known\trusted keys.
+
+If the service already has trusted keys from a trusted source, why do 
+they have to come from the client at all?
+
+> - The service can cross check the "key id" with the key rings measured.
+> - The look up of keys using the key id would be simpler and faster on 
+> the service side.
+> - It can also handle collision of Key Ids.
+
+How does this solve the collision issue?  If there are two keys with the 
+same key ID, isn't there still a collision?
+
+> 
+> Note that the following is a key assumption:
+> 
+> - Only keys signed by a key in the "BuiltIn Trusted Keyring" can be 
+> added to IMA\Platform keyrings.
+
+I understand how the client keyring is used in IMA to check file
+signatures, but how is that related to the attestation service?
+
+> 
+> 
+> Thanks,
+>   -lakshmi
+> 
 
