@@ -2,61 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA4B29EFC
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2019 21:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3C32B78B
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 May 2019 16:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391360AbfEXTWs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 24 May 2019 15:22:48 -0400
-Received: from namei.org ([65.99.196.166]:34284 "EHLO namei.org"
+        id S1726302AbfE0ObY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 May 2019 10:31:24 -0400
+Received: from mga12.intel.com ([192.55.52.136]:49805 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729918AbfEXTWs (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 24 May 2019 15:22:48 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id x4OJMYl9007828;
-        Fri, 24 May 2019 19:22:34 GMT
-Date:   Sat, 25 May 2019 05:22:34 +1000 (AEST)
-From:   James Morris <jmorris@namei.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-cc:     Matthew Garrett <matthewgarrett@google.com>,
+        id S1726191AbfE0ObY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 27 May 2019 10:31:24 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 May 2019 07:31:24 -0700
+X-ExtLoop1: 1
+Received: from pgomulkx-mobl.ger.corp.intel.com (HELO localhost) ([10.251.94.230])
+  by orsmga002.jf.intel.com with ESMTP; 27 May 2019 07:31:18 -0700
+Date:   Mon, 27 May 2019 17:31:03 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     James Morris <jmorris@namei.org>
+Cc:     Matthew Garrett <matthewgarrett@google.com>,
         linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
         roberto.sassu@huawei.com, linux-efi@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, tweek@google.com, bsz@semihalf.com,
         Linus Torvalds <torvalds@linux-foundation.org>
 Subject: Re: [PATCH V7 0/4] Add support for crypto agile logs
-In-Reply-To: <20190524103846.GA11695@linux.intel.com>
-Message-ID: <alpine.LRH.2.21.1905250506320.7233@namei.org>
-References: <20190520205501.177637-1-matthewgarrett@google.com> <20190523121449.GA9997@linux.intel.com> <20190523122610.GA12327@linux.intel.com> <alpine.LRH.2.21.1905240252440.31508@namei.org> <20190524103846.GA11695@linux.intel.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+Message-ID: <20190527143103.GA20497@linux.intel.com>
+References: <20190520205501.177637-1-matthewgarrett@google.com>
+ <20190523121449.GA9997@linux.intel.com>
+ <20190523122610.GA12327@linux.intel.com>
+ <alpine.LRH.2.21.1905240252440.31508@namei.org>
+ <20190524103846.GA11695@linux.intel.com>
+ <alpine.LRH.2.21.1905250506320.7233@namei.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.21.1905250506320.7233@namei.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 24 May 2019, Jarkko Sakkinen wrote:
-
-> I'm referring to these:
+On Sat, May 25, 2019 at 05:22:34AM +1000, James Morris wrote:
+> On Fri, 24 May 2019, Jarkko Sakkinen wrote:
 > 
-> https://lore.kernel.org/linux-integrity/20190329115544.GA27351@linux.intel.com/
+> > I'm referring to these:
+> > 
+> > https://lore.kernel.org/linux-integrity/20190329115544.GA27351@linux.intel.com/
+> > 
+> > I got response from you that those were applied and there is another
+> > response in that thread that they are being sent to Linus. That is why I
+> > haven't done anything since. Most of them are critical fixes to v5.1
+> > changes.
 > 
-> I got response from you that those were applied and there is another
-> response in that thread that they are being sent to Linus. That is why I
-> haven't done anything since. Most of them are critical fixes to v5.1
-> changes.
+> These are in Linus' tree.  
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a556810d8e06aa2da8bbe22da3d105eb5a0d0c7d
+> 
+> I initially queued them in the next-tpm branch, but forgot to drop them 
+> from there after sending them to Linus as a v5.1 fix. Linus was not happy 
+> to see them again in the v5.2 merge window.
+> 
+> Apologies for the confusion.
 
-These are in Linus' tree.  
+OK, just to confirm, my next PR will go straight to Linus?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a556810d8e06aa2da8bbe22da3d105eb5a0d0c7d
-
-I initially queued them in the next-tpm branch, but forgot to drop them 
-from there after sending them to Linus as a v5.1 fix. Linus was not happy 
-to see them again in the v5.2 merge window.
-
-Apologies for the confusion.
-
--- 
-James Morris
-<jmorris@namei.org>
-
+/Jarkko
