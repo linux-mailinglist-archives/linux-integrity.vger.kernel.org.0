@@ -2,45 +2,45 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4EA2CF47
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 May 2019 21:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F63A2CF6A
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 May 2019 21:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbfE1TOt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 May 2019 15:14:49 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41620 "EHLO
+        id S1727816AbfE1TYn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 May 2019 15:24:43 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:53780 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727755AbfE1TOt (ORCPT
+        by vger.kernel.org with ESMTP id S1727291AbfE1TYn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 May 2019 15:14:49 -0400
+        Tue, 28 May 2019 15:24:43 -0400
 Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4SJDoKn123580
-        for <linux-integrity@vger.kernel.org>; Tue, 28 May 2019 15:14:46 -0400
-Received: from e36.co.us.ibm.com (e36.co.us.ibm.com [32.97.110.154])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2ss88nq8q5-1
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4SJOXtd146011
+        for <linux-integrity@vger.kernel.org>; Tue, 28 May 2019 15:24:42 -0400
+Received: from e12.ny.us.ibm.com (e12.ny.us.ibm.com [129.33.205.202])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ssb2yr303-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 28 May 2019 15:14:46 -0400
+        for <linux-integrity@vger.kernel.org>; Tue, 28 May 2019 15:24:36 -0400
 Received: from localhost
-        by e36.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e12.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-integrity@vger.kernel.org> from <bauerman@linux.ibm.com>;
-        Tue, 28 May 2019 20:14:45 +0100
-Received: from b03cxnp08025.gho.boulder.ibm.com (9.17.130.17)
-        by e36.co.us.ibm.com (192.168.1.136) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Tue, 28 May 2019 20:23:30 +0100
+Received: from b01cxnp22036.gho.pok.ibm.com (9.57.198.26)
+        by e12.ny.us.ibm.com (146.89.104.199) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 28 May 2019 20:14:40 +0100
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4SJEdot23396840
+        Tue, 28 May 2019 20:23:25 +0100
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4SJNOSg34275810
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 May 2019 19:14:39 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EDD90BE056;
-        Tue, 28 May 2019 19:14:38 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0680BE04F;
-        Tue, 28 May 2019 19:14:34 +0000 (GMT)
+        Tue, 28 May 2019 19:23:24 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 59697AE05C;
+        Tue, 28 May 2019 19:23:24 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8BF17AE060;
+        Tue, 28 May 2019 19:23:20 +0000 (GMT)
 Received: from morokweng.localdomain (unknown [9.85.218.160])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Tue, 28 May 2019 19:14:34 +0000 (GMT)
-References: <20190418035120.2354-1-bauerman@linux.ibm.com> <20190418035120.2354-13-bauerman@linux.ibm.com> <1559052560.4090.14.camel@linux.ibm.com>
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Tue, 28 May 2019 19:23:20 +0000 (GMT)
+References: <20190418035120.2354-1-bauerman@linux.ibm.com> <20190418035120.2354-10-bauerman@linux.ibm.com> <1557442868.10635.87.camel@linux.ibm.com>
 User-agent: mu4e 1.0; emacs 26.2
 From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>
@@ -58,27 +58,27 @@ Cc:     linux-integrity@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
         Jonathan Corbet <corbet@lwn.net>,
         "AKASHI\, Takahiro" <takahiro.akashi@linaro.org>
-Subject: Re: [PATCH v10 12/12] ima: Store the measurement again when appraising a modsig
-In-reply-to: <1559052560.4090.14.camel@linux.ibm.com>
-Date:   Tue, 28 May 2019 16:14:30 -0300
+Subject: Re: [PATCH v10 09/12] ima: Implement support for module-style appended signatures
+In-reply-to: <1557442868.10635.87.camel@linux.ibm.com>
+Date:   Tue, 28 May 2019 16:23:16 -0300
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-GCONF: 00
-x-cbid: 19052819-0020-0000-0000-00000EF149D0
+x-cbid: 19052819-0060-0000-0000-00000348F66C
 X-IBM-SpamModules-Scores: 
 X-IBM-SpamModules-Versions: BY=3.00011176; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01209917; UDB=6.00635633; IPR=6.00990946;
- MB=3.00027089; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-28 19:14:44
+ PH=3.00000004; SC=3.00000286; SDB=6.01209920; UDB=6.00635634; IPR=6.00990949;
+ MB=3.00027089; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-28 19:23:29
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052819-0021-0000-0000-000066010AC1
-Message-Id: <871s0i75nt.fsf@morokweng.localdomain>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-28_08:,,
+x-cbparentid: 19052819-0061-0000-0000-000049888DD2
+Message-Id: <87zhn65qor.fsf@morokweng.localdomain>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-28_09:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=913 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905280120
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905280121
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
@@ -89,30 +89,60 @@ Mimi Zohar <zohar@linux.ibm.com> writes:
 
 > Hi Thiago,
 >
-> On Thu, 2019-04-18 at 00:51 -0300, Thiago Jung Bauermann wrote:
->> If the IMA template contains the "modsig" or "d-modsig" field, then the
->> modsig should be added to the measurement list when the file is appraised.
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index fca7a3f23321..a7a20a8c15c1 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -1144,6 +1144,12 @@ void ima_delete_rules(void)
+>>  	}
+>>  }
 >>
->> And that is what normally happens, but if a measurement rule caused a file
->> containing a modsig to be measured before a different rule causes it to be
->> appraised, the resulting measurement entry will not contain the modsig
->> because it is only fetched during appraisal. When the appraisal rule
->> triggers, it won't store a new measurement containing the modsig because
->> the file was already measured.
+>> +#define __ima_hook_stringify(str)	(#str),
+>> +
+>> +const char *const func_tokens[] = {
+>> +	__ima_hooks(__ima_hook_stringify)
+>> +};
+>> +
+>>  #ifdef	CONFIG_IMA_READ_POLICY
+>>  enum {
+>>  	mask_exec = 0, mask_write, mask_read, mask_append
+>> @@ -1156,12 +1162,6 @@ static const char *const mask_tokens[] = {
+>>  	"MAY_APPEND"
+>>  };
 >>
->> We need to detect that situation and store an additional measurement with
->> the modsig. This is done by adding an IMA_MEASURE action flag if we read a
->> modsig and the IMA template contains a modsig field.
+>> -#define __ima_hook_stringify(str)	(#str),
+>> -
+>> -static const char *const func_tokens[] = {
+>> -	__ima_hooks(__ima_hook_stringify)
+>> -};
+>> -
+>>  void *ima_policy_start(struct seq_file *m, loff_t *pos)
+>>  {
+>>  	loff_t l = *pos;
 >
-> With the new per policy rule "template" support being added, this
-> patch needs to be modified so that the per policy "template" format is
-> checked. ima_template_has_modsig() should be called with the
-> template_desc being used.
+> Is moving this something left over from previous versions or there is
+> a need for this change?
 
-Right. Thanks for point out what needs to be done. After rebasing on top
-of Matthew Garret's "IMA: Allow profiles to define the desired IMA
-template" patch I changed ima_template_has_modsig() to check the
-template_desc obtained from process_measurement().
+Well, it's not a strong need, but it's still relevant in the current
+version. I use func_tokens in ima_read_modsig() in order to be able to
+mention the hook name in mod_check_sig()'s error message:
+
+In ima_read_modsig():
+
+	rc = mod_check_sig(sig, buf_len, func_tokens[func]);
+
+And in mod_check_sig():
+
+		pr_err("%s: Module is not signed with expected PKCS#7 message\n",
+		       name);
+
+If you think it's not worth it to expose func_tokens, I can make
+ima_read_modsig() pass a more generic const string such as "IMA modsig"
+for example.
+
+> Other than this, the patch looks good.
+
+Nice!
 
 --
 Thiago Jung Bauermann
