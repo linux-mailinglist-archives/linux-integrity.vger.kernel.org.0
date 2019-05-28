@@ -2,149 +2,80 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2A22CFF4
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 May 2019 22:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE2A2D1AD
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2019 00:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726812AbfE1UGh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 May 2019 16:06:37 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44824 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726802AbfE1UGd (ORCPT
+        id S1726683AbfE1WrB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 May 2019 18:47:01 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:38960 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbfE1WrB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 May 2019 16:06:33 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4SK2AmK129238
-        for <linux-integrity@vger.kernel.org>; Tue, 28 May 2019 16:06:31 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ssa6ruyye-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 28 May 2019 16:06:31 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 28 May 2019 21:06:29 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 28 May 2019 21:06:22 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4SK6L2u48431204
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 May 2019 20:06:22 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C525D42047;
-        Tue, 28 May 2019 20:06:21 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AF4F942042;
-        Tue, 28 May 2019 20:06:19 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.111.38])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 May 2019 20:06:19 +0000 (GMT)
-Subject: Re: [PATCH v10 09/12] ima: Implement support for module-style
- appended signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tue, 28 May 2019 18:47:01 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 5DD9C72CC64;
+        Wed, 29 May 2019 01:46:59 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 438B74A4A14;
+        Wed, 29 May 2019 01:46:59 +0300 (MSK)
+Date:   Wed, 29 May 2019 01:46:58 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>
-Date:   Tue, 28 May 2019 16:06:09 -0400
-In-Reply-To: <87zhn65qor.fsf@morokweng.localdomain>
-References: <20190418035120.2354-1-bauerman@linux.ibm.com>
-         <20190418035120.2354-10-bauerman@linux.ibm.com>
-         <1557442868.10635.87.camel@linux.ibm.com>
-         <87zhn65qor.fsf@morokweng.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19052820-0020-0000-0000-00000341594A
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052820-0021-0000-0000-00002194571A
-Message-Id: <1559073969.4139.38.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-28_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905280125
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v3] ima-evm-utils: Convert sign v2 from RSA to EVP_PKEY
+ API
+Message-ID: <20190528224657.r6muelxxhjdgcyji@altlinux.org>
+References: <20190323025633.26541-1-vt@altlinux.org>
+ <1559069833.4139.25.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <1559069833.4139.25.camel@linux.ibm.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2019-05-28 at 16:23 -0300, Thiago Jung Bauermann wrote:
-> Mimi Zohar <zohar@linux.ibm.com> writes:
-> 
-> > Hi Thiago,
-> >
-> >> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> >> index fca7a3f23321..a7a20a8c15c1 100644
-> >> --- a/security/integrity/ima/ima_policy.c
-> >> +++ b/security/integrity/ima/ima_policy.c
-> >> @@ -1144,6 +1144,12 @@ void ima_delete_rules(void)
-> >>  	}
-> >>  }
-> >>
-> >> +#define __ima_hook_stringify(str)	(#str),
-> >> +
-> >> +const char *const func_tokens[] = {
-> >> +	__ima_hooks(__ima_hook_stringify)
-> >> +};
-> >> +
-> >>  #ifdef	CONFIG_IMA_READ_POLICY
-> >>  enum {
-> >>  	mask_exec = 0, mask_write, mask_read, mask_append
-> >> @@ -1156,12 +1162,6 @@ static const char *const mask_tokens[] = {
-> >>  	"MAY_APPEND"
-> >>  };
-> >>
-> >> -#define __ima_hook_stringify(str)	(#str),
-> >> -
-> >> -static const char *const func_tokens[] = {
-> >> -	__ima_hooks(__ima_hook_stringify)
-> >> -};
-> >> -
-> >>  void *ima_policy_start(struct seq_file *m, loff_t *pos)
-> >>  {
-> >>  	loff_t l = *pos;
-> >
-> > Is moving this something left over from previous versions or there is
-> > a need for this change?
-> 
-> Well, it's not a strong need, but it's still relevant in the current
-> version. I use func_tokens in ima_read_modsig() in order to be able to
-> mention the hook name in mod_check_sig()'s error message:
-> 
-> In ima_read_modsig():
-> 
-> 	rc = mod_check_sig(sig, buf_len, func_tokens[func]);
-> 
-> And in mod_check_sig():
-> 
-> 		pr_err("%s: Module is not signed with expected PKCS#7 message\n",
-> 		       name);
-> 
-> If you think it's not worth it to expose func_tokens, I can make
-> ima_read_modsig() pass a more generic const string such as "IMA modsig"
-> for example.
+Mimi,
 
-This is fine.  I somehow missed moving func_tokens[] outside of the
-ifdef was in order to make it independent of "CONFIG_IMA_READ_POLICY".
+On Tue, May 28, 2019 at 02:57:13PM -0400, Mimi Zohar wrote:
+> On Sat, 2019-03-23 at 05:56 +0300, Vitaly Chikunov wrote:
+> > Convert sign_v2 and related to using EVP_PKEY API instead of RSA API.
+> > This enables more signatures to work out of the box.
+> > 
+> > Remove RSA_ASN1_templates[] as it does not needed anymore. OpenSSL sign
+> > is doing proper PKCS1 padding automatically (tested to be compatible
+> > with previous version, except for MD4). This also fixes bug with MD4
+> > which produced wrong signature because of absence of the appropriate
+> > RSA_ASN1_template.
+> 
+> Is there any way of breaking this patch up to simplify review?
 
-thanks,
+Hm. The main change is to replace key type from RSA with more abstract
+EVP_PKEY. All other changes are a consequence of it.
 
-Mimi
+And because keys are now EVP_PKEY the templates are removed too, now
+that we are not dealing with keys on the too low level anymore.
 
+I already tried to leave RSA handling as is for v1 signatures, because
+they are RSA specific anyway.
+
+Also, I tried to leave most (external) API the same, except
+calc_keyid_v2 which now gets EVP_PKEY instead of RSA. Internally,
+find_keyid now returns EVP_PKEY too.
+
+read_pub_key now extracts RSA from EVP_PKEY from read_pub_pkey.
+
+And calc_keyid_v2 now works internally slightly differently (and
+generally) to handle all possible key types.
+
+Also, I run some tests with ASan.
+
+Thanks,
+
+
+> 
+> Mimi
