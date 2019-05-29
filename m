@@ -2,104 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0BA2DE58
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2019 15:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71EA2DFF0
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2019 16:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727261AbfE2NgN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 May 2019 09:36:13 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32974 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726612AbfE2NgM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 May 2019 09:36:12 -0400
-Received: from lhreml709-cah.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 18762D6F4E180265B89C;
-        Wed, 29 May 2019 14:36:11 +0100 (IST)
-Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.154)
- by smtpsuk.huawei.com (10.201.108.32) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Wed, 29 May 2019 14:36:03 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
-        <mjg59@google.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <silviu.vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2 3/3] ima: show rules with IMA_INMASK correctly
-Date:   Wed, 29 May 2019 15:30:35 +0200
-Message-ID: <20190529133035.28724-4-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190529133035.28724-1-roberto.sassu@huawei.com>
-References: <20190529133035.28724-1-roberto.sassu@huawei.com>
+        id S1726069AbfE2OjN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 May 2019 10:39:13 -0400
+Received: from mga05.intel.com ([192.55.52.43]:40996 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726012AbfE2OjN (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 29 May 2019 10:39:13 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 May 2019 07:39:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,527,1549958400"; 
+   d="scan'208";a="179598110"
+Received: from ehallina-mobl.ger.corp.intel.com (HELO localhost) ([10.252.1.77])
+  by fmsmga002.fm.intel.com with ESMTP; 29 May 2019 07:39:08 -0700
+Date:   Wed, 29 May 2019 17:39:07 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Laura Abbott <labbott@redhat.com>
+Cc:     "Winkler, Tomas" <tomas.winkler@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Phil Baker <baker1tex@gmail.com>,
+        Craig Robson <craig@zhatt.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH v3] tpm: Actually fail on TPM errors during "get random"
+Message-ID: <20190529143907.GA7984@linux.intel.com>
+References: <20190401190607.GA23795@beast>
+ <20190401234625.GA29016@linux.intel.com>
+ <20190402164057.GA4544@linux.intel.com>
+ <5B8DA87D05A7694D9FA63FD143655C1B9DAE2759@hasmsx108.ger.corp.intel.com>
+ <20190403175207.GC13396@linux.intel.com>
+ <bfcb58ef-98b3-a663-c249-3940ec9a39d3@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.204.65.154]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bfcb58ef-98b3-a663-c249-3940ec9a39d3@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Show the '^' character when a policy rule has flag IMA_INMASK.
+On Tue, May 28, 2019 at 03:02:49PM -0400, Laura Abbott wrote:
+> > Great, I'll add it. Thank you. Just want to be explicit with these
+> > things as I consider them as if I was asking a signature from someone
+> > :-)
+> > 
+> > /Jarkko
+> > 
+> Was this intended to go in for 5.2? I still don't see it in the tree.
 
-Fixes: 80eae209d63ac ("IMA: allow reading back the current IMA policy")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: stable@vger.kernel.org
----
- security/integrity/ima/ima_policy.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+Was intended but I failed to notice that I should start to send PRs
+to Linus instead of security tree and was waiting for security tree
+to be rebased. I'll include to the next PR.
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index e0cc323f948f..ae4034f041c4 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1146,10 +1146,10 @@ enum {
- };
- 
- static const char *const mask_tokens[] = {
--	"MAY_EXEC",
--	"MAY_WRITE",
--	"MAY_READ",
--	"MAY_APPEND"
-+	"^MAY_EXEC",
-+	"^MAY_WRITE",
-+	"^MAY_READ",
-+	"^MAY_APPEND"
- };
- 
- #define __ima_hook_stringify(str)	(#str),
-@@ -1209,6 +1209,7 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	struct ima_rule_entry *entry = v;
- 	int i;
- 	char tbuf[64] = {0,};
-+	int offset = 0;
- 
- 	rcu_read_lock();
- 
-@@ -1232,15 +1233,17 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	if (entry->flags & IMA_FUNC)
- 		policy_func_show(m, entry->func);
- 
--	if (entry->flags & IMA_MASK) {
-+	if ((entry->flags & IMA_MASK) || (entry->flags & IMA_INMASK)) {
-+		if (entry->flags & IMA_MASK)
-+			offset = 1;
- 		if (entry->mask & MAY_EXEC)
--			seq_printf(m, pt(Opt_mask), mt(mask_exec));
-+			seq_printf(m, pt(Opt_mask), mt(mask_exec) + offset);
- 		if (entry->mask & MAY_WRITE)
--			seq_printf(m, pt(Opt_mask), mt(mask_write));
-+			seq_printf(m, pt(Opt_mask), mt(mask_write) + offset);
- 		if (entry->mask & MAY_READ)
--			seq_printf(m, pt(Opt_mask), mt(mask_read));
-+			seq_printf(m, pt(Opt_mask), mt(mask_read) + offset);
- 		if (entry->mask & MAY_APPEND)
--			seq_printf(m, pt(Opt_mask), mt(mask_append));
-+			seq_printf(m, pt(Opt_mask), mt(mask_append) + offset);
- 		seq_puts(m, " ");
- 	}
- 
--- 
-2.17.1
-
+/Jarkko
