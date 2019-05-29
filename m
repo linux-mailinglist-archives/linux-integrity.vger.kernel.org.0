@@ -2,67 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A71EA2DFF0
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2019 16:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F072E373
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2019 19:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726069AbfE2OjN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 May 2019 10:39:13 -0400
-Received: from mga05.intel.com ([192.55.52.43]:40996 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726012AbfE2OjN (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 May 2019 10:39:13 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 May 2019 07:39:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,527,1549958400"; 
-   d="scan'208";a="179598110"
-Received: from ehallina-mobl.ger.corp.intel.com (HELO localhost) ([10.252.1.77])
-  by fmsmga002.fm.intel.com with ESMTP; 29 May 2019 07:39:08 -0700
-Date:   Wed, 29 May 2019 17:39:07 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Laura Abbott <labbott@redhat.com>
-Cc:     "Winkler, Tomas" <tomas.winkler@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Phil Baker <baker1tex@gmail.com>,
-        Craig Robson <craig@zhatt.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH v3] tpm: Actually fail on TPM errors during "get random"
-Message-ID: <20190529143907.GA7984@linux.intel.com>
-References: <20190401190607.GA23795@beast>
- <20190401234625.GA29016@linux.intel.com>
- <20190402164057.GA4544@linux.intel.com>
- <5B8DA87D05A7694D9FA63FD143655C1B9DAE2759@hasmsx108.ger.corp.intel.com>
- <20190403175207.GC13396@linux.intel.com>
- <bfcb58ef-98b3-a663-c249-3940ec9a39d3@redhat.com>
+        id S1726018AbfE2Rkt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 May 2019 13:40:49 -0400
+Received: from gateway24.websitewelcome.com ([192.185.51.35]:23810 "EHLO
+        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725917AbfE2Rkt (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 29 May 2019 13:40:49 -0400
+X-Greylist: delayed 1501 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 May 2019 13:40:49 EDT
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id 0AE7E138E24
+        for <linux-integrity@vger.kernel.org>; Wed, 29 May 2019 11:53:45 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id W1phh8umd90onW1phhBwf0; Wed, 29 May 2019 11:53:45 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.47.159] (port=50894 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.91)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hW1pf-002Frw-RX; Wed, 29 May 2019 11:53:44 -0500
+Date:   Wed, 29 May 2019 11:53:43 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] ima: use struct_size() in kzalloc()
+Message-ID: <20190529165343.GA2584@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bfcb58ef-98b3-a663-c249-3940ec9a39d3@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.47.159
+X-Source-L: No
+X-Exim-ID: 1hW1pf-002Frw-RX
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [189.250.47.159]:50894
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 14
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, May 28, 2019 at 03:02:49PM -0400, Laura Abbott wrote:
-> > Great, I'll add it. Thank you. Just want to be explicit with these
-> > things as I consider them as if I was asking a signature from someone
-> > :-)
-> > 
-> > /Jarkko
-> > 
-> Was this intended to go in for 5.2? I still don't see it in the tree.
+One of the more common cases of allocation size calculations is finding
+the size of a structure that has a zero-sized array at the end, along
+with memory for some number of elements for that array. For example:
 
-Was intended but I failed to notice that I should start to send PRs
-to Linus instead of security tree and was waiting for security tree
-to be rebased. I'll include to the next PR.
+struct foo {
+   int stuff;
+   struct boo entry[];
+};
 
-/Jarkko
+instance = kzalloc(sizeof(struct foo) + count * sizeof(struct boo), GFP_KERNEL);
+
+Instead of leaving these open-coded and prone to type mistakes, we can
+now use the new struct_size() helper:
+
+instance = kzalloc(struct_size(instance, entry, count), GFP_KERNEL);
+
+This code was detected with the help of Coccinelle.
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ security/integrity/ima/ima_template.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index b631b8bc7624..b945dff2ed14 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -281,9 +281,8 @@ static int ima_restore_template_data(struct ima_template_desc *template_desc,
+ 	int ret = 0;
+ 	int i;
+ 
+-	*entry = kzalloc(sizeof(**entry) +
+-		    template_desc->num_fields * sizeof(struct ima_field_data),
+-		    GFP_NOFS);
++	*entry = kzalloc(struct_size(*entry, template_data,
++				     template_desc->num_fields), GFP_NOFS);
+ 	if (!*entry)
+ 		return -ENOMEM;
+ 
+-- 
+2.21.0
+
