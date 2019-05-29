@@ -2,21 +2,21 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D452DE46
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2019 15:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A8B2DE4C
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2019 15:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726612AbfE2Neg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 May 2019 09:34:36 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32971 "EHLO huawei.com"
+        id S1727053AbfE2NfH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 May 2019 09:35:07 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32972 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726104AbfE2Neg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 May 2019 09:34:36 -0400
+        id S1726104AbfE2NfG (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 29 May 2019 09:35:06 -0400
 Received: from lhreml709-cah.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id C4463E5CB010485960B9;
-        Wed, 29 May 2019 14:34:34 +0100 (IST)
+        by Forcepoint Email with ESMTP id 2D59B29D317FA73B2E71;
+        Wed, 29 May 2019 14:35:05 +0100 (IST)
 Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.154)
  by smtpsuk.huawei.com (10.201.108.32) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Wed, 29 May 2019 14:34:24 +0100
+ 14.3.408.0; Wed, 29 May 2019 14:34:58 +0100
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
         <mjg59@google.com>
@@ -24,11 +24,14 @@ CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <silviu.vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 0/3] ima/evm fixes for v5.2
-Date:   Wed, 29 May 2019 15:30:32 +0200
-Message-ID: <20190529133035.28724-1-roberto.sassu@huawei.com>
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2 1/3] evm: check hash algorithm passed to init_desc()
+Date:   Wed, 29 May 2019 15:30:33 +0200
+Message-ID: <20190529133035.28724-2-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190529133035.28724-1-roberto.sassu@huawei.com>
+References: <20190529133035.28724-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.204.65.154]
@@ -38,30 +41,32 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Changelog
+This patch prevents memory access beyond the evm_tfm array by checking the
+validity of the index (hash algorithm) passed to init_desc(). The hash
+algorithm can be arbitrarily set if the security.ima xattr type is not
+EVM_XATTR_HMAC.
 
-v1:
-- remove patch 2/4 (evm: reset status in evm_inode_post_setattr()); file
-  attributes cannot be set if the signature is portable and immutable
-- patch 3/4: add __ro_after_init to ima_appraise_req_evm variable
-  declaration
-- patch 3/4: remove ima_appraise_req_evm kernel option and introduce
-  'enforce-evm' and 'log-evm' as possible values for ima_appraise=
-- remove patch 4/4 (ima: only audit failed appraisal verifications)
-- add new patch (ima: show rules with IMA_INMASK correctly)
+Fixes: 5feeb61183dde ("evm: Allow non-SHA1 digital signatures")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: stable@vger.kernel.org
+---
+ security/integrity/evm/evm_crypto.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-Roberto Sassu (3):
-  evm: check hash algorithm passed to init_desc()
-  ima: don't ignore INTEGRITY_UNKNOWN EVM status
-  ima: show rules with IMA_INMASK correctly
-
- .../admin-guide/kernel-parameters.txt         |  3 ++-
- security/integrity/evm/evm_crypto.c           |  3 +++
- security/integrity/ima/ima_appraise.c         |  8 +++++++
- security/integrity/ima/ima_policy.c           | 21 +++++++++++--------
- 4 files changed, 25 insertions(+), 10 deletions(-)
-
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index e11564eb645b..82a38e801ee4 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -89,6 +89,9 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+ 		tfm = &hmac_tfm;
+ 		algo = evm_hmac;
+ 	} else {
++		if (hash_algo >= HASH_ALGO__LAST)
++			return ERR_PTR(-EINVAL);
++
+ 		tfm = &evm_tfm[hash_algo];
+ 		algo = hash_algo_name[hash_algo];
+ 	}
 -- 
 2.17.1
 
