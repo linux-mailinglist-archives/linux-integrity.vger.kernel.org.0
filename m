@@ -2,165 +2,243 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBAC2FB4E
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2019 14:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F842FB6C
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2019 14:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727019AbfE3MAm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 May 2019 08:00:42 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57210 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726792AbfE3MAl (ORCPT
+        id S1726935AbfE3MHw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 May 2019 08:07:52 -0400
+Received: from upbd19pa11.eemsg.mail.mil ([214.24.27.86]:5864 "EHLO
+        upbd19pa11.eemsg.mail.mil" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726991AbfE3MHw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 May 2019 08:00:41 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4UBunqU116656
-        for <linux-integrity@vger.kernel.org>; Thu, 30 May 2019 08:00:40 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2stcebpn4b-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 30 May 2019 08:00:40 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 30 May 2019 13:00:37 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 30 May 2019 13:00:34 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4UC0Yn961341902
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 May 2019 12:00:34 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C9EE52071;
-        Thu, 30 May 2019 12:00:33 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.80.109])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E8D9952050;
-        Thu, 30 May 2019 12:00:31 +0000 (GMT)
-Subject: Re: [PATCH v2 2/3] ima: don't ignore INTEGRITY_UNKNOWN EVM status
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        dmitry.kasatkin@huawei.com, mjg59@google.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
-        stable@vger.kernel.org
-Date:   Thu, 30 May 2019 08:00:21 -0400
-In-Reply-To: <20190529133035.28724-3-roberto.sassu@huawei.com>
-References: <20190529133035.28724-1-roberto.sassu@huawei.com>
-         <20190529133035.28724-3-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19053012-0020-0000-0000-00000341F4A4
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19053012-0021-0000-0000-00002194F9B8
-Message-Id: <1559217621.4008.7.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-30_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905300091
+        Thu, 30 May 2019 08:07:52 -0400
+X-EEMSG-check-017: 218180233|UPBD19PA11_EEMSG_MP11.csd.disa.mil
+Received: from emsm-gh1-uea11.ncsc.mil ([214.29.60.3])
+  by upbd19pa11.eemsg.mail.mil with ESMTP/TLS/DHE-RSA-AES256-SHA256; 30 May 2019 12:07:26 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tycho.nsa.gov; i=@tycho.nsa.gov; q=dns/txt;
+  s=tycho.nsa.gov; t=1559218046; x=1590754046;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=vw8k6X9AZfC7QqqSg/maX61CSRpZFfNVIw9J5/4v6/o=;
+  b=IrV4n2gKIQ2NBF0DELVjnKaCyCUs/nRUj3m+2eYz6IvZgtATCWt8/20e
+   Tj/L6GXHPcY4k5wYlqxER+htK7MsW6AFnM2bfO7ZT7l6bJJg45uFs8FfH
+   M3XU7EYpkg52V2PM/Y/Au+CfaOBKJzpZVildRqwfb+YwnkpsZIyYKRyCO
+   SRnswGEOSoGAkx/r8HVPyTe6j7qbZBzzPlTT3dgwbrOjnJI+q0BwMFLPo
+   tgNPh9G+sHQVlMc3HgX2pAliFKivaiQ81efYscCPvRDNZYU6hhT10Q46B
+   uTqNpiVonh8ZHssSTejbHqGRlO26ThIKu7IbyGHg4pncylMtPhvQjEOib
+   g==;
+X-IronPort-AV: E=Sophos;i="5.60,531,1549929600"; 
+   d="scan'208";a="28332329"
+IronPort-PHdr: =?us-ascii?q?9a23=3AdqT+RRW/pAztjgO5R3f8MHsJwsLV8LGtZVwlr6?=
+ =?us-ascii?q?E/grcLSJyIuqrYZRWDtadThVPEFb/W9+hDw7KP9fy5ACpZu8fK7C9KWacPfi?=
+ =?us-ascii?q?dNsd8RkQ0kDZzNImzAB9muURYHGt9fXkRu5XCxPBsdMs//Y1rPvi/6tmZKSV?=
+ =?us-ascii?q?3wOgVvO+v6BJPZgdip2OCu4Z3TZBhDiCagbb9oIxi6sBjdutMLjYd8Lqs9xR?=
+ =?us-ascii?q?TEr3lVcOlK2G1kIk6ekQzh7cmq5p5j9CpQu/Ml98FeVKjxYro1Q79FAjk4Km?=
+ =?us-ascii?q?45/MLkuwXNQguJ/XscT34ZkgFUDAjf7RH1RYn+vy3nvedgwiaaPMn2TbcpWT?=
+ =?us-ascii?q?S+6qpgVRHlhDsbOzM/7WrakdJ7gr5Frx29phx/24/Ub5+TNPpiZaPWYNcWSX?=
+ =?us-ascii?q?NcUspNSyBNB4WxYIUVD+oFIO1WsY/zqVUTphe6HAWhBOfixjpOi3Tr36M1zv?=
+ =?us-ascii?q?4hHBnb0gI+EdIAsHfaotv7O6gdU++60KbGwC7fb/5Uwzrx9JTEfx4jrPyKQL?=
+ =?us-ascii?q?l+cdDRyU4qFw7dk1uQtZLqPyuV1usTtWiQ8vduVee1hG4jrwF+vDiuzdorh4?=
+ =?us-ascii?q?nSm40V0UvJ9Tl5wYkpJd24T1R3Ydi/EJRKrS2aOIx2Qt07TmxupS00yaUGtI?=
+ =?us-ascii?q?amcCUFx5kr3R7SZ+Gdf4SW7R/vSvydLSp+iXl4YrywnQyy/lKlyuDkU8m010?=
+ =?us-ascii?q?tFoTRdn9nXs3ANywTT6s+aSvth5kuh2SiA1wTU6uxcPUA7j7DbK588wr4rjJ?=
+ =?us-ascii?q?YTrUTCETP2mEXxlqOWcFkr+vO05Oj9Z7Xmp5ucO5d1igH4LKsuhtSyDfk3Pw?=
+ =?us-ascii?q?UBRWSW+fmw2Kf98UD2XrlGlOA6nrHcsJ/AJMQboqC5AxVS0oYm8xu/FCqp0M?=
+ =?us-ascii?q?8DkHkbLFNKZBKHj4/zN1HIO/D3F+2zg1urkDd13/zGJKHuAo3RLnjfl7fsZb?=
+ =?us-ascii?q?R95FRayAo1099T/ZFUBasbIPLzR0/xssLXDhkiPgy7xuboEtR91ocEVW2TBa?=
+ =?us-ascii?q?+ZNbvYsUWU6eI3P+mMeIgVtS78Kvgi5/7hl2U5lEQZfamo25sXdX+5Eu5nI0?=
+ =?us-ascii?q?qCZHrgmMsOEWAPvgAmVuzllEWCUSJPZ3a1R688/is0CJ+iDYrYXoCimqGB3C?=
+ =?us-ascii?q?OiEp1TYWBGDUqMHmnye4qYXPcMbTqYItV9nTwcSbihV4gh2AmqtA/7zbpnM+?=
+ =?us-ascii?q?XV9jQZtZLlyNh6+eLTlQsz9TxoD8WQyH+NT25qkWMSXTM2375woVZ7ylid1a?=
+ =?us-ascii?q?h0mftYFcZc5/lRSAc1KYbcz/BmC9D1Qg/BetaJSFC7QtSpGD0xVcw+zMMTY0?=
+ =?us-ascii?q?ZnGtWikhDC0zOvA78SirOLGZg0/bzH0njvKMZy1WzG2LMij1Y4WMtPM3Ophq?=
+ =?us-ascii?q?pl+wjUHY7JnF2Tl7y2eqQEwC7N6GCDwHKTs05CVg5wULvKXXQdZkbNqNT2+E?=
+ =?us-ascii?q?fCT7u0BrQhNQtAxtSOJbdNat3s3h16Q6LBMdLYbiqSkn2wGBCFwPvYboPsfW?=
+ =?us-ascii?q?hb3yzHCFUCngY78nOPNAx4DSCk9THwFjtrQGnzblvs/O82k3aySks53knedE?=
+ =?us-ascii?q?F6/6ak8R4Sw/qHQrUc2axS63RpkCl9AFvoh4GeMNGHvQc0OfwBMN4=3D?=
+X-IPAS-Result: =?us-ascii?q?A2BgCgCnxu9c/wHyM5BlHgEGBwaBZYEqAjsqgToBMiiEF?=
+ =?us-ascii?q?JMCUgaBECWJUIlwhxYJAQEBAQEBAQEBNAECAQGEQAKCfSM4EwEDAQEBBAEBA?=
+ =?us-ascii?q?QEDAQFsKII6KQGCZwEFIwQRQRALGAICJgICVwYNBgIBAYJTDD+BdxSqEXwzh?=
+ =?us-ascii?q?UeDKoFGgQwmAgKLUhd4gQeBOAyCXz6EKoMkglgEi0WIJpRSLwmCD4IUgj6OS?=
+ =?us-ascii?q?QYbgiGUNy2Nc5ZuIYFYKwgCGAghD4MnghsXjjwjAzCBBgEBjUoBAQ?=
+Received: from tarius.tycho.ncsc.mil ([144.51.242.1])
+  by emsm-gh1-uea11.NCSC.MIL with ESMTP; 30 May 2019 12:07:25 +0000
+Received: from moss-pluto.infosec.tycho.ncsc.mil (moss-pluto [192.168.25.131])
+        by tarius.tycho.ncsc.mil (8.14.4/8.14.4) with ESMTP id x4UC7OpY029772;
+        Thu, 30 May 2019 08:07:24 -0400
+Subject: Re: sleep in selinux_audit_rule_init
+To:     Janne Karhunen <janne.karhunen@gmail.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Dan Jurgens <danielj@mellanox.com>
+References: <CAE=NcrYsfQ2ijJJMEyTFoWnFqF2qGS=B2JNsVaE8WUNcGS7D9Q@mail.gmail.com>
+ <e8dcc9a2-594d-f81a-32a7-e18f591c6062@tycho.nsa.gov>
+ <4a725f06-8244-8264-a911-df7ca1c66789@tycho.nsa.gov>
+ <1558530022.4347.11.camel@linux.ibm.com>
+ <4db98b76-8637-edf6-c7df-3e244be0f11e@tycho.nsa.gov>
+ <1558533420.4347.30.camel@linux.ibm.com>
+ <1432f617-424e-044c-4f78-47f1100262ae@tycho.nsa.gov>
+ <CAE=NcranYrvV5Xnu8656kyDVUUzCs=Tdy+fkeo5jwVhtF8=81Q@mail.gmail.com>
+From:   Stephen Smalley <sds@tycho.nsa.gov>
+Message-ID: <a39cedd1-a932-3140-bf11-ef4e3a88e254@tycho.nsa.gov>
+Date:   Thu, 30 May 2019 08:07:24 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <CAE=NcranYrvV5Xnu8656kyDVUUzCs=Tdy+fkeo5jwVhtF8=81Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-05-29 at 15:30 +0200, Roberto Sassu wrote:
-> Currently, ima_appraise_measurement() ignores the EVM status when
-> evm_verifyxattr() returns INTEGRITY_UNKNOWN. If a file has a valid
-> security.ima xattr with type IMA_XATTR_DIGEST or IMA_XATTR_DIGEST_NG,
-> ima_appraise_measurement() returns INTEGRITY_PASS regardless of the EVM
-> status. The problem is that the EVM status is overwritten with the
-> > appraisal statu
-
-Roberto, your framing of this problem is harsh and misleading.  IMA
-and EVM are intentionally independent of each other and can be
-configured independently of each other.  The intersection of the two
-is the call to evm_verifyxattr().  INTEGRITY_UNKNOWN is returned for a
-number of reasons - when EVM is not configured, the EVM hmac key has
-not yet been loaded, the protected security attribute is unknown, or
-the file is not in policy.
-
-This patch does not differentiate between any of the above cases,
-requiring mutable files to always be protected by EVM, when specified
-as an "ima_appraise=" option on the boot command line.
-
-IMA could be extended to require EVM on a per IMA policy rule basis.  
-Instead of framing allowing IMA file hashes without EVM as a bug that
-has existed from the very beginning, now that IMA/EVM have matured and
-is being used, you could frame it as extending IMA or hardening.
-
+On 5/30/19 6:39 AM, Janne Karhunen wrote:
+> On Wed, May 22, 2019 at 6:27 PM Stephen Smalley <sds@tycho.nsa.gov> wrote:
 > 
-> This patch mitigates the issue by selecting signature verification as the
-> only method allowed for appraisal when EVM is not initialized. Since the
-> new behavior might break user space, it must be turned on by adding the
-> '-evm' suffix to the value of the ima_appraise= kernel option.
+>>> Ok.  The question is then how should IMA handle missing domains/types.
+>>>    Just dropping IMA policy rules doesn't sound safe, nor does skipping
+>>> rules in case the domains/types are restored.
+>>
+>> You can just do what audit_dupe_lsm_field() does.  It effectively
+>> disables the rule upon the invalidation (which makes sense, since it can
+>> no longer match anything since nothing can have that domain/type) but
+>> retains the string value so it can later re-activate the rule if the
+>> domain/type becomes valid again later.
 > 
-> Fixes: 2fe5d6def1672 ("ima: integrity appraisal extension")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Cc: stable@vger.kernel.org
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 3 ++-
->  security/integrity/ima/ima_appraise.c           | 8 ++++++++
->  2 files changed, 10 insertions(+), 1 deletion(-)
+> Finally got a moment to look into this. It looks to me there is
+> already a notifier? Could something like this work?
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 138f6664b2e2..d84a2e612b93 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1585,7 +1585,8 @@
->  			Set number of hash buckets for inode cache.
->  
->  	ima_appraise=	[IMA] appraise integrity measurements
-> -			Format: { "off" | "enforce" | "fix" | "log" }
-> +			Format: { "off" | "enforce" | "fix" | "log" |
-> +				  "enforce-evm" | "log-evm" } 
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index d213e835c498..2203451862d4 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -154,6 +154,8 @@ unsigned long ima_get_binary_runtime_size(void);
+>   int ima_init_template(void);
+>   void ima_init_template_list(void);
+>   int __init ima_init_digests(void);
+> +int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
+> +                         void *lsm_data);
+> 
+>   /*
+>    * used to protect h_table and sha_table
+> diff --git a/security/integrity/ima/ima_main.c
+> b/security/integrity/ima/ima_main.c
+> index 5749ec92516f..449502f5c3dc 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -52,6 +52,10 @@ int ima_hash_algo = HASH_ALGO_SHA1;
+>   static int hash_setup_done;
+>   static struct workqueue_struct *ima_update_wq;
+> 
+> +static struct notifier_block ima_lsm_policy_notifier = {
+> +       .notifier_call = ima_lsm_policy_change,
+> +};
+> +
+>   static int __init hash_setup(char *str)
+>   {
+>          struct ima_template_desc *template_desc = ima_template_desc_current();
+> @@ -691,6 +695,10 @@ static int __init init_ima(void)
+>                  error = ima_init();
+>          }
+> 
+> +       error = register_lsm_notifier(&ima_lsm_policy_notifier);
+> +       if (error)
+> +               pr_warn("Couldn't register LSM notifier, error %d\n", error);
+> +
+>          if (!error)
+>                  ima_update_policy_flag();
+>          else
+> diff --git a/security/integrity/ima/ima_policy.c
+> b/security/integrity/ima/ima_policy.c
+> index e0cc323f948f..c3983d24279a 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -252,8 +252,8 @@ __setup("ima_appraise_tcb", default_appraise_policy_setup);
+>   /*
+>    * The LSM policy can be reloaded, leaving the IMA LSM based rules referring
+>    * to the old, stale LSM policy.  Update the IMA LSM based rules to reflect
+> - * the reloaded LSM policy.  We assume the rules still exist; and BUG_ON() if
+> - * they don't.
+> + * the reloaded LSM policy.  Keep currently invalid fields around in case
+> + * they become valid after a policy reload.
+>    */
+>   static void ima_lsm_update_rules(void)
+>   {
+> @@ -269,11 +269,23 @@ static void ima_lsm_update_rules(void)
+>                                                             Audit_equal,
+>                                                             entry->lsm[i].args_p,
+>                                                             &entry->lsm[i].rule);
+> -                       BUG_ON(!entry->lsm[i].rule);
+> +                       if (result == -EINVAL)
+> +                               pr_warn("ima: rule for LSM \'%d\' is invalid\n",
+> +                                       entry->lsm[i].type);
 
-Is it necessary to define both "enforce-evm" and "log-evm"?  Perhaps
-defining "require-evm" is sufficient.
+I could be wrong, but I think there is still a problem here in that you 
+are modifying entry->lsm[i].rule in-place, but it is protected under RCU 
+and therefore needs to be duplicated and then modified?  Also you are 
+leaking the old rule?  Both of those issues also exist prior to your 
+patch but you aren't fixing them here. And lastly, it looks like lsm 
+notifiers are atomic notifiers (not clear to me why) so you can't block 
+in the callback, thereby requiring scheduling the work as is done in 
+infiniband.  I'm not sure though why we can't make the lsm notifiers 
+blocking notifiers.  The only callers of call_lsm_notifier() are 
+sel_write_enforce() and selinux_lsm_notifier_avc_callback(), called from 
+avc_ss_reset(), called from sel_write_enforce(), security_load_policy() 
+and security_set_bools(), all outside of locks and in process context 
+AFAICS.
 
-Mimi
-
->  			default: "enforce"
->  
->  	ima_appraise_tcb [IMA] Deprecated.  Use ima_policy= instead.
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index 5fb7127bbe68..afef06e10fb9 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -18,6 +18,7 @@
->  
->  #include "ima.h"
->  
-> +static bool ima_appraise_req_evm __ro_after_init;
->  static int __init default_appraise_setup(char *str)
->  {
->  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-> @@ -28,6 +29,9 @@ static int __init default_appraise_setup(char *str)
->  	else if (strncmp(str, "fix", 3) == 0)
->  		ima_appraise = IMA_APPRAISE_FIX;
->  #endif
-> +	if (strcmp(str, "enforce-evm") == 0 ||
-> +	    strcmp(str, "log-evm") == 0)
-> +		ima_appraise_req_evm = true;
->  	return 1;
->  }
->  
-> @@ -245,7 +249,11 @@ int ima_appraise_measurement(enum ima_hooks func,
->  	switch (status) {
->  	case INTEGRITY_PASS:
->  	case INTEGRITY_PASS_IMMUTABLE:
-> +		break;
->  	case INTEGRITY_UNKNOWN:
-> +		if (ima_appraise_req_evm &&
-> +		    xattr_value->type != EVM_IMA_XATTR_DIGSIG)
-> +			goto out;
->  		break;
->  	case INTEGRITY_NOXATTRS:	/* No EVM protected xattrs. */
->  	case INTEGRITY_NOLABEL:		/* No security.evm xattr. */
+>                  }
+>          }
+>   }
+> 
+> +int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
+> +                         void *lsm_data)
+> +{
+> +       if (event != LSM_POLICY_CHANGE)
+> +               return NOTIFY_DONE;
+> +
+> +       ima_lsm_update_rules();
+> +       return NOTIFY_DONE;
+> +}
+> +
+>   /**
+>    * ima_match_rules - determine whether an inode matches the measure rule.
+>    * @rule: a pointer to a rule
+> @@ -327,11 +339,10 @@ static bool ima_match_rules(struct
+> ima_rule_entry *rule, struct inode *inode,
+>          for (i = 0; i < MAX_LSM_RULES; i++) {
+>                  int rc = 0;
+>                  u32 osid;
+> -               int retried = 0;
+> 
+>                  if (!rule->lsm[i].rule)
+>                          continue;
+> -retry:
+> +
+>                  switch (i) {
+>                  case LSM_OBJ_USER:
+>                  case LSM_OBJ_ROLE:
+> @@ -352,11 +363,6 @@ static bool ima_match_rules(struct ima_rule_entry
+> *rule, struct inode *inode,
+>                  default:
+>                          break;
+>                  }
+> -               if ((rc < 0) && (!retried)) {
+> -                       retried = 1;
+> -                       ima_lsm_update_rules();
+> -                       goto retry;
+> -               }
+>                  if (!rc)
+>                          return false;
+>          }
+> 
+> 
+> 
+> --
+> Janne
+> 
 
