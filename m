@@ -2,190 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B772FA66
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2019 12:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085B62FB31
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2019 13:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726198AbfE3Kjm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 May 2019 06:39:42 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:35120 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725440AbfE3Kjl (ORCPT
+        id S1727026AbfE3Lx5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 May 2019 07:53:57 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60970 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726980AbfE3Lx5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 May 2019 06:39:41 -0400
-Received: by mail-lf1-f68.google.com with SMTP id a25so4635076lfg.2;
-        Thu, 30 May 2019 03:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XHCpjvHPHCTUoXV4uzyX5njNo72efca1yr68KRYC8bg=;
-        b=FVy1pCkJxN8ik5JUfKxMFYGCbz6l5KZhl3rvJrvnkcC4ab8Mz69mrBzdEeNBj7t1Hb
-         sM+IkP63UqFdIZEJCy2iplbX8NJG5krIXKJNcfaO+YJ8Po5XuKir/Gs+zOA9foy8CrXV
-         kp6NEaT4GFYIL+C5TRoB/aDQ34etmGwEqv6I1u/RzTF+MQMT8tzRw8WBvj+qAlttYiy3
-         dT9tDfZHjVjSiQ0bMs9Ikz4o9p+pzoiGVuwhirwIme2kAz9X9ilDgcKMC1UzfrWwS96V
-         B5kNJu55eZYIEinjqgFklVBfEISIwEw18ZHdpjA8qjf1nlqKazhnn+7GyKQAgm2L/T5v
-         hf7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XHCpjvHPHCTUoXV4uzyX5njNo72efca1yr68KRYC8bg=;
-        b=LjwUJIkJFQKFVWsKvPr0711AyutY51tuk3O44Bc/zfRHPtorjKtZhscTY2za9cchtq
-         JRyL5p15pjCqChC8REjYrnWujV5IDFlTMp2t9pikTORwWsERdD5ZzIDhzMqJSkR2kSGD
-         +y3LLRuvqNuY5pNNmUBEys9D/hBOFA9D/Fnb92/d07dJndV+DQuJw87g0k63A4idcjl1
-         6pzIedrbhX/YAN7iXSMdO3xAvmEHwBuB4cWMBL6BfEI3Ie/NsppcwgmWRFM2nj9LoDHR
-         CZ0IX5BvhrN5znLRwEvTpeh7U4eWUlYGN/e2UaL0i7MC9ptavYH28+S2D3dCWmT9B+fB
-         xWNQ==
-X-Gm-Message-State: APjAAAXlRCTIjKdxc1spW10Nk0ARYpHSvY1OfY+g8Xig0yvhsJM2jGhJ
-        Fvs4Y5BF23LCweJvYBZ7wdd4cx0Q7PDhMB89gBjyopyDIxg=
-X-Google-Smtp-Source: APXvYqx3q2JHj1PQIAbTirMy5R0zA5Kyt90S0aW3nEMYsCc024jMOC+k1A5bKZwKyAVdXgJddqc5uN+w3QUU+6uasK0=
-X-Received: by 2002:ac2:4286:: with SMTP id m6mr1799271lfh.150.1559212778387;
- Thu, 30 May 2019 03:39:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAE=NcrYsfQ2ijJJMEyTFoWnFqF2qGS=B2JNsVaE8WUNcGS7D9Q@mail.gmail.com>
- <e8dcc9a2-594d-f81a-32a7-e18f591c6062@tycho.nsa.gov> <4a725f06-8244-8264-a911-df7ca1c66789@tycho.nsa.gov>
- <1558530022.4347.11.camel@linux.ibm.com> <4db98b76-8637-edf6-c7df-3e244be0f11e@tycho.nsa.gov>
- <1558533420.4347.30.camel@linux.ibm.com> <1432f617-424e-044c-4f78-47f1100262ae@tycho.nsa.gov>
-In-Reply-To: <1432f617-424e-044c-4f78-47f1100262ae@tycho.nsa.gov>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Thu, 30 May 2019 13:39:27 +0300
-Message-ID: <CAE=NcranYrvV5Xnu8656kyDVUUzCs=Tdy+fkeo5jwVhtF8=81Q@mail.gmail.com>
-Subject: Re: sleep in selinux_audit_rule_init
-To:     Stephen Smalley <sds@tycho.nsa.gov>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
+        Thu, 30 May 2019 07:53:57 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4UBq6An086193
+        for <linux-integrity@vger.kernel.org>; Thu, 30 May 2019 07:53:55 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2stea2s74p-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 30 May 2019 07:53:55 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 30 May 2019 12:53:53 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 30 May 2019 12:53:50 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4UBrnTI44499030
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 May 2019 11:53:49 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B872A405F;
+        Thu, 30 May 2019 11:53:49 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0B2E8A4055;
+        Thu, 30 May 2019 11:53:48 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.80.109])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 30 May 2019 11:53:47 +0000 (GMT)
+Subject: Re: [PATCH v2 1/3] evm: check hash algorithm passed to init_desc()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        dmitry.kasatkin@huawei.com, mjg59@google.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
+        stable@vger.kernel.org
+Date:   Thu, 30 May 2019 07:53:37 -0400
+In-Reply-To: <20190529133035.28724-2-roberto.sassu@huawei.com>
+References: <20190529133035.28724-1-roberto.sassu@huawei.com>
+         <20190529133035.28724-2-roberto.sassu@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19053011-0012-0000-0000-00000320F03F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19053011-0013-0000-0000-00002159BF13
+Message-Id: <1559217217.4008.3.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-30_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905300090
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 22, 2019 at 6:27 PM Stephen Smalley <sds@tycho.nsa.gov> wrote:
+On Wed, 2019-05-29 at 15:30 +0200, Roberto Sassu wrote:
+> This patch prevents memory access beyond the evm_tfm array by checking the
+> validity of the index (hash algorithm) passed to init_desc(). The hash
+> algorithm can be arbitrarily set if the security.ima xattr type is not
+> EVM_XATTR_HMAC.
+> 
+> Fixes: 5feeb61183dde ("evm: Allow non-SHA1 digital signatures")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Cc: stable@vger.kernel.org
 
-> > Ok.  The question is then how should IMA handle missing domains/types.
-> >   Just dropping IMA policy rules doesn't sound safe, nor does skipping
-> > rules in case the domains/types are restored.
->
-> You can just do what audit_dupe_lsm_field() does.  It effectively
-> disables the rule upon the invalidation (which makes sense, since it can
-> no longer match anything since nothing can have that domain/type) but
-> retains the string value so it can later re-activate the rule if the
-> domain/type becomes valid again later.
+Thanks, queued.
 
-Finally got a moment to look into this. It looks to me there is
-already a notifier? Could something like this work?
+> ---
+>  security/integrity/evm/evm_crypto.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+> index e11564eb645b..82a38e801ee4 100644
+> --- a/security/integrity/evm/evm_crypto.c
+> +++ b/security/integrity/evm/evm_crypto.c
+> @@ -89,6 +89,9 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+>  		tfm = &hmac_tfm;
+>  		algo = evm_hmac;
+>  	} else {
+> +		if (hash_algo >= HASH_ALGO__LAST)
+> +			return ERR_PTR(-EINVAL);
+> +
+>  		tfm = &evm_tfm[hash_algo];
+>  		algo = hash_algo_name[hash_algo];
+>  	}
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index d213e835c498..2203451862d4 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -154,6 +154,8 @@ unsigned long ima_get_binary_runtime_size(void);
- int ima_init_template(void);
- void ima_init_template_list(void);
- int __init ima_init_digests(void);
-+int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
-+                         void *lsm_data);
-
- /*
-  * used to protect h_table and sha_table
-diff --git a/security/integrity/ima/ima_main.c
-b/security/integrity/ima/ima_main.c
-index 5749ec92516f..449502f5c3dc 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -52,6 +52,10 @@ int ima_hash_algo = HASH_ALGO_SHA1;
- static int hash_setup_done;
- static struct workqueue_struct *ima_update_wq;
-
-+static struct notifier_block ima_lsm_policy_notifier = {
-+       .notifier_call = ima_lsm_policy_change,
-+};
-+
- static int __init hash_setup(char *str)
- {
-        struct ima_template_desc *template_desc = ima_template_desc_current();
-@@ -691,6 +695,10 @@ static int __init init_ima(void)
-                error = ima_init();
-        }
-
-+       error = register_lsm_notifier(&ima_lsm_policy_notifier);
-+       if (error)
-+               pr_warn("Couldn't register LSM notifier, error %d\n", error);
-+
-        if (!error)
-                ima_update_policy_flag();
-        else
-diff --git a/security/integrity/ima/ima_policy.c
-b/security/integrity/ima/ima_policy.c
-index e0cc323f948f..c3983d24279a 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -252,8 +252,8 @@ __setup("ima_appraise_tcb", default_appraise_policy_setup);
- /*
-  * The LSM policy can be reloaded, leaving the IMA LSM based rules referring
-  * to the old, stale LSM policy.  Update the IMA LSM based rules to reflect
-- * the reloaded LSM policy.  We assume the rules still exist; and BUG_ON() if
-- * they don't.
-+ * the reloaded LSM policy.  Keep currently invalid fields around in case
-+ * they become valid after a policy reload.
-  */
- static void ima_lsm_update_rules(void)
- {
-@@ -269,11 +269,23 @@ static void ima_lsm_update_rules(void)
-                                                           Audit_equal,
-                                                           entry->lsm[i].args_p,
-                                                           &entry->lsm[i].rule);
--                       BUG_ON(!entry->lsm[i].rule);
-+                       if (result == -EINVAL)
-+                               pr_warn("ima: rule for LSM \'%d\' is invalid\n",
-+                                       entry->lsm[i].type);
-                }
-        }
- }
-
-+int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
-+                         void *lsm_data)
-+{
-+       if (event != LSM_POLICY_CHANGE)
-+               return NOTIFY_DONE;
-+
-+       ima_lsm_update_rules();
-+       return NOTIFY_DONE;
-+}
-+
- /**
-  * ima_match_rules - determine whether an inode matches the measure rule.
-  * @rule: a pointer to a rule
-@@ -327,11 +339,10 @@ static bool ima_match_rules(struct
-ima_rule_entry *rule, struct inode *inode,
-        for (i = 0; i < MAX_LSM_RULES; i++) {
-                int rc = 0;
-                u32 osid;
--               int retried = 0;
-
-                if (!rule->lsm[i].rule)
-                        continue;
--retry:
-+
-                switch (i) {
-                case LSM_OBJ_USER:
-                case LSM_OBJ_ROLE:
-@@ -352,11 +363,6 @@ static bool ima_match_rules(struct ima_rule_entry
-*rule, struct inode *inode,
-                default:
-                        break;
-                }
--               if ((rc < 0) && (!retried)) {
--                       retried = 1;
--                       ima_lsm_update_rules();
--                       goto retry;
--               }
-                if (!rc)
-                        return false;
-        }
-
-
-
---
-Janne
