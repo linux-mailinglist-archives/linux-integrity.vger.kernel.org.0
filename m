@@ -2,56 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 744353025D
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2019 20:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33925302F0
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2019 21:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbfE3SyS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 May 2019 14:54:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39536 "EHLO mail.kernel.org"
+        id S1726275AbfE3Tnm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 May 2019 15:43:42 -0400
+Received: from namei.org ([65.99.196.166]:35486 "EHLO namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725961AbfE3SyS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 May 2019 14:54:18 -0400
-Received: from gmail.com (unknown [104.132.1.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1C5F224B6B;
-        Thu, 30 May 2019 18:54:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559242457;
-        bh=q7K4pmGHUUBq3OOvKhZCDju5Yhxagmu1zFTfewcL3go=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dgpHrPpDfHfIKA83rjSp+ZqoKqKF9T0ncaTjYqKDrq0fEQLiRsrs1HHaz7osaMdge
-         pqY3/OtH1zbLDA7nucMMijqsUXCYYBiapFM3Au60t/A0QrKOMGwxRssgOp+RDpcHFu
-         wgDTyqudW+CCkNhybf2IbvoW0NMaCJVehv/Ek+Es=
-Date:   Thu, 30 May 2019 11:54:15 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-fscrypt@vger.kernel.org
-Cc:     "Theodore Y . Ts'o" <tytso@mit.edu>, linux-api@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
-        linux-integrity@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Victor Hsieh <victorhsieh@google.com>
-Subject: Re: [PATCH v3 00/15] fs-verity: read-only file-based authenticity
- protection
-Message-ID: <20190530185414.GD70051@gmail.com>
-References: <20190523161811.6259-1-ebiggers@kernel.org>
+        id S1725897AbfE3Tnm (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 30 May 2019 15:43:42 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id x4UJhQ8I031928;
+        Thu, 30 May 2019 19:43:26 GMT
+Date:   Fri, 31 May 2019 05:43:26 +1000 (AEST)
+From:   James Morris <jmorris@namei.org>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
+Subject: Re: [PATCH 18/22] docs: security: trusted-encrypted.rst: fix code-block
+ tag
+In-Reply-To: <9c8e63bba3c3735573ab107ffd65131db10e1d2e.1559171394.git.mchehab+samsung@kernel.org>
+Message-ID: <alpine.LRH.2.21.1905310543170.26428@namei.org>
+References: <cover.1559171394.git.mchehab+samsung@kernel.org> <9c8e63bba3c3735573ab107ffd65131db10e1d2e.1559171394.git.mchehab+samsung@kernel.org>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190523161811.6259-1-ebiggers@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 23, 2019 at 09:17:56AM -0700, Eric Biggers wrote:
-> Hello,
+On Wed, 29 May 2019, Mauro Carvalho Chehab wrote:
+
+> The code-block tag is at the wrong place, causing those
+> warnings:
 > 
-> This is a redesigned version of the fs-verity patchset, implementing
-> Ted's suggestion to build the Merkle tree in the kernel
-> (https://lore.kernel.org/linux-fsdevel/20190207031101.GA7387@mit.edu/).
+>     Documentation/security/keys/trusted-encrypted.rst:112: WARNING: Literal block expected; none found.
+>     Documentation/security/keys/trusted-encrypted.rst:121: WARNING: Unexpected indentation.
+>     Documentation/security/keys/trusted-encrypted.rst:122: WARNING: Block quote ends without a blank line; unexpected unindent.
+>     Documentation/security/keys/trusted-encrypted.rst:123: WARNING: Block quote ends without a blank line; unexpected unindent.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
-Does anyone have any comments on this patchset?
 
-- Eric
+Acked-by: James Morris <jamorris@linux.microsoft.com>
+
+
+-- 
+James Morris
+<jmorris@namei.org>
+
