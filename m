@@ -2,258 +2,459 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F85314CF
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 May 2019 20:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F19316E8
+	for <lists+linux-integrity@lfdr.de>; Sat,  1 Jun 2019 00:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726725AbfEaSfm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 31 May 2019 14:35:42 -0400
-Received: from ucol19pa13.eemsg.mail.mil ([214.24.24.86]:13818 "EHLO
-        ucol19pa13.eemsg.mail.mil" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726640AbfEaSfm (ORCPT
+        id S1726520AbfEaWHg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 31 May 2019 18:07:36 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38525 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725913AbfEaWHg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 31 May 2019 14:35:42 -0400
-X-EEMSG-check-017: 715932761|UCOL19PA13_EEMSG_MP11.csd.disa.mil
-X-IronPort-AV: E=Sophos;i="5.60,535,1549929600"; 
-   d="scan'208";a="715932761"
-Received: from emsm-gh1-uea11.ncsc.mil ([214.29.60.3])
-  by ucol19pa13.eemsg.mail.mil with ESMTP/TLS/DHE-RSA-AES256-SHA256; 31 May 2019 18:35:35 +0000
+        Fri, 31 May 2019 18:07:36 -0400
+Received: by mail-pg1-f193.google.com with SMTP id v11so4757548pgl.5;
+        Fri, 31 May 2019 15:07:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tycho.nsa.gov; i=@tycho.nsa.gov; q=dns/txt;
-  s=tycho.nsa.gov; t=1559327735; x=1590863735;
-  h=subject:to:references:from:message-id:date:mime-version:
-   in-reply-to:content-transfer-encoding;
-  bh=XzrECMSP8bwC0iBuwzVg1F660/PAKKUITgaxu97FBxE=;
-  b=P+eFS8eviQ+T27cFx+BrxTZnYZIJWOvZdVe8g91PAxwTL1Y/LBf4DOgj
-   0/8va15xQ69z7nv1goLpcO7r/IlcgSVsDwa9sLu3r4iv9l6edvt0+VlKW
-   bnhp1fJz5OzZzysUHjwgZYlqC+L/X0FMmORAeM3d6CbqN87YWQV+6QprM
-   YGp+J+hNnVPxR2YjhBBeHa1AmgArv3YSKuSLwj2TZO/qBC+j+EDPqUiQ8
-   pJ4EjZttS2x7VVd+nBI7lPxjoDN9SqfDVWou8d/elTGFf4Yn3wi952sTR
-   jIdCgvAMuRDTDC98I0pUu6AmjT/91Hs/3NDOD1jEeGK6DQKJ7TxtmboAn
-   w==;
-X-IronPort-AV: E=Sophos;i="5.60,535,1549929600"; 
-   d="scan'208";a="28415683"
-IronPort-PHdr: =?us-ascii?q?9a23=3AaqWslR2PpBtJGKl7smDT+DRfVm0co7zxezQtwd?=
- =?us-ascii?q?8ZsesUKvXxwZ3uMQTl6Ol3ixeRBMOHsqsC0rGP+Pm6CSQp2tWoiDg6aptCVh?=
- =?us-ascii?q?sI2409vjcLJ4q7M3D9N+PgdCcgHc5PBxdP9nC/NlVJSo6lPwWB6nK94iQPFR?=
- =?us-ascii?q?rhKAF7Ovr6GpLIj8Swyuu+54Dfbx9HiTagfL9+Ngi6oAvMusUZnIduNKU8wQ?=
- =?us-ascii?q?bVr3VVfOhb2XlmLk+JkRbm4cew8p9j8yBOtP8k6sVNT6b0cbkmQLJBFDgpPH?=
- =?us-ascii?q?w768PttRnYUAuA/WAcXXkMkhpJGAfK8hf3VYrsvyTgt+p93C6aPdDqTb0xRD?=
- =?us-ascii?q?+v4btnRAPuhSwaLDMy7n3ZhdJsg6JauBKhpgJww4jIYIGOKfFyerrRcc4GSW?=
- =?us-ascii?q?ZdW8pcUSJOApm4b4ASEeQPO+hWpJT5q1cXoxazAQygCeXywTFKm3D2x7U33f?=
- =?us-ascii?q?k/HwHI3AIuHNwAv3rbo9r3KKgcXvu4zLXKwDjZc/9axTnw5YrOfxs8of+MR7?=
- =?us-ascii?q?Vwcc/JxEcyCwPKkE2QqYz7MDOTy+8Drm2b4PBkVeKrlWEmqxx6rz+0xsgxkY?=
- =?us-ascii?q?nEnZ4Vy1DY+iV5x4Y5P9u4SFVhbtK+H5tQsD+aOpJwT8g/QG9ooD43xqAJtJ?=
- =?us-ascii?q?O0ZiQHyIkrywTBZ/GIbYSE+A/vWeCMKjlinn1lYqiwhxOq/Eilze3zS9e73U?=
- =?us-ascii?q?5RripAjtnMrncN1wHP6sSfSvty4EOh2TGX2gDP8O5EO0E0lbfAK5I73r4xlo?=
- =?us-ascii?q?YcsUTEHiPsnkX5kLSWeVk+9uit6uTnZq3qpp6aN4BqlgHzKrkil8OwDOgiMg?=
- =?us-ascii?q?UCQnKX9fqz2bH950H1Xa1GjvgsnanYtJDaK94bpqm8AwJNyYYs9g2/Aiy60N?=
- =?us-ascii?q?UYgXYHLFVFdAiBj4jyIV7COv/4DfChg1i0ijdk2+jGPqH9ApXKNnXDkq3ufb?=
- =?us-ascii?q?B760FC0gYzzspQ54hUCrEcJvL8REnxucfXDh88KQO0wuLnBM9h2YMZXGKFGr?=
- =?us-ascii?q?WZP7/KsV+U+uIvJPGBZY4SuDb9Mfcl/eXjjXs4mV8bYKmo0oEbaHGjEfRjOU?=
- =?us-ascii?q?mWfX3sgtIZG2cQogU+VPDqiEGFUTNLf3a9Rb885jUgBYK+F4jDW4StjKWE3C?=
- =?us-ascii?q?e8GZ1WfH5JBkqQHnfvcoWOQ+0MZz6KIs99jjwEUqCsS4sg1RGoqQ/7xKNrLu?=
- =?us-ascii?q?vS+i0Eq53j28J15+zPlRAy7jF0Ecud3H+XT21unWMHWSU23KZhrkx50FuD1r?=
- =?us-ascii?q?J4g/NAH9xJ+/xJShs6NYLbz+FiD9DyWwTBfsqGSVq/WdWpHy0+Ts8rw98Pf0?=
- =?us-ascii?q?Z8G8yujhXE3yW3Hr8Vk6KECYcq8qLTwXfxPdxxy3XY26k7iVkpXM9POXehhq?=
- =?us-ascii?q?5l+AiAT7LOxmeQkaCnPYcVxi7Q8mqFhT6MtUdeXUhzWL/FQHYSYGPZqN344g?=
- =?us-ascii?q?XJSLr4Tfw1NQtI0+aGK61Xepvoh1AAT/DmfJzGan+1s3+5GBLNw7SLdoescG?=
- =?us-ascii?q?IYmG3ZCU4Zg0US+2qLOhI/GjaJvW3TFnptGEjpbkeq9vNx7Du/T0kp30SRYk?=
- =?us-ascii?q?Z8zbup61sQgvCBT/47wL0JomEipi9yEVL72MjZWPSaoA80R7lRedMw5h980G?=
- =?us-ascii?q?vdswFsdsi7I7tKmk8VcwMxuVjnkRpwFNMTwoARsHo2wV8qeuqj21RbembdhM?=
- =?us-ascii?q?uhNw=3D=3D?=
-X-IPAS-Result: =?us-ascii?q?A2BBBwAfc/Fc/wHyM5BlHQEBBQEHBQGBZYFnKoFtKIQUk?=
- =?us-ascii?q?wdMAQEBAQEBBoEQJYlCDpEICQEBAQEBAQEBATQBAgEBhEACgwQjOBMBAwEBA?=
- =?us-ascii?q?QQBAQEBAwEBbCiCOikBgmcBBSMEEVELGAICJgICITYGAQwGAgEBglMMP4FrA?=
- =?us-ascii?q?wkUq0Z8M4VHgjwNXYFGgQwoi1gXeIEHgTgMgl8+ghqFNIJYBJNtlEc+CYIPg?=
- =?us-ascii?q?heNL4NiBhuCIZRGjHqBKYc/jz0hgVgrCAIYCCEPO4JsghsXjjwjAzCBBgEBj?=
- =?us-ascii?q?XYBAQ?=
-Received: from tarius.tycho.ncsc.mil ([144.51.242.1])
-  by emsm-gh1-uea11.NCSC.MIL with ESMTP; 31 May 2019 18:35:35 +0000
-Received: from moss-pluto.infosec.tycho.ncsc.mil (moss-pluto [192.168.25.131])
-        by tarius.tycho.ncsc.mil (8.14.4/8.14.4) with ESMTP id x4VIZYEl003437;
-        Fri, 31 May 2019 14:35:34 -0400
-Subject: Re: [PATCH 2/2] ima: use the lsm policy update notifier
-To:     Janne Karhunen <janne.karhunen@gmail.com>, zohar@linux.ibm.com,
-        paul@paul-moore.com, linux-integrity@vger.kernel.org,
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=wwEB+viJtVr8l42IEROtmss+3bJl6sJ6i2svX1dSYLA=;
+        b=LCwxuKliMnPPUu9aYGV1RV9VnHz7rHK0HZqosB7Aor204PjvDWWTYEVWZ5K24pn3UY
+         0EsHgKBn97IeueC7nnNaN2N2G+56vWD2gWBLE/8amw1+VxHyU4d4l3qqe5/jSD5TwPKX
+         Qx1QFLnT3yKKMATXadYrC9sGsf3MZXRvKp+h2/5h7Sw8ssPc/p/4Q0GnZ7VVfhv3qSyF
+         B4w7pwYnHHEDGaKH9KWde7vdy8nGMCj/eADnAUVmWp/tdR75FMTwFL0psmpqV9+qMoho
+         +U7m2l+vpTey64Y2EKcSEwRlUL4QK958O6FtI9CupdtD2Cc4zmb4zjvZ7Weo843Lhjt1
+         1QYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=wwEB+viJtVr8l42IEROtmss+3bJl6sJ6i2svX1dSYLA=;
+        b=HWGO2Gx0ziS7cv/Eq58tlEYKrzX4Ijc8Owv6fvzNcNhEMEOHNNOgf1uCtgMAbSUSOE
+         d1Mc4g2613NoYVbQqtJqZS14HBbgoxX79NDd3nP4DHU7cwjMrTtcYNgp/m4tuNo3+DQo
+         3C0YuU7rY71N4xDKWHf476sG29YTgE8M9zEDzGVrZVHto7iHWoUj8GDDD4Eyd6AesQoA
+         YPxhmQZ6Z0hl7qSXyUrXuAJMkbEmbxm20DblZLcPDf+0EDhsQyWcaDW6IMRKDoFGO2CO
+         nsrvYyiaA9hlsLsm4E2prLdIg3qa5ugYpval2N1uQLMCftxZQIo1GKlzNsL6O9jUpyLI
+         suvA==
+X-Gm-Message-State: APjAAAXSL4j8GO6YtyjBZ6aOF51QD5kiVBe15iI22GyR7Gp2CDsbpL7o
+        YH+t+Hv0j5oxBij/knOv1R8iRK25fvg=
+X-Google-Smtp-Source: APXvYqygwTb28qHcocSV061ljOkz9ZG+wJvgNdUa80UtzdWv/B8mTPZA5Ol/Kih7GJHYG1bvwuF/CA==
+X-Received: by 2002:aa7:8219:: with SMTP id k25mr13441510pfi.38.1559340455223;
+        Fri, 31 May 2019 15:07:35 -0700 (PDT)
+Received: from prsriva-Precision-Tower-5810.corp.microsoft.com ([2001:4898:80e8:8:18f0:3717:af81:1502])
+        by smtp.gmail.com with ESMTPSA id l12sm5680104pgq.26.2019.05.31.15.07.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 31 May 2019 15:07:34 -0700 (PDT)
+From:   Prakhar Srivastava <prsriva02@gmail.com>
+To:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-References: <20190531140237.9199-1-janne.karhunen@gmail.com>
- <20190531140237.9199-2-janne.karhunen@gmail.com>
-From:   Stephen Smalley <sds@tycho.nsa.gov>
-Message-ID: <7a0f17c6-5332-fd48-2727-1f1e2649d356@tycho.nsa.gov>
-Date:   Fri, 31 May 2019 14:35:34 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190531140237.9199-2-janne.karhunen@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Cc:     zohar@linux.ibm.com, bauerman@linux.ibm.com,
+        Prakhar Srivastava <prsriva02@gmail.com>
+Subject: [PATCH] Add support to carry ima buffer to in kexec_file_load for amr64
+Date:   Fri, 31 May 2019 15:07:23 -0700
+Message-Id: <20190531220723.7368-1-prsriva02@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/31/19 10:02 AM, Janne Karhunen wrote:
-> Don't do lazy policy updates while running the rule matching,
-> run the updates as they happen.
-> 
-> Depends on commit cda44589be1c ("LSM: switch to blocking policy update notifiers")
-> 
-> Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
-> ---
->   security/integrity/ima/ima.h        |  2 ++
->   security/integrity/ima/ima_main.c   |  8 ++++++
->   security/integrity/ima/ima_policy.c | 44 +++++++++++++++++++++--------
->   3 files changed, 42 insertions(+), 12 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index d213e835c498..2203451862d4 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -154,6 +154,8 @@ unsigned long ima_get_binary_runtime_size(void);
->   int ima_init_template(void);
->   void ima_init_template_list(void);
->   int __init ima_init_digests(void);
-> +int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
-> +			  void *lsm_data);
->   
->   /*
->    * used to protect h_table and sha_table
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 357edd140c09..f9629c5e1aee 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -43,6 +43,10 @@ int ima_appraise;
->   int ima_hash_algo = HASH_ALGO_SHA1;
->   static int hash_setup_done;
->   
-> +static struct notifier_block ima_lsm_policy_notifier = {
-> +	.notifier_call = ima_lsm_policy_change,
-> +};
-> +
->   static int __init hash_setup(char *str)
->   {
->   	struct ima_template_desc *template_desc = ima_template_desc_current();
-> @@ -593,6 +597,10 @@ static int __init init_ima(void)
->   		error = ima_init();
->   	}
->   
-> +	error = register_lsm_notifier(&ima_lsm_policy_notifier);
-> +	if (error)
-> +		pr_warn("Couldn't register LSM notifier, error %d\n", error);
-> +
->   	if (!error)
->   		ima_update_policy_flag();
->   
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index e0cc323f948f..4201a21ff42f 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -252,12 +252,14 @@ __setup("ima_appraise_tcb", default_appraise_policy_setup);
->   /*
->    * The LSM policy can be reloaded, leaving the IMA LSM based rules referring
->    * to the old, stale LSM policy.  Update the IMA LSM based rules to reflect
-> - * the reloaded LSM policy.  We assume the rules still exist; and BUG_ON() if
-> - * they don't.
-> + * the reloaded LSM policy.
->    */
->   static void ima_lsm_update_rules(void)
->   {
->   	struct ima_rule_entry *entry;
-> +	void *rule_new;
-> +	char *lsm_new;
-> +	char *lsm_old;
->   	int result;
->   	int i;
->   
-> @@ -265,15 +267,39 @@ static void ima_lsm_update_rules(void)
->   		for (i = 0; i < MAX_LSM_RULES; i++) {
->   			if (!entry->lsm[i].rule)
->   				continue;
-> +
-> +			lsm_old = entry->lsm[i].args_p;
-> +			lsm_new = kstrdup(lsm_old, GFP_KERNEL);
-> +			if (unlikely(!lsm_new))
-> +				return;
-> +
->   			result = security_filter_rule_init(entry->lsm[i].type,
->   							   Audit_equal,
-> -							   entry->lsm[i].args_p,
-> -							   &entry->lsm[i].rule);
-> -			BUG_ON(!entry->lsm[i].rule);
-> +							   lsm_new,
-> +							   &rule_new);
-> +			if (result == -EINVAL)
-> +				pr_warn("ima: rule for LSM \'%d\' is invalid\n",
-> +					entry->lsm[i].type);
-> +
-> +			entry->lsm[i].rule = rule_new;
+This patch re-uses the code written for powerpc to carry ima buffer
+to the next kernel during kexec_file_load for arm64.
+https://lore.kernel.org/patchwork/patch/740277/
 
-Doesn't this still leak the old entry->lsm[i].rule?
+changes added:
+- add new entries in the arch_kimage to contain the memory
+address of the kernel segment containing the ima buffer.
+- set up the dtb accordingly to contain the address of the
+ima buffer.
 
-Also, I don't think you can just mutate entry like this under RCU. 
-Don't you need to deep copy the entire entry, initialize the lsm rule in 
-the new entry, switch the new entry for the old in the list via the 
-appropriate rcu interface e.g. list_replace_rcu, and then free the old 
-entry via call_rcu() or after synchronize_rcu()?  Consider how 
-audit_update_lsm_rules() works; it takes a mutex to synchronize with 
-other writers to the list and calls update_lsm_rule() on every rule. 
-update_lsm_rule() checks whether the rule contains a lsm filter via 
-security_audit_rule_known(), and if so, deep copies the rule via 
-audit_dupe_rule(), replaces the old with the new via list_replace_rcu(), 
-and then performs a delayed free of the old rule via call_rcu(). 
-audit_dupe_rule() ultimately calls audit_dupe_lsm_field() to "duplicate" 
-the LSM field information, which consists of copying the string and then 
-calling security_audit_rule_init() aka security_filter_rule_init() to 
-create the internal structure representation of the lsm rule from the 
-string.  I could be wrong but I don't think you can short-circuit the 
-copying or mutate entry in place like this.
+Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
+---
+ arch/arm64/Kconfig                     |   7 +
+ arch/arm64/include/asm/ima.h           |  31 ++++
+ arch/arm64/include/asm/kexec.h         |   4 +
+ arch/arm64/kernel/Makefile             |   1 +
+ arch/arm64/kernel/ima_kexec.c          | 217 +++++++++++++++++++++++++
+ arch/arm64/kernel/machine_kexec_file.c |  39 +++++
+ 6 files changed, 299 insertions(+)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
 
-> +			entry->lsm[i].args_p = lsm_new;
-> +			synchronize_rcu();
-> +
-> +			kfree(lsm_old);
->   		}
->   	}
->   }
->   
-> +int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
-> +			  void *lsm_data)
-> +{
-> +	if (event != LSM_POLICY_CHANGE)
-> +		return NOTIFY_DONE;
-> +
-> +	ima_lsm_update_rules();
-> +	return NOTIFY_OK;
-> +}
-> +
->   /**
->    * ima_match_rules - determine whether an inode matches the measure rule.
->    * @rule: a pointer to a rule
-> @@ -327,11 +353,10 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
->   	for (i = 0; i < MAX_LSM_RULES; i++) {
->   		int rc = 0;
->   		u32 osid;
-> -		int retried = 0;
->   
->   		if (!rule->lsm[i].rule)
->   			continue;
-> -retry:
-> +
->   		switch (i) {
->   		case LSM_OBJ_USER:
->   		case LSM_OBJ_ROLE:
-> @@ -352,11 +377,6 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
->   		default:
->   			break;
->   		}
-> -		if ((rc < 0) && (!retried)) {
-> -			retried = 1;
-> -			ima_lsm_update_rules();
-> -			goto retry;
-> -		}
->   		if (!rc)
->   			return false;
->   	}
-> 
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 7e34b9eba5de..586152608d09 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -940,6 +940,13 @@ config KEXEC_FILE
+ 	  for kernel and initramfs as opposed to list of segments as
+ 	  accepted by previous system call.
+ 
++config HAVE_IMA_KEXEC
++	bool "enable arch specific ima buffer pass"
++	depends on KEXEC_FILE
++	help
++		This adds support to carry ima log to the next kernel in case
++		of kexec_file_load
++
+ config KEXEC_VERIFY_SIG
+ 	bool "Verify kernel signature during kexec_file_load() syscall"
+ 	depends on KEXEC_FILE
+diff --git a/arch/arm64/include/asm/ima.h b/arch/arm64/include/asm/ima.h
+new file mode 100644
+index 000000000000..2c504281028d
+--- /dev/null
++++ b/arch/arm64/include/asm/ima.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_ARM64_IMA_H
++#define _ASM_ARM64_IMA_H
++
++#define FDT_PROP_KEXEC_BUFFER	"linux,ima-kexec-buffer"
++
++struct kimage;
++
++int ima_get_kexec_buffer(void **addr, size_t *size);
++int ima_free_kexec_buffer(void);
++
++#ifdef CONFIG_IMA
++void remove_ima_buffer(void *fdt, int chosen_node);
++#else
++static inline void remove_ima_buffer(void *fdt, int chosen_node) {}
++#endif
++
++#ifdef CONFIG_IMA_KEXEC
++int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
++			      size_t size);
++
++int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node);
++#else
++static inline int setup_ima_buffer(const struct kimage *image, void *fdt,
++				   int chosen_node)
++{
++	remove_ima_buffer(fdt, chosen_node);
++	return 0;
++}
++#endif /* CONFIG_IMA_KEXEC */
++#endif /* _ASM_ARM64_IMA_H */
+diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
+index 67e4cb75d1fd..2498dc3617a4 100644
+--- a/arch/arm64/include/asm/kexec.h
++++ b/arch/arm64/include/asm/kexec.h
+@@ -99,6 +99,8 @@ static inline void crash_post_resume(void) {}
+ struct kimage_arch {
+ 	void *dtb;
+ 	unsigned long dtb_mem;
++	phys_addr_t ima_buffer_addr;
++	size_t ima_buffer_size;
+ };
+ 
+ extern const struct kexec_file_ops kexec_image_ops;
+@@ -110,6 +112,8 @@ extern int load_other_segments(struct kimage *image,
+ 		unsigned long kernel_load_addr, unsigned long kernel_size,
+ 		char *initrd, unsigned long initrd_len,
+ 		char *cmdline);
++extern int delete_fdt_mem_rsv(void *fdt, unsigned long start,
++		unsigned long size);
+ #endif
+ 
+ #endif /* __ASSEMBLY__ */
+diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
+index cd434d0719c1..bc4d84266b29 100644
+--- a/arch/arm64/kernel/Makefile
++++ b/arch/arm64/kernel/Makefile
+@@ -59,6 +59,7 @@ obj-$(CONFIG_CRASH_CORE)		+= crash_core.o
+ obj-$(CONFIG_ARM_SDE_INTERFACE)		+= sdei.o
+ obj-$(CONFIG_ARM64_SSBD)		+= ssbd.o
+ obj-$(CONFIG_ARM64_PTR_AUTH)		+= pointer_auth.o
++obj-$(CONFIG_HAVE_IMA_KEXEC)		+= ima_kexec.o
+ 
+ obj-y					+= vdso/ probes/
+ head-y					:= head.o
+diff --git a/arch/arm64/kernel/ima_kexec.c b/arch/arm64/kernel/ima_kexec.c
+new file mode 100644
+index 000000000000..41d6721861c9
+--- /dev/null
++++ b/arch/arm64/kernel/ima_kexec.c
+@@ -0,0 +1,217 @@
++/*
++ * Copyright (C) 2016 IBM Corporation
++ *
++ * Authors:
++ * Thiago Jung Bauermann <bauerman@linux.vnet.ibm.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ */
++
++#include <linux/slab.h>
++#include <linux/kexec.h>
++#include <linux/of.h>
++#include <linux/memblock.h>
++#include <linux/libfdt.h>
++#include <asm/kexec.h>
++#include <asm/ima.h>
++
++static int get_addr_size_cells(int *addr_cells, int *size_cells)
++{
++	struct device_node *root;
++
++	root = of_find_node_by_path("/");
++	if (!root)
++		return -EINVAL;
++
++	*addr_cells = of_n_addr_cells(root);
++	*size_cells = of_n_size_cells(root);
++
++	of_node_put(root);
++
++	return 0;
++}
++
++static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
++			       size_t *size)
++{
++
++	int ret, addr_cells, size_cells;
++
++	ret = get_addr_size_cells(&addr_cells, &size_cells);
++	if (ret)
++		return ret;
++
++	if (len < 4 * (addr_cells + size_cells))
++		return -ENOENT;
++
++	*addr = of_read_number(prop, addr_cells);
++	*size = of_read_number(prop + 4 * addr_cells, size_cells);
++
++	return 0;
++}
++
++/**
++ * ima_get_kexec_buffer - get IMA buffer from the previous kernel
++ * @addr:	On successful return, set to point to the buffer contents.
++ * @size:	On successful return, set to the buffer size.
++ *
++ * Return: 0 on success, negative errno on error.
++ */
++int ima_get_kexec_buffer(void **addr, size_t *size)
++{
++	int ret, len;
++	unsigned long tmp_addr;
++	size_t tmp_size;
++	const void *prop;
++
++	prop = of_get_property(of_chosen, FDT_PROP_KEXEC_BUFFER, &len);
++	if (!prop)
++		return -ENOENT;
++
++	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
++	if (ret)
++		return ret;
++
++	*addr = __va(tmp_addr);
++	*size = tmp_size;
++	return 0;
++}
++
++/**
++ * ima_free_kexec_buffer - free memory used by the IMA buffer
++ */
++int ima_free_kexec_buffer(void)
++{
++	int ret;
++	unsigned long addr;
++	size_t size;
++	struct property *prop;
++
++	prop = of_find_property(of_chosen, FDT_PROP_KEXEC_BUFFER, NULL);
++	if (!prop)
++		return -ENOENT;
++
++	ret = do_get_kexec_buffer(prop->value, prop->length, &addr, &size);
++	if (ret)
++		return ret;
++
++	ret = of_remove_property(of_chosen, prop);
++	if (ret)
++		return ret;
++
++	return memblock_free(addr, size);
++}
++
++/**
++ * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
++ *
++ * The IMA measurement buffer is of no use to a subsequent kernel, so we always
++ * remove it from the device tree.
++ */
++void remove_ima_buffer(void *fdt, int chosen_node)
++{
++	int ret, len;
++	unsigned long addr;
++	size_t size;
++	const void *prop;
++
++	prop = fdt_getprop(fdt, chosen_node, FDT_PROP_KEXEC_BUFFER, &len);
++	if (!prop)
++		return;
++
++	ret = do_get_kexec_buffer(prop, len, &addr, &size);
++	fdt_delprop(fdt, chosen_node, FDT_PROP_KEXEC_BUFFER);
++	if (ret)
++		return;
++
++	ret = delete_fdt_mem_rsv(fdt, addr, size);
++	if (!ret)
++		pr_debug("Removed old IMA buffer reservation.\n");
++}
++
++#ifdef CONFIG_IMA_KEXEC
++/**
++ * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA buffer
++ *
++ * Architectures should use this function to pass on the IMA buffer
++ * information to the next kernel.
++ *
++ * Return: 0 on success, negative errno on error.
++ */
++int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
++			      size_t size)
++{
++	image->arch.ima_buffer_addr = load_addr;
++	image->arch.ima_buffer_size = size;
++	return 0;
++}
++
++static int write_number(void *p, u64 value, int cells)
++{
++	if (cells == 1) {
++		u32 tmp;
++
++		if (value > U32_MAX)
++			return -EINVAL;
++
++		tmp = cpu_to_be32(value);
++		memcpy(p, &tmp, sizeof(tmp));
++	} else if (cells == 2) {
++		u64 tmp;
++
++		tmp = cpu_to_be64(value);
++		memcpy(p, &tmp, sizeof(tmp));
++	} else
++		return -EINVAL;
++	return 0;
++}
++
++/**
++ * setup_ima_buffer - add IMA buffer information to the fdt
++ * @image:		kexec image being loaded.
++ * @dtb:		Flattened device tree for the next kernel.
++ * @chosen_node:	Offset to the chosen node.
++ *
++ * Return: 0 on success, or negative errno on error.
++ */
++int setup_ima_buffer(const struct kimage *image, void *dtb, int chosen_node)
++{
++	int ret, addr_cells, size_cells, entry_size;
++	u8 value[16];
++
++	remove_ima_buffer(dtb, chosen_node);
++
++	ret = get_addr_size_cells(&addr_cells, &size_cells);
++	if (ret)
++		return ret;
++
++	entry_size = 4 * (addr_cells + size_cells);
++
++	if (entry_size > sizeof(value))
++		return -EINVAL;
++
++	ret = write_number(value, image->arch.ima_buffer_addr, addr_cells);
++	if (ret)
++		return ret;
++
++	ret = write_number(value + 4 * addr_cells, image->arch.ima_buffer_size,
++			size_cells);
++	if (ret)
++		return ret;
++
++	ret = fdt_setprop(dtb, chosen_node, FDT_PROP_KEXEC_BUFFER, value,
++			  entry_size);
++	if (ret < 0)
++		return -EINVAL;
++
++	ret = fdt_add_mem_rsv(dtb, image->segment[0].mem,
++			      image->segment[0].memsz);
++	if (ret)
++		return -EINVAL;
++
++	return 0;
++}
++#endif /* CONFIG_IMA_KEXEC */
+diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+index 58871333737a..c05ad6b74b62 100644
+--- a/arch/arm64/kernel/machine_kexec_file.c
++++ b/arch/arm64/kernel/machine_kexec_file.c
+@@ -21,6 +21,7 @@
+ #include <linux/types.h>
+ #include <linux/vmalloc.h>
+ #include <asm/byteorder.h>
++#include <asm/ima.h>
+ 
+ /* relevant device tree properties */
+ #define FDT_PROP_INITRD_START	"linux,initrd-start"
+@@ -85,6 +86,11 @@ static int setup_dtb(struct kimage *image,
+ 			goto out;
+ 	}
+ 
++	/* add ima_buffer */
++	ret = setup_ima_buffer(image, dtb, off);
++	if (ret)
++		goto out;
++
+ 	/* add kaslr-seed */
+ 	ret = fdt_delprop(dtb, off, FDT_PROP_KASLR_SEED);
+ 	if  (ret == -FDT_ERR_NOTFOUND)
+@@ -114,6 +120,39 @@ static int setup_dtb(struct kimage *image,
+  */
+ #define DTB_EXTRA_SPACE 0x1000
+ 
++
++/**
++ * delete_fdt_mem_rsv - delete memory reservation with given address and size
++ *
++ * Return: 0 on success, or negative errno on error.
++ */
++int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size)
++{
++	int i, ret, num_rsvs = fdt_num_mem_rsv(fdt);
++
++	for (i = 0; i < num_rsvs; i++) {
++		uint64_t rsv_start, rsv_size;
++
++		ret = fdt_get_mem_rsv(fdt, i, &rsv_start, &rsv_size);
++		if (ret) {
++			pr_err("Malformed device tree.\n");
++			return -EINVAL;
++		}
++
++		if (rsv_start == start && rsv_size == size) {
++			ret = fdt_del_mem_rsv(fdt, i);
++			if (ret) {
++				pr_err("Error deleting device tree reservation.\n");
++				return -EINVAL;
++			}
++
++			return 0;
++		}
++	}
++
++	return -ENOENT;
++}
++
+ static int create_dtb(struct kimage *image,
+ 		      unsigned long initrd_load_addr, unsigned long initrd_len,
+ 		      char *cmdline, void **dtb)
+-- 
+2.17.1
 
