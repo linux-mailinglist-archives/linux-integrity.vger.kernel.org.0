@@ -2,118 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9A433285
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Jun 2019 16:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B493345F
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Jun 2019 17:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729375AbfFCOoS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Jun 2019 10:44:18 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32980 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729238AbfFCOoS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Jun 2019 10:44:18 -0400
-Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 970C97DED53F5CEC1E01;
-        Mon,  3 Jun 2019 15:44:14 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 3 Jun
- 2019 15:44:04 +0100
-Subject: Re: [PATCH v2 2/3] ima: don't ignore INTEGRITY_UNKNOWN EVM status
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
-        <mjg59@google.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <silviu.vlasceanu@huawei.com>, <stable@vger.kernel.org>
-References: <20190529133035.28724-1-roberto.sassu@huawei.com>
- <20190529133035.28724-3-roberto.sassu@huawei.com>
- <1559217621.4008.7.camel@linux.ibm.com>
- <e6b31aa9-0319-1805-bdfc-3ddde5884494@huawei.com>
- <1559569401.5052.17.camel@HansenPartnership.com>
- <3667fbd4-b6ed-6a76-9ff4-84ec3c2dda12@huawei.com>
- <1559572305.5052.19.camel@HansenPartnership.com>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <b38d75b1-873a-1630-0148-41c49571531a@huawei.com>
-Date:   Mon, 3 Jun 2019 16:44:12 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1728281AbfFCP5w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Jun 2019 11:57:52 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:41311 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbfFCP5w (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 3 Jun 2019 11:57:52 -0400
+Received: by mail-lf1-f68.google.com with SMTP id 136so2484941lfa.8
+        for <linux-integrity@vger.kernel.org>; Mon, 03 Jun 2019 08:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dUIziqCaWwis11FMwxs4RVtYQ55XI7b2gVYUu/408e4=;
+        b=Y9F5pclKlBDwBsGlUcTkFo2gE0Lxa9w08Yi6C3Mbtmu/srmp1rs9zU93TrlT9tgQfK
+         w1ylShU+Ekv0VietSgqGx05CQtDkHwJOghI4QVY1lsw3x6VspFDaorn0ZQDEkytyQJ4m
+         C7Awrm7vc+GExhX+DrlE4GlGbcPuNCJS58WFf8fWwsSRrNhQ4ZOC6FHBouceunr/SkGT
+         LUXSnwrkPkw4p4+CzVuH1bzwMI3/tDtsG3n4Cz3aGamKcKzR5Vuw2O25bnPA6nuWy6Fc
+         AtQZbjcyBkoAmfms8Qe6xJa32tiH32IbgjqMTi5KzCJqYFgkgTKSzw4Tgle403rRmy0e
+         eioQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dUIziqCaWwis11FMwxs4RVtYQ55XI7b2gVYUu/408e4=;
+        b=jOg2WHyVw3lSAkVywDnSOOfAtROX41u8C/jIXKfZhxEOpPwu387kmxXfphpTtgea8A
+         jJZqsNin6UW+981pbP1UwmXAZ5hgbR3Rlkn1OSB7DV+5h60cDOxUkZ9s1qQxuMA+f8Ue
+         MySwXTuRfyw6wc7csChTOAxsX0HQ1kFb0dOefp1HZRRMoLNhHYTGg9xTLwh/qem77M53
+         L0IegDZIx9CsYEzv10p6JzQVPZlsutGsaoUEL+IlpMpp+e5uAzgKZOH7/VkI3w6ocweB
+         N6zWONRPSHPgxFtiZvxu1JG3VzyhIkKI0S0szI1IxP0LQ0IGsD/wzz5mnkO64M4WQa0U
+         MBzg==
+X-Gm-Message-State: APjAAAWQ8bRbsupdr6Mh4xU2eYRUb5+968rrmWxN3ldrkESDENnhDhta
+        TE3jaBDzInUiMV7NDQFBjnFEEfl/FPuhPZIr9BTk
+X-Google-Smtp-Source: APXvYqyIjVbFfm6bTAY+PP8RHZbzsFMuXP1lJL7n3NHTAvCY8HdOf04hV+rUc65GZ60suBUkENcT3xTGX2zIASzg8DA=
+X-Received: by 2002:ac2:410a:: with SMTP id b10mr13586267lfi.175.1559577470486;
+ Mon, 03 Jun 2019 08:57:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1559572305.5052.19.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+References: <20190531140237.9199-1-janne.karhunen@gmail.com>
+In-Reply-To: <20190531140237.9199-1-janne.karhunen@gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 3 Jun 2019 11:57:38 -0400
+Message-ID: <CAHC9VhSJ9GnUqU4cj-OzWinGndgLOHrhtmeayLG2f3iow1Tptg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] LSM: switch to blocking policy update notifiers
+To:     Janne Karhunen <janne.karhunen@gmail.com>
+Cc:     Stephen Smalley <sds@tycho.nsa.gov>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/3/2019 4:31 PM, James Bottomley wrote:
-> On Mon, 2019-06-03 at 16:29 +0200, Roberto Sassu wrote:
->> On 6/3/2019 3:43 PM, James Bottomley wrote:
->>> On Mon, 2019-06-03 at 11:25 +0200, Roberto Sassu wrote:
->>>> On 5/30/2019 2:00 PM, Mimi Zohar wrote:
->>>>> On Wed, 2019-05-29 at 15:30 +0200, Roberto Sassu wrote:
->>>>>> Currently, ima_appraise_measurement() ignores the EVM status
->>>>>> when evm_verifyxattr() returns INTEGRITY_UNKNOWN. If a file
->>>>>> has a valid security.ima xattr with type IMA_XATTR_DIGEST or
->>>>>> IMA_XATTR_DIGEST_NG, ima_appraise_measurement() returns
->>>>>> INTEGRITY_PASS regardless of the EVM status. The problem is
->>>>>> that the EVM status is overwritten with the appraisal statu
->>>>>
->>>>> Roberto, your framing of this problem is harsh and
->>>>> misleading.  IMA and EVM are intentionally independent of each
->>>>> other and can be configured independently of each other.  The
->>>>> intersection of the two is the call to
->>>>> evm_verifyxattr().  INTEGRITY_UNKNOWN is
->>>>> returned for a number of reasons - when EVM is not configured,
->>>>> the EVM hmac key has not yet been loaded, the protected
->>>>> security attribute is unknown, or the file is not in policy.
->>>>>
->>>>> This patch does not differentiate between any of the above
->>>>> cases, requiring mutable files to always be protected by EVM,
->>>>> when specified as an "ima_appraise=" option on the boot command
->>>>> line.
->>>>>
->>>>> IMA could be extended to require EVM on a per IMA policy rule
->>>>> basis. Instead of framing allowing IMA file hashes without EVM
->>>>> as a bug that has existed from the very beginning, now that
->>>>> IMA/EVM have matured and is being used, you could frame it as
->>>>> extending IMA or hardening.
->>>>
->>>> I'm seeing it from the perspective of an administrator that
->>>> manages an already hardened system, and expects that the system
->>>> only grants access to files with a valid signature/HMAC. That
->>>> system would not enforce this behavior if EVM keys are removed
->>>> and the digest in security.ima is set to the actual file digest.
->>>>
->>>> Framing it as a bug rather than an extension would in my opinion
->>>> help to convince people about the necessity to switch to the safe
->>>> mode, if their system is already hardened.
->>>
->>> I have a use case for IMA where I use it to enforce immutability of
->>> containers.  In this use case, the cluster admin places hashes on
->>> executables as the image is unpacked so that if an executable file
->>> is changed, IMA will cause an execution failure.  For this use
->>> case, I don't care about the EVM, in fact we don't use it, because
->>> the only object is to fail execution if a binary is mutated.
->>
->> How would you prevent root in the container from updating
->> security.ima?
-> 
-> We don't.  We only guarantee immutability for unprivileged containers,
-> so root can't be inside.
+On Fri, May 31, 2019 at 10:03 AM Janne Karhunen
+<janne.karhunen@gmail.com> wrote:
+> Atomic policy updaters are not very useful as they cannot
+> usually perform the policy updates on their own. Since it
+> seems that there is no strict need for the atomicity,
+> switch to the blocking variant.
+>
+> Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
+> ---
+>  security/security.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/security/security.c b/security/security.c
+> index 23cbb1a295a3..c5e69ce81521 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -39,7 +39,7 @@
+>  #define LSM_COUNT (__end_lsm_info - __start_lsm_info)
+>
+>  struct security_hook_heads security_hook_heads __lsm_ro_after_init;
+> -static ATOMIC_NOTIFIER_HEAD(lsm_notifier_chain);
+> +static BLOCKING_NOTIFIER_HEAD(lsm_notifier_chain);
+>
+>  static struct kmem_cache *lsm_file_cache;
+>  static struct kmem_cache *lsm_inode_cache;
+> @@ -432,19 +432,19 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+>
+>  int call_lsm_notifier(enum lsm_event event, void *data)
 
-Ok.
+As I mentioned in the other thread, I would like to see "blocking", or
+similar, added to the lsm_notifier functions with this change.  It
+makes it easier if/when we need to add both atomic and blocking
+variants, as well as making it much more clear which version is being
+used (helpful even now with just one variant).
 
-Regarding the new behavior, this must be explicitly enabled by adding
-ima_appraise=enforce-evm or log-evm to the kernel command line.
-Otherwise, the current behavior is preserved with this patch. Would this
-be ok?
+For example: call_lsm_notifier() -> call_lsm_blocking_notifier(),
+register_lsm_notifier() -> register_lsm_blocking_notifier().
 
-Roberto
+>  {
+> -       return atomic_notifier_call_chain(&lsm_notifier_chain, event, data);
+> +       return blocking_notifier_call_chain(&lsm_notifier_chain, event, data);
+>  }
+>  EXPORT_SYMBOL(call_lsm_notifier);
+>
+>  int register_lsm_notifier(struct notifier_block *nb)
+>  {
+> -       return atomic_notifier_chain_register(&lsm_notifier_chain, nb);
+> +       return blocking_notifier_chain_register(&lsm_notifier_chain, nb);
+>  }
+>  EXPORT_SYMBOL(register_lsm_notifier);
+>
+>  int unregister_lsm_notifier(struct notifier_block *nb)
+>  {
+> -       return atomic_notifier_chain_unregister(&lsm_notifier_chain, nb);
+> +       return blocking_notifier_chain_unregister(&lsm_notifier_chain, nb);
+>  }
+>  EXPORT_SYMBOL(unregister_lsm_notifier);
+>
+> --
+> 2.17.1
+>
+
 
 -- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+paul moore
+www.paul-moore.com
