@@ -2,181 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0913D3350E
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Jun 2019 18:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CACD337DF
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Jun 2019 20:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729282AbfFCQfG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Jun 2019 12:35:06 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:40609 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729281AbfFCQfG (ORCPT
+        id S1726603AbfFCSb4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Jun 2019 14:31:56 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38281 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726055AbfFCSb4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Jun 2019 12:35:06 -0400
-Received: by mail-io1-f69.google.com with SMTP id v11so14252848iop.7
-        for <linux-integrity@vger.kernel.org>; Mon, 03 Jun 2019 09:35:05 -0700 (PDT)
+        Mon, 3 Jun 2019 14:31:56 -0400
+Received: by mail-oi1-f193.google.com with SMTP id 18so12833747oij.5
+        for <linux-integrity@vger.kernel.org>; Mon, 03 Jun 2019 11:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JB7G7a3obPccO07RyvNY8mElks92DaU5NY5QKwWTZvQ=;
+        b=lE/gBTu5gNk+nG3gMkLC5L1qqMeFZke1tNjNI5xgMMMUPlBG3ZAzppxMiEuBOtKiMI
+         Y6xOk9eUEgPGAqGCVGFZpHU68PsLFNawXTBrG55HWus8sEfa/pbs2FkPH3l9y2eEvDvI
+         iGvFo6MBYyAPDhEBFQ/4NNauvhmdicFzBSZLXBRHikKFhbpLDxXobG2dm7zdUMcMLlR4
+         bLxdEBF7g9pTfKNAUVZBPWJPnMha7n3pUfVeRzY2e9a5BSDSaj0E6B5Lem8uEQQeVdh+
+         wXJNvLH9D4lzgEpF3Pu7V+6V4lfAyFJbr7/0knZSFvSon08cblLXIUE+SrdvBuzGJp3y
+         AyZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=RXLeb+ORgwCAgu+4FGMm/Rx6n81aoggbaLi2l8MCmkM=;
-        b=fV3acXKz9qdiN3f6vtS7/xQeKVWgzLgalqkQaeqoH20BbwSBUbRV3ZR7c4cZ7hs91V
-         4QgO3S8pUqKnX3sVphirBGQnsfW9cgKyOSr5IjEfIBK2ODRYHWIvq5Noo/eEpjOZFRo4
-         47Bsck+08oqnh2CTJlTmVnIoJUf0owV4gbSq4UBSwaOUvlaO2si1LZQnn6aYWQ4Q9Alt
-         aBtbjVRf+yBQpeFMx81MfJNmvhlM5u+Pmq5bfAq9Awd0Jjd8vkKdneVcR9rCD1QEQFXX
-         hdoQdA+VN4mx6ReTQHty9M0k3+mtQnaGhMZ74s2EkPdu6izkZHbrq1HPzL/Kt9LYgEL+
-         x3VA==
-X-Gm-Message-State: APjAAAWeMJGpzG0WlcrwHk67Xm4dgLGgggJg3pUNohActfUEPDdIEb0g
-        fNvDR1mq+C32cAHQy0Wazmo0OY6z3BUBLV/QiEtO2y4zVI7D
-X-Google-Smtp-Source: APXvYqzEWTKXME9yCi31qNI0/C/QrdV2NUT4ptM0qpWlNPhLn1B1nq1zalaZ/RiwrleKK9PDU3DFKjHrhYIZH9devvLa+fcinn8m
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JB7G7a3obPccO07RyvNY8mElks92DaU5NY5QKwWTZvQ=;
+        b=kdIPsV1nMMpJwk5aVp/Kzb0Q2VliO+i9oRTDQ154bKzqfcWNl4znqUmdPk3MzUYcCe
+         VbDupYZZZLcnetBTHDXQ9Y1oCGBLktXXDi+uIyu1Bkp59HbWnsF6A/aNjcaxoMJQEzSA
+         sRswVQTIxqa8wT7RFuaDg2Y9xme6QkEJGigq3myqHyfR+GZiFptCWJysb/cZ01qyc4Ax
+         FNWUrptoIIEN5NhFQggO5+xL3rGAZFfkcLe6Yt16ODuVY9P3x7aEbBKrsPvU7awbI9XF
+         F+3XZFekNrobbiZ7vtKJzVmSco+wUYEdkCrIQ1D7EO3NsOHL/0QnWvOM5ooWP7pMnGwv
+         XHIQ==
+X-Gm-Message-State: APjAAAXnvc0cEAFy4PeQV6xqZ3zhA4+sZi/+T6+cfI6xixaXixZP/Aqf
+        yAdn9RdH2JC19LdRk+y8OuDozQ==
+X-Google-Smtp-Source: APXvYqx/JQHKW1RVtJywUChZiZhbYIWjyWjyP52wifJ5hVzfHkQZ9dKculi7hqOvLpAffmvtGewfWA==
+X-Received: by 2002:aca:c382:: with SMTP id t124mr1900442oif.9.1559586715364;
+        Mon, 03 Jun 2019 11:31:55 -0700 (PDT)
+Received: from [192.168.1.5] (072-182-052-210.res.spectrum.com. [72.182.52.210])
+        by smtp.googlemail.com with ESMTPSA id b127sm6172046oih.43.2019.06.03.11.31.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jun 2019 11:31:54 -0700 (PDT)
+Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+To:     Roberto Sassu <roberto.sassu@huawei.com>, viro@zeniv.linux.org.uk
+Cc:     linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, initramfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bug-cpio@gnu.org,
+        zohar@linux.vnet.ibm.com, silviu.vlasceanu@huawei.com,
+        dmitry.kasatkin@huawei.com, takondra@cisco.com, kamensky@cisco.com,
+        hpa@zytor.com, arnd@arndb.de, james.w.mcmechan@gmail.com,
+        niveditas98@gmail.com
+References: <20190523121803.21638-1-roberto.sassu@huawei.com>
+ <cf9d08ca-74c7-c945-5bf9-7c3495907d1e@huawei.com>
+From:   Rob Landley <rob@landley.net>
+Message-ID: <541e9ea1-024f-5c22-0b58-f8692e6c1eb1@landley.net>
+Date:   Mon, 3 Jun 2019 13:32:53 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:660c:6c9:: with SMTP id z9mr4713948itk.94.1559579705269;
- Mon, 03 Jun 2019 09:35:05 -0700 (PDT)
-Date:   Mon, 03 Jun 2019 09:35:05 -0700
-In-Reply-To: <0000000000003302870578477029@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000054e5d1058a6df2eb@google.com>
-Subject: Re: possible deadlock in process_measurement
-From:   syzbot <syzbot+5ab61747675a87ea359d@syzkaller.appspotmail.com>
-To:     dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com,
-        zohar@linux.vnet.ibm.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <cf9d08ca-74c7-c945-5bf9-7c3495907d1e@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+On 6/3/19 4:31 AM, Roberto Sassu wrote:
+>> This patch set aims at solving the following use case: appraise files from
+>> the initial ram disk. To do that, IMA checks the signature/hash from the
+>> security.ima xattr. Unfortunately, this use case cannot be implemented
+>> currently, as the CPIO format does not support xattrs.
+>>
+>> This proposal consists in including file metadata as additional files named
+>> METADATA!!!, for each file added to the ram disk. The CPIO parser in the
+>> kernel recognizes these special files from the file name, and calls the
+>> appropriate parser to add metadata to the previously extracted file. It has
+>> been proposed to use bit 17:16 of the file mode as a way to recognize files
+>> with metadata, but both the kernel and the cpio tool declare the file mode
+>> as unsigned short.
+>
+> Any opinion on this patch set?
+> 
+> Thanks
+> 
+> Roberto
 
-HEAD commit:    3c09c195 Add linux-next specific files for 20190531
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=10f61a0ea00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6cfb24468280cd5c
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ab61747675a87ea359d
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=177c3d16a00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ec01baa00000
+Sorry, I've had the window open since you posted it but haven't gotten around to
+it. I'll try to build it later today.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+5ab61747675a87ea359d@syzkaller.appspotmail.com
+It does look interesting, and I have no objections to the basic approach. I
+should be able to add support to toybox cpio over a weekend once I've got the
+kernel doing it to test against.
 
-get_swap_device: Bad swap file entry 6000000000000001
-get_swap_device: Bad swap file entry 6400000000000001
-get_swap_device: Bad swap file entry 6800000000000001
-get_swap_device: Bad swap file entry 6c00000000000001
-get_swap_device: Bad swap file entry 7000000000000001
-get_swap_device: Bad swap file entry 7400000000000001
-======================================================
-WARNING: possible circular locking dependency detected
-5.2.0-rc2-next-20190531 #4 Not tainted
-------------------------------------------------------
-syz-executor395/17373 is trying to acquire lock:
-000000003d1a4a53 (&sb->s_type->i_mutex_key#10){+.+.}, at: inode_lock  
-include/linux/fs.h:778 [inline]
-000000003d1a4a53 (&sb->s_type->i_mutex_key#10){+.+.}, at:  
-process_measurement+0x15ae/0x15e0 security/integrity/ima/ima_main.c:228
-
-but task is already holding lock:
-00000000e0714fc5 (&mm->mmap_sem#2){++++}, at: do_mprotect_pkey+0x1f6/0xa30  
-mm/mprotect.c:485
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&mm->mmap_sem#2){++++}:
-        down_read+0x3f/0x1e0 kernel/locking/rwsem.c:24
-        get_user_pages_unlocked+0xfc/0x4a0 mm/gup.c:1174
-        __gup_longterm_unlocked mm/gup.c:2193 [inline]
-        get_user_pages_fast+0x43f/0x530 mm/gup.c:2245
-        iov_iter_get_pages+0x2c2/0xf80 lib/iov_iter.c:1287
-        dio_refill_pages fs/direct-io.c:171 [inline]
-        dio_get_page fs/direct-io.c:215 [inline]
-        do_direct_IO fs/direct-io.c:983 [inline]
-        do_blockdev_direct_IO+0x3f7b/0x8e00 fs/direct-io.c:1336
-        __blockdev_direct_IO+0xa1/0xca fs/direct-io.c:1422
-        ext4_direct_IO_write fs/ext4/inode.c:3782 [inline]
-        ext4_direct_IO+0xaa7/0x1bb0 fs/ext4/inode.c:3909
-        generic_file_direct_write+0x20a/0x4a0 mm/filemap.c:3110
-        __generic_file_write_iter+0x2ee/0x630 mm/filemap.c:3293
-        ext4_file_write_iter+0x332/0x1070 fs/ext4/file.c:266
-        call_write_iter include/linux/fs.h:1870 [inline]
-        new_sync_write+0x4d3/0x770 fs/read_write.c:483
-        __vfs_write+0xe1/0x110 fs/read_write.c:496
-        vfs_write+0x268/0x5d0 fs/read_write.c:558
-        ksys_write+0x14f/0x290 fs/read_write.c:611
-        __do_sys_write fs/read_write.c:623 [inline]
-        __se_sys_write fs/read_write.c:620 [inline]
-        __x64_sys_write+0x73/0xb0 fs/read_write.c:620
-        do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
-        entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
--> #0 (&sb->s_type->i_mutex_key#10){+.+.}:
-        lock_acquire+0x16f/0x3f0 kernel/locking/lockdep.c:4300
-        down_write+0x38/0xa0 kernel/locking/rwsem.c:66
-        inode_lock include/linux/fs.h:778 [inline]
-        process_measurement+0x15ae/0x15e0  
-security/integrity/ima/ima_main.c:228
-        ima_file_mmap+0x11a/0x130 security/integrity/ima/ima_main.c:370
-        security_file_mprotect+0xd5/0x100 security/security.c:1430
-        do_mprotect_pkey+0x537/0xa30 mm/mprotect.c:550
-        __do_sys_pkey_mprotect mm/mprotect.c:590 [inline]
-        __se_sys_pkey_mprotect mm/mprotect.c:587 [inline]
-        __x64_sys_pkey_mprotect+0x97/0xf0 mm/mprotect.c:587
-        do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
-        entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-other info that might help us debug this:
-
-  Possible unsafe locking scenario:
-
-        CPU0                    CPU1
-        ----                    ----
-   lock(&mm->mmap_sem#2);
-                                lock(&sb->s_type->i_mutex_key#10);
-                                lock(&mm->mmap_sem#2);
-   lock(&sb->s_type->i_mutex_key#10);
-
-  *** DEADLOCK ***
-
-1 lock held by syz-executor395/17373:
-  #0: 00000000e0714fc5 (&mm->mmap_sem#2){++++}, at:  
-do_mprotect_pkey+0x1f6/0xa30 mm/mprotect.c:485
-
-stack backtrace:
-CPU: 1 PID: 17373 Comm: syz-executor395 Not tainted 5.2.0-rc2-next-20190531  
-#4
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
-  print_circular_bug.cold+0x1cc/0x28f kernel/locking/lockdep.c:1566
-  check_prev_add kernel/locking/lockdep.c:2311 [inline]
-  check_prevs_add kernel/locking/lockdep.c:2419 [inline]
-  validate_chain kernel/locking/lockdep.c:2801 [inline]
-  __lock_acquire+0x3755/0x5490 kernel/locking/lockdep.c:3790
-  lock_acquire+0x16f/0x3f0 kernel/locking/lockdep.c:4300
-  down_write+0x38/0xa0 kernel/locking/rwsem.c:66
-  inode_lock include/linux/fs.h:778 [inline]
-  process_measurement+0x15ae/0x15e0 security/integrity/ima/ima_main.c:228
-  ima_file_mmap+0x11a/0x130 security/integrity/ima/ima_main.c:370
-  security_file_mprotect+0xd5/0x100 security/security.c:1430
-  do_mprotect_pkey+0x537/0xa30 mm/mprotect.c:550
-  __do_sys_pkey_mprotect mm/mprotect.c:590 [inline]
-  __se_sys_pkey_mprotect mm/mprotect.c:587 [inline]
-  __x64_sys_pkey_mprotect+0x97/0xf0 mm/mprotect.c:587
-  do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x440279
-Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 fb 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007ffeec2f48d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000149
-RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 0000000000440279
-RDX: 000000000000000
-
+Rob
