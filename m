@@ -2,90 +2,189 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFBF3426B
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 10:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC2634972
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 15:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726959AbfFDI5Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Jun 2019 04:57:24 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:48840 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726927AbfFDI5Y (ORCPT
+        id S1727653AbfFDNw0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Jun 2019 09:52:26 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36352 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727515AbfFDNw0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Jun 2019 04:57:24 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 1ABE08EE1D8;
-        Tue,  4 Jun 2019 01:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1559638644;
-        bh=wI/8+wiijGgOqLSYHFzdmNaGRkSygv9a+oR+A5uQbEQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=rfb3INXuVy4qOBudIOjCKyAXVMI684m+PxHEGeKwMGmp8gEHXGZRA6JyeEUZ9c0/H
-         e5CXWketma7GjLRupwrcYJuK0Nxl5pnqMZPaALWCUjCi1h3sMe7r/PfGIwTfBtzB5W
-         b2aD8n3OoevNwekKzuL3YRh6eZ3F2lB83HOGoqEI=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vVbUH0cOyB66; Tue,  4 Jun 2019 01:57:23 -0700 (PDT)
-Received: from jarvis.guest.haifa.ibm.com (unknown [195.110.41.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 8921B8EE101;
-        Tue,  4 Jun 2019 01:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1559638643;
-        bh=wI/8+wiijGgOqLSYHFzdmNaGRkSygv9a+oR+A5uQbEQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=xUN9j1ybZGq/0Fl2pBKJHXRrazk9uYYwC16X//yILiBdGZMFtElgxzDbIW10F1dGI
-         EPTJZ1M2kM6L9rgoiph1CxRKJoIr2ylDIAJE3kej12ObHS2hd/gghg2HghWz8WO5bW
-         WhQt5hGy8hYOjB3EkU8u9iFo2QeiMmgNL4x3WP4Q=
-Message-ID: <1559638637.3410.3.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 2/3] ima: don't ignore INTEGRITY_UNKNOWN EVM status
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@huawei.com,
-        mjg59@google.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
-        stable@vger.kernel.org
-Date:   Tue, 04 Jun 2019 11:57:17 +0300
-In-Reply-To: <b38d75b1-873a-1630-0148-41c49571531a@huawei.com>
-References: <20190529133035.28724-1-roberto.sassu@huawei.com>
-         <20190529133035.28724-3-roberto.sassu@huawei.com>
-         <1559217621.4008.7.camel@linux.ibm.com>
-         <e6b31aa9-0319-1805-bdfc-3ddde5884494@huawei.com>
-         <1559569401.5052.17.camel@HansenPartnership.com>
-         <3667fbd4-b6ed-6a76-9ff4-84ec3c2dda12@huawei.com>
-         <1559572305.5052.19.camel@HansenPartnership.com>
-         <b38d75b1-873a-1630-0148-41c49571531a@huawei.com>
+        Tue, 4 Jun 2019 09:52:26 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x54Dmk3q029545
+        for <linux-integrity@vger.kernel.org>; Tue, 4 Jun 2019 09:52:25 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2swrc5w07h-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 04 Jun 2019 09:52:24 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Tue, 4 Jun 2019 14:52:22 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 4 Jun 2019 14:52:19 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x54DqIPl50987066
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Jun 2019 13:52:18 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CB0511C04A;
+        Tue,  4 Jun 2019 13:52:18 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 65EA411C04C;
+        Tue,  4 Jun 2019 13:52:17 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.110.19])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Jun 2019 13:52:17 +0000 (GMT)
+Subject: Re: [PATCH V3] IMA: Allow profiles to define the desired IMA
+ template
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Matthew Garrett <matthewgarrett@google.com>,
+        linux-integrity@vger.kernel.org
+Cc:     prsriva02@gmail.com, bauerman@linux.ibm.com,
+        roberto.sassu@huawei.com, Matthew Garrett <mjg59@google.com>
+Date:   Tue, 04 Jun 2019 09:52:06 -0400
+In-Reply-To: <1559613113.3956.9.camel@linux.ibm.com>
+References: <20190603201322.7443-1-matthewgarrett@google.com>
+         <1559613113.3956.9.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19060413-0016-0000-0000-0000028404A0
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19060413-0017-0000-0000-000032E114F5
+Message-Id: <1559656326.4056.5.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-04_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906040093
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-06-03 at 16:44 +0200, Roberto Sassu wrote:
-> On 6/3/2019 4:31 PM, James Bottomley wrote:
-> > On Mon, 2019-06-03 at 16:29 +0200, Roberto Sassu wrote:
-[...]
-> > > How would you prevent root in the container from updating
-> > > security.ima?
+On Mon, 2019-06-03 at 21:51 -0400, Mimi Zohar wrote:
+> On Mon, 2019-06-03 at 13:13 -0700, Matthew Garrett wrote:
+> > Admins may wish to log different measurements using different IMA
+> > templates. Add support for overriding the default template on a per-rule
+> > basis.
 > > 
-> > We don't.  We only guarantee immutability for unprivileged
-> > containers, so root can't be inside.
+> > Signed-off-by: Matthew Garrett <mjg59@google.com>
+> > ---
+> > 
+> > Updated based on review feedback, verified that I can generate an event
+> > log that contains multiple different templates.
+> > 
+> >  Documentation/ABI/testing/ima_policy  |  6 ++++--
+> >  security/integrity/ima/ima.h          | 13 +++++++++----
+> >  security/integrity/ima/ima_api.c      | 24 ++++++++++++++++-------
+> >  security/integrity/ima/ima_appraise.c |  2 +-
+> >  security/integrity/ima/ima_init.c     |  2 +-
+> >  security/integrity/ima/ima_main.c     |  9 +++++----
+> >  security/integrity/ima/ima_policy.c   | 28 +++++++++++++++++++++++++--
+> >  security/integrity/ima/ima_template.c | 10 ++++++++--
+> >  8 files changed, 71 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
+> > index 74c6702de74e..4ded0668a22d 100644
+> > --- a/Documentation/ABI/testing/ima_policy
+> > +++ b/Documentation/ABI/testing/ima_policy
+> > @@ -24,8 +24,7 @@ Description:
+> >  				[euid=] [fowner=] [fsname=]]
+> >  			lsm:	[[subj_user=] [subj_role=] [subj_type=]
+> >  				 [obj_user=] [obj_role=] [obj_type=]]
+> > -			option:	[[appraise_type=]] [permit_directio]
+> > -
+> > +			option:	[[appraise_type=]] [template=] [permit_directio]
+> >  		base: 	func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK]
+> >  				[FIRMWARE_CHECK]
+> >  				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
+> > @@ -38,6 +37,9 @@ Description:
+> >  			fowner:= decimal value
+> >  		lsm:  	are LSM specific
+> >  		option:	appraise_type:= [imasig]
+> > +			template:= name or format of a defined IMA template
+> > +			type (eg,ima-ng or d-ng|n-ng). Only valid when action
+> > +			is "measure".
 > 
-> Ok.
+> This patch only supports specifying the template name, not the
+> template format description.  Please remove "d-ng|n-ng".
 > 
-> Regarding the new behavior, this must be explicitly enabled by adding
-> ima_appraise=enforce-evm or log-evm to the kernel command line.
-> Otherwise, the current behavior is preserved with this patch. Would
-> this be ok?
+> >  			pcr:= decimal value
+> > 
+> >  		default policy:
+> 
+> <snip>
+> 
+> > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> > index 0f6fe53cef09..cbae2a3a9c5b 100644
+> > --- a/security/integrity/ima/ima_policy.c
+> > +++ b/security/integrity/ima/ima_policy.c
+> > @@ -80,6 +80,7 @@ struct ima_rule_entry {
+> >  		int type;	/* audit type */
+> >  	} lsm[MAX_LSM_RULES];
+> >  	char *fsname;
+> > +	struct ima_template_desc *template;
+> >  };
+> > 
+> >  /*
+> > @@ -397,6 +398,7 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
+> >   * @func: IMA hook identifier
+> >   * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC)
+> >   * @pcr: set the pcr to extend
+> > + * @template_desc: the template that should be used for this rule
+> >   *
+> >   * Measure decision based on func/mask/fsmagic and LSM(subj/obj/type)
+> >   * conditions.
+> > @@ -406,7 +408,8 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
+> >   * than writes so ima_match_policy() is classical RCU candidate.
+> >   */
+> >  int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
+> > -		     enum ima_hooks func, int mask, int flags, int *pcr)
+> > +		     enum ima_hooks func, int mask, int flags, int *pcr,
+> > +		     struct ima_template_desc **template_desc)
+> >  {
+> >  	struct ima_rule_entry *entry;
+> >  	int action = 0, actmask = flags | (flags << 1);
+> > @@ -438,6 +441,11 @@ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
+> >  		if ((pcr) && (entry->flags & IMA_PCR))
+> >  			*pcr = entry->pcr;
+> > 
+> > +		if (template_desc && entry->template)
+> > +			*template_desc = entry->template;
+> > +		else
+> > +			*template_desc = ima_template_desc_current();
+> > +
+> 
+> This code is finding the template format, but is subsequently being
+> replaced with the current description.  One way of fixing this, is by
+> initializing the template_desc before walking the list.
 
-Sure, as long as it's an opt-in flag, meaning the behaviour of my
-kernels on physical cloud systems doesn't change as I upgrade them, I'm
-fine with that.
+Perhaps not, but the "else" clause also needs to test template_desc.
+ The other option is for all ima_match_policy callers to provide
+template_desc.
 
-James
+Mimi
+
+> 
+> >  		if (!actmask)
+> >  			break;
+> >  	}
+> > @@ -676,7 +684,7 @@ enum {
+> >  	Opt_uid_gt, Opt_euid_gt, Opt_fowner_gt,
+> >  	Opt_uid_lt, Opt_euid_lt, Opt_fowner_lt,
+> >  	Opt_appraise_type, Opt_permit_directio,
+> > -	Opt_pcr, Opt_err
+> > +	Opt_pcr, Opt_template, Opt_err
+> >  };
+> > 
 
