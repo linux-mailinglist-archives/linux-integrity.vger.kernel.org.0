@@ -2,79 +2,279 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B565B34B5C
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 17:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E183035050
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 21:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727776AbfFDPCI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Jun 2019 11:02:08 -0400
-Received: from mail-ua1-f45.google.com ([209.85.222.45]:36655 "EHLO
-        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727737AbfFDPCI (ORCPT
+        id S1726179AbfFDTfR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Jun 2019 15:35:17 -0400
+Received: from mail-yw1-f74.google.com ([209.85.161.74]:46023 "EHLO
+        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726379AbfFDTfR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Jun 2019 11:02:08 -0400
-Received: by mail-ua1-f45.google.com with SMTP id 94so7920998uam.3
-        for <linux-integrity@vger.kernel.org>; Tue, 04 Jun 2019 08:02:08 -0700 (PDT)
+        Tue, 4 Jun 2019 15:35:17 -0400
+Received: by mail-yw1-f74.google.com with SMTP id b63so4456936ywc.12
+        for <linux-integrity@vger.kernel.org>; Tue, 04 Jun 2019 12:35:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=ihaGGwLZm4n7dzcZPAp4qZkGrRbYpzyI3wuleSWYYGA=;
-        b=J6SVJIfx+NSSl9Giwz0vhuIScxC9ZlcX2Bj4onP2xE/QbCGOH+wQ/jTruXCvkK2/l/
-         sz+Qn9LJK9JBch3R4u275pWl0PDEhoBue7BKpHGKdiqngZ0GKILqZsYOjBFEgTK6MmJQ
-         BiLwiNuoQzxTV7oDzO2hI4uByDYCydsTgRvd8E2YyOsKyPzLs+npk9MD8nVcPnbRnSjN
-         P3uMd7q0O/NSUTOsecmASYocgVtaEQphnxGN84eiklFmVNJwCL6gE5E8CX2f5swUp4qP
-         9BpNRAnc4i8MyII/K/x3vDi9fsOAn+/2r+Nrf/CnzqZ0e3ejlOIro1BRECShJJOYFM76
-         sR4Q==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=nqmyeC+ULMhm5Z1OXDXUW8a3IDjcGN3t8NAaEwxyp+8=;
+        b=jX3jKalZwMxYkWjR6dmDpaA+Nuo32n4Mlg3GToGdy0KAj2yfRjhN1IhPQt6m9eMJpz
+         fTvBHvYMtoZ6Gbk7ds7d1zgV8oepN2qSDif4HRtLakhCjviJD5xGP+HAkZcrwQa3G7Pf
+         NfnFyNc4wRO0j6jFGMyfcaYTu00wS8M1WwK/vaHeDVfBLdjtWBYVpLocsyyO6Z85Ew70
+         PcMehjozG++MBQbcq/DdEAeTaebadCM34tcS91sOC58FlVpV/ReH4kncbtsvKEZudc9d
+         zPv4t+btQde6yfHYKTfKooqGsthPFdRHBO68IWj4D78/M0YuCwRA4XJ3Hx/D1AUxs+2H
+         bYRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=ihaGGwLZm4n7dzcZPAp4qZkGrRbYpzyI3wuleSWYYGA=;
-        b=cLfYxD6AP4sAQd+vr9R1wEyxwtJDRTjga42InF1Q9k6TvqE0twCW5ah6BOc+b0omCm
-         RzPVaUwrX8uBVnfGjY6F/KpF+7HKjLJaBHkMnex7EXAsw5IIIsgGLYD+gFyrQPA1eHc6
-         8F6VMU7UELJT79whUSEp27VhnbV3LE7IAOIa7dBf19sp+B3+GkA835HmJ4hLe2p2Y9Ym
-         6VgQ0aLadVXxMhHS2u2+DntEY5cIFvoRkrC5wzzd9D74Xik+ndpx0lZzYks2+v7mAarU
-         ySXcLptu5fQZf1+QI31XlNmhFw4/5sTHCBl6RMWq/+x3ToxFF7u/yMegQdpKeakK3jaS
-         neNg==
-X-Gm-Message-State: APjAAAWrsuAPtmvxJhKjIC0/VUYGmmbCSrGlpClc1dpt8OJWRTNxcW9H
-        oS3Sl51Ixrg++OL0qCBxFrwYlTreuK5TibeukgOrs+Ys
-X-Google-Smtp-Source: APXvYqygJmK+c6zZV4My4Lz0W5Up0UmV6fOjzQlyCuo3f0qqoUWIehUflcpOoBEVyDiOl6QbauBQcBsDbb5+FUirHms=
-X-Received: by 2002:ab0:698f:: with SMTP id t15mr6325052uaq.34.1559660527396;
- Tue, 04 Jun 2019 08:02:07 -0700 (PDT)
-MIME-Version: 1.0
-From:   Martin Townsend <mtownsend1973@gmail.com>
-Date:   Tue, 4 Jun 2019 16:01:56 +0100
-Message-ID: <CABatt_ztdnRn7ZU1ap0Kf-coA3GRRCDTZ0z=c6yMUToFuayUAA@mail.gmail.com>
-Subject: evmctl and Hardware Security Module
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=nqmyeC+ULMhm5Z1OXDXUW8a3IDjcGN3t8NAaEwxyp+8=;
+        b=ZLqHDLYjcEJaT8CwkjZQa2wSV02s/HGN5HZk0UnMNCxZ9Du6f4CXKnrLxBXVZeCY1e
+         UteH8DbsOt+lzlJUUjbFchiHKuqa/6FweGgh1fVRLRP1Vt10I/e/qwBrGRKy9zpsTB1f
+         FLq2GrHfUuxAjiMPXDDqiyHoXowFai98CcLtAoLdC1vU/FzdfAGw1r0yzOkOt4SpihJA
+         2G0pOy/5qROcFP6w52Uac7HVFE1w9SCvIndwIwIj4R2cxAePR3/zwl16YoYdM24wVxfe
+         zk517ew9+qofr1ulsYtrB18RM/8vyvrXtIbAABC05RcnMHebMUEcMtP6Iz3pQI+PP6PC
+         jkYA==
+X-Gm-Message-State: APjAAAUpLQgsEa1eCnxAkcv5n3Ra4WsgbzpuVxe5nrubTRbre7owJKjk
+        JZoMMSI9O1aHIZMD+eTnqazrB8yQWOHn3bXWNg73QclB0nbkv8mpE+QAtOjm9LSFgj9TvcNEIUd
+        UBlgW0Z9nuvXPlqgntQv1iISLUCynB7pAWvgYW+eWKhdmRztTpReKwVTWL4XqsG+MP5ar4ft9Xp
+        +Qv6TgQaFP1EMcCxSYeoo=
+X-Google-Smtp-Source: APXvYqw+rT2sweEiRPfNq4mwfjbwGro9KCHLP23tZyY9BfQsoWOTXQiL9fIXEnZmN3yZbpJP2Q50i7jmMSvpJxURMg/mzA==
+X-Received: by 2002:a25:6f0b:: with SMTP id k11mr15970733ybc.303.1559676916128;
+ Tue, 04 Jun 2019 12:35:16 -0700 (PDT)
+Date:   Tue,  4 Jun 2019 12:35:11 -0700
+Message-Id: <20190604193511.153831-1-matthewgarrett@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
+Subject: [PATCH] tpm: Don't duplicate events from the final event log in the
+ TCG2 log
+From:   Matthew Garrett <matthewgarrett@google.com>
 To:     linux-integrity@vger.kernel.org
+Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
+        linux-efi@vger.kernel.org, ard.biesheuvel@linaro.org,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Joe Richey <joerichey@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+After the first call to GetEventLog() on UEFI systems using the TCG2
+crypto agile log format, any further log events (other than those
+triggered by ExitBootServices()) will be logged in both the main log and
+also in the Final Events Log. While the kernel only calls GetEventLog()
+immediately before ExitBootServices(), we can't control whether earlier
+parts of the boot process have done so. This will result in log entries
+that exist in both logs, and so the current approach of simply appending
+the Final Event Log to the main log will result in events being
+duplicated.
 
-I'm hoping that someone with knowledge of evmctl is on this list and
-can help.  I want to modify evmctl to use a HSM to perform the
-signature generation side of things.  My first attempt, which is the
-easiest option, was to just replace
+We can avoid this problem by looking at the size of the Final Event Log
+just before we call ExitBootServices() and exporting this to the main
+kernel. The kernel can then skip over all events that occured before
+ExitBootServices() and only append events that were not also logged to
+the main log.
 
-len = RSA_private_encrypt(sizeof(sighash), sighash, sig + sizeof(*hdr)
-+ 2, key, RSA_PKCS1_PADDING);
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Reported-by: Joe Richey <joerichey@google.com>
+Suggested-by: Joe Richey <joerichey@google.com>
+---
+ drivers/char/tpm/eventlog/efi.c               | 11 ++++++-
+ .../firmware/efi/libstub/efi-stub-helper.c    | 15 ++++++++++
+ drivers/firmware/efi/libstub/efistub.h        |  2 ++
+ drivers/firmware/efi/libstub/fdt.c            | 27 ++++++-----------
+ drivers/firmware/efi/libstub/tpm.c            | 30 +++++++++++++++++++
+ drivers/firmware/efi/tpm.c                    |  2 +-
+ include/linux/efi.h                           |  1 +
+ 7 files changed, 68 insertions(+), 20 deletions(-)
 
-in sign_hash_v2 with a call to C_Encrypt from the Cryptoki API but
-sadly this failed as I think the private key has been marked as not
-being able to encrypt.  The call returns
-CKR_KEY_FUNCTION_NOT_PERMITTED.  If I try the public key it's encrypts
-happily.  I tried setting CKA_ENCRYPT on the private key but, and
-quite rightly, it wouldn't let me.
+diff --git a/drivers/char/tpm/eventlog/efi.c b/drivers/char/tpm/eventlog/efi.c
+index 9179cf6bdee9..06b7fc99aa4a 100644
+--- a/drivers/char/tpm/eventlog/efi.c
++++ b/drivers/char/tpm/eventlog/efi.c
+@@ -80,6 +80,8 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+ 		goto out;
+ 	}
+ 
++	efi_tpm_final_log_size -= log_tbl->final_events_early_size;
++
+ 	tmp = krealloc(log->bios_event_log,
+ 		       log_size + efi_tpm_final_log_size,
+ 		       GFP_KERNEL);
+@@ -90,8 +92,15 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+ 	}
+ 
+ 	log->bios_event_log = tmp;
++
++	/*
++	 * Copy any of the final events log that didn't also end up in the
++	 * main log. Events can be logged in both if events are generated
++	 * between GetEventLog() and ExitBootServices().
++	 */
+ 	memcpy((void *)log->bios_event_log + log_size,
+-	       final_tbl->events, efi_tpm_final_log_size);
++	       final_tbl->events + log_tbl->final_events_early_size,
++	       efi_tpm_final_log_size);
+ 	log->bios_event_log_end = log->bios_event_log +
+ 		log_size + efi_tpm_final_log_size;
+ 
+diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
+index e4610e72b78f..1db780c0f07b 100644
+--- a/drivers/firmware/efi/libstub/efi-stub-helper.c
++++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
+@@ -926,3 +926,18 @@ efi_status_t efi_exit_boot_services(efi_system_table_t *sys_table_arg,
+ fail:
+ 	return status;
+ }
++
++void *get_efi_config_table(efi_system_table_t *sys_table, efi_guid_t guid)
++{
++	efi_config_table_t *tables = (efi_config_table_t *)sys_table->tables;
++	int i;
++
++	for (i = 0; i < sys_table->nr_tables; i++) {
++		if (efi_guidcmp(tables[i].guid, guid) != 0)
++			continue;
++
++		return (void *)tables[i].table;
++	}
++
++	return NULL;
++}
+diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+index 1b1dfcaa6fb9..7f1556fd867d 100644
+--- a/drivers/firmware/efi/libstub/efistub.h
++++ b/drivers/firmware/efi/libstub/efistub.h
+@@ -65,6 +65,8 @@ efi_status_t check_platform_features(efi_system_table_t *sys_table_arg);
+ 
+ efi_status_t efi_random_get_seed(efi_system_table_t *sys_table_arg);
+ 
++void *get_efi_config_table(efi_system_table_t *sys_table, efi_guid_t guid);
++
+ /* Helper macros for the usual case of using simple C variables: */
+ #ifndef fdt_setprop_inplace_var
+ #define fdt_setprop_inplace_var(fdt, node_offset, name, var) \
+diff --git a/drivers/firmware/efi/libstub/fdt.c b/drivers/firmware/efi/libstub/fdt.c
+index 5440ba17a1c5..0bf0190917e0 100644
+--- a/drivers/firmware/efi/libstub/fdt.c
++++ b/drivers/firmware/efi/libstub/fdt.c
+@@ -363,26 +363,17 @@ efi_status_t allocate_new_fdt_and_exit_boot(efi_system_table_t *sys_table,
+ 
+ void *get_fdt(efi_system_table_t *sys_table, unsigned long *fdt_size)
+ {
+-	efi_guid_t fdt_guid = DEVICE_TREE_GUID;
+-	efi_config_table_t *tables;
+-	int i;
++	void *fdt;
+ 
+-	tables = (efi_config_table_t *)sys_table->tables;
++	fdt = get_efi_config_table(sys_table, DEVICE_TREE_GUID);
+ 
+-	for (i = 0; i < sys_table->nr_tables; i++) {
+-		void *fdt;
++	if (!fdt)
++		return NULL;
+ 
+-		if (efi_guidcmp(tables[i].guid, fdt_guid) != 0)
+-			continue;
+-
+-		fdt = (void *)tables[i].table;
+-		if (fdt_check_header(fdt) != 0) {
+-			pr_efi_err(sys_table, "Invalid header detected on UEFI supplied FDT, ignoring ...\n");
+-			return NULL;
+-		}
+-		*fdt_size = fdt_totalsize(fdt);
+-		return fdt;
++	if (fdt_check_header(fdt) != 0) {
++		pr_efi_err(sys_table, "Invalid header detected on UEFI supplied FDT, ignoring ...\n");
++		return NULL;
+ 	}
+-
+-	return NULL;
++	*fdt_size = fdt_totalsize(fdt);
++	return fdt;
+ }
+diff --git a/drivers/firmware/efi/libstub/tpm.c b/drivers/firmware/efi/libstub/tpm.c
+index 6b3b507a54eb..3cd5a8b1ff6d 100644
+--- a/drivers/firmware/efi/libstub/tpm.c
++++ b/drivers/firmware/efi/libstub/tpm.c
+@@ -64,11 +64,13 @@ void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
+ 	efi_status_t status;
+ 	efi_physical_addr_t log_location = 0, log_last_entry = 0;
+ 	struct linux_efi_tpm_eventlog *log_tbl = NULL;
++	struct efi_tcg2_final_events_table *final_events_table;
+ 	unsigned long first_entry_addr, last_entry_addr;
+ 	size_t log_size, last_entry_size;
+ 	efi_bool_t truncated;
+ 	int version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
+ 	void *tcg2_protocol = NULL;
++	int final_events_size = 0;
+ 
+ 	status = efi_call_early(locate_protocol, &tcg2_guid, NULL,
+ 				&tcg2_protocol);
+@@ -134,8 +136,36 @@ void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
+ 		return;
+ 	}
+ 
++	/*
++	 * Figure out whether any events have already been logged to the
++	 * final events structure, and if so how much space they take up
++	 */
++	final_events_table = get_efi_config_table(sys_table_arg,
++						LINUX_EFI_TPM_FINAL_LOG_GUID);
++	if (final_events_table && final_events_table->nr_events) {
++		struct tcg_pcr_event2_head *header;
++		int offset;
++		void *data;
++		int event_size;
++		int i = final_events_table->nr_events;
++
++		data = (void *)final_events_table;
++		offset = sizeof(final_events_table->version) +
++			sizeof(final_events_table->nr_events);
++
++		while (i) {
++			header = data + offset + final_events_size;
++			event_size = __calc_tpm2_event_size(header,
++						   (void *)(long)log_location,
++						   false);
++			final_events_size += event_size;
++			i--;
++		}
++	}
++
+ 	memset(log_tbl, 0, sizeof(*log_tbl) + log_size);
+ 	log_tbl->size = log_size;
++	log_tbl->final_events_early_size = final_events_size;
+ 	log_tbl->version = version;
+ 	memcpy(log_tbl->log, (void *) first_entry_addr, log_size);
+ 
+diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
+index 2c912ea08166..0bdceb5913aa 100644
+--- a/drivers/firmware/efi/tpm.c
++++ b/drivers/firmware/efi/tpm.c
+@@ -76,7 +76,7 @@ int __init efi_tpm_eventlog_init(void)
+ 		goto out;
+ 	}
+ 
+-	tbl_size = tpm2_calc_event_log_size(efi.tpm_final_log
++	tbl_size = tpm2_calc_event_log_size((void *)efi.tpm_final_log
+ 					    + sizeof(final_tbl->version)
+ 					    + sizeof(final_tbl->nr_events),
+ 					    final_tbl->nr_events,
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index e33c70a52a9d..d3e7b7475e02 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -1703,6 +1703,7 @@ struct linux_efi_random_seed {
+ 
+ struct linux_efi_tpm_eventlog {
+ 	u32	size;
++	u32	final_events_early_size;
+ 	u8	version;
+ 	u8	log[];
+ };
+-- 
+2.22.0.rc1.311.g5d7573a151-goog
 
-So the next option is to try and perform the signature generation in
-the HSM which is a bit more involved.  Before attempting, I was
-wondering whether this is possible or there is something in the way
-the signatures are generated that means that this just isn't going to
-work? I ask as I see that it prepends the ASN1 encoded message of what
-hash function was used to the actual hash. Would the HSM sign function
-do exactly the same if I use RSA_PKCS1_PADDING?
-
-Many Thanks in advance,
-Martin.
