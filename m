@@ -2,279 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E183035050
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 21:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853163508C
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 22:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbfFDTfR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Jun 2019 15:35:17 -0400
-Received: from mail-yw1-f74.google.com ([209.85.161.74]:46023 "EHLO
-        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726379AbfFDTfR (ORCPT
+        id S1726269AbfFDUDd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Jun 2019 16:03:33 -0400
+Received: from mail-it1-f195.google.com ([209.85.166.195]:35021 "EHLO
+        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726179AbfFDUDc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Jun 2019 15:35:17 -0400
-Received: by mail-yw1-f74.google.com with SMTP id b63so4456936ywc.12
-        for <linux-integrity@vger.kernel.org>; Tue, 04 Jun 2019 12:35:16 -0700 (PDT)
+        Tue, 4 Jun 2019 16:03:32 -0400
+Received: by mail-it1-f195.google.com with SMTP id n189so48659itd.0
+        for <linux-integrity@vger.kernel.org>; Tue, 04 Jun 2019 13:03:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=nqmyeC+ULMhm5Z1OXDXUW8a3IDjcGN3t8NAaEwxyp+8=;
-        b=jX3jKalZwMxYkWjR6dmDpaA+Nuo32n4Mlg3GToGdy0KAj2yfRjhN1IhPQt6m9eMJpz
-         fTvBHvYMtoZ6Gbk7ds7d1zgV8oepN2qSDif4HRtLakhCjviJD5xGP+HAkZcrwQa3G7Pf
-         NfnFyNc4wRO0j6jFGMyfcaYTu00wS8M1WwK/vaHeDVfBLdjtWBYVpLocsyyO6Z85Ew70
-         PcMehjozG++MBQbcq/DdEAeTaebadCM34tcS91sOC58FlVpV/ReH4kncbtsvKEZudc9d
-         zPv4t+btQde6yfHYKTfKooqGsthPFdRHBO68IWj4D78/M0YuCwRA4XJ3Hx/D1AUxs+2H
-         bYRQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1m9ImxAK4nx5wz47kwUXxq4IaRpk9/ezj49uqbRZAOw=;
+        b=N1JffQkfp3HwSkEUirFC/rdMrd4dpMZKMUg4ZAE47BVRtwvArTCoJfMfVWEkYh6/OY
+         VCXtIhBaXhtvCocRhB0EXkgj/Sg4SXP4HHycZ4wfQqlV/+foufoIkNw43NtdCRokrAX/
+         PfwJS2sosrnuJRLASDakV7vw+qnRoL09jsoJs4VYv6C+dNRUunCX9wDH/m83f7Y8XXSr
+         uYuVXOT3uSlFsGW4aKzUmnvy19APhOyFbf4M2dlS/gTJYIlmmiySYErRpy78Z7Kb3/JR
+         es3tL/KNxIf5BxHcoxf3a2T/K1om+OFWVn+9+5N9v53kgJvDYsVxxn0BzA4d96EwM8V/
+         sacQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=nqmyeC+ULMhm5Z1OXDXUW8a3IDjcGN3t8NAaEwxyp+8=;
-        b=ZLqHDLYjcEJaT8CwkjZQa2wSV02s/HGN5HZk0UnMNCxZ9Du6f4CXKnrLxBXVZeCY1e
-         UteH8DbsOt+lzlJUUjbFchiHKuqa/6FweGgh1fVRLRP1Vt10I/e/qwBrGRKy9zpsTB1f
-         FLq2GrHfUuxAjiMPXDDqiyHoXowFai98CcLtAoLdC1vU/FzdfAGw1r0yzOkOt4SpihJA
-         2G0pOy/5qROcFP6w52Uac7HVFE1w9SCvIndwIwIj4R2cxAePR3/zwl16YoYdM24wVxfe
-         zk517ew9+qofr1ulsYtrB18RM/8vyvrXtIbAABC05RcnMHebMUEcMtP6Iz3pQI+PP6PC
-         jkYA==
-X-Gm-Message-State: APjAAAUpLQgsEa1eCnxAkcv5n3Ra4WsgbzpuVxe5nrubTRbre7owJKjk
-        JZoMMSI9O1aHIZMD+eTnqazrB8yQWOHn3bXWNg73QclB0nbkv8mpE+QAtOjm9LSFgj9TvcNEIUd
-        UBlgW0Z9nuvXPlqgntQv1iISLUCynB7pAWvgYW+eWKhdmRztTpReKwVTWL4XqsG+MP5ar4ft9Xp
-        +Qv6TgQaFP1EMcCxSYeoo=
-X-Google-Smtp-Source: APXvYqw+rT2sweEiRPfNq4mwfjbwGro9KCHLP23tZyY9BfQsoWOTXQiL9fIXEnZmN3yZbpJP2Q50i7jmMSvpJxURMg/mzA==
-X-Received: by 2002:a25:6f0b:: with SMTP id k11mr15970733ybc.303.1559676916128;
- Tue, 04 Jun 2019 12:35:16 -0700 (PDT)
-Date:   Tue,  4 Jun 2019 12:35:11 -0700
-Message-Id: <20190604193511.153831-1-matthewgarrett@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
-Subject: [PATCH] tpm: Don't duplicate events from the final event log in the
- TCG2 log
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
-        linux-efi@vger.kernel.org, ard.biesheuvel@linaro.org,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Joe Richey <joerichey@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1m9ImxAK4nx5wz47kwUXxq4IaRpk9/ezj49uqbRZAOw=;
+        b=CMJrQ7HWAzSUgXkZfiQBOa8K3r35n4v/nmaCSJcyFVEv9U17/7T8hlrFH2DFVXQhFc
+         1deU8wMZyYwTQCeQEERfiRxgTdxTrhkisri9I9QLVb8Sa705u6+IvXp2GyjAGOd/Dfrd
+         zbtOWacCdeuAijT4XHbex/UtysYcsvrtQVZdY3/wIDEH7+pfjNGvahuFDbna+PMlrgOQ
+         mBJZ1xFZOvnAjrW4GBYQTwB1UICWVroP2Ol0gtIY7MnF7Fr2dOAdwYXxDxxs9peuBp6W
+         awk7sdIQj46zLjg4AzoBq8A1yA2KqUM2nthc9nzvZiFVGZ3gWmREk5Q1L5iQoY+/jHqy
+         8Hbw==
+X-Gm-Message-State: APjAAAW0YaiPFaWj6XsZUSTjEHl1u3Akb8pYJA3r+yk4t+HMxx88tl83
+        zQzvAYoqOAsqU4mixpBk/1B5xpN32fba+EEAIq1moA==
+X-Google-Smtp-Source: APXvYqwxX79yamU/DtBPPJ+TV8TqpZTxtEGMK+l2qmhFCHVLRRoxzVMO/Mgotlu6eRzVLG7P4WEDMiRm3x0uklfiTIg=
+X-Received: by 2002:a02:3308:: with SMTP id c8mr7644982jae.103.1559678611725;
+ Tue, 04 Jun 2019 13:03:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190603201322.7443-1-matthewgarrett@google.com> <1559613113.3956.9.camel@linux.ibm.com>
+In-Reply-To: <1559613113.3956.9.camel@linux.ibm.com>
+From:   Matthew Garrett <mjg59@google.com>
+Date:   Tue, 4 Jun 2019 13:03:20 -0700
+Message-ID: <CACdnJuvYzGBsAvmcP_6u+Zvr+AKTrKweJDbjurtZ02-HBbJN1Q@mail.gmail.com>
+Subject: Re: [PATCH V3] IMA: Allow profiles to define the desired IMA template
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        prakhar srivastava <prsriva02@gmail.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-After the first call to GetEventLog() on UEFI systems using the TCG2
-crypto agile log format, any further log events (other than those
-triggered by ExitBootServices()) will be logged in both the main log and
-also in the Final Events Log. While the kernel only calls GetEventLog()
-immediately before ExitBootServices(), we can't control whether earlier
-parts of the boot process have done so. This will result in log entries
-that exist in both logs, and so the current approach of simply appending
-the Final Event Log to the main log will result in events being
-duplicated.
+On Mon, Jun 3, 2019 at 6:52 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> On Mon, 2019-06-03 at 13:13 -0700, Matthew Garrett wrote:
+> > +                     template:= name or format of a defined IMA template
+> > +                     type (eg,ima-ng or d-ng|n-ng). Only valid when action
+> > +                     is "measure".
+>
+> This patch only supports specifying the template name, not the
+> template format description.  Please remove "d-ng|n-ng".
 
-We can avoid this problem by looking at the size of the Final Event Log
-just before we call ExitBootServices() and exporting this to the main
-kernel. The kernel can then skip over all events that occured before
-ExitBootServices() and only append events that were not also logged to
-the main log.
+It supports specifying the template format, as long as the template
+format is already defined. I can remove the example, but it'll still
+work.
 
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Reported-by: Joe Richey <joerichey@google.com>
-Suggested-by: Joe Richey <joerichey@google.com>
----
- drivers/char/tpm/eventlog/efi.c               | 11 ++++++-
- .../firmware/efi/libstub/efi-stub-helper.c    | 15 ++++++++++
- drivers/firmware/efi/libstub/efistub.h        |  2 ++
- drivers/firmware/efi/libstub/fdt.c            | 27 ++++++-----------
- drivers/firmware/efi/libstub/tpm.c            | 30 +++++++++++++++++++
- drivers/firmware/efi/tpm.c                    |  2 +-
- include/linux/efi.h                           |  1 +
- 7 files changed, 68 insertions(+), 20 deletions(-)
+> >       struct ima_rule_entry *entry;
+> >       int action = 0, actmask = flags | (flags << 1);
+> > @@ -438,6 +441,11 @@ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
+> >               if ((pcr) && (entry->flags & IMA_PCR))
+> >                       *pcr = entry->pcr;
+> >
+> > +             if (template_desc && entry->template)
+> > +                     *template_desc = entry->template;
+> > +             else
+> > +                     *template_desc = ima_template_desc_current();
+> > +
+>
+> This code is finding the template format, but is subsequently being
+> replaced with the current description.  One way of fixing this, is by
+> initializing the template_desc before walking the list.
 
-diff --git a/drivers/char/tpm/eventlog/efi.c b/drivers/char/tpm/eventlog/efi.c
-index 9179cf6bdee9..06b7fc99aa4a 100644
---- a/drivers/char/tpm/eventlog/efi.c
-+++ b/drivers/char/tpm/eventlog/efi.c
-@@ -80,6 +80,8 @@ int tpm_read_log_efi(struct tpm_chip *chip)
- 		goto out;
- 	}
- 
-+	efi_tpm_final_log_size -= log_tbl->final_events_early_size;
-+
- 	tmp = krealloc(log->bios_event_log,
- 		       log_size + efi_tpm_final_log_size,
- 		       GFP_KERNEL);
-@@ -90,8 +92,15 @@ int tpm_read_log_efi(struct tpm_chip *chip)
- 	}
- 
- 	log->bios_event_log = tmp;
-+
-+	/*
-+	 * Copy any of the final events log that didn't also end up in the
-+	 * main log. Events can be logged in both if events are generated
-+	 * between GetEventLog() and ExitBootServices().
-+	 */
- 	memcpy((void *)log->bios_event_log + log_size,
--	       final_tbl->events, efi_tpm_final_log_size);
-+	       final_tbl->events + log_tbl->final_events_early_size,
-+	       efi_tpm_final_log_size);
- 	log->bios_event_log_end = log->bios_event_log +
- 		log_size + efi_tpm_final_log_size;
- 
-diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
-index e4610e72b78f..1db780c0f07b 100644
---- a/drivers/firmware/efi/libstub/efi-stub-helper.c
-+++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
-@@ -926,3 +926,18 @@ efi_status_t efi_exit_boot_services(efi_system_table_t *sys_table_arg,
- fail:
- 	return status;
- }
-+
-+void *get_efi_config_table(efi_system_table_t *sys_table, efi_guid_t guid)
-+{
-+	efi_config_table_t *tables = (efi_config_table_t *)sys_table->tables;
-+	int i;
-+
-+	for (i = 0; i < sys_table->nr_tables; i++) {
-+		if (efi_guidcmp(tables[i].guid, guid) != 0)
-+			continue;
-+
-+		return (void *)tables[i].table;
-+	}
-+
-+	return NULL;
-+}
-diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-index 1b1dfcaa6fb9..7f1556fd867d 100644
---- a/drivers/firmware/efi/libstub/efistub.h
-+++ b/drivers/firmware/efi/libstub/efistub.h
-@@ -65,6 +65,8 @@ efi_status_t check_platform_features(efi_system_table_t *sys_table_arg);
- 
- efi_status_t efi_random_get_seed(efi_system_table_t *sys_table_arg);
- 
-+void *get_efi_config_table(efi_system_table_t *sys_table, efi_guid_t guid);
-+
- /* Helper macros for the usual case of using simple C variables: */
- #ifndef fdt_setprop_inplace_var
- #define fdt_setprop_inplace_var(fdt, node_offset, name, var) \
-diff --git a/drivers/firmware/efi/libstub/fdt.c b/drivers/firmware/efi/libstub/fdt.c
-index 5440ba17a1c5..0bf0190917e0 100644
---- a/drivers/firmware/efi/libstub/fdt.c
-+++ b/drivers/firmware/efi/libstub/fdt.c
-@@ -363,26 +363,17 @@ efi_status_t allocate_new_fdt_and_exit_boot(efi_system_table_t *sys_table,
- 
- void *get_fdt(efi_system_table_t *sys_table, unsigned long *fdt_size)
- {
--	efi_guid_t fdt_guid = DEVICE_TREE_GUID;
--	efi_config_table_t *tables;
--	int i;
-+	void *fdt;
- 
--	tables = (efi_config_table_t *)sys_table->tables;
-+	fdt = get_efi_config_table(sys_table, DEVICE_TREE_GUID);
- 
--	for (i = 0; i < sys_table->nr_tables; i++) {
--		void *fdt;
-+	if (!fdt)
-+		return NULL;
- 
--		if (efi_guidcmp(tables[i].guid, fdt_guid) != 0)
--			continue;
--
--		fdt = (void *)tables[i].table;
--		if (fdt_check_header(fdt) != 0) {
--			pr_efi_err(sys_table, "Invalid header detected on UEFI supplied FDT, ignoring ...\n");
--			return NULL;
--		}
--		*fdt_size = fdt_totalsize(fdt);
--		return fdt;
-+	if (fdt_check_header(fdt) != 0) {
-+		pr_efi_err(sys_table, "Invalid header detected on UEFI supplied FDT, ignoring ...\n");
-+		return NULL;
- 	}
--
--	return NULL;
-+	*fdt_size = fdt_totalsize(fdt);
-+	return fdt;
- }
-diff --git a/drivers/firmware/efi/libstub/tpm.c b/drivers/firmware/efi/libstub/tpm.c
-index 6b3b507a54eb..3cd5a8b1ff6d 100644
---- a/drivers/firmware/efi/libstub/tpm.c
-+++ b/drivers/firmware/efi/libstub/tpm.c
-@@ -64,11 +64,13 @@ void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
- 	efi_status_t status;
- 	efi_physical_addr_t log_location = 0, log_last_entry = 0;
- 	struct linux_efi_tpm_eventlog *log_tbl = NULL;
-+	struct efi_tcg2_final_events_table *final_events_table;
- 	unsigned long first_entry_addr, last_entry_addr;
- 	size_t log_size, last_entry_size;
- 	efi_bool_t truncated;
- 	int version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
- 	void *tcg2_protocol = NULL;
-+	int final_events_size = 0;
- 
- 	status = efi_call_early(locate_protocol, &tcg2_guid, NULL,
- 				&tcg2_protocol);
-@@ -134,8 +136,36 @@ void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
- 		return;
- 	}
- 
-+	/*
-+	 * Figure out whether any events have already been logged to the
-+	 * final events structure, and if so how much space they take up
-+	 */
-+	final_events_table = get_efi_config_table(sys_table_arg,
-+						LINUX_EFI_TPM_FINAL_LOG_GUID);
-+	if (final_events_table && final_events_table->nr_events) {
-+		struct tcg_pcr_event2_head *header;
-+		int offset;
-+		void *data;
-+		int event_size;
-+		int i = final_events_table->nr_events;
-+
-+		data = (void *)final_events_table;
-+		offset = sizeof(final_events_table->version) +
-+			sizeof(final_events_table->nr_events);
-+
-+		while (i) {
-+			header = data + offset + final_events_size;
-+			event_size = __calc_tpm2_event_size(header,
-+						   (void *)(long)log_location,
-+						   false);
-+			final_events_size += event_size;
-+			i--;
-+		}
-+	}
-+
- 	memset(log_tbl, 0, sizeof(*log_tbl) + log_size);
- 	log_tbl->size = log_size;
-+	log_tbl->final_events_early_size = final_events_size;
- 	log_tbl->version = version;
- 	memcpy(log_tbl->log, (void *) first_entry_addr, log_size);
- 
-diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
-index 2c912ea08166..0bdceb5913aa 100644
---- a/drivers/firmware/efi/tpm.c
-+++ b/drivers/firmware/efi/tpm.c
-@@ -76,7 +76,7 @@ int __init efi_tpm_eventlog_init(void)
- 		goto out;
- 	}
- 
--	tbl_size = tpm2_calc_event_log_size(efi.tpm_final_log
-+	tbl_size = tpm2_calc_event_log_size((void *)efi.tpm_final_log
- 					    + sizeof(final_tbl->version)
- 					    + sizeof(final_tbl->nr_events),
- 					    final_tbl->nr_events,
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index e33c70a52a9d..d3e7b7475e02 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -1703,6 +1703,7 @@ struct linux_efi_random_seed {
- 
- struct linux_efi_tpm_eventlog {
- 	u32	size;
-+	u32	final_events_early_size;
- 	u8	version;
- 	u8	log[];
- };
--- 
-2.22.0.rc1.311.g5d7573a151-goog
-
+Ok.
