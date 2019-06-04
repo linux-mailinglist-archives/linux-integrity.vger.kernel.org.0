@@ -2,97 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD95349B6
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 16:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8BB34A1C
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 16:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbfFDODJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Jun 2019 10:03:09 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32981 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727212AbfFDODJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Jun 2019 10:03:09 -0400
-Received: from LHREML711-CAH.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 02AEF5FEF7F70996D8C9;
-        Tue,  4 Jun 2019 15:03:08 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.34) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 4 Jun
- 2019 15:03:02 +0100
-Subject: Re: [PATCH V3] IMA: Allow profiles to define the desired IMA template
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        <linux-integrity@vger.kernel.org>
-CC:     <zohar@linux.vnet.ibm.com>, <prsriva02@gmail.com>,
-        <bauerman@linux.ibm.com>, Matthew Garrett <mjg59@google.com>
-References: <20190603201322.7443-1-matthewgarrett@google.com>
- <1559613113.3956.9.camel@linux.ibm.com>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <18481910-ea3b-3ca7-ded2-46b094bbe959@huawei.com>
-Date:   Tue, 4 Jun 2019 16:03:11 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1727972AbfFDOTB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Jun 2019 10:19:01 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52512 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727577AbfFDOSD (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 4 Jun 2019 10:18:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mN9SlMwFezZ1ZPB+c4+XXB+0uQsuZLbIqjOavdIdlqw=; b=QpCiAFfqH9xfvJHkdueb+lqM+O
+        QuJI6/GoxfZFHIF+U6YrRnFcJ0audVi2ntWjxj0QSqDFvIdaqC+PVtPlGdbJtOr/dyO74+0TsyC9j
+        kKuH+wV7Q3euRKGxUk+SC6pvVZvVi+3ScveTGuUEhX7VISIwNQZTmuih2CBmdx4WegnPB+DpSNsmk
+        Fuc/dkxbfjh9HZ6yKlMiUWhUOdDQAGVYkEcDKgDwhZR0RWVNavbNeH4lcqIX3BvNJEVPE7F06piej
+        FztI/3sXqJRJQlUJ62kHGeKFehUT5P4tpx134x+wR1/AwRSOnX46DkawaK4P0UkCKdnORcXE729eB
+        MWg6CfAg==;
+Received: from [179.182.172.34] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hYAGH-0001Rt-Tg; Tue, 04 Jun 2019 14:18:01 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hYAGE-0002lV-Ri; Tue, 04 Jun 2019 11:17:58 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        James Morris <jamorris@linux.microsoft.com>
+Subject: [PATCH v2 14/22] docs: security: trusted-encrypted.rst: fix code-block tag
+Date:   Tue,  4 Jun 2019 11:17:48 -0300
+Message-Id: <3f540bedea5771489750cbcba540e9b27b21225b.1559656538.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1559656538.git.mchehab+samsung@kernel.org>
+References: <cover.1559656538.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <1559613113.3956.9.camel@linux.ibm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/4/2019 3:51 AM, Mimi Zohar wrote:
-> On Mon, 2019-06-03 at 13:13 -0700, Matthew Garrett wrote:
->> Admins may wish to log different measurements using different IMA
->> templates. Add support for overriding the default template on a per-rule
->> basis.
->>
->> Signed-off-by: Matthew Garrett <mjg59@google.com>
->> ---
->>
->> Updated based on review feedback, verified that I can generate an event
->> log that contains multiple different templates.
->>
->>   Documentation/ABI/testing/ima_policy  |  6 ++++--
->>   security/integrity/ima/ima.h          | 13 +++++++++----
->>   security/integrity/ima/ima_api.c      | 24 ++++++++++++++++-------
->>   security/integrity/ima/ima_appraise.c |  2 +-
->>   security/integrity/ima/ima_init.c     |  2 +-
->>   security/integrity/ima/ima_main.c     |  9 +++++----
->>   security/integrity/ima/ima_policy.c   | 28 +++++++++++++++++++++++++--
->>   security/integrity/ima/ima_template.c | 10 ++++++++--
->>   8 files changed, 71 insertions(+), 23 deletions(-)
->>
->> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
->> index 74c6702de74e..4ded0668a22d 100644
->> --- a/Documentation/ABI/testing/ima_policy
->> +++ b/Documentation/ABI/testing/ima_policy
->> @@ -24,8 +24,7 @@ Description:
->>   				[euid=] [fowner=] [fsname=]]
->>   			lsm:	[[subj_user=] [subj_role=] [subj_type=]
->>   				 [obj_user=] [obj_role=] [obj_type=]]
->> -			option:	[[appraise_type=]] [permit_directio]
->> -
->> +			option:	[[appraise_type=]] [template=] [permit_directio]
->>   		base: 	func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK]
->>   				[FIRMWARE_CHECK]
->>   				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
->> @@ -38,6 +37,9 @@ Description:
->>   			fowner:= decimal value
->>   		lsm:  	are LSM specific
->>   		option:	appraise_type:= [imasig]
->> +			template:= name or format of a defined IMA template
->> +			type (eg,ima-ng or d-ng|n-ng). Only valid when action
->> +			is "measure".
-> 
-> This patch only supports specifying the template name, not the
-> template format description.  Please remove "d-ng|n-ng".
+The code-block tag is at the wrong place, causing those
+warnings:
 
-The patch is correct. lookup_template_desc() also considers the format.
+    Documentation/security/keys/trusted-encrypted.rst:112: WARNING: Literal block expected; none found.
+    Documentation/security/keys/trusted-encrypted.rst:121: WARNING: Unexpected indentation.
+    Documentation/security/keys/trusted-encrypted.rst:122: WARNING: Block quote ends without a blank line; unexpected unindent.
+    Documentation/security/keys/trusted-encrypted.rst:123: WARNING: Block quote ends without a blank line; unexpected unindent.
 
-Roberto
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Acked-by: James Morris <jamorris@linux.microsoft.com>
+Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+ Documentation/security/keys/trusted-encrypted.rst | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index 7b35fcb58933..50ac8bcd6970 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -107,12 +107,14 @@ Where::
+ 
+ Examples of trusted and encrypted key usage:
+ 
+-Create and save a trusted key named "kmk" of length 32 bytes::
++Create and save a trusted key named "kmk" of length 32 bytes.
+ 
+ Note: When using a TPM 2.0 with a persistent key with handle 0x81000001,
+ append 'keyhandle=0x81000001' to statements between quotes, such as
+ "new 32 keyhandle=0x81000001".
+ 
++::
++
+     $ keyctl add trusted kmk "new 32" @u
+     440502848
+ 
 -- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+2.21.0
+
