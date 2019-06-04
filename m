@@ -2,183 +2,560 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5955E33CE2
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 03:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B68A33EE0
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2019 08:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbfFDBwL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Jun 2019 21:52:11 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33216 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725876AbfFDBwL (ORCPT
+        id S1726606AbfFDGQF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Jun 2019 02:16:05 -0400
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:46082 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfFDGQF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Jun 2019 21:52:11 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x541pp9x001076
-        for <linux-integrity@vger.kernel.org>; Mon, 3 Jun 2019 21:52:10 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2swef5hx90-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 03 Jun 2019 21:52:10 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 4 Jun 2019 02:52:08 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 4 Jun 2019 02:52:06 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x541q5Lp60621030
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Jun 2019 01:52:05 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2279DA405B;
-        Tue,  4 Jun 2019 01:52:05 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 272A1A405F;
-        Tue,  4 Jun 2019 01:52:04 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.80.133])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Jun 2019 01:52:03 +0000 (GMT)
-Subject: Re: [PATCH V3] IMA: Allow profiles to define the desired IMA
- template
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Matthew Garrett <matthewgarrett@google.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.vnet.ibm.com, prsriva02@gmail.com,
-        bauerman@linux.ibm.com, roberto.sassu@huawei.com,
-        Matthew Garrett <mjg59@google.com>
-Date:   Mon, 03 Jun 2019 21:51:53 -0400
-In-Reply-To: <20190603201322.7443-1-matthewgarrett@google.com>
-References: <20190603201322.7443-1-matthewgarrett@google.com>
+        Tue, 4 Jun 2019 02:16:05 -0400
+Received: by mail-ua1-f65.google.com with SMTP id a95so7355387uaa.13
+        for <linux-integrity@vger.kernel.org>; Mon, 03 Jun 2019 23:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7ewJ5Ta1tqLfBar5/v+xvEoWC9eNsUmqmktS5BAL1v4=;
+        b=iAY6QNzYUMzpOTEij5DTCCeCGFdWX+1XW4Dl6XBGxs/uh5fTaQLzw6gsvM/YTY8yAy
+         Vuhlb2N9QIGzFB7p+uNx2agmVvaT0YrGwlkrznGcMV/BJ3vjZOwYfT91ObF0HilpxUvZ
+         ushwgIFUHzqKwzktGS+tWtQ9LoozyQTDc6pP8a8A9JtajvFy+BbT9nNuH9J2LXw3mFkK
+         ZXvk9WhmNFswi5rnMmyNWd3V0uXNtDBtdeNRgDQiPpT+QtzQvawBc1TGicUozSJq1H++
+         AztvwhH8/VO7uNnHicJVEEcNqS0BnVhEQg2NzDFigV8i5drGv7mrWaERSiLIZElL+w43
+         pyzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7ewJ5Ta1tqLfBar5/v+xvEoWC9eNsUmqmktS5BAL1v4=;
+        b=XCXk9xtnoWQ3FSIvooT20rQSH+u8MBv5HTJyYisWBbhd3B1dw/mcXM49foW5fsoFp2
+         8CJIzbxR/zbHcCYjFXhAtVq38hXoZtTMxJIwMzPpj+ZmhA5FQs3jz9dak+JVHmHHC/6s
+         v6W+ekE95JROi2+Y7ra4cW4Bm0AOkjY/osEa9GOVBb2BVBogT52EYigOoA+QG6SSjd36
+         ss8VsqU4bWLng3qyY3jWgS82+her+Hm0Jo2WHXsZnDlTKEUcJJgxoql5QUpKks1vckua
+         6b1sczNvAEzC0s+fHiDXoEtmuU1IT8k08IzpjibisWp/2QETLUBacw5gbKEG3zu1d3pD
+         tabw==
+X-Gm-Message-State: APjAAAVHssSA/T3XmnyczlMNj+7n5qPP+rePlrXuZMW99Cn2TAcuDQ8S
+        q6RhgG/otwhOjvOAvOUnLfPy07JP5AIuRaNRMizkCw==
+X-Google-Smtp-Source: APXvYqwKCyV+NOE8sEEcdPlQH+YXFJSn9SnFgvpkYXxbZf0ZGhvdtjM/bzR2bl6kcomUGRSbMbUBLpCYYqPwVEYMQ6Y=
+X-Received: by 2002:ab0:238a:: with SMTP id b10mr9118247uan.52.1559628964082;
+ Mon, 03 Jun 2019 23:16:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190530152758.16628-1-sashal@kernel.org> <20190530152758.16628-2-sashal@kernel.org>
+In-Reply-To: <20190530152758.16628-2-sashal@kernel.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Tue, 4 Jun 2019 11:45:52 +0530
+Message-ID: <CAFA6WYM1NrghG9qxUhrm76kopvBx9nmCL9XnRs11ysb2Yr0+Qw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] fTPM: firmware TPM running in TEE
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     peterhuewe@gmx.de,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        jgg@ziepe.ca, corbet@lwn.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Microsoft Linux Kernel List <linux-kernel@microsoft.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        "Bryan Kelly (CSI)" <bryankel@microsoft.com>,
+        tee-dev@lists.linaro.org
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19060401-0028-0000-0000-00000374ADB0
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19060401-0029-0000-0000-0000243482FE
-Message-Id: <1559613113.3956.9.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-04_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906040009
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-06-03 at 13:13 -0700, Matthew Garrett wrote:
-> Admins may wish to log different measurements using different IMA
-> templates. Add support for overriding the default template on a per-rule
-> basis.
-> 
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
+On Thu, 30 May 2019 at 20:58, Sasha Levin <sashal@kernel.org> wrote:
+>
+> This patch adds support for a software-only implementation of a TPM
+> running in TEE.
+>
+> There is extensive documentation of the design here:
+> https://www.microsoft.com/en-us/research/publication/ftpm-software-implementation-tpm-chip/ .
+>
+> As well as reference code for the firmware available here:
+> https://github.com/Microsoft/ms-tpm-20-ref/tree/master/Samples/ARM32-FirmwareTPM
+>
+> Signed-off-by: Thirupathaiah Annapureddy <thiruan@microsoft.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
-> 
-> Updated based on review feedback, verified that I can generate an event
-> log that contains multiple different templates.
-> 
->  Documentation/ABI/testing/ima_policy  |  6 ++++--
->  security/integrity/ima/ima.h          | 13 +++++++++----
->  security/integrity/ima/ima_api.c      | 24 ++++++++++++++++-------
->  security/integrity/ima/ima_appraise.c |  2 +-
->  security/integrity/ima/ima_init.c     |  2 +-
->  security/integrity/ima/ima_main.c     |  9 +++++----
->  security/integrity/ima/ima_policy.c   | 28 +++++++++++++++++++++++++--
->  security/integrity/ima/ima_template.c | 10 ++++++++--
->  8 files changed, 71 insertions(+), 23 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-> index 74c6702de74e..4ded0668a22d 100644
-> --- a/Documentation/ABI/testing/ima_policy
-> +++ b/Documentation/ABI/testing/ima_policy
-> @@ -24,8 +24,7 @@ Description:
->  				[euid=] [fowner=] [fsname=]]
->  			lsm:	[[subj_user=] [subj_role=] [subj_type=]
->  				 [obj_user=] [obj_role=] [obj_type=]]
-> -			option:	[[appraise_type=]] [permit_directio]
-> -
-> +			option:	[[appraise_type=]] [template=] [permit_directio]
->  		base: 	func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK]
->  				[FIRMWARE_CHECK]
->  				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
-> @@ -38,6 +37,9 @@ Description:
->  			fowner:= decimal value
->  		lsm:  	are LSM specific
->  		option:	appraise_type:= [imasig]
-> +			template:= name or format of a defined IMA template
-> +			type (eg,ima-ng or d-ng|n-ng). Only valid when action
-> +			is "measure".
-
-This patch only supports specifying the template name, not the
-template format description.  Please remove "d-ng|n-ng".
-
->  			pcr:= decimal value
-> 
->  		default policy:
-
-<snip>
-
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 0f6fe53cef09..cbae2a3a9c5b 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -80,6 +80,7 @@ struct ima_rule_entry {
->  		int type;	/* audit type */
->  	} lsm[MAX_LSM_RULES];
->  	char *fsname;
-> +	struct ima_template_desc *template;
->  };
-> 
->  /*
-> @@ -397,6 +398,7 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
->   * @func: IMA hook identifier
->   * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC)
->   * @pcr: set the pcr to extend
-> + * @template_desc: the template that should be used for this rule
->   *
->   * Measure decision based on func/mask/fsmagic and LSM(subj/obj/type)
->   * conditions.
-> @@ -406,7 +408,8 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
->   * than writes so ima_match_policy() is classical RCU candidate.
->   */
->  int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
-> -		     enum ima_hooks func, int mask, int flags, int *pcr)
-> +		     enum ima_hooks func, int mask, int flags, int *pcr,
-> +		     struct ima_template_desc **template_desc)
->  {
->  	struct ima_rule_entry *entry;
->  	int action = 0, actmask = flags | (flags << 1);
-> @@ -438,6 +441,11 @@ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
->  		if ((pcr) && (entry->flags & IMA_PCR))
->  			*pcr = entry->pcr;
-> 
-> +		if (template_desc && entry->template)
-> +			*template_desc = entry->template;
-> +		else
-> +			*template_desc = ima_template_desc_current();
+>  drivers/char/tpm/Kconfig        |   5 +
+>  drivers/char/tpm/Makefile       |   1 +
+>  drivers/char/tpm/tpm_ftpm_tee.c | 380 ++++++++++++++++++++++++++++++++
+>  drivers/char/tpm/tpm_ftpm_tee.h |  40 ++++
+>  4 files changed, 426 insertions(+)
+>  create mode 100644 drivers/char/tpm/tpm_ftpm_tee.c
+>  create mode 100644 drivers/char/tpm/tpm_ftpm_tee.h
+>
+> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> index f3e4bc490cf05..8bc9a56cade14 100644
+> --- a/drivers/char/tpm/Kconfig
+> +++ b/drivers/char/tpm/Kconfig
+> @@ -163,6 +163,11 @@ config TCG_VTPM_PROXY
+>           /dev/vtpmX and a server-side file descriptor on which the vTPM
+>           can receive commands.
+>
+> +config TCG_FTPM_TEE
+> +       tristate "TEE based fTPM Interface"
+> +       depends on TEE && OPTEE
+> +       ---help---
+> +         This driver proxies for fTPM running in TEE
+>
+>  source "drivers/char/tpm/st33zp24/Kconfig"
+>  endif # TCG_TPM
+> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+> index a01c4cab902a6..c354cdff9c625 100644
+> --- a/drivers/char/tpm/Makefile
+> +++ b/drivers/char/tpm/Makefile
+> @@ -33,3 +33,4 @@ obj-$(CONFIG_TCG_TIS_ST33ZP24) += st33zp24/
+>  obj-$(CONFIG_TCG_XEN) += xen-tpmfront.o
+>  obj-$(CONFIG_TCG_CRB) += tpm_crb.o
+>  obj-$(CONFIG_TCG_VTPM_PROXY) += tpm_vtpm_proxy.o
+> +obj-$(CONFIG_TCG_FTPM_TEE) += tpm_ftpm_tee.o
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> new file mode 100644
+> index 0000000000000..f926b1287988b
+> --- /dev/null
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -0,0 +1,380 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation
+> + *
+> + * Implements a firmware TPM as described here:
+> + * https://www.microsoft.com/en-us/research/publication/ftpm-software-implementation-tpm-chip/
+> + *
+> + * A reference implementation is available here:
+> + * https://github.com/microsoft/ms-tpm-20-ref/tree/master/Samples/ARM32-FirmwareTPM/optee_ta/fTPM
+> + */
 > +
+> +#include <linux/acpi.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/tee_drv.h>
+> +#include <linux/tpm.h>
+> +#include <linux/uuid.h>
+> +
+> +#include "tpm.h"
+> +#include "tpm_ftpm_tee.h"
+> +
+> +#define DRIVER_NAME "ftpm-tee"
+> +
+> +/*
+> + * TA_FTPM_UUID: BC50D971-D4C9-42C4-82CB-343FB7F37896
+> + *
+> + * Randomly generated, and must correspond to the GUID on the TA side.
+> + * Defined here in the reference implementation:
+> + * https://github.com/microsoft/ms-tpm-20-ref/blob/master/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/include/fTPM.h#L42
+> + */
+> +
+> +static const uuid_t ftpm_ta_uuid =
+> +       UUID_INIT(0xBC50D971, 0xD4C9, 0x42C4,
+> +                 0x82, 0xCB, 0x34, 0x3F, 0xB7, 0xF3, 0x78, 0x96);
+> +
+> +/**
+> + * ftpm_tee_tpm_op_recv - retrieve fTPM response.
+> + *
+> + * @chip: the tpm_chip description as specified in driver/char/tpm/tpm.h.
+> + * @buf: the buffer to store data.
+> + * @count: the number of bytes to read.
+> + *
+> + * Return:
+> + *     In case of success the number of bytes received.
+> + *     On failure, -errno.
+> + */
+> +static int ftpm_tee_tpm_op_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+> +{
+> +       struct ftpm_tee_private *pvt_data = dev_get_drvdata(chip->dev.parent);
+> +       size_t len;
+> +
+> +       len = pvt_data->resp_len;
+> +       if (count < len) {
+> +               dev_err(&chip->dev,
+> +                       "%s:Invalid size in recv: count=%zd, resp_len=%zd\n",
+> +                       __func__, count, len);
+> +               return -EIO;
+> +       }
+> +
+> +       memcpy(buf, pvt_data->resp_buf, len);
+> +       pvt_data->resp_len = 0;
+> +
+> +       return len;
+> +}
+> +
+> +/**
+> + * ftpm_tee_tpm_op_send - send TPM commands through the TEE shared memory.
+> + *
+> + * @chip: the tpm_chip description as specified in driver/char/tpm/tpm.h
+> + * @buf: the buffer to send.
+> + * @len: the number of bytes to send.
+> + *
+> + * Return:
+> + *     In case of success, returns 0.
+> + *     On failure, -errno
+> + */
+> +static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len)
+> +{
+> +       struct ftpm_tee_private *pvt_data = dev_get_drvdata(chip->dev.parent);
+> +       size_t resp_len;
+> +       int rc;
+> +       u8 *temp_buf;
+> +       struct tpm_header *resp_header;
+> +       struct tee_ioctl_invoke_arg transceive_args;
+> +       struct tee_param command_params[4];
+> +       struct tee_shm *shm = pvt_data->shm;
+> +
+> +       if (len > MAX_COMMAND_SIZE) {
+> +               dev_err(&chip->dev,
+> +                       "%s:len=%zd exceeds MAX_COMMAND_SIZE supported by fTPM TA\n",
+> +                       __func__, len);
+> +               return -EIO;
+> +       }
+> +
+> +       memset(&transceive_args, 0, sizeof(transceive_args));
+> +       memset(command_params, 0, sizeof(command_params));
+> +       pvt_data->resp_len = 0;
+> +
+> +       /* Invoke FTPM_OPTEE_TA_SUBMIT_COMMAND function of fTPM TA */
+> +       transceive_args = (struct tee_ioctl_invoke_arg) {
+> +               .func = FTPM_OPTEE_TA_SUBMIT_COMMAND,
+> +               .session = pvt_data->session,
+> +               .num_params = 4,
+> +       };
+> +
+> +       /* Fill FTPM_OPTEE_TA_SUBMIT_COMMAND parameters */
+> +       command_params[0] = (struct tee_param) {
+> +               .attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT,
+> +               .u.memref = {
+> +                       .shm = shm,
+> +                       .size = len,
+> +                       .shm_offs = 0,
+> +               },
+> +       };
+> +
+> +       temp_buf = tee_shm_get_va(shm, 0);
+> +       if (IS_ERR(temp_buf)) {
+> +               dev_err(&chip->dev, "%s:tee_shm_get_va failed for transmit\n",
+> +                       __func__);
+> +               return PTR_ERR(temp_buf);
+> +       }
+> +       memset(temp_buf, 0, (MAX_COMMAND_SIZE + MAX_RESPONSE_SIZE));
+> +
+> +       memcpy(temp_buf, buf, len);
+> +
+> +       command_params[1] = (struct tee_param) {
+> +               .attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT,
+> +               .u.memref = {
+> +                       .shm = shm,
+> +                       .size = MAX_RESPONSE_SIZE,
+> +                       .shm_offs = MAX_COMMAND_SIZE,
+> +               },
+> +       };
+> +
+> +       rc = tee_client_invoke_func(pvt_data->ctx, &transceive_args,
+> +                                       command_params);
+> +       if ((rc < 0) || (transceive_args.ret != 0)) {
+> +               dev_err(&chip->dev, "%s:SUBMIT_COMMAND invoke error: 0x%x\n",
+> +                       __func__, transceive_args.ret);
+> +               return (rc < 0) ? rc : transceive_args.ret;
+> +       }
+> +
+> +       temp_buf = tee_shm_get_va(shm, command_params[1].u.memref.shm_offs);
+> +       if (IS_ERR(temp_buf)) {
+> +               dev_err(&chip->dev, "%s:tee_shm_get_va failed for receive\n",
+> +                       __func__);
+> +               return PTR_ERR(temp_buf);
+> +       }
+> +
+> +       resp_header = (struct tpm_header *)temp_buf;
+> +       resp_len = be32_to_cpu(resp_header->length);
+> +
+> +       /* sanity check resp_len */
+> +       if (resp_len < TPM_HEADER_SIZE) {
+> +               dev_err(&chip->dev, "%s:tpm response header too small\n",
+> +                       __func__);
+> +               return -EIO;
+> +       }
+> +       if (resp_len > MAX_RESPONSE_SIZE) {
+> +               dev_err(&chip->dev,
+> +                       "%s:resp_len=%zd exceeds MAX_RESPONSE_SIZE\n",
+> +                       __func__, resp_len);
+> +               return -EIO;
+> +       }
+> +
+> +       /* sanity checks look good, cache the response */
+> +       memcpy(pvt_data->resp_buf, temp_buf, resp_len);
+> +       pvt_data->resp_len = resp_len;
+> +
+> +       return 0;
+> +}
+> +
+> +static void ftpm_tee_tpm_op_cancel(struct tpm_chip *chip)
+> +{
+> +       /* not supported */
+> +}
+> +
+> +static u8 ftpm_tee_tpm_op_status(struct tpm_chip *chip)
+> +{
+> +       return 0;
+> +}
+> +
+> +static bool ftpm_tee_tpm_req_canceled(struct tpm_chip *chip, u8 status)
+> +{
+> +       return 0;
+> +}
+> +
+> +static const struct tpm_class_ops ftpm_tee_tpm_ops = {
+> +       .flags = TPM_OPS_AUTO_STARTUP,
+> +       .recv = ftpm_tee_tpm_op_recv,
+> +       .send = ftpm_tee_tpm_op_send,
+> +       .cancel = ftpm_tee_tpm_op_cancel,
+> +       .status = ftpm_tee_tpm_op_status,
+> +       .req_complete_mask = 0,
+> +       .req_complete_val = 0,
+> +       .req_canceled = ftpm_tee_tpm_req_canceled,
+> +};
+> +
+> +/*
+> + * Check whether this driver supports the fTPM TA in the TEE instance
+> + * represented by the params (ver/data) to this function.
+> + */
+> +static int ftpm_tee_match(struct tee_ioctl_version_data *ver, const void *data)
+> +{
+> +       /*
+> +        * Currently this driver only support GP Complaint OPTEE based fTPM TA
+> +        */
+> +       if ((ver->impl_id == TEE_IMPL_ID_OPTEE) &&
+> +               (ver->gen_caps & TEE_GEN_CAP_GP))
+> +               return 1;
+> +       else
+> +               return 0;
+> +}
+> +
+> +/*
+> + * Undo what has been done in ftpm_tee_probe
+> + */
+> +static void ftpm_tee_deinit(struct ftpm_tee_private *pvt_data)
+> +{
+> +       /* Release the chip */
+> +       tpm_chip_unregister(pvt_data->chip);
+> +
+> +       /* frees chip */
+> +       if (pvt_data->chip)
+> +               put_device(&pvt_data->chip->dev);
+> +
+> +       if (pvt_data->ctx) {
+> +               /* Free the shared memory pool */
+> +               tee_shm_free(pvt_data->shm);
+> +
+> +               /* close the existing session with fTPM TA*/
+> +               tee_client_close_session(pvt_data->ctx, pvt_data->session);
+> +
+> +               /* close the context with TEE driver */
+> +               tee_client_close_context(pvt_data->ctx);
+> +       }
+> +
+> +       /* memory allocated with devm_kzalloc() is freed automatically */
+> +}
+> +
+> +/**
+> + * ftpm_tee_probe - initialize the fTPM
+> + * @pdev: the platform_device description.
+> + *
+> + * Return:
+> + *     On success, 0. On failure, -errno.
+> + */
+> +static int ftpm_tee_probe(struct platform_device *pdev)
+> +{
+> +       int rc;
+> +       struct tpm_chip *chip;
+> +       struct device *dev = &pdev->dev;
+> +       struct ftpm_tee_private *pvt_data = NULL;
+> +       struct tee_ioctl_open_session_arg sess_arg;
+> +
+> +       pvt_data = devm_kzalloc(dev, sizeof(struct ftpm_tee_private),
+> +                               GFP_KERNEL);
+> +       if (!pvt_data)
+> +               return -ENOMEM;
+> +
+> +       dev_set_drvdata(dev, pvt_data);
+> +
+> +       /* Open context with TEE driver */
+> +       pvt_data->ctx = tee_client_open_context(NULL, ftpm_tee_match, NULL,
+> +                                               NULL);
+> +       if (IS_ERR(pvt_data->ctx)) {
+> +               dev_err(dev, "%s:tee_client_open_context failed\n", __func__);
 
-This code is finding the template format, but is subsequently being
-replaced with the current description.  One way of fixing this, is by
-initializing the template_desc before walking the list.
+Is this well tested? I see this misleading error multiple times as
+follows although TEE driver works pretty well.
 
-Mimi
+Module built with "CONFIG_TCG_FTPM_TEE=y"
 
->  		if (!actmask)
->  			break;
->  	}
-> @@ -676,7 +684,7 @@ enum {
->  	Opt_uid_gt, Opt_euid_gt, Opt_fowner_gt,
->  	Opt_uid_lt, Opt_euid_lt, Opt_fowner_lt,
->  	Opt_appraise_type, Opt_permit_directio,
-> -	Opt_pcr, Opt_err
-> +	Opt_pcr, Opt_template, Opt_err
->  };
-> 
+[    1.436878] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_context failed
+[    1.509471] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_context failed
+[    1.517268] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_context failed
+[    1.525596] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_context failed
 
+-Sumit
+
+> +               return -EPROBE_DEFER;
+> +       }
+> +
+> +       /* Open a session with fTPM TA */
+> +       memset(&sess_arg, 0, sizeof(sess_arg));
+> +       memcpy(sess_arg.uuid, ftpm_ta_uuid.b, TEE_IOCTL_UUID_LEN);
+> +       sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+> +       sess_arg.num_params = 0;
+> +
+> +       rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
+> +       if ((rc < 0) || (sess_arg.ret != 0)) {
+> +               dev_err(dev, "%s:tee_client_open_session failed, err=%x\n",
+> +                       __func__, sess_arg.ret);
+> +               rc = -EINVAL;
+> +               goto out_tee_session;
+> +       }
+> +       pvt_data->session = sess_arg.session;
+> +
+> +       /* Allocate dynamic shared memory with fTPM TA */
+> +       pvt_data->shm = tee_shm_alloc(pvt_data->ctx,
+> +                               (MAX_COMMAND_SIZE + MAX_RESPONSE_SIZE),
+> +                               TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
+> +       if (IS_ERR(pvt_data->shm)) {
+> +               dev_err(dev, "%s:tee_shm_alloc failed\n", __func__);
+> +               rc = -ENOMEM;
+> +               goto out_shm_alloc;
+> +       }
+> +
+> +       /* Allocate new struct tpm_chip instance */
+> +       chip = tpm_chip_alloc(dev, &ftpm_tee_tpm_ops);
+> +       if (IS_ERR(chip)) {
+> +               dev_err(dev, "%s:tpm_chip_alloc failed\n", __func__);
+> +               rc = PTR_ERR(chip);
+> +               goto out_chip_alloc;
+> +       }
+> +
+> +       pvt_data->chip = chip;
+> +       pvt_data->chip->flags |= TPM_CHIP_FLAG_TPM2;
+> +
+> +       /* Create a character device for the fTPM */
+> +       rc = tpm_chip_register(pvt_data->chip);
+> +       if (rc) {
+> +               dev_err(dev, "%s:tpm_chip_register failed with rc=%d\n",
+> +                       __func__, rc);
+> +               goto out_chip;
+> +       }
+> +
+> +       return 0;
+> +
+> +out_chip:
+> +       put_device(&pvt_data->chip->dev);
+> +out_chip_alloc:
+> +       tee_shm_free(pvt_data->shm);
+> +out_shm_alloc:
+> +       tee_client_close_session(pvt_data->ctx, pvt_data->session);
+> +out_tee_session:
+> +       tee_client_close_context(pvt_data->ctx);
+> +
+> +       return rc;
+> +}
+> +
+> +/**
+> + * ftpm_tee_remove - remove the TPM device
+> + * @pdev: the platform_device description.
+> + *
+> + * Return:
+> + *     0 in case of success.
+> + */
+> +static int ftpm_tee_remove(struct platform_device *pdev)
+> +{
+> +       struct ftpm_tee_private *pvt_data = dev_get_drvdata(&pdev->dev);
+> +
+> +       /* Release the chip */
+> +       tpm_chip_unregister(pvt_data->chip);
+> +
+> +       /* frees chip */
+> +       put_device(&pvt_data->chip->dev);
+> +
+> +       /* Free the shared memory pool */
+> +       tee_shm_free(pvt_data->shm);
+> +
+> +       /* close the existing session with fTPM TA*/
+> +       tee_client_close_session(pvt_data->ctx, pvt_data->session);
+> +
+> +       /* close the context with TEE driver */
+> +       tee_client_close_context(pvt_data->ctx);
+> +
+> +        /* memory allocated with devm_kzalloc() is freed automatically */
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct of_device_id of_ftpm_tee_ids[] = {
+> +       { .compatible = "microsoft,ftpm" },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_ftpm_tee_ids);
+> +
+> +static struct platform_driver ftpm_tee_driver = {
+> +       .driver = {
+> +               .name = DRIVER_NAME,
+> +               .of_match_table = of_match_ptr(of_ftpm_tee_ids),
+> +       },
+> +       .probe = ftpm_tee_probe,
+> +       .remove = ftpm_tee_remove,
+> +};
+> +
+> +module_platform_driver(ftpm_tee_driver);
+> +
+> +MODULE_AUTHOR("Thirupathaiah Annapureddy <thiruan@microsoft.com>");
+> +MODULE_DESCRIPTION("TPM Driver for fTPM TA in TEE");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.h b/drivers/char/tpm/tpm_ftpm_tee.h
+> new file mode 100644
+> index 0000000000000..b09ee7be45459
+> --- /dev/null
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.h
+> @@ -0,0 +1,40 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) Microsoft Corporation
+> + */
+> +
+> +#ifndef __TPM_FTPM_TEE_H__
+> +#define __TPM_FTPM_TEE_H__
+> +
+> +#include <linux/tee_drv.h>
+> +#include <linux/tpm.h>
+> +#include <linux/uuid.h>
+> +
+> +/* The TAFs ID implemented in this TA */
+> +#define FTPM_OPTEE_TA_SUBMIT_COMMAND  (0)
+> +#define FTPM_OPTEE_TA_EMULATE_PPI     (1)
+> +
+> +/* max. buffer size supported by fTPM  */
+> +#define  MAX_COMMAND_SIZE       4096
+> +#define  MAX_RESPONSE_SIZE      4096
+> +
+> +/**
+> + * struct ftpm_tee_private - fTPM's private data
+> + * @chip:     struct tpm_chip instance registered with tpm framework.
+> + * @state:    internal state
+> + * @session:  fTPM TA session identifier.
+> + * @resp_len: cached response buffer length.
+> + * @resp_buf: cached response buffer.
+> + * @ctx:      TEE context handler.
+> + * @shm:      Memory pool shared with fTPM TA in TEE.
+> + */
+> +struct ftpm_tee_private {
+> +       struct tpm_chip *chip;
+> +       u32 session;
+> +       size_t resp_len;
+> +       u8 resp_buf[MAX_RESPONSE_SIZE];
+> +       struct tee_context *ctx;
+> +       struct tee_shm *shm;
+> +};
+> +
+> +#endif /* __TPM_FTPM_TEE_H__ */
+> --
+> 2.20.1
+>
