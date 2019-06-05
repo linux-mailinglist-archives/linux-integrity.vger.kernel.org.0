@@ -2,199 +2,279 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9C5358A7
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Jun 2019 10:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA0E358A9
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Jun 2019 10:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbfFEIgv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 5 Jun 2019 04:36:51 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:36021 "EHLO
+        id S1726695AbfFEIgy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 5 Jun 2019 04:36:54 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:35051 "EHLO
         mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726537AbfFEIgv (ORCPT
+        with ESMTP id S1726674AbfFEIgx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 5 Jun 2019 04:36:51 -0400
-Received: by mail-lf1-f65.google.com with SMTP id q26so18460767lfc.3;
-        Wed, 05 Jun 2019 01:36:48 -0700 (PDT)
+        Wed, 5 Jun 2019 04:36:53 -0400
+Received: by mail-lf1-f65.google.com with SMTP id a25so18472176lfg.2;
+        Wed, 05 Jun 2019 01:36:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=s+A0sbKZJ3KcXdis/xqInAFtidsfuGoO0fwS3mwy0nA=;
-        b=uJjN4XQHxxhYkefzHBSji11Zsv98LqF3E7AMoA5VZ3saiCQDUJiIu2bhavyRmUIiVd
-         Mox4yD6qSRX5Q80dq1aUjZYjT+RWRAkO9Jdjj19690ZdM+KOdFLyEdrYqOsm04eOM1P6
-         HY9QpKcla5bqj2xKDLwsbXoiWazsbn1qTOjkT73Ty7Z/OOO7Mzq0IgYgndk2wuznkS8y
-         kLXDPGKpWDEz3uHPeEWUlrmhIbu8Sum0e7soTcz/T6NBlAOX+kVzvRRM8IOoXlGRWGnN
-         yACyfPCqjBHcLipMhGzLHiM5t+4ElXv+yRMaXGYcgA2e5LTIpCVQMf3xvZr5p9edYSnP
-         T7mw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=yAY2x4M2ZvsX6SGgora+JblNOtjrwOO5ndy8yz8Qmbo=;
+        b=btfdArMixbJhY0rY55lpebP2t5pQVRlneqmBJA+qulOEK2S9fIZLAAqmt+Ln/5a5/R
+         f1lTFe8gvrImCn/mSemvyL4DnlBREwrZ/dn71rb8gzTO3Mu/dx8FIvN4p7oF9nm5CT39
+         hLLp688CR7tZaxE1GqYCE+4WpyiqVgH2KPaSiB3TiWcwqf4x7We95z0EuGxvLCxzsP/J
+         0KkNmhdqr4XK6EU8m9pt5Es2UyQlVuugA6XbATZZwJ5c0XfdIUJZcZ9JPO9hx/u6Eb9X
+         WHHr6OPfLvbe/R/cDmOQ46EI2zmeHM/M/BCqcVj/iIYis0GqFX7zvjiP4LK3AaMWeCYi
+         2H7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=s+A0sbKZJ3KcXdis/xqInAFtidsfuGoO0fwS3mwy0nA=;
-        b=e2y6X/Jv1pFaN7BCWOT+GEU0iLWr1i9rF9fjTsokKIC3n1WQhD8Hj4UF99JJRVQPUb
-         AxrlkTMS4Oc+sImX7mdAsdVgeRJqMoLe7IXOrWLYoB/Rg1V7cW6+ucEp4ZRo3u79Xr5x
-         +ZqcZIAHM4j8pt67xFCdfrFxH36ZjOknfCCcqCfu/vHAIdCAZ2oXG8iF74UrjpOJXZYx
-         7dxyT4zIP0Fh3IBLp9JNKVU5WYID4SG3vhuhRATcT7NUNVI7SE5O3BPBBYb0Abylb1LQ
-         I/mzWiLe4LNH6eadhaMrup6+u7E8mUyLa4GPBUtwurMoyFzToPEixtculbvetROWTvFQ
-         FspQ==
-X-Gm-Message-State: APjAAAXA9whRN9kTM56h6HEplGfj5ZF7jYlwsKNAGkh226Ts9fr0I0F/
-        iwXPR1aW9gcF9neVnfudm4NEsguhA9w=
-X-Google-Smtp-Source: APXvYqyFd+3XnBSO/C5j1KVnDVuNT68whUzKmWquZkJEBFMb3f1DrSRme4XgbMhYxbs0OCVXTcOp9A==
-X-Received: by 2002:a19:6a01:: with SMTP id u1mr17775000lfu.141.1559723808115;
-        Wed, 05 Jun 2019 01:36:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=yAY2x4M2ZvsX6SGgora+JblNOtjrwOO5ndy8yz8Qmbo=;
+        b=tmcHM01X6zo+Ld/PfroUrkbePdKh9LNcrso/xvNV/z4jcve3BYXgAJo5+tLJnCh6w+
+         NxnvWaO+6NJYAA3tQnXsrdmqRM4ZHGBiormj1rKz1H3O08hV2oAUnxTUTN20VTsYwsEq
+         VrxWnsQ7SBRNTKzVjQr4ogKBaVE0R5bt2e+5FK6oZexQ+2AhH38G4TR54ETnYjQtW6nX
+         lgYg65fJUy8QByX6rVK/ZV8u0HBTmAUObRyRjEwobw37hXfzTFaFkenQwLrlDgYDv2eM
+         i7cAhRE1+DY5P23CFzPFRyCk+x30g6S2XaRmGRSYvGnMT0mVD62VjGpe46YdhH8QGT1y
+         sDRQ==
+X-Gm-Message-State: APjAAAWqGb02gPC0p/0n4/x/sAdXbpsD5Sp/Vk5wk0JmCwu0onEzRkaT
+        IPpDo4tqfJoQXSV2c0qVWVFg8iHfkro=
+X-Google-Smtp-Source: APXvYqxRG47fyEfSM1m6YuO3gyrNyVx9PH54Z9AZVprfYBL7Q0cyFuPJZb7lRV1Zl0i+xjSeo5E6Ww==
+X-Received: by 2002:a19:521a:: with SMTP id m26mr4683740lfb.134.1559723811337;
+        Wed, 05 Jun 2019 01:36:51 -0700 (PDT)
 Received: from localhost.localdomain (mobile-user-c1d2e6-229.dhcp.inet.fi. [193.210.230.229])
-        by smtp.gmail.com with ESMTPSA id t21sm1392637ljg.60.2019.06.05.01.36.47
+        by smtp.gmail.com with ESMTPSA id t21sm1392637ljg.60.2019.06.05.01.36.50
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 01:36:47 -0700 (PDT)
+        Wed, 05 Jun 2019 01:36:50 -0700 (PDT)
 From:   Janne Karhunen <janne.karhunen@gmail.com>
 To:     sds@tycho.nsa.gov, zohar@linux.ibm.com, paul@paul-moore.com
 Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         Janne Karhunen <janne.karhunen@gmail.com>
-Subject: [PATCH 1/2] LSM: switch to blocking policy update notifiers
-Date:   Wed,  5 Jun 2019 11:36:05 +0300
-Message-Id: <20190605083606.4209-1-janne.karhunen@gmail.com>
+Subject: [PATCH 2/2] ima: use the lsm policy update notifier
+Date:   Wed,  5 Jun 2019 11:36:06 +0300
+Message-Id: <20190605083606.4209-2-janne.karhunen@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190605083606.4209-1-janne.karhunen@gmail.com>
+References: <20190605083606.4209-1-janne.karhunen@gmail.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Atomic policy updaters are not very useful as they cannot
-usually perform the policy updates on their own. Since it
-seems that there is no strict need for the atomicity,
-switch to the blocking variant. While doing so, rename
-the functions accordingly.
+Don't do lazy policy updates while running the rule matching,
+run the updates as they happen.
+
+Depends on commit 2d1d5cee66d1 ("LSM: switch to blocking policy update notifiers")
 
 Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
 ---
- drivers/infiniband/core/device.c |  6 +++---
- include/linux/security.h         |  6 +++---
- security/security.c              | 23 +++++++++++++----------
- security/selinux/hooks.c         |  2 +-
- security/selinux/selinuxfs.c     |  2 +-
- 5 files changed, 21 insertions(+), 18 deletions(-)
+ security/integrity/ima/ima.h        |   2 +
+ security/integrity/ima/ima_main.c   |   8 ++
+ security/integrity/ima/ima_policy.c | 124 +++++++++++++++++++++++-----
+ 3 files changed, 114 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-index 78dc07c6ac4b..61c0c93a2e73 100644
---- a/drivers/infiniband/core/device.c
-+++ b/drivers/infiniband/core/device.c
-@@ -2499,7 +2499,7 @@ static int __init ib_core_init(void)
- 		goto err_mad;
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index d213e835c498..2203451862d4 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -154,6 +154,8 @@ unsigned long ima_get_binary_runtime_size(void);
+ int ima_init_template(void);
+ void ima_init_template_list(void);
+ int __init ima_init_digests(void);
++int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
++			  void *lsm_data);
+ 
+ /*
+  * used to protect h_table and sha_table
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index f16353b5097e..9e3ea8a3f2db 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -43,6 +43,10 @@ int ima_appraise;
+ int ima_hash_algo = HASH_ALGO_SHA1;
+ static int hash_setup_done;
+ 
++static struct notifier_block ima_lsm_policy_notifier = {
++	.notifier_call = ima_lsm_policy_change,
++};
++
+ static int __init hash_setup(char *str)
+ {
+ 	struct ima_template_desc *template_desc = ima_template_desc_current();
+@@ -621,6 +625,10 @@ static int __init init_ima(void)
+ 		error = ima_init();
  	}
  
--	ret = register_lsm_notifier(&ibdev_lsm_nb);
-+	ret = register_blocking_lsm_notifier(&ibdev_lsm_nb);
- 	if (ret) {
- 		pr_warn("Couldn't register LSM notifier. ret %d\n", ret);
- 		goto err_sa;
-@@ -2518,7 +2518,7 @@ static int __init ib_core_init(void)
- 	return 0;
++	error = register_blocking_lsm_notifier(&ima_lsm_policy_notifier);
++	if (error)
++		pr_warn("Couldn't register LSM notifier, error %d\n", error);
++
+ 	if (!error)
+ 		ima_update_policy_flag();
  
- err_compat:
--	unregister_lsm_notifier(&ibdev_lsm_nb);
-+	unregister_blocking_lsm_notifier(&ibdev_lsm_nb);
- err_sa:
- 	ib_sa_cleanup();
- err_mad:
-@@ -2544,7 +2544,7 @@ static void __exit ib_core_cleanup(void)
- 	nldev_exit();
- 	rdma_nl_unregister(RDMA_NL_LS);
- 	unregister_pernet_device(&rdma_dev_net_ops);
--	unregister_lsm_notifier(&ibdev_lsm_nb);
-+	unregister_blocking_lsm_notifier(&ibdev_lsm_nb);
- 	ib_sa_cleanup();
- 	ib_mad_cleanup();
- 	addr_cleanup();
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 659071c2e57c..fc655fbe44ad 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -189,9 +189,9 @@ static inline const char *kernel_load_data_id_str(enum kernel_load_data_id id)
- 
- #ifdef CONFIG_SECURITY
- 
--int call_lsm_notifier(enum lsm_event event, void *data);
--int register_lsm_notifier(struct notifier_block *nb);
--int unregister_lsm_notifier(struct notifier_block *nb);
-+int call_blocking_lsm_notifier(enum lsm_event event, void *data);
-+int register_blocking_lsm_notifier(struct notifier_block *nb);
-+int unregister_blocking_lsm_notifier(struct notifier_block *nb);
- 
- /* prototypes */
- extern int security_init(void);
-diff --git a/security/security.c b/security/security.c
-index c01a88f65ad8..6bfc7636ddb7 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -39,7 +39,7 @@
- #define LSM_COUNT (__end_lsm_info - __start_lsm_info)
- 
- struct security_hook_heads security_hook_heads __lsm_ro_after_init;
--static ATOMIC_NOTIFIER_HEAD(lsm_notifier_chain);
-+static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
- 
- static struct kmem_cache *lsm_file_cache;
- static struct kmem_cache *lsm_inode_cache;
-@@ -430,23 +430,26 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
- 		panic("%s - Cannot get early memory.\n", __func__);
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 1cc822a59054..7129dc4cd396 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -249,31 +249,121 @@ static int __init default_appraise_policy_setup(char *str)
  }
+ __setup("ima_appraise_tcb", default_appraise_policy_setup);
  
--int call_lsm_notifier(enum lsm_event event, void *data)
-+int call_blocking_lsm_notifier(enum lsm_event event, void *data)
++static void ima_lsm_free_rule(struct ima_rule_entry *entry)
++{
++	int i;
++
++	for (i = 0; i < MAX_LSM_RULES; i++) {
++		kfree(entry->lsm[i].rule);
++		kfree(entry->lsm[i].args_p);
++	}
++	kfree(entry->fsname);
++	kfree(entry);
++}
++
++
++static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
++{
++	struct ima_rule_entry *nentry;
++	int i, result;
++
++	nentry = kmalloc(sizeof(*nentry), GFP_KERNEL);
++	if (!nentry)
++		return NULL;
++
++	memcpy(nentry, entry, sizeof(*nentry));
++	nentry->fsname = NULL;
++	for (i = 0; i < MAX_LSM_RULES; i++) {
++		nentry->lsm[i].rule = NULL;
++		nentry->lsm[i].args_p = NULL;
++	}
++
++	if (entry->fsname) {
++		nentry->fsname = kstrdup(entry->fsname, GFP_KERNEL);
++		if (!nentry->fsname)
++			goto out_err;
++	}
++	for (i = 0; i < MAX_LSM_RULES; i++) {
++		if (!entry->lsm[i].rule)
++			continue;
++
++		nentry->lsm[i].type = entry->lsm[i].type;
++		nentry->lsm[i].args_p = kstrdup(entry->lsm[i].args_p,
++						GFP_KERNEL);
++		if (!nentry->lsm[i].args_p)
++			goto out_err;
++
++		result = security_filter_rule_init(nentry->lsm[i].type,
++						   Audit_equal,
++						   nentry->lsm[i].args_p,
++						   &nentry->lsm[i].rule);
++		if (result == -EINVAL)
++			pr_warn("ima: rule for LSM \'%d\' is invalid\n",
++				entry->lsm[i].type);
++
++	}
++	return nentry;
++
++out_err:
++	ima_lsm_free_rule(nentry);
++	return NULL;
++}
++
++static int ima_lsm_update_rule(struct ima_rule_entry *entry)
++{
++	struct ima_rule_entry *nentry;
++
++	nentry = ima_lsm_copy_rule(entry);
++	if (!nentry)
++		return -ENOMEM;
++
++	list_replace_rcu(&entry->list, &nentry->list);
++	synchronize_rcu();
++	ima_lsm_free_rule(entry);
++
++	return 0;
++}
++
+ /*
+  * The LSM policy can be reloaded, leaving the IMA LSM based rules referring
+  * to the old, stale LSM policy.  Update the IMA LSM based rules to reflect
+- * the reloaded LSM policy.  We assume the rules still exist; and BUG_ON() if
+- * they don't.
++ * the reloaded LSM policy.
+  */
+ static void ima_lsm_update_rules(void)
  {
--	return atomic_notifier_call_chain(&lsm_notifier_chain, event, data);
-+	return blocking_notifier_call_chain(&blocking_lsm_notifier_chain,
-+					    event, data);
- }
--EXPORT_SYMBOL(call_lsm_notifier);
-+EXPORT_SYMBOL(call_blocking_lsm_notifier);
+-	struct ima_rule_entry *entry;
+-	int result;
+-	int i;
++	struct ima_rule_entry *entry, *e;
++	int i, result, needs_update;
  
--int register_lsm_notifier(struct notifier_block *nb)
-+int register_blocking_lsm_notifier(struct notifier_block *nb)
- {
--	return atomic_notifier_chain_register(&lsm_notifier_chain, nb);
-+	return blocking_notifier_chain_register(&blocking_lsm_notifier_chain,
-+						nb);
+-	list_for_each_entry(entry, &ima_policy_rules, list) {
++	list_for_each_entry_safe(entry, e, &ima_policy_rules, list) {
++		needs_update = 0;
+ 		for (i = 0; i < MAX_LSM_RULES; i++) {
+-			if (!entry->lsm[i].rule)
+-				continue;
+-			result = security_filter_rule_init(entry->lsm[i].type,
+-							   Audit_equal,
+-							   entry->lsm[i].args_p,
+-							   &entry->lsm[i].rule);
+-			BUG_ON(!entry->lsm[i].rule);
++			if (entry->lsm[i].rule) {
++				needs_update = 1;
++				break;
++			}
++		}
++		if (!needs_update)
++			continue;
++
++		result = ima_lsm_update_rule(entry);
++		if (result) {
++			pr_err("ima: lsm rule update error %d\n",
++				result);
++			return;
+ 		}
+ 	}
  }
--EXPORT_SYMBOL(register_lsm_notifier);
-+EXPORT_SYMBOL(register_blocking_lsm_notifier);
  
--int unregister_lsm_notifier(struct notifier_block *nb)
-+int unregister_blocking_lsm_notifier(struct notifier_block *nb)
- {
--	return atomic_notifier_chain_unregister(&lsm_notifier_chain, nb);
-+	return blocking_notifier_chain_unregister(&blocking_lsm_notifier_chain,
-+						  nb);
- }
--EXPORT_SYMBOL(unregister_lsm_notifier);
-+EXPORT_SYMBOL(unregister_blocking_lsm_notifier);
- 
++int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
++			  void *lsm_data)
++{
++	if (event != LSM_POLICY_CHANGE)
++		return NOTIFY_DONE;
++
++	ima_lsm_update_rules();
++	return NOTIFY_OK;
++}
++
  /**
-  * lsm_cred_alloc - allocate a composite cred blob
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index c61787b15f27..c1e37018c8eb 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -197,7 +197,7 @@ static int selinux_lsm_notifier_avc_callback(u32 event)
- {
- 	if (event == AVC_CALLBACK_RESET) {
- 		sel_ib_pkey_flush();
--		call_lsm_notifier(LSM_POLICY_CHANGE, NULL);
-+		call_blocking_lsm_notifier(LSM_POLICY_CHANGE, NULL);
- 	}
+  * ima_match_rules - determine whether an inode matches the measure rule.
+  * @rule: a pointer to a rule
+@@ -327,11 +417,10 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
+ 	for (i = 0; i < MAX_LSM_RULES; i++) {
+ 		int rc = 0;
+ 		u32 osid;
+-		int retried = 0;
  
- 	return 0;
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index 145ee62f205a..1e2e3e4b5fdb 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -180,7 +180,7 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
- 		selnl_notify_setenforce(new_value);
- 		selinux_status_update_setenforce(state, new_value);
- 		if (!new_value)
--			call_lsm_notifier(LSM_POLICY_CHANGE, NULL);
-+			call_blocking_lsm_notifier(LSM_POLICY_CHANGE, NULL);
+ 		if (!rule->lsm[i].rule)
+ 			continue;
+-retry:
++
+ 		switch (i) {
+ 		case LSM_OBJ_USER:
+ 		case LSM_OBJ_ROLE:
+@@ -352,11 +441,6 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
+ 		default:
+ 			break;
+ 		}
+-		if ((rc < 0) && (!retried)) {
+-			retried = 1;
+-			ima_lsm_update_rules();
+-			goto retry;
+-		}
+ 		if (!rc)
+ 			return false;
  	}
- 	length = count;
- out:
 -- 
 2.17.1
 
