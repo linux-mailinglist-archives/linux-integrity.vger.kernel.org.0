@@ -2,98 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D64213731B
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Jun 2019 13:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1C03733E
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Jun 2019 13:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728004AbfFFLj5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Jun 2019 07:39:57 -0400
-Received: from mail-it1-f195.google.com ([209.85.166.195]:51244 "EHLO
-        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726877AbfFFLj4 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Jun 2019 07:39:56 -0400
-Received: by mail-it1-f195.google.com with SMTP id m3so2629289itl.1
-        for <linux-integrity@vger.kernel.org>; Thu, 06 Jun 2019 04:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ATDRXGLW3SKA+8BA2BRhqoFgRHFlcKJPGLmDOgbTpLM=;
-        b=qc3xzSNVRN2ZHqA4Qq9sWKCinZ+aPa2DZYWThtV6g6/Uz7PDYFtgR6Q/uvTwYjvJOb
-         lJth1g+Zr2l66cmPLixbsDsPqk2C+lJD+phVR6U3W8sprgD2QYkomWyg0Drd1GQZSPxs
-         iMbUP0D0nO/TZebwQznViSUKI2i9OieD/ERrZt5Z5kzLhEYN+JsvPW42tji4/WSxw6Ob
-         fWNwTZeiJtEkrjZN+Myd/6lf9Z/tLyLaOAEmFrE+2nnaCwt4vJzaoUhhI/0sSF6PVTPX
-         eoNnlkzZZ/0+o1Q5LShZiSFfje3jcYgu9XVwq04oOw/hel3VKkhiARqPSDou290tFVwS
-         ZKfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ATDRXGLW3SKA+8BA2BRhqoFgRHFlcKJPGLmDOgbTpLM=;
-        b=Eh4eeqNGGv5HDPgucTbLGgfp+KIEKPr34KPJAvdPfImT8jd8YJ9aYl/l/Ut6paMpBq
-         aaNnRXhQb0y0qcsGO4zuC/SFgMTEtMR7rEkpSV0Dv0KzApWRy3P2AJJ/6hb3IWYGUbNv
-         o+3Pqf11JyHC6r5Q8hdHUSGlCQEctwHvqr+A7Q2oocgxHxGO0s/lRA912e+/ijfTN9vE
-         U2JzjTavxrEIPonsaOGV29WPAU49eiZTd+GBXeUhwn0HG/+wSxozfbwfBxpzhUS9Tef3
-         QAqDJZj59r0lHHK0jvlKOv372PmPQqQeDEYswEtyW1GGF8YMm8rmgzZN6/afUhZv3Ebc
-         Aygg==
-X-Gm-Message-State: APjAAAXx8FAWQ/hUIQX0ARuvAFrYo3IXYfxhC1e9y0gLJPOUYuLpE8bx
-        HCrT6WZ70afo5v86Y3e+OKUjjxcFMlvEHRFA57/ohg==
-X-Google-Smtp-Source: APXvYqy6IXwtsRT+VSEpdO9w13CdBrJZ0n4wxgUAAHnpaBNtBcCAocBB2FoIBSv0vcIsKI8349N7F/zgspYe071lqco=
-X-Received: by 2002:a24:740f:: with SMTP id o15mr15249956itc.76.1559821196007;
- Thu, 06 Jun 2019 04:39:56 -0700 (PDT)
+        id S1727310AbfFFLoS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Jun 2019 07:44:18 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32990 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727157AbfFFLoS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 6 Jun 2019 07:44:18 -0400
+Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id B9CDA6C53C31372D7D72;
+        Thu,  6 Jun 2019 12:44:15 +0100 (IST)
+Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
+ (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Thu, 6 Jun
+ 2019 12:43:51 +0100
+Subject: Re: [PATCH v3 0/2] ima/evm fixes for v5.2
+To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
+        <mjg59@google.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <stable@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>
+References: <20190606112620.26488-1-roberto.sassu@huawei.com>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <3711f387-3aef-9fbb-1bb4-dded6807b033@huawei.com>
+Date:   Thu, 6 Jun 2019 13:43:58 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-References: <20190605181140.35559-1-matthewgarrett@google.com>
-In-Reply-To: <20190605181140.35559-1-matthewgarrett@google.com>
-From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Date:   Thu, 6 Jun 2019 13:39:42 +0200
-Message-ID: <CAKv+Gu_GxV1GySRz-xju6RsB0Qdra=nN=CL+M=jvQ1e2V6p_ig@mail.gmail.com>
-Subject: Re: [PATCH] efi: Fix TPM code build failure on ARM
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        =?UTF-8?Q?Peter_H=C3=BCwe?= <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Matthew Garrett <mjg59@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190606112620.26488-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.220.96.108]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 5 Jun 2019 at 20:11, Matthew Garrett <matthewgarrett@google.com> wrote:
->
-> asm/early_ioremap.h needs to be #included before tpm_eventlog.h in order
-> to ensure that early_memremap is available.
->
+On 6/6/2019 1:26 PM, Roberto Sassu wrote:
+> Previous versions included the patch 'ima: don't ignore INTEGRITY_UNKNOWN
+> EVM status'. However, I realized that this patch cannot be accepted alone
+> because IMA-Appraisal would deny access to new files created during the
+> boot. With the current behavior, those files are accessible because they
+> have a valid security.ima (not protected by EVM) created after the first
+> write.
+> 
+> A solution for this problem is to initialize EVM very early with a random
+> key. Access to created files will be granted, even with the strict
+> appraisal, because after the first write those files will have both
+> security.ima and security.evm (HMAC calculated with the random key).
+> 
+> Strict appraisal will work only if it is done with signatures until the
+> persistent HMAC key is loaded.
 
-Doesn't that make it tpm_eventlog.h's job to #include it?
+Changelog
+
+v2:
+- remove patch 1/3 (evm: check hash algorithm passed to init_desc());
+   already accepted
+- remove patch 3/3 (ima: show rules with IMA_INMASK correctly);
+   already accepted
+- add new patch (evm: add option to set a random HMAC key at early boot)
+- patch 2/3: modify patch description
+
+v1:
+- remove patch 2/4 (evm: reset status in evm_inode_post_setattr()); file
+   attributes cannot be set if the signature is portable and immutable
+- patch 3/4: add __ro_after_init to ima_appraise_req_evm variable
+   declaration
+- patch 3/4: remove ima_appraise_req_evm kernel option and introduce
+   'enforce-evm' and 'log-evm' as possible values for ima_appraise=
+- remove patch 4/4 (ima: only audit failed appraisal verifications)
+- add new patch (ima: show rules with IMA_INMASK correctly)
 
 
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> ---
->  drivers/firmware/efi/tpm.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
-> index 0bdceb5913aa..1d3f5ca3eaaf 100644
-> --- a/drivers/firmware/efi/tpm.c
-> +++ b/drivers/firmware/efi/tpm.c
-> @@ -7,13 +7,12 @@
->  #define TPM_MEMREMAP(start, size) early_memremap(start, size)
->  #define TPM_MEMUNMAP(start, size) early_memunmap(start, size)
->
-> +#include <asm/early_ioremap.h>
->  #include <linux/efi.h>
->  #include <linux/init.h>
->  #include <linux/memblock.h>
->  #include <linux/tpm_eventlog.h>
->
-> -#include <asm/early_ioremap.h>
-> -
->  int efi_tpm_final_log_size;
->  EXPORT_SYMBOL(efi_tpm_final_log_size);
->
-> --
-> 2.22.0.rc1.311.g5d7573a151-goog
->
+> Roberto Sassu (2):
+>    evm: add option to set a random HMAC key at early boot
+>    ima: add enforce-evm and log-evm modes to strictly check EVM status
+> 
+>   .../admin-guide/kernel-parameters.txt         | 11 ++--
+>   security/integrity/evm/evm.h                  | 10 +++-
+>   security/integrity/evm/evm_crypto.c           | 57 ++++++++++++++++---
+>   security/integrity/evm/evm_main.c             | 41 ++++++++++---
+>   security/integrity/ima/ima_appraise.c         |  8 +++
+>   security/integrity/integrity.h                |  1 +
+>   6 files changed, 106 insertions(+), 22 deletions(-)
+> 
+
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
