@@ -2,146 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A4D37477
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Jun 2019 14:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CA137720
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Jun 2019 16:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726014AbfFFMpX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Jun 2019 08:45:23 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51036 "EHLO
+        id S1728682AbfFFOuR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Jun 2019 10:50:17 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52122 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725267AbfFFMpX (ORCPT
+        by vger.kernel.org with ESMTP id S1727603AbfFFOuR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Jun 2019 08:45:23 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x56CgiFa026680
-        for <linux-integrity@vger.kernel.org>; Thu, 6 Jun 2019 08:45:21 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2sy13nefft-1
+        Thu, 6 Jun 2019 10:50:17 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x56EjmYx049292
+        for <linux-integrity@vger.kernel.org>; Thu, 6 Jun 2019 10:50:15 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sy4vp8484-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 06 Jun 2019 08:44:57 -0400
+        for <linux-integrity@vger.kernel.org>; Thu, 06 Jun 2019 10:50:15 -0400
 Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 6 Jun 2019 13:44:41 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Thu, 6 Jun 2019 15:50:13 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 6 Jun 2019 13:44:38 +0100
+        Thu, 6 Jun 2019 15:50:09 +0100
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x56Cibes52756720
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x56Eo82q45809782
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Jun 2019 12:44:38 GMT
+        Thu, 6 Jun 2019 14:50:08 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E1D0D4C044;
-        Thu,  6 Jun 2019 12:44:37 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 765A94C058;
+        Thu,  6 Jun 2019 14:50:08 +0000 (GMT)
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B59CC4C040;
-        Thu,  6 Jun 2019 12:44:36 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 4AAF74C044;
+        Thu,  6 Jun 2019 14:50:07 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.80.80.30])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Jun 2019 12:44:36 +0000 (GMT)
-Subject: Re: [PATCH 0/2] [IMA] Measure public keys of BuiltIn Trusted Keys
+        Thu,  6 Jun 2019 14:50:07 +0000 (GMT)
+Subject: Re: [PATCH v3 0/2] ima/evm fixes for v5.2
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi <nramas@linux.microsoft.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     James Morris <jamorris@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        Balaji Balasubramanyan <balajib@linux.microsoft.com>,
-        Jordan Hand <jorhand@linux.microsoft.com>
-Date:   Thu, 06 Jun 2019 08:44:25 -0400
-In-Reply-To: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
-References: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        dmitry.kasatkin@huawei.com, mjg59@google.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        silviu.vlasceanu@huawei.com
+Date:   Thu, 06 Jun 2019 10:49:56 -0400
+In-Reply-To: <3711f387-3aef-9fbb-1bb4-dded6807b033@huawei.com>
+References: <20190606112620.26488-1-roberto.sassu@huawei.com>
+         <3711f387-3aef-9fbb-1bb4-dded6807b033@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-x-cbid: 19060612-0028-0000-0000-000003778CFB
+x-cbid: 19060614-0012-0000-0000-00000325A790
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19060612-0029-0000-0000-000024376CDB
-Message-Id: <1559825065.4278.94.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-06_10:,,
+x-cbparentid: 19060614-0013-0000-0000-0000215E8FBB
+Message-Id: <1559832596.4278.124.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-06_11:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906060091
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906060102
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-06-05 at 17:16 -0700, Lakshmi wrote:
-> The motive behind this patch series is to measure the public key
-> of keys in BuiltIn_Trusted_Keys keyring to IMA log.
+On Thu, 2019-06-06 at 13:43 +0200, Roberto Sassu wrote:
+> On 6/6/2019 1:26 PM, Roberto Sassu wrote:
+> > Previous versions included the patch 'ima: don't ignore INTEGRITY_UNKNOWN
+> > EVM status'. However, I realized that this patch cannot be accepted alone
+> > because IMA-Appraisal would deny access to new files created during the
+> > boot. With the current behavior, those files are accessible because they
+> > have a valid security.ima (not protected by EVM) created after the first
+> > write.
+> > 
+> > A solution for this problem is to initialize EVM very early with a random
+> > key. Access to created files will be granted, even with the strict
+> > appraisal, because after the first write those files will have both
+> > security.ima and security.evm (HMAC calculated with the random key).
+> > 
+> > Strict appraisal will work only if it is done with signatures until the
+> > persistent HMAC key is loaded.
 > 
-> The kernel could be built with the config parameter
-> CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY enabled.
-> If this is done only those "IMA Signer Keys" that are signed by a key in
-> the "BuiltIn Trusted Keys" or the "Secondary Trusted Keys" can be added
-> to the "IMA Keyring".
+> Changelog
 > 
-> In other words, "IMA Signer Keys" are attested by the "Trusted Keys"
-> on the client machines if the above config parameter is enabled.
-> 
-> IMA will enumerate the keys in the Trusted Keys keyring, and measure
-> them in the IMA log. On file read, IMA will validate the signature of
-> the system files using "IMA Signer Key" present in "IMA Keyring".
-> 
-> An attestation service would receive the "Trusted Keys" from
-> a trusted source (which is different from the client machines it is
-> attesting). The service would compare the Trusted Keys reported by
-> the client with the list of known Trusted Keys. A client would be
-> marked trusted by the service if and only if the keys reported
-> by the client are all trusted.
-> 
-> Using the above approach the attestation service will be attesting
-> the "IMA Signer" while the clients attest the IMA Signature of
-> the system files. This enables the service to attest the client
-> machines by maintaining only a list of "Trusted Keys". These keys
-> change much less frequently than "IMA Signer Keys". It also frees
-> the service from having to maintain the "Hash of System Files"
-> which would change very frequently. This approach would significantly
-> reduce the maintenance cost of the service with respect to the data used
-> for attesting clients.
+> v2:
+> - remove patch 1/3 (evm: check hash algorithm passed to init_desc());
+>    already accepted
+> - remove patch 3/3 (ima: show rules with IMA_INMASK correctly);
+>    already accepted
+> - add new patch (evm: add option to set a random HMAC key at early boot)
+> - patch 2/3: modify patch description
 
-Instead of measuring all the files in policy, Roberto's "digest lists"
-proposed patch set measures only "unknown" files.  Why bother with all
-those messy measurements?!
+Roberto, as I tried explaining previously, this feature is not a
+simple bug fix.  These patches, if upstreamed, will be upstreamed the
+normal way, during an open window.  Whether they are classified as a
+bug fix has yet to be decided.
 
-In your use case scenario, will the measurement list only contain the builtin and secondary keys?
+Please stop Cc'ing stable.  If I don't Cc stable before sending the pull request, then Greg and Sasha have been really good about deciding which patches should be backported.  (Please refer to the comment on "Cc'ing stable" in section "5) Select the recipients for your patch" in Documentation/process/submitting-patches.rst.)
+
+I'll review these patches, but in the future please use an appropriate patch set cover letter title in the subject line.
+
+thanks,
 
 Mimi
 
+
 > 
-> To achieve the above the patch series does the following:
->    - Adds a new method in asymmetric_key_subtype to query
->      the public key of the given key
->    - Enumerate the keys in "BuiltIn Trusted Keys" and measure
->      them to IMA log.
+> v1:
+> - remove patch 2/4 (evm: reset status in evm_inode_post_setattr()); file
+>    attributes cannot be set if the signature is portable and immutable
+> - patch 3/4: add __ro_after_init to ima_appraise_req_evm variable
+>    declaration
+> - patch 3/4: remove ima_appraise_req_evm kernel option and introduce
+>    'enforce-evm' and 'log-evm' as possible values for ima_appraise=
+> - remove patch 4/4 (ima: only audit failed appraisal verifications)
+> - add new patch (ima: show rules with IMA_INMASK correctly)
 > 
-> Lakshmi (2):
->    Added a new interface method namely query_public_key to
->      asymmetric_key_subtype interface
->    Measure keys in BuiltIn Trusted Keys keyring
 > 
->   Documentation/crypto/asymmetric-keys.txt |  1 +
->   certs/system_keyring.c                   |  7 ++
->   crypto/asymmetric_keys/public_key.c      |  7 ++
->   crypto/asymmetric_keys/signature.c       | 24 +++++++
->   include/crypto/public_key.h              |  1 +
->   include/keys/asymmetric-subtype.h        |  3 +
->   include/keys/system_keyring.h            |  9 +++
->   include/linux/key.h                      | 32 +++++++++
->   security/integrity/digsig.c              | 58 +++++++++++++++++
->   security/integrity/ima/Kconfig           |  9 +++
->   security/integrity/ima/ima_init.c        | 62 ++++++++++++++++++
->   security/integrity/integrity.h           | 25 ++++++++
->   security/keys/keyring.c                  | 82 ++++++++++++++++++++++++
->   13 files changed, 320 insertions(+)
+> > Roberto Sassu (2):
+> >    evm: add option to set a random HMAC key at early boot
+> >    ima: add enforce-evm and log-evm modes to strictly check EVM status
+> > 
+> >   .../admin-guide/kernel-parameters.txt         | 11 ++--
+> >   security/integrity/evm/evm.h                  | 10 +++-
+> >   security/integrity/evm/evm_crypto.c           | 57 ++++++++++++++++---
+> >   security/integrity/evm/evm_main.c             | 41 ++++++++++---
+> >   security/integrity/ima/ima_appraise.c         |  8 +++
+> >   security/integrity/integrity.h                |  1 +
+> >   6 files changed, 106 insertions(+), 22 deletions(-)
+> > 
 > 
 
