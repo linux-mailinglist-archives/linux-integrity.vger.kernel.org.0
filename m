@@ -2,122 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDBD372E7
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Jun 2019 13:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64213731B
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Jun 2019 13:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbfFFLak (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Jun 2019 07:30:40 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32989 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727296AbfFFLak (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Jun 2019 07:30:40 -0400
-Received: from lhreml705-cah.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id A3EEDA022841E334D138;
-        Thu,  6 Jun 2019 12:30:38 +0100 (IST)
-Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.154)
- by smtpsuk.huawei.com (10.201.108.46) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Thu, 6 Jun 2019 12:30:30 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
-        <mjg59@google.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <stable@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v3 2/2] ima: add enforce-evm and log-evm modes to strictly check EVM status
-Date:   Thu, 6 Jun 2019 13:26:20 +0200
-Message-ID: <20190606112620.26488-3-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190606112620.26488-1-roberto.sassu@huawei.com>
-References: <20190606112620.26488-1-roberto.sassu@huawei.com>
+        id S1728004AbfFFLj5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Jun 2019 07:39:57 -0400
+Received: from mail-it1-f195.google.com ([209.85.166.195]:51244 "EHLO
+        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726877AbfFFLj4 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 6 Jun 2019 07:39:56 -0400
+Received: by mail-it1-f195.google.com with SMTP id m3so2629289itl.1
+        for <linux-integrity@vger.kernel.org>; Thu, 06 Jun 2019 04:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ATDRXGLW3SKA+8BA2BRhqoFgRHFlcKJPGLmDOgbTpLM=;
+        b=qc3xzSNVRN2ZHqA4Qq9sWKCinZ+aPa2DZYWThtV6g6/Uz7PDYFtgR6Q/uvTwYjvJOb
+         lJth1g+Zr2l66cmPLixbsDsPqk2C+lJD+phVR6U3W8sprgD2QYkomWyg0Drd1GQZSPxs
+         iMbUP0D0nO/TZebwQznViSUKI2i9OieD/ERrZt5Z5kzLhEYN+JsvPW42tji4/WSxw6Ob
+         fWNwTZeiJtEkrjZN+Myd/6lf9Z/tLyLaOAEmFrE+2nnaCwt4vJzaoUhhI/0sSF6PVTPX
+         eoNnlkzZZ/0+o1Q5LShZiSFfje3jcYgu9XVwq04oOw/hel3VKkhiARqPSDou290tFVwS
+         ZKfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ATDRXGLW3SKA+8BA2BRhqoFgRHFlcKJPGLmDOgbTpLM=;
+        b=Eh4eeqNGGv5HDPgucTbLGgfp+KIEKPr34KPJAvdPfImT8jd8YJ9aYl/l/Ut6paMpBq
+         aaNnRXhQb0y0qcsGO4zuC/SFgMTEtMR7rEkpSV0Dv0KzApWRy3P2AJJ/6hb3IWYGUbNv
+         o+3Pqf11JyHC6r5Q8hdHUSGlCQEctwHvqr+A7Q2oocgxHxGO0s/lRA912e+/ijfTN9vE
+         U2JzjTavxrEIPonsaOGV29WPAU49eiZTd+GBXeUhwn0HG/+wSxozfbwfBxpzhUS9Tef3
+         QAqDJZj59r0lHHK0jvlKOv372PmPQqQeDEYswEtyW1GGF8YMm8rmgzZN6/afUhZv3Ebc
+         Aygg==
+X-Gm-Message-State: APjAAAXx8FAWQ/hUIQX0ARuvAFrYo3IXYfxhC1e9y0gLJPOUYuLpE8bx
+        HCrT6WZ70afo5v86Y3e+OKUjjxcFMlvEHRFA57/ohg==
+X-Google-Smtp-Source: APXvYqy6IXwtsRT+VSEpdO9w13CdBrJZ0n4wxgUAAHnpaBNtBcCAocBB2FoIBSv0vcIsKI8349N7F/zgspYe071lqco=
+X-Received: by 2002:a24:740f:: with SMTP id o15mr15249956itc.76.1559821196007;
+ Thu, 06 Jun 2019 04:39:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.204.65.154]
-X-CFilter-Loop: Reflected
+References: <20190605181140.35559-1-matthewgarrett@google.com>
+In-Reply-To: <20190605181140.35559-1-matthewgarrett@google.com>
+From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Date:   Thu, 6 Jun 2019 13:39:42 +0200
+Message-ID: <CAKv+Gu_GxV1GySRz-xju6RsB0Qdra=nN=CL+M=jvQ1e2V6p_ig@mail.gmail.com>
+Subject: Re: [PATCH] efi: Fix TPM code build failure on ARM
+To:     Matthew Garrett <matthewgarrett@google.com>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        =?UTF-8?Q?Peter_H=C3=BCwe?= <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Matthew Garrett <mjg59@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA and EVM have been designed as two independent subsystems: the first for
-checking the integrity of file data; the second for checking file metadata.
-Making them independent allows users to adopt them incrementally.
+On Wed, 5 Jun 2019 at 20:11, Matthew Garrett <matthewgarrett@google.com> wrote:
+>
+> asm/early_ioremap.h needs to be #included before tpm_eventlog.h in order
+> to ensure that early_memremap is available.
+>
 
-The point of intersection is in IMA-Appraisal, which calls
-evm_verifyxattr() to ensure that security.ima wasn't modified during an
-offline attack. The design choice, to ensure incremental adoption, was to
-continue appraisal verification if evm_verifyxattr() returns
-INTEGRITY_UNKNOWN. This value is returned when EVM is not enabled in the
-kernel configuration, or if the HMAC key has not been loaded yet.
+Doesn't that make it tpm_eventlog.h's job to #include it?
 
-Although this choice appears legitimate, it might not be suitable for
-hardened systems, where the administrator expects that access is denied if
-there is any error. An attacker could intentionally delete the EVM keys
-from the system and set the file digest in security.ima to the actual file
-digest so that the final appraisal status is INTEGRITY_PASS.
 
-This patch allows such hardened systems to strictly enforce an access
-control policy based on the validity of signatures/HMACs, by introducing
-two new values for the ima_appraise= kernel option: enforce-evm and
-log-evm.
-
-Fixes: 2fe5d6def1672 ("ima: integrity appraisal extension")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: stable@vger.kernel.org
----
- Documentation/admin-guide/kernel-parameters.txt | 3 ++-
- security/integrity/ima/ima_appraise.c           | 8 ++++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index fe5cde58c11b..0585194ca736 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1587,7 +1587,8 @@
- 			Set number of hash buckets for inode cache.
- 
- 	ima_appraise=	[IMA] appraise integrity measurements
--			Format: { "off" | "enforce" | "fix" | "log" }
-+			Format: { "off" | "enforce" | "fix" | "log" |
-+				  "enforce-evm" | "log-evm" }
- 			default: "enforce"
- 
- 	ima_appraise_tcb [IMA] Deprecated.  Use ima_policy= instead.
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index 5fb7127bbe68..afef06e10fb9 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -18,6 +18,7 @@
- 
- #include "ima.h"
- 
-+static bool ima_appraise_req_evm __ro_after_init;
- static int __init default_appraise_setup(char *str)
- {
- #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-@@ -28,6 +29,9 @@ static int __init default_appraise_setup(char *str)
- 	else if (strncmp(str, "fix", 3) == 0)
- 		ima_appraise = IMA_APPRAISE_FIX;
- #endif
-+	if (strcmp(str, "enforce-evm") == 0 ||
-+	    strcmp(str, "log-evm") == 0)
-+		ima_appraise_req_evm = true;
- 	return 1;
- }
- 
-@@ -245,7 +249,11 @@ int ima_appraise_measurement(enum ima_hooks func,
- 	switch (status) {
- 	case INTEGRITY_PASS:
- 	case INTEGRITY_PASS_IMMUTABLE:
-+		break;
- 	case INTEGRITY_UNKNOWN:
-+		if (ima_appraise_req_evm &&
-+		    xattr_value->type != EVM_IMA_XATTR_DIGSIG)
-+			goto out;
- 		break;
- 	case INTEGRITY_NOXATTRS:	/* No EVM protected xattrs. */
- 	case INTEGRITY_NOLABEL:		/* No security.evm xattr. */
--- 
-2.17.1
-
+> Signed-off-by: Matthew Garrett <mjg59@google.com>
+> ---
+>  drivers/firmware/efi/tpm.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
+> index 0bdceb5913aa..1d3f5ca3eaaf 100644
+> --- a/drivers/firmware/efi/tpm.c
+> +++ b/drivers/firmware/efi/tpm.c
+> @@ -7,13 +7,12 @@
+>  #define TPM_MEMREMAP(start, size) early_memremap(start, size)
+>  #define TPM_MEMUNMAP(start, size) early_memunmap(start, size)
+>
+> +#include <asm/early_ioremap.h>
+>  #include <linux/efi.h>
+>  #include <linux/init.h>
+>  #include <linux/memblock.h>
+>  #include <linux/tpm_eventlog.h>
+>
+> -#include <asm/early_ioremap.h>
+> -
+>  int efi_tpm_final_log_size;
+>  EXPORT_SYMBOL(efi_tpm_final_log_size);
+>
+> --
+> 2.22.0.rc1.311.g5d7573a151-goog
+>
