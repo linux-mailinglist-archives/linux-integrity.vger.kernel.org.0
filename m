@@ -2,57 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABBE38217
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 02:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E742A3821A
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 02:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728201AbfFGAYB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Jun 2019 20:24:01 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:32914 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728164AbfFGAYB (ORCPT
+        id S1728228AbfFGAYG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Jun 2019 20:24:06 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:43585 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728164AbfFGAYF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Jun 2019 20:24:01 -0400
-Received: by mail-pg1-f194.google.com with SMTP id h17so175791pgv.0;
-        Thu, 06 Jun 2019 17:24:00 -0700 (PDT)
+        Thu, 6 Jun 2019 20:24:05 -0400
+Received: by mail-pl1-f193.google.com with SMTP id cl9so93218plb.10;
+        Thu, 06 Jun 2019 17:24:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hckSLCeKIoVXacDaHtL22Ml1ZlZHnr9jEMcdvvjf21A=;
-        b=V2BrLf52zYKJtKuhz9EPieT3mUwYCTvb3g3eRnfwEv9utmNgsUgY7+UuX2BISQxb0l
-         sVaX2RY1IGXJSRkxvyw4s5zr9gjMue8YQfxVq7vivBPM1j7DO1DYa5BpU2BbUBoX88vw
-         UAgUB6tafTZAjXB5RPmFQ7UNhFrGfbFPAA7f5KHf02oqYy8K+hDkwG6RWTdvTv5ylC5L
-         QWTIHbZtX4BWa5HUvrV3R/o7d5mR9NInZJx0QyHNX723Z/Yr2RiaglvzrFWQlfnUcVHR
-         EqcI8C3KVMBk2Sb8R2PR2SmZ7cBQT8VPeTrRFe9RhD4AF+gMZoAc+3TGq2VoEWryXoaJ
-         NwKw==
+        bh=shUvO/uALYYYiabiTVXXX7TFdnr0+YAGqwBC2xXOs1I=;
+        b=DWA/uWxh1OP3EU4EMjkhhQXhKfoqXmaScZcQjE0WbT8pfwLPJFwEGMfZX+cELGcejD
+         9k4OPxmyapjjYXQGFXvZRY4UtDipQ/O0a4+ubsmTQ5I5Z/HlSZf6j/uaXbZ+aVJL5bxm
+         Ly5JVAttV4IJbpsUgDCFycySASE6od+fLpId+5SQSYuCxwsqD1gEHy5SlFuuPCLMv0L9
+         PC1fgFYDc98YB3KWeNFinmpr+6kRrEx5hMyaa+uyZSUZbS6RKIuJ/e5FQhEHAMIqIhZy
+         htVwL/aXQDd49Tpv6eP0MudbTOwW2FiRWiKWBEjrWN9UBrNyzmzPTgGH/PA6C7kBjSif
+         +bGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hckSLCeKIoVXacDaHtL22Ml1ZlZHnr9jEMcdvvjf21A=;
-        b=WM3ihONmLu0nxQmo95pR5AhbWLzASUScaK56X1Kjy5DeuzLl/jLBVaRD7HOWWaXq+b
-         9FIqlBGJWO6MBEENGnKkl1/Hevuzx7RoCWIAJqP0/MwS9OZGcxgD1AfGiRt4tLIxHfuJ
-         1MUDeJ3utwv3r64R8v7cGvTzzIdJ6Kv2yj8yfEnbhyoDz/Q4LFxjKRb0oTQxi2bjcGZ7
-         7Y77G7i0N5OUEWhYEYaGvaOXW7TtRP1VIORL/bxYMfJIRqnRvtiBF3GJvK5XVAvOkJeY
-         OnsCYz2vryGzoO+BuIwwadZb1uNnj6n413G4W+z1vtetO7yAwnUFLhlbvFTPiobt8kFC
-         wGhA==
-X-Gm-Message-State: APjAAAVoLuuuf0TeQt0ZPNruN1w7ioYorNiCIOuEsp7j8oa8VM3akEnb
-        HyUGKKhS9FVIXpxA07jjiAp6i5CL
-X-Google-Smtp-Source: APXvYqxi7sHr8OXL/S7kcw7Tew3717zgBGZg5pnkMk0Bfl6VD1x2nwijHrWAmYRjDv3YotxhJF5pdg==
-X-Received: by 2002:a63:ff0c:: with SMTP id k12mr461445pgi.32.1559867040014;
-        Thu, 06 Jun 2019 17:24:00 -0700 (PDT)
+        bh=shUvO/uALYYYiabiTVXXX7TFdnr0+YAGqwBC2xXOs1I=;
+        b=Vtn/0uypzDS/ktb/qSI9rIzHkLSgOjmbPzN/Ah4+7nV/8VxZfFRmOYg9JD/cgstIXc
+         5LLQyx5XQ4F2NpiFn3HLHjPmwW+Jnmkp7dPci1sYskSd0v2ud3VGd7NEQVtlzgduUflW
+         PHRHm9EGcnvVWA8EIMzo569HcDyEdZBS+nWOyFp+4B2bAqgZIE6UJ2GzZtOu+kjSXDkd
+         GyQiMHyBf5PQtz7XcOmWgIrRAW+Arf0YiGi3FmFlqbnqOf6/ZzEoRKZzpgQOpq/7R/Q1
+         8ZOgYrEn638gzyma6VseZEZrlb3zZ2FzCNCpmTmBR4yhNztclvoVMM+CAYBL+QUamVGD
+         pH8w==
+X-Gm-Message-State: APjAAAWtthJNVPLoEmlJmWWQlv4EesHSvBVHlHgm1yAbNMjtSmNElN9T
+        xQaBH+Mu34lV2ZmeMMGZycU9IwDV
+X-Google-Smtp-Source: APXvYqwjhmKcAaaGHYD0+lgDApcZ4N4LOCeGmxd5C8XRhg/VK9YK2h7VKOwdKXRLi/eyaHfI4jq5lQ==
+X-Received: by 2002:a17:902:bd46:: with SMTP id b6mr52625359plx.173.1559867044506;
+        Thu, 06 Jun 2019 17:24:04 -0700 (PDT)
 Received: from localhost.localdomain ([167.220.98.69])
-        by smtp.gmail.com with ESMTPSA id o13sm324179pfh.23.2019.06.06.17.23.59
+        by smtp.gmail.com with ESMTPSA id o13sm324179pfh.23.2019.06.06.17.24.03
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jun 2019 17:23:59 -0700 (PDT)
+        Thu, 06 Jun 2019 17:24:04 -0700 (PDT)
 From:   Prakhar Srivastava <prsriva02@gmail.com>
 To:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     zohar@linux.ibm.com, roberto.sassu@huawei.com, vgoyal@redhat.com,
         Prakhar Srivastava <prsriva02@gmail.com>
-Subject: [PATCH v7 1/3] Add a new ima hook ima_kexec_cmdline to measure cmdline args
-Date:   Thu,  6 Jun 2019 17:23:28 -0700
-Message-Id: <20190607002330.2999-2-prsriva02@gmail.com>
+Subject: [PATCH v7 2/3] add a new ima template field buf
+Date:   Thu,  6 Jun 2019 17:23:29 -0700
+Message-Id: <20190607002330.2999-3-prsriva02@gmail.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190607002330.2999-1-prsriva02@gmail.com>
 References: <20190607002330.2999-1-prsriva02@gmail.com>
@@ -63,201 +63,179 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch adds support in ima to measure kexec cmdline args
-during soft reboot kexec_file_load.
+A buffer(kexec cmdline args) measured into ima cannot be
+appraised without already being aware of the buffer contents.
+Since hashes are non-reversible, raw buffer is needed for
+validation or regenerating hash for appraisal/attestation.
 
-- A new ima hook ima_kexec_cmdline is defined to be called by the
-kexec code.
-- A new function process_buffer_measurement is defined to measure
-the buffer hash into the ima log.
-- A new func policy KEXEC_CMDLINE is defined to control the
- measurement.[Suggested by Mimi]
+This patch adds support to ima to allow store/read the
+buffer contents in HEX.
 
-Hash computation can be tested using
-sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements | 
-  grep  kexec-cmdline | cut -d' ' -f 6 | xxd -r -p | sha256sum
+- Add two new fields to ima_event_data to hold the buf and
+buf_len [Suggested by Roberto]
+- Add a new temaplte field 'buf' to be used to store/read
+the buffer data.[Suggested by Mimi]
+- Updated process_buffer_meaurement to add the buffer to
+ima_event_data. process_buffer_measurement added in
+"Add a new ima hook ima_kexec_cmdline to measure cmdline args"
 
 Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
+Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- Documentation/ABI/testing/ima_policy |  1 +
- include/linux/ima.h                  |  2 +
- security/integrity/ima/ima.h         |  1 +
- security/integrity/ima/ima_api.c     |  1 +
- security/integrity/ima/ima_main.c    | 77 ++++++++++++++++++++++++++++
- security/integrity/ima/ima_policy.c  |  9 ++++
- 6 files changed, 91 insertions(+)
+ Documentation/security/IMA-templates.rst  |  4 ++--
+ security/integrity/ima/ima.h              |  2 ++
+ security/integrity/ima/ima_api.c          |  4 ++--
+ security/integrity/ima/ima_init.c         |  2 +-
+ security/integrity/ima/ima_main.c         |  2 ++
+ security/integrity/ima/ima_template.c     |  2 ++
+ security/integrity/ima/ima_template_lib.c | 20 ++++++++++++++++++++
+ security/integrity/ima/ima_template_lib.h |  4 ++++
+ 8 files changed, 35 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index b383c1763610..fc376a323908 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -28,6 +28,7 @@ Description:
- 		base: 	func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK]
- 				[FIRMWARE_CHECK]
- 				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
-+				[KEXEC_CMDLINE]
- 			mask:= [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
- 			       [[^]MAY_EXEC]
- 			fsmagic:= hex value
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index fd9f7cf4cdf5..b42f5a006042 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -26,6 +26,7 @@ extern int ima_read_file(struct file *file, enum kernel_read_file_id id);
- extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 			      enum kernel_read_file_id id);
- extern void ima_post_path_mknod(struct dentry *dentry);
-+extern void ima_kexec_cmdline(const void *buf, int size);
+diff --git a/Documentation/security/IMA-templates.rst b/Documentation/security/IMA-templates.rst
+index 2cd0e273cc9a..3e78ce3591db 100644
+--- a/Documentation/security/IMA-templates.rst
++++ b/Documentation/security/IMA-templates.rst
+@@ -69,8 +69,8 @@ descriptors by adding their identifier to the format string
+    algorithm (field format: [<hash algo>:]digest, where the digest
+    prefix is shown only if the hash algorithm is not SHA1 or MD5);
+  - 'n-ng': the name of the event, without size limitations;
+- - 'sig': the file signature.
+-
++ - 'sig': the file signature;
++ - 'buf': the buffer data that was used to generate the hash without size limitations;
  
- #ifdef CONFIG_IMA_KEXEC
- extern void ima_add_kexec_buffer(struct kimage *image);
-@@ -92,6 +93,7 @@ static inline void ima_post_path_mknod(struct dentry *dentry)
- 	return;
- }
+ Below, there is the list of defined template descriptors:
  
-+static inline void ima_kexec_cmdline(const void *buf, int size) {}
- #endif /* CONFIG_IMA */
- 
- #ifndef CONFIG_IMA_KEXEC
 diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 18b48a6d0b80..a4ad1270bffa 100644
+index a4ad1270bffa..16110180545c 100644
 --- a/security/integrity/ima/ima.h
 +++ b/security/integrity/ima/ima.h
-@@ -185,6 +185,7 @@ static inline unsigned long ima_hash_key(u8 *digest)
- 	hook(KEXEC_KERNEL_CHECK)	\
- 	hook(KEXEC_INITRAMFS_CHECK)	\
- 	hook(POLICY_CHECK)		\
-+	hook(KEXEC_CMDLINE)		\
- 	hook(MAX_CHECK)
- #define __ima_hook_enumify(ENUM)	ENUM,
+@@ -65,6 +65,8 @@ struct ima_event_data {
+ 	struct evm_ima_xattr_data *xattr_value;
+ 	int xattr_len;
+ 	const char *violation;
++	const void *buf;
++	int buf_len;
+ };
  
+ /* IMA template field data definition */
 diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 78eb11c7ac07..ea7d8cbf712f 100644
+index ea7d8cbf712f..83ca99d65e4b 100644
 --- a/security/integrity/ima/ima_api.c
 +++ b/security/integrity/ima/ima_api.c
-@@ -176,6 +176,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
-  *		subj=, obj=, type=, func=, mask=, fsmagic=
-  *	subj,obj, and type: are LSM specific.
-  *	func: FILE_CHECK | BPRM_CHECK | CREDS_CHECK | MMAP_CHECK | MODULE_CHECK
-+ *	| KEXEC_CMDLINE
-  *	mask: contains the permission mask
-  *	fsmagic: hex value
-  *
+@@ -140,7 +140,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
+ 	struct ima_template_entry *entry;
+ 	struct inode *inode = file_inode(file);
+ 	struct ima_event_data event_data = {iint, file, filename, NULL, 0,
+-					    cause};
++					    cause, NULL, 0};
+ 	int violation = 1;
+ 	int result;
+ 
+@@ -296,7 +296,7 @@ void ima_store_measurement(struct integrity_iint_cache *iint,
+ 	struct inode *inode = file_inode(file);
+ 	struct ima_template_entry *entry;
+ 	struct ima_event_data event_data = {iint, file, filename, xattr_value,
+-					    xattr_len, NULL};
++					    xattr_len, NULL, NULL, 0};
+ 	int violation = 0;
+ 
+ 	if (iint->measured_pcrs & (0x1 << pcr))
+diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+index 993d0f1915ff..c8591406c0e2 100644
+--- a/security/integrity/ima/ima_init.c
++++ b/security/integrity/ima/ima_init.c
+@@ -50,7 +50,7 @@ static int __init ima_add_boot_aggregate(void)
+ 	struct ima_template_entry *entry;
+ 	struct integrity_iint_cache tmp_iint, *iint = &tmp_iint;
+ 	struct ima_event_data event_data = {iint, NULL, boot_aggregate_name,
+-					    NULL, 0, NULL};
++					    NULL, 0, NULL, NULL, 0};
+ 	int result = -ENOMEM;
+ 	int violation = 0;
+ 	struct {
 diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index af341a80118f..e4f301381ffb 100644
+index e4f301381ffb..9308d664f074 100644
 --- a/security/integrity/ima/ima_main.c
 +++ b/security/integrity/ima/ima_main.c
-@@ -605,6 +605,83 @@ int ima_load_data(enum kernel_load_data_id id)
- 	return 0;
+@@ -641,6 +641,8 @@ static void process_buffer_measurement(const void *buf, int size,
+ 	memset(&hash, 0, sizeof(hash));
+ 
+ 	event_data.filename = eventname;
++	event_data.buf = buf;
++	event_data.buf_len = size;
+ 
+ 	iint->ima_hash = &hash.hdr;
+ 	iint->ima_hash->algo = ima_hash_algo;
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index e6e892f31cbd..8c40de18a0aa 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -43,6 +43,8 @@ static const struct ima_template_field supported_fields[] = {
+ 	 .field_show = ima_show_template_string},
+ 	{.field_id = "sig", .field_init = ima_eventsig_init,
+ 	 .field_show = ima_show_template_sig},
++	{.field_id = "buf", .field_init = ima_eventbuf_init,
++	 .field_show = ima_show_template_buf},
+ };
+ #define MAX_TEMPLATE_NAME_LEN 15
+ 
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index 513b457ae900..43d1404141c1 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -162,6 +162,12 @@ void ima_show_template_sig(struct seq_file *m, enum ima_show_type show,
+ 	ima_show_template_field_data(m, show, DATA_FMT_HEX, field_data);
  }
  
++void ima_show_template_buf(struct seq_file *m, enum ima_show_type show,
++				struct ima_field_data *field_data)
++{
++	ima_show_template_field_data(m, show, DATA_FMT_HEX, field_data);
++}
++
+ /**
+  * ima_parse_buf() - Parses lengths and data from an input buffer
+  * @bufstartp:       Buffer start address.
+@@ -389,3 +395,17 @@ int ima_eventsig_init(struct ima_event_data *event_data,
+ 	return ima_write_template_field_data(xattr_value, event_data->xattr_len,
+ 					     DATA_FMT_HEX, field_data);
+ }
++
 +/*
-+ * process_buffer_measurement - Measure the buffer to ima log.
-+ * @buf: pointer to the buffer that needs to be added to the log.
-+ * @size: size of buffer(in bytes).
-+ * @eventname: event name to be used for the buffer entry.
-+ * @cred: a pointer to a credentials structure for user validation.
-+ * @secid: the secid of the task to be validated.
-+ *
-+ * Based on policy, the buffer is measured into the ima log.
++ *  ima_eventbuf_init - include the buffer(kexec-cmldine) as part of the
++ *  template data.
 + */
-+static void process_buffer_measurement(const void *buf, int size,
-+				const char *eventname, const struct cred *cred,
-+				u32 secid)
++int ima_eventbuf_init(struct ima_event_data *event_data,
++				struct ima_field_data *field_data)
 +{
-+	int ret = 0;
-+	struct ima_template_entry *entry = NULL;
-+	struct integrity_iint_cache tmp_iint, *iint = &tmp_iint;
-+	struct ima_event_data event_data = {.iint = iint};
-+	struct ima_template_desc *template_desc = NULL;
-+	struct {
-+		struct ima_digest_data hdr;
-+		char digest[IMA_MAX_DIGEST_SIZE];
-+	} hash;
-+	int violation = 0;
-+	int pcr = CONFIG_IMA_MEASURE_PCR_IDX;
-+	int action = 0;
++	if ((!event_data->buf) || (event_data->buf_len == 0))
++		return 0;
 +
-+	action = ima_get_action(NULL, cred, secid, 0, KEXEC_CMDLINE, &pcr,
-+					&template_desc);
-+	if (!(action & IMA_MEASURE))
-+		goto out;
-+
-+	memset(iint, 0, sizeof(*iint));
-+	memset(&hash, 0, sizeof(hash));
-+
-+	event_data.filename = eventname;
-+
-+	iint->ima_hash = &hash.hdr;
-+	iint->ima_hash->algo = ima_hash_algo;
-+	iint->ima_hash->length = hash_digest_size[ima_hash_algo];
-+
-+	ret = ima_calc_buffer_hash(buf, size, iint->ima_hash);
-+	if (ret < 0)
-+		goto out;
-+
-+	ret = ima_alloc_init_template(&event_data, &entry, template_desc);
-+	if (ret < 0)
-+		goto out;
-+
-+	if (action & IMA_MEASURE)
-+		ret = ima_store_template(entry, violation, NULL, buf, pcr);
-+
-+	if (ret < 0)
-+		ima_free_template_entry(entry);
-+
-+out:
-+	return;
++	return ima_write_template_field_data(event_data->buf, event_data->buf_len,
++					DATA_FMT_HEX, field_data);
 +}
-+
-+/**
-+ * ima_kexec_cmdline - measure kexec cmdline boot args
-+ * @buf: pointer to buffer
-+ * @size: size of buffer
-+ *
-+ * Buffers can only be measured, not appraised.
-+ */
-+void ima_kexec_cmdline(const void *buf, int size)
-+{
-+	u32 secid;
-+
-+	if (buf && size != 0) {
-+		security_task_getsecid(current, &secid);
-+		process_buffer_measurement(buf, size, "kexec-cmdline",
-+				current_cred(), secid);
-+	}
-+}
-+
- static int __init init_ima(void)
- {
- 	int error;
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index fd9b01881d17..98e351e13557 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -292,6 +292,13 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- {
- 	int i;
- 
-+	/* only incase of KEXEC_CMDLINE, inode is NULL */
-+	if (func == KEXEC_CMDLINE) {
-+		if ((rule->flags & IMA_FUNC) &&
-+			(rule->func == func) && (!inode))
-+			return true;
-+		return false;
-+	}
- 	if ((rule->flags & IMA_FUNC) &&
- 	    (rule->func != func && func != POST_SETATTR))
- 		return false;
-@@ -880,6 +887,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 				entry->func = KEXEC_INITRAMFS_CHECK;
- 			else if (strcmp(args[0].from, "POLICY_CHECK") == 0)
- 				entry->func = POLICY_CHECK;
-+			else if (strcmp(args[0].from, "KEXEC_CMDLINE") == 0)
-+				entry->func = KEXEC_CMDLINE;
- 			else
- 				result = -EINVAL;
- 			if (!result)
+diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
+index 6a3d8b831deb..f0178bc60c55 100644
+--- a/security/integrity/ima/ima_template_lib.h
++++ b/security/integrity/ima/ima_template_lib.h
+@@ -29,6 +29,8 @@ void ima_show_template_string(struct seq_file *m, enum ima_show_type show,
+ 			      struct ima_field_data *field_data);
+ void ima_show_template_sig(struct seq_file *m, enum ima_show_type show,
+ 			   struct ima_field_data *field_data);
++void ima_show_template_buf(struct seq_file *m, enum ima_show_type show,
++				struct ima_field_data *field_data);
+ int ima_parse_buf(void *bufstartp, void *bufendp, void **bufcurp,
+ 		  int maxfields, struct ima_field_data *fields, int *curfields,
+ 		  unsigned long *len_mask, int enforce_mask, char *bufname);
+@@ -42,4 +44,6 @@ int ima_eventname_ng_init(struct ima_event_data *event_data,
+ 			  struct ima_field_data *field_data);
+ int ima_eventsig_init(struct ima_event_data *event_data,
+ 		      struct ima_field_data *field_data);
++int ima_eventbuf_init(struct ima_event_data *event_data,
++				struct ima_field_data *field_data);
+ #endif /* __LINUX_IMA_TEMPLATE_LIB_H */
 -- 
 2.19.1
 
