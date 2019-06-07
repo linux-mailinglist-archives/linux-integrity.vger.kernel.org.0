@@ -2,113 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2FB392E1
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 19:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F62D394E2
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 20:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729787AbfFGRPk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jun 2019 13:15:40 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:34052 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729632AbfFGRPk (ORCPT
+        id S1732079AbfFGSyk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jun 2019 14:54:40 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:42286 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732040AbfFGSyk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jun 2019 13:15:40 -0400
-Received: from [10.200.157.26] (unknown [131.107.160.154])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1B93C20B7186;
-        Fri,  7 Jun 2019 10:15:39 -0700 (PDT)
-Subject: Re: [PATCH 0/2] [IMA] Measure public keys of BuiltIn Trusted Keys
-To:     Ken Goldman <kgold@linux.ibm.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
+        Fri, 7 Jun 2019 14:54:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mN9SlMwFezZ1ZPB+c4+XXB+0uQsuZLbIqjOavdIdlqw=; b=HTM+//NTshmY11VPp3W2zCC0AV
+        AnxnJl/5QTXQPkKrFfbo5L9QXQ+NWhQXx55Bzov9saX3KqjAdGWO5e9rYIJj+km9BAG0LXoJj0bap
+        q1I+rt94/+kmxxLnj2fVapCr8TgoRYqK/dxt0UrHQAIQcESZ2UnEA/WxAiDB5UMaYTYAgxAWYgQCB
+        Vm3QYFxZNeS4ooSrsMJqSGEl3lsWf6/E4fGKje0zAmxn2wJaGnYVVFjT3o+oeayKdH1SYHQUxPh6a
+        I+x+Tv3yFEYYuZItw1vXMeLhh3KzKn8fLI0a4cU45VsOQDmju23QkXlJrpu7dSWxgJVfYKUJk1Bw3
+        S69+bYTg==;
+Received: from [179.181.119.115] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hZK0d-0005sj-LB; Fri, 07 Jun 2019 18:54:39 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hZK0b-0007F6-Fo; Fri, 07 Jun 2019 15:54:37 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     James Morris <jamorris@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        Balaji Balasubramanyan <balajib@linux.microsoft.com>,
-        Jordan Hand <jorhand@linux.microsoft.com>
-References: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
- <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com>
-From:   Lakshmi <nramas@linux.microsoft.com>
-Message-ID: <0561ce44-f8f7-15f5-6eaf-fb97a785692a@linux.microsoft.com>
-Date:   Fri, 7 Jun 2019 10:15:38 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        James Morris <jamorris@linux.microsoft.com>
+Subject: [PATCH v3 11/20] docs: security: trusted-encrypted.rst: fix code-block tag
+Date:   Fri,  7 Jun 2019 15:54:27 -0300
+Message-Id: <d9063d11a7690c91a61938d0bb1f92e8669be95a.1559933665.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
+References: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/7/19 7:14 AM, Ken Goldman wrote:
+The code-block tag is at the wrong place, causing those
+warnings:
 
-> 
-> Why is this important?  What is gained by measuring the keys on the
-> built-in keyring?  The IMA log already measures [a pointer to] the
-> IMA keys used for signature verification.  Why does the service care 
-> what keys were used to install the IMA keys?
+    Documentation/security/keys/trusted-encrypted.rst:112: WARNING: Literal block expected; none found.
+    Documentation/security/keys/trusted-encrypted.rst:121: WARNING: Unexpected indentation.
+    Documentation/security/keys/trusted-encrypted.rst:122: WARNING: Block quote ends without a blank line; unexpected unindent.
+    Documentation/security/keys/trusted-encrypted.rst:123: WARNING: Block quote ends without a blank line; unexpected unindent.
 
-By measuring the built-in keyring, the service knows whether or not the 
-key(s) in "IMA keyring" are indeed trusted or not. So while the IMA key 
-validates the file signatures on the client, the built-in key validates 
-the IMA key(s).
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Acked-by: James Morris <jamorris@linux.microsoft.com>
+Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+ Documentation/security/keys/trusted-encrypted.rst | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-By knowing what keys were used to install the IMA key(s) the service 
-knows whether or not to trust the signature validation performed by IMA 
-on the client.
-
-> 
-> I don't understand this reasoning.
-> 
-> To me, there is a difference between signed files and trusted files. 
-> E.g., an old version may be signed, but it is no longer trusted. >
-> In other words, the service wants to know all files that have run, not 
-> just whether they are signed.
-
-The service will receive the entire IMA log - the entries that show what 
-system files were loaded, the IMA signature, etc. My change additionally 
-provides measurement on the signer (which key(s) were used to install 
-the keys in IMA keyring). Together this data enables the service to 
-determine whether the files on the client were signed and who the signer 
-is. The service can then decide whether the client is running files that 
-are trusted.
-
-> 
-> Further, the service also wants to know files that were blocked from 
-> running, either because of no signature, a signature with an untrusted 
-> IMA key, or a bad signature.  I.e., the service needs the entire IMA 
-> log, not just the keys used to install the keys used to locally verify 
-> the signatures.
-
-Like I have stated above, the change I am making is adding more data 
-(information on built-in keys) to what IMA log already provides".
-
-My proposal is not to replace the current IMA log with just data on 
-"built-in keys".
-
-Also, want to clarify that we do not want the service to also locally 
-verify the signatures. To do that the service needs to maintain the 
-signed file hashes of all the files and all the versions of each of 
-those files - That is an high overhead approach.
-
-Instead, we let the client do the signature validation and on the 
-service just validate who signed those files.
-
-> 
-> While the built-in keys may change less frequently that the IMA keys, 
-> both are likely to be stable.  I.e., is this proposal to provide an 
-> additional security benefit, or is it to improve performance?
-
-The proposal enables the service to validate that the file signature of 
-the files on the client were created by "trusted signer". So it provides 
-additional security benefit and at the same time reduces the maintenance 
-overhead in the service - by enabling it to just keep track of "Known 
-good trusted keys" which change less frequently.
-
-I hope I have answered all of your questions\concerns.
-
-Thanks,
-  -lakshmi
-
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index 7b35fcb58933..50ac8bcd6970 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -107,12 +107,14 @@ Where::
+ 
+ Examples of trusted and encrypted key usage:
+ 
+-Create and save a trusted key named "kmk" of length 32 bytes::
++Create and save a trusted key named "kmk" of length 32 bytes.
+ 
+ Note: When using a TPM 2.0 with a persistent key with handle 0x81000001,
+ append 'keyhandle=0x81000001' to statements between quotes, such as
+ "new 32 keyhandle=0x81000001".
+ 
++::
++
+     $ keyctl add trusted kmk "new 32" @u
+     440502848
+ 
+-- 
+2.21.0
 
