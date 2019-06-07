@@ -2,113 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACD13821C
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 02:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18F438245
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 02:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728261AbfFGAYK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Jun 2019 20:24:10 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:42128 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728164AbfFGAYJ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Jun 2019 20:24:09 -0400
-Received: by mail-pl1-f194.google.com with SMTP id go2so95800plb.9;
-        Thu, 06 Jun 2019 17:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jdwxKl4wizRzQbk4/KFjYiC+r5p9VBOXnRG4nGLJdyM=;
-        b=frlMsdvRlMIKMpedZliCN+HPffi6wAqXgAoTFT8Ks+g5V7zdE7bX8303KGk27gtbes
-         KMHRG6XxHla+t/fP27Flq6gQ4Pv6SdLY5U4NbA2c1MIQuZwsttKx6pVpUxn8YO/EGFAX
-         9rgGij9qUU0JNksQt5hHOuXHl2Tzi2sluMKkmdzufcam7R2Q213zaozVtY3CHbANb1GT
-         HD8d0cfs4kHCjLoETZCpWnSW/UMg8aPu92Aakyfpky0kzUO/hMKQNiwIEr19kzLJRFB0
-         2xqVrL6IHVIj7ycebNkSBfparupv7fFgKsy7dpANcDbDMl5NcIgik2M989+cU/l16kd/
-         rQQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jdwxKl4wizRzQbk4/KFjYiC+r5p9VBOXnRG4nGLJdyM=;
-        b=BeMZK73EAf0eP0xu1pqTrLYwbm4EJ1gP77xlrB5IhYXYm9ADjFNCwEFiTymd939fdA
-         mqgRey5PdThzM1LCTHCgl3okYu1AAYsVGn+JuZljUoulV4fz2XTeBciv0Zj+xk7+b7VM
-         9hD0/MtiITgymti0YVoPskED46grgrgtuAvUVwKkE7l4KKj7jJCUMMmzHp6HX0h1pOA6
-         8WWDtUNw0HzFnwkeB/QAc+uCNuf869Iy/2uvEqSf/O+AYtWcBUODQGXDi0h2/dkeILD3
-         zwq+IxUyXFKsWDWc7e4I2o+BSseF+RxOicRY2k090SIN6Bpz6QZbnv3gSI5zuKL3HyjE
-         qC8w==
-X-Gm-Message-State: APjAAAUtR2jea9/RxYBZgD+0Hb8OXE8iOV7lsMXL4O4i5/ANlTwfG0os
-        0PVTzB/ldxoetm32j2WNRPGzH7jT
-X-Google-Smtp-Source: APXvYqz/nkScLwgduXSW5wicT5ZRU/9QLcW+qAU40EZc1xQ7j9Og96KOCy6jxVbdHntHKFuBJ50DIA==
-X-Received: by 2002:a17:902:f01:: with SMTP id 1mr52664019ply.170.1559867048193;
-        Thu, 06 Jun 2019 17:24:08 -0700 (PDT)
-Received: from localhost.localdomain ([167.220.98.69])
-        by smtp.gmail.com with ESMTPSA id o13sm324179pfh.23.2019.06.06.17.24.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jun 2019 17:24:07 -0700 (PDT)
-From:   Prakhar Srivastava <prsriva02@gmail.com>
-To:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zohar@linux.ibm.com, roberto.sassu@huawei.com, vgoyal@redhat.com,
-        Prakhar Srivastava <prsriva02@gmail.com>
-Subject: [PATCH v7 3/3] call ima_kexec_cmdline to measure the cmdline args
-Date:   Thu,  6 Jun 2019 17:23:30 -0700
-Message-Id: <20190607002330.2999-4-prsriva02@gmail.com>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190607002330.2999-1-prsriva02@gmail.com>
-References: <20190607002330.2999-1-prsriva02@gmail.com>
+        id S1726997AbfFGApd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Jun 2019 20:45:33 -0400
+Received: from namei.org ([65.99.196.166]:37450 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726379AbfFGApd (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 6 Jun 2019 20:45:33 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id x570jK00022301;
+        Fri, 7 Jun 2019 00:45:20 GMT
+Date:   Fri, 7 Jun 2019 10:45:20 +1000 (AEST)
+From:   James Morris <jmorris@namei.org>
+To:     Paul Moore <paul@paul-moore.com>
+cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 1/2] LSM: switch to blocking policy update notifiers
+In-Reply-To: <CAHC9VhTzwPoxYPxYWn15ZQQwM6Q3wGJSRybb-zu_ZDA1xU6ziQ@mail.gmail.com>
+Message-ID: <alpine.LRH.2.21.1906071043160.21512@namei.org>
+References: <20190605083606.4209-1-janne.karhunen@gmail.com> <9121835b-d6ac-c9d5-349a-1ef7024c6192@schaufler-ca.com> <CAE=NcrahPmzmB-xJwxzXqaPGtJY+ijbxV4wXz7K=y-ocw4Cmwg@mail.gmail.com> <1edfbd72-f492-db17-8717-a8cfe30d9654@schaufler-ca.com>
+ <CAHC9VhTzwPoxYPxYWn15ZQQwM6Q3wGJSRybb-zu_ZDA1xU6ziQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-During soft reboot(kexec_file_load) boot cmdline args
-are not measured.Thus the new kernel on load boots with
-an assumption of cold reboot.
+On Wed, 5 Jun 2019, Paul Moore wrote:
 
-This patch makes a call to the ima hook ima_kexec_cmdline,
-added in "Add a new ima hook ima_kexec_cmdline to measure
-cmdline args"
-to measure the boot cmdline args into the ima log.
+> On Wed, Jun 5, 2019 at 1:05 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > On 6/5/2019 9:51 AM, Janne Karhunen wrote:
+> >
+> > One hook with an added "bool blocking" argument, if
+> > that's the only difference?
+> 
+> I think there is value in keeping a similar convention to the notifier
+> code on which this is based, see include/linux/notifier.h.
+> 
 
-- call ima_kexec_cmdline from kexec_file_load.
-- move the call ima_add_kexec_buffer after the cmdline
-args have been measured.
+Although this doesn't seem to be what other users in the kernel are doing. 
+Probably the less code churn the better in this case.
 
-Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
----
- kernel/kexec_file.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 072b6ee55e3f..ed4727586fc3 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -198,9 +198,6 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 		return ret;
- 	image->kernel_buf_len = size;
- 
--	/* IMA needs to pass the measurement list to the next kernel. */
--	ima_add_kexec_buffer(image);
--
- 	/* Call arch image probe handlers */
- 	ret = arch_kexec_kernel_image_probe(image, image->kernel_buf,
- 					    image->kernel_buf_len);
-@@ -241,8 +238,13 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 			ret = -EINVAL;
- 			goto out;
- 		}
-+
-+		ima_kexec_cmdline(image->cmdline_buf, image->cmdline_buf_len - 1);
- 	}
- 
-+	/* IMA needs to pass the measurement list to the next kernel. */
-+	ima_add_kexec_buffer(image);
-+
- 	/* Call arch image load handlers */
- 	ldata = arch_kexec_kernel_image_load(image);
- 
 -- 
-2.19.1
+James Morris
+<jmorris@namei.org>
 
