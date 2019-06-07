@@ -2,204 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B63F33976B
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 23:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76F43980E
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 23:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731176AbfFGVLf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jun 2019 17:11:35 -0400
-Received: from mail-it1-f194.google.com ([209.85.166.194]:38095 "EHLO
-        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730401AbfFGVLe (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jun 2019 17:11:34 -0400
-Received: by mail-it1-f194.google.com with SMTP id h9so4887052itk.3
-        for <linux-integrity@vger.kernel.org>; Fri, 07 Jun 2019 14:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Vz3v2cfJNJDIvZEsvbNPjIPnlqpxgDzyV60ZGJWzfhQ=;
-        b=UEqDKuK3YV4RlCo0JnvLnVbGkIMtd0HzIHUsbBvNm2xTqDKMyWFbdR2Rl3hk4c323b
-         BcYKSUeaQ428PkatGG/uFFh5Mx2pk556WowLcWnugppzTmpWtQG0mmXcR3Bbq138mrzM
-         MT2HLbAUM+faba8gkNciABRm4uxDnbCM9rKaqT5iy5Gs/9Xh/u1q/nJlE62x+t+yblAj
-         Ne3hZuhGBzmLdtMvD3FZzYZSztFkSidQXp4Y4/zERp2nYRFHTdSSWrpi0XEcKFHs7a6F
-         a+VAdZmBr0d300qRzaneXpSZrYLSKZB73O3KWqgbqCUWfnrYw9uZN17N5BaLVMUKCFvB
-         hqUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Vz3v2cfJNJDIvZEsvbNPjIPnlqpxgDzyV60ZGJWzfhQ=;
-        b=r81FDlTo9IwPAEMihLzBEumyHomRxyWP4HuJ2O/ma1OuUJvMrIRowP+gJpEriDA+/i
-         zbFTce63kj5xtD8wDokSjKbGcXg0XWzMpvxLwIJLZCki+2MbyXob9B0abHaBxp+KLo1Y
-         ahHpWpZM7bVCZihPrEalmWTQrRWByOOhtdH66L/ieLQTz1wB6wgfFANsoZggcDysX99V
-         vulKLJ3cs0csjVDHQUysAw4kmd8Tf6ilm5Da7gWHMg97+rsEP2btXQ1fsa6HUexY6iUn
-         HNd9+8ilPUj6d/ulUgXNw6iTRZgR/clCYTiQL+Pic7FdujG9nPUhuoPLYhRFZ9W7qS/3
-         M/Dw==
-X-Gm-Message-State: APjAAAU5gDei6MJTYIDap3QVmhO3vdNNLYky6NB3HtNrv1c9HUsKD0Ll
-        BYdy2kIaK71aRBcFUaQZNBG5oUOJO5GWRk7T2QiInA==
-X-Google-Smtp-Source: APXvYqwZIbdfnW45HY5l6VgkLwXLgEisz7LjMwanxfS5rvIogJHlbwFmD0j7GpVuAFWc+YOV6XNZHjau4YRVy4+06YM=
-X-Received: by 2002:a05:660c:44a:: with SMTP id d10mr5182000itl.153.1559941893361;
- Fri, 07 Jun 2019 14:11:33 -0700 (PDT)
+        id S1731142AbfFGVsy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jun 2019 17:48:54 -0400
+Received: from namei.org ([65.99.196.166]:37652 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729810AbfFGVsy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 7 Jun 2019 17:48:54 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id x57LmlGN031254;
+        Fri, 7 Jun 2019 21:48:47 GMT
+Date:   Sat, 8 Jun 2019 07:48:47 +1000 (AEST)
+From:   James Morris <jmorris@namei.org>
+To:     Paul Moore <paul@paul-moore.com>
+cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 1/2] LSM: switch to blocking policy update notifiers
+In-Reply-To: <CAHC9VhSrjVmnsAuXDmHVmsyDaEF10nsvdxq7VsfCsh=NfaOMQg@mail.gmail.com>
+Message-ID: <alpine.LRH.2.21.1906080748010.24873@namei.org>
+References: <20190605083606.4209-1-janne.karhunen@gmail.com> <9121835b-d6ac-c9d5-349a-1ef7024c6192@schaufler-ca.com> <CAE=NcrahPmzmB-xJwxzXqaPGtJY+ijbxV4wXz7K=y-ocw4Cmwg@mail.gmail.com> <1edfbd72-f492-db17-8717-a8cfe30d9654@schaufler-ca.com>
+ <CAHC9VhTzwPoxYPxYWn15ZQQwM6Q3wGJSRybb-zu_ZDA1xU6ziQ@mail.gmail.com> <alpine.LRH.2.21.1906071043160.21512@namei.org> <CAHC9VhSrjVmnsAuXDmHVmsyDaEF10nsvdxq7VsfCsh=NfaOMQg@mail.gmail.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-References: <20190607205147.102904-1-matthewgarrett@google.com> <20190607205147.102904-2-matthewgarrett@google.com>
-In-Reply-To: <20190607205147.102904-2-matthewgarrett@google.com>
-From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Date:   Fri, 7 Jun 2019 23:11:21 +0200
-Message-ID: <CAKv+Gu-Vz8OSspw9RdEnVj3e7GFaNdA9PVVMWY2RKkEDfAbuRA@mail.gmail.com>
-Subject: Re: [PATCH V2 2/2] tpm: Don't duplicate events from the final event
- log in the TCG2 log
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        =?UTF-8?Q?Peter_H=C3=BCwe?= <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Joe Richey <joerichey@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 7 Jun 2019 at 22:52, Matthew Garrett <matthewgarrett@google.com> wrote:
->
-> After the first call to GetEventLog() on UEFI systems using the TCG2
-> crypto agile log format, any further log events (other than those
-> triggered by ExitBootServices()) will be logged in both the main log and
-> also in the Final Events Log. While the kernel only calls GetEventLog()
-> immediately before ExitBootServices(), we can't control whether earlier
-> parts of the boot process have done so. This will result in log entries
-> that exist in both logs, and so the current approach of simply appending
-> the Final Event Log to the main log will result in events being
-> duplicated.
->
-> We can avoid this problem by looking at the size of the Final Event Log
-> just before we call ExitBootServices() and exporting this to the main
-> kernel. The kernel can then skip over all events that occured before
-> ExitBootServices() and only append events that were not also logged to
-> the main log.
->
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> Reported-by: Joe Richey <joerichey@google.com>
-> Suggested-by: Joe Richey <joerichey@google.com>
-> ---
->  drivers/char/tpm/eventlog/efi.c    | 11 ++++++++++-
->  drivers/firmware/efi/libstub/tpm.c | 30 ++++++++++++++++++++++++++++++
->  drivers/firmware/efi/tpm.c         |  2 +-
->  include/linux/efi.h                |  1 +
->  4 files changed, 42 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/char/tpm/eventlog/efi.c b/drivers/char/tpm/eventlog/efi.c
-> index 9179cf6bdee9..be6540f2cb3d 100644
-> --- a/drivers/char/tpm/eventlog/efi.c
-> +++ b/drivers/char/tpm/eventlog/efi.c
-> @@ -80,6 +80,8 @@ int tpm_read_log_efi(struct tpm_chip *chip)
->                 goto out;
->         }
->
-> +       efi_tpm_final_log_size -= log_tbl->final_events_preboot_size;
-> +
->         tmp = krealloc(log->bios_event_log,
->                        log_size + efi_tpm_final_log_size,
->                        GFP_KERNEL);
-> @@ -90,8 +92,15 @@ int tpm_read_log_efi(struct tpm_chip *chip)
->         }
->
->         log->bios_event_log = tmp;
-> +
-> +       /*
-> +        * Copy any of the final events log that didn't also end up in the
-> +        * main log. Events can be logged in both if events are generated
-> +        * between GetEventLog() and ExitBootServices().
-> +        */
->         memcpy((void *)log->bios_event_log + log_size,
-> -              final_tbl->events, efi_tpm_final_log_size);
-> +              final_tbl->events + log_tbl->final_events_preboot_size,
-> +              efi_tpm_final_log_size);
->         log->bios_event_log_end = log->bios_event_log +
->                 log_size + efi_tpm_final_log_size;
->
-> diff --git a/drivers/firmware/efi/libstub/tpm.c b/drivers/firmware/efi/libstub/tpm.c
-> index 6b3b507a54eb..eb9af83e4d59 100644
-> --- a/drivers/firmware/efi/libstub/tpm.c
-> +++ b/drivers/firmware/efi/libstub/tpm.c
-> @@ -64,11 +64,13 @@ void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
->         efi_status_t status;
->         efi_physical_addr_t log_location = 0, log_last_entry = 0;
->         struct linux_efi_tpm_eventlog *log_tbl = NULL;
-> +       struct efi_tcg2_final_events_table *final_events_table;
->         unsigned long first_entry_addr, last_entry_addr;
->         size_t log_size, last_entry_size;
->         efi_bool_t truncated;
->         int version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
->         void *tcg2_protocol = NULL;
-> +       int final_events_size = 0;
->
->         status = efi_call_early(locate_protocol, &tcg2_guid, NULL,
->                                 &tcg2_protocol);
-> @@ -134,8 +136,36 @@ void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
->                 return;
->         }
->
-> +       /*
-> +        * Figure out whether any events have already been logged to the
-> +        * final events structure, and if so how much space they take up
-> +        */
-> +       final_events_table = get_efi_config_table(sys_table_arg,
-> +                                               LINUX_EFI_TPM_FINAL_LOG_GUID);
-> +       if (final_events_table && final_events_table->nr_events) {
-> +               struct tcg_pcr_event2_head *header;
-> +               int offset;
-> +               void *data;
-> +               int event_size;
-> +               int i = final_events_table->nr_events;
-> +
-> +               data = (void *)final_events_table;
-> +               offset = sizeof(final_events_table->version) +
-> +                       sizeof(final_events_table->nr_events);
-> +
-> +               while (i > 0) {
-> +                       header = data + offset + final_events_size;
-> +                       event_size = __calc_tpm2_event_size(header,
-> +                                                  (void *)(long)log_location,
-> +                                                  false);
-> +                       final_events_size += event_size;
-> +                       i--;
-> +               }
-> +       }
-> +
->         memset(log_tbl, 0, sizeof(*log_tbl) + log_size);
->         log_tbl->size = log_size;
-> +       log_tbl->final_events_preboot_size = final_events_size;
->         log_tbl->version = version;
->         memcpy(log_tbl->log, (void *) first_entry_addr, log_size);
->
-> diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
-> index 2c912ea08166..0bdceb5913aa 100644
-> --- a/drivers/firmware/efi/tpm.c
-> +++ b/drivers/firmware/efi/tpm.c
-> @@ -76,7 +76,7 @@ int __init efi_tpm_eventlog_init(void)
->                 goto out;
->         }
->
-> -       tbl_size = tpm2_calc_event_log_size(efi.tpm_final_log
-> +       tbl_size = tpm2_calc_event_log_size((void *)efi.tpm_final_log
->                                             + sizeof(final_tbl->version)
->                                             + sizeof(final_tbl->nr_events),
->                                             final_tbl->nr_events,
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index e33c70a52a9d..2a26004a9bdb 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -1703,6 +1703,7 @@ struct linux_efi_random_seed {
->
->  struct linux_efi_tpm_eventlog {
->         u32     size;
-> +       u32     final_events_preboot_size;
->         u8      version;
->         u8      log[];
->  };
+On Fri, 7 Jun 2019, Paul Moore wrote:
 
-Acked-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+> On Thu, Jun 6, 2019 at 8:45 PM James Morris <jmorris@namei.org> wrote:
+> > On Wed, 5 Jun 2019, Paul Moore wrote:
+> > > On Wed, Jun 5, 2019 at 1:05 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > > > On 6/5/2019 9:51 AM, Janne Karhunen wrote:
+> > > >
+> > > > One hook with an added "bool blocking" argument, if
+> > > > that's the only difference?
+> > >
+> > > I think there is value in keeping a similar convention to the notifier
+> > > code on which this is based, see include/linux/notifier.h.
+> >
+> > Although this doesn't seem to be what other users in the kernel are doing.
+> 
+> How many of them potentially have the need for both blocking and
+> non-blocking notifiers?  I didn't go through the entire list of
+> callers, but it seems all that I looked at used only one type.  The
+> simple fact that we started with one type of notifier for the LSM, and
+> we are now switching to the other (and getting lucky that it is safe
+> to do so for the existing callers) seems to lend some weight to the
+> argument we may need both and adding "block"/"blocking"/etc. to the
+> name has value.
+
+Fair enough.
+
+
+-- 
+James Morris
+<jmorris@namei.org>
+
