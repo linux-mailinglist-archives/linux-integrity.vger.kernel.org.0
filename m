@@ -2,111 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D7638EFF
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 17:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2FB392E1
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2019 19:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729878AbfFGP0W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jun 2019 11:26:22 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38082 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729877AbfFGP0P (ORCPT
+        id S1729787AbfFGRPk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jun 2019 13:15:40 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:34052 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729632AbfFGRPk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jun 2019 11:26:15 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x57FN0Fj016180
-        for <linux-integrity@vger.kernel.org>; Fri, 7 Jun 2019 11:26:14 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2syth4g512-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 07 Jun 2019 11:26:13 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 7 Jun 2019 16:26:11 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 7 Jun 2019 16:26:09 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x57FQ89940304766
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Jun 2019 15:26:08 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1B397A4062;
-        Fri,  7 Jun 2019 15:26:08 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 066E1A405B;
-        Fri,  7 Jun 2019 15:26:07 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.81.48])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Jun 2019 15:26:06 +0000 (GMT)
-Subject: Re: [PATCH v3 2/2] ima: add enforce-evm and log-evm modes to
- strictly check EVM status
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        dmitry.kasatkin@huawei.com, mjg59@google.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com
-Date:   Fri, 07 Jun 2019 11:25:56 -0400
-In-Reply-To: <773c3301-7861-f28b-813a-1f2ff657bae8@huawei.com>
-References: <20190606112620.26488-1-roberto.sassu@huawei.com>
-         <20190606112620.26488-3-roberto.sassu@huawei.com>
-         <1559917462.4278.253.camel@linux.ibm.com>
-         <93459fe8-f9b6-fe45-1ca7-2efb8854dc8b@huawei.com>
-         <1559920112.4278.264.camel@linux.ibm.com>
-         <773c3301-7861-f28b-813a-1f2ff657bae8@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Fri, 7 Jun 2019 13:15:40 -0400
+Received: from [10.200.157.26] (unknown [131.107.160.154])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1B93C20B7186;
+        Fri,  7 Jun 2019 10:15:39 -0700 (PDT)
+Subject: Re: [PATCH 0/2] [IMA] Measure public keys of BuiltIn Trusted Keys
+To:     Ken Goldman <kgold@linux.ibm.com>,
+        Linux Integrity <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     James Morris <jamorris@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        Balaji Balasubramanyan <balajib@linux.microsoft.com>,
+        Jordan Hand <jorhand@linux.microsoft.com>
+References: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
+ <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com>
+From:   Lakshmi <nramas@linux.microsoft.com>
+Message-ID: <0561ce44-f8f7-15f5-6eaf-fb97a785692a@linux.microsoft.com>
+Date:   Fri, 7 Jun 2019 10:15:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19060715-0020-0000-0000-000003481BC5
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19060715-0021-0000-0000-0000219B3678
-Message-Id: <1559921156.4278.276.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-07_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906070107
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-06-07 at 17:14 +0200, Roberto Sassu wrote:
-> On 6/7/2019 5:08 PM, Mimi Zohar wrote:
-> > On Fri, 2019-06-07 at 16:40 +0200, Roberto Sassu wrote:
-> >>> On Thu, 2019-06-06 at 13:26 +0200, Roberto Sassu wrote:
-> > 
-> >>>> Although this choice appears legitimate, it might not be suitable for
-> >>>> hardened systems, where the administrator expects that access is denied if
-> >>>> there is any error. An attacker could intentionally delete the EVM keys
-> >>>> from the system and set the file digest in security.ima to the actual file
-> >>>> digest so that the final appraisal status is INTEGRITY_PASS.
-> >>>
-> >>> Assuming that the EVM HMAC key is stored in the initramfs, not on some
-> >>> other file system, and the initramfs is signed, INTEGRITY_UNKNOWN
-> >>> would be limited to the rootfs filesystem.
-> >>
-> >> There is another issue. The HMAC key, like the public keys, should be
-> >> loaded when appraisal is disabled. This means that we have to create a
-> >> trusted key at early boot and defer the unsealing.
-> > 
-> > There is no need for IMA to appraise the public key file signature,
-> > since the certificate is signed by a key on the builtin/secondary
-> > trusted keyring.  With CONFIG_IMA_LOAD_X509 enabled, the public key
-> > can be loaded onto the IMA keyring with IMA-appraisal enabled, but
-> > without verifying the file signature.
+On 6/7/19 7:14 AM, Ken Goldman wrote:
+
 > 
-> Yes, but access to the files containing the master key and the EVM key
-> is denied if appraisal is enabled.
+> Why is this important?  What is gained by measuring the keys on the
+> built-in keyring?  The IMA log already measures [a pointer to] the
+> IMA keys used for signature verification.  Why does the service care 
+> what keys were used to install the IMA keys?
 
-This is a key loading ordering issue.  Assuming you load the IMA key
-first, you should be able to verify the master and EVM keys.
+By measuring the built-in keyring, the service knows whether or not the 
+key(s) in "IMA keyring" are indeed trusted or not. So while the IMA key 
+validates the file signatures on the client, the built-in key validates 
+the IMA key(s).
 
-Mimi
+By knowing what keys were used to install the IMA key(s) the service 
+knows whether or not to trust the signature validation performed by IMA 
+on the client.
+
+> 
+> I don't understand this reasoning.
+> 
+> To me, there is a difference between signed files and trusted files. 
+> E.g., an old version may be signed, but it is no longer trusted. >
+> In other words, the service wants to know all files that have run, not 
+> just whether they are signed.
+
+The service will receive the entire IMA log - the entries that show what 
+system files were loaded, the IMA signature, etc. My change additionally 
+provides measurement on the signer (which key(s) were used to install 
+the keys in IMA keyring). Together this data enables the service to 
+determine whether the files on the client were signed and who the signer 
+is. The service can then decide whether the client is running files that 
+are trusted.
+
+> 
+> Further, the service also wants to know files that were blocked from 
+> running, either because of no signature, a signature with an untrusted 
+> IMA key, or a bad signature.  I.e., the service needs the entire IMA 
+> log, not just the keys used to install the keys used to locally verify 
+> the signatures.
+
+Like I have stated above, the change I am making is adding more data 
+(information on built-in keys) to what IMA log already provides".
+
+My proposal is not to replace the current IMA log with just data on 
+"built-in keys".
+
+Also, want to clarify that we do not want the service to also locally 
+verify the signatures. To do that the service needs to maintain the 
+signed file hashes of all the files and all the versions of each of 
+those files - That is an high overhead approach.
+
+Instead, we let the client do the signature validation and on the 
+service just validate who signed those files.
+
+> 
+> While the built-in keys may change less frequently that the IMA keys, 
+> both are likely to be stable.  I.e., is this proposal to provide an 
+> additional security benefit, or is it to improve performance?
+
+The proposal enables the service to validate that the file signature of 
+the files on the client were created by "trusted signer". So it provides 
+additional security benefit and at the same time reduces the maintenance 
+overhead in the service - by enabling it to just keep track of "Known 
+good trusted keys" which change less frequently.
+
+I hope I have answered all of your questions\concerns.
+
+Thanks,
+  -lakshmi
+
 
