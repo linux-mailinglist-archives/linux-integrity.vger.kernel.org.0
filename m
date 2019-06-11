@@ -2,177 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC193D3AE
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jun 2019 19:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1993D5CA
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jun 2019 20:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405070AbfFKRNV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jun 2019 13:13:21 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48562 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2405712AbfFKRNV (ORCPT
+        id S2392060AbfFKStK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jun 2019 14:49:10 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:37647 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389470AbfFKStK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jun 2019 13:13:21 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5BH3CNP021408
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jun 2019 13:13:20 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2t2et7d34n-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jun 2019 13:13:19 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 11 Jun 2019 18:13:18 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 11 Jun 2019 18:13:15 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5BHDE8U39256274
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jun 2019 17:13:14 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E357B11C04A;
-        Tue, 11 Jun 2019 17:13:13 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B49511C052;
-        Tue, 11 Jun 2019 17:13:12 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.81.78])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jun 2019 17:13:12 +0000 (GMT)
-Subject: Re: [PATCH 0/2] [IMA] Measure public keys of BuiltIn Trusted Keys
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi <nramas@linux.microsoft.com>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     James Morris <jamorris@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        Balaji Balasubramanyan <balajib@linux.microsoft.com>,
-        Jordan Hand <jorhand@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        James Bottomley <jejb@linux.ibm.com>
-Date:   Tue, 11 Jun 2019 13:13:01 -0400
-In-Reply-To: <1560255756.4464.111.camel@linux.ibm.com>
-References: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
-         <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com>
-         <0561ce44-f8f7-15f5-6eaf-fb97a785692a@linux.microsoft.com>
-         <1560255756.4464.111.camel@linux.ibm.com>
+        Tue, 11 Jun 2019 14:49:10 -0400
+Received: by mail-ot1-f67.google.com with SMTP id r10so12937223otd.4;
+        Tue, 11 Jun 2019 11:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dz7olQKnFjj7omxNegzsPSUMtfyoczAclzprO/pRrIY=;
+        b=iSB2gUM+ptPC8s0fS0yg8bC2jBrbkuG0brKiZ4ngrjTHi+relJzZSSVPJM7dV94t4l
+         gU3KxxHGPU01Yx9AGtudkpc9rU439Z9qNm3rbjoR5B/7iJeXRxqHwfcr5IZ5SzddM02Z
+         KFRpUqromvZR6N5vo4caAUKNaf/cIIjAM5oIYD3ofGrEBW3cvf0nloSJTi5gamBihAiv
+         FzelkkfRr6VNAb86okmqCnZj+o+BTjCDQj5h9tZYGKgI0cXtUrf8gfFpchkWy7HNq+iw
+         Cyuqx6i0a88zbJDV9n7NKk+saN6/gz2eWAgEsIJEic7/Fsq1u7zC5GPzYX4zGn3XlKfY
+         OUyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dz7olQKnFjj7omxNegzsPSUMtfyoczAclzprO/pRrIY=;
+        b=OL5iXDPyZkqwlIa9GsGDeQFXHEYsC7gyK3YBuH8brfM+r4a0QeiFTzWyH7W5fGgYf3
+         +9h3GtbTieRqNZGSmSBwahxWNi0xckovOunBMdeosDkPNIspmegnqKRc4W7PQW5XmRIT
+         clxKc9orK/6dJS5KF6v0WFC5KeVSHZhtDGc/OJgMvMyM2KBb8Ym0pw4Xq30jJFvC38Bt
+         scJfTgN0LZDFJKBazyYCSIqNxXGryNu15JY7yIMh7Q2bUfK243WdAbOcQHbXtxFCjIxH
+         fYlSlkiq5DX/FffVX8ZQMtsvVC7rPGvc2zzAjtEVqW+WSz9OGRhc2xDAxqOJBu55htCe
+         VYdQ==
+X-Gm-Message-State: APjAAAWouTOPTmlq3Yo5scWq1UpHpT+A6+fbenATqG3lO+gJK/OqdM9b
+        5QyMRxXdxnwz9NL+MdMP6MFXnGewIBDH28LButcEAQ==
+X-Google-Smtp-Source: APXvYqzkhILMzkowVhwzSSm9im2xIoXr2H9SzdfAW6Yt/vy3tjIAvRSX0L7L/0gRotVLYOYkXaULmE+GUytAFw0YSBc=
+X-Received: by 2002:a9d:7245:: with SMTP id a5mr36283933otk.232.1560278949767;
+ Tue, 11 Jun 2019 11:49:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190607002330.2999-1-prsriva02@gmail.com> <1560267426.4464.173.camel@linux.ibm.com>
+In-Reply-To: <1560267426.4464.173.camel@linux.ibm.com>
+From:   prakhar srivastava <prsriva02@gmail.com>
+Date:   Tue, 11 Jun 2019 11:48:58 -0700
+Message-ID: <CAEFn8q+RgSnJaWAJT+xN-CZWCsaOVqrPunT3icd_ua2bpkp_SQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/3] add new ima hook ima_kexec_cmdline to measure
+ kexec boot cmdline args
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>, vgoyal@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19061117-0016-0000-0000-0000028830D2
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061117-0017-0000-0000-000032E560CC
-Message-Id: <1560273181.4464.226.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-11_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=752 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906110109
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2019-06-11 at 08:22 -0400, Mimi Zohar wrote:
-> On Fri, 2019-06-07 at 10:15 -0700, Lakshmi wrote:
-> > On 6/7/19 7:14 AM, Ken Goldman wrote:
-> > 
-> > > 
-> > > Why is this important?  What is gained by measuring the keys on the
-> > > built-in keyring?  The IMA log already measures [a pointer to] the
-> > > IMA keys used for signature verification.  Why does the service care 
-> > > what keys were used to install the IMA keys?
-> > 
-> > By measuring the built-in keyring, the service knows whether or not the 
-> > key(s) in "IMA keyring" are indeed trusted or not. So while the IMA key 
-> > validates the file signatures on the client, the built-in key validates 
-> > the IMA key(s).
-> > 
-> > By knowing what keys were used to install the IMA key(s) the service 
-> > knows whether or not to trust the signature validation performed by IMA 
-> > on the client.
-> > 
-> > > 
-> > > I don't understand this reasoning.
-> > > 
-> > > To me, there is a difference between signed files and trusted files. 
-> > > E.g., an old version may be signed, but it is no longer trusted. >
-> > > In other words, the service wants to know all files that have run, not 
-> > > just whether they are signed.
-> > 
-> > The service will receive the entire IMA log - the entries that show what 
-> > system files were loaded, the IMA signature, etc. My change additionally 
-> > provides measurement on the signer (which key(s) were used to install 
-> > the keys in IMA keyring). Together this data enables the service to 
-> > determine whether the files on the client were signed and who the signer 
-> > is. The service can then decide whether the client is running files that 
-> > are trusted.
-> > 
-> > > 
-> > > Further, the service also wants to know files that were blocked from 
-> > > running, either because of no signature, a signature with an untrusted 
-> > > IMA key, or a bad signature.  I.e., the service needs the entire IMA 
-> > > log, not just the keys used to install the keys used to locally verify 
-> > > the signatures.
-> > 
-> > Like I have stated above, the change I am making is adding more data 
-> > (information on built-in keys) to what IMA log already provides".
-> > 
-> > My proposal is not to replace the current IMA log with just data on 
-> > "built-in keys".
-> > 
-> > Also, want to clarify that we do not want the service to also locally 
-> > verify the signatures. To do that the service needs to maintain the 
-> > signed file hashes of all the files and all the versions of each of 
-> > those files - That is an high overhead approach.
-> > 
-> > Instead, we let the client do the signature validation and on the 
-> > service just validate who signed those files.
-> > 
-> > > 
-> > > While the built-in keys may change less frequently that the IMA keys, 
-> > > both are likely to be stable.  I.e., is this proposal to provide an 
-> > > additional security benefit, or is it to improve performance?
-> > 
-> > The proposal enables the service to validate that the file signature of 
-> > the files on the client were created by "trusted signer". So it provides 
-> > additional security benefit and at the same time reduces the maintenance 
-> > overhead in the service - by enabling it to just keep track of "Known 
-> > good trusted keys" which change less frequently.
-> > 
-> > I hope I have answered all of your questions\concerns.
-> 
-> The design of IMA from the very beginning has been to allow the system
-> owner to decide which keys to trust.  This is the reason that the root
-> of trust pivots from the pre-boot keys to the keys embedded in the
-> Linux kernel.  When software packages contain both the file data and
-> file signatures, the system owner will be able to pick and choose
-> which public keys to sign and load onto the IMA keyring.
-> 
-> This patch set might not be limiting which public keys may be loaded
-> onto the builtin/secondary keyrings, but by virtue of including this
-> information in the measurement list, the attestation service (eg. TNC)
-> will be able to deny access.  IMA walks a fine line in enforcing and
-> measuring file integrity.  This patch set breaches that fine line and
-> by so doing, brings back the fears of trusted computing.
+On Tue, Jun 11, 2019 at 8:37 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> Hi Prakhar,
+>
+> The patch/patch set title in the Subject line should not explain "how"
+> you add a new feature.  In this case an appropriate patch set title
+> would be, "Add support for measuring the boot command line".
+>  Similarly, the first patch in this patch set could be named "Define a
+> new IMA hook to measure the boot command line arguments".
+>
+> On Thu, 2019-06-06 at 17:23 -0700, Prakhar Srivastava wrote:
+> > The motive behind the patch series is to measure the boot cmdline args
+> > used for soft reboot/kexec case.
+>
+> When mentoring, I suggest starting out with a simple status statement
+> (eg. "The kexec boot command line arguments are not currently being
+> measured."), followed by the problem statement in the first paragraph.
+>
+> >
+> > For secure boot attestation, it is necessary to measure the kernel
+>
+> Secure boot enforces local file data integrity.  The term here should
+> be "trusted boot attestation".
+>
+> > command line and the kernel version.
+>
+> The original version of this patch set included the kernel version.
+> This version is just measuring the boot command line arguments.
+>
+Sorry missed it while updating the cover letter.
+<snip>
 
-Many attempts over the years were made to update grub to support
-secure & trusted boot.  Richard Stallman (grudgingly) added the secure
-boot callbacks, which are also being used for trusted boot.  The code
-to actually do the signature verification though, as far as I'm aware,
-is still not part of grub.
-
-It also took a really long time and effort to convince Stallman that
-TPMs aren't totally bad.  He's added an addendum to the wiki.[1]
- Let's try not to upset Stallman too much.
-
-Mimi
-
-[1] https://www.gnu.org/philosophy/can-you-trust.en.html
-
+> > The ima logs need to be carried over to the next kernel, which will be followed
+> > up by other patchsets for x86_64 and arm64.
+> >
+> > The kexec cmdline hash
+>
+> ^stored in the "d-ng" field of the template data
+>
+I will add another template-name for ima-buf
+> > can be verified using
+>
+> > sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements |
+> >   grep  kexec-cmdline | cut -d' ' -f 6 | xxd -r -p | sha256sum
+>
+> Until per policy template field rule support is added, a template name
+> needs to be defined.  Please define "ima-buf" as:
+> {.name = "ima-buf", .fmt = "d-ng|n-ng|buf"}
+>
+> I'm still seeing some scripts/checkpatch "WARNING: line over 80
+> characters".  scripts/Lindent should provide the correct way of
+> formatting these lines.
+>
+> Some people feel that references to Lindent should be removed, but I
+> tend to agree with the Documentation/hwmon/submitting-patches.rst
+> comment pertaining to scripts/Lindent.
+>
+> "* Running your patch or driver file(s) through checkpatch does not
+> mean its formatting is clean. If unsure about formatting in your new
+> driver, run it through Lindent. Lindent is not perfect, and you may
+> have to do some minor cleanup, but it is a good start."
+>
+I will double check fix the issues.
+> Examples of where the line formatting is off is the call to
+> ima_get_action() in process_buffer_measurement() and the call to
+> process_buffer_measurement() in ima_kexec_cmdline().
+>
+Thanks,
+Prakhar Srivastava
+> thanks,
+>
+> Mimi
+<snip>
