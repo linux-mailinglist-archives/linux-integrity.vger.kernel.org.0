@@ -2,219 +2,213 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C44F53D103
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jun 2019 17:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6993B3D36C
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jun 2019 19:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390398AbfFKPhZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jun 2019 11:37:25 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49158 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388863AbfFKPhY (ORCPT
+        id S2390283AbfFKRGU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jun 2019 13:06:20 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36314 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2390295AbfFKRGU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jun 2019 11:37:24 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5BFVsvV049042
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jun 2019 11:37:24 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2t2cxqyd6w-1
+        Tue, 11 Jun 2019 13:06:20 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5BH2gX5098623
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Jun 2019 13:06:18 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2t2f9qbdtg-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jun 2019 11:37:23 -0400
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Jun 2019 13:06:18 -0400
 Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 11 Jun 2019 16:37:21 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <nayna@linux.ibm.com>;
+        Tue, 11 Jun 2019 18:06:16 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 11 Jun 2019 16:37:19 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5BFbId730212220
+        Tue, 11 Jun 2019 18:06:13 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5BH6CBp54853650
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jun 2019 15:37:18 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A18B6A4051;
-        Tue, 11 Jun 2019 15:37:18 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCB81A405E;
-        Tue, 11 Jun 2019 15:37:17 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.81.78])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jun 2019 15:37:17 +0000 (GMT)
-Subject: Re: [PATCH v7 0/3] add new ima hook ima_kexec_cmdline to measure
- kexec boot cmdline args
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     roberto.sassu@huawei.com, vgoyal@redhat.com
-Date:   Tue, 11 Jun 2019 11:37:06 -0400
-In-Reply-To: <20190607002330.2999-1-prsriva02@gmail.com>
-References: <20190607002330.2999-1-prsriva02@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 11 Jun 2019 17:06:12 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4094E11C050;
+        Tue, 11 Jun 2019 17:06:12 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7931A11C04C;
+        Tue, 11 Jun 2019 17:06:09 +0000 (GMT)
+Received: from swastik.ibm.com (unknown [9.80.199.191])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jun 2019 17:06:09 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linuxppc-dev@ozlabs.org, linux-efi@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>
+Subject: [PATCH v4 0/3] powerpc: Enabling IMA arch specific secure boot policies
+Date:   Tue, 11 Jun 2019 13:06:02 -0400
+X-Mailer: git-send-email 1.8.3.1
 X-TM-AS-GCONF: 00
-x-cbid: 19061115-0016-0000-0000-000002882983
+x-cbid: 19061117-0028-0000-0000-0000037967DD
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061115-0017-0000-0000-000032E558E5
-Message-Id: <1560267426.4464.173.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-11_07:,,
+x-cbparentid: 19061117-0029-0000-0000-0000243957E1
+Message-Id: <1560272765-5768-1-git-send-email-nayna@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-11_08:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906110101
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906110109
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Prakhar,
+This patch set, previously named "powerpc: Enabling secure boot on powernv
+systems - Part 1", is part of a series that implements secure boot on
+PowerNV systems.
 
-The patch/patch set title in the Subject line should not explain "how"
-you add a new feature.  In this case an appropriate patch set title
-would be, "Add support for measuring the boot command line".
- Similarly, the first patch in this patch set could be named "Define a
-new IMA hook to measure the boot command line arguments".
+In order to verify the OS kernel on PowerNV, secure boot requires X.509
+certificates trusted by the platform, the secure boot modes, and several
+other pieces of information. These are stored in secure variables
+controlled by OPAL, also known as OPAL secure variables.
 
-On Thu, 2019-06-06 at 17:23 -0700, Prakhar Srivastava wrote:
-> The motive behind the patch series is to measure the boot cmdline args
-> used for soft reboot/kexec case.
+The IMA architecture specific policy support on POWER is dependent on OPAL
+runtime services to access secure variables. OPAL APIs in skiboot are
+modified to define generic interface compatible to any backend. This
+patchset is consequently updated to be compatible with new OPAL API
+interface. This has cleaned up any EFIsms in the arch specific code.
+Further, the ima arch specific policies are updated to be able to support
+appended signatures. They also now use per policy template.
 
-When mentoring, I suggest starting out with a simple status statement
-(eg. "The kexec boot command line arguments are not currently being
-measured."), followed by the problem statement in the first paragraph.
+Exposing the OPAL secure variables to userspace will be posted as a
+separate patch set, allowing the IMA architecture specific policy on POWER
+to be upstreamed independently.
 
-> 
-> For secure boot attestation, it is necessary to measure the kernel
+This patch set adds the following features:
 
-Secure boot enforces local file data integrity.  The term here should
-be "trusted boot attestation".
+1. Add support for OPAL Runtime API to access secure variables controlled
+by OPAL.
+2. Define IMA arch-specific policies based on the secure boot state and
+mode of the system. On secure boot enabled PowerNV systems, the OS kernel
+signature will be verified by IMA appraisal.
 
-> command line and the kernel version. 
+Pre-requisites for this patchset are:
+1. OPAL APIs in Skiboot[1]
+2. Appended signature support in IMA [2]
+3. Per policy template support in IMA [3]
 
-The original version of this patch set included the kernel version.  
-This version is just measuring the boot command line arguments.
+[1] https://patchwork.ozlabs.org/project/skiboot/list/?series=112868 
+[2] https://patchwork.ozlabs.org/cover/1087361/. Updated version will be
+posted soon
+[3] Repo: https://kernel.googlesource.com/pub/scm/linux/kernel/git/zohar/linux-integrity
+Branch: next-queued-testing. Commit: f241bb1f42aa95
 
-> For cold boot, the boot loader
-> can be enhanced to measure these parameters.
-> (https://mjg59.dreamwidth.org/48897.html)
-> However, for attestation across soft reboot boundary, these values 
-> also need to be measured during kexec_file_load.
-> 
-> Currently for Kexec(kexec_file_load)/soft reboot scenario the boot cmdline
-> args for the next kernel are not measured. For 
-> normal case of boot/hardreboot the cmdline args are measured into the TPM.
-> The hash of boot command line is calculated and added to the current 
-> running kernel's measurement list.
-> On a soft reboot like kexec, no cmdline arguments measurement takes place.
-> 
-> To achive the above the patch series does the following
->   -adds a new ima hook: ima_kexec_cmdline which measures the cmdline args
->    into the ima log, behind a new ima policy entry KEXEC_CMDLINE.
->   -since the cmldine args cannot be appraised, a new template field(buf) is
->    added. The template field contains the buffer passed(cmldine args), which
->    can be used to appraise/attest at a later stage.
->   -call the ima_kexec_cmdline(...) hook from kexec_file_load call.
-> 
-> The ima logs need to be carried over to the next kernel, which will be followed
-> up by other patchsets for x86_64 and arm64.
-> 
-> The kexec cmdline hash
+----------------------------------------------------------------------------------
 
-^stored in the "d-ng" field of the template data
+Original Cover Letter:
 
-> can be verified using
+This patch set is part of a series that implements secure boot on PowerNV
+systems.
 
-> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements | 
->   grep  kexec-cmdline | cut -d' ' -f 6 | xxd -r -p | sha256sum
+In order to verify the OS kernel on PowerNV, secure boot requires X.509
+certificates trusted by the platform, the secure boot modes, and several
+other pieces of information. These are stored in secure variables
+controlled by OPAL, also known as OPAL secure variables.
 
-Until per policy template field rule support is added, a template name
-needs to be defined.  Please define "ima-buf" as:
-{.name = "ima-buf", .fmt = "d-ng|n-ng|buf"}
+The IMA architecture specific policy support on Power is dependent on OPAL
+runtime services to access secure variables. Instead of directly accessing
+the OPAL runtime services, version 3 of this patch set relied upon the
+EFI hooks. This version drops that dependency and calls the OPAL runtime
+services directly. Skiboot OPAL APIs are due to be posted soon.
 
-I'm still seeing some scripts/checkpatch "WARNING: line over 80
-characters".  scripts/Lindent should provide the correct way of
-formatting these lines.
+Exposing the OPAL secure variables to userspace will be posted as a
+separate patch set, allowing the IMA architecture specific policy on Power
+to be upstreamed independently.
 
-Some people feel that references to Lindent should be removed, but I
-tend to agree with the Documentation/hwmon/submitting-patches.rst
-comment pertaining to scripts/Lindent.
+This patch set adds the following features:
 
-"* Running your patch or driver file(s) through checkpatch does not
-mean its formatting is clean. If unsure about formatting in your new
-driver, run it through Lindent. Lindent is not perfect, and you may
-have to do some minor cleanup, but it is a good start."
+1. Add support for OPAL Runtime API to access secure variables controlled
+by OPAL.
+2. Define IMA arch-specific policies based on the secure boot state and
+mode of the system. On secure boot enabled powernv systems, the OS kernel
+signature will be verified by IMA appraisal.
 
-Examples of where the line formatting is off is the call to
-ima_get_action() in process_buffer_measurement() and the call to
-process_buffer_measurement() in ima_kexec_cmdline().
+[1] https://patchwork.kernel.org/cover/10882149/
 
-thanks,
+Changelog:
 
-Mimi
+v4:
+* Fixed the build issue as reported by Satheesh Rajendran.
 
-> 
-> Changelog:
-> V7:
->   - rebased to next-queued-testing
->   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/log/?h=next-queued-testing
-> 
-> V6:
->   -add a new ima hook and policy to measure the cmdline
->     args(ima_kexec_cmdline)
->   -add a new template field buf to contain the buffer measured.
->   [suggested by Mimi Zohar]
->    add new fields to ima_event_data to store/read buffer data.
->   [suggested by Roberto]
->   -call ima_kexec_cmdline from kexec_file_load path
-> 
-> v5:
->   -add a new ima hook and policy to measure the cmdline
->     args(ima_kexec_cmdline)
->   -add a new template field buf to contain the buffer measured.
->     [suggested by Mimi Zohar]
->   -call ima_kexec_cmdline from kexec_file_load path
-> 
-> v4:
->   - per feedback from LSM community, removed the LSM hook and renamed the
->     IMA policy to KEXEC_CMDLINE
-> 
-> v3: (rebase changes to next-general)
->   - Add policy checks for buffer[suggested by Mimi Zohar]
->   - use the IMA_XATTR to add buffer
->   - Add kexec_cmdline used for kexec file load
->   - Add an LSM hook to allow usage by other LSM.[suggestd by Mimi Zohar]
-> 
-> v2:
->   - Add policy checks for buffer[suggested by Mimi Zohar]
->   - Add an LSM hook to allow usage by other LSM.[suggestd by Mimi Zohar]
->   - use the IMA_XATTR to add buffer instead of sig template
-> 
-> v1:
->   -Add kconfigs to control the ima_buffer_check
->   -measure the cmdline args suffixed with the kernel file name
->   -add the buffer to the template sig field.
-> 
-> Prakhar Srivastava (3):
->   Add a new ima hook ima_kexec_cmdline to measure cmdline args
->   add a new ima template field buf
->   call ima_kexec_cmdline to measure the cmdline args
-> 
->  Documentation/ABI/testing/ima_policy      |  1 +
->  Documentation/security/IMA-templates.rst  |  2 +-
->  include/linux/ima.h                       |  2 +
->  kernel/kexec_file.c                       |  8 ++-
->  security/integrity/ima/ima.h              |  3 +
->  security/integrity/ima/ima_api.c          |  5 +-
->  security/integrity/ima/ima_init.c         |  2 +-
->  security/integrity/ima/ima_main.c         | 80 +++++++++++++++++++++++
->  security/integrity/ima/ima_policy.c       |  9 +++
->  security/integrity/ima/ima_template.c     |  2 +
->  security/integrity/ima/ima_template_lib.c | 20 ++++++
->  security/integrity/ima/ima_template_lib.h |  4 ++
->  12 files changed, 131 insertions(+), 7 deletions(-)
-> 
+v3:
+* OPAL APIs in Patch 1 are updated to provide generic interface based on
+key/keylen. This patchset updates kernel OPAL APIs to be compatible with
+generic interface.
+* Patch 2 is cleaned up to use new OPAL APIs. 
+* Since OPAL can support different types of backend which can vary in the
+variable interpretation, the Patch 2 is updated to add a check for the
+backend version
+* OPAL API now expects consumer to first check the supported backend version
+before calling other secvar OPAL APIs. This check is now added in patch 2.
+* IMA policies in Patch 3 is updated to specify appended signature and
+per policy template.
+* The patches now are free of any EFIisms.
+
+v2:
+
+* Removed Patch 1: powerpc/include: Override unneeded early ioremap
+functions
+* Updated Subject line and patch description of the Patch 1 of this series
+* Removed dependency of OPAL_SECVAR on EFI, CPU_BIG_ENDIAN and UCS2_STRING
+* Changed OPAL APIs from static to non-static. Added opal-secvar.h for the
+same
+* Removed EFI hooks from opal_secvar.c
+* Removed opal_secvar_get_next(), opal_secvar_enqueue() and
+opal_query_variable_info() function
+* get_powerpc_sb_mode() in secboot.c now directly calls OPAL Runtime API
+rather than via EFI hooks.
+* Fixed log messages in get_powerpc_sb_mode() function.
+* Added dependency for PPC_SECURE_BOOT on configs PPC64 and OPAL_SECVAR
+* Replaced obj-$(CONFIG_IMA) with obj-$(CONFIG_PPC_SECURE_BOOT) in
+arch/powerpc/kernel/Makefile
+
+Claudio Carvalho (1):
+  powerpc/powernv: Add OPAL API interface to get secureboot state
+
+Nayna Jain (2):
+  powerpc/powernv: detect the secure boot mode of the system
+  powerpc: Add support to initialize ima policy rules
+
+ arch/powerpc/Kconfig                         | 14 ++++
+ arch/powerpc/include/asm/opal-api.h          |  4 +-
+ arch/powerpc/include/asm/opal-secvar.h       | 23 ++++++
+ arch/powerpc/include/asm/opal.h              |  6 ++
+ arch/powerpc/include/asm/secboot.h           | 21 +++++
+ arch/powerpc/kernel/Makefile                 |  1 +
+ arch/powerpc/kernel/ima_arch.c               | 54 +++++++++++++
+ arch/powerpc/platforms/powernv/Kconfig       |  6 ++
+ arch/powerpc/platforms/powernv/Makefile      |  1 +
+ arch/powerpc/platforms/powernv/opal-call.c   |  2 +
+ arch/powerpc/platforms/powernv/opal-secvar.c | 85 ++++++++++++++++++++
+ arch/powerpc/platforms/powernv/secboot.c     | 61 ++++++++++++++
+ include/linux/ima.h                          |  3 +-
+ 13 files changed, 279 insertions(+), 2 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/opal-secvar.h
+ create mode 100644 arch/powerpc/include/asm/secboot.h
+ create mode 100644 arch/powerpc/kernel/ima_arch.c
+ create mode 100644 arch/powerpc/platforms/powernv/opal-secvar.c
+ create mode 100644 arch/powerpc/platforms/powernv/secboot.c
+
+-- 
+2.20.1
 
