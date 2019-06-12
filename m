@@ -2,116 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1465642A51
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2019 17:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3D042A65
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2019 17:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437171AbfFLPHK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jun 2019 11:07:10 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51244 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2436492AbfFLPHK (ORCPT
+        id S2439991AbfFLPKN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jun 2019 11:10:13 -0400
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:44313 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437304AbfFLPKN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jun 2019 11:07:10 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5CF5FWB128441
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jun 2019 11:07:09 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2t32n8ugn9-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jun 2019 11:07:08 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 12 Jun 2019 16:07:06 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 12 Jun 2019 16:07:04 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5CF73Er52559980
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jun 2019 15:07:03 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 38DBE42042;
-        Wed, 12 Jun 2019 15:07:03 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F39F4203F;
-        Wed, 12 Jun 2019 15:07:02 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.109.218])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Jun 2019 15:07:02 +0000 (GMT)
-Subject: Re: [PATCH v3 3/4] ima/ima_measurements.sh: Require builtin IMA tcb
- policy
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Ignaz Forster <iforster@suse.de>,
-        linux-integrity@vger.kernel.org
-Date:   Wed, 12 Jun 2019 11:06:51 -0400
-In-Reply-To: <20190611193021.17651-4-pvorel@suse.cz>
-References: <20190611193021.17651-1-pvorel@suse.cz>
-         <20190611193021.17651-4-pvorel@suse.cz>
+        Wed, 12 Jun 2019 11:10:13 -0400
+Received: by mail-yb1-f196.google.com with SMTP id x187so6502399ybc.11;
+        Wed, 12 Jun 2019 08:10:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=whA1MTQ/AQLJNqb+5D2QO/K0h7g3p7yYZHms0D8AcfU=;
+        b=hmGDYtb1Cvfqgb4T8epuX9aN30ElC4h99ZBYD8BBT0avdBTjncS4lUxyO+zfy8KkCK
+         T97FVMy1zM5VsDq8K7VULsHhBE52+BTYqYBVXlr6AQ1uUxiDgUw4GK0lxQZOht2bRcBN
+         +rGCva5D+rL5e/UxLFyI3371rg2jO99mQO4BpwGgL9ThWCFl5VfGUKMPWZHjklipXyLZ
+         YkZQYqQkX0Ahy/Uvmr9SvJnkilaHPQhb0ZLFH0olf28/vCDGQ21R5IXSlwksY6d8ZeK2
+         z4lEkOuTLoWvZrOKFLo3TIL2U5CF1rN3Ofw37L1hOvvFx7ch+35uWk2cUWsAjKKjd59A
+         rfwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=whA1MTQ/AQLJNqb+5D2QO/K0h7g3p7yYZHms0D8AcfU=;
+        b=S2L06v4TmF8RFQja8aef4iCllDMqve7yTZw3aKrQRXTu5pNqy2pHC6Y4w5lE+OoSXt
+         YWugBQjqTtBN4Iu8XiKvZhL0OQGDKQqYrNtCSVQX3xajOovp3RR63Nfq6XSJOK2Hjrfl
+         yglqYTMUtaJd+eJnYyAPEd1/qDhjQ8BZO8dOaJDYZbHIst/EVo6HgtnXJphlk4I+gIns
+         RroUmd28bJFEp6vjE4gGAmfVaMNoWSiEKEjPw3A2CKNYeyR0fJFImId+nkjIM3EH3FGV
+         g6mtkiPYU6tSkKAOUIrS+uhCcnJNWfythwo7gdLD+2hWRPSd/vyqxxhzyxuN02i92XyZ
+         l5BQ==
+X-Gm-Message-State: APjAAAUTywwpoqWqhsa1bWX0OhaOAUv3cpdsxb81yf9zUR37D+t2WcAc
+        OsAUkfcCn4ngE676P400Xz2bJ/iTcvDfX2EekWI=
+X-Google-Smtp-Source: APXvYqzZvBvyZY1onRqoKdTzhjMQBcY5zXvQ3lzUyJcP7f0JpG1CqEEQwmFIgdsy1KIyP5VwvJNgqQw2E6ZOEWIahoI=
+X-Received: by 2002:a25:8109:: with SMTP id o9mr36591180ybk.132.1560352212349;
+ Wed, 12 Jun 2019 08:10:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190608135717.8472-1-amir73il@gmail.com> <20190608135717.8472-2-amir73il@gmail.com>
+ <1560343899.4578.9.camel@linux.ibm.com>
+In-Reply-To: <1560343899.4578.9.camel@linux.ibm.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 12 Jun 2019 18:09:59 +0300
+Message-ID: <CAOQ4uxhooVwtHcDCr4hu+ovzKGUdWfQ+3F3nbgK3HXgV+fUK9w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] vfs: replace i_readcount with a biased i_count
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Jeff Layton <jlayton@poochiereds.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19061215-0008-0000-0000-000002F327C0
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061215-0009-0000-0000-000022602A27
-Message-Id: <1560352011.4578.43.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-12_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906120101
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Petr,
+On Wed, Jun 12, 2019 at 3:52 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> On Sat, 2019-06-08 at 16:57 +0300, Amir Goldstein wrote:
+> > Count struct files open RO together with inode reference count instead
+> > of using a dedicated i_readcount field.  This will allow us to use the
+> > RO count also when CONFIG_IMA is not defined and will reduce the size of
+> > struct inode for 32bit archs when CONFIG_IMA is defined.
+> >
+> > We need this RO count for posix leases code, which currently naively
+> > checks i_count and d_count in an inaccurate manner.
+> >
+> > Should regular i_count overflow into RO count bias by struct files
+> > opened for write, it's not a big deal, as we mostly need the RO count
+> > to be reliable when the first writer comes along.
+>
+> "i_count" has been defined forever.  Has its meaning changed?  This
+> patch implies that "i_readcount" was never really needed.
+>
 
-On Tue, 2019-06-11 at 21:30 +0200, Petr Vorel wrote:
-> Although custom policy which contains tcb can be loaded via dracut,
+Not really.
+i_count is only used to know if object is referenced.
+It does not matter if user takes 1 or more references on i_count
+as long as user puts back all the references it took.
 
-^which may contain the equivalent measurement tcb rules
+If user took i_readcount, i_count cannot be zero, so short of overflow,
+we can describe i_readcount as a biased i_count.
 
-> systemd or later manually from user space, detecting it would require
-> IMA_READ_POLICY=y. In order to simplify the check and avoid false
-> positives lets ignore this option and require builtin IMA tcb policy.
+But if I am following Miklos' suggestion to make i_count 64bit, inode
+struct size is going to grow for 32bit arch when  CONFIG_IMA is not
+defined, so to reduce impact, I will keep i_readcount as a separate
+member and let it be defined also when BITS_PER_LONG == 64
+and implement inode_is_open_rdonly() using d_count and i_count
+when i_readcount is not defined.
 
-This test is for adding new measurements to the measurement list.
+Let's see what people will have to say about that...
 
-> 
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> ---
->  .../kernel/security/integrity/ima/tests/ima_measurements.sh    | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-> index 328affc43..a3aa24d8a 100755
-> --- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-> +++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-> @@ -57,7 +57,8 @@ setup()
->  	[ -z "$DIGEST_INDEX" ] && tst_brk TCONF \
->  		"Cannot find digest index (template: '$template')"
-> 
-> -	tst_res TINFO "IMA measurement tests assume tcb policy to be loaded (ima_policy=tcb)"
-> +	grep -q -e ima_policy=[a-z_]*tcb -e ima_tcb -e ima_appraise_tcb /proc/cmdline || \
-> +		tst_brk TCONF "IMA measurement tests require builtin IMA tcb policy (ima_policy=tcb or ima_policy=appraise_tcb kernel parameter)"
->  }
-> 
-
-"appraise_tcb" doesn't provide the necessary measurement rules.
-"ima_policy=" isn't order specific.  The check would be for "|tcb", "|
-tcb", "tcb|", "tcb |", or just "=tcb".  The deprecated "ima_tcb"
-option is fine too.
-
-Mimi
-
->  # TODO: find support for rmd128 rmd256 rmd320 wp256 wp384 tgr128 tgr160
-
-
+Thanks,
+Amir.
