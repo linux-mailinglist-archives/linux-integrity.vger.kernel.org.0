@@ -2,107 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3639742C5D
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2019 18:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E0A42C9C
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2019 18:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408897AbfFLQdD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jun 2019 12:33:03 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:33004 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2408886AbfFLQdD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jun 2019 12:33:03 -0400
-Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id F20C6200662B4E236A65;
-        Wed, 12 Jun 2019 17:33:00 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Wed, 12 Jun
- 2019 17:32:52 +0100
-Subject: Re: [PATCH v3 0/2] ima/evm fixes for v5.2
-To:     Janne Karhunen <janne.karhunen@gmail.com>
-CC:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
-        <mjg59@google.com>, <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <silviu.vlasceanu@huawei.com>
-References: <20190606112620.26488-1-roberto.sassu@huawei.com>
- <CAE=NcraYOw9B3RFu3_DbJs9nPT87AtQEptC7zF4kAu4FP8YhxA@mail.gmail.com>
- <d9efe3c7-20dd-bbb0-40d8-40f69cba5b88@huawei.com>
- <CAE=NcraHqzST=SZNcrSgpv5EqfyUfpCCb7iQ0Oh6uohL3yiCdw@mail.gmail.com>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <c13c6b4f-1302-35fb-f077-00b7f84fea08@huawei.com>
-Date:   Wed, 12 Jun 2019 18:33:01 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S2502225AbfFLQrV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jun 2019 12:47:21 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37388 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502210AbfFLQrV (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 12 Jun 2019 12:47:21 -0400
+Received: from [10.91.6.157] (unknown [131.107.159.157])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5A85320B7186;
+        Wed, 12 Jun 2019 09:47:20 -0700 (PDT)
+From:   Jordan Hand <jorhand@linux.microsoft.com>
+Subject: Re: [PATCH 0/2] [IMA] Measure public keys of BuiltIn Trusted Keys
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Lakshmi <nramas@linux.microsoft.com>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        Linux Integrity <linux-integrity@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     James Morris <jamorris@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        Balaji Balasubramanyan <balajib@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        James Bottomley <jejb@linux.ibm.com>
+References: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
+ <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com>
+ <0561ce44-f8f7-15f5-6eaf-fb97a785692a@linux.microsoft.com>
+ <1560255756.4464.111.camel@linux.ibm.com>
+ <1560273181.4464.226.camel@linux.ibm.com>
+Message-ID: <b3fbbe78-423f-b48d-b32c-ede3841bf936@linux.microsoft.com>
+Date:   Wed, 12 Jun 2019 09:47:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <CAE=NcraHqzST=SZNcrSgpv5EqfyUfpCCb7iQ0Oh6uohL3yiCdw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <1560273181.4464.226.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/12/2019 3:38 PM, Janne Karhunen wrote:
-> On Wed, Jun 12, 2019 at 4:11 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
-> 
->>> - after initialization
->>>     - deny reading|writing anything without security.ima
->>>     - deny reading|writing anything invalid
->>>     - allow everything else
->>>
->>> The logic is pretty handy as it even creates additional layer of
->>> security around the early initialization files as they become
->>> unreadable after use.
+
+On 6/11/19 10:13 AM, Mimi Zohar wrote:
 >>
->> What if they should be legitimately used after the HMAC key is unsealed
->> and before switching to the persistent root file system?
-> 
-> Any examples? Log files and such are mostly 'one way' and should
-> probably be whitelisted in the policy?
-
-I checked better when the random key would be used to verify files
-created during the boot. If we consider rootfs only, basically it would
-be used for dracut-state.sh.
-
-Before I was using a rule to measure digest lists in tmpfs. I had many
-errors due to the fact that appraisal denied access to files in /run.
-The default policy does not appraise files in tmpfs, and also for digest
-lists it is not necessary (now I use: measure/appraise fsname=rootfs).
-
-
->>> Now, if we initialize the system with a random key like in your patch,
->>> this logic is to change quite drastically? It sounds to me the
->>> userland may actually break, all the userland initialization files in
->>> the existing ima configurations that do not use digsigs would become
->>> unreadable given that the random key is put in? Remember, those files
->>> can be protected via other means (most commonly signed ramdisk).
+>> The design of IMA from the very beginning has been to allow the system
+>> owner to decide which keys to trust.  This is the reason that the root
+>> of trust pivots from the pre-boot keys to the keys embedded in the
+>> Linux kernel.  When software packages contain both the file data and
+>> file signatures, the system owner will be able to pick and choose
+>> which public keys to sign and load onto the IMA keyring.
 >>
->> No, the first patch is about adding the ability to verify files created
->> during each boot. For any other file, EVM returns INTEGRITY_UNKNOWN as
->> before. The second patch changes the behavior, as INTEGRITY_UNKNOWN is
->> considered as an error for the enforce-evm appraisal mode. The second
->> patch aims at making the system more secure, as no file would be
->> accessible unless it is verified.
->>
->> It is true that configurations without digsigs won't work anymore but
->> the alternative is accepting any file until the HMAC key is unsealed.
+>> This patch set might not be limiting which public keys may be loaded
+>> onto the builtin/secondary keyrings, but by virtue of including this
+>> information in the measurement list, the attestation service (eg. TNC)
+>> will be able to deny access.  IMA walks a fine line in enforcing and
+>> measuring file integrity.  This patch set breaches that fine line and
+>> by so doing, brings back the fears of trusted computing.
+
+
+I don't understand why measuring the keyring is more restrictive. 
+Currently the signature of a file can already be measured. This means 
+that the service can maintain a list of allowable keys and see if the 
+files are signed with any of those keys. So effectively it is already 
+possible for a service to deny access to the machine based on the keys 
+it trusts.
+
+I also think validating the keys in the keyring is less restrictive than 
+file-hash validation. You can say "I trust any file that the signer 
+trusts". In file-hash validation you're saying "I only trust the files 
+that I trust".
+
 > 
-> That's a pretty big change for the userland IMHO. Quite a few
-> configurations out there will break, including mine I believe, so I
-> hope there is a solid reason asking people to change their stuff. I'm
-> fine holding off all writing until it is safe to do so for now..
+> Many attempts over the years were made to update grub to support
+> secure & trusted boot.  Richard Stallman (grudgingly) added the secure
+> boot callbacks, which are also being used for trusted boot.  The code
+> to actually do the signature verification though, as far as I'm aware,
+> is still not part of grub.
+> 
+> It also took a really long time and effort to convince Stallman that
+> TPMs aren't totally bad.  He's added an addendum to the wiki.[1]
+>   Let's try not to upset Stallman too much.
 
-The goal of appraisal is to allow access only to files with a valid
-signature or HMAC. With the current behavior, that cannot be guaranteed.
+I do understand the desire to avoid taking a step backward by pushing 
+too hard. As I said above, I don't see this as more restrictive than the 
+existing measurements. But you have more understanding of the history 
+here so let me know if I'm missing something.
 
-Unfortunately, dracut-state.sh is created very early. It could be
-possible to unseal the key before, but this probably means modifying
-systemd.
+-Jordan
 
-Roberto
-
--- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+> 
+> Mimi
+> 
+> [1] https://www.gnu.org/philosophy/can-you-trust.en.html
+> 
