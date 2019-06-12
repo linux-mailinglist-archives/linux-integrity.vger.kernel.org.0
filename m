@@ -2,102 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3D042A65
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2019 17:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C541742A9A
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2019 17:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439991AbfFLPKN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jun 2019 11:10:13 -0400
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:44313 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437304AbfFLPKN (ORCPT
+        id S1729507AbfFLPQH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jun 2019 11:16:07 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:36638 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729332AbfFLPQH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jun 2019 11:10:13 -0400
-Received: by mail-yb1-f196.google.com with SMTP id x187so6502399ybc.11;
-        Wed, 12 Jun 2019 08:10:12 -0700 (PDT)
+        Wed, 12 Jun 2019 11:16:07 -0400
+Received: by mail-lf1-f67.google.com with SMTP id q26so12457906lfc.3
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Jun 2019 08:16:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=whA1MTQ/AQLJNqb+5D2QO/K0h7g3p7yYZHms0D8AcfU=;
-        b=hmGDYtb1Cvfqgb4T8epuX9aN30ElC4h99ZBYD8BBT0avdBTjncS4lUxyO+zfy8KkCK
-         T97FVMy1zM5VsDq8K7VULsHhBE52+BTYqYBVXlr6AQ1uUxiDgUw4GK0lxQZOht2bRcBN
-         +rGCva5D+rL5e/UxLFyI3371rg2jO99mQO4BpwGgL9ThWCFl5VfGUKMPWZHjklipXyLZ
-         YkZQYqQkX0Ahy/Uvmr9SvJnkilaHPQhb0ZLFH0olf28/vCDGQ21R5IXSlwksY6d8ZeK2
-         z4lEkOuTLoWvZrOKFLo3TIL2U5CF1rN3Ofw37L1hOvvFx7ch+35uWk2cUWsAjKKjd59A
-         rfwg==
+        bh=YMusDYqalyv6pSFgNwPF4uKK+xbujszHazgInidAJjY=;
+        b=Q90p5Iy5nY+5qK8J0YqslmnGkaZ2iwBDq4pyJAywiMsz2C3QwATrz7NQrLc5pGxWhS
+         qus4894GAdS3fYkeWcUtJiCGmFclvQlmqvBAzIx+HHBrC0KroATQwxpCOcjPMKYRPCZf
+         K2jMa0u60l4MkW07IjX6rS2RVjct7qxBYBZC2CaF873OtUXqQhaetEk5mswWLhCRs5JJ
+         ujnL0lGBnbqS4xjB3gpsUi+6OqFkcz/r+ha4XlxnGYzWod02CJV1PEjVasAZba7uvVc9
+         FZ92PVNUZRJkayLdyozPUvL5qOOtxrklkXQeU0NNI2ezIOoROxFVujhTZmMk6Y0cx0AR
+         GB1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=whA1MTQ/AQLJNqb+5D2QO/K0h7g3p7yYZHms0D8AcfU=;
-        b=S2L06v4TmF8RFQja8aef4iCllDMqve7yTZw3aKrQRXTu5pNqy2pHC6Y4w5lE+OoSXt
-         YWugBQjqTtBN4Iu8XiKvZhL0OQGDKQqYrNtCSVQX3xajOovp3RR63Nfq6XSJOK2Hjrfl
-         yglqYTMUtaJd+eJnYyAPEd1/qDhjQ8BZO8dOaJDYZbHIst/EVo6HgtnXJphlk4I+gIns
-         RroUmd28bJFEp6vjE4gGAmfVaMNoWSiEKEjPw3A2CKNYeyR0fJFImId+nkjIM3EH3FGV
-         g6mtkiPYU6tSkKAOUIrS+uhCcnJNWfythwo7gdLD+2hWRPSd/vyqxxhzyxuN02i92XyZ
-         l5BQ==
-X-Gm-Message-State: APjAAAUTywwpoqWqhsa1bWX0OhaOAUv3cpdsxb81yf9zUR37D+t2WcAc
-        OsAUkfcCn4ngE676P400Xz2bJ/iTcvDfX2EekWI=
-X-Google-Smtp-Source: APXvYqzZvBvyZY1onRqoKdTzhjMQBcY5zXvQ3lzUyJcP7f0JpG1CqEEQwmFIgdsy1KIyP5VwvJNgqQw2E6ZOEWIahoI=
-X-Received: by 2002:a25:8109:: with SMTP id o9mr36591180ybk.132.1560352212349;
- Wed, 12 Jun 2019 08:10:12 -0700 (PDT)
+        bh=YMusDYqalyv6pSFgNwPF4uKK+xbujszHazgInidAJjY=;
+        b=Ecc0SCLQj5t38CAQT8VDSzyJAeQ3aUwJVN+eiBQIlC//X0BAVds3TFwmnjEivz6Q6u
+         4D8vdFWb5n0IOuT1AEzq82HBJ8IXN81LzlNArwLfl/J9LkdJIRYMftWBCAI3CsvlN4dq
+         d6Kg7Xukfb10hAXB9/6vcqlHEUBk5wdnsTkbPYhGZp6xBSwwN9t99v4EqIMHXIFsGP7g
+         YoHguSbLxq5Izf9qfD7/okAuExoQ75w1U0RKYXyJHk7FTtKnKDnqEPZqrposvzl/OUuW
+         ClvgeMZPlfzF6ve57W9/sZCGGAHpL3igTRaUVqPpzGFxj7bTB3Mv/XdGyE20tMtbLBfN
+         W+Ug==
+X-Gm-Message-State: APjAAAVTXCY3nnsam0/vWECLNdoelDwagZ1dd4izVLaBjpOjfhBG2WPh
+        OhHx9qWKA8IMWquD0WVfDnwZPjKA2v9dXsVCTsOg6J4=
+X-Google-Smtp-Source: APXvYqyN6xVD96Jl8RDKNEI6HwNcqB1yanl1Pp+ZZ6oaxLPKOeAYdSl7QnbgMOG4UnWkxhi0P2GplkRuBKmiRCHX95M=
+X-Received: by 2002:a19:7716:: with SMTP id s22mr24175955lfc.64.1560352565001;
+ Wed, 12 Jun 2019 08:16:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190608135717.8472-1-amir73il@gmail.com> <20190608135717.8472-2-amir73il@gmail.com>
- <1560343899.4578.9.camel@linux.ibm.com>
-In-Reply-To: <1560343899.4578.9.camel@linux.ibm.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 12 Jun 2019 18:09:59 +0300
-Message-ID: <CAOQ4uxhooVwtHcDCr4hu+ovzKGUdWfQ+3F3nbgK3HXgV+fUK9w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] vfs: replace i_readcount with a biased i_count
+References: <20190612074456.2504-1-janne.karhunen@gmail.com> <1560346093.4578.18.camel@linux.ibm.com>
+In-Reply-To: <1560346093.4578.18.camel@linux.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 12 Jun 2019 11:15:54 -0400
+Message-ID: <CAHC9VhRbO-ua-0Y=17zg97+oopXaj_eYBRzadrgSrG=twSjYRw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] LSM: switch to blocking policy update notifiers
 To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Jeff Layton <jlayton@poochiereds.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>
+Cc:     Janne Karhunen <janne.karhunen@gmail.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 3:52 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> On Sat, 2019-06-08 at 16:57 +0300, Amir Goldstein wrote:
-> > Count struct files open RO together with inode reference count instead
-> > of using a dedicated i_readcount field.  This will allow us to use the
-> > RO count also when CONFIG_IMA is not defined and will reduce the size of
-> > struct inode for 32bit archs when CONFIG_IMA is defined.
+On Wed, Jun 12, 2019 at 9:28 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> Hi Paul,
+
+/me waves
+
+> On Wed, 2019-06-12 at 10:44 +0300, Janne Karhunen wrote:
+> > Atomic policy updaters are not very useful as they cannot
+> > usually perform the policy updates on their own. Since it
+> > seems that there is no strict need for the atomicity,
+> > switch to the blocking variant. While doing so, rename
+> > the functions accordingly.
 > >
-> > We need this RO count for posix leases code, which currently naively
-> > checks i_count and d_count in an inaccurate manner.
+> > Changelog v2
+> > - Rebase to 'next-queued-testing'
 > >
-> > Should regular i_count overflow into RO count bias by struct files
-> > opened for write, it's not a big deal, as we mostly need the RO count
-> > to be reliable when the first writer comes along.
+> > Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
+> > Acked-by: Paul Moore <paul@paul-moore.com>
 >
-> "i_count" has been defined forever.  Has its meaning changed?  This
-> patch implies that "i_readcount" was never really needed.
->
+> The patches need to be upstreamed together.  Do you have any problems
+> with my upstreaming them via linux-integrity?
 
-Not really.
-i_count is only used to know if object is referenced.
-It does not matter if user takes 1 or more references on i_count
-as long as user puts back all the references it took.
+Nope, I've been operating under the assumption that you would be
+taking both patches via the linux-integrity tree.
 
-If user took i_readcount, i_count cannot be zero, so short of overflow,
-we can describe i_readcount as a biased i_count.
-
-But if I am following Miklos' suggestion to make i_count 64bit, inode
-struct size is going to grow for 32bit arch when  CONFIG_IMA is not
-defined, so to reduce impact, I will keep i_readcount as a separate
-member and let it be defined also when BITS_PER_LONG == 64
-and implement inode_is_open_rdonly() using d_count and i_count
-when i_readcount is not defined.
-
-Let's see what people will have to say about that...
-
-Thanks,
-Amir.
+-- 
+paul moore
+www.paul-moore.com
