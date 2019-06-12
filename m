@@ -2,176 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B3D426B4
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2019 14:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A42F42719
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2019 15:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437322AbfFLMwp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jun 2019 08:52:45 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41082 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2437172AbfFLMwp (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jun 2019 08:52:45 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5CCqb4Q083892
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jun 2019 08:52:44 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2t2yamqjna-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jun 2019 08:52:41 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 12 Jun 2019 13:51:55 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 12 Jun 2019 13:51:52 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5CCppLb34603156
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jun 2019 12:51:51 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C7254C04A;
-        Wed, 12 Jun 2019 12:51:51 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7EB904C040;
-        Wed, 12 Jun 2019 12:51:50 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.109.218])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Jun 2019 12:51:50 +0000 (GMT)
-Subject: Re: [PATCH 1/2] vfs: replace i_readcount with a biased i_count
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Amir Goldstein <amir73il@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Cc:     "J . Bruce Fields" <bfields@fieldses.org>,
-        Jeff Layton <jlayton@poochiereds.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Date:   Wed, 12 Jun 2019 08:51:39 -0400
-In-Reply-To: <20190608135717.8472-2-amir73il@gmail.com>
-References: <20190608135717.8472-1-amir73il@gmail.com>
-         <20190608135717.8472-2-amir73il@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19061212-0008-0000-0000-000002F31C46
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061212-0009-0000-0000-000022601DF8
-Message-Id: <1560343899.4578.9.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-12_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=724 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906120089
+        id S2439374AbfFLNL2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jun 2019 09:11:28 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:33003 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2439360AbfFLNL2 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 12 Jun 2019 09:11:28 -0400
+Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id DCF37E5B2385AE93A864;
+        Wed, 12 Jun 2019 14:11:26 +0100 (IST)
+Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
+ (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Wed, 12 Jun
+ 2019 14:11:20 +0100
+Subject: Re: [PATCH v3 0/2] ima/evm fixes for v5.2
+To:     Janne Karhunen <janne.karhunen@gmail.com>
+CC:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
+        <mjg59@google.com>, <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <silviu.vlasceanu@huawei.com>
+References: <20190606112620.26488-1-roberto.sassu@huawei.com>
+ <CAE=NcraYOw9B3RFu3_DbJs9nPT87AtQEptC7zF4kAu4FP8YhxA@mail.gmail.com>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <d9efe3c7-20dd-bbb0-40d8-40f69cba5b88@huawei.com>
+Date:   Wed, 12 Jun 2019 15:11:24 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
+MIME-Version: 1.0
+In-Reply-To: <CAE=NcraYOw9B3RFu3_DbJs9nPT87AtQEptC7zF4kAu4FP8YhxA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.220.96.108]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, 2019-06-08 at 16:57 +0300, Amir Goldstein wrote:
-> Count struct files open RO together with inode reference count instead
-> of using a dedicated i_readcount field.  This will allow us to use the
-> RO count also when CONFIG_IMA is not defined and will reduce the size of
-> struct inode for 32bit archs when CONFIG_IMA is defined.
+On 6/12/2019 1:28 PM, Janne Karhunen wrote:
+> On Thu, Jun 6, 2019 at 3:27 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>>
+>> Previous versions included the patch 'ima: don't ignore INTEGRITY_UNKNOWN
+>> EVM status'. However, I realized that this patch cannot be accepted alone
+>> because IMA-Appraisal would deny access to new files created during the
+>> boot.
 > 
-> We need this RO count for posix leases code, which currently naively
-> checks i_count and d_count in an inaccurate manner.
+> The early initialization logic seems to have been changing, the
+> original one as I have understood it:
+> - before initialization
+>    - allow reading anything without security.ima
+>    - deny reading anything with security.ima
+
+These two should be probably inverted: deny..., allow...
+
+
+>    - allow all writes
+
+Allow writing anything with security.ima
+Allow writing new files
+
+
+> - after initialization
+>    - deny reading|writing anything without security.ima
+>    - deny reading|writing anything invalid
+>    - allow everything else
 > 
-> Should regular i_count overflow into RO count bias by struct files
-> opened for write, it's not a big deal, as we mostly need the RO count
-> to be reliable when the first writer comes along.
+> The logic is pretty handy as it even creates additional layer of
+> security around the early initialization files as they become
+> unreadable after use.
 
-"i_count" has been defined forever.  Has its meaning changed?  This
-patch implies that "i_readcount" was never really needed.
+What if they should be legitimately used after the HMAC key is unsealed
+and before switching to the persistent root file system?
 
-Mimi
 
-> 
-> Cc: <stable@vger.kernel.org> # v4.19
-> Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-> ---
->  include/linux/fs.h                | 33 +++++++++++++++++++------------
->  security/integrity/ima/ima_main.c |  2 +-
->  2 files changed, 21 insertions(+), 14 deletions(-)
-> 
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index f7fdfe93e25d..504bf17967dd 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -694,9 +694,6 @@ struct inode {
->  	atomic_t		i_count;
->  	atomic_t		i_dio_count;
->  	atomic_t		i_writecount;
-> -#ifdef CONFIG_IMA
-> -	atomic_t		i_readcount; /* struct files open RO */
-> -#endif
->  	union {
->  		const struct file_operations	*i_fop;	/* former ->i_op->default_file_ops */
->  		void (*free_inode)(struct inode *);
-> @@ -2890,26 +2887,36 @@ static inline bool inode_is_open_for_write(const struct inode *inode)
->  	return atomic_read(&inode->i_writecount) > 0;
->  }
->  
-> -#ifdef CONFIG_IMA
-> +/*
-> + * Count struct files open RO together with inode rerefernce count.
-> + * We need this count for IMA and for posix leases. The RO count should not
-> + * include files opened RDWR nor files opened O_PATH and internal kernel
-> + * inode references, like the ones taken by overlayfs and inotify.
-> + * Should regular i_count overflow into I_RO_COUNT_BIAS by struct files
-> + * opened for write, it's not a big deal, as we mostly need
-> + * inode_is_open_rdonly() to be reliable when the first writer comes along.
-> + */
-> +#define I_RO_COUNT_SHIFT 10
-> +#define I_RO_COUNT_BIAS	(1UL << I_RO_COUNT_SHIFT)
-> +
->  static inline void i_readcount_dec(struct inode *inode)
->  {
-> -	BUG_ON(!atomic_read(&inode->i_readcount));
-> -	atomic_dec(&inode->i_readcount);
-> +	WARN_ON(atomic_read(&inode->i_count) < I_RO_COUNT_BIAS);
-> +	atomic_sub(I_RO_COUNT_BIAS, &inode->i_count);
->  }
->  static inline void i_readcount_inc(struct inode *inode)
->  {
-> -	atomic_inc(&inode->i_readcount);
-> +	atomic_add(I_RO_COUNT_BIAS, &inode->i_count);
->  }
-> -#else
-> -static inline void i_readcount_dec(struct inode *inode)
-> +static inline int i_readcount_read(const struct inode *inode)
->  {
-> -	return;
-> +	return atomic_read(&inode->i_count) >> I_RO_COUNT_SHIFT;
->  }
-> -static inline void i_readcount_inc(struct inode *inode)
-> +static inline bool inode_is_open_rdonly(const struct inode *inode)
->  {
-> -	return;
-> +	return atomic_read(&inode->i_count) > I_RO_COUNT_BIAS;
->  }
-> -#endif
-> +
->  extern int do_pipe_flags(int *, int);
->  
->  #define __kernel_read_file_id(id) \
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 357edd140c09..766bac778d11 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -94,7 +94,7 @@ static void ima_rdwr_violation_check(struct file *file,
->  	bool send_tomtou = false, send_writers = false;
->  
->  	if (mode & FMODE_WRITE) {
-> -		if (atomic_read(&inode->i_readcount) && IS_IMA(inode)) {
-> +		if (inode_is_open_rdonly(inode) && IS_IMA(inode)) {
->  			if (!iint)
->  				iint = integrity_iint_find(inode);
->  			/* IMA_MEASURE is set from reader side */
+> Now, if we initialize the system with a random key like in your patch,
+> this logic is to change quite drastically? It sounds to me the
+> userland may actually break, all the userland initialization files in
+> the existing ima configurations that do not use digsigs would become
+> unreadable given that the random key is put in? Remember, those files
+> can be protected via other means (most commonly signed ramdisk).
 
+No, the first patch is about adding the ability to verify files created
+during each boot. For any other file, EVM returns INTEGRITY_UNKNOWN as
+before. The second patch changes the behavior, as INTEGRITY_UNKNOWN is
+considered as an error for the enforce-evm appraisal mode. The second
+patch aims at making the system more secure, as no file would be
+accessible unless it is verified.
+
+It is true that configurations without digsigs won't work anymore but
+the alternative is accepting any file until the HMAC key is unsealed.
+
+Signing the ramdisk is for sure a possibility, but IMA would be
+sufficient to provide integrity protection as it checks any file in the
+ram disk.
+
+Unfortunately I found an issue in patch 1/2. These changes should be
+applied:
+
+--
+diff --git a/security/integrity/evm/evm_main.c 
+b/security/integrity/evm/evm_main.c
+index faa4a02a3139..f4af595678fe 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -310,10 +310,14 @@ EXPORT_SYMBOL_GPL(evm_verifyxattr);
+  static enum integrity_status evm_verify_current_integrity(struct 
+dentry *dentry)
+  {
+         struct inode *inode = d_backing_inode(dentry);
++       int rc;
+
+         if (!evm_key_loaded() || !S_ISREG(inode->i_mode) || evm_fixmode)
+                 return 0;
+-       return evm_verify_hmac(dentry, NULL, NULL, 0, NULL);
++       rc = evm_verify_hmac(dentry, NULL, NULL, 0, NULL);
++       if (rc == INTEGRITY_UNKNOWN && !evm_persistent_key_loaded())
++               return 0;
++       return rc;
+  }
+
+  /*
+--
+
+Roberto
+
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
