@@ -2,127 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DABC9443B3
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 18:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E09143F39
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 17:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388973AbfFMQbZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 12:31:25 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:59694 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730876AbfFMI0k (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:26:40 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 73FF830860C0;
-        Thu, 13 Jun 2019 08:26:39 +0000 (UTC)
-Received: from dhcp-128-65.nay.redhat.com (ovpn-12-87.pek2.redhat.com [10.72.12.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6E3E960FB1;
-        Thu, 13 Jun 2019 08:26:31 +0000 (UTC)
-Date:   Thu, 13 Jun 2019 16:26:27 +0800
-From:   Dave Young <dyoung@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, roberto.sassu@huawei.com,
-        "Eric W. Biederman" <ebiederm@xmission.com>, vgoyal@redhat.com,
-        kexec <kexec@lists.infradead.org>
-Subject: Re: [PATCH V8 3/3] Call ima_kexec_cmdline to measure the cmdline args
-Message-ID: <20190613082627.GA30288@dhcp-128-65.nay.redhat.com>
-References: <20190612221549.28399-1-prsriva02@gmail.com>
- <20190612221549.28399-4-prsriva02@gmail.com>
- <1560378703.4578.91.camel@linux.ibm.com>
+        id S1731545AbfFMPzb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 11:55:31 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:33007 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731543AbfFMIv6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 13 Jun 2019 04:51:58 -0400
+Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id E13342F4C597DB972D83;
+        Thu, 13 Jun 2019 09:51:56 +0100 (IST)
+Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
+ (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Thu, 13 Jun
+ 2019 09:51:50 +0100
+Subject: Re: [PATCH v3 0/2] ima/evm fixes for v5.2
+To:     Janne Karhunen <janne.karhunen@gmail.com>
+CC:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
+        <mjg59@google.com>, <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <silviu.vlasceanu@huawei.com>
+References: <20190606112620.26488-1-roberto.sassu@huawei.com>
+ <CAE=NcraYOw9B3RFu3_DbJs9nPT87AtQEptC7zF4kAu4FP8YhxA@mail.gmail.com>
+ <d9efe3c7-20dd-bbb0-40d8-40f69cba5b88@huawei.com>
+ <CAE=NcraHqzST=SZNcrSgpv5EqfyUfpCCb7iQ0Oh6uohL3yiCdw@mail.gmail.com>
+ <c13c6b4f-1302-35fb-f077-00b7f84fea08@huawei.com>
+ <CAE=NcrZiyWjZUuxdLgA9Bq89Cpt1W6MLAzPkLHVgfOqSo2i1hQ@mail.gmail.com>
+ <144bf319-ea0c-f6b6-5737-0aac34f37186@huawei.com>
+ <CAE=NcrZgQSENPOtRdU=u1y6kqy0ouaaj-gioKHaUxZUcbUHwqA@mail.gmail.com>
+ <3911846b-f836-592a-81e1-a2fd25470d98@huawei.com>
+ <CAE=NcraD_DcSqog8XbisA+0YdNqwj0v_jZhzjR2Na0eZ-2XgJQ@mail.gmail.com>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <af08b46a-323e-5f91-e349-731ee9ea24ab@huawei.com>
+Date:   Thu, 13 Jun 2019 10:51:58 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1560378703.4578.91.camel@linux.ibm.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Thu, 13 Jun 2019 08:26:39 +0000 (UTC)
+In-Reply-To: <CAE=NcraD_DcSqog8XbisA+0YdNqwj0v_jZhzjR2Na0eZ-2XgJQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.220.96.108]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 06/12/19 at 06:31pm, Mimi Zohar wrote:
-> [Cc: kexec mailing list]
+On 6/13/2019 10:04 AM, Janne Karhunen wrote:
+> On Thu, Jun 13, 2019 at 10:50 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
 > 
-> Hi Eric, Dave,
+>>> Would the appraise actually need any changes, just keep the
+>>> IMA_NEW_FILE in ima_check_last_writer()? Of course it's not that easy
+>>> (it never is) as the iint could go away and things like that, but with
+>>> some tweaks?
+>>
+>> I think the problem would be that the code that sets the status to
+>> INTEGRITY_PASS is not executed, because the file gets security.ima after
+>> the first write.
 > 
-> On Wed, 2019-06-12 at 15:15 -0700, Prakhar Srivastava wrote:
-> > During soft reboot(kexec_file_load) boot cmdline args
-> > are not measured.Thus the new kernel on load boots with
-> > an assumption of cold reboot.
-> > 
-> > This patch makes a call to the ima hook ima_kexec_cmdline,
-> > added in "Define a new IMA hook to measure the boot command
-> > line arguments"
-> > to measure the boot cmdline args into the ima log.
-> > 
-> > - call ima_kexec_cmdline from kexec_file_load.
-> > - move the call ima_add_kexec_buffer after the cmdline
-> > args have been measured.
-> > 
-> > Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
-> Cc: Eric W. Biederman <ebiederm@xmission.com>
-> Cc: Dave Young <dyoung@redhat.com>
+> We have a patchset coming shortly that starts tracking the inode
+> changes as we go, so first time we fix it is when the file is created
+> before it has any content (!);
 > 
-> Any chance we could get some Acks?
+> diff --git a/security/integrity/ima/ima_appraise.c
+> b/security/integrity/ima/ima_appraise.c
+> index 5fb7127bbe68..da4f0afe0348 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -236,8 +236,10 @@ int ima_appraise_measurement(enum ima_hooks func,
+>                          iint->flags |= IMA_NEW_FILE;
+>                  if ((iint->flags & IMA_NEW_FILE) &&
+>                      (!(iint->flags & IMA_DIGSIG_REQUIRED) ||
+> -                    (inode->i_size == 0)))
+> +                    (inode->i_size == 0))) {
+> +                       ima_fix_xattr(dentry, iint);
+>                          status = INTEGRITY_PASS;
 
-The ima_* is blackbox functions to me, looks like this patch is trying
-to measure kexec cmdline buffer and save in some ima logs and then add all the
-measure results including those for kernel/initrd to a kexec_buf and pass to 2nd
-kernel.
+Some time ago I developed this patch:
 
-It should be good and only take effect when IMA enabled. If all the
-assumptions are right:
+http://kernsec.org/pipermail/linux-security-module-archive/2017-November/004569.html
 
-Acked-by: Dave Young <dyoung@redhat.com>
-> 
-> thanks,
-> 
-> Mimi
-> 
-> > ---
-> >  kernel/kexec_file.c | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > index 072b6ee55e3f..b0c724e5d86c 100644
-> > --- a/kernel/kexec_file.c
-> > +++ b/kernel/kexec_file.c
-> > @@ -198,9 +198,6 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
-> >  		return ret;
-> >  	image->kernel_buf_len = size;
-> >  
-> > -	/* IMA needs to pass the measurement list to the next kernel. */
-> > -	ima_add_kexec_buffer(image);
-> > -
-> >  	/* Call arch image probe handlers */
-> >  	ret = arch_kexec_kernel_image_probe(image, image->kernel_buf,
-> >  					    image->kernel_buf_len);
-> > @@ -241,8 +238,14 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
-> >  			ret = -EINVAL;
-> >  			goto out;
-> >  		}
-> > +
-> > +		ima_kexec_cmdline(image->cmdline_buf,
-> > +				  image->cmdline_buf_len - 1);
-> >  	}
-> >  
-> > +	/* IMA needs to pass the measurement list to the next kernel. */
-> > +	ima_add_kexec_buffer(image);
-> > +
-> >  	/* Call arch image load handlers */
-> >  	ldata = arch_kexec_kernel_image_load(image);
-> >  
-> 
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
+Since the appraisal flags are not cleared, ima_appraise_measurement() is
+not executed again and the problem with EVM does not arise.
 
-Thanks
-Dave
+Roberto
+
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
