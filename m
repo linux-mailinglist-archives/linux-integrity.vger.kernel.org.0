@@ -2,33 +2,31 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC09B44539
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 18:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AF44479A
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 19:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392658AbfFMQmz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 12:42:55 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43586 "EHLO mx1.suse.de"
+        id S1729758AbfFMRA4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 13:00:56 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49320 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730500AbfFMQmy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jun 2019 12:42:54 -0400
+        id S1730181AbfFMRAu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 13 Jun 2019 13:00:50 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 226A4AF26;
-        Thu, 13 Jun 2019 16:42:53 +0000 (UTC)
-Subject: Re: [PATCH v4 3/4] ima/ima_measurements.sh: Require builtin IMA tcb
- policy
+        by mx1.suse.de (Postfix) with ESMTP id 8BD39AFA5;
+        Thu, 13 Jun 2019 17:00:48 +0000 (UTC)
+Subject: Re: [PATCH v4 4/4] ima: Add overlay test + doc
 To:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
 References: <20190613161414.29161-1-pvorel@suse.cz>
- <20190613161414.29161-4-pvorel@suse.cz>
+ <20190613161414.29161-5-pvorel@suse.cz>
 From:   Ignaz Forster <iforster@suse.de>
-Message-ID: <64f41ac8-51fc-5d2f-d6c6-0e363438beb9@suse.de>
-Date:   Thu, 13 Jun 2019 18:42:52 +0200
+Message-ID: <55f6fec4-ef01-db2b-62c0-cbbbf79c6c12@suse.de>
+Date:   Thu, 13 Jun 2019 19:00:48 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190613161414.29161-4-pvorel@suse.cz>
+In-Reply-To: <20190613161414.29161-5-pvorel@suse.cz>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -37,133 +35,276 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Petr,
-
 Am 13.06.19 um 18:14 Uhr schrieb Petr Vorel:
-> Although custom policy which may contain the equivalent measurement
-> tcb rules can be loaded via dracut, systemd or later manually from
-> user space, detecting it would require IMA_READ_POLICY=y. In order
-> to simplify the check and avoid false positives lets ignore this
-> option and require builtin IMA tcb policy.
+> test demonstrate a bug on overlayfs on current mainline kernel when
+> combining IMA with EVM.
 > 
-> Create check_ima_policy() helper in ima_setup.sh, so it can be reused in
-> other tests.
+> Based on reproducer made by Ignaz Forster <iforster@suse.de>
+> used for not upstreamed patchset [1] and previous report [2].
+> IMA only behavior has already been fixed [3].
 > 
-> + Use SPDX license identifier
+> NOTE: backup variables are needed because ima_setup.sh calling
+> tst_mount as well when TMPDIR is on tmpfs device.
 > 
+> Documentation is based on Ignaz Forster instructions for openSUSE [4].
+> 
+> [1] https://www.spinics.net/lists/linux-integrity/msg05926.html
+> [2] https://www.spinics.net/lists/linux-integrity/msg03593.html
+> [3] https://patchwork.kernel.org/patch/10776231/
+> [4] http://lists.linux.it/pipermail/ltp/2019-May/011956.html
+> 
+> Tested-by: Ignaz Forster <iforster@suse.de>
+> Acked-by: Mimi Zohar <zohar@linux.ibm.com>
 > Signed-off-by: Petr Vorel <pvorel@suse.cz>
 > ---
->   .../integrity/ima/tests/ima_measurements.sh   | 23 ++++----------
->   .../security/integrity/ima/tests/ima_setup.sh | 30 ++++++++++---------
->   2 files changed, 21 insertions(+), 32 deletions(-)
+>   runtest/ima                                   |  1 +
+>   .../security/integrity/ima/tests/README.md    | 83 +++++++++++++++++
+>   .../integrity/ima/tests/evm_overlay.sh        | 93 +++++++++++++++++++
+>   .../security/integrity/ima/tests/ima_setup.sh |  4 +-
+>   4 files changed, 179 insertions(+), 2 deletions(-)
+>   create mode 100644 testcases/kernel/security/integrity/ima/tests/README.md
+>   create mode 100755 testcases/kernel/security/integrity/ima/tests/evm_overlay.sh
 > 
-> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-> index 328affc43..1b9ed85b8 100755
-> --- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-> +++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-> @@ -1,19 +1,7 @@
->   #!/bin/sh
->   # Copyright (c) 2009 IBM Corporation
-> -# Copyright (c) 2018 Petr Vorel <pvorel@suse.cz>
-> -#
-> -# This program is free software; you can redistribute it and/or
-> -# modify it under the terms of the GNU General Public License as
-> -# published by the Free Software Foundation; either version 2 of
-> -# the License, or (at your option) any later version.
-> -#
-> -# This program is distributed in the hope that it would be useful,
-> -# but WITHOUT ANY WARRANTY; without even the implied warranty of
-> -# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> -# GNU General Public License for more details.
-> -#
-> -# You should have received a copy of the GNU General Public License
-> -# along with this program. If not, see <http://www.gnu.org/licenses/>.
-> +# Copyright (c) 2018-2019 Petr Vorel <pvorel@suse.cz>
-> +# SPDX-License-Identifier: GPL-2.0-or-later
->   #
->   # Author: Mimi Zohar, zohar@ibm.vnet.ibm.com
->   #
-> @@ -28,16 +16,17 @@ TST_NEEDS_DEVICE=1
->   
->   setup()
->   {
-> -	TEST_FILE="$PWD/test.txt"
-> +	check_ima_policy "tcb"
->   
-> +	TEST_FILE="$PWD/test.txt"
->   	POLICY="$IMA_DIR/policy"
->   	[ -f "$POLICY" ] || tst_res TINFO "not using default policy"
-> -
->   	DIGEST_INDEX=
->   
->   	local template="$(tail -1 $ASCII_MEASUREMENTS | cut -d' ' -f 3)"
->   	local i
->   
-> +	# parse digest index
->   	# https://www.kernel.org/doc/html/latest/security/IMA-templates.html#use
->   	case "$template" in
->   	ima|ima-ng|ima-sig) DIGEST_INDEX=4 ;;
-> @@ -56,8 +45,6 @@ setup()
->   
->   	[ -z "$DIGEST_INDEX" ] && tst_brk TCONF \
->   		"Cannot find digest index (template: '$template')"
-> -
-> -	tst_res TINFO "IMA measurement tests assume tcb policy to be loaded (ima_policy=tcb)"
->   }
->   
->   # TODO: find support for rmd128 rmd256 rmd320 wp256 wp384 tgr128 tgr160
-> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-> index da49eb1b2..606034fec 100644
-> --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-> +++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-> @@ -1,19 +1,7 @@
->   #!/bin/sh
->   # Copyright (c) 2009 IBM Corporation
-> -# Copyright (c) 2018 Petr Vorel <pvorel@suse.cz>
-> -#
-> -# This program is free software; you can redistribute it and/or
-> -# modify it under the terms of the GNU General Public License as
-> -# published by the Free Software Foundation; either version 2 of
-> -# the License, or (at your option) any later version.
-> -#
-> -# This program is distributed in the hope that it would be useful,
-> -# but WITHOUT ANY WARRANTY; without even the implied warranty of
-> -# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> -# GNU General Public License for more details.
-> -#
-> -# You should have received a copy of the GNU General Public License
-> -# along with this program. If not, see <http://www.gnu.org/licenses/>.
-> +# Copyright (c) 2018-2019 Petr Vorel <pvorel@suse.cz>
-> +# SPDX-License-Identifier: GPL-2.0-or-later
->   #
->   # Author: Mimi Zohar, zohar@ibm.vnet.ibm.com
->   
-> @@ -31,6 +19,20 @@ SYSFS="/sys"
->   UMOUNT=
->   TST_FS_TYPE="ext3"
->   
-> +check_ima_policy()
-> +{
-> +	local policy="$1"
-> +	local i
+> diff --git a/runtest/ima b/runtest/ima
+> index bcae16bb7..f3ea88cf0 100644
+> --- a/runtest/ima
+> +++ b/runtest/ima
+> @@ -3,3 +3,4 @@ ima_measurements ima_measurements.sh
+>   ima_policy ima_policy.sh
+>   ima_tpm ima_tpm.sh
+>   ima_violations ima_violations.sh
+> +evm_overlay evm_overlay.sh
+> diff --git a/testcases/kernel/security/integrity/ima/tests/README.md b/testcases/kernel/security/integrity/ima/tests/README.md
+> new file mode 100644
+> index 000000000..961b68a38
+> --- /dev/null
+> +++ b/testcases/kernel/security/integrity/ima/tests/README.md
+> @@ -0,0 +1,83 @@
+> +IMA + EVM testing
+> +=================
 > +
-> +	grep -q "ima_$policy" /proc/cmdline && return
-> +	for i in $(cat /proc/cmdline); do
-> +		if grep -q '^ima_policy=' $i; then
+> +IMA tests
+> +---------
+> +
+> +`ima_measurements.sh` require builtin IMA tcb policy to be loaded
+> +(`ima_policy=tcb` or `ima_policy=appraise_tcb` kernel parameter).
 
-$i will not contain a file, which grep will expect here. I guess you 
-meant to echo the variable instead?
+This test requires "appraise_tcb" ("tcb" is not enough), as the errors 
+only occur during appraisal.
+
+> +Although custom policy which contains which may contain the equivalent
+> +measurement tcb rules can be loaded via dracut, systemd or later manually
+> +from user space, detecting it would require `IMA_READ_POLICY=y` therefore
+> +ignore this option.
+
+I guess this should be
+"Although a custom policy, loaded via dracut, systemd or manually from 
+user space, may contain equivalent measurement tcb rules, detecting them 
+would [...]"
+
+> +Mandatory kernel configuration for IMA:
+> +```
+> +CONFIG_INTEGRITY=y
+> +CONFIG_IMA=y
+> +```
+> +
+> +EVM tests
+> +---------
+> +
+> +`evm_overlay.sh` requires to builtin IMA appraise tcb policy (e.g. `ima_policy=appraise_tcb`                              ^^
+                              a
+
+> +kernel parameter) which appraises the integrity of all files owned by root and EVM setup.
+> +Again, for simplicity ignore possibility to load reuired rules via custom policy.
+                                                       ^q
+
+> +Mandatory kernel configuration for IMA & EVM:
+> +```
+> +CONFIG_INTEGRITY=y
+> +CONFIG_INTEGRITY_SIGNATURE=y
+> +CONFIG_IMA=y
+> +CONFIG_IMA_APPRAISE=y
+> +CONFIG_EVM=y
+> +CONFIG_KEYS=y
+> +CONFIG_TRUSTED_KEYS=y
+> +CONFIG_ENCRYPTED_KEYS=y
+> +```
+> +
+> +Example of installing IMA + EVM on openSUSE:
+> +
+> +* Boot install system with `ima_policy=appraise_tcb ima_appraise=fix evm=fix` kernel parameters
+
+I was missing the measurement option. ima_policy should have been
+ima_policy='tcb|appraise_tcb' for the statement below to be true.
+
+> +  (for IMA measurement, IMA appraisal and EVM protection)
+> +* Proceed with installation until summary screen, but do not start the installation yet
+> +* Select package `dracut-ima` (required for early boot EVM support) for installation
+> +  (Debian based distros already contain IMA + EVM support in `dracut` package)
+> +* Change to a console window and run commands to generate keys required by EVM:
+> +```
+> +# mkdir /etc/keys
+> +# user_key=$(keyctl add user kmk-user "`dd if=/dev/urandom bs=1 count=32 2>/dev/null`" @u)
+> +# keyctl pipe "$user_key" > /etc/keys/kmk-user.blob
+> +# evm_key=$(keyctl add encrypted evm-key "new user:kmk-user 64" @u)
+> +# keyctl pipe "$evm_key" >/etc/keys/evm.blob
+> +# cat <<END >/etc/sysconfig/masterkey
+> +MASTERKEYTYPE="user"
+> +MASTERKEY="/etc/keys/kmk-user.blob"
+> +END
+> +# cat <<END >/etc/sysconfig/evm
+> +EVMKEY="/etc/keys/evm.blob"
+> +END
+> +# mount -t securityfs security /sys/kernel/security
+> +# echo 1 >/sys/kernel/security/evm
+> +```
+> +
+> +* Go back to the installation summary screen and start the installation
+> +* During the installation execute the following commands from the console:
+> +```
+> +# cp -r /etc/keys /mnt/etc/ # Debian based distributions: use /target instead of /mnt
+> +# cp /etc/sysconfig/{evm,masterkey} /mnt/etc/sysconfig/
+> +```
+> +
+> +This should work on any distribution using dracut.
+> +Loading EVM keys is also possible with initramfs-tools (Debian based distributions).
+> +
+> +Of course it's possible to install OS usual way, add keys later and fix missing xattrs with:
+> +```
+> +evmctl -r ima_fix /
+> +```
+> +
+> +or with `find` if evmctl not available:
+                            ^
+                            is
+
+> +```
+> +find / \( -fstype rootfs -o -fstype ext4 -o -fstype btrfs -o -fstype xfs \) -exec sh -c "< '{}'" \;
+> +```
+> +Again, fixing requires `ima_policy=appraise_tcb ima_appraise=fix evm=fix` kernel parameters.
+
+Maybe also add the tcb option for measurement here.
 
 Ignaz
 
-> +			grep -e "|[ ]*$policy" -e "$policy[ ]*|" -e "=$policy" $i && return
-> +		fi
-> +	done
-> +	tst_brk TCONF "IMA measurement tests require builtin IMA $policy policy (e.g. ima_policy=$policy kernel parameter)"
+> diff --git a/testcases/kernel/security/integrity/ima/tests/evm_overlay.sh b/testcases/kernel/security/integrity/ima/tests/evm_overlay.sh
+> new file mode 100755
+> index 000000000..024b03917
+> --- /dev/null
+> +++ b/testcases/kernel/security/integrity/ima/tests/evm_overlay.sh
+> @@ -0,0 +1,93 @@
+> +#!/bin/sh
+> +# Copyright (c) 2019 Petr Vorel <pvorel@suse.cz>
+> +# Based on reproducer and further discussion with Ignaz Forster <iforster@suse.de>
+> +# Reproducer for not upstreamed patchset [1] and previous report [2].
+> +# [1] https://www.spinics.net/lists/linux-integrity/msg05926.html
+> +# [2] https://www.spinics.net/lists/linux-integrity/msg03593.html
+> +
+> +TST_SETUP="setup"
+> +TST_CLEANUP="cleanup"
+> +TST_NEEDS_DEVICE=1
+> +TST_CNT=4
+> +. ima_setup.sh
+> +
+> +setup()
+> +{
+> +	EVM_FILE="/sys/kernel/security/evm"
+> +
+> +	[ -f "$EVM_FILE" ] || tst_brk TCONF "EVM not enabled in kernel"
+> +	[ $(cat $EVM_FILE) -eq 1 ] || tst_brk TCONF "EVM not enabled for this boot"
+> +
+> +	check_ima_policy "appraise_tcb"
+> +
+> +	lower="$TST_MNTPOINT/lower"
+> +	upper="$TST_MNTPOINT/upper"
+> +	work="$TST_MNTPOINT/work"
+> +	merged="$TST_MNTPOINT/merged"
+> +	mkdir -p $lower $upper $work $merged
+> +
+> +	device_backup="$TST_DEVICE"
+> +	TST_DEVICE="overlay"
+> +
+> +	fs_type_backup="$TST_FS_TYPE"
+> +	TST_FS_TYPE="overlay"
+> +
+> +	mntpoint_backup="$TST_MNTPOINT"
+> +	TST_MNTPOINT="$merged"
+> +
+> +	params_backup="$TST_MNT_PARAMS"
+> +	TST_MNT_PARAMS="-o lowerdir=$lower,upperdir=$upper,workdir=$work"
+> +
+> +	tst_mount
+> +	mounted=1
 > +}
 > +
->   mount_helper()
->   {
->   	local type="$1"
+> +test1()
+> +{
+> +	local file="foo1.txt"
+> +
+> +	tst_res TINFO "overwrite file in overlay"
+> +	EXPECT_PASS echo lower \> $lower/$file
+> +	EXPECT_PASS echo overlay \> $merged/$file
+> +}
+> +
+> +test2()
+> +{
+> +	local file="foo2.txt"
+> +
+> +	tst_res TINFO "append file in overlay"
+> +	EXPECT_PASS echo lower \> $lower/$file
+> +	EXPECT_PASS echo overlay \>\> $merged/$file
+> +}
+> +
+> +test3()
+> +{
+> +	local file="foo3.txt"
+> +
+> +	tst_res TINFO "create a new file in overlay"
+> +	EXPECT_PASS echo overlay \> $merged/$file
+> +}
+> +
+> +test4()
+> +{
+> +	local f
+> +
+> +	tst_res TINFO "read all created files"
+> +	for f in $(find $TST_MNTPOINT -type f); do
+> +		EXPECT_PASS cat $f \> /dev/null 2\> /dev/null
+> +	done
+> +}
+> +
+> +cleanup()
+> +{
+> +	[ -n "$mounted" ] || return 0
+> +
+> +	tst_umount $TST_DEVICE
+> +
+> +	TST_DEVICE="$device_backup"
+> +	TST_FS_TYPE="$fs_type_backup"
+> +	TST_MNTPOINT="$mntpoint_backup"
+> +	TST_MNT_PARAMS="$params_backup"
+> +}
+> +
+> +tst_run
+> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> index 606034fec..529b77529 100644
+> --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> +++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> @@ -66,14 +66,14 @@ print_ima_config()
+>   	local config="/boot/config-$(uname -r)"
+>   	local i
+>   
+> -	tst_res TINFO "/proc/cmdline: $(cat /proc/cmdline)"
+> -
+>   	if [ -r "$config" ]; then
+>   		tst_res TINFO "IMA kernel config:"
+>   		for i in $(grep ^CONFIG_IMA $config); do
+>   			tst_res TINFO "$i"
+>   		done
+>   	fi
+> +
+> +	tst_res TINFO "/proc/cmdline: $(cat /proc/cmdline)"
+>   }
+>   
+>   ima_setup()
 > 
-
