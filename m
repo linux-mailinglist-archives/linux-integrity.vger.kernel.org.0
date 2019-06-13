@@ -2,60 +2,61 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDAD44A50
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 20:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A26D44A73
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 20:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727262AbfFMSJd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 14:09:33 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39344 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727230AbfFMSJd (ORCPT
+        id S1728533AbfFMSKY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 14:10:24 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:37165 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728412AbfFMSJe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jun 2019 14:09:33 -0400
-Received: by mail-pg1-f196.google.com with SMTP id 196so11408851pgc.6
+        Thu, 13 Jun 2019 14:09:34 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 19so11486063pfa.4
         for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 11:09:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kxoc9uaFTrXitgGYEWP1umI8D3nYTFG7/XndbmYY6a0=;
-        b=nFQ4EkckPxw0WF0MFLIMBWkPAPG+G/Am9yz3ZWwP3J+255TSNgezoU085vQrU4CYJc
-         BUTYSLyr8z9cPfE3d216HI5JKug0qawJ4t5hsdHfXZyDmyukCy2JV60La7QzJQZpiL8c
-         qMUnTB2Q9imqjjbDI7O9sqLnY9/oaSeV4LM2E=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=pVbmGCXMlUq2A1hktcADs+0IfWfAQ2M2FW/CfDBhtLg=;
+        b=FAbijmMdOArgULwBkXsBJp3YbUW1/Wrzaqs6dcYUYMl82wQ5JDMEWbDHYL6JEOFTK6
+         3jUCluBlQdC0v3nbnxUgF8unfFjlPoH9r457SeTA879FsDsaanaiuHYZPar9Mowen66B
+         eWsg52ZG0Viw9c+nueScpWKxFYh2vdQF+vZQU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kxoc9uaFTrXitgGYEWP1umI8D3nYTFG7/XndbmYY6a0=;
-        b=E2nTC8d4aEBWNlpxjjOiRUoTIoPcBKkdDDDTDYNPB838lT1v2dFtV9xRRdOhkBiNB2
-         py3OYyqzGA+NzknR/jSEfEB/MEU8K2l6vn5dxiWWiseuYjeyUwGhlZ3tZAlGVdVyxXjf
-         voA/NNRnf1hSnl/idS5/EEWW3D/PIYYsyJzR8JAZKZVedYlEU1LjPowXjMfoaRAFt4WG
-         XIDYrRP3QCvfyfXcGP2LcO88Y7J/AqaQZbq7gLIan03Bsw1hh2fY1iR9lLsPuKEGGvi7
-         aX8oWkD4nDvCVFB1BLLxxjh5iOX1DAOQCi39uCpe5pHMaqtJUKShwJbq0mMCiYk+mviD
-         fLmA==
-X-Gm-Message-State: APjAAAWwGjNyqpag5Zz+YmdJbVnfDDwtoFMLwnUqljauQK5dCbZNYYLO
-        EumRIf0re5a3/CZcDlIuTBlmWA==
-X-Google-Smtp-Source: APXvYqxbswxJpCXA0mUnDfPLybphcnLW3OQWcfcV2c3w4Dhlexa68Sj6OQyYRUkDZU2Xd8Mtu2574w==
-X-Received: by 2002:a63:1a5e:: with SMTP id a30mr30997431pgm.433.1560449372553;
-        Thu, 13 Jun 2019 11:09:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pVbmGCXMlUq2A1hktcADs+0IfWfAQ2M2FW/CfDBhtLg=;
+        b=bTLJsS9XdD7X5e4XCOaWU8oQf+B4v0WdygVtwHpI68FWWN7W1paqKf0an+8bROA8Qy
+         EJ+Ev17ajXRYJ5OPesU4iyrq+NDk0qTX/PPHuhzkj665zcY+94rPdfQ2E3IUsLcnrRvd
+         OcN4tDdZKwXG/bAJ2mk94zvXoTntaWZLhCIYkY/907VlfxPSANIMywL5vxzxsHLmTMJY
+         XmZfl8AmYBBoje6ZoFYT3aChNf2jaHXaai211CxlnXQnX+GE8NjcMAuI/0akq5zVCzxc
+         xW+PnE6VuWfcTPsLScFFHo5Jaha52FXCZcw8B5c1bPkCzvze+vjZw/iPJH8UoeY8CIZc
+         /h5Q==
+X-Gm-Message-State: APjAAAW5Q91/qV6azf2yo+fZC1LPo4by3ovdMGVaHtpBdlDmzTfFiQBv
+        rFbUZ1ppqQX+t6+XoEId1Toz8Q==
+X-Google-Smtp-Source: APXvYqyrMSrLzGbPNmpEqq+83phzC38yETj3P78gr8NXQrfb8K/U7PH0ROe9UTKCnF6fg+nejUXM+Q==
+X-Received: by 2002:a63:6ec1:: with SMTP id j184mr15876956pgc.225.1560449373537;
+        Thu, 13 Jun 2019 11:09:33 -0700 (PDT)
 Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id b15sm454449pff.31.2019.06.13.11.09.31
+        by smtp.gmail.com with ESMTPSA id b15sm454449pff.31.2019.06.13.11.09.32
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 11:09:32 -0700 (PDT)
+        Thu, 13 Jun 2019 11:09:33 -0700 (PDT)
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Arnd Bergmann <arnd@arndb.de>,
+Cc:     Andrey Pronin <apronin@chromium.org>, linux-kernel@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org,
-        Andrey Pronin <apronin@chromium.org>,
-        devicetree@vger.kernel.org, Duncan Laurie <dlaurie@chromium.org>,
+        linux-integrity@vger.kernel.org, devicetree@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
         Guenter Roeck <groeck@chromium.org>
-Subject: [PATCH 0/8] tpm: Add driver for cr50
-Date:   Thu, 13 Jun 2019 11:09:23 -0700
-Message-Id: <20190613180931.65445-1-swboyd@chromium.org>
+Subject: [PATCH 1/8] tpm: block messages while suspended
+Date:   Thu, 13 Jun 2019 11:09:24 -0700
+Message-Id: <20190613180931.65445-2-swboyd@chromium.org>
 X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
+In-Reply-To: <20190613180931.65445-1-swboyd@chromium.org>
+References: <20190613180931.65445-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
@@ -63,57 +64,83 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch series adds support for the the H1 secure microcontroller
-running cr50 firmware found on various recent Chromebooks. This driver
-is necessary to boot into a ChromeOS userspace environment. It
-implements support for several functions, including TPM-like
-functionality, and supports SPI and I2C interfaces.
+From: Andrey Pronin <apronin@chromium.org>
 
-The last time this was series sent looks to be [1]. I've looked over the
-patches and review comments and tried to address any feedback that
-Andrey didn't address (really minor things like newlines). The first
-three patches add a couple pre-requisite core changes so that the
-drivers can be merged. The last two patches add some sysfs attributes
-and make symlinks so that ChromeOS userspace works.
+Other drivers or userspace may initiate sending a message to the tpm
+while the device itself and the controller of the bus it is on are
+suspended. That may break the bus driver logic.
+Block sending messages while the device is suspended.
 
-[1] https://lkml.kernel.org/r/1469757314-116169-1-git-send-email-apronin@chromium.org
+Signed-off-by: Andrey Pronin <apronin@chromium.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
 
-Andrey Pronin (7):
-  tpm: block messages while suspended
-  tpm_tis_core: add optional max xfer size check
-  tpm_tis_spi: add max xfer size
-  dt-bindings: tpm: document properties for cr50
-  tpm: add driver for cr50 on SPI
-  tpm: add sysfs attributes for tpm2
-  tpm: add legacy sysfs attributes for tpm2
+I don't think this was ever posted before.
 
-Duncan Laurie (1):
-  tpm: Add driver for cr50 on I2C
+ drivers/char/tpm/tpm-interface.c | 16 ++++++++++++++--
+ include/linux/tpm.h              |  2 ++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
- .../bindings/security/tpm/cr50_spi.txt        |  19 +
- drivers/char/tpm/Kconfig                      |  26 +
- drivers/char/tpm/Makefile                     |   3 +
- drivers/char/tpm/cr50.c                       |  39 +
- drivers/char/tpm/cr50.h                       |  30 +
- drivers/char/tpm/cr50_i2c.c                   | 704 ++++++++++++++++++
- drivers/char/tpm/cr50_spi.c                   | 450 +++++++++++
- drivers/char/tpm/tpm-chip.c                   |   4 +-
- drivers/char/tpm/tpm-interface.c              |  16 +-
- drivers/char/tpm/tpm-sysfs.c                  | 138 +++-
- drivers/char/tpm/tpm.h                        |  29 +-
- drivers/char/tpm/tpm_tis_core.c               |   9 +-
- drivers/char/tpm/tpm_tis_core.h               |   1 +
- drivers/char/tpm/tpm_tis_spi.c                |   1 +
- include/linux/tpm.h                           |   2 +
- 15 files changed, 1455 insertions(+), 16 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/security/tpm/cr50_spi.txt
- create mode 100644 drivers/char/tpm/cr50.c
- create mode 100644 drivers/char/tpm/cr50.h
- create mode 100644 drivers/char/tpm/cr50_i2c.c
- create mode 100644 drivers/char/tpm/cr50_spi.c
-
-
-base-commit: f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index ae1030c9b086..7232527652e8 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -86,6 +86,11 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+ 		return -E2BIG;
+ 	}
+ 
++	if (test_bit(0, &chip->is_suspended)) {
++		dev_warn(&chip->dev, "blocking transmit while suspended\n");
++		return -EAGAIN;
++	}
++
+ 	rc = chip->ops->send(chip, buf, count);
+ 	if (rc < 0) {
+ 		if (rc != -EPIPE)
+@@ -403,14 +408,19 @@ int tpm_pm_suspend(struct device *dev)
+ 		return 0;
+ 
+ 	if (!tpm_chip_start(chip)) {
+-		if (chip->flags & TPM_CHIP_FLAG_TPM2)
++		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+ 			tpm2_shutdown(chip, TPM2_SU_STATE);
+-		else
++			set_bit(0, &chip->is_suspended);
++		} else {
+ 			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
++		}
+ 
+ 		tpm_chip_stop(chip);
+ 	}
+ 
++	if (!rc)
++		set_bit(0, &chip->is_suspended);
++
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+@@ -426,6 +436,8 @@ int tpm_pm_resume(struct device *dev)
+ 	if (chip == NULL)
+ 		return -ENODEV;
+ 
++	clear_bit(0, &chip->is_suspended);
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(tpm_pm_resume);
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 1b5436b213a2..48df005228d0 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -132,6 +132,8 @@ struct tpm_chip {
+ 	int dev_num;		/* /dev/tpm# */
+ 	unsigned long is_open;	/* only one allowed */
+ 
++	unsigned long is_suspended;
++
+ 	char hwrng_name[64];
+ 	struct hwrng hwrng;
+ 
 -- 
 Sent by a computer through tubes
 
