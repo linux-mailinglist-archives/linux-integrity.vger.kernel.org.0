@@ -2,24 +2,23 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F4043BDB
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 17:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86A243C2D
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 17:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730563AbfFMPcJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 11:32:09 -0400
-Received: from mga14.intel.com ([192.55.52.115]:59856 "EHLO mga14.intel.com"
+        id S1728488AbfFMPee (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 11:34:34 -0400
+Received: from mga07.intel.com ([134.134.136.100]:23808 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727134AbfFMPcI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jun 2019 11:32:08 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1728256AbfFMPeT (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:34:19 -0400
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 08:32:07 -0700
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 08:34:18 -0700
 X-ExtLoop1: 1
 Received: from bbouchn-mobl.ger.corp.intel.com (HELO localhost) ([10.252.35.22])
-  by orsmga004.jf.intel.com with ESMTP; 13 Jun 2019 08:32:03 -0700
-Date:   Thu, 13 Jun 2019 18:32:02 +0300
+  by orsmga001.jf.intel.com with ESMTP; 13 Jun 2019 08:34:14 -0700
+Date:   Thu, 13 Jun 2019 18:34:14 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     Sumit Garg <sumit.garg@linaro.org>
 Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
@@ -29,14 +28,14 @@ Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
         ard.biesheuvel@linaro.org, daniel.thompson@linaro.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         tee-dev@lists.linaro.org
-Subject: Re: [RFC 4/7] KEYS: trusted: Introduce TEE based Trusted Keys
-Message-ID: <20190613153202.GF18488@linux.intel.com>
+Subject: Re: [RFC 6/7] doc: keys: Document usage of TEE based Trusted Keys
+Message-ID: <20190613153414.GG18488@linux.intel.com>
 References: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org>
- <1560421833-27414-5-git-send-email-sumit.garg@linaro.org>
+ <1560421833-27414-7-git-send-email-sumit.garg@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1560421833-27414-5-git-send-email-sumit.garg@linaro.org>
+In-Reply-To: <1560421833-27414-7-git-send-email-sumit.garg@linaro.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -44,21 +43,14 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 04:00:30PM +0530, Sumit Garg wrote:
-> Add support for TEE based trusted keys where TEE provides the functionality
-> to seal and unseal trusted keys using hardware unique key.
-> 
-> Refer to Documentation/tee.txt for detailed information about TEE.
-> 
-> Approach taken in this patch acts as an alternative to a TPM device in case
-> platform doesn't possess one.
+On Thu, Jun 13, 2019 at 04:00:32PM +0530, Sumit Garg wrote:
+> Provide documentation for usage of TEE based Trusted Keys via existing
+> user-space "keyctl" utility. Also, document various use-cases.
 > 
 > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 
-How does this interact with the trusted module? Why there is no update
-to security/keys/trusted-encrypted.txt?
-
-Somehow the existing trusted module needs to be re-architected to work
-with either. Otherwise, this will turn out to be a mess.
+Sorry missed this patch. Anyway, I don't think we want multiple trusted
+keys subsystems. You have to fix the existing one if you care to get
+these changes in. There is no really other way around this.
 
 /Jarkko
