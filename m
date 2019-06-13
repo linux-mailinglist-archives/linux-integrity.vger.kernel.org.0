@@ -2,58 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5256E44A5A
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 20:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B057844A61
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 20:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728762AbfFMSJk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 14:09:40 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46635 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728702AbfFMSJk (ORCPT
+        id S1727611AbfFMSJz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 14:09:55 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:37434 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728719AbfFMSJk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Thu, 13 Jun 2019 14:09:40 -0400
-Received: by mail-pl1-f193.google.com with SMTP id e5so8479211pls.13
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 11:09:39 -0700 (PDT)
+Received: by mail-pg1-f195.google.com with SMTP id 20so11410596pgr.4
+        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 11:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Z1Fu7Bx40el5Z+NnGm6nUKR8Rbgq2We1qi18txrAVX4=;
-        b=oPJ1r0C3Nk/LxjMHPGQwgHYVocQR2QZ/2EyniiC6dzMCWT0dSGlBxVsx4q9ly01K+6
-         cBi9LyHU/bSLhh8YSc6uJzU4DhnlOX+upnMqgEXQDnOyS+mmPwO4D39l1xTHWJNHHoAN
-         5oIJukiwqhciwJo1+hZVcvPPPZANOENSBmdcc=
+        bh=SdHyfYYn/P4YZ/RY4FqzRUe6FdwH0FXQqSlsB54SdhY=;
+        b=WYm1N50KkVbQ5oT/ljoGPabfESnEJECE/hUI8KAmJ52KpqVAT/LLwvqct6C+GrUUFV
+         xGfAKhX7xvxvArrasgYG7lSbSUnZfhWuPnwumkSl3hCjfy/cT75ahjwg9TIaNhNh7d0R
+         XHgZyIq1/aYzI4+WHrGxXC6bU+XUBZNlojFWQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Z1Fu7Bx40el5Z+NnGm6nUKR8Rbgq2We1qi18txrAVX4=;
-        b=XyJDPUZgWKdaNUSuCtsKrdC34iv7xg+q1tGSX+hjM5R+4cHUV0P+E316p+4E1j54Oy
-         B9Tw1di5C2jy5QK1YVJnnlconFO+WWhlkLXo5GAHZczCxl8VDN2GxIwd5oPwDysmrN65
-         XzOhMjpxNZrhwuuk5hcYiRiqR/z8U45JnETV8lyf54R/qx3l/ItnQZhJof3mpp6/S1Li
-         sW0wkd5V5rqWhuhVldlSf55BVWWp4OgzjJtLRp/mJbdsYjEFCdZrZzdou6DT5wFNscIr
-         pxcPgTKYWtfvQU6e5T6QzysUZSvO3BhcCeFHcmCMkpw/zEzwboNVqeq/wKkKziqV3oz9
-         EBwQ==
-X-Gm-Message-State: APjAAAXK2RwxWQbzOD8EBLjttR9hwCRjjEv9eFNb/5cYo+TDn2dfRU+x
-        QnE8uiNMk9UhFPkwn/D4tV1p5A==
-X-Google-Smtp-Source: APXvYqzFrfwxCIntW7DHp/K6PoYx/W/AiReIsSAaAlVeqRDRkvDBvNBHEx9pG4DDf9iH4R1rHV06/w==
-X-Received: by 2002:a17:902:24c:: with SMTP id 70mr88617309plc.2.1560449378830;
-        Thu, 13 Jun 2019 11:09:38 -0700 (PDT)
+        bh=SdHyfYYn/P4YZ/RY4FqzRUe6FdwH0FXQqSlsB54SdhY=;
+        b=E3CyKCBHD7QQNPXG/ulH7EgjvgG3dxKrnfZJ4OOWf+dqsqGVJ44mO506cGZ4VZ4qDw
+         MWmmjcO9WSMSexJZvj/XWedgyBrKWSpn/5k0iplYlKTQejk6fHjxcrPqMzyl1F94Js6s
+         z1gw9adqZXgTyTv7V4XapmDmpmok3GwevyYTE4FPTZGVUwuO67oVxotAKXO0FvA4hXP4
+         I3WLyq6ry3kP+UDTmb3eXVx8KMtkt8J0FFDV+pg6E9nD5VQgSMxMKxg1n+D4h1m5zE04
+         zxHmEC0NOugOhJmZayGE2ad/o8LrbGU4+isJBFhx3JqftVwYeLxOke9EmYBRQeqveUrl
+         uyTg==
+X-Gm-Message-State: APjAAAU93ZpPNQFKJkpGxYGq9iM0d81IOTqTgYD4kQtGZ4EUNefOVK+9
+        2WiLZw5VXfaOGHc7xSeCMSU8Pg==
+X-Google-Smtp-Source: APXvYqx83m0afnXdbmnktD4D4EiOaZOLzkVkSr8j7uRxRoq8GiaJY0+e8vRFGMgLniHvm9DvfV1aiQ==
+X-Received: by 2002:a63:f70b:: with SMTP id x11mr907761pgh.212.1560449379638;
+        Thu, 13 Jun 2019 11:09:39 -0700 (PDT)
 Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id b15sm454449pff.31.2019.06.13.11.09.37
+        by smtp.gmail.com with ESMTPSA id b15sm454449pff.31.2019.06.13.11.09.38
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 11:09:38 -0700 (PDT)
+        Thu, 13 Jun 2019 11:09:39 -0700 (PDT)
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Duncan Laurie <dlaurie@chromium.org>, linux-kernel@vger.kernel.org,
+Cc:     Andrey Pronin <apronin@chromium.org>, linux-kernel@vger.kernel.org,
         Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org,
-        Andrey Pronin <apronin@chromium.org>,
-        devicetree@vger.kernel.org, Guenter Roeck <groeck@chromium.org>
-Subject: [PATCH 6/8] tpm: Add driver for cr50 on I2C
-Date:   Thu, 13 Jun 2019 11:09:29 -0700
-Message-Id: <20190613180931.65445-7-swboyd@chromium.org>
+        linux-integrity@vger.kernel.org, devicetree@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: [PATCH 7/8] tpm: add sysfs attributes for tpm2
+Date:   Thu, 13 Jun 2019 11:09:30 -0700
+Message-Id: <20190613180931.65445-8-swboyd@chromium.org>
 X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
 In-Reply-To: <20190613180931.65445-1-swboyd@chromium.org>
 References: <20190613180931.65445-1-swboyd@chromium.org>
@@ -64,780 +64,221 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Duncan Laurie <dlaurie@chromium.org>
+From: Andrey Pronin <apronin@chromium.org>
 
-Add TPM 2.0 compatible I2C interface for chips with cr50 firmware.
+Add sysfs attributes in TPM2.0 case for:
+ - TPM_PT_PERMANENT flags
+ - TPM_PT_STARTUP_CLEAR flags
+ - lockout-related properties
 
-The firmware running on the currently supported H1 MCU requires a
-special driver to handle its specific protocol, and this makes it
-unsuitable to use tpm_tis_core_* and instead it must implement the
-underlying TPM protocol similar to the other I2C TPM drivers.
-
-- All 4 byes of status register must be read/written at once.
-- FIFO and burst count is limited to 63 and must be drained by AP.
-- Provides an interrupt to indicate when read response data is ready
-and when the TPM is finished processing write data.
-
-This driver is based on the existing infineon I2C TPM driver, which
-most closely matches the cr50 i2c protocol behavior.  The driver is
-intentionally kept very similar in structure and style to the
-corresponding drivers in coreboot and depthcharge.
-
-Signed-off-by: Duncan Laurie <dlaurie@chromium.org>
-[swboyd@chromium.org: Depend on i2c even if it's a module, replace
-boilier plate with SPDX tag, drop asm/byteorder.h include, simplify
-return from probe]
+Signed-off-by: Andrey Pronin <apronin@chromium.org>
 Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 ---
- drivers/char/tpm/Kconfig    |  10 +
- drivers/char/tpm/Makefile   |   1 +
- drivers/char/tpm/cr50_i2c.c | 704 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 715 insertions(+)
- create mode 100644 drivers/char/tpm/cr50_i2c.c
 
-diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-index b7028bfa6f87..57a8c3540265 100644
---- a/drivers/char/tpm/Kconfig
-+++ b/drivers/char/tpm/Kconfig
-@@ -119,6 +119,16 @@ config TCG_CR50
- 	---help---
- 	  Common routines shared by drivers for Cr50-based devices.
+This was sent before as https://lkml.kernel.org/r/1469678766-117528-1-git-send-email-apronin@chromium.org
+and Jarkko asked that the commit text be filled out more. I'll work with
+Andrey to do so, but I'm including it here so we can see if there are
+other comments.
+
+ drivers/char/tpm/tpm-sysfs.c | 130 ++++++++++++++++++++++++++++++++---
+ drivers/char/tpm/tpm.h       |  29 +++++++-
+ 2 files changed, 148 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
+index 533a260d744e..e9f6f7960023 100644
+--- a/drivers/char/tpm/tpm-sysfs.c
++++ b/drivers/char/tpm/tpm-sysfs.c
+@@ -314,7 +314,7 @@ static ssize_t timeouts_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(timeouts);
  
-+config TCG_CR50_I2C
-+	tristate "Cr50 I2C Interface"
-+	depends on I2C
-+	select TCG_CR50
-+	---help---
-+	  If you have a H1 secure module running Cr50 firmware on I2C bus,
-+	  say Yes and it will be accessible from within Linux. To compile
-+	  this driver as a module, choose M here; the module will be called
-+	  cr50_i2c.
-+
- config TCG_CR50_SPI
- 	tristate "Cr50 SPI Interface"
- 	depends on SPI
-diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-index 4e89538c73c8..3ac3448c21fa 100644
---- a/drivers/char/tpm/Makefile
-+++ b/drivers/char/tpm/Makefile
-@@ -29,6 +29,7 @@ obj-$(CONFIG_TCG_NSC) += tpm_nsc.o
- obj-$(CONFIG_TCG_ATMEL) += tpm_atmel.o
- obj-$(CONFIG_TCG_CR50) += cr50.o
- obj-$(CONFIG_TCG_CR50_SPI) += cr50_spi.o
-+obj-$(CONFIG_TCG_CR50_I2C) += cr50_i2c.o
- obj-$(CONFIG_TCG_INFINEON) += tpm_infineon.o
- obj-$(CONFIG_TCG_IBMVTPM) += tpm_ibmvtpm.o
- obj-$(CONFIG_TCG_TIS_ST33ZP24) += st33zp24/
-diff --git a/drivers/char/tpm/cr50_i2c.c b/drivers/char/tpm/cr50_i2c.c
-new file mode 100644
-index 000000000000..9c5bec1631eb
---- /dev/null
-+++ b/drivers/char/tpm/cr50_i2c.c
-@@ -0,0 +1,704 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2016 Google Inc.
-+ *
-+ * Based on Linux Kernel TPM driver by
-+ * Peter Huewe <peter.huewe@infineon.com>
-+ * Copyright (C) 2011 Infineon Technologies
-+ */
-+
-+/*
-+ * cr50 is a firmware for H1 secure modules that requires special
-+ * handling for the I2C interface.
-+ *
-+ * - Use an interrupt for transaction status instead of hardcoded delays
-+ * - Must use write+wait+read read protocol
-+ * - All 4 bytes of status register must be read/written at once
-+ * - Burst count max is 63 bytes, and burst count behaves
-+ *   slightly differently than other I2C TPMs
-+ * - When reading from FIFO the full burstcnt must be read
-+ *   instead of just reading header and determining the remainder
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/completion.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/pm.h>
-+#include <linux/slab.h>
-+#include <linux/interrupt.h>
-+#include <linux/wait.h>
-+#include "cr50.h"
-+
-+#define CR50_MAX_BUFSIZE	63
-+#define CR50_TIMEOUT_SHORT_MS	2	/* Short timeout during transactions */
-+#define CR50_TIMEOUT_NOIRQ_MS	20	/* Timeout for TPM ready without IRQ */
-+#define CR50_I2C_DID_VID	0x00281ae0L
-+#define CR50_I2C_MAX_RETRIES	3	/* Max retries due to I2C errors */
-+#define CR50_I2C_RETRY_DELAY_LO	55	/* Min usecs between retries on I2C */
-+#define CR50_I2C_RETRY_DELAY_HI	65	/* Max usecs between retries on I2C */
-+
-+static unsigned short rng_quality = 1022;
-+
-+module_param(rng_quality, ushort, 0644);
-+MODULE_PARM_DESC(rng_quality,
-+		 "Estimation of true entropy, in bits per 1024 bits.");
-+
-+struct priv_data {
-+	int irq;
-+	int locality;
-+	struct completion tpm_ready;
-+	u8 buf[CR50_MAX_BUFSIZE + sizeof(u8)];
+-static struct attribute *tpm_dev_attrs[] = {
++static struct attribute *tpm1_dev_attrs[] = {
+ 	&dev_attr_pubek.attr,
+ 	&dev_attr_pcrs.attr,
+ 	&dev_attr_enabled.attr,
+@@ -328,22 +328,132 @@ static struct attribute *tpm_dev_attrs[] = {
+ 	NULL,
+ };
+ 
+-static const struct attribute_group tpm_dev_group = {
+-	.attrs = tpm_dev_attrs,
++static const struct attribute_group tpm1_dev_group = {
++	.attrs = tpm1_dev_attrs,
+ };
+ 
+-void tpm_sysfs_add_device(struct tpm_chip *chip)
++struct tpm2_prop_flag_dev_attribute {
++	struct device_attribute attr;
++	u32 property_id;
++	u32 flag_mask;
 +};
 +
-+/*
-+ * The cr50 interrupt handler just signals waiting threads that the
-+ * interrupt was asserted.  It does not do any processing triggered
-+ * by interrupts but is instead used to avoid fixed delays.
-+ */
-+static irqreturn_t cr50_i2c_int_handler(int dummy, void *dev_id)
-+{
-+	struct tpm_chip *chip = dev_id;
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+
-+	complete(&priv->tpm_ready);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+/*
-+ * Wait for completion interrupt if available, otherwise use a fixed
-+ * delay for the TPM to be ready.
-+ *
-+ * Returns negative number for error, positive number for success.
-+ */
-+static int cr50_i2c_wait_tpm_ready(struct tpm_chip *chip)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+	long rc;
-+
-+	/* Use a safe fixed delay if interrupt is not supported */
-+	if (priv->irq <= 0) {
-+		msleep(CR50_TIMEOUT_NOIRQ_MS);
-+		return 1;
-+	}
-+
-+	/* Wait for interrupt to indicate TPM is ready to respond */
-+	rc = wait_for_completion_timeout(&priv->tpm_ready,
-+		msecs_to_jiffies(chip->timeout_a));
-+
-+	if (rc == 0)
-+		dev_warn(&chip->dev, "Timeout waiting for TPM ready\n");
-+
-+	return rc;
-+}
-+
-+static void cr50_i2c_enable_tpm_irq(struct tpm_chip *chip)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+
-+	if (priv->irq > 0) {
-+		reinit_completion(&priv->tpm_ready);
-+		enable_irq(priv->irq);
-+	}
-+}
-+
-+static void cr50_i2c_disable_tpm_irq(struct tpm_chip *chip)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+
-+	if (priv->irq > 0)
-+		disable_irq(priv->irq);
-+}
-+
-+/*
-+ * cr50_i2c_transfer - transfer messages over i2c
-+ *
-+ * @adapter: i2c adapter
-+ * @msgs: array of messages to transfer
-+ * @num: number of messages in the array
-+ *
-+ * Call unlocked i2c transfer routine with the provided parameters and retry
-+ * in case of bus errors. Returns the number of transferred messages.
-+ */
-+static int cr50_i2c_transfer(struct device *dev, struct i2c_adapter *adapter,
-+			     struct i2c_msg *msgs, int num)
-+{
-+	int rc, try;
-+
-+	for (try = 0; try < CR50_I2C_MAX_RETRIES; try++) {
-+		rc = __i2c_transfer(adapter, msgs, num);
-+		if (rc > 0)
-+			break;
-+		if (try)
-+			dev_warn(dev, "i2c transfer failed (attempt %d/%d): %d\n",
-+				 try+1, CR50_I2C_MAX_RETRIES, rc);
-+		usleep_range(CR50_I2C_RETRY_DELAY_LO, CR50_I2C_RETRY_DELAY_HI);
-+	}
-+
-+	return rc;
-+}
-+
-+/*
-+ * cr50_i2c_read() - read from TPM register
-+ *
-+ * @chip: TPM chip information
-+ * @addr: register address to read from
-+ * @buffer: provided by caller
-+ * @len: number of bytes to read
-+ *
-+ * 1) send register address byte 'addr' to the TPM
-+ * 2) wait for TPM to indicate it is ready
-+ * 3) read 'len' bytes of TPM response into the provided 'buffer'
-+ *
-+ * Returns negative number for error, 0 for success.
-+ */
-+static int cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t len)
-+{
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
-+	struct i2c_msg msg1 = {
-+		.addr = client->addr,
-+		.len = 1,
-+		.buf = &addr
-+	};
-+	struct i2c_msg msg2 = {
-+		.addr = client->addr,
-+		.flags = I2C_M_RD,
-+		.len = len,
-+		.buf = buffer
-+	};
-+	int rc;
-+
-+	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
-+	/* Prepare for completion interrupt */
-+	cr50_i2c_enable_tpm_irq(chip);
-+
-+	/* Send the register address byte to the TPM */
-+	rc = cr50_i2c_transfer(&chip->dev, client->adapter, &msg1, 1);
-+	if (rc <= 0)
-+		goto out;
-+
-+	/* Wait for TPM to be ready with response data */
-+	rc = cr50_i2c_wait_tpm_ready(chip);
-+	if (rc < 0)
-+		goto out;
-+
-+	/* Read response data from the TPM */
-+	rc = cr50_i2c_transfer(&chip->dev, client->adapter, &msg2, 1);
-+
-+out:
-+	cr50_i2c_disable_tpm_irq(chip);
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
-+	if (rc < 0)
-+		return rc;
-+	if (rc == 0)
-+		return -EIO; /* No i2c segments transferred */
-+
-+	return 0;
-+}
-+
-+/*
-+ * cr50_i2c_write() - write to TPM register
-+ *
-+ * @chip: TPM chip information
-+ * @addr: register address to write to
-+ * @buffer: data to write
-+ * @len: number of bytes to write
-+ *
-+ * 1) prepend the provided address to the provided data
-+ * 2) send the address+data to the TPM
-+ * 3) wait for TPM to indicate it is done writing
-+ *
-+ * Returns negative number for error, 0 for success.
-+ */
-+static int cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
-+			  size_t len)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
-+	struct i2c_msg msg1 = {
-+		.addr = client->addr,
-+		.len = len + 1,
-+		.buf = priv->buf
-+	};
-+	int rc;
-+
-+	if (len > CR50_MAX_BUFSIZE)
-+		return -EINVAL;
-+
-+	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
-+	/* Prepend the 'register address' to the buffer */
-+	priv->buf[0] = addr;
-+	memcpy(priv->buf + 1, buffer, len);
-+
-+	/* Prepare for completion interrupt */
-+	cr50_i2c_enable_tpm_irq(chip);
-+
-+	/* Send write request buffer with address */
-+	rc = cr50_i2c_transfer(&chip->dev, client->adapter, &msg1, 1);
-+	if (rc <= 0)
-+		goto out;
-+
-+	/* Wait for TPM to be ready, ignore timeout */
-+	cr50_i2c_wait_tpm_ready(chip);
-+
-+out:
-+	cr50_i2c_disable_tpm_irq(chip);
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
-+	if (rc < 0)
-+		return rc;
-+	if (rc == 0)
-+		return -EIO; /* No i2c segments transferred */
-+
-+	return 0;
-+}
-+
-+enum tis_access {
-+	TPM_ACCESS_VALID = 0x80,
-+	TPM_ACCESS_ACTIVE_LOCALITY = 0x20,
-+	TPM_ACCESS_REQUEST_PENDING = 0x04,
-+	TPM_ACCESS_REQUEST_USE = 0x02,
++struct tpm2_prop_u32_dev_attribute {
++	struct device_attribute attr;
++	u32 property_id;
 +};
 +
-+enum tis_status {
-+	TPM_STS_VALID = 0x80,
-+	TPM_STS_COMMAND_READY = 0x40,
-+	TPM_STS_GO = 0x20,
-+	TPM_STS_DATA_AVAIL = 0x10,
-+	TPM_STS_DATA_EXPECT = 0x08,
-+};
++static ssize_t tpm2_prop_flag_show(struct device *dev,
++				   struct device_attribute *attr,
++				   char *buf)
+ {
+-	/* XXX: If you wish to remove this restriction, you must first update
+-	 * tpm_sysfs to explicitly lock chip->ops.
+-	 */
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+-		return;
++	struct tpm2_prop_flag_dev_attribute *pa =
++		container_of(attr, struct tpm2_prop_flag_dev_attribute, attr);
++	u32 flags;
++	ssize_t rc;
 +
-+enum tis_defaults {
-+	TIS_SHORT_TIMEOUT = 750,	/* ms */
-+	TIS_LONG_TIMEOUT = 2000,	/* 2 sec */
-+};
-+
-+#define	TPM_ACCESS(l)			(0x0000 | ((l) << 4))
-+#define	TPM_STS(l)			(0x0001 | ((l) << 4))
-+#define	TPM_DATA_FIFO(l)		(0x0005 | ((l) << 4))
-+#define	TPM_DID_VID(l)			(0x0006 | ((l) << 4))
-+
-+static int check_locality(struct tpm_chip *chip, int loc)
-+{
-+	u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_ACTIVE_LOCALITY;
-+	u8 buf;
-+	int rc;
-+
-+	rc = cr50_i2c_read(chip, TPM_ACCESS(loc), &buf, 1);
-+	if (rc < 0)
-+		return rc;
-+
-+	if ((buf & mask) == mask)
-+		return loc;
-+
-+	return -EIO;
-+}
-+
-+static void release_locality(struct tpm_chip *chip, int force)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+	u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_PENDING;
-+	u8 addr = TPM_ACCESS(priv->locality);
-+	u8 buf;
-+
-+	if (cr50_i2c_read(chip, addr, &buf, 1) < 0)
-+		return;
-+
-+	if (force || (buf & mask) == mask) {
-+		buf = TPM_ACCESS_ACTIVE_LOCALITY;
-+		cr50_i2c_write(chip, addr, &buf, 1);
-+	}
-+
-+	priv->locality = 0;
-+}
-+
-+static int request_locality(struct tpm_chip *chip, int loc)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+	u8 buf = TPM_ACCESS_REQUEST_USE;
-+	unsigned long stop;
-+	int rc;
-+
-+	if (check_locality(chip, loc) == loc)
-+		return loc;
-+
-+	rc = cr50_i2c_write(chip, TPM_ACCESS(loc), &buf, 1);
-+	if (rc < 0)
-+		return rc;
-+
-+	stop = jiffies + chip->timeout_a;
-+	do {
-+		if (check_locality(chip, loc) == loc) {
-+			priv->locality = loc;
-+			return loc;
-+		}
-+		msleep(CR50_TIMEOUT_SHORT_MS);
-+	} while (time_before(jiffies, stop));
-+
-+	return -ETIMEDOUT;
-+}
-+
-+/* cr50 requires all 4 bytes of status register to be read */
-+static u8 cr50_i2c_tis_status(struct tpm_chip *chip)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+	u8 buf[4];
-+
-+	if (cr50_i2c_read(chip, TPM_STS(priv->locality), buf, sizeof(buf)) < 0)
++	rc = tpm2_get_tpm_pt(to_tpm_chip(dev), pa->property_id, &flags,
++			     "reading property");
++	if (rc)
 +		return 0;
-+	return buf[0];
++
++	return sprintf(buf, "%d\n", !!(flags & pa->flag_mask));
 +}
 +
-+/* cr50 requires all 4 bytes of status register to be written */
-+static void cr50_i2c_tis_ready(struct tpm_chip *chip)
++static ssize_t tpm2_prop_u32_show(struct device *dev,
++				  struct device_attribute *attr,
++				  char *buf)
 +{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+	u8 buf[4] = { TPM_STS_COMMAND_READY };
++	struct tpm2_prop_u32_dev_attribute *pa =
++		container_of(attr, struct tpm2_prop_u32_dev_attribute, attr);
++	u32 value;
++	ssize_t rc;
 +
-+	cr50_i2c_write(chip, TPM_STS(priv->locality), buf, sizeof(buf));
-+	msleep(CR50_TIMEOUT_SHORT_MS);
++	rc = tpm2_get_tpm_pt(to_tpm_chip(dev), pa->property_id, &value,
++			     "reading property");
++	if (rc)
++		return 0;
++
++	return sprintf(buf, "%u\n", value);
 +}
-+
-+/*
-+ * cr50 uses bytes 3:2 of status register for burst count and
-+ * all 4 bytes must be read
-+ */
-+static int cr50_i2c_wait_burststs(struct tpm_chip *chip, u8 mask,
-+				  size_t *burst, int *status)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+	unsigned long stop;
-+	u8 buf[4];
-+
-+	/* wait for burstcount */
-+	stop = jiffies + chip->timeout_b;
-+	do {
-+		if (cr50_i2c_read(chip, TPM_STS(priv->locality),
-+				  (u8 *)&buf, sizeof(buf)) < 0) {
-+			msleep(CR50_TIMEOUT_SHORT_MS);
-+			continue;
-+		}
-+
-+		*status = *buf;
-+		*burst = le16_to_cpup((__le16 *)(buf + 1));
-+
-+		if ((*status & mask) == mask &&
-+		    *burst > 0 && *burst <= CR50_MAX_BUFSIZE)
-+			return 0;
-+
-+		msleep(CR50_TIMEOUT_SHORT_MS);
-+	} while (time_before(jiffies, stop));
-+
-+	dev_err(&chip->dev, "Timeout reading burst and status\n");
-+	return -ETIMEDOUT;
-+}
-+
-+static int cr50_i2c_tis_recv(struct tpm_chip *chip, u8 *buf, size_t buf_len)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+	int status, rc;
-+	size_t burstcnt, cur, len, expected;
-+	u8 addr = TPM_DATA_FIFO(priv->locality);
-+	u8 mask = TPM_STS_VALID | TPM_STS_DATA_AVAIL;
-+
-+	if (buf_len < TPM_HEADER_SIZE)
-+		return -EINVAL;
-+
-+	rc = cr50_i2c_wait_burststs(chip, mask, &burstcnt, &status);
-+	if (rc < 0)
-+		goto out_err;
-+
-+	if (burstcnt > buf_len || burstcnt < TPM_HEADER_SIZE) {
-+		dev_err(&chip->dev,
-+			"Unexpected burstcnt: %zu (max=%zu, min=%d)\n",
-+			burstcnt, buf_len, TPM_HEADER_SIZE);
-+		rc = -EIO;
-+		goto out_err;
+ 
++#define TPM2_PROP_FLAG_ATTR(_name, _property_id, _flag_mask)           \
++	struct tpm2_prop_flag_dev_attribute attr_tpm2_prop_##_name = { \
++		__ATTR(_name, S_IRUGO, tpm2_prop_flag_show, NULL),     \
++		_property_id, _flag_mask                               \
 +	}
 +
-+	/* Read first chunk of burstcnt bytes */
-+	rc = cr50_i2c_read(chip, addr, buf, burstcnt);
-+	if (rc < 0) {
-+		dev_err(&chip->dev, "Read of first chunk failed\n");
-+		goto out_err;
++#define TPM2_PROP_U32_ATTR(_name, _property_id)                        \
++	struct tpm2_prop_u32_dev_attribute attr_tpm2_prop_##_name = {  \
++		__ATTR(_name, S_IRUGO, tpm2_prop_u32_show, NULL),      \
++		_property_id                                           \
 +	}
 +
-+	/* Determine expected data in the return buffer */
-+	expected = be32_to_cpup((__be32 *)(buf + 2));
-+	if (expected > buf_len) {
-+		dev_err(&chip->dev, "Too much data in FIFO\n");
-+		goto out_err;
-+	}
++TPM2_PROP_FLAG_ATTR(owner_auth_set,
++		    TPM2_PT_PERMANENT, TPM2_ATTR_OWNER_AUTH_SET);
++TPM2_PROP_FLAG_ATTR(endorsement_auth_set,
++		    TPM2_PT_PERMANENT, TPM2_ATTR_ENDORSEMENT_AUTH_SET);
++TPM2_PROP_FLAG_ATTR(lockout_auth_set,
++		    TPM2_PT_PERMANENT, TPM2_ATTR_LOCKOUT_AUTH_SET);
++TPM2_PROP_FLAG_ATTR(disable_clear,
++		    TPM2_PT_PERMANENT, TPM2_ATTR_DISABLE_CLEAR);
++TPM2_PROP_FLAG_ATTR(in_lockout,
++		    TPM2_PT_PERMANENT, TPM2_ATTR_IN_LOCKOUT);
++TPM2_PROP_FLAG_ATTR(tpm_generated_eps,
++		    TPM2_PT_PERMANENT, TPM2_ATTR_TPM_GENERATED_EPS);
 +
-+	/* Now read the rest of the data */
-+	cur = burstcnt;
-+	while (cur < expected) {
-+		/* Read updated burst count and check status */
-+		rc = cr50_i2c_wait_burststs(chip, mask, &burstcnt, &status);
-+		if (rc < 0)
-+			goto out_err;
++TPM2_PROP_FLAG_ATTR(ph_enable,
++		    TPM2_PT_STARTUP_CLEAR, TPM2_ATTR_PH_ENABLE);
++TPM2_PROP_FLAG_ATTR(sh_enable,
++		    TPM2_PT_STARTUP_CLEAR, TPM2_ATTR_SH_ENABLE);
++TPM2_PROP_FLAG_ATTR(eh_enable,
++		    TPM2_PT_STARTUP_CLEAR, TPM2_ATTR_EH_ENABLE);
++TPM2_PROP_FLAG_ATTR(ph_enable_nv,
++		    TPM2_PT_STARTUP_CLEAR, TPM2_ATTR_PH_ENABLE_NV);
++TPM2_PROP_FLAG_ATTR(orderly,
++		    TPM2_PT_STARTUP_CLEAR, TPM2_ATTR_ORDERLY);
 +
-+		len = min_t(size_t, burstcnt, expected - cur);
-+		rc = cr50_i2c_read(chip, addr, buf + cur, len);
-+		if (rc < 0) {
-+			dev_err(&chip->dev, "Read failed\n");
-+			goto out_err;
-+		}
++TPM2_PROP_U32_ATTR(lockout_counter, TPM2_PT_LOCKOUT_COUNTER);
++TPM2_PROP_U32_ATTR(max_auth_fail, TPM2_PT_MAX_AUTH_FAIL);
++TPM2_PROP_U32_ATTR(lockout_interval, TPM2_PT_LOCKOUT_INTERVAL);
++TPM2_PROP_U32_ATTR(lockout_recovery, TPM2_PT_LOCKOUT_RECOVERY);
 +
-+		cur += len;
-+	}
-+
-+	/* Ensure TPM is done reading data */
-+	rc = cr50_i2c_wait_burststs(chip, TPM_STS_VALID, &burstcnt, &status);
-+	if (rc < 0)
-+		goto out_err;
-+	if (status & TPM_STS_DATA_AVAIL) {
-+		dev_err(&chip->dev, "Data still available\n");
-+		rc = -EIO;
-+		goto out_err;
-+	}
-+
-+	release_locality(chip, 0);
-+	return cur;
-+
-+out_err:
-+	/* Abort current transaction if still pending */
-+	if (cr50_i2c_tis_status(chip) & TPM_STS_COMMAND_READY)
-+		cr50_i2c_tis_ready(chip);
-+
-+	release_locality(chip, 0);
-+	return rc;
-+}
-+
-+static int cr50_i2c_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
-+{
-+	struct priv_data *priv = dev_get_drvdata(&chip->dev);
-+	int rc, status;
-+	size_t burstcnt, limit, sent = 0;
-+	u8 tpm_go[4] = { TPM_STS_GO };
-+	unsigned long stop;
-+
-+	rc = request_locality(chip, 0);
-+	if (rc < 0)
-+		return rc;
-+
-+	/* Wait until TPM is ready for a command */
-+	stop = jiffies + chip->timeout_b;
-+	while (!(cr50_i2c_tis_status(chip) & TPM_STS_COMMAND_READY)) {
-+		if (time_after(jiffies, stop)) {
-+			rc = -ETIMEDOUT;
-+			goto out_err;
-+		}
-+
-+		cr50_i2c_tis_ready(chip);
-+	}
-+
-+	while (len > 0) {
-+		u8 mask = TPM_STS_VALID;
-+
-+		/* Wait for data if this is not the first chunk */
-+		if (sent > 0)
-+			mask |= TPM_STS_DATA_EXPECT;
-+
-+		/* Read burst count and check status */
-+		rc = cr50_i2c_wait_burststs(chip, mask, &burstcnt, &status);
-+		if (rc < 0)
-+			goto out_err;
-+
-+		/*
-+		 * Use burstcnt - 1 to account for the address byte
-+		 * that is inserted by cr50_i2c_write()
-+		 */
-+		limit = min_t(size_t, burstcnt - 1, len);
-+		rc = cr50_i2c_write(chip, TPM_DATA_FIFO(priv->locality),
-+				    &buf[sent], limit);
-+		if (rc < 0) {
-+			dev_err(&chip->dev, "Write failed\n");
-+			goto out_err;
-+		}
-+
-+		sent += limit;
-+		len -= limit;
-+	}
-+
-+	/* Ensure TPM is not expecting more data */
-+	rc = cr50_i2c_wait_burststs(chip, TPM_STS_VALID, &burstcnt, &status);
-+	if (rc < 0)
-+		goto out_err;
-+	if (status & TPM_STS_DATA_EXPECT) {
-+		dev_err(&chip->dev, "Data still expected\n");
-+		rc = -EIO;
-+		goto out_err;
-+	}
-+
-+	/* Start the TPM command */
-+	rc = cr50_i2c_write(chip, TPM_STS(priv->locality), tpm_go,
-+			    sizeof(tpm_go));
-+	if (rc < 0) {
-+		dev_err(&chip->dev, "Start command failed\n");
-+		goto out_err;
-+	}
-+	return 0;
-+
-+out_err:
-+	/* Abort current transaction if still pending */
-+	if (cr50_i2c_tis_status(chip) & TPM_STS_COMMAND_READY)
-+		cr50_i2c_tis_ready(chip);
-+
-+	release_locality(chip, 0);
-+	return rc;
-+}
-+
-+static bool cr50_i2c_req_canceled(struct tpm_chip *chip, u8 status)
-+{
-+	return (status == TPM_STS_COMMAND_READY);
-+}
-+
-+static const struct tpm_class_ops cr50_i2c = {
-+	.flags = TPM_OPS_AUTO_STARTUP,
-+	.status = &cr50_i2c_tis_status,
-+	.recv = &cr50_i2c_tis_recv,
-+	.send = &cr50_i2c_tis_send,
-+	.cancel = &cr50_i2c_tis_ready,
-+	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
-+	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
-+	.req_canceled = &cr50_i2c_req_canceled,
++#define ATTR_FOR_TPM2_PROP(_name) (&attr_tpm2_prop_##_name.attr.attr)
++static struct attribute *tpm2_dev_attrs[] = {
++	ATTR_FOR_TPM2_PROP(owner_auth_set),
++	ATTR_FOR_TPM2_PROP(endorsement_auth_set),
++	ATTR_FOR_TPM2_PROP(lockout_auth_set),
++	ATTR_FOR_TPM2_PROP(disable_clear),
++	ATTR_FOR_TPM2_PROP(in_lockout),
++	ATTR_FOR_TPM2_PROP(tpm_generated_eps),
++	ATTR_FOR_TPM2_PROP(ph_enable),
++	ATTR_FOR_TPM2_PROP(sh_enable),
++	ATTR_FOR_TPM2_PROP(eh_enable),
++	ATTR_FOR_TPM2_PROP(ph_enable_nv),
++	ATTR_FOR_TPM2_PROP(orderly),
++	ATTR_FOR_TPM2_PROP(lockout_counter),
++	ATTR_FOR_TPM2_PROP(max_auth_fail),
++	ATTR_FOR_TPM2_PROP(lockout_interval),
++	ATTR_FOR_TPM2_PROP(lockout_recovery),
++	&dev_attr_durations.attr,
++	&dev_attr_timeouts.attr,
++	NULL,
 +};
 +
-+static int cr50_i2c_init(struct i2c_client *client)
++static const struct attribute_group tpm2_dev_group = {
++	.attrs = tpm2_dev_attrs,
++};
++
++void tpm_sysfs_add_device(struct tpm_chip *chip)
 +{
-+	struct device *dev = &client->dev;
-+	struct tpm_chip *chip;
-+	struct priv_data *priv;
-+	u8 buf[4];
-+	u32 vendor;
-+	int rc;
-+
-+	chip = tpmm_chip_alloc(dev, &cr50_i2c);
-+	if (IS_ERR(chip))
-+		return PTR_ERR(chip);
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	/* cr50 is a TPM 2.0 chip */
-+	chip->flags |= TPM_CHIP_FLAG_TPM2;
-+
-+	/* Default timeouts */
-+	chip->timeout_a = msecs_to_jiffies(TIS_SHORT_TIMEOUT);
-+	chip->timeout_b = msecs_to_jiffies(TIS_LONG_TIMEOUT);
-+	chip->timeout_c = msecs_to_jiffies(TIS_SHORT_TIMEOUT);
-+	chip->timeout_d = msecs_to_jiffies(TIS_SHORT_TIMEOUT);
-+
-+	dev_set_drvdata(&chip->dev, priv);
-+	init_completion(&priv->tpm_ready);
-+
-+	if (client->irq > 0) {
-+		rc = devm_request_irq(dev, client->irq, cr50_i2c_int_handler,
-+				      IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-+				      dev->driver->name, chip);
-+		if (rc < 0) {
-+			dev_err(dev, "Failed to probe IRQ %d\n", client->irq);
-+			return rc;
-+		}
-+
-+		disable_irq(client->irq);
-+		priv->irq = client->irq;
-+	} else {
-+		dev_warn(dev, "No IRQ, will use %ums delay for TPM ready\n",
-+			 CR50_TIMEOUT_NOIRQ_MS);
-+	}
-+
-+	rc = request_locality(chip, 0);
-+	if (rc < 0) {
-+		dev_err(dev, "Could not request locality\n");
-+		return rc;
-+	}
-+
-+	/* Read four bytes from DID_VID register */
-+	rc = cr50_i2c_read(chip, TPM_DID_VID(0), buf, sizeof(buf));
-+	if (rc < 0) {
-+		dev_err(dev, "Could not read vendor id\n");
-+		release_locality(chip, 1);
-+		return rc;
-+	}
-+
-+	vendor = le32_to_cpup((__le32 *)buf);
-+	if (vendor != CR50_I2C_DID_VID) {
-+		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
-+		release_locality(chip, 1);
-+		return -ENODEV;
-+	}
-+
-+	dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-+		 client->addr, client->irq, vendor >> 16);
-+
-+	chip->hwrng.quality = rng_quality;
-+
-+	return tpm_chip_register(chip);
-+}
-+
-+static const struct i2c_device_id cr50_i2c_table[] = {
-+	{"cr50_i2c", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, cr50_i2c_table);
-+
-+#ifdef CONFIG_ACPI
-+static const struct acpi_device_id cr50_i2c_acpi_id[] = {
-+	{ "GOOG0005", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, cr50_i2c_acpi_id);
-+#endif
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id of_cr50_i2c_match[] = {
-+	{ .compatible = "google,cr50", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, of_cr50_i2c_match);
-+#endif
-+
-+static int cr50_i2c_probe(struct i2c_client *client,
-+			  const struct i2c_device_id *id)
-+{
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-+		return -ENODEV;
-+
-+	return cr50_i2c_init(client);
-+}
-+
-+static int cr50_i2c_remove(struct i2c_client *client)
-+{
-+	struct tpm_chip *chip = i2c_get_clientdata(client);
-+
-+	tpm_chip_unregister(chip);
-+	release_locality(chip, 1);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(cr50_i2c_pm, cr50_suspend, cr50_resume);
-+
-+static struct i2c_driver cr50_i2c_driver = {
-+	.id_table = cr50_i2c_table,
-+	.probe = cr50_i2c_probe,
-+	.remove = cr50_i2c_remove,
-+	.driver = {
-+		.name = "cr50_i2c",
-+		.pm = &cr50_i2c_pm,
-+		.acpi_match_table = ACPI_PTR(cr50_i2c_acpi_id),
-+		.of_match_table = of_match_ptr(of_cr50_i2c_match),
-+	},
+ 	/* The sysfs routines rely on an implicit tpm_try_get_ops, device_del
+ 	 * is called before ops is null'd and the sysfs core synchronizes this
+ 	 * removal so that no callbacks are running or can run again
+ 	 */
++	/* FIXME: update tpm_sysfs to explicitly lock chip->ops for TPM 2.0
++	 */
+ 	WARN_ON(chip->groups_cnt != 0);
+-	chip->groups[chip->groups_cnt++] = &tpm_dev_group;
++	chip->groups[chip->groups_cnt++] =
++		(chip->flags & TPM_CHIP_FLAG_TPM2) ?
++		&tpm2_dev_group : &tpm1_dev_group;
+ }
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 2cce072f25b5..c58140f86839 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -144,7 +144,34 @@ enum tpm2_capabilities {
+ };
+ 
+ enum tpm2_properties {
+-	TPM_PT_TOTAL_COMMANDS	= 0x0129,
++	TPM_PT_TOTAL_COMMANDS		= 0x0129,
++	TPM2_PT_NONE			= 0,
++	TPM2_PT_GROUP			= 0x100,
++	TPM2_PT_FIXED			= TPM2_PT_GROUP,
++	TPM2_PT_VAR			= TPM2_PT_GROUP * 2,
++	TPM2_PT_PERMANENT		= TPM2_PT_VAR + 0,
++	TPM2_PT_STARTUP_CLEAR		= TPM2_PT_VAR + 1,
++	TPM2_PT_LOCKOUT_COUNTER		= TPM2_PT_VAR + 14,
++	TPM2_PT_MAX_AUTH_FAIL		= TPM2_PT_VAR + 15,
++	TPM2_PT_LOCKOUT_INTERVAL	= TPM2_PT_VAR + 16,
++	TPM2_PT_LOCKOUT_RECOVERY	= TPM2_PT_VAR + 17,
 +};
 +
-+module_i2c_driver(cr50_i2c_driver);
++enum tpm2_attr_permanent {
++	TPM2_ATTR_OWNER_AUTH_SET	= BIT(0),
++	TPM2_ATTR_ENDORSEMENT_AUTH_SET	= BIT(1),
++	TPM2_ATTR_LOCKOUT_AUTH_SET	= BIT(2),
++	TPM2_ATTR_DISABLE_CLEAR		= BIT(8),
++	TPM2_ATTR_IN_LOCKOUT		= BIT(9),
++	TPM2_ATTR_TPM_GENERATED_EPS	= BIT(10),
++};
 +
-+MODULE_DESCRIPTION("cr50 TPM I2C Driver");
-+MODULE_LICENSE("GPL");
++enum tpm2_attr_startup_clear {
++	TPM2_ATTR_PH_ENABLE		= BIT(0),
++	TPM2_ATTR_SH_ENABLE		= BIT(1),
++	TPM2_ATTR_EH_ENABLE		= BIT(2),
++	TPM2_ATTR_PH_ENABLE_NV		= BIT(3),
++	TPM2_ATTR_ORDERLY		= BIT(31),
+ };
+ 
+ enum tpm2_startup_types {
 -- 
 Sent by a computer through tubes
 
