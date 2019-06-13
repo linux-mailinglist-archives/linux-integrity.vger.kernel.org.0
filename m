@@ -2,123 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4214143A67
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 17:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F4043BDB
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 17:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732106AbfFMPVA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 11:21:00 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:34235 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732104AbfFMPU7 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jun 2019 11:20:59 -0400
-Received: by mail-io1-f65.google.com with SMTP id k8so17767037iot.1
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 08:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+TErb3CYHjqgMEM+qQuKdZ7BSMjcTmOtVmFNFo81SDk=;
-        b=a62uOnV1z+blRGCTaI2EKn0Hx0F2gnrv/5aQImnAPlBOPHV2SiuF9FursKNDDBTr3/
-         nJcZDrusUGjAIzGIj2fO6uA11hZkfN3Gcqlua8GpYafI/C9tI34BuiOaNuJIYU5tihTe
-         hW8CgHNrdUHnaeU7V4ONwP3YN1rzmP29eF8Jo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+TErb3CYHjqgMEM+qQuKdZ7BSMjcTmOtVmFNFo81SDk=;
-        b=Xq6kMZy5BZwyDNLbNhhQP1sR2nPdBo/gbgUts+P3vSI9w1SFg+DNS3ELmZNCfFyWXB
-         Y9b/iWiFVRlrZad+YEB5+o11nnp0DfEFEyPNQhfoIXbJJxOmf1BrhBcEtIOiXm2n/7rI
-         aA2CP1S9IWbUkxcRga2UHTik8H8XOr6UykXrz89K3xIPoqi/eE9nuAdVAW+IZ0Hxl1hv
-         NxJAZabYbfQDqdFgqOfQh2Mu+3ZYelZvAPtQqFKB+r6SrPLIsGGDOpx8ebb6nx4uwe5G
-         wO1SAvQ4+UqbTChQQPLvjws1aMq+4kDw5yNgx3tC7Mh6PPPiocblnyORINBfJFVFaQB4
-         hvsA==
-X-Gm-Message-State: APjAAAVJ9Arrz72fAiBFvIjOpflS6HISu6+2TPqhvQeGpImPQAdSiyFf
-        261JXQz9mSHFGiYcajy7TUKzKLVO+vg=
-X-Google-Smtp-Source: APXvYqwTyZVFE55+b5lPF8iHEYmC5tQC9YNjr/CF67cDYtRuAZdl7qIzE/k1cV6z6AuBGJ4WynM7yg==
-X-Received: by 2002:a5d:860e:: with SMTP id f14mr8828505iol.242.1560439258393;
-        Thu, 13 Jun 2019 08:20:58 -0700 (PDT)
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com. [209.85.166.50])
-        by smtp.gmail.com with ESMTPSA id z17sm233165iol.73.2019.06.13.08.20.54
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Jun 2019 08:20:54 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id m24so17760298ioo.2
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 08:20:54 -0700 (PDT)
-X-Received: by 2002:a5e:c241:: with SMTP id w1mr1990359iop.58.1560439253994;
- Thu, 13 Jun 2019 08:20:53 -0700 (PDT)
+        id S1730563AbfFMPcJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 11:32:09 -0400
+Received: from mga14.intel.com ([192.55.52.115]:59856 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727134AbfFMPcI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:32:08 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 08:32:07 -0700
+X-ExtLoop1: 1
+Received: from bbouchn-mobl.ger.corp.intel.com (HELO localhost) ([10.252.35.22])
+  by orsmga004.jf.intel.com with ESMTP; 13 Jun 2019 08:32:03 -0700
+Date:   Thu, 13 Jun 2019 18:32:02 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, jens.wiklander@linaro.org,
+        corbet@lwn.net, dhowells@redhat.com, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        ard.biesheuvel@linaro.org, daniel.thompson@linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tee-dev@lists.linaro.org
+Subject: Re: [RFC 4/7] KEYS: trusted: Introduce TEE based Trusted Keys
+Message-ID: <20190613153202.GF18488@linux.intel.com>
+References: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org>
+ <1560421833-27414-5-git-send-email-sumit.garg@linaro.org>
 MIME-Version: 1.0
-References: <20190610220118.5530-1-dianders@chromium.org> <20190612191618.GC3378@linux.intel.com>
- <20190613135858.GB12791@linux.intel.com>
-In-Reply-To: <20190613135858.GB12791@linux.intel.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 13 Jun 2019 08:20:41 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UoSV9LKOTMuXKRfgFir+7_qPkuhSLN6XJEKPiRPuJJwg@mail.gmail.com>
-Message-ID: <CAD=FV=UoSV9LKOTMuXKRfgFir+7_qPkuhSLN6XJEKPiRPuJJwg@mail.gmail.com>
-Subject: Re: [PATCH] tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Guenter Roeck <groeck@chromium.org>,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        apronin@chromium.org, Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org,
-        Luigi Semenzato <semenzato@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1560421833-27414-5-git-send-email-sumit.garg@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+On Thu, Jun 13, 2019 at 04:00:30PM +0530, Sumit Garg wrote:
+> Add support for TEE based trusted keys where TEE provides the functionality
+> to seal and unseal trusted keys using hardware unique key.
+> 
+> Refer to Documentation/tee.txt for detailed information about TEE.
+> 
+> Approach taken in this patch acts as an alternative to a TPM device in case
+> platform doesn't possess one.
+> 
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 
-On Thu, Jun 13, 2019 at 6:59 AM Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Wed, Jun 12, 2019 at 10:16:18PM +0300, Jarkko Sakkinen wrote:
-> > On Mon, Jun 10, 2019 at 03:01:18PM -0700, Douglas Anderson wrote:
-> > > From: Vadim Sukhomlinov <sukhomlinov@google.com>
-> > >
-> > > TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
-> > > future TPM operations. TPM 1.2 behavior was different, future TPM
-> > > operations weren't disabled, causing rare issues. This patch ensures
-> > > that future TPM operations are disabled.
-> > >
-> > > Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
-> > > [dianders: resolved merge conflicts with mainline]
-> > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> >
-> > Nice catch. Thank you.
-> >
-> > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->
-> Applied to my master branch. I also added a fixes tag.
->
-> Can you check that it looks legit to you?
+How does this interact with the trusted module? Why there is no update
+to security/keys/trusted-encrypted.txt?
 
-Found the patch in your tree at
-<http://git.infradead.org/users/jjs/linux-tpmdd.git/commit/41f15a4f02092d531fb34b42a06e9a1603a7df27>.
-I'm decidedly a non-expert here, mostly just wrangling a patch that
-someone else came up with.  :-)  ...but let's see...
+Somehow the existing trusted module needs to be re-architected to work
+with either. Otherwise, this will turn out to be a mess.
 
-I think you're asking if the "Fixes" looks sane.  I guess it depends
-on what you're trying to accomplish.  Certainly what you've tagged in
-"Fixes" marks the point where it would be easiest to backport this fix
-to.  ...but I think the problem is much older than that patch.
-
-As I understand it, this problem has existed for much longer.  I
-believe that ${SUBJECT} patch evolved from an investigation that Luigi
-Semenzato did back in 2013 when we got back some Chromebooks whose
-TPMs claimed that they had been "attacked".  Said another way, I
-believe it is an evolution of the patch <https://crrev.com/c/57988>
-("CHROMIUM: workaround for Infineon TPM broken defensive timeout").
-
-...so technically someone ought to want this on all old kernels.
-Maybe keep the "Cc: stable" but remove the "Fixes"?
-
-
--Doug
+/Jarkko
