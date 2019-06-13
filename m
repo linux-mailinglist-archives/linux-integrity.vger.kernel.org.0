@@ -2,153 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB6A44CC9
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 22:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0F944D00
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 22:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729246AbfFMUAA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 16:00:00 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33462 "EHLO
+        id S1728641AbfFMUHz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 16:07:55 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37922 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728641AbfFMUAA (ORCPT
+        by vger.kernel.org with ESMTP id S1726894AbfFMUHz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jun 2019 16:00:00 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5DJum4R092964
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 15:59:58 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2t3s62a6qt-1
+        Thu, 13 Jun 2019 16:07:55 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5DK1mMK087464
+        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 16:07:54 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2t3tmkp993-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 15:59:58 -0400
+        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 16:07:54 -0400
 Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 13 Jun 2019 20:59:56 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Thu, 13 Jun 2019 21:07:52 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 13 Jun 2019 20:59:52 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5DJxpla39518322
+        Thu, 13 Jun 2019 21:07:48 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5DK7lEX47513814
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jun 2019 19:59:52 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E06DC11C04A;
-        Thu, 13 Jun 2019 19:59:51 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E3E2A11C050;
-        Thu, 13 Jun 2019 19:59:50 +0000 (GMT)
+        Thu, 13 Jun 2019 20:07:48 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D1CC552057;
+        Thu, 13 Jun 2019 20:07:47 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.80.81.91])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Jun 2019 19:59:50 +0000 (GMT)
-Subject: Re: [PATCH V8 2/3] Define a new ima template field buf
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B673A5204F;
+        Thu, 13 Jun 2019 20:07:46 +0000 (GMT)
+Subject: Re: [PATCH V8 3/3] Call ima_kexec_cmdline to measure the cmdline
+ args
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Prakhar Srivastava <prsriva02@gmail.com>,
+To:     Dave Young <dyoung@redhat.com>
+Cc:     Prakhar Srivastava <prsriva02@gmail.com>,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     roberto.sassu@huawei.com, vgoyal@redhat.com
-Date:   Thu, 13 Jun 2019 15:59:40 -0400
-In-Reply-To: <20190612221549.28399-3-prsriva02@gmail.com>
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, roberto.sassu@huawei.com,
+        "Eric W. Biederman" <ebiederm@xmission.com>, vgoyal@redhat.com,
+        kexec <kexec@lists.infradead.org>
+Date:   Thu, 13 Jun 2019 16:07:36 -0400
+In-Reply-To: <20190613082627.GA30288@dhcp-128-65.nay.redhat.com>
 References: <20190612221549.28399-1-prsriva02@gmail.com>
-         <20190612221549.28399-3-prsriva02@gmail.com>
+         <20190612221549.28399-4-prsriva02@gmail.com>
+         <1560378703.4578.91.camel@linux.ibm.com>
+         <20190613082627.GA30288@dhcp-128-65.nay.redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-x-cbid: 19061319-0028-0000-0000-0000037A16B1
+x-cbid: 19061320-0020-0000-0000-00000349E67B
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061319-0029-0000-0000-0000243A1102
-Message-Id: <1560455980.4805.57.camel@linux.ibm.com>
+x-cbparentid: 19061320-0021-0000-0000-0000219D1F3E
+Message-Id: <1560456456.4805.61.camel@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-13_12:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906130149
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906130150
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-06-12 at 15:15 -0700, Prakhar Srivastava wrote:
+On Thu, 2019-06-13 at 16:26 +0800, Dave Young wrote:
+> On 06/12/19 at 06:31pm, Mimi Zohar wrote:
+> > [Cc: kexec mailing list]
+> > 
+> > Hi Eric, Dave,
+> > 
+> > On Wed, 2019-06-12 at 15:15 -0700, Prakhar Srivastava wrote:
+> > > During soft reboot(kexec_file_load) boot cmdline args
+> > > are not measured.Thus the new kernel on load boots with
+> > > an assumption of cold reboot.
+> > > 
+> > > This patch makes a call to the ima hook ima_kexec_cmdline,
+> > > added in "Define a new IMA hook to measure the boot command
+> > > line arguments"
+> > > to measure the boot cmdline args into the ima log.
+> > > 
+> > > - call ima_kexec_cmdline from kexec_file_load.
+> > > - move the call ima_add_kexec_buffer after the cmdline
+> > > args have been measured.
+> > > 
+> > > Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
+> > Cc: Eric W. Biederman <ebiederm@xmission.com>
+> > Cc: Dave Young <dyoung@redhat.com>
+> > 
+> > Any chance we could get some Acks?
+> 
+> The ima_* is blackbox functions to me, looks like this patch is trying
+> to measure kexec cmdline buffer and save in some ima logs and then add all the
+> measure results including those for kernel/initrd to a kexec_buf and pass to 2nd
 
-As before, the patch title needs to be prefixed with "ima: ".
+Right, including the new boot command line measurement.
 
->  /* IMA template field data definition */
-> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-> index ea7d8cbf712f..83ca99d65e4b 100644
-> --- a/security/integrity/ima/ima_api.c
-> +++ b/security/integrity/ima/ima_api.c
-> @@ -140,7 +140,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
->  	struct ima_template_entry *entry;
->  	struct inode *inode = file_inode(file);
->  	struct ima_event_data event_data = {iint, file, filename, NULL, 0,
-> -					    cause};
-> +					    cause, NULL, 0};
+> kernel.
+> 
+> It should be good and only take effect when IMA enabled. If all the
+> assumptions are right:
+> 
+> Acked-by: Dave Young <dyoung@redhat.com>
 
-This change here and
-
->  	int violation = 1;
->  	int result;
->  
-> @@ -296,7 +296,7 @@ void ima_store_measurement(struct integrity_iint_cache *iint,
->  	struct inode *inode = file_inode(file);
->  	struct ima_template_entry *entry;
->  	struct ima_event_data event_data = {iint, file, filename, xattr_value,
-> -					    xattr_len, NULL};
-> +					    xattr_len, NULL, NULL, 0};
-
-here and 
-
->  	int violation = 0;
->  
->  	if (iint->measured_pcrs & (0x1 << pcr))
-> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-> index 993d0f1915ff..c8591406c0e2 100644
-> --- a/security/integrity/ima/ima_init.c
-> +++ b/security/integrity/ima/ima_init.c
-> @@ -50,7 +50,7 @@ static int __init ima_add_boot_aggregate(void)
->  	struct ima_template_entry *entry;
->  	struct integrity_iint_cache tmp_iint, *iint = &tmp_iint;
->  	struct ima_event_data event_data = {iint, NULL, boot_aggregate_name,
-> -					    NULL, 0, NULL};
-> +					    NULL, 0, NULL, NULL, 0};
-
-here, don't belong in this patch.  It belongs in "IMA: support for per
-policy rule template formats", in case it should ever be backported.
- Please post this as a separate patch, that will be squashed with
-"IMA: support for per policy rule template formats".
-
->  	int result = -ENOMEM;
->  	int violation = 0;
->  	struct {
-
-
-> diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
-> index 6a3d8b831deb..f0178bc60c55 100644
-> --- a/security/integrity/ima/ima_template_lib.h
-> +++ b/security/integrity/ima/ima_template_lib.h
-> @@ -29,6 +29,8 @@ void ima_show_template_string(struct seq_file *m, enum ima_show_type show,
->  			      struct ima_field_data *field_data);
->  void ima_show_template_sig(struct seq_file *m, enum ima_show_type show,
->  			   struct ima_field_data *field_data);
-> +void ima_show_template_buf(struct seq_file *m, enum ima_show_type show,
-> +				struct ima_field_data *field_data);
-
-Formatting ...
-
->  int ima_parse_buf(void *bufstartp, void *bufendp, void **bufcurp,
->  		  int maxfields, struct ima_field_data *fields, int *curfields,
->  		  unsigned long *len_mask, int enforce_mask, char *bufname);
-> @@ -42,4 +44,6 @@ int ima_eventname_ng_init(struct ima_event_data *event_data,
->  			  struct ima_field_data *field_data);
->  int ima_eventsig_init(struct ima_event_data *event_data,
->  		      struct ima_field_data *field_data);
-> +int ima_eventbuf_init(struct ima_event_data *event_data,
-> +				struct ima_field_data *field_data);
-
-Formatting ...
-
->  #endif /* __LINUX_IMA_TEMPLATE_LIB_H */
+Thanks, Dave.
 
