@@ -2,93 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E09143F39
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 17:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD8E43C4E
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 17:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731545AbfFMPzb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 11:55:31 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:33007 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731543AbfFMIv6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:51:58 -0400
-Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id E13342F4C597DB972D83;
-        Thu, 13 Jun 2019 09:51:56 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Thu, 13 Jun
- 2019 09:51:50 +0100
-Subject: Re: [PATCH v3 0/2] ima/evm fixes for v5.2
-To:     Janne Karhunen <janne.karhunen@gmail.com>
-CC:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
-        <mjg59@google.com>, <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <silviu.vlasceanu@huawei.com>
-References: <20190606112620.26488-1-roberto.sassu@huawei.com>
- <CAE=NcraYOw9B3RFu3_DbJs9nPT87AtQEptC7zF4kAu4FP8YhxA@mail.gmail.com>
- <d9efe3c7-20dd-bbb0-40d8-40f69cba5b88@huawei.com>
- <CAE=NcraHqzST=SZNcrSgpv5EqfyUfpCCb7iQ0Oh6uohL3yiCdw@mail.gmail.com>
- <c13c6b4f-1302-35fb-f077-00b7f84fea08@huawei.com>
- <CAE=NcrZiyWjZUuxdLgA9Bq89Cpt1W6MLAzPkLHVgfOqSo2i1hQ@mail.gmail.com>
- <144bf319-ea0c-f6b6-5737-0aac34f37186@huawei.com>
- <CAE=NcrZgQSENPOtRdU=u1y6kqy0ouaaj-gioKHaUxZUcbUHwqA@mail.gmail.com>
- <3911846b-f836-592a-81e1-a2fd25470d98@huawei.com>
- <CAE=NcraD_DcSqog8XbisA+0YdNqwj0v_jZhzjR2Na0eZ-2XgJQ@mail.gmail.com>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <af08b46a-323e-5f91-e349-731ee9ea24ab@huawei.com>
-Date:   Thu, 13 Jun 2019 10:51:58 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
-MIME-Version: 1.0
-In-Reply-To: <CAE=NcraD_DcSqog8XbisA+0YdNqwj0v_jZhzjR2Na0eZ-2XgJQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+        id S1727968AbfFMPfN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 11:35:13 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:34562 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727945AbfFMKbX (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 13 Jun 2019 06:31:23 -0400
+Received: by mail-pl1-f194.google.com with SMTP id i2so7957333plt.1
+        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 03:31:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=c4lD5Ja/W68zU30yx+ZIDKDyIrqaAIZ94VRiCyeCO0Y=;
+        b=YkW4wOsmtRXKF39IQeQs8ZdcwD+6X2M5iCF/r6jKCp49Ml1bgkwnn9qLqERse4MXnS
+         JvE/JUr1cR6fI4sYp9RHlrto71AB7k+bS6GVAtsKrhT2Wmz0R/Nn7NUSf9qGlSMRGqGX
+         VFRL05138Hd3JVcXhBoLNfRo+SP5MpLwlqKq3bPblTc9ut7nk6RpFrhz/AS0kQLMdp7W
+         NYPunno5BmFlawT6AG9mFdUyJvmrBka68PEWDGES8yBZtUknvd3nXlEXBJq+d80A2PuT
+         pOlbAZYM12CmFbPUcdVThV/+qdhyEwwMTvqzkqBEoGhYmCw5qx4Uu3CqrowG+fxR70zk
+         EXuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=c4lD5Ja/W68zU30yx+ZIDKDyIrqaAIZ94VRiCyeCO0Y=;
+        b=ZQfmiSAuoCBGeehQSgbauHiAMAHFgijKyhm+Fp+7FsbHiRmRbmi14MsqdfvmPqiiUr
+         nLTuqouRDGBhzVcK+Hzl4xwsrGATrjvvQ9o9LuEfdxMutVEP6ElSD4HX9qP2ECc2mBCL
+         Vr9WybQvBkyqkXI4UlrBSu9HkcNkxZ6V1GLO0KoawlBg/Xy3dydQ1KJ57VJDFrykG/7S
+         v9U6gO6IM9/J3mkWG4NjCneVQdatbROlo6946MkxqgoeNJYBa/I1uKoCU8To/HFNNMoC
+         puQbb1lHx6MyPBYr8JEohFHmWA8KPpt4Eth3EypPT9Aewdc1ngVep8mhfz8/TgpPZrvW
+         /8hA==
+X-Gm-Message-State: APjAAAWCWOhe1vW7oaRjvrOEt3dcS9tuqJcPAXgqcLJ41VxnBhQknoxv
+        VOzsGOsWK/9bkqQN2TDTtZ4xaQ==
+X-Google-Smtp-Source: APXvYqwf629GmUVbhLZnIAU/FAePATiykUd+OC7xErJfaA+0pIRy9XJpSrc4JheBzy9dpn/uP2D0ug==
+X-Received: by 2002:a17:902:106:: with SMTP id 6mr23919253plb.64.1560421882686;
+        Thu, 13 Jun 2019 03:31:22 -0700 (PDT)
+Received: from localhost.localdomain ([117.196.234.139])
+        by smtp.gmail.com with ESMTPSA id a12sm2265078pgq.0.2019.06.13.03.31.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 13 Jun 2019 03:31:21 -0700 (PDT)
+From:   Sumit Garg <sumit.garg@linaro.org>
+To:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     jens.wiklander@linaro.org, corbet@lwn.net, dhowells@redhat.com,
+        jejb@linux.ibm.com, jarkko.sakkinen@linux.intel.com,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        ard.biesheuvel@linaro.org, daniel.thompson@linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tee-dev@lists.linaro.org, Sumit Garg <sumit.garg@linaro.org>
+Subject: [RFC 0/7] Introduce TEE based Trusted Keys support
+Date:   Thu, 13 Jun 2019 16:00:26 +0530
+Message-Id: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/13/2019 10:04 AM, Janne Karhunen wrote:
-> On Thu, Jun 13, 2019 at 10:50 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
-> 
->>> Would the appraise actually need any changes, just keep the
->>> IMA_NEW_FILE in ima_check_last_writer()? Of course it's not that easy
->>> (it never is) as the iint could go away and things like that, but with
->>> some tweaks?
->>
->> I think the problem would be that the code that sets the status to
->> INTEGRITY_PASS is not executed, because the file gets security.ima after
->> the first write.
-> 
-> We have a patchset coming shortly that starts tracking the inode
-> changes as we go, so first time we fix it is when the file is created
-> before it has any content (!);
-> 
-> diff --git a/security/integrity/ima/ima_appraise.c
-> b/security/integrity/ima/ima_appraise.c
-> index 5fb7127bbe68..da4f0afe0348 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -236,8 +236,10 @@ int ima_appraise_measurement(enum ima_hooks func,
->                          iint->flags |= IMA_NEW_FILE;
->                  if ((iint->flags & IMA_NEW_FILE) &&
->                      (!(iint->flags & IMA_DIGSIG_REQUIRED) ||
-> -                    (inode->i_size == 0)))
-> +                    (inode->i_size == 0))) {
-> +                       ima_fix_xattr(dentry, iint);
->                          status = INTEGRITY_PASS;
+Add support for TEE based trusted keys where TEE provides the functionality
+to seal and unseal trusted keys using hardware unique key. Also, this is
+an alternative in case platform doesn't possess a TPM device.
 
-Some time ago I developed this patch:
+This series also adds some TEE features like:
 
-http://kernsec.org/pipermail/linux-security-module-archive/2017-November/004569.html
+Patch #1, #2 enables support for registered kernel shared memory with TEE.
 
-Since the appraisal flags are not cleared, ima_appraise_measurement() is
-not executed again and the problem with EVM does not arise.
+Patch #3 enables support for private kernel login method required for
+cases like trusted keys where we don't wan't user-space to directly access
+TEE service to retrieve trusted key contents.
 
-Roberto
+Rest of the patches from #4 to #7 adds support for TEE based trusted keys.
+
+This patch-set has been tested with OP-TEE based pseudo TA which can be
+found here [1].
+
+Looking forward to your valuable feedback/suggestions.
+
+[1] https://github.com/OP-TEE/optee_os/pull/3082
+
+Sumit Garg (7):
+  tee: optee: allow kernel pages to register as shm
+  tee: enable support to register kernel memory
+  tee: add private login method for kernel clients
+  KEYS: trusted: Introduce TEE based Trusted Keys
+  KEYS: encrypted: Allow TEE based trusted master keys
+  doc: keys: Document usage of TEE based Trusted Keys
+  MAINTAINERS: Add entry for TEE based Trusted Keys
+
+ Documentation/security/keys/tee-trusted.rst      |  93 +++++
+ MAINTAINERS                                      |   9 +
+ drivers/tee/optee/call.c                         |   7 +
+ drivers/tee/tee_core.c                           |   6 +
+ drivers/tee/tee_shm.c                            |  16 +-
+ include/keys/tee_trusted.h                       |  84 ++++
+ include/keys/trusted-type.h                      |   1 +
+ include/linux/tee_drv.h                          |   1 +
+ include/uapi/linux/tee.h                         |   2 +
+ security/keys/Kconfig                            |   3 +
+ security/keys/Makefile                           |   3 +
+ security/keys/encrypted-keys/masterkey_trusted.c |  10 +-
+ security/keys/tee_trusted.c                      | 506 +++++++++++++++++++++++
+ 13 files changed, 737 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/security/keys/tee-trusted.rst
+ create mode 100644 include/keys/tee_trusted.h
+ create mode 100644 security/keys/tee_trusted.c
 
 -- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+2.7.4
+
