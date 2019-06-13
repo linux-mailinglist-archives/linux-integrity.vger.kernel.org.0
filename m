@@ -2,182 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B3B447E2
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 19:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B0A44750
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 18:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725825AbfFMRCu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 13:02:50 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:41885 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729505AbfFLXEd (ORCPT
+        id S2404050AbfFMQ6o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 12:58:44 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:45836 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729874AbfFMAni (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jun 2019 19:04:33 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 83so9730777pgg.8
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jun 2019 16:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=axtens.net; s=google;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=0sXEuoXXfB+58oAqB27nyxVJnIR0qxmqN3amvLO4MUI=;
-        b=kMu+BVJa981hAatIgUu4yrYi7Q8PVRZO3FdVXL/KM/vtg9zSDoY6QaoYVsgwARCtsB
-         8wMNnJZZEbmSLCmDQCZCYinzc3oFyRXDR4yjqyajTfxcaq5mYNvy6US7H9FOyI1ujcE6
-         mkifXT6gFQ7lLMNCAiWTrrsyS6n/+tpWDLK+4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=0sXEuoXXfB+58oAqB27nyxVJnIR0qxmqN3amvLO4MUI=;
-        b=VXaWXJbqOb3fIQ+sFAIfXr4bVk/PUoNqr+dnWZwbTS2hzLbuMaYBmlGCyNmZervK4a
-         PgsyC/Mw2IO6BQ+1U3+TCpLatKJfXvClGNVApbpAKisNC3gkdLR4t2Ps0THwmu6FX0SW
-         FyisGE/mxR+Yqp9Ou7D2OjsKpukODnaW+3Sdl+aYCtvKim+7B7F1mHZI5R/1SVPzAU1l
-         rhZm2KvAWvBKcWgXMHm4FB/qzmi6Q+dhAduX+8lIiGdWVmTYaDoMED4bLmrsCvTwIHQx
-         P/qh771UAj0q26wkJ1PxSZcTnj2las5CXPkdL+icqih5Xepad/N0I9IYAlgi5+0njQZm
-         YHrA==
-X-Gm-Message-State: APjAAAUtX74DkDeEJztiyJJuOBNnDbr2Wc6JrRWcOiMNHYkTTQ/wZBrN
-        /XgURO22W//7RLgnfxIIKYXdRA==
-X-Google-Smtp-Source: APXvYqx+XWoFTjG9dZbuolj86wqQOT4Iqef0H+9nNIH/wMPWesoTcaGtVUCDotl0QJH7LYE+KensLw==
-X-Received: by 2002:a63:ee0a:: with SMTP id e10mr26896771pgi.28.1560380672280;
-        Wed, 12 Jun 2019 16:04:32 -0700 (PDT)
-Received: from localhost (ppp167-251-205.static.internode.on.net. [59.167.251.205])
-        by smtp.gmail.com with ESMTPSA id g9sm463989pgs.78.2019.06.12.16.04.29
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 12 Jun 2019 16:04:31 -0700 (PDT)
-From:   Daniel Axtens <dja@axtens.net>
-To:     Nayna <nayna@linux.vnet.ibm.com>, Nayna Jain <nayna@linux.ibm.com>,
-        linuxppc-dev@ozlabs.org, linux-efi@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        Eric Richter <erichte@linux.ibm.com>
-Subject: Re: [PATCH v3 1/3] powerpc/powernv: Add OPAL API interface to get secureboot state
-In-Reply-To: <eaa37bd0-a77d-d70a-feb5-c0e73ce231bf@linux.vnet.ibm.com>
-References: <1560198837-18857-1-git-send-email-nayna@linux.ibm.com> <1560198837-18857-2-git-send-email-nayna@linux.ibm.com> <87ftofpbth.fsf@dja-thinkpad.axtens.net> <eaa37bd0-a77d-d70a-feb5-c0e73ce231bf@linux.vnet.ibm.com>
-Date:   Thu, 13 Jun 2019 09:04:26 +1000
-Message-ID: <87d0jipfr9.fsf@dja-thinkpad.axtens.net>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Wed, 12 Jun 2019 20:43:38 -0400
+Received: from jaskaran-Intel-Server-Board-S1200V3RPS-UEFI-Development-Kit.corp.microsoft.com (unknown [131.107.160.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 380F620B7186;
+        Wed, 12 Jun 2019 17:43:37 -0700 (PDT)
+From:   Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
+To:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
+        jmorris@namei.org, scottsh@microsoft.com, ebiggers@google.com,
+        mpatocka@redhat.com
+Subject: [RFC PATCH v4 0/1] Add dm verity root hash pkcs7 sig validation.
+Date:   Wed, 12 Jun 2019 17:43:27 -0700
+Message-Id: <20190613004328.4274-1-jaskarankhurana@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Nayna,
+This patch set adds in-kernel pkcs7 signature checking for the roothash of
+the dm-verity hash tree.
+The verification is to support cases where the roothash is not secured by
+Trusted Boot, UEFI Secureboot or similar technologies.
+One of the use cases for this is for dm-verity volumes mounted after boot,
+the root hash provided during the creation of the dm-verity volume has to
+be secure and thus in-kernel validation implemented here will be used
+before we trust the root hash and allow the block device to be created.
 
->>> Since OPAL can support different types of backend which can vary in the
->>> variable interpretation, a new OPAL API call named OPAL_SECVAR_BACKEND, is
->>> added to retrieve the supported backend version. This helps the consumer
->>> to know how to interpret the variable.
->>>
->> (Firstly, apologies that I haven't got around to asking about this yet!)
->>
->> Are pluggable/versioned backend a good idea?
->>
->> There are a few things that worry me about the idea:
->>
->>   - It adds complexity in crypto (or crypto-adjacent) code, and that
->>     increases the likelihood that we'll accidentally add a bug with bad
->>     consequences.
->
-> Sorry, I think I am not clear on what exactly you mean here.Can you 
-> please elaborate or give specifics ?
+Why we are doing validation in the Kernel?
 
-Cryptosystems with greater flexibility can have new kinds of
-vulnerabilities arise from the greater complexity. The first sort of
-thing that comes to mind is a downgrade attack like from TLS. I think
-you're protected from this because the mode cannot be negotiatied at run
-time, but in general it's security sensitive code so I'd like it to be
-as simple as possible.
+The reason is to still be secure in cases where the attacker is able to
+compromise the user mode application in which case the user mode validation
+could not have been trusted.
+The root hash signature validation in the kernel along with existing
+dm-verity implementation gives a higher level of confidence in the
+executable code or the protected data. Before allowing the creation of
+the device mapper block device the kernel code will check that the detached
+pkcs7 signature passed to it validates the roothash and the signature is
+trusted by builtin keys set at kernel creation. The kernel should be
+secured using Verified boot, UEFI Secure Boot or similar technologies so we
+can trust it.
 
->>   - If we are worried about a long-term-future change to how secure-boot
->>     works, would it be better to just add more get/set calls to opal at
->>     the point at which we actually implement the new system?
->
-> The intention is to avoid to re-implement the key/value interface for 
-> each scheme. Do you mean to deprecate the old APIs and add new APIs with 
-> every scheme ?
+What about attacker mounting non dm-verity volumes to run executable
+code?
 
-Yes, because I expect the scheme would change very, very rarely.
+This verification can be used to have a security architecture where a LSM
+can enforce this verification for all the volumes and by doing this it can
+ensure that all executable code runs from signed and trusted dm-verity
+volumes.
 
->>   - Under what circumstances would would we change the kernel-visible
->>     behaviour of skiboot? Are we expecting to change the behaviour,
->>     content or names of the variables in future? Otherwise the only
->>     relevant change I can think of is a change to hardware platforms, and
->>     I'm not sure how a change in hardware would lead to change in
->>     behaviour in the kernel. Wouldn't Skiboot hide h/w differences?
->
-> Backends are intended to be an agreement for firmware, kernel and 
-> userspace on what the format of variables are, what variables should be 
-> expected, how they should be signed, etc. Though we don't expect it to 
-> happen very often, we want to anticipate possible changes in the 
-> firmware which may affect the kernel such as new features, support of 
-> new authentication mechanisms, addition of new variables. Corresponding 
-> skiboot patches are on - 
-> https://lists.ozlabs.org/pipermail/skiboot/2019-June/014641.html
+Further patches will be posted that build on this and enforce this
+verification based on policy for all the volumes on the system.
 
-I still feel like this is holding onto ongoing complexity for very
-little gain, but perhaps this is because I can't picture a specific
-change that would actually require a wholesale change to the scheme.
+How are these changes tested?
 
-You mention new features, support for new authentication mechanisms, and
-addition of new variables.
+To generate and sign the roothash just dump the roothash returned by veritysetup
+format in a text file and then sign using the tool in the topic branch here:
+(fsverity uses the tool for signing, I just added a parameter there for testing)
 
- - New features is a bit too generic to answer specifically. In general
-   I accept that there exists some new feature that would be
-   sufficiently backwards-incompatible as to require a new version. I
-   just can't think of one off the top of my head and so I'm not
-   convinced it's worth the complexity. Did you have something in mind?
+https://github.com/jaskarankhurana/fsverity-sign/tree/fs_verity_detached_pkcs7_for_dm_verity
 
- - By support for new authentication mechanisms, I assume you mean new
-   mechanisms for authenticating variable updates? This is communicated
-   in edk2 via the attributes field. Looking at patch 5 from the skiboot
-   series:
+fsverity sign-dm-verity <ROOTHASH_IN_A_FILE>  <OUTSIG> --key=<KEYFILE>
+--cert=<CERTFILE>
 
-+ * When the attribute EFI_VARIABLE_TIME_BASED_AUTHENTICATED_WRITE_ACCESS is set,
-+ * then the Data buffer shall begin with an instance of a complete (and
-+ * serialized) EFI_VARIABLE_AUTHENTICATION_2 descriptor.
+veritysetup part of cryptsetup library was modified to take a optional
+root-hash-sig parameter.
 
-   Could a new authentication scheme be communicated by setting a
-   different attribute value? Or are we not carrying attributes in the
-   metadata blob?
+Commandline used to test the changes:
 
- - For addition of new variables, I'm confused as to why this would
-   require a new API - wouldn't it just be exposed in the normal way via
-   opal_secvar_get(_next)?
+veritysetup open  <data_device> <name> <hash_device> <root_hash>
+ --root-hash-sig=<root_hash_pkcs7_detached_sig>
 
-I guess I also somewhat object to calling it a 'backend' if we're using
-it as a version scheme. I think the skiboot storage backends are true
-backends - they provide different implementations of the same
-functionality with the same API, but this seems like you're using it to
-indicate different functionality. It seems like we're using it as if it
-were called OPAL_SECVAR_VERSION.
+The changes for veritysetup are in a topic branch for now at:
+https://github.com/jaskarankhurana/veritysetup/tree/veritysetup_add_sig
 
->>   - What is the correct fallback behaviour if a kernel receives a result
->>     that it does not expect? If a kernel expecting BackendV1 is instead
->>     informed that it is running on BackendV2, then the cannot access the
->>     secure variable at all, so it cannot load keys that are potentially
->>     required to successfully boot (e.g. to validate the module for
->>     network card or graphics!)
->
-> The backend is declaredby the firmware, and is set at compile-time. The 
-> kernel queriesfirmware on whichbackend is in use, and the backend will 
-> not change at runtime.If the backend in use by the firmware is not 
-> supported by the kernel (e.g. kernel is too old), the kernel does not 
-> attempt to read any secure variables, as it won't understand what the 
-> format is. This is a secure boot failure condition, as we cannot verify 
-> the next kernel. With addition of new backends in the skiboot, the 
-> support will be added to the kernel. Note: skiboot and skiroot should 
-> always be in sync with backend support.
+Changelog:
 
-Seems reasonable. I'm thinking specifically about the kernel loaded
-after skiroot; and yes, on reflection just failing to boot is the only
-sensible thing you can do.
+v4:
+  - Code review feedback given by Milan Broz.
+  - Add documentation about the root hash signature parameter.
+  - Bump up the dm-verity target version.
+  - Provided way to sign and test with veritysetup in cover letter.
 
-Regards,
-Daniel
+v3:
+  - Code review feedback given by Sasha Levin.
+  - Removed EXPORT_SYMBOL_GPL since this was not required.
+  - Removed "This file is released under the GPLv2" since we have SPDX
+    identifier.
+  - Inside verity_verify_root_hash changed EINVAL to ENOKEY when the key
+    descriptor is not specified but due to force option being set it is
+    expected.
+  - Moved CONFIG check to inside verity_verify_get_sig_from_key.
+     (Did not move the sig_opts_cleanup to inside verity_dtr as the
+     sig_opts do not need to be allocated for the entire duration the block
+     device is active unlike the verity structure, note verity_dtr is called
+     only if verity_ctr fails or after the lifetime of the block device.)
+
+v2:
+  - Code review feedback to pass the signature binary blob as a key that can be
+    looked up in the kernel and be used to verify the roothash.
+    [Suggested by Milan Broz]
+  - Made the code related change suggested in review of v1.
+    [Suggested by Balbir Singh]
+
+v1:
+  - Add kconfigs to control dm-verity root has signature verification and
+    use the signature if specified to verify the root hash.
+
+Jaskaran Khurana (1):
+  Adds in-kernel pkcs7 sig checking the roothash of the dm-verity hash
+    tree
+
+ Documentation/device-mapper/verity.txt |   7 ++
+ drivers/md/Kconfig                     |  23 +++++
+ drivers/md/Makefile                    |   2 +-
+ drivers/md/dm-verity-target.c          |  36 ++++++-
+ drivers/md/dm-verity-verify-sig.c      | 132 +++++++++++++++++++++++++
+ drivers/md/dm-verity-verify-sig.h      |  30 ++++++
+ 6 files changed, 224 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/md/dm-verity-verify-sig.c
+ create mode 100644 drivers/md/dm-verity-verify-sig.h
+
+-- 
+2.17.1
 
