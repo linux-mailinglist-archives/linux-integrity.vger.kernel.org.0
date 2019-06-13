@@ -2,100 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1733443EB
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 18:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DABC9443B3
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2019 18:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392405AbfFMQdX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jun 2019 12:33:23 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:39260 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730816AbfFMIE4 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:04:56 -0400
-Received: by mail-lf1-f65.google.com with SMTP id p24so14321046lfo.6;
-        Thu, 13 Jun 2019 01:04:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9gCtDdvLdjyjyNKWUbR6wJnuv7FUPOS+6IB7ZzcAz+c=;
-        b=U4fL/N9ZGw9VRhYABC3i5p+yhIoeqDoXD2dlRNdbtYQMVAriywhfiy/dhojyMwZGpz
-         K0Zm9IPWQMF8SSxxoJ6HdyQEpyc1bG6E2fT2HfAKI+gdj6GAyxcn+hr8RCpEbHFUrgvn
-         CpepaTYBiLXhFL+qjoXlWPVBqKme+mcUZZ17WtFNADuNoX5a9KzXiz3BOlCEaxHArB4F
-         KIAODZ9tmJluheumianLexQpmvuCtvKKv5wmNMAObItduzvVgrk7nfrm4G+e7/1V6WKD
-         BF1LyXH8Gj+VIxrAtOA1Az6i+DMT3s5dBANNB1PDPMFzL8WcBaETL+7kNPFZRN8sefC5
-         hVGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9gCtDdvLdjyjyNKWUbR6wJnuv7FUPOS+6IB7ZzcAz+c=;
-        b=LJvyGmAyL8TVAw/goqhtprcXERXx1FM1TwfqoPyHGEkTNXN6Y3uyBzQHBFX2KXfjLw
-         6BzCqmpVM8BFwvelljN4eRz5o4GzOvIR1GsLCbLjhlwMKrkDoXNuobbvJdGa5S/5oMCx
-         GCIAtRxN12OsupxGDldzqTp4FbzHiZM6oEu9SKFpjMp4dKORjMEOOUOKy/850wruAzPZ
-         bSjWQjHOOZP3fW8DRF9XkWvy1XITwsMk90F51Izf3/dR0ccLBuK7pHROS2euj92XS5xu
-         b78FVj0Q4xO/Kry+KyOSzvwEeIGiViUSRzr9OWD7yjFK9nG2BrMFgnRfSQmGHCl+8/2B
-         vr2Q==
-X-Gm-Message-State: APjAAAWiR4BW5dsIaMATDaXwyA1mc0otYkEhTagq38QXZQgKYQZOXBkn
-        k6xcVWKeT8PxGB+4XKf5kVqRMLBg+hETZX99uxE=
-X-Google-Smtp-Source: APXvYqzLFzk7NtOJfG+b8M/+CHlqJrPv2SBKrcKCiijuq/epieEq72ItLujZgsxOrthT3MLYDvVmlniZeVtoqSurorY=
-X-Received: by 2002:a19:ae01:: with SMTP id f1mr43031184lfc.29.1560413093746;
- Thu, 13 Jun 2019 01:04:53 -0700 (PDT)
+        id S2388973AbfFMQbZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jun 2019 12:31:25 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:59694 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730876AbfFMI0k (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 13 Jun 2019 04:26:40 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 73FF830860C0;
+        Thu, 13 Jun 2019 08:26:39 +0000 (UTC)
+Received: from dhcp-128-65.nay.redhat.com (ovpn-12-87.pek2.redhat.com [10.72.12.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6E3E960FB1;
+        Thu, 13 Jun 2019 08:26:31 +0000 (UTC)
+Date:   Thu, 13 Jun 2019 16:26:27 +0800
+From:   Dave Young <dyoung@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, roberto.sassu@huawei.com,
+        "Eric W. Biederman" <ebiederm@xmission.com>, vgoyal@redhat.com,
+        kexec <kexec@lists.infradead.org>
+Subject: Re: [PATCH V8 3/3] Call ima_kexec_cmdline to measure the cmdline args
+Message-ID: <20190613082627.GA30288@dhcp-128-65.nay.redhat.com>
+References: <20190612221549.28399-1-prsriva02@gmail.com>
+ <20190612221549.28399-4-prsriva02@gmail.com>
+ <1560378703.4578.91.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20190606112620.26488-1-roberto.sassu@huawei.com>
- <CAE=NcraYOw9B3RFu3_DbJs9nPT87AtQEptC7zF4kAu4FP8YhxA@mail.gmail.com>
- <d9efe3c7-20dd-bbb0-40d8-40f69cba5b88@huawei.com> <CAE=NcraHqzST=SZNcrSgpv5EqfyUfpCCb7iQ0Oh6uohL3yiCdw@mail.gmail.com>
- <c13c6b4f-1302-35fb-f077-00b7f84fea08@huawei.com> <CAE=NcrZiyWjZUuxdLgA9Bq89Cpt1W6MLAzPkLHVgfOqSo2i1hQ@mail.gmail.com>
- <144bf319-ea0c-f6b6-5737-0aac34f37186@huawei.com> <CAE=NcrZgQSENPOtRdU=u1y6kqy0ouaaj-gioKHaUxZUcbUHwqA@mail.gmail.com>
- <3911846b-f836-592a-81e1-a2fd25470d98@huawei.com>
-In-Reply-To: <3911846b-f836-592a-81e1-a2fd25470d98@huawei.com>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Thu, 13 Jun 2019 11:04:42 +0300
-Message-ID: <CAE=NcraD_DcSqog8XbisA+0YdNqwj0v_jZhzjR2Na0eZ-2XgJQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] ima/evm fixes for v5.2
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@huawei.com,
-        mjg59@google.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, silviu.vlasceanu@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1560378703.4578.91.camel@linux.ibm.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Thu, 13 Jun 2019 08:26:39 +0000 (UTC)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 10:50 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+On 06/12/19 at 06:31pm, Mimi Zohar wrote:
+> [Cc: kexec mailing list]
+> 
+> Hi Eric, Dave,
+> 
+> On Wed, 2019-06-12 at 15:15 -0700, Prakhar Srivastava wrote:
+> > During soft reboot(kexec_file_load) boot cmdline args
+> > are not measured.Thus the new kernel on load boots with
+> > an assumption of cold reboot.
+> > 
+> > This patch makes a call to the ima hook ima_kexec_cmdline,
+> > added in "Define a new IMA hook to measure the boot command
+> > line arguments"
+> > to measure the boot cmdline args into the ima log.
+> > 
+> > - call ima_kexec_cmdline from kexec_file_load.
+> > - move the call ima_add_kexec_buffer after the cmdline
+> > args have been measured.
+> > 
+> > Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
+> Cc: Eric W. Biederman <ebiederm@xmission.com>
+> Cc: Dave Young <dyoung@redhat.com>
+> 
+> Any chance we could get some Acks?
 
-> > Would the appraise actually need any changes, just keep the
-> > IMA_NEW_FILE in ima_check_last_writer()? Of course it's not that easy
-> > (it never is) as the iint could go away and things like that, but with
-> > some tweaks?
->
-> I think the problem would be that the code that sets the status to
-> INTEGRITY_PASS is not executed, because the file gets security.ima after
-> the first write.
+The ima_* is blackbox functions to me, looks like this patch is trying
+to measure kexec cmdline buffer and save in some ima logs and then add all the
+measure results including those for kernel/initrd to a kexec_buf and pass to 2nd
+kernel.
 
-We have a patchset coming shortly that starts tracking the inode
-changes as we go, so first time we fix it is when the file is created
-before it has any content (!);
+It should be good and only take effect when IMA enabled. If all the
+assumptions are right:
 
-diff --git a/security/integrity/ima/ima_appraise.c
-b/security/integrity/ima/ima_appraise.c
-index 5fb7127bbe68..da4f0afe0348 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -236,8 +236,10 @@ int ima_appraise_measurement(enum ima_hooks func,
-                        iint->flags |= IMA_NEW_FILE;
-                if ((iint->flags & IMA_NEW_FILE) &&
-                    (!(iint->flags & IMA_DIGSIG_REQUIRED) ||
--                    (inode->i_size == 0)))
-+                    (inode->i_size == 0))) {
-+                       ima_fix_xattr(dentry, iint);
-                        status = INTEGRITY_PASS;
-+               }
-                goto out;
-        }
+Acked-by: Dave Young <dyoung@redhat.com>
+> 
+> thanks,
+> 
+> Mimi
+> 
+> > ---
+> >  kernel/kexec_file.c | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> > index 072b6ee55e3f..b0c724e5d86c 100644
+> > --- a/kernel/kexec_file.c
+> > +++ b/kernel/kexec_file.c
+> > @@ -198,9 +198,6 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+> >  		return ret;
+> >  	image->kernel_buf_len = size;
+> >  
+> > -	/* IMA needs to pass the measurement list to the next kernel. */
+> > -	ima_add_kexec_buffer(image);
+> > -
+> >  	/* Call arch image probe handlers */
+> >  	ret = arch_kexec_kernel_image_probe(image, image->kernel_buf,
+> >  					    image->kernel_buf_len);
+> > @@ -241,8 +238,14 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+> >  			ret = -EINVAL;
+> >  			goto out;
+> >  		}
+> > +
+> > +		ima_kexec_cmdline(image->cmdline_buf,
+> > +				  image->cmdline_buf_len - 1);
+> >  	}
+> >  
+> > +	/* IMA needs to pass the measurement list to the next kernel. */
+> > +	ima_add_kexec_buffer(image);
+> > +
+> >  	/* Call arch image load handlers */
+> >  	ldata = arch_kexec_kernel_image_load(image);
+> >  
+> 
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
 
-
-
---
-Janne
+Thanks
+Dave
