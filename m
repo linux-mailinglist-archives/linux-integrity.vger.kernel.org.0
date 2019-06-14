@@ -2,54 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B5D453D0
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 07:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E41453D5
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 07:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725834AbfFNFNM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jun 2019 01:13:12 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:39809 "EHLO
+        id S1725868AbfFNFNi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jun 2019 01:13:38 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:45960 "EHLO
         mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725822AbfFNFNM (ORCPT
+        with ESMTP id S1725780AbfFNFNh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jun 2019 01:13:12 -0400
-Received: by mail-lj1-f196.google.com with SMTP id v18so1006857ljh.6
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 22:13:11 -0700 (PDT)
+        Fri, 14 Jun 2019 01:13:37 -0400
+Received: by mail-lj1-f196.google.com with SMTP id m23so975205lje.12
+        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 22:13:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aL7dOhWJv6Iy9PdIL/Yj/9BYl97GRWMi/xDEOn/xHjE=;
-        b=MXRx/8mRNZMEm1bSJWyIQsqdjsBQQWYSqSNiLZbqiLy8NWqMXq9PwlieAW0h9A12ak
-         /QfePvWZDuOYNpjekRDfBniymCHnr8jZ6wyvty7ZG7h+tkY4iUnvLjn4rf/3RpwKp4y7
-         yENE6RqmnFanwpBzOT9bmTtrkiKD/rZKwo9AE5XqDN4hiTmgj6FpzDjKfz1dU/4bTGa/
-         5hv6teKrtqHFtBVrtF7qGtc5jBuXkteMXOVAPJd7bKlJrHx6evSlDzru4Zugeyp3Kl1B
-         fpiyzYSgJI1guXX+HAkkUTyRSKQmjmLyAQSCiVSywCIYV/d+sqdiFx2/yT92ARm6v5Se
-         1KDg==
+        bh=pEcwvzDbZgh36sf0IDCKh8szy53wV/GjfhuFB+x9+B0=;
+        b=s2taeimw3XvFPIL11YwD/5Yw5TcIPVUvT8+tgj8+2Zyh6SVTrHyyk/EJ/JCRhF//fw
+         A+2S86fznNpPTwxq6Z0Bo5GwbrLr1ETUBE+fCUiWfHDy1ry0/FU40X1JPxwHJSHuXyNs
+         cBnVNupPUiBNNCRN3y+IPUsKOnnTSZktQaPAjCRCitcR6kesm+/CYpQuV2lCmEz7xVus
+         44bJ1huXCH/7TA4XaXN41ZX5NREeKaKbP5Kc0dvkrvA+KzT3qyTQbm4k5yQVfqsl5URy
+         v4i22cjKfuvWrpRAt8la5w1JBjqVB2nGrhkF+DHEv6AlOQgyvmJ3+axF4XxaBBvqGaIR
+         4wHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aL7dOhWJv6Iy9PdIL/Yj/9BYl97GRWMi/xDEOn/xHjE=;
-        b=U37Qk6M0Sncf7nlw0bQ81vuIaGDLtA4YWaOgAnUHNg0pRDfu1N9HIG1aLLNkEZ3bYS
-         TJ+rWYlX35RpzUjtYWcakBah/OZn1KLqyAhg+e9tA1SB3alwXezwC16Ai/zbLmuhtQBS
-         YY1SiR3EB85Y9KC3F5Um5h7WCvFl/Cj6Y/M07s9WoV1UipGhTDlehhSRyIn4//3rh4/6
-         IrNDG7P4e2Ik4pqoev1wA9Lk8p7H2+M1SmKOc4gA1xd7DpkNWz5jOMShx/AGs2798K5d
-         zTPSNZa+q/szjGaYUMRnOFSAyt0KrrAzZxbXm/cE4kluLNhJ9mCoLytdvN47z2HifXOo
-         ubXA==
-X-Gm-Message-State: APjAAAVeLYjr5kyQKzpFLGhhOTdQ+L+0JViOt1/zOvAyWCASxtn2rfk8
-        ZnYC7Yq212agqV9RQxFP1qxd1prsDe8bUrPYgyRPVg==
-X-Google-Smtp-Source: APXvYqwbhE6azwYa5Cp42iogGaz/sbbBnyxJMg/6/oQvYNIvy2CVlb+gsNyQN1WDW1av7RwJ5ccPczeFkpq9mcT7YzM=
-X-Received: by 2002:a2e:4b12:: with SMTP id y18mr2691836lja.238.1560489190498;
- Thu, 13 Jun 2019 22:13:10 -0700 (PDT)
+        bh=pEcwvzDbZgh36sf0IDCKh8szy53wV/GjfhuFB+x9+B0=;
+        b=H3BZfDQjfgP6RW3edthmGmebY/fVmOc6B7BDomvKoqLb411A4jNig0EmM9Yxdpp0eP
+         RbvTKvr/xur6MtsljBTmik651UXU7bStbmI4dOfpjhlJBU4NnMKhZCYxNqJvHfeNjxSR
+         eFu9LwdGCBeRIfkcy/NhurIFNXk96wXEDfHyCu5Y9DJd6wn8m8lC3dJoG/6CWlowTLy0
+         6kc9D6mnWMWyDGpw8Nbmz3/mnIPNpFc5JTkpOhcfZTynsSFLGEZRMF9jmwFab4MTGHOQ
+         X4z75w4DTsjbquQ2NfmtEuHx/vhAZhe5j7hBPHjDuuItH8ghNTY1+Bz1WTpBJoxS8tql
+         dcPQ==
+X-Gm-Message-State: APjAAAXWsJrKsVAcjFQM2TzqkCeUEkvWEuuMVvcIqIjW8lR+T5iu22wN
+        vGB887RTvKgzFQD4Ry+qfbjJxlvJxL56StU3TDRICQ==
+X-Google-Smtp-Source: APXvYqyMLEhKd1WWY+BA07+pXv1UfARrC4yw3pAYgqbxqGyINCZlSFS8u3RnkH7fTLodB4y6NuAlY19vyYH/44JgWfg=
+X-Received: by 2002:a2e:85d4:: with SMTP id h20mr14940805ljj.142.1560489215802;
+ Thu, 13 Jun 2019 22:13:35 -0700 (PDT)
 MIME-Version: 1.0
 References: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org>
- <1560421833-27414-2-git-send-email-sumit.garg@linaro.org> <20190613151257.GA18488@linux.intel.com>
- <20190613151714.GC18488@linux.intel.com> <20190613151746.GD18488@linux.intel.com>
-In-Reply-To: <20190613151746.GD18488@linux.intel.com>
+ <1560421833-27414-3-git-send-email-sumit.garg@linaro.org> <20190613152003.GE18488@linux.intel.com>
+In-Reply-To: <20190613152003.GE18488@linux.intel.com>
 From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 14 Jun 2019 10:42:59 +0530
-Message-ID: <CAFA6WYMjuEm8jwjteD1Wu2Uqs_O2jQuVyffqqpaNnSs0hksDMw@mail.gmail.com>
-Subject: Re: [RFC 1/7] tee: optee: allow kernel pages to register as shm
+Date:   Fri, 14 Jun 2019 10:43:24 +0530
+Message-ID: <CAFA6WYOqMaLDBZSY5GYUc=p2GqtpujLfHo4OjqX83q-0aGD1bw@mail.gmail.com>
+Subject: Re: [RFC 2/7] tee: enable support to register kernel memory
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
@@ -67,25 +66,14 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 13 Jun 2019 at 20:47, Jarkko Sakkinen
+On Thu, 13 Jun 2019 at 20:50, Jarkko Sakkinen
 <jarkko.sakkinen@linux.intel.com> wrote:
 >
-> On Thu, Jun 13, 2019 at 06:17:14PM +0300, Jarkko Sakkinen wrote:
-> > On Thu, Jun 13, 2019 at 06:12:57PM +0300, Jarkko Sakkinen wrote:
-> > > On Thu, Jun 13, 2019 at 04:00:27PM +0530, Sumit Garg wrote:
-> > > > Kernel pages are marked as normal type memory only so allow kernel pages
-> > > > to be registered as shared memory with OP-TEE.
-> > > >
-> > > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> > >
-> > > Just out of pure interest why this was not allowed before?
+> On Thu, Jun 13, 2019 at 04:00:28PM +0530, Sumit Garg wrote:
+> > Enable support to register kernel memory reference with TEE. This change
+> > will allow TEE bus drivers to register memory references.
 > >
-> > Please spare me and ignore that one :-) Obviouslly because it
-> > was not used.
-> >
-> > Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->
-> Actually,
+> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 >
 > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 >
