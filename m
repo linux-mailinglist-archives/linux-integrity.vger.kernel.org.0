@@ -2,123 +2,210 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E9346C25
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 23:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28EA46C48
+	for <lists+linux-integrity@lfdr.de>; Sat, 15 Jun 2019 00:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbfFNV4i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jun 2019 17:56:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46624 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726792AbfFNV4g (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jun 2019 17:56:36 -0400
-Received: from localhost (unknown [23.100.24.84])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2D9BD2184E;
-        Fri, 14 Jun 2019 21:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560549395;
-        bh=AaOXU9JSXW7lKOl4hZybnR5+zYZKfEbQwzFRA41gvv8=;
-        h=Date:From:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:From;
-        b=xWMm4yhEKB2Mx1cp5Ek+eYiTWFnytpnjFNZSnN05no6V8kPXEEnXPN7LOMhs3CKgh
-         qP7UlS4SQtOeKJy3UIgInMEYMOWpVcMQo/QAhXJR//VZEPPU3Il/2DKQwGIwjMBbIX
-         HrmYcOoZKI0ZdObfongKn+lIRHTWALWJuJeehGb0=
-Date:   Fri, 14 Jun 2019 21:56:34 +0000
-From:   Sasha Levin <sashal@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-To:     Milan Broz <gmazyland@gmail.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Milan Broz <gmazyland@gmail.com>, stable@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH] tpm: Fix null pointer dereference on chip register error path
-In-Reply-To: <20190612084210.13562-1-gmazyland@gmail.com>
-References: <20190612084210.13562-1-gmazyland@gmail.com>
-Message-Id: <20190614215635.2D9BD2184E@mail.kernel.org>
+        id S1725942AbfFNWWj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jun 2019 18:22:39 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48188 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725809AbfFNWWi (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 14 Jun 2019 18:22:38 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5EMLlbc077313
+        for <linux-integrity@vger.kernel.org>; Fri, 14 Jun 2019 18:22:37 -0400
+Received: from e13.ny.us.ibm.com (e13.ny.us.ibm.com [129.33.205.203])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2t4husnxvv-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 14 Jun 2019 18:22:37 -0400
+Received: from localhost
+        by e13.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <nayna@linux.vnet.ibm.com>;
+        Fri, 14 Jun 2019 23:22:36 +0100
+Received: from b01cxnp22036.gho.pok.ibm.com (9.57.198.26)
+        by e13.ny.us.ibm.com (146.89.104.200) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 14 Jun 2019 23:22:31 +0100
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5EMMUt628836136
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Jun 2019 22:22:30 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 534F6B20B4;
+        Fri, 14 Jun 2019 22:22:30 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E768FB20AE;
+        Fri, 14 Jun 2019 22:22:28 +0000 (GMT)
+Received: from swastik.ibm.com (unknown [9.80.231.131])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 14 Jun 2019 22:22:28 +0000 (GMT)
+Subject: Re: [PATCH v3 1/3] powerpc/powernv: Add OPAL API interface to get
+ secureboot state
+To:     Daniel Axtens <dja@axtens.net>
+Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        Eric Richter <erichte@linux.ibm.com>
+References: <1560198837-18857-1-git-send-email-nayna@linux.ibm.com>
+ <1560198837-18857-2-git-send-email-nayna@linux.ibm.com>
+ <87ftofpbth.fsf@dja-thinkpad.axtens.net>
+ <eaa37bd0-a77d-d70a-feb5-c0e73ce231bf@linux.vnet.ibm.com>
+ <87d0jipfr9.fsf@dja-thinkpad.axtens.net>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+Date:   Fri, 14 Jun 2019 18:22:28 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
+MIME-Version: 1.0
+In-Reply-To: <87d0jipfr9.fsf@dja-thinkpad.axtens.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+x-cbid: 19061422-0064-0000-0000-000003EE45E4
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011263; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01218034; UDB=6.00640562; IPR=6.00999155;
+ MB=3.00027315; MTD=3.00000008; XFM=3.00000015; UTC=2019-06-14 22:22:34
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19061422-0065-0000-0000-00003DE4DAA6
+Message-Id: <b2cedb05-6373-b357-f35c-bc112c78a6fc@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-14_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906140175
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
-
-[This is an automated email]
-
-This commit has been processed because it contains a -stable tag.
-The stable tag indicates that it's relevant for the following trees: all
-
-The bot has tested the following trees: v5.1.9, v4.19.50, v4.14.125, v4.9.181, v4.4.181.
-
-v5.1.9: Build OK!
-v4.19.50: Failed to apply! Possible dependencies:
-    100b16a6f290 ("tpm: sort objects in the Makefile")
-    29b47ce98759 ("tpm: move TPM space code out of tpm_transmit()")
-    412eb585587a ("tpm: use tpm_buf in tpm_transmit_cmd() as the IO parameter")
-    5faafbab77e3 ("tpm: remove @space from tpm_transmit()")
-    70a3199a7101 ("tpm: factor out tpm_get_timeouts()")
-    719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
-    899102bc4518 ("tpm2: add new tpm2 commands according to TCG 1.36")
-    9db7fe187c54 ("tpm: factor out tpm_startup function")
-    9e1b74a63f77 ("tpm: add support for nonblocking operation")
-    b2d6e6de005e ("tpm: factor out tpm 1.x duration calculation to tpm1-cmd.c")
-    b34b77a99b1a ("tpm: declare struct tpm_header")
-    c3465a370fb3 ("tpm: move tpm_validate_commmand() to tpm2-space.c")
-    c3d477a725ef ("tpm: add ptr to the tpm_space struct to file_priv")
-    c4df71d43a5b ("tpm: encapsulate tpm_dev_transmit()")
-    d856c00f7d16 ("tpm: add tpm_calc_ordinal_duration() wrapper")
-
-v4.14.125: Failed to apply! Possible dependencies:
-    09dd144f72e7 ("tpm: Add explicit endianness cast")
-    0bfb23746052 ("tpm: Move eventlog files to a subdirectory")
-    100b16a6f290 ("tpm: sort objects in the Makefile")
-    58cc1e4faf10 ("tpm: parse TPM event logs based on EFI table")
-    67cb8e113ecd ("tpm: rename event log provider files")
-    719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
-    9b01b5356629 ("tpm: Move shared eventlog functions to common.c")
-    b2d6e6de005e ("tpm: factor out tpm 1.x duration calculation to tpm1-cmd.c")
-    d856c00f7d16 ("tpm: add tpm_calc_ordinal_duration() wrapper")
-    fd3ec3663718 ("tpm: move tpm_eventlog.h outside of drivers folder")
-
-v4.9.181: Failed to apply! Possible dependencies:
-    02ae1382882f ("tpm: redefine read_log() to handle ACPI/OF at runtime")
-    100b16a6f290 ("tpm: sort objects in the Makefile")
-    2528a64664f8 ("tpm: define a generic open() method for ascii & bios measurements")
-    719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
-    748935eeb72c ("tpm: have event log use the tpm_chip")
-    7518a21a9da3 ("tpm: drop tpm1_chip_register(/unregister)")
-    9b01b5356629 ("tpm: Move shared eventlog functions to common.c")
-    b1a9b7b602c5 ("tpm: replace symbolic permission with octal for securityfs files")
-    b2d6e6de005e ("tpm: factor out tpm 1.x duration calculation to tpm1-cmd.c")
-    cd9b7631a888 ("tpm: replace dynamically allocated bios_dir with a static array")
-    d856c00f7d16 ("tpm: add tpm_calc_ordinal_duration() wrapper")
-
-v4.4.181: Failed to apply! Possible dependencies:
-    02ae1382882f ("tpm: redefine read_log() to handle ACPI/OF at runtime")
-    036bb38ffb3e ("tpm_tis: Ensure interrupts are disabled when the driver starts")
-    100b16a6f290 ("tpm: sort objects in the Makefile")
-    23d06ff700f5 ("tpm: drop tpm_atmel specific fields from tpm_vendor_specific")
-    25112048cd59 ("tpm: rework tpm_get_timeouts()")
-    41a5e1cf1fe1 ("tpm/tpm_tis: Split tpm_tis driver into a core and TCG TIS compliant phy")
-    4d627e672bd0 ("tpm_tis: Do not fall back to a hardcoded address for TPM2")
-    4eea703caaac ("tpm: drop 'iobase' from struct tpm_vendor_specific")
-    51dd43dff74b ("tpm_tis: Use devm_ioremap_resource")
-    55a889c2cb13 ("tpm_crb: Use the common ACPI definition of struct acpi_tpm2")
-    56671c893e0e ("tpm: drop 'locality' from struct tpm_vendor_specific")
-    570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific")
-    57dacc2b4ce5 ("tpm: tpm_tis: Share common data between phys")
-    719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
-    7ab4032fa579 ("tpm_tis: Get rid of the duplicate IRQ probing code")
-    b2d6e6de005e ("tpm: factor out tpm 1.x duration calculation to tpm1-cmd.c")
-    d30b8e4f68ef ("tpm: cleanup tpm_tis_remove()")
-    d4956524f1b0 ("tpm: drop manufacturer_id from struct tpm_vendor_specific")
-    d856c00f7d16 ("tpm: add tpm_calc_ordinal_duration() wrapper")
-    e3837e74a06d ("tpm_tis: Refactor the interrupt setup")
-    ee1779840d09 ("tpm: drop 'base' from struct tpm_vendor_specific")
-    ef7b81dc7864 ("tpm_tis: Disable interrupt auto probing on a per-device basis")
 
 
-How should we proceed with this patch?
+On 06/12/2019 07:04 PM, Daniel Axtens wrote:
+> Hi Nayna,
+>
+>>>> Since OPAL can support different types of backend which can vary in the
+>>>> variable interpretation, a new OPAL API call named OPAL_SECVAR_BACKEND, is
+>>>> added to retrieve the supported backend version. This helps the consumer
+>>>> to know how to interpret the variable.
+>>>>
+>>> (Firstly, apologies that I haven't got around to asking about this yet!)
+>>>
+>>> Are pluggable/versioned backend a good idea?
+>>>
+>>> There are a few things that worry me about the idea:
+>>>
+>>>    - It adds complexity in crypto (or crypto-adjacent) code, and that
+>>>      increases the likelihood that we'll accidentally add a bug with bad
+>>>      consequences.
+>> Sorry, I think I am not clear on what exactly you mean here.Can you
+>> please elaborate or give specifics ?
+> Cryptosystems with greater flexibility can have new kinds of
+> vulnerabilities arise from the greater complexity. The first sort of
+> thing that comes to mind is a downgrade attack like from TLS. I think
+> you're protected from this because the mode cannot be negotiatied at run
+> time, but in general it's security sensitive code so I'd like it to be
+> as simple as possible.
+>
+>>>    - If we are worried about a long-term-future change to how secure-boot
+>>>      works, would it be better to just add more get/set calls to opal at
+>>>      the point at which we actually implement the new system?
+>> The intention is to avoid to re-implement the key/value interface for
+>> each scheme. Do you mean to deprecate the old APIs and add new APIs with
+>> every scheme ?
+> Yes, because I expect the scheme would change very, very rarely.
 
---
-Thanks,
-Sasha
+So, the design is not making the assumption that a particular scheme 
+will change often. It is just allowing the flexibility for addition of 
+new schemes or enhancements if needed.
+
+>
+>>>    - Under what circumstances would would we change the kernel-visible
+>>>      behaviour of skiboot? Are we expecting to change the behaviour,
+>>>      content or names of the variables in future? Otherwise the only
+>>>      relevant change I can think of is a change to hardware platforms, and
+>>>      I'm not sure how a change in hardware would lead to change in
+>>>      behaviour in the kernel. Wouldn't Skiboot hide h/w differences?
+>> Backends are intended to be an agreement for firmware, kernel and
+>> userspace on what the format of variables are, what variables should be
+>> expected, how they should be signed, etc. Though we don't expect it to
+>> happen very often, we want to anticipate possible changes in the
+>> firmware which may affect the kernel such as new features, support of
+>> new authentication mechanisms, addition of new variables. Corresponding
+>> skiboot patches are on -
+>> https://lists.ozlabs.org/pipermail/skiboot/2019-June/014641.html
+> I still feel like this is holding onto ongoing complexity for very
+> little gain, but perhaps this is because I can't picture a specific
+> change that would actually require a wholesale change to the scheme.
+
+That is the exact reason for having pluggable backend, because we cannot 
+determine now if there will be a need of new scheme in future or not.
+
+
+>
+> You mention new features, support for new authentication mechanisms, and
+> addition of new variables.
+>
+>   - New features is a bit too generic to answer specifically. In general
+>     I accept that there exists some new feature that would be
+>     sufficiently backwards-incompatible as to require a new version. I
+>     just can't think of one off the top of my head and so I'm not
+>     convinced it's worth the complexity. Did you have something in mind?
+
+That is the idea to keep the design flexible to be able to handle future 
+additions with maximum reuse. Example, supporting new algorithms or a 
+different handling of secure variable updates by different vendors.
+
+
+>
+>   - By support for new authentication mechanisms, I assume you mean new
+>     mechanisms for authenticating variable updates? This is communicated
+>     in edk2 via the attributes field. Looking at patch 5 from the skiboot
+>     series:
+>
+> + * When the attribute EFI_VARIABLE_TIME_BASED_AUTHENTICATED_WRITE_ACCESS is set,
+> + * then the Data buffer shall begin with an instance of a complete (and
+> + * serialized) EFI_VARIABLE_AUTHENTICATION_2 descriptor.
+>
+>     Could a new authentication scheme be communicated by setting a
+>     different attribute value? Or are we not carrying attributes in the
+>     metadata blob?
+>
+>   - For addition of new variables, I'm confused as to why this would
+>     require a new API - wouldn't it just be exposed in the normal way via
+>     opal_secvar_get(_next)?
+
+Sorry, probably it wasn't clear. By addition of new variables, we meant 
+that over time we might have to add new "volatile" variables that "fine 
+tunes" secure boot state. This might impact the kernel if it needs to 
+understand new variables to define its policies. However, this will not 
+result in change of API, it will result in change of the version.
+
+
+>
+> I guess I also somewhat object to calling it a 'backend' if we're using
+> it as a version scheme. I think the skiboot storage backends are true
+> backends - they provide different implementations of the same
+> functionality with the same API, but this seems like you're using it to
+> indicate different functionality. It seems like we're using it as if it
+> were called OPAL_SECVAR_VERSION.
+
+We are changing how we are exposing the version to the kernel. The 
+version will be exposed as device-tree entry rather than a OPAL runtime 
+service. We are not tied to the name "backend", we can switch to calling 
+it as "scheme" unless there is a better name.
+
+Thanks & Regards,
+       - Nayna
+
