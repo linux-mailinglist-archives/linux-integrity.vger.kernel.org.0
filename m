@@ -2,128 +2,270 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A96D45469
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 07:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855D3454D0
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 08:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbfFNF6p (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jun 2019 01:58:45 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:39586 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725985AbfFNF6p (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jun 2019 01:58:45 -0400
-Received: by mail-lj1-f195.google.com with SMTP id v18so1096879ljh.6
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 22:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QFXNxbR5qtxNXi2nY5hSY49xeuHs2429UMIo2iWWl0g=;
-        b=hD2rzW6+JswYVvwbKP+ETgzs+PloQRvs6H+EadUYpU/Oro1P+HHue6bgtuazPDg3gK
-         stuJfFJXi5+gnnWcvhtxSaUN3NgUEt6xiRprMP6iXljZvONiXwrdE3eIhXuN3F65jqvj
-         GDdqmqA4QbwtfVNGWRe5tEbx32S/rr8Z5fQh9bOdjhFyY0JSJuUKOSHoKQcwCLE6dXEF
-         8H1Ah0D76X6ToKxVMaSjQ6P3BfUoC5IDA1zBe7kuIrdrloFC94pCsg2+UXs3ll7h5odz
-         2CIf2h8rEBW6fQQpVQ6fPQTVx78raNLKckBefIUx83lDXGiAmD7qaIEG60q0jLmManM3
-         aAbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QFXNxbR5qtxNXi2nY5hSY49xeuHs2429UMIo2iWWl0g=;
-        b=ImF01N7p/HFWyhuP4YGRwyvPUzEngKVvTWQ2S97KQz6PTbUS5vlZ0JXs2vA10ES7M/
-         EGQMgEG522KN9SHa6JsfNQwUtDeKpbM7UYmRkL3vLERNYbw7o+kjW7cFFEoFzpW/3RNw
-         P4VGrhw9ooAedXB4kn/02Ty/d7JnKoqWWziE9mSDrOusKMLFo7ELZwnzBnvxi1UUC0yp
-         l7cZlwLYfjWKkW15HHpkPSm4NLldCiXFiZQ/vrEZPeXmudXoiMJ3dzzzNJo0wQiUjqxu
-         DbWaZHzTUi1+e6ddmcNKAAfvrtgFFjwOr9uFqR561hpqW9wnOQvg3JC0M++nKavyX1SI
-         a/yA==
-X-Gm-Message-State: APjAAAUorwWQNo3aEnE3+lgz8iJRcR9YC7xqF+j8PBdLs2xKFh4n2Ks7
-        xxBF5LnSOjKQdR1dkJ9WBWWM+dYbjh7M23iO8RTz4Q==
-X-Google-Smtp-Source: APXvYqzeksM7lw+9eRlJ79HkAyW5J8Xn00aCwvC2H55C68XUPO5raXUWhnglWIySJoN7qdrhKGK/PKFdGYxBJR4f23E=
-X-Received: by 2002:a2e:9b57:: with SMTP id o23mr1081203ljj.67.1560491923075;
- Thu, 13 Jun 2019 22:58:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org> <d803283e-5e69-5deb-fe94-3f2e45fb95af@schaufler-ca.com>
-In-Reply-To: <d803283e-5e69-5deb-fe94-3f2e45fb95af@schaufler-ca.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 14 Jun 2019 11:28:31 +0530
-Message-ID: <CAFA6WYN0u1nrxp1rok+GMi_wVH44FD9QKhoqOPvUNC0_f+kULw@mail.gmail.com>
-Subject: Re: [RFC 0/7] Introduce TEE based Trusted Keys support
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>, corbet@lwn.net,
-        dhowells@redhat.com, jejb@linux.ibm.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        id S1725809AbfFNGer (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jun 2019 02:34:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33920 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725780AbfFNGer (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 14 Jun 2019 02:34:47 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 904C720850;
+        Fri, 14 Jun 2019 06:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560494086;
+        bh=CkKywgMmABsPnJapZTOG9f6KDfJsQaG7fpEOo4UPeIA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tB9P5Z71Kj27xZnFlZrLVXZ6rtTkeM9DShoon4023U995XqGmKRtFJ67LgqimO8Fu
+         qutSVdk2Okvv6zyrykkOTpOExuYPJiJFAqWWAPCLlz4v3eJ3RrdMRn5h6hz5TgWjvD
+         xC7RGC3cOOrFhQY9CDEjDihB7v+UuM9sxRMmPSCI=
+Date:   Fri, 14 Jun 2019 08:34:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nayna Jain <nayna@linux.ibm.com>
+Cc:     linuxppc-dev@ozlabs.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        tee-dev@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>
+Subject: Re: [PATCH 2/2] powerpc: expose secure variables via sysfs
+Message-ID: <20190614063443.GB17056@kroah.com>
+References: <1560459027-5248-1-git-send-email-nayna@linux.ibm.com>
+ <1560459027-5248-3-git-send-email-nayna@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1560459027-5248-3-git-send-email-nayna@linux.ibm.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 13 Jun 2019 at 22:10, Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> On 6/13/2019 3:30 AM, Sumit Garg wrote:
-> > Add support for TEE based trusted keys where TEE provides the functionality
-> > to seal and unseal trusted keys using hardware unique key. Also, this is
-> > an alternative in case platform doesn't possess a TPM device.
-> >
-> > This series also adds some TEE features like:
->
-> Please expand the acronym TEE on first use. That will
-> help people who don't work with it on a daily basis
-> understand what you're going on about.
->
+On Thu, Jun 13, 2019 at 04:50:27PM -0400, Nayna Jain wrote:
+> As part of PowerNV secure boot support, OS verification keys are stored
+> and controlled by OPAL as secure variables. These need to be exposed to
+> the userspace so that sysadmins can perform key management tasks.
+> 
+> This patch adds the support to expose secure variables via a sysfs
+> interface It reuses the the existing efi defined hooks and backend in
+> order to maintain the compatibility with the userspace tools.
+> 
+> Though it reuses a great deal of efi, POWER platforms do not use EFI.
+> A new config, POWER_SECVAR_SYSFS, is defined to enable this new sysfs
+> interface.
+> 
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> ---
+>  arch/powerpc/Kconfig                 |   2 +
+>  drivers/firmware/Makefile            |   1 +
+>  drivers/firmware/efi/efivars.c       |   2 +-
+>  drivers/firmware/powerpc/Kconfig     |  12 +
+>  drivers/firmware/powerpc/Makefile    |   3 +
+>  drivers/firmware/powerpc/efi_error.c |  46 ++++
+>  drivers/firmware/powerpc/secvar.c    | 326 +++++++++++++++++++++++++++
+>  7 files changed, 391 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/firmware/powerpc/Kconfig
+>  create mode 100644 drivers/firmware/powerpc/Makefile
+>  create mode 100644 drivers/firmware/powerpc/efi_error.c
+>  create mode 100644 drivers/firmware/powerpc/secvar.c
 
-Sure will take care of this. BTW, its Trusted Execution Environment (TEE).
+If you add/remove/modify sysfs files, you also need to update the
+relevant Documentation/ABI/ entry as well.  Please add something there
+to describe your new files when you resend the next version of this
+patch series.
 
--Sumit
+> diff --git a/drivers/firmware/powerpc/Kconfig b/drivers/firmware/powerpc/Kconfig
+> new file mode 100644
+> index 000000000000..e0303fc517d5
+> --- /dev/null
+> +++ b/drivers/firmware/powerpc/Kconfig
+> @@ -0,0 +1,12 @@
+> +config POWER_SECVAR_SYSFS
+> +	tristate "Enable sysfs interface for POWER secure variables"
+> +	default n
 
-> >
-> > Patch #1, #2 enables support for registered kernel shared memory with TEE.
-> >
-> > Patch #3 enables support for private kernel login method required for
-> > cases like trusted keys where we don't wan't user-space to directly access
-> > TEE service to retrieve trusted key contents.
-> >
-> > Rest of the patches from #4 to #7 adds support for TEE based trusted keys.
-> >
-> > This patch-set has been tested with OP-TEE based pseudo TA which can be
-> > found here [1].
-> >
-> > Looking forward to your valuable feedback/suggestions.
-> >
-> > [1] https://github.com/OP-TEE/optee_os/pull/3082
-> >
-> > Sumit Garg (7):
-> >   tee: optee: allow kernel pages to register as shm
-> >   tee: enable support to register kernel memory
-> >   tee: add private login method for kernel clients
-> >   KEYS: trusted: Introduce TEE based Trusted Keys
-> >   KEYS: encrypted: Allow TEE based trusted master keys
-> >   doc: keys: Document usage of TEE based Trusted Keys
-> >   MAINTAINERS: Add entry for TEE based Trusted Keys
-> >
-> >  Documentation/security/keys/tee-trusted.rst      |  93 +++++
-> >  MAINTAINERS                                      |   9 +
-> >  drivers/tee/optee/call.c                         |   7 +
-> >  drivers/tee/tee_core.c                           |   6 +
-> >  drivers/tee/tee_shm.c                            |  16 +-
-> >  include/keys/tee_trusted.h                       |  84 ++++
-> >  include/keys/trusted-type.h                      |   1 +
-> >  include/linux/tee_drv.h                          |   1 +
-> >  include/uapi/linux/tee.h                         |   2 +
-> >  security/keys/Kconfig                            |   3 +
-> >  security/keys/Makefile                           |   3 +
-> >  security/keys/encrypted-keys/masterkey_trusted.c |  10 +-
-> >  security/keys/tee_trusted.c                      | 506 +++++++++++++++++++++++
-> >  13 files changed, 737 insertions(+), 4 deletions(-)
-> >  create mode 100644 Documentation/security/keys/tee-trusted.rst
-> >  create mode 100644 include/keys/tee_trusted.h
-> >  create mode 100644 security/keys/tee_trusted.c
-> >
+default is always n, no need to list it.
+
+> --- /dev/null
+> +++ b/drivers/firmware/powerpc/efi_error.c
+> @@ -0,0 +1,46 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2019 IBM Corporation
+> + * Author: Nayna Jain <nayna@linux.ibm.com>
+> + *
+> + * efi_error.c
+> + *      - Error codes as understood by efi based tools
+> + *      Taken from drivers/firmware/efi/efi.c
+
+Why not just export the symbol from the original file instead of
+duplicating it here?
+
+> +static int convert_buffer_to_efi_guid(u8 *buffer, efi_guid_t *guid)
+> +{
+> +	u32 *a1;
+> +	u16 *a2;
+> +	u16 *a3;
+> +
+> +	a1 = kzalloc(4, GFP_KERNEL);
+
+No error checking in this function for memory issues at all?
+
+> +	memcpy(a1, buffer, 4);
+> +	*a1 = be32_to_cpu(*a1);
+> +
+> +	a2 = kzalloc(2, GFP_KERNEL);
+> +	memcpy(a2, buffer+4, 2);
+> +	*a2 = be16_to_cpu(*a2);
+> +
+> +	a3 = kzalloc(2, GFP_KERNEL);
+> +	memcpy(a3, buffer+6, 2);
+> +	*a3 = be16_to_cpu(*a3);
+> +
+> +	*guid = EFI_GUID(*a1, *a2, *a3, *(buffer + 8),
+> +			*(buffer + 9),
+> +			*(buffer + 10),
+> +			*(buffer + 11),
+> +			*(buffer + 12),
+> +			*(buffer + 13),
+> +			*(buffer + 14),
+> +			*(buffer + 15));
+> +
+> +	kfree(a1);
+> +	kfree(a2);
+> +	kfree(a3);
+> +	return 0;
+> +}
+> +static efi_status_t powerpc_get_next_variable(unsigned long *name_size,
+> +					      efi_char16_t *name,
+> +					      efi_guid_t *vendor)
+> +{
+> +	int rc;
+> +	u8 *key;
+> +	int namesize;
+> +	unsigned long keylen;
+> +	unsigned long keysize = 1024;
+> +	unsigned long *mdsize;
+> +	u8 *mdata = NULL;
+> +	efi_guid_t guid;
+> +
+> +	if (ucs2_strnlen(name, 1024) > 0) {
+> +		createkey(name, &key, &keylen);
+> +	} else {
+> +		keylen = 0;
+> +		key = kzalloc(1024, GFP_KERNEL);
+> +	}
+> +
+> +	pr_info("%s: powerpc get next variable, key is %s\n", __func__, key);
+
+Don't put debugging info like this in the kernel log of everyone :(
+
+> +
+> +	rc = opal_get_next_variable(key, &keylen, keysize);
+> +	if (rc) {
+> +		kfree(key);
+> +		return opal_to_efi_status(rc);
+> +	}
+> +
+> +	mdsize = kzalloc(sizeof(unsigned long), GFP_KERNEL);
+
+No error checking?
+
+> +	rc = opal_get_variable_size(key, keylen, mdsize, NULL);
+> +	if (rc)
+> +		goto out;
+> +
+> +	if (*mdsize <= 0)
+> +		goto out;
+> +
+> +	mdata = kzalloc(*mdsize, GFP_KERNEL);
+> +
+> +	rc = opal_get_variable(key, keylen, mdata, mdsize, NULL, NULL);
+> +	if (rc)
+> +		goto out;
+> +
+> +	if (*mdsize > 0) {
+> +		namesize = *mdsize - sizeof(efi_guid_t) - sizeof(u32);
+> +		if (namesize > 0) {
+> +			memset(&guid, 0, sizeof(efi_guid_t));
+> +			convert_buffer_to_efi_guid(mdata + namesize, &guid);
+> +			memcpy(vendor, &guid, sizeof(efi_guid_t));
+> +			memset(name, 0, namesize + 2);
+> +			memcpy(name, mdata, namesize);
+> +			*name_size = namesize + 2;
+> +			name[namesize++] = 0;
+> +			name[namesize] = 0;
+> +		}
+> +	}
+> +
+> +out:
+> +	kfree(mdsize);
+> +	kfree(mdata);
+> +
+> +	return opal_to_efi_status(rc);
+> +}
+> +
+> +static efi_status_t powerpc_set_variable(efi_char16_t *name, efi_guid_t *vendor,
+> +					 u32 attr, unsigned long data_size,
+> +					 void *data)
+> +{
+> +	int rc;
+> +	u8 *key;
+> +	unsigned long keylen;
+> +	u8 *metadata;
+> +	unsigned long mdsize;
+> +
+> +	if (!name)
+> +		return EFI_INVALID_PARAMETER;
+> +
+> +	if (!vendor)
+> +		return EFI_INVALID_PARAMETER;
+> +
+> +	createkey(name, &key, &keylen);
+> +	pr_info("%s: nayna key is %s\n", __func__, key);
+
+Again, please remove all of your debugging code when resending.
+
+> +
+> +	createmetadata(name, vendor, &attr, &metadata, &mdsize);
+> +
+> +	rc = opal_set_variable(key, keylen, metadata, mdsize, data, data_size);
+> +
+> +	return opal_to_efi_status(rc);
+> +}
+> +
+> +
+> +static const struct efivar_operations efivar_ops = {
+> +	.get_variable = powerpc_get_variable,
+> +	.set_variable = powerpc_set_variable,
+> +	.get_next_variable = powerpc_get_next_variable,
+> +};
+> +
+> +
+> +static __init int power_secvar_init(void)
+> +{
+> +	int rc = 0;
+> +	unsigned long ver = 0;
+> +
+> +	rc = opal_variable_version(&ver);
+> +	if (ver != BACKEND_TC_COMPAT_V1) {
+> +		pr_info("Compatible backend unsupported\n");
+> +		return -1;
+
+Do not make up error numbers, use the defined values please.
+
+thanks,
+
+greg k-h
