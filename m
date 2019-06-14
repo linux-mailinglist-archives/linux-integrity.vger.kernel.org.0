@@ -2,171 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3C84573D
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 10:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCC745A77
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 12:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbfFNIRa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jun 2019 04:17:30 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41432 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726083AbfFNIRa (ORCPT
+        id S1726784AbfFNKeh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jun 2019 06:34:37 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:52878 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726545AbfFNKeg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jun 2019 04:17:30 -0400
-Received: by mail-lf1-f68.google.com with SMTP id 136so1092109lfa.8
-        for <linux-integrity@vger.kernel.org>; Fri, 14 Jun 2019 01:17:28 -0700 (PDT)
+        Fri, 14 Jun 2019 06:34:36 -0400
+Received: by mail-wm1-f66.google.com with SMTP id s3so1809493wms.2
+        for <linux-integrity@vger.kernel.org>; Fri, 14 Jun 2019 03:34:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sYZceYw/PBvRSxvmCoPk9kiBr948sZ4CFzmxWCPNjiY=;
-        b=RLrsNPT/uaaAfFbVFaeqZ6JSPheqCUq74WDZJocy/VXfonejDDi21W3KH/jUcNDYit
-         uFjYoUzJhvbyvDe6ImPVkmAIf0sWV0aajwDBxm1DxLInFjAvbcMbi5RidfsPjVZrMffs
-         Zg+N5N/SfwdpXzQeNbaoZttXLU3LyrWuOVWSUD/HN+icQi3UAq7i4EQoY2e7fRWAKS2G
-         DTsOw5eHbsCdluVPpPOXyDWc9Cz/smTVsS+OkRpIHcajmkoMv6Zwg3xxiKhhxMbLvAUE
-         ADOPKegxUfDNG+Bdd3FC2qU8XzWIx16DnlzPqgQA9ybWXYaKidIR61Rwg9y4sX2RXm2T
-         7/AQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=VQlYOuWw/XgKJ5lYOlgzDNhtem0wEWO83AzsJk5siJw=;
+        b=CFkz0AWBLH3qM/wTX9/0rbnEGIdGMhwqDq25JmOGJSDvCx9ui0dw9bqgpr1ksw+LT6
+         VMXk2sllUNdudRlnQH2Z9jYfoaJjzBK0BdkpGhugaQ59wtMT7Fi1LQBmUAcNx7u/Q6pU
+         woUjMPVk5GtD8+dGjT/59hrYjznvzD+kfru+iCm4Tz+MtFEks/RA/Kl9F9z+YnEp4Rj6
+         sL4tqPfeAmH+cBDQDwBd7Dr9J45Vc23gasoIa+2gUZSSujFqmnL1Cd4a2nk5nisrD3o2
+         zIEygEfF25IlZJQyz3E3gS73g0A/n8nN0PtL72QnwI6a6tCnEqMvkchTeYiJ1eSFbbrZ
+         iG7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sYZceYw/PBvRSxvmCoPk9kiBr948sZ4CFzmxWCPNjiY=;
-        b=AZeSB5qlqfEBUzQVMsSUbrarandTIPtBLHDBmughXfc59r+kO92ov1ppBF7Yr/Oval
-         J5cD8cRSq5iZIjWcDOBA/MRAdSHe/X3p/CcjklK7Mp6Z0pZB51h5iuZqTnVssviK6j5s
-         Ial10R8INKz94oM0eWtYwnLNjl4b7cFoxGImGTvhaWX/ACuzNQgBurhpwsQ/ln/2+iPX
-         po8IxoeSNyCY4M3GuYhUGGx/Z1DqELzbhILdXvBje+ldIRYT/eQ1z+2Oik8LVZdwSM/7
-         rDupsjlNQrwqQGlcik4L//F30WzwcrmeAEQT60JGEFbkyYapq1kOC+8mVdQTHg0fdGvw
-         A9Ag==
-X-Gm-Message-State: APjAAAXZsAE/hLMbaeq3+tM9OxNPqqlFE7inxXZad1fHLOljwUmelh4n
-        6SWipIbjV7cEovwYwqhTVp+gp938pH19M5Ctakm5WQ==
-X-Google-Smtp-Source: APXvYqwlbCDwuNlvWWLAMVDCvRG6Cs9rwpyMyT1zYYedGWIAKIWp5RRw1PxqPMLnhghF9xZ+PIVYSTL3bBt2hmIi3WQ=
-X-Received: by 2002:ac2:50c4:: with SMTP id h4mr34300421lfm.61.1560500248037;
- Fri, 14 Jun 2019 01:17:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org>
- <d803283e-5e69-5deb-fe94-3f2e45fb95af@schaufler-ca.com> <1560470593.4805.109.camel@linux.ibm.com>
-In-Reply-To: <1560470593.4805.109.camel@linux.ibm.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 14 Jun 2019 13:47:16 +0530
-Message-ID: <CAFA6WYOZOrv5D6261z-bwCP6+6ORzH3PcZz89Sfn=yts0dkvTg@mail.gmail.com>
-Subject: Re: [RFC 0/7] Introduce TEE based Trusted Keys support
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>, corbet@lwn.net,
-        dhowells@redhat.com, jejb@linux.ibm.com,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=VQlYOuWw/XgKJ5lYOlgzDNhtem0wEWO83AzsJk5siJw=;
+        b=CFaGwdlX7VF0S97wMpJ4ux2qhEU5HGdWo+SY2M0g1EbkyGPyq8sdW4xl9vsLQLrNFc
+         R0z0yFPB9r8Hc89vITnsydJhi7yjnKqjGarFu2umRynkbIhQiBWKG40noKbRSf33z8hN
+         6z+WYhe3EXpiXv1ru2e8jwZ7361G20iGqkdba6KH0LeEODmvEEW3kbiI93a46/CopCiO
+         BLDWaGpePTRXxvHdHOVw3c4H73ksP3vuqyAbJpStPX9bf0gHbvDsQgG/fXWKM6uprbKd
+         6saGsCUwma4qI9HeIUUGcMnZC8dz+nl2yu7yOhh1+UqPuzikelIAcQhj03/nUWkio8H5
+         QmFw==
+X-Gm-Message-State: APjAAAWhHYeIzVgNzDLR5XVYBt18+OsdnPZvwuGonvN7X5gOofDdhNJU
+        IpvRVIQs9MIJNwa/KW9Lq3v2hg==
+X-Google-Smtp-Source: APXvYqzMy7f04xPUuO0lEJs4Zkj7eAmy4TPUQhawhEeebqMCl/nBD1FiRvyH776EUxFte8zki3W9TQ==
+X-Received: by 2002:a7b:c933:: with SMTP id h19mr7726918wml.52.1560508474645;
+        Fri, 14 Jun 2019 03:34:34 -0700 (PDT)
+Received: from apalos (athedsl-4461147.home.otenet.gr. [94.71.2.75])
+        by smtp.gmail.com with ESMTPSA id s10sm3938737wrw.45.2019.06.14.03.34.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 14 Jun 2019 03:34:34 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 13:34:30 +0300
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Sumit Garg <sumit.garg@linaro.org>, peterhuewe@gmx.de,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        jmorris@namei.org, serge@hallyn.com,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-doc@vger.kernel.org,
+        jgg@ziepe.ca, corbet@lwn.net,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Microsoft Linux Kernel List <linux-kernel@microsoft.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        "Bryan Kelly (CSI)" <bryankel@microsoft.com>,
         tee-dev@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 1/2] fTPM: firmware TPM running in TEE
+Message-ID: <20190614103430.GA6108@apalos>
+References: <20190530152758.16628-1-sashal@kernel.org>
+ <20190530152758.16628-2-sashal@kernel.org>
+ <CAFA6WYM1NrghG9qxUhrm76kopvBx9nmCL9XnRs11ysb2Yr0+Qw@mail.gmail.com>
+ <20190604200951.GB29739@sasha-vm>
+ <CAFA6WYMOjgHRw9RVrjherNo0ZNbTtEonPwSFFC0dT4CZO=A1NQ@mail.gmail.com>
+ <20190613171141.GL1513@sasha-vm>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190613171141.GL1513@sasha-vm>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Thanks Mimi for your comments.
-
-On Fri, 14 Jun 2019 at 05:33, Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> On Thu, 2019-06-13 at 09:40 -0700, Casey Schaufler wrote:
-> > On 6/13/2019 3:30 AM, Sumit Garg wrote:
-> > > Add support for TEE based trusted keys where TEE provides the functionality
-> > > to seal and unseal trusted keys using hardware unique key. Also, this is
-> > > an alternative in case platform doesn't possess a TPM device.
-> > >
-> > > This series also adds some TEE features like:
-> >
-> > Please expand the acronym TEE on first use. That will
-> > help people who don't work with it on a daily basis
-> > understand what you're going on about.
->
-> Thanks, Casey.
->
-> "[6/7] doc: keys: Document usage of TEE based Trusted Keys" refers to
-> the kernel tee documentation, but that documentation is limited to
-> userspace interaction with the tee.
->
-
-Thanks for pointing this out. I will update documentation to include
-TEE bus approach and communication apis for kernel clients.
-
-BTW, the interface is similar as with user-space. Only difference is
-instead of IOCTL's from user-space, there are wrapper apis to
-communicate with TEE.
-
-Also, in case someone is interested to learn about TEE technology,
-this webinar [1] could be one of starting points.
-
-> A trusted key is a random number generated and sealed(encrypted) by
-> the TPM, so that only the TPM may unseal it.  The sealing key never
-> leaves the TPM.  The sealed, trusted key may be exported to userspace.
-
-Understood.
-
->  In the tee case, can the "sealing" key ever leave the tee?
-
-No, the "sealing" key never leaves TEE. Its basically a Hardware
-Unique Key (HUK) tied to a particular SoC.
-
->  Can the
-> sealed, trusted key, exported to userspace, be unsealed by the tee?
-
-You mean using user-space interface to TEE? If yes, then answer is
-"no" as user-space can't communicate with this TEE service as its
-accessible to kernel clients only (see patch [2]).
-
-In case you meant loading exported trusted key blob via "keyctl", then
-"yes" this driver can unseal the trusted key. Have a look at examples
-I have listed in documentation patch [3]. Also, this approach works
-well across power cycles too.
-
->  Are the tee security protections similar to those of the TPM?  How do
-> they compare?
->
-
-Let me try to compare both environments. Regarding TEE, I will refer
-to OP-TEE [4] as one of its implementation.
-
-TPM:
-
-1. External hardware.
-2. Sealing key resides inside TPM.
-3. Communicates via SPI, I2C etc.
-
-OP-TEE:
-
-1. On chip, trusted execution environment enforced via ARM TrustZone.
-2. Sealing key is unique to a particular SoC provided by secure fuses,
-secure crypto engine etc.
-3. Communicates via Secure Monitor Calls (SMCs [5]).
-
-[1] https://globalplatform.org/resource-publication/webinar-an-introduction-to-tee-technology/
-[2] [RFC 3/7] tee: add private login method for kernel clients
-[3] [RFC 6/7] doc: keys: Document usage of TEE based Trusted Keys
-[4] https://optee.readthedocs.io/general/about.html
-[5] http://infocenter.arm.com/help/topic/com.arm.doc.den0028b/ARM_DEN0028B_SMC_Calling_Convention.pdf
+Hi Sasha, 
+On Thu, Jun 13, 2019 at 01:11:41PM -0400, Sasha Levin wrote:
+> On Wed, Jun 05, 2019 at 04:39:36PM +0530, Sumit Garg wrote:
+> >On Wed, 5 Jun 2019 at 01:39, Sasha Levin <sashal@kernel.org> wrote:
+> >>
+> >>On Tue, Jun 04, 2019 at 11:45:52AM +0530, Sumit Garg wrote:
+> >>>On Thu, 30 May 2019 at 20:58, Sasha Levin <sashal@kernel.org> wrote:
+> >>>> +       /* Open context with TEE driver */
+> >>>> +       pvt_data->ctx = tee_client_open_context(NULL, ftpm_tee_match, NULL,
+> >>>> +                                               NULL);
+> >>>> +       if (IS_ERR(pvt_data->ctx)) {
+> >>>> +               dev_err(dev, "%s:tee_client_open_context failed\n", __func__);
+> >>>
+> >>>Is this well tested? I see this misleading error multiple times as
+> >>>follows although TEE driver works pretty well.
+> >>
+> >>Yes, this was all functionally tested.
+I did test as well with a DeveloperBox, i can confirm the driver is loading (but
+i have no fTPM support on the OP-TEE side for now)
 
 
--Sumit
+apalos@mule:~>sudo dmesg | grep optee
+[sudo] password for apalos: 
+[    5.035801] optee: probing for conduit method from DT.
+[    5.041045] optee: revision 3.2 (53bf1c38)
+[    5.041772] optee: initialized driver
+apalos@mule:~>sudo dmesg | grep tpm
+[    5.000674] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_context failed
+[    5.101655] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_session failed,
+err=ffff000c
+[    5.109703] ftpm-tee: probe of tpm@0 failed with error -22
 
-> Mimi
->
-> >
-> > >
-> > > Patch #1, #2 enables support for registered kernel shared memory with TEE.
-> > >
-> > > Patch #3 enables support for private kernel login method required for
-> > > cases like trusted keys where we don't wan't user-space to directly access
-> > > TEE service to retrieve trusted key contents.
-> > >
-> > > Rest of the patches from #4 to #7 adds support for TEE based trusted keys.
-> > >
-> > > This patch-set has been tested with OP-TEE based pseudo TA which can be
-> > > found here [1].
-> > >
-> > > Looking forward to your valuable feedback/suggestions.
->
+
+The error -22 is nice since the probe eventually failed (no fTPM support in
+secure world). Can we slightly change the
+'ftpm_tee_probe:tee_client_open_context failed' and indicate this is not a real
+error since the probe gets deferred untill Secure world is alive?
+
+By the way there is *real* interest for this functionality. I expect to run it
+on a number of Arm boards once i get some free time.
+
+> >Can you share your build instructions and testing approach?
+> 
+> Yes: it looks like you got all the kernel bits, but not the firmware.
+> There are instructions for it here: https://github.com/microsoft/ms-tpm-20-ref
+> 
+> Once it's running, you can test it by running your favorite TPM usecases
+> through /dev/tpm0.
+> 
+> --
+> Thanks,
+> Sasha
+
+Thanks
+/Ilias
