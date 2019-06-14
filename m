@@ -2,103 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E201468C6
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 22:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E9346C25
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 23:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726264AbfFNUVg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jun 2019 16:21:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43290 "EHLO mail.kernel.org"
+        id S1726806AbfFNV4i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jun 2019 17:56:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46624 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726072AbfFNUVg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jun 2019 16:21:36 -0400
-Received: from sasha-vm.mshome.net (unknown [131.107.159.134])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726792AbfFNV4g (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 14 Jun 2019 17:56:36 -0400
+Received: from localhost (unknown [23.100.24.84])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 423F62184C;
-        Fri, 14 Jun 2019 20:21:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2D9BD2184E;
+        Fri, 14 Jun 2019 21:56:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560543695;
-        bh=7pm8JkCLHqEoLrJYY8z/2/wqC8f2TYEabiJDZrXwd5A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y6YMv1qU68gkZugK3Zs30fL635yTULIgOGn84MH449NBFuBJzExPGh9cigrJlIwQE
-         RqIEblW+Qp8qPgGtfhPlQue/kbfpVY8HN5hvdJ7HK5A478nwceV1rCOPn7vzsY3Pue
-         AqL86QycMpZGNo9FD0KrsnwoMHnUw19l6cSBtJtM=
+        s=default; t=1560549395;
+        bh=AaOXU9JSXW7lKOl4hZybnR5+zYZKfEbQwzFRA41gvv8=;
+        h=Date:From:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:From;
+        b=xWMm4yhEKB2Mx1cp5Ek+eYiTWFnytpnjFNZSnN05no6V8kPXEEnXPN7LOMhs3CKgh
+         qP7UlS4SQtOeKJy3UIgInMEYMOWpVcMQo/QAhXJR//VZEPPU3Il/2DKQwGIwjMBbIX
+         HrmYcOoZKI0ZdObfongKn+lIRHTWALWJuJeehGb0=
+Date:   Fri, 14 Jun 2019 21:56:34 +0000
 From:   Sasha Levin <sashal@kernel.org>
-To:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca
-Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@microsoft.com, thiruan@microsoft.com,
-        bryankel@microsoft.com, tee-dev@lists.linaro.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH v5 2/2] fTPM: add documentation for ftpm driver
-Date:   Fri, 14 Jun 2019 16:21:27 -0400
-Message-Id: <20190614202127.26812-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190614202127.26812-1-sashal@kernel.org>
-References: <20190614202127.26812-1-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+To:     Sasha Levin <sashal@kernel.org>
+To:     Milan Broz <gmazyland@gmail.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Milan Broz <gmazyland@gmail.com>, stable@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH] tpm: Fix null pointer dereference on chip register error path
+In-Reply-To: <20190612084210.13562-1-gmazyland@gmail.com>
+References: <20190612084210.13562-1-gmazyland@gmail.com>
+Message-Id: <20190614215635.2D9BD2184E@mail.kernel.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch adds basic documentation to describe the new fTPM driver.
+Hi,
 
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- Documentation/security/tpm/index.rst        |  1 +
- Documentation/security/tpm/tpm_ftpm_tee.rst | 31 +++++++++++++++++++++
- 2 files changed, 32 insertions(+)
- create mode 100644 Documentation/security/tpm/tpm_ftpm_tee.rst
+[This is an automated email]
 
-diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
-index af77a7bbb070..15783668644f 100644
---- a/Documentation/security/tpm/index.rst
-+++ b/Documentation/security/tpm/index.rst
-@@ -4,4 +4,5 @@ Trusted Platform Module documentation
- 
- .. toctree::
- 
-+   tpm_ftpm_tee
-    tpm_vtpm_proxy
-diff --git a/Documentation/security/tpm/tpm_ftpm_tee.rst b/Documentation/security/tpm/tpm_ftpm_tee.rst
-new file mode 100644
-index 000000000000..29c2f8b5ed10
---- /dev/null
-+++ b/Documentation/security/tpm/tpm_ftpm_tee.rst
-@@ -0,0 +1,31 @@
-+=============================================
-+Firmware TPM Driver
-+=============================================
-+
-+| Authors:
-+| Thirupathaiah Annapureddy <thiruan@microsoft.com>
-+| Sasha Levin <sashal@kernel.org>
-+
-+This document describes the firmware Trusted Platform Module (fTPM)
-+device driver.
-+
-+Introduction
-+============
-+
-+This driver is a shim for a firmware implemented in ARM's TrustZone
-+environment. The driver allows programs to interact with the TPM in the same
-+way the would interact with a hardware TPM.
-+
-+Design
-+======
-+
-+The driver acts as a thin layer that passes commands to and from a TPM
-+implemented in firmware. The driver itself doesn't contain much logic and is
-+used more like a dumb pipe between firmware and kernel/userspace.
-+
-+The firmware itself is based on the following paper:
-+https://www.microsoft.com/en-us/research/wp-content/uploads/2017/06/ftpm1.pdf
-+
-+When the driver is loaded it will expose ``/dev/tpmX`` character devices to
-+userspace which will enable userspace to communicate with the firmware tpm
-+through this device.
--- 
-2.20.1
+This commit has been processed because it contains a -stable tag.
+The stable tag indicates that it's relevant for the following trees: all
 
+The bot has tested the following trees: v5.1.9, v4.19.50, v4.14.125, v4.9.181, v4.4.181.
+
+v5.1.9: Build OK!
+v4.19.50: Failed to apply! Possible dependencies:
+    100b16a6f290 ("tpm: sort objects in the Makefile")
+    29b47ce98759 ("tpm: move TPM space code out of tpm_transmit()")
+    412eb585587a ("tpm: use tpm_buf in tpm_transmit_cmd() as the IO parameter")
+    5faafbab77e3 ("tpm: remove @space from tpm_transmit()")
+    70a3199a7101 ("tpm: factor out tpm_get_timeouts()")
+    719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
+    899102bc4518 ("tpm2: add new tpm2 commands according to TCG 1.36")
+    9db7fe187c54 ("tpm: factor out tpm_startup function")
+    9e1b74a63f77 ("tpm: add support for nonblocking operation")
+    b2d6e6de005e ("tpm: factor out tpm 1.x duration calculation to tpm1-cmd.c")
+    b34b77a99b1a ("tpm: declare struct tpm_header")
+    c3465a370fb3 ("tpm: move tpm_validate_commmand() to tpm2-space.c")
+    c3d477a725ef ("tpm: add ptr to the tpm_space struct to file_priv")
+    c4df71d43a5b ("tpm: encapsulate tpm_dev_transmit()")
+    d856c00f7d16 ("tpm: add tpm_calc_ordinal_duration() wrapper")
+
+v4.14.125: Failed to apply! Possible dependencies:
+    09dd144f72e7 ("tpm: Add explicit endianness cast")
+    0bfb23746052 ("tpm: Move eventlog files to a subdirectory")
+    100b16a6f290 ("tpm: sort objects in the Makefile")
+    58cc1e4faf10 ("tpm: parse TPM event logs based on EFI table")
+    67cb8e113ecd ("tpm: rename event log provider files")
+    719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
+    9b01b5356629 ("tpm: Move shared eventlog functions to common.c")
+    b2d6e6de005e ("tpm: factor out tpm 1.x duration calculation to tpm1-cmd.c")
+    d856c00f7d16 ("tpm: add tpm_calc_ordinal_duration() wrapper")
+    fd3ec3663718 ("tpm: move tpm_eventlog.h outside of drivers folder")
+
+v4.9.181: Failed to apply! Possible dependencies:
+    02ae1382882f ("tpm: redefine read_log() to handle ACPI/OF at runtime")
+    100b16a6f290 ("tpm: sort objects in the Makefile")
+    2528a64664f8 ("tpm: define a generic open() method for ascii & bios measurements")
+    719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
+    748935eeb72c ("tpm: have event log use the tpm_chip")
+    7518a21a9da3 ("tpm: drop tpm1_chip_register(/unregister)")
+    9b01b5356629 ("tpm: Move shared eventlog functions to common.c")
+    b1a9b7b602c5 ("tpm: replace symbolic permission with octal for securityfs files")
+    b2d6e6de005e ("tpm: factor out tpm 1.x duration calculation to tpm1-cmd.c")
+    cd9b7631a888 ("tpm: replace dynamically allocated bios_dir with a static array")
+    d856c00f7d16 ("tpm: add tpm_calc_ordinal_duration() wrapper")
+
+v4.4.181: Failed to apply! Possible dependencies:
+    02ae1382882f ("tpm: redefine read_log() to handle ACPI/OF at runtime")
+    036bb38ffb3e ("tpm_tis: Ensure interrupts are disabled when the driver starts")
+    100b16a6f290 ("tpm: sort objects in the Makefile")
+    23d06ff700f5 ("tpm: drop tpm_atmel specific fields from tpm_vendor_specific")
+    25112048cd59 ("tpm: rework tpm_get_timeouts()")
+    41a5e1cf1fe1 ("tpm/tpm_tis: Split tpm_tis driver into a core and TCG TIS compliant phy")
+    4d627e672bd0 ("tpm_tis: Do not fall back to a hardcoded address for TPM2")
+    4eea703caaac ("tpm: drop 'iobase' from struct tpm_vendor_specific")
+    51dd43dff74b ("tpm_tis: Use devm_ioremap_resource")
+    55a889c2cb13 ("tpm_crb: Use the common ACPI definition of struct acpi_tpm2")
+    56671c893e0e ("tpm: drop 'locality' from struct tpm_vendor_specific")
+    570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific")
+    57dacc2b4ce5 ("tpm: tpm_tis: Share common data between phys")
+    719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
+    7ab4032fa579 ("tpm_tis: Get rid of the duplicate IRQ probing code")
+    b2d6e6de005e ("tpm: factor out tpm 1.x duration calculation to tpm1-cmd.c")
+    d30b8e4f68ef ("tpm: cleanup tpm_tis_remove()")
+    d4956524f1b0 ("tpm: drop manufacturer_id from struct tpm_vendor_specific")
+    d856c00f7d16 ("tpm: add tpm_calc_ordinal_duration() wrapper")
+    e3837e74a06d ("tpm_tis: Refactor the interrupt setup")
+    ee1779840d09 ("tpm: drop 'base' from struct tpm_vendor_specific")
+    ef7b81dc7864 ("tpm_tis: Disable interrupt auto probing on a per-device basis")
+
+
+How should we proceed with this patch?
+
+--
+Thanks,
+Sasha
