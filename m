@@ -2,137 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 060CD45ABA
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 12:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79DC45B05
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 12:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727157AbfFNKlY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jun 2019 06:41:24 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:40669 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727065AbfFNKlY (ORCPT
+        id S1727378AbfFNK6A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jun 2019 06:58:00 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49550 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727284AbfFNK6A (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jun 2019 06:41:24 -0400
-Received: by mail-lj1-f195.google.com with SMTP id a21so1884397ljh.7
-        for <linux-integrity@vger.kernel.org>; Fri, 14 Jun 2019 03:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q33161EtMzRSB6VIWTElwTgQtwrlUyXLxdZciZIKhi8=;
-        b=jIpgKCJerBDe2V4KyNw1PzAyvMlwzXdVZZ/0qiOJ+ppmelSNktDNri1MNI0Y2Ch71G
-         mxFrhZIgIqvzYXU8lgYP5McpKQW4Eq0q3WBNfNbIkkaSmNBMZ/1qDeDxEeC9t8OUQ3DQ
-         Z4gudg15cOXpH18Q2PkjJZXJU9aTCelom3XWX5gP4ghGSZ34f8awNWsDBnJdRUABtfXn
-         6POTD0TnE3lYawWMv7IwoYujxZavUThZ4v7t8lys1wvQq6I5c3KQGtkECF6ZTUw8O4DG
-         7VuqlX0FqLTmsyziFiGJzRAhWTIwlaTV+rn7UAsxeTODuq/dHsWuTL+E+UCLPREEmQ0r
-         Sdew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q33161EtMzRSB6VIWTElwTgQtwrlUyXLxdZciZIKhi8=;
-        b=ct6MrQW8jwRF1DW9RPam/m6261XenTJYZyhG6uiNf0zVQCfCZqoFVR+wKDVh/+a7/i
-         k8b1DTu2zfukarREfyqgxw7YxTAqOgFBjewzYcf9g2qoeh+hSxJLo+jordqksU17C06z
-         Fn9ljS0hGGffJl754BXnsUvmMbeSr2CSguOVLesiDBJKIITKCSwsyLAPd1VFpYbX/YT3
-         Zf/bezPmjHj9Gjqe03Tdbk26a3kxI6hH2LW7Z1J1YnZI5YlmM/Zx8CFeT/uiDxp0RHZX
-         Skna1s/CZfKnmosEW3Ihk8L/YFJsnLHRs63VDdG7ch9ASVF80nFVsIchuwuf7/S0i6bN
-         GrcQ==
-X-Gm-Message-State: APjAAAU91RrZuspgLCTzSWJcyhcSiGM8EMYwDgsH6MTzVkgwztmOYq0R
-        VAaqijKerl++4OGQWnbGCxxRSmyqu+a59s5Kf8KCMw==
-X-Google-Smtp-Source: APXvYqzz3hC4g88mZXFl5KkW+vdX+JqbwcLZsw2FXVeTt/9DrVzfPuH8CdNqbnVijTm32ZWG8sVUDH5Md8as+XqBggQ=
-X-Received: by 2002:a2e:63d9:: with SMTP id s86mr38515728lje.92.1560508882540;
- Fri, 14 Jun 2019 03:41:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190530152758.16628-1-sashal@kernel.org> <20190530152758.16628-2-sashal@kernel.org>
- <CAFA6WYM1NrghG9qxUhrm76kopvBx9nmCL9XnRs11ysb2Yr0+Qw@mail.gmail.com>
- <20190604200951.GB29739@sasha-vm> <CAFA6WYMOjgHRw9RVrjherNo0ZNbTtEonPwSFFC0dT4CZO=A1NQ@mail.gmail.com>
-In-Reply-To: <CAFA6WYMOjgHRw9RVrjherNo0ZNbTtEonPwSFFC0dT4CZO=A1NQ@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 14 Jun 2019 16:11:11 +0530
-Message-ID: <CAFA6WYP4Tm-K3PxvbQCqeOka6mvq3ebYYjKp0fjga9mV=OMUQQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] fTPM: firmware TPM running in TEE
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     peterhuewe@gmx.de,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        jgg@ziepe.ca, corbet@lwn.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Microsoft Linux Kernel List <linux-kernel@microsoft.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        "Bryan Kelly (CSI)" <bryankel@microsoft.com>,
-        tee-dev@lists.linaro.org
+        Fri, 14 Jun 2019 06:58:00 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5EAvGa7142954
+        for <linux-integrity@vger.kernel.org>; Fri, 14 Jun 2019 06:57:59 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2t4775fdss-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 14 Jun 2019 06:57:58 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Fri, 14 Jun 2019 11:57:56 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 14 Jun 2019 11:57:53 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5EAvq1P34210172
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Jun 2019 10:57:52 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7753A4C04A;
+        Fri, 14 Jun 2019 10:57:52 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8073A4C040;
+        Fri, 14 Jun 2019 10:57:51 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.81.115])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 14 Jun 2019 10:57:51 +0000 (GMT)
+Subject: Re: [PATCH V8 2/3] Define a new ima template field buf
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     roberto.sassu@huawei.com, vgoyal@redhat.com
+Date:   Fri, 14 Jun 2019 06:57:40 -0400
+In-Reply-To: <1560455980.4805.57.camel@linux.ibm.com>
+References: <20190612221549.28399-1-prsriva02@gmail.com>
+         <20190612221549.28399-3-prsriva02@gmail.com>
+         <1560455980.4805.57.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19061410-0008-0000-0000-000002F3B999
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19061410-0009-0000-0000-00002260C358
+Message-Id: <1560509860.4171.13.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-14_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906140091
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 5 Jun 2019 at 16:39, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> On Wed, 5 Jun 2019 at 01:39, Sasha Levin <sashal@kernel.org> wrote:
-> >
-> > On Tue, Jun 04, 2019 at 11:45:52AM +0530, Sumit Garg wrote:
-> > >On Thu, 30 May 2019 at 20:58, Sasha Levin <sashal@kernel.org> wrote:
-> > >> +       /* Open context with TEE driver */
-> > >> +       pvt_data->ctx = tee_client_open_context(NULL, ftpm_tee_match, NULL,
-> > >> +                                               NULL);
-> > >> +       if (IS_ERR(pvt_data->ctx)) {
-> > >> +               dev_err(dev, "%s:tee_client_open_context failed\n", __func__);
-> > >
-> > >Is this well tested? I see this misleading error multiple times as
-> > >follows although TEE driver works pretty well.
-> >
-> > Yes, this was all functionally tested.
->
-> Can you share your build instructions and testing approach?
->
-> >
-> > Why is this error message misleading? I'd be happy to fix it.
->
+Hi Prakhar,
 
-But still this message should be updated to represent correct status.
-Maybe something like:
+> > diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+> > index ea7d8cbf712f..83ca99d65e4b 100644
+> > --- a/security/integrity/ima/ima_api.c
+> > +++ b/security/integrity/ima/ima_api.c
+> > @@ -140,7 +140,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
+> >  	struct ima_template_entry *entry;
+> >  	struct inode *inode = file_inode(file);
+> >  	struct ima_event_data event_data = {iint, file, filename, NULL, 0,
+> > -					    cause};
+> > +					    cause, NULL, 0};
+> 
+> This change here and
+> 
+> >  	int violation = 1;
+> >  	int result;
+> >  
+> > @@ -296,7 +296,7 @@ void ima_store_measurement(struct integrity_iint_cache *iint,
+> >  	struct inode *inode = file_inode(file);
+> >  	struct ima_template_entry *entry;
+> >  	struct ima_event_data event_data = {iint, file, filename, xattr_value,
+> > -					    xattr_len, NULL};
+> > +					    xattr_len, NULL, NULL, 0};
+> 
+> here and 
+> 
+> >  	int violation = 0;
+> >  
+> >  	if (iint->measured_pcrs & (0x1 << pcr))
+> > diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+> > index 993d0f1915ff..c8591406c0e2 100644
+> > --- a/security/integrity/ima/ima_init.c
+> > +++ b/security/integrity/ima/ima_init.c
+> > @@ -50,7 +50,7 @@ static int __init ima_add_boot_aggregate(void)
+> >  	struct ima_template_entry *entry;
+> >  	struct integrity_iint_cache tmp_iint, *iint = &tmp_iint;
+> >  	struct ima_event_data event_data = {iint, NULL, boot_aggregate_name,
+> > -					    NULL, 0, NULL};
+> > +					    NULL, 0, NULL, NULL, 0};
+> 
+> here, don't belong in this patch.  It belongs in "IMA: support for per
+> policy rule template formats", in case it should ever be backported.
+>  Please post this as a separate patch, that will be squashed with
+> "IMA: support for per policy rule template formats".
 
-dev_warn(dev, "waiting for OP-TEE to be alive\n");
+Might mistake.  I should have picked up Thaigo's "ima: Use designated
+initializers for struct ima_event_data".  Please drop these changes
+instead.
 
-> IIUC, here you are trying to resolve dependency with OP-TEE driver
-> using "-EPROBE_DEFER". So user shouldn't be prompted with error
-> messages until OP-TEE driver comes up.
->
-> BTW, for me this OP-TEE driver dependency seems not to work, boot is
-> simply stuck waiting for device. Probably the reason being this fTPM
-> driver is a platform driver and OP-TEE NOT a platform driver.
->
+thanks,
 
-Apologies for the noise here. It works as expected.
+Mimi
 
--Sumit
+> 
+> >  	int result = -ENOMEM;
+> >  	int violation = 0;
+> >  	struct {
+> 
 
-> >
-> > >Module built with "CONFIG_TCG_FTPM_TEE=y"
-> > >
-> > >[    1.436878] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_context failed
-> > >[    1.509471] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_context failed
-> > >[    1.517268] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_context failed
-> > >[    1.525596] ftpm-tee tpm@0: ftpm_tee_probe:tee_client_open_context failed
-> >
-> > Does the TEE have the fTPM implementation and such? Could you provide
-> > details about your testing environment (hardware, fTPM verions, etc)?
-> >
->
-> I just did a sanity check on my arm64 machine (Developerbox), just
-> adding following DT node and enabled CONFIG_TCG_FTPM_TEE=y:
->
-> +    tpm@0 {
-> +        compatible = "microsoft,ftpm";
-> +    };
->
-> Basically with no fTPM TA, I expected the driver to fail during
-> "tee_client_open_session()" call with TA not found error and boot
-> should continue. But it fails during "tee_client_open_context()" which
-> opens a context with OP-TEE driver and has nothing to do with fTPM TA.
->
-> -Sumit
->
-> > --
-> > Thanks,
-> > Sasha
