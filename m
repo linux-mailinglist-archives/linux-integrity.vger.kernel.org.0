@@ -2,53 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D66845410
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 07:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EDB45422
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2019 07:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbfFNFhh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jun 2019 01:37:37 -0400
-Received: from mail-lj1-f179.google.com ([209.85.208.179]:37488 "EHLO
-        mail-lj1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725869AbfFNFhh (ORCPT
+        id S1725884AbfFNFnv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jun 2019 01:43:51 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:42765 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725846AbfFNFnv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jun 2019 01:37:37 -0400
-Received: by mail-lj1-f179.google.com with SMTP id 131so1064267ljf.4
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 22:37:35 -0700 (PDT)
+        Fri, 14 Jun 2019 01:43:51 -0400
+Received: by mail-lf1-f65.google.com with SMTP id y13so815633lfh.9
+        for <linux-integrity@vger.kernel.org>; Thu, 13 Jun 2019 22:43:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nZNUHhspX/f3YOWEVEHKyyk596NYJqshHjg/vatkpxY=;
-        b=W7/HmZtA2ueqgaDGdxDhZWvZWth1HioqPHWq3uv/ZfYeNDFiTuyQdPlIcFpcuu0z3o
-         y6Uev4UXOG5e2S2Wthj/b5CuG5uoZNUQ41OGakG4dyH/tXfB2UroHg2Gx7hFqiJFMRhd
-         gHQl567nnlSJFX9DFyvlw8RNWSWPh3lL/QzcclAHfQaZ7Hmb/dnSS3ruthZE4pMa5tAj
-         qNEHjhma02SIf4fFrc/C/8hZTObaS9YJgPfGfLn6NshA2iWpqtI9/UJDjLUUosWLA3m2
-         v6GAqT6YsvDPsMhcK6xY6KxkpITZc7duRiPE1DrBM6fXGlQ03o6X5Ga4vX7NpAEQzxLA
-         ALsg==
+        bh=pVIR1GkNWFjgCo6n/lJ9j+Zokzf1PhIsv8AWYg66O4c=;
+        b=OcjQ3DXZXxZGUJfGsHVs16bdUSPIXCoPO6rd+Em3canK5qP0jdrlME/SkH1ZpiBa5e
+         6En68VCQ0h1bHVeaZ5dk7+uUmItuqcCKFVMh6qwufvSmXVZlBM4Q5L/ajY8cwPIgqCd8
+         RmBSdwPO2hJg6BicZwSWWVw4/Nwxc8co02DUZy/HIqDQm6OZk7yAmI8/Mugy3BMvyLd4
+         rS8Zi6WkKqstpFv7VA+TvY/Y3t7DkznCLtOsQ/c8oQjJFc1V7MXNQuwP/UZoDaOcUoUg
+         tukyJ7OWFISkcvvz45rrVwlIrJUEHau2u1L45fQPLkh57gu28RkmLzFxen4iEOzcVMRH
+         YCCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nZNUHhspX/f3YOWEVEHKyyk596NYJqshHjg/vatkpxY=;
-        b=KSwHWo2KwFhMp9q/whb2kdnkZZIAkOn+FCdCugJKZiB87+uzf5QCQFVVNRg7J3YClV
-         NLEREiqYOgwcnpkKyoQSLdJXJD+IIXrMtSEbd8Lknb8XmWHvfVCDSbtLtgwGNEin4NU7
-         d1Pcs5F+jNshjml/LlKA2GEsFEA5DEOPGm7UOlyKLG2bpkHpJDtrwg7IszTnNwn6JaoB
-         bBW2BMKZy6L9WimRUG72siKPc9kNbRJXWBTf2kfBgdFpmBZbe0aLsSNODS7Gx7yHMaV6
-         p494Hg2gWDMdzg1ojrqhr1AJ9nkbiIOjJXoqDJ3lpYbFRHCdtGynL5Klv+P42JJeR+Uv
-         +7Uw==
-X-Gm-Message-State: APjAAAUD2YujeShsT1mybUMJflujA8dJQyYiffvhFVhvciA4AF9Xdp7j
-        DTNTLBmHifTBgJpGPgG3YlepEv0kmgHXCqKgEnMh8g==
-X-Google-Smtp-Source: APXvYqyD8F4fw7/Bk2YoYfYuM4/Zn6eIcYSxGX5Muv3tuAEyNC1m3Hoxr0nrzGDdzQZYfXEpLZ8Y+RHbpI0YCi+CBR8=
-X-Received: by 2002:a2e:63d9:: with SMTP id s86mr37708080lje.92.1560490655038;
- Thu, 13 Jun 2019 22:37:35 -0700 (PDT)
+        bh=pVIR1GkNWFjgCo6n/lJ9j+Zokzf1PhIsv8AWYg66O4c=;
+        b=AsvLXJX2z7/TQxFAr/HI0dwgue0G2NbQL6+ScWMeQOQ9paWTvtLYVrw79snU/yDr1i
+         jGH/u48sRt1hIIHetKo2OllkYGeufrYvuLRNACyIkEe3rxwjhlBT5WL9L/eXddc65OQ8
+         reXmT7gjX7ewvPCt8z+vxlrzUhekdp1qnDDodkersK0RhydGYAzonzwi3Ak0YQoRBhdA
+         fa3e67/WuJLywv/ijG+v8tbW22RislkMWhKOVMRkD+1HNL+SnuxgKxkhn+gziexplSv2
+         4GGI7SSXwCcNTbof8QjmkoCkOVSckV2AZjP3oaSZowEwMXjT9Slc6ObSvrBksihpQqS/
+         urtw==
+X-Gm-Message-State: APjAAAWz0IBsbGxhFNcnxmfjrn3g2yzdki3yNBcFtGvp5Rw2zATfhzHe
+        p7beaMLncNX1iaXFUN6Wg5PBoc42QTwX2VYYEoZvRg==
+X-Google-Smtp-Source: APXvYqxj5PpnHtG+YRTVNxCmORSFhlhBSVXH7J3GGA/xbCqCGA6/OMvH04SkOMSY5qASjDsZtJWfbvmI5TkJT9aHrNw=
+X-Received: by 2002:ac2:5094:: with SMTP id f20mr48938479lfm.186.1560491029117;
+ Thu, 13 Jun 2019 22:43:49 -0700 (PDT)
 MIME-Version: 1.0
 References: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org>
- <1560421833-27414-7-git-send-email-sumit.garg@linaro.org> <20190613153414.GG18488@linux.intel.com>
-In-Reply-To: <20190613153414.GG18488@linux.intel.com>
+ <1560421833-27414-5-git-send-email-sumit.garg@linaro.org> <20190613153202.GF18488@linux.intel.com>
+In-Reply-To: <20190613153202.GF18488@linux.intel.com>
 From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 14 Jun 2019 11:07:23 +0530
-Message-ID: <CAFA6WYP7qi_NBRUDBhcEAEzJY-iFvJdXqtCtgQxqAvPSXDjEng@mail.gmail.com>
-Subject: Re: [RFC 6/7] doc: keys: Document usage of TEE based Trusted Keys
+Date:   Fri, 14 Jun 2019 11:13:38 +0530
+Message-ID: <CAFA6WYOe19cOSNUdWvwg-FaXeU5_cev=OpsFYJp020bUrxWxow@mail.gmail.com>
+Subject: Re: [RFC 4/7] KEYS: trusted: Introduce TEE based Trusted Keys
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
@@ -66,34 +66,33 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 13 Jun 2019 at 21:04, Jarkko Sakkinen
+On Thu, 13 Jun 2019 at 21:02, Jarkko Sakkinen
 <jarkko.sakkinen@linux.intel.com> wrote:
 >
-> On Thu, Jun 13, 2019 at 04:00:32PM +0530, Sumit Garg wrote:
-> > Provide documentation for usage of TEE based Trusted Keys via existing
-> > user-space "keyctl" utility. Also, document various use-cases.
+> On Thu, Jun 13, 2019 at 04:00:30PM +0530, Sumit Garg wrote:
+> > Add support for TEE based trusted keys where TEE provides the functionality
+> > to seal and unseal trusted keys using hardware unique key.
+> >
+> > Refer to Documentation/tee.txt for detailed information about TEE.
+> >
+> > Approach taken in this patch acts as an alternative to a TPM device in case
+> > platform doesn't possess one.
 > >
 > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 >
-> Sorry missed this patch. Anyway, I don't think we want multiple trusted
-> keys subsystems. You have to fix the existing one if you care to get
-> these changes in. There is no really other way around this.
+> How does this interact with the trusted module? Why there is no update
+> to security/keys/trusted-encrypted.txt?
 >
 
-I understand your point.
+You already found documentation patch [1].
 
-When I initially looked at trusted key implementation, it seemed to be
-tightly coupled to use TPM device. So I implemented a parallel
-implementation to get initial feedback (functionality-wise) on this
-new approach.
+> Somehow the existing trusted module needs to be re-architected to work
+> with either. Otherwise, this will turn out to be a mess.
+>
 
-I will work on abstraction of trusted key apis to use either approach.
-But is it fine with you if I send if I send a separate RFC patch for
-abstraction and later once reviewed I will incorporate that patch in
-this patch-set.
+See my reply on this patch [1].
 
-It will be really helpful if you could help to test that abstraction
-patch with a real TPM device as I doesn't posses one to test.
+[1] [RFC 6/7] doc: keys: Document usage of TEE based Trusted Keys
 
 -Sumit
 
