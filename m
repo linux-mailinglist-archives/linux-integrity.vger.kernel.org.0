@@ -2,88 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F7B46E98
-	for <lists+linux-integrity@lfdr.de>; Sat, 15 Jun 2019 08:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5A446FEB
+	for <lists+linux-integrity@lfdr.de>; Sat, 15 Jun 2019 14:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbfFOG2y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 15 Jun 2019 02:28:54 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:39008 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbfFOG2y (ORCPT
+        id S1726400AbfFOMjv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 15 Jun 2019 08:39:51 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:35245 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725943AbfFOMjv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 15 Jun 2019 02:28:54 -0400
-Received: by mail-wm1-f68.google.com with SMTP id z23so4218951wma.4;
-        Fri, 14 Jun 2019 23:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:openpgp:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3zLySgCclFnvuNTV15P6TA3DxfDKWG9jw7Y0vYK7J1Q=;
-        b=o09zssjCRBBimQ6/BNdXPY/DozFzaYTRjxHgnUrOeK6avOcGfo8g8b0G71c+4BuXDG
-         tYRgLXUdZSUOFY2dnsC4rH6O6DKv0NsGFCa37xaaBWgHyu8vBgtjDDpW3Wx+Wzf4kec+
-         FTGlpmrsaiJd1dcCzCeFLI5b+mgn96bRU0ip5vAbwE/EuWPa+aR5z20NSJCz7odIBJuJ
-         whi4+Pp6HdDuZXQ8L5CQ/BXpiX+9N3VkYBDnOiY6BaeHRtlvpYEgmx9ttP+TYM+PAMLc
-         3Ny+fbxlBzyZghsuN15DT0+RYj2J6uYBCsaw9QmzvBiI/GZtgVhGTTuT1h8mOEEQ591z
-         1GCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3zLySgCclFnvuNTV15P6TA3DxfDKWG9jw7Y0vYK7J1Q=;
-        b=Gyyua74nRYfYnbuJPfy9TowuXeaqBiy/MyIurtjbPTkzpOvDTXepVRnG0TvnYzyo8q
-         DnXaPH9toQzfDRxy8Q07fCbTE4vUjid5vhxsBKt4TTe8lwEB4aIN/0w2hxh3gZHrvNxQ
-         9W5m/KA+dbpPCJmnsoY2WSELbihLbKuRHMXUUXt1bDpWX1OOcxieDqTkw7qS6WnJP5jH
-         IKtVugx3fFfGHcJ3Q+/KrRROPy5qPI4bk47PcrC4UtF0zHNk8dVE2ADBOb8qvQ4gTxw8
-         uuPY03zePX6XrKFUrw2n+5lpzG4zczi57l1msO8GUzsEEGg+i6EFvPFWEJ10wpSaYKBi
-         VI+Q==
-X-Gm-Message-State: APjAAAW19uK9Wltg86WtqvlKXU+Q/aLfsvUteLkH+xFsRamfvGhg+VHH
-        SgJBDkLdzBzRuY6RYNjT1rX9GTceOuHdxA==
-X-Google-Smtp-Source: APXvYqzFMXUG7FDAKz7YOvOYfDx0LdUjaKO3QWNufslY/7C+5+Oh+Hv0ZtRgOAg0LGIOeWfKmmPllA==
-X-Received: by 2002:a1c:c8:: with SMTP id 191mr10552594wma.6.1560580132093;
-        Fri, 14 Jun 2019 23:28:52 -0700 (PDT)
-Received: from [192.168.2.27] (39.35.broadband4.iol.cz. [85.71.35.39])
-        by smtp.gmail.com with ESMTPSA id f197sm6027911wme.39.2019.06.14.23.28.51
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 14 Jun 2019 23:28:51 -0700 (PDT)
-Subject: Re: [PATCH] tpm: Fix null pointer dereference on chip register error
- path
-To:     Sasha Levin <sashal@kernel.org>, linux-integrity@vger.kernel.org
-Cc:     stable@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-References: <20190612084210.13562-1-gmazyland@gmail.com>
- <20190614215635.2D9BD2184E@mail.kernel.org>
-From:   Milan Broz <gmazyland@gmail.com>
-Openpgp: preference=signencrypt
-Message-ID: <251208d1-96f9-1fab-3fee-4a216ff87f5e@gmail.com>
-Date:   Sat, 15 Jun 2019 08:28:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Sat, 15 Jun 2019 08:39:51 -0400
+Received: from callcc.thunk.org (rrcs-74-87-88-165.west.biz.rr.com [74.87.88.165])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x5FCdL7J031269
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 15 Jun 2019 08:39:22 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id A4E1B420484; Sat, 15 Jun 2019 08:39:20 -0400 (EDT)
+Date:   Sat, 15 Jun 2019 08:39:20 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v4 01/16] fs-verity: add a documentation file
+Message-ID: <20190615123920.GB6142@mit.edu>
+References: <20190606155205.2872-1-ebiggers@kernel.org>
+ <20190606155205.2872-2-ebiggers@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190614215635.2D9BD2184E@mail.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190606155205.2872-2-ebiggers@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 14/06/2019 23:56, Sasha Levin wrote:
-> Hi,
+On Thu, Jun 06, 2019 at 08:51:50AM -0700, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
 > 
-> [This is an automated email]
+> Add a documentation file for fs-verity, covering....
 > 
-> This commit has been processed because it contains a -stable tag.
-> The stable tag indicates that it's relevant for the following trees: all
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
 
-It should be only # v5.1+
+Looks good; you can add:
 
-And seems I also forgot to add some cc for the original patch, sorry.
+Reviewed-by: Theodore Ts'o <tytso@mit.edu>
 
-The referenced patch is here
-https://lore.kernel.org/linux-integrity/20190612084210.13562-1-gmazyland@gmail.com/
 
-Milan
+One minor design point below:
+
+> +ext4 stores the verity metadata (Merkle tree and fsverity_descriptor)
+> +past the end of the file, starting at the first page fully beyond
+                                                   ^^^^
+> +i_size.  This approach works because (a) verity files are readonly,
+> +and (b) pages fully beyond i_size aren't visible to userspace but can
+> +be read/written internally by ext4 with only some relatively small
+> +changes to ext4.  This approach avoids having to depend on the
+> +EA_INODE feature and on rearchitecturing ext4's xattr support to
+> +support paging multi-gigabyte xattrs into memory, and to support
+> +encrypting xattrs.  Note that the verity metadata *must* be encrypted
+> +when the file is, since it contains hashes of the plaintext data.
+
+If we ever want to support mounting, say, a file system with 4k blocks
+and fsverity enabled on a architecture with a 16k or 64k page size,
+then "page" in that first sentence will need to become "block".  At
+the moment we only support fsverity when page size == block size, so
+it's not an issue.
+
+However, it's worth reflecting on what this means.  In order to
+satisfy this requirement (from the mmap man page):
+
+       A file is mapped in multiples of the page size.  For a file
+       that is not a multiple of the page size, the remaining memory
+       is zeroed when mapped...
+
+we're going to have to special case how the last page gets mmaped.
+The simplest way to do this will be to map in an anonymous page which
+just has the blocks that are part of the data block copied in, and the
+rest of the page can be zero'ed.
+
+One thing we might consider doing just to make life much easier for
+ourselves (should we ever want to support page size != block size ---
+which I could imagine some folks like Chandan might find desirable) is
+to specify that the fsverity metadata begins at an offset which begins
+at i_size rounded up to the next 64k binary, which should handle all
+current and future architectures' page sizes.
+
+					- Ted
