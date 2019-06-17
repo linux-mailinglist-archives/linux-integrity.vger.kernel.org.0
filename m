@@ -2,93 +2,174 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B52C4776B
-	for <lists+linux-integrity@lfdr.de>; Mon, 17 Jun 2019 01:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA8547A4C
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Jun 2019 08:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727238AbfFPX4L (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 16 Jun 2019 19:56:11 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38359 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726038AbfFPX4L (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 16 Jun 2019 19:56:11 -0400
-Received: by mail-pg1-f193.google.com with SMTP id v11so4721583pgl.5
-        for <linux-integrity@vger.kernel.org>; Sun, 16 Jun 2019 16:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=axtens.net; s=google;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=eKbpzEiJylVko/AqUmYGdm35tR1kAF8kyTrOQOn/LZY=;
-        b=mjFgfEh9DpnUyYJnmm10xCAA44rjQ5vM3POmL21L1yxtntOM4gCLmgenR1CUMVLdRK
-         bKJ5vWJRNlNGEcrq4IdxzCEHcpIe7vlLMfhuxhzjrr57rEblFOm2QshpZwxJlJUsK8FS
-         r9C0ItB6L+JRovFIxzCuNpKzuioK88/Kll0kA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=eKbpzEiJylVko/AqUmYGdm35tR1kAF8kyTrOQOn/LZY=;
-        b=SCuYAiYgVu0i12JHn4TSXowWVkGhzryR7NeyPtbGs9Bf3nLbAAm7SNJG9iL//1eRs2
-         ytYCEnxgH+V0iBh/D4UrBaZE2yAJdQP5Sk7VNAo1n6/t8+GUgiG4Wmdr6mE+XlHa24pl
-         sxyNHN7odB+9ldehFoBMlNLpfCNxBJhjw+Lmcc6Szlklk/BaUDK6TFVStpK2GMsiL/LN
-         Aelx8XonyJUBqP4v4lteq+As2f1HxsjeVDL++7HoV5LcEGDMq/v+zp9WcBAM2APPG/VY
-         v9/FGrBdJhO9M6eDjchlw0NlAyam89M3nnHMw6Xe1Y0ePadjP+EqlYCrqInMVUmeDWmO
-         WBQQ==
-X-Gm-Message-State: APjAAAVthfgdJWhonkXP9kRJCs6bK8Nt8jm6gE19w5x7dM+aTmzZDkNT
-        qaLP0/lJmI5kCUvS4sUy+P9W4w==
-X-Google-Smtp-Source: APXvYqzVFXwvbw+h8Vy5oNuVgOROK+vJF9NO7ccBNAEWTkL02XdJ05Npe6ZqjRHegh2kVzPtwd85kA==
-X-Received: by 2002:a63:6981:: with SMTP id e123mr22346754pgc.136.1560729370570;
-        Sun, 16 Jun 2019 16:56:10 -0700 (PDT)
-Received: from localhost (ppp167-251-205.static.internode.on.net. [59.167.251.205])
-        by smtp.gmail.com with ESMTPSA id v4sm9131345pfb.14.2019.06.16.16.56.08
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 16 Jun 2019 16:56:09 -0700 (PDT)
-From:   Daniel Axtens <dja@axtens.net>
-To:     Nayna <nayna@linux.vnet.ibm.com>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        Eric Richter <erichte@linux.ibm.com>
-Subject: Re: [PATCH v3 1/3] powerpc/powernv: Add OPAL API interface to get secureboot state
-In-Reply-To: <b2cedb05-6373-b357-f35c-bc112c78a6fc@linux.vnet.ibm.com>
-References: <1560198837-18857-1-git-send-email-nayna@linux.ibm.com> <1560198837-18857-2-git-send-email-nayna@linux.ibm.com> <87ftofpbth.fsf@dja-thinkpad.axtens.net> <eaa37bd0-a77d-d70a-feb5-c0e73ce231bf@linux.vnet.ibm.com> <87d0jipfr9.fsf@dja-thinkpad.axtens.net> <b2cedb05-6373-b357-f35c-bc112c78a6fc@linux.vnet.ibm.com>
-Date:   Mon, 17 Jun 2019 09:56:05 +1000
-Message-ID: <87tvcp2iga.fsf@dja-thinkpad.axtens.net>
+        id S1726028AbfFQG46 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 17 Jun 2019 02:56:58 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:33023 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725793AbfFQG46 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 17 Jun 2019 02:56:58 -0400
+Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id B16C3488195E49602C2C;
+        Mon, 17 Jun 2019 07:56:56 +0100 (IST)
+Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
+ (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 17 Jun
+ 2019 07:56:49 +0100
+Subject: Re: [PATCH v4 00/14] ima: introduce IMA Digest Lists extension
+To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
+        <mjg59@google.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>
+References: <20190614175513.27097-1-roberto.sassu@huawei.com>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <9029dd14-1077-ec89-ddc2-e677e16ad314@huawei.com>
+Date:   Mon, 17 Jun 2019 08:56:53 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190614175513.27097-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.220.96.108]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Nayna,
+On 6/14/2019 7:54 PM, Roberto Sassu wrote:
+> This patch set introduces a new IMA extension called IMA Digest Lists.
+> 
+> At early boot, the extension preloads in kernel memory reference digest
+> values, that can be compared with actual file digests when files are
+> accessed in the system.
+> 
+> The extension will open for new possibilities: PCR with predictable value,
+> that can be used for sealing policies associated to data or TPM keys;
+> appraisal based on reference digests already provided by Linux distribution
+> vendors in the software packages.
+> 
+> The first objective can be achieved because the PCR values does not depend
+> on which and when files are measured: the extension measures digest lists
+> sequentially and files whose digest is not in the digest list.
+> 
+> The second objective can be reached because the extension is able to
+> extract reference measurements from packages (with a user space tool) and
+> use it as a source for appraisal verification as the reference came from
+> the security.ima xattr. This approach will also reduce the overhead as only
+> one signature is verified for many files (as opposed to one signature for
+> each file with the current implementation).
+> 
+> This version of the patch set provides a clear separation between current
+> and new functionality. First, the new functionality must be explicitly
+> enabled from the kernel command line. Second, results of operations
+> performed by the extension can be distinguished from those obtained from
+> the existing code: measurement entries created by the extension have a
+> different PCR; mutable files appraised with the extension have a different
+> security.ima type.
+> 
+> The review of this patch set should start from patch 11 and 12, which
+> modify the IMA-Measure and IMA-Appraise submodules to use digest lists.
+> Patch 1 to 5 are prerequisites. Patch 6 to 10 adds support for digest
+> lists. Finally, patch 13 introduces two new policies to measure/appraise
+> rootfs and patch 14 adds the documentation (including a flow chart to
+> show how IMA has been modified).
+> 
+> The user space tools to configure digest lists are available at:
+> 
+> https://github.com/euleros/digest-list-tools/releases/tag/v0.3
+> 
+> The patch set applies on top of linux-integrity/next-queued-testing
+> (73589972b987).
+> 
+> It is necessary to apply also:
+> https://patchwork.kernel.org/cover/10957495/
 
->> I guess I also somewhat object to calling it a 'backend' if we're using
->> it as a version scheme. I think the skiboot storage backends are true
->> backends - they provide different implementations of the same
->> functionality with the same API, but this seems like you're using it to
->> indicate different functionality. It seems like we're using it as if it
->> were called OPAL_SECVAR_VERSION.
->
-> We are changing how we are exposing the version to the kernel. The=20
-> version will be exposed as device-tree entry rather than a OPAL runtime=20
-> service. We are not tied to the name "backend", we can switch to calling=
-=20
-> it as "scheme" unless there is a better name.
+Another dependency is:
 
-This sounds like a good approach to me.
+https://patchwork.kernel.org/cover/10979341/
 
-Kind regards,
-Daniel
+Roberto
 
->
-> Thanks & Regards,
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - Nayna
+
+> To use appraisal, it is necessary to use a modified cpio and a modified
+> dracut:
+> 
+> https://github.com/euleros/cpio/tree/xattr-v1
+> https://github.com/euleros/dracut/tree/digest-lists
+> 
+> For now, please use it only in a testing environment.
+> 
+> 
+> Changelog
+> 
+> v3:
+> - move ima_lookup_loaded_digest() and ima_add_digest_data_entry() from
+>    ima_queue.c to ima_digest_list.c
+> - remove patch that introduces security.ima_algo
+> - add version number and type modifiers to the compact list header
+> - remove digest list metadata, all digest lists in the directory are
+>    accessed
+> - move loading of signing keys to user space
+> - add violation for both PCRs if they are selected
+> - introduce two new appraisal modes
+> 
+> v2:
+> - add support for multiple hash algorithms
+> - remove RPM parser from the kernel
+> - add support for parsing digest lists in user space
+> 
+> v1:
+> - add support for immutable/mutable files
+> - add support for appraisal with digest lists
+> 
+> 
+> Roberto Sassu (14):
+>    ima: read hash algorithm from security.ima even if appraisal is not
+>      enabled
+>    ima: generalize ima_read_policy()
+>    ima: generalize ima_write_policy() and raise uploaded data size limit
+>    ima: generalize policy file operations
+>    ima: use ima_show_htable_value to show violations and hash table data
+>    ima: add parser of compact digest list
+>    ima: restrict upload of converted digest lists
+>    ima: prevent usage of digest lists that are not measured/appraised
+>    ima: introduce new securityfs files
+>    ima: load parser digests and execute the parser at boot time
+>    ima: add support for measurement with digest lists
+>    ima: add support for appraisal with digest lists
+>    ima: introduce new policies initrd and appraise_initrd
+>    ima: add Documentation/security/IMA-digest-lists.txt
+> 
+>   .../admin-guide/kernel-parameters.txt         |  16 +-
+>   Documentation/security/IMA-digest-lists.txt   | 226 +++++++++++++
+>   include/linux/evm.h                           |   6 +
+>   include/linux/fs.h                            |   1 +
+>   security/integrity/evm/evm_main.c             |   2 +-
+>   security/integrity/iint.c                     |   1 +
+>   security/integrity/ima/Kconfig                |  25 ++
+>   security/integrity/ima/Makefile               |   1 +
+>   security/integrity/ima/ima.h                  |  32 +-
+>   security/integrity/ima/ima_api.c              |  43 ++-
+>   security/integrity/ima/ima_appraise.c         |  92 +++---
+>   security/integrity/ima/ima_digest_list.c      | 309 ++++++++++++++++++
+>   security/integrity/ima/ima_digest_list.h      |  69 ++++
+>   security/integrity/ima/ima_fs.c               | 224 ++++++++-----
+>   security/integrity/ima/ima_init.c             |   2 +-
+>   security/integrity/ima/ima_main.c             |  81 ++++-
+>   security/integrity/ima/ima_policy.c           |  29 +-
+>   security/integrity/integrity.h                |  22 ++
+>   18 files changed, 1018 insertions(+), 163 deletions(-)
+>   create mode 100644 Documentation/security/IMA-digest-lists.txt
+>   create mode 100644 security/integrity/ima/ima_digest_list.c
+>   create mode 100644 security/integrity/ima/ima_digest_list.h
+> 
+
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
