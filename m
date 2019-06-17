@@ -2,100 +2,150 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5DA49573
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jun 2019 00:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFF449607
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jun 2019 01:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbfFQWvg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 17 Jun 2019 18:51:36 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:34740 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726568AbfFQWvg (ORCPT
+        id S1726776AbfFQXmR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 17 Jun 2019 19:42:17 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55832 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726724AbfFQXmR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 17 Jun 2019 18:51:36 -0400
-Received: by mail-qk1-f195.google.com with SMTP id t8so7335997qkt.1
-        for <linux-integrity@vger.kernel.org>; Mon, 17 Jun 2019 15:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=R7JAr7nez95dVg1/6wJIkqeDIU+F0cp9vja/vFPRJFw=;
-        b=IxEUZuMdQJp34/Puwy1PzMsfF+CNvMhDuDiizsH2lbDiry4fHprm28hX3Wlf60KF9a
-         0IL4HMp0Fh9iml2DATXl+qbJ9eaK4tvMzrdvohheJ+kxkmGB5VSfsHnJ6eSC1KIhZiY0
-         ivCZ1eFuKHMXPuLRc5yBNoXCPnZJqoZaMxLTGsKrrnkRSsfAgi3ngCNpNhtadAde/rJw
-         3UqY+6EBG6FhPZtmgjsc8PIrJXiakc57yrnafAOzM/mWtr6r3YAqmaVduUSrGrqqAXDw
-         P0qrF11SLGwankHnhduH87S6h2xyJbfn8+PeUUUSXxdp5fda36YJY9Xf3w7PtrYEaSKb
-         f0gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=R7JAr7nez95dVg1/6wJIkqeDIU+F0cp9vja/vFPRJFw=;
-        b=A3ejXN/8OfuEwoqcPxzNVofI+nyoZuN2+9FK6Ck0ei3l3Omx2l76Z/QNhsCi6BXsIQ
-         lVDH2m6/HH+7qQdidn3GgY34SMCPBSzxLLM3NJ5/4uzDmyELpKkS5a3VrlSLzu8+v9PS
-         xZkRleoSYynoI82U/IlYHwalCjMjYJt2BWpYyvKGlm5jlTqL2yq41A7dO8ynx2qtKqz/
-         ZUhTyj6avzZjx0s+Zu5ZC6ybUdjjZ2KgJDHEJsFy8WtpXlwgnQWQe+FlfTgfOkCazCCU
-         e47EXr9EiYcoX+Ups/UtSUya6ioxrBjJvuK8CgE1eWde/S1IYirj/mLeZs/1pU6Feycb
-         44SA==
-X-Gm-Message-State: APjAAAV4mcc+tKzu3Y9OZaxQPsFOBAgdwvJj0Gx947a+IRBh/+9ANQAM
-        Tboq/+Zkmt5RQ4gpV1xqwAfOWQ==
-X-Google-Smtp-Source: APXvYqz94JsNDcpcmRkN70+HkHIcd6+Mz1HWtd4o8rGjA5RUlEsXqOEPsarqlnBZr+tByk/gRvP3gA==
-X-Received: by 2002:a37:68ca:: with SMTP id d193mr81764803qkc.240.1560811895507;
-        Mon, 17 Jun 2019 15:51:35 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-55-100.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.55.100])
-        by smtp.gmail.com with ESMTPSA id d141sm7926869qke.3.2019.06.17.15.51.34
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 17 Jun 2019 15:51:34 -0700 (PDT)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1hd0TO-00083X-B6; Mon, 17 Jun 2019 19:51:34 -0300
-Date:   Mon, 17 Jun 2019 19:51:34 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Andrey Pronin <apronin@chromium.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, devicetree@vger.kernel.org,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH 1/8] tpm: block messages while suspended
-Message-ID: <20190617225134.GA30762@ziepe.ca>
-References: <20190613180931.65445-1-swboyd@chromium.org>
- <20190613180931.65445-2-swboyd@chromium.org>
- <20190613232613.GH22901@ziepe.ca>
- <5d03e394.1c69fb81.f028c.bffb@mx.google.com>
+        Mon, 17 Jun 2019 19:42:17 -0400
+Received: from [10.200.157.26] (unknown [131.107.160.154])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D31CE2007677;
+        Mon, 17 Jun 2019 16:42:15 -0700 (PDT)
+Subject: Re: [PATCH 0/2] [IMA] Measure public keys of BuiltIn Trusted Keys
+To:     Ken Goldman <kgold@linux.ibm.com>,
+        Linux Integrity <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     James Morris <jamorris@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        Balaji Balasubramanyan <balajib@linux.microsoft.com>,
+        Jordan Hand <jorhand@linux.microsoft.com>
+References: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
+ <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com>
+ <0561ce44-f8f7-15f5-6eaf-fb97a785692a@linux.microsoft.com>
+ <7da97815-a09a-de6f-dbf2-7d2c96a077bb@linux.ibm.com>
+From:   Lakshmi <nramas@linux.microsoft.com>
+Message-ID: <ec8d559b-d78d-4e89-579a-837725928118@linux.microsoft.com>
+Date:   Mon, 17 Jun 2019 16:42:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d03e394.1c69fb81.f028c.bffb@mx.google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <7da97815-a09a-de6f-dbf2-7d2c96a077bb@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jun 14, 2019 at 11:12:36AM -0700, Stephen Boyd wrote:
-> Quoting Jason Gunthorpe (2019-06-13 16:26:13)
-> > On Thu, Jun 13, 2019 at 11:09:24AM -0700, Stephen Boyd wrote:
-> > > From: Andrey Pronin <apronin@chromium.org>
-> > > 
-> > > Other drivers or userspace may initiate sending a message to the tpm
-> > > while the device itself and the controller of the bus it is on are
-> > > suspended. That may break the bus driver logic.
-> > > Block sending messages while the device is suspended.
-> > > 
-> > > Signed-off-by: Andrey Pronin <apronin@chromium.org>
-> > > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > > 
-> > > I don't think this was ever posted before.
-> > 
-> > Use a real lock.
-> > 
+On 6/17/19 10:04 AM, Ken Goldman wrote:
+
+> How will it know that?  It will know about the keys in the built-in 
+> keyring, but how does that say whether an IMA key is trusted?
+
+The parameter CONFIG_INTEGRITY_TRUSTED_KEYRING is enabled so that key(s) 
+added to the IMA keyring must be signed by a key in the system trusted 
+keyring. So by knowing what keys are present in the "Built-In Trusted 
+Keyring", we can know if the IMA keys are trusted or not.
+
+>> By knowing what keys were used to install the IMA key(s) the service 
+>> knows whether or not to trust the signature validation performed by 
+>> IMA on the client.
 > 
-> To make sure the bit is tested under a lock so that suspend/resume can't
-> update the bit in parallel?
+> How does that happen?
+> 
+> In order to trust the IMA validation, it has to attest to the code doing 
+> the validation, and to the IMA keys.
+> 
+> It already knows which IMA keys were used from the IMA log, assuming the 
+> IMA code is attested.
 
-No, just use a real lock, don't make locks out of test bit/set bit
+Yes - from the IMA log the service knows which IMA keys were used.
+And, by knowing the keys in built-in trusted keyring, the service can 
+know whether those IMA keys are trusted (because the IMA keys have to be 
+signed by the key(s) in built-in trusted keyring: by enabling 
+CONFIG_INTEGRITY_TRUSTED_KEYRING).
 
-Jason
+Since, the built-in keys change much less often than the IMA keys, it is 
+much less maintenance overhead in the service to attest the built-in 
+keys compared to attesting the IMA keys.
+
+Due to the requirement that the IMA keys must be signed by built-in key, 
+attesting the built-in key effectively attests the IMA keys as well.
+
+> How does knowing the keys on the built-in keyring tell which files were 
+> signed?  How does it tell who the signer is?
+> 
+> That information (whether signed and what signed it) comes from the IMA 
+> log, right?
+The IMA log tells the service which files were signed and which IMA key 
+was used to sign those files.
+
+My proposal does not alter (remove) any data that is currently supported 
+in the IMA log. It is only adding more information in the IMA log - the 
+information on the signer of the IMA signer key(s).
+
+> How would your design help to know whether the files being run are 
+> trusted?  I think that has to come out-of-band.
+> 
+> E.g., I can know that libfoo.so.1.2.3 is signed and who the signer is, 
+> but I may not trust anything older than libfoo.2.0.0.
+
+You are right - the fact that file older than, for example, libfoo 2.0.0 
+is trusted or not is not something my proposal covers. That is not the 
+goal of this proposal.
+
+IMA log currently just conveys libfoo.1.5.6 is signed and provides 
+information on the signer. Whether that version is trusted or not needs 
+to be verified by the service outside of IMA.
+
+>> Like I have stated above, the change I am making is adding more data 
+>> (information on built-in keys) to what IMA log already provides".
+> 
+> Understood.  I'm trying to learn the usefulness of that data.
+
+My proposal is adding information on the signer of the IMA signer key - 
+that signer information is in the "Built-In Trusted Keys".
+
+That data, in addition to the current IMA log, provides information to 
+the service to determine if the IMA keys used by the clients are trusted 
+or not.
+
+> Doesn't it needs those hashes anyway, to determine whether the file is 
+> trusted.  To me "signed with a trusted key" does not equal "trusted".
+I agree - a file that has valid signature may not be trusted because 
+that version of the file was, for instance, buggy.
+
+The goal of my proposal is not to help the service determine whether a 
+file is trusted or not - that has to be done outside of IMA.
+
+The goal of my proposal is to convey whether the file was signed with a 
+trusted key.
+
+> We already know who signed from the IMA keys in the IMA log.
+> 
+> How does knowing who was authorized to install IMA keys help?  The 
+> attestor still has to know out of band which IMA keys to trust, and 
+> which files to trust.
+
+By building the kernel with CONFIG_INTEGRITY_TRUSTED_KEYRING we are 
+mandating that the IMA key is signed by built-in key.
+
+So by knowing who authorized (signed) the IMA key, the service is able 
+to know whether to trust the IMA key or not.
+
+Information on the IMA key is already available in the IMA log. But 
+since IMA keys change much more frequently than the "Built-In Keys", it 
+is more overhead for the service to keep track of all valid IMA keys 
+compared to doing the same for "Built-In keys".
+
+Hence my proposal to include the "Built-In keys" in the IMA measurement.
+
+Thanks,
+  -lakshmi
+
