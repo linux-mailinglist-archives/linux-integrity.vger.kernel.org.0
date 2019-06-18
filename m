@@ -2,117 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 352394A547
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jun 2019 17:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795304A6E6
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jun 2019 18:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729319AbfFRP0H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jun 2019 11:26:07 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:48970 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728982AbfFRP0H (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jun 2019 11:26:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zDQuLvyPeQhgh7/ZzmUlpMUVHgADFhKIg7Jx10j8T5Y=; b=PHPN2gJTKxWUHzfd0/kg7rMWvA
-        Yj3i5FFGVoxgSjQttV4VLQROldiE+URTLhWKZONApFUFQZPSia/6BqSPcPFo1hHkvmDU+1zb/7KH8
-        iAfuTs7fL8c+u3T4C7a5k8A+vCStaGR7Rq866QEQuJgAAfPc/5Z6TwmPANQLLk+JTxtXZdeHvEbhi
-        x5ZWr4fkXLWhGIsf/tgQyShCfFSeWbXWjzoJvmqEgvksGpX0524r9XpMHLI03T/R3ZdqG1duoVouV
-        4/V9aXlXKwpWtE7Qty9AtdI5jjEhd3yIreXwmZgu7AvtuvokiWBkx+2gDLHn44ABf3u+mvkf4vZV7
-        MTxOG69Q==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hdFzm-0000Kn-4u; Tue, 18 Jun 2019 15:26:02 +0000
-Subject: Re: [PATCH v4 2/2] fTPM: add documentation for ftpm driver
-To:     Sasha Levin <sashal@kernel.org>, peterhuewe@gmx.de,
-        jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca
-Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@microsoft.com, thiruan@microsoft.com,
-        bryankel@microsoft.com, tee-dev@lists.linaro.org
-References: <20190530152758.16628-1-sashal@kernel.org>
- <20190530152758.16628-3-sashal@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <c1cf6154-7140-66c9-dff9-dc7a788df518@infradead.org>
-Date:   Tue, 18 Jun 2019 08:25:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1729472AbfFRQbV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jun 2019 12:31:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58924 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729319AbfFRQbV (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 18 Jun 2019 12:31:21 -0400
+Received: from gmail.com (unknown [104.132.1.77])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A3AE32054F;
+        Tue, 18 Jun 2019 16:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560875480;
+        bh=8s8EM+uYReYgUA7GU9MPlmqiEwIExiskI/J8sVZVt2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wgRJzptgTLpjPDiEHTaZP7Qip+BiPwTjsvkocLXBfaZEI/gTRT5gSpoRGEMSpNuHe
+         U5HifCFDwTn9R81SiN+y7/MXL3wJ9s2x4LNgLhYTvryiwZpwtId2IibVduHFLs4qAP
+         P2C8p4W6B8LMCJMcvopWfhP9eOwKX0fxQoCm8fnE=
+Date:   Tue, 18 Jun 2019 09:31:18 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v4 01/16] fs-verity: add a documentation file
+Message-ID: <20190618163116.GA184520@gmail.com>
+References: <20190606155205.2872-1-ebiggers@kernel.org>
+ <20190606155205.2872-2-ebiggers@kernel.org>
+ <20190615123920.GB6142@mit.edu>
 MIME-Version: 1.0
-In-Reply-To: <20190530152758.16628-3-sashal@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190615123920.GB6142@mit.edu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/30/19 8:27 AM, Sasha Levin wrote:
-> This patch adds basic documentation to describe the new fTPM driver.
+Hi Ted,
+
+On Sat, Jun 15, 2019 at 08:39:20AM -0400, Theodore Ts'o wrote:
+> On Thu, Jun 06, 2019 at 08:51:50AM -0700, Eric Biggers wrote:
+> > From: Eric Biggers <ebiggers@google.com>
+> > 
+> > Add a documentation file for fs-verity, covering....
+> > 
+> > Signed-off-by: Eric Biggers <ebiggers@google.com>
 > 
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> Signed-off-by: Sasha Levin (Microsoft) <sashal@kernel.org>
-> ---
->  Documentation/security/tpm/index.rst        |  1 +
->  Documentation/security/tpm/tpm_ftpm_tee.rst | 31 +++++++++++++++++++++
->  2 files changed, 32 insertions(+)
->  create mode 100644 Documentation/security/tpm/tpm_ftpm_tee.rst
-
-Hi,
-Just some minor editing...
-
-> diff --git a/Documentation/security/tpm/tpm_ftpm_tee.rst b/Documentation/security/tpm/tpm_ftpm_tee.rst
-> new file mode 100644
-> index 0000000000000..29c2f8b5ed100
-> --- /dev/null
-> +++ b/Documentation/security/tpm/tpm_ftpm_tee.rst
-> @@ -0,0 +1,31 @@
-> +=============================================
-> +Firmware TPM Driver
-> +=============================================
-> +
-> +| Authors:
-> +| Thirupathaiah Annapureddy <thiruan@microsoft.com>
-> +| Sasha Levin <sashal@kernel.org>
-> +
-> +This document describes the firmware Trusted Platform Module (fTPM)
-> +device driver.
-> +
-> +Introduction
-> +============
-> +
-> +This driver is a shim for a firmware implemented in ARM's TrustZone
-
-                         for firmware
-
-> +environment. The driver allows programs to interact with the TPM in the same
-> +way the would interact with a hardware TPM.
-
-       they
-
-> +
-> +Design
-> +======
-> +
-> +The driver acts as a thin layer that passes commands to and from a TPM
-> +implemented in firmware. The driver itself doesn't contain much logic and is
-> +used more like a dumb pipe between firmware and kernel/userspace.
-> +
-> +The firmware itself is based on the following paper:
-> +https://www.microsoft.com/en-us/research/wp-content/uploads/2017/06/ftpm1.pdf
-> +
-> +When the driver is loaded it will expose ``/dev/tpmX`` character devices to
-> +userspace which will enable userspace to communicate with the firmware tpm
-
-                                                                          TPM
-
-> +through this device.
+> Looks good; you can add:
+> 
+> Reviewed-by: Theodore Ts'o <tytso@mit.edu>
+> 
+> 
+> One minor design point below:
+> 
+> > +ext4 stores the verity metadata (Merkle tree and fsverity_descriptor)
+> > +past the end of the file, starting at the first page fully beyond
+>                                                    ^^^^
+> > +i_size.  This approach works because (a) verity files are readonly,
+> > +and (b) pages fully beyond i_size aren't visible to userspace but can
+> > +be read/written internally by ext4 with only some relatively small
+> > +changes to ext4.  This approach avoids having to depend on the
+> > +EA_INODE feature and on rearchitecturing ext4's xattr support to
+> > +support paging multi-gigabyte xattrs into memory, and to support
+> > +encrypting xattrs.  Note that the verity metadata *must* be encrypted
+> > +when the file is, since it contains hashes of the plaintext data.
+> 
+> If we ever want to support mounting, say, a file system with 4k blocks
+> and fsverity enabled on a architecture with a 16k or 64k page size,
+> then "page" in that first sentence will need to become "block".  At
+> the moment we only support fsverity when page size == block size, so
+> it's not an issue.
+> 
+> However, it's worth reflecting on what this means.  In order to
+> satisfy this requirement (from the mmap man page):
+> 
+>        A file is mapped in multiples of the page size.  For a file
+>        that is not a multiple of the page size, the remaining memory
+>        is zeroed when mapped...
+> 
+> we're going to have to special case how the last page gets mmaped.
+> The simplest way to do this will be to map in an anonymous page which
+> just has the blocks that are part of the data block copied in, and the
+> rest of the page can be zero'ed.
+> 
+> One thing we might consider doing just to make life much easier for
+> ourselves (should we ever want to support page size != block size ---
+> which I could imagine some folks like Chandan might find desirable) is
+> to specify that the fsverity metadata begins at an offset which begins
+> at i_size rounded up to the next 64k binary, which should handle all
+> current and future architectures' page sizes.
 > 
 
+Thanks for the review.  Good point; I think we should just go with the "always
+round up to the next 64K boundary" method.  Special-casing how the last page
+gets mmap()ed seems it would be really painful.
 
--- 
-~Randy
+Since there can be a hole between the end of the file and the start of the
+verity metadata, this doesn't even necessarily use any additional disk space.
+
+For consistency and since there is little downside I think I'll do the same for
+f2fs too, though f2fs doesn't currently support PAGE_SIZE != 4096 at all anyway.
+
+- Eric
