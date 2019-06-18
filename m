@@ -2,99 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87633496B3
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jun 2019 03:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5CC4A2DE
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jun 2019 15:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726091AbfFRBbc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 17 Jun 2019 21:31:32 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:32905 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726774AbfFRBbc (ORCPT
+        id S1729163AbfFRNzq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jun 2019 09:55:46 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5022 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729161AbfFRNzp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 17 Jun 2019 21:31:32 -0400
-Received: by mail-io1-f68.google.com with SMTP id u13so26021526iop.0
-        for <linux-integrity@vger.kernel.org>; Mon, 17 Jun 2019 18:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2WT4SOUGABYGWzHRzghnrNDzGsi4pV3a3Oj1deUpmBU=;
-        b=t+ZZOMtbO+lttG5rT0PFjxj+7XqRqEGB/T1fAiceQjcihUlOlfke3ne94iEEn1NhTP
-         FrNMyvz8aJAI3eSDqt0Ckt3gEmCKzsaprV9ZtjfhU55wr9jWrPeGSet0M/Z1W8fFyhZX
-         lxgWNzr/oHhoinw911bAQsJhYffjPyHYGtBIz10V8ODPOxCQ0DvZYQQ7YwwxWTjil8sv
-         J051DY8CrzdPq4V7QwGucwkAToTuYBGE1jFQIpUK5exRmW3MMhv6klb3Gaoe7EdNp2II
-         jOlqU0QcCl2ODykKG07wCzZdLqinn8Q5bT1Q0P1Rq+DYtjFyi3dllF2uVoYIFOPw+rfs
-         XxQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2WT4SOUGABYGWzHRzghnrNDzGsi4pV3a3Oj1deUpmBU=;
-        b=QQtVc1N1X8WcPEgsJH6quRxMJCr2ECImfRBU6ToBGmcWLhkqgx2/3u2DhITGmjQo8Y
-         9bGRXY95DjFiwhsWpHHwCCLSfrLhFoDSNRGHDdYMAIO9MEeezkUMiRUo93hOcLD4rSQd
-         xFQcteuGXGlDhoXvV+W2ssf47sPVU/TjWUyps+9I/FyNlOsc+ATN6//KhY/6FqAHu3wS
-         M/E5/PWZWXrXAd5DCyUJQR+0SQh1n7a6Mg+F6SaXsxZz3zAvv1Nn5QciCn8k9/Ktb5J6
-         g2fWXpb+c1ZXFzrqyWwQvSCCUtumTTU0jFcLTk4I7rOJo0vlaoLamiO6RegzKY6ngKzI
-         rFBA==
-X-Gm-Message-State: APjAAAV8mKteGmd3KWjjbuoDVzAiaSkm2i01UCYYw+IOnlDv1FR8/4TB
-        P9uJSFQRoECDxI1EoLYM+pWfc3xwKwctZhaW60mwsxyC
-X-Google-Smtp-Source: APXvYqwLVPt+lP4uSINHg/7/vesTWjAKRqePScw8/I7343un5tc9CbxJhurWzjz5x4Vtq1+QoliWIXEI14xZXNQpfDc=
-X-Received: by 2002:a05:6602:220d:: with SMTP id n13mr10146995ion.104.1560821491398;
- Mon, 17 Jun 2019 18:31:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
- <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com> <0561ce44-f8f7-15f5-6eaf-fb97a785692a@linux.microsoft.com>
- <7da97815-a09a-de6f-dbf2-7d2c96a077bb@linux.ibm.com>
-In-Reply-To: <7da97815-a09a-de6f-dbf2-7d2c96a077bb@linux.ibm.com>
-From:   Matthew Garrett <mjg59@google.com>
-Date:   Mon, 17 Jun 2019 18:31:19 -0700
-Message-ID: <CACdnJusuFRXKXf7B+27PU7S8zHxZnrrQZdP2HBBNt2J97-qs0Q@mail.gmail.com>
-Subject: Re: [PATCH 0/2] [IMA] Measure public keys of BuiltIn Trusted Keys
-To:     Ken Goldman <kgold@linux.ibm.com>
-Cc:     Lakshmi <nramas@linux.microsoft.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        Balaji Balasubramanyan <balajib@linux.microsoft.com>,
-        Jordan Hand <jorhand@linux.microsoft.com>
+        Tue, 18 Jun 2019 09:55:45 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5IDoqjN095771
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Jun 2019 09:55:44 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2t6xs6f9cs-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Jun 2019 09:55:43 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Tue, 18 Jun 2019 14:55:40 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 18 Jun 2019 14:55:36 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5IDtaKP49086586
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jun 2019 13:55:36 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8B35A4054;
+        Tue, 18 Jun 2019 13:55:35 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F244DA405B;
+        Tue, 18 Jun 2019 13:55:34 +0000 (GMT)
+Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jun 2019 13:55:34 +0000 (GMT)
+Subject: Re: [PATCH] ima: dynamically allocate shash_desc
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+In-Reply-To: <CAK8P3a1Q2JG3KBYNYgWg0_XtGUufNc6zuqcUBqiGSaBRp+au-w@mail.gmail.com>
+References: <20190617115838.2397872-1-arnd@arndb.de>
+         <1560786951.4072.103.camel@linux.ibm.com>
+         <1560794826.4072.169.camel@linux.ibm.com>
+         <CAK8P3a1Q2JG3KBYNYgWg0_XtGUufNc6zuqcUBqiGSaBRp+au-w@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Date:   Tue, 18 Jun 2019 08:44:38 -0400
+Mime-Version: 1.0
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19061813-0008-0000-0000-000002F4CB64
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19061813-0009-0000-0000-00002261E300
+Message-Id: <1560861878.9530.17.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-18_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906180113
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 10:05 AM Ken Goldman <kgold@linux.ibm.com> wrote:
-> On 6/7/2019 1:15 PM, Lakshmi wrote:
-> > By knowing what keys were used to install the IMA key(s) the service
-> > knows whether or not to trust the signature validation performed by IMA
-> > on the client.
->
-> How does that happen?
->
-> In order to trust the IMA validation, it has to attest to the code doing
-> the validation, and to the IMA keys.
+On Mon, 2019-06-17 at 22:08 +0200, Arnd Bergmann wrote:
+> On Mon, Jun 17, 2019 at 8:08 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >
+> > On Mon, 2019-06-17 at 11:55 -0400, Mimi Zohar wrote:
+> > > On Mon, 2019-06-17 at 13:20 +0200, Arnd Bergmann wrote:
+> > > > On 32-bit ARM, we get a warning about excessive stack usage when
+> > > > building with clang.
+> > > >
+> > > > security/integrity/ima/ima_crypto.c:504:5: error: stack frame size
+> > > > of 1152 bytes in function 'ima_calc_field_array_hash' [-Werror,-
+> > > > Wframe-larger-than=]
+> > >
+> > > I'm definitely not seeing this.  Is this problem a result of non
+> > > upstreamed patches?  For sha1, currently the only possible hash
+> > > algorithm, I'm seeing 664.
+> 
+> You won't see it with gcc, only with clang in some randconfig builds,
+> I suppose only when KASAN is enabled.
+> 
+> > Every time a measurement is added to the measurement list, the memory
+> > would be allocated/freed.  The frequency of new measurements is policy
+> > dependent.  For performance reasons, I'd prefer if the allocation
+> > remains on the stack.
+> 
+> Is there a way to preallocate the shash_desc instead? That would
+> avoid the overhead.
 
-If you can assert that all code you've signed with your Secure Boot
-signing key is trusted, and that all keys that are embedded within
-code that's signed with your Secure Boot signing key are trusted, and
-that all keys signed with those keys are trusted, then you just need a
-mechanism to measure each component of that chain and attest to it.
-This is, as an example, the default Bitlocker policy under Windows -
-rather than seal the disk encryption secret to the full set of PCR
-values, the secret is sealed to PCR7. If a non-Windows bootloader is
-inserted into the boot process the PCR7 measurement will change (due
-to it being signed with a different certificate) and the unsealing
-will fail. Since Microsoft can assert that they will never sign
-something that they don't trust, this avoids having to re-seal the
-secret every time they update the bootloader.
+There are 3 other SHASH_DESC_ON_STACK definitions in just
+ima_crypto.c, with a total of ~55 other places in the kernel.  Before
+fixing this particular function, I'd like to know if the "excessive
+stack usage" warning is limited to ima_calc_field_array_hash_tfm().
+ If so, what is so special about its usage of SHASH_DESC_ON_STACK?
 
-> E.g., I can know that libfoo.so.1.2.3 is signed and who the signer is,
-> but I may not trust anything older than libfoo.2.0.0.
+thanks,
 
-If you want to construct more complex policies then you need to
-examine more information :) This approach doesn't work for your case,
-but if the policy concern is "I want to ensure that all code run on
-this system came through my build pipeline" then you don't need to
-look at individual signatures.
+Mimi
+
