@@ -2,136 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 280B84A8D3
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jun 2019 19:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709ED4A971
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jun 2019 20:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729285AbfFRRwP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jun 2019 13:52:15 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:38500 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729943AbfFRRwP (ORCPT
+        id S1729491AbfFRSHE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jun 2019 14:07:04 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:36680 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729319AbfFRSHE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jun 2019 13:52:15 -0400
-Received: from [10.91.6.157] (unknown [131.107.159.157])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2E76620B7194;
-        Tue, 18 Jun 2019 10:52:14 -0700 (PDT)
-Subject: Re: [PATCH 0/2] [IMA] Measure public keys of BuiltIn Trusted Keys
-To:     Ken Goldman <kgold@linux.ibm.com>,
-        Lakshmi <nramas@linux.microsoft.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     James Morris <jamorris@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        Balaji Balasubramanyan <balajib@linux.microsoft.com>
-References: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
- <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com>
- <5b160458-b4b8-470c-0123-8ce5525c5cb0@linux.microsoft.com>
- <f6ce1524-d1ee-08b4-d7bc-f3337a804b98@linux.ibm.com>
-From:   Jordan Hand <jorhand@linux.microsoft.com>
-Message-ID: <c1abe7e6-5f92-2359-19d0-024af65dd8a9@linux.microsoft.com>
-Date:   Tue, 18 Jun 2019 10:52:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 18 Jun 2019 14:07:04 -0400
+Received: by mail-qt1-f193.google.com with SMTP id p15so16535085qtl.3;
+        Tue, 18 Jun 2019 11:07:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tc5SveGAk5xUuqd8TE/eo44xuPz3szmJWnQMQ7ceihc=;
+        b=fLOYIz2AWOld4qC6XnjvF+f+iyBqcLmCpjL8suMPryo8VrIp9031kkF2mnEjDreb4j
+         afAXc0tYVyVTNdy1HOjYGwSz9UElYR+4gPnFTL1TD9ZuBf8RDRtE8OQvgXETXmxO+cw2
+         3s76eZvGUyzS755evBhVr/T+y2uuZnW5fBcRimLtHRkGGGMd8IGn9E1pHQ6jdwL0yjSU
+         UNFXNX2owQmF/b/i4rg9XPVEfPjFClbBNQ3ikPJpBT77K1hEX3N6R+DB3ofZTjIB3V1Z
+         1qm4n9us1LeTxEJVcY3SXaDaHgn/NdOTjJl/zaAeg+U6nYB9LOyuDSELBE5fRz6w84x8
+         dHiw==
+X-Gm-Message-State: APjAAAWarKsSXaZDGOTUv5CyJqHenbz1mSog5WKegEkeE/8FxssxBsji
+        2Jt6DHvRPS0UAbBMAu+fXz3DiWZ+YU/n4e3TUPk=
+X-Google-Smtp-Source: APXvYqxZap79tJRc+geEbzJzShPPIrQc8XHYJtp7zMygG22X1MJgBEecbGk1pYegoT0Ow/kbm8aHMpqcn2Zo5zMZc2Y=
+X-Received: by 2002:ac8:8dd:: with SMTP id y29mr35512555qth.304.1560881223019;
+ Tue, 18 Jun 2019 11:07:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <f6ce1524-d1ee-08b4-d7bc-f3337a804b98@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20190617115838.2397872-1-arnd@arndb.de> <1560786951.4072.103.camel@linux.ibm.com>
+ <1560794826.4072.169.camel@linux.ibm.com> <CAK8P3a1Q2JG3KBYNYgWg0_XtGUufNc6zuqcUBqiGSaBRp+au-w@mail.gmail.com>
+ <1560861878.9530.17.camel@linux.ibm.com>
+In-Reply-To: <1560861878.9530.17.camel@linux.ibm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 18 Jun 2019 20:06:46 +0200
+Message-ID: <CAK8P3a0_7ocqJZHA5Zbkd4yvhQnczKJxiSrBjOUDCmzO4gAb2Q@mail.gmail.com>
+Subject: Re: [PATCH] ima: dynamically allocate shash_desc
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/18/19 10:31 AM, Ken Goldman wrote:
-> On 6/10/2019 12:57 PM, Jordan Hand wrote:
->>
->> Thought I'd jump in this conversation to see if I can clarify what I 
->> see as the value of this patch set.
->>
->> At a certain point, keeping a list of all known-good (or known-bad) 
->> hashes becomes infeasible. We could probably disagree about at what 
->> scale this happens but I think we could agree that eventually this 
->> happens (let me know if you still disagree with this assertion). So at 
->> this point you likely need to rely on a few things:
-> 
-> I've seen large systems with 60,000 measurements.  Even if that goes to 
-> 100,000, *10 for bad measurements, and *10 for future expansion, that's 
-> only 10M, or 320 mbytes.  That's pennies of disk space.
+On Tue, Jun 18, 2019 at 3:55 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> On Mon, 2019-06-17 at 22:08 +0200, Arnd Bergmann wrote:
+> > On Mon, Jun 17, 2019 at 8:08 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > >
+> > > On Mon, 2019-06-17 at 11:55 -0400, Mimi Zohar wrote:
+> > > > On Mon, 2019-06-17 at 13:20 +0200, Arnd Bergmann wrote:
+> > > > > On 32-bit ARM, we get a warning about excessive stack usage when
+> > > > > building with clang.
+> > > > >
+> > > > > security/integrity/ima/ima_crypto.c:504:5: error: stack frame size
+> > > > > of 1152 bytes in function 'ima_calc_field_array_hash' [-Werror,-
+> > > > > Wframe-larger-than=]
+> > > >
+> > > > I'm definitely not seeing this.  Is this problem a result of non
+> > > > upstreamed patches?  For sha1, currently the only possible hash
+> > > > algorithm, I'm seeing 664.
+> >
+> > You won't see it with gcc, only with clang in some randconfig builds,
+> > I suppose only when KASAN is enabled.
+> >
+> > > Every time a measurement is added to the measurement list, the memory
+> > > would be allocated/freed.  The frequency of new measurements is policy
+> > > dependent.  For performance reasons, I'd prefer if the allocation
+> > > remains on the stack.
+> >
+> > Is there a way to preallocate the shash_desc instead? That would
+> > avoid the overhead.
+>
+> There are 3 other SHASH_DESC_ON_STACK definitions in just
+> ima_crypto.c, with a total of ~55 other places in the kernel.  Before
+> fixing this particular function, I'd like to know if the "excessive
+> stack usage" warning is limited to ima_calc_field_array_hash_tfm().
+>  If so, what is so special about its usage of SHASH_DESC_ON_STACK?
 
-Ah, so I'm not really worried about disk space/file size. I'm worried 
-about the need to update the service every time a new key is used to 
-sign something.
+SHASH_DESC_ON_STACK() uses at least 512 bytes of stack
+everywhere, which is half of the warning limit for a function on
+32 bit kernels.
 
-Lets say the people who are maintaining the attestation service (Team A) 
-are different from the people writing/signing the code to run on the 
-client (Team B). The problem is that Team A has to take an update 
-whenever a new signing key is used. And rolling leaf keys is often an 
-automatic process so Team B may not even know exactly when a new leaf 
-key is used. They just know its the same CA. And now as Team A, I may 
-trust code as long as its signed by 1 of 10 different sources.
+With KASAN, a small redzone is put around it so we can detect out
+of bounds access to a variable that is passed by reference.
+clang makes that buffer larger than gcc, so we end up with something
+like 768 bytes for each instance of SHASH_DESC_ON_STACK().
 
-My concern is more that the process of keeping track of these leaf keys 
-doesn't scale. This is where having a shared/static CA shines (as it 
-does in other PKI infrastructures like TLS).
+Most other users still stay below the 1024 byte warning level though,
+because typical functions only use a few bytes of stack space.
+In case of ima_calc_field_array_hash_tfm(), the is also the buffer[]
+array of 255 bytes that gets another large redzone.
 
-> 
->>
->> (1) is the file >= <known good version>. This allows you to forbid any 
->> kernel version before a vulnerability was fixed.
-> 
-> Perhaps, but one might also exclude a newer version, either because of a 
-> regression, a certification, etc.
-> 
->>
->> (2) Was it signed with a good, trusted, production key.
->>
->> You can sort of do this today by using the keyid. The issues with this 
->> are (a) collision (though the chance may be pretty remote. I don't 
->> have the crypto expertise to make an empirical call on that) and (b) 
->> you need to know all the possible signing keys in the service.
-> 
-> The 4 byte key id was probably a long term mistake, but can be fixed. 
-> Today, a collision is remote.  Even then, just try both keys.  Nothing 
-> breaks.
-> 
->>
->> Again, once you cross a certain scale threshold, signing/deployment is 
->> so automated that the leaf key could change at any time, leaving your 
->> service in the dark about new keys. You could automatically add new 
->> trusted keys to the service but it depends on the service environment 
->> and how much you want to automate what the service trusts.
->>
->> So what does measuring the keyring do? It allows you to put long-lived 
->> trusted CAs in .builtin_trusted_keys. On the service if you trust the 
->> CA and you trust the running kernel to do the right thing during key 
->> enrollment, you can trust that loaded files are properly signed.
-> 
-> This is my gap in understanding.
-> 
-> Even if I somewhat trust the keys on the built-in keyring, I may not 
-> trust every key on the IMA keyring.
+I fixed up all the (randconfig) warnings I get for arm32, arm64 and
+x86 kernels, and I think there were four to five that were because of
+SHASH_DESC_ON_STACK(). It might make sense to convert all
+three instances in ima to preallocate the descriptor if we do it for
+one of them, even when it's not actually needed.
 
-Its a different policy than is maybe used today in IMA, but often it is 
-the case that I want indirect trust. I (Party A) trust Party B. Party B 
-trusts parties C, D, and E. And long as party B trusts them, then party 
-A can also trust C, D, and E. It allows for a service to trust any code 
-that chains to a CA, but not trust any code that doesn't, in cases where 
-the service may not know the exact hashes or leaf keys it should trust.
-
-> 
-> I may trust the kernel that ran at the time the key was enrolled, but I 
-> don't trust the one that's currently running until I attest.  Or, are 
-> all the keys on both keyrings erased before any kernel SW update?  I 
-> don't think so.
-
-On a cold boot, the keys would be re-enrolled. I'm not sure about the 
-kexec case. But as long as you carry-forward the measurement log across 
-kexec, you can attest to the whole chain (this assumes TPM-based 
-attestation).
-
-And if you don't carry forward the measurements, there are some other 
-server side things you can do to reconstruct the PCR state. But I think 
-that's a bit out of scope for this discussion.
-
--Jordan
+     Arnd
