@@ -2,167 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 114EA4AECE
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jun 2019 01:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073744BC73
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jun 2019 17:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726007AbfFRXli (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jun 2019 19:41:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51092 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725913AbfFRXli (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jun 2019 19:41:38 -0400
-Received: from gmail.com (unknown [104.132.1.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 73DD02080C;
-        Tue, 18 Jun 2019 23:41:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560901296;
-        bh=JUDJyewBHmFtJkoI2vLr2zAbbPh3Fi6hkTWf+B7Ew6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZbYloxi7MOCwuUvW/nmSNQZQ4Yhb20pBMzG/c2xaN6MJitN9K2us5Gw4T3cJw3X1U
-         xKnS6g1e8Cs7JWs0JdapN0ScnIMO+xV2wC5UiIyCkPxIGeuGoU3/c0RZDuRi6CptYJ
-         x5eKyG+F+TZX/hs0+P92wWoWZFqhpXb876Nl1Y94=
-Date:   Tue, 18 Jun 2019 16:41:34 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Victor Hsieh <victorhsieh@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v4 14/16] ext4: add basic fs-verity support
-Message-ID: <20190618234133.GL184520@gmail.com>
-References: <20190606155205.2872-1-ebiggers@kernel.org>
- <20190606155205.2872-15-ebiggers@kernel.org>
- <20190615153112.GO6142@mit.edu>
- <20190618175117.GF184520@gmail.com>
- <20190618224615.GB4576@mit.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190618224615.GB4576@mit.edu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1730299AbfFSPHZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Jun 2019 11:07:25 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17538 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729642AbfFSPHX (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 19 Jun 2019 11:07:23 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5JF4oks081576
+        for <linux-integrity@vger.kernel.org>; Wed, 19 Jun 2019 11:07:21 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2t7p434pue-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 19 Jun 2019 11:07:21 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 19 Jun 2019 16:07:19 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 19 Jun 2019 16:07:16 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5JF7F9v49676398
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jun 2019 15:07:16 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2FE74C046;
+        Wed, 19 Jun 2019 15:07:15 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1D5B64C044;
+        Wed, 19 Jun 2019 15:07:15 +0000 (GMT)
+Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jun 2019 15:07:14 +0000 (GMT)
+Subject: Re: [PATCH V4] IMA: support for per policy rule template formats
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Matthew Garrett <matthewgarrett@google.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.vnet.ibm.com, prsriva02@gmail.com,
+        bauerman@linux.ibm.com, roberto.sassu@huawei.com,
+        Matthew Garrett <mjg59@google.com>
+In-Reply-To: <20190618202428.10320-1-matthewgarrett@google.com>
+References: <20190618202428.10320-1-matthewgarrett@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Tue, 18 Jun 2019 22:19:11 -0400
+Mime-Version: 1.0
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19061915-0020-0000-0000-0000034B8629
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19061915-0021-0000-0000-0000219EDABD
+Message-Id: <1560910751.4157.4.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-19_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=930 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906190122
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 06:46:15PM -0400, Theodore Ts'o wrote:
-> On Tue, Jun 18, 2019 at 10:51:18AM -0700, Eric Biggers wrote:
-> > On Sat, Jun 15, 2019 at 11:31:12AM -0400, Theodore Ts'o wrote:
-> > > On Thu, Jun 06, 2019 at 08:52:03AM -0700, Eric Biggers wrote:
-> > > > +/*
-> > > > + * Format of ext4 verity xattr.  This points to the location of the verity
-> > > > + * descriptor within the file data rather than containing it directly because
-> > > > + * the verity descriptor *must* be encrypted when ext4 encryption is used.  But,
-> > > > + * ext4 encryption does not encrypt xattrs.
-> > > > + */
-> > > > +struct fsverity_descriptor_location {
-> > > > +	__le32 version;
-> > > > +	__le32 size;
-> > > > +	__le64 pos;
-> > > > +};
-> > > 
-> > > What's the benefit of storing the location in an xattr as opposed to
-> > > just keying it off the end of i_size, rounded up to next page size (or
-> > > 64k) as I had suggested earlier?
-> > > 
-> > > Using an xattr burns xattr space, which is a limited resource, and it
-> > > adds some additional code complexity.  Does the benefits outweigh the
-> > > added complexity?
-> > > 
-> > > 						- Ted
-> > 
-> > It means that only the fs/verity/ support layer has to be aware of the format of
-> > the fsverity_descriptor, and the filesystem can just treat it an as opaque blob.
-> > 
-> > Otherwise the filesystem would need to read the first 'sizeof(struct
-> > fsverity_descriptor)' bytes and use those to calculate the size as
-> > 'sizeof(struct fsverity_descriptor) + le32_to_cpu(desc.sig_size)', then read the
-> > rest.  Is this what you have in mind?
-> 
-> So right now, the way enable_verity() works is that it appends the
-> Merkle tree to the data file, rounding up to the next page (but we
-> might change so we round up to the next 64k boundary).  Then it calls
-> end_enable_verity(), which is a file system specific function, passing
-> in the descriptor and the descriptor size.
-> 
-> Today ext4 and f2fs appends the descriptor after the Merkle, and then
-> sets the xattr containing the fsverity_descriptor_location.  Correct?
+On Tue, 2019-06-18 at 13:24 -0700, Matthew Garrett wrote:
+> @@ -1134,6 +1144,27 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>                         else
+>                                 entry->flags |= IMA_PCR;
+>  
+> +                       break;
+> +               case Opt_template:
+> +                       ima_log_string(ab, "template", args[0].from);
+> +                       if (entry->action != MEASURE) {
+> +                               result = -EINVAL;
+> +                               break;
+> +                       }
+> +                       template_desc = lookup_template_desc(args[0].from);
+> +                       if (!template_desc || entry->template) {
+> +                               result = -EINVAL;
+> +                       } else {
+> +                               /*
+> +                                * template_desc_init_fields() does nothing
+> +                                * if the template is already initialised,
+> +                                * so it's safe to do this unconditionally
+> +                                */
+> +                               template_desc_init_fields(template_desc->fmt,
+> +                                                &(template_desc->fields),
+> +                                                &(template_desc->num_fields));
+> +                               entry->template = template_desc;
+> +                       }
 
-That's all correct, except that enable_verity() itself doesn't know or care that
-the Merkle tree is being appended to the file.  That's up to the
-->write_merkle_tree_block() and ->read_merkle_tree_page() methods which are
-filesystem-specific.
+The "else" isn't necessary, causing unnecessary indenting.  Just add a
+break.
 
-> 
-> What I'm suggesting that ext4 do instead is that it appends the
-> descriptor to the Merkle tree, and then assuming that there is the
-> (descriptor size % block_size) is less than PAGE_SIZE-4, we can write
-> the descriptor size into the last 4 bytes of the last block in the
-> file.  If there is not enough space at the end of the descriptor, then
-> we append a block to the file, and then write the descriptor_size into
-> last 4 bytes of that block.
-> 
-> When ext4 needs to find the descriptor, it simply reads the last block
-> from the file, reads it into the page cache, reads the last 4 bytes
-> from that block to fetch the descriptor size, and it can use the
-> logical offset of the last block and the descriptor size to calculate
-> the beginning offset of the descriptor size.
-> 
-> We can then fake up the fsverity_descriptor_location structure, and
-> pass that into fsverity.
-> 
-> It does add a bit of extra complexity, but 99.9% of the time, it
-> requires no extra space.  The last 0.098% of the time, the file size
-> will grow by 4k, but if we can avoid spilling over to an external
-> xattr block, it will all be worth it.
-> 
-> And in the V1 version of the fsverity code, I had already written the
-> code to descend the extent tree to find the last logical block in the
-> extent tree.
-> 
+Mimi
 
-I don't think your proposed solution is so simple.  By definition the last
-extent ends on a filesystem block boundary, while the Merkle tree ends on a
-Merkle tree block boundary.  In the future we might support the case where these
-differ, so we don't want to preclude that in the on-disk format we choose now.
-Therefore, just storing the desc_size isn't enough; we'd actually have to store
-(desc_pos, desc_size), like I'm doing in the xattr.
+>                         break;
+>                 case Opt_err:
+>                         ima_log_string(ab, "UNKNOWN", p);
 
-Also, using ext4_find_extent() to find the last mapped block (as the v1 and v2
-patchsets did) assumes the file actually uses extents.  So we'd have to forbid
-non-extents based files as a special case, as the v2 patchset did.  We'd also
-have to find a way to implement the same functionality on f2fs (which should be
-possible, but it seems it would require some new code; there's nothing like
-f2fs_get_extent()) unless we did something different for f2fs.
-
-Note that on Android devices (the motivating use case for fs-verity), the xattrs
-of user data files on ext4 already spill into an external xattr block, due to
-the fscrypt and SELinux xattrs.  If/when people actually start caring about
-this, they'll need to increase the inode size to 512 bytes anyway, in which case
-there will be plenty of space for a few more in-line xattrs.  So I don't think
-we should jump through too many hoops to avoid using an xattr.
-
-> > It's also somewhat nice to have the version number in the xattr, in case we ever
-> > introduce a new fs-verity format for ext4 or f2fs.
-> 
-> We already have a version number in the fsverity descriptor.  Surely
-> that is what we would bump if we need to itnroduce a new fs-verity
-> format?
-> 
-
-I'm talking about if we ever wanted to make a filesystem-specific change to
-where the verity metadata is stored.  That's what the version number in the
-filesystem-specific xattr is for.  The version number in the fsverity_descriptor
-is different: that's for if we made a change to fs-verity for *all* filesystems.
-We hopefully won't ever need the filesystem-specific version number, but as long
-as we have to store the (desc_pos, desc_size) anyway, I think it's wise to add a
-version number just in case; it doesn't really cost anything.
-
-- Eric
