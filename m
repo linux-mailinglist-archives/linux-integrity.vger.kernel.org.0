@@ -2,108 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 073744BC73
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jun 2019 17:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4001F4B054
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jun 2019 05:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730299AbfFSPHZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Jun 2019 11:07:25 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17538 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729642AbfFSPHX (ORCPT
+        id S1728195AbfFSDGA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jun 2019 23:06:00 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:47305 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726037AbfFSDGA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Jun 2019 11:07:23 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5JF4oks081576
-        for <linux-integrity@vger.kernel.org>; Wed, 19 Jun 2019 11:07:21 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2t7p434pue-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 19 Jun 2019 11:07:21 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 19 Jun 2019 16:07:19 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 19 Jun 2019 16:07:16 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5JF7F9v49676398
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jun 2019 15:07:16 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E2FE74C046;
-        Wed, 19 Jun 2019 15:07:15 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D5B64C044;
-        Wed, 19 Jun 2019 15:07:15 +0000 (GMT)
-Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Jun 2019 15:07:14 +0000 (GMT)
-Subject: Re: [PATCH V4] IMA: support for per policy rule template formats
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Matthew Garrett <matthewgarrett@google.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.vnet.ibm.com, prsriva02@gmail.com,
-        bauerman@linux.ibm.com, roberto.sassu@huawei.com,
-        Matthew Garrett <mjg59@google.com>
-In-Reply-To: <20190618202428.10320-1-matthewgarrett@google.com>
-References: <20190618202428.10320-1-matthewgarrett@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Date:   Tue, 18 Jun 2019 22:19:11 -0400
-Mime-Version: 1.0
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19061915-0020-0000-0000-0000034B8629
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061915-0021-0000-0000-0000219EDABD
-Message-Id: <1560910751.4157.4.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-19_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=930 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906190122
+        Tue, 18 Jun 2019 23:06:00 -0400
+Received: from callcc.thunk.org ([66.31.38.53])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x5J35NPK021631
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jun 2019 23:05:24 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id C0BD1420484; Tue, 18 Jun 2019 23:05:22 -0400 (EDT)
+Date:   Tue, 18 Jun 2019 23:05:22 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v4 14/16] ext4: add basic fs-verity support
+Message-ID: <20190619030522.GA28351@mit.edu>
+References: <20190606155205.2872-1-ebiggers@kernel.org>
+ <20190606155205.2872-15-ebiggers@kernel.org>
+ <20190615153112.GO6142@mit.edu>
+ <20190618175117.GF184520@gmail.com>
+ <20190618224615.GB4576@mit.edu>
+ <20190618234133.GL184520@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190618234133.GL184520@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2019-06-18 at 13:24 -0700, Matthew Garrett wrote:
-> @@ -1134,6 +1144,27 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
->                         else
->                                 entry->flags |= IMA_PCR;
->  
-> +                       break;
-> +               case Opt_template:
-> +                       ima_log_string(ab, "template", args[0].from);
-> +                       if (entry->action != MEASURE) {
-> +                               result = -EINVAL;
-> +                               break;
-> +                       }
-> +                       template_desc = lookup_template_desc(args[0].from);
-> +                       if (!template_desc || entry->template) {
-> +                               result = -EINVAL;
-> +                       } else {
-> +                               /*
-> +                                * template_desc_init_fields() does nothing
-> +                                * if the template is already initialised,
-> +                                * so it's safe to do this unconditionally
-> +                                */
-> +                               template_desc_init_fields(template_desc->fmt,
-> +                                                &(template_desc->fields),
-> +                                                &(template_desc->num_fields));
-> +                               entry->template = template_desc;
-> +                       }
+On Tue, Jun 18, 2019 at 04:41:34PM -0700, Eric Biggers wrote:
+> 
+> I don't think your proposed solution is so simple.  By definition the last
+> extent ends on a filesystem block boundary, while the Merkle tree ends on a
+> Merkle tree block boundary.  In the future we might support the case where these
+> differ, so we don't want to preclude that in the on-disk format we choose now.
+> Therefore, just storing the desc_size isn't enough; we'd actually have to store
+> (desc_pos, desc_size), like I'm doing in the xattr.
 
-The "else" isn't necessary, causing unnecessary indenting.  Just add a
-break.
+I don't think any of this matters much, since what you're describing
+above is all about the Merkle tree, and that doesn't affect how we
+find the fsverity descriptor information.  We can just say that
+fsverity descriptor block begins on the next file system block
+boundary after the Merkle tree.  And in the case where say, the Merkle
+tree is 4k and the file system block size is 64k, that's fine --- the
+fs descriptor would just begin at the next 64k (fs blocksize)
+boundary.
 
-Mimi
+> Also, using ext4_find_extent() to find the last mapped block (as the v1 and v2
+> patchsets did) assumes the file actually uses extents.  So we'd have to forbid
+> non-extents based files as a special case, as the v2 patchset did.  We'd also
+> have to find a way to implement the same functionality on f2fs (which should be
+> possible, but it seems it would require some new code; there's nothing like
+> f2fs_get_extent()) unless we did something different for f2fs.
 
->                         break;
->                 case Opt_err:
->                         ima_log_string(ab, "UNKNOWN", p);
+So first, if f2fs wants to continue using the xattr, that's fine.  The
+code to write and fetch the fsverity descriptor is in file system
+specific code, and so this is something I'm happy to support just for
+ext4, and it shouldn't require any special changes in the common
+fsverity code at all.  Secondly, I suspect it's not *that* hard to
+find the last logical block mapping in f2fs, but I'll let Jaeguk
+comment on that.
 
+Finally, it's not that hard to find the last mapped block for indirect
+blocks, if we really care about supporting that combination.  (There
+are enough other things --- like fallocate --- which don't work with
+indirect mapped files, so I don't feel especially bad forbidding that
+combination.  A quick check in enable_verity() to return EOPNOTSUPP if
+the EXTENTS_FL flag is not present is not all that different from what
+we do with fallocate today.)
+
+But if we *did* want to support it, it's actually quite easy to find
+the last mapped block for an indirect mapped inode.  I just didn't
+bother to write the code, but it requires at most 3 block reads if
+there is a triple indirection block.  Otherwise, if there is a double
+indirection block in the inode, it requires at most 2 block reads, and
+otherwise, at most a single block read.
+
+> Note that on Android devices (the motivating use case for fs-verity), the xattrs
+> of user data files on ext4 already spill into an external xattr block, due to
+> the fscrypt and SELinux xattrs.  If/when people actually start caring about
+> this, they'll need to increase the inode size to 512 bytes anyway, in which case
+> there will be plenty of space for a few more in-line xattrs.  So I don't think
+> we should jump through too many hoops to avoid using an xattr.
+
+I'm thinking about other cases where we might not be using fscrypt,
+but where we might still be using fsverity and SELinux --- or maybe
+cases where the file systems are using 128 byte inodes, and where only
+fsverity is required.  (There are a *vast* number of production file
+systems using 128 byte inodes.)
+
+Cheers,
+
+						- Ted
