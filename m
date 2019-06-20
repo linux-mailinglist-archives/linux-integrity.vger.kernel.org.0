@@ -2,132 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B54B4C802
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Jun 2019 09:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE574CE89
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Jun 2019 15:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726381AbfFTHOM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 Jun 2019 03:14:12 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:40930 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725889AbfFTHOL (ORCPT
+        id S1731779AbfFTNWI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 Jun 2019 09:22:08 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60394 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731743AbfFTNWI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 Jun 2019 03:14:11 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id B576672CC64;
-        Thu, 20 Jun 2019 10:14:08 +0300 (MSK)
-Received: from beacon.altlinux.org (unknown [185.6.174.98])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 92CDE4A4A29;
-        Thu, 20 Jun 2019 10:14:08 +0300 (MSK)
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Thu, 20 Jun 2019 09:22:08 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5KDCbIj102925
+        for <linux-integrity@vger.kernel.org>; Thu, 20 Jun 2019 09:22:07 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2t89t8k98h-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 20 Jun 2019 09:22:06 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 20 Jun 2019 14:22:04 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 20 Jun 2019 14:22:02 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5KDM12e61604064
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Jun 2019 13:22:01 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 270BC4C046;
+        Thu, 20 Jun 2019 13:22:01 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A94B4C04A;
+        Thu, 20 Jun 2019 13:22:00 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.109.247])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Jun 2019 13:22:00 +0000 (GMT)
+Subject: Re: [PATCH v5 06/11] ima-evm-utils: Start converting find_keyid to
+ use EVP_PKEY API
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: [PATCH v6 11/11] ima-evm-utils: Pass status codes from sign and hash functions to the callers
-Date:   Thu, 20 Jun 2019 10:13:04 +0300
-Message-Id: <20190620071304.24495-12-vt@altlinux.org>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190620071304.24495-1-vt@altlinux.org>
-References: <20190620071304.24495-1-vt@altlinux.org>
-MIME-Version: 1.0
+Date:   Thu, 20 Jun 2019 09:21:49 -0400
+In-Reply-To: <20190620010713.wfmkjkf3fprgc3h6@altlinux.org>
+References: <20190618135623.6861-1-vt@altlinux.org>
+         <20190618135623.6861-7-vt@altlinux.org>
+         <1560947190.3975.23.camel@linux.ibm.com>
+         <20190619154339.e3kjc3niahwng64h@altlinux.org>
+         <1560962810.3975.57.camel@linux.ibm.com>
+         <20190620010713.wfmkjkf3fprgc3h6@altlinux.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19062013-0012-0000-0000-0000032AE1D2
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19062013-0013-0000-0000-000021640828
+Message-Id: <1561036909.4525.29.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-20_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=915 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906200099
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Move sign_hash()/ima_calc_hash()/calc_evm_hmac()/calc_evm_hash() status
-checking before assert()'ing of their return values, so it can be passed
-to the upper level callers. Especially useful for showing errors.
+Hi Vitaly,
 
-Fixes: 1d9c279279 ("Define hash and sig buffer sizes and add asserts")
-Fixes: 9643544701 ("Fix hash buffer overflow in verify_evm and hmac_evm")
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
----
- src/evmctl.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+> > > > If so, why are there other changes in this patch?
+> > > 
+> > > There is no other changes beside stated in description.
+> > 
+> > Are the changes from read_pub_key() to read_pub_pkey() and
+> > calc_keyid_v2() to calc_pkeyid_v2() needed for making find_keyid() a
+> > wrapper for find_keyid_pkey()?
+> 
+> Of course. `entry->key' now have different type. If we keep old type
+> (RSA) where will be nothing to wrap.
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index ded18c6..63ae1a6 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -514,14 +514,14 @@ static int sign_evm(const char *file, const char *key)
- 	int len, err;
- 
- 	len = calc_evm_hash(file, hash);
--	assert(len <= sizeof(hash));
- 	if (len <= 1)
- 		return len;
-+	assert(len <= sizeof(hash));
- 
- 	len = sign_hash(params.hash_algo, hash, len, key, NULL, sig + 1);
--	assert(len <= MAX_SIGNATURE_SIZE);
- 	if (len <= 1)
- 		return len;
-+	assert(len <= MAX_SIGNATURE_SIZE);
- 
- 	/* add header */
- 	len++;
-@@ -563,9 +563,9 @@ static int hash_ima(const char *file)
- 	}
- 
- 	len = ima_calc_hash(file, hash + offset);
--	assert(len + offset <= sizeof(hash));
- 	if (len <= 1)
- 		return len;
-+	assert(len + offset <= sizeof(hash));
- 
- 	len += offset;
- 
-@@ -593,14 +593,14 @@ static int sign_ima(const char *file, const char *key)
- 	int len, err;
- 
- 	len = ima_calc_hash(file, hash);
--	assert(len <= sizeof(hash));
- 	if (len <= 1)
- 		return len;
-+	assert(len <= sizeof(hash));
- 
- 	len = sign_hash(params.hash_algo, hash, len, key, NULL, sig + 1);
--	assert(len < sizeof(sig));
- 	if (len <= 1)
- 		return len;
-+	assert(len < sizeof(sig));
- 
- 	/* add header */
- 	len++;
-@@ -724,9 +724,9 @@ static int cmd_sign_hash(struct command *cmd)
- 		hex2bin(hash, line, hashlen / 2);
- 		siglen = sign_hash(params.hash_algo, hash, hashlen/2,
- 				 key, NULL, sig + 1);
--		assert(siglen < sizeof(sig));
- 		if (siglen <= 1)
- 			return siglen;
-+		assert(siglen < sizeof(sig));
- 
- 		fwrite(line, len, 1, stdout);
- 		fprintf(stdout, " ");
-@@ -778,9 +778,9 @@ static int verify_evm(const char *file)
- 	int len;
- 
- 	mdlen = calc_evm_hash(file, hash);
--	assert(mdlen <= sizeof(hash));
- 	if (mdlen <= 1)
- 		return mdlen;
-+	assert(mdlen <= sizeof(hash));
- 
- 	len = lgetxattr(file, xattr_evm, sig, sizeof(sig));
- 	if (len < 0) {
-@@ -1160,9 +1160,9 @@ static int hmac_evm(const char *file, const char *key)
- 	int len, err;
- 
- 	len = calc_evm_hmac(file, key, hash);
--	assert(len <= sizeof(hash));
- 	if (len <= 1)
- 		return len;
-+	assert(len <= sizeof(hash));
- 
- 	log_info("hmac: ");
- 	log_dump(hash, len);
--- 
-2.11.0
+The question wasn't if the changes in init_public_keys() need to be
+made, the question is its correlation to find_keyid().  Unlesss I'm
+missing something, find_keyid() is only called by verify_hash_v2(),
+not calc_keyid_v2().
+
+Mimi
 
