@@ -2,29 +2,29 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D31A54C7EB
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Jun 2019 09:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E3D4C7EC
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Jun 2019 09:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730611AbfFTHNh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 Jun 2019 03:13:37 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:40072 "EHLO
+        id S1730704AbfFTHNl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 Jun 2019 03:13:41 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:40196 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725889AbfFTHNh (ORCPT
+        with ESMTP id S1725889AbfFTHNl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 Jun 2019 03:13:37 -0400
+        Thu, 20 Jun 2019 03:13:41 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id AC40B72CC64;
-        Thu, 20 Jun 2019 10:13:34 +0300 (MSK)
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 82F2C72CC64;
+        Thu, 20 Jun 2019 10:13:39 +0300 (MSK)
 Received: from beacon.altlinux.org (unknown [185.6.174.98])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 7E7BE4A4A29;
-        Thu, 20 Jun 2019 10:13:34 +0300 (MSK)
+        by imap.altlinux.org (Postfix) with ESMTPSA id 681E94A4A29;
+        Thu, 20 Jun 2019 10:13:39 +0300 (MSK)
 From:   Vitaly Chikunov <vt@altlinux.org>
 To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: [PATCH v6 04/11] ima-evm-utils: Convert cmd_import and calc keyid v2 to EVP_PKEY API
-Date:   Thu, 20 Jun 2019 10:12:57 +0300
-Message-Id: <20190620071304.24495-5-vt@altlinux.org>
+Subject: [PATCH v6 05/11] ima-evm-utils: Start converting find_keyid to EVP_PKEY API
+Date:   Thu, 20 Jun 2019 10:12:58 +0300
+Message-Id: <20190620071304.24495-6-vt@altlinux.org>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20190620071304.24495-1-vt@altlinux.org>
 References: <20190620071304.24495-1-vt@altlinux.org>
@@ -35,125 +35,71 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Introduce calc_pkeyid_v2() (which accepts EVP_PKEY) to replace
-calc_keyid_v2() (which accepts RSA) in the future and use it in
-cmd_import().
+New find_keyid_pkey() accepts EVP_PKEY. Old find_keyid() calls
+find_keyid_pkey(), but still return RSA key.
 
 Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
 ---
- src/evmctl.c    | 25 +++++++++++++++----------
- src/imaevm.h    |  1 +
- src/libimaevm.c | 30 ++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+), 10 deletions(-)
+ src/libimaevm.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 03f41fe..224cb1f 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -891,7 +891,6 @@ static int cmd_import(struct command *cmd)
- 	int id, len, err = 0;
- 	char name[20];
- 	uint8_t keyid[8];
--	RSA *key;
- 
- 	inkey = g_argv[optind++];
- 	if (!inkey) {
-@@ -925,18 +924,26 @@ static int cmd_import(struct command *cmd)
- 		}
- 	}
- 
--	key = read_pub_key(inkey, params.x509);
--	if (!key)
--		return 1;
--
- 	if (params.x509) {
-+		EVP_PKEY *pkey = read_pub_pkey(inkey, params.x509);
-+
-+		if (!pkey)
-+			return 1;
- 		pub = file2bin(inkey, NULL, &len);
--		if (!pub)
--			goto out;
--		calc_keyid_v2((uint32_t *)keyid, name, key);
-+		if (!pub) {
-+			EVP_PKEY_free(pkey);
-+			return 1;
-+		}
-+		calc_pkeyid_v2((uint32_t *)keyid, name, pkey);
-+		EVP_PKEY_free(pkey);
- 	} else {
-+		RSA *key = read_pub_key(inkey, params.x509);
-+
-+		if (!key)
-+			return 1;
- 		len = key2bin(key, pub);
- 		calc_keyid_v1(keyid, name, pub, len);
-+		RSA_free(key);
- 	}
- 
- 	log_info("Importing public key %s from file %s into keyring %d\n", name, inkey, id);
-@@ -951,8 +958,6 @@ static int cmd_import(struct command *cmd)
- 	}
- 	if (params.x509)
- 		free(pub);
--out:
--	RSA_free(key);
- 	return err;
- }
- 
-diff --git a/src/imaevm.h b/src/imaevm.h
-index 6d5eabd..48d2663 100644
---- a/src/imaevm.h
-+++ b/src/imaevm.h
-@@ -220,6 +220,7 @@ EVP_PKEY *read_pub_pkey(const char *keyfile, int x509);
- 
- void calc_keyid_v1(uint8_t *keyid, char *str, const unsigned char *pkey, int len);
- void calc_keyid_v2(uint32_t *keyid, char *str, RSA *key);
-+void calc_pkeyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey);
- int key2bin(RSA *key, unsigned char *pub);
- 
- int sign_hash(const char *algo, const unsigned char *hash, int size, const char *keyfile, const char *keypass, unsigned char *sig);
 diff --git a/src/libimaevm.c b/src/libimaevm.c
-index 23fa804..707b2e9 100644
+index 707b2e9..ae18005 100644
 --- a/src/libimaevm.c
 +++ b/src/libimaevm.c
-@@ -753,6 +753,36 @@ void calc_keyid_v2(uint32_t *keyid, char *str, RSA *key)
- 	free(pkey);
+@@ -452,11 +452,11 @@ struct public_key_entry {
+ 	struct public_key_entry *next;
+ 	uint32_t keyid;
+ 	char name[9];
+-	RSA *key;
++	EVP_PKEY *key;
+ };
+ static struct public_key_entry *public_keys = NULL;
+ 
+-static RSA *find_keyid(uint32_t keyid)
++static EVP_PKEY *find_keyid_pkey(uint32_t keyid)
+ {
+ 	struct public_key_entry *entry;
+ 
+@@ -467,6 +467,22 @@ static RSA *find_keyid(uint32_t keyid)
+ 	return NULL;
  }
  
-+/*
-+ * Calculate keyid of the public_key part of EVP_PKEY
-+ */
-+void calc_pkeyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey)
++static RSA *find_keyid(uint32_t keyid)
 +{
-+	X509_PUBKEY *pk = NULL;
-+	const unsigned char *public_key = NULL;
-+	int len;
++	EVP_PKEY *pkey;
++	RSA *key;
 +
-+	/* This is more generic than i2d_PublicKey() */
-+	if (X509_PUBKEY_set(&pk, pkey) &&
-+	    X509_PUBKEY_get0_param(NULL, &public_key, &len, NULL, pk)) {
-+		uint8_t sha1[SHA_DIGEST_LENGTH];
-+
-+		SHA1(public_key, len, sha1);
-+		/* sha1[12 - 19] is exactly keyid from gpg file */
-+		memcpy(keyid, sha1 + 16, 4);
-+	} else
-+		*keyid = 0;
-+
-+	log_debug("keyid: ");
-+	log_debug_dump(keyid, 4);
-+	sprintf(str, "%x", __be32_to_cpup(keyid));
-+
-+	if (params.verbose > LOG_INFO)
-+		log_info("keyid: %s\n", str);
-+
-+	X509_PUBKEY_free(pk);
++	pkey = find_keyid_pkey(keyid);
++	if (!pkey)
++		return NULL;
++	key = EVP_PKEY_get0_RSA(pkey);
++	if (!key) {
++		log_err("find_keyid: unsupported key type\n");
++		return NULL;
++	}
++	return key;
 +}
 +
- static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
+ void init_public_keys(const char *keyfiles)
  {
- 	FILE *fp;
+ 	struct public_key_entry *entry;
+@@ -489,13 +505,13 @@ void init_public_keys(const char *keyfiles)
+ 			break;
+ 		}
+ 
+-		entry->key = read_pub_key(keyfile, 1);
++		entry->key = read_pub_pkey(keyfile, 1);
+ 		if (!entry->key) {
+ 			free(entry);
+ 			continue;
+ 		}
+ 
+-		calc_keyid_v2(&entry->keyid, entry->name, entry->key);
++		calc_pkeyid_v2(&entry->keyid, entry->name, entry->key);
+ 		sprintf(entry->name, "%x", __be32_to_cpup(&entry->keyid));
+ 		log_info("key %d: %s %s\n", i++, entry->name, keyfile);
+ 		entry->next = public_keys;
 -- 
 2.11.0
 
