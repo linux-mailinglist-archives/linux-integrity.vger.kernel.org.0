@@ -2,139 +2,209 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1DB4DE4D
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2019 03:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CA94DE7E
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2019 03:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725921AbfFUBDU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 Jun 2019 21:03:20 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39811 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbfFUBDU (ORCPT
+        id S1726878AbfFUBU5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 Jun 2019 21:20:57 -0400
+Received: from mail-qt1-f201.google.com ([209.85.160.201]:49119 "EHLO
+        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726873AbfFUBUy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 Jun 2019 21:03:20 -0400
-Received: by mail-pg1-f193.google.com with SMTP id 196so2477960pgc.6
-        for <linux-integrity@vger.kernel.org>; Thu, 20 Jun 2019 18:03:19 -0700 (PDT)
+        Thu, 20 Jun 2019 21:20:54 -0400
+Received: by mail-qt1-f201.google.com with SMTP id z5so6079088qth.15
+        for <linux-integrity@vger.kernel.org>; Thu, 20 Jun 2019 18:20:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:to:from:subject:cc:user-agent:date;
-        bh=/QNfQWig2oeC5POufHOkxnAuAVkUYpsqHyVQpvyXPFM=;
-        b=YT9pP8mmnoLSnibB3gevIC8O4iva3l7WbYe+TvJLiuO8Sl8rGyxguOWdu9Xkz3aMFK
-         0JcQpSOWMOO4Ipb2MWZdlgVt1gqKnEVbbl/k08kEf7rdSzKoGFDVsTEq54pldf9AvuOi
-         AEJ/VAYyprATMD4PR72B+IkMkBKhPYLYh7Sug=
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=hI61hPrGDQuqCDhatsEmznys0LPDvrfd2WbVsV7UPlg=;
+        b=J1p1myPry3G2fUhRn1sffqnju98JLVJqNUMbfDNOtphQZpXO3fpYpw/a4lbjBPniQb
+         aCTgIafzreRY8icd+M+H+5cvzIqfukazZO6CGeR31o5OzYs+jov87odip1NwcsZjGekc
+         lxQPdPdYK28zE4AaDuIVFTMRGVrO6c663/NEihelit38tv6umY5YEpfVMaAX4jJVND8D
+         4vnCD09qfgMnawFajy6vOuk62JBU1Wgm9LvvtbxEsgneHJflqoPqpUjz6v/cAeqaZI/j
+         l43OJ6g+icDETdpMEk7IBVtMzENAytYUYP+FXyw0wtAhkJyzb1kGCWOpPrUBm07JNpnB
+         6HJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:to:from:subject:cc
-         :user-agent:date;
-        bh=/QNfQWig2oeC5POufHOkxnAuAVkUYpsqHyVQpvyXPFM=;
-        b=a8wzRw5p700StKEEbS7VawlneRADDQxY5ctGFbl0+p1qCrYA3n6w6HdQnoF7p4CSLo
-         Xo12P89x0JRlp7KilfHgNiJhKrOSNxzSCdyjw8raUE0PPCcmLs3dQJ/JQ7gxva/wQ0ef
-         JWAmrvf6eQdqwF/YzFNgb80yaVVHqXaisqQe5rg5ifbyeodqWOGvRIos45SXA6SFK9JB
-         dvqgoHBe8D76xQfbOftG6zW8MP+c9FDKzGcr4XoAKqB+whyNX8frj6IKaxnI2CYb9cpA
-         1hEHSAwZ32pPI96VnE3Vq1ska9KooP8eVnCPGrabNCzIN09uuL32FQ7zaQcpgNzylrDz
-         9anw==
-X-Gm-Message-State: APjAAAXy2LUx8bpKwanBwWscd2TNXWyEZaGlm2pkO1Q+tinCUtzCMFw/
-        8UsTEcN3IFXFyVeGJHD6lOIybg==
-X-Google-Smtp-Source: APXvYqw5MjR8b5QF1inGOhF3D0ddQ3KFCau26pbHfnEVTRxI5c2/WPbsRNarL55GkCl3Ecm1fJ+H/A==
-X-Received: by 2002:a63:3c14:: with SMTP id j20mr3859916pga.169.1561078999454;
-        Thu, 20 Jun 2019 18:03:19 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id y185sm634195pfy.110.2019.06.20.18.03.18
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 20 Jun 2019 18:03:18 -0700 (PDT)
-Message-ID: <5d0c2cd6.1c69fb81.e66af.32bf@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190617225134.GA30762@ziepe.ca>
-References: <20190613180931.65445-1-swboyd@chromium.org> <20190613180931.65445-2-swboyd@chromium.org> <20190613232613.GH22901@ziepe.ca> <5d03e394.1c69fb81.f028c.bffb@mx.google.com> <20190617225134.GA30762@ziepe.ca>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-From:   Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [PATCH 1/8] tpm: block messages while suspended
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Andrey Pronin <apronin@chromium.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, devicetree@vger.kernel.org,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        <linux-crypto@vger.kernel.org>
-User-Agent: alot/0.8.1
-Date:   Thu, 20 Jun 2019 18:03:17 -0700
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=hI61hPrGDQuqCDhatsEmznys0LPDvrfd2WbVsV7UPlg=;
+        b=HzDCN8SIF/KY3O+7xn9sE0QiRzbiub4NqQ7rGf1BTNXTHLTNrkka2YfCTFwLpKjyra
+         Xf5vJIcNeEPWO7xpodUt52Nx2G3X28EcyZQ4ju2eBirsLVugy7m6iLck+8i5Ky9DcBRu
+         OtuNE9gfDDTWkqIg0b+Fq8CmgSc1JnnfXJWuxuSKcxqXZfK8nO6GTk/P+4gkHs9rNXu0
+         7WEPQJ+lO5Zaktc3tqhzXuuXoo71nh0QXL7IpN/Qn4UYrYciB4tP98+LW16rvOE/Jb5+
+         3fIEFMVo6F9Oi5KOZFvmfg1i7+gBNUsj6WZnK3ZDbAq4QEpI7m23hWzkEvfPysttR0H7
+         M8Cw==
+X-Gm-Message-State: APjAAAWKIFaL//fDQC6OwOGqsorMmktP/dvomhJzWCK1tYvYnkULQlCG
+        KVSBayKj20wFxQv3Mixj8JTi2oJ6RmuFiburl6GzYg==
+X-Google-Smtp-Source: APXvYqw9ks+4ahlKFd17q9x+JwDgQJiHAxvS1dKlBQiL6Fz1/eyLbP0EfwI4hRqIAQo2QMxUg8hlItNkr7/+o3bkavZvGg==
+X-Received: by 2002:a0c:b010:: with SMTP id k16mr42793207qvc.170.1561080052987;
+ Thu, 20 Jun 2019 18:20:52 -0700 (PDT)
+Date:   Thu, 20 Jun 2019 18:19:37 -0700
+In-Reply-To: <20190621011941.186255-1-matthewgarrett@google.com>
+Message-Id: <20190621011941.186255-27-matthewgarrett@google.com>
+Mime-Version: 1.0
+References: <20190621011941.186255-1-matthewgarrett@google.com>
+X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+Subject: [PATCH V33 26/30] kexec: Allow kexec_file() with appropriate IMA
+ policy when locked down
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     jmorris@namei.org
+Cc:     linux-security@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Quoting Jason Gunthorpe (2019-06-17 15:51:34)
-> On Fri, Jun 14, 2019 at 11:12:36AM -0700, Stephen Boyd wrote:
-> > Quoting Jason Gunthorpe (2019-06-13 16:26:13)
-> > > On Thu, Jun 13, 2019 at 11:09:24AM -0700, Stephen Boyd wrote:
-> > > > From: Andrey Pronin <apronin@chromium.org>
-> > > >=20
-> > > > Other drivers or userspace may initiate sending a message to the tpm
-> > > > while the device itself and the controller of the bus it is on are
-> > > > suspended. That may break the bus driver logic.
-> > > > Block sending messages while the device is suspended.
-> > > >=20
-> > > > Signed-off-by: Andrey Pronin <apronin@chromium.org>
-> > > > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > > >=20
-> > > > I don't think this was ever posted before.
-> > >=20
-> > > Use a real lock.
-> > >=20
-> >=20
-> > To make sure the bit is tested under a lock so that suspend/resume can't
-> > update the bit in parallel?
->=20
-> No, just use a real lock, don't make locks out of test bit/set bit
->=20
+Systems in lockdown mode should block the kexec of untrusted kernels.
+For x86 and ARM we can ensure that a kernel is trustworthy by validating
+a PE signature, but this isn't possible on other architectures. On those
+platforms we can use IMA digital signatures instead. Add a function to
+determine whether IMA has or will verify signatures for a given event type,
+and if so permit kexec_file() even if the kernel is otherwise locked down.
+This is restricted to cases where CONFIG_INTEGRITY_TRUSTED_KEYRING is set
+in order to prevent an attacker from loading additional keys at runtime.
 
-Ok. I looked back on the history of this change in our kernel (seems it
-wasn't attempted upstream for some time) and it looks like the problem
-may have been that the khwrng kthread (i.e. hwrng_fill()) isn't frozen
-across suspend/resume. This kthread runs concurrently with devices being
-resumed, the cr50 hardware is still suspended, and then a tpm command is
-sent and it hangs the I2C bus because the device hasn't been properly
-resumed yet.
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: linux-integrity@vger.kernel.org
+---
+ include/linux/ima.h                 |  9 ++++++
+ kernel/kexec_file.c                 |  7 +++-
+ security/integrity/ima/ima.h        |  2 ++
+ security/integrity/ima/ima_main.c   |  2 +-
+ security/integrity/ima/ima_policy.c | 50 +++++++++++++++++++++++++++++
+ 5 files changed, 68 insertions(+), 2 deletions(-)
 
-I suspect a better approach than trying to hold of all TPM commands
-across suspend/resume would be to fix the caller here to not even try to
-read the hwrng during this time. It's a general problem for other hwrngs
-that have some suspend/resume hooks too. This kthread is going to be
-running while suspend/resume is going on if the random entropy gets too
-low, and that probably shouldn't be the case.
-
-What do you think of the attached patch? I haven't tested it, but it
-would make sure that the kthread is frozen so that the hardware can be
-resumed before the kthread is thawed and tries to go touch the hardware.
-
-----8<-----
-diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
-index 95be7228f327..3b88af3149a7 100644
---- a/drivers/char/hw_random/core.c
-+++ b/drivers/char/hw_random/core.c
-@@ -13,6 +13,7 @@
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/err.h>
-+#include <linux/freezer.h>
- #include <linux/fs.h>
- #include <linux/hw_random.h>
- #include <linux/kernel.h>
-@@ -421,7 +422,9 @@ static int hwrng_fillfn(void *unused)
- {
- 	long rc;
-=20
--	while (!kthread_should_stop()) {
-+	set_freezable();
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index dc12fbcf484c..c30954acc660 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -132,4 +132,13 @@ static inline int ima_inode_removexattr(struct dentry *dentry,
+ 	return 0;
+ }
+ #endif /* CONFIG_IMA_APPRAISE */
 +
-+	while (!kthread_freezable_should_stop(NULL)) {
- 		struct hwrng *rng;
-=20
- 		rng =3D get_current_rng();
++#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
++extern bool ima_appraise_signature(enum kernel_read_file_id func);
++#else
++static inline bool ima_appraise_signature(enum kernel_read_file_id func)
++{
++	return false;
++}
++#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
+ #endif /* _LINUX_IMA_H */
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 455f4fc794f3..8134da6573c6 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -240,7 +240,12 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ 
+ 		ret = 0;
+ 
+-		if (security_is_locked_down(LOCKDOWN_KEXEC)) {
++		/* If IMA is guaranteed to appraise a signature on the kexec
++		 * image, permit it even if the kernel is otherwise locked
++		 * down.
++		 */
++		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
++		    security_is_locked_down(LOCKDOWN_KEXEC)) {
+ 			ret = -EPERM;
+ 			goto out;
+ 		}
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index d213e835c498..3bc62062cfe8 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -115,6 +115,8 @@ struct ima_kexec_hdr {
+ 	u64 count;
+ };
+ 
++extern const int read_idmap[];
++
+ #ifdef CONFIG_HAVE_IMA_KEXEC
+ void ima_load_kexec_buffer(void);
+ #else
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 357edd140c09..927fe889201a 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -473,7 +473,7 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
+ 	return 0;
+ }
+ 
+-static const int read_idmap[READING_MAX_ID] = {
++const int read_idmap[READING_MAX_ID] = {
+ 	[READING_FIRMWARE] = FIRMWARE_CHECK,
+ 	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
+ 	[READING_MODULE] = MODULE_CHECK,
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index e0cc323f948f..8784449918e2 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1339,3 +1339,53 @@ int ima_policy_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ #endif	/* CONFIG_IMA_READ_POLICY */
++
++#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
++/*
++ * ima_appraise_signature: whether IMA will appraise a given function using
++ * an IMA digital signature. This is restricted to cases where the kernel
++ * has a set of built-in trusted keys in order to avoid an attacker simply
++ * loading additional keys.
++ */
++bool ima_appraise_signature(enum kernel_read_file_id id)
++{
++	struct ima_rule_entry *entry;
++	bool found = false;
++	enum ima_hooks func;
++
++	if (id >= READING_MAX_ID)
++		return false;
++
++	func = read_idmap[id] ?: FILE_CHECK;
++
++	rcu_read_lock();
++	list_for_each_entry_rcu(entry, ima_rules, list) {
++		if (entry->action != APPRAISE)
++			continue;
++
++		/*
++		 * A generic entry will match, but otherwise require that it
++		 * match the func we're looking for
++		 */
++		if (entry->func && entry->func != func)
++			continue;
++
++		/*
++		 * We require this to be a digital signature, not a raw IMA
++		 * hash.
++		 */
++		if (entry->flags & IMA_DIGSIG_REQUIRED)
++			found = true;
++
++		/*
++		 * We've found a rule that matches, so break now even if it
++		 * didn't require a digital signature - a later rule that does
++		 * won't override it, so would be a false positive.
++		 */
++		break;
++	}
++
++	rcu_read_unlock();
++	return found;
++}
++#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
+-- 
+2.22.0.410.gd8fdbe21b5-goog
+
