@@ -2,547 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A30A44DDF0
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2019 02:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1DB4DE4D
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2019 03:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725905AbfFUAAN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 Jun 2019 20:00:13 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:46836 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbfFUAAN (ORCPT
+        id S1725921AbfFUBDU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 Jun 2019 21:03:20 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:39811 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbfFUBDU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 Jun 2019 20:00:13 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5KNwsMv091382;
-        Thu, 20 Jun 2019 23:59:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2018-07-02;
- bh=/mzUBTcckOnL9stejWbwXJK36urYgJBOTaRSFF7K42M=;
- b=CdBi975wOuTCMHvXWYp0cRldSAz+8VTysq45Mc+e6V34QjPI8GD4MLrGFx327ZMdBUDN
- 3CvHXgrLFUYJ/W3z6D6wrP4k06pXWGKEZhtHP4cKFAjyYoKTP/S2MtMHQKoWGqmrtdkR
- gyS0NfmypVe0ft+X/Ed5m+gI+McaohKOKrDbZp8SNndy7GMxcDzFE2bAykzmQz6OrseW
- GsVGvYFYYl3c6kD5S3hzndeS28Jbc1afcZ1d4Fm1kA4URjtElHO8sP4r0uugLC+XTGVt
- /KXR8cMooEVGcXLT81M8rf8/as2+zMvjUwNQ2E0hqapYPaKhVkR38W0JGzuPwpsTwslV Bg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2t7809kp8n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jun 2019 23:59:48 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5KNwcvN104991;
-        Thu, 20 Jun 2019 23:59:48 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2t77ypnrtq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jun 2019 23:59:47 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5KNxesR012117;
-        Thu, 20 Jun 2019 23:59:40 GMT
-Received: from localhost (/10.145.179.81)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 20 Jun 2019 16:59:39 -0700
-Date:   Thu, 20 Jun 2019 16:59:38 -0700
-From:   "Darrick J. Wong" <darrick.wong@oracle.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
-        "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Victor Hsieh <victorhsieh@google.com>,
-        Chandan Rajendra <chandan@linux.vnet.ibm.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 14/16] ext4: add basic fs-verity support
-Message-ID: <20190620235938.GE5375@magnolia>
-References: <20190620205043.64350-1-ebiggers@kernel.org>
- <20190620205043.64350-15-ebiggers@kernel.org>
+        Thu, 20 Jun 2019 21:03:20 -0400
+Received: by mail-pg1-f193.google.com with SMTP id 196so2477960pgc.6
+        for <linux-integrity@vger.kernel.org>; Thu, 20 Jun 2019 18:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:to:from:subject:cc:user-agent:date;
+        bh=/QNfQWig2oeC5POufHOkxnAuAVkUYpsqHyVQpvyXPFM=;
+        b=YT9pP8mmnoLSnibB3gevIC8O4iva3l7WbYe+TvJLiuO8Sl8rGyxguOWdu9Xkz3aMFK
+         0JcQpSOWMOO4Ipb2MWZdlgVt1gqKnEVbbl/k08kEf7rdSzKoGFDVsTEq54pldf9AvuOi
+         AEJ/VAYyprATMD4PR72B+IkMkBKhPYLYh7Sug=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:to:from:subject:cc
+         :user-agent:date;
+        bh=/QNfQWig2oeC5POufHOkxnAuAVkUYpsqHyVQpvyXPFM=;
+        b=a8wzRw5p700StKEEbS7VawlneRADDQxY5ctGFbl0+p1qCrYA3n6w6HdQnoF7p4CSLo
+         Xo12P89x0JRlp7KilfHgNiJhKrOSNxzSCdyjw8raUE0PPCcmLs3dQJ/JQ7gxva/wQ0ef
+         JWAmrvf6eQdqwF/YzFNgb80yaVVHqXaisqQe5rg5ifbyeodqWOGvRIos45SXA6SFK9JB
+         dvqgoHBe8D76xQfbOftG6zW8MP+c9FDKzGcr4XoAKqB+whyNX8frj6IKaxnI2CYb9cpA
+         1hEHSAwZ32pPI96VnE3Vq1ska9KooP8eVnCPGrabNCzIN09uuL32FQ7zaQcpgNzylrDz
+         9anw==
+X-Gm-Message-State: APjAAAXy2LUx8bpKwanBwWscd2TNXWyEZaGlm2pkO1Q+tinCUtzCMFw/
+        8UsTEcN3IFXFyVeGJHD6lOIybg==
+X-Google-Smtp-Source: APXvYqw5MjR8b5QF1inGOhF3D0ddQ3KFCau26pbHfnEVTRxI5c2/WPbsRNarL55GkCl3Ecm1fJ+H/A==
+X-Received: by 2002:a63:3c14:: with SMTP id j20mr3859916pga.169.1561078999454;
+        Thu, 20 Jun 2019 18:03:19 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id y185sm634195pfy.110.2019.06.20.18.03.18
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 20 Jun 2019 18:03:18 -0700 (PDT)
+Message-ID: <5d0c2cd6.1c69fb81.e66af.32bf@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190620205043.64350-15-ebiggers@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9294 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906200171
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9294 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906200171
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190617225134.GA30762@ziepe.ca>
+References: <20190613180931.65445-1-swboyd@chromium.org> <20190613180931.65445-2-swboyd@chromium.org> <20190613232613.GH22901@ziepe.ca> <5d03e394.1c69fb81.f028c.bffb@mx.google.com> <20190617225134.GA30762@ziepe.ca>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+From:   Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [PATCH 1/8] tpm: block messages while suspended
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Andrey Pronin <apronin@chromium.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, devicetree@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        <linux-crypto@vger.kernel.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 20 Jun 2019 18:03:17 -0700
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 01:50:41PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Add most of fs-verity support to ext4.  fs-verity is a filesystem
-> feature that enables transparent integrity protection and authentication
-> of read-only files.  It uses a dm-verity like mechanism at the file
-> level: a Merkle tree is used to verify any block in the file in
-> log(filesize) time.  It is implemented mainly by helper functions in
-> fs/verity/.  See Documentation/filesystems/fsverity.rst for the full
-> documentation.
-> 
-> This commit adds all of ext4 fs-verity support except for the actual
-> data verification, including:
-> 
-> - Adding a filesystem feature flag and an inode flag for fs-verity.
-> 
-> - Implementing the fsverity_operations to support enabling verity on an
->   inode and reading/writing the verity metadata.
-> 
-> - Updating ->write_begin(), ->write_end(), and ->writepages() to support
->   writing verity metadata pages.
-> 
-> - Calling the fs-verity hooks for ->open(), ->setattr(), and ->ioctl().
-> 
-> ext4 stores the verity metadata (Merkle tree and fsverity_descriptor)
-> past the end of the file, starting at the first 64K boundary beyond
-> i_size.  This approach works because (a) verity files are readonly, and
-> (b) pages fully beyond i_size aren't visible to userspace but can be
-> read/written internally by ext4 with only some relatively small changes
-> to ext4.  This approach avoids having to depend on the EA_INODE feature
-> and on rearchitecturing ext4's xattr support to support paging
-> multi-gigabyte xattrs into memory, and to support encrypting xattrs.
-> Note that the verity metadata *must* be encrypted when the file is,
-> since it contains hashes of the plaintext data.
-> 
-> This patch incorporates work by Theodore Ts'o and Chandan Rajendra.
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  fs/ext4/Makefile |   1 +
->  fs/ext4/ext4.h   |  21 ++-
->  fs/ext4/file.c   |   4 +
->  fs/ext4/inode.c  |  46 ++++--
->  fs/ext4/ioctl.c  |  12 ++
->  fs/ext4/super.c  |   9 ++
->  fs/ext4/sysfs.c  |   6 +
->  fs/ext4/verity.c | 354 +++++++++++++++++++++++++++++++++++++++++++++++
->  8 files changed, 438 insertions(+), 15 deletions(-)
->  create mode 100644 fs/ext4/verity.c
-> 
-> diff --git a/fs/ext4/Makefile b/fs/ext4/Makefile
-> index 8fdfcd3c3e0437..b17ddc229ac5f5 100644
-> --- a/fs/ext4/Makefile
-> +++ b/fs/ext4/Makefile
-> @@ -13,3 +13,4 @@ ext4-y	:= balloc.o bitmap.o block_validity.o dir.o ext4_jbd2.o extents.o \
->  
->  ext4-$(CONFIG_EXT4_FS_POSIX_ACL)	+= acl.o
->  ext4-$(CONFIG_EXT4_FS_SECURITY)		+= xattr_security.o
-> +ext4-$(CONFIG_FS_VERITY)		+= verity.o
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 1cb67859e0518b..5a1deea3fb3e37 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -41,6 +41,7 @@
->  #endif
->  
->  #include <linux/fscrypt.h>
-> +#include <linux/fsverity.h>
->  
->  #include <linux/compiler.h>
->  
-> @@ -395,6 +396,7 @@ struct flex_groups {
->  #define EXT4_TOPDIR_FL			0x00020000 /* Top of directory hierarchies*/
->  #define EXT4_HUGE_FILE_FL               0x00040000 /* Set to each huge file */
->  #define EXT4_EXTENTS_FL			0x00080000 /* Inode uses extents */
-> +#define EXT4_VERITY_FL			0x00100000 /* Verity protected inode */
+Quoting Jason Gunthorpe (2019-06-17 15:51:34)
+> On Fri, Jun 14, 2019 at 11:12:36AM -0700, Stephen Boyd wrote:
+> > Quoting Jason Gunthorpe (2019-06-13 16:26:13)
+> > > On Thu, Jun 13, 2019 at 11:09:24AM -0700, Stephen Boyd wrote:
+> > > > From: Andrey Pronin <apronin@chromium.org>
+> > > >=20
+> > > > Other drivers or userspace may initiate sending a message to the tpm
+> > > > while the device itself and the controller of the bus it is on are
+> > > > suspended. That may break the bus driver logic.
+> > > > Block sending messages while the device is suspended.
+> > > >=20
+> > > > Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> > > > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> > > >=20
+> > > > I don't think this was ever posted before.
+> > >=20
+> > > Use a real lock.
+> > >=20
+> >=20
+> > To make sure the bit is tested under a lock so that suspend/resume can't
+> > update the bit in parallel?
+>=20
+> No, just use a real lock, don't make locks out of test bit/set bit
+>=20
 
-Hmm, a new inode flag, superblock rocompat feature flag, and
-(presumably) the Merkle tree has some sort of well defined format which
-starts at the next 64k boundary past EOF.
+Ok. I looked back on the history of this change in our kernel (seems it
+wasn't attempted upstream for some time) and it looks like the problem
+may have been that the khwrng kthread (i.e. hwrng_fill()) isn't frozen
+across suspend/resume. This kthread runs concurrently with devices being
+resumed, the cr50 hardware is still suspended, and then a tpm command is
+sent and it hangs the I2C bus because the device hasn't been properly
+resumed yet.
 
-Would you mind updating the relevant parts of the ondisk format
-documentation in Documentation/filesystems/ext4/, please?
+I suspect a better approach than trying to hold of all TPM commands
+across suspend/resume would be to fix the caller here to not even try to
+read the hwrng during this time. It's a general problem for other hwrngs
+that have some suspend/resume hooks too. This kthread is going to be
+running while suspend/resume is going on if the random entropy gets too
+low, and that probably shouldn't be the case.
 
-I saw that the Merkle tree and verity descriptor formats themselves are
-documented in the first patch, so you could simply link the ext4
-documentation to it.
+What do you think of the attached patch? I haven't tested it, but it
+would make sure that the kthread is frozen so that the hardware can be
+resumed before the kthread is thawed and tries to go touch the hardware.
 
->  #define EXT4_EA_INODE_FL	        0x00200000 /* Inode used for large EA */
->  #define EXT4_EOFBLOCKS_FL		0x00400000 /* Blocks allocated beyond EOF */
->  #define EXT4_INLINE_DATA_FL		0x10000000 /* Inode has inline data. */
-
-<snip>
-
-> diff --git a/fs/ext4/verity.c b/fs/ext4/verity.c
-> new file mode 100644
-> index 00000000000000..0ff98eb4ecdbb7
-> --- /dev/null
-> +++ b/fs/ext4/verity.c
-> @@ -0,0 +1,354 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * fs/ext4/verity.c: fs-verity support for ext4
-> + *
-> + * Copyright 2019 Google LLC
-> + */
-> +
-> +/*
-> + * Implementation of fsverity_operations for ext4.
-> + *
-> + * ext4 stores the verity metadata (Merkle tree and fsverity_descriptor) past
-> + * the end of the file, starting at the first 64K boundary beyond i_size.  This
-> + * approach works because (a) verity files are readonly, and (b) pages fully
-> + * beyond i_size aren't visible to userspace but can be read/written internally
-> + * by ext4 with only some relatively small changes to ext4.  This approach
-> + * avoids having to depend on the EA_INODE feature and on rearchitecturing
-> + * ext4's xattr support to support paging multi-gigabyte xattrs into memory, and
-> + * to support encrypting xattrs.  Note that the verity metadata *must* be
-> + * encrypted when the file is, since it contains hashes of the plaintext data.
-
-Ahh, I had wondered about "why not just shove it in an ea_inode?"...
-
-> + *
-> + * Using a 64K boundary rather than a 4K one keeps things ready for
-> + * architectures with 64K pages, and it doesn't necessarily waste space on-disk
-> + * since there can be a hole between i_size and the start of the Merkle tree.
-> + */
-> +
-> +#include <linux/quotaops.h>
-> +
-> +#include "ext4.h"
-> +#include "ext4_extents.h"
-> +#include "ext4_jbd2.h"
-> +
-> +static inline loff_t ext4_verity_metadata_pos(const struct inode *inode)
-> +{
-> +	return round_up(inode->i_size, 65536);
-> +}
-> +
-> +/*
-> + * Read some verity metadata from the inode.  __vfs_read() can't be used because
-> + * we need to read beyond i_size.
-> + */
-> +static int pagecache_read(struct inode *inode, void *buf, size_t count,
-> +			  loff_t pos)
-> +{
-> +	while (count) {
-> +		size_t n = min_t(size_t, count,
-> +				 PAGE_SIZE - offset_in_page(pos));
-> +		struct page *page;
-> +		void *addr;
-> +
-> +		page = read_mapping_page(inode->i_mapping, pos >> PAGE_SHIFT,
-> +					 NULL);
-> +		if (IS_ERR(page))
-> +			return PTR_ERR(page);
-> +
-> +		addr = kmap_atomic(page);
-> +		memcpy(buf, addr + offset_in_page(pos), n);
-> +		kunmap_atomic(addr);
-> +
-> +		put_page(page);
-> +
-> +		buf += n;
-> +		pos += n;
-> +		count -= n;
-> +	}
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Write some verity metadata to the inode for FS_IOC_ENABLE_VERITY.
-> + * kernel_write() can't be used because the file descriptor is readonly.
-> + */
-> +static int pagecache_write(struct inode *inode, const void *buf, size_t count,
-> +			   loff_t pos)
-> +{
-> +	while (count) {
-> +		size_t n = min_t(size_t, count,
-> +				 PAGE_SIZE - offset_in_page(pos));
-> +		struct page *page;
-> +		void *fsdata;
-> +		void *addr;
-> +		int res;
-> +
-> +		res = pagecache_write_begin(NULL, inode->i_mapping, pos, n, 0,
-> +					    &page, &fsdata);
-> +		if (res)
-> +			return res;
-> +
-> +		addr = kmap_atomic(page);
-> +		memcpy(addr + offset_in_page(pos), buf, n);
-> +		kunmap_atomic(addr);
-> +
-> +		res = pagecache_write_end(NULL, inode->i_mapping, pos, n, n,
-> +					  page, fsdata);
-> +		if (res < 0)
-> +			return res;
-> +		if (res != n)
-> +			return -EIO;
-> +
-> +		buf += n;
-> +		pos += n;
-> +		count -= n;
-> +	}
-> +	return 0;
-> +}
-
-This same code is duplicated in the f2fs patch.  Is there a reason why
-they don't share this common code?  Even if you have to hide it under
-fs/verity/ ?
-
---D
-
-> +
-> +static int ext4_begin_enable_verity(struct file *filp)
-> +{
-> +	struct inode *inode = file_inode(filp);
-> +	const int credits = 2; /* superblock and inode for ext4_orphan_add() */
-> +	handle_t *handle;
-> +	int err;
-> +
-> +	err = ext4_convert_inline_data(inode);
-> +	if (err)
-> +		return err;
-> +
-> +	if (!ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)) {
-> +		ext4_warning_inode(inode,
-> +				   "verity is only allowed on extent-based files");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	err = ext4_inode_attach_jinode(inode);
-> +	if (err)
-> +		return err;
-> +
-> +	/*
-> +	 * ext4 uses the last allocated block to find the verity descriptor, so
-> +	 * we must remove any other blocks which might confuse things.
-> +	 */
-> +	err = ext4_truncate(inode);
-> +	if (err)
-> +		return err;
-> +
-> +	err = dquot_initialize(inode);
-> +	if (err)
-> +		return err;
-> +
-> +	handle = ext4_journal_start(inode, EXT4_HT_INODE, credits);
-> +	if (IS_ERR(handle))
-> +		return PTR_ERR(handle);
-> +
-> +	err = ext4_orphan_add(handle, inode);
-> +	if (err == 0)
-> +		ext4_set_inode_state(inode, EXT4_STATE_VERITY_IN_PROGRESS);
-> +
-> +	ext4_journal_stop(handle);
-> +	return err;
-> +}
-> +
-> +/*
-> + * ext4 stores the verity descriptor beginning on the next filesystem block
-> + * boundary after the Merkle tree.  Then, the descriptor size is stored in the
-> + * last 4 bytes of the last allocated filesystem block --- which is either the
-> + * block in which the descriptor ends, or the next block after that if there
-> + * weren't at least 4 bytes remaining.
-> + *
-> + * We can't simply store the descriptor in an xattr because it *must* be
-> + * encrypted when ext4 encryption is used, but ext4 encryption doesn't encrypt
-> + * xattrs.  Also, if the descriptor includes a large signature blob it may be
-> + * too large to store in an xattr without the EA_INODE feature.
-> + */
-> +static int ext4_write_verity_descriptor(struct inode *inode, const void *desc,
-> +					size_t desc_size, u64 merkle_tree_size)
-> +{
-> +	const u64 desc_pos = round_up(ext4_verity_metadata_pos(inode) +
-> +				      merkle_tree_size, i_blocksize(inode));
-> +	const u64 desc_end = desc_pos + desc_size;
-> +	const __le32 desc_size_disk = cpu_to_le32(desc_size);
-> +	const u64 desc_size_pos = round_up(desc_end + sizeof(desc_size_disk),
-> +					   i_blocksize(inode)) -
-> +				  sizeof(desc_size_disk);
-> +	int err;
-> +
-> +	err = pagecache_write(inode, desc, desc_size, desc_pos);
-> +	if (err)
-> +		return err;
-> +
-> +	return pagecache_write(inode, &desc_size_disk, sizeof(desc_size_disk),
-> +			       desc_size_pos);
-> +}
-> +
-> +static int ext4_end_enable_verity(struct file *filp, const void *desc,
-> +				  size_t desc_size, u64 merkle_tree_size)
-> +{
-> +	struct inode *inode = file_inode(filp);
-> +	const int credits = 2; /* superblock and inode for ext4_orphan_add() */
-> +	handle_t *handle;
-> +	int err1 = 0;
-> +	int err;
-> +
-> +	if (desc != NULL) {
-> +		/* Succeeded; write the verity descriptor. */
-> +		err1 = ext4_write_verity_descriptor(inode, desc, desc_size,
-> +						    merkle_tree_size);
-> +
-> +		/* Write all pages before clearing VERITY_IN_PROGRESS. */
-> +		if (!err1)
-> +			err1 = filemap_write_and_wait(inode->i_mapping);
-> +	} else {
-> +		/* Failed; truncate anything we wrote past i_size. */
-> +		ext4_truncate(inode);
-> +	}
-> +
-> +	/*
-> +	 * We must always clean up by clearing EXT4_STATE_VERITY_IN_PROGRESS and
-> +	 * deleting the inode from the orphan list, even if something failed.
-> +	 * If everything succeeded, we'll also set the verity bit in the same
-> +	 * transaction.
-> +	 */
-> +
-> +	ext4_clear_inode_state(inode, EXT4_STATE_VERITY_IN_PROGRESS);
-> +
-> +	handle = ext4_journal_start(inode, EXT4_HT_INODE, credits);
-> +	if (IS_ERR(handle)) {
-> +		ext4_orphan_del(NULL, inode);
-> +		return PTR_ERR(handle);
-> +	}
-> +
-> +	err = ext4_orphan_del(handle, inode);
-> +	if (err)
-> +		goto out_stop;
-> +
-> +	if (desc != NULL && !err1) {
-> +		struct ext4_iloc iloc;
-> +
-> +		err = ext4_reserve_inode_write(handle, inode, &iloc);
-> +		if (err)
-> +			goto out_stop;
-> +		ext4_set_inode_flag(inode, EXT4_INODE_VERITY);
-> +		ext4_set_inode_flags(inode);
-> +		err = ext4_mark_iloc_dirty(handle, inode, &iloc);
-> +	}
-> +out_stop:
-> +	ext4_journal_stop(handle);
-> +	return err ?: err1;
-> +}
-> +
-> +static int ext4_get_verity_descriptor_location(struct inode *inode,
-> +					       size_t *desc_size_ret,
-> +					       u64 *desc_pos_ret)
-> +{
-> +	struct ext4_ext_path *path;
-> +	struct ext4_extent *last_extent;
-> +	u32 end_lblk;
-> +	u64 desc_size_pos;
-> +	__le32 desc_size_disk;
-> +	u32 desc_size;
-> +	u64 desc_pos;
-> +	int err;
-> +
-> +	/*
-> +	 * Descriptor size is in last 4 bytes of last allocated block.
-> +	 * See ext4_write_verity_descriptor().
-> +	 */
-> +
-> +	if (!ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)) {
-> +		EXT4_ERROR_INODE(inode, "verity file doesn't use extents");
-> +		return -EFSCORRUPTED;
-> +	}
-> +
-> +	path = ext4_find_extent(inode, EXT_MAX_BLOCKS - 1, NULL, 0);
-> +	if (IS_ERR(path))
-> +		return PTR_ERR(path);
-> +
-> +	last_extent = path[path->p_depth].p_ext;
-> +	if (!last_extent) {
-> +		EXT4_ERROR_INODE(inode, "verity file has no extents");
-> +		ext4_ext_drop_refs(path);
-> +		kfree(path);
-> +		return -EFSCORRUPTED;
-> +	}
-> +
-> +	end_lblk = le32_to_cpu(last_extent->ee_block) +
-> +		   ext4_ext_get_actual_len(last_extent);
-> +	desc_size_pos = (u64)end_lblk << inode->i_blkbits;
-> +	ext4_ext_drop_refs(path);
-> +	kfree(path);
-> +
-> +	if (desc_size_pos < sizeof(desc_size_disk))
-> +		goto bad;
-> +	desc_size_pos -= sizeof(desc_size_disk);
-> +
-> +	err = pagecache_read(inode, &desc_size_disk, sizeof(desc_size_disk),
-> +			     desc_size_pos);
-> +	if (err)
-> +		return err;
-> +	desc_size = le32_to_cpu(desc_size_disk);
-> +
-> +	/*
-> +	 * The descriptor is stored just before the desc_size_disk, but starting
-> +	 * on a filesystem block boundary.
-> +	 */
-> +
-> +	if (desc_size > INT_MAX || desc_size > desc_size_pos)
-> +		goto bad;
-> +
-> +	desc_pos = round_down(desc_size_pos - desc_size, i_blocksize(inode));
-> +	if (desc_pos < ext4_verity_metadata_pos(inode))
-> +		goto bad;
-> +
-> +	*desc_size_ret = desc_size;
-> +	*desc_pos_ret = desc_pos;
-> +	return 0;
-> +
-> +bad:
-> +	EXT4_ERROR_INODE(inode, "verity file corrupted; can't find descriptor");
-> +	return -EFSCORRUPTED;
-> +}
-> +
-> +static int ext4_get_verity_descriptor(struct inode *inode, void *buf,
-> +				      size_t buf_size)
-> +{
-> +	size_t desc_size = 0;
-> +	u64 desc_pos = 0;
-> +	int err;
-> +
-> +	err = ext4_get_verity_descriptor_location(inode, &desc_size, &desc_pos);
-> +	if (err)
-> +		return err;
-> +
-> +	if (buf_size) {
-> +		if (desc_size > buf_size)
-> +			return -ERANGE;
-> +		err = pagecache_read(inode, buf, desc_size, desc_pos);
-> +		if (err)
-> +			return err;
-> +	}
-> +	return desc_size;
-> +}
-> +
-> +static struct page *ext4_read_merkle_tree_page(struct inode *inode,
-> +					       pgoff_t index)
-> +{
-> +	index += ext4_verity_metadata_pos(inode) >> PAGE_SHIFT;
-> +
-> +	return read_mapping_page(inode->i_mapping, index, NULL);
-> +}
-> +
-> +static int ext4_write_merkle_tree_block(struct inode *inode, const void *buf,
-> +					u64 index, int log_blocksize)
-> +{
-> +	loff_t pos = ext4_verity_metadata_pos(inode) + (index << log_blocksize);
-> +
-> +	return pagecache_write(inode, buf, 1 << log_blocksize, pos);
-> +}
-> +
-> +const struct fsverity_operations ext4_verityops = {
-> +	.begin_enable_verity	= ext4_begin_enable_verity,
-> +	.end_enable_verity	= ext4_end_enable_verity,
-> +	.get_verity_descriptor	= ext4_get_verity_descriptor,
-> +	.read_merkle_tree_page	= ext4_read_merkle_tree_page,
-> +	.write_merkle_tree_block = ext4_write_merkle_tree_block,
-> +};
-> -- 
-> 2.22.0.410.gd8fdbe21b5-goog
-> 
+----8<-----
+diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
+index 95be7228f327..3b88af3149a7 100644
+--- a/drivers/char/hw_random/core.c
++++ b/drivers/char/hw_random/core.c
+@@ -13,6 +13,7 @@
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
++#include <linux/freezer.h>
+ #include <linux/fs.h>
+ #include <linux/hw_random.h>
+ #include <linux/kernel.h>
+@@ -421,7 +422,9 @@ static int hwrng_fillfn(void *unused)
+ {
+ 	long rc;
+=20
+-	while (!kthread_should_stop()) {
++	set_freezable();
++
++	while (!kthread_freezable_should_stop(NULL)) {
+ 		struct hwrng *rng;
+=20
+ 		rng =3D get_current_rng();
