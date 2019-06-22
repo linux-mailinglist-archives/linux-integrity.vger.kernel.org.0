@@ -2,163 +2,213 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFC04E874
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2019 15:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC634F274
+	for <lists+linux-integrity@lfdr.de>; Sat, 22 Jun 2019 02:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726311AbfFUNEO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 21 Jun 2019 09:04:14 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45162 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726299AbfFUNEO (ORCPT
+        id S1726937AbfFVAFH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 21 Jun 2019 20:05:07 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:45959 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726953AbfFVAFF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 21 Jun 2019 09:04:14 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5LCvAeM024481
-        for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2019 09:04:13 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2t8x7n48ev-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2019 09:04:12 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 21 Jun 2019 14:04:11 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 21 Jun 2019 14:04:09 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5LD48NM54001774
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jun 2019 13:04:08 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 124C6A4059;
-        Fri, 21 Jun 2019 13:04:08 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 68E18A404D;
-        Fri, 21 Jun 2019 13:04:07 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.81.152])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 21 Jun 2019 13:04:07 +0000 (GMT)
-Subject: Re: [PATCH v5 01/11] ima-evm-utils: Make sure sig buffer is always
- MAX_SIGNATURE_SIZE
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Fri, 21 Jun 2019 20:05:05 -0400
+Received: by mail-pg1-f202.google.com with SMTP id k2so4989978pga.12
+        for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2019 17:05:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=TMklhc9+XfiI8L3K2AutSbeZaJ7HLQ2HsXG+mlV/TZs=;
+        b=p7vfmYbicP0O5OJzjFHdr94n1dC4CJO8yX/92U2d2BTbbGPpuy00yXNd9NLehfmCFV
+         5XqqdDRq+j7IDKg4ECOxaLzyDNdD8IRWnSj4RlJg+fnqujjgDyfVtsIJ9EOZPvHQpXUF
+         rFQ6bRCqsV8oHm1TLKJCR1V5tdwwsJJaH3HL1oCf+hG2ILKmD0gxGnsJmF9ggXD1qJsP
+         dyX+p6/3+RHtCJNz5ZK7L9Ir/FRDlefa1IqIXWmOpCGGurVyGN5/+sfdEvh3UMqC2Utp
+         4zkAY8boj/uZNoZnDEBzHHNWlw88TuW2EXhkMlcVLRtlhNAVlAt/WOZPPBD7NHwAMiy5
+         zcpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=TMklhc9+XfiI8L3K2AutSbeZaJ7HLQ2HsXG+mlV/TZs=;
+        b=JVLZclUU8pxgMRgNoDJWhE/PNE+tD7/Ynmt0VPQgpQY1g68RVtDv2476gYQIqvEV7Q
+         mE8Kpbl5C4MRNUncyEfO6YIC6jwY00l2MF/tlHIfL+PhN7X8TPSFZqt3FPc3xCOf/tBO
+         JC3OylwsaUOakM0eTIWdA6qXcxV/r7GtroczDEzHP1pH1uAlzXAWL8gnobagdfIbgWfD
+         Hm/wZdGdxrfEh4harESrgBgUDfS5Tx373mHrnLRTEAdHCZD/ijILEV3r5zVXnyqP3mE8
+         u32E4UXDYfy2NIAaJzl2NHLjHwBL3MVNJEDZT1+6Ob1OFRip8o95xQxYS7VMaeQiKipR
+         x7pw==
+X-Gm-Message-State: APjAAAXrjiax+DybliGfliJ5mhgV1/GHpCL/nMCDQxqOx211wBvns7nZ
+        v8wqcrmCIk5ARz22mFL51HgNJtOT3w20gtlOLWNaaw==
+X-Google-Smtp-Source: APXvYqyiFQ+2Cd5OSyAvJhYhgYOd8VHPKVlHOgHk3dAwEgc6MxZt9cRi1sgqABuTYgGBeTygjlYiJdOudBsv5yQQd+2tYg==
+X-Received: by 2002:a63:2258:: with SMTP id t24mr12689918pgm.236.1561161904729;
+ Fri, 21 Jun 2019 17:05:04 -0700 (PDT)
+Date:   Fri, 21 Jun 2019 17:03:54 -0700
+In-Reply-To: <20190622000358.19895-1-matthewgarrett@google.com>
+Message-Id: <20190622000358.19895-26-matthewgarrett@google.com>
+Mime-Version: 1.0
+References: <20190622000358.19895-1-matthewgarrett@google.com>
+X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+Subject: [PATCH V34 25/29] kexec: Allow kexec_file() with appropriate IMA
+ policy when locked down
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     jmorris@namei.org
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Date:   Fri, 21 Jun 2019 09:03:56 -0400
-In-Reply-To: <20190621122833.xzy3ztzr2ilmium6@altlinux.org>
-References: <20190618135623.6861-1-vt@altlinux.org>
-         <20190618135623.6861-2-vt@altlinux.org>
-         <1561066938.4057.18.camel@linux.ibm.com>
-         <20190621065913.a3plltlinylkdkeb@altlinux.org>
-         <1561115292.4057.70.camel@linux.ibm.com>
-         <20190621112225.sf6rtxzc2pu4oyfh@altlinux.org>
-         <1561116450.4057.81.camel@linux.ibm.com>
-         <20190621122833.xzy3ztzr2ilmium6@altlinux.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19062113-0012-0000-0000-0000032B37DA
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062113-0013-0000-0000-0000216461D4
-Message-Id: <1561122236.4057.107.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-21_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906210108
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-06-21 at 15:28 +0300, Vitaly Chikunov wrote:
-> Mimi,
-> 
-> On Fri, Jun 21, 2019 at 07:27:30AM -0400, Mimi Zohar wrote:
-> > On Fri, 2019-06-21 at 14:22 +0300, Vitaly Chikunov wrote:
-> > > On Fri, Jun 21, 2019 at 07:08:12AM -0400, Mimi Zohar wrote:
-> > > > On Fri, 2019-06-21 at 09:59 +0300, Vitaly Chikunov wrote:
-> > > > > On Thu, Jun 20, 2019 at 05:42:18PM -0400, Mimi Zohar wrote:
-> > > > > > On Tue, 2019-06-18 at 16:56 +0300, Vitaly Chikunov wrote:
-> > > > > > > Fix off-by-one error of the output buffer passed to sign_hash().
-> > > > > > > 
-> > > > > > > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> > > > > > > ---
-> > > > > > >  src/evmctl.c | 4 ++--
-> > > > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > > > > 
-> > > > > > > diff --git a/src/evmctl.c b/src/evmctl.c
-> > > > > > > index 15a7226..03f41fe 100644
-> > > > > > > --- a/src/evmctl.c
-> > > > > > > +++ b/src/evmctl.c
-> > > > > > > @@ -510,7 +510,7 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
-> > > > > > >  static int sign_evm(const char *file, const char *key)
-> > > > > > >  {
-> > > > > > >  	unsigned char hash[MAX_DIGEST_SIZE];
-> > > > > > > -	unsigned char sig[MAX_SIGNATURE_SIZE];
-> > > > > > > +	unsigned char sig[MAX_SIGNATURE_SIZE + 1];
-> > > > > > >  	int len, err;
-> > > > > > > 
-> > > > > > >  	len = calc_evm_hash(file, hash);
-> > > > > > > @@ -519,7 +519,7 @@ static int sign_evm(const char *file, const char *key)
-> > > > > > >  		return len;
-> > > > > > > 
-> > > > > > >  	len = sign_hash(params.hash_algo, hash, len, key, NULL, sig + 1);
-> > > > > > > -	assert(len < sizeof(sig));
-> > > > > > > +	assert(len <= MAX_SIGNATURE_SIZE);
-> > > > > > >  	if (len <= 1)
-> > > > > > >  		return len;
-> > > > > > > 
-> > > > > > 
-> > > > > > A similar problem occurs in sign_ima.  Without these changes
-> > > > > > sign_hash() succeeds, returning a length of 520 for
-> > > > > > sha256/streebog256. 
-> > > > > 
-> > > > > I will add it. Also, I found more similar errors and will fix them together.
-> > > > 
-> > > > The first byte of sig is reserved for the type of signature.  The
-> > > > remaining buffer is for the signature itself.  The existing
-> > > > "assert(len < sizeof(sig))" is therefore correct.  The sig size being
-> > > > returned is less than 1023, so why is this change needed?
-> > > 
-> > > Well, it looked more straightforward to check explicit
-> > > MAX_SIGNATURE_SIZE instead of relying on that '<' accounts for
-> > > that additional byte.
-> > > 
-> > > Main fix is of course this:
-> > > 
-> > > > > > > -       unsigned char sig[MAX_SIGNATURE_SIZE];
-> > > > > > > +       unsigned char sig[MAX_SIGNATURE_SIZE + 1];
-> > 
-> > That is the question.  Why does the buffer need to be
-> > "MAX_SIGNATURE_SIZE + 1", making it 1025 bytes?  MAX_SIGNATURE_SIZE -
-> > 1 is large enough for the signature.
-> 
-> Because maximum signature size is supposed to be MAX_SIGNATURE_SIZE,
-> isn't it? Why in reality it should be some other value?
+Systems in lockdown mode should block the kexec of untrusted kernels.
+For x86 and ARM we can ensure that a kernel is trustworthy by validating
+a PE signature, but this isn't possible on other architectures. On those
+platforms we can use IMA digital signatures instead. Add a function to
+determine whether IMA has or will verify signatures for a given event type,
+and if so permit kexec_file() even if the kernel is otherwise locked down.
+This is restricted to cases where CONFIG_INTEGRITY_TRUSTED_KEYRING is set
+in order to prevent an attacker from loading additional keys at runtime.
 
-No, I think it was chosen as an upper bound, simply used for buffer
-bounds checking.  I wouldn't make sig 1025.  If you want to make
-MAX_SIGNATuRE_SIZE 1023 and keep the + 1, that would be fine.
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: linux-integrity@vger.kernel.org
+---
+ include/linux/ima.h                 |  9 ++++++
+ kernel/kexec_file.c                 | 11 +++++--
+ security/integrity/ima/ima.h        |  2 ++
+ security/integrity/ima/ima_main.c   |  2 +-
+ security/integrity/ima/ima_policy.c | 50 +++++++++++++++++++++++++++++
+ 5 files changed, 71 insertions(+), 3 deletions(-)
 
-> 
-> That give me idea to add check if a generated signature will fit into
-> `sig` (assuming it's of MAX_SIGNATURE_SIZE) in sign_hash_v2() before we
-> call EVP_PKEY_sign().
-
-Yes, a call to EVP_PKEY_sign(), without providing the "sig", will
-return the length.  evmctl can be called recursively (-r).  I would
-hope that EVP_PKEY_sign() would check the buffer size before
-calculating the sig.  If it does, then checking is duplication.  I'm a
-bit concerned about the performance impact of checking the sig size
-each time.
-
-Mimi
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index dc12fbcf484c..c30954acc660 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -132,4 +132,13 @@ static inline int ima_inode_removexattr(struct dentry *dentry,
+ 	return 0;
+ }
+ #endif /* CONFIG_IMA_APPRAISE */
++
++#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
++extern bool ima_appraise_signature(enum kernel_read_file_id func);
++#else
++static inline bool ima_appraise_signature(enum kernel_read_file_id func)
++{
++	return false;
++}
++#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
+ #endif /* _LINUX_IMA_H */
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 27adb4312b03..539d0ca855bc 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -237,8 +237,15 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ 			goto out;
+ 		}
+ 
+-		ret = security_locked_down(LOCKDOWN_KEXEC);
+-		if (ret)
++		ret = 0;
++
++		/* If IMA is guaranteed to appraise a signature on the kexec
++		 * image, permit it even if the kernel is otherwise locked
++		 * down.
++		 */
++		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
++		    security_locked_down(LOCKDOWN_KEXEC)) {
++			ret = -EPERM;
+ 			goto out;
+ 
+ 		break;
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index d213e835c498..3bc62062cfe8 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -115,6 +115,8 @@ struct ima_kexec_hdr {
+ 	u64 count;
+ };
+ 
++extern const int read_idmap[];
++
+ #ifdef CONFIG_HAVE_IMA_KEXEC
+ void ima_load_kexec_buffer(void);
+ #else
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 357edd140c09..927fe889201a 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -473,7 +473,7 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
+ 	return 0;
+ }
+ 
+-static const int read_idmap[READING_MAX_ID] = {
++const int read_idmap[READING_MAX_ID] = {
+ 	[READING_FIRMWARE] = FIRMWARE_CHECK,
+ 	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
+ 	[READING_MODULE] = MODULE_CHECK,
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index e0cc323f948f..8784449918e2 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1339,3 +1339,53 @@ int ima_policy_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ #endif	/* CONFIG_IMA_READ_POLICY */
++
++#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
++/*
++ * ima_appraise_signature: whether IMA will appraise a given function using
++ * an IMA digital signature. This is restricted to cases where the kernel
++ * has a set of built-in trusted keys in order to avoid an attacker simply
++ * loading additional keys.
++ */
++bool ima_appraise_signature(enum kernel_read_file_id id)
++{
++	struct ima_rule_entry *entry;
++	bool found = false;
++	enum ima_hooks func;
++
++	if (id >= READING_MAX_ID)
++		return false;
++
++	func = read_idmap[id] ?: FILE_CHECK;
++
++	rcu_read_lock();
++	list_for_each_entry_rcu(entry, ima_rules, list) {
++		if (entry->action != APPRAISE)
++			continue;
++
++		/*
++		 * A generic entry will match, but otherwise require that it
++		 * match the func we're looking for
++		 */
++		if (entry->func && entry->func != func)
++			continue;
++
++		/*
++		 * We require this to be a digital signature, not a raw IMA
++		 * hash.
++		 */
++		if (entry->flags & IMA_DIGSIG_REQUIRED)
++			found = true;
++
++		/*
++		 * We've found a rule that matches, so break now even if it
++		 * didn't require a digital signature - a later rule that does
++		 * won't override it, so would be a false positive.
++		 */
++		break;
++	}
++
++	rcu_read_unlock();
++	return found;
++}
++#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
+-- 
+2.22.0.410.gd8fdbe21b5-goog
 
