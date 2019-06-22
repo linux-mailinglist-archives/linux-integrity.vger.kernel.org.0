@@ -2,213 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC634F274
-	for <lists+linux-integrity@lfdr.de>; Sat, 22 Jun 2019 02:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2894F6E9
+	for <lists+linux-integrity@lfdr.de>; Sat, 22 Jun 2019 18:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726937AbfFVAFH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 21 Jun 2019 20:05:07 -0400
-Received: from mail-pg1-f202.google.com ([209.85.215.202]:45959 "EHLO
-        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726953AbfFVAFF (ORCPT
+        id S1726393AbfFVQ2z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 22 Jun 2019 12:28:55 -0400
+Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:45194 "EHLO
+        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726413AbfFVQ2u (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 21 Jun 2019 20:05:05 -0400
-Received: by mail-pg1-f202.google.com with SMTP id k2so4989978pga.12
-        for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2019 17:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=TMklhc9+XfiI8L3K2AutSbeZaJ7HLQ2HsXG+mlV/TZs=;
-        b=p7vfmYbicP0O5OJzjFHdr94n1dC4CJO8yX/92U2d2BTbbGPpuy00yXNd9NLehfmCFV
-         5XqqdDRq+j7IDKg4ECOxaLzyDNdD8IRWnSj4RlJg+fnqujjgDyfVtsIJ9EOZPvHQpXUF
-         rFQ6bRCqsV8oHm1TLKJCR1V5tdwwsJJaH3HL1oCf+hG2ILKmD0gxGnsJmF9ggXD1qJsP
-         dyX+p6/3+RHtCJNz5ZK7L9Ir/FRDlefa1IqIXWmOpCGGurVyGN5/+sfdEvh3UMqC2Utp
-         4zkAY8boj/uZNoZnDEBzHHNWlw88TuW2EXhkMlcVLRtlhNAVlAt/WOZPPBD7NHwAMiy5
-         zcpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=TMklhc9+XfiI8L3K2AutSbeZaJ7HLQ2HsXG+mlV/TZs=;
-        b=JVLZclUU8pxgMRgNoDJWhE/PNE+tD7/Ynmt0VPQgpQY1g68RVtDv2476gYQIqvEV7Q
-         mE8Kpbl5C4MRNUncyEfO6YIC6jwY00l2MF/tlHIfL+PhN7X8TPSFZqt3FPc3xCOf/tBO
-         JC3OylwsaUOakM0eTIWdA6qXcxV/r7GtroczDEzHP1pH1uAlzXAWL8gnobagdfIbgWfD
-         Hm/wZdGdxrfEh4harESrgBgUDfS5Tx373mHrnLRTEAdHCZD/ijILEV3r5zVXnyqP3mE8
-         u32E4UXDYfy2NIAaJzl2NHLjHwBL3MVNJEDZT1+6Ob1OFRip8o95xQxYS7VMaeQiKipR
-         x7pw==
-X-Gm-Message-State: APjAAAXrjiax+DybliGfliJ5mhgV1/GHpCL/nMCDQxqOx211wBvns7nZ
-        v8wqcrmCIk5ARz22mFL51HgNJtOT3w20gtlOLWNaaw==
-X-Google-Smtp-Source: APXvYqyiFQ+2Cd5OSyAvJhYhgYOd8VHPKVlHOgHk3dAwEgc6MxZt9cRi1sgqABuTYgGBeTygjlYiJdOudBsv5yQQd+2tYg==
-X-Received: by 2002:a63:2258:: with SMTP id t24mr12689918pgm.236.1561161904729;
- Fri, 21 Jun 2019 17:05:04 -0700 (PDT)
-Date:   Fri, 21 Jun 2019 17:03:54 -0700
-In-Reply-To: <20190622000358.19895-1-matthewgarrett@google.com>
-Message-Id: <20190622000358.19895-26-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190622000358.19895-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH V34 25/29] kexec: Allow kexec_file() with appropriate IMA
- policy when locked down
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 22 Jun 2019 12:28:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220929; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=FwrBLUl7u665XwQeVPTq5hUQ4Ptv5qPcwgE0MfCyAxPjQW66W+sBKlTITy95Xiak8M/9mL3k87XvuhuNYmdzjOXFqAsXXJ7ZeR0tr0xQhaR4qpp9+I79zHB4JVXDeOtUnrv/ni1DEn3m49tSMIml9+1SbDvUcui/xLYzcB7mOtvlwJJC6bBkcbOwJW8drH7WnSKYQVlUvO9PRg8+IWYABo4m/HoTrmg3JSd7+tfq1bmdsTjreC9G6uwJClVG1p8XyGEOijmNqXv9Ivunj8UzUvxVldTIg/taTAKdSlSG3i+xbnz28LKLpxSK2+M63p52Vf+hNJ0OycyVj1TkO+H8OQ==
+X-YMail-OSG: BClZlNgVM1mJa1pSUAMlnjmDwJQUKDn0osVKNVIeZ6AC0JZQ8NzrV_.P2vPToBw
+ lk4l1yMYy0P1wu9iKWHPF1vwWtED.NCcY6jE.jXdELnZdUngnDzcX.f1Ik7TcPjN._6dUftCNvSG
+ 0ilPDIIh6JKut3rld3EDzfXqVTEprJFL10dLfXEmdNXy8_9HzWnLN9Uxxh6FWr8nj4DbExyF48M8
+ b8CzHn8AtWzh0fDjJqMRXb5UR1L1fHF.mq4wk_41bl8VHLLREhO8D9AiMB_Iou.TvP.xektI4Uzf
+ lBotEg54S8nbe5a5a2eamKaLSiD6XaCIzSQkrGwkgk9qzk7J4361PG1C2lAWhSULJjGYH.uKi9SH
+ 8omXh8MvwuZmVU7umqXbA4eIFWV8ruRR3qRFWtA.2B0Eer.D49EbNovsAu.wRPm8yYyL6YMdaoys
+ 3vYAkjype1yPgR0gHAH3zObnNPMrtMzQfsTzcaha59dNYsVWPRo5EvcFgAIKXVIUqnKnooWuODru
+ O4SgrdrM8PGEZGs5dJS.h.dJB3gwQ.0I1wf1Q_CLgJhbPMrumaMiWl3ifhN9G_CCxrGhRPRltqdB
+ RyAvAXGENXKEJswzM.sYWHkLQyblOWaGX5TLKzeDGaJCZVu7CtZvQ0aNcyWtqrf4SAtE7MK9SqUH
+ 7phABBxeBrGdyDkvdUQOX_EPh25.Hb3SncDKllMEIHjvEdwbQcMGmqMEDVCI8Jh0nfgpjh259ODl
+ q.bGW_sz63_QvjPWXygjUQ4RzfXiei1bHIkvbkPAHc04dS.Qr8LP1Jyxp2QD0wtNtJgo5RScK99X
+ P5NPqcNAR8eez8YgXpk3cKLQCR9JSylhL6QyUVACODhQSLMO_l73eEDpWzNQUeEQLrEwA53TFUO9
+ BXx4lR26gADp4OeWMANR3pTNDn8J7Oc5G1l.tF8AqVFtdsoB5vgCdw0tzoX9_22cJzNNteihaN9H
+ ktOSXaCeUY26x9DWNkYi7HTOCc9F4vHnioRwelB9Lv.KGDeGPUJBBPmfcn0xXC8MB2YTlUFeVHzN
+ FJsHhvFz9eJx.VwEAdhJs3DHW6xmbj9a_RSOf.BoLPiAvMAdoBe_1sVY8nFOqhuBwpkbj17TOzIW
+ ts0JEWafkyantIFw8kEnIr0AHDEAK4aB1fgOVS8TQpbEaj2tB4pKHPa4OOjXszQAPBozr7PYVj2f
+ 6AcwHFYhcmsrFfliX20p43dgFMRY8GMXgvUWeegBAeAuOTxCoUC9WvAdL
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:28:49 +0000
+Date:   Sat, 22 Jun 2019 16:28:46 +0000 (UTC)
+From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
+Reply-To: miss.fmayusuf11@gmail.com
+Message-ID: <270302503.296556.1561220926635@mail.yahoo.com>
+Subject: From:Miss: Fatima Yusuf.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Systems in lockdown mode should block the kexec of untrusted kernels.
-For x86 and ARM we can ensure that a kernel is trustworthy by validating
-a PE signature, but this isn't possible on other architectures. On those
-platforms we can use IMA digital signatures instead. Add a function to
-determine whether IMA has or will verify signatures for a given event type,
-and if so permit kexec_file() even if the kernel is otherwise locked down.
-This is restricted to cases where CONFIG_INTEGRITY_TRUSTED_KEYRING is set
-in order to prevent an attacker from loading additional keys at runtime.
 
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: linux-integrity@vger.kernel.org
----
- include/linux/ima.h                 |  9 ++++++
- kernel/kexec_file.c                 | 11 +++++--
- security/integrity/ima/ima.h        |  2 ++
- security/integrity/ima/ima_main.c   |  2 +-
- security/integrity/ima/ima_policy.c | 50 +++++++++++++++++++++++++++++
- 5 files changed, 71 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index dc12fbcf484c..c30954acc660 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -132,4 +132,13 @@ static inline int ima_inode_removexattr(struct dentry *dentry,
- 	return 0;
- }
- #endif /* CONFIG_IMA_APPRAISE */
-+
-+#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
-+extern bool ima_appraise_signature(enum kernel_read_file_id func);
-+#else
-+static inline bool ima_appraise_signature(enum kernel_read_file_id func)
-+{
-+	return false;
-+}
-+#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
- #endif /* _LINUX_IMA_H */
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 27adb4312b03..539d0ca855bc 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -237,8 +237,15 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 			goto out;
- 		}
- 
--		ret = security_locked_down(LOCKDOWN_KEXEC);
--		if (ret)
-+		ret = 0;
-+
-+		/* If IMA is guaranteed to appraise a signature on the kexec
-+		 * image, permit it even if the kernel is otherwise locked
-+		 * down.
-+		 */
-+		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
-+		    security_locked_down(LOCKDOWN_KEXEC)) {
-+			ret = -EPERM;
- 			goto out;
- 
- 		break;
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index d213e835c498..3bc62062cfe8 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -115,6 +115,8 @@ struct ima_kexec_hdr {
- 	u64 count;
- };
- 
-+extern const int read_idmap[];
-+
- #ifdef CONFIG_HAVE_IMA_KEXEC
- void ima_load_kexec_buffer(void);
- #else
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 357edd140c09..927fe889201a 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -473,7 +473,7 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
- 	return 0;
- }
- 
--static const int read_idmap[READING_MAX_ID] = {
-+const int read_idmap[READING_MAX_ID] = {
- 	[READING_FIRMWARE] = FIRMWARE_CHECK,
- 	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
- 	[READING_MODULE] = MODULE_CHECK,
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index e0cc323f948f..8784449918e2 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1339,3 +1339,53 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	return 0;
- }
- #endif	/* CONFIG_IMA_READ_POLICY */
-+
-+#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
-+/*
-+ * ima_appraise_signature: whether IMA will appraise a given function using
-+ * an IMA digital signature. This is restricted to cases where the kernel
-+ * has a set of built-in trusted keys in order to avoid an attacker simply
-+ * loading additional keys.
-+ */
-+bool ima_appraise_signature(enum kernel_read_file_id id)
-+{
-+	struct ima_rule_entry *entry;
-+	bool found = false;
-+	enum ima_hooks func;
-+
-+	if (id >= READING_MAX_ID)
-+		return false;
-+
-+	func = read_idmap[id] ?: FILE_CHECK;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(entry, ima_rules, list) {
-+		if (entry->action != APPRAISE)
-+			continue;
-+
-+		/*
-+		 * A generic entry will match, but otherwise require that it
-+		 * match the func we're looking for
-+		 */
-+		if (entry->func && entry->func != func)
-+			continue;
-+
-+		/*
-+		 * We require this to be a digital signature, not a raw IMA
-+		 * hash.
-+		 */
-+		if (entry->flags & IMA_DIGSIG_REQUIRED)
-+			found = true;
-+
-+		/*
-+		 * We've found a rule that matches, so break now even if it
-+		 * didn't require a digital signature - a later rule that does
-+		 * won't override it, so would be a false positive.
-+		 */
-+		break;
-+	}
-+
-+	rcu_read_unlock();
-+	return found;
-+}
-+#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
--- 
-2.22.0.410.gd8fdbe21b5-goog
+From:Miss: Fatima Yusuf.
 
+For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
+
+I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
+
+Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
+
+I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
+
+I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
+
+My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
+
+I am waiting to hear from you.
+Yours Sincerely,
+Miss.Fatima Yusuf.
