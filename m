@@ -2,137 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E844FACB
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Jun 2019 10:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78FA4FAD0
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Jun 2019 11:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726086AbfFWIgX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Jun 2019 04:36:23 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:49250 "EHLO
+        id S1726086AbfFWJAm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Jun 2019 05:00:42 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:41056 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726050AbfFWIgX (ORCPT
+        with ESMTP id S1726050AbfFWJAl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Jun 2019 04:36:23 -0400
+        Sun, 23 Jun 2019 05:00:41 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 7830A72CC6C;
-        Sun, 23 Jun 2019 11:36:20 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 633CB4A4A29;
-        Sun, 23 Jun 2019 11:36:20 +0300 (MSK)
-Date:   Sun, 23 Jun 2019 11:36:19 +0300
+        by vmicros1.altlinux.org (Postfix) with ESMTP id AB59A72CC6C;
+        Sun, 23 Jun 2019 12:00:38 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [185.6.174.98])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 69E024A4A29;
+        Sun, 23 Jun 2019 12:00:38 +0300 (MSK)
 From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v5 01/11] ima-evm-utils: Make sure sig buffer is always
- MAX_SIGNATURE_SIZE
-Message-ID: <20190623083619.xsavyj2ghp4mttl6@altlinux.org>
-References: <20190618135623.6861-1-vt@altlinux.org>
- <20190618135623.6861-2-vt@altlinux.org>
- <1561066938.4057.18.camel@linux.ibm.com>
- <20190621065913.a3plltlinylkdkeb@altlinux.org>
- <1561115292.4057.70.camel@linux.ibm.com>
- <20190621112225.sf6rtxzc2pu4oyfh@altlinux.org>
- <1561116450.4057.81.camel@linux.ibm.com>
- <20190621122833.xzy3ztzr2ilmium6@altlinux.org>
- <1561122236.4057.107.camel@linux.ibm.com>
+Subject: [PATCH v7 00/11] ima-evm-utils: Convert v2 signatures from RSA to EVP_PKEY API
+Date:   Sun, 23 Jun 2019 12:00:16 +0300
+Message-Id: <20190623090027.11852-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1561122236.4057.107.camel@linux.ibm.com>
-User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi,
+Convert sign v2 from RSA API (with manual formatting PKCS1) to more generic
+EVP_PKEY API, allowing to generate more types of OpenSSL supported signatures.
+This is done to enable EC-RDSA signatures, which are already supported in the
+Kernel. With some small fixes.
 
-On Fri, Jun 21, 2019 at 09:03:56AM -0400, Mimi Zohar wrote:
-> On Fri, 2019-06-21 at 15:28 +0300, Vitaly Chikunov wrote:
-> > On Fri, Jun 21, 2019 at 07:27:30AM -0400, Mimi Zohar wrote:
-> > > On Fri, 2019-06-21 at 14:22 +0300, Vitaly Chikunov wrote:
-> > > > On Fri, Jun 21, 2019 at 07:08:12AM -0400, Mimi Zohar wrote:
-> > > > > On Fri, 2019-06-21 at 09:59 +0300, Vitaly Chikunov wrote:
-> > > > > > On Thu, Jun 20, 2019 at 05:42:18PM -0400, Mimi Zohar wrote:
-> > > > > > > On Tue, 2019-06-18 at 16:56 +0300, Vitaly Chikunov wrote:
-> > > > > > > > Fix off-by-one error of the output buffer passed to sign_hash().
-> > > > > > > > 
-> > > > > > > > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> > > > > > > > ---
-> > > > > > > >  src/evmctl.c | 4 ++--
-> > > > > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > > > > > 
-> > > > > > > > diff --git a/src/evmctl.c b/src/evmctl.c
-> > > > > > > > index 15a7226..03f41fe 100644
-> > > > > > > > --- a/src/evmctl.c
-> > > > > > > > +++ b/src/evmctl.c
-> > > > > > > > @@ -510,7 +510,7 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
-> > > > > > > >  static int sign_evm(const char *file, const char *key)
-> > > > > > > >  {
-> > > > > > > >  	unsigned char hash[MAX_DIGEST_SIZE];
-> > > > > > > > -	unsigned char sig[MAX_SIGNATURE_SIZE];
-> > > > > > > > +	unsigned char sig[MAX_SIGNATURE_SIZE + 1];
-> > > > > > > >  	int len, err;
-> > > > > > > > 
-> > > > > > > >  	len = calc_evm_hash(file, hash);
-> > > > > > > > @@ -519,7 +519,7 @@ static int sign_evm(const char *file, const char *key)
-> > > > > > > >  		return len;
-> > > > > > > > 
-> > > > > > > >  	len = sign_hash(params.hash_algo, hash, len, key, NULL, sig + 1);
-> > > > > > > > -	assert(len < sizeof(sig));
-> > > > > > > > +	assert(len <= MAX_SIGNATURE_SIZE);
-> > > > > > > >  	if (len <= 1)
-> > > > > > > >  		return len;
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > A similar problem occurs in sign_ima. šWithout these changes
-> > > > > > > sign_hash() succeeds, returning a length of 520 for
-> > > > > > > sha256/streebog256. 
-> > > > > > 
-> > > > > > I will add it. Also, I found more similar errors and will fix them together.
-> > > > > 
-> > > > > The first byte of sig is reserved for the type of signature. šThe
-> > > > > remaining buffer is for the signature itself. šThe existing
-> > > > > "assert(len < sizeof(sig))" is therefore correct. šThe sig size being
-> > > > > returned is less than 1023, so why is this change needed?
-> > > > 
-> > > > Well, it looked more straightforward to check explicit
-> > > > MAX_SIGNATURE_SIZE instead of relying on that '<' accounts for
-> > > > that additional byte.
-> > > > 
-> > > > Main fix is of course this:
-> > > > 
-> > > > > > > > -       unsigned char sig[MAX_SIGNATURE_SIZE];
-> > > > > > > > +       unsigned char sig[MAX_SIGNATURE_SIZE + 1];
-> > > 
-> > > That is the question. šWhy does the buffer need to be
-> > > "MAX_SIGNATURE_SIZE + 1", making it 1025 bytes? šMAX_SIGNATURE_SIZE -
-> > > 1 is large enough for the signature.
-> > 
-> > Because maximum signature size is supposed to be MAX_SIGNATURE_SIZE,
-> > isn't it? Why in reality it should be some other value?
-> 
-> No, I think it was chosen as an upper bound, simply used for buffer
-> bounds checking. šI wouldn't make sig 1025. šIf you want to make
-> MAX_SIGNATuRE_SIZE 1023 and keep the + 1, that would be fine.
+All patches tested on x86_64 to not break anything.
 
-I will rework these 'fixes' with my new understanding.
+Changes since v6:
+- Remove "Make sure sig buffer is always MAX_SIGNATURE_SIZE" commit. Instead,
+  change assumption of sign_hash_v2() about @sig size.
+- Add "Log hash_algo with hash value in verbose mode".
+- Diff from v6 is below.
 
-> > That give me idea to add check if a generated signature will fit into
-> > `sig` (assuming it's of MAX_SIGNATURE_SIZE) in sign_hash_v2() before we
-> > call EVP_PKEY_sign().
-> 
-> Yes, a call to EVP_PKEY_sign(), without providing the "sig", will
-> return the length. ševmctl can be called recursively (-r). šI would
-> hope that EVP_PKEY_sign() would check the buffer size before
-> calculating the sig. šIf it does, then checking is duplication. šI'm a
-> bit concerned about the performance impact of checking the sig size
-> each time.
+Changes since v5:
+- Squash calc keyid v2 with cmd_import patch.
+- Add log_err messages to verify_hash_v2 and sign_hash_v2.
+- Fix sign and hash generation error processing to show errors instead
+  of assert failures.
 
-You are right, EVP_PKEY_sign() is already checking the buffer size. So,
-proposed check would be redundant.
+Changes since v4:
+- Split conversion into more patches, as suggested by Mimi Zohar.
+- Small fixes suggested by Mimi Zohar.
 
-Thanks,
+Changes since v3:
+- As suggested by Mimi Zohar this is v3 splitted into several patches to
+  simplify review. No code changes.
 
+Changes since v2:
+- Just rebase over newer commits.
+
+Changes since v1:
+- More key neutral code in calc_keyid_v1().
+- Fix uninitialized sigsize for EVP_PKEY_sign().
+- Fix memory leaks for openssl types.
+
+Vitaly Chikunov (11):
+  ima-evm-utils: Convert read_pub_key to EVP_PKEY API
+  ima-evm-utils: Convert read_priv_key to EVP_PKEY API
+  ima-evm-utils: Convert cmd_import and calc keyid v2 to EVP_PKEY API
+  ima-evm-utils: Start converting find_keyid to EVP_PKEY API
+  ima-evm-utils: Convert verify_hash_v2 to EVP_PKEY API
+  ima-evm-utils: Replace find_keyid with find_keyid_pkey
+  ima-evm-utils: Convert sign_hash_v2 to EVP_PKEY API
+  ima-evm-utils: Replace calc_keyid_v2 with calc_pkeyid_v2
+  ima-evm-utils: Remove RSA_ASN1_templates
+  ima-evm-utils: Pass status codes from sign and hash functions to the
+    callers
+  ima-evm-utils: Log hash_algo with hash value in verbose mode
+
+ src/evmctl.c    |  41 +++++----
+ src/imaevm.h    |   4 +-
+ src/libimaevm.c | 281 +++++++++++++++++++++++++++-----------------------------
+ 3 files changed, 159 insertions(+), 167 deletions(-)
+
+-- 
+2.11.0
+
+---
+Diff from v6:
+
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 63ae1a6..4e0a831 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -510,7 +510,7 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
+ static int sign_evm(const char *file, const char *key)
+ {
+ 	unsigned char hash[MAX_DIGEST_SIZE];
+-	unsigned char sig[MAX_SIGNATURE_SIZE + 1];
++	unsigned char sig[MAX_SIGNATURE_SIZE];
+ 	int len, err;
+ 
+ 	len = calc_evm_hash(file, hash);
+@@ -521,7 +521,7 @@ static int sign_evm(const char *file, const char *key)
+ 	len = sign_hash(params.hash_algo, hash, len, key, NULL, sig + 1);
+ 	if (len <= 1)
+ 		return len;
+-	assert(len <= MAX_SIGNATURE_SIZE);
++	assert(len < sizeof(sig));
+ 
+ 	/* add header */
+ 	len++;
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index 9e90d07..5bff414 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -459,7 +459,7 @@ int verify_hash_v2(const char *file, const unsigned char *hash, int size,
+ 	const EVP_MD *md;
+ 
+ 	if (params.verbose > LOG_INFO) {
+-		log_info("hash: ");
++		log_info("hash(%s): ", params.hash_algo);
+ 		log_dump(hash, size);
+ 	}
+ 
+@@ -838,7 +838,7 @@ out:
+ }
+ 
+ /*
+- * @sig is assumed to be of MAX_SIGNATURE_SIZE size
++ * @sig is assumed to be of (MAX_SIGNATURE_SIZE - 1) size
+  * Return: -1 signing error, >0 length of signature
+  */
+ int sign_hash_v2(const char *algo, const unsigned char *hash, int size, const char *keyfile, unsigned char *sig)
+@@ -871,7 +871,7 @@ int sign_hash_v2(const char *algo, const unsigned char *hash, int size, const ch
+ 		return -1;
+ 	}
+ 
+-	log_info("hash: ");
++	log_info("hash(%s): ", params.hash_algo);
+ 	log_dump(hash, size);
+ 
+ 	pkey = read_priv_pkey(keyfile, params.keypass);
+@@ -893,7 +893,7 @@ int sign_hash_v2(const char *algo, const unsigned char *hash, int size, const ch
+ 		goto err;
+ 	if (!EVP_PKEY_CTX_set_signature_md(ctx, md))
+ 		goto err;
+-	sigsize = MAX_SIGNATURE_SIZE - sizeof(struct signature_v2_hdr);
++	sigsize = MAX_SIGNATURE_SIZE - sizeof(struct signature_v2_hdr) - 1;
+ 	if (!EVP_PKEY_sign(ctx, hdr->sig, &sigsize, hash, size))
+ 		goto err;
+ 	len = (int)sigsize;
