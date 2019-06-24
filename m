@@ -2,193 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88713519F0
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2019 19:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E376751B3A
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2019 21:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729827AbfFXRru (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Jun 2019 13:47:50 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:42601 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726351AbfFXRru (ORCPT
+        id S1729806AbfFXTKA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Jun 2019 15:10:00 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20490 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729146AbfFXTKA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Jun 2019 13:47:50 -0400
-Received: by mail-pl1-f195.google.com with SMTP id ay6so7288490plb.9;
-        Mon, 24 Jun 2019 10:47:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Lba1BOUon5dqcIOzc5RFtxz1ZXdjiXb/UxRKeVauNzs=;
-        b=eZNWkHPcbXHoF+cagga4RGoi/1YC+3Pvf6AlTiTtp+MK++RuNqrzCjDQ1+YL5dWpZf
-         JbzCxe1F8mbsFw1MSyoQ1lMLidRAn+p65apKRr8LVbErHsvC3tyPHmhMCIBJGtiQt8QE
-         LTkI31Uobr92nK/H1/2B3Nv0xFh79lh3dPtu8niLV5q6Nk4HTF83Xpx7rFXCXILXtDWK
-         lBYLPneX3Wb6enW4pX+zE/AlREqVhFY91S6a3G3cukljE4ZTgF0q6B+fh7hGTJVOnS+x
-         iFpCmWUL8WZrTutUsqgP2Dn4YR39akeOlzVzdpRjG2o1nwBBAaEHZFHASy7eqlwM3dpM
-         ZnuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Lba1BOUon5dqcIOzc5RFtxz1ZXdjiXb/UxRKeVauNzs=;
-        b=Mk/7Pvt00nD0mgR8mEGBJWqKvnrEo/oPDcNPUbDmz7Y6dEXpz1dmn4HBkiFPvx0Kqp
-         z+5m85k1R883JGouK8hh79b4a+XHWw5hLG1DmgI4JHMXogZ1oocvK3SgLmBw2KoBbQbc
-         GQLuKEf4TC9Tnm1qJe1PRRbCOCD29OOV0LIuxiICDWLQtRbp9nNvz3HgNBw8lYD1f7Qe
-         m+iu3uwX+ACiXnjYw9OJYAJ49TwGQ+5qjbBP9dLJJPNHzdUsdqScxSpQkl/Y1kJ9umLQ
-         LY43o/o2O2q4CLmE2r9AzKqumFvYU0jOzKcDSPo/jRq8hDr0JF5FadiaeTbkAAFsQ9qY
-         Jpkw==
-X-Gm-Message-State: APjAAAXeAypnjrOEKG87kSAcmOrjWVnZLzTmroS0ZgT7bYg9BTlbRmsz
-        ARX+jQy+pPR28HT8zLHBQdw=
-X-Google-Smtp-Source: APXvYqx9lmZ1nghKpJJ5dCShlS9w9aLGOBBJ4pynNlOtaYwGCmTyf58wqRkgUMr9FhlBbImW1kz+0Q==
-X-Received: by 2002:a17:902:9688:: with SMTP id n8mr66862544plp.227.1561398469695;
-        Mon, 24 Jun 2019 10:47:49 -0700 (PDT)
-Received: from jorhand-ubuntu.corp.microsoft.com ([2001:4898:80e8:3:bdfa:627c:c51d:fa8])
-        by smtp.googlemail.com with ESMTPSA id f186sm13033954pfb.5.2019.06.24.10.47.49
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 24 Jun 2019 10:47:49 -0700 (PDT)
-From:   Jordan Hand <jordanhand22@gmail.com>
-X-Google-Original-From: Jordan Hand <jorhand@microsoft.com>
-Cc:     Jordan Hand <jordanhand22@gmail.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] tpm: Get TCG log from TPM2 ACPI table for tpm2 systems
-Date:   Mon, 24 Jun 2019 10:46:42 -0700
-Message-Id: <20190624174643.21746-1-jorhand@microsoft.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Mon, 24 Jun 2019 15:10:00 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5OJ3B1i175246
+        for <linux-integrity@vger.kernel.org>; Mon, 24 Jun 2019 15:09:59 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tb1xgpp1y-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 24 Jun 2019 15:09:58 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 24 Jun 2019 20:09:57 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 24 Jun 2019 20:09:55 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5OJ9sEe38863346
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jun 2019 19:09:54 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6F55642042;
+        Mon, 24 Jun 2019 19:09:54 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C738342045;
+        Mon, 24 Jun 2019 19:09:53 +0000 (GMT)
+Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Jun 2019 19:09:53 +0000 (GMT)
+Subject: Re: [PATCH v7 00/11] ima-evm-utils: Convert v2 signatures from RSA
+ to EVP_PKEY API
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Date:   Mon, 24 Jun 2019 15:09:53 -0400
+In-Reply-To: <20190624161638.xz6ebfvxzilh2gew@altlinux.org>
+References: <20190623090027.11852-1-vt@altlinux.org>
+         <1561387352.4340.20.camel@linux.ibm.com>
+         <20190624161638.xz6ebfvxzilh2gew@altlinux.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19062419-0028-0000-0000-0000037D2DAC
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19062419-0029-0000-0000-0000243D4C15
+Message-Id: <1561403393.4340.58.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_13:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906240151
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Jordan Hand <jordanhand22@gmail.com>
+On Mon, 2019-06-24 at 19:16 +0300, Vitaly Chikunov wrote:
+> Mimi,
+> 
+> On Mon, Jun 24, 2019 at 10:42:32AM -0400, Mimi Zohar wrote:
+> > On Sun, 2019-06-23 at 12:00 +0300, Vitaly Chikunov wrote:
+> > > Convert sign v2 from RSA API (with manual formatting PKCS1) to more generic
+> > > EVP_PKEY API, allowing to generate more types of OpenSSL supported signatures.
+> > > This is done to enable EC-RDSA signatures, which are already supported in the
+> > > Kernel. With some small fixes.
+> > > 
+> > > All patches tested on x86_64 to not break anything.
+> > > 
+> > > Changes since v6:
+> > > - Remove "Make sure sig buffer is always MAX_SIGNATURE_SIZE" commit. Instead,
+> > >   change assumption of sign_hash_v2() about @sig size.
+> > 
+> > With and without this change, the sha family is working properly, but
+> > with this patch set, I'm now seeing "sign_hash_v2: signing failed:
+> > (invalid digest)" for gost/streebog.  Previously it worked.
+> 
+> Sounds strange. For me it's working good for streebog now and then.
+> 
+>   = Testing algo gost2012_256-A hash streebog256 =
+>   test.txt: verification is OK
+>   ...
+> 
+> Maybe somehow your test env is getting broken?
+> 
+> I test on Debian 9, manually compiled openssl and then gost-engine
+> from git. Env is like this:
+> 
+>   PATH=$HOME/src/openssl/apps:$HOME/src/ima-evm-utils/src/.libs:$PATH
+>   LD_LIBRARY_PATH=$HOME/src/openssl:$HOME/src/ima-evm-utils/src/.libs
+>   OPENSSL_CONF=$HOME/src/gost-engine/build/openssl.conf
+>   OPENSSL_ENGINES=$HOME/src/gost-engine/build/bin
+> 
+> ima-evm-utils is ./configure'd with
+> 
+>   export OPENSSL_LIBS="-L$HOME/src/openssl -lssl -lcrypto"
+> 
+> and then make'd without install, and test run.
 
-For TPM2-based systems, retrieve the TCG log from the TPM2 ACPI table.
-The TPM2 ACPI table is defined in section 7.3 of the TCG ACPI
-Specification (see link).
+Ok.  I'm using a version, which I built when you first sent the
+patches for the crypto engine support.
 
-The TPM2 table is used primarily by legacy BIOS in place of the TCPA table
-when the system's TPM is version 2.0 to denote (among other metadata) the
-location of the crypto-agile TCG log. In particluar, the SeaBios firmware
-used by default by QEMU makes use of this table for crypto-agile logs.
-
-Link: https://trustedcomputinggroup.org/wp-content/uploads/TCG_ACPIGeneralSpecification_v1.20_r8.pdf
-
-Signed-off-by: Jordan Hand <jordanhand22@gmail.com>
----
-
-Same as v2 with more descriptive commit message
-
- drivers/char/tpm/eventlog/acpi.c | 67 +++++++++++++++++++++++---------
- 1 file changed, 48 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-index 63ada5e53f13..b945c4ff3af6 100644
---- a/drivers/char/tpm/eventlog/acpi.c
-+++ b/drivers/char/tpm/eventlog/acpi.c
-@@ -41,17 +41,31 @@ struct acpi_tcpa {
- 	};
- };
- 
-+struct acpi_tpm2 {
-+	struct acpi_table_header hdr;
-+	u16 platform_class;
-+	u16 reserved;
-+	u64 control_area_addr;
-+	u32 start_method;
-+	u8 start_method_params[12];
-+	u32 log_max_len;
-+	u64 log_start_addr;
-+} __packed;
-+
- /* read binary bios log */
- int tpm_read_log_acpi(struct tpm_chip *chip)
- {
--	struct acpi_tcpa *buff;
-+	struct acpi_table_header *buff;
-+	struct acpi_tcpa *tcpa;
-+	struct acpi_tpm2 *tpm2;
-+
- 	acpi_status status;
- 	void __iomem *virt;
- 	u64 len, start;
-+	int log_type;
- 	struct tpm_bios_log *log;
--
--	if (chip->flags & TPM_CHIP_FLAG_TPM2)
--		return -ENODEV;
-+	bool is_tpm2 = chip->flags & TPM_CHIP_FLAG_TPM2;
-+	acpi_string table_sig;
- 
- 	log = &chip->log;
- 
-@@ -61,26 +75,41 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	if (!chip->acpi_dev_handle)
- 		return -ENODEV;
- 
--	/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
--	status = acpi_get_table(ACPI_SIG_TCPA, 1,
--				(struct acpi_table_header **)&buff);
-+	/* Find TCPA or TPM2 entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
-+	table_sig = is_tpm2 ? ACPI_SIG_TPM2 : ACPI_SIG_TCPA;
-+	status = acpi_get_table(table_sig, 1, &buff);
- 
- 	if (ACPI_FAILURE(status))
- 		return -ENODEV;
- 
--	switch(buff->platform_class) {
--	case BIOS_SERVER:
--		len = buff->server.log_max_len;
--		start = buff->server.log_start_addr;
--		break;
--	case BIOS_CLIENT:
--	default:
--		len = buff->client.log_max_len;
--		start = buff->client.log_start_addr;
--		break;
-+	/* If log_max_len and log_start_addr are set, start_method_params will
-+	 * be 12 bytes, according to TCG ACPI spec. If start_method_params is
-+	 * fewer than 12 bytes, the TCG log is not available
-+	 */
-+	if (is_tpm2 && (buff->length == sizeof(struct acpi_tpm2))) {
-+		tpm2 = (struct acpi_tpm2 *)buff;
-+		len = tpm2->log_max_len;
-+		start = tpm2->log_start_addr;
-+		log_type = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
-+	} else {
-+		tcpa = (struct acpi_tcpa *)buff;
-+		switch (tcpa->platform_class) {
-+		case BIOS_SERVER:
-+			len = tcpa->server.log_max_len;
-+			start = tcpa->server.log_start_addr;
-+			break;
-+		case BIOS_CLIENT:
-+		default:
-+			len = tcpa->client.log_max_len;
-+			start = tcpa->client.log_start_addr;
-+			break;
-+		}
-+		log_type = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
- 	}
-+
- 	if (!len) {
--		dev_warn(&chip->dev, "%s: TCPA log area empty\n", __func__);
-+		dev_warn(&chip->dev, "%s: %s log area empty\n",
-+				table_sig, __func__);
- 		return -EIO;
- 	}
- 
-@@ -98,7 +127,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	memcpy_fromio(log->bios_event_log, virt, len);
- 
- 	acpi_os_unmap_iomem(virt, len);
--	return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-+	return log_type;
- 
- err:
- 	kfree(log->bios_event_log);
--- 
-2.17.1
+Mimi
 
