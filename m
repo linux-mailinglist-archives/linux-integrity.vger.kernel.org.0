@@ -2,71 +2,80 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F5F51BA1
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2019 21:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02BD51BB8
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2019 21:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727733AbfFXTrh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Jun 2019 15:47:37 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48798 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726263AbfFXTrh (ORCPT
+        id S1727529AbfFXTwc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Jun 2019 15:52:32 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44778 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728702AbfFXTw1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Jun 2019 15:47:37 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5OJlTFR117860
-        for <linux-integrity@vger.kernel.org>; Mon, 24 Jun 2019 15:47:35 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tb3uuaurv-1
+        Mon, 24 Jun 2019 15:52:27 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5OJlTo6033995
+        for <linux-integrity@vger.kernel.org>; Mon, 24 Jun 2019 15:52:26 -0400
+Received: from e34.co.us.ibm.com (e34.co.us.ibm.com [32.97.110.152])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tb4e2hhyt-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 24 Jun 2019 15:47:34 -0400
+        for <linux-integrity@vger.kernel.org>; Mon, 24 Jun 2019 15:52:25 -0400
 Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 24 Jun 2019 20:47:32 +0100
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        by e34.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <bauerman@linux.ibm.com>;
+        Mon, 24 Jun 2019 20:52:24 +0100
+Received: from b03cxnp07028.gho.boulder.ibm.com (9.17.130.15)
+        by e34.co.us.ibm.com (192.168.1.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 24 Jun 2019 20:47:29 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5OJlSQ537814566
+        Mon, 24 Jun 2019 20:52:18 +0100
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5OJqHtw38404584
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jun 2019 19:47:28 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 445D542042;
-        Mon, 24 Jun 2019 19:47:28 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B4F3A42041;
-        Mon, 24 Jun 2019 19:47:27 +0000 (GMT)
-Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Jun 2019 19:47:27 +0000 (GMT)
-Subject: Re: [PATCH v7 00/11] ima-evm-utils: Convert v2 signatures from RSA
- to EVP_PKEY API
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Mon, 24 Jun 2019 19:52:17 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 501DFC6055;
+        Mon, 24 Jun 2019 19:52:17 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF23AC605B;
+        Mon, 24 Jun 2019 19:52:12 +0000 (GMT)
+Received: from morokweng.localdomain (unknown [9.85.209.86])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Mon, 24 Jun 2019 19:52:11 +0000 (GMT)
+References: <20190611062817.18412-1-bauerman@linux.ibm.com> <20190611062817.18412-2-bauerman@linux.ibm.com>
+User-agent: mu4e 1.2.0; emacs 26.2
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Jessica Yu <jeyu@kernel.org>
+Cc:     linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "AKASHI\, Takahiro" <takahiro.akashi@linaro.org>,
         linux-integrity@vger.kernel.org
-Date:   Mon, 24 Jun 2019 15:47:27 -0400
-In-Reply-To: <20190624192349.gdp2xbe5c6etaw6v@altlinux.org>
-References: <20190623090027.11852-1-vt@altlinux.org>
-         <1561387352.4340.20.camel@linux.ibm.com>
-         <20190624161638.xz6ebfvxzilh2gew@altlinux.org>
-         <1561403393.4340.58.camel@linux.ibm.com>
-         <20190624192349.gdp2xbe5c6etaw6v@altlinux.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v11 01/13] MODSIGN: Export module signature definitions
+In-reply-to: <20190611062817.18412-2-bauerman@linux.ibm.com>
+Date:   Mon, 24 Jun 2019 16:52:09 -0300
+MIME-Version: 1.0
+Content-Type: text/plain
 X-TM-AS-GCONF: 00
-x-cbid: 19062419-0020-0000-0000-0000034D0002
+x-cbid: 19062419-0016-0000-0000-000009C64D7D
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011322; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01222738; UDB=6.00643410; IPR=6.01003899;
+ MB=3.00027449; MTD=3.00000008; XFM=3.00000015; UTC=2019-06-24 19:52:22
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062419-0021-0000-0000-000021A06B2D
-Message-Id: <1561405647.4340.63.camel@linux.ibm.com>
+x-cbparentid: 19062419-0017-0000-0000-000043C4ABE1
+Message-Id: <87imsukbh2.fsf@morokweng.localdomain>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_13:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1906240158
@@ -75,64 +84,309 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-06-24 at 22:23 +0300, Vitaly Chikunov wrote:
-> Mimi,
-> 
-> On Mon, Jun 24, 2019 at 03:09:53PM -0400, Mimi Zohar wrote:
-> > On Mon, 2019-06-24 at 19:16 +0300, Vitaly Chikunov wrote:
-> > > On Mon, Jun 24, 2019 at 10:42:32AM -0400, Mimi Zohar wrote:
-> > > > On Sun, 2019-06-23 at 12:00 +0300, Vitaly Chikunov wrote:
-> > > > > Convert sign v2 from RSA API (with manual formatting PKCS1) to more generic
-> > > > > EVP_PKEY API, allowing to generate more types of OpenSSL supported signatures.
-> > > > > This is done to enable EC-RDSA signatures, which are already supported in the
-> > > > > Kernel. With some small fixes.
-> > > > > 
-> > > > > All patches tested on x86_64 to not break anything.
-> > > > > 
-> > > > > Changes since v6:
-> > > > > - Remove "Make sure sig buffer is always MAX_SIGNATURE_SIZE" commit. Instead,
-> > > > >   change assumption of sign_hash_v2() about @sig size.
-> > > > 
-> > > > With and without this change, the sha family is working properly, but
-> > > > with this patch set, I'm now seeing "sign_hash_v2: signing failed:
-> > > > (invalid digest)" for gost/streebog.  Previously it worked.
-> > > 
-> > > Sounds strange. For me it's working good for streebog now and then.
-> > > 
-> > >   = Testing algo gost2012_256-A hash streebog256 =
-> > >   test.txt: verification is OK
-> > >   ...
-> > > 
-> > > Maybe somehow your test env is getting broken?
-> > > 
-> > > I test on Debian 9, manually compiled openssl and then gost-engine
-> > > from git. Env is like this:
-> > > 
-> > >   PATH=$HOME/src/openssl/apps:$HOME/src/ima-evm-utils/src/.libs:$PATH
-> > >   LD_LIBRARY_PATH=$HOME/src/openssl:$HOME/src/ima-evm-utils/src/.libs
-> > >   OPENSSL_CONF=$HOME/src/gost-engine/build/openssl.conf
-> > >   OPENSSL_ENGINES=$HOME/src/gost-engine/build/bin
-> > > 
-> > > ima-evm-utils is ./configure'd with
-> > > 
-> > >   export OPENSSL_LIBS="-L$HOME/src/openssl -lssl -lcrypto"
-> > > 
-> > > and then make'd without install, and test run.
-> > 
-> > Ok.  I'm using a version, which I built when you first sent the
-> > patches for the crypto engine support.
-> 
-> Did you mean you try to make RSA signature with Streebog hashes? This
-> shouldn't work, as intended. Streebog hash only should be used with
-> EC-RDSA signatures (or gost2012_{256,512} in terms of OpenSSL).
-> 
-> If it worked before this is strange. It should not. What patchset
-> version it was?
 
-No, I'm saying that I built both openssl and the gost engine a while
-ago.  There's been some gost engine updates since then, which are
-dependent on a newer version of openssl.  So I'll need to rebuild both
-openssl and the gost engine in order to re-test.
+Hello Jessica,
 
-Mimi
+AFAIK Mimi is happy with this patch set, but I still need acks from
+maintainers of other subsystems that my changes touch before she can
+accept it.
+
+Is this patch OK from your PoV?
+
+--
+Thiago Jung Bauermann
+IBM Linux Technology Center
+
+
+Thiago Jung Bauermann <bauerman@linux.ibm.com> writes:
+
+> IMA will use the module_signature format for append signatures, so export
+> the relevant definitions and factor out the code which verifies that the
+> appended signature trailer is valid.
+>
+> Also, create a CONFIG_MODULE_SIG_FORMAT option so that IMA can select it
+> and be able to use mod_check_sig() without having to depend on either
+> CONFIG_MODULE_SIG or CONFIG_MODULES.
+>
+> Signed-off-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: Jessica Yu <jeyu@kernel.org>
+> ---
+>  include/linux/module.h           |  3 --
+>  include/linux/module_signature.h | 44 +++++++++++++++++++++++++
+>  init/Kconfig                     |  6 +++-
+>  kernel/Makefile                  |  1 +
+>  kernel/module.c                  |  1 +
+>  kernel/module_signature.c        | 46 ++++++++++++++++++++++++++
+>  kernel/module_signing.c          | 56 +++++---------------------------
+>  scripts/Makefile                 |  2 +-
+>  8 files changed, 106 insertions(+), 53 deletions(-)
+>
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 188998d3dca9..aa56f531cf1e 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -25,9 +25,6 @@
+>  #include <linux/percpu.h>
+>  #include <asm/module.h>
+>
+> -/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
+> -#define MODULE_SIG_STRING "~Module signature appended~\n"
+> -
+>  /* Not Yet Implemented */
+>  #define MODULE_SUPPORTED_DEVICE(name)
+>
+> diff --git a/include/linux/module_signature.h b/include/linux/module_signature.h
+> new file mode 100644
+> index 000000000000..523617fc5b6a
+> --- /dev/null
+> +++ b/include/linux/module_signature.h
+> @@ -0,0 +1,44 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Module signature handling.
+> + *
+> + * Copyright (C) 2012 Red Hat, Inc. All Rights Reserved.
+> + * Written by David Howells (dhowells@redhat.com)
+> + */
+> +
+> +#ifndef _LINUX_MODULE_SIGNATURE_H
+> +#define _LINUX_MODULE_SIGNATURE_H
+> +
+> +/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
+> +#define MODULE_SIG_STRING "~Module signature appended~\n"
+> +
+> +enum pkey_id_type {
+> +	PKEY_ID_PGP,		/* OpenPGP generated key ID */
+> +	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
+> +	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
+> +};
+> +
+> +/*
+> + * Module signature information block.
+> + *
+> + * The constituents of the signature section are, in order:
+> + *
+> + *	- Signer's name
+> + *	- Key identifier
+> + *	- Signature data
+> + *	- Information block
+> + */
+> +struct module_signature {
+> +	u8	algo;		/* Public-key crypto algorithm [0] */
+> +	u8	hash;		/* Digest algorithm [0] */
+> +	u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
+> +	u8	signer_len;	/* Length of signer's name [0] */
+> +	u8	key_id_len;	/* Length of key identifier [0] */
+> +	u8	__pad[3];
+> +	__be32	sig_len;	/* Length of signature data */
+> +};
+> +
+> +int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> +		  const char *name);
+> +
+> +#endif /* _LINUX_MODULE_SIGNATURE_H */
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 8b9ffe236e4f..c2286a3c74c5 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1852,6 +1852,10 @@ config BASE_SMALL
+>  	default 0 if BASE_FULL
+>  	default 1 if !BASE_FULL
+>
+> +config MODULE_SIG_FORMAT
+> +	def_bool n
+> +	select SYSTEM_DATA_VERIFICATION
+> +
+>  menuconfig MODULES
+>  	bool "Enable loadable module support"
+>  	option modules
+> @@ -1929,7 +1933,7 @@ config MODULE_SRCVERSION_ALL
+>  config MODULE_SIG
+>  	bool "Module signature verification"
+>  	depends on MODULES
+> -	select SYSTEM_DATA_VERIFICATION
+> +	select MODULE_SIG_FORMAT
+>  	help
+>  	  Check modules for valid signatures upon load: the signature
+>  	  is simply appended to the module. For more information see
+> diff --git a/kernel/Makefile b/kernel/Makefile
+> index 33824f0385b3..f29ae2997a43 100644
+> --- a/kernel/Makefile
+> +++ b/kernel/Makefile
+> @@ -58,6 +58,7 @@ endif
+>  obj-$(CONFIG_UID16) += uid16.o
+>  obj-$(CONFIG_MODULES) += module.o
+>  obj-$(CONFIG_MODULE_SIG) += module_signing.o
+> +obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
+>  obj-$(CONFIG_KALLSYMS) += kallsyms.o
+>  obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
+>  obj-$(CONFIG_CRASH_CORE) += crash_core.o
+> diff --git a/kernel/module.c b/kernel/module.c
+> index 6e6712b3aaf5..2712f4d217f5 100644
+> --- a/kernel/module.c
+> +++ b/kernel/module.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/export.h>
+>  #include <linux/extable.h>
+>  #include <linux/moduleloader.h>
+> +#include <linux/module_signature.h>
+>  #include <linux/trace_events.h>
+>  #include <linux/init.h>
+>  #include <linux/kallsyms.h>
+> diff --git a/kernel/module_signature.c b/kernel/module_signature.c
+> new file mode 100644
+> index 000000000000..4224a1086b7d
+> --- /dev/null
+> +++ b/kernel/module_signature.c
+> @@ -0,0 +1,46 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Module signature checker
+> + *
+> + * Copyright (C) 2012 Red Hat, Inc. All Rights Reserved.
+> + * Written by David Howells (dhowells@redhat.com)
+> + */
+> +
+> +#include <linux/errno.h>
+> +#include <linux/printk.h>
+> +#include <linux/module_signature.h>
+> +#include <asm/byteorder.h>
+> +
+> +/**
+> + * mod_check_sig - check that the given signature is sane
+> + *
+> + * @ms:		Signature to check.
+> + * @file_len:	Size of the file to which @ms is appended.
+> + * @name:	What is being checked. Used for error messages.
+> + */
+> +int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> +		  const char *name)
+> +{
+> +	if (be32_to_cpu(ms->sig_len) >= file_len - sizeof(*ms))
+> +		return -EBADMSG;
+> +
+> +	if (ms->id_type != PKEY_ID_PKCS7) {
+> +		pr_err("%s: Module is not signed with expected PKCS#7 message\n",
+> +		       name);
+> +		return -ENOPKG;
+> +	}
+> +
+> +	if (ms->algo != 0 ||
+> +	    ms->hash != 0 ||
+> +	    ms->signer_len != 0 ||
+> +	    ms->key_id_len != 0 ||
+> +	    ms->__pad[0] != 0 ||
+> +	    ms->__pad[1] != 0 ||
+> +	    ms->__pad[2] != 0) {
+> +		pr_err("%s: PKCS#7 signature info has unexpected non-zero params\n",
+> +		       name);
+> +		return -EBADMSG;
+> +	}
+> +
+> +	return 0;
+> +}
+> diff --git a/kernel/module_signing.c b/kernel/module_signing.c
+> index 6b9a926fd86b..cdd04a6b8074 100644
+> --- a/kernel/module_signing.c
+> +++ b/kernel/module_signing.c
+> @@ -11,37 +11,13 @@
+>
+>  #include <linux/kernel.h>
+>  #include <linux/errno.h>
+> +#include <linux/module.h>
+> +#include <linux/module_signature.h>
+>  #include <linux/string.h>
+>  #include <linux/verification.h>
+>  #include <crypto/public_key.h>
+>  #include "module-internal.h"
+>
+> -enum pkey_id_type {
+> -	PKEY_ID_PGP,		/* OpenPGP generated key ID */
+> -	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
+> -	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
+> -};
+> -
+> -/*
+> - * Module signature information block.
+> - *
+> - * The constituents of the signature section are, in order:
+> - *
+> - *	- Signer's name
+> - *	- Key identifier
+> - *	- Signature data
+> - *	- Information block
+> - */
+> -struct module_signature {
+> -	u8	algo;		/* Public-key crypto algorithm [0] */
+> -	u8	hash;		/* Digest algorithm [0] */
+> -	u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
+> -	u8	signer_len;	/* Length of signer's name [0] */
+> -	u8	key_id_len;	/* Length of key identifier [0] */
+> -	u8	__pad[3];
+> -	__be32	sig_len;	/* Length of signature data */
+> -};
+> -
+>  /*
+>   * Verify the signature on a module.
+>   */
+> @@ -49,6 +25,7 @@ int mod_verify_sig(const void *mod, struct load_info *info)
+>  {
+>  	struct module_signature ms;
+>  	size_t sig_len, modlen = info->len;
+> +	int ret;
+>
+>  	pr_devel("==>%s(,%zu)\n", __func__, modlen);
+>
+> @@ -56,32 +33,15 @@ int mod_verify_sig(const void *mod, struct load_info *info)
+>  		return -EBADMSG;
+>
+>  	memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
+> -	modlen -= sizeof(ms);
+> +
+> +	ret = mod_check_sig(&ms, modlen, info->name);
+> +	if (ret)
+> +		return ret;
+>
+>  	sig_len = be32_to_cpu(ms.sig_len);
+> -	if (sig_len >= modlen)
+> -		return -EBADMSG;
+> -	modlen -= sig_len;
+> +	modlen -= sig_len + sizeof(ms);
+>  	info->len = modlen;
+>
+> -	if (ms.id_type != PKEY_ID_PKCS7) {
+> -		pr_err("%s: Module is not signed with expected PKCS#7 message\n",
+> -		       info->name);
+> -		return -ENOPKG;
+> -	}
+> -
+> -	if (ms.algo != 0 ||
+> -	    ms.hash != 0 ||
+> -	    ms.signer_len != 0 ||
+> -	    ms.key_id_len != 0 ||
+> -	    ms.__pad[0] != 0 ||
+> -	    ms.__pad[1] != 0 ||
+> -	    ms.__pad[2] != 0) {
+> -		pr_err("%s: PKCS#7 signature info has unexpected non-zero params\n",
+> -		       info->name);
+> -		return -EBADMSG;
+> -	}
+> -
+>  	return verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
+>  				      VERIFY_USE_SECONDARY_KEYRING,
+>  				      VERIFYING_MODULE_SIGNATURE,
+> diff --git a/scripts/Makefile b/scripts/Makefile
+> index 9d442ee050bd..52098b080ab7 100644
+> --- a/scripts/Makefile
+> +++ b/scripts/Makefile
+> @@ -17,7 +17,7 @@ hostprogs-$(CONFIG_VT)           += conmakehash
+>  hostprogs-$(BUILD_C_RECORDMCOUNT) += recordmcount
+>  hostprogs-$(CONFIG_BUILDTIME_EXTABLE_SORT) += sortextable
+>  hostprogs-$(CONFIG_ASN1)	 += asn1_compiler
+> -hostprogs-$(CONFIG_MODULE_SIG)	 += sign-file
+> +hostprogs-$(CONFIG_MODULE_SIG_FORMAT) += sign-file
+>  hostprogs-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += extract-cert
+>  hostprogs-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE) += insert-sys-cert
+>
 
