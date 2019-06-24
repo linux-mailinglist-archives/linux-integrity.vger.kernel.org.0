@@ -2,84 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE68751833
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2019 18:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E0B518B5
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2019 18:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731842AbfFXQQl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Jun 2019 12:16:41 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:39268 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730045AbfFXQQl (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Jun 2019 12:16:41 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 20EBF72CC58;
-        Mon, 24 Jun 2019 19:16:39 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 07B964A4A29;
-        Mon, 24 Jun 2019 19:16:39 +0300 (MSK)
-Date:   Mon, 24 Jun 2019 19:16:38 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v7 00/11] ima-evm-utils: Convert v2 signatures from RSA
- to EVP_PKEY API
-Message-ID: <20190624161638.xz6ebfvxzilh2gew@altlinux.org>
-References: <20190623090027.11852-1-vt@altlinux.org>
- <1561387352.4340.20.camel@linux.ibm.com>
+        id S1728803AbfFXQbH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Jun 2019 12:31:07 -0400
+Received: from mga18.intel.com ([134.134.136.126]:24104 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728544AbfFXQbH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 24 Jun 2019 12:31:07 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Jun 2019 09:31:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,412,1557212400"; 
+   d="scan'208";a="169493454"
+Received: from akolosov-mobl1.ger.corp.intel.com ([10.249.33.80])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jun 2019 09:31:02 -0700
+Message-ID: <9f89b976d0fc85fc07d1c5cd1d201c389ba7875b.camel@linux.intel.com>
+Subject: Re: [PATCH] tpm: Get TCG log from TPM2 ACPI table for tpm2 systems
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Jordan Hand <jordanhand22@gmail.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 24 Jun 2019 19:31:01 +0300
+In-Reply-To: <20190624034734.15957-1-jordanhand22@gmail.com>
+References: <20190624034734.15957-1-jordanhand22@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1561387352.4340.20.camel@linux.ibm.com>
-User-Agent: NeoMutt/20171215-106-ac61c7
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi,
-
-On Mon, Jun 24, 2019 at 10:42:32AM -0400, Mimi Zohar wrote:
-> On Sun, 2019-06-23 at 12:00 +0300, Vitaly Chikunov wrote:
-> > Convert sign v2 from RSA API (with manual formatting PKCS1) to more generic
-> > EVP_PKEY API, allowing to generate more types of OpenSSL supported signatures.
-> > This is done to enable EC-RDSA signatures, which are already supported in the
-> > Kernel. With some small fixes.
-> > 
-> > All patches tested on x86_64 to not break anything.
-> > 
-> > Changes since v6:
-> > - Remove "Make sure sig buffer is always MAX_SIGNATURE_SIZE" commit. Instead,
-> >   change assumption of sign_hash_v2() about @sig size.
+On Sun, 2019-06-23 at 20:47 -0700, Jordan Hand wrote:
+> For TPM2-based systems, retrieve the TCG log from the TPM2 ACPI table.
 > 
-> With and without this change, the sha family is working properly, but
-> with this patch set, I'm now seeing "sign_hash_v2: signing failed:
-> (invalid digest)" for gost/streebog. šPreviously it worked.
+> Signed-off-by: Jordan Hand <jordanhand22@gmail.com>
 
-Sounds strange. For me it's working good for streebog now and then.
+Please write a proper long description that describes where such thing
+is defined and used if you feel like refining this and sending v2.
 
-  = Testing algo gost2012_256-A hash streebog256 =
-  test.txt: verification is OK
-  ...
-
-Maybe somehow your test env is getting broken?
-
-I test on Debian 9, manually compiled openssl and then gost-engine
-from git. Env is like this:
-
-  PATH=$HOME/src/openssl/apps:$HOME/src/ima-evm-utils/src/.libs:$PATH
-  LD_LIBRARY_PATH=$HOME/src/openssl:$HOME/src/ima-evm-utils/src/.libs
-  OPENSSL_CONF=$HOME/src/gost-engine/build/openssl.conf
-  OPENSSL_ENGINES=$HOME/src/gost-engine/build/bin
-
-ima-evm-utils is ./configure'd with
-
-  export OPENSSL_LIBS="-L$HOME/src/openssl -lssl -lcrypto"
-
-and then make'd without install, and test run.
-
-
+/Jarkko
 
