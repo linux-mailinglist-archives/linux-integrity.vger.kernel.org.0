@@ -2,82 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BE852584
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jun 2019 09:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF1B54F73
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jun 2019 14:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728864AbfFYH4H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 Jun 2019 03:56:07 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:33800 "EHLO huawei.com"
+        id S1729550AbfFYM5u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 Jun 2019 08:57:50 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:33034 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726543AbfFYH4G (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 Jun 2019 03:56:06 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 3AEB77001CAEBEF3AD3F;
-        Tue, 25 Jun 2019 15:56:03 +0800 (CST)
-Received: from [10.134.22.195] (10.134.22.195) by smtp.huawei.com
- (10.3.19.214) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 25 Jun
- 2019 15:55:58 +0800
-Subject: Re: [PATCH v5 16/16] f2fs: add fs-verity support
-To:     Eric Biggers <ebiggers@kernel.org>, <linux-fscrypt@vger.kernel.org>
-CC:     <linux-ext4@vger.kernel.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-fsdevel@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Victor Hsieh <victorhsieh@google.com>,
-        Chandan Rajendra <chandan@linux.vnet.ibm.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20190620205043.64350-1-ebiggers@kernel.org>
- <20190620205043.64350-17-ebiggers@kernel.org>
-From:   Chao Yu <yuchao0@huawei.com>
-Message-ID: <90495fb1-72eb-ca42-8457-ef8e969eda51@huawei.com>
-Date:   Tue, 25 Jun 2019 15:55:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1728022AbfFYM5u (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 25 Jun 2019 08:57:50 -0400
+Received: from LHREML713-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 3E2D18746ED2E5F5F6B2;
+        Tue, 25 Jun 2019 13:57:48 +0100 (IST)
+Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
+ (10.201.108.36) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 25 Jun
+ 2019 13:57:37 +0100
+Subject: Re: [PATCH v4 00/14] ima: introduce IMA Digest Lists extension
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
+        <mjg59@google.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>
+References: <20190614175513.27097-1-roberto.sassu@huawei.com>
+ <9029dd14-1077-ec89-ddc2-e677e16ad314@huawei.com>
+Message-ID: <88d368e6-5b3c-0206-23a0-dc3e0aa385f0@huawei.com>
+Date:   Tue, 25 Jun 2019 14:57:45 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-In-Reply-To: <20190620205043.64350-17-ebiggers@kernel.org>
-Content-Type: text/plain; charset="windows-1252"
+In-Reply-To: <9029dd14-1077-ec89-ddc2-e677e16ad314@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.134.22.195]
+X-Originating-IP: [10.220.96.108]
 X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Eric,
+On 6/17/2019 8:56 AM, Roberto Sassu wrote:
+> On 6/14/2019 7:54 PM, Roberto Sassu wrote:
+>> This patch set introduces a new IMA extension called IMA Digest Lists.
+>>
+>> At early boot, the extension preloads in kernel memory reference digest
+>> values, that can be compared with actual file digests when files are
+>> accessed in the system.
+>>
+>> The extension will open for new possibilities: PCR with predictable 
+>> value,
+>> that can be used for sealing policies associated to data or TPM keys;
+>> appraisal based on reference digests already provided by Linux 
+>> distribution
+>> vendors in the software packages.
+>>
+>> The first objective can be achieved because the PCR values does not 
+>> depend
+>> on which and when files are measured: the extension measures digest lists
+>> sequentially and files whose digest is not in the digest list.
+>>
+>> The second objective can be reached because the extension is able to
+>> extract reference measurements from packages (with a user space tool) and
+>> use it as a source for appraisal verification as the reference came from
+>> the security.ima xattr. This approach will also reduce the overhead as 
+>> only
+>> one signature is verified for many files (as opposed to one signature for
+>> each file with the current implementation).
+>>
+>> This version of the patch set provides a clear separation between current
+>> and new functionality. First, the new functionality must be explicitly
+>> enabled from the kernel command line. Second, results of operations
+>> performed by the extension can be distinguished from those obtained from
+>> the existing code: measurement entries created by the extension have a
+>> different PCR; mutable files appraised with the extension have a 
+>> different
+>> security.ima type.
+>>
+>> The review of this patch set should start from patch 11 and 12, which
+>> modify the IMA-Measure and IMA-Appraise submodules to use digest lists.
+>> Patch 1 to 5 are prerequisites. Patch 6 to 10 adds support for digest
+>> lists. Finally, patch 13 introduces two new policies to measure/appraise
+>> rootfs and patch 14 adds the documentation (including a flow chart to
+>> show how IMA has been modified).
+>>
+>> The user space tools to configure digest lists are available at:
+>>
+>> https://github.com/euleros/digest-list-tools/releases/tag/v0.3
+>>
+>> The patch set applies on top of linux-integrity/next-queued-testing
+>> (73589972b987).
+>>
+>> It is necessary to apply also:
+>> https://patchwork.kernel.org/cover/10957495/
+> 
+> Another dependency is:
+> 
+> https://patchwork.kernel.org/cover/10979341/
+> 
+> Roberto
+I uploaded this patch set and all the required dependencies to:
 
-On 2019/6/21 4:50, Eric Biggers wrote:
-> +static int f2fs_begin_enable_verity(struct file *filp)
-> +{
-> +	struct inode *inode = file_inode(filp);
-> +	int err;
-> +
+https://github.com/euleros/linux/releases/tag/ima-digest-lists-v4
 
-I think we'd better add condition here (under inode lock) to disallow enabling
-verity on atomic/volatile inode, as we may fail to write merkle tree data due to
-atomic/volatile inode's special writeback method.
+It should be easy to test. Let me know if you have questions about the
+installation.
 
-> +	err = f2fs_convert_inline_inode(inode);
-> +	if (err)
-> +		return err;
-> +
-> +	err = dquot_initialize(inode);
-> +	if (err)
-> +		return err;
 
-We can get rid of dquot_initialize() here, since f2fs_file_open() ->
-dquot_file_open() should has initialized quota entry previously, right?
+Mimi, do you have any thoughts on this version?
 
-Thanks,
+Thanks
 
-> +
-> +	set_inode_flag(inode, FI_VERITY_IN_PROGRESS);
-> +	return 0;
-> +}
-> +
+Roberto
+
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Bo PENG, Jian LI, Yanli SHI
