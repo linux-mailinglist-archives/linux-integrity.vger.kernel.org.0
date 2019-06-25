@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B06755886
+	by mail.lfdr.de (Postfix) with ESMTP id AED9955888
 	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jun 2019 22:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727191AbfFYUNt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 Jun 2019 16:13:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42620 "EHLO mail.kernel.org"
+        id S1727550AbfFYUNu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 Jun 2019 16:13:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42690 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726274AbfFYUNt (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 Jun 2019 16:13:49 -0400
+        id S1726907AbfFYUNu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 25 Jun 2019 16:13:50 -0400
 Received: from sasha-vm.mshome.net (unknown [167.220.24.221])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB6C2208CB;
-        Tue, 25 Jun 2019 20:13:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 067F4208E3;
+        Tue, 25 Jun 2019 20:13:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561493627;
-        bh=qeM4bAabgWwY4g4m0VQIHE1c9stL66JdhZ+RLvPcx4g=;
+        s=default; t=1561493629;
+        bh=+A8kslJHW27NDdIFi7+iCBJaMHuSt9MpoOrdUYPdCYE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X5xEr+8lInlg8/L6iGo6eAzd3sAKl3AyZdGRKxhg5sSIo9fNgrAdHPUKt6os5e9Fm
-         s0IpG9S8xzaHKukl/9u7xAtvqtBUqNlSHBxPHk3WrfuNLWxKanqsn1CpCyFWhRnYCV
-         Z6Om0NDHHvrZyhZZ7YhbVPwnKukGsVj3xt4OlfCY=
+        b=wMCLl0PFhJPyATqhiS/MBnteSDZoFOtFe/8PptE6znBX92m3v8uZXSrNAxTvMYnKH
+         bdR+H4HmyIcDHrwqFYISVEt6I6k3JXcKWI9ORFLtCmCvVzEsTMjkwgRA9ULXgn+aFh
+         AP7om9XgDfvXBC7XblRLKcAGUgZkn35wj2eUyD7Q=
 From:   Sasha Levin <sashal@kernel.org>
 To:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca
 Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
@@ -31,9 +31,9 @@ Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
         bryankel@microsoft.com, tee-dev@lists.linaro.org,
         ilias.apalodimas@linaro.org, sumit.garg@linaro.org,
         rdunlap@infradead.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH v7 1/2] fTPM: firmware TPM running in TEE
-Date:   Tue, 25 Jun 2019 16:13:40 -0400
-Message-Id: <20190625201341.15865-2-sashal@kernel.org>
+Subject: [PATCH v7 2/2] fTPM: add documentation for ftpm driver
+Date:   Tue, 25 Jun 2019 16:13:41 -0400
+Message-Id: <20190625201341.15865-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190625201341.15865-1-sashal@kernel.org>
 References: <20190625201341.15865-1-sashal@kernel.org>
@@ -44,460 +44,62 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch adds support for a software-only implementation of a TPM
-running in TEE.
+This patch adds basic documentation to describe the new fTPM driver.
 
-There is extensive documentation of the design here:
-https://www.microsoft.com/en-us/research/publication/ftpm-software-implementation-tpm-chip/ .
-
-As well as reference code for the firmware available here:
-https://github.com/Microsoft/ms-tpm-20-ref/tree/master/Samples/ARM32-FirmwareTPM
-
-Tested-by: Thirupathaiah Annapureddy <thiruan@microsoft.com>
-Signed-off-by: Thirupathaiah Annapureddy <thiruan@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/tpm/Kconfig        |   5 +
- drivers/char/tpm/Makefile       |   1 +
- drivers/char/tpm/tpm_ftpm_tee.c | 356 ++++++++++++++++++++++++++++++++
- drivers/char/tpm/tpm_ftpm_tee.h |  40 ++++
- 4 files changed, 402 insertions(+)
- create mode 100644 drivers/char/tpm/tpm_ftpm_tee.c
- create mode 100644 drivers/char/tpm/tpm_ftpm_tee.h
+ Documentation/security/tpm/index.rst        |  1 +
+ Documentation/security/tpm/tpm_ftpm_tee.rst | 31 +++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 Documentation/security/tpm/tpm_ftpm_tee.rst
 
-diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-index 88a3c06fc153..17bfbf9f572f 100644
---- a/drivers/char/tpm/Kconfig
-+++ b/drivers/char/tpm/Kconfig
-@@ -164,6 +164,11 @@ config TCG_VTPM_PROXY
- 	  /dev/vtpmX and a server-side file descriptor on which the vTPM
- 	  can receive commands.
+diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
+index af77a7bbb070..15783668644f 100644
+--- a/Documentation/security/tpm/index.rst
++++ b/Documentation/security/tpm/index.rst
+@@ -4,4 +4,5 @@ Trusted Platform Module documentation
  
-+config TCG_FTPM_TEE
-+	tristate "TEE based fTPM Interface"
-+	depends on TEE && OPTEE
-+	---help---
-+	  This driver proxies for firmware TPM running in TEE.
+ .. toctree::
  
- source "drivers/char/tpm/st33zp24/Kconfig"
- endif # TCG_TPM
-diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-index a01c4cab902a..c354cdff9c62 100644
---- a/drivers/char/tpm/Makefile
-+++ b/drivers/char/tpm/Makefile
-@@ -33,3 +33,4 @@ obj-$(CONFIG_TCG_TIS_ST33ZP24) += st33zp24/
- obj-$(CONFIG_TCG_XEN) += xen-tpmfront.o
- obj-$(CONFIG_TCG_CRB) += tpm_crb.o
- obj-$(CONFIG_TCG_VTPM_PROXY) += tpm_vtpm_proxy.o
-+obj-$(CONFIG_TCG_FTPM_TEE) += tpm_ftpm_tee.o
-diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
++   tpm_ftpm_tee
+    tpm_vtpm_proxy
+diff --git a/Documentation/security/tpm/tpm_ftpm_tee.rst b/Documentation/security/tpm/tpm_ftpm_tee.rst
 new file mode 100644
-index 000000000000..0312c10767bd
+index 000000000000..48de0dcec0f6
 --- /dev/null
-+++ b/drivers/char/tpm/tpm_ftpm_tee.c
-@@ -0,0 +1,356 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) Microsoft Corporation
-+ *
-+ * Implements a firmware TPM as described here:
-+ * https://www.microsoft.com/en-us/research/publication/ftpm-software-implementation-tpm-chip/
-+ *
-+ * A reference implementation is available here:
-+ * https://github.com/microsoft/ms-tpm-20-ref/tree/master/Samples/ARM32-FirmwareTPM/optee_ta/fTPM
-+ */
++++ b/Documentation/security/tpm/tpm_ftpm_tee.rst
+@@ -0,0 +1,31 @@
++=============================================
++Firmware TPM Driver
++=============================================
 +
-+#include <linux/acpi.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/tee_drv.h>
-+#include <linux/tpm.h>
-+#include <linux/uuid.h>
++| Authors:
++| Thirupathaiah Annapureddy <thiruan@microsoft.com>
++| Sasha Levin <sashal@kernel.org>
 +
-+#include "tpm.h"
-+#include "tpm_ftpm_tee.h"
++This document describes the firmware Trusted Platform Module (fTPM)
++device driver.
 +
-+#define DRIVER_NAME "ftpm-tee"
++Introduction
++============
 +
-+/*
-+ * TA_FTPM_UUID: BC50D971-D4C9-42C4-82CB-343FB7F37896
-+ *
-+ * Randomly generated, and must correspond to the GUID on the TA side.
-+ * Defined here in the reference implementation:
-+ * https://github.com/microsoft/ms-tpm-20-ref/blob/master/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/include/fTPM.h#L42
-+ */
++This driver is a shim for firmware implemented in ARM's TrustZone
++environment. The driver allows programs to interact with the TPM in the same
++way they would interact with a hardware TPM.
 +
-+static const uuid_t ftpm_ta_uuid =
-+	UUID_INIT(0xBC50D971, 0xD4C9, 0x42C4,
-+		  0x82, 0xCB, 0x34, 0x3F, 0xB7, 0xF3, 0x78, 0x96);
++Design
++======
 +
-+/**
-+ * ftpm_tee_tpm_op_recv - retrieve fTPM response.
-+ *
-+ * @chip: the tpm_chip description as specified in driver/char/tpm/tpm.h.
-+ * @buf: the buffer to store data.
-+ * @count: the number of bytes to read.
-+ *
-+ * Return:
-+ * 	In case of success the number of bytes received.
-+ *	On failure, -errno.
-+ */
-+static int ftpm_tee_tpm_op_recv(struct tpm_chip *chip, u8 *buf, size_t count)
-+{
-+	struct ftpm_tee_private *pvt_data = dev_get_drvdata(chip->dev.parent);
-+	size_t len;
++The driver acts as a thin layer that passes commands to and from a TPM
++implemented in firmware. The driver itself doesn't contain much logic and is
++used more like a dumb pipe between firmware and kernel/userspace.
 +
-+	len = pvt_data->resp_len;
-+	if (count < len) {
-+		dev_err(&chip->dev,
-+			"%s:Invalid size in recv: count=%zd, resp_len=%zd\n",
-+			__func__, count, len);
-+		return -EIO;
-+	}
++The firmware itself is based on the following paper:
++https://www.microsoft.com/en-us/research/wp-content/uploads/2017/06/ftpm1.pdf
 +
-+	memcpy(buf, pvt_data->resp_buf, len);
-+	pvt_data->resp_len = 0;
-+
-+	return len;
-+}
-+
-+/**
-+ * ftpm_tee_tpm_op_send - send TPM commands through the TEE shared memory.
-+ *
-+ * @chip: the tpm_chip description as specified in driver/char/tpm/tpm.h
-+ * @buf: the buffer to send.
-+ * @len: the number of bytes to send.
-+ *
-+ * Return:
-+ * 	In case of success, returns 0.
-+ *	On failure, -errno
-+ */
-+static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len)
-+{
-+	struct ftpm_tee_private *pvt_data = dev_get_drvdata(chip->dev.parent);
-+	size_t resp_len;
-+	int rc;
-+	u8 *temp_buf;
-+	struct tpm_header *resp_header;
-+	struct tee_ioctl_invoke_arg transceive_args;
-+	struct tee_param command_params[4];
-+	struct tee_shm *shm = pvt_data->shm;
-+
-+	if (len > MAX_COMMAND_SIZE) {
-+		dev_err(&chip->dev,
-+			"%s:len=%zd exceeds MAX_COMMAND_SIZE supported by fTPM TA\n",
-+			__func__, len);
-+		return -EIO;
-+	}
-+
-+	memset(&transceive_args, 0, sizeof(transceive_args));
-+	memset(command_params, 0, sizeof(command_params));
-+	pvt_data->resp_len = 0;
-+
-+	/* Invoke FTPM_OPTEE_TA_SUBMIT_COMMAND function of fTPM TA */
-+	transceive_args = (struct tee_ioctl_invoke_arg) {
-+		.func = FTPM_OPTEE_TA_SUBMIT_COMMAND,
-+		.session = pvt_data->session,
-+		.num_params = 4,
-+	};
-+
-+	/* Fill FTPM_OPTEE_TA_SUBMIT_COMMAND parameters */
-+	command_params[0] = (struct tee_param) {
-+		.attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT,
-+		.u.memref = {
-+			.shm = shm,
-+			.size = len,
-+			.shm_offs = 0,
-+		},
-+	};
-+
-+	temp_buf = tee_shm_get_va(shm, 0);
-+	if (IS_ERR(temp_buf)) {
-+		dev_err(&chip->dev, "%s:tee_shm_get_va failed for transmit\n",
-+			__func__);
-+		return PTR_ERR(temp_buf);
-+	}
-+	memset(temp_buf, 0, (MAX_COMMAND_SIZE + MAX_RESPONSE_SIZE));
-+
-+	memcpy(temp_buf, buf, len);
-+
-+	command_params[1] = (struct tee_param) {
-+		.attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT,
-+		.u.memref = {
-+			.shm = shm,
-+			.size = MAX_RESPONSE_SIZE,
-+			.shm_offs = MAX_COMMAND_SIZE,
-+		},
-+	};
-+
-+	rc = tee_client_invoke_func(pvt_data->ctx, &transceive_args,
-+					command_params);
-+	if ((rc < 0) || (transceive_args.ret != 0)) {
-+		dev_err(&chip->dev, "%s:SUBMIT_COMMAND invoke error: 0x%x\n",
-+			__func__, transceive_args.ret);
-+		return (rc < 0) ? rc : transceive_args.ret;
-+	}
-+
-+	temp_buf = tee_shm_get_va(shm, command_params[1].u.memref.shm_offs);
-+	if (IS_ERR(temp_buf)) {
-+		dev_err(&chip->dev, "%s:tee_shm_get_va failed for receive\n",
-+			__func__);
-+		return PTR_ERR(temp_buf);
-+	}
-+
-+	resp_header = (struct tpm_header *)temp_buf;
-+	resp_len = be32_to_cpu(resp_header->length);
-+
-+	/* sanity check resp_len */
-+	if (resp_len < TPM_HEADER_SIZE) {
-+		dev_err(&chip->dev, "%s:tpm response header too small\n",
-+			__func__);
-+		return -EIO;
-+	}
-+	if (resp_len > MAX_RESPONSE_SIZE) {
-+		dev_err(&chip->dev,
-+			"%s:resp_len=%zd exceeds MAX_RESPONSE_SIZE\n",
-+			__func__, resp_len);
-+		return -EIO;
-+	}
-+
-+	/* sanity checks look good, cache the response */
-+	memcpy(pvt_data->resp_buf, temp_buf, resp_len);
-+	pvt_data->resp_len = resp_len;
-+
-+	return 0;
-+}
-+
-+static void ftpm_tee_tpm_op_cancel(struct tpm_chip *chip)
-+{
-+	/* not supported */
-+}
-+
-+static u8 ftpm_tee_tpm_op_status(struct tpm_chip *chip)
-+{
-+	return 0;
-+}
-+
-+static bool ftpm_tee_tpm_req_canceled(struct tpm_chip *chip, u8 status)
-+{
-+	return 0;
-+}
-+
-+static const struct tpm_class_ops ftpm_tee_tpm_ops = {
-+	.flags = TPM_OPS_AUTO_STARTUP,
-+	.recv = ftpm_tee_tpm_op_recv,
-+	.send = ftpm_tee_tpm_op_send,
-+	.cancel = ftpm_tee_tpm_op_cancel,
-+	.status = ftpm_tee_tpm_op_status,
-+	.req_complete_mask = 0,
-+	.req_complete_val = 0,
-+	.req_canceled = ftpm_tee_tpm_req_canceled,
-+};
-+
-+/*
-+ * Check whether this driver supports the fTPM TA in the TEE instance
-+ * represented by the params (ver/data) to this function.
-+ */
-+static int ftpm_tee_match(struct tee_ioctl_version_data *ver, const void *data)
-+{
-+	/*
-+	 * Currently this driver only support GP Complaint OPTEE based fTPM TA
-+	 */
-+	if ((ver->impl_id == TEE_IMPL_ID_OPTEE) &&
-+		(ver->gen_caps & TEE_GEN_CAP_GP))
-+		return 1;
-+	else
-+		return 0;
-+}
-+
-+/**
-+ * ftpm_tee_probe - initialize the fTPM
-+ * @pdev: the platform_device description.
-+ *
-+ * Return:
-+ * 	On success, 0. On failure, -errno.
-+ */
-+static int ftpm_tee_probe(struct platform_device *pdev)
-+{
-+	int rc;
-+	struct tpm_chip *chip;
-+	struct device *dev = &pdev->dev;
-+	struct ftpm_tee_private *pvt_data = NULL;
-+	struct tee_ioctl_open_session_arg sess_arg;
-+
-+	pvt_data = devm_kzalloc(dev, sizeof(struct ftpm_tee_private),
-+				GFP_KERNEL);
-+	if (!pvt_data)
-+		return -ENOMEM;
-+
-+	dev_set_drvdata(dev, pvt_data);
-+
-+	/* Open context with TEE driver */
-+	pvt_data->ctx = tee_client_open_context(NULL, ftpm_tee_match, NULL,
-+						NULL);
-+	if (IS_ERR(pvt_data->ctx)) {
-+		if (ERR_PTR(pvt_data->ctx) == -ENOENT)
-+			return -EPROBE_DEFER;
-+		dev_err(dev, "%s:tee_client_open_context failed\n", __func__);
-+		return ERR_PTR(pvt_data->ctx);
-+	}
-+
-+	/* Open a session with fTPM TA */
-+	memset(&sess_arg, 0, sizeof(sess_arg));
-+	memcpy(sess_arg.uuid, ftpm_ta_uuid.b, TEE_IOCTL_UUID_LEN);
-+	sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
-+	sess_arg.num_params = 0;
-+
-+	rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
-+	if ((rc < 0) || (sess_arg.ret != 0)) {
-+		dev_err(dev, "%s:tee_client_open_session failed, err=%x\n",
-+			__func__, sess_arg.ret);
-+		rc = -EINVAL;
-+		goto out_tee_session;
-+	}
-+	pvt_data->session = sess_arg.session;
-+
-+	/* Allocate dynamic shared memory with fTPM TA */
-+	pvt_data->shm = tee_shm_alloc(pvt_data->ctx,
-+				(MAX_COMMAND_SIZE + MAX_RESPONSE_SIZE),
-+				TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
-+	if (IS_ERR(pvt_data->shm)) {
-+		dev_err(dev, "%s:tee_shm_alloc failed\n", __func__);
-+		rc = -ENOMEM;
-+		goto out_shm_alloc;
-+	}
-+
-+	/* Allocate new struct tpm_chip instance */
-+	chip = tpm_chip_alloc(dev, &ftpm_tee_tpm_ops);
-+	if (IS_ERR(chip)) {
-+		dev_err(dev, "%s:tpm_chip_alloc failed\n", __func__);
-+		rc = PTR_ERR(chip);
-+		goto out_chip_alloc;
-+	}
-+
-+	pvt_data->chip = chip;
-+	pvt_data->chip->flags |= TPM_CHIP_FLAG_TPM2;
-+
-+	/* Create a character device for the fTPM */
-+	rc = tpm_chip_register(pvt_data->chip);
-+	if (rc) {
-+		dev_err(dev, "%s:tpm_chip_register failed with rc=%d\n",
-+			__func__, rc);
-+		goto out_chip;
-+	}
-+
-+	return 0;
-+
-+out_chip:
-+	put_device(&pvt_data->chip->dev);
-+out_chip_alloc:
-+	tee_shm_free(pvt_data->shm);
-+out_shm_alloc:
-+	tee_client_close_session(pvt_data->ctx, pvt_data->session);
-+out_tee_session:
-+	tee_client_close_context(pvt_data->ctx);
-+
-+	return rc;
-+}
-+
-+/**
-+ * ftpm_tee_remove - remove the TPM device
-+ * @pdev: the platform_device description.
-+ *
-+ * Return:
-+ * 	0 in case of success.
-+ */
-+static int ftpm_tee_remove(struct platform_device *pdev)
-+{
-+	struct ftpm_tee_private *pvt_data = dev_get_drvdata(&pdev->dev);
-+
-+	/* Release the chip */
-+	tpm_chip_unregister(pvt_data->chip);
-+
-+	/* frees chip */
-+	put_device(&pvt_data->chip->dev);
-+
-+	/* Free the shared memory pool */
-+	tee_shm_free(pvt_data->shm);
-+
-+	/* close the existing session with fTPM TA*/
-+	tee_client_close_session(pvt_data->ctx, pvt_data->session);
-+
-+	/* close the context with TEE driver */
-+	tee_client_close_context(pvt_data->ctx);
-+
-+        /* memory allocated with devm_kzalloc() is freed automatically */
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id of_ftpm_tee_ids[] = {
-+	{ .compatible = "microsoft,ftpm" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, of_ftpm_tee_ids);
-+
-+static struct platform_driver ftpm_tee_driver = {
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.of_match_table = of_match_ptr(of_ftpm_tee_ids),
-+	},
-+	.probe = ftpm_tee_probe,
-+	.remove = ftpm_tee_remove,
-+};
-+
-+module_platform_driver(ftpm_tee_driver);
-+
-+MODULE_AUTHOR("Thirupathaiah Annapureddy <thiruan@microsoft.com>");
-+MODULE_DESCRIPTION("TPM Driver for fTPM TA in TEE");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/char/tpm/tpm_ftpm_tee.h b/drivers/char/tpm/tpm_ftpm_tee.h
-new file mode 100644
-index 000000000000..b09ee7be4545
---- /dev/null
-+++ b/drivers/char/tpm/tpm_ftpm_tee.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) Microsoft Corporation
-+ */
-+
-+#ifndef __TPM_FTPM_TEE_H__
-+#define __TPM_FTPM_TEE_H__
-+
-+#include <linux/tee_drv.h>
-+#include <linux/tpm.h>
-+#include <linux/uuid.h>
-+
-+/* The TAFs ID implemented in this TA */
-+#define FTPM_OPTEE_TA_SUBMIT_COMMAND  (0)
-+#define FTPM_OPTEE_TA_EMULATE_PPI     (1)
-+
-+/* max. buffer size supported by fTPM  */
-+#define  MAX_COMMAND_SIZE       4096
-+#define  MAX_RESPONSE_SIZE      4096
-+
-+/**
-+ * struct ftpm_tee_private - fTPM's private data
-+ * @chip:     struct tpm_chip instance registered with tpm framework.
-+ * @state:    internal state
-+ * @session:  fTPM TA session identifier.
-+ * @resp_len: cached response buffer length.
-+ * @resp_buf: cached response buffer.
-+ * @ctx:      TEE context handler.
-+ * @shm:      Memory pool shared with fTPM TA in TEE.
-+ */
-+struct ftpm_tee_private {
-+	struct tpm_chip *chip;
-+	u32 session;
-+	size_t resp_len;
-+	u8 resp_buf[MAX_RESPONSE_SIZE];
-+	struct tee_context *ctx;
-+	struct tee_shm *shm;
-+};
-+
-+#endif /* __TPM_FTPM_TEE_H__ */
++When the driver is loaded it will expose ``/dev/tpmX`` character devices to
++userspace which will enable userspace to communicate with the firmware TPM
++through this device.
 -- 
 2.20.1
 
