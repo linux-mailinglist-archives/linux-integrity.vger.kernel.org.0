@@ -2,91 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CAD55655
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jun 2019 19:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9BE55709
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jun 2019 20:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731391AbfFYRw3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 Jun 2019 13:52:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45102 "EHLO mail.kernel.org"
+        id S1730607AbfFYSUW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 Jun 2019 14:20:22 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:37294 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726562AbfFYRw3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 Jun 2019 13:52:29 -0400
-Received: from gmail.com (unknown [104.132.1.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727138AbfFYSUW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 25 Jun 2019 14:20:22 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2756320663;
-        Tue, 25 Jun 2019 17:52:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561485148;
-        bh=wyycSt+pI2DJX5K8aByDIu1qndou0ZcC3vKhYC0f3bM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DjAOE5lDyE7nFLOiJ/TjmGzmXakZCqaiO7KZ4EjtP6/qEVCgSX/Fym0WfDE8dHEU7
-         TVqGc4cKyWEW9szMmQezxKmszLdo28xETW3HIk2BO5u49SUH1z9G3kxm/PyvTbUZla
-         rhLWkPZS8pNpuwPX5N2EHJ5EymKNGv0664ZbxDz8=
-Date:   Tue, 25 Jun 2019 10:52:26 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Chao Yu <yuchao0@huawei.com>
-Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
-        "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Victor Hsieh <victorhsieh@google.com>,
-        Chandan Rajendra <chandan@linux.vnet.ibm.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 16/16] f2fs: add fs-verity support
-Message-ID: <20190625175225.GC81914@gmail.com>
-References: <20190620205043.64350-1-ebiggers@kernel.org>
- <20190620205043.64350-17-ebiggers@kernel.org>
- <90495fb1-72eb-ca42-8457-ef8e969eda51@huawei.com>
+        by mx1.redhat.com (Postfix) with ESMTPS id C107D223885;
+        Tue, 25 Jun 2019 18:20:11 +0000 (UTC)
+Received: from localhost (unknown [10.18.25.174])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9BFC51972E;
+        Tue, 25 Jun 2019 18:20:05 +0000 (UTC)
+Date:   Tue, 25 Jun 2019 14:20:04 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
+        gmazyland@gmail.com
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, scottsh@microsoft.com,
+        ebiggers@google.com, jmorris@namei.org, dm-devel@redhat.com,
+        mpatocka@redhat.com, agk@redhat.com
+Subject: Re: [RFC PATCH v5 1/1] Add dm verity root hash pkcs7 sig validation.
+Message-ID: <20190625182004.GA32075@redhat.com>
+References: <20190619191048.20365-1-jaskarankhurana@linux.microsoft.com>
+ <20190619191048.20365-2-jaskarankhurana@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <90495fb1-72eb-ca42-8457-ef8e969eda51@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190619191048.20365-2-jaskarankhurana@linux.microsoft.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Tue, 25 Jun 2019 18:20:21 +0000 (UTC)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Chao, thanks for the review.
+On Wed, Jun 19 2019 at  3:10pm -0400,
+Jaskaran Khurana <jaskarankhurana@linux.microsoft.com> wrote:
 
-On Tue, Jun 25, 2019 at 03:55:57PM +0800, Chao Yu wrote:
-> Hi Eric,
+> The verification is to support cases where the roothash is not secured by
+> Trusted Boot, UEFI Secureboot or similar technologies.
+> One of the use cases for this is for dm-verity volumes mounted after boot,
+> the root hash provided during the creation of the dm-verity volume has to
+> be secure and thus in-kernel validation implemented here will be used
+> before we trust the root hash and allow the block device to be created.
 > 
-> On 2019/6/21 4:50, Eric Biggers wrote:
-> > +static int f2fs_begin_enable_verity(struct file *filp)
-> > +{
-> > +	struct inode *inode = file_inode(filp);
-> > +	int err;
-> > +
+> The signature being provided for verification must verify the root hash and
+> must be trusted by the builtin keyring for verification to succeed.
 > 
-> I think we'd better add condition here (under inode lock) to disallow enabling
-> verity on atomic/volatile inode, as we may fail to write merkle tree data due to
-> atomic/volatile inode's special writeback method.
+> The hash is added as a key of type "user" and the description is passed to 
+> the kernel so it can look it up and use it for verification.
 > 
-
-Yes, I'll add the following:
-
-	if (f2fs_is_atomic_file(inode) || f2fs_is_volatile_file(inode))
-		return -EOPNOTSUPP;
-
-> > +	err = f2fs_convert_inline_inode(inode);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	err = dquot_initialize(inode);
-> > +	if (err)
-> > +		return err;
+> Kernel commandline parameter will indicate whether to check (only if 
+> specified) or force (for all dm verity volumes) roothash signature 
+> verification.
 > 
-> We can get rid of dquot_initialize() here, since f2fs_file_open() ->
-> dquot_file_open() should has initialized quota entry previously, right?
+> Kernel commandline: dm_verity.verify_sig=1 or 2 for check/force root hash
+> signature validation respectively.
+> 
+> Signed-off-by: Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
 
-We still need it because dquot_file_open() only calls dquot_initialize() if the
-file is being opened for writing.  But here the file descriptor is readonly.
-I'll add a comment explaining this here and in the ext4 equivalent.
+Milan and/or others: could you please provide review and if you're OK
+with this patch respond accordingly?
 
-- Eric
+Thanks,
+Mike
