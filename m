@@ -2,66 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A11567C6
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jun 2019 13:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0907C56C5E
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jun 2019 16:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbfFZLiX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Jun 2019 07:38:23 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:33036 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726077AbfFZLiX (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Jun 2019 07:38:23 -0400
-Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 9E9C615522E748CA3604;
-        Wed, 26 Jun 2019 12:38:21 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.35) with Microsoft SMTP Server (TLS) id 14.3.408.0; Wed, 26 Jun
- 2019 12:38:12 +0100
-Subject: Re: [PATCH v4 00/14] ima: introduce IMA Digest Lists extension
-To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@huawei.com>,
-        <mjg59@google.com>, Rob Landley <rob@landley.net>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>
-References: <20190614175513.27097-1-roberto.sassu@huawei.com>
- <9029dd14-1077-ec89-ddc2-e677e16ad314@huawei.com>
- <88d368e6-5b3c-0206-23a0-dc3e0aa385f0@huawei.com>
- <1561484133.4066.16.camel@linux.ibm.com>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <19b082d1-b36e-bcbf-b25a-6d0969c9b638@huawei.com>
-Date:   Wed, 26 Jun 2019 13:38:21 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1726628AbfFZOkm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Jun 2019 10:40:42 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:41193 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726484AbfFZOkm (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 26 Jun 2019 10:40:42 -0400
+Received: by mail-lj1-f194.google.com with SMTP id 205so2476719ljj.8
+        for <linux-integrity@vger.kernel.org>; Wed, 26 Jun 2019 07:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vFSieBUuyGxTsoChoI1Kg6drR2s6KdAfDv5qlvcL6U4=;
+        b=gjjmtx7pQSLXIIPglIXmGlSTAjDSuSeyjiGzL71jUUkSnCusccrysNb3SwVt97+GUD
+         oxeu8ymiCZJnqV/vL7dlXOgo5o8IIPugS7Ryb7Pdzu6/h5nc0JOKe//dJ0UOGIoD0jxK
+         OkHQuk1t5Sl8m3zFSRGiGv+RQYGxc5dNEBZkdhLI45ATX3mLx1+68cdzbi0bSz2D1KqB
+         NpomU+kuGnweJeMmcMZ68zCy2noFhwu/Mu85tq489I8KdqkZG4+UMtqGJWfMkivcXpJh
+         zLN83pmP+mFa8IJbToG+iJYMd1u+jNpdHIfTD12UJJdep5ElubPENxXzSV+EFGnJuymf
+         oobQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vFSieBUuyGxTsoChoI1Kg6drR2s6KdAfDv5qlvcL6U4=;
+        b=p6QMkYYvOv38X40/mWRS3RGowGdWxPe0LpgEDnpqQgFkpwfwAKCjyEtAIJylu5IeZf
+         t0tFoOTRiaFmPlxa/quEED1D8nKNTFgPMj+fkqQY+LRbkbevsCLspzHWDHH/h2AhGgef
+         Pjttw9dLFVYnzOEQGv4jKh31KnF2x7Dgk4SqvMss+UA2wBZj5EhiLpiSqg7M5dzO1V8/
+         fdIhg6m9FAQXPC/1A8Ug2rNvUVNXcdvLuk+jcsx2WZbcCpQTzIn0psfCZncLuKrZEpNs
+         YQ7hkCfQU5qb9h+O7dIcVW01K2rNscD3uLlKKDZThD8raa93xMnXd5hSSe8xqOk9V/i4
+         Xe8w==
+X-Gm-Message-State: APjAAAV6IK4++35uvI9GPPcqLLnroG4rOoiBrG16UPNk3lQUz5rTrcxH
+        RUGLrH8JP3sIKGiFjVdsvkSlEdgvduUDv/IJPH0=
+X-Google-Smtp-Source: APXvYqyjlVV9L5GOgYQDqmTeuqiK71QN+BqUttvb4uQvfVYf8MTlQp8n9SNv6pdDWLAnpXVbOgAS8ZoU0iS2otbonLo=
+X-Received: by 2002:a2e:b047:: with SMTP id d7mr3236032ljl.8.1561560039763;
+ Wed, 26 Jun 2019 07:40:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1561484133.4066.16.camel@linux.ibm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+References: <20190623090027.11852-1-vt@altlinux.org> <1561387352.4340.20.camel@linux.ibm.com>
+ <20190624161638.xz6ebfvxzilh2gew@altlinux.org> <1561403393.4340.58.camel@linux.ibm.com>
+ <20190624192349.gdp2xbe5c6etaw6v@altlinux.org> <1561405647.4340.63.camel@linux.ibm.com>
+ <20190624201156.xrd6lyhrbnpbo2uz@altlinux.org> <1561431368.4340.106.camel@linux.ibm.com>
+In-Reply-To: <1561431368.4340.106.camel@linux.ibm.com>
+From:   Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Date:   Wed, 26 Jun 2019 17:42:05 +0300
+Message-ID: <CACE9dm9yO+h8wELkze051n-HN=hPgb=BZdJx-hTra6YUgfWtSA@mail.gmail.com>
+Subject: Re: [PATCH v7 00/11] ima-evm-utils: Convert v2 signatures from RSA to
+ EVP_PKEY API
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Vitaly Chikunov <vt@altlinux.org>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/25/2019 7:35 PM, Mimi Zohar wrote:
-> [Cc'ing Rob Landley]
-> 
-> On Tue, 2019-06-25 at 14:57 +0200, Roberto Sassu wrote:
->> Mimi, do you have any thoughts on this version?
-> 
-> I need to look closer, but when I first looked these changes seemed to
-> be really invasive.  Let's first work on getting the CPIO xattr
+On Tue, Jun 25, 2019 at 5:56 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> On Mon, 2019-06-24 at 23:11 +0300, Vitaly Chikunov wrote:
+> > Mimi,
+> >
+> > On Mon, Jun 24, 2019 at 03:47:27PM -0400, Mimi Zohar wrote:
+> > > On Mon, 2019-06-24 at 22:23 +0300, Vitaly Chikunov wrote:
+> > > >
+> > > > > > With and without this change, the sha family is working properly, but
+> > > > > > with this patch set, I'm now seeing "sign_hash_v2: signing failed:
+> > > > > > (invalid digest)" for gost/streebog.  Previously it worked.
+> > > >
+> > > > If it worked before this is strange. It should not. What patchset
+> > > > version it was?
+> > >
+> > > No, I'm saying that I built both openssl and the gost engine a while
+> > > ago.  There's been some gost engine updates since then, which are
+> > > dependent on a newer version of openssl.  So I'll need to rebuild both
+> > > openssl and the gost engine in order to re-test.
+> >
+> > Hm. I don't see a difference in signing code.
+> >
+> > Only the difference is there was no `log_err("sign_hash_v2: signing
+> > failed: (%s)\n", ...)` about singing failure, because, I thought, the
+> > caller would report it anyway, because of `return -1`.
+>
+> Thanks, Vitaly, for all your help.  It's now working properly.
+>
+> Mimi
+>
 
-If you can provide early comments, that would be great. I'll have a look
-at the problems and when the xattr support for the ram disk is
-upstreamed I will be ready to send a new version.
-
-Thanks
-
-Roberto
+I tested various generation and verification options and also backward
+and forward compatibility.
+Everything was fine for me....
 
 -- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+Thanks,
+Dmitry
