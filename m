@@ -2,75 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3474570B6
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jun 2019 20:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B825748D
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Jun 2019 00:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbfFZSfS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Jun 2019 14:35:18 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:47084 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726239AbfFZSfS (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Jun 2019 14:35:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=04YOcDLjot3ihaIK+O8DqmUkZ1/ZeU9r17gmohos7MI=; b=JE9favaLmIW7xwmMIJXeyJ+wxh
-        tit/6UQDt1ktt1DQKuSCV53K0rWRIhVovN8QuxRAI/HItb1tDl9Zrb/F9pJBKV5n1O0oyYM3jGXb/
-        DG64MCratex7p/P8h69Fo5+YUzvIeBo28M8TMsy9f0fGDjNw/VLNz4BCmMw2OUQGhsunbazxxvw7a
-        Ueggf1oUYsxLLMyDM4bn+TB0JekVqknnw/NoxT4pQITGWL2Mfs3y2DY/9blejIrClJv1t5cP1nXVj
-        0yoUwseIxWtOE4FJKFfeVLp7NkMPvyOgUP1/C+Q41HbAk3juTRcmyIill8MnuqOKn4zeUCXhXiZUV
-        y+PYeIwg==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hgClH-000123-9D; Wed, 26 Jun 2019 18:35:15 +0000
-Subject: Re: linux-next: Tree for Jun 26 (security/integrity/ima/)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-References: <20190626231617.1e858da3@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <ee503bc1-a588-81f5-47e0-1762f590662f@infradead.org>
-Date:   Wed, 26 Jun 2019 11:35:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726431AbfFZWuk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Jun 2019 18:50:40 -0400
+Received: from mga04.intel.com ([192.55.52.120]:27478 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726387AbfFZWuk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 26 Jun 2019 18:50:40 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Jun 2019 15:50:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,421,1557212400"; 
+   d="scan'208";a="170209986"
+Received: from mwsinger-mobl3.ger.corp.intel.com ([10.252.48.211])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Jun 2019 15:50:37 -0700
+Message-ID: <2595b4f6ce49cc3d413c75f86a63ad9d26f0f1fd.camel@linux.intel.com>
+Subject: [GIT PULL] tpmdd updates for Linux v5.3
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, jmorris@namei.org,
+        mjg59@google.com
+Date:   Thu, 27 Jun 2019 01:50:47 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.1-2 
 MIME-Version: 1.0
-In-Reply-To: <20190626231617.1e858da3@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/26/19 6:16 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The sparc64 builds are broken in this tree, sorry.
-> 
-> Changes since 20190625:
-> 
+Hi,
 
-on x86_64:
+My v5.3 PR contains two critical bug fixes and support for obtaining TPM
+events triggered by ExitBootServices(). For the latter I have to give a
+quite verbose explanation not least because I had to revisit all the
+details myself to remember what was going on in Matthew's patches.
 
-11 warnings like this one (in a randconfig build):
+The preboot software stack maintains an event log that gets entries
+every time something gets hashed to any of the PCR registers. What gets
+hashed could be a component to be run or perhaps log of some actions
+taken just to give couple of coarse examples. In general, anything
+relevant for the boot process that the preboot software does gets hashed
+and a log entry with a specific event type [1].
 
-  CC      security/integrity/ima/ima_fs.o
-In file included from ../security/integrity/ima/ima.h:25:0,
-                 from ../security/integrity/ima/ima_fs.c:26:
-../security/integrity/ima/../integrity.h:170:18: warning: ‘struct key_acl’ declared inside parameter list [enabled by default]
-           struct key_acl *acl)
-                  ^
-../security/integrity/ima/../integrity.h:170:18: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+The main application for this is remote attestation and the reason why
+it is useful is nicely put in the very first section of [1]:
 
+"Attestation is used to provide information about the platformâ€™s state
+to a challenger. However, PCR contents are difficult to interpret;
+therefore, attestation is typically more useful when the PCR contents
+are accompanied by a measurement log. While not trusted on their own,
+the measurement log contains a richer set of information than do the PCR
+contents. The PCR contents are used to provide the validation of the
+measurement log."
 
+Because EFI_TCG2_PROTOCOL.GetEventLog() is not available after calling
+ExitBootServices(), Linux EFI stub copies the event log to a custom
+configuration table. Unfortunately, ExitBootServices() also generates
+events and obviously these events do not get copied to that table.
+Luckily firmware does this for us by providing a configuration table
+identified by EFI_TCG2_FINAL_EVENTS_TABLE_GUID.
 
--- 
-~Randy
+This PR essentially contains necessary changes to provide the full
+event log for the use the user space that is concatenated from these
+two partial event logs [2].
+
+[1] 
+https://trustedcomputinggroup.org/resource/pc-client-specific-platform-firmware-profile-specification/
+[2] The final concatenation is done in drivers/char/tpm/eventlog/efi.c
+
+/Jarkko
+
+The following changes since commit c88e40e07cd967dcdf37321a63ab6e8b0d881100:
+
+  Merge tag 'mfd-fixes-5.2-1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd (2019-06-25 03:41:03
++0800)
+
+are available in the Git repository at:
+
+  git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-20190625
+
+for you to fetch changes up to 166a2809d65b282272c474835ec22c882a39ca1b:
+
+  tpm: Don't duplicate events from the final event log in the TCG2 log (2019-06-
+24 23:57:50 +0300)
+
+----------------------------------------------------------------
+tpmdd updates for Linux v5.3
+
+----------------------------------------------------------------
+Kees Cook (1):
+      tpm: Actually fail on TPM errors during "get random"
+
+Matthew Garrett (6):
+      tpm: Abstract crypto agile event size calculations
+      tpm: Reserve the TPM final events table
+      tpm: Append the final event log to the TPM event log
+      efi: Attempt to get the TCG2 event log in the boot stub
+      Abstract out support for locating an EFI config table
+      tpm: Don't duplicate events from the final event log in the TCG2 log
+
+Vadim Sukhomlinov (1):
+      tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
+
+ drivers/char/tpm/eventlog/efi.c                |  59 ++++++++--
+ drivers/char/tpm/eventlog/tpm2.c               |  47 +-------
+ drivers/char/tpm/tpm-chip.c                    |   6 +-
+ drivers/char/tpm/tpm1-cmd.c                    |   7 +-
+ drivers/char/tpm/tpm2-cmd.c                    |   7 +-
+ drivers/firmware/efi/efi.c                     |   2 +
+ drivers/firmware/efi/libstub/efi-stub-helper.c |  15 +++
+ drivers/firmware/efi/libstub/efistub.h         |   2 +
+ drivers/firmware/efi/libstub/fdt.c             |  27 ++---
+ drivers/firmware/efi/libstub/tpm.c             |  80 ++++++++++---
+ drivers/firmware/efi/tpm.c                     |  63 +++++++++-
+ include/linux/efi.h                            |  10 ++
+ include/linux/tpm_eventlog.h                   | 152 +++++++++++++++++++++++++
+ 13 files changed, 378 insertions(+), 99 deletions(-)
+
