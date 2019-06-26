@@ -2,48 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC75355C1E
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jun 2019 01:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2858C561D8
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jun 2019 07:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbfFYXNm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 Jun 2019 19:13:42 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:36102 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbfFYXNm (ORCPT
+        id S1725924AbfFZFsx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Jun 2019 01:48:53 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46395 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725790AbfFZFsx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 Jun 2019 19:13:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=bNOnF9RPhjENVHpzmRNMIxdtfQ6guu6sKYduKcd0Tc8=; b=V8VlTO0pZvD95eJUQjucRK+Rbt
-        gO6Y2d2E1MYhOhgMoiK3mYh9wHSdrc7Y4RDWpU/WgZkXW/HbILKz+9VWOpeI9mPPdnknTiW1HEKmV
-        4k2j/uzhDJ5RvVDLUMKJ/GWftlXZ9kVhW9SIARyQtBryfonYWlwrQEc+/ZyNatSQoYKsk1LJlFY8c
-        zzEQVzP1oauTdWdXBJAefgElIT0JIzbQZ9zS4iUz30xXrqHmwtOKKzcgDbTgf4tSTRmtk2Z/KS58W
-        mEdk/ljHdt/Sh9+G4tZ7hzAqyp1+wAIvnG1y9Wvm+N4pNWeEb7VWyNLOoIDy7mEmxqeGMgTEoli91
-        0XodM4TQ==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hfud4-0001Kq-Oz; Tue, 25 Jun 2019 23:13:35 +0000
-Subject: Re: [PATCH v7 2/2] fTPM: add documentation for ftpm driver
-To:     Sasha Levin <sashal@kernel.org>, peterhuewe@gmx.de,
-        jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca
-Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@microsoft.com, thiruan@microsoft.com,
-        bryankel@microsoft.com, tee-dev@lists.linaro.org,
-        ilias.apalodimas@linaro.org, sumit.garg@linaro.org
-References: <20190625201341.15865-1-sashal@kernel.org>
- <20190625201341.15865-3-sashal@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <fa526626-9eae-98ba-5127-6a4105781a41@infradead.org>
-Date:   Tue, 25 Jun 2019 16:13:32 -0700
+        Wed, 26 Jun 2019 01:48:53 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n4so1100845wrw.13;
+        Tue, 25 Jun 2019 22:48:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:openpgp:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xQ4ce+x35rsYY2o9p5K+v8CMy5RJxb4zWb9mr9D1IXc=;
+        b=EeftxwBtaYqbVh+JKbNLa0DToX40eFgJgREQDo/Uxz1oazpBRVViaNmD/bywZm2urd
+         WyXsH6lMSKRlgEwW9IjwloSyLIc9sCvrtIXbkAMQqbWLDm10T8XZ7XyDg5C84HWAlcep
+         zh30vyBFsSaFGGLC8KE50rO7+I7UXPD6gvIB3Jbl5jtU3uHqImETrewK4RvWjJIR60wg
+         XmjT9UDoAPpSE5N718dNjh88hXhpUFG/Ab6tWgLsW5UxzfeY4xqwdH3/7qtp9CceuWnR
+         HEk+afIHsLa6JCjHsx6l7gKtxLz86GLH1Gt0IgR741fovwBbCSb8el95mqNoC7+bxT6v
+         RM2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xQ4ce+x35rsYY2o9p5K+v8CMy5RJxb4zWb9mr9D1IXc=;
+        b=i05syPX1KynMsSyn98A4AHjtan+pszLIgMFQNxC+vMRVQ1IxItzdBoKXNKwxf1FDuK
+         hgD0IIQgyNLf2SVuHsFVLJskL/D5DdhZT3T2VeDTltmBMN61L3wsohqEEx0gCaveTuN0
+         JWv4rlFdMFsFGHEU8ADPvkQJ5REr5yCJCl0KhIOcvfHRF0Wa2KXk00PXF2lMJtDcTNTJ
+         Q7XNe5QYquUzjpqvGFVtEBF6Z9GWyJFrdZuc5WLiT7bFPVk848Ap79Co7XB4sU5CEi8e
+         rPtx699+dsX8nrdIm894tB3y6ixUYtFTgjhXl1VWg10kL/zuvlSH5PT/L23PCNfCzRV3
+         YNzw==
+X-Gm-Message-State: APjAAAVZfTnrvgIod9xz8OJabRWqWzW3p0E7sGtkM1qdrLRIrqylF9KK
+        gRfQKWyulIewl3GNt+25YZ4=
+X-Google-Smtp-Source: APXvYqzs68nCVLNXdvBtvfphp2c5AsFtEftsuIxWnLsNfPVw3Cgm6bUXIpmze0HkCQry6olx6IzSag==
+X-Received: by 2002:adf:c541:: with SMTP id s1mr1760212wrf.44.1561528131040;
+        Tue, 25 Jun 2019 22:48:51 -0700 (PDT)
+Received: from [10.43.17.24] (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id a84sm1236284wmf.29.2019.06.25.22.48.49
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 25 Jun 2019 22:48:50 -0700 (PDT)
+Subject: Re: [RFC PATCH v5 1/1] Add dm verity root hash pkcs7 sig validation.
+To:     Mike Snitzer <snitzer@redhat.com>,
+        Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, scottsh@microsoft.com,
+        ebiggers@google.com, jmorris@namei.org, dm-devel@redhat.com,
+        mpatocka@redhat.com, agk@redhat.com
+References: <20190619191048.20365-1-jaskarankhurana@linux.microsoft.com>
+ <20190619191048.20365-2-jaskarankhurana@linux.microsoft.com>
+ <20190625182004.GA32075@redhat.com>
+From:   Milan Broz <gmazyland@gmail.com>
+Openpgp: preference=signencrypt
+Message-ID: <e0cb17cc-35f9-46e2-ca1a-1c942989ed20@gmail.com>
+Date:   Wed, 26 Jun 2019 07:48:49 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190625201341.15865-3-sashal@kernel.org>
+In-Reply-To: <20190625182004.GA32075@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -52,70 +73,43 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/25/19 1:13 PM, Sasha Levin wrote:
-> This patch adds basic documentation to describe the new fTPM driver.
+On 25/06/2019 20:20, Mike Snitzer wrote:
+> On Wed, Jun 19 2019 at  3:10pm -0400,
+> Jaskaran Khurana <jaskarankhurana@linux.microsoft.com> wrote:
 > 
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  Documentation/security/tpm/index.rst        |  1 +
->  Documentation/security/tpm/tpm_ftpm_tee.rst | 31 +++++++++++++++++++++
->  2 files changed, 32 insertions(+)
->  create mode 100644 Documentation/security/tpm/tpm_ftpm_tee.rst
+>> The verification is to support cases where the roothash is not secured by
+>> Trusted Boot, UEFI Secureboot or similar technologies.
+>> One of the use cases for this is for dm-verity volumes mounted after boot,
+>> the root hash provided during the creation of the dm-verity volume has to
+>> be secure and thus in-kernel validation implemented here will be used
+>> before we trust the root hash and allow the block device to be created.
+>>
+>> The signature being provided for verification must verify the root hash and
+>> must be trusted by the builtin keyring for verification to succeed.
+>>
+>> The hash is added as a key of type "user" and the description is passed to 
+>> the kernel so it can look it up and use it for verification.
+>>
+>> Kernel commandline parameter will indicate whether to check (only if 
+>> specified) or force (for all dm verity volumes) roothash signature 
+>> verification.
+>>
+>> Kernel commandline: dm_verity.verify_sig=1 or 2 for check/force root hash
+>> signature validation respectively.
+>>
+>> Signed-off-by: Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
 > 
-> diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
-> index af77a7bbb070..15783668644f 100644
-> --- a/Documentation/security/tpm/index.rst
-> +++ b/Documentation/security/tpm/index.rst
-> @@ -4,4 +4,5 @@ Trusted Platform Module documentation
->  
->  .. toctree::
->  
-> +   tpm_ftpm_tee
->     tpm_vtpm_proxy
-> diff --git a/Documentation/security/tpm/tpm_ftpm_tee.rst b/Documentation/security/tpm/tpm_ftpm_tee.rst
-> new file mode 100644
-> index 000000000000..48de0dcec0f6
-> --- /dev/null
-> +++ b/Documentation/security/tpm/tpm_ftpm_tee.rst
-> @@ -0,0 +1,31 @@
-> +=============================================
-> +Firmware TPM Driver
-> +=============================================
-> +
-> +| Authors:
-> +| Thirupathaiah Annapureddy <thiruan@microsoft.com>
-> +| Sasha Levin <sashal@kernel.org>
-> +
-> +This document describes the firmware Trusted Platform Module (fTPM)
-> +device driver.
-> +
-> +Introduction
-> +============
-> +
-> +This driver is a shim for firmware implemented in ARM's TrustZone
-> +environment. The driver allows programs to interact with the TPM in the same
-> +way they would interact with a hardware TPM.
-> +
-> +Design
-> +======
-> +
-> +The driver acts as a thin layer that passes commands to and from a TPM
-> +implemented in firmware. The driver itself doesn't contain much logic and is
-> +used more like a dumb pipe between firmware and kernel/userspace.
-> +
-> +The firmware itself is based on the following paper:
-> +https://www.microsoft.com/en-us/research/wp-content/uploads/2017/06/ftpm1.pdf
-> +
-> +When the driver is loaded it will expose ``/dev/tpmX`` character devices to
-> +userspace which will enable userspace to communicate with the firmware TPM
-> +through this device.
-> 
+> Milan and/or others: could you please provide review and if you're OK
+> with this patch respond accordingly?
 
+Stand by please :)
 
--- 
-~Randy
+I like the patch, I think all major problems were solved, but I still need to test it somehow.
+
+Anyway, for the time being, I keep all ongoing patches that need some later
+userspace support in my branch
+https://git.kernel.org/pub/scm/linux/kernel/git/mbroz/linux.git/log/?h=dm-cryptsetup
+so at least it get some automated testing.
+
+Milan
+
