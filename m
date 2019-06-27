@@ -2,84 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B087D5853D
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Jun 2019 17:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B934258540
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Jun 2019 17:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbfF0PIZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 Jun 2019 11:08:25 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:58904 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726431AbfF0PIY (ORCPT
+        id S1726443AbfF0PIw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 Jun 2019 11:08:52 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8372 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727059AbfF0PIv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 Jun 2019 11:08:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4CZwDA7Pj4HoUqoimtFG6dWxz1lB8O8Y9IowCuyvjuo=; b=UWo6VtIXVEJUQFD02J/NXsl1wM
-        dksFvEed5QUKJoHfH5JDzfNzWNvVYRJdhlJedBY+a7xGjEJkkV1DyQzILnoLXCOtpAPk6gpxXhWCd
-        /bywSwc445dDB7Yc/btARPRov91Qe/os/xxO0dhqnmXVwRuCcpGUqyw/6D69aBX0almWfrGXonzbG
-        BnT/W9EyfkP9tx3HmuTk9NYes5OwqyUC2/yHlS3/t8E52Jn8sAGbRLwzMvPbCiQOaDJaNKuzO+yHj
-        oPp199PgJLgRw4Q/CzVPdgLpUs0iEmpT6q3e3sI09KgfkxXP4yFtVtlFqskFipbBHzLCf+0wa4WZk
-        8wVY9SDA==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hgW0a-00014f-Om; Thu, 27 Jun 2019 15:08:20 +0000
-Subject: Re: linux-next: Tree for Jun 26 (security/integrity/ima/)
-To:     David Howells <dhowells@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-References: <1561640534.4101.124.camel@linux.ibm.com>
- <20190626231617.1e858da3@canb.auug.org.au>
- <ee503bc1-a588-81f5-47e0-1762f590662f@infradead.org>
- <9446.1561642145@warthog.procyon.org.uk>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <596322b1-1c89-0538-5c26-cd132b03e3eb@infradead.org>
-Date:   Thu, 27 Jun 2019 08:08:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <9446.1561642145@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        Thu, 27 Jun 2019 11:08:51 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5RF5Zxb040882
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2019 11:08:50 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tcx4xqjne-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2019 11:08:49 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 27 Jun 2019 16:08:46 +0100
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 27 Jun 2019 16:08:43 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5RF8X5p33947926
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Jun 2019 15:08:33 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E07D7A4051;
+        Thu, 27 Jun 2019 15:08:42 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8011A4040;
+        Thu, 27 Jun 2019 15:08:41 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.82.20])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 27 Jun 2019 15:08:41 +0000 (GMT)
+Subject: Re: [PATCH V10 2/3] IMA: Define a new template field buf
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, roberto.sassu@huawei.com,
+        vgoyal@redhat.com
+Date:   Thu, 27 Jun 2019 11:08:31 -0400
+In-Reply-To: <87ftnyk5e0.fsf@morokweng.localdomain>
+References: <20190624062331.388-1-prsriva02@gmail.com>
+         <20190624062331.388-3-prsriva02@gmail.com>
+         <87ftnyk5e0.fsf@morokweng.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19062715-0028-0000-0000-0000037E4223
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19062715-0029-0000-0000-0000243E6CD9
+Message-Id: <1561648111.4101.135.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-27_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906270176
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/27/19 6:29 AM, David Howells wrote:
-> Mimi Zohar <zohar@linux.ibm.com> wrote:
+On Mon, 2019-06-24 at 19:03 -0300, Thiago Jung Bauermann wrote:
+> Hello Prakhar,
 > 
->>>   CC      security/integrity/ima/ima_fs.o
->>> In file included from ../security/integrity/ima/ima.h:25:0,
->>>                  from ../security/integrity/ima/ima_fs.c:26:
->>> ../security/integrity/ima/../integrity.h:170:18: warning: ‘struct key_acl’ declared inside parameter list [enabled by default]
->>>            struct key_acl *acl)
->>>                   ^
->>> ../security/integrity/ima/../integrity.h:170:18: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
->>
->> David, CONFIG_INTEGRITY_SIGNATURE is dependent on KEYS being enabled,
->> but the stub functions are not.  There's now a dependency on
->> key_acl().
+> Prakhar Srivastava <prsriva02@gmail.com> writes:
 > 
-> I added a forward declaration for struct key_acl into
-> security/integrity/integrity.h as you can see here:
+> > diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+> > index 00dd5a434689..a01a17e5c581 100644
+> > --- a/security/integrity/ima/ima_template.c
+> > +++ b/security/integrity/ima/ima_template.c
+> > @@ -26,6 +26,7 @@ static struct ima_template_desc builtin_templates[] = {
+> >  	{.name = IMA_TEMPLATE_IMA_NAME, .fmt = IMA_TEMPLATE_IMA_FMT},
+> >  	{.name = "ima-ng", .fmt = "d-ng|n-ng"},
+> >  	{.name = "ima-sig", .fmt = "d-ng|n-ng|sig"},
+> > +	{.name = "ima-buf", .fmt = "d-ng|n-ng|buf"},
+> >  	{.name = "", .fmt = ""},	/* placeholder for a custom format */
+> >  };
+> >
+> > @@ -43,6 +44,8 @@ static const struct ima_template_field supported_fields[] = {
+> >  	 .field_show = ima_show_template_string},
+> >  	{.field_id = "sig", .field_init = ima_eventsig_init,
+> >  	 .field_show = ima_show_template_sig},
+> > +	{.field_id = "buf", .field_init = ima_eventbuf_init,
+> > +	 .field_show = ima_show_template_buf},
+> >  };
+> >  #define MAX_TEMPLATE_NAME_LEN 15
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/diff/security/integrity/integrity.h?h=keys-acl&id=75ce113a1d56880e5abd37fa664ea9af399d2bcd
+> Currently, MAX_TEMPLATE_NAME_LEN is the length of a template that
+> contains all valid fields. It may make sense to increase it since
+> there's a new field being added.
 > 
-> which might not have made it into linux-next before you used it.
+> I suggest using a sizeof() to show where the number comes from (and
+> which can be visually shown to be correct):
+> 
+> #define MAX_TEMPLATE_NAME_LEN sizeof("d|n|d-ng|n-ng|sig|buf")
+> 
+> The sizeof() is calculated at compile time.
 
-No problem in linux-next 20190627.
+MAX_TEMPLATE_NAME_LEN is used when restoring measurements carried over
+from a kexec.  'd' and 'd-ng' should not both be defined in the
+template description, nor should 'n' and 'n-ng'.  Even without the
+duplication, the MAX_TEPLATE_NAME_LEN is greater than the current 15.
 
-Thanks.
+Thiago, could you address this as a separate patch?
 
--- 
-~Randy
+thanks!
+
+Mimi
+
+
+
