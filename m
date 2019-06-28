@@ -2,122 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F4A5933A
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2019 07:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8569593A8
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2019 07:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbfF1FMN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Jun 2019 01:12:13 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:45013 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726240AbfF1FMN (ORCPT
+        id S1726882AbfF1Fua (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Jun 2019 01:50:30 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36369 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726566AbfF1Fu3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Jun 2019 01:12:13 -0400
-Received: by mail-wr1-f66.google.com with SMTP id r16so2941622wrl.11;
-        Thu, 27 Jun 2019 22:12:11 -0700 (PDT)
+        Fri, 28 Jun 2019 01:50:29 -0400
+Received: by mail-lj1-f195.google.com with SMTP id i21so4738774ljj.3
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2019 22:50:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:openpgp:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=SJl+MEcLHxsmC7hL4toqKB0JY3VqT6Z87x0g1KUG1aU=;
-        b=Xj0afykFiahF870UUKq5lZkACMiX71h/r/Fjzqg0kwINVwRSXMJIdIxbMFTjvAmKKj
-         r9aTY7HivgbiWpxz/UkX9PgvGJ72XaLblhYwGeSp6U1yFk62FguSSfYz0VS9a0/O3k3n
-         5ZFZmFdkEvgaz24Ic8fH8oAamBFeBd71A2fqOha9ABaSH1jFBRN6voUSYFZ0yjbgBQ7a
-         aIwH0sZXTZ+toSpmqi2C0BL/a98uHowFepcb1aWDJ4GtAmcbFRXJi/ACi2JtShWxiyS+
-         j4+65Zfxv50nYfdJ+j6vXWB9anIuclvwSMlxR3cEx0VUf58aJWT8EQ7h61VaCBTqGV/D
-         vw2Q==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cbFBRaRExGspP5FBHqiodiH1th1SFCHyj3/EvKVMOx0=;
+        b=VKNi1swUOq5lK8dq5fqpEDERV76IAnNdVZ5XZGkHh0446kzeu1AUrTBtfcWnqjwz7s
+         CFLCv+VQfnCjIW21Uxjhk9kIItpOCpOBVaNjc4RN6PTb/zpOPrs2Jj7LcyAqecc21QRV
+         2zT0yeebkvwCzjWi2Tq7+2u7CBR3i7VsePNdHChsH3C/xrJfBA9rwWPDAi8E7lXECpz8
+         Q1nuzUYvZIvaVHYYNFAHG986q7tr+zKqYG229xXRcT4HSClajfzb3LUyrKnMstHdN24Y
+         IWVk/TCCmQCNkoJVw/Yul28cipc8m3F/AL+0q4ind6UeYydAvf+v66mhP8+vCEXX70QX
+         +NNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=SJl+MEcLHxsmC7hL4toqKB0JY3VqT6Z87x0g1KUG1aU=;
-        b=lGZUPlzgnOsOnhp3whEf0EDCX2ieGKXHjkH249TQ7Lxt34JUqGrnhkBe8l3eyezyzn
-         0GzNvZA5Nrk+VzrU7t5OG5HYvZ0HhuHTKn6jb4da8LpaP+2C+ZbJCXyGMhL91jGk34TE
-         quojnPvuol11rGsYyhTecD8XvYxg7kCdGL7QO06K2ukLLSQrFOtZEafuZ2YklGmlVbnh
-         YHRzktFwn/nNNj1eSO+oqJysuwwDXDWsMFEBb9VW+sUkYPRkUU5gh0SWkmxbeOdBAoda
-         hmZCfXY5fIVpcA7fYmIS8/xt6NMKP/eaP4hDyc16ZJr5CtgUpvCd8sDeS0ob76Yodl7P
-         xV7g==
-X-Gm-Message-State: APjAAAVQnYMvvA1w4ZwVgoxMU2wqzb8Zc0TjjlDzWjiT2k29xt/UGdqS
-        8C7hQKSkgQest0I0ywSL5Wo=
-X-Google-Smtp-Source: APXvYqw7iXg661+P0ytoSzuTlnML16T3d6/S3LFZw22cAgZe+5f7D14Z3sXNaeE4rKoyj1MqsaEQrg==
-X-Received: by 2002:adf:de90:: with SMTP id w16mr5957398wrl.217.1561698731019;
-        Thu, 27 Jun 2019 22:12:11 -0700 (PDT)
-Received: from [192.168.2.27] (39.35.broadband4.iol.cz. [85.71.35.39])
-        by smtp.gmail.com with ESMTPSA id a2sm2218310wmj.9.2019.06.27.22.12.09
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 22:12:10 -0700 (PDT)
-Subject: Re: [RFC PATCH v5 1/1] Add dm verity root hash pkcs7 sig validation.
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Jaskaran Singh Khurana <jaskarankhurana@linux.microsoft.com>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, agk@redhat.com, snitzer@redhat.com,
-        dm-devel@redhat.com, jmorris@namei.org, scottsh@microsoft.com,
-        mpatocka@redhat.com
-References: <20190619191048.20365-1-jaskarankhurana@linux.microsoft.com>
- <20190619191048.20365-2-jaskarankhurana@linux.microsoft.com>
- <20190627234149.GA212823@gmail.com>
- <alpine.LRH.2.21.1906271844470.22562@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.inter>
- <20190628030017.GA673@sol.localdomain>
-From:   Milan Broz <gmazyland@gmail.com>
-Openpgp: preference=signencrypt
-Message-ID: <264565b3-ff3c-29c0-7df0-d8ff061087d3@gmail.com>
-Date:   Fri, 28 Jun 2019 07:12:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cbFBRaRExGspP5FBHqiodiH1th1SFCHyj3/EvKVMOx0=;
+        b=EemIGuS3822lEfJyOtAoY/HA8tZ55bgK4zIBxfOfMDsDx8gfVvGHlflO6L+d2eQVEo
+         Y+x4Bjv6DUcs6wRnnxYEYQkacoyaxjy6rRDRmZWQwo0VvHn99lTttu/2dyN9q9Eum3MK
+         759buPgWXopgqtklexKIqcCY4FFJUo17P7gBy0sQWuzd056f8SpA9u/QPAfnA+8Ku9aZ
+         jM+pTcETYCLyOSxGt3WqjgeFoqW+jf/yGkPjSzanlRPmcGBjtE2pGpX7GCEmKCUpovwk
+         gPlMjPrYZ0iNL+0bpMj2Gfc8lJt4siuXidMzKOHa9xfxF6RsdKLLnzuzuTMryDlnm2ba
+         SORg==
+X-Gm-Message-State: APjAAAVcVg/ubf1Xr4xoO4KArVt6yYJPTjN4vyHRZQ3MyO4Bn4bg03FW
+        /VW9YFtP+s+kNR0321+304MaK9iXC00nCV3yY3gk9w==
+X-Google-Smtp-Source: APXvYqyEmJlYN3SMPXRrWfgX1NnF/P7C1CPVt4Z22T7CZtmDkBsqof9nh+eUEiF4lozTqMf3BR8KLe04tRokqvKZ1VQ=
+X-Received: by 2002:a2e:4b12:: with SMTP id y18mr4842583lja.238.1561701027991;
+ Thu, 27 Jun 2019 22:50:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190628030017.GA673@sol.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190625201341.15865-1-sashal@kernel.org> <20190625201341.15865-2-sashal@kernel.org>
+ <673dd30d03e8ed9825bb46ef21b2efef015f6f2a.camel@linux.intel.com>
+ <20190626235653.GL7898@sasha-vm> <b688e845ccbe011c54b10043fbc3c0de8f0befc2.camel@linux.intel.com>
+In-Reply-To: <b688e845ccbe011c54b10043fbc3c0de8f0befc2.camel@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 28 Jun 2019 11:20:16 +0530
+Message-ID: <CAFA6WYM=YFec7rx6QSWtaZYeY8LrcjQ3bbMMtF0r6jbBaHX+Bw@mail.gmail.com>
+Subject: Re: [PATCH v7 1/2] fTPM: firmware TPM running in TEE
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, corbet@lwn.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Microsoft Linux Kernel List <linux-kernel@microsoft.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        "Bryan Kelly (CSI)" <bryankel@microsoft.com>,
+        tee-dev@lists.linaro.org,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        rdunlap@infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 28/06/2019 05:00, Eric Biggers wrote:
->> Hello Eric,
->>
->> This started with a config (see V4). We didnot want scripts that pass this
->> parameter to suddenly stop working if for some reason the verification is
->> turned off so the optional parameter was just parsed and no validation
->> happened if the CONFIG was turned off. This was changed to a commandline
->> parameter after feedback from the community, so I would prefer to keep it
->> *now* as commandline parameter. Let me know if you are OK with this.
->>
->> Regards,
->> JK
-> 
-> Sorry, I haven't been following the whole discussion.  (BTW, you sent out
-> multiple versions both called "v4", and using a cover letter for a single patch
-> makes it unnecessarily difficult to review.)  However, it appears Milan were
-> complaining about the DM_VERITY_VERIFY_ROOTHASH_SIG_FORCE option which set the
-> policy for signature verification, *not* the DM_VERITY_VERIFY_ROOTHASH_SIG
-> option which enabled support for signature verification.  Am I missing
-> something?  You can have a module parameter which controls the "signatures
-> required" setting, while also allowing people to compile out kernel support for
-> the signature verification feature.
+Hi Jarkko and Sasha,
 
-Yes, this was exactly my point.
+On Thu, 27 Jun 2019 at 18:47, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Wed, 2019-06-26 at 19:56 -0400, Sasha Levin wrote:
+> > > You've used so much on this so shouldn't this have that somewhat new
+> > > co-developed-by tag? I'm also wondering can this work at all
+> >
+> > Honestly, I've just been massaging this patch more than "authoring" it.
+> > If you feel strongly about it feel free to add a Co-authored patch with
+> > my name, but in my mind this is just Thiru's work.
+>
+> This is just my subjective view but writing code is easier than making
+> it work in the mainline in 99% of cases. If this patch was doing
+> something revolutional, lets say a new outstanding scheduling algorithm,
+> then I would think otherwise. It is not. You without question deserve
+> both credit and also the blame (if this breaks everything) :-)
+>
+> > > process-wise if the original author of the patch is also the only tester
+> > > of the patch?
+> >
+> > There's not much we can do about this... Linaro folks have tested this
+> > without the fTPM firmware, so at the very least it won't explode for
+> > everyone. If for some reason non-microsoft folks see issues then we can
+> > submit patches on top to fix this, we're not just throwing this at you
+> > and running away.
+>
+> So why any of those Linaro folks can't do it? I can add after tested-by
+> tag parentheses something explaining that context of testing. It is
+> reasonable given the circumstances.
 
-I think I even mention in some reply to use exactly the same config Makefile logic
-as for FEC - to allow completely compile it out of the source:
+Simply because the hardware I have (Developerbox) doesn't provide
+enough flash space (as per current memory map) for this fTPM driver to
+be loaded as early TA along with OP-TEE binary. So I can't get any
+further point than sanity probe failure check for which I think a
+tested-by won't be appropriate.
 
-ifeq ($(CONFIG_DM_VERITY_FEC),y)
-dm-verity-objs                  += dm-verity-fec.o
-endif
+-Sumit
 
-> Sure, it means that the signature verification support won't be guaranteed to be
-> present when dm-verity is.  But the same is true of the hash algorithm (e.g.
-> sha512), and of the forward error correction feature.  Since the signature
-> verification is nontrivial and pulls in a lot of other kernel code which might
-> not be otherwise needed (via SYSTEM_DATA_VERIFICATION), it seems a natural
-> candidate for putting the support behind a Kconfig option.
-
-On the other side, dm-verity is meant for a system verification, so if it depends
-on SYSTEM_DATA_VERIFICATION is ... not so surprising :)
-
-But the change above is quite easy and while we already have FEC as config option,
-perhaps let's do it the same here.
-
-Milan
+>
+> I can also give an explanation in my next PR along the lines what you
+> are saying. This would definitely work for me.
+>
+> /Jarkko
+>
