@@ -2,114 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8569593A8
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2019 07:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09EA5956B
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2019 09:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbfF1Fua (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Jun 2019 01:50:30 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:36369 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726566AbfF1Fu3 (ORCPT
+        id S1726431AbfF1H4e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Jun 2019 03:56:34 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36576 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726385AbfF1H4d (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Jun 2019 01:50:29 -0400
-Received: by mail-lj1-f195.google.com with SMTP id i21so4738774ljj.3
-        for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2019 22:50:28 -0700 (PDT)
+        Fri, 28 Jun 2019 03:56:33 -0400
+Received: by mail-wr1-f68.google.com with SMTP id n4so5236161wrs.3
+        for <linux-integrity@vger.kernel.org>; Fri, 28 Jun 2019 00:56:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cbFBRaRExGspP5FBHqiodiH1th1SFCHyj3/EvKVMOx0=;
-        b=VKNi1swUOq5lK8dq5fqpEDERV76IAnNdVZ5XZGkHh0446kzeu1AUrTBtfcWnqjwz7s
-         CFLCv+VQfnCjIW21Uxjhk9kIItpOCpOBVaNjc4RN6PTb/zpOPrs2Jj7LcyAqecc21QRV
-         2zT0yeebkvwCzjWi2Tq7+2u7CBR3i7VsePNdHChsH3C/xrJfBA9rwWPDAi8E7lXECpz8
-         Q1nuzUYvZIvaVHYYNFAHG986q7tr+zKqYG229xXRcT4HSClajfzb3LUyrKnMstHdN24Y
-         IWVk/TCCmQCNkoJVw/Yul28cipc8m3F/AL+0q4ind6UeYydAvf+v66mhP8+vCEXX70QX
-         +NNg==
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:openpgp:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=99D1Ffx7ulGv1+mS0gf0uwoTH1CY21lfb7DrhE6Anyw=;
+        b=fGaqx+TxY2e/WSTUC74afbNS824jhkMiHIzaa62VKKli5j96PxgwjImtEa11BsrZDR
+         qn6FGiXFRGmjZ/0kk9iCQXiwagmMsX2YN+Ph1P42SfS3FWabfRnUGMcKf7I0g7uMg6Gf
+         p5xeosmTWAIwQy+n9ycKbcy1O4rYWU/Txi/3qhJsWChg1N4SwrsJCeX73yiO4d9Urj7S
+         +7z25rEszSXGb7UhxXpjNnPNy6394m3ObpE3cEQA08eFplb5WB8lb6Qb5wwyTg9Imm+H
+         03QwjBq5EbIKSWToYymcRd9SKhVJcxq5z0s6pP/k9Yat2KbnFr8/X3kFFPtMxS70/P9n
+         5WWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cbFBRaRExGspP5FBHqiodiH1th1SFCHyj3/EvKVMOx0=;
-        b=EemIGuS3822lEfJyOtAoY/HA8tZ55bgK4zIBxfOfMDsDx8gfVvGHlflO6L+d2eQVEo
-         Y+x4Bjv6DUcs6wRnnxYEYQkacoyaxjy6rRDRmZWQwo0VvHn99lTttu/2dyN9q9Eum3MK
-         759buPgWXopgqtklexKIqcCY4FFJUo17P7gBy0sQWuzd056f8SpA9u/QPAfnA+8Ku9aZ
-         jM+pTcETYCLyOSxGt3WqjgeFoqW+jf/yGkPjSzanlRPmcGBjtE2pGpX7GCEmKCUpovwk
-         gPlMjPrYZ0iNL+0bpMj2Gfc8lJt4siuXidMzKOHa9xfxF6RsdKLLnzuzuTMryDlnm2ba
-         SORg==
-X-Gm-Message-State: APjAAAVcVg/ubf1Xr4xoO4KArVt6yYJPTjN4vyHRZQ3MyO4Bn4bg03FW
-        /VW9YFtP+s+kNR0321+304MaK9iXC00nCV3yY3gk9w==
-X-Google-Smtp-Source: APXvYqyEmJlYN3SMPXRrWfgX1NnF/P7C1CPVt4Z22T7CZtmDkBsqof9nh+eUEiF4lozTqMf3BR8KLe04tRokqvKZ1VQ=
-X-Received: by 2002:a2e:4b12:: with SMTP id y18mr4842583lja.238.1561701027991;
- Thu, 27 Jun 2019 22:50:27 -0700 (PDT)
+        h=x-gm-message-state:subject:to:references:from:openpgp:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=99D1Ffx7ulGv1+mS0gf0uwoTH1CY21lfb7DrhE6Anyw=;
+        b=c1edRi/nhLDiyDiq2Mi9NqJ80YNYTyYhe95JbyaHDuRuShi1NK3xwKoKkm0xAPRVvf
+         aBKYK6wtvVt77NvWFDrUUOFIgnRqEdxNvo9SCC2dJllkltnSnEQeoPO4wreTSAsktKE5
+         JT7XLvb4Rwyc4m9FGMO8Jdckewx9i5EpOSiL4nSC1z+z4F9cuIJcEYLTCsJghqyveaBc
+         M3/fB7GKiXUsyRmlHaqehw9T5Ftwujn86jNmhTYsMc552ILrVkJpXHUi5XH0abvwkaa3
+         ixcXcEOBtX9pJ1i1eeG67SHHKb0cIBZlZh2FUyPTeUpCQirTVF3Ib9sT2kbzsUl8kI1N
+         +mug==
+X-Gm-Message-State: APjAAAW4MabJCSN7vaK5GIn5id+lqzwpsXnnNz31V0qJ7/lczcaT2cz7
+        Hl02qn3NeIAwsWm1jt85g+FWXYH/Nis=
+X-Google-Smtp-Source: APXvYqw9M6qv06O0dTBpVMXGX0TUrWSKi9NJaV7lCFGIbnceTE4EXcEEdLHEbHMxFTn9nTP93ighMg==
+X-Received: by 2002:adf:f581:: with SMTP id f1mr6867879wro.179.1561708591512;
+        Fri, 28 Jun 2019 00:56:31 -0700 (PDT)
+Received: from [192.168.8.100] (89-24-34-195.nat.epc.tmcz.cz. [89.24.34.195])
+        by smtp.gmail.com with ESMTPSA id b5sm1325640wrq.61.2019.06.28.00.56.30
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jun 2019 00:56:30 -0700 (PDT)
+Subject: Re: [PATCH] tpm: Fix null pointer dereference on chip register error
+ path
+To:     linux-integrity@vger.kernel.org, jarkko.sakkinen@linux.intel.com,
+        James Morris <jmorris@namei.org>
+References: <20190612084210.13562-1-gmazyland@gmail.com>
+From:   Milan Broz <gmazyland@gmail.com>
+Openpgp: preference=signencrypt
+Message-ID: <9df0a432-eb9c-914e-5ddc-2680a6fecebd@gmail.com>
+Date:   Fri, 28 Jun 2019 09:56:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20190625201341.15865-1-sashal@kernel.org> <20190625201341.15865-2-sashal@kernel.org>
- <673dd30d03e8ed9825bb46ef21b2efef015f6f2a.camel@linux.intel.com>
- <20190626235653.GL7898@sasha-vm> <b688e845ccbe011c54b10043fbc3c0de8f0befc2.camel@linux.intel.com>
-In-Reply-To: <b688e845ccbe011c54b10043fbc3c0de8f0befc2.camel@linux.intel.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 28 Jun 2019 11:20:16 +0530
-Message-ID: <CAFA6WYM=YFec7rx6QSWtaZYeY8LrcjQ3bbMMtF0r6jbBaHX+Bw@mail.gmail.com>
-Subject: Re: [PATCH v7 1/2] fTPM: firmware TPM running in TEE
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, corbet@lwn.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Microsoft Linux Kernel List <linux-kernel@microsoft.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        "Bryan Kelly (CSI)" <bryankel@microsoft.com>,
-        tee-dev@lists.linaro.org,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        rdunlap@infradead.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190612084210.13562-1-gmazyland@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko and Sasha,
+Hi,
 
-On Thu, 27 Jun 2019 at 18:47, Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Wed, 2019-06-26 at 19:56 -0400, Sasha Levin wrote:
-> > > You've used so much on this so shouldn't this have that somewhat new
-> > > co-developed-by tag? I'm also wondering can this work at all
-> >
-> > Honestly, I've just been massaging this patch more than "authoring" it.
-> > If you feel strongly about it feel free to add a Co-authored patch with
-> > my name, but in my mind this is just Thiru's work.
->
-> This is just my subjective view but writing code is easier than making
-> it work in the mainline in 99% of cases. If this patch was doing
-> something revolutional, lets say a new outstanding scheduling algorithm,
-> then I would think otherwise. It is not. You without question deserve
-> both credit and also the blame (if this breaks everything) :-)
->
-> > > process-wise if the original author of the patch is also the only tester
-> > > of the patch?
-> >
-> > There's not much we can do about this... Linaro folks have tested this
-> > without the fTPM firmware, so at the very least it won't explode for
-> > everyone. If for some reason non-microsoft folks see issues then we can
-> > submit patches on top to fix this, we're not just throwing this at you
-> > and running away.
->
-> So why any of those Linaro folks can't do it? I can add after tested-by
-> tag parentheses something explaining that context of testing. It is
-> reasonable given the circumstances.
+is there any problem in this with the trivial patch below?
 
-Simply because the hardware I have (Developerbox) doesn't provide
-enough flash space (as per current memory map) for this fTPM driver to
-be loaded as early TA along with OP-TEE binary. So I can't get any
-further point than sanity probe failure check for which I think a
-tested-by won't be appropriate.
+I just get the same crash again with stable 5.1 kernel...
 
--Sumit
+Milan
 
->
-> I can also give an explanation in my next PR along the lines what you
-> are saying. This would definitely work for me.
->
-> /Jarkko
->
+
+On 12/06/2019 10:42, Milan Broz wrote:
+> If clk_enable is not defined and chip initialization
+> is canceled code hits null dereference.
+> 
+> Easily reproducible with vTPM init fail:
+>   swtpm chardev --tpmstate dir=nonexistent_dir --tpm2 --vtpm-proxy
+> 
+> BUG: kernel NULL pointer dereference, address: 00000000
+> ...
+> Call Trace:
+>  tpm_chip_start+0x9d/0xa0 [tpm]
+>  tpm_chip_register+0x10/0x1a0 [tpm]
+>  vtpm_proxy_work+0x11/0x30 [tpm_vtpm_proxy]
+>  process_one_work+0x214/0x5a0
+>  worker_thread+0x134/0x3e0
+>  ? process_one_work+0x5a0/0x5a0
+>  kthread+0xd4/0x100
+>  ? process_one_work+0x5a0/0x5a0
+>  ? kthread_park+0x90/0x90
+>  ret_from_fork+0x19/0x24
+> 
+> Signed-off-by: Milan Broz <gmazyland@gmail.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/char/tpm/tpm-chip.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 90325e1749fb..4c2af643d698 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -95,7 +95,8 @@ int tpm_chip_start(struct tpm_chip *chip)
+>  	if (chip->locality == -1) {
+>  		ret = tpm_request_locality(chip);
+>  		if (ret) {
+> -			chip->ops->clk_enable(chip, false);
+> +			if (chip->ops->clk_enable)
+> +				chip->ops->clk_enable(chip, false);
+>  			return ret;
+>  		}
+>  	}
+> 
