@@ -2,37 +2,35 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B220C5A1B6
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2019 19:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9B45A54E
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2019 21:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726416AbfF1RDQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Jun 2019 13:03:16 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:60832 "EHLO
+        id S1726965AbfF1TpM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Jun 2019 15:45:12 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:60050 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726295AbfF1RDQ (ORCPT
+        with ESMTP id S1726497AbfF1TpM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Jun 2019 13:03:16 -0400
+        Fri, 28 Jun 2019 15:45:12 -0400
 Received: by linux.microsoft.com (Postfix, from userid 1029)
-        id DA9F320BE446; Fri, 28 Jun 2019 10:03:15 -0700 (PDT)
+        id 5A4D22007696; Fri, 28 Jun 2019 12:45:11 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by linux.microsoft.com (Postfix) with ESMTP id 856A53010329;
-        Fri, 28 Jun 2019 10:03:15 -0700 (PDT)
-Date:   Fri, 28 Jun 2019 10:03:15 -0700 (PDT)
+        by linux.microsoft.com (Postfix) with ESMTP id 4A08C301032E;
+        Fri, 28 Jun 2019 12:45:11 -0700 (PDT)
+Date:   Fri, 28 Jun 2019 12:45:11 -0700 (PDT)
 From:   Jaskaran Singh Khurana <jaskarankhurana@linux.microsoft.com>
 X-X-Sender: jaskarankhurana@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net
-To:     Milan Broz <gmazyland@gmail.com>
-cc:     Eric Biggers <ebiggers@kernel.org>,
-        linux-security-module@vger.kernel.org,
+To:     Eric Biggers <ebiggers@kernel.org>
+cc:     linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, agk@redhat.com, snitzer@redhat.com,
         dm-devel@redhat.com, jmorris@namei.org, scottsh@microsoft.com,
-        mpatocka@redhat.com
-Subject: Re: [RFC PATCH v5 1/1] Add dm verity root hash pkcs7 sig
+        mpatocka@redhat.com, gmazyland@gmail.com
+Subject: Re: [RFC PATCH v5 0/1] Add dm verity root hash pkcs7 sig
  validation.
-In-Reply-To: <264565b3-ff3c-29c0-7df0-d8ff061087d3@gmail.com>
-Message-ID: <alpine.LRH.2.21.1906281001020.119795@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.inter>
-References: <20190619191048.20365-1-jaskarankhurana@linux.microsoft.com> <20190619191048.20365-2-jaskarankhurana@linux.microsoft.com> <20190627234149.GA212823@gmail.com> <alpine.LRH.2.21.1906271844470.22562@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.inter>
- <20190628030017.GA673@sol.localdomain> <264565b3-ff3c-29c0-7df0-d8ff061087d3@gmail.com>
+In-Reply-To: <20190628040041.GB673@sol.localdomain>
+Message-ID: <alpine.LRH.2.21.1906281242110.2789@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.inter>
+References: <20190619191048.20365-1-jaskarankhurana@linux.microsoft.com> <20190628040041.GB673@sol.localdomain>
 User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII; format=flowed
@@ -42,59 +40,62 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-Hello Eric/Milan,
+Hello Eric,
+On Thu, 27 Jun 2019, Eric Biggers wrote:
 
-On Fri, 28 Jun 2019, Milan Broz wrote:
-
-> On 28/06/2019 05:00, Eric Biggers wrote:
->>> Hello Eric,
->>>
->>> This started with a config (see V4). We didnot want scripts that pass this
->>> parameter to suddenly stop working if for some reason the verification is
->>> turned off so the optional parameter was just parsed and no validation
->>> happened if the CONFIG was turned off. This was changed to a commandline
->>> parameter after feedback from the community, so I would prefer to keep it
->>> *now* as commandline parameter. Let me know if you are OK with this.
->>>
->>> Regards,
->>> JK
+> On Wed, Jun 19, 2019 at 12:10:47PM -0700, Jaskaran Khurana wrote:
+>> This patch set adds in-kernel pkcs7 signature checking for the roothash of
+>> the dm-verity hash tree.
+>> The verification is to support cases where the roothash is not secured by
+>> Trusted Boot, UEFI Secureboot or similar technologies.
+>> One of the use cases for this is for dm-verity volumes mounted after boot,
+>> the root hash provided during the creation of the dm-verity volume has to
+>> be secure and thus in-kernel validation implemented here will be used
+>> before we trust the root hash and allow the block device to be created.
 >>
->> Sorry, I haven't been following the whole discussion.  (BTW, you sent out
->> multiple versions both called "v4", and using a cover letter for a single patch
->> makes it unnecessarily difficult to review.)  However, it appears Milan were
->> complaining about the DM_VERITY_VERIFY_ROOTHASH_SIG_FORCE option which set the
->> policy for signature verification, *not* the DM_VERITY_VERIFY_ROOTHASH_SIG
->> option which enabled support for signature verification.  Am I missing
->> something?  You can have a module parameter which controls the "signatures
->> required" setting, while also allowing people to compile out kernel support for
->> the signature verification feature.
+>> Why we are doing validation in the Kernel?
+>>
+>> The reason is to still be secure in cases where the attacker is able to
+>> compromise the user mode application in which case the user mode validation
+>> could not have been trusted.
+>> The root hash signature validation in the kernel along with existing
+>> dm-verity implementation gives a higher level of confidence in the
+>> executable code or the protected data. Before allowing the creation of
+>> the device mapper block device the kernel code will check that the detached
+>> pkcs7 signature passed to it validates the roothash and the signature is
+>> trusted by builtin keys set at kernel creation. The kernel should be
+>> secured using Verified boot, UEFI Secure Boot or similar technologies so we
+>> can trust it.
+>>
+>> What about attacker mounting non dm-verity volumes to run executable
+>> code?
+>>
+>> This verification can be used to have a security architecture where a LSM
+>> can enforce this verification for all the volumes and by doing this it can
+>> ensure that all executable code runs from signed and trusted dm-verity
+>> volumes.
+>>
+>> Further patches will be posted that build on this and enforce this
+>> verification based on policy for all the volumes on the system.
+>>
 >
-> Yes, this was exactly my point.
+> I don't understand your justification for this feature.
 >
-> I think I even mention in some reply to use exactly the same config Makefile logic
-> as for FEC - to allow completely compile it out of the source:
+> If userspace has already been pwned severely enough for the attacker to be
+> executing arbitrary code with CAP_SYS_ADMIN (which is what the device mapper
+> ioctls need), what good are restrictions on loading more binaries from disk?
 >
-> ifeq ($(CONFIG_DM_VERITY_FEC),y)
-> dm-verity-objs                  += dm-verity-fec.o
-> endif
+> Please explain your security model.
 >
->> Sure, it means that the signature verification support won't be guaranteed to be
->> present when dm-verity is.  But the same is true of the hash algorithm (e.g.
->> sha512), and of the forward error correction feature.  Since the signature
->> verification is nontrivial and pulls in a lot of other kernel code which might
->> not be otherwise needed (via SYSTEM_DATA_VERIFICATION), it seems a natural
->> candidate for putting the support behind a Kconfig option.
+> - Eric
 >
-> On the other side, dm-verity is meant for a system verification, so if it depends
-> on SYSTEM_DATA_VERIFICATION is ... not so surprising :)
->
-> But the change above is quite easy and while we already have FEC as config option,
-> perhaps let's do it the same here.
->
-> Milan
->
-Yes, I will make this change. Please consider this discussion as resolved. 
-Thanks.
+
+In a datacenter like environment, this will protect the system from below 
+attacks:
+
+1.Prevents attacker from deploying scripts that run arbitrary executables on the system.
+2.Prevents physically present malicious admin to run arbitrary code on the
+   machine.
 
 Regards,
-Jaskaran.
+Jaskaran
