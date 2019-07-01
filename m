@@ -2,140 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AF55B5B7
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Jul 2019 09:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7AB5B82F
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Jul 2019 11:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727869AbfGAH1T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Jul 2019 03:27:19 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:52853 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727224AbfGAH1T (ORCPT
+        id S1728339AbfGAJll (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Jul 2019 05:41:41 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:54375 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728334AbfGAJll (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Jul 2019 03:27:19 -0400
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1hhqib-0001ik-R6; Mon, 01 Jul 2019 09:27:17 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <sha@pengutronix.de>)
-        id 1hhqia-0001bk-SN; Mon, 01 Jul 2019 09:27:16 +0200
-Date:   Mon, 1 Jul 2019 09:27:16 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] ima: fix freeing ongoing ahash_request
-Message-ID: <20190701072716.xo4xjo2nhjo4uhvq@pengutronix.de>
-References: <20190628081449.22515-1-s.hauer@pengutronix.de>
- <1561935704.3985.55.camel@linux.ibm.com>
+        Mon, 1 Jul 2019 05:41:41 -0400
+Received: by mail-wm1-f67.google.com with SMTP id g135so15104200wme.4;
+        Mon, 01 Jul 2019 02:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:openpgp:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6mj1GNCBlm5Kzl/Gv47qDDxI924Jr5t8ezQS95HGAxE=;
+        b=RMrB1vsX/2hK+on0/p7Z7GxznCyEy8+F457kddIrwKQwlCyrQQxmFpdyIB7KPTFSrI
+         1UEEwV35Lu1CwDmb2s+W4OV+NkzstIuw8Cc63+MTmhAkrLOTiGJ1qG16J4JvqTAEsrSs
+         uZnWKKrQgeqZdO/mh9YOy2EoWVT//ZMAZ8eHGu9m2sZo312GQ3vgDEcVGV8kekxPtJMN
+         rv0CFJjViOmLgWPsk0vUPM+G4Qtu0X7i8ze6FzUMeBgTwPapqt1nU/op3JD7L/rym6eB
+         LO9RSQlwXNBw4IS2pP/gIgz2ZEOQZYuk+kM5QZ6v7wLL6Ud/9JPtH+DTjO8Md5KsnlAx
+         l+pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6mj1GNCBlm5Kzl/Gv47qDDxI924Jr5t8ezQS95HGAxE=;
+        b=CNtxuFG0C+fodwzzq5WlRxI4eXG8u4oWNxdMbtgVH9eqvjg3qGe5BECdPnlRUwQHOl
+         5zPPffl0ZubCXhpFD+PP+biNgkSIrDyMEbgruvTLVtTQKAWiZplQgdS2dLMGR0KyHioL
+         0TesIpiz0CRrh47EEDomi3WbSdX2FX5ruq2nNlJHdl08YwgoWwCQP/Xjl6R9L0h3aIDX
+         rzzuHEZgXsEBXJCU2jnPN/HaiJK09JtABWgzPqi3JB/v4dD7z41EiAVtiNLRdbjr3c33
+         YR3fM0RwSsJaBAo0gmjf0z9OjJ0ohc2OjqwkF8BCyZN91V2yIUKbsjb91pvV2Noo1KrB
+         sCRA==
+X-Gm-Message-State: APjAAAUPpI1RUfTiCL2xC0BUakC47MacJo+h/dgw7tjbfOFjPCYRshky
+        BvC0niR5Pjy6mo1wcrJ6Wa0=
+X-Google-Smtp-Source: APXvYqw1GiG2c1p4SOty1AL+8QolpaF03Qeti32qNeBWi0z+owqwU83+3Kt9KKC6JMz4wuXTHDVY/A==
+X-Received: by 2002:a1c:3:: with SMTP id 3mr16735741wma.6.1561974098900;
+        Mon, 01 Jul 2019 02:41:38 -0700 (PDT)
+Received: from [172.22.36.64] (redhat-nat.vtp.fi.muni.cz. [78.128.215.6])
+        by smtp.gmail.com with ESMTPSA id 5sm5860353wmi.22.2019.07.01.02.41.37
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Mon, 01 Jul 2019 02:41:38 -0700 (PDT)
+Subject: Re: [RFC PATCH v5 0/1] Add dm verity root hash pkcs7 sig validation.
+To:     James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, agk@redhat.com, snitzer@redhat.com,
+        dm-devel@redhat.com, scottsh@microsoft.com, mpatocka@redhat.com
+References: <20190619191048.20365-1-jaskarankhurana@linux.microsoft.com>
+ <20190628040041.GB673@sol.localdomain>
+ <alpine.LRH.2.21.1906282040490.15624@namei.org>
+From:   Milan Broz <gmazyland@gmail.com>
+Openpgp: preference=signencrypt
+Message-ID: <749ddf56-3cb6-42c8-9ccc-71e09558400f@gmail.com>
+Date:   Mon, 1 Jul 2019 11:41:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1561935704.3985.55.camel@linux.ibm.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:11:06 up 44 days, 13:29, 70 users,  load average: 0.34, 0.19,
- 0.13
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+In-Reply-To: <alpine.LRH.2.21.1906282040490.15624@namei.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Jun 30, 2019 at 07:01:44PM -0400, Mimi Zohar wrote:
-> Hi Sasha,
+On 29/06/2019 06:01, James Morris wrote:
+> On Thu, 27 Jun 2019, Eric Biggers wrote:
 > 
-> On Fri, 2019-06-28 at 10:14 +0200, Sascha Hauer wrote:
-> > integrity_kernel_read() can fail in which case we forward to call
-> > ahash_request_free() on a currently running request. We have to wait
-> > for its completion before we can free the request.
-> > 
-> > This was observed by interrupting a "find / -type f -xdev -print0 | xargs -0
-> > cat 1>/dev/null" with ctrl-c on an IMA enabled filesystem.
-> > 
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  security/integrity/ima/ima_crypto.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-> > index 16a4f45863b1..6a60bdb322b1 100644
-> > --- a/security/integrity/ima/ima_crypto.c
-> > +++ b/security/integrity/ima/ima_crypto.c
-> > @@ -271,8 +271,10 @@ static int ima_calc_file_hash_atfm(struct file *file,
-> >  		rbuf_len = min_t(loff_t, i_size - offset, rbuf_size[active]);
-> >  		rc = integrity_kernel_read(file, offset, rbuf[active],
-> >  					   rbuf_len);
-> > -		if (rc != rbuf_len)
-> > +		if (rc != rbuf_len) {
-> > +			ahash_wait(ahash_rc, &wait);
-> >  			goto out3;
-> > +		}
+>> I don't understand your justification for this feature.
+>>
+>> If userspace has already been pwned severely enough for the attacker to be
+>> executing arbitrary code with CAP_SYS_ADMIN (which is what the device mapper
+>> ioctls need), what good are restrictions on loading more binaries from disk?
+>>
+>> Please explain your security model.
 > 
-> The normal case when "rc != rbuf_len" is when the last block of the
-> file data is read. 
+> Let's say the system has a policy where all code must be signed with a 
+> valid key, and that one mechanism for enforcing this is via signed 
+> dm-verity volumes. Validating the signature within the kernel provides 
+> stronger assurance than userspace validation. The kernel validates and 
+> executes the code, using kernel-resident keys, and does not need to rely 
+> on validation which has occurred across a trust boundary.
 
-When integrity_kernel_read() returns a value smaller than 0 then it's
-clearly an error and we want to bail out. The case when
-integrity_kernel_read() returns a short read though isn't properly
-handled. We have:
+Yes, but as it is implemented in this patch, a certificate is provided as
+a binary blob by the (super)user that activates the dm-verity device.
 
-		rc = integrity_kernel_read(file, offset, rbuf[active],
-					   rbuf_len);
-		if (rc != rbuf_len)
-			goto out3;
+Actually, I can put there anything that looks like a correct signature (self-signed
+or so), and dm-verity code is happy because the root hash is now signed.
 
-		...
+Maybe could this concept be extended to support in-kernel compiled certificates?
 
-out3:
-	ima_free_pages(rbuf[0], rbuf_size[0]);
-	ima_free_pages(rbuf[1], rbuf_size[1]);
-out2:
-	if (!rc) {
-		ahash_request_set_crypt(req, NULL, hash->digest, 0);
-		rc = ahash_wait(crypto_ahash_final(req), &wait);
-	}
-out1:
-	ahash_request_free(req);
-	return rc;
+I like the idea of signed root hash, but the truth is that if you have access
+to device activation, it brings nothing, you can just put any cert in the keyring
+and use it.
 
+Milan
 
-So on a short read we never finish the ahash request and we return a
-positive number from this function which it seems isn't expected from
-the callers.
-
-I'm not sure if we have to handle a short read, but currently it isn't
-handled. It seems we have to sort that out first.
-
-> In that case the "ahash_wait" isn't needed.  Is
-> there a performance penalty for adding this wait?  Could you
-> differentiate between the last buffer and failure?
 > 
-> Immediately before "out3:" there's a call to ahash_wait().  There are
-> three "goto out3".  This is the only place that skips the call to
-> ahash_wait().  If we do need to add it, it would be better to move the
-> "out3:" definition and remove the other calls to ahash_wait().
-
-The cases are different. Two times we call ahash_wait() and if that
-fails we jump to "out3:". In the case I handle here we are already in
-the error path and still have to call ahash_wait(). We also can't use
-the ahash_wait() after the loop because that would hide the error value
-we want to return (after the loop we have rc = ahash_wait(), we would
-return successfully if we'd jump there).
-
-Sascha
-
-
--- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> You don't need arbitrary CAP_SYS_ADMIN code execution, you just need a 
+> flaw in the app (or its dependent libraries, or configuration) which 
+> allows signature validation to be bypassed.
+> 
+> The attacker now needs a kernel rather than a userspace vulnerability to 
+> bypass the signed code policy.
+> 
