@@ -2,85 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF7D5C202
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Jul 2019 19:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B98A5C2C6
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Jul 2019 20:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbfGARdB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Jul 2019 13:33:01 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:53792 "EHLO
+        id S1727219AbfGASUT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Jul 2019 14:20:19 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:42222 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727334AbfGARdB (ORCPT
+        with ESMTP id S1725853AbfGASUS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Jul 2019 13:33:01 -0400
-Received: by linux.microsoft.com (Postfix, from userid 1029)
-        id 2FEB720BCFC5; Mon,  1 Jul 2019 10:33:00 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by linux.microsoft.com (Postfix) with ESMTP id 2922E3011494;
-        Mon,  1 Jul 2019 10:33:00 -0700 (PDT)
-Date:   Mon, 1 Jul 2019 10:33:00 -0700 (PDT)
-From:   Jaskaran Singh Khurana <jaskarankhurana@linux.microsoft.com>
-X-X-Sender: jaskarankhurana@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net
-To:     Milan Broz <gmazyland@gmail.com>
-cc:     James Morris <jmorris@namei.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-security-module@vger.kernel.org,
+        Mon, 1 Jul 2019 14:20:18 -0400
+Received: from jaskaran-Intel-Server-Board-S1200V3RPS-UEFI-Development-Kit.corp.microsoft.com (unknown [131.107.160.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 28A9620425FF;
+        Mon,  1 Jul 2019 11:20:18 -0700 (PDT)
+From:   Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
+To:     gmazyland@gmail.com, ebiggers@google.com
+Cc:     linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, agk@redhat.com, snitzer@redhat.com,
-        dm-devel@redhat.com, scottsh@microsoft.com, mpatocka@redhat.com
-Subject: Re: [RFC PATCH v5 0/1] Add dm verity root hash pkcs7 sig
- validation.
-In-Reply-To: <749ddf56-3cb6-42c8-9ccc-71e09558400f@gmail.com>
-Message-ID: <alpine.LRH.2.21.1907011029100.31396@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.inter>
-References: <20190619191048.20365-1-jaskarankhurana@linux.microsoft.com> <20190628040041.GB673@sol.localdomain> <alpine.LRH.2.21.1906282040490.15624@namei.org> <749ddf56-3cb6-42c8-9ccc-71e09558400f@gmail.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+        dm-devel@redhat.com, jmorris@namei.org, scottsh@microsoft.com,
+        mdsakib@microsoft.com, mpatocka@redhat.com
+Subject: [RFC PATCH v6 0/1] Add dm verity root hash pkcs7 sig validation.
+Date:   Mon,  1 Jul 2019 11:19:57 -0700
+Message-Id: <20190701181958.6493-1-jaskarankhurana@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Changes in v6:
 
-Hello Milan,
-On Mon, 1 Jul 2019, Milan Broz wrote:
+Address comments from Milan Broz and Eric Biggers on v5.
 
-> On 29/06/2019 06:01, James Morris wrote:
->> On Thu, 27 Jun 2019, Eric Biggers wrote:
->>
->>> I don't understand your justification for this feature.
->>>
->>> If userspace has already been pwned severely enough for the attacker to be
->>> executing arbitrary code with CAP_SYS_ADMIN (which is what the device mapper
->>> ioctls need), what good are restrictions on loading more binaries from disk?
->>>
->>> Please explain your security model.
->>
->> Let's say the system has a policy where all code must be signed with a
->> valid key, and that one mechanism for enforcing this is via signed
->> dm-verity volumes. Validating the signature within the kernel provides
->> stronger assurance than userspace validation. The kernel validates and
->> executes the code, using kernel-resident keys, and does not need to rely
->> on validation which has occurred across a trust boundary.
->
-> Yes, but as it is implemented in this patch, a certificate is provided as
-> a binary blob by the (super)user that activates the dm-verity device.
->
-> Actually, I can put there anything that looks like a correct signature (self-signed
-> or so), and dm-verity code is happy because the root hash is now signed.
->
-> Maybe could this concept be extended to support in-kernel compiled certificates?
->
-> I like the idea of signed root hash, but the truth is that if you have access
-> to device activation, it brings nothing, you can just put any cert in the keyring
-> and use it.
->
-> Milan
->
+-Keep the verification code under config DM_VERITY_VERIFY_ROOTHASH_SIG.
 
-The signature needs to be trusted by the .builtin_trusted_keys which is
-a read-only list of keys that were compiled into the kernel. The 
-verify_pkcs7_signature verifies trust against the builtin keyring so I 
-think what you are suggesting is covered here.
+-Change the command line parameter to requires_signatures(bool) which will
+force root hash to be signed and trusted if specified.
 
-Regards,
-Jaskaran.
+-Fix the signature not being present in verity_status. Merged the
+https://git.kernel.org/pub/scm/linux/kernel/git/mbroz/linux.git/commit/?h=dm-cryptsetup&id=a26c10806f5257e255b6a436713127e762935ad3
+made by Milan Broz and tested it.
+
+
+Jaskaran Khurana (1):
+  Add dm verity root hash pkcs7 sig validation.
+
+ Documentation/device-mapper/verity.txt |   7 ++
+ drivers/md/Kconfig                     |  12 +++
+ drivers/md/Makefile                    |   5 +
+ drivers/md/dm-verity-target.c          |  43 +++++++-
+ drivers/md/dm-verity-verify-sig.c      | 133 +++++++++++++++++++++++++
+ drivers/md/dm-verity-verify-sig.h      |  60 +++++++++++
+ drivers/md/dm-verity.h                 |   2 +
+ 7 files changed, 257 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/md/dm-verity-verify-sig.c
+ create mode 100644 drivers/md/dm-verity-verify-sig.h
+
+-- 
+2.17.1
+
