@@ -2,361 +2,330 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC945BEA0
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Jul 2019 16:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE1F5C054
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Jul 2019 17:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728331AbfGAOsB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Jul 2019 10:48:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43248 "EHLO mail.kernel.org"
+        id S1729377AbfGAPeE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Jul 2019 11:34:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727714AbfGAOsB (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Jul 2019 10:48:01 -0400
-Received: from linux-8ccs (ip5f5ade8b.dynamic.kabel-deutschland.de [95.90.222.139])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726076AbfGAPeD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 1 Jul 2019 11:34:03 -0400
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1C4972064B;
-        Mon,  1 Jul 2019 14:47:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E69920881;
+        Mon,  1 Jul 2019 15:34:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561992479;
-        bh=eWd844sqUf7/Cav62XflkGWhhzfKQ2VHhz2g3WuFpG0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y7bqjm3qprKdQmXs4IhW0kdDOeWF8ghzgbcsKAJZajarOxYIoGvSk/+LRG4mijRv5
-         96JYOnmsV3GRwYcBoZMXxr61qt4fEVB9bdjWSKbHw7SwIZpUckxwCz8DHYDCZAwpPm
-         7hLeSn5yMazZ5AojiCZre4S2MNhNGOQP1SClJFXQ=
-Date:   Mon, 1 Jul 2019 16:47:53 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>
-Subject: Re: [PATCH v12 01/11] MODSIGN: Export module signature definitions
-Message-ID: <20190701144752.GC25484@linux-8ccs>
-References: <20190628021934.4260-1-bauerman@linux.ibm.com>
- <20190628021934.4260-2-bauerman@linux.ibm.com>
+        s=default; t=1561995241;
+        bh=n1sDOWKS9YdwJeROw9cb0Thz+/MZ4edbJBN02TvYaQ4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tJMrjjP+fGbYnIHgEA3mtIdRLt3f7/+2LUKAu+amEdQOdn6fXNmkuJKr3utxUweCK
+         +TNmg+Q85kDoCtfX7Xy3mwsEsOQ2vnKx/HArgL6zo/cN/dTqvdUuSJkmr1Q1Upms5X
+         PYZvBXazAOtZ2AAdaF/3z4FbLWpVxw1Z15y8nrL0=
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-fscrypt@vger.kernel.org
+Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Chandan Rajendra <chandan@linux.vnet.ibm.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v6 00/17] fs-verity: read-only file-based authenticity protection
+Date:   Mon,  1 Jul 2019 08:32:20 -0700
+Message-Id: <20190701153237.1777-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190628021934.4260-2-bauerman@linux.ibm.com>
-X-OS:   Linux linux-8ccs 5.1.0-rc1-lp150.12.28-default+ x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-+++ Thiago Jung Bauermann [27/06/19 23:19 -0300]:
->IMA will use the module_signature format for append signatures, so export
->the relevant definitions and factor out the code which verifies that the
->appended signature trailer is valid.
->
->Also, create a CONFIG_MODULE_SIG_FORMAT option so that IMA can select it
->and be able to use mod_check_sig() without having to depend on either
->CONFIG_MODULE_SIG or CONFIG_MODULES.
->
->Signed-off-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
->Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->Cc: Jessica Yu <jeyu@kernel.org>
->---
-> include/linux/module.h           |  3 --
-> include/linux/module_signature.h | 44 +++++++++++++++++++++++++
-> init/Kconfig                     |  6 +++-
-> kernel/Makefile                  |  1 +
-> kernel/module.c                  |  1 +
-> kernel/module_signature.c        | 46 ++++++++++++++++++++++++++
-> kernel/module_signing.c          | 56 +++++---------------------------
-> scripts/Makefile                 |  2 +-
-> 8 files changed, 106 insertions(+), 53 deletions(-)
->
->diff --git a/include/linux/module.h b/include/linux/module.h
->index 188998d3dca9..aa56f531cf1e 100644
->--- a/include/linux/module.h
->+++ b/include/linux/module.h
->@@ -25,9 +25,6 @@
-> #include <linux/percpu.h>
-> #include <asm/module.h>
->
->-/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
->-#define MODULE_SIG_STRING "~Module signature appended~\n"
->-
+Hello,
 
-Hi Thiago, apologies for the delay.
+This is a redesigned version of the fs-verity patchset, implementing
+Ted's suggestion to build the Merkle tree in the kernel
+(https://lore.kernel.org/linux-fsdevel/20190207031101.GA7387@mit.edu/).
+This greatly simplifies the UAPI, since the verity metadata no longer
+needs to be transferred to the kernel.  Now to enable fs-verity on a
+file, one simply calls FS_IOC_ENABLE_VERITY, passing it this structure:
 
-It looks like arch/s390/kernel/machine_kexec_file.c also relies on
-MODULE_SIG_STRING being defined, so module_signature.h will need to be
-included there too, otherwise we'll run into a compilation error.
+	struct fsverity_enable_arg {
+		__u32 version;
+		__u32 hash_algorithm;
+		__u32 block_size;
+		__u32 salt_size;
+		__u64 salt_ptr;
+		__u32 sig_size;
+		__u32 __reserved1;
+		__u64 sig_ptr;
+		__u64 __reserved2[11];
+	};
 
-Other than that, the module-related changes look good to me:
+The filesystem then builds the file's Merkle tree and stores it in a
+filesystem-specific location associated with the file.  Afterwards,
+FS_IOC_MEASURE_VERITY can be used to retrieve the file measurement
+("root hash").  The way the file measurement is computed is also
+effectively part of the API (it has to be), but it's logically
+independent of where/how the filesystem stores the Merkle tree.
 
-Acked-by: Jessica Yu <jeyu@kernel.org>
+The API is fully documented in Documentation/filesystems/fsverity.rst,
+along with other aspects of fs-verity.  I also added an FAQ section that
+answers frequently asked questions about fs-verity, e.g. why isn't it
+all at the VFS level, why isn't it part of IMA, why does the Merkle tree
+need to be stored on-disk, etc.
 
-Thanks!
+Overview
+--------
 
-Jessica
+This patchset implements fs-verity for ext4 and f2fs.  fs-verity is
+similar to dm-verity, but implemented on a per-file basis: a Merkle tree
+is used to measure (hash) a read-only file's data as it is paged in.
+ext4 and f2fs hide this Merkle tree beyond the end of the file, but
+other filesystems can implement it differently if desired.
 
-> /* Not Yet Implemented */
-> #define MODULE_SUPPORTED_DEVICE(name)
->
->diff --git a/include/linux/module_signature.h b/include/linux/module_signature.h
->new file mode 100644
->index 000000000000..523617fc5b6a
->--- /dev/null
->+++ b/include/linux/module_signature.h
->@@ -0,0 +1,44 @@
->+/* SPDX-License-Identifier: GPL-2.0+ */
->+/*
->+ * Module signature handling.
->+ *
->+ * Copyright (C) 2012 Red Hat, Inc. All Rights Reserved.
->+ * Written by David Howells (dhowells@redhat.com)
->+ */
->+
->+#ifndef _LINUX_MODULE_SIGNATURE_H
->+#define _LINUX_MODULE_SIGNATURE_H
->+
->+/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
->+#define MODULE_SIG_STRING "~Module signature appended~\n"
->+
->+enum pkey_id_type {
->+	PKEY_ID_PGP,		/* OpenPGP generated key ID */
->+	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
->+	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
->+};
->+
->+/*
->+ * Module signature information block.
->+ *
->+ * The constituents of the signature section are, in order:
->+ *
->+ *	- Signer's name
->+ *	- Key identifier
->+ *	- Signature data
->+ *	- Information block
->+ */
->+struct module_signature {
->+	u8	algo;		/* Public-key crypto algorithm [0] */
->+	u8	hash;		/* Digest algorithm [0] */
->+	u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
->+	u8	signer_len;	/* Length of signer's name [0] */
->+	u8	key_id_len;	/* Length of key identifier [0] */
->+	u8	__pad[3];
->+	__be32	sig_len;	/* Length of signature data */
->+};
->+
->+int mod_check_sig(const struct module_signature *ms, size_t file_len,
->+		  const char *name);
->+
->+#endif /* _LINUX_MODULE_SIGNATURE_H */
->diff --git a/init/Kconfig b/init/Kconfig
->index 8b9ffe236e4f..c2286a3c74c5 100644
->--- a/init/Kconfig
->+++ b/init/Kconfig
->@@ -1852,6 +1852,10 @@ config BASE_SMALL
-> 	default 0 if BASE_FULL
-> 	default 1 if !BASE_FULL
->
->+config MODULE_SIG_FORMAT
->+	def_bool n
->+	select SYSTEM_DATA_VERIFICATION
->+
-> menuconfig MODULES
-> 	bool "Enable loadable module support"
-> 	option modules
->@@ -1929,7 +1933,7 @@ config MODULE_SRCVERSION_ALL
-> config MODULE_SIG
-> 	bool "Module signature verification"
-> 	depends on MODULES
->-	select SYSTEM_DATA_VERIFICATION
->+	select MODULE_SIG_FORMAT
-> 	help
-> 	  Check modules for valid signatures upon load: the signature
-> 	  is simply appended to the module. For more information see
->diff --git a/kernel/Makefile b/kernel/Makefile
->index 33824f0385b3..f29ae2997a43 100644
->--- a/kernel/Makefile
->+++ b/kernel/Makefile
->@@ -58,6 +58,7 @@ endif
-> obj-$(CONFIG_UID16) += uid16.o
-> obj-$(CONFIG_MODULES) += module.o
-> obj-$(CONFIG_MODULE_SIG) += module_signing.o
->+obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
-> obj-$(CONFIG_KALLSYMS) += kallsyms.o
-> obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
-> obj-$(CONFIG_CRASH_CORE) += crash_core.o
->diff --git a/kernel/module.c b/kernel/module.c
->index 6e6712b3aaf5..2712f4d217f5 100644
->--- a/kernel/module.c
->+++ b/kernel/module.c
->@@ -19,6 +19,7 @@
-> #include <linux/export.h>
-> #include <linux/extable.h>
-> #include <linux/moduleloader.h>
->+#include <linux/module_signature.h>
-> #include <linux/trace_events.h>
-> #include <linux/init.h>
-> #include <linux/kallsyms.h>
->diff --git a/kernel/module_signature.c b/kernel/module_signature.c
->new file mode 100644
->index 000000000000..4224a1086b7d
->--- /dev/null
->+++ b/kernel/module_signature.c
->@@ -0,0 +1,46 @@
->+// SPDX-License-Identifier: GPL-2.0+
->+/*
->+ * Module signature checker
->+ *
->+ * Copyright (C) 2012 Red Hat, Inc. All Rights Reserved.
->+ * Written by David Howells (dhowells@redhat.com)
->+ */
->+
->+#include <linux/errno.h>
->+#include <linux/printk.h>
->+#include <linux/module_signature.h>
->+#include <asm/byteorder.h>
->+
->+/**
->+ * mod_check_sig - check that the given signature is sane
->+ *
->+ * @ms:		Signature to check.
->+ * @file_len:	Size of the file to which @ms is appended.
->+ * @name:	What is being checked. Used for error messages.
->+ */
->+int mod_check_sig(const struct module_signature *ms, size_t file_len,
->+		  const char *name)
->+{
->+	if (be32_to_cpu(ms->sig_len) >= file_len - sizeof(*ms))
->+		return -EBADMSG;
->+
->+	if (ms->id_type != PKEY_ID_PKCS7) {
->+		pr_err("%s: Module is not signed with expected PKCS#7 message\n",
->+		       name);
->+		return -ENOPKG;
->+	}
->+
->+	if (ms->algo != 0 ||
->+	    ms->hash != 0 ||
->+	    ms->signer_len != 0 ||
->+	    ms->key_id_len != 0 ||
->+	    ms->__pad[0] != 0 ||
->+	    ms->__pad[1] != 0 ||
->+	    ms->__pad[2] != 0) {
->+		pr_err("%s: PKCS#7 signature info has unexpected non-zero params\n",
->+		       name);
->+		return -EBADMSG;
->+	}
->+
->+	return 0;
->+}
->diff --git a/kernel/module_signing.c b/kernel/module_signing.c
->index 6b9a926fd86b..cdd04a6b8074 100644
->--- a/kernel/module_signing.c
->+++ b/kernel/module_signing.c
->@@ -11,37 +11,13 @@
->
-> #include <linux/kernel.h>
-> #include <linux/errno.h>
->+#include <linux/module.h>
->+#include <linux/module_signature.h>
-> #include <linux/string.h>
-> #include <linux/verification.h>
-> #include <crypto/public_key.h>
-> #include "module-internal.h"
->
->-enum pkey_id_type {
->-	PKEY_ID_PGP,		/* OpenPGP generated key ID */
->-	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
->-	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
->-};
->-
->-/*
->- * Module signature information block.
->- *
->- * The constituents of the signature section are, in order:
->- *
->- *	- Signer's name
->- *	- Key identifier
->- *	- Signature data
->- *	- Information block
->- */
->-struct module_signature {
->-	u8	algo;		/* Public-key crypto algorithm [0] */
->-	u8	hash;		/* Digest algorithm [0] */
->-	u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
->-	u8	signer_len;	/* Length of signer's name [0] */
->-	u8	key_id_len;	/* Length of key identifier [0] */
->-	u8	__pad[3];
->-	__be32	sig_len;	/* Length of signature data */
->-};
->-
-> /*
->  * Verify the signature on a module.
->  */
->@@ -49,6 +25,7 @@ int mod_verify_sig(const void *mod, struct load_info *info)
-> {
-> 	struct module_signature ms;
-> 	size_t sig_len, modlen = info->len;
->+	int ret;
->
-> 	pr_devel("==>%s(,%zu)\n", __func__, modlen);
->
->@@ -56,32 +33,15 @@ int mod_verify_sig(const void *mod, struct load_info *info)
-> 		return -EBADMSG;
->
-> 	memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
->-	modlen -= sizeof(ms);
->+
->+	ret = mod_check_sig(&ms, modlen, info->name);
->+	if (ret)
->+		return ret;
->
-> 	sig_len = be32_to_cpu(ms.sig_len);
->-	if (sig_len >= modlen)
->-		return -EBADMSG;
->-	modlen -= sig_len;
->+	modlen -= sig_len + sizeof(ms);
-> 	info->len = modlen;
->
->-	if (ms.id_type != PKEY_ID_PKCS7) {
->-		pr_err("%s: Module is not signed with expected PKCS#7 message\n",
->-		       info->name);
->-		return -ENOPKG;
->-	}
->-
->-	if (ms.algo != 0 ||
->-	    ms.hash != 0 ||
->-	    ms.signer_len != 0 ||
->-	    ms.key_id_len != 0 ||
->-	    ms.__pad[0] != 0 ||
->-	    ms.__pad[1] != 0 ||
->-	    ms.__pad[2] != 0) {
->-		pr_err("%s: PKCS#7 signature info has unexpected non-zero params\n",
->-		       info->name);
->-		return -EBADMSG;
->-	}
->-
-> 	return verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
-> 				      VERIFY_USE_SECONDARY_KEYRING,
-> 				      VERIFYING_MODULE_SIGNATURE,
->diff --git a/scripts/Makefile b/scripts/Makefile
->index 9d442ee050bd..52098b080ab7 100644
->--- a/scripts/Makefile
->+++ b/scripts/Makefile
->@@ -17,7 +17,7 @@ hostprogs-$(CONFIG_VT)           += conmakehash
-> hostprogs-$(BUILD_C_RECORDMCOUNT) += recordmcount
-> hostprogs-$(CONFIG_BUILDTIME_EXTABLE_SORT) += sortextable
-> hostprogs-$(CONFIG_ASN1)	 += asn1_compiler
->-hostprogs-$(CONFIG_MODULE_SIG)	 += sign-file
->+hostprogs-$(CONFIG_MODULE_SIG_FORMAT) += sign-file
-> hostprogs-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += extract-cert
-> hostprogs-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE) += insert-sys-cert
->
+In general, fs-verity is intended for use on writable filesystems;
+dm-verity is still recommended on read-only ones.
+
+Similar to fscrypt, most of the code is in fs/verity/, and not too many
+filesystem-specific changes are needed.  The Merkle tree is built by the
+filesystem when the FS_IOC_ENABLE_VERITY ioctl is executed.
+
+fs-verity provides a file measurement (hash) in constant time and
+verifies data on-demand.  Thus, it is useful for efficiently verifying
+the authenticity of large files of which only a small portion may be
+accessed, such as Android application package (APK) files.  It may also
+be useful in "audit" use cases where file hashes are logged.
+
+fs-verity can also provide better protection against malicious disks
+than an ahead-of-time hash, since fs-verity re-verifies data each time
+it's paged in.  Note, however, that any authenticity guarantee is still
+dependent on verification of the file measurement and other relevant
+metadata in a way that makes sense for the overall system; fs-verity is
+only a tool to help with this.
+
+This patchset doesn't include IMA support for fs-verity file
+measurements.  This is planned and we'd like to collaborate with the IMA
+maintainers.  Although fs-verity can be used on its own without IMA,
+fs-verity is primarily a lower level feature (think of it as a way of
+hashing a file), so some users may still need IMA's policy mechanism.
+However, an optional in-kernel signature verification mechanism within
+fs-verity itself is also included.
+
+This patchset is based on v5.2-rc3.  It can also be found in git at tag
+fsverity_2019-07-01 of:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+
+fs-verity has a userspace utility:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/fsverity-utils.git
+
+xfstests for fs-verity can be found at branch "fsverity" of:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/xfstests-dev.git
+
+fs-verity is supported by f2fs-tools v1.11.0+ and e2fsprogs v1.45.2+.
+
+Examples of setting up fs-verity protected files can be found in the
+README.md file of fsverity-utils.
+
+Other useful references include:
+
+  - Documentation/filesystems/fsverity.rst, added by the first patch.
+
+  - LWN coverage of v3 patchset: https://lwn.net/Articles/790185/
+
+  - LWN coverage of v2 patchset: https://lwn.net/Articles/775872/
+
+  - LWN coverage of v1 patchset: https://lwn.net/Articles/763729/
+
+  - Presentation at Linux Security Summit North America 2018:
+      - Slides: https://schd.ws/hosted_files/lssna18/af/fs-verity%20slide%20deck.pdf
+      - Video: https://www.youtube.com/watch?v=Aw5h6aBhu6M
+      (This corresponded to the v1 patchset; changes have been made since then.)
+
+  - LWN coverage of LSFMM 2018 discussion: https://lwn.net/Articles/752614/
+
+Changed since v5:
+
+  - Switched to using detached signatures.  This simplifies the
+    signature verification code considerably.
+
+  - On f2fs, forbid enabling verity on files that have atomic or
+    volatile writes pending.
+
+  - Initialize quotas before evicting inline data.
+
+  - Prevent writing verity metadata beyond s_maxbytes.
+
+  - Switched from truncate_inode_pages() to invalidate_inode_pages2()
+    (fixes FS_IOC_ENABLE_VERITY on ext4 with data=journal)
+
+  - Always truncate the verity metadata if there's an error writing it,
+    even if the error doesn't occur until ->end_enable_verity().
+
+  - Updated the ext4 on-disk format documentation.
+
+  - A few minor cleanups.
+
+Changed since v4:
+
+  - Made ext4 and f2fs store the verity metadata beginning at a 64K
+    aligned boundary, to be ready for architectures with 64K pages.
+
+  - Made ext4 store the verity descriptor size in the file data stream,
+    so that no xattr is needed.
+
+  - Added support for empty files.
+
+  - A few minor cleanups.
+
+Changed since v3:
+
+  - The FS_IOC_GETFLAGS ioctl now returns the verity flag.
+
+  - Fixed setting i_verity_info too early.
+
+  - Restored pagecache invalidation in FS_IOC_ENABLE_VERITY.
+
+  - Fixed truncation of fsverity_enable_arg::hash_algorithm.
+
+  - Reject empty files for both open and enable, not just enable.
+
+  - Added a couple more FAQ entries to the documentation.
+
+  - A few minor cleanups.
+
+  - Rebased onto v5.2-rc3.
+
+Changed since v2:
+
+  - Large redesign: the Merkle tree is now built by
+    FS_IOC_ENABLE_VERITY, rather than being provided by userspace.  The
+    fsverity_operations provide an interface for filesystems to read and
+    write the Merkle tree from/to a filesystem-specific location.
+
+  - Lot of refactoring, cleanups, and documentation improvements.
+
+  - Many simplifications, such as simplifying the fsverity_descriptor
+    format, dropping CRC-32 support, and limiting the salt size.
+
+  - ext4 and f2fs now store an xattr that gives the location of the
+    fsverity_descriptor, so loading it is more straightforward.
+
+  - f2fs no longer counts the verity metadata in the on-disk i_size,
+    making it consistent with ext4.
+
+  - Replaced the filesystem-specific fs-verity kconfig options with
+    CONFIG_FS_VERITY.
+
+  - Replaced the filesystem-specific verity bit checks with IS_VERITY().
+
+Changed since v1:
+
+  - Added documentation file.
+
+  - Require write permission for FS_IOC_ENABLE_VERITY, rather than
+    CAP_SYS_ADMIN.
+
+  - Eliminated dependency on CONFIG_BLOCK and clarified that filesystems
+    can verify a page at a time rather than a bio at a time.
+
+  - Fixed conditions for verifying holes.
+
+  - ext4 now only allows fs-verity on extent-based files.
+
+  - Eliminated most of the assumptions that the verity metadata is
+    stored beyond EOF, in case filesystems want to do things
+    differently.
+
+  - Other cleanups.
+
+Eric Biggers (17):
+  fs-verity: add a documentation file
+  fs-verity: add MAINTAINERS file entry
+  fs-verity: add UAPI header
+  fs: uapi: define verity bit for FS_IOC_GETFLAGS
+  fs-verity: add Kconfig and the helper functions for hashing
+  fs-verity: add inode and superblock fields
+  fs-verity: add the hook for file ->open()
+  fs-verity: add the hook for file ->setattr()
+  fs-verity: add data verification hooks for ->readpages()
+  fs-verity: implement FS_IOC_ENABLE_VERITY ioctl
+  fs-verity: implement FS_IOC_MEASURE_VERITY ioctl
+  fs-verity: add SHA-512 support
+  fs-verity: support builtin file signatures
+  ext4: add basic fs-verity support
+  ext4: add fs-verity read support
+  ext4: update on-disk format documentation for fs-verity
+  f2fs: add fs-verity support
+
+ Documentation/filesystems/ext4/inodes.rst   |   6 +-
+ Documentation/filesystems/ext4/overview.rst |   1 +
+ Documentation/filesystems/ext4/super.rst    |   2 +
+ Documentation/filesystems/ext4/verity.rst   |  41 ++
+ Documentation/filesystems/fsverity.rst      | 725 ++++++++++++++++++++
+ Documentation/filesystems/index.rst         |   1 +
+ Documentation/ioctl/ioctl-number.txt        |   1 +
+ MAINTAINERS                                 |  12 +
+ fs/Kconfig                                  |   2 +
+ fs/Makefile                                 |   1 +
+ fs/ext4/Makefile                            |   1 +
+ fs/ext4/ext4.h                              |  23 +-
+ fs/ext4/file.c                              |   4 +
+ fs/ext4/inode.c                             |  48 +-
+ fs/ext4/ioctl.c                             |  12 +
+ fs/ext4/readpage.c                          | 207 +++++-
+ fs/ext4/super.c                             |  18 +-
+ fs/ext4/sysfs.c                             |   6 +
+ fs/ext4/verity.c                            | 364 ++++++++++
+ fs/f2fs/Makefile                            |   1 +
+ fs/f2fs/data.c                              |  72 +-
+ fs/f2fs/f2fs.h                              |  23 +-
+ fs/f2fs/file.c                              |  40 ++
+ fs/f2fs/inode.c                             |   5 +-
+ fs/f2fs/super.c                             |   3 +
+ fs/f2fs/sysfs.c                             |  11 +
+ fs/f2fs/verity.c                            | 245 +++++++
+ fs/f2fs/xattr.h                             |   2 +
+ fs/verity/Kconfig                           |  55 ++
+ fs/verity/Makefile                          |  10 +
+ fs/verity/enable.c                          | 355 ++++++++++
+ fs/verity/fsverity_private.h                | 185 +++++
+ fs/verity/hash_algs.c                       | 279 ++++++++
+ fs/verity/init.c                            |  61 ++
+ fs/verity/measure.c                         |  57 ++
+ fs/verity/open.c                            | 356 ++++++++++
+ fs/verity/signature.c                       | 159 +++++
+ fs/verity/verify.c                          | 281 ++++++++
+ include/linux/fs.h                          |  11 +
+ include/linux/fsverity.h                    | 209 ++++++
+ include/uapi/linux/fs.h                     |   1 +
+ include/uapi/linux/fsverity.h               |  40 ++
+ 42 files changed, 3875 insertions(+), 61 deletions(-)
+ create mode 100644 Documentation/filesystems/ext4/verity.rst
+ create mode 100644 Documentation/filesystems/fsverity.rst
+ create mode 100644 fs/ext4/verity.c
+ create mode 100644 fs/f2fs/verity.c
+ create mode 100644 fs/verity/Kconfig
+ create mode 100644 fs/verity/Makefile
+ create mode 100644 fs/verity/enable.c
+ create mode 100644 fs/verity/fsverity_private.h
+ create mode 100644 fs/verity/hash_algs.c
+ create mode 100644 fs/verity/init.c
+ create mode 100644 fs/verity/measure.c
+ create mode 100644 fs/verity/open.c
+ create mode 100644 fs/verity/signature.c
+ create mode 100644 fs/verity/verify.c
+ create mode 100644 include/linux/fsverity.h
+ create mode 100644 include/uapi/linux/fsverity.h
+
+-- 
+2.22.0
+
