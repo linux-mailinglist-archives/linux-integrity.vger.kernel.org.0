@@ -2,106 +2,181 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EA25E2AE
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jul 2019 13:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E09E5E642
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jul 2019 16:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfGCLPB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 3 Jul 2019 07:15:01 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22206 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726765AbfGCLO7 (ORCPT
+        id S1726490AbfGCOQJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 3 Jul 2019 10:16:09 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:36668 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727137AbfGCOQI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 3 Jul 2019 07:14:59 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x63BD0Bs141343
-        for <linux-integrity@vger.kernel.org>; Wed, 3 Jul 2019 07:14:57 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tgrajys0f-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 03 Jul 2019 07:14:56 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 3 Jul 2019 12:14:54 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 3 Jul 2019 12:14:51 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x63BEpOK52953218
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 3 Jul 2019 11:14:51 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F3397A405C;
-        Wed,  3 Jul 2019 11:14:50 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3C8CA405B;
-        Wed,  3 Jul 2019 11:14:49 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.110.77])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  3 Jul 2019 11:14:49 +0000 (GMT)
-Subject: Re: [PATCH] ima: Replace two seq_printf() calls by seq_puts() in
- ima_show_template_data_ascii()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "'Markus Elfring'" <Markus.Elfring@web.de>,
+        Wed, 3 Jul 2019 10:16:08 -0400
+Received: by mail-ed1-f66.google.com with SMTP id k21so2268980edq.3
+        for <linux-integrity@vger.kernel.org>; Wed, 03 Jul 2019 07:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8DKdbUgQ2jVt8K/6qfz1G9yQLM6zzf/4kO2TWk7/Q2I=;
+        b=yoGgAuhKXkHJtjTmsoIY1ltoABbwgoH4O2/u8mUvBkgk65XAlbzp9wlFR/oFrSWTx9
+         ZCsCR3BVFGPGC6bYgfwm3xRJQ5BJMcfaMt7WN5uklWjMlkTNw18k2aMokV1fw+NDbmnp
+         tYjbVLeqmMFJj+dPJUb4BFJdACG+A9sOY1/giqckYB9YZwlecSMLG9ZaoBW9VRV3WptH
+         4zV2LQYbdMjjIogOzL3LIcJH4bSgxg+CRaBqg/sOkxawmRHhg7pr7SoAaMtHHiVNmD5T
+         pgSLhq7vmgRujivkOGWRy4NJnuByC0ZwmzVaBJz+7zpQPZEtpCsRqDOYywJi0ng+U00l
+         612A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8DKdbUgQ2jVt8K/6qfz1G9yQLM6zzf/4kO2TWk7/Q2I=;
+        b=WO69+F1M4i5qm2ZEOh/3OWd1S9QZg3/JRlkHOx43F3z3x62KOY45UqVnqVonFyJOnh
+         lM2LlIP3DRhRNSfpNvYMge0z+klvrVivMxemd0ASdc5SB4qOXUO8i6RhMhcztZxbtmpT
+         Eshyb2Cfh8KtIUMjDrxmzRW1CLE2XsB11CJO3XI2sXv0+h8ix/XOboJwNRDi1tmgexO9
+         dK+7+GU9j8tyGsu/c0qVdLMwwWHydEg2ylHrZJD4WyPV4XpNCxv6BJA9agxAP+fO7mGN
+         A0Kh5O5aj9/2T5A+T14/Sg6Yjls8FcFl+ZLs7/j/Ci+CKBDrUMzYkfBlSBJdXAd7bleN
+         sMmQ==
+X-Gm-Message-State: APjAAAVLtRwtjDEhsC+QCGXEvC2E4sGgcT0eyyZatUctHnHlsOxVGmmO
+        /tvHR8JxJK52Z3GbXeTvLzvpuw==
+X-Google-Smtp-Source: APXvYqzMRF+/JPrGOgSS5HsYyntug1qCDYYN0ECP6hsJdmOeudDh/QasZt/niKNGAswJvAZAaEnywg==
+X-Received: by 2002:a17:906:3956:: with SMTP id g22mr34311793eje.292.1562163366123;
+        Wed, 03 Jul 2019 07:16:06 -0700 (PDT)
+Received: from debby (81-231-61-154-no276.tbcn.telia.com. [81.231.61.154])
+        by smtp.gmail.com with ESMTPSA id d4sm737274edb.4.2019.07.03.07.16.03
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 03 Jul 2019 07:16:04 -0700 (PDT)
+Date:   Wed, 3 Jul 2019 16:16:02 +0200
+From:   Joakim Bech <joakim.bech@linaro.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Date:   Wed, 03 Jul 2019 07:14:39 -0400
-In-Reply-To: <d94bfdb9d53b46059787b9bdd10c5919@AcuMS.aculab.com>
-References: <e96eac40-0745-80b5-6aab-f872e6415031@web.de>
-         <d94bfdb9d53b46059787b9bdd10c5919@AcuMS.aculab.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19070311-0008-0000-0000-000002F96C24
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070311-0009-0000-0000-00002266B96B
-Message-Id: <1562152479.4774.18.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-03_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=817 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907030135
+        Microsoft Linux Kernel List <linux-kernel@microsoft.com>,
+        "Bryan Kelly (CSI)" <bryankel@microsoft.com>,
+        "tee-dev@lists.linaro.org" <tee-dev@lists.linaro.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>
+Subject: Re: [PATCH v7 1/2] fTPM: firmware TPM running in TEE
+Message-ID: <20190703141602.fky5x5buuqdjw7wx@debby>
+References: <673dd30d03e8ed9825bb46ef21b2efef015f6f2a.camel@linux.intel.com>
+ <20190626235653.GL7898@sasha-vm>
+ <b688e845ccbe011c54b10043fbc3c0de8f0befc2.camel@linux.intel.com>
+ <20190627133004.GA3757@apalos>
+ <0893dc429d4c3f3b52d423f9e61c08a5012a7519.camel@linux.intel.com>
+ <20190702142109.GA32069@apalos>
+ <CY4PR21MB0279B99FB0097309ADE83809BCF80@CY4PR21MB0279.namprd21.prod.outlook.com>
+ <20190703065813.GA12724@apalos>
+ <CAC_iWjK2F13QxjuvqzqNLx00SiGz_FQ5X=MQxJyDev57bo3=LQ@mail.gmail.com>
+ <CAFA6WYMvd1BVGppYM230Bd1XjO11uU4WQf-F+ZtmtpasP4AjxQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYMvd1BVGppYM230Bd1XjO11uU4WQf-F+ZtmtpasP4AjxQ@mail.gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-07-03 at 09:16 +0000, David Laight wrote:
-
-> > diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-> > index 9fe0ef7f91e2..05636e9b19b1 100644
-> > --- a/security/integrity/ima/ima_template_lib.c
-> > +++ b/security/integrity/ima/ima_template_lib.c
-> > @@ -74,7 +74,7 @@ static void ima_show_template_data_ascii(struct seq_file *m,
-> >  	case DATA_FMT_DIGEST_WITH_ALGO:
-> >  		buf_ptr = strnchr(field_data->data, buflen, ':');
-> >  		if (buf_ptr != field_data->data)
-> > -			seq_printf(m, "%s", field_data->data);
-> > +			seq_puts(m, field_data->data);
-> > 
-> >  		/* skip ':' and '\0' */
-> >  		buf_ptr += 2;
+On Wed, Jul 03, 2019 at 03:33:14PM +0530, Sumit Garg wrote:
+> On Wed, 3 Jul 2019 at 13:42, Ilias Apalodimas
+> <ilias.apalodimas@linaro.org> wrote:
+> >
+> > Hi Thirupathaiah,
+> >
+> > (+Joakim)
+> >
+> > On Wed, 3 Jul 2019 at 09:58, Ilias Apalodimas
+> > <ilias.apalodimas@linaro.org> wrote:
+> > >
+> > > Hi Thirupathaiah,
+> > > >
+> > > > First of all, Thanks a lot for trying to test the driver.
+> > > >
+> > > np
+> > >
+> > > [...]
+> > > > > I managed to do some quick testing in QEMU.
+> > > > > Everything works fine when i build this as a module (using IBM's TPM 2.0
+> > > > > TSS)
+> > > > >
+> > > > > - As module
+> > > > > # insmod /lib/modules/5.2.0-rc1/kernel/drivers/char/tpm/tpm_ftpm_tee.ko
+> > > > > # getrandom -by 8
+> > > > > randomBytes length 8
+> > > > > 23 b9 3d c3 90 13 d9 6b
+> > > > >
+> > > > > - Built-in
+> > > > > # dmesg | grep optee
+> > > > > ftpm-tee firmware:optee: ftpm_tee_probe:tee_client_open_session failed,
+> > > > > err=ffff0008
+> > > > This (0xffff0008) translates to TEE_ERROR_ITEM_NOT_FOUND.
+> > > >
+> > > > Where is fTPM TA located in the your test setup?
+> > > > Is it stitched into TEE binary as an EARLY_TA or
+> > > > Is it expected to be loaded during run-time with the help of user mode OP-TEE supplicant?
+> > > >
+> > > > My guess is that you are trying to load fTPM TA through user mode OP-TEE supplicant.
+> > > > Can you confirm?
+> > > I tried both
+> > >
+> >
+> > Ok apparently there was a failure with my built-in binary which i
+> > didn't notice. I did a full rebuilt and checked the elf this time :)
+> >
+> > Built as an earlyTA my error now is:
+> > ftpm-tee firmware:optee: ftpm_tee_probe:tee_client_open_session
+> > failed, err=ffff3024 (translates to TEE_ERROR_TARGET_DEAD)
+> > Since you tested it on real hardware i guess you tried both
+> > module/built-in. Which TEE version are you using?
+> >
 > 
-> That code looks highly suspect!
-> It uses a bounded scan then assumes a '\0' terminated string.
-> It then adds 2 to a potentially NULL pointer.
+> > > > U-boot and Linux driver stacks work seamlessly without dependency on supplicant.
+> 
+> Is this true?
+> 
+> It looks like this fTPM driver can't work as a built-in driver. The
+> reason seems to be secure storage access required by OP-TEE fTPM TA
+> that is provided via OP-TEE supplicant that's not available during
+> kernel boot.
+> 
+> Snippet from ms-tpm-20-ref/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/fTPM.c +145:
+> 
+>     // If we fail to open fTPM storage we cannot continue.
+>     if (_plat__NVEnable(NULL) == 0) {
+>         TEE_Panic(TEE_ERROR_BAD_STATE);
+>     }
+> 
+> So it seems like this module will work as a loadable module only after
+> OP-TEE supplicant is up.
+> 
+This seems to be the same issues that I faced when trying to put
+together a setup for Linaro Connect discussions. When compiling the fTPM
+driver into the kernel (instead of a module) I saw mainly two issues.
 
-The code here is used for displaying the IMA measurement list, that
-the kernel itself created.  Protecting the in kernel memory from
-attack is a different problem.  Refer to Igor Stoppa's write once
-memory pools.
+1) fTPM driver seems to be probed before the TEE driver has been probed.
+   I temporary solved that by doing a late_initcall.
 
-Mimi
+2) With the late_initcall hack applied, the TEE side was called
+   successfully (if the fTPM TA's is compiled as "early TAs", i.e.,
+   built into the TEE core iself), but as Sumit said, it got stock on
+   secure storage operations, since tee-supplicant, the userspace
+   process serving the TEE with storage access hasn't been started.
 
+The first issue can(?)/should(?) be solved by some deferred probing
+mechanism.
+
+Regarding the second issue, is there a must to access secure storage
+when Linux kernel is booting up? I suppose this is some kind of
+initialization of the "NV" (adding TPM measurements?), but I guess it
+should be possible to delay those calls to a later point, when
+tee-supplicant is up and running and the first call to the TEE is made.
+
+-- 
+Regards,
+Joakim
