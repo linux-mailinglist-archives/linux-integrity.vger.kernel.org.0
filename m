@@ -2,181 +2,202 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E09E5E642
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jul 2019 16:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC735E81C
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jul 2019 17:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726490AbfGCOQJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 3 Jul 2019 10:16:09 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:36668 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727137AbfGCOQI (ORCPT
+        id S1725933AbfGCPub (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 3 Jul 2019 11:50:31 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:41156 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725847AbfGCPub (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 3 Jul 2019 10:16:08 -0400
-Received: by mail-ed1-f66.google.com with SMTP id k21so2268980edq.3
-        for <linux-integrity@vger.kernel.org>; Wed, 03 Jul 2019 07:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=8DKdbUgQ2jVt8K/6qfz1G9yQLM6zzf/4kO2TWk7/Q2I=;
-        b=yoGgAuhKXkHJtjTmsoIY1ltoABbwgoH4O2/u8mUvBkgk65XAlbzp9wlFR/oFrSWTx9
-         ZCsCR3BVFGPGC6bYgfwm3xRJQ5BJMcfaMt7WN5uklWjMlkTNw18k2aMokV1fw+NDbmnp
-         tYjbVLeqmMFJj+dPJUb4BFJdACG+A9sOY1/giqckYB9YZwlecSMLG9ZaoBW9VRV3WptH
-         4zV2LQYbdMjjIogOzL3LIcJH4bSgxg+CRaBqg/sOkxawmRHhg7pr7SoAaMtHHiVNmD5T
-         pgSLhq7vmgRujivkOGWRy4NJnuByC0ZwmzVaBJz+7zpQPZEtpCsRqDOYywJi0ng+U00l
-         612A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8DKdbUgQ2jVt8K/6qfz1G9yQLM6zzf/4kO2TWk7/Q2I=;
-        b=WO69+F1M4i5qm2ZEOh/3OWd1S9QZg3/JRlkHOx43F3z3x62KOY45UqVnqVonFyJOnh
-         lM2LlIP3DRhRNSfpNvYMge0z+klvrVivMxemd0ASdc5SB4qOXUO8i6RhMhcztZxbtmpT
-         Eshyb2Cfh8KtIUMjDrxmzRW1CLE2XsB11CJO3XI2sXv0+h8ix/XOboJwNRDi1tmgexO9
-         dK+7+GU9j8tyGsu/c0qVdLMwwWHydEg2ylHrZJD4WyPV4XpNCxv6BJA9agxAP+fO7mGN
-         A0Kh5O5aj9/2T5A+T14/Sg6Yjls8FcFl+ZLs7/j/Ci+CKBDrUMzYkfBlSBJdXAd7bleN
-         sMmQ==
-X-Gm-Message-State: APjAAAVLtRwtjDEhsC+QCGXEvC2E4sGgcT0eyyZatUctHnHlsOxVGmmO
-        /tvHR8JxJK52Z3GbXeTvLzvpuw==
-X-Google-Smtp-Source: APXvYqzMRF+/JPrGOgSS5HsYyntug1qCDYYN0ECP6hsJdmOeudDh/QasZt/niKNGAswJvAZAaEnywg==
-X-Received: by 2002:a17:906:3956:: with SMTP id g22mr34311793eje.292.1562163366123;
-        Wed, 03 Jul 2019 07:16:06 -0700 (PDT)
-Received: from debby (81-231-61-154-no276.tbcn.telia.com. [81.231.61.154])
-        by smtp.gmail.com with ESMTPSA id d4sm737274edb.4.2019.07.03.07.16.03
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 03 Jul 2019 07:16:04 -0700 (PDT)
-Date:   Wed, 3 Jul 2019 16:16:02 +0200
-From:   Joakim Bech <joakim.bech@linaro.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Microsoft Linux Kernel List <linux-kernel@microsoft.com>,
-        "Bryan Kelly (CSI)" <bryankel@microsoft.com>,
-        "tee-dev@lists.linaro.org" <tee-dev@lists.linaro.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>
-Subject: Re: [PATCH v7 1/2] fTPM: firmware TPM running in TEE
-Message-ID: <20190703141602.fky5x5buuqdjw7wx@debby>
-References: <673dd30d03e8ed9825bb46ef21b2efef015f6f2a.camel@linux.intel.com>
- <20190626235653.GL7898@sasha-vm>
- <b688e845ccbe011c54b10043fbc3c0de8f0befc2.camel@linux.intel.com>
- <20190627133004.GA3757@apalos>
- <0893dc429d4c3f3b52d423f9e61c08a5012a7519.camel@linux.intel.com>
- <20190702142109.GA32069@apalos>
- <CY4PR21MB0279B99FB0097309ADE83809BCF80@CY4PR21MB0279.namprd21.prod.outlook.com>
- <20190703065813.GA12724@apalos>
- <CAC_iWjK2F13QxjuvqzqNLx00SiGz_FQ5X=MQxJyDev57bo3=LQ@mail.gmail.com>
- <CAFA6WYMvd1BVGppYM230Bd1XjO11uU4WQf-F+ZtmtpasP4AjxQ@mail.gmail.com>
+        Wed, 3 Jul 2019 11:50:31 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id D0FBB72CC6C;
+        Wed,  3 Jul 2019 18:50:28 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [185.6.174.98])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 8D41B4A4A29;
+        Wed,  3 Jul 2019 18:50:28 +0300 (MSK)
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH v8 0/9] ima-evm-utils: Convert v2 signatures from RSA to EVP_PKEY API
+Date:   Wed,  3 Jul 2019 18:50:06 +0300
+Message-Id: <20190703155015.14262-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYMvd1BVGppYM230Bd1XjO11uU4WQf-F+ZtmtpasP4AjxQ@mail.gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 03:33:14PM +0530, Sumit Garg wrote:
-> On Wed, 3 Jul 2019 at 13:42, Ilias Apalodimas
-> <ilias.apalodimas@linaro.org> wrote:
-> >
-> > Hi Thirupathaiah,
-> >
-> > (+Joakim)
-> >
-> > On Wed, 3 Jul 2019 at 09:58, Ilias Apalodimas
-> > <ilias.apalodimas@linaro.org> wrote:
-> > >
-> > > Hi Thirupathaiah,
-> > > >
-> > > > First of all, Thanks a lot for trying to test the driver.
-> > > >
-> > > np
-> > >
-> > > [...]
-> > > > > I managed to do some quick testing in QEMU.
-> > > > > Everything works fine when i build this as a module (using IBM's TPM 2.0
-> > > > > TSS)
-> > > > >
-> > > > > - As module
-> > > > > # insmod /lib/modules/5.2.0-rc1/kernel/drivers/char/tpm/tpm_ftpm_tee.ko
-> > > > > # getrandom -by 8
-> > > > > randomBytes length 8
-> > > > > 23 b9 3d c3 90 13 d9 6b
-> > > > >
-> > > > > - Built-in
-> > > > > # dmesg | grep optee
-> > > > > ftpm-tee firmware:optee: ftpm_tee_probe:tee_client_open_session failed,
-> > > > > err=ffff0008
-> > > > This (0xffff0008) translates to TEE_ERROR_ITEM_NOT_FOUND.
-> > > >
-> > > > Where is fTPM TA located in the your test setup?
-> > > > Is it stitched into TEE binary as an EARLY_TA or
-> > > > Is it expected to be loaded during run-time with the help of user mode OP-TEE supplicant?
-> > > >
-> > > > My guess is that you are trying to load fTPM TA through user mode OP-TEE supplicant.
-> > > > Can you confirm?
-> > > I tried both
-> > >
-> >
-> > Ok apparently there was a failure with my built-in binary which i
-> > didn't notice. I did a full rebuilt and checked the elf this time :)
-> >
-> > Built as an earlyTA my error now is:
-> > ftpm-tee firmware:optee: ftpm_tee_probe:tee_client_open_session
-> > failed, err=ffff3024 (translates to TEE_ERROR_TARGET_DEAD)
-> > Since you tested it on real hardware i guess you tried both
-> > module/built-in. Which TEE version are you using?
-> >
-> 
-> > > > U-boot and Linux driver stacks work seamlessly without dependency on supplicant.
-> 
-> Is this true?
-> 
-> It looks like this fTPM driver can't work as a built-in driver. The
-> reason seems to be secure storage access required by OP-TEE fTPM TA
-> that is provided via OP-TEE supplicant that's not available during
-> kernel boot.
-> 
-> Snippet from ms-tpm-20-ref/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/fTPM.c +145:
-> 
->     // If we fail to open fTPM storage we cannot continue.
->     if (_plat__NVEnable(NULL) == 0) {
->         TEE_Panic(TEE_ERROR_BAD_STATE);
->     }
-> 
-> So it seems like this module will work as a loadable module only after
-> OP-TEE supplicant is up.
-> 
-This seems to be the same issues that I faced when trying to put
-together a setup for Linaro Connect discussions. When compiling the fTPM
-driver into the kernel (instead of a module) I saw mainly two issues.
+Convert sign v2 from RSA API (with manual formatting PKCS1) to more generic
+EVP_PKEY API, allowing to generate more types of OpenSSL supported signatures.
+This is done to enable EC-RDSA signatures, which are already supported in the
+Kernel. With some small fixes.
 
-1) fTPM driver seems to be probed before the TEE driver has been probed.
-   I temporary solved that by doing a late_initcall.
+All patches tested on x86_64 to not break anything.
 
-2) With the late_initcall hack applied, the TEE side was called
-   successfully (if the fTPM TA's is compiled as "early TAs", i.e.,
-   built into the TEE core iself), but as Sumit said, it got stock on
-   secure storage operations, since tee-supplicant, the userspace
-   process serving the TEE with storage access hasn't been started.
+Changes since v7:
+- Fix freeing pkey returned by find_keyid() in verify_hash_v2.
+- Fix assert after ima_calc_hash() before its return status check.
+- More verbose error log for sign and verify hash v2.
+- Diff from v7 is below.
 
-The first issue can(?)/should(?) be solved by some deferred probing
-mechanism.
+Changes since v6:
+- Remove "Make sure sig buffer is always MAX_SIGNATURE_SIZE" commit. Instead,
+  change assumption of sign_hash_v2() about @sig size.
+- Add "Log hash_algo with hash value in verbose mode".
+- Diff from v6 is below.
 
-Regarding the second issue, is there a must to access secure storage
-when Linux kernel is booting up? I suppose this is some kind of
-initialization of the "NV" (adding TPM measurements?), but I guess it
-should be possible to delay those calls to a later point, when
-tee-supplicant is up and running and the first call to the TEE is made.
+Changes since v5:
+- Squash calc keyid v2 with cmd_import patch.
+- Add log_err messages to verify_hash_v2 and sign_hash_v2.
+- Fix sign and hash generation error processing to show errors instead
+  of assert failures.
+
+Changes since v4:
+- Split conversion into more patches, as suggested by Mimi Zohar.
+- Small fixes suggested by Mimi Zohar.
+
+Changes since v3:
+- As suggested by Mimi Zohar this is v3 splitted into several patches to
+  simplify review. No code changes.
+
+Changes since v2:
+- Just rebase over newer commits.
+
+Changes since v1:
+- More key neutral code in calc_keyid_v1().
+- Fix uninitialized sigsize for EVP_PKEY_sign().
+- Fix memory leaks for openssl types.
+
+Vitaly Chikunov (9):
+  ima-evm-utils: Convert read_pub_key to EVP_PKEY API
+  ima-evm-utils: Convert read_priv_key to EVP_PKEY API
+  ima-evm-utils: Convert cmd_import and calc keyid v2 to EVP_PKEY API
+  ima-evm-utils: Convert verify_hash_v2 and find_keyid to EVP_PKEY API
+  ima-evm-utils: Convert sign_hash_v2 to EVP_PKEY API
+  ima-evm-utils: Replace calc_keyid_v2 with calc_pkeyid_v2
+  ima-evm-utils: Remove RSA_ASN1_templates
+  ima-evm-utils: Pass status codes from sign and hash functions to the
+    callers
+  ima-evm-utils: Log hash_algo with hash value in verbose mode
+
+ src/evmctl.c    |  41 ++++----
+ src/imaevm.h    |   4 +-
+ src/libimaevm.c | 301 ++++++++++++++++++++++++++++----------------------------
+ 3 files changed, 176 insertions(+), 170 deletions(-)
 
 -- 
-Regards,
-Joakim
+2.11.0
+
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index 5bff414..51d6c33 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -453,10 +453,11 @@ int verify_hash_v2(const char *file, const unsigned char *hash, int size,
+ 		   unsigned char *sig, int siglen, const char *keyfile)
+ {
+ 	int ret = -1;
+-	EVP_PKEY *pkey;
++	EVP_PKEY *pkey, *pkey_free = NULL;
+ 	struct signature_v2_hdr *hdr = (struct signature_v2_hdr *)sig;
+ 	EVP_PKEY_CTX *ctx;
+ 	const EVP_MD *md;
++	const char *st;
+ 
+ 	if (params.verbose > LOG_INFO) {
+ 		log_info("hash(%s): ", params.hash_algo);
+@@ -474,16 +475,22 @@ int verify_hash_v2(const char *file, const unsigned char *hash, int size,
+ 		pkey = read_pub_pkey(keyfile, 1);
+ 		if (!pkey)
+ 			return -1;
++		pkey_free = pkey;
+ 	}
+ 
++	st = "EVP_PKEY_CTX_new";
+ 	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
+ 		goto err;
++	st = "EVP_PKEY_verify_init";
+ 	if (!EVP_PKEY_verify_init(ctx))
+ 		goto err;
++	st = "EVP_get_digestbyname";
+ 	if (!(md = EVP_get_digestbyname(params.hash_algo)))
+ 		goto err;
++	st = "EVP_PKEY_CTX_set_signature_md";
+ 	if (!EVP_PKEY_CTX_set_signature_md(ctx, md))
+ 		goto err;
++	st = "EVP_PKEY_verify";
+ 	ret = EVP_PKEY_verify(ctx, sig + sizeof(*hdr),
+ 			      siglen - sizeof(*hdr), hash, size);
+ 	if (ret == 1)
+@@ -495,12 +502,13 @@ int verify_hash_v2(const char *file, const unsigned char *hash, int size,
+ 	}
+ err:
+ 	if (ret < 0 || ret > 1) {
+-		log_err("%s: verification failed: %d (%s)\n",
+-			file, ret, ERR_reason_error_string(ERR_peek_error()));
++		log_err("%s: verification failed: %d (%s) in %s\n",
++			file, ret, ERR_reason_error_string(ERR_peek_error()),
++			st);
+ 		ret = -1;
+ 	}
+ 	EVP_PKEY_CTX_free(ctx);
+-	EVP_PKEY_free(pkey);
++	EVP_PKEY_free(pkey_free);
+ 	return ret;
+ }
+ 
+@@ -610,9 +618,9 @@ int ima_verify_signature(const char *file, unsigned char *sig, int siglen,
+ 	    return verify_hash(file, digest, digestlen, sig + 1, siglen - 1);
+ 
+ 	hashlen = ima_calc_hash(file, hash);
+-	assert(hashlen <= sizeof(hash));
+ 	if (hashlen <= 1)
+ 		return hashlen;
++	assert(hashlen <= sizeof(hash));
+ 
+ 	return verify_hash(file, hash, hashlen, sig + 1, siglen - 1);
+ }
+@@ -850,6 +858,7 @@ int sign_hash_v2(const char *algo, const unsigned char *hash, int size, const ch
+ 	EVP_PKEY_CTX *ctx = NULL;
+ 	const EVP_MD *md;
+ 	size_t sigsize;
++	const char *st;
+ 
+ 	if (!hash) {
+ 		log_err("sign_hash_v2: hash is null\n");
+@@ -885,14 +894,19 @@ int sign_hash_v2(const char *algo, const unsigned char *hash, int size, const ch
+ 
+ 	calc_keyid_v2(&hdr->keyid, name, pkey);
+ 
++	st = "EVP_PKEY_CTX_new";
+ 	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
+ 		goto err;
++	st = "EVP_PKEY_sign_init";
+ 	if (!EVP_PKEY_sign_init(ctx))
+ 		goto err;
++	st = "EVP_get_digestbyname";
+ 	if (!(md = EVP_get_digestbyname(params.hash_algo)))
+ 		goto err;
++	st = "EVP_PKEY_CTX_set_signature_md";
+ 	if (!EVP_PKEY_CTX_set_signature_md(ctx, md))
+ 		goto err;
++	st = "EVP_PKEY_sign";
+ 	sigsize = MAX_SIGNATURE_SIZE - sizeof(struct signature_v2_hdr) - 1;
+ 	if (!EVP_PKEY_sign(ctx, hdr->sig, &sigsize, hash, size))
+ 		goto err;
+@@ -905,8 +919,8 @@ int sign_hash_v2(const char *algo, const unsigned char *hash, int size, const ch
+ 
+ err:
+ 	if (len == -1)
+-		log_err("sign_hash_v2: signing failed: (%s)\n",
+-			ERR_reason_error_string(ERR_peek_error()));
++		log_err("sign_hash_v2: signing failed: (%s) in %s\n",
++			ERR_reason_error_string(ERR_peek_error()), st);
+ 	EVP_PKEY_CTX_free(ctx);
+ 	EVP_PKEY_free(pkey);
+ 	return len;
