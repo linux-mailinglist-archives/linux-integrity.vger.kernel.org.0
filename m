@@ -2,109 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF5F5F309
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2019 08:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C35E5F3A4
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2019 09:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbfGDGpa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Jul 2019 02:45:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57460 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725945AbfGDGp1 (ORCPT
+        id S1726199AbfGDH0p (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Jul 2019 03:26:45 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:33250 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726120AbfGDH0p (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Jul 2019 02:45:27 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x646gQqr077944
-        for <linux-integrity@vger.kernel.org>; Thu, 4 Jul 2019 02:45:25 -0400
-Received: from e13.ny.us.ibm.com (e13.ny.us.ibm.com [129.33.205.203])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2th8t9puj6-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 04 Jul 2019 02:45:25 -0400
-Received: from localhost
-        by e13.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <bauerman@linux.ibm.com>;
-        Thu, 4 Jul 2019 07:45:24 +0100
-Received: from b01cxnp22036.gho.pok.ibm.com (9.57.198.26)
-        by e13.ny.us.ibm.com (146.89.104.200) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 4 Jul 2019 07:45:19 +0100
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x646jIW138338826
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 4 Jul 2019 06:45:18 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B3404AC06B;
-        Thu,  4 Jul 2019 06:45:17 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4321AAC05B;
-        Thu,  4 Jul 2019 06:45:11 +0000 (GMT)
-Received: from morokweng.localdomain (unknown [9.85.146.222])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Thu,  4 Jul 2019 06:45:10 +0000 (GMT)
-References: <20190628021934.4260-1-bauerman@linux.ibm.com> <1561991934.4067.17.camel@linux.ibm.com>
-User-agent: mu4e 1.2.0; emacs 26.2
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        David Howells <dhowells@redhat.com>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "AKASHI\, Takahiro" <takahiro.akashi@linaro.org>
-Subject: Re: [PATCH v12 00/11] Appended signatures support for IMA appraisal
-In-reply-to: <1561991934.4067.17.camel@linux.ibm.com>
-Date:   Thu, 04 Jul 2019 03:45:07 -0300
+        Thu, 4 Jul 2019 03:26:45 -0400
+Received: by mail-wr1-f66.google.com with SMTP id n9so5446801wru.0;
+        Thu, 04 Jul 2019 00:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=acx589NG1jiLdMklxVwLi+wOV3q1fLOPyM7fTcUpo3I=;
+        b=m+iUzkBtjYaLgESnRPV9+Z/nVko0OyGzmiwqgN8BW9oDY1jcJTkJ8ylTuoYrAQAoc8
+         FiPG3Mph8IKFK8/i5V4n1VMoQq6jytVBIPcCHrCrC0nWsIEF31I3GECxsdQWI7HjPsgX
+         rnpLB5K/HQJS04oXWr+VfisP+kBIdYXR+YcWlqBrA6HNVEe8tTURbnw6WWOOlQY0HAGz
+         qeu/3XAcDNdkbXkq+UB+uDcqEmdBAM5BQ6qHqY2+3F83qoesCqGUnHtj/siW1F0YSfqH
+         kWYWy35GgNqjXkF1A3ftoROfz04W00OL6E+p95a6etLTuNgPD1LblDGRjT/AH2lrANys
+         EZoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=acx589NG1jiLdMklxVwLi+wOV3q1fLOPyM7fTcUpo3I=;
+        b=ofiVXlvp8r6+fe1K3YOxlTNELOc2QLbLvWJ62OQkueSWBX2Tfu6msVScx/MI680+Go
+         YAoWPzE/lfmJPL1QCWZjAN/WzgG4YMmxKFRaGCOr0KjJaphq9m7PsMCJmF8nl0yGwFay
+         P13u1UfSxCTPxpPA7NvzxAZCoqMbNemCuEjFc2qwW5Kn3RPPpj3AP+Azyfo93NpyMOif
+         rMqUXyyWGfe3fRfkZF46rZqMAuk4Fw9w2boz+NAt4L+qW28ARxtsvb/QsZ5R5h+LPyLE
+         LbA4ZqWKsQ+92SJKM7oLuR446lJCRxD3J+JJYyN4qr1r9km24KpFuSruGUvWS16Vv+VW
+         PLew==
+X-Gm-Message-State: APjAAAUDPDyOogdh8QTIQOCJ2QRdgickCO4GlsvU1BjerR7Ba0O05vfO
+        YHMgom8anakOzxM7MnYhpPo=
+X-Google-Smtp-Source: APXvYqxMOnY0H5x2seVGKnaSEPGyBJd2lKzLEa8n4+9QTNHnN3GtySgKLzsYZyLUJeTU+jvLOMAuOg==
+X-Received: by 2002:a5d:43c9:: with SMTP id v9mr31873353wrr.70.1562225201923;
+        Thu, 04 Jul 2019 00:26:41 -0700 (PDT)
+Received: from merlot.mazyland.net (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.googlemail.com with ESMTPSA id p11sm5163388wrm.53.2019.07.04.00.26.40
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 04 Jul 2019 00:26:41 -0700 (PDT)
+From:   Milan Broz <gmazyland@gmail.com>
+To:     jarkko.sakkinen@linux.intel.com
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, arnd@arndb.de,
+        gregkh@linuxfoundation.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Milan Broz <gmazyland@gmail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v2] tpm: Fix null pointer dereference on chip register error path
+Date:   Thu,  4 Jul 2019 09:26:15 +0200
+Message-Id: <20190704072615.31143-1-gmazyland@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190703230125.aynx4ianvqqjt5d7@linux.intel.com>
+References: <20190703230125.aynx4ianvqqjt5d7@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-x-cbid: 19070406-0064-0000-0000-000003F7088F
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011376; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01227188; UDB=6.00646128; IPR=6.01008425;
- MB=3.00027580; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-04 06:45:23
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070406-0065-0000-0000-00003E225467
-Message-Id: <87k1cyl2mk.fsf@morokweng.localdomain>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-04_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907040087
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+If clk_enable is not defined and chip initialization
+is canceled code hits null dereference.
 
-Mimi Zohar <zohar@linux.ibm.com> writes:
+Easily reproducible with vTPM init fail:
+  swtpm chardev --tpmstate dir=nonexistent_dir --tpm2 --vtpm-proxy
 
-> On Thu, 2019-06-27 at 23:19 -0300, Thiago Jung Bauermann wrote:
->> Hello,
->> 
->> This version is essentially identical to the last one.
->> 
->> It is only a rebase on top of today's linux-integrity/next-queued-testing,
->> prompted by conflicts with Prakhar Srivastava's patches to measure the
->> kernel command line. It also drops two patches that are already present in
->> that branch.
->
-> Thanks, Thiago.  These patches are now in next-queued-testing waiting
-> for some additional reviews/acks.
+BUG: kernel NULL pointer dereference, address: 00000000
+...
+Call Trace:
+ tpm_chip_start+0x9d/0xa0 [tpm]
+ tpm_chip_register+0x10/0x1a0 [tpm]
+ vtpm_proxy_work+0x11/0x30 [tpm_vtpm_proxy]
+ process_one_work+0x214/0x5a0
+ worker_thread+0x134/0x3e0
+ ? process_one_work+0x5a0/0x5a0
+ kthread+0xd4/0x100
+ ? process_one_work+0x5a0/0x5a0
+ ? kthread_park+0x90/0x90
+ ret_from_fork+0x19/0x24
 
-Thank you very much, Mimi! Now I think I'm only missing acks for the
-PKCS#7 changes in patches 2 and 3, and an ack for the s390 changes in
-patch 1.
+Fixes: 719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
+Cc: stable@vger.kernel.org # v5.1+
+Signed-off-by: Milan Broz <gmazyland@gmail.com>
+---
+ drivers/char/tpm/tpm-chip.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 90325e1749fb..db6ac6f83948 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -77,6 +77,18 @@ static int tpm_go_idle(struct tpm_chip *chip)
+ 	return chip->ops->go_idle(chip);
+ }
+ 
++static void tpm_clk_enable(struct tpm_chip *chip)
++{
++	if (chip->ops->clk_enable)
++		chip->ops->clk_enable(chip, true);
++}
++
++static void tpm_clk_disable(struct tpm_chip *chip)
++{
++	if (chip->ops->clk_enable)
++		chip->ops->clk_enable(chip, false);
++}
++
+ /**
+  * tpm_chip_start() - power on the TPM
+  * @chip:	a TPM chip to use
+@@ -89,13 +101,12 @@ int tpm_chip_start(struct tpm_chip *chip)
+ {
+ 	int ret;
+ 
+-	if (chip->ops->clk_enable)
+-		chip->ops->clk_enable(chip, true);
++	tpm_clk_enable(chip);
+ 
+ 	if (chip->locality == -1) {
+ 		ret = tpm_request_locality(chip);
+ 		if (ret) {
+-			chip->ops->clk_enable(chip, false);
++			tpm_clk_disable(chip);
+ 			return ret;
+ 		}
+ 	}
+@@ -103,8 +114,7 @@ int tpm_chip_start(struct tpm_chip *chip)
+ 	ret = tpm_cmd_ready(chip);
+ 	if (ret) {
+ 		tpm_relinquish_locality(chip);
+-		if (chip->ops->clk_enable)
+-			chip->ops->clk_enable(chip, false);
++		tpm_clk_disable(chip);
+ 		return ret;
+ 	}
+ 
+@@ -124,8 +134,7 @@ void tpm_chip_stop(struct tpm_chip *chip)
+ {
+ 	tpm_go_idle(chip);
+ 	tpm_relinquish_locality(chip);
+-	if (chip->ops->clk_enable)
+-		chip->ops->clk_enable(chip, false);
++	tpm_clk_disable(chip);
+ }
+ EXPORT_SYMBOL_GPL(tpm_chip_stop);
+ 
 -- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
+2.20.1
 
