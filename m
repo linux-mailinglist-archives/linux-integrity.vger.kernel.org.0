@@ -2,104 +2,209 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF75B5EF58
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2019 01:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC9F5F1D4
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2019 05:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726902AbfGCXB3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 3 Jul 2019 19:01:29 -0400
-Received: from mga11.intel.com ([192.55.52.93]:13942 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726562AbfGCXB3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 3 Jul 2019 19:01:29 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Jul 2019 16:01:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,448,1557212400"; 
-   d="scan'208";a="184871694"
-Received: from elsaidmo-mobl2.ger.corp.intel.com (HELO localhost) ([10.249.33.22])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Jul 2019 16:01:27 -0700
-Date:   Thu, 4 Jul 2019 02:01:25 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Milan Broz <gmazyland@gmail.com>, linux-integrity@vger.kernel.org,
-        James Morris <jmorris@namei.org>
-Subject: Re: [PATCH] tpm: Fix null pointer dereference on chip register error
- path
-Message-ID: <20190703230125.aynx4ianvqqjt5d7@linux.intel.com>
-References: <20190612084210.13562-1-gmazyland@gmail.com>
- <9df0a432-eb9c-914e-5ddc-2680a6fecebd@gmail.com>
- <a8fc7162019168ab3b9b662fb629855205a6b1ca.camel@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a8fc7162019168ab3b9b662fb629855205a6b1ca.camel@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+        id S1726964AbfGDDc0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 3 Jul 2019 23:32:26 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64832 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727116AbfGDDc0 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 3 Jul 2019 23:32:26 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x643VxVR098224
+        for <linux-integrity@vger.kernel.org>; Wed, 3 Jul 2019 23:32:24 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2th5tx6v36-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 03 Jul 2019 23:32:24 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <nayna@linux.ibm.com>;
+        Thu, 4 Jul 2019 04:32:22 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 4 Jul 2019 04:32:19 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x643WI8l35062184
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 4 Jul 2019 03:32:18 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 55361AE056;
+        Thu,  4 Jul 2019 03:32:18 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D4EADAE04D;
+        Thu,  4 Jul 2019 03:32:15 +0000 (GMT)
+Received: from swastik.ibm.com (unknown [9.80.198.40])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  4 Jul 2019 03:32:15 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sachin Sant <sachinp@linux.vnet.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>
+Subject: [PATCH] tpm: fixes uninitialized allocated banks for IBM vtpm driver
+Date:   Wed,  3 Jul 2019 23:32:01 -0400
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+x-cbid: 19070403-0020-0000-0000-000003500E09
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19070403-0021-0000-0000-000021A3A88D
+Message-Id: <1562211121-2188-1-git-send-email-nayna@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-04_02:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907040044
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jul 02, 2019 at 09:37:51PM +0300, Jarkko Sakkinen wrote:
-> On Fri, 2019-06-28 at 09:56 +0200, Milan Broz wrote:
-> > Hi,
-> > 
-> > is there any problem in this with the trivial patch below?
-> > 
-> > I just get the same crash again with stable 5.1 kernel...
-> > 
-> > Milan
-> 
-> I'm sorry but I'm seeing this patch for the first time.
+The nr_allocated_banks and allocated banks are initialized as part of
+tpm_chip_register. Currently, this is done as part of auto startup
+function. However, some drivers, like the ibm vtpm driver, do not run
+auto startup during initialization. This results in uninitialized memory
+issue and causes a kernel panic during boot.
 
-OK, I finally reviewed your patch. Thank for finding this sever bug! I
-just have a few remarks.
+This patch moves the pcr allocation outside the auto startup function
+into tpm_chip_register. This ensures that allocated banks are initialized
+in any case.
 
-First of all, we need to add the necessary fixes tag to the patch, which
-will tell the commit ID that caused the crash and the one who we should
-blame:
+Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms with
+PCR read")
+Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+---
+ drivers/char/tpm/tpm-chip.c | 37 +++++++++++++++++++++++++++++++++++++
+ drivers/char/tpm/tpm.h      |  1 +
+ drivers/char/tpm/tpm1-cmd.c | 12 ------------
+ drivers/char/tpm/tpm2-cmd.c |  6 +-----
+ 4 files changed, 39 insertions(+), 17 deletions(-)
 
-Fixes: 719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 8804c9e916fd..958508bb8379 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -550,6 +550,39 @@ static int tpm_add_hwrng(struct tpm_chip *chip)
+ 	return hwrng_register(&chip->hwrng);
+ }
+ 
++/*
++ * tpm_pcr_allocation() - initializes the chip allocated banks for PCRs
++ */
++static int tpm_pcr_allocation(struct tpm_chip *chip)
++{
++	int rc = 0;
++
++	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++		rc = tpm2_get_pcr_allocation(chip);
++		if (rc)
++			goto out;
++	}
++
++	/* Initialize TPM 1.2 */
++	chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
++			GFP_KERNEL);
++	if (!chip->allocated_banks) {
++		rc = -ENOMEM;
++		goto out;
++	}
++
++	chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
++	chip->allocated_banks[0].digest_size = hash_digest_size[HASH_ALGO_SHA1];
++	chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
++	chip->nr_allocated_banks = 1;
++
++	return 0;
++out:
++	if (rc < 0)
++		rc = -ENODEV;
++	return rc;
++}
++
+ /*
+  * tpm_chip_register() - create a character device for the TPM chip
+  * @chip: TPM chip to use.
+@@ -573,6 +606,10 @@ int tpm_chip_register(struct tpm_chip *chip)
+ 	if (rc)
+ 		return rc;
+ 
++	rc = tpm_pcr_allocation(chip);
++	if (rc)
++		return rc;
++
+ 	tpm_sysfs_add_device(chip);
+ 
+ 	rc = tpm_bios_log_setup(chip);
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 2cce072f25b5..eabe6b755fa6 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -454,6 +454,7 @@ int tpm2_unseal_trusted(struct tpm_chip *chip,
+ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
+ 			u32 *value, const char *desc);
+ 
++ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip);
+ int tpm2_auto_startup(struct tpm_chip *chip);
+ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
+ unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+index 85dcf2654d11..ec5f3693c096 100644
+--- a/drivers/char/tpm/tpm1-cmd.c
++++ b/drivers/char/tpm/tpm1-cmd.c
+@@ -696,18 +696,6 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+ 		goto out;
+ 	}
+ 
+-	chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
+-					GFP_KERNEL);
+-	if (!chip->allocated_banks) {
+-		rc = -ENOMEM;
+-		goto out;
+-	}
+-
+-	chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
+-	chip->allocated_banks[0].digest_size = hash_digest_size[HASH_ALGO_SHA1];
+-	chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
+-	chip->nr_allocated_banks = 1;
+-
+ 	return rc;
+ out:
+ 	if (rc > 0)
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index e74c5b7b64bf..b4384d0e3741 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -841,7 +841,7 @@ struct tpm2_pcr_selection {
+ 	u8  pcr_select[3];
+ } __packed;
+ 
+-static ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
++ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
+ {
+ 	struct tpm2_pcr_selection pcr_selection;
+ 	struct tpm_buf buf;
+@@ -1041,10 +1041,6 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+ 			goto out;
+ 	}
+ 
+-	rc = tpm2_get_pcr_allocation(chip);
+-	if (rc)
+-		goto out;
+-
+ 	rc = tpm2_get_cc_attrs_tbl(chip);
+ 
+ out:
+-- 
+2.20.1
 
-It was a piece of a fairly large and complex refactorization [1] but it
-is not really a legit excuse and this is very unfortunate.
-
-I think it'd be better to take a different path how this will be fixed.
-
-Right after tpm_go_idle(), please add these:
-
-static void tpm_clk_enable(struct tpm_chip *chip)
-{
-	if (chip->ops->clk_enable)
-		chip->ops->clk_enable(chip);
-}
-
-static void tpm_tpm_clk_disable(struct tpm_chip *chip)
-{
-	if (chip->ops->tpm_clk_disable)
-		chip->ops->tpm_clk_disable(chip);
-}
-
-This is consistent with the other callbacks and gives better guarantees
-that a similar thing won't happen the next time when something happens
-to the call sites. This is what I should have done in my patch set to
-zero out the risk but failed to do that.
-
-You should categorically include the corresponding subsystem
-maintainers. Please check [2]. It is not like I would ignore any
-patches. It is more related to the risk of human error.
-
-Like many people, I filter any mailing list emails out of my inbox and
-go through them at some point. This will cause a random number of days
-of latency and with extremely bad luck I even might miss a patch
-completely.
-
-As a last remark put patch signed-off-by's and similar tags as last in
-your patch and put cc and fixes (in that order) before them.
-
-[1] https://lore.kernel.org/linux-integrity/20190205224723.19671-1-jarkko.sakkinen@linux.intel.com/
-[2] https://www.kernel.org/doc/html/v5.1/process/submitting-patches.html#select-the-recipients-for-your-patch
-
-/Jarkko
