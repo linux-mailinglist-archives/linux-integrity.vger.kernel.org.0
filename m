@@ -2,79 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C65965F738
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2019 13:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC935F744
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2019 13:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727560AbfGDL2x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Jul 2019 07:28:53 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:33048 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727554AbfGDL2x (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Jul 2019 07:28:53 -0400
-Received: from LHREML711-CAH.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id C9F5594D590F9653AB2D;
-        Thu,  4 Jul 2019 12:28:51 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.34) with Microsoft SMTP Server (TLS) id 14.3.408.0; Thu, 4 Jul
- 2019 12:28:49 +0100
-Subject: Re: [PATCH] Revert "tpm: pass an array of tpm_extend_digest
- structures to tpm_pcr_extend()"
+        id S1727552AbfGDLg5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Jul 2019 07:36:57 -0400
+Received: from smtp2.infineon.com ([217.10.52.18]:2767 "EHLO
+        smtp2.infineon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727436AbfGDLg5 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 4 Jul 2019 07:36:57 -0400
+X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Thu, 04 Jul 2019 07:36:55 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1562240216; x=1593776216;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=jj7pE5xyI7GKLRZzLxvYqwwU70BVQrx76pcVRLKA4RI=;
+  b=I8myp0XAPwFYWUjtFKYtEWt3h4jGAVEHi+wgjypm5QiARvRvk7TzZTan
+   W3ni6evVIN8maG4nq2whKh7mcSvndPa/tRRJVGi1qWQ7yeyBRkmnSPOhY
+   hlafMmkea33Ogg0cAXvo+p4AspLJ3chtSvyj+mPPSkVkacVhjfTS8EVck
+   Y=;
+IronPort-SDR: IXo7G6x+FN7DENZq6DX7nJou9qS2eXOrvYbwJ9vgXAStjiOzFMQzGFiCywqbwRFxbyoO4qxlD3
+ Ly1phjuUTNTw==
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6000,8403,9307"; a="5415994"
+X-IronPort-AV: E=Sophos;i="5.63,450,1557180000"; 
+   d="scan'208";a="5415994"
+Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
+  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2019 13:29:46 +0200
+Received: from MUCSE708.infineon.com (MUCSE708.infineon.com [172.23.7.82])
+        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
+        Thu,  4 Jul 2019 13:29:45 +0200 (CEST)
+Received: from [10.154.32.88] (172.23.8.247) by MUCSE708.infineon.com
+ (172.23.7.82) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1591.10; Thu, 4
+ Jul 2019 13:29:45 +0200
+Subject: Re: [PATCH v2 0/2] char: tpm: add new driver for tpm i2c ptp
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        <linux-integrity@vger.kernel.org>
-CC:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "David Howells" <dhowells@redhat.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Armijn Hemel <armijn@tjaldur.nl>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>, <keyrings@vger.kernel.org>
-References: <20190701131505.17759-1-msuchanek@suse.de>
- <8e4cc105b748c5395132b4d3d29d0d9b30a8720c.camel@linux.intel.com>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <cf2ea579-41c2-42da-2df3-0b1f12e1c639@huawei.com>
-Date:   Thu, 4 Jul 2019 13:28:57 +0200
+        Oshri Alkoby <oshrialkoby85@gmail.com>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+        <oshri.alkoby@nuvoton.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <gcwilson@us.ibm.com>,
+        <kgoldman@us.ibm.com>, <nayna@linux.vnet.ibm.com>,
+        <dan.morav@nuvoton.com>, <tomer.maimon@nuvoton.com>
+References: <20190628151327.206818-1-oshrialkoby85@gmail.com>
+ <8e6ca8796f229c5dc94355437351d7af323f0c56.camel@linux.intel.com>
+From:   Alexander Steffen <Alexander.Steffen@infineon.com>
+Message-ID: <79e8bfd2-2ed1-cf48-499c-5122229beb2e@infineon.com>
+Date:   Thu, 4 Jul 2019 13:29:41 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <8e4cc105b748c5395132b4d3d29d0d9b30a8720c.camel@linux.intel.com>
+In-Reply-To: <8e6ca8796f229c5dc94355437351d7af323f0c56.camel@linux.intel.com>
 Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE716.infineon.com (172.23.7.67) To
+ MUCSE708.infineon.com (172.23.7.82)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/4/2019 12:03 PM, Jarkko Sakkinen wrote:
-> On Mon, 2019-07-01 at 15:15 +0200, Michal Suchanek wrote:
->> This reverts commit 0b6cf6b97b7ef1fa3c7fefab0cac897a1c4a3400 to avoid
->> following crash:
-> 
-> Thank you. I think this the right choice for the moment. I fixed
-> a trivial checkpatch.pl error and added the mandatory tags. Can
-> you check quickly v2 (just posted)?
-> 
-> I already made it available in my master and next.
+On 04.07.2019 10:43, Jarkko Sakkinen wrote:
+> Check out tpm_tis_core.c and tpm_tis_spi.c. TPM TIS driver implements
+> that spec so you should only implement a new physical layer.
 
-Could you please wait few days? I would prefer to fix this issue instead
-of reverting the whole patch.
+I had the same thought. Unfortunately, the I2C-TIS specification 
+introduces two relevant changes compared to tpm_tis/tpm_tis_spi:
 
-Thanks
+1. Locality is not encoded into register addresses anymore, but stored 
+in a separate register.
+2. Several register addresses have changed (but still contain compatible 
+contents).
 
-Roberto
+I'd still prefer not to duplicate all the high-level logic from 
+tpm_tis_core. But this will probably mean to introduce some new 
+interfaces between tpm_tis_core and the physical layers.
 
--- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+Also, shouldn't the new driver be called tpm_tis_i2c, to group it with 
+all the other (TIS) drivers, that implement a vendor-independent 
+protocol? With tpm_i2c_ptp users might assume that ptp is just another 
+vendor.
+
+Alexander
