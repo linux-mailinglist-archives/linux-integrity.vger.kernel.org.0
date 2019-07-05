@@ -2,40 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 578FC604F7
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2019 13:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30F5604FC
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2019 13:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727066AbfGELCM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Jul 2019 07:02:12 -0400
-Received: from mga17.intel.com ([192.55.52.151]:43279 "EHLO mga17.intel.com"
+        id S1727483AbfGELDP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Jul 2019 07:03:15 -0400
+Received: from mga06.intel.com ([134.134.136.31]:51250 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726116AbfGELCM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Jul 2019 07:02:12 -0400
+        id S1726116AbfGELDP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 5 Jul 2019 07:03:15 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jul 2019 04:02:11 -0700
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jul 2019 04:03:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,454,1557212400"; 
-   d="scan'208";a="169647925"
+   d="scan'208";a="316065024"
 Received: from jsakkine-mobl1.tm.intel.com ([10.237.50.189])
-  by orsmga006.jf.intel.com with ESMTP; 05 Jul 2019 04:02:07 -0700
-Message-ID: <f161616a3681994680c70e66c51afd537a2f3423.camel@linux.intel.com>
-Subject: Re: [PATCH] tpm: fixes uninitialized allocated banks for IBM vtpm
- driver
+  by orsmga004.jf.intel.com with ESMTP; 05 Jul 2019 04:03:09 -0700
+Message-ID: <1b890d9a1a949683fdb7104e395c7f92022772fe.camel@linux.intel.com>
+Subject: Re: [PATCH] Revert "tpm: pass an array of tpm_extend_digest
+ structures to tpm_pcr_extend()"
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Michal Suchanek <msuchanek@suse.de>
-Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        linux-integrity@vger.kernel.org
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>
-Date:   Fri, 05 Jul 2019 14:02:06 +0300
-In-Reply-To: <f315356e7c00378c8785bd20d5869c9046ece2f2.camel@linux.intel.com>
-References: <1562211121-2188-1-git-send-email-nayna@linux.ibm.com>
-         <f315356e7c00378c8785bd20d5869c9046ece2f2.camel@linux.intel.com>
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Armijn Hemel <armijn@tjaldur.nl>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org
+Date:   Fri, 05 Jul 2019 14:03:08 +0300
+In-Reply-To: <cf2ea579-41c2-42da-2df3-0b1f12e1c639@huawei.com>
+References: <20190701131505.17759-1-msuchanek@suse.de>
+         <8e4cc105b748c5395132b4d3d29d0d9b30a8720c.camel@linux.intel.com>
+         <cf2ea579-41c2-42da-2df3-0b1f12e1c639@huawei.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.32.1-2 
@@ -46,33 +58,22 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-07-05 at 13:42 +0300, Jarkko Sakkinen wrote:
-> On Wed, 2019-07-03 at 23:32 -0400, Nayna Jain wrote:
-> > The nr_allocated_banks and allocated banks are initialized as part of
-> > tpm_chip_register. Currently, this is done as part of auto startup
-> > function. However, some drivers, like the ibm vtpm driver, do not run
-> > auto startup during initialization. This results in uninitialized memory
-> > issue and causes a kernel panic during boot.
+On Thu, 2019-07-04 at 13:28 +0200, Roberto Sassu wrote:
+> On 7/4/2019 12:03 PM, Jarkko Sakkinen wrote:
+> > On Mon, 2019-07-01 at 15:15 +0200, Michal Suchanek wrote:
+> > > This reverts commit 0b6cf6b97b7ef1fa3c7fefab0cac897a1c4a3400 to avoid
+> > > following crash:
 > > 
-> > This patch moves the pcr allocation outside the auto startup function
-> > into tpm_chip_register. This ensures that allocated banks are initialized
-> > in any case.
+> > Thank you. I think this the right choice for the moment. I fixed
+> > a trivial checkpatch.pl error and added the mandatory tags. Can
+> > you check quickly v2 (just posted)?
 > > 
-> > Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms with
-> > PCR read")
-> > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> > I already made it available in my master and next.
 > 
-> Please add
-> 
-> Reported-by: Michal Suchanek <msuchanek@suse.de>
-> 
-> It is missing. Michal is there a chance you could try this out once
-> Nayna send a new version?
+> Could you please wait few days? I would prefer to fix this issue instead
+> of reverting the whole patch.
 
-Hey, I saw Michal's tested-by. I can do that minor reorg cosmetic
-bits myeslf and add Micha's tag.
-
-Some issue with the network but I'll push a commit soonish.
+Nayna provided a fix should be ok.
 
 /Jarkko
 
