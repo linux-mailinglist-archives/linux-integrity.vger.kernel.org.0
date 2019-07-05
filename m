@@ -2,151 +2,202 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 540166092E
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2019 17:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F67260963
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2019 17:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727914AbfGEPVf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Jul 2019 11:21:35 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56616 "EHLO
+        id S1726851AbfGEPdf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Jul 2019 11:33:35 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25014 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726302AbfGEPVe (ORCPT
+        by vger.kernel.org with ESMTP id S1725497AbfGEPdf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Jul 2019 11:21:34 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x65FHEwU139689;
-        Fri, 5 Jul 2019 11:20:58 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tj80kaywk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Jul 2019 11:20:58 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x65FKvOt003765;
-        Fri, 5 Jul 2019 11:20:57 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tj80kayw2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Jul 2019 11:20:57 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x65FEcfC024677;
-        Fri, 5 Jul 2019 15:20:56 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma03dal.us.ibm.com with ESMTP id 2tdym7mvjr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Jul 2019 15:20:56 +0000
+        Fri, 5 Jul 2019 11:33:35 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x65FXNmA024292
+        for <linux-integrity@vger.kernel.org>; Fri, 5 Jul 2019 11:33:34 -0400
+Received: from e12.ny.us.ibm.com (e12.ny.us.ibm.com [129.33.205.202])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tj6mx6v07-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 05 Jul 2019 11:33:26 -0400
+Received: from localhost
+        by e12.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <nayna@linux.vnet.ibm.com>;
+        Fri, 5 Jul 2019 16:32:10 +0100
+Received: from b01cxnp23032.gho.pok.ibm.com (9.57.198.27)
+        by e12.ny.us.ibm.com (146.89.104.199) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 5 Jul 2019 16:32:07 +0100
 Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x65FKtnE52625730
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x65FW6ku48234784
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 5 Jul 2019 15:20:55 GMT
+        Fri, 5 Jul 2019 15:32:06 GMT
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F7AD124053;
-        Fri,  5 Jul 2019 15:20:55 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 35957124053;
+        Fri,  5 Jul 2019 15:32:06 +0000 (GMT)
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0BB1F124052;
-        Fri,  5 Jul 2019 15:20:54 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 5B6B7124052;
+        Fri,  5 Jul 2019 15:32:05 +0000 (GMT)
 Received: from swastik.ibm.com (unknown [9.85.133.199])
         by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  5 Jul 2019 15:20:53 +0000 (GMT)
-Subject: Re: [PATCH] Revert "tpm: pass an array of tpm_extend_digest
- structures to tpm_pcr_extend()"
-To:     Tyler Hicks <tyhicks@canonical.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Fri,  5 Jul 2019 15:32:05 +0000 (GMT)
+Subject: Re: [PATCH] tpm: fixes uninitialized allocated banks for IBM vtpm
+ driver
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
         Michal Suchanek <msuchanek@suse.de>,
-        linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Armijn Hemel <armijn@tjaldur.nl>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org
-References: <20190701131505.17759-1-msuchanek@suse.de>
- <8e4cc105b748c5395132b4d3d29d0d9b30a8720c.camel@linux.intel.com>
- <cf2ea579-41c2-42da-2df3-0b1f12e1c639@huawei.com>
- <1562240882.6165.78.camel@linux.ibm.com>
- <1562255201.6165.143.camel@linux.ibm.com> <20190704195857.GB6105@elm>
+        linux-kernel@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        George Wilson <gcwilson@linux.ibm.com>
+References: <1562211121-2188-1-git-send-email-nayna@linux.ibm.com>
+ <1998ebcf-1521-778f-2c80-55ad2c855023@linux.ibm.com>
 From:   Nayna <nayna@linux.vnet.ibm.com>
-Message-ID: <abcc3748-8471-8965-046e-9d9431b4f0e9@linux.vnet.ibm.com>
-Date:   Fri, 5 Jul 2019 11:20:53 -0400
+Date:   Fri, 5 Jul 2019 11:32:05 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <20190704195857.GB6105@elm>
+In-Reply-To: <1998ebcf-1521-778f-2c80-55ad2c855023@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
 X-TM-AS-GCONF: 00
+x-cbid: 19070515-0060-0000-0000-0000035971F9
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011383; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01227839; UDB=6.00646518; IPR=6.01009080;
+ MB=3.00027598; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-05 15:32:08
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19070515-0061-0000-0000-00004A069FD7
+Message-Id: <164b9c6e-9b6d-324d-9df8-d2f7d1ac8cfc@linux.vnet.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-05_05:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907050186
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907050189
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Tyler,
 
 
-On 07/04/2019 03:58 PM, Tyler Hicks wrote:
-> Hey Mimi!
->
-> On 2019-07-04 11:46:41, Mimi Zohar wrote:
->> Hi Jarkko,
+On 07/05/2019 10:13 AM, Stefan Berger wrote:
+> On 7/3/19 11:32 PM, Nayna Jain wrote:
+>> The nr_allocated_banks and allocated banks are initialized as part of
+>> tpm_chip_register. Currently, this is done as part of auto startup
+>> function. However, some drivers, like the ibm vtpm driver, do not run
+>> auto startup during initialization. This results in uninitialized memory
+>> issue and causes a kernel panic during boot.
 >>
->> On Thu, 2019-07-04 at 07:48 -0400, Mimi Zohar wrote:
->>> On Thu, 2019-07-04 at 13:28 +0200, Roberto Sassu wrote:
->>>> On 7/4/2019 12:03 PM, Jarkko Sakkinen wrote:
->>>>> On Mon, 2019-07-01 at 15:15 +0200, Michal Suchanek wrote:
->>>>>> This reverts commit 0b6cf6b97b7ef1fa3c7fefab0cac897a1c4a3400 to avoid
->>>>>> following crash:
->>>>> Thank you. I think this the right choice for the moment. I fixed
->>>>> a trivial checkpatch.pl error and added the mandatory tags. Can
->>>>> you check quickly v2 (just posted)?
->>>>>
->>>>> I already made it available in my master and next.
->>>> Could you please wait few days? I would prefer to fix this issue instead
->>>> of reverting the whole patch.
->>> Nayna posted a patch late yesterday titled "tpm: fixes uninitialized
->>> allocated banks for IBM vtpm driver", which addresses this bug.
->> Now with my review, and with Sachin Sant's and Michal Suchánek
->> testing, instead of reverting this patch could you pick up Nayna's
->> patch instead?
-> It looks to me like the revert would also fix a bug that is keeping the
-> eCryptfs module from loading when the TPM is in an "inactive" state:
+>> This patch moves the pcr allocation outside the auto startup function
+>> into tpm_chip_register. This ensures that allocated banks are 
+>> initialized
+>> in any case.
+>>
+>> Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms 
+>> with
+>> PCR read")
+>> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+>> ---
+>>   drivers/char/tpm/tpm-chip.c | 37 +++++++++++++++++++++++++++++++++++++
+>>   drivers/char/tpm/tpm.h      |  1 +
+>>   drivers/char/tpm/tpm1-cmd.c | 12 ------------
+>>   drivers/char/tpm/tpm2-cmd.c |  6 +-----
+>>   4 files changed, 39 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+>> index 8804c9e916fd..958508bb8379 100644
+>> --- a/drivers/char/tpm/tpm-chip.c
+>> +++ b/drivers/char/tpm/tpm-chip.c
+>> @@ -550,6 +550,39 @@ static int tpm_add_hwrng(struct tpm_chip *chip)
+>>       return hwrng_register(&chip->hwrng);
+>>   }
+>>
+>> +/*
+>> + * tpm_pcr_allocation() - initializes the chip allocated banks for PCRs
+>> + */
+>> +static int tpm_pcr_allocation(struct tpm_chip *chip)
+>> +{
+>> +    int rc = 0;
+>> +
+>> +    if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+>> +        rc = tpm2_get_pcr_allocation(chip);
+>> +        if (rc)
+>> +            goto out;
+>> +    }
+>> +
+>> +    /* Initialize TPM 1.2 */
+>> +    chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
+>> +            GFP_KERNEL);
+>> +    if (!chip->allocated_banks) {
+>> +        rc = -ENOMEM;
+>> +        goto out;
+>> +    }
+>> +
+>> +    chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
+>> +    chip->allocated_banks[0].digest_size = 
+>> hash_digest_size[HASH_ALGO_SHA1];
+>> +    chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
+>> +    chip->nr_allocated_banks = 1;
+>> +
+>> +    return 0;
+>> +out:
+>> +    if (rc < 0)
+>> +        rc = -ENODEV;
 >
->    https://bugzilla.kernel.org/show_bug.cgi?id=203953
 >
-> I just noticed that it was recently discussed here, too:
+> The old code where you lifted this from said:
 >
->    https://lore.kernel.org/linux-integrity/1562244125.6165.95.camel@linux.ibm.com/T/#t
+> out:
+>     if (rc > 0)
+>         rc = -ENODEV;
+>     return rc;
 >
-> I believe that the revert would fix it because the call to
-> init_digests()/tpm_get_random() would no longer be in the path of
-> loading ecryptfs.ko (which depends on encrypted-keys.ko, which depends
-> on trusted.ko).
+> It would not overwrite -ENOMEM with -ENODEV but yours does.
 >
-> If the revert isn't used, we'll need a different fix for bug 203953. It
-> should be an easy fix but I don't want it to be forgotten.
+> I think the correct fix would be to use:
+>
+> if (rc > 0)
+>
+>     rc = -ENODEV;
+>
+
+Yes. I think I misread it. Thanks Stefan. Will fix this..
 
 
-I think if TPM is inactive/disabled, it needs to be handled during 
-tpm_chip_register() itself. However, probably that needs more analysis 
-and discussion. For now, in context of the trusted.ko module, it seems 
-init_trusted() should "put_device", but continue even if init_digests() 
-fails, that will fix the issue.
+>
+>
+>
+>
+>> +    return rc;
+>> +}
+>> +
+>>   /*
+>>    * tpm_chip_register() - create a character device for the TPM chip
+>>    * @chip: TPM chip to use.
+>> @@ -573,6 +606,10 @@ int tpm_chip_register(struct tpm_chip *chip)
+>>       if (rc)
+>>           return rc;
+>
+> Above this is tpm_chip_stop(chip) because (afaik) none of the 
+> following function calls in tpm_chip_register() needed the TPM, but 
+> now with tpm_pcr_allocation() you will need to send a command to the 
+> TPM. So I would say you should move the tpm_chip_stop() into the error 
+> branch visible above and also after the tpm_pcr_allocation().
+>
+>
+>> +    rc = tpm_pcr_allocation(chip);
+> tpm_chip_stop(chip);
 
+I am not sure of the purpose of tpm_stop_chip(), so I have left it as it 
+is. Jarkko, what do you think about the change ?
 
 Thanks & Regards,
-         - Nayna
+          - Nayna
+
+
