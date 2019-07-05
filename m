@@ -2,202 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F67260963
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2019 17:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBF460A65
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2019 18:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbfGEPdf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Jul 2019 11:33:35 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25014 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725497AbfGEPdf (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Jul 2019 11:33:35 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x65FXNmA024292
-        for <linux-integrity@vger.kernel.org>; Fri, 5 Jul 2019 11:33:34 -0400
-Received: from e12.ny.us.ibm.com (e12.ny.us.ibm.com [129.33.205.202])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tj6mx6v07-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 05 Jul 2019 11:33:26 -0400
-Received: from localhost
-        by e12.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <nayna@linux.vnet.ibm.com>;
-        Fri, 5 Jul 2019 16:32:10 +0100
-Received: from b01cxnp23032.gho.pok.ibm.com (9.57.198.27)
-        by e12.ny.us.ibm.com (146.89.104.199) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 5 Jul 2019 16:32:07 +0100
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x65FW6ku48234784
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 5 Jul 2019 15:32:06 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 35957124053;
-        Fri,  5 Jul 2019 15:32:06 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B6B7124052;
-        Fri,  5 Jul 2019 15:32:05 +0000 (GMT)
-Received: from swastik.ibm.com (unknown [9.85.133.199])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  5 Jul 2019 15:32:05 +0000 (GMT)
-Subject: Re: [PATCH] tpm: fixes uninitialized allocated banks for IBM vtpm
- driver
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        linux-kernel@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        George Wilson <gcwilson@linux.ibm.com>
-References: <1562211121-2188-1-git-send-email-nayna@linux.ibm.com>
- <1998ebcf-1521-778f-2c80-55ad2c855023@linux.ibm.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-Date:   Fri, 5 Jul 2019 11:32:05 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1728560AbfGEQlC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Jul 2019 12:41:02 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:33057 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726302AbfGEQlC (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 5 Jul 2019 12:41:02 -0400
+Received: from LHREML711-CAH.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 01758ED5E91E14B571A7;
+        Fri,  5 Jul 2019 17:41:00 +0100 (IST)
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.154)
+ by smtpsuk.huawei.com (10.201.108.34) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Fri, 5 Jul 2019 17:40:52 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <jarkko.sakkinen@linux.intel.com>, <jejb@linux.ibm.com>,
+        <zohar@linux.ibm.com>, <jgg@ziepe.ca>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <crazyt2019+lml@gmail.com>, <tyhicks@canonical.com>,
+        <nayna@linux.vnet.ibm.com>, <silviu.vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH] KEYS: trusted: allow module init if TPM is inactive or deactivated
+Date:   Fri, 5 Jul 2019 18:37:35 +0200
+Message-ID: <20190705163735.11539-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <1998ebcf-1521-778f-2c80-55ad2c855023@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19070515-0060-0000-0000-0000035971F9
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011383; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01227839; UDB=6.00646518; IPR=6.01009080;
- MB=3.00027598; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-05 15:32:08
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070515-0061-0000-0000-00004A069FD7
-Message-Id: <164b9c6e-9b6d-324d-9df8-d2f7d1ac8cfc@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-05_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907050189
+Content-Type: text/plain
+X-Originating-IP: [10.204.65.154]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Commit c78719203fc6 ("KEYS: trusted: allow trusted.ko to initialize w/o a
+TPM") allows the trusted module to be loaded even a TPM is not found to
+avoid module dependency problems.
 
+Unfortunately, this does not completely solve the issue, as there could be
+a case where a TPM is found but is not functional (the TPM commands return
+an error). Specifically, after the tpm_chip structure is returned by
+tpm_default_chip() in init_trusted(), the execution terminates after
+init_digests() returns -EFAULT (due to the fact that tpm_get_random()
+returns a positive value, but less than TPM_MAX_DIGEST_SIZE).
 
-On 07/05/2019 10:13 AM, Stefan Berger wrote:
-> On 7/3/19 11:32 PM, Nayna Jain wrote:
->> The nr_allocated_banks and allocated banks are initialized as part of
->> tpm_chip_register. Currently, this is done as part of auto startup
->> function. However, some drivers, like the ibm vtpm driver, do not run
->> auto startup during initialization. This results in uninitialized memory
->> issue and causes a kernel panic during boot.
->>
->> This patch moves the pcr allocation outside the auto startup function
->> into tpm_chip_register. This ensures that allocated banks are 
->> initialized
->> in any case.
->>
->> Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms 
->> with
->> PCR read")
->> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
->> ---
->>   drivers/char/tpm/tpm-chip.c | 37 +++++++++++++++++++++++++++++++++++++
->>   drivers/char/tpm/tpm.h      |  1 +
->>   drivers/char/tpm/tpm1-cmd.c | 12 ------------
->>   drivers/char/tpm/tpm2-cmd.c |  6 +-----
->>   4 files changed, 39 insertions(+), 17 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
->> index 8804c9e916fd..958508bb8379 100644
->> --- a/drivers/char/tpm/tpm-chip.c
->> +++ b/drivers/char/tpm/tpm-chip.c
->> @@ -550,6 +550,39 @@ static int tpm_add_hwrng(struct tpm_chip *chip)
->>       return hwrng_register(&chip->hwrng);
->>   }
->>
->> +/*
->> + * tpm_pcr_allocation() - initializes the chip allocated banks for PCRs
->> + */
->> +static int tpm_pcr_allocation(struct tpm_chip *chip)
->> +{
->> +    int rc = 0;
->> +
->> +    if (chip->flags & TPM_CHIP_FLAG_TPM2) {
->> +        rc = tpm2_get_pcr_allocation(chip);
->> +        if (rc)
->> +            goto out;
->> +    }
->> +
->> +    /* Initialize TPM 1.2 */
->> +    chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
->> +            GFP_KERNEL);
->> +    if (!chip->allocated_banks) {
->> +        rc = -ENOMEM;
->> +        goto out;
->> +    }
->> +
->> +    chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
->> +    chip->allocated_banks[0].digest_size = 
->> hash_digest_size[HASH_ALGO_SHA1];
->> +    chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
->> +    chip->nr_allocated_banks = 1;
->> +
->> +    return 0;
->> +out:
->> +    if (rc < 0)
->> +        rc = -ENODEV;
->
->
-> The old code where you lifted this from said:
->
-> out:
->     if (rc > 0)
->         rc = -ENODEV;
->     return rc;
->
-> It would not overwrite -ENOMEM with -ENODEV but yours does.
->
-> I think the correct fix would be to use:
->
-> if (rc > 0)
->
->     rc = -ENODEV;
->
+This patch fixes the issue by ignoring the TPM_ERR_DEACTIVATED and
+TPM_ERR_DISABLED errors.
 
-Yes. I think I misread it. Thanks Stefan. Will fix this..
+Fixes: 240730437deb ("KEYS: trusted: explicitly use tpm_chip structure...")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ drivers/char/tpm/tpm.h  | 2 --
+ include/linux/tpm.h     | 3 +++
+ security/keys/trusted.c | 6 +++++-
+ 3 files changed, 8 insertions(+), 3 deletions(-)
 
-
->
->
->
->
->> +    return rc;
->> +}
->> +
->>   /*
->>    * tpm_chip_register() - create a character device for the TPM chip
->>    * @chip: TPM chip to use.
->> @@ -573,6 +606,10 @@ int tpm_chip_register(struct tpm_chip *chip)
->>       if (rc)
->>           return rc;
->
-> Above this is tpm_chip_stop(chip) because (afaik) none of the 
-> following function calls in tpm_chip_register() needed the TPM, but 
-> now with tpm_pcr_allocation() you will need to send a command to the 
-> TPM. So I would say you should move the tpm_chip_stop() into the error 
-> branch visible above and also after the tpm_pcr_allocation().
->
->
->> +    rc = tpm_pcr_allocation(chip);
-> tpm_chip_stop(chip);
-
-I am not sure of the purpose of tpm_stop_chip(), so I have left it as it 
-is. Jarkko, what do you think about the change ?
-
-Thanks & Regards,
-          - Nayna
-
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index e503ffc3aa39..a216ac396711 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -54,8 +54,6 @@ enum tpm_addr {
+ 
+ #define TPM_WARN_RETRY          0x800
+ #define TPM_WARN_DOING_SELFTEST 0x802
+-#define TPM_ERR_DEACTIVATED     0x6
+-#define TPM_ERR_DISABLED        0x7
+ #define TPM_ERR_INVALID_POSTINIT 38
+ 
+ #define TPM_HEADER_SIZE		10
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 53c0ea9ec9df..efd3ccbb6aee 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -26,6 +26,9 @@
+ #define TPM_DIGEST_SIZE 20	/* Max TPM v1.2 PCR size */
+ #define TPM_MAX_DIGEST_SIZE SHA512_DIGEST_SIZE
+ 
++#define TPM_ERR_DEACTIVATED     0x6
++#define TPM_ERR_DISABLED        0x7
++
+ struct tpm_chip;
+ struct trusted_key_payload;
+ struct trusted_key_options;
+diff --git a/security/keys/trusted.c b/security/keys/trusted.c
+index 9a94672e7adc..430d85090b3b 100644
+--- a/security/keys/trusted.c
++++ b/security/keys/trusted.c
+@@ -389,6 +389,10 @@ static int pcrlock(const int pcrnum)
+ 	if (!capable(CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
++	/* This can happen if the TPM is inactive. */
++	if (!digests)
++		return -EINVAL;
++
+ 	return tpm_pcr_extend(chip, pcrnum, digests) ? -EINVAL : 0;
+ }
+ 
+@@ -1233,7 +1237,7 @@ static int __init init_digests(void)
+ 	int i;
+ 
+ 	ret = tpm_get_random(chip, digest, TPM_MAX_DIGEST_SIZE);
+-	if (ret < 0)
++	if (ret < 0 || ret == TPM_ERR_DEACTIVATED || ret == TPM_ERR_DISABLED)
+ 		return ret;
+ 	if (ret < TPM_MAX_DIGEST_SIZE)
+ 		return -EFAULT;
+-- 
+2.17.1
 
