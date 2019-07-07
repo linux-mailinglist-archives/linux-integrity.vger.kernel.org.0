@@ -2,90 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 276DC6164E
-	for <lists+linux-integrity@lfdr.de>; Sun,  7 Jul 2019 21:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAACF61784
+	for <lists+linux-integrity@lfdr.de>; Sun,  7 Jul 2019 23:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727416AbfGGTde (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 7 Jul 2019 15:33:34 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57728 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726105AbfGGTde (ORCPT
+        id S1727573AbfGGVAR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 7 Jul 2019 17:00:17 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34026 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727073AbfGGVAQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 7 Jul 2019 15:33:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=jU5cEjUtcVYO3EaFU5lWyybUeSozoad8uL7Kr7BLfLM=; b=gb9drmike6oRAXpcP1cYg9E/h
-        L/qk0ptX30TDgNFuHLR4AGhKrfBn3QTrfMYf7J8/R6SfcsgC8EBDhVRkAYVokbnjdPYqW+Am4Bsiw
-        mbEwPjYMf8iqI37MI5DgNjkfhtG55g6EeWM2IWE24ntmKDiDxBhbLf6EjUVJO2VNNtq7v76E9ekBX
-        so5Bz++sxMLYMAzj28hL5zn6FC6xwAqTak5e7uNp0vfS/ofPIooa884l7zevYmDTBlhUgBProdfSU
-        a+qbyHJRObWin6sU9Omyyj6IL1TMp51Suyr0r2CpLAN77BskyyQQSfj5O0QoG+lB6MAVyWZb/RkrG
-        I3AGMBoug==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hkCuh-0003co-Vv; Sun, 07 Jul 2019 19:33:32 +0000
-Subject: Re: [PATCH] tpm: Document UEFI event log quirks
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     tweek@google.com, matthewgarrett@google.com,
-        Jonathan Corbet <corbet@lwn.net>
-References: <20190703161109.22935-1-jarkko.sakkinen@linux.intel.com>
- <6acf78df-b168-14d3-fea4-9a9d2945e77f@infradead.org>
- <a8ee93721a674434e22d31fd1d10bf9472c1c739.camel@linux.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <ec274596-6bc8-07a0-d09b-1d191646c5cd@infradead.org>
-Date:   Sun, 7 Jul 2019 12:33:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <a8ee93721a674434e22d31fd1d10bf9472c1c739.camel@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Sun, 7 Jul 2019 17:00:16 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x67Kuthi016186
+        for <linux-integrity@vger.kernel.org>; Sun, 7 Jul 2019 17:00:15 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tkh6qsnkn-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Sun, 07 Jul 2019 17:00:15 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Sun, 7 Jul 2019 22:00:13 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Sun, 7 Jul 2019 22:00:12 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x67L0BmA59965564
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 7 Jul 2019 21:00:11 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C6A0CAE058;
+        Sun,  7 Jul 2019 21:00:10 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30502AE057;
+        Sun,  7 Jul 2019 21:00:10 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.110.89])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun,  7 Jul 2019 21:00:10 +0000 (GMT)
+Subject: Re: Can we enforce "IMA Policy" based on file type
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Kavitha Sivagnanam <kavi@juniper.net>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Date:   Sun, 07 Jul 2019 16:59:59 -0400
+In-Reply-To: <41610A39-BB93-4D64-8821-B59DCE72EE8D@juniper.net>
+References: <BYAPR05MB39753CB3CA47513EEADC134CC1270@BYAPR05MB3975.namprd05.prod.outlook.com>
+         <1556193529.3894.94.camel@linux.ibm.com>
+         <41610A39-BB93-4D64-8821-B59DCE72EE8D@juniper.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19070721-0008-0000-0000-000002FAB7E4
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19070721-0009-0000-0000-0000226811DA
+Message-Id: <1562533199.4106.9.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-07_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907070293
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/5/19 3:15 AM, Jarkko Sakkinen wrote:
-> On Wed, 2019-07-03 at 09:45 -0700, Randy Dunlap wrote:
->>> +This introduces another problem: nothing guarantees that it is not
->>> +called before the stub gets to run. Thus, it needs to copy the final
->>> +events table preboot size to the custom configuration table so that
->>> +kernel offset it later on.
-
-     (so that)
-     the kernel can use that final table preboot size as an events table
-     offset later on.
-
->>
->> ?  kernel can offset it later on.
+On Tue, 2019-06-25 at 21:35 +0000, Kavitha Sivagnanam wrote:
 > 
-> EFI stub calculates the total size of the events in the final events
-> table at the time.
+> ﻿On 4/25/19, 4:59 AM, "Mimi Zohar" <zohar@linux.ibm.com> wrote:
 > 
-> Later on, TPM driver uses this offset to copy only the events that
-> were actually generated after ExitBootServices():
+> >    As Matthew indicated, you could define LSM labels on the squashfs file
+> >   images.  Another option would be to extend IMA by implementing the LSM
+> >    security_sb_mount hook.  The IMA policy rule would probably look
+> >   something like:
 > 
-> /*
->  * Copy any of the final events log that didn't also end up in the
->  * main log. Events can be logged in both if events are generated
->  * between GetEventLog() and ExitBootServices().
->  */
-> memcpy((void *)log->bios_event_log + log_size,
->        final_tbl->events + log_tbl->final_events_preboot_size,
->        efi_tpm_final_log_size);
+> We looked in to the security_sb_mount function. It receives the
+> device name as string "const char *dev_name".  We need to do the IMA
+> appraisal on the backing file (squashfs file) associated with this
+> device.  However, based on this device name we were unable to get
+> the backing_file associated with it in kernel space.
+> Can you give some pointers? 
 > 
-> What would be a better way to describe this?
+> Also, we need to know if at the time when this function is called,
+> if the backing file is associated with this device.
+> 
+> >    appraise func=MOUNT_CHECK fsname=squashfs appraise_type=imasig
 
-Yeah, I think I see what it's doing, how it's using that.
-See above.
+When the squashfs file is loopback mounted, the backing file is set in
+drivers/block/loop.c: loop_set_fd() and stored as lo->lo_backing_file.
 
-OK?
+Although security_sb_mount() is called after setting the backing file,
+it seems to be too early.  You probably need to wait until after
+fill_super().  Try using security_sb_kern_mount().
 
--- 
-~Randy
+Mimi
+
