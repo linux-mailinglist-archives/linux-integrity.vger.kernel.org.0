@@ -2,141 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C2161359
-	for <lists+linux-integrity@lfdr.de>; Sun,  7 Jul 2019 02:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF26D61623
+	for <lists+linux-integrity@lfdr.de>; Sun,  7 Jul 2019 20:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726586AbfGGAZu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 6 Jul 2019 20:25:50 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23322 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726743AbfGGAZu (ORCPT
+        id S1727371AbfGGSrs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 7 Jul 2019 14:47:48 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:46070 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726418AbfGGSrr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 6 Jul 2019 20:25:50 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x670LLa5125236
-        for <linux-integrity@vger.kernel.org>; Sat, 6 Jul 2019 20:25:48 -0400
-Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tjnsp6d0w-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Sat, 06 Jul 2019 20:25:48 -0400
-Received: from localhost
-        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <nayna@linux.vnet.ibm.com>;
-        Sun, 7 Jul 2019 01:25:47 +0100
-Received: from b03cxnp07029.gho.boulder.ibm.com (9.17.130.16)
-        by e33.co.us.ibm.com (192.168.1.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Sun, 7 Jul 2019 01:25:43 +0100
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x670Pglg61866240
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 7 Jul 2019 00:25:42 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40D20BE054;
-        Sun,  7 Jul 2019 00:25:42 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14528BE051;
-        Sun,  7 Jul 2019 00:25:39 +0000 (GMT)
-Received: from swastik.ibm.com (unknown [9.80.232.154])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Sun,  7 Jul 2019 00:25:39 +0000 (GMT)
-Subject: Re: [PATCH] tpm: fixes uninitialized allocated banks for IBM vtpm
- driver
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Michal Suchanek <msuchanek@suse.de>
-References: <1562211121-2188-1-git-send-email-nayna@linux.ibm.com>
- <1998ebcf-1521-778f-2c80-55ad2c855023@linux.ibm.com>
- <164b9c6e-9b6d-324d-9df8-d2f7d1ac8cfc@linux.vnet.ibm.com>
- <1270cd6ab2ceae1ad01e4b83b75fc4c6fc70027d.camel@linux.intel.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-Date:   Sat, 6 Jul 2019 20:25:39 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        Sun, 7 Jul 2019 14:47:47 -0400
+Received: from callcc.thunk.org (75-104-86-74.mobility.exede.net [75.104.86.74] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x67IlCEX014297
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 7 Jul 2019 14:47:19 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id C12BE42002E; Sun,  7 Jul 2019 14:47:11 -0400 (EDT)
+Date:   Sun, 7 Jul 2019 14:47:11 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Chandan Rajendra <chandan@linux.vnet.ibm.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v6 13/17] fs-verity: support builtin file signatures
+Message-ID: <20190707184711.GB19775@mit.edu>
+References: <20190701153237.1777-1-ebiggers@kernel.org>
+ <20190701153237.1777-14-ebiggers@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <1270cd6ab2ceae1ad01e4b83b75fc4c6fc70027d.camel@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19070700-0036-0000-0000-00000AD46E87
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011389; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01228488; UDB=6.00646913; IPR=6.01009737;
- MB=3.00027615; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-07 00:25:45
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070700-0037-0000-0000-00004C7EBA69
-Message-Id: <bd961ef2-baed-8fc3-7f21-566bbcf9da8b@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-06_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=987 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907070004
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190701153237.1777-14-ebiggers@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Mon, Jul 01, 2019 at 08:32:33AM -0700, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> To meet some users' needs, add optional support for having fs-verity
+> handle a portion of the authentication policy in the kernel.  An
+> ".fs-verity" keyring is created to which X.509 certificates can be
+> added; then a sysctl 'fs.verity.require_signatures' can be set to cause
+> the kernel to enforce that all fs-verity files contain a signature of
+> their file measurement by a key in this keyring.
+> 
+> See the "Built-in signature verification" section of
+> Documentation/filesystems/fsverity.rst for the full documentation.
+> 
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
 
+Looks good, you can add:
 
-On 07/05/2019 01:50 PM, Jarkko Sakkinen wrote:
-> On Fri, 2019-07-05 at 11:32 -0400, Nayna wrote:
->> I am not sure of the purpose of tpm_stop_chip(), so I have left it as it
->> is. Jarkko, what do you think about the change ?
-> Stefan right. Your does not work, or will randomly work or not work
-> depending on the chip.
->
-> You need to turn the TPM on with tpm_chip_start() and turn it off with
-> tpm_chip_stop() once you are done. This is done in tpm_chip_register()
-> before calling tpm_auto_startup().
->
-> TPM power management was once in tpm_transmit() but not anymore after my
-> patch set that removed nested tpm_transmit() calls.
->
-> While you're on it please take into account my earlier feedback.
->
-> Also, short summary could be "tpm: tpm_ibm_vtpm: Fix unallocated banks"
->
-> Some oddballs in your patch that I have to ask.
->
-> if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> 	rc = tpm2_get_pcr_allocation(chip);
-> 	if (rc)
-> 		goto out;
-> }
->
-> chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
-> 		GFP_KERNEL);
-> if (!chip->allocated_banks) {
-> 	rc = -ENOMEM;
-> 	goto out;
-> }
->
-> Why you don't return on site and instead jump somewhere? Also the
-> 2nd line for kcalloc() is misaligned.
->
-> out:
-> 	if (rc < 0)
-> 		rc = -ENODEV;
->
-> This will cause a new regression i.e. you let TPM error codes
-> through.
->
-> To summarize this patch fixes one regression and introduces two
-> completely new ones...
-
-Thanks Jarkko. I just now posted the v2 version that includes your and 
-Stefan's feedbacks.
-
-Thanks & Regards,
-        - Nayna
-
+Reviewed-by: Theodore Ts'o <tytso@mit.edu>
