@@ -2,117 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC519622FE
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2019 17:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1966623F7
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2019 17:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389658AbfGHPbK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Jul 2019 11:31:10 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54724 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389651AbfGHPbJ (ORCPT
+        id S2390676AbfGHPjR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Jul 2019 11:39:17 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:38989 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390742AbfGHPjO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Jul 2019 11:31:09 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x68FRmFI070360
-        for <linux-integrity@vger.kernel.org>; Mon, 8 Jul 2019 11:31:08 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tm5rm7dv8-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 08 Jul 2019 11:31:07 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 8 Jul 2019 16:31:05 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 8 Jul 2019 16:31:02 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x68FV1HD59900086
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 8 Jul 2019 15:31:01 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8CAB852050;
-        Mon,  8 Jul 2019 15:31:01 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.110.58])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A945952051;
-        Mon,  8 Jul 2019 15:31:00 +0000 (GMT)
-Subject: Re: [PATCH v1 0/5] ima-evm-utils: Assorted fixes and improvements
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Petr Vorel <pvorel@suse.cz>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>
-Date:   Mon, 08 Jul 2019 11:30:50 -0400
-In-Reply-To: <20190707234837.4866-1-vt@altlinux.org>
-References: <20190707234837.4866-1-vt@altlinux.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19070815-0012-0000-0000-000003305BAB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070815-0013-0000-0000-00002169BD88
-Message-Id: <1562599850.11461.43.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-08_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907080193
+        Mon, 8 Jul 2019 11:39:14 -0400
+Received: by mail-lj1-f194.google.com with SMTP id v18so16382666ljh.6
+        for <linux-integrity@vger.kernel.org>; Mon, 08 Jul 2019 08:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=D+MqPDavG72JIJh+i7ydfVr+tFhEdIBsYuNF/SflY4s=;
+        b=io4Hmy4BEIEFOl5wqrOg+jNWCZUftVq/uAlqqHmC8H9bJ2S5rVWY8hK0JE8NS5T0vr
+         aCbjTA4Hj1cj5dlTQiT80zVJEs9qrLxBttCaYZnj4YNKDVu8+juFC5o5z4AJICqsS+zz
+         uTbpSBiakCeD6b6B7FnRW2oRjOGCFy+4yYIRFEBFabVvraaWzJNOcxJsqDiy3qE3WhpN
+         TnnmXtXegQjvH6mgUvTHd3fQLkWf62scQzJECSXPTDM+yiUpwWR+KmSh71rS2rKrW/YU
+         96JRZYk/i8GLgfst1/CPaOJw/eW4bP0VBAsuPxQc0X8mBF2B8COTQH+VD9pXof91SbSq
+         rSwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=D+MqPDavG72JIJh+i7ydfVr+tFhEdIBsYuNF/SflY4s=;
+        b=U9upQe/7Cp5X2hmQRbjsoEhG6xaY3zjTyb2NcF8HEEeOAvQD0yXucsGxFGzhX+dOYD
+         bEGKzfO8Oy63ZOmfX2A5qKuMICccef04ahBcvZKmbF/aZzYMjrLqCkS2MJRUT6/3pN21
+         l+dNH34tWVS70Qiys0gBr3Lxi9L2rFCEoijsJF0k5fFnt1pGwXCVO3sfUvWAxNpcXgh0
+         KS+SQHHEW3Ei4PHtM5+XScJJ+fFtg8wBBElsUHqULIZBYCgolrWnMBM1hfHtmIy8rZzN
+         y3zJK8uGpvChNI+eFagLU1mNXmbvq8+vsbPYVr085/NFht7BkhnGZhrmJGgZn+dCbNYw
+         dn5g==
+X-Gm-Message-State: APjAAAWVFlFDrTdLORhgnP/b+IWCHUuAevJ1qm4zRBB+PXgYBve3Ody4
+        yJME/ZV8rsOu31ljsx1bJbyCIA==
+X-Google-Smtp-Source: APXvYqzEx0jOXIVaLhPfITF9bzeu4HZ/KoZJiu7wenFGxHberguce7iX6HWLmFSF2s96U/hPTphqSg==
+X-Received: by 2002:a2e:9dd7:: with SMTP id x23mr11243163ljj.160.1562600352121;
+        Mon, 08 Jul 2019 08:39:12 -0700 (PDT)
+Received: from jax (h-84-105.A175.priv.bahnhof.se. [79.136.84.105])
+        by smtp.gmail.com with ESMTPSA id g4sm2832994lfb.31.2019.07.08.08.39.10
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 08 Jul 2019 08:39:11 -0700 (PDT)
+Date:   Mon, 8 Jul 2019 17:39:09 +0200
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, corbet@lwn.net,
+        dhowells@redhat.com, jejb@linux.ibm.com,
+        jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
+        jmorris@namei.org, serge@hallyn.com, ard.biesheuvel@linaro.org,
+        daniel.thompson@linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org
+Subject: Re: [RFC 3/7] tee: add private login method for kernel clients
+Message-ID: <20190708153908.GA28253@jax>
+References: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org>
+ <1560421833-27414-4-git-send-email-sumit.garg@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1560421833-27414-4-git-send-email-sumit.garg@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Cc'ing Roberto, Petr, Thiago, Prakhar]
+Hi Sumit,
 
-Hi Vitaly,
-
-On Mon, 2019-07-08 at 02:48 +0300, Vitaly Chikunov wrote:
-> There is small fixes and improvements to ima-evm-utils.
-> Tested on x86_64.
+On Thu, Jun 13, 2019 at 04:00:29PM +0530, Sumit Garg wrote:
+> There are use-cases where user-space shouldn't be allowed to communicate
+> directly with a TEE device which is dedicated to provide a specific
+> service for a kernel client. So add a private login method for kernel
+> clients and disallow user-space to open-session using this login method.
 > 
-> Vitaly Chikunov (5):
->   ima-evm-utils: Fix EVP_MD_CTX leak in ima_calc_hash
->   ima-evm-utils: Fix memory leak in init_public_keys
->   ima-evm-utils: Preload public keys for ima_verify
->   ima-evm-utils: Allow multiple files in ima_verify
->   ima-evm-utils: Fix clang warning about possible unaligned pointer for
->     hdr->keyid
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> ---
+>  drivers/tee/tee_core.c   | 6 ++++++
+>  include/uapi/linux/tee.h | 2 ++
+>  2 files changed, 8 insertions(+)
 > 
->  src/evmctl.c    | 11 ++++++++---
->  src/libimaevm.c | 38 ++++++++++++++++++++++++++------------
->  2 files changed, 34 insertions(+), 15 deletions(-)
+> diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+> index 0f16d9f..4581bd1 100644
+> --- a/drivers/tee/tee_core.c
+> +++ b/drivers/tee/tee_core.c
+> @@ -334,6 +334,12 @@ static int tee_ioctl_open_session(struct tee_context *ctx,
+>  			goto out;
+>  	}
+>  
+> +	if (arg.clnt_login == TEE_IOCTL_LOGIN_REE_KERNEL) {
+TEE_IOCTL_LOGIN_REE_KERNEL is defined as 0x80000000 which is in the
+range specified and implementation defined by the GP spec. I wonder if
+we shouldn't filter the entire implementation defined range instead of
+just this value.
 
-Thanks, this patch set looks good.  These patches, the "ima-evm-utils: 
-Convert v2 signatures from RSA to EVP_PKEY AP", and the two patches I
-posted today are now in #next, but I'd really appreciate some
-additional Review's/Tested's on these patches.
+> +		pr_err("login method not allowed for user-space client\n");
+pr_debug(), if it's needed at all.
 
-Now that we're including ALL the kernel exported hash_info algorithms,
-a colleague suggested defining a list of deprecated hash algorithms.
- Instead of preventing the usage of these deprecated hash algorithms,
-initially I would start out with a warning.  It would be helpful to
-indicate which standard deprecated the hash algorithm and year.  At
-some point, we might want to prevent their usage in signing files, but
-not verifying file signatures.
+> +		rc = -EPERM;
+> +		goto out;
+> +	}
+> +
+>  	rc = ctx->teedev->desc->ops->open_session(ctx, &arg, params);
+>  	if (rc)
+>  		goto out;
+> diff --git a/include/uapi/linux/tee.h b/include/uapi/linux/tee.h
+> index 4b9eb06..f33c69c 100644
+> --- a/include/uapi/linux/tee.h
+> +++ b/include/uapi/linux/tee.h
+> @@ -172,6 +172,8 @@ struct tee_ioctl_buf_data {
+>  #define TEE_IOCTL_LOGIN_APPLICATION		4
+>  #define TEE_IOCTL_LOGIN_USER_APPLICATION	5
+>  #define TEE_IOCTL_LOGIN_GROUP_APPLICATION	6
+> +/* Private login method for REE kernel clients */
+It's worth noting that this is filtered by the TEE framework, compared
+to everything else which is treated opaquely.
 
-evmctl "ima_measurement" doesn't support custom template definitions.
-Also missing is support for verifying the "ima-buf" kexec command boot
-command line and the "ima-modsig" template appended signature.
+> +#define TEE_IOCTL_LOGIN_REE_KERNEL		0x80000000
+>  
+>  /**
+>   * struct tee_ioctl_param - parameter
+> -- 
+> 2.7.4
+> 
 
-David Jacobson started writing a regression framework and posted a v2
-version.  I'd really appreciate help with cleaning up that code. 
-
-Any other comments/suggestions/ideas?
-
-thanks,
-
-Mimi
-
+Thanks,
+Jens
