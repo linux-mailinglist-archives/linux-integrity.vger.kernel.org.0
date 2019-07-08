@@ -2,162 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D39C562A6A
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2019 22:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C8D62A86
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2019 22:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404981AbfGHUfM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Jul 2019 16:35:12 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:63236 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731973AbfGHUfL (ORCPT
+        id S1732070AbfGHUn2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Jul 2019 16:43:28 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:36956 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730007AbfGHUn1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Jul 2019 16:35:11 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x68KWx4E088164;
-        Mon, 8 Jul 2019 16:35:05 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tmbrstc21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Jul 2019 16:35:05 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x68KYIkn091227;
-        Mon, 8 Jul 2019 16:35:04 -0400
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tmbrstc1d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Jul 2019 16:35:04 -0400
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x68KTa9c006946;
-        Mon, 8 Jul 2019 20:35:03 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma01dal.us.ibm.com with ESMTP id 2tjk970jbr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Jul 2019 20:35:03 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x68KZ3nc38666656
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 8 Jul 2019 20:35:03 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DCE7E112063;
-        Mon,  8 Jul 2019 20:35:02 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 622D2112061;
-        Mon,  8 Jul 2019 20:35:00 +0000 (GMT)
-Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.176.217])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  8 Jul 2019 20:35:00 +0000 (GMT)
-Message-ID: <1562618099.20748.13.camel@linux.ibm.com>
-Subject: Re: [PATCH] KEYS: trusted: allow module init if TPM is inactive or
- deactivated
-From:   James Bottomley <jejb@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com, jgg@ziepe.ca
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, crazyt2019+lml@gmail.com,
-        tyhicks@canonical.com, nayna@linux.vnet.ibm.com,
-        silviu.vlasceanu@huawei.com
-Date:   Mon, 08 Jul 2019 13:34:59 -0700
-In-Reply-To: <20190705163735.11539-1-roberto.sassu@huawei.com>
-References: <20190705163735.11539-1-roberto.sassu@huawei.com>
+        Mon, 8 Jul 2019 16:43:27 -0400
+Received: by mail-io1-f68.google.com with SMTP id q22so16551359iog.4
+        for <linux-integrity@vger.kernel.org>; Mon, 08 Jul 2019 13:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6hgBi1CzgRieBvJ+aGYw7Q8JYjv3kGmR4nvAC4dZxio=;
+        b=DLSRwzig+cXtChPB3ZqUkWnkWR6/88GKXExTkjXpiVPHlrZWxBvX4Y2bcl6cVOWkR6
+         2Rlh80L4VpZOyBE4CMDm74C84c1FLm9+jtPe+A4fdmuSh2NoUaIbDx2pWEtWR2jLzoK7
+         zC8Ky4mfREFLJW/aLQNbwgraw81fB5+XPbvQ44btPhTmYDSSrYmLxwA3VlL1+2HPmal0
+         ryWCKsJ7t+HnJgh9vnxUhhYuvv5EodWh72KOjjLqvYUHxIBYtf7wnvuDzayVi+i6a3Ck
+         SgOnHzPUVSGKkGCBZVqwiOxkr8CBSK/5OMu29u6xDmsV2AbAIqbebZdVGYN/F6cwdCxv
+         ++tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6hgBi1CzgRieBvJ+aGYw7Q8JYjv3kGmR4nvAC4dZxio=;
+        b=fZG2I5VhEHsdbHQdxCvI8RolviY9zT/CpIGH6++nFV+Ofg05YJPtx/wZjDHZCkN24l
+         p7c/7clxHvC5AMPjKoRhtURIN1D55RDkbxSv3YzJib9lXy0++kykdywNWp7TorU4pgEk
+         2a4ObH1d+uKoAXbK5ufUI8ySyXoxFZOSRnpz02Y2DK4FG/46aqw960YoUujSWEeaBOjd
+         M+c93RzPy/hMXRNqVOvtFJXMG+EJ8wUJjxJQrlBfWp49BCsWWHhhZrYklGhtwfi5rmX6
+         rpTkT/iYm/4e/4Ne06Rtua1mFAFuKz+C7a4+3/dTxT8/qa6nsQRH65i5dC0snPuBTpYB
+         IFGA==
+X-Gm-Message-State: APjAAAXm6GXxXjzzzfa9gXLKGNQWfw1ayk3enzdgjt8hR24dZ3WgyN82
+        xttVeT20NvbjXqn2OlNAjCwOoMY/v6EPDF8TeG1wlw==
+X-Google-Smtp-Source: APXvYqzJPBGThXTsaTfeVdJUhwZLM8g29fkqE+KfbXXMs9//hzlMN33Q/mPkFcTsp+q+jSUd0ro7OUtrxql5KQbYPlY=
+X-Received: by 2002:a05:6638:303:: with SMTP id w3mr12477331jap.103.1562618606256;
+ Mon, 08 Jul 2019 13:43:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190703161109.22935-1-jarkko.sakkinen@linux.intel.com>
+In-Reply-To: <20190703161109.22935-1-jarkko.sakkinen@linux.intel.com>
+From:   Matthew Garrett <mjg59@google.com>
+Date:   Mon, 8 Jul 2019 13:43:14 -0700
+Message-ID: <CACdnJuu0gFySbcMY7Fpps-j8KP+rCifznOeo18P47UBQAygPVQ@mail.gmail.com>
+Subject: Re: [PATCH] tpm: Document UEFI event log quirks
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-doc@vger.kernel.org,
+        =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
+        Jonathan Corbet <corbet@lwn.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-08_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907080256
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-07-05 at 18:37 +0200, Roberto Sassu wrote:
-> Commit c78719203fc6 ("KEYS: trusted: allow trusted.ko to initialize
-> w/o a
-> TPM") allows the trusted module to be loaded even a TPM is not found
-> to
-> avoid module dependency problems.
-> 
-> Unfortunately, this does not completely solve the issue, as there
-> could be
-> a case where a TPM is found but is not functional (the TPM commands
-> return
-> an error). Specifically, after the tpm_chip structure is returned by
-> tpm_default_chip() in init_trusted(), the execution terminates after
-> init_digests() returns -EFAULT (due to the fact that tpm_get_random()
-> returns a positive value, but less than TPM_MAX_DIGEST_SIZE).
-> 
-> This patch fixes the issue by ignoring the TPM_ERR_DEACTIVATED and
-> TPM_ERR_DISABLED errors.
-> 
-> Fixes: 240730437deb ("KEYS: trusted: explicitly use tpm_chip
-> structure...")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  drivers/char/tpm/tpm.h  | 2 --
->  include/linux/tpm.h     | 3 +++
->  security/keys/trusted.c | 6 +++++-
->  3 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index e503ffc3aa39..a216ac396711 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -54,8 +54,6 @@ enum tpm_addr {
->  
->  #define TPM_WARN_RETRY          0x800
->  #define TPM_WARN_DOING_SELFTEST 0x802
-> -#define TPM_ERR_DEACTIVATED     0x6
-> -#define TPM_ERR_DISABLED        0x7
->  #define TPM_ERR_INVALID_POSTINIT 38
->  
->  #define TPM_HEADER_SIZE		10
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 53c0ea9ec9df..efd3ccbb6aee 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -26,6 +26,9 @@
->  #define TPM_DIGEST_SIZE 20	/* Max TPM v1.2 PCR size */
->  #define TPM_MAX_DIGEST_SIZE SHA512_DIGEST_SIZE
->  
-> +#define TPM_ERR_DEACTIVATED     0x6
-> +#define TPM_ERR_DISABLED        0x7
-> +
->  struct tpm_chip;
->  struct trusted_key_payload;
->  struct trusted_key_options;
-> diff --git a/security/keys/trusted.c b/security/keys/trusted.c
-> index 9a94672e7adc..430d85090b3b 100644
-> --- a/security/keys/trusted.c
-> +++ b/security/keys/trusted.c
-> @@ -389,6 +389,10 @@ static int pcrlock(const int pcrnum)
->  	if (!capable(CAP_SYS_ADMIN))
->  		return -EPERM;
->  
-> +	/* This can happen if the TPM is inactive. */
-> +	if (!digests)
-> +		return -EINVAL;
-> +
->  	return tpm_pcr_extend(chip, pcrnum, digests) ? -EINVAL : 0;
->  }
->  
-> @@ -1233,7 +1237,7 @@ static int __init init_digests(void)
->  	int i;
->  
->  	ret = tpm_get_random(chip, digest, TPM_MAX_DIGEST_SIZE);
+On Wed, Jul 3, 2019 at 9:11 AM Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+> +Before calling ExitBootServices() Linux EFI stub copies the event log to
+> +a custom configuration table defined by the stub itself. Unfortanely,
+> +the events generated by ExitBootServices() do end up to the table.
 
-Not a criticism of your patch, but can we please stop doing this. 
-Single random number sources are horrendously bad practice because it
-gives an attacker a single target to subvert.  We should ensure the TPM
-is plugged into the kernel RNG as a source and then take randomness
-from the mixed pool so it's harder for an attacker because they have to
-subvert all our sources to predict what came out.
-
-James
-
+"Unfortunately, the events generated by ExitBootServices() occur after
+this and don't end up in the table"?
