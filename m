@@ -2,38 +2,36 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2464F62084
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2019 16:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D266208D
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2019 16:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729179AbfGHOdJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Jul 2019 10:33:09 -0400
-Received: from mga18.intel.com ([134.134.136.126]:12732 "EHLO mga18.intel.com"
+        id S1731764AbfGHOem (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Jul 2019 10:34:42 -0400
+Received: from mga07.intel.com ([134.134.136.100]:14786 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728725AbfGHOdJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Jul 2019 10:33:09 -0400
+        id S1728725AbfGHOem (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 8 Jul 2019 10:34:42 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jul 2019 07:33:08 -0700
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jul 2019 07:34:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,466,1557212400"; 
-   d="scan'208";a="316734532"
+   d="scan'208";a="248833705"
 Received: from jsakkine-mobl1.tm.intel.com ([10.237.50.189])
-  by orsmga004.jf.intel.com with ESMTP; 08 Jul 2019 07:33:07 -0700
-Message-ID: <c72431a1e275d94203a62c99337cca40c20a43c9.camel@linux.intel.com>
-Subject: Re: [PATCH] tpm: Fix null pointer dereference on chip register
+  by orsmga001.jf.intel.com with ESMTP; 08 Jul 2019 07:34:39 -0700
+Message-ID: <58070e5ee4e64b10df063b61612b021c23f0fc14.camel@linux.intel.com>
+Subject: Re: [PATCH v2] tpm: Fix null pointer dereference on chip register
  error path
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Milan Broz <gmazyland@gmail.com>, linux-integrity@vger.kernel.org,
-        James Morris <jmorris@namei.org>
-Date:   Mon, 08 Jul 2019 17:33:08 +0300
-In-Reply-To: <1324e0d6-74c4-f8a7-ea9f-0a603bf15e93@gmail.com>
-References: <20190612084210.13562-1-gmazyland@gmail.com>
-         <9df0a432-eb9c-914e-5ddc-2680a6fecebd@gmail.com>
-         <a8fc7162019168ab3b9b662fb629855205a6b1ca.camel@linux.intel.com>
-         <20190703230125.aynx4ianvqqjt5d7@linux.intel.com>
-         <1821f2adb0910e76f039949e96ed78325025a4bd.camel@linux.intel.com>
-         <1324e0d6-74c4-f8a7-ea9f-0a603bf15e93@gmail.com>
+To:     Milan Broz <gmazyland@gmail.com>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, arnd@arndb.de,
+        gregkh@linuxfoundation.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date:   Mon, 08 Jul 2019 17:34:42 +0300
+In-Reply-To: <20190704072615.31143-1-gmazyland@gmail.com>
+References: <20190703230125.aynx4ianvqqjt5d7@linux.intel.com>
+         <20190704072615.31143-1-gmazyland@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.32.1-2 
@@ -44,23 +42,34 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-07-05 at 23:23 +0200, Milan Broz wrote:
-> On 05/07/2019 19:52, Jarkko Sakkinen wrote:
-> > So how should we work this one out? Do you want to create v2 or do I
-> > create a new patch and put reported-by tag. Both work for me. I just
-> > need to know this.
+On Thu, 2019-07-04 at 09:26 +0200, Milan Broz wrote:
+> If clk_enable is not defined and chip initialization
+> is canceled code hits null dereference.
 > 
-> Please fix you mail filters, the patch was sent more than day ago.
+> Easily reproducible with vTPM init fail:
+>   swtpm chardev --tpmstate dir=nonexistent_dir --tpm2 --vtpm-proxy
 > 
+> BUG: kernel NULL pointer dereference, address: 00000000
+> ...
+> Call Trace:
+>  tpm_chip_start+0x9d/0xa0 [tpm]
+>  tpm_chip_register+0x10/0x1a0 [tpm]
+>  vtpm_proxy_work+0x11/0x30 [tpm_vtpm_proxy]
+>  process_one_work+0x214/0x5a0
+>  worker_thread+0x134/0x3e0
+>  ? process_one_work+0x5a0/0x5a0
+>  kthread+0xd4/0x100
+>  ? process_one_work+0x5a0/0x5a0
+>  ? kthread_park+0x90/0x90
+>  ret_from_fork+0x19/0x24
 > 
-https://lore.kernel.org/linux-integrity/20190704072615.31143-1-gmazyland@gmail.com/T/#u
-> 
-> Milan
+> Fixes: 719b7d81f204 ("tpm: introduce tpm_chip_start() and tpm_chip_stop()")
+> Cc: stable@vger.kernel.org # v5.1+
+> Signed-off-by: Milan Broz <gmazyland@gmail.com>
 
-Nothing wrong with my mail filters, it was actually waiting in my inbox.
-Just didn't notice it that it was part of the emails I downloaded to my
-laptop with fdm on Friday (because in rush to spend weekend). Didn't
-have time to go through all of them during that day.
+Looks legit.
+
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
 /Jarkko
 
