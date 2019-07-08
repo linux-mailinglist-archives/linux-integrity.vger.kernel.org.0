@@ -2,123 +2,79 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B42362B6B
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jul 2019 00:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596BF62BF8
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jul 2019 00:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725815AbfGHWY0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Jul 2019 18:24:26 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23132 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726371AbfGHWYZ (ORCPT
+        id S1726512AbfGHWnN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Jul 2019 18:43:13 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44590 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725840AbfGHWnN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Jul 2019 18:24:25 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x68MMgla059347
-        for <linux-integrity@vger.kernel.org>; Mon, 8 Jul 2019 18:24:23 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tmbg5nveu-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 08 Jul 2019 18:24:22 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 8 Jul 2019 23:24:21 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 8 Jul 2019 23:24:18 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x68MOGwh62586898
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 8 Jul 2019 22:24:17 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF966A4055;
-        Mon,  8 Jul 2019 22:24:16 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5545FA4051;
-        Mon,  8 Jul 2019 22:24:15 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.110.58])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  8 Jul 2019 22:24:15 +0000 (GMT)
-Subject: Re: [PATCH v2] tpm: tpm_ibm_vtpm: Fix unallocated banks
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mon, 8 Jul 2019 18:43:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Transfer-Encoding
+        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=P9ZbarkRoC/k/pYpbYOrW10IaUGKSRYoo+klKaShKug=; b=MVvIJ0lMf7cHnUQYNbsF/VEmvR
+        NLtRe1c48h03TG8/yInjrRI0IzX1fnObf45rLaWtBRcdZP2pg0Mc0QBJ3mKZp2oR1xzzxymfYvmsm
+        AX2UOHJQpX7oWepvM9+QSEu9SJ30O8aL9HjYj65HRK5VJFnmchzLIzzZe07qaRrlwztD/0BzWB8uw
+        pzvWazlzhrR1hrleYsDmqITD3Iuk/dOEmnHTJaLBvNRVsOE1yLad0tGDboOgxkEMQU7qi1r/mAi5x
+        scmGgPxWAqrEakiCdXDvHlcjU+h91NoQ0Uy9E0Nejsw1VElIw+jXJyez5lJH8zhd5G0mkYoj1WtUQ
+        c54NUMqw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hkcLg-0007cu-7m; Mon, 08 Jul 2019 22:43:04 +0000
+Date:   Mon, 8 Jul 2019 15:43:04 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
         Sachin Sant <sachinp@linux.vnet.ibm.com>,
         George Wilson <gcwilson@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Michal Suchanek <msuchanek@suse.de>,
         Peter Huewe <peterhuewe@gmx.de>,
         Christoph Hellwig <hch@infradead.org>
-Date:   Mon, 08 Jul 2019 18:24:04 -0400
-In-Reply-To: <586c629b6d3c718f0c1585d77fe175fe007b27b1.camel@linux.intel.com>
+Subject: Re: [PATCH v2] tpm: tpm_ibm_vtpm: Fix unallocated banks
+Message-ID: <20190708224304.GA25838@infradead.org>
 References: <1562458725-15999-1-git-send-email-nayna@linux.ibm.com>
-         <586c629b6d3c718f0c1585d77fe175fe007b27b1.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+ <586c629b6d3c718f0c1585d77fe175fe007b27b1.camel@linux.intel.com>
+ <1562624644.11461.66.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19070822-0020-0000-0000-000003516D0B
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070822-0021-0000-0000-000021A5192F
-Message-Id: <1562624644.11461.66.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-08_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907080276
+In-Reply-To: <1562624644.11461.66.camel@linux.ibm.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko,
-
-On Mon, 2019-07-08 at 18:11 +0300, Jarkko Sakkinen wrote:
-> On Sat, 2019-07-06 at 20:18 -0400, Nayna Jain wrote:
-> > +/*
-> > + * tpm_get_pcr_allocation() - initialize the chip allocated banks for PCRs
-> > + * @chip: TPM chip to use.
-> > + */
-> > +static int tpm_get_pcr_allocation(struct tpm_chip *chip)
-> > +{
-> > +	int rc;
-> > +
-> > +	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > +		rc = tpm2_get_pcr_allocation(chip);
-> > +	else
-> > +		rc = tpm1_get_pcr_allocation(chip);
-> > +
-> > +	return rc;
-> > +}
+On Mon, Jul 08, 2019 at 06:24:04PM -0400, Mimi Zohar wrote:
+> > static int tpm_get_pcr_allocation(struct tpm_chip *chip)
+> > {
+> > 	int rc;
+> > 
+> > 	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
+> >      	     tpm2_get_pcr_allocation(chip) :
+> >      	     tpm1_get_pcr_allocation(chip);
 > 
-> It is just a trivial static function, which means that kdoc comment is
-> not required and neither it is useful. Please remove that. I would
-> rewrite the function like:
+> > 
+> > 	return rc > 0 ? -ENODEV : rc;
+> > }
+> > 
+> > This addresses the issue that Stefan also pointed out. You have to
+> > deal with the TPM error codes.
 > 
-> static int tpm_get_pcr_allocation(struct tpm_chip *chip)
-> {
-> 	int rc;
-> 
-> 	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
->      	     tpm2_get_pcr_allocation(chip) :
->      	     tpm1_get_pcr_allocation(chip);
+> Hm, in the past I was told by Christoph not to use the ternary
+> operator.  Have things changed?  Other than removing the comment, the
+> only other difference is the return.
 
-> 
-> 	return rc > 0 ? -ENODEV : rc;
-> }
-> 
-> This addresses the issue that Stefan also pointed out. You have to
-> deal with the TPM error codes.
-
-Hm, in the past I was told by Christoph not to use the ternary
-operator. Â Have things changed? Â Other than removing the comment, the
-only other difference is the return.
-
-Mimi
-
+In the end it is a matter of personal preference, but I find the
+quote version above using the ternary horribly obsfucated.
