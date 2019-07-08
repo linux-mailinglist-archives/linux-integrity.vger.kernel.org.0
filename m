@@ -2,59 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CBF62423
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2019 17:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC519622FE
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2019 17:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389133AbfGHP1p (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Jul 2019 11:27:45 -0400
-Received: from mga01.intel.com ([192.55.52.88]:2353 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389130AbfGHP1p (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Jul 2019 11:27:45 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jul 2019 08:27:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,466,1557212400"; 
-   d="scan'208";a="363835568"
-Received: from jsakkine-mobl1.tm.intel.com ([10.237.50.189])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2019 08:27:42 -0700
-Message-ID: <47219a790c2c5b5a3ec0a331ece8956f9a82f45b.camel@linux.intel.com>
-Subject: Re: [PATCH] tpm: Document UEFI event log quirks
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Jordan Hand <jorhand@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     tweek@google.com, matthewgarrett@google.com,
-        Jonathan Corbet <corbet@lwn.net>
-Date:   Mon, 08 Jul 2019 18:27:45 +0300
-In-Reply-To: <33ff21e2-1e27-cc85-0ea3-5127cb2598ba@linux.microsoft.com>
-References: <20190703161109.22935-1-jarkko.sakkinen@linux.intel.com>
-         <dacf145d-49e0-16e5-5963-415bab1884e1@linux.microsoft.com>
-         <fcf497b7aa95cd6915986bc4581f10814c4d5341.camel@linux.intel.com>
-         <33ff21e2-1e27-cc85-0ea3-5127cb2598ba@linux.microsoft.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S2389658AbfGHPbK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Jul 2019 11:31:10 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54724 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2389651AbfGHPbJ (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 8 Jul 2019 11:31:09 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x68FRmFI070360
+        for <linux-integrity@vger.kernel.org>; Mon, 8 Jul 2019 11:31:08 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tm5rm7dv8-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 08 Jul 2019 11:31:07 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 8 Jul 2019 16:31:05 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 8 Jul 2019 16:31:02 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x68FV1HD59900086
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 8 Jul 2019 15:31:01 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8CAB852050;
+        Mon,  8 Jul 2019 15:31:01 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.110.58])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A945952051;
+        Mon,  8 Jul 2019 15:31:00 +0000 (GMT)
+Subject: Re: [PATCH v1 0/5] ima-evm-utils: Assorted fixes and improvements
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Petr Vorel <pvorel@suse.cz>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>
+Date:   Mon, 08 Jul 2019 11:30:50 -0400
+In-Reply-To: <20190707234837.4866-1-vt@altlinux.org>
+References: <20190707234837.4866-1-vt@altlinux.org>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1-2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19070815-0012-0000-0000-000003305BAB
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19070815-0013-0000-0000-00002169BD88
+Message-Id: <1562599850.11461.43.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-08_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907080193
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, 2019-07-07 at 21:10 -0700, Jordan Hand wrote:
-> > "Thus, it nees to save the final events table size at the time to the
-> > custom configuration table so that the TPM driver can later on skip the
-> > events generated during the preboot time."
-> > 
-> Yes, that sounds more clear to me.
+[Cc'ing Roberto, Petr, Thiago, Prakhar]
+
+Hi Vitaly,
+
+On Mon, 2019-07-08 at 02:48 +0300, Vitaly Chikunov wrote:
+> There is small fixes and improvements to ima-evm-utils.
+> Tested on x86_64.
 > 
-> Thanks,
-> Jordan
+> Vitaly Chikunov (5):
+>   ima-evm-utils: Fix EVP_MD_CTX leak in ima_calc_hash
+>   ima-evm-utils: Fix memory leak in init_public_keys
+>   ima-evm-utils: Preload public keys for ima_verify
+>   ima-evm-utils: Allow multiple files in ima_verify
+>   ima-evm-utils: Fix clang warning about possible unaligned pointer for
+>     hdr->keyid
+> 
+>  src/evmctl.c    | 11 ++++++++---
+>  src/libimaevm.c | 38 ++++++++++++++++++++++++++------------
+>  2 files changed, 34 insertions(+), 15 deletions(-)
 
-Awesome, thank you.
+Thanks, this patch set looks good.  These patches, the "ima-evm-utils: 
+Convert v2 signatures from RSA to EVP_PKEY AP", and the two patches I
+posted today are now in #next, but I'd really appreciate some
+additional Review's/Tested's on these patches.
 
-/Jarkko
+Now that we're including ALL the kernel exported hash_info algorithms,
+a colleague suggested defining a list of deprecated hash algorithms.
+ Instead of preventing the usage of these deprecated hash algorithms,
+initially I would start out with a warning.  It would be helpful to
+indicate which standard deprecated the hash algorithm and year.  At
+some point, we might want to prevent their usage in signing files, but
+not verifying file signatures.
+
+evmctl "ima_measurement" doesn't support custom template definitions.
+Also missing is support for verifying the "ima-buf" kexec command boot
+command line and the "ima-modsig" template appended signature.
+
+David Jacobson started writing a regression framework and posted a v2
+version.  I'd really appreciate help with cleaning up that code. 
+
+Any other comments/suggestions/ideas?
+
+thanks,
+
+Mimi
 
