@@ -2,79 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E22E163984
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jul 2019 18:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7728D63BC4
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jul 2019 21:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbfGIQie (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 9 Jul 2019 12:38:34 -0400
-Received: from mga17.intel.com ([192.55.52.151]:35477 "EHLO mga17.intel.com"
+        id S1729160AbfGITPQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 9 Jul 2019 15:15:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45366 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725816AbfGIQie (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 9 Jul 2019 12:38:34 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jul 2019 09:38:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,470,1557212400"; 
-   d="scan'208";a="173613342"
-Received: from mmaitert-mobl2.ger.corp.intel.com (HELO localhost) ([10.249.34.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Jul 2019 09:38:28 -0700
-Date:   Tue, 9 Jul 2019 19:38:27 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v2] tpm: tpm_ibm_vtpm: Fix unallocated banks
-Message-ID: <20190709163827.2u6jeflrhg44q7dy@linux.intel.com>
-References: <1562458725-15999-1-git-send-email-nayna@linux.ibm.com>
- <586c629b6d3c718f0c1585d77fe175fe007b27b1.camel@linux.intel.com>
- <1562624644.11461.66.camel@linux.ibm.com>
- <20190708224304.GA25838@infradead.org>
+        id S1727608AbfGITPQ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 9 Jul 2019 15:15:16 -0400
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5A0042073D;
+        Tue,  9 Jul 2019 19:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562699715;
+        bh=Xa0ZWuyarGQ9jfbFZDvYzj8QRTx+PiAs5JnSBFhpMeQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qBl041Zkp5u6G9BjLV8K0Ja95s/vjISPq+Ay3RjQdZCWx0GuYC96eHdKghBLGhXaa
+         0zSyHAJANX3yeV0jQD/G7mP9zVx3Q91QqXg3GjDWA/nBqNYdGP3DYTT0jqq5gddPry
+         CzDFKr/n0xmiPDSA4Z0e2+0MiyymW89Hl0EosFug=
+Date:   Tue, 9 Jul 2019 12:15:12 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Reminder: 2 open syzbot bugs in "security/integrity" subsystem
+Message-ID: <20190709191512.GE641@sol.localdomain>
+Mail-Followup-To: linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190708224304.GA25838@infradead.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jul 08, 2019 at 03:43:04PM -0700, Christoph Hellwig wrote:
-> On Mon, Jul 08, 2019 at 06:24:04PM -0400, Mimi Zohar wrote:
-> > > static int tpm_get_pcr_allocation(struct tpm_chip *chip)
-> > > {
-> > > 	int rc;
-> > > 
-> > > 	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
-> > >      	     tpm2_get_pcr_allocation(chip) :
-> > >      	     tpm1_get_pcr_allocation(chip);
-> > 
-> > > 
-> > > 	return rc > 0 ? -ENODEV : rc;
-> > > }
-> > > 
-> > > This addresses the issue that Stefan also pointed out. You have to
-> > > deal with the TPM error codes.
-> > 
-> > Hm, in the past I was told by Christoph not to use the ternary
-> > operator.  Have things changed?  Other than removing the comment, the
-> > only other difference is the return.
-> 
-> In the end it is a matter of personal preference, but I find the
-> quote version above using the ternary horribly obsfucated.
+[This email was generated by a script.  Let me know if you have any suggestions
+to make it better, or if you want it re-generated with the latest status.]
 
-I fully agree that the return statement is an obsfucated mess and
-not a good place at all for using ternary operator.
+Of the currently open syzbot reports against the upstream kernel, I've manually
+marked 2 of them as possibly being bugs in the "security/integrity" subsystem. 
+I've listed these reports below, sorted by an algorithm that tries to list first
+the reports most likely to be still valid, important, and actionable.
 
-/Jarkko
+If you believe a bug is no longer valid, please close the syzbot report by
+sending a '#syz fix', '#syz dup', or '#syz invalid' command in reply to the
+original thread, as explained at https://goo.gl/tpsmEJ#status
+
+If you believe I misattributed a bug to the "security/integrity" subsystem,
+please let me know, and if possible forward the report to the correct people or
+mailing list.
+
+Here are the bugs:
+
+--------------------------------------------------------------------------------
+Title:              possible deadlock in process_measurement
+Last occurred:      34 days ago
+Reported:           267 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=aad04cfa9fddcc5588f8b28ddf739f9a3ebf5874
+Original thread:    https://lkml.kernel.org/lkml/0000000000003302870578477029@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+5ab61747675a87ea359d@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/0000000000003302870578477029@google.com
+
+--------------------------------------------------------------------------------
+Title:              INFO: task hung in process_measurement
+Last occurred:      118 days ago
+Reported:           281 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=623c2e176b9d80b1872e7559e5b823b1ec4911b6
+Original thread:    https://lkml.kernel.org/lkml/00000000000033ebee0577262a98@google.com/T/#u
+
+This bug has a C reproducer.
+
+syzbot has bisected this bug, but I think the bisection result is incorrect.
+
+The original thread for this bug received 1 reply, 106 days ago.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+cdc562bc26a2b2b0a94f@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/00000000000033ebee0577262a98@google.com
+
