@@ -2,112 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5088D65DA3
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jul 2019 18:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BDB65DBC
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jul 2019 18:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728405AbfGKQls (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 11 Jul 2019 12:41:48 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:35942 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728178AbfGKQls (ORCPT
+        id S1728294AbfGKQpJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 Jul 2019 12:45:09 -0400
+Received: from mx0b-00176a03.pphosted.com ([67.231.157.48]:22396 "EHLO
+        mx0a-00176a03.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728274AbfGKQpJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 11 Jul 2019 12:41:48 -0400
-Received: by mail-io1-f67.google.com with SMTP id o9so14017749iom.3
-        for <linux-integrity@vger.kernel.org>; Thu, 11 Jul 2019 09:41:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U26HbtI3jD7UvXKWDY+AWCy2gh8PUZwa9sGU1JIWjXQ=;
-        b=aVidaIVveN3OJ/2S+w//Bv7p73J9McnzDaalFESTX16MVbFCzrt6QOiQQRBEOtIbKz
-         WneY/yV0yMxn0tfb0iuB84iYzx31K19msCtykgFVvKZUHsAw1sNsO+mGPwshtF92J59G
-         iY2azj0chu6DOUjxW8Ps71Y11Bw/YPgwBuNVo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U26HbtI3jD7UvXKWDY+AWCy2gh8PUZwa9sGU1JIWjXQ=;
-        b=lYVTYQ8AiEIauUP53R3+DHfURtaoKq5ClDEJuE1tEfZlE9bmgoeKNqrkApGpfy7kbw
-         jUXH0gIbt3+gaL8fxmd7i0ozhxOo+Ozn4NwdPKgcjQZJaZiUAxqb62+Zh5Yy87tXRM6J
-         TA8FCJ49NZTmhF/byjc6hSQViMzYMDy0JnRbewEXbZb0EVb00uuvtxseLPXQfgXI6riB
-         sik2mtmlmfBdARwW+9tr32S+YxRhmuZ0weop7fJV/CZtn3zNhSnqgScp9+INT5MRQcR4
-         901svFxFYmbl+t9nsAoZl14sm5L3jc6vVdBvkaa6GHnDE3CzHxWuaUanEFeybfXCjPra
-         74YQ==
-X-Gm-Message-State: APjAAAU3h8xch3avF9dO8GM1tP4zgLFBMQHgAMsHH1yjQHHN+952P36t
-        FoTrt/oySri4JcnivHcj/mmZw/0cC2M=
-X-Google-Smtp-Source: APXvYqxY+9EIMmTjRKHz2aPmB1ScVz7MhAmuOUqNRYKg58O7ihiiE0B1Vu9y6GrHTLf8dX6NrLW3cQ==
-X-Received: by 2002:a05:6602:1d6:: with SMTP id w22mr5461420iot.87.1562863307276;
-        Thu, 11 Jul 2019 09:41:47 -0700 (PDT)
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com. [209.85.166.49])
-        by smtp.gmail.com with ESMTPSA id a8sm4647025ioh.29.2019.07.11.09.41.45
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Jul 2019 09:41:45 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id k8so14031430iot.1
-        for <linux-integrity@vger.kernel.org>; Thu, 11 Jul 2019 09:41:45 -0700 (PDT)
-X-Received: by 2002:a02:a703:: with SMTP id k3mr5538997jam.12.1562863305402;
- Thu, 11 Jul 2019 09:41:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190711162919.23813-1-dianders@chromium.org> <20190711163915.GD25807@ziepe.ca>
-In-Reply-To: <20190711163915.GD25807@ziepe.ca>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 11 Jul 2019 09:41:33 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XuDns7n_tShzEUnzJ3te92kkV8+2=QxtekSGdKV645hw@mail.gmail.com>
-Message-ID: <CAD=FV=XuDns7n_tShzEUnzJ3te92kkV8+2=QxtekSGdKV645hw@mail.gmail.com>
-Subject: Re: [PATCH] tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
+        Thu, 11 Jul 2019 12:45:09 -0400
+Received: from pps.filterd (m0048300.ppops.net [127.0.0.1])
+        by m0048300.ppops.net-00176a03. (8.16.0.27/8.16.0.27) with SMTP id x6BGifrs037860
+        for <linux-integrity@vger.kernel.org>; Thu, 11 Jul 2019 12:45:07 -0400
+From:   "Safford, David (GE Global Research, US)" <david.safford@ge.com>
 To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     "# 4.0+" <stable@vger.kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Peter Huewe <peterhuewe@gmx.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
+        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>
+Thread-Topic: Re: [PATCH] tpm_crb - workaround broken ACPI tables
+Thread-Index: AdU34krwvcnCVlC5RnKeY3i0fswIjwAOGIMAAAVMYtA=
+Date:   Thu, 11 Jul 2019 16:44:59 +0000
+Message-ID: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7C56@ALPMBAPA12.e2k.ad.ge.com>
+References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e2k.ad.ge.com>
+ <20190711145850.GC25807@ziepe.ca>
+In-Reply-To: <20190711145850.GC25807@ziepe.ca>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMjEyNDczOTUwXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMzcyZWViMGQtYTNmYi0xMWU5LThkZmQtYTRjM2YwYjU5OGE2XGFtZS10ZXN0XDM3MmVlYjBlLWEzZmItMTFlOS04ZGZkLWE0YzNmMGI1OThhNmJvZHkudHh0IiBzej0iMjQ2NSIgdD0iMTMyMDczMzcwOTgwMTg2NTcyIiBoPSJhR1RTZGtldFpWUGovck5WOThIc2ZHUnR6K289IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: 
+x-originating-ip: [3.159.19.191]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+Subject: [PATCH] tpm_crb - workaround broken ACPI tables
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-11_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907110185
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+> From: Jason Gunthorpe <jgg@ziepe.ca>
+> Sent: Thursday, July 11, 2019 10:59 AM
+> To: Safford, David (GE Global Research, US) <david.safford@ge.com>
+> Cc: linux-integrity@vger.kernel.org; jarkko.sakkinen@linux.intel.com;
+> Wiseman, Monty (GE Global Research, US) <monty.wiseman@ge.com>
+> Subject: EXT: Re: [PATCH] tpm_crb - workaround broken ACPI tables
+> 
+> On Thu, Jul 11, 2019 at 12:29:30PM +0000, Safford, David (GE Global Research,
+> US) wrote:
+> > Most x86 desktops and laptops have firmware TPMs which support the CRB
+> > interface. Unfortunately, the linux tpm_crb driver depends on
+> > perfectly correct ACPI tables, and there are a *lot* of systems out
+> > there with broken tpm_crb entries. (Not one of my five tpm_crb systems
+> > works with the existing driver.) While it is good to encourage vendors
+> > to fix their firmware, many refuse ("It works on Windows"), leaving
+> > users in the lurch.
+> >
+> > This patch adds a kernel parameter "tpm_crb.force=1" that works around
+> > the problem in every case I have tested so far. Basically it does two
+> > things:
+> > 	- it trusts the cmd and resp addresses in the CRB registers
+> > 	- it ignores all alleged IO resource conflicts
+> >
+> > Both workarounds make sense. If there really were an address conflict,
+> > or if the register values really were wrong, the device would not be
+> > working at all. And testing with this patch has shown that in every
+> > case (so far), the problem has been bogus ACPI entries.
+> >
+> > This patch is against the upstream 5.2 kernel.
+> >
+> > Signed-off-by: David Safford <david.safford@ge.com>
+> 
+> I think we need to ask the ioresource and ACPI people how to fix this
+> properly and automatically. Maybe some ACPI quirk or maybe we try to
+> resorve the resoruce and fall back to forcing or something
+> 
+> I don't think t a module parameter is the right answer
+> 
+> Jaason
 
-On Thu, Jul 11, 2019 at 9:39 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Thu, Jul 11, 2019 at 09:29:19AM -0700, Douglas Anderson wrote:
-> > From: Vadim Sukhomlinov <sukhomlinov@google.com>
-> >
-> > commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream.
-> >
-> > TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
-> > future TPM operations. TPM 1.2 behavior was different, future TPM
-> > operations weren't disabled, causing rare issues. This patch ensures
-> > that future TPM operations are disabled.
-> >
-> > Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
-> > [dianders: resolved merge conflicts with mainline]
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > This is the backport of the patch referenced above to 4.19 as was done
-> > in Chrome OS.  See <https://crrev.com/c/1495114> for details.  It
-> > presumably applies to some older kernels.  NOTE that the problem
-> > itself has existed for a long time, but continuing to backport this
-> > exact solution to super old kernels is out of scope for me.  For those
-> > truly interested feel free to reference the past discussion [1].
-> >
-> > Reason for backport: mainline has commit a3fbfae82b4c ("tpm: take TPM
-> > chip power gating out of tpm_transmit()") and commit 719b7d81f204
-> > ("tpm: introduce tpm_chip_start() and tpm_chip_stop()") and it didn't
-> > seem like a good idea to backport 17 patches to avoid the conflict.
->
-> Careful with this, you can't backport this to any kernels that don't
-> have the sysfs ops locking changes or they will crash in sysfs code.
+I would argue that this is the right place to fix the problem, as only the 
+tpm_crb driver has the semantic knowledge to get the valid addresses
+and sizes from the tpm_crb device registers dynamically. I'm not sure how 
+you would fix things in the ACPI subsystem, without a monstrous table for
+all the broken systems, or duplicating the driver's code. And I think we
+want a module parameter, both for safety, and to encourage vendors to
+fix their tables.
 
-Ah, got it.  Thanks for catching!  Should we just give up on trying to
-get this to stable then, or are the sysfs ops locking patches also
-easy to queue up?
-
--Doug
+dave
