@@ -2,82 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A78F5660B4
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jul 2019 22:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4433F660BE
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jul 2019 22:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730242AbfGKUd0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 11 Jul 2019 16:33:26 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:33343 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729616AbfGKUd0 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 11 Jul 2019 16:33:26 -0400
-Received: by mail-io1-f66.google.com with SMTP id z3so15580454iog.0
-        for <linux-integrity@vger.kernel.org>; Thu, 11 Jul 2019 13:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1rQWFvQ45gUjO8JhBu1BZ8yG6gJGSx9SFOsZLTKRxg8=;
-        b=h8dfg609t0LWfBFR5ij3Lmr6akiDQjlKwkNM+EqaXfWfEs3eMurxebMJ4NX+Q/+AHp
-         gw9VhCYI2l7gWg29DRK1Tu6Pnkq1wrfbM6+b/N7FBPHBeZRa+Ndj9LGLz0VP+AThoBLB
-         Nez7ayFrx66wd69B+IJKnJJI/+jw5QJkwVSGPquFF1hdedJ8uTkS5E+qfIN4DMN+32di
-         Zob7A8SodxjQnJl0hLOccP8fh3gglPHU5ggURbusWF616wk+75rrxToYXKqJgMsAmST7
-         vwwqqXXGMzo91euWDVUrM0yOmwUs292hYbXizxw+ozpQh9NBz1kZWBTD3ECrUq032fRl
-         U48A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1rQWFvQ45gUjO8JhBu1BZ8yG6gJGSx9SFOsZLTKRxg8=;
-        b=bWenkx9X/QcGWstJeHst+kapMNyBYQCThZi9AlLhpdcWEEW4hr/TZmucMaiyfFzD3W
-         5AH5kd2/empNbFaMm5Knbk/CEqq7UrwHJNaIikPLrNmOwQOiOk2tzQkvUxAuHM9D51zF
-         iA3jrUWigXIPfTh2wdE17gp5SkqolKGRUbTUpok08OSeV9GX6CZU9OvntVNXMGUp6c/j
-         O1vKHO/YKodzSl9OKKa8luqVNsVB+ls4jDMGf0T4y3cKQQD4XKnJff1jmoqggwfpFRJP
-         fjc6qGAzoeEbFn4pq28mmLwIziawG8i1mNAFvsg0jTpZt8Rl216lvFqEseMdf3wSJ8yd
-         8cXQ==
-X-Gm-Message-State: APjAAAVpkgLoe/i7d+O9EYpb13PraqrFUNJc2Lzl8S853iZIEg79oX+e
-        vWe35grqV/G1ub/kZvPss1HVpNSDfDInNR2bU9hmJBEa1UI=
-X-Google-Smtp-Source: APXvYqwDgkvNEPSUYh8/ZFQ6yCS54ifuJJcYqOEv/n7MelLIW9JH5L58ISp5Pd71W3fDzVpIuiG5W8MN+PN2Dq64MnE=
-X-Received: by 2002:a6b:f114:: with SMTP id e20mr3646041iog.169.1562877205424;
- Thu, 11 Jul 2019 13:33:25 -0700 (PDT)
+        id S1729069AbfGKUfn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 Jul 2019 16:35:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54580 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728355AbfGKUfn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 11 Jul 2019 16:35:43 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1FBDB206B8;
+        Thu, 11 Jul 2019 20:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562877342;
+        bh=hfnFl7VTYjBEMlwgwzL7ALQj3UVAUmLE8HOpQ1WsSVE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xlEmSwZQoGr4heZcmHNdXp8tsiny7MLfd8yHumZE7vRH2pM8GvHXxRZABCE0+nRDx
+         uSFdLJCHt5hvibs9i6DmBfe+/RYnHvG7+kCdlc6O1kRYgCbsXmg2P2r008qk4oaAWc
+         mpHx/+x2o63yh0M0CmHoSsIIIxNt1p2MvWyS40kA=
+Date:   Thu, 11 Jul 2019 16:35:41 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        peterhuewe@gmx.de, jgg@ziepe.ca, corbet@lwn.net,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@microsoft.com,
+        thiruan@microsoft.com, bryankel@microsoft.com,
+        tee-dev@lists.linaro.org, sumit.garg@linaro.org,
+        rdunlap@infradead.org
+Subject: Re: [PATCH v8 0/2] fTPM: firmware TPM running in TEE
+Message-ID: <20190711203541.GC10104@sasha-vm>
+References: <20190705204746.27543-1-sashal@kernel.org>
+ <20190711200858.xydm3wujikufxjcw@linux.intel.com>
+ <20190711201059.GA18260@apalos>
 MIME-Version: 1.0
-References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e2k.ad.ge.com>
- <20190711145850.GC25807@ziepe.ca> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7C56@ALPMBAPA12.e2k.ad.ge.com>
- <20190711185027.GG25807@ziepe.ca> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7CFE@ALPMBAPA12.e2k.ad.ge.com>
-In-Reply-To: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7CFE@ALPMBAPA12.e2k.ad.ge.com>
-From:   Matthew Garrett <mjg59@google.com>
-Date:   Thu, 11 Jul 2019 13:33:14 -0700
-Message-ID: <CACdnJutS4-N0GgtYPy9GGJ8dVf48VZGF5AFL2raB55bSPKUpNw@mail.gmail.com>
-Subject: Re: [PATCH] tpm_crb - workaround broken ACPI tables
-To:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20190711201059.GA18260@apalos>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 11, 2019 at 12:32 PM Safford, David (GE Global Research,
-US) <david.safford@ge.com> wrote:
-> As far as I can tell, some OEMs simply are putting bad data in the tables.
-> I have seen at least one report where a BIOS update did fix the problem.
+On Thu, Jul 11, 2019 at 11:10:59PM +0300, Ilias Apalodimas wrote:
+>On Thu, Jul 11, 2019 at 11:08:58PM +0300, Jarkko Sakkinen wrote:
+>> On Fri, Jul 05, 2019 at 04:47:44PM -0400, Sasha Levin wrote:
+>> > Changes from v7:
+>> >
+>> >  - Address Jarkko's comments.
+>> >
+>> > Sasha Levin (2):
+>> >   fTPM: firmware TPM running in TEE
+>> >   fTPM: add documentation for ftpm driver
+>> >
+>> >  Documentation/security/tpm/index.rst        |   1 +
+>> >  Documentation/security/tpm/tpm_ftpm_tee.rst |  27 ++
+>> >  drivers/char/tpm/Kconfig                    |   5 +
+>> >  drivers/char/tpm/Makefile                   |   1 +
+>> >  drivers/char/tpm/tpm_ftpm_tee.c             | 350 ++++++++++++++++++++
+>> >  drivers/char/tpm/tpm_ftpm_tee.h             |  40 +++
+>> >  6 files changed, 424 insertions(+)
+>> >  create mode 100644 Documentation/security/tpm/tpm_ftpm_tee.rst
+>> >  create mode 100644 drivers/char/tpm/tpm_ftpm_tee.c
+>> >  create mode 100644 drivers/char/tpm/tpm_ftpm_tee.h
+>> >
+>> > --
+>> > 2.20.1
+>> >
+>>
+>> I applied the patches now. Appreciate a lot the patience with these.
+>> Thank you.
 
-The issue is that the CRB region is mapped into a region marked as
-ACPI NVS. drivers/acpi/nvs.c claims this region and as a result a
-resource conflict is generated. Since Windows is clearly fine with
-other drivers using ACPI NVS regions, the correct fix involves
-figuring out a way to either share these resources or allow tpm_crb to
-reclaim the region from the NVS driver. Note that the NVS driver's
-behaviour is to save and restore NVS regions over suspend/resume, so
-simply forcibly allocating the resource will result in two separate
-codepaths touching the region on resume - this seems like a bad
-outcome. Ideally this could be solved generically, but practically
-(given we've only seen this around TPMs, as far as I can tell) adding
-a hook to nvs.c that allowed drivers aware of the issue to have the
-space handed off to them might be easier.
+Thanks Jarkko!
 
-Have you seen this on any non-AMD systems?
+>Will report back any issues when we start using it on real hardware
+>rather than QEMU
+
+And thank you Ilias, let us know if we can help with the setup.
+
+--
+Thanks,
+Sasha
