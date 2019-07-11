@@ -2,108 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6433065074
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jul 2019 05:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681606591A
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jul 2019 16:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbfGKDMb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Jul 2019 23:12:31 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18552 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726353AbfGKDMa (ORCPT
+        id S1728698AbfGKOdd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 Jul 2019 10:33:33 -0400
+Received: from mx0b-00176a03.pphosted.com ([67.231.157.48]:39512 "EHLO
+        mx0a-00176a03.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728529AbfGKOdd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Jul 2019 23:12:30 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6B3CQZU005184
-        for <linux-integrity@vger.kernel.org>; Wed, 10 Jul 2019 23:12:29 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tnrp3g715-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 10 Jul 2019 23:12:29 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 11 Jul 2019 04:07:31 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 11 Jul 2019 04:07:28 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6B37F0p35652076
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Jul 2019 03:07:15 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5429A405B;
-        Thu, 11 Jul 2019 03:07:27 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 735A7A4054;
-        Thu, 11 Jul 2019 03:07:26 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.110.74])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 11 Jul 2019 03:07:26 +0000 (GMT)
-Subject: Re: [GIT PULL] Keys: Set 4 - Key ACLs for 5.3
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>, keyrings@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, linux-nfs@vger.kernel.org,
-        CIFS <linux-cifs@vger.kernel.org>, linux-afs@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Date:   Wed, 10 Jul 2019 23:07:15 -0400
-In-Reply-To: <CAHk-=wiFti6=K2fyAYhx-PSX9ovQPJUNp0FMdV0pDaO_pSx9MQ@mail.gmail.com>
-References: <28477.1562362239@warthog.procyon.org.uk>
-         <CAHk-=wjxoeMJfeBahnWH=9zShKp2bsVy527vo3_y8HfOdhwAAw@mail.gmail.com>
-         <20190710194620.GA83443@gmail.com> <20190710201552.GB83443@gmail.com>
-         <CAHk-=wiFti6=K2fyAYhx-PSX9ovQPJUNp0FMdV0pDaO_pSx9MQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19071103-4275-0000-0000-0000034BBC6E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19071103-4276-0000-0000-0000385BC1F1
-Message-Id: <1562814435.4014.11.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-10_08:,,
+        Thu, 11 Jul 2019 10:33:33 -0400
+X-Greylist: delayed 7432 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Jul 2019 10:33:32 EDT
+Received: from pps.filterd (m0048206.ppops.net [127.0.0.1])
+        by m0048206.ppops.net-00176a03. (8.16.0.27/8.16.0.27) with SMTP id x6BCTJFI002315
+        for <linux-integrity@vger.kernel.org>; Thu, 11 Jul 2019 08:29:40 -0400
+From:   "Safford, David (GE Global Research, US)" <david.safford@ge.com>
+To:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
+        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>
+Subject: [PATCH] tpm_crb - workaround broken ACPI tables
+Thread-Topic: [PATCH] tpm_crb - workaround broken ACPI tables
+Thread-Index: AdU34krwvcnCVlC5RnKeY3i0fswIjw==
+Date:   Thu, 11 Jul 2019 12:29:30 +0000
+Message-ID: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e2k.ad.ge.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMjEyNDczOTUwXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctODY4NmZlYzAtYTNkNy0xMWU5LThkZmQtYTRjM2YwYjU5OGE2XGFtZS10ZXN0XDg2ODZmZWMxLWEzZDctMTFlOS04ZGZkLWE0YzNmMGI1OThhNmJvZHkudHh0IiBzej0iMjc4OSIgdD0iMTMyMDczMjE3NjkyNzUxMzU3IiBoPSJtMTNCS1BvR1pjSTM1NDEvWUdmZTllY1J6ajA9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-originating-ip: [3.159.19.191]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-11_02:,,
  signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907110035
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907110143
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
+Most x86 desktops and laptops have firmware TPMs which support the
+CRB interface. Unfortunately, the linux tpm_crb driver depends on
+perfectly correct ACPI tables, and there are a *lot* of systems out
+there with broken tpm_crb entries. (Not one of my five tpm_crb
+systems works with the existing driver.) While it is good to
+encourage vendors to fix their firmware, many refuse ("It works on
+Windows"), leaving users in the lurch.
 
-On Wed, 2019-07-10 at 18:59 -0700, Linus Torvalds wrote:
-> Anyway, since it does seem like David is offline, I've just reverted
-> this from my tree, and will be continuing my normal merge window pull
-> requests (the other issues I have seen have fixes in their respective
-> trees).
+This patch adds a kernel parameter "tpm_crb.force=1" that works
+around the problem in every case I have tested so far. Basically
+it does two things:
+	- it trusts the cmd and resp addresses in the CRB registers
+	- it ignores all alleged IO resource conflicts
 
-Sorry for the delay.  An exception is needed for loading builtin keys
-"KEY_ALLOC_BUILT_IN" onto a keyring that is not writable by userspace.
- The following works, but probably is not how David would handle the
-exception.
+Both workarounds make sense. If there really were an address conflict,
+or if the register values really were wrong, the device would not be
+working at all. And testing with this patch has shown that in every
+case (so far), the problem has been bogus ACPI entries.
 
-diff --git a/security/keys/key.c b/security/keys/key.c
-index 519211a996e7..a99332c1e014 100644
---- a/security/keys/key.c
-+++ b/security/keys/key.c
-@@ -896,7 +896,7 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
-        /* if we're going to allocate a new key, we're going to have
-         * to modify the keyring */
-        ret = key_permission(keyring_ref, KEY_NEED_WRITE);
--       if (ret < 0) {
-+       if (ret < 0 && !(flags & KEY_ALLOC_BUILT_IN)) {
-                key_ref = ERR_PTR(ret);
-                goto error_link_end;
-        }
+This patch is against the upstream 5.2 kernel.
 
-Mimi
+Signed-off-by: David Safford <david.safford@ge.com>
+
+--- a/drivers/char/tpm/tpm_crb.c	2019-07-07 18:41:56.000000000 -0400
++++ b/drivers/char/tpm/tpm_crb.c	2019-07-10 11:12:37.269766833 -0400
+@@ -108,6 +108,12 @@
+ 	u32 smc_func_id;
+ };
+ 
++static bool force;
++#ifdef CONFIG_X86
++module_param(force, bool, 0444);
++MODULE_PARM_DESC(force, "Force register provided mappings to overcome broken acpi tables");
++#endif
++
+ static bool crb_wait_for_reg_32(u32 __iomem *reg, u32 mask, u32 value,
+ 				unsigned long timeout)
+ {
+@@ -460,9 +466,12 @@
+ 	if (start != new_res.start)
+ 		return (void __iomem *) ERR_PTR(-EINVAL);
+ 
+-	if (!resource_contains(io_res, &new_res))
+-		return devm_ioremap_resource(dev, &new_res);
+-
++	if (!resource_contains(io_res, &new_res)){
++		if (force)
++			return ioremap(start, size);
++		else
++			return devm_ioremap_resource(dev, &new_res);
++	}
+ 	return priv->iobase + (new_res.start - io_res->start);
+ }
+ 
+@@ -480,6 +489,11 @@
+ 	if (start + size - 1 <= io_res->end)
+ 		return size;
+ 
++	if (force) {
++		dev_err(dev, FW_BUG "ACPI cmd size broken. Using %llX\n", size);
++		return size;
++	}
++
+ 	dev_err(dev,
+ 		FW_BUG "ACPI region does not cover the entire command/response buffer. %pr vs %llx %llx\n",
+ 		io_res, start, size);
+@@ -512,8 +526,11 @@
+ 		dev_err(dev, FW_BUG "TPM2 ACPI table does not define a memory resource\n");
+ 		return -EINVAL;
+ 	}
++	if (force)
++		priv->iobase = ioremap(io_res.start, io_res.end - io_res.start + 1);
++	else
++		priv->iobase = devm_ioremap_resource(dev, &io_res);
+ 
+-	priv->iobase = devm_ioremap_resource(dev, &io_res);
+ 	if (IS_ERR(priv->iobase))
+ 		return PTR_ERR(priv->iobase);
 
