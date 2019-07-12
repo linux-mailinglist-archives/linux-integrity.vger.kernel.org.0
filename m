@@ -2,130 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD99C67541
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2019 21:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE24675F6
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2019 22:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727355AbfGLTFa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Jul 2019 15:05:30 -0400
-Received: from mx0b-00176a03.pphosted.com ([67.231.157.48]:14910 "EHLO
-        mx0a-00176a03.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727186AbfGLTFa (ORCPT
+        id S1727577AbfGLUgg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Jul 2019 16:36:36 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:40513 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727118AbfGLUgf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Jul 2019 15:05:30 -0400
-Received: from pps.filterd (m0048300.ppops.net [127.0.0.1])
-        by m0048300.ppops.net-00176a03. (8.16.0.27/8.16.0.27) with SMTP id x6CJ4gOF032573
-        for <linux-integrity@vger.kernel.org>; Fri, 12 Jul 2019 15:05:28 -0400
-From:   "Safford, David (GE Global Research, US)" <david.safford@ge.com>
-To:     Matthew Garrett <mjg59@google.com>
-CC:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Fri, 12 Jul 2019 16:36:35 -0400
+Received: by mail-io1-f66.google.com with SMTP id h6so23194214iom.7
+        for <linux-integrity@vger.kernel.org>; Fri, 12 Jul 2019 13:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hPjxy1Y4XykRaQARrUP5zc9rIpF9JunleJZPwGG4+e8=;
+        b=a9jlvT5CA2lEzGQaLJG5Y8fmuDn62tCkfEvFBEr8PQ8l+PhCaIxk7nBltZ6NnSeoy7
+         drk/yeP2Nykr35aI/h1NC62BiQguksF4VpmUQjYD+jfvzLeYflQZ3tXcI4+SuPxmikx9
+         7+ZpFbZHSkkjyoDzNkaUiMXgZvg5PWfKYcv/DfY8j8RG367t2AchA5YUqwQ9OzJsoITt
+         Slwh7VUG+0hM970jYu4jL3yR8IRT5RazzeTTKLjpZaOYQH458cOk2bwTbSejUxsOKs4Z
+         3mL7sGrvN6kzDb2fsO7vSBOt/igzidHVTpAa6vfLteddQWsYjNm7JPj8iEds0SFoueyO
+         qgtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hPjxy1Y4XykRaQARrUP5zc9rIpF9JunleJZPwGG4+e8=;
+        b=W6UyNn9YKJiNhwyILZ+mx2HOJIwL0RnUraIA9AwWDN6Wu1ha6883DFukERqOAavfod
+         SwXEXUBuqPVSTQ4NCnyUQZFsHziVnIij7ChH1KNPUD2arIn/GHYZasGT66bT64FuR4vl
+         GIyYIPRwXMfeexnvXGPPu+ie+dr81m4rD9aCsvngk1ol9ttAw12/8Zs5DxM/XzRqgxA6
+         q8jI3gwcGeUhoeZoIa4T5od4P5Pqg8Ae2wGexBJDcap9mNnfcFNMqBx4D/V1d8iff/j6
+         YOicjRSQWfDIQu8Oy8ra8nE0YCQaqTgrvBYzY9oENckvSFSjjB1Fik3FtdwN5m3MDreH
+         S/5w==
+X-Gm-Message-State: APjAAAVfwtCKiI2OaquagcFhE0bKzGN50I1WXqK9AC6u8x1DZxBeSlQW
+        Yu3NDN1QniPRCNaNuw2vVHhYOMpNeBPvaQTJe/C6nw==
+X-Google-Smtp-Source: APXvYqxiJlAoA+H5V7CIgFUuCbZioJ9vuXMZe8tHqd+cYgzorj0TQewL4zUA5YxIRwabtYo+qE5JHocW/MZnikyvAgM=
+X-Received: by 2002:a6b:8f47:: with SMTP id r68mr13429943iod.204.1562963794817;
+ Fri, 12 Jul 2019 13:36:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e2k.ad.ge.com>
+ <20190711145850.GC25807@ziepe.ca> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7C56@ALPMBAPA12.e2k.ad.ge.com>
+ <20190711185027.GG25807@ziepe.ca> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7CFE@ALPMBAPA12.e2k.ad.ge.com>
+ <CACdnJutS4-N0GgtYPy9GGJ8dVf48VZGF5AFL2raB55bSPKUpNw@mail.gmail.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7E2A@ALPMBAPA12.e2k.ad.ge.com>
+ <CACdnJutmhRyGjiumXbzai1fTNqcYMRthzTfMsiQgzKFtu3+teA@mail.gmail.com> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7F56@ALPMBAPA12.e2k.ad.ge.com>
+In-Reply-To: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7F56@ALPMBAPA12.e2k.ad.ge.com>
+From:   Matthew Garrett <mjg59@google.com>
+Date:   Fri, 12 Jul 2019 13:36:23 -0700
+Message-ID: <CACdnJusqAbBxJTzQttF6DwU1efz336xA4o2uchnV9OFbMB+n1A@mail.gmail.com>
+Subject: Re: [PATCH] tpm_crb - workaround broken ACPI tables
+To:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
         "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>
-Thread-Topic: Re: [PATCH] tpm_crb - workaround broken ACPI tables
-Thread-Index: AdU34krwvcnCVlC5RnKeY3i0fswIjwAOGIMAAAVMYtAAAspvgAAHp5Mg///fewD//z0RQIACMTeAgAA4lfA=
-Date:   Fri, 12 Jul 2019 19:05:22 +0000
-Message-ID: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7F56@ALPMBAPA12.e2k.ad.ge.com>
-References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e2k.ad.ge.com>
- <20190711145850.GC25807@ziepe.ca>
- <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7C56@ALPMBAPA12.e2k.ad.ge.com>
- <20190711185027.GG25807@ziepe.ca>
- <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7CFE@ALPMBAPA12.e2k.ad.ge.com>
- <CACdnJutS4-N0GgtYPy9GGJ8dVf48VZGF5AFL2raB55bSPKUpNw@mail.gmail.com>
- <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7E2A@ALPMBAPA12.e2k.ad.ge.com>
- <CACdnJutmhRyGjiumXbzai1fTNqcYMRthzTfMsiQgzKFtu3+teA@mail.gmail.com>
-In-Reply-To: <CACdnJutmhRyGjiumXbzai1fTNqcYMRthzTfMsiQgzKFtu3+teA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMjEyNDczOTUwXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZmQ4ZTgyOTYtYTRkNy0xMWU5LThlMDAtYTRjM2YwYjU5OGE2XGFtZS10ZXN0XGZkOGU4Mjk4LWE0ZDctMTFlOS04ZTAwLWE0YzNmMGI1OThhNmJvZHkudHh0IiBzej0iNDE3NyIgdD0iMTMyMDc0MzE5MjAwODkwMDM2IiBoPSIrNHBUR243NkdyRGQxcHZQUjVrMDJRZWRyZXM9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: 
-x-originating-ip: [3.159.16.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-Subject: [PATCH] tpm_crb - workaround broken ACPI tables
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-12_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=916 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1907120191
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiANCj4gSSBzdXNwZWN0IHRoZSBpc3N1ZSBjb21lcyBmcm9tIEFNRCdzIHJlZmVyZW5jZSBjb2Rl
-IHJhdGhlciB0aGFuIG11bHRpcGxlDQo+IHZlbmRvcnMgYWxsIGhhdmluZyBtYWRlIHRoZSBzYW1l
-IG1pc3Rha2UuIFVuZm9ydHVuYXRlLg0KDQpZZXMuDQoNCj4gPiBCdXQgdGhlIGxhcHRvcCBzaG93
-cyBhIG5ldyBsYXlvdXQ6DQo+ID4gWyAgICAyLjA2OTUzOV0gdHBtX2NyYiBNU0ZUMDEwMTowMDog
-Y2FuJ3QgcmVxdWVzdCByZWdpb24gZm9yIHJlc291cmNlDQo+ID4gW21lbSAweGJkMTFmMDAwLTB4
-YmQxMjJmZmZdDQo+ID4gWyAgICAyLjA2OTU0M10gdHBtX2NyYjogcHJvYmUgb2YgTVNGVDAxMDE6
-MDAgZmFpbGVkIHdpdGggZXJyb3IgLTE2DQo+ID4gWyAgICAyLjE3NzY2M10gaW1hOiBObyBUUE0g
-Y2hpcCBmb3VuZCwgYWN0aXZhdGluZyBUUE0tYnlwYXNzIQ0KPiA+DQo+ID4gYmJjNjQwMDAtYmQx
-NGFmZmYgOiBSZXNlcnZlZA0KPiA+ICAgYmQxMWYwMDAtYmQxMWZmZmYgOiBNU0ZUMDEwMTowMA0K
-PiA+ICAgYmQxMjMwMDAtYmQxMjNmZmYgOiBNU0ZUMDEwMTowMA0KPiA+IGJkMTRiMDAwLWJkMTc5
-ZmZmIDogQUNQSSBUYWJsZXMNCj4gPiBiZDE3YTAwMC1iZDMyOGZmZiA6IEFDUEkgTm9uLXZvbGF0
-aWxlIFN0b3JhZ2UNCj4gDQo+IEhtbSwgdGhhdCdzIGludGVyZXN0aW5nLiBJcyB0aGlzIGEgVUVG
-SSBvciBCSU9TIHN5c3RlbT8gQ2FuIHlvdSBwcm92aWRlIHRoZQ0KPiBlODIwIGRhdGEgZnJvbSBk
-bWVzZz8NCg0KVUVGSSAtIHRoZSBsYXB0b3AgZG1lc2cgZTgyMCBmb2xsb3dzOg0KDQpbICAgIDAu
-MDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMDAwMDAwMDAwLTB4MDAwMDAwMDAwMDA5
-ZmZmZl0gdXNhYmxlDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMDAw
-MGEwMDAwLTB4MDAwMDAwMDAwMDBmZmZmZl0gcmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1Mt
-ZTgyMDogW21lbSAweDAwMDAwMDAwMDAxMDAwMDAtMHgwMDAwMDAwMDA5ZWMxZmZmXSB1c2FibGUN
-ClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDAwMDllYzIwMDAtMHgwMDAw
-MDAwMDA5ZmZmZmZmXSByZXNlcnZlZA0KWyAgICAwLjAwMDAwMF0gQklPUy1lODIwOiBbbWVtIDB4
-MDAwMDAwMDAwYTAwMDAwMC0weDAwMDAwMDAwMGExZmZmZmZdIHVzYWJsZQ0KWyAgICAwLjAwMDAw
-MF0gQklPUy1lODIwOiBbbWVtIDB4MDAwMDAwMDAwYTIwMDAwMC0weDAwMDAwMDAwMGEyMGFmZmZd
-IEFDUEkgTlZTDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMDBhMjBi
-MDAwLTB4MDAwMDAwMDBiYmM2M2ZmZl0gdXNhYmxlDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6
-IFttZW0gMHgwMDAwMDAwMGJiYzY0MDAwLTB4MDAwMDAwMDBiZDE0YWZmZl0gcmVzZXJ2ZWQNClsg
-ICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDAwYmQxNGIwMDAtMHgwMDAwMDAw
-MGJkMTc5ZmZmXSBBQ1BJIGRhdGENClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAw
-MDAwMDAwYmQxN2EwMDAtMHgwMDAwMDAwMGJkMzI4ZmZmXSBBQ1BJIE5WUw0KWyAgICAwLjAwMDAw
-MF0gQklPUy1lODIwOiBbbWVtIDB4MDAwMDAwMDBiZDMyOTAwMC0weDAwMDAwMDAwYmRiYjBmZmZd
-IHJlc2VydmVkDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMGJkYmIx
-MDAwLTB4MDAwMDAwMDBiZWZmZmZmZl0gdXNhYmxlDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6
-IFttZW0gMHgwMDAwMDAwMGJmMDAwMDAwLTB4MDAwMDAwMDBiZmZmZmZmZl0gcmVzZXJ2ZWQNClsg
-ICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDAwZjgwMDAwMDAtMHgwMDAwMDAw
-MGZiZmZmZmZmXSByZXNlcnZlZA0KWyAgICAwLjAwMDAwMF0gQklPUy1lODIwOiBbbWVtIDB4MDAw
-MDAwMDBmZDAwMDAwMC0weDAwMDAwMDAwZmRmZmZmZmZdIHJlc2VydmVkDQpbICAgIDAuMDAwMDAw
-XSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMGZlYjgwMDAwLTB4MDAwMDAwMDBmZWMwMWZmZl0g
-cmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDAwZmVjMTAw
-MDAtMHgwMDAwMDAwMGZlYzEwZmZmXSByZXNlcnZlZA0KWyAgICAwLjAwMDAwMF0gQklPUy1lODIw
-OiBbbWVtIDB4MDAwMDAwMDBmZWQwMDAwMC0weDAwMDAwMDAwZmVkMDBmZmZdIHJlc2VydmVkDQpb
-ICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMGZlZDQwMDAwLTB4MDAwMDAw
-MDBmZWQ0NGZmZl0gcmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAw
-MDAwMDAwZmVkODAwMDAtMHgwMDAwMDAwMGZlZDhmZmZmXSByZXNlcnZlZA0KWyAgICAwLjAwMDAw
-MF0gQklPUy1lODIwOiBbbWVtIDB4MDAwMDAwMDBmZWRjMjAwMC0weDAwMDAwMDAwZmVkY2ZmZmZd
-IHJlc2VydmVkDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMGZlZGQ0
-MDAwLTB4MDAwMDAwMDBmZWRkNWZmZl0gcmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgy
-MDogW21lbSAweDAwMDAwMDAwZmVlMDAwMDAtMHgwMDAwMDAwMGZlZWZmZmZmXSByZXNlcnZlZA0K
-WyAgICAwLjAwMDAwMF0gQklPUy1lODIwOiBbbWVtIDB4MDAwMDAwMDBmZjAwMDAwMC0weDAwMDAw
-MDAwZmZmZmZmZmZdIHJlc2VydmVkDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgw
-MDAwMDAwMTAwMDAwMDAwLTB4MDAwMDAwMDQyZWZmZmZmZl0gdXNhYmxlDQpbICAgIDAuMDAwMDAw
-XSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwNDJmMDAwMDAwLTB4MDAwMDAwMDQzZWZmZmZmZl0g
-cmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDA0M2YwMDAw
-MDAtMHgwMDAwMDAwNDNmMzNmZmZmXSB1c2FibGUNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDog
-W21lbSAweDAwMDAwMDA0M2YzNDAwMDAtMHgwMDAwMDAwNDNmZmZmZmZmXSByZXNlcnZlZA0KWyAg
-ICAwLjAwMDAwMF0gZTgyMDogdXBkYXRlIFttZW0gMHhiYTRmZDAxOC0weGJhNTBkMDU3XSB1c2Fi
-bGUgPT0+IHVzYWJsZQ0KWyAgICAwLjAwMDAwMF0gZTgyMDogdXBkYXRlIFttZW0gMHhiYTRmZDAx
-OC0weGJhNTBkMDU3XSB1c2FibGUgPT0+IHVzYWJsZQ0KWyAgICAwLjAwMDAwMF0gZTgyMDogdXBk
-YXRlIFttZW0gMHhiYTRlZjAxOC0weGJhNGZjNDU3XSB1c2FibGUgPT0+IHVzYWJsZQ0KWyAgICAw
-LjAwMDAwMF0gZTgyMDogdXBkYXRlIFttZW0gMHhiYTRlZjAxOC0weGJhNGZjNDU3XSB1c2FibGUg
-PT0+IHVzYWJsZQ0KWyAgICAwLjAwMDQ0M10gZTgyMDogdXBkYXRlIFttZW0gMHgwMDAwMDAwMC0w
-eDAwMDAwZmZmXSB1c2FibGUgPT0+IHJlc2VydmVkDQpbICAgIDAuMDAwNDQ0XSBlODIwOiByZW1v
-dmUgW21lbSAweDAwMGEwMDAwLTB4MDAwZmZmZmZdIHVzYWJsZQ0KWyAgICAwLjAwMDgwN10gZTgy
-MDogdXBkYXRlIFttZW0gMHhjMDAwMDAwMC0weGZmZmZmZmZmXSB1c2FibGUgPT0+IHJlc2VydmVk
-DQpbICAgIDAuNTc0NDIxXSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIgW21lbSAweDA5ZWMyMDAw
-LTB4MGJmZmZmZmZdDQpbICAgIDAuNTc0NDIyXSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIgW21l
-bSAweDBhMjAwMDAwLTB4MGJmZmZmZmZdDQpbICAgIDAuNTc0NDIyXSBlODIwOiByZXNlcnZlIFJB
-TSBidWZmZXIgW21lbSAweGJhNGVmMDE4LTB4YmJmZmZmZmZdDQpbICAgIDAuNTc0NDIzXSBlODIw
-OiByZXNlcnZlIFJBTSBidWZmZXIgW21lbSAweGJhNGZkMDE4LTB4YmJmZmZmZmZdDQpbICAgIDAu
-NTc0NDIzXSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIgW21lbSAweGJiYzY0MDAwLTB4YmJmZmZm
-ZmZdDQpbICAgIDAuNTc0NDI0XSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIgW21lbSAweGJmMDAw
-MDAwLTB4YmZmZmZmZmZdDQpbICAgIDAuNTc0NDI0XSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIg
-W21lbSAweDQyZjAwMDAwMC0weDQyZmZmZmZmZl0NClsgICAgMC41NzQ0MjRdIGU4MjA6IHJlc2Vy
-dmUgUkFNIGJ1ZmZlciBbbWVtIDB4NDNmMzQwMDAwLTB4NDNmZmZmZmZmXQ0K
+On Fri, Jul 12, 2019 at 12:05 PM Safford, David (GE Global Research,
+US) <david.safford@ge.com> wrote:
+
+> UEFI - the laptop dmesg e820 follows:
+
+Could you boot with efi=debug and attach the EFI memory map?
