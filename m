@@ -2,74 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C3966105
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jul 2019 23:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C76663A5
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2019 04:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbfGKVOF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 11 Jul 2019 17:14:05 -0400
-Received: from mga05.intel.com ([192.55.52.43]:37743 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726880AbfGKVOF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 11 Jul 2019 17:14:05 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jul 2019 14:14:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,480,1557212400"; 
-   d="scan'208";a="193537485"
-Received: from mmoerth-mobl6.ger.corp.intel.com (HELO localhost) ([10.249.35.82])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Jul 2019 14:14:00 -0700
-Date:   Fri, 12 Jul 2019 00:13:57 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Nayna Jain <nayna@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v3] tpm: tpm_ibm_vtpm: Fix unallocated banks
-Message-ID: <20190711211357.77bl2ixfnplmumcl@linux.intel.com>
-References: <1562861615-11391-1-git-send-email-nayna@linux.ibm.com>
- <20190711202824.dfhzxcqtk5ouud5n@linux.intel.com>
+        id S1728861AbfGLCFU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 Jul 2019 22:05:20 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:59292 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728853AbfGLCFU (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 11 Jul 2019 22:05:20 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id DFB9872CC58;
+        Fri, 12 Jul 2019 05:05:17 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 4F9424A4AE8;
+        Fri, 12 Jul 2019 05:05:17 +0300 (MSK)
+Date:   Fri, 12 Jul 2019 05:05:16 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 1/4] ima-evm-utils: link to libcrypto instead of OpenSSL
+Message-ID: <20190712020516.tpinh2xk43b6xufj@altlinux.org>
+Mail-Followup-To: Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>,
+        linux-integrity@vger.kernel.org
+References: <20190523122623.25684-1-dbaryshkov@gmail.com>
+ <20190711150732.7xrx42cnlsef6lit@altlinux.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190711202824.dfhzxcqtk5ouud5n@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190711150732.7xrx42cnlsef6lit@altlinux.org>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 11, 2019 at 11:28:24PM +0300, Jarkko Sakkinen wrote:
-> On Thu, Jul 11, 2019 at 12:13:35PM -0400, Nayna Jain wrote:
-> > The nr_allocated_banks and allocated banks are initialized as part of
-> > tpm_chip_register. Currently, this is done as part of auto startup
-> > function. However, some drivers, like the ibm vtpm driver, do not run
-> > auto startup during initialization. This results in uninitialized memory
-> > issue and causes a kernel panic during boot.
-> > 
-> > This patch moves the pcr allocation outside the auto startup function
-> > into tpm_chip_register. This ensures that allocated banks are initialized
-> > in any case.
-> > 
-> > Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms with
-> > PCR read")
-> > Reported-by: Michal Suchanek <msuchanek@suse.de>
-> > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-> > Tested-by: Michal Suchánek <msuchanek@suse.de>
+Dmitry,
+
+On Thu, Jul 11, 2019 at 06:07:32PM +0300, Vitaly Chikunov wrote:
+> On Thu, May 23, 2019 at 03:26:20PM +0300, Dmitry Eremin-Solenikov wrote:
+> > There is no need to link to full libssl. evmctl uses functions from
+> > libcrypto, so let's link only against that library.
 > 
-> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Btw, this breaks my tests in my set up with gost-engine, making evmctl
+> crash on OPENSSL_init_crypto (in bind_gost). Did not investigate real
+> cause yet. I test with latest version of gost-engine (e372739) and
+> openssl 0fc4d00a00.
 
-Thanks a lot! It is applied now.
+Sorry, this was my set up failure. Previously I was defining
+`OPENSSL_LIBS="-L$HOME/src/openssl -lssl -lcrypto"` to link with custom
+OpenSSL build. Now I should just define
+`LIBCRYPTO_LIBS="-L$HOME/src/openssl -lcrypto"` instead.
 
-/Jarkko
+So there is no error in these commits.
+
+Thanks,
