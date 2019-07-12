@@ -2,152 +2,159 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2576671B9
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2019 16:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98183671D7
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2019 17:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727140AbfGLOzS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Jul 2019 10:55:18 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:41842 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726984AbfGLOzS (ORCPT
+        id S1726466AbfGLPAg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Jul 2019 11:00:36 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:40463 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727104AbfGLPAc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Jul 2019 10:55:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=jyTpDF2cJguc7T2D7cN+higCLbj4x3NEYIIGAv7Vb1k=; b=d5q+mx+54zYN9fEzyPrr6e6Vn
-        P+OWHB81xK0z3+qq7SCsblGLnd3AIuBWLZO+8ZK/C8M7+LXeBC4T/0yyPKLV3LgbYMZD8LP42dMaR
-        2IIM9M5Zqu+Xu0JxZE+MzZIeriI/CapP7cTjO3VdiTwIN94g44p8vVr9UhhFoOr4jZEuZcaBkvFl4
-        18GFjroBpeu30gq9eVebugXvsVX+v7tn30COaNknA7ZlDAN8et9NsDu6ORa85NEDw4yG0fyHaHUq+
-        mVtrXsEfzksrItP+jJcDlg+J5+GKIJhEsoH+ZoUqPRrYhqsg2Lez4SgIkNoFqDkcQpCSPaoVO4vjK
-        r2N1yvaWA==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=[192.168.1.17])
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hlwxA-0008UU-2R; Fri, 12 Jul 2019 14:55:16 +0000
-Subject: Re: [PATCH v3] tpm: Document UEFI event log quirks
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     tweek@google.com, matthewgarrett@google.com,
-        jorhand@linux.microsoft.com, Jonathan Corbet <corbet@lwn.net>,
-        Sasha Levin <sashal@kernel.org>
-References: <20190712124912.23630-1-jarkko.sakkinen@linux.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <6c974f53-6dca-33fd-5aca-056ab8b274ed@infradead.org>
-Date:   Fri, 12 Jul 2019 07:55:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 12 Jul 2019 11:00:32 -0400
+Received: by mail-io1-f68.google.com with SMTP id h6so20938911iom.7
+        for <linux-integrity@vger.kernel.org>; Fri, 12 Jul 2019 08:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9ruDKR2WCuNJ8pZ4dZ78285EBDLCUM687NPIbMme+Zc=;
+        b=oYcAIdwNFzlN2wVuvt4l+koisE4DeidlMfdlUNIyLbc/G4iBkqJBanjSAwLfSFD/GL
+         Psdgp+cPejucuLGKOa2ErG7h7GEWhcbrfwfJkXKYWAbM326VgNJdG8dklOSllUnmvpcG
+         z640kegEODmBmSpJhSioeTrZ3V93kR8fijaKI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9ruDKR2WCuNJ8pZ4dZ78285EBDLCUM687NPIbMme+Zc=;
+        b=JQvWb9nEjZtWHFTbLjKXQg/UuJhD7O6x3xRrayZFBPGJghBlin0wTTKEmbB4AF7N6j
+         YDv61HVY7ystlHxILl3tYrXZIYr8ONj1HA6b/CiOEd/0taJBWPZ9cGGm7Tfodi3ucHDg
+         ZffjJQmk80GWwRiD5xo/5c9/2DbTjpKif5nqPGGqB5biKspTHzET9+fU2pzS34Zt5TO4
+         S0LT4BshtEKDUZ+KOiQYC9eAFvFGAXyDAwc/rCQSmEYmYnVCueNAfxqmmV8/WEIkQwC9
+         nOk+QU5fxVrWR3uH/7qkxl4aaWW+qC33qfhblAHrG7ZJL+Bw3U6Bb2MDmmLOobNltXvD
+         Ms7A==
+X-Gm-Message-State: APjAAAXm2eMlO3Xha9OprIVzOw2JCpmEt8YkmlsuLgEdiaN2pInTb3GE
+        xMXBuUQpdEv4x1YRENdgBg36UNN65XM=
+X-Google-Smtp-Source: APXvYqztcxG07AylDehXnttQw/KxWFlXVDyKSGroqjwS8AHfX0NhJUDkCTnq9g6EiHqwz3g1LEZFfQ==
+X-Received: by 2002:a02:cc76:: with SMTP id j22mr12351278jaq.9.1562943630567;
+        Fri, 12 Jul 2019 08:00:30 -0700 (PDT)
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com. [209.85.166.52])
+        by smtp.gmail.com with ESMTPSA id q22sm7359881ioj.56.2019.07.12.08.00.28
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 12 Jul 2019 08:00:28 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id k20so20913579ios.10
+        for <linux-integrity@vger.kernel.org>; Fri, 12 Jul 2019 08:00:28 -0700 (PDT)
+X-Received: by 2002:a02:c6a9:: with SMTP id o9mr12337396jan.90.1562943627679;
+ Fri, 12 Jul 2019 08:00:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190712124912.23630-1-jarkko.sakkinen@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20190711162919.23813-1-dianders@chromium.org> <20190711163915.GD25807@ziepe.ca>
+ <20190711170437.GA7544@kroah.com> <20190711171726.GE25807@ziepe.ca>
+ <20190711172630.GA11371@kroah.com> <CAD=FV=U0ue_4FyS7MO+iaKQ5gr0PhuLZaTV1adPY3ZtNhKTmHA@mail.gmail.com>
+ <20190712115025.GA8221@kroah.com>
+In-Reply-To: <20190712115025.GA8221@kroah.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 12 Jul 2019 08:00:12 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UBOWHrEFQRhxsnK-PmVkFjcvnEruuy0sYHh0p-Qnk8pA@mail.gmail.com>
+Message-ID: <CAD=FV=UBOWHrEFQRhxsnK-PmVkFjcvnEruuy0sYHh0p-Qnk8pA@mail.gmail.com>
+Subject: Re: [PATCH] tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, "# 4.0+" <stable@vger.kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Vadim Sukhomlinov <sukhomlinov@google.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Peter Huewe <peterhuewe@gmx.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/12/19 5:49 AM, Jarkko Sakkinen wrote:
-> There are some weird quirks when it comes to UEFI event log. Provide a
-> brief introduction to TPM event log mechanism and describe the quirks
-> and how they can be sorted out.
-> 
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> ---
-> v3: Add a section and use bullet list for references. Remove (invalid)
->     author info.
-> v2: Fixed one type, adjusted the last paragraph and added the file
+Hi,
 
-is that         typo  or type?
+On Fri, Jul 12, 2019 at 4:50 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jul 11, 2019 at 10:28:01AM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Thu, Jul 11, 2019 at 10:26 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Thu, Jul 11, 2019 at 02:17:26PM -0300, Jason Gunthorpe wrote:
+> > > > On Thu, Jul 11, 2019 at 07:04:37PM +0200, Greg KH wrote:
+> > > > > On Thu, Jul 11, 2019 at 01:39:15PM -0300, Jason Gunthorpe wrote:
+> > > > > > On Thu, Jul 11, 2019 at 09:29:19AM -0700, Douglas Anderson wrote:
+> > > > > > > From: Vadim Sukhomlinov <sukhomlinov@google.com>
+> > > > > > >
+> > > > > > > commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream.
+> > > > > > >
+> > > > > > > TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
+> > > > > > > future TPM operations. TPM 1.2 behavior was different, future TPM
+> > > > > > > operations weren't disabled, causing rare issues. This patch ensures
+> > > > > > > that future TPM operations are disabled.
+> > > > > > >
+> > > > > > > Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
+> > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
+> > > > > > > [dianders: resolved merge conflicts with mainline]
+> > > > > > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > > > > > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > > > > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > > > > > > This is the backport of the patch referenced above to 4.19 as was done
+> > > > > > > in Chrome OS.  See <https://crrev.com/c/1495114> for details.  It
+> > > > > > > presumably applies to some older kernels.  NOTE that the problem
+> > > > > > > itself has existed for a long time, but continuing to backport this
+> > > > > > > exact solution to super old kernels is out of scope for me.  For those
+> > > > > > > truly interested feel free to reference the past discussion [1].
+> > > > > > >
+> > > > > > > Reason for backport: mainline has commit a3fbfae82b4c ("tpm: take TPM
+> > > > > > > chip power gating out of tpm_transmit()") and commit 719b7d81f204
+> > > > > > > ("tpm: introduce tpm_chip_start() and tpm_chip_stop()") and it didn't
+> > > > > > > seem like a good idea to backport 17 patches to avoid the conflict.
+> > > > > >
+> > > > > > Careful with this, you can't backport this to any kernels that don't
+> > > > > > have the sysfs ops locking changes or they will crash in sysfs code.
+> > > > >
+> > > > > And what commit added that?
+> > > >
+> > > > commit 2677ca98ae377517930c183248221f69f771c921
+> > > > Author: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > > > Date:   Sun Nov 4 11:38:27 2018 +0200
+> > > >
+> > > >     tpm: use tpm_try_get_ops() in tpm-sysfs.c.
+> > > >
+> > > >     Use tpm_try_get_ops() in tpm-sysfs.c so that we can consider moving
+> > > >     other decorations (locking, localities, power management for example)
+> > > >     inside it. This direction can be of course taken only after other call
+> > > >     sites for tpm_transmit() have been treated in the same way.
+> > > >
+> > > > The last sentence suggests there are other patches needed too though..
+> > >
+> > > So 5.1.  So does this original patch need to go into the 5.2 and 5.1
+> > > kernels?
+> >
+> > The patch ("Fix TPM 1.2 Shutdown sequence to prevent future TPM
+> > operations")?  It's already done.  It just got merge conflicts when
+> > going back to 4.19 which is why I sent the backport.
+>
+> But the sysfs comment means I should not apply this backport then?
+>
+> Totally confused by this long thread, sorry.
+>
+> What am I supposed to do for the stable trees here?
 
-(one more below)
+I think the answer is to drop my backport for now and Jarkko says
+he'll take a fresh look at it in 2 weeks when he's back from his
+leave.  Thus my understanding:
 
->     to index.rst
->  Documentation/security/tpm/index.rst         |  1 +
->  Documentation/security/tpm/tpm_event_log.rst | 55 ++++++++++++++++++++
->  2 files changed, 56 insertions(+)
->  create mode 100644 Documentation/security/tpm/tpm_event_log.rst
-> 
-> diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
-> index 15783668644f..9e0815cb1e7f 100644
-> --- a/Documentation/security/tpm/index.rst
-> +++ b/Documentation/security/tpm/index.rst
-> @@ -4,5 +4,6 @@ Trusted Platform Module documentation
->  
->  .. toctree::
->  
-> +   tpm_event_log
->     tpm_ftpm_tee
->     tpm_vtpm_proxy
-> diff --git a/Documentation/security/tpm/tpm_event_log.rst b/Documentation/security/tpm/tpm_event_log.rst
-> new file mode 100644
-> index 000000000000..068eeb659bb9
-> --- /dev/null
-> +++ b/Documentation/security/tpm/tpm_event_log.rst
-> @@ -0,0 +1,55 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=============
-> +TPM Event Log
-> +=============
-> +
-> +This document briefly describes what TPM log is and how it is handed
-> +over from the preboot firmware to the operating system.
-> +
-> +Introduction
-> +============
-> +
-> +The preboot firmware maintains an event log that gets new entries every
-> +time something gets hashed by it to any of the PCR registers. The events
-> +are segregated by their type and contain the value of the hashed PCR
-> +register. Typically, the preboot firmware will hash the components to
-> +who execution is to be handed over or actions relevant to the boot
-> +process.
-> +
-> +The main application for this is remote attestation and the reason why
-> +it is useful is nicely put in the very first section of [1]:
-> +
-> +"Attestation is used to provide information about the platform’s state
-> +to a challenger. However, PCR contents are difficult to interpret;
-> +therefore, attestation is typically more useful when the PCR contents
-> +are accompanied by a measurement log. While not trusted on their own,
-> +the measurement log contains a richer set of information than do the PCR
-> +contents. The PCR contents are used to provide the validation of the
-> +measurement log."
-> +
-> +UEFI event log
-> +==============
-> +
-> +UEFI provided event log has a few somewhat weird quirks.
-> +
-> +Before calling ExitBootServices() Linux EFI stub copies the event log to
-> +a custom configuration table defined by the stub itself. Unfortanely,
+* On mainline: fixed
 
-[again:]                                                    Unfortunately,
+* On 5.2 / 5.1: you've already got this picked to stable.  Good
 
-> +the events generated by ExitBootServices() don't end up in the table.
-> +
-> +The firmware provides so called final events configuration table to sort
-> +out this issue. Events gets mirrored to this table after the first time
-> +EFI_TCG2_PROTOCOL.GetEventLog() gets called.
-> +
-> +This introduces another problem: nothing guarantees that it is not called
-> +before the Linux EFI stub gets to run. Thus, it needs to calculate and save the
-> +final events table size while the stub is still running to the custom
-> +configuration table so that the TPM driver can later on skip these events when
-> +concatenating two halves of the event log from the custom configuration table
-> +and the final events table.
-> +
-> +References
-> +==========
-> +
-> +- [1] https://trustedcomputinggroup.org/resource/pc-client-specific-platform-firmware-profile-specification/
-> +- [2] The final concatenation is done in drivers/char/tpm/eventlog/efi.c
-> 
+* On 4.14 / 4.19: Jarkko will look at in 2 weeks.
 
+* On 4.9 and older: I'd propose skipping unless someone is known to
+need a solution here.
 
--- 
-~Randy
+-Doug
