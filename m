@@ -2,71 +2,189 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE24675F6
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2019 22:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEBB675FD
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2019 22:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727577AbfGLUgg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Jul 2019 16:36:36 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:40513 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727118AbfGLUgf (ORCPT
+        id S1727943AbfGLUlr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Jul 2019 16:41:47 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42044 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727955AbfGLUlr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Jul 2019 16:36:35 -0400
-Received: by mail-io1-f66.google.com with SMTP id h6so23194214iom.7
-        for <linux-integrity@vger.kernel.org>; Fri, 12 Jul 2019 13:36:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hPjxy1Y4XykRaQARrUP5zc9rIpF9JunleJZPwGG4+e8=;
-        b=a9jlvT5CA2lEzGQaLJG5Y8fmuDn62tCkfEvFBEr8PQ8l+PhCaIxk7nBltZ6NnSeoy7
-         drk/yeP2Nykr35aI/h1NC62BiQguksF4VpmUQjYD+jfvzLeYflQZ3tXcI4+SuPxmikx9
-         7+ZpFbZHSkkjyoDzNkaUiMXgZvg5PWfKYcv/DfY8j8RG367t2AchA5YUqwQ9OzJsoITt
-         Slwh7VUG+0hM970jYu4jL3yR8IRT5RazzeTTKLjpZaOYQH458cOk2bwTbSejUxsOKs4Z
-         3mL7sGrvN6kzDb2fsO7vSBOt/igzidHVTpAa6vfLteddQWsYjNm7JPj8iEds0SFoueyO
-         qgtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hPjxy1Y4XykRaQARrUP5zc9rIpF9JunleJZPwGG4+e8=;
-        b=W6UyNn9YKJiNhwyILZ+mx2HOJIwL0RnUraIA9AwWDN6Wu1ha6883DFukERqOAavfod
-         SwXEXUBuqPVSTQ4NCnyUQZFsHziVnIij7ChH1KNPUD2arIn/GHYZasGT66bT64FuR4vl
-         GIyYIPRwXMfeexnvXGPPu+ie+dr81m4rD9aCsvngk1ol9ttAw12/8Zs5DxM/XzRqgxA6
-         q8jI3gwcGeUhoeZoIa4T5od4P5Pqg8Ae2wGexBJDcap9mNnfcFNMqBx4D/V1d8iff/j6
-         YOicjRSQWfDIQu8Oy8ra8nE0YCQaqTgrvBYzY9oENckvSFSjjB1Fik3FtdwN5m3MDreH
-         S/5w==
-X-Gm-Message-State: APjAAAVfwtCKiI2OaquagcFhE0bKzGN50I1WXqK9AC6u8x1DZxBeSlQW
-        Yu3NDN1QniPRCNaNuw2vVHhYOMpNeBPvaQTJe/C6nw==
-X-Google-Smtp-Source: APXvYqxiJlAoA+H5V7CIgFUuCbZioJ9vuXMZe8tHqd+cYgzorj0TQewL4zUA5YxIRwabtYo+qE5JHocW/MZnikyvAgM=
-X-Received: by 2002:a6b:8f47:: with SMTP id r68mr13429943iod.204.1562963794817;
- Fri, 12 Jul 2019 13:36:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e2k.ad.ge.com>
- <20190711145850.GC25807@ziepe.ca> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7C56@ALPMBAPA12.e2k.ad.ge.com>
- <20190711185027.GG25807@ziepe.ca> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7CFE@ALPMBAPA12.e2k.ad.ge.com>
- <CACdnJutS4-N0GgtYPy9GGJ8dVf48VZGF5AFL2raB55bSPKUpNw@mail.gmail.com>
- <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7E2A@ALPMBAPA12.e2k.ad.ge.com>
- <CACdnJutmhRyGjiumXbzai1fTNqcYMRthzTfMsiQgzKFtu3+teA@mail.gmail.com> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7F56@ALPMBAPA12.e2k.ad.ge.com>
-In-Reply-To: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7F56@ALPMBAPA12.e2k.ad.ge.com>
-From:   Matthew Garrett <mjg59@google.com>
-Date:   Fri, 12 Jul 2019 13:36:23 -0700
-Message-ID: <CACdnJusqAbBxJTzQttF6DwU1efz336xA4o2uchnV9OFbMB+n1A@mail.gmail.com>
-Subject: Re: [PATCH] tpm_crb - workaround broken ACPI tables
-To:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 12 Jul 2019 16:41:47 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6CKb6eL028446
+        for <linux-integrity@vger.kernel.org>; Fri, 12 Jul 2019 16:41:45 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tpyga466q-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 12 Jul 2019 16:41:45 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Fri, 12 Jul 2019 21:41:43 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 12 Jul 2019 21:41:41 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6CKfe4N31392126
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 Jul 2019 20:41:40 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D98E42045;
+        Fri, 12 Jul 2019 20:41:40 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C973D42042;
+        Fri, 12 Jul 2019 20:41:39 +0000 (GMT)
+Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 12 Jul 2019 20:41:39 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH] ima: fix ima_file_mmap circular locking dependency
+Date:   Fri, 12 Jul 2019 16:41:37 -0400
+X-Mailer: git-send-email 2.7.5
+X-TM-AS-GCONF: 00
+x-cbid: 19071220-0016-0000-0000-000002922858
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19071220-0017-0000-0000-000032EFEE4F
+Message-Id: <1562964097-8578-1-git-send-email-zohar@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-12_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=18 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=809 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907120210
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 12, 2019 at 12:05 PM Safford, David (GE Global Research,
-US) <david.safford@ge.com> wrote:
+The LSM security_mmap_file hook is called before the mmap_sem is taken.
+This results in IMA taking the i_mutex before the mmap_sem, yet the
+normal locking order is mmap_sem, i_mutex.
 
-> UEFI - the laptop dmesg e820 follows:
+To resolve this problem, rename and call ima_mmap_file() after taking
+the mmap_sem.
 
-Could you boot with efi=debug and attach the EFI memory map?
+Reported-by: syzbot+5ab61747675a87ea359d@syzkaller.appspotmail.com
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ include/linux/ima.h               | 4 ++--
+ ipc/shm.c                         | 5 +++++
+ mm/util.c                         | 8 ++++++++
+ security/integrity/ima/ima_main.c | 2 +-
+ security/security.c               | 8 ++------
+ 5 files changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 71796a0959d9..10adb38e0e43 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -17,7 +17,7 @@ extern int ima_bprm_check(struct linux_binprm *bprm);
+ extern int ima_file_check(struct file *file, int mask);
+ extern void ima_post_create_tmpfile(struct inode *inode);
+ extern void ima_file_free(struct file *file);
+-extern int ima_file_mmap(struct file *file, unsigned long prot);
++extern int ima_mmap_file(struct file *file, unsigned long prot);
+ extern int ima_load_data(enum kernel_load_data_id id);
+ extern int ima_read_file(struct file *file, enum kernel_read_file_id id);
+ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
+@@ -65,7 +65,7 @@ static inline void ima_file_free(struct file *file)
+ 	return;
+ }
+ 
+-static inline int ima_file_mmap(struct file *file, unsigned long prot)
++static inline int ima_mmap_file(struct file *file, unsigned long prot)
+ {
+ 	return 0;
+ }
+diff --git a/ipc/shm.c b/ipc/shm.c
+index ce1ca9f7c6e9..a712c7d426f0 100644
+--- a/ipc/shm.c
++++ b/ipc/shm.c
+@@ -34,6 +34,7 @@
+ #include <linux/mman.h>
+ #include <linux/shmem_fs.h>
+ #include <linux/security.h>
++#include <linux/ima.h>
+ #include <linux/syscalls.h>
+ #include <linux/audit.h>
+ #include <linux/capability.h>
+@@ -1549,6 +1550,10 @@ long do_shmat(int shmid, char __user *shmaddr, int shmflg,
+ 		goto out_fput;
+ 	}
+ 
++	err = ima_mmap_file(file, prot);
++	if (err)
++		goto out_fput;
++
+ 	if (addr && !(shmflg & SHM_REMAP)) {
+ 		err = -EINVAL;
+ 		if (addr + size < addr)
+diff --git a/mm/util.c b/mm/util.c
+index 9834c4ab7d8e..dbf2c15caacd 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -9,6 +9,7 @@
+ #include <linux/sched/mm.h>
+ #include <linux/sched/task_stack.h>
+ #include <linux/security.h>
++#include <linux/ima.h>
+ #include <linux/swap.h>
+ #include <linux/swapops.h>
+ #include <linux/mman.h>
+@@ -360,6 +361,13 @@ unsigned long vm_mmap_pgoff(struct file *file, unsigned long addr,
+ 	if (!ret) {
+ 		if (down_write_killable(&mm->mmap_sem))
+ 			return -EINTR;
++
++		ret = ima_mmap_file(file, prot);
++		if (ret) {
++			up_write(&mm->mmap_sem);
++			return ret;
++		}
++
+ 		ret = do_mmap_pgoff(file, addr, len, prot, flag, pgoff,
+ 				    &populate, &uf);
+ 		up_write(&mm->mmap_sem);
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 45d9ece88668..14678665cdc8 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -380,7 +380,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+  * On success return 0.  On integrity appraisal error, assuming the file
+  * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+  */
+-int ima_file_mmap(struct file *file, unsigned long prot)
++int ima_mmap_file(struct file *file, unsigned long prot)
+ {
+ 	u32 secid;
+ 
+diff --git a/security/security.c b/security/security.c
+index a749d884faec..e324c425e466 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1410,12 +1410,8 @@ static inline unsigned long mmap_prot(struct file *file, unsigned long prot)
+ int security_mmap_file(struct file *file, unsigned long prot,
+ 			unsigned long flags)
+ {
+-	int ret;
+-	ret = call_int_hook(mmap_file, 0, file, prot,
+-					mmap_prot(file, prot), flags);
+-	if (ret)
+-		return ret;
+-	return ima_file_mmap(file, prot);
++	return call_int_hook(mmap_file, 0, file, prot,
++			     mmap_prot(file, prot), flags);
+ }
+ 
+ int security_mmap_addr(unsigned long addr)
+-- 
+2.7.5
+
