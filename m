@@ -2,96 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE0A67511
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2019 20:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD99C67541
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2019 21:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726976AbfGLSY0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Jul 2019 14:24:26 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:43956 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726811AbfGLSYZ (ORCPT
+        id S1727355AbfGLTFa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Jul 2019 15:05:30 -0400
+Received: from mx0b-00176a03.pphosted.com ([67.231.157.48]:14910 "EHLO
+        mx0a-00176a03.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727186AbfGLTFa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Jul 2019 14:24:25 -0400
-Received: by mail-io1-f65.google.com with SMTP id k20so22362662ios.10
-        for <linux-integrity@vger.kernel.org>; Fri, 12 Jul 2019 11:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QbX5SSmgAX6r0nm0FWvTecY7kBanTKkAwgykxlsGKsM=;
-        b=V4E4fQhPPjxF6UpnAwXKFWQ6dyRjFQEqoQe20gPWZh6lpP4IxqPmj5L3+PsvZgXWiQ
-         +TP/nX8PVNH6VoOA0cJGnIxFuzfD2+MxYt7ZhYgCY/MrJrDmMeKjjNsj/Cc5fVPg5J55
-         OVVhiB7YdP9XQduIVpSu8vDfvinAXj49IJ/QqmUbN24X94YOdQKQy/gm0QGKMiZekXx9
-         4OAwPBBTq9a1StUjce0N7guWWv5CxDFxm7m+P9z/n3fnT4VVlB7m5X16bo4/3MmDDv6y
-         TJnqWdpGrv2HM05/KxQJhOlTOLC5WH5Gj770WgJK6JiDj3SAQAt2qrEKEApOaB9ugPPp
-         aIrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QbX5SSmgAX6r0nm0FWvTecY7kBanTKkAwgykxlsGKsM=;
-        b=nhhe0tRZZrw7fP1P8rYBZRmWZzCY6McA9Y5RgjP6/10aPf8DuAAZ3Q/YxxgczpCtd5
-         VMvU5/d+4NkJwaGob8pc7jxWuepyOjrznuJTUXoXrMCV/+yJ5u7CVSnJGZ7sUgsE1+gB
-         n6P/9NcizLlGJZgYKk8ucMami9a5wBOgnpPhHfTygYox7Ud3O2dcF4W/uCBkHXHOvHFl
-         mKnbFxAxI4qWM+2rsW8jaPrpQ4bYpsC3wvcsfa/OrsrvH2Gmw2AwqWwqvLmL3H90qBG+
-         KgQun1LXIO42oYguHgBFo5Ag9CcJn/xOEcb52g7xbHvJTrfCz/krwh7glg2ofpWd3bRv
-         lAfg==
-X-Gm-Message-State: APjAAAX2Q88n3+UOQQVPH1gx2BTO1rU+qi+bLn+Mw/As7MAZKriukYlE
-        KLJBNgSF39OGKDDh3X+Mj1lwKY7eRUhsHI1CxB8Ung==
-X-Google-Smtp-Source: APXvYqz39ORlkJRtZIQn44qHJv2C5TOs7NwAnVzR75U0sNqrJ9NTDy4hEvX7634not2CSPsmLdswrKPK+uaZi4PD+Pw=
-X-Received: by 2002:a02:2245:: with SMTP id o66mr13462919jao.53.1562955864560;
- Fri, 12 Jul 2019 11:24:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e2k.ad.ge.com>
- <20190711145850.GC25807@ziepe.ca> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7C56@ALPMBAPA12.e2k.ad.ge.com>
- <20190711185027.GG25807@ziepe.ca> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7CFE@ALPMBAPA12.e2k.ad.ge.com>
- <CACdnJutS4-N0GgtYPy9GGJ8dVf48VZGF5AFL2raB55bSPKUpNw@mail.gmail.com> <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7E2A@ALPMBAPA12.e2k.ad.ge.com>
-In-Reply-To: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7E2A@ALPMBAPA12.e2k.ad.ge.com>
-From:   Matthew Garrett <mjg59@google.com>
-Date:   Fri, 12 Jul 2019 11:24:13 -0700
-Message-ID: <CACdnJutmhRyGjiumXbzai1fTNqcYMRthzTfMsiQgzKFtu3+teA@mail.gmail.com>
-Subject: Re: [PATCH] tpm_crb - workaround broken ACPI tables
-To:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Fri, 12 Jul 2019 15:05:30 -0400
+Received: from pps.filterd (m0048300.ppops.net [127.0.0.1])
+        by m0048300.ppops.net-00176a03. (8.16.0.27/8.16.0.27) with SMTP id x6CJ4gOF032573
+        for <linux-integrity@vger.kernel.org>; Fri, 12 Jul 2019 15:05:28 -0400
+From:   "Safford, David (GE Global Research, US)" <david.safford@ge.com>
+To:     Matthew Garrett <mjg59@google.com>
+CC:     Jason Gunthorpe <jgg@ziepe.ca>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
         "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>
-Content-Type: text/plain; charset="UTF-8"
+Thread-Topic: Re: [PATCH] tpm_crb - workaround broken ACPI tables
+Thread-Index: AdU34krwvcnCVlC5RnKeY3i0fswIjwAOGIMAAAVMYtAAAspvgAAHp5Mg///fewD//z0RQIACMTeAgAA4lfA=
+Date:   Fri, 12 Jul 2019 19:05:22 +0000
+Message-ID: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7F56@ALPMBAPA12.e2k.ad.ge.com>
+References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e2k.ad.ge.com>
+ <20190711145850.GC25807@ziepe.ca>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7C56@ALPMBAPA12.e2k.ad.ge.com>
+ <20190711185027.GG25807@ziepe.ca>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7CFE@ALPMBAPA12.e2k.ad.ge.com>
+ <CACdnJutS4-N0GgtYPy9GGJ8dVf48VZGF5AFL2raB55bSPKUpNw@mail.gmail.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7E2A@ALPMBAPA12.e2k.ad.ge.com>
+ <CACdnJutmhRyGjiumXbzai1fTNqcYMRthzTfMsiQgzKFtu3+teA@mail.gmail.com>
+In-Reply-To: <CACdnJutmhRyGjiumXbzai1fTNqcYMRthzTfMsiQgzKFtu3+teA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMjEyNDczOTUwXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZmQ4ZTgyOTYtYTRkNy0xMWU5LThlMDAtYTRjM2YwYjU5OGE2XGFtZS10ZXN0XGZkOGU4Mjk4LWE0ZDctMTFlOS04ZTAwLWE0YzNmMGI1OThhNmJvZHkudHh0IiBzej0iNDE3NyIgdD0iMTMyMDc0MzE5MjAwODkwMDM2IiBoPSIrNHBUR243NkdyRGQxcHZQUjVrMDJRZWRyZXM9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: 
+x-originating-ip: [3.159.16.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Subject: [PATCH] tpm_crb - workaround broken ACPI tables
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-12_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=916 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907120191
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 12, 2019 at 5:42 AM Safford, David (GE Global Research,
-US) <david.safford@ge.com> wrote:
-> Thanks - that was very helpful.
-> All of my misbehaving systems are AMD - mostly Ryzen and Threadripper towers,
-> of various motherboard OEMs. One system is a 3rd gen Ryzen laptop (Asus FX505dy).
-
-I suspect the issue comes from AMD's reference code rather than
-multiple vendors all having made the same mistake. Unfortunate.
-
-> But the laptop shows a new layout:
-> [    2.069539] tpm_crb MSFT0101:00: can't request region for resource
-> [mem 0xbd11f000-0xbd122fff]
-> [    2.069543] tpm_crb: probe of MSFT0101:00 failed with error -16
-> [    2.177663] ima: No TPM chip found, activating TPM-bypass!
->
-> bbc64000-bd14afff : Reserved
->   bd11f000-bd11ffff : MSFT0101:00
->   bd123000-bd123fff : MSFT0101:00
-> bd14b000-bd179fff : ACPI Tables
-> bd17a000-bd328fff : ACPI Non-volatile Storage
-
-Hmm, that's interesting. Is this a UEFI or BIOS system? Can you
-provide the e820 data from dmesg?
-
-> Have you looked at the sequencing during suspend/restore?
-> If ACPI is the last to save, and first to restore, the TPM's use may
-> still be safe. I'll try to run some tests along those lines, and look
-> at the nvs driver.
-
-The NVS stuff was largely implemented by attempting to identify what
-Windows was doing and duplicating that, so it's kind of dangerous to
-rely on its ordering - there's a risk it might end up changing
-suddenly in order to mimic Windows' behaviour more closely.
+PiANCj4gSSBzdXNwZWN0IHRoZSBpc3N1ZSBjb21lcyBmcm9tIEFNRCdzIHJlZmVyZW5jZSBjb2Rl
+IHJhdGhlciB0aGFuIG11bHRpcGxlDQo+IHZlbmRvcnMgYWxsIGhhdmluZyBtYWRlIHRoZSBzYW1l
+IG1pc3Rha2UuIFVuZm9ydHVuYXRlLg0KDQpZZXMuDQoNCj4gPiBCdXQgdGhlIGxhcHRvcCBzaG93
+cyBhIG5ldyBsYXlvdXQ6DQo+ID4gWyAgICAyLjA2OTUzOV0gdHBtX2NyYiBNU0ZUMDEwMTowMDog
+Y2FuJ3QgcmVxdWVzdCByZWdpb24gZm9yIHJlc291cmNlDQo+ID4gW21lbSAweGJkMTFmMDAwLTB4
+YmQxMjJmZmZdDQo+ID4gWyAgICAyLjA2OTU0M10gdHBtX2NyYjogcHJvYmUgb2YgTVNGVDAxMDE6
+MDAgZmFpbGVkIHdpdGggZXJyb3IgLTE2DQo+ID4gWyAgICAyLjE3NzY2M10gaW1hOiBObyBUUE0g
+Y2hpcCBmb3VuZCwgYWN0aXZhdGluZyBUUE0tYnlwYXNzIQ0KPiA+DQo+ID4gYmJjNjQwMDAtYmQx
+NGFmZmYgOiBSZXNlcnZlZA0KPiA+ICAgYmQxMWYwMDAtYmQxMWZmZmYgOiBNU0ZUMDEwMTowMA0K
+PiA+ICAgYmQxMjMwMDAtYmQxMjNmZmYgOiBNU0ZUMDEwMTowMA0KPiA+IGJkMTRiMDAwLWJkMTc5
+ZmZmIDogQUNQSSBUYWJsZXMNCj4gPiBiZDE3YTAwMC1iZDMyOGZmZiA6IEFDUEkgTm9uLXZvbGF0
+aWxlIFN0b3JhZ2UNCj4gDQo+IEhtbSwgdGhhdCdzIGludGVyZXN0aW5nLiBJcyB0aGlzIGEgVUVG
+SSBvciBCSU9TIHN5c3RlbT8gQ2FuIHlvdSBwcm92aWRlIHRoZQ0KPiBlODIwIGRhdGEgZnJvbSBk
+bWVzZz8NCg0KVUVGSSAtIHRoZSBsYXB0b3AgZG1lc2cgZTgyMCBmb2xsb3dzOg0KDQpbICAgIDAu
+MDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMDAwMDAwMDAwLTB4MDAwMDAwMDAwMDA5
+ZmZmZl0gdXNhYmxlDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMDAw
+MGEwMDAwLTB4MDAwMDAwMDAwMDBmZmZmZl0gcmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1Mt
+ZTgyMDogW21lbSAweDAwMDAwMDAwMDAxMDAwMDAtMHgwMDAwMDAwMDA5ZWMxZmZmXSB1c2FibGUN
+ClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDAwMDllYzIwMDAtMHgwMDAw
+MDAwMDA5ZmZmZmZmXSByZXNlcnZlZA0KWyAgICAwLjAwMDAwMF0gQklPUy1lODIwOiBbbWVtIDB4
+MDAwMDAwMDAwYTAwMDAwMC0weDAwMDAwMDAwMGExZmZmZmZdIHVzYWJsZQ0KWyAgICAwLjAwMDAw
+MF0gQklPUy1lODIwOiBbbWVtIDB4MDAwMDAwMDAwYTIwMDAwMC0weDAwMDAwMDAwMGEyMGFmZmZd
+IEFDUEkgTlZTDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMDBhMjBi
+MDAwLTB4MDAwMDAwMDBiYmM2M2ZmZl0gdXNhYmxlDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6
+IFttZW0gMHgwMDAwMDAwMGJiYzY0MDAwLTB4MDAwMDAwMDBiZDE0YWZmZl0gcmVzZXJ2ZWQNClsg
+ICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDAwYmQxNGIwMDAtMHgwMDAwMDAw
+MGJkMTc5ZmZmXSBBQ1BJIGRhdGENClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAw
+MDAwMDAwYmQxN2EwMDAtMHgwMDAwMDAwMGJkMzI4ZmZmXSBBQ1BJIE5WUw0KWyAgICAwLjAwMDAw
+MF0gQklPUy1lODIwOiBbbWVtIDB4MDAwMDAwMDBiZDMyOTAwMC0weDAwMDAwMDAwYmRiYjBmZmZd
+IHJlc2VydmVkDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMGJkYmIx
+MDAwLTB4MDAwMDAwMDBiZWZmZmZmZl0gdXNhYmxlDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6
+IFttZW0gMHgwMDAwMDAwMGJmMDAwMDAwLTB4MDAwMDAwMDBiZmZmZmZmZl0gcmVzZXJ2ZWQNClsg
+ICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDAwZjgwMDAwMDAtMHgwMDAwMDAw
+MGZiZmZmZmZmXSByZXNlcnZlZA0KWyAgICAwLjAwMDAwMF0gQklPUy1lODIwOiBbbWVtIDB4MDAw
+MDAwMDBmZDAwMDAwMC0weDAwMDAwMDAwZmRmZmZmZmZdIHJlc2VydmVkDQpbICAgIDAuMDAwMDAw
+XSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMGZlYjgwMDAwLTB4MDAwMDAwMDBmZWMwMWZmZl0g
+cmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDAwZmVjMTAw
+MDAtMHgwMDAwMDAwMGZlYzEwZmZmXSByZXNlcnZlZA0KWyAgICAwLjAwMDAwMF0gQklPUy1lODIw
+OiBbbWVtIDB4MDAwMDAwMDBmZWQwMDAwMC0weDAwMDAwMDAwZmVkMDBmZmZdIHJlc2VydmVkDQpb
+ICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMGZlZDQwMDAwLTB4MDAwMDAw
+MDBmZWQ0NGZmZl0gcmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAw
+MDAwMDAwZmVkODAwMDAtMHgwMDAwMDAwMGZlZDhmZmZmXSByZXNlcnZlZA0KWyAgICAwLjAwMDAw
+MF0gQklPUy1lODIwOiBbbWVtIDB4MDAwMDAwMDBmZWRjMjAwMC0weDAwMDAwMDAwZmVkY2ZmZmZd
+IHJlc2VydmVkDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwMGZlZGQ0
+MDAwLTB4MDAwMDAwMDBmZWRkNWZmZl0gcmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgy
+MDogW21lbSAweDAwMDAwMDAwZmVlMDAwMDAtMHgwMDAwMDAwMGZlZWZmZmZmXSByZXNlcnZlZA0K
+WyAgICAwLjAwMDAwMF0gQklPUy1lODIwOiBbbWVtIDB4MDAwMDAwMDBmZjAwMDAwMC0weDAwMDAw
+MDAwZmZmZmZmZmZdIHJlc2VydmVkDQpbICAgIDAuMDAwMDAwXSBCSU9TLWU4MjA6IFttZW0gMHgw
+MDAwMDAwMTAwMDAwMDAwLTB4MDAwMDAwMDQyZWZmZmZmZl0gdXNhYmxlDQpbICAgIDAuMDAwMDAw
+XSBCSU9TLWU4MjA6IFttZW0gMHgwMDAwMDAwNDJmMDAwMDAwLTB4MDAwMDAwMDQzZWZmZmZmZl0g
+cmVzZXJ2ZWQNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDogW21lbSAweDAwMDAwMDA0M2YwMDAw
+MDAtMHgwMDAwMDAwNDNmMzNmZmZmXSB1c2FibGUNClsgICAgMC4wMDAwMDBdIEJJT1MtZTgyMDog
+W21lbSAweDAwMDAwMDA0M2YzNDAwMDAtMHgwMDAwMDAwNDNmZmZmZmZmXSByZXNlcnZlZA0KWyAg
+ICAwLjAwMDAwMF0gZTgyMDogdXBkYXRlIFttZW0gMHhiYTRmZDAxOC0weGJhNTBkMDU3XSB1c2Fi
+bGUgPT0+IHVzYWJsZQ0KWyAgICAwLjAwMDAwMF0gZTgyMDogdXBkYXRlIFttZW0gMHhiYTRmZDAx
+OC0weGJhNTBkMDU3XSB1c2FibGUgPT0+IHVzYWJsZQ0KWyAgICAwLjAwMDAwMF0gZTgyMDogdXBk
+YXRlIFttZW0gMHhiYTRlZjAxOC0weGJhNGZjNDU3XSB1c2FibGUgPT0+IHVzYWJsZQ0KWyAgICAw
+LjAwMDAwMF0gZTgyMDogdXBkYXRlIFttZW0gMHhiYTRlZjAxOC0weGJhNGZjNDU3XSB1c2FibGUg
+PT0+IHVzYWJsZQ0KWyAgICAwLjAwMDQ0M10gZTgyMDogdXBkYXRlIFttZW0gMHgwMDAwMDAwMC0w
+eDAwMDAwZmZmXSB1c2FibGUgPT0+IHJlc2VydmVkDQpbICAgIDAuMDAwNDQ0XSBlODIwOiByZW1v
+dmUgW21lbSAweDAwMGEwMDAwLTB4MDAwZmZmZmZdIHVzYWJsZQ0KWyAgICAwLjAwMDgwN10gZTgy
+MDogdXBkYXRlIFttZW0gMHhjMDAwMDAwMC0weGZmZmZmZmZmXSB1c2FibGUgPT0+IHJlc2VydmVk
+DQpbICAgIDAuNTc0NDIxXSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIgW21lbSAweDA5ZWMyMDAw
+LTB4MGJmZmZmZmZdDQpbICAgIDAuNTc0NDIyXSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIgW21l
+bSAweDBhMjAwMDAwLTB4MGJmZmZmZmZdDQpbICAgIDAuNTc0NDIyXSBlODIwOiByZXNlcnZlIFJB
+TSBidWZmZXIgW21lbSAweGJhNGVmMDE4LTB4YmJmZmZmZmZdDQpbICAgIDAuNTc0NDIzXSBlODIw
+OiByZXNlcnZlIFJBTSBidWZmZXIgW21lbSAweGJhNGZkMDE4LTB4YmJmZmZmZmZdDQpbICAgIDAu
+NTc0NDIzXSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIgW21lbSAweGJiYzY0MDAwLTB4YmJmZmZm
+ZmZdDQpbICAgIDAuNTc0NDI0XSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIgW21lbSAweGJmMDAw
+MDAwLTB4YmZmZmZmZmZdDQpbICAgIDAuNTc0NDI0XSBlODIwOiByZXNlcnZlIFJBTSBidWZmZXIg
+W21lbSAweDQyZjAwMDAwMC0weDQyZmZmZmZmZl0NClsgICAgMC41NzQ0MjRdIGU4MjA6IHJlc2Vy
+dmUgUkFNIGJ1ZmZlciBbbWVtIDB4NDNmMzQwMDAwLTB4NDNmZmZmZmZmXQ0K
