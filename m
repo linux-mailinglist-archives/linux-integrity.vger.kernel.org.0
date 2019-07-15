@@ -2,82 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9802F68692
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2019 11:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AF969927
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2019 18:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729603AbfGOJpu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 15 Jul 2019 05:45:50 -0400
-Received: from mga17.intel.com ([192.55.52.151]:12295 "EHLO mga17.intel.com"
+        id S1731074AbfGOQfC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 15 Jul 2019 12:35:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729487AbfGOJpu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 15 Jul 2019 05:45:50 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Jul 2019 02:45:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,493,1557212400"; 
-   d="scan'208";a="190510098"
-Received: from pertsuli-mobl.ger.corp.intel.com (HELO localhost) ([10.252.36.224])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Jul 2019 02:45:42 -0700
-Date:   Mon, 15 Jul 2019 12:45:41 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Oshri Alkobi <oshrialkoby85@gmail.com>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        IS20 Oshri Alkoby <oshri.alkoby@nuvoton.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        AP MS30 Linux Kernel community 
-        <linux-kernel@vger.kernel.org>, linux-integrity@vger.kernel.org,
-        gcwilson@us.ibm.com, kgoldman@us.ibm.com, nayna@linux.vnet.ibm.com,
-        IS30 Dan Morav <Dan.Morav@nuvoton.com>,
-        eyal.cohen@nuvoton.com
-Subject: Re: [PATCH v2 0/2] char: tpm: add new driver for tpm i2c ptp
-Message-ID: <20190715094541.zjqxainggjuvjxd2@linux.intel.com>
-References: <20190628151327.206818-1-oshrialkoby85@gmail.com>
- <8e6ca8796f229c5dc94355437351d7af323f0c56.camel@linux.intel.com>
- <79e8bfd2-2ed1-cf48-499c-5122229beb2e@infineon.com>
- <CAM9mBwJC2QD5-gV1eJUDzC2Fnnugr-oCZCoaH2sT_7ktFDkS-Q@mail.gmail.com>
- <45603af2fc8374a90ef9e81a67083395cc9c7190.camel@linux.intel.com>
- <6e7ff1b958d84f6e8e585fd3273ef295@NTILML02.nuvoton.com>
- <CAP6Zq1hPo9dG71YFyr7z9rjmi-DvoUZJOme4+2uqsfO+7nH+HQ@mail.gmail.com>
+        id S1729533AbfGOQfC (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 15 Jul 2019 12:35:02 -0400
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6DCDB2081C;
+        Mon, 15 Jul 2019 16:35:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563208501;
+        bh=P7A+7gOxObkHWO6q15pHPOZJY3ZnoB4xnL29l3PZe7s=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=qRoAXzIa+pdRPCFXmxYW6ryLdJ2CjbYC4GD+SDb0fQBtStL6KbuhUqmyfRlQFh0g9
+         n7FqCIbiLmWySaaO1UByUZU6qPSTydhuwChSZkbatxzPJt+c+rFLYo1pUpwziZeyas
+         4AoxFsumGv8w82GA/mGC5+C1YtW4PbLtSrEmfv4g=
+Date:   Mon, 15 Jul 2019 09:34:59 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        syzbot <syzbot+5ab61747675a87ea359d@syzkaller.appspotmail.com>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com, zohar@linux.vnet.ibm.com
+Subject: Re: possible deadlock in process_measurement
+Message-ID: <20190715163459.GB728@sol.localdomain>
+Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
+        syzbot <syzbot+5ab61747675a87ea359d@syzkaller.appspotmail.com>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com, zohar@linux.vnet.ibm.com
+References: <00000000000054e5d1058a6df2eb@google.com>
+ <1562854476.4014.47.camel@linux.ibm.com>
+ <20190711195011.GA48706@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAP6Zq1hPo9dG71YFyr7z9rjmi-DvoUZJOme4+2uqsfO+7nH+HQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190711195011.GA48706@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jul 15, 2019 at 11:08:47AM +0300, Tomer Maimon wrote:
->    Thanks for your feedback and sorry for the late response.
->
->    Due to the amount of work required to handle this technical feedback and
->    project constraints we need to put this task on hold for the near future.
->
->    In the meantime, anyone from the community is welcome to take over this
->    code and handle the re-design for the benefit of the entire TPM community.
+On Thu, Jul 11, 2019 at 12:50:13PM -0700, Eric Biggers wrote:
+> Hi Mimi,
+> 
+> On Thu, Jul 11, 2019 at 10:14:36AM -0400, Mimi Zohar wrote:
+> > Hi Eric,
+> > 
+> > On Mon, 2019-06-03 at 09:35 -0700, syzbot wrote:
+> > > syzbot has found a reproducer for the following crash on:
+> > > 
+> > > HEAD commit:    3c09c195 Add linux-next specific files for 20190531
+> > > git tree:       linux-next
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10f61a0ea00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=6cfb24468280cd5c
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=5ab61747675a87ea359d
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=177c3d16a00000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ec01baa00000
+> > > 
+> > 
+> > This reproducer seems like it is similar, but the cause is different
+> > than the original report.  One has to do with overlayfs, while the
+> > other has to do with ext4, mprotect/mmap.  I assume in both cases an
+> > IMA policy was required to trigger the locking bug.  What type of IMA
+> > policy are you using?
+> > 
+> > Do we need to differentiate the two reports?  Is the "last occurred"
+> > notification for the overlay, for mprotect, or both?  Please Cc the
+> > overlay mailing list on the overlay aspect.
+> 
+> AFAICS, syzbot boots all kernels with "ima_policy=tcb" on the command line.
+> And I don't think anything in userspace changes the IMA policy.
+> 
+> It's not unusual for multiple underlying bugs to get mixed into the same syzbot
+> bug.  syzbot doesn't know that one "possible deadlock in process_measurement" is
+> different from another.  "Last occurred" is for any crash that appeared as such.
+> 
+> This just needs to be handled the best we can.  Sometimes all the bugs can be
+> fixed; sometimes they've already been fixed; or sometimes it's easiest to fix
+> just one and then mark the syzbot bug as fixed, and syzbot will report it again
+> it's still occurring for some other reason.
+> 
+> - Eric
 
-Ok, so there is already driver for this called tpm_tis_core.
+Invalidating this bug report as per the discussion at
+https://lkml.kernel.org/linux-integrity/1563122888.4539.119.camel@linux.ibm.com/T/#mcd083826e5843f048c914c56a4e82147fc211704
 
-So you go and create a new module, whose name given the framework of
-things that we already have deployed, is destined to be tpm_tis_i2c.
+#syz invalid
 
-Then you roughly implement a new physical layer by using  a callback
-interface provided to you by tpm_tis_core.
+For future reference, anyone can update the status of syzbot bugs; no need to
+ask me to do it.  See https://goo.gl/tpsmEJ#status
 
-The so called re-design was already addressed by Alexander [1].
-
-How hard can it be seriously?
-
-[1] https://lkml.org/lkml/2019/7/4/331
-
-/Jarkko
+- Eric
