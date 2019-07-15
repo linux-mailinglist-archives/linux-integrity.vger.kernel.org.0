@@ -2,53 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F046839C
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2019 08:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AE868544
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2019 10:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729137AbfGOGjs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 15 Jul 2019 02:39:48 -0400
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:3089 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726074AbfGOGjs (ORCPT
+        id S1729512AbfGOIaa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 15 Jul 2019 04:30:30 -0400
+Received: from s2mx02.siteserve.jp ([210.248.135.119]:22508 "EHLO
+        s2mx02.siteserve.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726170AbfGOIaa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 15 Jul 2019 02:39:48 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R571e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=zhangliguang@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0TWv-.yB_1563172778;
-Received: from localhost(mailfrom:zhangliguang@linux.alibaba.com fp:SMTPD_---0TWv-.yB_1563172778)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 15 Jul 2019 14:39:46 +0800
-From:   luanshi <zhangliguang@linux.alibaba.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     linux-integrity@vger.kernel.org
-Subject: [PATCH] ima: Remove needless securityfs_remove() calls
-Date:   Mon, 15 Jul 2019 14:39:38 +0800
-Message-Id: <1563172778-37226-1-git-send-email-zhangliguang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Mon, 15 Jul 2019 04:30:30 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by s2mx02.siteserve.jp (Postfix) with ESMTP id 5CD6C11BF16;
+        Mon, 15 Jul 2019 17:10:52 +0900 (JST)
+X-Virus-Scanned: amavisd-new at s2mx02.siteserve.jp
+Received: from s2mx02.siteserve.jp ([127.0.0.1])
+        by localhost (mail.siteserve.jp [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xrzqXF2rmh7E; Mon, 15 Jul 2019 17:10:51 +0900 (JST)
+Received: from webmail.nakagawa-consul.com (localhost.localdomain [127.0.0.1])
+        by s2mx02.siteserve.jp (Postfix) with ESMTP id D280B11BDB1;
+        Mon, 15 Jul 2019 17:10:49 +0900 (JST)
+Received: from 174.128.236.106
+        (RisuMail authenticated user morita@nakagawa-consul.com)
+        by webmail.nakagawa-consul.com with HTTP;
+        Mon, 15 Jul 2019 17:10:50 +0900 (JST)
+Message-ID: <50258.174.128.236.106.1563178250.risu@webmail.nakagawa-consul.com>
+Date:   Mon, 15 Jul 2019 17:10:50 +0900 (JST)
+Subject: Loan offer !!
+From:   "Smith Jerry" <morita@nakagawa-consul.com>
+Reply-To: kasaperkoloans@yahoo.com.hk
+User-Agent: RisuMail 3.1
+X-Mailer: RisuMail 3.1
+MIME-Version: 1.0
+Content-Type: text/plain;charset=us-ascii
+Content-Transfer-Encoding: 8bit
+X-Priority: 3 (Normal)
+Importance: Normal
+To:     undisclosed-recipients:;
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Function securityfs_remove() is called when securityfs_create_file
-failed, this is needless. And dentry ima_policy is removed after ima_dir
-is illogical.
 
-Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
----
- security/integrity/ima/ima_fs.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 2000e8d..9c60ddc 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -501,6 +501,5 @@ int __init ima_fs_init(void)
- 	securityfs_remove(binary_runtime_measurements);
- 	securityfs_remove(ima_symlink);
- 	securityfs_remove(ima_dir);
--	securityfs_remove(ima_policy);
- 	return -1;
- }
--- 
-1.8.3.1
+
+Do you need a Loan? email us now on kasaperkoloans@yahoo.com.hk and get
+more details on the loan we offer
 
