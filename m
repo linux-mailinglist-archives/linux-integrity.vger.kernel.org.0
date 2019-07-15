@@ -2,106 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AF969927
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2019 18:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9763C69949
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2019 18:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731074AbfGOQfC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 15 Jul 2019 12:35:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57216 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729533AbfGOQfC (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 15 Jul 2019 12:35:02 -0400
-Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6DCDB2081C;
-        Mon, 15 Jul 2019 16:35:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563208501;
-        bh=P7A+7gOxObkHWO6q15pHPOZJY3ZnoB4xnL29l3PZe7s=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=qRoAXzIa+pdRPCFXmxYW6ryLdJ2CjbYC4GD+SDb0fQBtStL6KbuhUqmyfRlQFh0g9
-         n7FqCIbiLmWySaaO1UByUZU6qPSTydhuwChSZkbatxzPJt+c+rFLYo1pUpwziZeyas
-         4AoxFsumGv8w82GA/mGC5+C1YtW4PbLtSrEmfv4g=
-Date:   Mon, 15 Jul 2019 09:34:59 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        syzbot <syzbot+5ab61747675a87ea359d@syzkaller.appspotmail.com>,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com, zohar@linux.vnet.ibm.com
-Subject: Re: possible deadlock in process_measurement
-Message-ID: <20190715163459.GB728@sol.localdomain>
-Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
-        syzbot <syzbot+5ab61747675a87ea359d@syzkaller.appspotmail.com>,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com, zohar@linux.vnet.ibm.com
-References: <00000000000054e5d1058a6df2eb@google.com>
- <1562854476.4014.47.camel@linux.ibm.com>
- <20190711195011.GA48706@gmail.com>
+        id S1730874AbfGOQo3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 15 Jul 2019 12:44:29 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:33085 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730071AbfGOQo3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 15 Jul 2019 12:44:29 -0400
+Received: from LHREML713-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id CBD685973DB97AE590A7;
+        Mon, 15 Jul 2019 17:44:26 +0100 (IST)
+Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
+ (10.201.108.36) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 15 Jul
+ 2019 17:44:19 +0100
+Subject: Re: [PATCH] KEYS: trusted: allow module init if TPM is inactive or
+ deactivated
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+CC:     <jejb@linux.ibm.com>, <zohar@linux.ibm.com>, <jgg@ziepe.ca>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <crazyt2019+lml@gmail.com>, <tyhicks@canonical.com>,
+        <nayna@linux.vnet.ibm.com>, <silviu.vlasceanu@huawei.com>
+References: <20190705163735.11539-1-roberto.sassu@huawei.com>
+ <20190711194811.rfsohbfc3a7carpa@linux.intel.com>
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <b4454a78-1f1b-cc75-114a-99926e097b05@huawei.com>
+Date:   Mon, 15 Jul 2019 18:44:28 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190711195011.GA48706@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20190711194811.rfsohbfc3a7carpa@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.220.96.108]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 11, 2019 at 12:50:13PM -0700, Eric Biggers wrote:
-> Hi Mimi,
+On 7/11/2019 9:48 PM, Jarkko Sakkinen wrote:
+> On Fri, Jul 05, 2019 at 06:37:35PM +0200, Roberto Sassu wrote:
+>> Commit c78719203fc6 ("KEYS: trusted: allow trusted.ko to initialize w/o a
+>> TPM") allows the trusted module to be loaded even a TPM is not found to
+>> avoid module dependency problems.
+>>
+>> Unfortunately, this does not completely solve the issue, as there could be
+>> a case where a TPM is found but is not functional (the TPM commands return
+>> an error). Specifically, after the tpm_chip structure is returned by
+>> tpm_default_chip() in init_trusted(), the execution terminates after
+>> init_digests() returns -EFAULT (due to the fact that tpm_get_random()
+>> returns a positive value, but less than TPM_MAX_DIGEST_SIZE).
+>>
+>> This patch fixes the issue by ignoring the TPM_ERR_DEACTIVATED and
+>> TPM_ERR_DISABLED errors.
 > 
-> On Thu, Jul 11, 2019 at 10:14:36AM -0400, Mimi Zohar wrote:
-> > Hi Eric,
-> > 
-> > On Mon, 2019-06-03 at 09:35 -0700, syzbot wrote:
-> > > syzbot has found a reproducer for the following crash on:
-> > > 
-> > > HEAD commit:    3c09c195 Add linux-next specific files for 20190531
-> > > git tree:       linux-next
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10f61a0ea00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=6cfb24468280cd5c
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=5ab61747675a87ea359d
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=177c3d16a00000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ec01baa00000
-> > > 
-> > 
-> > This reproducer seems like it is similar, but the cause is different
-> > than the original report.  One has to do with overlayfs, while the
-> > other has to do with ext4, mprotect/mmap.  I assume in both cases an
-> > IMA policy was required to trigger the locking bug.  What type of IMA
-> > policy are you using?
-> > 
-> > Do we need to differentiate the two reports?  Is the "last occurred"
-> > notification for the overlay, for mprotect, or both?  Please Cc the
-> > overlay mailing list on the overlay aspect.
-> 
-> AFAICS, syzbot boots all kernels with "ima_policy=tcb" on the command line.
-> And I don't think anything in userspace changes the IMA policy.
-> 
-> It's not unusual for multiple underlying bugs to get mixed into the same syzbot
-> bug.  syzbot doesn't know that one "possible deadlock in process_measurement" is
-> different from another.  "Last occurred" is for any crash that appeared as such.
-> 
-> This just needs to be handled the best we can.  Sometimes all the bugs can be
-> fixed; sometimes they've already been fixed; or sometimes it's easiest to fix
-> just one and then mark the syzbot bug as fixed, and syzbot will report it again
-> it's still occurring for some other reason.
-> 
-> - Eric
+> Why allow trusted module to initialize if TPM is not functional?
 
-Invalidating this bug report as per the discussion at
-https://lkml.kernel.org/linux-integrity/1563122888.4539.119.camel@linux.ibm.com/T/#mcd083826e5843f048c914c56a4e82147fc211704
+According to the bug report at https://bugs.archlinux.org/task/62678,
+the trusted module is a dependency of the ecryptfs module. We should
+load the trusted module even if the TPM is inactive or deactivated.
 
-#syz invalid
+Given that commit 782779b60faa ("tpm: Actually fail on TPM errors during
+"get random"") changes the return code of tpm_get_random(), the patch
+should be modified to ignore the -EIO error. I will send a new version.
 
-For future reference, anyone can update the status of syzbot bugs; no need to
-ask me to do it.  See https://goo.gl/tpsmEJ#status
+Roberto
 
-- Eric
+-- 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
