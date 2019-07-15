@@ -2,87 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 349A3685F0
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2019 11:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9802F68692
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2019 11:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729404AbfGOJFb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 15 Jul 2019 05:05:31 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:38584 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729394AbfGOJFb (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 15 Jul 2019 05:05:31 -0400
-Received: by mail-wm1-f68.google.com with SMTP id s15so14347371wmj.3
-        for <linux-integrity@vger.kernel.org>; Mon, 15 Jul 2019 02:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=8SLvEjlc2V+wc5LKlamSyc/9J8fFrZb5bFr+zK982d4=;
-        b=d+ZvYjGynHD9tSfzVAKbAcZULlShG6N4IRlXHCxfyVJsE4wjkuBc5ND3Eo423McfSm
-         8dDaYEXQOx0TkPg/gNHXm7pQ0TFO6quYcWh0nquLLKH4aeSTax0jFwQIZSgyOI8KiGTU
-         CLt2VOqpPVEBIfOIWv5XmnV1sbNH00d3TUj2x4o5EENBqzJU+fI/Rm60Xx+pMN6W09SL
-         UJuh/TxSI7zowyPLEkgE2gIqyWA0TbV5wxNAb4mypuu4x9rroBT4yEzNwIqF8q6d6DzH
-         RtCfYXIjSgUBkh/Z/6ExuG5YFGEp+mGe7ppl9NdSD8DxkKN3+nG+XF6DConq5KneVX8N
-         KHUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8SLvEjlc2V+wc5LKlamSyc/9J8fFrZb5bFr+zK982d4=;
-        b=RKAlhE3Lvd3+skNd4uYqBNdp/847N0KrDR4nTgXOm7167AbADARNMFk4TXjL6LMnA3
-         OVEILG0m6DdWZSAvkzfpFox24yCj9QleJzKuqYF+HSVKR8X+c7FRR2WlvR/XbNh9wGNf
-         8ajpbWp4bVeS5+Rg7dXXDrI8FJDiDoYqIYD/4ZxKlVnuwv/xbB+kjmcLf4hCm6lDmKMh
-         n1bmKU7VBKggpg08QufYysgyB//B+GMrgVPfUfliX3juXxo7mHa26N0X08MLRILj+08G
-         zD0mNOQPeRNn6ae0eMOgdfCBP2EmmX5wH8zX3yDp9vl43PudVAjOYNoTPF/IZ2GK5pJn
-         NNBQ==
-X-Gm-Message-State: APjAAAWRBWFSK4KUUb9rhJ60pESnesEi+sjXq60NOAMetqc1etEVqssH
-        8vVjXPIXMuxSMvOUe04PLrMQJA==
-X-Google-Smtp-Source: APXvYqyooRiz3HOcEtyY+t7rwNaEQOf/QOzmw3jGwyslAKtIuZo3iNQObhOO8wgzh7ofVUfTua5ohQ==
-X-Received: by 2002:a1c:4b0b:: with SMTP id y11mr24746359wma.25.1563181529488;
-        Mon, 15 Jul 2019 02:05:29 -0700 (PDT)
-Received: from apalos (athedsl-428434.home.otenet.gr. [79.131.225.144])
-        by smtp.gmail.com with ESMTPSA id j17sm17672728wrb.35.2019.07.15.02.05.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Jul 2019 02:05:28 -0700 (PDT)
-Date:   Mon, 15 Jul 2019 12:05:25 +0300
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Sasha Levin <sashal@kernel.org>, peterhuewe@gmx.de, jgg@ziepe.ca,
-        corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@microsoft.com, thiruan@microsoft.com,
-        bryankel@microsoft.com, tee-dev@lists.linaro.org,
-        sumit.garg@linaro.org, rdunlap@infradead.org
-Subject: Re: [PATCH v8 0/2] fTPM: firmware TPM running in TEE
-Message-ID: <20190715090525.GA28477@apalos>
-References: <20190705204746.27543-1-sashal@kernel.org>
- <20190711200858.xydm3wujikufxjcw@linux.intel.com>
- <20190711201059.GA18260@apalos>
- <20190712033758.vnwrmdxvz2kplt65@linux.intel.com>
+        id S1729603AbfGOJpu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 15 Jul 2019 05:45:50 -0400
+Received: from mga17.intel.com ([192.55.52.151]:12295 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729487AbfGOJpu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 15 Jul 2019 05:45:50 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Jul 2019 02:45:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,493,1557212400"; 
+   d="scan'208";a="190510098"
+Received: from pertsuli-mobl.ger.corp.intel.com (HELO localhost) ([10.252.36.224])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Jul 2019 02:45:42 -0700
+Date:   Mon, 15 Jul 2019 12:45:41 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Oshri Alkobi <oshrialkoby85@gmail.com>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        IS20 Oshri Alkoby <oshri.alkoby@nuvoton.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        AP MS30 Linux Kernel community 
+        <linux-kernel@vger.kernel.org>, linux-integrity@vger.kernel.org,
+        gcwilson@us.ibm.com, kgoldman@us.ibm.com, nayna@linux.vnet.ibm.com,
+        IS30 Dan Morav <Dan.Morav@nuvoton.com>,
+        eyal.cohen@nuvoton.com
+Subject: Re: [PATCH v2 0/2] char: tpm: add new driver for tpm i2c ptp
+Message-ID: <20190715094541.zjqxainggjuvjxd2@linux.intel.com>
+References: <20190628151327.206818-1-oshrialkoby85@gmail.com>
+ <8e6ca8796f229c5dc94355437351d7af323f0c56.camel@linux.intel.com>
+ <79e8bfd2-2ed1-cf48-499c-5122229beb2e@infineon.com>
+ <CAM9mBwJC2QD5-gV1eJUDzC2Fnnugr-oCZCoaH2sT_7ktFDkS-Q@mail.gmail.com>
+ <45603af2fc8374a90ef9e81a67083395cc9c7190.camel@linux.intel.com>
+ <6e7ff1b958d84f6e8e585fd3273ef295@NTILML02.nuvoton.com>
+ <CAP6Zq1hPo9dG71YFyr7z9rjmi-DvoUZJOme4+2uqsfO+7nH+HQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190712033758.vnwrmdxvz2kplt65@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <CAP6Zq1hPo9dG71YFyr7z9rjmi-DvoUZJOme4+2uqsfO+7nH+HQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 12, 2019 at 06:37:58AM +0300, Jarkko Sakkinen wrote:
-> On Thu, Jul 11, 2019 at 11:10:59PM +0300, Ilias Apalodimas wrote:
-> > Will report back any issues when we start using it on real hardware
-> > rather than QEMU
-> > 
-> > Thanks
-> > /Ilias
-> 
-> That would awesome. PR is far away so there is time to add more
-> tested-by's. Thanks.
-> 
+On Mon, Jul 15, 2019 at 11:08:47AM +0300, Tomer Maimon wrote:
+>    Thanks for your feedback and sorry for the late response.
+>
+>    Due to the amount of work required to handle this technical feedback and
+>    project constraints we need to put this task on hold for the near future.
+>
+>    In the meantime, anyone from the community is welcome to take over this
+>    code and handle the re-design for the benefit of the entire TPM community.
 
-I tested the basic fucntionality on QEMU and with the code only built as a
-module. You can add my tested-by on this if you want
+Ok, so there is already driver for this called tpm_tis_core.
 
-> /Jarkko
+So you go and create a new module, whose name given the framework of
+things that we already have deployed, is destined to be tpm_tis_i2c.
+
+Then you roughly implement a new physical layer by using  a callback
+interface provided to you by tpm_tis_core.
+
+The so called re-design was already addressed by Alexander [1].
+
+How hard can it be seriously?
+
+[1] https://lkml.org/lkml/2019/7/4/331
+
+/Jarkko
