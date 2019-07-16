@@ -2,65 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E646AB2F
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2019 16:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6D86ACDE
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2019 18:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387864AbfGPO7R (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jul 2019 10:59:17 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:46680 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728695AbfGPO7R (ORCPT
+        id S2388006AbfGPQdj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jul 2019 12:33:39 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:35204 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725926AbfGPQdj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jul 2019 10:59:17 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 9300172CA65;
-        Tue, 16 Jul 2019 17:59:15 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 574734A4A29;
-        Tue, 16 Jul 2019 17:59:15 +0300 (MSK)
-Date:   Tue, 16 Jul 2019 17:59:15 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] ima-evm-utils: Fix null dereference from file2bin
- to memcpy
-Message-ID: <20190716145915.s5cng2cr5eb46ulx@altlinux.org>
-Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-References: <20190715200553.22403-1-vt@altlinux.org>
- <1563288418.4539.228.camel@linux.ibm.com>
+        Tue, 16 Jul 2019 12:33:39 -0400
+Received: from [10.200.157.26] (unknown [131.107.160.154])
+        by linux.microsoft.com (Postfix) with ESMTPSA id CE98C20B7185;
+        Tue, 16 Jul 2019 09:33:38 -0700 (PDT)
+Subject: Re: [PATCH 0/2] [IMA] Measure public keys of BuiltIn Trusted Keys
+From:   Lakshmi <nramas@linux.microsoft.com>
+To:     Ken Goldman <kgold@linux.ibm.com>,
+        Linux Integrity <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     James Morris <jamorris@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        Balaji Balasubramanyan <balajib@linux.microsoft.com>
+References: <f9f2a5ab-a880-7131-d0ca-fb3b72571478@linux.microsoft.com>
+ <71cc3b9b-d045-8a69-5917-96b4c5654b16@linux.ibm.com>
+ <5b160458-b4b8-470c-0123-8ce5525c5cb0@linux.microsoft.com>
+ <f6ce1524-d1ee-08b4-d7bc-f3337a804b98@linux.ibm.com>
+ <c1abe7e6-5f92-2359-19d0-024af65dd8a9@linux.microsoft.com>
+ <372c86da-8bc6-25a9-1a35-c9b7f35a789c@linux.microsoft.com>
+Message-ID: <48871b9b-ede1-f2f7-aa51-3e563e966a47@linux.microsoft.com>
+Date:   Tue, 16 Jul 2019 09:33:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <1563288418.4539.228.camel@linux.ibm.com>
-User-Agent: NeoMutt/20171215-106-ac61c7
+In-Reply-To: <372c86da-8bc6-25a9-1a35-c9b7f35a789c@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi,
-
-On Tue, Jul 16, 2019 at 10:46:58AM -0400, Mimi Zohar wrote:
-> On Mon, 2019-07-15 at 23:05 +0300, Vitaly Chikunov wrote:
-> > file2bin() may return NULL, which is set to tmp, which is passed to
-> > memcpy. Add explicit check for it.
-> > 
-> > Fixes: CID 229904.
+On 6/25/19 1:27 PM, Lakshmi wrote:
+> On 6/18/19 10:52 AM, Jordan Hand wrote:
 > 
-> Other than the missing tag, this and the other patches look good.
+> Hi Ken,
+> 
+> Did we (Jordan and I) address your concerns related to this patch set?
+> 
+> If you have more questions\concerns I'll be happy to respond.
+> 
+> Thanks,
+>   -lakshmi
 
-Sorry I forgot to add Signed-off-by tag. You may add to all these commits:
+Hi Ken\Mimi,
 
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+I wanted to check again - Did Jordan and I address your concerns?
+Do you have more questions\concerns related to this patch set?
+
+Please let me know.
 
 Thanks,
-
-> 
-> thanks!
-> 
-> Mimi
+  -lakshmi
