@@ -2,100 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8299B6C058
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2019 19:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBE86C0E2
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2019 20:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729455AbfGQRZr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jul 2019 13:25:47 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:34694 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727426AbfGQRZq (ORCPT
+        id S1727419AbfGQSTt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jul 2019 14:19:49 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45722 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727289AbfGQSTs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jul 2019 13:25:46 -0400
-Received: by mail-qt1-f193.google.com with SMTP id k10so24240918qtq.1
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jul 2019 10:25:46 -0700 (PDT)
+        Wed, 17 Jul 2019 14:19:48 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r1so11228793pfq.12
+        for <linux-integrity@vger.kernel.org>; Wed, 17 Jul 2019 11:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=y3o2MAlK+hZOMib5Fac+i/rBUtNgoVpu1Wg0Rqwft/s=;
-        b=DPUUic0kZrEK5De+KOwCI8bpRhFk2KK+ZmZlM56sbOTXqLpgamN78Ag4v9yfk6ha5H
-         u56XFFBXun8Schg9m40q0aRD2TZKdDv6ESpYsvcSnWZlYcj8d3dqiezrrkRbhSia2lp9
-         dHXiPKsYyKU0FUUIgxbSAoWxn1HlLfjp1eDs0N+OKcO7v/o02m1mKt2yWQKe+y1vftDT
-         Ul4Fptj5c/ybCtg0baZpgxb8VXQAxp5Yr4RjuRk8bN9mnLM/XwsmkahyzrVSnV32wX9X
-         7RreQ6Z5ik0HALFGwOkE+iqeLPK+SS2TK1e0Kn463bPTaiT0vevLxAfRm64mKxbO1aRz
-         AsoQ==
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:to:cc:from:user-agent:date;
+        bh=cncYQI8yvDmuwH2hjd5wGFOP7/lMDoigmo4c0xr02Ao=;
+        b=cdVNP8PeWqL5uNhZX3uc7ty7kC23aPPjSM0yYBgOR1h9uidYTgCVCkvhnXr1gpu0Cj
+         vfjC3bXkq7QGouQ/VNi2Z93tCm393g7QL+19UhaAcWNbQU3rvmaV5z4GxBB4l8TqNr6q
+         WY14CwpS1Oq1f2VPV+Gco3DGthjbRpiF1nRzI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=y3o2MAlK+hZOMib5Fac+i/rBUtNgoVpu1Wg0Rqwft/s=;
-        b=o4JXJ3LACBNQtLkJeoyHlpSBVLhy58u4qUtrccs+Y41KRuAJL+XwqCd+WbiSTBjfMm
-         oCi+DnZF/3hixzvGRM/h0IjW+l/uXYtRCHEA6nSsYpb7Se6oYjguGBMJn1Uj0Uz3JBR1
-         J5FyKtSd09tu5YcNcUfFD/bYZcuZOingdU2+h17FdiBFBoSiULThEO1IXmscuQ3lVCWl
-         v52D/4w69xx9l2WZI28Vll8RqhoLF/0N5lN8JoILTwAzCThPB96M4BFBcMIbWb2vnwOv
-         DrFSc4VwRHL08SjLr1eGbrUcvzxZVSaDk8uCulQ3a9S1Vxoapj8gPomreRkjVzlT4dZr
-         edqA==
-X-Gm-Message-State: APjAAAWAIOotUY5TwuMmOK+NNSMKNJy8Ve20snzK/XkHqJ1xhnr/jLOG
-        WLSkyNipIQZ6A30AkF5RU2oh5Q==
-X-Google-Smtp-Source: APXvYqyHlN70UeDzu9ByPw4va7icrC2D2fl5bsL6h+PrR1CAEoD2mQjrGDPi5Cc4I4CDuQroOsYYWw==
-X-Received: by 2002:a0c:b909:: with SMTP id u9mr29849022qvf.10.1563384345959;
-        Wed, 17 Jul 2019 10:25:45 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-55-100.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.55.100])
-        by smtp.gmail.com with ESMTPSA id w16sm10407356qki.36.2019.07.17.10.25.45
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 17 Jul 2019 10:25:45 -0700 (PDT)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1hnngW-0006Ts-Uq; Wed, 17 Jul 2019 14:25:44 -0300
-Date:   Wed, 17 Jul 2019 14:25:44 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:to:cc:from
+         :user-agent:date;
+        bh=cncYQI8yvDmuwH2hjd5wGFOP7/lMDoigmo4c0xr02Ao=;
+        b=pvsUZiJTOb98cUq6qpTLnyRwHE9EaEGG456iiUFfpv7g6RtOxssTb4wqD3kJmfuyOm
+         B6BcfV+/LTQgupq0dRoNt3W+N09/U1/tgaKN0ftp+wDq/etSWm6gmiMe6ZrSFy58TEYD
+         OtW5QjDM1cPBk0Ncljt7KAalQLDj25Jpf3O873YVFhNU07R7c2XD9oZtQYkNZBssW3B8
+         s6Ejsu5I/9bn9qmyZcFKJWQSRVq/X0yq1yb24u3Uhn1D2RziG1dZoFuK7Y0ul1buvUzd
+         rtAa0Ohy0R7UEjGF+BLAe8eTgQdZv+9Fv46TQl+E5EbddveCqqxiBvzIcoTzXmLZ2BzP
+         sKtA==
+X-Gm-Message-State: APjAAAUgr3mL4wD/zNd3chiixxofmrgKuFsBuJtuwAj17UiAKMD6wY+M
+        6VijVMjPGrN0BC3ZkPthhZ96Gg==
+X-Google-Smtp-Source: APXvYqwPbGaNe9vdMOp7CaO912oCLkRHsArhScKvUkPpOmz+FGcYmsosK7KFSH9Lp6vFjPBeZ8LoCg==
+X-Received: by 2002:a63:553:: with SMTP id 80mr44071454pgf.280.1563387588135;
+        Wed, 17 Jul 2019 11:19:48 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id y23sm26258823pfo.106.2019.07.17.11.19.46
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 17 Jul 2019 11:19:46 -0700 (PDT)
+Message-ID: <5d2f66c2.1c69fb81.de220.6eb6@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <7daa4875-eddd-518d-2622-754ccfbfc421@infineon.com>
+References: <20190716224518.62556-1-swboyd@chromium.org> <20190716224518.62556-4-swboyd@chromium.org> <7daa4875-eddd-518d-2622-754ccfbfc421@infineon.com>
+Subject: Re: [PATCH v2 3/6] tpm_tis_spi: add max xfer size
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Andrey Pronin <apronin@chromium.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Peter Huewe <peterhuewe@gmx.de>
+Cc:     Andrey Pronin <apronin@chromium.org>, linux-kernel@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-integrity@vger.kernel.org,
         Duncan Laurie <dlaurie@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH v2 5/6] tpm: add driver for cr50 on SPI
-Message-ID: <20190717172544.GL12119@ziepe.ca>
-References: <20190716224518.62556-1-swboyd@chromium.org>
- <20190716224518.62556-6-swboyd@chromium.org>
- <f824e3ab-ae2f-8c2f-549a-16569b10966e@infineon.com>
- <20190717122558.GF12119@ziepe.ca>
- <5d2f51a7.1c69fb81.6495.fbe8@mx.google.com>
- <20190717165628.GJ12119@ziepe.ca>
- <5d2f5570.1c69fb81.f3832.3c3f@mx.google.com>
- <20190717171216.GK12119@ziepe.ca>
- <5d2f594d.1c69fb81.baadd.d81d@mx.google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d2f594d.1c69fb81.baadd.d81d@mx.google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Guenter Roeck <groeck@chromium.org>,
+        Dmitry Torokhov <dtor@chromium.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Wed, 17 Jul 2019 11:19:45 -0700
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jul 17, 2019 at 10:22:20AM -0700, Stephen Boyd wrote:
-> Quoting Jason Gunthorpe (2019-07-17 10:12:16)
-> > On Wed, Jul 17, 2019 at 10:05:52AM -0700, Stephen Boyd wrote:
-> > > 
-> > > Yes. The space savings comes from having the extra module 'cr50.ko' that
-> > > holds almost nothing at all when the two drivers are modules.
-> > 
-> > I'm not sure it is an actual savings, there is alot of minimum
-> > overhead and alignment to have a module in the first place.
-> > 
-> 
-> Yeah. I'm pretty sure that's why it's a bool and not a tristate for this
-> symbol. A module has overhead that is not necessary for these little
-> helpers.
+Quoting Alexander Steffen (2019-07-17 01:07:11)
+> On 17.07.2019 00:45, Stephen Boyd wrote:
+> > From: Andrey Pronin <apronin@chromium.org>
+> >=20
+> > Reject burstcounts larger than 64 bytes reported by tpm.
+>=20
+> This is not the correct thing to do here. To quote the specification:
+>=20
+> "burstCount is defined as the number of bytes that can be written to or=20
+> read from the data FIFO by the software without incurring a wait state."
+> (https://trustedcomputinggroup.org/wp-content/uploads/TCG_PC_Client_Platf=
+orm_TPM_Profile_PTP_2.0_r1.03_v22.pdf=20
+> Page 84)
 
-Linking driver stuff like that to the kernel is pretty hacky, IMHO
+Thanks for pointing this out. I think we were using this SPI driver for
+cr50 but then we wrote our own version of this driver with the
+differences required to make cr50 work properly. I suspect we can drop
+this patch, but we've been carrying it forward for a while now, so I'll
+have to check with Andrey and others to make sure it's safe to remove.
 
-Jason
+>=20
+> If the FIFO contains 1k of data, it is completely valid for the TPM to=20
+> report that as its burstCount, there is no need to arbitrarily limit it.
+>=20
+> Also, burstCount is a property of the high-level TIS protocol, that=20
+> should not really care whether the low-level transfers are done via LPC=20
+> or SPI (or I2C). Since tpm_tis_spi can only transfer 64 bytes at a time, =
+
+> it is its job to split larger transfers (which it does perfectly fine).=20
+> This also has the advantage that burstCount needs only to be read once,=20
+> and then we can do 16 SPI transfers in a row to read that 1k of data.=20
+> With your change, it will read 64 bytes, then read burstCount again,=20
+> before reading the next 64 bytes and so on. This unnecessarily limits=20
+> performance.
+>=20
+> Maybe you can describe the problem you're trying to solve in more=20
+> detail, so that a better solution can be found, since this is clearly=20
+> something not intended by the spec.
+
+Right. The burst count we read from cr50 is never going to be larger
+than max_xfer_size that we specify in the cr50 driver here, so this is
+probably all useless and we can even drop the patch before this one that
+adds support for this burst count capping feature.
+
