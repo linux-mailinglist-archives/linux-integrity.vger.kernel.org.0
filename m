@@ -2,95 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0133A6B780
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2019 09:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584C26B7D7
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2019 10:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbfGQHsG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jul 2019 03:48:06 -0400
-Received: from mail.dice.at ([217.10.52.18]:48619 "EHLO smtp2.infineon.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725912AbfGQHsG (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jul 2019 03:48:06 -0400
+        id S1725951AbfGQIHP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jul 2019 04:07:15 -0400
+Received: from smtp11.infineon.com ([217.10.52.105]:52686 "EHLO
+        smtp11.infineon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbfGQIHO (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 17 Jul 2019 04:07:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1563349685; x=1594885685;
+  t=1563350834; x=1594886834;
   h=subject:to:cc:references:from:message-id:date:
    mime-version:in-reply-to:content-transfer-encoding;
-  bh=jLjRAVqSTndz5dE6IWJsxuPEGZffP354eiHvBjyHn60=;
-  b=avRws9aS+PBEzH0udYw4KuxPTCpQ6xRWzXpNLbhC9+FVc18hmg9MLigw
-   6YkDbk3ATtE4d/1cQu1UiJ1j4omja+rNu8myaGz98BUBUN5nSpcsw9l1L
-   RFrjiIKb7mv67fKEE/BBGDR/9b2CekIyFs9XflPb3+EJWt7ns62i/omaZ
-   Y=;
-IronPort-SDR: 0RGylmZ7q/+cpH2mZauRiES1hBIz41p8bF2nW1YB4JTnC/l8OARGfVjKX8yMHZXJDYRe/3Ldg5
- OwlU/xuq9lmg==
+  bh=4z8rxvDFgVBdoxBzX19X1thxGhp4/RCT8vCaBQ2HjL4=;
+  b=ljc+WDQOcA2UhEbHr5rorNGC3DJD/0xDeMSSRtkEey+fT64LXfG0cog4
+   udRK/4YdA/fYktxi9A1sVpoOC6C57FgFqdQ6l1HWa6QazwaDFuouch7Eh
+   wyx0tj2UNHwHPEkAKQ/eEjpGt5qmLtT/cGi81GU+lCDV+qdZgIA5TiGf2
+   w=;
+IronPort-SDR: mcBktrLRJoHDdVZv9GPazml1hMWVNYSfuqiIsCjRKVtImCc0b1m2JqHtkJ3ZVDppWMbcZWEY3S
+ pHsDC3CyCj49pYxQ0xfdNOnrSAVLob2r+wXUvid8wKYgjXEwBvaHabON+mqJVvFnZTX5v3SFRk
+ XDcU05JRi1TbLTmy5nN2Pj6lwqt6mdEU7q6NiTmy2hWF6kHB8EzM8E7LyAzp4I/IGC7DcEVRLg
+ 0CwVSzw8TjI3TR3j5A+wOaUZKpdpIdi9ifGCPyDNOWwSPTaQgK5yjYNx2TRKTAGFfxzs1JhmFq
+ o6I=
 X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6000,8403,9320"; a="6748731"
+X-IronPort-AV: E=McAfee;i="6000,8403,9320"; a="128087258"
 X-IronPort-AV: E=Sophos;i="5.64,273,1559512800"; 
-   d="scan'208";a="6748731"
-Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2019 09:48:03 +0200
+   d="scan'208";a="128087258"
+Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
+  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2019 10:07:13 +0200
 Received: from MUCSE708.infineon.com (MUCSE708.infineon.com [172.23.7.82])
-        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
-        Wed, 17 Jul 2019 09:48:03 +0200 (CEST)
+        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
+        Wed, 17 Jul 2019 10:07:12 +0200 (CEST)
 Received: from [10.154.32.63] (172.23.8.247) by MUCSE708.infineon.com
  (172.23.7.82) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1591.10; Wed, 17
- Jul 2019 09:48:03 +0200
-Subject: Re: [PATCH v2 0/2] char: tpm: add new driver for tpm i2c ptp
-To:     Tomer Maimon <tmaimon77@gmail.com>,
-        Oshri Alkobi <oshrialkoby85@gmail.com>,
+ Jul 2019 10:07:12 +0200
+Subject: Re: [PATCH v2 3/6] tpm_tis_spi: add max xfer size
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        IS20 Oshri Alkoby <oshri.alkoby@nuvoton.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        AP MS30 Linux Kernel community 
-        <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <gcwilson@us.ibm.com>, <kgoldman@us.ibm.com>,
-        <nayna@linux.vnet.ibm.com>, IS30 Dan Morav <Dan.Morav@nuvoton.com>,
-        <eyal.cohen@nuvoton.com>
-References: <20190628151327.206818-1-oshrialkoby85@gmail.com>
- <8e6ca8796f229c5dc94355437351d7af323f0c56.camel@linux.intel.com>
- <79e8bfd2-2ed1-cf48-499c-5122229beb2e@infineon.com>
- <CAM9mBwJC2QD5-gV1eJUDzC2Fnnugr-oCZCoaH2sT_7ktFDkS-Q@mail.gmail.com>
- <45603af2fc8374a90ef9e81a67083395cc9c7190.camel@linux.intel.com>
- <6e7ff1b958d84f6e8e585fd3273ef295@NTILML02.nuvoton.com>
- <CAP6Zq1hPo9dG71YFyr7z9rjmi-DvoUZJOme4+2uqsfO+7nH+HQ@mail.gmail.com>
+CC:     Andrey Pronin <apronin@chromium.org>,
+        <linux-kernel@vger.kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-integrity@vger.kernel.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Dmitry Torokhov <dtor@chromium.org>
+References: <20190716224518.62556-1-swboyd@chromium.org>
+ <20190716224518.62556-4-swboyd@chromium.org>
 From:   Alexander Steffen <Alexander.Steffen@infineon.com>
-Message-ID: <bccd2ebf-75b1-d02f-9283-4ffd7aa36616@infineon.com>
-Date:   Wed, 17 Jul 2019 09:48:02 +0200
+Message-ID: <7daa4875-eddd-518d-2622-754ccfbfc421@infineon.com>
+Date:   Wed, 17 Jul 2019 10:07:11 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <CAP6Zq1hPo9dG71YFyr7z9rjmi-DvoUZJOme4+2uqsfO+7nH+HQ@mail.gmail.com>
+In-Reply-To: <20190716224518.62556-4-swboyd@chromium.org>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE708.infineon.com (172.23.7.82) To
+X-ClientProxiedBy: MUCSE714.infineon.com (172.23.7.94) To
  MUCSE708.infineon.com (172.23.7.82)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 15.07.2019 10:08, Tomer Maimon wrote:
-> Hi Jarkko and All,
+On 17.07.2019 00:45, Stephen Boyd wrote:
+> From: Andrey Pronin <apronin@chromium.org>
 > 
-> Thanks for your feedback and sorry for the late response.
-> 
-> 
-> Due to the amount of work required to handle this technical feedback and 
-> project constraints we need to put this task on hold for the near future.
-> 
-> In the meantime, anyone from the community is welcome to take over this 
-> code and handle the re-design for the benefit of the entire TPM community.
+> Reject burstcounts larger than 64 bytes reported by tpm.
 
-Too bad you lack the time to finish this.
+This is not the correct thing to do here. To quote the specification:
 
-If somebody else were to pick it up, would it be possible for you to 
-provide a couple of TPMs that implement this protocol, so that it can be 
-properly tested?
+"burstCount is defined as the number of bytes that can be written to or 
+read from the data FIFO by the software without incurring a wait state."
+(https://trustedcomputinggroup.org/wp-content/uploads/TCG_PC_Client_Platform_TPM_Profile_PTP_2.0_r1.03_v22.pdf 
+Page 84)
+
+If the FIFO contains 1k of data, it is completely valid for the TPM to 
+report that as its burstCount, there is no need to arbitrarily limit it.
+
+Also, burstCount is a property of the high-level TIS protocol, that 
+should not really care whether the low-level transfers are done via LPC 
+or SPI (or I2C). Since tpm_tis_spi can only transfer 64 bytes at a time, 
+it is its job to split larger transfers (which it does perfectly fine). 
+This also has the advantage that burstCount needs only to be read once, 
+and then we can do 16 SPI transfers in a row to read that 1k of data. 
+With your change, it will read 64 bytes, then read burstCount again, 
+before reading the next 64 bytes and so on. This unnecessarily limits 
+performance.
+
+Maybe you can describe the problem you're trying to solve in more 
+detail, so that a better solution can be found, since this is clearly 
+something not intended by the spec.
 
 Alexander
