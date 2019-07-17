@@ -2,111 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE656BFDB
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2019 18:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7E56BFDE
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2019 18:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729284AbfGQQtp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jul 2019 12:49:45 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:40498 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727331AbfGQQto (ORCPT
+        id S1729476AbfGQQuO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jul 2019 12:50:14 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:43392 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726620AbfGQQuN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jul 2019 12:49:44 -0400
-Received: by mail-pf1-f195.google.com with SMTP id p184so11111169pfp.7
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jul 2019 09:49:44 -0700 (PDT)
+        Wed, 17 Jul 2019 12:50:13 -0400
+Received: by mail-qt1-f194.google.com with SMTP id w17so24043316qto.10
+        for <linux-integrity@vger.kernel.org>; Wed, 17 Jul 2019 09:50:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:to:cc:from:user-agent:date;
-        bh=5Fl5Dlb5En2+Wq+o2LvoJPZA7FE64mKY2RfJ/AGSAjg=;
-        b=M/7Z9+gDOEv7M8nlkeWZGNUlHiLiUkiZxwSc3n4jfdPNWM8nq23uOTzE9YrocVC6mA
-         ZBT/EdbYeCiH/878aDGvzDeCSjfwdU+F4dPXbRJzJt20lFphSw1EcL5j1ZXjvx8gS26h
-         0rbXKJHS3Sy2SUDezNgRx+/x694+ydI33ktK0=
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XH5XQyD8DWa/SvKRgH4wl/Y2fbyFH6tgDRoMo0vIhhY=;
+        b=gB1evY8iTPI6wfVzoXC+7BeHJtHWmdvHLjC8PnnCntCDln0SaiT2PXdqU5NYqnog3Z
+         XVB5Wt3nYRL6NuSs0CgYTHiJ91zMm8i5A81ZY8q2OAH0hiFpILG6UlKl8OSyLTGD8cSQ
+         YM5FKH8IAtdRDsohoy5a1a677OGbxx4mc8fRnGAL8Lbiu5KCl/VjYZj8EzP6gqX1kiim
+         wTToDzhldW1cNFTwySsulv3c3NlWbkEyOcNVJVKWhqMsSNqXgDc0qMh1+GEkaEQYT1pJ
+         mWlsw/RSPEDQI3q7NbArQVrjeu9lm/gboJDHJdWa+ZNgQDYbIFqtoRXzJIActcXSbrEI
+         M54w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:to:cc:from
-         :user-agent:date;
-        bh=5Fl5Dlb5En2+Wq+o2LvoJPZA7FE64mKY2RfJ/AGSAjg=;
-        b=qlBRfNHPWd+TfDqJAkMPvVbWK6fyPBBFRITK/zAG1UxnHzNV3DQQqKV9gN36desk1O
-         PTHACU3M45j76BLkes+k4L+5GKnZvWb8R3SUNnqYi36so0ASVUV4m2tcsLrcKCAqgSaN
-         t6tjYMq6yQUaEtgi8naOVQtGUDcxuIlV5oSC4gAYbCsjdP6tb5MT00uqJbPeQojSMdZa
-         RVWKeYXA9mL+tGiUamEWZkRjqjH1a7TBSc29/np5suhVqC1IGeKXAnwmCFvRF2yzyvS/
-         eD2fygmqE31TZvIFCcmnXJHHZzWIltZ7CuKb2jiRu/tTVeEb2tjDkud3qCk8ExUqDbEN
-         wbZA==
-X-Gm-Message-State: APjAAAWvshYDJIfCscZ90Jrwo1zddMhmXllTO5CfbsJ94F2+VfPsFQlB
-        jCl8ub4O/EqJGwJC06q1LWjVXQ==
-X-Google-Smtp-Source: APXvYqw4Ife04xsJ26z+6JtibYR39+gVPDdH9hC1m6zoSzlbBqMUpf4Yyn8uq1P4TAOm/LcO5jxK7g==
-X-Received: by 2002:a63:b919:: with SMTP id z25mr41988841pge.201.1563382184041;
-        Wed, 17 Jul 2019 09:49:44 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id r1sm24176724pgv.70.2019.07.17.09.49.43
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 17 Jul 2019 09:49:43 -0700 (PDT)
-Message-ID: <5d2f51a7.1c69fb81.6495.fbe8@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190717122558.GF12119@ziepe.ca>
-References: <20190716224518.62556-1-swboyd@chromium.org> <20190716224518.62556-6-swboyd@chromium.org> <f824e3ab-ae2f-8c2f-549a-16569b10966e@infineon.com> <20190717122558.GF12119@ziepe.ca>
-Subject: Re: [PATCH v2 5/6] tpm: add driver for cr50 on SPI
-To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XH5XQyD8DWa/SvKRgH4wl/Y2fbyFH6tgDRoMo0vIhhY=;
+        b=ZWjOhcULmZL2UqGwKX+vmRa6TjSNf1oov4IRDnPiWcZ3SVjWlcXlrGJeXezGA5P0gq
+         KPGy2cYpG6jHc5NC/MYv35susATy4bw4ATvgYpc50JHkJkf2qrfBt/1OBuYlaQSR3Kux
+         MxCzXeKF/jy7S7MVxGoZSKhvO6uxwG67luFdXTPSn8jT5WBfYVpF4lbugbKkvnEhPmhG
+         KqhhReT54m3wEWH8niZ/qKhTytHvEJE+K8s2OrhlN6OittlyqwZ0Nsws7IZmUnvpA+45
+         szKtA11ikH+dE5OUAekkwS8hHGVyrXF6WL/AFVb8JVn31SGROEuAtvz/elQEB9V42TGw
+         LIiQ==
+X-Gm-Message-State: APjAAAWYCG/uZx3Ry9hUyHF0Y6YVu2fdYwECMPo6bLNFBAwbe3avoYFc
+        Dt9xwGdXrqgxuO2oODTwucx2WQ==
+X-Google-Smtp-Source: APXvYqyYhM0GPsQWijd96/WpMOLz0ToqCooX486o7mCVsOebCRI1o1wjyQCLw53tIr7eh92YQVXtDQ==
+X-Received: by 2002:a0c:acfb:: with SMTP id n56mr29627290qvc.87.1563382212870;
+        Wed, 17 Jul 2019 09:50:12 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-55-100.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.55.100])
+        by smtp.gmail.com with ESMTPSA id k38sm14299332qtk.10.2019.07.17.09.50.12
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 17 Jul 2019 09:50:12 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1hnn87-0000MT-Q3; Wed, 17 Jul 2019 13:50:11 -0300
+Date:   Wed, 17 Jul 2019 13:50:11 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Stephen Boyd <swboyd@chromium.org>
 Cc:     Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Andrey Pronin <apronin@chromium.org>,
         linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-integrity@vger.kernel.org,
+        Andrey Pronin <apronin@chromium.org>,
         Duncan Laurie <dlaurie@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Wed, 17 Jul 2019 09:49:42 -0700
+        Guenter Roeck <groeck@chromium.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: Re: [PATCH v2 1/6] hwrng: core: Freeze khwrng thread during suspend
+Message-ID: <20190717165011.GI12119@ziepe.ca>
+References: <20190716224518.62556-1-swboyd@chromium.org>
+ <20190716224518.62556-2-swboyd@chromium.org>
+ <20190717113956.GA12119@ziepe.ca>
+ <5d2f4ff9.1c69fb81.3c314.ab00@mx.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d2f4ff9.1c69fb81.3c314.ab00@mx.google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Quoting Jason Gunthorpe (2019-07-17 05:25:58)
-> On Wed, Jul 17, 2019 at 02:00:06PM +0200, Alexander Steffen wrote:
-> > On 17.07.2019 00:45, Stephen Boyd wrote:
-> > > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> > > index 88a3c06fc153..b7028bfa6f87 100644
-> > > +++ b/drivers/char/tpm/Kconfig
-> > > @@ -114,6 +114,22 @@ config TCG_ATMEL
-> > >       will be accessible from within Linux.  To compile this driver
-> > >       as a module, choose M here; the module will be called tpm_atmel.
-> > > +config TCG_CR50
-> > > +   bool
-> > > +   ---help---
-> > > +     Common routines shared by drivers for Cr50-based devices.
-> > > +
-> >=20
-> > Is it a common pattern to add config options that are not useful on the=
-ir
-> > own? When would I ever enable TCG_CR50 without also enabling TCG_CR50_S=
-PI?
-> > Why can't you just use TCG_CR50_SPI for everything?
->=20
-> This is an internal kconfig symbol, it isn't seen by the user, which
-> is a pretty normal pattern.
->=20
-> But I don't think the help should be included (since it cannot be
-> seen), and I'm pretty sure it should be a tristate
+On Wed, Jul 17, 2019 at 09:42:32AM -0700, Stephen Boyd wrote:
+> Quoting Jason Gunthorpe (2019-07-17 04:39:56)
+> > On Tue, Jul 16, 2019 at 03:45:13PM -0700, Stephen Boyd wrote:
+> > > The hwrng_fill() function can run while devices are suspending and
+> > > resuming. If the hwrng is behind a bus such as i2c or SPI and that bus
+> > > is suspended, the hwrng may hang the bus while attempting to add some
+> > > randomness. It's been observed on ChromeOS devices with suspend-to-idle
+> > > (s2idle) and an i2c based hwrng that this kthread may run and ask the
+> > > hwrng device for randomness before the i2c bus has been resumed.
+> > 
+> > You mean the TPM here right?
+> 
+> In my case yes, but in general it isn't the TPM.
+> 
+> > 
+> > Should we be more careful in the TPM code to check if the TPM is
+> > suspended before trying to use it, rather than muck up callers?
+> > 
+> 
+> Given that it's not just a TPM issue I don't see how checking in the TPM
+> is going to fix this problem. It's better to not try to get random bytes
+> from the hwrng when the device could be suspended.
 
-Good point. I'll fix it.
+I think the same comment would apply to all the other suspend capable
+hwrngs...
 
->=20
-> But overall, it might be better to just double link the little helper:
->=20
-> obj-$(CONFIG_TCG_CR50_SPI) +=3D cr50.o cr50_spi.o
-> obj-$(CONFIG_TCG_CR50_I2C) +=3D cr50.o cr50_i2c.o
->=20
-> As we don't actually ever expect to load both modules into the same
-> system
->=20
+It just seems weird to do this, what about all the other tpm API
+users? Do they have a racy problem with suspend too?
 
-Sometimes we have both drivers built-in. To maintain the tiny space
-savings I'd prefer to just leave this as helpless and tristate.
-
+Jason
