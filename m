@@ -2,79 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C596C30B
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 00:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82ABC6C37C
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 01:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727543AbfGQWRR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jul 2019 18:17:17 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:42043 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727606AbfGQWRO (ORCPT
+        id S1728049AbfGQXOu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jul 2019 19:14:50 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:43786 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727804AbfGQXOu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jul 2019 18:17:14 -0400
-Received: by mail-pg1-f193.google.com with SMTP id t132so11820168pgb.9
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jul 2019 15:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:to:cc:from:user-agent:date;
-        bh=ZErEVvJ8JYXA3iwdIxlVCJMYGvo02bLUG34j47nMryY=;
-        b=mcIblSSWf5ikEHP4UXr6+aGbHZ5mkPRydF0lr7zooN55M3vESs8uRUSSEpDlP7iK8U
-         B59fdDgrNmpranJaP1PUCiwe/DOBSjKgXnclVGjM4ZK2dyRnuTnuxaI7KD2Fyf9s20mi
-         6vy1W2HOQv81gXfyJKbN/M9dAyW77DYZx6UpU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:to:cc:from
-         :user-agent:date;
-        bh=ZErEVvJ8JYXA3iwdIxlVCJMYGvo02bLUG34j47nMryY=;
-        b=UFX/QUqOU32+TtwRjVqhVIxiEXS9bpwKJxXFzDST0gNE7p+pc+Pf1XNBvMYUuo1jDS
-         9nAfSZaBj0YsKE8ZwtmpSdMd0z59fP9faLqFUHwKWdmaaB26vnYOWOLoJNb2MZi778Je
-         iSxy+oOrG5p3kzy3xlRpJ7LLCEnslefXBa8iTp2EKH0306FBl8KcTIyScbByrorlKFUE
-         I7eUImGx9C/DJW/jyvMjQMwvom9LUMKzQCTXLLXyJxw30DDqy6qpbyNyiqWInMTA0/xX
-         fAf62atm+nC9O92TEANcxvd5xac6RHFxM8F/HcQbl5UWMtbqAB495+AXwo8X6SoxHLAz
-         Ew5w==
-X-Gm-Message-State: APjAAAWJDimvCJ4IeDMWLMn4uufvXBYis+EyfYIEPdx5CjX+C/wGXXoC
-        Nycqq8c7eSFha03gbOCPI4cSHA==
-X-Google-Smtp-Source: APXvYqw7c35PhAMwlt994MttKuE5saXN+0D4ZP4wuF6qoM7MrH3ycgcxlhbEujoUx2xHbLj0H/dvXQ==
-X-Received: by 2002:a17:90a:20a2:: with SMTP id f31mr46455908pjg.90.1563401833612;
-        Wed, 17 Jul 2019 15:17:13 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id r75sm27395801pfc.18.2019.07.17.15.17.12
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 17 Jul 2019 15:17:12 -0700 (PDT)
-Message-ID: <5d2f9e68.1c69fb81.6e01c.27fe@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        Wed, 17 Jul 2019 19:14:50 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 0F75672CCD6;
+        Thu, 18 Jul 2019 02:14:47 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id DF0264A4A29;
+        Thu, 18 Jul 2019 02:14:46 +0300 (MSK)
+Date:   Thu, 18 Jul 2019 02:14:46 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v2] ima_evm_utils: erroneous "verification failed: 0
+ (invalid padding)" message
+Message-ID: <20190717231446.au4kjxvrgkyajn2v@altlinux.org>
+Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+References: <1563327389-28193-1-git-send-email-zohar@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <5d2f955d.1c69fb81.35877.7018@mx.google.com>
-References: <20190716224518.62556-1-swboyd@chromium.org> <20190716224518.62556-6-swboyd@chromium.org> <f824e3ab-ae2f-8c2f-549a-16569b10966e@infineon.com> <5d2f7daf.1c69fb81.c0b13.c3d4@mx.google.com> <5d2f955d.1c69fb81.35877.7018@mx.google.com>
-Subject: Re: [PATCH v2 5/6] tpm: add driver for cr50 on SPI
-To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Cc:     Andrey Pronin <apronin@chromium.org>, linux-kernel@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Wed, 17 Jul 2019 15:17:12 -0700
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <1563327389-28193-1-git-send-email-zohar@linux.ibm.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Quoting Stephen Boyd (2019-07-17 14:38:36)
-> @@ -131,6 +303,8 @@ static int tpm_tis_spi_transfer(struct tpm_tis_data *=
-data, u32 addr, u16 len,
-> =20
->  exit:
->         spi_bus_unlock(phy->spi_device->master);
-> +       phy->last_access =3D jiffies;
-> +       mutex_lock(&phy->time_track_mutex);
+Mimi,
 
-This should be mutex_unlock().
+On Tue, Jul 16, 2019 at 09:36:29PM -0400, Mimi Zohar wrote:
+> When keys are not provided, the default key is used to verify the file
+> signature, resulting in this erroneous message.  Before using the default
+> key to verify the file signature, verify the keyid is correct.
+> 
+> This patch adds the public key from the default x509 certificate onto the
+> "public_keys" list.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  src/evmctl.c    |  9 ++++++---
+>  src/libimaevm.c | 17 +++++++----------
+>  2 files changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index 61808d276419..65cc5bd12bad 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -879,8 +879,10 @@ static int cmd_verify_ima(struct command *cmd)
+>  	char *file = g_argv[optind++];
+>  	int err;
+>  
+> -	if (params.keyfile)
+> +	if (params.keyfile)	/* Support multiple public keys */
+>  		init_public_keys(params.keyfile);
+> +	else			/* assume read pubkey from x509 cert */
+> +		init_public_keys("/etc/keys/x509_evm.der");
+>  
+>  	errno = 0;
+>  	if (!file) {
+> @@ -1602,9 +1604,10 @@ static int ima_measurement(const char *file)
+>  		return -1;
+>  	}
+>  
+> -	/* Support multiple public keys */
+> -	if (params.keyfile)
+> +	if (params.keyfile)	/* Support multiple public keys */
+>  		init_public_keys(params.keyfile);
+> +	else			/* assume read pubkey from x509 cert */
+> +		init_public_keys("/etc/keys/x509_evm.der");
+>  
+>  	while (fread(&entry.header, sizeof(entry.header), 1, fp)) {
+>  		ima_extend_pcr(pcr[entry.header.pcr], entry.header.digest,
+> diff --git a/src/libimaevm.c b/src/libimaevm.c
+> index ae487f9fe36c..afd21051b09a 100644
+> --- a/src/libimaevm.c
+> +++ b/src/libimaevm.c
+> @@ -302,6 +302,9 @@ EVP_PKEY *read_pub_pkey(const char *keyfile, int x509)
+>  	X509 *crt = NULL;
+>  	EVP_PKEY *pkey = NULL;
+>  
+> +	if (!keyfile)
+> +		return NULL;
+> +
+>  	fp = fopen(keyfile, "r");
+>  	if (!fp) {
+>  		log_err("Failed to open keyfile: %s\n", keyfile);
+> @@ -569,27 +572,21 @@ static int get_hash_algo_from_sig(unsigned char *sig)
+>  int verify_hash(const char *file, const unsigned char *hash, int size, unsigned char *sig,
+>  		int siglen)
+>  {
+> -	const char *key;
+> -	int x509;
+> +	const char *key = NULL;
+>  	verify_hash_fn_t verify_hash;
+>  
+>  	/* Get signature type from sig header */
+>  	if (sig[0] == DIGSIG_VERSION_1) {
+>  		verify_hash = verify_hash_v1;
+> +
+>  		/* Read pubkey from RSA key */
+> -		x509 = 0;
+> +		if (!params.keyfile)
+> +			key = "/etc/keys/pubkey_evm.pem";
 
+There is only three code path reaching here:
+
+1. From cmd_ima_measurement - calls init_public_keys.
+2. From cmd_verify_ima - calls init_public_keys.
+3. From cmd_verify_evm - probably it should call init_public_keys too.
+
+Otherwise this change looks, good. When `--key` is not specified load
+default public key from x509_evm.der, but for signature v1 pass
+pubkey_evm.pem into verify_hash_v1.
+
+As a consequence, verify_hash_v2 should remove code handling `keyfile`
+argument (maybe with argument itself) because it's now always NULL, and
+just call find_keyid.
+
+Thanks,
+
+>  	} else if (sig[0] == DIGSIG_VERSION_2) {
+>  		verify_hash = verify_hash_v2;
+> -		/* Read pubkey from x509 cert */
+> -		x509 = 1;
+>  	} else
+>  		return -1;
+>  
+> -	/* Determine what key to use for verification*/
+> -	key = params.keyfile ? : x509 ?
+> -			"/etc/keys/x509_evm.der" :
+> -			"/etc/keys/pubkey_evm.pem";
+> -
+>  	return verify_hash(file, hash, size, sig, siglen, key);
+>  }
+>  
+> -- 
+> 2.7.5
