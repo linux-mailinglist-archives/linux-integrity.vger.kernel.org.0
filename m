@@ -2,146 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F88B6D175
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 17:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE0C6D249
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 18:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727685AbfGRP7b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 Jul 2019 11:59:31 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:36380 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726040AbfGRP7b (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 Jul 2019 11:59:31 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id C3BEA72CCD5;
-        Thu, 18 Jul 2019 18:59:29 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id B38C74A4A29;
-        Thu, 18 Jul 2019 18:59:29 +0300 (MSK)
-Date:   Thu, 18 Jul 2019 18:59:29 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v2] ima_evm_utils: erroneous "verification failed: 0
- (invalid padding)" message
-Message-ID: <20190718155929.jystftv4oemwx5r4@altlinux.org>
-Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-References: <1563327389-28193-1-git-send-email-zohar@linux.ibm.com>
- <20190717231446.au4kjxvrgkyajn2v@altlinux.org>
+        id S2390055AbfGRQrR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 Jul 2019 12:47:17 -0400
+Received: from mail.dice.at ([217.10.52.18]:8089 "EHLO smtp2.infineon.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727708AbfGRQrR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 18 Jul 2019 12:47:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1563468436; x=1595004436;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=OilpCINQlJ1Ia1M9So3ozgyl/1+paFeash3IP9Fq88I=;
+  b=jUQU5IqSAkFMJanTXUC6Inprsa6Z+Dbsx4vuzhNk+Al/m++DCRSSSZvs
+   67sLeBLL6o7MVXGNxvkKKAmNgiuGBgujOUHHOmpAJliLIv2S3SaHBwB/Q
+   9BlYmjRBRacTpzoi11BRu1WttGQDoW/JPCJtS2ZvzJyHKrZb0RqP9heFf
+   U=;
+IronPort-SDR: wWDE+YOCDVSGwKN4aaA4IAK3vzAyij4qICrart3MqkiQBJ94n4NH60gKb+2uYxu+CyICuNEZKN
+ a1Fr2jrq1LSg==
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6000,8403,9322"; a="6918400"
+X-IronPort-AV: E=Sophos;i="5.64,278,1559512800"; 
+   d="scan'208";a="6918400"
+Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
+  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2019 18:47:15 +0200
+Received: from MUCSE708.infineon.com (MUCSE708.infineon.com [172.23.7.82])
+        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
+        Thu, 18 Jul 2019 18:47:14 +0200 (CEST)
+Received: from [10.154.32.63] (172.23.8.247) by MUCSE708.infineon.com
+ (172.23.7.82) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1591.10; Thu, 18
+ Jul 2019 18:47:14 +0200
+Subject: Re: [PATCH v2 5/6] tpm: add driver for cr50 on SPI
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+CC:     Andrey Pronin <apronin@chromium.org>,
+        <linux-kernel@vger.kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-integrity@vger.kernel.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+References: <20190716224518.62556-1-swboyd@chromium.org>
+ <20190716224518.62556-6-swboyd@chromium.org>
+ <f824e3ab-ae2f-8c2f-549a-16569b10966e@infineon.com>
+ <5d2f7daf.1c69fb81.c0b13.c3d4@mx.google.com>
+From:   Alexander Steffen <Alexander.Steffen@infineon.com>
+Message-ID: <ef7195c5-4475-3cb1-6ded-e16d885d1a55@infineon.com>
+Date:   Thu, 18 Jul 2019 18:47:14 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <20190717231446.au4kjxvrgkyajn2v@altlinux.org>
-User-Agent: NeoMutt/20171215-106-ac61c7
+In-Reply-To: <5d2f7daf.1c69fb81.c0b13.c3d4@mx.google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE704.infineon.com (172.23.7.78) To
+ MUCSE708.infineon.com (172.23.7.82)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi,
-
-On Thu, Jul 18, 2019 at 02:14:46AM +0300, Vitaly Chikunov wrote:
-> On Tue, Jul 16, 2019 at 09:36:29PM -0400, Mimi Zohar wrote:
-> > When keys are not provided, the default key is used to verify the file
-> > signature, resulting in this erroneous message.  Before using the default
-> > key to verify the file signature, verify the keyid is correct.
-> > 
-> > This patch adds the public key from the default x509 certificate onto the
-> > "public_keys" list.
-> > 
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >  src/evmctl.c    |  9 ++++++---
-> >  src/libimaevm.c | 17 +++++++----------
-> >  2 files changed, 13 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/src/evmctl.c b/src/evmctl.c
-> > index 61808d276419..65cc5bd12bad 100644
-> > --- a/src/evmctl.c
-> > +++ b/src/evmctl.c
-> > @@ -879,8 +879,10 @@ static int cmd_verify_ima(struct command *cmd)
-> >  	char *file = g_argv[optind++];
-> >  	int err;
-> >  
-> > -	if (params.keyfile)
-> > +	if (params.keyfile)	/* Support multiple public keys */
-> >  		init_public_keys(params.keyfile);
-> > +	else			/* assume read pubkey from x509 cert */
-> > +		init_public_keys("/etc/keys/x509_evm.der");
-> >  
-> >  	errno = 0;
-> >  	if (!file) {
-> > @@ -1602,9 +1604,10 @@ static int ima_measurement(const char *file)
-> >  		return -1;
-> >  	}
-> >  
-> > -	/* Support multiple public keys */
-> > -	if (params.keyfile)
-> > +	if (params.keyfile)	/* Support multiple public keys */
-> >  		init_public_keys(params.keyfile);
-> > +	else			/* assume read pubkey from x509 cert */
-> > +		init_public_keys("/etc/keys/x509_evm.der");
-> >  
-> >  	while (fread(&entry.header, sizeof(entry.header), 1, fp)) {
-> >  		ima_extend_pcr(pcr[entry.header.pcr], entry.header.digest,
-> > diff --git a/src/libimaevm.c b/src/libimaevm.c
-> > index ae487f9fe36c..afd21051b09a 100644
-> > --- a/src/libimaevm.c
-> > +++ b/src/libimaevm.c
-> > @@ -302,6 +302,9 @@ EVP_PKEY *read_pub_pkey(const char *keyfile, int x509)
-> >  	X509 *crt = NULL;
-> >  	EVP_PKEY *pkey = NULL;
-> >  
-> > +	if (!keyfile)
-> > +		return NULL;
-> > +
-> >  	fp = fopen(keyfile, "r");
-> >  	if (!fp) {
-> >  		log_err("Failed to open keyfile: %s\n", keyfile);
-> > @@ -569,27 +572,21 @@ static int get_hash_algo_from_sig(unsigned char *sig)
-> >  int verify_hash(const char *file, const unsigned char *hash, int size, unsigned char *sig,
-> >  		int siglen)
-> >  {
-> > -	const char *key;
-> > -	int x509;
-> > +	const char *key = NULL;
-> >  	verify_hash_fn_t verify_hash;
-> >  
-> >  	/* Get signature type from sig header */
-> >  	if (sig[0] == DIGSIG_VERSION_1) {
-> >  		verify_hash = verify_hash_v1;
-> > +
-> >  		/* Read pubkey from RSA key */
-> > -		x509 = 0;
-> > +		if (!params.keyfile)
-> > +			key = "/etc/keys/pubkey_evm.pem";
+On 17.07.2019 21:57, Stephen Boyd wrote:
+> Quoting Alexander Steffen (2019-07-17 05:00:06)
+>> On 17.07.2019 00:45, Stephen Boyd wrote:
+>>> From: Andrey Pronin <apronin@chromium.org>
+>>>
+>>> +static unsigned short rng_quality = 1022;
+>>> +module_param(rng_quality, ushort, 0644);
+>>> +MODULE_PARM_DESC(rng_quality,
+>>> +              "Estimation of true entropy, in bits per 1024 bits.");
+>>
+>> What is the purpose of this parameter? None of the other TPM drivers
+>> have it.
 > 
-> There is only three code path reaching here:
+> I think the idea is to let users override the quality if they decide
+> that they don't want to use the default value specified in the driver.
+
+But isn't this something that applies to all TPMs, not only cr50? So 
+shouldn't this parameter be added to one of the global modules (tpm? 
+tpm_tis_core?) instead? Or do all low-level drivers (tpm_tis, 
+tpm_tis_spi, ...) need this parameter to provide a consistent interface 
+for the user?
+
+>> This copies a lot of code from tpm_tis_spi, but then slightly changes
+>> some things, without really explaining why.
 > 
-> 1. From cmd_ima_measurement - calls init_public_keys.
-> 2. From cmd_verify_ima - calls init_public_keys.
-> 3. From cmd_verify_evm - probably it should call init_public_keys too.
+> The commit text has some explanations. Here's the copy/paste from above:
 > 
-> Otherwise this change looks, good. When `--key` is not specified load
-> default public key from x509_evm.der, but for signature v1 pass
-> pubkey_evm.pem into verify_hash_v1.
+>>>    - need to ensure a certain delay between spi transactions, or else
+>>>      the chip may miss some part of the next transaction;
+>>>    - if there is no spi activity for some time, it may go to sleep,
+>>>      and needs to be waken up before sending further commands;
+>>>    - access to vendor-specific registers.
 > 
-> As a consequence, verify_hash_v2 should remove code handling `keyfile`
-> argument (maybe with argument itself) because it's now always NULL, and
-> just call find_keyid.
+> Do you want me to describe something further?
+> 
+>> For example, struct
+>> cr50_spi_phy contains both tx_buf and rx_buf, whereas tpm_tis_spi uses a
+>> single iobuf, that is allocated via devm_kmalloc instead of being part
+>> of the struct. Maybe the difference matters, maybe not, who knows?
+> 
+> Ok. Are you asking if this is a full-duplex SPI device?
 
-Btw, there is strange code in evmctl.c:cmd_convert():
+No, this was meant as an example for the previous question. As far as I 
+understood it, cr50 is basically compliant to the spec implemented by 
+tpm_tis_spi, but needs special handling in some cases. Therefore, I'd 
+expect a driver for cr50 to look exactly like tpm_tis_spi except for the 
+special bits here and there. The way buffers are allocated within the 
+driver is probably not something that should differ because of the TPM chip.
 
-        params.x509 = 0;
-
-        inkey = g_argv[optind++];
-        if (!inkey) {
-                inkey = params.x509 ? "/etc/keys/x509_evm.der" :
-                                      "/etc/keys/pubkey_evm.pem";
-        }
-
-Assigning zero to params.x509 makes `params.x509 ? ... : ...` redundant.
-
-Thanks,
-
-
+Alexander
