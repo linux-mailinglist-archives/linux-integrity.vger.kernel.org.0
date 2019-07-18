@@ -2,189 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BD86D289
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 19:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944BE6D28F
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 19:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727767AbfGRRJT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 Jul 2019 13:09:19 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25032 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726040AbfGRRJT (ORCPT
+        id S1727817AbfGRRKG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 Jul 2019 13:10:06 -0400
+Received: from smtp11.infineon.com ([217.10.52.105]:53366 "EHLO
+        smtp11.infineon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726040AbfGRRKG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 Jul 2019 13:09:19 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6IH76Mx119783
-        for <linux-integrity@vger.kernel.org>; Thu, 18 Jul 2019 13:09:18 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ttvup86qe-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 18 Jul 2019 13:09:17 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 18 Jul 2019 18:09:15 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 18 Jul 2019 18:09:13 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6IH9CrX55640078
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Jul 2019 17:09:12 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 63A9D11C064;
-        Thu, 18 Jul 2019 17:09:12 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBB8011C069;
-        Thu, 18 Jul 2019 17:09:11 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.110.122])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Jul 2019 17:09:11 +0000 (GMT)
-Subject: Re: [PATCH v2] ima_evm_utils: erroneous "verification failed: 0
- (invalid padding)" message
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org
-Date:   Thu, 18 Jul 2019 13:09:00 -0400
-In-Reply-To: <20190718155929.jystftv4oemwx5r4@altlinux.org>
-References: <1563327389-28193-1-git-send-email-zohar@linux.ibm.com>
-         <20190717231446.au4kjxvrgkyajn2v@altlinux.org>
-         <20190718155929.jystftv4oemwx5r4@altlinux.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19071817-4275-0000-0000-0000034E80A4
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19071817-4276-0000-0000-0000385E9AAF
-Message-Id: <1563469740.4539.313.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-18_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907180180
+        Thu, 18 Jul 2019 13:10:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1563469806; x=1595005806;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=uYQpB2SpaLcCphJei8uoWMZ+wuxVK+eGJl7as7wxcWw=;
+  b=Getiwo6HDC7X5jixTRKAVPTKCsDAWsqxSb+rARyA7ZjqhgteZBvIINMQ
+   2lqYkXtOrQ/tQSuAuU0xpKcEdzx4BtGrCevIMGF+wwo1WarOA4xYejtSU
+   KwUCR/rXnRg507sAoFSErZDRjLtWA7vLhqwzP+Evu/naNQXHWPrf+7hn2
+   g=;
+IronPort-SDR: rHd4GE8rbjWoeoPfI8EXQQ+1NixxkdbxyuchgG3iLzVAzCtyI6EmxtNfwLf0/axLZVK91DdNNe
+ KOTgfRoSQDSWC0H3Zlt/ixVA2s4UQoJ+ZCg/P8U7KnnU2GZ/Za0Dew6+mb4lSVe6NhjWgG5cJw
+ sfFI1hCHCZ3mnovB2izFm6sv48SKfMRA9XmQJhh2NHrBEq/n2ZAAey8j9da1CS1j8Tj0nkXx8Q
+ HZ1tXBRa51n23zbZ1uRDo2XLZvGKTknDxpuy8jcQ0Owd97YUF/AK6JbbFifZcqZ/t20rXXvdnw
+ 0iE=
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6000,8403,9322"; a="128253562"
+X-IronPort-AV: E=Sophos;i="5.64,278,1559512800"; 
+   d="scan'208";a="128253562"
+Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
+  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2019 19:10:04 +0200
+Received: from MUCSE708.infineon.com (MUCSE708.infineon.com [172.23.7.82])
+        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
+        Thu, 18 Jul 2019 19:10:03 +0200 (CEST)
+Received: from [10.154.32.63] (172.23.8.247) by MUCSE708.infineon.com
+ (172.23.7.82) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1591.10; Thu, 18
+ Jul 2019 19:10:03 +0200
+Subject: Re: [PATCH v2 0/2] char: tpm: add new driver for tpm i2c ptp
+To:     <Eyal.Cohen@nuvoton.com>, <jarkko.sakkinen@linux.intel.com>,
+        <tmaimon77@gmail.com>
+CC:     <oshrialkoby85@gmail.com>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+        <oshri.alkoby@nuvoton.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <gcwilson@us.ibm.com>, <kgoldman@us.ibm.com>,
+        <nayna@linux.vnet.ibm.com>, <Dan.Morav@nuvoton.com>,
+        <oren.tanami@nuvoton.com>
+References: <20190628151327.206818-1-oshrialkoby85@gmail.com>
+ <8e6ca8796f229c5dc94355437351d7af323f0c56.camel@linux.intel.com>
+ <79e8bfd2-2ed1-cf48-499c-5122229beb2e@infineon.com>
+ <CAM9mBwJC2QD5-gV1eJUDzC2Fnnugr-oCZCoaH2sT_7ktFDkS-Q@mail.gmail.com>
+ <45603af2fc8374a90ef9e81a67083395cc9c7190.camel@linux.intel.com>
+ <6e7ff1b958d84f6e8e585fd3273ef295@NTILML02.nuvoton.com>
+ <CAP6Zq1hPo9dG71YFyr7z9rjmi-DvoUZJOme4+2uqsfO+7nH+HQ@mail.gmail.com>
+ <20190715094541.zjqxainggjuvjxd2@linux.intel.com>
+ <9c8e216dbc4f43dbaa1701dc166b05e0@NTILML02.nuvoton.com>
+From:   Alexander Steffen <Alexander.Steffen@infineon.com>
+Message-ID: <548d3727-4a8f-38d4-2193-8a09cbae1e64@infineon.com>
+Date:   Thu, 18 Jul 2019 19:10:02 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <9c8e216dbc4f43dbaa1701dc166b05e0@NTILML02.nuvoton.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE714.infineon.com (172.23.7.94) To
+ MUCSE708.infineon.com (172.23.7.82)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2019-07-18 at 18:59 +0300, Vitaly Chikunov wrote:
-> Mimi,
+On 18.07.2019 14:51, Eyal.Cohen@nuvoton.com wrote:
+> Hi Jarkko and Alexander,
 > 
-> On Thu, Jul 18, 2019 at 02:14:46AM +0300, Vitaly Chikunov wrote:
-> > On Tue, Jul 16, 2019 at 09:36:29PM -0400, Mimi Zohar wrote:
-> > > When keys are not provided, the default key is used to verify the file
-> > > signature, resulting in this erroneous message.  Before using the default
-> > > key to verify the file signature, verify the keyid is correct.
-> > > 
-> > > This patch adds the public key from the default x509 certificate onto the
-> > > "public_keys" list.
-> > > 
-> > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > ---
-> > >  src/evmctl.c    |  9 ++++++---
-> > >  src/libimaevm.c | 17 +++++++----------
-> > >  2 files changed, 13 insertions(+), 13 deletions(-)
-> > > 
-> > > diff --git a/src/evmctl.c b/src/evmctl.c
-> > > index 61808d276419..65cc5bd12bad 100644
-> > > --- a/src/evmctl.c
-> > > +++ b/src/evmctl.c
-> > > @@ -879,8 +879,10 @@ static int cmd_verify_ima(struct command *cmd)
-> > >  	char *file = g_argv[optind++];
-> > >  	int err;
-> > >  
-> > > -	if (params.keyfile)
-> > > +	if (params.keyfile)	/* Support multiple public keys */
-> > >  		init_public_keys(params.keyfile);
-> > > +	else			/* assume read pubkey from x509 cert */
-> > > +		init_public_keys("/etc/keys/x509_evm.der");
-> > >  
-> > >  	errno = 0;
-> > >  	if (!file) {
-> > > @@ -1602,9 +1604,10 @@ static int ima_measurement(const char *file)
-> > >  		return -1;
-> > >  	}
-> > >  
-> > > -	/* Support multiple public keys */
-> > > -	if (params.keyfile)
-> > > +	if (params.keyfile)	/* Support multiple public keys */
-> > >  		init_public_keys(params.keyfile);
-> > > +	else			/* assume read pubkey from x509 cert */
-> > > +		init_public_keys("/etc/keys/x509_evm.der");
-> > >  
-> > >  	while (fread(&entry.header, sizeof(entry.header), 1, fp)) {
-> > >  		ima_extend_pcr(pcr[entry.header.pcr], entry.header.digest,
-> > > diff --git a/src/libimaevm.c b/src/libimaevm.c
-> > > index ae487f9fe36c..afd21051b09a 100644
-> > > --- a/src/libimaevm.c
-> > > +++ b/src/libimaevm.c
-> > > @@ -302,6 +302,9 @@ EVP_PKEY *read_pub_pkey(const char *keyfile, int x509)
-> > >  	X509 *crt = NULL;
-> > >  	EVP_PKEY *pkey = NULL;
-> > >  
-> > > +	if (!keyfile)
-> > > +		return NULL;
-> > > +
-> > >  	fp = fopen(keyfile, "r");
-> > >  	if (!fp) {
-> > >  		log_err("Failed to open keyfile: %s\n", keyfile);
-> > > @@ -569,27 +572,21 @@ static int get_hash_algo_from_sig(unsigned char *sig)
-> > >  int verify_hash(const char *file, const unsigned char *hash, int size, unsigned char *sig,
-> > >  		int siglen)
-> > >  {
-> > > -	const char *key;
-> > > -	int x509;
-> > > +	const char *key = NULL;
-> > >  	verify_hash_fn_t verify_hash;
-> > >  
-> > >  	/* Get signature type from sig header */
-> > >  	if (sig[0] == DIGSIG_VERSION_1) {
-> > >  		verify_hash = verify_hash_v1;
-> > > +
-> > >  		/* Read pubkey from RSA key */
-> > > -		x509 = 0;
-> > > +		if (!params.keyfile)
-> > > +			key = "/etc/keys/pubkey_evm.pem";
-> > 
-> > There is only three code path reaching here:
-> > 
-> > 1. From cmd_ima_measurement - calls init_public_keys.
-> > 2. From cmd_verify_ima - calls init_public_keys.
-> > 3. From cmd_verify_evm - probably it should call init_public_keys too.
-> > 
-> > Otherwise this change looks, good. When `--key` is not specified load
-> > default public key from x509_evm.der, but for signature v1 pass
-> > pubkey_evm.pem into verify_hash_v1.
-> > 
-> > As a consequence, verify_hash_v2 should remove code handling `keyfile`
-> > argument (maybe with argument itself) because it's now always NULL, and
-> > just call find_keyid.
-> 
-> Btw, there is strange code in evmctl.c:cmd_convert():
-> 
->         params.x509 = 0;
-> 
->         inkey = g_argv[optind++];
->         if (!inkey) {
->                 inkey = params.x509 ? "/etc/keys/x509_evm.der" :
->                                       "/etc/keys/pubkey_evm.pem";
->         }
-> 
-> Assigning zero to params.x509 makes `params.x509 ? ... : ...` redundant.
+> We have made an additional code review on the TPM TIS core driver, it looks quite good and we can connect our new I2C driver to this layer.
 
-Agreed.  The commit description that introduced this code is quite
-brief, and makes no mention of this cmd_convert function.  The main
-purpose of the commit is to calculate the EVM signature based on
-different EVM metadata than what currently exists on the local
-filesystem.  Even with Matthew's portable & immutable EVM signatures,
-providing different EVM metadata is probably still needed.
+Great :) In the meantime, I've done some experiments creating an I2C 
+driver based on tpm_tis_core, see 
+https://patchwork.kernel.org/patch/11049363/ Please have a look at that 
+and provide your feedback (and/or use it as a basis for further 
+implementations).
 
-For this release, let's just clean up the code, but not remove
-cmd_convet().  For the next release, we'll consider deprecating or
-removing this and other code.
+> However, there are several differences between the SPI interface and the I2C interface that will require changes to the TIS core.
+> At a minimum we thought of:
+> 1. Handling TPM Localities in I2C is different
 
-Mimi
+It turned out not to be that different in the end, see the code 
+mentioned above and my comment here: 
+https://patchwork.kernel.org/cover/11049365/
 
+> 2. Handling I2C CRC - relevant only to I2C bus hence not supported today by TIS core
+
+That is completely optional, so there is no need to implement it in the 
+beginning. Also, do you expect a huge benefit from that functionality? 
+Are bit flips that much more likely on I2C compared to SPI, which has no 
+CRC at all, but still works fine?
+
+> 3. Handling Chip specific issues, since I2C implementation might be slightly different across the various TPM vendors
+
+Right, that seems similar to the cr50 issues 
+(https://lkml.org/lkml/2019/7/17/677), so there should probably be a 
+similar way to do it.
+
+> 4. Modify tpm_tis_send_data and tpm_tis_recv_data to work according the TCG Device Driver Guide (optimization on TPM_STS access and send/recv retry)
+
+Optimizations are always welcome, but I'd expect basic communication to 
+work already with the current code (though maybe not as efficiently as 
+possible).
+
+> Besides this, during development we might encounter additional differences between SPI and I2C.
+> 
+> We currently target to allocate an eng. to work on this on the second half of August with a goal to have the driver ready for the next kernel merge window.
+> 
+> Regards,
+> Eyal.
