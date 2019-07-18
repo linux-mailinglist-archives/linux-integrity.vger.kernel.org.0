@@ -2,91 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDEE6C3FC
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 03:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE066CD51
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 13:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbfGRBEx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jul 2019 21:04:53 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:39312 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727658AbfGRBEx (ORCPT
+        id S1727827AbfGRLZn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 Jul 2019 07:25:43 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39087 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726715AbfGRLZn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jul 2019 21:04:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=yL1QRBLgiuTEBo6M7mFjYzXgwvS+vJNgmxYl0NAvUEs=; b=mHmwAYFl8MnzVDFln77SJazjT
-        oG5816qIGlCpjSZhs/9XnQCOfSYlwVtXYOW5HMdXYm9LbZGcySnZMcwgB8bWSqJhJCXVwCtDUZsZb
-        iNl4jnQcWmBPS+dsT066VquHLTdR5nKRHs9iME5jtjDoWpnlMazXXDnEEQkEi/RHfLnPY+1HGDvY2
-        g1UNFh1LjyLbhELEYprPFOlU3PsIU+LLzZ9aBaavDDE3oQdrkmDXC/6QIDexd6G0U3ybh7xi3vDvF
-        RLXXYYXPnZKT9p1q9XVbL4vVv5yyBIBZBBrBDya9VpZqy4ZDKz0D7qTmyDdbJzpZ3IxfMdv7wCKBI
-        AG37BwH1w==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=[192.168.1.17])
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hnuql-0002QV-HP; Thu, 18 Jul 2019 01:04:47 +0000
-Subject: Re: [RFC PATCH v7 1/1] Add dm verity root hash pkcs7 sig validation.
-To:     Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
-        gmazyland@gmail.com
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, agk@redhat.com, snitzer@redhat.com,
-        dm-devel@redhat.com, jmorris@namei.org, scottsh@microsoft.com,
-        mdsakib@microsoft.com, mpatocka@redhat.com, ebiggers@google.com
-References: <20190718004615.16818-1-jaskarankhurana@linux.microsoft.com>
- <20190718004615.16818-2-jaskarankhurana@linux.microsoft.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <d057b88f-0a21-0843-1212-af46f67343a2@infradead.org>
-Date:   Wed, 17 Jul 2019 18:04:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20190718004615.16818-2-jaskarankhurana@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Thu, 18 Jul 2019 07:25:43 -0400
+Received: by mail-pl1-f194.google.com with SMTP id b7so13754697pls.6
+        for <linux-integrity@vger.kernel.org>; Thu, 18 Jul 2019 04:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=k3a2v4scLqCzIgsIewhCrR8or1GEYNGppEVY9Fy2O/U=;
+        b=M1FLy5Kk4LfikIbzpeaUWtN1zq1XlK5JvCef3h2YeRK38Wr6CrReh7qdmTSxBKd0tr
+         o+bCMkEycBSfB22Ym3qrIiJhVXMF9RRjehkyX4ib2C30YhMXPk/zH6IB8r7T/nzqnuEx
+         ldwsWbOg/J27MJz09b6pj/NMbBOco/WX3y3STg9Qgzjq5H3TaRXVvFHplilz8xmCFaRq
+         2SlV3Yy6NxfGr3rWKGOpKjJbtACX48g85y5OprttVWZBrMtKLjw8FkeXjowey0P+3cWN
+         oc/Yh0GZ+8n27tCHhwfoDVKKZ5PuL/GM+tRgRcQ9pLybCrQ79gy1bTYJ1liiVoE73HeL
+         VkSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=k3a2v4scLqCzIgsIewhCrR8or1GEYNGppEVY9Fy2O/U=;
+        b=fmbfjX26uOrctM1NrdSe27IHiimMWR3VEB9DV3u4pGoZa2QUGNiSR7WZNdbDQn9l4i
+         nNBosKo1/pcbN+bMYaP89nkvN/mejTOm6IzS/FMCZxKNdllAjn/b7LTGmuA5U4knkf2m
+         3qAs2B+0+Bzxgzl4G0jnERPkCyBZF1l/UNSAAyAFWAU7yn2h9hDnI2/A7rpxUESEMhla
+         E4lm5gMgivVfPw0oOjuDDWP/QZkz+331rJwjdZ1FVafDyhRE3vHRKOz/pVZVhk8Kuvk7
+         E24oiNHrukxRmbsIWCFkvjJxPmafu5n82hftU7o9bPT0i99vLYEaAF8bAsW8ph4I65Sr
+         kjog==
+X-Gm-Message-State: APjAAAVQK13oiftcEQTzzMLQTFworYR6WzQBzTuyJ/U2NwCrxP4Paj4f
+        kSmfCYCC9GjGhbnvSC0CD3WrVw==
+X-Google-Smtp-Source: APXvYqzQf4CQsiQAtlZs4mdLJM/AQwjnWt8JUhNrsglzHFXFxeb6/N9wuQp9kLw/Y9rgnv3leMPvBw==
+X-Received: by 2002:a17:902:9a04:: with SMTP id v4mr48096653plp.95.1563449142612;
+        Thu, 18 Jul 2019 04:25:42 -0700 (PDT)
+Received: from localhost.localdomain ([117.252.69.63])
+        by smtp.gmail.com with ESMTPSA id 3sm29648436pfg.186.2019.07.18.04.25.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 18 Jul 2019 04:25:41 -0700 (PDT)
+From:   Sumit Garg <sumit.garg@linaro.org>
+To:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
+Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jejb@linux.ibm.com,
+        jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
+        jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
+        ard.biesheuvel@linaro.org, daniel.thompson@linaro.org,
+        linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org,
+        Sumit Garg <sumit.garg@linaro.org>
+Subject: [RFC/RFT v2 0/2] KEYS: trusted: Add generic trusted keys framework
+Date:   Thu, 18 Jul 2019 16:54:44 +0530
+Message-Id: <1563449086-13183-1-git-send-email-sumit.garg@linaro.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
-Just a couple of minor nits:
+This patch-set is an outcome of discussion here [1].
 
-On 7/17/19 5:46 PM, Jaskaran Khurana wrote:
-> diff --git a/drivers/md/Kconfig b/drivers/md/Kconfig
-> index 3834332f4963..c2b04d226c90 100644
-> --- a/drivers/md/Kconfig
-> +++ b/drivers/md/Kconfig
-> @@ -490,6 +490,18 @@ config DM_VERITY
->  
->  	  If unsure, say N.
->  
-> +config DM_VERITY_VERIFY_ROOTHASH_SIG
-> +	def_bool n
+I have tested this framework with trusted keys support provided via TEE
+but I wasn't able to test it with a TPM device as I don't possess one. It
+would be really helpful if others could test this patch-set using a TPM
+device.
 
-It already defaults to n, so we usually try to omit that (don't repeat it).
+[1] https://www.mail-archive.com/linux-doc@vger.kernel.org/msg30591.html
 
-> +	bool "Verity data device root hash signature verification support"
-> +	depends on DM_VERITY
-> +	select SYSTEM_DATA_VERIFICATION
-> +	  help
+Changes in v2:
 
-"help" should only be indented by one tab (and not the extra 2 spaces).
+Split trusted keys abstraction patch for ease of review.
 
-> +	  The device mapper target created by DM-VERITY can be validated if the
-> +	  pre-generated tree of cryptographic checksums passed has a pkcs#7
-> +	  signature file that can validate the roothash of the tree.
-> +
-> +	  If unsure, say N.
-> +
->  config DM_VERITY_FEC
->  	bool "Verity forward error correction support"
->  	depends on DM_VERITY
+Sumit Garg (2):
+  KEYS: trusted: create trusted keys subsystem
+  KEYS: trusted: Add generic trusted keys framework
 
+ crypto/asymmetric_keys/asym_tpm.c                  |   2 +-
+ include/keys/trusted-type.h                        |  45 +++
+ include/keys/{trusted.h => trusted_tpm.h}          |  19 +-
+ security/keys/Makefile                             |   2 +-
+ security/keys/trusted-keys/Makefile                |   7 +
+ .../keys/{trusted.c => trusted-keys/trusted-tpm.c} | 347 ++++-----------------
+ security/keys/trusted-keys/trusted.c               | 343 ++++++++++++++++++++
+ 7 files changed, 458 insertions(+), 307 deletions(-)
+ rename include/keys/{trusted.h => trusted_tpm.h} (85%)
+ create mode 100644 security/keys/trusted-keys/Makefile
+ rename security/keys/{trusted.c => trusted-keys/trusted-tpm.c} (77%)
+ create mode 100644 security/keys/trusted-keys/trusted.c
 
-thanks.
 -- 
-~Randy
+2.7.4
+
