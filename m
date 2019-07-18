@@ -2,122 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 944BE6D28F
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 19:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E187A6D374
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2019 20:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727817AbfGRRKG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 Jul 2019 13:10:06 -0400
-Received: from smtp11.infineon.com ([217.10.52.105]:53366 "EHLO
-        smtp11.infineon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726040AbfGRRKG (ORCPT
+        id S1727928AbfGRSHh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 Jul 2019 14:07:37 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40505 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727812AbfGRSHg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 Jul 2019 13:10:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1563469806; x=1595005806;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=uYQpB2SpaLcCphJei8uoWMZ+wuxVK+eGJl7as7wxcWw=;
-  b=Getiwo6HDC7X5jixTRKAVPTKCsDAWsqxSb+rARyA7ZjqhgteZBvIINMQ
-   2lqYkXtOrQ/tQSuAuU0xpKcEdzx4BtGrCevIMGF+wwo1WarOA4xYejtSU
-   KwUCR/rXnRg507sAoFSErZDRjLtWA7vLhqwzP+Evu/naNQXHWPrf+7hn2
-   g=;
-IronPort-SDR: rHd4GE8rbjWoeoPfI8EXQQ+1NixxkdbxyuchgG3iLzVAzCtyI6EmxtNfwLf0/axLZVK91DdNNe
- KOTgfRoSQDSWC0H3Zlt/ixVA2s4UQoJ+ZCg/P8U7KnnU2GZ/Za0Dew6+mb4lSVe6NhjWgG5cJw
- sfFI1hCHCZ3mnovB2izFm6sv48SKfMRA9XmQJhh2NHrBEq/n2ZAAey8j9da1CS1j8Tj0nkXx8Q
- HZ1tXBRa51n23zbZ1uRDo2XLZvGKTknDxpuy8jcQ0Owd97YUF/AK6JbbFifZcqZ/t20rXXvdnw
- 0iE=
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6000,8403,9322"; a="128253562"
-X-IronPort-AV: E=Sophos;i="5.64,278,1559512800"; 
-   d="scan'208";a="128253562"
-Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2019 19:10:04 +0200
-Received: from MUCSE708.infineon.com (MUCSE708.infineon.com [172.23.7.82])
-        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
-        Thu, 18 Jul 2019 19:10:03 +0200 (CEST)
-Received: from [10.154.32.63] (172.23.8.247) by MUCSE708.infineon.com
- (172.23.7.82) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1591.10; Thu, 18
- Jul 2019 19:10:03 +0200
-Subject: Re: [PATCH v2 0/2] char: tpm: add new driver for tpm i2c ptp
-To:     <Eyal.Cohen@nuvoton.com>, <jarkko.sakkinen@linux.intel.com>,
-        <tmaimon77@gmail.com>
-CC:     <oshrialkoby85@gmail.com>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
-        <oshri.alkoby@nuvoton.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <gcwilson@us.ibm.com>, <kgoldman@us.ibm.com>,
-        <nayna@linux.vnet.ibm.com>, <Dan.Morav@nuvoton.com>,
-        <oren.tanami@nuvoton.com>
-References: <20190628151327.206818-1-oshrialkoby85@gmail.com>
- <8e6ca8796f229c5dc94355437351d7af323f0c56.camel@linux.intel.com>
- <79e8bfd2-2ed1-cf48-499c-5122229beb2e@infineon.com>
- <CAM9mBwJC2QD5-gV1eJUDzC2Fnnugr-oCZCoaH2sT_7ktFDkS-Q@mail.gmail.com>
- <45603af2fc8374a90ef9e81a67083395cc9c7190.camel@linux.intel.com>
- <6e7ff1b958d84f6e8e585fd3273ef295@NTILML02.nuvoton.com>
- <CAP6Zq1hPo9dG71YFyr7z9rjmi-DvoUZJOme4+2uqsfO+7nH+HQ@mail.gmail.com>
- <20190715094541.zjqxainggjuvjxd2@linux.intel.com>
- <9c8e216dbc4f43dbaa1701dc166b05e0@NTILML02.nuvoton.com>
-From:   Alexander Steffen <Alexander.Steffen@infineon.com>
-Message-ID: <548d3727-4a8f-38d4-2193-8a09cbae1e64@infineon.com>
-Date:   Thu, 18 Jul 2019 19:10:02 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 18 Jul 2019 14:07:36 -0400
+Received: by mail-pg1-f195.google.com with SMTP id w10so13247256pgj.7
+        for <linux-integrity@vger.kernel.org>; Thu, 18 Jul 2019 11:07:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:to:cc:from:user-agent:date;
+        bh=RfJJrqNKOzq6VDv125Le7JKqtC6afIuDcC8YnNoBhb4=;
+        b=G323DOy8Qtdxgqnd7ouF0tWuJJet9oIDHekAC7buRtLAYXheqmYkHWkOylaZi0o7d2
+         qo/89211ZPMF9WSjTsF43vMS2WPMhjTfwg6/4ihQSl+wBcSqAn9uSkfwwFi+RjQCnvLT
+         8UxiRvPCD8ia8FvvqBcEDkSjbnWanlOwldmzI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:to:cc:from
+         :user-agent:date;
+        bh=RfJJrqNKOzq6VDv125Le7JKqtC6afIuDcC8YnNoBhb4=;
+        b=SwygOmDYB7kGZPkIfO+3dD7NbgkknPQA/w4BHNDwcbq7yb3g2UjR9ejqSqIwxynaRZ
+         4R8iR/zHY+OhiiDnfiH90QcsB1TiMCiL5FHl5cezjGsuYUoe9nvArmImoSMvGwLIdPfV
+         mCH6A/E8vDUxo5Tze6s7L3+xPO6bkQuvutWLCsPrqlrigoNeJwZHjBiJlRdc9JRhqhsg
+         6J4RtuZzu0KASKkBNRngcn/U9T0r40umB2Kmbv/+LqDSY0ZiXSy37NcCAFv39+X0X7bx
+         XYJa44S9eUfyCouXwzvXS0MPnFl6QhgvSX2q9uXJBXnxbb4DRxtNdKiFJ7a0BvnvOkrq
+         x/BQ==
+X-Gm-Message-State: APjAAAVVtrYRtrdvhqi90pmH5UkR4msLSbBF76lLN+HkbKyigxUKhXql
+        7vpzHimjQ6il3oOErR6f5JBq5A==
+X-Google-Smtp-Source: APXvYqwm+2673851A87QEwYFYQPn7iAopuHOMaT0+cJdMe69eScqaIX4MdE7FGTTC71lBd2bhj+FAw==
+X-Received: by 2002:a63:b919:: with SMTP id z25mr48637711pge.201.1563473256202;
+        Thu, 18 Jul 2019 11:07:36 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id o14sm26175175pjp.29.2019.07.18.11.07.35
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 18 Jul 2019 11:07:35 -0700 (PDT)
+Message-ID: <5d30b567.1c69fb81.e6308.74a2@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <9c8e216dbc4f43dbaa1701dc166b05e0@NTILML02.nuvoton.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE714.infineon.com (172.23.7.94) To
- MUCSE708.infineon.com (172.23.7.82)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <ef7195c5-4475-3cb1-6ded-e16d885d1a55@infineon.com>
+References: <20190716224518.62556-1-swboyd@chromium.org> <20190716224518.62556-6-swboyd@chromium.org> <f824e3ab-ae2f-8c2f-549a-16569b10966e@infineon.com> <5d2f7daf.1c69fb81.c0b13.c3d4@mx.google.com> <ef7195c5-4475-3cb1-6ded-e16d885d1a55@infineon.com>
+Subject: Re: [PATCH v2 5/6] tpm: add driver for cr50 on SPI
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+Cc:     Andrey Pronin <apronin@chromium.org>, linux-kernel@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 18 Jul 2019 11:07:34 -0700
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 18.07.2019 14:51, Eyal.Cohen@nuvoton.com wrote:
-> Hi Jarkko and Alexander,
-> 
-> We have made an additional code review on the TPM TIS core driver, it looks quite good and we can connect our new I2C driver to this layer.
+Quoting Alexander Steffen (2019-07-18 09:47:14)
+> On 17.07.2019 21:57, Stephen Boyd wrote:
+> >=20
+> > I think the idea is to let users override the quality if they decide
+> > that they don't want to use the default value specified in the driver.
+>=20
+> But isn't this something that applies to all TPMs, not only cr50? So=20
+> shouldn't this parameter be added to one of the global modules (tpm?=20
+> tpm_tis_core?) instead? Or do all low-level drivers (tpm_tis,=20
+> tpm_tis_spi, ...) need this parameter to provide a consistent interface=20
+> for the user?
 
-Great :) In the meantime, I've done some experiments creating an I2C 
-driver based on tpm_tis_core, see 
-https://patchwork.kernel.org/patch/11049363/ Please have a look at that 
-and provide your feedback (and/or use it as a basis for further 
-implementations).
+Looking at commit 7a64c5597aa4 ("tpm: Allow tpm_tis drivers to set hwrng
+quality.") I think all low-level drivers need to set the hwrng quality
+somehow. I'm not sure how tpm_tis_spi will do that in general, but at
+least for cr50 we have derived this quality number.
 
-> However, there are several differences between the SPI interface and the I2C interface that will require changes to the TIS core.
-> At a minimum we thought of:
-> 1. Handling TPM Localities in I2C is different
+I can move this module parameter to tpm_tis_core.c, but then it will be
+a global hwrng quality override for whatever tpm is registered through
+tpm_tis_core instead of per-tpm driver. This is sort of a problem right
+now too if we have two tpm_tis_spi devices. I can drop this parameter if
+you want.
 
-It turned out not to be that different in the end, see the code 
-mentioned above and my comment here: 
-https://patchwork.kernel.org/cover/11049365/
+>=20
+> >=20
+> > Do you want me to describe something further?
+> >=20
+> >> For example, struct
+> >> cr50_spi_phy contains both tx_buf and rx_buf, whereas tpm_tis_spi uses=
+ a
+> >> single iobuf, that is allocated via devm_kmalloc instead of being part
+> >> of the struct. Maybe the difference matters, maybe not, who knows?
+> >=20
+> > Ok. Are you asking if this is a full-duplex SPI device?
+>=20
+> No, this was meant as an example for the previous question. As far as I=20
+> understood it, cr50 is basically compliant to the spec implemented by=20
+> tpm_tis_spi, but needs special handling in some cases. Therefore, I'd=20
+> expect a driver for cr50 to look exactly like tpm_tis_spi except for the =
 
-> 2. Handling I2C CRC - relevant only to I2C bus hence not supported today by TIS core
+> special bits here and there. The way buffers are allocated within the=20
+> driver is probably not something that should differ because of the TPM ch=
+ip.
+>=20
 
-That is completely optional, so there is no need to implement it in the 
-beginning. Also, do you expect a huge benefit from that functionality? 
-Are bit flips that much more likely on I2C compared to SPI, which has no 
-CRC at all, but still works fine?
+Ok.
 
-> 3. Handling Chip specific issues, since I2C implementation might be slightly different across the various TPM vendors
-
-Right, that seems similar to the cr50 issues 
-(https://lkml.org/lkml/2019/7/17/677), so there should probably be a 
-similar way to do it.
-
-> 4. Modify tpm_tis_send_data and tpm_tis_recv_data to work according the TCG Device Driver Guide (optimization on TPM_STS access and send/recv retry)
-
-Optimizations are always welcome, but I'd expect basic communication to 
-work already with the current code (though maybe not as efficiently as 
-possible).
-
-> Besides this, during development we might encounter additional differences between SPI and I2C.
-> 
-> We currently target to allocate an eng. to work on this on the second half of August with a goal to have the driver ready for the next kernel merge window.
-> 
-> Regards,
-> Eyal.
