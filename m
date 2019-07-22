@@ -2,86 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B74D6EC2F
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jul 2019 23:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2167C6FADF
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jul 2019 10:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728564AbfGSVok (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Jul 2019 17:44:40 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:59204 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727528AbfGSVok (ORCPT
+        id S1727892AbfGVIDi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jul 2019 04:03:38 -0400
+Received: from mail-vs1-f49.google.com ([209.85.217.49]:37415 "EHLO
+        mail-vs1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726236AbfGVIDi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Jul 2019 17:44:40 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 20F7E72CA65;
-        Sat, 20 Jul 2019 00:44:38 +0300 (MSK)
-Received: from beacon.altlinux.org (unknown [185.6.174.98])
-        by imap.altlinux.org (Postfix) with ESMTPSA id F0AFB4A4A29;
-        Sat, 20 Jul 2019 00:44:37 +0300 (MSK)
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH] ima-evm-utils: Show information about x509 cert when loading public key
-Date:   Sat, 20 Jul 2019 00:44:36 +0300
-Message-Id: <20190719214436.22871-1-vt@altlinux.org>
-X-Mailer: git-send-email 2.11.0
+        Mon, 22 Jul 2019 04:03:38 -0400
+Received: by mail-vs1-f49.google.com with SMTP id v6so25534307vsq.4
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Jul 2019 01:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=2CULTBdhJhGYX2ATvxajLqNULc6VJNmdRvoPb3WBE5w=;
+        b=Mtp6gid+H75KsBZhsv2krMm3hlQ2sC+MxfmAErf+2EeZj22JfF/5He+fm24555/d06
+         d5NgEkrw6XNxshKCGzWT0FkceBvkzL8H+ZCtqY0WOYF28zynVX14xzL7HJsBxZWcxWxP
+         3MS22hcejeMerpY4rxyqfJPqHT1WZ1etX0x2xkTJIMIC4f+9U0nVVGkogb1bTYxolxSf
+         hXVmBaEJ1xpKOe9EgbU1UBHMQRofBolUAh8Y//edXToXa9e6jV1UsPDu5mlHUMrvcAF0
+         oXmAdkpyWcvyCeMWJZLBz7SXDfrVD/1823e4cmy/iEJ3q+52fhMllF5QZq5rGHgEOncI
+         FB8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=2CULTBdhJhGYX2ATvxajLqNULc6VJNmdRvoPb3WBE5w=;
+        b=GPPBbYXQ7JCJZ07djw/0BwhQ9fiYGHZ3gmYNe3PRx/JDe5Z0Y1SLrgdo0ICDYP9nfM
+         lPDAFavOZnTNnri+HaBoT1Asmqz/ZMnCmM7Ap6jyBLiY3R721iA0GBvEa7mMdSK03BsW
+         z68b6S5zuD/Mq2i4HxWHLWkpgCo8RjoNweA7/SGKAemT+F5eXFGRKN5v4OHgWwORKeU6
+         MAtHrpopZAMlT5wnq5vB0gJ+feIKM1h6m+ToYhzVHkvUpSJoBL83OI6JbS25mwsTMn6A
+         TOLODv5gPIJwJGaHgPZqzGsz4uBUIM0PL71G8CzXnAtPITX8J9TYP4zrK67sZ98BRkkq
+         onqw==
+X-Gm-Message-State: APjAAAXHxx3B1MLeJFuHT5sPpUwBMM56Kd9TIvgNLxKDUWRDfD7Z9am4
+        7B6Uv0tH/L34FReA5bTXXpvy5y0jpvXvqPvv2hpqXsNZ
+X-Google-Smtp-Source: APXvYqw/pydSXE9UNtTAuVPmokSjZIjqlw8TDmOtrEOYqAFpulK/vEENokx3D5khXZHOizeQ0rC3nK6UZNCPLTtAK1c=
+X-Received: by 2002:a67:ce97:: with SMTP id c23mr39988873vse.78.1563782617184;
+ Mon, 22 Jul 2019 01:03:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Martin Townsend <mtownsend1973@gmail.com>
+Date:   Mon, 22 Jul 2019 09:03:25 +0100
+Message-ID: <CABatt_yn_yjw-MOUnrPDyg-ZQd1AjaHkcJKxNBo8STC9o2EGrw@mail.gmail.com>
+Subject: SMACK and keys
+To:     linux-integrity@vger.kernel.org
+Cc:     Casey Schaufler <casey@schaufler-ca.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-If verbose output is specified output some interesting x509 cert flags
-and if it have defined Digital Signature purpose of not. While these
-constraints are not enforced anywhere this may be useful for user to
-know.
+Hi,
 
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
----
- src/libimaevm.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+One of our developers has reported the following audit log entry when
+trying to add a key to the kernel's keyring when SMACK is enabled:
 
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index 2280add..1c85397 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -56,6 +56,7 @@
- #include <openssl/pem.h>
- #include <openssl/evp.h>
- #include <openssl/x509.h>
-+#include <openssl/x509v3.h>
- #include <openssl/err.h>
- 
- #include "imaevm.h"
-@@ -333,6 +334,26 @@ EVP_PKEY *read_pub_pkey(const char *keyfile, int x509)
- 				keyfile);
- 			goto out;
- 		}
-+
-+		if (params.verbose > LOG_INFO) {
-+			uint32_t flags;
-+
-+			flags = X509_get_extension_flags(crt);
-+			log_info("Load x509 cert: %s flags:", keyfile);
-+			if (flags & EXFLAG_CA)
-+				log_info(" CA");
-+			if (flags & EXFLAG_SI)
-+				log_info(" Self-issued");
-+			if (flags & EXFLAG_SS)
-+				log_info(" Self-signed");
-+			flags = X509_get_key_usage(crt);
-+			if (flags & KU_DIGITAL_SIGNATURE)
-+				log_info(" Digital-Signature");
-+			else
-+				log_info(" No-Digital-Signature");
-+			log_info("\n");
-+		}
-+
- 		pkey = X509_extract_key(crt);
- 		X509_free(crt);
- 		if (!pkey) {
--- 
-2.11.0
+Jul  9 09:33:23 mach-cw-rnet-ppm-1840 user.notice kernel: audit:
+type=1400 audit(1562664803.960:12): lsm=SMACK fn=smack_key_permission
+action=denied subject="programmingapp" object="_" requested=w pid=905
+comm="programmingapp" key_serial=98475196 key_desc="_ses"
 
+I had a quick look through the code in smack_lsm.c but can't see how
+I'm supposed to set a SMACK label for keys or keyrings.  Is it
+possible and if so how? We are running a 4.9 Kernel with not much
+chance of upgrading as it's a vendor kernel (linux-imx).  As it's an
+embedded system we are happy to hard code the SMACK labels into the
+kernel if this is possible?  or is it set to '_' by design and we
+should add the key whilst the process is a privileged state before the
+SMACK label for the process has been set?
+
+Many Thanks,
+Martin.
