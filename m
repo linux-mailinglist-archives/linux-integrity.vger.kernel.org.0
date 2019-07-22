@@ -2,159 +2,201 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C3470A83
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jul 2019 22:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3253870B17
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jul 2019 23:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727658AbfGVUT5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jul 2019 16:19:57 -0400
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:46352 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727647AbfGVUT5 (ORCPT
+        id S1730123AbfGVVPW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jul 2019 17:15:22 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36620 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729697AbfGVVPW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jul 2019 16:19:57 -0400
-Received: by mail-vk1-f193.google.com with SMTP id b64so8188270vke.13
-        for <linux-integrity@vger.kernel.org>; Mon, 22 Jul 2019 13:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/fQQOqpuBL8hV+B+XPOqQvDfq/URV4+cGeVScowINNY=;
-        b=qtTbc28DDACwZfMAeAkyaIw+wilv0M9Wtl4KW22DBIvFkkpXNPSPLrXaJcS1RA9vWJ
-         Zk84SEO72NshM+DfLKdsnA6QSUmHsDBpJAPsxzKr0SjPSly4ItF9k62U94e2zd4uWGtH
-         oqO8ijb04A0zrJ2f5eKT6Z+nJ9lPkIFpzo3fW0QOufFUwcQGX72Ye0Lgy82nI60b5H3K
-         /ljMCQKR48kX2KkYn/Y586aXpnz1l78MW2TV4vJ1qSy+A3pnOacTZozTZxmoFhrjq8kd
-         mR9TUNMhlf/UWFohFMRcw5zQ8DtHBPVyWqViSnONoa9FDUu341bP8eZFxJ+JqVFr/lQC
-         Z/jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/fQQOqpuBL8hV+B+XPOqQvDfq/URV4+cGeVScowINNY=;
-        b=t22+a8TUzmhYx6nrX5loxm7g57npdGh45jA/4Mbo6eTo7ScwENrSj7MRk93tSK6J8E
-         JA544VtYbQsp+0YlvurgTlN8aMUYb+0bDHWOXPuIKu0PDCEu3uAvTsB0Tnc6oQUYQEGe
-         faoQloxm/YVaRsaM+ORLy3b92Xx/Oagy+faHtNtqWNa8rClwfHCY0oWFcIaijIdrpSoN
-         0TDCA17+FuUoAdy1cu+QEFr8KT8kv7LWxW30PexhjN74a9tCMJD0R//y7/ki8NiS9doV
-         xr4uyoaQXFix2Z6HCkih09tALH35+tVyd1wVolMdBt3YQkeWVCGQn12m5T1y3NkDDwPP
-         NK9Q==
-X-Gm-Message-State: APjAAAUcMdEWnjDGHUzYT9pRwyn6Q6BaJGnn7uFzfS4BjWrg+wecuKMy
-        ja2TXUvxPmStQt6gDP1HxbGPbv9A9A9xjpf4Si6wNEdJ
-X-Google-Smtp-Source: APXvYqwbFPC+7p7O33GiVlnCp3cInm7M4Q70I6C2gdLaCMwiwAdYYwAdW8775R/CEjXtBXriRlldHDpZNFSmToC0X00=
-X-Received: by 2002:a1f:5cd:: with SMTP id 196mr27231643vkf.62.1563826796297;
- Mon, 22 Jul 2019 13:19:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <CABatt_yn_yjw-MOUnrPDyg-ZQd1AjaHkcJKxNBo8STC9o2EGrw@mail.gmail.com>
- <165e3170-9b5a-7c75-9a9b-265ede62f55e@schaufler-ca.com>
-In-Reply-To: <165e3170-9b5a-7c75-9a9b-265ede62f55e@schaufler-ca.com>
-From:   Martin Townsend <mtownsend1973@gmail.com>
-Date:   Mon, 22 Jul 2019 21:19:45 +0100
-Message-ID: <CABatt_yS9m0nkqSzh_LwSDfc8wuubkXgiOxd6kgVKWuNjbFKuA@mail.gmail.com>
-Subject: Re: SMACK and keys
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 22 Jul 2019 17:15:22 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6ML8jNX017101
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Jul 2019 17:15:21 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2twhpsqb3c-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Jul 2019 17:15:21 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 22 Jul 2019 22:15:18 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 22 Jul 2019 22:15:15 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6MLFEhr63111422
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Jul 2019 21:15:14 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 74D0711C04A;
+        Mon, 22 Jul 2019 21:15:14 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97B2C11C05C;
+        Mon, 22 Jul 2019 21:15:13 +0000 (GMT)
+Received: from localhost.ibm.com (unknown [9.80.82.145])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 22 Jul 2019 21:15:13 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Vitaly Chikunov <vt@altlinux.org>, Petr Vorel <pvorel@suse.cz>,
+        "Bruno E . O . Meneguele" <bmeneg@redhat.com>,
+        Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH v1] ima-evm-utils: use tsspcrread to read the TPM 2.0 PCRs
+Date:   Mon, 22 Jul 2019 17:14:40 -0400
+X-Mailer: git-send-email 2.7.5
+X-TM-AS-GCONF: 00
+x-cbid: 19072221-0008-0000-0000-000002FFE048
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19072221-0009-0000-0000-0000226D6AAD
+Message-Id: <1563830080-31069-1-git-send-email-zohar@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-22_15:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=4 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907220233
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Casey
+The kernel does not expose the crypto agile TPM 2.0 PCR banks to
+userspace like it exposes PCRs for TPM 1.2.  As a result, a userspace
+application is required to read PCRs.
 
-Thank you for the swift reply.
+This patch adds tsspcrread support for reading the TPM 2.0 PCRs.
+tsspcrread is one application included in the ibmtss package.
 
-On Mon, Jul 22, 2019 at 5:25 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> On 7/22/2019 1:03 AM, Martin Townsend wrote:
-> > Hi,
-> >
-> > One of our developers has reported the following audit log entry when
-> > trying to add a key to the kernel's keyring when SMACK is enabled:
-> >
-> > Jul  9 09:33:23 mach-cw-rnet-ppm-1840 user.notice kernel: audit:
-> > type=1400 audit(1562664803.960:12): lsm=SMACK fn=smack_key_permission
-> > action=denied subject="programmingapp" object="_" requested=w pid=905
-> > comm="programmingapp" key_serial=98475196 key_desc="_ses"
->
-> The Smack label on a key is set when the key is created,
-> and is set to the label of the process that created it.
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+Changelog v1:
+- Based on Vitaly's review, test the popen "cmd"  return code.  Use
+pclose to determine if the result of the popen command succeeded or
+failed.  Removed the now unneeded checking for spaces.
+- Dynamically allocated the error msg and other changes based on
+Vitaly's review.
+- Based on Bruno's review, reverted the return code change.  At some
+point, we'll need to re-visit the return codes in general.
 
-I'll have to check but I thought that the programmingapp process from
-the audit message above was trying to create the key, the dev team
-were reporting that the add_key syscall was failing the SMACK access
-check.  This raises another question, we currently compile in several
-root Certificates into the kernel, would these get a SMACK label? and
-if so would this be '_'?
+ configure.ac    |  3 +++
+ src/Makefile.am |  3 +++
+ src/evmctl.c    | 48 ++++++++++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 50 insertions(+), 4 deletions(-)
 
->
-> > I had a quick look through the code in smack_lsm.c but can't see how
-> > I'm supposed to set a SMACK label for keys or keyrings.  Is it
-> > possible and if so how?
->
-> There is currently no way to change the Smack label on a key.
->
-> > We are running a 4.9 Kernel with not much
-> > chance of upgrading as it's a vendor kernel (linux-imx).  As it's an
-> > embedded system we are happy to hard code the SMACK labels into the
-> > kernel if this is possible?
->
-> In smack_key_alloc() change
->
->         key->security = skp;
->
-> to
->         key->security = &smack_known_star;
->
-> and all keys will have the star ("*") label, which
-> grants everyone access to them. Not the best solution
-> long term, but it should get you by.
-
-They are currently adding a rule 'programmingapp _ rw' so I think this
-would be an upgrade :)
-Could I go one further and have something like?
-#ifdef CONFIG_KEYS
-
-+static struct smack_known smack_known_keymaster = {
-+ .smk_known = "keymaster",
-+ .smk_secid = 9,
-+};
-+
- /**
-  * smack_key_alloc - Set the key security blob
-  * @key: object
-@@ -4327,9 +4332,7 @@ static void smack_inet_csk_clone(struct sock *sk,
- static int smack_key_alloc(struct key *key, const struct cred *cred,
-     unsigned long flags)
- {
-- struct smack_known *skp = smk_of_task(cred->security);
--
-- key->security = skp;
-+ key->security = &smack_known_keymaster;
-  return 0;
+diff --git a/configure.ac b/configure.ac
+index 9beb4b6c2377..40fea93fef2f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -28,6 +28,8 @@ PKG_CHECK_MODULES(LIBCRYPTO, [libcrypto >= 0.9.8 ])
+ AC_SUBST(KERNEL_HEADERS)
+ AC_CHECK_HEADER(unistd.h)
+ AC_CHECK_HEADERS(openssl/conf.h)
++AC_SEARCH_LIBS(TSS_Transmit, ibmtss, [have_ibmtss=yes], [have_ibmtss=no])
++AM_CONDITIONAL([CONFIG_IBMTSS], [test "x$have_ibmtss" = "xyes"])
+ 
+ AC_CHECK_HEADERS(sys/xattr.h, , [AC_MSG_ERROR([sys/xattr.h header not found. You need the c-library development package.])])
+ AC_CHECK_HEADERS(keyutils.h, , [AC_MSG_ERROR([keyutils.h header not found. You need the libkeyutils development package.])])
+@@ -71,4 +73,5 @@ echo
+ echo	"Configuration:"
+ echo	"          debug: $pkg_cv_enable_debug"
+ echo	"   openssl-conf: $enable_openssl_conf"
++echo	"         ibmtss: $have_ibmtss"
+ echo
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 9c037e21dc4f..f0990fb01210 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -21,6 +21,9 @@ evmctl_SOURCES = evmctl.c
+ evmctl_CPPFLAGS = $(AM_CPPFLAGS) $(LIBCRYPTO_CFLAGS)
+ evmctl_LDFLAGS = $(LDFLAGS_READLINE)
+ evmctl_LDADD =  $(LIBCRYPTO_LIBS) -lkeyutils libimaevm.la
++if CONFIG_IBMTSS
++evmctl_CFLAGS = -DIBMTSS
++endif
+ 
+ AM_CPPFLAGS = -I$(top_srcdir) -include config.h
+ 
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 9e0926f10404..f726b2186678 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -1383,10 +1383,8 @@ static int tpm_pcr_read(int idx, uint8_t *pcr, int len)
+ 	if (!fp)
+ 		fp = fopen(misc_pcrs, "r");
+ 
+-	if (!fp) {
+-		log_err("Unable to open %s or %s\n", pcrs, misc_pcrs);
++	if (!fp)
+ 		return -1;
+-	}
+ 
+ 	for (;;) {
+ 		p = fgets(buf, sizeof(buf), fp);
+@@ -1402,6 +1400,32 @@ static int tpm_pcr_read(int idx, uint8_t *pcr, int len)
+ 	return result;
  }
+ 
++#ifdef IBMTSS
++static int tpm_pcr_read2(int idx, uint8_t *hwpcr, int len, char **errmsg)
++{
++	FILE *fp;
++	char pcr[100];	/* may contain an error */
++	char cmd[36];
++	int ret;
++
++	sprintf(cmd, "tsspcrread -halg sha1 -ha %d -ns", idx);
++	fp = popen(cmd, "r");
++	if (!fp)
++		return -1;
++
++	fgets(pcr, sizeof(pcr), fp);
++
++	/* get the popen "cmd" return code */
++	ret = pclose(fp);
++	if (!ret)
++		hex2bin(hwpcr, pcr, SHA_DIGEST_LENGTH);
++	else
++		*errmsg = strdup(pcr);
++
++	return ret;
++}
++#endif
++
+ #define TCG_EVENT_NAME_LEN_MAX	255
+ 
+ struct template_entry {
+@@ -1658,8 +1682,24 @@ static int ima_measurement(const char *file)
+ 		log_info("PCRAgg %.2d: ", i);
+ 		log_dump(pcr[i], SHA_DIGEST_LENGTH);
+ 
+-		if (tpm_pcr_read(i, hwpcr, sizeof(hwpcr)))
++		if (tpm_pcr_read(i, hwpcr, sizeof(hwpcr))) {
++#ifdef IBMTSS
++			char *errmsg = NULL;
++
++			err = tpm_pcr_read2(i, hwpcr, sizeof(hwpcr), &errmsg);
++			if (err) {
++				errmsg[strlen(errmsg) - 1] = 0;
++
++				log_info("Failed to read either TPM 1.2 or TPM 2.0 PCRs.\n (%s)\n", errmsg);
++				free(errmsg);
++				exit(1);
++			}
++#else
++			log_info("Failed to read TPM 1.2 PCRs.\n");
+ 			exit(1);
++#endif
++		}
++
+ 		log_info("HW PCR-%d: ", i);
+ 		log_dump(hwpcr, sizeof(hwpcr));
+ 
+-- 
+2.7.5
 
-or is this just asking for trouble
-
->
-> > or is it set to '_' by design and we
-> > should add the key whilst the process is a privileged state before the
-> > SMACK label for the process has been set?
->
-> If you can run the program that creates the key with a label
-> other than floor ("_"), perhaps "keymaster", the key would be
-> labeled keymaster, and you could create access rules like
-
-I will get some more information on how they are creating the keys as
-I thought the process creating the keys was labelled "programmingapp"
-so the key in theory should be labelled "programmingapp".  And looking
-at the smack_key_alloc function mentioned previously it definitely
-looks like it should have.  I'll see if I can get them to create some
-test code and debug why this isn't happening.
-Thanks again for your help.
-
->
->         programmingapp keymaster rw
->
->
-> >
-> > Many Thanks,
-> > Martin.
->
