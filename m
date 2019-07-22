@@ -2,152 +2,344 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CB170563
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jul 2019 18:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEF9705CB
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jul 2019 18:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730237AbfGVQZU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jul 2019 12:25:20 -0400
-Received: from sonic301-9.consmr.mail.bf2.yahoo.com ([74.6.129.48]:34776 "EHLO
-        sonic301-9.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730116AbfGVQZU (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jul 2019 12:25:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1563812718; bh=I7s0LQz3xGjNdo9rjbuOOVi1dzD2jYmAkG324hj2GYA=; h=Subject:To:References:From:Date:In-Reply-To:From:Subject; b=cLukG7W/1x5a0dMuTUjw6pfyDU0Km5tvijdsEFp2GCPrJe9ZKZG5HZgB6h8ERIrHFWFHvKM1jE3UiSKdelHGP16Fun57+tdHM0sYvKE3j9x02Kbu+c9BrjV7NrvX3z094ZB5+RxzFdsemzIOG1zn+/r//+qmgJfN8Ko0ubqz/NaAJQIGQsT7GFdowUtbZdIXQZJwEuv6fztQnTT9RIXxdAGCDsT1jKBmR/f/sJVohh/LXdIsHHXyQprSp3cTbd3Jmsv5IgguwBJJfhTWobBriY7dGmkgu3v8n9TGOFpYpO6QEWYsOYJxe6+JgK8HMutvCL9H0cqC999PfNFUCuUvTA==
-X-YMail-OSG: KCey.jIVM1lBVdehHwNunO8guhgdHxLHNpq4RT2JyTmvzw7bzdNrKppBmSA7Mhm
- PerfEVjpsqag38biOXnQ0SBrU7Ee4OQoX7cOEr3ZYdTTgSPGMSxO.zJyobt739l2suIVYWV0Gh1f
- ZZQVxA5ejZBwEZtd54whbhbHOMKvlHh3SWSIKSh1ZoajxQpNbxEVcaJssnDcEduwH4gq_CaAy2y0
- _VWg8ktDjPPGbHMZdSo52.mPzhIgCj93ovZfQu60fSO9txfivt.Q1Niin855rOUQtv0.u85pQ_L4
- K3Sj9exYLPbtN.G.Ky3EVe33nbCRcMUyvoWQC6Hto6H4j.6EyMWazSs9y2Sx.Q9YTw_sS1dkWrhH
- pqR3A4dvA85JgmT.CkCW8G7aMN4UT6d0iDy55fSleVQuhqbFS8uZHxIkYvoD4UERllJX76UaYy2K
- z3zSg7RbgA59WSk1y_bMW3pNJmdHmPeMFaGU0h4PLv7DTV8y9AeS_dWXTqrJ00l4E1jb.MLTp_2H
- 50H3FuhgG3vYsFhuHa.bd.g6xbS1GxWxgf1Q2ij_bVwMXfoPyS6ztFQArLqwFl.SiMrgXa0Hjo3N
- mA8my0MWwZNrKj3jqcRR1dbZjkNP7KJB7rAUWJNmh1KfC1X1nzM7WA1ahVEns7qQtRGFNDnQdRDk
- ZK9...a5ngn2rQbghrcSdG4x2pWBG1NyqE.NRvSyITq_P72Vm0I6stq6eZpXZIv_ptnEAHXnGiB9
- jUVIclbAUBFlVUWebZc.mKgl5SSxFpIq1vDixgI8irvJAXt_WH2Bcigc6XA2UXOJ8VobKHK..PLT
- pEWcbBbdQltZqhaYkeC7zhrkwUdke_fLkpZQ_YrM6mQd433u0rFUADj5Pi4.k2wn66MJJ2oiX1dT
- Qfi2Jrx6uUilP_oDHp3rS20IR2uUdNd.ztQSKNW2YdExtav4AiiKVHi2UGoaMDBhLiWpjNxnZWbo
- 6ZHWDVojRFeWKnTMLENz2aXgHx3k5Y5usWAgANZQTz6UPw35PWzzOS58dRH6zsrhPFdx99WLdNws
- HD.M9pO5rSTjKzpZgtF_mQJTgBw60lAoTCbDNO2lHcFs8xYEIeiZqIM8AVft4xj85BemwhPgnZpg
- YCh5SwXITF4fwxDxk6Q.eguBrFAQf8SiU8xVoWsnBPhO_c3p3KNzXGb71SWAVSxTCQUYO7a2VBSD
- Q9KCveA5RGWoj4Urc0eN_AeXYjNgIpA8hcQ3tjbnKGYOo8buSF49SN.wYxcuQZfuQSSxl55XVR41
- .J8GtmZwTYJSu
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Mon, 22 Jul 2019 16:25:18 +0000
-Received: by smtp414.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 5d3a9adf0e9529af0b785836bf6e52cd;
-          Mon, 22 Jul 2019 16:25:17 +0000 (UTC)
-Subject: Re: SMACK and keys
-To:     Martin Townsend <mtownsend1973@gmail.com>,
-        linux-integrity@vger.kernel.org, casey@schaufler-ca.com
-References: <CABatt_yn_yjw-MOUnrPDyg-ZQd1AjaHkcJKxNBo8STC9o2EGrw@mail.gmail.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=casey@schaufler-ca.com; keydata=
- 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
- abzjfg==
-Message-ID: <165e3170-9b5a-7c75-9a9b-265ede62f55e@schaufler-ca.com>
-Date:   Mon, 22 Jul 2019 09:25:18 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1730982AbfGVQxu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jul 2019 12:53:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50818 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730144AbfGVQxu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 22 Jul 2019 12:53:50 -0400
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9183221738;
+        Mon, 22 Jul 2019 16:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563814428;
+        bh=2udSrc+gcNgR6qEJEYAc7kkKyzArxe8UTaAxcjScRCo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xGtrwWxqQqZVeK2kQd5kQZppjKeKeeWI8twZPn/2AR02blKw2f2gnP9Uqlw0ZMPfD
+         AyXrQrfX8IxCRbDVjEagVonL3bpL9qe8nCfEdBldycRn0GmyFVANa01E1lOsk9Zr72
+         XNd6Z9jaj3+5nNDOreqGi6YWo02CZjeRHYKFntmU=
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-fscrypt@vger.kernel.org
+Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Chandan Rajendra <chandan@linux.vnet.ibm.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v7 00/17] fs-verity: read-only file-based authenticity protection
+Date:   Mon, 22 Jul 2019 09:50:44 -0700
+Message-Id: <20190722165101.12840-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-In-Reply-To: <CABatt_yn_yjw-MOUnrPDyg-ZQd1AjaHkcJKxNBo8STC9o2EGrw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/22/2019 1:03 AM, Martin Townsend wrote:
-> Hi,
->
-> One of our developers has reported the following audit log entry when
-> trying to add a key to the kernel's keyring when SMACK is enabled:
->
-> Jul  9 09:33:23 mach-cw-rnet-ppm-1840 user.notice kernel: audit:
-> type=3D1400 audit(1562664803.960:12): lsm=3DSMACK fn=3Dsmack_key_permis=
-sion
-> action=3Ddenied subject=3D"programmingapp" object=3D"_" requested=3Dw p=
-id=3D905
-> comm=3D"programmingapp" key_serial=3D98475196 key_desc=3D"_ses"
+Hello,
 
-The Smack label on a key is set when the key is created,
-and is set to the label of the process that created it.
+This is a redesigned version of the fs-verity patchset, implementing
+Ted's suggestion to build the Merkle tree in the kernel
+(https://lore.kernel.org/linux-fsdevel/20190207031101.GA7387@mit.edu/).
+This greatly simplifies the UAPI, since the verity metadata no longer
+needs to be transferred to the kernel.  Now to enable fs-verity on a
+file, one simply calls FS_IOC_ENABLE_VERITY, passing it this structure:
 
-> I had a quick look through the code in smack_lsm.c but can't see how
-> I'm supposed to set a SMACK label for keys or keyrings.  Is it
-> possible and if so how?
+	struct fsverity_enable_arg {
+		__u32 version;
+		__u32 hash_algorithm;
+		__u32 block_size;
+		__u32 salt_size;
+		__u64 salt_ptr;
+		__u32 sig_size;
+		__u32 __reserved1;
+		__u64 sig_ptr;
+		__u64 __reserved2[11];
+	};
 
-There is currently no way to change the Smack label on a key.
+The filesystem then builds the file's Merkle tree and stores it in a
+filesystem-specific location associated with the file.  Afterwards,
+FS_IOC_MEASURE_VERITY can be used to retrieve the file measurement
+("root hash").  The way the file measurement is computed is also
+effectively part of the API (it has to be), but it's logically
+independent of where/how the filesystem stores the Merkle tree.
 
-> We are running a 4.9 Kernel with not much
-> chance of upgrading as it's a vendor kernel (linux-imx).  As it's an
-> embedded system we are happy to hard code the SMACK labels into the
-> kernel if this is possible?
+The API is fully documented in Documentation/filesystems/fsverity.rst,
+along with other aspects of fs-verity.  I also added an FAQ section that
+answers frequently asked questions about fs-verity, e.g. why isn't it
+all at the VFS level, why isn't it part of IMA, why does the Merkle tree
+need to be stored on-disk, etc.
 
-In smack_key_alloc() change
+Overview
+--------
 
-	key->security =3D skp;
+This patchset implements fs-verity for ext4 and f2fs.  fs-verity is
+similar to dm-verity, but implemented on a per-file basis: a Merkle tree
+is used to measure (hash) a read-only file's data as it is paged in.
+ext4 and f2fs hide this Merkle tree beyond the end of the file, but
+other filesystems can implement it differently if desired.
 
-to
-	key->security =3D &smack_known_star;
+In general, fs-verity is intended for use on writable filesystems;
+dm-verity is still recommended on read-only ones.
 
-and all keys will have the star ("*") label, which
-grants everyone access to them. Not the best solution
-long term, but it should get you by.
+Similar to fscrypt, most of the code is in fs/verity/, and not too many
+filesystem-specific changes are needed.  The Merkle tree is built by the
+filesystem when the FS_IOC_ENABLE_VERITY ioctl is executed.
 
-> or is it set to '_' by design and we
-> should add the key whilst the process is a privileged state before the
-> SMACK label for the process has been set?
+fs-verity provides a file measurement (hash) in constant time and
+verifies data on-demand.  Thus, it is useful for efficiently verifying
+the authenticity of large files of which only a small portion may be
+accessed, such as Android application package (APK) files.  It may also
+be useful in "audit" use cases where file hashes are logged.
 
-If you can run the program that creates the key with a label
-other than floor ("_"), perhaps "keymaster", the key would be
-labeled keymaster, and you could create access rules like
+fs-verity can also provide better protection against malicious disks
+than an ahead-of-time hash, since fs-verity re-verifies data each time
+it's paged in.  Note, however, that any authenticity guarantee is still
+dependent on verification of the file measurement and other relevant
+metadata in a way that makes sense for the overall system; fs-verity is
+only a tool to help with this.
 
-	programmingapp keymaster rw
+This patchset doesn't include IMA support for fs-verity file
+measurements.  This is planned and we'd like to collaborate with the IMA
+maintainers.  Although fs-verity can be used on its own without IMA,
+fs-verity is primarily a lower level feature (think of it as a way of
+hashing a file), so some users may still need IMA's policy mechanism.
+However, an optional in-kernel signature verification mechanism within
+fs-verity itself is also included.
 
+This patchset is based on v5.3-rc1.  It can also be found in git at tag
+fsverity_2019-07-22 of:
 
->
-> Many Thanks,
-> Martin.
+	https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+
+fs-verity has a userspace utility:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/fsverity-utils.git
+
+xfstests for fs-verity can be found at branch "fsverity" of:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/xfstests-dev.git
+
+fs-verity is supported by f2fs-tools v1.11.0+ and e2fsprogs v1.45.2+.
+
+Examples of setting up fs-verity protected files can be found in the
+README.md file of fsverity-utils.
+
+Other useful references include:
+
+  - Documentation/filesystems/fsverity.rst, added by the first patch.
+
+  - LWN coverage of v3 patchset: https://lwn.net/Articles/790185/
+
+  - LWN coverage of v2 patchset: https://lwn.net/Articles/775872/
+
+  - LWN coverage of v1 patchset: https://lwn.net/Articles/763729/
+
+  - Presentation at Linux Security Summit North America 2018:
+      - Slides: https://schd.ws/hosted_files/lssna18/af/fs-verity%20slide%20deck.pdf
+      - Video: https://www.youtube.com/watch?v=Aw5h6aBhu6M
+      (This corresponded to the v1 patchset; changes have been made since then.)
+
+  - LWN coverage of LSFMM 2018 discussion: https://lwn.net/Articles/752614/
+
+Changed since v6:
+
+  - Don't hold the inode lock for the whole FS_IOC_ENABLE_VERITY ioctl,
+    and make it fail with EBUSY if it's already executing.
+
+  - Use ENOPKG rather than ENOENT for the case where the selected hash
+    algorithm isn't supported by the crypto API.
+
+  - Fixed use-after-free in ext4_mpage_readpages() in the unlikely case
+    that allocating the bio_post_read_ctx fails.
+
+  - Rebased onto v5.3-rc1, resolved conflicts in f2fs, and converted the
+    require_signatures sysctl to use the new shared limit variables.
+
+Changed since v5:
+
+  - Switched to using detached signatures.  This simplifies the
+    signature verification code considerably.
+
+  - On f2fs, forbid enabling verity on files that have atomic or
+    volatile writes pending.
+
+  - Initialize quotas before evicting inline data.
+
+  - Prevent writing verity metadata beyond s_maxbytes.
+
+  - Switched from truncate_inode_pages() to invalidate_inode_pages2()
+    (fixes FS_IOC_ENABLE_VERITY on ext4 with data=journal)
+
+  - Always truncate the verity metadata if there's an error writing it,
+    even if the error doesn't occur until ->end_enable_verity().
+
+  - Updated the ext4 on-disk format documentation.
+
+  - A few minor cleanups.
+
+Changed since v4:
+
+  - Made ext4 and f2fs store the verity metadata beginning at a 64K
+    aligned boundary, to be ready for architectures with 64K pages.
+
+  - Made ext4 store the verity descriptor size in the file data stream,
+    so that no xattr is needed.
+
+  - Added support for empty files.
+
+  - A few minor cleanups.
+
+Changed since v3:
+
+  - The FS_IOC_GETFLAGS ioctl now returns the verity flag.
+
+  - Fixed setting i_verity_info too early.
+
+  - Restored pagecache invalidation in FS_IOC_ENABLE_VERITY.
+
+  - Fixed truncation of fsverity_enable_arg::hash_algorithm.
+
+  - Reject empty files for both open and enable, not just enable.
+
+  - Added a couple more FAQ entries to the documentation.
+
+  - A few minor cleanups.
+
+  - Rebased onto v5.2-rc3.
+
+Changed since v2:
+
+  - Large redesign: the Merkle tree is now built by
+    FS_IOC_ENABLE_VERITY, rather than being provided by userspace.  The
+    fsverity_operations provide an interface for filesystems to read and
+    write the Merkle tree from/to a filesystem-specific location.
+
+  - Lot of refactoring, cleanups, and documentation improvements.
+
+  - Many simplifications, such as simplifying the fsverity_descriptor
+    format, dropping CRC-32 support, and limiting the salt size.
+
+  - ext4 and f2fs now store an xattr that gives the location of the
+    fsverity_descriptor, so loading it is more straightforward.
+
+  - f2fs no longer counts the verity metadata in the on-disk i_size,
+    making it consistent with ext4.
+
+  - Replaced the filesystem-specific fs-verity kconfig options with
+    CONFIG_FS_VERITY.
+
+  - Replaced the filesystem-specific verity bit checks with IS_VERITY().
+
+Changed since v1:
+
+  - Added documentation file.
+
+  - Require write permission for FS_IOC_ENABLE_VERITY, rather than
+    CAP_SYS_ADMIN.
+
+  - Eliminated dependency on CONFIG_BLOCK and clarified that filesystems
+    can verify a page at a time rather than a bio at a time.
+
+  - Fixed conditions for verifying holes.
+
+  - ext4 now only allows fs-verity on extent-based files.
+
+  - Eliminated most of the assumptions that the verity metadata is
+    stored beyond EOF, in case filesystems want to do things
+    differently.
+
+  - Other cleanups.
+
+Eric Biggers (17):
+  fs-verity: add a documentation file
+  fs-verity: add MAINTAINERS file entry
+  fs-verity: add UAPI header
+  fs: uapi: define verity bit for FS_IOC_GETFLAGS
+  fs-verity: add Kconfig and the helper functions for hashing
+  fs-verity: add inode and superblock fields
+  fs-verity: add the hook for file ->open()
+  fs-verity: add the hook for file ->setattr()
+  fs-verity: add data verification hooks for ->readpages()
+  fs-verity: implement FS_IOC_ENABLE_VERITY ioctl
+  fs-verity: implement FS_IOC_MEASURE_VERITY ioctl
+  fs-verity: add SHA-512 support
+  fs-verity: support builtin file signatures
+  ext4: add basic fs-verity support
+  ext4: add fs-verity read support
+  ext4: update on-disk format documentation for fs-verity
+  f2fs: add fs-verity support
+
+ Documentation/filesystems/ext4/inodes.rst   |   6 +-
+ Documentation/filesystems/ext4/overview.rst |   1 +
+ Documentation/filesystems/ext4/super.rst    |   2 +
+ Documentation/filesystems/ext4/verity.rst   |  41 ++
+ Documentation/filesystems/fsverity.rst      | 726 ++++++++++++++++++++
+ Documentation/filesystems/index.rst         |   1 +
+ Documentation/ioctl/ioctl-number.rst        |   1 +
+ MAINTAINERS                                 |  12 +
+ fs/Kconfig                                  |   2 +
+ fs/Makefile                                 |   1 +
+ fs/ext4/Makefile                            |   1 +
+ fs/ext4/ext4.h                              |  23 +-
+ fs/ext4/file.c                              |   4 +
+ fs/ext4/inode.c                             |  48 +-
+ fs/ext4/ioctl.c                             |  12 +
+ fs/ext4/readpage.c                          | 208 +++++-
+ fs/ext4/super.c                             |  18 +-
+ fs/ext4/sysfs.c                             |   6 +
+ fs/ext4/verity.c                            | 367 ++++++++++
+ fs/f2fs/Makefile                            |   1 +
+ fs/f2fs/data.c                              |  72 +-
+ fs/f2fs/f2fs.h                              |  20 +-
+ fs/f2fs/file.c                              |  43 +-
+ fs/f2fs/inode.c                             |   5 +-
+ fs/f2fs/super.c                             |   3 +
+ fs/f2fs/sysfs.c                             |  11 +
+ fs/f2fs/verity.c                            | 247 +++++++
+ fs/f2fs/xattr.h                             |   2 +
+ fs/verity/Kconfig                           |  55 ++
+ fs/verity/Makefile                          |  10 +
+ fs/verity/enable.c                          | 369 ++++++++++
+ fs/verity/fsverity_private.h                | 185 +++++
+ fs/verity/hash_algs.c                       | 280 ++++++++
+ fs/verity/init.c                            |  61 ++
+ fs/verity/measure.c                         |  57 ++
+ fs/verity/open.c                            | 356 ++++++++++
+ fs/verity/signature.c                       | 157 +++++
+ fs/verity/verify.c                          | 281 ++++++++
+ include/linux/fs.h                          |  11 +
+ include/linux/fsverity.h                    | 211 ++++++
+ include/uapi/linux/fs.h                     |   1 +
+ include/uapi/linux/fsverity.h               |  40 ++
+ 42 files changed, 3897 insertions(+), 61 deletions(-)
+ create mode 100644 Documentation/filesystems/ext4/verity.rst
+ create mode 100644 Documentation/filesystems/fsverity.rst
+ create mode 100644 fs/ext4/verity.c
+ create mode 100644 fs/f2fs/verity.c
+ create mode 100644 fs/verity/Kconfig
+ create mode 100644 fs/verity/Makefile
+ create mode 100644 fs/verity/enable.c
+ create mode 100644 fs/verity/fsverity_private.h
+ create mode 100644 fs/verity/hash_algs.c
+ create mode 100644 fs/verity/init.c
+ create mode 100644 fs/verity/measure.c
+ create mode 100644 fs/verity/open.c
+ create mode 100644 fs/verity/signature.c
+ create mode 100644 fs/verity/verify.c
+ create mode 100644 include/linux/fsverity.h
+ create mode 100644 include/uapi/linux/fsverity.h
+
+-- 
+2.22.0
 
