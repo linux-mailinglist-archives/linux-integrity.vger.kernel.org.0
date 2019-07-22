@@ -2,134 +2,173 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95AC970B47
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jul 2019 23:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C3F70B8B
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jul 2019 23:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731140AbfGVV0c (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jul 2019 17:26:32 -0400
-Received: from mail-ua1-f54.google.com ([209.85.222.54]:45154 "EHLO
-        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728822AbfGVV0b (ORCPT
+        id S1731338AbfGVVgA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jul 2019 17:36:00 -0400
+Received: from mail-ua1-f51.google.com ([209.85.222.51]:37369 "EHLO
+        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729004AbfGVVgA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jul 2019 17:26:31 -0400
-Received: by mail-ua1-f54.google.com with SMTP id v18so16041176uad.12
-        for <linux-integrity@vger.kernel.org>; Mon, 22 Jul 2019 14:26:31 -0700 (PDT)
+        Mon, 22 Jul 2019 17:36:00 -0400
+Received: by mail-ua1-f51.google.com with SMTP id z13so16074122uaa.4
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Jul 2019 14:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=l2Brdo1rNZvuSD22e+nqM8rJ22yxnkGA3xtPR6++HuY=;
-        b=PXXstqpO2akfG1tt9r0mvd1b6o7bc7jrEhWUqvADxoc0RafTGjQkH5+9K0f1oFdmiJ
-         AH00BQGlhqvhipZdN9W+pmzNCVb/A21u5xRA0BvxOk6AB1vrnGJJRGNMXBkFx3XlZ/2h
-         jK6gceEjDK7lwSt8HnaDfEazhlkfy0P7/5FGyvuE7qBRBvk9RaU6EMcy4mo1RH4cRyji
-         qpuPwrPfqujflJL7YXiKQYkxLUL4ihOpVTooXCcK8xS+OnxeVjIFDPspU3kQbOezERB6
-         +ZAosIcPexxzMpgbHaUFurILKDR6PD4WdV52TvNbzX263MHorC9tfDjBYfFtLT5GSuFE
-         /wfA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DZVh65/58lxHPJC4RLLU/E+lo61XW5YeUMYN1xdN9n4=;
+        b=jgKEzjt8soD408kfcT7kUB9jBhBPFMv5xUwyrMO0aHQc/IyGL6/4w922Ae9pKLdEkq
+         s9OLIWnQBHeA0420o2SMGqUgjeaskQ7bZES0FX46XrGOCTT8NTwm8WMwZU3gd9MP1Mfh
+         aQN/NsT3hw2qrus+cmJH33c6R7aw4WJybX7Z/Js0asg8YqY+LRRp/IWmiPNgCp39Bv6l
+         2/4BtuB733fVLuiqYJi3cirhRAbfPAvp2ftlW3eN2uGhVDZtNvu5EQA0VFcwQ4ToH0Y9
+         mPoOIMegP2qSenkYNcy1qpk+ztZPZpUgNCZ9saEDn2kuwT849Oq7FPdgdioC65P+I/bZ
+         m7ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=l2Brdo1rNZvuSD22e+nqM8rJ22yxnkGA3xtPR6++HuY=;
-        b=Cz0sA1XMm1rUMPdbUzTnZzgNs+Rznw+wJbblT1EYSEEwuMUVw+ibPyaFyz/JZ4R6f9
-         c6q4IXzdKinxz+6wmBcDAG/tOeN/Knzlf0TdXpS3oi3RtK6UMLhME1ShVwEtOTLdii9w
-         ruoxb072KCGW90YOKXeLt2t/25qU90FDqCFqdZNvQAFeugq+xM6wyRqYPw8Vghh+o1Cl
-         NSDkFKlI4zT8fqqQOoDsCamqhOgvcYwEBlW9fEcOTFNeheSpylbOSnB9OaqwIIHcttsb
-         W0GqJWy2tt+kInqUVc7ibRyh4WY9Q6zrtcKNgqUDGOjmyQKi4qIKVpAloZa+RP8cJhMB
-         ZC9Q==
-X-Gm-Message-State: APjAAAVBHPVWVtNZURZepcSezRtOk5NX/GbIUhs4tOt453uB2u9SQCKF
-        Oii7mPydDY9jlSYQn96KJmQ1JAvyQudsqyF5ftdIKaUV
-X-Google-Smtp-Source: APXvYqwmjHGtDNej+RYK73D9CHf/BB9DGZeiCOv2Vh6qfKqzULl6ANTizNZ0dLBnNFA6mPXn/kYxSuP54j5KoKFK2oA=
-X-Received: by 2002:ab0:2789:: with SMTP id t9mr28440508uap.69.1563830790899;
- Mon, 22 Jul 2019 14:26:30 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DZVh65/58lxHPJC4RLLU/E+lo61XW5YeUMYN1xdN9n4=;
+        b=j9qpduEtBNR+jdMcz9nOraghIiBW14xtfkpUrMjWX9JRnezM9RqAKIDbx/+/Fc422j
+         3B/QAQXwg9yUpe1GVniqvZmCdqB1pOW1nGouEdOKKhmCPEBBbX7AZ85tuMF1eN9OPxwZ
+         aDCeztLoKEQev1oiXl6KgoRW/72TtYzJwXNE6uKM4iLHLJQWSwJWPjpEjJSbPIp14VUa
+         XCozzs1xUx1raEEsZ3LTUH+4FYRjxi9UoSrvZz6HLVzeH0zV3QnqvyQH9v9bg0m7eH0I
+         BBcwD+3RHo6C64Tafqn5Bq9BZPQ1Bclf+uVHJtZze0c5LvAJJU3A49uLwlQOIlHzRpQV
+         4PAQ==
+X-Gm-Message-State: APjAAAXX/sH2CpOiDR3nfWwhCU2iVaRP5R9lovbfpGIc9XjFvd/Xqujp
+        cUFsnJ1+A4nQNXFQEbj7YTXH38dhjiShcrEmquJogPlR
+X-Google-Smtp-Source: APXvYqwdyWTvSMkF4wh7kYSG+/JRTZTigqdBn6LPLTOD1bZ9JoVYUVzYnj+vzAFAbT/r/cDDUE7+qTiJxI71p74eGCs=
+X-Received: by 2002:ab0:6353:: with SMTP id f19mr45210819uap.34.1563831359139;
+ Mon, 22 Jul 2019 14:35:59 -0700 (PDT)
 MIME-Version: 1.0
+References: <CABatt_yn_yjw-MOUnrPDyg-ZQd1AjaHkcJKxNBo8STC9o2EGrw@mail.gmail.com>
+ <165e3170-9b5a-7c75-9a9b-265ede62f55e@schaufler-ca.com> <CABatt_yS9m0nkqSzh_LwSDfc8wuubkXgiOxd6kgVKWuNjbFKuA@mail.gmail.com>
+ <36c9e956-b821-0fb6-5a38-93285d341916@schaufler-ca.com>
+In-Reply-To: <36c9e956-b821-0fb6-5a38-93285d341916@schaufler-ca.com>
 From:   Martin Townsend <mtownsend1973@gmail.com>
-Date:   Mon, 22 Jul 2019 22:26:20 +0100
-Message-ID: <CABatt_zVj_V6ms7NF_zGhtibkfVL7hK4a65NTFhhF6mN=ZAtUg@mail.gmail.com>
-Subject: ubifs assert when creating a SMACK transmuting directory.
-To:     linux-mtd@lists.infradead.org, linux-integrity@vger.kernel.org
+Date:   Mon, 22 Jul 2019 22:35:48 +0100
+Message-ID: <CABatt_wPccEg=xpb16K-XDHXOzvbwVapNTE_XhWbQBghJNYZFg@mail.gmail.com>
+Subject: Re: SMACK and keys
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     linux-integrity@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+On Mon, Jul 22, 2019 at 10:23 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> On 7/22/2019 1:19 PM, Martin Townsend wrote:
+> > Hi Casey
+> >
+> > Thank you for the swift reply.
+> >
+> > On Mon, Jul 22, 2019 at 5:25 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> >> On 7/22/2019 1:03 AM, Martin Townsend wrote:
+> >>> Hi,
+> >>>
+> >>> One of our developers has reported the following audit log entry when
+> >>> trying to add a key to the kernel's keyring when SMACK is enabled:
+> >>>
+> >>> Jul  9 09:33:23 mach-cw-rnet-ppm-1840 user.notice kernel: audit:
+> >>> type=1400 audit(1562664803.960:12): lsm=SMACK fn=smack_key_permission
+> >>> action=denied subject="programmingapp" object="_" requested=w pid=905
+> >>> comm="programmingapp" key_serial=98475196 key_desc="_ses"
+> >> The Smack label on a key is set when the key is created,
+> >> and is set to the label of the process that created it.
+> > I'll have to check but I thought that the programmingapp process from
+> > the audit message above was trying to create the key, the dev team
+> > were reporting that the add_key syscall was failing the SMACK access
+> > check.  This raises another question, we currently compile in several
+> > root Certificates into the kernel, would these get a SMACK label? and
+> > if so would this be '_'?
+>
+> Yes, that could easily be what's happening here.
+>
+> What does a "compiled in" certificate look like?
 
-The following backtrack was reported by our dev team.
+It's a PEM file of concatenated certificates that you copy into the
+certs directory I think and then set the following in the kernel
+configuration (in this example we have a file called
+builtin-trusted.pem)
+CONFIG_SYSTEM_TRUSTED_KEYRING=y
+CONFIG_SYSTEM_TRUSTED_KEYS="certs/builtin-trusted.pem"
 
-[<8010ea60>] (unwind_backtrace) from [<8010c4d8>] (show_stack+0x10/0x14)
-[<8010c4d8>] (show_stack) from [<803b590c>] (ubifs_xattr_set+0x210/0x3ec)
-[<803b590c>] (ubifs_xattr_set) from [<80272134>] (__vfs_setxattr+0x70/0x80)
-[<80272134>] (__vfs_setxattr) from [<803ecd8c>]
-(smack_d_instantiate+0x41c/0x430)
-[<803ecd8c>] (smack_d_instantiate) from [<803e4ef0>]
-(security_d_instantiate+0x34/0x54)
-[<803e4ef0>] (security_d_instantiate) from [<80263edc>]
-(d_instantiate+0x28/0x4c)
-[<80263edc>] (d_instantiate) from [<80392858>] (ubifs_mkdir+0x1f8/0x200)
-[<80392858>] (ubifs_mkdir) from [<80257124>] (vfs_mkdir+0x148/0x1dc)
-[<80257124>] (vfs_mkdir) from [<8025add8>] (SyS_mkdirat+0x84/0xec)
-[<8025add8>] (SyS_mkdirat) from [<80107dfc>] (__sys_trace_return+0x0/0x10)
+I'm assuming that the public keys contained in the certificates are
+added to the kernels trusted keying automatically during boot.
 
-Looking at the code for smack_d_instantiate it's going down the following path
-/*
- * Transmuting directory
- */
-if (S_ISDIR(inode->i_mode)) {
-        /*
-         * If this is a new directory and the label was
-         * transmuted when the inode was initialized
-         * set the transmute attribute on the directory
-         * and mark the inode.
-         *
-         * If there is a transmute attribute on the
-         * directory mark the inode.
-         */
-        if (isp->smk_flags & SMK_INODE_CHANGED) {
-                isp->smk_flags &= ~SMK_INODE_CHANGED;
-                rc = __vfs_setxattr(dp, inode,
-                        XATTR_NAME_SMACKTRANSMUTE,
-                        TRANS_TRUE, TRANS_TRUE_SIZE,
-                        0);
-        } else {
-which ends up in ubifs_xattr_set which is expecting the inode
-semaphore to be locked and hence the assert message.
+>
+> >>> I had a quick look through the code in smack_lsm.c but can't see how
+> >>> I'm supposed to set a SMACK label for keys or keyrings.  Is it
+> >>> possible and if so how?
+> >> There is currently no way to change the Smack label on a key.
+> >>
+> >>> We are running a 4.9 Kernel with not much
+> >>> chance of upgrading as it's a vendor kernel (linux-imx).  As it's an
+> >>> embedded system we are happy to hard code the SMACK labels into the
+> >>> kernel if this is possible?
+> >> In smack_key_alloc() change
+> >>
+> >>         key->security = skp;
+> >>
+> >> to
+> >>         key->security = &smack_known_star;
+> >>
+> >> and all keys will have the star ("*") label, which
+> >> grants everyone access to them. Not the best solution
+> >> long term, but it should get you by.
+> > They are currently adding a rule 'programmingapp _ rw' so I think this
+> > would be an upgrade :)
+> > Could I go one further and have something like?
+> > #ifdef CONFIG_KEYS
+> >
+> > +static struct smack_known smack_known_keymaster = {
+> > + .smk_known = "keymaster",
+> > + .smk_secid = 9,
+> > +};
+> > +
+> >  /**
+> >   * smack_key_alloc - Set the key security blob
+> >   * @key: object
+> > @@ -4327,9 +4332,7 @@ static void smack_inet_csk_clone(struct sock *sk,
+> >  static int smack_key_alloc(struct key *key, const struct cred *cred,
+> >      unsigned long flags)
+> >  {
+> > - struct smack_known *skp = smk_of_task(cred->security);
+> > -
+> > - key->security = skp;
+> > + key->security = &smack_known_keymaster;
+> >   return 0;
+> >  }
+> >
+> > or is this just asking for trouble
+>
+> That would be even better. Be sure to add smack_known_keymaster
+> to the list of known labels, just like smack_known_floor and
+> friends are.
 
-I can reproduce this by creating a directory with SMACK64TRANSMUTE and
-then adding a rule with 't' set and then creating a directory
+Thank you, I didn't spot that.
 
-mkdir test
-chmod 777 test
-chsmack -a update test
-chsmack -t test
-
-echo programmingapp > /proc/self/attr/current
-echo programmingapp update rwxat > /sys/fs/smackfs/load2
-
-Creating a directory in test which trigger the ubifs assert.
-
-Looking at the code some more, don't we need to lock the inode when
-calling __vfs_setxattr above as the inode will have already been
-created (ubifs_init_security in ubifs_mkdir) and added to the inode
-hash and another process could potentially set an extended attribute
-on the directory whilst we are trying to add the transmute attribute
-here?
-
-I created a patch which put an inode_trylock around __vfs_setxattr and
-the ubifs assert has now disappeared in the use case described.
-Although this fixes things for a UBIFS I had a quick look at other
-filesystems to see how they handle setting extended attributes and the
-2 I looked at have a i_xattr_sem which is in some wrapper structure
-around an inode so maybe this isn't the best solution but maybe the
-inode_trylock should be moved into the ubifs_xattr_set function
-instead of the
-
-if (check_lock)
-        ubifs_assert(c, inode_is_locked(host));
-
-to be more in line with what the other filesystems do.  This is on a
-4.9 vendor kernel for an i.MX system but looking at 5.2 I think the
-problem would still exist but not entirely sure.  Either way is
-replacing the above check with inode_trylock a valid solution or is
-there a better way of solving this?
-
-Many Thanks,
-Martin.
+>
+> >>> or is it set to '_' by design and we
+> >>> should add the key whilst the process is a privileged state before the
+> >>> SMACK label for the process has been set?
+> >> If you can run the program that creates the key with a label
+> >> other than floor ("_"), perhaps "keymaster", the key would be
+> >> labeled keymaster, and you could create access rules like
+> > I will get some more information on how they are creating the keys as
+> > I thought the process creating the keys was labelled "programmingapp"
+> > so the key in theory should be labelled "programmingapp".  And looking
+> > at the smack_key_alloc function mentioned previously it definitely
+> > looks like it should have.  I'll see if I can get them to create some
+> > test code and debug why this isn't happening.
+> > Thanks again for your help.
+> >
+> >>         programmingapp keymaster rw
+> >>
+> >>
+> >>> Many Thanks,
+> >>> Martin.
+>
