@@ -2,96 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F78F74297
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jul 2019 02:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36D574300
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jul 2019 03:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726778AbfGYAg7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Jul 2019 20:36:59 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:23026 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726531AbfGYAg7 (ORCPT
+        id S2388487AbfGYBxb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Jul 2019 21:53:31 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:52638 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388469AbfGYBxb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Jul 2019 20:36:59 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6P0awt5103680
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Jul 2019 20:36:58 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2txwry112c-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Jul 2019 20:36:58 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 25 Jul 2019 01:36:50 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 25 Jul 2019 01:36:49 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6P0amcY48955488
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Jul 2019 00:36:48 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4238352050;
-        Thu, 25 Jul 2019 00:36:48 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.82.197])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9A10852051;
-        Thu, 25 Jul 2019 00:36:47 +0000 (GMT)
-Subject: Re: ima-evm-utils:  library version
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Bruno E. O. Meneguele" <bmeneg@redhat.com>,
-        Petr Vorel <pvorel@suse.cz>,
-        Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>
-Date:   Wed, 24 Jul 2019 20:36:36 -0400
-In-Reply-To: <20190724180440.GD3726@rhlt>
-References: <1563972698.4245.21.camel@linux.ibm.com>
-         <20190724172801.y64bs2byyuqfsezf@altlinux.org> <20190724180440.GD3726@rhlt>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Wed, 24 Jul 2019 21:53:31 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id D2BEE72CC6C;
+        Thu, 25 Jul 2019 04:53:29 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id BF4AF4A4AE8;
+        Thu, 25 Jul 2019 04:53:29 +0300 (MSK)
+Date:   Thu, 25 Jul 2019 04:53:29 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] ima-evm-utils: Namespace some too generic function names
+Message-ID: <20190725015329.q6cu7vxtzjpfve4m@altlinux.org>
+Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+References: <20190724204204.25383-1-vt@altlinux.org>
+ <1564010660.4245.76.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19072500-0016-0000-0000-00000295DABB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19072500-0017-0000-0000-000032F3D225
-Message-Id: <1564014996.4245.79.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-24_10:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907250003
+In-Reply-To: <1564010660.4245.76.camel@linux.ibm.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-07-24 at 15:04 -0300, Bruno E. O. Meneguele wrote:
-> On Wed, Jul 24, 2019 at 08:28:01PM +0300, Vitaly Chikunov wrote:
+Mimi,
 
-> > diff --git a/src/Makefile.am b/src/Makefile.am
-> > index 9c037e2..b794c50 100644
-> > --- a/src/Makefile.am
-> > +++ b/src/Makefile.am
-> > @@ -4,7 +4,7 @@ libimaevm_la_SOURCES = libimaevm.c
-> >  libimaevm_la_CPPFLAGS = $(AM_CPPFLAGS) $(LIBCRYPTO_CFLAGS)
-> >  # current[:revision[:age]]
-> >  # result: [current-age].age.revision
-> > -libimaevm_la_LDFLAGS = -version-info 0:0:0
-> > +libimaevm_la_LDFLAGS = -version-info 1:0:0
-> >  libimaevm_la_LIBADD =  $(LIBCRYPTO_LIBS)
-> > 
-> > Thanks,
+On Wed, Jul 24, 2019 at 07:24:20PM -0400, Mimi Zohar wrote:
+> On Wed, 2019-07-24 at 23:42 +0300, Vitaly Chikunov wrote:
+> > Prefix `dump', `do_dump', and `params' with `ima_' to avoid colliding
+> > with other global symbols.
 > 
-> And I also agree with his patch, changing -version-info to 1:0:0,
-> bumping "current" number, since the interface was indeed changed since
-> v1.1 release of ima-evm-utils.
+> The package is named ima-evm-utils, the tool is named evmctl, and now
+> we're prefixing the global symbols with "ima". šSome of the functions,
+> like dump(), are used by both "ima" and "evm". šAiming for some sort
+> of consistency, maybe it should be prefixed with "ima_evm", not just
+> "ima_"?š
+
+Just ima_ is OK with me. EVM could be thought as IMA extension.
+Or we can use evm_ like in evmctl. Or imaevm_ (without underscore, like
+in libimaevm or imaevm.h).
+
+> dump() should never have been named just "dump". šIt should have at
+> least been named "hexdump".
+> š
+> > `params' is prefixed with a #define trick to avoid change in half
+> > hundred places.
 > 
-> Thanks for catching that :))
+> Perhaps separate this change from the other change?
 
-Thanks! Â We'll use the libtool versioning.
+I agree to Bruno E. O. Meneguele it's better to actually rename `params'
+like other functions instead of redefining. Then all renames can go in
+one commit?
 
-Mimi
+Thanks,
 
