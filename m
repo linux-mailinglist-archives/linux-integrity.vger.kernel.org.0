@@ -2,105 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE8275C65
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jul 2019 03:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85C975CCD
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jul 2019 04:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727090AbfGZBDM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jul 2019 21:03:12 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18704 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726946AbfGZBDM (ORCPT
+        id S1725808AbfGZCOt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jul 2019 22:14:49 -0400
+Received: from condef-01.nifty.com ([202.248.20.66]:57775 "EHLO
+        condef-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725923AbfGZCOt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jul 2019 21:03:12 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6Q11kZx053378
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jul 2019 21:03:11 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tymek5uwh-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jul 2019 21:03:11 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 26 Jul 2019 02:03:10 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 26 Jul 2019 02:03:06 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6Q136QG58589292
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Jul 2019 01:03:06 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E57EE42049;
-        Fri, 26 Jul 2019 01:03:05 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5CD2C42045;
-        Fri, 26 Jul 2019 01:03:05 +0000 (GMT)
-Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 26 Jul 2019 01:03:05 +0000 (GMT)
-Subject: Re: [RFC PATCH] ima-evm-utils: Add some tests for evmctl
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Date:   Thu, 25 Jul 2019 21:03:04 -0400
-In-Reply-To: <20190725153823.dz6brcvoojum47dz@altlinux.org>
-References: <20190725061855.3734-1-vt@altlinux.org>
-         <1564065991.4245.132.camel@linux.ibm.com>
-         <20190725153823.dz6brcvoojum47dz@altlinux.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19072601-4275-0000-0000-00000350B882
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19072601-4276-0000-0000-00003860F6C1
-Message-Id: <1564102984.4245.199.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-26_01:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907260010
+        Thu, 25 Jul 2019 22:14:49 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-01.nifty.com with ESMTP id x6Q2BkHP024719;
+        Fri, 26 Jul 2019 11:11:46 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id x6Q2B03j020523;
+        Fri, 26 Jul 2019 11:11:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x6Q2B03j020523
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1564107062;
+        bh=HtcIZbZ1cRNbQwQ8xFJxK6kDpAQ+ysB+8/CuJSWfBmU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dUApB1VGtbZ7YUhYHnmVTvbvV4McLS446urzu4TTIrCx6Q3uzjOXkejckWvxWj0Ny
+         NVy979g1POs6m9GgEH1PVmliV+NSBj2CT5XFuFq4DqXXr0TZGArMAncmaLAO5uOXl6
+         tOoAnXg9snAbHp5BoxQKYV37oYvFCTgTb0PbISJNh7xRO1megtbpTk9cVECvy7jJ/D
+         f6xwBqVY73xZCbjtmlakoN05mP8V4G/tBCqg6qpiRYSQwbCNRY4/drTsYrvrQeLJz7
+         MdYDS8mOf4YiQ91NP+RL1ed6bIiuPQTQ7EVudW5KAysyzD88m7WsQs0JmF/BqkNl17
+         9a1YdDVcwhWKQ==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Dave Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Josh Boyer <jwboyer@fedoraproject.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 1/5] integrity: remove unneeded, broken attempt to add -fshort-wchar
+Date:   Fri, 26 Jul 2019 11:10:54 +0900
+Message-Id: <20190726021058.4212-2-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190726021058.4212-1-yamada.masahiro@socionext.com>
+References: <20190726021058.4212-1-yamada.masahiro@socionext.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2019-07-25 at 18:38 +0300, Vitaly Chikunov wrote:
-> Mimi,
-> 
-> On Thu, Jul 25, 2019 at 10:46:31AM -0400, Mimi Zohar wrote:
-> > On Thu, 2019-07-25 at 09:18 +0300, Vitaly Chikunov wrote:
-> > > Run `make check' to execute the tests.
-> > > Currently only ima_hash, ima_sign (v2), and ima_verify are tested.
-> > > 
-> > > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> > 
-> > Nice!  As much as I would like to include this patch in this release,
-> > let's hold off and add it to the next release.
-> 
-> You may include it if you wish, this should work good as is (over my
-> latest patches).
+I guess commit 15ea0e1e3e18 ("efi: Import certificates from UEFI Secure
+Boot") attempted to add -fshort-wchar for building load_uefi.o, but it
+has never worked as intended.
 
-Yes, it applies cleanly on top of the other patches.
-> 
-> > Reviewing shorter patches is a lot easier, at least for me.  Could you
-> > break this patch up?  Perhaps by defining the tests separately, and
-> > then adding the autotools support to run the test afterwards?
-> 
-> This is just tests, so they don't alter any other code, don't produce
-> user visible features, and don't complicate anything. Each file inside
-> of the patch could be understood separately.
+load_uefi.o is created in the platform_certs/ sub-directory. If you
+really want to add -fshort-wchar, the correct code is:
 
-I understand that.  However, without comments, with short function
-names, and single letter variable names, makes reviewing the code more
-difficult than needed.
+  $(obj)/platform_certs/load_uefi.o: KBUILD_CFLAGS += -fshort-wchar
 
-Mimi
+or, in a more Kbuild-ish way:
+
+  CFLAGS_load_uefi.o := -fshort-wchar
+
+But, you do not need to fix it.
+
+Commit 8c97023cf051 ("Kbuild: use -fshort-wchar globally") had already
+added -fshort-wchar globally. This code was unneeded in the first place.
+
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
+
+ security/integrity/Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+index 19faace69644..b6d6273a4176 100644
+--- a/security/integrity/Makefile
++++ b/security/integrity/Makefile
+@@ -13,7 +13,6 @@ integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyrin
+ integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
+ 					platform_certs/load_uefi.o
+ integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
+-$(obj)/load_uefi.o: KBUILD_CFLAGS += -fshort-wchar
+ 
+ subdir-$(CONFIG_IMA)			+= ima
+ obj-$(CONFIG_IMA)			+= ima/
+-- 
+2.17.1
 
