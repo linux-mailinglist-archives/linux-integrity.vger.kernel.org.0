@@ -2,57 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B77D766EC
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jul 2019 15:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA9D773F8
+	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jul 2019 00:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726607AbfGZNHG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Jul 2019 09:07:06 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43260 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726001AbfGZNHG (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Jul 2019 09:07:06 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 991C4AFE4;
-        Fri, 26 Jul 2019 13:07:05 +0000 (UTC)
-Date:   Fri, 26 Jul 2019 15:07:08 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        id S1727941AbfGZWXO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Jul 2019 18:23:14 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:58704 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727111AbfGZWXO (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 26 Jul 2019 18:23:14 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 9950672CC6C;
+        Sat, 27 Jul 2019 01:23:12 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [185.6.174.98])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 6C3F24A4AE8;
+        Sat, 27 Jul 2019 01:23:12 +0300 (MSK)
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: Re: [RFC PATCH] ima-evm-utils: Add some tests for evmctl
-Message-ID: <20190726130708.GA4542@dell5510>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20190725061855.3734-1-vt@altlinux.org>
+Subject: [PATCH] ima-evm-utils: Fix ima_verify for v1 signatures
+Date:   Sat, 27 Jul 2019 01:23:09 +0300
+Message-Id: <20190726222309.8106-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190725061855.3734-1-vt@altlinux.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Vitaly,
+Use user supplied key in verify_hash for DIGSIG_VERSION_1.
+Otherwise v1 signatures don't pass verification.
 
-generally LGTM, nice work!
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+---
+ src/libimaevm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I'd be also for splitting the test into more commits (if possible).
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index a582872..97f193e 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -612,6 +612,8 @@ int verify_hash(const char *file, const unsigned char *hash, int size, unsigned
+ 		/* Read pubkey from RSA key */
+ 		if (!imaevm_params.keyfile)
+ 			key = "/etc/keys/pubkey_evm.pem";
++		else
++			key = imaevm_params.keyfile;
+ 		return verify_hash_v1(file, hash, size, sig, siglen, key);
+ 	} else if (sig[0] == DIGSIG_VERSION_2) {
+ 		return verify_hash_v2(file, hash, size, sig, siglen);
+-- 
+2.11.0
 
-Other suggestions:
-* rename function names and variables to be more understandable
-(e.g. a=$1 p=$2 h=$3 f=$4 isn't much readable).
-* there should be some records in .gitignore
-* rename tests/functions to tests/functions.sh
-* I'd define exit codes (77, 99, ...) as variables
-* Do you plan to use XFAIL:, XPASS: and ERROR: ? IMHO these are redundant.
-* posix compatible shell code (does really arrays and 'declare -i'
-and other bashisms needed?), but that'd take some effort, so it's up to you and Mimi.
-IMHO posix shell syntax is easier to read.
-
-
-Kind regards,
-Petr
