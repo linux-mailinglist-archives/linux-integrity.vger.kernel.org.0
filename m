@@ -2,80 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7DC77613
-	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jul 2019 04:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AAA77633
+	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jul 2019 05:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbfG0CtF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Jul 2019 22:49:05 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:53660 "EHLO
+        id S1726276AbfG0DTD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Jul 2019 23:19:03 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:44652 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbfG0CtF (ORCPT
+        with ESMTP id S1726184AbfG0DTD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Jul 2019 22:49:05 -0400
+        Fri, 26 Jul 2019 23:19:03 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 131F972CC6C;
-        Sat, 27 Jul 2019 05:49:03 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id F0E414A4AE8;
-        Sat, 27 Jul 2019 05:49:02 +0300 (MSK)
-Date:   Sat, 27 Jul 2019 05:49:02 +0300
+        by vmicros1.altlinux.org (Postfix) with ESMTP id C1C5872CC6C;
+        Sat, 27 Jul 2019 06:19:01 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [185.6.174.98])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 9CF8C4A4AE8;
+        Sat, 27 Jul 2019 06:19:01 +0300 (MSK)
 From:   Vitaly Chikunov <vt@altlinux.org>
 To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v1 4/5] ima-evm-utils: Allow multiple files in ima_verify
-Message-ID: <20190727024902.zbbcibkrulqcautd@altlinux.org>
-Mail-Followup-To: Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-References: <20190707234837.4866-1-vt@altlinux.org>
- <20190707234837.4866-5-vt@altlinux.org>
+Subject: [PATCH 1/2] ima-evm-utils: Fix ima_verify return value on multiple files
+Date:   Sat, 27 Jul 2019 06:18:59 +0300
+Message-Id: <20190727031900.7140-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <20190707234837.4866-5-vt@altlinux.org>
-User-Agent: NeoMutt/20171215-106-ac61c7
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi,
+If any tested file results in failure produce failure exit code.
+Previously exit code affected only by the last file tested.
 
-On Mon, Jul 08, 2019 at 02:48:36AM +0300, Vitaly Chikunov wrote:
-> This allows testing multiple verify in a row, similar to ima_measurement.
-> 
-> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> ---
->  src/evmctl.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/src/evmctl.c b/src/evmctl.c
-> index fac593a..7ce2022 100644
-> --- a/src/evmctl.c
-> +++ b/src/evmctl.c
-> @@ -850,9 +850,11 @@ static int cmd_verify_ima(struct command *cmd)
->  		return -1;
->  	}
->  
-> -	err = verify_ima(file);
-> -	if (!err && params.verbose >= LOG_INFO)
-> -		log_info("%s: verification is OK\n", file);
-> +	do {
-> +		err = verify_ima(file);
-> +		if (!err && params.verbose >= LOG_INFO)
-> +			log_info("%s: verification is OK\n", file);
-> +	} while ((file = g_argv[optind++]));
+Fixes: "Allow multiple files in ima_verify"
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+---
 
-Currently `err' is affected only by the last verified file. But I think
-value of err should be affected by results from all files. But how?
-Should we AND verification results or OR? I think it should be ANDed and
-will send new version of this patch.
+I decided not to rebase "Allow multiple files in ima_verify" to not create
+merge conflicts with "Namespace some too generic object names".
 
-Thanks,
+ src/evmctl.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
->  	return err;
->  }
->  
-> -- 
-> 2.11.0
+diff --git a/src/evmctl.c b/src/evmctl.c
+index b02be8b..d33a91e 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -887,7 +887,7 @@ static int verify_ima(const char *file)
+ static int cmd_verify_ima(struct command *cmd)
+ {
+ 	char *file = g_argv[optind++];
+-	int err;
++	int err, fails = 0;
+ 
+ 	if (imaevm_params.keyfile)	/* Support multiple public keys */
+ 		init_public_keys(imaevm_params.keyfile);
+@@ -903,10 +903,12 @@ static int cmd_verify_ima(struct command *cmd)
+ 
+ 	do {
+ 		err = verify_ima(file);
++		if (err)
++			fails++;
+ 		if (!err && imaevm_params.verbose >= LOG_INFO)
+ 			log_info("%s: verification is OK\n", file);
+ 	} while ((file = g_argv[optind++]));
+-	return err;
++	return fails > 0;
+ }
+ 
+ static int cmd_convert(struct command *cmd)
+-- 
+2.11.0
+
