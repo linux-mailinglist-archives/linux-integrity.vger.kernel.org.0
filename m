@@ -2,62 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E04E778CA
-	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jul 2019 14:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAFC77BD9
+	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jul 2019 22:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728824AbfG0MzD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 27 Jul 2019 08:55:03 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:52006 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728431AbfG0MzD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 27 Jul 2019 08:55:03 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 0175C8553D;
-        Sat, 27 Jul 2019 12:55:03 +0000 (UTC)
-Received: from localhost (ovpn-116-13.gru2.redhat.com [10.97.116.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A2645C206;
-        Sat, 27 Jul 2019 12:55:02 +0000 (UTC)
-From:   "Bruno E. O. Meneguele" <bmeneg@redhat.com>
-To:     linux-integrity@vger.kernel.org, zohar@linux.vnet.ibm.com,
-        dmitry.kasatkin@gmail.com
-Subject: [PATCH] ima-evm-utils: fix trailing chars from configure script
-Date:   Sat, 27 Jul 2019 09:55:01 -0300
-Message-Id: <20190727125501.30914-1-bmeneg@redhat.com>
+        id S2388352AbfG0UkZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 27 Jul 2019 16:40:25 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:36903 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2387893AbfG0UkY (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 27 Jul 2019 16:40:24 -0400
+Received: from callcc.thunk.org (96-72-84-49-static.hfc.comcastbusiness.net [96.72.84.49] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x6RKdtcc013261
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 Jul 2019 16:39:57 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id B45954202F5; Sat, 27 Jul 2019 16:39:54 -0400 (EDT)
+Date:   Sat, 27 Jul 2019 16:39:54 -0400
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Chandan Rajendra <chandan@linux.vnet.ibm.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v7 10/17] fs-verity: implement FS_IOC_ENABLE_VERITY ioctl
+Message-ID: <20190727203954.GB1499@mit.edu>
+References: <20190722165101.12840-1-ebiggers@kernel.org>
+ <20190722165101.12840-11-ebiggers@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Sat, 27 Jul 2019 12:55:03 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190722165101.12840-11-ebiggers@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Two chars were left in a AC_DEFINE() in configure.ac, leading to an error
-message during ./configure call:
+On Mon, Jul 22, 2019 at 09:50:54AM -0700, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> Add a function for filesystems to call to implement the
+> FS_IOC_ENABLE_VERITY ioctl.  This ioctl enables fs-verity on a file.
+> 
+> See the "FS_IOC_ENABLE_VERITY" section of
+> Documentation/filesystems/fsverity.rst for the documentation.
+> 
+> Reviewed-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
 
-checking for tsspcrread... yes
-./configure: line 9894: ],: command not found
+Looks good.  You can add:
 
-Signed-off-by: Bruno E. O. Meneguele <bmeneg@redhat.com>
----
- configure.ac | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Theodore Ts'o <tytso@mit.edu>
 
-diff --git a/configure.ac b/configure.ac
-index eedf90e..7747481 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -32,7 +32,7 @@ AC_CHECK_HEADERS(openssl/conf.h)
- 
- AC_CHECK_PROG(TSSPCRREAD, [tsspcrread], yes, no)
- if test "x$TSSPCRREAD" = "xyes"; then
--	AC_DEFINE(HAVE_TSSPCRREAD, 1, [Define to 1 if you have tsspcrread binary installed])],
-+	AC_DEFINE(HAVE_TSSPCRREAD, 1, [Define to 1 if you have tsspcrread binary installed])
- fi
- 
- AC_CHECK_HEADERS(sys/xattr.h, , [AC_MSG_ERROR([sys/xattr.h header not found. You need the c-library development package.])])
--- 
-2.21.0
-
+						- Ted
