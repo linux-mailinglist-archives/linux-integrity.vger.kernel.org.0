@@ -2,832 +2,379 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D23776AB
-	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jul 2019 06:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA86C777DF
+	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jul 2019 11:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725818AbfG0ElX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 27 Jul 2019 00:41:23 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:38058 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725816AbfG0ElX (ORCPT
+        id S1728574AbfG0JUj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 27 Jul 2019 05:20:39 -0400
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:33415 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728264AbfG0JUi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 27 Jul 2019 00:41:23 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 16F1572CC6C;
-        Sat, 27 Jul 2019 07:41:15 +0300 (MSK)
-Received: from beacon.altlinux.org (unknown [185.6.174.98])
-        by imap.altlinux.org (Postfix) with ESMTPSA id DB8544A4AE8;
-        Sat, 27 Jul 2019 07:41:14 +0300 (MSK)
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH v2] ima-evm-utils: Add some tests for evmctl
-Date:   Sat, 27 Jul 2019 07:41:13 +0300
-Message-Id: <20190727044113.3865-1-vt@altlinux.org>
-X-Mailer: git-send-email 2.11.0
+        Sat, 27 Jul 2019 05:20:38 -0400
+Received: by mail-ua1-f65.google.com with SMTP id g11so22170293uak.0
+        for <linux-integrity@vger.kernel.org>; Sat, 27 Jul 2019 02:20:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sGYCVS+cwt+c15rmvBFTB3EVOspRoYOIEqCqGVHSJNI=;
+        b=gQsZiYzMRpraZWgtIUe8LQRK2b7d1aads49kpUxngiW4Fo3eZHvrSAY5YQ8J9vvYVl
+         Mv6UWNQhdFDnATIv5356HDVXv0VwG1OmV3PYZS7YQNdaGPxj2Tw+fZ/ykT/hknOoRFxG
+         jjffmX88jXIZa0gpb3E2b6r9nalE/yImfadCDBw++/ZiBfFeNyY9a2+Q3P+sSEhb0nVH
+         G4Sw0NPue0nGe59M9bERvKiel8vljU7dOQ9L96HrEmGHEwkYj1/lE9SR9mEC7J0NeJVh
+         ADaopB7HYo7uNRH0Vx2wWX1WwrmDMPSqbUv5VTqQ2vTx99yujiWtdi6O/KPOMj/GMYMd
+         yayw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sGYCVS+cwt+c15rmvBFTB3EVOspRoYOIEqCqGVHSJNI=;
+        b=SQbdc99C9u+qTLegu5Pf9Qdh8vg6YzTp5FPn9pFP1pHTSCjcIIsMnqwNKVL4uvnY4E
+         Bt01AFEKjmLRk1jiJNHTaInnlzy8WdTEnBN/wDllBhBozX7QTVoSihsua6ERxETAXbA6
+         r2DJnn2vZ3mfQ9/vyAtu5y5Y9QIRyQnUt+KO3yZ4tPudlGWNEbJi7nbfVwW+wLy7cP6E
+         9HrwsnBGW6qXYYdmy8afGz5eTiSZuHOoxQIuNA0YgH3M8JDQP++ovg83iWY/QslW+bwx
+         +bnAG8Tp9iyoV5opAM+VDbw9a1kFpsFTrgThnb9pdUYf45bY+uiAAk5WouAWqxLK3JCz
+         0Bug==
+X-Gm-Message-State: APjAAAV7SdyhwBZAGGSvyf8HI1sTeZMsj6KjpelaMmrLi9duEhWc+JXh
+        WAf853Q+A6ehLJKVwNlxGb0LFli/SVuKmvBGKLThT7rb
+X-Google-Smtp-Source: APXvYqwZxuTi1Nmj3Yr+bJs15GhJp4y7XHCXSZO61yGw2zdfmB7l0NCBpwHO3h/+/7yDkYSRRkM3S1qe74wbCZP81E0=
+X-Received: by 2002:ab0:7042:: with SMTP id v2mr2815347ual.141.1564219237363;
+ Sat, 27 Jul 2019 02:20:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CABatt_yn_yjw-MOUnrPDyg-ZQd1AjaHkcJKxNBo8STC9o2EGrw@mail.gmail.com>
+ <165e3170-9b5a-7c75-9a9b-265ede62f55e@schaufler-ca.com> <CABatt_yS9m0nkqSzh_LwSDfc8wuubkXgiOxd6kgVKWuNjbFKuA@mail.gmail.com>
+ <36c9e956-b821-0fb6-5a38-93285d341916@schaufler-ca.com> <CABatt_wPccEg=xpb16K-XDHXOzvbwVapNTE_XhWbQBghJNYZFg@mail.gmail.com>
+ <CABatt_zcFXOFYqLBcaZzuMewKp9EmqnUtsGB8H9gr14ui4xB8w@mail.gmail.com>
+ <459451d7-d946-9c9d-9e7b-3ebd710fd479@schaufler-ca.com> <CABatt_znPXRJAy+UF9L-0Fgb0WBSonEu2wNUXL17dT9hBdT06Q@mail.gmail.com>
+In-Reply-To: <CABatt_znPXRJAy+UF9L-0Fgb0WBSonEu2wNUXL17dT9hBdT06Q@mail.gmail.com>
+From:   Martin Townsend <mtownsend1973@gmail.com>
+Date:   Sat, 27 Jul 2019 10:20:26 +0100
+Message-ID: <CABatt_wwFWN-QOjRAUz=UYEeXD3MnCJ1o=2HnBSZJZfiwR2dNg@mail.gmail.com>
+Subject: Re: SMACK and keys
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     linux-integrity@vger.kernel.org,
+        "SMACK-discuss@lists.01.org" <SMACK-discuss@lists.01.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Run `make check' to execute the tests.
-Currently only ima_hash, ima_sign, and ima_verify are tested.
+On Fri, Jul 26, 2019 at 10:05 AM Martin Townsend
+<mtownsend1973@gmail.com> wrote:
+>
+> On Thu, Jul 25, 2019 at 8:44 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> >
+> > On 7/25/2019 8:07 AM, Martin Townsend wrote:
+> > > On Mon, Jul 22, 2019 at 10:35 PM Martin Townsend
+> > > <mtownsend1973@gmail.com> wrote:
+> >
+> > I'm adding the smack-discuss list to the thread.
+> >
+> > >> On Mon, Jul 22, 2019 at 10:23 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > >>> On 7/22/2019 1:19 PM, Martin Townsend wrote:
+> > >>>> Hi Casey
+> > >>>>
+> > >>>> Thank you for the swift reply.
+> > >>>>
+> > >>>> On Mon, Jul 22, 2019 at 5:25 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > >>>>> On 7/22/2019 1:03 AM, Martin Townsend wrote:
+> > >>>>>> Hi,
+> > >>>>>>
+> > >>>>>> One of our developers has reported the following audit log entry when
+> > >>>>>> trying to add a key to the kernel's keyring when SMACK is enabled:
+> > >>>>>>
+> > >>>>>> Jul  9 09:33:23 mach-cw-rnet-ppm-1840 user.notice kernel: audit:
+> > >>>>>> type=1400 audit(1562664803.960:12): lsm=SMACK fn=smack_key_permission
+> > >>>>>> action=denied subject="programmingapp" object="_" requested=w pid=905
+> > >>>>>> comm="programmingapp" key_serial=98475196 key_desc="_ses"
+> >
+> > Why does programmingapp need write access to the key "_ses" ?
+> > Knowing this may help identify options.
+> >
+> > >>>>> The Smack label on a key is set when the key is created,
+> > >>>>> and is set to the label of the process that created it.
+> > >>>> I'll have to check but I thought that the programmingapp process from
+> > >>>> the audit message above was trying to create the key, the dev team
+> > >>>> were reporting that the add_key syscall was failing the SMACK access
+> > >>>> check.  This raises another question, we currently compile in several
+> > >>>> root Certificates into the kernel, would these get a SMACK label? and
+> > >>>> if so would this be '_'?
+> > >>> Yes, that could easily be what's happening here.
+> > >>>
+> > >>> What does a "compiled in" certificate look like?
+> > >> It's a PEM file of concatenated certificates that you copy into the
+> > >> certs directory I think and then set the following in the kernel
+> > >> configuration (in this example we have a file called
+> > >> builtin-trusted.pem)
+> > >> CONFIG_SYSTEM_TRUSTED_KEYRING=y
+> > >> CONFIG_SYSTEM_TRUSTED_KEYS="certs/builtin-trusted.pem"
+> > >>
+> > >> I'm assuming that the public keys contained in the certificates are
+> > >> added to the kernels trusted keying automatically during boot.
+> > >>
+> > >>>>>> I had a quick look through the code in smack_lsm.c but can't see how
+> > >>>>>> I'm supposed to set a SMACK label for keys or keyrings.  Is it
+> > >>>>>> possible and if so how?
+> > >>>>> There is currently no way to change the Smack label on a key.
+> > >>>>>
+> > >>>>>> We are running a 4.9 Kernel with not much
+> > >>>>>> chance of upgrading as it's a vendor kernel (linux-imx).  As it's an
+> > >>>>>> embedded system we are happy to hard code the SMACK labels into the
+> > >>>>>> kernel if this is possible?
+> > >>>>> In smack_key_alloc() change
+> > >>>>>
+> > >>>>>         key->security = skp;
+> > >>>>>
+> > >>>>> to
+> > >>>>>         key->security = &smack_known_star;
+> > >>>>>
+> > >>>>> and all keys will have the star ("*") label, which
+> > >>>>> grants everyone access to them. Not the best solution
+> > >>>>> long term, but it should get you by.
+> > >>>> They are currently adding a rule 'programmingapp _ rw' so I think this
+> > >>>> would be an upgrade :)
+> > >>>> Could I go one further and have something like?
+> > >>>> #ifdef CONFIG_KEYS
+> > >>>>
+> > >>>> +static struct smack_known smack_known_keymaster = {
+> > >>>> + .smk_known = "keymaster",
+> > >>>> + .smk_secid = 9,
+> > >>>> +};
+> > >>>> +
+> > >>>>  /**
+> > >>>>   * smack_key_alloc - Set the key security blob
+> > >>>>   * @key: object
+> > >>>> @@ -4327,9 +4332,7 @@ static void smack_inet_csk_clone(struct sock *sk,
+> > >>>>  static int smack_key_alloc(struct key *key, const struct cred *cred,
+> > >>>>      unsigned long flags)
+> > >>>>  {
+> > >>>> - struct smack_known *skp = smk_of_task(cred->security);
+> > >>>> -
+> > >>>> - key->security = skp;
+> > >>>> + key->security = &smack_known_keymaster;
+> > >>>>   return 0;
+> > >>>>  }
+> > >>>>
+> > >>>> or is this just asking for trouble
+> > >>> That would be even better. Be sure to add smack_known_keymaster
+> > >>> to the list of known labels, just like smack_known_floor and
+> > >>> friends are.
+> > >> Thank you, I didn't spot that.
+> > >>
+> > >>>>>> or is it set to '_' by design and we
+> > >>>>>> should add the key whilst the process is a privileged state before the
+> > >>>>>> SMACK label for the process has been set?
+> > >>>>> If you can run the program that creates the key with a label
+> > >>>>> other than floor ("_"), perhaps "keymaster", the key would be
+> > >>>>> labeled keymaster, and you could create access rules like
+> > >>>> I will get some more information on how they are creating the keys as
+> > >>>> I thought the process creating the keys was labelled "programmingapp"
+> > >>>> so the key in theory should be labelled "programmingapp".  And looking
+> > >>>> at the smack_key_alloc function mentioned previously it definitely
+> > >>>> looks like it should have.  I'll see if I can get them to create some
+> > >>>> test code and debug why this isn't happening.
+> > >>>> Thanks again for your help.
+> > >>>>
+> > >>>>>         programmingapp keymaster rw
+> > >>>>>
+> > >>>>>
+> > >>>>>> Many Thanks,
+> > >>>>>> Martin.
+> > > I created the keymaster label for all keys and I also had to add a
+> > > rule of "_ keymaster rw" so that the kernel could setup the built-in
+> > > trusted keyring and it boots fine but then we are seeing lots of
+> > > processes failing with what looks like integrity checks and then
+> > > messages like
+> > >
+> > > Jul 19 10:11:15 mach-cw-rnet-ppm-1840 audit[1572]: AVC lsm=SMACK
+> > > fn=smack_key_permission action=denied subject="ubihealthd"
+> > > object="keymaster" labels_differ pid=1572 comm="(ihealthd)"
+> > > key_serial=20092166 key_desc=".ima_blacklist"
+> > >
+> > > Jul 19 10:11:15 mach-cw-rnet-ppm-1840 audit[1572]: AVC lsm=SMACK
+> > > fn=smack_key_permission action=denied subject="ubihealthd"
+> > > object="keymaster" labels_differ pid=1572 comm="(ihealthd)"
+> > > key_serial=694943947 key_desc=".evm"
+> >
+> > Again, what is ubihealthd doing that it needs access to keys?
+> >
+> > >
+> > > so I'm guessing that this means with my change I would have to give
+> > > every process that reads the root filesystem a rule for keymaster as
+> > > the main root filesystem is signed with IMA/EVM.  The default of '_'
+> > > I'm guessing would have the same effect and we would have to create a
+> > > rule for floor for every process?  I'm not sure what to do next except
+> > > if we can somehow identify the ima/evm key and give this the '*'
+> > > label.  For the moment we are going to assign all keys '*' so we can
+> > > proceed.  I just thought I would report our findings and wondered if
+> > > anyone had any ideas?
+>
+> I was asking the same questions :) so I put a dump_stack and outputted
+> the description of the keys in smack_key_permission to find out.
+>
+> It looks like it is IMA.  From the  log file you can see that when a
+> file is accessed from any process (ubihealthd was just one of them but
+> literally every process does this)
+>
+> I'll pick on ubihealthd, I scanned through the source code and I can't
+> see it using keys directly but it does write out a stats file.
+>
+> When the process starts up there is a quite a bit of interaction with
+> the _ses and invocation_id keyrings
+>
+> CPU: 0 PID: 353 Comm: (ihealthd) Tainted: G           O
+> 4.9.11-1.0.0+gc27010d #25
+> Hardware name: Freescale i.MX6 UltraLite (Device Tree)
+> [<8010ea60>] (unwind_backtrace) from [<8010c4d8>] (show_stack+0x10/0x14)
+> [<8010c4d8>] (show_stack) from [<803e8784>] (smack_key_permission+0x2c/0xe0)
+> [<803e8784>] (smack_key_permission) from [<803e7dd0>]
+> (security_key_permission+0x3c/0x5c)
+> [<803e7dd0>] (security_key_permission) from [<803df864>]
+> (lookup_user_key+0x144/0x500)
+> [<803df864>] (lookup_user_key) from [<803dd410>] (SyS_add_key+0xd0/0x210)
+> [<803dd410>] (SyS_add_key) from [<80107dfc>] (__sys_trace_return+0x0/0x10)
+> keyp->index_key->description=_ses
+>
+> CPU: 0 PID: 353 Comm: (ihealthd) Tainted: G           O
+> 4.9.11-1.0.0+gc27010d #25
+> Hardware name: Freescale i.MX6 UltraLite (Device Tree)
+> [<8010ea60>] (unwind_backtrace) from [<8010c4d8>] (show_stack+0x10/0x14)
+> [<8010c4d8>] (show_stack) from [<803e8784>] (smack_key_permission+0x2c/0xe0)
+> [<803e8784>] (smack_key_permission) from [<803e7dd0>]
+> (security_key_permission+0x3c/0x5c)
+> [<803e7dd0>] (security_key_permission) from [<803db9bc>]
+> (key_create_or_update+0x190/0x38c)
+> [<803db9bc>] (key_create_or_update) from [<803dd444>] (SyS_add_key+0x104/0x210)
+> [<803dd444>] (SyS_add_key) from [<80107dfc>] (__sys_trace_return+0x0/0x10)
+> keyp->index_key->description=_ses
+>
+> CPU: 0 PID: 353 Comm: (ihealthd) Tainted: G           O
+> 4.9.11-1.0.0+gc27010d #25
+> Hardware name: Freescale i.MX6 UltraLite (Device Tree)
+> [<8010ea60>] (unwind_backtrace) from [<8010c4d8>] (show_stack+0x10/0x14)
+> [<8010c4d8>] (show_stack) from [<803e8784>] (smack_key_permission+0x2c/0xe0)
+> [<803e8784>] (smack_key_permission) from [<803e7dd0>]
+> (security_key_permission+0x3c/0x5c)
+> [<803e7dd0>] (security_key_permission) from [<803dcb14>]
+> (keyring_search_aux+0x80/0x130)
+> [<803dcb14>] (keyring_search_aux) from [<803df400>]
+> (search_my_process_keyrings+0xd4/0x194)
+> [<803df400>] (search_my_process_keyrings) from [<803df4e4>]
+> (search_process_keyrings+0x24/0x10c)
+> [<803df4e4>] (search_process_keyrings) from [<803dfa78>]
+> (lookup_user_key+0x358/0x500)
+> [<803dfa78>] (lookup_user_key) from [<803de2cc>] (keyctl_setperm_key+0x24/0xa4)
+> [<803de2cc>] (keyctl_setperm_key) from [<80107dfc>]
+> (__sys_trace_return+0x0/0x10)
+> keyp->index_key->description=_ses
+>
+> CPU: 0 PID: 353 Comm: (ihealthd) Tainted: G           O
+> 4.9.11-1.0.0+gc27010d #25
+> Hardware name: Freescale i.MX6 UltraLite (Device Tree)
+> [<8010ea60>] (unwind_backtrace) from [<8010c4d8>] (show_stack+0x10/0x14)
+> [<8010c4d8>] (show_stack) from [<803e8784>] (smack_key_permission+0x2c/0xe0)
+> [<803e8784>] (smack_key_permission) from [<803e7dd0>]
+> (security_key_permission+0x3c/0x5c)
+> [<803e7dd0>] (security_key_permission) from [<803dc464>]
+> (keyring_search_iterator+0xa0/0xf0)
+> [<803dc464>] (keyring_search_iterator) from [<803dc674>]
+> (search_nested_keyrings+0x1c0/0x330)
+> [<803dc674>] (search_nested_keyrings) from [<803dcb6c>]
+> (keyring_search_aux+0xd8/0x130)
+> [<803dcb6c>] (keyring_search_aux) from [<803df400>]
+> (search_my_process_keyrings+0xd4/0x194)
+> [<803df400>] (search_my_process_keyrings) from [<803df4e4>]
+> (search_process_keyrings+0x24/0x10c)
+> [<803df4e4>] (search_process_keyrings) from [<803dfa78>]
+> (lookup_user_key+0x358/0x500)
+> [<803dfa78>] (lookup_user_key) from [<803de2cc>] (keyctl_setperm_key+0x24/0xa4)
+> [<803de2cc>] (keyctl_setperm_key) from [<80107dfc>]
+> (__sys_trace_return+0x0/0x10)
+> keyp->index_key->description=invocation_id
+>
+> CPU: 0 PID: 353 Comm: (ihealthd) Tainted: G           O
+> 4.9.11-1.0.0+gc27010d #25
+> Hardware name: Freescale i.MX6 UltraLite (Device Tree)
+> [<8010ea60>] (unwind_backtrace) from [<8010c4d8>] (show_stack+0x10/0x14)
+> [<8010c4d8>] (show_stack) from [<803e8784>] (smack_key_permission+0x2c/0xe0)
+> [<803e8784>] (smack_key_permission) from [<803e7dd0>]
+> (security_key_permission+0x3c/0x5c)
+> [<803e7dd0>] (security_key_permission) from [<803df864>]
+> (lookup_user_key+0x144/0x500)
+> [<803df864>] (lookup_user_key) from [<803de2cc>] (keyctl_setperm_key+0x24/0xa4)
+> [<803de2cc>] (keyctl_setperm_key) from [<80107dfc>]
+> (__sys_trace_return+0x0/0x10)
+> keyp->index_key->description=invocation_id
+>
+> ... And then when accessing a file we see
+>
+>
+> CPU: 0 PID: 475 Comm: (ihealthd) Tainted: G           O
+> 4.9.11-1.0.0+gc27010d #25
+> Hardware name: Freescale i.MX6 UltraLite (Device Tree)
+> [<8010ea60>] (unwind_backtrace) from [<8010c4d8>] (show_stack+0x10/0x14)
+> [<8010c4d8>] (show_stack) from [<803e8784>] (smack_key_permission+0x2c/0xe0)
+> [<803e8784>] (smack_key_permission) from [<803e7dd0>]
+> (security_key_permission+0x3c/0x5c)
+> [<803e7dd0>] (security_key_permission) from [<803dcb14>]
+> (keyring_search_aux+0x80/0x130)
+> [<803dcb14>] (keyring_search_aux) from [<803dcc58>] (keyring_search+0x94/0xcc)
+> [<803dcc58>] (keyring_search) from [<803f17b4>] (asymmetric_verify+0x90/0x1ec)
+> [<803f17b4>] (asymmetric_verify) from [<803f7020>] (evm_verify_hmac+0x204/0x258)
+> [<803f7020>] (evm_verify_hmac) from [<803f6894>]
+> (ima_appraise_measurement+0x12c/0x3a4)
+> [<803f6894>] (ima_appraise_measurement) from [<803f2aa8>]
+> (process_measurement+0x464/0x4d8)
+> [<803f2aa8>] (process_measurement) from [<803f2b44>] (ima_file_check+0x28/0x30)
+> [<803f2b44>] (ima_file_check) from [<8025873c>] (path_openat+0x67c/0x1414)
+> [<8025873c>] (path_openat) from [<8025a9b0>] (do_filp_open+0x70/0xdc)
+> [<8025a9b0>] (do_filp_open) from [<8024f9c0>] (do_open_execat+0x74/0x188)
+> [<8024f9c0>] (do_open_execat) from [<8025125c>] (do_execveat_common+0x1f4/0x84c)
+> [<8025125c>] (do_execveat_common) from [<80251ad8>] (SyS_execve+0x30/0x38)
+> [<80251ad8>] (SyS_execve) from [<80107dfc>] (__sys_trace_return+0x0/0x10)
+> keyp->index_key->description=.ima_blacklist
+>
+> But that seems to be ok.  Here's an example of where ubihealthd fails
+> to get a key and it looks like it is failing EVM when trying to open a
+> file.
+>
+> CPU: 0 PID: 530 Comm: (ihealthd) Tainted: G           O
+> 4.9.11-1.0.0+gc27010d #25
+> Hardware name: Freescale i.MX6 UltraLite (Device Tree)
+> [<8010ea60>] (unwind_backtrace) from [<8010c4d8>] (show_stack+0x10/0x14)
+> [<8010c4d8>] (show_stack) from [<803e8784>] (smack_key_permission+0x2c/0xe0)
+> [<803e8784>] (smack_key_permission) from [<803e7dd0>]
+> (security_key_permission+0x3c/0x5c)
+> [<803e7dd0>] (security_key_permission) from [<803dcb14>]
+> (keyring_search_aux+0x80/0x130)
+> [<803dcb14>] (keyring_search_aux) from [<803dcc58>] (keyring_search+0x94/0xcc)
+> [<803dcc58>] (keyring_search) from [<803f1808>] (asymmetric_verify+0xe4/0x1ec)
+> [<803f1808>] (asymmetric_verify) from [<803f7020>] (evm_verify_hmac+0x204/0x258)
+> [<803f7020>] (evm_verify_hmac) from [<803f6894>]
+> (ima_appraise_measurement+0x12c/0x3a4)
+> [<803f6894>] (ima_appraise_measurement) from [<803f2aa8>]
+> (process_measurement+0x464/0x4d8)
+> [<803f2aa8>] (process_measurement) from [<803f2b44>] (ima_file_check+0x28/0x30)
+> [<803f2b44>] (ima_file_check) from [<8025873c>] (path_openat+0x67c/0x1414)
+> [<8025873c>] (path_openat) from [<8025a9b0>] (do_filp_open+0x70/0xdc)
+> [<8025a9b0>] (do_filp_open) from [<8024f9c0>] (do_open_execat+0x74/0x188)
+> [<8024f9c0>] (do_open_execat) from [<8025125c>] (do_execveat_common+0x1f4/0x84c)
+> [<8025125c>] (do_execveat_common) from [<80251ad8>] (SyS_execve+0x30/0x38)
+> [<80251ad8>] (SyS_execve) from [<80107dfc>] (__sys_trace_return+0x0/0x10)
+> keyp->index_key->description=.evm
+> integrity: Request for unknown key 'id:a35fd9c6' err -13
+>
+> So I'm guessing using SMACK and IMA together is going to require a bit of work.
+> How about if I set the label of the .evm and probably .ima keyrings to
+> '*'? I shall try and report back.
 
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
----
-Changelog since v1:
-- Apply suggestions by Petr Vorel:
- - Rename function names and variables to be more understandable.
- - Rename tests/functions to tests/functions.sh.
- - Define exit codes (77, 99, ...) as variables.
-- Added more comments and remove single letter variables (for Mimi Zohar).
-- Move getfattr check into function.
-- Move evmctl run and check into single function.
-- Add sign/verify tests for v1 signatures.
-- Minor improvements.
-- Since I still edit all 5 files I did not split the patch into multiple
-  commits to separate the files, otherwise editing will become too
-  complicated, as I ought to continuously rebase and edit different
-  commits. This was really non-productive suggestion.
-
-Please test the tests.
-
- Makefile.am           |   2 +-
- configure.ac          |   1 +
- tests/Makefile.am     |  15 ++++
- tests/functions.sh    | 218 ++++++++++++++++++++++++++++++++++++++++++++++++++
- tests/gen-keys.sh     |  90 +++++++++++++++++++++
- tests/ima_hash.test   |  72 +++++++++++++++++
- tests/ima_sign.test   | 211 ++++++++++++++++++++++++++++++++++++++++++++++++
- tests/ima_verify.test |  93 +++++++++++++++++++++
- 8 files changed, 701 insertions(+), 1 deletion(-)
- create mode 100644 tests/Makefile.am
- create mode 100755 tests/functions.sh
- create mode 100755 tests/gen-keys.sh
- create mode 100755 tests/ima_hash.test
- create mode 100755 tests/ima_sign.test
- create mode 100755 tests/ima_verify.test
-
-diff --git a/Makefile.am b/Makefile.am
-index dba408d..45c6f82 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -1,4 +1,4 @@
--SUBDIRS = src
-+SUBDIRS = src tests
- dist_man_MANS = evmctl.1
- 
- doc_DATA =  examples/ima-genkey-self.sh examples/ima-genkey.sh examples/ima-gen-local-ca.sh
-diff --git a/configure.ac b/configure.ac
-index 3fc63b3..dccdd92 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -67,6 +67,7 @@ EVMCTL_MANPAGE_DOCBOOK_XSL
- 
- AC_CONFIG_FILES([Makefile
- 		src/Makefile
-+		tests/Makefile
- 		packaging/ima-evm-utils.spec
- 		])
- AC_OUTPUT
-diff --git a/tests/Makefile.am b/tests/Makefile.am
-new file mode 100644
-index 0000000..145ea30
---- /dev/null
-+++ b/tests/Makefile.am
-@@ -0,0 +1,15 @@
-+check_SCRIPTS =
-+TESTS = $(check_SCRIPTS)
-+
-+check_SCRIPTS += ima_hash.test ima_verify.test ima_sign.test
-+
-+# ima_verify depends on results of ima_hash
-+ima_verify.log: ima_sign.log
-+
-+clean-local:
-+	-rm -f *.txt *.out *.sig *.sig2
-+
-+distclean: distclean-keys
-+.PHONY: distclean-keys
-+distclean-keys:
-+	./gen-keys.sh clean
-diff --git a/tests/functions.sh b/tests/functions.sh
-new file mode 100755
-index 0000000..8794120
---- /dev/null
-+++ b/tests/functions.sh
-@@ -0,0 +1,218 @@
-+#!/bin/bash
-+#
-+# ima-evm-utils tests bash functions
-+#
-+# Copyright (C) 2019 Vitaly Chikunov <vt@altlinux.org>
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2, or (at your option)
-+# any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+# GNU General Public License for more details.
-+
-+# tests accounting
-+declare -i testspass=0 testsfail=0 testsskip=0
-+
-+# exit codes (compatible with automake)
-+declare -r OK=0
-+declare -r FAIL=1
-+declare -r HARDFAIL=99 # hard failure no matter testing mode
-+declare -r SKIP=77     # skip test
-+
-+# you can set env VERBOSE=1 to see more output from evmctl
-+V=vvvv
-+V=${V:0:$VERBOSE}
-+V=${V:+-$V}
-+
-+# require particular executables to be present
-+_require() {
-+  ret=
-+  for i; do
-+    if ! type $i; then
-+      echo "$i is required for test"
-+      ret=1
-+    fi
-+  done
-+  [ $ret ] && exit $HARDFAIL
-+}
-+
-+# only allow color output on tty
-+if tty -s; then
-+     RED=$'\e[1;31m'
-+   GREEN=$'\e[1;32m'
-+  YELLOW=$'\e[1;33m'
-+    BLUE=$'\e[1;34m'
-+    CYAN=$'\e[1;36m'
-+    NORM=$'\e[m'
-+fi
-+
-+# Define FAILEARLY to exit testing on the first error.
-+exit_early() {
-+  if [ $FAILEARLY ]; then
-+    exit $1
-+  fi
-+}
-+
-+# Test mode determined by TNEG variable:
-+#   undefined: to positive testing
-+#   defined: negative testing
-+TNEG=
-+TMODE=+
-+
-+# Eval positive test and account its result
-+pos() {
-+  TNEG= TMODE=+
-+  [ "$VERBOSE" ] && echo "Start positive test $*"
-+  eval "$@"
-+  E=$?
-+  [ "$VERBOSE" ] && echo "Stop ($E) positive test $*"
-+  case $E in
-+    0)  testspass+=1 ;;
-+    77) testsskip+=1 ;;
-+    99) testsfail+=1; exit_early 1 ;;
-+    *)  testsfail+=1; exit_early 2 ;;
-+  esac
-+}
-+
-+# Eval negative test and accoutn its result
-+neg() {
-+  TNEG=1 TMODE=-
-+  [ "$VERBOSE" ] && echo "Start negative test $*"
-+  eval "$@"
-+  E=$?
-+  [ "$VERBOSE" ] && echo "Stop ($E) negative test $*"
-+  case $E in
-+    0)  testsfail+=1; exit_early 3 ;;
-+    77) testsskip+=1 ;;
-+    99) testsfail+=1; exit_early 4 ;;
-+    *)  testspass+=1 ;;
-+  esac
-+  TNEG= # Restore default
-+}
-+
-+# return true if current test is positive
-+_is_positive_test() {
-+  [ -z "$TNEG" ]
-+}
-+
-+# return true if current test is negative
-+_is_negative_test() {
-+  [ "$TNEG" ]
-+}
-+
-+# Color following text to red if it's real error
-+red_if_pos() {
-+  _is_positive_test && echo $@ $RED
-+}
-+
-+norm_if_pos() {
-+  _is_positive_test && echo $@ $NORM
-+}
-+
-+DEL=
-+FOR=
-+# _evmctl_run should be run as `_evmctl_run ... || return'
-+_evmctl_run() {
-+  local cmd=$1 out=$1-$$.out
-+  # Additional parameters:
-+  # FOR: append to text as 'for $FOR'
-+  # DEL: additional files to rm if test failed
-+
-+  set -- evmctl $V ${ENGINE:+--engine $ENGINE} "$@"
-+  echo $YELLOW$TMODE $*$NORM
-+  eval "$@" >$out 2>&1
-+  ret=$?
-+
-+  if [ $ret -ge 126 -a $ret -lt 255 ]; then
-+    echo $RED
-+    echo "evmctl $cmd failed hard with ($ret) ${FOR:+for $FOR}"
-+    sed 's/^/  /' $out
-+    echo $NORM
-+    rm $out $DEL
-+    FOR= DEL=
-+    return $SKIP
-+  elif [ $ret -gt 0 ]; then
-+    red_if_pos
-+    echo "evmctl $cmd failed" ${TNEG:+properly} "with ($ret) ${FOR:+for $FOR}"
-+    sed 's/^/  /' $out
-+    norm_if_pos
-+    rm $out $DEL
-+    FOR= DEL=
-+    return $FAIL
-+  elif _is_negative_test; then
-+    echo $RED
-+    echo "evmctl $cmd wrongly succeeded ${FOR:+for $FOR}"
-+    sed 's/^/  /' $out
-+    echo $NORM
-+  else
-+    [ "$VERBOSE" ] && sed 's/^/  /' $out
-+  fi
-+  rm $out
-+  FOR= DEL=
-+  return $OK
-+}
-+
-+_extract_ima_xattr() {
-+  local file=$1 out=$2 pref=$3
-+
-+  getfattr -n user.ima -e hex $file \
-+    | grep ^user.ima= \
-+    | sed s/^user.ima=$pref// \
-+    | xxd -r -p > $out
-+}
-+
-+_test_ima_xattr() {
-+  local file=$1 pref=$2
-+
-+  if ! getfattr -n user.ima -e hex $file | egrep -qx "user.ima=$pref"; then
-+    red_if_pos
-+    echo "Did not find expected hash${FOR:+ for $FOR}:"
-+    echo "    user.ima=$pref"
-+    echo ""
-+    echo "Actual output below:"
-+    getfattr -n user.ima -e hex $file | sed 's/^/    /'
-+    norm_if_pos
-+    rm $file
-+    FOR=
-+    return $FAIL
-+  fi
-+  FOR=
-+}
-+
-+_enable_gost_engine() {
-+  # Do not enable if it's already working (enabled by user)
-+  if ! openssl md_gost12_256 /dev/null >/dev/null 2>&1 \
-+    && openssl engine gost >/dev/null 2>&1; then
-+    ENGINE=gost
-+  fi
-+}
-+
-+# Show test stats and exit into automake test system
-+# with proper exit code (same as ours).
-+_report_exit() {
-+  if [ $testsfail -gt 0 ]; then
-+    echo "=============================="
-+    echo "Run with FAILEARLY=1 $0 $@"
-+    echo "To stop after first failure"
-+    echo "=============================="
-+  fi
-+  [ $testspass -gt 0 ] && echo -n $GREEN || echo -n $NORM
-+  echo -n "PASS: $testspass"
-+  [ $testsskip -gt 0 ] && echo -n $YELLOW || echo -n $NORM
-+  echo -n " SKIP: $testsskip"
-+  [ $testsfail -gt 0 ] && echo -n $RED || echo -n $NORM
-+  echo " FAIL: $testsfail"
-+  echo $NORM
-+  if [ $testsfail -gt 0 ]; then
-+    exit $FAIL
-+  elif [ $testspass -gt 0 ]; then
-+    exit $OK
-+  else
-+    exit $SKIP
-+  fi
-+}
-+
-diff --git a/tests/gen-keys.sh b/tests/gen-keys.sh
-new file mode 100755
-index 0000000..056cd68
---- /dev/null
-+++ b/tests/gen-keys.sh
-@@ -0,0 +1,90 @@
-+#!/bin/bash
-+#
-+# Generate keys for the tests
-+#
-+# Copyright (C) 2019 Vitaly Chikunov <vt@altlinux.org>
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2, or (at your option)
-+# any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+# GNU General Public License for more details.
-+
-+cd $(dirname $0)
-+PATH=../src:$PATH
-+type openssl
-+
-+log() {
-+  echo - "$*"
-+  eval "$@"
-+}
-+
-+if [ "$1" = clean ]; then
-+  rm -f test-ca.conf
-+elif [ ! -e test-ca.conf ]; then
-+cat > test-ca.conf <<- EOF
-+	[ req ]
-+	distinguished_name = req_distinguished_name
-+	prompt = no
-+	string_mask = utf8only
-+	x509_extensions = v3_ca
-+
-+	[ req_distinguished_name ]
-+	O = IMA-CA
-+	CN = IMA/EVM certificate signing key
-+	emailAddress = ca@ima-ca
-+
-+	[ v3_ca ]
-+	basicConstraints=CA:TRUE
-+	subjectKeyIdentifier=hash
-+	authorityKeyIdentifier=keyid:always,issuer
-+EOF
-+fi
-+
-+# RSA
-+# Second key will be used for wrong key tests.
-+for m in 1024 2048; do
-+  if [ "$1" = clean ]; then
-+    rm -f test-rsa$m.cer test-rsa$m.key test-rsa$m.pub
-+    continue
-+  fi
-+  if [ ! -e test-rsa$m.key ]; then
-+    log openssl req -verbose -new -nodes -utf8 -sha1 -days 10000 -batch -x509 \
-+      -config test-ca.conf \
-+      -newkey rsa:$m \
-+      -out test-rsa$m.cer -outform DER \
-+      -keyout test-rsa$m.key
-+    # for v1 signatures
-+    log openssl pkey -in test-rsa$m.key -out test-rsa$m.pub -pubout
-+  fi
-+done
-+
-+# EC-RDSA
-+for m in \
-+  gost2012_256:A \
-+  gost2012_256:B \
-+  gost2012_256:C \
-+  gost2012_512:A \
-+  gost2012_512:B; do
-+    IFS=':' read -r algo param <<< "$m"
-+    if [ "$1" = clean ]; then
-+      rm -f test-$algo-$param.key test-$algo-$param.cer test-$algo-$param.pub
-+      continue
-+    fi
-+    [ -e test-$algo-$param.key ] && continue
-+    log openssl req -nodes -x509 -utf8 -days 10000 -batch \
-+      -config test-ca.conf \
-+      -newkey $algo \
-+      -pkeyopt paramset:$param \
-+      -out    test-$algo-$param.cer -outform DER \
-+      -keyout test-$algo-$param.key
-+    log openssl pkey -in test-$algo-$param.key -out test-$algo-$param.pub -pubout
-+done
-+
-+# This script leaves test-ca.conf, *.cer, *.pub, *.key files for sing/verify tests.
-+# They are never deleted except by `make distclean'.
-+
-diff --git a/tests/ima_hash.test b/tests/ima_hash.test
-new file mode 100755
-index 0000000..d4bfe19
---- /dev/null
-+++ b/tests/ima_hash.test
-@@ -0,0 +1,72 @@
-+#!/bin/bash
-+#
-+# evmctl ima_hash tests
-+#
-+# Copyright (C) 2019 Vitaly Chikunov <vt@altlinux.org>
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2, or (at your option)
-+# any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+# GNU General Public License for more details.
-+
-+cd $(dirname $0)
-+PATH=../src:$PATH
-+source ./functions.sh
-+_require evmctl openssl
-+
-+# Check with constant
-+check_const() {
-+  local alg=$1 pref=$2 hash=$3 file=$4
-+
-+  FOR=$alg DEL=$file \
-+    _evmctl_run ima_hash --hashalgo $alg --xattr-user $file || return
-+  FOR=$alg \
-+    _test_ima_xattr $file $pref$hash || return
-+  rm $file
-+  return $OK
-+}
-+
-+check() {
-+  local alg=$1 pref=$2 hash=$3
-+  local file=$alg-hash.txt
-+
-+  rm -f $file
-+  touch $file
-+  cmd="openssl dgst ${ENGINE:+-engine $ENGINE} -$alg $file"
-+  echo - $cmd
-+  hash=$(set -o pipefail; eval "$cmd" 2>/dev/null | cut -d' ' -f2)
-+  if [ $? -ne 0 ] && _is_positive_test; then
-+    echo $CYAN"$alg test is skipped"$NORM
-+    rm $file
-+    return $SKIP
-+  fi
-+  check_const $alg $pref "$hash" $file
-+}
-+
-+# check args: algo prefix hex-hash
-+pos check md4    0x01
-+pos check md5    0x01
-+pos check sha1   0x01
-+neg check SHA1   0x01 # uppercase
-+neg check sha512-224 0x01 # valid for pkcs1
-+neg check sha512-256 0x01 # valid for pkcs1
-+neg check unknown 0x01 # nonexistent
-+pos check sha224 0x0407
-+pos check sha256 0x0404
-+pos check sha384 0x0405
-+pos check sha512 0x0406
-+pos check rmd160 0x0403
-+neg check sm3     0x01
-+neg check sm3-256 0x01
-+_enable_gost_engine
-+pos check md_gost12_256 0x0412
-+pos check streebog256   0x0412
-+pos check md_gost12_512 0x0413
-+pos check streebog512   0x0413
-+
-+_report_exit
-diff --git a/tests/ima_sign.test b/tests/ima_sign.test
-new file mode 100755
-index 0000000..5af2bbb
---- /dev/null
-+++ b/tests/ima_sign.test
-@@ -0,0 +1,211 @@
-+#!/bin/bash
-+#
-+# evmctl ima_sign tests
-+#
-+# Copyright (C) 2019 Vitaly Chikunov <vt@altlinux.org>
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2, or (at your option)
-+# any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+# GNU General Public License for more details.
-+
-+cd $(dirname $0)
-+PATH=../src:$PATH
-+source ./functions.sh
-+_require evmctl openssl xxd getfattr
-+./gen-keys.sh >/dev/null 2>&1
-+
-+# Determine keyid from cert
-+keyid() {
-+  local cer=$1.cer
-+
-+  id=$(openssl x509 ${ENGINE:+-engine $ENGINE} \
-+      -in $cer -inform DER -pubkey -noout 2>/dev/null \
-+    | openssl asn1parse \
-+    | grep BIT.STRING \
-+    | cut -d: -f1)
-+  if [ -z "$id" ]; then
-+    echo "Cannot asn1parse $cer" >&2
-+    exit 1
-+  fi
-+  openssl x509 ${ENGINE:+-engine $ENGINE} \
-+      -in $cer -inform DER -pubkey -noout 2>/dev/null \
-+    | openssl asn1parse -strparse $id -out - -noout \
-+    | openssl dgst -c -sha1 \
-+    | cut -d' ' -f2 \
-+    | grep -o ":..:..:..:..$" \
-+    | tr -d :
-+}
-+
-+# Check that detached signature matches xattr signature
-+_test_sigfile() {
-+  local file=$1 file_sig=$2 file_sig2=$3
-+
-+  if [ ! -e $file_sig ]; then
-+    red_if_pos
-+    echo "evmctl ima_sign: no detached signature $file_sig"
-+    norm_if_pos
-+    rm $file
-+    return $FAIL
-+  fi
-+
-+  _extract_ima_xattr $file $file_sig2
-+  #getfattr -n user.ima --only-values $file > $file_sig2
-+  if ! cmp -bl $file_sig $file_sig2; then
-+    red_if_pos
-+    echo "evmctl ima_sign: xattr signature on $file differ from detached $file_sig"
-+    norm_if_pos
-+    rm $file $file_sig $file_sig2
-+    return $FAIL
-+  fi
-+
-+  rm $file_sig $file_sig2
-+}
-+
-+_ima_sign() {
-+  local key=$1 alg=$2 file=$3 opts=$4
-+
-+  FOR="$alg ($key.key)" DEL=$file \
-+    _evmctl_run ima_sign $opts \
-+      --hashalgo $alg --key $key.key --xattr-user --sigfile $file || return
-+  _test_sigfile $file $file.sig $file.sig2
-+}
-+
-+# Test RSA signature v1
-+# This is simpler test than v2 tests as we don't try to verify
-+# correctness of the signature here.
-+check_rsa1() {
-+  local key=test-rsa1024 alg=$1 pref=$2
-+  local file=${alg}-v1.txt
-+
-+  # Append suffix to files for negative tests, because we need
-+  # to leave only good files for ima_verify.test
-+  _is_negative_test && file+='~'
-+
-+  rm -f $file
-+  touch $file
-+  _ima_sign $key $alg $file "--rsa" || return
-+  FOR=$alg \
-+    _test_ima_xattr $file $pref || return
-+  return $OK
-+}
-+
-+# Test RSA signature v2
-+check_rsa2() {
-+  local key=test-rsa1024 alg=$1 pref=$2
-+  local file=$alg.txt
-+
-+  # Append suffix to files for negative tests, because we need
-+  # to leave only good files for ima_verify.test
-+  _is_negative_test && file+='~'
-+  rm -f $file
-+
-+  keyid=$(keyid $key)
-+  if [ $? -ne 0 -o -z "$keyid" ]; then
-+    echo "Unable to determine keyid for $key"
-+    return $HARDFAIL
-+  fi
-+  pref=$(echo $pref | sed "s/K/$keyid/")
-+
-+  # Calculate signature with openssl to compare later
-+  if _is_positive_test && ! openssl dgst -$alg /dev/null >/dev/null 2>&1; then
-+    echo $CYAN"$alg ($key.key) test is skipped (openssl cannot handle $alg digest)"$NORM
-+    return $SKIP
-+  fi
-+  touch $file
-+  cmd="openssl dgst -$alg -sign $key.key -hex $file"
-+  echo - "$cmd"
-+  sig=$(set -o pipefail; eval "$cmd" 2>/dev/null | cut -d' ' -f2)
-+  if [ $? -ne 0 ] && _is_positive_test; then
-+    echo $CYAN"$alg ($key.key) test is skipped (openssl cannot sign with $alg+$key.key)"$NORM
-+    rm $file
-+    return $SKIP
-+  fi
-+
-+  _ima_sign $key $alg $file || return
-+  FOR=$alg \
-+    _test_ima_xattr $file $pref$sig || return
-+  return $OK
-+}
-+
-+# Test EC-RDSA signature v2
-+check_ecrdsa() {
-+  local key=test-$1 alg=$2 pref=$3
-+
-+  # Sign different files not only depending on alg hash algo,
-+  # but also on alg key. Append curve letter to the hash algo.
-+  curve=${key##*-}
-+  file=$alg${curve,,}.txt
-+
-+  # Append suffix to files for negative tests, because we need
-+  # to leave only good files for ima_verify.test
-+  _is_negative_test && file+='~'
-+  rm -f $file
-+
-+  # Older openssl unable to parse 512-bit EC-RDSA keys
-+  if ! openssl pkey ${ENGINE:+-engine $ENGINE} -in $key.key >/dev/null 2>&1; then
-+    echo $CYAN"$alg ($key.key) test is skipped"$NORM
-+    return $SKIP
-+  fi
-+
-+  keyid=$(keyid $key)
-+  if [ $? -ne 0 ]; then
-+    echo "Unable to determine keyid for $key"
-+    return $HARDFAIL
-+  fi
-+  pref=$(echo $pref | sed "s/K/$keyid/")
-+
-+  touch $file
-+  _ima_sign $key $alg $file || return
-+  FOR="$alg ($key)" \
-+    _test_ima_xattr $file $pref.* || return
-+
-+  _extract_ima_xattr $file $file.sig2 $pref
-+
-+  # Verify with openssl
-+  cmd="openssl dgst ${ENGINE:+-engine $ENGINE} -$alg -verify $key.pub \
-+	-signature $file.sig2 $file"
-+  echo - "$cmd"
-+  if ! eval "$cmd"; then
-+    red_if_pos
-+    echo "Signature verification with openssl is failed."
-+    norm_if_pos
-+    rm $file.sig2
-+    return $FAIL
-+  fi
-+
-+  rm $file.sig2
-+  return $OK
-+}
-+
-+set -f # disable globbing
-+
-+# check args: algo prefix hex-signature-prefix (K in place of keyid.)
-+neg check_rsa1 md5    0x0301.*
-+pos check_rsa1 sha1   0x0301.{290}
-+pos check_rsa1 sha256 0x0301.{290}
-+pos check_rsa2 md5    0x030201K0080
-+pos check_rsa2 sha1   0x030202K0080
-+pos check_rsa2 sha224 0x030207K0080
-+pos check_rsa2 sha256 0x030204K0080
-+pos check_rsa2 sha384 0x030205K0080
-+pos check_rsa2 sha512 0x030206K0080
-+pos check_rsa2 rmd160 0x030203K0080
-+neg check_rsa2 noalgo 0x0302
-+_enable_gost_engine
-+pos check_ecrdsa gost2012_256-A md_gost12_256 0x030212K0040
-+pos check_ecrdsa gost2012_256-B md_gost12_256 0x030212K0040
-+pos check_ecrdsa gost2012_256-C md_gost12_256 0x030212K0040
-+pos check_ecrdsa gost2012_512-A md_gost12_512 0x030213K0080
-+pos check_ecrdsa gost2012_512-B md_gost12_512 0x030213K0080
-+neg check_ecrdsa gost2012_256-A md_gost12_512 0x030212K0040
-+neg check_ecrdsa gost2012_512-A md_gost12_256 0x030212K0040
-+
-+# This test leaves signed *.txt files for ima_verify.test.
-+# they are never deleted except by `make clean'.
-+_report_exit
-diff --git a/tests/ima_verify.test b/tests/ima_verify.test
-new file mode 100755
-index 0000000..c85331d
---- /dev/null
-+++ b/tests/ima_verify.test
-@@ -0,0 +1,93 @@
-+#!/bin/bash
-+#
-+# evmctl ima_verify tests
-+#
-+# Copyright (C) 2019 Vitaly Chikunov <vt@altlinux.org>
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2, or (at your option)
-+# any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+# GNU General Public License for more details.
-+
-+cd $(dirname $0)
-+PATH=../src:$PATH
-+source ./functions.sh
-+_require evmctl openssl
-+
-+# Note: This test uses *.txt files signed by ima_sign.test as input.
-+
-+# Check with constant
-+check() {
-+  local key=$1 alg=$2 files=${@:3}
-+
-+  if ! openssl dgst ${ENGINE:+-engine $ENGINE} -$alg /dev/null >/dev/null 2>&1; then
-+    echo $CYAN"$alg ($key.key) test is skipped (openssl does not support $alg)"$NORM
-+    return $SKIP
-+  fi
-+
-+  FOR="$files ($key)" \
-+    _evmctl_run ima_verify --key $key --xattr-user $files
-+}
-+
-+# Tests (check args: key hash-algo signed-file)
-+for alg in sha1 sha256; do
-+  file=$alg-v1.txt
-+
-+  pos check test-rsa1024.pub $alg $file
-+  neg check test-rsa2048.pub $alg $file
-+  neg check /dev/null $alg $file
-+  neg check /dev/zero $alg $file
-+done
-+
-+for alg in md5 sha1 sha224 sha256 sha384 sha512 rmd160; do
-+  file=$alg.txt
-+
-+  if [ ! -e $file ]; then
-+    echo $CYAN"Signed file $file is not found. Skipping verify $alg test."$NORM
-+    testsskip+=1
-+    continue
-+  fi
-+  pos check test-rsa1024.cer $alg $file
-+  neg check test-rsa1024.cer $alg /dev/null /proc/absent $file
-+  neg check test-rsa1024.cer $alg $file /dev/null /proc/absent
-+  pos check test-rsa1024.cer $alg $file $prev
-+  pos check test-rsa1024.cer $alg $prev $file
-+  pos check /dev/zero,test-rsa1024.cer $alg $file
-+  pos check /dev/null,test-rsa1024.cer $alg $file
-+  pos check test-rsa1024.cer,test-rsa2048.cer $alg $file
-+  pos check test-rsa2048.cer,test-rsa1024.cer $alg $file
-+  pos check ,,test-rsa1024.cer $alg $file
-+  neg check test-rsa2048.cer $alg $file
-+  neg check /dev/absent $alg $file
-+  neg check /dev/null $alg $file
-+  neg check /dev/zero $alg $file
-+  prev=$file
-+done
-+
-+_enable_gost_engine
-+wk=test-gost2012_512-B.cer # wrong key (other than first)
-+for key in gost2012_256-A gost2012_256-B gost2012_256-C \
-+	   gost2012_512-A gost2012_512-B; do
-+  tmp=${key#gost2012_}
-+  bits=${tmp%-?}	  # correct bit length
-+  wbits=$(( $bits == 256 ? 512 : 256 )) # wrong bit length
-+  curve=${key#*-}	  # curve letter
-+  alg=md_gost12_$bits	  # proper hash algo
-+  file=$alg${curve,,}.txt # file signed in ima_sign test
-+  key=test-$key.cer	  # correct key in a cert
-+  wwk=test-gost2012_$wbits-$curve.cer # key with wrong bit length
-+
-+  pos check $key     $alg $file
-+  pos check $wk,$key $alg $file
-+  pos check $key,$wk $alg $file
-+  neg check $wk    $alg $file
-+  neg check $wwk   $alg $file
-+  wk=$key # previous key is always wrong
-+done
-+
-+_report_exit
--- 
-2.11.0
-
+So labelling the .evm .ima and .ima_blacklist keyrings with '*' in
+smack_key_alloc fixed things.  We also add a certificate to the .ima
+and .evm keyrings for verifying signatures that also needs labelling
+with '*'.  I was hoping to put some code in to automatically label all
+keys linked to these keyrings with '*'.  'The problem was that in
+smack_key_alloc it hadn't been linked with any keyring and I don't
+think any of the other key LSM hooks help, so we just check the keys
+description for a certain string.
