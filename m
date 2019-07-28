@@ -2,91 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F0477D98
-	for <lists+linux-integrity@lfdr.de>; Sun, 28 Jul 2019 06:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B72477E11
+	for <lists+linux-integrity@lfdr.de>; Sun, 28 Jul 2019 06:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725832AbfG1EEA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 28 Jul 2019 00:04:00 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:49130 "EHLO
+        id S1725839AbfG1ExF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 28 Jul 2019 00:53:05 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:48820 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725440AbfG1EEA (ORCPT
+        with ESMTP id S1725832AbfG1ExF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 28 Jul 2019 00:04:00 -0400
+        Sun, 28 Jul 2019 00:53:05 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 8077B72CCE7;
-        Sun, 28 Jul 2019 07:03:56 +0300 (MSK)
-Received: from beacon.altlinux.org (unknown [185.6.174.98])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 393B94A4A29;
-        Sun, 28 Jul 2019 07:03:56 +0300 (MSK)
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 38A1E72CC6C;
+        Sun, 28 Jul 2019 07:53:03 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 238464A4A29;
+        Sun, 28 Jul 2019 07:53:03 +0300 (MSK)
+Date:   Sun, 28 Jul 2019 07:53:02 +0300
 From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+To:     Petr Vorel <pvorel@suse.cz>,
+        "Bruno E. O. Meneguele" <bmeneg@redhat.com>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: [PATCH] ima-evm-utils: Do not load keys from x509 certs if user pass --rsa
-Date:   Sun, 28 Jul 2019 07:03:54 +0300
-Message-Id: <20190728040354.14983-1-vt@altlinux.org>
-X-Mailer: git-send-email 2.11.0
+Subject: Re: [RFC PATCH] ima-evm-utils: Add some tests for evmctl
+Message-ID: <20190728045302.cziuajr3532r3b53@altlinux.org>
+Mail-Followup-To: Petr Vorel <pvorel@suse.cz>,
+        "Bruno E. O. Meneguele" <bmeneg@redhat.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+References: <20190725061855.3734-1-vt@altlinux.org>
+ <20190726130708.GA4542@dell5510>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20190726130708.GA4542@dell5510>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-If user wants to verify v1 signature and specify RSA public key in `-k'
-option, this key will be attempted to be loaded as x509 certificate and
-this process will output errors.
+Petr, Bruno,
 
-Do not load a key as a x509 cert if user pass `--rsa'.
+Thanks for reviews! I think I will rework the tests one more time. So
+that they can support EVM signatures too w/o too much code duplication.
 
-This is not perfect solution. As now it's possible to specify `-k' and
-`--rsa' and v2 signatures will not verify, because of no keys.
-
-This improvement is not added into ima_measurement().
-
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
----
- src/evmctl.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/src/evmctl.c b/src/evmctl.c
-index e0a835f..0f821e4 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -843,10 +843,12 @@ static int cmd_verify_evm(struct command *cmd)
- 		return -1;
- 	}
- 
--	if (imaevm_params.keyfile)	/* Support multiple public keys */
--		init_public_keys(imaevm_params.keyfile);
--	else				/* assume read pubkey from x509 cert */
--		init_public_keys("/etc/keys/x509_evm.der");
-+	if (imaevm_params.x509) {
-+		if (imaevm_params.keyfile) /* Support multiple public keys */
-+			init_public_keys(imaevm_params.keyfile);
-+		else			   /* assume read pubkey from x509 cert */
-+			init_public_keys("/etc/keys/x509_evm.der");
-+	}
- 
- 	err = verify_evm(file);
- 	if (!err && imaevm_params.verbose >= LOG_INFO)
-@@ -889,10 +891,12 @@ static int cmd_verify_ima(struct command *cmd)
- 	char *file = g_argv[optind++];
- 	int err, fails = 0;
- 
--	if (imaevm_params.keyfile)	/* Support multiple public keys */
--		init_public_keys(imaevm_params.keyfile);
--	else				/* assume read pubkey from x509 cert */
--		init_public_keys("/etc/keys/x509_evm.der");
-+	if (imaevm_params.x509) {
-+		if (imaevm_params.keyfile) /* Support multiple public keys */
-+			init_public_keys(imaevm_params.keyfile);
-+		else			   /* assume read pubkey from x509 cert */
-+			init_public_keys("/etc/keys/x509_evm.der");
-+	}
- 
- 	errno = 0;
- 	if (!file) {
--- 
-2.11.0
+Thanks,
 
