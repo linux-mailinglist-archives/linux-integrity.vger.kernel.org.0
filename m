@@ -2,65 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAFC77BD9
-	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jul 2019 22:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3C677C7F
+	for <lists+linux-integrity@lfdr.de>; Sun, 28 Jul 2019 02:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388352AbfG0UkZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 27 Jul 2019 16:40:25 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:36903 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2387893AbfG0UkY (ORCPT
+        id S1726513AbfG1AZP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 27 Jul 2019 20:25:15 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:34690 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725928AbfG1AZP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 27 Jul 2019 16:40:24 -0400
-Received: from callcc.thunk.org (96-72-84-49-static.hfc.comcastbusiness.net [96.72.84.49] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x6RKdtcc013261
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 27 Jul 2019 16:39:57 -0400
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id B45954202F5; Sat, 27 Jul 2019 16:39:54 -0400 (EDT)
-Date:   Sat, 27 Jul 2019 16:39:54 -0400
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Victor Hsieh <victorhsieh@google.com>,
-        Chandan Rajendra <chandan@linux.vnet.ibm.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v7 10/17] fs-verity: implement FS_IOC_ENABLE_VERITY ioctl
-Message-ID: <20190727203954.GB1499@mit.edu>
-References: <20190722165101.12840-1-ebiggers@kernel.org>
- <20190722165101.12840-11-ebiggers@kernel.org>
+        Sat, 27 Jul 2019 20:25:15 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 7240472CC6C;
+        Sun, 28 Jul 2019 03:25:13 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 576EA4A4AE8;
+        Sun, 28 Jul 2019 03:25:13 +0300 (MSK)
+Date:   Sun, 28 Jul 2019 03:25:12 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v2] ima-evm-utils: Add some tests for evmctl
+Message-ID: <20190728002512.gu4airn3xmebeqib@altlinux.org>
+Mail-Followup-To: Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+References: <20190727044113.3865-1-vt@altlinux.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-In-Reply-To: <20190722165101.12840-11-ebiggers@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190727044113.3865-1-vt@altlinux.org>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jul 22, 2019 at 09:50:54AM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
+On Sat, Jul 27, 2019 at 07:41:13AM +0300, Vitaly Chikunov wrote:
+> Run `make check' to execute the tests.
+> Currently only ima_hash, ima_sign, and ima_verify are tested.
 > 
-> Add a function for filesystems to call to implement the
-> FS_IOC_ENABLE_VERITY ioctl.  This ioctl enables fs-verity on a file.
-> 
-> See the "FS_IOC_ENABLE_VERITY" section of
-> Documentation/filesystems/fsverity.rst for the documentation.
-> 
-> Reviewed-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+> ....
+> +_evmctl_run() {
+> +  local cmd=$1 out=$1-$$.out
+> +  # Additional parameters:
+> +  # FOR: append to text as 'for $FOR'
+> +  # DEL: additional files to rm if test failed
+> +
+> +  set -- evmctl $V ${ENGINE:+--engine $ENGINE} "$@"
+> +  echo $YELLOW$TMODE $*$NORM
+> +  eval "$@" >$out 2>&1
+> +  ret=$?
+> +
+> +  if [ $ret -ge 126 -a $ret -lt 255 ]; then
+> +    echo $RED
+> +    echo "evmctl $cmd failed hard with ($ret) ${FOR:+for $FOR}"
+> +    sed 's/^/  /' $out
+> +    echo $NORM
+> +    rm $out $DEL
+> +    FOR= DEL=
+> +    return $SKIP
 
-Looks good.  You can add:
+Should be `return $HARDFAIL`.
 
-Reviewed-by: Theodore Ts'o <tytso@mit.edu>
-
-						- Ted
