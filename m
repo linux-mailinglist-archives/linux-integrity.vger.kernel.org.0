@@ -2,502 +2,193 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FAB78096
-	for <lists+linux-integrity@lfdr.de>; Sun, 28 Jul 2019 19:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0A47826F
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Jul 2019 01:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726089AbfG1RSM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 28 Jul 2019 13:18:12 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9994 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726080AbfG1RSM (ORCPT
+        id S1726216AbfG1Xkf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 28 Jul 2019 19:40:35 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:59146 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726207AbfG1Xkf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 28 Jul 2019 13:18:12 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6SHHI1x071790
-        for <linux-integrity@vger.kernel.org>; Sun, 28 Jul 2019 13:18:10 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2u13ptu5xe-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Sun, 28 Jul 2019 13:18:09 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Sun, 28 Jul 2019 18:18:07 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Sun, 28 Jul 2019 18:18:04 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6SHI3qK35061904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 28 Jul 2019 17:18:03 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55DBD11C054;
-        Sun, 28 Jul 2019 17:18:03 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 80C1711C052;
-        Sun, 28 Jul 2019 17:18:02 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.110.133])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 28 Jul 2019 17:18:02 +0000 (GMT)
+        Sun, 28 Jul 2019 19:40:35 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 45F1772CC6C;
+        Mon, 29 Jul 2019 02:40:32 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 2B42C4A4A29;
+        Mon, 29 Jul 2019 02:40:32 +0300 (MSK)
+Date:   Mon, 29 Jul 2019 02:40:31 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
+        "Bruno E. O. Meneguele" <bmeneg@redhat.com>
 Subject: Re: [PATCH v2] ima-evm-utils: Add some tests for evmctl
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>,
+Message-ID: <20190728234031.ucyu6fj4pvr4owd3@altlinux.org>
+Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
         Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Petr Vorel <pvorel@suse.cz>,
+        linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
         "Bruno E. O. Meneguele" <bmeneg@redhat.com>
-Date:   Sun, 28 Jul 2019 13:17:47 -0400
-In-Reply-To: <20190727044113.3865-1-vt@altlinux.org>
 References: <20190727044113.3865-1-vt@altlinux.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+ <1564334267.4245.420.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19072817-0008-0000-0000-00000301AF88
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19072817-0009-0000-0000-0000226F4B22
-Message-Id: <1564334267.4245.420.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-28_12:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907280217
+In-Reply-To: <1564334267.4245.420.camel@linux.ibm.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Vitaly,
+Mimi,
 
-On Sat, 2019-07-27 at 07:41 +0300, Vitaly Chikunov wrote:
-> Run `make check' to execute the tests.
-> Currently only ima_hash, ima_sign, and ima_verify are tested.
+On Sun, Jul 28, 2019 at 01:17:47PM -0400, Mimi Zohar wrote:
+> On Sat, 2019-07-27 at 07:41 +0300, Vitaly Chikunov wrote:
+> > - Since I still edit all 5 files I did not split the patch into multiple
+> >   commits to separate the files, otherwise editing will become too
+> >   complicated, as I ought to continuously rebase and edit different
+> >   commits. This was really non-productive suggestion
 > 
-> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> ---
-> Changelog since v1:
-> - Apply suggestions by Petr Vorel:
->  - Rename function names and variables to be more understandable.
->  - Rename tests/functions to tests/functions.sh.
->  - Define exit codes (77, 99, ...) as variables.
-> - Added more comments and remove single letter variables (for Mimi Zohar).
+> Ok, but the review will be broken up. šFor now, the comments below are
+> limited to tests/Makefile.am, tests/functions.sh and
+> tests/ima_hash.test. šSome of the comments are intrusive, so I'm going
+> to hold off on reviewing the other tests.
 
-Thanks.
+This is good, since I am reworking ima_sign/ima_verify tests into a single
+test that will also cover EVM sign/verify.
 
-> - Move getfattr check into function.
-> - Move evmctl run and check into single function.
-> - Add sign/verify tests for v1 signatures.
-> - Minor improvements.
-> - Since I still edit all 5 files I did not split the patch into multiple
->   commits to separate the files, otherwise editing will become too
->   complicated, as I ought to continuously rebase and edit different
->   commits. This was really non-productive suggestion
+> Autotools generates "test-driver". šShould it be added to git-ignore?
 
-Ok, but the review will be broken up. Â For now, the comments below are
-limited to tests/Makefile.am, tests/functions.sh and
-tests/ima_hash.test. Â Some of the comments are intrusive, so I'm going
-to hold off on reviewing the other tests.
+Didn't notice this.
 
+> Should we be using SPDX, at least for new files?
+
+OK.
+
+> > +    if ! type $i; then
 > 
-> Please test the tests.
+> "type" is a bashism.
+
+Tests are on bash.
+
+> > +# Define FAILEARLY to exit testing on the first error.
+> > +exit_early() {
+> > +  if [ $FAILEARLY ]; then
+> > +    exit $1
+> > +  fi
+> > +}
 > 
->  Makefile.am           |   2 +-
->  configure.ac          |   1 +
->  tests/Makefile.am     |  15 ++++
->  tests/functions.sh    | 218 ++++++++++++++++++++++++++++++++++++++++++++++++++
->  tests/gen-keys.sh     |  90 +++++++++++++++++++++
->  tests/ima_hash.test   |  72 +++++++++++++++++
->  tests/ima_sign.test   | 211 ++++++++++++++++++++++++++++++++++++++++++++++++
->  tests/ima_verify.test |  93 +++++++++++++++++++++
->  8 files changed, 701 insertions(+), 1 deletion(-)
->  create mode 100644 tests/Makefile.am
->  create mode 100755 tests/functions.sh
->  create mode 100755 tests/gen-keys.sh
->  create mode 100755 tests/ima_hash.test
->  create mode 100755 tests/ima_sign.test
->  create mode 100755 tests/ima_verify.test
+> I would group all of the environment variable function checking
+> together at the top of functions.sh.
+
+Some functions check VERBOSE should they be on top too?
+
+Or you meant this is just variable checking function? It isn't.
+
+> The functions "pos" and "neg" are written very concisely, but they are
+> part of a common set of functions, which are the crux of the tests
+> scripts. šI'm really hesitant about having common functions that
+> execute any command passed to it, without any form of verification.
+
+What verification and why?
+
+> > +  set -- evmctl $V ${ENGINE:+--engine $ENGINE} "$@"
+> > +  echo $YELLOW$TMODE $*$NORM
+> > +  eval "$@" >$out 2>&1
 > 
+> Here at least the command is limited to "evmctl".
 
-> diff --git a/tests/Makefile.am b/tests/Makefile.am
-> new file mode 100644
-> index 0000000..145ea30
-> --- /dev/null
-> +++ b/tests/Makefile.am
-> @@ -0,0 +1,15 @@
-> +check_SCRIPTS =
-> +TESTS = $(check_SCRIPTS)
-> +
-> +check_SCRIPTS += ima_hash.test ima_verify.test ima_sign.test
-> +
-> +# ima_verify depends on results of ima_hash
-> +ima_verify.log: ima_sign.log
-> +
-> +clean-local:
-> +	-rm -f *.txt *.out *.sig *.sig2
-> +
-> +distclean: distclean-keys
-> +.PHONY: distclean-keys
-> +distclean-keys:
-> +	./gen-keys.sh clean
+This is emvctl runner. pos/neg can and should run anything that needs
+their exit code be checked and accounted as test result.
 
-Autotools generates "test-driver". Â Should it be added to git-ignore?
+> Is there any benefit to using "set --", as opposed to defining a local
+> variable and executing it? šIs this simply a question of style?
 
+I will make it using variable.
 
-> diff --git a/tests/functions.sh b/tests/functions.sh
-> new file mode 100755
-> index 0000000..8794120
-> --- /dev/null
-> +++ b/tests/functions.sh
-> @@ -0,0 +1,218 @@
-> +#!/bin/bash
-> +#
-> +# ima-evm-utils tests bash functions
-> +#
-> +# Copyright (C) 2019 Vitaly Chikunov <vt@altlinux.org>
-> +#
-> +# This program is free software; you can redistribute it and/or modify
-> +# it under the terms of the GNU General Public License as published by
-> +# the Free Software Foundation; either version 2, or (at your option)
-> +# any later version.
-> +#
-> +# This program is distributed in the hope that it will be useful,
-> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
-> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> +# GNU General Public License for more details.
-> +
-
-Should we be using SPDX, at least for new files?
-
-> +# tests accounting
-> +declare -i testspass=0 testsfail=0 testsskip=0/
-> +
-> +# exit codes (compatible with automake)
-> +declare -r OK=0
-> +declare -r FAIL=1
-> +declare -r HARDFAIL=99 # hard failure no matter testing mode
-> +declare -r SKIP=77     # skip test
-> +
-> +# you can set env VERBOSE=1 to see more output from evmctl
-> +V=vvvv
-> +V=${V:0:$VERBOSE}
-> +V=${V:+-$V}
-> +
-> +# require particular executables to be present
-> +_require() {
-> +  ret=
-> +  for i; do
-> +    if ! type $i; then
-
-"type" is a bashism.
-
-> +      echo "$i is required for test"
-> +      ret=1
-> +    fi
-> +  done
-> +  [ $ret ] && exit $HARDFAIL
-> +}
-> +
-> +# only allow color output on tty
-> +if tty -s; then
-> +     RED=$'\e[1;31m'
-> +   GREEN=$'\e[1;32m'
-> +  YELLOW=$'\e[1;33m'
-> +    BLUE=$'\e[1;34m'
-> +    CYAN=$'\e[1;36m'
-> +    NORM=$'\e[m'
-> +fi
-> +
-> +# Define FAILEARLY to exit testing on the first error.
-> +exit_early() {
-> +  if [ $FAILEARLY ]; then
-> +    exit $1
-> +  fi
-> +}
-
-I would group all of the environment variable function checking
-together at the top of functions.sh.
-
-> +
-> +# Test mode determined by TNEG variable:
-> +#   undefined: to positive testing
-> +#   defined: negative testing
-> +TNEG=
-> +TMODE=+
-> +
-> +# Eval positive test and account its result
-> +pos() {
-> +  TNEG= TMODE=+
-> +  [ "$VERBOSE" ] && echo "Start positive test $*"
-> +  eval "$@"
-> +  E=$?
-> +  [ "$VERBOSE" ] && echo "Stop ($E) positive test $*"
-> +  case $E in
-> +    0)  testspass+=1 ;;
-> +    77) testsskip+=1 ;;
-> +    99) testsfail+=1; exit_early 1 ;;
-> +    *)  testsfail+=1; exit_early 2 ;;
-> +  esac
-> +}
-> +
-> +# Eval negative test and accoutn its result
-> +neg() {
-> +  TNEG=1 TMODE=-
-> +  [ "$VERBOSE" ] && echo "Start negative test $*"
-> +  eval "$@"
-> +  E=$?
-> +  [ "$VERBOSE" ] && echo "Stop ($E) negative test $*"
-> +  case $E in
-> +    0)  testsfail+=1; exit_early 3 ;;
-> +    77) testsskip+=1 ;;
-> +    99) testsfail+=1; exit_early 4 ;;
-> +    *)  testspass+=1 ;;
-> +  esac
-> +  TNEG= # Restore default
-> +}
+> > +_enable_gost_engine() {
+> > +  # Do not enable if it's already working (enabled by user)
+> > +  if ! openssl md_gost12_256 /dev/null >/dev/null 2>&1 \
+> > +    && openssl engine gost >/dev/null 2>&1; then
+> > +    ENGINE=gost
+> > +  fi
+> > +}
 > 
+> With gost provided as an Openssl engine, is it possible to be able to
+> execute the first command without the gost engine enabled? šWith
+> commit 782224f33cd7 ("ima-evm-utils: Rework openssl init"),
 
-The functions "pos" and "neg" are written very concisely, but they are
-part of a common set of functions, which are the crux of the tests
-scripts. Â I'm really hesitant about having common functions that
-execute any command passed to it, without any form of verification.
+I don't understand question. What is 'first command'? `openssl
+md_gost12_256` will not work if gost-engine is not configured somehow.
 
-> +# return true if current test is positive
-> +_is_positive_test() {
-> +  [ -z "$TNEG" ]
-> +}
-> +
-> +# return true if current test is negative
-> +_is_negative_test() {
-> +  [ "$TNEG" ]
-> +}
-> +
-> +# Color following text to red if it's real error
-> +red_if_pos() {
-> +  _is_positive_test && echo $@ $RED
-> +}
-> +
-> +norm_if_pos() {
-> +  _is_positive_test && echo $@ $NORM
-> +}
-> +
-> +DEL=
-> +FOR=
-> +# _evmctl_run should be run as `_evmctl_run ... || return'
-> +_evmctl_run() {
-> +  local cmd=$1 out=$1-$$.out
-> +  # Additional parameters:
-> +  # FOR: append to text as 'for $FOR'
-> +  # DEL: additional files to rm if test failed
-> +
-> +  set -- evmctl $V ${ENGINE:+--engine $ENGINE} "$@"
-> +  echo $YELLOW$TMODE $*$NORM
-> +  eval "$@" >$out 2>&1
+> I'm now wondering if the "--engine e' option is still needed?
 
-Here at least the command is limited to "evmctl".
+It's needed. Why you thinking it doesn't? Commit 782224f33cd7 will not
+load gost (or any other) engine on its own.
 
-Is there any benefit to using "set --", as opposed to defining a local
-variable and executing it? Â Is this simply a question of style?
-
-> +  ret=$?
-> +
-> +  if [ $ret -ge 126 -a $ret -lt 255 ]; then
-> +    echo $RED
-> +    echo "evmctl $cmd failed hard with ($ret) ${FOR:+for $FOR}"
-> +    sed 's/^/  /' $out
-> +    echo $NORM
-> +    rm $out $DEL
-> +    FOR= DEL=
-> +    return $SKIP
-> +  elif [ $ret -gt 0 ]; then
-> +    red_if_pos
-> +    echo "evmctl $cmd failed" ${TNEG:+properly} "with ($ret) ${FOR:+for $FOR}"
-> +    sed 's/^/  /' $out
-> +    norm_if_pos
-> +    rm $out $DEL
-> +    FOR= DEL=
-> +    return $FAIL
-> +  elif _is_negative_test; then
-> +    echo $RED
-> +    echo "evmctl $cmd wrongly succeeded ${FOR:+for $FOR}"
-> +    sed 's/^/  /' $out
-> +    echo $NORM
-> +  else
-> +    [ "$VERBOSE" ] && sed 's/^/  /' $out
-> +  fi
-> +  rm $out
-> +  FOR= DEL=
-> +  return $OK
-> +}
-> +
-> +_extract_ima_xattr() {
-> +  local file=$1 out=$2 pref=$3
-> +
-> +  getfattr -n user.ima -e hex $file \
-> +    | grep ^user.ima= \
-> +    | sed s/^user.ima=$pref// \
-> +    | xxd -r -p > $out
-> +}
-> +
-> +_test_ima_xattr() {
-> +  local file=$1 pref=$2
-> +
-> +  if ! getfattr -n user.ima -e hex $file | egrep -qx "user.ima=$pref"; then
-> +    red_if_pos
-> +    echo "Did not find expected hash${FOR:+ for $FOR}:"
-> +    echo "    user.ima=$pref"
-> +    echo ""
-> +    echo "Actual output below:"
-> +    getfattr -n user.ima -e hex $file | sed 's/^/    /'
-> +    norm_if_pos
-> +    rm $file
-> +    FOR=
-> +    return $FAIL
-> +  fi
-> +  FOR=
-> +}
-> +
-> +_enable_gost_engine() {
-> +  # Do not enable if it's already working (enabled by user)
-> +  if ! openssl md_gost12_256 /dev/null >/dev/null 2>&1 \
-> +    && openssl engine gost >/dev/null 2>&1; then
-> +    ENGINE=gost
-> +  fi
-> +}
-
-With gost provided as an Openssl engine, is it possible to be able to
-execute the first command without the gost engine enabled? Â With
-commit 782224f33cd7 ("ima-evm-utils: Rework openssl init"), I'm now
-wondering if the "--engine e' option is still needed?
-
-> +
-> +# Show test stats and exit into automake test system
-> +# with proper exit code (same as ours).
-> +_report_exit() {
-> +  if [ $testsfail -gt 0 ]; then
-> +    echo "=============================="
-> +    echo "Run with FAILEARLY=1 $0 $@"
-> +    echo "To stop after first failure"
-> +    echo "=============================="
-> +  fi
-> +  [ $testspass -gt 0 ] && echo -n $GREEN || echo -n $NORM
-> +  echo -n "PASS: $testspass"
-> +  [ $testsskip -gt 0 ] && echo -n $YELLOW || echo -n $NORM
-> +  echo -n " SKIP: $testsskip"
-> +  [ $testsfail -gt 0 ] && echo -n $RED || echo -n $NORM
-> +  echo " FAIL: $testsfail"
-> +  echo $NORM
-> +  if [ $testsfail -gt 0 ]; then
-> +    exit $FAIL
-> +  elif [ $testspass -gt 0 ]; then
-> +    exit $OK
-> +  else
-> +    exit $SKIP
-> +  fi
-> +}
-
-
-> diff --git a/tests/ima_hash.test b/tests/ima_hash.test
-> new file mode 100755
-> index 0000000..d4bfe19
-> --- /dev/null
-> +++ b/tests/ima_hash.test
-> @@ -0,0 +1,72 @@
-> +#!/bin/bash
-> +#
-> +# evmctl ima_hash tests
-> +#
-> +# Copyright (C) 2019 Vitaly Chikunov <vt@altlinux.org>
-> +#
-> +# This program is free software; you can redistribute it and/or modify
-> +# it under the terms of the GNU General Public License as published by
-> +# the Free Software Foundation; either version 2, or (at your option)
-> +# any later version.
-> +#
-> +# This program is distributed in the hope that it will be useful,
-> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
-> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> +# GNU General Public License for more details.
-> +
-> +cd $(dirname $0)
-> +PATH=../src:$PATH
-> +source ./functions.sh
-> +_require evmctl openssl
-> +
-> +# Check with constant
-> +check_const() {
-
-This function comment doesn't provide any more details than the
-function name. Â Please either rename this function (eg. check_xattr)
-or expand the function comment.
-
-> +  local alg=$1 pref=$2 hash=$3 file=$4
-> +
-> +  FOR=$alg DEL=$file 
-
-Why not use ALG=$alg and FILE=$file as the global variable names?
-
-> +    _evmctl_run ima_hash --hashalgo $alg --xattr-user $file || return
-> +  FOR=$alg \
-> +    _test_ima_xattr $file $pref$hash || return
-> +  rm $file
-> +  return $OK
-> +}
-> +
-> +check() {
-> +  local alg=$1 pref=$2 hash=$3
-> +  local file=$alg-hash.txt
-> +
-> +  rm -f $file
-> +  touch $file
-> +  cmd="openssl dgst ${ENGINE:+-engine $ENGINE} -$alg $file"
-> +  echo - $cmd
-> +  hash=$(set -o pipefail; eval "$cmd" 2>/dev/null | cut -d' ' -f2)
-
-Is there a reason for not executing $cmd directly? Â Is it safer
-calling "pipefail" and "eval"? Â Is this a question of style?
-
-> +  if [ $? -ne 0 ] && _is_positive_test; then
-> +    echo $CYAN"$alg test is skipped"$NORM
-> +    rm $file
-> +    return $SKIP
-> +  fi
-> +  check_const $alg $pref "$hash" $file
-> +}
-> +
-> +# check args: algo prefix hex-hash
-
-The first keyword - test type - is missing in the comment above. Â It
-would be clearer if instead of "pos" or "neg", the key words included
-the words "pass" and "fail", to indicate that the test is expected to
-pass or fail.
-
-Mimi
-
-> +pos check md4    0x01
-> +pos check md5    0x01
-> +pos check sha1   0x01
-> +neg check SHA1   0x01 # uppercase
-> +neg check sha512-224 0x01 # valid for pkcs1
-> +neg check sha512-256 0x01 # valid for pkcs1
-> +neg check unknown 0x01 # nonexistent
-> +pos check sha224 0x0407
-> +pos check sha256 0x0404
-> +pos check sha384 0x0405
-> +pos check sha512 0x0406
-> +pos check rmd160 0x0403
-> +neg check sm3     0x01
-> +neg check sm3-256 0x01
-> +_enable_gost_engine
-> +pos check md_gost12_256 0x0412
-> +pos check streebog256   0x0412
-> +pos check md_gost12_512 0x0413
-> +pos check streebog512   0x0413
-> +
-> +_report_exit
+> > +# Check with constant
+> > +check_const() {
 > 
+> This function comment doesn't provide any more details than the
+> function name. šPlease either rename this function (eg. check_xattr)
+> or expand the function comment.
+
+OK.
+
+(check* was supposed to be top-level tests. I will change this in v3.)
+
+> > +  local alg=$1 pref=$2 hash=$3 file=$4
+> > +
+> > +  FOR=$alg DEL=$file 
+> 
+> Why not use ALG=$alg and FILE=$file as the global variable names?
+
+check was called once for every algo. Are you proposing to change
+call like
+
+  check_const sha1 0x01 sha1-hash.txt
+to
+  ALG=sha1 FILE=sha1-hash.txt
+  check_const 0x01
+?
+
+(I tried to put every mandatory argument into a argument list.)
+
+> > +  cmd="openssl dgst ${ENGINE:+-engine $ENGINE} -$alg $file"
+> > +  echo - $cmd
+> > +  hash=$(set -o pipefail; eval "$cmd" 2>/dev/null | cut -d' ' -f2)
+> 
+> Is there a reason for not executing $cmd directly? šIs it safer
+> calling "pipefail" and "eval"? šIs this a question of style?
+
+I will remove eval (it also don't let me pass empty arguments into
+called functions). `pipefail' is needed, so I can see exit code of
+$cmd and not of `cut' in $?.
+
+> > +  if [ $? -ne 0 ] && _is_positive_test; then
+> > +    echo $CYAN"$alg test is skipped"$NORM
+> > +    rm $file
+> > +    return $SKIP
+> > +  fi
+> > +  check_const $alg $pref "$hash" $file
+> > +}
+> > +
+> > +# check args: algo prefix hex-hash
+> 
+> The first keyword - test type - is missing in the comment above. šIt
+> would be clearer if instead of "pos" or "neg", the key words included
+> the words "pass" and "fail", to indicate that the test is expected to
+> pass or fail.
+
+pass and fail looks like imperative statements, and not like something that
+will check other thing to pass or fail. I will rename them to something
+else.
+
+Thanks for the review!
+
 
