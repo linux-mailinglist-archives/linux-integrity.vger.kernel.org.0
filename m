@@ -2,158 +2,200 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45183784E0
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Jul 2019 08:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D898D785E0
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Jul 2019 09:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbfG2GSK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 Jul 2019 02:18:10 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:52484 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbfG2GSK (ORCPT
+        id S1726516AbfG2HJL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 Jul 2019 03:09:11 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:44997 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726335AbfG2HJK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 Jul 2019 02:18:10 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 962E472CC6C;
-        Mon, 29 Jul 2019 09:18:08 +0300 (MSK)
-Received: from beacon.altlinux.org (unknown [185.6.174.98])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 73F384A4A29;
-        Mon, 29 Jul 2019 09:18:08 +0300 (MSK)
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH] ima-evm-utils: Allow EVM verify to determine hash algo
-Date:   Mon, 29 Jul 2019 09:18:07 +0300
-Message-Id: <20190729061807.3278-1-vt@altlinux.org>
-X-Mailer: git-send-email 2.11.0
+        Mon, 29 Jul 2019 03:09:10 -0400
+Received: by mail-io1-f67.google.com with SMTP id s7so117607652iob.11
+        for <linux-integrity@vger.kernel.org>; Mon, 29 Jul 2019 00:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VUdf5YnKpAJwylxl/ycwhJ4KC3kGMhohvJ8eC68Wkak=;
+        b=dW1tFk4jEtVlXfgeb3SHVVbL78P7kmDnXs/6cBlP5NoogRImJw72mLK3rJ50mB13Tz
+         75I84NhCw7Rufe6pGZLxmDGJXZvDT9AImVTyTLIBueDJb1Fsx5/IbxpYrEssvWsPbsLS
+         zNF6DsHTnfgab8E7fzAMT5mi1LbNAvs/N4MbtfUzIdhck8gSe5U+IhTR2uuAwWYhFbx8
+         z3nz7LYMoUlxDoPZa4+M9ksh+KmF4Yat5qslLoRA71UyibFTXRIDVZPHgUZ0gYGnSA0B
+         xUpSWYdlvQKAlZDVsBwuVah0jG6Ot6RsJLbpnUe4TH4RWbMxydx7X4qYTkOf6omvvijg
+         Nj+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VUdf5YnKpAJwylxl/ycwhJ4KC3kGMhohvJ8eC68Wkak=;
+        b=YLo/klZzdh87h67NgUWY9QJG/wyqc7pDqtxkLEcGQ2zdbmJrSBmJ+neGoJTqSfJ6mk
+         xv1JBT6k30w9aESRN8QXovfz+b6+f/KOnU79dR8GKXfoYYTNoxYFV4GudIMfaFmDSt7a
+         Mo0oJIxH7dA4CXRM5Sfc/8PoVK055byoge7yjhO3DGSIuRTwkYeDGbYVeblyx+aiUgTL
+         RpdqwLzfPFf6AUf7bc3TOteK05VqGOa29aalEFaoIbacRp5rkrj1zwG5cfKFp2ozuiN6
+         W4y1amIPmi+02YTRO7+h82GotItlvF3thWZbacxjt0QRtKtf6CKEgX7YYGjcp692AQFV
+         Q0Ig==
+X-Gm-Message-State: APjAAAXaNM8G4n8H9MA6QVNCZIYrgo9Tw3Gns+62ZOJ15FjWqxo6SX5U
+        DHcRBmo7gFcAFUpaVDiqb2ytM+CZ7sNCmITyQLRxfg==
+X-Google-Smtp-Source: APXvYqxfyLRG2NB8NA6t2hptMHKLx1/S6kETRqPNP50e41r75/fCTH+7913CQDbpvLvodTcgaUntXV0H/NiJXLo2GsY=
+X-Received: by 2002:a6b:c9d8:: with SMTP id z207mr96480501iof.184.1564384149745;
+ Mon, 29 Jul 2019 00:09:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org>
+ <1560421833-27414-4-git-send-email-sumit.garg@linaro.org> <20190708153908.GA28253@jax>
+ <CAFA6WYNzs=RErreWaa5BmF-P03Vf9nzQjvY_JpMckw87k9z12w@mail.gmail.com>
+ <20190709070354.GA5791@jax> <CAFA6WYPHVXbsOjzGVT1WWziMRKmWns=3YkD6_j+C1OJxTUbDmw@mail.gmail.com>
+In-Reply-To: <CAFA6WYPHVXbsOjzGVT1WWziMRKmWns=3YkD6_j+C1OJxTUbDmw@mail.gmail.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Mon, 29 Jul 2019 09:08:58 +0200
+Message-ID: <CAHUa44GBt-8Z8ZniTraJYHgFVEUgMTjTJLEden3m2jhhY9qc-w@mail.gmail.com>
+Subject: Re: [RFC 3/7] tee: add private login method for kernel clients
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, dhowells@redhat.com,
+        jejb@linux.ibm.com,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, jmorris@namei.org,
+        serge@hallyn.com, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Previously for EVM verify you should specify `--hashalgo' option while
-for IMA ima_verify you didn't.
+Hi Sumit,
 
-Allow EVM verify to determine hash algo from signature.
+On Tue, Jul 9, 2019 at 11:36 AM Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> On Tue, 9 Jul 2019 at 12:33, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+> >
+> > On Tue, Jul 09, 2019 at 11:26:19AM +0530, Sumit Garg wrote:
+> > > Thanks Jens for your comments.
+> > >
+> > > On Mon, 8 Jul 2019 at 21:09, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+> > > >
+> > > > Hi Sumit,
+> > > >
+> > > > On Thu, Jun 13, 2019 at 04:00:29PM +0530, Sumit Garg wrote:
+> > > > > There are use-cases where user-space shouldn't be allowed to communicate
+> > > > > directly with a TEE device which is dedicated to provide a specific
+> > > > > service for a kernel client. So add a private login method for kernel
+> > > > > clients and disallow user-space to open-session using this login method.
+> > > > >
+> > > > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> > > > > ---
+> > > > >  drivers/tee/tee_core.c   | 6 ++++++
+> > > > >  include/uapi/linux/tee.h | 2 ++
+> > > > >  2 files changed, 8 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+> > > > > index 0f16d9f..4581bd1 100644
+> > > > > --- a/drivers/tee/tee_core.c
+> > > > > +++ b/drivers/tee/tee_core.c
+> > > > > @@ -334,6 +334,12 @@ static int tee_ioctl_open_session(struct tee_context *ctx,
+> > > > >                       goto out;
+> > > > >       }
+> > > > >
+> > > > > +     if (arg.clnt_login == TEE_IOCTL_LOGIN_REE_KERNEL) {
+> > > > TEE_IOCTL_LOGIN_REE_KERNEL is defined as 0x80000000 which is in the
+> > > > range specified and implementation defined by the GP spec. I wonder if
+> > > > we shouldn't filter the entire implementation defined range instead of
+> > > > just this value.
+> > >
+> > > Agree. Will rather check for entire implementation defined range:
+> > > 0x80000000 - 0xFFFFFFFF.
+> > >
+>
+> I had a second thought on this. It would be more restrictive for
+> user-space TEE client library which may need to use implementation
+> defined login method. So either we could define specific ranges for
+> kernel and user-space or we can start with single login method
+> reserved for kernel.
 
-Also, this makes two previously static functions to become exportable
-and renamed:
+I think we should reserve a range for kernel internal use. Only
+reserving a single single login for kernel could force us to restrict
+the API once more later, better to take a chunk now and be done with
+it. Half of 0x80000000 - 0xFFFFFFFF is probably more than enough too
+to leave a range for user space too.
 
-  get_hash_algo_from_sig -> imaevm_hash_algo_from_sig
-  get_hash_algo_by_id    -> imaevm_hash_algo_by_id
+>
+> > > >
+> > > > > +             pr_err("login method not allowed for user-space client\n");
+> > > > pr_debug(), if it's needed at all.
+> > > >
+> > >
+> > > Ok will use pr_debug() instead.
+> > >
+> > > > > +             rc = -EPERM;
+> > > > > +             goto out;
+> > > > > +     }
+> > > > > +
+> > > > >       rc = ctx->teedev->desc->ops->open_session(ctx, &arg, params);
+> > > > >       if (rc)
+> > > > >               goto out;
+> > > > > diff --git a/include/uapi/linux/tee.h b/include/uapi/linux/tee.h
+> > > > > index 4b9eb06..f33c69c 100644
+> > > > > --- a/include/uapi/linux/tee.h
+> > > > > +++ b/include/uapi/linux/tee.h
+> > > > > @@ -172,6 +172,8 @@ struct tee_ioctl_buf_data {
+> > > > >  #define TEE_IOCTL_LOGIN_APPLICATION          4
+> > > > >  #define TEE_IOCTL_LOGIN_USER_APPLICATION     5
+> > > > >  #define TEE_IOCTL_LOGIN_GROUP_APPLICATION    6
+> > > > > +/* Private login method for REE kernel clients */
+> > > > It's worth noting that this is filtered by the TEE framework, compared
+> > > > to everything else which is treated opaquely.
+> > > >
+> > >
+> > > IIUC, you are referring to login filter in optee_os. Change to prevent
+> > > filter for this login method is part of this PR [1].
+> > >
+> > > [1] https://github.com/OP-TEE/optee_os/pull/3082
+> >
+> > No, I was referring to the changes in tee_ioctl_open_session() above.
+> > It's relevant for user space to know since it will be prevented from
+> > using that range of login identifiers.
+>
+> Ok, so you mean to extend the comment here for user-space to know that
+> this login method/range is filtered by the TEE framework. Will do
+> that.
+>
+> > This will restrict the user space
+> > API, but I think the risk of breakage is minimal as OP-TEE is the only
+> > in-tree driver registering in the TEE framework. I'm not aware of any
+> > out-of-tree drivers registering.
+>
+> I am not sure if I follow you here. How do you expect this change to
+> break out-of-tree TEE driver registration?
 
-This is needed because EVM hash is calculated (in calc_evm_hash) outside
-of library.
+It's a change in common code that put restrictions on the API.
 
-imaevm_hash_algo_by_id() will now return NULL if algo is not found.
+Thanks,
+Jens
 
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
----
- src/evmctl.c    | 18 +++++++++++++-----
- src/imaevm.h    |  2 ++
- src/libimaevm.c | 10 +++++-----
- 3 files changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 0f821e4..e7e5fbf 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -810,14 +810,10 @@ static int verify_evm(const char *file)
- {
- 	unsigned char hash[MAX_DIGEST_SIZE];
- 	unsigned char sig[MAX_SIGNATURE_SIZE];
-+	int sig_hash_algo;
- 	int mdlen;
- 	int len;
- 
--	mdlen = calc_evm_hash(file, hash);
--	if (mdlen <= 1)
--		return mdlen;
--	assert(mdlen <= sizeof(hash));
--
- 	len = lgetxattr(file, xattr_evm, sig, sizeof(sig));
- 	if (len < 0) {
- 		log_err("getxattr failed: %s\n", file);
-@@ -829,6 +825,18 @@ static int verify_evm(const char *file)
- 		return -1;
- 	}
- 
-+	sig_hash_algo = imaevm_hash_algo_from_sig(sig + 1);
-+	if (sig_hash_algo < 0) {
-+		log_err("unknown hash algo: %s\n", file);
-+		return -1;
-+	}
-+	imaevm_params.hash_algo = imaevm_hash_algo_by_id(sig_hash_algo);
-+
-+	mdlen = calc_evm_hash(file, hash);
-+	if (mdlen <= 1)
-+		return mdlen;
-+	assert(mdlen <= sizeof(hash));
-+
- 	return verify_hash(file, hash, mdlen, sig + 1, len - 1);
- }
- 
-diff --git a/src/imaevm.h b/src/imaevm.h
-index b881d92..30e9730 100644
---- a/src/imaevm.h
-+++ b/src/imaevm.h
-@@ -223,5 +223,7 @@ int sign_hash(const char *algo, const unsigned char *hash, int size, const char
- int verify_hash(const char *file, const unsigned char *hash, int size, unsigned char *sig, int siglen);
- int ima_verify_signature(const char *file, unsigned char *sig, int siglen, unsigned char *digest, int digestlen);
- void init_public_keys(const char *keyfiles);
-+int imaevm_hash_algo_from_sig(unsigned char *sig);
-+const char *imaevm_hash_algo_by_id(int algo);
- 
- #endif
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index 4f4b207..c35a47d 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -105,7 +105,7 @@ void imaevm_hexdump(const void *ptr, int len)
- 	imaevm_do_hexdump(stdout, ptr, len, true);
- }
- 
--static const char *get_hash_algo_by_id(int algo)
-+const char *imaevm_hash_algo_by_id(int algo)
- {
- 	if (algo < PKEY_HASH__LAST)
- 		return pkey_hash_algo[algo];
-@@ -113,7 +113,7 @@ static const char *get_hash_algo_by_id(int algo)
- 		return hash_algo_name[algo];
- 
- 	log_err("digest %d not found\n", algo);
--	return "unknown";
-+	return NULL;
- }
- 
- /* Output all remaining openssl error messages. */
-@@ -575,7 +575,7 @@ int imaevm_get_hash_algo(const char *algo)
- 	return -1;
- }
- 
--static int get_hash_algo_from_sig(unsigned char *sig)
-+int imaevm_hash_algo_from_sig(unsigned char *sig)
- {
- 	uint8_t hashalgo;
- 
-@@ -632,13 +632,13 @@ int ima_verify_signature(const char *file, unsigned char *sig, int siglen,
- 		return -1;
- 	}
- 
--	sig_hash_algo = get_hash_algo_from_sig(sig + 1);
-+	sig_hash_algo = imaevm_hash_algo_from_sig(sig + 1);
- 	if (sig_hash_algo < 0) {
- 		log_err("Invalid signature\n");
- 		return -1;
- 	}
- 	/* Use hash algorithm as retrieved from signature */
--	imaevm_params.hash_algo = get_hash_algo_by_id(sig_hash_algo);
-+	imaevm_params.hash_algo = imaevm_hash_algo_by_id(sig_hash_algo);
- 
- 	/*
- 	 * Validate the signature based on the digest included in the
--- 
-2.11.0
-
+>
+> -Sumit
+>
+> >
+> > Thanks,
+> > Jens
+> >
+> > >
+> > > -Sumit
+> > >
+> > > > > +#define TEE_IOCTL_LOGIN_REE_KERNEL           0x80000000
+> > > > >
+> > > > >  /**
+> > > > >   * struct tee_ioctl_param - parameter
+> > > > > --
+> > > > > 2.7.4
+> > > > >
+> > > >
+> > > > Thanks,
+> > > > Jens
