@@ -2,62 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAF97A6F8
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jul 2019 13:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9FD7A6FB
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jul 2019 13:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730101AbfG3Laz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Jul 2019 07:30:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60644 "EHLO mail.kernel.org"
+        id S1730165AbfG3LbX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Jul 2019 07:31:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60756 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728412AbfG3Laz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Jul 2019 07:30:55 -0400
+        id S1728412AbfG3LbW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 30 Jul 2019 07:31:22 -0400
 Received: from localhost.localdomain (ool-18bba523.dyn.optonline.net [24.187.165.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 646772087F;
-        Tue, 30 Jul 2019 11:30:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22AAE2087F;
+        Tue, 30 Jul 2019 11:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564486254;
-        bh=ueqMsYbHUv7lG4NrZ2we8kj9Oo0ClZR8B/FulDTCRoI=;
+        s=default; t=1564486282;
+        bh=UzuT1ht2UlH1HsA6I56EcK7JT5cqdTD0Gg6pUQ/5nJE=;
         h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=J0LG+tDeMYjnKyqgAC9QwbppR1SA4xzVRSzT8bwJWNrGBUWKvJ2KDeQk1aETKVCH5
-         3dUUbUe9T510dTsLu+euh0kUE8rqLFJLP4EbbqU3l3A4axT0gG8okdmTxWsuOIf9+6
-         J36i/DzC7Vi7POu477ROw/F/dit11APYnxGu97Ho=
-Message-ID: <1564486237.4189.28.camel@kernel.org>
-Subject: Re: ima-evm-utils: git tagging for release
+        b=WYqqTVCmkN6C6w37bNAJv6TvB7KhXScyL1GWhj8NmgaJETR9olfNBolURvGIx5iKd
+         zndkFhT91VwEjXMqczMETuiNoqlBwJKzS1CtEd4AWZCn54vHLhchVSN4P6iKChubX9
+         V2cNMfe7BtWLihaOjK7KgtEkLyXI8027BNSrES68=
+Message-ID: <1564486265.4189.29.camel@kernel.org>
+Subject: Re: [PATCH] ima-evm-utils: Fix ima_verify for v1 signatures
 From:   Mimi Zohar <zohar@kernel.org>
-To:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org
-Date:   Tue, 30 Jul 2019 07:30:37 -0400
-In-Reply-To: <20190730062625.gpy2p4nff3vnm7sd@altlinux.org>
-References: <20190729101252.iirdsz2j5bjk267f@altlinux.org>
-         <20190730062625.gpy2p4nff3vnm7sd@altlinux.org>
+To:     Vitaly Chikunov <vt@altlinux.org>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Date:   Tue, 30 Jul 2019 07:31:05 -0400
+In-Reply-To: <20190726222309.8106-1-vt@altlinux.org>
+References: <20190726222309.8106-1-vt@altlinux.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Vitaly,
-
-On Tue, 2019-07-30 at 09:26 +0300, Vitaly Chikunov wrote:
-> Mimi,
+On Sat, 2019-07-27 at 01:23 +0300, Vitaly Chikunov wrote:
+> Use user supplied key in verify_hash for DIGSIG_VERSION_1.
+> Otherwise v1 signatures don't pass verification.
 > 
-> It seems that you are released v1.2 of ima-evm-utils. (I did not receive
-> any announcement on linux-integrity.) I noticed that you are not using
-> annotated tags for release versions.
+> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
 
-In the future, I'll announce it here.
-
-> 
-> I suggest you use annotated tags (possible even signed) for release
-> versions. (You will need to delete existing v1.2 local tag if you are
-> going to retag it with annotated tag.)
-
-There are a couple of additional bug fixes that need to be applied
-against the v1.2 release.  Maybe it would be better to release v1.2.1
-with these additional bug fixes, using the annotated tag.
+Thanks!
 
 Mimi
