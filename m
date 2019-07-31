@@ -2,29 +2,29 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1B97C818
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jul 2019 18:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4381F7C8D3
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jul 2019 18:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727349AbfGaQDo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 31 Jul 2019 12:03:44 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:42804 "EHLO
+        id S1729549AbfGaQgH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 31 Jul 2019 12:36:07 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:49994 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725209AbfGaQDo (ORCPT
+        with ESMTP id S1729540AbfGaQgH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 31 Jul 2019 12:03:44 -0400
+        Wed, 31 Jul 2019 12:36:07 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id D0BF072CCD6;
-        Wed, 31 Jul 2019 18:20:35 +0300 (MSK)
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 348EF72CCD6;
+        Wed, 31 Jul 2019 19:36:05 +0300 (MSK)
 Received: from beacon.altlinux.org (unknown [185.6.174.98])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 18D184A4AE7;
-        Wed, 31 Jul 2019 18:20:34 +0300 (MSK)
+        by imap.altlinux.org (Postfix) with ESMTPSA id 6CB184A4AE7;
+        Wed, 31 Jul 2019 19:36:03 +0300 (MSK)
 From:   Vitaly Chikunov <vt@altlinux.org>
 To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: [PATCH v5] ima-evm-utils: Add some tests for evmctl
-Date:   Wed, 31 Jul 2019 18:20:32 +0300
-Message-Id: <20190731152032.4157-1-vt@altlinux.org>
+Subject: [PATCH v6] ima-evm-utils: Add some tests for evmctl
+Date:   Wed, 31 Jul 2019 19:35:48 +0300
+Message-Id: <20190731163548.9934-1-vt@altlinux.org>
 X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -39,6 +39,10 @@ ima_verify are tested.
 
 Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
 ---
+Changelog since v5:
+- Fix tests if gost-engine is not present. Thx to Mimi Zohar for testing on
+  Xenial.
+
 Changelog since v4:
 - Fix bugs found by Mimi Zohar:
  - Fix typos in variable names
@@ -80,10 +84,10 @@ Changelog since v1:
  tests/.gitignore       |  16 +++
  tests/Makefile.am      |  12 ++
  tests/functions.sh     | 272 +++++++++++++++++++++++++++++++++++++
- tests/gen-keys.sh      |  91 +++++++++++++
+ tests/gen-keys.sh      |  93 +++++++++++++
  tests/ima_hash.test    |  71 ++++++++++
  tests/sign_verify.test | 359 +++++++++++++++++++++++++++++++++++++++++++++++++
- 9 files changed, 824 insertions(+), 2 deletions(-)
+ 9 files changed, 826 insertions(+), 2 deletions(-)
  create mode 100644 tests/.gitignore
  create mode 100644 tests/Makefile.am
  create mode 100755 tests/functions.sh
@@ -446,10 +450,10 @@ index 0000000..16c8d89
 +
 diff --git a/tests/gen-keys.sh b/tests/gen-keys.sh
 new file mode 100755
-index 0000000..6a31ac9
+index 0000000..ec2444d
 --- /dev/null
 +++ b/tests/gen-keys.sh
-@@ -0,0 +1,91 @@
+@@ -0,0 +1,93 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
@@ -535,7 +539,9 @@ index 0000000..6a31ac9
 +      -pkeyopt paramset:$param \
 +      -out    test-$algo-$param.cer -outform DER \
 +      -keyout test-$algo-$param.key
-+    log openssl pkey -in test-$algo-$param.key -out test-$algo-$param.pub -pubout
++    if [ -s test-$algo-$param.key ]; then
++      log openssl pkey -in test-$algo-$param.key -out test-$algo-$param.pub -pubout
++    fi
 +done
 +
 +# This script leaves test-ca.conf, *.cer, *.pub, *.key files for sing/verify tests.
@@ -620,7 +626,7 @@ index 0000000..c614063
 +
 diff --git a/tests/sign_verify.test b/tests/sign_verify.test
 new file mode 100755
-index 0000000..f7b7678
+index 0000000..4950652
 --- /dev/null
 +++ b/tests/sign_verify.test
 @@ -0,0 +1,359 @@
@@ -760,19 +766,19 @@ index 0000000..f7b7678
 +  fi
 +
 +  if _is_expect_pass; then
-+    if [ ! -e $KEY ]; then
-+      red_always
-+      echo "Key $KEY does not exist."
-+      color_restore
-+      return $HARDFAIL
-+    fi
-+
 +    # Can openssl work with this digest?
 +    cmd="openssl dgst $OPENSSL_ENGINE -$ALG $FILE"
 +    echo - $cmd
 +    if ! $cmd >/dev/null; then
 +      echo $CYAN"$ALG ($KEY) test is skipped (openssl is unable to digest)"$NORM
 +      return $SKIP
++    fi
++
++    if [ ! -e $KEY ]; then
++      red_always
++      echo "Key $KEY does not exist."
++      color_restore
++      return $HARDFAIL
 +    fi
 +
 +    # Can openssl sign with this digest and key?
