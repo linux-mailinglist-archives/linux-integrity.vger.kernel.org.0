@@ -2,117 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3F77D6D4
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 10:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56AC27D7A2
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 10:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730613AbfHAIAF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Aug 2019 04:00:05 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:37351 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730514AbfHAIAF (ORCPT
+        id S1729158AbfHAIaU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Aug 2019 04:30:20 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:46008 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727506AbfHAIaU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Aug 2019 04:00:05 -0400
-Received: by mail-lj1-f195.google.com with SMTP id z28so14180137ljn.4;
-        Thu, 01 Aug 2019 01:00:03 -0700 (PDT)
+        Thu, 1 Aug 2019 04:30:20 -0400
+Received: by mail-lf1-f65.google.com with SMTP id u10so10820542lfm.12;
+        Thu, 01 Aug 2019 01:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VAiKQtrdWdpAymEw2Fi6xVY10VrsZzJSh6lsPenXn5c=;
-        b=KyWodxvzOSUl5vMHnbnrwzIAAyi2FLqjzsrJG4CDOo0xubx8uDbAyXqHvMjXb2EZKR
-         3OTkmSgzUW5s4OFzZOJtJzkxL2Vw9tpTOsPuHNmJL10tEdjzf6+u9Z5Dm7Ybjzo2Fsnq
-         upL41HGVkP0Apu7kDsQGa73HXRgsYJ4eGQN4LQaCrmmTCyKiMdEQRG2WVK4rAboEaFkL
-         GR3a+bW/b/pBTN2NDcQHelOqJxfXR1ACeiixyEc+ACqJNOoNIwLeHNt7Gkj296UvulJw
-         dWF9aAtR4dZnfFwdJPh3B21ex1Yyr1oWQ/ZqlU8QV6eNaXvHxEZcelG2uu1GWLoxBxgQ
-         663w==
+        bh=2xNohy2xyMAt9HM3Gyk3aetZhs8G9eF7ELJFgFiK0/I=;
+        b=KVeh8Jw9S5Hs+wIxrPmvLbiA/a8qd2ZozSyly4TxKurfCOo1wsw0V1V4FfYAeJ2wAl
+         hX+8KRVyClJNg+3FptaphJmcdmM9LnzOh6gagbOFy1eMrZjqDl8bcVFvxVo1dAiR9p+b
+         FgdFqaoPZgECEcYJFHKHAoCypPwq4VSG353KdX7BgFGul9ORNUmXLocQaAQdLdRYnRab
+         T20nnn0f6BhIpOqtJKrlqaa9f6Yn6/vlQQ1nLKTFluF8kJjAcp5eNSoiPczaPKAQJHFy
+         DDP/HFLbIHCTMQOK6z+FkUHrlVi24L40YmEl1myxFuqnS8aWTlzma/wECZhp/dCoKJv3
+         W0sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VAiKQtrdWdpAymEw2Fi6xVY10VrsZzJSh6lsPenXn5c=;
-        b=GvMWCV/U9YOcLE4xcfMJjDR2SgtqeDGi7BJRHME7AqL7mr1ixuAmutOym0m4hpP9gI
-         9KJJiLh0a33oWkNvIlGJye3VJr7FaBpYMltsPF9ZuwiNyVThVc7NF9sCkmpaeL+VW8S6
-         JzHBjf3FlyEYnvmCpoytOs3XjGzzCn0mZtlv4yiOnhnRm9vts48kC8gObXYDu9acLLD6
-         pbfAi5YymPeSa+la3G9jxEYjwOe/rxKK2TfAp80/A1tUUKudy7iAtQiRqmlNFesL/EmR
-         ZOAG9VHLTE4JURgLRx0s0RPI0IYEwJ7AaY7xTuQbEpn6wiGR9N33TA0caDofY0MQk0Gu
-         psaA==
-X-Gm-Message-State: APjAAAV4H70kcD1p9bp7ucO1MXqQOHlQUUBk8sp+jH9za1IPL0ZpS3Zt
-        FL3iuRp9YJZkNG9rqQicEvdIFpDW58lVPftCJTA=
-X-Google-Smtp-Source: APXvYqx/gMgcGF2V7ylKamWcGjf6XGcn5JGjdm2r9vJ2Njp1NLJnu7wpmlveYBCUT/NrzJhe5JXapFqEUKI15zJ5ClQ=
-X-Received: by 2002:a2e:5d92:: with SMTP id v18mr67333062lje.9.1564646402586;
- Thu, 01 Aug 2019 01:00:02 -0700 (PDT)
+        bh=2xNohy2xyMAt9HM3Gyk3aetZhs8G9eF7ELJFgFiK0/I=;
+        b=LzNOOLJ8i1HHyeTpxE2+GpVdssv8bCiSKiOTnQAdQlI8miOya3BBc4LIBfvHtJGC7r
+         ALQRVHHiY8H8dDNkFQ7AeYC9QqEAz42yH7zN05PYFoI32Yw5dlf8lhG2ectZ5Cgf1b/K
+         RNP7jdLBOkBBhalOvOneQhubnWbg+XyLUWRFgWGphRltCQLE6+KCq4LLSRlxJo2MoKxK
+         j05d1rSCt3hCq+HVXKbThoOpk3VcpPCDnHMNX9tt7QayBBO2ZsZ45iimK08J8mHzp6us
+         Mf1qyeUWVuGK4lXxyGk+sMipfaysxbV38mWNuTYZX40/fdWec54Nd1Y7CnkjCxMYcmmi
+         nQiA==
+X-Gm-Message-State: APjAAAV6Rp+/Wkaudm7wMdKKATfevRsTpz0ZWkmjSDZ00A7YoDAjpx7q
+        x56J4fXo+pcpyh//iIf3XYAYG7QlIK1fYBBP4v4=
+X-Google-Smtp-Source: APXvYqzzD88SDt0GVEYWnLJkJRlwD14+HIfeihD4WoOdeKaL/6vYosJryMtEFIiIAgKt+K60XVbK4UMpvkES4vMcWVE=
+X-Received: by 2002:a19:f806:: with SMTP id a6mr47249319lff.102.1564648217496;
+ Thu, 01 Aug 2019 01:30:17 -0700 (PDT)
 MIME-Version: 1.0
 References: <1564489420-677-1-git-send-email-sumit.garg@linaro.org>
  <CAE=Ncrb63dQLe-nDQyO9OPv7XjwM_9mzL9SrcLiUi2Dr10cD4A@mail.gmail.com>
- <CAE=NcrY7b8eTTovOszBhGhVbjfJAXoAYehiUJyPENGfwWoVcPw@mail.gmail.com>
- <CAFA6WYOEqe1a1DCyVYKA+oZaZ0n5hnjxdubstUnrwdUW1-4xHw@mail.gmail.com>
- <CAE=NcraDkm5cxE=ceq_9XkQz=NZ6KdVXkNUsdD4G2LrWz-bpDw@mail.gmail.com> <CAFA6WYMOXQbL5OeheFUFpTr8gte8XHHr-71-h8+qX0+R_sekDQ@mail.gmail.com>
-In-Reply-To: <CAFA6WYMOXQbL5OeheFUFpTr8gte8XHHr-71-h8+qX0+R_sekDQ@mail.gmail.com>
+ <CAFA6WYPJAzbPdcpBqioxjY=T8RLw-73B_hpzX4cGnwVvm5zpJw@mail.gmail.com>
+ <CAE=Ncrb23q++z8R8UMbjDE2epEq4YVcNGzrRD31eH3JAooYejg@mail.gmail.com>
+ <CAFA6WYOKcOzSwakHhgshZcebD8ZBMSi7xQdjWYFS79=Xc+odOg@mail.gmail.com>
+ <CAE=NcrYz8bT9zDhS_ZcvY84fpeTDxZ-KhJKeQGGyf=o4pG2J-Q@mail.gmail.com>
+ <19d9be198619e951750dedeb4d0a7f372083b42c.camel@pengutronix.de>
+ <CAE=NcraqD9FNM0Gk9UGhPGi3heVzZrAKGc1gNZxoe1OnDaQ=pA@mail.gmail.com> <CAFA6WYPt4q+jaJbaoauXKr2qKgBHvtQ663s4t=W3nuPJPe2xpw@mail.gmail.com>
+In-Reply-To: <CAFA6WYPt4q+jaJbaoauXKr2qKgBHvtQ663s4t=W3nuPJPe2xpw@mail.gmail.com>
 From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Thu, 1 Aug 2019 10:59:51 +0300
-Message-ID: <CAE=Ncrae6pM+WBDu9eJ7Fw2Fkvf3_YqH5tj9Tt938D4RtWcdSQ@mail.gmail.com>
-Subject: Re: [RFC v2 0/6] Introduce TEE based Trusted Keys support
+Date:   Thu, 1 Aug 2019 11:30:05 +0300
+Message-ID: <CAE=NcrbujsM8wYJXq+s=o5Vy1xY1b0uKYBGvp6UP5ex70HrB2Q@mail.gmail.com>
+Subject: Re: [Tee-dev] [RFC v2 0/6] Introduce TEE based Trusted Keys support
 To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, dhowells@redhat.com,
-        jejb@linux.ibm.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+Cc:     Rouven Czerwinski <r.czerwinski@pengutronix.de>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
         Daniel Thompson <daniel.thompson@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, jejb@linux.ibm.com,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dhowells@redhat.com, linux-security-module@vger.kernel.org,
+        keyrings@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-integrity@vger.kernel.org,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
+        "Serge E. Hallyn" <serge@hallyn.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 1, 2019 at 10:40 AM Sumit Garg <sumit.garg@linaro.org> wrote:
+On Thu, Aug 1, 2019 at 10:58 AM Sumit Garg <sumit.garg@linaro.org> wrote:
 
-> > I chose the userspace plugin due to this, you can use userspace aids
-> > to provide any type of service. Use the crypto library you desire to
-> > do the magic you want.
+> > Anyway, just my .02c. I guess having any new support in the kernel for
+> > new trust sources is good and improvement from the current state. I
+> > can certainly make my stuff work with your setup as well, what ever
+> > people think is the best.
 >
-> Here TEE isn't similar to a user-space crypto library. In our case TEE
-> is based on ARM TrustZone which only allows TEE communications to be
-> initiated from privileged mode. So why would you like to route
-> communications via user-mode (which is less secure) when we have
-> standardised TEE interface available in kernel?
+> Yes your implementation can very well fit under trusted keys
+> abstraction framework without creating a new keytype: "ext-trusted".
 
-The physical access guards for reading/writing the involved critical
-memory are identical as far as I know? Layered security is generally a
-good thing, and the userspace pass actually adds a layer, so not sure
-which is really safer?
-
-In my case the rerouting was to done generalize it. Any type of trust
-source, anywhere.
-
-
-> > > Isn't actual purpose to have trusted keys is to protect user-space
-> > > from access to kernel keys in plain format? Doesn't user mode helper
-> > > defeat that purpose in one way or another?
-> >
-> > Not really. CPU is in the user mode while running the code, but the
-> > code or the secure keydata being is not available to the 'normal'
-> > userspace. It's like microkernel service/driver this way. The usermode
-> > driver is part of the kernel image and it runs on top of a invisible
-> > rootfs.
->
-> Can you elaborate here with an example regarding how this user-mode
-> helper will securely communicate with a hardware based trust source
-> with other user-space processes denied access to that trust source?
-
-The other user mode processes will never see the device node to open.
-There is none in existence for them; it only exists in the ramfs based
-root for the user mode helper.
+The fundamental problem with the 'standardized kernel tee' still
+exists - it will never be generic in real life. Getting all this in
+the kernel will solve your problem and sell this particular product,
+but it is quite unlikely to help that many users. If the security is
+truly important to you, would you really trust any of this code to
+someone else? In this day and age, I really doubt many do. Everyone
+does their own thing, so this is why I really see all that as a
+userspace problem.
 
 
 --
