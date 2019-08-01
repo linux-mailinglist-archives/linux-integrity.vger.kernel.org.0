@@ -2,106 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2F17D653
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 09:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E5D7D67C
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 09:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728582AbfHAHaV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Aug 2019 03:30:21 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:34679 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbfHAHaV (ORCPT
+        id S1730510AbfHAHkw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Aug 2019 03:40:52 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:41579 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730496AbfHAHkw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Aug 2019 03:30:21 -0400
-Received: by mail-lj1-f193.google.com with SMTP id p17so68339621ljg.1;
-        Thu, 01 Aug 2019 00:30:18 -0700 (PDT)
+        Thu, 1 Aug 2019 03:40:52 -0400
+Received: by mail-lj1-f196.google.com with SMTP id d24so68343507ljg.8
+        for <linux-integrity@vger.kernel.org>; Thu, 01 Aug 2019 00:40:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rdlu4Ad817zx+iOTcsjqQM76adHXpOWbEydNxUMSAfU=;
-        b=UzX7Ppc2TrBZ0COGTnbdhjA8/92a3SmUDMUBe7LHJnt7UzjMivXlt5ctFlFa8oCssU
-         SYmn0SU0YmBzG+xH1D7Xm6LwZdeQI4DMIuCFZ2apRvrxooP1XuUSa4h0cqvLb+yZ84WV
-         gzhVlRU7mA0IUpLblx7J9CW2e26MxMXKOvypsTKT7OA+spMddfGXtcyN9dJUUq1oZ3L2
-         WXvXffxmd9eeUSa0XCpuLJgrwP5q0Njaz9GFOXVxMiAPzbRBN62y8b/zTpo9Vvq+4wem
-         H3/6ktlq9TuBKIZYLltyIKoSiqKgUj5S5PLdGFqXB4oRQrT7eg2cwmMCz/P449szEX0W
-         H97A==
+        bh=H2DnLeysC51Jmq+BwRcdvsefRXSYiI2YJl6s9A/zlto=;
+        b=qrMT7PcgSqQaPkhDNxMbADKheyhBnSC+xpb7kKF54VBYkSMPossLqpaZCuNtF0lDMK
+         qXMEZEB3PZU5mAOOK9m7rgG41ScrZQmYocuw/IlarqJeVGqi35sAmjysYfxFyzDpdwrE
+         q0o1/fC76kq7sPI1X42ApVVwfrkAaLdqAWBgpE4pkfS5OjtTTBWyOF0eCL4MZjZx1E5O
+         hL8RRxrqjhZmDoasT8A3YGGN8527eUUnk+H3CroOjZQa0hqO8N1YZkTAY116z0aFZIV/
+         b8i6FslmwUzzoFlRmDqExDGN92AQOqj3haKzc3fHcFHkDuqot0ElZe4/3d+LWlRDtHx3
+         44jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rdlu4Ad817zx+iOTcsjqQM76adHXpOWbEydNxUMSAfU=;
-        b=hNkzAwrdbRsfJhStlM5KWPM6IHEqTqlT31w7Y2vQVHfkv5EOmYrKuNf0uv+9UnqLUP
-         JDkfs5TfYgJHtCvgF7d7dGVaO9EkfU0FNZT92K0qEnqYZuyL+MTr+/Fvd1DNgCfWsOFY
-         9DW5DAh3ZIflDF5nCRzVH7DwDR4u5MSsT5bXuBJ4v/SjTQc+xw5X6mozi6zhxlfA1Pjl
-         zH2esaCyhlp7FXXNrHby9YSW6RwqXtU5tM3nvg2Kg5Q2gMWjlzmjkDhrILJw5pDHngDD
-         HHSIYKS8B1QYJRQY2+R2zCKIjGLTKfRPGjPFz2klAM2m4vb3yNpNiSGrUfns0KnTZkAE
-         4kXw==
-X-Gm-Message-State: APjAAAU/ZXp8pPwlYi6lk4+neztU55IIbSdYv/xBVNVCh92bF3gmGhqU
-        /m0LDSjwG/TdnxAdGkMYQK6y33tzBuFIrvVeQXI=
-X-Google-Smtp-Source: APXvYqzD4VpesQpUb8MYg+Q5e04vCOtwoAClw957rRW1FlaRZEsQmMx74W0N61umpEVSCQWDHKBhpRkvaPwaSWsWw1Q=
-X-Received: by 2002:a2e:1290:: with SMTP id 16mr64210069ljs.88.1564644618088;
- Thu, 01 Aug 2019 00:30:18 -0700 (PDT)
+        bh=H2DnLeysC51Jmq+BwRcdvsefRXSYiI2YJl6s9A/zlto=;
+        b=LIADXOflsjIAFyRMrDZZ2HACfkjOrUt4klmPrihZe4IUdlkhIkvGXoWyyu79+UMfLd
+         m14Rk/F2GvTItYy62PU7QjjvC1b/RGieRjSguB+rVf3wN694nCVu12qwtur3gXg7nrgu
+         3KtNEH9XYJz8A7Y9mmCPIJke9MITNX/4kc0atR9fTvknSNR3H1vM3JzPNrkUXlgORvCM
+         2ucDP6xoQgAnSBggQGEuMYYNZS64LYJgsNcKgtSKcKc98M/1xugmY/EiA9wyzZ7PYUEs
+         J8ISjs64BXD90tHxr1a1eeFbfAPjIlS8rEZoCq6QFUc9nGKOFLQDFXP7HRPoWYyQlhHM
+         oTZA==
+X-Gm-Message-State: APjAAAUmJSW2qOpWfVuNmEN1NMZXmpPai9kgl/dPCeLzJzMr8inHYMIZ
+        WUb86QQyzGzp3+LOCxRc1RY+BB4LvKzFO83JmrHO7Q==
+X-Google-Smtp-Source: APXvYqzq0IJ9GtmcxYuyJWtDtzNwkmT4P2unALVLFpkxdrititI5GvPVtJgr09S2tzYu63OXgUbjTzql4hcILCNGdOk=
+X-Received: by 2002:a2e:970a:: with SMTP id r10mr63101245lji.115.1564645250122;
+ Thu, 01 Aug 2019 00:40:50 -0700 (PDT)
 MIME-Version: 1.0
 References: <1564489420-677-1-git-send-email-sumit.garg@linaro.org>
  <CAE=Ncrb63dQLe-nDQyO9OPv7XjwM_9mzL9SrcLiUi2Dr10cD4A@mail.gmail.com>
- <CAFA6WYPJAzbPdcpBqioxjY=T8RLw-73B_hpzX4cGnwVvm5zpJw@mail.gmail.com>
- <CAE=Ncrb23q++z8R8UMbjDE2epEq4YVcNGzrRD31eH3JAooYejg@mail.gmail.com>
- <CAFA6WYOKcOzSwakHhgshZcebD8ZBMSi7xQdjWYFS79=Xc+odOg@mail.gmail.com>
- <CAE=NcrYz8bT9zDhS_ZcvY84fpeTDxZ-KhJKeQGGyf=o4pG2J-Q@mail.gmail.com> <19d9be198619e951750dedeb4d0a7f372083b42c.camel@pengutronix.de>
-In-Reply-To: <19d9be198619e951750dedeb4d0a7f372083b42c.camel@pengutronix.de>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Thu, 1 Aug 2019 10:30:06 +0300
-Message-ID: <CAE=NcraqD9FNM0Gk9UGhPGi3heVzZrAKGc1gNZxoe1OnDaQ=pA@mail.gmail.com>
-Subject: Re: [Tee-dev] [RFC v2 0/6] Introduce TEE based Trusted Keys support
-To:     Rouven Czerwinski <r.czerwinski@pengutronix.de>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, jejb@linux.ibm.com,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+ <CAE=NcrY7b8eTTovOszBhGhVbjfJAXoAYehiUJyPENGfwWoVcPw@mail.gmail.com>
+ <CAFA6WYOEqe1a1DCyVYKA+oZaZ0n5hnjxdubstUnrwdUW1-4xHw@mail.gmail.com> <CAE=NcraDkm5cxE=ceq_9XkQz=NZ6KdVXkNUsdD4G2LrWz-bpDw@mail.gmail.com>
+In-Reply-To: <CAE=NcraDkm5cxE=ceq_9XkQz=NZ6KdVXkNUsdD4G2LrWz-bpDw@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 1 Aug 2019 13:10:38 +0530
+Message-ID: <CAFA6WYMOXQbL5OeheFUFpTr8gte8XHHr-71-h8+qX0+R_sekDQ@mail.gmail.com>
+Subject: Re: [RFC v2 0/6] Introduce TEE based Trusted Keys support
+To:     Janne Karhunen <janne.karhunen@gmail.com>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, dhowells@redhat.com,
+        jejb@linux.ibm.com,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dhowells@redhat.com, linux-security-module@vger.kernel.org,
-        keyrings@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         Casey Schaufler <casey@schaufler-ca.com>,
-        linux-integrity@vger.kernel.org,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 1, 2019 at 9:50 AM Rouven Czerwinski
-<r.czerwinski@pengutronix.de> wrote:
-
-> > I'm aware of it - I have implemented a large part of the GP TEE APIs
-> > earlier (primarily the crypto functions). Does the TEE you work with
-> > actually support GP properly? Can I take a look at the code?
+On Thu, 1 Aug 2019 at 11:51, Janne Karhunen <janne.karhunen@gmail.com> wrote:
 >
-> AFAIK Sumit is working with the OP-TEE implementation, which can be
-> found on github: https://github.com/op-tee/optee_os
+> On Wed, Jul 31, 2019 at 4:58 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> > > To clarify a bit further - my thought was to support any type of trust
+> > > source.
+> >
+> > That could be very well accomplished via Trusted Keys abstraction
+> > framework [1]. A trust source just need to implement following APIs:
+> >
+> > struct trusted_key_ops ts_trusted_key_ops = {
+> >        .migratable = 0, /* non-migratable */
+> >        .init = init_ts_trusted,
+> >        .seal = ts_key_seal,
+> >        .unseal = ts_key_unseal,
+> >        .get_random = ts_get_random,
+> >        .cleanup = cleanup_ts_trusted,
+> > };
+>
+> Which is basically the same as implementing a new keytype in the
+> kernel; abstraction is not raised in any considerable manner this way?
+>
 
-Thanks, I will take a look. The fundamental problem with these things
-is that there are infinite amount of ways how TEEs and ROTs can be
-done in terms of the hardware and software. I really doubt there are 2
-implementations in existence that are even remotely compatible in real
-life. As such, all things TEE/ROT would logically really belong in the
-userland and thanks to the bpfilter folks now the umh logic really
-makes that possible ... I think. The key implementation I did was just
-an RFC on the concept, what if we start to move the stuff that really
-belongs in the userspace to this pseudo-userland. It's not kernel, but
-it's not commonly accessible userland either. The shared memory would
-also work without any modifications between the umh based TEE/ROT
-driver and the userland if needed.
+It doesn't create a new keytype. There is only single keytype:
+"trusted" which could be implemented via one of the trust source
+available in the system like TPM, TEE etc.
 
-Anyway, just my .02c. I guess having any new support in the kernel for
-new trust sources is good and improvement from the current state. I
-can certainly make my stuff work with your setup as well, what ever
-people think is the best.
+> I chose the userspace plugin due to this, you can use userspace aids
+> to provide any type of service. Use the crypto library you desire to
+> do the magic you want.
 
+Here TEE isn't similar to a user-space crypto library. In our case TEE
+is based on ARM TrustZone which only allows TEE communications to be
+initiated from privileged mode. So why would you like to route
+communications via user-mode (which is less secure) when we have
+standardised TEE interface available in kernel?
 
---
-Janne
+>
+>
+> > > With the
+> > > user mode helper in between anyone can easily add their own thing in
+> > > there.
+> >
+> > Isn't actual purpose to have trusted keys is to protect user-space
+> > from access to kernel keys in plain format? Doesn't user mode helper
+> > defeat that purpose in one way or another?
+>
+> Not really. CPU is in the user mode while running the code, but the
+> code or the secure keydata being is not available to the 'normal'
+> userspace. It's like microkernel service/driver this way. The usermode
+> driver is part of the kernel image and it runs on top of a invisible
+> rootfs.
+>
+
+Can you elaborate here with an example regarding how this user-mode
+helper will securely communicate with a hardware based trust source
+with other user-space processes denied access to that trust source?
+
+-Sumit
+
+>
+> --
+> Janne
