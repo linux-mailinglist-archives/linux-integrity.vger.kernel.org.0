@@ -2,115 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE987D989
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 12:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7424D7DE88
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 17:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731035AbfHAKkl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Aug 2019 06:40:41 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:43669 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbfHAKkl (ORCPT
+        id S1726716AbfHAPNS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Aug 2019 11:13:18 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:46655 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727853AbfHAPNS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Aug 2019 06:40:41 -0400
-Received: by mail-lf1-f66.google.com with SMTP id c19so49869251lfm.10;
-        Thu, 01 Aug 2019 03:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=isUGmEYOLpjEg3jfVYEfLLyDXZizpluoarkdQOeJEco=;
-        b=e7zESjZM2/wzjwmiWWWbSAsTWhAV77ru/rCVx4JUymN/53sRSzBFQXud45X8Dr61zK
-         sqmwE48x+NwYk2Cj06PSvNDR8EAL73UGkym1ZfUF++xJXuhNMPXz+ZbmblOckb2EDibR
-         hn6TqYNEl4I925P779zb0qgrYlBYkGxknrNhHKo6jUgsDvnooc9DJ8mSJdetEzKQzfIu
-         yGRZza/lQjKJDFIMW4HrtW4SNKRhMMEr9D67Icb79a0oMCaE2HtXRxR5M4RhrEn5SpKM
-         a576UQfrDmvM2vsFwwi7Yxa0NJUzNBsNMxHNw41zLHW1yIPJgW5/e35MPiKmD1Qk/tSb
-         zgFg==
+        Thu, 1 Aug 2019 11:13:18 -0400
+Received: by mail-qt1-f195.google.com with SMTP id h21so70523232qtn.13
+        for <linux-integrity@vger.kernel.org>; Thu, 01 Aug 2019 08:13:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=isUGmEYOLpjEg3jfVYEfLLyDXZizpluoarkdQOeJEco=;
-        b=ocAW3vNpNejlf8c0y698MOcyJuojw2geujr5OI8EZf8JixVMH5BGYxyF12OwheKIUr
-         FTkdTfoVZjrYAQL6lLfV8xkuHqGIc/iMpZpVLlt3/G8K2a8OuhouDCchfXqv1C8P+dsd
-         Zet/ZJ0cIQSfEO8PU9iF47fqCK9jcvbKzlbzGLkdcrjgFbU5maowA9KThaHBi4VpCbGc
-         2xh8w4QFQSqKfm0c1HP/Lse5r4w5kFs7HdDXpVRCMS31VWfrjBTkcGB8JxnURvRAvKP+
-         QarxpIYxLhb/Bz+SMCtaKJqZ24UyvFuxi+VZcheCsLlaZmPr7uHMGqwUDCV2qchzCwIc
-         chkg==
-X-Gm-Message-State: APjAAAVpPfQFmrrocYYUn3tEzDYHhy5pR6AJwrLW++aj5K8MBLqchcvZ
-        fLMKoKL1ZfUbOrA4QSy8DD5B9YmUQv4xYWyeyXU=
-X-Google-Smtp-Source: APXvYqzBC9Gdh1FFxLOeL/OcODPMG8H50PClL/jL6/hOC+Ro8fVfZSKCPuosp/rXDAuw8uu1AiQV5PVAqbOPMwJCVac=
-X-Received: by 2002:ac2:5181:: with SMTP id u1mr10511367lfi.42.1564656038513;
- Thu, 01 Aug 2019 03:40:38 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:reply-to
+         :mime-version:content-disposition:user-agent;
+        bh=hzhbmaeDfHufjurciCEu3j2x06Ef6VSSHCUhyfNpaUc=;
+        b=ICekEMMgaxpFC4HTG48+tcJE6QpGBLmTikofI+SUuXnYla8U4Izxdvz+ZFiJna3CQN
+         /mQu5K43r6kg0OZJpnVpALaknRRbpAfIhpxxnwz22h8uD+/9zAvOxVm2gM1c5/2apwi1
+         OTMP52hZD4hxH2ijvZhKM1rBGaDvXTnDhfhwpn4VFgSkNUYeyhKwVsChqh+ohxAjAWNZ
+         eyt1T3ZPP6ZX03B4AkAKlw23tSKcDAPQVNtv3uMOdrNJAuY4JdwiyWovWsGSJ1AtteJB
+         Yc3O3gIJY8Bc3eesIF313b6ze250zIXFTF3vKQ91d99AKhDXyDh3Kc9BR3SRRt94jh4c
+         fObw==
+X-Gm-Message-State: APjAAAVhMqcjIvkHJC0a9NCUx3AuDnFD/MR441qARRkbRtu8/aleNiv8
+        bzGw2UB5orl+m4Rw2FLyeoFFppXsvL0=
+X-Google-Smtp-Source: APXvYqzuZSofgDEnbsw54yXGZMh9ejN+JO7Uffk9dmaFJq3LskhZRmZhp77dZjNWl4z1TI8a2IxFVA==
+X-Received: by 2002:aed:3363:: with SMTP id u90mr90558735qtd.7.1564672397091;
+        Thu, 01 Aug 2019 08:13:17 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id e7sm29463049qtp.91.2019.08.01.08.13.15
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 01 Aug 2019 08:13:16 -0700 (PDT)
+Date:   Thu, 1 Aug 2019 08:13:14 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-integrity@vger.kernel.org
+Subject: unable to handle page fault in 5.3-rc[12]
+Message-ID: <20190801151314.f2tjk2b52mhxuc3x@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
 MIME-Version: 1.0
-References: <1564489420-677-1-git-send-email-sumit.garg@linaro.org>
- <CAE=Ncrb63dQLe-nDQyO9OPv7XjwM_9mzL9SrcLiUi2Dr10cD4A@mail.gmail.com>
- <CAE=NcrY7b8eTTovOszBhGhVbjfJAXoAYehiUJyPENGfwWoVcPw@mail.gmail.com>
- <CAFA6WYOEqe1a1DCyVYKA+oZaZ0n5hnjxdubstUnrwdUW1-4xHw@mail.gmail.com>
- <CAE=NcraDkm5cxE=ceq_9XkQz=NZ6KdVXkNUsdD4G2LrWz-bpDw@mail.gmail.com>
- <CAFA6WYMOXQbL5OeheFUFpTr8gte8XHHr-71-h8+qX0+R_sekDQ@mail.gmail.com>
- <CAE=Ncrae6pM+WBDu9eJ7Fw2Fkvf3_YqH5tj9Tt938D4RtWcdSQ@mail.gmail.com> <CAFA6WYOwcO5-cyaJf3tMMAdyVHJo=BzmCWtsjA3S8aj5g-GZxQ@mail.gmail.com>
-In-Reply-To: <CAFA6WYOwcO5-cyaJf3tMMAdyVHJo=BzmCWtsjA3S8aj5g-GZxQ@mail.gmail.com>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Thu, 1 Aug 2019 13:40:26 +0300
-Message-ID: <CAE=NcrY7zA1OkKwpVrPbPd+c0OymZeAgT2hp6xZ3HQOgbXaZjg@mail.gmail.com>
-Subject: Re: [RFC v2 0/6] Introduce TEE based Trusted Keys support
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, dhowells@redhat.com,
-        jejb@linux.ibm.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 1, 2019 at 1:00 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+I've had a couple reports emailed to me with a trace like the following
+for 5.3-rc1 and 5.3-rc2. I'm just starting to dig into and look at recent
+commits and mailing list, but is this already known?
 
-> > > Here TEE isn't similar to a user-space crypto library. In our case TEE
-> > > is based on ARM TrustZone which only allows TEE communications to be
-> > > initiated from privileged mode. So why would you like to route
-> > > communications via user-mode (which is less secure) when we have
-> > > standardised TEE interface available in kernel?
-> >
-> > The physical access guards for reading/writing the involved critical
-> > memory are identical as far as I know? Layered security is generally a
-> > good thing, and the userspace pass actually adds a layer, so not sure
-> > which is really safer?
->
-> AFAIK, layered security is better in case we move from lower privilege
-> level to higher privilege level rather than in reverse order.
+It's been reported on a couple different Lenovo laptop models (T470s and X1 carbon I believe).
 
-You can look at this in many ways. Another way to look at it is that
-the services should be provided with the least amount of permissions
-required for the task. Further you can containerize something, the
-better.
-
-As for your PLATFORMS support: it is all nice, but there is no way to
-convince op-tee or any other tee to be adopted by many real users.
-Every serious user can and will do their own thing, or at very best,
-buy it from someone who did their own thing and is trusted. There is
-zero chance that samsung, huawei, apple, nsa, google, rambus, payment
-system vendors, .. would actually share the tee (or probably even the
-interfaces). It is just too vital and people do not trust each other
-anymore :(
-
-Anyway, enough about the topic from my side. I guess people will tell
-what they want, I'm fine with any, and it is all progress from the
-current state :)
-
-
---
-Janne
+Full panic message:
+[    0.774340] BUG: unable to handle page fault for address: ffffbc8fc00866ad
+[    0.774788] #PF: supervisor read access in kernel mode
+[    0.774788] #PF: error_code(0x0000) - not-present page
+[    0.774788] PGD 107d36067 P4D 107d36067 PUD 107d37067 PMD 107d38067 PTE 0
+[    0.774788] Oops: 0000 [#1] SMP PTI
+[    0.774788] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.3.0-0.rc2.1.elrdy.x86_64 #1
+[    0.774788] Hardware name: LENOVO 20HGS22D0W/20HGS22D0W, BIOS N1WET51W (1.30 ) 09/14/2018
+[    0.774788] RIP: 0010:memcpy_erms+0x6/0x10
+[    0.774788] Code: 90 90 90 90 eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+[    0.774788] RSP: 0000:ffffbc8fc0073b30 EFLAGS: 00010286
+[    0.774788] RAX: ffff9b1fc7c5b367 RBX: ffff9b1fc8390000 RCX: ffffffffffffe962
+[    0.774788] RDX: ffffffffffffe962 RSI: ffffbc8fc00866ad RDI: ffff9b1fc7c5b367
+[    0.774788] RBP: ffff9b1c10ca7018 R08: ffffbc8fc0085fff R09: 8000000000000063
+[    0.774788] R10: 0000000000001000 R11: 000fffffffe00000 R12: 0000000000003367
+[    0.774788] R13: ffff9b1fcc47c010 R14: ffffbc8fc0085000 R15: 0000000000000002
+[    0.774788] FS:  0000000000000000(0000) GS:ffff9b1fce200000(0000) knlGS:0000000000000000
+[    0.774788] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    0.774788] CR2: ffffbc8fc00866ad CR3: 000000029f60a001 CR4: 00000000003606f0
+[    0.774788] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    0.774788] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    0.774788] Call Trace:
+[    0.774788]  tpm_read_log_efi+0x156/0x1a0
+[    0.774788]  tpm_bios_log_setup+0xc8/0x190
+[    0.774788]  tpm_chip_register+0x50/0x1c0
+[    0.774788]  tpm_tis_core_init.cold.9+0x28c/0x466
+[    0.774788]  tpm_tis_plat_probe+0xcc/0xea
+[    0.774788]  platform_drv_probe+0x35/0x80
+[    0.774788]  really_probe+0xef/0x390
+[    0.774788]  driver_probe_device+0xb4/0x100
+[    0.774788]  device_driver_attach+0x4f/0x60
+[    0.774788]  __driver_attach+0x86/0x140
+[    0.774788]  ? device_driver_attach+0x60/0x60
+[    0.774788]  bus_for_each_dev+0x76/0xc0
+[    0.774788]  ? klist_add_tail+0x3b/0x70
+[    0.774788]  bus_add_driver+0x14a/0x1e0
+[    0.774788]  ? tpm_init+0xea/0xea
+[    0.774788]  ? do_early_param+0x8e/0x8e
+[    0.774788]  driver_register+0x6b/0xb0
+[    0.774788]  ? tpm_init+0xea/0xea
+[    0.774788]  init_tis+0x86/0xd8
+[    0.774788]  ? do_early_param+0x8e/0x8e
+[    0.774788]  ? driver_register+0x94/0xb0
+[    0.774788]  do_one_initcall+0x46/0x1e4
+[    0.774788]  ? do_early_param+0x8e/0x8e
+[    0.774788]  kernel_init_freeable+0x199/0x242
+[    0.774788]  ? rest_init+0xaa/0xaa
+[    0.774788]  kernel_init+0xa/0x106
+[    0.774788]  ret_from_fork+0x35/0x40
+[    0.774788] Modules linked in:
+[    0.774788] CR2: ffffbc8fc00866ad
+[    0.774788] ---[ end trace 42930799f8d6eaea ]---
+[    0.774788] RIP: 0010:memcpy_erms+0x6/0x10
+[    0.774788] Code: 90 90 90 90 eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+[    0.774788] RSP: 0000:ffffbc8fc0073b30 EFLAGS: 00010286
+[    0.774788] RAX: ffff9b1fc7c5b367 RBX: ffff9b1fc8390000 RCX: ffffffffffffe962
+[    0.774788] RDX: ffffffffffffe962 RSI: ffffbc8fc00866ad RDI: ffff9b1fc7c5b367
+[    0.774788] RBP: ffff9b1c10ca7018 R08: ffffbc8fc0085fff R09: 8000000000000063
+[    0.774788] R10: 0000000000001000 R11: 000fffffffe00000 R12: 0000000000003367
+[    0.774788] R13: ffff9b1fcc47c010 R14: ffffbc8fc0085000 R15: 0000000000000002
+[    0.774788] FS:  0000000000000000(0000) GS:ffff9b1fce200000(0000) knlGS:0000000000000000
+[    0.774788] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    0.774788] CR2: ffffbc8fc00866ad CR3: 000000029f60a001 CR4: 00000000003606f0
+[    0.774788] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    0.774788] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    0.774788] Kernel panic - not syncing: Fatal exception
+[    0.774788] Kernel Offset: 0x1d000000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[    0.774788] ---[ end Kernel panic - not syncing: Fatal exception ]---
