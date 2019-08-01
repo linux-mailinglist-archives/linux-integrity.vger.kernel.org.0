@@ -2,76 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B377E14B
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 19:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E84D7E3AD
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 22:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730117AbfHARnQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Aug 2019 13:43:16 -0400
-Received: from mga07.intel.com ([134.134.136.100]:60777 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729881AbfHARnQ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Aug 2019 13:43:16 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Aug 2019 10:43:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,335,1559545200"; 
-   d="scan'208";a="372686591"
-Received: from nippert-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.36.219])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Aug 2019 10:43:11 -0700
-Date:   Thu, 1 Aug 2019 20:43:10 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, tweek@google.com,
-        matthewgarrett@google.com, jorhand@linux.microsoft.com,
-        rdunlap@infradead.org, Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH v4] tpm: Document UEFI event log quirks
-Message-ID: <20190801174310.n3iuqhnaulgqexfg@linux.intel.com>
-References: <20190712154439.10642-1-jarkko.sakkinen@linux.intel.com>
- <20190731133948.1a527db8@lwn.net>
+        id S2388851AbfHAT64 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Aug 2019 15:58:56 -0400
+Received: from mail-io1-f54.google.com ([209.85.166.54]:37309 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388600AbfHAT64 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 1 Aug 2019 15:58:56 -0400
+Received: by mail-io1-f54.google.com with SMTP id q22so27291944iog.4
+        for <linux-integrity@vger.kernel.org>; Thu, 01 Aug 2019 12:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0MK7gpkIkb1rDS/a69ip812vylHERRnaq5QfKqF4c5g=;
+        b=Wim6L91rkdK7if7zbJVFgaA+tCuQFFtaXs1E5YyqyIQjKTQuffyblAdOQJFXJKd3FC
+         cf5pazxaIZtwMeyAaP0z0Z8NBBiOqrSVRdGWQYUXb4MRH6upiV2R8zwf+hBbqpSem/p5
+         aDerV0942S4/D+YsPBvXTYqakKrv/5bccKetr96/1veS8UPku22vKUbwMS888IA7qNAJ
+         sOcqWNiLEjcIloryyZBxcyXpfrhsRv3g2cJUXmfzx6/i7JhXBRhhWwcBw6c/1FYi6F76
+         TED1m6qEMVaJk9zi0qXqsRhyCDqdrX4RDBUyFal4Dyg31pdWfDjNT1N+t+K01xBoiz5o
+         VHAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0MK7gpkIkb1rDS/a69ip812vylHERRnaq5QfKqF4c5g=;
+        b=qWwu+OLBJNWxySCzKeP0sMXm57k0amWYxRYp05AdYSD2AWSPDuKaBfQ4HoLu4n29Lk
+         eKHbRYZmT+m3Pf0fTilgcYMOkc+4NTOaLBhdh9YGqyiIgQa2uKoCxZnR5GbpCRyP8pr9
+         WSS4m+00rbni5o8UYGbgZTpGBScainuPhadWewAy7YHH6Fmt3wStBKIS1HVPfFQkRq84
+         HyTmYFR8E0NmJjQR1UGFTe0O4rOyDMzrBTnCqBWZMOHMgUpU2gn7L3PbBF8EY+d18r6f
+         XcMWYUVFBS2zQmGMZF698i2AAkJB5jfOy4fAASlSTc4Fj+5jFZKbARHPTeQ2l5qkHE3P
+         5a9A==
+X-Gm-Message-State: APjAAAX8RICn9Fm5v/dQ6+z650gh3YRy1HITjIPA+ZQNHFUE2nFVm7pj
+        YQzKO4fNyRXJ781eEOjSOCNfvsP2uHhUIWdMEjgHbg==
+X-Google-Smtp-Source: APXvYqx2fcMr1CZjkyIaMnvnZ7vLMb0DqQawXYzkaFMTZ2fueXC4V1Uxp10KvoRoAjzp9TZkWeopraFx+nJENQjofPM=
+X-Received: by 2002:a6b:f114:: with SMTP id e20mr120992972iog.169.1564689534999;
+ Thu, 01 Aug 2019 12:58:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190731133948.1a527db8@lwn.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+References: <1563830080-31069-1-git-send-email-zohar@linux.ibm.com>
+ <20190723071545.GA26973@x230> <1563894876.14396.120.camel@linux.ibm.com>
+ <20190724072420.GA21901@dell5510> <1563976601.4245.32.camel@linux.ibm.com> <20190801173454.4zjrndyxkn2mokzo@linux.intel.com>
+In-Reply-To: <20190801173454.4zjrndyxkn2mokzo@linux.intel.com>
+From:   Matthew Garrett <mjg59@google.com>
+Date:   Thu, 1 Aug 2019 12:58:44 -0700
+Message-ID: <CACdnJuuL=fHp8uiaUf+Z8Pgaj7pm5J5LmKaFsVpU=_rgj_UDGA@mail.gmail.com>
+Subject: Re: Exposing the tpm 2.0 PCRs? (renamed subject)
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        "Bruno E . O . Meneguele" <bmeneg@redhat.com>,
+        Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 01:39:48PM -0600, Jonathan Corbet wrote:
-> On Fri, 12 Jul 2019 18:44:32 +0300
-> Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
-> 
-> > There are some weird quirks when it comes to UEFI event log. Provide a
-> > brief introduction to TPM event log mechanism and describe the quirks
-> > and how they can be sorted out.
-> > 
-> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > ---
-> > v4: - Unfortanely -> Unfortunately
-> > v3: - Add a section for refs and use a bullet list to enumerate them.
-> >     - Remove an invalid author info.
-> > v2: - Fix one typo.
-> >     - Refine the last paragraph to better explain how the two halves
-> >       of the event log are concatenated.
-> >  Documentation/security/tpm/index.rst         |  1 +
-> >  Documentation/security/tpm/tpm_event_log.rst | 55 ++++++++++++++++++++
-> >  2 files changed, 56 insertions(+)
-> >  create mode 100644 Documentation/security/tpm/tpm_event_log.rst
-> 
-> I've applied this, thanks.  Before I could do so, though, I had to edit
-> the headers, which read:
-> 
-> > Content-Type: text/plain; charset=y
-> 
-> "git am" *really* doesn't like "charset=y".  I think this is something
-> that git send-email likes to do occasionally, don't know why...
+On Thu, Aug 1, 2019 at 10:35 AM Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+> What is meant by TPM 2.0 PCRs support?
 
-Thank you!
-
-/Jarkko
+You can read TPM 1.2 PCR values directly through sysfs. There's no
+equivalent mechanism for obtaining the TPM 2 PCR banks - you have to
+talk to the TPM yourself.
