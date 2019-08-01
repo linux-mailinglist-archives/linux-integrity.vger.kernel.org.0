@@ -2,215 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE18D7D0DB
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 00:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6657D2CE
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2019 03:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730526AbfGaWSb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 31 Jul 2019 18:18:31 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:52830 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731394AbfGaWRb (ORCPT
+        id S1729686AbfHABXy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 31 Jul 2019 21:23:54 -0400
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:57875 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726595AbfHABXy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 31 Jul 2019 18:17:31 -0400
-Received: by mail-pf1-f201.google.com with SMTP id a20so44184607pfn.19
-        for <linux-integrity@vger.kernel.org>; Wed, 31 Jul 2019 15:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Ogy4z5xXdkGcZVx/gotBD44dFgIvUZxytASg1dmnrz4=;
-        b=Bajk5gYeO0raa2iJAXLUTeo1rNux2thWTyxy5cP2BZX9rVUFcLLwBM1Ihyr4IW6Uxu
-         OVe2hKqMjonh2PlJah6B/xRvCxOEBYAVBGbGtG5SxGXbvgbox/ljX9f23uTjmk8CdtHj
-         OpACdBgg8QTDRBPMzNVaG3NusYWPWtzuSDBMG1K3yU06iS9f0IVwyo5+DUjxp1ZaqLKn
-         2PqUsKDMn3y2VNU/ELITmp+dzRb2ku3sU7bSFIAZC3m3mAJLzfVbP0Edc+IQpH/qk47X
-         2UowsAKC5Wju2BwdPCp4ZZhOFCQRE0tSdOQOXnHroYpPv2eDlt8O+buvUZBVcS1GIREQ
-         Qz/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Ogy4z5xXdkGcZVx/gotBD44dFgIvUZxytASg1dmnrz4=;
-        b=KIEiBSguer4xs4BLe/Gk4TUgnjHtPhAOhnZ2GiOeIKzM3u0DT5RrphCYEZfS+dWN+W
-         HMGR7xGCpfJXgnKEhaZnQ//tt6nobZvfuAFKOFTNwREY2XMhBMsO8VPKk6ngyozZWx2N
-         bsJ+GSKNfvz9e3sDz76qy7FdNWT/TbLKlXO7C7PZ1QPQGo1lOOKql3zqNez4HuDZPAvk
-         7cJ2VnqEDEToPZFQnwe1KKZSlON/zLxuWIKGz9nY6uCGMhifWWmsOKpV/POqq/MHm9cQ
-         tZeXk0qfNNMp5bxQ8Km4wDLKw30J3jrgorxsViU/aYJYW0eWfHb8JGvtTK7BmkEozg5D
-         VmRQ==
-X-Gm-Message-State: APjAAAWmiXSbVavdA+qrj41JqKC9Vvy8iwNZdxPlZqWNuTnIewepsQZd
-        0wOLPxVt0UHdsTocf8CKvati5RohfpViJI6kFDxhbw==
-X-Google-Smtp-Source: APXvYqxZSsn4zOtqAMIbC8IIUJ8BgotlRvfyfmjrcz+Kzfba+ryUsIe0e+54iON0Ue9ORs3wFILRx4yWxTev9k6Xexi4Gg==
-X-Received: by 2002:a63:6c7:: with SMTP id 190mr114475501pgg.7.1564611450073;
- Wed, 31 Jul 2019 15:17:30 -0700 (PDT)
-Date:   Wed, 31 Jul 2019 15:16:13 -0700
-In-Reply-To: <20190731221617.234725-1-matthewgarrett@google.com>
-Message-Id: <20190731221617.234725-26-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190731221617.234725-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
-Subject: [PATCH V37 25/29] kexec: Allow kexec_file() with appropriate IMA
- policy when locked down
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 31 Jul 2019 21:23:54 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=zhang.jia@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0TYHlArn_1564622625;
+Received: from localhost(mailfrom:zhang.jia@linux.alibaba.com fp:SMTPD_---0TYHlArn_1564622625)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 01 Aug 2019 09:23:52 +0800
+From:   Jia Zhang <zhang.jia@linux.alibaba.com>
+To:     dhowells@redhat.com, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
+Cc:     keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhang.jia@linux.alibaba.com
+Subject: [PATCH] ima: Allow to import the blacklisted cert signed by secondary CA cert
+Date:   Thu,  1 Aug 2019 09:23:45 +0800
+Message-Id: <1564622625-112173-1-git-send-email-zhang.jia@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Systems in lockdown mode should block the kexec of untrusted kernels.
-For x86 and ARM we can ensure that a kernel is trustworthy by validating
-a PE signature, but this isn't possible on other architectures. On those
-platforms we can use IMA digital signatures instead. Add a function to
-determine whether IMA has or will verify signatures for a given event type,
-and if so permit kexec_file() even if the kernel is otherwise locked down.
-This is restricted to cases where CONFIG_INTEGRITY_TRUSTED_KEYRING is set
-in order to prevent an attacker from loading additional keys at runtime.
+Similar to .ima, the cert imported to .ima_blacklist is able to be
+authenticated by a secondary CA cert.
 
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: linux-integrity@vger.kernel.org
+Signed-off-by: Jia Zhang <zhang.jia@linux.alibaba.com>
 ---
- include/linux/ima.h                 |  9 ++++++
- kernel/kexec_file.c                 | 12 +++++--
- security/integrity/ima/ima.h        |  2 ++
- security/integrity/ima/ima_main.c   |  2 +-
- security/integrity/ima/ima_policy.c | 50 +++++++++++++++++++++++++++++
- 5 files changed, 72 insertions(+), 3 deletions(-)
+ include/keys/system_keyring.h    | 6 ++++++
+ security/integrity/digsig.c      | 6 ------
+ security/integrity/ima/ima_mok.c | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index a20ad398d260..1c37f17f7203 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -131,4 +131,13 @@ static inline int ima_inode_removexattr(struct dentry *dentry,
- 	return 0;
- }
- #endif /* CONFIG_IMA_APPRAISE */
-+
-+#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
-+extern bool ima_appraise_signature(enum kernel_read_file_id func);
+diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.h
+index c1a96fd..7dc91db 100644
+--- a/include/keys/system_keyring.h
++++ b/include/keys/system_keyring.h
+@@ -31,6 +31,12 @@ extern int restrict_link_by_builtin_and_secondary_trusted(
+ #define restrict_link_by_builtin_and_secondary_trusted restrict_link_by_builtin_trusted
+ #endif
+ 
++#ifdef CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
++#define restrict_link_to_ima restrict_link_by_builtin_and_secondary_trusted
 +#else
-+static inline bool ima_appraise_signature(enum kernel_read_file_id func)
-+{
-+	return false;
-+}
-+#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
- #endif /* _LINUX_IMA_H */
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index dd06f1070d66..13c9960a5860 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -228,9 +228,17 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 			goto out;
- 		}
- 
--		ret = security_locked_down(LOCKDOWN_KEXEC);
--		if (ret)
-+		ret = 0;
++#define restrict_link_to_ima restrict_link_by_builtin_trusted
++#endif
 +
-+		/* If IMA is guaranteed to appraise a signature on the kexec
-+		 * image, permit it even if the kernel is otherwise locked
-+		 * down.
-+		 */
-+		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
-+		    security_locked_down(LOCKDOWN_KEXEC)) {
-+			ret = -EPERM;
- 			goto out;
-+		}
- 
- 		break;
- 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 011b91c79351..64dcb11cf444 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -113,6 +113,8 @@ struct ima_kexec_hdr {
- 	u64 count;
+ #ifdef CONFIG_SYSTEM_BLACKLIST_KEYRING
+ extern int mark_hash_blacklisted(const char *hash);
+ extern int is_hash_blacklisted(const u8 *hash, size_t hash_len,
+diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+index 868ade3..c6f3384 100644
+--- a/security/integrity/digsig.c
++++ b/security/integrity/digsig.c
+@@ -33,12 +33,6 @@
+ 	".platform",
  };
  
-+extern const int read_idmap[];
-+
- #ifdef CONFIG_HAVE_IMA_KEXEC
- void ima_load_kexec_buffer(void);
- #else
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 584019728660..b9f57503af2c 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -502,7 +502,7 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
- 	return 0;
- }
+-#ifdef CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+-#define restrict_link_to_ima restrict_link_by_builtin_and_secondary_trusted
+-#else
+-#define restrict_link_to_ima restrict_link_by_builtin_trusted
+-#endif
+-
+ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
+ 			    const char *digest, int digestlen)
+ {
+diff --git a/security/integrity/ima/ima_mok.c b/security/integrity/ima/ima_mok.c
+index 36cadad..6d0b12d 100644
+--- a/security/integrity/ima/ima_mok.c
++++ b/security/integrity/ima/ima_mok.c
+@@ -31,7 +31,7 @@ __init int ima_mok_init(void)
+ 	if (!restriction)
+ 		panic("Can't allocate IMA blacklist restriction.");
  
--static const int read_idmap[READING_MAX_ID] = {
-+const int read_idmap[READING_MAX_ID] = {
- 	[READING_FIRMWARE] = FIRMWARE_CHECK,
- 	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
- 	[READING_MODULE] = MODULE_CHECK,
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 6df7f641ff66..827f1e33fe86 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1456,3 +1456,53 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	return 0;
- }
- #endif	/* CONFIG_IMA_READ_POLICY */
-+
-+#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
-+/*
-+ * ima_appraise_signature: whether IMA will appraise a given function using
-+ * an IMA digital signature. This is restricted to cases where the kernel
-+ * has a set of built-in trusted keys in order to avoid an attacker simply
-+ * loading additional keys.
-+ */
-+bool ima_appraise_signature(enum kernel_read_file_id id)
-+{
-+	struct ima_rule_entry *entry;
-+	bool found = false;
-+	enum ima_hooks func;
-+
-+	if (id >= READING_MAX_ID)
-+		return false;
-+
-+	func = read_idmap[id] ?: FILE_CHECK;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(entry, ima_rules, list) {
-+		if (entry->action != APPRAISE)
-+			continue;
-+
-+		/*
-+		 * A generic entry will match, but otherwise require that it
-+		 * match the func we're looking for
-+		 */
-+		if (entry->func && entry->func != func)
-+			continue;
-+
-+		/*
-+		 * We require this to be a digital signature, not a raw IMA
-+		 * hash.
-+		 */
-+		if (entry->flags & IMA_DIGSIG_REQUIRED)
-+			found = true;
-+
-+		/*
-+		 * We've found a rule that matches, so break now even if it
-+		 * didn't require a digital signature - a later rule that does
-+		 * won't override it, so would be a false positive.
-+		 */
-+		break;
-+	}
-+
-+	rcu_read_unlock();
-+	return found;
-+}
-+#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
+-	restriction->check = restrict_link_by_builtin_trusted;
++	restriction->check = restrict_link_to_ima;
+ 
+ 	ima_blacklist_keyring = keyring_alloc(".ima_blacklist",
+ 				KUIDT_INIT(0), KGIDT_INIT(0), current_cred(),
 -- 
-2.22.0.770.g0f2c4a37fd-goog
+1.8.3.1
 
