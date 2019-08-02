@@ -2,69 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C85380234
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 23:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678E8802CC
+	for <lists+linux-integrity@lfdr.de>; Sat,  3 Aug 2019 00:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404892AbfHBVS4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 2 Aug 2019 17:18:56 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:36541 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732537AbfHBVSz (ORCPT
+        id S2392465AbfHBWcu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Aug 2019 18:32:50 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:37882 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729919AbfHBWct (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 2 Aug 2019 17:18:55 -0400
-Received: from 162-237-133-238.lightspeed.rcsntx.sbcglobal.net ([162.237.133.238] helo=elm)
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
-        (Exim 4.76)
-        (envelope-from <tyhicks@canonical.com>)
-        id 1htewq-0000uT-Kv; Fri, 02 Aug 2019 21:18:49 +0000
-Date:   Fri, 2 Aug 2019 16:18:43 -0500
-From:   Tyler Hicks <tyhicks@canonical.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Bottomley <jejb@linux.ibm.com>, jgg@ziepe.ca,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, crazyt2019+lml@gmail.com,
-        nayna@linux.vnet.ibm.com, silviu.vlasceanu@huawei.com
-Subject: Re: [PATCH] KEYS: trusted: allow module init if TPM is inactive or
- deactivated
-Message-ID: <20190802211843.GH26616@elm>
-References: <20190705163735.11539-1-roberto.sassu@huawei.com>
- <1562618099.20748.13.camel@linux.ibm.com>
- <20190709162458.f4fjteokcmidv7w6@linux.intel.com>
- <1562689905.28089.52.camel@linux.ibm.com>
+        Fri, 2 Aug 2019 18:32:49 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 19so36697348pfa.4
+        for <linux-integrity@vger.kernel.org>; Fri, 02 Aug 2019 15:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:from:cc:to:user-agent:date;
+        bh=n5198bNj6xPak5lp58GNW9TiROyPem4hWkPcBo68qJw=;
+        b=fJUKQPS4pUns/qKXB+E5BbeFgPkGidQpfEH8g6hM69aPN76Y1i67uQjOOeHi7lrYPo
+         d3WKO/R9GPfN1KmGOxeAUoqQ55H5FFnoARVKVbO1GFDznbpI+vtlz706kJeP2LPv/jFa
+         weroVvlRGLXE51CXD9p4jLERwtuQBpgfNSiOA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
+         :user-agent:date;
+        bh=n5198bNj6xPak5lp58GNW9TiROyPem4hWkPcBo68qJw=;
+        b=D7jlRV9C18KvQ/jvJv53SFNbX8XxMrJiR1y2cUyX9BTNGDzFURp5w/szJVf8UXLvkN
+         ZkXMl2m/DmL00QDDmImvpsQ752GHSb4I1/5AOrMrg++swHrj8ZtoitFzlwK0Z2RDege1
+         gKO9xxw9exLcpm0K82aCmVkq0cyGn66N8/mReS7533K3bo9SbOjf06MT+eYratmTpn0R
+         FGF+10nXCLL9G7AVQYdMkR8PEno9v64ZdrYfmhJUOEanOSkDg0R6odFICGD5PsH67mGA
+         QerduPbWJLXLuOsdCDyyxpWhxQWeroG9eJ9T9/hOmOywq6loITSjDoc+UJG6aQlNxJWE
+         JtHQ==
+X-Gm-Message-State: APjAAAUkwxHHdc+Ae0kOZICKIBmn1cmGyyHu9B7zL7c70V7qmN/0pkLn
+        VzMfWjP/gs61fcFiVBBFCffAvQ==
+X-Google-Smtp-Source: APXvYqwfzXrcyiQxegqrN4/Tyx7c3hgH+H9yHvJhJCR5t6RjCTviiais+rAQt8xp6KJPksScapQpRQ==
+X-Received: by 2002:a17:90a:bf0e:: with SMTP id c14mr6096070pjs.55.1564785169042;
+        Fri, 02 Aug 2019 15:32:49 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id 4sm88158926pfc.92.2019.08.02.15.32.48
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 02 Aug 2019 15:32:48 -0700 (PDT)
+Message-ID: <5d44ba10.1c69fb81.a5654.3c8a@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1562689905.28089.52.camel@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190802204318.5aktcn7xnvzcwvqj@linux.intel.com>
+References: <20190716224518.62556-1-swboyd@chromium.org> <20190716224518.62556-6-swboyd@chromium.org> <f824e3ab-ae2f-8c2f-549a-16569b10966e@infineon.com> <5d2f7daf.1c69fb81.c0b13.c3d4@mx.google.com> <ef7195c5-4475-3cb1-6ded-e16d885d1a55@infineon.com> <20190802204318.5aktcn7xnvzcwvqj@linux.intel.com>
+Subject: Re: [PATCH v2 5/6] tpm: add driver for cr50 on SPI
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Andrey Pronin <apronin@chromium.org>,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+User-Agent: alot/0.8.1
+Date:   Fri, 02 Aug 2019 15:32:47 -0700
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2019-07-09 12:31:45, Mimi Zohar wrote:
-> On Tue, 2019-07-09 at 19:24 +0300, Jarkko Sakkinen wrote:
-> > On Mon, Jul 08, 2019 at 01:34:59PM -0700, James Bottomley wrote:
-> > > Not a criticism of your patch, but can we please stop doing this. 
-> > > Single random number sources are horrendously bad practice because it
-> > > gives an attacker a single target to subvert.  We should ensure the TPM
-> > > is plugged into the kernel RNG as a source and then take randomness
-> > > from the mixed pool so it's harder for an attacker because they have to
-> > > subvert all our sources to predict what came out.
-> > 
-> > It is and I agree.
-> 
-> I still haven't quite figured out why the digests need to be
-> initialized to anything other than 0.
+Quoting Jarkko Sakkinen (2019-08-02 13:43:18)
+> On Thu, Jul 18, 2019 at 06:47:14PM +0200, Alexander Steffen wrote:
+> > On 17.07.2019 21:57, Stephen Boyd wrote:
+> > > Quoting Alexander Steffen (2019-07-17 05:00:06)
+> > > > On 17.07.2019 00:45, Stephen Boyd wrote:
+> > > > > From: Andrey Pronin <apronin@chromium.org>
+> > > > >=20
+> > > > > +static unsigned short rng_quality =3D 1022;
+> > > > > +module_param(rng_quality, ushort, 0644);
+> > > > > +MODULE_PARM_DESC(rng_quality,
+> > > > > +              "Estimation of true entropy, in bits per 1024 bits=
+.");
+> > > >=20
+> > > > What is the purpose of this parameter? None of the other TPM drivers
+> > > > have it.
+> > >=20
+> > > I think the idea is to let users override the quality if they decide
+> > > that they don't want to use the default value specified in the driver.
+> >=20
+> > But isn't this something that applies to all TPMs, not only cr50? So
+> > shouldn't this parameter be added to one of the global modules (tpm?
+> > tpm_tis_core?) instead? Or do all low-level drivers (tpm_tis, tpm_tis_s=
+pi,
+> > ...) need this parameter to provide a consistent interface for the user?
+>=20
+> This definitely something that is out of context of the patch set and
+> thus must be removed from the patch set.
 
-After looking into 0b6cf6b97b7ef1fa3c7fefab0cac897a1c4a3400, I have to
-agree. I don't see the purpose of using tpm_get_random() in
-init_digests().
+Ok. I've dropped this part of the patch.
 
-Roberto, why can't we just initialize the digests with zeroes? It would
-fix the bug for eCryptfs and NVDIMM and address the concern that James
-had regarding the single random number source.
-
-Tyler
