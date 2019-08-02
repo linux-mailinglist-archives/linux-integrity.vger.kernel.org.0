@@ -2,40 +2,44 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E98F9801A8
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 22:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D307801AF
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 22:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388993AbfHBUUz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 2 Aug 2019 16:20:55 -0400
-Received: from mga03.intel.com ([134.134.136.65]:53713 "EHLO mga03.intel.com"
+        id S2391423AbfHBUW0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Aug 2019 16:22:26 -0400
+Received: from mga06.intel.com ([134.134.136.31]:7287 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387790AbfHBUUz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 2 Aug 2019 16:20:55 -0400
+        id S2391221AbfHBUW0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 2 Aug 2019 16:22:26 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Aug 2019 13:20:54 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Aug 2019 13:22:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,339,1559545200"; 
-   d="scan'208";a="201782824"
+   d="scan'208";a="201783048"
 Received: from psathya-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.36.242])
-  by fmsmga002.fm.intel.com with ESMTP; 02 Aug 2019 13:20:52 -0700
-Date:   Fri, 2 Aug 2019 23:20:50 +0300
+  by fmsmga002.fm.intel.com with ESMTP; 02 Aug 2019 13:22:10 -0700
+Date:   Fri, 2 Aug 2019 23:22:09 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Alexander Steffen <Alexander.Steffen@infineon.com>
-Cc:     linux-integrity@vger.kernel.org, tmaimon77@gmail.com,
-        oshrialkoby85@gmail.com, Eyal.Cohen@nuvoton.com,
-        Dan.Morav@nuvoton.com
-Subject: Re: [RFC PATCH 2/2] tpm: Add tpm_tis_i2c backend for tpm_tis_core
-Message-ID: <20190802201937.26xyr7y5vxc2kk7k@linux.intel.com>
-References: <20190718170355.6464-1-Alexander.Steffen@infineon.com>
- <20190718170355.6464-3-Alexander.Steffen@infineon.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: Re: [PATCH v2 1/6] hwrng: core: Freeze khwrng thread during suspend
+Message-ID: <20190802202209.2jzeosacc66mtnpr@linux.intel.com>
+References: <20190716224518.62556-1-swboyd@chromium.org>
+ <20190716224518.62556-2-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190718170355.6464-3-Alexander.Steffen@infineon.com>
+In-Reply-To: <20190716224518.62556-2-swboyd@chromium.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
@@ -43,80 +47,24 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 18, 2019 at 07:03:55PM +0200, Alexander Steffen wrote:
-> +static int tpm_tis_i2c_write_bytes(struct tpm_tis_data *data, u32 addr,
-> +				   u16 len, const u8 *value)
-> +{
-> +	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
-> +	int ret;
-> +
-> +	u8 locality[] = {
-> +		0, // TPM_LOC_SEL
-> +		addr >> 12, // locality
-> +	};
-> +
-> +	if (phy->iobuf) {
-> +		if (len > TPM_BUFSIZE - 1)
-> +			return -EIO;
-> +
-> +		phy->iobuf[0] = address_to_register(addr);
-> +		memcpy(phy->iobuf + 1, value, len);
-> +
-> +		{
-> +			struct i2c_msg msgs[] = {
-> +				{
-> +					.addr = phy->i2c_client->addr,
-> +					.len = sizeof(locality),
-> +					.buf = locality,
-> +				},
-> +				{
-> +					.addr = phy->i2c_client->addr,
-> +					.len = len + 1,
-> +					.buf = phy->iobuf,
-> +				},
-> +			};
-> +
-> +			ret = i2c_transfer(phy->i2c_client->adapter, msgs,
-> +					   ARRAY_SIZE(msgs));
-> +		}
-> +	} else {
-> +		u8 reg = address_to_register(addr);
-> +
-> +		struct i2c_msg msgs[] = {
-> +			{
-> +				.addr = phy->i2c_client->addr,
-> +				.len = sizeof(locality),
-> +				.buf = locality,
-> +			},
-> +			{
-> +				.addr = phy->i2c_client->addr,
-> +				.len = sizeof(reg),
-> +				.buf = &reg,
-> +			},
-> +			{
-> +				.addr = phy->i2c_client->addr,
-> +				.len = len,
-> +				.buf = (u8*)value,
-> +				.flags = I2C_M_NOSTART,
-> +			},
-> +		};
-> +
-> +		ret = i2c_transfer(phy->i2c_client->adapter, msgs,
-> +				   ARRAY_SIZE(msgs));
-> +	}
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	usleep_range(250, 300); // wait default GUARD_TIME of 250µs
+On Tue, Jul 16, 2019 at 03:45:13PM -0700, Stephen Boyd wrote:
+> The hwrng_fill() function can run while devices are suspending and
+> resuming. If the hwrng is behind a bus such as i2c or SPI and that bus
+> is suspended, the hwrng may hang the bus while attempting to add some
+> randomness. It's been observed on ChromeOS devices with suspend-to-idle
+> (s2idle) and an i2c based hwrng that this kthread may run and ask the
+> hwrng device for randomness before the i2c bus has been resumed.
+> 
+> Let's make this kthread freezable so that we don't try to touch the
+> hwrng during suspend/resume. This ensures that we can't cause the hwrng
+> backing driver to get into a bad state because the device is guaranteed
+> to be resumed before the hwrng kthread is thawed.
+> 
+> Cc: Andrey Pronin <apronin@chromium.org>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: Duncan Laurie <dlaurie@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-This does not look good. Would prefer to have named constants.
-
-> +
-> +	return 0;
-> +}
-
-You could probably simplify this by using branching for constructing
-the message arrays and then use the same code path for transfer.
+This does not need a fixes tag?
 
 /Jarkko
