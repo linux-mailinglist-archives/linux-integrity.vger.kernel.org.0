@@ -2,106 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F25197FD66
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 17:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7FD7FD8E
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 17:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727599AbfHBPVM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 2 Aug 2019 11:21:12 -0400
-Received: from mga03.intel.com ([134.134.136.65]:32939 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727198AbfHBPVM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 2 Aug 2019 11:21:12 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Aug 2019 08:21:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,338,1559545200"; 
-   d="scan'208";a="201689365"
-Received: from jsakkine-mobl1.tm.intel.com ([10.237.50.189])
-  by fmsmga002.fm.intel.com with ESMTP; 02 Aug 2019 08:21:07 -0700
-Message-ID: <4e61869efc51a2b10f931bc010e6d37d62d6c06c.camel@linux.intel.com>
-Subject: Re: [PATCH v2 5/6] tpm: add driver for cr50 on SPI
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Cc:     Andrey Pronin <apronin@chromium.org>, linux-kernel@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Date:   Fri, 02 Aug 2019 18:21:06 +0300
-In-Reply-To: <5d430cfb.1c69fb81.9480d.0d81@mx.google.com>
-References: <20190716224518.62556-1-swboyd@chromium.org>
-         <20190716224518.62556-6-swboyd@chromium.org>
-         <f824e3ab-ae2f-8c2f-549a-16569b10966e@infineon.com>
-         <5d2f7daf.1c69fb81.c0b13.c3d4@mx.google.com>
-         <5d2f955d.1c69fb81.35877.7018@mx.google.com>
-         <b05904bf-00b9-bf30-0fc9-9f363e181d80@infineon.com>
-         <5d30b649.1c69fb81.f440e.9a0a@mx.google.com>
-         <1bb8d417-3199-7aff-ad60-b25464502cb3@infineon.com>
-         <5d430cfb.1c69fb81.9480d.0d81@mx.google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1-2 
+        id S1733165AbfHBPaq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Aug 2019 11:30:46 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57690 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733136AbfHBPap (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 2 Aug 2019 11:30:45 -0400
+Received: from 162-237-133-238.lightspeed.rcsntx.sbcglobal.net ([162.237.133.238] helo=elm)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <tyhicks@canonical.com>)
+        id 1htZVr-0001Mo-Ax; Fri, 02 Aug 2019 15:30:35 +0000
+Date:   Fri, 2 Aug 2019 10:30:30 -0500
+From:   Tyler Hicks <tyhicks@canonical.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     jarkko.sakkinen@linux.intel.com, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, crazyt2019+lml@gmail.com,
+        nayna@linux.vnet.ibm.com, silviu.vlasceanu@huawei.com
+Subject: Re: [PATCH v2] KEYS: trusted: allow module init if TPM is inactive
+ or deactivated
+Message-ID: <20190802153030.GB26616@elm>
+References: <20190802150733.1972-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190802150733.1972-1-roberto.sassu@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2019-08-01 at 09:02 -0700, Stephen Boyd wrote:
-> Quoting Alexander Steffen (2019-07-19 00:53:00)
-> > On 18.07.2019 20:11, Stephen Boyd wrote:
-> > > Quoting Alexander Steffen (2019-07-18 09:47:22)
-> > > > On 17.07.2019 23:38, Stephen Boyd wrote:
-> > > > > Quoting Stephen Boyd (2019-07-17 12:57:34)
-> > > > > > Quoting Alexander Steffen (2019-07-17 05:00:06)
-> > > > > > > Can't the code be shared more explicitly, e.g. by cr50_spi wrapping
-> > > > > > > tpm_tis_spi, so that it can intercept the calls, execute the additional
-> > > > > > > actions (like waking up the device), but then let tpm_tis_spi do the
-> > > > > > > common work?
-> > > > > > > 
-> > > > > > 
-> > > > > > I suppose the read{16,32} and write32 functions could be reused. I'm not
-> > > > > > sure how great it will be if we combine these two drivers, but I can
-> > > > > > give it a try today and see how it looks.
-> > > > > > 
-> > > > > 
-> > > > > Here's the patch. I haven't tested it besides compile testing.
-> > > 
-> > > The code seems to work but I haven't done any extensive testing besides
-> > > making sure that the TPM responds to pcr reads and some commands like
-> > > reading random numbers.
-> > > 
-> > > > Thanks for providing this. Makes it much easier to see what the actual
-> > > > differences between the devices are.
-> > > > 
-> > > > Do we have a general policy on how to support devices that are very
-> > > > similar but need special handling in some places? Not duplicating the
-> > > > whole driver just to change a few things definitely seems like an
-> > > > improvement (and has already been done in the past, as with
-> > > > TPM_TIS_ITPM_WORKAROUND). But should all the code just be added to
-> > > > tpm_tis_spi.c? Or is there some way to keep a clearer separation,
-> > > > especially when (in the future) we have multiple devices that all have
-> > > > their own set of deviations from the spec?
-> > > > 
-> > > 
-> > > If you have any ideas on how to do it please let me know. At this point,
-> > > I'd prefer if the maintainers could provide direction on what they want.
-> > 
-> > Sure, I'd expect Jarkko will say something once he's back from vacation.
-> > 
+On 2019-08-02 17:07:33, Roberto Sassu wrote:
+> Commit c78719203fc6 ("KEYS: trusted: allow trusted.ko to initialize w/o a
+> TPM") allows the trusted module to be loaded even a TPM is not found to
+                                                   ^ if
+
+> avoid module dependency problems.
 > 
-> Should I just resend this patch series? I haven't attempted to make the
-> i2c driver changes, but at least the SPI driver changes seem good enough
-> to resend.
+> However, trusted module initialization can still fail if the TPM is
+> inactive or deactivated. This patch ignores tpm_get_random() errors in
+> init_digests() and returns -EFAULT in pcrlock() if the TPM didn't return
+> random data.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Hi, I'm back. If there are already like obvious changes, please send an
-update and I'll take a look at that.
+The code changes look correct to me.
 
-/Jarkko
+  Reviewed-by: Tyler Hicks <tyhicks@canonical.com>
 
+For whoever takes this patch through their tree, I think that adding the
+following Fixes tag would be useful (as well as cc'ing stable):
+
+  Fixes: 240730437deb ("KEYS: trusted: explicitly use tpm_chip structure...")
+
+I think it is also worth leaving a short note, in the commit message,
+for backporters that commit 782779b60faa ("tpm: Actually fail on TPM
+errors during "get random"") should be included with any backports of
+this patch.
+
+Thanks!
+
+Tyler
+
+> ---
+>  security/keys/trusted.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/security/keys/trusted.c b/security/keys/trusted.c
+> index 9a94672e7adc..34f04ffcf2e5 100644
+> --- a/security/keys/trusted.c
+> +++ b/security/keys/trusted.c
+> @@ -389,6 +389,10 @@ static int pcrlock(const int pcrnum)
+>  	if (!capable(CAP_SYS_ADMIN))
+>  		return -EPERM;
+>  
+> +	/* This happens if the TPM didn't return random data */
+> +	if (!digests)
+> +		return -EFAULT;
+> +
+>  	return tpm_pcr_extend(chip, pcrnum, digests) ? -EINVAL : 0;
+>  }
+>  
+> @@ -1233,10 +1237,8 @@ static int __init init_digests(void)
+>  	int i;
+>  
+>  	ret = tpm_get_random(chip, digest, TPM_MAX_DIGEST_SIZE);
+> -	if (ret < 0)
+> -		return ret;
+> -	if (ret < TPM_MAX_DIGEST_SIZE)
+> -		return -EFAULT;
+> +	if (ret < 0 || ret < TPM_MAX_DIGEST_SIZE)
+> +		return 0;
+>  
+>  	digests = kcalloc(chip->nr_allocated_banks, sizeof(*digests),
+>  			  GFP_KERNEL);
+> -- 
+> 2.17.1
+> 
