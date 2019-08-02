@@ -2,77 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8012E801E6
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 22:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C85380234
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 23:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437019AbfHBUov (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 2 Aug 2019 16:44:51 -0400
-Received: from mga12.intel.com ([192.55.52.136]:35806 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726574AbfHBUov (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 2 Aug 2019 16:44:51 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Aug 2019 13:44:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,339,1559545200"; 
-   d="scan'208";a="181118540"
-Received: from psathya-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.36.242])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Aug 2019 13:44:47 -0700
-Date:   Fri, 2 Aug 2019 23:44:46 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Duncan Laurie <dlaurie@chromium.org>,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S2404892AbfHBVS4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Aug 2019 17:18:56 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:36541 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732537AbfHBVSz (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 2 Aug 2019 17:18:55 -0400
+Received: from 162-237-133-238.lightspeed.rcsntx.sbcglobal.net ([162.237.133.238] helo=elm)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <tyhicks@canonical.com>)
+        id 1htewq-0000uT-Kv; Fri, 02 Aug 2019 21:18:49 +0000
+Date:   Fri, 2 Aug 2019 16:18:43 -0500
+From:   Tyler Hicks <tyhicks@canonical.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Bottomley <jejb@linux.ibm.com>, jgg@ziepe.ca,
         linux-integrity@vger.kernel.org,
-        Andrey Pronin <apronin@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH v2 6/6] tpm: Add driver for cr50 on I2C
-Message-ID: <20190802204446.pj3vx56gzrdohibx@linux.intel.com>
-References: <20190716224518.62556-1-swboyd@chromium.org>
- <20190716224518.62556-7-swboyd@chromium.org>
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, crazyt2019+lml@gmail.com,
+        nayna@linux.vnet.ibm.com, silviu.vlasceanu@huawei.com
+Subject: Re: [PATCH] KEYS: trusted: allow module init if TPM is inactive or
+ deactivated
+Message-ID: <20190802211843.GH26616@elm>
+References: <20190705163735.11539-1-roberto.sassu@huawei.com>
+ <1562618099.20748.13.camel@linux.ibm.com>
+ <20190709162458.f4fjteokcmidv7w6@linux.intel.com>
+ <1562689905.28089.52.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190716224518.62556-7-swboyd@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+In-Reply-To: <1562689905.28089.52.camel@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 03:45:18PM -0700, Stephen Boyd wrote:
-> From: Duncan Laurie <dlaurie@chromium.org>
+On 2019-07-09 12:31:45, Mimi Zohar wrote:
+> On Tue, 2019-07-09 at 19:24 +0300, Jarkko Sakkinen wrote:
+> > On Mon, Jul 08, 2019 at 01:34:59PM -0700, James Bottomley wrote:
+> > > Not a criticism of your patch, but can we please stop doing this. 
+> > > Single random number sources are horrendously bad practice because it
+> > > gives an attacker a single target to subvert.  We should ensure the TPM
+> > > is plugged into the kernel RNG as a source and then take randomness
+> > > from the mixed pool so it's harder for an attacker because they have to
+> > > subvert all our sources to predict what came out.
+> > 
+> > It is and I agree.
 > 
-> Add TPM 2.0 compatible I2C interface for chips with cr50 firmware.
-> 
-> The firmware running on the currently supported H1 MCU requires a
-> special driver to handle its specific protocol, and this makes it
-> unsuitable to use tpm_tis_core_* and instead it must implement the
-> underlying TPM protocol similar to the other I2C TPM drivers.
-> 
-> - All 4 byes of status register must be read/written at once.
-> - FIFO and burst count is limited to 63 and must be drained by AP.
-> - Provides an interrupt to indicate when read response data is ready
-> and when the TPM is finished processing write data.
-> 
-> This driver is based on the existing infineon I2C TPM driver, which
-> most closely matches the cr50 i2c protocol behavior.  The driver is
-> intentionally kept very similar in structure and style to the
-> corresponding drivers in coreboot and depthcharge.
-> 
-> Signed-off-by: Duncan Laurie <dlaurie@chromium.org>
-> [swboyd@chromium.org: Depend on i2c even if it's a module, replace
-> boilier plate with SPDX tag, drop asm/byteorder.h include, simplify
-> return from probe]
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> I still haven't quite figured out why the digests need to be
+> initialized to anything other than 0.
 
-Apologies. I missed this when I stated my comment about SPI.
+After looking into 0b6cf6b97b7ef1fa3c7fefab0cac897a1c4a3400, I have to
+agree. I don't see the purpose of using tpm_get_random() in
+init_digests().
 
-/Jarkko
+Roberto, why can't we just initialize the digests with zeroes? It would
+fix the bug for eCryptfs and NVDIMM and address the concern that James
+had regarding the single random number source.
+
+Tyler
