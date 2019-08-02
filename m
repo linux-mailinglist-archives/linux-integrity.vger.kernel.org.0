@@ -2,76 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E18D7E791
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 03:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14AD7EC4E
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 07:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731518AbfHBBmb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Aug 2019 21:42:31 -0400
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:39435 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731411AbfHBBmb (ORCPT
+        id S2388205AbfHBFuX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Aug 2019 01:50:23 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44792 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388192AbfHBFuW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Aug 2019 21:42:31 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04446;MF=zhang.jia@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0TYR759._1564710146;
-Received: from ali-6c96cfd98fb5.local(mailfrom:zhang.jia@linux.alibaba.com fp:SMTPD_---0TYR759._1564710146)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 02 Aug 2019 09:42:27 +0800
-Subject: Re: [PATCH] ima: Allow to import the blacklisted cert signed by
- secondary CA cert
-To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
-        dmitry.kasatkin@gmail.com
-Cc:     keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Mark D. Baushke" <mdb@juniper.net>,
-        Petko Manolov <petkan@mip-labs.com>
-References: <1564622625-112173-1-git-send-email-zhang.jia@linux.alibaba.com>
- <1564700229.11223.9.camel@linux.ibm.com>
-From:   Jia Zhang <zhang.jia@linux.alibaba.com>
-Message-ID: <d6a27436-3822-3dda-a3be-4e2dfbe04390@linux.alibaba.com>
-Date:   Fri, 2 Aug 2019 09:42:26 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0)
- Gecko/20100101 Thunderbird/52.6.0
+        Fri, 2 Aug 2019 01:50:22 -0400
+Received: by mail-lj1-f194.google.com with SMTP id k18so71647478ljc.11
+        for <linux-integrity@vger.kernel.org>; Thu, 01 Aug 2019 22:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vwz8Yfm4Cow2GeEvNxlf9aEZE7OVt1rKT7raAjp8VpA=;
+        b=X3oq7lAkHf3gv2MqFLGGzBIFgglHgG5rRPhA3IA/fycv6qEgWi/E/L84U6E0mZJF5k
+         HaeRuMoGJlD1AnH/ujS8Un7jZdQyUMaemOE5kq531tVfuOAnjD/LU5AJx52J+CGFad+M
+         jFedj9VOB/NnqbRUoJFCIu0uLsAjmh4zr0n2QpQes0qqSw36DYgPoBTlCdlefz4yPDzf
+         ZDHoh285WC5GUXxkKWfRJJJ/jy4JL86Kqy8qWDtY1HoxHInqDQbFsced+bOAVZGpUwdZ
+         Gcz9jma3dRlxxMCgIJpxiWALuPHaN0nxFpjSnOh3TSquP4VcgUfapw+xPsm/8Iv003js
+         NRVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vwz8Yfm4Cow2GeEvNxlf9aEZE7OVt1rKT7raAjp8VpA=;
+        b=U3+ADWxDblfu26BjgzdLIFoEy2iTJVdFkDTilzRc8Ut9VCCUsxHA6DqVlMhq4FDQq0
+         YRtbwgo7MmVkiu6tX8f+lbu6YcE4ShcRvEYHF4PHqNxCY3MLdwBVRtT1/IiSUV7c90Ud
+         Ldh0bmRNcyH3nDjOLLgmOoaSjQ+1D4rcMPDxM6rYWpCpD+Gu0h/yjPwTmAfX9HYqRjps
+         sTx31bLueZOEmyPAtIEvf0NcuO+a1vBSlAlTsH+Dipfh7DzAXUviQx1NE7url+kFnKjN
+         CCCbOvuts+8yAcdknXxCbC/akgtUBFea4XCyyrIxXJ2ntGtBrCELEwO1gz/BaYiSF68v
+         /qLA==
+X-Gm-Message-State: APjAAAWGxX2f02taUwYFedsJFdABKZfEHi3CJgFQYFcukBpnZwqXlwDz
+        n3Ki9wIVkvDLMTiTKl1bzrE8+9s8qE4MCrWsFh+d9g==
+X-Google-Smtp-Source: APXvYqxa1pCtNqv5a9orx+jqYo5gAuz4nI99d0UZk2C8opZTrYtKmFiLmrw+zaVFcZxMgM+dWW013yJe1zTceqVxnvo=
+X-Received: by 2002:a2e:301a:: with SMTP id w26mr68823438ljw.76.1564725020734;
+ Thu, 01 Aug 2019 22:50:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1564700229.11223.9.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1563449086-13183-1-git-send-email-sumit.garg@linaro.org>
+ <1563449086-13183-2-git-send-email-sumit.garg@linaro.org> <20190801172310.cldcftfdoh5vyfjg@linux.intel.com>
+In-Reply-To: <20190801172310.cldcftfdoh5vyfjg@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 2 Aug 2019 11:20:09 +0530
+Message-ID: <CAFA6WYM+FQuXA9Saj5+ffOGsc-shhiF5Uos4g14Qndvu6w97Sg@mail.gmail.com>
+Subject: Re: [RFC/RFT v2 1/2] KEYS: trusted: create trusted keys subsystem
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-security-module@vger.kernel.org, dhowells@redhat.com,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        jejb@linux.ibm.com, Mimi Zohar <zohar@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, 1 Aug 2019 at 22:54, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Thu, Jul 18, 2019 at 04:54:45PM +0530, Sumit Garg wrote:
+> > Move existing code to trusted keys subsystem. Also, rename files with
+> > "tpm" as suffix which provides the underlying implementation.
+> >
+> > Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+>
+> What about TPM2 trusted keys code?
 
+Isn't TPM2 code located here: "drivers/char/tpm/"? Would you like to
+move that code under trusted keys subsystem only?
 
-On 2019/8/2 上午6:57, Mimi Zohar wrote:
-> Hi Jia,
-> 
-> On Thu, 2019-08-01 at 09:23 +0800, Jia Zhang wrote:
->> Similar to .ima, the cert imported to .ima_blacklist is able to be
->> authenticated by a secondary CA cert.
->>
->> Signed-off-by: Jia Zhang <zhang.jia@linux.alibaba.com>
-> 
-> The IMA blacklist, which is defined as experimental for a reason, was
-> upstreamed prior to the system blacklist.  Any reason you're not using
-> the system blacklist?  Before making this sort of change, I'd like
-> some input from others.
+-Sumit
 
-In our trusted cloud service, the IMA private key is controlled by
-tenant for some reason. Some unprofessional operations made by tenant
-may lead to the leakage of IMA private key. So the need for importing
-the blacklisted is necessary，without system/kexec reboot, on the
-contrary, the system blacklist needs a kernel rebuild and system/kexec
-reboot, without runtime and fine-grained control.
-
-The secondary CA cert has a similar story, but it is not controlled by
-tenant. It is always imported during system/kexec boot to serve
-importing IMA trusted cert and IMA blacklisted cert.
-
-Jia
-
-> 
-> thanks,
-> 
-> Mimi
-> 
+>
+> /Jarkko
