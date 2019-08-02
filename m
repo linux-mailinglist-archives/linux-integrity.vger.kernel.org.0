@@ -2,130 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50818801CE
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 22:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30C1801E1
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2019 22:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391529AbfHBUfq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 2 Aug 2019 16:35:46 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:35967 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732848AbfHBUfq (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 2 Aug 2019 16:35:46 -0400
-Received: from 162-237-133-238.lightspeed.rcsntx.sbcglobal.net ([162.237.133.238] helo=elm)
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
-        (Exim 4.76)
-        (envelope-from <tyhicks@canonical.com>)
-        id 1hteH3-0006zl-Sv; Fri, 02 Aug 2019 20:35:38 +0000
-Date:   Fri, 2 Aug 2019 15:35:33 -0500
-From:   Tyler Hicks <tyhicks@canonical.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, crazyt2019+lml@gmail.com,
-        nayna@linux.vnet.ibm.com, silviu.vlasceanu@huawei.com
-Subject: Re: [PATCH] KEYS: trusted: allow module init if TPM is inactive or
- deactivated
-Message-ID: <20190802203532.GF26616@elm>
-References: <20190705163735.11539-1-roberto.sassu@huawei.com>
- <20190711194811.rfsohbfc3a7carpa@linux.intel.com>
- <b4454a78-1f1b-cc75-114a-99926e097b05@huawei.com>
- <20190801163215.mfkagoafkxscesne@linux.intel.com>
- <e50c4cfa-1f0c-6f4d-1910-010a8d874393@huawei.com>
- <20190802142721.GA26616@elm>
- <20190802194226.oiztvme5klkmw6fh@linux.intel.com>
- <20190802202343.GE26616@elm>
+        id S1726579AbfHBUlt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Aug 2019 16:41:49 -0400
+Received: from mga17.intel.com ([192.55.52.151]:4241 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726305AbfHBUlt (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 2 Aug 2019 16:41:49 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Aug 2019 13:41:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,339,1559545200"; 
+   d="scan'208";a="178255267"
+Received: from psathya-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.36.242])
+  by orsmga006.jf.intel.com with ESMTP; 02 Aug 2019 13:41:43 -0700
+Date:   Fri, 2 Aug 2019 23:41:42 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Andrey Pronin <apronin@chromium.org>,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH v2 5/6] tpm: add driver for cr50 on SPI
+Message-ID: <20190802204131.pcb73zq7gllyy3ul@linux.intel.com>
+References: <20190716224518.62556-1-swboyd@chromium.org>
+ <20190716224518.62556-6-swboyd@chromium.org>
+ <f824e3ab-ae2f-8c2f-549a-16569b10966e@infineon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190802202343.GE26616@elm>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <f824e3ab-ae2f-8c2f-549a-16569b10966e@infineon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2019-08-02 15:23:43, Tyler Hicks wrote:
-> On 2019-08-02 22:42:26, Jarkko Sakkinen wrote:
-> > On Fri, Aug 02, 2019 at 09:27:22AM -0500, Tyler Hicks wrote:
-> > > On 2019-08-02 10:21:16, Roberto Sassu wrote:
-> > > > On 8/1/2019 6:32 PM, Jarkko Sakkinen wrote:
-> > > > > On Mon, Jul 15, 2019 at 06:44:28PM +0200, Roberto Sassu wrote:
-> > > > > > According to the bug report at https://bugs.archlinux.org/task/62678,
-> > > > > > the trusted module is a dependency of the ecryptfs module. We should
-> > > > > > load the trusted module even if the TPM is inactive or deactivated.
-> > > > > > 
-> > > > > > Given that commit 782779b60faa ("tpm: Actually fail on TPM errors during
-> > > > > > "get random"") changes the return code of tpm_get_random(), the patch
-> > > > > > should be modified to ignore the -EIO error. I will send a new version.
-> > > > > 
-> > > > > Do you have information where this dependency comes from?
-> > > > 
-> > > > ecryptfs retrieves the encryption key from encrypted keys (see
-> > > > ecryptfs_get_encrypted_key()).
-> > > 
-> > > That has been there for many years with any problems. It was added
-> > > in 2011:
-> > > 
-> > >  commit 1252cc3b232e582e887623dc5f70979418caaaa2
-> > >  Author: Roberto Sassu <roberto.sassu@polito.it>
-> > >  Date:   Mon Jun 27 13:45:45 2011 +0200
-> > > 
-> > >      eCryptfs: added support for the encrypted key type
-> > > 
-> > > What's recently changed the situation is this patch:
-> > > 
-> > >  commit 240730437deb213a58915830884e1a99045624dc
-> > >  Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > >  Date:   Wed Feb 6 17:24:51 2019 +0100
-> > > 
-> > >      KEYS: trusted: explicitly use tpm_chip structure from tpm_default_chip()
-> > > 
-> > > Now eCryptfs has a hard dependency on a TPM chip that's working
-> > > as expected even if eCryptfs (or the rest of the system) isn't utilizing
-> > > the TPM. If the TPM behaves unexpectedly, you can't access your files.
-> > > We need to get this straightened out soon.
-> > 
-> > I agree with this conclusion that eCryptfs needs to be fixed, not
-> > another workaround to trusted.ko.
-> 
-> That wasn't the conclusion that I came to. I prefer Robert's proposed
-> change to trusted.ko.
-> 
-> How do you propose that this be fixed in eCryptfs?
-> 
-> Removing encrypted_key support from eCryptfs is the only way that I can
-> see to fix the bug in eCryptfs. That support has been there since 2011.
-> I'm not sure of the number of users that would be broken by removing
-> encrypted_key support. I don't think the number is high but I can't say
-> that confidently.
+On Wed, Jul 17, 2019 at 02:00:06PM +0200, Alexander Steffen wrote:
+> Is it a common pattern to add config options that are not useful on their
+> own? When would I ever enable TCG_CR50 without also enabling TCG_CR50_SPI?
+> Why can't you just use TCG_CR50_SPI for everything?
 
-AFAICT, this bug doesn't only affect eCryptfs. It also affects Intel
-nvdimm support starting with:
+Agreed. If the kernel only has the spi driver, we only want option for
+that.
 
- commit 4c6926a23b76ea23403976290cd45a7a143f6500
- Author: Dave Jiang <dave.jiang@intel.com>
- Date:   Thu Dec 6 12:40:01 2018 -0800
-
-     acpi/nfit, libnvdimm: Add unlock of nvdimm support for Intel DIMMs
-
-So without a workaround in trusted.ko, encrypted_key support will need
-to be removed from eCryptfs and nvdimm to address this issue.
-
-Tyler
-
-> 
-> Roberto, what was your use case when you added encrypted_key support to
-> eCryptfs back then? Are you aware of any users of eCryptfs +
-> encrypted_keys?
-> 
-> Jarkko, removing a long-standing feature is potentially more disruptive
-> to users than adding a workaround to trusted.ko which already requires a
-> similar workaround. I don't think that I agree with you on the proper
-> fix here.
-> 
-> Tyler
-> 
-> > 
-> > /Jarkko
+/Jarkko
