@@ -2,82 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDA4808D1
-	for <lists+linux-integrity@lfdr.de>; Sun,  4 Aug 2019 03:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C293580A41
+	for <lists+linux-integrity@lfdr.de>; Sun,  4 Aug 2019 12:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729095AbfHDBqE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 3 Aug 2019 21:46:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45392 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726150AbfHDBqE (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 3 Aug 2019 21:46:04 -0400
-Received: from localhost.localdomain (ool-18bba523.dyn.optonline.net [24.187.165.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F253321726;
-        Sun,  4 Aug 2019 01:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564883163;
-        bh=LObcNmCTMYOwT0YqrzSQoS9DFz9YmJB/jsZ8jz9VWiw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=E2bL4sYF6FreUCYUd9IpAVztcpoyip+1mUP3FEP3RYjJ24xUpPslMV+cTd2qyJ4MA
-         0huAb7ZkdApN7WG1I353p1c7oZ/SscxOtvscfIx0Cy6Tq/ZhNMOZAkXjLtx+rt/mdd
-         btu9sLWTJWfbk7cGLxkNJbr4dTwd0Ew0vA63dfM8=
-Message-ID: <1564883160.11223.103.camel@kernel.org>
-Subject: Re: [PATCH] KEYS: trusted: allow module init if TPM is inactive or
- deactivated
-From:   Mimi Zohar <zohar@kernel.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Tyler Hicks <tyhicks@canonical.com>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>, jejb@linux.ibm.com,
-        jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, crazyt2019+lml@gmail.com,
-        nayna@linux.vnet.ibm.com, silviu.vlasceanu@huawei.com
-Date:   Sat, 03 Aug 2019 21:46:00 -0400
-In-Reply-To: <aff3502c598fb76a1517795edaacd8c8ea330051.camel@linux.intel.com>
-References: <20190705163735.11539-1-roberto.sassu@huawei.com>
-         <20190711194811.rfsohbfc3a7carpa@linux.intel.com>
-         <b4454a78-1f1b-cc75-114a-99926e097b05@huawei.com>
-         <20190801163215.mfkagoafkxscesne@linux.intel.com>
-         <e50c4cfa-1f0c-6f4d-1910-010a8d874393@huawei.com>
-         <20190802142721.GA26616@elm>
-         <20190802194226.oiztvme5klkmw6fh@linux.intel.com>
-         <20190802202343.GE26616@elm>
-         <aff3502c598fb76a1517795edaacd8c8ea330051.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        id S1726050AbfHDKAh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 4 Aug 2019 06:00:37 -0400
+Received: from mail-ed1-f42.google.com ([209.85.208.42]:45977 "EHLO
+        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725932AbfHDKAg (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 4 Aug 2019 06:00:36 -0400
+Received: by mail-ed1-f42.google.com with SMTP id x19so70189745eda.12
+        for <linux-integrity@vger.kernel.org>; Sun, 04 Aug 2019 03:00:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=g8BNhH388Zl1p3dVfMhGaT2LfsXGUWfNYbaxd1kMPnI=;
+        b=cJeRD2rttui2+1hua4bisO/tDx0ju6fuRzQ2tD6oUYLH5Ne6t25zvcwclxczUFSrf4
+         /BeL7fPYKX5zi/TksPCB3husm9nwtvhST2Lu0fTQVIzUUMJ1bOdtuPC1pVN6LbGNocIc
+         NWk+R6O4VOtIhucXjqnpGIr8Am0ga8ivd7yVly3WPJHMBK85K0NxHmf3CsXNW+H34MGL
+         6bSBNdOU0k1R/WgV2aKrvy2FeXmIQsFSKBR0VBFpiuVL6hHZrxwPpIn9ts5J/vqNMiEy
+         abpDdizQZsLfPRTKP6fXbb9R7owaaOdPBPTOmbK0yyWyvxolAyAO6bB5KOw4Zuo1QLKp
+         Hiuw==
+X-Gm-Message-State: APjAAAX0Cd4mcpCmiQ4aTYCytqshffeakhI8ZR4vUtFADTMi92c3WRjP
+        JSS6igl12Ryv5QCHw0mnY8giqQ==
+X-Google-Smtp-Source: APXvYqxcdHXaH1ybwLvBcHI1ZrUwq0G3kPIENozSUqwM6NF7eNBaHwAsijTgHh2cbiC4dVp3SDWkpA==
+X-Received: by 2002:a17:906:5399:: with SMTP id g25mr111945424ejo.247.1564912835174;
+        Sun, 04 Aug 2019 03:00:35 -0700 (PDT)
+Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
+        by smtp.gmail.com with ESMTPSA id k51sm19583123edb.7.2019.08.04.03.00.34
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Sun, 04 Aug 2019 03:00:34 -0700 (PDT)
+To:     Matthew Garrett <mjg59@google.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi@vger.kernel.org
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: 5.3 boot regression caused by 5.3 TPM changes
+Message-ID: <b20dd437-790a-aad9-0515-061751d46e53@redhat.com>
+Date:   Sun, 4 Aug 2019 12:00:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, 2019-08-03 at 17:44 +0300, Jarkko Sakkinen wrote:
-> On Fri, 2019-08-02 at 15:23 -0500, Tyler Hicks wrote:
-> > That wasn't the conclusion that I came to. I prefer Robert's proposed
-> > change to trusted.ko.
-> > 
-> > How do you propose that this be fixed in eCryptfs?
-> > 
-> > Removing encrypted_key support from eCryptfs is the only way that I can
-> > see to fix the bug in eCryptfs. That support has been there since 2011.
-> > I'm not sure of the number of users that would be broken by removing
-> > encrypted_key support. I don't think the number is high but I can't say
-> > that confidently.
-> 
-> Looking at the documentation [1] it is stated that
-> 
-> "Encrypted keys do not depend on a TPM, and are faster, as they use AES
-> for encryption/decryption."
-> 
-> Why would you need to remove support for encrypted keys? Isn't it a
-> regression in encrypted keys to hard depend on trusted keys given
-> what the documentation says?
+Hi All,
 
-"Encrypted" key are symmetric keys, which are encrypted/decrypted
-either by a "trusted" key or, for development purposes only, a "user"
-key.
+While testing 5.3-rc2 on an Irbis TW90 Intel Cherry Trail based
+tablet I noticed that it does not boot on this device.
 
-Mimi
+A git bisect points to commit 166a2809d65b ("tpm: Don't duplicate
+events from the final event log in the TCG2 log")
+
+And I can confirm that reverting just that single commit makes
+the TW90 boot again.
+
+This machine uses AptIO firmware with base component versions
+of: UEFI 2.4 PI 1.3. I've tried to reproduce the problem on
+a Teclast X80 Pro which is also CHT based and also uses AptIO
+firmware with the same base components. But it does not reproduce
+there. Neither does the problem reproduce on a CHT tablet using
+InsideH20 based firmware.
+
+Note that these devices have a software/firmware TPM-2.0
+implementation, they do not have an actual TPM chip.
+
+Comparing TPM firmware setting between the 2 AptIO based
+tablets the settings are identical, but the troublesome
+TW90 does have some more setting then the X80, it has
+the following settings which are not shown on the X80:
+
+Active PCR banks:           SHA-1         (read only)
+Available PCR banks:        SHA-1,SHA256  (read only)
+TPM2.0 UEFI SPEC version:   TCG_2         (other possible setting: TCG_1_2
+Physical Presence SPEC ver: 1.2           (other possible setting: 1.3)
+
+I have the feeling that at least the first 2 indicate that
+the previous win10 installation has actually used the
+TPM, where as on the X80 the TPM is uninitialized.
+Note this is just a hunch I could be completely wrong.
+
+I would be happy to run any commands to try and debug this
+or to build a kernel with some patches to gather more info.
+
+Note any kernel patches to printk some debug stuff need
+to be based on 5.3 with 166a2809d65b reverted, without that
+reverted the device will not boot, and thus I cannot collect
+logs without it reverted.
+
+Regards,
+
+Hans
