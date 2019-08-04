@@ -2,42 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 912C780CA9
-	for <lists+linux-integrity@lfdr.de>; Sun,  4 Aug 2019 22:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2886080CD6
+	for <lists+linux-integrity@lfdr.de>; Sun,  4 Aug 2019 23:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbfHDUsR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 4 Aug 2019 16:48:17 -0400
-Received: from mga09.intel.com ([134.134.136.24]:45944 "EHLO mga09.intel.com"
+        id S1726659AbfHDVpA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 4 Aug 2019 17:45:00 -0400
+Received: from mga03.intel.com ([134.134.136.65]:4039 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726346AbfHDUsR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 4 Aug 2019 16:48:17 -0400
-X-Amp-Result: UNSCANNABLE
+        id S1726346AbfHDVo7 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 4 Aug 2019 17:44:59 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Aug 2019 13:48:16 -0700
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Aug 2019 14:44:34 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,347,1559545200"; 
-   d="scan'208";a="348926486"
-Received: from rmohamed-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.37.16])
-  by orsmga005.jf.intel.com with ESMTP; 04 Aug 2019 13:48:08 -0700
-Date:   Sun, 4 Aug 2019 23:48:07 +0300
+   d="scan'208";a="173712234"
+Received: from chenghao-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.36.2])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Aug 2019 14:44:28 -0700
+Date:   Mon, 5 Aug 2019 00:44:28 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, jens.wiklander@linaro.org,
-        corbet@lwn.net, dhowells@redhat.com, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
-        casey@schaufler-ca.com, ard.biesheuvel@linaro.org,
-        daniel.thompson@linaro.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        tee-dev@lists.linaro.org
-Subject: Re: [RFC v2 0/6] Introduce TEE based Trusted Keys support
-Message-ID: <20190804204807.ajhy3jhwie3oq6d5@linux.intel.com>
-References: <1564489420-677-1-git-send-email-sumit.garg@linaro.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, corbet@lwn.net,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@microsoft.com,
+        thiruan@microsoft.com, bryankel@microsoft.com,
+        tee-dev@lists.linaro.org, ilias.apalodimas@linaro.org,
+        sumit.garg@linaro.org, rdunlap@infradead.org
+Subject: Re: [PATCH v8 0/2] fTPM: firmware TPM running in TEE
+Message-ID: <20190804214218.vdv2sn4oc4cityy2@linux.intel.com>
+References: <20190705204746.27543-1-sashal@kernel.org>
+ <20190711200858.xydm3wujikufxjcw@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1564489420-677-1-git-send-email-sumit.garg@linaro.org>
+In-Reply-To: <20190711200858.xydm3wujikufxjcw@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
@@ -45,17 +45,95 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jul 30, 2019 at 05:53:34PM +0530, Sumit Garg wrote:
->   tee: optee: allow kernel pages to register as shm
->   tee: enable support to register kernel memory
->   tee: add private login method for kernel clients
->   KEYS: trusted: Introduce TEE based Trusted Keys
->   doc: keys: Document usage of TEE based Trusted Keys
->   MAINTAINERS: Add entry for TEE based Trusted Keys
+On Thu, Jul 11, 2019 at 11:08:58PM +0300, Jarkko Sakkinen wrote:
+> On Fri, Jul 05, 2019 at 04:47:44PM -0400, Sasha Levin wrote:
+> > Changes from v7:
+> > 
+> >  - Address Jarkko's comments.
+> > 
+> > Sasha Levin (2):
+> >   fTPM: firmware TPM running in TEE
+> >   fTPM: add documentation for ftpm driver
+> > 
+> >  Documentation/security/tpm/index.rst        |   1 +
+> >  Documentation/security/tpm/tpm_ftpm_tee.rst |  27 ++
+> >  drivers/char/tpm/Kconfig                    |   5 +
+> >  drivers/char/tpm/Makefile                   |   1 +
+> >  drivers/char/tpm/tpm_ftpm_tee.c             | 350 ++++++++++++++++++++
+> >  drivers/char/tpm/tpm_ftpm_tee.h             |  40 +++
+> >  6 files changed, 424 insertions(+)
+> >  create mode 100644 Documentation/security/tpm/tpm_ftpm_tee.rst
+> >  create mode 100644 drivers/char/tpm/tpm_ftpm_tee.c
+> >  create mode 100644 drivers/char/tpm/tpm_ftpm_tee.h
+> > 
+> > -- 
+> > 2.20.1
+> > 
+> 
+> I applied the patches now. Appreciate a lot the patience with these.
+> Thank you.
 
-Skimmed through the patches. I think it is better to sort out the
-current LKM dependency issue with trusted.ko and get TPM 1.2 and TPM 2.0
-trusted keys code consolidated before it makes sense to really go detail
-on this.
+Hi, can you possibly fix these:
+
+005-tpm-tpm_ftpm_tee-A-driver-for-firmware-TPM-running-i.patch
+---------------------------------------------------------------
+WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+#10:
+https://www.microsoft.com/en-us/research/publication/ftpm-software-implementation-tpm-chip/ .
+
+WARNING: Non-standard signature: Co-authored-by:
+#18:
+Co-authored-by: Sasha Levin <sashal@kernel.org>
+
+WARNING: prefer 'help' over '---help---' for new help texts
+#39: FILE: drivers/char/tpm/Kconfig:167:
++config TCG_FTPM_TEE
+
+WARNING: please write a paragraph that describes the config symbol fully
+#39: FILE: drivers/char/tpm/Kconfig:167:
++config TCG_FTPM_TEE
+
+WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+#57:
+new file mode 100644
+
+WARNING: please, no space before tabs
+#102: FILE: drivers/char/tpm/tpm_ftpm_tee.c:41:
++ * ^IIn case of success the number of bytes received.$
+
+WARNING: please, no space before tabs
+#131: FILE: drivers/char/tpm/tpm_ftpm_tee.c:70:
++ * ^IIn case of success, returns 0.$
+
+WARNING: please, no space before tabs
+#276: FILE: drivers/char/tpm/tpm_ftpm_tee.c:215:
++ * ^IOn success, 0. On failure, -errno.$
+
+WARNING: please, no space before tabs
+#366: FILE: drivers/char/tpm/tpm_ftpm_tee.c:305:
++ * ^I0 always.$
+
+ERROR: code indent should use tabs where possible
+#387: FILE: drivers/char/tpm/tpm_ftpm_tee.c:326:
++        /* memory allocated with devm_kzalloc() is freed automatically */$
+
+WARNING: DT compatible string "microsoft,ftpm" appears un-documented -- check ./Documentation/devicetree/bindings/
+#393: FILE: drivers/char/tpm/tpm_ftpm_tee.c:332:
++	{ .compatible = "microsoft,ftpm" },
+
+WARNING: DT compatible string vendor "microsoft" appears un-documented -- check ./Documentation/devicetree/bindings/vendor-prefixes.yaml
+#393: FILE: drivers/char/tpm/tpm_ftpm_tee.c:332:
++	{ .compatible = "microsoft,ftpm" },
+
+total: 1 errors, 11 warnings, 405 lines checked
+
+NOTE: For some of the reported defects, checkpatch may be able to
+      mechanically convert to the typical style using --fix or --fix-inplace.
+
+NOTE: Whitespace errors detected.
+      You may wish to use scripts/cleanpatch or scripts/cleanfile
+
+I temporarily dropped the patches but can apply them once the issues
+are fixed.
 
 /Jarkko
