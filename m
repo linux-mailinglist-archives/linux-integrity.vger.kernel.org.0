@@ -2,37 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B22F80CA4
-	for <lists+linux-integrity@lfdr.de>; Sun,  4 Aug 2019 22:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912C780CA9
+	for <lists+linux-integrity@lfdr.de>; Sun,  4 Aug 2019 22:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726587AbfHDUpZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 4 Aug 2019 16:45:25 -0400
-Received: from mga03.intel.com ([134.134.136.65]:3654 "EHLO mga03.intel.com"
+        id S1726656AbfHDUsR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 4 Aug 2019 16:48:17 -0400
+Received: from mga09.intel.com ([134.134.136.24]:45944 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726561AbfHDUpZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 4 Aug 2019 16:45:25 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1726346AbfHDUsR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 4 Aug 2019 16:48:17 -0400
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Aug 2019 13:44:59 -0700
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Aug 2019 13:48:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,347,1559545200"; 
-   d="scan'208";a="175408009"
+   d="scan'208";a="348926486"
 Received: from rmohamed-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.37.16])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Aug 2019 13:44:57 -0700
-Date:   Sun, 4 Aug 2019 23:44:55 +0300
+  by orsmga005.jf.intel.com with ESMTP; 04 Aug 2019 13:48:08 -0700
+Date:   Sun, 4 Aug 2019 23:48:07 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Zach Kubinski <zkubinski@xes-inc.com>
-Cc:     linux-integrity@vger.kernel.org
-Subject: Re: A Request for your Expertise: tpm_crb: probe of MSFT0101:00
- failed with error -16
-Message-ID: <20190804204400.kr4zhqalik7u64u6@linux.intel.com>
-References: <504710714.386603.1564694480182.JavaMail.zimbra@xes-inc.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, jens.wiklander@linaro.org,
+        corbet@lwn.net, dhowells@redhat.com, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        casey@schaufler-ca.com, ard.biesheuvel@linaro.org,
+        daniel.thompson@linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        tee-dev@lists.linaro.org
+Subject: Re: [RFC v2 0/6] Introduce TEE based Trusted Keys support
+Message-ID: <20190804204807.ajhy3jhwie3oq6d5@linux.intel.com>
+References: <1564489420-677-1-git-send-email-sumit.garg@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <504710714.386603.1564694480182.JavaMail.zimbra@xes-inc.com>
+In-Reply-To: <1564489420-677-1-git-send-email-sumit.garg@linaro.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
@@ -40,48 +45,17 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi
+On Tue, Jul 30, 2019 at 05:53:34PM +0530, Sumit Garg wrote:
+>   tee: optee: allow kernel pages to register as shm
+>   tee: enable support to register kernel memory
+>   tee: add private login method for kernel clients
+>   KEYS: trusted: Introduce TEE based Trusted Keys
+>   doc: keys: Document usage of TEE based Trusted Keys
+>   MAINTAINERS: Add entry for TEE based Trusted Keys
 
-On Thu, Aug 01, 2019 at 04:21:20PM -0500, Zach Kubinski wrote:
->    Hi Jarkko,
->        I'm working on what I believe is a bug with our BIOS here at X-ES
->    which gives the following error in dmesg:
->        tpm_crb MSFT0101:00: can't request region for resource [mem
->        0x7be54000-0x7be5402f]
->        tpm_crb: probe of MSFT0101:00 failed with error -16
->        I've seen your name in many forums spanning the last couple years on
->    this
->        issue and related issues but I can't seem to find a thread that
->    accurately
->        describes and fixes the issue.
->        I wanted to reach out to see if you would be willing to help clarify a
->        thread or point me to one that could assist me in fixing this issue.
->        Currently, I believe that
->        this issue stems from the TPM attempting to allocate the Control
->        Area(CONA) in the ACPI_NVS region, shown in the e820 table, which
->    returns
->        the Linux error code -16 "EBUSY".
->        From what I read, the entire ACPI_NVS region has this flag which leads
->    me
->        to believe that there should be somewhere else to allocate the Control
->        Area.
->        I am using Linux Kernel 4-19-34 and my BIOS is UEFI Grangeville. If
->    you
->        would like any further information please let me know, I hope this
->    message
->        reaches you and I'm looking forward to hearing from you.
->        Best,
->        Zach Kubinski
-
-I would ask you to read
-
-https://www.kernel.org/doc/html/latest/process/email-clients.html
-
-and then configure your email client accordingly.
-
-Also go through this with time https://kernelnewbies.org/PatchCulture.
-Especially I would suggest to read email etiquette part carefully.
-
-Thank you.
+Skimmed through the patches. I think it is better to sort out the
+current LKM dependency issue with trusted.ko and get TPM 1.2 and TPM 2.0
+trusted keys code consolidated before it makes sense to really go detail
+on this.
 
 /Jarkko
