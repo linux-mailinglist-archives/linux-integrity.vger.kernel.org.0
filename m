@@ -2,49 +2,41 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C53778275D
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2019 00:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA4B8276C
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2019 00:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728922AbfHEWLJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Aug 2019 18:11:09 -0400
-Received: from mga04.intel.com ([192.55.52.120]:10190 "EHLO mga04.intel.com"
+        id S1730900AbfHEWMy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Aug 2019 18:12:54 -0400
+Received: from mga11.intel.com ([192.55.52.93]:40026 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727928AbfHEWLJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Aug 2019 18:11:09 -0400
+        id S1727928AbfHEWMy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 5 Aug 2019 18:12:54 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 15:11:09 -0700
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 15:12:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,350,1559545200"; 
-   d="scan'208";a="202600160"
+   d="scan'208";a="175707900"
 Received: from unknown (HELO localhost) ([10.252.52.83])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Aug 2019 15:11:05 -0700
-Date:   Tue, 6 Aug 2019 01:11:04 +0300
+  by fmsmga007.fm.intel.com with ESMTP; 05 Aug 2019 15:12:49 -0700
+Date:   Tue, 6 Aug 2019 01:12:43 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Tyler Hicks <tyhicks@canonical.com>, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, jgg@ziepe.ca,
+        tyhicks@canonical.com, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         linux-kernel@vger.kernel.org, crazyt2019+lml@gmail.com,
         nayna@linux.vnet.ibm.com, silviu.vlasceanu@huawei.com
-Subject: Re: [PATCH] KEYS: trusted: allow module init if TPM is inactive or
- deactivated
-Message-ID: <20190805221029.v75lcoecz6fvvjqt@linux.intel.com>
-References: <20190705163735.11539-1-roberto.sassu@huawei.com>
- <20190711194811.rfsohbfc3a7carpa@linux.intel.com>
- <b4454a78-1f1b-cc75-114a-99926e097b05@huawei.com>
- <20190801163215.mfkagoafkxscesne@linux.intel.com>
- <e50c4cfa-1f0c-6f4d-1910-010a8d874393@huawei.com>
- <20190802142721.GA26616@elm>
- <20190802194226.oiztvme5klkmw6fh@linux.intel.com>
- <20190802202343.GE26616@elm>
- <e10f7b04-3d63-435e-180e-72a084ac4bab@huawei.com>
+Subject: Re: [PATCH v3] KEYS: trusted: allow module init if TPM is inactive
+ or deactivated
+Message-ID: <20190805221243.chp4x5h2ow76nmz4@linux.intel.com>
+References: <20190805164427.17408-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e10f7b04-3d63-435e-180e-72a084ac4bab@huawei.com>
+In-Reply-To: <20190805164427.17408-1-roberto.sassu@huawei.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
@@ -52,13 +44,28 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Aug 05, 2019 at 04:50:35PM +0200, Roberto Sassu wrote:
-> I also don't think it is a good idea to remove this functionality.
+On Mon, Aug 05, 2019 at 06:44:27PM +0200, Roberto Sassu wrote:
+> Commit c78719203fc6 ("KEYS: trusted: allow trusted.ko to initialize w/o a
+> TPM") allows the trusted module to be loaded even if a TPM is not found, to
+> avoid module dependency problems.
 > 
-> Jarkko, we were discussing about this issue in another thread, and your
-> answer then (https://lkml.org/lkml/2019/3/21/396) was that it is a
-> priority to fix the regression.
+> However, trusted module initialization can still fail if the TPM is
+> inactive or deactivated. tpm_get_random() returns an error.
+> 
+> This patch removes the call to tpm_get_random() and instead extends the PCR
+> specified by the user with zeros. The security of this alternative is
+> equivalent to the previous one, as either option prevents with a PCR update
+> unsealing and misuse of sealed data by a user space process.
+> 
+> Even if a PCR is extended with zeros, instead of random data, it is still
+> computationally infeasible to find a value as input for a new PCR extend
+> operation, to obtain again the PCR value that would allow unsealing.
+> 
+> Fixes: 240730437deb ("KEYS: trusted: explicitly use tpm_chip structure...")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Tyler Hicks <tyhicks@canonical.com>
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
 
-OK, I think I'm now in the same page. I guess vacation did the job.
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
 /Jarkko
