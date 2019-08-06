@@ -2,128 +2,215 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B29CE839AA
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2019 21:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E1C83C7C
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2019 23:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726376AbfHFT1W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Aug 2019 15:27:22 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:42741 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726301AbfHFT1W (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Aug 2019 15:27:22 -0400
-Received: by mail-ed1-f68.google.com with SMTP id v15so83373259eds.9
-        for <linux-integrity@vger.kernel.org>; Tue, 06 Aug 2019 12:27:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1LHxYcL996sKOby6eEjWVTx69NkSzcDYDpH2jDk93e8=;
-        b=FOgN/BvAc3m1ZQbDM/HPZ0ugkUSXX0bZVUZf83u0vRxpARhqzuzdOI68ZTEgN2H5KZ
-         AYp+x1JBE/aIlkWbc7Yb14MngaXH0LmKbRucW6Rt4oMI4FYNtNvvm8AmQYOSuswrYyDp
-         EGlRLw/+MS2Niam50O1LB3+LOyhSqDx3f9voB0cZ8+fTH84iP/OT3xcMcs4CtKMsj2Tn
-         s7Hho1dseC4UcmIR6JODipn2gr4rGZQC9UaMsNjBCFgrgthlEszL1AKwHA4aR7nGLldk
-         5PBEz4bwn+DqMAz+R4wbibkz4SSW1UgfyxAiYFwT1/QlS6Kn2v6H1b8uWjGWmpjHJuSt
-         HEMQ==
-X-Gm-Message-State: APjAAAVHWvbZhwDLG5wu+0WdcMULbvTg7VthlA7iucnJ1OgiVjWza6+E
-        AycQw5vwRt7EX+fZf5ZUIM264g==
-X-Google-Smtp-Source: APXvYqz/Tszk0I/Ku+EjS80ijEzX6q7wYNUEgtRBwizetzwIBl+06H1dvevfmqcRDGWBdASl7Q6VeQ==
-X-Received: by 2002:a50:b875:: with SMTP id k50mr5715639ede.232.1565119640579;
-        Tue, 06 Aug 2019 12:27:20 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id w27sm21228102edw.63.2019.08.06.12.27.19
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Aug 2019 12:27:19 -0700 (PDT)
-Subject: Re: 5.3 boot regression caused by 5.3 TPM changes
-To:     Chris Coulson <chris.coulson@canonical.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        id S1728340AbfHFVfU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Aug 2019 17:35:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53130 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728333AbfHFVfU (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 6 Aug 2019 17:35:20 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A53D62089E;
+        Tue,  6 Aug 2019 21:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565127318;
+        bh=cPivkqwnQ1OdRMluIbubqEiTl3DSailklhPA6Iw5au4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oldEed+hx2SsGGcigoPJ5DkGtmF2H+whCxo8x7JcEq4GCNSdyiSK6BEyefJwEIane
+         GnRnV0btWFkjUOMfdUtas2FqJk1Pt4LzF7SXLozF3Q8py+uUGpGVPZmfEO5MS8zZks
+         poox7QAuOqPW2IugRLnjQYmjoJAnAyhjzsH0LhUU=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Nayna Jain <nayna@linux.ibm.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sachin Sant <sachinp@linux.vnet.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi@vger.kernel.org
-References: <b20dd437-790a-aad9-0515-061751d46e53@redhat.com>
- <0d5bbfe6-a95e-987e-b436-83f754d044ac@canonical.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <4df2fd32-4b64-4cba-4211-d1008ec01da4@redhat.com>
-Date:   Tue, 6 Aug 2019 21:27:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sasha Levin <sashal@kernel.org>,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 59/59] tpm: tpm_ibm_vtpm: Fix unallocated banks
+Date:   Tue,  6 Aug 2019 17:33:19 -0400
+Message-Id: <20190806213319.19203-59-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190806213319.19203-1-sashal@kernel.org>
+References: <20190806213319.19203-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <0d5bbfe6-a95e-987e-b436-83f754d044ac@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+From: Nayna Jain <nayna@linux.ibm.com>
 
-On 06-08-19 17:53, Chris Coulson wrote:
-> Hi,
-> 
-> On 04/08/2019 11:00, Hans de Goede wrote:
->> Hi All,
->>
->> While testing 5.3-rc2 on an Irbis TW90 Intel Cherry Trail based
->> tablet I noticed that it does not boot on this device.
->>
->> A git bisect points to commit 166a2809d65b ("tpm: Don't duplicate
->> events from the final event log in the TCG2 log")
->>
->> And I can confirm that reverting just that single commit makes
->> the TW90 boot again.
->>
->> This machine uses AptIO firmware with base component versions
->> of: UEFI 2.4 PI 1.3. I've tried to reproduce the problem on
->> a Teclast X80 Pro which is also CHT based and also uses AptIO
->> firmware with the same base components. But it does not reproduce
->> there. Neither does the problem reproduce on a CHT tablet using
->> InsideH20 based firmware.
->>
->> Note that these devices have a software/firmware TPM-2.0
->> implementation, they do not have an actual TPM chip.
->>
->> Comparing TPM firmware setting between the 2 AptIO based
->> tablets the settings are identical, but the troublesome
->> TW90 does have some more setting then the X80, it has
->> the following settings which are not shown on the X80:
->>
->> Active PCR banks:           SHA-1         (read only)
->> Available PCR banks:        SHA-1,SHA256  (read only)
->> TPM2.0 UEFI SPEC version:   TCG_2         (other possible setting: TCG_1_2
->> Physical Presence SPEC ver: 1.2           (other possible setting: 1.3)
->>
->> I have the feeling that at least the first 2 indicate that
->> the previous win10 installation has actually used the
->> TPM, where as on the X80 the TPM is uninitialized.
->> Note this is just a hunch I could be completely wrong.
->>
->> I would be happy to run any commands to try and debug this
->> or to build a kernel with some patches to gather more info.
->>
->> Note any kernel patches to printk some debug stuff need
->> to be based on 5.3 with 166a2809d65b reverted, without that
->> reverted the device will not boot, and thus I cannot collect
->> logs without it reverted.
->>
->> Regards,
->>
->> Hans
-> Do you think this might be the same issue as https://marc.info/?l=linux-integrity&m=155968949020639 <https://marc.info/?l=linux-integrity&m=155968949020639&w=2>?
+[ Upstream commit fa4f99c05320eb28bf6ba52a9adf64d888da1f9e ]
 
-I was hoping it would be the same issue, so I tested a 5.3 kernel
-with that patch added, but unfortunately it still crashes on
-the Irbis TW90.
+The nr_allocated_banks and allocated banks are initialized as part of
+tpm_chip_register. Currently, this is done as part of auto startup
+function. However, some drivers, like the ibm vtpm driver, do not run
+auto startup during initialization. This results in uninitialized memory
+issue and causes a kernel panic during boot.
 
-Regards,
+This patch moves the pcr allocation outside the auto startup function
+into tpm_chip_register. This ensures that allocated banks are initialized
+in any case.
 
-Hans
+Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms with PCR read")
+Reported-by: Michal Suchanek <msuchanek@suse.de>
+Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+Tested-by: Michal Suchánek <msuchanek@suse.de>
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/char/tpm/tpm-chip.c | 20 ++++++++++++++++++++
+ drivers/char/tpm/tpm.h      |  2 ++
+ drivers/char/tpm/tpm1-cmd.c | 36 ++++++++++++++++++++++++------------
+ drivers/char/tpm/tpm2-cmd.c |  6 +-----
+ 4 files changed, 47 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index d47ad10a35fe3..1d3c25831604a 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -545,6 +545,20 @@ static int tpm_add_hwrng(struct tpm_chip *chip)
+ 	return hwrng_register(&chip->hwrng);
+ }
+ 
++static int tpm_get_pcr_allocation(struct tpm_chip *chip)
++{
++	int rc;
++
++	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
++	     tpm2_get_pcr_allocation(chip) :
++	     tpm1_get_pcr_allocation(chip);
++
++	if (rc > 0)
++		return -ENODEV;
++
++	return rc;
++}
++
+ /*
+  * tpm_chip_register() - create a character device for the TPM chip
+  * @chip: TPM chip to use.
+@@ -564,6 +578,12 @@ int tpm_chip_register(struct tpm_chip *chip)
+ 	if (rc)
+ 		return rc;
+ 	rc = tpm_auto_startup(chip);
++	if (rc) {
++		tpm_chip_stop(chip);
++		return rc;
++	}
++
++	rc = tpm_get_pcr_allocation(chip);
+ 	tpm_chip_stop(chip);
+ 	if (rc)
+ 		return rc;
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index e503ffc3aa39c..a7fea3e0ca86a 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -394,6 +394,7 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf);
+ ssize_t tpm1_getcap(struct tpm_chip *chip, u32 subcap_id, cap_t *cap,
+ 		    const char *desc, size_t min_cap_length);
+ int tpm1_get_random(struct tpm_chip *chip, u8 *out, size_t max);
++int tpm1_get_pcr_allocation(struct tpm_chip *chip);
+ unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+ int tpm_pm_suspend(struct device *dev);
+ int tpm_pm_resume(struct device *dev);
+@@ -449,6 +450,7 @@ int tpm2_unseal_trusted(struct tpm_chip *chip,
+ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
+ 			u32 *value, const char *desc);
+ 
++ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip);
+ int tpm2_auto_startup(struct tpm_chip *chip);
+ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
+ unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+index faacbe1ffa1a9..149e953ca3699 100644
+--- a/drivers/char/tpm/tpm1-cmd.c
++++ b/drivers/char/tpm/tpm1-cmd.c
+@@ -699,18 +699,6 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+ 		goto out;
+ 	}
+ 
+-	chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
+-					GFP_KERNEL);
+-	if (!chip->allocated_banks) {
+-		rc = -ENOMEM;
+-		goto out;
+-	}
+-
+-	chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
+-	chip->allocated_banks[0].digest_size = hash_digest_size[HASH_ALGO_SHA1];
+-	chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
+-	chip->nr_allocated_banks = 1;
+-
+ 	return rc;
+ out:
+ 	if (rc > 0)
+@@ -779,3 +767,27 @@ int tpm1_pm_suspend(struct tpm_chip *chip, u32 tpm_suspend_pcr)
+ 	return rc;
+ }
+ 
++/**
++ * tpm1_get_pcr_allocation() - initialize the allocated bank
++ * @chip: TPM chip to use.
++ *
++ * The function initializes the SHA1 allocated bank to extend PCR
++ *
++ * Return:
++ * * 0 on success,
++ * * < 0 on error.
++ */
++int tpm1_get_pcr_allocation(struct tpm_chip *chip)
++{
++	chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
++					GFP_KERNEL);
++	if (!chip->allocated_banks)
++		return -ENOMEM;
++
++	chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
++	chip->allocated_banks[0].digest_size = hash_digest_size[HASH_ALGO_SHA1];
++	chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
++	chip->nr_allocated_banks = 1;
++
++	return 0;
++}
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index d103545e40550..ba9acae83bff1 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -840,7 +840,7 @@ struct tpm2_pcr_selection {
+ 	u8  pcr_select[3];
+ } __packed;
+ 
+-static ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
++ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
+ {
+ 	struct tpm2_pcr_selection pcr_selection;
+ 	struct tpm_buf buf;
+@@ -1040,10 +1040,6 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+ 			goto out;
+ 	}
+ 
+-	rc = tpm2_get_pcr_allocation(chip);
+-	if (rc)
+-		goto out;
+-
+ 	rc = tpm2_get_cc_attrs_tbl(chip);
+ 
+ out:
+-- 
+2.20.1
 
