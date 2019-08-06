@@ -2,215 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E1C83C7C
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2019 23:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4ED983D2A
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Aug 2019 00:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728340AbfHFVfU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Aug 2019 17:35:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53130 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728333AbfHFVfU (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Aug 2019 17:35:20 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A53D62089E;
-        Tue,  6 Aug 2019 21:35:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565127318;
-        bh=cPivkqwnQ1OdRMluIbubqEiTl3DSailklhPA6Iw5au4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oldEed+hx2SsGGcigoPJ5DkGtmF2H+whCxo8x7JcEq4GCNSdyiSK6BEyefJwEIane
-         GnRnV0btWFkjUOMfdUtas2FqJk1Pt4LzF7SXLozF3Q8py+uUGpGVPZmfEO5MS8zZks
-         poox7QAuOqPW2IugRLnjQYmjoJAnAyhjzsH0LhUU=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nayna Jain <nayna@linux.ibm.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 59/59] tpm: tpm_ibm_vtpm: Fix unallocated banks
-Date:   Tue,  6 Aug 2019 17:33:19 -0400
-Message-Id: <20190806213319.19203-59-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190806213319.19203-1-sashal@kernel.org>
-References: <20190806213319.19203-1-sashal@kernel.org>
+        id S1726821AbfHFWHx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Aug 2019 18:07:53 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41950 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726806AbfHFWHw (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 6 Aug 2019 18:07:52 -0400
+Received: by mail-pg1-f193.google.com with SMTP id x15so31958458pgg.8
+        for <linux-integrity@vger.kernel.org>; Tue, 06 Aug 2019 15:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZSLa4pNiWVqg5KmBwta4Nm3QMlIdwSyFGBhxf3tLV/w=;
+        b=nobdHh1wZax0LZlHpwPnDw9QdBVGA+CFBO3iOVA5rcN2zefAZuJwnaAme81Si9+Rnu
+         zEd23EfqY2WNKdV1vgdFtmiB3Bz7PRont0luEkFLeH5UiVuGlSYTmSqCGAtURyXmljU+
+         +mesW+29QPYEFsItnyEshD9M2CkbBC5ggtsVc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZSLa4pNiWVqg5KmBwta4Nm3QMlIdwSyFGBhxf3tLV/w=;
+        b=USls9d/KSnTg6NnnHpfZD6M6xnfKcFPFru6hx45mFCbf/OS/UUW4Xcq801HEZ/V8TO
+         YZBEePEktDuqLxov8DJILzV5gPl5PmtUKM8ntXy+TEZ3DIzbx1Pg+I3IKAFH+J5cJoLA
+         qSIFxvjhuv7PANxnevrQBF27xlDqyPAmx5IH5964+WrbmqY5u9jeDhym6b/8sSjE22+D
+         kW2Qp6w83/tod6WeIOJ28LtuhH3g/a2D7szsNJI4MfR18Cf42rCXdLETcO4F40fwL4z5
+         vqcEyW1AvwZHLWzUH4OZ0f/syYPe2yZZ5qy8It7zML4AE9DX5blmloW/IY059fC78R2M
+         U3jQ==
+X-Gm-Message-State: APjAAAX9dKR38+VNfCBVGi7NjWM0PgiNy4mlD9ZG0eLXLCZgoJEjVnsx
+        Zd67MPhAkGRGehNyx/fDS9B/sQ==
+X-Google-Smtp-Source: APXvYqwARHzSNZo9u5RkbmGoO6mXRD9rKbrWfywdzN9ynPSoFRLViJ20FSU0eMGbIyWZ9RTdfBZXPw==
+X-Received: by 2002:a17:90a:206a:: with SMTP id n97mr5279752pjc.10.1565129272082;
+        Tue, 06 Aug 2019 15:07:52 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id p7sm98982509pfp.131.2019.08.06.15.07.51
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 06 Aug 2019 15:07:51 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>
+Subject: [PATCH v3 0/4] tpm: Add driver for cr50
+Date:   Tue,  6 Aug 2019 15:07:46 -0700
+Message-Id: <20190806220750.86597-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Nayna Jain <nayna@linux.ibm.com>
+This patch series adds support for the the H1 secure microcontroller
+running cr50 firmware found on various recent Chromebooks. This driver
+is necessary to boot into a ChromeOS userspace environment. It
+implements support for several functions, including TPM-like
+functionality over a SPI interface.
 
-[ Upstream commit fa4f99c05320eb28bf6ba52a9adf64d888da1f9e ]
+The last time this was series sent looks to be [1]. I've looked over the
+patches and review comments and tried to address any feedback that
+Andrey didn't address (really minor things like newlines). I've reworked
+the patches from the last version to layer on top of the existing TPM
+TIS SPI implementation in tpm_tis_spi.c. Hopefully this is more
+palatable than combining the two drivers together into one file.
 
-The nr_allocated_banks and allocated banks are initialized as part of
-tpm_chip_register. Currently, this is done as part of auto startup
-function. However, some drivers, like the ibm vtpm driver, do not run
-auto startup during initialization. This results in uninitialized memory
-issue and causes a kernel panic during boot.
+[1] https://lkml.kernel.org/r/1469757314-116169-1-git-send-email-apronin@chromium.org
 
-This patch moves the pcr allocation outside the auto startup function
-into tpm_chip_register. This ensures that allocated banks are initialized
-in any case.
+TODO:
+ * Add a patch to spit out WARN_ON() when TPM is suspended and some
+   kernel code attempts to use it
+ * Rework the i2c driver per Alexander's comments on v2
 
-Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms with PCR read")
-Reported-by: Michal Suchanek <msuchanek@suse.de>
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-Tested-by: Michal Suchánek <msuchanek@suse.de>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/char/tpm/tpm-chip.c | 20 ++++++++++++++++++++
- drivers/char/tpm/tpm.h      |  2 ++
- drivers/char/tpm/tpm1-cmd.c | 36 ++++++++++++++++++++++++------------
- drivers/char/tpm/tpm2-cmd.c |  6 +-----
- 4 files changed, 47 insertions(+), 17 deletions(-)
+Changes from v2:
+ * Sent khwrng thread patch separately
+ * New patch to expose TPM SPI functionality from tpm_tis_spi.c
+ * Usage of that new patch in cr50 SPI driver
+ * Drop i2c version of cr50 SPI driver for now (will resend later)
+ * New patch to add a TPM chip flag indicating TPM shouldn't be reset
+   over suspend. Allows us to get rid of the cr50 suspend/resume functions
+   that are mostly generic
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index d47ad10a35fe3..1d3c25831604a 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -545,6 +545,20 @@ static int tpm_add_hwrng(struct tpm_chip *chip)
- 	return hwrng_register(&chip->hwrng);
- }
- 
-+static int tpm_get_pcr_allocation(struct tpm_chip *chip)
-+{
-+	int rc;
-+
-+	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
-+	     tpm2_get_pcr_allocation(chip) :
-+	     tpm1_get_pcr_allocation(chip);
-+
-+	if (rc > 0)
-+		return -ENODEV;
-+
-+	return rc;
-+}
-+
- /*
-  * tpm_chip_register() - create a character device for the TPM chip
-  * @chip: TPM chip to use.
-@@ -564,6 +578,12 @@ int tpm_chip_register(struct tpm_chip *chip)
- 	if (rc)
- 		return rc;
- 	rc = tpm_auto_startup(chip);
-+	if (rc) {
-+		tpm_chip_stop(chip);
-+		return rc;
-+	}
-+
-+	rc = tpm_get_pcr_allocation(chip);
- 	tpm_chip_stop(chip);
- 	if (rc)
- 		return rc;
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index e503ffc3aa39c..a7fea3e0ca86a 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -394,6 +394,7 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf);
- ssize_t tpm1_getcap(struct tpm_chip *chip, u32 subcap_id, cap_t *cap,
- 		    const char *desc, size_t min_cap_length);
- int tpm1_get_random(struct tpm_chip *chip, u8 *out, size_t max);
-+int tpm1_get_pcr_allocation(struct tpm_chip *chip);
- unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
- int tpm_pm_suspend(struct device *dev);
- int tpm_pm_resume(struct device *dev);
-@@ -449,6 +450,7 @@ int tpm2_unseal_trusted(struct tpm_chip *chip,
- ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
- 			u32 *value, const char *desc);
- 
-+ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip);
- int tpm2_auto_startup(struct tpm_chip *chip);
- void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
- unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
-diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-index faacbe1ffa1a9..149e953ca3699 100644
---- a/drivers/char/tpm/tpm1-cmd.c
-+++ b/drivers/char/tpm/tpm1-cmd.c
-@@ -699,18 +699,6 @@ int tpm1_auto_startup(struct tpm_chip *chip)
- 		goto out;
- 	}
- 
--	chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
--					GFP_KERNEL);
--	if (!chip->allocated_banks) {
--		rc = -ENOMEM;
--		goto out;
--	}
--
--	chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
--	chip->allocated_banks[0].digest_size = hash_digest_size[HASH_ALGO_SHA1];
--	chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
--	chip->nr_allocated_banks = 1;
--
- 	return rc;
- out:
- 	if (rc > 0)
-@@ -779,3 +767,27 @@ int tpm1_pm_suspend(struct tpm_chip *chip, u32 tpm_suspend_pcr)
- 	return rc;
- }
- 
-+/**
-+ * tpm1_get_pcr_allocation() - initialize the allocated bank
-+ * @chip: TPM chip to use.
-+ *
-+ * The function initializes the SHA1 allocated bank to extend PCR
-+ *
-+ * Return:
-+ * * 0 on success,
-+ * * < 0 on error.
-+ */
-+int tpm1_get_pcr_allocation(struct tpm_chip *chip)
-+{
-+	chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
-+					GFP_KERNEL);
-+	if (!chip->allocated_banks)
-+		return -ENOMEM;
-+
-+	chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
-+	chip->allocated_banks[0].digest_size = hash_digest_size[HASH_ALGO_SHA1];
-+	chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
-+	chip->nr_allocated_banks = 1;
-+
-+	return 0;
-+}
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index d103545e40550..ba9acae83bff1 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -840,7 +840,7 @@ struct tpm2_pcr_selection {
- 	u8  pcr_select[3];
- } __packed;
- 
--static ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
-+ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
- {
- 	struct tpm2_pcr_selection pcr_selection;
- 	struct tpm_buf buf;
-@@ -1040,10 +1040,6 @@ int tpm2_auto_startup(struct tpm_chip *chip)
- 			goto out;
- 	}
- 
--	rc = tpm2_get_pcr_allocation(chip);
--	if (rc)
--		goto out;
--
- 	rc = tpm2_get_cc_attrs_tbl(chip);
- 
- out:
+Changes from v1:
+ * Dropped symlink and sysfs patches
+ * Removed 'is_suspended' bits
+ * Added new patch to freeze khwrng thread
+ * Moved binding to google,cr50.txt and added Reviewed-by tag from Rob
+
+Cc: Andrey Pronin <apronin@chromium.org>
+Cc: Duncan Laurie <dlaurie@chromium.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
+
+Andrey Pronin (2):
+  dt-bindings: tpm: document properties for cr50
+  tpm: add driver for cr50 on SPI
+
+Stephen Boyd (2):
+  tpm: Add a flag to indicate TPM power is managed by firmware
+  tpm: tpm_tis_spi: Export functionality to other drivers
+
+ .../bindings/security/tpm/google,cr50.txt     |  19 +
+ drivers/char/tpm/Kconfig                      |   9 +
+ drivers/char/tpm/Makefile                     |   1 +
+ drivers/char/tpm/cr50_spi.c                   | 373 ++++++++++++++++++
+ drivers/char/tpm/tpm-interface.c              |   8 +-
+ drivers/char/tpm/tpm.h                        |   1 +
+ drivers/char/tpm/tpm_tis_spi.c                |  98 +++--
+ drivers/char/tpm/tpm_tis_spi.h                |  37 ++
+ 8 files changed, 503 insertions(+), 43 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/security/tpm/google,cr50.txt
+ create mode 100644 drivers/char/tpm/cr50_spi.c
+ create mode 100644 drivers/char/tpm/tpm_tis_spi.h
+
+
+base-commit: 0ecfebd2b52404ae0c54a878c872bb93363ada36
+prerequisite-patch-id: ce0cac49be5e67df1427e4207cf38c6e31091445
 -- 
-2.20.1
+Sent by a computer through tubes
 
