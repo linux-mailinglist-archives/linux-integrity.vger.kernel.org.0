@@ -2,105 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 841FF8574B
-	for <lists+linux-integrity@lfdr.de>; Thu,  8 Aug 2019 02:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4226585756
+	for <lists+linux-integrity@lfdr.de>; Thu,  8 Aug 2019 02:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730149AbfHHAna (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 7 Aug 2019 20:43:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9592 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729624AbfHHAna (ORCPT
+        id S1730598AbfHHAzk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 7 Aug 2019 20:55:40 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29486 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730198AbfHHAzk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 7 Aug 2019 20:43:30 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x780fXOR164358;
-        Wed, 7 Aug 2019 20:43:25 -0400
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2u88ke9py8-1
+        Wed, 7 Aug 2019 20:55:40 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x780qLYw083614;
+        Wed, 7 Aug 2019 20:55:37 -0400
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2u8680ev21-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Aug 2019 20:43:25 -0400
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x780Q2h5013670;
-        Thu, 8 Aug 2019 00:43:25 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma03wdc.us.ibm.com with ESMTP id 2u51w645ev-1
+        Wed, 07 Aug 2019 20:55:37 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x780pYSw011594;
+        Thu, 8 Aug 2019 00:55:36 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04dal.us.ibm.com with ESMTP id 2u51w73n49-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Aug 2019 00:43:25 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x780hOWG60358964
+        Thu, 08 Aug 2019 00:55:36 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x780tZ3453477858
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 8 Aug 2019 00:43:24 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 378587805F;
-        Thu,  8 Aug 2019 00:43:24 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D8C777805E;
-        Thu,  8 Aug 2019 00:43:22 +0000 (GMT)
+        Thu, 8 Aug 2019 00:55:35 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 373AFBE058;
+        Thu,  8 Aug 2019 00:55:35 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D6CDABE04F;
+        Thu,  8 Aug 2019 00:55:33 +0000 (GMT)
 Received: from morokweng.localdomain (unknown [9.85.230.139])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Thu,  8 Aug 2019 00:43:22 +0000 (GMT)
-References: <201908072140.Qep3jWIW%lkp@intel.com> <2ee96e49ade2e30a44fa14840610b432@lip6.fr>
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Thu,  8 Aug 2019 00:55:33 +0000 (GMT)
+References: <201908080752.5U4CXtOx%lkp@intel.com>
 User-agent: mu4e 1.2.0; emacs 26.2
 From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Julia Lawall <Julia.Lawall@lip6.fr>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        kbuild-all@01.org
-Subject: [PATCH] ima: Fix use after free in ima_read_modsig()
-In-reply-to: <2ee96e49ade2e30a44fa14840610b432@lip6.fr>
-Date:   Wed, 07 Aug 2019 21:43:18 -0300
-Message-ID: <8736ico5ax.fsf@morokweng.localdomain>
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@01.org, linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [integrity:next-queued-testing 2/13] include/linux/module_signature.h:32:2: error: unknown type name 'u8'
+In-reply-to: <201908080752.5U4CXtOx%lkp@intel.com>
+Date:   Wed, 07 Aug 2019 21:55:26 -0300
+Message-ID: <871rxwo4qp.fsf@morokweng.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-07_07:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908080002
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908080004
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-Julia Lawall <Julia.Lawall@lip6.fr> writes:
+kbuild test robot <lkp@intel.com> writes:
 
-> This looks risky. See lines 80 and 81.
+> tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-queued-testing
+> head:   cd3553a6a5047b7a759803ae3ba3991a901b89f8
+> commit: a5e7fd15c3b94862ce3639e82cabd2de74a0ad90 [2/13] MODSIGN: Export module signature definitions
+> config: x86_64-allyesconfig (attached as .config)
+> compiler: gcc-7 (Debian 7.4.0-10) 7.4.0
+> reproduce:
+>         git checkout a5e7fd15c3b94862ce3639e82cabd2de74a0ad90
+>         # save the attached .config to linux build tree
+>         make ARCH=x86_64 
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from <command-line>:0:0:
+>>> include/linux/module_signature.h:32:2: error: unknown type name 'u8'
+>      u8 algo;  /* Public-key crypto algorithm [0] */
+>      ^~
+>    include/linux/module_signature.h:33:2: error: unknown type name 'u8'
+>      u8 hash;  /* Digest algorithm [0] */
+>      ^~
+>    include/linux/module_signature.h:34:2: error: unknown type name 'u8'
+>      u8 id_type; /* Key identifier type [PKEY_ID_PKCS7] */
+>      ^~
+>    include/linux/module_signature.h:35:2: error: unknown type name 'u8'
+>      u8 signer_len; /* Length of signer's name [0] */
+>      ^~
+>    include/linux/module_signature.h:36:2: error: unknown type name 'u8'
+>      u8 key_id_len; /* Length of key identifier [0] */
+>      ^~
+>    include/linux/module_signature.h:37:2: error: unknown type name 'u8'
+>      u8 __pad[3];
+>      ^~
+>>> include/linux/module_signature.h:38:2: error: unknown type name '__be32'
+>      __be32 sig_len; /* Length of signature data */
+>      ^~~~~~
+>>> include/linux/module_signature.h:41:54: error: unknown type name 'size_t'
+>     int mod_check_sig(const struct module_signature *ms, size_t file_len,
+>                                                          ^~~~~~
 
-That is indeed a bug. Thanks for spotting it!
+This is the same issue spotted and fixed by Stephen Rothwell here:
 
-Here's the fix:
+https://lore.kernel.org/linux-next/20190806121519.0f8ac653@canb.auug.org.au/
 
-From 445e9ab15f61dc3b1fa1a30495d233bd2d2ecdaa Mon Sep 17 00:00:00 2001
-From: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Date: Wed, 7 Aug 2019 21:29:53 -0300
-Subject: [PATCH] ima: Fix use after free in ima_read_modsig()
-
-If we can't parse the PKCS7 in the appended modsig, we will free the modsig
-structure and then access one of its members to determine the error value.
-
-Fixes: 39b07096364a ("ima: Implement support for module-style appended signatures")
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Julia Lawall <julia.lawall@lip6.fr>
-Signed-off-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
----
- security/integrity/ima/ima_modsig.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima/ima_modsig.c
-index c412e31d1714..d106885cc495 100644
---- a/security/integrity/ima/ima_modsig.c
-+++ b/security/integrity/ima/ima_modsig.c
-@@ -91,8 +91,9 @@ int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
- 
- 	hdr->pkcs7_msg = pkcs7_parse_message(buf + buf_len, sig_len);
- 	if (IS_ERR(hdr->pkcs7_msg)) {
-+		rc = PTR_ERR(hdr->pkcs7_msg);
- 		kfree(hdr);
--		return PTR_ERR(hdr->pkcs7_msg);
-+		return rc;
- 	}
- 
- 	memcpy(hdr->raw_pkcs7, buf + buf_len, sig_len);
+Mimi added his patch to her linux-integrity/next-integrity branch so it
+is fixed already.
+-- 
+Thiago Jung Bauermann
+IBM Linux Technology Center
