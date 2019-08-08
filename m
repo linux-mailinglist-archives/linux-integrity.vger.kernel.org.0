@@ -2,79 +2,215 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD7285644
-	for <lists+linux-integrity@lfdr.de>; Thu,  8 Aug 2019 01:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C026856E6
+	for <lists+linux-integrity@lfdr.de>; Thu,  8 Aug 2019 02:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729219AbfHGXDQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 7 Aug 2019 19:03:16 -0400
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:42076 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730038AbfHGXDQ (ORCPT
+        id S2389733AbfHHAIc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 7 Aug 2019 20:08:32 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:57057 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389755AbfHHAIa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 7 Aug 2019 19:03:16 -0400
-Received: by mail-ua1-f67.google.com with SMTP id a97so35632969uaa.9
-        for <linux-integrity@vger.kernel.org>; Wed, 07 Aug 2019 16:03:15 -0700 (PDT)
+        Wed, 7 Aug 2019 20:08:30 -0400
+Received: by mail-pl1-f202.google.com with SMTP id o6so54375542plk.23
+        for <linux-integrity@vger.kernel.org>; Wed, 07 Aug 2019 17:08:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=p3wiUZTjk/4U/E4pi4Y2n0i/U7m5LkR3wRuzR1Bth2Y=;
-        b=c+/0SXYFPNw46NRsWE6P91sFVLXR191WhfFGez4Z3L6n/kCMfju/P3OvTcDT7nRng3
-         0DuVP6bypyJOpVZ3IQ958+wa5TcdHu5wj3SXO68gguTLGCfdkE0N6fNDDCH/C0C/icTu
-         zMDbE1BFA0vpE0vWfBFgXLw8BErTXhA0SqRtCFfj57LGnKIkmn+s28lYbL3tKpB1m/bc
-         Fh4mZMRGRnoyPRvGpfK7PTLyHYUab/HWZS3QPrtEDHb03rSBrsm0OAiqd5hIbEvE5n3V
-         qIwGH13ycXp5Mu2bO8eNOtQ8CdnqT8j0Ypz3UyKmcb66GGUmdvsdjg1umBh/5bge05XR
-         O+uw==
+        bh=Ogy4z5xXdkGcZVx/gotBD44dFgIvUZxytASg1dmnrz4=;
+        b=IzoA99EvVVMGm9iXr5KRRBbeK85e/Ze+iJ9iWUhTulS6b8deHVOQEYewHyfCg3YWKb
+         3n9ZeQ8b9FstJivLxoyemYdyRzOeASPo7Lb9s6Lul+7rnh/0DUQLnMQerlb9jVwlmAuX
+         CWb1WrhDxYczCeXgOokUhcIjn90LF2+4iaeQpYsBF7vvqj61khqLVsfX5AIHVy59Bfku
+         Cqar1nW/4zmvbfZHpnDPUl8up88QpGSd2JhrKka8MnIZKA43SrVLBO8QNH40/SRdST3C
+         o9GdZ0A7xwSwZT23wwAu1n/eRvupnqUT4xYpFjmhWFyV9vQuQWlJuWMKfIIU76DxdSxp
+         fgmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p3wiUZTjk/4U/E4pi4Y2n0i/U7m5LkR3wRuzR1Bth2Y=;
-        b=U86SYIbxEEONDAojzyFxolOaELH/9X2Uc8eFaOCzO+7iSmdqrJUGTPm+EWqYMvKba+
-         OdIYPgiD+bHF3QbALUTPBnJXEDzk2dIKk6NsWTTsjBIqKv3s0mQAhtH5W54tTmrXP0MA
-         lxG9DtQrmlTi/iCSaOtThzhCUlZZG2Ps2cO6QPw4enKR2NCyJ+UTXa344QuESl+R9Q1X
-         FDCxwZREMH2dJ7ldAWD1Z6GBPv3/v12U4TKl9Rd5lA9bbV9r86xHkqlijVmYgNcjDlO8
-         uTdiWH0clD3h29J0sC30hNw1AzgP9DVoB6y2lQg/xQJdnoQN4fQJK/fsTc4ndJz95xSN
-         QxEg==
-X-Gm-Message-State: APjAAAV7AkT8jYPgGwWhrr3vGxbvIBdeJ9REz4ei3ZRhiq/ihjQ4RXc3
-        E0L4jnyXk1M1g4fcsqk27rF82vppBWetGViaivT2wQ==
-X-Google-Smtp-Source: APXvYqxCbzuMBWT5K3b2HgUi+Q5hTzul8JsyZgTT6hLJtDr97u7KeHt/RxokKus6SftJ2PcCZHaoSSck3FX5mjKavTU=
-X-Received: by 2002:a9f:3806:: with SMTP id p6mr4441649uad.21.1565218994663;
- Wed, 07 Aug 2019 16:03:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190807215903.24990-1-hdegoede@redhat.com>
-In-Reply-To: <20190807215903.24990-1-hdegoede@redhat.com>
-From:   Matthew Garrett <mjg59@google.com>
-Date:   Wed, 7 Aug 2019 16:03:03 -0700
-Message-ID: <CACdnJutiu0kUreyECpNok=D1hPqCW-JDw1aEzMU9cMuTSiMTxw@mail.gmail.com>
-Subject: Re: [PATCH 5.3 regression fix] efi-stub: Fix get_efi_config_table on
- mixed-mode setups
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=Ogy4z5xXdkGcZVx/gotBD44dFgIvUZxytASg1dmnrz4=;
+        b=NkgIuqXX9Xw55F7YyEBrdA86A5dSmQrTggPAnwBZQ6VJrzKv/JszgCzZ1Xa9u6sX9j
+         it3bymaorBhHJSCjbOJ2d+eDAkmJM+3gw6FVlRYLfaaMtcfG/NpFSOj5HtFMoiVIPssp
+         i9vvDXoNIjhPZakdES44IBz55V6Mel97MBNy+udpZJJtAPcvxbWYEi5f7TZxZOdQ3JzR
+         wwHy2PAz0AgP9t7Y3RRskGwPDMB9f9Mp1M6meJKSwiIs2aJoxg+IX+vjLGFxBBFNkNgi
+         /OCl7hfRONfZuJEBaW86N4MabMfIsU17CBhck+nI2CT4jrMeByPgcxi2YWlB3LpPtyMp
+         S1yg==
+X-Gm-Message-State: APjAAAUoB5pa1EbzdyS2Reg1lIQkF4PNfpbof97AFjBgdpX6ZmwUIiWL
+        M9/8u+cLpkhGYlbKtcUEqG/O53DGcmgnzrnC2F7AnQ==
+X-Google-Smtp-Source: APXvYqyYcl1lHJVi5QafLIqnQ/T8ARwsfnJI8TV5cVWwIBkfTH6TsaU92Hxf/kaVz/MLf5f6M/dtpML1JjzLYbz1X/52Rw==
+X-Received: by 2002:a63:4522:: with SMTP id s34mr9957055pga.362.1565222909034;
+ Wed, 07 Aug 2019 17:08:29 -0700 (PDT)
+Date:   Wed,  7 Aug 2019 17:07:17 -0700
+In-Reply-To: <20190808000721.124691-1-matthewgarrett@google.com>
+Message-Id: <20190808000721.124691-26-matthewgarrett@google.com>
+Mime-Version: 1.0
+References: <20190808000721.124691-1-matthewgarrett@google.com>
+X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
+Subject: [PATCH V38 25/29] kexec: Allow kexec_file() with appropriate IMA
+ policy when locked down
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     jmorris@namei.org
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 7, 2019 at 2:59 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Fix get_efi_config_table using the wrong structs when booting a
-> 64 bit kernel on 32 bit firmware.
->
-> Cc: Matthew Garrett <mjg59@google.com>
-> Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-> Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> Fixes: 82d736ac56d7 ("Abstract out support for locating an EFI config table")
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Systems in lockdown mode should block the kexec of untrusted kernels.
+For x86 and ARM we can ensure that a kernel is trustworthy by validating
+a PE signature, but this isn't possible on other architectures. On those
+platforms we can use IMA digital signatures instead. Add a function to
+determine whether IMA has or will verify signatures for a given event type,
+and if so permit kexec_file() even if the kernel is otherwise locked down.
+This is restricted to cases where CONFIG_INTEGRITY_TRUSTED_KEYRING is set
+in order to prevent an attacker from loading additional keys at runtime.
 
-Acked-By: Matthew Garrett <mjg59@google.com>
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: linux-integrity@vger.kernel.org
+---
+ include/linux/ima.h                 |  9 ++++++
+ kernel/kexec_file.c                 | 12 +++++--
+ security/integrity/ima/ima.h        |  2 ++
+ security/integrity/ima/ima_main.c   |  2 +-
+ security/integrity/ima/ima_policy.c | 50 +++++++++++++++++++++++++++++
+ 5 files changed, 72 insertions(+), 3 deletions(-)
 
-Good catch. I think fixing this is preferable to reverting - the
-duplicate events are visible to userland, so there's a risk that apps
-will end up depending on them if there's a release that behaves that
-way. Presumably mixed mode isn't a thing on ARM?
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index a20ad398d260..1c37f17f7203 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -131,4 +131,13 @@ static inline int ima_inode_removexattr(struct dentry *dentry,
+ 	return 0;
+ }
+ #endif /* CONFIG_IMA_APPRAISE */
++
++#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
++extern bool ima_appraise_signature(enum kernel_read_file_id func);
++#else
++static inline bool ima_appraise_signature(enum kernel_read_file_id func)
++{
++	return false;
++}
++#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
+ #endif /* _LINUX_IMA_H */
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index dd06f1070d66..13c9960a5860 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -228,9 +228,17 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ 			goto out;
+ 		}
+ 
+-		ret = security_locked_down(LOCKDOWN_KEXEC);
+-		if (ret)
++		ret = 0;
++
++		/* If IMA is guaranteed to appraise a signature on the kexec
++		 * image, permit it even if the kernel is otherwise locked
++		 * down.
++		 */
++		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
++		    security_locked_down(LOCKDOWN_KEXEC)) {
++			ret = -EPERM;
+ 			goto out;
++		}
+ 
+ 		break;
+ 
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 011b91c79351..64dcb11cf444 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -113,6 +113,8 @@ struct ima_kexec_hdr {
+ 	u64 count;
+ };
+ 
++extern const int read_idmap[];
++
+ #ifdef CONFIG_HAVE_IMA_KEXEC
+ void ima_load_kexec_buffer(void);
+ #else
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 584019728660..b9f57503af2c 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -502,7 +502,7 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
+ 	return 0;
+ }
+ 
+-static const int read_idmap[READING_MAX_ID] = {
++const int read_idmap[READING_MAX_ID] = {
+ 	[READING_FIRMWARE] = FIRMWARE_CHECK,
+ 	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
+ 	[READING_MODULE] = MODULE_CHECK,
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 6df7f641ff66..827f1e33fe86 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1456,3 +1456,53 @@ int ima_policy_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ #endif	/* CONFIG_IMA_READ_POLICY */
++
++#if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
++/*
++ * ima_appraise_signature: whether IMA will appraise a given function using
++ * an IMA digital signature. This is restricted to cases where the kernel
++ * has a set of built-in trusted keys in order to avoid an attacker simply
++ * loading additional keys.
++ */
++bool ima_appraise_signature(enum kernel_read_file_id id)
++{
++	struct ima_rule_entry *entry;
++	bool found = false;
++	enum ima_hooks func;
++
++	if (id >= READING_MAX_ID)
++		return false;
++
++	func = read_idmap[id] ?: FILE_CHECK;
++
++	rcu_read_lock();
++	list_for_each_entry_rcu(entry, ima_rules, list) {
++		if (entry->action != APPRAISE)
++			continue;
++
++		/*
++		 * A generic entry will match, but otherwise require that it
++		 * match the func we're looking for
++		 */
++		if (entry->func && entry->func != func)
++			continue;
++
++		/*
++		 * We require this to be a digital signature, not a raw IMA
++		 * hash.
++		 */
++		if (entry->flags & IMA_DIGSIG_REQUIRED)
++			found = true;
++
++		/*
++		 * We've found a rule that matches, so break now even if it
++		 * didn't require a digital signature - a later rule that does
++		 * won't override it, so would be a false positive.
++		 */
++		break;
++	}
++
++	rcu_read_unlock();
++	return found;
++}
++#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
+-- 
+2.22.0.770.g0f2c4a37fd-goog
+
