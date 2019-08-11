@@ -2,49 +2,49 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7146F892F1
-	for <lists+linux-integrity@lfdr.de>; Sun, 11 Aug 2019 19:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E7889332
+	for <lists+linux-integrity@lfdr.de>; Sun, 11 Aug 2019 20:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbfHKRp1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 11 Aug 2019 13:45:27 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:38536 "EHLO
+        id S1726055AbfHKSwf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 11 Aug 2019 14:52:35 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:37915 "EHLO
         mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725900AbfHKRp1 (ORCPT
+        with ESMTP id S1726011AbfHKSwf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 11 Aug 2019 13:45:27 -0400
-Received: by mail-ed1-f66.google.com with SMTP id r12so66911857edo.5;
-        Sun, 11 Aug 2019 10:45:25 -0700 (PDT)
+        Sun, 11 Aug 2019 14:52:35 -0400
+Received: by mail-ed1-f66.google.com with SMTP id r12so67015688edo.5;
+        Sun, 11 Aug 2019 11:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OkeSRQnN4oJ7aQxCKbRmPDsqrGLxx5oJbZpuRmRzFxE=;
-        b=hDCw0RzgUcdGshA30IFBVJ0qwvIFt+P4f/s7LxZr/lxRRlmHje6fZiw1r8nLDNYBZf
-         BLSMQioVCu/kIJMUZoSo8FZUBKlEX3NaQZtRaNpBB6RHzF7ddYeCQYweY/U/iMLJ4a6s
-         V6NH1HEa9HldSxE0scrTfGYtkbpsbO0XBc0QprSibRitbzOmDAU5xBUOX8u4SJt82LCH
-         tJj+Ct9Pwlqkc3W7Y+tMH2t9ivUiTnHaRPrUPTyR9XW/SpLp8bcFrK869tDOexBT+UwM
-         9yISCbiIvgjy9zz3TRATd+SbcvcLDvPQRAmkxrxWorvWWCtxYZkdJlOQyzuLXMUkW89/
-         nlNQ==
+        bh=KYK7YTFui77HICQxsg8JHaSNjp6UjHG92th/aL1dPFo=;
+        b=Ew3YcMsfAhzbTARoe38VKNNfgl9MbbX1naHpAK8cVSms97PmH7VeyUYUg566PaoG1c
+         GkEyXuX/khNpsO4f9H09tktQE1D4FazupzNSyC5+4Ifh+uQIhqtNKnWmQ9EacbLZRPYJ
+         qoOm0yPED2VK1gZXN80A7aLm1KK6Ao4B3HULdal0loBxjRYAKVGxlNt8FvdFJeMG9KxP
+         7C7FA4gYnpIwpzDEPQUGu4eh5m3NOxUu3Eq1KN6uqcbBSDwff2/LO00YsKs4nZCLZunp
+         z4UJYxtnbkWGH6mxOTTjvsIjacFWHkOMMGGn7vNqu4zIDbjCPZp0lWKP1ScDA6N2gGyG
+         Ddag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OkeSRQnN4oJ7aQxCKbRmPDsqrGLxx5oJbZpuRmRzFxE=;
-        b=FMgeNIOFOHzXD8cRYbZ7Swaiwb5vD3l4x0ANNQ+T9AWrTsXsu3qFT3FxtHvLf6U+PJ
-         DrR7iSt13JDq3tp5ZdtBKjWue94IBFxG9ccrt+XfCY6cjIUOKSD4FSfpLkqdvGLHXI/B
-         CL2SBsmBg1/eBR4saG+Np89T6vdXLGJzCAaIh2gQc+CFRMmsSL89JA0sdTGzYgVACtNu
-         xqMMWSX8VFFVO8LS3O0/d431VTStPuy+SY+JUr89oeiyeIQncvXR5bqGLGpbO1pg+w84
-         /EJtz53oZGgCJZiJOEa9iAnBiCwwDXU+R9gerOTiCc+mmsBgPdLsbrLzup/8By2jSx+W
-         PdCQ==
-X-Gm-Message-State: APjAAAW9R8J7+6GeSnnCDjDieZuBl/E8CWi24gCzXR+fXAJaGuAwEGMy
-        CcJlxC8lLGQRsSk7iPyfTkw=
-X-Google-Smtp-Source: APXvYqxnUEW3Zmsu5QV75FAahLBrsP0cq3QNr0G1kPvfaowEXw/nVeMOCkecD+DLBpUMkhTfFsoNvw==
-X-Received: by 2002:a50:8858:: with SMTP id c24mr136498edc.253.1565545524996;
-        Sun, 11 Aug 2019 10:45:24 -0700 (PDT)
+        bh=KYK7YTFui77HICQxsg8JHaSNjp6UjHG92th/aL1dPFo=;
+        b=DPgl4bhSubguIArDak5KdNY1u7AweDwrTtCPKEP10hnkExXLqZOHOTU6UInbMadb1L
+         fa4hgMsJ4DGV97ZO+iUxTmpZ2v64Q558tCu/sNJ4C3F7Wp9nAIvdBtYGCOo3EIjmEwQJ
+         Y73jLutHbA0laSxaRL9a8HmytlDd2ylzxs7nckHWWyBqNDworEORkLXpA9/gTvwXOl+l
+         7mIYdhnAbltVT/mNxBrmYiw1lDJeyoWNnCqzUlZuW/cudd0tWGIFCSoAQBGnVXijYXVX
+         jeBgHf5fdg+bOa8HSP0toE7XQb9hF7Hhx59vIoGp205hOO7J6JK7zQzQDgiPEF0eOrYI
+         5J3w==
+X-Gm-Message-State: APjAAAVzz3oXws3J2px2cRluL+n5TcfQRkk12r9rj+u/jlUEc9nFLDQs
+        QCr44NLv135AX+7Mybmtc0Ad0OMvn5ywvg==
+X-Google-Smtp-Source: APXvYqwO2XdD8acBLt7QbE/p8x+/yikd0pZnx3MXByXW62i5O0edVdsiVnlpGIu6mP59CkFfbvajJg==
+X-Received: by 2002:a50:a485:: with SMTP id w5mr33287954edb.277.1565549552566;
+        Sun, 11 Aug 2019 11:52:32 -0700 (PDT)
 Received: from localhost.localdomain ([188.187.105.131])
-        by smtp.gmail.com with ESMTPSA id y4sm245868ejj.8.2019.08.11.10.45.17
+        by smtp.gmail.com with ESMTPSA id u8sm22968136edo.78.2019.08.11.11.52.30
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 11 Aug 2019 10:45:24 -0700 (PDT)
+        Sun, 11 Aug 2019 11:52:31 -0700 (PDT)
 From:   ivan.lazeev@gmail.com
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
@@ -52,9 +52,9 @@ Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         Vanya Lazeev <ivan.lazeev@gmail.com>
-Subject: [PATCH] Fix fTPM on AMD Zen+ CPUs
-Date:   Sun, 11 Aug 2019 20:45:05 +0300
-Message-Id: <20190811174505.27019-1-ivan.lazeev@gmail.com>
+Subject: [PATCH v2] Fix fTPM on AMD Zen+ CPUs
+Date:   Sun, 11 Aug 2019 21:52:18 +0300
+Message-Id: <20190811185218.16893-1-ivan.lazeev@gmail.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -76,13 +76,16 @@ However, I don't have any other hardware to test the changes on and no
 expertise to be sure that other TPMs won't break as a result.
 Hopefully, the patch will be useful.
 
+Changes from v1:
+- use list_for_each_safe
+
 Signed-off-by: Vanya Lazeev <ivan.lazeev@gmail.com>
 ---
  drivers/char/tpm/tpm_crb.c | 146 ++++++++++++++++++++++++++++---------
  1 file changed, 110 insertions(+), 36 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index e59f1f91d..73e4b9105 100644
+index e59f1f91d..b0e797464 100644
 --- a/drivers/char/tpm/tpm_crb.c
 +++ b/drivers/char/tpm/tpm_crb.c
 @@ -91,7 +91,6 @@ enum crb_status {
@@ -113,9 +116,9 @@ index e59f1f91d..73e4b9105 100644
  
 +static void crb_free_resource_list(struct list_head *resources)
 +{
-+	struct list_head *position;
++	struct list_head *position, *tmp;
 +
-+	list_for_each(position, resources)
++	list_for_each_safe(position, tmp, resources)
 +		kfree(list_entry(position, struct crb_resource, link));
 +}
 +
