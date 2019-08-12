@@ -2,207 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E7289F39
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Aug 2019 15:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A508A06E
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Aug 2019 16:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728806AbfHLNKG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 12 Aug 2019 09:10:06 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:44927 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728786AbfHLNKG (ORCPT
+        id S1727218AbfHLOLw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Aug 2019 10:11:52 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41425 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726610AbfHLOLv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 12 Aug 2019 09:10:06 -0400
-Received: by mail-qk1-f196.google.com with SMTP id d79so76752303qke.11
-        for <linux-integrity@vger.kernel.org>; Mon, 12 Aug 2019 06:10:05 -0700 (PDT)
+        Mon, 12 Aug 2019 10:11:51 -0400
+Received: by mail-pg1-f193.google.com with SMTP id x15so39204777pgg.8
+        for <linux-integrity@vger.kernel.org>; Mon, 12 Aug 2019 07:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=likbUpy+hqGKJ+aVkUc0jeuI5OoHP9NpOwWastRmABc=;
-        b=kMK9LpmiWRr60D1T45SSevOv2vlXHiDiuiZf4ulsSujUTJizy0pUz3kKtJ7qNNGElj
-         mFCM6EpcfkE6SAynb+2ABW1IUSVqv2ssditwGlUOMmvdLgN1O01qru86vwQGjt+PtEcw
-         yCn6ptRF+oQZfo9bCTN+M7VWA/LinJSYRnBoCCzIhLilDCp9A+WNZUvoYIQch03LkiyW
-         UCAF0avgTHRqAP6fpSSdLw5TOSHhg0FRWpCrCjIBz6vBgjj5BFqOsozA1HSfhsf37z88
-         GlNWxbskvtCvJaIoLD5/kiOmhDqKuvUYuNv8F3UdSBXmES59wTP1s/FuIEgyxkN33U0M
-         QDgQ==
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:from:cc:to:user-agent:date;
+        bh=SGmz9dqjmCs8LvKp8zAPaRvxUXfTfgA9DZoThPq2Zfk=;
+        b=R3ughcKyKsB9ynwRlDUsBLeJxI0wTbh9U80+BlPTlWvHY+mqcPo242YZTHm+JtJVAc
+         03HDm073tE3NUowLGnh1grX2Jlf2obWoidM+GpcRmXCtxRhD3ML6+Ho3e5CCnYdQtSQF
+         YYKNKJVM6zuLv9oARY8wdlHcGrlU5jzsaC5KY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=likbUpy+hqGKJ+aVkUc0jeuI5OoHP9NpOwWastRmABc=;
-        b=qIZ4/yEnyn08ABGLW7mgXmX3eMjIpZ+VHiYklc7px0w/UyI8jU4E3DXBDyVU26En0T
-         E5JSsmPXfRFLxOvRaXmxku2hcV/p7aqvWQCtTXMk6C2dZJqfveGvYlHFGzkCA3rzWwd7
-         +yHpD5XdC5lxnUPNf3mIaNNLglGbTbRnbKnW7qWJUB2UBBHV5mqSTcF0qg0hrLTVzkd+
-         oOC5ibk3R3Xp+Sr8I2V26vadUqg/FUDO1Iis9wGS6XkwaGXX5BH5+hns3qZa/fEOmawl
-         O6bTCYwfF5s0Iy9ATxp3lUzZoLbciPwDL/aUR1w30DwxNYKrvotQvcy71olXA1b5g5ZG
-         aKxQ==
-X-Gm-Message-State: APjAAAUlsuKHOzBTfiDB9wJwV3JzT7oXTssTvOjWS5R2GRjIqh/8N8hY
-        YrRfgcywt9XK2AO9zBmHelR0rg==
-X-Google-Smtp-Source: APXvYqzGPtJIkSMQQNtzwkSQiuzOThChzk/aOVnFzsP0ZJUn84TcNwpdr4gmvQMUHX5Di1/LtzK0ZA==
-X-Received: by 2002:a37:b381:: with SMTP id c123mr30501028qkf.349.1565615404632;
-        Mon, 12 Aug 2019 06:10:04 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-55-100.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.55.100])
-        by smtp.gmail.com with ESMTPSA id h26sm60899009qta.58.2019.08.12.06.10.04
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 12 Aug 2019 06:10:04 -0700 (PDT)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1hxA5L-0007Yr-Q4; Mon, 12 Aug 2019 10:10:03 -0300
-Date:   Mon, 12 Aug 2019 10:10:03 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     ivan.lazeev@gmail.com
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Fix fTPM on AMD Zen+ CPUs
-Message-ID: <20190812131003.GF24457@ziepe.ca>
-References: <20190811185218.16893-1-ivan.lazeev@gmail.com>
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
+         :user-agent:date;
+        bh=SGmz9dqjmCs8LvKp8zAPaRvxUXfTfgA9DZoThPq2Zfk=;
+        b=i9ngiCr6kQh4YKs2J50VS7rM4o4rXP+9X4NoZrGBDFdctbsiqKj8ldBIytdso0DRk7
+         nLVyHrjPu+y/Ovz1586PVwtvoB7EJT9JNBNjKn6fc+iwUOmNQYSE/Y/YpLRDSvtlsz/G
+         b4E3RgPHfoRvpuaFydgRDyo7MelS9KtwHYXn7zJs9mEjdA1nc4ORokzJ7K9psXKu6yME
+         ZdzCLqIRzPs/u6zv3cVlbNNxzOEXXan2fyFQ6hAYC16rKuiBLJW8pRIOwPcXTDlLOwbt
+         Vpbom2Oz2r3G5IuS+aOQ/AXPe4lMaEYhB+/ILBhjJN+Hx9IMistbtwZfXxEvPelIzHxQ
+         EYRA==
+X-Gm-Message-State: APjAAAV6yo0QO/g+rHyOiwrm+o47WlOV/kr9S7ODjijMLsjazteYk1is
+        zoWjE6cv7KklJzolrFxfBzmc8Q==
+X-Google-Smtp-Source: APXvYqzTkLEQ5LoC3N/FY3dMkzdpLY6L3s+itMqvlWa1al4ZT/JMownU9ERVCLrnb8PqFtNEfE3iTg==
+X-Received: by 2002:aa7:8085:: with SMTP id v5mr18669427pff.165.1565619110657;
+        Mon, 12 Aug 2019 07:11:50 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id o9sm70839997pgv.19.2019.08.12.07.11.49
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 12 Aug 2019 07:11:50 -0700 (PDT)
+Message-ID: <5d5173a6.1c69fb81.3bbe4.6118@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190811185218.16893-1-ivan.lazeev@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <93400d11833bd42c4be0b846416ff1f469904784.camel@linux.intel.com>
+References: <20190806220750.86597-1-swboyd@chromium.org> <20190806220750.86597-2-swboyd@chromium.org> <93400d11833bd42c4be0b846416ff1f469904784.camel@linux.intel.com>
+Subject: Re: [PATCH v3 1/4] tpm: Add a flag to indicate TPM power is managed by firmware
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+User-Agent: alot/0.8.1
+Date:   Mon, 12 Aug 2019 07:11:48 -0700
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Aug 11, 2019 at 09:52:18PM +0300, ivan.lazeev@gmail.com wrote:
-> From: Vanya Lazeev <ivan.lazeev@gmail.com>
-> 
-> The patch is an attempt to make fTPM on AMD Zen CPUs work.
-> Bug link: https://bugzilla.kernel.org/show_bug.cgi?id=195657
-> 
-> The problem seems to be that tpm_crb driver doesn't expect tpm command
-> and response memory regions to belong to different ACPI resources.
-> 
-> Tested on Asrock ITX motherboard with Ryzen 2600X CPU.
-> However, I don't have any other hardware to test the changes on and no
-> expertise to be sure that other TPMs won't break as a result.
-> Hopefully, the patch will be useful.
-> 
-> Changes from v1:
-> - use list_for_each_safe
-> 
-> Signed-off-by: Vanya Lazeev <ivan.lazeev@gmail.com>
->  drivers/char/tpm/tpm_crb.c | 146 ++++++++++++++++++++++++++++---------
->  1 file changed, 110 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-> index e59f1f91d..b0e797464 100644
-> +++ b/drivers/char/tpm/tpm_crb.c
-> @@ -91,7 +91,6 @@ enum crb_status {
->  struct crb_priv {
->  	u32 sm;
->  	const char *hid;
-> -	void __iomem *iobase;
->  	struct crb_regs_head __iomem *regs_h;
->  	struct crb_regs_tail __iomem *regs_t;
->  	u8 __iomem *cmd;
-> @@ -108,6 +107,13 @@ struct tpm2_crb_smc {
->  	u32 smc_func_id;
->  };
->  
-> +struct crb_resource {
-> +	struct resource io_res;
-> +	void __iomem *iobase;
-> +
-> +	struct list_head link;
-> +};
-> +
->  static bool crb_wait_for_reg_32(u32 __iomem *reg, u32 mask, u32 value,
->  				unsigned long timeout)
->  {
-> @@ -432,23 +438,69 @@ static const struct tpm_class_ops tpm_crb = {
->  	.req_complete_val = CRB_DRV_STS_COMPLETE,
->  };
->  
-> +static void crb_free_resource_list(struct list_head *resources)
-> +{
-> +	struct list_head *position, *tmp;
-> +
-> +	list_for_each_safe(position, tmp, resources)
-> +		kfree(list_entry(position, struct crb_resource, link));
-> +}
-> +
-> +/**
-> + * Checks if resource @io_res contains range with the specified @start and @size
-> + * completely or, when @strict is false, at least it's beginning.
-> + * Non-strict match is needed to work around broken BIOSes that return
-> + * inconsistent values from ACPI regions vs registers.
-> + */
-> +static inline bool crb_resource_contains(const struct resource *io_res,
-> +					 u64 start, u32 size, bool strict)
-> +{
-> +	return start >= io_res->start &&
-> +		(start + size - 1 <= io_res->end ||
-> +		 (!strict && start <= io_res->end));
-> +}
-> +
-> +static struct crb_resource *crb_containing_resource(
-> +		const struct list_head *resources,
-> +		u64 start, u32 size, bool strict)
-> +{
-> +	struct list_head *pos;
-> +
-> +	list_for_each(pos, resources) {
-> +		struct crb_resource *cres;
-> +
-> +		cres = list_entry(pos, struct crb_resource, link);
-> +		if (crb_resource_contains(&cres->io_res, start, size, strict))
-> +			return cres;
-> +	}
-> +
-> +	return NULL;
-> +}
+Quoting Jarkko Sakkinen (2019-08-09 11:02:01)
+> On Tue, 2019-08-06 at 15:07 -0700, Stephen Boyd wrote:
+> > On some platforms, the TPM power is managed by firmware and therefore we
+> > don't need to stop the TPM on suspend when going to a light version of
+> > suspend such as S0ix ("freeze" suspend state). Add a chip flag to
+> > indicate this so that certain platforms can probe for the usage of this
+> > light suspend and avoid touching the TPM state across suspend/resume.
+>=20
+> The commit message should mention the new constant.
 
-This flow seems very strange, why isn't this part of crb_map_res?
+Alright.
 
->  static int crb_check_resource(struct acpi_resource *ares, void *data)
->  {
-> -	struct resource *io_res = data;
-> +	struct list_head *list = data;
-> +	struct crb_resource *cres;
->  	struct resource_win win;
->  	struct resource *res = &(win.res);
->  
->  	if (acpi_dev_resource_memory(ares, res) ||
->  	    acpi_dev_resource_address_space(ares, &win)) {
-> -		*io_res = *res;
-> -		io_res->name = NULL;
-> +		cres = kzalloc(sizeof(*cres), GFP_KERNEL);
-> +		if (!cres)
-> +			return -ENOMEM;
-> +
-> +		cres->io_res = *res;
-> +		cres->io_res.name = NULL;
-> +
-> +		list_add_tail(&cres->link, list);
+>=20
+> > +     if (chip->flags & TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED)
+> > +             if (!pm_suspend_via_firmware())
+>=20
+> Why both checks are needed?
+>=20
+> If both checks are needed, you could write it as a single
+> conditional statement:
+>=20
+> if (chip->flags & TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED &&
+>     !pm_suspend_via_firmware())
+>=20
 
-And why is this allocating memory inside the acpi table walker? It
-seems to me like the memory should be allocated once the mapping is
-made.
-
-Maybe all the mappings should be created from the ACPI ranges right
-away?
-
-> @@ -460,10 +512,16 @@ static void __iomem *crb_map_res(struct device *dev, struct crb_priv *priv,
->  	if (start != new_res.start)
->  		return (void __iomem *) ERR_PTR(-EINVAL);
->  
-> -	if (!resource_contains(io_res, &new_res))
-> +	if (!cres)
->  		return devm_ioremap_resource(dev, &new_res);
->  
-> -	return priv->iobase + (new_res.start - io_res->start);
-> +	if (!cres->iobase) {
-> +		cres->iobase = devm_ioremap_resource(dev, &cres->io_res);
-> +		if (IS_ERR(cres->iobase))
-> +			return cres->iobase;
-> +	}
-
-It sounds likethe real bug is that the crb_map_res only considers a
-single active mapping, while these AMD chips need more than one?
-
-Jason
+Ok. I'll combine them.
