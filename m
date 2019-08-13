@@ -2,104 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 115948B051
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Aug 2019 08:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D06D8B181
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Aug 2019 09:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbfHMG6E (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 13 Aug 2019 02:58:04 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:35620 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725981AbfHMG6E (ORCPT
+        id S1727451AbfHMHxw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 13 Aug 2019 03:53:52 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43056 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727777AbfHMHxq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 13 Aug 2019 02:58:04 -0400
-Received: by mail-ed1-f65.google.com with SMTP id w20so105943342edd.2;
-        Mon, 12 Aug 2019 23:58:03 -0700 (PDT)
+        Tue, 13 Aug 2019 03:53:46 -0400
+Received: by mail-pg1-f195.google.com with SMTP id r26so14881095pgl.10
+        for <linux-integrity@vger.kernel.org>; Tue, 13 Aug 2019 00:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=BkX27APDVJ4zeW7H5E4Qx7Yc0d0xGm41vKaV5VvGjbc=;
+        b=EUdHy4gMsfvnN4CUa0oecjGACMAqEVtxiUGdmUM3Ngncip9f6n/2Rw3ZJn3X3l9sZS
+         ny7AGcTCFJ27zwjOfnJYgheFkweH5FQbRnDxSUbatFM1XzLPKIrQ0NsauE3UI+Pn2wN4
+         UE/C03Zfv4d623FqJOP5vQnECBcvuG6mCHsddHNdxCQiCpjZsrsiXlkRAF4EwV8bKEuE
+         eDubrM7GZHn2mlNSjuQ8nRtqxC1F6z4Zpxp6mFZ46jTNGRrarGKsv3ypYdN2n9ojSJNd
+         Ysgt6PpD7gEePDOcIc4ocX6twitoDfuOom2ZT+6tneIx2mXRrQjm58Ql21kdt6VTnIo6
+         YyQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6clqX/GVRjqbh5VWBalBjmQ4fpsDd0SBiJaQ5yYYQNY=;
-        b=OXoYSAKbRE0i+wzKkGALiDLIQtX3BdCMtg7habSvTsAZXrtPt9ZOM3q4gp4LwpBuwF
-         vxnJVNHGenP3V99IM7Il7ZuotblSO0TjBhdb3zU7EXKsuSUmfTfveJ6DO/TRCv/3z+0F
-         K+4J+oqmVEfPxPcDjzcWdtL6bzfQMcDjtDW1INsUeNyEZxtlhTXw5qI2Spo2HQ6wEjvX
-         wVrEa1saoQzgAR/N6GUC9hadbT9oipyIwwPW7aDt/kjH7pnZuqZlmr5IURs9lIV8z6kj
-         6jSWf0+suTlrX47tfmJFHZKpO6UnJicLa4iQ1zekoKjPQzx+7zJ1fb7lFBZe4WVt7uzx
-         V49Q==
-X-Gm-Message-State: APjAAAXoeMrmK95FfyuU94FID2IpvDbO1fpqoSBhz1WFPKTZ51xx3DII
-        UMLA7vS1NjWXwy3Kf6u1zQP7J8VIL38=
-X-Google-Smtp-Source: APXvYqwY7oR4gKkJp2F88JWCL6jbjM5qJqzfAR7s5WDUijWol9n1ByPQwAP/IzTmTuqAIYZD0QcJRQ==
-X-Received: by 2002:a50:f702:: with SMTP id g2mr5664150edn.261.1565679482759;
-        Mon, 12 Aug 2019 23:58:02 -0700 (PDT)
-Received: from [10.68.32.192] (broadband-188-32-48-208.ip.moscow.rt.ru. [188.32.48.208])
-        by smtp.gmail.com with ESMTPSA id v6sm17822998ejx.28.2019.08.12.23.58.00
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Aug 2019 23:58:02 -0700 (PDT)
-Subject: Re: Bad file pattern in MAINTAINERS section 'KEYS-TRUSTED'
-To:     linux-kernel@vger.kernel.org
-Cc:     Joe Perches <joe@perches.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        Denis Kenzior <denkenz@gmail.com>, efremov@linux.com
-References: <7cd8d12f59bcacd18a78f599b46dac555f7f16c0.camel@perches.com>
- <20190325212705.26837-1-joe@perches.com>
-From:   Denis Efremov <efremov@linux.com>
-Message-ID: <7152d1c2-14bc-87ae-618b-830a1fa008b0@linux.com>
-Date:   Tue, 13 Aug 2019 09:57:59 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190325212705.26837-1-joe@perches.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=BkX27APDVJ4zeW7H5E4Qx7Yc0d0xGm41vKaV5VvGjbc=;
+        b=iS5vBs6UMBVDXfdKM5eBx7FqRCtdziQjvbpWavzh0GphsgSIIM+T24GfHQ4ICnTPd7
+         e5HBDxp7lIxx+5MrWCU89nZg0jMBgXqnG6g8EE8e/FjDvoOOEL4vf2ujcmttoexpw8Y9
+         dDCc+/PEsUlaik+Zq/rHZ1eC+NU7QMEEhivI7jtUR+O0oheCTp2pEqEykkXsjyXaMmJ7
+         UI8lmncUTXjZz3B5pHbn7l5ZadumDXYm7QAhpxyrOrYORZL2/++bLSC6OZZVNvrQRzJT
+         6IEZ/BvcdSfpIj9mG9chcUunIwC3sw246YudKYSXoslnyy8RC1bgLnTGMc4ge8J6EpF1
+         T7DQ==
+X-Gm-Message-State: APjAAAUbWF62S0W1s/xi+534g/I7LtOJ/9T7zXVOR1rqZbs4awgBCfVM
+        aCLOv+N3bHrHe31vHc9VkKVYpw==
+X-Google-Smtp-Source: APXvYqxRe3kDEnRmKsgK98qrW7tpR2Jo5TKYlmK35RYqch6gNYKDeSUOOqqDMefeWOISDFFAHhX7kQ==
+X-Received: by 2002:a17:90b:8c1:: with SMTP id ds1mr1040437pjb.114.1565682826009;
+        Tue, 13 Aug 2019 00:53:46 -0700 (PDT)
+Received: from localhost.localdomain ([45.114.72.100])
+        by smtp.gmail.com with ESMTPSA id l25sm131462563pff.143.2019.08.13.00.53.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 13 Aug 2019 00:53:45 -0700 (PDT)
+From:   Sumit Garg <sumit.garg@linaro.org>
+To:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
+Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, peterhuewe@gmx.de, jgg@ziepe.ca,
+        jejb@linux.ibm.com, jarkko.sakkinen@linux.intel.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, casey@schaufler-ca.com,
+        ard.biesheuvel@linaro.org, daniel.thompson@linaro.org,
+        linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org,
+        Sumit Garg <sumit.garg@linaro.org>
+Subject: [RFC/RFT v4 0/5] Add generic trusted keys framework/subsystem
+Date:   Tue, 13 Aug 2019 13:22:59 +0530
+Message-Id: <1565682784-10234-1-git-send-email-sumit.garg@linaro.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi All,
+This patch-set is an outcome of discussion here [1]. It has evolved very
+much since v1 to create, consolidate and generalize trusted keys
+subsystem.
 
-Initially, I've prepared a patch and only after found this discussion. So, please,
-look at this patch no more than just a simple reminder that get_maintainers.pl
-still emits this warning.
+This framework has been tested with trusted keys support provided via TEE
+but I wasn't able to test it with a TPM device as I don't possess one. It
+would be really helpful if others could test this patch-set using a TPM
+device.
 
-Thanks,
-Denis
+[1] https://www.mail-archive.com/linux-doc@vger.kernel.org/msg30591.html
 
------------------------- >8 ------------------------
-Subject: [PATCH] MAINTAINERS: keys: Update path to trusted.h
+Changes in v4:
+1. Separate patch for export of tpm_buf code to include/linux/tpm.h
+2. Change TPM1.x trusted keys code to use common tpm_buf
+3. Keep module name as trusted.ko only
 
-Update MAINTAINERS record to reflect that trusted.h
-was moved to a different directory.
+Changes in v3:
 
-Cc: Denis Kenzior <denkenz@gmail.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org
-Fixes: 22447981fc05 ("KEYS: Move trusted.h to include/keys [ver #2]")
-Signed-off-by: Denis Efremov <efremov@linux.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Move TPM2 trusted keys code to trusted keys subsystem.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7d213e192626..eeeb4097d5bd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8920,7 +8920,7 @@ S:	Supported
- F:	Documentation/security/keys/trusted-encrypted.rst
- F:	include/keys/trusted-type.h
- F:	security/keys/trusted.c
--F:	security/keys/trusted.h
-+F:	include/keys/trusted.h
- 
- KEYS/KEYRINGS:
- M:	David Howells <dhowells@redhat.com>
+Changes in v2:
+
+Split trusted keys abstraction patch for ease of review.
+
+Sumit Garg (5):
+  tpm: move tpm_buf code to include/linux/
+  KEYS: trusted: use common tpm_buf for TPM1.x code
+  KEYS: trusted: create trusted keys subsystem
+  KEYS: trusted: move tpm2 trusted keys code
+  KEYS: trusted: Add generic trusted keys framework
+
+ crypto/asymmetric_keys/asym_tpm.c                  |   2 +-
+ drivers/char/tpm/tpm-chip.c                        |   1 +
+ drivers/char/tpm/tpm-interface.c                   |  56 ---
+ drivers/char/tpm/tpm.h                             | 230 -----------
+ drivers/char/tpm/tpm2-cmd.c                        | 308 +--------------
+ include/keys/trusted-type.h                        |  45 +++
+ include/keys/{trusted.h => trusted_tpm.h}          |  61 +--
+ include/linux/tpm.h                                | 270 ++++++++++++-
+ security/keys/Makefile                             |   2 +-
+ security/keys/trusted-keys/Makefile                |   9 +
+ security/keys/trusted-keys/trusted-common.c        | 343 ++++++++++++++++
+ .../keys/{trusted.c => trusted-keys/trusted-tpm.c} | 437 +++++----------------
+ security/keys/trusted-keys/trusted-tpm2.c          | 378 ++++++++++++++++++
+ 13 files changed, 1141 insertions(+), 1001 deletions(-)
+ rename include/keys/{trusted.h => trusted_tpm.h} (64%)
+ create mode 100644 security/keys/trusted-keys/Makefile
+ create mode 100644 security/keys/trusted-keys/trusted-common.c
+ rename security/keys/{trusted.c => trusted-keys/trusted-tpm.c} (72%)
+ create mode 100644 security/keys/trusted-keys/trusted-tpm2.c
+
 -- 
-2.21.0
-
+2.7.4
 
