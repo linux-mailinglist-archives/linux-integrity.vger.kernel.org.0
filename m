@@ -2,38 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B7C8F620
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Aug 2019 23:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC408F64C
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Aug 2019 23:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730578AbfHOVCH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Aug 2019 17:02:07 -0400
-Received: from mga17.intel.com ([192.55.52.151]:49995 "EHLO mga17.intel.com"
+        id S1730336AbfHOVRF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Aug 2019 17:17:05 -0400
+Received: from mga09.intel.com ([134.134.136.24]:50855 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726008AbfHOVCG (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Aug 2019 17:02:06 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1730312AbfHOVRF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 15 Aug 2019 17:17:05 -0400
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Aug 2019 14:02:06 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Aug 2019 14:17:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,389,1559545200"; 
-   d="scan'208";a="176987523"
+   d="scan'208";a="194846939"
 Received: from schuberw-mobl.ger.corp.intel.com (HELO localhost) ([10.252.38.145])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Aug 2019 14:02:02 -0700
-Date:   Fri, 16 Aug 2019 00:02:01 +0300
+  by fmsmga001.fm.intel.com with ESMTP; 15 Aug 2019 14:17:02 -0700
+Date:   Fri, 16 Aug 2019 00:17:01 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     peterhuewe@gmx.de, mark.rutland@arm.com, robh+dt@kernel.org,
-        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] tpm/tpm_ftpm_tee: trivial checkpatch fixes
-Message-ID: <20190815210201.yhc7dosvnafcayfu@linux.intel.com>
-References: <20190813130559.16936-1-sashal@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        =?utf-8?Q?Marc-Andr=C3=A9?= Lureau <marcandre.lureau@redhat.com>
+Subject: Re: Does probing of TIS with interrupts work
+Message-ID: <20190815211701.7nhq3uelpddho7i7@linux.intel.com>
+References: <f721bf34-1cfc-de2b-91e4-24b17150645b@linux.ibm.com>
+ <20190813122838.GD29508@ziepe.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190813130559.16936-1-sashal@kernel.org>
+In-Reply-To: <20190813122838.GD29508@ziepe.ca>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
@@ -41,16 +41,19 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 09:05:59AM -0400, Sasha Levin wrote:
-> Fixes a few checkpatch warnings (and ignores some), mostly around
-> spaces/tabs and documentation.
+On Tue, Aug 13, 2019 at 09:28:38AM -0300, Jason Gunthorpe wrote:
+> On Mon, Aug 12, 2019 at 11:39:27PM -0400, Stefan Berger wrote:
+> > I have tried to get probing of TIS with interrupts to work on a module and I
+> > am wondering whether it works for anyone. I noticed it tries to probe while
+> > locality 0 is released and the TPM_CHIP_FLAG_IRQ is never set, so it never
+> > gets to certain places in the code. To get it to work I had to add a patch
+> > like this one here to tpm_tis_core_init:
 > 
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> It worked a long time ago, probably bitrotted
+> 
+> We should probably drop it entirely if it doesn't even work today and
+> nobody has complained.
 
-Thank you!
-
-I'll squash these to the existing patches.
-
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+I'd prefer to fix this.
 
 /Jarkko
