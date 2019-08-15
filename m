@@ -2,57 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9C58F6B3
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Aug 2019 23:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183408F6CE
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2019 00:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731710AbfHOV5n (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Aug 2019 17:57:43 -0400
-Received: from mga18.intel.com ([134.134.136.126]:51213 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730803AbfHOV5n (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Aug 2019 17:57:43 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Aug 2019 14:57:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,389,1559545200"; 
-   d="scan'208";a="171234679"
-Received: from schuberw-mobl.ger.corp.intel.com (HELO localhost) ([10.252.38.145])
-  by orsmga008.jf.intel.com with ESMTP; 15 Aug 2019 14:57:14 -0700
-Date:   Fri, 16 Aug 2019 00:57:12 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Denis Efremov <efremov@linux.com>
-Cc:     linux-kernel@vger.kernel.org, Joe Perches <joe@perches.com>,
+        id S1730643AbfHOWMH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Aug 2019 18:12:07 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:34998 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726357AbfHOWMH (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 15 Aug 2019 18:12:07 -0400
+Received: by mail-wr1-f68.google.com with SMTP id k2so3567130wrq.2;
+        Thu, 15 Aug 2019 15:12:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2VSiIUxKNFkiB9+c2R7u/EHBxMEOJ5mWiAVsv2Kr2Ss=;
+        b=rTGOAv3m5luaq1ehyRbEBi86OwaDKnQJHxNxdriJPiKL8f+I/Xpy3GV8kwLthHOs7d
+         BZgsnEkETL4p4sJMg2JziTz9+d8Z9Yku2PzB5233Gs63D192b7JFEVH/lIrUIk98HTRg
+         fmDywUwWIDm035RYzUAESEyyeO+SnDiUWR2XPeP990bYnUvlqGzY7qtN0oTzeLDWXstP
+         Gn8bdvX/bCxFlP5NNT0gtLQimum0Se7r2xp2paWVcWw8YzjtrSsaijE1ZWpRO+gFii/a
+         TppOIF3UGEZphCq1HU9y7UFImyf7LNbUhNgmYvJz6igD78B6zhY3UI6rU/vm24GGhbYa
+         nf6A==
+X-Gm-Message-State: APjAAAUT+Bv7yGfJe03E35bFLtJTRu4WYH51PN1z+7KTJ3RddioCvsNJ
+        dT/xzRgaxGN6E/ya8nd/BlTONcTW
+X-Google-Smtp-Source: APXvYqzGC77fYDK9g8cZlzwrtM9BXuO3SFsvZ/94xoIb+aLGXYv3+AJ8L4V7boO03nAosNmMzRnbrw==
+X-Received: by 2002:adf:fe08:: with SMTP id n8mr7111830wrr.60.1565907125380;
+        Thu, 15 Aug 2019 15:12:05 -0700 (PDT)
+Received: from localhost.localdomain (broadband-188-32-48-208.ip.moscow.rt.ru. [188.32.48.208])
+        by smtp.googlemail.com with ESMTPSA id h97sm10652662wrh.74.2019.08.15.15.12.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Aug 2019 15:12:04 -0700 (PDT)
+From:   Denis Efremov <efremov@linux.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Denis Efremov <efremov@linux.com>, joe@perches.com,
+        linux-kernel@vger.kernel.org, Denis Kenzior <denkenz@gmail.com>,
         James Bottomley <jejb@linux.ibm.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        Denis Kenzior <denkenz@gmail.com>
-Subject: Re: Bad file pattern in MAINTAINERS section 'KEYS-TRUSTED'
-Message-ID: <20190815215712.tho3fdfk43rs45ej@linux.intel.com>
-References: <7cd8d12f59bcacd18a78f599b46dac555f7f16c0.camel@perches.com>
- <20190325212705.26837-1-joe@perches.com>
- <7152d1c2-14bc-87ae-618b-830a1fa008b0@linux.com>
+        linux-integrity@vger.kernel.org
+Subject: [RESEND PATCH] MAINTAINERS: keys: Update path to trusted.h
+Date:   Fri, 16 Aug 2019 01:12:00 +0300
+Message-Id: <20190815221200.3465-1-efremov@linux.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190815215712.tho3fdfk43rs45ej@linux.intel.com>
+References: <20190815215712.tho3fdfk43rs45ej@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7152d1c2-14bc-87ae-618b-830a1fa008b0@linux.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 09:57:59AM +0300, Denis Efremov wrote:
-> Hi All,
-> 
-> Initially, I've prepared a patch and only after found this discussion. So, please,
-> look at this patch no more than just a simple reminder that get_maintainers.pl
-> still emits this warning.
+Update MAINTAINERS record to reflect that trusted.h
+was moved to a different directory in commit 22447981fc05
+("KEYS: Move trusted.h to include/keys [ver #2]").
 
-Can you resend this as a proper patch that can be applied. No other
-complains.
+Cc: Denis Kenzior <denkenz@gmail.com>
+Cc: James Bottomley <jejb@linux.ibm.com>
+Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org
+Signed-off-by: Denis Efremov <efremov@linux.com>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-/Jarkko
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cfb344ba2914..168e5121578e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8916,7 +8916,7 @@ S:	Supported
+ F:	Documentation/security/keys/trusted-encrypted.rst
+ F:	include/keys/trusted-type.h
+ F:	security/keys/trusted.c
+-F:	security/keys/trusted.h
++F:	include/keys/trusted.h
+ 
+ KEYS/KEYRINGS:
+ M:	David Howells <dhowells@redhat.com>
+-- 
+2.21.0
+
