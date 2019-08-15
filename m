@@ -2,97 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1510E8EC2E
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Aug 2019 15:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257D28EC4D
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Aug 2019 15:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731253AbfHONAm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Aug 2019 09:00:42 -0400
-Received: from mga07.intel.com ([134.134.136.100]:65275 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729818AbfHONAm (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Aug 2019 09:00:42 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Aug 2019 06:00:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,389,1559545200"; 
-   d="scan'208";a="167737330"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.163])
-  by orsmga007.jf.intel.com with ESMTP; 15 Aug 2019 06:00:12 -0700
-Date:   Thu, 15 Aug 2019 16:00:11 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Andrey Pronin <apronin@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>
-Subject: Re: [PATCH v3 4/4] tpm: add driver for cr50 on SPI
-Message-ID: <20190815130011.6xxofsf3onf775p4@linux.intel.com>
-References: <20190806220750.86597-1-swboyd@chromium.org>
- <20190806220750.86597-5-swboyd@chromium.org>
- <e7951cb251116e903cf0040ee6f271dc4e68ff2e.camel@linux.intel.com>
- <5d51d02c.1c69fb81.6f113.f06a@mx.google.com>
+        id S1731939AbfHONDv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Aug 2019 09:03:51 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:35449 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730124AbfHONDt (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 15 Aug 2019 09:03:49 -0400
+Received: by mail-lj1-f195.google.com with SMTP id l14so2180592lje.2
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Aug 2019 06:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0dWebL9fI0U8v/Hpo+dz8Sut2HpNVnveufAiPqP0BQw=;
+        b=FmOkGWme0a9zngByt8Xx69NGtzkfYQoKULWmL12BZ2cCel3xo9BWxubi9OjatpqIqa
+         aCblyK/wBtn4LHnnByVR4FkegV/JwUl6aY5bnqtdVQLwtSTU6w0E8FXGwiwGtBwQfhyQ
+         1JVGMgzHRIlY4UXyQriDsZFP2cdhFeyc1HbJRyOzuWxjQomyJM1V+qrCyl3BNnkYTAVu
+         ok0fgZ5VuX3x7AI+Ve0xGQg2kqeYy1kg7OVkRp2VOwzeNu5BTeXusBlqXVAPhVZ4k83W
+         anplh+2FtjGKTwwlufYZFFPtJPPN0vuHErIzzrGWR6BJCeQMLPrC6u+PFzzjAuH26anN
+         2vOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0dWebL9fI0U8v/Hpo+dz8Sut2HpNVnveufAiPqP0BQw=;
+        b=AvEA9jQ0R04+4Pxc7eT6OJbmei+U9zLIw/TdG2UhxNcNYRo4TCSf8LXHAMzW7CKBNJ
+         VXUDmZ5SOz9xr56VpBpLIldITRu+/TKf9JFltw/2XaNuzS8zlCHWSPRHhn9cZrpFEVp/
+         tdIGG3uu8shNSwxOnIMuyXSz7ly2f8e86uD2MnsqcemqK7ysu7kmfcvog6hJagMivE95
+         Q4La85BbHNeI0R6gGzS6W/KtQ5BSfBAxpK8Mr03raYk6cFhluRDo2rn7x2t4AgQbbtTA
+         rjR5scWrqOCgpm60J91FQWiDaK5fTZR8LWlG5HtgOhw6QEWb+BAFPFgBr2zDmUU7bU76
+         AWBQ==
+X-Gm-Message-State: APjAAAVFTklApBvsPkaFUvxFRcRCSX5EjJV5a6xDJ204liBCjpTB+/Y9
+        oeBwDcJ7euNM0ukss04/CctyY/up0ETafB9/zp+wRQ==
+X-Google-Smtp-Source: APXvYqz1/QQoHBf2h86ZFsG2s6PVvHb8R6MnNm7oO5lIAJpXQ5PL7Zmvi79AuEfoFIn8Z79YsusZkO8EhOrspBcsfmU=
+X-Received: by 2002:a05:651c:104a:: with SMTP id x10mr2522077ljm.238.1565874226938;
+ Thu, 15 Aug 2019 06:03:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d51d02c.1c69fb81.6f113.f06a@mx.google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+References: <1565682784-10234-1-git-send-email-sumit.garg@linaro.org> <1565789078.10490.10.camel@kernel.org>
+In-Reply-To: <1565789078.10490.10.camel@kernel.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 15 Aug 2019 18:33:35 +0530
+Message-ID: <CAFA6WYPU0oREaHROhhRsEXJTijvER8G4riBk4e4=Bd5XgGFqtQ@mail.gmail.com>
+Subject: Re: [RFC/RFT v4 0/5] Add generic trusted keys framework/subsystem
+To:     Mimi Zohar <zohar@kernel.org>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-security-module@vger.kernel.org, dhowells@redhat.com,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        peterhuewe@gmx.de, jgg@ziepe.ca, jejb@linux.ibm.com,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 01:46:35PM -0700, Stephen Boyd wrote:
-> Quoting Jarkko Sakkinen (2019-08-09 13:31:04)
-> > On Tue, 2019-08-06 at 15:07 -0700, Stephen Boyd wrote:
-> > > From: Andrey Pronin <apronin@chromium.org>
-> > > 
-> > > Add TPM2.0 PTP FIFO compatible SPI interface for chips with Cr50
-> > > firmware. The firmware running on the currently supported H1
-> > > Secure Microcontroller requires a special driver to handle its
-> > > specifics:
-> > > 
-> > >  - need to ensure a certain delay between spi transactions, or else
-> > >    the chip may miss some part of the next transaction;
-> > >  - if there is no spi activity for some time, it may go to sleep,
-> > >    and needs to be waken up before sending further commands;
-> > >  - access to vendor-specific registers.
-> > 
-> > Which Chromebook models have this chip?
-> 
-> Pretty much all Chromebooks released in the last year or two have this
-> chip in them. I don't have an exhaustive list, but you can usually check
-> this by putting your device into dev mode and then looking at the driver
-> attached to the TPM device in sysfs or by grepping the dmesg output for
-> cr50.
-> 
-> > 
-> > If I had an access to one, how do I do kernel testing with it i.e.
-> > how do I get it to boot initramfs and bzImage from a USB stick?
-> > 
-> > 
-> 
-> You can follow the developer guide[1] and build a USB image for the
-> board you have. You can usually checkout the latest upstream kernel in
-> place of where the kernel is built from in the chroot, typically
-> ~/trunk/src/third_party/kernel/<version number>. The build should pick
-> up that it's an upstream tree and try to use some default defconfig.
-> This driver isn't upstream yet, so you may need to enable it in the
-> defconfig, located in
-> ~/trunk/src/third_party/chromiumos-overlay/eclass/cros-kernel/ so that
-> the driver is actually built. After that, use 'cros flash' to flash the
-> new kernel image to your USB stick and boot from USB with 'ctrl+u' and
-> you should be on your way to chromeos kernel testing.
-> 
-> [1] https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md
+Hi Mimi,
 
-Hey, thanks for info! I'll see if I can get my hands on one.
+On Wed, 14 Aug 2019 at 18:54, Mimi Zohar <zohar@kernel.org> wrote:
+>
+> Hi Sumit,
+>
+> On Tue, 2019-08-13 at 13:22 +0530, Sumit Garg wrote:
+> > This patch-set is an outcome of discussion here [1]. It has evolved very
+> > much since v1 to create, consolidate and generalize trusted keys
+> > subsystem.
+> >
+> > This framework has been tested with trusted keys support provided via TEE
+> > but I wasn't able to test it with a TPM device as I don't possess one. It
+> > would be really helpful if others could test this patch-set using a TPM
+> > device.
+>
+> With the "CONFIG_HEADER_TEST" and "CONFIG_KERNEL_HEADER_TEST" config
+> options enabled, which is required for linux-next, it fails to build.
+>
 
-/Jarkko
+TBH, I wasn't aware about this test feature for headers. It looks like
+the header which fails this test is "include/keys/trusted_tpm.h" which
+is basically a rename of "include/keys/trusted.h" plus changes in this
+patch-set.
+
+And "include/keys/trusted.h" header is already put under blacklist
+here: "include/Kbuild +68" as it fails to build. So its that rename
+due to which build failure is observed now.
+
+It seems to be an easy fix for this build failure via following changes:
+
+diff --git a/include/keys/trusted_tpm.h b/include/keys/trusted_tpm.h
+index 7b593447920b..ca1bec0ef65d 100644
+--- a/include/keys/trusted_tpm.h
++++ b/include/keys/trusted_tpm.h
+@@ -2,6 +2,9 @@
+ #ifndef __TRUSTED_TPM_H
+ #define __TRUSTED_TPM_H
+
++#include <keys/trusted-type.h>
++#include <linux/tpm_command.h>
++
+ /* implementation specific TPM constants */
+ #define MAX_BUF_SIZE                   1024
+ #define TPM_GETRANDOM_SIZE             14
+
+So I will include above changes in this patch-set and also remove
+"include/keys/trusted.h" header from the blacklist.
+
+-Sumit
+
+> Mimi
