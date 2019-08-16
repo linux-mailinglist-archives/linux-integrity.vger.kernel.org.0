@@ -2,97 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B069032A
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2019 15:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF79090507
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2019 17:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727240AbfHPNgq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 16 Aug 2019 09:36:46 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:56118 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726597AbfHPNgq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 16 Aug 2019 09:36:46 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 335931108;
-        Fri, 16 Aug 2019 13:36:46 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5ED0BA4FAC;
-        Fri, 16 Aug 2019 13:36:43 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <1562814435.4014.11.camel@linux.ibm.com>
-References: <1562814435.4014.11.camel@linux.ibm.com> <28477.1562362239@warthog.procyon.org.uk> <CAHk-=wjxoeMJfeBahnWH=9zShKp2bsVy527vo3_y8HfOdhwAAw@mail.gmail.com> <20190710194620.GA83443@gmail.com> <20190710201552.GB83443@gmail.com> <CAHk-=wiFti6=K2fyAYhx-PSX9ovQPJUNp0FMdV0pDaO_pSx9MQ@mail.gmail.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     dhowells@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        James Morris <jmorris@namei.org>, keyrings@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, linux-nfs@vger.kernel.org,
-        CIFS <linux-cifs@vger.kernel.org>, linux-afs@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] Keys: Set 4 - Key ACLs for 5.3
+        id S1727391AbfHPP4W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 16 Aug 2019 11:56:22 -0400
+Received: from smtp11.infineon.com ([217.10.52.105]:41162 "EHLO
+        smtp11.infineon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727312AbfHPP4V (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 16 Aug 2019 11:56:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1565970980; x=1597506980;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=/hDSL5+yXqoK9ZsLrgrJU5OIaG5/nQmNtSKAOjdD5Ys=;
+  b=ef5nPX/4oZeFlgML88udlsLtTMgeZjaVLkkV9Hus189mOPSkt0cCmRtD
+   WVxtMZF6tNUUceb1rKrvclGaAwV/Op29gyz+rMbw3k11m0bczEiiJFGpk
+   J4RE92cDfzWj35ysrVax00GPr+rqLfmjX9J+CyoiZGRW7/YES1SKt2bRR
+   s=;
+IronPort-SDR: dXXt6HEMEx/WscydFsl5+VseijR3m7xKZAmj8B3293TXnG4GLAm63P4myX6XzXZoCb58atKAYU
+ NQI14GtphJIeA5xbP6Sbxik23S0sddvb4wz/5zRbHlv2j09zDxtDgYO1HOYvCRcfTP1ilxe8Ea
+ IXLGAcr4mY1eoykPJLaZO+9L22dK2htGOGuUpy/M1WlYPuc//G6pjt0AVh1sOIYiVxZT2lz+yj
+ +DOWYATCiMMcvfajSGrFhYiP2bD1uaCNyi/AWQIswnBlqzo85YWdiC0TQheokBUZqf3LVbJ3Jc
+ ziQ=
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6000,8403,9351"; a="130793049"
+X-IronPort-AV: E=Sophos;i="5.64,393,1559512800"; 
+   d="scan'208";a="130793049"
+Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
+  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2019 17:56:19 +0200
+Received: from MUCSE708.infineon.com (MUCSE708.infineon.com [172.23.7.82])
+        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
+        Fri, 16 Aug 2019 17:56:19 +0200 (CEST)
+Received: from [10.154.32.23] (172.23.8.247) by MUCSE708.infineon.com
+ (172.23.7.82) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1713.5; Fri, 16
+ Aug 2019 17:56:18 +0200
+Subject: Re: [PATCH v2 1/6] hwrng: core: Freeze khwrng thread during suspend
+To:     Stephen Boyd <swboyd@chromium.org>, Jason Gunthorpe <jgg@ziepe.ca>
+CC:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-integrity@vger.kernel.org>,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+References: <20190716224518.62556-1-swboyd@chromium.org>
+ <20190716224518.62556-2-swboyd@chromium.org>
+ <20190717113956.GA12119@ziepe.ca>
+ <5d2f4ff9.1c69fb81.3c314.ab00@mx.google.com>
+ <20190717165011.GI12119@ziepe.ca>
+ <5d2f54db.1c69fb81.5720c.dc05@mx.google.com>
+ <5d44be49.1c69fb81.8078a.4d08@mx.google.com>
+From:   Alexander Steffen <Alexander.Steffen@infineon.com>
+Message-ID: <d72750b9-38b8-172f-8902-427fcc3d0a5d@infineon.com>
+Date:   Fri, 16 Aug 2019 17:56:12 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Date:   Fri, 16 Aug 2019 14:36:42 +0100
-Message-ID: <23498.1565962602@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Fri, 16 Aug 2019 13:36:46 +0000 (UTC)
+In-Reply-To: <5d44be49.1c69fb81.8078a.4d08@mx.google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE716.infineon.com (172.23.7.67) To
+ MUCSE708.infineon.com (172.23.7.82)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi Zohar <zohar@linux.ibm.com> wrote:
+On 03.08.2019 00:50, Stephen Boyd wrote:
+> Quoting Stephen Boyd (2019-07-17 10:03:22)
+>> Quoting Jason Gunthorpe (2019-07-17 09:50:11)
+>>> On Wed, Jul 17, 2019 at 09:42:32AM -0700, Stephen Boyd wrote:
+>>
+>> Yes. That's exactly my point. A hwrng that's suspended will fail here
+>> and it's better to just not try until it's guaranteed to have resumed.
+>>
+>>>
+>>> It just seems weird to do this, what about all the other tpm API
+>>> users? Do they have a racy problem with suspend too?
+>>
+>> I haven't looked at them. Are they being called from suspend/resume
+>> paths? I don't think anything for the userspace API can be a problem
+>> because those tasks are all frozen. The only problem would be some
+>> kernel internal API that TPM API exposes. I did a quick grep and I see
+>> things like IMA or the trusted keys APIs that might need a closer look.
+>>
+>> Either way, trying to hold off a TPM operation from the TPM API when
+>> we're suspended isn't really possible. If something like IMA needs to
+>> get TPM data from deep suspend path and it fails because the device is
+>> suspended, all we can do is return an error from TPM APIs and hope the
+>> caller can recover. The fix is probably going to be to change the code
+>> to not call into the TPM API until the hardware has resumed by avoiding
+>> doing anything with the TPM until resume is over. So we're at best able
+>> to make same sort of band-aid here in the TPM API where all we can do is
+>> say -EAGAIN but we can't tell the caller when to try again.
+>>
+> 
+> Andrey talked to me a little about this today. Andrey would prefer we
+> don't just let the TPM go into a wonky state if it's used during
+> suspend/resume so that it can stay resilient to errors. Sounds OK to me,
+> but my point still stands that we need to fix the callers.
+> 
+> I'll resurrect the IS_SUSPENDED flag and make it set generically by the
+> tpm_pm_suspend() and tpm_pm_resume() functions and then spit out a big
+> WARN_ON() and return an error value like -EAGAIN if the TPM functions
+> are called when the TPM is suspended. I hope we don't hit the warning
+> message, but if we do then at least we can track it down rather quickly
+> and figure out how to fix the caller instead of just silently returning
+> -EAGAIN and hoping for that to be visible to the user.
 
-> Sorry for the delay.  An exception is needed for loading builtin keys
-> "KEY_ALLOC_BUILT_IN" onto a keyring that is not writable by userspace.
->  The following works, but probably is not how David would handle the
-> exception.
+There is another use case I see for this functionality: There are ways 
+for user space to upgrade the TPM's firmware via /dev/tpm0 (using e.g. 
+TPM2_FieldUpgradeStart/TPM2_FieldUpgradeData). While upgrading, the 
+normal TPM functionality might not be available (commands return 
+TPM_RC_UPGRADE or other error codes). Even after the upgrade is 
+finished, the TPM might continue to refuse command execution (e.g. with 
+TPM_RC_REBOOT).
 
-I think the attached is the right way to fix it.
+I'm not sure whether all in-kernel users are prepared to deal correctly 
+with those error codes. But even if they are, it might be better to 
+block them from sending commands in the first place, to not interfere 
+with the upgrade process.
 
-load_system_certificate_list(), for example, when it creates keys does this:
+What would you think about a way for a user space upgrade tool to also 
+set this flag, to make the TPM unavailable for everything but the 
+upgrade process?
 
-	key = key_create_or_update(make_key_ref(builtin_trusted_keys, 1),
-
-marking the keyring as "possessed" in make_key_ref().  This allows the
-possessor permits to be used - and that's the *only* way to use them for
-internal keyrings like this because you can't link to them and you can't join
-them.
-
-David
----
-diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-index 57be78b5fdfc..1f8f26f7bb05 100644
---- a/certs/system_keyring.c
-+++ b/certs/system_keyring.c
-@@ -99,7 +99,7 @@ static __init int system_trusted_keyring_init(void)
- 	builtin_trusted_keys =
- 		keyring_alloc(".builtin_trusted_keys",
- 			      KUIDT_INIT(0), KGIDT_INIT(0), current_cred(),
--			      &internal_key_acl, KEY_ALLOC_NOT_IN_QUOTA,
-+			      &internal_keyring_acl, KEY_ALLOC_NOT_IN_QUOTA,
- 			      NULL, NULL);
- 	if (IS_ERR(builtin_trusted_keys))
- 		panic("Can't allocate builtin trusted keyring\n");
-diff --git a/security/keys/permission.c b/security/keys/permission.c
-index fc84d9ef6239..86efd3eaf083 100644
---- a/security/keys/permission.c
-+++ b/security/keys/permission.c
-@@ -47,7 +47,7 @@ struct key_acl internal_keyring_acl = {
- 	.usage	= REFCOUNT_INIT(1),
- 	.nr_ace	= 2,
- 	.aces = {
--		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH),
-+		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_WRITE),
- 		KEY_OWNER_ACE(KEY_ACE_VIEW | KEY_ACE_READ | KEY_ACE_SEARCH),
- 	}
- };
+Alexander
