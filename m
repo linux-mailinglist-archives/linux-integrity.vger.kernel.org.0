@@ -2,68 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3D794B6C
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2019 19:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3891D94EEB
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2019 22:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727589AbfHSROc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Aug 2019 13:14:32 -0400
-Received: from mga02.intel.com ([134.134.136.20]:13280 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726918AbfHSROc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Aug 2019 13:14:32 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Aug 2019 09:56:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,405,1559545200"; 
-   d="scan'208";a="179474448"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.125])
-  by fmsmga007.fm.intel.com with ESMTP; 19 Aug 2019 09:56:29 -0700
-Date:   Mon, 19 Aug 2019 19:56:29 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org, dhowells@redhat.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        peterhuewe@gmx.de, jgg@ziepe.ca, jejb@linux.ibm.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, casey@schaufler-ca.com,
-        ard.biesheuvel@linaro.org, daniel.thompson@linaro.org,
-        linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org
-Subject: Re: [RFC/RFT v4 1/5] tpm: move tpm_buf code to include/linux/
-Message-ID: <20190819165629.qv7cmg6kiwb6oxig@linux.intel.com>
-References: <1565682784-10234-1-git-send-email-sumit.garg@linaro.org>
- <1565682784-10234-2-git-send-email-sumit.garg@linaro.org>
+        id S1728136AbfHSUZN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Aug 2019 16:25:13 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:45498 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728018AbfHSUZN (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 19 Aug 2019 16:25:13 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id F3CE172CCD5;
+        Mon, 19 Aug 2019 23:25:11 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [185.6.174.98])
+        by imap.altlinux.org (Postfix) with ESMTPSA id C50BF4A4AF6;
+        Mon, 19 Aug 2019 23:25:11 +0300 (MSK)
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH] ima-evm-utils: Enable large-file support
+Date:   Mon, 19 Aug 2019 23:25:07 +0300
+Message-Id: <20190819202507.27735-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1565682784-10234-2-git-send-email-sumit.garg@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 01:23:00PM +0530, Sumit Garg wrote:
-> Move tpm_buf code to common include/linux/tpm.h header so that it can
-> be reused via other subsystems like trusted keys etc.
-> 
-> Also rename trusted keys TPM 1.x buffer implementation to tpm1_buf to
-> avoid any compilation errors.
-> 
-> Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+Some architectures require special measures to access large files (LFS).
+Add `AC_SYS_LARGEFILE' to `configure.ac' to handle this.
 
-A question: did you try to do this as mechanically as you ever could
-or did you do any other code changes? I did go through it but it is
-possible that I missed something.
+It seems that ABI is not changed with this.
 
-In this type of changes it is mandatory be extra strict on not doing
-anything extra (the rename you would was not of course extra because
-it was necessary to do).
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+---
+ configure.ac | 1 +
+ 1 file changed, 1 insertion(+)
 
-/Jarkko
+diff --git a/configure.ac b/configure.ac
+index 3f21ba4..02bd6f8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -8,6 +8,7 @@ AC_CONFIG_MACRO_DIR([m4])
+ 
+ AC_CANONICAL_HOST
+ AC_USE_SYSTEM_EXTENSIONS
++AC_SYS_LARGEFILE
+ 
+ # Checks for programs.
+ AC_PROG_CC
+-- 
+2.11.0
+
