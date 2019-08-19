@@ -2,46 +2,39 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C6E94B0B
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2019 18:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37B694B21
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2019 19:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727398AbfHSQ54 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Aug 2019 12:57:56 -0400
-Received: from mga05.intel.com ([192.55.52.43]:17569 "EHLO mga05.intel.com"
+        id S1727268AbfHSRAX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Aug 2019 13:00:23 -0400
+Received: from mga02.intel.com ([134.134.136.20]:11836 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726987AbfHSQ54 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Aug 2019 12:57:56 -0400
+        id S1726918AbfHSRAX (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 19 Aug 2019 13:00:23 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Aug 2019 09:57:55 -0700
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Aug 2019 09:45:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,405,1559545200"; 
-   d="scan'208";a="179474734"
+   d="scan'208";a="207060383"
 Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.125])
-  by fmsmga007.fm.intel.com with ESMTP; 19 Aug 2019 09:57:50 -0700
-Date:   Mon, 19 Aug 2019 19:57:50 +0300
+  by fmsmga002.fm.intel.com with ESMTP; 19 Aug 2019 09:44:57 -0700
+Date:   Mon, 19 Aug 2019 19:44:57 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org, dhowells@redhat.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        peterhuewe@gmx.de, jgg@ziepe.ca, jejb@linux.ibm.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, casey@schaufler-ca.com,
-        ard.biesheuvel@linaro.org, daniel.thompson@linaro.org,
-        linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org
-Subject: Re: [RFC/RFT v4 2/5] KEYS: trusted: use common tpm_buf for TPM1.x
- code
-Message-ID: <20190819165750.h4zlqtjubwm7tohg@linux.intel.com>
-References: <1565682784-10234-1-git-send-email-sumit.garg@linaro.org>
- <1565682784-10234-3-git-send-email-sumit.garg@linaro.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     peterhuewe@gmx.de, mark.rutland@arm.com, robh+dt@kernel.org,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] tpm/tpm_ftpm_tee: trivial checkpatch fixes
+Message-ID: <20190819164457.extm4j4akx4mu6nl@linux.intel.com>
+References: <20190813130559.16936-1-sashal@kernel.org>
+ <20190815210201.yhc7dosvnafcayfu@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1565682784-10234-3-git-send-email-sumit.garg@linaro.org>
+In-Reply-To: <20190815210201.yhc7dosvnafcayfu@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
@@ -49,13 +42,22 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 01:23:01PM +0530, Sumit Garg wrote:
-> Utilize common heap based tpm_buf code for TPM1.x trusted keys rather
-> than using stack based tpm1_buf code. Also, remove tpm1_buf code.
+On Fri, Aug 16, 2019 at 12:02:01AM +0300, Jarkko Sakkinen wrote:
+> On Tue, Aug 13, 2019 at 09:05:59AM -0400, Sasha Levin wrote:
+> > Fixes a few checkpatch warnings (and ignores some), mostly around
+> > spaces/tabs and documentation.
+> > 
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
 > 
-> Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> Thank you!
+> 
+> I'll squash these to the existing patches.
+> 
+> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Oops, replied this twice, sorry :-)
+
+Anyway, I pushed the patch. I think I just keep it as separate
+after all.
 
 /Jarkko
