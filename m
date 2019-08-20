@@ -2,95 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3988896435
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2019 17:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545F49679E
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2019 19:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbfHTPXN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Aug 2019 11:23:13 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:43878 "EHLO mx1.redhat.com"
+        id S1727358AbfHTRcJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Aug 2019 13:32:09 -0400
+Received: from mga03.intel.com ([134.134.136.65]:28892 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729838AbfHTPXM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Aug 2019 11:23:12 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 568A410F23E0;
-        Tue, 20 Aug 2019 15:23:12 +0000 (UTC)
-Received: from localhost (ovpn-116-54.gru2.redhat.com [10.97.116.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D90271000323;
-        Tue, 20 Aug 2019 15:23:11 +0000 (UTC)
-Date:   Tue, 20 Aug 2019 12:23:11 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] ima-evm-utils: Change log text of hash in hash_ima
-Message-ID: <20190820152311.GD7410@rhlt>
-References: <20190817223229.22623-1-vt@altlinux.org>
+        id S1727006AbfHTRcJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 20 Aug 2019 13:32:09 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Aug 2019 10:32:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,408,1559545200"; 
+   d="scan'208";a="378646993"
+Received: from fmsmsx105.amr.corp.intel.com ([10.18.124.203])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Aug 2019 10:32:08 -0700
+Received: from fmsmsx126.amr.corp.intel.com (10.18.125.43) by
+ FMSMSX105.amr.corp.intel.com (10.18.124.203) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Tue, 20 Aug 2019 10:32:08 -0700
+Received: from fmsmsx103.amr.corp.intel.com ([169.254.2.141]) by
+ FMSMSX126.amr.corp.intel.com ([169.254.1.24]) with mapi id 14.03.0439.000;
+ Tue, 20 Aug 2019 10:32:07 -0700
+From:   "Oliver, Dario N" <dario.n.oliver@intel.com>
+To:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Subject: WARNING: lock held when returning to user space!
+Thread-Topic: WARNING: lock held when returning to user space!
+Thread-Index: AdVXfS6rIPRFVuvoTYm0GpaOY1OQdg==
+Date:   Tue, 20 Aug 2019 17:32:06 +0000
+Message-ID: <20A6FE0AC912764FB8B5BC5A1A7CB92B3BBD1557@FMSMSX103.amr.corp.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiZTUyZTE4OTUtYzViYy00NTY2LTkyZDUtNTY1MzA1YjY2YTNjIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiQ0prMUMxRzRoemR1SVE4OHRrZ1FzZUE3QmwxYjJBUm5mbmd3c1VBc1k3U0E4WGRyNW1tbXF5Rlg0b0RQMTRpUiJ9
+x-ctpclassification: CTP_NT
+dlp-product: dlpe-windows
+dlp-version: 11.0.400.15
+dlp-reaction: no-action
+x-originating-ip: [10.1.200.108]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2iBwrppp/7QCDedR"
-Content-Disposition: inline
-In-Reply-To: <20190817223229.22623-1-vt@altlinux.org>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Tue, 20 Aug 2019 15:23:12 +0000 (UTC)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hello,
 
---2iBwrppp/7QCDedR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am currently experiencing the following warning when using the tpm2-software/tpm2-tools, latchset/clevis tools. 
+This was originally reported in the tpm2-tools repository here https://github.com/tpm2-software/tpm2-tools/issues/1676
+The maintainer of tpm2-tools suggested that I should report this issue to the linux-integrity distribution list.
 
-On Sun, Aug 18, 2019 at 01:32:29AM +0300, Vitaly Chikunov wrote:
-> Output value is not just a hash, but hash prefixed with header. User may
-> be confused to see invalid hash value. Thus, change text so that is
-> obvious this is not a raw hash.
->=20
-> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> ---
->  src/evmctl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/src/evmctl.c b/src/evmctl.c
-> index ef1f289..53711f4 100644
-> --- a/src/evmctl.c
-> +++ b/src/evmctl.c
-> @@ -606,7 +606,7 @@ static int hash_ima(const char *file)
->  	len +=3D offset;
-> =20
->  	if (imaevm_params.verbose >=3D LOG_INFO)
-> -		log_info("hash(%s): ", imaevm_params.hash_algo);
-> +		log_info("hdr+hash(%s): ", imaevm_params.hash_algo);
-> =20
->  	if (sigdump || imaevm_params.verbose >=3D LOG_INFO)
->  		imaevm_hexdump(hash, len);
-> --=20
-> 2.11.0
->=20
+1656.971592] ================================================
+[ 1656.971605] WARNING: lock held when returning to user space!
+[ 1656.971619] 5.3.0-0.rc3.git1.1.fc31.x86_64 #1 Tainted: G        W        
+[ 1656.971633] ------------------------------------------------
+[ 1656.971646] tpm2_createprim/3229 is leaving the kernel with locks still held!
+[ 1656.971662] 2 locks held by tpm2_createprim/3229:
+[ 1656.971672]  #0: 0000000040f82a51 (&chip->ops_sem){.+.+}, at: tpm_try_get_ops+0x23/0x90
+[ 1656.971700]  #1: 000000005e2badf9 (&chip->tpm_mutex){+.+.}, at: tpm_try_get_ops+0x3e/0x90
+[ 1666.789624] EXT4-fs (dm-3): mounted filesystem with ordered data mode. Opts: (null)
 
-Haha, simple but really useful change :)
-Thanks.
+To reproduce, the clevis tool can be used to unlock an encrypted partition with tpm pin:
 
---2iBwrppp/7QCDedR
-Content-Type: application/pgp-signature; name="signature.asc"
+clevis luks unlock -d /dev/mmcblk0p1 -n c1
 
------BEGIN PGP SIGNATURE-----
+The OS where this is reproducible is Fedora IoT Rawhide (future 31 release), currently using the Linux Kernel 5.3
+The versions of the tools I am using are the following
 
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl1cEF4ACgkQYdRkFR+R
-okO2wAf/cXoKedg9t+SWIj/TdPctL361Z0mhew+IaKIBUU2MERsv/HFTUXB49xX4
-w3PKy297gq0EQC4+zFo/60jvhRq7w1EkDaCx8XIWj0GGVq9pTzyVZCJhVDiEHydW
-/aW0U5uRvPlAu8Nnzjku7xvn88TeujcCKLZ+b6/f7SsTzuS9L/vC/XYfD5kbg2OE
-vC/aD0bq6bbYaX3b4VdU4U0sQ9o2GhPNLbd3yBm1BY7CZYCZDMyX2U8Mmm1Qi2FG
-0uug3ExhnUUlT71dKAokaEcWbZ5vIp7PQg6eSsTnqk+ZjaL0oDP2zD+OFY0M6k52
-wCRQ8jDNMpd9g/++OgIHMrA7uT2AEw==
-=9jLr
------END PGP SIGNATURE-----
+[root@fedora-iot-2 containers]# rpm -qa tpm2*
+tpm2-tss-2.2.3-2.fc31.x86_64
+tpm2-tools-3.2.0-3.fc31.x86_64
 
---2iBwrppp/7QCDedR--
+[root@fedora-iot-2 containers]# rpm -qa clevis*
+clevis-luks-11-6.fc31.x86_64
+clevis-11-6.fc31.x86_64
+clevis-systemd-11-6.fc31.x86_64
+clevis-dracut-11-6.fc31.x86_64
+
+Regards, 
+
+Nicolas Oliver
+
