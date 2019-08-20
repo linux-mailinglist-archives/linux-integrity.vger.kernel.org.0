@@ -2,52 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D21B956D8
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2019 07:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68916956E6
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2019 07:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729204AbfHTFrD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Aug 2019 01:47:03 -0400
-Received: from mail-lf1-f47.google.com ([209.85.167.47]:43516 "EHLO
-        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729198AbfHTFq7 (ORCPT
+        id S1729165AbfHTFwT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Aug 2019 01:52:19 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:44542 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729107AbfHTFwT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Aug 2019 01:46:59 -0400
-Received: by mail-lf1-f47.google.com with SMTP id c19so3126986lfm.10
-        for <linux-integrity@vger.kernel.org>; Mon, 19 Aug 2019 22:46:58 -0700 (PDT)
+        Tue, 20 Aug 2019 01:52:19 -0400
+Received: by mail-lf1-f68.google.com with SMTP id v16so3130457lfg.11
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Aug 2019 22:52:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=w/16MSoB080+HPdEFGeDYjIeK82W9jRb08AH0y5e7ug=;
-        b=ONrMQaez/cE4lLvCHTz83wtZhsB6/S4LzrA9EZrBW2K3t2ECG+uxRDWV23qT9rLzpN
-         1z3IWOd8jc1HkoLiDGbFYVOMNA6odIeqAnNGVhbYia9Hts4arGeJW6Y6NJOvCLd/3ST+
-         Zx5c8d1x7LnZisVXAmLmVMQRX9O1ye60gMU638z3Yrup9N0o4Yeq8zJ14bzMFirSydY9
-         HK8q5i/NI6Wdw90AuotXYccM85of5EJzPuPozi5EsiNpb6/QY52qzmvWjo2zFjRk7gg7
-         xJ2sGUa8uxrHMISm2XaEQ5+EyKQWPzc7vMAjHtlVpEpEhIPS+55ytCUNUjSiQ+EuOFz2
-         JaLg==
+        bh=vHAQ6sjGHaPokXl9LscA2e05lIoVzw0cNrU4ejp7cLc=;
+        b=HQvqSgy0YUzEMHBgIvYKX0zsNdO2GK/OgcaAI+Yo+QEFURl36YFnDm6QxkYKZLBQfh
+         gl6kpBN477j29o3jAxsyCKqzbbwiKtO8wwumBKw+Fy5bbzHiHTBdZo9vYs2WUaOUFk5C
+         rfgG0y2dLA/qprCRRnLVrD/nZCVXNgya8cNMMDFfIrGMmj5v5uPhthv3gH/tTj9zqGt7
+         2WtXPOqYS6+/elBcXC2Ff66xH3qX8e3ZFThDI6neMyANPzJYKkoNUZUTl+uQUPJQXGYK
+         4pORYYX1dPk/YoJ4PVlrOLRxRF6rtiz5mSvpWxKyh+0Fln7DLrG08nF45fRRUJpa5Dg0
+         qS/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=w/16MSoB080+HPdEFGeDYjIeK82W9jRb08AH0y5e7ug=;
-        b=Ghfs0aG7KYv9iJeMuobzt3eH3yLDyWbQHdktqgTe756SYYuzQ00vOty5kI50n0zk2o
-         wUVtt0TVb6BoI7EbQarcAt+B4SNcP4THRDQt5ptRfBQFymo91EnVLYq09ZvG1ZrsfAYo
-         Mi3apx+JYGNgf+0dabfxV0FV1Ga2x8tKhXaO1xmZixBMRUCun5Nt+SzOR3RWniRKbh24
-         Q4q8uXU95Mts+JI2cfdxKHuN9IKLxkrBAuE0Bg0pG9MY3joLReIWzhsQjBTilp7B01za
-         6t+UYaN4kSDTCDxsYU39AAgpUymsUnJ7/uZBHIvvdZaRxgzwjtfNxjIBahpy3h0RvrUp
-         qDig==
-X-Gm-Message-State: APjAAAXhoLx6+OcQ6XVaFXX7SEP6UKENkdjPJnQ4/9cMOjaz3T3DjzwF
-        yLYxeC4Lx7JdpAHsN0o011RVQENc2ZChoGyQ5oKsWASh
-X-Google-Smtp-Source: APXvYqzXgsI4jHSs1KfPdhgjOlMxnhbURzhgo1Vij0mJo5HH0MGoR46f8bFCz8tBN4/AFA4sE2vR/FBxk0cIvZrvyJk=
-X-Received: by 2002:ac2:5637:: with SMTP id b23mr14863080lff.186.1566280017646;
- Mon, 19 Aug 2019 22:46:57 -0700 (PDT)
+        bh=vHAQ6sjGHaPokXl9LscA2e05lIoVzw0cNrU4ejp7cLc=;
+        b=qgTo1GR5+Tly+guakcmmCsGmGeW7vNWuU0YnDxWnVC+/Z+xFIv6g4SxofbaDBbPBX/
+         qrJhgjZfbSm3RNwNG7iIo/Mo+LSuAxz+djR14XXT7MYqMOdYh7q0x0+4qXCanLyF/7km
+         cf8HN0yFumQZh1lhiLb6fBNWmNNeYRrfQsOTpYhsJaYSXpqmOPwI+5ZpYseLz17v10gB
+         XOiQDgsrSM/S5aXQph7X/G9GRbikj0N658WY8Yo89XAfGssK5GsQZ2/5jQWrSerDAwZV
+         MZuRyElGbxt6og21BOtpbMFIhIzFvrDdBgxRay7jnHD1qXbDbvcJhCNpy5Q0vrhesYwL
+         4BZg==
+X-Gm-Message-State: APjAAAXtf0MOu1i5scusLTkqAq0bm4g2e/ibVXUE2816Bje4YMXX78C/
+        kmXhLIHbRVANkp3cnHCyiO9+zWrP7Z/u+OgxJ2wWRQ==
+X-Google-Smtp-Source: APXvYqw5VQhpvfJxXd2kxR0GMuYrecMAqIEichsfrIuwkJJya9Bt9H2v7Gsuv+lSVTPHE4s9++DwaiSgqwaVMZmC/x4=
+X-Received: by 2002:ac2:4901:: with SMTP id n1mr14221485lfi.0.1566280337317;
+ Mon, 19 Aug 2019 22:52:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <1565682784-10234-1-git-send-email-sumit.garg@linaro.org> <20190819165400.xsgpbtbj26y7d2wb@linux.intel.com>
-In-Reply-To: <20190819165400.xsgpbtbj26y7d2wb@linux.intel.com>
+References: <1565682784-10234-1-git-send-email-sumit.garg@linaro.org>
+ <1565682784-10234-2-git-send-email-sumit.garg@linaro.org> <20190819165629.qv7cmg6kiwb6oxig@linux.intel.com>
+In-Reply-To: <20190819165629.qv7cmg6kiwb6oxig@linux.intel.com>
 From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 20 Aug 2019 11:16:46 +0530
-Message-ID: <CAFA6WYMCjKCf=aCVEXrQtZJ57V+2MCLNZKov6t37unzgpLmc0A@mail.gmail.com>
-Subject: Re: [RFC/RFT v4 0/5] Add generic trusted keys framework/subsystem
+Date:   Tue, 20 Aug 2019 11:22:05 +0530
+Message-ID: <CAFA6WYMoX95UcuGb2UdrUMnq=4wYJChwcMgm8pHHPs_Lg=5iNg@mail.gmail.com>
+Subject: Re: [RFC/RFT v4 1/5] tpm: move tpm_buf code to include/linux/
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
         "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
@@ -71,48 +72,30 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 19 Aug 2019 at 22:24, Jarkko Sakkinen
+On Mon, 19 Aug 2019 at 22:26, Jarkko Sakkinen
 <jarkko.sakkinen@linux.intel.com> wrote:
 >
-> On Tue, Aug 13, 2019 at 01:22:59PM +0530, Sumit Garg wrote:
-> > This patch-set is an outcome of discussion here [1]. It has evolved very
-> > much since v1 to create, consolidate and generalize trusted keys
-> > subsystem.
+> On Tue, Aug 13, 2019 at 01:23:00PM +0530, Sumit Garg wrote:
+> > Move tpm_buf code to common include/linux/tpm.h header so that it can
+> > be reused via other subsystems like trusted keys etc.
 > >
-> > This framework has been tested with trusted keys support provided via TEE
-> > but I wasn't able to test it with a TPM device as I don't possess one. It
-> > would be really helpful if others could test this patch-set using a TPM
-> > device.
+> > Also rename trusted keys TPM 1.x buffer implementation to tpm1_buf to
+> > avoid any compilation errors.
+> >
+> > Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 >
-> I think 1/5-4/5 make up a non-RFC patch set that needs to reviewed,
-> tested and merged as a separate entity.
->
-
-Okay.
-
-> On the other hand 5/5 cannot be merged even if I fully agreed on
-> the code change as without TEE patch it does not add any value for
-> Linux.
+> A question: did you try to do this as mechanically as you ever could
+> or did you do any other code changes? I did go through it but it is
+> possible that I missed something.
 >
 
-I agree here that 5/5 should go along with TEE patch-set. But if you
-look at initial v1 patch-set, the idea was to get feedback on trusted
-keys abstraction as a standalone patch along with testing using a TPM
-(1.x or 2.0).
-
-Since Mimi has tested this patch-set with TPM (1.x & 2.0), I am happy
-to merge 5/5 with TEE patch-set. But it would be nice if I could get
-feedback on 5/5 before I send next version of TEE patch-set.
-
-> To straighten up thing I would suggest that the next patch set
-> version would only consists of the first four patches and we meld
-> them to the shape so that we can land them to the mainline. Then
-> it should be way more easier to concentrate the actual problem you
-> are trying to resolve.
->
-
-Okay will send next patch-set version with first four patches only.
+There aren't any other code changes apart from "tpm1_buf" rename.
 
 -Sumit
 
+> In this type of changes it is mandatory be extra strict on not doing
+> anything extra (the rename you would was not of course extra because
+> it was necessary to do).
+>
 > /Jarkko
