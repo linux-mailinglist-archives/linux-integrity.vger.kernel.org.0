@@ -2,97 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA38D95E5C
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2019 14:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8989640F
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2019 17:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728947AbfHTMZ0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Aug 2019 08:25:26 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57040 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728366AbfHTMZZ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Aug 2019 08:25:25 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7KCM7rd144102;
-        Tue, 20 Aug 2019 08:25:23 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2ugf4c551r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Aug 2019 08:25:21 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7KCP8O5016306;
-        Tue, 20 Aug 2019 12:25:21 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03dal.us.ibm.com with ESMTP id 2ue976mucs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Aug 2019 12:25:21 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7KCPJPI56033666
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Aug 2019 12:25:19 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D11FD7805F;
-        Tue, 20 Aug 2019 12:25:19 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 633457805C;
-        Tue, 20 Aug 2019 12:25:19 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 20 Aug 2019 12:25:19 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
-To:     jarkko.sakkinen@linux.intel.com, linux-integrity@vger.kernel.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH] tpm_tis: Fix interrupt probing
-Date:   Tue, 20 Aug 2019 08:25:17 -0400
-Message-Id: <20190820122517.2086223-1-stefanb@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.20.1
+        id S1730541AbfHTPTl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Aug 2019 11:19:41 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:48518 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730538AbfHTPTl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 20 Aug 2019 11:19:41 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 0E772811BF;
+        Tue, 20 Aug 2019 15:19:41 +0000 (UTC)
+Received: from localhost (ovpn-116-54.gru2.redhat.com [10.97.116.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 952894126;
+        Tue, 20 Aug 2019 15:19:40 +0000 (UTC)
+Date:   Tue, 20 Aug 2019 12:19:39 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] ima-evm-utils: Enable large-file support
+Message-ID: <20190820151939.GC7410@rhlt>
+References: <20190819202507.27735-1-vt@altlinux.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-20_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=820 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908200130
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="WfZ7S8PLGjBY9Voh"
+Content-Disposition: inline
+In-Reply-To: <20190819202507.27735-1-vt@altlinux.org>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.27]); Tue, 20 Aug 2019 15:19:41 +0000 (UTC)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
 
-The interrupt probing of the TPM TIS was broken since we are trying to
-run it without an active locality and without the TPM_CHIP_FLAG_IRQ set.
+--WfZ7S8PLGjBY9Voh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- drivers/char/tpm/tpm_tis_core.c | 3 +++
- 1 file changed, 3 insertions(+)
+Hi Vitaly,
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index c3181ea9f271..270f43acbb77 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -980,6 +980,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 			goto out_err;
- 		}
- 
-+		tpm_chip_start(chip);
-+		chip->flags |= TPM_CHIP_FLAG_IRQ;
- 		if (irq) {
- 			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
- 						 irq);
-@@ -989,6 +991,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 		} else {
- 			tpm_tis_probe_irq(chip, intmask);
- 		}
-+		tpm_chip_stop(chip);
- 	}
- 
- 	rc = tpm_chip_register(chip);
--- 
-2.14.5
+On Mon, Aug 19, 2019 at 11:25:07PM +0300, Vitaly Chikunov wrote:
+> Some architectures require special measures to access large files (LFS).
+> Add `AC_SYS_LARGEFILE' to `configure.ac' to handle this.
+>=20
+> It seems that ABI is not changed with this.
+>=20
+> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+> ---
+>  configure.ac | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/configure.ac b/configure.ac
+> index 3f21ba4..02bd6f8 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -8,6 +8,7 @@ AC_CONFIG_MACRO_DIR([m4])
+> =20
+>  AC_CANONICAL_HOST
+>  AC_USE_SYSTEM_EXTENSIONS
+> +AC_SYS_LARGEFILE
+> =20
 
+Should we also add AC_FUNC_FSEEKO?
+
+I can't see any use of fseek or ftell in the code, but if we are
+enabling AC_SYS_LARGEFILE by default we also should check for
+AC_FUNC_FSEEKO in order to allow the use of fseeko/ftello whenever
+needed.
+
+>  # Checks for programs.
+>  AC_PROG_CC
+> --=20
+> 2.11.0
+>=20
+
+--WfZ7S8PLGjBY9Voh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl1cD4oACgkQYdRkFR+R
+okO6fQgAz1rUnzcGsTL1IKFsrdtbP1A75Nywyr96DAgKgfR+IJNUx8CM/q0IYHzm
+y0XMpWbNus3z3R+w8nTQdQ3cwC4yhu6TRN44USbnnBZM8P1vRBxAYhZObEZTjt0q
+Q7NFFdsFbq19dQte9EmCGc7cDOyZtPn3Blq8cZaSgu0JScJLVPy15fpiHTSWyvOT
+/ZcWiOjkksJR6K4Yn86eO/qgO60PPXDzQGV5frZHhY4wOFmwIPX+F2q9Wt613O1W
+jwxx1BE1fPEBcPloBih+KOyKbA1du9nKB0KEBx5nGY6blxC5m64vTCjIa3bL51TM
+U/t7+8Y9dcOfiscTaC4yulpPEdEJFQ==
+=b/TJ
+-----END PGP SIGNATURE-----
+
+--WfZ7S8PLGjBY9Voh--
