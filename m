@@ -2,102 +2,95 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8989640F
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2019 17:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3988896435
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2019 17:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730541AbfHTPTl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Aug 2019 11:19:41 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:48518 "EHLO mx1.redhat.com"
+        id S1726345AbfHTPXN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Aug 2019 11:23:13 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:43878 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730538AbfHTPTl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Aug 2019 11:19:41 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        id S1729838AbfHTPXM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 20 Aug 2019 11:23:12 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 0E772811BF;
-        Tue, 20 Aug 2019 15:19:41 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 568A410F23E0;
+        Tue, 20 Aug 2019 15:23:12 +0000 (UTC)
 Received: from localhost (ovpn-116-54.gru2.redhat.com [10.97.116.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 952894126;
-        Tue, 20 Aug 2019 15:19:40 +0000 (UTC)
-Date:   Tue, 20 Aug 2019 12:19:39 -0300
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D90271000323;
+        Tue, 20 Aug 2019 15:23:11 +0000 (UTC)
+Date:   Tue, 20 Aug 2019 12:23:11 -0300
 From:   Bruno Meneguele <bmeneg@redhat.com>
 To:     Vitaly Chikunov <vt@altlinux.org>
 Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] ima-evm-utils: Enable large-file support
-Message-ID: <20190820151939.GC7410@rhlt>
-References: <20190819202507.27735-1-vt@altlinux.org>
+Subject: Re: [PATCH] ima-evm-utils: Change log text of hash in hash_ima
+Message-ID: <20190820152311.GD7410@rhlt>
+References: <20190817223229.22623-1-vt@altlinux.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WfZ7S8PLGjBY9Voh"
+        protocol="application/pgp-signature"; boundary="2iBwrppp/7QCDedR"
 Content-Disposition: inline
-In-Reply-To: <20190819202507.27735-1-vt@altlinux.org>
+In-Reply-To: <20190817223229.22623-1-vt@altlinux.org>
 X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
 User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.27]); Tue, 20 Aug 2019 15:19:41 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Tue, 20 Aug 2019 15:23:12 +0000 (UTC)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---WfZ7S8PLGjBY9Voh
+--2iBwrppp/7QCDedR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Vitaly,
-
-On Mon, Aug 19, 2019 at 11:25:07PM +0300, Vitaly Chikunov wrote:
-> Some architectures require special measures to access large files (LFS).
-> Add `AC_SYS_LARGEFILE' to `configure.ac' to handle this.
->=20
-> It seems that ABI is not changed with this.
+On Sun, Aug 18, 2019 at 01:32:29AM +0300, Vitaly Chikunov wrote:
+> Output value is not just a hash, but hash prefixed with header. User may
+> be confused to see invalid hash value. Thus, change text so that is
+> obvious this is not a raw hash.
 >=20
 > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
 > ---
->  configure.ac | 1 +
->  1 file changed, 1 insertion(+)
+>  src/evmctl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/configure.ac b/configure.ac
-> index 3f21ba4..02bd6f8 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -8,6 +8,7 @@ AC_CONFIG_MACRO_DIR([m4])
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index ef1f289..53711f4 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -606,7 +606,7 @@ static int hash_ima(const char *file)
+>  	len +=3D offset;
 > =20
->  AC_CANONICAL_HOST
->  AC_USE_SYSTEM_EXTENSIONS
-> +AC_SYS_LARGEFILE
+>  	if (imaevm_params.verbose >=3D LOG_INFO)
+> -		log_info("hash(%s): ", imaevm_params.hash_algo);
+> +		log_info("hdr+hash(%s): ", imaevm_params.hash_algo);
 > =20
-
-Should we also add AC_FUNC_FSEEKO?
-
-I can't see any use of fseek or ftell in the code, but if we are
-enabling AC_SYS_LARGEFILE by default we also should check for
-AC_FUNC_FSEEKO in order to allow the use of fseeko/ftello whenever
-needed.
-
->  # Checks for programs.
->  AC_PROG_CC
+>  	if (sigdump || imaevm_params.verbose >=3D LOG_INFO)
+>  		imaevm_hexdump(hash, len);
 > --=20
 > 2.11.0
 >=20
 
---WfZ7S8PLGjBY9Voh
+Haha, simple but really useful change :)
+Thanks.
+
+--2iBwrppp/7QCDedR
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl1cD4oACgkQYdRkFR+R
-okO6fQgAz1rUnzcGsTL1IKFsrdtbP1A75Nywyr96DAgKgfR+IJNUx8CM/q0IYHzm
-y0XMpWbNus3z3R+w8nTQdQ3cwC4yhu6TRN44USbnnBZM8P1vRBxAYhZObEZTjt0q
-Q7NFFdsFbq19dQte9EmCGc7cDOyZtPn3Blq8cZaSgu0JScJLVPy15fpiHTSWyvOT
-/ZcWiOjkksJR6K4Yn86eO/qgO60PPXDzQGV5frZHhY4wOFmwIPX+F2q9Wt613O1W
-jwxx1BE1fPEBcPloBih+KOyKbA1du9nKB0KEBx5nGY6blxC5m64vTCjIa3bL51TM
-U/t7+8Y9dcOfiscTaC4yulpPEdEJFQ==
-=b/TJ
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl1cEF4ACgkQYdRkFR+R
+okO2wAf/cXoKedg9t+SWIj/TdPctL361Z0mhew+IaKIBUU2MERsv/HFTUXB49xX4
+w3PKy297gq0EQC4+zFo/60jvhRq7w1EkDaCx8XIWj0GGVq9pTzyVZCJhVDiEHydW
+/aW0U5uRvPlAu8Nnzjku7xvn88TeujcCKLZ+b6/f7SsTzuS9L/vC/XYfD5kbg2OE
+vC/aD0bq6bbYaX3b4VdU4U0sQ9o2GhPNLbd3yBm1BY7CZYCZDMyX2U8Mmm1Qi2FG
+0uug3ExhnUUlT71dKAokaEcWbZ5vIp7PQg6eSsTnqk+ZjaL0oDP2zD+OFY0M6k52
+wCRQ8jDNMpd9g/++OgIHMrA7uT2AEw==
+=9jLr
 -----END PGP SIGNATURE-----
 
---WfZ7S8PLGjBY9Voh--
+--2iBwrppp/7QCDedR--
