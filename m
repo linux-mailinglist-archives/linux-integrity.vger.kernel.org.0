@@ -2,68 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA9D98440
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Aug 2019 21:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B2E986BA
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Aug 2019 23:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729177AbfHUTWn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 21 Aug 2019 15:22:43 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34116 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727998AbfHUTWn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 21 Aug 2019 15:22:43 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id F0F5630833CB;
-        Wed, 21 Aug 2019 19:22:42 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C53C04513;
-        Wed, 21 Aug 2019 19:22:39 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <1566402203.5162.12.camel@linux.ibm.com>
-References: <1566402203.5162.12.camel@linux.ibm.com> <1562814435.4014.11.camel@linux.ibm.com> <28477.1562362239@warthog.procyon.org.uk> <CAHk-=wjxoeMJfeBahnWH=9zShKp2bsVy527vo3_y8HfOdhwAAw@mail.gmail.com> <20190710194620.GA83443@gmail.com> <20190710201552.GB83443@gmail.com> <CAHk-=wiFti6=K2fyAYhx-PSX9ovQPJUNp0FMdV0pDaO_pSx9MQ@mail.gmail.com> <23498.1565962602@warthog.procyon.org.uk>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     dhowells@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        James Morris <jmorris@namei.org>, keyrings@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, linux-nfs@vger.kernel.org,
-        CIFS <linux-cifs@vger.kernel.org>, linux-afs@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] Keys: Set 4 - Key ACLs for 5.3
+        id S1728609AbfHUVod (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 21 Aug 2019 17:44:33 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:37760 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726513AbfHUVod (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 21 Aug 2019 17:44:33 -0400
+Received: by mail-pf1-f194.google.com with SMTP id y9so1954963pfl.4
+        for <linux-integrity@vger.kernel.org>; Wed, 21 Aug 2019 14:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:subject:to:from:user-agent:date;
+        bh=UtdjlTTwPPpAjm4AUF1n+63QfaoAivza/ox3sRCZdnA=;
+        b=dYfsQD/boswD54RLhQ9rPhB5Jy6CC9kMzU4yhUW97mYq6mK7qizOAnVuaB3skD+o8f
+         gkaB1+cIQZk3UAAjHaJJBTLB2QcsIXcrXyWK5vOyZLE8iEwS0kpOUsZHdtvFPa2AqhKe
+         HzcptyRqxA+zceEHHD9F0tbUbW9qA5dOM8NKM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
+         :user-agent:date;
+        bh=UtdjlTTwPPpAjm4AUF1n+63QfaoAivza/ox3sRCZdnA=;
+        b=ItkySXFFOGgSf7YCMIYHv49RWyPysSPmD6YDZAtWps+sQL/U98K9JR3jwPuy83xIRs
+         lxZl6dKkppzDUxjgWgKTthhA81x8MF/lTPdvaYhABrCQNF/2o5ETibOjBqbq2Bqu3kap
+         RQ5JzplFTIt8KFvlHGI87b8bF7XuRSCe2H9hnRmsbsk+CE11ZUNX1x0fGY1NXieLkk4G
+         J+Fj/9qZBIoCKsFEL64BjD5TEZSnIb9V9n9MIUisnTLcnR7KA/U52OChMul2lRWRpz2l
+         0fHd0eaudJbeEyIL0YFfYBKkG1HQ03Adv80OlvUR2ZWZ7D25wl+SdOA4bUdCUeK9m4T/
+         PhYw==
+X-Gm-Message-State: APjAAAUsRbYI+V95rwmVmDe5gRm5GYCScUBxapcSWrEMt7IowKHW5WAB
+        1zpFIp0Vl40AeQekg+nhJzmVXA==
+X-Google-Smtp-Source: APXvYqy45+Mu6qMPOpu87JONLRNOdIWhh0t+/JhxZBGNWIjM32cz2JoD0Y2H8PFtoZy+NtXUCTBprw==
+X-Received: by 2002:a17:90a:bc4b:: with SMTP id t11mr2104340pjv.87.1566423872553;
+        Wed, 21 Aug 2019 14:44:32 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id e26sm27118599pfd.14.2019.08.21.14.44.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2019 14:44:31 -0700 (PDT)
+Message-ID: <5d5dbb3f.1c69fb81.eaa49.52b0@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <19087.1566415359.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: 8BIT
-Date:   Wed, 21 Aug 2019 20:22:39 +0100
-Message-ID: <19088.1566415359@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Wed, 21 Aug 2019 19:22:43 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190821191131.y7cmdtkxfs3ojmv6@linux.intel.com>
+References: <20190812223622.73297-1-swboyd@chromium.org> <20190812223622.73297-4-swboyd@chromium.org> <20190819163505.wnyhgrtg4akiifdn@linux.intel.com> <5d5ad75e.1c69fb81.43fc3.5a77@mx.google.com> <20190821191131.y7cmdtkxfs3ojmv6@linux.intel.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>
+Subject: Re: [PATCH v4 3/6] tpm: tpm_tis_spi: Add a pre-transfer callback
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Wed, 21 Aug 2019 14:44:31 -0700
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-I added a bunch of tests to the keyutils testsuite, currently on my -next
-branch:
+Quoting Jarkko Sakkinen (2019-08-21 12:11:31)
+> On Mon, Aug 19, 2019 at 10:07:41AM -0700, Stephen Boyd wrote:
+> > Any name is fine for me. Any suggestions?
+>=20
+> What if just add @ready to struct tpm_tis_spi_phy add drop this patch
+> altogether?
+>=20
+> It is only used only by CR50 but I think it is less of an overkill than
+> adding a callback.
+>=20
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/log/?h=next
+Ok, sounds good.
 
-See:
-
-	Add a keyctl command for granting a permit on a key
-	Handle kernel having key/keyring ACLs
-
-I've added manpages to describe the new bits, but I wonder whether I should
-add a manpage specifically to detail the permissions system.  It'll probably
-be useful when more advanced subjects become available, such as for specific
-UIDs and for containers-as-a-whole.
-
-David
