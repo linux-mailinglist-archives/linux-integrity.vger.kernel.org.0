@@ -2,131 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7271A98087
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Aug 2019 18:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C784098219
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Aug 2019 19:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729162AbfHUQqo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 21 Aug 2019 12:46:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59620 "EHLO mail.kernel.org"
+        id S1729713AbfHUR6y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 21 Aug 2019 13:58:54 -0400
+Received: from mga09.intel.com ([134.134.136.24]:36081 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727862AbfHUQqo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 21 Aug 2019 12:46:44 -0400
-Received: from localhost (wsip-184-188-36-2.sd.sd.cox.net [184.188.36.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3487D22D6D;
-        Wed, 21 Aug 2019 16:46:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566406003;
-        bh=WQ2BlRv9mAl/kq+zQd+AH1qq87Y+Uvy3hDKIZvT8V28=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V+bfxgzitOAgmD3JoQz1FwTEvVsSra+bN8CblJi8UOvJ1nxyg0FOHGtPtAo758uIN
-         b0c1KihRa1iKO2CDB3W4YkzKzYugI9s0tXhUxYuWu8tkx5bHWcqAyWfxUaerqSwdWL
-         DwkJKMGD+XsH0HINst1IbsxbD8j3b5Ykc9ZEMbqg=
-Date:   Wed, 21 Aug 2019 09:32:24 -0700
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nayna Jain <nayna@linux.ibm.com>
-Cc:     linuxppc-dev@ozlabs.org, linux-efi@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>
-Subject: Re: [PATCH v2 4/4] powerpc: load firmware trusted keys into kernel
- keyring
-Message-ID: <20190821163224.GC28571@kroah.com>
-References: <1566400103-18201-1-git-send-email-nayna@linux.ibm.com>
- <1566400103-18201-5-git-send-email-nayna@linux.ibm.com>
+        id S1730505AbfHUR6x (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 21 Aug 2019 13:58:53 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Aug 2019 10:58:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,412,1559545200"; 
+   d="scan'208";a="172851343"
+Received: from kumarsh1-mobl.ger.corp.intel.com (HELO localhost) ([10.249.33.104])
+  by orsmga008.jf.intel.com with ESMTP; 21 Aug 2019 10:58:47 -0700
+Date:   Wed, 21 Aug 2019 20:58:46 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>
+Subject: Re: [PATCH v4 4/6] tpm: tpm_tis_spi: Export functionality to other
+ drivers
+Message-ID: <20190821175846.ewcrpam44fdm27ya@linux.intel.com>
+References: <20190812223622.73297-1-swboyd@chromium.org>
+ <20190812223622.73297-5-swboyd@chromium.org>
+ <20190819164005.evg35d2hcuslbnrj@linux.intel.com>
+ <5d5ad7f0.1c69fb81.ebfc2.7e1d@mx.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1566400103-18201-5-git-send-email-nayna@linux.ibm.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <5d5ad7f0.1c69fb81.ebfc2.7e1d@mx.google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 11:08:23AM -0400, Nayna Jain wrote:
-> The keys used to verify the Host OS kernel are managed by OPAL as secure
-> variables. This patch loads the verification keys into the .platform
-> keyring and revocation keys into .blacklist keyring. This enables
-> verification and loading of the kernels signed by the boot time keys which
-> are trusted by firmware.
+On Mon, Aug 19, 2019 at 10:10:08AM -0700, Stephen Boyd wrote:
+> Quoting Jarkko Sakkinen (2019-08-19 09:40:05)
+> > On Mon, Aug 12, 2019 at 03:36:20PM -0700, Stephen Boyd wrote:
+> > > Export a new function, tpm_tis_spi_init(), and the associated
+> > > read/write/transfer APIs so that we can create variant drivers based on
+> > > the core functionality of this TPM SPI driver. Variant drivers can wrap
+> > > the tpm_tis_spi_phy struct with their own struct and override the
+> > > behavior of tpm_tis_spi_transfer() by supplying their own flow control
+> > > and pre-transfer hooks. This shares the most code between the core
+> > > driver and any variants that want to override certain behavior without
+> > > cluttering the core driver.
+> > 
+> > I think this is adding way too much complexity for the purpose. We
+> > definitely do want this three layer architecture here.
+> > 
+> > Instead there should be a single tpm_tis_spi driver that dynamically
+> > either TCG or CR50. I rather take some extra bytes in the LKM than
+> > the added complexity.
+> > 
 > 
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> ---
->  security/integrity/Kconfig                    |  9 ++
->  security/integrity/Makefile                   |  3 +
->  .../integrity/platform_certs/load_powerpc.c   | 94 +++++++++++++++++++
->  3 files changed, 106 insertions(+)
->  create mode 100644 security/integrity/platform_certs/load_powerpc.c
+> Ok. I had that patch originally[1]. Do you want me to resend that patch
+> and start review over from there?
 > 
-> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-> index 0bae6adb63a9..2b4109c157e2 100644
-> --- a/security/integrity/Kconfig
-> +++ b/security/integrity/Kconfig
-> @@ -72,6 +72,15 @@ config LOAD_IPL_KEYS
->         depends on S390
->         def_bool y
->  
-> +config LOAD_PPC_KEYS
-> +	bool "Enable loading of platform and revocation keys for POWER"
-> +	depends on INTEGRITY_PLATFORM_KEYRING
-> +	depends on PPC_SECURE_BOOT
-> +	def_bool y
+> [1] https://lkml.kernel.org/r/5d2f955d.1c69fb81.35877.7018@mx.google.com
 
-def_bool y only for things that the system will not boot if it is not
-enabled because you added a new feature.  Otherwise just do not set the
-default.
+What if:
 
-> +	help
-> +	  Enable loading of db keys to the .platform keyring and dbx keys to
-> +	  the .blacklist keyring for powerpc based platforms.
-> +
->  config INTEGRITY_AUDIT
->  	bool "Enables integrity auditing support "
->  	depends on AUDIT
-> diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-> index 525bf1d6e0db..9eeb6b053de3 100644
-> --- a/security/integrity/Makefile
-> +++ b/security/integrity/Makefile
-> @@ -14,6 +14,9 @@ integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
->  				      platform_certs/load_uefi.o \
->  				      platform_certs/keyring_handler.o
->  integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
-> +integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
-> +					 platform_certs/load_powerpc.o \
-> +					 platform_certs/keyring_handler.o
->  $(obj)/load_uefi.o: KBUILD_CFLAGS += -fshort-wchar
-  
->  subdir-$(CONFIG_IMA)			+= ima
-> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
-> new file mode 100644
-> index 000000000000..f4d869171062
-> --- /dev/null
-> +++ b/security/integrity/platform_certs/load_powerpc.c
-> @@ -0,0 +1,94 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2019 IBM Corporation
-> + * Author: Nayna Jain <nayna@linux.ibm.com>
-> + *
-> + * load_powernv.c
+1. You mostly use this solution but have it as a separate source module
+   only.
+2. Use TPM_IS_CR50 only once to bind the callbacks.
 
-That's not the name of this file :(
-
-And the perfect example of why you NEVER have the name of the file in
-the file itself, as it's not needed and easy to get wrong :)
-
-thanks,
-
-greg k-h
+/Jarkko
