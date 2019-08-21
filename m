@@ -2,54 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 333119843D
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Aug 2019 21:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA9D98440
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Aug 2019 21:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729743AbfHUTUo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 21 Aug 2019 15:20:44 -0400
-Received: from mga18.intel.com ([134.134.136.126]:23453 "EHLO mga18.intel.com"
+        id S1729177AbfHUTWn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 21 Aug 2019 15:22:43 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:34116 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729618AbfHUTUo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 21 Aug 2019 15:20:44 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Aug 2019 12:20:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,412,1559545200"; 
-   d="scan'208";a="178598693"
-Received: from kumarsh1-mobl.ger.corp.intel.com (HELO localhost) ([10.249.33.104])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Aug 2019 12:20:36 -0700
-Date:   Wed, 21 Aug 2019 22:20:35 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org, dhowells@redhat.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        peterhuewe@gmx.de, jgg@ziepe.ca, jejb@linux.ibm.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, casey@schaufler-ca.com,
-        ard.biesheuvel@linaro.org, daniel.thompson@linaro.org,
-        linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org
-Subject: Re: [PATCH v5 0/4] Create and consolidate trusted keys subsystem
-Message-ID: <20190821192035.aahtxb3qyl4vpezv@linux.intel.com>
-References: <1566392345-15419-1-git-send-email-sumit.garg@linaro.org>
+        id S1727998AbfHUTWn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 21 Aug 2019 15:22:43 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id F0F5630833CB;
+        Wed, 21 Aug 2019 19:22:42 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C53C04513;
+        Wed, 21 Aug 2019 19:22:39 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <1566402203.5162.12.camel@linux.ibm.com>
+References: <1566402203.5162.12.camel@linux.ibm.com> <1562814435.4014.11.camel@linux.ibm.com> <28477.1562362239@warthog.procyon.org.uk> <CAHk-=wjxoeMJfeBahnWH=9zShKp2bsVy527vo3_y8HfOdhwAAw@mail.gmail.com> <20190710194620.GA83443@gmail.com> <20190710201552.GB83443@gmail.com> <CAHk-=wiFti6=K2fyAYhx-PSX9ovQPJUNp0FMdV0pDaO_pSx9MQ@mail.gmail.com> <23498.1565962602@warthog.procyon.org.uk>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     dhowells@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        James Morris <jmorris@namei.org>, keyrings@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, linux-nfs@vger.kernel.org,
+        CIFS <linux-cifs@vger.kernel.org>, linux-afs@lists.infradead.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] Keys: Set 4 - Key ACLs for 5.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1566392345-15419-1-git-send-email-sumit.garg@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <19087.1566415359.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: 8BIT
+Date:   Wed, 21 Aug 2019 20:22:39 +0100
+Message-ID: <19088.1566415359@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Wed, 21 Aug 2019 19:22:43 +0000 (UTC)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 06:29:01PM +0530, Sumit Garg wrote:
-> [SNIP]
+I added a bunch of tests to the keyutils testsuite, currently on my -next
+branch:
 
-Thank you. And as I promised I will give my remarks about 5/5 in the
-previous revision.
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/log/?h=next
 
-/Jarkko
+See:
+
+	Add a keyctl command for granting a permit on a key
+	Handle kernel having key/keyring ACLs
+
+I've added manpages to describe the new bits, but I wonder whether I should
+add a manpage specifically to detail the permissions system.  It'll probably
+be useful when more advanced subjects become available, such as for specific
+UIDs and for containers-as-a-whole.
+
+David
