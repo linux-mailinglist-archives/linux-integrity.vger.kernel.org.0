@@ -2,121 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D6E98AE0
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Aug 2019 07:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62803993C5
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Aug 2019 14:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728080AbfHVFla (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Aug 2019 01:41:30 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:44064 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726857AbfHVFl3 (ORCPT
+        id S2387665AbfHVMd4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Aug 2019 08:33:56 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:34548 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387650AbfHVMdz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Aug 2019 01:41:29 -0400
-Received: by mail-io1-f67.google.com with SMTP id j4so1137985iog.11;
-        Wed, 21 Aug 2019 22:41:29 -0700 (PDT)
+        Thu, 22 Aug 2019 08:33:55 -0400
+Received: by mail-lj1-f193.google.com with SMTP id x18so5406437ljh.1
+        for <linux-integrity@vger.kernel.org>; Thu, 22 Aug 2019 05:33:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hn6rxeyfQPsYnbNUt5MSgWQtbToPh9tKf9jba7m/Mb0=;
-        b=qh9NTAxShXjNLbP7aaKIkgSdqONWOprq9JZrxoqc5kVXFAF5XJO5QWJ5FTba1FYzh3
-         y+OtXi6NNfMAbQe96n5PTZ2GLN8Ybf570q7QcCkXQwkR3A2jqYHPWQTtLJDyCxxQ8vpd
-         FzSSFLB6V/D5k3rOIAg7WfBgNX8of0+VO6VwIiUvUCxse5vr2s4F3MMKuILFAbFrOqNJ
-         lS+1sHQf8TtPAnMc9+mI5kOv/1frTd1/wywNNNTIIz42s5GGVf1QxgFPRhvXI6dIUv/7
-         myvqsmGFBPQngRg+CXIaw4wu72oAay3IjQyGlN2B4sBh6xhEnbbur+SeKGMAfsOPCbsP
-         1RXg==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=AUhQHTcU1mgF9tzfCfhTROT5gqg6hyWkEW6XXLZ5cKmIG6UWi6GCnenpPcHX4Cri83
+         w1TgBBzhAQ9fJrCgRmYTB4GtgbaO8IYXyp82dYVIMcnRnJj3uIfVM+gak46EuT3WPl1x
+         MyO4bF1hJx29JmhWKS8kScMNA5YTmDoIRwF1/KQAtk31i+8c3IqCHvOpnyvwNseUyrye
+         1IqvNZv01+7i1PNQshNGopcLr8O6ocZqfYYvQlq9uTQ8VyMAZeOwyheLMbZ2C+xE2wz6
+         V+JMN5SgJUKZipPYiSbmyA/OCQqpqeQ5Dv68tcLS5KbcRU0g3nTBmm4Sbfda1dl2wNbG
+         eFAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hn6rxeyfQPsYnbNUt5MSgWQtbToPh9tKf9jba7m/Mb0=;
-        b=nUhf9Phac08CA/jnkLXcJoi/sEPWvbc+5LpZUcUq+7bk2Up3hmSGWRVvOPQucx+MVD
-         o4wnb8TAcupcOYClvAmrpemduSnNTPnAoP/34rddiZBIMqh82oz/5rGe5wEOYXx2CCbB
-         QQe6fIwQQucfEIimFhzDPMjOsB9i+00edLTmi3GjYdP16K6LJ4q8k/BxpbDq0vl0kvoW
-         DMsooqligz/M4fr9nfrPk7yKhcgbF5CU+c47yYqnXzFyJ4fozfjCcY5NzOHtzKtD2YHI
-         IS511i++fXETUhLa1KHl9B6/UHkh8hesd4yJCUAnItuXua3mjorhOcCkaQbv3pGGaR/P
-         dJXw==
-X-Gm-Message-State: APjAAAWbAwT+YZMtjrGt9acXxzEIARfkOBVE5X02ghPpEpS9ITZACmf1
-        PcMcFvt9uOqvhFDFbI7oEe1vr6j+N23a/RjDl7w=
-X-Google-Smtp-Source: APXvYqy6nIsjmdyjJU/y7Jt/ct3pwz+lpQCAmPtDtYRpTMGX/1uH9hIhwQwdQXVE23y8PT5ZqJiCE/t5E0jsquqbZXI=
-X-Received: by 2002:a6b:6e0e:: with SMTP id d14mr25453232ioh.18.1566452488810;
- Wed, 21 Aug 2019 22:41:28 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=qzVe3OMPRipPxM2aJUzjXh0jtSS0HiZ7J36GOfb7KYOmnOOLvIpoYGdSZju0nag7NR
+         67wAQflkhYSQeJPTGYltu4tkhfiRomEBAR3CakD+fvck22hj9C6BStohwNbpsoSp9mDD
+         zz1p8QLYdD/UsvmStBqkRlYpgE5CJj/Fh8o7wjxEKDCkoDj1WtgzaNa7M23V9ZSonUpx
+         RUhwPOQYQ7S482HjsnNbYSsU+uXKJQIlIgPaCqT7dH9hf7bpg2Vh7L/g+m5wYWeXLysW
+         DkKs+ih/WwuBwQl9cw6vKeLOZQE5B8eltFtikFDcFj6YOJC2kaZHCgCT3ZvStw5xyiVm
+         Jz1Q==
+X-Gm-Message-State: APjAAAVgROLV1sCIHWpuPYL8f7PwJCZpkMgoKYXL4imGKhuD2CD1IE5O
+        rnByD7GNG/oEtWjIBQM4fwcVE4WLMc3k6B/slmc=
+X-Google-Smtp-Source: APXvYqxg7AtGyQDADYULNl8nHybD0AJp2ycxrRkCZAvwbR0kvEi3IE06cyQbgNbI8SGqgtUqnsJ3Iq1qssJPpmxZSt8=
+X-Received: by 2002:a2e:970e:: with SMTP id r14mr16736896lji.204.1566477233810;
+ Thu, 22 Aug 2019 05:33:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <1566400103-18201-1-git-send-email-nayna@linux.ibm.com>
- <1566400103-18201-2-git-send-email-nayna@linux.ibm.com> <eda9210b56ab220519642d272079eeca60a18265.camel@gmail.com>
-In-Reply-To: <eda9210b56ab220519642d272079eeca60a18265.camel@gmail.com>
-From:   "Oliver O'Halloran" <oohall@gmail.com>
-Date:   Thu, 22 Aug 2019 15:41:17 +1000
-Message-ID: <CAOSf1CHOsnnC94DxHhG4opZfYjV7u_ndrE2B3Cr6ZV58RAxoWA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] powerpc/powernv: Add OPAL API interface to access
- secure variable
-To:     Nayna Jain <nayna@linux.ibm.com>,
-        linuxppc-dev <linuxppc-dev@ozlabs.org>,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>
+Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:33:53
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
+Date:   Thu, 22 Aug 2019 12:33:53 +0000
+Message-ID: <CAN-_bTaF=eU-LMX4XaaadMGLTp31z=_83HGFhxq7=Kkzk_Q0hg@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 3:02 PM Oliver O'Halloran <oohall@gmail.com> wrote:
->
-> On Wed, 2019-08-21 at 11:08 -0400, Nayna Jain wrote:
-> > diff --git a/arch/powerpc/platforms/powernv/opal.c b/arch/powerpc/platforms/powernv/opal.c
-> > index aba443be7daa..ffe6f1cf0830 100644
-> > --- a/arch/powerpc/platforms/powernv/opal.c
-> > +++ b/arch/powerpc/platforms/powernv/opal.c
-> > @@ -32,6 +32,8 @@
-> >  #include <asm/mce.h>
-> >  #include <asm/imc-pmu.h>
-> >  #include <asm/bug.h>
-> > +#include <asm/secvar.h>
-> > +#include <asm/secboot.h>
-> >
-> >  #include "powernv.h"
-> >
-> > @@ -988,6 +990,9 @@ static int __init opal_init(void)
-> >       /* Initialise OPAL Power control interface */
-> >       opal_power_control_init();
-> >
-> > +     if (is_powerpc_secvar_supported())
-> > +             secvar_init();
-> > +
->
-> The usual pattern here is to have the init function check for support
-> internally.
->
-> Also, is_powerpc_secvar_supported() doesn't appear to be defined
-> anywhere. Is that supposed to be is_opal_secvar_supported()? Or is this
-> series supposed to be applied on top of another series?
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-To answer my own question, yes it depends on the series at [1] which
-adds IMA support. Turns out actually reading the cover letter helps,
-who knew.
-
-That said, I'm still not entirely sure about this. The implementation
-of is_powerpc_secvar_supported() in [2] parses the DT and seems to
-assume the DT bindings that OPAL produces. Are those common with the
-DT bindings produced by OF when running on pseries?
-
-[1] http://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=125961
-[2] http://patchwork.ozlabs.org/patch/1149257/
-
->
-> >       return 0;
-> >  }
-> >  machine_subsys_initcall(powernv, opal_init);
->
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
