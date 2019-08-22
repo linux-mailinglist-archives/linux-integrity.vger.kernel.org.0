@@ -2,92 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62803993C5
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Aug 2019 14:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E81C99BEE
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Aug 2019 19:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387665AbfHVMd4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Aug 2019 08:33:56 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:34548 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387650AbfHVMdz (ORCPT
+        id S2391022AbfHVR3b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Aug 2019 13:29:31 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:46744 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390632AbfHVR3a (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Aug 2019 08:33:55 -0400
-Received: by mail-lj1-f193.google.com with SMTP id x18so5406437ljh.1
-        for <linux-integrity@vger.kernel.org>; Thu, 22 Aug 2019 05:33:54 -0700 (PDT)
+        Thu, 22 Aug 2019 13:29:30 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q139so4382735pfc.13
+        for <linux-integrity@vger.kernel.org>; Thu, 22 Aug 2019 10:29:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=AUhQHTcU1mgF9tzfCfhTROT5gqg6hyWkEW6XXLZ5cKmIG6UWi6GCnenpPcHX4Cri83
-         w1TgBBzhAQ9fJrCgRmYTB4GtgbaO8IYXyp82dYVIMcnRnJj3uIfVM+gak46EuT3WPl1x
-         MyO4bF1hJx29JmhWKS8kScMNA5YTmDoIRwF1/KQAtk31i+8c3IqCHvOpnyvwNseUyrye
-         1IqvNZv01+7i1PNQshNGopcLr8O6ocZqfYYvQlq9uTQ8VyMAZeOwyheLMbZ2C+xE2wz6
-         V+JMN5SgJUKZipPYiSbmyA/OCQqpqeQ5Dv68tcLS5KbcRU0g3nTBmm4Sbfda1dl2wNbG
-         eFAg==
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:subject:to:from:user-agent:date;
+        bh=ukVWNvitz/UHIvotHd8untO0xzPRYvc+1WN6pDOo+Js=;
+        b=l6U7Lyf0pAC/hPrTqdj669gt+CJ2CBM5J0Opg6CFM4CUAfgfTtm4KpO9FqRIop85Qz
+         og1xd2wgn2De8IsjsrP8/RZGxBgAftfBiGPbR1jyBC+m6ItdST7JEQuPdc27GZqj+TUy
+         FVB72DFh2flIuP8MmLebo1Fe4pP6NVI95/AvQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=qzVe3OMPRipPxM2aJUzjXh0jtSS0HiZ7J36GOfb7KYOmnOOLvIpoYGdSZju0nag7NR
-         67wAQflkhYSQeJPTGYltu4tkhfiRomEBAR3CakD+fvck22hj9C6BStohwNbpsoSp9mDD
-         zz1p8QLYdD/UsvmStBqkRlYpgE5CJj/Fh8o7wjxEKDCkoDj1WtgzaNa7M23V9ZSonUpx
-         RUhwPOQYQ7S482HjsnNbYSsU+uXKJQIlIgPaCqT7dH9hf7bpg2Vh7L/g+m5wYWeXLysW
-         DkKs+ih/WwuBwQl9cw6vKeLOZQE5B8eltFtikFDcFj6YOJC2kaZHCgCT3ZvStw5xyiVm
-         Jz1Q==
-X-Gm-Message-State: APjAAAVgROLV1sCIHWpuPYL8f7PwJCZpkMgoKYXL4imGKhuD2CD1IE5O
-        rnByD7GNG/oEtWjIBQM4fwcVE4WLMc3k6B/slmc=
-X-Google-Smtp-Source: APXvYqxg7AtGyQDADYULNl8nHybD0AJp2ycxrRkCZAvwbR0kvEi3IE06cyQbgNbI8SGqgtUqnsJ3Iq1qssJPpmxZSt8=
-X-Received: by 2002:a2e:970e:: with SMTP id r14mr16736896lji.204.1566477233810;
- Thu, 22 Aug 2019 05:33:53 -0700 (PDT)
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
+         :user-agent:date;
+        bh=ukVWNvitz/UHIvotHd8untO0xzPRYvc+1WN6pDOo+Js=;
+        b=VhlHcOQD96OkwnyY/Qb/8xCc3OzH+qWs6nLcyPnpgPN9jgFaNqBLfzxSKoaj/QLTLi
+         A9G8vVUpRZCHMMR0S1SA+PxLDvlWxO5gYL2ezwzA3H9zvHqWXFOiDUhcWx2DYxt6Py+H
+         KgTdknOMkMZrT32fS9PS4116UmUU4ZdKutHd08r96sqJlllSG6M6AQFKenhTjVAN/ehJ
+         E9jv2xZ/PFE2vGaMh0s8nGlvzTccBSl2otf44fQFd9M5a7K0CXeo60xVcuxRK06n9IZP
+         FIu0htjLzSvXfbseHgX4HDuRUgS5d2wSYACZtvElbXKXfjBYDqTr3wThjY/ZongZkNUo
+         1b8w==
+X-Gm-Message-State: APjAAAVDV1mLhP9OVdJKN7AHobjpAP/eo12K3bkn3cnM3v7iMtZ4TjjB
+        3gYaOvfKXou82i5K+56T1xlABg==
+X-Google-Smtp-Source: APXvYqz4lxbTsv5Z2JO/gKEg6i2DpoNEniiFZCAuMi/Tl3YoY+PSd8B4B3xWz6iKO9e1ZGHdDvWg5A==
+X-Received: by 2002:a17:90a:380a:: with SMTP id w10mr798893pjb.138.1566494969205;
+        Thu, 22 Aug 2019 10:29:29 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id b6sm23644299pgq.26.2019.08.22.10.29.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2019 10:29:28 -0700 (PDT)
+Message-ID: <5d5ed0f8.1c69fb81.46245.daf8@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:33:53
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
-Date:   Thu, 22 Aug 2019 12:33:53 +0000
-Message-ID: <CAN-_bTaF=eU-LMX4XaaadMGLTp31z=_83HGFhxq7=Kkzk_Q0hg@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190821175846.ewcrpam44fdm27ya@linux.intel.com>
+References: <20190812223622.73297-1-swboyd@chromium.org> <20190812223622.73297-5-swboyd@chromium.org> <20190819164005.evg35d2hcuslbnrj@linux.intel.com> <5d5ad7f0.1c69fb81.ebfc2.7e1d@mx.google.com> <20190821175846.ewcrpam44fdm27ya@linux.intel.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>
+Subject: Re: [PATCH v4 4/6] tpm: tpm_tis_spi: Export functionality to other drivers
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 22 Aug 2019 10:29:27 -0700
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
+Quoting Jarkko Sakkinen (2019-08-21 10:58:46)
+> On Mon, Aug 19, 2019 at 10:10:08AM -0700, Stephen Boyd wrote:
+> > Quoting Jarkko Sakkinen (2019-08-19 09:40:05)
+> > >=20
+> > > Instead there should be a single tpm_tis_spi driver that dynamically
+> > > either TCG or CR50. I rather take some extra bytes in the LKM than
+> > > the added complexity.
+> > >=20
+> >=20
+> > Ok. I had that patch originally[1]. Do you want me to resend that patch
+> > and start review over from there?
+> >=20
+> > [1] https://lkml.kernel.org/r/5d2f955d.1c69fb81.35877.7018@mx.google.com
+>=20
+> What if:
+>=20
+> 1. You mostly use this solution but have it as a separate source module
+>    only.
+> 2. Use TPM_IS_CR50 only once to bind the callbacks.
+>=20
 
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+Ok I think I understand. Take the callback approach from these patches
+and combine that with the TPM_IS_CR50 changes I made in [1]. I'll try it
+out and resend.
+
