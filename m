@@ -2,81 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D22E09D389
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Aug 2019 17:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD279D51F
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Aug 2019 19:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732225AbfHZP56 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Aug 2019 11:57:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60902 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727864AbfHZP56 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Aug 2019 11:57:58 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C369620828;
-        Mon, 26 Aug 2019 15:57:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566835077;
-        bh=blUYG8ZxI4V85CCdRu6wwyVrWFwoe8m7ktk5ZMl8OdU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GBnmuK7Pv1FZCHS+Livxfezz4rL3sDkZZ+RwyLnRlwoMa56BTxvqZOBdxs42Yh5op
-         S7+MjUjLraULqNWCgT8f0CmoKTO/dSXf0J4YVUptakeIlhn5aaHGbrE7EvuvmMJgGo
-         Gm1Oj30vyfO98acaBe7IC1QYe6ai1wJhWrAZVl5A=
-Date:   Mon, 26 Aug 2019 17:57:54 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nayna <nayna@linux.vnet.ibm.com>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>
-Subject: Re: [PATCH v3 2/4] powerpc: expose secure variables to userspace via
- sysfs
-Message-ID: <20190826155754.GA489@kroah.com>
-References: <1566825818-9731-1-git-send-email-nayna@linux.ibm.com>
- <1566825818-9731-3-git-send-email-nayna@linux.ibm.com>
- <20190826145649.GA27342@kroah.com>
- <2c5b8ba3-e5a3-5c80-a291-ea9965db2019@linux.vnet.ibm.com>
+        id S1731986AbfHZRkj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Aug 2019 13:40:39 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:46191 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731256AbfHZRki (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 26 Aug 2019 13:40:38 -0400
+Received: by mail-io1-f68.google.com with SMTP id x4so39165110iog.13
+        for <linux-integrity@vger.kernel.org>; Mon, 26 Aug 2019 10:40:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=07FbLzlU1Ecz43EkldpfmQ01c+welin2T9Ux9RN+VOA=;
+        b=jUktPM/+OKebsv6P/ehphnW7txXBARqsKU0ruH32PE1OiNAW7yGvUkyq4+ekbKnfoJ
+         18QQJJJ0+ms68LlNYQJyAwMDc0wrtDZn0oZLbAcZGMdhLqJq1DWNt159dVv1RGCYGbZp
+         4Cv8usiDzHIi6fraaFOJtNw2wQAGBDlbgdOs2kD5USWeBiv1vh7d3eDQ/z3VHHDMfcKY
+         kmNp1wOZna+Ll+lQTmfx06KtrFNjR9AdjQ/TmSbd9IHGlY+g1WnWfUOtMSjlYvoNq3ZD
+         ssgcOGtDlKDQBjLxRqnAjffKFcmGA1bDuGNwzkBERb3jVo6YvYKWaqX6j7+NoqjHNg0R
+         i4nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=07FbLzlU1Ecz43EkldpfmQ01c+welin2T9Ux9RN+VOA=;
+        b=t/yTDREtU7m9bP9EjwcyFQkXjK0LP8SbWGfOpu4kLkpdk+1sKezL8iV5utf9nBEDgG
+         K48s7Rkq4WYXBPbZlUxHQePHPcm1ihWzeYm0pK7ho/fvYoABBHYBD7dK67gWSj0xetSB
+         d14jAYtYW/UcNNRuczRqAxnNURh4hnIIpvNCCiVZauk8HcVtx8qveFP58mldzvZkgqrc
+         exSCkh4yAnvKtzPUbhkhYqXCVa/dBvC7X+c0YgxZ4E0o7dBp4u9Comaw4juvKePORNy1
+         QlxVwLB0UQnE8GcLIXx8Fd0YyyQ5S8JESX4ZDT5Ly6//AoGwXOmd2AC8kxYd8glq/ivj
+         t+qQ==
+X-Gm-Message-State: APjAAAWeFY1lQ4RC2Yn2qSTLfrCI48r0ql5uAkT7rpog9khGU71TTXYj
+        /oPxC7uUlAQ/RlYExQDUwZ2y3wXmsETU5zXsTs5NPA==
+X-Google-Smtp-Source: APXvYqww5diAuNUdEkTEcBBDnreTmON4tALCdYa3hUfAPKmUmf9O2eXoldlz14FrKT+I0D8//8NJYLuMJIA0RpfUjGI=
+X-Received: by 2002:a6b:bcc4:: with SMTP id m187mr13841450iof.16.1566841237601;
+ Mon, 26 Aug 2019 10:40:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2c5b8ba3-e5a3-5c80-a291-ea9965db2019@linux.vnet.ibm.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20190826081752.57258-1-kkamagui@gmail.com>
+In-Reply-To: <20190826081752.57258-1-kkamagui@gmail.com>
+From:   Matthew Garrett <mjg59@google.com>
+Date:   Mon, 26 Aug 2019 10:40:25 -0700
+Message-ID: <CACdnJutomLNthYDzEc0wFBcBHK5iqnk0p-hkAkp57zQZ38oGPA@mail.gmail.com>
+Subject: Re: [PATCH] x86: tpm: Remove a busy bit of the NVS area for
+ supporting AMD's fTPM
+To:     Seunghun Han <kkamagui@gmail.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Aug 26, 2019 at 11:46:11AM -0400, Nayna wrote:
-> 
-> 
-> On 08/26/2019 10:56 AM, Greg Kroah-Hartman wrote:
-> > On Mon, Aug 26, 2019 at 09:23:36AM -0400, Nayna Jain wrote:
-> > > +static struct kobj_attribute size_attr = __ATTR_RO(size);
-> > Wait, why not just normal ATTR_RO()?
-> 
-> Oh!! Sorry. I am not seeing this macro in sysfs.h. am I missing something ?
+On Mon, Aug 26, 2019 at 1:18 AM Seunghun Han <kkamagui@gmail.com> wrote:
+> To support AMD's fTPM, I removed the busy bit from the ACPI NVS area like
+> the reserved area so that AMD's fTPM regions could be assigned in it.
 
-Ugh, no, you are right, I thought it was there as the BIN_ATTR_RO() one
-was there :)
-
-> > > +static struct bin_attribute data_attr = __BIN_ATTR_RO(data, VARIABLE_MAX_SIZE);
-> > And BIN_ATTR_RO() here?
-> 
-> This would have worked. I think I just thought to use the same way as
-> __ATTR_RO().
-
-Yes, that's fine to use, sorry for the noise.
-
-greg k-h
+drivers/acpi/nvs.c saves and restores the contents of NVS regions, and
+if other drivers use these regions without any awareness of this then
+things may break. I'm reluctant to say that just unilaterally marking
+these regions as available is a good thing, but it's clearly what's
+expected by AMD's implementation. One approach would be to have a
+callback into the nvs code to indicate that a certain region should be
+handed off to a driver, which would ensure that we can handle this on
+a case by case basis?
