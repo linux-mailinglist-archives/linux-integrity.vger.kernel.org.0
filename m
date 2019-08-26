@@ -2,40 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B87B59C8B9
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Aug 2019 07:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAF49C8E1
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Aug 2019 07:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725933AbfHZFka (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Aug 2019 01:40:30 -0400
-Received: from mga12.intel.com ([192.55.52.136]:38271 "EHLO mga12.intel.com"
+        id S1729191AbfHZF7J (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Aug 2019 01:59:09 -0400
+Received: from mga18.intel.com ([134.134.136.126]:34419 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725806AbfHZFka (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Aug 2019 01:40:30 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1726606AbfHZF7J (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 26 Aug 2019 01:59:09 -0400
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Aug 2019 22:40:29 -0700
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Aug 2019 22:59:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,431,1559545200"; 
-   d="scan'208";a="355316672"
+   d="scan'208";a="174103428"
 Received: from chlopez-mobl1.amr.corp.intel.com (HELO localhost) ([10.252.38.177])
-  by orsmga005.jf.intel.com with ESMTP; 25 Aug 2019 22:40:26 -0700
-Date:   Mon, 26 Aug 2019 08:40:24 +0300
+  by orsmga008.jf.intel.com with ESMTP; 25 Aug 2019 22:59:05 -0700
+Date:   Mon, 26 Aug 2019 08:59:03 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND][PATCH v2-resend] MAINTAINERS: fix style in KEYS-TRUSTED
- entry
-Message-ID: <20190826054024.fjx3robu464ndvi7@linux.intel.com>
-References: <20190825170015.3199-1-lukas.bulwahn@gmail.com>
+To:     Seunghun Han <kkamagui@gmail.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] tpm: tpm_crb: Add an AMD fTPM support feature
+Message-ID: <20190826055903.5um5pfweoszibem3@linux.intel.com>
+References: <20190825174019.5977-1-kkamagui@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190825170015.3199-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20190825174019.5977-1-kkamagui@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
@@ -43,21 +40,44 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Aug 25, 2019 at 07:00:15PM +0200, Lukas Bulwahn wrote:
-> Mimi Zohar used spaces instead of a tab when adding Jarkko Sakkinen as
-> further maintainer to the KEYS-TRUSTED section entry.
+On Mon, Aug 26, 2019 at 02:40:19AM +0900, Seunghun Han wrote:
+> I'm Seunghun Han and work at the Affiliated Institute of ETRI. I got an AMD
+> system which had a Ryzen Threadripper 1950X and MSI mainboard, and I had
+> a problem with AMD's fTPM. My machine showed an error message below, and
+> the fTPM didn't work because of it.
 > 
-> In fact, ./scripts/checkpatch.pl -f MAINTAINERS complains:
+> [    5.732084] tpm_crb MSFT0101:00: can't request region for resource
+>                [mem 0x79b4f000-0x79b4ffff]
+> [    5.732089] tpm_crb: probe of MSFT0101:00 failed with error -16
 > 
->   WARNING: MAINTAINERS entries use one tab after TYPE:
->   #8581: FILE: MAINTAINERS:8581:
->   +M:      Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> When I saw the iomem areas and found two TPM CRB regions were in the ACPI
+> NVS area.  The iomem regions are below.
 > 
-> The issue was detected when writing a script that parses MAINTAINERS.
+> 79a39000-79b6afff : ACPI Non-volatile Storage
+>   79b4b000-79b4bfff : MSFT0101:00
+>   79b4f000-79b4ffff : MSFT0101:00
 > 
-> Fixes: 34bccd61b139 ("MAINTAINERS: add Jarkko as maintainer for trusted keys")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> After analyzing this issue, I found out that a busy bit was set to the ACPI
+> NVS area, and the current Linux kernel allowed nothing to be assigned in
+> it. I also found that the kernel couldn't calculate the sizes of command
+> and response buffers correctly when the TPM regions were two or more.
+> 
+> To support AMD's fTPM, I removed the busy bit from the ACPI NVS area
+> so that AMD's fTPM regions could be assigned in it. I also fixed the bug
+> that did not calculate the sizes of command and response buffer correctly.
+> 
+> Signed-off-by: Seunghun Han <kkamagui@gmail.com>
 
-Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+You need to split this into multiple patches e.g. if you think you've
+fixed a bug, please write a patch with just the bug fix and nothing
+else.
+
+For further information, read the section three of
+
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+
+I'd also recommend to check out the earlier discussion on ACPI NVS:
+
+https://lore.kernel.org/linux-integrity/BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e2k.ad.ge.com/
 
 /Jarkko
