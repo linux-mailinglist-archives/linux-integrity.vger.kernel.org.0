@@ -2,120 +2,226 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2808B9CFC0
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Aug 2019 14:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055D39D060
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Aug 2019 15:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731931AbfHZMoF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Aug 2019 08:44:05 -0400
-Received: from mx0a-00176a03.pphosted.com ([67.231.149.52]:65452 "EHLO
-        mx0a-00176a03.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730339AbfHZMoF (ORCPT
+        id S1731951AbfHZNYD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Aug 2019 09:24:03 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32646 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726953AbfHZNYD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Aug 2019 08:44:05 -0400
-X-Greylist: delayed 2407 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Aug 2019 08:44:04 EDT
-Received: from pps.filterd (m0047962.ppops.net [127.0.0.1])
-        by m0047962.ppops.net-00176a03. (8.16.0.42/8.16.0.42) with SMTP id x7QC3qAY043962;
-        Mon, 26 Aug 2019 08:03:57 -0400
-From:   "Safford, David (GE Global Research, US)" <david.safford@ge.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Seunghun Han <kkamagui@gmail.com>
-CC:     Peter Huewe <peterhuewe@gmx.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Thread-Topic: Re: [PATCH] tpm: tpm_crb: Add an AMD fTPM support feature
-Thread-Index: AQHVW2w9adn8CXNrxUe37sfJUFBZA6cNMu+AgAAc+0A=
-Date:   Mon, 26 Aug 2019 11:58:40 +0000
-Message-ID: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1BAA7@ALPMBAPA12.e2k.ad.ge.com>
-References: <20190825174019.5977-1-kkamagui@gmail.com>
- <20190826055903.5um5pfweoszibem3@linux.intel.com>
-In-Reply-To: <20190826055903.5um5pfweoszibem3@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMjEyNDczOTUwXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZDZkMWNlNjUtYzdmOC0xMWU5LThlMmQtYTRjM2YwYjU5OGE2XGFtZS10ZXN0XGQ2ZDFjZTY3LWM3ZjgtMTFlOS04ZTJkLWE0YzNmMGI1OThhNmJvZHkudHh0IiBzej0iMzA0MSIgdD0iMTMyMTEyOTQzMTkxNzE0MTM2IiBoPSIyTzZNYkMxUktqdGtoVXBLd2tES29GVlc4U2c9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: 
-x-originating-ip: [3.159.19.191]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-Subject: [PATCH] tpm: tpm_crb: Add an AMD fTPM support feature
+        Mon, 26 Aug 2019 09:24:03 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7QDLtQF013572
+        for <linux-integrity@vger.kernel.org>; Mon, 26 Aug 2019 09:24:00 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2umg7dg3f2-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 26 Aug 2019 09:24:00 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <nayna@linux.ibm.com>;
+        Mon, 26 Aug 2019 14:23:57 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 26 Aug 2019 14:23:52 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7QDNoqY31654366
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Aug 2019 13:23:50 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B327742047;
+        Mon, 26 Aug 2019 13:23:50 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3117442042;
+        Mon, 26 Aug 2019 13:23:48 +0000 (GMT)
+Received: from swastik.ibm.com (unknown [9.85.199.141])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 26 Aug 2019 13:23:48 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linuxppc-dev@ozlabs.org, linux-efi@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Nayna Jain <nayna@linux.ibm.com>
+Subject: [PATCH v3 0/4] powerpc: expose secure variables to the kernel and userspace 
+Date:   Mon, 26 Aug 2019 09:23:34 -0400
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+x-cbid: 19082613-4275-0000-0000-0000035D89E3
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19082613-4276-0000-0000-0000386FB754
+Message-Id: <1566825818-9731-1-git-send-email-nayna@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-26_07:,,
  signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=827 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908260136
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908260145
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: linux-integrity-owner@vger.kernel.org <linux-integrity-
-> owner@vger.kernel.org> On Behalf Of Jarkko Sakkinen
-> Sent: Monday, August 26, 2019 1:59 AM
-> To: Seunghun Han <kkamagui@gmail.com>
-> Cc: Peter Huewe <peterhuewe@gmx.de>; Thomas Gleixner
-> <tglx@linutronix.de>; linux-kernel@vger.kernel.org; linux-
-> integrity@vger.kernel.org
-> Subject: EXT: Re: [PATCH] tpm: tpm_crb: Add an AMD fTPM support feature
-> 
-> On Mon, Aug 26, 2019 at 02:40:19AM +0900, Seunghun Han wrote:
-> > I'm Seunghun Han and work at the Affiliated Institute of ETRI. I got
-> > an AMD system which had a Ryzen Threadripper 1950X and MSI mainboard,
-> > and I had a problem with AMD's fTPM. My machine showed an error
-> > message below, and the fTPM didn't work because of it.
-> >
-> > [    5.732084] tpm_crb MSFT0101:00: can't request region for resource
-> >                [mem 0x79b4f000-0x79b4ffff]
-> > [    5.732089] tpm_crb: probe of MSFT0101:00 failed with error -16
-> >
-> > When I saw the iomem areas and found two TPM CRB regions were in the
-> > ACPI NVS area.  The iomem regions are below.
-> >
-> > 79a39000-79b6afff : ACPI Non-volatile Storage
-> >   79b4b000-79b4bfff : MSFT0101:00
-> >   79b4f000-79b4ffff : MSFT0101:00
-> >
-> > After analyzing this issue, I found out that a busy bit was set to the
-> > ACPI NVS area, and the current Linux kernel allowed nothing to be
-> > assigned in it. I also found that the kernel couldn't calculate the
-> > sizes of command and response buffers correctly when the TPM regions
-> were two or more.
-> >
-> > To support AMD's fTPM, I removed the busy bit from the ACPI NVS area
-> > so that AMD's fTPM regions could be assigned in it. I also fixed the
-> > bug that did not calculate the sizes of command and response buffer
-> correctly.
+In order to verify the OS kernel on PowerNV systems, secure boot requires
+X.509 certificates trusted by the platform. These are stored in secure
+variables controlled by OPAL, called OPAL secure variables. In order to
+enable users to manage the keys, the secure variables need to be exposed
+to userspace.
 
-The problem is that the acpi tables are _wrong_ in this and other cases.
-They not only incorrectly report the area as reserved, but also report
-the command and response buffer sizes incorrectly. If you look at
-the addresses for the buffers listed in the crb control area, the sizes
-are correct (4Kbytes).  My patch uses the control area values, and
-everything works. The remaining problem is that if acpi reports the
-area as NVS, then the linux nvs driver will try to use the space.
-I'm looking at how to fix that. I'm not sure, if simply removing
-the busy bit is sufficient.
-Dave
+OPAL provides the runtime services for the kernel to be able to access the
+secure variables[1]. This patchset defines the kernel interface for the
+OPAL APIs. These APIs are used by the hooks, which load these variables
+to the keyring and expose them to the userspace for reading/writing.
 
-> >
-> > Signed-off-by: Seunghun Han <kkamagui@gmail.com>
-> 
-> You need to split this into multiple patches e.g. if you think you've fixed a
-> bug, please write a patch with just the bug fix and nothing else.
-> 
-> For further information, read the section three of
-> 
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-> 
-> I'd also recommend to check out the earlier discussion on ACPI NVS:
-> 
-> https://lore.kernel.org/linux-
-> integrity/BCA04D5D9A3B764C9B7405BBA4D4A3C035EF7BC7@ALPMBAPA12.e
-> 2k.ad.ge.com/
-> 
-> /Jarkko
+The previous version[2] of the patchset added support only for the sysfs
+interface. This patch adds two more patches that involves loading of
+the firmware trusted keys to the kernel keyring. This patchset is
+dependent on the base CONFIG PPC_SECURE_BOOT added by ima arch specific
+patches for POWER[3]
+
+Overall, this patchset adds the following support:
+
+* expose secure variables to the kernel via OPAL Runtime API interface
+* expose secure variables to the userspace via kernel sysfs interface
+* load kernel verification and revocation keys to .platform and
+.blacklist keyring respectively.
+
+The secure variables can be read/written using simple linux utilities
+cat/hexdump.
+
+For example:
+Path to the secure variables is:
+/sys/firmware/secvar/vars
+
+Each secure variable is listed as directory. 
+$ ls -l
+total 0
+drwxr-xr-x. 2 root root 0 Aug 20 21:20 db
+drwxr-xr-x. 2 root root 0 Aug 20 21:20 KEK
+drwxr-xr-x. 2 root root 0 Aug 20 21:20 PK
+
+The attributes of each of the secure variables are(for example: PK):
+[PK]$ ls -l
+total 0
+-r--r--r--. 1 root root 32000 Aug 21 08:28 data
+-r--r--r--. 1 root root 65536 Aug 21 08:28 size
+--w-------. 1 root root 32000 Aug 21 08:28 update
+
+The "data" is used to read the existing variable value using hexdump. The
+data is stored in ESL format.
+The "update" is used to write a new value using cat. The update is
+to be submitted as AUTH file.
+
+[1] Depends on skiboot OPAL API changes which removes metadata from
+the API. The new version with the changes are going to be posted soon.
+[2] https://lkml.org/lkml/2019/6/13/1644
+[3] https://lkml.org/lkml/2019/8/19/402
+
+Changelog:
+v3:
+* includes Greg's feedbacks:
+ * fixes in Patch 2/4
+   * updates the Documentation.
+   * fixes code feedbacks
+    * adds SYSFS Kconfig dependency for SECVAR_SYSFS
+    * fixes mixed tabs and spaces
+    * removes "name" attribute for each of the variable name based
+    directories
+    * fixes using __ATTR_RO() and __BIN_ATTR_RO() and statics and const
+    * fixes the racing issue by using kobj_type default groups. Also,
+    fixes the kobject leakage.
+    * removes extra print messages
+  * updates patch description for Patch 3/4
+  * removes file name from Patch 4/4 file header comment and removed
+  def_bool y from the LOAD_PPC_KEYS Kconfig
+
+* includes Oliver's feedbacks:
+  * fixes Patch 1/2
+   * moves OPAL API wrappers after opal_nx_proc_init(), fixed the
+   naming, types and removed extern.
+   * fixes spaces
+   * renames get_variable() to get(), get_next_variable() to get_next()
+   and set_variable() to set()
+   * removed get_secvar_ops() and defined secvar_ops as global
+   * fixes consts and statics
+   * removes generic secvar_init() and defined platform specific
+   opal_secar_init()
+   * updates opal_secvar_supported() to check for secvar support even
+   before checking the OPAL APIs support and also fixed the error codes.
+   * addes function that converts OPAL return codes to linux errno
+   * moves secvar check support in the opal_secvar_init() and defined its
+   prototype in opal.h
+  * fixes Patch 2/2
+   * fixes static/const
+   * defines macro for max name size
+   * replaces OPAL error codes with linux errno and also updated error
+   handling
+   * moves secvar support check before creating sysfs kobjects in 
+   secvar_sysfs_init()
+   * fixes spaces  
+
+v2:
+* removes complete efi-sms from the sysfs implementation and is simplified
+* includes Greg's and Oliver's feedbacks:
+ * adds sysfs documentation
+ * moves sysfs code to arch/powerpc
+ * other code related feedbacks.
+* adds two new patches to load keys to .platform and .blacklist keyring.
+These patches are added to this series as they are also dependent on
+OPAL APIs.
+
+Nayna Jain (4):
+  powerpc/powernv: Add OPAL API interface to access secure variable
+  powerpc: expose secure variables to userspace via sysfs
+  x86/efi: move common keyring handler functions to new file
+  powerpc: load firmware trusted keys/hashes into kernel keyring
+
+ Documentation/ABI/testing/sysfs-secvar        |  37 ++++
+ arch/powerpc/Kconfig                          |  10 +
+ arch/powerpc/include/asm/opal-api.h           |   5 +-
+ arch/powerpc/include/asm/opal.h               |   7 +-
+ arch/powerpc/include/asm/powernv.h            |   2 +
+ arch/powerpc/include/asm/secvar.h             |  35 +++
+ arch/powerpc/kernel/Makefile                  |   3 +-
+ arch/powerpc/kernel/secvar-ops.c              |  19 ++
+ arch/powerpc/kernel/secvar-sysfs.c            | 200 ++++++++++++++++++
+ arch/powerpc/platforms/powernv/Kconfig        |   6 +
+ arch/powerpc/platforms/powernv/Makefile       |   1 +
+ arch/powerpc/platforms/powernv/opal-call.c    |   3 +
+ arch/powerpc/platforms/powernv/opal-secvar.c  | 138 ++++++++++++
+ arch/powerpc/platforms/powernv/opal.c         |   5 +
+ security/integrity/Kconfig                    |   8 +
+ security/integrity/Makefile                   |   6 +-
+ .../platform_certs/keyring_handler.c          |  80 +++++++
+ .../platform_certs/keyring_handler.h          |  32 +++
+ .../integrity/platform_certs/load_powerpc.c   |  88 ++++++++
+ security/integrity/platform_certs/load_uefi.c |  67 +-----
+ 20 files changed, 682 insertions(+), 70 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-secvar
+ create mode 100644 arch/powerpc/include/asm/secvar.h
+ create mode 100644 arch/powerpc/kernel/secvar-ops.c
+ create mode 100644 arch/powerpc/kernel/secvar-sysfs.c
+ create mode 100644 arch/powerpc/platforms/powernv/opal-secvar.c
+ create mode 100644 security/integrity/platform_certs/keyring_handler.c
+ create mode 100644 security/integrity/platform_certs/keyring_handler.h
+ create mode 100644 security/integrity/platform_certs/load_powerpc.c
+
+-- 
+2.20.1
+
