@@ -2,72 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0269D974
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Aug 2019 00:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEBE9DA16
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Aug 2019 01:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726539AbfHZWq7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Aug 2019 18:46:59 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:36240 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725817AbfHZWq6 (ORCPT
+        id S1726678AbfHZXnU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Aug 2019 19:43:20 -0400
+Received: from 5.mo6.mail-out.ovh.net ([46.105.54.31]:49182 "EHLO
+        5.mo6.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726020AbfHZXnU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Aug 2019 18:46:58 -0400
-Received: from [10.91.6.157] (unknown [167.220.2.157])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D15B720B7186;
-        Mon, 26 Aug 2019 15:46:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D15B720B7186
-Subject: Re: [PATCH v12 00/11] Appended signatures support for IMA appraisal
-To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>
-References: <20190628021934.4260-1-bauerman@linux.ibm.com>
-From:   Jordan Hand <jorhand@linux.microsoft.com>
-Message-ID: <9682b5d0-1634-2dd0-2cbb-eb1fa8ba7423@linux.microsoft.com>
-Date:   Mon, 26 Aug 2019 15:46:57 -0700
+        Mon, 26 Aug 2019 19:43:20 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Aug 2019 19:43:19 EDT
+Received: from player735.ha.ovh.net (unknown [10.108.42.75])
+        by mo6.mail-out.ovh.net (Postfix) with ESMTP id B0F061DDA04
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Aug 2019 01:24:56 +0200 (CEST)
+Received: from 3mdeb.com (093105046241.oswiecim.vectranet.pl [93.105.46.241])
+        (Authenticated sender: piotr.krol@3mdeb.com)
+        by player735.ha.ovh.net (Postfix) with ESMTPSA id 56AA5926A453
+        for <linux-integrity@vger.kernel.org>; Mon, 26 Aug 2019 23:24:56 +0000 (UTC)
+To:     linux-integrity@vger.kernel.org
+From:   =?UTF-8?Q?Piotr_Kr=c3=b3l?= <piotr.krol@3mdeb.com>
+Subject: TPM 2.0 Linux sysfs interface
+Openpgp: preference=signencrypt
+Message-ID: <3329329f-4bf4-b8cd-dee8-eb36e513c728@3mdeb.com>
+Date:   Tue, 27 Aug 2019 01:24:55 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190628021934.4260-1-bauerman@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 7658371166347840629
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduvddrudehhedgvdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenuc
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/27/19 7:19 PM, Thiago Jung Bauermann wrote:
-> On the OpenPOWER platform, secure boot and trusted boot are being
-> implemented using IMA for taking measurements and verifying signatures.
-> Since the kernel image on Power servers is an ELF binary, kernels are
-> signed using the scripts/sign-file tool and thus use the same signature
-> format as signed kernel modules.
-> 
-> This patch series adds support in IMA for verifying those signatures.
-> It adds flexibility to OpenPOWER secure boot, because it allows it to boot
-> kernels with the signature appended to them as well as kernels where the
-> signature is stored in the IMA extended attribute.
+Hi all,
+I'm moving here discussion that I started with Jarkko and Peter on LinkedIn.
 
-I know this is pretty late, but I just wanted to let you know that I
-tested this patch set on x86_64 with QEMU.
+I'm preparing for 2 talks during LPC 2019 System Boot MC and one of it
+will discuss TPM 2.0 sysfs support [1]. This was discussed couple times
+[2] and explained why it is not done yet by Jarkko [3].
 
-That is, I enrolled a key to _ima keyring, signed my kernel and modules
-with appended signatures (with scripts/sign-file), set the IMA policy to
-appraise and measure my kernel and modules. Also tested kexec appraisal.
+Why is this important?
+- there seem to be no default method to distinguish if we dealing with
+TPM 1.2 or 2.0 in the system
+- distros use various tools to detect TPM based on sysfs (e.g. Qubes OS
+scripts)
+- tpm2-software has ton of dependencies, is not easy to build,
+development is way faster then distros can manage and packages are often
+out of date or even broken, so using it can be troublesome
+- for deeply embedded systems adding fully-featured tpm2-software
+doesn't make sense e.g. if we just need PCRs values
 
-You can add my tested-by if you'd like.
+Jarkko comment on detecting 1.2 vs 2.0:
+"Detecting TPM 2.0 is dead easy: send any idempotent TPM 2.0 command and
+check if the tag field matches 0x8002 (TPM_NO_SESSIONS). The sysfs
+features for TPM 1.2 are for the large part useless as you can get the
+same data by using TPM commands."
 
--Jordan
+Ok, but doesn't this mean I need TPM2 software stack?
+Peter mentioned that it can be tricky to invoke such tools early in boot
+process.
+
+Finally, I do not feel expert in the field of Linux integrity and don't
+want to argue for sysfs if it doesn't make sense for TPM 2.0, but if
+that's the situation I would like to know what are the best practices to
+solve above issues. If you think there is something important to be
+discussed in above context please let me know.
+
+[1] https://linuxplumbersconf.org/event/4/contributions/516/
+[2]
+https://patchwork.kernel.org/project/linux-integrity/list/?series=&submitter=&state=*&q=sysfs&archive=&delegate=
+[3] https://lwn.net/Articles/624241/
+
+Best Regards,
+-- 
+Piotr Król
+Embedded Systems Consultant
+GPG: B2EE71E967AA9E4C
+https://3mdeb.com | @3mdeb_com
