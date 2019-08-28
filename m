@@ -2,138 +2,159 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B8C9F9D2
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 07:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9AC9FCC8
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 10:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726136AbfH1F2Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Aug 2019 01:28:25 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:40095 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726145AbfH1F2Y (ORCPT
+        id S1726290AbfH1IVx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Aug 2019 04:21:53 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:46446 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbfH1IVx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Aug 2019 01:28:24 -0400
-Received: by mail-lj1-f194.google.com with SMTP id e27so1363502ljb.7
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Aug 2019 22:28:23 -0700 (PDT)
+        Wed, 28 Aug 2019 04:21:53 -0400
+Received: by mail-pg1-f193.google.com with SMTP id m3so1024710pgv.13
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 01:21:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wuD+47oBthIHQumcqd0YN679T72WGLTDD4hOsKbpLxE=;
-        b=JxQ/DhDP05PNcJhHPHt2GrZ/B8VfZ53oE6THwxTahk32Tsn0TFdadeMPol+lFd4P1A
-         ZSNr/mSN4jHxlMDbHl9zDZxG22Ec4vfh7ClgirOkCZvTjA6NTfc7GF6QpnMJoq3yf1Tf
-         jZJPmiBUgmxrpi3fZHzpuAAhDEbJIGpkDmyqW77n0f4dC+Kdoog+2dPGysHFHolJFQYJ
-         dKWrRA+dbT0VHyb3+C39xtvli41mc53RQaVl4B3RnrOVhuH3KUKlLJ1X9oNXIVZroUOV
-         ysRIXcz2GlsRxWYVmoX0DOS+xB7rY3Uuf0nRqv9lrREvMrwVG+NiTKs3C3JiDAFCeUsa
-         253w==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hf45YlPIP8ddQ+9IgXrDwMOTvaQuW/eJTBteOBX/I9Q=;
+        b=QarfX3x0RNlBXL5Ags3BPwGvEk2tmhISwqTlgLs+nnJdfUu8v9vBXxkfDrfYh5Vya2
+         43ggcvc2Mg3BdWJKUmTultr306gJ7l1jxLSgEWbl0YLd0GQhdtcp08Eq8UP045Ut/ZxD
+         gmwm6WnDGUw8iXqz+gmKwdYiT0w/Y19bKqw8k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wuD+47oBthIHQumcqd0YN679T72WGLTDD4hOsKbpLxE=;
-        b=oBbvHnqwCDNwjJGmls5ciCajPVb7afLdWpUhVysLYDF6BXe22G8mooWchT1ch0fzgH
-         1yBANlYAo31Fud3CPaLybdwLUxGMVlXBJvS57lkcArsrWqaIonTEIOCekN4W/az8O7z1
-         C4Q14KkC1l8gljAICId7/gVP7jk6TxcNbo0Xg1g/95TRrG1ODuOJVzMCKHIj7VvOMw3F
-         E5qhhLKIT3K3k7lLg+9bsbeR4OrAF/F1igWng13UeU1XnyfWOgTISFCBWzJE0AhJeXK8
-         suvBQm0H/IQv/0PjLAYDq/7u8u5Bd+SrFqmD5bykPkM27D+eosu/+MNW44T9pc2hKvpX
-         iFBg==
-X-Gm-Message-State: APjAAAWCQJO3nv168v61VQ/uPAbWaK3ThpLvzPs304uhfTSj0PuOOvwO
-        p9mxazZXvESSj5EP6Xh1IT3go59jTVIZHzJDhu834Q==
-X-Google-Smtp-Source: APXvYqzP6WVBc3SIpSbwvH+PA6Ta0a7UKTqmsXsZbvFWOoRZR8d2RevgeN/WfpPSOG2xP4CPkCq1nfyajuFEu/pawkk=
-X-Received: by 2002:a2e:819:: with SMTP id 25mr987414lji.142.1566970102465;
- Tue, 27 Aug 2019 22:28:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <1566392345-15419-1-git-send-email-sumit.garg@linaro.org>
- <1566392345-15419-5-git-send-email-sumit.garg@linaro.org> <20190827141742.6qxowsigqolxaod4@linux.intel.com>
-In-Reply-To: <20190827141742.6qxowsigqolxaod4@linux.intel.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 28 Aug 2019 10:58:11 +0530
-Message-ID: <CAFA6WYPnoDoMWd=PT4mgXPhg1Wp0=AFDnWd_44UMP7sijXzAZA@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] KEYS: trusted: move tpm2 trusted keys code
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-security-module@vger.kernel.org, dhowells@redhat.com,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        peterhuewe@gmx.de, jgg@ziepe.ca, jejb@linux.ibm.com,
-        Arnd Bergmann <arnd@arndb.de>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hf45YlPIP8ddQ+9IgXrDwMOTvaQuW/eJTBteOBX/I9Q=;
+        b=ELd+ybIWsl9/oE9ZvTDAj1476XfTTZIxUhnY8OkfE0QSUEyh5KFoK8/C7Fu5YpbQJ8
+         vJC3gsceC9iQitAHMqtmlw1ZdnYIguLq9sI9P9ks7g2BLWBh6GRM4Vf4Jd6vDl56VDxD
+         SswHwSYCyy5lkYpXSoO7VDfMZyq6myvFkQDv4p0wZJzJ0zw4n3iYEzyEbOB3Dll5Ixwf
+         qk6Pq8gF4PLAY8MkEd5Q+RFvCy15bkHxHJRC1xvx6jcekbz4NOu02FJCyzWNBpJFbFZK
+         34spsZIbpR0ugWGXy4Z/2nEfFJskJd81DXqNzaSJZDdoqdZu/yrI/GGrSHJWL+u6fJe0
+         f2rQ==
+X-Gm-Message-State: APjAAAUOHC6MsU1qemeto0KKvIvkAonpfFvfYfPNj8PP1Fhk5f86IyWS
+        mrvfwu4Iyu0uqRYZh4j7XJOraA==
+X-Google-Smtp-Source: APXvYqxCPCA1MOy9GycrKtPgCXdfjpa6uXiu0S0qmGw9WCDhKe6OzRKVoCmqWF8RYpNk1oM4LDzfcw==
+X-Received: by 2002:a17:90a:32a3:: with SMTP id l32mr3126610pjb.14.1566980511903;
+        Wed, 28 Aug 2019 01:21:51 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id y10sm1296959pjp.27.2019.08.28.01.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Aug 2019 01:21:51 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v5 0/4] tpm: Add driver for cr50
+Date:   Wed, 28 Aug 2019 01:21:46 -0700
+Message-Id: <20190828082150.42194-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 27 Aug 2019 at 19:47, Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Wed, Aug 21, 2019 at 06:29:05PM +0530, Sumit Garg wrote:
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (C) 2004 IBM Corporation
-> > + * Copyright (C) 2014 Intel Corporation
->
-> Everything below can be dropped from this new file. Git has the most
-> accurate authority information.
->
-> I'm not sure why I added the authors-list in the first place to the
-> header when I implemented these functions as none of those folks have
-> contributed to this particular piece of work.
->
-> > + * Authors:
-> > + * Leendert van Doorn <leendert@watson.ibm.com>
-> > + * Dave Safford <safford@watson.ibm.com>
-> > + * Reiner Sailer <sailer@watson.ibm.com>
-> > + * Kylene Hall <kjhall@us.ibm.com>
-> > + *
-> > + * Maintained by: <tpmdd-devel@lists.sourceforge.net>
-> > + *
-> > + * Trusted Keys code for TCG/TCPA TPM2 (trusted platform module).
-> > + */
->
-> To summarize, I think this would be sufficient:
->
-> // SPDX-License-Identifier: GPL-2.0-only
-> /*
->  * Copyright (C) 2004 IBM Corporation
->  * Copyright (C) 2014 Intel Corporation
->  */
+This patch series adds support for the the H1 secure microcontroller
+running cr50 firmware found on various recent Chromebooks. This driver
+is necessary to boot into a ChromeOS userspace environment. It
+implements support for several functions, including TPM-like
+functionality over a SPI interface.
 
-Sounds good to me.
+The last time this was series sent looks to be [1]. I've looked over the
+patches and review comments and tried to address any feedback that
+Andrey didn't address (really minor things like newlines). I've reworked
+the patches from the last version to layer on top of the existing TPM
+TIS SPI implementation in tpm_tis_spi.c. Hopefully this is more
+palatable than combining the two drivers together into one file.
 
->
-> I think there should never be such a rush that acronym could not be
-> written with the correct spelling. I'm referring to 'tpm2' in the short
-> summary.
+Note, I wasn't sure exactly what was wanted in v4, so I've combined
+the two files but I wasn't able to avoid adding a bool indicating
+the phy is cr50 or not, because suspend/resume is a hook that attaches
+to the driver and not the device.
 
-So you mean to say we should use upper-case letters for 'TPM2' acronym?
+Please review so we can get the approach to supporting this device
+sorted out.
 
-> I'm sorry, I had to say it, just can't help myself with those
-> kind of details :-) I can take care of fixing those once I apply these
-> patches.
->
-> You've done an awesome job. Thank you.
->
+[1] https://lkml.kernel.org/r/1469757314-116169-1-git-send-email-apronin@chromium.org
 
-You are welcome.
+TODO:
+ * Add a patch to spit out WARN_ON() when TPM is suspended and some
+   kernel code attempts to use it
+ * Rework the i2c driver per Alexander's comments on v2
 
-> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->
+Changes from v4 (https://lkml.kernel.org/r/20190812223622.73297-1-swboyd@chromium.org):
+ * Dropped the 'pre-transfer' hook patch and added a 'ready' member instead
+ * Combined cr50_spi and tpm_tis_spi into one kernel module
+ * Introduced a swizzle in tpm_tis_spi probe routine to jump to cr50
+   probe path
+ * Moved binding to start of the thread
+ * Picked up Jarkko reviewed-by tag on new flag for suspend/resume
+ * Added a comment to flow control patch indicating what it's all about
 
-Thanks for your review.
+Changes from v3:
+ * Split out hooks into separate patches
+ * Update commit text to not say "libify"
+ * Collapse if statement into one for first patch
+ * Update commit text on first patch to mention flag
+ * Drop TIS_IS_CR50 as it's unused
 
--Sumit
+Changes from v2:
+ * Sent khwrng thread patch separately
+ * New patch to expose TPM SPI functionality from tpm_tis_spi.c
+ * Usage of that new patch in cr50 SPI driver
+ * Drop i2c version of cr50 SPI driver for now (will resend later)
+ * New patch to add a TPM chip flag indicating TPM shouldn't be reset
+   over suspend. Allows us to get rid of the cr50 suspend/resume functions
+   that are mostly generic
 
-> Unfortunately I'm not yet sure if I have time to test these before going
-> to Linux Plumbers but these would be anyway too close to the next merge
-> window to be added to the v5.4 PR.
->
-> /Jarkko
+Changes from v1:
+ * Dropped symlink and sysfs patches
+ * Removed 'is_suspended' bits
+ * Added new patch to freeze khwrng thread
+ * Moved binding to google,cr50.txt and added Reviewed-by tag from Rob
+
+Cc: Andrey Pronin <apronin@chromium.org>
+Cc: Duncan Laurie <dlaurie@chromium.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc: Heiko Stuebner <heiko@sntech.de>
+
+Andrey Pronin (1):
+  dt-bindings: tpm: document properties for cr50
+
+Stephen Boyd (3):
+  tpm: Add a flag to indicate TPM power is managed by firmware
+  tpm: tpm_tis_spi: Introduce a flow control callback
+  tpm: tpm_tis_spi: Support cr50 devices
+
+ .../bindings/security/tpm/google,cr50.txt     |  19 +
+ drivers/char/tpm/Kconfig                      |   7 +
+ drivers/char/tpm/Makefile                     |   4 +-
+ drivers/char/tpm/cr50_spi.c                   | 327 ++++++++++++++++++
+ drivers/char/tpm/tpm-interface.c              |   8 +-
+ drivers/char/tpm/tpm.h                        |   1 +
+ drivers/char/tpm/tpm_tis_spi.c                | 110 +++---
+ drivers/char/tpm/tpm_tis_spi.h                |  54 +++
+ 8 files changed, 486 insertions(+), 44 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/security/tpm/google,cr50.txt
+ create mode 100644 drivers/char/tpm/cr50_spi.c
+ create mode 100644 drivers/char/tpm/tpm_tis_spi.h
+
+
+base-commit: 0ecfebd2b52404ae0c54a878c872bb93363ada36
+-- 
+Sent by a computer through tubes
+
