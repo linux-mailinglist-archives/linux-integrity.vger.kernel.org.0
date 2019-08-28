@@ -2,23 +2,22 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04014A0A32
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 21:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FE1A0A3D
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 21:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726541AbfH1TMJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Aug 2019 15:12:09 -0400
-Received: from gateway34.websitewelcome.com ([192.185.149.222]:23690 "EHLO
+        id S1726583AbfH1TRJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Aug 2019 15:17:09 -0400
+Received: from gateway34.websitewelcome.com ([192.185.149.222]:47607 "EHLO
         gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726315AbfH1TMJ (ORCPT
+        by vger.kernel.org with ESMTP id S1726576AbfH1TRJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Aug 2019 15:12:09 -0400
-X-Greylist: delayed 1255 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Aug 2019 15:12:08 EDT
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 6CBFF6307F09
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 13:51:12 -0500 (CDT)
+        Wed, 28 Aug 2019 15:17:09 -0400
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 96AFE77138BF
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 13:55:47 -0500 (CDT)
 Received: from gator4166.hostgator.com ([108.167.133.22])
         by cmsmtp with SMTP
-        id 332Gieja9iQer332GiyFKd; Wed, 28 Aug 2019 13:51:12 -0500
+        id 336hirFL64FKp336hivUsk; Wed, 28 Aug 2019 13:55:47 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -26,27 +25,28 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=luqKYGJu+KofvWlAiQtrPtmwibeUX7kl9Aljx5sEuBY=; b=f01vjnZlkXWcXmkDBhWMItzoZl
-        tFHdK5YZ814Y3LjXwQ6n1U2H1WWGQn/Im8RjfJyY06Kgu6uTm2ozXSAm1L3Z5R2eNEOU9ilA36rSc
-        95G4gQTt6WrQwNcle/Ilas22CQYw4VFksrlcVcP8x6KGtB5c/0jrnAV9T8vsdnSqI7x6B0ctHwukS
-        7rLaaSYaFPtyVRoILg5C0nzTP+wObAo0o7fYnhNLxI+GeL5bYWav1TMAVc0XIgquEJ4OGnd+e3meF
-        R+IPapUe2I5kizvdHPOzStBEH+wEoA47zlMJbyv16Ie/rj9JzlGS2WsVc+QUBLuK18DgjpuJ9dVq1
-        YBAdR8FA==;
-Received: from [189.152.216.116] (port=50252 helo=[192.168.43.131])
+        bh=x3EkMbvY5M+F0ZgkMKWKuEnvOd5+O3JVELt30UQ3AWI=; b=sdeyZstJ0en07fGkSm+barpXKA
+        forS5aUufqtOOza91wiQ6H1Z+87jwubOLF5b/2nmSVEm0nheOms69+OMJ++wbcwvO2+gtT1z8MKZ0
+        3GzHMCwQEFvEyBrzQQ4QvgIiyTEYdSK3gMbEJZmar38I+gXEubZtPDzQvnJaUzSHPAeIDMjVXWDWU
+        lLQqbK2ibTDe+drgvVr8yw2ddAgDWAMseqc3Fpfkbk5acxLbolpzUN15peP6GZjZs2Xjj+nquX7Np
+        9JDk8pkErkBWnVv8U/Nng0fpHplu1SZCh4H7cgsEQAMRcDGSMEDMBTMYluwBa+nZ3M+rtYP50HFYj
+        ZvoWys+Q==;
+Received: from [189.152.216.116] (port=50314 helo=[192.168.43.131])
         by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
         (Exim 4.92)
         (envelope-from <gustavo@embeddedor.com>)
-        id 1i332F-000QYW-Vu; Wed, 28 Aug 2019 13:51:12 -0500
-Subject: Re: [PATCH] ima: use struct_size() in kzalloc()
+        id 1i336h-000dPQ-2m; Wed, 28 Aug 2019 13:55:47 -0500
+Subject: Re: [PATCH][next] ima: ima_modsig: Fix use-after-free bug in
+ ima_read_modsig
 To:     Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>
 Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190529165343.GA2584@embeddedor>
- <671185b9-5c91-5235-b5ea-96d3449bf716@embeddedor.com>
- <1567018017.6115.61.camel@linux.ibm.com>
+References: <20190811235507.GA9587@embeddedor>
+ <1567000215.6115.19.camel@linux.ibm.com>
 From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=gustavo@embeddedor.com; keydata=
@@ -92,15 +92,15 @@ Autocrypt: addr=gustavo@embeddedor.com; keydata=
  YJWH93PN+ZUh6i6Rd2U/i8jH5WvzR57UeWxE4P8bQc0hNGrUsHQH6bpHV2lbuhDdqo+cM9eh
  GZEO3+gCDFmKrjspZjkJbB5Gadzvts5fcWGOXEvuT8uQSvl+vEL0g6vczsyPBtqoBLa9SNrS
  VtSixD1uOgytAP7RWS474w==
-Message-ID: <6e5871f0-70ff-eda5-5fd6-b8fd327f10c6@embeddedor.com>
-Date:   Wed, 28 Aug 2019 13:51:10 -0500
+Message-ID: <cc5b4371-0386-fac8-e1f0-9f29a23a15ed@embeddedor.com>
+Date:   Wed, 28 Aug 2019 13:55:45 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1567018017.6115.61.camel@linux.ibm.com>
+In-Reply-To: <1567000215.6115.19.camel@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -109,13 +109,13 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 189.152.216.116
 X-Source-L: No
-X-Exim-ID: 1i332F-000QYW-Vu
+X-Exim-ID: 1i336h-000dPQ-2m
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.43.131]) [189.152.216.116]:50252
+X-Source-Sender: ([192.168.43.131]) [189.152.216.116]:50314
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 38
+X-Email-Count: 46
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
 Sender: linux-integrity-owner@vger.kernel.org
@@ -125,19 +125,30 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 
-On 8/28/19 1:46 PM, Mimi Zohar wrote:
-> On Wed, 2019-08-28 at 13:29 -0500, Gustavo A. R. Silva wrote:
->> Hi all,
->>
->> Friendly ping:
->>
->> Who can take this, please?
+On 8/28/19 8:50 AM, Mimi Zohar wrote:
+> Hi Gustavo,
 > 
-> Thank you for the reminder.  I'm just getting back from LSS and a very
-> short vacation.  I'll look at it shortly.
+> On Sun, 2019-08-11 at 18:55 -0500, Gustavo A. R. Silva wrote:
+>> hdr is being freed and then dereferenced by accessing hdr->pkcs7_msg
+>>
+>> Fix this by copying the value returned by PTR_ERR(hdr->pkcs7_msg) into
+>> automatic variable err for its safe use after freeing hdr.
+>>
+>> Addresses-Coverity-ID: 1485813 ("Read from pointer after free")
+>> Fixes: 39b07096364a ("ima: Implement support for module-style appended signatures")
+>> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> 
+> This bug was reported Julia and addressed by Thiago on 8/7. If you
+> would like to add your Review/Tested-by, the patch can be found in the
+> linux-integrity next-queued-testing branch.
 > 
 
-Thanks, Mimi.
+I'm glad this is fixed now. :)
 
+Yeah, you can add my:
+
+Reviewed-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+
+Thanks
 --
 Gustavo
