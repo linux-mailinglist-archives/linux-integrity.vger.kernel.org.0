@@ -2,23 +2,23 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53662A09FF
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 20:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04014A0A32
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 21:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbfH1Sx4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Aug 2019 14:53:56 -0400
-Received: from gateway24.websitewelcome.com ([192.185.50.45]:35275 "EHLO
-        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726563AbfH1Sxw (ORCPT
+        id S1726541AbfH1TMJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Aug 2019 15:12:09 -0400
+Received: from gateway34.websitewelcome.com ([192.185.149.222]:23690 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726315AbfH1TMJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Aug 2019 14:53:52 -0400
-X-Greylist: delayed 1472 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Aug 2019 14:53:51 EDT
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 4D5C93E9D4
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 13:29:19 -0500 (CDT)
+        Wed, 28 Aug 2019 15:12:09 -0400
+X-Greylist: delayed 1255 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Aug 2019 15:12:08 EDT
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 6CBFF6307F09
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 13:51:12 -0500 (CDT)
 Received: from gator4166.hostgator.com ([108.167.133.22])
         by cmsmtp with SMTP
-        id 32h5iu5CP2PzO32h5irvuF; Wed, 28 Aug 2019 13:29:19 -0500
+        id 332Gieja9iQer332GiyFKd; Wed, 28 Aug 2019 13:51:12 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -26,17 +26,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ewILt52ANbAo0/SJyy4fWKVEQWsG7Vl+LCU+2RXicqU=; b=CsSzg4pFPdVgp+yZgmkWLU+yLP
-        7Oel84hpT38RBNEyMamLet85i08wdlPJJ2MQVFrbhR4GdHBooX1at7o+D4Si0F0SAJixI70a7M1N+
-        eBDEPdwbCZe9EYoUhpwubfLEymSGmmlqYfO0ic50dyW4GMSL/1OO14R/2fU9fpD+O+jg5ydvTO5TS
-        ePIHPWynjVvm39jd44MfuyL5HGDdgAttNru2JUyRzK0U7c1HBd6V7MFqa3XX21ZRBZnfTdFiYa+EM
-        RSzZAYU5NOqptdCmd2biDzHmRHr/kjzZ24ULj0O0bmDpTs66MR3YfIhz5r2/Z0pShCztlBT5O0e9r
-        ANAFurPw==;
-Received: from [189.152.216.116] (port=47944 helo=[192.168.43.131])
+        bh=luqKYGJu+KofvWlAiQtrPtmwibeUX7kl9Aljx5sEuBY=; b=f01vjnZlkXWcXmkDBhWMItzoZl
+        tFHdK5YZ814Y3LjXwQ6n1U2H1WWGQn/Im8RjfJyY06Kgu6uTm2ozXSAm1L3Z5R2eNEOU9ilA36rSc
+        95G4gQTt6WrQwNcle/Ilas22CQYw4VFksrlcVcP8x6KGtB5c/0jrnAV9T8vsdnSqI7x6B0ctHwukS
+        7rLaaSYaFPtyVRoILg5C0nzTP+wObAo0o7fYnhNLxI+GeL5bYWav1TMAVc0XIgquEJ4OGnd+e3meF
+        R+IPapUe2I5kizvdHPOzStBEH+wEoA47zlMJbyv16Ie/rj9JzlGS2WsVc+QUBLuK18DgjpuJ9dVq1
+        YBAdR8FA==;
+Received: from [189.152.216.116] (port=50252 helo=[192.168.43.131])
         by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
         (Exim 4.92)
         (envelope-from <gustavo@embeddedor.com>)
-        id 1i32h4-003pFp-Ox; Wed, 28 Aug 2019 13:29:18 -0500
+        id 1i332F-000QYW-Vu; Wed, 28 Aug 2019 13:51:12 -0500
 Subject: Re: [PATCH] ima: use struct_size() in kzalloc()
 To:     Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
@@ -45,6 +45,8 @@ To:     Mimi Zohar <zohar@linux.ibm.com>,
 Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20190529165343.GA2584@embeddedor>
+ <671185b9-5c91-5235-b5ea-96d3449bf716@embeddedor.com>
+ <1567018017.6115.61.camel@linux.ibm.com>
 From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=gustavo@embeddedor.com; keydata=
@@ -90,15 +92,15 @@ Autocrypt: addr=gustavo@embeddedor.com; keydata=
  YJWH93PN+ZUh6i6Rd2U/i8jH5WvzR57UeWxE4P8bQc0hNGrUsHQH6bpHV2lbuhDdqo+cM9eh
  GZEO3+gCDFmKrjspZjkJbB5Gadzvts5fcWGOXEvuT8uQSvl+vEL0g6vczsyPBtqoBLa9SNrS
  VtSixD1uOgytAP7RWS474w==
-Message-ID: <671185b9-5c91-5235-b5ea-96d3449bf716@embeddedor.com>
-Date:   Wed, 28 Aug 2019 13:29:16 -0500
+Message-ID: <6e5871f0-70ff-eda5-5fd6-b8fd327f10c6@embeddedor.com>
+Date:   Wed, 28 Aug 2019 13:51:10 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190529165343.GA2584@embeddedor>
+In-Reply-To: <1567018017.6115.61.camel@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -107,13 +109,13 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 189.152.216.116
 X-Source-L: No
-X-Exim-ID: 1i32h4-003pFp-Ox
+X-Exim-ID: 1i332F-000QYW-Vu
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.43.131]) [189.152.216.116]:47944
+X-Source-Sender: ([192.168.43.131]) [189.152.216.116]:50252
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 16
+X-Email-Count: 38
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
 Sender: linux-integrity-owner@vger.kernel.org
@@ -121,54 +123,21 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi all,
 
-Friendly ping:
 
-Who can take this, please?
+On 8/28/19 1:46 PM, Mimi Zohar wrote:
+> On Wed, 2019-08-28 at 13:29 -0500, Gustavo A. R. Silva wrote:
+>> Hi all,
+>>
+>> Friendly ping:
+>>
+>> Who can take this, please?
+> 
+> Thank you for the reminder.  I'm just getting back from LSS and a very
+> short vacation.  I'll look at it shortly.
+> 
 
-Thanks
+Thanks, Mimi.
+
 --
 Gustavo
-
-On 5/29/19 11:53 AM, Gustavo A. R. Silva wrote:
-> One of the more common cases of allocation size calculations is finding
-> the size of a structure that has a zero-sized array at the end, along
-> with memory for some number of elements for that array. For example:
-> 
-> struct foo {
->    int stuff;
->    struct boo entry[];
-> };
-> 
-> instance = kzalloc(sizeof(struct foo) + count * sizeof(struct boo), GFP_KERNEL);
-> 
-> Instead of leaving these open-coded and prone to type mistakes, we can
-> now use the new struct_size() helper:
-> 
-> instance = kzalloc(struct_size(instance, entry, count), GFP_KERNEL);
-> 
-> This code was detected with the help of Coccinelle.
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-> ---
->  security/integrity/ima/ima_template.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-> index b631b8bc7624..b945dff2ed14 100644
-> --- a/security/integrity/ima/ima_template.c
-> +++ b/security/integrity/ima/ima_template.c
-> @@ -281,9 +281,8 @@ static int ima_restore_template_data(struct ima_template_desc *template_desc,
->  	int ret = 0;
->  	int i;
->  
-> -	*entry = kzalloc(sizeof(**entry) +
-> -		    template_desc->num_fields * sizeof(struct ima_field_data),
-> -		    GFP_NOFS);
-> +	*entry = kzalloc(struct_size(*entry, template_data,
-> +				     template_desc->num_fields), GFP_NOFS);
->  	if (!*entry)
->  		return -ENOMEM;
->  
-> 
