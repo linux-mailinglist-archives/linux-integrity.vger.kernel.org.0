@@ -2,93 +2,158 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE529FE94
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 11:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062CEA01FA
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 14:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbfH1JgQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Aug 2019 05:36:16 -0400
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:35512 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726326AbfH1JgQ (ORCPT
+        id S1726391AbfH1Mj1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Aug 2019 08:39:27 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51816 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726270AbfH1Mj1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Aug 2019 05:36:16 -0400
-Received: by mail-yb1-f195.google.com with SMTP id c9so583037ybf.2;
-        Wed, 28 Aug 2019 02:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m8H1ni9yUIvKX3ot84qs9UAKbQ5sv70F7CGKmm49qW4=;
-        b=q3/C+voFtOOZNKoHGbnnO9Lg3fcxIGE+I+t73LnEHRvCavUUPEU4M8v09XScvVHHJ/
-         ef4ZUdZ5B8yrQihlHBLcuYYIbJB8Vg05r8uOCN+HZTg4LKguyrltkFdPoEi1axbGEvEP
-         0iaNoTsbzz/Kk/j4iq1P01lB5wi1il0lHo1pi9NrM9Y64Lbq1yWjFAMy9y09qG4PRb0L
-         VUgYInjsBhqtNX9QPvPVkMhXm27U3ykIq3x3RfMB/oUmAF9WuxrZ84Qw7BDgq43k5jcZ
-         HAeYs1jLgBsjddmJ/B81VMz9bCYJzE5DrRUlq8VR3WBzJPxvFOruPuaj70NUEjBfPqB3
-         BUZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m8H1ni9yUIvKX3ot84qs9UAKbQ5sv70F7CGKmm49qW4=;
-        b=sGf1blZZ0RvrK365nWzw5GBGvItBF5N56zXSmOAw92ROSNG33x+7M2UFLQM18kshLt
-         aDm93eKqCJdoh3Aeks4tp5AiE0RJ+dVfwKW1TBCMBSQ88q7t9xbSp5h5kYaEpfzRNhAl
-         q1wrgmAzupKBaMsRMdh/NDXBgNjLnN+bfyfOywnYL6z6xUx40Dx9er33H1K+m0F5313t
-         djD/QT739HUsBpBKQ0IhF9ffAMSOFaSgeXwkFeMo5e50uQXjBGAwYRz7iKC0AiUhFAjM
-         bzxppKlJm838MywqCvXg8eldfY2fUlRnQSeJRJU5IBFkkDB4Yjn6iNNtxuSjP0g6nMyI
-         h9hQ==
-X-Gm-Message-State: APjAAAWGjikjzZtvg4n3hIj+BWPjAfPtksBCjU7DL5+BodxqELvBrp6J
-        XFTV3qFEpM9Ug1MXHn8MRIi2hqnuehj2jQfqi/k=
-X-Google-Smtp-Source: APXvYqzyAy1t7MyLmD3sjcO183YWsA3wpOmY8Nw7sOWOFmGweBbTSStv7843QVn7kK55nYWg6OxAl6W3a5KktRP/l9M=
-X-Received: by 2002:a25:2f42:: with SMTP id v63mr2232165ybv.228.1566984975242;
- Wed, 28 Aug 2019 02:36:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190826081752.57258-1-kkamagui@gmail.com> <CACdnJutomLNthYDzEc0wFBcBHK5iqnk0p-hkAkp57zQZ38oGPA@mail.gmail.com>
- <CAHjaAcSFhQsDYL2iRwwhyvxh9mH4DhxZ__DNzhtk=iiZZ5JdbA@mail.gmail.com>
- <CACdnJutfR2X-5ksXw4PNUdyH2MJs_mExNCcYPp8NLcPW2EDrYQ@mail.gmail.com>
- <CAHjaAcSpU0eW5PLsEpxTkycwi+wNS67xeizb6_BMM_-qUZYAmg@mail.gmail.com> <20190827171106.owkvt6slwwg5ypyl@srcf.ucam.org>
-In-Reply-To: <20190827171106.owkvt6slwwg5ypyl@srcf.ucam.org>
-From:   Seunghun Han <kkamagui@gmail.com>
-Date:   Wed, 28 Aug 2019 18:36:04 +0900
-Message-ID: <CAHjaAcSu04J3WqT_vnSnaQuYpFQ+xiXXWxhcCeLQccEq6eQGcQ@mail.gmail.com>
-Subject: Re: [PATCH] x86: tpm: Remove a busy bit of the NVS area for
- supporting AMD's fTPM
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     Matthew Garrett <mjg59@google.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 28 Aug 2019 08:39:27 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7SCaPkU050298
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 08:39:25 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2unqrwcvux-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 08:39:24 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 28 Aug 2019 13:39:23 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 28 Aug 2019 13:39:19 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7SCdHOH55574588
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Aug 2019 12:39:17 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5E37EA4064;
+        Wed, 28 Aug 2019 12:39:17 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1646CA4060;
+        Wed, 28 Aug 2019 12:39:16 +0000 (GMT)
+Received: from localhost.ibm.com (unknown [9.85.129.156])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Aug 2019 12:39:15 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Petr Vorel <pvorel@suse.cz>, Jessica Yu <jeyu@kernel.org>,
+        Dave Young <dyoung@redhat.com>, shuah <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] sefltest/ima: support appended signatures (modsig)
+Date:   Wed, 28 Aug 2019 08:39:06 -0400
+X-Mailer: git-send-email 2.7.5
+X-TM-AS-GCONF: 00
+x-cbid: 19082812-0012-0000-0000-00000343E072
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19082812-0013-0000-0000-0000217E1D40
+Message-Id: <1566995946-6582-1-git-send-email-zohar@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-28_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=769 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908280134
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
->
-> On Wed, Aug 28, 2019 at 01:36:30AM +0900, Seunghun Han wrote:
->
-> > I got your point. Is there any problem if some regions which don't
-> > need to be handled in NVS area are saved and restored? If there is a
-> > problem, how about adding code for ignoring the regions in NVS area to
-> > the nvs.c file like Jarkko said? If we add the code, we can save and
-> > restore NVS area without driver's interaction.
->
-> The only thing that knows which regions should be skipped by the NVS
-> driver is the hardware specific driver, so the TPM driver needs to ask
-> the NVS driver to ignore that region and grant control to the TPM
-> driver.
->
-> --
-> Matthew Garrett | mjg59@srcf.ucam.org
+Detect and allow appended signatures.
 
-Thank you, Matthew and Jarkko.
-It seems that the TPM driver needs to handle the specific case that
-TPM regions are in the NVS. I would make a patch that removes TPM
-regions from the ACPI NVS by requesting to the NVS driver soon.
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ .../selftests/kexec/test_kexec_file_load.sh        | 38 +++++++++++++++++++---
+ 1 file changed, 34 insertions(+), 4 deletions(-)
 
-Jarkko,
-I would like to get some advice on it. What do you think about
-removing TPM regions from the ACPI NVS in TPM CRB driver? If you don't
-mind, I would make the patch about it.
+diff --git a/tools/testing/selftests/kexec/test_kexec_file_load.sh b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+index fa7c24e8eefb..2ff600388c30 100755
+--- a/tools/testing/selftests/kexec/test_kexec_file_load.sh
++++ b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+@@ -37,11 +37,20 @@ is_ima_sig_required()
+ 	# sequentially.  As a result, a policy rule may be defined, but
+ 	# might not necessarily be used.  This test assumes if a policy
+ 	# rule is specified, that is the intent.
++
++	# First check for appended signature (modsig), then xattr
+ 	if [ $ima_read_policy -eq 1 ]; then
+ 		check_ima_policy "appraise" "func=KEXEC_KERNEL_CHECK" \
+-			"appraise_type=imasig"
++			"appraise_type=imasig|modsig"
+ 		ret=$?
+-		[ $ret -eq 1 ] && log_info "IMA signature required";
++		if [ $ret -eq 1 ]; then
++			log_info "IMA or appended(modsig) signature required"
++		else
++			check_ima_policy "appraise" "func=KEXEC_KERNEL_CHECK" \
++				"appraise_type=imasig"
++			ret=$?
++			[ $ret -eq 1 ] && log_info "IMA signature required";
++		fi
+ 	fi
+ 	return $ret
+ }
+@@ -84,6 +93,22 @@ check_for_imasig()
+ 	return $ret
+ }
+ 
++# Return 1 for appended signature (modsig) found and 0 for not found.
++check_for_modsig()
++{
++	local module_sig_string="~Module signature appended~"
++	local sig="$(tail --bytes $((${#module_sig_string} + 1)) $KERNEL_IMAGE)"
++	local ret=0
++
++	if [ "$sig" == "$module_sig_string" ]; then
++		ret=1
++		log_info "kexec kernel image modsig signed"
++	else
++		log_info "kexec kernel image not modsig signed"
++	fi
++	return $ret
++}
++
+ kexec_file_load_test()
+ {
+ 	local succeed_msg="kexec_file_load succeeded"
+@@ -98,7 +123,8 @@ kexec_file_load_test()
+ 		# In secureboot mode with an architecture  specific
+ 		# policy, make sure either an IMA or PE signature exists.
+ 		if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ] && \
+-			[ $ima_signed -eq 0 ] && [ $pe_signed -eq 0 ]; then
++			[ $ima_signed -eq 0 ] && [ $pe_signed -eq 0 ] \
++			  && [ $ima_modsig -eq 0 ]; then
+ 			log_fail "$succeed_msg (missing sig)"
+ 		fi
+ 
+@@ -107,7 +133,8 @@ kexec_file_load_test()
+ 			log_fail "$succeed_msg (missing PE sig)"
+ 		fi
+ 
+-		if [ $ima_sig_required -eq 1 ] && [ $ima_signed -eq 0 ]; then
++		if [ $ima_sig_required -eq 1 ] && [ $ima_signed -eq 0 ] \
++		     && [ $ima_modsig -eq 0 ]; then
+ 			log_fail "$succeed_msg (missing IMA sig)"
+ 		fi
+ 
+@@ -204,5 +231,8 @@ pe_signed=$?
+ check_for_imasig
+ ima_signed=$?
+ 
++check_for_modsig
++ima_modsig=$?
++
+ # Test loading the kernel image via kexec_file_load syscall
+ kexec_file_load_test
+-- 
+2.7.5
 
-Seunghun
