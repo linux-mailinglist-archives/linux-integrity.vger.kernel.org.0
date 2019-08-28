@@ -2,22 +2,22 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5417F9F78A
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 02:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3B89F788
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 02:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726347AbfH1Aq1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Aug 2019 20:46:27 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:43278 "EHLO mx1.redhat.com"
+        id S1726091AbfH1Aqa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Aug 2019 20:46:30 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:42434 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726091AbfH1Aq0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Aug 2019 20:46:26 -0400
+        id S1726342AbfH1Aq1 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 27 Aug 2019 20:46:27 -0400
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id C58E281F25;
-        Wed, 28 Aug 2019 00:46:26 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 3A76C85360;
+        Wed, 28 Aug 2019 00:46:27 +0000 (UTC)
 Received: from cantor.redhat.com (ovpn-118-116.phx2.redhat.com [10.3.118.116])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 67E5D6092D;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D34B860923;
         Wed, 28 Aug 2019 00:46:26 +0000 (UTC)
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
 To:     linux-integrity@vger.kernel.org
@@ -26,22 +26,35 @@ Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Jerry Snitselaar <jsnitsel@redhat.com>,
         Alexey Klimov <aklimov@redhat.com>
-Subject: [PATCH 1/2 v2] tpm: provide a way to override the chip returned durations
-Date:   Tue, 27 Aug 2019 17:46:20 -0700
-Message-Id: <20190828004621.29050-2-jsnitsel@redhat.com>
+Subject: [PATCH 2/2 v2] tpm_tis: override durations for STM tpm with firmware 1.2.8.28
+Date:   Tue, 27 Aug 2019 17:46:21 -0700
+Message-Id: <20190828004621.29050-3-jsnitsel@redhat.com>
 In-Reply-To: <20190828004621.29050-1-jsnitsel@redhat.com>
 References: <20190828004621.29050-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.27]); Wed, 28 Aug 2019 00:46:26 +0000 (UTC)
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Wed, 28 Aug 2019 00:46:27 +0000 (UTC)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Patch adds method ->update_durations to override returned
-durations in case TPM chip misbehaves for TPM 1.2 drivers.
+There was revealed a bug in the STM TPM chipset used in Dell R415s.
+Bug is observed so far only on chipset firmware 1.2.8.28
+(1.2 TPM, device-id 0x0, rev-id 78). After some number of
+operations chipset hangs and stays in inconsistent state:
+
+tpm_tis 00:09: Operation Timed out
+tpm_tis 00:09: tpm_transmit: tpm_send: error -5
+
+Durations returned by the chip are the same like on other
+firmware revisions but apparently with specifically 1.2.8.28 fw
+durations should be reset to 2 minutes to enable tpm chip work
+properly. No working way of updating firmware was found.
+
+This patch adds implementation of ->update_durations method
+that matches only STM devices with specific firmware version.
 
 Cc: Peter Huewe <peterhuewe@gmx.de>
 Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
@@ -49,58 +62,124 @@ Cc: Jason Gunthorpe <jgg@ziepe.ca>
 Signed-off-by: Alexey Klimov <aklimov@redhat.com>
 Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
 ---
-v2: newline cleanup as requested by Jarkko
+v2: Make suggested changes from Jarkko
+    - change struct field name to durations from durs
+    - formatting cleanups
+    - turn into void function like update_timeouts and
+      use chip->duration_adjusted to track whether adjustment occurred.
 
- drivers/char/tpm/tpm1-cmd.c | 15 +++++++++++++++
- include/linux/tpm.h         |  2 ++
- 2 files changed, 17 insertions(+)
+ drivers/char/tpm/tpm_tis_core.c | 91 +++++++++++++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-index 149e953ca369..ca7158fa6e6c 100644
---- a/drivers/char/tpm/tpm1-cmd.c
-+++ b/drivers/char/tpm/tpm1-cmd.c
-@@ -343,6 +343,7 @@ int tpm1_get_timeouts(struct tpm_chip *chip)
- {
- 	cap_t cap;
- 	unsigned long timeout_old[4], timeout_chip[4], timeout_eff[4];
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index c3181ea9f271..81b65ec2a41b 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -506,6 +506,96 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
+ 	return rc;
+ }
+ 
++struct tis_vendor_durations_override {
++	u32 did_vid;
++	struct tpm_version_t tpm_version;
 +	unsigned long durations[3];
- 	ssize_t rc;
- 
- 	rc = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, NULL,
-@@ -427,6 +428,20 @@ int tpm1_get_timeouts(struct tpm_chip *chip)
- 		usecs_to_jiffies(be32_to_cpu(cap.duration.tpm_long));
- 	chip->duration[TPM_LONG_LONG] = 0; /* not used under 1.2 */
- 
-+	/*
-+	 * Provide the ability for vendor overrides of duration values in case
-+	 * of misreporting.
-+	 */
-+	if (chip->ops->update_durations)
-+		chip->ops->update_durations(chip, durations);
++};
 +
-+	if (chip->duration_adjusted) {
-+		dev_info(&chip->dev, HW_ERR "Adjusting reported durations.");
-+		chip->duration[TPM_SHORT] = durations[0];
-+		chip->duration[TPM_MEDIUM] = durations[1];
-+		chip->duration[TPM_LONG] = durations[2];
++static const struct  tis_vendor_durations_override vendor_dur_overrides[] = {
++	/* STMicroelectronics 0x104a */
++	{ 0x0000104a,
++	  { 1, 2, 8, 28 },
++	  { (2 * 60 * HZ), (2 * 60 * HZ), (2 * 60 * HZ) } },
++};
++
++static void tpm_tis_update_durations(struct tpm_chip *chip,
++				     unsigned long *duration_cap)
++{
++	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
++	u32 did_vid;
++	int i, rc;
++	cap_t cap;
++
++	chip->duration_adjusted = false;
++
++	if (chip->ops->clk_enable != NULL)
++		chip->ops->clk_enable(chip, true);
++
++	rc = tpm_tis_read32(priv, TPM_DID_VID(0), &did_vid);
++	if (rc < 0) {
++		dev_warn(&chip->dev, "%s: failed to read did_vid. %d\n",
++			 __func__, rc);
++		goto out;
 +	}
 +
- 	/* The Broadcom BCM0102 chipset in a Dell Latitude D820 gets the above
- 	 * value wrong and apparently reports msecs rather than usecs. So we
- 	 * fix up the resulting too-small TPM_SHORT value to make things work.
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 53c0ea9ec9df..bb1d1ac7081d 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -67,6 +67,8 @@ struct tpm_class_ops {
- 	u8 (*status) (struct tpm_chip *chip);
- 	void (*update_timeouts)(struct tpm_chip *chip,
- 				unsigned long *timeout_cap);
-+	void (*update_durations)(struct tpm_chip *chip,
-+				 unsigned long *duration_cap);
- 	int (*go_idle)(struct tpm_chip *chip);
- 	int (*cmd_ready)(struct tpm_chip *chip);
- 	int (*request_locality)(struct tpm_chip *chip, int loc);
++	for (i = 0; i != ARRAY_SIZE(vendor_dur_overrides); i++) {
++		if (vendor_dur_overrides[i].did_vid != did_vid)
++			continue;
++
++		/* Try to get a TPM version 1.2 TPM_CAP_VERSION_INFO */
++		rc = tpm1_getcap(chip, TPM_CAP_VERSION_1_2, &cap,
++				 "attempting to determine the 1.2 version",
++				 sizeof(cap.tpm_version_1_2));
++		if (!rc) {
++			if ((cap.tpm_version_1_2.Major ==
++			     vendor_dur_overrides[i].tpm_version.Major) &&
++			    (cap.tpm_version_1_2.Minor ==
++			     vendor_dur_overrides[i].tpm_version.Minor) &&
++			    (cap.tpm_version_1_2.revMajor ==
++			     vendor_dur_overrides[i].tpm_version.revMajor) &&
++			    (cap.tpm_version_1_2.revMinor ==
++			     vendor_dur_overrides[i].tpm_version.revMinor)) {
++
++				memcpy(duration_cap,
++				       vendor_dur_overrides[i].durations,
++				       sizeof(vendor_dur_overrides[i].durations));
++
++				chip->duration_adjusted = true;
++				goto out;
++			}
++		} else {
++			rc = tpm1_getcap(chip, TPM_CAP_VERSION_1_1, &cap,
++					 "attempting to determine the 1.1 version",
++					 sizeof(cap.tpm_version));
++
++			if (rc)
++				goto out;
++
++			if ((cap.tpm_version.Major ==
++			     vendor_dur_overrides[i].tpm_version.Major) &&
++			    (cap.tpm_version.Minor ==
++			     vendor_dur_overrides[i].tpm_version.Minor) &&
++			    (cap.tpm_version.revMajor ==
++			     vendor_dur_overrides[i].tpm_version.revMajor) &&
++			    (cap.tpm_version.revMinor ==
++			     vendor_dur_overrides[i].tpm_version.revMinor)) {
++
++				memcpy(duration_cap,
++				       vendor_dur_overrides[i].durations,
++				       sizeof(vendor_dur_overrides[i].durations));
++
++				chip->duration_adjusted = true;
++				goto out;
++			}
++		}
++	}
++
++out:
++	if (chip->ops->clk_enable != NULL)
++		chip->ops->clk_enable(chip, false);
++}
++
+ struct tis_vendor_timeout_override {
+ 	u32 did_vid;
+ 	unsigned long timeout_us[4];
+@@ -842,6 +932,7 @@ static const struct tpm_class_ops tpm_tis = {
+ 	.send = tpm_tis_send,
+ 	.cancel = tpm_tis_ready,
+ 	.update_timeouts = tpm_tis_update_timeouts,
++	.update_durations = tpm_tis_update_durations,
+ 	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
+ 	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
+ 	.req_canceled = tpm_tis_req_canceled,
 -- 
 2.21.0
 
