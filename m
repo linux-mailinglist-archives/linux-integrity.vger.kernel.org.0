@@ -2,95 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F68A03B4
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 15:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261ACA0540
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 16:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbfH1NuY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Aug 2019 09:50:24 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64038 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726439AbfH1NuY (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Aug 2019 09:50:24 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7SDdxlX115472
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 09:50:23 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2unrh35x3v-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 09:50:23 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 28 Aug 2019 14:50:20 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 28 Aug 2019 14:50:18 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7SDoHIf58327210
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Aug 2019 13:50:17 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E4A74C04A;
-        Wed, 28 Aug 2019 13:50:17 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 996804C04E;
-        Wed, 28 Aug 2019 13:50:15 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.129.156])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 28 Aug 2019 13:50:15 +0000 (GMT)
-Subject: Re: [PATCH][next] ima: ima_modsig: Fix use-after-free bug in
- ima_read_modsig
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 28 Aug 2019 09:50:15 -0400
-In-Reply-To: <20190811235507.GA9587@embeddedor>
-References: <20190811235507.GA9587@embeddedor>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        id S1726447AbfH1Opq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Aug 2019 10:45:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45322 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726395AbfH1Opp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 28 Aug 2019 10:45:45 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E85EF2077B;
+        Wed, 28 Aug 2019 14:45:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567003544;
+        bh=vneSpYWc4gWpu4W6gxC/dr26+W3sYZi98+pPPJepJB0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ucKcS+rJhzYEk6AK3752Inb4Zx4CTZgBJG43fvi3Wdb+3+BkPSB+RUS8Zmie1Jzlu
+         Hq9OuhmtffrrXHw2Ea3LeSm5kWb4cdvt3Ltm3G8h33of/sNQp19TtalYFb7isCAgwc
+         sb8Xm3J+E60E8aA8fzkjhV2WzEH80FJ6yeUVfd7M=
+Subject: Re: [PATCH] sefltest/ima: support appended signatures (modsig)
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Petr Vorel <pvorel@suse.cz>, Jessica Yu <jeyu@kernel.org>,
+        Dave Young <dyoung@redhat.com>,
+        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
+References: <1566995946-6582-1-git-send-email-zohar@linux.ibm.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <2f89d09f-1b69-3d77-6846-01bef7d20f39@kernel.org>
+Date:   Wed, 28 Aug 2019 08:45:29 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <1566995946-6582-1-git-send-email-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19082813-0008-0000-0000-0000030E46EB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19082813-0009-0000-0000-00004A2C8752
-Message-Id: <1567000215.6115.19.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-28_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908280144
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Gustavo,
+Hi Mimi,
 
-On Sun, 2019-08-11 at 18:55 -0500, Gustavo A. R. Silva wrote:
-> hdr is being freed and then dereferenced by accessing hdr->pkcs7_msg
+On 8/28/19 6:39 AM, Mimi Zohar wrote:
+> Detect and allow appended signatures.
 > 
-> Fix this by copying the value returned by PTR_ERR(hdr->pkcs7_msg) into
-> automatic variable err for its safe use after freeing hdr.
-> 
-> Addresses-Coverity-ID: 1485813 ("Read from pointer after free")
-> Fixes: 39b07096364a ("ima: Implement support for module-style appended signatures")
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 
-This bug was reported Julia and addressed by Thiago on 8/7. If you
-would like to add your Review/Tested-by, the patch can be found in the
-linux-integrity next-queued-testing branch.
+Can you please add a couple of more sentences on the feature
+and what happens without it? I know this is a test for the
+feature, however, it will be useful for users and testers to
+know more about this test and the feature it is testing.
+
+Also, are there test skip conditions to be concerned about?
+
+Is there a dependency on another tree or would like me to take
+this through kselftest tree?
+
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>   .../selftests/kexec/test_kexec_file_load.sh        | 38 +++++++++++++++++++---
+>   1 file changed, 34 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kexec/test_kexec_file_load.sh b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+> index fa7c24e8eefb..2ff600388c30 100755
+> --- a/tools/testing/selftests/kexec/test_kexec_file_load.sh
+> +++ b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+> @@ -37,11 +37,20 @@ is_ima_sig_required()
+>   	# sequentially.  As a result, a policy rule may be defined, but
+>   	# might not necessarily be used.  This test assumes if a policy
+>   	# rule is specified, that is the intent.
+> +
+> +	# First check for appended signature (modsig), then xattr
+>   	if [ $ima_read_policy -eq 1 ]; then
+>   		check_ima_policy "appraise" "func=KEXEC_KERNEL_CHECK" \
+> -			"appraise_type=imasig"
+> +			"appraise_type=imasig|modsig"
+>   		ret=$?
+> -		[ $ret -eq 1 ] && log_info "IMA signature required";
+> +		if [ $ret -eq 1 ]; then
+> +			log_info "IMA or appended(modsig) signature required"
+> +		else
+> +			check_ima_policy "appraise" "func=KEXEC_KERNEL_CHECK" \
+> +				"appraise_type=imasig"
+> +			ret=$?
+> +			[ $ret -eq 1 ] && log_info "IMA signature required";
+> +		fi
+>   	fi
+>   	return $ret
+>   }
+> @@ -84,6 +93,22 @@ check_for_imasig()
+>   	return $ret
+>   }
+>   
+> +# Return 1 for appended signature (modsig) found and 0 for not found.
+> +check_for_modsig()
+> +{
+> +	local module_sig_string="~Module signature appended~"
+> +	local sig="$(tail --bytes $((${#module_sig_string} + 1)) $KERNEL_IMAGE)"
+> +	local ret=0
+> +
+> +	if [ "$sig" == "$module_sig_string" ]; then
+> +		ret=1
+> +		log_info "kexec kernel image modsig signed"
+> +	else
+> +		log_info "kexec kernel image not modsig signed"
+> +	fi
+> +	return $ret
+> +}
+> +
+>   kexec_file_load_test()
+>   {
+>   	local succeed_msg="kexec_file_load succeeded"
+> @@ -98,7 +123,8 @@ kexec_file_load_test()
+>   		# In secureboot mode with an architecture  specific
+>   		# policy, make sure either an IMA or PE signature exists.
+>   		if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ] && \
+> -			[ $ima_signed -eq 0 ] && [ $pe_signed -eq 0 ]; then
+> +			[ $ima_signed -eq 0 ] && [ $pe_signed -eq 0 ] \
+> +			  && [ $ima_modsig -eq 0 ]; then
+>   			log_fail "$succeed_msg (missing sig)"
+>   		fi
+>   
+> @@ -107,7 +133,8 @@ kexec_file_load_test()
+>   			log_fail "$succeed_msg (missing PE sig)"
+>   		fi
+>   
+> -		if [ $ima_sig_required -eq 1 ] && [ $ima_signed -eq 0 ]; then
+> +		if [ $ima_sig_required -eq 1 ] && [ $ima_signed -eq 0 ] \
+> +		     && [ $ima_modsig -eq 0 ]; then
+>   			log_fail "$succeed_msg (missing IMA sig)"
+>   		fi
+>   
+> @@ -204,5 +231,8 @@ pe_signed=$?
+>   check_for_imasig
+>   ima_signed=$?
+>   
+> +check_for_modsig
+> +ima_modsig=$?
+> +
+>   # Test loading the kernel image via kexec_file_load syscall
+>   kexec_file_load_test
+> 
 
 thanks,
-
-Mimi
-
+-- Shuah
