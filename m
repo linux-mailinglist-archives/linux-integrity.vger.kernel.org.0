@@ -2,184 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3B89F788
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 02:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B8C9F9D2
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2019 07:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726091AbfH1Aqa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Aug 2019 20:46:30 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:42434 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726342AbfH1Aq1 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Aug 2019 20:46:27 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 3A76C85360;
-        Wed, 28 Aug 2019 00:46:27 +0000 (UTC)
-Received: from cantor.redhat.com (ovpn-118-116.phx2.redhat.com [10.3.118.116])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D34B860923;
-        Wed, 28 Aug 2019 00:46:26 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Alexey Klimov <aklimov@redhat.com>
-Subject: [PATCH 2/2 v2] tpm_tis: override durations for STM tpm with firmware 1.2.8.28
-Date:   Tue, 27 Aug 2019 17:46:21 -0700
-Message-Id: <20190828004621.29050-3-jsnitsel@redhat.com>
-In-Reply-To: <20190828004621.29050-1-jsnitsel@redhat.com>
-References: <20190828004621.29050-1-jsnitsel@redhat.com>
+        id S1726136AbfH1F2Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Aug 2019 01:28:25 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:40095 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726145AbfH1F2Y (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 28 Aug 2019 01:28:24 -0400
+Received: by mail-lj1-f194.google.com with SMTP id e27so1363502ljb.7
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Aug 2019 22:28:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wuD+47oBthIHQumcqd0YN679T72WGLTDD4hOsKbpLxE=;
+        b=JxQ/DhDP05PNcJhHPHt2GrZ/B8VfZ53oE6THwxTahk32Tsn0TFdadeMPol+lFd4P1A
+         ZSNr/mSN4jHxlMDbHl9zDZxG22Ec4vfh7ClgirOkCZvTjA6NTfc7GF6QpnMJoq3yf1Tf
+         jZJPmiBUgmxrpi3fZHzpuAAhDEbJIGpkDmyqW77n0f4dC+Kdoog+2dPGysHFHolJFQYJ
+         dKWrRA+dbT0VHyb3+C39xtvli41mc53RQaVl4B3RnrOVhuH3KUKlLJ1X9oNXIVZroUOV
+         ysRIXcz2GlsRxWYVmoX0DOS+xB7rY3Uuf0nRqv9lrREvMrwVG+NiTKs3C3JiDAFCeUsa
+         253w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wuD+47oBthIHQumcqd0YN679T72WGLTDD4hOsKbpLxE=;
+        b=oBbvHnqwCDNwjJGmls5ciCajPVb7afLdWpUhVysLYDF6BXe22G8mooWchT1ch0fzgH
+         1yBANlYAo31Fud3CPaLybdwLUxGMVlXBJvS57lkcArsrWqaIonTEIOCekN4W/az8O7z1
+         C4Q14KkC1l8gljAICId7/gVP7jk6TxcNbo0Xg1g/95TRrG1ODuOJVzMCKHIj7VvOMw3F
+         E5qhhLKIT3K3k7lLg+9bsbeR4OrAF/F1igWng13UeU1XnyfWOgTISFCBWzJE0AhJeXK8
+         suvBQm0H/IQv/0PjLAYDq/7u8u5Bd+SrFqmD5bykPkM27D+eosu/+MNW44T9pc2hKvpX
+         iFBg==
+X-Gm-Message-State: APjAAAWCQJO3nv168v61VQ/uPAbWaK3ThpLvzPs304uhfTSj0PuOOvwO
+        p9mxazZXvESSj5EP6Xh1IT3go59jTVIZHzJDhu834Q==
+X-Google-Smtp-Source: APXvYqzP6WVBc3SIpSbwvH+PA6Ta0a7UKTqmsXsZbvFWOoRZR8d2RevgeN/WfpPSOG2xP4CPkCq1nfyajuFEu/pawkk=
+X-Received: by 2002:a2e:819:: with SMTP id 25mr987414lji.142.1566970102465;
+ Tue, 27 Aug 2019 22:28:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Wed, 28 Aug 2019 00:46:27 +0000 (UTC)
+References: <1566392345-15419-1-git-send-email-sumit.garg@linaro.org>
+ <1566392345-15419-5-git-send-email-sumit.garg@linaro.org> <20190827141742.6qxowsigqolxaod4@linux.intel.com>
+In-Reply-To: <20190827141742.6qxowsigqolxaod4@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 28 Aug 2019 10:58:11 +0530
+Message-ID: <CAFA6WYPnoDoMWd=PT4mgXPhg1Wp0=AFDnWd_44UMP7sijXzAZA@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] KEYS: trusted: move tpm2 trusted keys code
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-security-module@vger.kernel.org, dhowells@redhat.com,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        peterhuewe@gmx.de, jgg@ziepe.ca, jejb@linux.ibm.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-There was revealed a bug in the STM TPM chipset used in Dell R415s.
-Bug is observed so far only on chipset firmware 1.2.8.28
-(1.2 TPM, device-id 0x0, rev-id 78). After some number of
-operations chipset hangs and stays in inconsistent state:
+On Tue, 27 Aug 2019 at 19:47, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Wed, Aug 21, 2019 at 06:29:05PM +0530, Sumit Garg wrote:
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2004 IBM Corporation
+> > + * Copyright (C) 2014 Intel Corporation
+>
+> Everything below can be dropped from this new file. Git has the most
+> accurate authority information.
+>
+> I'm not sure why I added the authors-list in the first place to the
+> header when I implemented these functions as none of those folks have
+> contributed to this particular piece of work.
+>
+> > + * Authors:
+> > + * Leendert van Doorn <leendert@watson.ibm.com>
+> > + * Dave Safford <safford@watson.ibm.com>
+> > + * Reiner Sailer <sailer@watson.ibm.com>
+> > + * Kylene Hall <kjhall@us.ibm.com>
+> > + *
+> > + * Maintained by: <tpmdd-devel@lists.sourceforge.net>
+> > + *
+> > + * Trusted Keys code for TCG/TCPA TPM2 (trusted platform module).
+> > + */
+>
+> To summarize, I think this would be sufficient:
+>
+> // SPDX-License-Identifier: GPL-2.0-only
+> /*
+>  * Copyright (C) 2004 IBM Corporation
+>  * Copyright (C) 2014 Intel Corporation
+>  */
 
-tpm_tis 00:09: Operation Timed out
-tpm_tis 00:09: tpm_transmit: tpm_send: error -5
+Sounds good to me.
 
-Durations returned by the chip are the same like on other
-firmware revisions but apparently with specifically 1.2.8.28 fw
-durations should be reset to 2 minutes to enable tpm chip work
-properly. No working way of updating firmware was found.
+>
+> I think there should never be such a rush that acronym could not be
+> written with the correct spelling. I'm referring to 'tpm2' in the short
+> summary.
 
-This patch adds implementation of ->update_durations method
-that matches only STM devices with specific firmware version.
+So you mean to say we should use upper-case letters for 'TPM2' acronym?
 
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Signed-off-by: Alexey Klimov <aklimov@redhat.com>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
-v2: Make suggested changes from Jarkko
-    - change struct field name to durations from durs
-    - formatting cleanups
-    - turn into void function like update_timeouts and
-      use chip->duration_adjusted to track whether adjustment occurred.
+> I'm sorry, I had to say it, just can't help myself with those
+> kind of details :-) I can take care of fixing those once I apply these
+> patches.
+>
+> You've done an awesome job. Thank you.
+>
 
- drivers/char/tpm/tpm_tis_core.c | 91 +++++++++++++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
+You are welcome.
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index c3181ea9f271..81b65ec2a41b 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -506,6 +506,96 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
- 	return rc;
- }
- 
-+struct tis_vendor_durations_override {
-+	u32 did_vid;
-+	struct tpm_version_t tpm_version;
-+	unsigned long durations[3];
-+};
-+
-+static const struct  tis_vendor_durations_override vendor_dur_overrides[] = {
-+	/* STMicroelectronics 0x104a */
-+	{ 0x0000104a,
-+	  { 1, 2, 8, 28 },
-+	  { (2 * 60 * HZ), (2 * 60 * HZ), (2 * 60 * HZ) } },
-+};
-+
-+static void tpm_tis_update_durations(struct tpm_chip *chip,
-+				     unsigned long *duration_cap)
-+{
-+	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-+	u32 did_vid;
-+	int i, rc;
-+	cap_t cap;
-+
-+	chip->duration_adjusted = false;
-+
-+	if (chip->ops->clk_enable != NULL)
-+		chip->ops->clk_enable(chip, true);
-+
-+	rc = tpm_tis_read32(priv, TPM_DID_VID(0), &did_vid);
-+	if (rc < 0) {
-+		dev_warn(&chip->dev, "%s: failed to read did_vid. %d\n",
-+			 __func__, rc);
-+		goto out;
-+	}
-+
-+	for (i = 0; i != ARRAY_SIZE(vendor_dur_overrides); i++) {
-+		if (vendor_dur_overrides[i].did_vid != did_vid)
-+			continue;
-+
-+		/* Try to get a TPM version 1.2 TPM_CAP_VERSION_INFO */
-+		rc = tpm1_getcap(chip, TPM_CAP_VERSION_1_2, &cap,
-+				 "attempting to determine the 1.2 version",
-+				 sizeof(cap.tpm_version_1_2));
-+		if (!rc) {
-+			if ((cap.tpm_version_1_2.Major ==
-+			     vendor_dur_overrides[i].tpm_version.Major) &&
-+			    (cap.tpm_version_1_2.Minor ==
-+			     vendor_dur_overrides[i].tpm_version.Minor) &&
-+			    (cap.tpm_version_1_2.revMajor ==
-+			     vendor_dur_overrides[i].tpm_version.revMajor) &&
-+			    (cap.tpm_version_1_2.revMinor ==
-+			     vendor_dur_overrides[i].tpm_version.revMinor)) {
-+
-+				memcpy(duration_cap,
-+				       vendor_dur_overrides[i].durations,
-+				       sizeof(vendor_dur_overrides[i].durations));
-+
-+				chip->duration_adjusted = true;
-+				goto out;
-+			}
-+		} else {
-+			rc = tpm1_getcap(chip, TPM_CAP_VERSION_1_1, &cap,
-+					 "attempting to determine the 1.1 version",
-+					 sizeof(cap.tpm_version));
-+
-+			if (rc)
-+				goto out;
-+
-+			if ((cap.tpm_version.Major ==
-+			     vendor_dur_overrides[i].tpm_version.Major) &&
-+			    (cap.tpm_version.Minor ==
-+			     vendor_dur_overrides[i].tpm_version.Minor) &&
-+			    (cap.tpm_version.revMajor ==
-+			     vendor_dur_overrides[i].tpm_version.revMajor) &&
-+			    (cap.tpm_version.revMinor ==
-+			     vendor_dur_overrides[i].tpm_version.revMinor)) {
-+
-+				memcpy(duration_cap,
-+				       vendor_dur_overrides[i].durations,
-+				       sizeof(vendor_dur_overrides[i].durations));
-+
-+				chip->duration_adjusted = true;
-+				goto out;
-+			}
-+		}
-+	}
-+
-+out:
-+	if (chip->ops->clk_enable != NULL)
-+		chip->ops->clk_enable(chip, false);
-+}
-+
- struct tis_vendor_timeout_override {
- 	u32 did_vid;
- 	unsigned long timeout_us[4];
-@@ -842,6 +932,7 @@ static const struct tpm_class_ops tpm_tis = {
- 	.send = tpm_tis_send,
- 	.cancel = tpm_tis_ready,
- 	.update_timeouts = tpm_tis_update_timeouts,
-+	.update_durations = tpm_tis_update_durations,
- 	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
- 	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
- 	.req_canceled = tpm_tis_req_canceled,
--- 
-2.21.0
+> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>
 
+Thanks for your review.
+
+-Sumit
+
+> Unfortunately I'm not yet sure if I have time to test these before going
+> to Linux Plumbers but these would be anyway too close to the next merge
+> window to be added to the v5.4 PR.
+>
+> /Jarkko
