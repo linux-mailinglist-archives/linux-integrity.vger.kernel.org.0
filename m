@@ -2,134 +2,237 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5565CA0EA9
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Aug 2019 02:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CC1A0ED0
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Aug 2019 03:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726971AbfH2AkI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Aug 2019 20:40:08 -0400
-Received: from 1.mo177.mail-out.ovh.net ([178.33.107.143]:44779 "EHLO
-        1.mo177.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726079AbfH2AkI (ORCPT
+        id S1726128AbfH2BLc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Aug 2019 21:11:32 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24356 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726079AbfH2BLb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Aug 2019 20:40:08 -0400
-X-Greylist: delayed 4626 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Aug 2019 20:40:07 EDT
-Received: from player796.ha.ovh.net (unknown [10.108.57.140])
-        by mo177.mail-out.ovh.net (Postfix) with ESMTP id A8C0C1081F3
-        for <linux-integrity@vger.kernel.org>; Thu, 29 Aug 2019 01:22:59 +0200 (CEST)
-Received: from 3mdeb.com (093105046241.oswiecim.vectranet.pl [93.105.46.241])
-        (Authenticated sender: piotr.krol@3mdeb.com)
-        by player796.ha.ovh.net (Postfix) with ESMTPSA id 635AA91D73D4;
-        Wed, 28 Aug 2019 23:22:55 +0000 (UTC)
-Subject: Re: TPM 2.0 Linux sysfs interface
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Petr Vorel <pvorel@suse.cz>, Ken Goldman <kgold@linux.ibm.com>
-References: <3329329f-4bf4-b8cd-dee8-eb36e513c728@3mdeb.com>
- <1567004581.6115.33.camel@linux.ibm.com>
-From:   =?UTF-8?Q?Piotr_Kr=c3=b3l?= <piotr.krol@3mdeb.com>
-Openpgp: preference=signencrypt
-Message-ID: <e8b2496b-7d53-f9d7-f2b7-779b87a4132a@3mdeb.com>
-Date:   Thu, 29 Aug 2019 01:22:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <1567004581.6115.33.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        Wed, 28 Aug 2019 21:11:31 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7T16u23085966
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 21:11:31 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2up1m3my4n-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 21:11:30 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 29 Aug 2019 02:11:28 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 29 Aug 2019 02:11:26 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7T1BPni42467452
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 01:11:25 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 173714C046;
+        Thu, 29 Aug 2019 01:11:25 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 312064C040;
+        Thu, 29 Aug 2019 01:11:24 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.129.156])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Aug 2019 01:11:24 +0000 (GMT)
+Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, Matthew Garrett <mjg59@google.com>
+Cc:     jamorris@linux.microsoft.com, sashal@kernel.org,
+        kgoldman@us.ibm.com
+Date:   Wed, 28 Aug 2019 21:11:23 -0400
+In-Reply-To: <20190828002735.31025-1-nramas@linux.microsoft.com>
+References: <20190828002735.31025-1-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 924082351426358420
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduvddrudeiuddgvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddm
+X-TM-AS-GCONF: 00
+x-cbid: 19082901-0008-0000-0000-0000030E70BD
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19082901-0009-0000-0000-00004A2CB290
+Message-Id: <1567041083.6115.133.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-29_01:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908290010
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+[Cc'ing Matthew Garrett]
 
-
-On 8/28/19 5:03 PM, Mimi Zohar wrote:
-> [Cc'ing Petr Vorel]
+On Tue, 2019-08-27 at 17:27 -0700, Lakshmi Ramasubramanian wrote:
+> Created using linux v5.3.0-rc5
 > 
-> Hi Piotr,
+> Motive:
+> 
+> Motive behind this patch set is to measure the public keys in
+> the trusted keyring. If CONFIG_SECONDARY_TRUSTED_KEYRING is
+> enabled then the trusted keys keyring is secondary_trusted_keys.
+> Otherwise, the trusted keys keyring is builtin_trusted_keys.
+> 
+> Measurement of the trusted keys is an addition to
+> the existing IMA measurements and not a replacement for it.
+> 
+> The measurement is enabled through the configuration value
+> CONFIG_IMA_MEASURE_TRUSTED_KEYS. This configuration
+> is turned OFF by default and have to opted in by the kernel
+> builder.
+> 
+> Background:
+> 
+> Currently IMA measures file hashes and .ima signatures. IMA signatures
+> are validated against keys in ".ima" keyring. If the kernel is built with
+> CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY enabled,
+> then all keys in ".ima" keyring must be signed by a key in
+> ".builtin_trusted_keys" or ".secondary_trusted_keys" keyrings.
+> 
+> On systems with CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+> enabled, measuring keys in the  trusted keyring provides a mechanism
+> to attest that the client's system binaries are indeed signed by signers
+> that chain to known trusted keys.
+> 
+> Without this patch set, to attest the clients one needs to maintain
+> an "allowed list" of file hashes of all versions of all client binaries
+> that are deployed on the clients in the enterprise.  That is a huge
+> operational challenge in a large scale environment of clients with
+> heterogenous builds. This also limits scalability and agility of
+> rolling out frequent client binary updates.
 
-Hi Mimi,
+The purpose of the ima-sig template, which includes the file signature
+and header containing the keyid, is to avoid needing to maintain a
+white list as you described.
+ 
+> 
+> Current patch:
+> 
+> This patch set to measure the public keys in the trusted keys
+> keyring is disabled by default and can be enabled with
+> CONFIG_IMA_MEASURE_TRUSTED_KEYS. When this configuration is
+> enabled, during boot IMA enumerates keys in the trusted keys
+> keyring and measures them in the IMA log.
+> 
+> Questions and concerns raised by reviewers on this patch set:
+> 
+> Question 1:
+> Is "Signed with a trusted key" equal to "Trusted file"?
+> Doesn't the service need the hashes of the system files to determine
+> whether a file is trusted or not?
+> 
+> "Signed with a trusted key" does not equal "Trusted"
+> 
+> Answer:
+> Agree "Signed with a trusted key" may not equal "Trusted".
+> To address this, the attesting service can maintain a small
+> manageable set of bad hashes (a "Blocked list") and a list of
+> trusted keys expected in client's trusted keys keyring.
+> Using this data, the service can detect the presence of
+> "Disallowed (untrusted) version of client binaries".
+> 
+> Question 2:
+> Providing more data to the service (such as the keys in trusted keyring)
+> empowers the service to deny access to clients (block clients).
+> IMA walks a fine line in enforcing and measuring file integrity.
+> This patchset breaches that fine line and in doing so brings back
+> the fears of trusted computing.
+> 
+> Answer:
+> Any new measurement we add in IMA will provide more data to service
+> and can enable it to deny access to clients. It is not clear why
+> this patch set would breach the fine line between measuring
+> and enforcing.
+> 
+> Since this patch set is disabled by default and enabled through
+> CONFIG_IMA_MEASURE_TRUSTED_KEYS, only those enterprises that
+> require this new measurement can opt-in for it. Since it is disabled
+> by default, it does not restrict the autonomy of independent users
+> who are unaffected by attestation.
+
+The concern isn't on the client side, but the server side.  Once the
+ability of including measurements of keys on the builtin and/or
+secondary keyrings on the client side exists, the attestation servers
+can start requiring it.  Providing a means of disabling it on the
+client side doesn't address this problem.
 
 > 
-> On Tue, 2019-08-27 at 01:24 +0200, Piotr Król wrote:
->> Hi all,
->> I'm moving here discussion that I started with Jarkko and Peter on LinkedIn.
->>
->> I'm preparing for 2 talks during LPC 2019 System Boot MC and one of it
->> will discuss TPM 2.0 sysfs support [1]. This was discussed couple times
->> [2] and explained why it is not done yet by Jarkko [3].
->>
->> Why is this important?
->> - there seem to be no default method to distinguish if we dealing with
->> TPM 1.2 or 2.0 in the system. 
+> Question 3:
+> IMA log already contains a pointer to the IMA keys used for signature
+> verification. Why does the service need to care what keys were used
+> to sign (install) the IMA keys? What is gained by measuring the keys
+> in the trusted keyring?
 > 
-> Agreed, this affects both the LTP IMA tests and ima-evm-utils package,
-> which need to support both TPM 1.2 and 2.0 for the forseeable future.
-> The LTP IMA tests check different sysfs files to determine if it is
-> TPM 1.2 or TPM 2.0 (eg. /sys/class/tpm/tpm0/device/description,
-> /sys/class/tpm/tpm0/device/pcrs and /sys/class/misc/tpm0/device/pcrs),
-> but the "description" file is not defined by all TPM 2.0's.  It
-> shouldn't be that difficult to define a single common sysfs file.
+> Answer:
+> To attest the clients using the current IMA log, service needs to maintain
+> hashes of all the deployed versions of all the system binaries for their
+> enterprise. This will introduce a very high operational overhead in
+> a large scale environment of clients with heterogenous builds.
+> This limits scalability and agility of rolling out frequent client
+> binary updates.
 
-Thank you for that use cases I will point to that during LPC discussion.
+No, there is no need for maintaining a binary hash white list.  The
+attestation server requires a set of trusted keys used to sign
+software.
 
-Jarkko said that what he potential can cope with is:
-/sys/class/tpm/tpm0/protocol_major
+The only reason for measuring the keys on the builtin and/or secondary
+keyrings is to prevent system owners from signing and running
+applications on their own systems.
 
-But maybe version file is also good to go, depends what it should return
-and how that information should be obtained for various TPM versions.
+Since you obviously disagree, I'd really like to hear other people's thoughts.
+
+Mimi
 
 > 
->> - distros use various tools to detect TPM based on sysfs (e.g. Qubes OS
->> scripts)
->> - tpm2-software has ton of dependencies, is not easy to build,
->> development is way faster then distros can manage and packages are often
->> out of date or even broken, so using it can be troublesome
->> - for deeply embedded systems adding fully-featured tpm2-software
->> doesn't make sense e.g. if we just need PCRs values
->>
->> Jarkko comment on detecting 1.2 vs 2.0:
->> "Detecting TPM 2.0 is dead easy: send any idempotent TPM 2.0 command and
->> check if the tag field matches 0x8002 (TPM_NO_SESSIONS). The sysfs
->> features for TPM 1.2 are for the large part useless as you can get the
->> same data by using TPM commands."
->>
->> Ok, but doesn't this mean I need TPM2 software stack?
->> Peter mentioned that it can be tricky to invoke such tools early in boot
->> process.
+> On the other hand, with the current patch set, we will have IMA
+> validate the file signature on the clients and the service validate
+> that the IMA keys were installed using trusted keys.
 > 
-> ima-evm-utils now uses the TPM 2.0 TSS[1] to read the PCRs.  I haven't
-> tried using it during boot, but I don't forsee a problem. I guess it
-> depends on how early you need to read the PCRs.
+> This provides a chain of trust:
+>     => IMA Key validates file signature on the client
+>     => Key in the trusted keyring attests IMA key on the client
+>     => Attestation service attests the trusted keys
+>        reported by the client in the IMA log
+> 
+> This approach, therefore, would require the service to maintain
+> a manageble set of trusted keys that it receives from a trusted source.
+> And, verify if the clients only have keys from that set of trusted keys.
+> 
+> Question 4:
+> Where will the attestation service receive the keys to validate against?
+> 
+> Answer:
+> Attestation service will receive the keys from a trusted source such as
+> the enterprise build services that provides the client builds.
+> The service will use this set of keys to verify that the keys reported by
+> the clients in the IMA log contains only keys from this trusted list.
+> 
+> Question 5:
+> What is changing in the IMA log through this patch set?
+> 
+> Answer:
+> This patch set does not remove any data that is currently included
+> in the IMA log. It only adds more data to the IMA log - the data on
+> keys in the trusted keyring
+> 
+> Lakshmi Ramasubramanian (1):
+>   KEYS: Measure keys in trusted keyring
+> 
+>  certs/system_keyring.c            | 15 ++++++
+>  include/keys/system_keyring.h     |  4 ++
+>  include/linux/key.h               | 21 ++++++++
+>  security/integrity/ima/Kconfig    | 14 ++++++
+>  security/integrity/ima/ima_init.c | 84 +++++++++++++++++++++++++++++++
+>  security/keys/keyring.c           | 63 +++++++++++++++++++++++
+>  6 files changed, 201 insertions(+)
+> 
 
-I'm still looking into use case to provide correct examples. I'm
-thinking about edge computing devices e.g. Azure IoT Edge, AWS IoT and
-Greengrass and its ability to perform trusted boot, but do not have
-something well exercised yet.
-
-Definitely there is automatic validation of hardware modules which is
-time sensitive and faster access to basic functions verification, then
-more savings to manufacturer.
-
-For research purposes I tried couple queries on GitHub to check who use
-pcrs throughs sysfs [1][2]. Among others you can find CoreOS, Android,
-already mentioned LTP, some google projects. Quite a lot of user space
-code to be fixed. Maybe if I will have enough time I will prepare
-statistics about usage of given endpoints to quantify how those affect
-system.
-
-[1]
-https://github.com/search?q=%22%2Fsys%2Fclass%2Ftpm%2Ftpm0%2Fdevice%2Fpcrs%22&type=Code
-[2]
-https://github.com/search?q=%22%2Fsys%2Fclass%2Fmisc%2Ftpm0%2Fdevice%2Fpcrs%22&type=Code
-
-Best Regards,
--- 
-Piotr Król
-Embedded Systems Consultant
-GPG: B2EE71E967AA9E4C
-https://3mdeb.com | @3mdeb_com
