@@ -2,126 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA6BA1007
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Aug 2019 05:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1075A12A9
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Aug 2019 09:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726514AbfH2DqF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Aug 2019 23:46:05 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7486 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726839AbfH2DqF (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Aug 2019 23:46:05 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7T3h0U3127937
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 23:46:04 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2up31jdv5w-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Aug 2019 23:46:03 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 29 Aug 2019 04:46:01 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 29 Aug 2019 04:45:57 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7T3juQf51839122
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Aug 2019 03:45:56 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BED444204C;
-        Thu, 29 Aug 2019 03:45:56 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A0A8342041;
-        Thu, 29 Aug 2019 03:45:55 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.163.216])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 29 Aug 2019 03:45:55 +0000 (GMT)
-Subject: Re: [PATCH] ima: use struct_size() in kzalloc()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 28 Aug 2019 23:45:55 -0400
-In-Reply-To: <671185b9-5c91-5235-b5ea-96d3449bf716@embeddedor.com>
-References: <20190529165343.GA2584@embeddedor>
-         <671185b9-5c91-5235-b5ea-96d3449bf716@embeddedor.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        id S1726417AbfH2Hct (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Aug 2019 03:32:49 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40762 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726075AbfH2Hct (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 29 Aug 2019 03:32:49 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 15E90B03B;
+        Thu, 29 Aug 2019 07:32:48 +0000 (UTC)
+Date:   Thu, 29 Aug 2019 09:32:46 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Piotr =?iso-8859-2?Q?Kr=F3l?= <piotr.krol@3mdeb.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        Ken Goldman <kgold@linux.ibm.com>
+Subject: Re: TPM 2.0 Linux sysfs interface
+Message-ID: <20190829073246.GA28007@dell5510>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <3329329f-4bf4-b8cd-dee8-eb36e513c728@3mdeb.com>
+ <1567004581.6115.33.camel@linux.ibm.com>
+ <e8b2496b-7d53-f9d7-f2b7-779b87a4132a@3mdeb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19082903-4275-0000-0000-0000035E859E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19082903-4276-0000-0000-00003870BB55
-Message-Id: <1567050355.11493.3.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-29_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=989 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908290038
+In-Reply-To: <e8b2496b-7d53-f9d7-f2b7-779b87a4132a@3mdeb.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Gustavo,
+Hi Piotr,
 
-On Wed, 2019-08-28 at 13:29 -0500, Gustavo A. R. Silva wrote:
-> On 5/29/19 11:53 AM, Gustavo A. R. Silva wrote:
-> > One of the more common cases of allocation size calculations is finding
-> > the size of a structure that has a zero-sized array at the end, along
-> > with memory for some number of elements for that array. For example:
-> > 
-> > struct foo {
-> >    int stuff;
-> >    struct boo entry[];
-> > };
-> > 
-> > instance = kzalloc(sizeof(struct foo) + count * sizeof(struct boo), GFP_KERNEL);
-> > 
-> > Instead of leaving these open-coded and prone to type mistakes, we can
-> > now use the new struct_size() helper:
-> > 
-> > instance = kzalloc(struct_size(instance, entry, count), GFP_KERNEL);
-> > 
-> > This code was detected with the help of Coccinelle.
-> > 
-> > Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-> > ---
-> >  security/integrity/ima/ima_template.c | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-> > index b631b8bc7624..b945dff2ed14 100644
-> > --- a/security/integrity/ima/ima_template.c
-> > +++ b/security/integrity/ima/ima_template.c
-> > @@ -281,9 +281,8 @@ static int ima_restore_template_data(struct ima_template_desc *template_desc,
-> >  	int ret = 0;
-> >  	int i;
-> >  
-> > -	*entry = kzalloc(sizeof(**entry) +
-> > -		    template_desc->num_fields * sizeof(struct ima_field_data),
-> > -		    GFP_NOFS);
-> > +	*entry = kzalloc(struct_size(*entry, template_data,
-> > +				     template_desc->num_fields), GFP_NOFS);
-> >  	if (!*entry)
-> >  		return -ENOMEM;
-> >  
-> > 
+...
+> >> Why is this important?
+> >> - there seem to be no default method to distinguish if we dealing with
+> >> TPM 1.2 or 2.0 in the system. 
 
-The same usage exists in ima_api.c: ima_alloc_init_template(). Â Did
-you want to make the change there as well?
+> > Agreed, this affects both the LTP IMA tests and ima-evm-utils package,
+> > which need to support both TPM 1.2 and 2.0 for the forseeable future.
+> > The LTP IMA tests check different sysfs files to determine if it is
+> > TPM 1.2 or TPM 2.0 (eg. /sys/class/tpm/tpm0/device/description,
+> > /sys/class/tpm/tpm0/device/pcrs and /sys/class/misc/tpm0/device/pcrs),
+> > but the "description" file is not defined by all TPM 2.0's.  It
+> > shouldn't be that difficult to define a single common sysfs file.
 
-thanks,
+> Thank you for that use cases I will point to that during LPC discussion.
+Thanks.
 
-Mimi
+> Jarkko said that what he potential can cope with is:
+> /sys/class/tpm/tpm0/protocol_major
 
+> But maybe version file is also good to go, depends what it should return
+> and how that information should be obtained for various TPM versions.
+
+...
+> I'm still looking into use case to provide correct examples. I'm
+> thinking about edge computing devices e.g. Azure IoT Edge, AWS IoT and
+> Greengrass and its ability to perform trusted boot, but do not have
+> something well exercised yet.
+
+> Definitely there is automatic validation of hardware modules which is
+> time sensitive and faster access to basic functions verification, then
+> more savings to manufacturer.
+
+> For research purposes I tried couple queries on GitHub to check who use
+> pcrs throughs sysfs [1][2]. Among others you can find CoreOS, Android,
+> already mentioned LTP, some google projects. Quite a lot of user space
+> code to be fixed. Maybe if I will have enough time I will prepare
+> statistics about usage of given endpoints to quantify how those affect
+> system.
+BTW: codesearch.debian.net shows nothing using pcrs in whole
+Debian distro [3] [4], nothing is on gitlab either.
+
+> [1]
+> https://github.com/search?q=%22%2Fsys%2Fclass%2Ftpm%2Ftpm0%2Fdevice%2Fpcrs%22&type=Code
+> [2]
+> https://github.com/search?q=%22%2Fsys%2Fclass%2Fmisc%2Ftpm0%2Fdevice%2Fpcrs%22&type=Code
+[3] https://codesearch.debian.net/search?q=%2Fsys%2Fclass%2Ftpm%2Ftpm0%2Fdevice%2Fpcrs&literal=1
+[4] https://codesearch.debian.net/search?q=%2Fsys%2Fclass%2Fmisc%2Ftpm0%2Fdevice%2Fpcrs&literal=1
+
+Kind regards,
+Petr
