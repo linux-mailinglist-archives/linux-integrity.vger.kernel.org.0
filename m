@@ -2,120 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FBFA206C
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Aug 2019 18:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CE4A207B
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Aug 2019 18:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbfH2QNG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Aug 2019 12:13:06 -0400
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:37450 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727118AbfH2QNF (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Aug 2019 12:13:05 -0400
-Received: by mail-yb1-f196.google.com with SMTP id t5so1382436ybt.4;
-        Thu, 29 Aug 2019 09:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kNznxc1elQs9GK9cu3jq6YkqkQEUKZhFLbPtaGv0C7o=;
-        b=Kg0eD7aNyxUxwwHK5ETgxsz5XldzcAgvsJUzNfvpReGhHOVR2p+874TdwEXnXR9zQ2
-         K9h3T4xDrjrK8j4+dYWIXFkFPPpKRg7Tw76OfrkTNwwV8dzbGtTE3Vx9uSi7skwRwiXL
-         Wz7QG0/CBZ0++nKYNWMsl4mgSFICLzr7VLX1x7QbzZt5D2MEkkRQ8BE4A3Dk79c8I5dk
-         X8RHnt18Ofzeh3b9D7E8hnI97l58deFHhK+/NyftX5pRcqTaY/vRzCCLgAUiKT/SgEUF
-         1B5fixfjE4QImmhs+0/1xvvFK+xXN2T2wl+RZ0mjgVDw9NAr+w2vadGJqEGjDtVsYrY+
-         VaTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kNznxc1elQs9GK9cu3jq6YkqkQEUKZhFLbPtaGv0C7o=;
-        b=adk9d0Dwfc6Kew0WVc1tly3JbjLDW8Gd0Cv8QSnjCERA4Je0LwmMu2xOywhtcTpxaO
-         +zDQj3mQ+KKYp1SH6c7M56F9Jtbpgb1rybiNsRkn8i9R0eEm7d1fyn2BI6zW40FB6y3v
-         2PcysyDIh44skUBo8zDVL1UTc146AQe5nSuyLXNIDbU9iW3+NM/zXKn45QY/zEjTLcFO
-         YjP/WnbO+N61IU0rzHsx6n1zbNRgbN70a4kJwosmfOBQkvfO9KSOZs2lsOrL9Mz21vyr
-         Nwf6wDGbpnITkJ3O/NIsl39Z1bjjUe2tRhm0ZqJgS/KlgEKTqpywbWXD0MCNzQLiXgTF
-         GlBg==
-X-Gm-Message-State: APjAAAUsHXRtOD3RQSRIrxdRCbEI0b12rnwLipYxe5JYmXSXwlI0PKNo
-        XVfTUCK82yIpUfRd0vmpu9JFuA5qffvHnc3MiPA=
-X-Google-Smtp-Source: APXvYqxOiciOtyiybUGhnpKGmM1DjYJIs5IYPSDqHbwUFYOmyJV/fnnpTn6QkBGE0FEPgWf28bsP8P7NLrHxQy9Y8Rk=
-X-Received: by 2002:a25:9cc9:: with SMTP id z9mr7850415ybo.496.1567095184713;
- Thu, 29 Aug 2019 09:13:04 -0700 (PDT)
+        id S1728081AbfH2QOa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Aug 2019 12:14:30 -0400
+Received: from mga02.intel.com ([134.134.136.20]:56270 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727426AbfH2QOa (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 29 Aug 2019 12:14:30 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Aug 2019 09:14:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,444,1559545200"; 
+   d="scan'208";a="171947177"
+Received: from friedlmi-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.54.26])
+  by orsmga007.jf.intel.com with ESMTP; 29 Aug 2019 09:14:24 -0700
+Date:   Thu, 29 Aug 2019 19:14:17 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Andrey Pronin <apronin@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 1/4] dt-bindings: tpm: document properties for cr50
+Message-ID: <20190829161417.tzk4wewlupr4udgd@linux.intel.com>
+References: <20190828082150.42194-1-swboyd@chromium.org>
+ <20190828082150.42194-2-swboyd@chromium.org>
 MIME-Version: 1.0
-References: <20190826081752.57258-1-kkamagui@gmail.com> <CACdnJutomLNthYDzEc0wFBcBHK5iqnk0p-hkAkp57zQZ38oGPA@mail.gmail.com>
- <CAHjaAcSFhQsDYL2iRwwhyvxh9mH4DhxZ__DNzhtk=iiZZ5JdbA@mail.gmail.com>
- <CACdnJutfR2X-5ksXw4PNUdyH2MJs_mExNCcYPp8NLcPW2EDrYQ@mail.gmail.com>
- <CAHjaAcSpU0eW5PLsEpxTkycwi+wNS67xeizb6_BMM_-qUZYAmg@mail.gmail.com>
- <20190827171106.owkvt6slwwg5ypyl@srcf.ucam.org> <CAHjaAcSu04J3WqT_vnSnaQuYpFQ+xiXXWxhcCeLQccEq6eQGcQ@mail.gmail.com>
- <20190829153437.gjcqfolsc26vyt4x@linux.intel.com> <20190829153917.glq6eoka2eufy42w@linux.intel.com>
-In-Reply-To: <20190829153917.glq6eoka2eufy42w@linux.intel.com>
-From:   Seunghun Han <kkamagui@gmail.com>
-Date:   Fri, 30 Aug 2019 01:12:53 +0900
-Message-ID: <CAHjaAcQ2OmrFO2wWCXocR9xO_aTRYU4vLf3aBr4v5Fn2A89wvg@mail.gmail.com>
-Subject: Re: [PATCH] x86: tpm: Remove a busy bit of the NVS area for
- supporting AMD's fTPM
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190828082150.42194-2-swboyd@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
->
-> On Thu, Aug 29, 2019 at 06:34:37PM +0300, Jarkko Sakkinen wrote:
-> > On Wed, Aug 28, 2019 at 06:36:04PM +0900, Seunghun Han wrote:
-> > > >
-> > > > On Wed, Aug 28, 2019 at 01:36:30AM +0900, Seunghun Han wrote:
-> > > >
-> > > > > I got your point. Is there any problem if some regions which don't
-> > > > > need to be handled in NVS area are saved and restored? If there is a
-> > > > > problem, how about adding code for ignoring the regions in NVS area to
-> > > > > the nvs.c file like Jarkko said? If we add the code, we can save and
-> > > > > restore NVS area without driver's interaction.
-> > > >
-> > > > The only thing that knows which regions should be skipped by the NVS
-> > > > driver is the hardware specific driver, so the TPM driver needs to ask
-> > > > the NVS driver to ignore that region and grant control to the TPM
-> > > > driver.
-> > > >
-> > > > --
-> > > > Matthew Garrett | mjg59@srcf.ucam.org
-> > >
-> > > Thank you, Matthew and Jarkko.
-> > > It seems that the TPM driver needs to handle the specific case that
-> > > TPM regions are in the NVS. I would make a patch that removes TPM
-> > > regions from the ACPI NVS by requesting to the NVS driver soon.
-> > >
-> > > Jarkko,
-> > > I would like to get some advice on it. What do you think about
-> > > removing TPM regions from the ACPI NVS in TPM CRB driver? If you don't
-> > > mind, I would make the patch about it.
-> >
-> > I'm not sure if ignoring is right call. Then the hibernation behaviour
-> > for TPM regions would break.
-> >
-> > Thus, should be "ask access" rather than "grant control".
+On Wed, Aug 28, 2019 at 01:21:47AM -0700, Stephen Boyd wrote:
+> From: Andrey Pronin <apronin@chromium.org>
+> 
+> Add TPM2.0 PTP FIFO compatible SPI interface for chips with Cr50
+> firmware.
+> 
+> Cc: Andrey Pronin <apronin@chromium.org>
+> Cc: Duncan Laurie <dlaurie@chromium.org>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  .../bindings/security/tpm/google,cr50.txt     | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/security/tpm/google,cr50.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/security/tpm/google,cr50.txt b/Documentation/devicetree/bindings/security/tpm/google,cr50.txt
+> new file mode 100644
+> index 000000000000..cd69c2efdd37
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/security/tpm/google,cr50.txt
+> @@ -0,0 +1,19 @@
+> +* H1 Secure Microcontroller with Cr50 Firmware on SPI Bus.
+> +
+> +H1 Secure Microcontroller running Cr50 firmware provides several
+> +functions, including TPM-like functionality. It communicates over
+> +SPI using the FIFO protocol described in the PTP Spec, section 6.
+> +
+> +Required properties:
+> +- compatible: Should be "google,cr50".
+> +- spi-max-frequency: Maximum SPI frequency.
+> +
+> +Example:
+> +
+> +&spi0 {
+> +	tpm@0 {
+> +		compatible = "google,cr50";
+> +		reg = <0>;
+> +		spi-max-frequency = <800000>;
+> +	};
+> +};
+> -- 
+> Sent by a computer through tubes
+> 
 
-I agree with your idea. It seems to make trouble. So, I would like to
-do like your idea below.
+Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-> Or "reserve access" as NVS driver does not have intelligence to do any
-> policy based decision here.
->
-> A function that gets region and then checks if NVS driver has matching
-> one and returns true/false based on that should be good enough. Then
-> you raw ioremap() in the TPM driver.
->
-> /Jarkko
-
-This solution is great and clear to me. I will make a new patch on
-your advice and test it in my machine. After that, I will send it
-again soon.
-I really appreciate it.
-
-Seunghun
+/Jarkko
