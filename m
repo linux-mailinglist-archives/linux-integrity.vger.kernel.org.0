@@ -2,93 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19596A2B4A
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 02:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AF1A2B50
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 02:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726369AbfH3AJc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Aug 2019 20:09:32 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14322 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726014AbfH3AJc (ORCPT
+        id S1726670AbfH3ALf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Aug 2019 20:11:35 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6058 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725826AbfH3ALf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Aug 2019 20:09:32 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7U07LfO111295;
-        Thu, 29 Aug 2019 20:09:29 -0400
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2upna1f03b-1
+        Thu, 29 Aug 2019 20:11:35 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7U07Ovq079474;
+        Thu, 29 Aug 2019 20:11:33 -0400
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2upp2dd8jj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Aug 2019 20:09:28 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7U04jrk002048;
-        Fri, 30 Aug 2019 00:09:28 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma02dal.us.ibm.com with ESMTP id 2un65kb7fm-1
+        Thu, 29 Aug 2019 20:11:33 -0400
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7U0A5tB029665;
+        Fri, 30 Aug 2019 00:11:32 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma02wdc.us.ibm.com with ESMTP id 2ujvv6yf8x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Aug 2019 00:09:28 +0000
+        Fri, 30 Aug 2019 00:11:32 +0000
 Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7U09QQl57082294
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7U0BVu048169460
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Aug 2019 00:09:27 GMT
+        Fri, 30 Aug 2019 00:11:31 GMT
 Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DBDBD136059;
-        Fri, 30 Aug 2019 00:09:26 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 42CAE13604F;
+        Fri, 30 Aug 2019 00:11:31 +0000 (GMT)
 Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F50813604F;
-        Fri, 30 Aug 2019 00:09:26 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id BB0D0136053;
+        Fri, 30 Aug 2019 00:11:30 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 30 Aug 2019 00:09:26 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
-To:     jarkko.sakkinen@linux.intel.com
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-stable@vger.kernel.org
-Subject: [PATCH] tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
-Date:   Thu, 29 Aug 2019 20:09:06 -0400
-Message-Id: <20190830000906.2369009-1-stefanb@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.20.1
+        Fri, 30 Aug 2019 00:11:28 +0000 (GMT)
+Subject: Re: [PATCH] tpm_tis: Fix interrupt probing
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190820122517.2086223-1-stefanb@linux.vnet.ibm.com>
+ <20190827131400.qchcwa2act24c47b@linux.intel.com>
+ <20190827151915.hb4xwr2vik2i5ryb@linux.intel.com>
+ <797ff54e-dceb-21d2-dd74-e5244f9c6dfd@linux.ibm.com>
+ <20190829132021.6vfc535ecb62jokf@linux.intel.com>
+ <20190829161057.22l72j55jy3dyib7@linux.intel.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <039601c6-e22a-d113-0eb2-ee2a206f5b73@linux.ibm.com>
+Date:   Thu, 29 Aug 2019 20:11:27 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <20190829161057.22l72j55jy3dyib7@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-MW
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-29_09:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=954 adultscore=0 classifier=spam adjust=0 reason=mlx
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=566 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1906280000 definitions=main-1908290242
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+On 8/29/19 12:10 PM, Jarkko Sakkinen wrote:
+> On Thu, Aug 29, 2019 at 04:20:21PM +0300, Jarkko Sakkinen wrote:
+>> On Tue, Aug 27, 2019 at 03:34:36PM -0400, Stefan Berger wrote:
+>>> On 8/27/19 11:19 AM, Jarkko Sakkinen wrote:
+>>>> On Tue, Aug 27, 2019 at 04:14:00PM +0300, Jarkko Sakkinen wrote:
+>>>>> On Tue, Aug 20, 2019 at 08:25:17AM -0400, Stefan Berger wrote:
+>>>>>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>>>>>
+>>>>>> The interrupt probing of the TPM TIS was broken since we are trying to
+>>>>>> run it without an active locality and without the TPM_CHIP_FLAG_IRQ set.
+>>>>>>
+>>>>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>>>> Need these:
+>>>>>
+>>>>> Cc: linux-stable@vger.kernel.org
+>>>>> Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
+>>>>>
+>>>>> Thank you. I'll apply this to my tree.
+>>>>>
+>>>>> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>>>> The commit went in the following form:
+>>>>
+>>>> http://git.infradead.org/users/jjs/linux-tpmdd.git/commit/9b558deab2c5d7dc23d5f7a4064892ede482ad32
+>>> I saw you dropped the stetting of the IRQ flag - I needed it, otherwise it
+>>> wouldn't execute certain code paths.
+>> I explained why I removed that part. There was no any reasoning for
+>> it. Also, it cannot be in the same commit if it fixes a diffent
+>> issue.
+> AFAIK they go with different fixes-tags.
 
-The tpm_tis_core has to set the TPM_CHIP_FLAG_IRQ before probing for
-interrupts since there is no other place in the code that would set
-it.
+I sent a separate patch for this. It looks like this bug goes back to 
+when the TPM_CHIP_FLAG_IRQ was introduced in March 2019?!
 
-Cc: linux-stable@vger.kernel.org
-Fixes: 570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific")
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- drivers/char/tpm/tpm_tis_core.c | 1 +
- 1 file changed, 1 insertion(+)
+    Stefan
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index ffa9048d8f6c..270f43acbb77 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -981,6 +981,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 		}
- 
- 		tpm_chip_start(chip);
-+		chip->flags |= TPM_CHIP_FLAG_IRQ;
- 		if (irq) {
- 			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
- 						 irq);
--- 
-2.14.5
 
