@@ -2,194 +2,148 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA00EA348A
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 11:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637ACA348C
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 11:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726726AbfH3J5F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Aug 2019 05:57:05 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40751 "EHLO
+        id S1727948AbfH3J5I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Aug 2019 05:57:08 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44162 "EHLO
         mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726653AbfH3J5F (ORCPT
+        with ESMTP id S1726653AbfH3J5I (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Aug 2019 05:57:05 -0400
-Received: by mail-pg1-f193.google.com with SMTP id w10so3301599pgj.7;
-        Fri, 30 Aug 2019 02:57:04 -0700 (PDT)
+        Fri, 30 Aug 2019 05:57:08 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i18so3288044pgl.11;
+        Fri, 30 Aug 2019 02:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Zfu2xUE4Jx/6REa+NXkYINqVo6biV5W15PMsvGC/FkI=;
-        b=l+KhvFJMpIKUS6qHYO70lYlttYtg17b9VbDZsoJYGQwb50qZVXUCUJ+mSalJuyOqma
-         hgcEhTKLWkokR5TXGggfL+mU4YXtgyzI7U2P/s/LTIgsyJ73WWICBp4NB3SnCmIkuCdR
-         4LguXGpwmzCMmh1BSrYYWhwA350WHMf0K0yJrCCN5yHlf/MTuDpsXNrTw4fbMNWqnnA6
-         ANf1S0YO7snn2CH1mUBpWi1ublem5OZwgci5qcmChdIEMPB+8fODERxwmVunkxVDqvFs
-         6yQJ8ZNRyeN6X7Irzst7kV17oNUmnBtRqtAHup9PGigQDVQRfYeR+HOkxqX/a+fe08+2
-         9lcw==
+        bh=fy06+AemNIV2gCe3GVN+rRCnIQVGYZ4AUqkeTUjjHyw=;
+        b=NuCttfCZy0ZS1kR7cSkGFdVOY98JlEfbLJXoVFGhP+U7MR1Ff2SR1k2G6OLcZlGkot
+         goeVOJdxdjAKqO2nBzkCuoP2Cxl3mpB4kQj0MOreMFi36z7ufj/6YiRK+iMhQNkuYM/L
+         w6O+OfqYEYbsaYUpu36Az6hTJwYKrMN4hhTh3pRjVSZNrdDz1XcAigXCw5/XKotAmUjg
+         62mGuAn5SLfHBbmHE/leeeWeoWf2c9qYO5AvBOCF0XU4mVp7j1P3sFqC4bIvwupzOgtn
+         eC0mWTFBFtMe3mHNP+ySrkz/4eQVM1gz6/URwDuc0Goal8j9iav8ejXkqxmMeZqivoWZ
+         jVSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Zfu2xUE4Jx/6REa+NXkYINqVo6biV5W15PMsvGC/FkI=;
-        b=itet9ZacEw66pQe/3h1LVXK3qDp3qMAaQFeuP8WEiUFfkEZROTYVW1LurBeANYzvkD
-         8jCA2GX9zuyP8rII9qGIoThzDl6SzfXWrXqKt+CXGNtsMo0f6LGITun73I+KdnBD6dzX
-         n/EjVzctqB786s/HZrRnIMRrQQRr4OqWzQZoS1mkzLX5Jgh5M8j5/MYyOc5GwcRzcrOt
-         tTsoiIr3dmIDdDw4sL4ioSv/y90kdi5BYONv6+v5c4gMuCKoTkA+fg+r018bWHXn+yfb
-         J3o0Jx3y2t2Sm7Z3TUgHQdg/vM6DtrtgIC+zjjW4CXOWyeigw+lOLOQe3zQr/MoA8Bx5
-         bMMA==
-X-Gm-Message-State: APjAAAWG2b2IX8VzOis/46himSO/J60INLmk+OCwbuEPIxb/ZJkIGdSG
-        b7YMr0vXBcW961jauOWg9zM=
-X-Google-Smtp-Source: APXvYqzyWc0t0rMB0T6hFCw7Dj7mBC1oFZ/Zy4IJxfTu5WtDjARxkr1YHFQSuBpHYHyPED/6sVfmbQ==
-X-Received: by 2002:a62:38d7:: with SMTP id f206mr17255098pfa.102.1567159023866;
-        Fri, 30 Aug 2019 02:57:03 -0700 (PDT)
+        bh=fy06+AemNIV2gCe3GVN+rRCnIQVGYZ4AUqkeTUjjHyw=;
+        b=GqzTlPGq3d2P+znL4pgyrgiwIuOaAUtI89uW8gu7J8zjG/rcigGFkv3NNtxBo36UhR
+         rg7kA2qWgmV9/fFTTjs2HUI9XllGl/sc6/HBm3CrDOgCBfaoO4fQv8U3pLpEo66q2YLc
+         fwREKSOEPioWFMY6KikwgKWwaplEenA+fX9/93z5kzzx++GOSxECIO8Znalh1CxhkKce
+         c+XV9al4IsNiEZH+TA9LHcfLHXZLXjhFPOXSOCYe/T61hP3kKDAqLzLOyRT4krEpKuMc
+         lGnqEtw6CfzbTnrBnEAYAw0jQxXgV0UOdIeRLVgGOCMvqC3CZ+4pZRWTIJg60CopgRlo
+         SKSQ==
+X-Gm-Message-State: APjAAAXdgzHjeYDxzSH4rkBsYwYgwkPADwcY17VsSVJigfk3fVFQ8XNN
+        J5J66mtPdIWHnCQhCqKPteQ=
+X-Google-Smtp-Source: APXvYqwE6swxiaYetHF650SEUEqiqNIW0JpPSu/0ZgIq+LbjwJNbop9b7jYNzfAi69ZtkIWT74lmZQ==
+X-Received: by 2002:a62:52d0:: with SMTP id g199mr442074pfb.120.1567159027247;
+        Fri, 30 Aug 2019 02:57:07 -0700 (PDT)
 Received: from localhost.localdomain ([175.203.71.146])
-        by smtp.googlemail.com with ESMTPSA id k64sm8329447pge.65.2019.08.30.02.57.01
+        by smtp.googlemail.com with ESMTPSA id k64sm8329447pge.65.2019.08.30.02.57.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2019 02:57:03 -0700 (PDT)
+        Fri, 30 Aug 2019 02:57:06 -0700 (PDT)
 From:   Seunghun Han <kkamagui@gmail.com>
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Cc:     Peter Huewe <peterhuewe@gmx.de>,
         linux-integrity@vger.kernel.org (open list:TPM DEVICE DRIVER),
         linux-kernel@vger.kernel.org, Seunghun Han <kkamagui@gmail.com>
-Subject: [PATCH 1/2] tpm: tpm_crb: enhance command and response buffer size calculation code
-Date:   Fri, 30 Aug 2019 18:56:38 +0900
-Message-Id: <20190830095639.4562-2-kkamagui@gmail.com>
+Subject: [PATCH 2/2] tpm: tpm_crb: enhance resource mapping mechanism for supporting AMD's fTPM
+Date:   Fri, 30 Aug 2019 18:56:39 +0900
+Message-Id: <20190830095639.4562-3-kkamagui@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190830095639.4562-1-kkamagui@gmail.com>
 References: <20190830095639.4562-1-kkamagui@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The purpose of crb_fixup_cmd_size() function is to work around broken
-BIOSes and get the trustable size between the ACPI region and register.
-When the TPM has a command buffer and response buffer independently,
-the crb_map_io() function calls crb_fixup_cmd_size() twice to calculate
-each buffer size.  However, the current implementation of it considers
-one of two buffers.
+I got an AMD system which had a Ryzen Threadripper 1950X and MSI
+mainboard, and I had a problem with AMD's fTPM. My machine showed an error
+message below, and the fTPM didn't work because of it.
 
-To support independent command and response buffers, I changed
-crb_check_resource() function for storing ACPI TPB regions to a list.
-I also changed crb_fixup_cmd_size() to use the list for calculating each
-buffer size.
+[  5.732084] tpm_crb MSFT0101:00: can't request region for resource
+             [mem 0x79b4f000-0x79b4ffff]
+[  5.732089] tpm_crb: probe of MSFT0101:00 failed with error -16
+
+When I saw the iomem, I found two fTPM regions were in the ACPI NVS area. 
+The regions are below.
+
+79a39000-79b6afff : ACPI Non-volatile Storage
+  79b4b000-79b4bfff : MSFT0101:00
+  79b4f000-79b4ffff : MSFT0101:00
+
+After analyzing this issue, I found that crb_map_io() function called
+devm_ioremap_resource() and it failed. The ACPI NVS didn't allow the TPM
+CRB driver to assign a resource in it because a busy bit was set to
+the ACPI NVS area.
+
+To support AMD's fTPM, I added a function to check intersects between
+the TPM region and ACPI NVS before it mapped the region. If some
+intersects are detected, the function just calls devm_ioremap() for
+a workaround. If there is no intersect, it calls devm_ioremap_resource().
 
 Signed-off-by: Seunghun Han <kkamagui@gmail.com>
 ---
- drivers/char/tpm/tpm_crb.c | 44 +++++++++++++++++++++++++++++++-------
- 1 file changed, 36 insertions(+), 8 deletions(-)
+ drivers/char/tpm/tpm_crb.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index e59f1f91d7f3..14f486c23af2 100644
+index 14f486c23af2..7b60cd594b92 100644
 --- a/drivers/char/tpm/tpm_crb.c
 +++ b/drivers/char/tpm/tpm_crb.c
-@@ -442,6 +442,9 @@ static int crb_check_resource(struct acpi_resource *ares, void *data)
- 	    acpi_dev_resource_address_space(ares, &win)) {
- 		*io_res = *res;
- 		io_res->name = NULL;
-+
-+		/* Add this TPM CRB resource to the list */
-+		return 0;
- 	}
- 
+@@ -450,6 +450,27 @@ static int crb_check_resource(struct acpi_resource *ares, void *data)
  	return 1;
-@@ -471,7 +474,7 @@ static void __iomem *crb_map_res(struct device *dev, struct crb_priv *priv,
-  * region vs the registers. Trust the ACPI region. Such broken systems
-  * probably cannot send large TPM commands since the buffer will be truncated.
-  */
--static u64 crb_fixup_cmd_size(struct device *dev, struct resource *io_res,
-+static u64 __crb_fixup_cmd_size(struct device *dev, struct resource *io_res,
- 			      u64 start, u64 size)
- {
- 	if (io_res->start > start || io_res->end < start)
-@@ -487,6 +490,26 @@ static u64 crb_fixup_cmd_size(struct device *dev, struct resource *io_res,
- 	return io_res->end - start + 1;
  }
  
-+static u64 crb_fixup_cmd_size(struct device *dev, struct list_head *resources,
-+			      u64 start, u64 size)
++static void __iomem *crb_ioremap_resource(struct device *dev,
++					  const struct resource *res)
 +{
-+	struct resource_entry *pos;
-+	struct resource *cur_res;
-+	u64 ret = size;
++	int rc;
++	resource_size_t size = res->end - res->start;
 +
-+	/* Check all TPM CRB resources with the start and size values */
-+	resource_list_for_each_entry(pos, resources) {
-+		cur_res = pos->res;
-+
-+		ret = __crb_fixup_cmd_size(dev, cur_res, start, size);
-+		/* Broken BIOS is detected. Trust the ACPI region. */
-+		if (ret < size)
-+			break;
++	/* Broken BIOS assigns command and response buffers in ACPI NVS region.
++	 * Check intersections between a resource and ACPI NVS for W/A.
++	 */
++	rc = region_intersects(res->start, size, IORESOURCE_MEM |
++			       IORESOURCE_BUSY, IORES_DESC_ACPI_NV_STORAGE);
++	if (rc != REGION_DISJOINT) {
++		dev_err(dev,
++			FW_BUG "Resource overlaps with a ACPI NVS. %pr\n",
++			res);
++		return devm_ioremap(dev, res->start, size);
 +	}
 +
-+	return ret;
++	return devm_ioremap_resource(dev, res);
 +}
 +
- static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 		      struct acpi_table_tpm2 *buf)
+ static void __iomem *crb_map_res(struct device *dev, struct crb_priv *priv,
+ 				 struct resource *io_res, u64 start, u32 size)
  {
-@@ -506,16 +529,18 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 				     &io_res);
- 	if (ret < 0)
- 		return ret;
--	acpi_dev_free_resource_list(&resources);
+@@ -464,7 +485,7 @@ static void __iomem *crb_map_res(struct device *dev, struct crb_priv *priv,
+ 		return (void __iomem *) ERR_PTR(-EINVAL);
  
- 	if (resource_type(&io_res) != IORESOURCE_MEM) {
- 		dev_err(dev, FW_BUG "TPM2 ACPI table does not define a memory resource\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out_early;
+ 	if (!resource_contains(io_res, &new_res))
+-		return devm_ioremap_resource(dev, &new_res);
++		return crb_ioremap_resource(dev, &new_res);
+ 
+ 	return priv->iobase + (new_res.start - io_res->start);
+ }
+@@ -536,7 +557,7 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
+ 		goto out_early;
  	}
  
- 	priv->iobase = devm_ioremap_resource(dev, &io_res);
--	if (IS_ERR(priv->iobase))
--		return PTR_ERR(priv->iobase);
-+	if (IS_ERR(priv->iobase)) {
-+		ret = PTR_ERR(priv->iobase);
-+		goto out_early;
-+	}
- 
- 	/* The ACPI IO region starts at the head area and continues to include
- 	 * the control area, as one nice sane region except for some older
-@@ -532,7 +557,7 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 
- 	ret = __crb_request_locality(dev, priv, 0);
- 	if (ret)
--		return ret;
-+		goto out_early;
- 
- 	priv->regs_t = crb_map_res(dev, priv, &io_res, buf->control_address,
- 				   sizeof(struct crb_regs_tail));
-@@ -552,7 +577,7 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 	pa_high = ioread32(&priv->regs_t->ctrl_cmd_pa_high);
- 	pa_low  = ioread32(&priv->regs_t->ctrl_cmd_pa_low);
- 	cmd_pa = ((u64)pa_high << 32) | pa_low;
--	cmd_size = crb_fixup_cmd_size(dev, &io_res, cmd_pa,
-+	cmd_size = crb_fixup_cmd_size(dev, &resources, cmd_pa,
- 				      ioread32(&priv->regs_t->ctrl_cmd_size));
- 
- 	dev_dbg(dev, "cmd_hi = %X cmd_low = %X cmd_size %X\n",
-@@ -566,7 +591,7 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 
- 	memcpy_fromio(&__rsp_pa, &priv->regs_t->ctrl_rsp_pa, 8);
- 	rsp_pa = le64_to_cpu(__rsp_pa);
--	rsp_size = crb_fixup_cmd_size(dev, &io_res, rsp_pa,
-+	rsp_size = crb_fixup_cmd_size(dev, &resources, rsp_pa,
- 				      ioread32(&priv->regs_t->ctrl_rsp_size));
- 
- 	if (cmd_pa != rsp_pa) {
-@@ -596,6 +621,9 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 
- 	__crb_relinquish_locality(dev, priv, 0);
- 
-+out_early:
-+	acpi_dev_free_resource_list(&resources);
-+
- 	return ret;
- }
- 
+-	priv->iobase = devm_ioremap_resource(dev, &io_res);
++	priv->iobase = crb_ioremap_resource(dev, &io_res);
+ 	if (IS_ERR(priv->iobase)) {
+ 		ret = PTR_ERR(priv->iobase);
+ 		goto out_early;
 -- 
 2.21.0
 
