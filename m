@@ -2,171 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB6CA3DD6
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 20:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6391A3F9B
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 23:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbfH3Sl4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Aug 2019 14:41:56 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62528 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727914AbfH3Sl4 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Aug 2019 14:41:56 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7UIbL1B190353
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Aug 2019 14:41:55 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2uq0tssmx5-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Aug 2019 14:41:55 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 30 Aug 2019 19:41:53 +0100
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 30 Aug 2019 19:41:50 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7UIfnI644957956
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Aug 2019 18:41:49 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 162BCA4051;
-        Fri, 30 Aug 2019 18:41:49 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2A76CA4040;
-        Fri, 30 Aug 2019 18:41:48 +0000 (GMT)
-Received: from dhcp-9-31-103-196.watson.ibm.com (unknown [9.31.103.196])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 30 Aug 2019 18:41:48 +0000 (GMT)
-Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, Matthew Garrett <mjg59@google.com>
-Cc:     jamorris@linux.microsoft.com, sashal@kernel.org,
-        kgoldman@us.ibm.com,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 30 Aug 2019 14:41:47 -0400
-In-Reply-To: <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>
-References: <20190828002735.31025-1-nramas@linux.microsoft.com>
-         <1567041083.6115.133.camel@linux.ibm.com>
-         <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        id S1728148AbfH3VUz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Aug 2019 17:20:55 -0400
+Received: from mga04.intel.com ([192.55.52.120]:33549 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728138AbfH3VUy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 30 Aug 2019 17:20:54 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Aug 2019 14:20:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,447,1559545200"; 
+   d="scan'208";a="265437774"
+Received: from tstruk-mobl1.jf.intel.com ([10.24.8.137])
+  by orsmga001.jf.intel.com with ESMTP; 30 Aug 2019 14:20:54 -0700
+Subject: Re: TPM 2.0 Linux sysfs interface
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     =?UTF-8?Q?Piotr_Kr=c3=b3l?= <piotr.krol@3mdeb.com>,
+        linux-integrity@vger.kernel.org
+References: <3329329f-4bf4-b8cd-dee8-eb36e513c728@3mdeb.com>
+ <20190827010559.GA31752@ziepe.ca> <1567007592.6115.58.camel@linux.ibm.com>
+ <20190828161502.GC933@ziepe.ca>
+From:   Tadeusz Struk <tadeusz.struk@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=tadeusz.struk@intel.com; prefer-encrypt=mutual; keydata=
+ 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
+ FheFfUJaD4iEjuL98uUjS/AI
+Message-ID: <f7e1f25a-8b2d-1e0e-e784-0908161c3c99@intel.com>
+Date:   Fri, 30 Aug 2019 14:20:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190828161502.GC933@ziepe.ca>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19083018-0016-0000-0000-000002A4BEBE
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19083018-0017-0000-0000-000033051A9E
-Message-Id: <1567190507.10024.134.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-30_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908300178
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Cc'ing Monty, Roberto]
+On 8/28/19 9:15 AM, Jason Gunthorpe wrote:
+>>> So exposing PCRs and things through sysfs is not going to happen.
+>>>
+>>> If you had some very narrowly defined things like version, then
+>>> *maybe* but I think a well defined use case is needed for why this
+>>> needs to be sysfs and can't be done in C as Jarkko explained.
+>> Piotr's request for a sysfs file to differentiate between TPM 1.2 and
+>> TPM 2.0 is a reasonable request and probably could be implemented on
+>> TPM registration.
+>>
+>> If exposing the PCRs through sysfs is not acceptable, then perhaps
+>> suggest an alternative.
+> Use the char dev, this is exactly what is is for.
 
-On Thu, 2019-08-29 at 19:43 -0700, Lakshmi Ramasubramanian wrote:
-> >> Without this patch set, to attest the clients one needs to maintain
-> >> an "allowed list" of file hashes of all versions of all client binaries
-> >> that are deployed on the clients in the enterprise.  That is a huge
-> >> operational challenge in a large scale environment of clients with
-> >> heterogenous builds. This also limits scalability and agility of
-> >> rolling out frequent client binary updates.
-> > 
-> > The purpose of the ima-sig template, which includes the file signature
-> > and header containing the keyid, is to avoid needing to maintain a
-> > white list as you described.
-> 
-> If the service were to validate the signature in the ima-sig template, 
-> it needs to have the hash of the file. Using the keyid in ima-sig pick 
-> the key, calculate the signed hash and compare it with the signed hash 
-> in the ima-sig template. Correct?
-> 
-> Or, it has to maintain the signed hash of the file and compare it with 
-> the signed hash in the ima-sig template.
-> 
-> In both the cases, the service needs to have the hash or signed hash for 
-> all the client files (for all versions of that file). This the 
-> maintenance overhead we are trying to avoid.
+What about a new /proc entry?
+Currently there are /proc/cpuinfo, /proc/meminfo, /proc/slabinfo...
+What about adding a new /proc/tpminfo that would print info like
+version, number of enabled PCR banks, physical interface [tis|crb],
+vendor, etc.
 
-No, the measurement list ima-sig template record contains both the
-file hash and signature.  There's no need to maintain a white list of
-either the file hashes or signed hashes.  All that is needed is the
-set of permitted public keys (eg. keys on the trusted IMA keyring).
-
-> 
-> > The concern isn't on the client side, but the server side.  Once the
-> > ability of including measurements of keys on the builtin and/or
-> > secondary keyrings on the client side exists, the attestation servers
-> > can start requiring it.  Providing a means of disabling it on the
-> > client side doesn't address this problem.
-> 
-> But, wouldn't this problem exist for any new measure we add on the 
-> client side? Why is it particularly an issue for measuring trusted keys?
-> 
-> > 
-> > No, there is no need for maintaining a binary hash white list.  The
-> > attestation server requires a set of trusted keys used to sign
-> > software.
-> > 
-> > The only reason for measuring the keys on the builtin and/or secondary
-> > keyrings is to prevent system owners from signing and running
-> > applications on their own systems.
-> > 
-> > Since you obviously disagree, I'd really like to hear other people's thoughts.
-> 
-> Actually I am agreeing with you - the reason we want to measure the keys 
-> in the trusted keyring is to ensure that the system binaries running on 
-> the client are signed by trusted keys only.
-
-The .builtin, .secondary, .ima, and .evm keyrings are all trusted
-keyrings, based on a signature chain of trust rooted in the signed
-Linux kernel.
-
-Even though on the local system, files signed by the system owner
-would be permitted, the attestation server would be able to control
-access to whatever service.  For example, Trusted Network Connect
-(TNC) could control network access.  By measuring the keys on the
-builtin/secondary keyrings, that control is not based on who signed
-the software package, but based on who signed the certificate of the
-key that signed the software package.  My concern is how this level of
-indirection could be abused.
-
-> Please see below:
-> 
-> We let IMA verify the integrity of the system files on the client using 
-> IMA key(s). The IMA key(s) are themselves signed by "Trusted Key(s)" - 
-> unsigned IMA key or IMA key signed by keys not in the trusted keyring 
-> are not even allowed to be added to the IMA keyring.
-> 
-> And, on the server we validate the "Trusted Keyring" contains only 
-> known\trusted keys.
-> 
-> Through the above process - the server does not need to know the signed 
-> file hash. It only needs to keep a list of trusted keys and verify if 
-> the keys reported by the client is in that trusted keys set.
-> 
-> Please let me know if that answers your questions.
-
-All of this would still be true, if you measured the keys on the
-trusted IMA keyring, but without the level of indirection described
-above.  Depending on your use case scenario, the problem with this
-approach is maintaining a list of all the certificates that have been
-signed by keys on the builtin, and if enabled, the secondary keyrings.
-
-In the last LSS-NA BoF, Monty suggested, for a different use case, one
-that needs to seal keys, measuring keys and extending a separate PCR.
-
-Mimi
-
+Thanks,
+-- 
+Tadeusz
