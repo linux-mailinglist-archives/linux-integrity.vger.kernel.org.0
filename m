@@ -2,130 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E18D7A3492
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 12:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085F6A36F7
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 14:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727236AbfH3KCD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Aug 2019 06:02:03 -0400
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:45455 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726480AbfH3KCD (ORCPT
+        id S1728067AbfH3Mng (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Aug 2019 08:43:36 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:40980 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727826AbfH3Mng (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Aug 2019 06:02:03 -0400
-Received: by mail-yw1-f68.google.com with SMTP id n69so2172949ywd.12;
-        Fri, 30 Aug 2019 03:02:02 -0700 (PDT)
+        Fri, 30 Aug 2019 08:43:36 -0400
+Received: by mail-qt1-f195.google.com with SMTP id i4so7403211qtj.8
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Aug 2019 05:43:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BIMw0qKaytre7FG6jFJWV4iDfNINre/R6oO7ZIuT+RM=;
-        b=a/iH+APt7PbRkzLKE6KRlBQQvNjly6EgIh2Equ0T3wdPNvBCM9eYU3/uElXpVQVpJP
-         fIvORJDofPBr7LkutP4IBsVTrLCIsU0t10urIJmElXgiOXH4e9q1yYzyFv3+K2IuvN7P
-         /Ri6HQg6AofF4T7y54qZ8rGDJnhYQ1axF/RdpptNCVAXHT7zXuUpoiPM7qmzBIXPDxkc
-         yz43N32iSTODuXLhklnvg4xO3pFOf4iekY9g7XtUsy8MNVjxoZFssoP7e0AC4xiwpx7w
-         LhUzFXBsgsK2+Z7kNAbqDpvfakxDCbYzgiv5ZQqwOCQA3uq2h0SksKwaWhinmCGs9EZi
-         g2Lg==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=3ZitNgFXrdayf4EBPMRNk2dQMSxsOg5aQdjNQBrLxV0=;
+        b=O3LIh1VnGlkPOZRjsHo4nMuWtoEGAiQRYYoD6NNlNcGuu0FBYUlVYR6rh1cRtKftVu
+         bT0oSnDd+W+W9nEf4LCrq0Z6XgY6fv2097uMGoIARrHecLnNcbEfoTF5tNdkG4mKMTyh
+         d3qBjBhPbET10i0VH4df7MtHrExDfBIk8ELqFSBsx0Vgzq4SH/+xhTaobO1jGFgWOlxO
+         2HPbu/l6Z6CCz+aMERDdMW3DXnp3MNiwVFPSdQoKWx4kiExb8Yu0RA7iLKFMKMcofpvT
+         J253asUJtCWT6ATk/krqzemDRS4bnNEU3czn+uiR1hCHPsDh0ouB8YywBj2f4MR7mKkW
+         grBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BIMw0qKaytre7FG6jFJWV4iDfNINre/R6oO7ZIuT+RM=;
-        b=o7467a9hQ2wg4Zp3nDa1ingY56rPNguUXkiOeQydiaOiCGeAk8zo5CPMRD1sti7E2t
-         7wrBY6KN0LS5NZXGIUCloFJHNGUSgOsGkR2CX9yPJGE460MJh5p+HdJ23LuherNrHSba
-         ruTpdc0PMy+HRgZ0nfNUVbExIiz/1GRj0q+MKeJHtNjJRzOj4tLsm27V60wezjbO9rcw
-         XVOhN+0/sPQ3iQL51+7/rRSofc1w/RZOrIAO/yMDm4maWJwYNvei2+Z1IIuFfME5LHty
-         On0bY991M5Vf4KR2HnbTnY9PLcZ1vaC27UDdwAPSL8S/K1ryUQs2CkPj8dljKXRItGjL
-         Ihlg==
-X-Gm-Message-State: APjAAAXX6aMTQp0ipPVje9gl0oY5TJVbQ/wUzm/CYedTRwgajvcqP5Zj
-        K9PH+renSiOV5TFuaOXrquhHpRaUtnBUvSYIL+4=
-X-Google-Smtp-Source: APXvYqzYIhbifbnfgdIKzmR3aU+cJzCuIaJQl3BUNyvyAZVabAy2aY3yZydYfvfnALekrK7oN9gYZXu8g0KQgBdsQKs=
-X-Received: by 2002:a0d:d596:: with SMTP id x144mr9971364ywd.69.1567159321875;
- Fri, 30 Aug 2019 03:02:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190826081752.57258-1-kkamagui@gmail.com> <CACdnJutomLNthYDzEc0wFBcBHK5iqnk0p-hkAkp57zQZ38oGPA@mail.gmail.com>
- <CAHjaAcSFhQsDYL2iRwwhyvxh9mH4DhxZ__DNzhtk=iiZZ5JdbA@mail.gmail.com>
- <CACdnJutfR2X-5ksXw4PNUdyH2MJs_mExNCcYPp8NLcPW2EDrYQ@mail.gmail.com>
- <CAHjaAcSpU0eW5PLsEpxTkycwi+wNS67xeizb6_BMM_-qUZYAmg@mail.gmail.com>
- <20190827171106.owkvt6slwwg5ypyl@srcf.ucam.org> <CAHjaAcSu04J3WqT_vnSnaQuYpFQ+xiXXWxhcCeLQccEq6eQGcQ@mail.gmail.com>
- <20190829153437.gjcqfolsc26vyt4x@linux.intel.com> <20190829153917.glq6eoka2eufy42w@linux.intel.com>
- <CAHjaAcQ2OmrFO2wWCXocR9xO_aTRYU4vLf3aBr4v5Fn2A89wvg@mail.gmail.com>
-In-Reply-To: <CAHjaAcQ2OmrFO2wWCXocR9xO_aTRYU4vLf3aBr4v5Fn2A89wvg@mail.gmail.com>
-From:   Seunghun Han <kkamagui@gmail.com>
-Date:   Fri, 30 Aug 2019 19:01:50 +0900
-Message-ID: <CAHjaAcQv+8ZqYwcYLj57rM9wMRvsoUczzE8uXjsTY+yxNB7vFw@mail.gmail.com>
-Subject: Re: [PATCH] x86: tpm: Remove a busy bit of the NVS area for
- supporting AMD's fTPM
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        Matthew Garrett <mjg59@google.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=3ZitNgFXrdayf4EBPMRNk2dQMSxsOg5aQdjNQBrLxV0=;
+        b=G+ITFnvkKsnaxWXardyVWbIQdNCkKNm7Muz2P3dLSm41LTckzevOs4Jz/amBoloSos
+         MHaqdjbQRYOLCLC6RaxCaQmGWz7FsaSYjAmMih3Wo5iNLxaVaesKpBgVBJgTgWItm5y+
+         hpC/GoyxeLQ1sgEa/2muEhotA+qtEsoU9XEZzQSC2nB/ZTzmGw12d9TOC9R6fZQjeaQ6
+         hDm0lfWTHVdAn0+X1/a6jLnow8Xe1CMcvqo0uAEHNx2/Q9lgZHyv8wyoGuGEB4f+RaR8
+         +Kw/eivs/2knyZpriIHmyn90sUpkTxNI6TQ3SEm6AS4oRnU7jj9MbOMMd/Zm9hhE9N8V
+         eU1Q==
+X-Gm-Message-State: APjAAAWxBzYgCf2NOeVDN3hjphJ3KfvBz6gofT0nybBVhl0Il4UYrZHl
+        /usmnSefoRhbXxZFWVHqggIrKw==
+X-Google-Smtp-Source: APXvYqxr7U5iMINGzaLcpnUhV5vvDu+v79cBheEV2BWbod9IlB4d2dpJ4rUyizeWdQ0pkITl4LBVqA==
+X-Received: by 2002:ac8:478b:: with SMTP id k11mr15016996qtq.323.1567169015108;
+        Fri, 30 Aug 2019 05:43:35 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-167-216-168.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.216.168])
+        by smtp.gmail.com with ESMTPSA id d134sm2141239qkg.133.2019.08.30.05.43.34
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 30 Aug 2019 05:43:34 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1i3gFa-0003Cg-4Q; Fri, 30 Aug 2019 09:43:34 -0300
+Date:   Fri, 30 Aug 2019 09:43:34 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Seunghun Han <kkamagui@gmail.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Peter Huewe <peterhuewe@gmx.de>,
         "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] tpm: tpm_crb: enhance resource mapping mechanism for
+ supporting AMD's fTPM
+Message-ID: <20190830124334.GA10004@ziepe.ca>
+References: <20190830095639.4562-1-kkamagui@gmail.com>
+ <20190830095639.4562-3-kkamagui@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190830095639.4562-3-kkamagui@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> > On Thu, Aug 29, 2019 at 06:34:37PM +0300, Jarkko Sakkinen wrote:
-> > > On Wed, Aug 28, 2019 at 06:36:04PM +0900, Seunghun Han wrote:
-> > > > >
-> > > > > On Wed, Aug 28, 2019 at 01:36:30AM +0900, Seunghun Han wrote:
-> > > > >
-> > > > > > I got your point. Is there any problem if some regions which don't
-> > > > > > need to be handled in NVS area are saved and restored? If there is a
-> > > > > > problem, how about adding code for ignoring the regions in NVS area to
-> > > > > > the nvs.c file like Jarkko said? If we add the code, we can save and
-> > > > > > restore NVS area without driver's interaction.
-> > > > >
-> > > > > The only thing that knows which regions should be skipped by the NVS
-> > > > > driver is the hardware specific driver, so the TPM driver needs to ask
-> > > > > the NVS driver to ignore that region and grant control to the TPM
-> > > > > driver.
-> > > > >
-> > > > > --
-> > > > > Matthew Garrett | mjg59@srcf.ucam.org
-> > > >
-> > > > Thank you, Matthew and Jarkko.
-> > > > It seems that the TPM driver needs to handle the specific case that
-> > > > TPM regions are in the NVS. I would make a patch that removes TPM
-> > > > regions from the ACPI NVS by requesting to the NVS driver soon.
-> > > >
-> > > > Jarkko,
-> > > > I would like to get some advice on it. What do you think about
-> > > > removing TPM regions from the ACPI NVS in TPM CRB driver? If you don't
-> > > > mind, I would make the patch about it.
-> > >
-> > > I'm not sure if ignoring is right call. Then the hibernation behaviour
-> > > for TPM regions would break.
-> > >
-> > > Thus, should be "ask access" rather than "grant control".
->
-> I agree with your idea. It seems to make trouble. So, I would like to
-> do like your idea below.
->
-> > Or "reserve access" as NVS driver does not have intelligence to do any
-> > policy based decision here.
-> >
-> > A function that gets region and then checks if NVS driver has matching
-> > one and returns true/false based on that should be good enough. Then
-> > you raw ioremap() in the TPM driver.
-> >
-> > /Jarkko
->
-> This solution is great and clear to me. I will make a new patch on
-> your advice and test it in my machine. After that, I will send it
-> again soon.
-> I really appreciate it.
->
-> Seunghun
+On Fri, Aug 30, 2019 at 06:56:39PM +0900, Seunghun Han wrote:
+> I got an AMD system which had a Ryzen Threadripper 1950X and MSI
+> mainboard, and I had a problem with AMD's fTPM. My machine showed an error
+> message below, and the fTPM didn't work because of it.
+> 
+> [  5.732084] tpm_crb MSFT0101:00: can't request region for resource
+>              [mem 0x79b4f000-0x79b4ffff]
+> [  5.732089] tpm_crb: probe of MSFT0101:00 failed with error -16
+> 
+> When I saw the iomem, I found two fTPM regions were in the ACPI NVS area. 
+> The regions are below.
+> 
+> 79a39000-79b6afff : ACPI Non-volatile Storage
+>   79b4b000-79b4bfff : MSFT0101:00
+>   79b4f000-79b4ffff : MSFT0101:00
+> 
+> After analyzing this issue, I found that crb_map_io() function called
+> devm_ioremap_resource() and it failed. The ACPI NVS didn't allow the TPM
+> CRB driver to assign a resource in it because a busy bit was set to
+> the ACPI NVS area.
+> 
+> To support AMD's fTPM, I added a function to check intersects between
+> the TPM region and ACPI NVS before it mapped the region. If some
+> intersects are detected, the function just calls devm_ioremap() for
+> a workaround. If there is no intersect, it calls devm_ioremap_resource().
+> 
+> Signed-off-by: Seunghun Han <kkamagui@gmail.com>
+> ---
+>  drivers/char/tpm/tpm_crb.c | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
 
-I have made and sent patches on your advice.
-The patch links are below and please review them.
-[PATCH 0/2] https://lkml.org/lkml/2019/8/30/372
-[PATCH 1/2] https://lkml.org/lkml/2019/8/30/373
-[PATCH 2/2] https://lkml.org/lkml/2019/8/30/374
+This still seems to result in two drivers controlling the same
+memory. Does this create bugs and races during resume?
 
-Thank you again for your sincere advice.
-
-Seunghun
+Jason
