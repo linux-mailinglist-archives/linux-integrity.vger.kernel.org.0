@@ -2,159 +2,177 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 711C1A3AB2
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 17:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32547A3A8F
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Aug 2019 17:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727935AbfH3Pnv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Aug 2019 11:43:51 -0400
-Received: from mx0b-00176a03.pphosted.com ([67.231.157.48]:50670 "EHLO
-        mx0a-00176a03.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727883AbfH3Pnu (ORCPT
+        id S1728341AbfH3Pkp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Aug 2019 11:40:45 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:40066 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727434AbfH3Pkp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Aug 2019 11:43:50 -0400
-X-Greylist: delayed 4977 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Aug 2019 11:43:49 EDT
-Received: from pps.filterd (m0048205.ppops.net [127.0.0.1])
-        by m0048205.ppops.net-00176a03. (8.16.0.27/8.16.0.27) with SMTP id x7UEJM78038302;
-        Fri, 30 Aug 2019 10:20:52 -0400
-From:   "Safford, David (GE Global Research, US)" <david.safford@ge.com>
-To:     Seunghun Han <kkamagui@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>
-CC:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Thread-Topic: Re: [PATCH 2/2] tpm: tpm_crb: enhance resource mapping
- mechanism for supporting AMD's fTPM
-Thread-Index: AQHVXxlOrNmKX2KHXEaevQ/odv4D9acT5e0AgAAT9ID//79NoA==
-Date:   Fri, 30 Aug 2019 14:20:49 +0000
-Message-ID: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CC59@ALPMBAPA12.e2k.ad.ge.com>
-References: <20190830095639.4562-1-kkamagui@gmail.com>
- <20190830095639.4562-3-kkamagui@gmail.com> <20190830124334.GA10004@ziepe.ca>
- <CAHjaAcQ0MrPCZUit7s0Rmqpwpp0w5jiYjNUNEEm2yc1AejZ3ng@mail.gmail.com>
-In-Reply-To: <CAHjaAcQ0MrPCZUit7s0Rmqpwpp0w5jiYjNUNEEm2yc1AejZ3ng@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
- =?utf-8?B?bk5jTWpFeU5EY3pPVFV3WEdGd2NHUmhkR0ZjY205aGJXbHVaMXd3T1dRNE5E?=
- =?utf-8?B?bGlOaTB6TW1RekxUUmhOREF0T0RWbFpTMDJZamcwWW1FeU9XVXpOV0pjYlhO?=
- =?utf-8?B?bmMxeHRjMmN0TldNek9HSmpPRFl0WTJJek1TMHhNV1U1TFRobE16WXRZVFJq?=
- =?utf-8?B?TTJZd1lqVTVPR0V6WEdGdFpTMTBaWE4wWERWak16aGlZemc0TFdOaU16RXRN?=
- =?utf-8?B?VEZsT1MwNFpUTTJMV0UwWXpObU1HSTFPVGhoTTJKdlpIa3VkSGgwSWlCemVq?=
- =?utf-8?B?MGlOREV5TVNJZ2REMGlNVE15TVRFMk5EZzBORGd5T0RneE16a3lJaUJvUFNK?=
- =?utf-8?B?QmFEWlljSEowYkc0MmMwOHdWbkZHTVROelFUUTRhRlk1UmtFOUlpQnBaRDBp?=
- =?utf-8?B?SWlCaWJEMGlNQ0lnWW04OUlqRWlJR05wUFNKalFVRkJRVVZTU0ZVeFVsTlNW?=
- =?utf-8?B?VVpPUTJkVlFVRkZiME5CUVVKM1ZqVk5aVkJzTDFaQlpYVlhVSFZrWjFCUGNY?=
- =?utf-8?B?bzJOVmtyTlRKQk9EWnlUVVJCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJTRUZCUVVGRVlVRlJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlJVRkJVVUZDUVVGQlFVWjBSMlZSZDBGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VW8wUVVGQlFtNUJSMVZCV0hkQ2FrRkhPRUZpWjBKdFFVZHJRVnBCUW14QlJ6?=
- =?utf-8?B?UkJaRUZDY0VGSFJVRmlRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGRlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFXZEJRVUZCUVVGdVowRkJRVWRqUVZwUlFtWkJSMmRCWVZGQ2JrRkhaMEZp?=
- =?utf-8?B?UVVJMVFVZE5RV0ozUW5WQlIxbEJZVkZDYTBGSFZVRmlaMEl3UVVkclFWbFJR?=
- =?utf-8?B?bk5CUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJV?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVU5CUVVGQlFVRkRaVUZCUVVGYWQwSnNRVVk0UVdKblFu?=
- =?utf-8?B?WkJSelJCWTBGQ01VRkhTVUZpUVVKd1FVZE5RVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUWtGQlFVRkJRVUZCUVVGSlFVRkJRVUZCUVQwOUlpOCtQQzl0?=
- =?utf-8?B?WlhSaFBnPT0=?=
-x-dg-rorf: 
-x-originating-ip: [3.159.19.191]
+        Fri, 30 Aug 2019 11:40:45 -0400
+Received: by mail-pl1-f193.google.com with SMTP id h3so3530977pls.7
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Aug 2019 08:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:subject:to:from:user-agent:date;
+        bh=Ni6vNyoiAeI273d2BSfT1RbRFUtf/5mAYsPvknqZkqM=;
+        b=muR7C5wWL5lPrP4S4XeyNe0FZ45O/GeNLN2/NCaK1O+WpN6QlMihoe7PQzPflJ02i6
+         GV+xG/6KhUXf03e1zxSM4P1ZsyC7i4I+MWgMBk0Ab5i+a50uYi4U+fIL8nHwiWM+3Jiq
+         DljDInXRECSbYBXAKNKHbWpE6HUOKD/nxznnw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
+         :user-agent:date;
+        bh=Ni6vNyoiAeI273d2BSfT1RbRFUtf/5mAYsPvknqZkqM=;
+        b=LLiQXT/IHU1b1HsGISmdEQRI00Q7+1Qyvcgp2aGZfPIawH7Y4/zIRxS3Gsk6b+kHzN
+         riemp3iI3tnc2YQRtCtEJ33O3WDuYGhwtK5bEBYwVuCKwqznFYhOWjREy7Hn4/am3jzy
+         JISDLrqyeF/tcfsRPQwdx6R0MVzXyJIOR3NKY0GaV/T/7x5FUG358bZ/N4ypordTnSOF
+         I6WIVa4YLi3TIRkhOHgvRedDWdY1/qehIu2eXyfLqI0WY14JJTzlHz4rkDLm9/uQDCgY
+         m8xdS9wOZl1dq1xnpcSrSfG6rap9t4wYznBHGHBB9SdQOcL4zFByJ5Qj2UXNJsmN5VQJ
+         smHA==
+X-Gm-Message-State: APjAAAXtyu/FUZkyiFod4Ks7KIXJMxNTm3685KYuDofqDBYf6l7qx4DC
+        ElIVywxT7BGZ2tvoNY2cm1xvAg==
+X-Google-Smtp-Source: APXvYqzZ0ZAHomdPr+u0gekRSspkMTVbLIDC9pDSXzLNL2dUFK/VU90FKtIevvRB/QYLVlF4ZbfAlA==
+X-Received: by 2002:a17:902:e9:: with SMTP id a96mr16802533pla.169.1567179644447;
+        Fri, 30 Aug 2019 08:40:44 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id i14sm3164228pfo.158.2019.08.30.08.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Aug 2019 08:40:43 -0700 (PDT)
+Message-ID: <5d69437b.1c69fb81.2722d.8556@mx.google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Subject: [PATCH 2/2] tpm: tpm_crb: enhance resource mapping mechanism for supporting
- AMD's fTPM
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-30_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908300147
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <2926868.n5I8ZQlzTx@phil>
+References: <20190829224110.91103-1-swboyd@chromium.org> <20190829224110.91103-5-swboyd@chromium.org> <2926868.n5I8ZQlzTx@phil>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Andrey Pronin <apronin@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH v6 4/4] tpm: tpm_tis_spi: Support cr50 devices
+To:     Heiko Stuebner <heiko@sntech.de>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Fri, 30 Aug 2019 08:40:42 -0700
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBsaW51eC1pbnRlZ3JpdHktb3duZXJAdmdlci5rZXJuZWwub3JnIDxsaW51eC1pbnRl
-Z3JpdHktDQo+IG93bmVyQHZnZXIua2VybmVsLm9yZz4gT24gQmVoYWxmIE9mIFNldW5naHVuIEhh
-bg0KPiBTZW50OiBGcmlkYXksIEF1Z3VzdCAzMCwgMjAxOSA5OjU1IEFNDQo+IFRvOiBKYXNvbiBH
-dW50aG9ycGUgPGpnZ0B6aWVwZS5jYT4NCj4gQ2M6IEphcmtrbyBTYWtraW5lbiA8amFya2tvLnNh
-a2tpbmVuQGxpbnV4LmludGVsLmNvbT47IFBldGVyIEh1ZXdlDQo+IDxwZXRlcmh1ZXdlQGdteC5k
-ZT47IG9wZW4gbGlzdDpUUE0gREVWSUNFIERSSVZFUiA8bGludXgtDQo+IGludGVncml0eUB2Z2Vy
-Lmtlcm5lbC5vcmc+OyBMaW51eCBLZXJuZWwgTWFpbGluZyBMaXN0IDxsaW51eC0NCj4ga2VybmVs
-QHZnZXIua2VybmVsLm9yZz4NCj4gU3ViamVjdDogRVhUOiBSZTogW1BBVENIIDIvMl0gdHBtOiB0
-cG1fY3JiOiBlbmhhbmNlIHJlc291cmNlIG1hcHBpbmcNCj4gbWVjaGFuaXNtIGZvciBzdXBwb3J0
-aW5nIEFNRCdzIGZUUE0NCj4gDQo+ID4NCj4gPiBPbiBGcmksIEF1ZyAzMCwgMjAxOSBhdCAwNjo1
-NjozOVBNICswOTAwLCBTZXVuZ2h1biBIYW4gd3JvdGU6DQo+ID4gPiBJIGdvdCBhbiBBTUQgc3lz
-dGVtIHdoaWNoIGhhZCBhIFJ5emVuIFRocmVhZHJpcHBlciAxOTUwWCBhbmQgTVNJDQo+ID4gPiBt
-YWluYm9hcmQsIGFuZCBJIGhhZCBhIHByb2JsZW0gd2l0aCBBTUQncyBmVFBNLiBNeSBtYWNoaW5l
-IHNob3dlZA0KPiBhbg0KPiA+ID4gZXJyb3IgbWVzc2FnZSBiZWxvdywgYW5kIHRoZSBmVFBNIGRp
-ZG4ndCB3b3JrIGJlY2F1c2Ugb2YgaXQuDQo+ID4gPg0KPiA+ID4gWyAgNS43MzIwODRdIHRwbV9j
-cmIgTVNGVDAxMDE6MDA6IGNhbid0IHJlcXVlc3QgcmVnaW9uIGZvciByZXNvdXJjZQ0KPiA+ID4g
-ICAgICAgICAgICAgIFttZW0gMHg3OWI0ZjAwMC0weDc5YjRmZmZmXSBbICA1LjczMjA4OV0gdHBt
-X2NyYjogcHJvYmUNCj4gPiA+IG9mIE1TRlQwMTAxOjAwIGZhaWxlZCB3aXRoIGVycm9yIC0xNg0K
-PiA+ID4NCj4gPiA+IFdoZW4gSSBzYXcgdGhlIGlvbWVtLCBJIGZvdW5kIHR3byBmVFBNIHJlZ2lv
-bnMgd2VyZSBpbiB0aGUgQUNQSSBOVlMNCj4gYXJlYS4NCj4gPiA+IFRoZSByZWdpb25zIGFyZSBi
-ZWxvdy4NCj4gPiA+DQo+ID4gPiA3OWEzOTAwMC03OWI2YWZmZiA6IEFDUEkgTm9uLXZvbGF0aWxl
-IFN0b3JhZ2UNCj4gPiA+ICAgNzliNGIwMDAtNzliNGJmZmYgOiBNU0ZUMDEwMTowMA0KPiA+ID4g
-ICA3OWI0ZjAwMC03OWI0ZmZmZiA6IE1TRlQwMTAxOjAwDQo+ID4gPg0KPiA+ID4gQWZ0ZXIgYW5h
-bHl6aW5nIHRoaXMgaXNzdWUsIEkgZm91bmQgdGhhdCBjcmJfbWFwX2lvKCkgZnVuY3Rpb24NCj4g
-PiA+IGNhbGxlZA0KPiA+ID4gZGV2bV9pb3JlbWFwX3Jlc291cmNlKCkgYW5kIGl0IGZhaWxlZC4g
-VGhlIEFDUEkgTlZTIGRpZG4ndCBhbGxvdyB0aGUNCj4gPiA+IFRQTSBDUkIgZHJpdmVyIHRvIGFz
-c2lnbiBhIHJlc291cmNlIGluIGl0IGJlY2F1c2UgYSBidXN5IGJpdCB3YXMgc2V0DQo+ID4gPiB0
-byB0aGUgQUNQSSBOVlMgYXJlYS4NCj4gPiA+DQo+ID4gPiBUbyBzdXBwb3J0IEFNRCdzIGZUUE0s
-IEkgYWRkZWQgYSBmdW5jdGlvbiB0byBjaGVjayBpbnRlcnNlY3RzDQo+ID4gPiBiZXR3ZWVuIHRo
-ZSBUUE0gcmVnaW9uIGFuZCBBQ1BJIE5WUyBiZWZvcmUgaXQgbWFwcGVkIHRoZSByZWdpb24uIElm
-DQo+ID4gPiBzb21lIGludGVyc2VjdHMgYXJlIGRldGVjdGVkLCB0aGUgZnVuY3Rpb24ganVzdCBj
-YWxscyBkZXZtX2lvcmVtYXAoKQ0KPiA+ID4gZm9yIGEgd29ya2Fyb3VuZC4gSWYgdGhlcmUgaXMg
-bm8gaW50ZXJzZWN0LCBpdCBjYWxscw0KPiBkZXZtX2lvcmVtYXBfcmVzb3VyY2UoKS4NCj4gPiA+
-DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBTZXVuZ2h1biBIYW4gPGtrYW1hZ3VpQGdtYWlsLmNvbT4N
-Cj4gPiA+IC0tLQ0KPiA+ID4gIGRyaXZlcnMvY2hhci90cG0vdHBtX2NyYi5jIHwgMjUgKysrKysr
-KysrKysrKysrKysrKysrKystLQ0KPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyMyBpbnNlcnRpb25z
-KCspLCAyIGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gVGhpcyBzdGlsbCBzZWVtcyB0byByZXN1bHQg
-aW4gdHdvIGRyaXZlcnMgY29udHJvbGxpbmcgdGhlIHNhbWUgbWVtb3J5Lg0KPiA+IERvZXMgdGhp
-cyBjcmVhdGUgYnVncyBhbmQgcmFjZXMgZHVyaW5nIHJlc3VtZT8NCj4gPg0KPiA+IEphc29uDQo+
-IA0KPiBXaGVuIEkgdGVzdGVkIHRoaXMgcGF0Y2ggaW4gbXkgbWFjaGluZSwgaXQgc2VlbWVkIHRo
-YXQgQUNQSSBOVlMgd2FzIHNhdmVkDQo+IGFmdGVyIFRQTSBDUkIgZHJpdmVyIHNlbnQgIlRQTTJf
-U2h1dGRvd24oU1RBVEUpIiB0byB0aGUgZlRQTSB3aGlsZQ0KPiBzdXNwZW5kaW5nLiBUaGVuLCBB
-Q1BJIE5WUyB3YXMgcmVzdG9yZWQgd2hpbGUgcmVzdW1pbmcuDQo+IEFmdGVyIHJlc3VtaW5nLCBQ
-Q1JzIGRpZG4ndCBjaGFuZ2UgYW5kIFRQTTIgdG9vbHMgc3VjaCBhcyB0cG0yX3Bjcmxpc3QsDQo+
-IHRwbTJfZXh0ZW5kLCB0cG0yX2dldHJhbmRvbXMgd29ya2VkIHdlbGwuDQo+IFNvLCBhY2NvcmRp
-bmcgdG8gbXkgdGVzdCByZXN1bHQsIGl0IHNlZW1zIHRoYXQgdGhlIHBhdGNoIGRvZXNuJ3QgY3Jl
-YXRlIGJ1Z3MNCj4gYW5kIHJhY2UgZHVyaW5nIHJlc3VtZS4NCj4gDQo+IFNldW5naHVuDQoNClRo
-aXMgd2FzIGRpc2N1c3NlZCBlYXJsaWVyIG9uIHRoZSBsaXN0Lg0KVGhlIGNvbnNlbnN1cyB3YXMg
-dGhhdCwgd2hpbGUgc2FmZSBub3csIHRoaXMgd291bGQgYmUgZnJhZ2lsZSwgYW5kIHN1YmplY3Qg
-dG8gDQp1bmV4cGVjdGVkIGNoYW5nZXMgaW4gQUNQSS9OVlMsIGFuZCB3ZSByZWFsbHkgbmVlZCB0
-byB0ZWxsIE5WUyB0byBleGNsdWRlIHRoZQ0KcmVnaW9ucyBmb3IgbG9uZyB0ZXJtIHNhZmV0eS4N
-Cg0KQXMgc2VwYXJhdGUgaXNzdWVzLCB0aGUgcGF0Y2hlcyBkbyBub3Qgd29yayBhdCBhbGwgb24g
-c29tZSBvZiBteSBBTUQgc3lzdGVtcy4NCkZpcnN0LCB5b3Ugb25seSBmb3JjZSB0aGUgcmVtYXAg
-aWYgdGhlIG92ZXJsYXAgaXMgd2l0aCBOVlMsIGJ1dCBJIGhhdmUgc3lzdGVtcw0Kd2hlcmUgdGhl
-IG92ZXJsYXAgaXMgd2l0aCBvdGhlciByZXNlcnZlZCByZWdpb25zLiBZb3Ugc2hvdWxkIGZvcmNl
-IHRoZSByZW1hcA0KcmVnYXJkbGVzcywgYnV0IGlmIGl0IGlzIE5WUywgZ3JhYiB0aGUgc3BhY2Ug
-YmFjayBmcm9tIE5WUy4NCg0KU2Vjb25kLCB0aGUgcGF0Y2ggZXh0ZW5kcyB0aGUgd3JvbmcgYmVo
-YXZpb3Igb2YgdGhlIGN1cnJlbnQgZHJpdmVyIHRvIGJvdGgNCmJ1ZmZlciByZWdpb25zLiBJZiB0
-aGVyZSBpcyBhIGNvbmZsaWN0IGJldHdlZW4gd2hhdCB0aGUgZGV2aWNlJ3MgY29udHJvbA0KcmVn
-aXN0ZXIgc2F5cywgYW5kIHdoYXQgQUNQSSBzYXlzLCB0aGUgZXhpc3RpbmcgZHJpdmVyIGV4cGxp
-Y2l0bHkgInRydXN0cyB0aGUgQUNQSSIuDQpUaGlzIGlzIGp1c3Qgd3JvbmcuIFRoZSBhY3R1YWwg
-ZGV2aWNlIHdpbGwgdXNlIHRoZSBhcmVhcyBhcyBkZWZpbmVkIGJ5IGl0cw0KY29udHJvbCByZWdp
-c3RlcnMgcmVnYXJkbGVzcyBvZiB3aGF0IEFDUEkgc2F5cy4gSSB0YWxrZWQgdG8gTWljcm9zb2Z0
-LCBhbmQNCnRoZWlyIGRyaXZlciB0cnVzdHMgdGhlIGNvbnRyb2wgcmVnaXN0ZXIgdmFsdWVzLCBh
-bmQgZG9lc24ndCBldmVuIGxvb2sgYXQgdGhlDQpBQ1BJIHZhbHVlcy4NCg0KSW4gcHJhY3RpY2Us
-IEkgaGF2ZSB0ZXN0ZWQgc2V2ZXJhbCBzeXN0ZW1zIGluIHdoaWNoIHRoZSBkZXZpY2UgcmVnaXN0
-ZXJzIHNob3cNClRoZSBjb3JyZWN0IDRLIGJ1ZmZlcnMsIGJ1dCB0aGUgZHJpdmVyIGluc3RlYWQg
-dHJ1c3RzIHRoZSBBQ1BJIHZhbHVlcywgd2hpY2gNCmxpc3QganVzdCAxSyBidWZmZXJzLiAxSyBi
-dWZmZXJzIHdpbGwgbm90IHdvcmsgZm9yIGxhcmdlIHJlcXVlc3RzLCBhbmQgdGhlIA0KZGV2aWNl
-IGlzIGdvaW5nIHRvIHJlYWQgYW5kIHdyaXRlIHRoZSA0SyBidWZmZXJzIHJlZ2FyZGxlc3MuDQoN
-CmRhdmUNCg==
+Quoting Heiko Stuebner (2019-08-30 08:33:48)
+> Am Freitag, 30. August 2019, 00:41:10 CEST schrieb Stephen Boyd:
+> > From: Andrey Pronin <apronin@chromium.org>
+> >=20
+> > Add TPM2.0 PTP FIFO compatible SPI interface for chips with Cr50
+> > firmware. The firmware running on the currently supported H1 Secure
+> > Microcontroller requires a special driver to handle its specifics:
+> >=20
+> >  - need to ensure a certain delay between SPI transactions, or else
+> >    the chip may miss some part of the next transaction
+> >  - if there is no SPI activity for some time, it may go to sleep,
+> >    and needs to be waken up before sending further commands
+> >  - access to vendor-specific registers
+> >=20
+> > Cr50 firmware has a requirement to wait for the TPM to wakeup before
+> > sending commands over the SPI bus. Otherwise, the firmware could be in
+> > deep sleep and not respond. The method to wait for the device to wakeup
+> > is slightly different than the usual flow control mechanism described in
+> > the TCG SPI spec. Add a completion to tpm_tis_spi_transfer() before we
+> > start a SPI transfer so we can keep track of the last time the TPM
+> > driver accessed the SPI bus to support the flow control mechanism.
+> >=20
+> > Split the cr50 logic off into a different file to keep it out of the
+> > normal code flow of the existing SPI driver while making it all part of
+> > the same module when the code is optionally compiled into the same
+> > module. Export a new function, tpm_tis_spi_init(), and the associated
+> > read/write/transfer APIs so that we can do this. Make the cr50 code wrap
+> > the tpm_tis_spi_phy struct with its own struct to override the behavior
+> > of tpm_tis_spi_transfer() by supplying a custom flow control hook. This
+> > shares the most code between the core driver and the cr50 support
+> > without combining everything into the core driver or exporting module
+> > symbols.
+> >=20
+> > Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> > Cc: Andrey Pronin <apronin@chromium.org>
+> > Cc: Duncan Laurie <dlaurie@chromium.org>
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Guenter Roeck <groeck@chromium.org>
+> > Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
+> > Cc: Heiko Stuebner <heiko@sntech.de>
+> > [swboyd@chromium.org: Replace boilerplate with SPDX tag, drop
+> > suspended bit and remove ifdef checks in cr50.h, migrate to functions
+> > exported in tpm_tis_spi.h, combine into one module instead of two]
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>=20
+> This variant breaks building the tpm as a module:
+>=20
+>=20
+> WARNING: modpost: missing MODULE_LICENSE() in drivers/char/tpm/cr50_spi.o
+> see include/linux/module.h for more information
+> ERROR: "tpm_tis_spi_write32" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_read32" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_read16" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_init" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_transfer" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_resume" [drivers/char/tpm/tpm_tis_spi.ko] undefined!
+> ERROR: "cr50_spi_probe" [drivers/char/tpm/tpm_tis_spi.ko] undefined!
+> make[2]: *** [../scripts/Makefile.modpost:103: modules-modpost] Fehler 1
+> make[1]: *** [/home/devel/hstuebner/00_git-repos/linux-rockchip/Makefile:=
+1302: modules] Fehler 2
+> make[1]: Verzeichnis =E2=80=9E/home/devel/hstuebner/00_git-repos/linux-ro=
+ckchip/_build-arm64=E2=80=9C wird verlassen
+> make: *** [Makefile:179: sub-make] Fehler 2
+>=20
+>=20
+> After adding a dummy MODULE_LICENSE I end up with:
+>=20
+> ERROR: "tpm_tis_spi_write32" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_read32" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_read16" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_init" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_transfer" [drivers/char/tpm/cr50_spi.ko] undefined!
+> ERROR: "tpm_tis_spi_resume" [drivers/char/tpm/tpm_tis_spi.ko] undefined!
+> ERROR: "cr50_spi_probe" [drivers/char/tpm/tpm_tis_spi.ko] undefined!
+>=20
+>=20
+> So building things as modules this way clearly is not working. Going back
+> to the previous approach makes the module happy again, aka:
+>=20
+> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+> index 6ff135d6f008..477fcddbff8c 100644
+> --- a/drivers/char/tpm/Makefile
+> +++ b/drivers/char/tpm/Makefile
+> @@ -21,7 +21,9 @@ tpm-$(CONFIG_EFI) +=3D eventlog/efi.o
+>  tpm-$(CONFIG_OF) +=3D eventlog/of.o
+>  obj-$(CONFIG_TCG_TIS_CORE) +=3D tpm_tis_core.o
+>  obj-$(CONFIG_TCG_TIS) +=3D tpm_tis.o
+> -obj-$(CONFIG_TCG_TIS_SPI) +=3D tpm_tis_spi.o cr50_spi.o
+> +obj-$(CONFIG_TCG_TIS_SPI) +=3D tpm_tis_spi_mod.o
+> +tpm_tis_spi_mod-y :=3D tpm_tis_spi.o
+> +tpm_tis_spi_mod-y +=3D cr50_spi.o
+>  obj-$(CONFIG_TCG_TIS_I2C_ATMEL) +=3D tpm_i2c_atmel.o
+>  obj-$(CONFIG_TCG_TIS_I2C_INFINEON) +=3D tpm_i2c_infineon.o
+>  obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) +=3D tpm_i2c_nuvoton.o
+>=20
+
+I wasn't happy that I had to make a tpm_tis_spi_mod target to get the
+.ko to build properly but I thought it was because of the extra Kconfig
+option. If two files can't be combined into one .ko and have it be named
+tpm_tis_spi.ko then we have to do the above workaround. Or we can
+#include the cr50_spi.c file into tpm_tis_spi.c file. Or we can rename
+tpm_tis_spi.c to tpm_tis_spi_base.c and then do the above change with a
+tpm_tis_spi-y. Maybe Masahiro has some hints.
+
