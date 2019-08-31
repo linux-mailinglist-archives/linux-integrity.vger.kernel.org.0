@@ -2,25 +2,32 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A04E4A4237
-	for <lists+linux-integrity@lfdr.de>; Sat, 31 Aug 2019 06:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CE2A425E
+	for <lists+linux-integrity@lfdr.de>; Sat, 31 Aug 2019 07:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725815AbfHaEZr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 31 Aug 2019 00:25:47 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:48286 "EHLO
+        id S1725899AbfHaFL2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 31 Aug 2019 01:11:28 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:35994 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725781AbfHaEZr (ORCPT
+        with ESMTP id S1725298AbfHaFL2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 31 Aug 2019 00:25:47 -0400
+        Sat, 31 Aug 2019 01:11:28 -0400
 Received: from localhost.localdomain (c-67-168-100-174.hsd1.wa.comcast.net [67.168.100.174])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 51D4820B7186
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Aug 2019 21:25:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 51D4820B7186
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5E8BD20B7186;
+        Fri, 30 Aug 2019 22:11:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5E8BD20B7186
 From:   Jordan Hand <jorhand@linux.microsoft.com>
-To:     linux-integrity@vger.kernel.org
-Subject: [PATCH v3] tpm: Parse event log from TPM2 ACPI table
-Date:   Fri, 30 Aug 2019 21:25:29 -0700
-Message-Id: <20190831042529.1424-1-jorhand@linux.microsoft.com>
+To:     jarkko.sakkinen@linux.intel.com
+Cc:     Jordan Hand <jorhand@linux.microsoft.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] tpm: Parse event log from TPM2 ACPI table
+Date:   Fri, 30 Aug 2019 22:10:27 -0700
+Message-Id: <20190831051027.11544-1-jorhand@linux.microsoft.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
