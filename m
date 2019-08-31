@@ -2,79 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D692FA4146
-	for <lists+linux-integrity@lfdr.de>; Sat, 31 Aug 2019 02:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A04E4A4237
+	for <lists+linux-integrity@lfdr.de>; Sat, 31 Aug 2019 06:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728267AbfHaASG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Aug 2019 20:18:06 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:30886 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728240AbfHaASF (ORCPT
+        id S1725815AbfHaEZr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 31 Aug 2019 00:25:47 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:48286 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725781AbfHaEZr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Aug 2019 20:18:05 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7V06xuG072321;
-        Fri, 30 Aug 2019 20:18:03 -0400
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2uqabf602m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Aug 2019 20:18:02 -0400
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7V09sml001615;
-        Sat, 31 Aug 2019 00:18:01 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma04wdc.us.ibm.com with ESMTP id 2ujvv75nxh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 31 Aug 2019 00:18:01 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7V0I1BD43909398
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 31 Aug 2019 00:18:01 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2981DAC05E;
-        Sat, 31 Aug 2019 00:18:01 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 59193AC05B;
-        Sat, 31 Aug 2019 00:17:59 +0000 (GMT)
-Received: from morokweng.localdomain (unknown [9.85.207.220])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Sat, 31 Aug 2019 00:17:58 +0000 (GMT)
-References: <20190829200532.13545-1-prsriva@linux.microsoft.com> <20190829200532.13545-2-prsriva@linux.microsoft.com> <20190830052347.8032F2073F@mail.kernel.org>
-User-agent: mu4e 1.2.0; emacs 26.2
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        linux-arm-msm@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jmorris@namei.org,
-        zohar@linux.ibm.com
-Subject: Re: [RFC][PATCH 1/1] Carry ima measurement log for arm64 via kexec_file_load
-In-reply-to: <20190830052347.8032F2073F@mail.kernel.org>
-Date:   Fri, 30 Aug 2019 21:17:55 -0300
-Message-ID: <87pnkmkx1o.fsf@morokweng.localdomain>
+        Sat, 31 Aug 2019 00:25:47 -0400
+Received: from localhost.localdomain (c-67-168-100-174.hsd1.wa.comcast.net [67.168.100.174])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 51D4820B7186
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Aug 2019 21:25:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 51D4820B7186
+From:   Jordan Hand <jorhand@linux.microsoft.com>
+To:     linux-integrity@vger.kernel.org
+Subject: [PATCH v3] tpm: Parse event log from TPM2 ACPI table
+Date:   Fri, 30 Aug 2019 21:25:29 -0700
+Message-Id: <20190831042529.1424-1-jorhand@linux.microsoft.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-30_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=751 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908310000
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+For systems with a TPM2 chip which use ACPI to expose event logs, retrieve the
+crypto-agile event log from the TPM2 ACPI table. The TPM2 table is defined
+in section 7.3 of the TCG ACPI Specification (see link).
 
-Stephen Boyd <sboyd@kernel.org> writes:
-> A lot of this code looks DT generic. Can it be moved out of the arch
-> layer to drivers/of/?
+The TPM2 table is used by SeaBIOS in place of the TCPA table when the system's
+TPM is version 2.0 to denote (among other metadata) the location of the
+crypto-agile log.
 
-Yes, if this code could be in drivers/of/ it would be great! Perhaps the
- DT generic functions could go in drivers/of/fdt.c, and ones dealing
- with IMA nodes/properties could go in drivers/of/fdt_ima.c?
+Link: https://trustedcomputinggroup.org/resource/tcg-acpi-specification/
+Signed-off-by: Jordan Hand <jorhand@linux.microsoft.com>
+---
+ drivers/char/tpm/eventlog/acpi.c | 60 ++++++++++++++++++++++----------
+ 1 file changed, 41 insertions(+), 19 deletions(-)
 
---
-Thiago Jung Bauermann
-IBM Linux Technology Center
+diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+index 63ada5e53f13..38a8bcec1dd5 100644
+--- a/drivers/char/tpm/eventlog/acpi.c
++++ b/drivers/char/tpm/eventlog/acpi.c
+@@ -41,17 +41,23 @@ struct acpi_tcpa {
+ 	};
+ };
+ 
++/* If an event log is present, the TPM2 ACPI table will contain the full
++ * trailer
++ */
++
+ /* read binary bios log */
+ int tpm_read_log_acpi(struct tpm_chip *chip)
+ {
+-	struct acpi_tcpa *buff;
++	struct acpi_table_header *buff;
++	struct acpi_tcpa *tcpa;
++	struct acpi_tpm2_trailer *tpm2_trailer;
+ 	acpi_status status;
+ 	void __iomem *virt;
+ 	u64 len, start;
++	int log_type;
+ 	struct tpm_bios_log *log;
+-
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+-		return -ENODEV;
++	bool is_tpm2 = chip->flags & TPM_CHIP_FLAG_TPM2;
++	acpi_string table_sig;
+ 
+ 	log = &chip->log;
+ 
+@@ -61,26 +67,42 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 	if (!chip->acpi_dev_handle)
+ 		return -ENODEV;
+ 
+-	/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
+-	status = acpi_get_table(ACPI_SIG_TCPA, 1,
+-				(struct acpi_table_header **)&buff);
++	/* Find TCPA or TPM2 entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
++	table_sig = is_tpm2 ? ACPI_SIG_TPM2 : ACPI_SIG_TCPA;
++	status = acpi_get_table(table_sig, 1, &buff);
+ 
+ 	if (ACPI_FAILURE(status))
+ 		return -ENODEV;
+ 
+-	switch(buff->platform_class) {
+-	case BIOS_SERVER:
+-		len = buff->server.log_max_len;
+-		start = buff->server.log_start_addr;
+-		break;
+-	case BIOS_CLIENT:
+-	default:
+-		len = buff->client.log_max_len;
+-		start = buff->client.log_start_addr;
+-		break;
++	if (!is_tpm2) {
++		tcpa = (struct acpi_tcpa *)buff;
++		switch (tcpa->platform_class) {
++		case BIOS_SERVER:
++			len = tcpa->server.log_max_len;
++			start = tcpa->server.log_start_addr;
++			break;
++		case BIOS_CLIENT:
++		default:
++			len = tcpa->client.log_max_len;
++			start = tcpa->client.log_start_addr;
++			break;
++		}
++		log_type = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
++	} else if (buff->length ==
++		   sizeof(struct acpi_table_tpm2) +
++		   sizeof(struct acpi_tpm2_trailer)) {
++		tpm2_trailer = (struct acpi_tpm2_trailer *)buff;
++
++		len = tpm2_trailer.minimum_log_length;
++		start = tpm2_trailer.log_address;
++		log_type = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
++	} else {
++		return -ENODEV;
+ 	}
++
+ 	if (!len) {
+-		dev_warn(&chip->dev, "%s: TCPA log area empty\n", __func__);
++		dev_warn(&chip->dev, "%s: %s log area empty\n",
++			 __func__, table_sig);
+ 		return -EIO;
+ 	}
+ 
+@@ -98,7 +120,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 	memcpy_fromio(log->bios_event_log, virt, len);
+ 
+ 	acpi_os_unmap_iomem(virt, len);
+-	return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
++	return log_type;
+ 
+ err:
+ 	kfree(log->bios_event_log);
+-- 
+2.20.1
+
