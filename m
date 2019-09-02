@@ -2,386 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B99FA5DB6
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 00:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B45A5DDC
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 00:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727384AbfIBWEq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Sep 2019 18:04:46 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42538 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726933AbfIBWEq (ORCPT
+        id S1727729AbfIBWmR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Sep 2019 18:42:17 -0400
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:43483 "EHLO
+        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727681AbfIBWmQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Sep 2019 18:04:46 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x82M1wX0045873
-        for <linux-integrity@vger.kernel.org>; Mon, 2 Sep 2019 18:04:45 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2us9tbtc4w-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 02 Sep 2019 18:04:45 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 2 Sep 2019 23:04:42 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 2 Sep 2019 23:04:39 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x82M4Fe725297256
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 Sep 2019 22:04:15 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CFFF9A405B;
-        Mon,  2 Sep 2019 22:04:38 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA111A4065;
-        Mon,  2 Sep 2019 22:04:37 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.185.123])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  2 Sep 2019 22:04:37 +0000 (GMT)
-Subject: Re: [PATCH 1/1] KEYS: Measure keys in trusted keyring
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Cc:     jamorris@linux.microsoft.com, sashal@kernel.org,
-        kgoldman@us.ibm.com
-Date:   Mon, 02 Sep 2019 18:04:36 -0400
-In-Reply-To: <20190828002735.31025-2-nramas@linux.microsoft.com>
-References: <20190828002735.31025-1-nramas@linux.microsoft.com>
-         <20190828002735.31025-2-nramas@linux.microsoft.com>
+        Mon, 2 Sep 2019 18:42:16 -0400
+Received: by mail-yw1-f65.google.com with SMTP id n205so5141208ywb.10;
+        Mon, 02 Sep 2019 15:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5VinCzEEH/Uk+FyLdBPhobtfKHbcOpqI1/OiKIP+nEo=;
+        b=jHjjt3ospKYQOsutK4f7sotSxd5PNU+Zhtq6gx3h/W9EkvCpG9SvLzH97WkKLaE062
+         q1y9gHsmmATqN6PU4PJBeCyECIJD9Wcp8AWuRxg5iXHeHav6+iWl/x1n6Pp07alSinLF
+         KwwvvfuKbLCxYEhIg9aNeOyrgG9fMxgefSy7A9bPW+yHu7/WRsZ20xr1bFP7ZNDDx1Pf
+         KH5jbaYfeN/FQVW270QBJxod5Ip4DIRGhGXPqWCK1QU/ZMuAqkGYr1KwYRQyaYouMb5K
+         Q/OEcmdC9yC3WqSdLjr8EJbInqd+bUYt2inTIL5XDtUa+roDzm0GI0RqONjVIyBeyNC/
+         1XuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5VinCzEEH/Uk+FyLdBPhobtfKHbcOpqI1/OiKIP+nEo=;
+        b=SEGVF5lYXYvk95UzoHO1Gw6gmlJNX5X4a0DZ/uQ47Q2xRYu97bVDKGbVktS/mawfqX
+         ZvqPhsk0kiPYW512hJNfrpGAGCzvk5Vie3Py6seeJ15264m7bZmB4yhiflarpP//f6Wv
+         jH/AnODydSDvNdHqkycZd9xb9dVUefsRKF+rO73TVhkDVi0dVrYpVs4k/XlrJHlL5BY7
+         XODQJTYsfElLH+pLoriltIoNkZjKhMLMJMnVNaNpcR15af4LluocUQ+PY/UApzg5B72K
+         nC5oG8kg+UlfsStL05G8Fw2uEDSvh43mEUWtBQCJhv5g+JY5BtY8f6JVRVQHMT4m0T/P
+         uQtw==
+X-Gm-Message-State: APjAAAXyYhFlAwEu62IVvFaAeHUrMZGZzRuIvkKknAtcNZ+tqZjMYQR4
+        j2Eze4xtIG9W6J9RGg25d6Fipgfu9cu2z6p38PsJG/OB59Y=
+X-Google-Smtp-Source: APXvYqxyKiI05WXxKGwCJSWYmOBkGoTck/rBw0K9RFvGYovmNWY79iFdVOkNY7PlCRWOoUZw/Ns42dntHyRQJday77c=
+X-Received: by 2002:a0d:df13:: with SMTP id i19mr22823943ywe.264.1567464135563;
+ Mon, 02 Sep 2019 15:42:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190830095639.4562-1-kkamagui@gmail.com> <20190830095639.4562-3-kkamagui@gmail.com>
+ <20190830124334.GA10004@ziepe.ca> <CAHjaAcQ0MrPCZUit7s0Rmqpwpp0w5jiYjNUNEEm2yc1AejZ3ng@mail.gmail.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CC59@ALPMBAPA12.e2k.ad.ge.com>
+ <CAHjaAcQu3jOSj0QV3u4GSgnhpkTmJTMqckY_cnuzeTY-HNUWcA@mail.gmail.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CD06@ALPMBAPA12.e2k.ad.ge.com> <20190902135348.3pndbtbi6hpgjpjn@linux.intel.com>
+In-Reply-To: <20190902135348.3pndbtbi6hpgjpjn@linux.intel.com>
+From:   Seunghun Han <kkamagui@gmail.com>
+Date:   Tue, 3 Sep 2019 07:42:03 +0900
+Message-ID: <CAHjaAcR4H6CnHxzR3NHLpMCgdafVHYuKCp4qxUd8b+K0SN34BQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tpm: tpm_crb: enhance resource mapping mechanism for
+ supporting AMD's fTPM
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19090222-0028-0000-0000-00000396D31F
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19090222-0029-0000-0000-000024591E43
-Message-Id: <1567461876.10024.338.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-02_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1909020248
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2019-08-27 at 17:27 -0700, Lakshmi Ramasubramanian wrote:
-> Measure keys in the trusted keyring. If CONFIG_SECONDARY_TRUSTED_KEYRING
-> is enabled then the trusted keys keyring is secondary_trusted_keys.
-> Otherwise, the trusted keys keyring is builtin_trusted_keys.
-> 
-> This measurement is in addition to IMA measuring module\file
-> signature. It adds more information for attestation service
-> to validate the client has known good keys in the trusted
-> keyring.
-> 
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>
+> On Fri, Aug 30, 2019 at 05:58:39PM +0000, Safford, David (GE Global Research, US) wrote:
+> > > Thank you for your advice. We also discussed earlier and concluded that
+> > > checking and raw remapping are enough to work around this. The link is
+> > > here, https://lkml.org/lkml/2019/8/29/962 .
+> >
+> > I don't see Matthew Garrett's agreement on that thread.
+>
+> No one has agreed on anything.
+>
+> /Jarkko
 
-IMA measures, appraises, and audits files based on policy[1].  If
-you're going to measure keys, all of the code should be within the IMA
-subdirectory.  The only code outside of the IMA subdirectory is either
-an LSM or IMA hook.  If an LSM hook already exists, use it.  If an LSM
-hook doesn't exist and the location is generic that other LSMs would
-be interested, define a new LSM hook, otherwise define a new IMA hook.
+Jarkko,
+you gave me good advice related to the NVS area and mapping like below.
 
-For example, to measure /boot/cmdline, the rule is "measure
-func=KEXEC_CMDLINE template=ima-buf".  A similar rule for measuring
-keys would look something like "measure func=KEYS template=ima-buf
-pcr=<number>".
+"A function that gets region and then checks if NVS driver has matching
+ one and returns true/false based on that should be good enough. Then
+you raw ioremap() in the TPM driver."
 
-Remember "ifdef's" don't belong in C code[2].  Normally a stub
-function is defined in an include file to avoid ifdefs.
+So, I made a patch on your advice and test it. According to my test
+result, command and response buffers were saved and restored while
+hibernation. And, there was no side-effect because they were just
+buffers and hibernation didn't affect the control area of TPM CRB
+driver. So, I think that saving and restoring buffers during sleep is
+no problem. I also think your advice and solution are clear and good
+to work around AMD's fTPM. I will attach my detailed test result soon.
 
-Mimi
+Jarkko,
+I have a question. Do you think this patch is not enough to handle
+AMD's fTPM problem? If so, would you tell me about it? I will change
+my patch.
 
-[1] Documentation/ABI/testing/ima_policy
-[2] Refer to Documentation/process/coding-style.rst section "21)
-Conditional Compilation".
-
-
-> ---
->  certs/system_keyring.c            | 15 ++++++
->  include/keys/system_keyring.h     |  4 ++
->  include/linux/key.h               | 21 ++++++++
->  security/integrity/ima/Kconfig    | 14 ++++++
->  security/integrity/ima/ima_init.c | 84 +++++++++++++++++++++++++++++++
->  security/keys/keyring.c           | 63 +++++++++++++++++++++++
->  6 files changed, 201 insertions(+)
-> 
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index 1eba08a1af82..221eabee70b4 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -283,3 +283,18 @@ void __init set_platform_trusted_keys(struct key *keyring)
->  	platform_trusted_keys = keyring;
->  }
->  #endif
-> +
-> +#ifdef CONFIG_IMA_MEASURE_TRUSTED_KEYS
-> +struct key *get_trusted_keys(void)
-> +{
-> +	struct key *trusted_keys;
-> +
-> +#ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
-> +	trusted_keys = secondary_trusted_keys;
-> +#else
-> +	trusted_keys = builtin_trusted_keys;
-> +#endif
-> +
-> +	return trusted_keys;
-> +}
-> +#endif /* CONFIG_IMA_MEASURE_TRUSTED_KEYS */
-> diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.h
-> index c1a96fdf598b..789782a1d5a9 100644
-> --- a/include/keys/system_keyring.h
-> +++ b/include/keys/system_keyring.h
-> @@ -66,4 +66,8 @@ static inline void set_platform_trusted_keys(struct key *keyring)
->  }
->  #endif
->  
-> +#ifdef CONFIG_IMA_MEASURE_TRUSTED_KEYS
-> +extern struct key *get_trusted_keys(void);
-> +#endif /* CONFIG_IMA_MEASURE_TRUSTED_KEYS */
-> +
->  #endif /* _KEYS_SYSTEM_KEYRING_H */
-> diff --git a/include/linux/key.h b/include/linux/key.h
-> index 50028338a4cc..843198b94677 100644
-> --- a/include/linux/key.h
-> +++ b/include/linux/key.h
-> @@ -408,6 +408,27 @@ extern key_ref_t lookup_user_key(key_serial_t id, unsigned long flags,
->  				 key_perm_t perm);
->  extern void key_free_user_ns(struct user_namespace *);
->  
-> +typedef int (*key_iterator_func)(void *key, u32 keylen,
-> +				const char *description);
-> +
-> +/*
-> + * Context data used to iterate through the keys in a keyring.
-> + *
-> + *  size  - Total number of keys in the keyring
-> + *  enumerated - Number of keys that have been enumerated so far
-> + *  iterator - Pointer to the function called for each key
-> + */
-> +struct keyring_iterator {
-> +	size_t size;
-> +	size_t enumerated;
-> +	key_iterator_func iterator;
-> +};
-> +
-> +#ifdef CONFIG_IMA_MEASURE_TRUSTED_KEYS
-> +extern long keyring_read_trusted_keys(
-> +	struct keyring_iterator *key_iterator);
-> +#endif /* CONFIG_IMA_MEASURE_TRUSTED_KEYS */
-> +
->  /*
->   * The permissions required on a key that we're looking up.
->   */
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index 2ced99dde694..f33237da0add 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -297,3 +297,17 @@ config IMA_APPRAISE_SIGNED_INIT
->  	default n
->  	help
->  	   This option requires user-space init to be signed.
-> +
-> +config IMA_MEASURE_TRUSTED_KEYS
-> +	bool "Measure the keys in the Trusted Keys keyring"
-> +	depends on IMA
-> +	default n
-> +	help
-> +	   This option enables measurement of the public key of
-> +	   the keys in the Trusted Keys keyring during
-> +	   IMA initialization. Depending on the kernel configuration
-> +	   the trusted keyring could be one of the following:
-> +	    if CONFIG_SECONDARY_TRUSTED_KEYRING is enabled then
-> +	        secondary_trusted_keys
-> +	    else
-> +	        builtin_trusted_keys
-> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-> index 5d55ade5f3b9..987939f6c0f6 100644
-> --- a/security/integrity/ima/ima_init.c
-> +++ b/security/integrity/ima/ima_init.c
-> @@ -89,6 +89,83 @@ static int __init ima_add_boot_aggregate(void)
->  	return result;
->  }
->  
-> +#ifdef CONFIG_IMA_MEASURE_TRUSTED_KEYS
-> +int __init store_trusted_keyring_key(void *key,
-> +		u32 keylen, const char *key_description)
-> +{
-> +	static const char op[] = "store_trusted_keyring_key";
-> +	const char *audit_cause = "ENOMEM";
-> +	struct ima_template_entry *entry;
-> +	struct integrity_iint_cache tmp_iint, *iint = &tmp_iint;
-> +	struct ima_event_data event_data = {iint, NULL, key_description,
-> +					    NULL, 0, NULL};
-> +	int result = -ENOMEM;
-> +	int violation = 0;
-> +	struct {
-> +		struct ima_digest_data hdr;
-> +		char digest[IMA_MAX_DIGEST_SIZE];
-> +	} hash;
-> +
-> +	if (key == NULL || keylen == 0)
-> +		return 0;
-> +
-> +	memset(iint, 0, sizeof(*iint));
-> +	memset(&hash, 0, sizeof(hash));
-> +	iint->ima_hash = &hash.hdr;
-> +	iint->ima_hash->algo = HASH_ALGO_SHA1;
-> +	iint->ima_hash->length = SHA1_DIGEST_SIZE;
-> +
-> +	result = ima_calc_buffer_hash(key, keylen, &hash.hdr);
-> +	if (result < 0) {
-> +		audit_cause = "hashing_error";
-> +		goto err_out;
-> +	}
-> +
-> +	result = ima_alloc_init_template(&event_data, &entry, NULL);
-> +	if (result < 0) {
-> +		audit_cause = "alloc_entry";
-> +		goto err_out;
-> +	}
-> +
-> +	result = ima_store_template(entry, violation, NULL,
-> +					key_description,
-> +					CONFIG_IMA_MEASURE_PCR_IDX);
-> +	if (result < 0) {
-> +		ima_free_template_entry(entry);
-> +		audit_cause = "store_entry";
-> +		goto err_out;
-> +	}
-> +	return 0;
-> +err_out:
-> +	integrity_audit_msg(AUDIT_INTEGRITY_PCR, NULL,
-> +				key_description, op,
-> +				audit_cause, result, 0);
-> +	return result;
-> +}
-> +
-> +int __init ima_add_trusted_keyring_keys(int (*store_trusted_key)(
-> +			void *key,
-> +			u32 keylen,
-> +			const char *key_description))
-> +{
-> +	struct keyring_iterator key_iterator;
-> +	int rc = 0;
-> +
-> +	/* Retrieve the information on keys in
-> +	 * the Built-In Trusted Keys keyring.
-> +	 */
-> +	key_iterator.size = 0;
-> +	key_iterator.enumerated = 0;
-> +	key_iterator.iterator = store_trusted_key;
-> +	rc = keyring_read_trusted_keys(&key_iterator);
-> +	if (rc < 0)
-> +		pr_err("Failed %d to read keys in trusted_keys\n", rc);
-> +
-> +	return rc;
-> +}
-> +
-> +#endif /* CONFIG_IMA_MEASURE_TRUSTED_KEYS */
-> +
->  #ifdef CONFIG_IMA_LOAD_X509
->  void __init ima_load_x509(void)
->  {
-> @@ -129,6 +206,13 @@ int __init ima_init(void)
->  	if (rc != 0)
->  		return rc;
->  
-> +#ifdef CONFIG_IMA_MEASURE_TRUSTED_KEYS
-> +	/* Measure keys from builtin trusted keys keyring. */
-> +	rc = ima_add_trusted_keyring_keys(store_trusted_keyring_key);
-> +	if (rc != 0)
-> +		return rc;
-> +#endif /* CONFIG_IMA_MEASURE_TRUSTED_KEYS */
-> +
->  	ima_init_policy();
->  
->  	return ima_fs_init();
-> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-> index febf36c6ddc5..fe84923b3c1c 100644
-> --- a/security/keys/keyring.c
-> +++ b/security/keys/keyring.c
-> @@ -16,6 +16,9 @@
->  #include <linux/nsproxy.h>
->  #include <keys/keyring-type.h>
->  #include <keys/user-type.h>
-> +#include <keys/asymmetric-type.h>
-> +#include <keys/system_keyring.h>
-> +#include <crypto/public_key.h>
->  #include <linux/assoc_array_priv.h>
->  #include <linux/uaccess.h>
->  #include <net/net_namespace.h>
-> @@ -1790,3 +1793,63 @@ void keyring_restriction_gc(struct key *keyring, struct key_type *dead_type)
->  
->  	kleave(" [restriction gc]");
->  }
-> +
-> +#ifdef CONFIG_IMA_MEASURE_TRUSTED_KEYS
-> +static int keyring_keys_iterator(const void *object, void *data)
-> +{
-> +	struct keyring_iterator *key_iterator = data;
-> +	const struct key *key = keyring_ptr_to_key(object);
-> +	const struct public_key *pk;
-> +	int rc = 0;
-> +
-> +	if (key_iterator->enumerated < key_iterator->size) {
-> +		key_iterator->enumerated++;
-> +		pk = key->payload.data[asym_crypto];
-> +		if ((pk != NULL) &&
-> +			(pk->keylen > 0) &&
-> +			(key->description != NULL)) {
-> +			rc = key_iterator->iterator(pk->key,
-> +					pk->keylen,
-> +					key->description);
-> +		}
-> +	}
-> +
-> +	return rc;
-> +}
-> +
-> +/*
-> + * Read a list of keys from the given keyring.
-> + *  keyring - Keyring to read the list of keys from
-> + *  key_iterator - Keyring iterator
-> + */
-> +long keyring_read_keys(
-> +	const struct key *keyring,
-> +	struct keyring_iterator *key_iterator)
-> +{
-> +	long ret = 0;
-> +
-> +	kenter("{%d}", key_serial(keyring));
-> +
-> +	key_iterator->size = keyring->keys.nr_leaves_on_tree;
-> +	key_iterator->enumerated = 0;
-> +	ret = assoc_array_iterate(&keyring->keys,
-> +				keyring_keys_iterator,
-> +				key_iterator);
-> +	if (ret == 0)
-> +		kleave(" = %ld [ok]", ret);
-> +	else
-> +		kleave(" = %ld [error]", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Read a list of keys from the trusted_keys keyring.
-> + *  key_iterator - Keyring iterator
-> + */
-> +long keyring_read_trusted_keys(
-> +	struct keyring_iterator *key_iterator)
-> +{
-> +	return keyring_read_keys(get_trusted_keys(), key_iterator);
-> +}
-> +#endif /* CONFIG_IMA_MEASURE_TRUSTED_KEYS */
-
+Seunghun
