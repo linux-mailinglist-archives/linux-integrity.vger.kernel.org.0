@@ -2,167 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB3EA595C
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Sep 2019 16:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F03A5967
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Sep 2019 16:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731605AbfIBO1x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Sep 2019 10:27:53 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:57962 "EHLO mx1.redhat.com"
+        id S1726436AbfIBObZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Sep 2019 10:31:25 -0400
+Received: from mga09.intel.com ([134.134.136.24]:47430 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731560AbfIBO1w (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Sep 2019 10:27:52 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 8794930001EB;
-        Mon,  2 Sep 2019 14:27:52 +0000 (UTC)
-Received: from cantor.redhat.com (ovpn-116-156.phx2.redhat.com [10.3.116.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C61760C18;
-        Mon,  2 Sep 2019 14:27:52 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Alexey Klimov <aklimov@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Subject: [PATCH v4 3/3] tpm_tis: override durations for STM tpm with firmware 1.2.8.28
-Date:   Mon,  2 Sep 2019 07:27:35 -0700
-Message-Id: <20190902142735.6280-4-jsnitsel@redhat.com>
-In-Reply-To: <20190902142735.6280-1-jsnitsel@redhat.com>
-References: <20190902142735.6280-1-jsnitsel@redhat.com>
+        id S1726382AbfIBObZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 2 Sep 2019 10:31:25 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Sep 2019 07:31:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,459,1559545200"; 
+   d="scan'208";a="183321293"
+Received: from doblerbe-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.53.100])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Sep 2019 07:31:22 -0700
+Date:   Mon, 2 Sep 2019 17:31:21 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jmorris@namei.org
+Subject: [GIT PULL] tpmdd updates for Linux v5.4
+Message-ID: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Mon, 02 Sep 2019 14:27:52 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-There was revealed a bug in the STM TPM chipset used in Dell R415s.
-Bug is observed so far only on chipset firmware 1.2.8.28
-(1.2 TPM, device-id 0x0, rev-id 78). After some number of
-operations chipset hangs and stays in inconsistent state:
+Hi
 
-tpm_tis 00:09: Operation Timed out
-tpm_tis 00:09: tpm_transmit: tpm_send: error -5
+A new driver for fTPM living inside ARM TEE was added this round. In
+addition to that, there is three bug fixes and one clean up.
 
-Durations returned by the chip are the same like on other
-firmware revisions but apparently with specifically 1.2.8.28 fw
-durations should be reset to 2 minutes to enable tpm chip work
-properly. No working way of updating firmware was found.
+/Jarkko
 
-This patch adds implementation of ->update_durations method
-that matches only STM devices with specific firmware version.
+The following changes since commit 8fb8e9e46261e0117cb3cffb6dd8bb7e08f8649b:
 
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Signed-off-by: Alexey Klimov <aklimov@redhat.com>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- drivers/char/tpm/tpm_tis_core.c | 79 +++++++++++++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+  Merge tag 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma (2019-08-30 09:23:45 -0700)
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index c3181ea9f271..27c6ca031e23 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -506,6 +506,84 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
- 	return rc;
- }
- 
-+struct tis_vendor_durations_override {
-+	u32 did_vid;
-+	struct tpm1_version version;
-+	unsigned long durations[3];
-+};
-+
-+static const struct  tis_vendor_durations_override vendor_dur_overrides[] = {
-+	/* STMicroelectronics 0x104a */
-+	{ 0x0000104a,
-+	  { 1, 2, 8, 28 },
-+	  { (2 * 60 * HZ), (2 * 60 * HZ), (2 * 60 * HZ) } },
-+};
-+
-+static void tpm_tis_update_durations(struct tpm_chip *chip,
-+				     unsigned long *duration_cap)
-+{
-+	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-+	struct tpm1_version *version;
-+	u32 did_vid;
-+	int i, rc;
-+	cap_t cap;
-+
-+	chip->duration_adjusted = false;
-+
-+	if (chip->ops->clk_enable != NULL)
-+		chip->ops->clk_enable(chip, true);
-+
-+	rc = tpm_tis_read32(priv, TPM_DID_VID(0), &did_vid);
-+	if (rc < 0) {
-+		dev_warn(&chip->dev, "%s: failed to read did_vid. %d\n",
-+			 __func__, rc);
-+		goto out;
-+	}
-+
-+	/* Try to get a TPM version 1.2 or 1.1 TPM_CAP_VERSION_INFO */
-+	rc = tpm1_getcap(chip, TPM_CAP_VERSION_1_2, &cap,
-+			 "attempting to determine the 1.2 version",
-+			 sizeof(cap.version2));
-+	if (!rc) {
-+		version = &cap.version2.version;
-+	} else {
-+		rc = tpm1_getcap(chip, TPM_CAP_VERSION_1_1, &cap,
-+				 "attempting to determine the 1.1 version",
-+				 sizeof(cap.version1));
-+
-+		if (rc)
-+			goto out;
-+
-+		version = &cap.version1;
-+	}
-+
-+	for (i = 0; i != ARRAY_SIZE(vendor_dur_overrides); i++) {
-+		if (vendor_dur_overrides[i].did_vid != did_vid)
-+			continue;
-+
-+		if ((version->major ==
-+		     vendor_dur_overrides[i].version.major) &&
-+		    (version->minor ==
-+		     vendor_dur_overrides[i].version.minor) &&
-+		    (version->rev_major ==
-+		     vendor_dur_overrides[i].version.rev_major) &&
-+		    (version->rev_minor ==
-+		     vendor_dur_overrides[i].version.rev_minor)) {
-+
-+			memcpy(duration_cap,
-+			       vendor_dur_overrides[i].durations,
-+			       sizeof(vendor_dur_overrides[i].durations));
-+
-+			chip->duration_adjusted = true;
-+			goto out;
-+		}
-+	}
-+
-+out:
-+	if (chip->ops->clk_enable != NULL)
-+		chip->ops->clk_enable(chip, false);
-+}
-+
- struct tis_vendor_timeout_override {
- 	u32 did_vid;
- 	unsigned long timeout_us[4];
-@@ -842,6 +920,7 @@ static const struct tpm_class_ops tpm_tis = {
- 	.send = tpm_tis_send,
- 	.cancel = tpm_tis_ready,
- 	.update_timeouts = tpm_tis_update_timeouts,
-+	.update_durations = tpm_tis_update_durations,
- 	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
- 	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
- 	.req_canceled = tpm_tis_req_canceled,
--- 
-2.21.0
+are available in the Git repository at:
 
+  git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-20190902
+
+for you to fetch changes up to e8bd417aab0c72bfb54465596b16085702ba0405:
+
+  tpm/tpm_ftpm_tee: Document fTPM TEE driver (2019-09-02 17:08:35 +0300)
+
+----------------------------------------------------------------
+tpmdd updates for Linux v5.4
+
+----------------------------------------------------------------
+Jarkko Sakkinen (1):
+      tpm: Remove a deprecated comments about implicit sysfs locking
+
+Lukas Bulwahn (1):
+      MAINTAINERS: fix style in KEYS-TRUSTED entry
+
+Sasha Levin (2):
+      tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE
+      tpm/tpm_ftpm_tee: Document fTPM TEE driver
+
+Stefan Berger (2):
+      tpm_tis_core: Turn on the TPM before probing IRQ's
+      tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
+
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ Documentation/security/tpm/index.rst               |   1 +
+ Documentation/security/tpm/tpm_ftpm_tee.rst        |  27 ++
+ MAINTAINERS                                        |   2 +-
+ drivers/char/tpm/Kconfig                           |   5 +
+ drivers/char/tpm/Makefile                          |   1 +
+ drivers/char/tpm/tpm-chip.c                        |   7 +-
+ drivers/char/tpm/tpm-sysfs.c                       |   7 -
+ drivers/char/tpm/tpm_ftpm_tee.c                    | 350 +++++++++++++++++++++
+ drivers/char/tpm/tpm_ftpm_tee.h                    |  40 +++
+ drivers/char/tpm/tpm_tis_core.c                    |   3 +
+ 11 files changed, 432 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/security/tpm/tpm_ftpm_tee.rst
+ create mode 100644 drivers/char/tpm/tpm_ftpm_tee.c
+ create mode 100644 drivers/char/tpm/tpm_ftpm_tee.h
