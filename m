@@ -2,21 +2,21 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B543A554D
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Sep 2019 13:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC20DA5552
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Sep 2019 13:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730271AbfIBLwl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Sep 2019 07:52:41 -0400
-Received: from ozlabs.org ([203.11.71.1]:48367 "EHLO ozlabs.org"
+        id S1731269AbfIBLwu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Sep 2019 07:52:50 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:46967 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729850AbfIBLwl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Sep 2019 07:52:41 -0400
+        id S1731213AbfIBLwt (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 2 Sep 2019 07:52:49 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46MT3T1Rzqz9s7T;
-        Mon,  2 Sep 2019 21:52:37 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46MT3f0ptxz9sNk;
+        Mon,  2 Sep 2019 21:52:46 +1000 (AEST)
 From:   Michael Ellerman <mpe@ellerman.id.au>
 To:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -31,11 +31,11 @@ Cc:     Paul Mackerras <paulus@samba.org>,
         George Wilson <gcwilson@linux.ibm.com>,
         Eric Ricther <erichte@linux.ibm.com>,
         Nayna Jain <nayna@linux.ibm.com>
-Subject: Re: [PATCH v5 1/2] powerpc: detect the secure boot mode of the system
-In-Reply-To: <1566218108-12705-2-git-send-email-nayna@linux.ibm.com>
-References: <1566218108-12705-1-git-send-email-nayna@linux.ibm.com> <1566218108-12705-2-git-send-email-nayna@linux.ibm.com>
-Date:   Mon, 02 Sep 2019 21:52:36 +1000
-Message-ID: <87tv9usynv.fsf@mpe.ellerman.id.au>
+Subject: Re: [PATCH v5 2/2] powerpc: Add support to initialize ima policy rules
+In-Reply-To: <1566218108-12705-3-git-send-email-nayna@linux.ibm.com>
+References: <1566218108-12705-1-git-send-email-nayna@linux.ibm.com> <1566218108-12705-3-git-send-email-nayna@linux.ibm.com>
+Date:   Mon, 02 Sep 2019 21:52:46 +1000
+Message-ID: <87sgpesynl.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain
 Sender: linux-integrity-owner@vger.kernel.org
@@ -45,248 +45,154 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Hi Nayna,
 
-Sorry I've taken so long to get to this series, there's just too many
-patches that need reviewing :/
+Some more comments below.
 
 Nayna Jain <nayna@linux.ibm.com> writes:
-> Secure boot on POWER defines different IMA policies based on the secure
-> boot state of the system.
+> POWER secure boot relies on the kernel IMA security subsystem to
+> perform the OS kernel image signature verification.
 
-The terminology throughout is a bit vague, we have POWER, PowerPC, Linux
-on POWER etc.
+Again this is just a design choice we've made, it's not specified
+anywhere or anything like that. And it only applies to bare metal secure
+boot, at least so far. AIUI.
 
-What this patch is talking about is a particular implemention of secure
-boot on some OpenPOWER machines running bare metal - am I right?
+> Since each secure
+> boot mode has different IMA policy requirements, dynamic definition of
+> the policy rules based on the runtime secure boot mode of the system is
+> required. On systems that support secure boot, but have it disabled,
+> only measurement policy rules of the kernel image and modules are
+> defined.
 
-So saying "Secure boot on POWER defines different IMA policies" is a bit
-broad I think. Really we've just decided that a way to implement secure
-boot is to use IMA policies.
+It's probably worth mentioning that we intend to use this in our
+Linux-based boot loader, which uses kexec, and that's one of the reasons
+why we're particularly interested in defining the rules for kexec?
 
-> This patch defines a function to detect the secure boot state of the
-> system.
+> This patch defines the arch-specific implementation to retrieve the
+> secure boot mode of the system and accordingly configures the IMA policy
+> rules.
 >
-> The PPC_SECURE_BOOT config represents the base enablement of secureboot
-> on POWER.
+> This patch provides arch-specific IMA policies if PPC_SECURE_BOOT
+> config is enabled.
 >
 > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
 > ---
->  arch/powerpc/Kconfig               | 11 +++++
->  arch/powerpc/include/asm/secboot.h | 27 ++++++++++++
->  arch/powerpc/kernel/Makefile       |  2 +
->  arch/powerpc/kernel/secboot.c      | 71 ++++++++++++++++++++++++++++++
->  4 files changed, 111 insertions(+)
->  create mode 100644 arch/powerpc/include/asm/secboot.h
->  create mode 100644 arch/powerpc/kernel/secboot.c
+>  arch/powerpc/Kconfig           |  2 ++
+>  arch/powerpc/kernel/Makefile   |  2 +-
+>  arch/powerpc/kernel/ima_arch.c | 50 ++++++++++++++++++++++++++++++++++
+>  include/linux/ima.h            |  3 +-
+>  4 files changed, 55 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/powerpc/kernel/ima_arch.c
 >
 > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 77f6ebf97113..c902a39124dc 100644
+> index c902a39124dc..42109682b727 100644
 > --- a/arch/powerpc/Kconfig
 > +++ b/arch/powerpc/Kconfig
-> @@ -912,6 +912,17 @@ config PPC_MEM_KEYS
->  
->  	  If unsure, say y.
->  
-> +config PPC_SECURE_BOOT
-> +	prompt "Enable PowerPC Secure Boot"
-
-How about "Enable secure boot support"
-
-> +	bool
-> +	default n
-
-The default is 'n', so you don't need that default line.
-
-> +	depends on PPC64
-
-Should it just depend on POWERNV for now? AFAIK there's nothing in here
-that's necessarily going to be shared with the guest secure boot code is
-there?
-
-> +	help
-> +	  Linux on POWER with firmware secure boot enabled needs to define
-> +	  security policies to extend secure boot to the OS.This config
-> +	  allows user to enable OS Secure Boot on PowerPC systems that
-> +	  have firmware secure boot support.
-
-Again POWER vs PowerPC.
-
-I think something like:
-
-"Enable support for secure boot on some systems that have firmware
-support for it. If in doubt say N."
-
-
-> diff --git a/arch/powerpc/include/asm/secboot.h b/arch/powerpc/include/asm/secboot.h
-
-secure_boot.h would be fine.
-
-> new file mode 100644
-> index 000000000000..e726261bb00b
-> --- /dev/null
-> +++ b/arch/powerpc/include/asm/secboot.h
-> @@ -0,0 +1,27 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * PowerPC secure boot definitions
-> + *
-> + * Copyright (C) 2019 IBM Corporation
-> + * Author: Nayna Jain <nayna@linux.ibm.com>
-
-I prefer to not have email addresses in copyright headers, as they just
-bit rot. Your email is in the git log.
-
-> + *
-> + */
-> +#ifndef POWERPC_SECBOOT_H
-> +#define POWERPC_SECBOOT_H
-
-We usually do _ASM_POWERPC_SECBOOT_H (or _ASM_POWERPC_SECURE_BOOT_H).
-
-> +#ifdef CONFIG_PPC_SECURE_BOOT
-> +extern struct device_node *is_powerpc_secvar_supported(void);
-> +extern bool get_powerpc_secureboot(void);
-
-You don't need 'extern' for functions in headers.
-
-> +#else
-> +static inline struct device_node *is_powerpc_secvar_supported(void)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline bool get_powerpc_secureboot(void)
-> +{
-> +	return false;
-> +}
-> +
-> +#endif
-> +#endif
+> @@ -917,6 +917,8 @@ config PPC_SECURE_BOOT
+>  	bool
+>  	default n
+>  	depends on PPC64
+> +	depends on IMA
+> +	depends on IMA_ARCH_POLICY
+>  	help
+>  	  Linux on POWER with firmware secure boot enabled needs to define
+>  	  security policies to extend secure boot to the OS.This config
 > diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-> index ea0c69236789..d310ebb4e526 100644
+> index d310ebb4e526..520b1c814197 100644
 > --- a/arch/powerpc/kernel/Makefile
 > +++ b/arch/powerpc/kernel/Makefile
-> @@ -157,6 +157,8 @@ endif
+> @@ -157,7 +157,7 @@ endif
 >  obj-$(CONFIG_EPAPR_PARAVIRT)	+= epapr_paravirt.o epapr_hcalls.o
 >  obj-$(CONFIG_KVM_GUEST)		+= kvm.o kvm_emul.o
 >  
-> +obj-$(CONFIG_PPC_SECURE_BOOT)	+= secboot.o
-> +
+> -obj-$(CONFIG_PPC_SECURE_BOOT)	+= secboot.o
+> +obj-$(CONFIG_PPC_SECURE_BOOT)	+= secboot.o ima_arch.o
+>  
 >  # Disable GCOV, KCOV & sanitizers in odd or sensitive code
 >  GCOV_PROFILE_prom_init.o := n
->  KCOV_INSTRUMENT_prom_init.o := n
-> diff --git a/arch/powerpc/kernel/secboot.c b/arch/powerpc/kernel/secboot.c
+> diff --git a/arch/powerpc/kernel/ima_arch.c b/arch/powerpc/kernel/ima_arch.c
 > new file mode 100644
-> index 000000000000..5ea0d52d64ef
+> index 000000000000..ac90fac83338
 > --- /dev/null
-> +++ b/arch/powerpc/kernel/secboot.c
-> @@ -0,0 +1,71 @@
+> +++ b/arch/powerpc/kernel/ima_arch.c
+> @@ -0,0 +1,50 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
 > + * Copyright (C) 2019 IBM Corporation
 > + * Author: Nayna Jain <nayna@linux.ibm.com>
 > + *
-> + * secboot.c
-> + *      - util function to get powerpc secboot state
-
-That's not really necessary.
-
+> + * ima_arch.c
+> + *      - initialize ima policies for PowerPC Secure Boot
 > + */
-> +#include <linux/types.h>
-> +#include <linux/of.h>
+> +
+> +#include <linux/ima.h>
 > +#include <asm/secboot.h>
 > +
-> +struct device_node *is_powerpc_secvar_supported(void)
-
-This is a pretty weird signature. The "is_" implies it will return a
-bool, but then it actually returns a device node *.
-
+> +bool arch_ima_get_secureboot(void)
 > +{
-> +	struct device_node *np;
-> +	int status;
-> +
-> +	np = of_find_node_by_name(NULL, "ibm,secureboot");
-> +	if (!np) {
-> +		pr_info("secureboot node is not found\n");
-> +		return NULL;
-> +	}
-
-There's no good reason to search by name. You should just search by compatible.
-
-eg. of_find_compatible_node()
-
-> +	status = of_device_is_compatible(np, "ibm,secureboot-v3");
-> +	if (!status) {
-> +		pr_info("Secure variables are not supported by this firmware\n");
-> +		return NULL;
-> +	}
-> +
-> +	return np;
+> +	return get_powerpc_secureboot();
 > +}
 > +
-> +bool get_powerpc_secureboot(void)
+> +/*
+> + * File signature verification is not needed, include only measurements
+> + */
+> +static const char *const default_arch_rules[] = {
+> +	"measure func=KEXEC_KERNEL_CHECK",
+> +	"measure func=MODULE_CHECK",
+> +	NULL
+> +};
+
+The rules above seem fairly self explanatory.
+
+> +
+> +/* Both file signature verification and measurements are needed */
+> +static const char *const sb_arch_rules[] = {
+> +	"measure func=KEXEC_KERNEL_CHECK template=ima-modsig",
+> +	"appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig|modsig",
+> +#if IS_ENABLED(CONFIG_MODULE_SIG)
+> +	"measure func=MODULE_CHECK",
+> +#else
+> +	"measure func=MODULE_CHECK template=ima-modsig",
+> +	"appraise func=MODULE_CHECK appraise_type=imasig|modsig",
+> +#endif
+
+But these ones are not so obvious, at least to me who knows very little
+about IMA.
+
+Can you add a one line comment to each of the ones in here saying what
+it does and why we want it?
+
+> +	NULL
+> +};
+> +
+> +/*
+> + * On PowerPC, file measurements are to be added to the IMA measurement list
+> + * irrespective of the secure boot state of the system.
+
+Why? Just because we think it's useful? Would be good to provide some
+further justification.
+
+    * Signature verification
+> + * is conditionally enabled based on the secure boot state.
+> + */
+> +const char *const *arch_get_ima_policy(void)
 > +{
-> +	struct device_node *np;
-> +	struct device_node *secvar_np;
-> +	const u64 *psecboot;
-> +	u64 secboot = 0;
-> +
-> +	np = is_powerpc_secvar_supported();
-> +	if (!np)
-> +		goto disabled;
-> +
-> +	/* Fail-safe for any failure related to secvar */
-> +	secvar_np = of_get_child_by_name(np, "secvar");
-
-Finding a child by name is not ideal, it encodes the structure of the
-tree in the API. It's better to just search by compatible.
-
-eg. of_find_compatible_node("ibm,secvar-v1")
-
-You should also define what that means, ie. write a little snippet of
-doc to define what the expected properties are and their meaning and so
-on.
-
-> +	if (!secvar_np) {
-> +		pr_err("Expected secure variables support, fail-safe\n");
-
-I'm a bit confused by this. This is the exact opposite of what I
-understand fail-safe to mean. We shouldn't tell the user the system is
-securely booted unless we're 100% sure it is. Right?
-
-> +		goto enabled;
-> +	}
-> +
-> +	if (!of_device_is_available(secvar_np)) {
-> +		pr_err("Secure variables support is in error state, fail-safe\n");
-> +		goto enabled;
-> +	}
-
-It seems a little weird to use the status property to indicate ok/error
-and then also have a "secure-mode" property. Wouldn't just "secure-mode"
-be sufficient with several states to represent what we need?
-
-> +	psecboot = of_get_property(secvar_np, "secure-mode", NULL);
-> +	if (!psecboot)
-> +		goto enabled;
-
-Please use of_read_property_u64() or similar.
-
-> +	secboot = be64_to_cpup((__be64 *)psecboot);
-> +	if (!(secboot & (~0x0)))
-
-I'm not sure what that's trying to do.
-
-> +		goto disabled;
-
-> +
-> +enabled:
-> +	pr_info("secureboot mode enabled\n");
-> +	return true;
-> +
-> +disabled:
-> +	pr_info("secureboot mode disabled\n");
-> +	return false;
+> +	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_ima_get_secureboot())
+> +		return sb_arch_rules;
+> +	return default_arch_rules;
 > +}
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index a20ad398d260..10af09b5b478 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -29,7 +29,8 @@ extern void ima_kexec_cmdline(const void *buf, int size);
+>  extern void ima_add_kexec_buffer(struct kimage *image);
+>  #endif
+>  
+> -#if (defined(CONFIG_X86) && defined(CONFIG_EFI)) || defined(CONFIG_S390)
+> +#if (defined(CONFIG_X86) && defined(CONFIG_EFI)) || defined(CONFIG_S390) \
+> +	|| defined(CONFIG_PPC_SECURE_BOOT)
+>  extern bool arch_ima_get_secureboot(void);
+>  extern const char * const *arch_get_ima_policy(void);
+>  #else
 
 
 cheers
