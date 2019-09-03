@@ -2,99 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF564A5FCE
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 05:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215A2A60DA
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 07:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725855AbfICDhI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Sep 2019 23:37:08 -0400
-Received: from ozlabs.org ([203.11.71.1]:45387 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725821AbfICDhI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Sep 2019 23:37:08 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Mt1C3FNgz9sDB;
-        Tue,  3 Sep 2019 13:37:03 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nayna <nayna@linux.vnet.ibm.com>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>
-Subject: Re: [PATCH] sysfs: add BIN_ATTR_WO() macro
-In-Reply-To: <20190826150153.GD18418@kroah.com>
-References: <1566825818-9731-1-git-send-email-nayna@linux.ibm.com> <1566825818-9731-3-git-send-email-nayna@linux.ibm.com> <20190826140131.GA15270@kroah.com> <ff9674e1-1b27-783a-38f3-4fd725353186@linux.vnet.ibm.com> <20190826150153.GD18418@kroah.com>
-Date:   Tue, 03 Sep 2019 13:37:02 +1000
-Message-ID: <87ef0yrqxt.fsf@mpe.ellerman.id.au>
+        id S1725878AbfICFz2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Sep 2019 01:55:28 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:37713 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbfICFz2 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 3 Sep 2019 01:55:28 -0400
+Received: by mail-wr1-f65.google.com with SMTP id z11so15981138wrt.4
+        for <linux-integrity@vger.kernel.org>; Mon, 02 Sep 2019 22:55:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=qs1zOUIDKmoVBr3Xp78rpcg5lChZyelbkdgsIEkY4UA=;
+        b=DATnU2eu0YeV44/Y9F6ccXu8iwK+FO3SPE37W2q/wOeJdMhEZQuFKyyGb8IWfTrV1f
+         HGpHrWO+6XDy1H3qOZ6HI7kD0fUWO1ZQJbFKapRMb3PPLvMnfTw1dZOBsMvQ6WNI97ms
+         nWQTV7qK3rJRAgLSSKyBWQTab9V0j1Yl3iz/UF0ICAUcLSFQpgGWhhEuFj2wFkXCbPSf
+         xlj1TDvPf3jfJvqAjXSgn9F5lAqgFRFYb+G2e5KMOmobX7Izh253AReIYruvJWjBMaQn
+         6SjjibXeeu+shpJk4NcQb6pC85H81pxzYIc9AJK8FZrsHzxdPdJbcmtnNz1Xio3HvYQA
+         LmtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=qs1zOUIDKmoVBr3Xp78rpcg5lChZyelbkdgsIEkY4UA=;
+        b=c+Zufum3lFIvUAllGMImgnDvxj2ULkU1sCPfBaf799ATbO4e/wtlsXz6POHQP+zlbs
+         AFHStq7EfFXNLbrBz8imgr1+YgWZ+L1BmMtVnf0ruxHeSZPO2kh+LlFBltqGuqfcUBta
+         OKQ/8wwG1L+lewn1b6Zqu7gIZ+dlcXI6CEaSH7/UaDkysKHhuk2V2Fjv/Ky6iIwKZmgL
+         RpAgLPM+QGsr2Jx1u83tegKPjwALO9FiMGY9OnLy0+Wr4hzoFhMmVhsx6gA4/d4prb2U
+         h3vcauXYlZHykzQiLRiEzKDpGKTGaDDs/Qxkl2nw0gqiBpeGKWiJjzkCp/5K53eqm8c3
+         grYw==
+X-Gm-Message-State: APjAAAUObZGqIz8InW2HOwrvedtjYW1yfGs9hB71XhuMLs86sBvwaQBr
+        KDzrCrmDd8IS7y8GFn9A5IQPe6hhuqk=
+X-Google-Smtp-Source: APXvYqwHLMPIZnB41RjbJJVs5tbG/L1g3dq+FfcG63C0WnVjuADzslqzJmnjtnNukypbX/fjuiSamg==
+X-Received: by 2002:a5d:4a81:: with SMTP id o1mr11964787wrq.328.1567490126196;
+        Mon, 02 Sep 2019 22:55:26 -0700 (PDT)
+Received: from ziepe.ca ([193.47.165.251])
+        by smtp.gmail.com with ESMTPSA id w12sm2372369wrg.47.2019.09.02.22.55.24
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 02 Sep 2019 22:55:25 -0700 (PDT)
+Received: from jgg by jggl.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1i51ml-0001Ax-V7; Tue, 03 Sep 2019 02:55:23 -0300
+Date:   Tue, 3 Sep 2019 02:55:23 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Tadeusz Struk <tadeusz.struk@intel.com>,
+        Piotr =?utf-8?B?S3LDs2w=?= <piotr.krol@3mdeb.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: TPM 2.0 Linux sysfs interface
+Message-ID: <20190903055523.GA4500@ziepe.ca>
+References: <3329329f-4bf4-b8cd-dee8-eb36e513c728@3mdeb.com>
+ <20190827010559.GA31752@ziepe.ca>
+ <1567007592.6115.58.camel@linux.ibm.com>
+ <20190828161502.GC933@ziepe.ca>
+ <f7e1f25a-8b2d-1e0e-e784-0908161c3c99@intel.com>
+ <20190902192632.GB5393@ziepe.ca>
+ <1567460118.10024.316.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1567460118.10024.316.camel@linux.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-> This variant was missing from sysfs.h, I guess no one noticed it before.
->
-> Turns out the powerpc secure variable code can use it, so add it to the
-> tree for it, and potentially others to take advantage of, instead of
-> open-coding it.
->
-> Reported-by: Nayna Jain <nayna@linux.ibm.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->
-> I'll queue this up to my tree for 5.4-rc1, but if you want to take this
-> in your tree earlier, feel free to do so.
+On Mon, Sep 02, 2019 at 05:35:18PM -0400, Mimi Zohar wrote:
+> On Mon, 2019-09-02 at 16:26 -0300, Jason Gunthorpe wrote:
+> > On Fri, Aug 30, 2019 at 02:20:54PM -0700, Tadeusz Struk wrote:
+> > > On 8/28/19 9:15 AM, Jason Gunthorpe wrote:
+> > > >>> So exposing PCRs and things through sysfs is not going to happen.
+> > > >>>
+> > > >>> If you had some very narrowly defined things like version, then
+> > > >>> *maybe* but I think a well defined use case is needed for why this
+> > > >>> needs to be sysfs and can't be done in C as Jarkko explained.
+> > > >> Piotr's request for a sysfs file to differentiate between TPM 1.2 and
+> > > >> TPM 2.0 is a reasonable request and probably could be implemented on
+> > > >> TPM registration.
+> > > >>
+> > > >> If exposing the PCRs through sysfs is not acceptable, then perhaps
+> > > >> suggest an alternative.
+> > > > Use the char dev, this is exactly what is is for.
+> > > 
+> > > What about a new /proc entry?
+> > > Currently there are /proc/cpuinfo, /proc/meminfo, /proc/slabinfo...
+> > > What about adding a new /proc/tpminfo that would print info like
+> > > version, number of enabled PCR banks, physical interface [tis|crb],
+> > > vendor, etc.
+> > 
+> > I thought we were not really doing new proc entries?
+> > 
+> > Why this focus on making some textual output?
+> 
+> I don't really care if we define procfs, sysfs, or securityfs file(s)
+> or whether those files are ascii or binary.  Whatever is defined,
+> should be defined for both TPM 1.2 and TPM 2.0 (eg. TPM version).
 
-OK. This series is blocked on the firmware support going in, so at the
-moment it might miss v5.4 anyway. So this going via your tree is no
-problem.
+Use an ioctl on the char dev?
 
-If it does make it into v5.4 we can do a fixup patch to use the new
-macro once everything's in Linus' tree.
-
-cheers
-
-> diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
-> index 965236795750..5420817ed317 100644
-> --- a/include/linux/sysfs.h
-> +++ b/include/linux/sysfs.h
-> @@ -196,6 +196,12 @@ struct bin_attribute {
->  	.size	= _size,						\
->  }
->  
-> +#define __BIN_ATTR_WO(_name) {						\
-> +	.attr	= { .name = __stringify(_name), .mode = 0200 },		\
-> +	.store	= _name##_store,					\
-> +	.size	= _size,						\
-> +}
-> +
->  #define __BIN_ATTR_RW(_name, _size)					\
->  	__BIN_ATTR(_name, 0644, _name##_read, _name##_write, _size)
->  
-> @@ -208,6 +214,9 @@ struct bin_attribute bin_attr_##_name = __BIN_ATTR(_name, _mode, _read,	\
->  #define BIN_ATTR_RO(_name, _size)					\
->  struct bin_attribute bin_attr_##_name = __BIN_ATTR_RO(_name, _size)
->  
-> +#define BIN_ATTR_WO(_name, _size)					\
-> +struct bin_attribute bin_attr_##_name = __BIN_ATTR_WO(_name, _size)
-> +
->  #define BIN_ATTR_RW(_name, _size)					\
->  struct bin_attribute bin_attr_##_name = __BIN_ATTR_RW(_name, _size)
->  
-> -- 
-> 2.23.0
+Jason
