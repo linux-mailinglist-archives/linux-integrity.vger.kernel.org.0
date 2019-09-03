@@ -2,111 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F61A772B
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Sep 2019 00:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2C6A774C
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Sep 2019 00:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725977AbfICWkm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Sep 2019 18:40:42 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:44470 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725882AbfICWkl (ORCPT
+        id S1727348AbfICWvY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Sep 2019 18:51:24 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36780 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726965AbfICWvY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Sep 2019 18:40:41 -0400
-Received: from [10.91.6.157] (unknown [167.220.2.157])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2559920B7186;
-        Tue,  3 Sep 2019 15:40:41 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2559920B7186
-Subject: Re: TPM 2.0 Linux sysfs interface
-To:     Tadeusz Struk <tadeusz.struk@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     =?UTF-8?Q?Piotr_Kr=c3=b3l?= <piotr.krol@3mdeb.com>,
-        linux-integrity@vger.kernel.org
-References: <3329329f-4bf4-b8cd-dee8-eb36e513c728@3mdeb.com>
- <20190827010559.GA31752@ziepe.ca> <1567007592.6115.58.camel@linux.ibm.com>
- <20190828161502.GC933@ziepe.ca>
- <f7e1f25a-8b2d-1e0e-e784-0908161c3c99@intel.com>
- <20190902192632.GB5393@ziepe.ca> <1567460118.10024.316.camel@linux.ibm.com>
- <20190903055523.GA4500@ziepe.ca>
- <bc9ab35e-997c-b107-3073-d5150de063d0@intel.com>
-From:   Jordan Hand <jorhand@linux.microsoft.com>
-Message-ID: <fe908209-3752-19b2-2652-79fb75f69e2b@linux.microsoft.com>
-Date:   Tue, 3 Sep 2019 15:40:40 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <bc9ab35e-997c-b107-3073-d5150de063d0@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        Tue, 3 Sep 2019 18:51:24 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x83Mko9Q120197
+        for <linux-integrity@vger.kernel.org>; Tue, 3 Sep 2019 18:51:22 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ut0mcs1g3-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 03 Sep 2019 18:51:22 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Tue, 3 Sep 2019 23:51:20 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 3 Sep 2019 23:51:16 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x83MpEso55705710
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Sep 2019 22:51:14 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B797A405C;
+        Tue,  3 Sep 2019 22:51:14 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 43B53A405F;
+        Tue,  3 Sep 2019 22:51:12 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.191.35])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  3 Sep 2019 22:51:12 +0000 (GMT)
+Subject: Re: [PATCH v3 3/4] x86/efi: move common keyring handler functions
+ to new file
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Josh Boyer <jwboyer@fedoraproject.org>,
+        David Howells <dhowells@redhat.com>
+Date:   Tue, 03 Sep 2019 18:51:11 -0400
+In-Reply-To: <87pnkisyiv.fsf@mpe.ellerman.id.au>
+References: <1566825818-9731-1-git-send-email-nayna@linux.ibm.com>
+         <1566825818-9731-4-git-send-email-nayna@linux.ibm.com>
+         <87pnkisyiv.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19090322-0028-0000-0000-000003974662
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19090322-0029-0000-0000-0000245995A7
+Message-Id: <1567551071.4937.5.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-03_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1909030228
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+(Cc'ing Josh Boyer, David Howells)
 
-On 9/3/19 9:23 AM, Tadeusz Struk wrote:
-> On 9/2/19 10:55 PM, Jason Gunthorpe wrote:
->> On Mon, Sep 02, 2019 at 05:35:18PM -0400, Mimi Zohar wrote:
->>> On Mon, 2019-09-02 at 16:26 -0300, Jason Gunthorpe wrote:
->>>> On Fri, Aug 30, 2019 at 02:20:54PM -0700, Tadeusz Struk wrote:
->>>>> On 8/28/19 9:15 AM, Jason Gunthorpe wrote:
->>>>>>>> So exposing PCRs and things through sysfs is not going to happen.
->>>>>>>>
->>>>>>>> If you had some very narrowly defined things like version, then
->>>>>>>> *maybe* but I think a well defined use case is needed for why this
->>>>>>>> needs to be sysfs and can't be done in C as Jarkko explained.
->>>>>>> Piotr's request for a sysfs file to differentiate between TPM 1.2 and
->>>>>>> TPM 2.0 is a reasonable request and probably could be implemented on
->>>>>>> TPM registration.
->>>>>>>
->>>>>>> If exposing the PCRs through sysfs is not acceptable, then perhaps
->>>>>>> suggest an alternative.
->>>>>> Use the char dev, this is exactly what is is for.
->>>>>
->>>>> What about a new /proc entry?
->>>>> Currently there are /proc/cpuinfo, /proc/meminfo, /proc/slabinfo...
->>>>> What about adding a new /proc/tpminfo that would print info like
->>>>> version, number of enabled PCR banks, physical interface [tis|crb],
->>>>> vendor, etc.
->>>>
->>>> I thought we were not really doing new proc entries?
->>>>
->>>> Why this focus on making some textual output?
->>>
->>> I don't really care if we define procfs, sysfs, or securityfs file(s)
->>> or whether those files are ascii or binary.  Whatever is defined,
->>> should be defined for both TPM 1.2 and TPM 2.0 (eg. TPM version).
->>
->> Use an ioctl on the char dev?
+On Mon, 2019-09-02 at 21:55 +1000, Michael Ellerman wrote:
+> Nayna Jain <nayna@linux.ibm.com> writes:
 > 
-> The advantage of /proc/tpminfo would be that it can be a first
-> entry point on a system, that would give general overview of the
-> system TPM configuration, without the need of poking /dev/tpm<N>
-> files, only to find out that the TPM doesn't understand the
-> command, because it implements different version of TCG spec.
-> It would be a single point of information in case of multiple TPMs.
-> It can have some predefined format that could be read by a human
-> as well as a machine, e.g.
+> > The handlers to add the keys to the .platform keyring and blacklisted
+> > hashes to the .blacklist keyring is common for both the uefi and powerpc
+> > mechanisms of loading the keys/hashes from the firmware.
+> >
+> > This patch moves the common code from load_uefi.c to keyring_handler.c
+> >
+> > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+
+Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+
+> > ---
+> >  security/integrity/Makefile                   |  3 +-
+> >  .../platform_certs/keyring_handler.c          | 80 +++++++++++++++++++
+> >  .../platform_certs/keyring_handler.h          | 32 ++++++++
+> >  security/integrity/platform_certs/load_uefi.c | 67 +---------------
+> >  4 files changed, 115 insertions(+), 67 deletions(-)
+> >  create mode 100644 security/integrity/platform_certs/keyring_handler.c
+> >  create mode 100644 security/integrity/platform_certs/keyring_handler.h
 > 
-> tpm0:
->    version: 2.0
->    physical interface: CRB
->    supported PCR banks: SHA1, SHA256
->    ...
->    vendor: <Vendor Name>
->    vendor specific: <Vendor specific output>
->
-To me it still feels trivial write an application to do this same thing
-in userspace with ioctls to the char device (figure out what interface
-the TPM is using, get basic capabilities, etc.). There isn't anything
-here that the kernel can do that can't be done from userspace that I can
-see. Is this not true? Maybe its less code in the kernel but I don't
-know that that's a great reason.
+> This has no acks from security folks, though I'm not really clear on who
+> maintains those files.
 
-I don't see a clear advantage to putting the code in the kernel, but I
-do see disadvantages. Interfaces between kernel and userspace need to be
-more rigid to avoid breakage.
+I upstreamed David's, Josh's, and Nayna's patches, so that's probably
+me.
 
-Thanks,
-Jordan
+> Do I take it because it's mostly just code movement people are OK with
+> it going in via the powerpc tree?
+
+Yes, the only reason for splitting load_uefi.c is for powerpc.  These
+patches should be upstreamed together.  
+
+Mimi
+
