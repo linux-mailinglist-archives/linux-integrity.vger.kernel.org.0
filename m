@@ -2,91 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC63A73D5
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 21:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F61A772B
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Sep 2019 00:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726273AbfICTnh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Sep 2019 15:43:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44002 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725994AbfICTnh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Sep 2019 15:43:37 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 701C02087E;
-        Tue,  3 Sep 2019 19:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567539816;
-        bh=siTmQhPkETqtbp5xDiGVSXlWmbm3jkAo5QqPaZswdwk=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=ftd/sdeH/M6lJzdqOq62eLGH9vEdeGeIY6gCxaTCsad8bcSKQ3l6DcvwdyyGereNS
-         iveyAkOm/u8ZHgtLYM3G6eewK6WQ6XJnNU9T2SYEJ2cgRrUlagtGYQK3K/aj2PcpFm
-         bgmmvk0tLXnQpZCOGb7YsMYOyuvl33mfNlTR0MtE=
-Date:   Tue, 3 Sep 2019 15:43:35 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "# 4.0+" <stable@vger.kernel.org>,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH AUTOSEL 4.19 126/167] tpm: Fix TPM 1.2 Shutdown sequence
- to prevent future TPM operations
-Message-ID: <20190903194335.GG5281@sasha-vm>
-References: <20190903162519.7136-1-sashal@kernel.org>
- <20190903162519.7136-126-sashal@kernel.org>
- <CAD=FV=W0YodeoOCiCv9zmv+-gswuU8U_XgrBnesE=wynTbDBiA@mail.gmail.com>
- <20190903165346.hwqlrin77cmzjiti@cantor>
+        id S1725977AbfICWkm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Sep 2019 18:40:42 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:44470 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbfICWkl (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 3 Sep 2019 18:40:41 -0400
+Received: from [10.91.6.157] (unknown [167.220.2.157])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 2559920B7186;
+        Tue,  3 Sep 2019 15:40:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2559920B7186
+Subject: Re: TPM 2.0 Linux sysfs interface
+To:     Tadeusz Struk <tadeusz.struk@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     =?UTF-8?Q?Piotr_Kr=c3=b3l?= <piotr.krol@3mdeb.com>,
+        linux-integrity@vger.kernel.org
+References: <3329329f-4bf4-b8cd-dee8-eb36e513c728@3mdeb.com>
+ <20190827010559.GA31752@ziepe.ca> <1567007592.6115.58.camel@linux.ibm.com>
+ <20190828161502.GC933@ziepe.ca>
+ <f7e1f25a-8b2d-1e0e-e784-0908161c3c99@intel.com>
+ <20190902192632.GB5393@ziepe.ca> <1567460118.10024.316.camel@linux.ibm.com>
+ <20190903055523.GA4500@ziepe.ca>
+ <bc9ab35e-997c-b107-3073-d5150de063d0@intel.com>
+From:   Jordan Hand <jorhand@linux.microsoft.com>
+Message-ID: <fe908209-3752-19b2-2652-79fb75f69e2b@linux.microsoft.com>
+Date:   Tue, 3 Sep 2019 15:40:40 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190903165346.hwqlrin77cmzjiti@cantor>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <bc9ab35e-997c-b107-3073-d5150de063d0@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 09:53:46AM -0700, Jerry Snitselaar wrote:
->On Tue Sep 03 19, Doug Anderson wrote:
->>Hi,
+
+On 9/3/19 9:23 AM, Tadeusz Struk wrote:
+> On 9/2/19 10:55 PM, Jason Gunthorpe wrote:
+>> On Mon, Sep 02, 2019 at 05:35:18PM -0400, Mimi Zohar wrote:
+>>> On Mon, 2019-09-02 at 16:26 -0300, Jason Gunthorpe wrote:
+>>>> On Fri, Aug 30, 2019 at 02:20:54PM -0700, Tadeusz Struk wrote:
+>>>>> On 8/28/19 9:15 AM, Jason Gunthorpe wrote:
+>>>>>>>> So exposing PCRs and things through sysfs is not going to happen.
+>>>>>>>>
+>>>>>>>> If you had some very narrowly defined things like version, then
+>>>>>>>> *maybe* but I think a well defined use case is needed for why this
+>>>>>>>> needs to be sysfs and can't be done in C as Jarkko explained.
+>>>>>>> Piotr's request for a sysfs file to differentiate between TPM 1.2 and
+>>>>>>> TPM 2.0 is a reasonable request and probably could be implemented on
+>>>>>>> TPM registration.
+>>>>>>>
+>>>>>>> If exposing the PCRs through sysfs is not acceptable, then perhaps
+>>>>>>> suggest an alternative.
+>>>>>> Use the char dev, this is exactly what is is for.
+>>>>>
+>>>>> What about a new /proc entry?
+>>>>> Currently there are /proc/cpuinfo, /proc/meminfo, /proc/slabinfo...
+>>>>> What about adding a new /proc/tpminfo that would print info like
+>>>>> version, number of enabled PCR banks, physical interface [tis|crb],
+>>>>> vendor, etc.
+>>>>
+>>>> I thought we were not really doing new proc entries?
+>>>>
+>>>> Why this focus on making some textual output?
+>>>
+>>> I don't really care if we define procfs, sysfs, or securityfs file(s)
+>>> or whether those files are ascii or binary.  Whatever is defined,
+>>> should be defined for both TPM 1.2 and TPM 2.0 (eg. TPM version).
 >>
->>On Tue, Sep 3, 2019 at 9:28 AM Sasha Levin <sashal@kernel.org> wrote:
->>>
->>>From: Vadim Sukhomlinov <sukhomlinov@google.com>
->>>
->>>[ Upstream commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 ]
->>>
->>>TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
->>>future TPM operations. TPM 1.2 behavior was different, future TPM
->>>operations weren't disabled, causing rare issues. This patch ensures
->>>that future TPM operations are disabled.
->>>
->>>Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
->>>Cc: stable@vger.kernel.org
->>>Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
->>>[dianders: resolved merge conflicts with mainline]
->>>Signed-off-by: Douglas Anderson <dianders@chromium.org>
->>>Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->>>Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->>>Signed-off-by: Sasha Levin <sashal@kernel.org>
->>>---
->>> drivers/char/tpm/tpm-chip.c | 5 +++--
->>> 1 file changed, 3 insertions(+), 2 deletions(-)
->>
->>Jarkko: did you deal with the issues that came up in response to my
->>post?  Are you happy with this going into 4.19 stable at this point?
->>I notice this has your Signed-off-by so maybe?
->>
+>> Use an ioctl on the char dev?
+> 
+> The advantage of /proc/tpminfo would be that it can be a first
+> entry point on a system, that would give general overview of the
+> system TPM configuration, without the need of poking /dev/tpm<N>
+> files, only to find out that the TPM doesn't understand the
+> command, because it implements different version of TCG spec.
+> It would be a single point of information in case of multiple TPMs.
+> It can have some predefined format that could be read by a human
+> as well as a machine, e.g.
+> 
+> tpm0:
+>    version: 2.0
+>    physical interface: CRB
+>    supported PCR banks: SHA1, SHA256
+>    ...
+>    vendor: <Vendor Name>
+>    vendor specific: <Vendor specific output>
 >
->I think that is just the signed-off-by chain coming from the upstream patch.
->Jarkko mentioned getting to the backports after Linux Plumbers, which is next week.
+To me it still feels trivial write an application to do this same thing
+in userspace with ioctls to the char device (figure out what interface
+the TPM is using, get basic capabilities, etc.). There isn't anything
+here that the kernel can do that can't be done from userspace that I can
+see. Is this not true? Maybe its less code in the kernel but I don't
+know that that's a great reason.
 
-Right. I gave a go at backporting a few patches and this happens to be
-one of them. It will be a while before it goes in a stable tree
-(probably way after after LPC).
+I don't see a clear advantage to putting the code in the kernel, but I
+do see disadvantages. Interfaces between kernel and userspace need to be
+more rigid to avoid breakage.
 
---
 Thanks,
-Sasha
+Jordan
