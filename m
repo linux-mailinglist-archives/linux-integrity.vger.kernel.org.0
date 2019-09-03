@@ -2,84 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C3CA6D56
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 17:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 269F3A6DA8
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 18:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729005AbfICPyw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Sep 2019 11:54:52 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:45092 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728679AbfICPyw (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Sep 2019 11:54:52 -0400
-Received: from [10.200.157.26] (unknown [131.107.147.154])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7249B20B7186;
-        Tue,  3 Sep 2019 08:54:51 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7249B20B7186
-Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>
-Cc:     jamorris@linux.microsoft.com, sashal@kernel.org,
-        kgoldman@us.ibm.com,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20190828002735.31025-1-nramas@linux.microsoft.com>
- <1567041083.6115.133.camel@linux.ibm.com>
- <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>
- <1567190507.10024.134.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <2cd27f52-1029-bcea-c73b-7d3d002cf030@linux.microsoft.com>
-Date:   Tue, 3 Sep 2019 08:54:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729109AbfICQK4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Sep 2019 12:10:56 -0400
+Received: from mga11.intel.com ([192.55.52.93]:60358 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728679AbfICQK4 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 3 Sep 2019 12:10:56 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Sep 2019 09:10:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,463,1559545200"; 
+   d="scan'208";a="184803149"
+Received: from vkuppusa-mobl2.ger.corp.intel.com ([10.252.39.67])
+  by orsmga003.jf.intel.com with ESMTP; 03 Sep 2019 09:10:51 -0700
+Message-ID: <f73c8da9fe417eb07137baac9c96dc0e0b6f63a3.camel@linux.intel.com>
+Subject: Re: [PATCH 2/2] tpm: tpm_crb: enhance resource mapping mechanism
+ for supporting AMD's fTPM
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Seunghun Han <kkamagui@gmail.com>
+Cc:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Tue, 03 Sep 2019 19:10:50 +0300
+In-Reply-To: <CAHjaAcR4H6CnHxzR3NHLpMCgdafVHYuKCp4qxUd8b+K0SN34BQ@mail.gmail.com>
+References: <20190830095639.4562-1-kkamagui@gmail.com>
+         <20190830095639.4562-3-kkamagui@gmail.com>
+         <20190830124334.GA10004@ziepe.ca>
+         <CAHjaAcQ0MrPCZUit7s0Rmqpwpp0w5jiYjNUNEEm2yc1AejZ3ng@mail.gmail.com>
+         <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CC59@ALPMBAPA12.e2k.ad.ge.com>
+         <CAHjaAcQu3jOSj0QV3u4GSgnhpkTmJTMqckY_cnuzeTY-HNUWcA@mail.gmail.com>
+         <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CD06@ALPMBAPA12.e2k.ad.ge.com>
+         <20190902135348.3pndbtbi6hpgjpjn@linux.intel.com>
+         <CAHjaAcR4H6CnHxzR3NHLpMCgdafVHYuKCp4qxUd8b+K0SN34BQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.2-1 
 MIME-Version: 1.0
-In-Reply-To: <1567190507.10024.134.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 8/30/19 11:41 AM, Mimi Zohar wrote:
+On Tue, 2019-09-03 at 07:42 +0900, Seunghun Han wrote:
+> I have a question. Do you think this patch is not enough to handle
+> AMD's fTPM problem? If so, would you tell me about it? I will change
+> my patch.
 
-> No, the measurement list ima-sig template record contains both the
-> file hash and signature.  There's no need to maintain a white list of
-> either the file hashes or signed hashes.  All that is needed is the
-> set of permitted public keys (eg. keys on the trusted IMA keyring).
+I have no new feedback to give at this point and no absolutely time to
+brainstorm new ideas.
 
-You are right - Thanks for the info.
+You've now sent the same patch set version twice. The one that was
+sent 8-30 has the same patch version and no change log so no action
+taken from my part.
 
-> Even though on the local system, files signed by the system owner
-> would be permitted, the attestation server would be able to control
-> access to whatever service.  For example, Trusted Network Connect
-> (TNC) could control network access.  By measuring the keys on the
-> builtin/secondary keyrings, that control is not based on who signed
-> the software package, but based on who signed the certificate of the
-> key that signed the software package.  My concern is how this level of
-> indirection could be abused.
-Since the signer of certificate of the key that signed the software 
-package changes much less frequently compared to the certificate of the 
-key used to sign the software package, the operational overhead on the 
-server side is significantly reduced.
+Please version your patch sets and keep the change log in the cover
+letter.
 
-I understand there is another level of indirection here. But I am also 
-not clear how this can be abused.
-
-> All of this would still be true, if you measured the keys on the
-> trusted IMA keyring, but without the level of indirection described
-> above.  Depending on your use case scenario, the problem with this
-> approach is maintaining a list of all the certificates that have been
-> signed by keys on the builtin, and if enabled, the secondary keyrings.
-
-Yes - that is the issue we are trying to avoid. Especially since the 
-list of signing certificates can grow faster than the signer of those 
-certificates (that are present in the builtin/secondary keyrings)
-
-> In the last LSS-NA BoF, Monty suggested, for a different use case, one
-> that needs to seal keys, measuring keys and extending a separate PCR.
-Thanks for the info. I will gather more information on this one.
-
-  -lakshmi
+/Jarkko
 
