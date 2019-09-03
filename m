@@ -2,158 +2,197 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5955EA6E01
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 18:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC24A6E98
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 18:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729865AbfICQXZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Sep 2019 12:23:25 -0400
-Received: from mga12.intel.com ([192.55.52.136]:58902 "EHLO mga12.intel.com"
+        id S1730377AbfICQ1O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Sep 2019 12:27:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48486 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729692AbfICQXZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Sep 2019 12:23:25 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Sep 2019 09:23:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,463,1559545200"; 
-   d="scan'208";a="207142019"
-Received: from tstruk-mobl1.jf.intel.com ([10.24.8.137])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Sep 2019 09:23:24 -0700
-Subject: Re: TPM 2.0 Linux sysfs interface
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Mimi Zohar <zohar@linux.ibm.com>
-Cc:     =?UTF-8?Q?Piotr_Kr=c3=b3l?= <piotr.krol@3mdeb.com>,
+        id S1730805AbfICQ1N (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 3 Sep 2019 12:27:13 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 75CEF2343A;
+        Tue,  3 Sep 2019 16:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567528032;
+        bh=a4NmxbwiPEzexKJXfsdWriqzulb6iQVx+mR6f8AREG8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=amJphO+y+O0su+lBntdi/Uqirixrhz2Rgd7b2ngzimJEr0ZStQfFp1iWOln97ab/a
+         7YFZQ/RHb+u1jGIWF6MGfr/T3jrl/So+9gBfXRI0FELHFL8pgYU2HY2WbWsn3tLlqC
+         3gMA/dRmM2rpG3pdz9TV+lm5OEa2E1rrYKP4dn+8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>,
         linux-integrity@vger.kernel.org
-References: <3329329f-4bf4-b8cd-dee8-eb36e513c728@3mdeb.com>
- <20190827010559.GA31752@ziepe.ca> <1567007592.6115.58.camel@linux.ibm.com>
- <20190828161502.GC933@ziepe.ca>
- <f7e1f25a-8b2d-1e0e-e784-0908161c3c99@intel.com>
- <20190902192632.GB5393@ziepe.ca> <1567460118.10024.316.camel@linux.ibm.com>
- <20190903055523.GA4500@ziepe.ca>
-From:   Tadeusz Struk <tadeusz.struk@intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=tadeusz.struk@intel.com; prefer-encrypt=mutual; keydata=
- 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
- FheFfUJaD4iEjuL98uUjS/AI
-Message-ID: <bc9ab35e-997c-b107-3073-d5150de063d0@intel.com>
-Date:   Tue, 3 Sep 2019 09:23:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+Subject: [PATCH AUTOSEL 4.19 062/167] tpm: Fix some name collisions with drivers/char/tpm.h
+Date:   Tue,  3 Sep 2019 12:23:34 -0400
+Message-Id: <20190903162519.7136-62-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190903162519.7136-1-sashal@kernel.org>
+References: <20190903162519.7136-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190903055523.GA4500@ziepe.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 9/2/19 10:55 PM, Jason Gunthorpe wrote:
-> On Mon, Sep 02, 2019 at 05:35:18PM -0400, Mimi Zohar wrote:
->> On Mon, 2019-09-02 at 16:26 -0300, Jason Gunthorpe wrote:
->>> On Fri, Aug 30, 2019 at 02:20:54PM -0700, Tadeusz Struk wrote:
->>>> On 8/28/19 9:15 AM, Jason Gunthorpe wrote:
->>>>>>> So exposing PCRs and things through sysfs is not going to happen.
->>>>>>>
->>>>>>> If you had some very narrowly defined things like version, then
->>>>>>> *maybe* but I think a well defined use case is needed for why this
->>>>>>> needs to be sysfs and can't be done in C as Jarkko explained.
->>>>>> Piotr's request for a sysfs file to differentiate between TPM 1.2 and
->>>>>> TPM 2.0 is a reasonable request and probably could be implemented on
->>>>>> TPM registration.
->>>>>>
->>>>>> If exposing the PCRs through sysfs is not acceptable, then perhaps
->>>>>> suggest an alternative.
->>>>> Use the char dev, this is exactly what is is for.
->>>>
->>>> What about a new /proc entry?
->>>> Currently there are /proc/cpuinfo, /proc/meminfo, /proc/slabinfo...
->>>> What about adding a new /proc/tpminfo that would print info like
->>>> version, number of enabled PCR banks, physical interface [tis|crb],
->>>> vendor, etc.
->>>
->>> I thought we were not really doing new proc entries?
->>>
->>> Why this focus on making some textual output?
->>
->> I don't really care if we define procfs, sysfs, or securityfs file(s)
->> or whether those files are ascii or binary.  Whatever is defined,
->> should be defined for both TPM 1.2 and TPM 2.0 (eg. TPM version).
-> 
-> Use an ioctl on the char dev?
+From: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-The advantage of /proc/tpminfo would be that it can be a first
-entry point on a system, that would give general overview of the
-system TPM configuration, without the need of poking /dev/tpm<N>
-files, only to find out that the TPM doesn't understand the
-command, because it implements different version of TCG spec.
-It would be a single point of information in case of multiple TPMs.
-It can have some predefined format that could be read by a human
-as well as a machine, e.g.
+[ Upstream commit 8ab547a2dcfac6ec184a5e036e1093eb3f7a215c ]
 
-tpm0:
-   version: 2.0
-   physical interface: CRB
-   supported PCR banks: SHA1, SHA256
-   ...
-   vendor: <Vendor Name>
-   vendor specific: <Vendor specific output>
+* Rename TPM_BUFSIZE defined in drivers/char/tpm/st33zp24/st33zp24.h to
+  ST33ZP24_BUFSIZE.
+* Rename TPM_BUFSIZE defined in drivers/char/tpm/tpm_i2c_infineon.c to
+  TPM_I2C_INFINEON_BUFSIZE.
+* Rename TPM_RETRY in tpm_i2c_nuvoton to TPM_I2C_RETRIES.
+* Remove TPM_HEADER_SIZE from tpm_i2c_nuvoton.
 
+Cc: stable@vger.kernel.org
+Fixes: bf38b8710892 ("tpm/tpm_i2c_stm_st33: Split tpm_i2c_tpm_st33 in 2 layers (core + phy)")
+Fixes: aad628c1d91a ("char/tpm: Add new driver for Infineon I2C TIS TPM")
+Fixes: 32d33b29ba07 ("TPM: Retry SaveState command in suspend path")
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/char/tpm/st33zp24/i2c.c      |  2 +-
+ drivers/char/tpm/st33zp24/spi.c      |  2 +-
+ drivers/char/tpm/st33zp24/st33zp24.h |  4 ++--
+ drivers/char/tpm/tpm_i2c_infineon.c  | 15 ++++++++-------
+ drivers/char/tpm/tpm_i2c_nuvoton.c   | 16 +++++++---------
+ 5 files changed, 19 insertions(+), 20 deletions(-)
 
-Thanks,
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index be5d1abd3e8ef..8390c5b54c3be 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -33,7 +33,7 @@
+ 
+ struct st33zp24_i2c_phy {
+ 	struct i2c_client *client;
+-	u8 buf[TPM_BUFSIZE + 1];
++	u8 buf[ST33ZP24_BUFSIZE + 1];
+ 	int io_lpcpd;
+ };
+ 
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index d7909ab287a85..ff019a1e3c68f 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -63,7 +63,7 @@
+  * some latency byte before the answer is available (max 15).
+  * We have 2048 + 1024 + 15.
+  */
+-#define ST33ZP24_SPI_BUFFER_SIZE (TPM_BUFSIZE + (TPM_BUFSIZE / 2) +\
++#define ST33ZP24_SPI_BUFFER_SIZE (ST33ZP24_BUFSIZE + (ST33ZP24_BUFSIZE / 2) +\
+ 				  MAX_SPI_LATENCY)
+ 
+ 
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.h b/drivers/char/tpm/st33zp24/st33zp24.h
+index 6f4a4198af6aa..20da0a84988d6 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.h
++++ b/drivers/char/tpm/st33zp24/st33zp24.h
+@@ -18,8 +18,8 @@
+ #ifndef __LOCAL_ST33ZP24_H__
+ #define __LOCAL_ST33ZP24_H__
+ 
+-#define TPM_WRITE_DIRECTION             0x80
+-#define TPM_BUFSIZE                     2048
++#define TPM_WRITE_DIRECTION	0x80
++#define ST33ZP24_BUFSIZE	2048
+ 
+ struct st33zp24_dev {
+ 	struct tpm_chip *chip;
+diff --git a/drivers/char/tpm/tpm_i2c_infineon.c b/drivers/char/tpm/tpm_i2c_infineon.c
+index 977fd42daa1b1..3b4e9672ff6cd 100644
+--- a/drivers/char/tpm/tpm_i2c_infineon.c
++++ b/drivers/char/tpm/tpm_i2c_infineon.c
+@@ -26,8 +26,7 @@
+ #include <linux/wait.h>
+ #include "tpm.h"
+ 
+-/* max. buffer size supported by our TPM */
+-#define TPM_BUFSIZE 1260
++#define TPM_I2C_INFINEON_BUFSIZE 1260
+ 
+ /* max. number of iterations after I2C NAK */
+ #define MAX_COUNT 3
+@@ -63,11 +62,13 @@ enum i2c_chip_type {
+ 	UNKNOWN,
+ };
+ 
+-/* Structure to store I2C TPM specific stuff */
+ struct tpm_inf_dev {
+ 	struct i2c_client *client;
+ 	int locality;
+-	u8 buf[TPM_BUFSIZE + sizeof(u8)]; /* max. buffer size + addr */
++	/* In addition to the data itself, the buffer must fit the 7-bit I2C
++	 * address and the direction bit.
++	 */
++	u8 buf[TPM_I2C_INFINEON_BUFSIZE + 1];
+ 	struct tpm_chip *chip;
+ 	enum i2c_chip_type chip_type;
+ 	unsigned int adapterlimit;
+@@ -219,7 +220,7 @@ static int iic_tpm_write_generic(u8 addr, u8 *buffer, size_t len,
+ 		.buf = tpm_dev.buf
+ 	};
+ 
+-	if (len > TPM_BUFSIZE)
++	if (len > TPM_I2C_INFINEON_BUFSIZE)
+ 		return -EINVAL;
+ 
+ 	if (!tpm_dev.client->adapter->algo->master_xfer)
+@@ -527,8 +528,8 @@ static int tpm_tis_i2c_send(struct tpm_chip *chip, u8 *buf, size_t len)
+ 	u8 retries = 0;
+ 	u8 sts = TPM_STS_GO;
+ 
+-	if (len > TPM_BUFSIZE)
+-		return -E2BIG;	/* command is too long for our tpm, sorry */
++	if (len > TPM_I2C_INFINEON_BUFSIZE)
++		return -E2BIG;
+ 
+ 	if (request_locality(chip, 0) < 0)
+ 		return -EBUSY;
+diff --git a/drivers/char/tpm/tpm_i2c_nuvoton.c b/drivers/char/tpm/tpm_i2c_nuvoton.c
+index b8defdfdf2dc6..2803080097841 100644
+--- a/drivers/char/tpm/tpm_i2c_nuvoton.c
++++ b/drivers/char/tpm/tpm_i2c_nuvoton.c
+@@ -35,14 +35,12 @@
+ #include "tpm.h"
+ 
+ /* I2C interface offsets */
+-#define TPM_STS                0x00
+-#define TPM_BURST_COUNT        0x01
+-#define TPM_DATA_FIFO_W        0x20
+-#define TPM_DATA_FIFO_R        0x40
+-#define TPM_VID_DID_RID        0x60
+-/* TPM command header size */
+-#define TPM_HEADER_SIZE        10
+-#define TPM_RETRY      5
++#define TPM_STS			0x00
++#define TPM_BURST_COUNT		0x01
++#define TPM_DATA_FIFO_W		0x20
++#define TPM_DATA_FIFO_R		0x40
++#define TPM_VID_DID_RID		0x60
++#define TPM_I2C_RETRIES		5
+ /*
+  * I2C bus device maximum buffer size w/o counting I2C address or command
+  * i.e. max size required for I2C write is 34 = addr, command, 32 bytes data
+@@ -292,7 +290,7 @@ static int i2c_nuvoton_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ 		dev_err(dev, "%s() count < header size\n", __func__);
+ 		return -EIO;
+ 	}
+-	for (retries = 0; retries < TPM_RETRY; retries++) {
++	for (retries = 0; retries < TPM_I2C_RETRIES; retries++) {
+ 		if (retries > 0) {
+ 			/* if this is not the first trial, set responseRetry */
+ 			i2c_nuvoton_write_status(client,
 -- 
-Tadeusz
+2.20.1
+
