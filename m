@@ -2,103 +2,192 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD4AA7260
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 20:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F0BA7283
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 20:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727069AbfICSPD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Sep 2019 14:15:03 -0400
-Received: from mail-yw1-f66.google.com ([209.85.161.66]:32948 "EHLO
-        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727352AbfICSPD (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Sep 2019 14:15:03 -0400
-Received: by mail-yw1-f66.google.com with SMTP id e65so6154176ywh.0;
-        Tue, 03 Sep 2019 11:15:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fXkAkHucmqjgRur+IjQhyi5kKT37YWuWTzD3VpWtsg0=;
-        b=ntv7CEaollKFU9wsGZi+urn8zpOjY8CZrCGX9uanU9rEkUUwtoG2BQKLAK4j1JP31E
-         mdAOGt7iwUcrZFg0chBC92R/1SxbUnu3D5LM/lSWidgtI3+jzUkg7qUbKq9A1FYQsL87
-         jolqCgEbdAjycGAxGkfudyhK36bxCTFhbAaTL/y1zJSRQWu2gJ82rLSCp6OFDDovL62y
-         mmopsdkjOUsLZqJ4BRQpHvitszF5ZpPn9a5Ir/XLS6LpB+nCi3iMo3rthv/EkBgG8zLW
-         0TrqloJ1w2W/HGRBbXst7/kckF8TRQmcHaqxhUtGGsIKfK0iy9YRoMT99XNzZYi159Kp
-         MVJw==
+        id S1727364AbfICS1u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Sep 2019 14:27:50 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:54618 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727352AbfICS1u (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 3 Sep 2019 14:27:50 -0400
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 51C5736887
+        for <linux-integrity@vger.kernel.org>; Tue,  3 Sep 2019 18:27:49 +0000 (UTC)
+Received: by mail-qk1-f198.google.com with SMTP id t6so11457962qkm.7
+        for <linux-integrity@vger.kernel.org>; Tue, 03 Sep 2019 11:27:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fXkAkHucmqjgRur+IjQhyi5kKT37YWuWTzD3VpWtsg0=;
-        b=QiwMPgxkx56aWfvgSpvWmBjTor/0kNHzXKGKtEVuK2cVSN4K44VoiUWUEl435kuQkQ
-         9/j695MjjQZ9u4RnaHCsLV5w6HuLVt2Z6pPs2egj5RhVaJR3uNC7ucTonwOMNSRL/1BR
-         YteX5G3snVrhpfkV8VgX2YdxpuW+olgv61PLumqcDfmo+tPq4mlywFBu4wILeyMrXEQs
-         0bzatt6aagwmSql1TMeAY/NJGUM+MBwLd25b25YhmTdo5jcLT0BYWupjot8ndkJyczi3
-         urrGO3PgaaWS8ygzHx+5gh7WthRBmhFUfwLmqQWB5uq0k3okWsVWpW6p5UYJw0a6vYSL
-         iRhA==
-X-Gm-Message-State: APjAAAUSsqKPIPELuv2FnlyiayW2Jazo8plWTfkKQpVRbWXVa5s8hbL0
-        bQCLEX6saL7nInd9M5bfps/qP7nQ4pkIpdLPMaE=
-X-Google-Smtp-Source: APXvYqzUteMvbu/JD+RSQQW5D8Phtl/I5oQ+l/SfFU9QA9W63S8MlbNMxGvgLrr0HNBCbU2A7ewkAz85UTDHn8mvceY=
-X-Received: by 2002:a0d:df13:: with SMTP id i19mr26242555ywe.264.1567534502345;
- Tue, 03 Sep 2019 11:15:02 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=07Nosu99Mp1zqKp4ye8H9IkjaI2ZBjCJN3UDTKMkL/I=;
+        b=nTVcGIv+L0n3zu6SxX0LlZp8gwOy6MPk318rIQmijAZJm8Nw2dbdGe/MF4JxW6tuzM
+         VTiEemBOnQtDDGdiyQtT3nfFPM09hi4aInVDrAHpaoW0OEJgn/F51gcCipNm75nm95zr
+         RQjRxTQcXL2wVPIvE2eyD4TqdAAQYqUwkE/2MyRoJ7jjfV0eL9HMxQEB6aMqvNXPAkf4
+         lqOCegvz7B2W3jdO1rW4O/bGhB1E6wAimrt+6t6J/x1W3Hw8fH1/JV58XzY2GHopDxXe
+         XwQSjxJSPThFkGdn1lFCSuGuyHkSoAlvh9UreBCV5SHORoHlnuQpxyyuZd9ik0Uq9sqU
+         +fug==
+X-Gm-Message-State: APjAAAUHcBCrfdVgnE/QJaWROQeiKr9vxkxH9NJkrqAvxtc9viIiU5ww
+        5OgAO8UNovKKUeUHmUb9SoBYHhFN82gq5EoLzQN+Mjus9jFMfBudkVfomUxRd4m4633J4UzC0VU
+        pXuCPAayM2veJJS2biJlEAYMdh7Up
+X-Received: by 2002:aed:27c1:: with SMTP id m1mr15498668qtg.197.1567535268663;
+        Tue, 03 Sep 2019 11:27:48 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqztOEl0H8g/hPHQCmeKx+cH2srAaosbtrUNr/jReZ5cxMrICdEyZyhC5Lxe2bZk0gPYyqchpw==
+X-Received: by 2002:aed:27c1:: with SMTP id m1mr15498636qtg.197.1567535268421;
+        Tue, 03 Sep 2019 11:27:48 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id c26sm10902892qtk.93.2019.09.03.11.27.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Sep 2019 11:27:47 -0700 (PDT)
+Date:   Tue, 3 Sep 2019 11:27:42 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jordan Hand <jorhand@linux.microsoft.com>
+Cc:     jarkko.sakkinen@linux.intel.com, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] tpm: Parse event log from TPM2 ACPI table
+Message-ID: <20190903182742.rmqthgu6rms3uill@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+Mail-Followup-To: Jordan Hand <jorhand@linux.microsoft.com>,
+        jarkko.sakkinen@linux.intel.com, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190831051027.11544-1-jorhand@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20190830095639.4562-1-kkamagui@gmail.com> <20190830095639.4562-3-kkamagui@gmail.com>
- <20190830124334.GA10004@ziepe.ca> <CAHjaAcQ0MrPCZUit7s0Rmqpwpp0w5jiYjNUNEEm2yc1AejZ3ng@mail.gmail.com>
- <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CC59@ALPMBAPA12.e2k.ad.ge.com>
- <CAHjaAcQu3jOSj0QV3u4GSgnhpkTmJTMqckY_cnuzeTY-HNUWcA@mail.gmail.com>
- <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CD06@ALPMBAPA12.e2k.ad.ge.com>
- <CAHjaAcRPg9-9MXiLH7AfJO6P1k25CSwJrSiuUwzFLwN5Ynr0DQ@mail.gmail.com> <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CF04@ALPMBAPA12.e2k.ad.ge.com>
-In-Reply-To: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CF04@ALPMBAPA12.e2k.ad.ge.com>
-From:   Seunghun Han <kkamagui@gmail.com>
-Date:   Wed, 4 Sep 2019 03:14:48 +0900
-Message-ID: <CAHjaAcQ9+w_iQfSeGr+TgELN5w8+iAjix22q7SpPjKvyh_W_uA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tpm: tpm_crb: enhance resource mapping mechanism for
- supporting AMD's fTPM
-To:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Matthew Garrett <mjg59@google.com>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20190831051027.11544-1-jorhand@linux.microsoft.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> I tried your patch out on my systems with a "reserved" but not "NVS"
-> region conflict, and you are correct - the region is not busy, and
-> the driver is able to map the buffers with your patch.
+On Fri Aug 30 19, Jordan Hand wrote:
+>For systems with a TPM2 chip which use ACPI to expose event logs, retrieve the
+>crypto-agile event log from the TPM2 ACPI table. The TPM2 table is defined
+>in section 7.3 of the TCG ACPI Specification (see link).
 >
-> > First of all, I misunderstood your message.
-> > I have to tell you about the buffer size exactly. The command and response
-> > buffer sizes in ACPI table were 0x1000 and this was 4K, not 1K. The sizes in
-> > the control register were 0x4000 and this was 16K (large buffer size), not 4K.
-> > I have been using the TPM for my research and the typical cases like creating
-> > public/private keys, encrypting/decrypting data, sealing/unsealing a secrete,
-> > and getting random numbers are not over 4K buffer. So, as you know, I think
-> > the 4K buffer can handle the most cases and the current implementation of
-> > crb_fixup_cmd_size() works well. If you concern the specific case that uses
-> > over 4K buffer, please let me know.
+>The TPM2 table is used by SeaBIOS in place of the TCPA table when the system's
+>TPM is version 2.0 to denote (among other metadata) the location of the
+>crypto-agile log.
 >
-> I have read postings of some systems where ACPI says 1K, but in all of my cases
-> that I can test,  you are correct that ACPI is saying 4K instead of the device's 16K.
-> I tried really hard, but couldn't send any valid requests over 4K, (I believe that's
-> actually the max by the spec), and therefore never saw any failures on my
-> systems. I think the driver behavior is wrong for those other cases, but perhaps
-> this should wait until someone can get access and do the testing.
+>Link: https://trustedcomputinggroup.org/resource/tcg-acpi-specification/
+>Signed-off-by: Jordan Hand <jorhand@linux.microsoft.com>
+>---
+> drivers/char/tpm/eventlog/acpi.c | 60 ++++++++++++++++++++++----------
+> 1 file changed, 41 insertions(+), 19 deletions(-)
 >
-> So I'm happy with your patches, other than what is decided for the nvs driver
-> conflict. I'm testing them on some production systems, and have seen no other
-> issues.
+>diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+>index 63ada5e53f13..38a8bcec1dd5 100644
+>--- a/drivers/char/tpm/eventlog/acpi.c
+>+++ b/drivers/char/tpm/eventlog/acpi.c
+>@@ -41,17 +41,23 @@ struct acpi_tcpa {
+> 	};
+> };
 >
-> dave
+>+/* If an event log is present, the TPM2 ACPI table will contain the full
+>+ * trailer
+>+ */
+>+
+> /* read binary bios log */
+> int tpm_read_log_acpi(struct tpm_chip *chip)
+> {
+>-	struct acpi_tcpa *buff;
+>+	struct acpi_table_header *buff;
+>+	struct acpi_tcpa *tcpa;
+>+	struct acpi_tpm2_trailer *tpm2_trailer;
+> 	acpi_status status;
+> 	void __iomem *virt;
+> 	u64 len, start;
+>+	int log_type;
+> 	struct tpm_bios_log *log;
+>-
+>-	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+>-		return -ENODEV;
+>+	bool is_tpm2 = chip->flags & TPM_CHIP_FLAG_TPM2;
+>+	acpi_string table_sig;
+>
+> 	log = &chip->log;
+>
+>@@ -61,26 +67,42 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+> 	if (!chip->acpi_dev_handle)
+> 		return -ENODEV;
+>
+>-	/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
+>-	status = acpi_get_table(ACPI_SIG_TCPA, 1,
+>-				(struct acpi_table_header **)&buff);
+>+	/* Find TCPA or TPM2 entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
+>+	table_sig = is_tpm2 ? ACPI_SIG_TPM2 : ACPI_SIG_TCPA;
+>+	status = acpi_get_table(table_sig, 1, &buff);
+>
+> 	if (ACPI_FAILURE(status))
+> 		return -ENODEV;
+>
+>-	switch(buff->platform_class) {
+>-	case BIOS_SERVER:
+>-		len = buff->server.log_max_len;
+>-		start = buff->server.log_start_addr;
+>-		break;
+>-	case BIOS_CLIENT:
+>-	default:
+>-		len = buff->client.log_max_len;
+>-		start = buff->client.log_start_addr;
+>-		break;
+>+	if (!is_tpm2) {
+>+		tcpa = (struct acpi_tcpa *)buff;
+>+		switch (tcpa->platform_class) {
+>+		case BIOS_SERVER:
+>+			len = tcpa->server.log_max_len;
+>+			start = tcpa->server.log_start_addr;
+>+			break;
+>+		case BIOS_CLIENT:
+>+		default:
+>+			len = tcpa->client.log_max_len;
+>+			start = tcpa->client.log_start_addr;
+>+			break;
+>+		}
+>+		log_type = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
+>+	} else if (buff->length ==
+>+		   sizeof(struct acpi_table_tpm2) +
+>+		   sizeof(struct acpi_tpm2_trailer)) {
+>+		tpm2_trailer = (struct acpi_tpm2_trailer *)buff;
+>+
+>+		len = tpm2_trailer.minimum_log_length;
+>+		start = tpm2_trailer.log_address;
 
-Thank you for your help and testing. I would like to make patch v2 to
-change the point that kbuild robot told me.
-If you don't mind, may I add "tested-by" tag to patch v2 with your
-name and email address?
+Are your builds not failing here? Both v3 and v4 have this.
 
-Seunghun
+>+		log_type = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
+>+	} else {
+>+		return -ENODEV;
+> 	}
+>+
+> 	if (!len) {
+>-		dev_warn(&chip->dev, "%s: TCPA log area empty\n", __func__);
+>+		dev_warn(&chip->dev, "%s: %s log area empty\n",
+>+			 __func__, table_sig);
+> 		return -EIO;
+> 	}
+>
+>@@ -98,7 +120,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+> 	memcpy_fromio(log->bios_event_log, virt, len);
+>
+> 	acpi_os_unmap_iomem(virt, len);
+>-	return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
+>+	return log_type;
+>
+> err:
+> 	kfree(log->bios_event_log);
+>-- 
+>2.20.1
+>
