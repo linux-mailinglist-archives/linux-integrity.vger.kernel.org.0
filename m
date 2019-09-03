@@ -2,54 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7B2A6621
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 11:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF956A662A
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Sep 2019 11:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728146AbfICJ4O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Sep 2019 05:56:14 -0400
-Received: from mail-yb1-f194.google.com ([209.85.219.194]:38084 "EHLO
-        mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726631AbfICJ4O (ORCPT
+        id S1726840AbfICJ7i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Sep 2019 05:59:38 -0400
+Received: from mail-yw1-f66.google.com ([209.85.161.66]:34107 "EHLO
+        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726631AbfICJ7h (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Sep 2019 05:56:14 -0400
-Received: by mail-yb1-f194.google.com with SMTP id o18so1859552ybp.5;
-        Tue, 03 Sep 2019 02:56:13 -0700 (PDT)
+        Tue, 3 Sep 2019 05:59:37 -0400
+Received: by mail-yw1-f66.google.com with SMTP id n126so5590168ywf.1;
+        Tue, 03 Sep 2019 02:59:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
         bh=U6GJPfaZ/qFHUB6hWCAnPc1AvXnKbZ0hV6EedVYWQIY=;
-        b=SdkFd8WZcvMd90zX32FwiU1AJDKsjPVsfeJfG8yDsMxQkDjh4X+/P4a9mgx8jLPYm7
-         tqr/I+3jawSWKKPRuZLhP1v0JFx8i6OvwPjK+o7xBAdSkHPXXHS5nBzUlYLYvmCuJ8D+
-         U9UCvOyr/wFExt+6qDZdLFhAgBd8pZQ2FF5bqLxesKAVaLW2gYUY0iaHkptE95OHAKaY
-         fMEz5IzyK/OPC0C2q+uP4XEj22oOo2AwfsllcKjGy9pd1Apln1Pn7qaTxqjshhoHWQpQ
-         xwpeXlfg6UlqfG0ecH/vt/aS2ZBsXM8ORhRnmqGriVXW+aZOzD1qr+hpmvTC0bjufM3i
-         493g==
+        b=n6Wbb2T3OrHkOEgq1uG8OOlWUlKZxqrTTzNvvhQAaV19eOgKK9UnG8PAeWSuG3eUbM
+         0uuahhp2XIVotI1WRCbiSh26qBrQTMvWx70uI1ryExcLni++qJvC216PDP21PnZ5iMXo
+         UvCt3vGgjM0C+tmNo0IH2F+XBvRWDCCru6p0vgk68ZEzn4IKRfRsOuJwb3zy9+B9f3Bk
+         mkhr6mn878OUdqx9h2fdFMIX7tPczzHIpQCrnMVY4cB6WPPAefMSSEgX3nmpc52EYXkh
+         /E8JOXkoFSfUrX/zCu3KTbZ1X2Nn5c6eHmR+WhD6wXpY5XUc7jlao2ysd685fO/3c+Ei
+         ekhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=U6GJPfaZ/qFHUB6hWCAnPc1AvXnKbZ0hV6EedVYWQIY=;
-        b=jD9vnT8nEgtKev+BMYQ4rs4yryZiu0F5whgS7msbs3gl4Wd4FjFFEKE6XQdFgvV0QF
-         +iEXV6Mc3l6An9aC/hog4KHZD6TUwIP+wf5KQ0mL+QHJoZBip1bs2e22ky8zy9pMJ8b2
-         12m/1jJ38ojn/i1KuKLOgwQGwt/gm75zLUGO4rGanjAi9gMsZG7woVjM/zz1gpcCTZfb
-         nmsSVZ6N1IdFApVDkXI1evrbBI4D8CBTSth40ADzky5z6SP6B8ax77FMrIiy9ZJ4tfvA
-         CxqUYBRJ9nCvn+4xBl92tpLGjb236vvx+L2OJ8zYgxt4lhriH6yscf+drt87esyrOd5V
-         WrTA==
-X-Gm-Message-State: APjAAAVUJmPn5oOGJriQ9RZc2q7Y1bMGBiJmGBzYKSWOPQQ1/1pmvVwn
-        uKr99vWHjJKHmRvfGOAuxoCtkaD+pEmP4LzGIRs=
-X-Google-Smtp-Source: APXvYqzxDtY3fftQpmBqZf+CXx0ofVeeMvxNZmBc0kaKtgYBToKQsAN+ObyfzO3NHqmQX32G5TAvIubt/p2nO6EITaE=
-X-Received: by 2002:a25:d490:: with SMTP id m138mr23326748ybf.341.1567504573275;
- Tue, 03 Sep 2019 02:56:13 -0700 (PDT)
+        b=dnn3pur/aa4pOLmcfrukAZiBf6rt+9gHXJuYOBEV4IYiDBey3ObNFcQ2tFDtrwuR95
+         9pM1K/t6HPylein62WRuS25RnjUVY2CXgg+3ThuptMA+w2YmEIdXekKoJb8E0Kflb9oe
+         CF5rSflLvTzJg/Oveoa0XFWAVz/MXIekL1IxyQAqr3PVUykPPiZ4PlVDgyb8BJdnyYNN
+         rt2C8jRLOnf0WR8KH6SV3Oieij2+LBMuwEwMMsStbu5aTz3q6lrpu4f5U+fYhRv+pEeS
+         VWRJiFm2fAbFXQZrdF3qsmfz6m4AFat8KVVBDOJw8kgwiy61NGNzOEhJ5cUH4W2zK+XR
+         mbmA==
+X-Gm-Message-State: APjAAAX3OwrszErphVQpn5/yxCuE6GwebVMu+WyuQ93YplpS6m4KuGYL
+        aFldBmwkNcOssGuA4OFx3RVClUJTCRjHcikVAUo=
+X-Google-Smtp-Source: APXvYqwzrafoKUXBaLnc2t75LcAVLHZwei0kNqZcFQbKY0COGotVWTmsOurD2E7nOR2WtZyCFLryEthGjUsfiAarOHo=
+X-Received: by 2002:a81:c1:: with SMTP id 184mr15436891ywa.175.1567504776447;
+ Tue, 03 Sep 2019 02:59:36 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190830095639.4562-1-kkamagui@gmail.com> <20190830095639.4562-3-kkamagui@gmail.com>
  <20190830124334.GA10004@ziepe.ca> <CAHjaAcQ0MrPCZUit7s0Rmqpwpp0w5jiYjNUNEEm2yc1AejZ3ng@mail.gmail.com>
  <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CC59@ALPMBAPA12.e2k.ad.ge.com>
- <CAHjaAcQu3jOSj0QV3u4GSgnhpkTmJTMqckY_cnuzeTY-HNUWcA@mail.gmail.com> <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CD06@ALPMBAPA12.e2k.ad.ge.com>
-In-Reply-To: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CD06@ALPMBAPA12.e2k.ad.ge.com>
+ <CAHjaAcQu3jOSj0QV3u4GSgnhpkTmJTMqckY_cnuzeTY-HNUWcA@mail.gmail.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F1CD06@ALPMBAPA12.e2k.ad.ge.com> <CAHjaAcRPg9-9MXiLH7AfJO6P1k25CSwJrSiuUwzFLwN5Ynr0DQ@mail.gmail.com>
+In-Reply-To: <CAHjaAcRPg9-9MXiLH7AfJO6P1k25CSwJrSiuUwzFLwN5Ynr0DQ@mail.gmail.com>
 From:   Seunghun Han <kkamagui@gmail.com>
-Date:   Tue, 3 Sep 2019 18:56:01 +0900
-Message-ID: <CAHjaAcRPg9-9MXiLH7AfJO6P1k25CSwJrSiuUwzFLwN5Ynr0DQ@mail.gmail.com>
+Date:   Tue, 3 Sep 2019 18:59:25 +0900
+Message-ID: <CAHjaAcSq5+o2_yawwUOhvi0NYWLOcsEP0uA6SKuCeznTsVaRSg@mail.gmail.com>
 Subject: Re: [PATCH 2/2] tpm: tpm_crb: enhance resource mapping mechanism for
  supporting AMD's fTPM
 To:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>
@@ -57,7 +58,9 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Peter Huewe <peterhuewe@gmx.de>,
         "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Matthew Garrett <mjg59@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
