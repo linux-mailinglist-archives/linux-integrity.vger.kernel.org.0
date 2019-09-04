@@ -2,102 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD28A8116
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Sep 2019 13:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5440EA8136
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Sep 2019 13:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727722AbfIDLbI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Sep 2019 07:31:08 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11982 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726240AbfIDLbI (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Sep 2019 07:31:08 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x84BS0M6141677
-        for <linux-integrity@vger.kernel.org>; Wed, 4 Sep 2019 07:31:07 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ut9q8p4s1-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 04 Sep 2019 07:31:06 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 4 Sep 2019 12:31:04 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 4 Sep 2019 12:31:00 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x84BUxkv40239168
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 Sep 2019 11:30:59 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD11E42042;
-        Wed,  4 Sep 2019 11:30:59 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9F4E42047;
-        Wed,  4 Sep 2019 11:30:58 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.171.171])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  4 Sep 2019 11:30:58 +0000 (GMT)
-Subject: Re: TPM 2.0 Linux sysfs interface
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Jordan Hand <jorhand@linux.microsoft.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        Piotr =?ISO-8859-1?Q?Kr=F3l?= <piotr.krol@3mdeb.com>,
-        linux-integrity@vger.kernel.org,
-        Alexey Dobriyan <adobriyan@gmail.com>
-Date:   Wed, 04 Sep 2019 07:30:58 -0400
-In-Reply-To: <20190904055829.GA3936@ziepe.ca>
-References: <20190827010559.GA31752@ziepe.ca>
-         <1567007592.6115.58.camel@linux.ibm.com> <20190828161502.GC933@ziepe.ca>
-         <f7e1f25a-8b2d-1e0e-e784-0908161c3c99@intel.com>
-         <20190902192632.GB5393@ziepe.ca> <1567460118.10024.316.camel@linux.ibm.com>
-         <20190903055523.GA4500@ziepe.ca>
-         <bc9ab35e-997c-b107-3073-d5150de063d0@intel.com>
-         <fe908209-3752-19b2-2652-79fb75f69e2b@linux.microsoft.com>
-         <1567553383.4937.29.camel@linux.ibm.com> <20190904055829.GA3936@ziepe.ca>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19090411-0008-0000-0000-00000310ECDB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19090411-0009-0000-0000-00004A2F4215
-Message-Id: <1567596658.4937.40.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-04_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1909040117
+        id S1726943AbfIDLgy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Sep 2019 07:36:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726589AbfIDLgx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 4 Sep 2019 07:36:53 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 570E320820;
+        Wed,  4 Sep 2019 11:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567597012;
+        bh=a56KG1rm+dxxe4u1p29NlNtKXIQggvIKhjPKOKWs/KQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YXK5LvcsSf+fXLWKyCcDDnoK7JjgM5tb8afue21/iYjn6NS5vzvdc/xIL8kUv7Aql
+         ObEyuV6v/38/XFHwUq85kTLTQBMYnGMVEo1cz2ASFWQYXT+HslPLL/neAukQNmT9QZ
+         nynLzFH1HhrSNxsUDGSvCMqYIS96U1w1BvcvzrHw=
+Date:   Wed, 4 Sep 2019 13:36:50 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Nayna <nayna@linux.vnet.ibm.com>, Nayna Jain <nayna@linux.ibm.com>,
+        linuxppc-dev@ozlabs.org, linux-efi@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>
+Subject: Re: [PATCH] sysfs: add BIN_ATTR_WO() macro
+Message-ID: <20190904113650.GA8275@kroah.com>
+References: <1566825818-9731-1-git-send-email-nayna@linux.ibm.com>
+ <1566825818-9731-3-git-send-email-nayna@linux.ibm.com>
+ <20190826140131.GA15270@kroah.com>
+ <ff9674e1-1b27-783a-38f3-4fd725353186@linux.vnet.ibm.com>
+ <20190826150153.GD18418@kroah.com>
+ <87ef0yrqxt.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ef0yrqxt.fsf@mpe.ellerman.id.au>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-09-04 at 02:58 -0300, Jason Gunthorpe wrote:
-> On Tue, Sep 03, 2019 at 07:29:43PM -0400, Mimi Zohar wrote:
+On Tue, Sep 03, 2019 at 01:37:02PM +1000, Michael Ellerman wrote:
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> > This variant was missing from sysfs.h, I guess no one noticed it before.
+> >
+> > Turns out the powerpc secure variable code can use it, so add it to the
+> > tree for it, and potentially others to take advantage of, instead of
+> > open-coding it.
+> >
+> > Reported-by: Nayna Jain <nayna@linux.ibm.com>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >
+> > I'll queue this up to my tree for 5.4-rc1, but if you want to take this
+> > in your tree earlier, feel free to do so.
 > 
-> > This discussion is going around in circles.  There are enough people
-> > asking that the kernel provide at least the TPM version (eg. TPM 1.2
-> > or TPM 2.0).  Userspace applications/regression tests shouldn't have
-> > to figure out the TPM version by sending a TPM command and seeing if
-> > it fails.  That really isn't asking a lot.
-> 
-> A single version number could be appropriate for sysfs
->  
-> > I would also prefer not having to be dependent on a userspace
-> > application to read the TPM PCRs in order to verify the IMA
-> > measurement list.
-> 
-> Why?
+> OK. This series is blocked on the firmware support going in, so at the
+> moment it might miss v5.4 anyway. So this going via your tree is no
+> problem.
 
-Being dependent on a userspace application implies a level of trust,
-that might not be warranted, depending on the system's configuration.
+Ok, will queue it up now, thanks!
 
-Mimi
-
+greg k-h
