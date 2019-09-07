@@ -2,76 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A31AC9A6
-	for <lists+linux-integrity@lfdr.de>; Sun,  8 Sep 2019 00:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE9AACA14
+	for <lists+linux-integrity@lfdr.de>; Sun,  8 Sep 2019 01:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727970AbfIGWEv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 7 Sep 2019 18:04:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48930 "EHLO mail.kernel.org"
+        id S1732554AbfIGX6b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 7 Sep 2019 19:58:31 -0400
+Received: from mga07.intel.com ([134.134.136.100]:45343 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727736AbfIGWEv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 7 Sep 2019 18:04:51 -0400
-Received: from localhost (unknown [62.28.240.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 68A18208C3;
-        Sat,  7 Sep 2019 22:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567893890;
-        bh=yiwL59PzzZwDqWaxr+QzIl79z/yYj6BVf3CAazvxQa4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xb1cdUK+gOyCZxk6wzqajZPJ3U5XmY5rN//nLEvUtI2t3QxrBR6ALsvM2aDgnsboD
-         fmHB+3Q9GZ0K4B8/B/2hFEizl3jwiZs7zjELO8TbmimVKSAFk67e7VwFUSJP/JgyCJ
-         NqEUenQppKK/MntPBcZcACUH0A3M3j8JI/6nNs0c=
-Date:   Sat, 7 Sep 2019 18:04:48 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "# 4.0+" <stable@vger.kernel.org>,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH AUTOSEL 4.19 126/167] tpm: Fix TPM 1.2 Shutdown sequence
- to prevent future TPM operations
-Message-ID: <20190907220448.GB2012@sasha-vm>
-References: <20190903162519.7136-1-sashal@kernel.org>
- <20190903162519.7136-126-sashal@kernel.org>
- <CAD=FV=W0YodeoOCiCv9zmv+-gswuU8U_XgrBnesE=wynTbDBiA@mail.gmail.com>
- <20190903165346.hwqlrin77cmzjiti@cantor>
- <20190903194335.GG5281@sasha-vm>
- <f2224c094836a4b8989c1cd6243a0b7ad1261a87.camel@linux.intel.com>
+        id S1726168AbfIGX6b (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 7 Sep 2019 19:58:31 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Sep 2019 16:58:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,478,1559545200"; 
+   d="scan'208";a="184864717"
+Received: from andriiza-mobl.ger.corp.intel.com ([10.252.38.198])
+  by fmsmga007.fm.intel.com with ESMTP; 07 Sep 2019 16:58:25 -0700
+Message-ID: <2c9ba2f43d3d234eab15980770ec72a565f730ab.camel@linux.intel.com>
+Subject: Re: [PATCH] tpm_crb: fix fTPM on AMD Zen+ CPUs
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     ivan.lazeev@gmail.com
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 08 Sep 2019 02:58:24 +0300
+In-Reply-To: <180a3a0fd33cbac9df8adf65999c53a9ddc20bf5.camel@linux.intel.com>
+References: <20190904190332.25019-1-ivan.lazeev@gmail.com>
+         <180a3a0fd33cbac9df8adf65999c53a9ddc20bf5.camel@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.2-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <f2224c094836a4b8989c1cd6243a0b7ad1261a87.camel@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Sep 07, 2019 at 09:55:18PM +0300, Jarkko Sakkinen wrote:
->On Tue, 2019-09-03 at 15:43 -0400, Sasha Levin wrote:
->> Right. I gave a go at backporting a few patches and this happens to be
->> one of them. It will be a while before it goes in a stable tree
->> (probably way after after LPC).
->
->It *semantically* depends on
->
->db4d8cb9c9f2 ("tpm: use tpm_try_get_ops() in tpm-sysfs.c.")
->
->I.e. can cause crashes without the above patch. As a code change your
->patch is fine but it needs the above patch backported to work in stable
->manner.
->
->So... either I can backport that one (because ultimately I have
->responsibility to do that as the maintainer) but if you want to finish
->this one that is what you need to backport in addition and then it
->should be fine.
+On Sun, 2019-09-08 at 00:49 +0300, Jarkko Sakkinen wrote:
+> On Wed, 2019-09-04 at 22:03 +0300, ivan.lazeev@gmail.com wrote:
+> > From: Ivan Lazeev <ivan.lazeev@gmail.com>
+> > 
+> > Bug link: https://bugzilla.kernel.org/show_bug.cgi?id=195657
+> > 
+> > cmd/rsp buffers are expected to be in the same ACPI region.
+> > For Zen+ CPUs BIOS's might report two different regions, some of
+> > them also report region sizes inconsistent with values from TPM
+> > registers.
+> > 
+> > Work around the issue by storing ACPI regions declared for the
+> > device in a list, then using it to find entry corresponding
+> > to each buffer. Use information from the entry to map each resource
+> > at most once and make buffer size consistent with the length of the
+> > region.
+> > 
+> > Signed-off-by: Ivan Lazeev <ivan.lazeev@gmail.com>
+> 
+> Can you add the relevant pieces of /proc/iomem output to the commit
+> message so we can see the memory configuration? I don't have the
+> hardware available where this kind of situation occurs.
 
-If you're ok with the backport of this commit, I can just add
-db4d8cb9c9f2 on top.
+Here in particular this is more than relevant because given that this
+patch fixes the issue for you, it seems that you don't have the regions
+marked as NVS regions.
 
---
-Thanks,
-Sasha
+/Jarkko
+
