@@ -2,47 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1203AADD40
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 18:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5155FADD52
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 18:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728341AbfIIQ2N (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Sep 2019 12:28:13 -0400
-Received: from mga11.intel.com ([192.55.52.93]:61682 "EHLO mga11.intel.com"
+        id S1727361AbfIIQdt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Sep 2019 12:33:49 -0400
+Received: from mga03.intel.com ([134.134.136.65]:11439 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbfIIQ2N (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Sep 2019 12:28:13 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1725908AbfIIQdt (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 9 Sep 2019 12:33:49 -0400
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Sep 2019 09:28:12 -0700
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Sep 2019 09:33:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,486,1559545200"; 
-   d="scan'208";a="213975881"
+   d="scan'208";a="189074625"
 Received: from pstarove-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.38.118])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Sep 2019 09:28:09 -0700
-Date:   Mon, 9 Sep 2019 17:28:08 +0100
+  by orsmga006.jf.intel.com with ESMTP; 09 Sep 2019 09:33:46 -0700
+Date:   Mon, 9 Sep 2019 17:33:45 +0100
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "# 4.0+" <stable@vger.kernel.org>,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH AUTOSEL 4.19 126/167] tpm: Fix TPM 1.2 Shutdown sequence
- to prevent future TPM operations
-Message-ID: <20190909162808.ggcnrtvbvor7deqy@linux.intel.com>
-References: <20190903162519.7136-1-sashal@kernel.org>
- <20190903162519.7136-126-sashal@kernel.org>
- <CAD=FV=W0YodeoOCiCv9zmv+-gswuU8U_XgrBnesE=wynTbDBiA@mail.gmail.com>
- <20190903165346.hwqlrin77cmzjiti@cantor>
- <20190903194335.GG5281@sasha-vm>
- <f2224c094836a4b8989c1cd6243a0b7ad1261a87.camel@linux.intel.com>
- <20190907220448.GB2012@sasha-vm>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        dhowells@redhat.com, sumit.garg@linaro.org
+Subject: Re: KEYS-TRUSTED git
+Message-ID: <20190909163345.rmfnazpahzmnibe6@linux.intel.com>
+References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com>
+ <1567952431.4614.140.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190907220448.GB2012@sasha-vm>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1567952431.4614.140.camel@linux.ibm.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
@@ -50,29 +41,38 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Sep 07, 2019 at 06:04:48PM -0400, Sasha Levin wrote:
-> On Sat, Sep 07, 2019 at 09:55:18PM +0300, Jarkko Sakkinen wrote:
-> > On Tue, 2019-09-03 at 15:43 -0400, Sasha Levin wrote:
-> > > Right. I gave a go at backporting a few patches and this happens to be
-> > > one of them. It will be a while before it goes in a stable tree
-> > > (probably way after after LPC).
+On Sun, Sep 08, 2019 at 10:20:31AM -0400, Mimi Zohar wrote:
+> On Sun, 2019-09-08 at 03:10 +0300, Jarkko Sakkinen wrote:
+> > It seems that at least vast majority of the trusted keys patches flow
+> > through my tree to the mainline. Still, it is undocumented in the
+> > MAINTAINERS file.
 > > 
-> > It *semantically* depends on
+> > So, should I just add my TPM tree as the upstream there? Or should I
+> > just create a new GIT for trusted keys? My TPM PR goes to Linux ATM.
+> > Should my trusted keys PR go to David instead? That would definitely
+> > require own tree.
 > > 
-> > db4d8cb9c9f2 ("tpm: use tpm_try_get_ops() in tpm-sysfs.c.")
-> > 
-> > I.e. can cause crashes without the above patch. As a code change your
-> > patch is fine but it needs the above patch backported to work in stable
-> > manner.
-> > 
-> > So... either I can backport that one (because ultimately I have
-> > responsibility to do that as the maintainer) but if you want to finish
-> > this one that is what you need to backport in addition and then it
-> > should be fine.
+> > With Sumit's recent work trusted keys is turning more than just being
+> > TPM keys so now it is a good time to consider the flow... Sumit, I'm
+> > sorry that I haven't added your first series yet. I need to first sync
+> > up how we are going to move forward.
 > 
-> If you're ok with the backport of this commit, I can just add
-> db4d8cb9c9f2 on top.
+> Thanks, Jarkko.  Agreed, trusted keys is becoming more than just TPM
+> based keys.  Now would be a good time to set up at least a separate
+> branch or GIT repo.
+> 
+> Are all "trust" methods equivalent?  As new "trust" methods are
+> defined, there should be a document describing the trust method, with
+> a comparison to the TPM.
+> 
+> (It would be nice to have some kernel selftests to ensure existing
+> methods don't break.)
 
-Sure, I've already gave my promise to do that :-)
+We could put this (with appropriate mods whatever they are) to
+selftests:
+
+https://raw.githubusercontent.com/jsakkine-intel/tpm2-scripts/master/keyctl-smoke.sh
+
+No near adequate but it is starting point...
 
 /Jarkko
