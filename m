@@ -2,152 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD97AD561
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 11:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89CDAD705
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 12:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727135AbfIIJJx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Sep 2019 05:09:53 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42377 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726171AbfIIJJx (ORCPT
+        id S1729404AbfIIKkL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Sep 2019 06:40:11 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49930 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726407AbfIIKkL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Sep 2019 05:09:53 -0400
-Received: by mail-pf1-f196.google.com with SMTP id w22so8749043pfi.9;
-        Mon, 09 Sep 2019 02:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=U5NCtSQYid1u8C34eAEqP1Aq7f0r5wTbuSh3G4fErsg=;
-        b=hLdJ4Pa8HA5IJO/Dalzmk8viU2XnTDLr6ibidCeKWstsBsWlg9SZrBbFTmwIvJrkOK
-         3hVSsvYy0Vdx1VnAK7zfj7Dt9sRVkDhoJxhS2eak4S80ja1hfwbIsumTVoCtt419ENsE
-         W2WUSTSNo3uzYC5Otnn0SfccrIcy7qVm9VqHbS2a492CeKPfAaxnoQRqLGAQ69sAIT+M
-         ZLKms0ChcVW6WAKA1uEx0gZUQt5uiFH89uAun7luHj/XHBu/j/epXdzP3gjqZ4ad4415
-         AKYQGckxR7/71o7gtDDQ34Ghb0HA1ThskT+a1vgodtRuSiViPLToQ36Zg5Byn8hhsgWs
-         5LUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=U5NCtSQYid1u8C34eAEqP1Aq7f0r5wTbuSh3G4fErsg=;
-        b=AJ3uI/iYNkqXQtBtrzgvhArvIUb9SGYUO+utGp8x4TX4eWs3YC52uLMRIyb8VMYFiq
-         6m0eEE+KcWYhsRCIwT1yLCHa40J4M77lyeLf11JCaFdd/r48dhZWxpir+S1z6Kr2jA6J
-         SeXZUSefuvXFgC7og9hw79dWLNw+schlCoYhRXPhWHRT6KXUR9WSNx1nv4qvJ0L43K0i
-         VyE2V1xTtn5M7q3ttBR7JOo3vQ4ujI56a0A38KbhBAyluhMa5LLp4+CpvIE7D+yRnm7C
-         k4YpDUEXyP/ED8ooO9VKMPonv1cHm+YBZM/QuNP+uH1G12GXBply6JNYhKZHSSloFgp/
-         TRdg==
-X-Gm-Message-State: APjAAAVIKiXMwTLWDjRgZb6iGNCJGjLabmPtcIWEnUU13MMzq0o5fQh/
-        Cj1SEqI442nzwMKJKxgYeZh8NZ8cCOM=
-X-Google-Smtp-Source: APXvYqxEqt8hkjK1fOi3DC5vXYYjxVtlSq7gWu1J2oOdPulgj6r2wLlAwOu3jdgw13HfdVitXUdqMg==
-X-Received: by 2002:a17:90a:db0e:: with SMTP id g14mr23729979pjv.54.1568020192535;
-        Mon, 09 Sep 2019 02:09:52 -0700 (PDT)
-Received: from localhost.localdomain ([175.203.71.146])
-        by smtp.googlemail.com with ESMTPSA id s18sm19122962pfh.0.2019.09.09.02.09.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2019 02:09:52 -0700 (PDT)
-From:   Seunghun Han <kkamagui@gmail.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        linux-integrity@vger.kernel.org (open list:TPM DEVICE DRIVER),
-        linux-kernel@vger.kernel.org, Seunghun Han <kkamagui@gmail.com>
-Subject: [PATCH v2 2/2] tpm: tpm_crb: enhance resource mapping mechanism for supporting AMD's fTPM
-Date:   Mon,  9 Sep 2019 18:09:06 +0900
-Message-Id: <20190909090906.28700-3-kkamagui@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190909090906.28700-1-kkamagui@gmail.com>
-References: <20190909090906.28700-1-kkamagui@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Mon, 9 Sep 2019 06:40:11 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x89Adc05122591
+        for <linux-integrity@vger.kernel.org>; Mon, 9 Sep 2019 06:40:09 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2uwm9fjpcr-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 09 Sep 2019 06:40:09 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 9 Sep 2019 11:40:07 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 9 Sep 2019 11:40:04 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x89Ae3Ic27263124
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 9 Sep 2019 10:40:03 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AF6F911C05B;
+        Mon,  9 Sep 2019 10:40:03 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B34111C04C;
+        Mon,  9 Sep 2019 10:40:02 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.159.93])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  9 Sep 2019 10:40:02 +0000 (GMT)
+Subject: Re: KEYS-TRUSTED git
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Sumit Garg <sumit.garg@linaro.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        dhowells@redhat.com, Kenneth Goldman <kgoldman@us.ibm.com>,
+        David Safford <david.safford@ge.com>,
+        Monty Wiseman <monty.wiseman@ge.com>
+Date:   Mon, 09 Sep 2019 06:40:01 -0400
+In-Reply-To: <CAFA6WYPq8Tq6=jTqnWQf9w9pzdJu8AcX-CFBWPwoVmMaLEJKhg@mail.gmail.com>
+References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com>
+         <1567952431.4614.140.camel@linux.ibm.com>
+         <CAFA6WYPq8Tq6=jTqnWQf9w9pzdJu8AcX-CFBWPwoVmMaLEJKhg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19090910-0016-0000-0000-000002A8B94F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19090910-0017-0000-0000-000033093A22
+Message-Id: <1568025601.4614.253.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-09_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1909090113
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-I got an AMD system which had a Ryzen Threadripper 1950X and MSI
-mainboard, and I had a problem with AMD's fTPM. My machine showed an error
-message below, and the fTPM didn't work because of it.
+[Cc'ing Ken, Dave, & Monty]
 
-[  5.732084] tpm_crb MSFT0101:00: can't request region for resource
-             [mem 0x79b4f000-0x79b4ffff]
-[  5.732089] tpm_crb: probe of MSFT0101:00 failed with error -16
+On Mon, 2019-09-09 at 11:57 +0530, Sumit Garg wrote:
+> On Sun, 8 Sep 2019 at 19:50, Mimi Zohar <zohar@linux.ibm.com> wrote:
 
-When I saw the iomem, I found two fTPM regions were in the ACPI NVS area. 
-The regions are below.
+> > Are all "trust" methods equivalent?  As new "trust" methods are
+> > defined, there should be a document describing the trust method, with
+> > a comparison to the TPM.
+> 
+> For Trusted Execution Environment (TEE) as a new "trust" method, I
+> have tried to document it here [1]. Please share your thoughts on this
+> patch [1] in case I missed something. I would be happy to incorporate
+> your feedback. Also, can you elaborate on "comparison to the TPM",
+> what specifics parameters are you looking for documentation?
 
-79a39000-79b6afff : ACPI Non-volatile Storage
-  79b4b000-79b4bfff : MSFT0101:00
-  79b4f000-79b4ffff : MSFT0101:00
+For example, the security properties/guarantees of a hardware TPM are
+different than a software TPM.  Could we capture that difference in
+chart form?  As new "trust" methods are added, include that
+information in the chart and extend the chart with other information,
+as needed.
 
-After analyzing this issue, I found that crb_map_io() function called
-devm_ioremap_resource() and it failed. The ACPI NVS didn't allow the TPM
-CRB driver to assign a resource in it because a busy bit was set to
-the ACPI NVS area.
+Mimi
 
-To support AMD's fTPM, I added a function to check intersects between
-the TPM region and ACPI NVS before it mapped the region. If some
-intersects are detected, the function just calls devm_ioremap() for
-a workaround. If there is no intersect, it calls devm_ioremap_resource().
-
-Signed-off-by: Seunghun Han <kkamagui@gmail.com>
----
-Changes in v2: fix a warning of kbuild test robot. The link is below.
-               https://lkml.org/lkml/2019/8/31/217
-
- drivers/char/tpm/tpm_crb.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index 14f486c23af2..6b98a3a995b7 100644
---- a/drivers/char/tpm/tpm_crb.c
-+++ b/drivers/char/tpm/tpm_crb.c
-@@ -450,6 +450,27 @@ static int crb_check_resource(struct acpi_resource *ares, void *data)
- 	return 1;
- }
- 
-+static void __iomem *crb_ioremap_resource(struct device *dev,
-+					  const struct resource *res)
-+{
-+	int rc;
-+	resource_size_t size = resource_size(res);
-+
-+	/* Broken BIOS assigns command and response buffers in ACPI NVS region.
-+	 * Check intersections between a resource and ACPI NVS for W/A.
-+	 */
-+	rc = region_intersects(res->start, size, IORESOURCE_MEM |
-+			       IORESOURCE_BUSY, IORES_DESC_ACPI_NV_STORAGE);
-+	if (rc != REGION_DISJOINT) {
-+		dev_err(dev,
-+			FW_BUG "Resource overlaps with a ACPI NVS. %pr\n",
-+			res);
-+		return devm_ioremap(dev, res->start, size);
-+	}
-+
-+	return devm_ioremap_resource(dev, res);
-+}
-+
- static void __iomem *crb_map_res(struct device *dev, struct crb_priv *priv,
- 				 struct resource *io_res, u64 start, u32 size)
- {
-@@ -464,7 +485,7 @@ static void __iomem *crb_map_res(struct device *dev, struct crb_priv *priv,
- 		return (void __iomem *) ERR_PTR(-EINVAL);
- 
- 	if (!resource_contains(io_res, &new_res))
--		return devm_ioremap_resource(dev, &new_res);
-+		return crb_ioremap_resource(dev, &new_res);
- 
- 	return priv->iobase + (new_res.start - io_res->start);
- }
-@@ -536,7 +557,7 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 		goto out_early;
- 	}
- 
--	priv->iobase = devm_ioremap_resource(dev, &io_res);
-+	priv->iobase = crb_ioremap_resource(dev, &io_res);
- 	if (IS_ERR(priv->iobase)) {
- 		ret = PTR_ERR(priv->iobase);
- 		goto out_early;
--- 
-2.21.0
+> 
+> [1] https://patchwork.kernel.org/patch/11065679/
+> 
+> -Sumit
 
