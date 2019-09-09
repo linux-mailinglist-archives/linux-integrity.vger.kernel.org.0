@@ -2,88 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBE7ADDFD
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 19:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB37AE04C
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 23:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727980AbfIIRZH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Sep 2019 13:25:07 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64050 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726864AbfIIRZH (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Sep 2019 13:25:07 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x89HM0Zd035000
-        for <linux-integrity@vger.kernel.org>; Mon, 9 Sep 2019 13:25:06 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2uwtehsssm-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 09 Sep 2019 13:25:05 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 9 Sep 2019 18:25:04 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 9 Sep 2019 18:25:01 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x89HP0up49676314
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Sep 2019 17:25:00 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27B96A405C;
-        Mon,  9 Sep 2019 17:25:00 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F09AA4054;
-        Mon,  9 Sep 2019 17:24:59 +0000 (GMT)
-Received: from dhcp-9-31-103-196.watson.ibm.com (unknown [9.31.103.196])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Sep 2019 17:24:59 +0000 (GMT)
-Subject: Re: KEYS-TRUSTED git
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        dhowells@redhat.com
-Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        sumit.garg@linaro.org
-Date:   Mon, 09 Sep 2019 13:24:58 -0400
-In-Reply-To: <20190909165200.npxq3hkft4bddv6v@linux.intel.com>
-References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com>
-         <1567952431.4614.140.camel@linux.ibm.com>
-         <20190909165200.npxq3hkft4bddv6v@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19090917-0020-0000-0000-00000369E8AB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19090917-0021-0000-0000-000021BF6AB6
-Message-Id: <1568049898.4614.349.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-09_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=4 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=871 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1909090178
+        id S1727535AbfIIVfL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Sep 2019 17:35:11 -0400
+Received: from namei.org ([65.99.196.166]:43508 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727335AbfIIVfK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 9 Sep 2019 17:35:10 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id x89LYsHY019848;
+        Mon, 9 Sep 2019 21:34:54 GMT
+Date:   Mon, 9 Sep 2019 14:34:54 -0700 (PDT)
+From:   James Morris <jmorris@namei.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        jamorris@linux.microsoft.com, sashal@kernel.org,
+        kgoldman@us.ibm.com,
+        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
+In-Reply-To: <1568035881.4614.347.camel@linux.ibm.com>
+Message-ID: <alpine.LRH.2.21.1909091429050.19397@namei.org>
+References: <20190828002735.31025-1-nramas@linux.microsoft.com>         <1567041083.6115.133.camel@linux.ibm.com>         <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>         <1567190507.10024.134.camel@linux.ibm.com>        
+ <2cd27f52-1029-bcea-c73b-7d3d002cf030@linux.microsoft.com> <1568035881.4614.347.camel@linux.ibm.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="1665246916-1758340488-1568064894=:19397"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-09-09 at 17:52 +0100, Jarkko Sakkinen wrote:
-> On Sun, Sep 08, 2019 at 10:20:31AM -0400, Mimi Zohar wrote:
-> > Thanks, Jarkko.  Agreed, trusted keys is becoming more than just TPM
-> > based keys.  Now would be a good time to set up at least a separate
-> > branch or GIT repo.
-> 
-> I created a tree for trusted keys:
-> 
-> http://git.infradead.org/users/jjs/linux-trusted-keys.git
-> 
-> The remaining issue before I send a patch to update MAINTAINERS is whether
-> the flow goes through David to Linus or directly to Linus.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-David?
+--1665246916-1758340488-1568064894=:19397
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
+On Mon, 9 Sep 2019, Mimi Zohar wrote:
+
+> The remote attestation server could gate any service based on the
+> certificate signer.  The first gated service, based on this feature,
+> will probably be network access (eg. TNC).  If/when this feature is
+> upstreamed, every company, including financial institutes,
+> organizations, and governments will become THE certificate signer for
+> their organization, in order to limit access to their network and
+> systems.
+
+This is already happening at scale, and a primary use-case for the 
+patchset.
+
+> Once that happens, how long will it be until the same
+> feature will be abused and used to limit the individual's ability to
+> pick and choose which applications may run on their systems.[1]
+
+Isn't this already happening (in a non-abusive way) with mobile devices?
+
+> Mimi
+> 
+> [1] Refer to Richard Stallman's last paragraph https://www.gnu.org/phi
+> losophy/can-you-trust.en.html
+
+Please consider if you really want to be endorsing this individual.
+
+
+-- 
+James Morris
+<jmorris@namei.org>
+
+--1665246916-1758340488-1568064894=:19397--
