@@ -2,124 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A04AD132
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 01:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA20AD31A
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 08:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731305AbfIHXb0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 8 Sep 2019 19:31:26 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8144 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731296AbfIHXb0 (ORCPT
+        id S1728405AbfIIG17 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Sep 2019 02:27:59 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:45533 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728224AbfIIG17 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 8 Sep 2019 19:31:26 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x88NRKAM104026
-        for <linux-integrity@vger.kernel.org>; Sun, 8 Sep 2019 19:31:25 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2uw83u4cqx-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Sun, 08 Sep 2019 19:31:24 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 9 Sep 2019 00:31:22 +0100
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 9 Sep 2019 00:31:19 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x88NVIGt45547968
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 8 Sep 2019 23:31:18 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 58576AE04D;
-        Sun,  8 Sep 2019 23:31:18 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 78A1CAE053;
-        Sun,  8 Sep 2019 23:31:17 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.159.93])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun,  8 Sep 2019 23:31:17 +0000 (GMT)
-Subject: Re: [RFC][PATCH 1/1] Carry ima measurement log for arm64 via
- kexec_file_load
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     prsriva <prsriva@linux.microsoft.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-integrity@vger.kernel.org, jmorris@namei.org
-Date:   Sun, 08 Sep 2019 19:31:16 -0400
-In-Reply-To: <0c7453d4-620d-2d98-3fda-f902b18da535@linux.microsoft.com>
-References: <20190829200532.13545-1-prsriva@linux.microsoft.com>
-         <20190829200532.13545-2-prsriva@linux.microsoft.com>
-         <87r252kxc8.fsf@morokweng.localdomain>
-         <0c7453d4-620d-2d98-3fda-f902b18da535@linux.microsoft.com>
+        Mon, 9 Sep 2019 02:27:59 -0400
+Received: by mail-lj1-f196.google.com with SMTP id q64so951634ljb.12
+        for <linux-integrity@vger.kernel.org>; Sun, 08 Sep 2019 23:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4AnsXWc++S5LkXHTpAfCh/YWJ7C1+32GsM7I37o2460=;
+        b=D2wEzaKdCaWzX0botC+B9UcIZVI299ld6FUD6DGof3sLEBp641RhBED5XonYC0WXOm
+         P7Rdk+epj8zcozcW1QDhyK1j2RffaCQIw0DmaeRvVSsrsmX0WOF0cWvN3uDihJkXa5fN
+         0rU2VJkb6KQhTmtAckprUTmCysBRSTEcc2k0lmAb4je6qYcIJg+F9viCBBDBtRGHS6n5
+         uqc3mY8SxP2zfY6GmG741aCF7PLCBuKYZIaWOm1ic4++1I/fP1wA2F7vNk4Qub5MJuMi
+         foI9IJjvs78H1v/F7NY80waKZgwRcRevhWUnccuivE87WZfwDXThCUsTUmL1D5YwDGqL
+         oxxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4AnsXWc++S5LkXHTpAfCh/YWJ7C1+32GsM7I37o2460=;
+        b=G2bEJYmdEe8YNCBYujVcVVUlLMheZC9hHB+faw2wAStqu8RDTK6gwlt2OSXppzH21E
+         eOlI+FMjruYk/UjL+XZ9QWDstfO3GQbiWKYK8pePu7L9q/DR7nx1pSXtr/pHL/BBUWYq
+         uXnVN8sPAneRbMbnCEqzMNWQshTQ0aHPNQhgDjdjl707ZX0nHhTCipAgxMSIspqWDMUm
+         /Q6a16mi2bapoXcvyYEO9II/yMdeTjYYfNtVhZfuqhI0PfnrXbFVbAAhtMz00hmN/4d5
+         zA2YR94adW4RQLhz6ja3TO/p6Kz9ZpN4Hl+vRbDpJpgQdD99J0jGwHKjeSilx2RJCoD6
+         m4KQ==
+X-Gm-Message-State: APjAAAW1TZknmDyxIwqev0QIEpoK5tgNEoAEpvUgUAkgxiYelmIVrb4B
+        2N5ZONMf+sd3Qs5oGgm/K269HW8YuTuKfHQPB7W2Yg==
+X-Google-Smtp-Source: APXvYqwyIuuOyuyziWA5aZipTXbu9CYBLzgfb2oQ4gGQ/akpuEbVQ2OClHiwZ8b2Qtckcw1GfMmCDUwBisRzKPw7PBk=
+X-Received: by 2002:a2e:504f:: with SMTP id v15mr14941188ljd.67.1568010477095;
+ Sun, 08 Sep 2019 23:27:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com> <1567952431.4614.140.camel@linux.ibm.com>
+In-Reply-To: <1567952431.4614.140.camel@linux.ibm.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 9 Sep 2019 11:57:45 +0530
+Message-ID: <CAFA6WYPq8Tq6=jTqnWQf9w9pzdJu8AcX-CFBWPwoVmMaLEJKhg@mail.gmail.com>
+Subject: Re: KEYS-TRUSTED git
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        dhowells@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19090823-4275-0000-0000-00000362F7CD
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19090823-4276-0000-0000-000038754646
-Message-Id: <1567985476.4614.224.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-08_15:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1909080260
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Prakhar,
-
-On Fri, 2019-09-06 at 16:56 -0700, prsriva wrote:
-> On 8/30/19 5:11 PM, Thiago Jung Bauermann wrote:
-> > Hello Prakhar,
+On Sun, 8 Sep 2019 at 19:50, Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> On Sun, 2019-09-08 at 03:10 +0300, Jarkko Sakkinen wrote:
+> > It seems that at least vast majority of the trusted keys patches flow
+> > through my tree to the mainline. Still, it is undocumented in the
+> > MAINTAINERS file.
 > >
-> > Answering this part from the cover letter:
+> > So, should I just add my TPM tree as the upstream there? Or should I
+> > just create a new GIT for trusted keys? My TPM PR goes to Linux ATM.
+> > Should my trusted keys PR go to David instead? That would definitely
+> > require own tree.
 > >
-> >> The code is in most part same as powerpc, i want to get feedback as to
-> >> how/correct way to refactor the code so that cross architecture
-> >> partial helpers can be put in a common place.
-> 
-> I started refactoring code to bring helpers under drivers/of, but
-> 
-> i soon reliazed the current implementation can be changed a bit
-> 
-> so that some of the additional functions can be sourced from
-> 
-> existing fdt_*/of_* functions since the fdt_ima was seeming to be
-> 
-> an overkill. I have done so in the V1 patch and also addressed
-> 
-> comments you have.
-> 
-> Hopefully its(v1) is a cleaner approach.
-> 
-> - Thanks for the review, and guidance.
+> > With Sumit's recent work trusted keys is turning more than just being
+> > TPM keys so now it is a good time to consider the flow... Sumit, I'm
+> > sorry that I haven't added your first series yet. I need to first sync
+> > up how we are going to move forward.
 
-"Carrying over the ima log during kexec_file_load" was originally
-posted on 5/10 and 5/31 without a cover letter. On 8/29 it was
-reposted as an RFC with a cover letter.  The cover letter was v1, but
-the patch itself was not.  In the future, please use the "git format-
-patch "-subject-prefix" option to add the version number to both the
-cover letter and the patches.
+@Jarkko: No worries, I understand the situation.
 
-The comments you received were based on the 8/29 version.  I haven't
-seen anything after that. 
+>
+> Thanks, Jarkko.  Agreed, trusted keys is becoming more than just TPM
+> based keys.  Now would be a good time to set up at least a separate
+> branch or GIT repo.
 
-Mimi
++1
 
+>
+> Are all "trust" methods equivalent?  As new "trust" methods are
+> defined, there should be a document describing the trust method, with
+> a comparison to the TPM.
 
-> > That's a great idea. If it could go to drivers/of/ as Stephen Boyd
-> > mentioned in the other email that would be great.
-> >
-> > More comments below.
-> > -Addressed those in the v1 patch
-> > Prakhar Srivastava <prsriva@linux.microsoft.com> writes:
-> >
+For Trusted Execution Environment (TEE) as a new "trust" method, I
+have tried to document it here [1]. Please share your thoughts on this
+patch [1] in case I missed something. I would be happy to incorporate
+your feedback. Also, can you elaborate on "comparison to the TPM",
+what specifics parameters are you looking for documentation?
 
+[1] https://patchwork.kernel.org/patch/11065679/
+
+-Sumit
+
+>
+> (It would be nice to have some kernel selftests to ensure existing
+> methods don't break.)
+>
+> Mimi
+>
