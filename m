@@ -2,113 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEBBAD87B
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 14:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6CDAD8BC
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 14:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390458AbfIIMF5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Sep 2019 08:05:57 -0400
-Received: from condef-10.nifty.com ([202.248.20.75]:23753 "EHLO
-        condef-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387569AbfIIMF5 (ORCPT
+        id S2404834AbfIIMQx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Sep 2019 08:16:53 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:48050 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2404832AbfIIMQw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Sep 2019 08:05:57 -0400
-X-Greylist: delayed 529 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Sep 2019 08:05:55 EDT
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-10.nifty.com with ESMTP id x89BiGdp022438;
-        Mon, 9 Sep 2019 20:44:16 +0900
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id x89BiAUR018670;
-        Mon, 9 Sep 2019 20:44:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com x89BiAUR018670
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1568029451;
-        bh=of2s0vFLHh9Xp+TAKb4j4quIC4aFs7+CQ9EVWEBoOXY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FxXgmurF6mxeDS60G1oeYiUS9P/0FdqK3IuE6+pNylWWl0JC9YTccp3nDkDjoghYm
-         HJRy8imvWFb9FJvmthHjPNCpObFu89E8cNKvpkvYdFaphQFN1ytFPKlOWTpFMq/REG
-         UX6Sr1xQqj5P4F8OI0coJlWuZLV96XyNDDo9oTxoD2md5vA6vOvEliQhXVg8Q9oKMa
-         6mS4RTZavsxHL4BatlyaahCO7qGmKODsNVBUQo5XLv0JP5vSiojJHL1BxHePZW+sML
-         r5jUPN2YcalUSFF6lNt5xXr/ETxtUOrO35I3eHRXQStPPEKUAKzROuvnu2JjXEiYEf
-         apYKZ+1vMUM7A==
-X-Nifty-SrcIP: [209.85.222.50]
-Received: by mail-ua1-f50.google.com with SMTP id k12so4133631uan.13;
-        Mon, 09 Sep 2019 04:44:10 -0700 (PDT)
-X-Gm-Message-State: APjAAAXsONBP+ovDwCYZotbtyQIkyK/s3ka6wO8GbnGsz0ig47gHHn5t
-        fRTwc4S8h9Wmo6xc7qMr/o1j0T2q6ezJfZu59U4=
-X-Google-Smtp-Source: APXvYqyiuOyxhpYGNWsBUxwx3KfspUmCoygmqcgVBTNco1JFlWrzoMv8KeT07F5nk5pp3m3XjunIkVE3l/KQjpoLVjk=
-X-Received: by 2002:a9f:2213:: with SMTP id 19mr10805775uad.25.1568029449667;
- Mon, 09 Sep 2019 04:44:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190726021058.4212-1-yamada.masahiro@socionext.com> <20190726021058.4212-2-yamada.masahiro@socionext.com>
-In-Reply-To: <20190726021058.4212-2-yamada.masahiro@socionext.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Mon, 9 Sep 2019 20:43:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT1KfUb5vkU7r=fUWqo+YoavzuirT050+8z9T4FpOYOQg@mail.gmail.com>
-Message-ID: <CAK7LNAT1KfUb5vkU7r=fUWqo+YoavzuirT050+8z9T4FpOYOQg@mail.gmail.com>
-Subject: Re: [PATCH 1/5] integrity: remove unneeded, broken attempt to add -fshort-wchar
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Dave Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Josh Boyer <jwboyer@fedoraproject.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
+        Mon, 9 Sep 2019 08:16:52 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6E8478EE180;
+        Mon,  9 Sep 2019 05:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1568031412;
+        bh=A4wO046/2GXXt4hgSTTGToYKR3Su1LXB/mUtb9Xom3U=;
+        h=Subject:From:To:Cc:Date:From;
+        b=V57AIN2QFFSA2qS6cMyM/XLS44bcn94woPkECenIfuOFhV6QfYozDdE7LxfBCN24a
+         VfsEjHtZIom7OIVWbtdZ6PF8QE+mS660fFxc9Y/T591pBumucsP7xJ5I/ek3mf6Dvb
+         8fTdy/T0c6kb3lnZX6S8W79AXDMN5vE/eT+CR+/A=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hDGJeiVB2gl1; Mon,  9 Sep 2019 05:16:52 -0700 (PDT)
+Received: from [192.168.6.117] (unknown [148.69.85.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 228358EE105;
+        Mon,  9 Sep 2019 05:16:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1568031412;
+        bh=A4wO046/2GXXt4hgSTTGToYKR3Su1LXB/mUtb9Xom3U=;
+        h=Subject:From:To:Cc:Date:From;
+        b=V57AIN2QFFSA2qS6cMyM/XLS44bcn94woPkECenIfuOFhV6QfYozDdE7LxfBCN24a
+         VfsEjHtZIom7OIVWbtdZ6PF8QE+mS660fFxc9Y/T591pBumucsP7xJ5I/ek3mf6Dvb
+         8fTdy/T0c6kb3lnZX6S8W79AXDMN5vE/eT+CR+/A=
+Message-ID: <1568031408.6613.29.camel@HansenPartnership.com>
+Subject: [PATCH v6 00/12] add integrity and security to TPM2 transactions
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Date:   Mon, 09 Sep 2019 13:16:48 +0100
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 11:11 AM Masahiro Yamada
-<yamada.masahiro@socionext.com> wrote:
->
-> I guess commit 15ea0e1e3e18 ("efi: Import certificates from UEFI Secure
-> Boot") attempted to add -fshort-wchar for building load_uefi.o, but it
-> has never worked as intended.
->
-> load_uefi.o is created in the platform_certs/ sub-directory. If you
-> really want to add -fshort-wchar, the correct code is:
->
->   $(obj)/platform_certs/load_uefi.o: KBUILD_CFLAGS += -fshort-wchar
->
-> or, in a more Kbuild-ish way:
->
->   CFLAGS_load_uefi.o := -fshort-wchar
->
-> But, you do not need to fix it.
->
-> Commit 8c97023cf051 ("Kbuild: use -fshort-wchar globally") had already
-> added -fshort-wchar globally. This code was unneeded in the first place.
->
-> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-> ---
+Link to previous cover letter:
 
-Ping.
+https://lore.kernel.org/linux-integrity/1540193596.3202.7.camel@HansenPartnership.com/
 
+This is marked v6 instead of v5 because I did a v5 after feedback on v4
+but didn't get around to posting it and then had to rework the whole of
+the kernel space handling while I was on holiday.  I also added the
+documentation of how the whole thing works and the rationale for doing
+it in tpm-security.rst (patch 11).  The main reason for doing this now
+is so we have something to discuss at Plumbers.
 
+The new patch set implements the various splits requested, but the main
+changes are that the kernel space is gone and is replaced by a context
+save and restore of the generated null seed.  This is easier to handle
+than a full kernel space given the new threading for TPM spaces, but
+conceptually it is still very like a space.  I've also made whether
+integrity and encryption is turned on a Kconfig option.
 
->
->  security/integrity/Makefile | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-> index 19faace69644..b6d6273a4176 100644
-> --- a/security/integrity/Makefile
-> +++ b/security/integrity/Makefile
-> @@ -13,7 +13,6 @@ integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyrin
->  integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
->                                         platform_certs/load_uefi.o
->  integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
-> -$(obj)/load_uefi.o: KBUILD_CFLAGS += -fshort-wchar
->
->  subdir-$(CONFIG_IMA)                   += ima
->  obj-$(CONFIG_IMA)                      += ima/
-> --
-> 2.17.1
->
+James
 
+---
+
+James Bottomley (12):
+  tpm-buf: move from static inlines to real functions
+  tpm-buf: add handling for TPM2B types
+  tpm-buf: add cursor based functions for response parsing
+  tpm2-space: export the context save and load commands
+  tpm2-sessions: Add full HMAC and encrypt/decrypt session handling
+  tpm-buf: add tpm_buf_parameters()
+  tpm2: add hmac checks to tpm2_pcr_extend()
+  tpm2: add session encryption protection to tpm2_get_random()
+  trusted keys: Add session encryption protection to the seal/unseal
+    path
+  tpm: add the null key name as a tpm2 sysfs variable
+  Documentation: add tpm-security.rst
+  tpm2-sessions: NOT FOR COMMITTING add sessions testing
+
+ Documentation/security/tpm/tpm-security.rst |  204 +++++
+ drivers/char/tpm/Kconfig                    |   11 +
+ drivers/char/tpm/Makefile                   |    4 +
+ drivers/char/tpm/tpm-buf.c                  |  202 +++++
+ drivers/char/tpm/tpm-chip.c                 |    1 +
+ drivers/char/tpm/tpm-sysfs.c                |   27 +-
+ drivers/char/tpm/tpm.h                      |  117 +--
+ drivers/char/tpm/tpm2-cmd.c                 |  202 +++--
+ drivers/char/tpm/tpm2-sessions-test.c       |  795 ++++++++++++++++++
+ drivers/char/tpm/tpm2-sessions.c            | 1204 +++++++++++++++++++++++++++
+ drivers/char/tpm/tpm2-sessions.h            |  138 +++
+ drivers/char/tpm/tpm2-space.c               |    8 +-
+ include/linux/tpm.h                         |   29 +
+ 13 files changed, 2787 insertions(+), 155 deletions(-)
+ create mode 100644 Documentation/security/tpm/tpm-security.rst
+ create mode 100644 drivers/char/tpm/tpm-buf.c
+ create mode 100644 drivers/char/tpm/tpm2-sessions-test.c
+ create mode 100644 drivers/char/tpm/tpm2-sessions.c
+ create mode 100644 drivers/char/tpm/tpm2-sessions.h
 
 -- 
-Best Regards
-Masahiro Yamada
+2.16.4
+
