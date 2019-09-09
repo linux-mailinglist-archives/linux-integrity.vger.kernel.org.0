@@ -2,106 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA20AD31A
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 08:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4990EAD55C
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2019 11:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728405AbfIIG17 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Sep 2019 02:27:59 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45533 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728224AbfIIG17 (ORCPT
+        id S1727739AbfIIJJj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Sep 2019 05:09:39 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41720 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727135AbfIIJJj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Sep 2019 02:27:59 -0400
-Received: by mail-lj1-f196.google.com with SMTP id q64so951634ljb.12
-        for <linux-integrity@vger.kernel.org>; Sun, 08 Sep 2019 23:27:57 -0700 (PDT)
+        Mon, 9 Sep 2019 05:09:39 -0400
+Received: by mail-pg1-f193.google.com with SMTP id x15so7450260pgg.8;
+        Mon, 09 Sep 2019 02:09:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4AnsXWc++S5LkXHTpAfCh/YWJ7C1+32GsM7I37o2460=;
-        b=D2wEzaKdCaWzX0botC+B9UcIZVI299ld6FUD6DGof3sLEBp641RhBED5XonYC0WXOm
-         P7Rdk+epj8zcozcW1QDhyK1j2RffaCQIw0DmaeRvVSsrsmX0WOF0cWvN3uDihJkXa5fN
-         0rU2VJkb6KQhTmtAckprUTmCysBRSTEcc2k0lmAb4je6qYcIJg+F9viCBBDBtRGHS6n5
-         uqc3mY8SxP2zfY6GmG741aCF7PLCBuKYZIaWOm1ic4++1I/fP1wA2F7vNk4Qub5MJuMi
-         foI9IJjvs78H1v/F7NY80waKZgwRcRevhWUnccuivE87WZfwDXThCUsTUmL1D5YwDGqL
-         oxxA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nkgxfyyynI7isiueWlzcBjvaj2ty8uVTrVmQjQhJboM=;
+        b=KyRRriKUZdEP7SymqzKEAIo1aivwNm+LsxEQIgia+ei8L68Fm31A0/EofVFAGS+9m2
+         Iv6POZsNwoAbTwOp1icRWHENj6yWlrRLRc7DdxwHR/jT1Zkk/NA5XfUK2oSJFLocI7ng
+         lKTdCSYK5+Nx6y2q71Y0f45r7nYDbMib3oAYBwhn9qq3U5IJU2hbMLpLyJ+GqXJEDzXO
+         0O5IdFzML8z5ST3xEApfWCV6ufmncsI09YcWRqS1BmpbU/w+P+WFEMvQ5SfeaQb0uU8T
+         g1CIL4xfuZ0KdaYvwvBk3HtHEGrLkRrOXYTHQanQEMIE0RxiJsilYhKlp3RNlWR84wBU
+         nIeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4AnsXWc++S5LkXHTpAfCh/YWJ7C1+32GsM7I37o2460=;
-        b=G2bEJYmdEe8YNCBYujVcVVUlLMheZC9hHB+faw2wAStqu8RDTK6gwlt2OSXppzH21E
-         eOlI+FMjruYk/UjL+XZ9QWDstfO3GQbiWKYK8pePu7L9q/DR7nx1pSXtr/pHL/BBUWYq
-         uXnVN8sPAneRbMbnCEqzMNWQshTQ0aHPNQhgDjdjl707ZX0nHhTCipAgxMSIspqWDMUm
-         /Q6a16mi2bapoXcvyYEO9II/yMdeTjYYfNtVhZfuqhI0PfnrXbFVbAAhtMz00hmN/4d5
-         zA2YR94adW4RQLhz6ja3TO/p6Kz9ZpN4Hl+vRbDpJpgQdD99J0jGwHKjeSilx2RJCoD6
-         m4KQ==
-X-Gm-Message-State: APjAAAW1TZknmDyxIwqev0QIEpoK5tgNEoAEpvUgUAkgxiYelmIVrb4B
-        2N5ZONMf+sd3Qs5oGgm/K269HW8YuTuKfHQPB7W2Yg==
-X-Google-Smtp-Source: APXvYqwyIuuOyuyziWA5aZipTXbu9CYBLzgfb2oQ4gGQ/akpuEbVQ2OClHiwZ8b2Qtckcw1GfMmCDUwBisRzKPw7PBk=
-X-Received: by 2002:a2e:504f:: with SMTP id v15mr14941188ljd.67.1568010477095;
- Sun, 08 Sep 2019 23:27:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nkgxfyyynI7isiueWlzcBjvaj2ty8uVTrVmQjQhJboM=;
+        b=mcoyXrSbDWPOJzuNC/eTMmwNdzbFtU+rmcJuqYikje6d/6wltwDouHnTkp0c3u7ibH
+         QSzJqjIgZaUBB1gCRNUSStwQWtMcr3D3AQ11Idrg9w3HV5AK4Rs2+usGrJLyF6nSBLLs
+         oytOEBne3QLX6WiCN9MxMvtkvWlPObDg+sZp6CsSj7fLv9XCZ8eY1yE+U59SRWO+r5Nq
+         9J8KfqUvJPnYsE1TjezIZgozAMZQdPRHwDxlkIgS8DEcSeFoMeMob77fMfW9cu5KtbWm
+         z116Fcw2euqYahAv2ejDVLFAp5jxEZt0RQAMQK4o9sZNLdlkf7oy2kh/b27WtPQJkkpQ
+         M/6w==
+X-Gm-Message-State: APjAAAXM4030o0IGqt/FiK7OrXbp7EYPyK2cVYNemRMLmCGfAPT0xrqj
+        R0bUAejhormCqrKAet5RGizWoqdGBvw=
+X-Google-Smtp-Source: APXvYqyv7Q8AbgbN732fMmWQJKwZBg3kWDKD62OgiYUFSzKN/ulKIEF0BavL/fEXOgGiW44l1hBEmA==
+X-Received: by 2002:a17:90a:f993:: with SMTP id cq19mr24573494pjb.51.1568020178081;
+        Mon, 09 Sep 2019 02:09:38 -0700 (PDT)
+Received: from localhost.localdomain ([175.203.71.146])
+        by smtp.googlemail.com with ESMTPSA id s18sm19122962pfh.0.2019.09.09.02.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2019 02:09:37 -0700 (PDT)
+From:   Seunghun Han <kkamagui@gmail.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        linux-integrity@vger.kernel.org (open list:TPM DEVICE DRIVER),
+        linux-kernel@vger.kernel.org, Seunghun Han <kkamagui@gmail.com>
+Subject: [PATCH v2 0/2] Enhance support for the AMD's fTPM
+Date:   Mon,  9 Sep 2019 18:09:04 +0900
+Message-Id: <20190909090906.28700-1-kkamagui@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com> <1567952431.4614.140.camel@linux.ibm.com>
-In-Reply-To: <1567952431.4614.140.camel@linux.ibm.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Mon, 9 Sep 2019 11:57:45 +0530
-Message-ID: <CAFA6WYPq8Tq6=jTqnWQf9w9pzdJu8AcX-CFBWPwoVmMaLEJKhg@mail.gmail.com>
-Subject: Re: KEYS-TRUSTED git
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        dhowells@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, 8 Sep 2019 at 19:50, Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> On Sun, 2019-09-08 at 03:10 +0300, Jarkko Sakkinen wrote:
-> > It seems that at least vast majority of the trusted keys patches flow
-> > through my tree to the mainline. Still, it is undocumented in the
-> > MAINTAINERS file.
-> >
-> > So, should I just add my TPM tree as the upstream there? Or should I
-> > just create a new GIT for trusted keys? My TPM PR goes to Linux ATM.
-> > Should my trusted keys PR go to David instead? That would definitely
-> > require own tree.
-> >
-> > With Sumit's recent work trusted keys is turning more than just being
-> > TPM keys so now it is a good time to consider the flow... Sumit, I'm
-> > sorry that I haven't added your first series yet. I need to first sync
-> > up how we are going to move forward.
+This patch series enhances the support for the AMD's fTPM. 
+The AMD system assigned a command buffer and response buffer 
+independently in ACPI NVS region. ACPI NVS region allowed nothing to 
+assign a resource in it. 
 
-@Jarkko: No worries, I understand the situation.
+For supporting AMD's fTPM, I made a patch to enhance the code of command 
+and response buffer size calculation. I also made a patch to detect TPM 
+regions in ACPI NVS and work around it. 
 
->
-> Thanks, Jarkko.  Agreed, trusted keys is becoming more than just TPM
-> based keys.  Now would be a good time to set up at least a separate
-> branch or GIT repo.
+Changes in v2:
+ - fix a warning of kbuild test robot. The link is below. 
+   https://lkml.org/lkml/2019/8/31/217
 
-+1
+Seunghun Han (2):
+  tpm: tpm_crb: enhance command and response buffer size calculation
+    code
+  tpm: tpm_crb: enhance resource mapping mechanism for supporting AMD's
+    fTPM
 
->
-> Are all "trust" methods equivalent?  As new "trust" methods are
-> defined, there should be a document describing the trust method, with
-> a comparison to the TPM.
+ drivers/char/tpm/tpm_crb.c | 69 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 59 insertions(+), 10 deletions(-)
 
-For Trusted Execution Environment (TEE) as a new "trust" method, I
-have tried to document it here [1]. Please share your thoughts on this
-patch [1] in case I missed something. I would be happy to incorporate
-your feedback. Also, can you elaborate on "comparison to the TPM",
-what specifics parameters are you looking for documentation?
+-- 
+2.21.0
 
-[1] https://patchwork.kernel.org/patch/11065679/
-
--Sumit
-
->
-> (It would be nice to have some kernel selftests to ensure existing
-> methods don't break.)
->
-> Mimi
->
