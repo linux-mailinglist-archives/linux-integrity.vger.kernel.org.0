@@ -2,48 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F301AE954
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2019 13:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB1BAE984
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2019 13:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731068AbfIJLnl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Sep 2019 07:43:41 -0400
-Received: from mga06.intel.com ([134.134.136.31]:29533 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725935AbfIJLnl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Sep 2019 07:43:41 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Sep 2019 04:43:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,489,1559545200"; 
-   d="scan'208";a="384302689"
-Received: from mweingar-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.26])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Sep 2019 04:43:37 -0700
-Date:   Tue, 10 Sep 2019 12:43:36 +0100
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        jejb@linux.ibm.com, dhowells@redhat.com
-Subject: Re: KEYS-TRUSTED git
-Message-ID: <20190910114336.GA7018@linux.intel.com>
-References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com>
- <1567952431.4614.140.camel@linux.ibm.com>
- <CAFA6WYPq8Tq6=jTqnWQf9w9pzdJu8AcX-CFBWPwoVmMaLEJKhg@mail.gmail.com>
+        id S1726151AbfIJLun (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Sep 2019 07:50:43 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:35677 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725981AbfIJLun (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 10 Sep 2019 07:50:43 -0400
+Received: by mail-ed1-f66.google.com with SMTP id t50so16814130edd.2;
+        Tue, 10 Sep 2019 04:50:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:reply-to:subject:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GpJfqKyJ8z5hMAdV00KswPvzHh3VewI6+H6ZsOLK7zA=;
+        b=iySVbi3rYegbaHbAvu3fUzUvv+QAKgHHwUAoOjm5QXopZ2mOxyQObbvVduFMuYvSU2
+         ExytaLUilI/MNDam3UDcBDWgUyqXZLCOrp775bstXZBeAcNY0FZC+ZDY69AD+RJtebtn
+         HZIoUmyjVR79t9NBPwjT08PUTLCTroE3mSkaBIgC3PYIltAZDuaRcz+a7hTlLx0E02O+
+         FqZV/sM/9zt9gkCHTfyydQ5atW2UYhsJiuFMNH0NKFD0cFPS1miSs7+ZmWMOEZwJD0Qi
+         J0UeqVqYWhKc+jEyRifQqJECUXys8zah5kseAdVhKZ8OzmFrRDB7yF6Gkquut4+AHMgI
+         s5qg==
+X-Gm-Message-State: APjAAAVxmHxxEYFBFjJD7QCtcQCD1NuzfTVp4rT1PWODq3bG40xK+L2+
+        FKovvjq/LGe6yRVMWiwWnCQch3wx
+X-Google-Smtp-Source: APXvYqxJKNH20Vh7TGTW0P8oPEff0oLdDyjgN4uipK6Og+2bYei3QZ008inXV2706g5er5eiHMT5yg==
+X-Received: by 2002:a17:906:85c8:: with SMTP id i8mr24508786ejy.178.1568116241277;
+        Tue, 10 Sep 2019 04:50:41 -0700 (PDT)
+Received: from [10.10.2.174] (bran.ispras.ru. [83.149.199.196])
+        by smtp.gmail.com with ESMTPSA id r5sm3376145edd.56.2019.09.10.04.50.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Sep 2019 04:50:40 -0700 (PDT)
+Reply-To: efremov@linux.com
+Subject: Re: [RESEND PATCH] MAINTAINERS: keys: Update path to trusted.h
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>, joe@perches.com,
+        linux-kernel@vger.kernel.org, Denis Kenzior <denkenz@gmail.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+References: <20190815215712.tho3fdfk43rs45ej@linux.intel.com>
+ <20190815221200.3465-1-efremov@linux.com>
+ <20190816185823.kjuxqfegpsywulkn@linux.intel.com>
+From:   Denis Efremov <efremov@linux.com>
+Message-ID: <b1a3742e-4d35-ebf6-2127-bc857c09997d@linux.com>
+Date:   Tue, 10 Sep 2019 14:50:39 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYPq8Tq6=jTqnWQf9w9pzdJu8AcX-CFBWPwoVmMaLEJKhg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190816185823.kjuxqfegpsywulkn@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 09, 2019 at 11:57:45AM +0530, Sumit Garg wrote:
-> @Jarkko: No worries, I understand the situation.
+Hi,
 
-I made the call to add them anyway to my TPM tree.
+On 8/16/19 9:58 PM, Jarkko Sakkinen wrote:
+> On Fri, Aug 16, 2019 at 01:12:00AM +0300, Denis Efremov wrote:
+>> Update MAINTAINERS record to reflect that trusted.h
+>> was moved to a different directory in commit 22447981fc05
+>> ("KEYS: Move trusted.h to include/keys [ver #2]").
+>>
+>> Cc: Denis Kenzior <denkenz@gmail.com>
+>> Cc: James Bottomley <jejb@linux.ibm.com>
+>> Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>> Cc: Mimi Zohar <zohar@linux.ibm.com>
+>> Cc: linux-integrity@vger.kernel.org
+>> Signed-off-by: Denis Efremov <efremov@linux.com>
+> 
+> Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> 
+> /Jarkko
+> 
 
-/Jarkko
+Could someone take this fix through his tree?
+
+Thanks,
+Denis
