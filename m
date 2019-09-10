@@ -2,82 +2,79 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA23AAE338
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2019 07:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEA1AE435
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2019 09:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730422AbfIJFNm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Sep 2019 01:13:42 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:43621 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390663AbfIJFNm (ORCPT
+        id S1732396AbfIJHFH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Sep 2019 03:05:07 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:39982 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726141AbfIJHFG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Sep 2019 01:13:42 -0400
-Received: by mail-lf1-f67.google.com with SMTP id q27so12345401lfo.10
-        for <linux-integrity@vger.kernel.org>; Mon, 09 Sep 2019 22:13:41 -0700 (PDT)
+        Tue, 10 Sep 2019 03:05:06 -0400
+Received: by mail-lf1-f68.google.com with SMTP id w18so646011lfk.7;
+        Tue, 10 Sep 2019 00:05:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cbhnljMSvrm4Eb/KXzc+RpovBmrskcbXiFtPe30EOeo=;
-        b=dDI98vuEiKdWP044Aq60Rfs0oVNhOMLnqb+v8cd/nTLiWGWoxrC7bK0bJlXRGRLBWl
-         OkruDqTbEF1MnjTQ6LzIql/IbBNIRZemt+ZekjNNAlLCnGNGHw5R6WdjyzVFf7CGPDVc
-         PsMjA2VoJvMCymcb6foSlZXXaG72LlL1wV+1USmkdEO44wBORSJ+x4HP2Gw4+GFOsUZt
-         fxW7SavC5G3u0iF5rRcCYdV5Y2tOpnk2HcgI8z1MIdSdwNbdHxSWBlmCEpsTYA4hx5vI
-         57rqDjmabd8C+dThEAzBiAJgAUCE0u+iGYrXDMHwb7xoTfjlax833P1oVLn6rP0yifyl
-         jZYA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=DozwmUHwj3k2SEoSTTzpSe/D0hTydvpHRMjDyd8vPuA=;
+        b=lAi7DV+BNuqvg25v5XsQCJO5S8QiXZvZkSuoSs2U68BKHCzQM0o9qMWIdQqkSXCk3g
+         dEh04utjhe4CEOk9udh1fJlL/L395nobKw6BYunahGbX5dUKH9U6alypvLCdFo7gJ2wM
+         g9akrlRq4pGN8otw8b2NbJa1n6JVNnMdPG2JnqGhdS2nMR6an/B/ZjzEqMNk09hneAQ/
+         PXhj3enJtyWalEuVEq/GQQgOetj6SfQBY+LUKP6oxeubFlSeFZpxBDxogBodwgRauln8
+         y/TruqX2F/KIe1S6gxjsQ8HSOJ6Sqa8PP1hcZmoLvM2iBHXfS6+xaOs/IFIeCk2zq68p
+         jxMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cbhnljMSvrm4Eb/KXzc+RpovBmrskcbXiFtPe30EOeo=;
-        b=dJpM3ED8+S/07y9QCrUgKT4M63JM/RzSJHX67nFEJD/M670uLz6ntMDkt+uGzn3AQy
-         x+HQnLebnUtbmbFtfCvFgx866LaZ+edfWHYyKybN3F6kc0leNCnt90XEYOOv84g+m2ei
-         +9wJRqJCcArxL6aX6HFDEWC2ndDoIwN4D8FI9ZspYz+TMEn+PGSxwVge3mgvcMVmF70g
-         mgZPkYtA1Ag/8WRhFNVltXoC9mDLWWu8jxVSoJyK9EenZ/6P9UhXfJd1eUCCoxLyAPm1
-         yEo4NW44B7wzHdowFmZYJCNu0FUeRp8Kfv6pBDW5Jh9T0uUYcFDm5nWlZi6+zgzJZA3s
-         aPKw==
-X-Gm-Message-State: APjAAAUQxHXVbWbuKW3KV6vHipJjuv9tdF5gRBM7MpGkV2iF/kjEEN70
-        eEqjT7xBW7xLonMy1zOWH+lRg9vDsPMKahGP9Wjagw==
-X-Google-Smtp-Source: APXvYqyu4qmBvYdKY60qaEbXVW0h3uzrHlcJ4EuNULoC/qTrXN/8mpok0DsyaFuatghwy6m3s6/T0/Rwhw152lylZqY=
-X-Received: by 2002:a19:f806:: with SMTP id a6mr18607616lff.151.1568092420328;
- Mon, 09 Sep 2019 22:13:40 -0700 (PDT)
+         :message-id:subject:to;
+        bh=DozwmUHwj3k2SEoSTTzpSe/D0hTydvpHRMjDyd8vPuA=;
+        b=ZBpVOIXocGyKFAR65epjIP1sC0f/0rHaoVSn346rWn64Xbv2glyRQoL6qIgZ8G8X7I
+         W6gok/Tzvwi8BDMwBMcULLwbA4Jpyex8A1PQuU8Eawq0FfdFgXGBwsv1L+TQmvebaQwR
+         c9GJ+Qj0dFC/8pZ1nqwiFJ1kXpHkeOJyvAU2HnqqG5HU8RMWtlRfxcb7OGUDPpQVmm0m
+         d4OHeJeTSneNpxK+niRptVlgdh3CaqULtam1pT9tpr9BrFWfRR1aXAn7ybmZ0rGMhTob
+         Viev/RBbmZ7V3shvue2YpGFsTYVFzbJ+PoIUCs5HIiL6P7ahZwZzXZoTD5r1z9aCfnee
+         mByA==
+X-Gm-Message-State: APjAAAV3R9Qt8xt2zYNVsWNJ7G55uqjioCxjLGjsxqm+ekaof3HjThWW
+        mIJ0bqDoDgDZBN7sUFrFRHR4qIeJbiwCp9ctKV0=
+X-Google-Smtp-Source: APXvYqyca1SH9H5DaRx8OiIKHA6rL3hTD1AqM+2vgGminaPlWP06PPODcpw0VTaopULzgbXjfkmUz2/0N+cTcywUsIc=
+X-Received: by 2002:a19:ac0c:: with SMTP id g12mr19380686lfc.128.1568099104597;
+ Tue, 10 Sep 2019 00:05:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com>
- <1567952431.4614.140.camel@linux.ibm.com> <CAFA6WYPq8Tq6=jTqnWQf9w9pzdJu8AcX-CFBWPwoVmMaLEJKhg@mail.gmail.com>
- <20190909163643.qxmzpcggi567hmhv@linux.intel.com>
-In-Reply-To: <20190909163643.qxmzpcggi567hmhv@linux.intel.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 10 Sep 2019 10:43:27 +0530
-Message-ID: <CAFA6WYP6enHJBSsgzvTqzFEQwaW3ye2NrdnaxDMRCS1BC8mpsw@mail.gmail.com>
-Subject: Re: KEYS-TRUSTED git
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        jejb@linux.ibm.com, dhowells@redhat.com
+References: <20190902094540.12786-1-janne.karhunen@gmail.com> <20190909213938.GA105935@gmail.com>
+In-Reply-To: <20190909213938.GA105935@gmail.com>
+From:   Janne Karhunen <janne.karhunen@gmail.com>
+Date:   Tue, 10 Sep 2019 10:04:53 +0300
+Message-ID: <CAE=NcraXOhGcPHh3cPxfaNjFXtPyDdSFa9hSrUSPfpFUmsxyMA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] ima: keep the integrity state of open files up to date
+To:     Janne Karhunen <janne.karhunen@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>, linux-mm@kvack.org,
+        viro@zeniv.linux.org.uk,
+        Konsta Karsisto <konsta.karsisto@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 9 Sep 2019 at 22:06, Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
+On Tue, Sep 10, 2019 at 12:39 AM Eric Biggers <ebiggers@kernel.org> wrote:
+> > Core file operations (open, close, sync, msync, truncate) are
+> > now allowed to update the measurement immediately. In order
+> > to maintain sufficient write performance for writes, add a
+> > latency tunable delayed work workqueue for computing the
+> > measurements.
 >
-> On Mon, Sep 09, 2019 at 11:57:45AM +0530, Sumit Garg wrote:
-> > For Trusted Execution Environment (TEE) as a new "trust" method, I
-> > have tried to document it here [1]. Please share your thoughts on this
-> > patch [1] in case I missed something. I would be happy to incorporate
-> > your feedback. Also, can you elaborate on "comparison to the TPM",
-> > what specifics parameters are you looking for documentation?
->
-> I think the right order is actually:
->
-> 1. Set up the GIT tree.
-> 2. Merge your TEE patches (when they pass the review phase).
-> 3. Come up with the documentation.
+> This still doesn't make it crash-safe.  So why is it okay?
 
-Sounds good to me.
+If Android is the load, this makes it crash safe 99% of the time and
+that is considerably better than 0% of the time.
 
--Sumit
+That said, we have now a patch draft forming up that pushes the update
+to the ext4 journal. With this patch on top we should reach the
+magical 100% given data=journal mount. One step at a time.
 
->
-> /Jarkko
+
+--
+Janne
