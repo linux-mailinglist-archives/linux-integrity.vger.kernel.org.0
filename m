@@ -2,40 +2,39 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F49AEA7C
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2019 14:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F60AECD8
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2019 16:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389910AbfIJMe7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Sep 2019 08:34:59 -0400
-Received: from mga09.intel.com ([134.134.136.24]:55125 "EHLO mga09.intel.com"
+        id S1731630AbfIJOV3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Sep 2019 10:21:29 -0400
+Received: from mga06.intel.com ([134.134.136.31]:41438 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729890AbfIJMe6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Sep 2019 08:34:58 -0400
+        id S1730779AbfIJOV3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 10 Sep 2019 10:21:29 -0400
 X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Sep 2019 05:34:56 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Sep 2019 07:21:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,489,1559545200"; 
-   d="scan'208";a="185495499"
-Received: from mweingar-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.26])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Sep 2019 05:34:54 -0700
-Date:   Tue, 10 Sep 2019 13:34:52 +0100
+   d="scan'208";a="185520736"
+Received: from agreppma-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.7])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Sep 2019 07:21:26 -0700
+Date:   Tue, 10 Sep 2019 15:21:25 +0100
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Seunghun Han <kkamagui@gmail.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tpm: tpm_crb: enhance command and response buffer
- size calculation code
-Message-ID: <20190910123452.GC7484@linux.intel.com>
-References: <20190909090906.28700-1-kkamagui@gmail.com>
- <20190909090906.28700-2-kkamagui@gmail.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com
+Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        sumit.garg@linaro.org
+Subject: Re: KEYS-TRUSTED git
+Message-ID: <20190910142114.GA8682@linux.intel.com>
+References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com>
+ <1567952431.4614.140.camel@linux.ibm.com>
+ <20190909165200.npxq3hkft4bddv6v@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190909090906.28700-2-kkamagui@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190909165200.npxq3hkft4bddv6v@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -43,24 +42,21 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 09, 2019 at 06:09:05PM +0900, Seunghun Han wrote:
-> The purpose of crb_fixup_cmd_size() function is to work around broken
-> BIOSes and get the trustable size between the ACPI region and register.
-> When the TPM has a command buffer and response buffer independently,
-> the crb_map_io() function calls crb_fixup_cmd_size() twice to calculate
-> each buffer size.  However, the current implementation of it considers
-> one of two buffers.
+On Mon, Sep 09, 2019 at 05:52:00PM +0100, Jarkko Sakkinen wrote:
+> On Sun, Sep 08, 2019 at 10:20:31AM -0400, Mimi Zohar wrote:
+> > Thanks, Jarkko.  Agreed, trusted keys is becoming more than just TPM
+> > based keys.  Now would be a good time to set up at least a separate
+> > branch or GIT repo.
 > 
-> To support independent command and response buffers, I changed
-> crb_check_resource() function for storing ACPI TPB regions to a list.
-> I also changed crb_fixup_cmd_size() to use the list for calculating each
-> buffer size.
+> I created a tree for trusted keys:
 > 
-> Signed-off-by: Seunghun Han <kkamagui@gmail.com>
+> http://git.infradead.org/users/jjs/linux-trusted-keys.git
+> 
+> The remaining issue before I send a patch to update MAINTAINERS is whether
+> the flow goes through David to Linus or directly to Linus.
 
-I think as far as the tpm_crb goes I focus on getting Vanya's change
-landed because it is better structured, more mature and the first
-version was sent couple of weeks earlier. You are welcome to make
-your remarks on that patch.
+I use my tpmdd tree for trusted-keys changes too. For me managing two
+trees is only adds to work and probably does not add that much value to
+anyone else. The only glitch is the tree's name...
 
 /Jarkko
