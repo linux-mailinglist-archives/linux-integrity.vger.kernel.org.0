@@ -2,123 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAB6AEE30
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2019 17:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3568AEE46
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2019 17:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388133AbfIJPLZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Sep 2019 11:11:25 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:40234 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727562AbfIJPLZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Sep 2019 11:11:25 -0400
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 09B0981F0F
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Sep 2019 15:11:25 +0000 (UTC)
-Received: by mail-qk1-f197.google.com with SMTP id h14so21110479qkl.17
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Sep 2019 08:11:25 -0700 (PDT)
+        id S2403830AbfIJPMl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Sep 2019 11:12:41 -0400
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:34218 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730177AbfIJPMl (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 10 Sep 2019 11:12:41 -0400
+Received: by mail-yb1-f195.google.com with SMTP id u68so6255786ybg.1;
+        Tue, 10 Sep 2019 08:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dBN0mOQb7kVuILysF+ico+GsGc+Un+rEP0RRGf2F7fA=;
+        b=eEeKL2c0kgpkANsPqQ+OIL4UrNqXsOrPBNDv5Xhb76Uh8VRM8yrYt8RSubFZZq9FnY
+         XAjaFqFhfc4Tn/mPWNpvnB7AebGsGxLQg7jlJuPXz1dm+vuSlzdXZ986Rm042VT9M/7y
+         tzNjkF4qB8bJ3YvoaRJVX5BZ+nNbuOpyDAZWGu0PJxn75Uhgkz5VwiS3LgIVAaAFHnbI
+         MOI1IaSDmoMObywmoGlSUXpQfRG9DBjQh27guB1HgKqz5MinaEwK2lhx8MyLDs+Wc3z8
+         +vg9neqlu5GqBlnCvjB9SjhhCVO/0mYBcHFweHtFnGdcRf2uUG8LqYqHbW51FHjzwhPX
+         N2tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=mjlmQ8q4ebSGeqcCwGl4CP2ghV+MJ2RVpTWgq9fAfiY=;
-        b=MWfHBKpTE5FAIA8BGs+4Z4vqhQbjj4gbC/Xz6wVb4/Z6XVTzdEUZtFGqgGFNlPu+P4
-         s9IevLXK10dnmog2wDfz0IX7HTeblK1W41FR9kBRrFcZSOvoYcxNn0ivspS3T86Nq+Ak
-         8EbQUB1ylaYDTSX7KuCq9t9xL8LRADhabLsIbSeJOXsrPDbgDNw2DPwH74BEK/qORy6A
-         Yikw6PA7Z5gVD5/j9CvNdkLTUW/nj26TldWU35wPbgMFniNtdyNXPWrq69QTEAWr1TNO
-         CiuTvqWN6E/donsEbBi6V1Ytx/dXcPxlWDTq0Xw4/QdWRfE3StiUmfPVXur/kXvKEegg
-         E4HA==
-X-Gm-Message-State: APjAAAV185sY8xjKoa2f5G0nZ/7my3E4+dDR7Jr+cSicYMBBnxCgpgmx
-        kCgSZ5ixsqhonjFHPk8tu/q65qSFz2TWaK5srTmwjMo4ZFmckKLXkzkwRblQpIq9/KEfyK4Bqux
-        /8MmwJcqKj6RS6731w/S5AqwDQfmY
-X-Received: by 2002:ad4:4246:: with SMTP id l6mr17975788qvq.140.1568128284315;
-        Tue, 10 Sep 2019 08:11:24 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqzpuL3859rR0LE2rl/dgBb2h5pYNfUuwtFD0PdhTLyboBw9QPffFa+4gWJicHD8zJTrvwDs6A==
-X-Received: by 2002:ad4:4246:: with SMTP id l6mr17975751qvq.140.1568128283949;
-        Tue, 10 Sep 2019 08:11:23 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id z72sm10001318qka.115.2019.09.10.08.11.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2019 08:11:23 -0700 (PDT)
-Date:   Tue, 10 Sep 2019 08:11:21 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Call tpm_put_ops() when the validation for @digests
- fails
-Message-ID: <20190910151121.3tgzwuhrroog5dvb@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20190910142437.20889-1-jarkko.sakkinen@linux.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dBN0mOQb7kVuILysF+ico+GsGc+Un+rEP0RRGf2F7fA=;
+        b=j5MiRcjcFD9ZGGeHrfJpr0EJ4mbju26VxoQ4vMYIFWFEB+FYND5/GsEeB6gJQM7HIb
+         e12LEnjbb+Q7d5YoDOpI0o3z2bOBqZXcLHXq02DAkzH73CLO5w03L9/zOmW420qJsVeg
+         xfwAvHX3WJEm85WnYmPaYvT3SS2/bAVG11RSCWfiQQFg1fWNu17IT9ddSpuzFgwA0DHQ
+         pclyORe8rNVzsv93OBktEphztCLc8MjgKKVLYGcAAXewoSVHjldIBIZRwChYMgcMYof7
+         DBJl3cldXMTPfXMPwPg/pQnFqd6xCjkDI2n3wSSvMQ+qE+CnLhKQNeMZyy1nV9SWAfrZ
+         LJBg==
+X-Gm-Message-State: APjAAAXTz+sAPMLHtK0LVm+nvk95/Q4mlJE0GU2YTtK7UFKwT9BHDtTD
+        G+jPDngu75/5++8PoSWIsPQoCDeFbkwgEwNLy7Y=
+X-Google-Smtp-Source: APXvYqzi0rcOSdrW08Ls9qoI4oX8dwob9XnFDdNGrV07kIdOjEbn2N1g/H+DHq2jz1Xlewmr8YljVo4KdeeAJe0784c=
+X-Received: by 2002:a25:d751:: with SMTP id o78mr21368658ybg.101.1568128360022;
+ Tue, 10 Sep 2019 08:12:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190910142437.20889-1-jarkko.sakkinen@linux.intel.com>
-User-Agent: NeoMutt/20180716
+References: <20190909090906.28700-1-kkamagui@gmail.com> <20190909090906.28700-2-kkamagui@gmail.com>
+ <20190910123452.GC7484@linux.intel.com>
+In-Reply-To: <20190910123452.GC7484@linux.intel.com>
+From:   Seunghun Han <kkamagui@gmail.com>
+Date:   Wed, 11 Sep 2019 00:12:25 +0900
+Message-ID: <CAHjaAcRyd1bSjeD-jJkjzeSGq8gf_f=qz_=wyi1omY7-20xARw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] tpm: tpm_crb: enhance command and response buffer
+ size calculation code
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Sep 10 19, Jarkko Sakkinen wrote:
->The chip is not released when the validation for @digests fails. Add
->tpm_put_ops() to the failure path.
 >
->Cc: stable@vger.kernel.org
->Reported-by: Roberto Sassu <roberto.sassu@huawei.com>
->Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> On Mon, Sep 09, 2019 at 06:09:05PM +0900, Seunghun Han wrote:
+> > The purpose of crb_fixup_cmd_size() function is to work around broken
+> > BIOSes and get the trustable size between the ACPI region and register.
+> > When the TPM has a command buffer and response buffer independently,
+> > the crb_map_io() function calls crb_fixup_cmd_size() twice to calculate
+> > each buffer size.  However, the current implementation of it considers
+> > one of two buffers.
+> >
+> > To support independent command and response buffers, I changed
+> > crb_check_resource() function for storing ACPI TPB regions to a list.
+> > I also changed crb_fixup_cmd_size() to use the list for calculating each
+> > buffer size.
+> >
+> > Signed-off-by: Seunghun Han <kkamagui@gmail.com>
+>
+> I think as far as the tpm_crb goes I focus on getting Vanya's change
+> landed because it is better structured, more mature and the first
+> version was sent couple of weeks earlier. You are welcome to make
+> your remarks on that patch.
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Thank you for your review. I already knew Vanya's patch,
+https://lkml.org/lkml/2019/8/11/151, and this patch didn't work for
+me. I also couldn't agree on some points like memory allocating inside
+the ACPI walker and changing many parts of TPM driver. I would like to
+support AMD's fTPM with the smallest changes since this is a
+workaround as you know.
 
->---
-> drivers/char/tpm/tpm-interface.c | 14 +++++++++-----
-> 1 file changed, 9 insertions(+), 5 deletions(-)
+I didn't understand clearly what your point is. Do you want me to
+change my patches structurally like Vanya's patch and make patch v3?
+or want me to give some advice to Vanya?
+
 >
->diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
->index 208e5ba40e6e..c7eeb40feac8 100644
->--- a/drivers/char/tpm/tpm-interface.c
->+++ b/drivers/char/tpm/tpm-interface.c
->@@ -320,18 +320,22 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
-> 	if (!chip)
-> 		return -ENODEV;
->
->-	for (i = 0; i < chip->nr_allocated_banks; i++)
->-		if (digests[i].alg_id != chip->allocated_banks[i].alg_id)
->-			return -EINVAL;
->+	for (i = 0; i < chip->nr_allocated_banks; i++) {
->+		if (digests[i].alg_id != chip->allocated_banks[i].alg_id) {
->+			rc = EINVAL;
->+			goto out;
->+		}
->+	}
->
-> 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> 		rc = tpm2_pcr_extend(chip, pcr_idx, digests);
->-		tpm_put_ops(chip);
->-		return rc;
->+		goto out;
-> 	}
->
-> 	rc = tpm1_pcr_extend(chip, pcr_idx, digests[0].digest,
-> 			     "attempting extend a PCR value");
->+
->+out:
-> 	tpm_put_ops(chip);
-> 	return rc;
-> }
->-- 
->2.20.1
->
+> /Jarkko
