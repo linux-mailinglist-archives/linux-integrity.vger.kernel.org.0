@@ -2,84 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2792AAF92A
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Sep 2019 11:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADDFAF9A8
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Sep 2019 11:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727453AbfIKJkz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Sep 2019 05:40:55 -0400
-Received: from mga09.intel.com ([134.134.136.24]:5597 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726657AbfIKJkz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Sep 2019 05:40:55 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Sep 2019 02:40:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
-   d="scan'208";a="175598688"
-Received: from dgonsal1-mobl.ger.corp.intel.com (HELO localhost) ([10.249.38.48])
-  by orsmga007.jf.intel.com with ESMTP; 11 Sep 2019 02:40:53 -0700
-Date:   Wed, 11 Sep 2019 10:40:52 +0100
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v6 00/12] add integrity and security to TPM2 transactions
-Message-ID: <20190911094052.GA22754@linux.intel.com>
-References: <1568031408.6613.29.camel@HansenPartnership.com>
- <20190910162132.GA11338@linux.intel.com>
- <20190911084249.GA7436@linux.intel.com>
+        id S1726928AbfIKJ6u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Sep 2019 05:58:50 -0400
+Received: from mail-lf1-f46.google.com ([209.85.167.46]:44759 "EHLO
+        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726579AbfIKJ6u (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 11 Sep 2019 05:58:50 -0400
+Received: by mail-lf1-f46.google.com with SMTP id q11so1000439lfc.11
+        for <linux-integrity@vger.kernel.org>; Wed, 11 Sep 2019 02:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OpRBkszw25mp0fLeRyh2TfOJBy5aBP0yZdtE3UYaIn0=;
+        b=tIa4tKpGu2lvlqrbZK+ql90Qf50L4HwtMxl7FXHX8p8wrkkwWdTg3F4csGry2o+RDm
+         S11Ivh+Q4acv2tKgMEm4L9dvp/5Zi5/JM+Tew0rVLYzKNUa9oSvXsJ+VAif2D6IE+EFW
+         y7GHsUTdJ92OQL1KTkhAxCu9iiIENgawQIB1LFmzHcKC2v3WTyBUEcAOvFNybpYlBt1T
+         cglzFQis42UKhg4izMPmKd+xzDe6ov5PX/5xjgJFbIgBagWeLmckvPstUVnFs7TdBogN
+         tBdo/FQQk/GsdaFUZqYPxlpHdB5qgGTC0MScEAkptpTj+yGhxhi8YAFFQ7pPrjHVaK2p
+         2bHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OpRBkszw25mp0fLeRyh2TfOJBy5aBP0yZdtE3UYaIn0=;
+        b=SRVKBooqHrcZfm1NGIOM45cQ72aBI2vws5/1SSGO58XcSxeAT9aCxxRZ9/2znKRXOV
+         0TIA4veybbbT92R8dBt5xGsyBDd3dUKWgDCGxAXSM6IG+VYlgJyO8wIhufumfRc2ZqZt
+         XdiOFLA9liqJa6NJZZx59Os/v9nxbDrJrmyWzemhzFrlWLxjJkeLxoellnBGE23TnSNM
+         tR5oeWJJlk7RORJbb9KWMLbMtAI8h6SERTm0omo06D3h8zw72RmVtkSCZFLY3aWzvlpH
+         DDm6yuc0QlIIQnGLZHSz0MZWKU6xRPE4XPQi3IBNdlFLtm/aCJ0+r16ksyM4uGN3itAg
+         q0Sg==
+X-Gm-Message-State: APjAAAXJysDY0zNbXDVXY/qXEdLWUXOll70nZKXrxvU57d1QpgZSKq64
+        3EySPb6LLMecSOb7jri23Urn9tuV8dWDKENVyzNcrQ==
+X-Google-Smtp-Source: APXvYqxMs8S/Wx/3db1xRxgCBPmB0doHxxfRLd4geJFOU/Wcf2aNrd5rqAUSGdtHOxCgrnDcmYGt9DTiy+YxoIkoAG4=
+X-Received: by 2002:ac2:5c11:: with SMTP id r17mr23917542lfp.61.1568195927793;
+ Wed, 11 Sep 2019 02:58:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190911084249.GA7436@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com>
+ <1567952431.4614.140.camel@linux.ibm.com> <CAFA6WYPq8Tq6=jTqnWQf9w9pzdJu8AcX-CFBWPwoVmMaLEJKhg@mail.gmail.com>
+ <20190910114336.GA7018@linux.intel.com> <20190911092708.GA20023@linux.intel.com>
+ <20190911092926.GA20970@linux.intel.com> <20190911093637.GA21744@linux.intel.com>
+In-Reply-To: <20190911093637.GA21744@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 11 Sep 2019 15:28:36 +0530
+Message-ID: <CAFA6WYOdgxEjCYMsgqCUjq7mydH3apxmqxjkyLbqiKfc_1R5Tg@mail.gmail.com>
+Subject: Re: KEYS-TRUSTED git
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     jejb@linux.ibm.com, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, dhowells@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 09:42:49AM +0100, Jarkko Sakkinen wrote:
-> On Tue, Sep 10, 2019 at 05:21:32PM +0100, Jarkko Sakkinen wrote:
-> > On Mon, Sep 09, 2019 at 01:16:48PM +0100, James Bottomley wrote:
-> > > Link to previous cover letter:
-> > > 
-> > > https://lore.kernel.org/linux-integrity/1540193596.3202.7.camel@HansenPartnership.com/
-> > > 
-> > > This is marked v6 instead of v5 because I did a v5 after feedback on v4
-> > > but didn't get around to posting it and then had to rework the whole of
-> > > the kernel space handling while I was on holiday.  I also added the
-> > > documentation of how the whole thing works and the rationale for doing
-> > > it in tpm-security.rst (patch 11).  The main reason for doing this now
-> > > is so we have something to discuss at Plumbers.
-> > > 
-> > > The new patch set implements the various splits requested, but the main
-> > > changes are that the kernel space is gone and is replaced by a context
-> > > save and restore of the generated null seed.  This is easier to handle
-> > > than a full kernel space given the new threading for TPM spaces, but
-> > > conceptually it is still very like a space.  I've also made whether
-> > > integrity and encryption is turned on a Kconfig option.
-> > > 
-> > > James
-> > 
-> > So... is there a changelog for the revisions?
-> 
-> This also desperately needs a cover letter with the full rationale and
-> not just a link to an aged cover letter. I have bigger problems with the
-> form than the function ATM.
-> 
-> TPM's threat model does not cover hardware attacks. It is hardware
-> designed to give some protection against software attacks. If I were
-> sending these patches I would start to look for an angle from that
-> perspective.
+On Wed, 11 Sep 2019 at 15:06, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Wed, Sep 11, 2019 at 10:29:26AM +0100, Jarkko Sakkinen wrote:
+> > On Wed, Sep 11, 2019 at 10:27:08AM +0100, Jarkko Sakkinen wrote:
+> > > On Tue, Sep 10, 2019 at 12:43:36PM +0100, Jarkko Sakkinen wrote:
+> > > > On Mon, Sep 09, 2019 at 11:57:45AM +0530, Sumit Garg wrote:
+> > > > > @Jarkko: No worries, I understand the situation.
+> > > >
+> > > > I made the call to add them anyway to my TPM tree.
+> > >
+> > > Also,
+> > >
+> > > Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > >
+> > > I think I give a shot of doing one more PR to 5.4 because that would
+> > > help both your and James' work because this is the kind of intersection
+> > > point betwen them.
+> >
+> > Polished short summaries a bit:
+> >
+> > 1. Start with capital letter.
+> > 2. s/tpm2/TPM2/g
+>
+> Now also in my next branch. I wait for 24h or so and if no alarms are
+> rised I'll send a PR. The code changes for the most part mechanically
+> move stuff, which makes me confident that I can still do a PR with
+> these changes.
 
-The rationale can be essentially just that since there is often lots of
-*software* running outside the CPU on different cores all around the HW
-platform, this will add to defense in depth. I'm not looking for
-anything more rockety sciency than that.
+Did you notice an issue reported by kbuild test robot? It looks like
+asymmetric keys based on TPM also relied on old tpm_buf method. So we
+need to transition them also to use new tpm_buf method. I can work on
+corresponding changes required but need your help to test it.
 
-I think that was the key lesson from TPM Genie.
+-Sumit
 
-/Jarkko
+>
+> /Jarkko
