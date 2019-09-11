@@ -2,89 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF755AF751
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Sep 2019 09:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E55AF82A
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Sep 2019 10:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726657AbfIKH4H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Sep 2019 03:56:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39638 "EHLO mail.kernel.org"
+        id S1726657AbfIKImx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Sep 2019 04:42:53 -0400
+Received: from mga06.intel.com ([134.134.136.31]:56754 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725924AbfIKH4H (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Sep 2019 03:56:07 -0400
-Received: from localhost (unknown [62.28.240.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A300820872;
-        Wed, 11 Sep 2019 07:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568188566;
-        bh=vwdg9KLjse6e40fTr8aUorTZdfy5Ppck3ADiYBkf1T4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lql4CiyQX+heooybFPSHweBYg47+93NbswFcMHmw9S7BaznL4jbaVGRLpH9+YLRxx
-         Y+fc/AIWCX3tOALBJNCE7HGMevBuYz4x0i7pGGvx67iZnKaXXFh8pqi75QvyL9whzx
-         blWuoauoUenq8nBmQuFaolKDEU/ODjPok59jw7eI=
-Date:   Wed, 11 Sep 2019 03:56:03 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "# 4.0+" <stable@vger.kernel.org>,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH AUTOSEL 4.19 126/167] tpm: Fix TPM 1.2 Shutdown sequence
- to prevent future TPM operations
-Message-ID: <20190911075603.GH2012@sasha-vm>
-References: <20190903162519.7136-1-sashal@kernel.org>
- <20190903162519.7136-126-sashal@kernel.org>
- <CAD=FV=W0YodeoOCiCv9zmv+-gswuU8U_XgrBnesE=wynTbDBiA@mail.gmail.com>
- <20190903165346.hwqlrin77cmzjiti@cantor>
- <20190903194335.GG5281@sasha-vm>
- <f2224c094836a4b8989c1cd6243a0b7ad1261a87.camel@linux.intel.com>
- <20190907220448.GB2012@sasha-vm>
- <20190909162808.ggcnrtvbvor7deqy@linux.intel.com>
+        id S1725379AbfIKImx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 11 Sep 2019 04:42:53 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Sep 2019 01:42:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
+   d="scan'208";a="189611282"
+Received: from dgonsal1-mobl.ger.corp.intel.com (HELO localhost) ([10.249.38.48])
+  by orsmga006.jf.intel.com with ESMTP; 11 Sep 2019 01:42:50 -0700
+Date:   Wed, 11 Sep 2019 09:42:49 +0100
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     linux-integrity@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v6 00/12] add integrity and security to TPM2 transactions
+Message-ID: <20190911084249.GA7436@linux.intel.com>
+References: <1568031408.6613.29.camel@HansenPartnership.com>
+ <20190910162132.GA11338@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190909162808.ggcnrtvbvor7deqy@linux.intel.com>
+In-Reply-To: <20190910162132.GA11338@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 09, 2019 at 05:28:08PM +0100, Jarkko Sakkinen wrote:
->On Sat, Sep 07, 2019 at 06:04:48PM -0400, Sasha Levin wrote:
->> On Sat, Sep 07, 2019 at 09:55:18PM +0300, Jarkko Sakkinen wrote:
->> > On Tue, 2019-09-03 at 15:43 -0400, Sasha Levin wrote:
->> > > Right. I gave a go at backporting a few patches and this happens to be
->> > > one of them. It will be a while before it goes in a stable tree
->> > > (probably way after after LPC).
->> >
->> > It *semantically* depends on
->> >
->> > db4d8cb9c9f2 ("tpm: use tpm_try_get_ops() in tpm-sysfs.c.")
->> >
->> > I.e. can cause crashes without the above patch. As a code change your
->> > patch is fine but it needs the above patch backported to work in stable
->> > manner.
->> >
->> > So... either I can backport that one (because ultimately I have
->> > responsibility to do that as the maintainer) but if you want to finish
->> > this one that is what you need to backport in addition and then it
->> > should be fine.
->>
->> If you're ok with the backport of this commit, I can just add
->> db4d8cb9c9f2 on top.
->
->Sure, I've already gave my promise to do that :-)
+On Tue, Sep 10, 2019 at 05:21:32PM +0100, Jarkko Sakkinen wrote:
+> On Mon, Sep 09, 2019 at 01:16:48PM +0100, James Bottomley wrote:
+> > Link to previous cover letter:
+> > 
+> > https://lore.kernel.org/linux-integrity/1540193596.3202.7.camel@HansenPartnership.com/
+> > 
+> > This is marked v6 instead of v5 because I did a v5 after feedback on v4
+> > but didn't get around to posting it and then had to rework the whole of
+> > the kernel space handling while I was on holiday.  I also added the
+> > documentation of how the whole thing works and the rationale for doing
+> > it in tpm-security.rst (patch 11).  The main reason for doing this now
+> > is so we have something to discuss at Plumbers.
+> > 
+> > The new patch set implements the various splits requested, but the main
+> > changes are that the kernel space is gone and is replaced by a context
+> > save and restore of the generated null seed.  This is easier to handle
+> > than a full kernel space given the new threading for TPM spaces, but
+> > conceptually it is still very like a space.  I've also made whether
+> > integrity and encryption is turned on a Kconfig option.
+> > 
+> > James
+> 
+> So... is there a changelog for the revisions?
 
-I think that the dependency in question is actually:
+This also desperately needs a cover letter with the full rationale and
+not just a link to an aged cover letter. I have bigger problems with the
+form than the function ATM.
 
-	2677ca98ae377 ("tpm: use tpm_try_get_ops() in tpm-sysfs.c.")
+TPM's threat model does not cover hardware attacks. It is hardware
+designed to give some protection against software attacks. If I were
+sending these patches I would start to look for an angle from that
+perspective.
 
-Which is tricky to backport. I think I'll drop this patch for now and
-wait for your backport instead.
-
---
-Thanks,
-Sasha
+/Jarkko
