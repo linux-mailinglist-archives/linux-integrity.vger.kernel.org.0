@@ -2,65 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F8EAF8E6
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Sep 2019 11:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77576AF903
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Sep 2019 11:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727453AbfIKJ3a (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Sep 2019 05:29:30 -0400
-Received: from mga06.intel.com ([134.134.136.31]:60123 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725616AbfIKJ33 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Sep 2019 05:29:29 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Sep 2019 02:29:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
-   d="scan'208";a="175596461"
-Received: from dgonsal1-mobl.ger.corp.intel.com (HELO localhost) ([10.249.38.48])
-  by orsmga007.jf.intel.com with ESMTP; 11 Sep 2019 02:29:27 -0700
-Date:   Wed, 11 Sep 2019 10:29:26 +0100
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>, jejb@linux.ibm.com
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        dhowells@redhat.com
-Subject: Re: KEYS-TRUSTED git
-Message-ID: <20190911092926.GA20970@linux.intel.com>
-References: <c253ca7292b397f1352d2ee00fce0b011f84abff.camel@linux.intel.com>
- <1567952431.4614.140.camel@linux.ibm.com>
- <CAFA6WYPq8Tq6=jTqnWQf9w9pzdJu8AcX-CFBWPwoVmMaLEJKhg@mail.gmail.com>
- <20190910114336.GA7018@linux.intel.com>
- <20190911092708.GA20023@linux.intel.com>
+        id S1727399AbfIKJex (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Sep 2019 05:34:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45394 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725616AbfIKJex (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 11 Sep 2019 05:34:53 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 537DAAEA4;
+        Wed, 11 Sep 2019 09:34:51 +0000 (UTC)
+From:   Petr Vorel <pvorel@suse.cz>
+To:     linux-kselftest@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>, linux-integrity@vger.kernel.org
+Subject: [PATCH] selftests/tpm2: Add log and *.pyc to .gitignore
+Date:   Wed, 11 Sep 2019 11:34:42 +0200
+Message-Id: <20190911093442.13412-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.22.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190911092708.GA20023@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 10:27:08AM +0100, Jarkko Sakkinen wrote:
-> On Tue, Sep 10, 2019 at 12:43:36PM +0100, Jarkko Sakkinen wrote:
-> > On Mon, Sep 09, 2019 at 11:57:45AM +0530, Sumit Garg wrote:
-> > > @Jarkko: No worries, I understand the situation.
-> > 
-> > I made the call to add them anyway to my TPM tree.
-> 
-> Also,
-> 
-> Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> 
-> I think I give a shot of doing one more PR to 5.4 because that would
-> help both your and James' work because this is the kind of intersection
-> point betwen them.
+Fixes: 6ea3dfe1e073 ("selftests: add TPM 2.0 tests")
 
-Polished short summaries a bit:
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+ tools/testing/selftests/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-1. Start with capital letter.
-2. s/tpm2/TPM2/g
+diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+index 8059ce834247..61df01cdf0b2 100644
+--- a/tools/testing/selftests/.gitignore
++++ b/tools/testing/selftests/.gitignore
+@@ -2,3 +2,5 @@ gpiogpio-event-mon
+ gpiogpio-hammer
+ gpioinclude/
+ gpiolsgpio
++tpm2/SpaceTest.log
++tpm2/*.pyc
+-- 
+2.22.1
 
-/Jarkko
