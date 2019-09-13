@@ -2,165 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1ECCB053A
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Sep 2019 23:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894C9B2114
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2019 15:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728336AbfIKV3d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Sep 2019 17:29:33 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42804 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728319AbfIKV3d (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Sep 2019 17:29:33 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8BLHhIP132004
-        for <linux-integrity@vger.kernel.org>; Wed, 11 Sep 2019 17:29:32 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2uy7gqjc6x-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 11 Sep 2019 17:29:32 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 11 Sep 2019 22:29:30 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 11 Sep 2019 22:29:27 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8BLT1Ee38535424
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Sep 2019 21:29:01 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9819A11C04A;
-        Wed, 11 Sep 2019 21:29:26 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0F45711C050;
-        Wed, 11 Sep 2019 21:29:26 +0000 (GMT)
-Received: from dhcp-9-31-103-196.watson.ibm.com (unknown [9.31.103.196])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 11 Sep 2019 21:29:25 +0000 (GMT)
-Subject: [GIT PULL] integrity subsystem updates for v5.4
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Wed, 11 Sep 2019 17:29:25 -0400
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19091121-0008-0000-0000-00000314850B
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19091121-0009-0000-0000-00004A32F24B
-Message-Id: <1568237365.5783.39.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-11_10:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=13 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1909110188
+        id S2390359AbfIMNcl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Sep 2019 09:32:41 -0400
+Received: from mga07.intel.com ([134.134.136.100]:1052 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389185AbfIMNMk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 13 Sep 2019 09:12:40 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 06:12:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,501,1559545200"; 
+   d="scan'208";a="215371241"
+Received: from ddungax-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.37.38])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Sep 2019 06:12:35 -0700
+Date:   Fri, 13 Sep 2019 14:12:34 +0100
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Seunghun Han <kkamagui@gmail.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vanya Lazeev <ivan.lazeev@gmail.com>
+Subject: Re: [PATCH v2 2/2] tpm: tpm_crb: enhance resource mapping mechanism
+ for supporting AMD's fTPM
+Message-ID: <20190913131234.GA7412@linux.intel.com>
+References: <20190909090906.28700-1-kkamagui@gmail.com>
+ <20190909090906.28700-3-kkamagui@gmail.com>
+ <20190910144215.GA30780@linux.intel.com>
+ <20190910150342.GA1920@linux.intel.com>
+ <CAHjaAcRf3fcJMp6AwVRTrVaABZVzSkhBwRcpKZogAS4SSDK3zg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHjaAcRf3fcJMp6AwVRTrVaABZVzSkhBwRcpKZogAS4SSDK3zg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
+On Wed, Sep 11, 2019 at 12:28:18AM +0900, Seunghun Han wrote:
+> > Matthew pointed out that having a hook in NVS driver is better solution
+> > because it is nil functionality if the TPM driver is loaded. We need
+> > functions to:
+> >
+> > 1. Request a region from the NVS driver (when tpm_crb loads)
+> > 2. Release a region back to the NVS Driver (when tpm_crb unloads).
+> >
+> > My proposal would unnecessarily duplicate code and also leave a
+> > side-effect when TPM is not used in the first place.
+> >
+> > I see this as the overally best solution. If you can come up with a
+> > patch for the NVS side and changes to CRB drivers to utilize the new
+> > hooks, then combined with Vanya's changes we have a sustainable solution
+> > for AMD fTPM.
+> 
+> It's a great solution. I will update this patch on your advice and
+> send it to you soon.
+> 
+> By the way, I have a question about your advice.
+> If we handle the NVS region with NVS driver, calling devm_ioremap()
+> function is fine like crb_ioremap_resource() function in this patch?
 
-The major feature in this pull request is IMA support for measuring
-and appraising appended file signatures.  In addition are a couple of
-bug fixes and code cleanup to use struct_size().
+No, you should reclaim the resource that conflicts and return it back
+when tpm_crb is unregistered (e.g. rmmod tpm_crb).
 
-In addition to the PE/COFF and IMA xattr signatures, the kexec kernel
-image may be signed with an appended signature, using the same
-scripts/sign-file tool that is used to sign kernel modules.
- Similarly, the initramfs may contain an appended signature.
+I would try something like enumerating iomem resources with
+walk_iomem_res_desc(). I would advice to peek at arch/x86/kernel/crash.c
+for an example how to use this for NVS regions
+(IORES_DESC_ACPI_NV_STORAGE).
 
-(Stephen is carrying a patch to address a merge conflict with the
-security tree.)
+E.g. you could use a callback for it along the lines of:
 
-thanks,
+static int crb_find_iomem_res_cb(struct resource *res, void *io_res_ptr)
+{
+	struct resource *io_res = io_res_ptr;
 
-Mimi
+	if (res->start == io_res->start && res->end == io_res->end) {
+		/*
+		 * Backup all resource data so that it can be inserted
+		 * later on with the flags it had etc.
+		 */
+		*io_res = *res;
+		return 1;
+	}
 
-The following changes since commit 609488bc979f99f805f34e9a32c1e3b71179d10b:
+	return 0;
+}
 
-  Linux 5.3-rc2 (2019-07-28 12:47:02 -0700)
+Then you could __release_region() to unallocate the source. When tpm_crb
+is removed you can then allocate and insert a resource with data
+matching it had.
 
-are available in the git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
-
-for you to fetch changes up to 2a7f0e53daf29ca6dc9fbe2a27158f13474ec1b5:
-
-  ima: ima_api: Use struct_size() in kzalloc() (2019-08-29 14:23:30 -0400)
-
-----------------------------------------------------------------
-Gustavo A. R. Silva (2):
-      ima: use struct_size() in kzalloc()
-      ima: ima_api: Use struct_size() in kzalloc()
-
-Mimi Zohar (2):
-      ima: initialize the "template" field with the default template
-      sefltest/ima: support appended signatures (modsig)
-
-Sascha Hauer (2):
-      ima: always return negative code for error
-      ima: fix freeing ongoing ahash_request
-
-Stephen Rothwell (1):
-      MODSIGN: make new include file self contained
-
-Thiago Jung Bauermann (11):
-      MODSIGN: Export module signature definitions
-      PKCS#7: Refactor verify_pkcs7_signature()
-      PKCS#7: Introduce pkcs7_get_digest()
-      integrity: Select CONFIG_KEYS instead of depending on it
-      ima: Add modsig appraise_type option for module-style appended signatures
-      ima: Factor xattr_verify() out of ima_appraise_measurement()
-      ima: Implement support for module-style appended signatures
-      ima: Collect modsig
-      ima: Define ima-modsig template
-      ima: Store the measurement again when appraising a modsig
-      ima: Fix use after free in ima_read_modsig()
-
- Documentation/ABI/testing/ima_policy               |   6 +-
- Documentation/security/IMA-templates.rst           |   3 +
- arch/s390/Kconfig                                  |   2 +-
- arch/s390/kernel/machine_kexec_file.c              |  24 +--
- certs/system_keyring.c                             |  61 +++++--
- crypto/asymmetric_keys/pkcs7_verify.c              |  33 ++++
- include/crypto/pkcs7.h                             |   4 +
- include/linux/module.h                             |   3 -
- include/linux/module_signature.h                   |  46 +++++
- include/linux/verification.h                       |  10 ++
- init/Kconfig                                       |   6 +-
- kernel/Makefile                                    |   1 +
- kernel/module.c                                    |   1 +
- kernel/module_signature.c                          |  46 +++++
- kernel/module_signing.c                            |  56 +-----
- scripts/Makefile                                   |   2 +-
- security/integrity/Kconfig                         |   2 +-
- security/integrity/digsig.c                        |  43 ++++-
- security/integrity/ima/Kconfig                     |  13 ++
- security/integrity/ima/Makefile                    |   1 +
- security/integrity/ima/ima.h                       |  60 ++++++-
- security/integrity/ima/ima_api.c                   |  27 ++-
- security/integrity/ima/ima_appraise.c              | 194 ++++++++++++++-------
- security/integrity/ima/ima_crypto.c                |  10 +-
- security/integrity/ima/ima_main.c                  |  24 ++-
- security/integrity/ima/ima_modsig.c                | 168 ++++++++++++++++++
- security/integrity/ima/ima_policy.c                |  71 ++++++--
- security/integrity/ima/ima_template.c              |  31 +++-
- security/integrity/ima/ima_template_lib.c          |  64 ++++++-
- security/integrity/ima/ima_template_lib.h          |   4 +
- security/integrity/integrity.h                     |  20 +++
- .../selftests/kexec/test_kexec_file_load.sh        |  38 +++-
- 32 files changed, 871 insertions(+), 203 deletions(-)
- create mode 100644 include/linux/module_signature.h
- create mode 100644 kernel/module_signature.c
- create mode 100644 security/integrity/ima/ima_modsig.c
-
+/Jarkko
