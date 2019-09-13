@@ -2,98 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C361EB2423
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2019 18:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EFCB24BA
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2019 19:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389592AbfIMQfV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Sep 2019 12:35:21 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40664 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387822AbfIMQfV (ORCPT
+        id S2388528AbfIMRlZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Sep 2019 13:41:25 -0400
+Received: from smtprelay0063.hostedemail.com ([216.40.44.63]:44769 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726822AbfIMRlZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Sep 2019 12:35:21 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w10so15533829pgj.7;
-        Fri, 13 Sep 2019 09:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=U1A+7K7DBCYzZ10LaOWX7DewnzC97b4Covgem9tPITc=;
-        b=WDywiucKcTd0TVEp5ZnkILQ3wgFeKxmG4pJuqgS4DyzPjMacxPh4ZxfK8KjJHI+iXP
-         zmlKc+R7wpq+uJM57/COIqb9U7qbCJGVk3yxz8BP9Kv8B5CkktfoGswxvL4zE/PXOL91
-         Q0cYM1ZHnEZWUQcXweTJA6zJWDTf9ZrGrilmKZyz0JVO+Vstxc6G88AsEtpZO6BK+mXq
-         DtvlrHN+SlH4eMhNh9gsB/bF/k0neI1OPvHCn/H48KeaIDC0kNX5/lFrKVGuO/s+dnnf
-         x9w33nx6mfwNk0ApBaRG+WXN1oMC6tEW/D58bHZTFgbIsxPIgfjVfR7DI7ZmbwWAPS/4
-         mOxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=U1A+7K7DBCYzZ10LaOWX7DewnzC97b4Covgem9tPITc=;
-        b=rtK9s8JvqWf7nr8wuG6rzP2SDkm9sx1khi26fZ8RzKUAlSpYy31szL9tMrDp8KxJ6Y
-         RwUKMhzBQUcgg5QmABNKeNr+i1x4lKOMiz6zl4fftPI34rvZTAb/Tx+52L6YxlntEKlM
-         VxoW2PAOirETQ38gez2BMRbPfW+S9KpLV9IBOrF/p9Hm//2mrVFGuSFPBQFRYFDMSj75
-         dir5Y/+XDdIeDxb9h5v04xQIv8AyluP0C3mMPLEc/OyP2/S3N4DAMHUSOvWvl5OK8oNc
-         E8/5yCP1HYeoG1qWn/be+iQJ5B6WBbQGTyzY9gMf77nKeJYX+E7ZD6+CAQw39pvwhJ+C
-         mANw==
-X-Gm-Message-State: APjAAAUc2pVcYf7EtX0Qd1FeOKdKZiAA2GFniLpzs88I63BIRBeLalN4
-        gpg2W+24O6IeY48BlzP5I/s=
-X-Google-Smtp-Source: APXvYqw2x57TgLuZYyv7s+sdwpz6y9pno7nl9Tn8GS7DnHpyGJ6XnIwjsmPewtoeMUodWUryGoKfIw==
-X-Received: by 2002:a17:90a:eac7:: with SMTP id ev7mr6337926pjb.61.1568392519733;
-        Fri, 13 Sep 2019 09:35:19 -0700 (PDT)
-Received: from SD ([106.222.13.126])
-        by smtp.gmail.com with ESMTPSA id c62sm40785154pfa.92.2019.09.13.09.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2019 09:35:19 -0700 (PDT)
-Date:   Fri, 13 Sep 2019 22:05:06 +0530
-From:   Saiyam Doshi <saiyamdoshi.in@gmail.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] security: ima: make use of kmemdup
-Message-ID: <20190913163506.GA30916@SD>
+        Fri, 13 Sep 2019 13:41:25 -0400
+X-Greylist: delayed 305 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Sep 2019 13:41:24 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id ECA6C180013F1;
+        Fri, 13 Sep 2019 17:36:19 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 73C7218225E0A;
+        Fri, 13 Sep 2019 17:36:18 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::,RULES_HIT:41:355:379:599:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1568:1593:1594:1711:1714:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3622:3865:3866:3867:3868:3870:3871:4321:5007:6119:9545:10004:10400:10848:11232:11658:11914:12043:12297:12740:12760:12895:13069:13311:13357:13439:14181:14659:14721:21080:21450:21627:30054:30091,0,RBL:47.151.152.152:@perches.com:.lbl8.mailshell.net-62.8.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:31,LUA_SUMMARY:none
+X-HE-Tag: part18_19b2e2b09e449
+X-Filterd-Recvd-Size: 1675
+Received: from XPS-9350.home (unknown [47.151.152.152])
+        (Authenticated sender: joe@perches.com)
+        by omf16.hostedemail.com (Postfix) with ESMTPA;
+        Fri, 13 Sep 2019 17:36:16 +0000 (UTC)
+Message-ID: <33da71451cbc5836efd61ccf125be89c6e946253.camel@perches.com>
+Subject: Re: [PATCH] MAINTAINERS: Add a git and a maintainer entry to
+ keyring subsystems
+From:   Joe Perches <joe@perches.com>
+To:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Fri, 13 Sep 2019 10:36:15 -0700
+In-Reply-To: <11580.1568387033@warthog.procyon.org.uk>
+References: <20190910143228.30305-1-jarkko.sakkinen@linux.intel.com>
+         <11580.1568387033@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.32.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Replace call to kmalloc followed by memcpy with a direct call
-to kmemdup to achieve same functionality.
+On Fri, 2019-09-13 at 16:03 +0100, David Howells wrote:
+> Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> 
+> > Subject: [PATCH] MAINTAINERS: Add a git and a maintainer entry to keyring subsystems
+> 
+> I would recommend splitting the patch in two and putting something like:
+> 
+> 	keys: Add Jarkko Sakkinen as co-maintainer
+> 
+> as the subject of the keyrings maintainership one.
 
-Signed-off-by: Saiyam Doshi <saiyamdoshi.in@gmail.com>
----
- security/integrity/ima/ima_policy.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Why is there utility in micro splitting such a trivial patch?
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 6df7f641ff66..1bd77c5eaeb7 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -262,15 +262,14 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 	struct ima_rule_entry *nentry;
- 	int i, result;
- 
--	nentry = kmalloc(sizeof(*nentry), GFP_KERNEL);
--	if (!nentry)
--		return NULL;
--
- 	/*
- 	 * Immutable elements are copied over as pointers and data; only
- 	 * lsm rules can change
- 	 */
--	memcpy(nentry, entry, sizeof(*nentry));
-+	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
-+	if (!nentry)
-+		return NULL;
-+
- 	memset(nentry->lsm, 0, FIELD_SIZEOF(struct ima_rule_entry, lsm));
- 
- 	for (i = 0; i < MAX_LSM_RULES; i++) {
--- 
-2.20.1
 
