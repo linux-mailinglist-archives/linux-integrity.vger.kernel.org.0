@@ -2,42 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E41C9B2167
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2019 15:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF19B216F
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2019 15:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389605AbfIMNuV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Sep 2019 09:50:21 -0400
-Received: from mga05.intel.com ([192.55.52.43]:7151 "EHLO mga05.intel.com"
+        id S2388927AbfIMNxI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Sep 2019 09:53:08 -0400
+Received: from mga14.intel.com ([192.55.52.115]:38524 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388639AbfIMNuU (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Sep 2019 09:50:20 -0400
+        id S2388813AbfIMNxH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 13 Sep 2019 09:53:07 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 06:50:20 -0700
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 06:53:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
-   d="scan'208";a="176286060"
+   d="scan'208";a="179680756"
 Received: from ltudorx-wtg.ger.corp.intel.com (HELO localhost) ([10.252.37.39])
-  by orsmga007.jf.intel.com with ESMTP; 13 Sep 2019 06:50:14 -0700
-Date:   Fri, 13 Sep 2019 14:50:11 +0100
+  by orsmga008.jf.intel.com with ESMTP; 13 Sep 2019 06:53:01 -0700
+Date:   Fri, 13 Sep 2019 14:52:58 +0100
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Call tpm_put_ops() when the validation for @digests
- fails
-Message-ID: <20190913135011.GH7412@linux.intel.com>
-References: <20190910142437.20889-1-jarkko.sakkinen@linux.intel.com>
- <20190910151121.3tgzwuhrroog5dvb@cantor>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] selftests/tpm2: Add log and *.pyc to .gitignore
+Message-ID: <20190913135258.GI7412@linux.intel.com>
+References: <20190911093442.13412-1-pvorel@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190910151121.3tgzwuhrroog5dvb@cantor>
+In-Reply-To: <20190911093442.13412-1-pvorel@suse.cz>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -45,18 +40,13 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 10, 2019 at 08:11:21AM -0700, Jerry Snitselaar wrote:
-> On Tue Sep 10 19, Jarkko Sakkinen wrote:
-> > The chip is not released when the validation for @digests fails. Add
-> > tpm_put_ops() to the failure path.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Reported-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+On Wed, Sep 11, 2019 at 11:34:42AM +0200, Petr Vorel wrote:
+> Fixes: 6ea3dfe1e073 ("selftests: add TPM 2.0 tests")
 > 
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> Signed-off-by: Petr Vorel <pvorel@suse.cz>
 
-Roberto, can you just squash this fix with yours to a single patch and
-send a new patch version? You can add suggested-by tag from me to v4.
+Reviewed-by:  <jarkko.sakkinen@linux.intel.com>
+
+I applied this to my tpmdd tree. I'll put the both fixes to my next PR.
 
 /Jarkko
