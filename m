@@ -2,37 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF19B216F
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2019 15:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBB7B2182
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2019 16:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388927AbfIMNxI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Sep 2019 09:53:08 -0400
-Received: from mga14.intel.com ([192.55.52.115]:38524 "EHLO mga14.intel.com"
+        id S2388191AbfIMOAS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Sep 2019 10:00:18 -0400
+Received: from mga07.intel.com ([134.134.136.100]:3837 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388813AbfIMNxH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Sep 2019 09:53:07 -0400
+        id S2388130AbfIMOAS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 13 Sep 2019 10:00:18 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 06:53:07 -0700
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 07:00:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
-   d="scan'208";a="179680756"
+X-IronPort-AV: E=Sophos;i="5.64,501,1559545200"; 
+   d="scan'208";a="192730370"
 Received: from ltudorx-wtg.ger.corp.intel.com (HELO localhost) ([10.252.37.39])
-  by orsmga008.jf.intel.com with ESMTP; 13 Sep 2019 06:53:01 -0700
-Date:   Fri, 13 Sep 2019 14:52:58 +0100
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Sep 2019 07:00:10 -0700
+Date:   Fri, 13 Sep 2019 15:00:06 +0100
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] selftests/tpm2: Add log and *.pyc to .gitignore
-Message-ID: <20190913135258.GI7412@linux.intel.com>
-References: <20190911093442.13412-1-pvorel@suse.cz>
+To:     Seunghun Han <kkamagui@gmail.com>
+Cc:     ivan.lazeev@gmail.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+        jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterhuewe@gmx.de
+Subject: Re: [PATCH v2] Fix fTPM on AMD Zen+ CPUs
+Message-ID: <20190913140006.GA29755@linux.intel.com>
+References: <CAHjaAcStAfarJoPG0tbSY0BVcp0-7Lvah2FdpmC_eCFfxaSVFw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190911093442.13412-1-pvorel@suse.cz>
+In-Reply-To: <CAHjaAcStAfarJoPG0tbSY0BVcp0-7Lvah2FdpmC_eCFfxaSVFw@mail.gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -40,13 +41,20 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 11:34:42AM +0200, Petr Vorel wrote:
-> Fixes: 6ea3dfe1e073 ("selftests: add TPM 2.0 tests")
+On Wed, Sep 11, 2019 at 02:17:48PM +0900, Seunghun Han wrote:
+> Vanya,
+> I also made a patch series to solve AMD's fTPM. My patch link is here,
+> https://lkml.org/lkml/2019/9/9/132 .
 > 
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> The maintainer, Jarkko, wanted me to remark on your patch, so I would
+> like to cooperate with you.
+> 
+> Your patch is good for me. If you are fine, I would like to take your
+> patch and merge it with my patch series. I also would like to change
+> some points Jason mentioned before.
 
-Reviewed-by:  <jarkko.sakkinen@linux.intel.com>
-
-I applied this to my tpmdd tree. I'll put the both fixes to my next PR.
+I rather handle the review processes separately because I can merge
+Vanyas's patch first. Bundling them into patch set would only slow
+down things.
 
 /Jarkko
