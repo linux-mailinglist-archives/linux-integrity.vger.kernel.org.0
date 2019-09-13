@@ -2,115 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC485B256A
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2019 20:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FABB28A2
+	for <lists+linux-integrity@lfdr.de>; Sat, 14 Sep 2019 00:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389961AbfIMSwC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Sep 2019 14:52:02 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:33303 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389946AbfIMSwC (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Sep 2019 14:52:02 -0400
-Received: from lhreml701-cah.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 7C8E0838EB7978359F1B;
-        Fri, 13 Sep 2019 19:51:59 +0100 (IST)
-Received: from A170120444-LP.china.huawei.com (10.47.67.210) by
- smtpsuk.huawei.com (10.201.108.42) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Fri, 13 Sep 2019 19:51:49 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <jarkko.sakkinen@linux.intel.com>, <zohar@linux.ibm.com>,
-        <jsnitsel@redhat.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <silviu.vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4] KEYS: trusted: correctly initialize digests and fix locking issue
-Date:   Fri, 13 Sep 2019 20:51:36 +0200
-Message-ID: <20190913185136.780-1-roberto.sassu@huawei.com>
+        id S2404163AbfIMWuR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Sep 2019 18:50:17 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:46632 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404114AbfIMWuR (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 13 Sep 2019 18:50:17 -0400
+Received: from prsriva-Precision-Tower-5810.corp.microsoft.com (unknown [167.220.2.18])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E945020B7186;
+        Fri, 13 Sep 2019 15:50:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E945020B7186
+From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Cc:     arnd@arndb.de, jean-philippe@linaro.org, allison@lohutok.net,
+        kristina.martsenko@arm.org, yamada.masahiro@socionext.com,
+        duwe@lst.de, mark.rutland@arm.com, tglx@linutronix.de,
+        takahiro.akashi@linaro.org, james.morse@arm.org,
+        catalin.marinas@arm.com, sboyd@kernel.org, bauerman@linux.ibm.com,
+        zohar@linux.ibm.com
+Subject: [RFC PATCH v1 0/1] Add support for arm64 to carry ima measurement log in kexec_file_load
+Date:   Fri, 13 Sep 2019 15:50:08 -0700
+Message-Id: <20190913225009.3406-1-prsriva@linux.microsoft.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.47.67.210]
-X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Commit 0b6cf6b97b7e ("tpm: pass an array of tpm_extend_digest structures to
-tpm_pcr_extend()") modifies tpm_pcr_extend() to accept a digest for each
-PCR bank. After modification, tpm_pcr_extend() expects that digests are
-passed in the same order as the algorithms set in chip->allocated_banks.
+Add support for arm64 to carry ima measurement log
+to the next kexec'ed session triggered via kexec_file_load.
+- Top of Linux 5.3-rc6
 
-This patch fixes two issues introduced in the last iterations of the patch
-set: missing initialization of the TPM algorithm ID in the tpm_digest
-structures passed to tpm_pcr_extend() by the trusted key module, and
-unreleased locks in the TPM driver due to returning from tpm_pcr_extend()
-without calling tpm_put_ops().
+Currently during kexec the kernel file signatures are/can be validated
+prior to actual load, the information(PE/ima signature) is not carried
+to the next session. This lead to loss of information.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-Fixes: 0b6cf6b97b7e ("tpm: pass an array of tpm_extend_digest structures to tpm_pcr_extend()")
----
- drivers/char/tpm/tpm-interface.c | 14 +++++++++-----
- security/keys/trusted.c          |  5 +++++
- 2 files changed, 14 insertions(+), 5 deletions(-)
+Carrying forward the ima measurement log to the next kexec'ed session 
+allows a verifying party to get the entire runtime event log since the
+last full reboot, since that is when PCRs were last reset.
 
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index 1b4f95c13e00..d9ace5480665 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -320,18 +320,22 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- 	if (!chip)
- 		return -ENODEV;
- 
--	for (i = 0; i < chip->nr_allocated_banks; i++)
--		if (digests[i].alg_id != chip->allocated_banks[i].alg_id)
--			return -EINVAL;
-+	for (i = 0; i < chip->nr_allocated_banks; i++) {
-+		if (digests[i].alg_id != chip->allocated_banks[i].alg_id) {
-+			rc = EINVAL;
-+			goto out;
-+		}
-+	}
- 
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
- 		rc = tpm2_pcr_extend(chip, pcr_idx, digests);
--		tpm_put_ops(chip);
--		return rc;
-+		goto out;
- 	}
- 
- 	rc = tpm1_pcr_extend(chip, pcr_idx, digests[0].digest,
- 			     "attempting extend a PCR value");
-+
-+out:
- 	tpm_put_ops(chip);
- 	return rc;
- }
-diff --git a/security/keys/trusted.c b/security/keys/trusted.c
-index ade699131065..1fbd77816610 100644
---- a/security/keys/trusted.c
-+++ b/security/keys/trusted.c
-@@ -1228,11 +1228,16 @@ static int __init trusted_shash_alloc(void)
- 
- static int __init init_digests(void)
- {
-+	int i;
-+
- 	digests = kcalloc(chip->nr_allocated_banks, sizeof(*digests),
- 			  GFP_KERNEL);
- 	if (!digests)
- 		return -ENOMEM;
- 
-+	for (i = 0; i < chip->nr_allocated_banks; i++)
-+		digests[i].alg_id = chip->allocated_banks[i].alg_id;
-+
- 	return 0;
- }
- 
+Changelog:
+
+v1:
+  - add new fdt porperties to mark start and end for ima measurement
+    log.
+  - use fdt_* functions to add/remove fdt properties and memory
+    allocations.
+  - remove additional check for endian-ness as they are checked
+    in fdt_* functions.
+
+v0:
+  - Add support to carry ima measurement log in arm64, 
+   uses same code as powerpc.
+
+Prakhar Srivastava (1):
+  Add support for arm64 to carry ima measurement log in kexec_file_load
+
+ arch/arm64/Kconfig                     |   7 +
+ arch/arm64/include/asm/ima.h           |  29 ++++
+ arch/arm64/include/asm/kexec.h         |   5 +
+ arch/arm64/kernel/Makefile             |   3 +-
+ arch/arm64/kernel/ima_kexec.c          | 213 +++++++++++++++++++++++++
+ arch/arm64/kernel/machine_kexec_file.c |   6 +
+ 6 files changed, 262 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
+
 -- 
 2.17.1
 
