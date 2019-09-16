@@ -2,83 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53834B39F5
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2019 14:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6012EB3B22
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2019 15:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732298AbfIPMHC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Sep 2019 08:07:02 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32520 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731744AbfIPMHC (ORCPT
+        id S1733087AbfIPNRM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Sep 2019 09:17:12 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:41861 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732956AbfIPNRL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Sep 2019 08:07:02 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8GC1Eb2023538
-        for <linux-integrity@vger.kernel.org>; Mon, 16 Sep 2019 08:07:01 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2v28etuj48-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 16 Sep 2019 08:07:00 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 16 Sep 2019 13:06:58 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 16 Sep 2019 13:06:55 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8GC6t7723265432
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Sep 2019 12:06:55 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E750BA4060;
-        Mon, 16 Sep 2019 12:06:54 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C50A0A4054;
-        Mon, 16 Sep 2019 12:06:53 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.153.178])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 16 Sep 2019 12:06:53 +0000 (GMT)
-Subject: Re: LPC System Boot and Security Microconference  (subject change)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Piotr =?ISO-8859-1?Q?Kr=F3l?= <piotr.krol@3mdeb.com>
-Date:   Mon, 16 Sep 2019 08:06:53 -0400
-In-Reply-To: <20190916074657.GA26795@linux.intel.com>
-References: <20190916073535.25117-1-jarkko.sakkinen@linux.intel.com>
-         <20190916074657.GA26795@linux.intel.com>
+        Mon, 16 Sep 2019 09:17:11 -0400
+Received: by mail-lj1-f193.google.com with SMTP id f5so1713191ljg.8
+        for <linux-integrity@vger.kernel.org>; Mon, 16 Sep 2019 06:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aA+U7AmDCNWjq14jh2S68p2S74Unu27IayYKPois77U=;
+        b=BC46gSZGC9YgbcyDwaeVukrsEkzRi9jVLF90m5TEoDfDfsW21Lvv95CH5EoKuOzG8S
+         /wls581J4kPgw/3SUJaFftbmNoR7rrbmfiG55/EUwWkOx9FC7x4rL8e/iQtGIPDlihly
+         pvqxbi54OfSeAuHAG8FJglBKUnF0QdahseXVvCFKWaPlHNbcja23koL2Z4jFY3FmtdHc
+         m8P0h0cFsmjbNB14DPitPeJEpAIlRLw93w6cfneTL6sU4BZJYwqP5Xp5pt+l5Sn2P6CU
+         BHiKQQKfqmdZSDDWrQIxCB2t9TE7BBRaqhg3kmbA4w8sbdv59WCOg0DZ2PxwC8ke4VgY
+         dezQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aA+U7AmDCNWjq14jh2S68p2S74Unu27IayYKPois77U=;
+        b=EqQnVy3J9dBBoIdw4kt67VlvblHZZ+YrcCiYEDw7ORcla+joBdn/rrv6fYD8ejplaF
+         op8QW/fKr060GyK3xxZbStJZ/Qc9xZtLX3yJy5DnWL2Xje3ZIzOs9uUK2oABe4CQ+oUJ
+         ST0F7ZluZEUFhuFmRsUDOTYFm2vXr/8jxIertXu9eTDgwbM3NmzTMdOId/Tp+OfSylG5
+         oJqLe/hR7kjozyiNvH/R/W07ACmc4ECM0jUNPTOMZwlJGCXg+oZecjsHGLeOrqWBxk1s
+         QCIwXSuI9MrvLLxQJyMZroxTY4g0DJOk4NnR3zZ4T3qyBLOepfjy+BV6nNj8TEe03d0S
+         RP4w==
+X-Gm-Message-State: APjAAAVjnt527COzrkR30qnGF5WdF0Kms+bYMAAGf9Nf+yBmNAA7Tp37
+        DvLqDQUVwSgwWghQeibj6V2wa31mtXQWvJV5VgkWlQ==
+X-Google-Smtp-Source: APXvYqxoJ3Q6AMJzTvvzLQwNEDnXhEEvnpgR/ZKP/uugJ9uruSAELuNoVit0XgZ3AY7waHynnevVwN4KsAqxQKJs+Vg=
+X-Received: by 2002:a2e:884c:: with SMTP id z12mr29597119ljj.92.1568639828352;
+ Mon, 16 Sep 2019 06:17:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <C867A0BA-1ACF-4600-8179-3E15A098846C@oracle.com>
+In-Reply-To: <C867A0BA-1ACF-4600-8179-3E15A098846C@oracle.com>
+From:   Janne Karhunen <janne.karhunen@gmail.com>
+Date:   Mon, 16 Sep 2019 16:16:57 +0300
+Message-ID: <CAE=Ncrb=rh0LeDjnGYGuGJVPXG3Y1UpjD5Tw41s0zyOAaL1NKg@mail.gmail.com>
+Subject: Re: IMA on remote file systems
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     linux-integrity@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19091612-0012-0000-0000-0000034C952A
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19091612-0013-0000-0000-000021870B29
-Message-Id: <1568635613.4975.40.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-16_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=941 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1909160130
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-09-16 at 10:46 +0300, Jarkko Sakkinen wrote:
-> My excuse is the overnight flight last night (no sleep).
+On Wed, Aug 28, 2019 at 8:36 PM Chuck Lever <chuck.lever@oracle.com> wrote:
 
-Sorry I couldn't make LPC.  Did anyone takes notes of the LPC System
-Boot and Security microconference?
+> My thought was to use an ephemeral Merkle tree for NFS (and
+> possibly other remote filesystems, like FUSE, until these
+> filesystems support durable per-file Merkle trees). A tree would
+> be constructed when the client measures a file, but it would not
+> saved to the filesystem. Instead of a hash of the file's contents,
+> the tree's root signature is stored as the IMA metadata.
 
-thanks,
+So the attack you are trying to guard against is that the pages that
+were evicted once and that are read back could still be integrity
+verified?
 
-Mimi
+Handling this properly would be awesome. I don't think we have
+anything against this now, the pages that were once evicted are really
+not checked when read back.
 
+
+--
+Janne
