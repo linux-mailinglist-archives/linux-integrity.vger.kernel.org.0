@@ -2,188 +2,144 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A3BB402E
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2019 20:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA248B4051
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2019 20:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390298AbfIPSSr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Sep 2019 14:18:47 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:51094 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729765AbfIPSSr (ORCPT
+        id S2390363AbfIPS3o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Sep 2019 14:29:44 -0400
+Received: from 2.mo1.mail-out.ovh.net ([178.32.119.250]:36953 "EHLO
+        2.mo1.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726648AbfIPS3n (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Sep 2019 14:18:47 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8GI8jWl020426;
-        Mon, 16 Sep 2019 18:18:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2019-08-05; bh=QLq4nnabSQvNaHQNUlM9lQ61GOayOg/Jx/HdebGsyaY=;
- b=a915c6hMEYjvEDztwG3t4nuTGUHb60K7qMVVL5mDxZOaR0aIEapgDwlQJKnQTGfbxgEm
- lmayJsbOhwqiAKUKabvCht1w9CXhlBp4EMPS9YBlZ+NwLO7PzloSotwD1es+SYYogRIf
- LjU+4uQUOn8k3EFVR8XIviJlLupU9Ca/gXIiPuDxtQRKF+8NOBrYpbe9DPltYfZv/HDQ
- nEgxxRKlCZO/8TVp2/hpBDpD5FYO2xIzwkZT1JWyBVZGZaCTWM7Ehs0eTafxokiNk7hS
- 1uhmg2CivQOtOIDvDi2EKiYANLuIZd/66tVpskTzQmSKKZENHricVzUmy5esvhhU/UKg 0Q== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2v0r5p99at-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Sep 2019 18:18:38 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8GI8dVv075942;
-        Mon, 16 Sep 2019 18:16:37 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2v0nb54yga-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Sep 2019 18:16:37 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x8GIGaRc018641;
-        Mon, 16 Sep 2019 18:16:36 GMT
-Received: from anon-dhcp-153.1015granger.net (/68.61.232.219)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 16 Sep 2019 11:16:35 -0700
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: IMA on remote file systems
-From:   Chuck Lever <chuck.lever@oracle.com>
-In-Reply-To: <20190916161054.GB4553@mit.edu>
-Date:   Mon, 16 Sep 2019 14:16:34 -0400
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Michael Halcrow <mhalcrow@google.com>,
-        "Theodore Y. Ts'o" <tytso@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Eric Biggers <ebiggers@google.com>
-Content-Transfer-Encoding: 7bit
-Message-Id: <8E8BBD35-F1DD-49C8-B350-6DDA39E5CC74@oracle.com>
-References: <C867A0BA-1ACF-4600-8179-3E15A098846C@oracle.com>
- <FA4C0F15-EE0A-4231-8415-A035C1CF3E32@oracle.com>
- <1568583730.5055.36.camel@linux.ibm.com> <20190916161054.GB4553@mit.edu>
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9382 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1909160178
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9382 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1909160178
+        Mon, 16 Sep 2019 14:29:43 -0400
+X-Greylist: delayed 8817 seconds by postgrey-1.27 at vger.kernel.org; Mon, 16 Sep 2019 14:29:41 EDT
+Received: from player693.ha.ovh.net (unknown [10.109.159.35])
+        by mo1.mail-out.ovh.net (Postfix) with ESMTP id 8102218FC11
+        for <linux-integrity@vger.kernel.org>; Mon, 16 Sep 2019 18:02:42 +0200 (CEST)
+Received: from 3mdeb.com (85-222-117-222.dynamic.chello.pl [85.222.117.222])
+        (Authenticated sender: piotr.krol@3mdeb.com)
+        by player693.ha.ovh.net (Postfix) with ESMTPSA id 5155D9D825CE;
+        Mon, 16 Sep 2019 16:02:36 +0000 (UTC)
+Subject: Re: LPC System Boot and Security Microconference (subject change)
+To:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+References: <20190916073535.25117-1-jarkko.sakkinen@linux.intel.com>
+ <20190916074657.GA26795@linux.intel.com>
+ <1568635613.4975.40.camel@linux.ibm.com>
+ <20190916134437.dx7aniyzsmoal45l@cantor>
+From:   =?UTF-8?Q?Piotr_Kr=c3=b3l?= <piotr.krol@3mdeb.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=piotr.krol@3mdeb.com; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <4a51563d-3d8b-24b6-a529-1fbe8f60678e@3mdeb.com>
+Date:   Mon, 16 Sep 2019 18:02:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190916134437.dx7aniyzsmoal45l@cantor>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 12835821888172706887
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedufedrudefgdeljecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
 
 
-> On Sep 16, 2019, at 12:10 PM, Theodore Y. Ts'o <tytso@mit.edu> wrote:
+
+On 9/16/19 3:44 PM, Jerry Snitselaar wrote:
+> On Mon Sep 16 19, Mimi Zohar wrote:
+
+Hi Mimi,
+
+>> On Mon, 2019-09-16 at 10:46 +0300, Jarkko Sakkinen wrote:
+>>> My excuse is the overnight flight last night (no sleep).
+>> 
+>> Sorry I couldn't make LPC.  Did anyone takes notes of the LPC
+>> System Boot and Security microconference?
+>> 
+>> thanks,
+>> 
+>> Mimi
+>> 
 > 
-> On Sun, Sep 15, 2019 at 05:42:10PM -0400, Mimi Zohar wrote:
->>>> My thought was to use an ephemeral Merkle tree for NFS (and
->>>> possibly other remote filesystems, like FUSE, until these
->>>> filesystems support durable per-file Merkle trees). A tree would
->>>> be constructed when the client measures a file, but it would not
->>>> saved to the filesystem. Instead of a hash of the file's contents,
->>>> the tree's root signature is stored as the IMA metadata.
->>>> 
->>>> Once a Merkle tree is available, it can be used in exactly the
->>>> same way that a durable Merkle tree would, to verify the integrity
->>>> of individual pages as they are used, evicted, and then read back
->>>> from the server.
->>>> 
->>>> If the client needs to evict part or all of an ephemeral tree, it
->>>> can subsequently be reconstructed by measuring the file again and
->>>> verifying its root signature against the stored IMA metadata.
+> There is an etherpad somewhere, but I haven't found a link to it
+> yet, and there will eventually be videos posted as well.
 > 
-> Where would the client store the ephemeral tree?  If you're thinking
-> about storing in memory, calculating the emphemeral tree would require
-> dragging the entire file across the network, which is going to be just
-> as bad as using IMA --- plus the CPU cost of calculating the Merkle
-> tree, and the memory cost of storing the ephemeral Merkle tree.
 
-A client would store ephemeral Merkle trees in memory.
+Link to etherpad:
+https://etherpad.net/p/LPC2019_System_Boot_and_Security
 
-The most interesting use case to me is protecting executables and
-DLLs. These will tend to be limited in size, so the cost of Merkle
-tree construction should be nicely bounded in the typical case.
+Best Regards,
+- -- 
+Piotr Król
+Embedded Systems Consultant
+GPG: B2EE71E967AA9E4C
+https://3mdeb.com | @3mdeb_com
+-----BEGIN PGP SIGNATURE-----
 
-An additional cost would arise if the in-memory tree were to be
-evicted. We hope that is an infrequent event. If the tree is
-partially evicted, only some of the file needs to be read back
-to re-construct it, since we would still have in-memory hashes
-stored in the interior nodes of the tree that enable the client to
-verify the portion of the tree that needs to be re-constructed.
-
-The short-term purpose of these trees is to add the value of better
-integrity protection for file systems that find it difficult to
-store per-file Merkle trees durably. We expect that situation will
-be temporary for many file systems, though not all.
-
-The price that is paid for this extra protection is that it will
-perform like traditional IMA, as you observed above. This is probably
-a different cost than reading from flash on a mobile device: a typical
-NFS client will be less memory- and CPU-constrained than a mobile
-device, and the cost of reading over NFS on a fast network from the
-server's cache is not high. The trade-offs here are going to be
-different.
-
-
-> I suspect that for most clients, it wouldn't be worth it unless the
-> client can store the ephemeral tree *somewhere* on the client's local
-> persistent storage, or maybe if it could store the Merkle tree on the
-> NFS server (maybe via an xattr which contains the pathname to the
-> Merkle tree relative to the NFS mount point?).
-
-The trees could be cached locally for exceptionally large files (eg
-files larger than the client's physical memory). For smaller files,
-which I expect will be the typical case, the cost of reading a file
-will be about the same as reading a Merkle tree.
-
-As mentioned in my proposal, the eventual goal is to extend the NFS
-protocol to store the Merkle tree durably on the server. We will get
-there eventually. Changing the protocol is a slow process, particularly
-because it involves consensus among NFS implementers who work on other
-operating systems besides Linux.
-
-
->>>> So the only difference here is that the latency-to-first-byte
->>>> benefit of a durable Merkle tree would be absent.
-> 
-> What problem are you most interested in solving?  And what cost do you
-> think the user will be willing to pay in order to solve that problem?
-
-NFS users would get full protection of their files from storage
-to point-of-use, at the same cost as IMA, until some point in the
-future when NFS can store the trees durably. The same would apply
-to other filesystems that find storing a full Merkle tree to be
-a challenge.
-
-
->> I like the idea, but there are a couple of things that need to happen
->> first.  Both fs-verity and IMA appended signatures need to be
->> upstreamed.
-> 
-> Eric has sent the pull request fs-verity today.
-> 
->>  The IMA appended signature support simplifies
->> ima_appraise_measurement(), paving the way for adding IMA support for
->> other types of signature verification.  How IMA will support fs-verity 
->> signatures still needs to be defined.  That discussion will hopefully
->> include NFS support.
-> 
-> As far as using the Merkle tree root hash for the IMA measurement,
-> what sort of policy should be used for determining when the Merkle
-> tree root hash should be used in preference to reading and checksuming
-> the whole file when it is first opened?  It could be as simple as, "if
-> this is a fs-verity, use the fs-verity Merkle root".  Is that OK?
-> 
->     	  	     	     	       	      - Ted
-
---
-Chuck Lever
-
-
-
+iQIzBAEBCgAdFiEE4DCbLYWmfoRjKeNLsu5x6WeqnkwFAl1/shoACgkQsu5x6Weq
+nkwYGBAAr6PSE1F0Cr3f0izrkmq+RA60aSG1/UHvDrie/kVCsrbFPb7UFYrqePBr
++tw4fUSeVu5+8dSHoKjtT+AXaUo3AO4ChCCI/9Z57gaIu/35Qt+qtGu+Jo6mnK5x
+wAI/2Lr+7uO+KL3AmBVkAMta2hpKkMdWv/9Lnd3MvVO4DUnp5QRiVTBCWQvLa8SW
+3Z0KNudpz5iRVieRJBXHR5y6ZKXK2jq5PSvsp2UjtLo6oajH0Syh0L2LBbzPp27n
+rd7k2sMWlLcTKgRZYETRrkzwHXjKNiUhqaWBjRDVTFQLQoa+8s+O1JI/qDIZb274
+6CtypT20xArSZGqGE9GhXEodBUXa9QTOWtHhwe8r/ImO3e42U+mW8xuwA4g4aTju
+Axcg4FIAyVRN/Egp5aFncJE6N2f5vfu3thMzSPmPzSrxHA3tc3fSip+UlpMiO5f+
+xM+8GIjnbkyK408SGvS577xOgu7TJOlT0y9HCjy1pQlNSlTy6tTEVzgwvM5ntZSv
+TGsRzy1j0SIPBJCh4+MNPQk3CyLui4uSAi6G2olu9swS8Qcu+enAYLIfaCtfadMd
+F1FKnSYIa0je9Nx3kjOVzl8/1Q4jHIWKTq8YxFftLKGWDxd7yMzLH01W0hkWQfJT
+aknsSKTDy5WPh9pFKNxl4znSfFyarSn7t7Ro8IiiZwXtjpooY6Y=
+=IjQC
+-----END PGP SIGNATURE-----
