@@ -2,40 +2,45 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4FAB35E3
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2019 09:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C89BB35E4
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2019 09:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729197AbfIPHrE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Sep 2019 03:47:04 -0400
-Received: from mga18.intel.com ([134.134.136.126]:15975 "EHLO mga18.intel.com"
+        id S1729419AbfIPHsJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Sep 2019 03:48:09 -0400
+Received: from mga06.intel.com ([134.134.136.31]:45410 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726316AbfIPHrE (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Sep 2019 03:47:04 -0400
+        id S1727945AbfIPHsJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 16 Sep 2019 03:48:09 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Sep 2019 00:47:03 -0700
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Sep 2019 00:48:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,510,1559545200"; 
-   d="scan'208";a="361450315"
+X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
+   d="scan'208";a="176968979"
 Received: from sshkruni-mobl.ccr.corp.intel.com (HELO localhost) ([10.249.38.138])
-  by orsmga005.jf.intel.com with ESMTP; 16 Sep 2019 00:46:59 -0700
-Date:   Mon, 16 Sep 2019 10:46:57 +0300
+  by orsmga007.jf.intel.com with ESMTP; 16 Sep 2019 00:48:06 -0700
+Date:   Mon, 16 Sep 2019 10:48:05 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, stable@vger.kernel.org,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Fix tpm_send() length calculation
-Message-ID: <20190916074657.GA26795@linux.intel.com>
-References: <20190916073535.25117-1-jarkko.sakkinen@linux.intel.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Petr Vorel <pvorel@suse.cz>
+Subject: Re: [PATCH] selftest/trustedkeys: TPM 1.2 trusted keys test
+Message-ID: <20190916074805.GA26608@linux.intel.com>
+References: <1568157511-5464-1-git-send-email-zohar@linux.ibm.com>
+ <1568157876.4991.3.camel@linux.ibm.com>
+ <1568203240.5783.8.camel@linux.ibm.com>
+ <20190913140820.GC29755@linux.intel.com>
+ <1568580742.5055.0.camel@linux.ibm.com>
+ <1568604471.4975.8.camel@linux.ibm.com>
+ <20190916073552.GD4859@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190916073535.25117-1-jarkko.sakkinen@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190916073552.GD4859@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -43,21 +48,48 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 16, 2019 at 10:35:35AM +0300, Jarkko Sakkinen wrote:
-> Set the size of the tpm_buf correctly. Now it is set to the header
-> length by tpm_buf_init().
+On Mon, Sep 16, 2019 at 10:35:52AM +0300, Jarkko Sakkinen wrote:
+> On Sun, Sep 15, 2019 at 11:27:51PM -0400, Mimi Zohar wrote:
+> > On Sun, 2019-09-15 at 16:52 -0400, Mimi Zohar wrote:
+> > > On Fri, 2019-09-13 at 15:08 +0100, Jarkko Sakkinen wrote:
+> > > > On Wed, Sep 11, 2019 at 08:00:40AM -0400, Mimi Zohar wrote:
+> > > > > On Tue, 2019-09-10 at 19:24 -0400, Mimi Zohar wrote:
+> > > > > > On Tue, 2019-09-10 at 19:18 -0400, Mimi Zohar wrote:
+> > > > > > > Create, save and load trusted keys test
+> > > > > > 
+> > > > > > Creating trusted keys is failing with the following messages.  Any idea why?
+> > > > > > 
+> > > > > > [  147.014653] tpm tpm0: A TPM error (34) occurred attempting to a send a command
+> > > > > > [  147.014678] trusted_key: srkseal failed (-1)
+> > > > > > [  147.014687] trusted_key: key_seal failed (-1)
+> > > > > 
+> > > > > This is a regression, that needs to be resolved.  The test works on
+> > > > > kernels prior to 5.1.
+> > > > 
+> > > > It breaks on 5.2?
+> > > 
+> > > No, the regression is in 5.1.
+> > > 
+> > > > 
+> > > > Can you bisect the failing commit?
+> > > 
+> > > git bisect start -- drivers/char/tpm/
+> > > git bisect bad
+> > > git bisect good v5.0 
+> > > 
+> > > # first bad commit: [412eb585587a1dc43c9622db79de9663b6c4c238] tpm:
+> > > use tpm_buf in tpm_transmit_cmd() as the IO parameter
+> > 
+> > In tpm_send(), setting buf.data directly to cmd, instead of calling
+> > tpm_buf_init() fixes the problem.
 > 
-> Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: stable@vger.kernel.org
-> Fixes: 412eb585587a ("use tpm_buf in tpm_transmit_cmd() as the IO parameter")
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> I see. Obviously memcpy() does not tpm_buf length. The implementation is
+> kind of clunky but the point is to move building the tpm_buf to the
+> caller (which is soon possible thanks to Sumit's patches).
+> 
+> I sent a fix candidate.
 
-This is all wrong in all possible ways :-( My excuse is the overnight
-flight last night (no sleep). Mimi, I think what you first proposed as
-the fix is the right way tho fix it. I'll take some sleep and after that
-I'll make a legit commit with fix and a commit message explaining the
-root cause.
-
-Please try to ignore this.
+Ugh. Sorry about the "fix candidate". Your fix is the way it should be
+done. I'll put background to it once I've slept a bit.
 
 /Jarkko
