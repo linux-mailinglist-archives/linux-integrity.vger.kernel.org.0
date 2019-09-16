@@ -2,65 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7659B3C00
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2019 16:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF37FB3C8B
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2019 16:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388093AbfIPOAi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Sep 2019 10:00:38 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:27387 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387846AbfIPOAh (ORCPT
+        id S1727989AbfIPO3L (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Sep 2019 10:29:11 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:57326 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727934AbfIPO3L (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Sep 2019 10:00:37 -0400
+        Mon, 16 Sep 2019 10:29:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1568642435;
+        s=mimecast20190719; t=1568644149;
         h=from:from:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0aF91SFxr1M/w3Q8BpQEaz6nNu7eUkvCTjk7VOdGCBY=;
-        b=I7tRr7sgUwyGb4O72n8skr6U4gujjg9E6uJBwg35ohN0Ld6frvquG5tr4Omxg9e93wDF5c
-        +yarwVHd4FeytPjtgk27wnSJCZ+FwykJsc8jmHkuqCY8d7I0G0J/Z2xlkWvuhhYjWhLlYK
-        Fp29CzS4u0oRs6rL//eIcekrXoozQ6w=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-64-lhfjjyWdOhOgaS8C2FpP-Q-1; Mon, 16 Sep 2019 10:00:34 -0400
-Received: by mail-pf1-f197.google.com with SMTP id i28so27093106pfq.16
-        for <linux-integrity@vger.kernel.org>; Mon, 16 Sep 2019 07:00:34 -0700 (PDT)
+        bh=fwXH1ImCPzfrwxi64rILWeatQdSWplanzBU1TQzkPa8=;
+        b=NggYRrKypOgCAiLZ5mHQNmhT0wst/otlkCRi6i4h7Hh1QUkRsCKJOwe5yLb10g4A35YD+q
+        b2F+fwGB5pimwLgHuzdxs8fIAVE12F4TibDnkJHDz/Sc7IDf/Vv80zJu49UsUQ4CauVigZ
+        HlOIEwADJ6DaTCeM1UrUYWG9RIX8KeQ=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-304-WcV2t0naNJ6FnKTOuUWwFw-1; Mon, 16 Sep 2019 10:29:01 -0400
+Received: by mail-pf1-f199.google.com with SMTP id i28so27156049pfq.16
+        for <linux-integrity@vger.kernel.org>; Mon, 16 Sep 2019 07:29:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+mWtBj9NE052F+pTtbVetK9KaOXhoG12yf6gAshKO1A=;
-        b=B0Lrew9dlY9WPiM7O+GhkdbMeSDUsApGfhaIROhdiLKcfJKIVQogTOQz38kxut7Oz4
-         xMAoMVpyBUEpYkODS5Zs9fJslRyNcCAOhQVnYVyQarnd4/7lSpxh7az3WUzThAyGt3vQ
-         T6XtCf2vcMZdigvid3bQCOCBUfbDHX5wvKs1vcCdhPWM2MxYBsK5VpTKHQ9mc0AgyI9l
-         HylQGpVQlT8Hriza/xpDqjIJFaIr+NWXjj5Rn/veKInTbHmahODdlkOO/nXxXBqu2tya
-         1QRTfNKj8s6rO+Eqlm64GLDPpJd/r11lFJsaF3LyoaKn0M2e+BQQexQwHb1mHOSsa+am
-         5THg==
-X-Gm-Message-State: APjAAAXsaaDiiiePPSEHjRwOMGIj1Lt26MG9oO8xhebOtBR3Bb4Oghgp
-        6vU+Q32eEtTsJu+6B8hwlKmWomflYdEqOcuJtjZwjGVLnSVRGSYWscUuoEFdSzXwtlIG16EcOBZ
-        MBap0ieb2ScaT4bmptFYunlldgsM/
-X-Received: by 2002:aa7:82d9:: with SMTP id f25mr60471559pfn.117.1568642433221;
-        Mon, 16 Sep 2019 07:00:33 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqywhKKngwMXUV0LwuAphfIhri2RlyoOH4E/y7sYaba3fHVT/JYsJRol2lEwK+n3zM+khZrEWg==
-X-Received: by 2002:aa7:82d9:: with SMTP id f25mr60471542pfn.117.1568642433028;
-        Mon, 16 Sep 2019 07:00:33 -0700 (PDT)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=P86h/jFKIJ/irxhYfYPVmXGgl3ZEyuScOpJV/1WZTds=;
+        b=CDrIG9C8njFstaji+rGd3ugR3uA6/oknKMyTWDrekX4GAd++O1KYADbuuaHma+nw0r
+         CKXWMW8UH0t/4gdGJYRcrkehLES/FrGCx96VF6E1+V0k5iTEyUN/qHdihBg8Hygv1GFf
+         KSBIFgoewLeAO9nd3qypz+8oM1/h0DMglT7A5CiduuJqqhjeUgi4On3MAuD52zWwmEjD
+         mRNxRsTu/enleNan1bF0Lg0vxQsnWVlYCNuVXsy/IGueVBGEmanc9TeYwWZOOuNBOpoV
+         hsZE3OdI6fTx6UxNTTdGxEnr0f73MJB4Qj9LwYW18Bqx2D/gpKrl1z8pD8Ye54wCJDRy
+         6urw==
+X-Gm-Message-State: APjAAAUra8UIR+6rkYUYRcRtz+sRbWmlb+9c5GqeN2gr4Q6CMs0Euax2
+        3lgEoIJsBRcjPFApxiWVsFUDU5SiJ8A5cGTg2kadmJEl/RswsXsumazLJuvjBZwSP9rTpSlci6W
+        I9FUxw6SVNa9bsxm4IGO6owvqbV74
+X-Received: by 2002:a17:902:a98a:: with SMTP id bh10mr22945plb.343.1568644140833;
+        Mon, 16 Sep 2019 07:29:00 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzgS5l9+3U9b7hrmryV5elJBUaYZVsmWeD+0BeO4bkO7pqoK3J9x7qTMr5Ly9r4ZnkeYgqDpg==
+X-Received: by 2002:a17:902:a98a:: with SMTP id bh10mr22915plb.343.1568644140461;
+        Mon, 16 Sep 2019 07:29:00 -0700 (PDT)
 Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id b10sm16917669pfo.123.2019.09.16.07.00.31
+        by smtp.gmail.com with ESMTPSA id ck13sm9594437pjb.29.2019.09.16.07.28.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Sep 2019 07:00:32 -0700 (PDT)
-Date:   Mon, 16 Sep 2019 07:00:30 -0700
+        Mon, 16 Sep 2019 07:28:59 -0700 (PDT)
+Date:   Mon, 16 Sep 2019 07:28:58 -0700
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         linux-integrity@vger.kernel.org,
         Roberto Sassu <roberto.sassu@huawei.com>,
         Petr Vorel <pvorel@suse.cz>
 Subject: Re: [PATCH] selftest/trustedkeys: TPM 1.2 trusted keys test
-Message-ID: <20190916140030.uzx2mfvy4qrzpi4o@cantor>
+Message-ID: <20190916142858.hnyshinbj6hpf2b3@cantor>
 Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
 References: <1568157511-5464-1-git-send-email-zohar@linux.ibm.com>
  <1568157876.4991.3.camel@linux.ibm.com>
@@ -69,11 +69,11 @@ References: <1568157511-5464-1-git-send-email-zohar@linux.ibm.com>
  <1568580742.5055.0.camel@linux.ibm.com>
  <1568604471.4975.8.camel@linux.ibm.com>
  <20190916074225.fouluhpylge6fmlj@cantor>
- <CAFA6WYMdLLOe87BN5mD78A4vkmXPesco+QZXTY6uDgTYqPnong@mail.gmail.com>
+ <1568634746.4975.32.camel@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <CAFA6WYMdLLOe87BN5mD78A4vkmXPesco+QZXTY6uDgTYqPnong@mail.gmail.com>
+In-Reply-To: <1568634746.4975.32.camel@linux.ibm.com>
 User-Agent: NeoMutt/20180716
-X-MC-Unique: lhfjjyWdOhOgaS8C2FpP-Q-1
+X-MC-Unique: WcV2t0naNJ6FnKTOuUWwFw-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -83,10 +83,8 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon Sep 16 19, Sumit Garg wrote:
->On Mon, 16 Sep 2019 at 13:19, Jerry Snitselaar <jsnitsel@redhat.com> wrote=
-:
->>
+On Mon Sep 16 19, Mimi Zohar wrote:
+>On Mon, 2019-09-16 at 00:42 -0700, Jerry Snitselaar wrote:
 >> On Sun Sep 15 19, Mimi Zohar wrote:
 >> >On Sun, 2019-09-15 at 16:52 -0400, Mimi Zohar wrote:
 >> >> On Fri, 2019-09-13 at 15:08 +0100, Jarkko Sakkinen wrote:
@@ -103,8 +101,8 @@ o a send a command
 >> >> > > > [  147.014678] trusted_key: srkseal failed (-1)
 >> >> > > > [  147.014687] trusted_key: key_seal failed (-1)
 >> >> > >
->> >> > > This is a regression, that needs to be resolved.  The test works =
-on
+>> >> > > This is a regression, that needs to be resolved. =A0The test work=
+s on
 >> >> > > kernels prior to 5.1.
 >> >> >
 >> >> > It breaks on 5.2?
@@ -116,7 +114,7 @@ on
 >> >>
 >> >> git bisect start -- drivers/char/tpm/
 >> >> git bisect bad
->> >> git bisect good v5.0
+>> >> git bisect good v5.0=A0
 >> >>
 >> >> # first bad commit: [412eb585587a1dc43c9622db79de9663b6c4c238] tpm:
 >> >> use tpm_buf in tpm_transmit_cmd() as the IO parameter
@@ -138,20 +136,36 @@ on
 >> While playing around with it, adding a memcpy() after the transmit
 >> call worked for me as well as setting buf.data directly instead of the
 >> tpm_buf_init/memcpy/tpm_buf_destroy calls.
+>
+>Thanks! =A0I really appreciate your looking at the problem. =A0I haven't
+>yet tried the fix with a TPM 2.0.
 >>
+
+I don't know the security/keys/trusted.c code well at all, but it looks
+like parts of it are wired up to differentiate between tpm1.2 and tpm2.0,
+and others are not. There is a tpm_seal_trusted and tpm_unseal_trusted that
+gets used for tpm2, and are called in trusted_instantiate, which does a
+tpm_is_tpm2 check, but trusted_update just calls the tpm1.2 code and
+has no tpm2 checks from what I can tell.
+
 >> I'm wondering if it would be worthwhile to convert the
 >> security/keys/trusted.c and crypto/asymmertic_keys/aym_tpm.c code to
 >> use the same tpm_buf and tpm_buf manipulation code as gets used in
 >> drivers/char/tpm.
 >
->This is exactly what patch #2 in this patch-set [1] tries to achieve.
+>For now, let's keep the regression fix, that is backported, simple and
+>straight forward.
 >
->[1] https://lkml.org/lkml/2019/9/16/196
+
+Agreed, I was just talking about in general. but it looks like Sumit has
+already taken that task on.
+
+>Trusted keys is evolving to be more than just TPM based keys. =A0I'm
+>sure there will be more changes coming. =A0At least, now, there is a TPM
+>1.2 regression test.
 >
->-Sumit
-
-I'll take a look at the patchset today.
-
-Regards,
-Jerry
+>thanks,
+>
+>Mimi
+>
 
