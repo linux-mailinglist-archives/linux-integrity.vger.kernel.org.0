@@ -2,108 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3AAB55FD
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2019 21:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF3BB5734
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2019 22:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729935AbfIQTNO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Sep 2019 15:13:14 -0400
-Received: from mga09.intel.com ([134.134.136.24]:31049 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726523AbfIQTNO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Sep 2019 15:13:14 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Sep 2019 12:13:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,517,1559545200"; 
-   d="scan'208";a="198791424"
-Received: from vcazacux-wtg.ger.corp.intel.com (HELO localhost) ([10.252.38.72])
-  by orsmga002.jf.intel.com with ESMTP; 17 Sep 2019 12:13:09 -0700
-Date:   Tue, 17 Sep 2019 22:13:07 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        stable@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        id S1727690AbfIQUyS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Sep 2019 16:54:18 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:39149 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbfIQUyR (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 17 Sep 2019 16:54:17 -0400
+Received: by mail-ed1-f66.google.com with SMTP id g12so4602463eds.6;
+        Tue, 17 Sep 2019 13:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TB55ogVb7L8Rnu3J7GOd1CTL9DFPAcCA1b2WA++LLLI=;
+        b=eXL7i/wN7GH6Vg8CmKxQzNRZqwTGKPKReKUXNjbUDxJBsbaoKuTv2WhQj5LHhHJpXm
+         oautn+efA3gz0kSro5bUCcJVZQVBLUyLxb4YCuWmAzRzrnBA5MJZsem6hlUSZVWup6a/
+         Xvf+SgcqbOGD2PwUX6hzZN80jtJYz35lyc6BeP/7YTPTcRoJ888Y6II9fuYR+tj+KonK
+         C2uTpTrcHKeOpqpjfWBqbzbnGojiJdArPYR41YbhBDpXniyg7vdT3iuaMzjOsf1hsvlb
+         mlojdKbD+hLueWkALJGurBh6/X17j9NQAxEpUCYwgTZIHI2G1N9CsY55cso3hXb7ttqf
+         hZqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TB55ogVb7L8Rnu3J7GOd1CTL9DFPAcCA1b2WA++LLLI=;
+        b=LSkG27rZWs3XlZG6Y9pgkusPkvgFY+MgN76BgD8I6tw/ULA4Fjgep7N9lDSu4MRXoO
+         N+bENX+vGvgIeHd62RSyvj8dJsBJSbJqaGM/qyVV8hjmvs9xsSQeSfeEGV7alz3+1xau
+         5IQYV/OhnSH2tCNZ0LP1jC6g4QEuvpGT78jCRI7ZYhzItUqecDTb1jB5vWdpjV/L/zH5
+         Y9oRD+Xs1WXAW5N0CdJDnSf3Ul4jX8aPk/hM6n+RQB9yAnyU+E6Ko0NBdrs0t+PEbpAU
+         2Y1Yp9c4fDGH62Vhd+4XCwP1/ziltR6lLLzH+7e6ezTBj0jsiFd6CI1Ky60DHbPx0EEv
+         jIOQ==
+X-Gm-Message-State: APjAAAWSN0ycK/CxWW0bWqv8VKs5IZusLRIS1pD5CuaAj6rnuwqxo9TW
+        FKmE0/5XEm571qGe79d4/Z8=
+X-Google-Smtp-Source: APXvYqwvE6X1EVnGhC9HVkhxDzcqBzkxXBlXuu8iArgUgF2V6xspFM36gdqHu0QLdhUXF8/RxV0Wsg==
+X-Received: by 2002:a17:906:6dd4:: with SMTP id j20mr6585951ejt.173.1568753656032;
+        Tue, 17 Sep 2019 13:54:16 -0700 (PDT)
+Received: from hv-1.home ([5.3.191.207])
+        by smtp.gmail.com with ESMTPSA id h3sm407037ejp.77.2019.09.17.13.54.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Sep 2019 13:54:15 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 23:54:03 +0300
+From:   Vanya Lazeev <ivan.lazeev@gmail.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Wrap the buffer from the caller to tpm_buf in
- tpm_send()
-Message-ID: <20190917191307.GH10244@linux.intel.com>
-References: <20190916085008.22239-1-jarkko.sakkinen@linux.intel.com>
- <20190916210331.l6enypnafk2cwako@cantor>
- <20190916210454.mq3g2m6s5a2syaxp@cantor>
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] tpm_crb: fix fTPM on AMD Zen+ CPUs
+Message-ID: <20190917205402.GA2500@hv-1.home>
+References: <20190914171743.22786-1-ivan.lazeev@gmail.com>
+ <20190916055130.GA7925@linux.intel.com>
+ <20190916200029.GA27567@hv-1.home>
+ <20190917190950.GG10244@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190916210454.mq3g2m6s5a2syaxp@cantor>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20190917190950.GG10244@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 16, 2019 at 02:04:54PM -0700, Jerry Snitselaar wrote:
-> On Mon Sep 16 19, Jerry Snitselaar wrote:
-> > On Mon Sep 16 19, Jarkko Sakkinen wrote:
-> > > tpm_send() does not give anymore the result back to the caller. This
-> > > would require another memcpy(), which kind of tells that the whole
-> > > approach is somewhat broken. Instead, as Mimi suggested, this commit
-> > > just wraps the data to the tpm_buf, and thus the result will not go to
-> > > the garbage.
+On Tue, Sep 17, 2019 at 10:10:13PM +0300, Jarkko Sakkinen wrote:
+> On Mon, Sep 16, 2019 at 11:00:30PM +0300, Vanya Lazeev wrote:
+> > On Mon, Sep 16, 2019 at 08:51:30AM +0300, Jarkko Sakkinen wrote:
+> > > On Sat, Sep 14, 2019 at 08:17:44PM +0300, ivan.lazeev@gmail.com wrote:
+> > > > +	struct list_head acpi_resources, crb_resources;
 > > > 
-> > > Obviously this assumes from the caller that it passes large enough
-> > > buffer, which makes the whole API somewhat broken because it could be
-> > > different size than @buflen but since trusted keys is the only module
-> > > using this API right now I think that this fix is sufficient for the
-> > > moment.
-> > > 
-> > > In the near future the plan is to replace the parameters with a tpm_buf
-> > > created by the caller.
-> > > 
-> > > Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: 412eb585587a ("use tpm_buf in tpm_transmit_cmd() as the IO parameter")
-> > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > ---
-> > > drivers/char/tpm/tpm-interface.c | 8 ++------
-> > > 1 file changed, 2 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> > > index d9ace5480665..2459d36dd8cc 100644
-> > > --- a/drivers/char/tpm/tpm-interface.c
-> > > +++ b/drivers/char/tpm/tpm-interface.c
-> > > @@ -358,13 +358,9 @@ int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen)
-> > > 	if (!chip)
-> > > 		return -ENODEV;
-> > > 
-> > > -	rc = tpm_buf_init(&buf, 0, 0);
-> > > -	if (rc)
-> > > -		goto out;
-> > > -
-> > > -	memcpy(buf.data, cmd, buflen);
-> > > +	buf.data = cmd;
-> > > 	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to a send a command");
-> > > -	tpm_buf_destroy(&buf);
-> > > +
-> > > out:
-> > > 	tpm_put_ops(chip);
-> > > 	return rc;
-> > > -- 
-> > > 2.20.1
-> > > 
+> > > Please do not create crb_resources. I said this already last time.
 > > 
-> > Nothing uses the out label any longer so it should be dropped as well, but other than that...
-> > 
-> > Acked-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> > But then, if I'm not mistaken, it will be impossible to track pointers
+> > to multiple remaped regions. In this particular case, it
+> > doesn't matter, because both buffers are in different ACPI regions,
+> > and using acpi_resources only to fix buffer will be enough.
+> > However, this creates incosistency between single- and
+> > multiple-region cases: in the latter iobase field of struct crb_priv
+> > doesn't make any difference. Am I understanding the situation correctly?
+> > Will such fix be ok?
 > 
-> sigh (wrong emacs macro hit), that should be:
-> 
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> So why you need to track pointers other than in initialization as devm
+> will take care of freeing them. Just trying to understand the problem.
+>
 
-Thank you! I pushed the commit to master/next.
-
-/Jarkko
+We need to know, which ioremap'ed address assign to control area, command
+and response buffer, based on which ACPI region contains each of them.
+Is there any method of getting remapped address for the raw one after
+resouce containing it has been allocated?
+And what do you mean by initialization? crb_resources lives only in
+crb_map_io, which seems to run only once.
