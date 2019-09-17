@@ -2,93 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6A0B4784
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2019 08:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5319CB4836
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2019 09:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733103AbfIQGaq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Sep 2019 02:30:46 -0400
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:46225 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726953AbfIQGaq (ORCPT
+        id S1729270AbfIQHZA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Sep 2019 03:25:00 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:35953 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727635AbfIQHZA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Sep 2019 02:30:46 -0400
-Received: by mail-lf1-f46.google.com with SMTP id t8so1844241lfc.13
-        for <linux-integrity@vger.kernel.org>; Mon, 16 Sep 2019 23:30:44 -0700 (PDT)
+        Tue, 17 Sep 2019 03:25:00 -0400
+Received: by mail-lf1-f66.google.com with SMTP id x80so2020545lff.3;
+        Tue, 17 Sep 2019 00:24:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EXCHQuhCHet0c7anifz9tn4COPe2lCe/Ze06n0FCKKA=;
-        b=Y7/7HLE6tpu+NW42uSI467T5liRsQhcznS9mbFq6+OfRahVm3Ka1d5XPfYLVPkscPS
-         n0HCsNoQaSHhoJmN3YhOy+gT6LYQE+R6UqDbWtXdzi3XHLJr9Sc74nxYtpY5t/seIdSd
-         Yx0Q18T+T3exHx0RlnPF0mFz2i3lgZno+oejRWDhpaKbO0fMYW2DOcBQRx3lL3N+B+0U
-         J9DY7R5KhdLe27XBE/fgZx6shPXXocXwthzt3kQh+vPVeKD5N45y7vnlxogOxrIbO9Wf
-         ZAvh51k0gdL4200Mgp66u2yBTlqmAym9cvmmVgoPVB0kMe4bcSj/wYK4NuF9OAY+wckJ
-         LqBw==
+        bh=Qwg6zM/jLzVfFWvAafz0P3l4DlIs73HFOS11i0AOm/E=;
+        b=CYtpc7JBwVYZJkO5bu+hMw9nz74gAbzWv4jysLzN0tPty/ZkbNDatrXNIOvil+bvYV
+         j+msbzNId38AXGZ0m6gDP9S2+djOAoZL56MwYXPN+HPtktitm41HS+C0WBppkYSRxMbL
+         M4zi5Ayw2PKWtJMFWPkd02Ab74issxyifvYumCXUmh3sTMBO/dRunwk+dqk7FXWgiTux
+         hBLy130UQolJiXY9TGrIE856omIdQsJXneExri7BgEkyOmfObAaYXKx6SW3qqsYqw8jv
+         8LjNJWAfTNWelG3EOZXS/5FjQVSotgtne2NYjRYC2jEq584I0r7ejEedOPDpKP/XSG27
+         mZ1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EXCHQuhCHet0c7anifz9tn4COPe2lCe/Ze06n0FCKKA=;
-        b=U5R7PG8IZKXMpI+go6BtPZoSwUDP2J2SLdqc2toYw9m+/+TdZcEyXck0CQNiLro4BH
-         JoAJSzgI7Vqrc/l5PhxBPCKhchxaVc4NT/WqD0SrdCEg6RYVQjb3FdwwbRaDDFYddwEH
-         uEpgusvK6J5mg7oiXPjMeFYsDaDGNdQUXLtnaemc2u6/C5glSZykSpRB8Jg5/4dbnYtb
-         DTcy+b3L/uVnX65RGubhNXWDjtCFVDFdsRVebWcGCavtd5wORe6KSFpQvyqfXnE+SZv2
-         aw+iqkCL+LVPBEgl7s0GsptvEMcNlgBiplrvd1xOShZ08K4g8WZRVJ3ZbH7JKzktxWBT
-         /5Lw==
-X-Gm-Message-State: APjAAAXnHBDe+nseORFZp1k4w86pHZZ5S1ToL46BAChU8YDzqgRvuTkw
-        YYOQ33x6l9EifK7StxXiHK3/Py7U9EgK0vcwxRo=
-X-Google-Smtp-Source: APXvYqyHEPcPdnKYzqH0JuzMCLJjGrtWSoHNajFcznqO/FAa6n7Y3miCAU+bcCS5NlOxd7HvIxXSweHJffLOhqi6Kgo=
-X-Received: by 2002:a19:f24d:: with SMTP id d13mr1111230lfk.127.1568701843686;
- Mon, 16 Sep 2019 23:30:43 -0700 (PDT)
+        bh=Qwg6zM/jLzVfFWvAafz0P3l4DlIs73HFOS11i0AOm/E=;
+        b=mD8caVyMYGmwW4h1eQEgX99kmxfjt1BhXGtYX8f4cxRPRe9u6aFb6oVTgpK1H2yAdC
+         MHcuMk3S+mWp666UV9aMlqWEFxK9nWNdC2D9+U4Og4loEL/f+5QALohuurGBLTwVVKV0
+         HKQEtC0WMzmv1bjWcQp8BMCutxQjk6BTI48dAc9XdpHOjSEZVDurr6gtrh8Xxpp2KuhD
+         QAxFkwVxD+rFMuU2C7ePl2ML+Jg8CC0eGgeIKrH/nQiAmWONx/p60TBQqC/DGC20knOW
+         NirRherx8pfQK8cqzn3tPtn1YLnT6HvOUIWRUxkbPUqvYBq2KJ9QADNzO6EKsFxT1uHs
+         Fb1w==
+X-Gm-Message-State: APjAAAX9Bs3cuoS5aX433zqkiUjpr/8rxARednmXkF0y69o8dckrpuIs
+        jWgUZvE9v5V1cn+8J6nol43nEsKZfyO3y7ygiO0=
+X-Google-Smtp-Source: APXvYqy+NcmNXsIN+VRAJQK2Y/gl0meGEC5ot2nIdx79cDdmz8XlaRY4mVGgamAd4LU1uS5J7tPh6iLwbqL2MSAeoKc=
+X-Received: by 2002:a19:f24d:: with SMTP id d13mr1241547lfk.127.1568705097080;
+ Tue, 17 Sep 2019 00:24:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <C867A0BA-1ACF-4600-8179-3E15A098846C@oracle.com>
- <CAE=Ncrb=rh0LeDjnGYGuGJVPXG3Y1UpjD5Tw41s0zyOAaL1NKg@mail.gmail.com> <1BF68F78-FA8E-4633-9AB4-AB6E0B10DCB8@oracle.com>
-In-Reply-To: <1BF68F78-FA8E-4633-9AB4-AB6E0B10DCB8@oracle.com>
+References: <20190902094540.12786-1-janne.karhunen@gmail.com>
+ <20190909213938.GA105935@gmail.com> <CAE=NcraXOhGcPHh3cPxfaNjFXtPyDdSFa9hSrUSPfpFUmsxyMA@mail.gmail.com>
+ <20190915202433.GC1704@sol.localdomain> <CAE=NcrbaJD4CaUvg1tmNSSKjkG-EizNM7GUaztA0=fiUCo03Cg@mail.gmail.com>
+ <20190917042334.GA1436@sol.localdomain>
+In-Reply-To: <20190917042334.GA1436@sol.localdomain>
 From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Tue, 17 Sep 2019 09:30:31 +0300
-Message-ID: <CAE=NcrYjzdBCB7aK6bL+C+W8N-QJyuPF0RvFqCmsK_S90oyvxg@mail.gmail.com>
-Subject: Re: IMA on remote file systems
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     linux-integrity@vger.kernel.org, "Theodore Y. Ts'o" <tytso@mit.edu>
+Date:   Tue, 17 Sep 2019 10:24:45 +0300
+Message-ID: <CAE=NcrYOEUU0yKT9HdB+HEKjsFKFUqnHP96_OnUrr=XxobD9Jg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] ima: keep the integrity state of open files up to date
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>, linux-mm@kvack.org,
+        viro@zeniv.linux.org.uk,
+        Konsta Karsisto <konsta.karsisto@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 16, 2019 at 5:47 PM Chuck Lever <chuck.lever@oracle.com> wrote:
+On Tue, Sep 17, 2019 at 7:23 AM Eric Biggers <ebiggers@kernel.org> wrote:
 
-> >> My thought was to use an ephemeral Merkle tree for NFS (and
-> >> possibly other remote filesystems, like FUSE, until these
-> >> filesystems support durable per-file Merkle trees). A tree would
-> >> be constructed when the client measures a file, but it would not
-> >> saved to the filesystem. Instead of a hash of the file's contents,
-> >> the tree's root signature is stored as the IMA metadata.
+> > > Who will use it if it isn't 100% safe?
 > >
-> > So the attack you are trying to guard against is that the pages that
-> > were evicted once and that are read back could still be integrity
-> > verified?
+> > I suppose anyone using mutable data with IMA appraise should, unless
+> > they have a redundant power supply and a kernel that never crashes. In
+> > a way this is like asking if the ima-appraise should be there for
+> > mutable data at all. All this is doing is that it improves the crash
+> > recovery reliability without taking anything away.
 >
-> Yes, the idea would be to provide a generic mechanism for constructing
-> ephemeral trees such that it can be used for the purpose you describe
-> on behalf of file systems besides NFS; eg. FUSE, or other remote file
-> systems such as SMB.
+> Okay, so why would anyone use mutable data with IMA appraise if it corrupts your
+> files by design, both with and without this patchset?
 
-I might be wrong, but handling this properly would be good for the
-core IMA as well. Take an example of a memory mapped database file:
-this file will have generic write access for a group of processes.
-Now, if the attacker can create memory pressure on the host, we might
-eventually end up freeing pages from this particular file. Once this
-happens the attacker is free to modify the pages on the disk and they
-will all get eventually loaded back into the memory without no-one
-noticing.
+Now you are exaggerating heavily: it does not corrupt your files by
+design. A crash in any security related system is supposed to be
+pretty rare occurrence.
 
-Could the fs-verity be plugged in as a measurement mechanism in the
-IMA? So rather than calling a hash function, call verity to measure
-and add new set of IMA hooks to report violations that arise after
-execution? IMA policy logic and functionality would be pretty much
-unchanged.
+
+> > Anyway, I think I'm getting along with my understanding of the page
+> > writeback slowly and the journal support will eventually be there at
+> > least as an add-on patch for those that want to use it and really need
+> > the last 0.n% reliability. Note that even without that patch you can
+> > build ima-appraise based systems that are 99.999% reliable just by
+>
+> On what storage devices, workloads, and filesystems is this number for?
+
+I reached 99.2% recovery rate with the AOSP without touching the
+android on top by crashing the kernel with a test case while the
+device was in use. 80% if I crash it while the device is in the
+busiest write cycle (the first boot, I guess we would suck quite
+royally if we never made past this point without dying).
+
+99.95+% of course requires a high-availability system that probably
+crashes once per year at best and recovers in seconds. In that case
+this will recover it with pretty high odds, so reliability is not all
+that much reduced from it's normal reliability statistics. So, the
+ima-appraise for the mutable data could be in use even in a
+high-availability system. 99% recovery probability for the crash that
+occurs once per year would be OK; 0% would not be. I suppose it all
+depends on your requirements.
+
+
+> > having the patch we're discussing here. Without it you would be orders
+> > of magnitude worse off. All we are doing is that we give it a fairly
+> > good chance to recover instead of giving up without even trying.
+> >
+> > That said, I'm not sure the 100% crash recovery is ever guaranteed in
+> > any Linux system. We just have to do what we can, no?
+>
+> Filesystems implement consistency mechanisms, e.g. journalling or copy-on-write,
+> to recover from crashes by design.  This patchset doesn't implement or use any
+> such mechanism, so it's not crash-safe.  It's not clear that it's even a step in
+> the right direction, as no patches have been proposed for a correct solution so
+> we can see what it actually involves.
+
+Great, what would be the better alternative? I guess the suggestion
+cannot be that 'don't use it' since the code is there?
+
+As for the 'step to the right direction': before we could talk about
+any of this journaling stuff we had to make sure that we have the
+plumbing where the measurements are accurate. These patches do that
+and the journaling is the next step. All the journaling add-on does
+now is that it binds the page write and the xattr update into one
+transaction, so both of those run as sub-transactions of one master.
+Now, only when the master ends the data is moved out of the journal in
+one bundle. All this is so ridiculously simple I doubt my own eyes,
+but it seems to work fine apart from some slowdown on shutdown when
+processes call sync() like there is no tomorrow. Nevertheless,
+understanding the related code (the page writeback and the ext4) is
+pretty nasty and there are lots of things I need to understand about
+that still. The thing I'm currently trying to get my head around is
+that whether or not it is possible that we have a measurement over a
+page that was not eligible for the writeback. I'm also no ext4 expert
+so all help in that regard is highly appreciated if this type of thing
+is interesting to others.
+
+Anyway, all this is good info. If this code is not needed upstream,
+I'm happy to stop working with it and will maintain this for my use
+only. Let me know,
 
 
 --
