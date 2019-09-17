@@ -2,96 +2,190 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF3BB5734
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2019 22:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD85B587B
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Sep 2019 01:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727690AbfIQUyS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Sep 2019 16:54:18 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:39149 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbfIQUyR (ORCPT
+        id S1728638AbfIQXUv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Sep 2019 19:20:51 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:36488 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728593AbfIQXUv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Sep 2019 16:54:17 -0400
-Received: by mail-ed1-f66.google.com with SMTP id g12so4602463eds.6;
-        Tue, 17 Sep 2019 13:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TB55ogVb7L8Rnu3J7GOd1CTL9DFPAcCA1b2WA++LLLI=;
-        b=eXL7i/wN7GH6Vg8CmKxQzNRZqwTGKPKReKUXNjbUDxJBsbaoKuTv2WhQj5LHhHJpXm
-         oautn+efA3gz0kSro5bUCcJVZQVBLUyLxb4YCuWmAzRzrnBA5MJZsem6hlUSZVWup6a/
-         Xvf+SgcqbOGD2PwUX6hzZN80jtJYz35lyc6BeP/7YTPTcRoJ888Y6II9fuYR+tj+KonK
-         C2uTpTrcHKeOpqpjfWBqbzbnGojiJdArPYR41YbhBDpXniyg7vdT3iuaMzjOsf1hsvlb
-         mlojdKbD+hLueWkALJGurBh6/X17j9NQAxEpUCYwgTZIHI2G1N9CsY55cso3hXb7ttqf
-         hZqg==
+        Tue, 17 Sep 2019 19:20:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1568762449;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=93E18wmPDnWISw+WCxSngiCmtTN5YEZlrDezy3l38Gk=;
+        b=couZs63Fg0Tp2CIvtlwf5ND1giwaltS5SjV6dsjaI+i/mDo++bMzUobvGEMWFipAc2y0T0
+        UyFAGK5BK/psfoKcl3oBjr8OPy9ojJV8+I5uXPR5QRW1NeBfBUpyk4wAKV1xCeYLl+1Pu4
+        kssgJSlcLKdWLjy9JA2HN2Uf/bcCWVM=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-334-LdaHhzC8M8e8_Y3kGEeKWQ-1; Tue, 17 Sep 2019 19:20:48 -0400
+Received: by mail-qt1-f200.google.com with SMTP id u8so6024470qtq.19
+        for <linux-integrity@vger.kernel.org>; Tue, 17 Sep 2019 16:20:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TB55ogVb7L8Rnu3J7GOd1CTL9DFPAcCA1b2WA++LLLI=;
-        b=LSkG27rZWs3XlZG6Y9pgkusPkvgFY+MgN76BgD8I6tw/ULA4Fjgep7N9lDSu4MRXoO
-         N+bENX+vGvgIeHd62RSyvj8dJsBJSbJqaGM/qyVV8hjmvs9xsSQeSfeEGV7alz3+1xau
-         5IQYV/OhnSH2tCNZ0LP1jC6g4QEuvpGT78jCRI7ZYhzItUqecDTb1jB5vWdpjV/L/zH5
-         Y9oRD+Xs1WXAW5N0CdJDnSf3Ul4jX8aPk/hM6n+RQB9yAnyU+E6Ko0NBdrs0t+PEbpAU
-         2Y1Yp9c4fDGH62Vhd+4XCwP1/ziltR6lLLzH+7e6ezTBj0jsiFd6CI1Ky60DHbPx0EEv
-         jIOQ==
-X-Gm-Message-State: APjAAAWSN0ycK/CxWW0bWqv8VKs5IZusLRIS1pD5CuaAj6rnuwqxo9TW
-        FKmE0/5XEm571qGe79d4/Z8=
-X-Google-Smtp-Source: APXvYqwvE6X1EVnGhC9HVkhxDzcqBzkxXBlXuu8iArgUgF2V6xspFM36gdqHu0QLdhUXF8/RxV0Wsg==
-X-Received: by 2002:a17:906:6dd4:: with SMTP id j20mr6585951ejt.173.1568753656032;
-        Tue, 17 Sep 2019 13:54:16 -0700 (PDT)
-Received: from hv-1.home ([5.3.191.207])
-        by smtp.gmail.com with ESMTPSA id h3sm407037ejp.77.2019.09.17.13.54.14
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7+WxHU8ygfk3h+I6FmzyR0qaXk6tSMIwN3i7ZC9x+Vc=;
+        b=AxycKduA4cNbEpc2Pup+NkjQELTpIl1fZu29XfNtAKLYtHls1NKL3S/8KOEcA7T1Cy
+         rmt7fJYikAhrEhQ6ZPZc8YzaC6ahXGzoKvZMrDuaHkF/0IDQTppD+LtgQ84BsqNFOyw8
+         D5UhjK/MNcj4h40OVP8d5grlZW8fO9MNAmiLvO6Uio5wsD+xVV+L5GpK8y+oYlaRhkx2
+         SwZw8gcz2xSCnTDUaSYVQfVJsD/L4PWA+mxPsrJIpSa+FCVIUc2YHnNMYDThUVZgOfwH
+         ZFwCr7gBWLi7NHAaY3Aw0Iy/Cxb3jGjsmYygDkaNONGX3wXUbizsOcDYYrhrvfSyUwmO
+         wtdA==
+X-Gm-Message-State: APjAAAXGuXOQufbtIQfA9K89rVa1PrS2BsUc5k2Ivi8JHy9jRO/UICnI
+        Kgr6uaOf+EQdJSyPdCO46O2o6VAItV/3a0z3jp/i+3w1lWKxk0pvdP0/ZYAnxUpDZmN1FUYSa+E
+        MrktwPtmcrtlF4UVOZysYgxPdmrQK
+X-Received: by 2002:ac8:5243:: with SMTP id y3mr1480366qtn.51.1568762447608;
+        Tue, 17 Sep 2019 16:20:47 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqwp0F+aEG1fWsAucZwpZA+kpCXViLPadwjlFc+b7X/2c9+Cz4HtEOjkcvR0QInYE1jHqo8VDg==
+X-Received: by 2002:ac8:5243:: with SMTP id y3mr1480346qtn.51.1568762447265;
+        Tue, 17 Sep 2019 16:20:47 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id i1sm1727204qkk.88.2019.09.17.16.20.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2019 13:54:15 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 23:54:03 +0300
-From:   Vanya Lazeev <ivan.lazeev@gmail.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] tpm_crb: fix fTPM on AMD Zen+ CPUs
-Message-ID: <20190917205402.GA2500@hv-1.home>
-References: <20190914171743.22786-1-ivan.lazeev@gmail.com>
- <20190916055130.GA7925@linux.intel.com>
- <20190916200029.GA27567@hv-1.home>
- <20190917190950.GG10244@linux.intel.com>
+        Tue, 17 Sep 2019 16:20:46 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 16:20:45 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Matthew Garrett <mjg59@google.com>
+Subject: Re: unable to handle page fault in 5.3-rc[12]
+Message-ID: <20190917232045.qgdomirhd7ll5sk3@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+References: <20190801151314.f2tjk2b52mhxuc3x@cantor>
+ <20190801201913.mwxqdfqb2a7c2zwn@cantor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20190801201913.mwxqdfqb2a7c2zwn@cantor>
+User-Agent: NeoMutt/20180716
+X-MC-Unique: LdaHhzC8M8e8_Y3kGEeKWQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Content-Disposition: inline
-In-Reply-To: <20190917190950.GG10244@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 10:10:13PM +0300, Jarkko Sakkinen wrote:
-> On Mon, Sep 16, 2019 at 11:00:30PM +0300, Vanya Lazeev wrote:
-> > On Mon, Sep 16, 2019 at 08:51:30AM +0300, Jarkko Sakkinen wrote:
-> > > On Sat, Sep 14, 2019 at 08:17:44PM +0300, ivan.lazeev@gmail.com wrote:
-> > > > +	struct list_head acpi_resources, crb_resources;
-> > > 
-> > > Please do not create crb_resources. I said this already last time.
-> > 
-> > But then, if I'm not mistaken, it will be impossible to track pointers
-> > to multiple remaped regions. In this particular case, it
-> > doesn't matter, because both buffers are in different ACPI regions,
-> > and using acpi_resources only to fix buffer will be enough.
-> > However, this creates incosistency between single- and
-> > multiple-region cases: in the latter iobase field of struct crb_priv
-> > doesn't make any difference. Am I understanding the situation correctly?
-> > Will such fix be ok?
-> 
-> So why you need to track pointers other than in initialization as devm
-> will take care of freeing them. Just trying to understand the problem.
+On Thu Aug 01 19, Jerry Snitselaar wrote:
+>Hi Matthew, cc'ing as this might have something to do with the recent
+>changes to tpm_read_log_efi.
 >
+>On Thu Aug 01 19, Jerry Snitselaar wrote:
+>>I've had a couple reports emailed to me with a trace like the following
+>>for 5.3-rc1 and 5.3-rc2. I'm just starting to dig into and look at recent
+>>commits and mailing list, but is this already known?
+>>
+>>It's been reported on a couple different Lenovo laptop models (T470s and =
+X1 carbon I believe).
+>>
+>>Full panic message:
+>>[    0.774340] BUG: unable to handle page fault for address: ffffbc8fc008=
+66ad
+>>[    0.774788] #PF: supervisor read access in kernel mode
+>>[    0.774788] #PF: error_code(0x0000) - not-present page
+>>[    0.774788] PGD 107d36067 P4D 107d36067 PUD 107d37067 PMD 107d38067 PT=
+E 0
+>>[    0.774788] Oops: 0000 [#1] SMP PTI
+>>[    0.774788] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.3.0-0.rc2.1.el=
+rdy.x86_64 #1
+>>[    0.774788] Hardware name: LENOVO 20HGS22D0W/20HGS22D0W, BIOS N1WET51W=
+ (1.30 ) 09/14/2018
+>>[    0.774788] RIP: 0010:memcpy_erms+0x6/0x10
+>>[    0.774788] Code: 90 90 90 90 eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e=
+9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <=
+f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+>>[    0.774788] RSP: 0000:ffffbc8fc0073b30 EFLAGS: 00010286
+>>[    0.774788] RAX: ffff9b1fc7c5b367 RBX: ffff9b1fc8390000 RCX: fffffffff=
+fffe962
+>>[    0.774788] RDX: ffffffffffffe962 RSI: ffffbc8fc00866ad RDI: ffff9b1fc=
+7c5b367
+>>[    0.774788] RBP: ffff9b1c10ca7018 R08: ffffbc8fc0085fff R09: 800000000=
+0000063
+>>[    0.774788] R10: 0000000000001000 R11: 000fffffffe00000 R12: 000000000=
+0003367
+>>[    0.774788] R13: ffff9b1fcc47c010 R14: ffffbc8fc0085000 R15: 000000000=
+0000002
+>>[    0.774788] FS:  0000000000000000(0000) GS:ffff9b1fce200000(0000) knlG=
+S:0000000000000000
+>>[    0.774788] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>[    0.774788] CR2: ffffbc8fc00866ad CR3: 000000029f60a001 CR4: 000000000=
+03606f0
+>>[    0.774788] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000000=
+0000000
+>>[    0.774788] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000000000=
+0000400
+>>[    0.774788] Call Trace:
+>>[    0.774788]  tpm_read_log_efi+0x156/0x1a0
+>>[    0.774788]  tpm_bios_log_setup+0xc8/0x190
+>>[    0.774788]  tpm_chip_register+0x50/0x1c0
+>>[    0.774788]  tpm_tis_core_init.cold.9+0x28c/0x466
+>>[    0.774788]  tpm_tis_plat_probe+0xcc/0xea
+>>[    0.774788]  platform_drv_probe+0x35/0x80
+>>[    0.774788]  really_probe+0xef/0x390
+>>[    0.774788]  driver_probe_device+0xb4/0x100
+>>[    0.774788]  device_driver_attach+0x4f/0x60
+>>[    0.774788]  __driver_attach+0x86/0x140
+>>[    0.774788]  ? device_driver_attach+0x60/0x60
+>>[    0.774788]  bus_for_each_dev+0x76/0xc0
+>>[    0.774788]  ? klist_add_tail+0x3b/0x70
+>>[    0.774788]  bus_add_driver+0x14a/0x1e0
+>>[    0.774788]  ? tpm_init+0xea/0xea
+>>[    0.774788]  ? do_early_param+0x8e/0x8e
+>>[    0.774788]  driver_register+0x6b/0xb0
+>>[    0.774788]  ? tpm_init+0xea/0xea
+>>[    0.774788]  init_tis+0x86/0xd8
+>>[    0.774788]  ? do_early_param+0x8e/0x8e
+>>[    0.774788]  ? driver_register+0x94/0xb0
+>>[    0.774788]  do_one_initcall+0x46/0x1e4
+>>[    0.774788]  ? do_early_param+0x8e/0x8e
+>>[    0.774788]  kernel_init_freeable+0x199/0x242
+>>[    0.774788]  ? rest_init+0xaa/0xaa
+>>[    0.774788]  kernel_init+0xa/0x106
+>>[    0.774788]  ret_from_fork+0x35/0x40
+>>[    0.774788] Modules linked in:
+>>[    0.774788] CR2: ffffbc8fc00866ad
+>>[    0.774788] ---[ end trace 42930799f8d6eaea ]---
+>>[    0.774788] RIP: 0010:memcpy_erms+0x6/0x10
+>>[    0.774788] Code: 90 90 90 90 eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e=
+9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <=
+f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+>>[    0.774788] RSP: 0000:ffffbc8fc0073b30 EFLAGS: 00010286
+>>[    0.774788] RAX: ffff9b1fc7c5b367 RBX: ffff9b1fc8390000 RCX: fffffffff=
+fffe962
+>>[    0.774788] RDX: ffffffffffffe962 RSI: ffffbc8fc00866ad RDI: ffff9b1fc=
+7c5b367
+>>[    0.774788] RBP: ffff9b1c10ca7018 R08: ffffbc8fc0085fff R09: 800000000=
+0000063
+>>[    0.774788] R10: 0000000000001000 R11: 000fffffffe00000 R12: 000000000=
+0003367
+>>[    0.774788] R13: ffff9b1fcc47c010 R14: ffffbc8fc0085000 R15: 000000000=
+0000002
+>>[    0.774788] FS:  0000000000000000(0000) GS:ffff9b1fce200000(0000) knlG=
+S:0000000000000000
+>>[    0.774788] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>[    0.774788] CR2: ffffbc8fc00866ad CR3: 000000029f60a001 CR4: 000000000=
+03606f0
+>>[    0.774788] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000000=
+0000000
+>>[    0.774788] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000000000=
+0000400
+>>[    0.774788] Kernel panic - not syncing: Fatal exception
+>>[    0.774788] Kernel Offset: 0x1d000000 from 0xffffffff81000000 (relocat=
+ion range: 0xffffffff80000000-0xffffffffbfffffff)
+>>[    0.774788] ---[ end Kernel panic - not syncing: Fatal exception ]---
 
-We need to know, which ioremap'ed address assign to control area, command
-and response buffer, based on which ACPI region contains each of them.
-Is there any method of getting remapped address for the raw one after
-resouce containing it has been allocated?
-And what do you mean by initialization? crb_resources lives only in
-crb_map_io, which seems to run only once.
+I finally was able to get a laptop model where this is being seen. efi_tpm_=
+final_log_size is -1, which I'm guessing is coming from
+tpm2_calc_event_log_size, and the sanity check in tpm_read_log_efi is check=
+ing if efi_tpm_final_log_size =3D=3D 0. Building a test
+kernel really quick to verify that tpm2_calc_event_log_size is where it ori=
+ginates, but I imagine there should be a check of tbl_size
+after tpm2_calc_event_log_size call in efi_tpm_eventlog_init?
+
