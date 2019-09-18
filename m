@@ -2,98 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 525E7B635E
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Sep 2019 14:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E14B638B
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Sep 2019 14:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727588AbfIRMhg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Sep 2019 08:37:36 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:33304 "EHLO
+        id S1727469AbfIRMvF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Sep 2019 08:51:05 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:35787 "EHLO
         outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725902AbfIRMhg (ORCPT
+        with ESMTP id S1727435AbfIRMvF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Sep 2019 08:37:36 -0400
+        Wed, 18 Sep 2019 08:51:05 -0400
 Received: from callcc.thunk.org (guestnat-104-133-0-98.corp.google.com [104.133.0.98] (may be forged))
         (authenticated bits=0)
         (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x8ICbOWC010072
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x8ICorbe014044
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Sep 2019 08:37:25 -0400
+        Wed, 18 Sep 2019 08:50:54 -0400
 Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 4E445420811; Wed, 18 Sep 2019 08:37:24 -0400 (EDT)
-Date:   Wed, 18 Sep 2019 08:37:24 -0400
+        id C258B420811; Wed, 18 Sep 2019 08:50:52 -0400 (EDT)
+Date:   Wed, 18 Sep 2019 08:50:52 -0400
 From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Janne Karhunen <janne.karhunen@gmail.com>,
+To:     Janne Karhunen <janne.karhunen@gmail.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
         Chuck Lever <chuck.lever@oracle.com>,
-        linux-integrity@vger.kernel.org
+        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
 Subject: Re: IMA on remote file systems
-Message-ID: <20190918123724.GJ6762@mit.edu>
+Message-ID: <20190918125052.GK6762@mit.edu>
 References: <C867A0BA-1ACF-4600-8179-3E15A098846C@oracle.com>
  <CAE=Ncrb=rh0LeDjnGYGuGJVPXG3Y1UpjD5Tw41s0zyOAaL1NKg@mail.gmail.com>
  <1BF68F78-FA8E-4633-9AB4-AB6E0B10DCB8@oracle.com>
  <CAE=NcrYjzdBCB7aK6bL+C+W8N-QJyuPF0RvFqCmsK_S90oyvxg@mail.gmail.com>
  <20190917124533.GD6762@mit.edu>
  <1568732169.11799.18.camel@HansenPartnership.com>
+ <CAE=NcrZySAMJZe8Y9AfF2T3zoZqDe_HC4e7kD6eOkZMGBmSMOQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1568732169.11799.18.camel@HansenPartnership.com>
+In-Reply-To: <CAE=NcrZySAMJZe8Y9AfF2T3zoZqDe_HC4e7kD6eOkZMGBmSMOQ@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 09:56:09AM -0500, James Bottomley wrote:
-> > There seems to be a philosophical debate about this.  Some IMA folks
-> > have claimed that you want to know at the time of the binary being
-> > executed, whether or not it is corrupt or not.  Their concern is that
-> > if you can make a binary crash when it pages in some page of memory,,,,
->
-> That's not my recollection of the IMA position.
+On Wed, Sep 18, 2019 at 08:27:57AM +0300, Janne Karhunen wrote:
+> 
+> The way I see this is that the greatest asset to protect on any device
+> is the user data. The data security comes first, then the device
+> security as a mechanism to protect that same data. You could even say
+> that the device security is worthless when the device is empty. The
+> user data is almost always mutable by nature. So, would be really
+> great if the fs-verity metadata storage would take it into a
+> consideration that one day someone will want to use it for the mutable
+> data as well, even if Google does not want at this point in time.
+> Things like photos, videos are ideal use cases for the verity like Ted
+> pointed out.
 
-I had *several* conversations with IMA folks, including Mimi, who very
-carefully explained to me why fs-verity was bad from a security
-perspective.  We also had security experts inside Google who said it
-was fine, so it's fair to say that there is no unaminimity on this
-issue.  (Put 4 security experts in a room, and watch 5 different
-positions develop).
+Writable data is tricky, and has several problems.  The first is
+performance; the block which gets modified and the cryptographic
+checksum has to be updated atomically; and if you use a Merkle tree,
+you have to update multiple blocks in the Merkle tree atomically.  The
+journalling necessary to address this is really tricky.
 
-> I'd more say the Linux Kernel itself, at least for executables, has
-> mechanisms to ensure open files aren't updated because that ends up
-> causing potential I/D cache incoherence with resulting binary crashes,
-> so for executables, IMA relies on this mechanism.
+The other problem is if you want to update authenticated checksums
+while blocks are being updated, this raises the question about how do
+you secure the key used to sign the checksums?  For read-only data,
+the private signing key can be stored off the device.  For example, it
+can be stored on an off-line build server for a Red Hat package.  Or
+Google can store the signing key for APK's on a secure server inside
+their data centers before the package is made available on Google Play
+Download servers.
 
-But that's only true because the disk is inside the TCB.  If you can
-modify the disk while file is open --- for example, if the NSA has
-created trojaned HDD firmware --- then assuming that the kernel can
-ensure that the file can't be modified while it's being executed is
-completely false.  Consider what happens if the file is stored on
-iSCSI, where either (a) there is no protection of the network
-connection, or (b) the iSCSI device is under the control of the
-malicious attacker.
+For mutable data, the signing key needs to be stored on the mobile
+device --- so the value is significantly decreased.  After all, if a
+malicious attacker can take over the phone in order to modify a photo,
+the malicious attacker can also steal the signing key off the mobile
+device and then modify the photo.
 
-> I'd also be wary of pushing a merkle tree as a solution to the TOC/TOU
-> problem because, while it's true you can appraise a page at a time
-> using the lowest layer hash, unless you do a full merkle tree check on
-> that hash every time, you're still vulnerable to the attacker
-> corrupting both the hash and the page (especially as the merkle tree
-> can be so huge, requiring that it be paged too).
+There are solutions for these problems.  For example, one could use a
+storage device with 4128 byte sectors, with an inline encryption
+engine (ICE) which uses AES-GCM (an Authenticated Encryption with
+Associated Data mode), with the key stored in a secure enclave and
+where the host OS authenticates to the secure enclave, and then the
+secure enclave delivers the key to the ICE without the key ever
+touching the general purpose CPU.  But in general, they all require a
+lot of custom hardware.  And I'm not making any comments about any
+future product features in Android, but it's safe to say that security
+architects have been talking about such designs for quite some time.
+The challenge has always been balancing the cost / benefit tradeoffs,
+and whether customers are willing to pay what it costs, either in $$$
+or performance, to get that level of security.
 
-If the page containing the lowest layer hash is in memory (and memory
-is considered part of the TCB), then we don't need to do the full
-merkle tree check.  If the lowest layer hash has been pushed out of
-memory, then it has to be read from the storage device, but we might
-not still have to do a full merkle tree check.  We only have to do a
-check up to the merkle tree block which is still in memory.  In
-practice, both for dm-verity and fs-verity, the upper layers of the
-Merkle tree are will tend to be kept in memory because we can touch
-them as "accessed" even though we didn't need to actually recompute
-the hash of tree nodes which are still in memory.
+Cheers,
 
-So the Merkle tree *does* solve the TOC/TOU issue, so long as we are
-careful and explicit about what are trust assumptions are.  And
-certainly treating the memory as being in the TCB is fairly
-uncontroversial thing to do!
-
-						 Ted
+						- Ted
