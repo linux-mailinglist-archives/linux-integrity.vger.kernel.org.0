@@ -2,113 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF16BB720B
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Sep 2019 06:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47555B7363
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Sep 2019 08:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725887AbfISEAW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 19 Sep 2019 00:00:22 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57156 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725320AbfISEAV (ORCPT
+        id S2387901AbfISGsG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Sep 2019 02:48:06 -0400
+Received: from mail-lj1-f169.google.com ([209.85.208.169]:44276 "EHLO
+        mail-lj1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387758AbfISGsG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 19 Sep 2019 00:00:21 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8J3vSTd042757;
-        Wed, 18 Sep 2019 23:59:28 -0400
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2v3ve896ky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Sep 2019 23:59:28 -0400
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x8J3tIOP010643;
-        Thu, 19 Sep 2019 03:59:26 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma02wdc.us.ibm.com with ESMTP id 2v3vbtt8s1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Sep 2019 03:59:26 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8J3xQVi54001986
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Sep 2019 03:59:26 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 633B8AE05C;
-        Thu, 19 Sep 2019 03:59:26 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53748AE05F;
-        Thu, 19 Sep 2019 03:59:22 +0000 (GMT)
-Received: from morokweng.localdomain (unknown [9.85.160.236])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Thu, 19 Sep 2019 03:59:22 +0000 (GMT)
-References: <20190913225009.3406-1-prsriva@linux.microsoft.com> <20190913225009.3406-2-prsriva@linux.microsoft.com> <1568816111.16709.68.camel@linux.ibm.com> <1568841696.4733.3.camel@linux.ibm.com>
-User-agent: mu4e 1.2.0; emacs 26.2
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        arnd@arndb.de, jean-philippe@linaro.org, allison@lohutok.net,
-        kristina.martsenko@arm.org, yamada.masahiro@socionext.com,
-        duwe@lst.de, mark.rutland@arm.com, tglx@linutronix.de,
-        takahiro.akashi@linaro.org, james.morse@arm.org,
-        catalin.marinas@arm.com, sboyd@kernel.org
-Subject: Re: [RFC PATCH v1 1/1] Add support for arm64 to carry ima measurement log in kexec_file_load
-In-reply-to: <1568841696.4733.3.camel@linux.ibm.com>
-Date:   Thu, 19 Sep 2019 00:59:11 -0300
-Message-ID: <871rwd2ay8.fsf@morokweng.localdomain>
+        Thu, 19 Sep 2019 02:48:06 -0400
+Received: by mail-lj1-f169.google.com with SMTP id m13so2341917ljj.11
+        for <linux-integrity@vger.kernel.org>; Wed, 18 Sep 2019 23:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GQ74i7jMfFV1EW/qaEkp9OdMKSet+fmNgopOKpWlDMA=;
+        b=kDZtUPSul7z6BJvVGvl7iL10tYZ1X9Wy9r9WrZRvI0otdnu6qMNwGdFDvMjN3oPHIN
+         mBWNWver+58TGVuKZOVcZb4oKaWKIpEii8etZU7vLWN1HUlUetSbEJ0bOATnpwb+cljn
+         8jxJq71NU85+9Jx2b1Xk/FTy1WIajxZ8MDfXFXMY2ci1eV9fpuvFz9yI0bs8yuLya+Nk
+         0fxQDqydhtMczGEVE5FDF8w/LVm4dlv8EpeWkgK1WmvIRp4uHa1ZmqTSuH2Oe8eIScQA
+         MnV7O0u/NzvXD50gq7p5neB1FaWseY+IOI0Vupv2I5D04wQf/Zsv8l6DuY4qXtrrJ+Q0
+         Gp+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GQ74i7jMfFV1EW/qaEkp9OdMKSet+fmNgopOKpWlDMA=;
+        b=p4BjYzJbTnSEGkL5t+r9gEiULiHragAOl0h3dwMN43xa+9D138UeWOgZuGOBJfNdrB
+         WM/PnIY9ZwPSGAeCbg0W+tFDxehqiQs876Yidbq24ObghO5HPAVr0HiNXpEq43Gy+YfE
+         SgI50DeTanyQIhKUvXHOxvegykZOyHqqzMFRjgRab3moP9Hcx0bgPtqTzH+H9AhrIxV4
+         jvOT2WgPVZ7NqaWNtuCS8kk1zG0muSjKjvuDuub7lUupiyoedyfLx2TNlkmvoYYVdbIy
+         ImqLEGDx2tR5YOA/qE+y0/W2+ESuVWiIkWKSCFd/NCUGvFRzpn3z+tOykXmNfGIKYRGb
+         lqgg==
+X-Gm-Message-State: APjAAAWlJOb6I4hf4pAhSnC6FcRn2rdHlbGVZaUBfpAVbtVob/wcpBe6
+        AxiJUyZ9cDOieP3JL56bMeQ8BXCZJ49LcVU8Gg8=
+X-Google-Smtp-Source: APXvYqxE3GulFVU8kBs6ObsttFIbC54A0ZdRsL7P8q4MMJCvHHFksKFOIZ++6kqBU/bevyB+6mq8th1/z/BIZAgaUcI=
+X-Received: by 2002:a2e:b0c2:: with SMTP id g2mr4281955ljl.217.1568875684339;
+ Wed, 18 Sep 2019 23:48:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-19_01:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1909190034
+References: <C867A0BA-1ACF-4600-8179-3E15A098846C@oracle.com>
+ <CAE=Ncrb=rh0LeDjnGYGuGJVPXG3Y1UpjD5Tw41s0zyOAaL1NKg@mail.gmail.com>
+ <1BF68F78-FA8E-4633-9AB4-AB6E0B10DCB8@oracle.com> <CAE=NcrYjzdBCB7aK6bL+C+W8N-QJyuPF0RvFqCmsK_S90oyvxg@mail.gmail.com>
+ <20190917124533.GD6762@mit.edu> <1568732169.11799.18.camel@HansenPartnership.com>
+ <CAE=NcrZySAMJZe8Y9AfF2T3zoZqDe_HC4e7kD6eOkZMGBmSMOQ@mail.gmail.com> <1568821962.5817.17.camel@HansenPartnership.com>
+In-Reply-To: <1568821962.5817.17.camel@HansenPartnership.com>
+From:   Janne Karhunen <janne.karhunen@gmail.com>
+Date:   Thu, 19 Sep 2019 09:47:52 +0300
+Message-ID: <CAE=NcrbHLU9=6yv9XwsP6PDMcWNAp5QUML5UKhj6vjZkqN=PbQ@mail.gmail.com>
+Subject: Re: IMA on remote file systems
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Wed, Sep 18, 2019 at 6:53 PM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
 
-Mimi Zohar <zohar@linux.ibm.com> writes:
+> Mutability for integrity checked executables/data is problematic.  With
+> IMA you have to update the file and the xattr and make sure nothing
+> touches it before you've completed all the updates otherwise you get an
+> integrity check failure.  This can work if your mutation is simply a
+> distro update, but it's really hard to do if the file is constantly
+> undergoing mutation because the window where the integrity check fails
+> is huge ... thus it depends on your use case for mutability.
 
-> On Wed, 2019-09-18 at 10:15 -0400, Mimi Zohar wrote:
->
->> > +	uint64_t tmp_start, tmp_end;
->> > +
->> > +	propStart = of_find_property(of_chosen, "linux,ima-kexec-buffer",
->> > +				     NULL);
->> > +	if (propStart) {
->> > +		tmp_start = fdt64_to_cpu(*((const fdt64_t *) propStart));
->> > +		ret = of_remove_property(of_chosen, propStart);
->> > +		if (!ret) {
->> > +			return ret;
->> > +		}
->> > +
->> > +		propEnd = of_find_property(of_chosen,
->> > +					   "linux,ima-kexec-buffer-end", NULL);
->> > +		if (!propEnd) {
->> > +			return -EINVAL;
->> > +		}
->> > +
->> > +		tmp_end = fdt64_to_cpu(*((const fdt64_t *) propEnd));
->> > +
->> > +		ret = of_remove_property(of_chosen, propEnd);
->> > +		if (!ret) {
->> > +			return ret;
->> > +		}
->> 
->> There seems to be quite a bit of code duplication in this function and
->> in ima_get_kexec_buffer().  It could probably be cleaned up with some
->> refactoring.
->
-> Sorry, my mistake.  One calls of_get_property(), while the other calls
-> of_find_property().
+Right, but try those patches I posted. They mostly address this, even
+android mmap'd databases seem to stay pretty well up to date and the
+performance is not entirely destroyed either if tuned a bit.
 
-of_get_property() is a thin wrapper around of_find_property(), so if
-that's the only difference I think they can still be merged.
 
--- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
+--
+Janne
