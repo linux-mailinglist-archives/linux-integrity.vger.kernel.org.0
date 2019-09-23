@@ -2,98 +2,245 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CE4B973E
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Sep 2019 20:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3226BB731
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Sep 2019 16:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406592AbfITSct (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Sep 2019 14:32:49 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:40605 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406624AbfITScs (ORCPT
+        id S2440124AbfIWOwr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Sep 2019 10:52:47 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:60818 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730583AbfIWOwr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Sep 2019 14:32:48 -0400
-Received: by mail-pg1-f196.google.com with SMTP id w10so4292141pgj.7
-        for <linux-integrity@vger.kernel.org>; Fri, 20 Sep 2019 11:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p7IfU61KE2txhnLC8mG/Pzm9PBv785Nvfxd4FYtvCwc=;
-        b=b+RPPisf/2hxQhW05ru7RW/KG9Jpf2rSHMmfrV2LDB4v3ZsUDOhf+sdejyVBzrvSFQ
-         f7PXa7Z0tMhC7VqrXtpsCmIcaOL6hs00kaYfKCIgi/MFzGo3tYmK8XJZ23HZWuaZjrfv
-         Z6mFQHxasieOupjhCYo951/yeGWwoYwlMJlu4=
+        Mon, 23 Sep 2019 10:52:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1569250365;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fnHfrwRyFSd2mBHPfngqJTHWBoEaUqDVG4Gba3U6g+U=;
+        b=Bjkk6uF1Ack1S7TgI2ZH7orjft8xGs0GTfa9w1ZSH0n9SRmU04b3s4CfNExkRek/C8pgOL
+        rsQprkcli/tac/0Ls6t393In772E2IAWRPeSRSWRW5PoO8+uFcpNu8qGrcFGTJ9FWE1Dpv
+        tUMFWkvOJU39YxXb5gTYvUpA9v64xeI=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-58-ysaY9JEeO7q0uZ9DQLxzmQ-1; Mon, 23 Sep 2019 10:52:43 -0400
+Received: by mail-qt1-f197.google.com with SMTP id x3so17544615qto.7
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Sep 2019 07:52:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p7IfU61KE2txhnLC8mG/Pzm9PBv785Nvfxd4FYtvCwc=;
-        b=nfa0FzecvUoYhasfkgRI2BFQt+utb7L5PRbeUQX0BvQi3cSD6t2aMYGzdYFpC2ZO2f
-         cGjkTK+DliskNpjINjVl57OSvHb/ixXzc73KUSxJBrphUG8q+Fl/x1ysQFSr1k906Mjt
-         ibL8QmFuM7CeW3p0sv3Buh1C4tHmcT2ssWixBbNi5qMU9DKpePr8295HFcfSoMQEeZTF
-         fYPHjnCYR8oPc00ry/cheYPSkqKa9qsGGDe9IirTr/fCfojpgGNujrnVKCeyc2gv4DBS
-         KVQgSLwKAHV7Fx2OHGuRyS2IwQETLuwcR1GI6yH9aMnJcqbRn2+rry4Ge29phUloFBzV
-         BDpQ==
-X-Gm-Message-State: APjAAAVZ7pNkTdDRKJ7rfUIa76nIyhEsFk4MVSXBdSzMRO4tG02y+sJM
-        5Wcz1ahzYujEodLz/cUTRMz9uA==
-X-Google-Smtp-Source: APXvYqy8nLBGPA5Ce5MY1hxDTwMj6VGdu3MYCiEfKtWTCTtQj3T/I+08bq/MEAKVkaCJRyy09HhEEQ==
-X-Received: by 2002:a63:5d0e:: with SMTP id r14mr16656526pgb.15.1569004368198;
-        Fri, 20 Sep 2019 11:32:48 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id b69sm4436072pfb.132.2019.09.20.11.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2019 11:32:47 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Peter Huewe <peterhuewe@gmx.de>,
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HyYCw9JIb/UV+poKSr0mrWc69vO3WXi731SqVUGI+ds=;
+        b=Cbto+eLZ61VMqf1HaAQg4AhERE9S4PWERE1MTfl99vaNLeVLQaWm77fZ52ol6P2mMB
+         ciujMt8ot6FWugdS2ExTfKivTWQtbMYN2OGQN7WlFfI7eruWOcTxXuE0UK9Po8TMfn8o
+         2U2V6VFq0vDLegObA7HpFBMqzRc87yRcGP1dzK+5nJTxR/2LAgqnNmiwc+oXQ85p4mvZ
+         z/ypAFzRtSlDiwgqfTkUPv/7Kt5YllSeVcrooDV8f0nzHje9fX0m4ijn7u+YKSGH7gyp
+         MUtmjFTmIFcZW/caInqkirlf51gUkIDA4NJgW9Z/mqDU3jqPT5OFQVqhkVkwVO/GQWNo
+         8t0w==
+X-Gm-Message-State: APjAAAXaQOFMjVjq+K7q3DFSqGpxHGJWztmWpRVgb2SEE9BUdi1zzBUK
+        AWSuEFzzPDAZKl6ZyaEqlUS4V44lBfwYuxgqY5XGI3fdYu+Ws5TBc1se0cDExLkqJx7J3c6zrpc
+        i281OETJ5/fiFIWCSClmQSYt8Qy2J
+X-Received: by 2002:aed:316d:: with SMTP id 100mr352073qtg.20.1569250362075;
+        Mon, 23 Sep 2019 07:52:42 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqz4/W3quyXwK9HwWEc6/h7kEcQ+0gurZ+pNMvwsCcHB/s74lngliKngPT7jor3HtKa4bVBTRQ==
+X-Received: by 2002:aed:316d:: with SMTP id 100mr352046qtg.20.1569250361730;
+        Mon, 23 Sep 2019 07:52:41 -0700 (PDT)
+Received: from [192.168.1.157] (pool-96-235-39-235.pitbpa.fios.verizon.net. [96.235.39.235])
+        by smtp.gmail.com with ESMTPSA id z141sm5575608qka.126.2019.09.23.07.52.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Sep 2019 07:52:40 -0700 (PDT)
+Subject: Re: [RFC PATCH] tpm: only set efi_tpm_final_log_size after successful
+ event log parsing
+To:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Andrey Pronin <apronin@chromium.org>,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v7 6/6] tpm: tpm_tis_spi: Drop THIS_MODULE usage from driver struct
-Date:   Fri, 20 Sep 2019 11:32:40 -0700
-Message-Id: <20190920183240.181420-7-swboyd@chromium.org>
-X-Mailer: git-send-email 2.23.0.351.gc4317032e6-goog
-In-Reply-To: <20190920183240.181420-1-swboyd@chromium.org>
-References: <20190920183240.181420-1-swboyd@chromium.org>
+References: <20190918191626.5741-1-jsnitsel@redhat.com>
+ <20190918192355.bzsv7ct5nmtrv5nu@cantor>
+From:   Laura Abbott <labbott@redhat.com>
+Message-ID: <e781bf52-0ffb-23bb-2ce6-f298d7545731@redhat.com>
+Date:   Mon, 23 Sep 2019 10:52:40 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190918192355.bzsv7ct5nmtrv5nu@cantor>
+Content-Language: en-US
+X-MC-Unique: ysaY9JEeO7q0uZ9DQLxzmQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The module_spi_driver() macro already inserts THIS_MODULE into the
-driver .owner field. Remove it to save a line.
+On 9/18/19 8:23 PM, Jerry Snitselaar wrote:
+> On Wed Sep 18 19, Jerry Snitselaar wrote:
+>> If __calc_tpm2_event_size fails to parse an event it will return 0,
+>> resulting tpm2_calc_event_log_size returning -1. Currently
+>> there is no check of this return value, and efi_tpm_final_log_size
+>> can end up being set to this negative value resulting
+>> in a panic like the following:
+>>
+>> [=A0=A0=A0 0.774340] BUG: unable to handle page fault for address: ffffb=
+c8fc00866ad
+>> [=A0=A0=A0 0.774788] #PF: supervisor read access in kernel mode
+>> [=A0=A0=A0 0.774788] #PF: error_code(0x0000) - not-present page
+>> [=A0=A0=A0 0.774788] PGD 107d36067 P4D 107d36067 PUD 107d37067 PMD 107d3=
+8067 PTE 0
+>> [=A0=A0=A0 0.774788] Oops: 0000 [#1] SMP PTI
+>> [=A0=A0=A0 0.774788] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.3.0-0.r=
+c2.1.elrdy.x86_64 #1
+>> [=A0=A0=A0 0.774788] Hardware name: LENOVO 20HGS22D0W/20HGS22D0W, BIOS N=
+1WET51W (1.30 ) 09/14/2018
+>> [=A0=A0=A0 0.774788] RIP: 0010:memcpy_erms+0x6/0x10
+>> [=A0=A0=A0 0.774788] Code: 90 90 90 90 eb 1e 0f 1f 00 48 89 f8 48 89 d1 =
+48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 =
+89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+>> [=A0=A0=A0 0.774788] RSP: 0000:ffffbc8fc0073b30 EFLAGS: 00010286
+>> [=A0=A0=A0 0.774788] RAX: ffff9b1fc7c5b367 RBX: ffff9b1fc8390000 RCX: ff=
+ffffffffffe962
+>> [=A0=A0=A0 0.774788] RDX: ffffffffffffe962 RSI: ffffbc8fc00866ad RDI: ff=
+ff9b1fc7c5b367
+>> [=A0=A0=A0 0.774788] RBP: ffff9b1c10ca7018 R08: ffffbc8fc0085fff R09: 80=
+00000000000063
+>> [=A0=A0=A0 0.774788] R10: 0000000000001000 R11: 000fffffffe00000 R12: 00=
+00000000003367
+>> [=A0=A0=A0 0.774788] R13: ffff9b1fcc47c010 R14: ffffbc8fc0085000 R15: 00=
+00000000000002
+>> [=A0=A0=A0 0.774788] FS:=A0 0000000000000000(0000) GS:ffff9b1fce200000(0=
+000) knlGS:0000000000000000
+>> [=A0=A0=A0 0.774788] CS:=A0 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [=A0=A0=A0 0.774788] CR2: ffffbc8fc00866ad CR3: 000000029f60a001 CR4: 00=
+000000003606f0
+>> [=A0=A0=A0 0.774788] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00=
+00000000000000
+>> [=A0=A0=A0 0.774788] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00=
+00000000000400
+>> [=A0=A0=A0 0.774788] Call Trace:
+>> [=A0=A0=A0 0.774788]=A0 tpm_read_log_efi+0x156/0x1a0
+>> [=A0=A0=A0 0.774788]=A0 tpm_bios_log_setup+0xc8/0x190
+>> [=A0=A0=A0 0.774788]=A0 tpm_chip_register+0x50/0x1c0
+>> [=A0=A0=A0 0.774788]=A0 tpm_tis_core_init.cold.9+0x28c/0x466
+>> [=A0=A0=A0 0.774788]=A0 tpm_tis_plat_probe+0xcc/0xea
+>> [=A0=A0=A0 0.774788]=A0 platform_drv_probe+0x35/0x80
+>> [=A0=A0=A0 0.774788]=A0 really_probe+0xef/0x390
+>> [=A0=A0=A0 0.774788]=A0 driver_probe_device+0xb4/0x100
+>> [=A0=A0=A0 0.774788]=A0 device_driver_attach+0x4f/0x60
+>> [=A0=A0=A0 0.774788]=A0 __driver_attach+0x86/0x140
+>> [=A0=A0=A0 0.774788]=A0 ? device_driver_attach+0x60/0x60
+>> [=A0=A0=A0 0.774788]=A0 bus_for_each_dev+0x76/0xc0
+>> [=A0=A0=A0 0.774788]=A0 ? klist_add_tail+0x3b/0x70
+>> [=A0=A0=A0 0.774788]=A0 bus_add_driver+0x14a/0x1e0
+>> [=A0=A0=A0 0.774788]=A0 ? tpm_init+0xea/0xea
+>> [=A0=A0=A0 0.774788]=A0 ? do_early_param+0x8e/0x8e
+>> [=A0=A0=A0 0.774788]=A0 driver_register+0x6b/0xb0
+>> [=A0=A0=A0 0.774788]=A0 ? tpm_init+0xea/0xea
+>> [=A0=A0=A0 0.774788]=A0 init_tis+0x86/0xd8
+>> [=A0=A0=A0 0.774788]=A0 ? do_early_param+0x8e/0x8e
+>> [=A0=A0=A0 0.774788]=A0 ? driver_register+0x94/0xb0
+>> [=A0=A0=A0 0.774788]=A0 do_one_initcall+0x46/0x1e4
+>> [=A0=A0=A0 0.774788]=A0 ? do_early_param+0x8e/0x8e
+>> [=A0=A0=A0 0.774788]=A0 kernel_init_freeable+0x199/0x242
+>> [=A0=A0=A0 0.774788]=A0 ? rest_init+0xaa/0xaa
+>> [=A0=A0=A0 0.774788]=A0 kernel_init+0xa/0x106
+>> [=A0=A0=A0 0.774788]=A0 ret_from_fork+0x35/0x40
+>> [=A0=A0=A0 0.774788] Modules linked in:
+>> [=A0=A0=A0 0.774788] CR2: ffffbc8fc00866ad
+>> [=A0=A0=A0 0.774788] ---[ end trace 42930799f8d6eaea ]---
+>> [=A0=A0=A0 0.774788] RIP: 0010:memcpy_erms+0x6/0x10
+>> [=A0=A0=A0 0.774788] Code: 90 90 90 90 eb 1e 0f 1f 00 48 89 f8 48 89 d1 =
+48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 =
+89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+>> [=A0=A0=A0 0.774788] RSP: 0000:ffffbc8fc0073b30 EFLAGS: 00010286
+>> [=A0=A0=A0 0.774788] RAX: ffff9b1fc7c5b367 RBX: ffff9b1fc8390000 RCX: ff=
+ffffffffffe962
+>> [=A0=A0=A0 0.774788] RDX: ffffffffffffe962 RSI: ffffbc8fc00866ad RDI: ff=
+ff9b1fc7c5b367
+>> [=A0=A0=A0 0.774788] RBP: ffff9b1c10ca7018 R08: ffffbc8fc0085fff R09: 80=
+00000000000063
+>> [=A0=A0=A0 0.774788] R10: 0000000000001000 R11: 000fffffffe00000 R12: 00=
+00000000003367
+>> [=A0=A0=A0 0.774788] R13: ffff9b1fcc47c010 R14: ffffbc8fc0085000 R15: 00=
+00000000000002
+>> [=A0=A0=A0 0.774788] FS:=A0 0000000000000000(0000) GS:ffff9b1fce200000(0=
+000) knlGS:0000000000000000
+>> [=A0=A0=A0 0.774788] CS:=A0 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [=A0=A0=A0 0.774788] CR2: ffffbc8fc00866ad CR3: 000000029f60a001 CR4: 00=
+000000003606f0
+>> [=A0=A0=A0 0.774788] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00=
+00000000000000
+>> [=A0=A0=A0 0.774788] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00=
+00000000000400
+>> [=A0=A0=A0 0.774788] Kernel panic - not syncing: Fatal exception
+>> [=A0=A0=A0 0.774788] Kernel Offset: 0x1d000000 from 0xffffffff81000000 (=
+relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+>> [=A0=A0=A0 0.774788] ---[ end Kernel panic - not syncing: Fatal exceptio=
+n ]---
+>>
+>> Fixes: c46f3405692de ("tpm: Reserve the TPM final events table")
+>> Cc: Matthew Garrett <mjg59@google.com>
+>> Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+>> Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+>> ---
+>> drivers/firmware/efi/tpm.c | 11 ++++++++---
+>> 1 file changed, 8 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
+>> index 1d3f5ca3eaaf..5cd00a7833c2 100644
+>> --- a/drivers/firmware/efi/tpm.c
+>> +++ b/drivers/firmware/efi/tpm.c
+>> @@ -40,8 +40,7 @@ int __init efi_tpm_eventlog_init(void)
+>> {
+>> =A0=A0=A0=A0struct linux_efi_tpm_eventlog *log_tbl;
+>> =A0=A0=A0=A0struct efi_tcg2_final_events_table *final_tbl;
+>> -=A0=A0=A0 unsigned int tbl_size;
+>> -=A0=A0=A0 int ret =3D 0;
+>> +=A0=A0=A0 int tbl_size, ret =3D 0;
+>>
+>> =A0=A0=A0=A0if (efi.tpm_log =3D=3D EFI_INVALID_TABLE_ADDR) {
+>> =A0=A0=A0=A0=A0=A0=A0 /*
+>> @@ -80,11 +79,17 @@ int __init efi_tpm_eventlog_init(void)
+>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 + =
+sizeof(final_tbl->nr_events),
+>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 fi=
+nal_tbl->nr_events,
+>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 lo=
+g_tbl->log);
+>> +=A0=A0=A0 if (tbl_size < 0) {
+>> +=A0=A0=A0=A0=A0=A0=A0 pr_err("Failed to parse event in TPM Final Event =
+log\n");
+>> +=A0=A0=A0=A0=A0=A0=A0 goto calc_out;
+>> +=A0=A0=A0 }
+>> +
+>> =A0=A0=A0=A0memblock_reserve((unsigned long)final_tbl,
+>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 tbl_size + sizeof(*final_tbl));
+>> -=A0=A0=A0 early_memunmap(final_tbl, sizeof(*final_tbl));
+>> =A0=A0=A0=A0efi_tpm_final_log_size =3D tbl_size;
+>>
+>> +calc_out:
+>> +=A0=A0=A0 early_memunmap(final_tbl, sizeof(*final_tbl));
+>> out:
+>> =A0=A0=A0=A0early_memunmap(log_tbl, sizeof(*log_tbl));
+>> =A0=A0=A0=A0return ret;
+>> --=20
+>> 2.23.0
+>>
+>=20
+> I'm not sure what to set ret to, which currently isn't checked, or if any=
+thing
+> should be done with efi.tpm_final_log.
+>=20
 
-Cc: Andrey Pronin <apronin@chromium.org>
-Cc: Duncan Laurie <dlaurie@chromium.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
-Cc: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/char/tpm/tpm_tis_spi.c | 1 -
- 1 file changed, 1 deletion(-)
+fwiw, this is being hit by a number of Fedora users
+https://bugzilla.redhat.com/show_bug.cgi?id=3D1752961
+I'd like to bring this patch to Fedora if there's general agreement
+this is the correct approach.
 
-diff --git a/drivers/char/tpm/tpm_tis_spi.c b/drivers/char/tpm/tpm_tis_spi.c
-index ec703aee7e7d..d1754fd6c573 100644
---- a/drivers/char/tpm/tpm_tis_spi.c
-+++ b/drivers/char/tpm/tpm_tis_spi.c
-@@ -283,7 +283,6 @@ MODULE_DEVICE_TABLE(acpi, acpi_tis_spi_match);
- 
- static struct spi_driver tpm_tis_spi_driver = {
- 	.driver = {
--		.owner = THIS_MODULE,
- 		.name = "tpm_tis_spi",
- 		.pm = &tpm_tis_pm,
- 		.of_match_table = of_match_ptr(of_tis_spi_match),
--- 
-Sent by a computer through tubes
+Thanks,
+Laura
 
