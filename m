@@ -2,40 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4805BD388
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2019 22:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFEDBD4EF
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2019 00:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406216AbfIXU1I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Sep 2019 16:27:08 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:58042 "EHLO
+        id S2391727AbfIXWbc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Sep 2019 18:31:32 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:47472 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726156AbfIXU1I (ORCPT
+        with ESMTP id S2389629AbfIXWbb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Sep 2019 16:27:08 -0400
-Received: from [10.200.156.146] (unknown [167.220.2.18])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0EEC620BBF87;
-        Tue, 24 Sep 2019 13:27:07 -0700 (PDT)
-Subject: Re: [RFC PATCH v1 1/1] Add support for arm64 to carry ima measurement
- log in kexec_file_load
-To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc:     mark.rutland@arm.com, jean-philippe@linaro.org, arnd@arndb.de,
-        takahiro.akashi@linaro.org, sboyd@kernel.org,
-        catalin.marinas@arm.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        yamada.masahiro@socionext.com, kristina.martsenko@arm.org,
-        duwe@lst.de, allison@lohutok.net, james.morse@arm.org,
-        linux-integrity@vger.kernel.org, tglx@linutronix.de,
-        linux-arm-kernel@lists.infradead.org
-References: <20190913225009.3406-1-prsriva@linux.microsoft.com>
- <20190913225009.3406-2-prsriva@linux.microsoft.com>
- <87zhiz1x9l.fsf@morokweng.localdomain>
-From:   prsriva <prsriva@linux.microsoft.com>
-Message-ID: <baf74901-a594-c15d-b93f-f7d0a8c584b8@linux.microsoft.com>
-Date:   Tue, 24 Sep 2019 13:27:06 -0700
+        Tue, 24 Sep 2019 18:31:31 -0400
+Received: from [10.200.157.26] (unknown [131.107.147.154])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 37B0C2010688;
+        Tue, 24 Sep 2019 15:31:27 -0700 (PDT)
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Subject: ima_tpm_chip is queried and saved only at IMA init, but never later
+Message-ID: <d9c28fc6-bd5e-95ae-6386-84e87125c41d@linux.microsoft.com>
+Date:   Tue, 24 Sep 2019 15:31:18 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <87zhiz1x9l.fsf@morokweng.localdomain>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -44,67 +31,38 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+When IMA is initialized the default TPM is queried and saved.
+If at this point a TPM wasn't available, but is detected and surfaced 
+later by the system, IMA doesn't update the TPM information.
 
+security/integrity/ima/ima_init.c
+int __init ima_init(void)
+{
+	int rc;
 
-On 9/19/19 8:07 PM, Thiago Jung Bauermann wrote:
-> 
-> Hello Prakhar,
-> 
-> Prakhar Srivastava <prsriva@linux.microsoft.com> writes:
-> 
->> During kexec_file_load, carrying forward the ima measurement log allows
->> a verifying party to get the entire runtime event log since the last
->> full reboot since that is when PCRs were last reset.
+	ima_tpm_chip = tpm_default_chip();
+	if (!ima_tpm_chip)
+		pr_info("No TPM chip found, activating TPM-bypass!\n");
+	...
+}
 
-<snip>
+TPM PCR update function in IMA is essentially a NOP if TPM wasn't 
+detected during IMA init.
 
-> In the previous patch, you took the powerpc file and made a few
-> modifications to fit your needs. This file is now somewhat different
-> than the powerpc version, but I don't understand to what purpose. It's
-> not different in any significant way.
-> 
-> Based on review comments from your previous patch, I was expecting to
-> see code from the powerpc file moved to an arch-independent part of the
-> the kernel and possibly adapted so that both arm64 and powerpc could use
-> it. Can you explain why you chose this approach instead? What is the
-> advantage of having superficially different but basically equivalent
-> code in the two architectures?
-> 
-> Actually, there's one change that is significant: instead of a single
-> linux,ima-kexec-buffer property holding the start address and size of
-> the buffer, ARM64 is now using two properties (linux,ima-kexec-buffer
-> and linux,ima-kexec-buffer-end) for the start and end addresses. In my
-> opinion, unless there's a good reason for it Linux should be consistent
-> accross architectures when possible.
-> 
-> --
-> Thiago Jung Bauermann
-> IBM Linux Technology Center
+security/integrity/ima/ima_queue.c
+static int ima_pcr_extend(const u8 *hash, int pcr)
+{
+	int result = 0;
 
-I looked at the of_ drivers are it became apparent that the driver calls
-were already available for consumption. Adding ima specific code will be
-same as adding wrapper code for any other property. Which is true for
-all properties, effectively setting the property name and pass through
-for other parameters.
+	if (!ima_tpm_chip)
+		return result;
+	...
+}
 
-I still like to move both implementations to a arch independent code 
-path, i could not convince my self that of_*ima is probably the place, 
-but if that's the best place?, then i will go ahead and make that change 
-as well.
-
-Regarding using two properties, it just seemed more consistent how the
-properties(start-end) are being used in the kexec, and hides the inner 
-details for the cell structures, thats all.
-
-Its just the placement of the wrapper functions, but once thats done
-both archs will call the same.
+In one configuration I am testing, I see the TPM appear post IMA Init. 
+Likely this is rare, but I was wondering if there was a reason why TPM 
+information is only queried during IMA init, but never updated at a 
+later point.
 
 Thanks,
-Prakhar Srivastava
-
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+  -lakshmi
