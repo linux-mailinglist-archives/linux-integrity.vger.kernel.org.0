@@ -2,93 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC42BBA2D
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Sep 2019 19:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8EFBC655
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2019 13:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390600AbfIWRKQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Sep 2019 13:10:16 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:22124 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732903AbfIWRKP (ORCPT
+        id S2395127AbfIXLMn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Sep 2019 07:12:43 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:35492 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388764AbfIXLMn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Sep 2019 13:10:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1569258614;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=brtnUNEATJxaiEmZJMG7ZyzZu+Ldb+R0Iih2eWtZNa8=;
-        b=CvIurzkUgXXwWaeRZFHy9j301sh+XRjQ129axRbcz3vxYFAltnTcG+DS10099kKtvNAnWm
-        hyAZ0mDMFjBhAqdZoio/LZFJNydHiaBpDSKBNHQiHt3PEbZOizDET2hG4HOPPjkOXrVTiB
-        ZeymYIv3TDz4WM1/u9bTNwcvWatQKUI=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-95-pE-UcHyjOzSPKSVDyWk9EQ-1; Mon, 23 Sep 2019 13:10:13 -0400
-Received: by mail-io1-f71.google.com with SMTP id r13so24416588ioj.22
-        for <linux-integrity@vger.kernel.org>; Mon, 23 Sep 2019 10:10:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=rh1uvaNsooagBW4WOK11wp/OzNbWIxJmJoNftck7Ang=;
-        b=dbP5LtaUs8HIdH3YwENEHo/ZdjQ6uQjO8YsTTjHOv+XKjP2SaxRmjZkimJrGFJ2pot
-         hhUZml6X9zDlOSeMCGFG9mOeLMX+gI6Lorc1A67Ug3X81WrO8I4SDDrqf7//bs9ca6B5
-         AXDpbZ0bK+6yCU1/11fr6xBtLCJfFws+N6XNsz4JL9N3N5W4rkrcVVKxVsD01njywhxI
-         5GGuhKCTYCAejFF8HxOPyfg0vb2zmIZW9Eag4UX2Scj4j0Ev3eNGktzKFW8PDMC4HT+V
-         ult59AAHz5EdA3D0dq5dqinZpNQBOQRktyz8OQ475LZoiyrQpJKOtpuFwhdX/75rUJQ+
-         9g8A==
-X-Gm-Message-State: APjAAAUJFTEDpBk5YiMw9oUeM4XeTmc8DX0PbRSoqzhMRP4Kwt8HokoZ
-        I53ZFH/rn9BcguKToJPomIqUjcodCUtyuP8uZfb6AztQFk7uc6UVqHdl/B3KJYRAqsGWLQpm7jF
-        vhGH0+gYANnUG9RVZNpyBQJzqsmHN
-X-Received: by 2002:a5e:9917:: with SMTP id t23mr308423ioj.141.1569258612795;
-        Mon, 23 Sep 2019 10:10:12 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxXT9PS2Bv55kiYnVhChrkQQVSNPJh291rae4rfNmJB3BZ6AEfm4CLIiEf4j7x0kpdjPLYidA==
-X-Received: by 2002:a5e:9917:: with SMTP id t23mr308405ioj.141.1569258612538;
-        Mon, 23 Sep 2019 10:10:12 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id w7sm11707131iob.17.2019.09.23.10.10.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Sep 2019 10:10:11 -0700 (PDT)
-Date:   Mon, 23 Sep 2019 10:10:10 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-efi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [RFC PATCH] tpm: only set efi_tpm_final_log_size after
- successful event log parsing
-Message-ID: <20190923171010.csz4js3xs2mixmpq@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-References: <20190918191626.5741-1-jsnitsel@redhat.com>
-MIME-Version: 1.0
-In-Reply-To: <20190918191626.5741-1-jsnitsel@redhat.com>
-User-Agent: NeoMutt/20180716
-X-MC-Unique: pE-UcHyjOzSPKSVDyWk9EQ-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+        Tue, 24 Sep 2019 07:12:43 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0164A8EE175;
+        Tue, 24 Sep 2019 04:12:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1569323563;
+        bh=7Ai2qtIntMWNVtxwe6qQsuPbjf6XjGDzBQonHyILHuw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=d8vGZgqMBZ+hp7FMGmptBoxa8NuFaKkrg/uzwOKm4OZx0cNPSP663Txtd6GSPLDw7
+         x8DW4Y8HwWJx3JcmQ2uYIo34hrrmgWgs86kHzw7Utkfxfr1VFXp5U9zqjdwEvSx6eU
+         12TEraBTRT3/PXU0i0hzasp4Q2jq9yf//aMYIPl8=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id eNmijRz7YiHK; Tue, 24 Sep 2019 04:12:42 -0700 (PDT)
+Received: from [192.168.101.242] (unknown [24.246.103.29])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 414818EE12C;
+        Tue, 24 Sep 2019 04:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1569323562;
+        bh=7Ai2qtIntMWNVtxwe6qQsuPbjf6XjGDzBQonHyILHuw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Gvkj3Ct1bv3ybOgiYNYVi1SsR3Fw32GIY4wFNu7MKT+1NsUscSTrhidl5RXHvHNRs
+         co00JrvFBOZ45m/8k/8O7UE33+tRCU0Kf40Xq1JtjmlrL13kwCi1OTMO8vEhoxSVpZ
+         qacEs5VJTkGzU9iTxYMJUcNCrn0i7dS82RNtkbsk=
+Message-ID: <1569323560.24519.6.camel@HansenPartnership.com>
+Subject: Re: [PATCH v6 02/12] tpm-buf: add handling for TPM2B types
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Tue, 24 Sep 2019 07:12:40 -0400
+In-Reply-To: <20190920141826.GC9578@linux.intel.com>
+References: <1568031408.6613.29.camel@HansenPartnership.com>
+         <1568031515.6613.31.camel@HansenPartnership.com>
+         <20190920141826.GC9578@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Any thoughts on this? I know of at least 2 Lenovo models that are
-running into this problem.
+On Fri, 2019-09-20 at 17:18 +0300, Jarkko Sakkinen wrote:
+> On Mon, Sep 09, 2019 at 01:18:35PM +0100, James Bottomley wrote:
+> > Most complex TPM commands require appending TPM2B buffers to the
+> > command body.  Since TPM2B types are essentially variable size
+> > arrays,it makes it impossible to represent these complex command
+> > arguments as structures and we simply have to build them up using
+> > append primitives like these.
+> > 
+> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.c
+> > om>
+> 
+> I think a better idea would be to have headerless TPM buffers
 
-In the case of the one I have currently have access to the problem is
-that the hash algorithm id for an event isn't one that is currently in
-the TCG registry, and it fails to find a match when walking the
-digest_sizes array. That seems like an issue for the vendor to fix in the b=
-ios,
-but we should look at the return value of tpm2_calc_event_log_size and not
-stick a negative value in efi_tpm_final_log_size.
+I thought about that.  The main problem is that most of the
+construct/append functions use the header, and these are the functions
+most useful to the TPM2B operation.
+
+The other thing that argues against this is that the TPM2B case would
+save nothing if we eliminated the header, because we allocate a page
+for all the data regardless.
+
+>  and also it makes sense to have a separate length field in the
+> struct to keep the code sane given that sometimes the buffer does not
+> store the length.
+
+I'm really not sure about that one.  The header length has to be filled
+in for the non-TPM2B case but right at the moment we have no finish
+function for the buf where it could be, so we'd end up having to
+maintain two lengths in every update operation on non-TPM2B buffers. 
+That seems inefficient and the only slight efficiency we get in the
+TPM2B case is not having to do the big endian conversion from the
+header which doesn't seem to be worth the added complexity.
+
+James
+
+> E.g.
+> 
+> enum tpm_buf_flags {
+> 	TPM_BUF_OVERFLOW	= BIT(0),
+> 	TPM_BUF_HEADERLESS	= BIT(1),
+> };
+> 
+> struct tpm_buf {
+> 	unsigned int length;
+> 	struct page *data_page;
+> 	unsigned int flags;
+> 	u8 *data;
+> };
+> 
+> /Jarkko
+> 
 
