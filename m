@@ -2,39 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD29BDBF5
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2019 12:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD02BDBF9
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2019 12:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388933AbfIYKQA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 25 Sep 2019 06:16:00 -0400
-Received: from mga12.intel.com ([192.55.52.136]:34644 "EHLO mga12.intel.com"
+        id S2389040AbfIYKQe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Sep 2019 06:16:34 -0400
+Received: from mga06.intel.com ([134.134.136.31]:40402 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388915AbfIYKP7 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 25 Sep 2019 06:15:59 -0400
+        id S1727141AbfIYKQe (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 25 Sep 2019 06:16:34 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Sep 2019 03:15:59 -0700
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Sep 2019 03:16:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,547,1559545200"; 
-   d="scan'208";a="203585405"
+   d="scan'208";a="193723106"
 Received: from dariusvo-mobl.ger.corp.intel.com (HELO localhost) ([10.249.39.150])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Sep 2019 03:15:54 -0700
+  by orsmga006.jf.intel.com with ESMTP; 25 Sep 2019 03:16:27 -0700
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     linux-integrity@vger.kernel.org
-Cc:     Vadim Sukhomlinov <sukhomlinov@google.com>, stable@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
+Cc:     Peter Jones <pjones@redhat.com>, linux-efi@vger.kernel.org,
+        stable@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Bartosz Szczepanek <bsz@semihalf.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
-Date:   Wed, 25 Sep 2019 13:15:32 +0300
-Message-Id: <20190925101532.31280-4-jarkko.sakkinen@linux.intel.com>
+Subject: [PATCH v2 1/2] efi+tpm: Don't access event->count when it isn't mapped.
+Date:   Wed, 25 Sep 2019 13:16:18 +0300
+Message-Id: <20190925101622.31457-1-jarkko.sakkinen@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190925101532.31280-1-jarkko.sakkinen@linux.intel.com>
-References: <20190925101532.31280-1-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
@@ -42,46 +41,78 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Vadim Sukhomlinov <sukhomlinov@google.com>
+From: Peter Jones <pjones@redhat.com>
 
-commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
+Some machines generate a lot of event log entries.  When we're
+iterating over them, the code removes the old mapping and adds a
+new one, so once we cross the page boundary we're unmapping the page
+with the count on it.  Hilarity ensues.
 
-TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
-future TPM operations. TPM 1.2 behavior was different, future TPM
-operations weren't disabled, causing rare issues. This patch ensures
-that future TPM operations are disabled.
+This patch keeps the info from the header in local variables so we don't
+need to access that page again or keep track of if it's mapped.
 
-Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
+Fixes: 44038bc514a2 ("tpm: Abstract crypto agile event size calculations")
+Cc: linux-efi@vger.kernel.org
+Cc: linux-integrity@vger.kernel.org
 Cc: stable@vger.kernel.org
-Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
-[dianders: resolved merge conflicts with mainline]
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Peter Jones <pjones@redhat.com>
+Tested-by: Lyude Paul <lyude@redhat.com>
 Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Acked-by: Matthew Garrett <mjg59@google.com>
+Acked-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 ---
- drivers/char/tpm/tpm-chip.c | 3 +++
- 1 file changed, 3 insertions(+)
+ include/linux/tpm_eventlog.h | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 0eca20c5a80c..ede8c1deca97 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -158,12 +158,15 @@ static int tpm_class_shutdown(struct device *dev)
- {
- 	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
+diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
+index 63238c84dc0b..12584b69a3f3 100644
+--- a/include/linux/tpm_eventlog.h
++++ b/include/linux/tpm_eventlog.h
+@@ -170,6 +170,7 @@ static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+ 	u16 halg;
+ 	int i;
+ 	int j;
++	u32 count, event_type;
  
-+	down_write(&chip->ops_sem);
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
- 		down_write(&chip->ops_sem);
- 		tpm2_shutdown(chip, TPM2_SU_CLEAR);
- 		chip->ops = NULL;
- 		up_write(&chip->ops_sem);
+ 	marker = event;
+ 	marker_start = marker;
+@@ -190,16 +191,22 @@ static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
  	}
-+	chip->ops = NULL;
-+	up_write(&chip->ops_sem);
  
- 	return 0;
- }
+ 	event = (struct tcg_pcr_event2_head *)mapping;
++	/*
++	 * the loop below will unmap these fields if the log is larger than
++	 * one page, so save them here for reference.
++	 */
++	count = READ_ONCE(event->count);
++	event_type = READ_ONCE(event->event_type);
+ 
+ 	efispecid = (struct tcg_efi_specid_event_head *)event_header->event;
+ 
+ 	/* Check if event is malformed. */
+-	if (event->count > efispecid->num_algs) {
++	if (count > efispecid->num_algs) {
+ 		size = 0;
+ 		goto out;
+ 	}
+ 
+-	for (i = 0; i < event->count; i++) {
++	for (i = 0; i < count; i++) {
+ 		halg_size = sizeof(event->digests[i].alg_id);
+ 
+ 		/* Map the digest's algorithm identifier */
+@@ -256,8 +263,9 @@ static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+ 		+ event_field->event_size;
+ 	size = marker - marker_start;
+ 
+-	if ((event->event_type == 0) && (event_field->event_size == 0))
++	if (event_type == 0 && event_field->event_size == 0)
+ 		size = 0;
++
+ out:
+ 	if (do_mapping)
+ 		TPM_MEMUNMAP(mapping, mapping_size);
 -- 
 2.20.1
 
