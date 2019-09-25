@@ -2,66 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFE7BD5FE
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2019 03:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383F3BDBEF
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2019 12:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387771AbfIYBLY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Sep 2019 21:11:24 -0400
-Received: from mga07.intel.com ([134.134.136.100]:47679 "EHLO mga07.intel.com"
+        id S2388589AbfIYKPn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Sep 2019 06:15:43 -0400
+Received: from mga11.intel.com ([192.55.52.93]:40438 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387402AbfIYBLY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Sep 2019 21:11:24 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1726276AbfIYKPn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 25 Sep 2019 06:15:43 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Sep 2019 18:11:22 -0700
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Sep 2019 03:15:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,546,1559545200"; 
-   d="scan'208";a="188634031"
-Received: from wujunyox-mobl3.ger.corp.intel.com (HELO localhost) ([10.249.38.101])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Sep 2019 18:11:15 -0700
-Date:   Wed, 25 Sep 2019 04:11:15 +0300
+X-IronPort-AV: E=Sophos;i="5.64,547,1559545200"; 
+   d="scan'208";a="201203466"
+Received: from dariusvo-mobl.ger.corp.intel.com (HELO localhost) ([10.249.39.150])
+  by orsmga002.jf.intel.com with ESMTP; 25 Sep 2019 03:15:39 -0700
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     dhowells@redhat.com, peterhuewe@gmx.de, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-security-module@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        jejb@linux.ibm.com, Mimi Zohar <zohar@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>
-Subject: Re: [Patch v6 4/4] KEYS: trusted: Move TPM2 trusted keys code
-Message-ID: <20190925011115.GA3503@linux.intel.com>
-References: <1568630064-14887-1-git-send-email-sumit.garg@linaro.org>
- <1568630064-14887-5-git-send-email-sumit.garg@linaro.org>
- <20190917181415.GA8472@linux.intel.com>
- <20190917181507.GB8472@linux.intel.com>
- <CAFA6WYMbUGQ6+-XvR9_qSc=oVe1QSTg4kB-+y6rBmQLq+B6skg@mail.gmail.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Vadim Sukhomlinov <sukhomlinov@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 0/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
+Date:   Wed, 25 Sep 2019 13:15:29 +0300
+Message-Id: <20190925101532.31280-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYMbUGQ6+-XvR9_qSc=oVe1QSTg4kB-+y6rBmQLq+B6skg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 11:53:08AM +0530, Sumit Garg wrote:
-> No worries :). I will send next version of patch-set.
-> 
-> FYI, I will be travelling for Linaro Connect next week so you could
-> expect some delays in my responses.
+commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
 
-These patches will go to v5.5. There is nothing to rush.
+This backport is for v4.14 and v4.19 The backport requires non-racy
+behaviour from TPM 1.x sysfs code. Thus, the dependecies for that
+are included.
 
-/Jarkko
+NOTE: 1/3 is only needed for v4.14.
+
+Cc: linux-integrity@vger.kernel.org
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Vadim Sukhomlinov <sukhomlinov@google.com>
+Link: https://lore.kernel.org/stable/20190712152734.GA13940@kroah.com/
+
+Jarkko Sakkinen (2):
+  tpm: migrate pubek_show to struct tpm_buf
+  tpm: use tpm_try_get_ops() in tpm-sysfs.c.
+
+Vadim Sukhomlinov (1):
+  tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
+
+ drivers/char/tpm/tpm-chip.c  |   3 +
+ drivers/char/tpm/tpm-sysfs.c | 201 +++++++++++++++++++++--------------
+ drivers/char/tpm/tpm.h       |  13 ---
+ 3 files changed, 124 insertions(+), 93 deletions(-)
+
+-- 
+2.20.1
+
