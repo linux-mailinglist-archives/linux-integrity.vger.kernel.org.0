@@ -2,69 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE1DBF3CC
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Sep 2019 15:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB6ABF76C
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Sep 2019 19:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbfIZNMc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Sep 2019 09:12:32 -0400
-Received: from mga01.intel.com ([192.55.52.88]:31304 "EHLO mga01.intel.com"
+        id S1727549AbfIZRQR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Sep 2019 13:16:17 -0400
+Received: from mga18.intel.com ([134.134.136.126]:63648 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725836AbfIZNMc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Sep 2019 09:12:32 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1727512AbfIZRQR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 26 Sep 2019 13:16:17 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Sep 2019 06:12:31 -0700
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Sep 2019 10:16:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,552,1559545200"; 
-   d="scan'208";a="341238010"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.168])
-  by orsmga004.jf.intel.com with ESMTP; 26 Sep 2019 06:12:27 -0700
-Date:   Thu, 26 Sep 2019 16:12:27 +0300
+   d="scan'208";a="219475012"
+Received: from schneian-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.39.17])
+  by fmsmga002.fm.intel.com with ESMTP; 26 Sep 2019 10:16:12 -0700
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Detach page allocation from tpm_buf
-Message-ID: <20190926131227.GA6582@linux.intel.com>
-References: <20190925134842.19305-1-jarkko.sakkinen@linux.intel.com>
- <20190926124635.GA6040@linux.intel.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        keyrings@vger.kernel.org (open list:ASYMMETRIC KEYS),
+        linux-crypto@vger.kernel.org (open list:CRYPTO API),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+Date:   Thu, 26 Sep 2019 20:16:01 +0300
+Message-Id: <20190926171601.30404-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190926124635.GA6040@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Sep 26, 2019 at 03:46:35PM +0300, Jarkko Sakkinen wrote:
-> On Wed, Sep 25, 2019 at 04:48:41PM +0300, Jarkko Sakkinen wrote:
-> > -		tpm_buf_reset(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_RANDOM);
-> > +		tpm_buf_reset(&buf, data_ptr, PAGE_SIZE,
-> > +			      TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_EXTEND);
-> 
-> Oops.
+Only the kernel random pool should be used for generating random numbers.
+TPM contributes to that pool among the other sources of entropy. In here it
+is not, agreed, absolutely critical because TPM is what is trusted anyway
+but in order to remove tpm_get_random() we need to first remove all the
+call sites.
 
-Maybe we could use random as the probe for TPM version since we anyway
-send a TPM command as a probe for TPM version:
+Cc: stable@vger.kernel.org
+Fixes: 0c36264aa1d5 ("KEYS: asym_tpm: Add loadkey2 and flushspecific [ver #2]")
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+ crypto/asymmetric_keys/asym_tpm.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-1. Try TPM2 get random.
-2. If fail, try TPM1 get random.
-3. Output random number to klog.
+diff --git a/crypto/asymmetric_keys/asym_tpm.c b/crypto/asymmetric_keys/asym_tpm.c
+index 76d2ce3a1b5b..c14b8d186e93 100644
+--- a/crypto/asymmetric_keys/asym_tpm.c
++++ b/crypto/asymmetric_keys/asym_tpm.c
+@@ -6,6 +6,7 @@
+ #include <linux/kernel.h>
+ #include <linux/seq_file.h>
+ #include <linux/scatterlist.h>
++#include <linux/random.h>
+ #include <linux/tpm.h>
+ #include <linux/tpm_command.h>
+ #include <crypto/akcipher.h>
+@@ -54,11 +55,7 @@ static int tpm_loadkey2(struct tpm_buf *tb,
+ 	}
+ 
+ 	/* generate odd nonce */
+-	ret = tpm_get_random(NULL, nonceodd, TPM_NONCE_SIZE);
+-	if (ret < 0) {
+-		pr_info("tpm_get_random failed (%d)\n", ret);
+-		return ret;
+-	}
++	get_random_bytes(nonceodd, TPM_NONCE_SIZE);
+ 
+ 	/* calculate authorization HMAC value */
+ 	ret = TSS_authhmac(authdata, keyauth, SHA1_DIGEST_SIZE, enonce,
+-- 
+2.20.1
 
-Something like 8 bytes would be sufficient. This would make sure that
-no new change breaks tpm_get_random() and also this would give some
-feedback that TPM is at least somewhat working.
-
-/Jarkko
