@@ -2,72 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D70BFBE5
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2019 01:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39412C05F8
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2019 15:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728648AbfIZXW1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Sep 2019 19:22:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39466 "EHLO mail.kernel.org"
+        id S1726295AbfI0NHI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 27 Sep 2019 09:07:08 -0400
+Received: from mga12.intel.com ([192.55.52.136]:5415 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728270AbfIZXW1 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Sep 2019 19:22:27 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E041207E0;
-        Thu, 26 Sep 2019 23:22:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569540146;
-        bh=GQUyMjye5vxmGMIj00o9cH/mVKe1NcXqBa/0DfTtHrw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lwe85V6TohEQw3nBBb9Bdqf+HrEz1OmN6GYeCI4L/QakpJQva0ND2s4ShvldrUl80
-         /uxq/DljbUWy73uB6bCvCcZXgo2OvbQ4+yiFr4ZEye2sXcnH2ZPUzwuzEym4AuHsaa
-         xn9dbAdK9tQycQVK6SlNYbuuWAyGi63AqRtoYHz8=
-Date:   Thu, 26 Sep 2019 19:22:25 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        id S1726144AbfI0NHI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 27 Sep 2019 09:07:08 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Sep 2019 06:07:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,555,1559545200"; 
+   d="scan'208";a="214823353"
+Received: from mdauner2-mobl2.ger.corp.intel.com (HELO localhost) ([10.249.39.118])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Sep 2019 06:07:03 -0700
+Date:   Fri, 27 Sep 2019 16:06:57 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
         Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent future
- TPM operations
-Message-ID: <20190926232225.GJ8171@sasha-vm>
-References: <20190925101532.31280-1-jarkko.sakkinen@linux.intel.com>
- <20190925101532.31280-4-jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH] tpm: Detach page allocation from tpm_buf
+Message-ID: <20190927130657.GA5556@linux.intel.com>
+References: <20190925134842.19305-1-jarkko.sakkinen@linux.intel.com>
+ <1569420226.3642.24.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190925101532.31280-4-jarkko.sakkinen@linux.intel.com>
+In-Reply-To: <1569420226.3642.24.camel@HansenPartnership.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 25, 2019 at 01:15:32PM +0300, Jarkko Sakkinen wrote:
->From: Vadim Sukhomlinov <sukhomlinov@google.com>
->
->commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
->
->TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
->future TPM operations. TPM 1.2 behavior was different, future TPM
->operations weren't disabled, causing rare issues. This patch ensures
->that future TPM operations are disabled.
->
->Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
->Cc: stable@vger.kernel.org
->Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
->[dianders: resolved merge conflicts with mainline]
->Signed-off-by: Douglas Anderson <dianders@chromium.org>
->Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+On Wed, Sep 25, 2019 at 10:03:46AM -0400, James Bottomley wrote:
+> On Wed, 2019-09-25 at 16:48 +0300, Jarkko Sakkinen wrote:
+> [...]
+> > +	data_page = alloc_page(GFP_HIGHUSER);
+> > +	if (!data_page)
+> > +		return -ENOMEM;
+> > +
+> > +	data_ptr = kmap(data_page);
+> 
+> I don't think this is such a good idea.  On 64 bit it's no different
+> from GFP_KERNEL and on 32 bit where we do have highmem, kmap space is
+> at a premium, so doing a highmem allocation + kmap is more wasteful of
+> resources than simply doing GFP_KERNEL.  In general, you should only do
+> GFP_HIGHMEM if the page is going to be mostly used by userspace, which
+> really isn't the case here.
 
-I've queued it up for 4.19 and 4.14, thanks!
+Changing that in this commit would be wrong even if you are right.
+After this commit has been applied it is somewhat easier to make
+best choices for allocation in each call site (probably most will
+end up using stack).
 
---
-Thanks,
-Sasha
+/Jarkko
