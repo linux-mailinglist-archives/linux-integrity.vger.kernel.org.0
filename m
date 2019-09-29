@@ -2,119 +2,177 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F74C11B0
-	for <lists+linux-integrity@lfdr.de>; Sat, 28 Sep 2019 20:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7102C12FE
+	for <lists+linux-integrity@lfdr.de>; Sun, 29 Sep 2019 06:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728573AbfI1SGI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 28 Sep 2019 14:06:08 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:36086 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726581AbfI1SGI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 28 Sep 2019 14:06:08 -0400
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 327AE550CF
-        for <linux-integrity@vger.kernel.org>; Sat, 28 Sep 2019 18:06:08 +0000 (UTC)
-Received: by mail-qk1-f199.google.com with SMTP id w198so6187279qka.0
-        for <linux-integrity@vger.kernel.org>; Sat, 28 Sep 2019 11:06:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=d0byJOIsz1lqJ5hnq+jj0W7I6Ibu7N/QFdfVSTVCzMo=;
-        b=iVyjjP+hdQ2CKdZ4Hczos4J+EPRBG392W4ZNRIXSBSbdnxpDqO30+zcy0FmdZS91yC
-         P2OXxoF3jMb9R3pXpp6Vow4dbyztTOX4BcK1n3xhcOkitZJx5kxkw9Cj8uJ2DvSJq/CY
-         MIp7bx20jy3vnqRf8IiLtSHhk3qccjyLPC4QmUF/KKldGdayHXGrBjl0wROgQjt7X7M6
-         qBMbq+peLZ0kfLbDsifHkyvob52ndH+fvbxqBmpvZl4LU+UoUfbP3QqIoEWpdzpt/MFv
-         p/j72PqwCcJDyHt8m/MRsmQvg60YsBI8egaiN66Gv8Hl0EwOs/NHtAPLLFP2jDVYNucn
-         Eq5g==
-X-Gm-Message-State: APjAAAVEinBKoc7AdWuM6xOwQVkMmFVZI9KKtNz3FxK+iI0cazVC+Tii
-        vf6kDl6sc3Bjxiqeykk+Y2Utr03X+InphQK12rxlIUdyzsuRPXiu07tyYG/QX5VlANQlXh2wu6p
-        XHfvGOxNK7P77AwnuuIiTzXcIKy8W
-X-Received: by 2002:a37:aa58:: with SMTP id t85mr11009833qke.381.1569693967477;
-        Sat, 28 Sep 2019 11:06:07 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqztxQPbojuWzD2tjs1KlNLYklUTuFbRfAwL7mz2CmOFv1UcY4AcvsgovDjiYI9wdsF0ybTlZg==
-X-Received: by 2002:a37:aa58:: with SMTP id t85mr11009800qke.381.1569693967176;
-        Sat, 28 Sep 2019 11:06:07 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id d40sm5647462qtk.6.2019.09.28.11.06.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Sep 2019 11:06:06 -0700 (PDT)
-Date:   Sat, 28 Sep 2019 11:05:59 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
-Message-ID: <20190928180559.jivt5zlisr43fnva@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20190926171601.30404-1-jarkko.sakkinen@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190926171601.30404-1-jarkko.sakkinen@linux.intel.com>
-User-Agent: NeoMutt/20180716
+        id S1726072AbfI2EUv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 29 Sep 2019 00:20:51 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14296 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725379AbfI2EUu (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 29 Sep 2019 00:20:50 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8T47B2m097345
+        for <linux-integrity@vger.kernel.org>; Sun, 29 Sep 2019 00:20:49 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vamks0y6n-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Sun, 29 Sep 2019 00:20:49 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Sun, 29 Sep 2019 05:20:47 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Sun, 29 Sep 2019 05:20:42 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8T4Kf8m42926160
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 29 Sep 2019 04:20:41 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14F41A4051;
+        Sun, 29 Sep 2019 04:20:41 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D89D1A404D;
+        Sun, 29 Sep 2019 04:20:38 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.142.195])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 29 Sep 2019 04:20:38 +0000 (GMT)
+Subject: Re: [PATCH v6 5/9] powerpc/ima: add measurement rules to ima arch
+ specific policy
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Date:   Sun, 29 Sep 2019 00:20:38 -0400
+In-Reply-To: <1569594360-7141-6-git-send-email-nayna@linux.ibm.com>
+References: <1569594360-7141-1-git-send-email-nayna@linux.ibm.com>
+         <1569594360-7141-6-git-send-email-nayna@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19092904-0028-0000-0000-000003A3A3C0
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19092904-0029-0000-0000-00002465C963
+Message-Id: <1569730838.4999.31.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-29_02:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1909290047
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu Sep 26 19, Jarkko Sakkinen wrote:
->Only the kernel random pool should be used for generating random numbers.
->TPM contributes to that pool among the other sources of entropy. In here it
->is not, agreed, absolutely critical because TPM is what is trusted anyway
->but in order to remove tpm_get_random() we need to first remove all the
->call sites.
->
->Cc: stable@vger.kernel.org
->Fixes: 0c36264aa1d5 ("KEYS: asym_tpm: Add loadkey2 and flushspecific [ver #2]")
->Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->---
-> crypto/asymmetric_keys/asym_tpm.c | 7 ++-----
-> 1 file changed, 2 insertions(+), 5 deletions(-)
->
->diff --git a/crypto/asymmetric_keys/asym_tpm.c b/crypto/asymmetric_keys/asym_tpm.c
->index 76d2ce3a1b5b..c14b8d186e93 100644
->--- a/crypto/asymmetric_keys/asym_tpm.c
->+++ b/crypto/asymmetric_keys/asym_tpm.c
->@@ -6,6 +6,7 @@
-> #include <linux/kernel.h>
-> #include <linux/seq_file.h>
-> #include <linux/scatterlist.h>
->+#include <linux/random.h>
-> #include <linux/tpm.h>
-> #include <linux/tpm_command.h>
-> #include <crypto/akcipher.h>
->@@ -54,11 +55,7 @@ static int tpm_loadkey2(struct tpm_buf *tb,
-> 	}
->
-> 	/* generate odd nonce */
->-	ret = tpm_get_random(NULL, nonceodd, TPM_NONCE_SIZE);
->-	if (ret < 0) {
->-		pr_info("tpm_get_random failed (%d)\n", ret);
->-		return ret;
->-	}
->+	get_random_bytes(nonceodd, TPM_NONCE_SIZE);
->
-> 	/* calculate authorization HMAC value */
-> 	ret = TSS_authhmac(authdata, keyauth, SHA1_DIGEST_SIZE, enonce,
->-- 
->2.20.1
->
+On Fri, 2019-09-27 at 10:25 -0400, Nayna Jain wrote:
+> This patch adds the measurement rules to the arch specific policies for the
+> systems with trusted boot.
+> 
 
-Should tpm_unbind and tpm_sign in asym_tpm.c be switched as well then?
+on trusted boot enabled systems.
+
+
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+
+Minor comment correction below.
+
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
+> ---
+>  arch/powerpc/kernel/ima_arch.c | 44 +++++++++++++++++++++++++++++++---
+>  1 file changed, 41 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/ima_arch.c b/arch/powerpc/kernel/ima_arch.c
+> index 39401b67f19e..77c61b142042 100644
+> --- a/arch/powerpc/kernel/ima_arch.c
+> +++ b/arch/powerpc/kernel/ima_arch.c
+> @@ -12,8 +12,18 @@ bool arch_ima_get_secureboot(void)
+>  	return is_powerpc_os_secureboot_enabled();
+>  }
+>  
+> -/* Defines IMA appraise rules for secureboot */
+> +/*
+> + * The "arch_rules" contains both the securebot and trustedboot rules for adding
+> + * the kexec kernel image and kernel modules file hashes to the IMA measurement
+> + * list and verifying the file signatures against known good values.
+> + *
+> + * The "appraise_type=imasig|modsig" option allows the good signature to be
+> + * stored as an xattr or as an appended signature. The "template=ima-modsig"
+> + * option includes the appended signature in the IMA measurement list.
+
+includes the appended signature, when available, in the IMA
+measurement list. 
+
+> + */
+>  static const char *const arch_rules[] = {
+> +	"measure func=KEXEC_KERNEL_CHECK template=ima-modsig",
+> +	"measure func=MODULE_CHECK template=ima-modsig",
+>  	"appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig|modsig",
+>  #if !IS_ENABLED(CONFIG_MODULE_SIG)
+>  	"appraise func=MODULE_CHECK appraise_type=imasig|modsig",
+> @@ -22,12 +32,40 @@ static const char *const arch_rules[] = {
+>  };
+>  
+>  /*
+> - * Returns the relevant IMA arch policies based on the system secureboot state.
+> + * The "measure_rules" are enabled only on "trustedboot" enabled systems.
+> + * These rules add the kexec kernel image and kernel modules file hashes to
+> + * the IMA measurement list.
+> + */
+> +static const char *const measure_rules[] = {
+> +	"measure func=KEXEC_KERNEL_CHECK",
+> +	"measure func=MODULE_CHECK",
+> +	NULL
+> +};
+> +
+> +/*
+> + * Returns the relevant IMA arch policies based on the system secureboot
+> + * and trustedboot state.
+>   */
+>  const char *const *arch_get_ima_policy(void)
+>  {
+> -	if (is_powerpc_os_secureboot_enabled())
+> +	const char *const *rules;
+> +	int offset = 0;
+> +
+> +	for (rules = arch_rules; *rules != NULL; rules++) {
+> +		if (strncmp(*rules, "appraise", 8) == 0)
+> +			break;
+> +		offset++;
+> +	}
+> +
+> +	if (is_powerpc_os_secureboot_enabled()
+> +	    && is_powerpc_trustedboot_enabled())
+>  		return arch_rules;
+>  
+> +	if (is_powerpc_os_secureboot_enabled())
+> +		return arch_rules + offset;
+> +
+> +	if (is_powerpc_trustedboot_enabled())
+> +		return measure_rules;
+> +
+>  	return NULL;
+>  }
+
