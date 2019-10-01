@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A976C3C62
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Oct 2019 18:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A2CC3E16
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Oct 2019 19:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730952AbfJAQu7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Oct 2019 12:50:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56684 "EHLO mail.kernel.org"
+        id S1727650AbfJAQj0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Oct 2019 12:39:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50314 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387946AbfJAQoZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:44:25 -0400
+        id S1727612AbfJAQj0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 1 Oct 2019 12:39:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 638D82168B;
-        Tue,  1 Oct 2019 16:44:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8D00321906;
+        Tue,  1 Oct 2019 16:39:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569948265;
-        bh=LZt8K+pFKJyJFvN9uH562Rpkc7q8eYhurxMZU2lrw3c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KQicYPU7tCpO6RgyukFheSM3oBPMY4a8QotJ4F4hNFQPlaZ5BDOHRdisvsGFzqXgt
-         NkFdRDj9o/hj9aEyPd2cwrh3b0+ISiZvwozdK/O4LPl6+T8arr3iJysp6aPdykfMKG
-         MRo5pOlzfMknMr3HlSkzw47w5sIihVxHjpdw0hvc=
+        s=default; t=1569947965;
+        bh=6vs+mxOj8LdnxQhig/ZrlnZJRypReXhz9Lk/p8RpLM8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jGLI5M3/MgspypwgK7RuuBhxQKM/wm9p8BMl+Zk/7P7Vljj7pADYysfJLKxTc8aOg
+         ErXVPTvc1dheoTBmNyv4BMZvXVr794GbRy+ZvxRHOYWk2/gh5RtkU81awjO0E6inuD
+         fqfR5XtFYyeg9s7615+pN/gpMF/cV4kcHkCp3W5g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
@@ -30,10 +30,12 @@ Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 01/29] ima: always return negative code for error
-Date:   Tue,  1 Oct 2019 12:43:55 -0400
-Message-Id: <20191001164423.16406-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 02/71] ima: always return negative code for error
+Date:   Tue,  1 Oct 2019 12:38:12 -0400
+Message-Id: <20191001163922.14735-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191001163922.14735-1-sashal@kernel.org>
+References: <20191001163922.14735-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index af680b5b678a4..06b0ee75f34fb 100644
+index d4c7b8e1b083d..7532b062be594 100644
 --- a/security/integrity/ima/ima_crypto.c
 +++ b/security/integrity/ima/ima_crypto.c
-@@ -293,8 +293,11 @@ static int ima_calc_file_hash_atfm(struct file *file,
+@@ -268,8 +268,11 @@ static int ima_calc_file_hash_atfm(struct file *file,
  		rbuf_len = min_t(loff_t, i_size - offset, rbuf_size[active]);
  		rc = integrity_kernel_read(file, offset, rbuf[active],
  					   rbuf_len);
