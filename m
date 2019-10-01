@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91013C3CB7
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Oct 2019 18:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A976C3C62
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Oct 2019 18:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727908AbfJAQyG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Oct 2019 12:54:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55260 "EHLO mail.kernel.org"
+        id S1730952AbfJAQu7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Oct 2019 12:50:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56684 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732503AbfJAQnP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:43:15 -0400
+        id S2387946AbfJAQoZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 1 Oct 2019 12:44:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE7E321855;
-        Tue,  1 Oct 2019 16:43:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 638D82168B;
+        Tue,  1 Oct 2019 16:44:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569948194;
-        bh=/PVC3G9/SX/K3Pj3kLvFzj8Bv5bJt9sVHAuZdAS7PY0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EMatnWQ6rkVVG6+O7Gc3JOnZLDdIq276+QOo/fx/Zw4a53k0aTo3hqIac3FhkkDuZ
-         wYcL4hFLiIUMQglJQQ6jEqX0czGinL1F4PL+D5E0Qq7FampBcXPMID/r+ne4hGrluw
-         fnLazSxSb3RNP2nBP57rkDs685BeYqQOUixKSJFE=
+        s=default; t=1569948265;
+        bh=LZt8K+pFKJyJFvN9uH562Rpkc7q8eYhurxMZU2lrw3c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KQicYPU7tCpO6RgyukFheSM3oBPMY4a8QotJ4F4hNFQPlaZ5BDOHRdisvsGFzqXgt
+         NkFdRDj9o/hj9aEyPd2cwrh3b0+ISiZvwozdK/O4LPl6+T8arr3iJysp6aPdykfMKG
+         MRo5pOlzfMknMr3HlSkzw47w5sIihVxHjpdw0hvc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
@@ -30,12 +30,10 @@ Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 02/43] ima: fix freeing ongoing ahash_request
-Date:   Tue,  1 Oct 2019 12:42:30 -0400
-Message-Id: <20191001164311.15993-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 01/29] ima: always return negative code for error
+Date:   Tue,  1 Oct 2019 12:43:55 -0400
+Message-Id: <20191001164423.16406-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191001164311.15993-1-sashal@kernel.org>
-References: <20191001164311.15993-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -47,38 +45,40 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Sascha Hauer <s.hauer@pengutronix.de>
 
-[ Upstream commit 4ece3125f21b1d42b84896c5646dbf0e878464e1 ]
+[ Upstream commit f5e1040196dbfe14c77ce3dfe3b7b08d2d961e88 ]
 
-integrity_kernel_read() can fail in which case we forward to call
-ahash_request_free() on a currently running request. We have to wait
-for its completion before we can free the request.
-
-This was observed by interrupting a "find / -type f -xdev -print0 | xargs -0
-cat 1>/dev/null" with ctrl-c on an IMA enabled filesystem.
+integrity_kernel_read() returns the number of bytes read. If this is
+a short read then this positive value is returned from
+ima_calc_file_hash_atfm(). Currently this is only indirectly called from
+ima_calc_file_hash() and this function only tests for the return value
+being zero or nonzero and also doesn't forward the return value.
+Nevertheless there's no point in returning a positive value as an error,
+so translate a short read into -EINVAL.
 
 Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/integrity/ima/ima_crypto.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ security/integrity/ima/ima_crypto.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index b7822d2b79736..f63b4bd45d60e 100644
+index af680b5b678a4..06b0ee75f34fb 100644
 --- a/security/integrity/ima/ima_crypto.c
 +++ b/security/integrity/ima/ima_crypto.c
-@@ -274,6 +274,11 @@ static int ima_calc_file_hash_atfm(struct file *file,
- 		if (rc != rbuf_len) {
- 			if (rc >= 0)
- 				rc = -EINVAL;
-+			/*
-+			 * Forward current rc, do not overwrite with return value
-+			 * from ahash_wait()
-+			 */
-+			ahash_wait(ahash_rc, &wait);
+@@ -293,8 +293,11 @@ static int ima_calc_file_hash_atfm(struct file *file,
+ 		rbuf_len = min_t(loff_t, i_size - offset, rbuf_size[active]);
+ 		rc = integrity_kernel_read(file, offset, rbuf[active],
+ 					   rbuf_len);
+-		if (rc != rbuf_len)
++		if (rc != rbuf_len) {
++			if (rc >= 0)
++				rc = -EINVAL;
  			goto out3;
- 		}
++		}
  
+ 		if (rbuf[1] && offset) {
+ 			/* Using two buffers, and it is not the first
 -- 
 2.20.1
 
