@@ -2,86 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2D5C8964
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2019 15:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA53DC8A57
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2019 15:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbfJBNPS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Oct 2019 09:15:18 -0400
-Received: from mga03.intel.com ([134.134.136.65]:30344 "EHLO mga03.intel.com"
+        id S1727370AbfJBN6B (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Oct 2019 09:58:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56604 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726295AbfJBNPS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Oct 2019 09:15:18 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Oct 2019 06:15:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,574,1559545200"; 
-   d="scan'208";a="203589840"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.158])
-  by orsmga002.jf.intel.com with ESMTP; 02 Oct 2019 06:15:03 -0700
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-stabley@vger.kernel.org
-Cc:     Vadim Sukhomlinov <sukhomlinov@google.com>, stable@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        id S1725917AbfJBN6B (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 2 Oct 2019 09:58:01 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CFF821783;
+        Wed,  2 Oct 2019 13:57:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570024680;
+        bh=hsQC6o71ybFmccqFc2OdD/0cntqTXO/+R3g0oF5wrIo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MP93ep4PEeCoVB8M7Bp6DhF7bZ2t5zKmQvmHd+npc4tzxZwucONmILipwmt/ZYxf3
+         Yd0F3Qb3YchV5ISjDJ2W2nknpkAr9Vlx7JaIr6ki2QhFIup1CfXaW+QSW25mEbB6HZ
+         7SwGFZQU1K85uO1scv4oX3rxW60qeuz6fYaSDi64=
+Date:   Wed, 2 Oct 2019 15:57:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-stabley@vger.kernel.org,
+        Vadim Sukhomlinov <sukhomlinov@google.com>,
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
         Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgunthorpe@obsidianresearch.com>,
-        linux-integrity@vger.kernel.org (open list:TPM DEVICE DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
-Date:   Wed,  2 Oct 2019 16:14:44 +0300
-Message-Id: <20191002131445.7793-4-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191002131445.7793-1-jarkko.sakkinen@linux.intel.com>
+        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent future
+ TPM operations
+Message-ID: <20191002135758.GA1738718@kroah.com>
 References: <20191002131445.7793-1-jarkko.sakkinen@linux.intel.com>
+ <20191002131445.7793-4-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191002131445.7793-4-jarkko.sakkinen@linux.intel.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Vadim Sukhomlinov <sukhomlinov@google.com>
+On Wed, Oct 02, 2019 at 04:14:44PM +0300, Jarkko Sakkinen wrote:
+> From: Vadim Sukhomlinov <sukhomlinov@google.com>
+> 
+> commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
+> 
+> TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
+> future TPM operations. TPM 1.2 behavior was different, future TPM
+> operations weren't disabled, causing rare issues. This patch ensures
+> that future TPM operations are disabled.
+> 
+> Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
+> [dianders: resolved merge conflicts with mainline]
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
+What kernel version(s) is this for?
 
-TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
-future TPM operations. TPM 1.2 behavior was different, future TPM
-operations weren't disabled, causing rare issues. This patch ensures
-that future TPM operations are disabled.
+thanks,
 
-Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
-[dianders: resolved merge conflicts with mainline]
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- drivers/char/tpm/tpm-chip.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 0eca20c5a80c..dcf5bb153495 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -158,12 +158,13 @@ static int tpm_class_shutdown(struct device *dev)
- {
- 	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
- 
-+	down_write(&chip->ops_sem);
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
--		down_write(&chip->ops_sem);
- 		tpm2_shutdown(chip, TPM2_SU_CLEAR);
- 		chip->ops = NULL;
--		up_write(&chip->ops_sem);
- 	}
-+	chip->ops = NULL;
-+	up_write(&chip->ops_sem);
- 
- 	return 0;
- }
--- 
-2.20.1
-
+greg k-h
