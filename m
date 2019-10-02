@@ -2,98 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4194C8DE8
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2019 18:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71F8C8F40
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2019 19:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbfJBQJ5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Oct 2019 12:09:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37950 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725852AbfJBQJ5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Oct 2019 12:09:57 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2640F21D81;
-        Wed,  2 Oct 2019 16:09:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570032596;
-        bh=qqbcqGXc5C/kil7EDQLVNG0WxVmn4bKkQ5z1qtVBH2Q=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=I6Tr4280cvka5hVIZcRHW0xfbBZqsZG1Qv4fWPzJErLIMSTdtN3sg09PYTobRNTpJ
-         uG6Ux1/2OcAQhPgBjPo13j/m+qtZuksaJp3rF9M61F61UV7lLU5vAWPlIpDyH463+L
-         X2AihfONiDEc+WCDM+0WeEW51joqoGyaHdZ39OJY=
-Date:   Wed, 2 Oct 2019 18:09:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sasha Levin <sashal@kernel.org>,
+        id S1728588AbfJBRDw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Oct 2019 13:03:52 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:35581 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728484AbfJBRDv (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 2 Oct 2019 13:03:51 -0400
+Received: by mail-wr1-f66.google.com with SMTP id v8so20559709wrt.2
+        for <linux-integrity@vger.kernel.org>; Wed, 02 Oct 2019 10:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BYYfVQIfFtpOzEISpfYA8mada12Gi+by+EuvgLlTqFs=;
+        b=I3ma6LtMenHnUmcpuK5EauyVCCDOO/mq1nFzq1/qCLqwWVUQzOv19WX3l2eYhKYNbo
+         iK7BapnntZY0k2eht5rZTc8xCP68vdLvhPmnsnIpo7+Nk1MjynmDQfAATc8OeJdI2RlG
+         ZamUbSthr2YnREgTluCf2qL8/bPhBlJFvIcQ3PhvURk9/QdLREqYsH5SKTklYmAGH/jE
+         C+CareO8YOz6+t1LNuY61w/s7oCdSMGyZULGQ7QvQEhOdxasIWBS2982WtZWX1oh5Gmf
+         8GUaOZuI9tUzhp0E7XD3+Ib2DJJ714TsqCjFgZ5Ah5k/WwfX7XOBEP3kcWEkvRhKfL94
+         W/3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BYYfVQIfFtpOzEISpfYA8mada12Gi+by+EuvgLlTqFs=;
+        b=lJld4qGgehjGKwu90gtFi2VvmOdHmT0vVYjQNAM/t5RTuxJTrnLwxV65Gx80dvnHEV
+         3CapzEe8ZsO7+tWzGdJ1secrwENDgPncZjERIRydhzlCKhXjFWh1FuwfJelcWnIn1Cso
+         h8IRsuC3amliIQ0XDDXV2CqgkvmaRcozO1wQlErtMJMzGijbvzHIb4ttA708T1GjP2ia
+         BUQ1RhdhZwxpKXyM37QxlUECGssxTmiYxnYQ8Tpamnq6H1gLcGi7KeSWMriFN1tFE33i
+         lhHVlBD9lF3bBIxVMEGzkbWhyC+X8jDDbldbQ6r8x5heBeNQ6OyDsQsxbrFPuJSTWYWX
+         7HuQ==
+X-Gm-Message-State: APjAAAU4B2SMczvwuO9PzAnHOv3YvkLjTmpPAesNUv5Sn+suG/JRyiTu
+        hP5lky2mR7lVVykD4Btx5VR38w==
+X-Google-Smtp-Source: APXvYqzXLD7bD20WEf4fYahS92VBaU8Nfz7zJCiUjw+YXBjU6Eadhx+AVtevlqIIL2bsBkVfwA9OPg==
+X-Received: by 2002:adf:e348:: with SMTP id n8mr3213078wrj.299.1570035828925;
+        Wed, 02 Oct 2019 10:03:48 -0700 (PDT)
+Received: from sudo.home ([2a01:cb1d:112:6f00:f145:3252:fc29:76c9])
+        by smtp.gmail.com with ESMTPSA id f18sm7085459wmh.43.2019.10.02.10.03.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 02 Oct 2019 10:03:48 -0700 (PDT)
+From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
+To:     linux-efi@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Dave Young <dyoung@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-stabley@vger.kernel.org,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgunthorpe@obsidianresearch.com>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent future
- TPM operations
-Message-ID: <20191002160954.GA1754224@kroah.com>
-References: <20191002131445.7793-1-jarkko.sakkinen@linux.intel.com>
- <20191002131445.7793-4-jarkko.sakkinen@linux.intel.com>
- <20191002135758.GA1738718@kroah.com>
- <20191002151751.GP17454@sasha-vm>
- <20191002153123.wcguist4okoxckis@cantor>
- <20191002154204.me4lzgx2l4r6zkpy@cantor>
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-integrity@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Lyude Paul <lyude@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Octavian Purdila <octavian.purdila@intel.com>,
+        Peter Jones <pjones@redhat.com>, Scott Talbert <swt@techie.net>
+Subject: [GIT PULL 0/7] EFI fixes for v5.4
+Date:   Wed,  2 Oct 2019 18:58:57 +0200
+Message-Id: <20191002165904.8819-1-ard.biesheuvel@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191002154204.me4lzgx2l4r6zkpy@cantor>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 02, 2019 at 08:42:04AM -0700, Jerry Snitselaar wrote:
-> On Wed Oct 02 19, Jerry Snitselaar wrote:
-> > On Wed Oct 02 19, Sasha Levin wrote:
-> > > On Wed, Oct 02, 2019 at 03:57:58PM +0200, Greg KH wrote:
-> > > > On Wed, Oct 02, 2019 at 04:14:44PM +0300, Jarkko Sakkinen wrote:
-> > > > > From: Vadim Sukhomlinov <sukhomlinov@google.com>
-> > > > > 
-> > > > > commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
-> > > > > 
-> > > > > TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
-> > > > > future TPM operations. TPM 1.2 behavior was different, future TPM
-> > > > > operations weren't disabled, causing rare issues. This patch ensures
-> > > > > that future TPM operations are disabled.
-> > > > > 
-> > > > > Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
-> > > > > Cc: stable@vger.kernel.org
-> > > > > Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
-> > > > > [dianders: resolved merge conflicts with mainline]
-> > > > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > > > ---
-> > > > > drivers/char/tpm/tpm-chip.c | 5 +++--
-> > > > > 1 file changed, 3 insertions(+), 2 deletions(-)
-> > > > 
-> > > > What kernel version(s) is this for?
-> > > 
-> > > It would go to 4.19, we've recently reverted an incorrect backport of
-> > > this patch.
-> > > 
-> > > Jarkko, why is this patch 3/3? We haven't seen the first two on the
-> > > mailing list, do we need anything besides this patch?
-> > > 
-> > > --
-> > > Thanks,
-> > > Sasha
-> > 
-> > It looks like there was a problem mailing the earlier patchset, and patches 1 and 2
-> > weren't cc'd to stable, but patch 3 was.
-> 
-> Is linux-stabley@vger.kernel.org a valid address?
-> 
+The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c:
 
-Heh, no :)
+  Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git tags/efi-urgent
+
+for you to fetch changes up to d45bb93ac68495a8c53126742b4d2223101cfb7f:
+
+  efi/x86: do not clean dummy variable in kexec path (2019-10-02 18:44:23 +0200)
+
+----------------------------------------------------------------
+A couple of EFI fixes for v5.4:
+- a cosmetic fix for the byte order of PCI class codes in CPER error reports
+- bail early instead of pointlessly iterating over all EFI variables looking
+  for the one containing a supplementary ACPI SSDT table if we never specified
+  a variable name to begin with
+- some fixes for TPM event log parsing
+- fix kexec hangs on OVMF/x86 caused by attempts to delete a dummy variable
+  which shouldn't even exist at that point.
+
+----------------------------------------------------------------
+Ard Biesheuvel (1):
+      efivar/ssdt: don't iterate over EFI vars if no SSDT override was specified
+
+Ben Dooks (1):
+      efi: make unexported efi_rci2_sysfs_init static
+
+Dave Young (1):
+      efi/x86: do not clean dummy variable in kexec path
+
+Jerry Snitselaar (1):
+      efi/tpm: only set efi_tpm_final_log_size after successful event log parsing
+
+Lukas Wunner (1):
+      efi: cper: Fix endianness of PCIe class code
+
+Peter Jones (2):
+      efi/tpm: Don't access event->count when it isn't mapped.
+      efi/tpm: don't traverse an event log with no events
+
+ arch/x86/platform/efi/efi.c       |  3 ---
+ drivers/firmware/efi/cper.c       |  2 +-
+ drivers/firmware/efi/efi.c        |  3 +++
+ drivers/firmware/efi/rci2-table.c |  2 +-
+ drivers/firmware/efi/tpm.c        | 24 ++++++++++++++++++------
+ include/linux/tpm_eventlog.h      | 16 ++++++++++++----
+ 6 files changed, 35 insertions(+), 15 deletions(-)
