@@ -2,66 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CEBC9D4C
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2019 13:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18638C9D51
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2019 13:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729949AbfJCLbP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Oct 2019 07:31:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58842 "EHLO mail.kernel.org"
+        id S1729987AbfJCLcP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Oct 2019 07:32:15 -0400
+Received: from mga11.intel.com ([192.55.52.93]:49045 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729891AbfJCLbP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Oct 2019 07:31:15 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3C58B20830;
-        Thu,  3 Oct 2019 11:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570102274;
-        bh=L5QzbVAsls8qitJom+2MsYWRpUVL7rpChg5mZ9JGQ4s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mY93TulDp3NeDtrEixgOQs9CTaomFf/67X+WdbWC2iZCT7G7KwTb0XH7EYXhv8IxZ
-         FGh9k434aZIDwoDwTylrtKwuks9YkSUHw97a5ksjItDZ2PBU2sJrVS1KiWq7/Wm6S2
-         pAoFKtkP9zCYtRSYibIEF25IkHRbx9Xe4V2jTx/8=
-Date:   Thu, 3 Oct 2019 13:31:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-stable@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        id S1729961AbfJCLcO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 3 Oct 2019 07:32:14 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Oct 2019 04:32:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,251,1566889200"; 
+   d="scan'208";a="198504653"
+Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.161])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Oct 2019 04:32:11 -0700
+Date:   Thu, 3 Oct 2019 14:32:11 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] tpm: migrate pubek_show to struct tpm_buf
-Message-ID: <20191003113112.GB2447460@kroah.com>
-References: <20191003112424.9036-1-jarkko.sakkinen@linux.intel.com>
- <20191003112424.9036-2-jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH] tpm: Detach page allocation from tpm_buf
+Message-ID: <20191003113211.GC8933@linux.intel.com>
+References: <20190925134842.19305-1-jarkko.sakkinen@linux.intel.com>
+ <20190926124635.GA6040@linux.intel.com>
+ <20190926131227.GA6582@linux.intel.com>
+ <1570020024.4999.104.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20191003112424.9036-2-jarkko.sakkinen@linux.intel.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1570020024.4999.104.camel@linux.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 03, 2019 at 02:24:22PM +0300, Jarkko Sakkinen wrote:
-> commit da379f3c1db0c9a1fd27b11d24c9894b5edc7c75 upstream
+On Wed, Oct 02, 2019 at 08:40:24AM -0400, Mimi Zohar wrote:
+> On Thu, 2019-09-26 at 16:12 +0300, Jarkko Sakkinen wrote:
+> > On Thu, Sep 26, 2019 at 03:46:35PM +0300, Jarkko Sakkinen wrote:
+> > > On Wed, Sep 25, 2019 at 04:48:41PM +0300, Jarkko Sakkinen wrote:
+> > > > -		tpm_buf_reset(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_RANDOM);
+> > > > +		tpm_buf_reset(&buf, data_ptr, PAGE_SIZE,
+> > > > +			      TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_EXTEND);
+> > > 
+> > > Oops.
+> > 
+> > Maybe we could use random as the probe for TPM version since we anyway
+> > send a TPM command as a probe for TPM version:
+> > 
+> > 1. Try TPM2 get random.
+> > 2. If fail, try TPM1 get random.
+> > 3. Output random number to klog.
+> > 
+> > Something like 8 bytes would be sufficient. This would make sure that
+> > no new change breaks tpm_get_random() and also this would give some
+> > feedback that TPM is at least somewhat working.
 > 
-> Migrated pubek_show to struct tpm_buf and cleaned up its implementation.
-> Previously the output parameter structure was declared but left
-> completely unused. Now it is used to refer different fields of the
-> output. We can move it to tpm-sysfs.c as it does not have any use
-> outside of that file.
-> 
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> ---
->  drivers/char/tpm/tpm-sysfs.c | 87 ++++++++++++++++++++----------------
->  drivers/char/tpm/tpm.h       | 13 ------
->  2 files changed, 48 insertions(+), 52 deletions(-)
+> That involves sending 2 TPM commands.  At what point does this occur?
+>  On registration?  Whenever getting a random number?  Is the result
+> cached in chip->flags?
 
-Again, what kernel tree(s) do you want this, and the other 2 patches
-applied to?  And why?
+On registeration. It is just printed to klog.
 
-thanks,
+> Will this delay the TPM initialization, causing IMA to go into "TPM
+> bypass mode"?
 
-greg k-h
+Of course it will delay the init.
+
+As I've stated before the real fix for the bypass issue would be
+to make TPM as part of the core but this has not received much
+appeal. I think I've sent patch for this once.
+
+/Jarkko
