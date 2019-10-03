@@ -2,114 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A457C9ED2
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2019 14:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0D4C9ED7
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2019 14:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728900AbfJCMuQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Oct 2019 08:50:16 -0400
-Received: from mga12.intel.com ([192.55.52.136]:49408 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726393AbfJCMuQ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Oct 2019 08:50:16 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Oct 2019 05:50:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,252,1566889200"; 
-   d="scan'208";a="196334370"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.161])
-  by orsmga006.jf.intel.com with ESMTP; 03 Oct 2019 05:50:13 -0700
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        keyrings@vger.kernel.org (open list:ASYMMETRIC KEYS),
-        linux-crypto@vger.kernel.org (open list:CRYPTO API),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] KEYS: asym_tpm: Switch to get_random_bytes()
-Date:   Thu,  3 Oct 2019 15:50:09 +0300
-Message-Id: <20191003125009.30195-1-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
+        id S1730112AbfJCMvG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Oct 2019 08:51:06 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41238 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728212AbfJCMvG (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 3 Oct 2019 08:51:06 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x93ClGKP084803
+        for <linux-integrity@vger.kernel.org>; Thu, 3 Oct 2019 08:51:05 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vdgfr242v-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 03 Oct 2019 08:51:05 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 3 Oct 2019 13:51:03 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 3 Oct 2019 13:50:58 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x93CovpO59375778
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Oct 2019 12:50:57 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 70CC1AE04D;
+        Thu,  3 Oct 2019 12:50:57 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 82A59AE045;
+        Thu,  3 Oct 2019 12:50:55 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.158.158])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Oct 2019 12:50:55 +0000 (GMT)
+Subject: Re: [PATCH] tpm: Detach page allocation from tpm_buf
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Thu, 03 Oct 2019 08:50:54 -0400
+In-Reply-To: <20191003113506.GE8933@linux.intel.com>
+References: <20190925134842.19305-1-jarkko.sakkinen@linux.intel.com>
+         <1569420226.3642.24.camel@HansenPartnership.com>
+         <20190927130657.GA5556@linux.intel.com>
+         <1570020105.4999.106.camel@linux.ibm.com>
+         <20191003113506.GE8933@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19100312-0016-0000-0000-000002B3AE87
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19100312-0017-0000-0000-00003314B8A6
+Message-Id: <1570107054.4421.174.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-03_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910030119
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Only the kernel random pool should be used for generating random numbers.
-TPM contributes to that pool among the other sources of entropy. In here it
-is not, agreed, absolutely critical because TPM is what is trusted anyway
-but in order to remove tpm_get_random() we need to first remove all the
-call sites.
+On Thu, 2019-10-03 at 14:35 +0300, Jarkko Sakkinen wrote:
+> On Wed, Oct 02, 2019 at 08:41:45AM -0400, Mimi Zohar wrote:
+> > On Fri, 2019-09-27 at 16:06 +0300, Jarkko Sakkinen wrote:
+> > > On Wed, Sep 25, 2019 at 10:03:46AM -0400, James Bottomley wrote:
+> > > > On Wed, 2019-09-25 at 16:48 +0300, Jarkko Sakkinen wrote:
+> > > > [...]
+> > > > > +	data_page = alloc_page(GFP_HIGHUSER);
+> > > > > +	if (!data_page)
+> > > > > +		return -ENOMEM;
+> > > > > +
+> > > > > +	data_ptr = kmap(data_page);
+> > > > 
+> > > > I don't think this is such a good idea.  On 64 bit it's no different
+> > > > from GFP_KERNEL and on 32 bit where we do have highmem, kmap space is
+> > > > at a premium, so doing a highmem allocation + kmap is more wasteful of
+> > > > resources than simply doing GFP_KERNEL.  In general, you should only do
+> > > > GFP_HIGHMEM if the page is going to be mostly used by userspace, which
+> > > > really isn't the case here.
+> > > 
+> > > Changing that in this commit would be wrong even if you are right.
+> > > After this commit has been applied it is somewhat easier to make
+> > > best choices for allocation in each call site (probably most will
+> > > end up using stack).
+> > 
+> > Agreed, but it could be a separate patch, prior to this one.  Why
+> > duplicate the problem all over only to change it later?
+> 
+> What problem exactly it is duplicating? The existing allocation
+> scheme here works correctly.
 
-Cc: stable@vger.kernel.org
-Fixes: 0c36264aa1d5 ("KEYS: asym_tpm: Add loadkey2 and flushspecific [ver #2]")
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
-v2:
-* Changed two remaining call sites to use get_random_bytes()
-* Removed "stating the obvious" comments.
- crypto/asymmetric_keys/asym_tpm.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+In the current code "alloc_page(GFP_HIGHUSER)" exists in a single
+function.  With this patch, "alloc_page(GFP_HIGHUSER)" is duplicated
+24 times.  If it is incorrect and we shouldn't be using GFP_HIGHUSER,
+as James said, then why duplicate it 24 times?  Fix it as a separate
+patch first, that could be backported if needed, and then make the
+change.
 
-diff --git a/crypto/asymmetric_keys/asym_tpm.c b/crypto/asymmetric_keys/asym_tpm.c
-index 76d2ce3a1b5b..4eaf57483b9a 100644
---- a/crypto/asymmetric_keys/asym_tpm.c
-+++ b/crypto/asymmetric_keys/asym_tpm.c
-@@ -6,6 +6,7 @@
- #include <linux/kernel.h>
- #include <linux/seq_file.h>
- #include <linux/scatterlist.h>
-+#include <linux/random.h>
- #include <linux/tpm.h>
- #include <linux/tpm_command.h>
- #include <crypto/akcipher.h>
-@@ -53,12 +54,7 @@ static int tpm_loadkey2(struct tpm_buf *tb,
- 		return ret;
- 	}
- 
--	/* generate odd nonce */
--	ret = tpm_get_random(NULL, nonceodd, TPM_NONCE_SIZE);
--	if (ret < 0) {
--		pr_info("tpm_get_random failed (%d)\n", ret);
--		return ret;
--	}
-+	get_random_bytes(nonceodd, TPM_NONCE_SIZE);
- 
- 	/* calculate authorization HMAC value */
- 	ret = TSS_authhmac(authdata, keyauth, SHA1_DIGEST_SIZE, enonce,
-@@ -139,12 +135,7 @@ static int tpm_unbind(struct tpm_buf *tb,
- 		return ret;
- 	}
- 
--	/* generate odd nonce */
--	ret = tpm_get_random(NULL, nonceodd, TPM_NONCE_SIZE);
--	if (ret < 0) {
--		pr_info("tpm_get_random failed (%d)\n", ret);
--		return ret;
--	}
-+	get_random_bytes(nonceodd, TPM_NONCE_SIZE);
- 
- 	/* calculate authorization HMAC value */
- 	ret = TSS_authhmac(authdata, keyauth, SHA1_DIGEST_SIZE, enonce,
-@@ -225,12 +216,7 @@ static int tpm_sign(struct tpm_buf *tb,
- 		return ret;
- 	}
- 
--	/* generate odd nonce */
--	ret = tpm_get_random(NULL, nonceodd, TPM_NONCE_SIZE);
--	if (ret < 0) {
--		pr_info("tpm_get_random failed (%d)\n", ret);
--		return ret;
--	}
-+	get_random_bytes(nonceodd, TPM_NONCE_SIZE);
- 
- 	/* calculate authorization HMAC value */
- 	ret = TSS_authhmac(authdata, keyauth, SHA1_DIGEST_SIZE, enonce,
--- 
-2.20.1
+Mimi
 
