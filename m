@@ -2,103 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C85FEC9D30
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2019 13:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CEBC9D4C
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2019 13:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729895AbfJCLZn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Oct 2019 07:25:43 -0400
-Received: from mga03.intel.com ([134.134.136.65]:51919 "EHLO mga03.intel.com"
+        id S1729949AbfJCLbP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Oct 2019 07:31:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58842 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725827AbfJCLZn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Oct 2019 07:25:43 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Oct 2019 04:25:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,251,1566889200"; 
-   d="scan'208";a="198503176"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.161])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Oct 2019 04:25:39 -0700
-Date:   Thu, 3 Oct 2019 14:25:39 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sasha Levin <sashal@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-stabley@vger.kernel.org,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgunthorpe@obsidianresearch.com>,
+        id S1729891AbfJCLbP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 3 Oct 2019 07:31:15 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3C58B20830;
+        Thu,  3 Oct 2019 11:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570102274;
+        bh=L5QzbVAsls8qitJom+2MsYWRpUVL7rpChg5mZ9JGQ4s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mY93TulDp3NeDtrEixgOQs9CTaomFf/67X+WdbWC2iZCT7G7KwTb0XH7EYXhv8IxZ
+         FGh9k434aZIDwoDwTylrtKwuks9YkSUHw97a5ksjItDZ2PBU2sJrVS1KiWq7/Wm6S2
+         pAoFKtkP9zCYtRSYibIEF25IkHRbx9Xe4V2jTx/8=
+Date:   Thu, 3 Oct 2019 13:31:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-stable@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent future
- TPM operations
-Message-ID: <20191003112539.GB8933@linux.intel.com>
-References: <20191002131445.7793-1-jarkko.sakkinen@linux.intel.com>
- <20191002131445.7793-4-jarkko.sakkinen@linux.intel.com>
- <20191002135758.GA1738718@kroah.com>
- <20191002151751.GP17454@sasha-vm>
- <20191002153123.wcguist4okoxckis@cantor>
- <20191002154204.me4lzgx2l4r6zkpy@cantor>
- <20191003112442.GA8933@linux.intel.com>
+Subject: Re: [PATCH 1/3] tpm: migrate pubek_show to struct tpm_buf
+Message-ID: <20191003113112.GB2447460@kroah.com>
+References: <20191003112424.9036-1-jarkko.sakkinen@linux.intel.com>
+ <20191003112424.9036-2-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191003112442.GA8933@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191003112424.9036-2-jarkko.sakkinen@linux.intel.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 03, 2019 at 02:24:42PM +0300, Jarkko Sakkinen wrote:
-> On Wed, Oct 02, 2019 at 08:42:04AM -0700, Jerry Snitselaar wrote:
-> > On Wed Oct 02 19, Jerry Snitselaar wrote:
-> > > On Wed Oct 02 19, Sasha Levin wrote:
-> > > > On Wed, Oct 02, 2019 at 03:57:58PM +0200, Greg KH wrote:
-> > > > > On Wed, Oct 02, 2019 at 04:14:44PM +0300, Jarkko Sakkinen wrote:
-> > > > > > From: Vadim Sukhomlinov <sukhomlinov@google.com>
-> > > > > > 
-> > > > > > commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
-> > > > > > 
-> > > > > > TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
-> > > > > > future TPM operations. TPM 1.2 behavior was different, future TPM
-> > > > > > operations weren't disabled, causing rare issues. This patch ensures
-> > > > > > that future TPM operations are disabled.
-> > > > > > 
-> > > > > > Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
-> > > > > > Cc: stable@vger.kernel.org
-> > > > > > Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
-> > > > > > [dianders: resolved merge conflicts with mainline]
-> > > > > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > > > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > > > > ---
-> > > > > > drivers/char/tpm/tpm-chip.c | 5 +++--
-> > > > > > 1 file changed, 3 insertions(+), 2 deletions(-)
-> > > > > 
-> > > > > What kernel version(s) is this for?
-> > > > 
-> > > > It would go to 4.19, we've recently reverted an incorrect backport of
-> > > > this patch.
-> > > > 
-> > > > Jarkko, why is this patch 3/3? We haven't seen the first two on the
-> > > > mailing list, do we need anything besides this patch?
-> > > > 
-> > > > --
-> > > > Thanks,
-> > > > Sasha
-> > > 
-> > > It looks like there was a problem mailing the earlier patchset, and patches 1 and 2
-> > > weren't cc'd to stable, but patch 3 was.
-> > 
-> > Is linux-stabley@vger.kernel.org a valid address?
-> > 
+On Thu, Oct 03, 2019 at 02:24:22PM +0300, Jarkko Sakkinen wrote:
+> commit da379f3c1db0c9a1fd27b11d24c9894b5edc7c75 upstream
 > 
-> No, did a resend :-(
+> Migrated pubek_show to struct tpm_buf and cleaned up its implementation.
+> Previously the output parameter structure was declared but left
+> completely unused. Now it is used to refer different fields of the
+> output. We can move it to tpm-sysfs.c as it does not have any use
+> outside of that file.
+> 
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> ---
+>  drivers/char/tpm/tpm-sysfs.c | 87 ++++++++++++++++++++----------------
+>  drivers/char/tpm/tpm.h       | 13 ------
+>  2 files changed, 48 insertions(+), 52 deletions(-)
 
-New version sent to stableish@vger.kernel.org.
+Again, what kernel tree(s) do you want this, and the other 2 patches
+applied to?  And why?
 
-/Jarkko
+thanks,
+
+greg k-h
