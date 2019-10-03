@@ -2,31 +2,31 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A697BCAE21
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2019 20:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DF1CAE30
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2019 20:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730869AbfJCS0v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Oct 2019 14:26:51 -0400
-Received: from mga12.intel.com ([192.55.52.136]:12625 "EHLO mga12.intel.com"
+        id S2387837AbfJCSbH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Oct 2019 14:31:07 -0400
+Received: from mga05.intel.com ([192.55.52.43]:45441 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729199AbfJCS0v (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Oct 2019 14:26:51 -0400
+        id S1729064AbfJCSbH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 3 Oct 2019 14:31:07 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Oct 2019 11:26:50 -0700
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Oct 2019 11:31:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,253,1566889200"; 
-   d="scan'208";a="275795994"
-Received: from okiselev-mobl1.ccr.corp.intel.com (HELO localhost) ([10.251.93.117])
-  by orsmga001.jf.intel.com with ESMTP; 03 Oct 2019 11:26:46 -0700
-Date:   Thu, 3 Oct 2019 21:26:44 +0300
+   d="scan'208";a="216909589"
+Received: from jvalevi1-mobl1.ger.corp.intel.com (HELO localhost) ([10.251.93.117])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Oct 2019 11:31:02 -0700
+Date:   Thu, 3 Oct 2019 21:31:01 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org,
+Cc:     linux-integrity@vger.kernel.org,
         Jerry Snitselaar <jsnitsel@redhat.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
         Sumit Garg <sumit.garg@linaro.org>,
         Stefan Berger <stefanb@linux.vnet.ibm.com>,
         Peter Huewe <peterhuewe@gmx.de>,
@@ -34,18 +34,18 @@ Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         open list <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] tpm: Detach page allocation from tpm_buf
-Message-ID: <20191003182644.GA20683@linux.intel.com>
+Message-ID: <20191003182934.GB20683@linux.intel.com>
 References: <20190925134842.19305-1-jarkko.sakkinen@linux.intel.com>
- <1569420226.3642.24.camel@HansenPartnership.com>
- <20190927130657.GA5556@linux.intel.com>
- <1570020105.4999.106.camel@linux.ibm.com>
- <20191003113506.GE8933@linux.intel.com>
- <1570107054.4421.174.camel@linux.ibm.com>
+ <20190926124635.GA6040@linux.intel.com>
+ <20190926131227.GA6582@linux.intel.com>
+ <1570020024.4999.104.camel@linux.ibm.com>
+ <20191003113211.GC8933@linux.intel.com>
+ <1570106350.4421.166.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1570107054.4421.174.camel@linux.ibm.com>
+In-Reply-To: <1570106350.4421.166.camel@linux.ibm.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -53,44 +53,60 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 03, 2019 at 08:50:54AM -0400, Mimi Zohar wrote:
-> On Thu, 2019-10-03 at 14:35 +0300, Jarkko Sakkinen wrote:
-> > On Wed, Oct 02, 2019 at 08:41:45AM -0400, Mimi Zohar wrote:
-> > > On Fri, 2019-09-27 at 16:06 +0300, Jarkko Sakkinen wrote:
-> > > > On Wed, Sep 25, 2019 at 10:03:46AM -0400, James Bottomley wrote:
-> > > > > On Wed, 2019-09-25 at 16:48 +0300, Jarkko Sakkinen wrote:
-> > > > > [...]
-> > > > > > +	data_page = alloc_page(GFP_HIGHUSER);
-> > > > > > +	if (!data_page)
-> > > > > > +		return -ENOMEM;
-> > > > > > +
-> > > > > > +	data_ptr = kmap(data_page);
+On Thu, Oct 03, 2019 at 08:39:10AM -0400, Mimi Zohar wrote:
+> On Thu, 2019-10-03 at 14:32 +0300, Jarkko Sakkinen wrote:
+> > On Wed, Oct 02, 2019 at 08:40:24AM -0400, Mimi Zohar wrote:
+> > > On Thu, 2019-09-26 at 16:12 +0300, Jarkko Sakkinen wrote:
+> > > > On Thu, Sep 26, 2019 at 03:46:35PM +0300, Jarkko Sakkinen wrote:
+> > > > > On Wed, Sep 25, 2019 at 04:48:41PM +0300, Jarkko Sakkinen wrote:
+> > > > > > -		tpm_buf_reset(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_RANDOM);
+> > > > > > +		tpm_buf_reset(&buf, data_ptr, PAGE_SIZE,
+> > > > > > +			      TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_EXTEND);
 > > > > > 
-> > > > > I don't think this is such a good idea.  On 64 bit it's no different
-> > > > > from GFP_KERNEL and on 32 bit where we do have highmem, kmap space is
-> > > > > at a premium, so doing a highmem allocation + kmap is more wasteful of
-> > > > > resources than simply doing GFP_KERNEL.  In general, you should only do
-> > > > > GFP_HIGHMEM if the page is going to be mostly used by userspace, which
-> > > > > really isn't the case here.
+> > > > > Oops.
 > > > > 
-> > > > Changing that in this commit would be wrong even if you are right.
-> > > > After this commit has been applied it is somewhat easier to make
-> > > > best choices for allocation in each call site (probably most will
-> > > > end up using stack).
+> > > > Maybe we could use random as the probe for TPM version since we anyway
+> > > > send a TPM command as a probe for TPM version:
+> > > > 
+> > > > 1. Try TPM2 get random.
+> > > > 2. If fail, try TPM1 get random.
+> > > > 3. Output random number to klog.
+> > > > 
+> > > > Something like 8 bytes would be sufficient. This would make sure that
+> > > > no new change breaks tpm_get_random() and also this would give some
+> > > > feedback that TPM is at least somewhat working.
 > > > 
-> > > Agreed, but it could be a separate patch, prior to this one.  Why
-> > > duplicate the problem all over only to change it later?
+> > > That involves sending 2 TPM commands.  At what point does this occur?
+> > >  On registration?  Whenever getting a random number?  Is the result
+> > > cached in chip->flags?
 > > 
-> > What problem exactly it is duplicating? The existing allocation
-> > scheme here works correctly.
+> > On registeration. It is just printed to klog.
 > 
-> In the current code "alloc_page(GFP_HIGHUSER)" exists in a single
-> function.  With this patch, "alloc_page(GFP_HIGHUSER)" is duplicated
-> 24 times.  If it is incorrect and we shouldn't be using GFP_HIGHUSER,
-> as James said, then why duplicate it 24 times?  Fix it as a separate
-> patch first, that could be backported if needed, and then make the
-> change.
+> What sets "TPM_CHIP_FLAG_TPM2" in chip->flags?  And when?
+> 
+> > 
+> > > Will this delay the TPM initialization, causing IMA to go into "TPM
+> > > bypass mode"?
+> > 
+> > Of course it will delay the init.
+> 
+> Delaying the init will most likely cause regressions on systems with
+> TPM 1.2 systems.
+> 
+> Instead of sending the TPM 2.0 command and on failure sending the TPM
+> 1.2 version of the command, could chip->flags be tested?  And if not
+> chip->flags, then provide the TPM version as part of registration.
 
-Sorry I mixed this with Jerry's proposal :-) I can do that of course.
+No rush pushing this forward. I got your point.
+
+> > As I've stated before the real fix for the bypass issue would be
+> > to make TPM as part of the core but this has not received much
+> > appeal. I think I've sent patch for this once.
+> 
+> I must have missed this discussion.
+
+Yeah, I think that'd be a great idea. We need a better control on
+TPM core as multiple subsystem's depend on it in API level. Something
+to reconsider in future.
 
 /Jarkko
