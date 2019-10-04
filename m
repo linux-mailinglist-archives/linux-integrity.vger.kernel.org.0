@@ -2,91 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B0BCC38D
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Oct 2019 21:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7127FCC3CF
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Oct 2019 21:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727978AbfJDT3I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Oct 2019 15:29:08 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:41518 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbfJDT3I (ORCPT
+        id S1730943AbfJDT4I convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Oct 2019 15:56:08 -0400
+Received: from mx0a-00176a03.pphosted.com ([67.231.149.52]:53736 "EHLO
+        mx0a-00176a03.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730836AbfJDT4I (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Oct 2019 15:29:08 -0400
-Received: from [10.200.157.26] (unknown [131.107.147.154])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8CEFD20B71C6;
-        Fri,  4 Oct 2019 12:29:07 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8CEFD20B71C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1570217347;
-        bh=YAma0bGF5RtxG7cbZduEzv133Tl63YTcqwfLLv1Pc70=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=C4K0ALeDP7q2s4ZhTyW41Hg/ZbeiaeFmDaZfyI3N7Grz0/mIHXIrz0R0VKfyusnUR
-         ss/hmA1JzdBsip0ZAuiAvSG9Zscx1xKwor3WEiegTKlXK98JrPVzJ3I4l4lthMyvLw
-         fyxqkw+JqAFkWcnphEFdJE5pqnzaAoadWbUGCnQk=
-Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
-To:     Mimi Zohar <zohar@linux.ibm.com>, Sasha Levin <sashal@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        jamorris@linux.microsoft.com, kgoldman@us.ibm.com,
+        Fri, 4 Oct 2019 15:56:08 -0400
+Received: from pps.filterd (m0047962.ppops.net [127.0.0.1])
+        by m0047962.ppops.net-00176a03. (8.16.0.42/8.16.0.42) with SMTP id x94JsTeF011265;
+        Fri, 4 Oct 2019 15:56:07 -0400
+From:   "Safford, David (GE Global Research, US)" <david.safford@ge.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+CC:     Mimi Zohar <zohar@linux.ibm.com>,
         "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20190828002735.31025-1-nramas@linux.microsoft.com>
- <1567041083.6115.133.camel@linux.ibm.com>
- <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>
- <1567190507.10024.134.camel@linux.ibm.com>
- <2cd27f52-1029-bcea-c73b-7d3d002cf030@linux.microsoft.com>
- <1568035881.4614.347.camel@linux.ibm.com> <20190919131851.GA8171@sasha-vm>
- <1568913178.4733.89.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <1dfc7a83-3fcb-1356-958e-2afb7c6f1285@linux.microsoft.com>
-Date:   Fri, 4 Oct 2019 12:29:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <1568913178.4733.89.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Thread-Topic: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+Thread-Index: AQHVdI4g9L3xPAeMJki3mq4fpV79C6dHrWSAgAFrf4CAABaxAIAAUs4AgAAPVoCAAOxxAIAAnnWA///LRNA=
+Date:   Fri, 4 Oct 2019 19:56:01 +0000
+Message-ID: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com>
+References: <20190926171601.30404-1-jarkko.sakkinen@linux.intel.com>
+ <1570024819.4999.119.camel@linux.ibm.com>
+ <20191003114119.GF8933@linux.intel.com>
+ <1570107752.4421.183.camel@linux.ibm.com>
+ <20191003175854.GB19679@linux.intel.com>
+ <1570128827.5046.19.camel@linux.ibm.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A22E@ALPMBAPA12.e2k.ad.ge.com>
+ <20191004182711.GC6945@linux.intel.com>
+In-Reply-To: <20191004182711.GC6945@linux.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMjEyNDczOTUw?=
+ =?us-ascii?Q?XGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0?=
+ =?us-ascii?Q?YmEyOWUzNWJcbXNnc1xtc2ctZmM1ZWJkODctZTZlMC0xMWU5LThlNWMtYTRj?=
+ =?us-ascii?Q?M2YwYjU5OGE2XGFtZS10ZXN0XGZjNWViZDg5LWU2ZTAtMTFlOS04ZTVjLWE0?=
+ =?us-ascii?Q?YzNmMGI1OThhNmJvZHkudHh0IiBzej0iMTkzMSIgdD0iMTMyMTQ2OTI1NjAy?=
+ =?us-ascii?Q?OTY5NzY4IiBoPSJJb1M3U21NaU54OWR1V0xqclpiM1c5a2d5YUU9IiBpZD0i?=
+ =?us-ascii?Q?IiBibD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQUFFb0NB?=
+ =?us-ascii?Q?QUNvbUxtKzdYclZBYnV1SzdTSmoxQmZ1NjRydEltUFVGOERBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBSEFBQUFEYUFRQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBRUFBUUFCQUFBQUZ0R2VRd0FBQUFBQUFBQUFBQUFBQUo0QUFBQm5BR1VB?=
+ =?us-ascii?Q?WHdCakFHOEFiZ0JtQUdrQVpBQmxBRzRBZEFCcEFHRUFiQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdjQVpRQmZBR2dBYVFCbkFHZ0Fi?=
+ =?us-ascii?Q?QUI1QUdNQWJ3QnVBR1lBYVFCa0FHVUFiZ0IwQUdrQVlRQnNBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNB?=
+ =?us-ascii?Q?QUFBQUFDZUFBQUFad0JsQUY4QWJnQnZBRzRBY0FCMUFHSUFiQUJwQUdNQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBQT09Ii8+PC9t?=
+ =?us-ascii?Q?ZXRhPg=3D=3D?=
+x-dg-rorf: 
+x-originating-ip: [3.159.19.191]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+Subject: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-04_12:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910040163
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 9/19/19 10:12 AM, Mimi Zohar wrote:
 
-Hi Mimi,
+> From: linux-integrity-owner@vger.kernel.org <linux-integrity-
+> owner@vger.kernel.org> On Behalf Of Jarkko Sakkinen
+> Sent: Friday, October 4, 2019 2:27 PM
+> Subject: EXT: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+> 
+> If you are able to call tpm_get_random(), the driver has already registered
+> TPN as hwrng. With this solution you fail to follow the principle of defense in
+> depth. If the TPM random number generator is compromissed (has a bug)
+> using the entropy pool will decrease the collateral damage.
 
-> On 9/1 I commented on this patch set from a technical perspective,
-> saying: >
-> IMA measures, appraises, and audits files based on policy[1].  If
-> you're going to measure keys, all of the code should be within the IMA
-> subdirectory.  The only code outside of the IMA subdirectory is either
-> an LSM or IMA hook.  If an LSM hook already exists, use it.  If an LSM
-> hook doesn't exist and the location is generic that other LSMs would
-> be interested, define a new LSM hook, otherwise define a new IMA hook.
+And if the entropy pool has a bug or is misconfigured, you lose everything.
+That does not sound like defense in depth to me. In the real world
+I am not aware of a single instance of RNG vulnerability on a TPM.
+I am directly aware of several published vulnerabilities in embedded systems 
+due to a badly ported version of the kernel random pool. In addition, 
+the random generator in a TPM is hardware isolated, and less likely to be
+vulnerable to side channel or memory manipulation errors. The TPM
+RNG is typically FIPS certified.  The use of the TPM RNG was a deliberate
+design choice in trusted keys.
 
-I am having trouble addressing the above feedback. Appreciate if you 
-could provide guidance:
+> > Third, as Mimi states, using a TPM is not a "regression". It would be
+> > a regression to change trusted keys _not_ to use the TPM, because that
+> > is what trusted keys are documented to provide to user space.
+> 
+> For asym-tpm.c it is without a question a regression because of the evolution
+> that has happened after trusted keys. For trusted keys using kernel rng
+> would be improvement.
 
-The key(s) in the trusted keys keyring (builtin, secondary, etc.) are 
-added early in the kernel boot process. But IMA is initialized later.
-If I have a LSM\IMA hook, that gets called when key(s) are added to the 
-trusted keys keyring, I won't be able to invoke IMA on "key add" since 
-IMA is not yet initialized.
+Perhaps this is a language issue, but you are not using "regression" correctly.
+Changing to the kernel pool would not only be a debatable  "improvement", 
+but also would certainly be a change to the documented trusted key  
+behavior, which I thought was frowned upon.
 
-Right now, I have the key measurement function in ima_init. I can gate 
-that based on policy (similar to how Prakhar has done kexec_cmdline 
-measurement) and follow the coding guidelines you have pointed to.
-But it would still have to call keyring function to get the list of keys 
-in the trusted keys keyring.
-
-Are you fine if I take the above approach?
-
-If not, could you please suggest a better way to handle it that meets 
-the kernel layering guidelines?
-
-Thanks,
-  -lakshmi
-
-
+dave
