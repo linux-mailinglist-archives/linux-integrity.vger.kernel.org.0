@@ -2,118 +2,237 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFD0CC580
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Oct 2019 23:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773B4CC5A7
+	for <lists+linux-integrity@lfdr.de>; Sat,  5 Oct 2019 00:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730889AbfJDV6S (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Oct 2019 17:58:18 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52572 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730770AbfJDV6R (ORCPT
+        id S1731569AbfJDWLM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Oct 2019 18:11:12 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:35852 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730814AbfJDWLL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Oct 2019 17:58:17 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x94Luw0l056098
-        for <linux-integrity@vger.kernel.org>; Fri, 4 Oct 2019 17:58:15 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2vedef9sjp-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 04 Oct 2019 17:58:15 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 4 Oct 2019 22:58:14 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 4 Oct 2019 22:58:09 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x94Lw84D47710448
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Oct 2019 21:58:08 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6356AE045;
-        Fri,  4 Oct 2019 21:58:08 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4E70AE055;
-        Fri,  4 Oct 2019 21:58:07 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.197.95])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  4 Oct 2019 21:58:07 +0000 (GMT)
-Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        jamorris@linux.microsoft.com, kgoldman@us.ibm.com,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Date:   Fri, 04 Oct 2019 17:58:07 -0400
-In-Reply-To: <868f6b82-7b43-5e27-0738-f9d09e765c59@linux.microsoft.com>
-References: <20190828002735.31025-1-nramas@linux.microsoft.com>
-         <1567041083.6115.133.camel@linux.ibm.com>
-         <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>
-         <1567190507.10024.134.camel@linux.ibm.com>
-         <2cd27f52-1029-bcea-c73b-7d3d002cf030@linux.microsoft.com>
-         <1568035881.4614.347.camel@linux.ibm.com> <20190919131851.GA8171@sasha-vm>
-         <1568913178.4733.89.camel@linux.ibm.com>
-         <1dfc7a83-3fcb-1356-958e-2afb7c6f1285@linux.microsoft.com>
-         <1570219032.5046.101.camel@linux.ibm.com>
-         <868f6b82-7b43-5e27-0738-f9d09e765c59@linux.microsoft.com>
+        Fri, 4 Oct 2019 18:11:11 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id BF8928EE27D;
+        Fri,  4 Oct 2019 15:11:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1570227070;
+        bh=TFG7caQVqFJ3Q80Ho7+LboXA24+IoJDY4nVR3w9xVPA=;
+        h=Subject:From:To:Date:In-Reply-To:References:From;
+        b=Uwvx5G6diQgxoXrkYxzNofLkC7dZbBYJ7FY7Bl7X8TbM7S9Fw0AQyTuLann8WLD+f
+         4dwv/2uh7nVPESoJ6sFEX6rVIwdQTvRuJrgjubzytGhpktWOy0ywkuSGPpU0Qt0PEU
+         hJTTm/jA7pFdR4PqqjUrDU2WJo2Mc6hCsfKgOmnU=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Zsxd6MXkHfIz; Fri,  4 Oct 2019 15:11:10 -0700 (PDT)
+Received: from jarvis.lan (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id E4B318EE0EE;
+        Fri,  4 Oct 2019 15:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1570227070;
+        bh=TFG7caQVqFJ3Q80Ho7+LboXA24+IoJDY4nVR3w9xVPA=;
+        h=Subject:From:To:Date:In-Reply-To:References:From;
+        b=Uwvx5G6diQgxoXrkYxzNofLkC7dZbBYJ7FY7Bl7X8TbM7S9Fw0AQyTuLann8WLD+f
+         4dwv/2uh7nVPESoJ6sFEX6rVIwdQTvRuJrgjubzytGhpktWOy0ywkuSGPpU0Qt0PEU
+         hJTTm/jA7pFdR4PqqjUrDU2WJo2Mc6hCsfKgOmnU=
+Message-ID: <1570227068.17537.4.camel@HansenPartnership.com>
+Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Safford <david.safford@ge.com>,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Fri, 04 Oct 2019 15:11:08 -0700
+In-Reply-To: <20191004201134.nuesk6hxtxajnxh2@cantor>
+References: <1570128827.5046.19.camel@linux.ibm.com>
+         <20191003215125.GA30511@linux.intel.com>
+         <20191003215743.GB30511@linux.intel.com>
+         <1570140491.5046.33.camel@linux.ibm.com>
+         <1570147177.10818.11.camel@HansenPartnership.com>
+         <20191004182216.GB6945@linux.intel.com>
+         <1570213491.3563.27.camel@HansenPartnership.com>
+         <20191004183342.y63qdvspojyf3m55@cantor>
+         <1570214574.3563.32.camel@HansenPartnership.com>
+         <20191004200728.xoj6jlgbhv57gepc@cantor>
+         <20191004201134.nuesk6hxtxajnxh2@cantor>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19100421-0008-0000-0000-0000031E1F1E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19100421-0009-0000-0000-00004A3D2BB9
-Message-Id: <1570226287.5046.114.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-04_13:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910040183
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-10-04 at 13:10 -0700, Lakshmi Ramasubramanian wrote:
-> On 10/4/19 12:57 PM, Mimi Zohar wrote:
-> 
+On Fri, 2019-10-04 at 13:11 -0700, Jerry Snitselaar wrote:
+> On Fri Oct 04 19, Jerry Snitselaar wrote:
+> > On Fri Oct 04 19, James Bottomley wrote:
+> > > On Fri, 2019-10-04 at 11:33 -0700, Jerry Snitselaar wrote:
+> > > > On Fri Oct 04 19, James Bottomley wrote:
+> > > > > On Fri, 2019-10-04 at 21:22 +0300, Jarkko Sakkinen wrote:
+> > > > > > On Thu, Oct 03, 2019 at 04:59:37PM -0700, James Bottomley
+> > > > > > wrote:
+> > > > > > > I think the principle of using multiple RNG sources for
+> > > > > > > strong keys is a sound one, so could I propose a
+> > > > > > > compromise:  We have a tpm subsystem random number
+> > > > > > > generator that, when asked for <n> random bytes first
+> > > > > > > extracts <n> bytes from the TPM RNG and places it into
+> > > > > > > the kernel entropy pool and then asks for <n> random
+> > > > > > > bytes from the kernel RNG? That way, it will always have
+> > > > > > > the entropy to satisfy the request and in the worst case,
+> > > > > > > where the kernel has picked up no other entropy sources
+> > > > > > > at all it will be equivalent to what we have now (single
+> > > > > > > entropy source) but usually it will be a much better
+> > > > > > > mixed entropy source.
+> > > > > > 
+> > > > > > I think we should rely the existing architecture where TPM
+> > > > > > is contributing to the entropy pool as hwrng.
+> > > > > 
+> > > > > That doesn't seem to work: when I trace what happens I see us
+> > > > > inject 32 bytes of entropy at boot time, but never again.  I
+> > > > > think the problem is the kernel entropy pool is push not pull
+> > > > > and we have no triggering event in the TPM to get us to
+> > > > > push.  I suppose we could set a timer to do this or perhaps
+> > > > > there is a pull hook and we haven't wired it up correctly?
+> > > > > 
+> > > > > James
+> > > > > 
+> > > > 
+> > > > Shouldn't hwrng_fillfn be pulling from it?
+> > > 
+> > > It should, but the problem seems to be it only polls the
+> > > "current" hw rng ... it doesn't seem to have a concept that there
+> > > may be more than one.  What happens, according to a brief reading
+> > > of the code, is when multiple are registered, it determines what
+> > > the "best" one is and then only pulls from that.  What I think it
+> > > should be doing is filling from all of them using the entropy
+> > > quality to adjust how many bits we get.
+> > > 
+> > > James
+> > > 
 > > 
-> > IMA is late because it is waiting for the TPM to be available.
->  >
-> > Another option would be to queue the measurements and then replay
-> > them once the TPM and IMA are available.
-> > 
-> > I'm not sure I like this approach any better.
+> > Most of them don't even set quality, including the tpm, so they end
+> > up at the end of the list. For the ones that do I'm not sure how
+> > they determined the value. For example virtio-rng sets quality to
+> > 1000.
 > 
-> I agree - I too don't like this approach (queue the measurements and 
-> then replay). Even in that approach IMA will have to invoke functions 
-> outside of IMA to retrieve the stored measurements.
+> I should have added that I like that idea though.
 
-The measurements could be added to an IMA pending measurement
-workqueue, until the TPM is enabled, assuming there is a TPM, and then
-processed.  All of this code would be within IMA.
+OK, so I looked at how others implement this.  It turns out there's
+only one other: the atheros rng and this is what it does:
 
-> 
-> I prefer gathering data on trusted keys in ima_init, but gate it by IMA 
-> policy and follow the other coding guidelines you have suggested earlier 
-> (similar to the approach taken for kexec_cmdline measurement).
+drivers/net/wireless/ath/ath9k/rng.c
 
-So your intention is only to measure the initial keys added to these
-keyrings, not anything subsequently added to the secondary keyring?
+so rather than redoing the entirety of the TPM rng like this, I thought
+it's easier to keep what we have (direct hwrng device) and plug our
+tpm_get_random() function into the kernel rng like the below.  
 
-> Please let me know if you agree - I can send the new patch set by next week.
+James
 
-Defining an LSM/IMA hook to measure keys, based on policy, seems
-cleaner and more useful.
+---
 
-Mimi
-
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 3d6d394a8661..0794521c0784 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -536,7 +536,7 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ {
+ 	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
+ 
+-	return tpm_get_random(chip, data, max);
++	return __tpm_get_random(chip, data, max);
+ }
+ 
+ static int tpm_add_hwrng(struct tpm_chip *chip)
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index d7a3888ad80f..14631cba000c 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -24,6 +24,7 @@
+ #include <linux/mutex.h>
+ #include <linux/spinlock.h>
+ #include <linux/freezer.h>
++#include <linux/random.h>
+ #include <linux/tpm_eventlog.h>
+ 
+ #include "tpm.h"
+@@ -424,15 +425,11 @@ int tpm_pm_resume(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(tpm_pm_resume);
+ 
+-/**
+- * tpm_get_random() - get random bytes from the TPM's RNG
+- * @chip:	a &struct tpm_chip instance, %NULL for the default chip
+- * @out:	destination buffer for the random bytes
+- * @max:	the max number of bytes to write to @out
+- *
+- * Return: number of random bytes read or a negative error value.
++/*
++ * Internal interface for tpm_get_random(): gets the random string
++ * directly from the TPM without mixing into the linux rng.
+  */
+-int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
++int __tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
+ {
+ 	int rc;
+ 
+@@ -451,6 +448,38 @@ int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
+ 	tpm_put_ops(chip);
+ 	return rc;
+ }
++
++/**
++ * tpm_get_random() - get random bytes influenced by the TPM's RNG
++ * @chip:	a &struct tpm_chip instance, %NULL for the default chip
++ * @out:	destination buffer for the random bytes
++ * @max:	the max number of bytes to write to @out
++ *
++ * Uses the TPM as a source of input to the kernel random number
++ * generator and then takes @max bytes directly from the kernel.  In
++ * the worst (no other entropy) case, this will return the pure TPM
++ * random number, but if the kernel RNG has any entropy at all it will
++ * return a mixed entropy output which doesn't rely on a single
++ * source.
++ *
++ * Return: number of random bytes read or a negative error value.
++ */
++int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
++{
++	int rc;
++
++	rc = __tpm_get_random(chip, out, max);
++	if (rc <= 0)
++		return rc;
++	/*
++	 * assume the TPM produces pure randomness, so the amount of
++	 * entropy is the number of bits returned
++	 */
++	add_hwgenerator_randomness(out, rc, rc * 8);
++	get_random_bytes(out, rc);
++
++	return rc;
++}
+ EXPORT_SYMBOL_GPL(tpm_get_random);
+ 
+ /**
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index a7fea3e0ca86..25f6b347b194 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -398,6 +398,7 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip);
+ unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+ int tpm_pm_suspend(struct device *dev);
+ int tpm_pm_resume(struct device *dev);
++int __tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
+ 
+ static inline void tpm_msleep(unsigned int delay_msec)
+ {
