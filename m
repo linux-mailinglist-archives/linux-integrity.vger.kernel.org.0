@@ -2,116 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 505D8CD202
-	for <lists+linux-integrity@lfdr.de>; Sun,  6 Oct 2019 15:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4016CD97A
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 00:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbfJFNSB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 6 Oct 2019 09:18:01 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:14304 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726060AbfJFNSB (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 6 Oct 2019 09:18:01 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x96DH9Ns137434
-        for <linux-integrity@vger.kernel.org>; Sun, 6 Oct 2019 09:18:00 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vf85ktj1m-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Sun, 06 Oct 2019 09:17:59 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Sun, 6 Oct 2019 14:17:57 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Sun, 6 Oct 2019 14:17:54 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x96DHrMb55508994
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 6 Oct 2019 13:17:53 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB5B911C04A;
-        Sun,  6 Oct 2019 13:17:53 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C73F11C058;
-        Sun,  6 Oct 2019 13:17:52 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.176.169])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun,  6 Oct 2019 13:17:52 +0000 (GMT)
-Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        jamorris@linux.microsoft.com, kgoldman@us.ibm.com,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Date:   Sun, 06 Oct 2019 09:17:51 -0400
-In-Reply-To: <382dfa7b-a5f9-01e3-0624-9ecd526557bb@linux.microsoft.com>
-References: <20190828002735.31025-1-nramas@linux.microsoft.com>
-         <1567041083.6115.133.camel@linux.ibm.com>
-         <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>
-         <1567190507.10024.134.camel@linux.ibm.com>
-         <2cd27f52-1029-bcea-c73b-7d3d002cf030@linux.microsoft.com>
-         <1568035881.4614.347.camel@linux.ibm.com> <20190919131851.GA8171@sasha-vm>
-         <1568913178.4733.89.camel@linux.ibm.com>
-         <1dfc7a83-3fcb-1356-958e-2afb7c6f1285@linux.microsoft.com>
-         <1570219032.5046.101.camel@linux.ibm.com>
-         <868f6b82-7b43-5e27-0738-f9d09e765c59@linux.microsoft.com>
-         <1570226287.5046.114.camel@linux.ibm.com>
-         <382dfa7b-a5f9-01e3-0624-9ecd526557bb@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19100613-0020-0000-0000-0000037584C6
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19100613-0021-0000-0000-000021CB986E
-Message-Id: <1570367871.5046.161.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-06_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=942 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910060134
+        id S1726227AbfJFWcg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 6 Oct 2019 18:32:36 -0400
+Received: from mga01.intel.com ([192.55.52.88]:52024 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726000AbfJFWcg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 6 Oct 2019 18:32:36 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Oct 2019 15:32:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,265,1566889200"; 
+   d="scan'208";a="204889687"
+Received: from dnlarsen-mobl4.amr.corp.intel.com (HELO localhost) ([10.252.3.159])
+  by orsmga002.jf.intel.com with ESMTP; 06 Oct 2019 15:32:30 -0700
+Date:   Mon, 7 Oct 2019 01:32:28 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Andrey Pronin <apronin@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v7 4/6] tpm: tpm_tis_spi: Support cr50 devices
+Message-ID: <20191006223228.GA8860@linux.intel.com>
+References: <20190920183240.181420-1-swboyd@chromium.org>
+ <20190920183240.181420-5-swboyd@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190920183240.181420-5-swboyd@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-10-04 at 17:10 -0700, Lakshmi Ramasubramanian wrote:
-> On 10/4/19 2:58 PM, Mimi Zohar wrote:
+On Fri, Sep 20, 2019 at 11:32:38AM -0700, Stephen Boyd wrote:
+> From: Andrey Pronin <apronin@chromium.org>
 > 
-> > The measurements could be added to an IMA pending measurement
-> > workqueue, until the TPM is enabled, assuming there is a TPM, and then
-> > processed.  All of this code would be within IMA.
+> Add TPM2.0 PTP FIFO compatible SPI interface for chips with Cr50
+> firmware. The firmware running on the currently supported H1 Secure
+> Microcontroller requires a special driver to handle its specifics:
 > 
-> Good point. I will look into this.
+>  - need to ensure a certain delay between SPI transactions, or else
+>    the chip may miss some part of the next transaction
+>  - if there is no SPI activity for some time, it may go to sleep,
+>    and needs to be waken up before sending further commands
+>  - access to vendor-specific registers
 > 
-> >> I prefer gathering data on trusted keys in ima_init, but gate it by IMA
-> >> policy and follow the other coding guidelines you have suggested earlier
-> >> (similar to the approach taken for kexec_cmdline measurement).
-> > 
-> > So your intention is only to measure the initial keys added to these
-> > keyrings, not anything subsequently added to the secondary keyring?
+> Cr50 firmware has a requirement to wait for the TPM to wakeup before
+> sending commands over the SPI bus. Otherwise, the firmware could be in
+> deep sleep and not respond. The method to wait for the device to wakeup
+> is slightly different than the usual flow control mechanism described in
+> the TCG SPI spec. Add a completion to tpm_tis_spi_transfer() before we
+> start a SPI transfer so we can keep track of the last time the TPM
+> driver accessed the SPI bus to support the flow control mechanism.
 > 
-> I am currently measuring only the initial keys. But I think including 
-> the ones added subsequently is a good idea.
+> Split the cr50 logic off into a different file to keep it out of the
+> normal code flow of the existing SPI driver while making it all part of
+> the same module when the code is optionally compiled into the same
+> module. Export a new function, tpm_tis_spi_init(), and the associated
+> read/write/transfer APIs so that we can do this. Make the cr50 code wrap
+> the tpm_tis_spi_phy struct with its own struct to override the behavior
+> of tpm_tis_spi_transfer() by supplying a custom flow control hook. This
+> shares the most code between the core driver and the cr50 support
+> without combining everything into the core driver or exporting module
+> symbols.
 > 
-> > Defining an LSM/IMA hook to measure keys, based on policy, seems
-> > cleaner and more useful.
-> 
-> I agree.
+> Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> Cc: Andrey Pronin <apronin@chromium.org>
+> Cc: Duncan Laurie <dlaurie@chromium.org>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Cc: Heiko Stuebner <heiko@sntech.de>
 
-As defining an early IMA workqueue and measuring keys are independent
-of each other, they should be posted, reviewed, and upstreamed as
-separate patch sets.
+First, I apologize for such a long latency (two weeks).
 
-Mimi
+I think this looks legit now.
 
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+
+/Jarkko
