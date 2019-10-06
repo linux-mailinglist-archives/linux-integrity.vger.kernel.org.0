@@ -2,84 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAF7CC6D7
-	for <lists+linux-integrity@lfdr.de>; Sat,  5 Oct 2019 02:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED7BCCD84
+	for <lists+linux-integrity@lfdr.de>; Sun,  6 Oct 2019 02:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbfJEAKN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Oct 2019 20:10:13 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:60686 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbfJEAKN (ORCPT
+        id S1726918AbfJFAjE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 5 Oct 2019 20:39:04 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54018 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726925AbfJFAjE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Oct 2019 20:10:13 -0400
-Received: from [10.200.157.26] (unknown [131.107.147.154])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D4D6B20B71C6;
-        Fri,  4 Oct 2019 17:10:11 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D4D6B20B71C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1570234212;
-        bh=Eu7eFGJUhL8ChQ4mjTx6uGUjkQqTb1IOoeXJFzGLPm0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=gr5GtEbBW3RUqCu0mPRMhAIoxKgdJ+F+J3nCG8ZqNKbCkknN1q6ZE1kmA2bIVhT7R
-         UbqBo+f62xZHfFlFFVhHq7BL/jFqkUWru4ZPQ6SvRNLWM4sPUw57IF1vfoSUDHeW93
-         hbbYqf0Wrsy4N9nNfzKQEXGh9pIM/X5E+mnWXZfE=
-Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
-To:     Mimi Zohar <zohar@linux.ibm.com>, Sasha Levin <sashal@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        jamorris@linux.microsoft.com, kgoldman@us.ibm.com,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20190828002735.31025-1-nramas@linux.microsoft.com>
- <1567041083.6115.133.camel@linux.ibm.com>
- <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>
- <1567190507.10024.134.camel@linux.ibm.com>
- <2cd27f52-1029-bcea-c73b-7d3d002cf030@linux.microsoft.com>
- <1568035881.4614.347.camel@linux.ibm.com> <20190919131851.GA8171@sasha-vm>
- <1568913178.4733.89.camel@linux.ibm.com>
- <1dfc7a83-3fcb-1356-958e-2afb7c6f1285@linux.microsoft.com>
- <1570219032.5046.101.camel@linux.ibm.com>
- <868f6b82-7b43-5e27-0738-f9d09e765c59@linux.microsoft.com>
- <1570226287.5046.114.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <382dfa7b-a5f9-01e3-0624-9ecd526557bb@linux.microsoft.com>
-Date:   Fri, 4 Oct 2019 17:10:11 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <1570226287.5046.114.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Sat, 5 Oct 2019 20:39:04 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x960aZdQ072104
+        for <linux-integrity@vger.kernel.org>; Sat, 5 Oct 2019 20:39:03 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vet8cmqce-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Sat, 05 Oct 2019 20:39:03 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Sun, 6 Oct 2019 01:39:00 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Sun, 6 Oct 2019 01:38:56 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x960ctYr57671800
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 6 Oct 2019 00:38:55 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 89019A4040;
+        Sun,  6 Oct 2019 00:38:55 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4502A404D;
+        Sun,  6 Oct 2019 00:38:53 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.134.152])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun,  6 Oct 2019 00:38:53 +0000 (GMT)
+Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Safford <david.safford@ge.com>,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Sat, 05 Oct 2019 20:38:53 -0400
+In-Reply-To: <1570227068.17537.4.camel@HansenPartnership.com>
+References: <1570128827.5046.19.camel@linux.ibm.com>
+         <20191003215125.GA30511@linux.intel.com>
+         <20191003215743.GB30511@linux.intel.com>
+         <1570140491.5046.33.camel@linux.ibm.com>
+         <1570147177.10818.11.camel@HansenPartnership.com>
+         <20191004182216.GB6945@linux.intel.com>
+         <1570213491.3563.27.camel@HansenPartnership.com>
+         <20191004183342.y63qdvspojyf3m55@cantor>
+         <1570214574.3563.32.camel@HansenPartnership.com>
+         <20191004200728.xoj6jlgbhv57gepc@cantor>
+         <20191004201134.nuesk6hxtxajnxh2@cantor>
+         <1570227068.17537.4.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19100600-0012-0000-0000-0000035467BF
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19100600-0013-0000-0000-0000218F7549
+Message-Id: <1570322333.5046.145.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-05_14:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910060003
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 10/4/19 2:58 PM, Mimi Zohar wrote:
+On Fri, 2019-10-04 at 15:11 -0700, James Bottomley wrote:
 
-> The measurements could be added to an IMA pending measurement
-> workqueue, until the TPM is enabled, assuming there is a TPM, and then
-> processed.  All of this code would be within IMA.
+> +
+> +/**
+> + * tpm_get_random() - get random bytes influenced by the TPM's RNG
+> + * @chip:	a &struct tpm_chip instance, %NULL for the default chip
+> + * @out:	destination buffer for the random bytes
+> + * @max:	the max number of bytes to write to @out
+> + *
+> + * Uses the TPM as a source of input to the kernel random number
+> + * generator and then takes @max bytes directly from the kernel.  In
+> + * the worst (no other entropy) case, this will return the pure TPM
+> + * random number, but if the kernel RNG has any entropy at all it will
+> + * return a mixed entropy output which doesn't rely on a single
+> + * source.
+> + *
+> + * Return: number of random bytes read or a negative error value.
+> + */
+> +int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
+> +{
+> +	int rc;
+> +
+> +	rc = __tpm_get_random(chip, out, max);
+> +	if (rc <= 0)
+> +		return rc;
+> +	/*
+> +	 * assume the TPM produces pure randomness, so the amount of
+> +	 * entropy is the number of bits returned
+> +	 */
+> +	add_hwgenerator_randomness(out, rc, rc * 8);
+> +	get_random_bytes(out, rc);
 
-Good point. I will look into this.
+Using the TPM as a source of input to the kernel random number
+generator is fine, but please don't change the meaning of trusted
+keys.  The trusted-encrypted keys documentation clearly states
+"Trusted Keys use a TPM both to generate and to seal the keys."
 
->> I prefer gathering data on trusted keys in ima_init, but gate it by IMA
->> policy and follow the other coding guidelines you have suggested earlier
->> (similar to the approach taken for kexec_cmdline measurement).
-> 
-> So your intention is only to measure the initial keys added to these
-> keyrings, not anything subsequently added to the secondary keyring?
+If you really want to use a different random number source instead of
+the TPM, then define a new trusted key option (eg. rng=kernel), with
+the default being the TPM.
 
-I am currently measuring only the initial keys. But I think including 
-the ones added subsequently is a good idea.
+Mimi
 
-> Defining an LSM/IMA hook to measure keys, based on policy, seems
-> cleaner and more useful.
 
-I agree.
-
-thanks,
-  -lakshmi
+> +
+> +	return rc;
+> +}
+>  EXPORT_SYMBOL_GPL(tpm_get_random);
 
