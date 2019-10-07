@@ -2,32 +2,32 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A236ACD9C1
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 01:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA4BCD9D2
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 02:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbfJFXwq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 6 Oct 2019 19:52:46 -0400
-Received: from mga14.intel.com ([192.55.52.115]:3412 "EHLO mga14.intel.com"
+        id S1726559AbfJGAF3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 6 Oct 2019 20:05:29 -0400
+Received: from mga12.intel.com ([192.55.52.136]:28126 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726741AbfJFXwp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 6 Oct 2019 19:52:45 -0400
+        id S1726269AbfJGAF3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 6 Oct 2019 20:05:29 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Oct 2019 16:52:44 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Oct 2019 17:05:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,265,1566889200"; 
-   d="scan'208";a="204901648"
+   d="scan'208";a="204904213"
 Received: from mwebb1-mobl.ger.corp.intel.com (HELO localhost) ([10.251.93.103])
-  by orsmga002.jf.intel.com with ESMTP; 06 Oct 2019 16:52:38 -0700
-Date:   Mon, 7 Oct 2019 02:52:38 +0300
+  by orsmga002.jf.intel.com with ESMTP; 06 Oct 2019 17:05:22 -0700
+Date:   Mon, 7 Oct 2019 03:05:20 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        David Safford <david.safford@ge.com>,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+To:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
         David Howells <dhowells@redhat.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
@@ -35,22 +35,20 @@ Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
-Message-ID: <20191006235238.GA16641@linux.intel.com>
-References: <1570140491.5046.33.camel@linux.ibm.com>
- <1570147177.10818.11.camel@HansenPartnership.com>
- <20191004182216.GB6945@linux.intel.com>
- <1570213491.3563.27.camel@HansenPartnership.com>
- <20191004183342.y63qdvspojyf3m55@cantor>
- <1570214574.3563.32.camel@HansenPartnership.com>
- <20191004200728.xoj6jlgbhv57gepc@cantor>
- <20191004201134.nuesk6hxtxajnxh2@cantor>
- <1570227068.17537.4.camel@HansenPartnership.com>
- <1570322333.5046.145.camel@linux.ibm.com>
+Message-ID: <20191007000520.GA17116@linux.intel.com>
+References: <20190926171601.30404-1-jarkko.sakkinen@linux.intel.com>
+ <1570024819.4999.119.camel@linux.ibm.com>
+ <20191003114119.GF8933@linux.intel.com>
+ <1570107752.4421.183.camel@linux.ibm.com>
+ <20191003175854.GB19679@linux.intel.com>
+ <1570128827.5046.19.camel@linux.ibm.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A22E@ALPMBAPA12.e2k.ad.ge.com>
+ <20191004182711.GC6945@linux.intel.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1570322333.5046.145.camel@linux.ibm.com>
+In-Reply-To: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -58,55 +56,40 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Oct 05, 2019 at 08:38:53PM -0400, Mimi Zohar wrote:
-> On Fri, 2019-10-04 at 15:11 -0700, James Bottomley wrote:
+On Fri, Oct 04, 2019 at 07:56:01PM +0000, Safford, David (GE Global Research, US) wrote:
 > 
-> > +
-> > +/**
-> > + * tpm_get_random() - get random bytes influenced by the TPM's RNG
-> > + * @chip:	a &struct tpm_chip instance, %NULL for the default chip
-> > + * @out:	destination buffer for the random bytes
-> > + * @max:	the max number of bytes to write to @out
-> > + *
-> > + * Uses the TPM as a source of input to the kernel random number
-> > + * generator and then takes @max bytes directly from the kernel.  In
-> > + * the worst (no other entropy) case, this will return the pure TPM
-> > + * random number, but if the kernel RNG has any entropy at all it will
-> > + * return a mixed entropy output which doesn't rely on a single
-> > + * source.
-> > + *
-> > + * Return: number of random bytes read or a negative error value.
-> > + */
-> > +int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
-> > +{
-> > +	int rc;
-> > +
-> > +	rc = __tpm_get_random(chip, out, max);
-> > +	if (rc <= 0)
-> > +		return rc;
-> > +	/*
-> > +	 * assume the TPM produces pure randomness, so the amount of
-> > +	 * entropy is the number of bits returned
-> > +	 */
-> > +	add_hwgenerator_randomness(out, rc, rc * 8);
-> > +	get_random_bytes(out, rc);
+> > From: linux-integrity-owner@vger.kernel.org <linux-integrity-
+> > owner@vger.kernel.org> On Behalf Of Jarkko Sakkinen
+> > Sent: Friday, October 4, 2019 2:27 PM
+> > Subject: EXT: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+> > 
+> > If you are able to call tpm_get_random(), the driver has already registered
+> > TPN as hwrng. With this solution you fail to follow the principle of defense in
+> > depth. If the TPM random number generator is compromissed (has a bug)
+> > using the entropy pool will decrease the collateral damage.
 > 
-> Using the TPM as a source of input to the kernel random number
-> generator is fine, but please don't change the meaning of trusted
-> keys.  The trusted-encrypted keys documentation clearly states
-> "Trusted Keys use a TPM both to generate and to seal the keys."
-> 
-> If you really want to use a different random number source instead of
-> the TPM, then define a new trusted key option (eg. rng=kernel), with
-> the default being the TPM.
+> And if the entropy pool has a bug or is misconfigured, you lose everything.
+> That does not sound like defense in depth to me. In the real world
+> I am not aware of a single instance of RNG vulnerability on a TPM.
+> I am directly aware of several published vulnerabilities in embedded systems 
+> due to a badly ported version of the kernel random pool. In addition, 
+> the random generator in a TPM is hardware isolated, and less likely to be
+> vulnerable to side channel or memory manipulation errors. The TPM
+> RNG is typically FIPS certified.  The use of the TPM RNG was a deliberate
+> design choice in trusted keys.
 
-I'll add a patch that updates the documentation because it is clearly
-not a good practice to use TPM to generate keys that are not keys
-residing inside the TPM.
+Hmm... so is RDRAND opcode FIPS certified.
 
-With TEE coming in, TPM is not the only hardware measure anymore sealing
-the keys and we don't want a mess where every hardware asset does their
-own proprietary key generation. The proprietary technology should only
-take care of the sealing part.
+Kernel has the random number generator for two reasons:
+
+1. To protect against bugs in hwrng's.
+2. To protect against deliberate backdoors in hwrng's.
+
+How TPM RNG is guaranteed to protect against both 1 and 2?
+
+If I would agree what you say, that'd be argument against using kernel
+random number generator *anywhere* in the kernel. Even with the entropy
+issues it is least worst thing to use for key generations for better
+or worse.
 
 /Jarkko
