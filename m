@@ -2,119 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F6DCE60E
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 16:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B08FCE655
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 17:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728552AbfJGOwA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Oct 2019 10:52:00 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:44247 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728019AbfJGOt0 (ORCPT
+        id S1727830AbfJGPDQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Oct 2019 11:03:16 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:50330 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727490AbfJGPDQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Oct 2019 10:49:26 -0400
-Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tip-bot2@linutronix.de>)
-        id 1iHUJz-0005pe-PH; Mon, 07 Oct 2019 16:49:11 +0200
-Received: from [127.0.1.1] (localhost [IPv6:::1])
-        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id 3A4A61C032F;
-        Mon,  7 Oct 2019 16:49:10 +0200 (CEST)
-Date:   Mon, 07 Oct 2019 14:49:10 -0000
-From:   "tip-bot2 for Lukas Wunner" <tip-bot2@linutronix.de>
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: efi/urgent] efi/cper: Fix endianness of PCIe class code
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        Dave Young <dyoung@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lyude Paul <lyude@redhat.com>,
+        Mon, 7 Oct 2019 11:03:16 -0400
+Received: from [10.200.157.26] (unknown [131.107.147.154])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0176020B71C6;
+        Mon,  7 Oct 2019 08:03:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0176020B71C6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1570460596;
+        bh=3UNgHczRc93rsHEBArN7oW1VK8U/knTQGdJtQ9X0udk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=kjT52YlScVFZYoE2Jg9J3Sa38C1SOIOiTuNbARiN3aNA1TJ22TbyY5Yqr2EY6PaGd
+         T8S7ABB/YXQJQrhIHtSqpFkFQTrcLhhh8FMT3h0i/1KnuMzvCCdBGOKQOON013kfHH
+         UDc99R7Zb2tsMesEZwzf/JP/FIq6padDavFilI+U=
+Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
+To:     Mimi Zohar <zohar@linux.ibm.com>, Sasha Levin <sashal@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
         Matthew Garrett <mjg59@google.com>,
-        Octavian Purdila <octavian.purdila@intel.com>,
-        Peter Jones <pjones@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Scott Talbert <swt@techie.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20191002165904.8819-2-ard.biesheuvel@linaro.org>
-References: <20191002165904.8819-2-ard.biesheuvel@linaro.org>
+        jamorris@linux.microsoft.com, kgoldman@us.ibm.com,
+        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <20190828002735.31025-1-nramas@linux.microsoft.com>
+ <1567041083.6115.133.camel@linux.ibm.com>
+ <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>
+ <1567190507.10024.134.camel@linux.ibm.com>
+ <2cd27f52-1029-bcea-c73b-7d3d002cf030@linux.microsoft.com>
+ <1568035881.4614.347.camel@linux.ibm.com> <20190919131851.GA8171@sasha-vm>
+ <1568913178.4733.89.camel@linux.ibm.com>
+ <1dfc7a83-3fcb-1356-958e-2afb7c6f1285@linux.microsoft.com>
+ <1570219032.5046.101.camel@linux.ibm.com>
+ <868f6b82-7b43-5e27-0738-f9d09e765c59@linux.microsoft.com>
+ <1570226287.5046.114.camel@linux.ibm.com>
+ <382dfa7b-a5f9-01e3-0624-9ecd526557bb@linux.microsoft.com>
+ <1570367871.5046.161.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <59a7386d-5cb6-110a-7261-072f9c2c80a8@linux.microsoft.com>
+Date:   Mon, 7 Oct 2019 08:03:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Message-ID: <157045975018.9978.3816747773596306843.tip-bot2@tip-bot2>
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <1570367871.5046.161.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The following commit has been merged into the efi/urgent branch of tip:
+On 10/6/19 6:17 AM, Mimi Zohar wrote:
 
-Commit-ID:     6fb9367a15d1a126d222d738b2702c7958594a5f
-Gitweb:        https://git.kernel.org/tip/6fb9367a15d1a126d222d738b2702c7958594a5f
-Author:        Lukas Wunner <lukas@wunner.de>
-AuthorDate:    Wed, 02 Oct 2019 18:58:58 +02:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Mon, 07 Oct 2019 15:24:35 +02:00
+> As defining an early IMA workqueue and measuring keys are independent
+> of each other, they should be posted, reviewed, and upstreamed as
+> separate patch sets.
+> 
+> Mimi
+> 
 
-efi/cper: Fix endianness of PCIe class code
+Yes - I'll create separate patch sets for those changes.
 
-The CPER parser assumes that the class code is big endian, but at least
-on this edk2-derived Intel Purley platform it's little endian:
+thanks,
+  -lakshmi
 
-    efi: EFI v2.50 by EDK II BIOS ID:PLYDCRB1.86B.0119.R05.1701181843
-    DMI: Intel Corporation PURLEY/PURLEY, BIOS PLYDCRB1.86B.0119.R05.1701181843 01/18/2017
 
-    {1}[Hardware Error]:   device_id: 0000:5d:00.0
-    {1}[Hardware Error]:   slot: 0
-    {1}[Hardware Error]:   secondary_bus: 0x5e
-    {1}[Hardware Error]:   vendor_id: 0x8086, device_id: 0x2030
-    {1}[Hardware Error]:   class_code: 000406
-                                       ^^^^^^ (should be 060400)
-
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Signed-off-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc: Ben Dooks <ben.dooks@codethink.co.uk>
-Cc: Dave Young <dyoung@redhat.com>
-Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc: Jerry Snitselaar <jsnitsel@redhat.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Matthew Garrett <mjg59@google.com>
-Cc: Octavian Purdila <octavian.purdila@intel.com>
-Cc: Peter Jones <pjones@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Scott Talbert <swt@techie.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-efi@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-Link: https://lkml.kernel.org/r/20191002165904.8819-2-ard.biesheuvel@linaro.org
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
----
- drivers/firmware/efi/cper.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
-index addf074..b1af0de 100644
---- a/drivers/firmware/efi/cper.c
-+++ b/drivers/firmware/efi/cper.c
-@@ -381,7 +381,7 @@ static void cper_print_pcie(const char *pfx, const struct cper_sec_pcie *pcie,
- 		printk("%s""vendor_id: 0x%04x, device_id: 0x%04x\n", pfx,
- 		       pcie->device_id.vendor_id, pcie->device_id.device_id);
- 		p = pcie->device_id.class_code;
--		printk("%s""class_code: %02x%02x%02x\n", pfx, p[0], p[1], p[2]);
-+		printk("%s""class_code: %02x%02x%02x\n", pfx, p[2], p[1], p[0]);
- 	}
- 	if (pcie->validation_bits & CPER_PCIE_VALID_SERIAL_NUMBER)
- 		printk("%s""serial number: 0x%04x, 0x%04x\n", pfx,
