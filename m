@@ -2,313 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4970CEC56
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 21:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F558CEC82
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 21:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729294AbfJGS7y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Oct 2019 14:59:54 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:53558 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729239AbfJGS7x (ORCPT
+        id S1728352AbfJGTMe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Oct 2019 15:12:34 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57022 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728116AbfJGTMe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Oct 2019 14:59:53 -0400
-Received: from prsriva-Precision-Tower-5810.corp.microsoft.com (unknown [167.220.2.18])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D7B6220B711B;
-        Mon,  7 Oct 2019 11:59:51 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D7B6220B711B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1570474792;
-        bh=7P5k7YwpHfvQvOjglsK2XRSZ86bDHXhQgf/q8X1TJq0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OFWRzwr8tBCMr/rCIT2e2II20clCP9B1Wp2tHRsfCyKFjNPf++iIAK2IluBsEn+HR
-         MqakxTVSoZfLL/etUtFoN/hcrGAFv4mvrjT3OAUuuqQW3qxiNMYHsOOR7A6oLf4337
-         b2BcCk67JgdSFbD+UiG03p1O2iqs/oPz7/9ajTmo=
-From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Cc:     arnd@arndb.de, jean-philippe@linaro.org, allison@lohutok.net,
-        kristina.martsenko@arm.org, yamada.masahiro@socionext.com,
-        duwe@lst.de, mark.rutland@arm.com, tglx@linutronix.de,
-        takahiro.akashi@linaro.org, james.morse@arm.org,
-        catalin.marinas@arm.com, sboyd@kernel.org, bauerman@linux.ibm.com,
-        zohar@linux.ibm.com
-Subject: [PATCH v2 2/2] update powerpc implementation to call into of_ima*
-Date:   Mon,  7 Oct 2019 11:59:43 -0700
-Message-Id: <20191007185943.1828-3-prsriva@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191007185943.1828-1-prsriva@linux.microsoft.com>
-References: <20191007185943.1828-1-prsriva@linux.microsoft.com>
+        Mon, 7 Oct 2019 15:12:34 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x97J7IE0052493;
+        Mon, 7 Oct 2019 15:12:22 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2vg8jbdx8a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Oct 2019 15:12:22 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x97J7TjD053309;
+        Mon, 7 Oct 2019 15:12:21 -0400
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2vg8jbdx7q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Oct 2019 15:12:21 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x97JA5jg004030;
+        Mon, 7 Oct 2019 19:12:21 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma02dal.us.ibm.com with ESMTP id 2vejt6r9yx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Oct 2019 19:12:20 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x97JCHsF60162346
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Oct 2019 19:12:19 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6AC33136252;
+        Mon,  7 Oct 2019 19:12:15 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ACD66136272;
+        Mon,  7 Oct 2019 19:12:10 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.184.117])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Oct 2019 19:12:10 +0000 (GMT)
+Message-ID: <1570475528.4242.2.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 1/2] tpm: Use GFP_KERNEL for allocating struct tpm_buf
+From:   James Bottomley <jejb@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Mon, 07 Oct 2019 12:12:08 -0700
+In-Reply-To: <20191006095005.GA7660@linux.intel.com>
+References: <20191003185103.26347-1-jarkko.sakkinen@linux.intel.com>
+         <20191003185103.26347-2-jarkko.sakkinen@linux.intel.com>
+         <1570148716.10818.19.camel@linux.ibm.com>
+         <20191006095005.GA7660@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-07_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=997 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910070165
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-update powerpc ima buffer pass implementationt to call into
-of_ima* for a cross architecture support.
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH] tpm: use GFP kernel for tpm_buf allocations
 
-Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+The current code uses GFP_HIGHMEM, which is wrong because GFP_HIGHMEM
+(on 32 bit systems) is memory ordinarily inaccessible to the kernel
+and should only be used for allocations affecting userspace.  In order
+to make highmem visible to the kernel on 32 bit it has to be kmapped,
+which consumes valuable entries in the kmap region.  Since the tpm_buf
+is only ever used in the kernel, switch to using a GFP_KERNEL
+allocation so as not to waste kmap space on 32 bits.
+
+Fixes: a74f8b36352e (tpm: introduce tpm_buf)
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
- arch/powerpc/include/asm/ima.h  |   6 --
- arch/powerpc/kernel/Makefile    |   8 +-
- arch/powerpc/kernel/ima_kexec.c | 170 +++-----------------------------
- 3 files changed, 16 insertions(+), 168 deletions(-)
+ drivers/char/tpm/tpm.h | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/ima.h b/arch/powerpc/include/asm/ima.h
-index ead488cf3981..5ecff8896eed 100644
---- a/arch/powerpc/include/asm/ima.h
-+++ b/arch/powerpc/include/asm/ima.h
-@@ -6,12 +6,7 @@ struct kimage;
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index a7fea3e0ca86..b4f1cbf344b6 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -284,7 +284,6 @@ enum tpm_buf_flags {
+ };
  
- int ima_get_kexec_buffer(void **addr, size_t *size);
- int ima_free_kexec_buffer(void);
--
--#ifdef CONFIG_IMA
- void remove_ima_buffer(void *fdt, int chosen_node);
--#else
--static inline void remove_ima_buffer(void *fdt, int chosen_node) {}
--#endif
+ struct tpm_buf {
+-	struct page *data_page;
+ 	unsigned int flags;
+ 	u8 *data;
+ };
+@@ -300,20 +299,18 @@ static inline void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
  
- #ifdef CONFIG_IMA_KEXEC
- int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
-@@ -26,5 +21,4 @@ static inline int setup_ima_buffer(const struct kimage *image, void *fdt,
- 	return 0;
- }
- #endif /* CONFIG_IMA_KEXEC */
--
- #endif /* _ASM_POWERPC_IMA_H */
-diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-index 56dfa7a2a6f2..6a3d8fd6f1df 100644
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -126,12 +126,8 @@ obj-$(CONFIG_PCI)		+= pci_$(BITS).o $(pci64-y) \
- obj-$(CONFIG_PCI_MSI)		+= msi.o
- obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o crash.o \
- 				   machine_kexec_$(BITS).o
--obj-$(CONFIG_KEXEC_FILE)	+= machine_kexec_file_$(BITS).o kexec_elf_$(BITS).o
--ifdef CONFIG_HAVE_IMA_KEXEC
--ifdef CONFIG_IMA
--obj-y				+= ima_kexec.o
--endif
--endif
-+obj-$(CONFIG_KEXEC_FILE)	+= machine_kexec_file_$(BITS).o kexec_elf_$(BITS).o \
-+				   ima_kexec.o
- 
- obj-$(CONFIG_AUDIT)		+= audit.o
- obj64-$(CONFIG_AUDIT)		+= compat_audit.o
-diff --git a/arch/powerpc/kernel/ima_kexec.c b/arch/powerpc/kernel/ima_kexec.c
-index 720e50e490b6..41f52297de0c 100644
---- a/arch/powerpc/kernel/ima_kexec.c
-+++ b/arch/powerpc/kernel/ima_kexec.c
-@@ -6,45 +6,21 @@
-  * Thiago Jung Bauermann <bauerman@linux.vnet.ibm.com>
-  */
- 
--#include <linux/slab.h>
- #include <linux/kexec.h>
- #include <linux/of.h>
--#include <linux/memblock.h>
--#include <linux/libfdt.h>
- 
--static int get_addr_size_cells(int *addr_cells, int *size_cells)
-+/**
-+ * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
-+ *
-+ * The IMA measurement buffer is of no use to a subsequent kernel, so we always
-+ * remove it from the device tree.
-+ */
-+void remove_ima_buffer(void *fdt, int chosen_node)
+ static inline int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
  {
--	struct device_node *root;
--
--	root = of_find_node_by_path("/");
--	if (!root)
--		return -EINVAL;
--
--	*addr_cells = of_n_addr_cells(root);
--	*size_cells = of_n_size_cells(root);
--
--	of_node_put(root);
--
--	return 0;
-+	fdt_remove_ima_buffer(fdt, chosen_node);
-+	return;
- }
+-	buf->data_page = alloc_page(GFP_HIGHUSER);
+-	if (!buf->data_page)
++	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
++	if (!buf->data)
+ 		return -ENOMEM;
  
--static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
--			       size_t *size)
--{
--	int ret, addr_cells, size_cells;
--
--	ret = get_addr_size_cells(&addr_cells, &size_cells);
--	if (ret)
--		return ret;
--
--	if (len < 4 * (addr_cells + size_cells))
--		return -ENOENT;
--
--	*addr = of_read_number(prop, addr_cells);
--	*size = of_read_number(prop + 4 * addr_cells, size_cells);
--
--	return 0;
--}
- 
- /**
-  * ima_get_kexec_buffer - get IMA buffer from the previous kernel
-@@ -55,23 +31,7 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
-  */
- int ima_get_kexec_buffer(void **addr, size_t *size)
- {
--	int ret, len;
--	unsigned long tmp_addr;
--	size_t tmp_size;
--	const void *prop;
--
--	prop = of_get_property(of_chosen, "linux,ima-kexec-buffer", &len);
--	if (!prop)
--		return -ENOENT;
--
--	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
--	if (ret)
--		return ret;
--
--	*addr = __va(tmp_addr);
--	*size = tmp_size;
--
--	return 0;
-+	return of_get_ima_buffer(addr, size);
- }
- 
- /**
-@@ -79,52 +39,7 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
-  */
- int ima_free_kexec_buffer(void)
- {
--	int ret;
--	unsigned long addr;
--	size_t size;
--	struct property *prop;
--
--	prop = of_find_property(of_chosen, "linux,ima-kexec-buffer", NULL);
--	if (!prop)
--		return -ENOENT;
--
--	ret = do_get_kexec_buffer(prop->value, prop->length, &addr, &size);
--	if (ret)
--		return ret;
--
--	ret = of_remove_property(of_chosen, prop);
--	if (ret)
--		return ret;
--
--	return memblock_free(addr, size);
--
--}
--
--/**
-- * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
-- *
-- * The IMA measurement buffer is of no use to a subsequent kernel, so we always
-- * remove it from the device tree.
-- */
--void remove_ima_buffer(void *fdt, int chosen_node)
--{
--	int ret, len;
--	unsigned long addr;
--	size_t size;
--	const void *prop;
--
--	prop = fdt_getprop(fdt, chosen_node, "linux,ima-kexec-buffer", &len);
--	if (!prop)
--		return;
--
--	ret = do_get_kexec_buffer(prop, len, &addr, &size);
--	fdt_delprop(fdt, chosen_node, "linux,ima-kexec-buffer");
--	if (ret)
--		return;
--
--	ret = delete_fdt_mem_rsv(fdt, addr, size);
--	if (!ret)
--		pr_debug("Removed old IMA buffer reservation.\n");
-+	return of_remove_ima_buffer();
- }
- 
- #ifdef CONFIG_IMA_KEXEC
-@@ -145,27 +60,6 @@ int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
+ 	buf->flags = 0;
+-	buf->data = kmap(buf->data_page);
+ 	tpm_buf_reset(buf, tag, ordinal);
  	return 0;
  }
  
--static int write_number(void *p, u64 value, int cells)
--{
--	if (cells == 1) {
--		u32 tmp;
--
--		if (value > U32_MAX)
--			return -EINVAL;
--
--		tmp = cpu_to_be32(value);
--		memcpy(p, &tmp, sizeof(tmp));
--	} else if (cells == 2) {
--		u64 tmp;
--
--		tmp = cpu_to_be64(value);
--		memcpy(p, &tmp, sizeof(tmp));
--	} else
--		return -EINVAL;
--
--	return 0;
--}
--
- /**
-  * setup_ima_buffer - add IMA buffer information to the fdt
-  * @image:		kexec image being loaded.
-@@ -176,44 +70,8 @@ static int write_number(void *p, u64 value, int cells)
-  */
- int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node)
+ static inline void tpm_buf_destroy(struct tpm_buf *buf)
  {
--	int ret, addr_cells, size_cells, entry_size;
--	u8 value[16];
--
--	remove_ima_buffer(fdt, chosen_node);
--	if (!image->arch.ima_buffer_size)
--		return 0;
--
--	ret = get_addr_size_cells(&addr_cells, &size_cells);
--	if (ret)
--		return ret;
--
--	entry_size = 4 * (addr_cells + size_cells);
--
--	if (entry_size > sizeof(value))
--		return -EINVAL;
--
--	ret = write_number(value, image->arch.ima_buffer_addr, addr_cells);
--	if (ret)
--		return ret;
--
--	ret = write_number(value + 4 * addr_cells, image->arch.ima_buffer_size,
--			   size_cells);
--	if (ret)
--		return ret;
--
--	ret = fdt_setprop(fdt, chosen_node, "linux,ima-kexec-buffer", value,
--			  entry_size);
--	if (ret < 0)
--		return -EINVAL;
--
--	ret = fdt_add_mem_rsv(fdt, image->arch.ima_buffer_addr,
--			      image->arch.ima_buffer_size);
--	if (ret)
--		return -EINVAL;
--
--	pr_debug("IMA buffer at 0x%llx, size = 0x%zx\n",
--		 image->arch.ima_buffer_addr, image->arch.ima_buffer_size);
--
--	return 0;
-+	return fdt_setup_ima_buffer(image->arch.ima_buffer_addr,
-+				    image->arch.ima_buffer_size,
-+				    fdt, chosen_node);
+-	kunmap(buf->data_page);
+-	__free_page(buf->data_page);
++	free_page(buf->data);
  }
- #endif /* CONFIG_IMA_KEXEC */
+ 
+ static inline u32 tpm_buf_length(struct tpm_buf *buf)
 -- 
-2.17.1
+2.16.4
 
