@@ -2,102 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFC1CEB74
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 20:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F5FCEC54
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 21:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728212AbfJGSIb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Oct 2019 14:08:31 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43082 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728031AbfJGSI1 (ORCPT
+        id S1729244AbfJGS7w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Oct 2019 14:59:52 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:53512 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728723AbfJGS7w (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Oct 2019 14:08:27 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x97I2h80144010
-        for <linux-integrity@vger.kernel.org>; Mon, 7 Oct 2019 14:08:26 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vg9gr9x3n-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 07 Oct 2019 14:08:25 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 7 Oct 2019 19:08:23 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 7 Oct 2019 19:08:19 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x97I8Idm54394928
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Oct 2019 18:08:18 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14DF711C05C;
-        Mon,  7 Oct 2019 18:08:18 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C533A11C04C;
-        Mon,  7 Oct 2019 18:08:16 +0000 (GMT)
-Received: from dhcp-9-31-103-196.watson.ibm.com (unknown [9.31.103.196])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Oct 2019 18:08:16 +0000 (GMT)
-Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        David Safford <david.safford@ge.com>,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Mon, 07 Oct 2019 14:08:15 -0400
-In-Reply-To: <20191006235238.GA16641@linux.intel.com>
-References: <1570140491.5046.33.camel@linux.ibm.com>
-         <1570147177.10818.11.camel@HansenPartnership.com>
-         <20191004182216.GB6945@linux.intel.com>
-         <1570213491.3563.27.camel@HansenPartnership.com>
-         <20191004183342.y63qdvspojyf3m55@cantor>
-         <1570214574.3563.32.camel@HansenPartnership.com>
-         <20191004200728.xoj6jlgbhv57gepc@cantor>
-         <20191004201134.nuesk6hxtxajnxh2@cantor>
-         <1570227068.17537.4.camel@HansenPartnership.com>
-         <1570322333.5046.145.camel@linux.ibm.com>
-         <20191006235238.GA16641@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19100718-4275-0000-0000-0000036EEB6D
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19100718-4276-0000-0000-00003881FA7D
-Message-Id: <1570471695.5046.186.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-07_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=686 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910070161
+        Mon, 7 Oct 2019 14:59:52 -0400
+Received: from prsriva-Precision-Tower-5810.corp.microsoft.com (unknown [167.220.2.18])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 69A6F20B71C6;
+        Mon,  7 Oct 2019 11:59:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 69A6F20B71C6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1570474791;
+        bh=i1YNYZkRfCpA/p84XvJ1BSmi0vYuNO3vasWc16x7h5w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bUMg9NWEr+pp4M2o41A1e1I9U30OnGMtJhnx5DLEgLo6Kvcv/b5OkxyhB8aSgkInp
+         eo2PjiRS6TrrYXd3ZUOJxHABmgq4nnQkVVg08ZYCrpoXmkqPAB1v5xw2pQTroT4DmQ
+         EHeXmaECc+Lvvmabg74le1t8VtAaamTGop/Rkdpw=
+From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Cc:     arnd@arndb.de, jean-philippe@linaro.org, allison@lohutok.net,
+        kristina.martsenko@arm.org, yamada.masahiro@socionext.com,
+        duwe@lst.de, mark.rutland@arm.com, tglx@linutronix.de,
+        takahiro.akashi@linaro.org, james.morse@arm.org,
+        catalin.marinas@arm.com, sboyd@kernel.org, bauerman@linux.ibm.com,
+        zohar@linux.ibm.com
+Subject: [PATCH v2 0/2] Add support to carry ima measurement log in kexec_file_load
+Date:   Mon,  7 Oct 2019 11:59:41 -0700
+Message-Id: <20191007185943.1828-1-prsriva@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-10-07 at 02:52 +0300, Jarkko Sakkinen wrote:
-> 
-> With TEE coming in, TPM is not the only hardware measure anymore sealing
-> the keys and we don't want a mess where every hardware asset does their
-> own proprietary key generation. The proprietary technology should only
-> take care of the sealing part.
+Add support to carry ima measurement log
+to the next kexec'ed session triggered via kexec_file_load.
+- Top of Linux 5.3-rc6
 
-I'm fine with the concept of "trusted" keys being extended beyond just
-TPM.  But just as the VFS layer defines a set of callbacks and generic
-functions, which can be used in lieu of file system specific callback
-functions, a similar approach could be used here.
+Currently during kexec the kernel file signatures are/can be validated
+prior to actual load, the information(PE/ima signature) is not carried
+to the next session. This lead to loss of information.
 
-Mimi
+Carrying forward the ima measurement log to the next kexec'ed session 
+allows a verifying party to get the entire runtime event log since the
+last full reboot, since that is when PCRs were last reset.
+
+Tested for arm64 qemu and real hardware.
+
+I have not been unable to test the patch for powerpc 64bit. Any testing
+is greatly appretiated.
+
+TODO: Add support for 32 bit in the of_ima.c
+
+Changelog:
+
+v2:
+  - move common code to drivers/of/of_ima.c.
+  - point arm64 to use of_ima implementation.
+  - point powerpc to use of_ima implementation
+
+v1:
+  - add new fdt porperties to mark start and end for ima measurement
+    log.
+  - use fdt_* functions to add/remove fdt properties and memory
+    allocations.
+  - remove additional check for endian-ness as they are checked
+    in fdt_* functions.
+
+v0:
+  - Add support to carry ima measurement log in arm64, 
+   uses same code as powerpc.
+Prakhar Srivastava (2):
+  Add support for arm64 to carry ima measurement log in kexec_file_load
+  update powerpc implementation to call into of_ima*
+
+ arch/Kconfig                           |   6 +-
+ arch/arm64/include/asm/ima.h           |  24 +++
+ arch/arm64/include/asm/kexec.h         |   5 +
+ arch/arm64/kernel/Makefile             |   3 +-
+ arch/arm64/kernel/ima_kexec.c          |  78 ++++++++++
+ arch/arm64/kernel/machine_kexec_file.c |   6 +
+ arch/powerpc/include/asm/ima.h         |   6 -
+ arch/powerpc/kernel/Makefile           |   8 +-
+ arch/powerpc/kernel/ima_kexec.c        | 170 ++-------------------
+ drivers/of/Kconfig                     |   6 +
+ drivers/of/Makefile                    |   1 +
+ drivers/of/of_ima.c                    | 204 +++++++++++++++++++++++++
+ include/linux/of.h                     |  31 ++++
+ 13 files changed, 378 insertions(+), 170 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
+ create mode 100644 drivers/of/of_ima.c
+
+-- 
+2.17.1
 
