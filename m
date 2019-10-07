@@ -2,75 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B08FCE655
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 17:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFC1CEB74
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 20:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727830AbfJGPDQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Oct 2019 11:03:16 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:50330 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727490AbfJGPDQ (ORCPT
+        id S1728212AbfJGSIb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Oct 2019 14:08:31 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43082 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728031AbfJGSI1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Oct 2019 11:03:16 -0400
-Received: from [10.200.157.26] (unknown [131.107.147.154])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0176020B71C6;
-        Mon,  7 Oct 2019 08:03:15 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0176020B71C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1570460596;
-        bh=3UNgHczRc93rsHEBArN7oW1VK8U/knTQGdJtQ9X0udk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kjT52YlScVFZYoE2Jg9J3Sa38C1SOIOiTuNbARiN3aNA1TJ22TbyY5Yqr2EY6PaGd
-         T8S7ABB/YXQJQrhIHtSqpFkFQTrcLhhh8FMT3h0i/1KnuMzvCCdBGOKQOON013kfHH
-         UDc99R7Zb2tsMesEZwzf/JP/FIq6padDavFilI+U=
-Subject: Re: [PATCH 0/1] KEYS: Measure keys in trusted keyring
-To:     Mimi Zohar <zohar@linux.ibm.com>, Sasha Levin <sashal@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        jamorris@linux.microsoft.com, kgoldman@us.ibm.com,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20190828002735.31025-1-nramas@linux.microsoft.com>
- <1567041083.6115.133.camel@linux.ibm.com>
- <ec8d7cd5-a83a-c344-eaa6-9bd2cef08772@linux.microsoft.com>
- <1567190507.10024.134.camel@linux.ibm.com>
- <2cd27f52-1029-bcea-c73b-7d3d002cf030@linux.microsoft.com>
- <1568035881.4614.347.camel@linux.ibm.com> <20190919131851.GA8171@sasha-vm>
- <1568913178.4733.89.camel@linux.ibm.com>
- <1dfc7a83-3fcb-1356-958e-2afb7c6f1285@linux.microsoft.com>
- <1570219032.5046.101.camel@linux.ibm.com>
- <868f6b82-7b43-5e27-0738-f9d09e765c59@linux.microsoft.com>
- <1570226287.5046.114.camel@linux.ibm.com>
- <382dfa7b-a5f9-01e3-0624-9ecd526557bb@linux.microsoft.com>
- <1570367871.5046.161.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <59a7386d-5cb6-110a-7261-072f9c2c80a8@linux.microsoft.com>
-Date:   Mon, 7 Oct 2019 08:03:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <1570367871.5046.161.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Mon, 7 Oct 2019 14:08:27 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x97I2h80144010
+        for <linux-integrity@vger.kernel.org>; Mon, 7 Oct 2019 14:08:26 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vg9gr9x3n-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 07 Oct 2019 14:08:25 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 7 Oct 2019 19:08:23 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 7 Oct 2019 19:08:19 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x97I8Idm54394928
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Oct 2019 18:08:18 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14DF711C05C;
+        Mon,  7 Oct 2019 18:08:18 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C533A11C04C;
+        Mon,  7 Oct 2019 18:08:16 +0000 (GMT)
+Received: from dhcp-9-31-103-196.watson.ibm.com (unknown [9.31.103.196])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Oct 2019 18:08:16 +0000 (GMT)
+Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        David Safford <david.safford@ge.com>,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Mon, 07 Oct 2019 14:08:15 -0400
+In-Reply-To: <20191006235238.GA16641@linux.intel.com>
+References: <1570140491.5046.33.camel@linux.ibm.com>
+         <1570147177.10818.11.camel@HansenPartnership.com>
+         <20191004182216.GB6945@linux.intel.com>
+         <1570213491.3563.27.camel@HansenPartnership.com>
+         <20191004183342.y63qdvspojyf3m55@cantor>
+         <1570214574.3563.32.camel@HansenPartnership.com>
+         <20191004200728.xoj6jlgbhv57gepc@cantor>
+         <20191004201134.nuesk6hxtxajnxh2@cantor>
+         <1570227068.17537.4.camel@HansenPartnership.com>
+         <1570322333.5046.145.camel@linux.ibm.com>
+         <20191006235238.GA16641@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19100718-4275-0000-0000-0000036EEB6D
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19100718-4276-0000-0000-00003881FA7D
+Message-Id: <1570471695.5046.186.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-07_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=686 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910070161
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 10/6/19 6:17 AM, Mimi Zohar wrote:
-
-> As defining an early IMA workqueue and measuring keys are independent
-> of each other, they should be posted, reviewed, and upstreamed as
-> separate patch sets.
+On Mon, 2019-10-07 at 02:52 +0300, Jarkko Sakkinen wrote:
 > 
-> Mimi
-> 
+> With TEE coming in, TPM is not the only hardware measure anymore sealing
+> the keys and we don't want a mess where every hardware asset does their
+> own proprietary key generation. The proprietary technology should only
+> take care of the sealing part.
 
-Yes - I'll create separate patch sets for those changes.
+I'm fine with the concept of "trusted" keys being extended beyond just
+TPM.  But just as the VFS layer defines a set of callbacks and generic
+functions, which can be used in lieu of file system specific callback
+functions, a similar approach could be used here.
 
-thanks,
-  -lakshmi
-
+Mimi
 
