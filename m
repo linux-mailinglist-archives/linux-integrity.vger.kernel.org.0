@@ -2,94 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA4BCD9D2
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 02:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991A5CDB57
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 07:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbfJGAF3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 6 Oct 2019 20:05:29 -0400
-Received: from mga12.intel.com ([192.55.52.136]:28126 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726269AbfJGAF3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 6 Oct 2019 20:05:29 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Oct 2019 17:05:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,265,1566889200"; 
-   d="scan'208";a="204904213"
-Received: from mwebb1-mobl.ger.corp.intel.com (HELO localhost) ([10.251.93.103])
-  by orsmga002.jf.intel.com with ESMTP; 06 Oct 2019 17:05:22 -0700
-Date:   Mon, 7 Oct 2019 03:05:20 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
-Message-ID: <20191007000520.GA17116@linux.intel.com>
-References: <20190926171601.30404-1-jarkko.sakkinen@linux.intel.com>
- <1570024819.4999.119.camel@linux.ibm.com>
- <20191003114119.GF8933@linux.intel.com>
- <1570107752.4421.183.camel@linux.ibm.com>
- <20191003175854.GB19679@linux.intel.com>
- <1570128827.5046.19.camel@linux.ibm.com>
- <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A22E@ALPMBAPA12.e2k.ad.ge.com>
- <20191004182711.GC6945@linux.intel.com>
- <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727180AbfJGF0o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Oct 2019 01:26:44 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:36887 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727171AbfJGF0o (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 7 Oct 2019 01:26:44 -0400
+Received: by mail-pl1-f193.google.com with SMTP id u20so6296020plq.4
+        for <linux-integrity@vger.kernel.org>; Sun, 06 Oct 2019 22:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=1XpgQPoN+UcClVgrIlyON95HaUMJi3oZGyVlHRQ7/YE=;
+        b=oJvL03CNiwIGAzVCpkxpmmFYefUdYS0uFbWbKHzkPIngh4gEhMZaLviuWrACXgMGom
+         seIcuVppGarffY4hbgKKh5GD7rtMulaDxxX90phKlid3B8oUIgax+rSsFse06hI5uvbH
+         adrSchEYYl6H1gOGEmAjd1vb/s5/h5HhhUQxzbOmu+WJnAcrOTYeMGGPdCm92QEqPF1Q
+         N0mgSzfXePsz1O5/seTaS6Hp/rbmyWz+DhAs2G7qpmsY9C23yaA4aZVFlg3mLzZBmU6B
+         aUturVn/FXN49wkjO9INicdodor6bW8K3JCk7H8XowXPN5IWb0+ER18dzeAqt5j4pgjE
+         Z+AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=1XpgQPoN+UcClVgrIlyON95HaUMJi3oZGyVlHRQ7/YE=;
+        b=sGdELR4NypsbjiK3q7X5rQ9RaE3mYeDKvF7VNKG9HjKljJPpZvVrEqGczzyWwmqTyj
+         32Zu5wbKWzPIH+0doLwS1LbNgL7FvhLM6dG6NFYuqxNu5sEGuElnsLd1nVHKNTejC//F
+         jvLjmSfYTMIk9az8Yb123Pl0Ggpd1VByDlr+g2JZcG5BAejvme9bKb9RA63OzqXM4INa
+         5TsFg6fYa5n0B3+ZPnMnFLO5SYmGp07iSeEWLgC6JdiLCtp9MjxTGTd8KB/McHxKyHzw
+         XOemMjuFBQ2tANgQ9R0kUb2RuNbNzpssE9Ry0cWtdXNXjcDXuK2dRmj27YGLve7N9JOM
+         mrJQ==
+X-Gm-Message-State: APjAAAXbjqUH6/nZ9ksdKFt0lz3uKrjsf1YJog3omg48vPG3wUUYMqM+
+        0glCzb1z33qi5Oc64mgNtW/O7g==
+X-Google-Smtp-Source: APXvYqwVrP1ltr11Rwk/RorG9/LvEAH0DFK23AAsbW8dKkGfRlTDdGdcPLHN0IHpS9aXB1RSf96pSw==
+X-Received: by 2002:a17:902:a706:: with SMTP id w6mr27735596plq.138.1570426003313;
+        Sun, 06 Oct 2019 22:26:43 -0700 (PDT)
+Received: from localhost.localdomain ([117.252.65.194])
+        by smtp.gmail.com with ESMTPSA id x9sm15895448pje.27.2019.10.06.22.26.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sun, 06 Oct 2019 22:26:42 -0700 (PDT)
+From:   Sumit Garg <sumit.garg@linaro.org>
+To:     jarkko.sakkinen@linux.intel.com, dhowells@redhat.com,
+        peterhuewe@gmx.de
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jgg@ziepe.ca, arnd@arndb.de,
+        gregkh@linuxfoundation.org, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        jsnitsel@redhat.com, linux-kernel@vger.kernel.org,
+        daniel.thompson@linaro.org, Sumit Garg <sumit.garg@linaro.org>
+Subject: [Patch v7 0/4] Create and consolidate trusted keys subsystem
+Date:   Mon,  7 Oct 2019 10:55:31 +0530
+Message-Id: <1570425935-7435-1-git-send-email-sumit.garg@linaro.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Oct 04, 2019 at 07:56:01PM +0000, Safford, David (GE Global Research, US) wrote:
-> 
-> > From: linux-integrity-owner@vger.kernel.org <linux-integrity-
-> > owner@vger.kernel.org> On Behalf Of Jarkko Sakkinen
-> > Sent: Friday, October 4, 2019 2:27 PM
-> > Subject: EXT: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
-> > 
-> > If you are able to call tpm_get_random(), the driver has already registered
-> > TPN as hwrng. With this solution you fail to follow the principle of defense in
-> > depth. If the TPM random number generator is compromissed (has a bug)
-> > using the entropy pool will decrease the collateral damage.
-> 
-> And if the entropy pool has a bug or is misconfigured, you lose everything.
-> That does not sound like defense in depth to me. In the real world
-> I am not aware of a single instance of RNG vulnerability on a TPM.
-> I am directly aware of several published vulnerabilities in embedded systems 
-> due to a badly ported version of the kernel random pool. In addition, 
-> the random generator in a TPM is hardware isolated, and less likely to be
-> vulnerable to side channel or memory manipulation errors. The TPM
-> RNG is typically FIPS certified.  The use of the TPM RNG was a deliberate
-> design choice in trusted keys.
+This patch-set does restructuring of trusted keys code to create and
+consolidate trusted keys subsystem.
 
-Hmm... so is RDRAND opcode FIPS certified.
+Also, patch #2 replaces tpm1_buf code used in security/keys/trusted.c and
+crypto/asymmertic_keys/asym_tpm.c files to use the common tpm_buf code.
 
-Kernel has the random number generator for two reasons:
+Changes in v7:
+1. Rebased to top of tpmdd/master
+2. Patch #4: update tpm2 trusted keys code to use tpm_send() instead of
+   tpm_transmit_cmd() which is an internal function.
 
-1. To protect against bugs in hwrng's.
-2. To protect against deliberate backdoors in hwrng's.
+Changes in v6:
+1. Switch TPM asymmetric code also to use common tpm_buf code. These
+   changes required patches #1 and #2 update, so I have dropped review
+   tags from those patches.
+2. Incorporated miscellaneous comments from Jarkko.
 
-How TPM RNG is guaranteed to protect against both 1 and 2?
+Changes in v5:
+1. Drop 5/5 patch as its more relavant along with TEE patch-set.
+2. Add Reviewed-by tag for patch #2.
+3. Fix build failure when "CONFIG_HEADER_TEST" and
+   "CONFIG_KERNEL_HEADER_TEST" config options are enabled.
+4. Misc changes to rename files.
 
-If I would agree what you say, that'd be argument against using kernel
-random number generator *anywhere* in the kernel. Even with the entropy
-issues it is least worst thing to use for key generations for better
-or worse.
+Changes in v4:
+1. Separate patch for export of tpm_buf code to include/linux/tpm.h
+2. Change TPM1.x trusted keys code to use common tpm_buf
+3. Keep module name as trusted.ko only
 
-/Jarkko
+Changes in v3:
+
+Move TPM2 trusted keys code to trusted keys subsystem.
+
+Changes in v2:
+
+Split trusted keys abstraction patch for ease of review.
+
+Sumit Garg (4):
+  tpm: Move tpm_buf code to include/linux/
+  KEYS: Use common tpm_buf for trusted and asymmetric keys
+  KEYS: trusted: Create trusted keys subsystem
+  KEYS: trusted: Move TPM2 trusted keys code
+
+ crypto/asymmetric_keys/asym_tpm.c                  | 101 +++----
+ drivers/char/tpm/tpm-interface.c                   |  56 ----
+ drivers/char/tpm/tpm.h                             | 226 ---------------
+ drivers/char/tpm/tpm2-cmd.c                        | 307 --------------------
+ include/Kbuild                                     |   1 -
+ include/keys/{trusted.h => trusted_tpm.h}          |  49 +---
+ include/linux/tpm.h                                | 251 ++++++++++++++--
+ security/keys/Makefile                             |   2 +-
+ security/keys/trusted-keys/Makefile                |   8 +
+ .../{trusted.c => trusted-keys/trusted_tpm1.c}     |  96 +++----
+ security/keys/trusted-keys/trusted_tpm2.c          | 314 +++++++++++++++++++++
+ 11 files changed, 652 insertions(+), 759 deletions(-)
+ rename include/keys/{trusted.h => trusted_tpm.h} (77%)
+ create mode 100644 security/keys/trusted-keys/Makefile
+ rename security/keys/{trusted.c => trusted-keys/trusted_tpm1.c} (94%)
+ create mode 100644 security/keys/trusted-keys/trusted_tpm2.c
+
+-- 
+2.7.4
+
