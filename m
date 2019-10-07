@@ -2,86 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA592CDF68
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 12:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD1ACE5AC
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2019 16:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727345AbfJGKd0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Oct 2019 06:33:26 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:36744 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727252AbfJGKdZ (ORCPT
+        id S1728614AbfJGOtl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Oct 2019 10:49:41 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:44463 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728556AbfJGOtk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Oct 2019 06:33:25 -0400
-Received: by mail-lj1-f196.google.com with SMTP id v24so13057316ljj.3;
-        Mon, 07 Oct 2019 03:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oNNig/APpXlzsgQf4/4zikU/t/X44sqLM8yD3yPV7Z4=;
-        b=a6/c32y8W+2OO4I6umBjXsfYmAjr1wzq5ZHhKiIZm4Em48taC2TXmnilorIClfKHaO
-         RSmxzvD8Xs9fFNWqWqMrgleX8F0IxuyIxwH1d9TyD7vMeV3yPBJehBnUP3Lfh7mprb3c
-         9b8wzQwf0QnO24TOfK2zUJKNaulHRMaWc2qN787jm9FNi2sc5hlCzXobCuA0HVTyK12D
-         /qqGSIztyF/WpWSBLhqXD9Sb1XwyKVK4uiix35kPRM7S4UaTzPcREo0x+u1WhX1lhin8
-         EI/ymKpfMHY/b8ZnavARPa21x+ufuCtjZ2NegaQj+mZGtpsQyVbXypQS5qliNRaaQqn5
-         Dy+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oNNig/APpXlzsgQf4/4zikU/t/X44sqLM8yD3yPV7Z4=;
-        b=AUTF1YmG9s9Nvjq8lV+7TqUEuF/PkGD6i/Z2zZt/Zqdq3Xik3ii0IgAADIU/x8Ozk7
-         /Xquw4J/G2O0tWl2+ijCV+/tPKs/+gxTIBQxaWEtFmRH/6tpIe1rJbsJL1D0VZuDvhuH
-         f276mGqh3tGAFEIhZ5i3n5cedSQI2+1Iv/pZsDGt/iqyRHUqIglGBJGtQUqttPYqGwiZ
-         vjlxDyhclYgyIMZBiz3W8GM2p33RIxLZFxh94ayf7VOQNa2Ylp4ONTQk0Gn1DyMHFBLO
-         gmfBTnT1SMnki+Ki+tJ8V8paStNyfAkI5VOJkJffzaOi/8mi9jIO84zU+VNR1RPWqSEA
-         r+0A==
-X-Gm-Message-State: APjAAAV7TNNNnRZUZ59sqMpnGelwTtMUOxATEt7UZU/5ZAaopfKEmPRT
-        cCEnu9IKAatZ51nc1dVf1pQ+hofjdQMIPtXtWlw=
-X-Google-Smtp-Source: APXvYqxSWwZ3uEPxII3m5erP4rL+4mMFDIzGpozY/SmRULvAvFf0dEbcTOqNDO98GfiRUqXydlHQYNsktRgveYZyj2U=
-X-Received: by 2002:a2e:9854:: with SMTP id e20mr17397616ljj.72.1570444403274;
- Mon, 07 Oct 2019 03:33:23 -0700 (PDT)
+        Mon, 7 Oct 2019 10:49:40 -0400
+Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tip-bot2@linutronix.de>)
+        id 1iHUJy-0005pU-64; Mon, 07 Oct 2019 16:49:10 +0200
+Received: from [127.0.1.1] (localhost [IPv6:::1])
+        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id D3C031C08B0;
+        Mon,  7 Oct 2019 16:49:09 +0200 (CEST)
+Date:   Mon, 07 Oct 2019 14:49:09 -0000
+From:   "tip-bot2 for Peter Jones" <tip-bot2@linutronix.de>
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: efi/urgent] efi/tpm: Don't traverse an event log with no events
+Cc:     Lyude Paul <lyude@redhat.com>, Peter Jones <pjones@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Dave Young <dyoung@redhat.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Octavian Purdila <octavian.purdila@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Scott Talbert <swt@techie.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
+        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
+In-Reply-To: <20191002165904.8819-5-ard.biesheuvel@linaro.org>
+References: <20191002165904.8819-5-ard.biesheuvel@linaro.org>
 MIME-Version: 1.0
-References: <20190926171601.30404-1-jarkko.sakkinen@linux.intel.com>
- <1570024819.4999.119.camel@linux.ibm.com> <20191003114119.GF8933@linux.intel.com>
-In-Reply-To: <20191003114119.GF8933@linux.intel.com>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Mon, 7 Oct 2019 13:33:11 +0300
-Message-ID: <CAE=NcrY3BTvD-L2XP6bsO=9oAJLtSD0wYpUymVkAGAnYObsPzQ@mail.gmail.com>
-Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <157045974981.9978.10521392421826592930.tip-bot2@tip-bot2>
+X-Mailer: tip-git-log-daemon
+Robot-ID: <tip-bot2.linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 3, 2019 at 2:41 PM Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
+The following commit has been merged into the efi/urgent branch of tip:
 
-> > At what point during boot is the kernel random pool available?  Does
-> > this imply that you're planning on changing trusted keys as well?
->
-> Well trusted keys *must* be changed to use it. It is not a choice
-> because using a proprietary random number generator instead of defacto
-> one in the kernel can be categorized as a *regression*.
->
-> Also, TEE trusted keys cannot use the TPM option.
->
-> If it was not initialized early enough we would need fix that too.
+Commit-ID:     05c8c1ff81ed2eb9bad7c27cf92e55c864c16df8
+Gitweb:        https://git.kernel.org/tip/05c8c1ff81ed2eb9bad7c27cf92e55c864c16df8
+Author:        Peter Jones <pjones@redhat.com>
+AuthorDate:    Wed, 02 Oct 2019 18:59:01 +02:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Mon, 07 Oct 2019 15:24:35 +02:00
 
-Note that especially IMA and fs encryptions are pretty annoying in
-this sense. You probably want to keep your keys device specific and
-you really need the keys around the time when the filesystems mount
-for the first time. This is very early on..
+efi/tpm: Don't traverse an event log with no events
 
+When there are no entries to put into the final event log, some machines
+will return the template they would have populated anyway.  In this case
+the nr_events field is 0, but the rest of the log is just garbage.
 
---
-Janne
+This patch stops us from trying to iterate the table with
+__calc_tpm2_event_size() when the number of events in the table is 0.
+
+Tested-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Peter Jones <pjones@redhat.com>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Signed-off-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Acked-by: Matthew Garrett <mjg59@google.com>
+Acked-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: Ben Dooks <ben.dooks@codethink.co.uk>
+Cc: Dave Young <dyoung@redhat.com>
+Cc: Jerry Snitselaar <jsnitsel@redhat.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Lukas Wunner <lukas@wunner.de>
+Cc: Octavian Purdila <octavian.purdila@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Scott Talbert <swt@techie.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-efi@vger.kernel.org
+Cc: linux-integrity@vger.kernel.org
+Cc: stable@vger.kernel.org
+Fixes: c46f3405692d ("tpm: Reserve the TPM final events table")
+Link: https://lkml.kernel.org/r/20191002165904.8819-5-ard.biesheuvel@linaro.org
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+---
+ drivers/firmware/efi/tpm.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
+index 1d3f5ca..b9ae5c6 100644
+--- a/drivers/firmware/efi/tpm.c
++++ b/drivers/firmware/efi/tpm.c
+@@ -75,11 +75,16 @@ int __init efi_tpm_eventlog_init(void)
+ 		goto out;
+ 	}
+ 
+-	tbl_size = tpm2_calc_event_log_size((void *)efi.tpm_final_log
+-					    + sizeof(final_tbl->version)
+-					    + sizeof(final_tbl->nr_events),
+-					    final_tbl->nr_events,
+-					    log_tbl->log);
++	tbl_size = 0;
++	if (final_tbl->nr_events != 0) {
++		void *events = (void *)efi.tpm_final_log
++				+ sizeof(final_tbl->version)
++				+ sizeof(final_tbl->nr_events);
++
++		tbl_size = tpm2_calc_event_log_size(events,
++						    final_tbl->nr_events,
++						    log_tbl->log);
++	}
+ 	memblock_reserve((unsigned long)final_tbl,
+ 			 tbl_size + sizeof(*final_tbl));
+ 	early_memunmap(final_tbl, sizeof(*final_tbl));
