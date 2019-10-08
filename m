@@ -2,37 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11780D0411
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2019 01:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98221D046F
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2019 01:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726068AbfJHX1v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Oct 2019 19:27:51 -0400
-Received: from mga05.intel.com ([192.55.52.43]:4002 "EHLO mga05.intel.com"
+        id S1729487AbfJHXtl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Oct 2019 19:49:41 -0400
+Received: from mga04.intel.com ([192.55.52.120]:8641 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725908AbfJHX1v (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Oct 2019 19:27:51 -0400
+        id S1726068AbfJHXtl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 8 Oct 2019 19:49:41 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 16:27:50 -0700
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 16:49:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,273,1566889200"; 
-   d="scan'208";a="223394807"
+   d="scan'208";a="197846974"
 Received: from jhogan1-mobl.ger.corp.intel.com (HELO localhost) ([10.252.2.221])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Oct 2019 16:27:48 -0700
-Date:   Wed, 9 Oct 2019 02:27:47 +0300
+  by orsmga006.jf.intel.com with ESMTP; 08 Oct 2019 16:49:36 -0700
+Date:   Wed, 9 Oct 2019 02:49:35 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Tadeusz Struk <tadeusz.struk@intel.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] tpm: add check after commands attribs tab allocation
-Message-ID: <20191008232747.GB12089@linux.intel.com>
-References: <157048479752.25182.17480591993061064051.stgit@tstruk-mobl1.jf.intel.com>
+To:     Ken Goldman <kgold@linux.ibm.com>
+Cc:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+Message-ID: <20191008234935.GA13926@linux.intel.com>
+References: <1570024819.4999.119.camel@linux.ibm.com>
+ <20191003114119.GF8933@linux.intel.com>
+ <1570107752.4421.183.camel@linux.ibm.com>
+ <20191003175854.GB19679@linux.intel.com>
+ <1570128827.5046.19.camel@linux.ibm.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A22E@ALPMBAPA12.e2k.ad.ge.com>
+ <20191004182711.GC6945@linux.intel.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com>
+ <20191007000520.GA17116@linux.intel.com>
+ <59b88042-9c56-c891-f75e-7c0719eb5ff9@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <157048479752.25182.17480591993061064051.stgit@tstruk-mobl1.jf.intel.com>
+In-Reply-To: <59b88042-9c56-c891-f75e-7c0719eb5ff9@linux.ibm.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -40,15 +54,18 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Oct 07, 2019 at 02:46:37PM -0700, Tadeusz Struk wrote:
-> devm_kcalloc() can fail and return NULL so we need to check for that.
+On Mon, Oct 07, 2019 at 06:13:01PM -0400, Ken Goldman wrote:
+> The TPM library specification states that the TPM must comply with NIST
+> SP800-90 A.
 > 
-> Fixes: 58472f5cd4f6f ("tpm: validate TPM 2.0 commands")
-> Signed-off-by: Tadeusz Struk <tadeusz.struk@intel.com>
+> https://trustedcomputinggroup.org/membership/certification/tpm-certified-products/
+> 
+> shows that the TPMs get third party certification, Common Criteria EAL 4+.
+> 
+> While it's theoretically possible that an attacker could compromise
+> both the TPM vendors and the evaluation agencies, we do have EAL 4+
+> assurance against both 1 and 2.
 
-Thank you.
-
-Cc: stable@vger.kernel.org
-Reviewed-by:  Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Certifications do not equal to trust.
 
 /Jarkko
