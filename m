@@ -2,88 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E15D1AEA
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2019 23:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90525D1B04
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2019 23:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731995AbfJIV3E (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 9 Oct 2019 17:29:04 -0400
-Received: from mga12.intel.com ([192.55.52.136]:16325 "EHLO mga12.intel.com"
+        id S1731134AbfJIVgP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 9 Oct 2019 17:36:15 -0400
+Received: from mga11.intel.com ([192.55.52.93]:10309 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732038AbfJIV3E (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 9 Oct 2019 17:29:04 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1730490AbfJIVgP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 9 Oct 2019 17:36:15 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Oct 2019 14:29:03 -0700
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Oct 2019 14:36:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,277,1566889200"; 
-   d="scan'208";a="187747086"
+   d="scan'208";a="200262511"
 Received: from thomaske-mobl.ger.corp.intel.com (HELO localhost) ([10.252.3.55])
-  by orsmga008.jf.intel.com with ESMTP; 09 Oct 2019 14:28:58 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Oct 2019 14:36:12 -0700
+Date:   Thu, 10 Oct 2019 00:36:10 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-stable@vger.kernel.org
-Cc:     Vadim Sukhomlinov <sukhomlinov@google.com>, stable@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org (open list:TPM DEVICE DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 3/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
-Date:   Thu, 10 Oct 2019 00:28:31 +0300
-Message-Id: <20191009212831.29081-4-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191009212831.29081-1-jarkko.sakkinen@linux.intel.com>
-References: <20191009212831.29081-1-jarkko.sakkinen@linux.intel.com>
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] tpm: Use GFP_KERNEL for allocating struct tpm_buf
+Message-ID: <20191009213559.GA30044@linux.intel.com>
+References: <20191003185103.26347-1-jarkko.sakkinen@linux.intel.com>
+ <20191003185103.26347-2-jarkko.sakkinen@linux.intel.com>
+ <1570148716.10818.19.camel@linux.ibm.com>
+ <20191006095005.GA7660@linux.intel.com>
+ <1570475528.4242.2.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1570475528.4242.2.camel@linux.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Vadim Sukhomlinov <sukhomlinov@google.com>
+On Mon, Oct 07, 2019 at 12:12:08PM -0700, James Bottomley wrote:
+> From: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Subject: [PATCH] tpm: use GFP kernel for tpm_buf allocations
+> 
+> The current code uses GFP_HIGHMEM, which is wrong because GFP_HIGHMEM
+> (on 32 bit systems) is memory ordinarily inaccessible to the kernel
+> and should only be used for allocations affecting userspace.  In order
+> to make highmem visible to the kernel on 32 bit it has to be kmapped,
+> which consumes valuable entries in the kmap region.  Since the tpm_buf
+> is only ever used in the kernel, switch to using a GFP_KERNEL
+> allocation so as not to waste kmap space on 32 bits.
+> 
+> Fixes: a74f8b36352e (tpm: introduce tpm_buf)
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
+Pushed to master branch.
 
-TPM 2.0 Shutdown involve sending TPM2_Shutdown to TPM chip and disabling
-future TPM operations. TPM 1.2 behavior was different, future TPM
-operations weren't disabled, causing rare issues. This patch ensures
-that future TPM operations are disabled.
-
-Fixes: d1bd4a792d39 ("tpm: Issue a TPM2_Shutdown for TPM2 devices.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Vadim Sukhomlinov <sukhomlinov@google.com>
-[dianders: resolved merge conflicts with mainline]
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- drivers/char/tpm/tpm-chip.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 0eca20c5a80c..ac8a3812fbcd 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -158,12 +158,11 @@ static int tpm_class_shutdown(struct device *dev)
- {
- 	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
- 
--	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
--		down_write(&chip->ops_sem);
-+	down_write(&chip->ops_sem);
-+	if (chip->flags & TPM_CHIP_FLAG_TPM2)
- 		tpm2_shutdown(chip, TPM2_SU_CLEAR);
--		chip->ops = NULL;
--		up_write(&chip->ops_sem);
--	}
-+	chip->ops = NULL;
-+	up_write(&chip->ops_sem);
- 
- 	return 0;
- }
--- 
-2.20.1
-
+/Jarkko
