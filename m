@@ -2,133 +2,80 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBA1D1A0B
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2019 22:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD18FD1AE3
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2019 23:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731134AbfJIUtL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 9 Oct 2019 16:49:11 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:53156 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728804AbfJIUtK (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 9 Oct 2019 16:49:10 -0400
-Received: from [10.200.156.146] (unknown [167.220.2.18])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9792520B71C6;
-        Wed,  9 Oct 2019 13:49:09 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9792520B71C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1570654149;
-        bh=R1XYwLvD2iwGBu/tSvMiVcIj6u8j47QQ6okMOZpNB7U=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=DKXLDx2TpAjvOkCcLD+fMOQ+UmAKk9f0J4PKC6kqYILap7MQfAxBIF2iiDgV4XJLq
-         GWrcnyuAANdZF6aJ12FQZieemm+kz1XCRB86ccPD2aAux00sIXbYcxnvl7Jf912bkQ
-         R+9ELrLAIdqH9L7Ny8K/E71UScCwE4MURLnjvU3Y=
-Subject: Re: [PATCH v2 1/2] Add support for arm64 to carry ima measurement log
- in kexec_file_load
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        arnd@arndb.de, jean-philippe@linaro.org, allison@lohutok.net,
-        kristina.martsenko@arm.org, yamada.masahiro@socionext.com,
-        duwe@lst.de, mark.rutland@arm.com, tglx@linutronix.de,
-        takahiro.akashi@linaro.org, james.morse@arm.org,
-        catalin.marinas@arm.com, sboyd@kernel.org, bauerman@linux.ibm.com,
-        zohar@linux.ibm.com
-References: <20191007185943.1828-1-prsriva@linux.microsoft.com>
- <20191007185943.1828-2-prsriva@linux.microsoft.com>
- <20191008212224.GC1396@sasha-vm>
-From:   prsriva <prsriva@linux.microsoft.com>
-Message-ID: <b4ca20f8-dc8c-7266-de54-8062cf6ac8e3@linux.microsoft.com>
-Date:   Wed, 9 Oct 2019 13:49:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1731155AbfJIV2t (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 9 Oct 2019 17:28:49 -0400
+Received: from mga01.intel.com ([192.55.52.88]:42170 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729908AbfJIV2s (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 9 Oct 2019 17:28:48 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Oct 2019 14:28:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,277,1566889200"; 
+   d="scan'208";a="184198711"
+Received: from thomaske-mobl.ger.corp.intel.com (HELO localhost) ([10.252.3.55])
+  by orsmga007.jf.intel.com with ESMTP; 09 Oct 2019 14:28:38 -0700
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     linux-stable@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-integrity@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Vadim Sukhomlinov <sukhomlinov@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4 0/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
+Date:   Thu, 10 Oct 2019 00:28:28 +0300
+Message-Id: <20191009212831.29081-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20191008212224.GC1396@sasha-vm>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
 
+This backport is for v4.14 and v4.19 The backport requires non-racy
+behaviour from TPM 1.x sysfs code. Thus, the dependecies for that
+are included.
 
-On 10/8/19 2:22 PM, Sasha Levin wrote:
-> On Mon, Oct 07, 2019 at 11:59:42AM -0700, Prakhar Srivastava wrote:
->> During kexec_file_load, carrying forward the ima measurement log allows
->> a verifying party to get the entire runtime event log since the last
->> full reboot since that is when PCRs were last reset.
->>
->> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
->> ---
->> arch/Kconfig                           |   6 +-
->> arch/arm64/include/asm/ima.h           |  24 +++
->> arch/arm64/include/asm/kexec.h         |   5 +
->> arch/arm64/kernel/Makefile             |   3 +-
->> arch/arm64/kernel/ima_kexec.c          |  78 ++++++++++
->> arch/arm64/kernel/machine_kexec_file.c |   6 +
->> drivers/of/Kconfig                     |   6 +
->> drivers/of/Makefile                    |   1 +
->> drivers/of/of_ima.c                    | 204 +++++++++++++++++++++++++
->> include/linux/of.h                     |  31 ++++
->> 10 files changed, 362 insertions(+), 2 deletions(-)
->> create mode 100644 arch/arm64/include/asm/ima.h
->> create mode 100644 arch/arm64/kernel/ima_kexec.c
->> create mode 100644 drivers/of/of_ima.c
->>
->> diff --git a/arch/Kconfig b/arch/Kconfig
->> index a7b57dd42c26..d53e1596c5b1 100644
->> --- a/arch/Kconfig
->> +++ b/arch/Kconfig
->> @@ -19,7 +19,11 @@ config KEXEC_CORE
->>     bool
->>
->> config HAVE_IMA_KEXEC
->> -    bool
->> +    bool "Carry over IMA measurement log during kexec_file_load() 
->> syscall"
->> +    depends on KEXEC_FILE
->> +    help
->> +      Select this option to carry over IMA measurement log during
->> +      kexec_file_load.
-> 
-> This change looks very wrong: HAVE_* config symbols are used to indicate
-> the availability of certain arch specific capability, rather than act as
-> a config option. How does this work with CONFIG_IMA_KEXEC ?
-> 
-Thanks for pointing this out. My attempt was to move this out of arch 
-dependent config. I will fix the CONFIG.
+NOTE: 1/3 is only needed for v4.14.
 
-> Also, please, at the very least verify that basic functionality works on
-> the architectures we have access to. Trying it on x86:
-> 
+v4:
+* There was unnecessary assignment inside TPM_CHIP_FLAG_TPM2 branch (does
+  not cause any run-time issue).
+v3:
+* Fixed the cover letter and the subject prefix. My deepest apologies
+  for all the hassle :-(
+v2:
+* Something happened when merging 3/3 that write lock was taken
+  twice. Fixed in this version. Did also sanity check test with
+  TPM2:
+  echo devices > /sys/power/pm_test && echo mem > /sys/power/state
 
-Let me fix the build issues for other archs.
-I have tested these changes for arm64.
+Cc: linux-integrity@vger.kernel.org
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Vadim Sukhomlinov <sukhomlinov@google.com>
+Link: https://lore.kernel.org/stable/20190712152734.GA13940@kroah.com/
 
-> $ make allmodconfig
-> scripts/kconfig/conf  --allmodconfig Kconfig
-> #
-> # No change to .config
-> #
-> $ make
->   CALL    scripts/checksyscalls.sh
->   CALL    scripts/atomic/check-atomics.sh
->   DESCEND  objtool
->   CC      security/integrity/ima/ima_fs.o
-> In file included from security/integrity/ima/ima_fs.c:26:
-> security/integrity/ima/ima.h:28:10: fatal error: asm/ima.h: No such file 
-> or directory
-> #include <asm/ima.h>
->           ^~~~~~~~~~~
-> compilation terminated.
-> make[3]: *** [scripts/Makefile.build:266: 
-> security/integrity/ima/ima_fs.o] Error 1
-> make[2]: *** [scripts/Makefile.build:509: security/integrity/ima] Error 2
-> make[1]: *** [scripts/Makefile.build:509: security/integrity] Error 2
-> make: *** [Makefile:1649: security] Error 2
-> 
-> -- 
-> Thanks,
-> Sasha
+Jarkko Sakkinen (2):
+  tpm: migrate pubek_show to struct tpm_buf
+  tpm: use tpm_try_get_ops() in tpm-sysfs.c.
+
+Vadim Sukhomlinov (1):
+  tpm: Fix TPM 1.2 Shutdown sequence to prevent future TPM operations
+
+ drivers/char/tpm/tpm-chip.c  |   9 +-
+ drivers/char/tpm/tpm-sysfs.c | 201 +++++++++++++++++++++--------------
+ drivers/char/tpm/tpm.h       |  13 ---
+ 3 files changed, 125 insertions(+), 98 deletions(-)
+
+-- 
+2.20.1
+
