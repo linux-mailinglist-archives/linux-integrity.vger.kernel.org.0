@@ -2,65 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90525D1B04
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2019 23:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95305D1D38
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Oct 2019 02:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731134AbfJIVgP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 9 Oct 2019 17:36:15 -0400
-Received: from mga11.intel.com ([192.55.52.93]:10309 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730490AbfJIVgP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 9 Oct 2019 17:36:15 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Oct 2019 14:36:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,277,1566889200"; 
-   d="scan'208";a="200262511"
-Received: from thomaske-mobl.ger.corp.intel.com (HELO localhost) ([10.252.3.55])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Oct 2019 14:36:12 -0700
-Date:   Thu, 10 Oct 2019 00:36:10 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] tpm: Use GFP_KERNEL for allocating struct tpm_buf
-Message-ID: <20191009213559.GA30044@linux.intel.com>
-References: <20191003185103.26347-1-jarkko.sakkinen@linux.intel.com>
- <20191003185103.26347-2-jarkko.sakkinen@linux.intel.com>
- <1570148716.10818.19.camel@linux.ibm.com>
- <20191006095005.GA7660@linux.intel.com>
- <1570475528.4242.2.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1570475528.4242.2.camel@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1732487AbfJJANB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 9 Oct 2019 20:13:01 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:43742 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732019AbfJJANB (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 9 Oct 2019 20:13:01 -0400
+Received: from prsriva-Precision-Tower-5810.corp.microsoft.com (unknown [167.220.2.18])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C712320B71C6;
+        Wed,  9 Oct 2019 17:12:59 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C712320B71C6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1570666379;
+        bh=8PIUlpe4QGC+q/h/YpfHHQXYskMJ+TEhigux0nCSFXM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qaOuO5Yn2yipBl6hZT8j8IFlCHBTtyJC7kkcW9FvlG5kGq4uyWFQDjYVtosLiWlQ+
+         1D46wLbZo9t0EgiPI05/SVm9SsFhuQCQQOgfaxGIp8F9rqNKmrc+3JogfHl0Y7hZOY
+         cFsEVt4+weA6ky/j8ZbMQ1JG5JBtdUG4jXQoDpKU=
+From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Cc:     arnd@arndb.de, jean-philippe@linaro.org, allison@lohutok.net,
+        kristina.martsenko@arm.org, yamada.masahiro@socionext.com,
+        duwe@lst.de, mark.rutland@arm.com, tglx@linutronix.de,
+        takahiro.akashi@linaro.org, james.morse@arm.org,
+        catalin.marinas@arm.com, sboyd@kernel.org, bauerman@linux.ibm.com,
+        zohar@linux.ibm.com
+Subject: [PATCH v3 0/2] Add support for arm64 to carry ima measurement log in kexec_file_load
+Date:   Wed,  9 Oct 2019 17:12:49 -0700
+Message-Id: <20191010001251.22746-1-prsriva@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Oct 07, 2019 at 12:12:08PM -0700, James Bottomley wrote:
-> From: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Subject: [PATCH] tpm: use GFP kernel for tpm_buf allocations
-> 
-> The current code uses GFP_HIGHMEM, which is wrong because GFP_HIGHMEM
-> (on 32 bit systems) is memory ordinarily inaccessible to the kernel
-> and should only be used for allocations affecting userspace.  In order
-> to make highmem visible to the kernel on 32 bit it has to be kmapped,
-> which consumes valuable entries in the kmap region.  Since the tpm_buf
-> is only ever used in the kernel, switch to using a GFP_KERNEL
-> allocation so as not to waste kmap space on 32 bits.
-> 
-> Fixes: a74f8b36352e (tpm: introduce tpm_buf)
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Add support to carry ima measurement log
+to the next kexec'ed session triggered via kexec_file_load.
+- Top of Linux 5.3-rc6
 
-Pushed to master branch.
+Currently during kexec the kernel file signatures are/can be validated
+prior to actual load, the information(PE/ima signature) is not carried
+to the next session. This lead to loss of information.
 
-/Jarkko
+Carrying forward the ima measurement log to the next kexec'ed session 
+allows a verifying party to get the entire runtime event log since the
+last full reboot, since that is when PCRs were last reset.
+
+Tested for arm64 qemu and real hardware.
+I have not been unable to test the patch for powerpc 64bit. Any testing
+is greatly appretiated.
+
+TODO: Add support for 32 bit in the of_ima.c
+
+v3:
+  - Fix build breaks due to bad config.
+
+v2:
+  - move common code to drivers/of/of_ima.c.
+  - point arm64 to use of_ima implementation.
+  - point powerpc to use of_ima implementation
+
+v1:
+  - add new fdt porperties to mark start and end for ima measurement
+    log.
+  - use fdt_* functions to add/remove fdt properties and memory
+    allocations.
+  - remove additional check for endian-ness as they are checked
+    in fdt_* functions.
+
+v0:
+  - Add support to carry ima measurement log in arm64, 
+   uses same code as powerpc.
+Prakhar Srivastava (2):
+  Add support for arm64 to carry ima measurement log in kexec_file_load
+  update powerpc implementation to call into of_ima*
+
+ arch/arm64/Kconfig                     |   7 +
+ arch/arm64/include/asm/ima.h           |  24 +++
+ arch/arm64/include/asm/kexec.h         |   5 +
+ arch/arm64/kernel/Makefile             |   3 +-
+ arch/arm64/kernel/ima_kexec.c          |  78 ++++++++++
+ arch/arm64/kernel/machine_kexec_file.c |   6 +
+ arch/powerpc/Kconfig                   |   6 +
+ arch/powerpc/include/asm/ima.h         |   6 -
+ arch/powerpc/kernel/Makefile           |   8 +-
+ arch/powerpc/kernel/ima_kexec.c        | 170 ++-------------------
+ drivers/of/Kconfig                     |   6 +
+ drivers/of/Makefile                    |   1 +
+ drivers/of/of_ima.c                    | 204 +++++++++++++++++++++++++
+ include/linux/of.h                     |  31 ++++
+ 14 files changed, 386 insertions(+), 169 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
+ create mode 100644 drivers/of/of_ima.c
+
+-- 
+2.17.1
+
