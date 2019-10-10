@@ -2,59 +2,78 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE85D22C6
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Oct 2019 10:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A790FD2B03
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Oct 2019 15:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733089AbfJJI20 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Oct 2019 04:28:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39198 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726864AbfJJI20 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Oct 2019 04:28:26 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E39982190F;
-        Thu, 10 Oct 2019 08:28:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570696105;
-        bh=L5is3Avng3rknWFuaXu0mMsht9z+QsEW6JsvwMdFvA0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BfBBTPYw33qgR9u4E5Mc7HStrgmcfJEHHXzSTD9gWbhGpoOpzRIl6av3RrVBsyLvh
-         M2IdxTjDr75uEBGOb173VkhYPFsbAnfjqMFgkSVUNX4+qKlMBJxh3/6QbidG0qdyIC
-         qlrRpxRf8KI8WZJQb9aoLhTi6sf0DUCR6+fvlNGc=
-Date:   Thu, 10 Oct 2019 10:28:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-stable@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Vadim Sukhomlinov <sukhomlinov@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 0/3] tpm: Fix TPM 1.2 Shutdown sequence to prevent
- future TPM operations
-Message-ID: <20191010082822.GD326087@kroah.com>
-References: <20191009212831.29081-1-jarkko.sakkinen@linux.intel.com>
+        id S1728286AbfJJNR6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Oct 2019 09:17:58 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38676 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388002AbfJJNRn (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 10 Oct 2019 09:17:43 -0400
+Received: by mail-ot1-f66.google.com with SMTP id e11so4819361otl.5
+        for <linux-integrity@vger.kernel.org>; Thu, 10 Oct 2019 06:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ub-ac-id.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
+        b=kbDD0ETnfb+9T5ky4afnuU19WL5B3TgSTtrvr8/78l52RfSJ/bD7cjcm8C45XsJ4wr
+         kY8zUv/ms1sLDr56E/0rqAcpldgbTirzVsO1TqrlTRt5AL5IhxusLfWbWkCQZqSDApog
+         xVZixZPZF5pv+wD9wYHHFszyBuRJ0Z0/71+2E/SGgHwnMzv66/86w9uplcX1z0grTv9p
+         1TYZ7MtIagYr+hnMPgyspL8CH18dkY1RexU6NSgr6L6/lGHi7jHNMmmGOoiBuh2azqNd
+         aWHFVXbx5cxjkbX5kJe7PAp4IU2wf06fogqa+YoO9ylF7jna+POCU+xNsHXT6R2wFQg9
+         YqYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
+        b=lBdHToeV5n4gUrWaqbgq5u+/WiO0FEJSqFNIjLBmuUKgI6F+4CUoDdYF5T+pOQFHbf
+         syJvr7oFyOc5yfcSJzYtob9jlJX5pWqNiRfuUHC2DHFMAxGq+DJfjZDOVXfrJdASvyaE
+         c7QFy44HhHo1mjYz76gn1xLwCTU95LvZ+DSeAkK/GERmN8b0Ge3nIoN+3KH90jrI0Ig6
+         fvADcnQ6xYqVWBn5us5QWT7qUlW4yfZNqdlobaAcbWDXMLIpw3jM4w/vBQYpoodHrRO0
+         aPFzqRZgwxyQr8qnWjZPodFH51PUTfDfSVcQexCFK0g1ldTRiURtvHfBjIxiKdpUwl7L
+         De6g==
+X-Gm-Message-State: APjAAAVlWYH6Dg5PZnaoePDETT1X1dIm2/aPj1fNOTYKbCTsOovf4XXk
+        vRxof4K+Q5SlWeb06XuTlKIoQWiAjUD6SoHTBdIn
+X-Google-Smtp-Source: APXvYqwe5B6z/3dUuNDQtQ0n2oQYOsdY3HQR3dkIin1gqVhu0NNteov05tKzv4DhJBBR4bjK2RG7Phnj6WUHoBrkRYc=
+X-Received: by 2002:a05:6830:1103:: with SMTP id w3mr7909437otq.312.1570713462861;
+ Thu, 10 Oct 2019 06:17:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191009212831.29081-1-jarkko.sakkinen@linux.intel.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Received: by 2002:a4a:3346:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 06:17:41
+ -0700 (PDT)
+Reply-To: sunrisefundingltd50@gmail.com
+From:   Valentina Yurina <v_yurina@ub.ac.id>
+Date:   Thu, 10 Oct 2019 14:17:41 +0100
+Message-ID: <CAKoEkvu4vc5Yn9-hzxQ5dYmUL=oO69=GSP0FC7O+CGz9Jni8+Q@mail.gmail.com>
+Subject: Apply For Financial investment at a lower rate 2%
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 12:28:28AM +0300, Jarkko Sakkinen wrote:
-> commit db4d8cb9c9f2af71c4d087817160d866ed572cc9 upstream
-> 
-> This backport is for v4.14 and v4.19 The backport requires non-racy
-> behaviour from TPM 1.x sysfs code. Thus, the dependecies for that
-> are included.
-> 
-> NOTE: 1/3 is only needed for v4.14.
+-- 
+Hello,
 
-How can a 0/X have a git commit id?
+We are private lenders based in UK.
 
-:)
+Do you need a loan (credit) as soon as possible. Are you in search of
+money to solve your personal needs or finance your business venture,
+then get Your desired loan today! Consult us at Sunrise Funding Ltd.
 
-greg k-h
+* We offer personal loan & huge capital loan at 2% interest rate to
+the general public both locally and internationally.
+* Credit amount range from $5,000.00 -- $500,000.00 and above.
+* Special $10,000,000.00 Loan offer for huge project also available.
+* Loan period of 6 months -- 10 years.
+* Loan is granted 24 hours after approval and accredited, directly in
+hand or bank account.
+
+Please note that you are advised to contact us for more details via
+the following e-mail address below;
+
+EMAIL : sunrisefundingltd50@gmail.com
+FIRM : Sunrise Funding Ltd UK.
