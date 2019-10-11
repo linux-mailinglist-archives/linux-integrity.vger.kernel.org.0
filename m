@@ -2,73 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED51D3A54
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Oct 2019 09:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669D5D3EA6
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Oct 2019 13:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbfJKHua (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Oct 2019 03:50:30 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:36338 "EHLO gloria.sntech.de"
+        id S1727926AbfJKLlT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Oct 2019 07:41:19 -0400
+Received: from mga07.intel.com ([134.134.136.100]:47805 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726546AbfJKHua (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Oct 2019 03:50:30 -0400
-Received: from ip5f5a6266.dynamic.kabel-deutschland.de ([95.90.98.102] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <heiko@sntech.de>)
-        id 1iIpgx-0000mF-Tj; Fri, 11 Oct 2019 09:50:27 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        Andrey Pronin <apronin@chromium.org>,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>
-Subject: Re: [PATCH v7 0/6] tpm: Add driver for cr50
-Date:   Fri, 11 Oct 2019 09:50:27 +0200
-Message-ID: <4042311.vcUrecXYXX@diego>
-In-Reply-To: <20191006223831.GA10397@linux.intel.com>
-References: <20190920183240.181420-1-swboyd@chromium.org> <20191006223831.GA10397@linux.intel.com>
+        id S1727883AbfJKLlT (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 11 Oct 2019 07:41:19 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Oct 2019 04:41:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,284,1566889200"; 
+   d="scan'208";a="200765694"
+Received: from mkaltenb-mobl.ger.corp.intel.com (HELO localhost) ([10.251.83.92])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 Oct 2019 04:41:11 -0700
+Date:   Fri, 11 Oct 2019 14:41:05 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     dhowells@redhat.com, peterhuewe@gmx.de, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jgg@ziepe.ca, arnd@arndb.de,
+        gregkh@linuxfoundation.org, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        jsnitsel@redhat.com, linux-kernel@vger.kernel.org,
+        daniel.thompson@linaro.org
+Subject: Re: [Patch v7 1/4] tpm: Move tpm_buf code to include/linux/
+Message-ID: <20191011114105.GA3129@linux.intel.com>
+References: <1570425935-7435-1-git-send-email-sumit.garg@linaro.org>
+ <1570425935-7435-2-git-send-email-sumit.garg@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1570425935-7435-2-git-send-email-sumit.garg@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Am Montag, 7. Oktober 2019, 00:39:00 CEST schrieb Jarkko Sakkinen:
-> On Fri, Sep 20, 2019 at 11:32:34AM -0700, Stephen Boyd wrote:
-> > This patch series adds support for the H1 secure microcontroller
-> > running cr50 firmware found on various recent Chromebooks. This driver
-> > is necessary to boot into a ChromeOS userspace environment. It
-> > implements support for several functions, including TPM-like
-> > functionality over a SPI interface.
-> > 
-> > The last time this was series sent looks to be [1]. I've looked over the
-> > patches and review comments and tried to address any feedback that
-> > Andrey didn't address (really minor things like newlines). I've reworked
-> > the patches from the last version to layer on top of the existing TPM
-> > TIS SPI implementation in tpm_tis_spi.c. Hopefully this is more
-> > palatable than combining the two drivers together into one file.
-> > 
-> > Please review so we can get the approach to supporting this device
-> > sorted out.
-> > 
-> > [1] https://lkml.kernel.org/r/1469757314-116169-1-git-send-email-apronin@chromium.org
+On Mon, Oct 07, 2019 at 10:55:32AM +0530, Sumit Garg wrote:
+> Move tpm_buf code to common include/linux/tpm.h header so that it can
+> be reused via other subsystems like trusted keys etc.
+> 
+> Also rename trusted keys and asymmetric keys usage of TPM 1.x buffer
+> implementation to tpm1_buf to avoid any compilation errors.
+> 
+> Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> ---
+>  crypto/asymmetric_keys/asym_tpm.c |  12 +--
+>  drivers/char/tpm/tpm.h            | 215 --------------------------------------
+>  include/keys/trusted.h            |  12 +--
+>  include/linux/tpm.h               | 215 ++++++++++++++++++++++++++++++++++++++
+>  security/keys/trusted.c           |  12 +--
+>  5 files changed, 233 insertions(+), 233 deletions(-)
 
-[...]
+Looks clean.
 
-> OK, so, I put these to my master in hopes to get testing exposure.
-> I think the changes are in great shape now. Thank you.
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-on a rk3399-gru-bob it works nicely for me, so
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-Thanks
-Heiko
-
-
+/Jarkko
