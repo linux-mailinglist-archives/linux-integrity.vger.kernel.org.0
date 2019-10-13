@@ -2,89 +2,161 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5E9D4A6A
-	for <lists+linux-integrity@lfdr.de>; Sat, 12 Oct 2019 00:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7419ED53D4
+	for <lists+linux-integrity@lfdr.de>; Sun, 13 Oct 2019 04:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727654AbfJKWew (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Oct 2019 18:34:52 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:36058 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727594AbfJKWev (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Oct 2019 18:34:51 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id B38348E582
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Oct 2019 22:34:51 +0000 (UTC)
-Received: by mail-io1-f71.google.com with SMTP id a22so16448190ioq.23
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Oct 2019 15:34:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=pb2kd2/UeXZLZxX2NPDVZ505qaor0AU6e6HZyZ5Nf/0=;
-        b=iSU46mQ0lJwkrZCnMtNcRxhKY4L1HQNTTYKE2v9Ia91C9XyOV6EOPkvMaw1zY8KVc4
-         SBYXS3aLB7Jeo6H/ersqLCDrEuXUkLWpgUzTjs5jQ3g3ZjQOiYEJ1ocXymRmCDKd0MSb
-         0muj2QkFuRyX/U62N2snm0T06v8x2EKo+39Py2ORBHDZcy5puDsSLi6BnHme4PzZEqhl
-         O6UU8kQ9QLXzUzw+1hHOMOwsXco1XjOSYouKzrXXQDN5y6We3RBH2LSYu8oeGK8wmBSS
-         r3FRGDDxl9OIkck/4HcXTF6slIEeRvhdd0JDy441MFrSGpGCbR07j7ZOvy2PW28qwdhZ
-         fbgA==
-X-Gm-Message-State: APjAAAWUGQ+Pc69cAlPZVgn1gJONAK0zX/xxsx0nCW5CSrDigt2yt9be
-        iw0wnNrbrDIXCddxoNeAAMp+wwAfv8hwFT+u3SPosDxH1wLJBZwd3CvmGjY0EcLfxoQYN3aAi0z
-        1is31p63fmIcM0S7AFRXvGxsYEX1a
-X-Received: by 2002:a5d:8b12:: with SMTP id k18mr3790082ion.133.1570833291146;
-        Fri, 11 Oct 2019 15:34:51 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwpN+irjTZ41pWeVOF+4kudnO11CT6u7HGkC68Z1Xz7WWUQxPTXop0tLsor9iDJHIHBYs/Qjg==
-X-Received: by 2002:a5d:8b12:: with SMTP id k18mr3790056ion.133.1570833290974;
-        Fri, 11 Oct 2019 15:34:50 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id u11sm8534708iof.22.2019.10.11.15.34.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2019 15:34:50 -0700 (PDT)
-Date:   Fri, 11 Oct 2019 15:34:49 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     jarkko.sakkinen@linux.intel.com, dhowells@redhat.com,
-        peterhuewe@gmx.de, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, jgg@ziepe.ca, arnd@arndb.de,
-        gregkh@linuxfoundation.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
-        linux-kernel@vger.kernel.org, daniel.thompson@linaro.org
-Subject: Re: [Patch v7 2/4] KEYS: Use common tpm_buf for trusted and
- asymmetric keys
-Message-ID: <20191011223448.7kycskba5mfsbvvw@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: Sumit Garg <sumit.garg@linaro.org>,
-        jarkko.sakkinen@linux.intel.com, dhowells@redhat.com,
-        peterhuewe@gmx.de, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, jgg@ziepe.ca, arnd@arndb.de,
-        gregkh@linuxfoundation.org, jejb@linux.ibm.com, zohar@linux.ibm.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kernel@vger.kernel.org,
-        daniel.thompson@linaro.org
-References: <1570425935-7435-1-git-send-email-sumit.garg@linaro.org>
- <1570425935-7435-3-git-send-email-sumit.garg@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <1570425935-7435-3-git-send-email-sumit.garg@linaro.org>
-User-Agent: NeoMutt/20180716
+        id S1728073AbfJMCt3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 12 Oct 2019 22:49:29 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51290 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727606AbfJMCt3 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 12 Oct 2019 22:49:29 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9D2kvef165792
+        for <linux-integrity@vger.kernel.org>; Sat, 12 Oct 2019 22:49:27 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2vkp1fekf3-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Sat, 12 Oct 2019 22:49:27 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Sun, 13 Oct 2019 03:49:25 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Sun, 13 Oct 2019 03:49:22 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9D2nKdn56623234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 13 Oct 2019 02:49:21 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CCDD4A4055;
+        Sun, 13 Oct 2019 02:49:20 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4A35CA4040;
+        Sun, 13 Oct 2019 02:49:19 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.192.114])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 13 Oct 2019 02:49:19 +0000 (GMT)
+Subject: Re: [PATCH v0 1/2] KEYS: Measure keys added to builtin or secondary
+ trusted keys keyring
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, sashal@kernel.org,
+        jamorris@linux.microsoft.com, kgoldman@us.ibm.com,
+        mjg59@google.com, dhowells@redhat.com
+Cc:     balajib@linux.microsoft.com, prsriva@linux.microsoft.com,
+        jorhand@linux.microsoft.com, patatash@linux.microsoft.com
+Date:   Sat, 12 Oct 2019 22:49:18 -0400
+In-Reply-To: <20191011173547.3200-2-nramas@linux.microsoft.com>
+References: <20191011173547.3200-1-nramas@linux.microsoft.com>
+         <20191011173547.3200-2-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19101302-0028-0000-0000-000003A98D4C
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19101302-0029-0000-0000-0000246B9C45
+Message-Id: <1570934958.5250.121.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-12_14:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910130026
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon Oct 07 19, Sumit Garg wrote:
->Switch to utilize common heap based tpm_buf code for TPM based trusted
->and asymmetric keys rather than using stack based tpm1_buf code. Also,
->remove tpm1_buf code.
->
->Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
->---
+On Fri, 2019-10-11 at 10:35 -0700, Lakshmi Ramasubramanian wrote:
+> IMA hook TRUSTED_KEYS to measure keys added to builtin or secondary
+> trusted keys keyring. This can be enabled through IMA policy.
+> 
+> The key data is queued up if IMA is not yet initialized and measured
+> when IMA is initialized. If IMA is initialized then the key is
+> measured immediately.
+> 
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+This patch needs to be broken up into multiple, smaller patches.  As
+discussed, measuring keys should be separate from the early
+measurement workqueue, at minimum as separate patches, if not separate
+patch sets.  A new LSM hook definitely needs to be defined in a
+separate patch.
+
+>  /*
+> - * process_buffer_measurement - Measure the buffer to ima log.
+> - * @buf: pointer to the buffer that needs to be added to the log.
+> - * @size: size of buffer(in bytes).
+> - * @eventname: event name to be used for the buffer entry.
+> - * @cred: a pointer to a credentials structure for user validation.
+> - * @secid: the secid of the task to be validated.
+> + * ima_post_key_create_or_update
+> + *     @keyring points to the keyring to which the key belongs
+> + *     @key points to the key being created or updated
+> + *     @builtin_or_secondary flag indicating whether
+> + *     the keyring to which the key belongs is the builtin
+> + *     or secondary trusted keys keyring
+> + * Measure keys added to the builtin or secondary trusted keyring
+>   *
+> - * Based on policy, the buffer is measured into the ima log.
+> + * On success return 0.
+> + * Return appropriate error code on error
+>   */
+> -static void process_buffer_measurement(const void *buf, int size,
+> -				       const char *eventname,
+> -				       const struct cred *cred, u32 secid)
+> +int ima_post_key_create_or_update(struct key *keyring,
+> +				  struct key *key,
+> +				  bool builtin_or_secondary)
+>  {
+> -	int ret = 0;
+> -	struct ima_template_entry *entry = NULL;
+> -	struct integrity_iint_cache iint = {};
+> -	struct ima_event_data event_data = {.iint = &iint,
+> -					    .filename = eventname,
+> -					    .buf = buf,
+> -					    .buf_len = size};
+> -	struct ima_template_desc *template_desc = NULL;
+> -	struct {
+> -		struct ima_digest_data hdr;
+> -		char digest[IMA_MAX_DIGEST_SIZE];
+> -	} hash = {};
+> -	int violation = 0;
+> -	int pcr = CONFIG_IMA_MEASURE_PCR_IDX;
+> -	int action = 0;
+> +	int rc = 0;
+> +	struct ima_trusted_key_entry *entry = NULL;
+> +	const struct public_key *pk;
+> +	u32 secid;
+> +	bool queued = false;
+>  
+> -	action = ima_get_action(NULL, cred, secid, 0, KEXEC_CMDLINE, &pcr,
+> -				&template_desc);
+> -	if (!(action & IMA_MEASURE))
+> -		return;
+> +	/*
+> +	 * We only measure asymmetric keys added to either
+> +	 * the builtin or the secondary trusted keys keyring.
+> +	 */
+> +	if (!builtin_or_secondary ||
+> +	    (key->type != &key_type_asymmetric))
+> +		return 0;
+
+Measuring keys should be generic, independent of the keyring that it
+is being added to.  Please do not hard code policy.
+
+Mimi
+
+>  
+> -	iint.ima_hash = &hash.hdr;
+> -	iint.ima_hash->algo = ima_hash_algo;
+> -	iint.ima_hash->length = hash_digest_size[ima_hash_algo];
+> +	mutex_lock(&ima_trusted_keys_mutex);
+
