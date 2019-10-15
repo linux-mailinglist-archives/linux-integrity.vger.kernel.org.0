@@ -2,113 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B41D76CB
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Oct 2019 14:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FFBD7CDC
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Oct 2019 19:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726004AbfJOMrU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 15 Oct 2019 08:47:20 -0400
-Received: from mga07.intel.com ([134.134.136.100]:26311 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725710AbfJOMrU (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 15 Oct 2019 08:47:20 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Oct 2019 05:47:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,300,1566889200"; 
-   d="scan'208";a="207538674"
-Received: from shacharl-mobl.ger.corp.intel.com (HELO localhost) ([10.252.9.88])
-  by orsmga002.jf.intel.com with ESMTP; 15 Oct 2019 05:47:14 -0700
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        id S1727132AbfJOREx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Oct 2019 13:04:53 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:46263 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726558AbfJOREx (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 15 Oct 2019 13:04:53 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q5so12846942pfg.13
+        for <linux-integrity@vger.kernel.org>; Tue, 15 Oct 2019 10:04:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mqEuhvlTqp14S8mH0iL/2lPaSLcfm7VaqiIgGEqKWMk=;
+        b=D4ShOz3TQih7NmaeEtKqlb0TSvP7KSMCGM5nw1Meu4R/O3TiGC5gvdoT71EV93zC00
+         o3P+2MuiEwb0x991JYgWp8RdsnPrBq2eyzFNkZDCqtcKJGPHCCnvf1W4QrN3VlTGqVij
+         zRnQqqWnEEhxFpafxdGrn/uS+QEnde8vqvC29bWx5046vcTH9kQMcaZetBfWiLZkgUN8
+         hjnNumZcvEZx1UUhlUQZRyKKjXyIKIV7KPwAirH1UN6EHwD6GCbdBelziTqbqa4CSk17
+         wk9w51KIJ5QnnvrCOdhBE3ZGCWGrQSqbFk5WguDuNE5KJN3rwt7Xu/CYbFfh28G9P7bq
+         JqYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mqEuhvlTqp14S8mH0iL/2lPaSLcfm7VaqiIgGEqKWMk=;
+        b=OwU7uQkbifpfY7Hx+/fEoLnV23rqOnfVqXYWVjWoPjMQzBgJWF97J6hvIc38SLtFjH
+         dXJIKVFSt27lAj21sHkhlMvsw8kPslW3i7N0Mbx/yphfI8GdTXMCgJG+fWbmfve7hrOO
+         jGrZYbtWlqe07CuxqaJJT9blLFttPMZy6dfdNlnLdgmFiyjcn8CPwfqQQe1RttfrBH5D
+         ofH2VDYQuEymiaCgR/6+5Plz29nbugtjArkzJ2vljhVcRD4SC84EdGZRelWm5FrkOg70
+         xkbkxtF80s8uYZ8EtZYg0wmYLTQhfAktHnLyjZIqvTTecJgqdJ0eP3MN9vMy6TwD392V
+         +BUA==
+X-Gm-Message-State: APjAAAU0dUWg5rFu+cc770guWRqE4cTCLm65jSbgg5EUYiyquVeGZ0oX
+        5FX7CnEEP7+PlYqGv+TBFZ2n1g==
+X-Google-Smtp-Source: APXvYqyhmYECdW43MhFhTN7//aeS41RHJ10Z2yDljk0yyhfJjbjM1mu84/PDw5uP6av+TuznHBaj2A==
+X-Received: by 2002:a63:6949:: with SMTP id e70mr39295261pgc.226.1571159092733;
+        Tue, 15 Oct 2019 10:04:52 -0700 (PDT)
+Received: from ziepe.ca ([72.143.229.181])
+        by smtp.gmail.com with ESMTPSA id t125sm26439052pfc.80.2019.10.15.10.04.51
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 15 Oct 2019 10:04:51 -0700 (PDT)
+Received: from jgg by jggl.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1iKQFe-0001TU-HP; Tue, 15 Oct 2019 14:04:50 -0300
+Date:   Tue, 15 Oct 2019 14:04:50 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org,
         David Safford <david.safford@ge.com>,
         Pascal Van Leeuwen <pvanleeuwen@verimatrix.com>,
         James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Peter Huewe <peterhuewe@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] tpm: Salt tpm_get_random() result with get_random_bytes()
-Date:   Tue, 15 Oct 2019 15:47:02 +0300
-Message-Id: <20191015124702.633-1-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm: Salt tpm_get_random() result with get_random_bytes()
+Message-ID: <20191015170450.GB5444@ziepe.ca>
+References: <20191015124702.633-1-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191015124702.633-1-jarkko.sakkinen@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Salt the result that comes from the TPM RNG with random bytes from the
-kernel RNG. This will allow to use tpm_get_random() as a substitute for
-get_random_bytes().  TPM could have a bug (making results predicatable),
-backdoor or even an inteposer in the bus. Salting gives protections
-against these concerns.
+On Tue, Oct 15, 2019 at 03:47:02PM +0300, Jarkko Sakkinen wrote:
+> Salt the result that comes from the TPM RNG with random bytes from the
+> kernel RNG. This will allow to use tpm_get_random() as a substitute for
+> get_random_bytes().  TPM could have a bug (making results predicatable),
+> backdoor or even an inteposer in the bus. Salting gives protections
+> against these concerns.
 
-Cc: David Safford <david.safford@ge.com>
-Cc: Pascal Van Leeuwen <pvanleeuwen@verimatrix.com>
-Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- drivers/char/tpm/tpm-interface.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+Seems like a dangerous use case, why would any kernel user that cared
+about quality of randomness ever call a tpm_* API to get quality
+random data?
 
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index 7f105490604c..a135b1cd5a17 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -22,6 +22,7 @@
- #include <linux/poll.h>
- #include <linux/slab.h>
- #include <linux/mutex.h>
-+#include <linux/random.h>
- #include <linux/spinlock.h>
- #include <linux/suspend.h>
- #include <linux/freezer.h>
-@@ -431,16 +432,24 @@ int tpm_pm_resume(struct device *dev)
- EXPORT_SYMBOL_GPL(tpm_pm_resume);
- 
- /**
-- * tpm_get_random() - get random bytes from the TPM's RNG
-+ * tpm_get_random() - Get random bytes from the TPM's RNG
-  * @chip:	a &struct tpm_chip instance, %NULL for the default chip
-  * @out:	destination buffer for the random bytes
-  * @max:	the max number of bytes to write to @out
-  *
-- * Return: number of random bytes read or a negative error value.
-+ * Get random bytes from the TPM's RNG and salt the result with the same amount
-+ * of bytes from the kernel RNG. Salting allows to call this function as a
-+ * substitute for get_random_bytes() where appropriate.
-+ *
-+ * Return:
-+ *   number of random bytes on success,
-+ *   -errno on error
-  */
- int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
- {
-+	u8 salt[TPM_MAX_RNG_DATA];
- 	int rc;
-+	int i;
- 
- 	if (!out || max > TPM_MAX_RNG_DATA)
- 		return -EINVAL;
-@@ -455,6 +464,14 @@ int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
- 		rc = tpm1_get_random(chip, out, max);
- 
- 	tpm_put_ops(chip);
-+
-+	if (rc > 0) {
-+		get_random_bytes(salt, rc);
-+
-+		for (i = 0; i < rc; i++)
-+			out[i] ^= salt[i];
-+	}
-+
- 	return rc;
- }
- EXPORT_SYMBOL_GPL(tpm_get_random);
--- 
-2.20.1
-
+Jason
