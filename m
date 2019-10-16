@@ -2,104 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C52D99BA
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Oct 2019 21:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD468D9DF8
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Oct 2019 23:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436701AbfJPTKd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Oct 2019 15:10:33 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:35082 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732084AbfJPTKd (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Oct 2019 15:10:33 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7838D8EE0CC;
-        Wed, 16 Oct 2019 12:10:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1571253032;
-        bh=pZvAVmDqMp56efKKwit5bs7uRqUQsjVTFJozEct6wvU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ClJJXg/ZVGUv+nH7L2Plg7+hQNHIidZPswodVDriX2adntBmJVShn1Hck6smY7GPI
-         4SIfWp+esnM5gawAtRrAIu4tHPIHDPA7EH9LSDbx3nqSqZB5B4mNhumvgovOHIPXN5
-         fBnxmGSn/rxr/5/10m3EOjyZb870ftman3umiOnE=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FHHZIyJXfYlB; Wed, 16 Oct 2019 12:10:32 -0700 (PDT)
-Received: from [9.232.197.57] (unknown [129.33.253.145])
+        id S2437753AbfJPVzR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 16 Oct 2019 17:55:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45762 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2437748AbfJPVzR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 16 Oct 2019 17:55:17 -0400
+Received: from localhost (unknown [192.55.54.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2BF048EE02B;
-        Wed, 16 Oct 2019 12:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1571253032;
-        bh=pZvAVmDqMp56efKKwit5bs7uRqUQsjVTFJozEct6wvU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ClJJXg/ZVGUv+nH7L2Plg7+hQNHIidZPswodVDriX2adntBmJVShn1Hck6smY7GPI
-         4SIfWp+esnM5gawAtRrAIu4tHPIHDPA7EH9LSDbx3nqSqZB5B4mNhumvgovOHIPXN5
-         fBnxmGSn/rxr/5/10m3EOjyZb870ftman3umiOnE=
-Message-ID: <1571253029.17520.5.camel@HansenPartnership.com>
-Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Wed, 16 Oct 2019 15:10:29 -0400
-In-Reply-To: <20191016162543.GB6279@linux.intel.com>
-References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com>
-         <20191007000520.GA17116@linux.intel.com>
-         <59b88042-9c56-c891-f75e-7c0719eb5ff9@linux.ibm.com>
-         <20191008234935.GA13926@linux.intel.com>
-         <20191008235339.GB13926@linux.intel.com>
-         <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2B995@ALPMBAPA12.e2k.ad.ge.com>
-         <20191014190033.GA15552@linux.intel.com>
-         <1571081397.3728.9.camel@HansenPartnership.com>
-         <20191016110031.GE10184@linux.intel.com>
-         <1571229252.3477.7.camel@HansenPartnership.com>
-         <20191016162543.GB6279@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C7D1218DE;
+        Wed, 16 Oct 2019 21:55:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571262916;
+        bh=61zl7DkTaWrXCdCD6qktASwL8w1xwvcJ3Y+nDn38yoY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aVhWrnaswqTQjQsdIPP8LDcoErM56dPS7JJVgIaJe6Lruq7znAHVpleEF+Ym3Q1Tm
+         ANX13YnlPo9gQJsCylwxGolX1gQDUSYme47GcXNEHuukGCr2lKpBukq2gZQafzH+wk
+         EXWWEiCbqjPjoOKYOFAOb/mhJqntphH50K4bxtXI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Scott Talbert <swt@techie.net>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Dave Young <dyoung@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lukas Wunner <lukas@wunner.de>, Lyude Paul <lyude@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Octavian Purdila <octavian.purdila@intel.com>,
+        Peter Jones <pjones@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>
+Subject: [PATCH 4.9 76/92] efivar/ssdt: Dont iterate over EFI vars if no SSDT override was specified
+Date:   Wed, 16 Oct 2019 14:50:49 -0700
+Message-Id: <20191016214845.951472119@linuxfoundation.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191016214759.600329427@linuxfoundation.org>
+References: <20191016214759.600329427@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-10-16 at 19:25 +0300, Jarkko Sakkinen wrote:
-> On Wed, Oct 16, 2019 at 08:34:12AM -0400, James Bottomley wrote:
-> > reversible ciphers are generally frowned upon in random number
-> > generation, that's why the krng uses chacha20.  In general I think
-> > we shouldn't try to code our own mixing and instead should get the
-> > krng to do it for us using whatever the algorithm du jour that the
-> > crypto guys have blessed is.  That's why I proposed adding the TPM
-> > output to the krng as entropy input and then taking the output of
-> > the krng.
-> 
-> It is already registered as hwrng. What else?
+From: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 
-It only contributes entropy once at start of OS.
+commit c05f8f92b701576b615f30aac31fabdc0648649b upstream.
 
->  Was the issue that it is only used as seed when the rng is init'd
-> first? I haven't at this point gone to the internals of krng.
+The kernel command line option efivar_ssdt= allows the name to be
+specified of an EFI variable containing an ACPI SSDT table that should
+be loaded into memory by the OS, and treated as if it was provided by
+the firmware.
 
-Basically it was similar to your xor patch except I got the kernel rng
-to do the mixing, so it would use the chacha20 cipher at the moment
-until they decide that's unsafe and change it to something else:
+Currently, that code will always iterate over the EFI variables and
+compare each name with the provided name, even if the command line
+option wasn't set to begin with.
 
-https://lore.kernel.org/linux-crypto/1570227068.17537.4.camel@HansenPartnership.com/
+So bail early when no variable name was provided. This works around a
+boot regression on the 2012 Mac Pro, as reported by Scott.
 
-It uses add_hwgenerator_randomness() to do the mixing.  It also has an
-unmixed source so that read of the TPM hwrng device works as expected.
+Tested-by: Scott Talbert <swt@techie.net>
+Signed-off-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: <stable@vger.kernel.org> # v4.9+
+Cc: Ben Dooks <ben.dooks@codethink.co.uk>
+Cc: Dave Young <dyoung@redhat.com>
+Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc: Jerry Snitselaar <jsnitsel@redhat.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Lukas Wunner <lukas@wunner.de>
+Cc: Lyude Paul <lyude@redhat.com>
+Cc: Matthew Garrett <mjg59@google.com>
+Cc: Octavian Purdila <octavian.purdila@intel.com>
+Cc: Peter Jones <pjones@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-efi@vger.kernel.org
+Cc: linux-integrity@vger.kernel.org
+Fixes: 475fb4e8b2f4 ("efi / ACPI: load SSTDs from EFI variables")
+Link: https://lkml.kernel.org/r/20191002165904.8819-3-ard.biesheuvel@linaro.org
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-James
+---
+ drivers/firmware/efi/efi.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-
-
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -243,6 +243,9 @@ static __init int efivar_ssdt_load(void)
+ 	void *data;
+ 	int ret;
+ 
++	if (!efivar_ssdt[0])
++		return 0;
++
+ 	ret = efivar_init(efivar_ssdt_iter, &entries, true, &entries);
+ 
+ 	list_for_each_entry_safe(entry, aux, &entries, list) {
 
 
