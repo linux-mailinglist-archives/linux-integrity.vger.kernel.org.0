@@ -2,94 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A95D9584
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Oct 2019 17:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555F4D95EC
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Oct 2019 17:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394126AbfJPP1j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Oct 2019 11:27:39 -0400
-Received: from mga18.intel.com ([134.134.136.126]:64212 "EHLO mga18.intel.com"
+        id S2404778AbfJPPsx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 16 Oct 2019 11:48:53 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:35514 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394125AbfJPP1j (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Oct 2019 11:27:39 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Oct 2019 08:27:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,304,1566889200"; 
-   d="scan'208";a="370830735"
-Received: from hagarwal-mobl1.gar.corp.intel.com (HELO localhost) ([10.252.5.165])
-  by orsmga005.jf.intel.com with ESMTP; 16 Oct 2019 08:27:33 -0700
-Date:   Wed, 16 Oct 2019 18:27:31 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        Andrey Pronin <apronin@chromium.org>,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>
-Subject: Re: [PATCH v7 0/6] tpm: Add driver for cr50
-Message-ID: <20191016152731.GD4261@linux.intel.com>
-References: <20190920183240.181420-1-swboyd@chromium.org>
- <4042311.vcUrecXYXX@diego>
- <20191014195607.GK15552@linux.intel.com>
- <11998737.dOvWaeisEJ@phil>
+        id S1726985AbfJPPsx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 16 Oct 2019 11:48:53 -0400
+Received: from zn.tnic (p200300EC2F093900C973EA3B8BE79A94.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:3900:c973:ea3b:8be7:9a94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7C6C21EC0CB7;
+        Wed, 16 Oct 2019 17:48:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1571240931;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=jmX8/r1x/roPBxPzVwV80iSi0MvvPRQDzQnr23dp5ns=;
+        b=W73TA2+QOLdkRyLbrczLc/7ptPoKfR2iKpdxfN9wQvwcqbD5amGSiTp9g72BGPqIaBrCEL
+        YISTB2/yxFpw1S/wAwsXzKsZnuI3+Ftc6wgcbsCnkmLHr4rGjcfXsCRoFq+iL/jORuisIr
+        z0EwpletbOM2Z0/1fE1o4Vrt63QCesk=
+Date:   Wed, 16 Oct 2019 17:48:42 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Joe Perches <joe@perches.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Kairui Song <kasong@redhat.com>, linux-kernel@vger.kernel.org,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v3] x86, efi: never relocate kernel below lowest
+ acceptable address
+Message-ID: <20191016154842.GJ1138@zn.tnic>
+References: <20191012034421.25027-1-kasong@redhat.com>
+ <20191014101419.GA4715@zn.tnic>
+ <20191014202111.GP15552@linux.intel.com>
+ <20191014211825.GJ4715@zn.tnic>
+ <20191016152014.GC4261@linux.intel.com>
+ <fb0e7c13da405970d5cbd59c10005daaf970b8da.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <11998737.dOvWaeisEJ@phil>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <fb0e7c13da405970d5cbd59c10005daaf970b8da.camel@perches.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 10:23:15PM +0200, Heiko Stuebner wrote:
-> Hi,
-> 
-> Am Montag, 14. Oktober 2019, 21:56:30 CEST schrieb Jarkko Sakkinen:
-> > On Fri, Oct 11, 2019 at 09:50:27AM +0200, Heiko Stübner wrote:
-> > > Am Montag, 7. Oktober 2019, 00:39:00 CEST schrieb Jarkko Sakkinen:
-> > > > On Fri, Sep 20, 2019 at 11:32:34AM -0700, Stephen Boyd wrote:
-> > > > > This patch series adds support for the H1 secure microcontroller
-> > > > > running cr50 firmware found on various recent Chromebooks. This driver
-> > > > > is necessary to boot into a ChromeOS userspace environment. It
-> > > > > implements support for several functions, including TPM-like
-> > > > > functionality over a SPI interface.
-> > > > > 
-> > > > > The last time this was series sent looks to be [1]. I've looked over the
-> > > > > patches and review comments and tried to address any feedback that
-> > > > > Andrey didn't address (really minor things like newlines). I've reworked
-> > > > > the patches from the last version to layer on top of the existing TPM
-> > > > > TIS SPI implementation in tpm_tis_spi.c. Hopefully this is more
-> > > > > palatable than combining the two drivers together into one file.
-> > > > > 
-> > > > > Please review so we can get the approach to supporting this device
-> > > > > sorted out.
-> > > > > 
-> > > > > [1] https://lkml.kernel.org/r/1469757314-116169-1-git-send-email-apronin@chromium.org
-> > > 
-> > > [...]
-> > > 
-> > > > OK, so, I put these to my master in hopes to get testing exposure.
-> > > > I think the changes are in great shape now. Thank you.
-> > > 
-> > > on a rk3399-gru-bob it works nicely for me, so
-> > > Tested-by: Heiko Stuebner <heiko@sntech.de>
-> > 
-> > Thank you! I updated my tree with your tag. Mind if I also add
-> > reviewed-by's?
-> 
-> I think I did spent enough time with the patches to warrant that, so
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+On Wed, Oct 16, 2019 at 08:23:56AM -0700, Joe Perches wrote:
+> ?  examples please.
 
-Thank you!
+From this very thread:
 
-/Jarkko
+\sEfi\s, \sefi\s, \seFI\s etc should be "EFI"
+
+I'm thinking perhaps start conservatively and catch the most often
+misspelled ones in commit messages or comments. "CPU", "SMT", "MCE",
+"MCA", "PCI" etc come to mind.
+
+> checkpatch has a db for misspellings, I supposed another for
+> acronyms could be added,
+
+Doesn't have to be another one - established acronyms are part of the
+dictionary too.
+
+> but how would false positives be avoided?
+
+Perhaps delimited with spaces or non-word chars (\W) and when they're
+part of a comment or the commit message...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
