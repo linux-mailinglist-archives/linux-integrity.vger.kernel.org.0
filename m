@@ -2,51 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90440D9E71
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Oct 2019 00:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C935D9F9E
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Oct 2019 00:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438373AbfJPV7D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Oct 2019 17:59:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53222 "EHLO mail.kernel.org"
+        id S2395426AbfJPV4o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 16 Oct 2019 17:56:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48668 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438364AbfJPV7C (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Oct 2019 17:59:02 -0400
+        id S2395417AbfJPV4o (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 16 Oct 2019 17:56:44 -0400
 Received: from localhost (unknown [192.55.54.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 53FD221E6F;
-        Wed, 16 Oct 2019 21:59:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C1E8A21D7D;
+        Wed, 16 Oct 2019 21:56:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571263141;
-        bh=NXQkog5XLhxkoS1MMABH5+Ooyaj6tXLdrLg3O7FuWrU=;
+        s=default; t=1571263003;
+        bh=8Em2bsmIAcI/tf3Ihod02Uq15PYbjOQsMAOdNwSUvTk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w0+ZYR0u1ZXhD4aRzP/+FtcB78EUWE1DYoEtGzAQmGL8T1GaPkwB4u7kaPs+QpeDZ
-         x6NdzKnAzIVmdG0/lH1JgdDsKZ5MR/eVv/oXGxw78jt2rUkxrDUcWjQIhUq5CkgWwS
-         oH+lH1LsPsD5rCwWLFCILTQ3daPRKkpJKnbEjjpo=
+        b=HcPXBAAKzTiqlPdXsQ6seV/3ICMFLT4Qpban1IyigTKtBzCfgt5P65YO37F3O3v7L
+         115jhdnO1eOvCapNQ9BaQqyro7pZpDiSZHsimnEjBD2DlbvkVt3NAF4Lug3PEgGRwn
+         a/Nxgs84SkUIknWDgtafhvNOTO2ig+7SHUOFlD0s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jerry Snitselaar <jsnitsel@redhat.com>,
+        stable@vger.kernel.org, Scott Talbert <swt@techie.net>,
         Ard Biesheuvel <ard.biesheuvel@linaro.org>,
         Ben Dooks <ben.dooks@codethink.co.uk>,
         Dave Young <dyoung@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Lukas Wunner <lukas@wunner.de>, Lyude Paul <lyude@redhat.com>,
         Matthew Garrett <mjg59@google.com>,
         Octavian Purdila <octavian.purdila@intel.com>,
         Peter Jones <pjones@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Scott Talbert <swt@techie.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
         Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH 5.3 065/112] efi/tpm: Only set efi_tpm_final_log_size after successful event log parsing
+Subject: [PATCH 4.14 43/65] efivar/ssdt: Dont iterate over EFI vars if no SSDT override was specified
 Date:   Wed, 16 Oct 2019 14:50:57 -0700
-Message-Id: <20191016214901.944210386@linuxfoundation.org>
+Message-Id: <20191016214832.914076532@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191016214844.038848564@linuxfoundation.org>
-References: <20191016214844.038848564@linuxfoundation.org>
+In-Reply-To: <20191016214756.457746573@linuxfoundation.org>
+References: <20191016214756.457746573@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +56,29 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Jerry Snitselaar <jsnitsel@redhat.com>
+From: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 
-commit e658c82be5561412c5e83b5e74e9da4830593f3e upstream.
+commit c05f8f92b701576b615f30aac31fabdc0648649b upstream.
 
-If __calc_tpm2_event_size() fails to parse an event it will return 0,
-resulting tpm2_calc_event_log_size() returning -1. Currently there is
-no check of this return value, and 'efi_tpm_final_log_size' can end up
-being set to this negative value resulting in a crash like this one:
+The kernel command line option efivar_ssdt= allows the name to be
+specified of an EFI variable containing an ACPI SSDT table that should
+be loaded into memory by the OS, and treated as if it was provided by
+the firmware.
 
-  BUG: unable to handle page fault for address: ffffbc8fc00866ad
-  #PF: supervisor read access in kernel mode
-  #PF: error_code(0x0000) - not-present page
+Currently, that code will always iterate over the EFI variables and
+compare each name with the provided name, even if the command line
+option wasn't set to begin with.
 
-  RIP: 0010:memcpy_erms+0x6/0x10
-  Call Trace:
-   tpm_read_log_efi()
-   tpm_bios_log_setup()
-   tpm_chip_register()
-   tpm_tis_core_init.cold.9+0x28c/0x466
-   tpm_tis_plat_probe()
-   platform_drv_probe()
-   ...
+So bail early when no variable name was provided. This works around a
+boot regression on the 2012 Mac Pro, as reported by Scott.
 
-Also __calc_tpm2_event_size() returns a size of 0 when it fails
-to parse an event, so update function documentation to reflect this.
-
-The root cause of the issue that caused the failure of event parsing
-in this case is resolved by Peter Jone's patchset dealing with large
-event logs where crossing over a page boundary causes the page with
-the event count to be unmapped.
-
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Tested-by: Scott Talbert <swt@techie.net>
 Signed-off-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: <stable@vger.kernel.org> # v4.9+
 Cc: Ben Dooks <ben.dooks@codethink.co.uk>
 Cc: Dave Young <dyoung@redhat.com>
 Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc: Jerry Snitselaar <jsnitsel@redhat.com>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Lukas Wunner <lukas@wunner.de>
 Cc: Lyude Paul <lyude@redhat.com>
@@ -99,53 +86,29 @@ Cc: Matthew Garrett <mjg59@google.com>
 Cc: Octavian Purdila <octavian.purdila@intel.com>
 Cc: Peter Jones <pjones@redhat.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Scott Talbert <swt@techie.net>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: linux-efi@vger.kernel.org
 Cc: linux-integrity@vger.kernel.org
-Cc: stable@vger.kernel.org
-Fixes: c46f3405692de ("tpm: Reserve the TPM final events table")
-Link: https://lkml.kernel.org/r/20191002165904.8819-6-ard.biesheuvel@linaro.org
+Fixes: 475fb4e8b2f4 ("efi / ACPI: load SSTDs from EFI variables")
+Link: https://lkml.kernel.org/r/20191002165904.8819-3-ard.biesheuvel@linaro.org
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
- drivers/firmware/efi/tpm.c   |    9 ++++++++-
- include/linux/tpm_eventlog.h |    2 +-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ drivers/firmware/efi/efi.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/firmware/efi/tpm.c
-+++ b/drivers/firmware/efi/tpm.c
-@@ -85,11 +85,18 @@ int __init efi_tpm_eventlog_init(void)
- 						    final_tbl->nr_events,
- 						    log_tbl->log);
- 	}
-+
-+	if (tbl_size < 0) {
-+		pr_err(FW_BUG "Failed to parse event in TPM Final Events Log\n");
-+		goto out_calc;
-+	}
-+
- 	memblock_reserve((unsigned long)final_tbl,
- 			 tbl_size + sizeof(*final_tbl));
--	early_memunmap(final_tbl, sizeof(*final_tbl));
- 	efi_tpm_final_log_size = tbl_size;
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -266,6 +266,9 @@ static __init int efivar_ssdt_load(void)
+ 	void *data;
+ 	int ret;
  
-+out_calc:
-+	early_memunmap(final_tbl, sizeof(*final_tbl));
- out:
- 	early_memunmap(log_tbl, sizeof(*log_tbl));
- 	return ret;
---- a/include/linux/tpm_eventlog.h
-+++ b/include/linux/tpm_eventlog.h
-@@ -152,7 +152,7 @@ struct tcg_algorithm_info {
-  * total. Once we've done this we know the offset of the data length field,
-  * and can calculate the total size of the event.
-  *
-- * Return: size of the event on success, <0 on failure
-+ * Return: size of the event on success, 0 on failure
-  */
++	if (!efivar_ssdt[0])
++		return 0;
++
+ 	ret = efivar_init(efivar_ssdt_iter, &entries, true, &entries);
  
- static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+ 	list_for_each_entry_safe(entry, aux, &entries, list) {
 
 
