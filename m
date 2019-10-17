@@ -2,89 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10373DB579
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Oct 2019 20:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CD8DB580
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Oct 2019 20:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438373AbfJQSEr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Oct 2019 14:04:47 -0400
-Received: from mga03.intel.com ([134.134.136.65]:44892 "EHLO mga03.intel.com"
+        id S2389832AbfJQSGr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Oct 2019 14:06:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54524 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437870AbfJQSEq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Oct 2019 14:04:46 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Oct 2019 11:04:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,308,1566889200"; 
-   d="scan'208";a="221467301"
-Received: from eshoguli-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.19.56])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Oct 2019 11:04:40 -0700
-Date:   Thu, 17 Oct 2019 21:04:40 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     "Safford, David (GE Global Research, US)" <david.safford@ge.com>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
-Message-ID: <20191017180440.GG6667@linux.intel.com>
-References: <59b88042-9c56-c891-f75e-7c0719eb5ff9@linux.ibm.com>
- <20191008234935.GA13926@linux.intel.com>
- <20191008235339.GB13926@linux.intel.com>
- <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2B995@ALPMBAPA12.e2k.ad.ge.com>
- <20191014190033.GA15552@linux.intel.com>
- <1571081397.3728.9.camel@HansenPartnership.com>
- <20191016110031.GE10184@linux.intel.com>
- <1571229252.3477.7.camel@HansenPartnership.com>
- <20191016162543.GB6279@linux.intel.com>
- <1571253029.17520.5.camel@HansenPartnership.com>
+        id S2388188AbfJQSGr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 17 Oct 2019 14:06:47 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0627321835;
+        Thu, 17 Oct 2019 18:06:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571335606;
+        bh=prHm7NxUgWw6gtKYHx0XzUtdQBFWGrcBtG2xHXdLPQM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K873WHE6VcGhA8uNvdeW9swkfr+2AlTEaX+xQxVuKi1yemH8bI9ac1G5vErI/GOgs
+         O2Hy+8/NWM03Iat1y2dlU6racEQbU0eL9CyiltxPgRdio1hRk9dzB1DLlYROnoYscS
+         xm55KPRgKpoWHMl7E9rQ7rrPfJ/JIPgr28TP39bU=
+Date:   Thu, 17 Oct 2019 14:06:44 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Pavel Tatashin <pasha.tatashin@soleen.com>, jmorris@namei.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@microsoft.com, thiruan@microsoft.com,
+        bryankel@microsoft.com, tee-dev@lists.linaro.org,
+        ilias.apalodimas@linaro.org, sumit.garg@linaro.org,
+        rdunlap@infradead.org
+Subject: Re: [PATCH v3] tpm/tpm_ftpm_tee: add shutdown call back
+Message-ID: <20191017180644.GW31224@sasha-vm>
+References: <20191016163114.985542-1-pasha.tatashin@soleen.com>
+ <20191017162251.GB6667@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <1571253029.17520.5.camel@HansenPartnership.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20191017162251.GB6667@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 03:10:29PM -0400, James Bottomley wrote:
-> On Wed, 2019-10-16 at 19:25 +0300, Jarkko Sakkinen wrote:
-> > On Wed, Oct 16, 2019 at 08:34:12AM -0400, James Bottomley wrote:
-> > > reversible ciphers are generally frowned upon in random number
-> > > generation, that's why the krng uses chacha20.  In general I think
-> > > we shouldn't try to code our own mixing and instead should get the
-> > > krng to do it for us using whatever the algorithm du jour that the
-> > > crypto guys have blessed is.  That's why I proposed adding the TPM
-> > > output to the krng as entropy input and then taking the output of
-> > > the krng.
-> > 
-> > It is already registered as hwrng. What else?
-> 
-> It only contributes entropy once at start of OS.
+On Thu, Oct 17, 2019 at 07:22:51PM +0300, Jarkko Sakkinen wrote:
+>On Wed, Oct 16, 2019 at 12:31:14PM -0400, Pavel Tatashin wrote:
+>> Add shutdown call back to close existing session with fTPM TA
+>> to support kexec scenario.
+>>
+>> Add parentheses to function names in comments as specified in kdoc.
+>>
+>> Signed-off-by: Thirupathaiah Annapureddy <thiruan@microsoft.com>
+>> Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
+>
+>LGTM
+>
+>Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>
+>I have no means to test this though. It still needs a tested-by.
 
-Ok.
+We've been running this patch internally for the past few months,
+testing kexec scenarios, so I guess it could have mine :)
 
-> >  Was the issue that it is only used as seed when the rng is init'd
-> > first? I haven't at this point gone to the internals of krng.
-> 
-> Basically it was similar to your xor patch except I got the kernel rng
-> to do the mixing, so it would use the chacha20 cipher at the moment
-> until they decide that's unsafe and change it to something else:
-> 
-> https://lore.kernel.org/linux-crypto/1570227068.17537.4.camel@HansenPartnership.com/
-> 
-> It uses add_hwgenerator_randomness() to do the mixing.  It also has an
-> unmixed source so that read of the TPM hwrng device works as expected.
+Tested-by: Sasha Levin <sashal@kernel.org>
 
-Thinking that could this potentially racy? I.e. between the calls
-something else could eat the entropy added?
-
-/Jarkko
+-- 
+Thanks,
+Sasha
