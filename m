@@ -2,75 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67095DA218
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Oct 2019 01:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2F4DAD6D
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Oct 2019 14:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390305AbfJPXZ2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Oct 2019 19:25:28 -0400
-Received: from smtprelay0045.hostedemail.com ([216.40.44.45]:56242 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725970AbfJPXZ2 (ORCPT
+        id S2390375AbfJQMwa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Oct 2019 08:52:30 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45675 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732353AbfJQMwa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Oct 2019 19:25:28 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id B26C85832;
-        Wed, 16 Oct 2019 23:25:26 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::::,RULES_HIT:41:355:379:599:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3167:3352:3622:3865:3866:3867:3868:3870:3871:4321:5007:6742:7875:7903:10004:10400:11232:11658:11914:12297:12663:12740:12760:12895:13069:13311:13357:13439:14659:21080:21433:21627:21740:30003:30054:30090:30091,0,RBL:47.151.152.152:@perches.com:.lbl8.mailshell.net-62.14.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:24,LUA_SUMMARY:none
-X-HE-Tag: flock47_2f3f58b870741
-X-Filterd-Recvd-Size: 2044
-Received: from XPS-9350.home (unknown [47.151.152.152])
-        (Authenticated sender: joe@perches.com)
-        by omf02.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 16 Oct 2019 23:25:24 +0000 (UTC)
-Message-ID: <3f2feed96a3569e2a27051864ae5e8a84ce634b4.camel@perches.com>
-Subject: Re: [PATCH v3] x86, efi: never relocate kernel below lowest
- acceptable address
-From:   Joe Perches <joe@perches.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Kairui Song <kasong@redhat.com>, linux-kernel@vger.kernel.org,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Date:   Wed, 16 Oct 2019 16:25:23 -0700
-In-Reply-To: <20191016154842.GJ1138@zn.tnic>
-References: <20191012034421.25027-1-kasong@redhat.com>
-         <20191014101419.GA4715@zn.tnic> <20191014202111.GP15552@linux.intel.com>
-         <20191014211825.GJ4715@zn.tnic> <20191016152014.GC4261@linux.intel.com>
-         <fb0e7c13da405970d5cbd59c10005daaf970b8da.camel@perches.com>
-         <20191016154842.GJ1138@zn.tnic>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.32.1-2 
+        Thu, 17 Oct 2019 08:52:30 -0400
+Received: by mail-lj1-f193.google.com with SMTP id q64so2392605ljb.12
+        for <linux-integrity@vger.kernel.org>; Thu, 17 Oct 2019 05:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QrLNGivHk+MX8xmqPNs4VJfLnymqhdD216JwoEaih2o=;
+        b=pxijlpnJvH+0Meiyj9IJb82BApkYa5Amf8UD++PDk2Vmv6edkmCzoFFXCRLntxyrC1
+         mLkWZCG6OSWH+5i+vHjTerMGjh9sWPTJes3VNAUhsCvYuQnTCdR4Tg7ba2ic4lRik6KE
+         JG2/FQ276AuTq9GpU+msGysKBTdy0rzz/xr4IuUdwM/l5r5qC8kKsIfyn2meaOzRInGT
+         o5ksIUdYOzr8rmUJLsCOb/VBis8RXjC35uW1/4glW/GT3AVSC4oswPriEz6NnvJNAVm/
+         zsW1cnRSp0R4crrk2JCd+r+mabjMCA2aBmK670MduETPO6SboZEEuq/rHegWThVf6NzS
+         nS6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QrLNGivHk+MX8xmqPNs4VJfLnymqhdD216JwoEaih2o=;
+        b=e/YXaKJpdQyvGYbnujA9pLCplwtX5aJxOAp7gKYpOi5eJqFHfqTK9hZudbMpHQySur
+         f8XYzhV2SU+5zxBVv7/lLnwwN9IFrPe86aAJwfGl39WKNYk2wLVnZ3xx55/S2WkH3iOF
+         NvBSq2eFzqk3A7Xxz7n7YYh80HXbAvrmhx+I0buIe7CXaieSN1pjlcZXqLIXxeE4gESy
+         jGIXTf9E19C1HZ7e9J5aHdF+/ZIHGA0/6UmV6b5dU3TuR7VAnJ4X81EdlA4zxM/Qiubx
+         oq6k3VgHq9VznqH2DeBSOuAIzKoa+BV+dmcJ1jF5dfLwWzegCJKsBLbyi+vBMG4XIkwg
+         WWDQ==
+X-Gm-Message-State: APjAAAXgSZyUZctprSCeTp+gCXCBDGsDlSyoGHY/o9pa9qtjZfUri0+h
+        WlzJUDT8l2Otk7+TPapTepVqZ694oAPL3IuSVFu4mw==
+X-Google-Smtp-Source: APXvYqzkqvovU/sudHAtBIJQ9t1ZDyznyMb/4m7doUJ9DprBLfCEEqxIwDTEJvxsF+Qg9xk6jO7VE2ktilr7QFgkKZo=
+X-Received: by 2002:a2e:1214:: with SMTP id t20mr2401231lje.191.1571316748450;
+ Thu, 17 Oct 2019 05:52:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com>
+ <20191007000520.GA17116@linux.intel.com> <59b88042-9c56-c891-f75e-7c0719eb5ff9@linux.ibm.com>
+ <20191008234935.GA13926@linux.intel.com> <20191008235339.GB13926@linux.intel.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2B995@ALPMBAPA12.e2k.ad.ge.com>
+ <20191014190033.GA15552@linux.intel.com> <1571081397.3728.9.camel@HansenPartnership.com>
+ <20191016110031.GE10184@linux.intel.com> <1571229252.3477.7.camel@HansenPartnership.com>
+ <20191016162543.GB6279@linux.intel.com> <1571253029.17520.5.camel@HansenPartnership.com>
+In-Reply-To: <1571253029.17520.5.camel@HansenPartnership.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 17 Oct 2019 18:22:17 +0530
+Message-ID: <CAFA6WYNNNTWXDrp_R3M60srGJYjJdRoaNpSnP54V_BinYYXTMA@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        "Safford, David (GE Global Research, US)" <david.safford@ge.com>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-10-16 at 17:48 +0200, Borislav Petkov wrote:
-> On Wed, Oct 16, 2019 at 08:23:56AM -0700, Joe Perches wrote:
-> > ?  examples please.
-> 
-> From this very thread:
-> 
-> \sEfi\s, \sefi\s, \seFI\s etc should be "EFI"
-> 
-> I'm thinking perhaps start conservatively and catch the most often
-> misspelled ones in commit messages or comments. "CPU", "SMT", "MCE",
-> "MCA", "PCI" etc come to mind.
-> 
-> > checkpatch has a db for misspellings, I supposed another for
-> > acronyms could be added,
-> 
-> Doesn't have to be another one - established acronyms are part of the
-> dictionary too.
+On Thu, 17 Oct 2019 at 00:40, James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> On Wed, 2019-10-16 at 19:25 +0300, Jarkko Sakkinen wrote:
+> > On Wed, Oct 16, 2019 at 08:34:12AM -0400, James Bottomley wrote:
+> > > reversible ciphers are generally frowned upon in random number
+> > > generation, that's why the krng uses chacha20.  In general I think
+> > > we shouldn't try to code our own mixing and instead should get the
+> > > krng to do it for us using whatever the algorithm du jour that the
+> > > crypto guys have blessed is.  That's why I proposed adding the TPM
+> > > output to the krng as entropy input and then taking the output of
+> > > the krng.
+> >
+> > It is already registered as hwrng. What else?
+>
+> It only contributes entropy once at start of OS.
+>
 
-Couldn't work.  The dictionary is case insensitive.
+Why not just configure quality parameter of TPM hwrng as follows? It
+would automatically initiate a kthread during hwrng_init() to feed
+entropy from TPM to kernel random numbers pool (see:
+drivers/char/hw_random/core.c +142).
 
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 3d6d394..fcc3817 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -548,6 +548,7 @@ static int tpm_add_hwrng(struct tpm_chip *chip)
+                 "tpm-rng-%d", chip->dev_num);
+        chip->hwrng.name = chip->hwrng_name;
+        chip->hwrng.read = tpm_hwrng_read;
++       chip->hwrng.quality = 1024; /* Here we assume TPM provides
+full entropy */
+        return hwrng_register(&chip->hwrng);
 
+ }
+
+> >  Was the issue that it is only used as seed when the rng is init'd
+> > first? I haven't at this point gone to the internals of krng.
+>
+> Basically it was similar to your xor patch except I got the kernel rng
+> to do the mixing, so it would use the chacha20 cipher at the moment
+> until they decide that's unsafe and change it to something else:
+>
+> https://lore.kernel.org/linux-crypto/1570227068.17537.4.camel@HansenPartnership.com/
+>
+> It uses add_hwgenerator_randomness() to do the mixing.  It also has an
+> unmixed source so that read of the TPM hwrng device works as expected.
+
+Above suggestion is something similar to yours but utilizing the
+framework already provided via hwrng core.
+
+-Sumit
+
+>
+> James
+>
+>
+>
+>
+>
