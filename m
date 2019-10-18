@@ -2,72 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CD8DB580
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Oct 2019 20:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D51DBE67
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Oct 2019 09:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389832AbfJQSGr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Oct 2019 14:06:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54524 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388188AbfJQSGr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Oct 2019 14:06:47 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0627321835;
-        Thu, 17 Oct 2019 18:06:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571335606;
-        bh=prHm7NxUgWw6gtKYHx0XzUtdQBFWGrcBtG2xHXdLPQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K873WHE6VcGhA8uNvdeW9swkfr+2AlTEaX+xQxVuKi1yemH8bI9ac1G5vErI/GOgs
-         O2Hy+8/NWM03Iat1y2dlU6racEQbU0eL9CyiltxPgRdio1hRk9dzB1DLlYROnoYscS
-         xm55KPRgKpoWHMl7E9rQ7rrPfJ/JIPgr28TP39bU=
-Date:   Thu, 17 Oct 2019 14:06:44 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Pavel Tatashin <pasha.tatashin@soleen.com>, jmorris@namei.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@microsoft.com, thiruan@microsoft.com,
-        bryankel@microsoft.com, tee-dev@lists.linaro.org,
-        ilias.apalodimas@linaro.org, sumit.garg@linaro.org,
-        rdunlap@infradead.org
-Subject: Re: [PATCH v3] tpm/tpm_ftpm_tee: add shutdown call back
-Message-ID: <20191017180644.GW31224@sasha-vm>
-References: <20191016163114.985542-1-pasha.tatashin@soleen.com>
- <20191017162251.GB6667@linux.intel.com>
+        id S2504663AbfJRHci (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 18 Oct 2019 03:32:38 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:38598 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504654AbfJRHci (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 18 Oct 2019 03:32:38 -0400
+Received: by mail-lj1-f194.google.com with SMTP id b20so5155000ljj.5;
+        Fri, 18 Oct 2019 00:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M59q7a9C0OgA4oCmsCvNmrsotdikD3/oQO5y00c53pE=;
+        b=QDjSdwVhwSC0JWfWLJhp/h9DdZY9n0KxIP8OCUJAgh30ovPE8RBv1vHr+hVbVE0tME
+         iJD/yM8B0njK1VSHughXZlw5SQkhpbffxcCOWITVKsRI0dqS8/ILGqUXSDE6L6GQObAB
+         8Spdl/ikovaOjEkQ7UyA0Glo6fnrOJKKEAP/gqHenduF5Lu0WFI9N0bTzyfpDg3zfBV2
+         IRnoDoHGZNoLlHtk2Azb1de+77SEAhw9DcNfUSfk+GVqyQLuuShl+xT1Ca29rp3J6LGC
+         y80VJ4sumAssPPDxX3/qBR8wbdfQ+PliuJhcYWI5xzyfTw1IL0YY22z+NQybKAWp1Wdy
+         emHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M59q7a9C0OgA4oCmsCvNmrsotdikD3/oQO5y00c53pE=;
+        b=OqejqXKR2Btm1eTSswEz+ntVUVN002t/R6PIbFviDA8rDmBsMfnOqN1irwdOo3hjLk
+         YCQJmYJPPmSSliIOEzh3BExrQKzDWEeiUZ8AayTQPl8freFcAAWECvbqNSjxLkdTQxQH
+         4kBGov1jEAb74kfS/wwJFKQ6ZC0kK+QCpj9Tek0yKgWE5jmyg2HTCo2Z5ljF7rAOuRYV
+         CGtjMwbu5cewKg1OpkImqfETsVT4bRSnps0DURCtaijdt2vXKKxSPkUdDmLC/DiX+kCY
+         LzDHJlA+CWX3ZvLndruQAhUAB/FTET9F+bvfxQ79i8N6bJpAMb6VP2lEpy23OeWbbf4U
+         8qSQ==
+X-Gm-Message-State: APjAAAUKB0TO2VE+TYCtmu/wgTBKNDFG/DLwK/HVpgBXIRZMFh15wFHX
+        891On3Yw/5kr2uKORTWgdzQPvF5k2OXAXMhuJaY=
+X-Google-Smtp-Source: APXvYqxGOxFAMF/DGekSaTRLTT9JUI7FrVcOqmXscMrke5xrFR1FwSh6E7g1AZnXqZ7em90pHobqgkjM7M2X9uVhFI0=
+X-Received: by 2002:a2e:b4a8:: with SMTP id q8mr5095902ljm.106.1571383954846;
+ Fri, 18 Oct 2019 00:32:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20191017162251.GB6667@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A22E@ALPMBAPA12.e2k.ad.ge.com>
+ <20191004182711.GC6945@linux.intel.com> <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com>
+ <20191007000520.GA17116@linux.intel.com> <59b88042-9c56-c891-f75e-7c0719eb5ff9@linux.ibm.com>
+ <20191008234935.GA13926@linux.intel.com> <20191008235339.GB13926@linux.intel.com>
+ <BCA04D5D9A3B764C9B7405BBA4D4A3C035F2B995@ALPMBAPA12.e2k.ad.ge.com>
+ <20191014190033.GA15552@linux.intel.com> <1571081397.3728.9.camel@HansenPartnership.com>
+ <20191016110031.GE10184@linux.intel.com> <1571229252.3477.7.camel@HansenPartnership.com>
+In-Reply-To: <1571229252.3477.7.camel@HansenPartnership.com>
+From:   Janne Karhunen <janne.karhunen@gmail.com>
+Date:   Fri, 18 Oct 2019 10:32:23 +0300
+Message-ID: <CAE=NcrbSrqNUF_Jhe4cL=BSmY=p45nS8axkSJC6HWeGo2NnXDA@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: asym_tpm: Switch to get_random_bytes()
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        "Safford, David (GE Global Research, US)" <david.safford@ge.com>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 07:22:51PM +0300, Jarkko Sakkinen wrote:
->On Wed, Oct 16, 2019 at 12:31:14PM -0400, Pavel Tatashin wrote:
->> Add shutdown call back to close existing session with fTPM TA
->> to support kexec scenario.
->>
->> Add parentheses to function names in comments as specified in kdoc.
->>
->> Signed-off-by: Thirupathaiah Annapureddy <thiruan@microsoft.com>
->> Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
->
->LGTM
->
->Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->
->I have no means to test this though. It still needs a tested-by.
+On Wed, Oct 16, 2019 at 6:35 PM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
 
-We've been running this patch internally for the past few months,
-testing kexec scenarios, so I guess it could have mine :)
+> > The documentation says that krng is suitable for key generation.
+> > Should the documentation changed to state that it is unsuitable?
+>
+> How do you get that from the argument above?  The krng is about the
+> best we have in terms of unpredictable key generation, so of course it
+> is suitable ... provided you give the entropy enough time to have
+> sufficient entropy.
 
-Tested-by: Sasha Levin <sashal@kernel.org>
+Yes, so it can be both the safest and the least safe option available.
+By default it's the worst one, but use it wisely and it can be the
+best source. Hence I was proposing that kconfig option + boot time
+printout to make this clear for everyone..
 
--- 
-Thanks,
-Sasha
+
+--
+Janne
