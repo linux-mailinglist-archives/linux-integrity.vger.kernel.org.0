@@ -2,112 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0073DD490
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Oct 2019 00:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157B9DD7C1
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Oct 2019 11:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728314AbfJRWZs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 18 Oct 2019 18:25:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36162 "EHLO mail.kernel.org"
+        id S1725938AbfJSJpc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 19 Oct 2019 05:45:32 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:47164 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728236AbfJRWEa (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:04:30 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1725294AbfJSJpc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 19 Oct 2019 05:45:32 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BE853222C5;
-        Fri, 18 Oct 2019 22:04:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436269;
-        bh=mlquCAeuub9DQjmH5s7QG9Jv8sxTcMDhb1VpuNgMqWg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZfxhYZsEd89PgUh68OTB3llLGWteAAsPyl7uIRv5oVGKd3XEp54itm1M7VQFRZ3ZV
-         VbGVByrLJjAB2NsovXseRSoKx1YRUVKZBwTIWMcWLeNKj/OTgn7tCIyscoomGXNoOt
-         qDfOmlN30WbDLNKxtbBDb1eppT5BZua2VD7SelH4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dave Young <dyoung@redhat.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
+        by mx1.redhat.com (Postfix) with ESMTPS id 1364389F301;
+        Sat, 19 Oct 2019 09:45:32 +0000 (UTC)
+Received: from shalem.localdomain.com (ovpn-116-37.ams2.redhat.com [10.36.116.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4509B19481;
+        Sat, 19 Oct 2019 09:45:30 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lukas Wunner <lukas@wunner.de>, Lyude Paul <lyude@redhat.com>,
-        Octavian Purdila <octavian.purdila@intel.com>,
-        Peter Jones <pjones@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Scott Talbert <swt@techie.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.3 49/89] efi/x86: Do not clean dummy variable in kexec path
-Date:   Fri, 18 Oct 2019 18:02:44 -0400
-Message-Id: <20191018220324.8165-49-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018220324.8165-1-sashal@kernel.org>
-References: <20191018220324.8165-1-sashal@kernel.org>
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] tpm: Switch to platform_get_irq_optional()
+Date:   Sat, 19 Oct 2019 11:45:28 +0200
+Message-Id: <20191019094528.27850-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.68]); Sat, 19 Oct 2019 09:45:32 +0000 (UTC)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Dave Young <dyoung@redhat.com>
+Since commit 7723f4c5ecdb ("driver core: platform: Add an error message to
+platform_get_irq*()"), platform_get_irq() will call dev_err() on an error,
+as the IRQ usage in the tpm_tis driver is optional, this is undesirable.
 
-[ Upstream commit 2ecb7402cfc7f22764e7bbc80790e66eadb20560 ]
+Specifically this leads to this new false-positive error being logged:
+[    5.135413] tpm_tis MSFT0101:00: IRQ index 0 not found
 
-kexec reboot fails randomly in UEFI based KVM guest.  The firmware
-just resets while calling efi_delete_dummy_variable();  Unfortunately
-I don't know how to debug the firmware, it is also possible a potential
-problem on real hardware as well although nobody reproduced it.
+This commit switches to platform_get_irq_optional(), which does not log
+an error, fixing this.
 
-The intention of the efi_delete_dummy_variable is to trigger garbage collection
-when entering virtual mode.  But SetVirtualAddressMap can only run once
-for each physical reboot, thus kexec_enter_virtual_mode() is not necessarily
-a good place to clean a dummy object.
-
-Drop the efi_delete_dummy_variable so that kexec reboot can work.
-
-Signed-off-by: Dave Young <dyoung@redhat.com>
-Signed-off-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Acked-by: Matthew Garrett <mjg59@google.com>
-Cc: Ben Dooks <ben.dooks@codethink.co.uk>
-Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc: Jerry Snitselaar <jsnitsel@redhat.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Lukas Wunner <lukas@wunner.de>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Octavian Purdila <octavian.purdila@intel.com>
-Cc: Peter Jones <pjones@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Scott Talbert <swt@techie.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-efi@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-Link: https://lkml.kernel.org/r/20191002165904.8819-8-ard.biesheuvel@linaro.org
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: <stable@vger.kernel.org> # 5.4.x
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- arch/x86/platform/efi/efi.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/char/tpm/tpm_tis.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
-index a7189a3b4d70f..3304f61538a26 100644
---- a/arch/x86/platform/efi/efi.c
-+++ b/arch/x86/platform/efi/efi.c
-@@ -894,9 +894,6 @@ static void __init kexec_enter_virtual_mode(void)
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index e4fdde93ed4c..e7df342a317d 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -286,7 +286,7 @@ static int tpm_tis_plat_probe(struct platform_device *pdev)
+ 	}
+ 	tpm_info.res = *res;
  
- 	if (efi_enabled(EFI_OLD_MEMMAP) && (__supported_pte_mask & _PAGE_NX))
- 		runtime_code_page_mkexec();
--
--	/* clean DUMMY object */
--	efi_delete_dummy_variable();
- #endif
- }
- 
+-	tpm_info.irq = platform_get_irq(pdev, 0);
++	tpm_info.irq = platform_get_irq_optional(pdev, 0);
+ 	if (tpm_info.irq <= 0) {
+ 		if (pdev != force_pdev)
+ 			tpm_info.irq = -1;
 -- 
-2.20.1
+2.23.0
 
