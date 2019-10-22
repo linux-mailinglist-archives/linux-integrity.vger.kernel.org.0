@@ -2,73 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB67EE06A6
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Oct 2019 16:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBF2E0E96
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Oct 2019 01:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729994AbfJVOnX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Oct 2019 10:43:23 -0400
-Received: from mga06.intel.com ([134.134.136.31]:54388 "EHLO mga06.intel.com"
+        id S1732704AbfJVXhe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Oct 2019 19:37:34 -0400
+Received: from ozlabs.org ([203.11.71.1]:50863 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727582AbfJVOnX (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Oct 2019 10:43:23 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Oct 2019 07:43:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,327,1566889200"; 
-   d="scan'208";a="197139153"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.120])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Oct 2019 07:43:20 -0700
-Date:   Tue, 22 Oct 2019 17:43:20 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH] selftest/trustedkeys: TPM 1.2 trusted keys test
-Message-ID: <20191022144320.GA3758@linux.intel.com>
-References: <1568157511-5464-1-git-send-email-zohar@linux.ibm.com>
- <20191011130129.GA20277@linux.intel.com>
- <1570800093.5250.82.camel@linux.ibm.com>
- <20191014195725.GL15552@linux.intel.com>
+        id S1731847AbfJVXhe (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 22 Oct 2019 19:37:34 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46yVKk41tlz9sP3;
+        Wed, 23 Oct 2019 10:37:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1571787451;
+        bh=bix38GBS8ziIG4D3rYTWk0p86PfmiZSj/wSR65+5FO4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=UGBdAfxatgCtF86fvylV99/QFpSVym95XuNMX9oU9VJ/vdOXEBZnaKPrE+RU4NoEa
+         LF4vXTA63Y1NCPpdUeNamISsqi58pKjanBzbMC5w+mv6Tf55QMI+2wCFqXK2Syjo0T
+         NQRBGiuxA5ZKAKARmotaog3inA58Mk1hdtXTzKoRfpM4ptLFMTepUmJaIz6VGujCMr
+         JvoS89CZDSyjig9lE0RuwgLNyYRbrS4GtsUYs+PjySDB7MIt+fV+Zb0KTe5Bs9Rj1X
+         k04YauMfnuq75MflrBRrXCE6uOEpH6Hg+o/k4rkuDybV3a0E+QhbYmFBBHmGJtAzBC
+         spPt9ZtqKX6Bw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Subject: Re: [PATCH v8 1/8] powerpc: detect the secure boot mode of the system
+In-Reply-To: <1571508377-23603-2-git-send-email-nayna@linux.ibm.com>
+References: <1571508377-23603-1-git-send-email-nayna@linux.ibm.com> <1571508377-23603-2-git-send-email-nayna@linux.ibm.com>
+Date:   Wed, 23 Oct 2019 10:37:30 +1100
+Message-ID: <87zhhs5p39.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191014195725.GL15552@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 10:57:25PM +0300, Jarkko Sakkinen wrote:
-> On Fri, Oct 11, 2019 at 09:21:33AM -0400, Mimi Zohar wrote:
-> > On Fri, 2019-10-11 at 16:01 +0300, Jarkko Sakkinen wrote:
-> > > On Tue, Sep 10, 2019 at 07:18:31PM -0400, Mimi Zohar wrote:
-> > > > Create, save and load trusted keys test
-> > > > 
-> > > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > 
-> > > Also can be used to test Sumit's patches i.e. there is an immediate
-> > > application for this one. I'll use this check TPM 1.x and TPM 2.0
-> > > trusted keys code.
-> > > 
-> > > You could sanity check your script for sending with my master, which
-> > > already has those patches.
-> > 
-> > Sure, but due to the holidays that won't happen until the middle of
-> > next week.
-> 
-> There is no immediate rush, or more like, this should not be rushed.
-> 
-> I'm also waiting v8 now because of sparse issues.
+Nayna Jain <nayna@linux.ibm.com> writes:
+> diff --git a/arch/powerpc/kernel/secure_boot.c b/arch/powerpc/kernel/secure_boot.c
+> new file mode 100644
+> index 000000000000..99bba7915629
+> --- /dev/null
+> +++ b/arch/powerpc/kernel/secure_boot.c
+> @@ -0,0 +1,30 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2019 IBM Corporation
+> + * Author: Nayna Jain
+> + */
+> +#include <linux/types.h>
+> +#include <linux/of.h>
+> +#include <asm/secure_boot.h>
+> +
+> +bool is_ppc_secureboot_enabled(void)
+> +{
+> +	struct device_node *node;
+> +	bool enabled = false;
+> +
+> +	node = of_find_compatible_node(NULL, NULL, "ibm,secvar-v1");
 
-OK, so you must get rid of TrouSerS dependency. Otherwise this
-is unsuitable for kernel selftests. Please do TPM 1.x with the
-raw TPM device.
+If this found a node then you have a node with an elevated refcount
+which you need to drop on the way out.
 
-A legit selftest should be implemented only with POSIX assets.
+> +	if (!of_device_is_available(node)) {
+> +		pr_err("Cannot find secure variable node in device tree; failing to secure state\n");
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * secureboot is enabled if os-secure-enforcing property exists,
+> +	 * else disabled.
+> +	 */
+> +	enabled = of_property_read_bool(node, "os-secure-enforcing");
+> +
+> +out:
 
-/Jarkko
+So here you need:
+
+	of_node_put(node);
+
+
+> +	pr_info("Secure boot mode %s\n", enabled ? "enabled" : "disabled");
+> +	return enabled;
+> +}
+
+cheers
