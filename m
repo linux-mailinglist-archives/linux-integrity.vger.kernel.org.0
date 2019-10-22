@@ -2,87 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2DEDF463
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Oct 2019 19:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D592E04B7
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Oct 2019 15:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbfJURiq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Oct 2019 13:38:46 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55542 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726672AbfJURip (ORCPT
+        id S1729458AbfJVNSD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Oct 2019 09:18:03 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:49324 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728346AbfJVNSC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Oct 2019 13:38:45 -0400
-Received: from [10.137.104.46] (unknown [131.107.174.174])
-        by linux.microsoft.com (Postfix) with ESMTPSA id AE02B20106BE;
-        Mon, 21 Oct 2019 10:38:44 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AE02B20106BE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1571679524;
-        bh=OppP3iKDSw2FPx3G6reM8oMns790vjDmP2JsXIZRv10=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=GwxpzdMx19YB+EITwNb0/yASP6lZVpv7uOVBwfLbkTsMI8lKaRMHq8T3aqp94ZyfQ
-         1pOpEt6kBoJlE5o+iN+wepjET/nW7/1AwItQl9J0HrOBsfGul2zsQYl2peg2/EVmJi
-         f0QCt6DBCuq00I5V+U+IszHLzNa7Vt1yJ5pq+qy4=
-Subject: Re: [PATCH V4 0/2] Add support for arm64 to carry ima measurement
-To:     Pavel Tatashin <pasha.tatashin@soleen.com>,
-        James Morse <james.morse@arm.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, jean-philippe@linaro.org,
-        arnd@arndb.de, Masahiro Yamada <yamada.masahiro@socionext.com>,
-        sboyd@kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        kexec mailing list <kexec@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, zohar@linux.ibm.com,
-        takahiro.akashi@linaro.org, duwe@lst.de, bauerman@linux.ibm.com,
-        allison@lohutok.net, linux-integrity@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20191011003600.22090-1-prsriva@linux.microsoft.com>
- <87d92514-e5e4-a79f-467f-f24a4ed279b6@arm.com>
- <b35b239c-990c-0d5b-0298-8f9e35064e2b@linux.microsoft.com>
- <0053eb68-0905-4679-c97a-00c5cb6f1abb@arm.com>
- <CA+CK2bBVcE91YbJx1f_BkNqbD03wGLNtyane7PjCnEu8i_cH2Q@mail.gmail.com>
-From:   prsriva <prsriva@linux.microsoft.com>
-Message-ID: <11036cd6-2977-5f78-7fe7-1085ba31f005@linux.microsoft.com>
-Date:   Mon, 21 Oct 2019 10:38:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Tue, 22 Oct 2019 09:18:02 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9MDEsYH173168;
+        Tue, 22 Oct 2019 13:18:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=gvXlJJdZoi0UOi7sjSMdMEagvITjG6PigcIYf2Q3xM8=;
+ b=GDj+TGGH4Hju+qltMrXe0xzygIP2O3KL4zbPBMbv1cqzjJGSKDDkT3jwGLiT8Lgh1/ay
+ Oj/Fx0ag+T4dTaxit8Z1LDIS3A3jIXmRQsEglJt1M6fwNaWzUhl9x/EpOR5mXrLEGIyq
+ ZeZj+dKOR+Kz6E9jwBOYZ585caqzLBb8hXWab4V5GA1WPhkFStBhdWM1QLyEUObZGHTl
+ oWoXGMA9gTPaETE3YpPEgNuZmsMs1DkUzwh3QARvkGtErLt/SWt1UuxumUqarN9laBFq
+ QXPiXjjj+6elzq+9ckddEX62z3uiQEFtYkw89NvsCidrI//uhAzezbiK/RDISnhG7X/+ vw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 2vqteppjdc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Oct 2019 13:18:00 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9MDEpUd078918;
+        Tue, 22 Oct 2019 13:15:59 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 2vrc01v12r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Oct 2019 13:15:59 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9MDFvrq032236;
+        Tue, 22 Oct 2019 13:15:57 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 22 Oct 2019 06:15:57 -0700
+Date:   Tue, 22 Oct 2019 16:15:50 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     tadeusz.struk@intel.com
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Subject: [bug report] tpm: add support for nonblocking operation
+Message-ID: <20191022131550.GA4249@mwanda>
 MIME-Version: 1.0
-In-Reply-To: <CA+CK2bBVcE91YbJx1f_BkNqbD03wGLNtyane7PjCnEu8i_cH2Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9417 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=910
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910220122
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9417 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=995 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910220122
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hello Tadeusz Struk,
 
-On 10/15/19 11:47 AM, Pavel Tatashin wrote:
->> I think the UEFI persistent-memory-reservations thing is a better fit for this [0][1].
-> 
-> Hi James,
-> 
-> Thank you for your thought. As I understand you propose the to use the
-> existing method as such:
-> 1. Use the existing kexec ABI to pass reservation from kernel to
-> kernel using EFI the same as is done for GICv3 tables.
-> 2. Allow this memory to be reservable only during first Linux boot via
-> EFI memory reserve
-> 3. Allow to have this memory pre-reserved by firmware or to be
-> embedded into device tree.
-> 
-> A question I have is how to tell that a reserved region is reserved
-> for IMA use. With GICv3 it is done by reading the registers, finding
-> the interrupt tables memory, and check that the memory ranges are
-> indeed pre-reserved.
-> 
-> Is there a way to name memory with the current ABI that you think is acceptable?
-> 
-> Thank you,
-> Pasha
-> 
-Friendly ping.
+The patch 9e1b74a63f77: "tpm: add support for nonblocking operation"
+from Sep 10, 2018, leads to the following static checker warning:
 
-Thanks,
-Prakhar Srivastava
+	drivers/char/tpm/tpm-dev-common.c:222 tpm_common_write()
+	warn: inconsistent returns 'priv->chip->tpm_mutex'.
 
+drivers/char/tpm/tpm-dev-common.c
+   184  
+   185          /* atomic tpm command send and result receive. We only hold the ops
+   186           * lock during this period so that the tpm can be unregistered even if
+   187           * the char dev is held open.
+   188           */
+   189          if (tpm_try_get_ops(priv->chip)) {
+   190                  ret = -EPIPE;
+   191                  goto out;
+   192          }
+   193  
+   194          priv->response_length = 0;
+   195          priv->response_read = false;
+   196          *off = 0;
+   197  
+   198          /*
+   199           * If in nonblocking mode schedule an async job to send
+   200           * the command return the size.
+   201           * In case of error the err code will be returned in
+   202           * the subsequent read call.
+   203           */
+   204          if (file->f_flags & O_NONBLOCK) {
+   205                  priv->command_enqueued = true;
+   206                  queue_work(tpm_dev_wq, &priv->async_work);
+   207                  mutex_unlock(&priv->buffer_mutex);
+   208                  return size;
+                        ^^^^^^^^^^^
+Don't we need to do a tpm_put_ops(priv->chip) before returning?
+
+   209          }
+   210  
+   211          ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
+   212                                 sizeof(priv->data_buffer));
+   213          tpm_put_ops(priv->chip);
+   214  
+   215          if (ret > 0) {
+   216                  priv->response_length = ret;
+   217                  mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
+   218                  ret = size;
+   219          }
+   220  out:
+   221          mutex_unlock(&priv->buffer_mutex);
+   222          return ret;
+   223  }
+
+regards,
+dan carpenter
