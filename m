@@ -2,122 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D592E04B7
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Oct 2019 15:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB67EE06A6
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Oct 2019 16:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729458AbfJVNSD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Oct 2019 09:18:03 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:49324 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728346AbfJVNSC (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Oct 2019 09:18:02 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9MDEsYH173168;
-        Tue, 22 Oct 2019 13:18:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=gvXlJJdZoi0UOi7sjSMdMEagvITjG6PigcIYf2Q3xM8=;
- b=GDj+TGGH4Hju+qltMrXe0xzygIP2O3KL4zbPBMbv1cqzjJGSKDDkT3jwGLiT8Lgh1/ay
- Oj/Fx0ag+T4dTaxit8Z1LDIS3A3jIXmRQsEglJt1M6fwNaWzUhl9x/EpOR5mXrLEGIyq
- ZeZj+dKOR+Kz6E9jwBOYZ585caqzLBb8hXWab4V5GA1WPhkFStBhdWM1QLyEUObZGHTl
- oWoXGMA9gTPaETE3YpPEgNuZmsMs1DkUzwh3QARvkGtErLt/SWt1UuxumUqarN9laBFq
- QXPiXjjj+6elzq+9ckddEX62z3uiQEFtYkw89NvsCidrI//uhAzezbiK/RDISnhG7X/+ vw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2vqteppjdc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Oct 2019 13:18:00 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9MDEpUd078918;
-        Tue, 22 Oct 2019 13:15:59 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 2vrc01v12r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Oct 2019 13:15:59 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9MDFvrq032236;
-        Tue, 22 Oct 2019 13:15:57 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 22 Oct 2019 06:15:57 -0700
-Date:   Tue, 22 Oct 2019 16:15:50 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     tadeusz.struk@intel.com
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Subject: [bug report] tpm: add support for nonblocking operation
-Message-ID: <20191022131550.GA4249@mwanda>
+        id S1729994AbfJVOnX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Oct 2019 10:43:23 -0400
+Received: from mga06.intel.com ([134.134.136.31]:54388 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727582AbfJVOnX (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 22 Oct 2019 10:43:23 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Oct 2019 07:43:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,327,1566889200"; 
+   d="scan'208";a="197139153"
+Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.120])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Oct 2019 07:43:20 -0700
+Date:   Tue, 22 Oct 2019 17:43:20 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH] selftest/trustedkeys: TPM 1.2 trusted keys test
+Message-ID: <20191022144320.GA3758@linux.intel.com>
+References: <1568157511-5464-1-git-send-email-zohar@linux.ibm.com>
+ <20191011130129.GA20277@linux.intel.com>
+ <1570800093.5250.82.camel@linux.ibm.com>
+ <20191014195725.GL15552@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20191014195725.GL15552@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9417 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=910
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910220122
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9417 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=995 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910220122
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Tadeusz Struk,
+On Mon, Oct 14, 2019 at 10:57:25PM +0300, Jarkko Sakkinen wrote:
+> On Fri, Oct 11, 2019 at 09:21:33AM -0400, Mimi Zohar wrote:
+> > On Fri, 2019-10-11 at 16:01 +0300, Jarkko Sakkinen wrote:
+> > > On Tue, Sep 10, 2019 at 07:18:31PM -0400, Mimi Zohar wrote:
+> > > > Create, save and load trusted keys test
+> > > > 
+> > > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > 
+> > > Also can be used to test Sumit's patches i.e. there is an immediate
+> > > application for this one. I'll use this check TPM 1.x and TPM 2.0
+> > > trusted keys code.
+> > > 
+> > > You could sanity check your script for sending with my master, which
+> > > already has those patches.
+> > 
+> > Sure, but due to the holidays that won't happen until the middle of
+> > next week.
+> 
+> There is no immediate rush, or more like, this should not be rushed.
+> 
+> I'm also waiting v8 now because of sparse issues.
 
-The patch 9e1b74a63f77: "tpm: add support for nonblocking operation"
-from Sep 10, 2018, leads to the following static checker warning:
+OK, so you must get rid of TrouSerS dependency. Otherwise this
+is unsuitable for kernel selftests. Please do TPM 1.x with the
+raw TPM device.
 
-	drivers/char/tpm/tpm-dev-common.c:222 tpm_common_write()
-	warn: inconsistent returns 'priv->chip->tpm_mutex'.
+A legit selftest should be implemented only with POSIX assets.
 
-drivers/char/tpm/tpm-dev-common.c
-   184  
-   185          /* atomic tpm command send and result receive. We only hold the ops
-   186           * lock during this period so that the tpm can be unregistered even if
-   187           * the char dev is held open.
-   188           */
-   189          if (tpm_try_get_ops(priv->chip)) {
-   190                  ret = -EPIPE;
-   191                  goto out;
-   192          }
-   193  
-   194          priv->response_length = 0;
-   195          priv->response_read = false;
-   196          *off = 0;
-   197  
-   198          /*
-   199           * If in nonblocking mode schedule an async job to send
-   200           * the command return the size.
-   201           * In case of error the err code will be returned in
-   202           * the subsequent read call.
-   203           */
-   204          if (file->f_flags & O_NONBLOCK) {
-   205                  priv->command_enqueued = true;
-   206                  queue_work(tpm_dev_wq, &priv->async_work);
-   207                  mutex_unlock(&priv->buffer_mutex);
-   208                  return size;
-                        ^^^^^^^^^^^
-Don't we need to do a tpm_put_ops(priv->chip) before returning?
-
-   209          }
-   210  
-   211          ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
-   212                                 sizeof(priv->data_buffer));
-   213          tpm_put_ops(priv->chip);
-   214  
-   215          if (ret > 0) {
-   216                  priv->response_length = ret;
-   217                  mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
-   218                  ret = size;
-   219          }
-   220  out:
-   221          mutex_unlock(&priv->buffer_mutex);
-   222          return ret;
-   223  }
-
-regards,
-dan carpenter
+/Jarkko
