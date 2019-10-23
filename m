@@ -2,123 +2,195 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 923C7E22BC
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Oct 2019 20:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73160E26F6
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 01:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404072AbfJWStf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Oct 2019 14:49:35 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10790 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404028AbfJWStf (ORCPT
+        id S2436986AbfJWXUr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Oct 2019 19:20:47 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:55617 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2436985AbfJWXUq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Oct 2019 14:49:35 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9NIlVix014098
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Oct 2019 14:49:34 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vtt2m5dmw-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Oct 2019 14:49:33 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 23 Oct 2019 19:49:31 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 23 Oct 2019 19:49:28 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9NInRD459506866
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Oct 2019 18:49:27 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5014842049;
-        Wed, 23 Oct 2019 18:49:27 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C45A42042;
-        Wed, 23 Oct 2019 18:49:26 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.184.174])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Oct 2019 18:49:25 +0000 (GMT)
-Subject: Re: [PATCH v1 5/6] KEYS: measure queued keys
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        dhowells@redhat.com, casey@schaufler-ca.com, sashal@kernel.org,
-        jamorris@linux.microsoft.com,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
-Date:   Wed, 23 Oct 2019 14:49:25 -0400
-In-Reply-To: <1571853139.5104.154.camel@linux.ibm.com>
-References: <20191023001818.3684-1-nramas@linux.microsoft.com>
-         <20191023001818.3684-6-nramas@linux.microsoft.com>
-         <1571836990.5104.96.camel@linux.ibm.com>
-         <89d778d1-1ac9-4a58-b159-7db68b7fa4ad@linux.microsoft.com>
-         <1571853139.5104.154.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19102318-0016-0000-0000-000002BC4B8E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102318-0017-0000-0000-0000331D8CDD
-Message-Id: <1571856565.5104.176.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-23_04:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910230174
+        Wed, 23 Oct 2019 19:20:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1571872846;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O1gIIOpWX0kmuV8pGcMJNBdk7solK8ew7ygNzM9f9h4=;
+        b=GsXl7K2m4xriGUP6ceO2hR3D5552Qa3vzA0rYtVygl1UmKlxKRsPQkK8THAgfNivz0AaLg
+        Xw171WHJSmyTEe0E97LTRed8SeT9PrdTrbWe0Hf2j0eiuVjFa7WtKCvb35w+6EAIP5Wmwr
+        4z3udoOIYUAVgN1efzyrtdHz0cFQgis=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-256-gfyGILhMPp6Rr8T_Y_xPmA-1; Wed, 23 Oct 2019 19:20:42 -0400
+Received: by mail-il1-f198.google.com with SMTP id w9so13873064ilo.12
+        for <linux-integrity@vger.kernel.org>; Wed, 23 Oct 2019 16:20:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=BNl9Uy1RmdYWPElsAHF3OHYdNrnKgMqhpn5Eaj07V2k=;
+        b=DhZQ8Ha+bCAZQ1xe9HLdOOuIxlzcOzGmr1lRuplWNqyw41nMJj78GETVz7WwgVjAtM
+         kYmoswm4jYnIqoKy//uFY7ovhZiIfFEzxkZOBsHkP9ajtXgqMAFMpDBDhzrC5oPfJURb
+         KT+WOmWH7IRq6GzaTFGY73Wpz2ClyeYp7ddymzhiyzYAFWKV/raRoa/3o3dewtW4wWrO
+         ctfd5Ma4uE4lGLAsrRhJk2XgWJDkQLnaWW+cSFLOPi4AHs/5+5Z+SyGPwAm3DIf5QUIR
+         0yxqUEWdY4RZH+434EetvzTkd7y3hbURewB2475GvT3ox8TgR3Gv+pQETVwHbxXVPTh3
+         GTlA==
+X-Gm-Message-State: APjAAAXgSEzyXX+BumMPqnH8X6VPjTt5bR6tbDi2pl6j/WLWEQz/QuEO
+        vJQ5L9Ay7gf3ciWhGMyt/Pw3/hk7c3U3ls71FQETTI/TlPB0KP3bMBQk7DhlTRfaw6fz5BbuIPo
+        NX6kMiZOyrhEQOGpkTkBd+UWqlFH9
+X-Received: by 2002:a6b:ab03:: with SMTP id u3mr553333ioe.158.1571872841765;
+        Wed, 23 Oct 2019 16:20:41 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyF7qrGiVvCscTOw+aNfXxqYquTIiaVJdbtw612TTKl3QtQMeOf7yuOTCKu3ac4j7p0IUWriw==
+X-Received: by 2002:a6b:ab03:: with SMTP id u3mr553307ioe.158.1571872841493;
+        Wed, 23 Oct 2019 16:20:41 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id u124sm7731617ioe.63.2019.10.23.16.20.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2019 16:20:40 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 16:20:35 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     ivan.lazeev@gmail.com, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8] tpm_crb: fix fTPM on AMD Zen+ CPUs
+Message-ID: <20191023232035.ir7hmed4m3emovyx@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        ivan.lazeev@gmail.com, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191016182814.18350-1-ivan.lazeev@gmail.com>
+ <20191021155735.GA7387@linux.intel.com>
+ <20191023115151.GF21973@linux.intel.com>
+MIME-Version: 1.0
+In-Reply-To: <20191023115151.GF21973@linux.intel.com>
+User-Agent: NeoMutt/20180716
+X-MC-Unique: gfyGILhMPp6Rr8T_Y_xPmA-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-10-23 at 13:52 -0400, Mimi Zohar wrote:
-> On Wed, 2019-10-23 at 10:34 -0700, Lakshmi Ramasubramanian wrote:
-> > On 10/23/19 6:23 AM, Mimi Zohar wrote:
-> > 
-> > > The ordering of this patch set is awkward.  It should first introduce
-> > > a generic method for measuring keys based on the keyring.  Then add
-> > > the additional support needed for the specific builtin_trusted_keys
-> > > keyring usecase.
-> > 
-> > Would the following ordering of the patch set be acceptable:
-> > 
-> >   => PATCH 0/5: Cover letter
-> > 
-> >   => PATCH 1/5: Define the enum "hook(BUILTIN_TRUSTED_KEYS)" in ima.h
-> > 
-> >   => PATCH 2/5: Define ima hook
-> >                 This will initially do nothing if ima is not yet
-> >                 initialized.
-> >                 Call process_buffer_measurement() if ima is initialized.
-> > 
-> >   => PATCH 3/5: key_create_or_update change and the call to ima hook
-> > 
-> >   => PATCH 4/5: Queue\De-Queue of key measurement requests.
-> >                 Enable queuing of key in the ima hook if ima is not
-> >                 initialized.
-> > 
-> >   => PATCH 5/5: ima policy to enable measurement of keys which will
-> >                 enable end-to-end working of this feature.
-> 
-> The first patches need to introduce the generic concept of measuring
-> keys based on policy.  Only afterwards would you add any builtin
-> trusted keyring specific code.
+On Wed Oct 23 19, Jarkko Sakkinen wrote:
+>On Mon, Oct 21, 2019 at 06:57:35PM +0300, Jarkko Sakkinen wrote:
+>> Almost tested this today. Unfortunately the USB stick at hand was
+>> broken.  I'll retry tomorrow or Wed depending on which day I visit at
+>> the office and which day I WFH.
+>>
+>> At least the AMI BIOS had all the TPM stuff in it. The hardware I'll be
+>> using is Udoo Bolt V8 (thanks Jerry for pointing me out this device)
+>> with AMD Ryzen Embedded V1605B [1]
+>>
+>> Thanks for the patience with your patch.
+>>
+>> [1] https://en.wikichip.org/wiki/amd/ryzen_embedded/v1605b
+>
+>Jerry, are you confident to give this tested-by?
+>
+>I'm still in process of finding what I should put to .config in order
+>to get USB keyboard working with UDOO BOLT.
+>
+>/Jarkko
 
-1. Extend the IMA policy language to support identifying keyrings
-2. Define a new IMA hook which calls process_buffer_measurement()
-3. Call the new IMA hook (eg. from post_key_create_or_update)
-4. Define an early workqueue for saving keys loaded prior to IMA is
-initialized.  (Remember we don't hard code policy in the kernel.)
+I ran it through the tpm2 kselftests and it passed:
 
-I'll be pushing out linux-integrity shortly.  For the time being,
-please base your patches on -rc3.
+TAP version 13
+1..2
+# selftests: tpm2: test_smoke.sh
+# test_read_partial_overwrite (tpm2_tests.SmokeTest) ... ok
+# test_read_partial_resp (tpm2_tests.SmokeTest) ... ok
+# test_seal_with_auth (tpm2_tests.SmokeTest) ... ok
+# test_seal_with_policy (tpm2_tests.SmokeTest) ... ok
+# test_seal_with_too_long_auth (tpm2_tests.SmokeTest) ... ok
+# test_send_two_cmds (tpm2_tests.SmokeTest) ... ok
+# test_too_short_cmd (tpm2_tests.SmokeTest) ... ok
+# test_unseal_with_wrong_auth (tpm2_tests.SmokeTest) ... ok
+# test_unseal_with_wrong_policy (tpm2_tests.SmokeTest) ... ok
+#
+# ----------------------------------------------------------------------
+# Ran 9 tests in 12.305s
+#
+# OK
+ok 1 selftests: tpm2: test_smoke.sh
+# selftests: tpm2: test_space.sh
+# test_flush_context (tpm2_tests.SpaceTest) ... ok
+# test_get_handles (tpm2_tests.SpaceTest) ... ok
+# test_invalid_cc (tpm2_tests.SpaceTest) ... ok
+# test_make_two_spaces (tpm2_tests.SpaceTest) ... ok
+#
+# ----------------------------------------------------------------------
+# Ran 4 tests in 11.355s
+#
+# OK
+ok 2 selftests: tpm2: test_space.sh
 
-thanks,
 
-Mimi
+I also did some other testing of tpm2-tools commands, creating a
+trusted key and encrypted key, and running rngtest against /dev/random
+with the current hwrng being tpm-rng-0.
+
+I ran the selftests on an intel nuc as well:
+
+TAP version 13
+1..2
+# selftests: tpm2: test_smoke.sh
+# test_read_partial_overwrite (tpm2_tests.SmokeTest) ... ok
+# test_read_partial_resp (tpm2_tests.SmokeTest) ... ok
+# test_seal_with_auth (tpm2_tests.SmokeTest) ... ok
+# test_seal_with_policy (tpm2_tests.SmokeTest) ... ok
+# test_seal_with_too_long_auth (tpm2_tests.SmokeTest) ... ok
+# test_send_two_cmds (tpm2_tests.SmokeTest) ... ok
+# test_too_short_cmd (tpm2_tests.SmokeTest) ... ok
+# test_unseal_with_wrong_auth (tpm2_tests.SmokeTest) ... ok
+# test_unseal_with_wrong_policy (tpm2_tests.SmokeTest) ... ok
+#=20
+# ----------------------------------------------------------------------
+# Ran 9 tests in 29.620s
+#=20
+# OK
+ok 1 selftests: tpm2: test_smoke.sh
+# selftests: tpm2: test_space.sh
+# test_flush_context (tpm2_tests.SpaceTest) ... ok
+# test_get_handles (tpm2_tests.SpaceTest) ... ok
+# test_invalid_cc (tpm2_tests.SpaceTest) ... ok
+# test_make_two_spaces (tpm2_tests.SpaceTest) ... ok
+#=20
+# ----------------------------------------------------------------------
+# Ran 4 tests in 26.337s
+#=20
+# OK
+ok 2 selftests: tpm2: test_space.sh
+
+
+So,
+
+Tested-by: Jerry Snitselaar <jsnitsel@redhat.com>
+
+
+
+One thing I've noticed on the bolt and the nuc:
+
+[    0.808935] tpm_tis MSFT0101:00: IRQ index 0 not found
+
+I'm guessing this is Stefan's patches causing this?
+
+1ea32c83c699 | 2019-09-02 | tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before prob=
+ing for interrupts (Stefan Berger)
+5b359c7c4372 | 2019-09-02 | tpm_tis_core: Turn on the TPM before probing IR=
+Q's (Stefan Berger)
+
+I've never noticed tpm_tis messages before on a tpm_crb system, and doublec=
+hecked that I don't see it with 5.3.
 
