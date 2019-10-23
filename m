@@ -2,26 +2,26 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 923F5E1932
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Oct 2019 13:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04296E194E
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Oct 2019 13:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390794AbfJWLlj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Oct 2019 07:41:39 -0400
-Received: from mga02.intel.com ([134.134.136.20]:17445 "EHLO mga02.intel.com"
+        id S1733137AbfJWLtn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Oct 2019 07:49:43 -0400
+Received: from mga11.intel.com ([192.55.52.93]:56121 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390623AbfJWLlj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Oct 2019 07:41:39 -0400
+        id S1733180AbfJWLtn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 23 Oct 2019 07:49:43 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Oct 2019 04:41:38 -0700
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Oct 2019 04:49:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.68,220,1569308400"; 
-   d="scan'208";a="399363728"
+   d="scan'208";a="228097176"
 Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.121])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Oct 2019 04:41:33 -0700
-Date:   Wed, 23 Oct 2019 14:41:33 +0300
+  by fmsmga002.fm.intel.com with ESMTP; 23 Oct 2019 04:49:35 -0700
+Date:   Wed, 23 Oct 2019 14:49:35 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     Sumit Garg <sumit.garg@linaro.org>
 Cc:     dhowells@redhat.com, peterhuewe@gmx.de, keyrings@vger.kernel.org,
@@ -33,12 +33,13 @@ Cc:     dhowells@redhat.com, peterhuewe@gmx.de, keyrings@vger.kernel.org,
         jsnitsel@redhat.com, linux-kernel@vger.kernel.org,
         daniel.thompson@linaro.org
 Subject: Re: [Patch v8 0/4] Create and consolidate trusted keys subsystem
-Message-ID: <20191023114133.GD21973@linux.intel.com>
+Message-ID: <20191023114935.GE21973@linux.intel.com>
 References: <1571202895-32651-1-git-send-email-sumit.garg@linaro.org>
+ <20191023114133.GD21973@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1571202895-32651-1-git-send-email-sumit.garg@linaro.org>
+In-Reply-To: <20191023114133.GD21973@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -46,75 +47,79 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 10:44:51AM +0530, Sumit Garg wrote:
-> This patch-set does restructuring of trusted keys code to create and
-> consolidate trusted keys subsystem.
+On Wed, Oct 23, 2019 at 02:41:33PM +0300, Jarkko Sakkinen wrote:
+> On Wed, Oct 16, 2019 at 10:44:51AM +0530, Sumit Garg wrote:
+> > This patch-set does restructuring of trusted keys code to create and
+> > consolidate trusted keys subsystem.
+> > 
+> > Also, patch #2 replaces tpm1_buf code used in security/keys/trusted.c and
+> > crypto/asymmertic_keys/asym_tpm.c files to use the common tpm_buf code.
+> > 
+> > Changes in v8:
+> > 1. Rebased to latest tpmdd/master.
+> > 2. Added Reviewed-by tags.
+> > 
+> > Changes in v7:
+> > 1. Rebased to top of tpmdd/master
+> > 2. Patch #4: update tpm2 trusted keys code to use tpm_send() instead of
+> >    tpm_transmit_cmd() which is an internal function.
+> > 
+> > Changes in v6:
+> > 1. Switch TPM asymmetric code also to use common tpm_buf code. These
+> >    changes required patches #1 and #2 update, so I have dropped review
+> >    tags from those patches.
+> > 2. Incorporated miscellaneous comments from Jarkko.
+> > 
+> > Changes in v5:
+> > 1. Drop 5/5 patch as its more relavant along with TEE patch-set.
+> > 2. Add Reviewed-by tag for patch #2.
+> > 3. Fix build failure when "CONFIG_HEADER_TEST" and
+> >    "CONFIG_KERNEL_HEADER_TEST" config options are enabled.
+> > 4. Misc changes to rename files.
+> > 
+> > Changes in v4:
+> > 1. Separate patch for export of tpm_buf code to include/linux/tpm.h
+> > 2. Change TPM1.x trusted keys code to use common tpm_buf
+> > 3. Keep module name as trusted.ko only
+> > 
+> > Changes in v3:
+> > 
+> > Move TPM2 trusted keys code to trusted keys subsystem.
+> > 
+> > Changes in v2:
+> > 
+> > Split trusted keys abstraction patch for ease of review.
+> > 
+> > Sumit Garg (4):
+> >   tpm: Move tpm_buf code to include/linux/
+> >   KEYS: Use common tpm_buf for trusted and asymmetric keys
+> >   KEYS: trusted: Create trusted keys subsystem
+> >   KEYS: trusted: Move TPM2 trusted keys code
+> > 
+> >  crypto/asymmetric_keys/asym_tpm.c                  | 101 +++----
+> >  drivers/char/tpm/tpm-interface.c                   |  56 ----
+> >  drivers/char/tpm/tpm.h                             | 223 ---------------
+> >  drivers/char/tpm/tpm2-cmd.c                        | 307 --------------------
+> >  include/Kbuild                                     |   1 -
+> >  include/keys/{trusted.h => trusted_tpm.h}          |  49 +---
+> >  include/linux/tpm.h                                | 248 ++++++++++++++--
+> >  security/keys/Makefile                             |   2 +-
+> >  security/keys/trusted-keys/Makefile                |   8 +
+> >  .../{trusted.c => trusted-keys/trusted_tpm1.c}     |  96 +++----
+> >  security/keys/trusted-keys/trusted_tpm2.c          | 314 +++++++++++++++++++++
+> >  11 files changed, 649 insertions(+), 756 deletions(-)
+> >  rename include/keys/{trusted.h => trusted_tpm.h} (77%)
+> >  create mode 100644 security/keys/trusted-keys/Makefile
+> >  rename security/keys/{trusted.c => trusted-keys/trusted_tpm1.c} (94%)
+> >  create mode 100644 security/keys/trusted-keys/trusted_tpm2.c
+> > 
+> > -- 
+> > 2.7.4
+> > 
 > 
-> Also, patch #2 replaces tpm1_buf code used in security/keys/trusted.c and
-> crypto/asymmertic_keys/asym_tpm.c files to use the common tpm_buf code.
-> 
-> Changes in v8:
-> 1. Rebased to latest tpmdd/master.
-> 2. Added Reviewed-by tags.
-> 
-> Changes in v7:
-> 1. Rebased to top of tpmdd/master
-> 2. Patch #4: update tpm2 trusted keys code to use tpm_send() instead of
->    tpm_transmit_cmd() which is an internal function.
-> 
-> Changes in v6:
-> 1. Switch TPM asymmetric code also to use common tpm_buf code. These
->    changes required patches #1 and #2 update, so I have dropped review
->    tags from those patches.
-> 2. Incorporated miscellaneous comments from Jarkko.
-> 
-> Changes in v5:
-> 1. Drop 5/5 patch as its more relavant along with TEE patch-set.
-> 2. Add Reviewed-by tag for patch #2.
-> 3. Fix build failure when "CONFIG_HEADER_TEST" and
->    "CONFIG_KERNEL_HEADER_TEST" config options are enabled.
-> 4. Misc changes to rename files.
-> 
-> Changes in v4:
-> 1. Separate patch for export of tpm_buf code to include/linux/tpm.h
-> 2. Change TPM1.x trusted keys code to use common tpm_buf
-> 3. Keep module name as trusted.ko only
-> 
-> Changes in v3:
-> 
-> Move TPM2 trusted keys code to trusted keys subsystem.
-> 
-> Changes in v2:
-> 
-> Split trusted keys abstraction patch for ease of review.
-> 
-> Sumit Garg (4):
->   tpm: Move tpm_buf code to include/linux/
->   KEYS: Use common tpm_buf for trusted and asymmetric keys
->   KEYS: trusted: Create trusted keys subsystem
->   KEYS: trusted: Move TPM2 trusted keys code
-> 
->  crypto/asymmetric_keys/asym_tpm.c                  | 101 +++----
->  drivers/char/tpm/tpm-interface.c                   |  56 ----
->  drivers/char/tpm/tpm.h                             | 223 ---------------
->  drivers/char/tpm/tpm2-cmd.c                        | 307 --------------------
->  include/Kbuild                                     |   1 -
->  include/keys/{trusted.h => trusted_tpm.h}          |  49 +---
->  include/linux/tpm.h                                | 248 ++++++++++++++--
->  security/keys/Makefile                             |   2 +-
->  security/keys/trusted-keys/Makefile                |   8 +
->  .../{trusted.c => trusted-keys/trusted_tpm1.c}     |  96 +++----
->  security/keys/trusted-keys/trusted_tpm2.c          | 314 +++++++++++++++++++++
->  11 files changed, 649 insertions(+), 756 deletions(-)
->  rename include/keys/{trusted.h => trusted_tpm.h} (77%)
->  create mode 100644 security/keys/trusted-keys/Makefile
->  rename security/keys/{trusted.c => trusted-keys/trusted_tpm1.c} (94%)
->  create mode 100644 security/keys/trusted-keys/trusted_tpm2.c
-> 
-> -- 
-> 2.7.4
-> 
+> Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Pushed. I'll include them to my v5.5 PR :-) Thank you for doing
+this.
 
 /Jarkko
