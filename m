@@ -2,195 +2,232 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73160E26F6
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 01:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3093E2719
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 01:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436986AbfJWXUr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Oct 2019 19:20:47 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:55617 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2436985AbfJWXUq (ORCPT
+        id S2392777AbfJWXkK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Oct 2019 19:40:10 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:51344 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731522AbfJWXj6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Oct 2019 19:20:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1571872846;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O1gIIOpWX0kmuV8pGcMJNBdk7solK8ew7ygNzM9f9h4=;
-        b=GsXl7K2m4xriGUP6ceO2hR3D5552Qa3vzA0rYtVygl1UmKlxKRsPQkK8THAgfNivz0AaLg
-        Xw171WHJSmyTEe0E97LTRed8SeT9PrdTrbWe0Hf2j0eiuVjFa7WtKCvb35w+6EAIP5Wmwr
-        4z3udoOIYUAVgN1efzyrtdHz0cFQgis=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-256-gfyGILhMPp6Rr8T_Y_xPmA-1; Wed, 23 Oct 2019 19:20:42 -0400
-Received: by mail-il1-f198.google.com with SMTP id w9so13873064ilo.12
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Oct 2019 16:20:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=BNl9Uy1RmdYWPElsAHF3OHYdNrnKgMqhpn5Eaj07V2k=;
-        b=DhZQ8Ha+bCAZQ1xe9HLdOOuIxlzcOzGmr1lRuplWNqyw41nMJj78GETVz7WwgVjAtM
-         kYmoswm4jYnIqoKy//uFY7ovhZiIfFEzxkZOBsHkP9ajtXgqMAFMpDBDhzrC5oPfJURb
-         KT+WOmWH7IRq6GzaTFGY73Wpz2ClyeYp7ddymzhiyzYAFWKV/raRoa/3o3dewtW4wWrO
-         ctfd5Ma4uE4lGLAsrRhJk2XgWJDkQLnaWW+cSFLOPi4AHs/5+5Z+SyGPwAm3DIf5QUIR
-         0yxqUEWdY4RZH+434EetvzTkd7y3hbURewB2475GvT3ox8TgR3Gv+pQETVwHbxXVPTh3
-         GTlA==
-X-Gm-Message-State: APjAAAXgSEzyXX+BumMPqnH8X6VPjTt5bR6tbDi2pl6j/WLWEQz/QuEO
-        vJQ5L9Ay7gf3ciWhGMyt/Pw3/hk7c3U3ls71FQETTI/TlPB0KP3bMBQk7DhlTRfaw6fz5BbuIPo
-        NX6kMiZOyrhEQOGpkTkBd+UWqlFH9
-X-Received: by 2002:a6b:ab03:: with SMTP id u3mr553333ioe.158.1571872841765;
-        Wed, 23 Oct 2019 16:20:41 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyF7qrGiVvCscTOw+aNfXxqYquTIiaVJdbtw612TTKl3QtQMeOf7yuOTCKu3ac4j7p0IUWriw==
-X-Received: by 2002:a6b:ab03:: with SMTP id u3mr553307ioe.158.1571872841493;
-        Wed, 23 Oct 2019 16:20:41 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id u124sm7731617ioe.63.2019.10.23.16.20.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 16:20:40 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 16:20:35 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     ivan.lazeev@gmail.com, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8] tpm_crb: fix fTPM on AMD Zen+ CPUs
-Message-ID: <20191023232035.ir7hmed4m3emovyx@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        ivan.lazeev@gmail.com, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191016182814.18350-1-ivan.lazeev@gmail.com>
- <20191021155735.GA7387@linux.intel.com>
- <20191023115151.GF21973@linux.intel.com>
-MIME-Version: 1.0
-In-Reply-To: <20191023115151.GF21973@linux.intel.com>
-User-Agent: NeoMutt/20180716
-X-MC-Unique: gfyGILhMPp6Rr8T_Y_xPmA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+        Wed, 23 Oct 2019 19:39:58 -0400
+Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B488820106BE;
+        Wed, 23 Oct 2019 16:39:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B488820106BE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1571873995;
+        bh=EbL/+S+i5zAm2sZAw2rfqgxrNxhU5pb2Dq78teEHmhs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XVA1357l0nZ26mmoPFX3oWFBAXzcOSzL64a8NqKvDGPpF9ArX1AWjqgmbvmyglMK1
+         akDj+Bzo1G92Ol1jvoVWTNBrroJsfC91cx4YdQ+cXEbtBcW2lTiUkEwskgRnTso9AN
+         zgxWNsctsTREUD18jMsHdZAXxD7jOVqE8Wuja6ow=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, dhowells@redhat.com, casey@schaufler-ca.com,
+        sashal@kernel.org, jamorris@linux.microsoft.com,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+Cc:     nramas@linux.microsoft.com
+Subject: [PATCH v2 0/4] KEYS: measure keys when they are created or updated
+Date:   Wed, 23 Oct 2019 16:39:46 -0700
+Message-Id: <20191023233950.22072-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Oct 23 19, Jarkko Sakkinen wrote:
->On Mon, Oct 21, 2019 at 06:57:35PM +0300, Jarkko Sakkinen wrote:
->> Almost tested this today. Unfortunately the USB stick at hand was
->> broken.  I'll retry tomorrow or Wed depending on which day I visit at
->> the office and which day I WFH.
->>
->> At least the AMI BIOS had all the TPM stuff in it. The hardware I'll be
->> using is Udoo Bolt V8 (thanks Jerry for pointing me out this device)
->> with AMD Ryzen Embedded V1605B [1]
->>
->> Thanks for the patience with your patch.
->>
->> [1] https://en.wikichip.org/wiki/amd/ryzen_embedded/v1605b
->
->Jerry, are you confident to give this tested-by?
->
->I'm still in process of finding what I should put to .config in order
->to get USB keyboard working with UDOO BOLT.
->
->/Jarkko
+Problem Statement:
 
-I ran it through the tpm2 kselftests and it passed:
+Keys created or updated in the system are currently not being measured.
+Therefore an attestation service, for instance, would not be able to
+attest whether or not the trusted keys keyring(s), for instance, contain
+only known good (trusted) keys.
 
-TAP version 13
-1..2
-# selftests: tpm2: test_smoke.sh
-# test_read_partial_overwrite (tpm2_tests.SmokeTest) ... ok
-# test_read_partial_resp (tpm2_tests.SmokeTest) ... ok
-# test_seal_with_auth (tpm2_tests.SmokeTest) ... ok
-# test_seal_with_policy (tpm2_tests.SmokeTest) ... ok
-# test_seal_with_too_long_auth (tpm2_tests.SmokeTest) ... ok
-# test_send_two_cmds (tpm2_tests.SmokeTest) ... ok
-# test_too_short_cmd (tpm2_tests.SmokeTest) ... ok
-# test_unseal_with_wrong_auth (tpm2_tests.SmokeTest) ... ok
-# test_unseal_with_wrong_policy (tpm2_tests.SmokeTest) ... ok
-#
-# ----------------------------------------------------------------------
-# Ran 9 tests in 12.305s
-#
-# OK
-ok 1 selftests: tpm2: test_smoke.sh
-# selftests: tpm2: test_space.sh
-# test_flush_context (tpm2_tests.SpaceTest) ... ok
-# test_get_handles (tpm2_tests.SpaceTest) ... ok
-# test_invalid_cc (tpm2_tests.SpaceTest) ... ok
-# test_make_two_spaces (tpm2_tests.SpaceTest) ... ok
-#
-# ----------------------------------------------------------------------
-# Ran 4 tests in 11.355s
-#
-# OK
-ok 2 selftests: tpm2: test_space.sh
+ima measures system files, command line arguments passed to kexec, and
+boot aggregate. It can be used to measure keys as well. But there is
+no mechanism available in the kernel for ima to know when a key is
+created or updated.
+
+This change aims to address measuring keys created or updated
+in the system.
+
+To achieve the above the following changes have been made:
+
+ - Added a new ima hook namely, ima_post_key_create_or_update, which
+   measures the key. The measurement can be controlled through ima policy.
+
+   In this change set a new ima policy hook BUILTIN_TRUSTED_KEYS has been
+   added to measure keys added to the builtin_trusted_keys keyring.
+   In future, this can be extended to measure keys added to other
+   keyrings.
+
+Change Log:
+
+  v2:
+
+  => Per suggestion from Mimi reordered the patch set to first
+     enable measuring keys added or updated in the system.
+     And, then scope the measurement to keys added to 
+     builtin_trusted_keys keyring through ima policy.
+  => Removed security_key_create_or_update function and instead
+     call ima hook, to measure the key, directly from 
+     key_create_or_update function.
+
+  v1:
+
+  => LSM function for key_create_or_update. It calls ima.
+  => Added ima hook for measuring keys
+  => ima measures keys based on ima policy.
+
+  v0:
+
+  => Added LSM hook for key_create_or_update.
+  => Measure keys added to builtin or secondary trusted keys keyring.
+
+Background:
+
+Currently ima measures file hashes and .ima signatures. ima signatures
+are validated against keys in the ".ima" keyring. If the kernel is built
+with CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY enabled,
+then all keys in ".ima" keyring must be signed by a key in
+".builtin_trusted_keys" or ".secondary_trusted_keys" keyrings.
+
+Although ima supports the above configuration, not having an insight
+into what keys are present in these trusted keys keyrings would prevent
+an attestation service from validating a client machine.
+ 
+On systems with CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+enabled, measuring keys in the  ".builtin_trusted_keys" keyring provides
+a mechanism to attest that the client's system binaries are indeed signed
+by signers that chain to known trusted keys.
+
+Without this change, to attest the clients one needs to maintain
+an "allowed list" of file hashes of all versions of all client binaries
+that are deployed on the clients in the enterprise. That is a huge
+operational challenge in a large scale environment of clients with
+heterogenous builds. This also limits scalability and agility of
+rolling out frequent client binary updates.
+
+Testing performed:
+
+  * Booted the kernel with this change.
+  * Executed keyctl tests from the Linux Test Project (LTP)
+  * Added a new key to a keyring and verified "key create" code path.
+    => In this case added a key to builtin_trusted_keys keyring.
+    => Verified ima measured this key only when a policy is set.
+  * Added the same key again and verified "key update" code path.
+    => Add the same key to builtin_trusted_keys keyring.
+    => Verified ima measured the key only when a policy is set.
+
+Questions and concerns raised by reviewers on this patch set:
+
+Question 1:
+Is "Signed with a trusted key" equal to "Trusted file"?
+Doesn't the service need the hashes of the system files to determine
+whether a file is trusted or not?
+"Signed with a trusted key" does not equal "Trusted"
+
+Answer:
+Agree "Signed with a trusted key" may not equal "Trusted".
+To address this, the attesting service can maintain a small
+manageable set of bad hashes (a "Blocked list") and a list of
+trusted keys expected in client's .builtin_trusted_keys" keyring.
+Using this data, the service can detect the presence of
+"Disallowed (untrusted) version of client binaries".
+
+Question 2:
+Providing more data to the service (such as ".builtin_trusted_keys"),
+empowers the service  to deny access to clients (block clients).
+IMA walks a fine line in enforcing and measuring file integrity.
+This patchset breaches that fine line and in doing so brings back
+the fears of trusted computing.
+
+Answer:
+Any new measurement we add in IMA will provide more data to service
+and can enable it to deny access to clients. It is not clear why this patch
+set would breach the fine line between measuring and enforcing.
+Since this patch set is disabled by default and enabled through
+CONFIG_IMA_MEASURE_TRUSTED_KEYS, only those enterprises that
+require this new measurement can opt-in for it. Since it is disabled
+by default, it does not restrict the autonomy of independent users
+who are unaffected by attestation.
+
+Question 3:
+IMA log already contains a pointer to the IMA keys used for signature
+verification. Why does the service need to care what keys were used
+to sign (install) the IMA keys? What is gained by measuring the keys
+in the ".builtin_trusted_keys"
 
 
-I also did some other testing of tpm2-tools commands, creating a
-trusted key and encrypted key, and running rngtest against /dev/random
-with the current hwrng being tpm-rng-0.
-
-I ran the selftests on an intel nuc as well:
-
-TAP version 13
-1..2
-# selftests: tpm2: test_smoke.sh
-# test_read_partial_overwrite (tpm2_tests.SmokeTest) ... ok
-# test_read_partial_resp (tpm2_tests.SmokeTest) ... ok
-# test_seal_with_auth (tpm2_tests.SmokeTest) ... ok
-# test_seal_with_policy (tpm2_tests.SmokeTest) ... ok
-# test_seal_with_too_long_auth (tpm2_tests.SmokeTest) ... ok
-# test_send_two_cmds (tpm2_tests.SmokeTest) ... ok
-# test_too_short_cmd (tpm2_tests.SmokeTest) ... ok
-# test_unseal_with_wrong_auth (tpm2_tests.SmokeTest) ... ok
-# test_unseal_with_wrong_policy (tpm2_tests.SmokeTest) ... ok
-#=20
-# ----------------------------------------------------------------------
-# Ran 9 tests in 29.620s
-#=20
-# OK
-ok 1 selftests: tpm2: test_smoke.sh
-# selftests: tpm2: test_space.sh
-# test_flush_context (tpm2_tests.SpaceTest) ... ok
-# test_get_handles (tpm2_tests.SpaceTest) ... ok
-# test_invalid_cc (tpm2_tests.SpaceTest) ... ok
-# test_make_two_spaces (tpm2_tests.SpaceTest) ... ok
-#=20
-# ----------------------------------------------------------------------
-# Ran 4 tests in 26.337s
-#=20
-# OK
-ok 2 selftests: tpm2: test_space.sh
+Answer:
+To attest the clients using the current IMA log, service needs to maintain
+hashes of all the deployed versions of all the system binaries for their
+enterprise. This will introduce a very high operational overhead in
+a large scale environment of clients with heterogenous builds.
+This limits scalability and agility of rolling out frequent client
+binary updates.
 
 
-So,
+On the other hand, with the current patch set, we will have IMA
+validate the file signature on the clients and the service validate
+that the IMA keys were installed using trusted keys.
 
-Tested-by: Jerry Snitselaar <jsnitsel@redhat.com>
+
+This provides a chain of trust:
+    => IMA Key validates file signature on the client
+    => Built-In trusted key attests IMA key on the client
+    => Attestation service attests the Built-In trusted keys
+         reported by the client in the IMA log
 
 
+This approach, therefore, would require the service to maintain
+a manageble set of trusted keys that it receives from a trusted source.
+And, verify if the clients only have keys from that set of trusted keys.
 
-One thing I've noticed on the bolt and the nuc:
+Question 4:
+Where will the attestation service receive the keys to validate against?
 
-[    0.808935] tpm_tis MSFT0101:00: IRQ index 0 not found
+Answer:
+Attestation service will receive the keys from a trusted source such as
+the enterprise build services that provides the client builds.
+The service will use this set of keys to verify that the keys reported by
+the clients in the IMA log contains only keys from this trusted list.
 
-I'm guessing this is Stefan's patches causing this?
 
-1ea32c83c699 | 2019-09-02 | tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before prob=
-ing for interrupts (Stefan Berger)
-5b359c7c4372 | 2019-09-02 | tpm_tis_core: Turn on the TPM before probing IR=
-Q's (Stefan Berger)
+Question 5:
+What is changing in the IMA log through this patch set?
 
-I've never noticed tpm_tis messages before on a tpm_crb system, and doublec=
-hecked that I don't see it with 5.3.
+
+Answer:
+This patch set does not remove any data that is currently included
+in the IMA log. It only adds more data to the IMA log - the data on
+".builtin_trusted_keys"
+
+Lakshmi Ramasubramanian (4):
+  KEYS: Defined an ima hook for measuring keys on key create or update
+  KEYS: Queue key for measurement if ima is not initialized. Measure
+    queued keys when ima is initialized
+  KEYS: Added BUILTIN_TRUSTED_KEYS enum to measure keys added to
+    builtin_trusted_keys keyring
+  KEYS: Enabled ima policy to measure keys added to builtin_trusted_keys
+    keyring
+
+ Documentation/ABI/testing/ima_policy |  1 +
+ certs/system_keyring.c               |  5 ++
+ include/keys/system_keyring.h        |  2 +
+ include/linux/ima.h                  |  8 +++
+ security/integrity/ima/ima.h         | 18 ++++++
+ security/integrity/ima/ima_api.c     |  1 +
+ security/integrity/ima/ima_init.c    | 10 ++-
+ security/integrity/ima/ima_main.c    | 49 +++++++++++++++
+ security/integrity/ima/ima_policy.c  |  5 +-
+ security/integrity/ima/ima_queue.c   | 94 ++++++++++++++++++++++++++++
+ security/keys/key.c                  |  9 +++
+ 11 files changed, 200 insertions(+), 2 deletions(-)
+
+-- 
+2.17.1
 
