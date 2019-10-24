@@ -2,104 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CD0E3BD3
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 21:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABC6E3BE2
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 21:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390786AbfJXTLd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Oct 2019 15:11:33 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:43543 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390839AbfJXTLd (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Oct 2019 15:11:33 -0400
-Received: by mail-qk1-f196.google.com with SMTP id a194so20390256qkg.10
-        for <linux-integrity@vger.kernel.org>; Thu, 24 Oct 2019 12:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Ks1e0HacBXB8L5bemV2sH9KBhSB1vMv/PFafjR7LxiI=;
-        b=GJe2G3KtpfbNJJuUouQKkkv3hltvAH3sCIZDE1wttL+QTAdIWIvOqdscjRoSUgTb6G
-         Dm93IbJpj1YHW+GkxdBPclgXVveqM98+BctB1PuC7RElcaC2C9mqKX0AAmdyZgNPUUQt
-         w3jhAf1EVaPt++N5pGXZuxgl+O0DbJo2VDc1lE/iXnUobi4r0u/tyQ6L3dZFiQMFnnzY
-         pPx93FBrDfrXcwz0fy3VZdmxxL7xPq2x5ELTJuf+f8bA0pyBT0BbeWT+Ntg2R9aNM1bN
-         vZLOcm7v63c1a5m3LbD5mNj6vwTnZSKpT5vwweKdIaHPJOoYpCeYpDvn2dDlGpLQnYNI
-         m+bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Ks1e0HacBXB8L5bemV2sH9KBhSB1vMv/PFafjR7LxiI=;
-        b=CnK4JwHvPWq5srw985lAQLF+An8XOXPDXVB4l/pkOssCorEUlnEHtNaHePyDgSDK65
-         tTa8b0ENFxIsULSWMIbyXwZaH37upc5fOEweIpjblUAV29YuAWeUXIv0on9JYbF8ni5g
-         Xf8b9sSbH6wffWY3d0jMSpa9E4oqwbmx0VjuckMu3DUJ/ryNUSmfhWgwE2q6ppWievAo
-         mPDrpPhGnbU3Z/5W9yCf/bTVP1lMLKymzkXUZTXKpB5tPBksYRki2PPsJKujcDvHjiRY
-         al6poivEMeltM/0Ps7+UlVyqs0P2viBcy2bHyeUhsNUl2OKcfU9tkGiKiXsMiNsYEV3t
-         Bujw==
-X-Gm-Message-State: APjAAAVG3aiMNzq7/rnijrPaqzzHApVNobz8zAfDMDyVH51kpJN4Z5VR
-        BpSFHNZN8jZDHBaFHOH78yoQh6VUL5c=
-X-Google-Smtp-Source: APXvYqzy93zjMo9026HgWRK2/o7c1akpxq561kc8KDmLR9SugFVZo2L9MH8msJTYcPWhA+VdQ1934g==
-X-Received: by 2002:a05:620a:200f:: with SMTP id c15mr13517958qka.263.1571944292071;
-        Thu, 24 Oct 2019 12:11:32 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-180.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.180])
-        by smtp.gmail.com with ESMTPSA id f21sm12793101qte.36.2019.10.24.12.11.31
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 24 Oct 2019 12:11:31 -0700 (PDT)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1iNiWB-0005Bu-7m; Thu, 24 Oct 2019 16:11:31 -0300
-Date:   Thu, 24 Oct 2019 16:11:31 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] tpm: Switch to platform_get_irq_optional()
-Message-ID: <20191024191131.GD23952@ziepe.ca>
-References: <20191019094528.27850-1-hdegoede@redhat.com>
- <20191021154942.GB4525@linux.intel.com>
- <80409d36-53fa-d159-d864-51b8495dc306@redhat.com>
- <20191023113733.GB21973@linux.intel.com>
- <d6adeb21-f7b3-5c64-fa32-03a8ee21cc53@redhat.com>
- <20191024142519.GA3881@linux.intel.com>
- <c6a0c3e3-c5c8-80d9-b6b6-bf45d66f4b32@redhat.com>
- <20191024190942.GA12038@linux.intel.com>
+        id S2392926AbfJXTOH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Oct 2019 15:14:07 -0400
+Received: from mga09.intel.com ([134.134.136.24]:63210 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392923AbfJXTOG (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 24 Oct 2019 15:14:06 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 12:14:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,225,1569308400"; 
+   d="scan'208";a="399871937"
+Received: from nesterov-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.8.153])
+  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2019 12:14:02 -0700
+Date:   Thu, 24 Oct 2019 22:14:02 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Petr Vorel <pvorel@suse.cz>, Nayna <nayna@linux.vnet.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        ltp@lists.linux.it,
+        Piotr =?iso-8859-1?Q?Kr=F3l?= <piotr.krol@3mdeb.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [LTP] [PATCH] ima: skip verifying TPM 2.0 PCR values
+Message-ID: <20191024191402.GB12038@linux.intel.com>
+References: <1558041162.3971.2.camel@linux.ibm.com>
+ <fccc3abd-f3ce-fdb1-55d7-c18ce116446c@linux.vnet.ibm.com>
+ <20190517150456.GA11796@dell5510>
+ <20191024121848.GA5908@dell5510>
+ <20191024172023.GA7948@linux.intel.com>
+ <20191024182005.GZ23952@ziepe.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191024190942.GA12038@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191024182005.GZ23952@ziepe.ca>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 10:09:42PM +0300, Jarkko Sakkinen wrote:
-> Why do you think that way?
+On Thu, Oct 24, 2019 at 03:20:05PM -0300, Jason Gunthorpe wrote:
+> On Thu, Oct 24, 2019 at 08:20:23PM +0300, Jarkko Sakkinen wrote:
+> > Also replicants for durations and timeouts files would make sense for
+> > TPM 2.0.
 > 
-> I mean the commit does not even have a fixes line. It already obviously
-> implies that this kind of discussion is mandatory. Your reasoning in
-> this discussion does make sense. The problem is really the commit
-> message supplied.
-> 
-> I'd guess something like this would be more appropriate:
-> 
-> "
-> platform_get_irq() calls dev_err() on an error. As the IRQ usage in the
-> tpm_tis driver is optional, this is undesirable.
-> 
-> Specifically this leads to this new false-positive error being logged:
-> [    5.135413] tpm_tis MSFT0101:00: IRQ index 0 not found
-> 
-> This commit switches to platform_get_irq_optional(), which does not log
-> an error, fixing this.
-> 
-> Fixes: 7723f4c5ecdb ("driver core: platform: Add an error message to platform_get_irq*()"
-> Cc: <stable@vger.kernel.org> # 5.4.x
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> "
+> These ones don't meet the sysfs standard of one value per file, which
+> is why they didn't make it to tpm2
 
-This is much better, yes
+They would be still useful to have available in some form as there is
+no way deduce them from the user space.
 
-Jason
+I'd prioritize in this particular case the compatibility with the legacy
+files over sysfs standard with a clear note in the commit message.
+
+/Jarkko
