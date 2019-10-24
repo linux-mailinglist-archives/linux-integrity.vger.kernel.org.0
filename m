@@ -2,79 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8322AE271A
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 01:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4CFE27B1
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 03:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392762AbfJWXj5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Oct 2019 19:39:57 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:51392 "EHLO
+        id S1732328AbfJXB1u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Oct 2019 21:27:50 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:60460 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392754AbfJWXj5 (ORCPT
+        with ESMTP id S1726925AbfJXB1t (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Oct 2019 19:39:57 -0400
-Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8BC3F2010AC5;
-        Wed, 23 Oct 2019 16:39:56 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8BC3F2010AC5
+        Wed, 23 Oct 2019 21:27:49 -0400
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3E7BA20F3BC1;
+        Wed, 23 Oct 2019 18:27:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3E7BA20F3BC1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1571873996;
-        bh=oW+D4pzJ9HOm7aty1xLpBXhe3vkoiV3VtOmUq5zybZE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KwrDmZZIX88BVDaFpk62/UTRFfg8vDbcNg/bsMUDBiNi77P2GSx4LNT8y4J9GKkym
-         Wtc46DQVk8VizdzAXeO6xaHmLPoewvNihz/8v19k4v5pUqILUk7NKyUv39pJZE02hz
-         ER9MYfNKYCwEu+SdZkqeHNokHzuArKR4libWkqHk=
+        s=default; t=1571880469;
+        bh=7uKBvl8yiufQLf7daeVfbHD8ZvcsSsW7/pDpL5qUKm8=;
+        h=To:From:Subject:Date:From;
+        b=pN66PVcxLf8AGC9pt2mSBUkcm2fakbOHtiuJrGyMMAURTqR2FGmtu6AIZBIYAhzuZ
+         gXkXFJrz+UBd5vcOJ7wVSlCCNVDIM7gQMUqLg/kSEGzvO3zTD6wgh3cmQt40sebcXI
+         r9OCTCnPadqXFmMKr8/2uUNa9l6MV4vHFdypw820=
+To:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, dhowells@redhat.com, casey@schaufler-ca.com,
-        sashal@kernel.org, jamorris@linux.microsoft.com,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
-Cc:     nramas@linux.microsoft.com
-Subject: [PATCH v2 4/4] KEYS: Enabled ima policy to measure keys added to builtin_trusted_keys keyring
-Date:   Wed, 23 Oct 2019 16:39:50 -0700
-Message-Id: <20191023233950.22072-5-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191023233950.22072-1-nramas@linux.microsoft.com>
-References: <20191023233950.22072-1-nramas@linux.microsoft.com>
+Subject: Measure ima policy
+Message-ID: <81e4a3f1-146b-cad2-a868-24a38cfde599@linux.microsoft.com>
+Date:   Wed, 23 Oct 2019 18:27:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Updated ima policy handler to check if the ima policy enables
-measurement of keys added to the builtin_trusted_keys keyring.
+Hi Mimi,
 
-With this patch measurement of keys added to the builtin_trusted_keys
-keyring is enabled end-to-end.
+Do you know if there is a plan (or, work already in progress) to measure 
+the "ima policy" that is currently in effect?
 
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
----
- security/integrity/ima/ima_policy.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+We were thinking it would be a good measurement to have that an 
+attestation service can validate.
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 6df7f641ff66..944636076152 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -370,7 +370,7 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- {
- 	int i;
- 
--	if (func == KEXEC_CMDLINE) {
-+	if ((func == KEXEC_CMDLINE) || (func == BUILTIN_TRUSTED_KEYS)) {
- 		if ((rule->flags & IMA_FUNC) && (rule->func == func))
- 			return true;
- 		return false;
-@@ -959,6 +959,9 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 				entry->func = POLICY_CHECK;
- 			else if (strcmp(args[0].from, "KEXEC_CMDLINE") == 0)
- 				entry->func = KEXEC_CMDLINE;
-+			else if (strcmp(args[0].from,
-+					"BUILTIN_TRUSTED_KEYS") == 0)
-+				entry->func = BUILTIN_TRUSTED_KEYS;
- 			else
- 				result = -EINVAL;
- 			if (!result)
--- 
-2.17.1
-
+thanks,
+  -lakshmi
