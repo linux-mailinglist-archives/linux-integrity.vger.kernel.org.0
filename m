@@ -2,28 +2,29 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE04E39EF
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 19:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B23E3A28
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 19:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394006AbfJXR0b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Oct 2019 13:26:31 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:54710 "EHLO
+        id S2503842AbfJXRez (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Oct 2019 13:34:55 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:57686 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389384AbfJXR0b (ORCPT
+        with ESMTP id S2503819AbfJXRey (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Oct 2019 13:26:31 -0400
+        Thu, 24 Oct 2019 13:34:54 -0400
 Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3B2552007698;
-        Thu, 24 Oct 2019 10:26:30 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3B2552007698
+        by linux.microsoft.com (Postfix) with ESMTPSA id E5AD02010AC3;
+        Thu, 24 Oct 2019 10:34:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E5AD02010AC3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1571937990;
-        bh=5R3b8oxPvTR6qGGx7vVi+OuiVSZNkllUsHU4qd/a/nE=;
+        s=default; t=1571938494;
+        bh=QdSrXCYUwtpMpli7Gl4G6qgqXWpnd26Qx0Uoa9NFbl8=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=OSCT2WjdmQ1xniyUn2/peoWgE9ycpc8Wc2ZzDicCH9kewV38vZAm5RmcKcKk8JDul
-         vNhWVweVtxUsfZF4xhG/qHuI8Rd7EwsQ+Nok8m5DqU4EetWGl4pOiPxKH5SORqCBkb
-         rOGzLTADWSqaGBt2UxTEU3rZBd/6AnlKTOr8YOeI=
-Subject: Re: [PATCH v9 1/8] powerpc: detect the secure boot mode of the system
+        b=FlkyGU6IaKamoiEDN/toTRVHqvED/hfEVum2YK7OArrnh9QkY5P2UtdQfRsl4N0jy
+         vkbhCfgVkApKl8t6C8jHxRVPcOjzEMNfQnMzzKFHRN8mkOOm7N5MND7q9f8dTr7dus
+         ixO6+VaWTm+bZrwM3e4YGcc88FR8Wm50wtymCoyg=
+Subject: Re: [PATCH v9 2/8] powerpc/ima: add support to initialize ima policy
+ rules
 To:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
         linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -42,14 +43,14 @@ Cc:     linux-kernel@vger.kernel.org,
         Oliver O'Halloran <oohall@gmail.com>,
         Prakhar Srivastava <prsriva02@gmail.com>
 References: <20191024034717.70552-1-nayna@linux.ibm.com>
- <20191024034717.70552-2-nayna@linux.ibm.com>
+ <20191024034717.70552-3-nayna@linux.ibm.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <b0282ef2-f75c-a139-9991-01eba15adb22@linux.microsoft.com>
-Date:   Thu, 24 Oct 2019 10:26:47 -0700
+Message-ID: <dd7e04fc-25e8-280f-b565-bdb031939655@linux.microsoft.com>
+Date:   Thu, 24 Oct 2019 10:35:11 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <20191024034717.70552-2-nayna@linux.ibm.com>
+In-Reply-To: <20191024034717.70552-3-nayna@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -59,28 +60,28 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 On 10/23/2019 8:47 PM, Nayna Jain wrote:
-> This patch defines a function to detect the secure boot state of a
-> PowerNV system.
 
-> +bool is_ppc_secureboot_enabled(void)
-> +{
-> +	struct device_node *node;
-> +	bool enabled = false;
-> +
-> +	node = of_find_compatible_node(NULL, NULL, "ibm,secvar-v1");
-> +	if (!of_device_is_available(node)) {
-> +		pr_err("Cannot find secure variable node in device tree; failing to secure state\n");
-> +		goto out;
+> +/*
+> + * The "secure_rules" are enabled only on "secureboot" enabled systems.
+> + * These rules verify the file signatures against known good values.
+> + * The "appraise_type=imasig|modsig" option allows the known good signature
+> + * to be stored as an xattr or as an appended signature.
+> + *
+> + * To avoid duplicate signature verification as much as possible, the IMA
+> + * policy rule for module appraisal is added only if CONFIG_MODULE_SIG_FORCE
+> + * is not enabled.
+> + */
+> +static const char *const secure_rules[] = {
+> +	"appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig|modsig",
+> +#ifndef CONFIG_MODULE_SIG_FORCE
+> +	"appraise func=MODULE_CHECK appraise_type=imasig|modsig",
+> +#endif
+> +	NULL
+> +};
 
-Related to "goto out;" above:
-
-Would of_find_compatible_node return NULL if the given node is not found?
-
-If of_device_is_available returns false (say, because node is NULL or it 
-does not find the specified node) would it be correct to call of_node_put?
-
-> +
-> +out:
-> +	of_node_put(node);
+Is there any way to not use conditional compilation in the above array 
+definition? Maybe define different functions to get "secure_rules" for 
+when CONFIG_MODULE_SIG_FORCE is defined and when it is not defined.
+Just a suggestion.
 
   -lakshmi
