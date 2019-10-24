@@ -2,69 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7864E39AE
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 19:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE04E39EF
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2019 19:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440000AbfJXRU2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Oct 2019 13:20:28 -0400
-Received: from mga14.intel.com ([192.55.52.115]:40506 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727036AbfJXRU2 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Oct 2019 13:20:28 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 10:20:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,225,1569308400"; 
-   d="scan'208";a="399837335"
-Received: from nesterov-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.8.153])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2019 10:20:24 -0700
-Date:   Thu, 24 Oct 2019 20:20:23 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     Nayna <nayna@linux.vnet.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        ltp@lists.linux.it,
-        Piotr =?iso-8859-1?Q?Kr=F3l?= <piotr.krol@3mdeb.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [LTP] [PATCH] ima: skip verifying TPM 2.0 PCR values
-Message-ID: <20191024172023.GA7948@linux.intel.com>
-References: <1558041162.3971.2.camel@linux.ibm.com>
- <fccc3abd-f3ce-fdb1-55d7-c18ce116446c@linux.vnet.ibm.com>
- <20190517150456.GA11796@dell5510>
- <20191024121848.GA5908@dell5510>
+        id S2394006AbfJXR0b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Oct 2019 13:26:31 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:54710 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389384AbfJXR0b (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 24 Oct 2019 13:26:31 -0400
+Received: from [10.137.112.111] (unknown [131.107.147.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3B2552007698;
+        Thu, 24 Oct 2019 10:26:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3B2552007698
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1571937990;
+        bh=5R3b8oxPvTR6qGGx7vVi+OuiVSZNkllUsHU4qd/a/nE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=OSCT2WjdmQ1xniyUn2/peoWgE9ycpc8Wc2ZzDicCH9kewV38vZAm5RmcKcKk8JDul
+         vNhWVweVtxUsfZF4xhG/qHuI8Rd7EwsQ+Nok8m5DqU4EetWGl4pOiPxKH5SORqCBkb
+         rOGzLTADWSqaGBt2UxTEU3rZBd/6AnlKTOr8YOeI=
+Subject: Re: [PATCH v9 1/8] powerpc: detect the secure boot mode of the system
+To:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>
+References: <20191024034717.70552-1-nayna@linux.ibm.com>
+ <20191024034717.70552-2-nayna@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <b0282ef2-f75c-a139-9991-01eba15adb22@linux.microsoft.com>
+Date:   Thu, 24 Oct 2019 10:26:47 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191024121848.GA5908@dell5510>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191024034717.70552-2-nayna@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 02:18:48PM +0200, Petr Vorel wrote:
-> Hi all,
-> 
-> I wonder what to do with this patch "ima: skip verifying TPM 2.0 PCR values" [1].
-> Is it a correct way to differentiate between TPM 1.2 and TPM 2.0?
-> Or something else should be applied?
-> 
-> How is the work on TPM 2.0 Linux sysfs interface?
-> But even it's done in near future, we'd still need some way for older kernels.
-> 
-> Kind regards,
-> Petr
-> 
-> [1] https://patchwork.ozlabs.org/patch/1100733/
+On 10/23/2019 8:47 PM, Nayna Jain wrote:
+> This patch defines a function to detect the secure boot state of a
+> PowerNV system.
 
-version_major sysfs file would be acceptable if someone wants to proceed
-and send such patch.
+> +bool is_ppc_secureboot_enabled(void)
+> +{
+> +	struct device_node *node;
+> +	bool enabled = false;
+> +
+> +	node = of_find_compatible_node(NULL, NULL, "ibm,secvar-v1");
+> +	if (!of_device_is_available(node)) {
+> +		pr_err("Cannot find secure variable node in device tree; failing to secure state\n");
+> +		goto out;
 
-Also replicants for durations and timeouts files would make sense for
-TPM 2.0.
+Related to "goto out;" above:
 
-/Jarkko
+Would of_find_compatible_node return NULL if the given node is not found?
+
+If of_device_is_available returns false (say, because node is NULL or it 
+does not find the specified node) would it be correct to call of_node_put?
+
+> +
+> +out:
+> +	of_node_put(node);
+
+  -lakshmi
