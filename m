@@ -2,174 +2,245 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2E5E40AB
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 02:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E618AE40B0
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 02:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387943AbfJYArK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Oct 2019 20:47:10 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4226 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387940AbfJYArK (ORCPT
+        id S2388167AbfJYAro (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Oct 2019 20:47:44 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27240 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388154AbfJYAro (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Oct 2019 20:47:10 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9P0hCUV140531
-        for <linux-integrity@vger.kernel.org>; Thu, 24 Oct 2019 20:47:08 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2vuj4cg4dv-1
+        Thu, 24 Oct 2019 20:47:44 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9P0lScV132006
+        for <linux-integrity@vger.kernel.org>; Thu, 24 Oct 2019 20:47:43 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vumntucjc-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 24 Oct 2019 20:47:08 -0400
+        for <linux-integrity@vger.kernel.org>; Thu, 24 Oct 2019 20:47:43 -0400
 Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 25 Oct 2019 01:47:06 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <nayna@linux.ibm.com>;
+        Fri, 25 Oct 2019 01:47:40 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 25 Oct 2019 01:47:03 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9P0l2cJ34865272
+        Fri, 25 Oct 2019 01:47:36 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9P0lYZZ31195276
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Oct 2019 00:47:02 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7782052054;
-        Fri, 25 Oct 2019 00:47:02 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.206.19])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2CB9152052;
-        Fri, 25 Oct 2019 00:47:01 +0000 (GMT)
-Subject: Re: [LTP] [PATCH] ima: skip verifying TPM 2.0 PCR values
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Petr Vorel <pvorel@suse.cz>, Nayna <nayna@linux.vnet.ibm.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        ltp@lists.linux.it,
-        Piotr =?ISO-8859-1?Q?Kr=F3l?= <piotr.krol@3mdeb.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Date:   Thu, 24 Oct 2019 20:47:00 -0400
-In-Reply-To: <20191024213842.c6cl4tlnsi56pgcy@cantor>
-References: <1558041162.3971.2.camel@linux.ibm.com>
-         <fccc3abd-f3ce-fdb1-55d7-c18ce116446c@linux.vnet.ibm.com>
-         <20190517150456.GA11796@dell5510> <20191024121848.GA5908@dell5510>
-         <20191024172023.GA7948@linux.intel.com>
-         <20191024213842.c6cl4tlnsi56pgcy@cantor>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Fri, 25 Oct 2019 00:47:34 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40B2C11C058;
+        Fri, 25 Oct 2019 00:47:34 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A5AFE11C04C;
+        Fri, 25 Oct 2019 00:47:31 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.40.192.65])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 25 Oct 2019 00:47:31 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linuxppc-dev@ozlabs.org, linux-efi@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Nayna Jain <nayna@linux.ibm.com>
+Subject: [PATCH v5 0/4] powerpc: expose secure variables to the kernel and userspace 
+Date:   Thu, 24 Oct 2019 19:47:25 -0500
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-x-cbid: 19102500-0012-0000-0000-0000035D2A2A
+x-cbid: 19102500-0020-0000-0000-0000037E2E68
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102500-0013-0000-0000-000021985EC6
-Message-Id: <1571964420.5173.12.camel@linux.ibm.com>
+x-cbparentid: 19102500-0021-0000-0000-000021D47805
+Message-Id: <20191025004729.4452-1-nayna@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-24_13:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910250006
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910250007
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2019-10-24 at 14:38 -0700, Jerry Snitselaar wrote:
-> On Thu Oct 24 19, Jarkko Sakkinen wrote:
-> >On Thu, Oct 24, 2019 at 02:18:48PM +0200, Petr Vorel wrote:
-> >> Hi all,
-> >>
-> >> I wonder what to do with this patch "ima: skip verifying TPM 2.0 PCR values" [1].
-> >> Is it a correct way to differentiate between TPM 1.2 and TPM 2.0?
-> >> Or something else should be applied?
-> >>
-> >> How is the work on TPM 2.0 Linux sysfs interface?
-> >> But even it's done in near future, we'd still need some way for older kernels.
-> >>
-> >> Kind regards,
-> >> Petr
-> >>
-> >> [1] https://patchwork.ozlabs.org/patch/1100733/
-> >
-> >version_major sysfs file would be acceptable if someone wants to proceed
-> >and send such patch.
-> >
-> >Also replicants for durations and timeouts files would make sense for
-> >TPM 2.0.
-> >
-> >/Jarkko
-> 
-> Is it as simple as doing this?
-> 
-> diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-> index edfa89160010..fd8eb8d8945c 100644
-> --- a/drivers/char/tpm/tpm-sysfs.c
-> +++ b/drivers/char/tpm/tpm-sysfs.c
-> @@ -309,7 +309,17 @@ static ssize_t timeouts_show(struct device *dev, struct device_attribute *attr,
->  }
->  static DEVICE_ATTR_RO(timeouts);
->  
-> -static struct attribute *tpm_dev_attrs[] = {
-> +static ssize_t version_major_show(struct device *dev,
-> +                                 struct device_attribute *attr, char *buf)
-> +{
-> +       struct tpm_chip *chip = to_tpm_chip(dev);
-> +
-> +       return sprintf(buf, "TPM%s\n", chip->flags & TPM_CHIP_FLAG_TPM2
-> +                      ? "2.0" : "1.2");
-> +}
-> +static DEVICE_ATTR_RO(version_major);
-> +
-> +static struct attribute *tpm12_dev_attrs[] = {
->         &dev_attr_pubek.attr,
->         &dev_attr_pcrs.attr,
->         &dev_attr_enabled.attr,
-> @@ -320,18 +330,28 @@ static struct attribute *tpm_dev_attrs[] = {
->         &dev_attr_cancel.attr,
->         &dev_attr_durations.attr,
->         &dev_attr_timeouts.attr,
-> +       &dev_attr_version_major.attr,
->         NULL,
->  };
->  
+In order to verify the OS kernel on PowerNV systems, secure boot requires
+X.509 certificates trusted by the platform. These are stored in secure
+variables controlled by OPAL, called OPAL secure variables. In order to
+enable users to manage the keys, the secure variables need to be exposed
+to userspace.
 
-The TPM version seems to be included in "dev_attr_caps.attr".
+OPAL provides the runtime services for the kernel to be able to access the
+secure variables[1]. This patchset defines the kernel interface for the
+OPAL APIs. These APIs are used by the hooks, which load these variables
+to the keyring and expose them to the userspace for reading/writing.
 
-> -static const struct attribute_group tpm_dev_group = {
-> -       .attrs = tpm_dev_attrs,
-> +static struct attribute *tpm20_dev_attrs[] = {
-> +       &dev_attr_version_major.attr,
-> +       NULL
-> +};
+The previous version[2] of the patchset added support only for the sysfs
+interface. This patch adds two more patches that involves loading of
+the firmware trusted keys to the kernel keyring.
 
-This should work, but wouldn't exporting this information under
-security/tpmX, like the binary_bios_measurements, be a lot easier to
-find and use?
+Overall, this patchset adds the following support:
 
-Mimi
+* expose secure variables to the kernel via OPAL Runtime API interface
+* expose secure variables to the userspace via kernel sysfs interface
+* load kernel verification and revocation keys to .platform and
+.blacklist keyring respectively.
 
-> +
-> +static const struct attribute_group tpm12_dev_group = {
-> +       .attrs = tpm12_dev_attrs,
-> +};
-> +
-> +static const struct attribute_group tpm20_dev_group = {
-> +       .attrs = tpm20_dev_attrs,
->  };
->  
->  void tpm_sysfs_add_device(struct tpm_chip *chip)
->  {
-> -       if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> -               return;
-> -
->         WARN_ON(chip->groups_cnt != 0);
-> -       chip->groups[chip->groups_cnt++] = &tpm_dev_group;
-> +       if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> +               chip->groups[chip->groups_cnt++] = &tpm20_dev_group;
-> +       else
-> +               chip->groups[chip->groups_cnt++] = &tpm12_dev_group;
->  }
-> 
-> 
-> Did a quick test on 2 systems here.
+The secure variables can be read/written using simple linux utilities
+cat/hexdump.
+
+For example:
+Path to the secure variables is:
+/sys/firmware/secvar/vars
+
+Each secure variable is listed as directory. 
+$ ls -l
+total 0
+drwxr-xr-x. 2 root root 0 Aug 20 21:20 db
+drwxr-xr-x. 2 root root 0 Aug 20 21:20 KEK
+drwxr-xr-x. 2 root root 0 Aug 20 21:20 PK
+
+The attributes of each of the secure variables are(for example: PK):
+[db]$ ls -l
+total 0
+-r--r--r--. 1 root root  4096 Oct  1 15:10 data
+-r--r--r--. 1 root root 65536 Oct  1 15:10 size
+--w-------. 1 root root  4096 Oct  1 15:12 update
+
+The "data" is used to read the existing variable value using hexdump. The
+data is stored in ESL format.
+The "update" is used to write a new value using cat. The update is
+to be submitted as AUTH file.
+
+[1] Depends on skiboot OPAL API changes which removes metadata from
+the API. https://lists.ozlabs.org/pipermail/skiboot/2019-September/015203.html.
+[2] https://lkml.org/lkml/2019/6/13/1644
+
+Changelog:
+v5:
+* rebased to v5.4-rc3
+* includes Oliver's feedbacks
+  * changed OPAL API as platform driver
+  * sysfs are made default enabled and dependent on PPC_SECURE_BOOT
+  * fixed code specific changes in both OPAL API and sysfs
+  * reading size of the "data" and "update" file from device-tree.  
+  * fixed sysfs documentation to also reflect the data and update file
+  size interpretation
+  * This patchset is no more dependent on ima-arch/blacklist patchset
+
+v4:
+* rebased to v5.4-rc1 
+* uses __BIN_ATTR_WO macro to create binary attribute as suggested by
+  Greg
+* removed email id from the file header
+* renamed argument keysize to keybufsize in get_next() function
+* updated default binary file sizes to 0, as firmware handles checking
+against the maximum size
+* fixed minor formatting issues in Patch 4/4
+* added Greg's and Mimi's Reviewed-by and Ack-by
+
+v3:
+* includes Greg's feedbacks:
+ * fixes in Patch 2/4
+   * updates the Documentation.
+   * fixes code feedbacks
+    * adds SYSFS Kconfig dependency for SECVAR_SYSFS
+    * fixes mixed tabs and spaces
+    * removes "name" attribute for each of the variable name based
+    directories
+    * fixes using __ATTR_RO() and __BIN_ATTR_RO() and statics and const
+    * fixes the racing issue by using kobj_type default groups. Also,
+    fixes the kobject leakage.
+    * removes extra print messages
+  * updates patch description for Patch 3/4
+  * removes file name from Patch 4/4 file header comment and removed
+  def_bool y from the LOAD_PPC_KEYS Kconfig
+
+* includes Oliver's feedbacks:
+  * fixes Patch 1/2
+   * moves OPAL API wrappers after opal_nx_proc_init(), fixed the
+   naming, types and removed extern.
+   * fixes spaces
+   * renames get_variable() to get(), get_next_variable() to get_next()
+   and set_variable() to set()
+   * removed get_secvar_ops() and defined secvar_ops as global
+   * fixes consts and statics
+   * removes generic secvar_init() and defined platform specific
+   opal_secar_init()
+   * updates opal_secvar_supported() to check for secvar support even
+   before checking the OPAL APIs support and also fixed the error codes.
+   * addes function that converts OPAL return codes to linux errno
+   * moves secvar check support in the opal_secvar_init() and defined its
+   prototype in opal.h
+  * fixes Patch 2/2
+   * fixes static/const
+   * defines macro for max name size
+   * replaces OPAL error codes with linux errno and also updated error
+   handling
+   * moves secvar support check before creating sysfs kobjects in 
+   secvar_sysfs_init()
+   * fixes spaces  
+
+v2:
+* removes complete efi-sms from the sysfs implementation and is simplified
+* includes Greg's and Oliver's feedbacks:
+ * adds sysfs documentation
+ * moves sysfs code to arch/powerpc
+ * other code related feedbacks.
+* adds two new patches to load keys to .platform and .blacklist keyring.
+These patches are added to this series as they are also dependent on
+OPAL APIs.
+
+Nayna Jain (4):
+  powerpc/powernv: Add OPAL API interface to access secure variable
+  powerpc: expose secure variables to userspace via sysfs
+  x86/efi: move common keyring handler functions to new file
+  powerpc: load firmware trusted keys/hashes into kernel keyring
+
+ Documentation/ABI/testing/sysfs-secvar        |  39 +++
+ arch/powerpc/Kconfig                          |  12 +
+ arch/powerpc/include/asm/opal-api.h           |   5 +-
+ arch/powerpc/include/asm/opal.h               |   7 +
+ arch/powerpc/include/asm/secvar.h             |  35 +++
+ arch/powerpc/kernel/Makefile                  |   3 +-
+ arch/powerpc/kernel/secvar-ops.c              |  16 ++
+ arch/powerpc/kernel/secvar-sysfs.c            | 228 ++++++++++++++++++
+ arch/powerpc/platforms/powernv/Makefile       |   2 +-
+ arch/powerpc/platforms/powernv/opal-call.c    |   3 +
+ arch/powerpc/platforms/powernv/opal-secvar.c  | 140 +++++++++++
+ arch/powerpc/platforms/powernv/opal.c         |   3 +
+ security/integrity/Kconfig                    |   8 +
+ security/integrity/Makefile                   |   7 +-
+ .../platform_certs/keyring_handler.c          |  80 ++++++
+ .../platform_certs/keyring_handler.h          |  32 +++
+ .../integrity/platform_certs/load_powerpc.c   |  86 +++++++
+ security/integrity/platform_certs/load_uefi.c |  67 +----
+ 18 files changed, 702 insertions(+), 71 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-secvar
+ create mode 100644 arch/powerpc/include/asm/secvar.h
+ create mode 100644 arch/powerpc/kernel/secvar-ops.c
+ create mode 100644 arch/powerpc/kernel/secvar-sysfs.c
+ create mode 100644 arch/powerpc/platforms/powernv/opal-secvar.c
+ create mode 100644 security/integrity/platform_certs/keyring_handler.c
+ create mode 100644 security/integrity/platform_certs/keyring_handler.h
+ create mode 100644 security/integrity/platform_certs/load_powerpc.c
+
+-- 
+2.20.1
 
