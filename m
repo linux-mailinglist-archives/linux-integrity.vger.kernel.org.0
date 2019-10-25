@@ -2,92 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3D9E5485
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 21:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7245DE54A2
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 21:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725852AbfJYTmw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Oct 2019 15:42:52 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58070 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726754AbfJYTmv (ORCPT
+        id S1726369AbfJYTt2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Oct 2019 15:49:28 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:38732 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726263AbfJYTt2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Oct 2019 15:42:51 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9PJXbKS023290
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Oct 2019 15:42:51 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vv3avgh08-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Oct 2019 15:42:50 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 25 Oct 2019 20:42:48 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 25 Oct 2019 20:42:44 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9PJghpi57671886
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Oct 2019 19:42:43 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B317711C04C;
-        Fri, 25 Oct 2019 19:42:43 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0989111C050;
-        Fri, 25 Oct 2019 19:42:43 +0000 (GMT)
-Received: from dhcp-9-31-103-196.watson.ibm.com (unknown [9.31.103.196])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Oct 2019 19:42:42 +0000 (GMT)
-Subject: Re: [PATCH] tpm: Add major_version sysfs file
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        linux-integrity@vger.kernel.org
-Date:   Fri, 25 Oct 2019 15:42:42 -0400
-In-Reply-To: <20191025193243.GI23952@ziepe.ca>
-References: <20191025142847.14931-1-jsnitsel@redhat.com>
-         <1572027516.4532.41.camel@linux.ibm.com>
-         <20191025184522.5txabdikcrn2dgvj@cantor> <20191025193243.GI23952@ziepe.ca>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19102519-0016-0000-0000-000002BDA382
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102519-0017-0000-0000-0000331EEEAF
-Message-Id: <1572032562.4532.74.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-25_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910250177
+        Fri, 25 Oct 2019 15:49:28 -0400
+Received: from [10.137.112.111] (unknown [131.107.147.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 632C62010AC9;
+        Fri, 25 Oct 2019 12:49:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 632C62010AC9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1572032967;
+        bh=arffu6CtqVuIvQ0iJb4yQV3sPO18YA6ZcJjsgBLt/xQ=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=lD93IP13AyAM2AwIGQvUum25fkCiBf3v7KXinxUlkR4XjpFDt5L83C2dKGYY3/tiu
+         Hrn2jhYlP4712hBMEMtZ9zx7eNeKe56E8ME8t/sv7Y6J78os4oUe4F6I4GeL+LtQi6
+         QENmDTLIJ9GIhTP8aIuKaFddenhSXQtN7EiMFd+g=
+Subject: Re: [PATCH v2 1/4] KEYS: Defined an ima hook for measuring keys on
+ key create or update
+To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
+        casey@schaufler-ca.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+References: <20191023233950.22072-1-nramas@linux.microsoft.com>
+ <20191023233950.22072-2-nramas@linux.microsoft.com>
+ <1572032428.4532.72.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <715d35ba-a102-3524-77a8-70a784628b46@linux.microsoft.com>
+Date:   Fri, 25 Oct 2019 12:49:45 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
+MIME-Version: 1.0
+In-Reply-To: <1572032428.4532.72.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-10-25 at 16:32 -0300, Jason Gunthorpe wrote:
-> On Fri, Oct 25, 2019 at 11:45:22AM -0700, Jerry Snitselaar wrote:
-> > On Fri Oct 25 19, Mimi Zohar wrote:
-> > Yes, there should be an entry added to
-> > Documentation/ABI/stable/sysfs-class-tpm.
-> > I will fix that up and the TCG not being uppercase in a v2.
-> > 
-> > Should Documentation/ABI/stable/sysfs-class-tpm updated in
-> > some way to reflect that those are all links under device
-> > now and not actually there.
+On 10/25/2019 12:40 PM, Mimi Zohar wrote:
+
+> On Wed, 2019-10-23 at 16:39 -0700, Lakshmi Ramasubramanian wrote:
+>> Defined an ima hook to measure keys created or updated in the system.
 > 
-> Applications should not use the link version, that path was a
-> mistake. The link is for compatability with old userspace.
+> "IMA" is an anacronym.  Unless it is a part of a function name, it
+> should be capitalized.
+Will fix that.
 
-Are you suggesting that userspace has to search for the device info? 
-That makes no sense.
+> 
+> Before describing "what" you're doing, describe the problem.  For
+> example, "The asymmetric keys used for verifying file signatures or
+> certificates are currently not included in the IMA measurement list.
+>   This patch defines a new IMA hook named ima_key_create_or_update() to
+> measure keys."
+Agree - will update.
 
-Mimi
 
+>> +
+>> +	if (!ima_initialized)
+>> +		return;
+> 
+> There's no reason to define a new variable to determine if IMA is
+> initialized.  Use ima_policy_flag.
+Will change it.
+
+>  Like process_measurements, the test should be in process_buffer_measurement(), not here.
+
+Currently, queuing of requests when IMA is not initialized is done for 
+keys only. Moving that check inside process_buffer_measurement would 
+mean handling queuing for all buffer measurements.
+
+Can that be done as a separate patch set and not in this one?
+
+>> @@ -936,6 +937,9 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
+>>   		goto error_link_end;
+>>   	}
+>>   
+>> +	/* let the ima module know about the created key. */
+>> +	ima_post_key_create_or_update(keyring, key, flags, true);
+>> +
+>>   	key_ref = make_key_ref(key, is_key_possessed(keyring_ref));
+> 
+> This patch defines the new IMA hook.  This call and the subsequent one
+> below can be defined in a separate patch.  The subject line of that
+> patch would be "keys: Add ima_key_create_or_update call to measure
+> keys".
+> 
+> Mimi
+Agree - will change it.
+
+thanks,
+  -lakshmi
