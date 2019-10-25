@@ -2,189 +2,255 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F38E5470
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 21:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 711CEE5479
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 21:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725775AbfJYTgn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Oct 2019 15:36:43 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:60138 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726212AbfJYTgg (ORCPT
+        id S1727394AbfJYTki (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Oct 2019 15:40:38 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48764 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727387AbfJYTkh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Oct 2019 15:36:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1572032194;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WY4DqfThBC4KF0edM6YYGs6wiTpVUS+SZXP71BDtiMc=;
-        b=AevmlaZf5tgcK+YclBERySM042j0TK/95eaXVmy1JOiqzN/nZiTvAHFFgtzg+dcGVYrxuu
-        6gdZOOs0pA6iy1yvDVDr7ShvksmnxyHf5UY8KnAfu4uTRjSxNNl7PjSJ5bqDHS3LVt5P8z
-        X+Kgep6GMgYzSKwMowpRIAGF/ytGrYo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-136-yS2I6GnMO_CAHk_1PF2FmQ-1; Fri, 25 Oct 2019 15:36:31 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 34C6180183D;
-        Fri, 25 Oct 2019 19:36:30 +0000 (UTC)
-Received: from cantor.redhat.com (ovpn-117-192.phx2.redhat.com [10.3.117.192])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D3BB63D8F;
-        Fri, 25 Oct 2019 19:36:29 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Subject: [PATCH] tpm: Update mailing list contact information in sysfs-class-tpm
-Date:   Fri, 25 Oct 2019 12:36:28 -0700
-Message-Id: <20191025193628.31004-1-jsnitsel@redhat.com>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-MC-Unique: yS2I6GnMO_CAHk_1PF2FmQ-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+        Fri, 25 Oct 2019 15:40:37 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9PJXUuM040222
+        for <linux-integrity@vger.kernel.org>; Fri, 25 Oct 2019 15:40:36 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vv47qpafc-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 25 Oct 2019 15:40:36 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Fri, 25 Oct 2019 20:40:33 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 25 Oct 2019 20:40:31 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9PJeUMc46137518
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Oct 2019 19:40:30 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2CB325204E;
+        Fri, 25 Oct 2019 19:40:30 +0000 (GMT)
+Received: from dhcp-9-31-103-196.watson.ibm.com (unknown [9.31.103.196])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 310A25204F;
+        Fri, 25 Oct 2019 19:40:29 +0000 (GMT)
+Subject: Re: [PATCH v2 1/4] KEYS: Defined an ima hook for measuring keys on
+ key create or update
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        dhowells@redhat.com, casey@schaufler-ca.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+Date:   Fri, 25 Oct 2019 15:40:28 -0400
+In-Reply-To: <20191023233950.22072-2-nramas@linux.microsoft.com>
+References: <20191023233950.22072-1-nramas@linux.microsoft.com>
+         <20191023233950.22072-2-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19102519-0008-0000-0000-00000327A1B7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19102519-0009-0000-0000-00004A46DA19
+Message-Id: <1572032428.4532.72.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-25_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910250177
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-All of the entries in Documentation/ABI/stable/sysfs-class-tpm
-point to the old tpmdd-devel mailing list. This patch
-updates the entries to point to linux-intergrity.
+On Wed, 2019-10-23 at 16:39 -0700, Lakshmi Ramasubramanian wrote:
+> Defined an ima hook to measure keys created or updated in the system.
 
-Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-integrity@vger.kernel.org
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- Documentation/ABI/stable/sysfs-class-tpm | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+"IMA" is an anacronym.  Unless it is a part of a function name, it
+should be capitalized.
 
-diff --git a/Documentation/ABI/stable/sysfs-class-tpm b/Documentation/ABI/s=
-table/sysfs-class-tpm
-index c6bd02bafafd..e0116d42e4a0 100644
---- a/Documentation/ABI/stable/sysfs-class-tpm
-+++ b/Documentation/ABI/stable/sysfs-class-tpm
-@@ -1,7 +1,7 @@
- What:=09=09/sys/class/tpm/tpmX/device/
- Date:=09=09April 2005
- KernelVersion:=092.6.12
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The device/ directory under a specific TPM instance exposes
- =09=09the properties of that TPM chip
-=20
-@@ -9,7 +9,7 @@ Description:=09The device/ directory under a specific TPM i=
-nstance exposes
- What:=09=09/sys/class/tpm/tpmX/device/active
- Date:=09=09April 2006
- KernelVersion:=092.6.17
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "active" property prints a '1' if the TPM chip is accep=
-ting
- =09=09commands. An inactive TPM chip still contains all the state of
- =09=09an active chip (Storage Root Key, NVRAM, etc), and can be
-@@ -21,7 +21,7 @@ Description:=09The "active" property prints a '1' if the =
-TPM chip is accepting
- What:=09=09/sys/class/tpm/tpmX/device/cancel
- Date:=09=09June 2005
- KernelVersion:=092.6.13
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "cancel" property allows you to cancel the currently
- =09=09pending TPM command. Writing any value to cancel will call the
- =09=09TPM vendor specific cancel operation.
-@@ -29,7 +29,7 @@ Description:=09The "cancel" property allows you to cancel=
- the currently
- What:=09=09/sys/class/tpm/tpmX/device/caps
- Date:=09=09April 2005
- KernelVersion:=092.6.12
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "caps" property contains TPM manufacturer and version i=
-nfo.
-=20
- =09=09Example output:
-@@ -46,7 +46,7 @@ Description:=09The "caps" property contains TPM manufactu=
-rer and version info.
- What:=09=09/sys/class/tpm/tpmX/device/durations
- Date:=09=09March 2011
- KernelVersion:=093.1
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "durations" property shows the 3 vendor-specific values
- =09=09used to wait for a short, medium and long TPM command. All
- =09=09TPM commands are categorized as short, medium or long in
-@@ -69,7 +69,7 @@ Description:=09The "durations" property shows the 3 vendo=
-r-specific values
- What:=09=09/sys/class/tpm/tpmX/device/enabled
- Date:=09=09April 2006
- KernelVersion:=092.6.17
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "enabled" property prints a '1' if the TPM chip is enab=
-led,
- =09=09meaning that it should be visible to the OS. This property
- =09=09may be visible but produce a '0' after some operation that
-@@ -78,7 +78,7 @@ Description:=09The "enabled" property prints a '1' if the=
- TPM chip is enabled,
- What:=09=09/sys/class/tpm/tpmX/device/owned
- Date:=09=09April 2006
- KernelVersion:=092.6.17
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "owned" property produces a '1' if the TPM_TakeOwnershi=
-p
- =09=09ordinal has been executed successfully in the chip. A '0'
- =09=09indicates that ownership hasn't been taken.
-@@ -86,7 +86,7 @@ Description:=09The "owned" property produces a '1' if the=
- TPM_TakeOwnership
- What:=09=09/sys/class/tpm/tpmX/device/pcrs
- Date:=09=09April 2005
- KernelVersion:=092.6.12
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "pcrs" property will dump the current value of all Plat=
-form
- =09=09Configuration Registers in the TPM. Note that since these
- =09=09values may be constantly changing, the output is only valid
-@@ -109,7 +109,7 @@ Description:=09The "pcrs" property will dump the curren=
-t value of all Platform
- What:=09=09/sys/class/tpm/tpmX/device/pubek
- Date:=09=09April 2005
- KernelVersion:=092.6.12
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "pubek" property will return the TPM's public endorseme=
-nt
- =09=09key if possible. If the TPM has had ownership established and
- =09=09is version 1.2, the pubek will not be available without the
-@@ -161,7 +161,7 @@ Description:=09The "pubek" property will return the TPM=
-'s public endorsement
- What:=09=09/sys/class/tpm/tpmX/device/temp_deactivated
- Date:=09=09April 2006
- KernelVersion:=092.6.17
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "temp_deactivated" property returns a '1' if the chip h=
-as
- =09=09been temporarily deactivated, usually until the next power
- =09=09cycle. Whether a warm boot (reboot) will clear a TPM chip
-@@ -170,7 +170,7 @@ Description:=09The "temp_deactivated" property returns =
-a '1' if the chip has
- What:=09=09/sys/class/tpm/tpmX/device/timeouts
- Date:=09=09March 2011
- KernelVersion:=093.1
--Contact:=09tpmdd-devel@lists.sf.net
-+Contact:=09linux-integrity@vger.kernel.org
- Description:=09The "timeouts" property shows the 4 vendor-specific values
- =09=09for the TPM's interface spec timeouts. The use of these
- =09=09timeouts is defined by the TPM interface spec that the chip
---=20
-2.23.0
+Before describing "what" you're doing, describe the problem.  For
+example, "The asymmetric keys used for verifying file signatures or
+certificates are currently not included in the IMA measurement list.
+ This patch defines a new IMA hook named ima_key_create_or_update() to
+measure keys."
+
+> Call this ima hook from key_create_or_update function when a new key
+> is created or an existing key is updated.
+> 
+> ima hook calls process_buffer_measurement function to measure the key
+> if ima is initialized. If ima is not yet initialized, the ima hook
+> currently does nothing. The change to queue the key for measurement
+> and measure after ima is initialized is implemented in a later patch.
+
+> This patch set depends on the following patch set provided by
+> Nayna Jain from IBM (nayna@linux.ibm.com). That patch set is
+> currently being reviewed:
+> 
+> [PATCH v8 5/8] ima: make process_buffer_measurement() generic
+> https://lore.kernel.org/linux-integrity/1569594360-7141-7-git-send-email-nayna@linux.ibm.com/
+
+Unnecessary information for this patch.
+
+
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> ---
+>  include/linux/ima.h               |  8 ++++++++
+>  security/integrity/ima/ima.h      |  3 +++
+>  security/integrity/ima/ima_init.c |  1 +
+>  security/integrity/ima/ima_main.c | 26 ++++++++++++++++++++++++++
+>  security/keys/key.c               |  9 +++++++++
+>  5 files changed, 47 insertions(+)
+> 
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index a20ad398d260..4df39aefcd06 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -24,6 +24,9 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
+>  			      enum kernel_read_file_id id);
+>  extern void ima_post_path_mknod(struct dentry *dentry);
+>  extern void ima_kexec_cmdline(const void *buf, int size);
+> +extern void ima_post_key_create_or_update(struct key *keyring,
+> +					  struct key *key,
+> +					  unsigned long flags, bool create);
+>  
+>  #ifdef CONFIG_IMA_KEXEC
+>  extern void ima_add_kexec_buffer(struct kimage *image);
+> @@ -91,6 +94,11 @@ static inline void ima_post_path_mknod(struct dentry *dentry)
+>  }
+>  
+>  static inline void ima_kexec_cmdline(const void *buf, int size) {}
+> +
+> +static inline void ima_post_key_create_or_update(struct key *keyring,
+> +						 struct key *key,
+> +						 unsigned long flags,
+> +						 bool create) {}
+>  #endif /* CONFIG_IMA */
+>  
+>  #ifndef CONFIG_IMA_KEXEC
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 997a57137351..2d4130ff5655 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -21,6 +21,8 @@
+>  #include <linux/tpm.h>
+>  #include <linux/audit.h>
+>  #include <crypto/hash_info.h>
+> +#include <crypto/public_key.h>
+> +#include <keys/asymmetric-type.h>
+>  
+>  #include "../integrity.h"
+>  
+> @@ -52,6 +54,7 @@ extern int ima_policy_flag;
+>  extern int ima_hash_algo;
+>  extern int ima_appraise;
+>  extern struct tpm_chip *ima_tpm_chip;
+> +extern bool ima_initialized;
+>  
+>  /* IMA event related data */
+>  struct ima_event_data {
+> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+> index 5d55ade5f3b9..52847ce765a4 100644
+> --- a/security/integrity/ima/ima_init.c
+> +++ b/security/integrity/ima/ima_init.c
+> @@ -23,6 +23,7 @@
+>  /* name for boot aggregate entry */
+>  static const char boot_aggregate_name[] = "boot_aggregate";
+>  struct tpm_chip *ima_tpm_chip;
+> +bool ima_initialized;
+>  
+>  /* Add the boot aggregate to the IMA measurement list and extend
+>   * the PCR register.
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 2b60d8fd017a..8bde12385912 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -693,6 +693,32 @@ void ima_kexec_cmdline(const void *buf, int size)
+>  	}
+>  }
+>  
+> +/**
+> + * ima_post_key_create_or_update - measure keys
+> + * @keyring: keyring to which the key is linked to
+> + * @key: created or updated key
+> + * @flags: key flags
+> + * @create: flag indicating whether the key was created or updated
+> + *
+> + * Keys can only be measured, not appraised.
+> + */
+> +void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+> +				   unsigned long flags, bool create)
+> +{
+> +	const struct public_key *pk;
+> +
+> +	if (key->type != &key_type_asymmetric)
+> +		return;
+> +
+> +	if (!ima_initialized)
+> +		return;
+
+There's no reason to define a new variable to determine if IMA is
+initialized.  Use ima_policy_flag.  Like process_measurements, the
+test should be in process_buffer_measurement(), not here.
+
+> +
+> +	pk = key->payload.data[asym_crypto];
+> +	process_buffer_measurement(pk->key, pk->keylen,
+> +				   key->description,
+> +				   NONE, 0);
+> +}
+> +
+>  static int __init init_ima(void)
+>  {
+>  	int error;
+> diff --git a/security/keys/key.c b/security/keys/key.c
+> index 764f4c57913e..7c39054d8da6 100644
+> --- a/security/keys/key.c
+> +++ b/security/keys/key.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/security.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/random.h>
+> +#include <linux/ima.h>
+>  #include <linux/err.h>
+>  #include "internal.h"
+>  
+> @@ -936,6 +937,9 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
+>  		goto error_link_end;
+>  	}
+>  
+> +	/* let the ima module know about the created key. */
+> +	ima_post_key_create_or_update(keyring, key, flags, true);
+> +
+>  	key_ref = make_key_ref(key, is_key_possessed(keyring_ref));
+
+This patch defines the new IMA hook.  This call and the subsequent one
+below can be defined in a separate patch.  The subject line of that
+patch would be "keys: Add ima_key_create_or_update call to measure
+keys".
+
+Mimi
+
+>  
+>  error_link_end:
+> @@ -965,6 +969,11 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
+>  	}
+>  
+>  	key_ref = __key_update(key_ref, &prep);
+> +	if (!IS_ERR(key_ref)) {
+> +		/* let the ima module know about the updated key. */
+> +		ima_post_key_create_or_update(keyring, key, flags, false);
+> +	}
+> +
+>  	goto error_free_prep;
+>  }
+>  EXPORT_SYMBOL(key_create_or_update);
 
