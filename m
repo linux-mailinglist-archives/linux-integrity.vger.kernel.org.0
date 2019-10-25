@@ -2,146 +2,164 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B4EE5271
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 19:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EB5E5275
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 19:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387874AbfJYRhP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Oct 2019 13:37:15 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50036 "EHLO
+        id S2502902AbfJYRjz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Oct 2019 13:39:55 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14542 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387859AbfJYRhP (ORCPT
+        by vger.kernel.org with ESMTP id S2505866AbfJYRjz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Oct 2019 13:37:15 -0400
+        Fri, 25 Oct 2019 13:39:55 -0400
 Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9PHaqRD051337;
-        Fri, 25 Oct 2019 13:36:52 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2vv3ck4y7w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Oct 2019 13:36:51 -0400
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x9PHapUW051275;
-        Fri, 25 Oct 2019 13:36:51 -0400
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2vv3ck4y5b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Oct 2019 13:36:51 -0400
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x9PHZ6h9003745;
-        Fri, 25 Oct 2019 17:36:43 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma01dal.us.ibm.com with ESMTP id 2vqt47t7v7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Oct 2019 17:36:42 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9PHae5p63373682
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9PHapsi051284
+        for <linux-integrity@vger.kernel.org>; Fri, 25 Oct 2019 13:39:54 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2vv3ck525w-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 25 Oct 2019 13:39:53 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Fri, 25 Oct 2019 18:39:51 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 25 Oct 2019 18:39:46 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9PHdj5W21102994
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Oct 2019 17:36:40 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A6D60C605F;
-        Fri, 25 Oct 2019 17:36:40 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8F66AC6057;
-        Fri, 25 Oct 2019 17:36:38 +0000 (GMT)
-Received: from [9.85.155.79] (unknown [9.85.155.79])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Oct 2019 17:36:38 +0000 (GMT)
-Subject: Re: [PATCH v9 7/8] ima: check against blacklisted hashes for files
- with modsig
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>
-References: <20191024034717.70552-1-nayna@linux.ibm.com>
- <20191024034717.70552-8-nayna@linux.ibm.com>
- <8e6dde58-17c2-a834-9ec3-1271b4ffd3a8@linux.microsoft.com>
-From:   Nayna Jain <nayna@linux.vnet.ibm.com>
-Message-ID: <c051d807-59a1-5dd0-40b7-be0867f0e43a@linux.vnet.ibm.com>
-Date:   Fri, 25 Oct 2019 12:36:37 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <8e6dde58-17c2-a834-9ec3-1271b4ffd3a8@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Fri, 25 Oct 2019 17:39:45 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9B407AE045;
+        Fri, 25 Oct 2019 17:39:45 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8A1AAE053;
+        Fri, 25 Oct 2019 17:39:43 +0000 (GMT)
+Received: from dhcp-9-31-103-196.watson.ibm.com (unknown [9.31.103.196])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 25 Oct 2019 17:39:43 +0000 (GMT)
+Subject: Re: [PATCH V4 0/2] Add support for arm64 to carry ima measurement
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     James Morse <james.morse@arm.com>
+Cc:     prsriva <prsriva@linux.microsoft.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        mark.rutland@arm.com, jean-philippe@linaro.org, arnd@arndb.de,
+        takahiro.akashi@linaro.org, sboyd@kernel.org,
+        catalin.marinas@arm.com, yamada.masahiro@socionext.com,
+        duwe@lst.de, tglx@linutronix.de, allison@lohutok.net,
+        ard.biesheuvel@linaro.org
+Date:   Fri, 25 Oct 2019 13:39:43 -0400
+In-Reply-To: <3879883b-8c27-df25-ce20-97ed7274dc80@arm.com>
+References: <20191011003600.22090-1-prsriva@linux.microsoft.com>
+         <87d92514-e5e4-a79f-467f-f24a4ed279b6@arm.com>
+         <b35b239c-990c-0d5b-0298-8f9e35064e2b@linux.microsoft.com>
+         <0053eb68-0905-4679-c97a-00c5cb6f1abb@arm.com>
+         <1571190256.5250.200.camel@linux.ibm.com>
+         <3879883b-8c27-df25-ce20-97ed7274dc80@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 X-TM-AS-GCONF: 00
+x-cbid: 19102517-0020-0000-0000-0000037EA105
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19102517-0021-0000-0000-000021D4EF22
+Message-Id: <1572025183.4532.34.camel@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-25_09:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=746 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1908290000 definitions=main-1910250161
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, 2019-10-25 at 18:07 +0100, James Morse wrote:
+> Hi Mimi,
+> 
+> On 16/10/2019 02:44, Mimi Zohar wrote:
+> > On Tue, 2019-10-15 at 18:39 +0100, James Morse wrote:
+> >> If SecureBoot isn't relevant, I'm confused as to why kexec_file_load() is.
+> >>
+> >> I thought kexec_file_load() only existed because SecureBoot systems need to validate the
+> >> new OS images's signature before loading it, and we can't trust user-space calling Kexec
+> >> to do this.
+> >>
+> >> If there is no secure boot, why does this thing only work with kexec_file_load()?
+> >> (good news! With the UEFI memreseve table, it should work transparently with regular kexec
+> >> too)
+> 
+> > I'm so sorry for the confusion.  IMA was originally limited to
+> > extending trusted boot concepts to the OS.  As of Linux 3.10, IMA
+> > added support for extending secure boot concepts and auditing file
+> > hashes (commit e7c568e0fd0cf).
+> > 
+> > True, kexec_file_load is required for verifying the kexec kernel
+> > image, but it is also required for measuring the kexec kernel image as
+> > well.
+> > 
+> > After reading the kernel image into memory (kernel_read_file_from_fd),
+> > the hash is calculated and then added to the IMA measurement list and
+> > used to extend the TPM.  All of this is based on the IMA policy,
+> > including the TPM PCR.
+> 
+> Don't we get a set of segments with the regular kexec syscall? These could equally be
+> hashed and measured, and logged via IMA and/or extending the TPMs measurements.
 
-On 10/24/19 12:48 PM, Lakshmi Ramasubramanian wrote:
-> On 10/23/2019 8:47 PM, Nayna Jain wrote:
->
->> +/*
->> + * ima_check_blacklist - determine if the binary is blacklisted.
->> + *
->> + * Add the hash of the blacklisted binary to the measurement list, 
->> based
->> + * on policy.
->> + *
->> + * Returns -EPERM if the hash is blacklisted.
->> + */
->> +int ima_check_blacklist(struct integrity_iint_cache *iint,
->> +            const struct modsig *modsig, int pcr)
->> +{
->> +    enum hash_algo hash_algo;
->> +    const u8 *digest = NULL;
->> +    u32 digestsize = 0;
->> +    int rc = 0;
->> +
->> +    if (!(iint->flags & IMA_CHECK_BLACKLIST))
->> +        return 0;
->> +
->> +    if (iint->flags & IMA_MODSIG_ALLOWED && modsig) {
->> +        ima_get_modsig_digest(modsig, &hash_algo, &digest, 
->> &digestsize);
->> +
->> +        rc = is_binary_blacklisted(digest, digestsize);
->> +        if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
->> +            process_buffer_measurement(digest, digestsize,
->> +                           "blacklisted-hash", NONE,
->> +                           pcr);
->> +    }
->
-> The enum value "NONE" is being passed to process_buffer_measurement to 
-> indicate that the check for required action based on ima policy is 
-> already done by ima_check_blacklist. Not sure, but this can cause 
-> confusion in the future when someone updates process_buffer_measurement.
+IMA works at the file level.  I'm not sure what it would mean to
+measure "segments".
 
+Originally, kexec_file_load read the KEXEC kernel image twice, once to
+calculate the file hash, and again to verify the signature.  Now
+kexec_file_load calls kernel_read_file_from_fd, which reads the file
+into memory, before IMA calculates the file buffer hash.
 
-As I explained in the response to other patch, the purpose is to 
-indicate that it is an auxiliary measurement record. By passing func as 
-NONE, it implies there is no explicit policy to be queried for the 
-template as it is an additional record for an existing policy and is to 
-use ima-buf template.
+> 
+> (obviously this would include the command-line and maybe purgatory, which makes it less
+> predictable, but these are still the binary blobs that were given privileged access to the
+> system).
+> 
+> 
+> >>> I am not sure if i addressed all your concerns, please let me know
+> >>> if i missed anything. To me most concerns look to be towards the kexec case and dependency
+> >>> on hardware(ACPI/TPM) during boot and early boot services, where as carrying the logs is
+> >>> only during the kexec_file_load sys call and does not interfere with that code path.
+> >>> IMA documentation: https://sourceforge.net/p/linux-ima/wiki/Home/
+> >>
+> >> Supporting ACPI in the same way is something we need to do from day one. kexec_file_load()
+> >> already does this. I'm not sure "only kexec_file_load()" is a justifiable restriction...
+> 
+> > The TPM PCRs are not reset on a soft reboot.  As a result, in order to
+> > validate the IMA measurement list against the TPM PCRs, the IMA
+> > measurement list is saved on kexec load, restored on boot, and then
+> > the memory allocated for carrying the measurement list across kexec is
+> > freed.
+> 
+> Hmm, this is why the reserved memory gets freed.
 
-What type of confusion do you mean ?
+Yes
+> 
+> What happens to stuff that happens between kexec-load and boot?
+> There is a comment:
+> | /* segment size can't change between kexec load and execute */
 
-Thanks & Regards,
+Right, the original version addressed this, but was nixed by Eric,
+saying it was unnecessary.  The current version allocates more memory
+than needed to hopefully compensate. 
 
-      - Nayna
+> 
+> But I can't see anywhere that enforces that. I guess those measurements will go missing,
+> and the TPM value will not match after kexec.
+
+No, the kexec load will succeed, but if there isn't enough memory to
+store the measurement list, the exec should fail.
+
+Mimi
 
