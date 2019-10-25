@@ -2,110 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D992FE4EB3
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 16:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B408E4F14
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 16:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725919AbfJYON5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Oct 2019 10:13:57 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:32174 "EHLO
+        id S2436607AbfJYO24 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Oct 2019 10:28:56 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:41630 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727003AbfJYON4 (ORCPT
+        with ESMTP id S2407965AbfJYO2z (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Oct 2019 10:13:56 -0400
+        Fri, 25 Oct 2019 10:28:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1572012830;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iKhhUZoR3ETcndZCkdmFNE8ChoQ3VU6czGoP+SADhxw=;
-        b=HOjdqZkHgjBHj+mpvGp2bY5v0937PC63WPQfW//+j8t/RfgUsmuE+L3lOJu0HSdLwbzHtr
-        QjolhGLw30FNwBJaXBSI8R1frv6Xxio66RqJKbMXL/VjPYCzrmQprp90nIKJsmtTVyDakX
-        NVEkBRJ4EKLeJoUEHix80oVc+qWxPlE=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-208-bWo64EzdOnmnTFqOyPlPTw-1; Fri, 25 Oct 2019 10:13:49 -0400
-Received: by mail-pf1-f199.google.com with SMTP id r19so2000717pfh.7
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Oct 2019 07:13:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=X+e8SRli7RIXuNIpLGcbbLLRwOMtP8b1dDWnVykEWd8=;
-        b=f0njXOGElzK+oknu8IQN97HpW5FWSnYXA6cn7GE1ijNclQP07Gu0f+woor9gR297cn
-         OZz/bgJ+xCw4aYX020AJ5UDvYLBsbcZHxvSaBRJYzqnbBgnT2GoBIV1rz46oV9CuCMxO
-         NNX3ROfNIvy+uLYe9qGwcsLIl5wpx0dkEaKengaVFixbbFoYsFWFIHBMo95eVUsIaue4
-         AcK2UZxYTmFSf0wppxLA9cx99k68RNbxrmov8ONGo320oziw4aZxhbUrFM7+s72ba3BL
-         40xpQfn3qX4c4li9T9mU6tG/0/sz/ezDpTm3j5vhtNrsa8dNLsMaxSmcr6XOl9cOltcM
-         sBag==
-X-Gm-Message-State: APjAAAWg1/Emf43c5RMfKq0CHsr7XCIn17VhpDLHeOq5gdUb3nIzUAQr
-        LabJi0g7QegrM2htu/2b2p+wAkEfyseb6sRw3ozwgRP6jXliyTYokrBH6t+aYzEmUsHt/xM1W7X
-        /YPpiz3k+ks+tsf5pIJvQISBYr/Ii
-X-Received: by 2002:a17:902:930b:: with SMTP id bc11mr4112125plb.284.1572012828060;
-        Fri, 25 Oct 2019 07:13:48 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqw9k9KnbOJwB4/FRHSgZ+Ocoy9VruYqrc0rVKQ5nE7UqMIMmehiCscqeRU+ui7pdmzchKD1EA==
-X-Received: by 2002:a17:902:930b:: with SMTP id bc11mr4112101plb.284.1572012827821;
-        Fri, 25 Oct 2019 07:13:47 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id 27sm2661444pgx.23.2019.10.25.07.13.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 07:13:46 -0700 (PDT)
-Date:   Fri, 25 Oct 2019 07:13:45 -0700
+        s=mimecast20190719; t=1572013734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zyapHGu7/Oo0qkTwxuNUgfmvbp8XI8/6ksqWtHCwxRA=;
+        b=Nt7t9+IEakoCiIqlAPm0fhLzSVlF8tBA8qkW/cPqDgjyJ+sL8XHnba3qyQIOEmLyCu3sk0
+        Ym7EXIKPVxuYBtuz2qB0iDBH4q2tExewHKURVbQj/TkHj4m3DCy3AwINBSjipgD4Z6x4GY
+        eH3wA1dH4ryHDSame2iQXrmzftiHTEI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-170-trDOS9OGPUCDUZ3yGX7yiw-1; Fri, 25 Oct 2019 10:28:50 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B27621800E01;
+        Fri, 25 Oct 2019 14:28:49 +0000 (UTC)
+Received: from cantor.redhat.com (ovpn-117-192.phx2.redhat.com [10.3.117.192])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6409B5D9CA;
+        Fri, 25 Oct 2019 14:28:49 +0000 (UTC)
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Nayna <nayna@linux.vnet.ibm.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        ltp@lists.linux.it,
-        Piotr =?utf-8?B?S3LDs2w=?= <piotr.krol@3mdeb.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [LTP] [PATCH] ima: skip verifying TPM 2.0 PCR values
-Message-ID: <20191025141345.46ifshskk2vpxi2t@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-References: <1558041162.3971.2.camel@linux.ibm.com>
- <fccc3abd-f3ce-fdb1-55d7-c18ce116446c@linux.vnet.ibm.com>
- <20190517150456.GA11796@dell5510>
- <20191024121848.GA5908@dell5510>
- <20191024172023.GA7948@linux.intel.com>
- <20191024213842.c6cl4tlnsi56pgcy@cantor>
- <1571964420.5173.12.camel@linux.ibm.com>
- <20191025021159.dt7ifgnebnke6ca7@cantor>
- <20191025085617.GA13329@x230>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Subject: [PATCH] tpm: Add major_version sysfs file
+Date:   Fri, 25 Oct 2019 07:28:47 -0700
+Message-Id: <20191025142847.14931-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20191025085617.GA13329@x230>
-User-Agent: NeoMutt/20180716
-X-MC-Unique: bWo64EzdOnmnTFqOyPlPTw-1
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-MC-Unique: trDOS9OGPUCDUZ3yGX7yiw-1
 X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
+Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Oct 25 19, Petr Vorel wrote:
->Hi,
->
->> /sys/kernel/security/tpmX/major_version (on fedora and rhel at least, is=
- it elsewhere on other distros?)
->
->> versus
->
->> /sys/class/tpm/tpmX/major_version
->
->Is it more HW related (/sys/class/tpm/tpmX) or LSM related
->(/sys/kernel/security/tpmX)?
->I guess /sys/kernel/security/tpmX might be better.
->
+Easily determining what TCG version a tpm device implements
+has been a pain point for userspace for a long time, so
+add a sysfs file to report the tcg version of a tpm device.
 
-I think it is HW related since it is describing the
-TCG version that the chip implements.
+Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-integrity@vger.kernel.org
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+ drivers/char/tpm/tpm-sysfs.c | 34 +++++++++++++++++++++++++++-------
+ 1 file changed, 27 insertions(+), 7 deletions(-)
 
->Thanks for implementing this, I'll try to test it soon.
->
->Kind regards,
->Petr
+diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
+index edfa89160010..9372c2d6f0b3 100644
+--- a/drivers/char/tpm/tpm-sysfs.c
++++ b/drivers/char/tpm/tpm-sysfs.c
+@@ -309,7 +309,17 @@ static ssize_t timeouts_show(struct device *dev, struc=
+t device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(timeouts);
+=20
+-static struct attribute *tpm_dev_attrs[] =3D {
++static ssize_t major_version_show(struct device *dev,
++=09=09=09=09  struct device_attribute *attr, char *buf)
++{
++=09struct tpm_chip *chip =3D to_tpm_chip(dev);
++
++=09return sprintf(buf, "%s\n", chip->flags & TPM_CHIP_FLAG_TPM2
++=09=09       ? "2.0" : "1.2");
++}
++static DEVICE_ATTR_RO(major_version);
++
++static struct attribute *tpm12_dev_attrs[] =3D {
+ =09&dev_attr_pubek.attr,
+ =09&dev_attr_pcrs.attr,
+ =09&dev_attr_enabled.attr,
+@@ -320,18 +330,28 @@ static struct attribute *tpm_dev_attrs[] =3D {
+ =09&dev_attr_cancel.attr,
+ =09&dev_attr_durations.attr,
+ =09&dev_attr_timeouts.attr,
++=09&dev_attr_major_version.attr,
+ =09NULL,
+ };
+=20
+-static const struct attribute_group tpm_dev_group =3D {
+-=09.attrs =3D tpm_dev_attrs,
++static struct attribute *tpm20_dev_attrs[] =3D {
++=09&dev_attr_major_version.attr,
++=09NULL
++};
++
++static const struct attribute_group tpm12_dev_group =3D {
++=09.attrs =3D tpm12_dev_attrs,
++};
++
++static const struct attribute_group tpm20_dev_group =3D {
++=09.attrs =3D tpm20_dev_attrs,
+ };
+=20
+ void tpm_sysfs_add_device(struct tpm_chip *chip)
+ {
+-=09if (chip->flags & TPM_CHIP_FLAG_TPM2)
+-=09=09return;
+-
+ =09WARN_ON(chip->groups_cnt !=3D 0);
+-=09chip->groups[chip->groups_cnt++] =3D &tpm_dev_group;
++=09if (chip->flags & TPM_CHIP_FLAG_TPM2)
++=09=09chip->groups[chip->groups_cnt++] =3D &tpm20_dev_group;
++=09else
++=09=09chip->groups[chip->groups_cnt++] =3D &tpm12_dev_group;
+ }
+--=20
+2.23.0
 
