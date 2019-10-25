@@ -2,237 +2,200 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14559E40CB
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 02:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E90E415F
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2019 04:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388479AbfJYA67 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Oct 2019 20:58:59 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25036 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388430AbfJYA67 (ORCPT
+        id S2387579AbfJYCMH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Oct 2019 22:12:07 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:44363 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1732948AbfJYCMH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Oct 2019 20:58:59 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9P0vXDs038016
-        for <linux-integrity@vger.kernel.org>; Thu, 24 Oct 2019 20:58:58 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vujamg6tn-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 24 Oct 2019 20:58:57 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <nayna@linux.ibm.com>;
-        Fri, 25 Oct 2019 01:58:55 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 25 Oct 2019 01:58:51 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9P0wni335061910
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Oct 2019 00:58:49 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5E70FAE056;
-        Fri, 25 Oct 2019 00:58:49 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DFB58AE04D;
-        Fri, 25 Oct 2019 00:58:46 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.40.192.65])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Oct 2019 00:58:46 +0000 (GMT)
-From:   Nayna Jain <nayna@linux.ibm.com>
-To:     linuxppc-dev@ozlabs.org, linux-efi@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: [PATCH v5 4/4] powerpc: load firmware trusted keys/hashes into kernel keyring
-Date:   Thu, 24 Oct 2019 19:58:39 -0500
-X-Mailer: git-send-email 2.20.1
+        Thu, 24 Oct 2019 22:12:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1571969525;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jidlgzTgtjWEnSlNkbgFbTTY71x/qeOQ/z5fqs+Lrko=;
+        b=EAo2HUTW82XwpisFkm7pvWcyyYrwGsijEjuzG++gJvQlI7QkxrKUH/lllpAO2UyBz+m1aL
+        XNc3fz1QKD13H+o4GKGx1xcrVgQtgfRo4GUQ2O3KTBwAVl+G6NMqbdjWNXhnX6tPztmsVx
+        evtr1F/wfAl+CM0dPDUSgaaVM+hNbi8=
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
+ [209.85.219.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-328-yPHme-1LOluCktAA9G8q4g-1; Thu, 24 Oct 2019 22:12:04 -0400
+Received: by mail-yb1-f200.google.com with SMTP id t48so746559ybi.22
+        for <linux-integrity@vger.kernel.org>; Thu, 24 Oct 2019 19:12:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=SaVdG3lhFlR6Qr8n+mB9mHj2cm/I2mQXo1eS2C+ohX4=;
+        b=GrYNJTGTiGhLjhZMudcwJoRYb8nWb/oRphKprg+Wi+bz/JdRmNXn2DU+IXrgES6fc3
+         tmfo2Wza8HQC8bYKt1p3yhqg2M7SHQu67yBSBQ19QFKL642msuKH0DIf/tq8ysi1zrq6
+         +QphFT87jk5ZmBXK2hG/TEl4Vy3ketBUGcb29/7H2Z3aSjUY+d++oCdNBt6Fl4481VEu
+         azuUP7tX6kbSsXgBY1n7Zn215cXR0Reib5ijQNvYH6oGf0z6ulN6KxbBjsget9p8bSlg
+         qA9hb42EkDvTVYa2daF6XjHnIp2hSVYR16rjnFrEBWDQBumxpufBESNA/xOF/uPKsIv1
+         Fkuw==
+X-Gm-Message-State: APjAAAWotB187cRy0PL9bRDeDAVG5ZJEA/YR/HP43CvC9fauK5888cuf
+        otOpyfqoL8IJNYQb0s5CxGxVfIKsGv3WFhmi1mKhUkKWMf4E/txGkSanFCz6CvxeCUqmDcDSkQz
+        YIUw0vnsHy+cgAXJbz7rpnbpwubOA
+X-Received: by 2002:a81:48d1:: with SMTP id v200mr453779ywa.318.1571969522587;
+        Thu, 24 Oct 2019 19:12:02 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyG+6dQfDIBqeRdQtBluev4gHldBXK3OS55p+h88o8nlmDitJfjQinSbtm8/Wvr3vNnEumnBQ==
+X-Received: by 2002:a81:48d1:: with SMTP id v200mr453756ywa.318.1571969522151;
+        Thu, 24 Oct 2019 19:12:02 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id j3sm543643ywb.10.2019.10.24.19.12.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2019 19:12:01 -0700 (PDT)
+Date:   Thu, 24 Oct 2019 19:11:59 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Petr Vorel <pvorel@suse.cz>, Nayna <nayna@linux.vnet.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        ltp@lists.linux.it,
+        Piotr =?utf-8?B?S3LDs2w=?= <piotr.krol@3mdeb.com>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [LTP] [PATCH] ima: skip verifying TPM 2.0 PCR values
+Message-ID: <20191025021159.dt7ifgnebnke6ca7@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+References: <1558041162.3971.2.camel@linux.ibm.com>
+ <fccc3abd-f3ce-fdb1-55d7-c18ce116446c@linux.vnet.ibm.com>
+ <20190517150456.GA11796@dell5510>
+ <20191024121848.GA5908@dell5510>
+ <20191024172023.GA7948@linux.intel.com>
+ <20191024213842.c6cl4tlnsi56pgcy@cantor>
+ <1571964420.5173.12.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19102500-0028-0000-0000-000003AF23F3
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102500-0029-0000-0000-000024715822
-Message-Id: <20191025005839.4498-1-nayna@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-24_13:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910250008
+In-Reply-To: <1571964420.5173.12.camel@linux.ibm.com>
+User-Agent: NeoMutt/20180716
+X-MC-Unique: yPHme-1LOluCktAA9G8q4g-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The keys used to verify the Host OS kernel are managed by firmware as
-secure variables. This patch loads the verification keys into the .platform
-keyring and revocation hashes into .blacklist keyring. This enables
-verification and loading of the kernels signed by the boot time keys which
-are trusted by firmware.
+On Thu Oct 24 19, Mimi Zohar wrote:
+>On Thu, 2019-10-24 at 14:38 -0700, Jerry Snitselaar wrote:
+>> On Thu Oct 24 19, Jarkko Sakkinen wrote:
+>> >On Thu, Oct 24, 2019 at 02:18:48PM +0200, Petr Vorel wrote:
+>> >> Hi all,
+>> >>
+>> >> I wonder what to do with this patch "ima: skip verifying TPM 2.0 PCR =
+values" [1].
+>> >> Is it a correct way to differentiate between TPM 1.2 and TPM 2.0?
+>> >> Or something else should be applied?
+>> >>
+>> >> How is the work on TPM 2.0 Linux sysfs interface?
+>> >> But even it's done in near future, we'd still need some way for older=
+ kernels.
+>> >>
+>> >> Kind regards,
+>> >> Petr
+>> >>
+>> >> [1] https://patchwork.ozlabs.org/patch/1100733/
+>> >
+>> >version_major sysfs file would be acceptable if someone wants to procee=
+d
+>> >and send such patch.
+>> >
+>> >Also replicants for durations and timeouts files would make sense for
+>> >TPM 2.0.
+>> >
+>> >/Jarkko
+>>
+>> Is it as simple as doing this?
+>>
+>> diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
+>> index edfa89160010..fd8eb8d8945c 100644
+>> --- a/drivers/char/tpm/tpm-sysfs.c
+>> +++ b/drivers/char/tpm/tpm-sysfs.c
+>> @@ -309,7 +309,17 @@ static ssize_t timeouts_show(struct device *dev, st=
+ruct device_attribute *attr,
+>>  }
+>>  static DEVICE_ATTR_RO(timeouts);
+>>
+>> -static struct attribute *tpm_dev_attrs[] =3D {
+>> +static ssize_t version_major_show(struct device *dev,
+>> +                                 struct device_attribute *attr, char *b=
+uf)
+>> +{
+>> +       struct tpm_chip *chip =3D to_tpm_chip(dev);
+>> +
+>> +       return sprintf(buf, "TPM%s\n", chip->flags & TPM_CHIP_FLAG_TPM2
+>> +                      ? "2.0" : "1.2");
+>> +}
+>> +static DEVICE_ATTR_RO(version_major);
+>> +
+>> +static struct attribute *tpm12_dev_attrs[] =3D {
+>>         &dev_attr_pubek.attr,
+>>         &dev_attr_pcrs.attr,
+>>         &dev_attr_enabled.attr,
+>> @@ -320,18 +330,28 @@ static struct attribute *tpm_dev_attrs[] =3D {
+>>         &dev_attr_cancel.attr,
+>>         &dev_attr_durations.attr,
+>>         &dev_attr_timeouts.attr,
+>> +       &dev_attr_version_major.attr,
+>>         NULL,
+>>  };
+>>
+>
+>The TPM version seems to be included in "dev_attr_caps.attr".
+>
+>> -static const struct attribute_group tpm_dev_group =3D {
+>> -       .attrs =3D tpm_dev_attrs,
+>> +static struct attribute *tpm20_dev_attrs[] =3D {
+>> +       &dev_attr_version_major.attr,
+>> +       NULL
+>> +};
+>
+>This should work, but wouldn't exporting this information under
+>security/tpmX, like the binary_bios_measurements, be a lot easier to
+>find and use?
+>
+>Mimi
+>
 
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
----
- arch/powerpc/Kconfig                          |  1 +
- security/integrity/Kconfig                    |  8 ++
- security/integrity/Makefile                   |  4 +-
- .../integrity/platform_certs/load_powerpc.c   | 86 +++++++++++++++++++
- 4 files changed, 98 insertions(+), 1 deletion(-)
- create mode 100644 security/integrity/platform_certs/load_powerpc.c
+/sys/kernel/security/tpmX/major_version (on fedora and rhel at least, is it=
+ elsewhere on other distros?)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 949e747bc8c2..5d860ed6c901 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -939,6 +939,7 @@ config PPC_SECURE_BOOT
- 	bool
- 	depends on PPC_POWERNV
- 	depends on IMA_ARCH_POLICY
-+	select LOAD_PPC_KEYS
- 	help
- 	  Systems with firmware secure boot enabled need to define security
- 	  policies to extend secure boot to the OS. This config allows a user
-diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-index 0bae6adb63a9..26abee23e4e3 100644
---- a/security/integrity/Kconfig
-+++ b/security/integrity/Kconfig
-@@ -72,6 +72,14 @@ config LOAD_IPL_KEYS
-        depends on S390
-        def_bool y
- 
-+config LOAD_PPC_KEYS
-+	bool "Enable loading of platform and blacklisted keys for POWER"
-+	depends on INTEGRITY_PLATFORM_KEYRING
-+	depends on PPC_SECURE_BOOT
-+	help
-+	  Enable loading of keys to the .platform keyring and blacklisted
-+	  hashes to the .blacklist keyring for powerpc based platforms.
-+
- config INTEGRITY_AUDIT
- 	bool "Enables integrity auditing support "
- 	depends on AUDIT
-diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-index 351c9662994b..7ee39d66cf16 100644
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -14,6 +14,8 @@ integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
- 				      platform_certs/load_uefi.o \
- 				      platform_certs/keyring_handler.o
- integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
--
-+integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
-+                                     platform_certs/load_powerpc.o \
-+                                     platform_certs/keyring_handler.o
- obj-$(CONFIG_IMA)			+= ima/
- obj-$(CONFIG_EVM)			+= evm/
-diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
-new file mode 100644
-index 000000000000..83d99cde5376
---- /dev/null
-+++ b/security/integrity/platform_certs/load_powerpc.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 IBM Corporation
-+ * Author: Nayna Jain
-+ *
-+ *      - loads keys and hashes stored and controlled by the firmware.
-+ */
-+#include <linux/kernel.h>
-+#include <linux/sched.h>
-+#include <linux/cred.h>
-+#include <linux/err.h>
-+#include <linux/slab.h>
-+#include <asm/secure_boot.h>
-+#include <asm/secvar.h>
-+#include "keyring_handler.h"
-+
-+/*
-+ * Get a certificate list blob from the named secure variable.
-+ */
-+static __init void *get_cert_list(u8 *key, unsigned long keylen, uint64_t *size)
-+{
-+	int rc;
-+	void *db;
-+
-+	rc = secvar_ops->get(key, keylen, NULL, size);
-+	if (rc) {
-+		pr_err("Couldn't get size: %d\n", rc);
-+		return NULL;
-+	}
-+
-+	db = kmalloc(*size, GFP_KERNEL);
-+	if (!db)
-+		return NULL;
-+
-+	rc = secvar_ops->get(key, keylen, db, size);
-+	if (rc) {
-+		kfree(db);
-+		pr_err("Error reading db var: %d\n", rc);
-+		return NULL;
-+	}
-+
-+	return db;
-+}
-+
-+/*
-+ * Load the certs contained in the keys databases into the platform trusted
-+ * keyring and the blacklisted X.509 cert SHA256 hashes into the blacklist
-+ * keyring.
-+ */
-+static int __init load_powerpc_certs(void)
-+{
-+	void *db = NULL, *dbx = NULL;
-+	uint64_t dbsize = 0, dbxsize = 0;
-+	int rc = 0;
-+
-+	if (!secvar_ops)
-+		return -ENODEV;
-+
-+	/* Get db, and dbx.  They might not exist, so it isn't
-+	 * an error if we can't get them.
-+	 */
-+	db = get_cert_list("db", 3, &dbsize);
-+	if (!db) {
-+		pr_err("Couldn't get db list from firmware\n");
-+	} else {
-+		rc = parse_efi_signature_list("powerpc:db", db, dbsize,
-+					      get_handler_for_db);
-+		if (rc)
-+			pr_err("Couldn't parse db signatures: %d\n", rc);
-+		kfree(db);
-+	}
-+
-+	dbx = get_cert_list("dbx", 3,  &dbxsize);
-+	if (!dbx) {
-+		pr_info("Couldn't get dbx list from firmware\n");
-+	} else {
-+		rc = parse_efi_signature_list("powerpc:dbx", dbx, dbxsize,
-+					      get_handler_for_dbx);
-+		if (rc)
-+			pr_err("Couldn't parse dbx signatures: %d\n", rc);
-+		kfree(dbx);
-+	}
-+
-+	return rc;
-+}
-+late_initcall(load_powerpc_certs);
--- 
-2.20.1
+versus
+
+/sys/class/tpm/tpmX/major_version
+
+I don't know that it is any easier to find.
+
+>> +
+>> +static const struct attribute_group tpm12_dev_group =3D {
+>> +       .attrs =3D tpm12_dev_attrs,
+>> +};
+>> +
+>> +static const struct attribute_group tpm20_dev_group =3D {
+>> +       .attrs =3D tpm20_dev_attrs,
+>>  };
+>>
+>>  void tpm_sysfs_add_device(struct tpm_chip *chip)
+>>  {
+>> -       if (chip->flags & TPM_CHIP_FLAG_TPM2)
+>> -               return;
+>> -
+>>         WARN_ON(chip->groups_cnt !=3D 0);
+>> -       chip->groups[chip->groups_cnt++] =3D &tpm_dev_group;
+>> +       if (chip->flags & TPM_CHIP_FLAG_TPM2)
+>> +               chip->groups[chip->groups_cnt++] =3D &tpm20_dev_group;
+>> +       else
+>> +               chip->groups[chip->groups_cnt++] =3D &tpm12_dev_group;
+>>  }
+>>
+>>
+>> Did a quick test on 2 systems here.
+>
 
