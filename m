@@ -2,111 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3AAE774E
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2019 18:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C818CE7A09
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2019 21:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404046AbfJ1RIt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Oct 2019 13:08:49 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3160 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404041AbfJ1RIt (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Oct 2019 13:08:49 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9SH7D4b103032
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2019 13:08:48 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vx16xrc8y-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2019 13:08:47 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 28 Oct 2019 17:08:45 -0000
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 28 Oct 2019 17:08:41 -0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9SH8eA143516212
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Oct 2019 17:08:40 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 50D4B4203F;
-        Mon, 28 Oct 2019 17:08:40 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1BD2842041;
-        Mon, 28 Oct 2019 17:08:39 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.151.87])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Oct 2019 17:08:38 +0000 (GMT)
-Subject: Re: [PATCH v2 3/4] KEYS: Added BUILTIN_TRUSTED_KEYS enum to measure
- keys added to builtin_trusted_keys keyring
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        dhowells@redhat.com, casey@schaufler-ca.com, sashal@kernel.org,
-        jamorris@linux.microsoft.com,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
-Date:   Mon, 28 Oct 2019 13:08:38 -0400
-In-Reply-To: <8494baa1-c4db-f08b-26c9-2e56279075d0@linux.microsoft.com>
-References: <20191023233950.22072-1-nramas@linux.microsoft.com>
-         <20191023233950.22072-4-nramas@linux.microsoft.com>
-         <1572186810.4532.206.camel@linux.ibm.com>
-         <8494baa1-c4db-f08b-26c9-2e56279075d0@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19102817-0020-0000-0000-000003804EA6
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102817-0021-0000-0000-000021D653C1
-Message-Id: <1572282518.4532.260.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-28_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=993 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910280166
+        id S1728900AbfJ1UYZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Oct 2019 16:24:25 -0400
+Received: from mga18.intel.com ([134.134.136.126]:6769 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727951AbfJ1UYZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 28 Oct 2019 16:24:25 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Oct 2019 13:24:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,241,1569308400"; 
+   d="scan'208";a="202618992"
+Received: from shrehore-mobl1.ti.intel.com (HELO localhost) ([10.251.82.5])
+  by orsmga003.jf.intel.com with ESMTP; 28 Oct 2019 13:24:21 -0700
+Date:   Mon, 28 Oct 2019 22:24:19 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-integrity@vger.kernel.org, tglx@linutronix.de,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Philip Tricca <philip.b.tricca@intel.com>,
+        Tadeusz Struk <tadeusz.struk@intel.com>
+Subject: Re: [PATCH] tpm: remove tpm_dev_wq_lock
+Message-ID: <20191028202419.GA7214@linux.intel.com>
+References: <20190211105835.16851-1-bigeasy@linutronix.de>
+ <20190211141145.GD8431@linux.intel.com>
+ <20191010160313.pdf6ue4r2intbgoh@linutronix.de>
+ <20191014193942.GH15552@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191014193942.GH15552@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-10-28 at 08:12 -0700, Lakshmi Ramasubramanian wrote:
-> On 10/27/19 7:33 AM, Mimi Zohar wrote:
+On Mon, Oct 14, 2019 at 10:39:42PM +0300, Jarkko Sakkinen wrote:
+> On Thu, Oct 10, 2019 at 06:03:13PM +0200, Sebastian Andrzej Siewior wrote:
+> > On 2019-02-11 16:11:45 [+0200], Jarkko Sakkinen wrote:
+> > > On Mon, Feb 11, 2019 at 11:58:35AM +0100, Sebastian Andrzej Siewior wrote:
+> > > > Added in commit
+> > > > 
+> > > >   9e1b74a63f776 ("tpm: add support for nonblocking operation")
+> > > > 
+> > > > but never actually used it.
+> > > > 
+> > > > Cc: Philip Tricca <philip.b.tricca@intel.com>
+> > > > Cc: Tadeusz Struk <tadeusz.struk@intel.com>
+> > > > Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > > > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> > > 
+> > > You should use Fixes-tag e.g.
+> > > 
+> > > Fixes: <12 first chars from SHA-1> ("<short summary>")
+> > 
+> > Is this the only reason why it has not been picked up? A fixes line
+> > which triggers stable backports for something that does need to be
+> > backported?
 > 
-> > .builtin_trusted_keys is a trusted keyring, which is created by the
-> > kernel.  It cannot be deleted or replaced by userspace, so it should
-> > be possible to correlate a keyring name with a keyring number on
-> > policy load.
+> Fully agree with you. Frankly, I don't really remember anymore why I
+> responded that way. My guess is that I responded that to a worng patch.
 > 
-> Yes - at policy load we can map a keyring name to a keyring number.
+> Please just ping immediatelly. Sometimes when dealing with dozens of
+> patches this kind of human error might happen.
 > 
-> But at runtime we still need to know if the keyring parameter passed to 
-> the IMA hook function is configured to be measured.
-> 
-> void ima_post_key_create_or_update(struct key *keyring, struct key *key,
-> 				   unsigned long flags, bool create);
-> {
->     => Get the keyring number for the given "keyring".
+> In any case, the patch is applied.
 
-There is no "getting" involved here.  Pass "keyring" to
-process_buffer_measurement and on to ima_get_action().
+OK, so. Gave a relook at this:
 
->     => Check if the keyring number is in the configured IMA policy.
+This gives checkpatch.pl error:
 
-ima_get_action() should do a simple compare of the valued stored in
-the IMA policy with the value returned by key_serial().
+0012-tpm-remove-tpm_dev_wq_lock.patch
+-------------------------------------
+ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit 9e1b74a63f77 ("tpm: add support for nonblocking operation")'
+#8: 
+  9e1b74a63f776 ("tpm: add support for nonblocking operation")
 
-Mimi
+total: 1 errors, 0 warnings, 7 lines checked
 
->     => If yes, measure the key.
->     => Else, do nothing.
-> }
+NOTE: For some of the reported defects, checkpatch may be able to
+      mechanically convert to the typical style using --fix or --fix-inplace.
 
-> Did I misunderstand what you had stated?
+Please send me a new patch with a legit fixes line. It is a fix to
+regression even if it is a cosmetic one.
 
+I'll drop the current patch from my tree and apply a new one once
+I get it from you.
+
+Thanks.
+
+/Jarkko
