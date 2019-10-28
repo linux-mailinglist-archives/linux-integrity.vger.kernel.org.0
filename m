@@ -2,66 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5E4E6A68
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2019 02:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 848B6E70D5
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2019 12:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727685AbfJ1BL0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 27 Oct 2019 21:11:26 -0400
-Received: from posta.amasya.edu.tr ([193.255.105.20]:21447 "EHLO
-        posta.amasya.edu.tr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727581AbfJ1BL0 (ORCPT
+        id S2388727AbfJ1LzK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Oct 2019 07:55:10 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62758 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728802AbfJ1LzK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 27 Oct 2019 21:11:26 -0400
-X-Greylist: delayed 412 seconds by postgrey-1.27 at vger.kernel.org; Sun, 27 Oct 2019 21:11:23 EDT
-Received: by posta.amasya.edu.tr (Postfix, from userid 110)
-        id C70373C0849; Mon, 28 Oct 2019 04:04:29 +0300 (+03)
-X-Virus-Scanned: by SpamTitan at amasya.edu.tr
-Authentication-Results: posta.amasya.edu.tr; none
-Date:   Mon, 28 Oct 2019 04:04:17 +0300 (EET)
-From:   Bellucci Capital Partners <pinar.sen@amasya.edu.tr>
-Reply-To: Bellucci Capital Partners <info@belluccicp.net>
-Message-ID: <562889327.193976.1572224657561.JavaMail.zimbra@amasya.edu.tr>
-Subject: 
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [198.46.170.187]
-X-Mailer: Zimbra 8.8.15_GA_3869 (ZimbraWebClient - FF70 (Win)/8.8.15_GA_3869)
-Thread-Index: PnLc5EXjHjSmm3JIfAjZcRGfZDdKBA==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+        Mon, 28 Oct 2019 07:55:10 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9SBqmZ8135343
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2019 07:55:08 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2vwwggcmc0-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2019 07:55:08 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 28 Oct 2019 11:55:06 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 28 Oct 2019 11:55:01 -0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9SBsxh127263030
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Oct 2019 11:55:00 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D430E11C050;
+        Mon, 28 Oct 2019 11:54:59 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7AD1811C04A;
+        Mon, 28 Oct 2019 11:54:57 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.151.87])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 28 Oct 2019 11:54:57 +0000 (GMT)
+Subject: Re: [PATCH v9 2/8] powerpc/ima: add support to initialize ima
+ policy rules
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Nayna Jain <nayna@linux.vnet.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>
+Date:   Mon, 28 Oct 2019 07:54:56 -0400
+In-Reply-To: <1572133923.4532.79.camel@linux.ibm.com>
+References: <20191024034717.70552-1-nayna@linux.ibm.com>
+         <20191024034717.70552-3-nayna@linux.ibm.com>
+         <dd7e04fc-25e8-280f-b565-bdb031939655@linux.microsoft.com>
+         <27dbe08e-5473-4dd0-d2ad-2df591e23f5e@linux.vnet.ibm.com>
+         <1572133923.4532.79.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19102811-0012-0000-0000-0000035E5E70
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19102811-0013-0000-0000-000021999B74
+Message-Id: <1572263696.4532.240.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-28_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910280122
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Sat, 2019-10-26 at 19:52 -0400, Mimi Zohar wrote:
+> On Fri, 2019-10-25 at 12:02 -0500, Nayna Jain wrote:
+> > On 10/24/19 12:35 PM, Lakshmi Ramasubramanian wrote:
+> > > On 10/23/2019 8:47 PM, Nayna Jain wrote:
+> > >
+> > >> +/*
+> > >> + * The "secure_rules" are enabled only on "secureboot" enabled systems.
+> > >> + * These rules verify the file signatures against known good values.
+> > >> + * The "appraise_type=imasig|modsig" option allows the known good 
+> > >> signature
+> > >> + * to be stored as an xattr or as an appended signature.
+> > >> + *
+> > >> + * To avoid duplicate signature verification as much as possible, 
+> > >> the IMA
+> > >> + * policy rule for module appraisal is added only if 
+> > >> CONFIG_MODULE_SIG_FORCE
+> > >> + * is not enabled.
+> > >> + */
+> > >> +static const char *const secure_rules[] = {
+> > >> +    "appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig|modsig",
+> > >> +#ifndef CONFIG_MODULE_SIG_FORCE
+> > >> +    "appraise func=MODULE_CHECK appraise_type=imasig|modsig",
+> > >> +#endif
+> > >> +    NULL
+> > >> +};
+> > >
+> > > Is there any way to not use conditional compilation in the above array 
+> > > definition? Maybe define different functions to get "secure_rules" for 
+> > > when CONFIG_MODULE_SIG_FORCE is defined and when it is not defined.
+> > 
+> > How will you decide which function to be called ?
+> 
+> You could call "is_module_sig_enforced()".
 
+Calling is_module_sig_enforce() would prevent verifying the same
+kernel module appended signature twice, when CONFIG_MODULE_SIG is
+enabled, but not CONFIG_MODULE_SIG_FORCE.  This comes at the expense
+of having to define additional policies.
 
-Hej,
+Unlike for the kernel image, there is no coordination between lockdown
+and IMA for kernel modules signature verification.  I suggest
+deferring defining additional policies to when the lockdown/IMA
+coordination is addressed.
 
-Vi har en enorm kreditportfölj, vi är intresserade av att finansiera projekt med stor volym. Förfarandena är följande:
+Mimi
 
-1-Klienten måste skicka en kort sammanfattning av projektet. Detta måste innehålla det totala beloppet som krävs för projektet, beräknad avkastning på investeringen, lånets återbetalningsperiod, detta får inte vara mer än 15 år.
-
-2- Klienten kommer att behöva försäkra det nämnda projektet hos ett försäkringsbolag om det totala lånebeloppet för att garantera lånet som säkerhet.
-
-3- Räntan är 1% per år.
-
-4-återbetalningstid är 15 år
-
-5 Finansiering tar ungefär 10 bankdagar från den dag du presenterar försäkringscertifikatet.
-
-
-Om du är nöjd med ovanstående procedurer skicka mig en avsiktsförklaring på ditt företags brevhuvud.
-
-För ytterligare information om hur du kan få ett lån från: Svara omedelbart på den här e-postmeddelanden:
-info@belluccicp.net
-
-Hälsningar, när vi väntar på ditt svar.
-
-Vänliga hälsningar
-Manuel Baressi
-Annonspersonal
-WEB: https://www.belluccicp.net
-Bu e-posta mesaji kisiye ozel olup, gizli bilgiler iceriyor olabilir. Eger bu e-posta mesaji size yanlislikla ulasmissa, icerigini hicbir sekilde kullanmayiniz ve e-postayi siliniz. Amasya Universitesi bu e-posta mesajinin icerigi ile ilgili olarak hicbir hukuksal sorumlulugu kabul etmez. The information contained in this communication may contain confidential or legally privileged information. Amasya University doesn't accept any legal responsibility for the contents and attachments of this message. The sender does not accept any liability for any errors or omissions or any viruses in the context of this message which arise as a result of internet transmission.
