@@ -2,120 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD54E70FA
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2019 13:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFCBE743D
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2019 15:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388845AbfJ1MK5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Oct 2019 08:10:57 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37676 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388836AbfJ1MK4 (ORCPT
+        id S1729154AbfJ1O6i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Oct 2019 10:58:38 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:42786 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726563AbfJ1O6h (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Oct 2019 08:10:56 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9SC3d7b033332
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2019 08:10:55 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vwyj4h6mm-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2019 08:10:55 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 28 Oct 2019 12:10:53 -0000
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 28 Oct 2019 12:10:48 -0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9SCAkZb50135174
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Oct 2019 12:10:46 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 522B5A4051;
-        Mon, 28 Oct 2019 12:10:46 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DDF40A404D;
-        Mon, 28 Oct 2019 12:10:43 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.151.87])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Oct 2019 12:10:43 +0000 (GMT)
-Subject: Re: [PATCH v9 0/8] powerpc: Enabling IMA arch specific secure boot
- policies
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Date:   Mon, 28 Oct 2019 08:10:43 -0400
-In-Reply-To: <20191024034717.70552-1-nayna@linux.ibm.com>
-References: <20191024034717.70552-1-nayna@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19102812-4275-0000-0000-000003786D27
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102812-4276-0000-0000-0000388B9F9F
-Message-Id: <1572264643.4532.244.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-28_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=877 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910280124
+        Mon, 28 Oct 2019 10:58:37 -0400
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AD8EF2010AC5;
+        Mon, 28 Oct 2019 07:58:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AD8EF2010AC5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1572274716;
+        bh=+4i7snc8+CJH6rwfZpPIV08+c2Slr7iBUhUCuWfrlls=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=j0UFvLFAwzPt56V4SalGwYBFPyo5AY8x+FDt/QbWoI7weuCwz94pbxHS2dxcBywsO
+         /Au8gNVv1GfwxnunbQq+3l5z+IcOX8CI0/1qn/lWU1D3WD4s1o3bl2iSeln9CRJSRq
+         DIjRAtjUzDkwRDz3GalJJ9ckMbiYvrkixtFgKYFE=
+Subject: Re: [PATCH v2 1/4] KEYS: Defined an ima hook for measuring keys on
+ key create or update
+To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
+        casey@schaufler-ca.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+References: <20191023233950.22072-1-nramas@linux.microsoft.com>
+ <20191023233950.22072-2-nramas@linux.microsoft.com>
+ <1572032428.4532.72.camel@linux.ibm.com>
+ <c1de8055-89a7-25dd-d99a-427e2c2c4c59@linux.microsoft.com>
+ <1572187644.4532.211.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <1d7730ff-9847-c6be-4f4f-8cf1e90a71f2@linux.microsoft.com>
+Date:   Mon, 28 Oct 2019 07:58:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <1572187644.4532.211.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-10-23 at 22:47 -0500, Nayna Jain wrote:
-> This patchset extends the previous version[1] by adding support for
-> checking against a blacklist of binary hashes.
-> 
-> The IMA subsystem supports custom, built-in, arch-specific policies to
-> define the files to be measured and appraised. These policies are honored
-> based on priority, where arch-specific policy is the highest and custom
-> is the lowest.
-> 
-> PowerNV system uses a Linux-based bootloader to kexec the OS. The
-> bootloader kernel relies on IMA for signature verification of the OS
-> kernel before doing the kexec. This patchset adds support for powerpc
-> arch-specific IMA policies that are conditionally defined based on a
-> system's secure boot and trusted boot states. The OS secure boot and
-> trusted boot states are determined via device-tree properties.
-> 
-> The verification needs to be performed only for binaries that are not
-> blacklisted. The kernel currently only checks against the blacklist of
-> keys. However, doing so results in blacklisting all the binaries that
-> are signed by the same key. In order to prevent just one particular
-> binary from being loaded, it must be checked against a blacklist of
-> binary hashes. This patchset also adds support to IMA for checking
-> against a hash blacklist for files. signed by appended signature.
-> 
-> [1] http://patchwork.ozlabs.org/cover/1149262/ 
+On 10/27/19 7:47 AM, Mimi Zohar wrote:
 
-Thanks, Nayna.
+>>> There's no reason to define a new variable to determine if IMA is
+>>> initialized.  Use ima_policy_flag.
+>>
+>> Please correct me if I am wrong -
+>>
+>> ima_policy_flag will be set to 0 if IMA is not yet initialized
+>> OR
+>> IMA is initialized, but ima_policy_flag could be still set to 0 (say,
+>> due to the configured policy).
+>>
+>> In the latter case the measurement request should be a NOP immediately.
+> 
+> I'm not sure.  The builtin keys most likely will be loaded prior to a
+> custom IMA policy containing "keyring" rules are defined.
+> 
+> Mimi
 
-Please feel free to add my Signed-off-by tag on patches (2, 4, 5, 7 &
-8).
+I am not sure if I described it clearly - let me clarify:
+
+Say, we use ima_policy_flag to determine whether to
+measure the key immediately or
+queue the key for measurement and, measure when IMA is initialized.
+
+We can incorrectly keep queuing keys in the case when IMA is 
+initialized, but due to the way IMA policy is configured ima_policy_flag 
+is still 0.
+
+That's why I feel a separate boolean flag would be needed to know 
+whether IMA is initialized or not.
+
+If IMA is initialized, ima_policy_flag will dictate whether to measure 
+the key or not.
 
 thanks,
-
-Mimi
+  -lakshmi
 
