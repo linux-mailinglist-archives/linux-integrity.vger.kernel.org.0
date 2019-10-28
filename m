@@ -2,98 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F08E7A68
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2019 21:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B060DE7A70
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2019 21:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728422AbfJ1UpX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Oct 2019 16:45:23 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:15572 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725959AbfJ1UpX (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Oct 2019 16:45:23 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9SKWSD8112861
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2019 16:45:22 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vx6q61tve-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2019 16:45:22 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 28 Oct 2019 20:45:19 -0000
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 28 Oct 2019 20:45:16 -0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9SKjF4125428188
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Oct 2019 20:45:15 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 525B34C040;
-        Mon, 28 Oct 2019 20:45:15 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53C814C046;
-        Mon, 28 Oct 2019 20:45:14 +0000 (GMT)
-Received: from dhcp-9-31-103-196.watson.ibm.com (unknown [9.31.103.196])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Oct 2019 20:45:14 +0000 (GMT)
-Subject: Re: [PATCH v1] selftest/trustedkeys: TPM 1.2 trusted keys test
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     David Howells <dhowells@redhat.com>, Petr Vorel <pvorel@suse.cz>,
-        shuah <shuah@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 28 Oct 2019 16:45:13 -0400
-In-Reply-To: <20191028203014.GA8279@linux.intel.com>
-References: <1571944467-13097-1-git-send-email-zohar@linux.ibm.com>
-         <20191028203014.GA8279@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19102820-0028-0000-0000-000003B07F8B
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102820-0029-0000-0000-00002472BDE2
-Message-Id: <1572295513.4532.270.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-28_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910280195
+        id S1725905AbfJ1UrX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Oct 2019 16:47:23 -0400
+Received: from mga14.intel.com ([192.55.52.115]:23214 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725867AbfJ1UrW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 28 Oct 2019 16:47:22 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Oct 2019 13:47:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,241,1569308400"; 
+   d="scan'208";a="399567426"
+Received: from shrehore-mobl1.ti.intel.com (HELO localhost) ([10.251.82.5])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Oct 2019 13:47:19 -0700
+Date:   Mon, 28 Oct 2019 22:47:18 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] tpm: Switch to platform_get_irq_optional()
+Message-ID: <20191028204718.GE8279@linux.intel.com>
+References: <20191019094528.27850-1-hdegoede@redhat.com>
+ <20191021154942.GB4525@linux.intel.com>
+ <80409d36-53fa-d159-d864-51b8495dc306@redhat.com>
+ <20191023113733.GB21973@linux.intel.com>
+ <d6adeb21-f7b3-5c64-fa32-03a8ee21cc53@redhat.com>
+ <20191024142519.GA3881@linux.intel.com>
+ <c6a0c3e3-c5c8-80d9-b6b6-bf45d66f4b32@redhat.com>
+ <20191024190942.GA12038@linux.intel.com>
+ <4e381d14-0258-5804-59f0-43a299570942@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e381d14-0258-5804-59f0-43a299570942@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-10-28 at 22:30 +0200, Jarkko Sakkinen wrote:
-> On Thu, Oct 24, 2019 at 03:14:27PM -0400, Mimi Zohar wrote:
-> > Create, save and load trusted keys test
-> > 
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > 
-> > Change log v1:
-> > - Replace the directions for using Trousers to take ownership of the TPM
-> > with directions for using the IBM TSS.
-> > - Differentiate between different types of errors.  Recent bug is causing
-> > "add_key: Timer expired".
-> > ---
-> 
-> Is not really usable as a selftest because of 3rd party dependencies.
+On Fri, Oct 25, 2019 at 11:13:21AM +0200, Hans de Goede wrote:
+> Ok, this is fine with me, I will send v2 with the updated commit msg right away.
 
-As part of diagnosing trusted keys failure, there is some
-hints/directions as to how to take TPM 1.2 ownership, but it does not
-take ownership.  The previous version included directions for using
-Trousers.  This version provides directions for using the IBM TSS.
- Feel free to include additional hints/directions.
+Thank you, appreciate it.
 
-Mimi
-   
-
+/Jarkko
