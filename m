@@ -2,91 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF065E8771
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Oct 2019 12:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EFAE8888
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Oct 2019 13:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730214AbfJ2Lt1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Oct 2019 07:49:27 -0400
-Received: from mga03.intel.com ([134.134.136.65]:49218 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728317AbfJ2Lt1 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Oct 2019 07:49:27 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 04:49:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
-   d="scan'208";a="401121904"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.122])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Oct 2019 04:49:23 -0700
-Date:   Tue, 29 Oct 2019 13:49:22 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     David Howells <dhowells@redhat.com>, Petr Vorel <pvorel@suse.cz>,
-        shuah <shuah@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] selftest/trustedkeys: TPM 1.2 trusted keys test
-Message-ID: <20191029114922.GA12825@linux.intel.com>
-References: <1571944467-13097-1-git-send-email-zohar@linux.ibm.com>
- <20191028203014.GA8279@linux.intel.com>
- <1572295513.4532.270.camel@linux.ibm.com>
- <20191029091535.GB9896@linux.intel.com>
- <20191029092516.GA13848@linux.intel.com>
- <20191029114535.GA12272@linux.intel.com>
+        id S1728321AbfJ2Mnp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Oct 2019 08:43:45 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:35385 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727675AbfJ2Mno (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 29 Oct 2019 08:43:44 -0400
+Received: by mail-qt1-f194.google.com with SMTP id l3so9404228qtp.2
+        for <linux-integrity@vger.kernel.org>; Tue, 29 Oct 2019 05:43:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TXsJHSoo6XYJ6cmw4QLnIObYGsRpmUKQyLd9uZ7wkHU=;
+        b=Nr6YRwwQAv3WVwHvATui1+4gY5n5S8nFygstH9Q5D323z59Z3JruQgQ+HRdrMgI4bs
+         G9qKb6cS8Khxj3VGfjZrw0zyCwF5dQ3Ytbl1NTMkcA+56R+CfpSWTDLl1h/xpZMB33GF
+         cVwbZV3NkKw4AlZluIZhIG2PqkyOfPlmy0fIMbx7v0tM9ox3J/QoNKx+SiDOJ9rXbAKa
+         y1GY3OWy+G6pBoKm8pP9t+uGMCVVpbafIaeCvjF4fr4r8Tp8eTsYdVyBOel4nH88BmXX
+         RYUwlar+4f7BEBpzq1gFW7G1RSWX23DaGgBd2pL1u1DkwlERb+REM2UTFsN4HlOHfG57
+         wm1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TXsJHSoo6XYJ6cmw4QLnIObYGsRpmUKQyLd9uZ7wkHU=;
+        b=SGgmEz+HL2WcTFvVWd2ir1eODcUx+v/+gX0YAPEXkPFyf7Azq69rW6H+Rqi1TCN1jc
+         nHAbR3OT/18Bz2XT/qRpF7tA7iDMUw1mkbo/rXkOaxmbl3tJU8PNeEbxABlaOlnX4PhK
+         Y0mw3uIiJoOeMxzyAjzjlQkO1DFYeUPhoNOze6Pk4WPQ0LAmm2G7AbwAts3HLUtssuM0
+         vgIx7ckHI9JOWucGeBRKMHVbVhOgVSh0pWcpalGuZh73XoKsVv7aOSZyYyMbQfBM6AQ6
+         aKa0bMvRd9ybvLncaFtNkGT+vUghpy0J/mkOqF4AGKaAoVP8F23KGLEErF3ngwPnPXyR
+         WP8A==
+X-Gm-Message-State: APjAAAWPa8SSIRHlQVwLItL76k4f3YYUUP9EqRVPZ5Wb5seOCAc7BglT
+        tNKaQWVGt6PIlFxTUj/o8CIEXXz4Wto=
+X-Google-Smtp-Source: APXvYqxhLDu2NJgtfVpKNZoOd8Py5ETo03oMHFBh2QF1rLrNBcF8YR0Vgy/whPMeWBNCa2VLR1BbWA==
+X-Received: by 2002:aed:3baf:: with SMTP id r44mr3939570qte.255.1572353023797;
+        Tue, 29 Oct 2019 05:43:43 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-180.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.180])
+        by smtp.gmail.com with ESMTPSA id y28sm7329951qky.25.2019.10.29.05.43.43
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 29 Oct 2019 05:43:43 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1iPQqc-0004sy-GP; Tue, 29 Oct 2019 09:43:42 -0300
+Date:   Tue, 29 Oct 2019 09:43:42 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v2] tpm: Add major_version sysfs file
+Message-ID: <20191029124342.GB6128@ziepe.ca>
+References: <20191025193103.30226-1-jsnitsel@redhat.com>
+ <20191028205313.GH8279@linux.intel.com>
+ <20191028210507.7i6d6b5olw72shm3@cantor>
+ <20191029091731.GC9896@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191029114535.GA12272@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191029091731.GC9896@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 01:45:35PM +0200, Jarkko Sakkinen wrote:
-> On Tue, Oct 29, 2019 at 11:25:16AM +0200, Jarkko Sakkinen wrote:
-> > I'll anyway try to setup user space with TrouSerS so that I can try
-> > it out. BuildRoot has recipe for that but not for IBM TSS 2.0 so I'll
-> > skip that and use my own test script for TPM2 trusted keys.
+On Tue, Oct 29, 2019 at 11:17:31AM +0200, Jarkko Sakkinen wrote:
+> On Mon, Oct 28, 2019 at 02:05:07PM -0700, Jerry Snitselaar wrote:
+> > On Mon Oct 28 19, Jarkko Sakkinen wrote:
+> > > On Fri, Oct 25, 2019 at 12:31:03PM -0700, Jerry Snitselaar wrote:
+> > > > +	return sprintf(buf, "%s\n", chip->flags & TPM_CHIP_FLAG_TPM2
+> > > > +		       ? "2.0" : "1.2");
+> > > 
+> > > This is not right. Should be either "1" or "2".
+> > > 
+> > > /Jarkko
+> > 
+> > Okay I will fix that up. Do we have a final decision on the file name,
+> > major_version versus version_major?
 > 
-> Busybox version of mktemp gives this error message:
-> 
->   mktemp: Invalid argument
-> 
-> I get that three times.
-> 
-> Then I get non-existent directory error from line 65 but it is probably
-> consequence of the previous errors.
-> 
-> This the help for mktemp:
-> 
-> "
-> Usage: mktemp [-dt] [-p DIR] [TEMPLATE]
-> 
-> Create a temporary file with name based on TEMPLATE and print its name.
-> TEMPLATE must end with XXXXXX (e.g. [/dir/]nameXXXXXX).
-> Without TEMPLATE, -t tmp.XXXXXX is assumed.
-> 
-> 	-d	Make directory, not file
-> 	-q	Fail silently on errors
-> 	-t	Prepend base directory name to TEMPLATE
-> 	-p DIR	Use DIR as a base directory (implies -t)
-> 	-u	Do not create anything; print a name
-> 
-> Base directory is: -p DIR, else $TMPDIR, else /tmp
-> "
-> 
-> Use total six X's seems to fix the problem.
+> Well, I don't see how major_version would make any sense. It is
+> not as future proof as version_major. Still waiting for Jason's
+> feedback for this.
 
-OK, I fixes that issue and then I end up with:
+$ find /sys/ -name  "*version*"
+/sys/devices/pci0000:00/0000:00:17.0/ata1/host0/scsi_host/host0/ahci_host_version
+/sys/devices/virtual/net/docker0/bridge/multicast_mld_version
+/sys/devices/virtual/net/docker0/bridge/multicast_igmp_version
+/sys/firmware/efi/esrt/entries/entry0/lowest_supported_fw_version
+/sys/firmware/efi/esrt/entries/entry0/last_attempt_version
+/sys/firmware/efi/esrt/entries/entry0/fw_version
+/sys/module/acpi/parameters/acpica_version
 
-  [INFO] add_key: No such device
+etc..
 
-Anyway, got further.
+Not a single example of the backward version.
 
-/Jarkko
+Most likely it should be called 'tpm_version'
+
+Jason
