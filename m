@@ -2,122 +2,163 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFA0EA1DE
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Oct 2019 17:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B65EA76D
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Oct 2019 23:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726821AbfJ3QgI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Oct 2019 12:36:08 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53420 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726803AbfJ3QgH (ORCPT
+        id S1727208AbfJ3W6u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Oct 2019 18:58:50 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:57903 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726837AbfJ3W6t (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Oct 2019 12:36:07 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9UGPjnj134858
-        for <linux-integrity@vger.kernel.org>; Wed, 30 Oct 2019 12:36:05 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vydy6gnhw-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 30 Oct 2019 12:36:05 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 30 Oct 2019 16:36:03 -0000
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 30 Oct 2019 16:35:57 -0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9UGZtxl35848306
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Oct 2019 16:35:55 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD11AA405B;
-        Wed, 30 Oct 2019 16:35:55 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B9C6A4054;
-        Wed, 30 Oct 2019 16:35:53 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.134.98])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 30 Oct 2019 16:35:52 +0000 (GMT)
-Subject: Re: [PATCH v9 5/8] ima: make process_buffer_measurement() generic
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>
-Date:   Wed, 30 Oct 2019 12:35:52 -0400
-In-Reply-To: <6c94bfc0-d3ce-202b-6927-f664ee513fa9@linux.microsoft.com>
-References: <20191024034717.70552-1-nayna@linux.ibm.com>
-         <20191024034717.70552-6-nayna@linux.ibm.com>
-         <6c94bfc0-d3ce-202b-6927-f664ee513fa9@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19103016-0028-0000-0000-000003B12C1E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19103016-0029-0000-0000-00002473720A
-Message-Id: <1572453352.5707.3.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-30_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=667 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910300149
+        Wed, 30 Oct 2019 18:58:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1572476328;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nzz7sPab5APnqYMyjw2jhY5UVs1dF5WZgMMoICv2W90=;
+        b=Vrc27cvyqkPhdEcqcz4RyoI6WnZ2bdcgPrYawj9jdVjF1ITW3RYgNttDoTDYbmY+L1A40I
+        Op9mJ778DdC41ilhicnfHTvU/c+rfzfpdg0VXwbeznb72ikVEqafnKceHKj/aQPOX98m3h
+        8aN3NFR9hfnt3cPT3cDcOdDVO7AHgW0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-276-yma7WaZvPoWPAOsDcfcQ0A-1; Wed, 30 Oct 2019 18:58:46 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 007471005500;
+        Wed, 30 Oct 2019 22:58:45 +0000 (UTC)
+Received: from cantor.redhat.com (ovpn-116-32.phx2.redhat.com [10.3.116.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9791C5D6D6;
+        Wed, 30 Oct 2019 22:58:44 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Subject: [PATCH v4] tpm: Add tpm_version_major sysfs file
+Date:   Wed, 30 Oct 2019 15:58:43 -0700
+Message-Id: <20191030225843.23366-1-jsnitsel@redhat.com>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-MC-Unique: yma7WaZvPoWPAOsDcfcQ0A-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-10-30 at 08:22 -0700, Lakshmi Ramasubramanian wrote:
-> On 10/23/19 8:47 PM, Nayna Jain wrote:
-> 
-> Hi Nayna,
-> 
-> > process_buffer_measurement() is limited to measuring the kexec boot
-> > command line. This patch makes process_buffer_measurement() more
-> > generic, allowing it to measure other types of buffer data (e.g.
-> > blacklisted binary hashes or key hashes).
-> 
-> Now that process_buffer_measurement() is being made generic to measure 
-> any buffer, it would be good to add a tag to indicate what type of 
-> buffer is being measured.
-> 
-> For example, if the buffer is kexec command line the log could look like:
-> 
->   "kexec_cmdline: <command line data>"
-> 
-> Similarly, if the buffer is blacklisted binary hash:
-> 
->   "blacklist hash: <data>".
-> 
-> If the buffer is key hash:
-> 
->   "<name of the keyring>: key data".
-> 
-> This would greatly help the consumer of the IMA log to know the type of 
-> data represented in each IMA log entry.
+Easily determining what TCG version a tpm device implements
+has been a pain point for userspace for a long time, so
+add a sysfs file to report the TCG major version of a tpm device.
 
-Both the existing kexec command line and the new blacklist buffer
-measurement pass that information in the eventname.   The [PATCH 7/8]
-"ima: check against blacklisted hashes for files with modsig" patch
-description includes an example.
+Also add an entry to Documentation/ABI/stable/sysfs-class-tpm
+describing the new file.
 
-Mimi
+Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-integrity@vger.kernel.org
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+v4: - Change file name to tpm_version_major
+    - Actually display just the major version.
+    - change structs to tpm1_* & tpm2_*
+      instead of tpm12_* tpm20_*.
+v3: - Change file name to version_major.
+v2: - Fix TCG usage in commit message.
+    - Add entry to sysfs-class-tpm in Documentation/ABI/stable
+
+ Documentation/ABI/stable/sysfs-class-tpm | 11 ++++++++
+ drivers/char/tpm/tpm-sysfs.c             | 34 +++++++++++++++++++-----
+ 2 files changed, 38 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/ABI/stable/sysfs-class-tpm b/Documentation/ABI/s=
+table/sysfs-class-tpm
+index c0e23830f56a..5468fedc493c 100644
+--- a/Documentation/ABI/stable/sysfs-class-tpm
++++ b/Documentation/ABI/stable/sysfs-class-tpm
+@@ -183,3 +183,14 @@ Description:=09The "timeouts" property shows the 4 ven=
+dor-specific values
+ =09=09The four timeout values are shown in usecs, with a trailing
+ =09=09"[original]" or "[adjusted]" depending on whether the values
+ =09=09were scaled by the driver to be reported in usec from msecs.
++
++What:=09=09/sys/class/tpm/tpmX/tpm_version_major
++Date:=09=09October 2019
++KernelVersion:=095.5
++Contact:=09linux-integrity@vger.kernel.org
++Description:=09The "tpm_version_major" property shows the TCG spec major v=
+ersion
++=09=09implemented by the TPM device.
++
++=09=09Example output:
++
++=09=092
+diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
+index edfa89160010..12da71e72488 100644
+--- a/drivers/char/tpm/tpm-sysfs.c
++++ b/drivers/char/tpm/tpm-sysfs.c
+@@ -309,7 +309,17 @@ static ssize_t timeouts_show(struct device *dev, struc=
+t device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(timeouts);
+=20
+-static struct attribute *tpm_dev_attrs[] =3D {
++static ssize_t tpm_version_major_show(struct device *dev,
++=09=09=09=09  struct device_attribute *attr, char *buf)
++{
++=09struct tpm_chip *chip =3D to_tpm_chip(dev);
++
++=09return sprintf(buf, "%s\n", chip->flags & TPM_CHIP_FLAG_TPM2
++=09=09       ? "2" : "1");
++}
++static DEVICE_ATTR_RO(tpm_version_major);
++
++static struct attribute *tpm1_dev_attrs[] =3D {
+ =09&dev_attr_pubek.attr,
+ =09&dev_attr_pcrs.attr,
+ =09&dev_attr_enabled.attr,
+@@ -320,18 +330,28 @@ static struct attribute *tpm_dev_attrs[] =3D {
+ =09&dev_attr_cancel.attr,
+ =09&dev_attr_durations.attr,
+ =09&dev_attr_timeouts.attr,
++=09&dev_attr_tpm_version_major.attr,
+ =09NULL,
+ };
+=20
+-static const struct attribute_group tpm_dev_group =3D {
+-=09.attrs =3D tpm_dev_attrs,
++static struct attribute *tpm2_dev_attrs[] =3D {
++=09&dev_attr_tpm_version_major.attr,
++=09NULL
++};
++
++static const struct attribute_group tpm1_dev_group =3D {
++=09.attrs =3D tpm1_dev_attrs,
++};
++
++static const struct attribute_group tpm2_dev_group =3D {
++=09.attrs =3D tpm2_dev_attrs,
+ };
+=20
+ void tpm_sysfs_add_device(struct tpm_chip *chip)
+ {
+-=09if (chip->flags & TPM_CHIP_FLAG_TPM2)
+-=09=09return;
+-
+ =09WARN_ON(chip->groups_cnt !=3D 0);
+-=09chip->groups[chip->groups_cnt++] =3D &tpm_dev_group;
++=09if (chip->flags & TPM_CHIP_FLAG_TPM2)
++=09=09chip->groups[chip->groups_cnt++] =3D &tpm2_dev_group;
++=09else
++=09=09chip->groups[chip->groups_cnt++] =3D &tpm1_dev_group;
+ }
+--=20
+2.23.0
 
