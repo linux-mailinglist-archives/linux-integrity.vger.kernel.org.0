@@ -2,97 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95053EB1F7
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2019 15:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EECEB36D
+	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2019 16:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727998AbfJaOAc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 31 Oct 2019 10:00:32 -0400
-Received: from mail-pl1-f182.google.com ([209.85.214.182]:33704 "EHLO
-        mail-pl1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727993AbfJaOAc (ORCPT
+        id S1727589AbfJaPIx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 31 Oct 2019 11:08:53 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:43196 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726642AbfJaPIx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 31 Oct 2019 10:00:32 -0400
-Received: by mail-pl1-f182.google.com with SMTP id y8so2764185plk.0
-        for <linux-integrity@vger.kernel.org>; Thu, 31 Oct 2019 07:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=vwkM+SzsoiF7YKIoK9DIXcbGL7DR7Z0spQKLzLaNHZQ=;
-        b=lwu1b6fl86TKE/CMp25S7IhlXjiw3/P2BxSE+VrP/HwDLSRhME76dbmwTxC8BpTHT/
-         KlbWpTvNZ8LGCVHZxHYfeVb4PzGeDIRDSQUUNVT1cYlyd90gf/aDu7vQzFlm37hEcFxc
-         KPvQpjyuaoCttslC+3jrhjI35gwN4wAyqx8axXPj3wJRQiyABZJvWFci2ShCan+zXbN6
-         zPYtL7Np1pNM3HzRTzv6xjj+EHoeRQVR8NLL/jBkKjtl1pqhL2OOqXYI2ujSL1Or0oV2
-         CRt4RrD958u8atB+0vrOw3fWVyDb6Z1aeIY4m9ANwue1KimAXpvJ6WG+RN5eP5GQdHY/
-         2jKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=vwkM+SzsoiF7YKIoK9DIXcbGL7DR7Z0spQKLzLaNHZQ=;
-        b=Z5WyFJwRYbQ/15flJYcpbELl31Ir12U7hWY6/+ztGv5iohBuQTCQmmRqvQNfxUjRCL
-         TYH9IRrsXq0qsb4OdaEJNLUSAv4O6SuB1eErLem2UVJbQuTH7Nl9LaAzCbkfxfSh5js/
-         +44S6+gBQx658+z9keE2Wfkuj/Ucki4dyb9G8Ajo5PY7erp6+jRDndSFzKATAd4h5jB7
-         yzhRqHuQYitt+EYPnA5q7SLEkBCyLdxsFfKbgOyFEa1JTzm4y0wLrp7hcgIUEvcvn7ux
-         6NkWTCq0dqMvBO851v1A+7AGGLRe63lUtfKiIlsg8JsVnL9i1DUwvFpw0bvCr8CbBdOM
-         L1dg==
-X-Gm-Message-State: APjAAAU7zjoBB3ezid3uQWfButMt35fxcj1MEs3oJHMVNsLUVSxiY3NA
-        EB4qtGlqS6AByuWGfjOsVCBDmg==
-X-Google-Smtp-Source: APXvYqw09qKkn7Bgw5qiGynPfr7slN+fXXwxh/UBQthSfTfEmpqgT8eYadae9P4L6lIIRwbq16G6sg==
-X-Received: by 2002:a17:902:a5c2:: with SMTP id t2mr6758983plq.258.1572530431038;
-        Thu, 31 Oct 2019 07:00:31 -0700 (PDT)
-Received: from localhost.localdomain ([117.252.69.143])
-        by smtp.gmail.com with ESMTPSA id i16sm3522441pfa.184.2019.10.31.07.00.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 31 Oct 2019 07:00:30 -0700 (PDT)
-From:   Sumit Garg <sumit.garg@linaro.org>
-To:     jens.wiklander@linaro.org, jarkko.sakkinen@linux.intel.com,
-        dhowells@redhat.com
-Cc:     corbet@lwn.net, jejb@linux.ibm.com, zohar@linux.ibm.com,
-        jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
-        ard.biesheuvel@linaro.org, daniel.thompson@linaro.org,
-        stuart.yoder@arm.com, janne.karhunen@gmail.com,
-        keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        tee-dev@lists.linaro.org, Sumit Garg <sumit.garg@linaro.org>
-Subject: [Patch v3 7/7] MAINTAINERS: Add entry for TEE based Trusted Keys
-Date:   Thu, 31 Oct 2019 19:28:43 +0530
-Message-Id: <1572530323-14802-8-git-send-email-sumit.garg@linaro.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1572530323-14802-1-git-send-email-sumit.garg@linaro.org>
-References: <1572530323-14802-1-git-send-email-sumit.garg@linaro.org>
+        Thu, 31 Oct 2019 11:08:53 -0400
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 45D1420B7192;
+        Thu, 31 Oct 2019 08:08:52 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 45D1420B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1572534532;
+        bh=b552znnqsYND51xMigIZXtf6qqgljQrlCIE5HH5S2i4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=sLIJtvbXJ37ifCWsEv5uQlJL6ydCzZ9r2nzBqntNvkOn9VL478bTvghdzjppI4LuT
+         UbPE4B0JlPjWQ9wbW2NU/QsZjG0jVfrgvrb1FByefyTItfAZ2W9Ysyoz66iP0xgKDE
+         cTysNaCkTLXtdQrV8mMQrn74ShsmcxWzjk39quP0=
+Subject: Re: [PATCH v3 1/9] KEYS: Defined an IMA hook to measure keys on key
+ create or update
+To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
+        matthewgarrett@google.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org
+Cc:     prsriva@linux.microsoft.com
+References: <20191031011910.2574-1-nramas@linux.microsoft.com>
+ <20191031011910.2574-2-nramas@linux.microsoft.com>
+ <1572523831.5028.43.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <b83bd7ef-ce7f-e750-e30b-30d5a6469a28@linux.microsoft.com>
+Date:   Thu, 31 Oct 2019 08:08:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <1572523831.5028.43.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add MAINTAINERS entry for TEE based Trusted Keys framework.
+On 10/31/19 5:10 AM, Mimi Zohar wrote:
 
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> On Wed, 2019-10-30 at 18:19 -0700, Lakshmi Ramasubramanian wrote:
+>> Asymmetric keys used for verifying file signatures or certificates
+>> are currently not included in the IMA measurement list.
+>>
+>> This patch defines a new IMA hook namely ima_post_key_create_or_update()
+>> to measure asymmetric keys.
+> 
+> It's not enough for the kernel to be able to compile the kernel after
+> applying all the patches in a patch set.  After applying each patch,
+> the kernel should build properly, otherwise it is not bi-sect safe.
+>   Refer to "3) Separate your changes" of
+> "Documentation/process/submitting-patches.rst.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c6c34d0..08d0282 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9059,6 +9059,15 @@ F:	include/keys/trusted-type.h
- F:	security/keys/trusted.c
- F:	include/keys/trusted.h
- 
-+KEYS-TEE-TRUSTED
-+M:	Sumit Garg <sumit.garg@linaro.org>
-+L:	linux-integrity@vger.kernel.org
-+L:	keyrings@vger.kernel.org
-+S:	Supported
-+F:	Documentation/security/keys/tee-trusted.rst
-+F:	include/keys/trusted_tee.h
-+F:	security/keys/trusted-keys/trusted_tee.c
-+
- KEYS/KEYRINGS:
- M:	David Howells <dhowells@redhat.com>
- M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
--- 
-2.7.4
+I started with kernel version 5.3 for this patch set.
+I applied Nayna's process_buffer_measurement() patch and then built my 
+changes on top of that.
+This patch has no other dependency as far as I know.
 
+Are you seeing a build break after applying this patch alone?
+
+(PATCH v3 1/9) KEYS: Defined an IMA hook to measure keys on key create 
+or update
+> 
+> This patch should also define the new "func".
+> 
+
+Ok - I'll make that change.
+
+thanks,
+  -lakshmi
