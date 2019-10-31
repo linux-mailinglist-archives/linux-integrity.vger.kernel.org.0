@@ -2,112 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A052FEB40F
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2019 16:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799DEEB424
+	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2019 16:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbfJaPho (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 31 Oct 2019 11:37:44 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30300 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726680AbfJaPho (ORCPT
+        id S1728408AbfJaPmw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 31 Oct 2019 11:42:52 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55280 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726735AbfJaPmw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 31 Oct 2019 11:37:44 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9VFahpN051955
-        for <linux-integrity@vger.kernel.org>; Thu, 31 Oct 2019 11:37:42 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2w027f0j9x-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 31 Oct 2019 11:37:42 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 31 Oct 2019 15:37:40 -0000
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 31 Oct 2019 15:37:36 -0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9VFbZ0f31653994
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 31 Oct 2019 15:37:35 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6904452069;
-        Thu, 31 Oct 2019 15:37:35 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.194.174])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 40B7B52067;
-        Thu, 31 Oct 2019 15:37:34 +0000 (GMT)
+        Thu, 31 Oct 2019 11:42:52 -0400
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B3DC020B7192;
+        Thu, 31 Oct 2019 08:42:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B3DC020B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1572536571;
+        bh=VEMRMLTSgqwtGYH1CLoFnXVfEwXi5+fo0FYWAu1w7Go=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=G2hhH/AW1SH0XWVF66twEG0I+7/S1MLgrbzWgHOt8e1t1b3nCBUej8k9gqk9zS3Vg
+         E1yjfNTAspzVJF3iDIaQPJGM0OeZPp7jqrO8/3Z5p/x6/1z2cJtGOetUuYXADAYhCV
+         b3KLUodKNyJfdMrxz7NHebkEWUhWZHyE0BCtRQeo=
 Subject: Re: [PATCH v3 1/9] KEYS: Defined an IMA hook to measure keys on key
  create or update
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Sasha Levin <sashal@kernel.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, Sasha Levin <sashal@kernel.org>
 Cc:     dhowells@redhat.com, matthewgarrett@google.com,
         jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         prsriva@linux.microsoft.com
-Date:   Thu, 31 Oct 2019 11:37:33 -0400
-In-Reply-To: <20191031152730.GQ1554@sasha-vm>
 References: <20191031011910.2574-1-nramas@linux.microsoft.com>
-         <20191031011910.2574-2-nramas@linux.microsoft.com>
-         <1572523831.5028.43.camel@linux.ibm.com>
-         <b83bd7ef-ce7f-e750-e30b-30d5a6469a28@linux.microsoft.com>
-         <20191031152730.GQ1554@sasha-vm>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+ <20191031011910.2574-2-nramas@linux.microsoft.com>
+ <1572523831.5028.43.camel@linux.ibm.com>
+ <b83bd7ef-ce7f-e750-e30b-30d5a6469a28@linux.microsoft.com>
+ <20191031152730.GQ1554@sasha-vm> <1572536253.5028.50.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <a629707a-40d2-e3dd-fdf4-af2f84f47796@linux.microsoft.com>
+Date:   Thu, 31 Oct 2019 08:42:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <1572536253.5028.50.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19103115-0012-0000-0000-0000035F8748
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19103115-0013-0000-0000-0000219AD2A2
-Message-Id: <1572536253.5028.50.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-31_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910310157
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2019-10-31 at 11:27 -0400, Sasha Levin wrote:
-> On Thu, Oct 31, 2019 at 08:08:48AM -0700, Lakshmi Ramasubramanian wrote:
-> >On 10/31/19 5:10 AM, Mimi Zohar wrote:
-> >
-> >>On Wed, 2019-10-30 at 18:19 -0700, Lakshmi Ramasubramanian wrote:
-> >>>Asymmetric keys used for verifying file signatures or certificates
-> >>>are currently not included in the IMA measurement list.
-> >>>
-> >>>This patch defines a new IMA hook namely ima_post_key_create_or_update()
-> >>>to measure asymmetric keys.
-> >>
-> >>It's not enough for the kernel to be able to compile the kernel after
-> >>applying all the patches in a patch set.  After applying each patch,
-> >>the kernel should build properly, otherwise it is not bi-sect safe.
-> >>  Refer to "3) Separate your changes" of
-> >>"Documentation/process/submitting-patches.rst.
-> >
-> >I started with kernel version 5.3 for this patch set.
-> >I applied Nayna's process_buffer_measurement() patch and then built my 
-> >changes on top of that.
-> >This patch has no other dependency as far as I know.
-> >
-> >Are you seeing a build break after applying this patch alone?
-> >
-> >(PATCH v3 1/9) KEYS: Defined an IMA hook to measure keys on key create 
-> >or update
+On 10/31/19 8:37 AM, Mimi Zohar wrote:
+
+>> I couldn't even apply this patch: Nayna's series (v10) doesn't apply  >> top of 5.3 to begin with, and while it does apply on mainline, 
+this>> first patch wouldn't apply on top.
+> Lakshmi, development is always on top of mainline.  In this case,
+>   please use 5.4.0-rc3 and apply Nayna's v10 patch set.
 > 
-> I couldn't even apply this patch: Nayna's series (v10) doesn't apply on
-> top of 5.3 to begin with, and while it does apply on mainline, this
-> first patch wouldn't apply on top.
+> Mimi
 
-Lakshmi, development is always on top of mainline.  In this case,
- please use 5.4.0-rc3 and apply Nayna's v10 patch set.
 
-Mimi
+Thanks for the info Mimi.
 
+I initially started with v5.4, but the kernel I built wouldn't boot on 
+my machine :(
+
+I'll update to the latest v5.4 changes and try again.
+
+thanks,
+  -lakshmi
