@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B26D5EF015
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Nov 2019 23:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1AFEF08E
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Nov 2019 23:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730596AbfKDVvo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Nov 2019 16:51:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44700 "EHLO mail.kernel.org"
+        id S1729889AbfKDVsD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Nov 2019 16:48:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37868 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730586AbfKDVvm (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Nov 2019 16:51:42 -0500
+        id S1729829AbfKDVsD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 4 Nov 2019 16:48:03 -0500
 Received: from localhost (6.204-14-84.ripe.coltfrance.com [84.14.204.6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 83966217F4;
-        Mon,  4 Nov 2019 21:51:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0431F20869;
+        Mon,  4 Nov 2019 21:48:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572904301;
+        s=default; t=1572904082;
         bh=7SOk7tiTVGhBb6vH7JX2MPjaoKS77atUxG4Pvnesje8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yhsn17oKveR0alrrhaEivNSxqTyjDgd7CkVZs5Q8i2rAT0oKv2LOveBPgel/oGBpU
-         8+nWgG79agc0GhZPFJj34cp6syBol9eX5Vz+gjqlGYXDTrICDBuxcNE1DsceZ6qZSj
-         8lrljci4C2IAvd1OVnoaTaMFJ3JSxte6gaFUePrk=
+        b=PPRkre1W7gQfHRCB2PfJCa6+aZBHLShgmm6u6KBslI6w5ZdEcm2eS0fdIt/i9KMn8
+         94ck55qSZ6iaFFuiSWEUpHLAUfotn94S0J99CHyjYIcNtaVjgIN7hckWUFxhwA4LfY
+         8VD6vNRRY2daodl0Ji0U6ry9gEIE5N4Qi/Qpg2qo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,12 +42,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
         Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 21/62] efi/cper: Fix endianness of PCIe class code
-Date:   Mon,  4 Nov 2019 22:44:43 +0100
-Message-Id: <20191104211921.182137135@linuxfoundation.org>
+Subject: [PATCH 4.4 15/46] efi/cper: Fix endianness of PCIe class code
+Date:   Mon,  4 Nov 2019 22:44:46 +0100
+Message-Id: <20191104211844.447008458@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191104211901.387893698@linuxfoundation.org>
-References: <20191104211901.387893698@linuxfoundation.org>
+In-Reply-To: <20191104211830.912265604@linuxfoundation.org>
+References: <20191104211830.912265604@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
