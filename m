@@ -2,36 +2,36 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 771EDF1DF1
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Nov 2019 20:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F6FF1E09
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Nov 2019 20:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732323AbfKFTB3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 6 Nov 2019 14:01:29 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:36196 "EHLO
+        id S1731934AbfKFTBs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 6 Nov 2019 14:01:48 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36206 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732278AbfKFTB2 (ORCPT
+        with ESMTP id S1732281AbfKFTB2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Wed, 6 Nov 2019 14:01:28 -0500
 Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C61CA20B4909;
+        by linux.microsoft.com (Postfix) with ESMTPSA id EF83C20B490A;
         Wed,  6 Nov 2019 11:01:27 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C61CA20B4909
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EF83C20B490A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1573066887;
-        bh=oyyg5Mcb7als6eY3sgazWcDSLsuJqSo0c/tbzPXjc9Q=;
+        s=default; t=1573066888;
+        bh=TEn9F8AzefeWVhas63NXBgzu5ZQXoipIdRO6lRvgWaE=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FAm5ugWGaYN/UX7WRUU0u48rXuwnzHSiAB0TXS0vGC2aGPSZ+3mbEjHJfSk6DGquz
-         jf3PeHW9docxUpxbnGkXf7aJ/wUX2/J1xDsim5lFm02yJ1BjpYsrtUnM8Qo6vmUvNM
-         +NSS/Mx1/FiTrSwsxHx+m4ea7hwTz8/VxT5Y4/HY=
+        b=ngfXtDQzvzD2intSwFGrLDT02P4QQ+LvZB0dlEug9jP3xiWTNjFae/0kKX2ZWe8rz
+         RKRCRs9GabpNgw2XBDn+zeVzBpwrJEL9o3X2sQHtU49Hh/QH+hhss9D2hYCVZfpR/B
+         +AS6fycv4gG411dpiEcxJKsfBf9R0qCGqSrelvdA=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, dhowells@redhat.com,
         matthewgarrett@google.com, sashal@kernel.org,
         jamorris@linux.microsoft.com, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 09/10] IMA: Call queue and dequeue functions to measure keys
-Date:   Wed,  6 Nov 2019 11:01:15 -0800
-Message-Id: <20191106190116.2578-10-nramas@linux.microsoft.com>
+Subject: [PATCH v4 10/10] KEYS: Call the IMA hook to measure key when a new key is created or an existing key is updated
+Date:   Wed,  6 Nov 2019 11:01:16 -0800
+Message-Id: <20191106190116.2578-11-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191106190116.2578-1-nramas@linux.microsoft.com>
 References: <20191106190116.2578-1-nramas@linux.microsoft.com>
@@ -40,46 +40,78 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Keys should be queued for measurement if IMA is not yet initialized.
-Keys queued for measurement, if any, need to be processed when IMA
-initialization is completed.
+key_create_or_update function needs to call the IMA hook to measure
+the key when a new key is created or an existing key is updated.
 
-This patch updates the IMA hook for key_create_or_update 
-to call ima_queue_or_process_key_for_measurement() and
-adds the call to process queued keys upon IMA initialization
-completion.
+This patch adds the call to the IMA hook from key_create_or_update
+function.
 
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 ---
- security/integrity/ima/ima_init.c | 1 +
- security/integrity/ima/ima_main.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ include/linux/ima.h | 8 ++++++++
+ security/keys/key.c | 9 +++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index a810af6df587..74817a9f78e5 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -137,6 +137,7 @@ int __init ima_init(void)
- 		return rc;
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 6d904754d858..069879242a15 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -24,6 +24,9 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
+ 			      enum kernel_read_file_id id);
+ extern void ima_post_path_mknod(struct dentry *dentry);
+ extern void ima_kexec_cmdline(const void *buf, int size);
++extern void ima_post_key_create_or_update(struct key *keyring,
++					  struct key *key,
++					  unsigned long flags, bool create);
  
- 	ima_initialized = true;
-+	ima_measure_queued_keys();
- 
- 	return 0;
- }
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 56540357c854..8733990867f2 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -757,7 +757,7 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
- 				   unsigned long flags, bool create)
- {
- 	if ((keyring != NULL) && (key != NULL))
--		return;
-+		ima_queue_or_process_key_for_measurement(keyring, key);
+ #ifdef CONFIG_IMA_KEXEC
+ extern void ima_add_kexec_buffer(struct kimage *image);
+@@ -92,6 +95,11 @@ static inline void ima_post_path_mknod(struct dentry *dentry)
  }
  
- static int __init init_ima(void)
+ static inline void ima_kexec_cmdline(const void *buf, int size) {}
++
++static inline void ima_post_key_create_or_update(struct key *keyring,
++						 struct key *key,
++						 unsigned long flags,
++						 bool create) {}
+ #endif /* CONFIG_IMA */
+ 
+ #ifndef CONFIG_IMA_KEXEC
+diff --git a/security/keys/key.c b/security/keys/key.c
+index 764f4c57913e..9782d4d046fd 100644
+--- a/security/keys/key.c
++++ b/security/keys/key.c
+@@ -13,6 +13,7 @@
+ #include <linux/security.h>
+ #include <linux/workqueue.h>
+ #include <linux/random.h>
++#include <linux/ima.h>
+ #include <linux/err.h>
+ #include "internal.h"
+ 
+@@ -936,6 +937,9 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
+ 		goto error_link_end;
+ 	}
+ 
++	/* let the ima module know about the created key. */
++	ima_post_key_create_or_update(keyring, key, flags, true);
++
+ 	key_ref = make_key_ref(key, is_key_possessed(keyring_ref));
+ 
+ error_link_end:
+@@ -965,6 +969,11 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
+ 	}
+ 
+ 	key_ref = __key_update(key_ref, &prep);
++
++	/* let the ima module know about the updated key. */
++	if (!IS_ERR(key_ref))
++		ima_post_key_create_or_update(keyring, key, flags, false);
++
+ 	goto error_free_prep;
+ }
+ EXPORT_SYMBOL(key_create_or_update);
 -- 
 2.17.1
 
