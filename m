@@ -2,81 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED13F3752
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2019 19:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CDAF3768
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2019 19:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725871AbfKGSfN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Nov 2019 13:35:13 -0500
-Received: from mga01.intel.com ([192.55.52.88]:62803 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725823AbfKGSfM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Nov 2019 13:35:12 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Nov 2019 10:35:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,278,1569308400"; 
-   d="scan'208";a="201118303"
-Received: from kbutterl-mobl.ger.corp.intel.com (HELO localhost) ([10.251.81.45])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Nov 2019 10:35:09 -0800
-Date:   Thu, 7 Nov 2019 20:35:03 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-integrity@vger.kernel.org, tglx@linutronix.de,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Philip Tricca <philip.b.tricca@intel.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>
-Subject: Re: [PATCH] tpm: remove tpm_dev_wq_lock
-Message-ID: <20191107183503.GA8418@linux.intel.com>
-References: <20190211141145.GD8431@linux.intel.com>
- <20191010160313.pdf6ue4r2intbgoh@linutronix.de>
- <20191014193942.GH15552@linux.intel.com>
- <20191028202419.GA7214@linux.intel.com>
- <20191028202637.GB7214@linux.intel.com>
- <20191104143957.onsfuvmwfuvmfuu6@linutronix.de>
- <20191104173709.qqmdiacytyimbqhx@cantor>
- <20191104174450.dlxlgixizej5orqr@linutronix.de>
- <20191104182732.md3t6xbumg53wkcl@cantor>
- <20191107161041.h7pgtlmj5zbi4frs@linutronix.de>
+        id S1726656AbfKGSmh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Nov 2019 13:42:37 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:54996 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725883AbfKGSmh (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 7 Nov 2019 13:42:37 -0500
+Received: from [10.137.112.111] (unknown [131.107.147.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0142220B7192;
+        Thu,  7 Nov 2019 10:42:35 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0142220B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1573152156;
+        bh=IIgQX9NCafdzdKDo68gnRTo2ABhXlMLZcXZGDGbYSCo=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=kyb8YsJHumSyLq3rC7RM6o3mGIu3AVQWDCrlcnyVYtfYPHWkv+eJuLBSFC405C9T3
+         7Jk3GCscYZavGCi1Rjs4+R1pLaWhEcUk3LhLrP4fO6jBQylW6mXz4hpORlSCvHVGQw
+         RuyPFSx2n2sxVy4qNUTvAnCh4hvVxn6CLoWPg/wI=
+Subject: Re: [PATCH v4 01/10] IMA: Defined an IMA hook to measure keys on key
+ create or update
+To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
+        matthewgarrett@google.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191106190116.2578-1-nramas@linux.microsoft.com>
+ <20191106190116.2578-2-nramas@linux.microsoft.com>
+ <1573080189.5028.313.camel@linux.ibm.com>
+ <c838a233-28fb-cad2-4694-18366c2643a4@linux.microsoft.com>
+ <1573098037.5028.325.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <7ce84aa0-729e-c58e-f16a-25490b4e336d@linux.microsoft.com>
+Date:   Thu, 7 Nov 2019 10:42:55 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191107161041.h7pgtlmj5zbi4frs@linutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1573098037.5028.325.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Nov 07, 2019 at 05:10:41PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2019-11-04 11:27:32 [-0700], Jerry Snitselaar wrote:
-> > On Mon Nov 04 19, Sebastian Andrzej Siewior wrote:
-> > > On 2019-11-04 10:37:09 [-0700], Jerry Snitselaar wrote:
-> > > > It looks like checkpatch is expecting the word commit to precede the hash on the same line.
-> > > > I get no errors with the following:
-> > > 
-> > > That would explain it. That is however not what the TIP tree and other
-> > > people do not to mention that reading wise it makes sense to keep the
-> > > word `commit' as part of the sentence and add the hash in the next line.
-> > > 
-> > 
-> > Yes it reads better. What about the following?
-> > 
-> > Added in commit 9e1b74a63f776 ("tpm: add support for nonblocking
-> > operation"), but never actually used it.
-> > 
-> > And then add the Fixes: line above the Cc: and Signed-off-by: ?
+On 11/6/2019 7:40 PM, Mimi Zohar wrote:
+
+>>> I would move the patch that defines the "keyring=" policy option prior
+>>> to this one.  Include the call to process_buffer_measurement() in this
+>>> patch.  A subsequent patch would add support to defer measuring the
+>>> key, by calling a function named something like
+>>> ima_queue_key_measurement().
+>>>
+>>> Mimi
+>>
+>> As I'd stated in the other response, I wanted to isolate all key related
+>> code in a separate C file and build it if and only if all CONFIG
+>> dependencies are met.
 > 
-> Can please get over with? It is a simple patch. It has simple
-> description.
+> The basic measuring of keys shouldn't be any different than any other
+> policy rule, other than it is a key and not a file.  This is the
+> reason that I keep saying start out with the basics and then add
+> support to defer measuring keys on the trusted keyrings.
 
-https://lore.kernel.org/linux-integrity/20191028202419.GA7214@linux.intel.com/
+I'll make the changes, rearrange the patches and send an updated set.
 
-I'm also cool with cc stable as long as the commit is message has the
-correct format.
+I do have a few questions since I am still not fully understanding the 
+requirements you are targeting. Appreciate if you could please clarify.
 
-/Jarkko
+As you already know, I am using the "public key" of the given asymmetric 
+key as the "buffer" to measure in process_buffer_measurement().
+
+The measurement decision is not based on whether the keyring is a 
+trusted one or an untrusted one. As long as the IMA policy allows 
+(through the "keyrings=" option) the key will be measured.
+
+Do you want only trusted keyrings to be allowed in the measurement?
+In my opinion, that decision should be deferred to whoever is setting up 
+the IMA policy.
+
+> Only the queueing code needed for measuring keys on the trusted
+> keyrings would be in a separate file.
+> 
+> Mimi
+
+The decision to process key immediately or defer (queue) is based on 
+whether IMA has been initialized or not. Keyring is not used for this 
+decision.
+
+Could you please clarify how queuing is related to keyring's 
+trustworthiness?
+
+The check for whether the key is an asymmetric one or not, and 
+extracting the "public key" if it is an asymmetric key needs to be in a 
+separate file to handle the CONFIG dependencies in IMA.
+
+thanks,
+  -lakshmi
+
