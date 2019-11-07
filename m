@@ -2,44 +2,44 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D635EF22E0
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2019 00:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86CCF233B
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2019 01:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727462AbfKFXwM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 6 Nov 2019 18:52:12 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:53368 "EHLO
+        id S1727328AbfKGAVY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 6 Nov 2019 19:21:24 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:35294 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbfKFXwM (ORCPT
+        with ESMTP id S1727326AbfKGAVX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 6 Nov 2019 18:52:12 -0500
+        Wed, 6 Nov 2019 19:21:23 -0500
 Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2FC6F20B7192;
-        Wed,  6 Nov 2019 15:52:11 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2FC6F20B7192
+        by linux.microsoft.com (Postfix) with ESMTPSA id C964720B7192;
+        Wed,  6 Nov 2019 16:21:22 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C964720B7192
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1573084331;
-        bh=7+TITNWnuuqtobgXFF9AfJ8kAcAt4vZ2t9MtwS6OXX4=;
+        s=default; t=1573086082;
+        bh=eEEXoIsgjYfls0Ada3aH4Nvwgp+zX0ZpkvcRvWey2wE=;
         h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=Gu1APcN4pyax71gcqYaAGdCtpIOmXf+wnCOL+xZC42h5YzThdJ0hzJk82wr3IR8sr
-         1OMthYH/qbPa2X011zafPUPpOwABgK8hFxmOm96D/wJbfa5DVYlr44SFXuITIHb7CI
-         6HV2JMReS+0R5u4OtMJlXQ+E29piD77UmskPLmck=
-Subject: Re: [PATCH v4 08/10] IMA: Defined functions to queue and dequeue keys
- for measurement
+        b=Ybz76JqWo8S/SHKczbTAnnAXEvfdR+hU62S0BJ/UxhSd5gDkGnszsim7VpPJcygU7
+         U8jVE5gwHgLRpjKITVm1b5P//2fZtD/6xm+wSHPTR4+CPJeG57p+hUnJ03jsiDDffc
+         Wcd8Sc8rXFowL6qc3poi7EjfClSfg6d3kcmjgVjY=
+Subject: Re: [PATCH v4 01/10] IMA: Defined an IMA hook to measure keys on key
+ create or update
 To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
         matthewgarrett@google.com, sashal@kernel.org,
         jamorris@linux.microsoft.com, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20191106190116.2578-1-nramas@linux.microsoft.com>
- <20191106190116.2578-9-nramas@linux.microsoft.com>
- <1573080281.5028.314.camel@linux.ibm.com>
+ <20191106190116.2578-2-nramas@linux.microsoft.com>
+ <1573080189.5028.313.camel@linux.ibm.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <8b2fd578-7429-f5b8-4286-1face91e1ae6@linux.microsoft.com>
-Date:   Wed, 6 Nov 2019 15:52:31 -0800
+Message-ID: <c838a233-28fb-cad2-4694-18366c2643a4@linux.microsoft.com>
+Date:   Wed, 6 Nov 2019 16:21:43 -0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <1573080281.5028.314.camel@linux.ibm.com>
+In-Reply-To: <1573080189.5028.313.camel@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -49,67 +49,49 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 11/6/2019 2:44 PM, Mimi Zohar wrote:
+On 11/6/2019 2:43 PM, Mimi Zohar wrote:
 
->> +int ima_queue_or_process_key_for_measurement(struct key *keyring,
->> +					     struct key *key)
+>> +void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+>> +				   unsigned long flags, bool create)
 >> +{
->> +	int rc = 0;
->> +	struct ima_measure_key_entry *entry = NULL;
->> +	const struct public_key *pk;
->> +
->> +	if (key->type != &key_type_asymmetric)
->> +		return 0;
->> +
->> +	mutex_lock(&ima_measure_keys_mutex);
-
+>> +	if ((keyring != NULL) && (key != NULL))
+>> +		return;
 > 
-> Unless the key is being queued, there's no reason to take the lock.
+> I would move the patch that defines the "keyring=" policy option prior
+> to this one.  Include the call to process_buffer_measurement() in this
+> patch.  A subsequent patch would add support to defer measuring the
+> key, by calling a function named something like
+> ima_queue_key_measurement().
+> 
+> Mimi
 
-Reason the lock is taken even in the case the key is not queued is to 
-avoid the following race condition:
+As I'd stated in the other response, I wanted to isolate all key related 
+code in a separate C file and build it if and only if all CONFIG 
+dependencies are met.
 
-  => ima_init() sets ima_initialized flag and calls the dequeue function
+I can do the following:
 
-  => If IMA hook checks ima_initialized flag outside the lock and sees 
-the flag is not set, it will call the queue function.
+=> Define the IMA hook in ima_asymmetric_keys.c instead of ima_main.c
 
-  => If the above two steps race, the key could get added to the queue 
-after ima_init() has processed the queued keys.
+=> In include/linux/ima.h declare the IMA hook if 
+CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS is enabled.
+Else, NOP it.
 
-That's the reason I named the function called by the IMA hook to 
-ima_queue_or_process_key_for_measurement().
-
-But I can make the following change:
-
-  => IMA hook checks the flag.
-  => If it is set, process key immediately
-  => If the flag is not set, call ima_queue_or_process_key_for_measurement()
-
-ima_queue_or_process_key_for_measurement() will do the following:
-
-  => With the lock held check ima_initialized flag
-  => If true release the lock and call process_buffer_measurement()
-  => If false, queue the key and then release the lock
+#ifdef CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
+extern void ima_post_key_create_or_update(struct key *keyring,
+					  struct key *key,
+					  unsigned long flags,
+                                           bool create);
+#else
+static inline void ima_post_key_create_or_update(struct key *keyring,
+						 struct key *key,
+						 unsigned long flags,
+						 bool create) {}
+#endif
 
 Would that be acceptable?
 
-> Measuring the key should be done in ima_post_key_create_or_update()
-> unless, it is being deferred.  Please update the function name to
-> reflect this.
-
-Just wanted to confirm:
-Rename ima_post_key_create_or_update() to a more appropriate name?
-
-Another reason for doing all key related operations in 
-ima_queue_or_process_key_for_measurement() is to isolate key related 
-code in a separate C file and build it if and only if the CONFIG 
-dependencies are met.
-
-With respect to loading custom policy, I will take a look at how to 
-handle that case. Thanks for pointing that out.
-
-> Mimi
-
 thanks,
   -lakshmi
+
+
