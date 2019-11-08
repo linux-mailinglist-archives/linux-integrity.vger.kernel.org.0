@@ -2,105 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D079EF3A3B
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2019 22:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66975F43B0
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Nov 2019 10:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726251AbfKGVMd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Nov 2019 16:12:33 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:51254 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbfKGVMc (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Nov 2019 16:12:32 -0500
-Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D7C8820B7192;
-        Thu,  7 Nov 2019 13:12:31 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D7C8820B7192
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1573161151;
-        bh=Dq/RMVhen0d8e7vLNzh46Ixy8AtVy3mHTdjNkp6DDic=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=RsCmziqVUticNS68QSUKws2DrO/UoBxa18Xihwt7iTe2TWPIwRFs2LZFzAuuc81rf
-         TgtkRW1ijozgN/gAv2RBqRE4lX95WRbLSiduik0gDhQnofP8Qw2TL36s8p3AloT1bt
-         cHuoPTE1ia1FG49S/gVjrWY+89+JmgV+BNKG4WRs=
-Subject: Re: [PATCH v4 01/10] IMA: Defined an IMA hook to measure keys on key
- create or update
-To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
-        matthewgarrett@google.com, sashal@kernel.org,
-        jamorris@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191106190116.2578-1-nramas@linux.microsoft.com>
- <20191106190116.2578-2-nramas@linux.microsoft.com>
- <1573080189.5028.313.camel@linux.ibm.com>
- <c838a233-28fb-cad2-4694-18366c2643a4@linux.microsoft.com>
- <1573098037.5028.325.camel@linux.ibm.com>
- <7ce84aa0-729e-c58e-f16a-25490b4e336d@linux.microsoft.com>
- <1573159988.5028.400.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <f45593ae-823e-6d61-d14c-20726bd8cacc@linux.microsoft.com>
-Date:   Thu, 7 Nov 2019 13:12:31 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1731507AbfKHJml (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 8 Nov 2019 04:42:41 -0500
+Received: from ozlabs.org ([203.11.71.1]:53119 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731436AbfKHJmj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 8 Nov 2019 04:42:39 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 478b0W3jgtz9sP6;
+        Fri,  8 Nov 2019 20:42:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1573206156;
+        bh=HX/zf896+L+aLj5O52hjw0t0TJACu18gwzubsdQDKao=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=fR/E8RyIIV9SH5jJ24k4CkSnV7QgtDW3LJ+kkvk99VO/lnDNUOeEMuzs+17FqtD9s
+         f9aDOFogdkIoR66y2NBPqigmk+WXxeltzF0G18vpZNKTHgjj1tVXNfIl4qcwr49R+4
+         KjvsjjfYuOPp1jNkkvlHTM308O3ZfX5yO6V74oyTLvNWwFqPkL1vDIlRqjih0EXEeZ
+         /YnjCKOb7FacQDI7/ZRvygb/VyPh+EZRIvOhLR9gsJ9Jp8PPUWb//aUfqzafQDh4vo
+         roR1lEI0zAvgko5ZtaCyObtNxgeQDkeADjto2j3KY+ZDFRFBaBnwMwY+aVCteqyxZ1
+         JhwFXFnfFOOPw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Eric Richter <erichte@linux.ibm.com>, linuxppc-dev@ozlabs.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Nayna Jain <nayna@linux.ibm.com>
+Subject: Re: [PATCH v7 4/4] powerpc: load firmware trusted keys/hashes into kernel keyring
+In-Reply-To: <20191107042205.13710-5-erichte@linux.ibm.com>
+References: <20191107042205.13710-1-erichte@linux.ibm.com> <20191107042205.13710-5-erichte@linux.ibm.com>
+Date:   Fri, 08 Nov 2019 20:42:26 +1100
+Message-ID: <87eeyi4scd.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-In-Reply-To: <1573159988.5028.400.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/7/19 12:53 PM, Mimi Zohar wrote:
+Eric Richter <erichte@linux.ibm.com> writes:
+> From: Nayna Jain <nayna@linux.ibm.com>
+>
+> The keys used to verify the Host OS kernel are managed by firmware as
+> secure variables. This patch loads the verification keys into the .platform
+> keyring and revocation hashes into .blacklist keyring. This enables
+> verification and loading of the kernels signed by the boot time keys which
+> are trusted by firmware.
+>
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Eric Richter <erichte@linux.ibm.com>
+> ---
+>  arch/powerpc/Kconfig                          |  1 +
+>  security/integrity/Kconfig                    |  8 ++
+>  security/integrity/Makefile                   |  4 +-
+>  .../integrity/platform_certs/load_powerpc.c   | 98 +++++++++++++++++++
+>  4 files changed, 110 insertions(+), 1 deletion(-)
+>  create mode 100644 security/integrity/platform_certs/load_powerpc.c
+>
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index cabc091f3fe1..498967a5ef4e 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -939,6 +939,7 @@ config PPC_SECURE_BOOT
+>  	bool
+>  	depends on PPC_POWERNV
+>  	depends on IMA_ARCH_POLICY
+> +	select LOAD_PPC_KEYS
 
->>
->> The measurement decision is not based on whether the keyring is a
->> trusted one or an untrusted one. As long as the IMA policy allows
->> (through the "keyrings=" option) the key will be measured.
-> 
-> We should be able to measure all keys being loaded onto any keyring or
-> onto a specific "keyring=".   This shouldn't be any different than any
-> other policy rule.  Once you have this basic feature working, you
-> would address loading keys during early boot.
-Perfect - that's exactly how I have implemented it right now. Will 
-continue to test it.
+This gave me a warning:
 
->> Do you want only trusted keyrings to be allowed in the measurement?
->> In my opinion, that decision should be deferred to whoever is setting up
->> the IMA policy.
-> 
-> Right, but it shouldn't be limited to just "trusted" keyrings.  This
-> way you can first test loading keys onto any keyring.
-Thank you.
+WARNING: unmet direct dependencies detected for LOAD_PPC_KEYS
+  Depends on [n]: INTEGRITY [=y] && INTEGRITY_PLATFORM_KEYRING [=n] && PPC_SECURE_BOOT [=y]
+  Selected by [y]:
+  - PPC_SECURE_BOOT [=y] && PPC_POWERNV [=y] && IMA_ARCH_POLICY [=y]
 
-> Queuing the keys should be independent of measuring the keys.
->   Initially you would start with just measuring the key.  From a high
-> level it would look like:
-> 
->      ima_post_key_create_or_update(...)
->      {
->         "measure key based on
->      policy(key, keyring, ...)"
->      }
-> 
-> This requires the IMA "keyring=" policy option support be defined
-> first.
-> 
-> Subsequently you would add key queuing support, and then update
-> ima_post_key_create_or_update().  It would look like:
-> 
->          ima_post_key_create_or_update(...)
->          {
->              if (custom policy is loaded)
->                 "measure key based on policy(key, keyring, ...)"
->              else
->                  "queue key(key, keyring)"
->          }
-> 
-> Mimi
+I think you should probably just drop the select ..
 
-Yes - I have the above change working. Will continue testing.
+> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+> index 0bae6adb63a9..26abee23e4e3 100644
+> --- a/security/integrity/Kconfig
+> +++ b/security/integrity/Kconfig
+> @@ -72,6 +72,14 @@ config LOAD_IPL_KEYS
+>         depends on S390
+>         def_bool y
+>  
+> +config LOAD_PPC_KEYS
+> +	bool "Enable loading of platform and blacklisted keys for POWER"
+> +	depends on INTEGRITY_PLATFORM_KEYRING
+> +	depends on PPC_SECURE_BOOT
+> +	help
+> +	  Enable loading of keys to the .platform keyring and blacklisted
+> +	  hashes to the .blacklist keyring for powerpc based platforms.
 
-thanks,
-  -lakshmi
+And instead make this default y, if you think it should be enabled by
+default when its prerequisites are met.
+
+cheers
