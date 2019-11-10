@@ -2,237 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3C0F60F0
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Nov 2019 20:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDC3F67DB
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 Nov 2019 08:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbfKITBE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 9 Nov 2019 14:01:04 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27208 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726730AbfKITBD (ORCPT
+        id S1726582AbfKJH0R (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 10 Nov 2019 02:26:17 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:36155 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725836AbfKJH0R (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 9 Nov 2019 14:01:03 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id xA9Iv03Q050484
-        for <linux-integrity@vger.kernel.org>; Sat, 9 Nov 2019 14:01:02 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2w5smwetub-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Sat, 09 Nov 2019 14:01:02 -0500
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <nayna@linux.ibm.com>;
-        Sat, 9 Nov 2019 19:01:00 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Sat, 9 Nov 2019 19:00:56 -0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xA9J0JwL38207828
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 9 Nov 2019 19:00:19 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 98FC552050;
-        Sat,  9 Nov 2019 19:00:54 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.40.192.65])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 20AA85204E;
-        Sat,  9 Nov 2019 19:00:52 +0000 (GMT)
-From:   Nayna Jain <nayna@linux.ibm.com>
-To:     linuxppc-dev@ozlabs.org, linux-efi@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: [PATCH v8 4/4] powerpc: load firmware trusted keys/hashes into kernel keyring
-Date:   Sat,  9 Nov 2019 13:00:32 -0600
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191109190032.96259-1-nayna@linux.ibm.com>
-References: <20191109190032.96259-1-nayna@linux.ibm.com>
+        Sun, 10 Nov 2019 02:26:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1573370776;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YkMhB0wE6t3nkAH0JSMv/COaSrrNN/Kr0CPzL2/Lqa4=;
+        b=eQAroHuKHUqXB93Rqr2GiBk6p0IiJ/+wCVLYh9GiJ9VbvMrItUuEMKxc2GL71XaDNgvfMJ
+        Hz8sSxm4WoCNStaB8bz5Msdsv9anp6DTP9+568eOL7YHJC2axtqgabgvVrtMKcP+5VAWmA
+        ugvmTp7ErJYG6HjCGcTTb7ykDJ13jN0=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-243-BrkHPbZbO8G65m3roEj0IQ-1; Sun, 10 Nov 2019 02:26:15 -0500
+Received: by mail-yb1-f199.google.com with SMTP id z1so9301289ybn.16
+        for <linux-integrity@vger.kernel.org>; Sat, 09 Nov 2019 23:26:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=YkMhB0wE6t3nkAH0JSMv/COaSrrNN/Kr0CPzL2/Lqa4=;
+        b=HYE9TF/r5xTkFBLjEU4BYskhy1C0ptjqmWk2IGyesvTTFjFnUL3ZogstN9gTVBnZ73
+         yiTN7Huo7m1+q+JcWWde7fEl9oN9ywZwLNK8kIMJrgpkWYk1IlP+DQGFMZ5TpHg2RTUs
+         MPD97hRuHNvWV9rF+so1Yf/XrfmdBzGg9TgwA1igh1AYErtqCndOb83Z119QPq1tiv0h
+         AzhsvOpblm5SOKbPxDhku1H2T0UDgPLOmPH6z+HDIKBvRrLa76Z4I64ro9ySdoLIfLd7
+         wuwUjbqzsN2ONRsBmzvLY+6T13v+g1XgbLLhCinFYLJMG78HzMi//+mT+Rh1/P4ObuaA
+         mIog==
+X-Gm-Message-State: APjAAAVGdI5FoHPh13C+rQb/smKE5HlCYR4estO+FHoIxom/sCEpsqKy
+        CAkB3ZItbjkqkYSiUeuasNavU5M7P+0ytn4vPpPhbofK6RQNr4A2fxvKzvkNG7U9bVqscuDd71s
+        JsGMZuz75WNMe4KDAW3xQpZVogOak
+X-Received: by 2002:a25:ca17:: with SMTP id a23mr16289907ybg.385.1573370774510;
+        Sat, 09 Nov 2019 23:26:14 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyn8U76vTyiUtMFvG11E65EEDEs3Mg26aIC27ez7gXsTP4qa06IjAr5gHBn2Vzj8ofAYu1Zmg==
+X-Received: by 2002:a25:ca17:: with SMTP id a23mr16289898ybg.385.1573370774239;
+        Sat, 09 Nov 2019 23:26:14 -0800 (PST)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id b199sm12299949ywh.23.2019.11.09.23.26.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Nov 2019 23:26:13 -0800 (PST)
+Date:   Sun, 10 Nov 2019 00:26:11 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Christian Bundy <christianbundy@fraction.io>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org
+Subject: Re: PROBLEM: TPM bug causes suspend to turn off device
+Message-ID: <20191110072611.2k6tjt4geiq2rqol@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+References: <a60dadce-3650-44ce-8785-2f737ab9b993@www.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19110919-0016-0000-0000-000002C23D10
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19110919-0017-0000-0000-00003323C7BD
-Message-Id: <20191109190032.96259-5-nayna@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-09_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1910280000 definitions=main-1911090193
+In-Reply-To: <a60dadce-3650-44ce-8785-2f737ab9b993@www.fastmail.com>
+X-MC-Unique: BrkHPbZbO8G65m3roEj0IQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The keys used to verify the Host OS kernel are managed by firmware as
-secure variables. This patch loads the verification keys into the .platform
-keyring and revocation hashes into .blacklist keyring. This enables
-verification and loading of the kernels signed by the boot time keys which
-are trusted by firmware.
-
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Eric Richter <erichte@linux.ibm.com>
----
- security/integrity/Kconfig                    |  9 ++
- security/integrity/Makefile                   |  4 +-
- .../integrity/platform_certs/load_powerpc.c   | 98 +++++++++++++++++++
- 3 files changed, 110 insertions(+), 1 deletion(-)
- create mode 100644 security/integrity/platform_certs/load_powerpc.c
-
-diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-index 0bae6adb63a9..71f0177e8716 100644
---- a/security/integrity/Kconfig
-+++ b/security/integrity/Kconfig
-@@ -72,6 +72,15 @@ config LOAD_IPL_KEYS
-        depends on S390
-        def_bool y
- 
-+config LOAD_PPC_KEYS
-+	bool "Enable loading of platform and blacklisted keys for POWER"
-+	depends on INTEGRITY_PLATFORM_KEYRING
-+	depends on PPC_SECURE_BOOT
-+	default y
-+	help
-+	  Enable loading of keys to the .platform keyring and blacklisted
-+	  hashes to the .blacklist keyring for powerpc based platforms.
-+
- config INTEGRITY_AUDIT
- 	bool "Enables integrity auditing support "
- 	depends on AUDIT
-diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-index 351c9662994b..7ee39d66cf16 100644
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -14,6 +14,8 @@ integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
- 				      platform_certs/load_uefi.o \
- 				      platform_certs/keyring_handler.o
- integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
--
-+integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
-+                                     platform_certs/load_powerpc.o \
-+                                     platform_certs/keyring_handler.o
- obj-$(CONFIG_IMA)			+= ima/
- obj-$(CONFIG_EVM)			+= evm/
-diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
-new file mode 100644
-index 000000000000..99ddc2ed59e6
---- /dev/null
-+++ b/security/integrity/platform_certs/load_powerpc.c
-@@ -0,0 +1,98 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 IBM Corporation
-+ * Author: Nayna Jain
-+ *
-+ *      - loads keys and hashes stored and controlled by the firmware.
-+ */
-+#include <linux/kernel.h>
-+#include <linux/sched.h>
-+#include <linux/cred.h>
-+#include <linux/err.h>
-+#include <linux/slab.h>
-+#include <linux/of.h>
-+#include <asm/secure_boot.h>
-+#include <asm/secvar.h>
-+#include "keyring_handler.h"
-+
-+/*
-+ * Get a certificate list blob from the named secure variable.
-+ */
-+static __init void *get_cert_list(u8 *key, unsigned long keylen, uint64_t *size)
-+{
-+	int rc;
-+	void *db;
-+
-+	rc = secvar_ops->get(key, keylen, NULL, size);
-+	if (rc) {
-+		pr_err("Couldn't get size: %d\n", rc);
-+		return NULL;
-+	}
-+
-+	db = kmalloc(*size, GFP_KERNEL);
-+	if (!db)
-+		return NULL;
-+
-+	rc = secvar_ops->get(key, keylen, db, size);
-+	if (rc) {
-+		kfree(db);
-+		pr_err("Error reading %s var: %d\n", key, rc);
-+		return NULL;
-+	}
-+
-+	return db;
-+}
-+
-+/*
-+ * Load the certs contained in the keys databases into the platform trusted
-+ * keyring and the blacklisted X.509 cert SHA256 hashes into the blacklist
-+ * keyring.
-+ */
-+static int __init load_powerpc_certs(void)
-+{
-+	void *db = NULL, *dbx = NULL;
-+	uint64_t dbsize = 0, dbxsize = 0;
-+	int rc = 0;
-+	struct device_node *node;
-+
-+	if (!secvar_ops)
-+		return -ENODEV;
-+
-+	/* The following only applies for the edk2-compat backend.
-+	 * Return early if it is not set.
-+	 */
-+
-+	node = of_find_compatible_node(NULL, NULL, "ibm,edk2-compat-v1");
-+	if (!node)
-+		return -ENODEV;
-+
-+	/* Get db, and dbx.  They might not exist, so it isn't
-+	 * an error if we can't get them.
-+	 */
-+	db = get_cert_list("db", 3, &dbsize);
-+	if (!db) {
-+		pr_err("Couldn't get db list from firmware\n");
-+	} else {
-+		rc = parse_efi_signature_list("powerpc:db", db, dbsize,
-+					      get_handler_for_db);
-+		if (rc)
-+			pr_err("Couldn't parse db signatures: %d\n", rc);
-+		kfree(db);
-+	}
-+
-+	dbx = get_cert_list("dbx", 4,  &dbxsize);
-+	if (!dbx) {
-+		pr_info("Couldn't get dbx list from firmware\n");
-+	} else {
-+		rc = parse_efi_signature_list("powerpc:dbx", dbx, dbxsize,
-+					      get_handler_for_dbx);
-+		if (rc)
-+			pr_err("Couldn't parse dbx signatures: %d\n", rc);
-+		kfree(dbx);
-+	}
-+
-+	of_node_put(node);
-+
-+	return rc;
-+}
-+late_initcall(load_powerpc_certs);
--- 
-2.20.1
+Jarkko, should there be tpm_chip_start/tpm_chip_stop calls around
+the tpm1_getcap calls in tpm1_get_timeouts?
 
