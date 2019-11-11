@@ -2,41 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD43F82E0
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Nov 2019 23:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92ECAF8308
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Nov 2019 23:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbfKKW35 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 11 Nov 2019 17:29:57 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:50332 "EHLO
+        id S1727630AbfKKWhl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 11 Nov 2019 17:37:41 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:53084 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726877AbfKKW35 (ORCPT
+        with ESMTP id S1726912AbfKKWhl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 11 Nov 2019 17:29:57 -0500
+        Mon, 11 Nov 2019 17:37:41 -0500
 Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 903CE20B7192;
-        Mon, 11 Nov 2019 14:29:56 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 903CE20B7192
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6858120B7192;
+        Mon, 11 Nov 2019 14:37:40 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6858120B7192
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1573511396;
-        bh=Lx7iits91CkNuBqZLd20zMr4uyVVjAzL/Xch/h41f5Y=;
+        s=default; t=1573511860;
+        bh=JAJ429uDrlDNbZDkeSdCYcoCvf5POqtncvJncujgjRA=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=nWiO84SaocrRuLAxT31uph/FEZblHnCD1LrQAYf0Tp8VnZJqcP2IoqCFkHPAdKThU
-         PcbK2c9WbUxPfU+KRBQvDod7ake+pF2Aa43G0HOMQX7FhJgWfjNmiq+IymA9/gj+Rz
-         bn+ePz+A16Hl+1yd1mENR6WKby+RQmdceiaZ6DnM=
-Subject: Re: [PATCH] ima: avoid appraise error for hash calc interrupt
-To:     Patrick Callaghan <patrickc@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
+        b=pEqqdmWeWwca6el82Y7BDyoW0kZAMB8in5gjKJPT2x1CG6HOBn/9RiHD4x8RTtit9
+         K/rXdmeJTfLfnjR4hDXzrEYWmSGGTUNOl5XZrT/ui95vcOrJQDlI/H1v2sQp5mjse3
+         rjQ+HO3OErxJ3Tonv+3R/6GUHlKCF/fQZPMQopUA=
+Subject: Re: [PATCH v9 0/4] powerpc: expose secure variables to the kernel and
+ userspace
+To:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>
-References: <20191111192348.30535-1-patrickc@linux.ibm.com>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>
+References: <1573441836-3632-1-git-send-email-nayna@linux.ibm.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <e3f520ce-a290-206d-8097-b852123357ca@linux.microsoft.com>
-Date:   Mon, 11 Nov 2019 14:29:52 -0800
+Message-ID: <216572e5-d8c6-f181-3ec0-b4a840f20f46@linux.microsoft.com>
+Date:   Mon, 11 Nov 2019 14:37:40 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191111192348.30535-1-patrickc@linux.ibm.com>
+In-Reply-To: <1573441836-3632-1-git-send-email-nayna@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -45,26 +57,35 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/11/19 11:23 AM, Patrick Callaghan wrote:
+On 11/10/19 7:10 PM, Nayna Jain wrote:
 
-> -		if (rbuf_len == 0)
-> +		if (rbuf_len == 0) {	/* unexpected EOF */
-> +			rc = -EINVAL;
->   			break;
-> +		}
->   		offset += rbuf_len;
+Hi Nayna,
 
-Should there be an additional check to validate that (offset + rbuf_len) 
-is less than i_size before calling cypto_shash_update (since rbuf_len is 
-one of the parameters for this call)?
+> In order to verify the OS kernel on PowerNV systems, secure boot requires
+> X.509 certificates trusted by the platform. These are stored in secure
+> variables controlled by OPAL, called OPAL secure variables. In order to
+> enable users to manage the keys, the secure variables need to be exposed
+> to userspace.
+Are you planning to split the patches in this patch set into smaller 
+chunks so that it is easier to code review and also perhaps make it 
+easier when merging the changes?
 
-                if ((rbuf_len == 0) || (offset + rbuf_len >= i_size)) {
-                         rc = -EINVAL;
-                         break;
-                }
-                offset += rbuf_len;
+Just a suggestion - but if, folks familiar with this code base don't 
+have any objections, please feel free to ignore my comment.
 
->   	       rc = crypto_shash_update(shash, rbuf, rbuf_len);
+Patch #1
+  1, opal-api.h which adds the #defines  OPAL_SECVAR_ and the API signature.
+  2, secvar.h then adds secvar_operations struct
+  3, powerpc/kernel for the Interface definitions
+  4, powernv/opal-secvar.c for the API implementations
+  5, powernv/opal-call.c for the API calls
+  6, powernv/opal.c for the secvar init calls.
 
+Patch #2
+1, Definitions of attribute functions like backend_show, size_show, etc.
+2, secvar_sysfs_load
+3, secvar_sysfs_init
+4, secvar_sysfs_exit
+
+thanks,
   -lakshmi
-
