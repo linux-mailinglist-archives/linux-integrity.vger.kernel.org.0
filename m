@@ -2,76 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCABF85F3
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2019 02:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85975F8607
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2019 02:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726923AbfKLBVE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 11 Nov 2019 20:21:04 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54609 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726906AbfKLBVE (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 11 Nov 2019 20:21:04 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Bqgx1Ywjz9sP4;
-        Tue, 12 Nov 2019 12:21:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1573521661;
-        bh=F9ZI7aJXVRSlCItRZVrAQItH8rcNwZbNz7XhEYGd5MM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=MoSZd7gInPCPqS8Y0iT98x1HK1vNNhVr/zZB4JiXZjLV1BMkNQT13BWWbUIqA0zBO
-         JDFYy4EazB84GH1G6G2PPmoRnt0K9ChPMSxwpRYUbhePPcLg2K+M9sswNV1nyfWvTI
-         Xiid+IBG0a/bOQycR7OvXIxjUmVwYErB+vS3lX5gZDZLOtkVAEdlpk1077UIzTr0z6
-         GCiinP46ZWqf+B8+TrbDVVVpiaGIaZmTjGi0PuBExuFganVMoBm9VcqB6Xd+K6J74z
-         TaxZH44Ms9pe5myYbyUf7AMTY7fv1Bd6UIx9AqhJkeRwsRLvKASWbtQuCphrm0eYQx
-         03lK0YzT3KyTg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garret <matthew.garret@nebula.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Claudio Carvalho <cclaudio@linux.ibm.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Eric Ricther <erichte@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>
-Subject: Re: [PATCH v9 0/4] powerpc: expose secure variables to the kernel and userspace
-In-Reply-To: <216572e5-d8c6-f181-3ec0-b4a840f20f46@linux.microsoft.com>
-References: <1573441836-3632-1-git-send-email-nayna@linux.ibm.com> <216572e5-d8c6-f181-3ec0-b4a840f20f46@linux.microsoft.com>
-Date:   Tue, 12 Nov 2019 12:21:00 +1100
-Message-ID: <87sgmt3n5v.fsf@mpe.ellerman.id.au>
+        id S1726915AbfKLB0H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 11 Nov 2019 20:26:07 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7012 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726924AbfKLB0H (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 11 Nov 2019 20:26:07 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id xAC1HKno023981;
+        Mon, 11 Nov 2019 20:25:50 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2w7jpagevg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Nov 2019 20:25:50 -0500
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id xAC1JJbc027854;
+        Mon, 11 Nov 2019 20:25:49 -0500
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2w7jpagevb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Nov 2019 20:25:49 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xAC1LAHd026975;
+        Tue, 12 Nov 2019 01:25:53 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01wdc.us.ibm.com with ESMTP id 2w5n36afqv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Nov 2019 01:25:52 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xAC1PkUs50725354
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Nov 2019 01:25:46 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1AF6AC05B;
+        Tue, 12 Nov 2019 01:25:46 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AF725AC059;
+        Tue, 12 Nov 2019 01:25:41 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Nov 2019 01:25:41 +0000 (GMT)
+Subject: Re: [PATCH v1 3/5] char: tpm: rewrite "tpm_tis_req_canceled()"
+To:     amirmizi6@gmail.comg, Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
+        oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, peterhuewe@gmx.de,
+        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        ayna@linux.vnet.ibm.com, Dan.Morav@nuvoton.com,
+        oren.tanami@nuvoton.com, shmulik.hagar@nuvoton.com,
+        amir.mizinski@nuvoton.com
+References: <20191110162137.230913-1-amirmizi6@gmail.com>
+ <20191110162137.230913-4-amirmizi6@gmail.com>
+ <20191110180010.xyvv4gf6jiqyrac3@cantor>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <3214005f-740b-46a8-7c0b-db96b63cd6f3@linux.ibm.com>
+Date:   Mon, 11 Nov 2019 20:25:40 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20191110180010.xyvv4gf6jiqyrac3@cantor>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-11_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1910280000 definitions=main-1911120009
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
-> On 11/10/19 7:10 PM, Nayna Jain wrote:
+On 11/10/19 1:00 PM, Jerry Snitselaar wrote:
+> On Sun Nov 10 19, amirmizi6@gmail.com wrote:
+>> From: Amir Mizinski <amirmizi6@gmail.com>
+>>
+>> using this function while read/write data resulted in aborted operation.
+>> after investigating according to TCG TPM Profile (PTP) Specifications,
+>> i found cancel should happen only if TPM_STS.commandReady bit is lit
+>> and couldn't find a case when the current condition is valid.
+>> also only cmdReady bit need to be compared instead of the full lower 
+>> status register byte.
+>>
+>> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+>> ---
+>> drivers/char/tpm/tpm_tis_core.c | 12 +-----------
+>> 1 file changed, 1 insertion(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm_tis_core.c 
+>> b/drivers/char/tpm/tpm_tis_core.c
+>> index ce7f8a1..9016f06 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.c
+>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>> @@ -627,17 +627,7 @@ static int probe_itpm(struct tpm_chip *chip)
+>>
+>> static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+>> {
+>> -    struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>> -
+>> -    switch (priv->manufacturer_id) {
+>> -    case TPM_VID_WINBOND:
+>> -        return ((status == TPM_STS_VALID) ||
+>> -            (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
+>> -    case TPM_VID_STM:
+>> -        return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
 >
-> Hi Nayna,
->
->> In order to verify the OS kernel on PowerNV systems, secure boot requires
->> X.509 certificates trusted by the platform. These are stored in secure
->> variables controlled by OPAL, called OPAL secure variables. In order to
->> enable users to manage the keys, the secure variables need to be exposed
->> to userspace.
-> Are you planning to split the patches in this patch set into smaller 
-> chunks so that it is easier to code review and also perhaps make it 
-> easier when merging the changes?
+> Stefan were these cases you found that were deviating from the spec? 
+> Wondering
+> if dropping these will cause issues for these devices.
 
-I don't think splitting them would add any value. They're already split
-into the firmware specific bits (patch 1), and the sysfs parts (patch
-2), which is sufficient for me.
 
-cheers
+I believe these devices needed special handling of the status register 
+as they didn't behave as the 'other' devices, so I would expect issues.
+
+    Stefan
+
