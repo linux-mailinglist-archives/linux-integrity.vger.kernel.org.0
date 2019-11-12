@@ -2,122 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF9DF9A9A
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2019 21:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADEFF9AA0
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2019 21:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbfKLU0Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Nov 2019 15:26:25 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:37003 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726896AbfKLU0Z (ORCPT
+        id S1726923AbfKLU1j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Nov 2019 15:27:39 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15672 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726388AbfKLU1j (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Nov 2019 15:26:25 -0500
-Received: by mail-qt1-f193.google.com with SMTP id g50so21241131qtb.4
-        for <linux-integrity@vger.kernel.org>; Tue, 12 Nov 2019 12:26:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WAHHo3eYG/GlHJEoP+Cppnso1TeHYAoN/ZX4SH504bY=;
-        b=RGusDddQfS3B9UAv0zCdjipMrsC5BcvYhv4a5HuXnreJeUQV7JYI9AXkF+iTNPfA6O
-         mfNZ3aFbbmzZPc4gLTj0bMpDHKLs7ou7Y4mrJV7KqYg6T/8v3GBxNbJki1pTlQfP1RhP
-         vL6yy2SgOmBCVWqt4oae4acbzVSIH3XhBnVQrj+VLEXD9KeqgJFJsPGCuKujM8zxFyW7
-         P+VJYNyeVrPPgxfE0ONH61jM12DoFvzwDTndIOKZHKqShdO12L5VsRvEeZjmkW5nv/RM
-         nRifeoYAdtjIps4uQw0DXbQGIs6yK5YO4yrjSh+JELD9gnUemiPpFEo1LPehwJRN3jdL
-         TRyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WAHHo3eYG/GlHJEoP+Cppnso1TeHYAoN/ZX4SH504bY=;
-        b=d42+i3ZJ2AT179kU+GziqA1bT1NPoU17H6evgDCmLdRmEwG+WY5RbGhOElZfEV6wWx
-         IcHhjneNBZG0fCeDMnXgqT9iXjzXkz+OCykqjVycQVja0O4ad6A0eYunSb+/wD36Qb42
-         RVRXupeVZCYFPVqEWChFVeFvF+Dk5pddF2rudiCzDKy4H9T90z/fJEPTUO/IMZP547pZ
-         6gwNkWSXLpQF69ejsUxAYPbZh5eatI2pW2o8ucBAOrLiNo7aKsfzDvQP1O1jQGS8gO8l
-         fBM3VV2tbVF1pQM2nN1OiTV1zeeT88Hsx1MUwUMXRcDrdI08Dex8wXwIKDtGkCplwlmV
-         W0RQ==
-X-Gm-Message-State: APjAAAWqnCauJ6xHysMF17qjDmGKnYZcK20eYoBo4bJyG9HSXqktYI2t
-        Q4p1MgwzMFD2tMcvYLPm0ZrhsA==
-X-Google-Smtp-Source: APXvYqxEXOzL0XqlH0Yt6OoI2swlKz89LpzD+J2fHHgpoaiFOE3utI9fW8vLljz1XfxUubAnDMiwaw==
-X-Received: by 2002:ac8:6f3a:: with SMTP id i26mr5541601qtv.344.1573590384226;
-        Tue, 12 Nov 2019 12:26:24 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-180.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.180])
-        by smtp.gmail.com with ESMTPSA id n185sm9341472qkd.32.2019.11.12.12.26.23
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 12 Nov 2019 12:26:23 -0800 (PST)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1iUck3-0003nR-76; Tue, 12 Nov 2019 16:26:23 -0400
-Date:   Tue, 12 Nov 2019 16:26:23 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        linux-stable@vger.kernel.org,
-        Christian Bundy <christianbundy@fraction.io>
-Subject: Re: [PATCH] tpm_tis: turn on TPM before calling tpm_get_timeouts
-Message-ID: <20191112202623.GB5584@ziepe.ca>
-References: <20191111233418.17676-1-jsnitsel@redhat.com>
- <20191112200328.GA11213@linux.intel.com>
- <CALzcddtMiSzhgZv5R6xqb1Amyk7cdY4mJdYDS86KRxH4wR_EGA@mail.gmail.com>
+        Tue, 12 Nov 2019 15:27:39 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id xACKQcJY111776;
+        Tue, 12 Nov 2019 15:27:35 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2w82qsa1k1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Nov 2019 15:27:34 -0500
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id xACKQmAE112557;
+        Tue, 12 Nov 2019 15:27:32 -0500
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2w82qsa1jj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Nov 2019 15:27:32 -0500
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xACKQO0Y023436;
+        Tue, 12 Nov 2019 20:27:31 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma05wdc.us.ibm.com with ESMTP id 2w5n369w0t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Nov 2019 20:27:31 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xACKRUnQ48366078
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Nov 2019 20:27:30 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9DFA2136051;
+        Tue, 12 Nov 2019 20:27:30 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1FB0E136053;
+        Tue, 12 Nov 2019 20:27:29 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Nov 2019 20:27:29 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     linux-integrity@vger.kernel.org, jsnitsel@redhat.com,
+        jarkko.sakkinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH] tpm_tis: Move setting of TPM_CHIP_FLAG_IRQ into tpm_tis_probe_irq_single
+Date:   Tue, 12 Nov 2019 15:27:25 -0500
+Message-Id: <20191112202725.3009814-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALzcddtMiSzhgZv5R6xqb1Amyk7cdY4mJdYDS86KRxH4wR_EGA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-12_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1910280000 definitions=main-1911120174
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Nov 12, 2019 at 01:23:33PM -0700, Jerry Snitselaar wrote:
-> On Tue, Nov 12, 2019 at 1:03 PM Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Mon, Nov 11, 2019 at 04:34:18PM -0700, Jerry Snitselaar wrote:
-> > > With power gating moved out of the tpm_transmit code we need
-> > > to power on the TPM prior to calling tpm_get_timeouts.
-> > >
-> > > Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > Cc: Peter Huewe <peterhuewe@gmx.de>
-> > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: linux-stable@vger.kernel.org
-> > > Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
-> > > Reported-by: Christian Bundy <christianbundy@fraction.io>
-> > > Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > >  drivers/char/tpm/tpm_tis_core.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> > > index 270f43acbb77..cb101cec8f8b 100644
-> > > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > > @@ -974,13 +974,14 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
-> > >                * to make sure it works. May as well use that command to set the
-> > >                * proper timeouts for the driver.
-> > >                */
-> > > +             tpm_chip_start(chip);
-> > >               if (tpm_get_timeouts(chip)) {
-> > >                       dev_err(dev, "Could not get TPM timeouts and durations\n");
-> > >                       rc = -ENODEV;
-> > > +                     tpm_stop_chip(chip);
-> > >                       goto out_err;
-> > >               }
-> >
-> > Couldn't this call just be removed?
-> >
-> > /Jarkko
-> >
-> 
-> Probably. It will eventually get called when tpm_chip_register
-> happens. I don't know what the reason was for trying it prior to the
-> irq probe.
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-At least tis once needed the timeouts before registration because it
-was issuing TPM commands to complete its setup.
+Move the setting of the TPM_CHIP_FLAG_IRQ for irq probing into
+tpm_tis_probe_irq_single before calling tpm_tis_gen_interrupt.
+This move handles error conditions better that may arise if anything
+before fails in tpm_tis_probe_irq_single.
 
-If timeouts have not been set then no TPM command should be executed.
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Suggested-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+ drivers/char/tpm/tpm_tis_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Jason
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 8af2cee1a762..6b6605890c7d 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -790,6 +790,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+ 		return rc;
+ 
+ 	priv->irq_tested = false;
++	chip->flags |= TPM_CHIP_FLAG_IRQ;
+ 
+ 	/* Generate an interrupt by having the core call through to
+ 	 * tpm_tis_send
+@@ -1060,7 +1061,6 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		}
+ 
+ 		tpm_chip_start(chip);
+-		chip->flags |= TPM_CHIP_FLAG_IRQ;
+ 		if (irq) {
+ 			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
+ 						 irq);
+-- 
+2.14.5
+
