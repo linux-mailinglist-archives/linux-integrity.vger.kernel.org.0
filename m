@@ -2,100 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5557F83D7
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2019 01:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCABF85F3
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2019 02:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbfKLADo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 11 Nov 2019 19:03:44 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:56184 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726985AbfKLADo (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 11 Nov 2019 19:03:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573517023;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bsoa/zduDjdjsB3b7JEy0vJUwhAm1R/rZnjwwyCHBSg=;
-        b=eqlemsebaEDOTyT9rJy/zvl0872dwmqpWi8/ZEiYbRwfmgCOAxE1nbWmyincGWc68KD6jk
-        kyZYhRb+X2QjP33JTPTzYEbwmwbRk/d6vrQIyfoVKXYNG7Znmdd9LwKBgSgzDW5UQA23aa
-        CKqWirpQybQebGnjdZaJgAHQhcO1UIc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-409-DZiGzyTcM0mQ0OcBOivYAg-1; Mon, 11 Nov 2019 19:03:40 -0500
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726923AbfKLBVE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 11 Nov 2019 20:21:04 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54609 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726906AbfKLBVE (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 11 Nov 2019 20:21:04 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F2832800D49;
-        Tue, 12 Nov 2019 00:03:38 +0000 (UTC)
-Received: from cantor.redhat.com (ovpn-116-116.phx2.redhat.com [10.3.116.116])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 86A8E60852;
-        Tue, 12 Nov 2019 00:03:38 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Christian Bundy <christianbundy@fraction.io>
-Subject: [PATCH v2] tpm_tis: turn on TPM before calling tpm_get_timeouts
-Date:   Mon, 11 Nov 2019 17:03:37 -0700
-Message-Id: <20191112000337.18898-1-jsnitsel@redhat.com>
-In-Reply-To: <20191111233418.17676-1-jsnitsel@redhat.com>
-References: <20191111233418.17676-1-jsnitsel@redhat.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Bqgx1Ywjz9sP4;
+        Tue, 12 Nov 2019 12:21:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1573521661;
+        bh=F9ZI7aJXVRSlCItRZVrAQItH8rcNwZbNz7XhEYGd5MM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=MoSZd7gInPCPqS8Y0iT98x1HK1vNNhVr/zZB4JiXZjLV1BMkNQT13BWWbUIqA0zBO
+         JDFYy4EazB84GH1G6G2PPmoRnt0K9ChPMSxwpRYUbhePPcLg2K+M9sswNV1nyfWvTI
+         Xiid+IBG0a/bOQycR7OvXIxjUmVwYErB+vS3lX5gZDZLOtkVAEdlpk1077UIzTr0z6
+         GCiinP46ZWqf+B8+TrbDVVVpiaGIaZmTjGi0PuBExuFganVMoBm9VcqB6Xd+K6J74z
+         TaxZH44Ms9pe5myYbyUf7AMTY7fv1Bd6UIx9AqhJkeRwsRLvKASWbtQuCphrm0eYQx
+         03lK0YzT3KyTg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@ozlabs.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garret <matthew.garret@nebula.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Claudio Carvalho <cclaudio@linux.ibm.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Eric Ricther <erichte@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>
+Subject: Re: [PATCH v9 0/4] powerpc: expose secure variables to the kernel and userspace
+In-Reply-To: <216572e5-d8c6-f181-3ec0-b4a840f20f46@linux.microsoft.com>
+References: <1573441836-3632-1-git-send-email-nayna@linux.ibm.com> <216572e5-d8c6-f181-3ec0-b4a840f20f46@linux.microsoft.com>
+Date:   Tue, 12 Nov 2019 12:21:00 +1100
+Message-ID: <87sgmt3n5v.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-MC-Unique: DZiGzyTcM0mQ0OcBOivYAg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-With power gating moved out of the tpm_transmit code we need
-to power on the TPM prior to calling tpm_get_timeouts.
+Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+> On 11/10/19 7:10 PM, Nayna Jain wrote:
+>
+> Hi Nayna,
+>
+>> In order to verify the OS kernel on PowerNV systems, secure boot requires
+>> X.509 certificates trusted by the platform. These are stored in secure
+>> variables controlled by OPAL, called OPAL secure variables. In order to
+>> enable users to manage the keys, the secure variables need to be exposed
+>> to userspace.
+> Are you planning to split the patches in this patch set into smaller 
+> chunks so that it is easier to code review and also perhaps make it 
+> easier when merging the changes?
 
-Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
-Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()=
-")
-Reported-by: Christian Bundy <christianbundy@fraction.io>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
-v2: fix stable cc to correct address
+I don't think splitting them would add any value. They're already split
+into the firmware specific bits (patch 1), and the sysfs parts (patch
+2), which is sufficient for me.
 
- drivers/char/tpm/tpm_tis_core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_cor=
-e.c
-index 270f43acbb77..cb101cec8f8b 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -974,13 +974,14 @@ int tpm_tis_core_init(struct device *dev, struct tpm_=
-tis_data *priv, int irq,
- =09=09 * to make sure it works. May as well use that command to set the
- =09=09 * proper timeouts for the driver.
- =09=09 */
-+=09=09tpm_chip_start(chip);
- =09=09if (tpm_get_timeouts(chip)) {
- =09=09=09dev_err(dev, "Could not get TPM timeouts and durations\n");
- =09=09=09rc =3D -ENODEV;
-+=09=09=09tpm_stop_chip(chip);
- =09=09=09goto out_err;
- =09=09}
-=20
--=09=09tpm_chip_start(chip);
- =09=09chip->flags |=3D TPM_CHIP_FLAG_IRQ;
- =09=09if (irq) {
- =09=09=09tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
---=20
-2.24.0
-
+cheers
