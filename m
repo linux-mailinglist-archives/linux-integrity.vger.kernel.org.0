@@ -2,107 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A12AFF9C68
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2019 22:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2BAF9ED3
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Nov 2019 01:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbfKLVjG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Nov 2019 16:39:06 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59200 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726912AbfKLVjG (ORCPT
+        id S1726910AbfKMACw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Nov 2019 19:02:52 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:51550 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726912AbfKMACt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Nov 2019 16:39:06 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id xACKQcVM080297;
-        Tue, 12 Nov 2019 15:30:53 -0500
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2w820mkshg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Nov 2019 15:30:53 -0500
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xACKUL5v031354;
-        Tue, 12 Nov 2019 20:30:52 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma03wdc.us.ibm.com with ESMTP id 2w5n361vcq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Nov 2019 20:30:52 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xACKUprg32964922
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Nov 2019 20:30:51 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8001FAC05E;
-        Tue, 12 Nov 2019 20:30:51 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 728D9AC059;
-        Tue, 12 Nov 2019 20:30:51 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Nov 2019 20:30:51 +0000 (GMT)
-Subject: Re: question about setting TPM_CHIP_FLAG_IRQ in tpm_tis_core_init
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191112033637.kxotlhm6mtr5irvd@cantor>
- <20191112200703.GB11213@linux.intel.com>
- <20191112201734.sury5nd3cptkckgb@cantor>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <50290fc8-4d22-3eb5-c930-079f8b819a8e@linux.ibm.com>
-Date:   Tue, 12 Nov 2019 15:30:51 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        Tue, 12 Nov 2019 19:02:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1573603368;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mFZNYzU4aq8T7KuOOh7683mZkvSGsdedXb2PwJoCtQ4=;
+        b=LwD23NvnG+Lmyq1AXSYQe28KMn5vIDePVlz6QJaw1vl2gNZaHB/tlPZ3ZTu05knWns8GL6
+        veuzD0CmPDGizWIUbCU5y8Nd4mXysdbI8VD2rOK4H67bNHW+202LTJt9JxBESVaNGWq+w7
+        gT8JdYqTl23YKbsPeVQ6DtL16Pe9Iok=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-284-5EKU7PrLP_mDMrmo4DPU2w-1; Tue, 12 Nov 2019 19:02:47 -0500
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C42CA800EB3;
+        Wed, 13 Nov 2019 00:02:45 +0000 (UTC)
+Received: from cantor.redhat.com (ovpn-116-198.phx2.redhat.com [10.3.116.198])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 401CE64020;
+        Wed, 13 Nov 2019 00:02:45 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        Christian Bundy <christianbundy@fraction.io>
+Subject: [PATCH v3] tpm_tis: turn on TPM before calling tpm_get_timeouts
+Date:   Tue, 12 Nov 2019 17:02:43 -0700
+Message-Id: <20191113000243.16611-1-jsnitsel@redhat.com>
+In-Reply-To: <20191111233418.17676-1-jsnitsel@redhat.com>
+References: <20191111233418.17676-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20191112201734.sury5nd3cptkckgb@cantor>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-12_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1910280000 definitions=main-1911120174
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-MC-Unique: 5EKU7PrLP_mDMrmo4DPU2w-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/12/19 3:17 PM, Jerry Snitselaar wrote:
-> On Tue Nov 12 19, Jarkko Sakkinen wrote:
->> On Mon, Nov 11, 2019 at 08:36:37PM -0700, Jerry Snitselaar wrote:
->>> Question about 1ea32c83c699 ("tpm_tis_core: Set TPM_CHIP_FLAG_IRQ
->>> before probing for interrupts").  Doesn't tpm_tis_send set this flag,
->>> and setting it here in tpm_tis_core_init short circuits what
->>> tpm_tis_send was doing before? There is a bug report of an interrupt
->>> storm from a tpm on a t490s laptop with the Fedora 31 kernel (5.3),
->>> and I'm wondering if this change could cause that. Before they got the
->>> warning about interrupts not working, and using polling instead.
->>
->> Looks like it. Stefan?
->>
->> /Jarkko
->>
->
-> Stefan is right about the condition check at the beginning of 
-> tpm_tis_send.
->
->     if (!(chip->flags & TPM_CHIP_FLAG_IRQ) || priv->irq_tested)
->         return tpm_tis_send_main(chip, buf, len);
->
-> Before his change it would've gone straight to calling
-> tpm_tis_send_main instead of jumping down and doing the irq test, due
-> to the flag not being set. With his change it should now skip this
-> tpm_tis_send_main call when tpm_tis_gen_interrupt is called, and then
-> after that time through tpm_tis_send priv->irq_tested will be set, and
-> the flag should be set as to whether or not irqs were working.
->
-> I should hopefully have access to a t490s in a few days so I can look 
-> at it,
-> and try to figure out what is happening.
->
-I hope the t490s is an outlier. Give the patch I just posted a try.
+With power gating moved out of the tpm_transmit code we need
+to power on the TPM prior to calling tpm_get_timeouts.
 
-     Stefan
+Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()=
+")
+Reported-by: Christian Bundy <christianbundy@fraction.io>
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+v3: call tpm_chip_stop in error path
+v2: fix stable cc to correct address
 
+ drivers/char/tpm/tpm_tis_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_cor=
+e.c
+index 270f43acbb77..806acc666696 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -974,13 +974,14 @@ int tpm_tis_core_init(struct device *dev, struct tpm_=
+tis_data *priv, int irq,
+ =09=09 * to make sure it works. May as well use that command to set the
+ =09=09 * proper timeouts for the driver.
+ =09=09 */
++=09=09tpm_chip_start(chip);
+ =09=09if (tpm_get_timeouts(chip)) {
+ =09=09=09dev_err(dev, "Could not get TPM timeouts and durations\n");
+ =09=09=09rc =3D -ENODEV;
++=09=09=09tpm_chip_stop(chip);
+ =09=09=09goto out_err;
+ =09=09}
+=20
+-=09=09tpm_chip_start(chip);
+ =09=09chip->flags |=3D TPM_CHIP_FLAG_IRQ;
+ =09=09if (irq) {
+ =09=09=09tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
+--=20
+2.24.0
 
