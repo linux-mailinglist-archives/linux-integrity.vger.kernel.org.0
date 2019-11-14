@@ -2,36 +2,36 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 459DCFBE2B
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Nov 2019 04:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1B1FBE37
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Nov 2019 04:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbfKNDMT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Nov 2019 22:12:19 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:48454 "EHLO
+        id S1727122AbfKNDMa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Nov 2019 22:12:30 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:48462 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726528AbfKNDMK (ORCPT
+        with ESMTP id S1726548AbfKNDMK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Wed, 13 Nov 2019 22:12:10 -0500
 Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.159.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5FBDC20B4904;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 863B720B4905;
         Wed, 13 Nov 2019 19:12:09 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5FBDC20B4904
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 863B720B4905
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1573701129;
-        bh=DcjuEGpDue6hzcYPER7yA0s/bwWCNqk95yOKVyIqy7s=;
+        bh=ry+B6JyXbEyIMFjlJbZQDnq31UX3LFYZGc2QxVmtSW4=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=sxfYy0ZM+8fA3PgmgbpQ+/pxtjIdIbWB6zXljPg8GkIpFpgv3vsTWz8RWY7cXe8WX
-         K/8A/1JXdEWTEDKkDsqz2eCRQdpTWv6wjI6UNyLdTPTOhjZuQBAGZMFIOJ12XlT1b9
-         3OR2lpoCCxNYpVP4Tg8+cw7Rhfiqj2z7w2xDAaBo=
+        b=IR4FDGHJjt+AdTzq/RxAjG534S3Q6piFgas7ZyLdJ8PDTHNH/daPqzg7LuciJnoGU
+         3q12d9vZJocy0U91MmeEcHEerlS9H2GfW7aKGIFyVaD6QLJrg50x25Ui3AVGNYf4AJ
+         hmID6amV/gotFJWh84DZXPZrmvuASd6f6sh1VB5A=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, dhowells@redhat.com,
         matthewgarrett@google.com, sashal@kernel.org,
         jamorris@linux.microsoft.com, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v7 2/5] IMA: Define an IMA hook to measure keys
-Date:   Wed, 13 Nov 2019 19:11:59 -0800
-Message-Id: <20191114031202.18012-3-nramas@linux.microsoft.com>
+Subject: [PATCH v7 3/5] KEYS: Call the IMA hook to measure keys
+Date:   Wed, 13 Nov 2019 19:12:00 -0800
+Message-Id: <20191114031202.18012-4-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191114031202.18012-1-nramas@linux.microsoft.com>
 References: <20191114031202.18012-1-nramas@linux.microsoft.com>
@@ -40,88 +40,81 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Measure asymmetric keys used for verifying file signatures,
-certificates, etc.
+Call the IMA hook from key_create_or_update function to measure
+the key when a new key is created or an existing key is updated.
 
-This patch defines a new IMA hook namely ima_post_key_create_or_update()
-to measure asymmetric keys.
-
-The IMA hook is defined in a new file namely ima_asymmetric_keys.c
-which is built only if CONFIG_KEYS is enabled.
+This patch adds the call to the IMA hook from key_create_or_update
+function to measure the key on key create or update.
 
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 ---
- security/integrity/ima/Makefile              |  1 +
- security/integrity/ima/ima_asymmetric_keys.c | 51 ++++++++++++++++++++
- 2 files changed, 52 insertions(+)
- create mode 100644 security/integrity/ima/ima_asymmetric_keys.c
+ include/linux/ima.h | 13 +++++++++++++
+ security/keys/key.c |  7 +++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/security/integrity/ima/Makefile b/security/integrity/ima/Makefile
-index 31d57cdf2421..3c796664be8a 100644
---- a/security/integrity/ima/Makefile
-+++ b/security/integrity/ima/Makefile
-@@ -12,3 +12,4 @@ ima-$(CONFIG_IMA_APPRAISE) += ima_appraise.o
- ima-$(CONFIG_IMA_APPRAISE_MODSIG) += ima_modsig.o
- ima-$(CONFIG_HAVE_IMA_KEXEC) += ima_kexec.o
- obj-$(CONFIG_IMA_BLACKLIST_KEYRING) += ima_mok.o
-+obj-$(CONFIG_KEYS) += ima_asymmetric_keys.o
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-new file mode 100644
-index 000000000000..f6884641a622
---- /dev/null
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2019 Microsoft Corporation
-+ *
-+ * Author: Lakshmi Ramasubramanian (nramas@linux.microsoft.com)
-+ *
-+ * File: ima_asymmetric_keys.c
-+ *       Defines an IMA hook to measure asymmetric keys on key
-+ *       create or update.
-+ */
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 6d904754d858..0af88b781ab6 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -25,6 +25,12 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
+ extern void ima_post_path_mknod(struct dentry *dentry);
+ extern void ima_kexec_cmdline(const void *buf, int size);
+ 
++#ifdef CONFIG_KEYS
++extern void ima_post_key_create_or_update(struct key *keyring,
++					  struct key *key,
++					  unsigned long flags, bool create);
++#endif
 +
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ #ifdef CONFIG_IMA_KEXEC
+ extern void ima_add_kexec_buffer(struct kimage *image);
+ #endif
+@@ -101,6 +107,13 @@ static inline void ima_add_kexec_buffer(struct kimage *image)
+ {}
+ #endif
+ 
++#ifndef CONFIG_KEYS
++static inline void ima_post_key_create_or_update(struct key *keyring,
++						 struct key *key,
++						 unsigned long flags,
++						 bool create) {}
++#endif
 +
-+#include <crypto/public_key.h>
-+#include <keys/asymmetric-type.h>
-+#include "ima.h"
+ #ifdef CONFIG_IMA_APPRAISE
+ extern bool is_ima_appraise_enabled(void);
+ extern void ima_inode_post_setattr(struct dentry *dentry);
+diff --git a/security/keys/key.c b/security/keys/key.c
+index 764f4c57913e..a0f1e7b3b8b9 100644
+--- a/security/keys/key.c
++++ b/security/keys/key.c
+@@ -13,6 +13,7 @@
+ #include <linux/security.h>
+ #include <linux/workqueue.h>
+ #include <linux/random.h>
++#include <linux/ima.h>
+ #include <linux/err.h>
+ #include "internal.h"
+ 
+@@ -936,6 +937,8 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
+ 		goto error_link_end;
+ 	}
+ 
++	ima_post_key_create_or_update(keyring, key, flags, true);
 +
-+/**
-+ * ima_post_key_create_or_update - measure asymmetric keys
-+ * @keyring: keyring to which the key is linked to
-+ * @key: created or updated key
-+ * @flags: key flags
-+ * @create: flag indicating whether the key was created or updated
-+ *
-+ * Keys can only be measured, not appraised.
-+ */
-+void ima_post_key_create_or_update(struct key *keyring, struct key *key,
-+				   unsigned long flags, bool create)
-+{
-+	const struct public_key *pk;
+ 	key_ref = make_key_ref(key, is_key_possessed(keyring_ref));
+ 
+ error_link_end:
+@@ -965,6 +968,10 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
+ 	}
+ 
+ 	key_ref = __key_update(key_ref, &prep);
 +
-+	/* Only asymmetric keys are handled by this hook. */
-+	if (key->type != &key_type_asymmetric)
-+		return;
++	if (!IS_ERR(key_ref))
++		ima_post_key_create_or_update(keyring, key, flags, false);
 +
-+	/* Get the public_key of the given asymmetric key to measure. */
-+	pk = key->payload.data[asym_crypto];
-+
-+	/*
-+	 * keyring->description points to the name of the keyring
-+	 * (such as ".builtin_trusted_keys", ".ima", etc.) to
-+	 * which the given key is linked to.
-+	 *
-+	 * The name of the keyring is passed in the "eventname"
-+	 * parameter to process_buffer_measurement() and is set
-+	 * in the "eventname" field in ima_event_data for
-+	 * the key measurement IMA event.
-+	 */
-+	process_buffer_measurement(pk->key, pk->keylen,
-+				   keyring->description, KEY_CHECK, 0);
-+}
+ 	goto error_free_prep;
+ }
+ EXPORT_SYMBOL(key_create_or_update);
 -- 
 2.17.1
 
