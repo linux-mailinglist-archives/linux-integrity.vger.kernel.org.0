@@ -2,49 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5527FE40B
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2019 18:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF89FE440
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2019 18:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727548AbfKOReN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Nov 2019 12:34:13 -0500
-Received: from mga06.intel.com ([134.134.136.31]:58421 "EHLO mga06.intel.com"
+        id S1725907AbfKORng (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Nov 2019 12:43:36 -0500
+Received: from mga14.intel.com ([192.55.52.115]:15679 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727540AbfKOReN (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Nov 2019 12:34:13 -0500
+        id S1725848AbfKORng (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 15 Nov 2019 12:43:36 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Nov 2019 09:34:12 -0800
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Nov 2019 09:43:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.68,309,1569308400"; 
-   d="scan'208";a="195453275"
+   d="scan'208";a="199269947"
 Received: from sgaffney-mobl3.amr.corp.intel.com (HELO localhost) ([10.252.4.81])
-  by orsmga007.jf.intel.com with ESMTP; 15 Nov 2019 09:34:08 -0800
-Date:   Fri, 15 Nov 2019 19:34:07 +0200
+  by orsmga008.jf.intel.com with ESMTP; 15 Nov 2019 09:43:31 -0800
+Date:   Fri, 15 Nov 2019 19:43:29 +0200
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
 Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-integrity@vger.kernel.org, tglx@linutronix.de,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Philip Tricca <philip.b.tricca@intel.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>
-Subject: Re: [PATCH] tpm: remove tpm_dev_wq_lock
-Message-ID: <20191115173407.GC21300@linux.intel.com>
-References: <20191014193942.GH15552@linux.intel.com>
- <20191028202419.GA7214@linux.intel.com>
- <20191028202637.GB7214@linux.intel.com>
- <20191104143957.onsfuvmwfuvmfuu6@linutronix.de>
- <20191104173709.qqmdiacytyimbqhx@cantor>
- <20191104174450.dlxlgixizej5orqr@linutronix.de>
- <20191104182732.md3t6xbumg53wkcl@cantor>
- <20191107161041.h7pgtlmj5zbi4frs@linutronix.de>
- <20191107183503.GA8418@linux.intel.com>
- <20191114111612.r7los6v7lpmiujcw@linutronix.de>
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        linux-stable@vger.kernel.org,
+        Christian Bundy <christianbundy@fraction.io>
+Subject: Re: [PATCH] tpm_tis: turn on TPM before calling tpm_get_timeouts
+Message-ID: <20191115174329.GA22029@linux.intel.com>
+References: <20191111233418.17676-1-jsnitsel@redhat.com>
+ <20191112200328.GA11213@linux.intel.com>
+ <CALzcddtMiSzhgZv5R6xqb1Amyk7cdY4mJdYDS86KRxH4wR_EGA@mail.gmail.com>
+ <20191112202623.GB5584@ziepe.ca>
+ <CALzcddtse-4bKWaA0+ns-gVKGyQzMrYWS4n1rFpbbhKLb83z7g@mail.gmail.com>
+ <20191114165357.GA11107@linux.intel.com>
+ <20191114165629.GC26068@ziepe.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191114111612.r7los6v7lpmiujcw@linutronix.de>
+In-Reply-To: <20191114165629.GC26068@ziepe.ca>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -52,43 +50,31 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 12:16:12PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2019-11-07 20:35:03 [+0200], Jarkko Sakkinen wrote:
-> > On Thu, Nov 07, 2019 at 05:10:41PM +0100, Sebastian Andrzej Siewior wrote:
-> > > On 2019-11-04 11:27:32 [-0700], Jerry Snitselaar wrote:
-> > > > On Mon Nov 04 19, Sebastian Andrzej Siewior wrote:
-> > > > > On 2019-11-04 10:37:09 [-0700], Jerry Snitselaar wrote:
-> > > > > > It looks like checkpatch is expecting the word commit to precede the hash on the same line.
-> > > > > > I get no errors with the following:
-> > > > > 
-> > > > > That would explain it. That is however not what the TIP tree and other
-> > > > > people do not to mention that reading wise it makes sense to keep the
-> > > > > word `commit' as part of the sentence and add the hash in the next line.
-> > > > > 
-> > > > 
-> > > > Yes it reads better. What about the following?
-> > > > 
-> > > > Added in commit 9e1b74a63f776 ("tpm: add support for nonblocking
-> > > > operation"), but never actually used it.
-> > > > 
-> > > > And then add the Fixes: line above the Cc: and Signed-off-by: ?
-> > > 
-> > > Can please get over with? It is a simple patch. It has simple
-> > > description.
+On Thu, Nov 14, 2019 at 12:56:29PM -0400, Jason Gunthorpe wrote:
+> On Thu, Nov 14, 2019 at 06:55:06PM +0200, Jarkko Sakkinen wrote:
+> > > Would it function with the timeout values set at the beginning of
+> > > tpm_tis_core_init (max values)?
 > > 
-> > https://lore.kernel.org/linux-integrity/20191028202419.GA7214@linux.intel.com/
+> > tpm_get_timeouts() should be replaced with:
 > > 
-> > I'm also cool with cc stable as long as the commit is message has the
-> > correct format.
+> > if (tpm_chip_start()) {
+> > 	dev_err(dev, "Could not get TPM timeouts and durations\n");
+> > 	rc = -ENODEV;
+> > 	goto out_err;
+> > }
+> > 
+> > tpm_stop_chip(chip);
+> > 
+> > tpm_get_timeouts() is called by tpm_auto_startup(). Also the function
+> > should be moved to tpm_chip.c and converted to a static function so
+> > that it won't be called from random cal sites like above.
 > 
-> This is _really_ getting ridiculous. Holding back a simple patch just
-> because checkpatch says that the word `commit' is not in a new line. It
-> is more readable that way not to mention line with the commit id is
-> getting really long. This is a stupid checkpatch rule which is enforced
-> here.
+> Careful, the design here was to allow a driver to do only
+> get_timeouts, then additional setup work, then do auto_startup()
+> 
+> Forcing a driver to do auto_startup too early may not be good.
 
-I'm not sure why formatting a commit message properly is ridicilous.
-
-If it is a bug fix, then it should have fixes tag.
+All drivers always do it anyway because all drivers always call
+tpm_chip_register().
 
 /Jarkko
