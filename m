@@ -2,105 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C57FE573
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2019 20:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1EEFE66C
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2019 21:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbfKOTOz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Nov 2019 14:14:55 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:58602 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726308AbfKOTOz (ORCPT
+        id S1726550AbfKOUfE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Nov 2019 15:35:04 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:43760 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726549AbfKOUfE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Nov 2019 14:14:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573845293;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6aeKPDmbhVFkPfpFZ83fbmccBa2OFHpCHF58FRCqPwY=;
-        b=Cl288YrGYXPs+jIjxIrKUPuHDzpigmJplF0WaCjMyj5bacJXTeG3DkE2hJ1zHB4QBUGGpq
-        69/GzXsWJVESOe52Ix8feYgC3AA904QHkb8tPh5tW+zZsc0sbFALT0W+kgfIQxqfAUWnht
-        bKOoBNfqpf1/5uQR08VHF1L/UY82cXQ=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-108-tKpgKRE2PhWTVkafHEM04g-1; Fri, 15 Nov 2019 14:14:52 -0500
-Received: by mail-pg1-f200.google.com with SMTP id u197so7947810pgc.17
-        for <linux-integrity@vger.kernel.org>; Fri, 15 Nov 2019 11:14:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=FxBh+q2M0KKHt6TdqEdE1VpfsrS5eZh2oXrvCdz9BQo=;
-        b=jOXpqJIShX3ji9Lkt1pT4jfTSCtHaLngYIzothgohKwgmvz9xLRlm2IwkO6MXIOX5+
-         ta1bdU46iJxAKmgdVibpWWD5N3Lt3E2+QHlmOTu/EqiDvClB6RqnXL20327I/SF/wIT1
-         uJPOFdAypsYGNW3iRGEeEEz99E0U5ZuBlADAoGRVHhUa06bkg35hDA3nOc1wVI9H83Hf
-         ojWfGuqglEL0+EvTAkeNc4Ql1bP86QTrc+i3sjPW8wejZY9+WsOQsDCFoLedBWF5koz6
-         /w6YcTuq4wY6ikb/lZS8/HJbkYx3uV4qxhI6mx00BPB9JLlg7DuOdCCR9IF/srpQtfdD
-         PRGg==
-X-Gm-Message-State: APjAAAVHV454ivhjQgGZajIa+FuyDBcUkHhcjsXZXX8+ARpOpHFQJ3SF
-        3SXDQWkV5VcqLDsc7ubwnI3fu3+HuCR/E62bUC+tdziaoSwAJuTx3ExdFR6pHQ3/G8UBJIv3Vdq
-        OCL3F5Bg2mERh3sfdnGLebkgBP8LB
-X-Received: by 2002:a62:31c1:: with SMTP id x184mr19500526pfx.255.1573845291380;
-        Fri, 15 Nov 2019 11:14:51 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxv+9Zt2zsiWTpVh31clu5gBOi8WXECDEI8w7e37+mZ8dEznH2KmYFs+APiWtJMjzZwXiqG3w==
-X-Received: by 2002:a62:31c1:: with SMTP id x184mr19500497pfx.255.1573845291027;
-        Fri, 15 Nov 2019 11:14:51 -0800 (PST)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id q34sm10731806pjb.15.2019.11.15.11.14.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Nov 2019 11:14:50 -0800 (PST)
-Date:   Fri, 15 Nov 2019 12:14:49 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: question about setting TPM_CHIP_FLAG_IRQ in tpm_tis_core_init
-Message-ID: <20191115191449.qnqgos4nli3tjsdw@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191112033637.kxotlhm6mtr5irvd@cantor>
- <6d6f0899-8ba0-d6cf-ef3b-317ca698b687@linux.ibm.com>
- <20191112201716.GA12340@linux.intel.com>
+        Fri, 15 Nov 2019 15:35:04 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5BD932010688;
+        Fri, 15 Nov 2019 12:35:03 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5BD932010688
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1573850103;
+        bh=UsriIi/AR6aXXB4mccM4CzK1HsGXzB8Gu8Fw14iu8iI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=PApOFFak/vFKmPamiN/zSYbG2jVi6YZDM65N+jRM0wJuGINsenwK13V9wl2tjwI87
+         jXWxVDq+ZdQbYLrTD3M6JXpZR9Pp5Dy1nbP00CHfC/RDlALC/FJP6LZBZSoL+A+5En
+         QauVIHK1hNEqsyGhsgRBLDw+v9nVfNLpvfSvscpY=
+Subject: Re: [PATCH] ima: avoid appraise error for hash calc interrupt
+To:     Patrick Callaghan <patrickc@linux.vnet.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Patrick Callaghan <patrickc@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>
+References: <20191111192348.30535-1-patrickc@linux.ibm.com>
+ <e3f520ce-a290-206d-8097-b852123357ca@linux.microsoft.com>
+ <1573578841.17949.48.camel@linux.ibm.com>
+ <c6a57c24-2f30-f252-0f42-8d748ede65af@linux.microsoft.com>
+ <1573582344.17949.67.camel@linux.ibm.com>
+ <abdf66fb39d4c8ee08e0b52c34fb81b93bd33006.camel@linux.vnet.ibm.com>
+ <4e1c0c6b-a5e1-a95a-8a0b-c5a7f0a253cf@linux.microsoft.com>
+ <ffb1ec9d8cf12f6366fb4eb022a5442a8edae53c.camel@linux.vnet.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <3bb7ee92-9a8f-d180-a1dc-5f737db5252d@linux.microsoft.com>
+Date:   Fri, 15 Nov 2019 12:34:59 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191112201716.GA12340@linux.intel.com>
-X-MC-Unique: tKpgKRE2PhWTVkafHEM04g-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+In-Reply-To: <ffb1ec9d8cf12f6366fb4eb022a5442a8edae53c.camel@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Nov 12 19, Jarkko Sakkinen wrote:
->On Tue, Nov 12, 2019 at 08:28:57AM -0500, Stefan Berger wrote:
->> I set this flag for the TIS because it wasn't set anywhere else.
->> tpm_tis_send() wouldn't set the flag but go via the path:
->>
->> if (!(chip->flags & TPM_CHIP_FLAG_IRQ) || priv->irq_tested)
->>
->> =A0=A0=A0=A0=A0=A0=A0 return tpm_tis_send_main(chip, buf, len);
->
->Wondering why this isn't just "if (priv->irq_tested)"? Isn't that the
->whole point. The tail is the test part e.g. should be executed when
->IRQ testing is done.
->
->/Jarkko
->
+On 11/15/19 7:25 AM, Patrick Callaghan wrote:
 
-I wonder if it would make sense to rename tpm_tis_send_main to tpm_tis_send=
-,
-move the irq testing bits from the current tpm_tis_send to tpm_tis_gen_inte=
-rrupt,
-and have tpm_tis_gen_interrupt build its own tpmbufs to send via tpm_tis_se=
-nd
-for the testing. Have all the irq testing bits are off on their own and sep=
-arated out
-from sending commands.
+> Hello Laks,
+> Agreed. The assumption is that integrity_kernel_read() function does
+> not return a value greater than the fourth parameter passed to it (i.e.
+> does not read more bytes from the file than the size of the buffer
+> passed to it). I tried to validate that this assumption was true by
+> following the code but felt I could not prove it with my current
+> knowledge of the code. If this assumption is not true then I believe
+> that any code change for this problem should go into a different
+> patch.
+
+I agree Patrick - not a blocker for this patch set.
+
+thanks,
+  -lakshmi
+
 
