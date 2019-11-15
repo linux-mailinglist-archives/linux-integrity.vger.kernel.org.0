@@ -2,140 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 208E6FE124
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2019 16:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5527FE40B
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2019 18:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727507AbfKOP0G (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Nov 2019 10:26:06 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39678 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727504AbfKOP0G (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Nov 2019 10:26:06 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAFFMsZ2048126;
-        Fri, 15 Nov 2019 10:25:59 -0500
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2w9nsdmd3p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Nov 2019 10:25:59 -0500
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xAFFNGQt025551;
-        Fri, 15 Nov 2019 15:25:58 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma02wdc.us.ibm.com with ESMTP id 2w9gy3wpqf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Nov 2019 15:25:58 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xAFFPvDQ17957122
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 Nov 2019 15:25:57 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B771B112062;
-        Fri, 15 Nov 2019 15:25:57 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7DC13112061;
-        Fri, 15 Nov 2019 15:25:57 +0000 (GMT)
-Received: from oc3746452103.endicott.ibm.com (unknown [9.60.73.196])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 15 Nov 2019 15:25:57 +0000 (GMT)
-Message-ID: <ffb1ec9d8cf12f6366fb4eb022a5442a8edae53c.camel@linux.vnet.ibm.com>
-Subject: Re: [PATCH] ima: avoid appraise error for hash calc interrupt
-From:   Patrick Callaghan <patrickc@linux.vnet.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Patrick Callaghan <patrickc@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>
-Date:   Fri, 15 Nov 2019 10:25:57 -0500
-In-Reply-To: <4e1c0c6b-a5e1-a95a-8a0b-c5a7f0a253cf@linux.microsoft.com>
-References: <20191111192348.30535-1-patrickc@linux.ibm.com>
-         <e3f520ce-a290-206d-8097-b852123357ca@linux.microsoft.com>
-         <1573578841.17949.48.camel@linux.ibm.com>
-         <c6a57c24-2f30-f252-0f42-8d748ede65af@linux.microsoft.com>
-         <1573582344.17949.67.camel@linux.ibm.com>
-         <abdf66fb39d4c8ee08e0b52c34fb81b93bd33006.camel@linux.vnet.ibm.com>
-         <4e1c0c6b-a5e1-a95a-8a0b-c5a7f0a253cf@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-5.el7) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-15_04:2019-11-15,2019-11-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 suspectscore=0 priorityscore=1501 clxscore=1015 spamscore=0
- lowpriorityscore=0 adultscore=0 malwarescore=0 mlxlogscore=999
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911150139
+        id S1727548AbfKOReN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Nov 2019 12:34:13 -0500
+Received: from mga06.intel.com ([134.134.136.31]:58421 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727540AbfKOReN (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 15 Nov 2019 12:34:13 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Nov 2019 09:34:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,309,1569308400"; 
+   d="scan'208";a="195453275"
+Received: from sgaffney-mobl3.amr.corp.intel.com (HELO localhost) ([10.252.4.81])
+  by orsmga007.jf.intel.com with ESMTP; 15 Nov 2019 09:34:08 -0800
+Date:   Fri, 15 Nov 2019 19:34:07 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-integrity@vger.kernel.org, tglx@linutronix.de,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Philip Tricca <philip.b.tricca@intel.com>,
+        Tadeusz Struk <tadeusz.struk@intel.com>
+Subject: Re: [PATCH] tpm: remove tpm_dev_wq_lock
+Message-ID: <20191115173407.GC21300@linux.intel.com>
+References: <20191014193942.GH15552@linux.intel.com>
+ <20191028202419.GA7214@linux.intel.com>
+ <20191028202637.GB7214@linux.intel.com>
+ <20191104143957.onsfuvmwfuvmfuu6@linutronix.de>
+ <20191104173709.qqmdiacytyimbqhx@cantor>
+ <20191104174450.dlxlgixizej5orqr@linutronix.de>
+ <20191104182732.md3t6xbumg53wkcl@cantor>
+ <20191107161041.h7pgtlmj5zbi4frs@linutronix.de>
+ <20191107183503.GA8418@linux.intel.com>
+ <20191114111612.r7los6v7lpmiujcw@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191114111612.r7los6v7lpmiujcw@linutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2019-11-14 at 10:45 -0800, Lakshmi Ramasubramanian wrote:
-> On 11/14/19 5:55 AM, Patrick Callaghan wrote:
-> 
-> Hi Patrick,
-> 
-> > Hello Laks,
-> > You suggested that the if statement of the patch change to the
-> > following:
+On Thu, Nov 14, 2019 at 12:16:12PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2019-11-07 20:35:03 [+0200], Jarkko Sakkinen wrote:
+> > On Thu, Nov 07, 2019 at 05:10:41PM +0100, Sebastian Andrzej Siewior wrote:
+> > > On 2019-11-04 11:27:32 [-0700], Jerry Snitselaar wrote:
+> > > > On Mon Nov 04 19, Sebastian Andrzej Siewior wrote:
+> > > > > On 2019-11-04 10:37:09 [-0700], Jerry Snitselaar wrote:
+> > > > > > It looks like checkpatch is expecting the word commit to precede the hash on the same line.
+> > > > > > I get no errors with the following:
+> > > > > 
+> > > > > That would explain it. That is however not what the TIP tree and other
+> > > > > people do not to mention that reading wise it makes sense to keep the
+> > > > > word `commit' as part of the sentence and add the hash in the next line.
+> > > > > 
+> > > > 
+> > > > Yes it reads better. What about the following?
+> > > > 
+> > > > Added in commit 9e1b74a63f776 ("tpm: add support for nonblocking
+> > > > operation"), but never actually used it.
+> > > > 
+> > > > And then add the Fixes: line above the Cc: and Signed-off-by: ?
+> > > 
+> > > Can please get over with? It is a simple patch. It has simple
+> > > description.
 > > 
-> > if ((rbuf_len == 0) || (offset + rbuf_len >= i_size)) {
+> > https://lore.kernel.org/linux-integrity/20191028202419.GA7214@linux.intel.com/
 > > 
-> > Unless the file size changed between the time that i_size was set
-> > in
-> > ima_calc_file_hash_tfm() and an i_size_read() call was subsequently
-> > issued in a function downstream of the integrity_kernel_read()
-> > call,
-> > the rbuf_len returned on the integrity_kernel_read() call will not
-> > be
-> > more than i_size - offset. I do not think that it is possible for
-> > the
-> > file size to change during this window but nonetheless, if it can,
-> > this
-> > would be a different problem and I would not want to include this
-> > in my
-> > patch. That said, I do appreciate you taking time to review this
-> > patch.
+> > I'm also cool with cc stable as long as the commit is message has the
+> > correct format.
 > 
-> You are right - unless the file size changes between the calls this 
-> problem would not occur. I agree - that issue, even if it can occur, 
-> should be addressed separately.
-> 
-> Another one (again - am not saying this needs to be addressed in
-> this 
-> patch, but just wanted to point out)
-> 
-> 	rbuf = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> 	...
-> 	rbuf_len = integrity_kernel_read(file, offset, rbuf,
-> PAGE_SIZE);
-> 	...
-> 	rc = crypto_shash_update(shash, rbuf, rbuf_len);
-> 
-> rbuf is of size PAGE_SIZE, but rbuf_len, returned by 
-> integrity_kernel_read() is passed as buffer size to 
-> crypto_shash_update() without any validation (rbuf_len <= PAGE_SIZE)
-> 
-> It is assumed here that integrity_kernel_read() would not return a 
-> length greater than rbuf size and hence crypto_shash_update() would 
-> never access beyond the given buffer.
-> 
-> thanks,
->   -lakshmi
-> 
-> 
-Hello Laks,
-Agreed. The assumption is that integrity_kernel_read() function does
-not return a value greater than the fourth parameter passed to it (i.e.
-does not read more bytes from the file than the size of the buffer
-passed to it). I tried to validate that this assumption was true by
-following the code but felt I could not prove it with my current
-knowledge of the code. If this assumption is not true then I believe
-that any code change for this problem should go into a different
-patch. 
+> This is _really_ getting ridiculous. Holding back a simple patch just
+> because checkpatch says that the word `commit' is not in a new line. It
+> is more readable that way not to mention line with the commit id is
+> getting really long. This is a stupid checkpatch rule which is enforced
+> here.
 
-Thank you.
+I'm not sure why formatting a commit message properly is ridicilous.
 
+If it is a bug fix, then it should have fixes tag.
+
+/Jarkko
