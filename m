@@ -2,65 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0711003B4
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 Nov 2019 12:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87805100AF6
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Nov 2019 18:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbfKRLWX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 18 Nov 2019 06:22:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57826 "EHLO mail.kernel.org"
+        id S1726423AbfKRR72 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 18 Nov 2019 12:59:28 -0500
+Received: from mga02.intel.com ([134.134.136.20]:53198 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726461AbfKRLWW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 18 Nov 2019 06:22:22 -0500
-Received: from localhost (unknown [89.205.134.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F05D2067D;
-        Mon, 18 Nov 2019 11:22:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574076142;
-        bh=OS+6pBh0YtQl2IEclxkdgczAts6g38dIU89aC1tfCh8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SxZuuitp7F6Ngudiv5xG6ZfFvvC2t8JCgCndMiC3NygJxIm7TLIEENPZ0bMLDf6eD
-         PoHu8ERtHqdo9/GcgEb97bTbcymoiigD0UX+/QqPXu9Wkxy+mKrUIO2mG04Fi8sWnD
-         Q81z4dBvt4uIqaiw4BXfq9uYRNicgMfDNtwtArFY=
-Date:   Mon, 18 Nov 2019 12:22:18 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     David Binderman <dcb314@hotmail.com>
-Cc:     "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-5.4-rc8/drivers/char/tpm/tpm1-cmd.c:735: possible missing
- return value check
-Message-ID: <20191118112218.GA156486@kroah.com>
-References: <DB7PR08MB3801D9F4D5822D36E57282F39C4D0@DB7PR08MB3801.eurprd08.prod.outlook.com>
- <20191118092721.GA154812@kroah.com>
- <DB7PR08MB38017F9C07DA5D40B3133AED9C4D0@DB7PR08MB3801.eurprd08.prod.outlook.com>
+        id S1726317AbfKRR72 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 18 Nov 2019 12:59:28 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 09:59:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,321,1569308400"; 
+   d="scan'208";a="208926876"
+Received: from cooperwu-mobl.gar.corp.intel.com (HELO localhost) ([10.252.3.195])
+  by orsmga003.jf.intel.com with ESMTP; 18 Nov 2019 09:59:25 -0800
+Date:   Mon, 18 Nov 2019 19:59:24 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, jsnitsel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH] tpm_tis: Move setting of TPM_CHIP_FLAG_IRQ into
+ tpm_tis_probe_irq_single
+Message-ID: <20191118175924.GA5984@linux.intel.com>
+References: <20191112202725.3009814-1-stefanb@linux.vnet.ibm.com>
+ <20191114164151.GB9528@linux.intel.com>
+ <20191114164426.GC9528@linux.intel.com>
+ <185664a9-58f2-2a4b-4e6b-8d7750a35690@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB7PR08MB38017F9C07DA5D40B3133AED9C4D0@DB7PR08MB3801.eurprd08.prod.outlook.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <185664a9-58f2-2a4b-4e6b-8d7750a35690@linux.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 09:42:01AM +0000, David Binderman wrote:
-> Hello there Greg,
+On Sat, Nov 16, 2019 at 09:32:06AM -0500, Stefan Berger wrote:
+> On 11/14/19 11:44 AM, Jarkko Sakkinen wrote:
+> > On Thu, Nov 14, 2019 at 06:41:51PM +0200, Jarkko Sakkinen wrote:
+> > > On Tue, Nov 12, 2019 at 03:27:25PM -0500, Stefan Berger wrote:
+> > > > From: Stefan Berger <stefanb@linux.ibm.com>
+> > > > 
+> > > > Move the setting of the TPM_CHIP_FLAG_IRQ for irq probing into
+> > > > tpm_tis_probe_irq_single before calling tpm_tis_gen_interrupt.
+> > > > This move handles error conditions better that may arise if anything
+> > > > before fails in tpm_tis_probe_irq_single.
+> > > > 
+> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > Suggested-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> > > What about just changing the condition?
+> > Also cannot take this since it is not a bug (no fixes tag).
 > 
-> >Great, how about you submit a patch to resolve this?  That way you can
-> >get the full credit for finding and resolveing the issue?
-> 
-> No thanks. I gave up bothering to send in patches when I found
-> out my emails cc'ing to the linux kernel mailing list get bounced.
+> I'll repost but will wait until Jerry has tested it on that machine.
 
-Yes, hotmail.com emails have been rejected from there for many years.
-If you wish to contribute to the kernel you need to use a different
-email domain, sorry.
+OK, great, thank you.
 
-good luck!
+This is really needs some reasoning on why this was the right way to
+fix the issue. In addition, a source code comment might make sense.
 
-greg k-h
+/Jarkko
