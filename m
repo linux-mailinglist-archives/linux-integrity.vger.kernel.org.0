@@ -2,170 +2,205 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E74103BCB
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Nov 2019 14:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13E71040D3
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Nov 2019 17:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730948AbfKTNh4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 20 Nov 2019 08:37:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44966 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729145AbfKTNh4 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 20 Nov 2019 08:37:56 -0500
-Received: from localhost.localdomain (unknown [118.189.143.39])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 92BB2224D2;
-        Wed, 20 Nov 2019 13:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574257074;
-        bh=wD3mXbNja9ectFp7lvh2up4ccGeb8rNyy241I2AEdDU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=G9cMvX8kKqiOhbdcD9TMVRwfcY+nK1JMG3vIwFJCl9r9CClW86exzpY1lrzbx5Zf2
-         93NTsDmYzfWlNhSAWWo/ol7I1i0UpwXyVTbJTLjoRfbIPOEAGBrak4XNBzIQ8RrGyS
-         Rgx4TC3zjmPMrLTj3be40JEtF1bMDBJI4cXySVEc=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Micah Morton <mortonm@chromium.org>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH] security: Fix Kconfig indentation
-Date:   Wed, 20 Nov 2019 21:37:50 +0800
-Message-Id: <20191120133750.12519-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S1729078AbfKTQaT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 20 Nov 2019 11:30:19 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:42456 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729050AbfKTQaT (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 20 Nov 2019 11:30:19 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 293D620B7185;
+        Wed, 20 Nov 2019 08:30:17 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 293D620B7185
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1574267417;
+        bh=Id+4bYRC49+0/WFMWhRorOtnr8nfzkLAWke26BR9CHA=;
+        h=Subject:From:To:References:Cc:Date:In-Reply-To:From;
+        b=QhnDx3KlUw+EzCQB7OklMfq7+sOIASu0iS8mn+euA0F7Tb/IBvqjHT5uacYZvmiMw
+         H7LI+Pq6Nx8Dy0lc6HLai2kOb7kMJrPH4XfqvjmjSIGTIIuw1lFR6s7xDycgVIxgQF
+         xEHz/5uRh3pBvuHljAni1HKUCinYgm+FJ3yPaaiQ=
+Subject: Validating key measurement
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+References: <20191118223818.3353-1-nramas@linux.microsoft.com>
+ <20191118223818.3353-5-nramas@linux.microsoft.com>
+Cc:     Nayna Jain <nayna@linux.ibm.com>, bauerman@linux.ibm.com
+Message-ID: <faab8e25-6aac-e44d-2364-ab2d0eca36a6@linux.microsoft.com>
+Date:   Wed, 20 Nov 2019 08:30:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191118223818.3353-5-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Adjust indentation from spaces to tab (+optional two spaces) as in
-coding style with command like:
-	$ sed -e 's/^        /\t/' -i */Kconfig
+On 11/18/19 2:38 PM, Lakshmi Ramasubramanian wrote:
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- security/apparmor/Kconfig      |  2 +-
- security/integrity/Kconfig     | 24 ++++++++++++------------
- security/integrity/ima/Kconfig | 12 ++++++------
- security/safesetid/Kconfig     | 24 ++++++++++++------------
- 4 files changed, 31 insertions(+), 31 deletions(-)
+Hi Mimi,
 
-diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-index a422a349f926..1f0e712c5e50 100644
---- a/security/apparmor/Kconfig
-+++ b/security/apparmor/Kconfig
-@@ -32,7 +32,7 @@ config SECURITY_APPARMOR_HASH_DEFAULT
-        depends on SECURITY_APPARMOR_HASH
-        default y
-        help
--         This option selects whether sha1 hashing of loaded policy
-+	 This option selects whether sha1 hashing of loaded policy
- 	 is enabled by default. The generation of sha1 hashes for
- 	 loaded policy provide system administrators a quick way
- 	 to verify that policy in the kernel matches what is expected,
-diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-index 71f0177e8716..c92339445087 100644
---- a/security/integrity/Kconfig
-+++ b/security/integrity/Kconfig
-@@ -34,10 +34,10 @@ config INTEGRITY_ASYMMETRIC_KEYS
- 	bool "Enable asymmetric keys support"
- 	depends on INTEGRITY_SIGNATURE
- 	default n
--        select ASYMMETRIC_KEY_TYPE
--        select ASYMMETRIC_PUBLIC_KEY_SUBTYPE
--        select CRYPTO_RSA
--        select X509_CERTIFICATE_PARSER
-+	select ASYMMETRIC_KEY_TYPE
-+	select ASYMMETRIC_PUBLIC_KEY_SUBTYPE
-+	select CRYPTO_RSA
-+	select X509_CERTIFICATE_PARSER
- 	help
- 	  This option enables digital signature verification using
- 	  asymmetric keys.
-@@ -53,14 +53,14 @@ config INTEGRITY_TRUSTED_KEYRING
- 	   keyring.
- 
- config INTEGRITY_PLATFORM_KEYRING
--        bool "Provide keyring for platform/firmware trusted keys"
--        depends on INTEGRITY_ASYMMETRIC_KEYS
--        depends on SYSTEM_BLACKLIST_KEYRING
--        help
--         Provide a separate, distinct keyring for platform trusted keys, which
--         the kernel automatically populates during initialization from values
--         provided by the platform for verifying the kexec'ed kerned image
--         and, possibly, the initramfs signature.
-+	bool "Provide keyring for platform/firmware trusted keys"
-+	depends on INTEGRITY_ASYMMETRIC_KEYS
-+	depends on SYSTEM_BLACKLIST_KEYRING
-+	help
-+	 Provide a separate, distinct keyring for platform trusted keys, which
-+	 the kernel automatically populates during initialization from values
-+	 provided by the platform for verifying the kexec'ed kerned image
-+	 and, possibly, the initramfs signature.
- 
- config LOAD_UEFI_KEYS
-        depends on INTEGRITY_PLATFORM_KEYRING
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 838476d780e5..ec9259bd8115 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -159,13 +159,13 @@ config IMA_APPRAISE
- 	  If unsure, say N.
- 
- config IMA_ARCH_POLICY
--        bool "Enable loading an IMA architecture specific policy"
--        depends on (KEXEC_SIG && IMA) || IMA_APPRAISE \
-+	bool "Enable loading an IMA architecture specific policy"
-+	depends on (KEXEC_SIG && IMA) || IMA_APPRAISE \
- 		   && INTEGRITY_ASYMMETRIC_KEYS
--        default n
--        help
--          This option enables loading an IMA architecture specific policy
--          based on run time secure boot flags.
-+	default n
-+	help
-+	  This option enables loading an IMA architecture specific policy
-+	  based on run time secure boot flags.
- 
- config IMA_APPRAISE_BUILD_POLICY
- 	bool "IMA build time configured policy rules"
-diff --git a/security/safesetid/Kconfig b/security/safesetid/Kconfig
-index 18b5fb90417b..ab1a2c69b0b8 100644
---- a/security/safesetid/Kconfig
-+++ b/security/safesetid/Kconfig
-@@ -1,15 +1,15 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config SECURITY_SAFESETID
--        bool "Gate setid transitions to limit CAP_SET{U/G}ID capabilities"
--        depends on SECURITY
--        select SECURITYFS
--        default n
--        help
--          SafeSetID is an LSM module that gates the setid family of syscalls to
--          restrict UID/GID transitions from a given UID/GID to only those
--          approved by a system-wide whitelist. These restrictions also prohibit
--          the given UIDs/GIDs from obtaining auxiliary privileges associated
--          with CAP_SET{U/G}ID, such as allowing a user to set up user namespace
--          UID mappings.
-+	bool "Gate setid transitions to limit CAP_SET{U/G}ID capabilities"
-+	depends on SECURITY
-+	select SECURITYFS
-+	default n
-+	help
-+	  SafeSetID is an LSM module that gates the setid family of syscalls to
-+	  restrict UID/GID transitions from a given UID/GID to only those
-+	  approved by a system-wide whitelist. These restrictions also prohibit
-+	  the given UIDs/GIDs from obtaining auxiliary privileges associated
-+	  with CAP_SET{U/G}ID, such as allowing a user to set up user namespace
-+	  UID mappings.
- 
--          If you are unsure how to answer this question, answer N.
-+	  If you are unsure how to answer this question, answer N.
--- 
-2.17.1
+I have described below how we can validate key measurement using the 
+data in the IMA log, tools such as openssl, etc.
 
+Also, I have included how the key measurement data can be used to 
+correlate with ima-sig and ima-modsig entries (have taken some of this 
+from Nayna's patch on "appraising using blacklist of file hash".
+
+Appreciate if you could please review and let me know if I should add 
+more info.
+
+thanks,
+  -lakshmi
+
+> 
+> The following example illustrates how key measurement can be verified.
+> 
+> Sample IMA Policy entry to measure keys
+> (Added in the file /etc/ima/ima-policy):
+> measure func=KEY_CHECK keyrings=.ima|.evm|.blacklist template=ima-buf
+> 
+> Build the kernel with this patch set applied and reboot to that kernel.
+> 
+> Ensure the IMA policy is applied:
+> 
+> root@nramas:/home/nramas# cat /sys/kernel/security/ima/policy
+> measure func=KEY_CHECK keyrings=.ima|.evm|.blacklist template=ima-buf
+> 
+> View the initial IMA measurement log:
+> 
+> root@nramas:/home/nramas# cat /sys/kernel/security/ima/ascii_runtime_measurements
+> 10 67ec... ima-ng sha1:b5466c508583f0e633df83aa58fc7c5b67ccf667 boot_aggregate
+> 
+> Now, add a certificate in DER format (for example, x509_ima.der) to
+> the .ima keyring:
+> 
+> root@nramas:/home/nramas# keyctl show %:.ima
+> Keyring
+>   547515640 ---lswrv      0     0  keyring: .ima
+> 
+> root@nramas:/home/nramas# evmctl import x509_ima.der 547515640
+> 
+> root@nramas:/home/nramas# keyctl show %:.ima
+> Keyring
+>   547515640 ---lswrv      0     0  keyring: .ima
+>   809678766 --als--v      0     0   \_ asymmetric: hostname: whoami signing key: 052dd247dc3c36...
+> 
+> View the updated IMA measurement log:
+> 
+> root@nramas:/home/nramas# cat /sys/kernel/security/ima/ascii_runtime_measurements
+> 10 67ec... ima-ng sha1:b5466c508583f0e633df83aa58fc7c5b67ccf667 boot_aggregate
+> 10 3adf... ima-buf sha256:27c915b8ddb9fae7214cf0a8a7043cc3eeeaa7539bcb136f8427067b5f6c3b7b .ima 30818902818100ee96b264072a42888f78a2f9b8198467a3ad97d126f3d1cc1c24d23e7185cc743b04d4a54254ca16e1e11ed4450deb98b1f7bb4288424570fabcfc6d5aa93a2a14fa2b7835ac877cfea761e5ff414c6ee274eff26f8bd6c484312e56619299acf0dbd224b87c3883b66a9393d21af8962458663b0ac1706c63773cd50e8236270203010001
+> root@nramas:/home/nramas#
+> 
+> The public key of x509_ima.der certificate and the key's SHA-256 hash
+> are included in the IMA log.
+> 
+> For example, in the above IMA log entry the public key is the following:
+> 
+> 30818902818100ee96b264072a42888f78a2f9b8198467a3ad97d126f3d1cc1c24d23e7185cc743b04d4a54254ca16e1e11ed4450deb98b1f7bb4288424570fabcfc6d5aa93a2a14fa2b7835ac877cfea761e5ff414c6ee274eff26f8bd6c484312e56619299acf0dbd224b87c3883b66a9393d21af8962458663b0ac1706c63773cd50e8236270203010001
+> 
+> sha256:27c915b8ddb9fae7214cf0a8a7043cc3eeeaa7539bcb136f8427067b5f6c3b7b
+> 
+> root@nramas:/home/nramas# cat /sys/kernel/security/ima/ascii_runtime_measurements |
+>                            grep " .ima" | cut -d' ' -f 6 | xxd -r -p | sha256sum
+> 27c915b8ddb9fae7214cf0a8a7043cc3eeeaa7539bcb136f8427067b5f6c3b7b
+> root@nramas:/home/nramas#
+> 
+> SHA-256 hash in the IMA log and the above output should match.
+> 
+> Now run the following "openssl" command to display
+> various fields of x509_ima.der certificate:
+> 
+> Verify the "Modulus" and the "Exponent" with that
+> in the public key data in the IMA log entry.
+> Note that the "Modulus" in the IMA log entry follows
+> the RSA Header (For example, 308189028181)
+> The "Exponent" is the last 3 hex numbers in the IMA log
+> (For example, 0x01 0x00 0x01)
+> 
+> root@nramas:/home/nramas# openssl x509 -in x509_ima.der -inform der -noout -text
+> Certificate:
+>      Data:
+>          Version: 3 (0x2)
+>          Serial Number:
+>              5b:e0:23:4f:f3:ad:f0:50:34:9b:33:b8:94:65:a6:aa:b6:e3:39:f7
+>          Signature Algorithm: sha256WithRSAEncryption
+>          Issuer: O = hostname, CN = whoami signing key, emailAddress = whoami@hostname
+>          Validity
+>              Not Before: Aug 22 02:29:02 2019 GMT
+>              Not After : Aug 21 02:29:02 2020 GMT
+>          Subject: O = hostname, CN = whoami signing key, emailAddress = whoami@hostname
+>          Subject Public Key Info:
+>              Public Key Algorithm: rsaEncryption
+>                  RSA Public-Key: (1024 bit)
+>                  Modulus:
+>                      00:ee:96:b2:64:07:2a:42:88:8f:78:a2:f9:b8:19:
+>                      84:67:a3:ad:97:d1:26:f3:d1:cc:1c:24:d2:3e:71:
+>                      85:cc:74:3b:04:d4:a5:42:54:ca:16:e1:e1:1e:d4:
+>                      45:0d:eb:98:b1:f7:bb:42:88:42:45:70:fa:bc:fc:
+>                      6d:5a:a9:3a:2a:14:fa:2b:78:35:ac:87:7c:fe:a7:
+>                      61:e5:ff:41:4c:6e:e2:74:ef:f2:6f:8b:d6:c4:84:
+>                      31:2e:56:61:92:99:ac:f0:db:d2:24:b8:7c:38:83:
+>                      b6:6a:93:93:d2:1a:f8:96:24:58:66:3b:0a:c1:70:
+>                      6c:63:77:3c:d5:0e:82:36:27
+>                  Exponent: 65537 (0x10001)
+>          X509v3 extensions:
+>              X509v3 Basic Constraints: critical
+>                  CA:FALSE
+>              X509v3 Key Usage:
+>                  Digital Signature
+>              X509v3 Subject Key Identifier:
+>                  05:2D:D2:47:DC:3C:36:D6:D6:06:75:FE:7A:E8:69:79:0B:E5:61:71
+>              X509v3 Authority Key Identifier:
+>                  keyid:E3:67:10:F0:83:4C:97:3E:D9:4A:18:6F:BC:D2:23:75:B4:5E:24:54
+> 
+>      Signature Algorithm: sha256WithRSAEncryption
+>           b1:2f:ae:ff:1e:0e:39:0c:fd:5e:b7:14:0a:f3:b7:a6:53:cb:
+>           49:c6:ab:0a:23:be:24:c0:35:33:1d:76:00:c8:f7:58:f9:df:
+>           7f:df:c5:ee:b6:fe:c3:58:59:20:3e:ca:0e:4f:01:f9:a7:9a:
+>           58:be:63:09:47:cb:95:9a:52:d3:f2:de:96:f2:10:d4:92:47:
+>           c3:3a:62:26:dc:2a:52:ee:54:10:69:ed:3c:62:1f:87:67:fd:
+>           36:a0:61:e9:a6:1a:db:5d:1d:d3:44:99:d9:9a:1c:e6:ba:a4:
+>           96:b4:f5:e2:26:8b:fc:52:c3:ee:a4:a6:b7:b5:18:1f:08:52:
+>           4a:ee
+> root@nramas:/home/nramas#
+> 
+> An ima-sig entry for a kernel module, say, kheaders.ko
+> from the IMA log entry is given below:
+> 
+> 10 0c98... ima-sig
+> sha256:3bc6ed4f0b4d6e31bc1dbc9ef844605abc7afdc6d81a57d77a1ec9407997c40
+> 2 /usr/lib/modules/5.4.0-rc3+/kernel/kernel/kheaders.ko
+> 03020BE561710100abcde...
+> 
+> In the above 0BE56171 is the Key ID of the key used to verify
+> the IMA signature. This Key ID is the last 4 hex digits of
+> the subject key identifier displayed in openssl output
+> for the certificate x509_ima.der (Which is the IMA certificate
+> used to sign the kernel module).
+> 
+> X509v3 Subject Key Identifier:
+>     05:2D:D2:47:DC:3C:36:D6:D6:06:75:FE:7A:E8:69:79:0B:E5:61:71
+> 
+> The ima-modsig entry for the same kernel module is:
+> 
+> 10 82aa... ima-modsig
+> sha256:3bc6ed4f0b4d6e31bc1dbc9ef844605abc7afdc6d81a57d77a1ec9407997c40
+> 2 /usr/lib/modules/5.4.0rc3+/kernel/kernel/kheaders.ko
+> sha256:77fa889b35a05338ec52e51591c1b89d4c8d1c99a21251d7c22b1a8642a6bad3
+> 30818902818100ee96b264072a42888f78a2f9b8198467a3ad97d126f3d1cc1c24d23e7185cc743b04d4a54254ca16e1e11ed4450deb98b1f7bb4288424570fabcfc6d5aa93a2a14fa2b7835ac877cfea761e5ff414c6ee274eff26f8bd6c484312e56619299acf0dbd224b87c3883b66a9393d21af8962458663b0ac1706c63773cd50e8236270203010001
+> 
+> If the kernel module was signed by x509_ima.der certificate then
+> the public key entry in the ima-modsig should match the public key
+> for the key measurement for x509_ima.der.
+> 
+> The above can be used to correlate the key measurement IMA entry,
+> ima-sig and ima-modsig entries using the same key.
