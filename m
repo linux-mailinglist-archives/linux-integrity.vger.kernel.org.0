@@ -2,128 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF431049B3
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 05:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35561056C8
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 17:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725904AbfKUEsh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 20 Nov 2019 23:48:37 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:36683 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725819AbfKUEsh (ORCPT
+        id S1726689AbfKUQRM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 21 Nov 2019 11:17:12 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:41360 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726379AbfKUQRM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 20 Nov 2019 23:48:37 -0500
-Received: by mail-il1-f194.google.com with SMTP id s75so2009130ilc.3;
-        Wed, 20 Nov 2019 20:48:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fh2kN/lU7mRPHokRtJd6e3fCEFIJiroZZ0yxElbfzqs=;
-        b=jA3ylDn3R3rlm4ISMWmWOZLv3cbhukQnCFPvuaVeBxawOL684lGXZxJ8blgLbTLQ0l
-         jTXN4y2umAWY1w66x+eKSqVInaRvSB+myglrsWUpwQpUSybDLFbfvVfVss90Jz3eEvPJ
-         xzB67KjCRlz1vJHybZ8IpjQg+LygNev64Wa1JplRnPh7xhAPu9XbN/aYcj5o8RGt2lVg
-         +X2dYp0dR8caWXL7llZ4PzTx8KENv6c6YmR5AEv6oa3/ruy2592VPdRm2Mh4II/KR1vY
-         CblbTmbAzZ9/9ieQKHgeZ2NrRwu4v3FET5Ig+yJYnAWZ55iyIlcKG4lSlwh8QiMdp6G7
-         wDnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fh2kN/lU7mRPHokRtJd6e3fCEFIJiroZZ0yxElbfzqs=;
-        b=D5gOkvkZKteAoCfuINcTyVm+Vsg49ZAAoZJg4SK8tTZcgEvAraFp+LB4GRIclccbB3
-         O35F+38pgTXgrNavhZxTQqB/T8cNNRTfLNupHl5C51kEC6W/01/MBD3CV6pz5eUgBVYT
-         MV26JCSln677ntxeY8R8RSobA41NY2FsRG6WERmEXbMnCufpoxIrDXtPDBA7MYX0f3xQ
-         f5syT05p8/2qvsRdGjEWKTY7eUp+IjPdakmqp5efG/+92PCT5JLzakZIKDslUKYBdoVs
-         J9qsNlrk+M0MBPo2BJVlTSZ9gI8lw1HrGHWBJHiE7EKFnC5a2/8OqyvewlZr5MXnNOwm
-         uM7w==
-X-Gm-Message-State: APjAAAWOODc68dqWonPFvK6G4E3Y4f38jzc4lkv2nLa6sQ6FvLpAltcQ
-        0PuopkrkuJBxMKTkTbi+2focBYMuEYj3DTBNVK8=
-X-Google-Smtp-Source: APXvYqyqC0bOLqeBjKWMPY+5UVaRAV7+YB6XL4nm9rXOT/pSx9MxWcMt0zCmleOAGia+kLdEe6eMwRry4gCHiNKUACM=
-X-Received: by 2002:a92:ba04:: with SMTP id o4mr8252986ili.19.1574311716391;
- Wed, 20 Nov 2019 20:48:36 -0800 (PST)
+        Thu, 21 Nov 2019 11:17:12 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0A02320B7185;
+        Thu, 21 Nov 2019 08:17:12 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0A02320B7185
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1574353032;
+        bh=0NGwDic+CWZB9bud1PRLutHtUsmXVrkpBUEVqMzsVAQ=;
+        h=From:Subject:To:Cc:Date:From;
+        b=A1wFisUrfB9OEk6PIKwUhzWIV9IIDSY4uoJzNDiCeJ78Leu6bD7rQxaw8Ont4njLq
+         iuAfG8rn2elfBXeCX4VBLupVrYwQPMuCsUY09W3OhnctBcuGVfY2oHj8xJmIZpkcwZ
+         U1dHGFiPP7t5kZLNEztfWTwSw+z1Y6E89iYVjE/E=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Subject: IMA: Data included in the key measurement
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     James Morris <jamorris@linuxonhyperv.com>
+Message-ID: <19242774-688e-58ff-40f8-e346d6ba4339@linux.microsoft.com>
+Date:   Thu, 21 Nov 2019 08:17:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
-In-Reply-To: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Wed, 20 Nov 2019 20:48:25 -0800
-Message-ID: <CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com>
-Subject: Re: [GIT PULL] tpmdd updates for Linux v5.4
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        stable <stable@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 2, 2019 at 7:34 AM Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> Hi
->
-> A new driver for fTPM living inside ARM TEE was added this round. In
-> addition to that, there is three bug fixes and one clean up.
->
-> /Jarkko
->
-> The following changes since commit 8fb8e9e46261e0117cb3cffb6dd8bb7e08f8649b:
->
->   Merge tag 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma (2019-08-30 09:23:45 -0700)
->
-> are available in the Git repository at:
->
->   git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-20190902
->
-> for you to fetch changes up to e8bd417aab0c72bfb54465596b16085702ba0405:
->
->   tpm/tpm_ftpm_tee: Document fTPM TEE driver (2019-09-02 17:08:35 +0300)
->
-> ----------------------------------------------------------------
-> tpmdd updates for Linux v5.4
->
-> ----------------------------------------------------------------
-> Jarkko Sakkinen (1):
->       tpm: Remove a deprecated comments about implicit sysfs locking
->
-> Lukas Bulwahn (1):
->       MAINTAINERS: fix style in KEYS-TRUSTED entry
->
-> Sasha Levin (2):
->       tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE
->       tpm/tpm_ftpm_tee: Document fTPM TEE driver
->
-> Stefan Berger (2):
->       tpm_tis_core: Turn on the TPM before probing IRQ's
->       tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
+Hi Mimi,
 
-Hi Jarrko,
+ >>> everything needed for verifying a signature is included in
+ >>> the key measurement.
 
-I'm replying here because I can't find the patches to reply to
-directly from LKML.
+Regarding the requirement you had stated above, I would like some 
+clarification.
 
-Commit 7f064c378e2c "tpm_tis_core: Turn on the TPM before probing
-IRQ's" in the v5.3-stable tree caused a regression on a pre-release
-platform with a TPM2 device. The interrupt starts screaming when the
-driver is loaded and does not stop until the device is force unbond
-from the driver by:
+When I started this change to measure keys through IMA, the use case we 
+had in mind was enabling an attestation service, for instance, to verify 
+if the client has only known good (trusted) keys - for example, in 
+keyrings such as ".builtin_trusted_keys", ".ima", etc.
 
-     echo IFX0740:00 > /sys/bus/platform/drivers/tpm_tis/unbind
+On the client IMA verifies the signature of system binaries using keys 
+in the IMA keyring. And, if the config namely 
+CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY is enabled, 
+only keys signed by a built-in trusted key can be added to the IMA keyring.
 
-I checked v5.4-rc8 and it has the same problem. I tried reverting:
+An attestation service can keep a list of public keys of "known good 
+(trusted)" keys for various keyrings, and verify against the measurement 
+data provided by the client.
 
-1ea32c83c699 tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
-5b359c7c4372 tpm_tis_core: Turn on the TPM before probing IRQ's
+To achieve the above we decided to include only the public key in the 
+key measurement buffer.
 
-Which silenced the screaming interrupt problem, but now the TPM is reporting:
+I would like to know what benefit we'd get by including "everything 
+needed for verifying a signature in the key measurement"?
 
-[    3.725131] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
-[    3.725358] tpm tpm0: tpm_try_transmit: send(): error -5
-[    3.725359] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
-polling instead
+ From testing point of view, if we have the certificate (like the .DER 
+file), we can validate the key measurement data in the IMA log.
 
-...at load, where it was not reporting this previously. Can you take a look?
+Do you see a need to include more data or the entire cert for the 
+product code?
+
+thanks,
+  -lakshmi
