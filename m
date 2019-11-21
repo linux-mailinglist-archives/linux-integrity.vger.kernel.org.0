@@ -2,90 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F25ED105855
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 18:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CE510585F
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 18:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726968AbfKUROt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 21 Nov 2019 12:14:49 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:33618 "EHLO
+        id S1726689AbfKURQ2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 21 Nov 2019 12:16:28 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:34234 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726563AbfKUROt (ORCPT
+        with ESMTP id S1726541AbfKURQ2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 21 Nov 2019 12:14:49 -0500
-Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2E0FA20B7185;
-        Thu, 21 Nov 2019 09:14:48 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2E0FA20B7185
+        Thu, 21 Nov 2019 12:16:28 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B562520B7185;
+        Thu, 21 Nov 2019 09:16:27 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B562520B7185
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1574356488;
-        bh=ZxVEr4uFBXMRO2Hmj7wYKpQquAuGeS6v3eiWUkYsy5s=;
-        h=From:To:Subject:Date:From;
-        b=eDFE+bS71Ax1RsH5sgy7TdV1cQGZAg93ws+U3a6Ak5jkHFH5e4/5G8pW7pen2N6N3
-         WfsJUogB9nUKMQeC3ZdSP09ZX0rwUASzI26pfTgGDYaq8Tt5aC3gs2R93UM6zsgTdd
-         kO+b9GM81HhoZH3oRNT0J/sHfoG/tn+5s0/s5yJA=
+        s=default; t=1574356587;
+        bh=qat8oBu3lTpPZCIADeKrXEqOEeEglX6sCbk/08Ye0xY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=VGaFauFcEmscLAjXlvBoPG6FNb9b6UeymvFXF+EQpSkm8a204R9K5/dRwB8i7ByXO
+         IPsj4qI/xFmN+MsLo+Z3rItTS07qprkf6SicjtbaE0kiOckYtSZ20ADfNFi8GRuDnG
+         Y/loVCfZiNEAxN1oRlrt1AB467Af9y5pmeeAPo1Y=
+Subject: Re: [PATCH v8 2/5] IMA: Define an IMA hook to measure keys
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+References: <20191118223818.3353-1-nramas@linux.microsoft.com>
+ <20191118223818.3353-3-nramas@linux.microsoft.com>
+ <ED63593E-BE9B-40B7-B7FD-9DE772DC2EB1@oracle.com>
+ <98eeec95-cc19-2900-b96e-eadaac1b4a68@linux.microsoft.com>
+ <1574299330.4793.158.camel@linux.ibm.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, eric.snowberg@oracle.com,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH v0] IMA: Check IMA policy flag
-Date:   Thu, 21 Nov 2019 09:14:44 -0800
-Message-Id: <20191121171444.2797-1-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
+Message-ID: <2dfe3a9b-8a24-5da4-f889-9ac3db44c50b@linux.microsoft.com>
+Date:   Thu, 21 Nov 2019 09:16:22 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <1574299330.4793.158.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-process_buffer_measurement() needs to check if ima_policy_flag
-is set to measure and\or appraise. Not doing this check can
-result in kernel panic (such as when process_buffer_measurement()
-is called before IMA is initialized).
+On 11/20/19 5:22 PM, Mimi Zohar wrote:
 
-Please see one instance reported by Eric Snowberg
-(eric.snowberg@oracle.com) when testing key measurement:
-https://lore.kernel.org/linux-integrity/20191118223818.3353-1-nramas@linux.microsoft.com/T/#mc243b065659d43a7f5070a2383979542f10d58d1
+>> I had the following check in process_buffer_measurement() as part of my
+>> patch, but removed it since it is being upstreamed separately (by Mimi)
+>>
+>>    if (!ima_policy_flag)
+>>    	return;
+> 
+> Did you post it as a separate patch?  I can't seem to find it.
+> 
+> Mimi
+> 
 
-This change adds the check in process_buffer_measurement()
-to return immediately if ima_policy_flag is set to 0.
+I have sent a separate patch with just this change (to check 
+ima_policy_flag in process_buffer_measurement()).
 
-[    1.185105] Loading compiled-in X.509 certificates
-[    1.190240] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[    1.191835] #PF: supervisor read access in kernel mode
-[    1.193041] #PF: error_code(0x0000) - not-present page
-[    1.222749] Call Trace:
-[    1.223344]  ? crypto_destroy_tfm+0x5f/0xb0
-[    1.224315]  ima_get_action+0x2c/0x30
-[    1.225148]  process_buffer_measurement+0x1da/0x230
-[    1.226306]  ima_post_key_create_or_update+0x3b/0x40
-[    1.227459]  key_create_or_update+0x371/0x5c0
-[    1.228494]  load_system_certificate_list+0x99/0xfa
-[    1.229588]  ? system_trusted_keyring_init+0xfb/0xfb
-[    1.230705]  ? do_early_param+0x95/0x95
-[    1.231574]  do_one_initcall+0x4a/0x1fa
-[    1.232444]  ? do_early_param+0x95/0x95
-[    1.233313]  kernel_init_freeable+0x1c2/0x267
-[    1.234300]  ? rest_init+0xb0/0xb0
-[    1.235075]  kernel_init+0xe/0x110
-[    1.235842]  ret_from_fork+0x24/0x50
-
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
----
- security/integrity/ima/ima_main.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 60027c643ecd..c9374430bb72 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -651,6 +651,9 @@ static void process_buffer_measurement(const void *buf, int size,
- 	int pcr = CONFIG_IMA_MEASURE_PCR_IDX;
- 	int action = 0;
- 
-+	if (!ima_policy_flag)
-+		return;
-+
- 	action = ima_get_action(NULL, cred, secid, 0, KEXEC_CMDLINE, &pcr,
- 				&template_desc);
- 	if (!(action & IMA_MEASURE))
--- 
-2.17.1
-
+thanks,
+  -lakshmi
