@@ -2,107 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AA01047F6
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 02:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 683E8104815
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 02:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726346AbfKUBWR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 20 Nov 2019 20:22:17 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12812 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726765AbfKUBWR (ORCPT
+        id S1726165AbfKUBcH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 20 Nov 2019 20:32:07 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36142 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725819AbfKUBcH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 20 Nov 2019 20:22:17 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAL1KgoF024174
-        for <linux-integrity@vger.kernel.org>; Wed, 20 Nov 2019 20:22:16 -0500
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wcf5rd3fx-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 20 Nov 2019 20:22:15 -0500
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 21 Nov 2019 01:22:13 -0000
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 21 Nov 2019 01:22:12 -0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xAL1MBbS54525976
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Nov 2019 01:22:11 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 517D1A405B;
-        Thu, 21 Nov 2019 01:22:11 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 992A9A4054;
-        Thu, 21 Nov 2019 01:22:10 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.233.220])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 21 Nov 2019 01:22:10 +0000 (GMT)
+        Wed, 20 Nov 2019 20:32:07 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B20AD20B7185;
+        Wed, 20 Nov 2019 17:32:06 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B20AD20B7185
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1574299926;
+        bh=aeBFIDmsoWny0EYr1/a2SoKWD35gPHAfNwnYfOwZy7Y=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=VSgxdqIy4KDeltAbZ9SUt6xRmyYcz3BkhjsQtC5Ai/DXDZ6w50YFDseA96Olnm/UX
+         dn2GPLUE1DKos9EyIOZANzpP5kpa8t1WPU9wxySlRHqbYfu1tf1oPy5w0AZLP5bLaN
+         x7Wdx4RK8aO2jvomC2xBu0tHWMYb7MVjx5U1zhlg=
 Subject: Re: [PATCH v8 2/5] IMA: Define an IMA hook to measure keys
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+To:     Mimi Zohar <zohar@linux.ibm.com>,
         Eric Snowberg <eric.snowberg@oracle.com>
 Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         keyrings@vger.kernel.org
-Date:   Wed, 20 Nov 2019 20:22:10 -0500
-In-Reply-To: <98eeec95-cc19-2900-b96e-eadaac1b4a68@linux.microsoft.com>
 References: <20191118223818.3353-1-nramas@linux.microsoft.com>
-         <20191118223818.3353-3-nramas@linux.microsoft.com>
-         <ED63593E-BE9B-40B7-B7FD-9DE772DC2EB1@oracle.com>
-         <98eeec95-cc19-2900-b96e-eadaac1b4a68@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+ <20191118223818.3353-3-nramas@linux.microsoft.com>
+ <ED63593E-BE9B-40B7-B7FD-9DE772DC2EB1@oracle.com>
+ <98eeec95-cc19-2900-b96e-eadaac1b4a68@linux.microsoft.com>
+ <1574299330.4793.158.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <21c08fdf-43d7-67e0-1cb5-66bdbce1b6ad@linux.microsoft.com>
+Date:   Wed, 20 Nov 2019 17:32:03 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <1574299330.4793.158.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19112101-0028-0000-0000-000003BD4EE4
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19112101-0029-0000-0000-0000248074E8
-Message-Id: <1574299330.4793.158.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-20_08:2019-11-20,2019-11-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- mlxscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911210008
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-11-20 at 15:40 -0800, Lakshmi Ramasubramanian wrote:
-> On 11/20/2019 3:28 PM, Eric Snowberg wrote:
-> Hi Eric,
-> 
-> > 
-> > I’m interested in using this patch series, however I get the following on every boot:
-> 
-> > [    1.222749] Call Trace:
-> > [    1.223344]  ? crypto_destroy_tfm+0x5f/0xb0
-> > [    1.224315]  ima_get_action+0x2c/0x30
-> > [    1.225148]  process_buffer_measurement+0x1da/0x230
-> > [    1.226306]  ima_post_key_create_or_update+0x3b/0x40
-> 
-> This is happening because IMA is not yet initialized when the IMA hook 
-> is called.
-> 
-> I had the following check in process_buffer_measurement() as part of my 
-> patch, but removed it since it is being upstreamed separately (by Mimi)
-> 
->   if (!ima_policy_flag)
->   	return;
+On 11/20/19 5:22 PM, Mimi Zohar wrote:
 
-Did you post it as a separate patch?  I can't seem to find it.
-
-Mimi
-
+>> I had the following check in process_buffer_measurement() as part of my
+>> patch, but removed it since it is being upstreamed separately (by Mimi)
+>>
+>>    if (!ima_policy_flag)
+>>    	return;
 > 
-> Until this change is in, please add the above line locally on entry to 
-> process_buffer_measurement() to get around the issue.
+> Did you post it as a separate patch?  I can't seem to find it.
 > 
-> thanks,
->   -lakshmi
+> Mimi
 
+No - I removed the above change from my patch since you mentioned it's 
+being upstreamed separately.
+
+I didn't realize you wanted me to include the above change alone in a 
+separate patch (in my patch set). Sorry - I guess I misunderstood.
+
+I can do that when I send an update - I expect to by the end of this week.
+
+thanks,
+  -lakshmi
