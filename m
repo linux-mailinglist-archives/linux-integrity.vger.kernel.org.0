@@ -2,247 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B79E310492F
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 04:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF431049B3
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 05:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727506AbfKUDUi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 20 Nov 2019 22:20:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34344 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727479AbfKUDUi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 20 Nov 2019 22:20:38 -0500
-Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C728208A3;
-        Thu, 21 Nov 2019 03:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574306436;
-        bh=/qpRTgE0LJrXb0QTi11x6t5aoTkCWjmuOZltGWigTFU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=b+kWP7x5V546NaICrZ9xnu+pqW7hXC+Znh17bgn1YSeQUBH5PZGy4H7EehAvxfg2k
-         7AQOBrEWPges1853CP4lDepu1fZ3co11WEWNKamPGQ09GQViRl+iG0dDGdeHkQAj5C
-         91UvduCcHP6AIiEk3ILcyuDIwjymXhWLFg9qxW2U=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Micah Morton <mortonm@chromium.org>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
-Subject: [PATCH v2] security: Fix Kconfig indentation
-Date:   Thu, 21 Nov 2019 04:20:31 +0100
-Message-Id: <1574306432-27096-1-git-send-email-krzk@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1725904AbfKUEsh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 20 Nov 2019 23:48:37 -0500
+Received: from mail-il1-f194.google.com ([209.85.166.194]:36683 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725819AbfKUEsh (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 20 Nov 2019 23:48:37 -0500
+Received: by mail-il1-f194.google.com with SMTP id s75so2009130ilc.3;
+        Wed, 20 Nov 2019 20:48:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fh2kN/lU7mRPHokRtJd6e3fCEFIJiroZZ0yxElbfzqs=;
+        b=jA3ylDn3R3rlm4ISMWmWOZLv3cbhukQnCFPvuaVeBxawOL684lGXZxJ8blgLbTLQ0l
+         jTXN4y2umAWY1w66x+eKSqVInaRvSB+myglrsWUpwQpUSybDLFbfvVfVss90Jz3eEvPJ
+         xzB67KjCRlz1vJHybZ8IpjQg+LygNev64Wa1JplRnPh7xhAPu9XbN/aYcj5o8RGt2lVg
+         +X2dYp0dR8caWXL7llZ4PzTx8KENv6c6YmR5AEv6oa3/ruy2592VPdRm2Mh4II/KR1vY
+         CblbTmbAzZ9/9ieQKHgeZ2NrRwu4v3FET5Ig+yJYnAWZ55iyIlcKG4lSlwh8QiMdp6G7
+         wDnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fh2kN/lU7mRPHokRtJd6e3fCEFIJiroZZ0yxElbfzqs=;
+        b=D5gOkvkZKteAoCfuINcTyVm+Vsg49ZAAoZJg4SK8tTZcgEvAraFp+LB4GRIclccbB3
+         O35F+38pgTXgrNavhZxTQqB/T8cNNRTfLNupHl5C51kEC6W/01/MBD3CV6pz5eUgBVYT
+         MV26JCSln677ntxeY8R8RSobA41NY2FsRG6WERmEXbMnCufpoxIrDXtPDBA7MYX0f3xQ
+         f5syT05p8/2qvsRdGjEWKTY7eUp+IjPdakmqp5efG/+92PCT5JLzakZIKDslUKYBdoVs
+         J9qsNlrk+M0MBPo2BJVlTSZ9gI8lw1HrGHWBJHiE7EKFnC5a2/8OqyvewlZr5MXnNOwm
+         uM7w==
+X-Gm-Message-State: APjAAAWOODc68dqWonPFvK6G4E3Y4f38jzc4lkv2nLa6sQ6FvLpAltcQ
+        0PuopkrkuJBxMKTkTbi+2focBYMuEYj3DTBNVK8=
+X-Google-Smtp-Source: APXvYqyqC0bOLqeBjKWMPY+5UVaRAV7+YB6XL4nm9rXOT/pSx9MxWcMt0zCmleOAGia+kLdEe6eMwRry4gCHiNKUACM=
+X-Received: by 2002:a92:ba04:: with SMTP id o4mr8252986ili.19.1574311716391;
+ Wed, 20 Nov 2019 20:48:36 -0800 (PST)
+MIME-Version: 1.0
+References: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
+In-Reply-To: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 20 Nov 2019 20:48:25 -0800
+Message-ID: <CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com>
+Subject: Re: [GIT PULL] tpmdd updates for Linux v5.4
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        stable <stable@vger.kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Adjust indentation from spaces to tab (+optional two spaces) as in
-coding style with command like:
-	$ sed -e 's/^        /\t/' -i */Kconfig
+On Mon, Sep 2, 2019 at 7:34 AM Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> Hi
+>
+> A new driver for fTPM living inside ARM TEE was added this round. In
+> addition to that, there is three bug fixes and one clean up.
+>
+> /Jarkko
+>
+> The following changes since commit 8fb8e9e46261e0117cb3cffb6dd8bb7e08f8649b:
+>
+>   Merge tag 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma (2019-08-30 09:23:45 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-20190902
+>
+> for you to fetch changes up to e8bd417aab0c72bfb54465596b16085702ba0405:
+>
+>   tpm/tpm_ftpm_tee: Document fTPM TEE driver (2019-09-02 17:08:35 +0300)
+>
+> ----------------------------------------------------------------
+> tpmdd updates for Linux v5.4
+>
+> ----------------------------------------------------------------
+> Jarkko Sakkinen (1):
+>       tpm: Remove a deprecated comments about implicit sysfs locking
+>
+> Lukas Bulwahn (1):
+>       MAINTAINERS: fix style in KEYS-TRUSTED entry
+>
+> Sasha Levin (2):
+>       tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE
+>       tpm/tpm_ftpm_tee: Document fTPM TEE driver
+>
+> Stefan Berger (2):
+>       tpm_tis_core: Turn on the TPM before probing IRQ's
+>       tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Hi Jarrko,
 
----
+I'm replying here because I can't find the patches to reply to
+directly from LKML.
 
-Changes since v1:
-1. Fix also 7-space and tab+1 space indentation issues.
----
- security/apparmor/Kconfig      | 22 +++++++++++-----------
- security/integrity/Kconfig     | 36 ++++++++++++++++++------------------
- security/integrity/ima/Kconfig | 12 ++++++------
- security/keys/Kconfig          | 22 +++++++++++-----------
- security/safesetid/Kconfig     | 24 ++++++++++++------------
- 5 files changed, 58 insertions(+), 58 deletions(-)
+Commit 7f064c378e2c "tpm_tis_core: Turn on the TPM before probing
+IRQ's" in the v5.3-stable tree caused a regression on a pre-release
+platform with a TPM2 device. The interrupt starts screaming when the
+driver is loaded and does not stop until the device is force unbond
+from the driver by:
 
-diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-index a422a349f926..81d85acff580 100644
---- a/security/apparmor/Kconfig
-+++ b/security/apparmor/Kconfig
-@@ -28,17 +28,17 @@ config SECURITY_APPARMOR_HASH
- 	  is available to userspace via the apparmor filesystem.
- 
- config SECURITY_APPARMOR_HASH_DEFAULT
--       bool "Enable policy hash introspection by default"
--       depends on SECURITY_APPARMOR_HASH
--       default y
--       help
--         This option selects whether sha1 hashing of loaded policy
--	 is enabled by default. The generation of sha1 hashes for
--	 loaded policy provide system administrators a quick way
--	 to verify that policy in the kernel matches what is expected,
--	 however it can slow down policy load on some devices. In
--	 these cases policy hashing can be disabled by default and
--	 enabled only if needed.
-+	bool "Enable policy hash introspection by default"
-+	depends on SECURITY_APPARMOR_HASH
-+	default y
-+	help
-+	  This option selects whether sha1 hashing of loaded policy
-+	  is enabled by default. The generation of sha1 hashes for
-+	  loaded policy provide system administrators a quick way
-+	  to verify that policy in the kernel matches what is expected,
-+	  however it can slow down policy load on some devices. In
-+	  these cases policy hashing can be disabled by default and
-+	  enabled only if needed.
- 
- config SECURITY_APPARMOR_DEBUG
- 	bool "Build AppArmor with debug code"
-diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-index 71f0177e8716..41d565f9c2c3 100644
---- a/security/integrity/Kconfig
-+++ b/security/integrity/Kconfig
-@@ -34,10 +34,10 @@ config INTEGRITY_ASYMMETRIC_KEYS
- 	bool "Enable asymmetric keys support"
- 	depends on INTEGRITY_SIGNATURE
- 	default n
--        select ASYMMETRIC_KEY_TYPE
--        select ASYMMETRIC_PUBLIC_KEY_SUBTYPE
--        select CRYPTO_RSA
--        select X509_CERTIFICATE_PARSER
-+	select ASYMMETRIC_KEY_TYPE
-+	select ASYMMETRIC_PUBLIC_KEY_SUBTYPE
-+	select CRYPTO_RSA
-+	select X509_CERTIFICATE_PARSER
- 	help
- 	  This option enables digital signature verification using
- 	  asymmetric keys.
-@@ -53,24 +53,24 @@ config INTEGRITY_TRUSTED_KEYRING
- 	   keyring.
- 
- config INTEGRITY_PLATFORM_KEYRING
--        bool "Provide keyring for platform/firmware trusted keys"
--        depends on INTEGRITY_ASYMMETRIC_KEYS
--        depends on SYSTEM_BLACKLIST_KEYRING
--        help
--         Provide a separate, distinct keyring for platform trusted keys, which
--         the kernel automatically populates during initialization from values
--         provided by the platform for verifying the kexec'ed kerned image
--         and, possibly, the initramfs signature.
-+	bool "Provide keyring for platform/firmware trusted keys"
-+	depends on INTEGRITY_ASYMMETRIC_KEYS
-+	depends on SYSTEM_BLACKLIST_KEYRING
-+	help
-+	  Provide a separate, distinct keyring for platform trusted keys, which
-+	  the kernel automatically populates during initialization from values
-+	  provided by the platform for verifying the kexec'ed kerned image
-+	  and, possibly, the initramfs signature.
- 
- config LOAD_UEFI_KEYS
--       depends on INTEGRITY_PLATFORM_KEYRING
--       depends on EFI
--       def_bool y
-+	depends on INTEGRITY_PLATFORM_KEYRING
-+	depends on EFI
-+	def_bool y
- 
- config LOAD_IPL_KEYS
--       depends on INTEGRITY_PLATFORM_KEYRING
--       depends on S390
--       def_bool y
-+	depends on INTEGRITY_PLATFORM_KEYRING
-+	depends on S390
-+	def_bool y
- 
- config LOAD_PPC_KEYS
- 	bool "Enable loading of platform and blacklisted keys for POWER"
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 838476d780e5..ec9259bd8115 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -159,13 +159,13 @@ config IMA_APPRAISE
- 	  If unsure, say N.
- 
- config IMA_ARCH_POLICY
--        bool "Enable loading an IMA architecture specific policy"
--        depends on (KEXEC_SIG && IMA) || IMA_APPRAISE \
-+	bool "Enable loading an IMA architecture specific policy"
-+	depends on (KEXEC_SIG && IMA) || IMA_APPRAISE \
- 		   && INTEGRITY_ASYMMETRIC_KEYS
--        default n
--        help
--          This option enables loading an IMA architecture specific policy
--          based on run time secure boot flags.
-+	default n
-+	help
-+	  This option enables loading an IMA architecture specific policy
-+	  based on run time secure boot flags.
- 
- config IMA_APPRAISE_BUILD_POLICY
- 	bool "IMA build time configured policy rules"
-diff --git a/security/keys/Kconfig b/security/keys/Kconfig
-index 20791a556b58..7d7fc251b38a 100644
---- a/security/keys/Kconfig
-+++ b/security/keys/Kconfig
-@@ -109,17 +109,17 @@ config ENCRYPTED_KEYS
- 	  If you are unsure as to whether this is required, answer N.
- 
- config KEY_DH_OPERATIONS
--       bool "Diffie-Hellman operations on retained keys"
--       depends on KEYS
--       select CRYPTO
--       select CRYPTO_HASH
--       select CRYPTO_DH
--       help
--	 This option provides support for calculating Diffie-Hellman
--	 public keys and shared secrets using values stored as keys
--	 in the kernel.
--
--	 If you are unsure as to whether this is required, answer N.
-+	bool "Diffie-Hellman operations on retained keys"
-+	depends on KEYS
-+	select CRYPTO
-+	select CRYPTO_HASH
-+	select CRYPTO_DH
-+	help
-+	  This option provides support for calculating Diffie-Hellman
-+	  public keys and shared secrets using values stored as keys
-+	  in the kernel.
-+
-+	  If you are unsure as to whether this is required, answer N.
- 
- config KEY_NOTIFICATIONS
- 	bool "Provide key/keyring change notifications"
-diff --git a/security/safesetid/Kconfig b/security/safesetid/Kconfig
-index 18b5fb90417b..ab1a2c69b0b8 100644
---- a/security/safesetid/Kconfig
-+++ b/security/safesetid/Kconfig
-@@ -1,15 +1,15 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config SECURITY_SAFESETID
--        bool "Gate setid transitions to limit CAP_SET{U/G}ID capabilities"
--        depends on SECURITY
--        select SECURITYFS
--        default n
--        help
--          SafeSetID is an LSM module that gates the setid family of syscalls to
--          restrict UID/GID transitions from a given UID/GID to only those
--          approved by a system-wide whitelist. These restrictions also prohibit
--          the given UIDs/GIDs from obtaining auxiliary privileges associated
--          with CAP_SET{U/G}ID, such as allowing a user to set up user namespace
--          UID mappings.
-+	bool "Gate setid transitions to limit CAP_SET{U/G}ID capabilities"
-+	depends on SECURITY
-+	select SECURITYFS
-+	default n
-+	help
-+	  SafeSetID is an LSM module that gates the setid family of syscalls to
-+	  restrict UID/GID transitions from a given UID/GID to only those
-+	  approved by a system-wide whitelist. These restrictions also prohibit
-+	  the given UIDs/GIDs from obtaining auxiliary privileges associated
-+	  with CAP_SET{U/G}ID, such as allowing a user to set up user namespace
-+	  UID mappings.
- 
--          If you are unsure how to answer this question, answer N.
-+	  If you are unsure how to answer this question, answer N.
--- 
-2.7.4
+     echo IFX0740:00 > /sys/bus/platform/drivers/tpm_tis/unbind
 
+I checked v5.4-rc8 and it has the same problem. I tried reverting:
+
+1ea32c83c699 tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
+5b359c7c4372 tpm_tis_core: Turn on the TPM before probing IRQ's
+
+Which silenced the screaming interrupt problem, but now the TPM is reporting:
+
+[    3.725131] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
+[    3.725358] tpm tpm0: tpm_try_transmit: send(): error -5
+[    3.725359] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
+polling instead
+
+...at load, where it was not reporting this previously. Can you take a look?
