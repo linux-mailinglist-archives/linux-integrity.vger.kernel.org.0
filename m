@@ -2,71 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 683E8104815
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 02:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 974E11048D6
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2019 04:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbfKUBcH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 20 Nov 2019 20:32:07 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:36142 "EHLO
+        id S1726333AbfKUDLW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 20 Nov 2019 22:11:22 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:42906 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725819AbfKUBcH (ORCPT
+        with ESMTP id S1725904AbfKUDLW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 20 Nov 2019 20:32:07 -0500
+        Wed, 20 Nov 2019 22:11:22 -0500
 Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B20AD20B7185;
-        Wed, 20 Nov 2019 17:32:06 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B20AD20B7185
+        by linux.microsoft.com (Postfix) with ESMTPSA id BB23820B7185;
+        Wed, 20 Nov 2019 19:11:21 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BB23820B7185
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1574299926;
-        bh=aeBFIDmsoWny0EYr1/a2SoKWD35gPHAfNwnYfOwZy7Y=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=VSgxdqIy4KDeltAbZ9SUt6xRmyYcz3BkhjsQtC5Ai/DXDZ6w50YFDseA96Olnm/UX
-         dn2GPLUE1DKos9EyIOZANzpP5kpa8t1WPU9wxySlRHqbYfu1tf1oPy5w0AZLP5bLaN
-         x7Wdx4RK8aO2jvomC2xBu0tHWMYb7MVjx5U1zhlg=
-Subject: Re: [PATCH v8 2/5] IMA: Define an IMA hook to measure keys
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
+        s=default; t=1574305881;
+        bh=gTFGVwIweV1rSl+0K4uxrvsQYK2nyN8aEGlIR9MKgV0=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=jSQRp8Qlr0Z+080phAZU/poDFshC1wW4Q5gy0b7vwdikQZyT/3ouS0p3UxIYj77M4
+         CgBDKbTerQyk0O5+sIVveKVmtl0kMBHkAnJxLc5UTEk4N90WXAcXR3MoSWgJXq6h3f
+         aVihKY6ND0bmIZZIlfB0OaLepBLJGLTFLu5gdOt0=
+Subject: Re: [PATCH v8 4/5] IMA: Add support to limit measuring keys
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        dhowells@redhat.com
 References: <20191118223818.3353-1-nramas@linux.microsoft.com>
- <20191118223818.3353-3-nramas@linux.microsoft.com>
- <ED63593E-BE9B-40B7-B7FD-9DE772DC2EB1@oracle.com>
- <98eeec95-cc19-2900-b96e-eadaac1b4a68@linux.microsoft.com>
- <1574299330.4793.158.camel@linux.ibm.com>
+ <20191118223818.3353-5-nramas@linux.microsoft.com>
+ <1574291957.4793.144.camel@linux.ibm.com>
+ <fef8fc67-643d-e579-9628-6516fd02b4db@linux.microsoft.com>
+ <1574297611.4793.154.camel@linux.ibm.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <21c08fdf-43d7-67e0-1cb5-66bdbce1b6ad@linux.microsoft.com>
-Date:   Wed, 20 Nov 2019 17:32:03 -0800
+Message-ID: <9ed2c456-c959-06d8-7e4c-34662d60b169@linux.microsoft.com>
+Date:   Wed, 20 Nov 2019 19:11:21 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <1574299330.4793.158.camel@linux.ibm.com>
+In-Reply-To: <1574297611.4793.154.camel@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/20/19 5:22 PM, Mimi Zohar wrote:
+Adding David Howells@Redhat
 
->> I had the following check in process_buffer_measurement() as part of my
->> patch, but removed it since it is being upstreamed separately (by Mimi)
->>
->>    if (!ima_policy_flag)
->>    	return;
-> 
-> Did you post it as a separate patch?  I can't seem to find it.
-> 
-> Mimi
+Hi David,
 
-No - I removed the above change from my patch since you mentioned it's 
-being upstreamed separately.
+On 11/20/19 4:53 PM, Mimi Zohar wrote:
+> I would very much like for a regression test to be included in this
+> patch set, but it isn't a requirement, as long as everything needed
+> for verifying a signature is included in the key measurement.
 
-I didn't realize you wanted me to include the above change alone in a 
-separate patch (in my patch set). Sorry - I guess I misunderstood.
+/*
+  * Cryptographic data for the public-key subtype of
+  * the asymmetric key type.
+  *
+  * Note that this may include private part of the key as well
+  * as the public part.
+  */
+struct public_key {
+	void *key;
+	u32 keylen;
+	enum OID algo;
+	void *params;
+	u32 paramlen;
+	bool key_is_private;
+	const char *id_type;
+	const char *pkey_algo;
+};
 
-I can do that when I send an update - I expect to by the end of this week.
+ From the "struct key" the public_key is being retrieved like this:
+struct public_key *pk = key->payload.data[asym_crypto];
+
+The buffer being measured currently includes the data pointed to by 
+"key" only (in struct public_key).
+
+The function that verifies signature using public key takes public_key 
+and public_key_signature as input:
+
+/*
+  * Verify a signature using a public key.
+  */
+int public_key_verify_signature(const struct public_key *pkey,
+				const struct public_key_signature *sig)
+
+Just wanted to confirm:
+
+For verifying "struct public_key_signature" would it be sufficient if I 
+include all the fields in "struct public_key" structure?
 
 thanks,
   -lakshmi
