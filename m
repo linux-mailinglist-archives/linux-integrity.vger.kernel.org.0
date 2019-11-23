@@ -2,75 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E557310780B
-	for <lists+linux-integrity@lfdr.de>; Fri, 22 Nov 2019 20:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE410107C6A
+	for <lists+linux-integrity@lfdr.de>; Sat, 23 Nov 2019 03:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbfKVTcd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 22 Nov 2019 14:32:33 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:45942 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726695AbfKVTcd (ORCPT
+        id S1726085AbfKWC1B (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 22 Nov 2019 21:27:01 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:45985 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726089AbfKWC1B (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 22 Nov 2019 14:32:33 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6EF3A8EE10C;
-        Fri, 22 Nov 2019 11:32:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1574451152;
-        bh=xdLz5DF3jZUJH3dAWBzid+6iO9QipRNxmg3J/qvCpvY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=V9radRWRD+0oglBjw8cBB1scw4eXeG1oRV4+i06VT7g3zYC4a2kbacGgHzn16DdTQ
-         RRuw+OOPhJvscBiBwt80vzIFKduYtUfBKSbscgyJjjdCiM5gkIj7Y2XN13RVHZXRpE
-         IEkHr+zM+PmolQTQfmyyOc1BxYauoPMGii7y1XY0=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jYutBcUoMBku; Fri, 22 Nov 2019 11:32:32 -0800 (PST)
-Received: from jarvis.lan (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id D61C48EE0EF;
-        Fri, 22 Nov 2019 11:32:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1574451152;
-        bh=xdLz5DF3jZUJH3dAWBzid+6iO9QipRNxmg3J/qvCpvY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=V9radRWRD+0oglBjw8cBB1scw4eXeG1oRV4+i06VT7g3zYC4a2kbacGgHzn16DdTQ
-         RRuw+OOPhJvscBiBwt80vzIFKduYtUfBKSbscgyJjjdCiM5gkIj7Y2XN13RVHZXRpE
-         IEkHr+zM+PmolQTQfmyyOc1BxYauoPMGii7y1XY0=
-Message-ID: <1574451150.11063.3.camel@HansenPartnership.com>
-Subject: Re: IMA: Data included in the key measurement
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, dhowells@redhat.com
-Cc:     James Morris <jamorris@linuxonhyperv.com>
-Date:   Fri, 22 Nov 2019 11:32:30 -0800
-In-Reply-To: <19554a75-06c3-f234-f27e-25f65dbecd1f@linux.microsoft.com>
-References: <19242774-688e-58ff-40f8-e346d6ba4339@linux.microsoft.com>
-         <1574354333.3277.27.camel@HansenPartnership.com>
-         <b4257d08-f6cf-19a0-f6f0-99c962ededac@linux.microsoft.com>
-         <1574439451.3331.14.camel@HansenPartnership.com>
-         <19554a75-06c3-f234-f27e-25f65dbecd1f@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Fri, 22 Nov 2019 21:27:01 -0500
+Received: by mail-il1-f199.google.com with SMTP id h69so336831ild.12
+        for <linux-integrity@vger.kernel.org>; Fri, 22 Nov 2019 18:27:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=AXD7gA5IclP9MlEfBt3hOECjOVr1z7Xrb3xxCpv2mBI=;
+        b=pfj7W5+X8Hc7JgU5LiPFi7oNUg7etHSda/U3wqeLxkDABfN1Q4elxiFAd0KaA8R32b
+         yWYrk+JciDxfbbLpgnNW5kbE7HuXgDKQ+hhcawHLwUVZ1GO+T1S1uizFr6HJr5CqYuvV
+         KbWHzZwHDkS/JSM+y+jZQhZd25CB6C8FWizNaJAWFt6Wgs4sUqJzfXULk/nXTpl2m66h
+         A9ty1RQtchAJ9wz980wwh41ZGO3JbFpnbh7GUdu8U4ODRq6alyl9KIarqR6HiawCmx0W
+         pkr+oV6eEcYH49czii74aPYFWiXA+DLevOGwHgia8JJMxEtekcYMl2Aoe/Hrsrgeh4Uf
+         sKlg==
+X-Gm-Message-State: APjAAAW0bRj9UM8mHFhL90WKo0Vgs5ji41Ps37I3NQYi+X/XGC5/OCW4
+        TLr9Vb/gA0eCMC15ODOzgNfJUj/nwrjiV9xmSRCglp2T1Ksv
+X-Google-Smtp-Source: APXvYqw+zwi8wEAChrZq2ZVReXjmVskvTdckaXjZ2KbBA0nnhxgLvaWwwG2piW1E9CjkkowM30p50xw7NE0F2nHtTiaknnYm/gUD
+MIME-Version: 1.0
+X-Received: by 2002:a92:bb95:: with SMTP id x21mr20040816ilk.128.1574476020687;
+ Fri, 22 Nov 2019 18:27:00 -0800 (PST)
+Date:   Fri, 22 Nov 2019 18:27:00 -0800
+In-Reply-To: <000000000000d03eea0571adfe83@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ebac4d0597fa4340@google.com>
+Subject: Re: possible deadlock in mnt_want_write
+From:   syzbot <syzbot+ae82084b07d0297e566b@syzkaller.appspotmail.com>
+To:     amir73il@gmail.com, ast@kernel.org, dvyukov@google.com,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        mszeredi@redhat.com, rgoldwyn@suse.de,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, zohar@linux.vnet.ibm.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-11-22 at 09:39 -0800, Lakshmi Ramasubramanian wrote:
-> On 11/22/19 8:17 AM, James Bottomley wrote:
-> 
-> Thanks for the info James. I'll investigate further.
+syzbot has bisected this bug to:
 
-It strikes me that for attestation purposes, the hash of the
-TBSCertificate, which is the thing that the issuer signs so we have it
-anyway (well modulo us wanting a different hash algorithm), is a
-complete and unique identifier for the certificate; can't we just use
-that ... and perhaps we should add it to the ids stored in the key
-payload[2]?
+commit 8e54cadab447dae779f80f79c87cbeaea9594f60
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Sun Nov 27 01:05:42 2016 +0000
 
-James
+     fix default_file_splice_read()
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15147a36e00000
+start commit:   6d906f99 Merge tag 'arm64-fixes' of git://git.kernel.org/p..
+git tree:       upstream
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=17147a36e00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13147a36e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=856fc6d0fbbeede9
+dashboard link: https://syzkaller.appspot.com/bug?extid=ae82084b07d0297e566b
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=111767b7200000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1611ab2d200000
+
+Reported-by: syzbot+ae82084b07d0297e566b@syzkaller.appspotmail.com
+Fixes: 8e54cadab447 ("fix default_file_splice_read()")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
