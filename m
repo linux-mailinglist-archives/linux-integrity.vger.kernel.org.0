@@ -2,159 +2,159 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6020C108473
-	for <lists+linux-integrity@lfdr.de>; Sun, 24 Nov 2019 19:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6611092E1
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Nov 2019 18:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbfKXSCY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 24 Nov 2019 13:02:24 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:37261 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726825AbfKXSCY (ORCPT
+        id S1725946AbfKYRdp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 25 Nov 2019 12:33:45 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:50116 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725868AbfKYRdp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 24 Nov 2019 13:02:24 -0500
-Received: by mail-pf1-f193.google.com with SMTP id p24so6113071pfn.4;
-        Sun, 24 Nov 2019 10:02:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kfIxdj2LVxPAZ1Wflylge9S9kE5jfMTIOd5jj5CenZE=;
-        b=pNQRyLgjPx9sp3uAoqGaDL+twbZ6ytwmS3lHalR1VW+f101xGNgn0KnPNZSCOGAHIY
-         fdnbzRv2kmAojPMTZyLQcIjbvqE3u9JFGlsqs2j/vZKVqOLEWl6vbr6OgbyyXVo/4K4i
-         VnTuNIaR820Zf9G6pNUsTuIOad2EvNHtEj64tzgnlCZnr8MW+zcjVEudTYwArBd082k5
-         jqZcgUAyOYM9yu7d1DsXZTjVIkN5gxWWg5iBRC5KoosYopPzkdRNlGoRHgERO0jtsu8r
-         MtaGbV2zLre2cRoHeYILUSCq3Im4rM33T+fW92VeIDyeEpP614VosPlVKmPlZTAbijfa
-         fvCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kfIxdj2LVxPAZ1Wflylge9S9kE5jfMTIOd5jj5CenZE=;
-        b=GYqpCRTFeNFMB8gsudmHmBJ4ySYVyEGAm2NK+fYWG6QMZD+s0dhkKXlovem1T1QG4B
-         3ekpMtOjUaNG+AvmdU0Tp0cNG8eWJwCgjLLhaJrAwkb5z8VqlQ0sN2m+wjxf8UYkyese
-         VIThTw7jOneor7WPj7V+yu61g7NwP/Z4Hy8w9ZLzmF+og4RB8NkCS2gadN+A5QkIY6hN
-         5YyGq5bEshs+zu+daM4Dl7KaWF5X0MFf6O3xhwEjHdQRs8C5YVNV3kwf5IxkI7TMvLxc
-         /ntbSKBcX85eKcDibnQj+D82DqvqYpqNPH3oQTk7rvj059P27qoHbtZaFXdypNaccjnH
-         iJDA==
-X-Gm-Message-State: APjAAAVAPusvRhgMRLayC1V62I08ipuBdKy3F+sqAcWUiCq43cLV7UNC
-        OJtZj25F+a/3L5xkmm6ze2Um3avGw4RopIJCj9I=
-X-Google-Smtp-Source: APXvYqz+QhEQbI+zJvb+yOUQctcHTWpvncfbC+TguFgDqeb6TfTL91Xglo+Y7i3unSyfPSwALiE6ZX/IlBCxuULxOIw=
-X-Received: by 2002:a63:8e:: with SMTP id 136mr21396785pga.355.1574618543209;
- Sun, 24 Nov 2019 10:02:23 -0800 (PST)
+        Mon, 25 Nov 2019 12:33:45 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8175220B7185;
+        Mon, 25 Nov 2019 09:33:43 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8175220B7185
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1574703223;
+        bh=NK70LHrX4/fNESrlRitozq08RIhY2ImS5o9uVRG9e+w=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=sLkhzLO8u+HHsWmqFrx3BwNDPXq/B9hQZvfg9GaVvlZ0iXXeKuIrUsWnCzG3PQJDh
+         luEacilVJ4928dJUg8zSN9aqQGu1bEq0uLLwGLw4bzOAQ9aHrnBoun+nRh6kawU6kF
+         OH/rY7YqCu6tIWz2dMVCGLhOcj8ncE4tA8qQXpMg=
+Subject: Re: IMA: Data included in the key measurement
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, dhowells@redhat.com
+Cc:     James Morris <jamorris@linuxonhyperv.com>
+References: <19242774-688e-58ff-40f8-e346d6ba4339@linux.microsoft.com>
+ <1574354333.3277.27.camel@HansenPartnership.com>
+ <b4257d08-f6cf-19a0-f6f0-99c962ededac@linux.microsoft.com>
+ <1574439451.3331.14.camel@HansenPartnership.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <6ceecb10-61f5-1067-d219-1f6caaa104a9@linux.microsoft.com>
+Date:   Mon, 25 Nov 2019 09:33:39 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20191110162137.230913-1-amirmizi6@gmail.com> <20191110162137.230913-5-amirmizi6@gmail.com>
- <20191114191054.GA20209@bogus>
-In-Reply-To: <20191114191054.GA20209@bogus>
-From:   Amir Mizinski <amirmizi6@gmail.com>
-Date:   Sun, 24 Nov 2019 20:02:13 +0200
-Message-ID: <CAMHTsUXKUfCwHzucq7+zwkopM-9ZravWqXF8PXH9zegbkWjSgA@mail.gmail.com>
-Subject: Re: [PATCH v1 4/5] dt-bindings: tpm: Add the TPM TIS I2C device tree
- binding documentaion
-To:     Rob Herring <robh@kernel.org>
-Cc:     Eyal.Cohen@nuvoton.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Oshri Alkobi <oshrialkoby85@gmail.com>,
-        Alexander Steffen <alexander.steffen@infineon.com>,
-        Mark Rutland <mark.rutland@arm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        IS20 Oshri Alkoby <oshri.alkoby@nuvoton.com>,
-        Tomer Maimon <tmaimon77@gmail.com>, gcwilson@us.ibm.com,
-        kgoldman@us.ibm.com, ayna@linux.vnet.ibm.com,
-        IS30 Dan Morav <Dan.Morav@nuvoton.com>,
-        oren.tanami@nuvoton.com, shmulik.hager@nuvoton.com,
-        amir.mizinski@nuvoton.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1574439451.3331.14.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: base64
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 9:10 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Sun, Nov 10, 2019 at 06:21:36PM +0200, amirmizi6@gmail.com wrote:
-> > From: Amir Mizinski <amirmizi6@gmail.com>
-> >
-> > this file aim at documenting TPM TIS I2C related dt-bindings for the I2C PTP based Physical TPM.
-> >
-> > Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
-> > ---
-> >  .../bindings/security/tpm/tpm_tis_i2c.txt          | 24 ++++++++++++++++++++++
-> >  1 file changed, 24 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm_tis_i2c.txt
->
-> Please make this a schema. See
-> Documentation/devicetree/writing-schema.rst.
->
-> >
-> > diff --git a/Documentation/devicetree/bindings/security/tpm/tpm_tis_i2c.txt b/Documentation/devicetree/bindings/security/tpm/tpm_tis_i2c.txt
-> > new file mode 100644
-> > index 0000000..7d5a69e
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/security/tpm/tpm_tis_i2c.txt
-> > @@ -0,0 +1,24 @@
-> > +* Device Tree Bindings for I2C PTP based Trusted Platform Module(TPM)
-> > +
-> > +The TCG defines hardware protocol, registers and interface (based
-> > +on the TPM Interface Specification) for accessing TPM devices
-> > +implemented with an I2C interface.
-> > +
-> > +Refer to the 'I2C Interface Definition' section in 'TCG PC Client
-> > +PlatformTPMProfile(PTP) Specification' publication for specification.
-> > +
-> > +Required properties:
-> > +
-> > +- compatible     : Should be "tcg,tpm_tis-i2c"
->
-> s/_/-/
->
-> As this has to be under an I2C controller node, the '-i2c' part is
-> redundant.
->
-
-I wrote this Respectively with the tpm_tis-spi driver.
-https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/security/tpm/tpm_tis_spi.txt
-Should i change it anyway or keep the format?
-Also the '-i2c' is added since its not the only protocol used over
-tis, and it is handled differently from spi.
-
-> There's a bigger issue that the h/w here is more than just an I2C
-> protocol. The chip may have multiple power supplies, clocks, reset
-> lines, etc. HID over I2C seems like a similar case. Does the spec define
-> *all* of that? If not, you need chip specific compatibles. You can keep
-> this as a fallback though.
->
-> > +- reg            : Address on the bus
-> > +- tpm-pirq       : Input gpio pin, used for host interrupts
->
-> GPIO connections are properties ending in '-gpios'. However, if the only
-> use is an interrupt, then you should use 'interrupts'.
->
-
-My mistake, i didn't implemented interrupts yet so ill clear this for
-now.  thank you.
-
-> > +
-> > +Example (for Raspberry Pie 3 Board with Nuvoton's NPCT75X (2.0)
-> > +-------------------------------------------------------------------
-> > +
-> > +tpm_tis-i2c: tpm_tis-i2c@2e {
-> > +
-> > +       compatible = "tcg,tpm_tis-i2c";
-> > +       reg = <0x2e>;
-> > +       tpm-pirq = <&gpio 24 GPIO_ACTIVE_HIGH>;
-> > +};
-> > --
-> > 2.7.4
-> >
-
-Apologies for the late response, had a personal issue that needed my attention
-I'm working on making this a schema for next version. This is new for
-me, if you have additional sources regarding how to write it, i'll
-appreciate if you send me.
-Thank you.
-
-Amir Mizinski
+T24gMTEvMjIvMTkgODoxNyBBTSwgSmFtZXMgQm90dG9tbGV5IHdyb3RlOg0KDQo+IElmIHlv
+dSBtZWFzdXJlIGF0IHRpbWUgb2YgaW5zZXJ0aW9uIHlvdSBzaG91bGQgYmUgYWJsZSB0byBt
+ZWFzdXJlIHRoZQ0KPiBlbnRpcmUga2V5IGJlY2F1c2UgaXQncyBpbnNlcnRlZCBhcyBhIGNv
+bXBsZXRlIGNlcnRpZmljYXRlLiAgSWYgdGhlcmUncw0KPiBhZGRpdGlvbmFsIGRhdGEgeW91
+IG5lZWQgdG8gcmV0cmlldmUgYWZ0ZXIgdGhlIGxvYWQsIHdlIG1pZ2h0IGJlIGFibGUNCj4g
+dG8gc3RvcmUgaXQgaW4gYWRkaXRpb24gdG8gdGhlIGRhdGEgd2UgYWxyZWFkeSBzYXZlIGZy
+b20gdGhlDQo+IGNlcnRpZmljYXRlLg0KPiANCj4gSmFtZXMNCg0KWW91IGFyZSByaWdodCBK
+YW1lcyAtIGF0IHRoZSB0aW1lIG9mIGluc2VydGlvbiB0aGUgY29tcGxldGUgY2VydGlmaWNh
+dGUgDQpjYW4gYmUgbWVhc3VyZWQuIFRoYW5rcyBmb3IgdGhlIGluZm9ybWF0aW9uLg0KDQpJ
+IHdpbGwgdXBkYXRlIG15IHBhdGNoIHNldCB0byBpbmNsdWRlIHRoZSBjZXJ0aWZpY2F0ZSBk
+YXRhIGluIGtleSANCm1lYXN1cmVtZW50LiBQbGVhc2UgbGV0IG1lIGtub3cgaWYgeW91IGhh
+dmUgYW55IGNvbW1lbnRzXGNvbmNlcm5zLg0KDQpQbGVhc2Ugc2VlIGJlbG93IGZvciBkZXRh
+aWxzOg0KDQpJbiB0aGUgZmlsZSAic2VjdXJpdHkva2V5cy9rZXkuYyIgPT4NCmtleV9yZWZf
+dCBrZXlfY3JlYXRlX29yX3VwZGF0ZShrZXlfcmVmX3Qga2V5cmluZ19yZWYsDQoJCQkgICAg
+ICAgY29uc3QgY2hhciAqdHlwZSwNCgkJCSAgICAgICBjb25zdCBjaGFyICpkZXNjcmlwdGlv
+biwNCgkJCSAgICAgICBjb25zdCB2b2lkICpwYXlsb2FkLA0KCQkJICAgICAgIHNpemVfdCBw
+bGVuLA0KCQkJICAgICAgIGtleV9wZXJtX3QgcGVybSwNCgkJCSAgICAgICB1bnNpZ25lZCBs
+b25nIGZsYWdzKQ0KDQpJbiB0aGUga2V5IG1lYXN1cmVtZW50LCBpbnN0ZWFkIG9mIGp1c3Qg
+dGhlICJwdWJsaWMga2V5IiwgSSBpbmNsdWRlZCB0aGUgDQpidWZmZXIgcG9pbnRlZCB0byBi
+eSB0aGUgInBheWxvYWQiIHBhcmFtZXRlciAoYnVmZmVyIG9mIHNpemUgInBsZW4iIA0KYnl0
+ZXMpIGluIHRoZSBjYWxsIHRvIGtleV9jcmVhdGVfb3JfdXBkYXRlKCkuIEl0IGlzIHRoZSBl
+bnRpcmUgY2VydGlmaWNhdGUuDQoNCnRoYW5rcywNCiAgLWxha3NobWkNCg0KUGxlYXNlIHNl
+ZSB0aGUgc2VxdWVuY2Ugb2YgY29tbWFuZHMgYmVsb3cgdG8gaW1wb3J0IGEgY2VydGlmaWNh
+dGUgKGluIA0KREVSIGZvcm1hdCkgdG8gIi5pbWEiIGtleXJpbmcgYW5kIHJlZ2VuZXJhdGUg
+dGhlIGNlcnRpZmljYXRlIGZyb20gdGhlIA0KSU1BIG1lYXN1cmVtZW50IGxvZy4NCg0KKioq
+KioqIEltcG9ydCBhIERFUiBjZXJ0aWZpY2F0ZSB0byAuaW1hIGtleXJpbmcgKioqKioqDQoN
+CnJvb3RAbnJhbWFzOi9ob21lL25yYW1hcyMga2V5Y3RsIHNob3cgJTouaW1hDQpLZXlyaW5n
+DQogICA3NTI5NTE4MyAtLS1sc3dydiAgICAgIDAgICAgIDAgIGtleXJpbmc6IC5pbWENCg0K
+cm9vdEBucmFtYXM6L2hvbWUvbnJhbWFzIyBldm1jdGwgaW1wb3J0IHg1MDlfaW1hLmRlciA3
+NTI5NTE4Mw0KMTE4ODg2MDE3DQoNCnJvb3RAbnJhbWFzOi9ob21lL25yYW1hcyMga2V5Y3Rs
+IHNob3cgJTouaW1hDQpLZXlyaW5nDQogICA3NTI5NTE4MyAtLS1sc3dydiAgICAgIDAgICAg
+IDAgIGtleXJpbmc6IC5pbWENCiAgMTE4ODg2MDE3IC0tYWxzLS12ICAgICAgMCAgICAgMCAg
+IFxfIGFzeW1tZXRyaWM6IGhvc3RuYW1lOiB3aG9hbWkgDQpzaWduaW5nIGtleTogMDUyZGQy
+NDdkYzNjMzZkNmQ2MDY3NWZlN2FlODY5NzkwYmU1NjE3MQ0KDQoqKioqKiogVmlldyB0aGUg
+SU1BIG1lYXN1cmVtZW50IGxvZyAqKioqKioNCg0Kcm9vdEBucmFtYXM6L2hvbWUvbnJhbWFz
+IyBjYXQgDQovc3lzL2tlcm5lbC9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2FzY2lpX3J1bnRp
+bWVfbWVhc3VyZW1lbnRzDQoxMCBmYWYzZGQ1MzIxMTRmZWVkOGI4MjE1ZWI3YjVkOGMzMTA3
+ZDVlNzAyIGltYS1idWYgDQpzaGEyNTY6YWM4YmQ2N2JkYWRlZDYzYmU5MjMxYzQ5NTU4NWZk
+ODhlZGNlMDgxMmQ5YjY3N2UxZTFlMjE5ZTJkZDNiY2Q2MCANCi5pbWEgDQozMDgyMDI4NjMw
+ODIwMWVmYTAwMzAyMDEwMjAyMTQ1YmUwMjM0ZmYzYWRmMDUwMzQ5YjMzYjg5NDY1YTZhYWI2
+ZTMzOWY3MzAwZDA2MDkyYTg2NDg4NmY3MGQwMTAxMGIwNTAwMzA1MDMxMTEzMDBmMDYwMzU1
+MDQwYTBjMDg2ODZmNzM3NDZlNjE2ZDY1MzExYjMwMTkwNjAzNTUwNDAzMGMxMjc3Njg2ZjYx
+NmQ2OTIwNzM2OTY3NmU2OTZlNjcyMDZiNjU3OTMxMWUzMDFjMDYwOTJhODY0ODg2ZjcwZDAx
+MDkwMTE2MGY3NzY4NmY2MTZkNjk0MDY4NmY3Mzc0NmU2MTZkNjUzMDFlMTcwZDMxMzkzMDM4
+MzIzMjMwMzIzMjM5MzAzMjVhMTcwZDMyMzAzMDM4MzIzMTMwMzIzMjM5MzAzMjVhMzA1MDMx
+MTEzMDBmMDYwMzU1MDQwYTBjMDg2ODZmNzM3NDZlNjE2ZDY1MzExYjMwMTkwNjAzNTUwNDAz
+MGMxMjc3Njg2ZjYxNmQ2OTIwNzM2OTY3NmU2OTZlNjcyMDZiNjU3OTMxMWUzMDFjMDYwOTJh
+ODY0ODg2ZjcwZDAxMDkwMTE2MGY3NzY4NmY2MTZkNjk0MDY4NmY3Mzc0NmU2MTZkNjUzMDgx
+OWYzMDBkMDYwOTJhODY0ODg2ZjcwZDAxMDEwMTA1MDAwMzgxOGQwMDMwODE4OTAyODE4MTAw
+ZWU5NmIyNjQwNzJhNDI4ODhmNzhhMmY5YjgxOTg0NjdhM2FkOTdkMTI2ZjNkMWNjMWMyNGQy
+M2U3MTg1Y2M3NDNiMDRkNGE1NDI1NGNhMTZlMWUxMWVkNDQ1MGRlYjk4YjFmN2JiNDI4ODQy
+NDU3MGZhYmNmYzZkNWFhOTNhMmExNGZhMmI3ODM1YWM4NzdjZmVhNzYxZTVmZjQxNGM2ZWUy
+NzRlZmYyNmY4YmQ2YzQ4NDMxMmU1NjYxOTI5OWFjZjBkYmQyMjRiODdjMzg4M2I2NmE5Mzkz
+ZDIxYWY4OTYyNDU4NjYzYjBhYzE3MDZjNjM3NzNjZDUwZTgyMzYyNzAyMDMwMTAwMDFhMzVk
+MzA1YjMwMGMwNjAzNTUxZDEzMDEwMWZmMDQwMjMwMDAzMDBiMDYwMzU1MWQwZjA0MDQwMzAy
+MDc4MDMwMWQwNjAzNTUxZDBlMDQxNjA0MTQwNTJkZDI0N2RjM2MzNmQ2ZDYwNjc1ZmU3YWU4
+Njk3OTBiZTU2MTcxMzAxZjA2MDM1NTFkMjMwNDE4MzAxNjgwMTRlMzY3MTBmMDgzNGM5NzNl
+ZDk0YTE4NmZiY2QyMjM3NWI0NWUyNDU0MzAwZDA2MDkyYTg2NDg4NmY3MGQwMTAxMGIwNTAw
+MDM4MTgxMDBiMTJmYWVmZjFlMGUzOTBjZmQ1ZWI3MTQwYWYzYjdhNjUzY2I0OWM2YWIwYTIz
+YmUyNGMwMzUzMzFkNzYwMGM4Zjc1OGY5ZGY3ZmRmYzVlZWI2ZmVjMzU4NTkyMDNlY2EwZTRm
+MDFmOWE3OWE1OGJlNjMwOTQ3Y2I5NTlhNTJkM2YyZGU5NmYyMTBkNDkyNDdjMzNhNjIyNmRj
+MmE1MmVlNTQxMDY5ZWQzYzYyMWY4NzY3ZmQzNmEwNjFlOWE2MWFkYjVkMWRkMzQ0OTlkOTlh
+MWNlNmJhYTQ5NmI0ZjVlMjI2OGJmYzUyYzNlZWE0YTZiN2I1MTgxZjA4NTI0YWVlDQoNCioq
+KioqKiBSZWdlbmVyYXRlIHRoZSBjZXJ0aWZpY2F0ZSBmcm9tIElNQSBtZWFzdXJlbWVudCBs
+b2cgKioqKioqDQoNCnJvb3RAbnJhbWFzOi9ob21lL25yYW1hcyMgY2F0IA0KL3N5cy9rZXJu
+ZWwvc2VjdXJpdHkvaW1hL2FzY2lpX3J1bnRpbWVfbWVhc3VyZW1lbnRzIHwgZ3JlcCAiIC5p
+bWEiIHwgY3V0IA0KLWQnICcgLWYgNiB8IHh4ZCAtciAtcCA+IGltYS1jZXJ0LmRlcg0KDQpy
+b290QG5yYW1hczovaG9tZS9ucmFtYXMjIG9wZW5zc2wgeDUwOSAtaW4gaW1hLWNlcnQuZGVy
+IC1pbmZvcm0gREVSIA0KLXRleHQgLW5vb3V0DQpDZXJ0aWZpY2F0ZToNCiAgICAgRGF0YToN
+CiAgICAgICAgIFZlcnNpb246IDMgKDB4MikNCiAgICAgICAgIFNlcmlhbCBOdW1iZXI6DQog
+ICAgICAgICAgICAgNWI6ZTA6MjM6NGY6ZjM6YWQ6ZjA6NTA6MzQ6OWI6MzM6Yjg6OTQ6NjU6
+YTY6YWE6YjY6ZTM6Mzk6ZjcNCiAgICAgICAgIFNpZ25hdHVyZSBBbGdvcml0aG06IHNoYTI1
+NldpdGhSU0FFbmNyeXB0aW9uDQogICAgICAgICBJc3N1ZXI6IE8gPSBob3N0bmFtZSwgQ04g
+PSB3aG9hbWkgc2lnbmluZyBrZXksIGVtYWlsQWRkcmVzcyA9IA0Kd2hvYW1pQGhvc3RuYW1l
+DQogICAgICAgICBWYWxpZGl0eQ0KICAgICAgICAgICAgIE5vdCBCZWZvcmU6IEF1ZyAyMiAw
+MjoyOTowMiAyMDE5IEdNVA0KICAgICAgICAgICAgIE5vdCBBZnRlciA6IEF1ZyAyMSAwMjoy
+OTowMiAyMDIwIEdNVA0KICAgICAgICAgU3ViamVjdDogTyA9IGhvc3RuYW1lLCBDTiA9IHdo
+b2FtaSBzaWduaW5nIGtleSwgZW1haWxBZGRyZXNzID0gDQp3aG9hbWlAaG9zdG5hbWUNCiAg
+ICAgICAgIFN1YmplY3QgUHVibGljIEtleSBJbmZvOg0KICAgICAgICAgICAgIFB1YmxpYyBL
+ZXkgQWxnb3JpdGhtOiByc2FFbmNyeXB0aW9uDQogICAgICAgICAgICAgICAgIFJTQSBQdWJs
+aWMtS2V5OiAoMTAyNCBiaXQpDQogICAgICAgICAgICAgICAgIE1vZHVsdXM6DQogICAgICAg
+ICAgICAgICAgICAgICAwMDplZTo5NjpiMjo2NDowNzoyYTo0Mjo4ODo4Zjo3ODphMjpmOTpi
+ODoxOToNCiAgICAgICAgICAgICAgICAgICAgIDg0OjY3OmEzOmFkOjk3OmQxOjI2OmYzOmQx
+OmNjOjFjOjI0OmQyOjNlOjcxOg0KICAgICAgICAgICAgICAgICAgICAgODU6Y2M6NzQ6M2I6
+MDQ6ZDQ6YTU6NDI6NTQ6Y2E6MTY6ZTE6ZTE6MWU6ZDQ6DQogICAgICAgICAgICAgICAgICAg
+ICA0NTowZDplYjo5ODpiMTpmNzpiYjo0Mjo4ODo0Mjo0NTo3MDpmYTpiYzpmYzoNCiAgICAg
+ICAgICAgICAgICAgICAgIDZkOjVhOmE5OjNhOjJhOjE0OmZhOjJiOjc4OjM1OmFjOjg3Ojdj
+OmZlOmE3Og0KICAgICAgICAgICAgICAgICAgICAgNjE6ZTU6ZmY6NDE6NGM6NmU6ZTI6NzQ6
+ZWY6ZjI6NmY6OGI6ZDY6YzQ6ODQ6DQogICAgICAgICAgICAgICAgICAgICAzMToyZTo1Njo2
+MTo5Mjo5OTphYzpmMDpkYjpkMjoyNDpiODo3YzozODo4MzoNCiAgICAgICAgICAgICAgICAg
+ICAgIGI2OjZhOjkzOjkzOmQyOjFhOmY4Ojk2OjI0OjU4OjY2OjNiOjBhOmMxOjcwOg0KICAg
+ICAgICAgICAgICAgICAgICAgNmM6NjM6Nzc6M2M6ZDU6MGU6ODI6MzY6MjcNCiAgICAgICAg
+ICAgICAgICAgRXhwb25lbnQ6IDY1NTM3ICgweDEwMDAxKQ0KICAgICAgICAgWDUwOXYzIGV4
+dGVuc2lvbnM6DQogICAgICAgICAgICAgWDUwOXYzIEJhc2ljIENvbnN0cmFpbnRzOiBjcml0
+aWNhbA0KICAgICAgICAgICAgICAgICBDQTpGQUxTRQ0KICAgICAgICAgICAgIFg1MDl2MyBL
+ZXkgVXNhZ2U6DQogICAgICAgICAgICAgICAgIERpZ2l0YWwgU2lnbmF0dXJlDQogICAgICAg
+ICAgICAgWDUwOXYzIFN1YmplY3QgS2V5IElkZW50aWZpZXI6DQogICAgICAgICAgICAgICAg
+IDA1OjJEOkQyOjQ3OkRDOjNDOjM2OkQ2OkQ2OjA2Ojc1OkZFOjdBOkU4OjY5Ojc5OjBCOkU1
+OjYxOjcxDQogICAgICAgICAgICAgWDUwOXYzIEF1dGhvcml0eSBLZXkgSWRlbnRpZmllcjoN
+CiANCmtleWlkOkUzOjY3OjEwOkYwOjgzOjRDOjk3OjNFOkQ5OjRBOjE4OjZGOkJDOkQyOjIz
+Ojc1OkI0OjVFOjI0OjU0DQoNCiAgICAgU2lnbmF0dXJlIEFsZ29yaXRobTogc2hhMjU2V2l0
+aFJTQUVuY3J5cHRpb24NCiAgICAgICAgICBiMToyZjphZTpmZjoxZTowZTozOTowYzpmZDo1
+ZTpiNzoxNDowYTpmMzpiNzphNjo1MzpjYjoNCiAgICAgICAgICA0OTpjNjphYjowYToyMzpi
+ZToyNDpjMDozNTozMzoxZDo3NjowMDpjODpmNzo1ODpmOTpkZjoNCiAgICAgICAgICA3Zjpk
+ZjpjNTplZTpiNjpmZTpjMzo1ODo1OToyMDozZTpjYTowZTo0ZjowMTpmOTphNzo5YToNCiAg
+ICAgICAgICA1ODpiZTo2MzowOTo0NzpjYjo5NTo5YTo1MjpkMzpmMjpkZTo5NjpmMjoxMDpk
+NDo5Mjo0NzoNCiAgICAgICAgICBjMzozYTo2MjoyNjpkYzoyYTo1MjplZTo1NDoxMDo2OTpl
+ZDozYzo2MjoxZjo4Nzo2NzpmZDoNCiAgICAgICAgICAzNjphMDo2MTplOTphNjoxYTpkYjo1
+ZDoxZDpkMzo0NDo5OTpkOTo5YToxYzplNjpiYTphNDoNCiAgICAgICAgICA5NjpiNDpmNTpl
+MjoyNjo4YjpmYzo1MjpjMzplZTphNDphNjpiNzpiNToxODoxZjowODo1MjoNCiAgICAgICAg
+ICA0YTplZQ0KDQo=
