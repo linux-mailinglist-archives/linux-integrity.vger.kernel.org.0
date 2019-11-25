@@ -2,159 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6611092E1
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Nov 2019 18:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C74C109356
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Nov 2019 19:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbfKYRdp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 25 Nov 2019 12:33:45 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:50116 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725868AbfKYRdp (ORCPT
+        id S1727948AbfKYSOr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 25 Nov 2019 13:14:47 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52468 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727928AbfKYSOq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 25 Nov 2019 12:33:45 -0500
-Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8175220B7185;
-        Mon, 25 Nov 2019 09:33:43 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8175220B7185
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1574703223;
-        bh=NK70LHrX4/fNESrlRitozq08RIhY2ImS5o9uVRG9e+w=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=sLkhzLO8u+HHsWmqFrx3BwNDPXq/B9hQZvfg9GaVvlZ0iXXeKuIrUsWnCzG3PQJDh
-         luEacilVJ4928dJUg8zSN9aqQGu1bEq0uLLwGLw4bzOAQ9aHrnBoun+nRh6kawU6kF
-         OH/rY7YqCu6tIWz2dMVCGLhOcj8ncE4tA8qQXpMg=
+        Mon, 25 Nov 2019 13:14:46 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAPI8Hjl045626
+        for <linux-integrity@vger.kernel.org>; Mon, 25 Nov 2019 13:14:45 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wfk45efnp-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 25 Nov 2019 13:14:45 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 25 Nov 2019 18:14:43 -0000
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 25 Nov 2019 18:14:39 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xAPIEcW933292292
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Nov 2019 18:14:38 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA92E52052;
+        Mon, 25 Nov 2019 18:14:38 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.184.107])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id F01605204E;
+        Mon, 25 Nov 2019 18:14:37 +0000 (GMT)
 Subject: Re: IMA: Data included in the key measurement
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
         linux-integrity@vger.kernel.org, dhowells@redhat.com
 Cc:     James Morris <jamorris@linuxonhyperv.com>
+Date:   Mon, 25 Nov 2019 13:14:37 -0500
+In-Reply-To: <6ceecb10-61f5-1067-d219-1f6caaa104a9@linux.microsoft.com>
 References: <19242774-688e-58ff-40f8-e346d6ba4339@linux.microsoft.com>
- <1574354333.3277.27.camel@HansenPartnership.com>
- <b4257d08-f6cf-19a0-f6f0-99c962ededac@linux.microsoft.com>
- <1574439451.3331.14.camel@HansenPartnership.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <6ceecb10-61f5-1067-d219-1f6caaa104a9@linux.microsoft.com>
-Date:   Mon, 25 Nov 2019 09:33:39 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <1574439451.3331.14.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: base64
+         <1574354333.3277.27.camel@HansenPartnership.com>
+         <b4257d08-f6cf-19a0-f6f0-99c962ededac@linux.microsoft.com>
+         <1574439451.3331.14.camel@HansenPartnership.com>
+         <6ceecb10-61f5-1067-d219-1f6caaa104a9@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-TM-AS-GCONF: 00
+x-cbid: 19112518-0028-0000-0000-000003BF5D71
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19112518-0029-0000-0000-00002482930A
+Message-Id: <1574705677.4793.215.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-25_04:2019-11-21,2019-11-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
+ adultscore=0 mlxscore=0 bulkscore=0 phishscore=0 clxscore=1015 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911250149
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-T24gMTEvMjIvMTkgODoxNyBBTSwgSmFtZXMgQm90dG9tbGV5IHdyb3RlOg0KDQo+IElmIHlv
-dSBtZWFzdXJlIGF0IHRpbWUgb2YgaW5zZXJ0aW9uIHlvdSBzaG91bGQgYmUgYWJsZSB0byBt
-ZWFzdXJlIHRoZQ0KPiBlbnRpcmUga2V5IGJlY2F1c2UgaXQncyBpbnNlcnRlZCBhcyBhIGNv
-bXBsZXRlIGNlcnRpZmljYXRlLiAgSWYgdGhlcmUncw0KPiBhZGRpdGlvbmFsIGRhdGEgeW91
-IG5lZWQgdG8gcmV0cmlldmUgYWZ0ZXIgdGhlIGxvYWQsIHdlIG1pZ2h0IGJlIGFibGUNCj4g
-dG8gc3RvcmUgaXQgaW4gYWRkaXRpb24gdG8gdGhlIGRhdGEgd2UgYWxyZWFkeSBzYXZlIGZy
-b20gdGhlDQo+IGNlcnRpZmljYXRlLg0KPiANCj4gSmFtZXMNCg0KWW91IGFyZSByaWdodCBK
-YW1lcyAtIGF0IHRoZSB0aW1lIG9mIGluc2VydGlvbiB0aGUgY29tcGxldGUgY2VydGlmaWNh
-dGUgDQpjYW4gYmUgbWVhc3VyZWQuIFRoYW5rcyBmb3IgdGhlIGluZm9ybWF0aW9uLg0KDQpJ
-IHdpbGwgdXBkYXRlIG15IHBhdGNoIHNldCB0byBpbmNsdWRlIHRoZSBjZXJ0aWZpY2F0ZSBk
-YXRhIGluIGtleSANCm1lYXN1cmVtZW50LiBQbGVhc2UgbGV0IG1lIGtub3cgaWYgeW91IGhh
-dmUgYW55IGNvbW1lbnRzXGNvbmNlcm5zLg0KDQpQbGVhc2Ugc2VlIGJlbG93IGZvciBkZXRh
-aWxzOg0KDQpJbiB0aGUgZmlsZSAic2VjdXJpdHkva2V5cy9rZXkuYyIgPT4NCmtleV9yZWZf
-dCBrZXlfY3JlYXRlX29yX3VwZGF0ZShrZXlfcmVmX3Qga2V5cmluZ19yZWYsDQoJCQkgICAg
-ICAgY29uc3QgY2hhciAqdHlwZSwNCgkJCSAgICAgICBjb25zdCBjaGFyICpkZXNjcmlwdGlv
-biwNCgkJCSAgICAgICBjb25zdCB2b2lkICpwYXlsb2FkLA0KCQkJICAgICAgIHNpemVfdCBw
-bGVuLA0KCQkJICAgICAgIGtleV9wZXJtX3QgcGVybSwNCgkJCSAgICAgICB1bnNpZ25lZCBs
-b25nIGZsYWdzKQ0KDQpJbiB0aGUga2V5IG1lYXN1cmVtZW50LCBpbnN0ZWFkIG9mIGp1c3Qg
-dGhlICJwdWJsaWMga2V5IiwgSSBpbmNsdWRlZCB0aGUgDQpidWZmZXIgcG9pbnRlZCB0byBi
-eSB0aGUgInBheWxvYWQiIHBhcmFtZXRlciAoYnVmZmVyIG9mIHNpemUgInBsZW4iIA0KYnl0
-ZXMpIGluIHRoZSBjYWxsIHRvIGtleV9jcmVhdGVfb3JfdXBkYXRlKCkuIEl0IGlzIHRoZSBl
-bnRpcmUgY2VydGlmaWNhdGUuDQoNCnRoYW5rcywNCiAgLWxha3NobWkNCg0KUGxlYXNlIHNl
-ZSB0aGUgc2VxdWVuY2Ugb2YgY29tbWFuZHMgYmVsb3cgdG8gaW1wb3J0IGEgY2VydGlmaWNh
-dGUgKGluIA0KREVSIGZvcm1hdCkgdG8gIi5pbWEiIGtleXJpbmcgYW5kIHJlZ2VuZXJhdGUg
-dGhlIGNlcnRpZmljYXRlIGZyb20gdGhlIA0KSU1BIG1lYXN1cmVtZW50IGxvZy4NCg0KKioq
-KioqIEltcG9ydCBhIERFUiBjZXJ0aWZpY2F0ZSB0byAuaW1hIGtleXJpbmcgKioqKioqDQoN
-CnJvb3RAbnJhbWFzOi9ob21lL25yYW1hcyMga2V5Y3RsIHNob3cgJTouaW1hDQpLZXlyaW5n
-DQogICA3NTI5NTE4MyAtLS1sc3dydiAgICAgIDAgICAgIDAgIGtleXJpbmc6IC5pbWENCg0K
-cm9vdEBucmFtYXM6L2hvbWUvbnJhbWFzIyBldm1jdGwgaW1wb3J0IHg1MDlfaW1hLmRlciA3
-NTI5NTE4Mw0KMTE4ODg2MDE3DQoNCnJvb3RAbnJhbWFzOi9ob21lL25yYW1hcyMga2V5Y3Rs
-IHNob3cgJTouaW1hDQpLZXlyaW5nDQogICA3NTI5NTE4MyAtLS1sc3dydiAgICAgIDAgICAg
-IDAgIGtleXJpbmc6IC5pbWENCiAgMTE4ODg2MDE3IC0tYWxzLS12ICAgICAgMCAgICAgMCAg
-IFxfIGFzeW1tZXRyaWM6IGhvc3RuYW1lOiB3aG9hbWkgDQpzaWduaW5nIGtleTogMDUyZGQy
-NDdkYzNjMzZkNmQ2MDY3NWZlN2FlODY5NzkwYmU1NjE3MQ0KDQoqKioqKiogVmlldyB0aGUg
-SU1BIG1lYXN1cmVtZW50IGxvZyAqKioqKioNCg0Kcm9vdEBucmFtYXM6L2hvbWUvbnJhbWFz
-IyBjYXQgDQovc3lzL2tlcm5lbC9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2FzY2lpX3J1bnRp
-bWVfbWVhc3VyZW1lbnRzDQoxMCBmYWYzZGQ1MzIxMTRmZWVkOGI4MjE1ZWI3YjVkOGMzMTA3
-ZDVlNzAyIGltYS1idWYgDQpzaGEyNTY6YWM4YmQ2N2JkYWRlZDYzYmU5MjMxYzQ5NTU4NWZk
-ODhlZGNlMDgxMmQ5YjY3N2UxZTFlMjE5ZTJkZDNiY2Q2MCANCi5pbWEgDQozMDgyMDI4NjMw
-ODIwMWVmYTAwMzAyMDEwMjAyMTQ1YmUwMjM0ZmYzYWRmMDUwMzQ5YjMzYjg5NDY1YTZhYWI2
-ZTMzOWY3MzAwZDA2MDkyYTg2NDg4NmY3MGQwMTAxMGIwNTAwMzA1MDMxMTEzMDBmMDYwMzU1
-MDQwYTBjMDg2ODZmNzM3NDZlNjE2ZDY1MzExYjMwMTkwNjAzNTUwNDAzMGMxMjc3Njg2ZjYx
-NmQ2OTIwNzM2OTY3NmU2OTZlNjcyMDZiNjU3OTMxMWUzMDFjMDYwOTJhODY0ODg2ZjcwZDAx
-MDkwMTE2MGY3NzY4NmY2MTZkNjk0MDY4NmY3Mzc0NmU2MTZkNjUzMDFlMTcwZDMxMzkzMDM4
-MzIzMjMwMzIzMjM5MzAzMjVhMTcwZDMyMzAzMDM4MzIzMTMwMzIzMjM5MzAzMjVhMzA1MDMx
-MTEzMDBmMDYwMzU1MDQwYTBjMDg2ODZmNzM3NDZlNjE2ZDY1MzExYjMwMTkwNjAzNTUwNDAz
-MGMxMjc3Njg2ZjYxNmQ2OTIwNzM2OTY3NmU2OTZlNjcyMDZiNjU3OTMxMWUzMDFjMDYwOTJh
-ODY0ODg2ZjcwZDAxMDkwMTE2MGY3NzY4NmY2MTZkNjk0MDY4NmY3Mzc0NmU2MTZkNjUzMDgx
-OWYzMDBkMDYwOTJhODY0ODg2ZjcwZDAxMDEwMTA1MDAwMzgxOGQwMDMwODE4OTAyODE4MTAw
-ZWU5NmIyNjQwNzJhNDI4ODhmNzhhMmY5YjgxOTg0NjdhM2FkOTdkMTI2ZjNkMWNjMWMyNGQy
-M2U3MTg1Y2M3NDNiMDRkNGE1NDI1NGNhMTZlMWUxMWVkNDQ1MGRlYjk4YjFmN2JiNDI4ODQy
-NDU3MGZhYmNmYzZkNWFhOTNhMmExNGZhMmI3ODM1YWM4NzdjZmVhNzYxZTVmZjQxNGM2ZWUy
-NzRlZmYyNmY4YmQ2YzQ4NDMxMmU1NjYxOTI5OWFjZjBkYmQyMjRiODdjMzg4M2I2NmE5Mzkz
-ZDIxYWY4OTYyNDU4NjYzYjBhYzE3MDZjNjM3NzNjZDUwZTgyMzYyNzAyMDMwMTAwMDFhMzVk
-MzA1YjMwMGMwNjAzNTUxZDEzMDEwMWZmMDQwMjMwMDAzMDBiMDYwMzU1MWQwZjA0MDQwMzAy
-MDc4MDMwMWQwNjAzNTUxZDBlMDQxNjA0MTQwNTJkZDI0N2RjM2MzNmQ2ZDYwNjc1ZmU3YWU4
-Njk3OTBiZTU2MTcxMzAxZjA2MDM1NTFkMjMwNDE4MzAxNjgwMTRlMzY3MTBmMDgzNGM5NzNl
-ZDk0YTE4NmZiY2QyMjM3NWI0NWUyNDU0MzAwZDA2MDkyYTg2NDg4NmY3MGQwMTAxMGIwNTAw
-MDM4MTgxMDBiMTJmYWVmZjFlMGUzOTBjZmQ1ZWI3MTQwYWYzYjdhNjUzY2I0OWM2YWIwYTIz
-YmUyNGMwMzUzMzFkNzYwMGM4Zjc1OGY5ZGY3ZmRmYzVlZWI2ZmVjMzU4NTkyMDNlY2EwZTRm
-MDFmOWE3OWE1OGJlNjMwOTQ3Y2I5NTlhNTJkM2YyZGU5NmYyMTBkNDkyNDdjMzNhNjIyNmRj
-MmE1MmVlNTQxMDY5ZWQzYzYyMWY4NzY3ZmQzNmEwNjFlOWE2MWFkYjVkMWRkMzQ0OTlkOTlh
-MWNlNmJhYTQ5NmI0ZjVlMjI2OGJmYzUyYzNlZWE0YTZiN2I1MTgxZjA4NTI0YWVlDQoNCioq
-KioqKiBSZWdlbmVyYXRlIHRoZSBjZXJ0aWZpY2F0ZSBmcm9tIElNQSBtZWFzdXJlbWVudCBs
-b2cgKioqKioqDQoNCnJvb3RAbnJhbWFzOi9ob21lL25yYW1hcyMgY2F0IA0KL3N5cy9rZXJu
-ZWwvc2VjdXJpdHkvaW1hL2FzY2lpX3J1bnRpbWVfbWVhc3VyZW1lbnRzIHwgZ3JlcCAiIC5p
-bWEiIHwgY3V0IA0KLWQnICcgLWYgNiB8IHh4ZCAtciAtcCA+IGltYS1jZXJ0LmRlcg0KDQpy
-b290QG5yYW1hczovaG9tZS9ucmFtYXMjIG9wZW5zc2wgeDUwOSAtaW4gaW1hLWNlcnQuZGVy
-IC1pbmZvcm0gREVSIA0KLXRleHQgLW5vb3V0DQpDZXJ0aWZpY2F0ZToNCiAgICAgRGF0YToN
-CiAgICAgICAgIFZlcnNpb246IDMgKDB4MikNCiAgICAgICAgIFNlcmlhbCBOdW1iZXI6DQog
-ICAgICAgICAgICAgNWI6ZTA6MjM6NGY6ZjM6YWQ6ZjA6NTA6MzQ6OWI6MzM6Yjg6OTQ6NjU6
-YTY6YWE6YjY6ZTM6Mzk6ZjcNCiAgICAgICAgIFNpZ25hdHVyZSBBbGdvcml0aG06IHNoYTI1
-NldpdGhSU0FFbmNyeXB0aW9uDQogICAgICAgICBJc3N1ZXI6IE8gPSBob3N0bmFtZSwgQ04g
-PSB3aG9hbWkgc2lnbmluZyBrZXksIGVtYWlsQWRkcmVzcyA9IA0Kd2hvYW1pQGhvc3RuYW1l
-DQogICAgICAgICBWYWxpZGl0eQ0KICAgICAgICAgICAgIE5vdCBCZWZvcmU6IEF1ZyAyMiAw
-MjoyOTowMiAyMDE5IEdNVA0KICAgICAgICAgICAgIE5vdCBBZnRlciA6IEF1ZyAyMSAwMjoy
-OTowMiAyMDIwIEdNVA0KICAgICAgICAgU3ViamVjdDogTyA9IGhvc3RuYW1lLCBDTiA9IHdo
-b2FtaSBzaWduaW5nIGtleSwgZW1haWxBZGRyZXNzID0gDQp3aG9hbWlAaG9zdG5hbWUNCiAg
-ICAgICAgIFN1YmplY3QgUHVibGljIEtleSBJbmZvOg0KICAgICAgICAgICAgIFB1YmxpYyBL
-ZXkgQWxnb3JpdGhtOiByc2FFbmNyeXB0aW9uDQogICAgICAgICAgICAgICAgIFJTQSBQdWJs
-aWMtS2V5OiAoMTAyNCBiaXQpDQogICAgICAgICAgICAgICAgIE1vZHVsdXM6DQogICAgICAg
-ICAgICAgICAgICAgICAwMDplZTo5NjpiMjo2NDowNzoyYTo0Mjo4ODo4Zjo3ODphMjpmOTpi
-ODoxOToNCiAgICAgICAgICAgICAgICAgICAgIDg0OjY3OmEzOmFkOjk3OmQxOjI2OmYzOmQx
-OmNjOjFjOjI0OmQyOjNlOjcxOg0KICAgICAgICAgICAgICAgICAgICAgODU6Y2M6NzQ6M2I6
-MDQ6ZDQ6YTU6NDI6NTQ6Y2E6MTY6ZTE6ZTE6MWU6ZDQ6DQogICAgICAgICAgICAgICAgICAg
-ICA0NTowZDplYjo5ODpiMTpmNzpiYjo0Mjo4ODo0Mjo0NTo3MDpmYTpiYzpmYzoNCiAgICAg
-ICAgICAgICAgICAgICAgIDZkOjVhOmE5OjNhOjJhOjE0OmZhOjJiOjc4OjM1OmFjOjg3Ojdj
-OmZlOmE3Og0KICAgICAgICAgICAgICAgICAgICAgNjE6ZTU6ZmY6NDE6NGM6NmU6ZTI6NzQ6
-ZWY6ZjI6NmY6OGI6ZDY6YzQ6ODQ6DQogICAgICAgICAgICAgICAgICAgICAzMToyZTo1Njo2
-MTo5Mjo5OTphYzpmMDpkYjpkMjoyNDpiODo3YzozODo4MzoNCiAgICAgICAgICAgICAgICAg
-ICAgIGI2OjZhOjkzOjkzOmQyOjFhOmY4Ojk2OjI0OjU4OjY2OjNiOjBhOmMxOjcwOg0KICAg
-ICAgICAgICAgICAgICAgICAgNmM6NjM6Nzc6M2M6ZDU6MGU6ODI6MzY6MjcNCiAgICAgICAg
-ICAgICAgICAgRXhwb25lbnQ6IDY1NTM3ICgweDEwMDAxKQ0KICAgICAgICAgWDUwOXYzIGV4
-dGVuc2lvbnM6DQogICAgICAgICAgICAgWDUwOXYzIEJhc2ljIENvbnN0cmFpbnRzOiBjcml0
-aWNhbA0KICAgICAgICAgICAgICAgICBDQTpGQUxTRQ0KICAgICAgICAgICAgIFg1MDl2MyBL
-ZXkgVXNhZ2U6DQogICAgICAgICAgICAgICAgIERpZ2l0YWwgU2lnbmF0dXJlDQogICAgICAg
-ICAgICAgWDUwOXYzIFN1YmplY3QgS2V5IElkZW50aWZpZXI6DQogICAgICAgICAgICAgICAg
-IDA1OjJEOkQyOjQ3OkRDOjNDOjM2OkQ2OkQ2OjA2Ojc1OkZFOjdBOkU4OjY5Ojc5OjBCOkU1
-OjYxOjcxDQogICAgICAgICAgICAgWDUwOXYzIEF1dGhvcml0eSBLZXkgSWRlbnRpZmllcjoN
-CiANCmtleWlkOkUzOjY3OjEwOkYwOjgzOjRDOjk3OjNFOkQ5OjRBOjE4OjZGOkJDOkQyOjIz
-Ojc1OkI0OjVFOjI0OjU0DQoNCiAgICAgU2lnbmF0dXJlIEFsZ29yaXRobTogc2hhMjU2V2l0
-aFJTQUVuY3J5cHRpb24NCiAgICAgICAgICBiMToyZjphZTpmZjoxZTowZTozOTowYzpmZDo1
-ZTpiNzoxNDowYTpmMzpiNzphNjo1MzpjYjoNCiAgICAgICAgICA0OTpjNjphYjowYToyMzpi
-ZToyNDpjMDozNTozMzoxZDo3NjowMDpjODpmNzo1ODpmOTpkZjoNCiAgICAgICAgICA3Zjpk
-ZjpjNTplZTpiNjpmZTpjMzo1ODo1OToyMDozZTpjYTowZTo0ZjowMTpmOTphNzo5YToNCiAg
-ICAgICAgICA1ODpiZTo2MzowOTo0NzpjYjo5NTo5YTo1MjpkMzpmMjpkZTo5NjpmMjoxMDpk
-NDo5Mjo0NzoNCiAgICAgICAgICBjMzozYTo2MjoyNjpkYzoyYTo1MjplZTo1NDoxMDo2OTpl
-ZDozYzo2MjoxZjo4Nzo2NzpmZDoNCiAgICAgICAgICAzNjphMDo2MTplOTphNjoxYTpkYjo1
-ZDoxZDpkMzo0NDo5OTpkOTo5YToxYzplNjpiYTphNDoNCiAgICAgICAgICA5NjpiNDpmNTpl
-MjoyNjo4YjpmYzo1MjpjMzplZTphNDphNjpiNzpiNToxODoxZjowODo1MjoNCiAgICAgICAg
-ICA0YTplZQ0KDQo=
+On Mon, 2019-11-25 at 09:33 -0800, Lakshmi Ramasubramanian wrote:
+> On 11/22/19 8:17 AM, James Bottomley wrote:
+> 
+> > If you measure at time of insertion you should be able to measure the
+> > entire key because it's inserted as a complete certificate.  If there's
+> > additional data you need to retrieve after the load, we might be able
+> > to store it in addition to the data we already save from the
+> > certificate.
+> > 
+> > James
+> 
+> You are right James - at the time of insertion the complete certificate 
+> can be measured. Thanks for the information.
+> 
+> I will update my patch set to include the certificate data in key 
+> measurement. Please let me know if you have any comments\concerns.
+> 
+> Please see below for details:
+> 
+> In the file "security/keys/key.c" =>
+> key_ref_t key_create_or_update(key_ref_t keyring_ref,
+> 			       const char *type,
+> 			       const char *description,
+> 			       const void *payload,
+> 			       size_t plen,
+> 			       key_perm_t perm,
+> 			       unsigned long flags)
+> 
+> In the key measurement, instead of just the "public key", I included the 
+> buffer pointed to by the "payload" parameter (buffer of size "plen" 
+> bytes) in the call to key_create_or_update(). It is the entire certificate.
+> 
+> thanks,
+>   -lakshmi
+> 
+> Please see the sequence of commands below to import a certificate (in 
+> DER format) to ".ima" keyring and regenerate the certificate from the 
+> IMA measurement log.
+> 
+> ****** Import a DER certificate to .ima keyring ******
+> 
+> root@nramas:/home/nramas# keyctl show %:.ima
+> Keyring
+>    75295183 ---lswrv      0     0  keyring: .ima
+> 
+> root@nramas:/home/nramas# evmctl import x509_ima.der 75295183
+> 118886017
+> 
+> root@nramas:/home/nramas# keyctl show %:.ima
+> Keyring
+>    75295183 ---lswrv      0     0  keyring: .ima
+>   118886017 --als--v      0     0   \_ asymmetric: hostname: whoami 
+> signing key: 052dd247dc3c36d6d60675fe7ae869790be56171
+> 
+> ****** View the IMA measurement log ******
+> 
+> root@nramas:/home/nramas# cat 
+> /sys/kernel/security/integrity/ima/ascii_runtime_measurements
+> 10 faf3dd532114feed8b8215eb7b5d8c3107d5e702 ima-buf 
+> sha256:ac8bd67bdaded63be9231c495585fd88edce0812d9b677e1e1e219e2dd3bcd60 
+> .ima 
+> 30820286308201efa00302010202145be0234ff3adf050349b33b89465a6aab6e339f7300d06092a864886f70d01010b050030503111300f060355040a0c08686f73746e616d65311b301906035504030c1277686f616d69207369676e696e67206b6579311e301c06092a864886f70d010901160f77686f616d6940686f73746e616d65301e170d3139303832323032323930325a170d3230303832313032323930325a30503111300f060355040a0c08686f73746e616d65311b301906035504030c1277686f616d69207369676e696e67206b6579311e301c06092a864886f70d010901160f77686f616d6940686f73746e616d6530819f300d06092a864886f70d010101050003818d0030818902818100ee96b264072a42888f78a2f9b8198467a3ad97d126f3d1cc1c24d23e7185cc743b04d4a54254ca16e1e11ed4450deb98b1f7bb4288424570fabcfc6d5aa93a2a14fa2b7835ac877cfea761e5ff414c6ee274eff26f8bd6c484312e56619299acf0dbd224b87c3883b66a9393d21af8962458663b0ac1706c63773cd50e8236270203010001a35d305b300c0603551d130101ff04023000300b0603551d0f040403020780301d0603551d0e04160414052dd247dc3c36d6d60675fe7ae869790be56171301f0603551d23041830168014e36710f0834c973ed94a186fbcd22375b45e2454300d06092a864886f70d01010b050003818100b12faeff1e0e390cfd5eb7140af3b7a653cb49c6ab0a23be24c035331d7600c8f758f9df7fdfc5eeb6fec35859203eca0e4f01f9a79a58be630947cb959a52d3f2de96f210d49247c33a6226dc2a52ee541069ed3c621f8767fd36a061e9a61adb5d1dd34499d99a1ce6baa496b4f5e2268bfc52c3eea4a6b7b5181f08524aee
+> 
+> ****** Regenerate the certificate from IMA measurement log ******
+> 
+> root@nramas:/home/nramas# cat 
+> /sys/kernel/security/ima/ascii_runtime_measurements | grep " .ima" | cut 
+> -d' ' -f 6 | xxd -r -p > ima-cert.der
+> 
+> root@nramas:/home/nramas# openssl x509 -in ima-cert.der -inform DER 
+> -text -noout
+
+Only the commands to validate the "key" measurement and extract the
+certificate need to be included in the patch description.  You could
+combine these two commands using "tee".  One would save the
+certificate, while the other would calculate the template data hash.
+ Providing the openssl command to display the saved certificate is
+optional.
+
+Mimi
+
