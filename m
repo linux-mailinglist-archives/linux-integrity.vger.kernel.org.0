@@ -2,104 +2,150 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D8310BD36
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2019 22:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9364410BF67
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2019 22:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729342AbfK0V0T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Nov 2019 16:26:19 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:33640 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727488AbfK0V0T (ORCPT
+        id S1727851AbfK0UjH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Nov 2019 15:39:07 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48880 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728863AbfK0UjH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Nov 2019 16:26:19 -0500
-Received: by mail-oi1-f196.google.com with SMTP id x21so14329260oic.0
-        for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2019 13:26:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FvIzR24kHBea1uxOpKKhJOT4jJB8qq3HQYSkFgo3U3E=;
-        b=vThlKJNpDRPL9EvkUMfozZ8dvzrN+pb71NRt9M+FbIHb/Xz+9FcrMIu4yHm1PEauZa
-         I8eA2C10V6PS8qQEX8q22qTBiZ2eac763UwVTnYdKf3iE8vNrP914cHwDmWr0JuiusFq
-         VI+Ps4ttc9N082Q70yjK9ZE2HHyAXYmKHiwGC2sU7GZXpTEAp/J6vH7eZJBJ7ppr+x3M
-         ufcUicdg/5jdYNyBDasulrzj0g8Xf9nTla0fm1rVwJO0cRZ8Gq8O3MwocCqwAymu3E6V
-         FTgEkxA9Uhq59tv2287Qz+s4W8TZdwaDOTg4LnJhfFfIPK+Puei6JaW0O2gb+x5eAI9V
-         YAaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FvIzR24kHBea1uxOpKKhJOT4jJB8qq3HQYSkFgo3U3E=;
-        b=DxCmJ3brkDk1J4c9vVPqjVEw/6eeuBcZOoxd75vchw4pOSp+zuKHXq4Wz6/l1TGmv+
-         jUvDSTwDLHQY4ajMhqiop7Knz1XoWYyRtQkZNBCilPp5qZfXC4iNBoutRJ/csMGgeAQR
-         7P+dWfFJH/C0Bf0k3bEiZCINgvNIKjoiOdGbhoV0njMw9AgZk00zBUB0WWWFbge3mnCn
-         E3A59ksoFKI/aRVw4oNMgH2mkdh3HhtEpLfX++ORNXoHDAUhcC0amRDEZ9/v1Fc1iav/
-         joiGTRSmqQxgpeKUwvEgNdag0hjmJLO9EaGHQ05D7DV/I3kJC4Z7lNAVsDZWSus50QVB
-         VMQg==
-X-Gm-Message-State: APjAAAWCJ2k1rkeqqP/AI+gBt+YlncKYZl6vYO5hqXEtq7wk1QLLiEtJ
-        9ImBGlB7XvfWk2E4GeEqVVYR3q5kfn6dW/VCzEWqPg==
-X-Google-Smtp-Source: APXvYqzjfv3uRACCOCg93jfSkR/I+DVeAiPls/NFEqGCYZ38KdgrJFBtLtMlmlxnWDacs2YcTvlXPCF13m2/1pu3CJ0=
-X-Received: by 2002:a05:6808:20c:: with SMTP id l12mr1738564oie.105.1574889978465;
- Wed, 27 Nov 2019 13:26:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20191112202725.3009814-1-stefanb@linux.vnet.ibm.com>
- <20191114164151.GB9528@linux.intel.com> <20191114164426.GC9528@linux.intel.com>
- <185664a9-58f2-2a4b-4e6b-8d7750a35690@linux.ibm.com> <20191121184949.yvw2gwzlkhjzko64@cantor>
- <20191127211109.GF14290@linux.intel.com>
-In-Reply-To: <20191127211109.GF14290@linux.intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Wed, 27 Nov 2019 13:26:07 -0800
-Message-ID: <CAPcyv4gO2T4xcZjYSYJ8-0kDPRnVYWhX_df5E94Cjyksx6WFbg@mail.gmail.com>
-Subject: Re: [PATCH] tpm_tis: Move setting of TPM_CHIP_FLAG_IRQ into tpm_tis_probe_irq_single
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org, jsnitsel@redhat.com
+        Wed, 27 Nov 2019 15:39:07 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xARKbAmE146620
+        for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2019 15:39:05 -0500
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2whh8sr3xn-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2019 15:39:05 -0500
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 27 Nov 2019 20:39:03 -0000
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 27 Nov 2019 20:39:00 -0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xARKcxtt59375626
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 27 Nov 2019 20:38:59 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 685C7A404D;
+        Wed, 27 Nov 2019 20:38:59 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 52D1BA4051;
+        Wed, 27 Nov 2019 20:38:58 +0000 (GMT)
+Received: from dhcp-9-31-103-87.watson.ibm.com (unknown [9.31.103.87])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 27 Nov 2019 20:38:58 +0000 (GMT)
+Subject: Re: [PATCH v0 1/2] IMA: Defined queue functions
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org
+Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
+        matthewgarrett@google.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, Janne Karhunen <janne.karhunen@gmail.com>
+Date:   Wed, 27 Nov 2019 15:38:57 -0500
+In-Reply-To: <20191127025212.3077-2-nramas@linux.microsoft.com>
+References: <20191127025212.3077-1-nramas@linux.microsoft.com>
+         <20191127025212.3077-2-nramas@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19112720-0008-0000-0000-0000033918B0
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19112720-0009-0000-0000-00004A58227A
+Message-Id: <1574887137.4793.346.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-27_04:2019-11-27,2019-11-27 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ clxscore=1015 priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 lowpriorityscore=0 suspectscore=3 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-1911270166
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[ add Jerry ]
+Hi Lakshmi,
 
-On Wed, Nov 27, 2019 at 1:11 PM Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Thu, Nov 21, 2019 at 11:49:49AM -0700, Jerry Snitselaar wrote:
-> > On Sat Nov 16 19, Stefan Berger wrote:
-> > > On 11/14/19 11:44 AM, Jarkko Sakkinen wrote:
-> > > > On Thu, Nov 14, 2019 at 06:41:51PM +0200, Jarkko Sakkinen wrote:
-> > > > > On Tue, Nov 12, 2019 at 03:27:25PM -0500, Stefan Berger wrote:
-> > > > > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > > > >
-> > > > > > Move the setting of the TPM_CHIP_FLAG_IRQ for irq probing into
-> > > > > > tpm_tis_probe_irq_single before calling tpm_tis_gen_interrupt.
-> > > > > > This move handles error conditions better that may arise if anything
-> > > > > > before fails in tpm_tis_probe_irq_single.
-> > > > > >
-> > > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > > > Suggested-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > > > > What about just changing the condition?
-> > > > Also cannot take this since it is not a bug (no fixes tag).
-> > >
-> > > I'll repost but will wait until Jerry has tested it on that machine.
-> > >
-> > >    Stefan
-> > >
-> > >
-> > > >
-> > > > /Jarkko
-> > >
-> > >
-> >
-> > It appears they still have the problem. I'm still waiting on logistics
-> > to send me a system to debug.
->
-> Which hardware is guaranteed to ignite this? I can try to get test hw
-> for this from somewhere. Kind of looking into this blinded ATM. Dan?
+Janne Karhunen is defining an IMA workqueue in order to more
+frequently update the on disk security xattrs.  The Subject line on
+this patch needs to be more explicit (eg. define workqueue for early
+boot "key" measurements).
 
-Jerry had mentioned that this was also occurring on T490s. Otherwise
-I'll ping you offline about the system I saw this on internally.
+On Tue, 2019-11-26 at 18:52 -0800, Lakshmi Ramasubramanian wrote:
+> Keys created or updated in the system before IMA is initialized
+
+Keys created or updated before a custom policy is loaded are currently
+not measured.
+
+> should be queued up. And, keys (including any queued ones)
+> should be processed when IMA initialization is completed.
+> 
+> This patch defines functions to queue and dequeue keys for
+> measurement. A flag namely ima_process_keys_for_measurement
+> is used to check if the key should be queued or should be
+> processed immediately.
+> 
+> ima_policy_flag cannot be relied upon to make queuing decision
+> because ima_policy_flag will be set to 0 when either IMA is
+> not initialized or when the IMA policy itself is empty.
+
+I'm not sure why you want to differentiate between IMA being
+initialized vs. an empty policy.  I would think you would want to know
+when a custom policy has been loaded.
+
+Until ima_update_policy() is called, "ima_rules" points to the
+architecture specific and configured policy rules, which are
+persistent, and the builtin policy rules.  Once a custom policy is
+loaded, "ima_rules" points to the architecture specific, configured,
+and custom policy rules.
+
+I would define a function that determines whether or not a custom
+policy has been loaded.
+
+(I still need to review adding/removing from the queue.)
+
+> 
+> @@ -27,14 +154,14 @@
+>   * The payload data used to instantiate or update the key is measured.
+>   */
+>  void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+> -				   const void *payload, size_t plen,
+> +				   const void *payload, size_t payload_len,
+>  				   unsigned long flags, bool create)
+
+This "hunk" and subsequent one seem to be just a variable name change.
+ It has nothing to do with queueing "key" measurements and shouldn't
+be included in this patch.
+
+Mimi
+
+>  {
+>  	/* Only asymmetric keys are handled by this hook. */
+>  	if (key->type != &key_type_asymmetric)
+>  		return;
+>  
+> -	if (!payload || (plen == 0))
+> +	if (!payload || (payload_len == 0))
+>  		return;
+>  
+>  	/*
+> @@ -52,7 +179,7 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+>  	 * if the IMA policy is configured to measure a key linked
+>  	 * to the given keyring.
+>  	 */
+> -	process_buffer_measurement(payload, plen,
+> +	process_buffer_measurement(payload, payload_len,
+>  				   keyring->description, KEY_CHECK, 0,
+>  				   keyring->description);
+>  }
+
+
