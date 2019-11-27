@@ -2,199 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B17A210B6D0
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2019 20:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3CF10BD6F
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2019 22:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727821AbfK0TdH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Nov 2019 14:33:07 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58144 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727803AbfK0TdE (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Nov 2019 14:33:04 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xARJWjKK179255
-        for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2019 14:33:03 -0500
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2whrgmf0my-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2019 14:33:02 -0500
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 27 Nov 2019 19:33:00 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 27 Nov 2019 19:32:57 -0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xARJWuS458196162
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 Nov 2019 19:32:56 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A3B011C052;
-        Wed, 27 Nov 2019 19:32:56 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74A1711C050;
-        Wed, 27 Nov 2019 19:32:55 +0000 (GMT)
-Received: from dhcp-9-31-103-87.watson.ibm.com (unknown [9.31.103.87])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 27 Nov 2019 19:32:55 +0000 (GMT)
-Subject: Re: [PATCH v9 6/6] IMA: Read keyrings= option from the IMA policy
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
-        matthewgarrett@google.com, sashal@kernel.org,
-        jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
-Date:   Wed, 27 Nov 2019 14:32:54 -0500
-In-Reply-To: <20191127015654.3744-7-nramas@linux.microsoft.com>
-References: <20191127015654.3744-1-nramas@linux.microsoft.com>
-         <20191127015654.3744-7-nramas@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19112719-0008-0000-0000-000003391467
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19112719-0009-0000-0000-00004A581E18
-Message-Id: <1574883174.4793.318.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-27_04:2019-11-27,2019-11-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- phishscore=0 suspectscore=3 adultscore=0 impostorscore=0
- priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 mlxscore=0
- spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911270158
+        id S1727527AbfK0V2l (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Nov 2019 16:28:41 -0500
+Received: from mga07.intel.com ([134.134.136.100]:52526 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730054AbfK0U6G (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 27 Nov 2019 15:58:06 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Nov 2019 12:58:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,250,1571727600"; 
+   d="scan'208";a="211805140"
+Received: from gtau-mobl.ger.corp.intel.com (HELO localhost) ([10.251.83.243])
+  by orsmga003.jf.intel.com with ESMTP; 27 Nov 2019 12:58:02 -0800
+Date:   Wed, 27 Nov 2019 22:58:00 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [GIT PULL] tpmdd updates for Linux v5.4
+Message-ID: <20191127205800.GA14290@linux.intel.com>
+References: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
+ <CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2019-11-26 at 17:56 -0800, Lakshmi Ramasubramanian wrote:
-> Read "keyrings=" option, if specified in the IMA policy, and store in
-> the list of IMA rules when the configured IMA policy is read.
+On Wed, Nov 20, 2019 at 08:48:25PM -0800, Dan Williams wrote:
+> On Mon, Sep 2, 2019 at 7:34 AM Jarkko Sakkinen
+> <jarkko.sakkinen@linux.intel.com> wrote:
+> >
+> > Hi
+> >
+> > A new driver for fTPM living inside ARM TEE was added this round. In
+> > addition to that, there is three bug fixes and one clean up.
+> >
+> > /Jarkko
+> >
+> > The following changes since commit 8fb8e9e46261e0117cb3cffb6dd8bb7e08f8649b:
+> >
+> >   Merge tag 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma (2019-08-30 09:23:45 -0700)
+> >
+> > are available in the Git repository at:
+> >
+> >   git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-20190902
+> >
+> > for you to fetch changes up to e8bd417aab0c72bfb54465596b16085702ba0405:
+> >
+> >   tpm/tpm_ftpm_tee: Document fTPM TEE driver (2019-09-02 17:08:35 +0300)
+> >
+> > ----------------------------------------------------------------
+> > tpmdd updates for Linux v5.4
+> >
+> > ----------------------------------------------------------------
+> > Jarkko Sakkinen (1):
+> >       tpm: Remove a deprecated comments about implicit sysfs locking
+> >
+> > Lukas Bulwahn (1):
+> >       MAINTAINERS: fix style in KEYS-TRUSTED entry
+> >
+> > Sasha Levin (2):
+> >       tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE
+> >       tpm/tpm_ftpm_tee: Document fTPM TEE driver
+> >
+> > Stefan Berger (2):
+> >       tpm_tis_core: Turn on the TPM before probing IRQ's
+> >       tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
 > 
-> This patch defines a new policy token enum namely Opt_keyrings
-> and an option flag IMA_KEYRINGS for reading "keyrings=" option
-> from the IMA policy.
+> Hi Jarrko,
 > 
-> Updated ima_parse_rule() to parse "keyrings=" option in the policy.
-> Updated ima_policy_show() to display "keyrings=" option.
+> I'm replying here because I can't find the patches to reply to
+> directly from LKML.
 > 
-> The following example illustrates how key measurement can be verified.
-
-The example is really too colloquial/verbose.  Please truncate it,
-leaving just a sample "key" policy rule, with directions for verifying
-the template data against the digest included in the measurement list.
-
+> Commit 7f064c378e2c "tpm_tis_core: Turn on the TPM before probing
+> IRQ's" in the v5.3-stable tree caused a regression on a pre-release
+> platform with a TPM2 device. The interrupt starts screaming when the
+> driver is loaded and does not stop until the device is force unbond
+> from the driver by:
 > 
-> Sample IMA Policy entry to measure keys
-> (Added in the file /etc/ima/ima-policy):
-
-Remove the above.
-
-Sample "key" measurement rule:
-
-> measure func=KEY_CHECK keyrings=.ima|.evm template=ima-buf
+>      echo IFX0740:00 > /sys/bus/platform/drivers/tpm_tis/unbind
 > 
-> Build the kernel with this patch set applied and reboot to that kernel.
+> I checked v5.4-rc8 and it has the same problem. I tried reverting:
 > 
-> Ensure the IMA policy is applied:
+> 1ea32c83c699 tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
+> 5b359c7c4372 tpm_tis_core: Turn on the TPM before probing IRQ's
 > 
-> root@nramas:/home/nramas# cat /sys/kernel/security/ima/policy
-> measure func=KEY_CHECK keyrings=.ima|.evm template=ima-buf
+> Which silenced the screaming interrupt problem, but now the TPM is reporting:
 > 
-> View the initial IMA measurement log:
+> [    3.725131] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
+> [    3.725358] tpm tpm0: tpm_try_transmit: send(): error -5
+> [    3.725359] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
+> polling instead
 > 
-> root@nramas:/home/nramas
-> # cat /sys/kernel/security/ima/ascii_runtime_measurements
-> 10 67ec... ima-ng sha1:b5466c508583f0e633df83aa58fc7c5b67ccf667 boot_aggregate
-> 
-> Now, add a certificate (for example, x509_ima.der) to the .ima keyring
-> using evmctl (IMA-EVM Utility)
-> 
-> root@nramas:/home/nramas# keyctl show %:.ima
-> Keyring
->  547515640 ---lswrv      0     0  keyring: .ima
-> 
-> root@nramas:/home/nramas# evmctl import x509_ima.der 547515640
-> 
-> root@nramas:/home/nramas# keyctl show %:.ima
-> Keyring
->  547515640 ---lswrv      0     0  keyring: .ima
->  809678766 --als--v      0     0   \_ asymmetric: hostname: whoami signing key: 052dd247dc3c36...
-> 
-> View the updated IMA measurement log:
-> 
-> root@nramas:/home/nramas#
+> ...at load, where it was not reporting this previously. Can you take a look?
 
-Remove everything up to here and simply say something like:
+It is already in WiP:
 
-Display "key" measurement in the IMA measurement list:
+https://patchwork.kernel.org/patch/11240111/
 
-> # cat /sys/kernel/security/ima/ascii_runtime_measurements
+Stefan also sent patches that revert to changes that you described:
 
-> 10 3adf... ima-buf
-> sha256:27c915b8ddb9fae7214cf0a8a7043cc3eeeaa7539bcb136f8427067b5f6c3
-> b7b .ima 308202863082...4aee
+https://patchwork.kernel.org/cover/11262363/
 
+Probably better first to fix the issue on top of master before deciding
+actions.
 
-> root@nramas:/home/nramas#
-
-Remove this string from all the commands.
-> 
-> For this sample, SHA256 should be selected as the hash algorithm
-> used by IMA.
-> 
-> The following command verifies if the SHA256 hash generated from
-> the payload in the IMA log entry (listed above) for the .ima key
-> matches the SHA256 hash in the IMA log entry. The output of this
-> command should match the SHA256 hash given in the IMA log entry
-> (In this case, it should be
-> 27c915b8ddb9fae7214cf0a8a7043cc3eeeaa7539bcb136f8427067b5f6c3b7b)
-
-Previously you didn't use the hash value, but ".ima" to locate the
-"key" measurement in the measurement list.  In each of the commands
-above, it might be clearer.
-
-> 
-> root@nramas:/home/nramas
-
-ditto
-
-> # cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements
-> | grep
-> 27c915b8ddb9fae7214cf0a8a7043cc3eeeaa7539bcb136f8427067b5f6c3b7b | 
-
-> cut -d' ' -f 6 | xxd -r -p |tee ima-cert.der | sha256sum | cut -d' '
-> -f 1
-> 
-> The above command also creates a binary file namely ima-cert.der
-> using the payload in the IMA log entry. This file should be a valid
-> x509 certificate which can be verified using openssl as given below:
-> 
-> root@nramas:/home/nramas
-
-ditto
-
-
-> # openssl x509 -in ima-cert.der -inform DER -text
-> 
-> The above command should display the contents of the file ima-cert.der
-> as an x509 certificate.
-
-Either the comments should be above or below the commands, not both.
-
-> 
-> The IMA policy used here allows measurement of keys added to
-> ".ima" and ".evm" keyrings only. Add a key to any other keyring and
-> verify that the key is not measured.
-
-This comment would be included, if desired, when defining the policy
-rule, not here.
-
-Mimi
-
+/Jarkko
