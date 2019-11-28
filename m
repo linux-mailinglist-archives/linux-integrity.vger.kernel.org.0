@@ -2,118 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3C710C116
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Nov 2019 01:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E9B10C146
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Nov 2019 02:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbfK1Ao3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Nov 2019 19:44:29 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:59684 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727031AbfK1Ao3 (ORCPT
+        id S1727518AbfK1BIe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Nov 2019 20:08:34 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:39921 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727088AbfK1BIe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Nov 2019 19:44:29 -0500
-Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 6AB9720B7185;
-        Wed, 27 Nov 2019 16:44:28 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6AB9720B7185
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1574901868;
-        bh=i45B9K6gVEFEes7FGLuQ9jYlPqhzKWyb3Cu2Dwz50MQ=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Xg9GNm45D60C+1lHv95rf09FhgFgasrx8uaOEEbCT6ewMV3l5IisnA0yQyyAlr2Cm
-         jKqcnwQSUCdd3rxD4IollqF7uIV9leFHlvoGIMnx1CB+1xudRcLTwqjq1Foyoqdl4r
-         ViIuxUNiaQZqSrL8PnBgxvEmLbnvMILJj3zG4yPs=
-Subject: Re: [PATCH v9 5/6] IMA: Add support to limit measuring keys
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
-        matthewgarrett@google.com, sashal@kernel.org,
-        jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
-References: <20191127015654.3744-1-nramas@linux.microsoft.com>
- <20191127015654.3744-6-nramas@linux.microsoft.com>
- <1574880741.4793.292.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <18b30666-7c44-f81e-8515-189052007e47@linux.microsoft.com>
-Date:   Wed, 27 Nov 2019 16:44:22 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        Wed, 27 Nov 2019 20:08:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574903312;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4lxh3+1e+t0p/N8JdhBbJ4iy/gsFRZKU/W7b/lbYo44=;
+        b=bMLXgXPAqgOZbRnr+1nVNVju5nGXRSbFLkN5jsUnQ+0xPLG7IQoQlWBKmEChXcBGBp0p4Y
+        bvx2E4fVRA4NFXXbSABWe89zY72wG4UPoQxe/5ZdfndTLsUL0iQNULcQY38WyGJ8J+YAg/
+        /IMXhllHZKEmrUA1PEoDggE+WSGAtg0=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-162-cQdk_q_eO6CMWh7KSRUvkw-1; Wed, 27 Nov 2019 20:08:30 -0500
+Received: by mail-pg1-f199.google.com with SMTP id 14so13729786pgv.16
+        for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2019 17:08:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=4lxh3+1e+t0p/N8JdhBbJ4iy/gsFRZKU/W7b/lbYo44=;
+        b=Juh92hlHiPGW1yQap1yzoHhrkisyNvY12xwx8CPzShxUdANDjWA9mqpI3UvCh5KaRp
+         Q7Ga4mkwE6s7dwqvp+quNOZIC4wJwscj9OiOl3sAlI9c0JEzKgfVC4qzSZd7Zry24oQ5
+         RLhIZ6MYE0Yyxu4+Ui4ovEYgiqZdUikFL9/8WqNdHFnxF1MPxWT08m+kSCaZxVzoEF4T
+         p47QaSXYgkXvZG9jzJtsy+06b1HP2JPJJg7yx/X5rerJe29vrLToplJ7aCaCmk9CS8FD
+         yUFyU42uEa39t/pTslQACm9EUYKea5ERpaqoPIU+xo/BsEjvcgIZKxJH+l3g86Cr7KTJ
+         /DDQ==
+X-Gm-Message-State: APjAAAXKkV9Y/0QiAmmILnjUBhg4ce6PEY6IeLJAS0juxvd91YKlqnXL
+        VQgtv4Fhy6btf753lqRJ0egPNbqjbaMqxr4EKzPpjaVurfEhssFFWuqzZ9sgsOegadSkOXpSRi0
+        yC9t8Sxh3plr2Rn69aABGWZDseOtY
+X-Received: by 2002:a17:902:9b85:: with SMTP id y5mr7074826plp.334.1574903308939;
+        Wed, 27 Nov 2019 17:08:28 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwcvc25Epzzx5nB68vlU5JUnkFeScMae9w13LQmZvEajOi11t7slcGmn/Ggj/jfoNtwCuq/zQ==
+X-Received: by 2002:a17:902:9b85:: with SMTP id y5mr7074796plp.334.1574903308548;
+        Wed, 27 Nov 2019 17:08:28 -0800 (PST)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id h5sm1676517pfk.30.2019.11.27.17.08.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Nov 2019 17:08:27 -0800 (PST)
+Date:   Wed, 27 Nov 2019 18:08:26 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4] tpm: Add tpm_version_major sysfs file
+Message-ID: <20191128010826.w4ixlix3s3ovta3m@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+Mail-Followup-To: linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+References: <20191030225843.23366-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <1574880741.4793.292.camel@linux.ibm.com>
+In-Reply-To: <20191030225843.23366-1-jsnitsel@redhat.com>
+X-MC-Unique: cQdk_q_eO6CMWh7KSRUvkw-1
+X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/27/19 10:52 AM, Mimi Zohar wrote:
+On Wed Oct 30 19, Jerry Snitselaar wrote:
+>Easily determining what TCG version a tpm device implements
+>has been a pain point for userspace for a long time, so
+>add a sysfs file to report the TCG major version of a tpm device.
+>
+>Also add an entry to Documentation/ABI/stable/sysfs-class-tpm
+>describing the new file.
+>
+>Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>Cc: Mimi Zohar <zohar@linux.ibm.com>
+>Cc: Peter Huewe <peterhuewe@gmx.de>
+>Cc: Jason Gunthorpe <jgg@ziepe.ca>
+>Cc: linux-integrity@vger.kernel.org
+>Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+>---
+>v4: - Change file name to tpm_version_major
+>    - Actually display just the major version.
+>    - change structs to tpm1_* & tpm2_*
+>      instead of tpm12_* tpm20_*.
+>v3: - Change file name to version_major.
+>v2: - Fix TCG usage in commit message.
+>    - Add entry to sysfs-class-tpm in Documentation/ABI/stable
+>
+> Documentation/ABI/stable/sysfs-class-tpm | 11 ++++++++
+> drivers/char/tpm/tpm-sysfs.c             | 34 +++++++++++++++++++-----
+> 2 files changed, 38 insertions(+), 7 deletions(-)
+>
 
-Hi Mimi,
+Anyone else have feedback?
 
->> +static bool ima_match_keyring(struct ima_rule_entry *rule,
->> +			      const char *keyring)
->> +{
->> +	/*
->> +	 * "keyrings=" is specified in the policy in the format below:
->> +	 *   keyrings=.builtin_trusted_keys|.ima|.evm
->> +	 *
->> +	 * Each keyring name in the option is separated by a '|' and
->> +	 * the last keyring name is null terminated.
->> +	 *
->> +	 * The given keyring is considered matched only if
->> +	 * the whole keyring name matched a keyring name specified
->> +	 * in the "keyrings=" option.
->> +	 */
->> +	p = strstr(rule->keyrings, keyring);
->> +	if (p) {
->> +		/*
->> +		 * Found a substring match. Check if the character
->> +		 * at the end of the keyring name is | (keyring name
->> +		 * separator) or is the terminating null character.
->> +		 * If yes, we have a whole string match.
->> +		 */
->> +		p += strlen(keyring);
->> +		if (*p == '|' || *p == '\0')
->> +			return true;
->> +	}
->> +
-> 
-> Using "while strsep()" would simplify this code, removing the need for
-> such a long comment.
-> 
-> Mimi
-
-strsep() modifies the source string (replaces the delimiter with '\0' 
-and also updates the source string pointer). I am not sure it can be 
-used for our scenario. Please correct me if I am wrong.
-
-Initial IMA policy:
--------------------
-measure func=KEY_CHECK 
-keyrings=.ima|.evm|.builtin_trusted_keys|.blacklist template=ima-buf
-
-Policy after adding a key to .ima keyring:
-------------------------------------------
-measure func=KEY_CHECK keyrings=.evm|.builtin_trusted_keys|.blacklist 
-template=ima-buf
-
-Policy after adding a key to a keyring that is not listed in the policy:
-------------------------------------------------------------------------
-measure func=KEY_CHECK keyrings= template=ima-buf
-
-********************************************************************************
-
-Please see the description from the man page for strsep():
-
-http://man7.org/linux/man-pages/man3/strsep.3.html
-
-char *strsep(char **stringp, const char *delim);
-
-This function finds the first token in the string *stringp, that is 
-delimited by one of the bytes in the string delim.  This token is 
-terminated by overwriting the delimiter with a null byte ('\0'), and 
-*stringp is updated to point past the token.
-
-thanks,
-  -lakshmi
