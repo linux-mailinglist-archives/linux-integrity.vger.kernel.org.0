@@ -2,73 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2011810C14A
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Nov 2019 02:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4479B10C15A
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Nov 2019 02:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbfK1BJu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Nov 2019 20:09:50 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:46351 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727088AbfK1BJu (ORCPT
+        id S1727138AbfK1BVN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Nov 2019 20:21:13 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:37987 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726984AbfK1BVN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Nov 2019 20:09:50 -0500
+        Wed, 27 Nov 2019 20:21:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1574903389;
+        s=mimecast20190719; t=1574904071;
         h=from:from:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gToFrwAF3Uy6k7hO1WWqHDn6U7gZbrdQcmuYWTaqI8A=;
-        b=QOiQEOqF4nweGzwPtDGttJO6rDa3VeWiZ+xV3rquXirlcfvGG7EwhmANtA0BfAzrinjPQm
-        SNfve2z10VKowVisPSQyAVg3nHLtAaKrkXd16FSg7DQw7Q2gVcNRFsWjahX8dXT5joQQbn
-        uENSCvQqttFBMAGdaB6MS+egXsJR6hM=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-418-Him3DtiEPPqh8FUL6cPvKg-1; Wed, 27 Nov 2019 20:09:45 -0500
-Received: by mail-pg1-f200.google.com with SMTP id w9so13734271pgl.1
-        for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2019 17:09:45 -0800 (PST)
+        bh=/HFDV1dFXXc1XWLJ2qEUSb2HH9ThLGZlFl18InpcbEM=;
+        b=fMdUPrnVRgpW8JmVXK02JEMH2Gl+uigiLmv7ng9DJDPjod5X/h677ntevLrWyzoYPLZ+q1
+        NIXGOJQ+YgqxxRb3xLfquihQgOoycbr9a8g9Je/O+ftxjwiL1Sc8Aca3OdWLEimXvJsP60
+        03OXHwfpWgFdGwBcT3eXww2BK/JX3aQ=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-16-Sw0BjWkINqqbSGYFVd7B1A-1; Wed, 27 Nov 2019 20:21:10 -0500
+Received: by mail-pg1-f197.google.com with SMTP id e6so13759108pgc.8
+        for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2019 17:21:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
          :mail-followup-to:references:mime-version:content-disposition
          :in-reply-to;
-        bh=gToFrwAF3Uy6k7hO1WWqHDn6U7gZbrdQcmuYWTaqI8A=;
-        b=NJ0aQDTbukFoIXivYzNFf8E7JHg3XDDvNzfy2ry4SWeV7GzOXMkQegpkKTPctOd4Mq
-         tc83Xz1f5TyrSM0HH1HP1T5nOZQOk4WMi57DR5Ezv1AbqQBW3cnehEIwgU7SQDbsdp7k
-         4FyMj8AZ738OhRQBzuHGHcRyUUC6enmIP/iSMpX/ZsbNdIbBagsJGM7k+xZenVz9Y32d
-         2jF/whDZnCjAayA9FAzrUbua7fOri/I/178xYdG9Dkiyo4B2ipOBKbWJHadSlZToMm4V
-         aoco5vTY0r9fT2FtZKrmEjShug9dcXF6vQAm4zIdhwYfZjH54g0UHQhELEDQFti2SRbj
-         9WsQ==
-X-Gm-Message-State: APjAAAV4nlX9UYMcaprV9tZMn45nvbk0QIH35iexBhz/p7Bvg0wm3bi3
-        ukpPOS3jku6jcwJ1r85Gwy8eaLeO+v55a2EqpQ4T3DDptHIHMeFFCXtsxvRoiyeVTOLlyXcQJF0
-        z2Go+DhqQlwbQgp8wTgcTJeIIBg+h
-X-Received: by 2002:a17:902:bb83:: with SMTP id m3mr6896862pls.94.1574903384574;
-        Wed, 27 Nov 2019 17:09:44 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyIvzsNym80Q9Lwzet1IKxQ6KC5wqL0VT0ocnGy4kM0wenhkNMfOac8XHuBRaPjQdgzX7ZxoA==
-X-Received: by 2002:a17:902:bb83:: with SMTP id m3mr6896839pls.94.1574903384223;
-        Wed, 27 Nov 2019 17:09:44 -0800 (PST)
+        bh=vTEn0L1tG99iZM5cLflAm0RZ2oMnvmDu1+wuwMQxkUM=;
+        b=By8YYmqzffjiTY7PfacOtqL0Un+FUlk1LABPJtRORmO+892YND5YTtYW3c0IY7rJvT
+         9w9fiFJXlpyTchSmVK577T7SSm/MhbG/NedYSPyHqGDpT+Y/PJFk6GxhCRJRp4IsfLpa
+         jIc/bUF+P9QEQRcyQN9iT7af2LAll2VcRUTAwmnvkdGVD4rmFpFnaJdxaYsmQ+Om89Al
+         dADVuIB9IBKV5XeBlRss7mXDL6lLO3CfoeUeHPnP4ToYV3SBAFOKasZ7kY5WoaeQxbvQ
+         qP9uiECKC/JxNLxs+TcNvbj8afwj0CGM5JPRCwJ33yhNlcgTyec6Q3CB6qbrukjouWB1
+         PdzA==
+X-Gm-Message-State: APjAAAXRKV9L03K1ouVWD4bbLSI87p9ke5EsijN/B9nPJIwCzlYCm9mU
+        S9sGbpe9shOOTpVrvqNnd8vl3MnGsSV+hzwvo9ZOwEfHjCTYsAy18VYUw8ZdwOgkEA7eEalmjPw
+        nRiaALOawfTMtiRCuhmLiM/Qc5U6G
+X-Received: by 2002:a17:90a:2ec1:: with SMTP id h1mr6483429pjs.135.1574904068881;
+        Wed, 27 Nov 2019 17:21:08 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyjVtEYxAwz6OxEYHIoYVxh1+vYXkjGP6L4qiqNj44pwBMCuMKKj8B0oFLc4FDJ/qFfluQ55w==
+X-Received: by 2002:a17:90a:2ec1:: with SMTP id h1mr6483414pjs.135.1574904068578;
+        Wed, 27 Nov 2019 17:21:08 -0800 (PST)
 Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id v63sm18029926pfb.181.2019.11.27.17.09.43
+        by smtp.gmail.com with ESMTPSA id u26sm2722140pfn.46.2019.11.27.17.21.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2019 17:09:43 -0800 (PST)
-Date:   Wed, 27 Nov 2019 18:09:42 -0700
+        Wed, 27 Nov 2019 17:21:07 -0800 (PST)
+Date:   Wed, 27 Nov 2019 18:20:55 -0700
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] tpm: Update mailing list contact information in
- sysfs-class-tpm
-Message-ID: <20191128010942.ysfkztficovmdl42@cantor>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [GIT PULL] tpmdd updates for Linux v5.4
+Message-ID: <20191128012055.f3a6gq7bjpvuierx@cantor>
 Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
 Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-References: <20191025193628.31004-1-jsnitsel@redhat.com>
- <20191028205338.GI8279@linux.intel.com>
+        Dan Williams <dan.j.williams@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        stable <stable@vger.kernel.org>
+References: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
+ <CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com>
+ <20191127205800.GA14290@linux.intel.com>
+ <20191127205912.GB14290@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20191028205338.GI8279@linux.intel.com>
-X-MC-Unique: Him3DtiEPPqh8FUL6cPvKg-1
+In-Reply-To: <20191127205912.GB14290@linux.intel.com>
+X-MC-Unique: Sw0BjWkINqqbSGYFVd7B1A-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -78,21 +87,102 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon Oct 28 19, Jarkko Sakkinen wrote:
->On Fri, Oct 25, 2019 at 12:36:28PM -0700, Jerry Snitselaar wrote:
->> All of the entries in Documentation/ABI/stable/sysfs-class-tpm
->> point to the old tpmdd-devel mailing list. This patch
->> updates the entries to point to linux-intergrity.
+On Wed Nov 27 19, Jarkko Sakkinen wrote:
+>On Wed, Nov 27, 2019 at 10:58:00PM +0200, Jarkko Sakkinen wrote:
+>> On Wed, Nov 20, 2019 at 08:48:25PM -0800, Dan Williams wrote:
+>> > On Mon, Sep 2, 2019 at 7:34 AM Jarkko Sakkinen
+>> > <jarkko.sakkinen@linux.intel.com> wrote:
+>> > >
+>> > > Hi
+>> > >
+>> > > A new driver for fTPM living inside ARM TEE was added this round. In
+>> > > addition to that, there is three bug fixes and one clean up.
+>> > >
+>> > > /Jarkko
+>> > >
+>> > > The following changes since commit 8fb8e9e46261e0117cb3cffb6dd8bb7e0=
+8f8649b:
+>> > >
+>> > >   Merge tag 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel=
+/git/rdma/rdma (2019-08-30 09:23:45 -0700)
+>> > >
+>> > > are available in the Git repository at:
+>> > >
+>> > >   git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-=
+20190902
+>> > >
+>> > > for you to fetch changes up to e8bd417aab0c72bfb54465596b16085702ba0=
+405:
+>> > >
+>> > >   tpm/tpm_ftpm_tee: Document fTPM TEE driver (2019-09-02 17:08:35 +0=
+300)
+>> > >
+>> > > ----------------------------------------------------------------
+>> > > tpmdd updates for Linux v5.4
+>> > >
+>> > > ----------------------------------------------------------------
+>> > > Jarkko Sakkinen (1):
+>> > >       tpm: Remove a deprecated comments about implicit sysfs locking
+>> > >
+>> > > Lukas Bulwahn (1):
+>> > >       MAINTAINERS: fix style in KEYS-TRUSTED entry
+>> > >
+>> > > Sasha Levin (2):
+>> > >       tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE
+>> > >       tpm/tpm_ftpm_tee: Document fTPM TEE driver
+>> > >
+>> > > Stefan Berger (2):
+>> > >       tpm_tis_core: Turn on the TPM before probing IRQ's
+>> > >       tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interru=
+pts
+>> >
+>> > Hi Jarrko,
+>> >
+>> > I'm replying here because I can't find the patches to reply to
+>> > directly from LKML.
+>> >
+>> > Commit 7f064c378e2c "tpm_tis_core: Turn on the TPM before probing
+>> > IRQ's" in the v5.3-stable tree caused a regression on a pre-release
+>> > platform with a TPM2 device. The interrupt starts screaming when the
+>> > driver is loaded and does not stop until the device is force unbond
+>> > from the driver by:
+>> >
+>> >      echo IFX0740:00 > /sys/bus/platform/drivers/tpm_tis/unbind
+>> >
+>> > I checked v5.4-rc8 and it has the same problem. I tried reverting:
+>> >
+>> > 1ea32c83c699 tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for in=
+terrupts
+>> > 5b359c7c4372 tpm_tis_core: Turn on the TPM before probing IRQ's
+>> >
+>> > Which silenced the screaming interrupt problem, but now the TPM is rep=
+orting:
+>> >
+>> > [    3.725131] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
+>> > [    3.725358] tpm tpm0: tpm_try_transmit: send(): error -5
+>> > [    3.725359] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
+>> > polling instead
+>> >
+>> > ...at load, where it was not reporting this previously. Can you take a=
+ look?
 >>
->> Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->> Cc: Peter Huewe <peterhuewe@gmx.de>
->> Cc: Jason Gunthorpe <jgg@ziepe.ca>
->> Cc: linux-integrity@vger.kernel.org
->> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+>> It is already in WiP:
+>>
+>> https://patchwork.kernel.org/patch/11240111/
+>>
+>> Stefan also sent patches that revert to changes that you described:
+>>
+>> https://patchwork.kernel.org/cover/11262363/
+>>
+>> Probably better first to fix the issue on top of master before deciding
+>> actions.
 >
->Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>... and apologies for late response.
 >
 >/Jarkko
+>
 
-Should this go into your next branch?
+There also was that other issue reported on the list about
+tpm_tis_core_init failing when calling tpm_get_timeouts due to the
+power gating changes.
 
