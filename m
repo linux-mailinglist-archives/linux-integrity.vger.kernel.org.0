@@ -2,187 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4479B10C15A
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Nov 2019 02:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C8410D064
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Nov 2019 02:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727138AbfK1BVN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Nov 2019 20:21:13 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:37987 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726984AbfK1BVN (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Nov 2019 20:21:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1574904071;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/HFDV1dFXXc1XWLJ2qEUSb2HH9ThLGZlFl18InpcbEM=;
-        b=fMdUPrnVRgpW8JmVXK02JEMH2Gl+uigiLmv7ng9DJDPjod5X/h677ntevLrWyzoYPLZ+q1
-        NIXGOJQ+YgqxxRb3xLfquihQgOoycbr9a8g9Je/O+ftxjwiL1Sc8Aca3OdWLEimXvJsP60
-        03OXHwfpWgFdGwBcT3eXww2BK/JX3aQ=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-16-Sw0BjWkINqqbSGYFVd7B1A-1; Wed, 27 Nov 2019 20:21:10 -0500
-Received: by mail-pg1-f197.google.com with SMTP id e6so13759108pgc.8
-        for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2019 17:21:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=vTEn0L1tG99iZM5cLflAm0RZ2oMnvmDu1+wuwMQxkUM=;
-        b=By8YYmqzffjiTY7PfacOtqL0Un+FUlk1LABPJtRORmO+892YND5YTtYW3c0IY7rJvT
-         9w9fiFJXlpyTchSmVK577T7SSm/MhbG/NedYSPyHqGDpT+Y/PJFk6GxhCRJRp4IsfLpa
-         jIc/bUF+P9QEQRcyQN9iT7af2LAll2VcRUTAwmnvkdGVD4rmFpFnaJdxaYsmQ+Om89Al
-         dADVuIB9IBKV5XeBlRss7mXDL6lLO3CfoeUeHPnP4ToYV3SBAFOKasZ7kY5WoaeQxbvQ
-         qP9uiECKC/JxNLxs+TcNvbj8afwj0CGM5JPRCwJ33yhNlcgTyec6Q3CB6qbrukjouWB1
-         PdzA==
-X-Gm-Message-State: APjAAAXRKV9L03K1ouVWD4bbLSI87p9ke5EsijN/B9nPJIwCzlYCm9mU
-        S9sGbpe9shOOTpVrvqNnd8vl3MnGsSV+hzwvo9ZOwEfHjCTYsAy18VYUw8ZdwOgkEA7eEalmjPw
-        nRiaALOawfTMtiRCuhmLiM/Qc5U6G
-X-Received: by 2002:a17:90a:2ec1:: with SMTP id h1mr6483429pjs.135.1574904068881;
-        Wed, 27 Nov 2019 17:21:08 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyjVtEYxAwz6OxEYHIoYVxh1+vYXkjGP6L4qiqNj44pwBMCuMKKj8B0oFLc4FDJ/qFfluQ55w==
-X-Received: by 2002:a17:90a:2ec1:: with SMTP id h1mr6483414pjs.135.1574904068578;
-        Wed, 27 Nov 2019 17:21:08 -0800 (PST)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id u26sm2722140pfn.46.2019.11.27.17.21.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2019 17:21:07 -0800 (PST)
-Date:   Wed, 27 Nov 2019 18:20:55 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [GIT PULL] tpmdd updates for Linux v5.4
-Message-ID: <20191128012055.f3a6gq7bjpvuierx@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        stable <stable@vger.kernel.org>
-References: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
- <CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com>
- <20191127205800.GA14290@linux.intel.com>
- <20191127205912.GB14290@linux.intel.com>
+        id S1726764AbfK2BkL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 28 Nov 2019 20:40:11 -0500
+Received: from mga12.intel.com ([192.55.52.136]:63234 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726756AbfK2BkK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 28 Nov 2019 20:40:10 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Nov 2019 17:40:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,255,1571727600"; 
+   d="scan'208";a="383951374"
+Received: from fmsmsx105.amr.corp.intel.com ([10.18.124.203])
+  by orsmga005.jf.intel.com with ESMTP; 28 Nov 2019 17:40:09 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ FMSMSX105.amr.corp.intel.com (10.18.124.203) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Thu, 28 Nov 2019 17:40:08 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 28 Nov 2019 17:40:08 -0800
+Received: from shsmsx151.ccr.corp.intel.com (10.239.6.50) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Thu, 28 Nov 2019 17:40:07 -0800
+Received: from shsmsx102.ccr.corp.intel.com ([169.254.2.108]) by
+ SHSMSX151.ccr.corp.intel.com ([169.254.3.149]) with mapi id 14.03.0439.000;
+ Fri, 29 Nov 2019 09:40:06 +0800
+From:   "Zhao, Shirley" <shirley.zhao@intel.com>
+To:     James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "'Mauro Carvalho Chehab'" <mchehab+samsung@kernel.org>,
+        "Zhu, Bing" <bing.zhu@intel.com>,
+        "Chen, Luhai" <luhai.chen@intel.com>
+Subject: RE: One question about trusted key of keyring in Linux kernel.
+Thread-Topic: One question about trusted key of keyring in Linux kernel.
+Thread-Index: AdWZwFKzDBwFOydYTGGk+Aqs+6BIxAANhxEAAoxRZMAAOKaagABSSevw
+Date:   Fri, 29 Nov 2019 01:40:05 +0000
+Message-ID: <A888B25CD99C1141B7C254171A953E8E49096521@shsmsx102.ccr.corp.intel.com>
+References: <A888B25CD99C1141B7C254171A953E8E49094313@shsmsx102.ccr.corp.intel.com>
+         <1573659978.17949.83.camel@linux.ibm.com>
+         <A888B25CD99C1141B7C254171A953E8E49095F9B@shsmsx102.ccr.corp.intel.com>
+ <1574877977.3551.5.camel@linux.ibm.com>
+In-Reply-To: <1574877977.3551.5.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiNGI3ZjAwMWItZTVhYi00MzY4LWJmZGMtNjlkODE3OTk1YTMwIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiRWdcL1wvS2VcL1F2bUVpM0dZeE02YnUzNzFJN1dieWlQWHJQWFE0V0lyY3BVUVlvQjA2UzNkTXdqQ1pSYWV1Skw1SyJ9
+x-ctpclassification: CTP_NT
+x-originating-ip: [10.239.127.40]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20191127205912.GB14290@linux.intel.com>
-X-MC-Unique: Sw0BjWkINqqbSGYFVd7B1A-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Nov 27 19, Jarkko Sakkinen wrote:
->On Wed, Nov 27, 2019 at 10:58:00PM +0200, Jarkko Sakkinen wrote:
->> On Wed, Nov 20, 2019 at 08:48:25PM -0800, Dan Williams wrote:
->> > On Mon, Sep 2, 2019 at 7:34 AM Jarkko Sakkinen
->> > <jarkko.sakkinen@linux.intel.com> wrote:
->> > >
->> > > Hi
->> > >
->> > > A new driver for fTPM living inside ARM TEE was added this round. In
->> > > addition to that, there is three bug fixes and one clean up.
->> > >
->> > > /Jarkko
->> > >
->> > > The following changes since commit 8fb8e9e46261e0117cb3cffb6dd8bb7e0=
-8f8649b:
->> > >
->> > >   Merge tag 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel=
-/git/rdma/rdma (2019-08-30 09:23:45 -0700)
->> > >
->> > > are available in the Git repository at:
->> > >
->> > >   git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-=
-20190902
->> > >
->> > > for you to fetch changes up to e8bd417aab0c72bfb54465596b16085702ba0=
-405:
->> > >
->> > >   tpm/tpm_ftpm_tee: Document fTPM TEE driver (2019-09-02 17:08:35 +0=
-300)
->> > >
->> > > ----------------------------------------------------------------
->> > > tpmdd updates for Linux v5.4
->> > >
->> > > ----------------------------------------------------------------
->> > > Jarkko Sakkinen (1):
->> > >       tpm: Remove a deprecated comments about implicit sysfs locking
->> > >
->> > > Lukas Bulwahn (1):
->> > >       MAINTAINERS: fix style in KEYS-TRUSTED entry
->> > >
->> > > Sasha Levin (2):
->> > >       tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE
->> > >       tpm/tpm_ftpm_tee: Document fTPM TEE driver
->> > >
->> > > Stefan Berger (2):
->> > >       tpm_tis_core: Turn on the TPM before probing IRQ's
->> > >       tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interru=
-pts
->> >
->> > Hi Jarrko,
->> >
->> > I'm replying here because I can't find the patches to reply to
->> > directly from LKML.
->> >
->> > Commit 7f064c378e2c "tpm_tis_core: Turn on the TPM before probing
->> > IRQ's" in the v5.3-stable tree caused a regression on a pre-release
->> > platform with a TPM2 device. The interrupt starts screaming when the
->> > driver is loaded and does not stop until the device is force unbond
->> > from the driver by:
->> >
->> >      echo IFX0740:00 > /sys/bus/platform/drivers/tpm_tis/unbind
->> >
->> > I checked v5.4-rc8 and it has the same problem. I tried reverting:
->> >
->> > 1ea32c83c699 tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for in=
-terrupts
->> > 5b359c7c4372 tpm_tis_core: Turn on the TPM before probing IRQ's
->> >
->> > Which silenced the screaming interrupt problem, but now the TPM is rep=
-orting:
->> >
->> > [    3.725131] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
->> > [    3.725358] tpm tpm0: tpm_try_transmit: send(): error -5
->> > [    3.725359] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
->> > polling instead
->> >
->> > ...at load, where it was not reporting this previously. Can you take a=
- look?
->>
->> It is already in WiP:
->>
->> https://patchwork.kernel.org/patch/11240111/
->>
->> Stefan also sent patches that revert to changes that you described:
->>
->> https://patchwork.kernel.org/cover/11262363/
->>
->> Probably better first to fix the issue on top of master before deciding
->> actions.
->
->... and apologies for late response.
->
->/Jarkko
->
-
-There also was that other issue reported on the list about
-tpm_tis_core_init failing when calling tpm_get_timeouts due to the
-power gating changes.
-
+SGksIEphbWVzLCANCg0KTWF5YmUgdGhlIFRQTSBjb21tYW5kIGNvbmZ1c2VkIHlvdS4gDQoNClRo
+ZSBxdWVzdGlvbiBpcyBJIHVzZSBrZXljdGwgY29tbWFuZCBzZWFsZWQgYSB0cnVzdGVkIGtleSB3
+aXRoIFBDUiBwb2xpY3ksIGJ1dCBsb2FkIGl0IGZhaWxlZCBhZnRlciByZWJvb3QuIA0KSSBkb24n
+dCBrbm93IHdoeSBpdCB3YXMgbG9hZGVkIGZhaWxlZC4gSSB1c2UgVFBNIGNvbW1hbmQgdG8gaGVs
+cCBmaW5kIGl0LCBpdCByZXBvcnQgcG9saWN5IGNoZWNrIGZhaWxlZC4gDQoNClNvIG15IHF1ZXN0
+aW9uIGlzIGhvdyB0byBsb2FkIHRoZSBQQ1IgcG9saWN5IHNlYWxlZCB0cnVzdGVkIGtleSBjb3Jy
+ZWN0bHk/IA0KSG93IHRvIHVzZSBwb2xpY3lkaWdlc3QgYW5kIHBvbGljeWhhbmRsZSBjb3JyZWN0
+bHkuIA0KDQpUaGFua3MuIA0KDQotIFNoaXJsZXkgDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0t
+LS0tDQpGcm9tOiBKYW1lcyBCb3R0b21sZXkgPGplamJAbGludXguaWJtLmNvbT4gDQpTZW50OiBU
+aHVyc2RheSwgTm92ZW1iZXIgMjgsIDIwMTkgMjowNiBBTQ0KVG86IFpoYW8sIFNoaXJsZXkgPHNo
+aXJsZXkuemhhb0BpbnRlbC5jb20+OyBNaW1pIFpvaGFyIDx6b2hhckBsaW51eC5pYm0uY29tPjsg
+SmFya2tvIFNha2tpbmVuIDxqYXJra28uc2Fra2luZW5AbGludXguaW50ZWwuY29tPjsgSm9uYXRo
+YW4gQ29yYmV0IDxjb3JiZXRAbHduLm5ldD4NCkNjOiBsaW51eC1pbnRlZ3JpdHlAdmdlci5rZXJu
+ZWwub3JnOyBrZXlyaW5nc0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWRvY0B2Z2VyLmtlcm5lbC5v
+cmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7ICdNYXVybyBDYXJ2YWxobyBDaGVoYWIn
+IDxtY2hlaGFiK3NhbXN1bmdAa2VybmVsLm9yZz47IFpodSwgQmluZyA8YmluZy56aHVAaW50ZWwu
+Y29tPjsgQ2hlbiwgTHVoYWkgPGx1aGFpLmNoZW5AaW50ZWwuY29tPg0KU3ViamVjdDogUmU6IE9u
+ZSBxdWVzdGlvbiBhYm91dCB0cnVzdGVkIGtleSBvZiBrZXlyaW5nIGluIExpbnV4IGtlcm5lbC4N
+Cg0KT24gVHVlLCAyMDE5LTExLTI2IGF0IDA3OjMyICswMDAwLCBaaGFvLCBTaGlybGV5IHdyb3Rl
+Og0KPiBUaGFua3MgZm9yIHlvdXIgZmVlZGJhY2ssIE1pbWkuIA0KPiBCdXQgdGhlIGRvY3VtZW50
+IG9mIGRyYWN1dCBjYW4ndCBzb2x2ZSBteSBwcm9ibGVtLiANCj4gDQo+IEkgZGlkIG1vcmUgdGVz
+dCB0aGVzZSBkYXlzIGFuZCB0cnkgdG8gZGVzY3JpcHQgbXkgcXVlc3Rpb24gaW4gbW9yZSANCj4g
+ZGV0YWlsLg0KPiANCj4gSW4gbXkgc2NlbmFyaW8sIHRoZSB0cnVzdGVkIGtleSB3aWxsIGJlIHNl
+YWxlZCBpbnRvIFRQTSB3aXRoIFBDUiANCj4gcG9saWN5Lg0KPiBBbmQgdGhlcmUgYXJlIHNvbWUg
+cmVsYXRlZCBvcHRpb25zIGluIG1hbnVhbCBsaWtlIA0KPiAgICAgICAgaGFzaD0gICAgICAgICBo
+YXNoIGFsZ29yaXRobSBuYW1lIGFzIGEgc3RyaW5nLiBGb3IgVFBNIDEueCB0aGUNCj4gb25seQ0K
+PiAgICAgICAgICAgICAgICAgICAgICBhbGxvd2VkIHZhbHVlIGlzIHNoYTEuIEZvciBUUE0gMi54
+IHRoZSBhbGxvd2VkIA0KPiB2YWx1ZXMNCj4gICAgICAgICAgICAgICAgICAgICAgYXJlIHNoYTEs
+IHNoYTI1Niwgc2hhMzg0LCBzaGE1MTIgYW5kIHNtMy0yNTYuDQo+ICAgICAgICBwb2xpY3lkaWdl
+c3Q9IGRpZ2VzdCBmb3IgdGhlIGF1dGhvcml6YXRpb24gcG9saWN5LiBtdXN0IGJlIA0KPiBjYWxj
+dWxhdGVkDQo+ICAgICAgICAgICAgICAgICAgICAgIHdpdGggdGhlIHNhbWUgaGFzaCBhbGdvcml0
+aG0gYXMgc3BlY2lmaWVkIGJ5IHRoZSANCj4gJ2hhc2g9Jw0KPiAgICAgICAgICAgICAgICAgICAg
+ICBvcHRpb24uDQo+ICAgICAgICBwb2xpY3loYW5kbGU9IGhhbmRsZSB0byBhbiBhdXRob3JpemF0
+aW9uIHBvbGljeSBzZXNzaW9uIHRoYXQgDQo+IGRlZmluZXMgdGhlDQo+ICAgICAgICAgICAgICAg
+ICAgICAgIHNhbWUgcG9saWN5IGFuZCB3aXRoIHRoZSBzYW1lIGhhc2ggYWxnb3JpdGhtIGFzIA0K
+PiB3YXMgdXNlZCB0bw0KPiAgICAgICAgICAgICAgICAgICAgICBzZWFsIHRoZSBrZXkuIA0KPiAN
+Cj4gSGVyZSBpcyBteSB0ZXN0IHN0ZXAuIA0KPiBGaXJzdGx5LCB0aGUgcGNyIHBvbGljeSBpcyBn
+ZW5lcmF0ZWQgYXMgYmVsb3c6IA0KPiAkIHRwbTJfY3JlYXRlcG9saWN5IC0tcG9saWN5LXBjciAt
+LXBjci1saXN0IHNoYTI1Njo3IC0tcG9saWN5IA0KPiBwY3I3X2Jpbi5wb2xpY3kgPiBwY3I3LnBv
+bGljeQ0KPiANCj4gUGNyNy5wb2xpY3kgaXMgdGhlIGFzY2lpIGhleCBvZiBwb2xpY3k6DQo+ICQg
+Y2F0IHBjcjcucG9saWN5DQo+IDMyMWZiZDI4YjYwZmNjMjMwMTdkNTAxYjEzM2JkNWRiZjI4ODk4
+MTQ1ODhlOGEyMzUxMGZlMTAxMDVjYjJjYzkNCj4gDQo+IFRoZW4gZ2VuZXJhdGUgdGhlIHRydXN0
+ZWQga2V5IGFuZCBjb25maWd1cmUgcG9saWN5ZGlnZXN0IGFuZCBnZXQgdGhlIA0KPiBrZXkgSUQ6
+DQo+ICQga2V5Y3RsIGFkZCB0cnVzdGVkIGttayAibmV3IDMyIGtleWhhbmRsZT0weDgxMDAwMDAx
+IGhhc2g9c2hhMjU2IA0KPiBwb2xpY3lkaWdlc3Q9YGNhdCBwY3I3LnBvbGljeWAiIEB1DQo+IDg3
+NDExNzA0NQ0KPiANCj4gU2F2ZSB0aGUgdHJ1c3RlZCBrZXkuIA0KPiAkIGtleWN0bCBwaXBlIDg3
+NDExNzA0NSA+IGttay5ibG9iDQo+IA0KPiBSZWJvb3QgYW5kIGxvYWQgdGhlIGtleS4gDQo+IFN0
+YXJ0IGEgYXV0aCBzZXNzaW9uIHRvIGdlbmVyYXRlIHRoZSBwb2xpY3k6DQo+ICQgdHBtMl9zdGFy
+dGF1dGhzZXNzaW9uIC1TIHNlc3Npb24uY3R4DQo+IHNlc3Npb24taGFuZGxlOiAweDMwMDAwMDAN
+Cj4gJCB0cG0yX3Bjcmxpc3QgLUwgc2hhMjU2OjcgLW8gcGNyNy5zaGEyNTYgJCB0cG0yX3BvbGlj
+eXBjciAtUyANCj4gc2Vzc2lvbi5jdHggLUwgc2hhMjU2OjcgLUYgcGNyNy5zaGEyNTYgLWYgcGNy
+Ny5wb2xpY3kNCj4gcG9saWN5LWRpZ2VzdDoNCj4gMHgzMjFGQkQyOEI2MEZDQzIzMDE3RDUwMUIx
+MzNCRDVEQkYyODg5ODE0NTg4RThBMjM1MTBGRTEwMTA1Q0IyQ0M5DQo+IA0KPiBJbnB1dCB0aGUg
+cG9saWN5IGhhbmRsZSB0byBsb2FkIHRydXN0ZWQga2V5Og0KPiAkIGtleWN0bCBhZGQgdHJ1c3Rl
+ZCBrbWsgImxvYWQgYGNhdCBrbWsuYmxvYmAga2V5aGFuZGxlPTB4ODEwMDAwMDEgDQo+IHBvbGlj
+eWhhbmRsZT0weDMwMDAwMDAiIEB1DQo+IGFkZF9rZXk6IE9wZXJhdGlvbiBub3QgcGVybWl0dGVk
+DQo+IA0KPiBUaGUgZXJyb3Igc2hvdWxkIGJlIHBvbGljeSBjaGVjayBmYWlsZWQsIGJlY2F1c2Ug
+SSB1c2UgVFBNIGNvbW1hbmQgdG8gDQo+IHVuc2VhbCBkaXJlY3RseSB3aXRoIGVycm9yIG9mIHBv
+bGljeSBjaGVjayBmYWlsZWQuDQo+ICQgdHBtMl91bnNlYWwgLWMgMHg4MTAwMDAwMSAtTCBzaGEy
+NTY6NyBFUlJPUiBvbiBsaW5lOiAiODEiIGluIGZpbGU6IA0KPiAiLi9saWIvbG9nLmgiOiBUc3My
+X1N5c19VbnNlYWwoMHg5OUQpIC0gdHBtOnNlc3Npb24oMSk6YSBwb2xpY3kgY2hlY2sgDQo+IGZh
+aWxlZCBFUlJPUiBvbiBsaW5lOiAiMjEzIiBpbiBmaWxlOiAidG9vbHMvdHBtMl91bnNlYWwuYyI6
+IFVuc2VhbCANCj4gZmFpbGVkIQ0KPiBFUlJPUiBvbiBsaW5lOiAiMTY2IiBpbiBmaWxlOiAidG9v
+bHMvdHBtMl90b29sLmMiOiBVbmFibGUgdG8gcnVuIA0KPiB0cG0yX3Vuc2VhbA0KDQpJIHRoaW5r
+IHRoZXJlJ3MgYSBtaXNjb21tdW5pY2F0aW9uIGhlcmU6IHlvdSdyZSBjb21wbGFpbmluZyBhYm91
+dCB0aGUgZXJyb3IgcmV0dXJuZWQgZnJvbSBhIHRydXN0ZWQga2V5IHVuc2VhbCBvcGVyYXRpb24g
+dGhhdCAqc2hvdWxkKiBmYWlsLCBjb3JyZWN0PyAgWW91IHRoaW5rIGl0IHNob3VsZCByZXR1cm4g
+YSBUUE0gZXJyb3IgYnV0IGluc3RlYWQgaXQgcmV0dXJucyAtRVBFUk0uICBUaGF0J3MgY29tcGxl
+dGVseSBjb3JyZWN0OiB3ZSB0cmFuc2xhdGUgYWxsIFRQTSBlcnJvcnMgaW50byBsaW51eCBvbmVz
+IGFzIHdlIHBhc3MgdGhlbSB1cCB0byB1c2Vyc3BhY2UsIHNvIHRoZSBiZXN0IHdlIGNhbiBkbyBp
+cyBvcGVyYXRpb24gbm90IHBlcm1pdHRlZC4NCg0KSmFtZXMNCg0K
