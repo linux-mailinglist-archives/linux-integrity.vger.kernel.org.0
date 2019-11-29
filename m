@@ -2,118 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0099110DA62
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 Nov 2019 21:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D22110DAB7
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Nov 2019 22:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbfK2UF3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 29 Nov 2019 15:05:29 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5738 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727040AbfK2UF3 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 29 Nov 2019 15:05:29 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xATK23gC007032;
-        Fri, 29 Nov 2019 15:05:20 -0500
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2wjym5bx1h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Nov 2019 15:05:20 -0500
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xATK5CCg004672;
-        Fri, 29 Nov 2019 20:05:19 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma03dal.us.ibm.com with ESMTP id 2wevd7pgmf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Nov 2019 20:05:19 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xATK5Imu30671340
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Nov 2019 20:05:18 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6CFF5B2066;
-        Fri, 29 Nov 2019 20:05:18 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1CC21B2064;
-        Fri, 29 Nov 2019 20:05:17 +0000 (GMT)
-Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.134.245])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Nov 2019 20:05:16 +0000 (GMT)
-Message-ID: <1575057916.6220.7.camel@linux.ibm.com>
-Subject: Re: One question about trusted key of keyring in Linux kernel.
-From:   James Bottomley <jejb@linux.ibm.com>
-To:     "Zhao, Shirley" <shirley.zhao@intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "'Mauro Carvalho Chehab'" <mchehab+samsung@kernel.org>,
-        "Zhu, Bing" <bing.zhu@intel.com>,
-        "Chen, Luhai" <luhai.chen@intel.com>
-Date:   Fri, 29 Nov 2019 12:05:16 -0800
-In-Reply-To: <A888B25CD99C1141B7C254171A953E8E49096521@shsmsx102.ccr.corp.intel.com>
-References: <A888B25CD99C1141B7C254171A953E8E49094313@shsmsx102.ccr.corp.intel.com>
-         <1573659978.17949.83.camel@linux.ibm.com>
-         <A888B25CD99C1141B7C254171A953E8E49095F9B@shsmsx102.ccr.corp.intel.com>
-         <1574877977.3551.5.camel@linux.ibm.com>
-         <A888B25CD99C1141B7C254171A953E8E49096521@shsmsx102.ccr.corp.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-29_07:2019-11-29,2019-11-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- mlxlogscore=999 spamscore=0 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 impostorscore=0 adultscore=0
- clxscore=1011 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911290174
+        id S1727090AbfK2VEH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 29 Nov 2019 16:04:07 -0500
+Received: from mga02.intel.com ([134.134.136.20]:41812 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727073AbfK2VEH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 29 Nov 2019 16:04:07 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Nov 2019 13:04:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,258,1571727600"; 
+   d="scan'208";a="199903920"
+Received: from kryanx-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.22.23])
+  by orsmga007.jf.intel.com with ESMTP; 29 Nov 2019 13:04:02 -0800
+Date:   Fri, 29 Nov 2019 23:04:00 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [GIT PULL] tpmdd updates for Linux v5.4
+Message-ID: <20191129210400.GB12055@linux.intel.com>
+References: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
+ <CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com>
+ <20191122161836.ry3cbon2iy22ftoc@cantor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191122161836.ry3cbon2iy22ftoc@cantor>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-11-29 at 01:40 +0000, Zhao, Shirley wrote:
-> Hi, James, 
+On Fri, Nov 22, 2019 at 09:18:36AM -0700, Jerry Snitselaar wrote:
+> On Wed Nov 20 19, Dan Williams wrote:
+> > On Mon, Sep 2, 2019 at 7:34 AM Jarkko Sakkinen
+> > <jarkko.sakkinen@linux.intel.com> wrote:
+> > > 
+> > > Hi
+> > > 
+> > > A new driver for fTPM living inside ARM TEE was added this round. In
+> > > addition to that, there is three bug fixes and one clean up.
+> > > 
+> > > /Jarkko
+> > > 
+> > > The following changes since commit 8fb8e9e46261e0117cb3cffb6dd8bb7e08f8649b:
+> > > 
+> > >   Merge tag 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma (2019-08-30 09:23:45 -0700)
+> > > 
+> > > are available in the Git repository at:
+> > > 
+> > >   git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-20190902
+> > > 
+> > > for you to fetch changes up to e8bd417aab0c72bfb54465596b16085702ba0405:
+> > > 
+> > >   tpm/tpm_ftpm_tee: Document fTPM TEE driver (2019-09-02 17:08:35 +0300)
+> > > 
+> > > ----------------------------------------------------------------
+> > > tpmdd updates for Linux v5.4
+> > > 
+> > > ----------------------------------------------------------------
+> > > Jarkko Sakkinen (1):
+> > >       tpm: Remove a deprecated comments about implicit sysfs locking
+> > > 
+> > > Lukas Bulwahn (1):
+> > >       MAINTAINERS: fix style in KEYS-TRUSTED entry
+> > > 
+> > > Sasha Levin (2):
+> > >       tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE
+> > >       tpm/tpm_ftpm_tee: Document fTPM TEE driver
+> > > 
+> > > Stefan Berger (2):
+> > >       tpm_tis_core: Turn on the TPM before probing IRQ's
+> > >       tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
+> > 
+> > Hi Jarrko,
+> > 
+> > I'm replying here because I can't find the patches to reply to
+> > directly from LKML.
+> > 
+> > Commit 7f064c378e2c "tpm_tis_core: Turn on the TPM before probing
+> > IRQ's" in the v5.3-stable tree caused a regression on a pre-release
+> > platform with a TPM2 device. The interrupt starts screaming when the
+> > driver is loaded and does not stop until the device is force unbond
+> > from the driver by:
+> > 
+> >     echo IFX0740:00 > /sys/bus/platform/drivers/tpm_tis/unbind
+> > 
+> > I checked v5.4-rc8 and it has the same problem. I tried reverting:
+> > 
+> > 1ea32c83c699 tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
+> > 5b359c7c4372 tpm_tis_core: Turn on the TPM before probing IRQ's
+> > 
+> > Which silenced the screaming interrupt problem, but now the TPM is reporting:
+> > 
+> > [    3.725131] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
+> > [    3.725358] tpm tpm0: tpm_try_transmit: send(): error -5
+> > [    3.725359] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
+> > polling instead
+> > 
+> > ...at load, where it was not reporting this previously. Can you take a look?
+> > 
 > 
-> Maybe the TPM command confused you. 
+> We've had an issue reported for a Lenovo t490s getting an interrupt storm
+> with the Fedora 5.3 stable kernel, so it appears to be impacting a number of
+> systems.
 
-Well you did seem to be saying we had a problem in the TPM sealed key
-subsystem.
+Hi sorry for inactivity. I've had a renovation going on where I live
+which has caused some crackling in the comms but I'm catching up during
+the weekend.
 
-> The question is I use keyctl command sealed a trusted key with PCR
-> policy, but load it failed after reboot. 
-> I don't know why it was loaded failed. I use TPM command to help find
-> it, it report policy check failed. 
+Which CPU model does T490S have? Can you paste /proc/cpuinfo?
 
-Right, so your question seems to be why after a reboot, the TPM policy
-no longer works to authorize the key even from user space?  My best
-guess would be the PCR value you've sealed it to changed over the
-reboot for some reason.
-
-> So my question is how to load the PCR policy sealed trusted key
-> correctly?
-
-You have to set the sealing release policy to something you know will
-be invariant across reboots for an unseal to happen reliably.  However,
-usually you also want the unseal to fail if something you don't like
-changes, so you set the policy to be something that's invariant unless
-that happens.  Not really knowing what your conditions are we can't
-really tell you what your policy should look like.
-
-> How to use policydigest and policyhandle correctly. 
-
-I've no real idea how the tpm2_ commands work, but the tsspolicy
-commands all have man pages which do a pretty good explanation.  If I
-infer how your tpm2_ commands seem to be working, I think
-you're sealing to a pcr7 hash?  pcr7 is the one that's supposed to
-measure the secure boot path and properties and as such shouldn't
-change across reboots, so I think your problem becomes finding out why
-it changed.
-
-James
-
+/Jarkko
