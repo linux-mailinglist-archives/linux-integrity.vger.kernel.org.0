@@ -2,89 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C0F10E334
-	for <lists+linux-integrity@lfdr.de>; Sun,  1 Dec 2019 19:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3C810E3FB
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2019 00:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727310AbfLASms (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 1 Dec 2019 13:42:48 -0500
-Received: from mtax.cdmx.gob.mx ([187.141.35.197]:13726 "EHLO mtax.cdmx.gob.mx"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727275AbfLASmr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 1 Dec 2019 13:42:47 -0500
-X-Greylist: delayed 7802 seconds by postgrey-1.27 at vger.kernel.org; Sun, 01 Dec 2019 13:42:47 EST
-X-NAI-Header: Modified by McAfee Email Gateway (4500)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
-        t=1575217651; h=DKIM-Filter:X-Virus-Scanned:
-         Content-Type:MIME-Version:Content-Transfer-Encoding:
-         Content-Description:Subject:To:From:Date:Message-Id:
-         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
-         X-AnalysisOut:X-AnalysisOut:X-SAAS-TrackingID:
-         X-NAI-Spam-Flag:X-NAI-Spam-Threshold:X-NAI-Spam-Score:
-         X-NAI-Spam-Rules:X-NAI-Spam-Version; bh=M
-        8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs4
-        8=; b=EU6IHNv2FpJujqYaVqg4S2cikCNlBAYlAYO+A7dwstU/
-        il02qJQF68/GXvnmdF9TzPKiOlnmgHAjrYahNMU0x4LtO4fcIu
-        4B/ASqmUx6Uq2fKREYv8Ml5/GgClBNctfKP1jdKJSy5mX+mVCF
-        7LEVP4Gcfn8agJpuBCmHudplW1M=
-Received: from cdmx.gob.mx (correo.cdmx.gob.mx [10.250.108.150]) by mtax.cdmx.gob.mx with smtp
-        (TLS: TLSv1/SSLv3,256bits,ECDHE-RSA-AES256-GCM-SHA384)
-         id 1dee_65f9_e1920368_f3ad_42ea_8780_5d7dc7ada885;
-        Sun, 01 Dec 2019 10:27:30 -0600
-Received: from localhost (localhost [127.0.0.1])
-        by cdmx.gob.mx (Postfix) with ESMTP id A8DAF1E2B01;
-        Sun,  1 Dec 2019 10:18:52 -0600 (CST)
-Received: from cdmx.gob.mx ([127.0.0.1])
-        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id wmEwHShxcJgh; Sun,  1 Dec 2019 10:18:52 -0600 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by cdmx.gob.mx (Postfix) with ESMTP id 443C51E2FF8;
-        Sun,  1 Dec 2019 10:14:21 -0600 (CST)
-DKIM-Filter: OpenDKIM Filter v2.9.2 cdmx.gob.mx 443C51E2FF8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cdmx.gob.mx;
-        s=72359050-3965-11E6-920A-0192F7A2F08E; t=1575216861;
-        bh=M8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs48=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
-         From:Date:Message-Id;
-        b=kTmZgGqhdRs9UNMRh7P+YONLCPj75cdgsFrL2r9MvZ4g6YUbFVZ0btbV75BAEE8+b
-         QTrG53fjGRyyRNqPP+dZR/os0w9fe9eZU7X18zB8Fimu89weBo9wgUtMAtXRg4F9S3
-         V1XDSedRGwLV1av8pJ/3Zk3BZOkom+nn7PNbFtmQ=
-X-Virus-Scanned: amavisd-new at cdmx.gob.mx
-Received: from cdmx.gob.mx ([127.0.0.1])
-        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id UgdLJ73ow-ud; Sun,  1 Dec 2019 10:14:21 -0600 (CST)
-Received: from [192.168.0.104] (unknown [188.125.168.160])
-        by cdmx.gob.mx (Postfix) with ESMTPSA id 36BEF1E3275;
-        Sun,  1 Dec 2019 10:05:42 -0600 (CST)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727279AbfLAXyz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 1 Dec 2019 18:54:55 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:15056 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727266AbfLAXyz (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 1 Dec 2019 18:54:55 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB1NqUqU104695;
+        Sun, 1 Dec 2019 18:54:53 -0500
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wm6sm59du-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 01 Dec 2019 18:54:53 -0500
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xB1No2sl023106;
+        Sun, 1 Dec 2019 23:54:52 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04wdc.us.ibm.com with ESMTP id 2wkg265vsc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 01 Dec 2019 23:54:52 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB1Nspo047251850
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 1 Dec 2019 23:54:51 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 25DCC7805F;
+        Sun,  1 Dec 2019 23:54:51 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9A1217805C;
+        Sun,  1 Dec 2019 23:54:50 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Sun,  1 Dec 2019 23:54:50 +0000 (GMT)
+Subject: Re: [PATCH 0/2] Revert patches fixing probing of interrupts
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20191126131753.3424363-1-stefanb@linux.vnet.ibm.com>
+ <20191129223418.GA15726@linux.intel.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <6f6f60a2-3b55-e76d-c11a-4677fcb72c16@linux.ibm.com>
+Date:   Sun, 1 Dec 2019 18:54:45 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Congratulations
-To:     Recipients <aac-styfe@cdmx.gob.mx>
-From:   "Bishop Johnr" <aac-styfe@cdmx.gob.mx>
-Date:   Sun, 01 Dec 2019 17:05:35 +0100
-Message-Id: <20191201160543.36BEF1E3275@cdmx.gob.mx>
-X-AnalysisOut: [v=2.2 cv=JYXMlQCV c=1 sm=1 tr=0 p=6K-Ig8iNAUou4E5wYCEA:9 p]
-X-AnalysisOut: [=zRI05YRXt28A:10 a=T6zFoIZ12MK39YzkfxrL7A==:117 a=9152RP8M]
-X-AnalysisOut: [6GQqDhC/mI/QXQ==:17 a=8nJEP1OIZ-IA:10 a=pxVhFHJ0LMsA:10 a=]
-X-AnalysisOut: [pGLkceISAAAA:8 a=wPNLvfGTeEIA:10 a=M8O0W8wq6qAA:10 a=Ygvjr]
-X-AnalysisOut: [iKHvHXA2FhpO6d-:22]
-X-SAAS-TrackingID: 0f9e3ed5.0.7834648.00-2361.13425677.s12p02m003.mxlogic.net
-X-NAI-Spam-Flag: NO
-X-NAI-Spam-Threshold: 3
-X-NAI-Spam-Score: -5000
-X-NAI-Spam-Rules: 1 Rules triggered
-        WHITELISTED=-5000
-X-NAI-Spam-Version: 2.3.0.9418 : core <6686> : inlines <7165> : streams
- <1840193> : uri <2949750>
+In-Reply-To: <20191129223418.GA15726@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-01_04:2019-11-29,2019-12-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ suspectscore=0 clxscore=1011 malwarescore=0 adultscore=0 impostorscore=0
+ phishscore=0 mlxlogscore=845 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912010215
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Money was donated to you by Mr and Mrs Allen and Violet Large, just contact=
- them with this email for more information =
+On 11/29/19 5:37 PM, Jarkko Sakkinen wrote:
+> On Tue, Nov 26, 2019 at 08:17:51AM -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Revert the patches that were fixing the probing of interrupts due
+>> to reports of interrupt stroms on some systems
+> Can you explain how reverting is going to fix the issue?
 
 
-EMail: allenandvioletlargeaward@gmail.com
+The reverts fix 'the interrupt storm issue' that they are causing on 
+some systems but don't fix the issue with the interrupt mode not being 
+used. I was hoping Jerry would get access to a system faster but this 
+didn't seem to be the case. So sending these patches seemed the better 
+solution than leaving 5.4.x with the problem but going back to when it 
+worked 'better.'
+
+
+>
+> This is wrong way to move forward. The root cause must be identified
+> first and then decide actions like always in any situation.
+>
+> /Jarkko
+
+
