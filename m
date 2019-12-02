@@ -2,104 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DFA10EFD4
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2019 20:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9089010F14E
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2019 21:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727730AbfLBTLo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Dec 2019 14:11:44 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39076 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727977AbfLBTLl (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Dec 2019 14:11:41 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB2J8FXo131186
-        for <linux-integrity@vger.kernel.org>; Mon, 2 Dec 2019 14:11:40 -0500
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wn3pcnt0g-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 02 Dec 2019 14:11:39 -0500
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 2 Dec 2019 19:11:37 -0000
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 2 Dec 2019 19:11:33 -0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB2JBWRW40567084
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 Dec 2019 19:11:32 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C29B8A4053;
-        Mon,  2 Dec 2019 19:11:32 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A1A92A405D;
-        Mon,  2 Dec 2019 19:11:31 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.147.107])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  2 Dec 2019 19:11:31 +0000 (GMT)
-Subject: Re: [PATCH v0 1/2] IMA: Defined queue functions
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
-        matthewgarrett@google.com, sashal@kernel.org,
-        jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Mon, 02 Dec 2019 14:11:31 -0500
-In-Reply-To: <6ec16f9d-b4f4-bb85-3496-be110fa68f6b@linux.microsoft.com>
-References: <20191127025212.3077-1-nramas@linux.microsoft.com>
-         <20191127025212.3077-2-nramas@linux.microsoft.com>
-         <1574887137.4793.346.camel@linux.ibm.com>
-         <ea2fafb8-a97f-5365-debd-d90143e549bf@linux.microsoft.com>
-         <1575309622.4793.413.camel@linux.ibm.com>
-         <6ec16f9d-b4f4-bb85-3496-be110fa68f6b@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19120219-0012-0000-0000-0000036FDE17
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19120219-0013-0000-0000-000021AB9755
-Message-Id: <1575313891.4793.423.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-02_04:2019-11-29,2019-12-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 mlxscore=0 adultscore=0 impostorscore=0 suspectscore=0
- bulkscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912020163
+        id S1727973AbfLBUGH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Dec 2019 15:06:07 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:55390 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727927AbfLBUGH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 2 Dec 2019 15:06:07 -0500
+X-Greylist: delayed 579 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Dec 2019 15:06:06 EST
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 00443A1D; Mon,  2 Dec 2019 13:56:26 -0600 (CST)
+Date:   Mon, 2 Dec 2019 13:56:26 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com
+Subject: Re: [v11-ima PATCH 20/25] LSM: Verify LSM display sanity in binder
+Message-ID: <20191202195626.GA32116@mail.hallyn.com>
+References: <20191127213718.18267-1-casey@schaufler-ca.com>
+ <20191127213718.18267-21-casey@schaufler-ca.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191127213718.18267-21-casey@schaufler-ca.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-12-02 at 10:39 -0800, Lakshmi Ramasubramanian wrote:
-> On 12/2/19 10:00 AM, Mimi Zohar wrote:
+On Wed, Nov 27, 2019 at 01:37:13PM -0800, Casey Schaufler wrote:
+> Verify that the tasks on the ends of a binder transaction
+> use the same "display" security module. This prevents confusion
+> of security "contexts".
 > 
-> > 
-> > ima_update_policy() is called from multiple places.  Initially, it is
-> > called before a custom policy has been loaded.  The call to
-> > ima_process_queued_keys_for_measurement() needs to be moved to within
-> > the test, otherwise it runs the risk of dropping "key" measurements.
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+>  security/security.c | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
 > 
-> static const struct file_operations ima_measure_policy_ops = {
-> 	.release = ima_release_policy,
-> };
-> 
-> ima_update_policy() is called from ima_release_policy() function.
-> 
-> On my test machine I have the IMA policy in /etc/ima/ima-policy file. 
-> When IMA policy is setup from this file, I see ima_release_policy() 
-> called (which in turn calls ima_update_policy()).
-> 
-> How can I have ima_update_policy() called before a custom policy is loaded?
+> diff --git a/security/security.c b/security/security.c
+> index 101063b00aeb..0e8c61cceecd 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -738,9 +738,38 @@ int security_binder_set_context_mgr(struct task_struct *mgr)
+>  	return call_int_hook(binder_set_context_mgr, 0, mgr);
+>  }
+>  
+> +/**
+> + * security_binder_transaction - Binder driver transacton check
 
-Oops, you're right.  My concern was ima_init_policy(), but it calls
-ima_update_policy_flag() directly.
+nit - mis-spelled transaction
 
-Mimi
-
+> + * @from: source of the transaction
+> + * @to: destination of the transaction
+> + *
+> + * Verify that the tasks have the same LSM "display", then
+> + * call the security module hooks.
+> + *
+> + * Returns -EINVAL if the displays don't match, or the
+> + * result of the security module checks.
+> + */
+>  int security_binder_transaction(struct task_struct *from,
+>  				struct task_struct *to)
+>  {
+> +	int from_display = lsm_task_display(from);
+> +	int to_display = lsm_task_display(to);
+> +
+> +	/*
+> +	 * If the display is LSMBLOB_INVALID the first module that has
+> +	 * an entry is used. This will be in the 0 slot.
+> +	 *
+> +	 * This is currently only required if the server has requested
+> +	 * peer contexts, but it would be unwieldly to have too much of
+> +	 * the binder driver detail here.
+> +	 */
+> +	if (from_display == LSMBLOB_INVALID)
+> +		from_display = 0;
+> +	if (to_display == LSMBLOB_INVALID)
+> +		to_display = 0;
+> +	if (from_display != to_display)
+> +		return -EINVAL;
+> +
+>  	return call_int_hook(binder_transaction, 0, from, to);
+>  }
+>  
+> -- 
+> 2.20.1
