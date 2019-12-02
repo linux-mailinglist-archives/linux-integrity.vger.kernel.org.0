@@ -2,50 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B82310E59F
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2019 06:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFE110E5EA
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2019 07:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbfLBFzx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Dec 2019 00:55:53 -0500
-Received: from mga07.intel.com ([134.134.136.100]:11360 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725807AbfLBFzx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Dec 2019 00:55:53 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Dec 2019 21:55:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,268,1571727600"; 
-   d="scan'208";a="200488128"
-Received: from fmsmsx105.amr.corp.intel.com ([10.18.124.203])
-  by orsmga007.jf.intel.com with ESMTP; 01 Dec 2019 21:55:52 -0800
-Received: from fmsmsx113.amr.corp.intel.com (10.18.116.7) by
- FMSMSX105.amr.corp.intel.com (10.18.124.203) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Sun, 1 Dec 2019 21:55:52 -0800
-Received: from shsmsx152.ccr.corp.intel.com (10.239.6.52) by
- FMSMSX113.amr.corp.intel.com (10.18.116.7) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Sun, 1 Dec 2019 21:55:51 -0800
-Received: from shsmsx102.ccr.corp.intel.com ([169.254.2.109]) by
- SHSMSX152.ccr.corp.intel.com ([169.254.6.222]) with mapi id 14.03.0439.000;
- Mon, 2 Dec 2019 13:55:49 +0800
-From:   "Zhao, Shirley" <shirley.zhao@intel.com>
-To:     James Bottomley <jejb@linux.ibm.com>,
+        id S1725976AbfLBGRm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Dec 2019 01:17:42 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3452 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725807AbfLBGRm (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 2 Dec 2019 01:17:42 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB26BbNa117263;
+        Mon, 2 Dec 2019 01:17:38 -0500
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wm6cwxmca-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Dec 2019 01:17:38 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xB26FBh1026677;
+        Mon, 2 Dec 2019 06:17:37 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma03dal.us.ibm.com with ESMTP id 2wkg26c6xf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Dec 2019 06:17:37 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB26HaFs52035850
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Dec 2019 06:17:36 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1718A7805C;
+        Mon,  2 Dec 2019 06:17:36 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1CFAB78060;
+        Mon,  2 Dec 2019 06:17:34 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.189.151])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  2 Dec 2019 06:17:33 +0000 (GMT)
+Message-ID: <1575267453.4080.26.camel@linux.ibm.com>
+Subject: Re: One question about trusted key of keyring in Linux kernel.
+From:   James Bottomley <jejb@linux.ibm.com>
+To:     "Zhao, Shirley" <shirley.zhao@intel.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Jonathan Corbet <corbet@lwn.net>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "'Mauro Carvalho Chehab'" <mchehab+samsung@kernel.org>,
         "Zhu, Bing" <bing.zhu@intel.com>,
         "Chen, Luhai" <luhai.chen@intel.com>
-Subject: RE: One question about trusted key of keyring in Linux kernel.
-Thread-Topic: One question about trusted key of keyring in Linux kernel.
-Thread-Index: AdWZwFKzDBwFOydYTGGk+Aqs+6BIxAANhxEAAoxRZMAAOKaagABSSevwABZzFQAAgRP1kP//pW0A//9ftMA=
-Date:   Mon, 2 Dec 2019 05:55:49 +0000
-Message-ID: <A888B25CD99C1141B7C254171A953E8E4909D360@shsmsx102.ccr.corp.intel.com>
+Date:   Sun, 01 Dec 2019 22:17:33 -0800
+In-Reply-To: <A888B25CD99C1141B7C254171A953E8E4909D360@shsmsx102.ccr.corp.intel.com>
 References: <A888B25CD99C1141B7C254171A953E8E49094313@shsmsx102.ccr.corp.intel.com>
          <1573659978.17949.83.camel@linux.ibm.com>
          <A888B25CD99C1141B7C254171A953E8E49095F9B@shsmsx102.ccr.corp.intel.com>
@@ -53,102 +62,154 @@ References: <A888B25CD99C1141B7C254171A953E8E49094313@shsmsx102.ccr.corp.intel.c
          <A888B25CD99C1141B7C254171A953E8E49096521@shsmsx102.ccr.corp.intel.com>
          <1575057916.6220.7.camel@linux.ibm.com>
          <A888B25CD99C1141B7C254171A953E8E4909BA3B@shsmsx102.ccr.corp.intel.com>
- <1575260220.4080.17.camel@linux.ibm.com>
-In-Reply-To: <1575260220.4080.17.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMTc0N2FlZWQtYWMzZS00ZmUyLWEwNWMtN2I3MmVlOWUzZTM1IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoia0ZMR3V0SUI3U3pjS3JldnFlUzg1ZnVYS3M2WnA2S09rdkdWWFAzemVkRE5DXC8xN2hVRDkrclk4VmNaRXR3RmkifQ==
-x-ctpclassification: CTP_NT
-x-originating-ip: [10.239.127.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+         <1575260220.4080.17.camel@linux.ibm.com>
+         <A888B25CD99C1141B7C254171A953E8E4909D360@shsmsx102.ccr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-01_04:2019-11-29,2019-12-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 suspectscore=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912020055
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-VGhhbmtzIGZvciB5b3VyIGZlZWRiYWNrLCBKYW1lcy4NCg0KVGhlIHBvbGljeSBpcyBnZW5lcmF0
-ZWQgYnkgVFBNIGNvbW1hbmQsIHRwbTJfY3JlYXRlcG9saWN5LCBpdCBqdXN0IHVzZSB0aGUgYWxn
-b3JpdGhtIHlvdSBtZW50aW9uZWQsIHdoaWNoIGlzIGRlZmluZWQgaW4gVFBNIHNwZWMuIA0KSSBy
-ZS1hdHRhY2ggbXkgdGVzdCBzdGVwcyBhcyBiZWxvdy4gDQpQbGVhc2UgaGVscCBjaGVjayBpdCwg
-aXMgdGhlcmUgYW55dGhpbmcgd3JvbmcsIGVzcGVjaWFsbHkgdGhlIGZvcm1hdCBvZiBrZXljdGwg
-Y29tbWFuZC4gDQoNCkZpcnN0bHksIHRoZSBwY3IgcG9saWN5IGlzIGdlbmVyYXRlZCBhcyBiZWxv
-dzogDQokIHRwbTJfY3JlYXRlcG9saWN5IC0tcG9saWN5LXBjciAtLXBjci1saXN0IHNoYTI1Njo3
-IC0tcG9saWN5IHBjcjdfYmluLnBvbGljeSA+IHBjcjcucG9saWN5DQoNClBjcjcucG9saWN5IGlz
-IHRoZSBhc2NpaSBoZXggb2YgcG9saWN5Og0KJCBjYXQgcGNyNy5wb2xpY3kNCjMyMWZiZDI4YjYw
-ZmNjMjMwMTdkNTAxYjEzM2JkNWRiZjI4ODk4MTQ1ODhlOGEyMzUxMGZlMTAxMDVjYjJjYzkNCg0K
-VGhlbiBnZW5lcmF0ZSB0aGUgdHJ1c3RlZCBrZXkgYW5kIGNvbmZpZ3VyZSBwb2xpY3lkaWdlc3Qg
-YW5kIGdldCB0aGUga2V5IElEOiANCiQga2V5Y3RsIGFkZCB0cnVzdGVkIGttayAibmV3IDMyIGtl
-eWhhbmRsZT0weDgxMDAwMDAxIGhhc2g9c2hhMjU2IHBvbGljeWRpZ2VzdD1gY2F0IHBjcjcucG9s
-aWN5YCIgQHUNCjg3NDExNzA0NQ0KDQpTYXZlIHRoZSB0cnVzdGVkIGtleS4gDQokIGtleWN0bCBw
-aXBlIDg3NDExNzA0NSA+IGttay5ibG9iDQoNClJlYm9vdCBhbmQgbG9hZCB0aGUga2V5LiANClN0
-YXJ0IGEgYXV0aCBzZXNzaW9uIHRvIGdlbmVyYXRlIHRoZSBwb2xpY3k6DQokIHRwbTJfc3RhcnRh
-dXRoc2Vzc2lvbiAtUyBzZXNzaW9uLmN0eA0Kc2Vzc2lvbi1oYW5kbGU6IDB4MzAwMDAwMA0KJCB0
-cG0yX3Bjcmxpc3QgLUwgc2hhMjU2OjcgLW8gcGNyNy5zaGEyNTYgJCB0cG0yX3BvbGljeXBjciAt
-UyBzZXNzaW9uLmN0eCAtTCBzaGEyNTY6NyAtRiBwY3I3LnNoYTI1NiAtZiBwY3I3LnBvbGljeQ0K
-cG9saWN5LWRpZ2VzdDogMHgzMjFGQkQyOEI2MEZDQzIzMDE3RDUwMUIxMzNCRDVEQkYyODg5ODE0
-NTg4RThBMjM1MTBGRTEwMTA1Q0IyQ0M5DQoNCklucHV0IHRoZSBwb2xpY3kgaGFuZGxlIHRvIGxv
-YWQgdHJ1c3RlZCBrZXk6DQokIGtleWN0bCBhZGQgdHJ1c3RlZCBrbWsgImxvYWQgYGNhdCBrbWsu
-YmxvYmAga2V5aGFuZGxlPTB4ODEwMDAwMDEgcG9saWN5aGFuZGxlPTB4MzAwMDAwMCIgQHUNCmFk
-ZF9rZXk6IE9wZXJhdGlvbiBub3QgcGVybWl0dGVkDQoNClRoZSBlcnJvciBzaG91bGQgYmUgcG9s
-aWN5IGNoZWNrIGZhaWxlZCwgYmVjYXVzZSBJIHVzZSBUUE0gY29tbWFuZCB0byB1bnNlYWwgZGly
-ZWN0bHkgd2l0aCBlcnJvciBvZiBwb2xpY3kgY2hlY2sgZmFpbGVkLiANCiQgdHBtMl91bnNlYWwg
-LWMgMHg4MTAwMDAwMSAtTCBzaGEyNTY6Nw0KRVJST1Igb24gbGluZTogIjgxIiBpbiBmaWxlOiAi
-Li9saWIvbG9nLmgiOiBUc3MyX1N5c19VbnNlYWwoMHg5OUQpIC0gdHBtOnNlc3Npb24oMSk6YSBw
-b2xpY3kgY2hlY2sgZmFpbGVkIEVSUk9SIG9uIGxpbmU6ICIyMTMiIGluIGZpbGU6ICJ0b29scy90
-cG0yX3Vuc2VhbC5jIjogVW5zZWFsIGZhaWxlZCENCkVSUk9SIG9uIGxpbmU6ICIxNjYiIGluIGZp
-bGU6ICJ0b29scy90cG0yX3Rvb2wuYyI6IFVuYWJsZSB0byBydW4gdHBtMl91bnNlYWwNCg0KLSBT
-aGlybGV5IA0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogSmFtZXMgQm90dG9t
-bGV5IDxqZWpiQGxpbnV4LmlibS5jb20+IA0KU2VudDogTW9uZGF5LCBEZWNlbWJlciAyLCAyMDE5
-IDEyOjE3IFBNDQpUbzogWmhhbywgU2hpcmxleSA8c2hpcmxleS56aGFvQGludGVsLmNvbT47IE1p
-bWkgWm9oYXIgPHpvaGFyQGxpbnV4LmlibS5jb20+OyBKYXJra28gU2Fra2luZW4gPGphcmtrby5z
-YWtraW5lbkBsaW51eC5pbnRlbC5jb20+OyBKb25hdGhhbiBDb3JiZXQgPGNvcmJldEBsd24ubmV0
-Pg0KQ2M6IGxpbnV4LWludGVncml0eUB2Z2VyLmtlcm5lbC5vcmc7IGtleXJpbmdzQHZnZXIua2Vy
-bmVsLm9yZzsgbGludXgtZG9jQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2Vy
-bmVsLm9yZzsgJ01hdXJvIENhcnZhbGhvIENoZWhhYicgPG1jaGVoYWIrc2Ftc3VuZ0BrZXJuZWwu
-b3JnPjsgWmh1LCBCaW5nIDxiaW5nLnpodUBpbnRlbC5jb20+OyBDaGVuLCBMdWhhaSA8bHVoYWku
-Y2hlbkBpbnRlbC5jb20+DQpTdWJqZWN0OiBSZTogT25lIHF1ZXN0aW9uIGFib3V0IHRydXN0ZWQg
-a2V5IG9mIGtleXJpbmcgaW4gTGludXgga2VybmVsLg0KDQpPbiBNb24sIDIwMTktMTItMDIgYXQg
-MDE6NDQgKzAwMDAsIFpoYW8sIFNoaXJsZXkgd3JvdGU6DQo+IEhpLCBKYW1lcywNCj4gDQo+IFRo
-ZSB2YWx1ZSBvZiBQQ1I3IGlzIG5vdCBjaGFuZ2VkLiBJIGhhdmUgY2hlY2tlZCBpdCB3aXRoIFRQ
-TSBjb21tYW5kIA0KPiB0cG1fcGNybGlzdC4NCj4gDQo+IFNvIEkgdGhpbmsgdGhlIHByb2JsZW0g
-aXMgaG93IHRvIHVzZSB0aGUgb3B0aW9uIHBvbGljeWRpZ2VzdCBhbmQgDQo+IHBvbGljeWhhbmRs
-ZT8gSXMgdGhlcmUgYW55IGV4YW1wbGU/DQo+IE1heWJlIHRoZSBmb3JtYXQgaW4gbXkgY29tbWFu
-ZCBpcyBub3QgY29ycmVjdC4gDQoNCk9LLCBzbyBwcmV2aW91c2x5IHlvdSBzYWlkIHRoYXQgdXNp
-bmcgdGhlIEludGVsIFRTUyB0aGUgcG9saWN5IGFsc28gZmFpbGVkIGFmdGVyIGEgcmVib290Og0K
-DQo+IFRoZSBlcnJvciBzaG91bGQgYmUgcG9saWN5IGNoZWNrIGZhaWxlZCwgYmVjYXVzZSBJIHVz
-ZSBUUE0gY29tbWFuZCB0byANCj4gdW5zZWFsIGRpcmVjdGx5IHdpdGggZXJyb3Igb2YgcG9saWN5
-IGNoZWNrIGZhaWxlZC4NCj4gJCB0cG0yX3Vuc2VhbCAtYyAweDgxMDAwMDAxIC1MIHNoYTI1Njo3
-IEVSUk9SIG9uIGxpbmU6ICI4MSIgaW4gZmlsZTogDQo+ICIuL2xpYi9sb2cuaCI6IFRzczJfU3lz
-X1Vuc2VhbCgweDk5RCkgLSB0cG06c2Vzc2lvbigxKTphIHBvbGljeSBjaGVjayANCj4gZmFpbGVk
-IEVSUk9SIG9uIGxpbmU6ICIyMTMiIGluIGZpbGU6ICJ0b29scy90cG0yX3Vuc2VhbC5jIjogVW5z
-ZWFsIA0KPiBmYWlsZWQhDQo+IEVSUk9SIG9uIGxpbmU6ICIxNjYiIGluIGZpbGU6ICJ0b29scy90
-cG0yX3Rvb2wuYyI6IFVuYWJsZSB0byBydW4gDQo+IHRwbTJfdW5zZWFsDQoNClNvIHRoaXMgbXVz
-dCBtZWFuIHRoZSBhY3R1YWwgcG9saWN5IGhhc2ggeW91IGNvbnN0cnVjdGVkIHdhcyB3cm9uZyBp
-biBzb21lIHdheTogaXQgZGlkbid0IGNvcnJlc3BvbmQgc2ltcGx5IHRvIGEgdmFsdWUgb2YgcGNy
-NyAuLi4gd2VsbCBhc3N1bWluZyB0aGUgLUwgc2hhMjU2OjcgbWVhbnMgY29uc3RydWN0IGEgcG9s
-aWN5IG9mIHRoZSBzaGEyNTYgdmFsdWUgb2YgcGNyNyBhbmQgdXNlIGl0IGluIHRoZSB1bnNlYWwu
-DQoNCkkgY2FuIHRlbGwgeW91IGhvdyB0byBjb25zdHJ1Y3QgcG9saWNpZXMgdXNpbmcgVFBNMiBj
-b21tYW5kcywgYnV0IEkgdGhpbmsgeW91IHdhbnQgdG8ga25vdyBob3cgdG8gZG8gaXQgdXNpbmcg
-dGhlIEludGVsIFRTUz8gIEluIHdoaWNoIGNhc2UgeW91IHJlYWxseSBuZWVkIHRvIGNvbnN1bHQg
-dGhlIGV4cGVydHMgaW4gdGhhdCBUU1MsIGxpa2UgUGhpbCBUcmljY2EuDQoNCkZvciB0aGUgcGxh
-aW4gVFBNMiBjYXNlLCB0aGUgcG9saWN5IGxvb2tzIGxpa2UNCg0KVFBNX0NDX1BvbGljeVBDUiB8
-fCBwY3JzIHx8IHBjckRpZ2VzdA0KDQpXaGVyZSBUUE1fQ0NfUG9saWN5UENSID0gMDAwMDAxN2Yg
-YW5kIGZvciBzZWxlY3RpbmcgcGNyNyBvbmx5LiAgcGNycyBpcyBhIGNvbXBsaWNhdGVkIGVudGl0
-eTogaXQncyBhIGNvdW50ZWQgYXJyYXkgb2YgcGNyIHNlbGVjdGlvbnMuICBGb3IgeW91ciBwb2xp
-Y3kgeW91IG9ubHkgbmVlZCBvbmUgZW50cnksIHNvIGl0IHdvdWxkIGJlIDAwMDAwMDAxIGZvbGxv
-d2VkIGJ5IGEgc2luZ2xlIHBjclNlbGVjdGlvbiBlbnRyeS4gIHBjclNlbGVjdGlvbiBpcyB0aGUg
-aGFzaCBhbGdvcml0aG0sIHRoZSBzaXplIG9mIHRoZSBzZWxlY3Rpb24gYml0bWFwIChhbHdheXMg
-MyBzaW5jZSBldmVyeSBjdXJyZW50IFRQTSBvbmx5IGhhcw0KMjQgUENScykgYW5kIGEgYml0bWFw
-IHNlbGVjdGluZyB0aGUgUENScyBpbiBiaWcgZW5kaWFuIGZvcm1hdCwgc28gZm9yDQpQQ1I3IHVz
-aW5nIHNoYTI1NiAoYWxnb3JpdGhtIDAwMGIpLCBwY3JTZWxlY3Rpb24gPSAwMDBiIDAzIDgwIDAw
-IDAwLiANCkFuZCB0aGVuIHlvdSBmb2xsb3cgdGhpcyBieSB0aGUgaGFzaCBvZiB0aGUgUENSIHZh
-bHVlIHlvdSdyZSBsb29raW5nIGZvci4gIFRoZSBwb2xpY3loYXNoIGJlY29tZXMgdGhlIGluaXRp
-YWwgcG9saWN5IChhbGwgemVyb3MgZm9yIHRoZSBzdGFydCBvZiB0aGUgcG9saWN5IGNoYWluKSBo
-YXNoZWQgd2l0aCB0aGlzLg0KDQpSZWdhcmRzLA0KDQpKYW1lcw0KDQo=
+On Mon, 2019-12-02 at 05:55 +0000, Zhao, Shirley wrote:
+> Thanks for your feedback, James.
+> 
+> The policy is generated by TPM command, tpm2_createpolicy, it just
+> use the algorithm you mentioned, which is defined in TPM spec. 
+> I re-attach my test steps as below. 
+> Please help check it, is there anything wrong, especially the format
+> of keyctl command. 
+> 
+> Firstly, the pcr policy is generated as below: 
+> $ tpm2_createpolicy --policy-pcr --pcr-list sha256:7 --policy
+> pcr7_bin.policy > pcr7.policy
+
+I don't use the Intel TSS, so I can't help you with this command: you
+need to ask someone who does use it it, like Phil.
+
+> Pcr7.policy is the ascii hex of policy:
+> $ cat pcr7.policy
+> 321fbd28b60fcc23017d501b133bd5dbf2889814588e8a23510fe10105cb2cc9
+
+You haven't provided enough information.  If you tell me what the pcr7
+value you tied the policy to is, I can run it through the IBM TSS
+policy maker and tell you if this is the correct hash.  But obviously,
+since it's a hash, I can't reverse it to tell you what the policy it
+mandates is.
+
+James
+
+> Then generate the trusted key and configure policydigest and get the
+> key ID: 
+> $ keyctl add trusted kmk "new 32 keyhandle=0x81000001 hash=sha256
+> policydigest=`cat pcr7.policy`" @u
+> 874117045
+> 
+> Save the trusted key. 
+> $ keyctl pipe 874117045 > kmk.blob
+> 
+> Reboot and load the key. 
+> Start a auth session to generate the policy:
+> $ tpm2_startauthsession -S session.ctx
+> session-handle: 0x3000000
+> $ tpm2_pcrlist -L sha256:7 -o pcr7.sha256 $ tpm2_policypcr -S
+> session.ctx -L sha256:7 -F pcr7.sha256 -f pcr7.policy
+> policy-digest:
+> 0x321FBD28B60FCC23017D501B133BD5DBF2889814588E8A23510FE10105CB2CC9
+> 
+> Input the policy handle to load trusted key:
+> $ keyctl add trusted kmk "load `cat kmk.blob` keyhandle=0x81000001
+> policyhandle=0x3000000" @u
+> add_key: Operation not permitted
+> 
+> The error should be policy check failed, because I use TPM command to
+> unseal directly with error of policy check failed. 
+> $ tpm2_unseal -c 0x81000001 -L sha256:7
+> ERROR on line: "81" in file: "./lib/log.h": Tss2_Sys_Unseal(0x99D) -
+> tpm:session(1):a policy check failed ERROR on line: "213" in file:
+> "tools/tpm2_unseal.c": Unseal failed!
+> ERROR on line: "166" in file: "tools/tpm2_tool.c": Unable to run
+> tpm2_unseal
+> 
+> - Shirley 
+> 
+> -----Original Message-----
+> From: James Bottomley <jejb@linux.ibm.com> 
+> Sent: Monday, December 2, 2019 12:17 PM
+> To: Zhao, Shirley <shirley.zhao@intel.com>; Mimi Zohar <zohar@linux.i
+> bm.com>; Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>; Jonathan
+> Corbet <corbet@lwn.net>
+> Cc: linux-integrity@vger.kernel.org; keyrings@vger.kernel.org; linux-
+> doc@vger.kernel.org; linux-kernel@vger.kernel.org; 'Mauro Carvalho
+> Chehab' <mchehab+samsung@kernel.org>; Zhu, Bing <bing.zhu@intel.com>;
+> Chen, Luhai <luhai.chen@intel.com>
+> Subject: Re: One question about trusted key of keyring in Linux
+> kernel.
+> 
+> On Mon, 2019-12-02 at 01:44 +0000, Zhao, Shirley wrote:
+> > Hi, James,
+> > 
+> > The value of PCR7 is not changed. I have checked it with TPM
+> > command 
+> > tpm_pcrlist.
+> > 
+> > So I think the problem is how to use the option policydigest and 
+> > policyhandle? Is there any example?
+> > Maybe the format in my command is not correct. 
+> 
+> OK, so previously you said that using the Intel TSS the policy also
+> failed after a reboot:
+> 
+> > The error should be policy check failed, because I use TPM command
+> > to 
+> > unseal directly with error of policy check failed.
+> > $ tpm2_unseal -c 0x81000001 -L sha256:7 ERROR on line: "81" in
+> > file: 
+> > "./lib/log.h": Tss2_Sys_Unseal(0x99D) - tpm:session(1):a policy
+> > check 
+> > failed ERROR on line: "213" in file: "tools/tpm2_unseal.c": Unseal 
+> > failed!
+> > ERROR on line: "166" in file: "tools/tpm2_tool.c": Unable to run 
+> > tpm2_unseal
+> 
+> So this must mean the actual policy hash you constructed was wrong in
+> some way: it didn't correspond simply to a value of pcr7 ... well
+> assuming the -L sha256:7 means construct a policy of the sha256 value
+> of pcr7 and use it in the unseal.
+> 
+> I can tell you how to construct policies using TPM2 commands, but I
+> think you want to know how to do it using the Intel TSS?  In which
+> case you really need to consult the experts in that TSS, like Phil
+> Tricca.
+> 
+> For the plain TPM2 case, the policy looks like
+> 
+> TPM_CC_PolicyPCR || pcrs || pcrDigest
+> 
+> Where TPM_CC_PolicyPCR = 0000017f and for selecting pcr7 only.  pcrs
+> is a complicated entity: it's a counted array of pcr selections.  For
+> your policy you only need one entry, so it would be 00000001 followed
+> by a single pcrSelection entry.  pcrSelection is the hash algorithm,
+> the size of the selection bitmap (always 3 since every current TPM
+> only has
+> 24 PCRs) and a bitmap selecting the PCRs in big endian format, so for
+> PCR7 using sha256 (algorithm 000b), pcrSelection = 000b 03 80 00 00. 
+> And then you follow this by the hash of the PCR value you're looking
+> for.  The policyhash becomes the initial policy (all zeros for the
+> start of the policy chain) hashed with this.
+> 
+> Regards,
+> 
+> James
+> 
+
