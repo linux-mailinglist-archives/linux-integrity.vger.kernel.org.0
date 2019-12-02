@@ -2,50 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B5E10E5F0
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2019 07:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 130B210E615
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2019 07:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725920AbfLBGXd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Dec 2019 01:23:33 -0500
-Received: from mga07.intel.com ([134.134.136.100]:12658 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725935AbfLBGXd (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Dec 2019 01:23:33 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Dec 2019 22:23:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,268,1571727600"; 
-   d="scan'208";a="212937004"
-Received: from fmsmsx108.amr.corp.intel.com ([10.18.124.206])
-  by orsmga003.jf.intel.com with ESMTP; 01 Dec 2019 22:23:30 -0800
-Received: from fmsmsx156.amr.corp.intel.com (10.18.116.74) by
- FMSMSX108.amr.corp.intel.com (10.18.124.206) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Sun, 1 Dec 2019 22:23:29 -0800
-Received: from shsmsx151.ccr.corp.intel.com (10.239.6.50) by
- fmsmsx156.amr.corp.intel.com (10.18.116.74) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Sun, 1 Dec 2019 22:23:29 -0800
-Received: from shsmsx102.ccr.corp.intel.com ([169.254.2.109]) by
- SHSMSX151.ccr.corp.intel.com ([169.254.3.214]) with mapi id 14.03.0439.000;
- Mon, 2 Dec 2019 14:23:27 +0800
-From:   "Zhao, Shirley" <shirley.zhao@intel.com>
-To:     James Bottomley <jejb@linux.ibm.com>,
+        id S1726276AbfLBGou (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Dec 2019 01:44:50 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40882 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725976AbfLBGou (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 2 Dec 2019 01:44:50 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB26gDgM072442;
+        Mon, 2 Dec 2019 01:44:40 -0500
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2wm6g7xxfd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Dec 2019 01:44:39 -0500
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xB26eOtN021563;
+        Mon, 2 Dec 2019 06:44:39 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma03wdc.us.ibm.com with ESMTP id 2wkg26882x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Dec 2019 06:44:39 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB26iccR48366026
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Dec 2019 06:44:38 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 12BD478063;
+        Mon,  2 Dec 2019 06:44:38 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F6F67805E;
+        Mon,  2 Dec 2019 06:44:36 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.189.151])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  2 Dec 2019 06:44:35 +0000 (GMT)
+Message-ID: <1575269075.4080.31.camel@linux.ibm.com>
+Subject: Re: One question about trusted key of keyring in Linux kernel.
+From:   James Bottomley <jejb@linux.ibm.com>
+To:     "Zhao, Shirley" <shirley.zhao@intel.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Jonathan Corbet <corbet@lwn.net>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "'Mauro Carvalho Chehab'" <mchehab+samsung@kernel.org>,
         "Zhu, Bing" <bing.zhu@intel.com>,
         "Chen, Luhai" <luhai.chen@intel.com>
-Subject: RE: One question about trusted key of keyring in Linux kernel.
-Thread-Topic: One question about trusted key of keyring in Linux kernel.
-Thread-Index: AdWZwFKzDBwFOydYTGGk+Aqs+6BIxAANhxEAAoxRZMAAOKaagABSSevwABZzFQAAgRP1kP//pW0A//9ftMCAAMH6gP//eLrA
-Date:   Mon, 2 Dec 2019 06:23:27 +0000
-Message-ID: <A888B25CD99C1141B7C254171A953E8E4909E381@shsmsx102.ccr.corp.intel.com>
+Date:   Sun, 01 Dec 2019 22:44:35 -0800
+In-Reply-To: <A888B25CD99C1141B7C254171A953E8E4909E381@shsmsx102.ccr.corp.intel.com>
 References: <A888B25CD99C1141B7C254171A953E8E49094313@shsmsx102.ccr.corp.intel.com>
          <1573659978.17949.83.camel@linux.ibm.com>
          <A888B25CD99C1141B7C254171A953E8E49095F9B@shsmsx102.ccr.corp.intel.com>
@@ -55,135 +64,56 @@ References: <A888B25CD99C1141B7C254171A953E8E49094313@shsmsx102.ccr.corp.intel.c
          <A888B25CD99C1141B7C254171A953E8E4909BA3B@shsmsx102.ccr.corp.intel.com>
          <1575260220.4080.17.camel@linux.ibm.com>
          <A888B25CD99C1141B7C254171A953E8E4909D360@shsmsx102.ccr.corp.intel.com>
- <1575267453.4080.26.camel@linux.ibm.com>
-In-Reply-To: <1575267453.4080.26.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMzg0YmE3ODUtYmYzZC00YjU3LTgwNDktMTliMzViM2EyYTc5IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoidFRRZzFMWEF6Nm03Wlh4VjdZdmxNVWd1bmZRWk1kXC9EM3kwQUtQcjdXMVpVVnhDRjdtRXlBWDREeHhqWmNSR3gifQ==
-x-ctpclassification: CTP_NT
-x-originating-ip: [10.239.127.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+         <1575267453.4080.26.camel@linux.ibm.com>
+         <A888B25CD99C1141B7C254171A953E8E4909E381@shsmsx102.ccr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-01_04:2019-11-29,2019-12-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 phishscore=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 spamscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=883 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912020059
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SGksIEphbWVzLCANCg0KVGhlIFBDUjcgdmFsdWUgYW5kIFBDUjcgcG9saWN5IGlzIGFzIGJlbG93
-LCBwbGVhc2UgcmV2aWV3LCB0aGFua3MuIA0KDQojIHRwbTJfcGNybGlzdCAtTCBzaGEyNTY6NyAt
-byBwY3I3XzIuc2hhMjU2DQpzaGEyNTY6DQogIDcgOiAweDA2MUFBRDA3MDVBNjIzNjFBRDE4RTU4
-QjY1RDNENzM4M0Y0RDEwRjdGNUE3RTc4OTI0QkUwNTdBQzY3OTc0MDgNCg0KIyB0cG0yX2NyZWF0
-ZXBvbGljeSAtLXBvbGljeS1wY3IgLS1wY3ItbGlzdCBzaGEyNTY6NyAtLXBvbGljeSBwY3I3X2Jp
-bi5wb2xpY3kgPiBwY3I3LnBvbGljeQ0KMzIxZmJkMjhiNjBmY2MyMzAxN2Q1MDFiMTMzYmQ1ZGJm
-Mjg4OTgxNDU4OGU4YTIzNTEwZmUxMDEwNWNiMmNjOQ0KDQojIGNhdCBwY3I3LnBvbGljeQ0KMzIx
-ZmJkMjhiNjBmY2MyMzAxN2Q1MDFiMTMzYmQ1ZGJmMjg4OTgxNDU4OGU4YTIzNTEwZmUxMDEwNWNi
-MmNjOQ0KDQotIFNoaXJsZXkgDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBK
-YW1lcyBCb3R0b21sZXkgPGplamJAbGludXguaWJtLmNvbT4gDQpTZW50OiBNb25kYXksIERlY2Vt
-YmVyIDIsIDIwMTkgMjoxOCBQTQ0KVG86IFpoYW8sIFNoaXJsZXkgPHNoaXJsZXkuemhhb0BpbnRl
-bC5jb20+OyBNaW1pIFpvaGFyIDx6b2hhckBsaW51eC5pYm0uY29tPjsgSmFya2tvIFNha2tpbmVu
-IDxqYXJra28uc2Fra2luZW5AbGludXguaW50ZWwuY29tPjsgSm9uYXRoYW4gQ29yYmV0IDxjb3Ji
-ZXRAbHduLm5ldD4NCkNjOiBsaW51eC1pbnRlZ3JpdHlAdmdlci5rZXJuZWwub3JnOyBrZXlyaW5n
-c0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWRvY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5l
-bEB2Z2VyLmtlcm5lbC5vcmc7ICdNYXVybyBDYXJ2YWxobyBDaGVoYWInIDxtY2hlaGFiK3NhbXN1
-bmdAa2VybmVsLm9yZz47IFpodSwgQmluZyA8YmluZy56aHVAaW50ZWwuY29tPjsgQ2hlbiwgTHVo
-YWkgPGx1aGFpLmNoZW5AaW50ZWwuY29tPg0KU3ViamVjdDogUmU6IE9uZSBxdWVzdGlvbiBhYm91
-dCB0cnVzdGVkIGtleSBvZiBrZXlyaW5nIGluIExpbnV4IGtlcm5lbC4NCg0KT24gTW9uLCAyMDE5
-LTEyLTAyIGF0IDA1OjU1ICswMDAwLCBaaGFvLCBTaGlybGV5IHdyb3RlOg0KPiBUaGFua3MgZm9y
-IHlvdXIgZmVlZGJhY2ssIEphbWVzLg0KPiANCj4gVGhlIHBvbGljeSBpcyBnZW5lcmF0ZWQgYnkg
-VFBNIGNvbW1hbmQsIHRwbTJfY3JlYXRlcG9saWN5LCBpdCBqdXN0IHVzZSANCj4gdGhlIGFsZ29y
-aXRobSB5b3UgbWVudGlvbmVkLCB3aGljaCBpcyBkZWZpbmVkIGluIFRQTSBzcGVjLg0KPiBJIHJl
-LWF0dGFjaCBteSB0ZXN0IHN0ZXBzIGFzIGJlbG93LiANCj4gUGxlYXNlIGhlbHAgY2hlY2sgaXQs
-IGlzIHRoZXJlIGFueXRoaW5nIHdyb25nLCBlc3BlY2lhbGx5IHRoZSBmb3JtYXQgDQo+IG9mIGtl
-eWN0bCBjb21tYW5kLg0KPiANCj4gRmlyc3RseSwgdGhlIHBjciBwb2xpY3kgaXMgZ2VuZXJhdGVk
-IGFzIGJlbG93OiANCj4gJCB0cG0yX2NyZWF0ZXBvbGljeSAtLXBvbGljeS1wY3IgLS1wY3ItbGlz
-dCBzaGEyNTY6NyAtLXBvbGljeSANCj4gcGNyN19iaW4ucG9saWN5ID4gcGNyNy5wb2xpY3kNCg0K
-SSBkb24ndCB1c2UgdGhlIEludGVsIFRTUywgc28gSSBjYW4ndCBoZWxwIHlvdSB3aXRoIHRoaXMg
-Y29tbWFuZDogeW91IG5lZWQgdG8gYXNrIHNvbWVvbmUgd2hvIGRvZXMgdXNlIGl0IGl0LCBsaWtl
-IFBoaWwuDQoNCj4gUGNyNy5wb2xpY3kgaXMgdGhlIGFzY2lpIGhleCBvZiBwb2xpY3k6DQo+ICQg
-Y2F0IHBjcjcucG9saWN5DQo+IDMyMWZiZDI4YjYwZmNjMjMwMTdkNTAxYjEzM2JkNWRiZjI4ODk4
-MTQ1ODhlOGEyMzUxMGZlMTAxMDVjYjJjYzkNCg0KWW91IGhhdmVuJ3QgcHJvdmlkZWQgZW5vdWdo
-IGluZm9ybWF0aW9uLiAgSWYgeW91IHRlbGwgbWUgd2hhdCB0aGUgcGNyNyB2YWx1ZSB5b3UgdGll
-ZCB0aGUgcG9saWN5IHRvIGlzLCBJIGNhbiBydW4gaXQgdGhyb3VnaCB0aGUgSUJNIFRTUyBwb2xp
-Y3kgbWFrZXIgYW5kIHRlbGwgeW91IGlmIHRoaXMgaXMgdGhlIGNvcnJlY3QgaGFzaC4gIEJ1dCBv
-YnZpb3VzbHksIHNpbmNlIGl0J3MgYSBoYXNoLCBJIGNhbid0IHJldmVyc2UgaXQgdG8gdGVsbCB5
-b3Ugd2hhdCB0aGUgcG9saWN5IGl0IG1hbmRhdGVzIGlzLg0KDQpKYW1lcw0KDQo+IFRoZW4gZ2Vu
-ZXJhdGUgdGhlIHRydXN0ZWQga2V5IGFuZCBjb25maWd1cmUgcG9saWN5ZGlnZXN0IGFuZCBnZXQg
-dGhlIA0KPiBrZXkgSUQ6DQo+ICQga2V5Y3RsIGFkZCB0cnVzdGVkIGttayAibmV3IDMyIGtleWhh
-bmRsZT0weDgxMDAwMDAxIGhhc2g9c2hhMjU2IA0KPiBwb2xpY3lkaWdlc3Q9YGNhdCBwY3I3LnBv
-bGljeWAiIEB1DQo+IDg3NDExNzA0NQ0KPiANCj4gU2F2ZSB0aGUgdHJ1c3RlZCBrZXkuIA0KPiAk
-IGtleWN0bCBwaXBlIDg3NDExNzA0NSA+IGttay5ibG9iDQo+IA0KPiBSZWJvb3QgYW5kIGxvYWQg
-dGhlIGtleS4gDQo+IFN0YXJ0IGEgYXV0aCBzZXNzaW9uIHRvIGdlbmVyYXRlIHRoZSBwb2xpY3k6
-DQo+ICQgdHBtMl9zdGFydGF1dGhzZXNzaW9uIC1TIHNlc3Npb24uY3R4DQo+IHNlc3Npb24taGFu
-ZGxlOiAweDMwMDAwMDANCj4gJCB0cG0yX3Bjcmxpc3QgLUwgc2hhMjU2OjcgLW8gcGNyNy5zaGEy
-NTYgJCB0cG0yX3BvbGljeXBjciAtUyANCj4gc2Vzc2lvbi5jdHggLUwgc2hhMjU2OjcgLUYgcGNy
-Ny5zaGEyNTYgLWYgcGNyNy5wb2xpY3kNCj4gcG9saWN5LWRpZ2VzdDoNCj4gMHgzMjFGQkQyOEI2
-MEZDQzIzMDE3RDUwMUIxMzNCRDVEQkYyODg5ODE0NTg4RThBMjM1MTBGRTEwMTA1Q0IyQ0M5DQo+
-IA0KPiBJbnB1dCB0aGUgcG9saWN5IGhhbmRsZSB0byBsb2FkIHRydXN0ZWQga2V5Og0KPiAkIGtl
-eWN0bCBhZGQgdHJ1c3RlZCBrbWsgImxvYWQgYGNhdCBrbWsuYmxvYmAga2V5aGFuZGxlPTB4ODEw
-MDAwMDEgDQo+IHBvbGljeWhhbmRsZT0weDMwMDAwMDAiIEB1DQo+IGFkZF9rZXk6IE9wZXJhdGlv
-biBub3QgcGVybWl0dGVkDQo+IA0KPiBUaGUgZXJyb3Igc2hvdWxkIGJlIHBvbGljeSBjaGVjayBm
-YWlsZWQsIGJlY2F1c2UgSSB1c2UgVFBNIGNvbW1hbmQgdG8gDQo+IHVuc2VhbCBkaXJlY3RseSB3
-aXRoIGVycm9yIG9mIHBvbGljeSBjaGVjayBmYWlsZWQuDQo+ICQgdHBtMl91bnNlYWwgLWMgMHg4
-MTAwMDAwMSAtTCBzaGEyNTY6NyBFUlJPUiBvbiBsaW5lOiAiODEiIGluIGZpbGU6IA0KPiAiLi9s
-aWIvbG9nLmgiOiBUc3MyX1N5c19VbnNlYWwoMHg5OUQpIC0gdHBtOnNlc3Npb24oMSk6YSBwb2xp
-Y3kgY2hlY2sgDQo+IGZhaWxlZCBFUlJPUiBvbiBsaW5lOiAiMjEzIiBpbiBmaWxlOg0KPiAidG9v
-bHMvdHBtMl91bnNlYWwuYyI6IFVuc2VhbCBmYWlsZWQhDQo+IEVSUk9SIG9uIGxpbmU6ICIxNjYi
-IGluIGZpbGU6ICJ0b29scy90cG0yX3Rvb2wuYyI6IFVuYWJsZSB0byBydW4gDQo+IHRwbTJfdW5z
-ZWFsDQo+IA0KPiAtIFNoaXJsZXkNCj4gDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+
-IEZyb206IEphbWVzIEJvdHRvbWxleSA8amVqYkBsaW51eC5pYm0uY29tPg0KPiBTZW50OiBNb25k
-YXksIERlY2VtYmVyIDIsIDIwMTkgMTI6MTcgUE0NCj4gVG86IFpoYW8sIFNoaXJsZXkgPHNoaXJs
-ZXkuemhhb0BpbnRlbC5jb20+OyBNaW1pIFpvaGFyIDx6b2hhckBsaW51eC5pIA0KPiBibS5jb20+
-OyBKYXJra28gU2Fra2luZW4gPGphcmtrby5zYWtraW5lbkBsaW51eC5pbnRlbC5jb20+OyBKb25h
-dGhhbiANCj4gQ29yYmV0IDxjb3JiZXRAbHduLm5ldD4NCj4gQ2M6IGxpbnV4LWludGVncml0eUB2
-Z2VyLmtlcm5lbC5vcmc7IGtleXJpbmdzQHZnZXIua2VybmVsLm9yZzsgbGludXgtIA0KPiBkb2NA
-dmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyAnTWF1cm8gQ2Fy
-dmFsaG8gDQo+IENoZWhhYicgPG1jaGVoYWIrc2Ftc3VuZ0BrZXJuZWwub3JnPjsgWmh1LCBCaW5n
-IDxiaW5nLnpodUBpbnRlbC5jb20+OyANCj4gQ2hlbiwgTHVoYWkgPGx1aGFpLmNoZW5AaW50ZWwu
-Y29tPg0KPiBTdWJqZWN0OiBSZTogT25lIHF1ZXN0aW9uIGFib3V0IHRydXN0ZWQga2V5IG9mIGtl
-eXJpbmcgaW4gTGludXggDQo+IGtlcm5lbC4NCj4gDQo+IE9uIE1vbiwgMjAxOS0xMi0wMiBhdCAw
-MTo0NCArMDAwMCwgWmhhbywgU2hpcmxleSB3cm90ZToNCj4gPiBIaSwgSmFtZXMsDQo+ID4gDQo+
-ID4gVGhlIHZhbHVlIG9mIFBDUjcgaXMgbm90IGNoYW5nZWQuIEkgaGF2ZSBjaGVja2VkIGl0IHdp
-dGggVFBNIGNvbW1hbmQgDQo+ID4gdHBtX3Bjcmxpc3QuDQo+ID4gDQo+ID4gU28gSSB0aGluayB0
-aGUgcHJvYmxlbSBpcyBob3cgdG8gdXNlIHRoZSBvcHRpb24gcG9saWN5ZGlnZXN0IGFuZCANCj4g
-PiBwb2xpY3loYW5kbGU/IElzIHRoZXJlIGFueSBleGFtcGxlPw0KPiA+IE1heWJlIHRoZSBmb3Jt
-YXQgaW4gbXkgY29tbWFuZCBpcyBub3QgY29ycmVjdC4gDQo+IA0KPiBPSywgc28gcHJldmlvdXNs
-eSB5b3Ugc2FpZCB0aGF0IHVzaW5nIHRoZSBJbnRlbCBUU1MgdGhlIHBvbGljeSBhbHNvIA0KPiBm
-YWlsZWQgYWZ0ZXIgYSByZWJvb3Q6DQo+IA0KPiA+IFRoZSBlcnJvciBzaG91bGQgYmUgcG9saWN5
-IGNoZWNrIGZhaWxlZCwgYmVjYXVzZSBJIHVzZSBUUE0gY29tbWFuZCANCj4gPiB0byB1bnNlYWwg
-ZGlyZWN0bHkgd2l0aCBlcnJvciBvZiBwb2xpY3kgY2hlY2sgZmFpbGVkLg0KPiA+ICQgdHBtMl91
-bnNlYWwgLWMgMHg4MTAwMDAwMSAtTCBzaGEyNTY6NyBFUlJPUiBvbiBsaW5lOiAiODEiIGluDQo+
-ID4gZmlsZTogDQo+ID4gIi4vbGliL2xvZy5oIjogVHNzMl9TeXNfVW5zZWFsKDB4OTlEKSAtIHRw
-bTpzZXNzaW9uKDEpOmEgcG9saWN5IA0KPiA+IGNoZWNrIGZhaWxlZCBFUlJPUiBvbiBsaW5lOiAi
-MjEzIiBpbiBmaWxlOiAidG9vbHMvdHBtMl91bnNlYWwuYyI6IA0KPiA+IFVuc2VhbCBmYWlsZWQh
-DQo+ID4gRVJST1Igb24gbGluZTogIjE2NiIgaW4gZmlsZTogInRvb2xzL3RwbTJfdG9vbC5jIjog
-VW5hYmxlIHRvIHJ1biANCj4gPiB0cG0yX3Vuc2VhbA0KPiANCj4gU28gdGhpcyBtdXN0IG1lYW4g
-dGhlIGFjdHVhbCBwb2xpY3kgaGFzaCB5b3UgY29uc3RydWN0ZWQgd2FzIHdyb25nIGluIA0KPiBz
-b21lIHdheTogaXQgZGlkbid0IGNvcnJlc3BvbmQgc2ltcGx5IHRvIGEgdmFsdWUgb2YgcGNyNyAu
-Li4gd2VsbCANCj4gYXNzdW1pbmcgdGhlIC1MIHNoYTI1Njo3IG1lYW5zIGNvbnN0cnVjdCBhIHBv
-bGljeSBvZiB0aGUgc2hhMjU2IHZhbHVlIA0KPiBvZiBwY3I3IGFuZCB1c2UgaXQgaW4gdGhlIHVu
-c2VhbC4NCj4gDQo+IEkgY2FuIHRlbGwgeW91IGhvdyB0byBjb25zdHJ1Y3QgcG9saWNpZXMgdXNp
-bmcgVFBNMiBjb21tYW5kcywgYnV0IEkgDQo+IHRoaW5rIHlvdSB3YW50IHRvIGtub3cgaG93IHRv
-IGRvIGl0IHVzaW5nIHRoZSBJbnRlbCBUU1M/ICBJbiB3aGljaCANCj4gY2FzZSB5b3UgcmVhbGx5
-IG5lZWQgdG8gY29uc3VsdCB0aGUgZXhwZXJ0cyBpbiB0aGF0IFRTUywgbGlrZSBQaGlsIA0KPiBU
-cmljY2EuDQo+IA0KPiBGb3IgdGhlIHBsYWluIFRQTTIgY2FzZSwgdGhlIHBvbGljeSBsb29rcyBs
-aWtlDQo+IA0KPiBUUE1fQ0NfUG9saWN5UENSIHx8IHBjcnMgfHwgcGNyRGlnZXN0DQo+IA0KPiBX
-aGVyZSBUUE1fQ0NfUG9saWN5UENSID0gMDAwMDAxN2YgYW5kIGZvciBzZWxlY3RpbmcgcGNyNyBv
-bmx5LiAgcGNycyANCj4gaXMgYSBjb21wbGljYXRlZCBlbnRpdHk6IGl0J3MgYSBjb3VudGVkIGFy
-cmF5IG9mIHBjciBzZWxlY3Rpb25zLiAgRm9yIA0KPiB5b3VyIHBvbGljeSB5b3Ugb25seSBuZWVk
-IG9uZSBlbnRyeSwgc28gaXQgd291bGQgYmUgMDAwMDAwMDEgZm9sbG93ZWQgDQo+IGJ5IGEgc2lu
-Z2xlIHBjclNlbGVjdGlvbiBlbnRyeS4gIHBjclNlbGVjdGlvbiBpcyB0aGUgaGFzaCBhbGdvcml0
-aG0sIA0KPiB0aGUgc2l6ZSBvZiB0aGUgc2VsZWN0aW9uIGJpdG1hcCAoYWx3YXlzIDMgc2luY2Ug
-ZXZlcnkgY3VycmVudCBUUE0gDQo+IG9ubHkgaGFzDQo+IDI0IFBDUnMpIGFuZCBhIGJpdG1hcCBz
-ZWxlY3RpbmcgdGhlIFBDUnMgaW4gYmlnIGVuZGlhbiBmb3JtYXQsIHNvIGZvcg0KPiBQQ1I3IHVz
-aW5nIHNoYTI1NiAoYWxnb3JpdGhtIDAwMGIpLCBwY3JTZWxlY3Rpb24gPSAwMDBiIDAzIDgwIDAw
-IDAwLiANCj4gQW5kIHRoZW4geW91IGZvbGxvdyB0aGlzIGJ5IHRoZSBoYXNoIG9mIHRoZSBQQ1Ig
-dmFsdWUgeW91J3JlIGxvb2tpbmcgDQo+IGZvci4gIFRoZSBwb2xpY3loYXNoIGJlY29tZXMgdGhl
-IGluaXRpYWwgcG9saWN5IChhbGwgemVyb3MgZm9yIHRoZSANCj4gc3RhcnQgb2YgdGhlIHBvbGlj
-eSBjaGFpbikgaGFzaGVkIHdpdGggdGhpcy4NCj4gDQo+IFJlZ2FyZHMsDQo+IA0KPiBKYW1lcw0K
-PiANCg0K
+On Mon, 2019-12-02 at 06:23 +0000, Zhao, Shirley wrote:
+> Hi, James, 
+> 
+> The PCR7 value and PCR7 policy is as below, please review, thanks. 
+> 
+> # tpm2_pcrlist -L sha256:7 -o pcr7_2.sha256
+> sha256:
+>   7 :
+> 0x061AAD0705A62361AD18E58B65D3D7383F4D10F7F5A7E78924BE057AC6797408
+> 
+> # tpm2_createpolicy --policy-pcr --pcr-list sha256:7 --policy
+> pcr7_bin.policy > pcr7.policy
+> 321fbd28b60fcc23017d501b133bd5dbf2889814588e8a23510fe10105cb2cc9
+> 
+> # cat pcr7.policy
+> 321fbd28b60fcc23017d501b133bd5dbf2889814588e8a23510fe10105cb2cc9
+
+Well, the IBM TSS says that's the correct policy.  Your policy command
+is
+
+jejb@jarvis:~> tsspolicymakerpcr -bm 000080 -if ~/pcr7.txt -pr | tee tmp.policy
+0000017f00000001000b038000009a47350fdbcc77ebeadcb4b4818d8e82a21717ea24434333c791c0cd0d1dc14e
+
+And that hashes to
+jejb@jarvis:~> tsspolicymaker -if ~/tmp.policy  -pr
+ policy digest length 32
+ 32 1f bd 28 b6 0f cc 23 01 7d 50 1b 13 3b d5 db 
+ f2 88 98 14 58 8e 8a 23 51 0f e1 01 05 cb 2c c9 
+
+So I don't understand why the userspace Intel TSS command is failing to
+do the unseal.
+
+James
+
