@@ -2,45 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9198310F3BD
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2019 01:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB4310F3C4
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2019 01:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725941AbfLCACR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Dec 2019 19:02:17 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43452 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725853AbfLCACQ (ORCPT
+        id S1726057AbfLCADS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Dec 2019 19:03:18 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27312 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726024AbfLCADS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Dec 2019 19:02:16 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB302DsG009777
-        for <linux-integrity@vger.kernel.org>; Mon, 2 Dec 2019 19:02:15 -0500
+        Mon, 2 Dec 2019 19:03:18 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB3039oK115890
+        for <linux-integrity@vger.kernel.org>; Mon, 2 Dec 2019 19:03:17 -0500
 Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wm6xau3nw-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wm6uyugr5-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 02 Dec 2019 19:02:15 -0500
+        for <linux-integrity@vger.kernel.org>; Mon, 02 Dec 2019 19:03:12 -0500
 Received: from localhost
         by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 3 Dec 2019 00:02:13 -0000
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        Tue, 3 Dec 2019 00:02:39 -0000
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
         by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 3 Dec 2019 00:02:09 -0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB3029CR47775858
+        Tue, 3 Dec 2019 00:02:35 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB302YKW8192114
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Dec 2019 00:02:09 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0616CA4054;
-        Tue,  3 Dec 2019 00:02:09 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5792A405B;
-        Tue,  3 Dec 2019 00:02:07 +0000 (GMT)
+        Tue, 3 Dec 2019 00:02:34 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C79245204E;
+        Tue,  3 Dec 2019 00:02:34 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.147.107])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  3 Dec 2019 00:02:07 +0000 (GMT)
-Subject: Re: [PATCH v0 1/2] IMA: Defined queue functions
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id AE5EF5205A;
+        Tue,  3 Dec 2019 00:02:33 +0000 (GMT)
+Subject: Re: [PATCH v0 2/2] IMA: Call queue functions to measure keys
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         linux-integrity@vger.kernel.org
@@ -48,26 +45,26 @@ Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
         matthewgarrett@google.com, sashal@kernel.org,
         jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
         keyrings@vger.kernel.org
-Date:   Mon, 02 Dec 2019 19:02:07 -0500
-In-Reply-To: <20191127025212.3077-2-nramas@linux.microsoft.com>
+Date:   Mon, 02 Dec 2019 19:02:33 -0500
+In-Reply-To: <20191127025212.3077-3-nramas@linux.microsoft.com>
 References: <20191127025212.3077-1-nramas@linux.microsoft.com>
-         <20191127025212.3077-2-nramas@linux.microsoft.com>
+         <20191127025212.3077-3-nramas@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-x-cbid: 19120300-0016-0000-0000-000002CFFE06
+x-cbid: 19120300-0016-0000-0000-000002CFFE0B
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19120300-0017-0000-0000-00003331F4C5
-Message-Id: <1575331327.4793.469.camel@linux.ibm.com>
+x-cbparentid: 19120300-0017-0000-0000-00003331F4CA
+Message-Id: <1575331353.4793.471.camel@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-02_06:2019-11-29,2019-12-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- suspectscore=2 lowpriorityscore=0 phishscore=0 priorityscore=1501
- impostorscore=0 clxscore=1015 adultscore=0 mlxlogscore=999 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912020206
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 adultscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-1912020206
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
@@ -76,208 +73,105 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 Hi Lakshmi,
 
 On Tue, 2019-11-26 at 18:52 -0800, Lakshmi Ramasubramanian wrote:
-> Keys created or updated in the system before IMA is initialized
-> should be queued up. And, keys (including any queued ones)
-> should be processed when IMA initialization is completed.
-> 
-> This patch defines functions to queue and dequeue keys for
-> measurement. A flag namely ima_process_keys_for_measurement
-> is used to check if the key should be queued or should be
-> processed immediately.
-> 
-> ima_policy_flag cannot be relied upon to make queuing decision
-> because ima_policy_flag will be set to 0 when either IMA is
-> not initialized or when the IMA policy itself is empty.
+> Keys should be queued for measurement if custom IMA policies have
+> not yet been applied. Keys queued for measurement, if any, need to be
+> processed when custom IMA policies have been applied.
 
-Already commented on the patch description.  Some additional minor
-comments below.
+Please start with the problem description.  For example, measuring
+keys requires loading a custom IMA policy.
 
+> 
+> This patch adds the call to ima_queue_key_for_measurement() in
+> the IMA hook function if ima_process_keys_for_measurement flag is set
+> to false. And, the call to ima_process_queued_keys_for_measurement()
+> when custom IMA policies have been applied in ima_update_policy().
+
+This reads like pseudo code.  Please summarize the purpose of this
+patch.
+
+> 
+> NOTE:
+> If the kernel is built with CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE
+> enabled then the IMA policy should be applied as custom IMA policies.
+> 
+> Keys will be queued up until custom policies are applied and processed
+> when custom policies have been applied.
 > 
 > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 > ---
->  security/integrity/ima/ima.h                 |  15 +++
->  security/integrity/ima/ima_asymmetric_keys.c | 135 ++++++++++++++++++-
->  2 files changed, 146 insertions(+), 4 deletions(-)
+>  security/integrity/ima/ima_asymmetric_keys.c | 16 ++++++++++++++++
+>  security/integrity/ima/ima_policy.c          | 12 ++++++++++++
+>  2 files changed, 28 insertions(+)
 > 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index f06238e41a7c..f86371647707 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -205,6 +205,21 @@ extern const char *const func_tokens[];
->  
->  struct modsig;
->  
-> +#ifdef CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE
-> +/*
-> + * To track keys that need to be measured.
-> + */
-> +struct ima_measure_key_entry {
-> +	struct list_head list;
-> +	void *payload;
-> +	size_t payload_len;
-> +	char *keyring_name;
-> +};
-> +void ima_process_queued_keys_for_measurement(void);
-> +#else
-> +static inline void ima_process_queued_keys_for_measurement(void) {}
-> +#endif /* CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE */
-> +
->  /* LIM API function definitions */
->  int ima_get_action(struct inode *inode, const struct cred *cred, u32 secid,
->  		   int mask, enum ima_hooks func, int *pcr,
 > diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-> index ca895f9a6504..10deb77b22a0 100644
+> index 10deb77b22a0..adb7a307190f 100644
 > --- a/security/integrity/ima/ima_asymmetric_keys.c
 > +++ b/security/integrity/ima/ima_asymmetric_keys.c
-> @@ -14,12 +14,139 @@
->  #include <keys/asymmetric-type.h>
->  #include "ima.h"
+> @@ -157,6 +157,8 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+>  				   const void *payload, size_t payload_len,
+>  				   unsigned long flags, bool create)
+>  {
+> +	bool key_queued = false;
+> +
+>  	/* Only asymmetric keys are handled by this hook. */
+>  	if (key->type != &key_type_asymmetric)
+>  		return;
+> @@ -164,6 +166,20 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+>  	if (!payload || (payload_len == 0))
+>  		return;
 >  
-> +/*
-> + * Flag to indicate whether a key can be processed
-> + * right away or should be queued for processing later.
-> + */
-> +bool ima_process_keys_for_measurement;
+> +	if (!ima_process_keys_for_measurement)
+> +		key_queued = ima_queue_key_for_measurement(keyring,
+> +							   payload,
+> +							   payload_len);
 > +
-> +/*
-> + * To synchronize access to the list of keys that need to be measured
-> + */
-> +static DEFINE_MUTEX(ima_measure_keys_mutex);
-> +static LIST_HEAD(ima_measure_keys);
-> +
-> +static void ima_free_measure_key_entry(struct ima_measure_key_entry *entry)
-> +{
-> +	if (entry) {
-> +		kfree(entry->payload);
-> +		kfree(entry->keyring_name);
-> +		kfree(entry);
-> +	}
-> +}
-> +
-> +static struct ima_measure_key_entry *ima_alloc_measure_key_entry(
-> +	struct key *keyring,
-> +	const void *payload, size_t payload_len)
-> +{
-> +	int rc = 0;
-> +	struct ima_measure_key_entry *entry = NULL;
-> +
-> +	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
-> +	if (entry) {
-> +		entry->payload =
-> +			kmemdup(payload, payload_len, GFP_KERNEL);
-> +		entry->keyring_name =
-> +			kstrdup(keyring->description, GFP_KERNEL);
+> +	/*
+> +	 * Need to check again if the key was queued or not because
+> +	 * ima_process_keys_for_measurement could have flipped from
+> +	 * false to true after it was checked above, but before the key
+> +	 * could be queued by ima_queue_key_for_measurement().
+> +	 */
 
-No need to break up the assignments like this.  Neither line when
-joined is greater than 80 bytes.
+You're describing a race condition.
 
-> +		entry->payload_len = payload_len;
-> +	}
-> +
-> +	if ((entry == NULL) || (entry->payload == NULL) ||
-> +	    (entry->keyring_name == NULL)) {
-> +		rc = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	INIT_LIST_HEAD(&entry->list);
-> +	rc = 0;
-
-"rc" was initialized in the declaration.
-
-> +
-> +out:
-> +	if (rc) {
-> +		ima_free_measure_key_entry(entry);
-> +		entry = NULL;
-> +	}
-> +
-> +	return entry;
-> +}
-> +
-> +bool ima_queue_key_for_measurement(struct key *keyring,
-> +				   const void *payload, size_t payload_len)
-> +{
-> +	bool queued = false;
-> +	struct ima_measure_key_entry *entry = NULL;
-
-No need to initialize ima_measure_key_entry here, as the first
-statement sets it.
-> +
-> +	entry = ima_alloc_measure_key_entry(keyring, payload, payload_len);
-> +	if (entry) {
-
-If we're ignoring failure to allocate memory, why not just return?
-
-> +		/*
-> +		 * ima_measure_keys_mutex should be taken before checking
-> +		 * ima_process_keys_for_measurement flag to avoid the race
-> +		 * condition between the IMA hook checking this flag and
-> +		 * calling ima_queue_key_for_measurement() to queue
-> +		 * the key and ima_process_queued_keys_for_measurement()
-> +		 * setting this flag.
-> +		 */
-> +		mutex_lock(&ima_measure_keys_mutex);
-> +		if (!ima_process_keys_for_measurement) {
-> +			list_add_tail(&entry->list, &ima_measure_keys);
-> +			queued = true;
-> +		}
-> +		mutex_unlock(&ima_measure_keys_mutex);
-> +
-> +		if (!queued)
-> +			ima_free_measure_key_entry(entry);
-> +	}
-> +
-> +	return queued;
-> +}
-> +
-> +void ima_process_queued_keys_for_measurement(void)
-> +{
-> +	struct ima_measure_key_entry *entry, *tmp;
-> +	LIST_HEAD(temp_ima_measure_keys);
-> +
-> +	if (ima_process_keys_for_measurement)
+> +	if (key_queued)
 > +		return;
 > +
-> +	/*
-> +	 * Any queued keys will be processed now. From here on
-> +	 * keys should be processed right away.
-> +	 */
-> +	ima_process_keys_for_measurement = true;
+>  	/*
+>  	 * keyring->description points to the name of the keyring
+>  	 * (such as ".builtin_trusted_keys", ".ima", etc.) to
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 78b25f083fe1..a2e30a90f97d 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -812,6 +812,18 @@ void ima_update_policy(void)
+>  		kfree(arch_policy_entry);
+>  	}
+>  	ima_update_policy_flag();
 > +
 > +	/*
-> +	 * To avoid holding the mutex when processing queued keys,
-> +	 * transfer the queued keys with the mutex held to a temp list,
-> +	 * release the mutex, and then process the queued keys from
-> +	 * the temp list.
+> +	 * Custom IMA policies have been setup.
+> +	 * Process key(s) queued up for measurement now.
 > +	 *
-> +	 * Since ima_process_keys_for_measurement is set to true above,
-> +	 * any new key will be processed immediately and not be queued.
+> +	 * NOTE:
+> +	 *   Custom IMA policies always overwrite builtin policies
+> +	 *   (policies compiled in code). If one wants measurement
+> +	 *   of asymmetric keys then it has to be configured in
+> +	 *   custom policies and updated here.
 > +	 */
-> +	INIT_LIST_HEAD(&temp_ima_measure_keys);
-> +	mutex_lock(&ima_measure_keys_mutex);
-> +	list_for_each_entry_safe(entry, tmp, &ima_measure_keys, list) {
-> +		list_move_tail(&entry->list, &temp_ima_measure_keys);
-> +	}
 
-Parenthesis not needed.
+The "NOTE" is over commenting the code and belongs in the patch
+description.
 
-> +	mutex_unlock(&ima_measure_keys_mutex);
-> +
-> +	list_for_each_entry_safe(entry, tmp,
-> +				 &temp_ima_measure_keys, list) {
+> +	ima_process_queued_keys_for_measurement();
 
-No need to break up this line either.  The joined line is not greater
-than 80 bytes.
+Overwriting the initial policy is highly recommended, but not everyone
+defines a custom policy.  Should there be a time limit or some other
+criteria before deleting the key measurement queue?
 
-> +		process_buffer_measurement(entry->payload,
-> +					   entry->payload_len,
-> +					   entry->keyring_name,
-> +					   KEY_CHECK, 0,
-> +					   entry->keyring_name);
-> +		list_del(&entry->list);
-> +		ima_free_measure_key_entry(entry);
-> +	}
-> +}
-> +
+Mimi
+
+>  }
+>  
+>  /* Keep the enumeration in sync with the policy_tokens! */
 
