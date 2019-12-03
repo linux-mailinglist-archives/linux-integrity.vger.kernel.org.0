@@ -2,103 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9B010FD8F
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2019 13:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E341101E1
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2019 17:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbfLCMZy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Dec 2019 07:25:54 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36308 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725954AbfLCMZy (ORCPT
+        id S1727118AbfLCQJD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Dec 2019 11:09:03 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:54174 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727113AbfLCQJC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Dec 2019 07:25:54 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB3CMvOD076545
-        for <linux-integrity@vger.kernel.org>; Tue, 3 Dec 2019 07:25:53 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wnqm1g9kp-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 03 Dec 2019 07:25:52 -0500
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 3 Dec 2019 12:25:50 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 3 Dec 2019 12:25:48 -0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB3CP7YJ49611108
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Dec 2019 12:25:07 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 50C9DA4055;
-        Tue,  3 Dec 2019 12:25:47 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 49AC7A4051;
-        Tue,  3 Dec 2019 12:25:46 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.191.79])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  3 Dec 2019 12:25:46 +0000 (GMT)
-Subject: Re: [PATCH v9 5/6] IMA: Add support to limit measuring keys
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
+        Tue, 3 Dec 2019 11:09:02 -0500
+Received: from [10.137.112.111] (unknown [131.107.147.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AFB6B20B7185;
+        Tue,  3 Dec 2019 08:09:01 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AFB6B20B7185
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1575389341;
+        bh=cA2NvMvX1jL063jiAdOXXSP1Gwaopiy2VeenLg73h9E=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=j0N/i9Wx4wwKdNtHrm2WiqBSSaRnzd0P4Nju3IvAxxS1CcFNHA3MS/3Q3Os/4QHLJ
+         2VDp4boCAXWBWDXj/bLxU3qp2OP7YXQDEMkLUN4VO6HVwQAK0bZLSdCq2QjyWVbTG9
+         gjmLXK0hvdRzNV5jLvVrMYJiEbObjEC6RYJyjR5o=
+Subject: Re: [PATCH v0 2/2] IMA: Call queue functions to measure keys
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
 Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
         matthewgarrett@google.com, sashal@kernel.org,
         jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
         keyrings@vger.kernel.org
-Date:   Tue, 03 Dec 2019 07:25:45 -0500
-In-Reply-To: <20191127015654.3744-6-nramas@linux.microsoft.com>
-References: <20191127015654.3744-1-nramas@linux.microsoft.com>
-         <20191127015654.3744-6-nramas@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+References: <20191127025212.3077-1-nramas@linux.microsoft.com>
+ <20191127025212.3077-3-nramas@linux.microsoft.com>
+ <1575331353.4793.471.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <e89dcb1c-c463-919a-aabb-e285d884a914@linux.microsoft.com>
+Date:   Tue, 3 Dec 2019 08:09:20 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+In-Reply-To: <1575331353.4793.471.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19120312-0016-0000-0000-000002D0578F
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19120312-0017-0000-0000-0000333250B9
-Message-Id: <1575375945.5241.16.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-03_02:2019-12-02,2019-12-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1015 priorityscore=1501
- spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=749 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912030098
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Lakshmi,
+Thanks for reviewing the changes Mimi. I'll address your comments in the 
+next update.
 
-On Tue, 2019-11-26 at 17:56 -0800, Lakshmi Ramasubramanian wrote:
-> Limit measuring keys to those keys being loaded onto a given set of
-> keyrings only.
 > 
-> This patch defines a new IMA policy option namely "keyrings=" that
-> can be used to specify a set of keyrings. If this option is specified
-> in the policy for "measure func=KEY_CHECK" then only the keys
-> loaded onto a keyring given in the "keyrings=" option are measured.
+> Overwriting the initial policy is highly recommended, but not everyone
+> defines a custom policy.  Should there be a time limit or some other
+> criteria before deleting the key measurement queue?
 > 
-> Added a new parameter namely "keyring" (name of the keyring) to
-> process_buffer_measurement(). The keyring name is passed to
-> ima_get_action() to determine the required action.
-> ima_match_rules() is updated to check keyring in the policy, if
-> specified, for KEY_CHECK function.
-> 
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Mimi
 
-A keyring can be created by any user with any keyring name, other than
- ones dot prefixed, which are limited to the trusted builtin keyrings.
- With a policy of "func=KEY_CHECK template=ima-buf keyrings=foo", for
-example, keys loaded onto any keyring named "foo" will be measured.
- For files, the IMA policy may be constrained to a particular uid/gid.
- An additional method of identifying or constraining keyring names
-needs to be defined.
+For the above, I feel checking for the presence of custom policy, if 
+that is possible, would be a more deterministic approach compared to 
+having a time limit.
 
-Mimi 
+On my machine, systemd loads the custom IMA policy from 
+/etc/ima/ima-policy if that file is present. Is this the recommended way 
+to configure custom IMA policy? If yes, can the IMA initialization 
+function check for the presence of the above file?
+
+Another way to address this issue is to define a new CONFIG parameter to 
+determine whether or not to support deferred processing of keys. If this 
+config is chosen, custom IMA policy must be defined.
+
+Least preferred option would be to leave the queued keys as is if custom 
+policy is not defined - at the cost of, maybe, a non-trivial amount of 
+kernel memory consumed.
+
+If detection of custom policy is not possible, then define a timer to 
+drain the key measurement queue.
+
+Please let me know which approach you think is optimal.
+
+thanks,
+  -lakshmi
 
