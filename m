@@ -2,151 +2,212 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16845112EB8
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2019 16:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD2A1137BB
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2019 23:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728557AbfLDPkn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Dec 2019 10:40:43 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:34602 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728555AbfLDPkn (ORCPT
+        id S1728459AbfLDWlk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Dec 2019 17:41:40 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:50118 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728053AbfLDWlj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Dec 2019 10:40:43 -0500
-Received: by mail-qk1-f194.google.com with SMTP id d202so323038qkb.1
-        for <linux-integrity@vger.kernel.org>; Wed, 04 Dec 2019 07:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=TKYIamcANZtYnmd1DLMg7mRBVJgMxnDC2sAqJEPIU6o=;
-        b=MnN7qOb/Aw5hzyId41e+MvM96sCf/2c9FL9dits2novfdCy38l1/jJBsE1+wc4CuQQ
-         wJ6Niv+OzgPFjhdWNvF5jLiIqcA7oN//EoCsfCB2ZNOzcq2M0zI0Orgz+dmeNVH+GvJA
-         gOc3ooWHdDMsuUfWywZwnY2gzvT3IzCIpuqxFfrlccfJKdFW91lXLM9Y1u/dy9s7T3KN
-         I6AgMBz1p0Pf1QQ+UK8fEJlZv5SO1z74BKGRINlVNqAT55wfRmGFV5SECzpLWjlYfb2b
-         FCgn29hXTwL/HXrrQzMlDGu/tGJqh/6IB/UcRDvmaC1OeHDCYh5IHIA7Z096X8tbng5F
-         Wmyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TKYIamcANZtYnmd1DLMg7mRBVJgMxnDC2sAqJEPIU6o=;
-        b=P3V1fWbPxFLqrm85zKdJRBDDDd66e/TBaccTwblWCVpwYdhOGT5M/YDy+prRoL6sFS
-         mZIm8YRj7CO6KIDXPHfoH80GJHLpJY8ZVY5iT0BsOQaG/+Wgu+G9r0YxREt8ht0nxudP
-         74FD+6F0tyRZM5qbOrveaW42QHJfwvxPaBscNHicl2qDYHnJnQU+FoVSQPhV7BQGO5BX
-         nQhQ+u2zwNpE69iRAvoQuJJk9dV2hEfxKgn11zuJUovfPhtIx9b5p6mvSw2dFZFHxd44
-         JHkQRmqXvrMkJ89/C/sl+yq8TmaEaMN0XOVNYG1Yla5tolmAn4PmcJzRWSDh1Ss+VUBS
-         QVVw==
-X-Gm-Message-State: APjAAAVGkVSUHKVhJ7U3A9RcmBMgE33G5x+BTRHLKAqnPXiOWOwl0KUB
-        c5ti7Nu9GVnjF2MY4nS6vbZvdQ==
-X-Google-Smtp-Source: APXvYqzaHMZ7ljtRRla518W1B2GOaSGHFhofv7ElsnTVyzHk/MSaxlYFr3gvMJQ2QFU6avcGGFW/IA==
-X-Received: by 2002:a37:7186:: with SMTP id m128mr3526332qkc.384.1575474042150;
-        Wed, 04 Dec 2019 07:40:42 -0800 (PST)
-Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id y28sm3937692qtk.65.2019.12.04.07.40.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 07:40:41 -0800 (PST)
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, jmorris@namei.org, sashal@kernel.org,
-        peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@microsoft.com,
-        thiruan@microsoft.com, bryankel@microsoft.com,
-        tee-dev@lists.linaro.org, ilias.apalodimas@linaro.org,
-        sumit.garg@linaro.org, rdunlap@infradead.org
-Subject: [PATCH v4 1/1] tpm/tpm_ftpm_tee: add shutdown call back
-Date:   Wed,  4 Dec 2019 10:40:38 -0500
-Message-Id: <20191204154038.2276810-2-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191204154038.2276810-1-pasha.tatashin@soleen.com>
-References: <20191204154038.2276810-1-pasha.tatashin@soleen.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 4 Dec 2019 17:41:39 -0500
+Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EBAA720B4760;
+        Wed,  4 Dec 2019 14:41:36 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EBAA720B4760
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1575499297;
+        bh=Z+y91JgRIwnVc0sS4RRMc6nimO0sgKyY/41suDsck/8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DO212QUuZfeFv3smDOawM0rDF0RXJLk1iyPWKqNDXV1R5nuV69FhLHwyyndrT4j5O
+         M6NEZmZKJAJ7PV4GzZ8NpomJLrjuEWQmG+rr5a4LnnufhzfNyPsM3gt+cFBmuDf8dJ
+         G5JTXcfCITdccr+c5mzoYM/LvuA2wngD4LcXbDR0=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
+        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
+        sashal@kernel.org, jamorris@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
+Subject: [PATCH v10 0/6] KEYS: Measure keys when they are created or updated
+Date:   Wed,  4 Dec 2019 14:41:25 -0800
+Message-Id: <20191204224131.3384-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add shutdown call back to close existing session with fTPM TA
-to support kexec scenario.
+Keys created or updated in the system are currently not measured.
+Therefore an attestation service, for instance, would not be able to
+attest whether or not the trusted keys keyring(s), for instance, contain
+only known good (trusted) keys.
 
-Add parentheses to function names in comments as specified in kdoc.
+IMA measures system files, command line arguments passed to kexec,
+boot aggregate, etc. It can be used to measure keys as well.
+But there is no mechanism available in the kernel for IMA to
+know when a key is created or updated.
 
-Signed-off-by: Thirupathaiah Annapureddy <thiruan@microsoft.com>
-Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Tested-by: Sasha Levin <sashal@kernel.org>
----
- drivers/char/tpm/tpm_ftpm_tee.c | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+This change aims to address measuring keys created or updated
+in the system.
 
-diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-index 6640a14dbe48..22bf553ccf9d 100644
---- a/drivers/char/tpm/tpm_ftpm_tee.c
-+++ b/drivers/char/tpm/tpm_ftpm_tee.c
-@@ -32,7 +32,7 @@ static const uuid_t ftpm_ta_uuid =
- 		  0x82, 0xCB, 0x34, 0x3F, 0xB7, 0xF3, 0x78, 0x96);
- 
- /**
-- * ftpm_tee_tpm_op_recv - retrieve fTPM response.
-+ * ftpm_tee_tpm_op_recv() - retrieve fTPM response.
-  * @chip:	the tpm_chip description as specified in driver/char/tpm/tpm.h.
-  * @buf:	the buffer to store data.
-  * @count:	the number of bytes to read.
-@@ -61,7 +61,7 @@ static int ftpm_tee_tpm_op_recv(struct tpm_chip *chip, u8 *buf, size_t count)
- }
- 
- /**
-- * ftpm_tee_tpm_op_send - send TPM commands through the TEE shared memory.
-+ * ftpm_tee_tpm_op_send() - send TPM commands through the TEE shared memory.
-  * @chip:	the tpm_chip description as specified in driver/char/tpm/tpm.h
-  * @buf:	the buffer to send.
-  * @len:	the number of bytes to send.
-@@ -208,7 +208,7 @@ static int ftpm_tee_match(struct tee_ioctl_version_data *ver, const void *data)
- }
- 
- /**
-- * ftpm_tee_probe - initialize the fTPM
-+ * ftpm_tee_probe() - initialize the fTPM
-  * @pdev: the platform_device description.
-  *
-  * Return:
-@@ -298,7 +298,7 @@ static int ftpm_tee_probe(struct platform_device *pdev)
- }
- 
- /**
-- * ftpm_tee_remove - remove the TPM device
-+ * ftpm_tee_remove() - remove the TPM device
-  * @pdev: the platform_device description.
-  *
-  * Return:
-@@ -328,6 +328,19 @@ static int ftpm_tee_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+/**
-+ * ftpm_tee_shutdown() - shutdown the TPM device
-+ * @pdev: the platform_device description.
-+ */
-+static void ftpm_tee_shutdown(struct platform_device *pdev)
-+{
-+	struct ftpm_tee_private *pvt_data = dev_get_drvdata(&pdev->dev);
-+
-+	tee_shm_free(pvt_data->shm);
-+	tee_client_close_session(pvt_data->ctx, pvt_data->session);
-+	tee_client_close_context(pvt_data->ctx);
-+}
-+
- static const struct of_device_id of_ftpm_tee_ids[] = {
- 	{ .compatible = "microsoft,ftpm" },
- 	{ }
-@@ -341,6 +354,7 @@ static struct platform_driver ftpm_tee_driver = {
- 	},
- 	.probe = ftpm_tee_probe,
- 	.remove = ftpm_tee_remove,
-+	.shutdown = ftpm_tee_shutdown,
- };
- 
- module_platform_driver(ftpm_tee_driver);
+To achieve the above the following changes have been made:
+
+ - Added a new IMA hook namely, ima_post_key_create_or_update, which
+   measures the key. This IMA hook is called from key_create_or_update
+   function. The key measurement can be controlled through IMA policy.
+
+   A new IMA policy function KEY_CHECK has been added to measure keys.
+   "keyrings=" option can be specified for KEY_CHECK to limit
+   measuring the keys loaded onto the specified keyrings only.
+
+   uid can be specified to further restrict key measurement for keys
+   created by specific user.
+
+   # measure keys loaded onto any keyring
+   measure func=KEY_CHECK
+
+   # measure keys loaded onto the IMA keyring only for root user
+   measure func=KEY_CHECK uid=0 keyring=".ima"
+
+   # measure keys on the BUILTIN and IMA keyrings into a different PCR
+   measure func=KEY_CHECK keyring=".builtin_trusted_keys|.ima" pcr=11
+
+Testing performed:
+
+  * Booted the kernel with this change.
+  * When KEY_CHECK policy is set IMA measures keys loaded
+    onto any keyring (keyrings= option not specified).
+  * Keys are not measured when KEY_CHECK is not set.
+  * When keyrings= option is specified for KEY_CHECK then only the keys
+    loaded onto a keyring specified in the option is measured.
+  * When uid is specified in the policy the key is measured
+    only when the current user id matches the one given in the policy.
+  * Added a new key to a keyring.
+    => Added keys to .ima and .evm keyrings.
+  * Added the same key again.
+    => Add the same key to .ima and .evm keyrings.
+
+Change Log:
+
+  v10:
+
+  => Added check for user id (uid) in ima_match_keyring()
+  => Updated ima_match_keyring() function to use strsep() to
+     check for keyring match.
+  => Edited key measurement validation description.
+
+  v9:
+
+  => Changed the measured key data from just the public key to
+     the entire payload passed to key_create_or_update() function.
+     This payload is the certificate from which the key is created
+     or updated by key_create_or_update() function.
+  => Added check in process_buffer_measurement() to return
+     immediately if ima_policy_flag is set to zero.
+
+  v8:
+
+  => Updated ima_match_keyring() function to check for
+     whole keyring name match.
+  => Used CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE instead of
+     CONFIG_KEYS to build ima_asymmetric_keys.c and enable
+     the IMA hook to measure keys since this config handles
+     the required build time dependencies better.
+  => Updated patch description to illustrate verification
+     of key measurement.
+
+  v7:
+
+  => Removed CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS option and used
+     CONFIG_KEYS instead for ima_asymmetric_keys.c
+  => Added the patches related to "keyrings=" option support to
+     this patch set.
+
+  v6:
+
+  => Rebased the changes to v5.4-rc7
+  => Renamed KEYRING_CHECK to KEY_CHECK per Mimi's suggestion.
+  => Excluded the patches that add support for limiting key
+     measurement to specific keyrings ("keyrings=" option
+     for "measure func=KEY_CHECK" in the IMA policy).
+     Also, excluded the patches that add support for deferred
+     processing of keys (queue support).
+     These patches will be added in separate patch sets later.
+
+  v5:
+
+  => Reorganized the patches to add measurement of keys through
+     the IMA hook without any queuing and then added queuing support.
+  => Updated the queuing functions to minimize code executed inside mutex.
+  => Process queued keys after custom IMA policies have been applied.
+
+  v4:
+
+  => Rebased the changes to v5.4-rc3
+  => Applied the following dependent patch set first
+     and then added new changes.
+  https://lore.kernel.org/linux-integrity/1572492694-6520-1-git-send-email-zohar@linux.ibm.com
+  => Refactored the patch set to separate out changes related to
+     func KEYRING_CHECK and options keyrings into different patches.
+  => Moved the functions to queue and dequeue keys for measurement
+     from ima_queue.c to a new file ima_asymmetric_keys.c.
+  => Added a new config namely CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
+     to compile ima_asymmetric_keys.c
+
+  v3:
+
+  => Added KEYRING_CHECK for measuring keys. This can optionally specify
+     keyrings to measure.
+  => Updated ima_get_action() and related functions to return
+     the keyrings if specified in the policy.
+  => process_buffer_measurement() function is updated to take keyring
+     as a parameter. The key will be measured if the policy includes
+     the keyring in the list of measured keyrings. If the policy does not
+     specify any keyrings then all keys are measured.
+
+  v2:
+
+  => Per suggestion from Mimi reordered the patch set to first
+     enable measuring keys added or updated in the system.
+     And, then scope the measurement to keys added to 
+     builtin_trusted_keys keyring through ima policy.
+  => Removed security_key_create_or_update function and instead
+     call ima hook, to measure the key, directly from 
+     key_create_or_update function.
+
+  v1:
+
+  => LSM function for key_create_or_update. It calls ima.
+  => Added ima hook for measuring keys
+  => ima measures keys based on ima policy.
+
+  v0:
+
+  => Added LSM hook for key_create_or_update.
+  => Measure keys added to builtin or secondary trusted keys keyring.
+
+Lakshmi Ramasubramanian (6):
+  IMA: Check IMA policy flag
+  IMA: Add KEY_CHECK func to measure keys
+  IMA: Define an IMA hook to measure keys
+  KEYS: Call the IMA hook to measure keys
+  IMA: Add support to limit measuring keys
+  IMA: Read keyrings= option from the IMA policy
+
+ Documentation/ABI/testing/ima_policy         | 16 +++-
+ include/linux/ima.h                          | 14 +++
+ security/integrity/ima/Makefile              |  1 +
+ security/integrity/ima/ima.h                 |  9 +-
+ security/integrity/ima/ima_api.c             |  8 +-
+ security/integrity/ima/ima_appraise.c        |  4 +-
+ security/integrity/ima/ima_asymmetric_keys.c | 58 ++++++++++++
+ security/integrity/ima/ima_main.c            | 12 ++-
+ security/integrity/ima/ima_policy.c          | 96 ++++++++++++++++++--
+ security/keys/key.c                          | 10 ++
+ 10 files changed, 208 insertions(+), 20 deletions(-)
+ create mode 100644 security/integrity/ima/ima_asymmetric_keys.c
+
 -- 
-2.24.0
+2.17.1
 
