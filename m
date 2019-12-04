@@ -2,47 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 382171121B3
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2019 04:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 934F31121D8
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2019 04:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726901AbfLDDBz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Dec 2019 22:01:55 -0500
-Received: from mga05.intel.com ([192.55.52.43]:36485 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726549AbfLDDBz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Dec 2019 22:01:55 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Dec 2019 19:01:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,275,1571727600"; 
-   d="scan'208";a="205227855"
-Received: from fmsmsx106.amr.corp.intel.com ([10.18.124.204])
-  by orsmga008.jf.intel.com with ESMTP; 03 Dec 2019 19:01:53 -0800
-Received: from shsmsx152.ccr.corp.intel.com (10.239.6.52) by
- FMSMSX106.amr.corp.intel.com (10.18.124.204) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Tue, 3 Dec 2019 19:01:52 -0800
-Received: from shsmsx102.ccr.corp.intel.com ([169.254.2.109]) by
- SHSMSX152.ccr.corp.intel.com ([169.254.6.222]) with mapi id 14.03.0439.000;
- Wed, 4 Dec 2019 11:01:50 +0800
-From:   "Zhao, Shirley" <shirley.zhao@intel.com>
-To:     James Bottomley <jejb@linux.ibm.com>,
+        id S1726834AbfLDDeW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Dec 2019 22:34:22 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4636 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726804AbfLDDeW (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 3 Dec 2019 22:34:22 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB43REQd115453;
+        Tue, 3 Dec 2019 22:33:13 -0500
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wnsvhfdn7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Dec 2019 22:33:13 -0500
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xB43UthK007794;
+        Wed, 4 Dec 2019 03:33:12 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma04dal.us.ibm.com with ESMTP id 2wkg2728j0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Dec 2019 03:33:12 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB43XBFg28115206
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 Dec 2019 03:33:11 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7DB8AE062;
+        Wed,  4 Dec 2019 03:33:11 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B2B2AE05C;
+        Wed,  4 Dec 2019 03:33:10 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.183.167])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  4 Dec 2019 03:33:10 +0000 (GMT)
+Message-ID: <1575430389.14163.27.camel@linux.ibm.com>
+Subject: Re: One question about trusted key of keyring in Linux kernel.
+From:   James Bottomley <jejb@linux.ibm.com>
+To:     "Zhao, Shirley" <shirley.zhao@intel.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Jonathan Corbet <corbet@lwn.net>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "'Mauro Carvalho Chehab'" <mchehab+samsung@kernel.org>,
         "Zhu, Bing" <bing.zhu@intel.com>,
         "Chen, Luhai" <luhai.chen@intel.com>
-Subject: RE: One question about trusted key of keyring in Linux kernel.
-Thread-Topic: One question about trusted key of keyring in Linux kernel.
-Thread-Index: AdWZwFKzDBwFOydYTGGk+Aqs+6BIxAANhxEAAoxRZMAAOKaagABSSevwABZzFQAAgRP1kP//pW0A//9ftMCAAMH6gP//eLrAgACO1ID//3k2UAAqYIQA//8FitD//nrPAP/64XgQ
-Date:   Wed, 4 Dec 2019 03:01:50 +0000
-Message-ID: <A888B25CD99C1141B7C254171A953E8E4909E877@shsmsx102.ccr.corp.intel.com>
+Date:   Tue, 03 Dec 2019 19:33:09 -0800
+In-Reply-To: <A888B25CD99C1141B7C254171A953E8E4909E877@shsmsx102.ccr.corp.intel.com>
 References: <A888B25CD99C1141B7C254171A953E8E49094313@shsmsx102.ccr.corp.intel.com>
          <1573659978.17949.83.camel@linux.ibm.com>
          <A888B25CD99C1141B7C254171A953E8E49095F9B@shsmsx102.ccr.corp.intel.com>
@@ -58,138 +70,41 @@ References: <A888B25CD99C1141B7C254171A953E8E49094313@shsmsx102.ccr.corp.intel.c
          <A888B25CD99C1141B7C254171A953E8E4909E399@shsmsx102.ccr.corp.intel.com>
          <1575312932.24227.13.camel@linux.ibm.com>
          <A888B25CD99C1141B7C254171A953E8E4909E62E@shsmsx102.ccr.corp.intel.com>
- <1575342724.24227.41.camel@linux.ibm.com>
-In-Reply-To: <1575342724.24227.41.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiNTYzYzVkMWQtYWNlMC00MjA3LWE2YjAtMGZjZDcxZWZjOTY1IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiN29pKzRYNEZSV0NSSU5idkZcLzJRanhtSE1tcWJQQk5ZUmZVZGxlNEo1K0g0eDk0akZRWGhqZlFlRWpBM055bGsifQ==
-x-ctpclassification: CTP_NT
-x-originating-ip: [10.239.127.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+         <1575342724.24227.41.camel@linux.ibm.com>
+         <A888B25CD99C1141B7C254171A953E8E4909E877@shsmsx102.ccr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-03_07:2019-12-02,2019-12-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ impostorscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912040023
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SGksIEphbWVzLCANCg0KVXNpbmcgcG9saWN5IGRpZ2VzdCB0byByZWxvYWQgdHJ1c3RlZCBrZXks
-IGRvZXNuJ3Qgd29yaywgZWl0aGVyLiANClBsZWFzZSBjaGVjayB0aGUgc3RlcHMgYmVsb3cuIA0K
-SSB0aGluayBwb2xpY3kgZGlnZXN0IHNob3VsZCBiZSBjYWxjdWxhdGVkIGJ5IFRQTSB3aGVuIHZl
-cmlmeWluZyB0aGUgcG9saWN5IHRvIHJlbG9hZCBrZXkuIA0KDQovLy8vLy8vIGJ1aWxkIHBvbGlj
-eQ0KIyB0cG0yX3Bjcmxpc3QgLUwgc2hhMjU2OjcgLW8gcGNyNy5zaGEyNTYNCnNoYTI1NjoNCiAg
-NyA6IDB4MDYxQUFEMDcwNUE2MjM2MUFEMThFNThCNjVEM0Q3MzgzRjREMTBGN0Y1QTdFNzg5MjRC
-RTA1N0FDNjc5NzQwOA0KIyB0cG0yX2NyZWF0ZXBvbGljeSAtLXBvbGljeS1wY3IgLS1wY3ItbGlz
-dCBzaGEyNTY6NyAtLXBvbGljeSBwY3I3X2Jpbi5wb2xpY3kgPiBwY3I3LnBvbGljeQ0KIyBjYXQg
-cGNyNy5wb2xpY3kNCjMyMWZiZDI4YjYwZmNjMjMwMTdkNTAxYjEzM2JkNWRiZjI4ODk4MTQ1ODhl
-OGEyMzUxMGZlMTAxMDVjYjJjYzkNCg0KLy8vLy8vLyBuZXcgdHJ1c3RlZCBrZXkgYW5kIHVzZSBw
-b2xpY3kgdG8gcHJvdGVjdA0KIyBrZXljdGwgYWRkIHRydXN0ZWQga21rICJuZXcgMzIga2V5aGFu
-ZGxlPTB4ODEwMDAwMDEgaGFzaD1zaGEyNTYgcG9saWN5ZGlnZXN0PWBjYXQgcGNyNy5wb2xpY3lg
-IiBAdQ0KNDY2MTA3NTc4DQojIGtleWN0bCBwaXBlIDQ2NjEwNzU3OCA+IGttay5ibG9iDQojIGtl
-eWN0bCBwcmludCA0NjYxMDc1NzgNCjAwN2YwMDIwYTkyMmNhNzY0ZDNhZTlmZWFlNGMzYTFiMTQw
-YzYxMGFkMWRmODM2ZGY2ZDcwNTQ5NTdmM2Y1ZGExNDA0MmYyOTAwMTBkM2NhODNhY2EwOGVkMTBh
-NDMzYmE1ODVhNTE0NzEyNmQyMDdmMGM1MmU1M2ExZWRiZmMzMWI4OWIzMDk4ODA1Mzg3MDU1M2Vm
-NjkyYzc3YzI4YjJjN2FkYjYzZTFmYzY5ODY5ZDdmMmU4YWIyYjlkODkwNmUwMmJkOTUzZGM1OGMz
-YTViMWRlMDg1OGVjMzhhNmRjYjU1MTM4NGYzOGQ2ODM0ODQyZmQyMmI0YTljNjFjMDMyMDAwNGUw
-MDA4MDAwYjAwMDAwMDAwMDAyMDMyMWZiZDI4YjYwZmNjMjMwMTdkNTAxYjEzM2JkNWRiZjI4ODk4
-MTQ1ODhlOGEyMzUxMGZlMTAxMDVjYjJjYzkwMDEwMDAyMDAyODAzMjE4MTBhNjZkZjYzOTA1ZDQ4
-NDZlMzllNmFkM2VjNjliNzdkZWFjMzM5ZjQyMDlmMjkxMDc4NDgzYzEwMDczMDAwMDAwMDAwMDIw
-ZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3
-ODUyYjg1NTAxMDAwYjAwMjIwMDBiZGNkYjY5NGUxMDJlMTNhMGZiYTUxMTEwODFjYjZjZjYxNmMx
-MThkNDA0OTM2Y2FjM2U4NGRiMjRjNzFlNDdkNTAwMjIwMDBiMDRiNWRiMWFhNTI2MzVkZmIyNDJl
-NzZmNmJkZThlMjE3NmFlNDhmYzY4Mjk0NmM2Yzc2ZDk2ZjYwODA3OWQxZjAwMDAwMDIwMzZiNmZj
-Y2E4MjA2YzdmNzIyZGU4NTgyMWQ3ZWNiNDc4NTk3NmZkZDY0MmJjNzUzODUwNWEyYTgxOGM4YTIz
-ODgwMjE0MDAwMDAwMTAwMjAxNGI0MzlkYTliOTQ5MGQ5YmI2ZTVhOTNlN2U2ZWQ0MDhiMWQ1MWFl
-NDVhYmNjZDVkNWRjYzYyNWQ5NjgyODJkDQojIGNhdCBrbWsuYmxvYg0KMDA3ZjAwMjBhOTIyY2E3
-NjRkM2FlOWZlYWU0YzNhMWIxNDBjNjEwYWQxZGY4MzZkZjZkNzA1NDk1N2YzZjVkYTE0MDQyZjI5
-MDAxMGQzY2E4M2FjYTA4ZWQxMGE0MzNiYTU4NWE1MTQ3MTI2ZDIwN2YwYzUyZTUzYTFlZGJmYzMx
-Yjg5YjMwOTg4MDUzODcwNTUzZWY2OTJjNzdjMjhiMmM3YWRiNjNlMWZjNjk4NjlkN2YyZThhYjJi
-OWQ4OTA2ZTAyYmQ5NTNkYzU4YzNhNWIxZGUwODU4ZWMzOGE2ZGNiNTUxMzg0ZjM4ZDY4MzQ4NDJm
-ZDIyYjRhOWM2MWMwMzIwMDA0ZTAwMDgwMDBiMDAwMDAwMDAwMDIwMzIxZmJkMjhiNjBmY2MyMzAx
-N2Q1MDFiMTMzYmQ1ZGJmMjg4OTgxNDU4OGU4YTIzNTEwZmUxMDEwNWNiMmNjOTAwMTAwMDIwMDI4
-MDMyMTgxMGE2NmRmNjM5MDVkNDg0NmUzOWU2YWQzZWM2OWI3N2RlYWMzMzlmNDIwOWYyOTEwNzg0
-ODNjMTAwNzMwMDAwMDAwMDAwMjBlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0
-MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1MDEwMDBiMDAyMjAwMGJkY2RiNjk0ZTEwMmUxM2Ew
-ZmJhNTExMTA4MWNiNmNmNjE2YzExOGQ0MDQ5MzZjYWMzZTg0ZGIyNGM3MWU0N2Q1MDAyMjAwMGIw
-NGI1ZGIxYWE1MjYzNWRmYjI0MmU3NmY2YmRlOGUyMTc2YWU0OGZjNjgyOTQ2YzZjNzZkOTZmNjA4
-MDc5ZDFmMDAwMDAwMjAzNmI2ZmNjYTgyMDZjN2Y3MjJkZTg1ODIxZDdlY2I0Nzg1OTc2ZmRkNjQy
-YmM3NTM4NTA1YTJhODE4YzhhMjM4ODAyMTQwMDAwMDAxMDAyMDE0YjQzOWRhOWI5NDkwZDliYjZl
-NWE5M2U3ZTZlZDQwOGIxZDUxYWU0NWFiY2NkNWQ1ZGNjNjI1ZDk2ODI4MmQNCg0KLy8vLy8vLy8v
-L2NsZWFyIHRydXN0ZWQga2V5IGFuZCByZWxvYWQNCiMga2V5Y3RsIGNsZWFyIEB1DQprZXljdGwg
-bGlzdCBAdQ0Ka2V5cmluZyBpcyBlbXB0eQ0KIyBrZXljdGwgYWRkIHRydXN0ZWQga21rICJsb2Fk
-IGBjYXQga21rLmJsb2JgIGtleWhhbmRsZT0weDgxMDAwMDAxIGhhc2g9c2hhMjU2IHBvbGljeWRp
-Z2VzdD1gY2F0IHBjcjcucG9saWN5YCIgQHUNCmFkZF9rZXk6IE9wZXJhdGlvbiBub3QgcGVybWl0
-dGVkDQoNCg0KVGhhbmtzLiANCg0KLSBTaGlybGV5IA0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2Ut
-LS0tLQ0KRnJvbTogSmFtZXMgQm90dG9tbGV5IDxqZWpiQGxpbnV4LmlibS5jb20+IA0KU2VudDog
-VHVlc2RheSwgRGVjZW1iZXIgMywgMjAxOSAxMToxMiBBTQ0KVG86IFpoYW8sIFNoaXJsZXkgPHNo
-aXJsZXkuemhhb0BpbnRlbC5jb20+OyBNaW1pIFpvaGFyIDx6b2hhckBsaW51eC5pYm0uY29tPjsg
-SmFya2tvIFNha2tpbmVuIDxqYXJra28uc2Fra2luZW5AbGludXguaW50ZWwuY29tPjsgSm9uYXRo
-YW4gQ29yYmV0IDxjb3JiZXRAbHduLm5ldD4NCkNjOiBsaW51eC1pbnRlZ3JpdHlAdmdlci5rZXJu
-ZWwub3JnOyBrZXlyaW5nc0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWRvY0B2Z2VyLmtlcm5lbC5v
-cmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7ICdNYXVybyBDYXJ2YWxobyBDaGVoYWIn
-IDxtY2hlaGFiK3NhbXN1bmdAa2VybmVsLm9yZz47IFpodSwgQmluZyA8YmluZy56aHVAaW50ZWwu
-Y29tPjsgQ2hlbiwgTHVoYWkgPGx1aGFpLmNoZW5AaW50ZWwuY29tPg0KU3ViamVjdDogUmU6IE9u
-ZSBxdWVzdGlvbiBhYm91dCB0cnVzdGVkIGtleSBvZiBrZXlyaW5nIGluIExpbnV4IGtlcm5lbC4N
-Cg0KT24gVHVlLCAyMDE5LTEyLTAzIGF0IDAyOjExICswMDAwLCBaaGFvLCBTaGlybGV5IHdyb3Rl
-Og0KPiBUaGFua3Mgc28gbXVjaCBmb3IgeW91IGZlZWRiYWNrLCBKYW1lcy4gDQo+IEFuZCBnbGFk
-IHRvIGhlYXIgdGhhdCB0aGUgQVBJIHdpbGwgYmUgbWFkZSBtb3JlIGZyaWVuZGx5LiANCj4gDQo+
-IEJ1dCBJIGhhdmUgYSBsaXR0bGUgY29uZnVzZWQgYWJvdXQgdGhlIGNhbGwgc3RhY2suIA0KPiBG
-cm9tIHRoZSBkb2N1bWVudCwgaHR0cHM6Ly9naXRodWIuY29tL3RvcnZhbGRzL2xpbnV4L2Jsb2Iv
-bWFzdGVyL0RvY3UNCj4gbWVudGF0aW9uL3NlY3VyaXR5L2tleXMvdHJ1c3RlZC1lbmNyeXB0ZWQu
-cnN0IGFuZCANCj4gaHR0cHM6Ly9naXRodWIuY29tL3pmc29ubGludXgvZHJhY3V0L3RyZWUvbWFz
-dGVyL21vZHVsZXMuZC85N21hc3RlcmtlDQo+IHksIHRoZSB0cnVzdGVkIGtleSBpcyBhIHJhbmRv
-bSBudW1iZXIgYW5kIGdlbmVyYXRlZCBieSBUUE0yLjAgYW5kIA0KPiBzZWFsZWQgd2l0aCBUUE0y
-LjAgMjA0OCBSU0Ega2V5Lg0KDQpXZWxsLCB1bSwgdGhhdCBkb2N1bWVudCBzZWVtcyB0byBiZSBi
-YXNlZCBvbiBUUE0gMS4yIC4uLiBhIGxvdCBvZiB3aGF0IGl0IHNheXMgaXNuJ3QgcXVpdGUgdHJ1
-ZSBmb3IgVFBNIDIuMC4gIEZvciBpbnN0YW5jZSBhbGwgVFBNIDIuMCBwcmltYXJ5IGtleXMgY29t
-ZSB3aXRoIGEgc3ltbWV0cmljIGNvbXBvbmVudCwgc28gdGhlIHNlYWxlZCBkYXRhIGluIFRQTSAy
-LjAgaXMgYWN0dWFsbHkgc3ltbWV0cmljYWxseSBlbmNyeXB0ZWQgdG8gYSBwcmltYXJ5IGtleS4N
-Cg0KPiBUaGUgMjA0OCBSU0Ega2V5IGlzIGdlbmVyYXRlZCBieSB0cG0yX2NyZWF0ZXByaW1hcnks
-IGFuZCBpdCBjYW4gYmUgZ290IA0KPiBieSB0aGUgVFBNMi4wIGhhbmRsZSwganVzdCB0aGUgImtl
-eWhhbmRsZSIgdXNlZCBpbiB0aGUgZm9sbG93aW5nIA0KPiBrZXljdGwgY29tbWFuZC4NCj4gJCBr
-ZXljdGwgYWRkIHRydXN0ZWQga21rICJuZXcgMzIga2V5aGFuZGxlPTB4ODEwMDAwMDEgaGFzaD1z
-aGEyNTYgDQo+IHBvbGljeWRpZ2VzdD1gY2F0IHBjcjcucG9saWN5YCIgQHUNCg0KVGhlIHByb2Js
-ZW0gVFBNIDIuMCBoYXMgaXMgdGhhdCBtb3N0IG9mIHRoZW0gY2FuJ3QgZ2VuZXJhdGUgcHJpbWUg
-bnVtYmVycyB2ZXJ5IGZhc3QsIHNvIGV2ZW4gdGhyb3VnaCB0aGUga2VybmVsIGNvdWxkIGdlbmVy
-YXRlIHRoZSBSU0EgcHJpbWFyeSwgaXQgd291bGQgdXN1YWxseSB0YWtlIGZhciB0b28gbG9uZywg
-c28gaWYgeW91IHdhbnQgdG8gdXNlIGEgUlNBIHByaW1hcnkgeW91IGhhdmUgdG8gcHJlLWdlbmVy
-YXRlIG9uZSBhbmQgcGxhY2UgaXQgaW4gTlYgc3RvcmFnZTsgdGhlIFRDRyByZWNvbW1lbmRzIGRv
-aW5nIHRoaXMgYXQgaGFuZGxlIDgxMDAwMDAxLCB3aGljaCBpcyB3aGF0IHlvdSBoYXZlIGFib3Zl
-LiAgSG93ZXZlciwgdGhlIG1vcmUgbW9kZXJuIHdheSBpcyB0byBkZXJpdmUgYW4gZWxsaXB0aWMg
-Y3VydmUga2V5IHByaW1hcnkga2V5IGV2ZXJ5IHRpbWUgLi4uIEVDIGtleXMgY2FuIGJlIGdlbmVy
-YXRlZCBieSBtb3N0IFRQTXMgaW4gMTBzIG9mIG1pbGxpc2Vjb25kcywgc28gdGhlIHByaW1hcnkg
-ZG9lc24ndCBuZWVkIHRvIGJlIHByZXNlbnQgaW4gTlZSQU0uDQoNClRIZSBrZXJuZWwgc2hvdWxk
-IGJlIHVzaW5nIHRoZSBFQyBwcmltYXJ5IG1ldGhvZCBmb3IgdGhlIHBhcmVudC4gIFRoZSBvbmx5
-IGV4Y2VwdGlvbiBpcyB3aGVuIHRoZSBrZXkgaGFzIGFuIGludGVybWVkaWF0ZSBwYXJlbnQsIGFu
-ZCB0aGVuIGl0IGNhbiBiZSBzaW1wbHkgbG9hZGVkIGZyb20gYSBmaWxlLg0KDQo+IElmIHJlYm9v
-dCwgdG8gcmUtbG9hZCB0aGUgdHJ1c3RlZCBrZXkgYmFjayB0byBrZXlyaW5nLCBqdXN0IGNhbGwg
-DQo+IHRwbTJfdW5zZWFsIGlzIGVub3VnaCwgZG9uJ3QgbmVlZCB0byBjYWxsIHRwbTJfbG9hZCB0
-byBsb2FkIHRoZQ0KPiBUUE0yLjAgMjA0OCBSU0Ega2V5Lg0KPiBJZiB0aGUgdHJ1c3RlZCBrZXkg
-aXMgYWxzbyBwcm90ZWN0ZWQgYnkgcG9saWN5LCB0aGVuIHRoZSBwb2xpY3kgd2lsbCANCj4gYmUg
-Y2hlY2tlZCBkdXJpbmcgdHBtMl91bnNlYWwuDQo+IA0KPiBBZnRlciBjaGVjayB0aGUgc291cmNl
-IGNvZGUsIHRoZSBjYWxsIHN0YWNrIGlzIG1vc3RseSBsaWtlOiANCj4gU1lTQ0FMTF9ERUZJTkU1
-KGFkZF9rZXksLi4uKSAtLT4ga2V5X2NyZWF0ZV9vcl91cGRhdGUoKSAtLT4NCj4gX19rZXlfaW5z
-dGFudGlhdGVfYW5kX2xpbmsoKSAtLT4gIHRydXN0ZWRfaW5zdGFudGlhdGUoKSAtLT4NCj4gdHBt
-Ml91bnNlYWxfdHJ1c3RlZCgpIC0tPiB0cG0yX3Vuc2VhbF9jbWQoKS4NCg0KV2VsbCwgdGhlIEFQ
-SSBpcyBjb25mdXNpbmcsIGJ1dCB0aGUgY29kZSBzZWVtcyB0byBpbXBseSB0aGUgcGFyZW50IHNo
-b3VsZCBiZSBwcmVzZW50IHNvbWVob3cuICBBIGtleSBpbiBOVlJBTSwgbGlrZSA4MTAwMDAwMSBp
-cyBhbHdheXMgcHJlc2VudCBzbyBpdCBkb2Vzbid0IG5lZWQgdG8gYmUgbG9hZGVkIGl0IGNhbiBq
-dXN0IGJlIHVzZWQgYXMgaXMuDQoNCj4gQW5vdGhlciBwcm9ibGVtIGhlcmUgaXMsIHRvIGJ1aWxk
-IHRoZSBwb2xpY3kgdG8gdW5zZWFsIHRoZSBrZXksIGl0IA0KPiBuZWVkIHRvIHN0YXJ0IGFuIHBv
-bGljeSBzZXNzaW9uLCBhbmQgdHJhbnNmZXIgdGhlIHNlc3Npb24gaGFuZGxlIHRvDQo+IFRQTTIu
-MCB1bnNlYWwgY29tbWFuZC4gDQo+IEluIG15IGtleWN0bCBjb21tYW5kLCBJIHVzZSB0cG0yLjAg
-Y29tbWFuZCB0byBzdGFydCB0aGUgc2Vzc2lvbiBhbmQgDQo+IGdldCB0aGUgaGFuZGxlLCBwdXQg
-aXQgaW50byB0aGUga2V5Y3RsIGNvbW1hbmQgbGlrZToNCj4ga2V5Y3RsIGFkZCB0cnVzdGVkIGtt
-ayAibG9hZCBgY2F0IGttay5ibG9iYCBrZXloYW5kbGU9MHg4MTAwMDAwMSANCj4gcG9saWN5aGFu
-ZGxlPTB4MzAwMDAwMCIgQHUNCg0KQXMgSSBzYWlkLCB1c2luZyBwb2xpY3kgaGFuZGxlcyBzaW1w
-bHkgd29uJ3Qgc2NhbGUsIHNvIHdlIG5lZWQgdG8gdXNlIHRoZSBhY3R1YWwgcG9saWN5IGluc3Rl
-YWQgLi4uIHRodXMgdGhlIHBvbGljeSBzaG91bGQgYmUgcGFzc2VkIGludG8gdGhlIGtlcm5lbCAg
-YXMgcGFydCBvZiB0aGUgdHJ1c3RlZCBrZXkgYW5kIHRoZSBrZXJuZWwgaXRzZWxmIHdvdWxkIGdl
-bmVyYXRlIGEgcG9saWN5IHNlc3Npb24gZnJvbSB0aGUgcG9saWN5IHN0YXRlbWVudHMgLi4uIHRo
-aXMgYXBwcm9hY2ggaXMgYXJlYWR5IHByb3ZlbiB0byBiZSB1c2VmdWwgYW5kIGZ1bmN0aW9uYWwg
-aW4gdGhlIHRwbTIgb3BlbnNzbCBlbmdpbmUgY29kZS4NCg0KSmFtZXMNCg0K
+On Wed, 2019-12-04 at 03:01 +0000, Zhao, Shirley wrote:
+> Hi, James, 
+> 
+> Using policy digest to reload trusted key, doesn't work, either. 
+> Please check the steps below. 
+> I think policy digest should be calculated by TPM when verifying the
+> policy to reload key. 
+
+You misunderstand my meaning: the API we have now doesn't work; the key
+blob the kernel returns currently after key create won't reload because
+it contains extraneous data.  I was proposing a working API I thought
+might replace it, but obviously it has to be coded up and accepted into
+a kernel version before you can use it.
+
+If you want to get trusted keys working today, I think the TPM 1.2 API
+still works if you have a TPM 1.2 system.
+
+James
+
