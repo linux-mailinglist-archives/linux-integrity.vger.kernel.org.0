@@ -2,36 +2,36 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E741137B3
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2019 23:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679671137C6
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2019 23:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728344AbfLDWli (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Dec 2019 17:41:38 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:50126 "EHLO
+        id S1728542AbfLDWl7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Dec 2019 17:41:59 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:50140 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728238AbfLDWlh (ORCPT
+        with ESMTP id S1728284AbfLDWli (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Dec 2019 17:41:37 -0500
+        Wed, 4 Dec 2019 17:41:38 -0500
 Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 247E520B4761;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5003120B4762;
         Wed,  4 Dec 2019 14:41:37 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 247E520B4761
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5003120B4762
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1575499297;
-        bh=Hygomg0IkjBeTUP6XSMjFJvucT6fovHpF5/8RvY72oU=;
+        bh=L4puKXt7OmrSagN42Huxd1vQTKOco/JYM8kKj45zf2k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iJRKu8W0djMen2xh9DrpDAo0rF3rXzhrlVJrODNqahFlmyA0mKvV7EmIoeeiz1Yyx
-         ANmrDneGPBpfbewZra4kLsH93NLJZKmfSBQ08/JVObz5CbGkraEFqvYWNYib84tLc+
-         G2kf5qBKTceHtoKSAvHYEkImNDzS87JWdVR7/zRQ=
+        b=Buek2F9ll8/bUHrhBgsViGYaRaAayGefcfg1p/6jSG8lGyFdn74jFOjDhLIGv0lth
+         OCPEHjH59CUe33w0Kp3t+PNuLKCkzSWHVmQK6EA+cY937+VB3Qmwbh8V/Le2lpN222
+         FfYcp8C8jRBqumLtEZyRmM/sWX8Hp6ameMe8rhPo=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
 Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
         mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
         sashal@kernel.org, jamorris@linux.microsoft.com,
         linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
-Subject: [PATCH v10 1/6] IMA: Check IMA policy flag
-Date:   Wed,  4 Dec 2019 14:41:26 -0800
-Message-Id: <20191204224131.3384-2-nramas@linux.microsoft.com>
+Subject: [PATCH v10 2/6] IMA: Add KEY_CHECK func to measure keys
+Date:   Wed,  4 Dec 2019 14:41:27 -0800
+Message-Id: <20191204224131.3384-3-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191204224131.3384-1-nramas@linux.microsoft.com>
 References: <20191204224131.3384-1-nramas@linux.microsoft.com>
@@ -40,35 +40,74 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Return immediately from process_buffer_measurement()
-if the IMA policy flag is set to zero. Not doing this
-can result in kernel panic when process_buffer_measurement()
-is called before IMA is initialized (for instance, when
-the IMA hook is called when a key is added to
-the .builtin_trusted_keys keyring).
+Measure keys loaded onto any keyring.
 
-This change adds the check in process_buffer_measurement()
-to return immediately if ima_policy_flag is set to zero.
+This patch defines a new IMA policy func namely KEY_CHECK to
+measure keys. Updated ima_match_rules() to check for KEY_CHECK
+and ima_parse_rule() to handle KEY_CHECK.
 
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 ---
- security/integrity/ima/ima_main.c | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/ABI/testing/ima_policy | 6 +++++-
+ security/integrity/ima/ima.h         | 1 +
+ security/integrity/ima/ima_policy.c  | 4 +++-
+ 3 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index d7e987baf127..9b35db2fc777 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -655,6 +655,9 @@ void process_buffer_measurement(const void *buf, int size,
- 	int action = 0;
- 	u32 secid;
+diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
+index 29aaedf33246..066d32797500 100644
+--- a/Documentation/ABI/testing/ima_policy
++++ b/Documentation/ABI/testing/ima_policy
+@@ -29,7 +29,7 @@ Description:
+ 		base: 	func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK]
+ 				[FIRMWARE_CHECK]
+ 				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
+-				[KEXEC_CMDLINE]
++				[KEXEC_CMDLINE] [KEY_CHECK]
+ 			mask:= [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
+ 			       [[^]MAY_EXEC]
+ 			fsmagic:= hex value
+@@ -113,3 +113,7 @@ Description:
+ 		Example of appraise rule allowing modsig appended signatures:
  
-+	if (!ima_policy_flag)
-+		return;
+ 			appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig|modsig
 +
- 	/*
- 	 * Both LSM hooks and auxilary based buffer measurements are
- 	 * based on policy.  To avoid code duplication, differentiate
++		Example of measure rule using KEY_CHECK to measure all keys:
++
++			measure func=KEY_CHECK
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index df4ca482fb53..fe6c698617bd 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -193,6 +193,7 @@ static inline unsigned long ima_hash_key(u8 *digest)
+ 	hook(KEXEC_INITRAMFS_CHECK)	\
+ 	hook(POLICY_CHECK)		\
+ 	hook(KEXEC_CMDLINE)		\
++	hook(KEY_CHECK)			\
+ 	hook(MAX_CHECK)
+ #define __ima_hook_enumify(ENUM)	ENUM,
+ 
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index f19a895ad7cd..1525a28fd705 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -373,7 +373,7 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
+ {
+ 	int i;
+ 
+-	if (func == KEXEC_CMDLINE) {
++	if ((func == KEXEC_CMDLINE) || (func == KEY_CHECK)) {
+ 		if ((rule->flags & IMA_FUNC) && (rule->func == func))
+ 			return true;
+ 		return false;
+@@ -997,6 +997,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+ 				entry->func = POLICY_CHECK;
+ 			else if (strcmp(args[0].from, "KEXEC_CMDLINE") == 0)
+ 				entry->func = KEXEC_CMDLINE;
++			else if (strcmp(args[0].from, "KEY_CHECK") == 0)
++				entry->func = KEY_CHECK;
+ 			else
+ 				result = -EINVAL;
+ 			if (!result)
 -- 
 2.17.1
 
