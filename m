@@ -2,108 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD12112D0B
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2019 14:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D64112EBE
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2019 16:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbfLDN5R (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Dec 2019 08:57:17 -0500
-Received: from mx2.suse.de ([195.135.220.15]:52596 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727850AbfLDN5R (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Dec 2019 08:57:17 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 7396EAD2B
-        for <linux-integrity@vger.kernel.org>; Wed,  4 Dec 2019 13:57:15 +0000 (UTC)
-Date:   Wed, 4 Dec 2019 14:57:15 +0100
-From:   Matthias Gerstner <mgerstner@suse.de>
-To:     linux-integrity@vger.kernel.org
-Subject: Ramifications of INTEGRITY_PLATFORM_KEYRING
-Message-ID: <20191204135715.GB11974@f195.suse.de>
+        id S1728500AbfLDPkt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Dec 2019 10:40:49 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:40575 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728470AbfLDPkl (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 4 Dec 2019 10:40:41 -0500
+Received: by mail-qk1-f196.google.com with SMTP id a137so278544qkc.7
+        for <linux-integrity@vger.kernel.org>; Wed, 04 Dec 2019 07:40:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FzcsaP9w6MtdwnTCcp16VdCAYOhvH887rp/95iRWQVQ=;
+        b=kl4D5bwqnbSucJmMwroPQGUi8vdiy/KN3BwAawDv0FO/VVAdiPtbDITjYyGGah4BF3
+         a/73mNg8kI48HQdaNb1QKKqoPvqL5X2enjy0liqn2PB7ZmacHQldTWntbtMxCGCwtr8e
+         kh7MayOaGH8NXvoKfqDpMI0d8WB64uuz6gkOx6vbgndE8NqHbqLnG5uruiE+iRaT1JHW
+         LsKNr6Dj4ztOWcJHsrBalH4XlKVwrsTkMSdODFciIRV2DiBhoxF7lpzYJA+mhSiGK3He
+         yQQMOyZckfKmtublkzjnoCNEzCnsghEFqEPafDb7NUZ/UowQA2yBG5dQ3pdsMYN4F+xj
+         knLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FzcsaP9w6MtdwnTCcp16VdCAYOhvH887rp/95iRWQVQ=;
+        b=XGlu5zjQ8/2ZDnE60TVkYq6/ikdadk1ESOPlX/RufCaNQK4KIpWO7jjyQXIO/RFkdY
+         YaPI21J3l3pzerHzS1j/5s7Gl75wLpZHS6cwM/AyyGKGB4BbV3r/A+M+l7EuxBgTNBgZ
+         z8zKJ7VXMT2VwW/ZPeU4J+ykvqusznvPF/QrA7ufRF+pbOPC+aGHeeHcnownlrWk6Qu5
+         SJOJ0APZDg2vZ+FdnDi8tMBb2uo1/FDDn0y1Zf9pee3jcE2dNOsgsbCX429rVVeqtgW4
+         /KTCRc5MyZXVrP86KK1nnd1DkySnykClOOGs2TK+3xvCkjb1h+SLEzGo5KPUjWjo1pVF
+         inqw==
+X-Gm-Message-State: APjAAAVMIR0AVA/NlzMUR9loKuI7yyut6S0CwM1ds/zepauekwgIMpQC
+        r9gx6tmfOt3QsiBBJBZ+BwBx2w==
+X-Google-Smtp-Source: APXvYqwbHqmSIMaGHCldLdUxFkVwopIpvrtZm5CXX9fnNsfkRpFdzeM155lG9p5Sq1HX4dEysXr66g==
+X-Received: by 2002:a37:27cf:: with SMTP id n198mr3600708qkn.188.1575474040601;
+        Wed, 04 Dec 2019 07:40:40 -0800 (PST)
+Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
+        by smtp.gmail.com with ESMTPSA id y28sm3937692qtk.65.2019.12.04.07.40.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2019 07:40:39 -0800 (PST)
+From:   Pavel Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, jmorris@namei.org, sashal@kernel.org,
+        peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@microsoft.com,
+        thiruan@microsoft.com, bryankel@microsoft.com,
+        tee-dev@lists.linaro.org, ilias.apalodimas@linaro.org,
+        sumit.garg@linaro.org, rdunlap@infradead.org
+Subject: [PATCH v4 0/1] tpm/tpm_ftpm_tee: add shutdown call back
+Date:   Wed,  4 Dec 2019 10:40:37 -0500
+Message-Id: <20191204154038.2276810-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WhfpMioaduB5tiZL"
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Changes from v3:
+ - Synced with mainline
+ - Added Tested-by Sasha Levin, and Reviewed-by: Jarkko Sakkinen.
 
---WhfpMioaduB5tiZL
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Previous versions:
+v3:
+https://lore.kernel.org/lkml/20191016163114.985542-1-pasha.tatashin@soleen.com
+v2:
+https://lore.kernel.org/lkml/20191014202135.429009-1-pasha.tatashin@soleen.com
+v1:
+https://lore.kernel.org/lkml/20191011145721.59257-1-pasha.tatashin@soleen.com
 
-Hi,
 
-at SUSE we implemented an integration test for our enterprise kernels
-that checks the functionality of various IMA/EVM related features like
-IMA appraisal with digital signatures. To do this a custom CA
-certificate is enrolled as a MOK certificate in the system. The
-according public key is then loaded into the .ima kernel keyring to be
-used for verification of security.ima signatures.
+Pavel Tatashin (1):
+  tpm/tpm_ftpm_tee: add shutdown call back
 
-With a recent update we did from kernel version 4.12 to version 5.3 a
-regression in this integration test was reported by our QA team. As it
-turned out the reason is kernel option INTEGRITY_PLATFORM_KEYRING=3Dy,
-which is the default setting our kernel engineers took over. With this
-option enabled a couple of platform certificates are no longer loaded
-into the .secondary_trusted_keys keyring but into the new .platform
-keyring. And IMA only uses those keys to verify things like kexec any
-more.
+ drivers/char/tpm/tpm_ftpm_tee.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-The certificate we enrolled as MOK in the system is now also part for
-the .platform keyring, causing us to be unable to load the required
-public key into the .ima keyring.
+-- 
+2.24.0
 
-I was able to still get things to work by building my own custom kernel
-with the custom CA being built into the kernel which is a lot of more
-effort, however, and a scenario we can't easily support for our
-customers.
-
-I can understand the reasoning of that new option, that trusting
-arbitrary platform certificates shipped with the hardware might not be a
-good idea. I wonder, however, whether moving these certificates from
-=2Esecondary_trusted_keys to .platform doesn't also affect other
-components than just IMA?
-
-I would be interested in your view on this and any advice.
-
-Cheers
-
-Matthias
-
---=20
-Matthias Gerstner <matthias.gerstner@suse.de>
-Dipl.-Wirtsch.-Inf. (FH), Security Engineer
-https://www.suse.com/security
-Phone: +49 911 740 53 290
-GPG Key ID: 0x14C405C971923553
-
-SUSE Software Solutions Germany GmbH
-HRB 36809, AG N=FCrnberg
-Gesch=E4ftsf=FChrer: Felix Imend=F6rffer
-
---WhfpMioaduB5tiZL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEE82oG1A8ab1eESZdjFMQFyXGSNVMFAl3nuzgACgkQFMQFyXGS
-NVP6dg//eujTIxXlLctLYoNV/0kg0lmuNM/ZZdNU9C54KgD/A3hTVY17HNvUDbCL
-r8fMCOlFu/EQsH4UjSjKmXIrBHFPE9tudQ23BjoORWv+pxZYq8D15bqEHetkKdQh
-uAnVpwXO+l7K3qkQdSOUevRdrVdswIWBvq75AZxIyDBxT6T210uGJYrLkd+8qtJ5
-GAfX0o1SLy9tm/OdbnCREIDrXlLyNOB+te95tXrWy42krE8qlgRSA2cSErGFWOmm
-kSrS3Zft9pxDh+55RuzbLdPnavrvDyEgRptTMHKAXc3hivYllO0K+HDmrbVZK+HV
-HUphVwGR6BRmTCJMgf/pBQAJy2/o9XV2XYHCKIrfW7w4WUvMdcsmlFU/0A6rV+dX
-kyeBXBqIc71b5h/NljnBrJf0Tds3q66qW15HGRT6Cy9SmSb0fwiXFw06Rav/XI31
-F5vC4Ybo4a+XGe1D253v03abitvcDzrFjPVes4CazFFR3JguAhGV/Fox/kmurTGF
-DslyTsSkspy3jbNHaocC9jt2+dRIhBpI+gozjfEoYes9WgKgHWoYblm/XKqQtJM0
-S6ICeXvZ8WZ956LijGn4PyHspObKFxVZONR82P82bPk8Se0UIpUQLbLEK8kTaiDJ
-s+pYfgyxmRR02rEtwxMGkW9JalN3dRlSb+s7VSaynnT9N/7eaZY=
-=479n
------END PGP SIGNATURE-----
-
---WhfpMioaduB5tiZL--
