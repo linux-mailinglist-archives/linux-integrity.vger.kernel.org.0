@@ -2,137 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6390E11597B
-	for <lists+linux-integrity@lfdr.de>; Sat,  7 Dec 2019 00:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AD3115A3A
+	for <lists+linux-integrity@lfdr.de>; Sat,  7 Dec 2019 01:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726421AbfLFXDE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Dec 2019 18:03:04 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:55681 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726371AbfLFXDD (ORCPT
+        id S1726720AbfLGA34 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Dec 2019 19:29:56 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37966 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726506AbfLGA3z (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Dec 2019 18:03:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1575673382;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u6WTqIKjz3S325CCDp38W7Sg6rbkSpfGWJMYdV0cMT0=;
-        b=EPHoS9Y7mGVqpASnGIL6xvZW0WsuJXhhVYRGGjD5nF+CAvxVazuw1Wd1BL9gNcL+mdV9rV
-        zJCEG3YduYIR0RQZNWIh/BKEVYUlIopn2hjm1JIPY6pJKok91jk4+8zrfMOq46YkMwjOkr
-        /dtWpn4x8UVAo8WDZNEtmdOctlB4B6g=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-271-BzAdmgIZOSmpSauo59ecoA-1; Fri, 06 Dec 2019 18:02:59 -0500
-Received: by mail-pl1-f200.google.com with SMTP id 66so4303422plc.22
-        for <linux-integrity@vger.kernel.org>; Fri, 06 Dec 2019 15:02:59 -0800 (PST)
+        Fri, 6 Dec 2019 19:29:55 -0500
+Received: by mail-wr1-f66.google.com with SMTP id y17so9649217wrh.5
+        for <linux-integrity@vger.kernel.org>; Fri, 06 Dec 2019 16:29:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
+        b=LXxoS6Ed7of6jWaofmDfQc8/u3Mg9Maolmr3Vpf9Rmy6M9EqjFAuvGQ8h9p7LhnwAL
+         J2FbblgdkGgZHafRFxx28eRdV2u28AyUlEZcVvHuYvVm3rtf1quwzUCMSvqmMRhzvXWg
+         Lr2BVgHFftpJuxoM6FIG7HwvD6NJoH8mvEjpjvV8POe7OxPQSgcaMvRkWz9Uiu2DLDQI
+         zLbCM6eF/2UqhYCC9SzqWLAqDFWNhNPH2Mzqdx7SMOIQYQVzi+r4mUYfVbZ4zkg6G/Rf
+         GMyYZz2zxEAODyOdyEtKF6h6LvlYj6nQy3cPNK/qqQ+yOafhqpdxqfrrNrKMk4+XdZU4
+         ueNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=9Ch5m35fVkEKG5wxtfGoZa8Wx0h7Ub5VYf9I4jeT7RE=;
-        b=Hji3jAVJuWsFkagi2RD77ixK7AX+ClRPtWbqrD3PyHfBxBPUI+F/uczMMXY1sQEoFg
-         MqYZJ/k6oJayBHV3K0DZcH71n8vQfzSQNdLlUcUjT/QWwRUe4hMKyvY7L1o8//UP+O9+
-         uf/UEsGQ4+xhzD2ZHVQ7j2P28etp+utfd0dxWhthwTYgAJVVXruiR/5d6trBiN+GGfCC
-         3ZLS8qD/KSu6FoJViltNYQziXYwNQ7ZvuQDHy7PvmHF8mlWvlwM7z1EzrHrINSYUjvUw
-         twEDbDzwSlhMrGGQMlW8pSfjJDnic4SVrwtM8wRtW9TLHDeM+BqouWiEbgpDy7akq+PL
-         RQyg==
-X-Gm-Message-State: APjAAAWU4QNjAHKBBZbZ7/CV7/JdZC0SdFtlpy6VKZgySS6WXs6VKc3L
-        HNC8jq+6IKIBdQR+3A5fCFszGZ28zqWieMtnDnKgv3r6S8UvL+LGy1oTwUmbjrqCJcDDLof1E8l
-        DCvjTUWfPzV2I3bxBbcfLhDbQ68KB
-X-Received: by 2002:a17:902:fe12:: with SMTP id g18mr17164257plj.20.1575673378484;
-        Fri, 06 Dec 2019 15:02:58 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwaH2k0aU5daJfRg60OkT59+hoEibc8Ok80QvecPXGnd9NYmO8bLlYzXX6tQ4naJPtMp1VAZQ==
-X-Received: by 2002:a17:902:fe12:: with SMTP id g18mr17164215plj.20.1575673377994;
-        Fri, 06 Dec 2019 15:02:57 -0800 (PST)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id m5sm4231286pjl.30.2019.12.06.15.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Dec 2019 15:02:57 -0800 (PST)
-Date:   Fri, 6 Dec 2019 16:02:55 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [GIT PULL] tpmdd updates for Linux v5.4
-Message-ID: <20191206230255.mhinntfevp6vdlkj@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        stable <stable@vger.kernel.org>
-References: <20190902143121.pjnykevzlajlcrh6@linux.intel.com>
- <CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com>
- <20191127205800.GA14290@linux.intel.com>
- <20191127205912.GB14290@linux.intel.com>
- <20191128012055.f3a6gq7bjpvuierx@cantor>
- <20191129235322.GB21546@linux.intel.com>
- <20191130001253.rtovohtfbg25uifm@cantor>
- <20191206211834.GD9971@linux.intel.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
+        b=ibxPH/LplngMTVAmmu2KRrAHxJt/zTFavGFyRNBFY2JTGCdrZ930leCJmyuhsZ49P7
+         iqJlCnfkh/Yryi/crypqUxNNe1bIZ/ycereevibc1jJs/2FIrvVE2bCtx7Oj7Xjk9KCW
+         4shBOfC01FoXblftWV4GTMuqrTtSxOCTB7vAHLjkhwYDzpRyyTDoV0uZ7N/oUeu92jrs
+         R2AFmjDnuNUekqoizYnzu51G/85YGQco8JfJW2dYeXTIwIt/2VHC/+GnQyQgX2patwQE
+         cjodhSN3/bvJhvv6VVSXmunWQeYTwBMRhQKIHtZKJi/5S4PqrlUtyTqSiPriASnY51j6
+         CTNg==
+X-Gm-Message-State: APjAAAVto0fEC1O2BKVMaGatfCPHq46/DBOLK7gDgHfaxsT4p4xRarcc
+        95lyhZGx/gtCJxObFcmzO8UsAL/C40skSEAxAmo=
+X-Google-Smtp-Source: APXvYqwrh3pZjAB0r+TmXxbhmAM/apODdHlIT+82DMPTCRz8CUTTqPzcZB7T3FAp1SOvDrWQKKNsT0CStxod+O7hBLs=
+X-Received: by 2002:adf:e591:: with SMTP id l17mr16654604wrm.139.1575678594023;
+ Fri, 06 Dec 2019 16:29:54 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191206211834.GD9971@linux.intel.com>
-X-MC-Unique: BzAdmgIZOSmpSauo59ecoA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+Received: by 2002:a5d:678e:0:0:0:0:0 with HTTP; Fri, 6 Dec 2019 16:29:53 -0800 (PST)
+Reply-To: mrs.aalia.ahmed@gmail.com
+From:   "Mrs.Aalia.Ahmed" <adamhana1907@gmail.com>
+Date:   Sat, 7 Dec 2019 00:29:53 +0000
+Message-ID: <CAOGreO=8t36s1Mau26bRqTQErHsnOf5ki10AJ6EA4tNedNUo8g@mail.gmail.com>
+Subject: OK
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Dec 06 19, Jarkko Sakkinen wrote:
->On Fri, Nov 29, 2019 at 05:12:53PM -0700, Jerry Snitselaar wrote:
->> On Sat Nov 30 19, Jarkko Sakkinen wrote:
->> > On Wed, Nov 27, 2019 at 06:20:55PM -0700, Jerry Snitselaar wrote:
->> > > There also was that other issue reported on the list about
->> > > tpm_tis_core_init failing when calling tpm_get_timeouts due to the
->> > > power gating changes.
->> >
->> > Please add a (lore.ko) link for reference to this thread.
->> >
->> > /Jarkko
->> >
->>
->> https://lore.kernel.org/linux-integrity/a60dadce-3650-44ce-8785-2f737ab9=
-b993@www.fastmail.com/
->
->tpm_chip_stop() probably causes the issue. That is why tpm2_probe()
->works and failure happens after that.
->
->tpm_chip_stop() should be called once at the end of the function.
->
+Greetings My Dearest One.
 
-The patch I posted that fixed the issue for him moved the
-tpm_chip_start() from the irq probing section right below there to
-before the tpm_get_timeouts call, but your idea is better.
-
-Any thoughts on the irq issue? I need to go back and look at the older
-commits again, but before Stefan's patch enabling the irq flag I'm not
-sure the last time that testing code section in tpm_tis_send was
-actually used. I think prior to that it always just went straight to
-tpm_tis_send_main.
-
-570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific") adds
-the flag, and I can see where it disables and enables the flag in the
-testing code in tpm_tis_send, but I don't see where it enables the
-flag originally for it to ever get into the testing section of
-tpm_tis_send. That means since this commit tpm_tis hasn't been using
-interrupts, right?
-
-Regards,
-Jerry
-
->/Jarkko
->
-
+My name is Mrs.Aalia.Ahmed, i saw your profile and became interested
+in you, please contact me through my email address
+(mrs.aalia.ahmed@gmail.com) to know each other and i have something
+very important to tell you, i wait for your response to my email ID.
+(mrs.aalia.ahmed@gmail.com
