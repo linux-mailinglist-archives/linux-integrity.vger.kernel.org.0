@@ -2,414 +2,242 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED914116A7E
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 11:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4538116A93
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 11:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727249AbfLIKEy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Dec 2019 05:04:54 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:57232 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727060AbfLIKEy (ORCPT
+        id S1726377AbfLIKJq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Dec 2019 05:09:46 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:40734 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726351AbfLIKJp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Dec 2019 05:04:54 -0500
+        Mon, 9 Dec 2019 05:09:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Mime-Version:Content-Type:References:
+        d=infradead.org; s=bombadil.20170209; h=Mime-Version:Content-Type:References:
         In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=SMuiV3/yROalRziGR2DntMNkUKqi5eUF3k8CCj+Nfe8=; b=aBvW6s/fCFUVKDu1Xic3fwtk6
-        y4grlL5MO/miAa6oxvDXuVwFpPBfodDUuvoyiJQ37j2a+p5Njp3uKp/GLh36/Lt5nfaFhSajEKNUS
-        jvmjdMI+f7Bg58dNg0hoJCN8F0gMB8Om6CO8AgN4e8FMMy7jq+sy9EcekPNu8IC1rYO/jqdgV48gv
-        vF8RYsiWlsIpf87IvvX/kXZT1sckEbfkPXuEQnAg9WcJLlvWemMzyGKAgd0QFLNRCCvcJ2FNli+9d
-        G/+lWEg9PavwA+keYSyEOADIxxc22VPxLRIijuV/WI3mBIQT3rO56TKEdKVLslAKFIygxrbVll1wB
-        +g5+IivsA==;
+         bh=l15eZ/h0f6ooXptsApCbaVxRmx7fi01LtB9Ln/k7yME=; b=lmh0il1QgE43hIhU7AXGhlRcB
+        NpPBca6o5vPjKsaSQrMmPU8FvVX6iKrYy7yLC6Fc9FwpN2xMjbMaia77Nlm4sI94OzcLDcWHtcjG/
+        mvtLnIzkttjeNl2iJwBCZeKc671+t2ndfFQjLYO7rNgLODHbrEY5+QRb4oTCDowlydbfGCbV6AB7S
+        n35cBjChNngKAnAnS8kUi+s/GY1rP0dPVNlUz+Tv43F5KyqaEg4saKtbjXh7iP/3WlGs3gYtZq5Bs
+        W0KCaAqyv2sNlU5hX+MQ4KDFHRAv2px/+DeRnFEyZYCi95JGGMuwzNH+naXIqT6BEYwELrHWS+IXZ
+        IIxsRg3Ng==;
 Received: from 54-240-197-228.amazon.com ([54.240.197.228] helo=freeip.amazon.com)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ieFuK-0006vz-Rb; Mon, 09 Dec 2019 10:04:49 +0000
-Message-ID: <3b035027b934eb253143dca66ebae4356b386efe.camel@infradead.org>
-Subject: Re: [PATCH 4/8] security: keys: trusted: use ASN.1 tpm2 key format
- for the blobs
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ieFz7-0001pm-8s; Mon, 09 Dec 2019 10:09:45 +0000
+Message-ID: <6fa42aee37f8207c7dcb037615b87cc02b708ec4.camel@infradead.org>
+Subject: Re: [PATCH 5/8] security: keys: trusted: Make sealed key properly
+ interoperable
 From:   David Woodhouse <dwmw2@infradead.org>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org,
-        David Howells <dhowells@redhat.com>
+        linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Date:   Mon, 09 Dec 2019 10:04:45 +0000
-In-Reply-To: <1575781831.14069.13.camel@HansenPartnership.com>
+Date:   Mon, 09 Dec 2019 10:09:43 +0000
+In-Reply-To: <1575781888.14069.14.camel@HansenPartnership.com>
 References: <1575781600.14069.8.camel@HansenPartnership.com>
-         <1575781831.14069.13.camel@HansenPartnership.com>
+         <1575781888.14069.14.camel@HansenPartnership.com>
 Content-Type: multipart/signed; micalg="sha-256";
         protocol="application/x-pkcs7-signature";
-        boundary="=-jOQsVIbnyjHJ35ZY96La"
+        boundary="=-szUFQSGF2y696U7mB2xx"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
 Mime-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by merlin.infradead.org. See http://www.infradead.org/rpr.html
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---=-jOQsVIbnyjHJ35ZY96La
+--=-szUFQSGF2y696U7mB2xx
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, 2019-12-07 at 21:10 -0800, James Bottomley wrote:
-> Modify the tpm2 key format blob output to export and import in the
-> ASN.1 form for tpm2 sealed object keys.  For compatibility with prior
-> trusted keys, the importer will also accept two tpm2b quantities
-> representing the public and private parts of the key.  However, the
-> export via keyctl pipe will only output the ASN.1 format.
-
-You still have a tpm2_key_encode() function which spits out the raw
-private/public blobs each prefixed with a length word. What's that
-still used for?
-
-> The benefit of the ASN.1 format is that it's a standard
-
-We should probably make that true. Did we even get as far as writing up
-an RFC-style description of the ASN.1?=20
-
->  and thus the
-> exported key can be used by userspace tools.  The format includes
-> policy specifications, thus it gets us out of having to construct
-> policy handles in userspace and the format includes the parent meaning
-> you don't have to keep passing it in each time.
+On Sat, 2019-12-07 at 21:11 -0800, James Bottomley wrote:
+> The current implementation appends a migratable flag to the end of a
+> key, meaning the format isn't exactly interoperable because the using
+> party needs to know to strip this extra byte.  However, all other
+> consumers of TPM sealed blobs expect the unseal to return exactly the
+> key.  Since TPM2 keys have a key property flag that corresponds to
+> migratable, use that flag instead and make the actual key the only
+> sealed quantity.  This is secure because the key properties are bound
+> to a hash in the private part, so if they're altered the key won't
+> load.
 >=20
-> This patch only implements basic handling for the ASN.1 format, so
-> keys with passwords but no policy.
-
-... but doesn't bail out with an error when it sees something it
-doesn't yet understand? Including the 'secret' field which is only
-relevant for importable keys, etc.
-
+> Backwards compatibility is implemented by detecting whether we're
+> loading a new format key or not and correctly setting migratable from
+> the last byte of old format keys.
+>=20
 > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 > ---
->  security/keys/trusted-keys/Makefile       |   2 +-
->  security/keys/trusted-keys/tpm2key.asn1   |  23 ++++
->  security/keys/trusted-keys/trusted_tpm1.c |   2 +-
->  security/keys/trusted-keys/trusted_tpm2.c | 170 ++++++++++++++++++++++++=
-+++++-
->  4 files changed, 190 insertions(+), 7 deletions(-)
->  create mode 100644 security/keys/trusted-keys/tpm2key.asn1
+>  include/keys/trusted-type.h               |  1 +
+>  include/linux/tpm.h                       |  2 ++
+>  security/keys/trusted-keys/trusted_tpm2.c | 57 ++++++++++++++++++++++---=
+------
+>  3 files changed, 44 insertions(+), 16 deletions(-)
 >=20
-> diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-=
-keys/Makefile
-> index 7b73cebbb378..e0198641eff2 100644
-> --- a/security/keys/trusted-keys/Makefile
-> +++ b/security/keys/trusted-keys/Makefile
-> @@ -5,4 +5,4 @@
-> =20
->  obj-$(CONFIG_TRUSTED_KEYS) +=3D trusted.o
->  trusted-y +=3D trusted_tpm1.o
-> -trusted-y +=3D trusted_tpm2.o
-> +trusted-y +=3D trusted_tpm2.o tpm2key.asn1.o
-> diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trus=
-ted-keys/tpm2key.asn1
-> new file mode 100644
-> index 000000000000..1851b7c80f08
-> --- /dev/null
-> +++ b/security/keys/trusted-keys/tpm2key.asn1
-> @@ -0,0 +1,23 @@
-> +---
-> +--- Note: This isn't quite the definition in the standard
-> +---       However, the Linux asn.1 parser doesn't understand
-> +---       [2] EXPLICIT SEQUENCE OF OPTIONAL
-> +---       So there's an extra intermediate TPMPolicySequence
-> +---       definition to work around this
-
-At the very least we should prod David with a pointy stick on that
-topic, rather than quietly working around it.
-
-
-> +
-> +TPMKey ::=3D SEQUENCE {
-> +	type		OBJECT IDENTIFIER ({tpmkey_type}),
-> +	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
-> +	policy		[1] EXPLICIT TPMPolicySequence OPTIONAL,
-> +	secret		[2] EXPLICIT OCTET STRING OPTIONAL,
-> +	parent		INTEGER ({tpmkey_parent}),
-> +	pubkey		OCTET STRING ({tpmkey_pub}),
-> +	privkey		OCTET STRING ({tpmkey_priv})
-> +	}
-> +
-> +TPMPolicySequence ::=3D SEQUENCE OF TPMPolicy
-> +
-> +TPMPolicy ::=3D SEQUENCE {
-> +	commandCode		[0] EXPLICIT INTEGER,
-> +	commandPolicy		[1] EXPLICIT OCTET STRING
-> +	}
-> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/tr=
-usted-keys/trusted_tpm1.c
-> index d2c5ec1e040b..d744a0d1cb89 100644
-> --- a/security/keys/trusted-keys/trusted_tpm1.c
-> +++ b/security/keys/trusted-keys/trusted_tpm1.c
-> @@ -991,7 +991,7 @@ static int trusted_instantiate(struct key *key,
->  		goto out;
->  	}
-> =20
-> -	if (!options->keyhandle) {
-> +	if (!options->keyhandle && !tpm2) {
->  		ret =3D -EINVAL;
->  		goto out;
->  	}
-> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/tr=
-usted-keys/trusted_tpm2.c
-> index 08ec7f48f01d..4efc7b64d1cd 100644
-> --- a/security/keys/trusted-keys/trusted_tpm2.c
-> +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> @@ -4,6 +4,8 @@
->   * Copyright (C) 2014 Intel Corporation
->   */
-> =20
-> +#include <linux/asn1_encoder.h>
-> +#include <linux/oid_registry.h>
->  #include <linux/string.h>
->  #include <linux/err.h>
->  #include <linux/tpm.h>
-> @@ -12,6 +14,10 @@
->  #include <keys/trusted-type.h>
->  #include <keys/trusted_tpm.h>
-> =20
-> +#include <asm/unaligned.h>
-> +
-> +#include "tpm2key.asn1.h"
-> +
->  static struct tpm2_hash tpm2_hash_map[] =3D {
->  	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
->  	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
-> @@ -20,6 +26,141 @@ static struct tpm2_hash tpm2_hash_map[] =3D {
->  	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+> index a94c03a61d8f..4728e13aada8 100644
+> --- a/include/keys/trusted-type.h
+> +++ b/include/keys/trusted-type.h
+> @@ -22,6 +22,7 @@ struct trusted_key_payload {
+>  	unsigned int key_len;
+>  	unsigned int blob_len;
+>  	unsigned char migratable;
+> +	unsigned char old_format;
+>  	unsigned char key[MAX_KEY_SIZE + 1];
+>  	unsigned char blob[MAX_BLOB_SIZE];
+>  };
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index 03e9b184411b..cd46ab27baa5 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -297,6 +297,8 @@ struct tpm_buf {
 >  };
 > =20
-> +static u32 tpm2key_oid[] =3D { 2,23,133,10,1,5 };
-> +
-> +static int tpm2_key_encode(struct trusted_key_payload *payload,
-> +			   struct trusted_key_options *options,
-> +			   u8 *src, u32 len)
-> +{
-> +	u8 *scratch =3D kmalloc(PAGE_SIZE, GFP_KERNEL);
-> +	u8 *work =3D scratch, *work1;
-> +	u8 *priv, *pub;
-> +	u16 priv_len, pub_len;
-> +
-> +	priv_len =3D get_unaligned_be16(src);
-> +	src +=3D 2;
-> +	priv =3D src;
-> +	src +=3D priv_len;
-> +	pub_len =3D get_unaligned_be16(src);
-> +	src +=3D 2;
-> +	pub =3D src;
-> +
-> +	if (!scratch)
-> +		return -ENOMEM;
-> +
-> +	asn1_encode_oid(&work, tpm2key_oid, asn1_oid_len(tpm2key_oid));
-> +	if (options->blobauth[0] =3D=3D 0) {
-> +		unsigned char bool[3], *w =3D bool;
-> +		/* tag 0 is emptyAuth */
-> +		asn1_encode_boolean(&w, true);
-> +		asn1_encode_tag(&work, 0, bool, w - bool);
-> +	}
-> +	asn1_encode_integer(&work, options->keyhandle);
-> +	asn1_encode_octet_string(&work, pub, pub_len);
-> +	asn1_encode_octet_string(&work, priv, priv_len);
-> +
-> +	work1 =3D payload->blob;
-> +	asn1_encode_sequence(&work1, scratch, work - scratch);
-> +
-> +	return work1 - payload->blob;
-> +}
-
-I still don't like the lack of overflow protection here, one layer up
-from the underlying encoding APIs I already commented on.
-
-
-> +struct tpm2key_context {
-> +	u32 parent;
-> +	const u8 *pub;
-> +	u32 pub_len;
-> +	const u8 *priv;
-> +	u32 priv_len;
-> +};
-> +
-> +static int tpm2_key_decode(struct trusted_key_payload *payload,
-> +			   struct trusted_key_options *options,
-> +			   u8 **buf)
-> +{
-> +	int ret;
-> +	struct tpm2key_context ctx;
-> +	u8 *blob;
-> +
-> +	ret =3D asn1_ber_decoder(&tpm2key_decoder, &ctx, payload->blob,
-> +			       payload->blob_len);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
-> +		return -EINVAL;
-> +
-> +	blob =3D kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
-> +	if (!blob)
-> +		return -ENOMEM;
-> +
-> +	*buf =3D blob;
-> +	options->keyhandle =3D ctx.parent;
-> +	put_unaligned_be16(ctx.priv_len, blob);
-> +	blob +=3D 2;
-> +	memcpy(blob, ctx.priv, ctx.priv_len);
-> +	blob +=3D ctx.priv_len;
-> +	put_unaligned_be16(ctx.pub_len, blob);
-> +	blob +=3D 2;
-> +	memcpy(blob, ctx.pub, ctx.pub_len);
->=20
-
-Hm, do we really have to create this legacy form here and pass it
-around? Can't we change whatever consumes this?
-
-> +	return 0;
-> +}
-> +
-> +int tpmkey_parent(void *context, size_t hdrlen,
-> +		  unsigned char tag,
-> +		  const void *value, size_t vlen)
-> +{
-> +	struct tpm2key_context *ctx =3D context;
-> +	const u8 *v =3D value;
-> +	int i;
-> +
-> +	ctx->parent =3D 0;
-> +	for (i =3D 0; i < vlen; i++) {
-> +		ctx->parent <<=3D 8;
-> +		ctx->parent |=3D v[i];
-> +	}
-> +	return 0;
-> +}
-> +
-> +int tpmkey_type(void *context, size_t hdrlen,
-> +		unsigned char tag,
-> +		const void *value, size_t vlen)
-> +{
-> +	enum OID oid =3D look_up_OID(value, vlen);
-> +
-> +	if (oid !=3D OID_TPMSealedData) {
-> +		char buffer[50];
-> +
-> +		sprint_oid(value, vlen, buffer, sizeof(buffer));
-> +		pr_debug("OID is \"%s\" which is not TPMSealedData\n",
-> +			 buffer);
-> +		return -EINVAL;
-> +	}
-> +	return 0;
-> +}
-> +
-> +int tpmkey_pub(void *context, size_t hdrlen,
-> +	       unsigned char tag,
-> +	       const void *value, size_t vlen)
-> +{
-> +	struct tpm2key_context *ctx =3D context;
-> +
-> +	ctx->pub =3D value;
-> +	ctx->pub_len =3D vlen;
-> +	return 0;
-> +}
-> +
-> +int tpmkey_priv(void *context, size_t hdrlen,
-> +		unsigned char tag,
-> +		const void *value, size_t vlen)
-> +{
-> +	struct tpm2key_context *ctx =3D context;
-> +
-> +	ctx->priv =3D value;
-> +	ctx->priv_len =3D vlen;
-> +	return 0;
-> +}
-> +
->  /**
->   * tpm_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
->   *
-> @@ -79,6 +220,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->  	if (i =3D=3D ARRAY_SIZE(tpm2_hash_map))
->  		return -EINVAL;
+>  enum tpm2_object_attributes {
+> +	TPM2_OA_FIXED_TPM		=3D BIT(1),
+> +	TPM2_OA_FIXED_PARENT		=3D BIT(4),
+>  	TPM2_OA_USER_WITH_AUTH		=3D BIT(6),
+>  };
 > =20
-> +	if (!options->keyhandle)
-> +		return -EINVAL;
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/tr=
+usted-keys/trusted_tpm2.c
+> index 4efc7b64d1cd..a34ab6f90f76 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -207,6 +207,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  	unsigned int blob_len;
+>  	struct tpm_buf buf;
+>  	u32 hash;
+> +	u32 flags;
+>  	int i;
+>  	int rc;
+> =20
+> @@ -235,29 +236,30 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  			     TPM_DIGEST_SIZE);
+> =20
+>  	/* sensitive */
+> -	tpm_buf_append_u16(&buf, 4 + TPM_DIGEST_SIZE + payload->key_len + 1);
+> +	tpm_buf_append_u16(&buf, 4 + TPM_DIGEST_SIZE + payload->key_len);
+> =20
+>  	tpm_buf_append_u16(&buf, TPM_DIGEST_SIZE);
+>  	tpm_buf_append(&buf, options->blobauth, TPM_DIGEST_SIZE);
+> -	tpm_buf_append_u16(&buf, payload->key_len + 1);
+> +	tpm_buf_append_u16(&buf, payload->key_len);
+>  	tpm_buf_append(&buf, payload->key, payload->key_len);
+> -	tpm_buf_append_u8(&buf, payload->migratable);
+> =20
+>  	/* public */
+>  	tpm_buf_append_u16(&buf, 14 + options->policydigest_len);
+>  	tpm_buf_append_u16(&buf, TPM_ALG_KEYEDHASH);
+>  	tpm_buf_append_u16(&buf, hash);
+> =20
+> +	/* key properties */
+> +	flags =3D 0;
+> +	flags |=3D options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
+> +	flags |=3D payload->migratable ? (TPM2_OA_FIXED_TPM |
+> +					TPM2_OA_FIXED_PARENT) : 0;
+> +	tpm_buf_append_u32(&buf, flags);
 > +
->  	rc =3D tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
->  	if (rc)
->  		return rc;
-> @@ -144,8 +288,10 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->  		goto out;
->  	}
+>  	/* policy */
+> -	if (options->policydigest_len) {
+> -		tpm_buf_append_u32(&buf, 0);
+> -		tpm_buf_append_u16(&buf, options->policydigest_len);
+> +	tpm_buf_append_u16(&buf, options->policydigest_len);
+> +	if (options->policydigest_len)
+>  		tpm_buf_append(&buf, options->policydigest,
+>  			       options->policydigest_len);
+> -	} else {
+> -		tpm_buf_append_u32(&buf, TPM2_OA_USER_WITH_AUTH);
+> -		tpm_buf_append_u16(&buf, 0);
+> -	}
 > =20
-> -	memcpy(payload->blob, &buf.data[TPM_HEADER_SIZE + 4], blob_len);
-> -	payload->blob_len =3D blob_len;
-> +	payload->blob_len =3D
-> +		tpm2_key_encode(payload, options,
-> +				&buf.data[TPM_HEADER_SIZE + 4],
-> +				blob_len);
-> =20
->  out:
->  	tpm_buf_destroy(&buf);
-> @@ -156,6 +302,8 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->  		else
->  			rc =3D -EPERM;
->  	}
-> +	if (payload->blob_len < 0)
-> +		return payload->blob_len;
-> =20
->  	return rc;
->  }
-> @@ -182,13 +330,23 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+>  	/* public parameters */
+>  	tpm_buf_append_u16(&buf, TPM_ALG_NULL);
+> @@ -330,13 +332,16 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
 >  	unsigned int private_len;
 >  	unsigned int public_len;
 >  	unsigned int blob_len;
-> +	u8 *blob;
+> -	u8 *blob;
+> +	u8 *blob, *pub;
 >  	int rc;
+> +	u32 attrs;
 > =20
-> -	private_len =3D be16_to_cpup((__be16 *) &payload->blob[0]);
-> +	rc =3D tpm2_key_decode(payload, options, &blob);
-> +	if (rc)
-> +		/* old form */
-> +		blob =3D payload->blob;
-> +
-> +	/* new format carries keyhandle but old format doesn't */
-> +	if (!options->keyhandle)
-> +		return -EINVAL;
-> +
-> +	private_len =3D be16_to_cpup((__be16 *) &blob[0]);
->  	if (private_len > (payload->blob_len - 2))
+>  	rc =3D tpm2_key_decode(payload, options, &blob);
+> -	if (rc)
+> +	if (rc) {
+>  		/* old form */
+>  		blob =3D payload->blob;
+> +		payload->old_format =3D 1;
+> +	}
+> =20
+>  	/* new format carries keyhandle but old format doesn't */
+>  	if (!options->keyhandle)
+> @@ -347,6 +352,16 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
 >  		return -E2BIG;
 > =20
-> -	public_len =3D be16_to_cpup((__be16 *) &payload->blob[2 + private_len])=
-;
-> +	public_len =3D be16_to_cpup((__be16 *) &blob[2 + private_len]);
+>  	public_len =3D be16_to_cpup((__be16 *) &blob[2 + private_len]);
+> +
+> +	pub =3D blob + 2 + private_len + 2;
+> +	/* key attributes are always at offset 4 */
+> +	attrs =3D get_unaligned_be32(pub + 4);
+
+
+At this point I don't believe you've checked yet that payload->blob_len=20
+is sufficient to know that these bytes exist.
+
+I think you're reading 'private_len' from non-existent bytes too, if
+payload->blob_len is zero or one? Which I think was there before you
+started, but you touched it last...
+
+
+> +	if ((attrs & (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT)) =3D=3D
+> +	    (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT))
+> +		payload->migratable =3D 0;
+> +	else
+> +		payload->migratable =3D 1;
+> +
 >  	blob_len =3D private_len + public_len + 4;
 >  	if (blob_len > payload->blob_len)
 >  		return -E2BIG;
-> @@ -204,7 +362,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
->  			     options->keyauth /* hmac */,
->  			     TPM_DIGEST_SIZE);
+> @@ -427,7 +442,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+>  	if (!rc) {
+>  		data_len =3D be16_to_cpup(
+>  			(__be16 *) &buf.data[TPM_HEADER_SIZE + 4]);
+> -		if (data_len < MIN_KEY_SIZE ||  data_len > MAX_KEY_SIZE + 1) {
+> +		if (data_len < MIN_KEY_SIZE ||  data_len > MAX_KEY_SIZE) {
+>  			rc =3D -EFAULT;
+>  			goto out;
+>  		}
+> @@ -438,9 +453,19 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+>  		}
+>  		data =3D &buf.data[TPM_HEADER_SIZE + 6];
 > =20
-> -	tpm_buf_append(&buf, payload->blob, blob_len);
-> +	tpm_buf_append(&buf, blob, blob_len);
-> =20
->  	if (buf.flags & TPM_BUF_OVERFLOW) {
->  		rc =3D -E2BIG;
-> @@ -217,6 +375,8 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
->  			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
+> -		memcpy(payload->key, data, data_len - 1);
+> -		payload->key_len =3D data_len - 1;
+> -		payload->migratable =3D data[data_len - 1];
+> +		if (payload->old_format) {
+> +			/* migratable flag is at the end of the key */
+> +			memcpy(payload->key, data, data_len - 1);
+> +			payload->key_len =3D data_len - 1;
+> +			payload->migratable =3D data[data_len - 1];
+> +		} else {
+> +			/*
+> +			 * migratable flag already collected from key
+> +			 * attributes
+> +			 */
+> +			memcpy(payload->key, data, data_len);
+> +			payload->key_len =3D data_len;
+> +		}
+>  	}
 > =20
 >  out:
-> +	if (blob !=3D payload->blob)
-> +		kfree(blob);
->  	tpm_buf_destroy(&buf);
-> =20
->  	if (rc > 0)
 
 
---=-jOQsVIbnyjHJ35ZY96La
+--=-szUFQSGF2y696U7mB2xx
 Content-Type: application/x-pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -492,20 +320,20 @@ BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
 BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
 ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
 ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkx
-MjA5MTAwNDQ1WjAvBgkqhkiG9w0BCQQxIgQgE8C0U4D52gDJ5q6U3wbFxotmZzGAsQain3Cm9lne
-qKcwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+MjA5MTAwOTQzWjAvBgkqhkiG9w0BCQQxIgQgMj5MGyz5DQNDBikQ9lwD4CYBrNDPR0BahBp/4KlE
+/ZMwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
 TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
 PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
 aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
 A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
 bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBAFlhO9asWqINPl5hHxOUM5/srIa2SBwL1PuZgp6LFh0oDgoQ6JRuvOyPZz2xRPyM
-0Lqw+Bm53X717LIvmouTBWBxP4bS3UFQyGgoi3+QDIgJwwV8NxDFF9WC6eJLaFncyPr7xi+9eDxx
-GixI3bTIHSG8n3gLw+PV8v4ptw3jgc48nYIhKAhf1n2xj3PnGXbtudqcY2t4K3pQh2aWVl2jU15G
-dSpc0I5L+Qz5QxF8mF78EKjaIoFYibH6ZrEdOCR/eqv3f80LhQpXrvvRWa0kPxSldNOUCxXkpQeU
-fOP5eUylmTJhZUfXe3nE3xdrt8niOkRjZZwB+xSYSdQ4cOtVOxcAAAAAAAA=
+DQEBAQUABIIBABaygqjpkz2ZppDaohQYw3EKLWFGy5nL7dkAvWfEbALVHq6/0bddrArE8Ko2bS/h
+fYXA7v3mEesJlfIqQv85dR8KyIx6DA1W0mOvmXKas3koH9Xyo8Mf2fAiBohULzKel7OwrR/hPR8T
+JvOjPo3cDeEKMShTX9Brz8Pf6rGjU2V7N7wbGWF+vFM7Uank5feWq5EcAmNXglapUJ5yHuDN1HwC
+FRs+Z/dwGlKkzl55ebr4nqH7P2nN/6xKvdcmNGVd1EJVu1ECUOwiG6SJY+Zf2tye6n/4v5brlJHi
+0sa1T0rt59BYvY+XLyMzZXE3j30R+bEdA/AwTUqHl5q6VQeYkTcAAAAAAAA=
 
 
---=-jOQsVIbnyjHJ35ZY96La--
+--=-szUFQSGF2y696U7mB2xx--
 
