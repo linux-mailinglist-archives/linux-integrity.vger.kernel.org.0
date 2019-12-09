@@ -2,45 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7151168B3
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 09:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED914116A7E
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 11:04:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727044AbfLIIzs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Dec 2019 03:55:48 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:56770 "EHLO
+        id S1727249AbfLIKEy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Dec 2019 05:04:54 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:57232 "EHLO
         merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726377AbfLIIzs (ORCPT
+        with ESMTP id S1727060AbfLIKEy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Dec 2019 03:55:48 -0500
+        Mon, 9 Dec 2019 05:04:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=merlin.20170209; h=Mime-Version:Content-Type:References:
         In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=4MOS6QrGq26bUmpcHg27UpSMk2XjE+sa3RxmC/yoSnI=; b=Glmm5PawG+RO98l/MuXecKk+e
-        QhYfifPN73lzwhKNJWHfrKq38jZEEmQFt1GCh3Eawx6y/G2cVi3jEyVCHGBhDCtPjAb6piPAkpAP9
-        WbgPZc5lwojYN4LxkZrw+ZgvpwjDMbNPM3GDmsciKBoxTucg6aRmBTfl+sdslNyTcub7sS351ZESo
-        2dgMgSJKb5kueM/o2m+UCeYQwnrwQLwjT/awP+IZddDk6EC9EeLcPm12s+v7uonnvmQw8Nsl/UmkF
-        Z+Jq/cSq6kEFTk15EurvzhzB/bOZz3T86Jl1jWPiDkXPW3lr8NwrMq9xJdY7qiM0FlUv/11+/l5r7
-        sWNHdKBGg==;
+         bh=SMuiV3/yROalRziGR2DntMNkUKqi5eUF3k8CCj+Nfe8=; b=aBvW6s/fCFUVKDu1Xic3fwtk6
+        y4grlL5MO/miAa6oxvDXuVwFpPBfodDUuvoyiJQ37j2a+p5Njp3uKp/GLh36/Lt5nfaFhSajEKNUS
+        jvmjdMI+f7Bg58dNg0hoJCN8F0gMB8Om6CO8AgN4e8FMMy7jq+sy9EcekPNu8IC1rYO/jqdgV48gv
+        vF8RYsiWlsIpf87IvvX/kXZT1sckEbfkPXuEQnAg9WcJLlvWemMzyGKAgd0QFLNRCCvcJ2FNli+9d
+        G/+lWEg9PavwA+keYSyEOADIxxc22VPxLRIijuV/WI3mBIQT3rO56TKEdKVLslAKFIygxrbVll1wB
+        +g5+IivsA==;
 Received: from 54-240-197-228.amazon.com ([54.240.197.228] helo=freeip.amazon.com)
         by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ieEpT-0005zf-KI; Mon, 09 Dec 2019 08:55:43 +0000
-Message-ID: <194d8ba601b9ecb43e812445729c6270e9f32162.camel@infradead.org>
-Subject: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS for TPM keys
+        id 1ieFuK-0006vz-Rb; Mon, 09 Dec 2019 10:04:49 +0000
+Message-ID: <3b035027b934eb253143dca66ebae4356b386efe.camel@infradead.org>
+Subject: Re: [PATCH 4/8] security: keys: trusted: use ASN.1 tpm2 key format
+ for the blobs
 From:   David Woodhouse <dwmw2@infradead.org>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, monty.wiseman@ge.com
+        linux-integrity@vger.kernel.org,
+        David Howells <dhowells@redhat.com>
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Date:   Mon, 09 Dec 2019 08:55:40 +0000
-In-Reply-To: <1575781746.14069.11.camel@HansenPartnership.com>
+Date:   Mon, 09 Dec 2019 10:04:45 +0000
+In-Reply-To: <1575781831.14069.13.camel@HansenPartnership.com>
 References: <1575781600.14069.8.camel@HansenPartnership.com>
-         <1575781746.14069.11.camel@HansenPartnership.com>
+         <1575781831.14069.13.camel@HansenPartnership.com>
 Content-Type: multipart/signed; micalg="sha-256";
         protocol="application/x-pkcs7-signature";
-        boundary="=-B0ADI04lvrP7icvxF06E"
+        boundary="=-jOQsVIbnyjHJ35ZY96La"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
 Mime-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by merlin.infradead.org. See http://www.infradead.org/rpr.html
@@ -50,64 +52,364 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---=-B0ADI04lvrP7icvxF06E
+--=-jOQsVIbnyjHJ35ZY96La
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, 2019-12-07 at 21:09 -0800, James Bottomley wrote:
-> The TCG has defined an OID prefix "2.23.133.10.1" for the various TPM
-> key uses.  We've defined three of the available numbers:
->=20
-> 2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key (Usually
-> 		RSA2048 or Elliptic Curve) which can be imported by a
-> 		TPM2_Load() operation.
->=20
-> 2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key (Usually
-> 		RSA2048 or Elliptic Curve) which can be imported by a
-> 		TPM2_Import() operation.
->=20
-> Both loadable and importable keys are specific to a given TPM, the
-> difference is that a loadable key is wrapped with the symmetric
-> secret, so must have been created by the TPM itself.  An importable
-> key is wrapped with a DH shared secret, and may be created without
-> access to the TPM provided you know the public part of the parent key.
->=20
-> 2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to 128
-> 		bytes) which is sealed by the TPM.  It usually
-> 		represents a symmetric key and must be unsealed before
-> 		use.
+On Sat, 2019-12-07 at 21:10 -0800, James Bottomley wrote:
+> Modify the tpm2 key format blob output to export and import in the
+> ASN.1 form for tpm2 sealed object keys.  For compatibility with prior
+> trusted keys, the importer will also accept two tpm2b quantities
+> representing the public and private parts of the key.  However, the
+> export via keyctl pipe will only output the ASN.1 format.
 
-Do we still not have an official reference for these that you can
-provide in the commit or the file itself?
+You still have a tpm2_key_encode() function which spits out the raw
+private/public blobs each prefixed with a length word. What's that
+still used for?
 
-It would be very nice to have something more than a verbal assurance
-that they're in Monty's spreadsheet.
+> The benefit of the ASN.1 format is that it's a standard
 
+We should probably make that true. Did we even get as far as writing up
+an RFC-style description of the ASN.1?=20
+
+>  and thus the
+> exported key can be used by userspace tools.  The format includes
+> policy specifications, thus it gets us out of having to construct
+> policy handles in userspace and the format includes the parent meaning
+> you don't have to keep passing it in each time.
+>=20
+> This patch only implements basic handling for the ASN.1 format, so
+> keys with passwords but no policy.
+
+... but doesn't bail out with an error when it sees something it
+doesn't yet understand? Including the 'secret' field which is only
+relevant for importable keys, etc.
 
 > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 > ---
->  include/linux/oid_registry.h | 5 +++++
->  1 file changed, 5 insertions(+)
+>  security/keys/trusted-keys/Makefile       |   2 +-
+>  security/keys/trusted-keys/tpm2key.asn1   |  23 ++++
+>  security/keys/trusted-keys/trusted_tpm1.c |   2 +-
+>  security/keys/trusted-keys/trusted_tpm2.c | 170 ++++++++++++++++++++++++=
++++++-
+>  4 files changed, 190 insertions(+), 7 deletions(-)
+>  create mode 100644 security/keys/trusted-keys/tpm2key.asn1
 >=20
-> diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-> index 657d6bf2c064..a4cee888f9b0 100644
-> --- a/include/linux/oid_registry.h
-> +++ b/include/linux/oid_registry.h
-> @@ -107,6 +107,11 @@ enum OID {
->  	OID_gostTC26Sign512B,		/* 1.2.643.7.1.2.1.2.2 */
->  	OID_gostTC26Sign512C,		/* 1.2.643.7.1.2.1.2.3 */
+> diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-=
+keys/Makefile
+> index 7b73cebbb378..e0198641eff2 100644
+> --- a/security/keys/trusted-keys/Makefile
+> +++ b/security/keys/trusted-keys/Makefile
+> @@ -5,4 +5,4 @@
 > =20
-> +	/* TCG defined OIDS for TPM based keys */
-> +	OID_TPMLoadableKey,		/* 2.23.133.10.1.3 */
-> +	OID_TPMImporableKey,		/* 2.23.133.10.1.4 */
-> +	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
+>  obj-$(CONFIG_TRUSTED_KEYS) +=3D trusted.o
+>  trusted-y +=3D trusted_tpm1.o
+> -trusted-y +=3D trusted_tpm2.o
+> +trusted-y +=3D trusted_tpm2.o tpm2key.asn1.o
+> diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trus=
+ted-keys/tpm2key.asn1
+> new file mode 100644
+> index 000000000000..1851b7c80f08
+> --- /dev/null
+> +++ b/security/keys/trusted-keys/tpm2key.asn1
+> @@ -0,0 +1,23 @@
+> +---
+> +--- Note: This isn't quite the definition in the standard
+> +---       However, the Linux asn.1 parser doesn't understand
+> +---       [2] EXPLICIT SEQUENCE OF OPTIONAL
+> +---       So there's an extra intermediate TPMPolicySequence
+> +---       definition to work around this
+
+At the very least we should prod David with a pointy stick on that
+topic, rather than quietly working around it.
+
+
 > +
->  	OID__NR
+> +TPMKey ::=3D SEQUENCE {
+> +	type		OBJECT IDENTIFIER ({tpmkey_type}),
+> +	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
+> +	policy		[1] EXPLICIT TPMPolicySequence OPTIONAL,
+> +	secret		[2] EXPLICIT OCTET STRING OPTIONAL,
+> +	parent		INTEGER ({tpmkey_parent}),
+> +	pubkey		OCTET STRING ({tpmkey_pub}),
+> +	privkey		OCTET STRING ({tpmkey_priv})
+> +	}
+> +
+> +TPMPolicySequence ::=3D SEQUENCE OF TPMPolicy
+> +
+> +TPMPolicy ::=3D SEQUENCE {
+> +	commandCode		[0] EXPLICIT INTEGER,
+> +	commandPolicy		[1] EXPLICIT OCTET STRING
+> +	}
+> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/tr=
+usted-keys/trusted_tpm1.c
+> index d2c5ec1e040b..d744a0d1cb89 100644
+> --- a/security/keys/trusted-keys/trusted_tpm1.c
+> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+> @@ -991,7 +991,7 @@ static int trusted_instantiate(struct key *key,
+>  		goto out;
+>  	}
+> =20
+> -	if (!options->keyhandle) {
+> +	if (!options->keyhandle && !tpm2) {
+>  		ret =3D -EINVAL;
+>  		goto out;
+>  	}
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/tr=
+usted-keys/trusted_tpm2.c
+> index 08ec7f48f01d..4efc7b64d1cd 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -4,6 +4,8 @@
+>   * Copyright (C) 2014 Intel Corporation
+>   */
+> =20
+> +#include <linux/asn1_encoder.h>
+> +#include <linux/oid_registry.h>
+>  #include <linux/string.h>
+>  #include <linux/err.h>
+>  #include <linux/tpm.h>
+> @@ -12,6 +14,10 @@
+>  #include <keys/trusted-type.h>
+>  #include <keys/trusted_tpm.h>
+> =20
+> +#include <asm/unaligned.h>
+> +
+> +#include "tpm2key.asn1.h"
+> +
+>  static struct tpm2_hash tpm2_hash_map[] =3D {
+>  	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+>  	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+> @@ -20,6 +26,141 @@ static struct tpm2_hash tpm2_hash_map[] =3D {
+>  	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
 >  };
 > =20
+> +static u32 tpm2key_oid[] =3D { 2,23,133,10,1,5 };
+> +
+> +static int tpm2_key_encode(struct trusted_key_payload *payload,
+> +			   struct trusted_key_options *options,
+> +			   u8 *src, u32 len)
+> +{
+> +	u8 *scratch =3D kmalloc(PAGE_SIZE, GFP_KERNEL);
+> +	u8 *work =3D scratch, *work1;
+> +	u8 *priv, *pub;
+> +	u16 priv_len, pub_len;
+> +
+> +	priv_len =3D get_unaligned_be16(src);
+> +	src +=3D 2;
+> +	priv =3D src;
+> +	src +=3D priv_len;
+> +	pub_len =3D get_unaligned_be16(src);
+> +	src +=3D 2;
+> +	pub =3D src;
+> +
+> +	if (!scratch)
+> +		return -ENOMEM;
+> +
+> +	asn1_encode_oid(&work, tpm2key_oid, asn1_oid_len(tpm2key_oid));
+> +	if (options->blobauth[0] =3D=3D 0) {
+> +		unsigned char bool[3], *w =3D bool;
+> +		/* tag 0 is emptyAuth */
+> +		asn1_encode_boolean(&w, true);
+> +		asn1_encode_tag(&work, 0, bool, w - bool);
+> +	}
+> +	asn1_encode_integer(&work, options->keyhandle);
+> +	asn1_encode_octet_string(&work, pub, pub_len);
+> +	asn1_encode_octet_string(&work, priv, priv_len);
+> +
+> +	work1 =3D payload->blob;
+> +	asn1_encode_sequence(&work1, scratch, work - scratch);
+> +
+> +	return work1 - payload->blob;
+> +}
+
+I still don't like the lack of overflow protection here, one layer up
+from the underlying encoding APIs I already commented on.
 
 
---=-B0ADI04lvrP7icvxF06E
+> +struct tpm2key_context {
+> +	u32 parent;
+> +	const u8 *pub;
+> +	u32 pub_len;
+> +	const u8 *priv;
+> +	u32 priv_len;
+> +};
+> +
+> +static int tpm2_key_decode(struct trusted_key_payload *payload,
+> +			   struct trusted_key_options *options,
+> +			   u8 **buf)
+> +{
+> +	int ret;
+> +	struct tpm2key_context ctx;
+> +	u8 *blob;
+> +
+> +	ret =3D asn1_ber_decoder(&tpm2key_decoder, &ctx, payload->blob,
+> +			       payload->blob_len);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
+> +		return -EINVAL;
+> +
+> +	blob =3D kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
+> +	if (!blob)
+> +		return -ENOMEM;
+> +
+> +	*buf =3D blob;
+> +	options->keyhandle =3D ctx.parent;
+> +	put_unaligned_be16(ctx.priv_len, blob);
+> +	blob +=3D 2;
+> +	memcpy(blob, ctx.priv, ctx.priv_len);
+> +	blob +=3D ctx.priv_len;
+> +	put_unaligned_be16(ctx.pub_len, blob);
+> +	blob +=3D 2;
+> +	memcpy(blob, ctx.pub, ctx.pub_len);
+>=20
+
+Hm, do we really have to create this legacy form here and pass it
+around? Can't we change whatever consumes this?
+
+> +	return 0;
+> +}
+> +
+> +int tpmkey_parent(void *context, size_t hdrlen,
+> +		  unsigned char tag,
+> +		  const void *value, size_t vlen)
+> +{
+> +	struct tpm2key_context *ctx =3D context;
+> +	const u8 *v =3D value;
+> +	int i;
+> +
+> +	ctx->parent =3D 0;
+> +	for (i =3D 0; i < vlen; i++) {
+> +		ctx->parent <<=3D 8;
+> +		ctx->parent |=3D v[i];
+> +	}
+> +	return 0;
+> +}
+> +
+> +int tpmkey_type(void *context, size_t hdrlen,
+> +		unsigned char tag,
+> +		const void *value, size_t vlen)
+> +{
+> +	enum OID oid =3D look_up_OID(value, vlen);
+> +
+> +	if (oid !=3D OID_TPMSealedData) {
+> +		char buffer[50];
+> +
+> +		sprint_oid(value, vlen, buffer, sizeof(buffer));
+> +		pr_debug("OID is \"%s\" which is not TPMSealedData\n",
+> +			 buffer);
+> +		return -EINVAL;
+> +	}
+> +	return 0;
+> +}
+> +
+> +int tpmkey_pub(void *context, size_t hdrlen,
+> +	       unsigned char tag,
+> +	       const void *value, size_t vlen)
+> +{
+> +	struct tpm2key_context *ctx =3D context;
+> +
+> +	ctx->pub =3D value;
+> +	ctx->pub_len =3D vlen;
+> +	return 0;
+> +}
+> +
+> +int tpmkey_priv(void *context, size_t hdrlen,
+> +		unsigned char tag,
+> +		const void *value, size_t vlen)
+> +{
+> +	struct tpm2key_context *ctx =3D context;
+> +
+> +	ctx->priv =3D value;
+> +	ctx->priv_len =3D vlen;
+> +	return 0;
+> +}
+> +
+>  /**
+>   * tpm_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+>   *
+> @@ -79,6 +220,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  	if (i =3D=3D ARRAY_SIZE(tpm2_hash_map))
+>  		return -EINVAL;
+> =20
+> +	if (!options->keyhandle)
+> +		return -EINVAL;
+> +
+>  	rc =3D tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
+>  	if (rc)
+>  		return rc;
+> @@ -144,8 +288,10 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  		goto out;
+>  	}
+> =20
+> -	memcpy(payload->blob, &buf.data[TPM_HEADER_SIZE + 4], blob_len);
+> -	payload->blob_len =3D blob_len;
+> +	payload->blob_len =3D
+> +		tpm2_key_encode(payload, options,
+> +				&buf.data[TPM_HEADER_SIZE + 4],
+> +				blob_len);
+> =20
+>  out:
+>  	tpm_buf_destroy(&buf);
+> @@ -156,6 +302,8 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  		else
+>  			rc =3D -EPERM;
+>  	}
+> +	if (payload->blob_len < 0)
+> +		return payload->blob_len;
+> =20
+>  	return rc;
+>  }
+> @@ -182,13 +330,23 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+>  	unsigned int private_len;
+>  	unsigned int public_len;
+>  	unsigned int blob_len;
+> +	u8 *blob;
+>  	int rc;
+> =20
+> -	private_len =3D be16_to_cpup((__be16 *) &payload->blob[0]);
+> +	rc =3D tpm2_key_decode(payload, options, &blob);
+> +	if (rc)
+> +		/* old form */
+> +		blob =3D payload->blob;
+> +
+> +	/* new format carries keyhandle but old format doesn't */
+> +	if (!options->keyhandle)
+> +		return -EINVAL;
+> +
+> +	private_len =3D be16_to_cpup((__be16 *) &blob[0]);
+>  	if (private_len > (payload->blob_len - 2))
+>  		return -E2BIG;
+> =20
+> -	public_len =3D be16_to_cpup((__be16 *) &payload->blob[2 + private_len])=
+;
+> +	public_len =3D be16_to_cpup((__be16 *) &blob[2 + private_len]);
+>  	blob_len =3D private_len + public_len + 4;
+>  	if (blob_len > payload->blob_len)
+>  		return -E2BIG;
+> @@ -204,7 +362,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+>  			     options->keyauth /* hmac */,
+>  			     TPM_DIGEST_SIZE);
+> =20
+> -	tpm_buf_append(&buf, payload->blob, blob_len);
+> +	tpm_buf_append(&buf, blob, blob_len);
+> =20
+>  	if (buf.flags & TPM_BUF_OVERFLOW) {
+>  		rc =3D -E2BIG;
+> @@ -217,6 +375,8 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+>  			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
+> =20
+>  out:
+> +	if (blob !=3D payload->blob)
+> +		kfree(blob);
+>  	tpm_buf_destroy(&buf);
+> =20
+>  	if (rc > 0)
+
+
+--=-jOQsVIbnyjHJ35ZY96La
 Content-Type: application/x-pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -190,20 +492,20 @@ BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
 BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
 ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
 ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkx
-MjA5MDg1NTQwWjAvBgkqhkiG9w0BCQQxIgQgBfrM5opmcd0NJCLlgUQDWX+CUhvSuLcNZbpVxVDN
-3Igwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+MjA5MTAwNDQ1WjAvBgkqhkiG9w0BCQQxIgQgE8C0U4D52gDJ5q6U3wbFxotmZzGAsQain3Cm9lne
+qKcwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
 TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
 PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
 aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
 A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
 bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBAI6tGzRE1Hxh47/ZNSnV4LKKMRj8e9PM58XnZ70goqIblDDvSgYPxAdWtmC4BJAZ
-jTY2tKbCFYRcbD10vtsRND/Lq3Qbvre8yNaGEChXMGRL9/B6WqyPNzKvAMytW78LsdyXHtzQLdSR
-0ekNZaUsHMDgYgVn0YofP91dkgBMjsU2NW3TDva8NJwjhQTzGibh9i8C1V5bzRuR65XCtIyEg0Fl
-UnvXlLf2RCMQevRXuZ21ptOW1E92tYq+8/QnpT3dfmc/hECKv0UsigzgvDsv6tq53e0kYI1wc6gv
-Ouv5zCMQVnwqdKBFXCFqN3LUnrJkKY825+qKA7ROu1phYm97OokAAAAAAAA=
+DQEBAQUABIIBAFlhO9asWqINPl5hHxOUM5/srIa2SBwL1PuZgp6LFh0oDgoQ6JRuvOyPZz2xRPyM
+0Lqw+Bm53X717LIvmouTBWBxP4bS3UFQyGgoi3+QDIgJwwV8NxDFF9WC6eJLaFncyPr7xi+9eDxx
+GixI3bTIHSG8n3gLw+PV8v4ptw3jgc48nYIhKAhf1n2xj3PnGXbtudqcY2t4K3pQh2aWVl2jU15G
+dSpc0I5L+Qz5QxF8mF78EKjaIoFYibH6ZrEdOCR/eqv3f80LhQpXrvvRWa0kPxSldNOUCxXkpQeU
+fOP5eUylmTJhZUfXe3nE3xdrt8niOkRjZZwB+xSYSdQ4cOtVOxcAAAAAAAA=
 
 
---=-B0ADI04lvrP7icvxF06E--
+--=-jOQsVIbnyjHJ35ZY96La--
 
