@@ -2,41 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E298117656
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 20:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76E7117633
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 20:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfLITwX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Dec 2019 14:52:23 -0500
-Received: from mga14.intel.com ([192.55.52.115]:50945 "EHLO mga14.intel.com"
+        id S1726495AbfLITrY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Dec 2019 14:47:24 -0500
+Received: from mga04.intel.com ([192.55.52.120]:48858 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726342AbfLITwX (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Dec 2019 14:52:23 -0500
+        id S1726342AbfLITrY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 9 Dec 2019 14:47:24 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Dec 2019 11:42:53 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Dec 2019 11:47:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,296,1571727600"; 
-   d="scan'208";a="215198322"
+   d="scan'208";a="215199721"
 Received: from nshalmon-mobl.ger.corp.intel.com (HELO localhost) ([10.252.8.146])
-  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2019 11:42:50 -0800
-Date:   Mon, 9 Dec 2019 21:42:48 +0200
+  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2019 11:47:17 -0800
+Date:   Mon, 9 Dec 2019 21:47:15 +0200
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 0/2] Revert patches fixing probing of interrupts
-Message-ID: <20191209194248.GC19243@linux.intel.com>
-References: <20191126131753.3424363-1-stefanb@linux.vnet.ibm.com>
- <20191129223418.GA15726@linux.intel.com>
- <6f6f60a2-3b55-e76d-c11a-4677fcb72c16@linux.ibm.com>
- <20191202185520.57w2h3dgs5q7lhob@cantor>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     "Zhao, Shirley" <shirley.zhao@intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        'Mauro Carvalho Chehab' <mchehab+samsung@kernel.org>,
+        "Zhu, Bing" <bing.zhu@intel.com>,
+        "Chen, Luhai" <luhai.chen@intel.com>
+Subject: Re: One question about trusted key of keyring in Linux kernel.
+Message-ID: <20191209194715.GD19243@linux.intel.com>
+References: <A888B25CD99C1141B7C254171A953E8E49096521@shsmsx102.ccr.corp.intel.com>
+ <1575057916.6220.7.camel@linux.ibm.com>
+ <A888B25CD99C1141B7C254171A953E8E4909BA3B@shsmsx102.ccr.corp.intel.com>
+ <1575260220.4080.17.camel@linux.ibm.com>
+ <A888B25CD99C1141B7C254171A953E8E4909D360@shsmsx102.ccr.corp.intel.com>
+ <1575267453.4080.26.camel@linux.ibm.com>
+ <A888B25CD99C1141B7C254171A953E8E4909E381@shsmsx102.ccr.corp.intel.com>
+ <1575269075.4080.31.camel@linux.ibm.com>
+ <A888B25CD99C1141B7C254171A953E8E4909E399@shsmsx102.ccr.corp.intel.com>
+ <1575312932.24227.13.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191202185520.57w2h3dgs5q7lhob@cantor>
+In-Reply-To: <1575312932.24227.13.camel@linux.ibm.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -44,32 +57,16 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Dec 02, 2019 at 11:55:20AM -0700, Jerry Snitselaar wrote:
-> On Sun Dec 01 19, Stefan Berger wrote:
-> > On 11/29/19 5:37 PM, Jarkko Sakkinen wrote:
-> > > On Tue, Nov 26, 2019 at 08:17:51AM -0500, Stefan Berger wrote:
-> > > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > > 
-> > > > Revert the patches that were fixing the probing of interrupts due
-> > > > to reports of interrupt stroms on some systems
-> > > Can you explain how reverting is going to fix the issue?
-> > 
-> > 
-> > The reverts fix 'the interrupt storm issue' that they are causing on
-> > some systems but don't fix the issue with the interrupt mode not being
-> > used. I was hoping Jerry would get access to a system faster but this
-> > didn't seem to be the case. So sending these patches seemed the better
-> > solution than leaving 5.4.x with the problem but going back to when it
-> > worked 'better.'
-> > 
-> 
-> I finally heard back from IT support, and unfortunately they don't
-> have any T490s systems to give out on temp loan. So I can only send
-> patched kernels to the end user that had the problem.
+On Mon, Dec 02, 2019 at 10:55:32AM -0800, James Bottomley wrote:
+> blob but it looks like we need to fix the API.  I suppose the good news
+> is given this failure that we have the opportunity to rewrite the API
+> since no-one else can have used it for anything because of this.  The
 
-At least it is a fact that tpm_chip_stop() is called too early and that
-is destined to cause issues.
+I did successfully run this test when I wrote it 5 years ago:
 
-Should I bake a patch or do you have already something?
+https://github.com/jsakkine-intel/tpm2-scripts/blob/master/keyctl-smoke.sh
+
+Given that there is API a way must be found that backwards compatibility
+is not broken. New format is fine but it must co-exist.
 
 /Jarkko
