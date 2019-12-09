@@ -2,79 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CE8117997
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 23:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA70117B7A
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 00:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbfLIWnc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Dec 2019 17:43:32 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:36022 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726207AbfLIWnb (ORCPT
+        id S1726495AbfLIXdb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Dec 2019 18:33:31 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:42190 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726362AbfLIXdb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Dec 2019 17:43:31 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 011AB8EE112;
-        Mon,  9 Dec 2019 14:43:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1575931411;
-        bh=tI86EOiTxTwFYLwOcFaF7VRk0cDONI7QpU9xwxLbrkQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ejhSM5hAFH8j6FZfjva+MYz3GZoo5Z4BOZMxXPsidcA+60gCdws0p43YVkZjI5LgK
-         z5TA4lqDK+syZjAEe4+XfZ/zwdtqG0Cgi4p9OH34U7TTabb3QDtFWTYvZWp2EPJ1OR
-         9h3DL/3pG3BFsBedaFhecLD10Y14cy5snfbUS+gc=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5Ng0Oy8grPlk; Mon,  9 Dec 2019 14:43:30 -0800 (PST)
-Received: from jarvis.lan (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C5D128EE0FC;
-        Mon,  9 Dec 2019 14:43:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1575931410;
-        bh=tI86EOiTxTwFYLwOcFaF7VRk0cDONI7QpU9xwxLbrkQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=pEXx5gL44K2Bx2aPlI/vvIOGIj0YQcdNR/xFnt0CFkzMe+Canmi/dIVJWj0Vxfv/R
-         2hTSmtMX9xvxJI2ZYGl4V+08rI0RklrnjwWBG6VC4BDYyJaZHs1KEM3mPHyJhzUWzZ
-         AMRAWx1TSq7LWVgLzO/wn1D8Sqf3hlQVewp+UdRs=
-Message-ID: <1575931408.31378.37.camel@HansenPartnership.com>
-Subject: Re: [PATCH 2/8] lib: add asn.1 encoder
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Matthew Garrett <mjg59@google.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Date:   Mon, 09 Dec 2019 14:43:28 -0800
-In-Reply-To: <CACdnJuuFoOd-fCCFRWHF6b59YJpA2XPwKw35TH-PWUDUO96vTw@mail.gmail.com>
-References: <1575781600.14069.8.camel@HansenPartnership.com>
-         <1575781706.14069.10.camel@HansenPartnership.com>
-         <CACdnJuuFoOd-fCCFRWHF6b59YJpA2XPwKw35TH-PWUDUO96vTw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        Mon, 9 Dec 2019 18:33:31 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9A687205D07B;
+        Mon,  9 Dec 2019 15:33:30 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9A687205D07B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1575934410;
+        bh=kWQMpmteAElyhNw3lYY9plKkwcO7W5de84ECeD7ibdA=;
+        h=Subject:From:To:References:Date:In-Reply-To:From;
+        b=RpwA+yt+9++7bNTEaVvDuuS8V2g83vD6cis23VA5Ti/AllHU37K1P7fepozJtbvxJ
+         fqPvbYkSFEnL5nWVYNTLFX2gr2bT8yShGlwBSv9hjalDNYz1x+9C/qADPgcuySmHIP
+         jqm6jPo8+eJPQFE7ksXAUptu4cg3Ck37gg+vaZ1k=
+Subject: Verified the key measurement patches in v5.5-rc1
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+References: <1572492694-6520-1-git-send-email-zohar@linux.ibm.com>
+ <5254346f-4ba7-c820-e127-d46b84f2e6e6@linux.microsoft.com>
+ <1575927416.4557.25.camel@linux.ibm.com>
+ <3322befc-d1b9-41cf-aabf-0259fe3adb2b@linux.microsoft.com>
+Message-ID: <25655efd-df10-5a6c-6a56-51bd187911d2@linux.microsoft.com>
+Date:   Mon, 9 Dec 2019 15:33:26 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
+MIME-Version: 1.0
+In-Reply-To: <3322befc-d1b9-41cf-aabf-0259fe3adb2b@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-12-09 at 14:05 -0800, Matthew Garrett wrote:
-> On Sat, Dec 7, 2019 at 9:08 PM James Bottomley
-> <James.Bottomley@hansenpartnership.com> wrote:
-> > 
-> > We have a need in the TPM trusted keys to return the ASN.1 form of
-> > the TPM key blob so it can be operated on by tools outside of the
-> > kernel. To do that, we have to be able to read and write the key
-> > format.  The current ASN.1 decoder does fine for reading, but we
-> > need pieces of an ASN.1 encoder to return the key blob.
-> 
-> Is there a reason the kernel needs to do this encoding, rather than
-> having something in userland do the translation?
+Hi Mimi,
 
-Well, yes, we'd have to define a format to pass up first and then you'd
-always need an encoder programme to do it.  Given it's fairly simple to
-encode the key format, doing it directly in ASN.1 ... especially as we
-already read ASN.1 keys, seems to be the best for the user.
+>>> Has this change been signed off and merged for the next update of the
+>>> kernel (v5.5)?
+>>
+>> Yes, refer to the linuxppc mailing list archives.
+>>
+>> Mimi
+>>
+>> [1] https://lists.ozlabs.org/pipermail/linuxppc-dev/
+>>
 
-James
+Just wanted to let you know that I applied my "key measurement" patches 
+(that I'd posted last week) in v5.5-rc1 branch and validated the changes.
 
+Verified both the non-deferred and the deferred key processing patches.
+
+Please let me know if you were able to review the changes.
+
+thanks,
+  -lakshmi
