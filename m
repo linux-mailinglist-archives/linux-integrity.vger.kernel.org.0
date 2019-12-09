@@ -2,175 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C728F116899
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 09:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7151168B3
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 09:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbfLIIu4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Dec 2019 03:50:56 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:45276 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726377AbfLIIuz (ORCPT
+        id S1727044AbfLIIzs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Dec 2019 03:55:48 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:56770 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726377AbfLIIzs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Dec 2019 03:50:55 -0500
+        Mon, 9 Dec 2019 03:55:48 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Mime-Version:Content-Type:References:
+        d=infradead.org; s=merlin.20170209; h=Mime-Version:Content-Type:References:
         In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=raDwZdXhm/ocslieiRqQr7D9redw49APKKDGB7Zg8wI=; b=pIqxcd8/sr2wZL/AgRWq2juLk
-        xpEoZaDjLzrEgC+WReMce/FRTSIg6OztbiBBPWQoTDy/hN+el7nxLHdgHIEk/+kQ3TFkPrxc9VF1w
-        AnTmLJh56nsw1ZuUnxWOl4FEVqp51NyJ1wiAqnZpogl3TMtZ3r5JgBheHwj1X9xucz3EAAlppKYs/
-        KaXb3Olqg6UCIirE0U8ChE6P+7CIACW5TYiLepYIVAHXc+575VHbPM8QcyQbCIum4cW3Z2TC7pC14
-        voppPcvTcXhPFif8/orjO3lJPD7gcDA2TbCM5Y8uES4XmT5nrg6/lUbNo28alFrn1YTwiT9R2iebW
-        xq0meKHbA==;
+         bh=4MOS6QrGq26bUmpcHg27UpSMk2XjE+sa3RxmC/yoSnI=; b=Glmm5PawG+RO98l/MuXecKk+e
+        QhYfifPN73lzwhKNJWHfrKq38jZEEmQFt1GCh3Eawx6y/G2cVi3jEyVCHGBhDCtPjAb6piPAkpAP9
+        WbgPZc5lwojYN4LxkZrw+ZgvpwjDMbNPM3GDmsciKBoxTucg6aRmBTfl+sdslNyTcub7sS351ZESo
+        2dgMgSJKb5kueM/o2m+UCeYQwnrwQLwjT/awP+IZddDk6EC9EeLcPm12s+v7uonnvmQw8Nsl/UmkF
+        Z+Jq/cSq6kEFTk15EurvzhzB/bOZz3T86Jl1jWPiDkXPW3lr8NwrMq9xJdY7qiM0FlUv/11+/l5r7
+        sWNHdKBGg==;
 Received: from 54-240-197-228.amazon.com ([54.240.197.228] helo=freeip.amazon.com)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ieEko-0005UU-U4; Mon, 09 Dec 2019 08:50:55 +0000
-Message-ID: <8391d7c97e2897ec7e0ba2a30de272f7a0dd1ec3.camel@infradead.org>
-Subject: Re: [PATCH 2/8] lib: add asn.1 encoder
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ieEpT-0005zf-KI; Mon, 09 Dec 2019 08:55:43 +0000
+Message-ID: <194d8ba601b9ecb43e812445729c6270e9f32162.camel@infradead.org>
+Subject: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS for TPM keys
 From:   David Woodhouse <dwmw2@infradead.org>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org
+        linux-integrity@vger.kernel.org, monty.wiseman@ge.com
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Howells <dhowells@redhat.com>
-Date:   Mon, 09 Dec 2019 08:50:52 +0000
-In-Reply-To: <1575781706.14069.10.camel@HansenPartnership.com>
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Date:   Mon, 09 Dec 2019 08:55:40 +0000
+In-Reply-To: <1575781746.14069.11.camel@HansenPartnership.com>
 References: <1575781600.14069.8.camel@HansenPartnership.com>
-         <1575781706.14069.10.camel@HansenPartnership.com>
+         <1575781746.14069.11.camel@HansenPartnership.com>
 Content-Type: multipart/signed; micalg="sha-256";
         protocol="application/x-pkcs7-signature";
-        boundary="=-3ac79ANoe95FEgd07bCJ"
+        boundary="=-B0ADI04lvrP7icvxF06E"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
 Mime-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by merlin.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---=-3ac79ANoe95FEgd07bCJ
+--=-B0ADI04lvrP7icvxF06E
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, 2019-12-07 at 21:08 -0800, James Bottomley wrote:
-> +/**
-> + * asn1_encode_integer - encode positive integer to ASN.1
-> + * @_data: pointer to the pointer to the data
-> + * @integer: integer to be encoded
-> + *
-> + * This is a simplified encoder: since we know the integer is
-> + * positive we don't have to bother with twos complement and since we
-> + * know the largest integer is a u64, we know the max length is 8.
-> + */
-> +void asn1_encode_integer(unsigned char **_data, u64 integer)
-> +{
-> +	unsigned char *data =3D *_data, *d =3D &data[2];
-> +	int i;
-> +	bool found =3D false;
+On Sat, 2019-12-07 at 21:09 -0800, James Bottomley wrote:
+> The TCG has defined an OID prefix "2.23.133.10.1" for the various TPM
+> key uses.  We've defined three of the available numbers:
+>=20
+> 2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key (Usually
+> 		RSA2048 or Elliptic Curve) which can be imported by a
+> 		TPM2_Load() operation.
+>=20
+> 2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key (Usually
+> 		RSA2048 or Elliptic Curve) which can be imported by a
+> 		TPM2_Import() operation.
+>=20
+> Both loadable and importable keys are specific to a given TPM, the
+> difference is that a loadable key is wrapped with the symmetric
+> secret, so must have been created by the TPM itself.  An importable
+> key is wrapped with a DH shared secret, and may be created without
+> access to the TPM provided you know the public part of the parent key.
+>=20
+> 2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to 128
+> 		bytes) which is sealed by the TPM.  It usually
+> 		represents a symmetric key and must be unsealed before
+> 		use.
+
+Do we still not have an official reference for these that you can
+provide in the commit or the file itself?
+
+It would be very nice to have something more than a verbal assurance
+that they're in Monty's spreadsheet.
+
+
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> ---
+>  include/linux/oid_registry.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
+> index 657d6bf2c064..a4cee888f9b0 100644
+> --- a/include/linux/oid_registry.h
+> +++ b/include/linux/oid_registry.h
+> @@ -107,6 +107,11 @@ enum OID {
+>  	OID_gostTC26Sign512B,		/* 1.2.643.7.1.2.1.2.2 */
+>  	OID_gostTC26Sign512C,		/* 1.2.643.7.1.2.1.2.3 */
+> =20
+> +	/* TCG defined OIDS for TPM based keys */
+> +	OID_TPMLoadableKey,		/* 2.23.133.10.1.3 */
+> +	OID_TPMImporableKey,		/* 2.23.133.10.1.4 */
+> +	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
 > +
-> +	data[0] =3D _tag(UNIV, PRIM, INT);
-> +	if (integer =3D=3D 0) {
-> +		*d++ =3D 0;
-> +		goto out;
-> +	}
-> +	for (i =3D sizeof(integer); i > 0 ; i--) {
-> +		int byte =3D integer >> (8*(i-1));
-> +
-> +		if (!found && byte =3D=3D 0)
-> +			continue;
-> +		found =3D true;
-> +		if (byte & 0x80)
-> +			*d++ =3D 0;
-> +		*d++ =3D byte;
-> +	}
-> + out:
-> +	data[1] =3D d - data - 2;
-> +	*_data =3D d;
-> +}
-
-I'd be a lot happier to see a 'buffer length' argument here. This API is ju=
-st one accidental u64 underflow away from a caller which "knows" its <128 i=
-nteger is only three bytes long, actually taking eleven and overflowing its=
- buffer. Especially since  you are actively encouraging people to create fr=
-agments on the stack and then assemble them into SEQUENCES later (qv=C2=B9)=
-.
-
-Also: is documenting it as taking a 'positive integer' enough? Making
-that explicit in the function name might be more likely to prevent
-future users from assuming it actually encodes an arbitrary INTEGER.
-
-> +static void asn1_encode_definite_length(unsigned char **data, u32 len)
-> +{
-> +	if (len <=3D 0x7f) {
-> +		*((*data)++) =3D len;
-> +		return;
-> +	}
-> +	if (len <=3D 0xff) {
-> +		*((*data)++) =3D 0x81;
-> +		*((*data)++) =3D len & 0xff;
-> +		return;
-> +	}
-> +	if (len <=3D 0xffff) {
-> +		*((*data)++) =3D 0x82;
-> +		*((*data)++) =3D (len >> 8) & 0xff;
-> +		*((*data)++) =3D len & 0xff;
-> +		return;
-> +	}
-> +
-> +	if (WARN(len > 0xffffff, "ASN.1 length can't be > 0xffffff"))
-> +		return;
-> +
-> +	*((*data)++) =3D 0x83;
-> +	*((*data)++) =3D (len >> 16) & 0xff;
-> +	*((*data)++) =3D (len >> 8) & 0xff;
-> +	*((*data)++) =3D len & 0xff;
-> +}
-
-(=C2=B9)
-
-That's nice when you know the length in advance. Less so when you
-don't, because you have to either calculate it first or actually create
-the whole of the content in a separate buffer and copy it around.
-
-It would be useful to permit sequences with indeterminate length. You
-could even return a pointer which allows them to be changed to definite
-length if they are <128 bytes at the end.
-
-I note that later in this series in tpm2_encode_policy() you are
-eschewing your own API for this, and doing just what I said above =E2=80=94
-going back and filling in the length later.
-
-> +/**
-> + * asn1_encode_tag - add a tag for optional or explicit value
-> + * @data: pointer to place tag at
-> + * @tag: tag to be placed
-> + * @string: the data to be tagged
-> + * @len: the length of the data to be tagged
-> + *
-> + * Note this currently only handles short form tags < 31
-> + */
-> +void asn1_encode_tag(unsigned char **data, u32 tag,
-> +		     const unsigned char *string, u32 len)
-> +{
-> +	if (WARN(tag > 30, "ASN.1 tag can't be > 30"))
-> +		return;
-> +
-> +	*((*data)++) =3D _tagn(CONT, CONS, tag);
-> +	asn1_encode_definite_length(data, len);
-> +	memcpy(*data, string, len);
-> +	*data +=3D len;
-> +}
-> +EXPORT_SYMBOL(asn1_encode_tag);
-
-EXPORT_SYMBOL() again when everything else here uses
-EXPORT_SYMBOL_GPL().
+>  	OID__NR
+>  };
+> =20
 
 
-
---=-3ac79ANoe95FEgd07bCJ
+--=-B0ADI04lvrP7icvxF06E
 Content-Type: application/x-pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -253,20 +190,20 @@ BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
 BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
 ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
 ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkx
-MjA5MDg1MDUyWjAvBgkqhkiG9w0BCQQxIgQguyfT8AiiehNzwoEruBEOPV+ZucFy21vm+rlD8qpB
-WJ4wgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+MjA5MDg1NTQwWjAvBgkqhkiG9w0BCQQxIgQgBfrM5opmcd0NJCLlgUQDWX+CUhvSuLcNZbpVxVDN
+3Igwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
 TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
 PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
 aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
 A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
 bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBAIlXQytlbr9qagdi0047HyIsbgqhjbK+TkQXbNYCc8lO3M791aI7yMaA4LrQrKJC
-Ev/Y7jZ/Cn2VYd4obbE80jicXKqYepXVwATU1gnRH5c2Xbe/fJy55NSgrkh+Ja0OyQFsFYP10dKw
-+Q6LEOej+LQVZBxaAECVwRojYOmU7+1dW/FvSCaXMINVqSUefPVu+nFVYtm9QGuSNYgNaRwixK9O
-iG0yr01/lPWFkFmdWXzYvUTsWBwXC+mZKSJ8aea6mL1MerpOVBp0gAZwSIZS5vU2soXAQkwkkP1d
-d/jQ1ryLkSXJDw44KM/9WhdPVBEohbE0yGx4jxGyVjwpZEeWHWQAAAAAAAA=
+DQEBAQUABIIBAI6tGzRE1Hxh47/ZNSnV4LKKMRj8e9PM58XnZ70goqIblDDvSgYPxAdWtmC4BJAZ
+jTY2tKbCFYRcbD10vtsRND/Lq3Qbvre8yNaGEChXMGRL9/B6WqyPNzKvAMytW78LsdyXHtzQLdSR
+0ekNZaUsHMDgYgVn0YofP91dkgBMjsU2NW3TDva8NJwjhQTzGibh9i8C1V5bzRuR65XCtIyEg0Fl
+UnvXlLf2RCMQevRXuZ21ptOW1E92tYq+8/QnpT3dfmc/hECKv0UsigzgvDsv6tq53e0kYI1wc6gv
+Ouv5zCMQVnwqdKBFXCFqN3LUnrJkKY825+qKA7ROu1phYm97OokAAAAAAAA=
 
 
---=-3ac79ANoe95FEgd07bCJ--
+--=-B0ADI04lvrP7icvxF06E--
 
