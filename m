@@ -2,46 +2,46 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F5F116833
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 09:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C728F116899
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Dec 2019 09:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727183AbfLIIbi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Dec 2019 03:31:38 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:56972 "EHLO
+        id S1727047AbfLIIu4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Dec 2019 03:50:56 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:45276 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727044AbfLIIbi (ORCPT
+        with ESMTP id S1726377AbfLIIuz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Dec 2019 03:31:38 -0500
+        Mon, 9 Dec 2019 03:50:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Mime-Version:Content-Type:References:
         In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=WJUa7JIlVzrzcQTc5hNMLLfcBo2LhH5Rdv4Gm3yp2BE=; b=aalj54QhWQMxrc/0AveeHugiq
-        0i6mfinAuyb1YxJlj2LRTNc+3OBZA1FuRIeF2i7KwJlGMmEbx7/gkl2sRfqj80Z1H0HNslv8/VZPi
-        L6qpE0sSLLNX1JG1SNERUzI1RI7ADJ5e3REmxHCnew6JjhuxQ3Nl53mA3kXxOFz4nnEWsmB4rCidt
-        Kjh+kL5R6Zh+tI33iHcF6CzmVuGk9KrV4uZWkoSoWLDxYyPq7Tk+efNB+FI5aVneH5noQBlDsuPEH
-        j0i5YxUW4/aVg4knoLXFIj3StqMueER4xSBZPGSyZgOBE706g8xgCiU6xJLVYB1DEs6sXDEIu3qnK
-        hrzchzPiA==;
+         bh=raDwZdXhm/ocslieiRqQr7D9redw49APKKDGB7Zg8wI=; b=pIqxcd8/sr2wZL/AgRWq2juLk
+        xpEoZaDjLzrEgC+WReMce/FRTSIg6OztbiBBPWQoTDy/hN+el7nxLHdgHIEk/+kQ3TFkPrxc9VF1w
+        AnTmLJh56nsw1ZuUnxWOl4FEVqp51NyJ1wiAqnZpogl3TMtZ3r5JgBheHwj1X9xucz3EAAlppKYs/
+        KaXb3Olqg6UCIirE0U8ChE6P+7CIACW5TYiLepYIVAHXc+575VHbPM8QcyQbCIum4cW3Z2TC7pC14
+        voppPcvTcXhPFif8/orjO3lJPD7gcDA2TbCM5Y8uES4XmT5nrg6/lUbNo28alFrn1YTwiT9R2iebW
+        xq0meKHbA==;
 Received: from 54-240-197-228.amazon.com ([54.240.197.228] helo=freeip.amazon.com)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ieES9-0005EW-Rl; Mon, 09 Dec 2019 08:31:38 +0000
-Message-ID: <89e3c7c531b228673089ad892d5e6390642ced85.camel@infradead.org>
-Subject: Re: [PATCH 1/8] security: keys: trusted: flush the key handle after
- use
+        id 1ieEko-0005UU-U4; Mon, 09 Dec 2019 08:50:55 +0000
+Message-ID: <8391d7c97e2897ec7e0ba2a30de272f7a0dd1ec3.camel@infradead.org>
+Subject: Re: [PATCH 2/8] lib: add asn.1 encoder
 From:   David Woodhouse <dwmw2@infradead.org>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Date:   Mon, 09 Dec 2019 08:31:35 +0000
-In-Reply-To: <1575781659.14069.9.camel@HansenPartnership.com>
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Howells <dhowells@redhat.com>
+Date:   Mon, 09 Dec 2019 08:50:52 +0000
+In-Reply-To: <1575781706.14069.10.camel@HansenPartnership.com>
 References: <1575781600.14069.8.camel@HansenPartnership.com>
-         <1575781659.14069.9.camel@HansenPartnership.com>
+         <1575781706.14069.10.camel@HansenPartnership.com>
 Content-Type: multipart/signed; micalg="sha-256";
         protocol="application/x-pkcs7-signature";
-        boundary="=-YlNkMhfoP1zJwDaiGoI/"
+        boundary="=-3ac79ANoe95FEgd07bCJ"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
 Mime-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
@@ -51,53 +51,126 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---=-YlNkMhfoP1zJwDaiGoI/
+--=-3ac79ANoe95FEgd07bCJ
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, 2019-12-07 at 21:07 -0800, James Bottomley wrote:
-> The trusted keys code currently loads a blob into the TPM and unseals
-> on the handle.  However, it never flushes the handle meaning that
-> volatile contexts build up until the TPM becomes unusable.  Fix this
-> by flushing the handle after the unseal.
->=20
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> ---
->  drivers/char/tpm/tpm.h                    | 1 -
->  drivers/char/tpm/tpm2-cmd.c               | 1 +
->  include/linux/tpm.h                       | 1 +
->  security/keys/trusted-keys/trusted_tpm2.c | 1 +
->  4 files changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index b9e1547be6b5..5620747da0cf 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -218,7 +218,6 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
->  int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
->  		    struct tpm_digest *digests);
->  int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max);
-> -void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
->  ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
->  			u32 *value, const char *desc);
-> =20
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index fdb457704aa7..b87592f4a6c7 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -362,6 +362,7 @@ void tpm2_flush_context(struct tpm_chip *chip, u32 ha=
-ndle)
->  	tpm_transmit_cmd(chip, &buf, 0, "flushing context");
->  	tpm_buf_destroy(&buf);
->  }
-> +EXPORT_SYMBOL(tpm2_flush_context);
+On Sat, 2019-12-07 at 21:08 -0800, James Bottomley wrote:
+> +/**
+> + * asn1_encode_integer - encode positive integer to ASN.1
+> + * @_data: pointer to the pointer to the data
+> + * @integer: integer to be encoded
+> + *
+> + * This is a simplified encoder: since we know the integer is
+> + * positive we don't have to bother with twos complement and since we
+> + * know the largest integer is a u64, we know the max length is 8.
+> + */
+> +void asn1_encode_integer(unsigned char **_data, u64 integer)
+> +{
+> +	unsigned char *data =3D *_data, *d =3D &data[2];
+> +	int i;
+> +	bool found =3D false;
+> +
+> +	data[0] =3D _tag(UNIV, PRIM, INT);
+> +	if (integer =3D=3D 0) {
+> +		*d++ =3D 0;
+> +		goto out;
+> +	}
+> +	for (i =3D sizeof(integer); i > 0 ; i--) {
+> +		int byte =3D integer >> (8*(i-1));
+> +
+> +		if (!found && byte =3D=3D 0)
+> +			continue;
+> +		found =3D true;
+> +		if (byte & 0x80)
+> +			*d++ =3D 0;
+> +		*d++ =3D byte;
+> +	}
+> + out:
+> +	data[1] =3D d - data - 2;
+> +	*_data =3D d;
+> +}
+
+I'd be a lot happier to see a 'buffer length' argument here. This API is ju=
+st one accidental u64 underflow away from a caller which "knows" its <128 i=
+nteger is only three bytes long, actually taking eleven and overflowing its=
+ buffer. Especially since  you are actively encouraging people to create fr=
+agments on the stack and then assemble them into SEQUENCES later (qv=C2=B9)=
+.
+
+Also: is documenting it as taking a 'positive integer' enough? Making
+that explicit in the function name might be more likely to prevent
+future users from assuming it actually encodes an arbitrary INTEGER.
+
+> +static void asn1_encode_definite_length(unsigned char **data, u32 len)
+> +{
+> +	if (len <=3D 0x7f) {
+> +		*((*data)++) =3D len;
+> +		return;
+> +	}
+> +	if (len <=3D 0xff) {
+> +		*((*data)++) =3D 0x81;
+> +		*((*data)++) =3D len & 0xff;
+> +		return;
+> +	}
+> +	if (len <=3D 0xffff) {
+> +		*((*data)++) =3D 0x82;
+> +		*((*data)++) =3D (len >> 8) & 0xff;
+> +		*((*data)++) =3D len & 0xff;
+> +		return;
+> +	}
+> +
+> +	if (WARN(len > 0xffffff, "ASN.1 length can't be > 0xffffff"))
+> +		return;
+> +
+> +	*((*data)++) =3D 0x83;
+> +	*((*data)++) =3D (len >> 16) & 0xff;
+> +	*((*data)++) =3D (len >> 8) & 0xff;
+> +	*((*data)++) =3D len & 0xff;
+> +}
+
+(=C2=B9)
+
+That's nice when you know the length in advance. Less so when you
+don't, because you have to either calculate it first or actually create
+the whole of the content in a separate buffer and copy it around.
+
+It would be useful to permit sequences with indeterminate length. You
+could even return a pointer which allows them to be changed to definite
+length if they are <128 bytes at the end.
+
+I note that later in this series in tpm2_encode_policy() you are
+eschewing your own API for this, and doing just what I said above =E2=80=94
+going back and filling in the length later.
+
+> +/**
+> + * asn1_encode_tag - add a tag for optional or explicit value
+> + * @data: pointer to place tag at
+> + * @tag: tag to be placed
+> + * @string: the data to be tagged
+> + * @len: the length of the data to be tagged
+> + *
+> + * Note this currently only handles short form tags < 31
+> + */
+> +void asn1_encode_tag(unsigned char **data, u32 tag,
+> +		     const unsigned char *string, u32 len)
+> +{
+> +	if (WARN(tag > 30, "ASN.1 tag can't be > 30"))
+> +		return;
+> +
+> +	*((*data)++) =3D _tagn(CONT, CONS, tag);
+> +	asn1_encode_definite_length(data, len);
+> +	memcpy(*data, string, len);
+> +	*data +=3D len;
+> +}
+> +EXPORT_SYMBOL(asn1_encode_tag);
+
+EXPORT_SYMBOL() again when everything else here uses
+EXPORT_SYMBOL_GPL().
 
 
-Everything else is EXPORT_SYMBOL_GPL(). Why EXPORT_SYMBOL() here?
 
-
-
---=-YlNkMhfoP1zJwDaiGoI/
+--=-3ac79ANoe95FEgd07bCJ
 Content-Type: application/x-pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -180,20 +253,20 @@ BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
 BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
 ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
 ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkx
-MjA5MDgzMTM1WjAvBgkqhkiG9w0BCQQxIgQg5XOk8y+tKowjVmI9WkDF8Nq+sACkm5suJKiuT/H1
-BG4wgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+MjA5MDg1MDUyWjAvBgkqhkiG9w0BCQQxIgQguyfT8AiiehNzwoEruBEOPV+ZucFy21vm+rlD8qpB
+WJ4wgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
 TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
 PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
 aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
 A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
 bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBADWJhb5ywP7lnhrDMn9uVxkikrXG9ymLiLDeOROfYLLiA9I1nypwRUGRHUx+GvmW
-0oLUNzEmakv0v8SMhrv+ioCYjoxFISynOiqS28wr3TsIJjlNmHNWqOHeVxyHhm7SS8XhA9JYKWmy
-4eiOE0w/aZ7t3jWpSjVIV+An7WieZQRuVljftnf5IV27x6e0nCsRGP3NySE3vOXbfMToSeXxGAMB
-zV8UTH959nf+yzX/B/pdchUDlcSXHm7uBWm2xZP8SOuLsqmxHUkBZQ1Y62wYe2VXwlTaRpDsQcHW
-NG6PCNEE4j//CFlaggK2bwz3bh5RKr0DjXUcHwvKOl1tXT8j45wAAAAAAAA=
+DQEBAQUABIIBAIlXQytlbr9qagdi0047HyIsbgqhjbK+TkQXbNYCc8lO3M791aI7yMaA4LrQrKJC
+Ev/Y7jZ/Cn2VYd4obbE80jicXKqYepXVwATU1gnRH5c2Xbe/fJy55NSgrkh+Ja0OyQFsFYP10dKw
++Q6LEOej+LQVZBxaAECVwRojYOmU7+1dW/FvSCaXMINVqSUefPVu+nFVYtm9QGuSNYgNaRwixK9O
+iG0yr01/lPWFkFmdWXzYvUTsWBwXC+mZKSJ8aea6mL1MerpOVBp0gAZwSIZS5vU2soXAQkwkkP1d
+d/jQ1ryLkSXJDw44KM/9WhdPVBEohbE0yGx4jxGyVjwpZEeWHWQAAAAAAAA=
 
 
---=-YlNkMhfoP1zJwDaiGoI/--
+--=-3ac79ANoe95FEgd07bCJ--
 
