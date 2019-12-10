@@ -2,126 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0465119E5C
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 23:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69ED7119F4C
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 00:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727256AbfLJWoD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Dec 2019 17:44:03 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37262 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728626AbfLJWoD (ORCPT
+        id S1727024AbfLJXXC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Dec 2019 18:23:02 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:43078 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725999AbfLJXXC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:44:03 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBAMbcgi142550
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Dec 2019 17:44:02 -0500
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2wt2etcvh2-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Dec 2019 17:44:01 -0500
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 10 Dec 2019 22:43:59 -0000
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 10 Dec 2019 22:43:56 -0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBAMhtZX56492178
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Dec 2019 22:43:55 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 15BE8A4057;
-        Tue, 10 Dec 2019 22:43:55 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 05E25A405F;
-        Tue, 10 Dec 2019 22:43:54 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.214.111])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 10 Dec 2019 22:43:53 +0000 (GMT)
-Subject: Re: [PATCH v10 6/6] IMA: Read keyrings= option from the IMA policy
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
+        Tue, 10 Dec 2019 18:23:02 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C81CD20B7187;
+        Tue, 10 Dec 2019 15:23:01 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C81CD20B7187
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1576020181;
+        bh=IwjesaSjIEpWOT7ynG/Xbgg6ZKGL9pgenoKbV2q6g7U=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=AtFIj0pZTW3Hx8baUyJZNgJlKwVCHqk0JgEAfORoB1Ig+7wTL3Z+xEg252xhKXUHn
+         WpKnz8MLoEOt4VMwiw1H/qzFioq46Zk6Rr4kaFBZ+fiPbk7bf2tQp13QHoEvAswMw4
+         sJgAlHh3Wh83SR/ADhT6iy+dEOzCvUXUSaSx5d5s=
+Subject: Re: [PATCH v10 5/6] IMA: Add support to limit measuring keys
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
 Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
         mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
         sashal@kernel.org, jamorris@linux.microsoft.com,
         linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
-Date:   Tue, 10 Dec 2019 17:43:53 -0500
-In-Reply-To: <20191204224131.3384-7-nramas@linux.microsoft.com>
 References: <20191204224131.3384-1-nramas@linux.microsoft.com>
-         <20191204224131.3384-7-nramas@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19121022-0020-0000-0000-0000039654FA
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19121022-0021-0000-0000-000021ED9844
-Message-Id: <1576017833.4579.45.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-10_07:2019-12-10,2019-12-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- mlxlogscore=999 spamscore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 phishscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912100186
+ <20191204224131.3384-6-nramas@linux.microsoft.com>
+ <1576017805.4579.44.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <07c231c9-509e-cd1f-9ea0-bfb20f9a0070@linux.microsoft.com>
+Date:   Tue, 10 Dec 2019 15:23:01 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
+MIME-Version: 1.0
+In-Reply-To: <1576017805.4579.44.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-12-04 at 14:41 -0800, Lakshmi Ramasubramanian wrote:
-> Read "keyrings=" option, if specified in the IMA policy, and store in
-> the list of IMA rules when the configured IMA policy is read.
-> 
-> This patch defines a new policy token enum namely Opt_keyrings
-> and an option flag IMA_KEYRINGS for reading "keyrings=" option
-> from the IMA policy.
-> 
-> Updated ima_parse_rule() to parse "keyrings=" option in the policy.
-> Updated ima_policy_show() to display "keyrings=" option.
-> 
-> The following example illustrates how key measurement can be verified.
-> 
-> Sample "key" measurement rule in the IMA policy:
-> 
-> measure func=KEY_CHECK uid=0 keyrings=.ima|.evm template=ima-buf
-> 
-> Display "key" measurement in the IMA measurement list:
-> 
-> cat /sys/kernel/security/ima/ascii_runtime_measurements
-> 
-> 10 faf3...e702 ima-buf
-> sha256:27c915b8ddb9fae7214cf0a8a7043cc3eeeaa7539bcb136f8427067b5f6c3
-> b7b .ima 308202863082...4aee
-> 
-> Verify "key" measurement data for a key added to ".ima" keyring:
-> 
-> cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements |
-> grep ".ima" | cut -d' ' -f 6 | xxd -r -p |tee ima-cert.der |
-> sha256sum | cut -d' ' -f 1
-> 
+On 12/10/19 2:43 PM, Mimi Zohar wrote:
 
-The dot needs to be quoted, otherwise it matches any character.  I
-would also limit the above command to the first instance (eg. grep -m
-1 "\.ima).
+>> +static bool ima_match_keyring(struct ima_rule_entry *rule,
+>> +			      const char *keyring, const struct cred *cred)
+>> +{
+>> +	char *keyrings, *next_keyring, *keyrings_ptr;
+>> +	bool matched = false;
+>> +
+>> +	/* If "keyrings=" is not specified all keys are measured. */
+> 
+> With the addiitonal "uid" support this isn't necessarily true any
+> more.
+> 
+> Mimi
 
-> The output of the above command should match the sha256 hash
-> in the "key" measurement entry in the IMA measurement list.
+Will move the check for uid ahead of the check for keyrings.
 
-There are multiple hashes in a measurement list record.  Perhaps refer
-to the 2nd hash as the "template hash".
-
-Mimi
+if ((rule->flags & IMA_UID) && !rule->uid_op(cred->uid, rule->uid))
+	return false;
 
 > 
-> The file namely "ima-cert.der" generated by the above command
-> should be a valid x509 certificate (in DER format) and should match
-> the one that was used to import the key to the .ima keyring.
-> The certificate file can be verified using openssl tool.
-> 
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>> +	if (!rule->keyrings)
+>> +		return true;
+>> +
+>> +	if (!keyring)
+>> +		return false;
+>> +
+>> +	if ((rule->flags & IMA_UID) && !rule->uid_op(cred->uid, rule->uid))
+>> +		return false;
+>> +
+
+thanks,
+  -lakshmi
+
 
