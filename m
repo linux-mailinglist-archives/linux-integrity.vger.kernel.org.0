@@ -2,88 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56320118683
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 12:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E1111896A
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 14:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727569AbfLJLiT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Dec 2019 06:38:19 -0500
-Received: from mail-lj1-f173.google.com ([209.85.208.173]:39321 "EHLO
-        mail-lj1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727407AbfLJLiS (ORCPT
+        id S1727295AbfLJNUN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Dec 2019 08:20:13 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:50860 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727211AbfLJNUN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Dec 2019 06:38:18 -0500
-Received: by mail-lj1-f173.google.com with SMTP id e10so19471808ljj.6
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Dec 2019 03:38:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=5LnyDU0KmWguwrS7cDtavRO12NccQSxS6Db4rVS+sao=;
-        b=PwkgHPbRXuq03aUW8McQdQlTKuD2dS7i84KeO1/K7l1DGGFNCVnWxrtCPWdTjTpA/5
-         bQfUAknsaYunJJAicqBUvbSjlh8L0oe9bTWP1uZGfqc5sijnxTTR8RrfsxMEhnr3ccW8
-         HCj1g7brCJztIcJZ3MrPppIihzVv4LiBB9Jg8Om57GQxo64ahbOHf8XtsDy35t22FF6I
-         7bHPXkoxNZH6ixlnjb7x2xhnQz6C/HEuWC/oXtfWhPJF7WJP1X420XyqIw76Ffb5yVOq
-         lihAJwRz+IkWB70im07x7s4AW4NNwNGV8p58v0KgEMXKhOiXPut8B6lrYTjmsmKEwMQg
-         Keyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=5LnyDU0KmWguwrS7cDtavRO12NccQSxS6Db4rVS+sao=;
-        b=IBHQWEwu1hSWfUv9M1UDitk8lBmBU4L+OeMm63vmU+Y8ds4ZUEejR9qYxRG5wsT8BA
-         YrJqv3vHKaNohc0rnBBrzVJrvQdg3WKTYt1FjgUCEW52bsqOYpWAB52lg1h/bedcqILo
-         YvVLmD5tXSQQedBjnRILhBYRaMl90czcEm7kydfJwEAK9FHkMPC3BvHur1KzKtdRM5fl
-         8mYnvWd5Rtnn9nIrGorRdbV9aTneW3MsB+GVz2IXGoK4qHaGBLkpbVXhEaR/+y1tfQ9Q
-         72eeCwyR2DW/ttkTGVpcIVUc1ZrwOGMPtDaZKM0pSt+Xme1yMPwMYmZafluNpJXum5yr
-         cKnA==
-X-Gm-Message-State: APjAAAVxJ+p/obC5T79m91PM7zotspL8HeQYYoVtnQt7menXIrOrfBDQ
-        fzK5mIJiQjjuInEdLUuJn4Dh5qQJnQCrPhPBjX+OkA==
-X-Google-Smtp-Source: APXvYqz23Nxvy0SzghrkQBgRBshb5LZpYFHdXwCUtdTTU3fzb35e8axz1PKi75+Z4Bga0APARd7uzWDWAIedkAQ+jlU=
-X-Received: by 2002:a2e:854c:: with SMTP id u12mr19080933ljj.135.1575977896057;
- Tue, 10 Dec 2019 03:38:16 -0800 (PST)
-MIME-Version: 1.0
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Tue, 10 Dec 2019 13:38:04 +0200
-Message-ID: <CAE=Ncrb-kMDRgALnvXtKukSVLEw81rqxGv6+XXxg487Q_qLKGA@mail.gmail.com>
-Subject: forever growing ima measurement list
-To:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Elaine R Palmer <erpalmer@us.ibm.com>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        David Safford <david.safford@ge.com>,
-        Konsta Karsisto <konsta.karsisto@gmail.com>
+        Tue, 10 Dec 2019 08:20:13 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id AA0DD8EE18E;
+        Tue, 10 Dec 2019 05:20:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1575984012;
+        bh=BJOcl/8ddzmbITs1rLnDhHDvl/+bu60lAtaFfEUGLyk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=t4oc1j6+dJFLt67Lrktn9mJzRogZWSJ3e4hdAHPMHae07ufBV6oMa0QOA11y/VhmO
+         q5HnWwSCm2MTpnD8+B6JiMVuGMZ7C9SRmQ3Pc+keJt2er8VnK7z4ZhH/2/+i/95L1a
+         q9AA3PZipHLU771PzQbBSQ4QPlFrdEg0tOq/9ITY=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9DKuYZdbkwfA; Tue, 10 Dec 2019 05:20:11 -0800 (PST)
+Received: from jarvis.lan (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 283D08EE0F8;
+        Tue, 10 Dec 2019 05:20:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1575984011;
+        bh=BJOcl/8ddzmbITs1rLnDhHDvl/+bu60lAtaFfEUGLyk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=cPJMiHoTy4+KzpvI7IM8ZvkO8b01seGliPrSswZbs2mhIO9tj+P07efUeCkFQLoF+
+         Ob+jmVmVVAnUOeva4Vg6XqibuKPZGCe8Qr0T02yHa6drgdy3HFGsp4PsW/S9IIv4qX
+         3aglJWIDGUXbBsDPKy3mNAEsDCUPs9PFEvQ/e1WY=
+Message-ID: <1575984010.3459.4.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 2/8] lib: add asn.1 encoder
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     David Woodhouse <dwmw2@infradead.org>,
+        linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        keyrings@vger.kernel.org
+Date:   Tue, 10 Dec 2019 05:20:10 -0800
+In-Reply-To: <932257121039494734d97e290abb9159b1f5ca28.camel@infradead.org>
+References: <1575936272.31378.50.camel@HansenPartnership.com>
+         <1575936367.31378.52.camel@HansenPartnership.com>
+         <932257121039494734d97e290abb9159b1f5ca28.camel@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+On Tue, 2019-12-10 at 08:18 +0000, David Woodhouse wrote:
+> On Mon, 2019-12-09 at 16:06 -0800, James Bottomley wrote:
+> > +/**
+> > + * asn1_encode_integer - encode positive integer to ASN.1
+> > + * @_data: pointer to the pointer to the data
+> > + * @integer: integer to be encoded
+> > + * @len: length of buffer
+> > + *
+> > + * This is a simplified encoder: it only currently does
+> > + * positive integers, but it should be simple enough to add the 
+> > + * negative case if a use comes along.
+> > + */
+> > +void asn1_encode_integer(unsigned char **_data, s64 integer, int
+> > len)
+> > +{
+> > +       unsigned char *data = *_data, *d = &data[2];
+> > +       int i;
+> > +       bool found = false;
+> > +
+> > +       if (WARN(integer < 0,
+> > +                "BUG: asn1_encode_integer only supports positive
+> > integers"))
+> > +               return;
+> > +
+> > +       if (WARN(len < 3,
+> > +                "BUG: buffer for integers must have at least 3
+> > bytes"))
+> > +               return;
+> > +
+> > +       len =- 2;
+> > +
+> > +       data[0] = _tag(UNIV, PRIM, INT);
+> > +       if (integer == 0) {
+> > +               *d++ = 0;
+> > +               goto out;
+> > +       }
+> > +       for (i = sizeof(integer); i > 0 ; i--) {
+> > +               int byte = integer >> (8*(i-1));
+> > +
+> > +               if (!found && byte == 0)
+> > +                       continue;
+> > +               found = true;
+> > +               if (byte & 0x80) {
+> > +                       /*
+> > +                        * no check needed here, we already know we
+> > +                        * have len >= 1
+> > +                        */
+> > +                       *d++ = 0;
+> > +                       len--;
+> > +               }
+> > +               if (WARN(len == 0,
+> > +                        "BUG buffer too short in
+> > asn1_encode_integer"))
+> > +                       return;
+> > +               *d++ = byte;
+> > +               len--;
+> > +       }
+> > + out:
+> > +       data[1] = d - data - 2;
+> > +       *_data = d;
+> > +}
+> > +EXPORT_SYMBOL_GPL(asn1_encode_integer);
+> 
+> 
+> Didn't you say you were going to make it return an error when it ran
+> out of space or was asked to encode a negative number?
 
-Looks to me that systems with high uptimes eventually exhaust the
-entire kernel memory as there are no limits for the measurement list
-size. Problem is pretty bad for systems that have processes that can
-create temporary files, such as a browser - each new site visited can
-eat some kernel memory that is lost forever (!).  While this can be
-tackled via the policy, in some of these cases it is very hard to form
-safe policy statements that would strictly define what exactly needs
-to be measured. Besides, some of these systems support applications
-that the system users can install and such policy statements might
-even be impossible as the administrator would never know.
+it follows the pattern of all the other functions in that it dumps a
+kernel warning on problems and bails.  I don't really want to add error
+handling for my use case, since it's not expected to have any problems.
+ My main problem case is a malicious user tricking the kernel into
+trying to overflow the output buffer and in that case I don't really
+care that the ASN.1 output will be malformed as long as the buffer
+doesn't overflow.
 
-Now, we can attempt to tackle this if there is a common agreement on
-what to do with the case. First thing that comes to my mind based on a
-comment from Mimi concerning the prior work on the topic by Dave is
-that the measurement list should probably get periodically exported to
-a file with its own measurement. Rest of the measurement entries would
-then get freed, so the system would start again from a clean state
-(ie. state where there is only 1 entry in the measurement list, the
-older generation list name and the measurement). For remote
-attestation of the system you would have to concatenate all the lists
-and verify their validity by walking down the chain, starting from the
-existing in-kernel measurement that is kept secure. In other words,
-each exported list would have a measurement of the earlier generation
-list and we would build a simple list chain.
+James
 
-Thoughts?
+> There are other encoding functions which you haven't yet added the
+> buffer length field to, and they'll want to be able to return -ENOSPC
+> too.
 
 
---
-Janne
