@@ -2,151 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A9D117C32
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 01:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFFB1180EC
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 07:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727385AbfLJAKU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Dec 2019 19:10:20 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:38224 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726495AbfLJAKT (ORCPT
+        id S1727137AbfLJG4k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Dec 2019 01:56:40 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:65088 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727004AbfLJG4k (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Dec 2019 19:10:19 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 92E4B8EE112;
-        Mon,  9 Dec 2019 16:10:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1575936619;
-        bh=qXHPTGBNkTg68Sa4gU3uMyopIzQxxDozpkSYvTM99EM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FYR8i1yI5F9Xbx+98/FbtAEYKP4XMjsGj0K3bl138O/kTYJwnDmNO3qnJpGx/kVuX
-         Xoh5bysO6E73/MWMSW9l2Pkb87X3Rc7054iTGvwhw6vhCcitbxfBgNXu9+2J0iCJtm
-         7JTA4bYjqK5svcDNmX4yCQSPjHEfhRt8s5HmK/Do=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1HxD2SFPLquR; Mon,  9 Dec 2019 16:10:19 -0800 (PST)
-Received: from jarvis.lan (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2DE018EE0FC;
-        Mon,  9 Dec 2019 16:10:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1575936619;
-        bh=qXHPTGBNkTg68Sa4gU3uMyopIzQxxDozpkSYvTM99EM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FYR8i1yI5F9Xbx+98/FbtAEYKP4XMjsGj0K3bl138O/kTYJwnDmNO3qnJpGx/kVuX
-         Xoh5bysO6E73/MWMSW9l2Pkb87X3Rc7054iTGvwhw6vhCcitbxfBgNXu9+2J0iCJtm
-         7JTA4bYjqK5svcDNmX4yCQSPjHEfhRt8s5HmK/Do=
-Message-ID: <1575936618.31378.58.camel@HansenPartnership.com>
-Subject: [PATCH v2 8/8] security: keys: trusted: implement counter/timer
- policy
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Date:   Mon, 09 Dec 2019 16:10:18 -0800
-In-Reply-To: <1575936272.31378.50.camel@HansenPartnership.com>
-References: <1575936272.31378.50.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Tue, 10 Dec 2019 01:56:40 -0500
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBA6rH6d003154;
+        Tue, 10 Dec 2019 01:56:31 -0500
+Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2052.outbound.protection.outlook.com [104.47.38.52])
+        by mx0a-00128a01.pphosted.com with ESMTP id 2wrb1s83v7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Dec 2019 01:56:31 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Wwkz/EQ0TOZF1jP50PiosrZOXd9EEZpA36dZWhiNx0wtppVqFgN43lH/f1s4nm388dx3OZcF6MSmNCV3j9LIyQ0n72kCzK6kIIXim8TBAeS0RAwnMH7oyU6dXgoO1/TJj/+tcweDzEn+oHi2uY7bTMgWNNVVAZGCtAPqciOhLBHDt7lwCzzcKD3iYRmIzIY74naF14XRaoQel5grbsah4UP2vbRzo3TAfgMgLGlz9QGvdWDBx/vvlmW9Ai64FU/o9MNn30pPdSzAaonnwSCSMys39v2oxCYE05cBRaZNuoAaYjis6BNb97Z6Sl1f0RkLxo9rx+793CBRYE2JILtumg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ga/SDbL4y9VJszCxq3G0sJo8U3USmDWRsFHvxybOPmE=;
+ b=Z20ocBuhhE5XrHkW73gZ3QH6I4iTAIuSM2xs15fyfws/UX1qyu9YfWZClbDJb5ZrLXNv17ECozh9wm7LzT+h9/tvTXc3BsP5WKtj9XqZahyemjFRCPeUTuRbWSW40/g/snCG+xUcCZTYUTzOYFk5cJ4v4bk2okxvORdrjO3QqjfmbvpjFhkkoeMhhvjsgcGHquVkYd+e2t83mAC0kxGAK+v/2s4o7zN6bQfq/F2R3T3JIdQuoe5rra0/M8VIXz2rd8sfPBTbkZnSDVL5VJglNS3SJse8PpXY4+Q992atAZI1WsG/f87JxOlhHPDSomcFMxf6kn7XTWSV3UJuMJcN+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 137.71.25.55) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=analog.com;
+ dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ga/SDbL4y9VJszCxq3G0sJo8U3USmDWRsFHvxybOPmE=;
+ b=QViiWSS/lUITsgzOe8GcK1f3HX/QxTE26ocTmEcElm4DkQ9fagMe2vrb2NOY6iaoaaK2VFLTmetm4W4zFVa98uaTAwaSdzRZmlLmQz+faa4QPcRP2oDcCsyNazJpXCCRPd9f6wQ0oOqIyQbYAZXayehGguZxWVOVfoEtdQfFgSQ=
+Received: from DM3PR03CA0001.namprd03.prod.outlook.com (2603:10b6:0:50::11) by
+ BN3PR03MB2193.namprd03.prod.outlook.com (2a01:111:e400:7bb6::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2516.17; Tue, 10 Dec
+ 2019 06:56:27 +0000
+Received: from SN1NAM02FT037.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e44::207) by DM3PR03CA0001.outlook.office365.com
+ (2603:10b6:0:50::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2538.14 via Frontend
+ Transport; Tue, 10 Dec 2019 06:56:27 +0000
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
+Received: from nwd2mta1.analog.com (137.71.25.55) by
+ SN1NAM02FT037.mail.protection.outlook.com (10.152.72.89) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2495.26
+ via Frontend Transport; Tue, 10 Dec 2019 06:56:26 +0000
+Received: from ASHBMBX8.ad.analog.com (ashbmbx8.ad.analog.com [10.64.17.5])
+        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id xBA6uP2i012670
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
+        Mon, 9 Dec 2019 22:56:25 -0800
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Tue, 10 Dec
+ 2019 01:56:25 -0500
+Received: from zeus.spd.analog.com (10.64.82.11) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Tue, 10 Dec 2019 01:56:25 -0500
+Received: from saturn.ad.analog.com ([10.48.65.121])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id xBA6uL5o021168;
+        Tue, 10 Dec 2019 01:56:22 -0500
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <peterhuewe@gmx.de>,
+        <jarkko.sakkinen@linux.intel.com>, <jgg@ziepe.ca>, <arnd@arndb.de>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH V2] tpm_tis_spi: use new `delay` structure for SPI transfer delays
+Date:   Tue, 10 Dec 2019 08:56:19 +0200
+Message-ID: <20191210065619.7395-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191204080049.32701-1-alexandru.ardelean@analog.com>
+References: <20191204080049.32701-1-alexandru.ardelean@analog.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(199004)(189003)(54534003)(186003)(70206006)(305945005)(8936002)(8676002)(107886003)(336012)(70586007)(36756003)(44832011)(5660300002)(4326008)(246002)(86362001)(7636002)(426003)(2906002)(2616005)(498600001)(356004)(2870700001)(6666004)(7696005)(54906003)(1076003)(26005)(110136005)(81973001);DIR:OUT;SFP:1101;SCL:1;SRVR:BN3PR03MB2193;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 12a634ba-432c-479a-d1d6-08d77d3e139e
+X-MS-TrafficTypeDiagnostic: BN3PR03MB2193:
+X-Microsoft-Antispam-PRVS: <BN3PR03MB2193F7D79FA77C31BC89ED91F95B0@BN3PR03MB2193.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:826;
+X-Forefront-PRVS: 02475B2A01
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: u2jKMGkgvGZA6IMDIVelgVh9PN2rSUXcUGYJYJ5oquRFWT/24ViCjqB0d5BJGOUdOce2tC9zxTNyXzBcibHoUbOPWetpdMP3PFsGRBp3B29i36HZ7Ko/upXmpzEcewoyqmUz1KEpZNQmU4PvTmNwlBZ+zF/t5MGahmVy2yQBfJkBSvaGPLKhQOo2A+v1WEHp2YxuPaqhv71LJw85la3v/5G9U+3FhB+qye1G5S7W0J3eBBnkNe1Wa/NLuWQed+mv5mdgFbMlj3NBaA9mXkHaP/+hfMyGSbQxXE4i3A+VszBzSt/06Fd9nZu0QGeMYlbEqDPPbudBzp06h1InZ2H0suNWik1zI4nYeKiRqHyDDj4V5FtEt4RqES79dPrQOPxn0I+DufjnuQ1j35UIFbsf7anaWn0WgIG3td6C2yQQC7N/FFsao5cIacWZCuEUpU5t5jv5J8l7QniEV1dY8UGFDnPWcvejs5ui8nFNRkejbVVRqszZGzCDmJjBZelCr22QL6HyFSMdieQqxlHrX7cUgQ==
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2019 06:56:26.5703
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12a634ba-432c-479a-d1d6-08d77d3e139e
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN3PR03MB2193
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-10_01:2019-12-10,2019-12-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
+ adultscore=0 phishscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912100060
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This is actually a generic policy allowing a range of comparisons
-against any value set in the TPM Clock, which includes things like the
-reset count, a monotonic millisecond count and the restart count.  The
-most useful comparison is against the millisecond count for expiring
-keys.  However, you have to remember that currently Linux doesn't try
-to sync the epoch timer with the TPM, so the expiration is actually
-measured in how long the TPM itself has been powered on ... the TPM
-timer doesn't count while the system is powered down.  The millisecond
-counter is a u64 quantity found at offset 8 in the timer structure,
-and the <= comparision operand is 9, so a policy set to expire after the
-TPM has been up for 100 seconds would look like
+In a recent change to the SPI subsystem [1], a new `delay` struct was added
+to replace the `delay_usecs`. This change replaces the current `delay_usecs`
+with `delay` for this driver.
 
-0000016d00000000000f424000080009
+The `spi_transfer_delay_exec()` function [in the SPI framework] makes sure
+that both `delay_usecs` & `delay` are used (in this order to preserve
+backwards compatibility).
 
-Where 0x16d is the counter timer policy code and 0xf4240 is 100 000 in
-hex.
+[1] commit bebcfd272df6485 ("spi: introduce `delay` field for
+`spi_transfer` + spi_transfer_delay_exec()")
 
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 ---
- Documentation/security/keys/trusted-encrypted.rst | 29 +++++++++++++++++++++++
- security/keys/trusted-keys/tpm2-policy.c          | 19 +++++++++++++++
- 2 files changed, 48 insertions(+)
 
-diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-index ade1a9dc8367..52d8bd8bef65 100644
---- a/Documentation/security/keys/trusted-encrypted.rst
-+++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -235,3 +235,32 @@ about the usage can be found in the file
- Another new format 'enc32' has been defined in order to support encrypted keys
- with payload size of 32 bytes. This will initially be used for nvdimm security
- but may expand to other usages that require 32 bytes payload.
-+
-+Appendix
-+--------
-+
-+TPM 2.0 Policies
-+----------------
-+
-+The current TPM supports PCR lock policies as documented above and
-+CounterTimer policies which can be used to create expiring keys.  One
-+caveat with expiring keys is that the TPM millisecond counter does not
-+update while a system is powered off and Linux does not sync the TPM
-+millisecond count with its internal clock, so the best you can expire
-+in is in terms of how long any given TPM has been powered on.  (FIXME:
-+Linux should simply update the millisecond clock to the current number
-+of seconds past the epoch on boot).
-+
-+A CounterTimer policy is expressed in terms of length and offset
-+against the TPM clock structure (TPMS_TIME_INFO), which looks like the
-+packed structure::
-+
-+    struct tpms_time_info {
-+            u64 uptime;       /* time in ms since last start or reset */
-+	    u64 clock;        /* cumulative uptime in ms */
-+	    u32 resetcount;   /* numer of times the TPM has been reset */
-+	    u32 restartcount; /* number of times the TPM has been restarted */
-+	    u8  safe          /* time was safely loaded from NVRam */
-+    };
-+
-+The usual comparison for expiring keys is against clock, at offset 8.
-diff --git a/security/keys/trusted-keys/tpm2-policy.c b/security/keys/trusted-keys/tpm2-policy.c
-index 6d69f0300584..f19beb3e9e49 100644
---- a/security/keys/trusted-keys/tpm2-policy.c
-+++ b/security/keys/trusted-keys/tpm2-policy.c
-@@ -322,6 +322,25 @@ int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols,
- 			tpm_buf_append(&buf, pols->policies[i],
- 				       pols->len[i] - pols->hash_size);
- 			break;
-+		case TPM2_CC_POLICY_COUNTER_TIMER: {
-+			/*
-+			 * the format of this is the last two u16
-+			 * quantities are the offset and operation
-+			 * respectively.  The rest is operandB which
-+			 * must be zero padded in a hash digest
-+			 */
-+			u16 opb_len = pols->len[i] - 4;
-+
-+			if (opb_len > pols->hash_size)
-+				return -EINVAL;
-+
-+			tpm_buf_append_u16(&buf, opb_len);
-+			tpm_buf_append(&buf, pols->policies[i], opb_len);
-+			/* offset and operand*/
-+			tpm_buf_append(&buf, pols->policies[i] + opb_len, 4);
-+			failure = "Counter Timer";
-+			break;
-+		}
- 		default:
- 			failure = "unknown policy";
- 			break;
+Changelog v1 -> v2:
+* fixed typo `delay_secs` -> `delay_usecs`
+
+ drivers/char/tpm/tpm_tis_spi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_spi.c b/drivers/char/tpm/tpm_tis_spi.c
+index 19513e622053..1990e79afaed 100644
+--- a/drivers/char/tpm/tpm_tis_spi.c
++++ b/drivers/char/tpm/tpm_tis_spi.c
+@@ -105,7 +105,8 @@ static int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+ 
+ 		spi_xfer.cs_change = 0;
+ 		spi_xfer.len = transfer_len;
+-		spi_xfer.delay_usecs = 5;
++		spi_xfer.delay.value = 5;
++		spi_xfer.delay.unit = SPI_DELAY_UNIT_USECS;
+ 
+ 		if (in) {
+ 			spi_xfer.tx_buf = NULL;
 -- 
-2.16.4
+2.20.1
 
