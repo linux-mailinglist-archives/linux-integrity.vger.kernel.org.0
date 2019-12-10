@@ -2,134 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE79011904B
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 20:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7E011952E
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 22:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727631AbfLJTE6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Dec 2019 14:04:58 -0500
-Received: from mga09.intel.com ([134.134.136.24]:50106 "EHLO mga09.intel.com"
+        id S1728974AbfLJVM2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Dec 2019 16:12:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36498 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727603AbfLJTE6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Dec 2019 14:04:58 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Dec 2019 11:04:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,300,1571727600"; 
-   d="scan'208";a="203294114"
-Received: from tstruk-mobl1.jf.intel.com (HELO [127.0.1.1]) ([10.7.196.67])
-  by orsmga007.jf.intel.com with ESMTP; 10 Dec 2019 11:04:58 -0800
-Subject: [PATCH] tpm: selftest: add test covering async mode
-From:   Tadeusz Struk <tadeusz.struk@intel.com>
-To:     jarkko.sakkinen@linux.intel.com
-Cc:     tadeusz.struk@intel.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, jgg@ziepe.ca, mingo@redhat.com,
-        jeffrin@rajagiritech.edu.in, linux-integrity@vger.kernel.org,
-        will@kernel.org, peterhuewe@gmx.de
-Date:   Tue, 10 Dec 2019 11:04:59 -0800
-Message-ID: <157600469924.5042.14784541627191833405.stgit@tstruk-mobl1>
-In-Reply-To: <34e5340f-de75-f20e-7898-6142eac45c13@intel.com>
-References: <34e5340f-de75-f20e-7898-6142eac45c13@intel.com>
-User-Agent: StGit/0.17.1-dirty
+        id S1728757AbfLJVM2 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:12:28 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 02BCC205C9;
+        Tue, 10 Dec 2019 21:12:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576012347;
+        bh=vF3g0hw+3Ff1ci2v6urh1aDwao9IiHAd2H18RgCtfsY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=B6bsVPqm20ZEifarnMBu5UKxCDrFQxvzrxgchxZ9J7uAOLSGlamiPZNUBcQJoVrBh
+         OY1Xob5LxM0PFL0A99xs4tFfugd8RaxavqTBcTt9MNI44qBZ+72dzXdsUiFFXOfRQS
+         MhIxbftY9ZdsjpNKtfS1D0E4FjfXW1cI1ZzHd2I8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 277/350] tpm: Add a flag to indicate TPM power is managed by firmware
+Date:   Tue, 10 Dec 2019 16:06:22 -0500
+Message-Id: <20191210210735.9077-238-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
+References: <20191210210735.9077-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add a test that sends a tpm cmd in an asyn mode.
-Currently there is a gap in test coverage with regards
-to this functionality.
+From: Stephen Boyd <swboyd@chromium.org>
 
-Signed-off-by: Tadeusz Struk <tadeusz.struk@intel.com>
+[ Upstream commit 2e2ee5a2db06c4b81315514b01d06fe5644342e9 ]
+
+On some platforms, the TPM power is managed by firmware and therefore we
+don't need to stop the TPM on suspend when going to a light version of
+suspend such as S0ix ("freeze" suspend state). Add a chip flag,
+TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED, to indicate this so that certain
+platforms can probe for the usage of this light suspend and avoid
+touching the TPM state across suspend/resume.
+
+Cc: Andrey Pronin <apronin@chromium.org>
+Cc: Duncan Laurie <dlaurie@chromium.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/tpm2/test_smoke.sh |    1 +
- tools/testing/selftests/tpm2/tpm2.py       |   19 +++++++++++++++++--
- tools/testing/selftests/tpm2/tpm2_tests.py |   13 +++++++++++++
- 3 files changed, 31 insertions(+), 2 deletions(-)
+ drivers/char/tpm/tpm-interface.c | 8 +++++++-
+ drivers/char/tpm/tpm.h           | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 80521d46220c..cb54ab637ea6 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -2,3 +2,4 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index d7a3888ad80f0..7f105490604c8 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -23,6 +23,7 @@
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+ #include <linux/spinlock.h>
++#include <linux/suspend.h>
+ #include <linux/freezer.h>
+ #include <linux/tpm_eventlog.h>
  
- python -m unittest -v tpm2_tests.SmokeTest
-+python -m unittest -v tpm2_tests.AsyncTest
-diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
-index 828c18584624..d0fcb66a88a6 100644
---- a/tools/testing/selftests/tpm2/tpm2.py
-+++ b/tools/testing/selftests/tpm2/tpm2.py
-@@ -6,8 +6,8 @@ import socket
- import struct
- import sys
- import unittest
--from fcntl import ioctl
--
-+import fcntl
-+import select
+@@ -394,7 +395,11 @@ int tpm_pm_suspend(struct device *dev)
+ 		return -ENODEV;
  
- TPM2_ST_NO_SESSIONS = 0x8001
- TPM2_ST_SESSIONS = 0x8002
-@@ -352,6 +352,7 @@ def hex_dump(d):
- class Client:
-     FLAG_DEBUG = 0x01
-     FLAG_SPACE = 0x02
-+    FLAG_NONBLOCK = 0x04
-     TPM_IOC_NEW_SPACE = 0xa200
+ 	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+-		return 0;
++		goto suspended;
++
++	if ((chip->flags & TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED) &&
++	    !pm_suspend_via_firmware())
++		goto suspended;
  
-     def __init__(self, flags = 0):
-@@ -362,13 +363,27 @@ class Client:
-         else:
-             self.tpm = open('/dev/tpmrm0', 'r+b', buffering=0)
+ 	if (!tpm_chip_start(chip)) {
+ 		if (chip->flags & TPM_CHIP_FLAG_TPM2)
+@@ -405,6 +410,7 @@ int tpm_pm_suspend(struct device *dev)
+ 		tpm_chip_stop(chip);
+ 	}
  
-+        if (self.flags & Client.FLAG_NONBLOCK):
-+            flags = fcntl.fcntl(self.tpm, fcntl.F_GETFL)
-+            flags |= os.O_NONBLOCK
-+            fcntl.fcntl(self.tpm, fcntl.F_SETFL, flags)
-+            self.tpm_poll = select.poll()
-+
-     def close(self):
-         self.tpm.close()
++suspended:
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index a7fea3e0ca86a..f3bf2f7f755c8 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -162,6 +162,7 @@ enum tpm_chip_flags {
+ 	TPM_CHIP_FLAG_VIRTUAL		= BIT(3),
+ 	TPM_CHIP_FLAG_HAVE_TIMEOUTS	= BIT(4),
+ 	TPM_CHIP_FLAG_ALWAYS_POWERED	= BIT(5),
++	TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED	= BIT(6),
+ };
  
-     def send_cmd(self, cmd):
-         self.tpm.write(cmd)
-+
-+        if (self.flags & Client.FLAG_NONBLOCK):
-+            self.tpm_poll.register(self.tpm, select.POLLIN)
-+            self.tpm_poll.poll(10000)
-+
-         rsp = self.tpm.read()
- 
-+        if (self.flags & Client.FLAG_NONBLOCK):
-+            self.tpm_poll.unregister(self.tpm)
-+
-         if (self.flags & Client.FLAG_DEBUG) != 0:
-             sys.stderr.write('cmd' + os.linesep)
-             sys.stderr.write(hex_dump(cmd) + os.linesep)
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index d4973be53493..728be7c69b76 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -288,3 +288,16 @@ class SpaceTest(unittest.TestCase):
- 
-         self.assertEqual(rc, tpm2.TPM2_RC_COMMAND_CODE |
-                          tpm2.TSS2_RESMGR_TPM_RC_LAYER)
-+
-+class AsyncTest(unittest.TestCase):
-+    def setUp(self):
-+        logging.basicConfig(filename='AsyncTest.log', level=logging.DEBUG)
-+
-+    def test_async(self):
-+        log = logging.getLogger(__name__)
-+        log.debug(sys._getframe().f_code.co_name)
-+
-+        async_client = tpm2.Client(tpm2.Client.FLAG_NONBLOCK)
-+        log.debug("Calling get_cap in a NON_BLOCKING mode")
-+        async_client.get_cap(tpm2.TPM2_CAP_HANDLES, tpm2.HR_LOADED_SESSION)
-+        async_client.close()
+ #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
+-- 
+2.20.1
 
