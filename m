@@ -2,76 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92641119D43
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 23:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 680D1119D54
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Dec 2019 23:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729542AbfLJWhU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Dec 2019 17:37:20 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:54062 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729037AbfLJWhT (ORCPT
+        id S1729653AbfLJWhk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Dec 2019 17:37:40 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:49422 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728232AbfLJWhh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:37:19 -0500
-Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 94FF320B7187;
-        Tue, 10 Dec 2019 14:37:18 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 94FF320B7187
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1576017438;
-        bh=EabcIUSm95ln/x8SaeAaqGu8PxIoseXQ2Xb4iEAC1ic=;
-        h=From:To:Subject:Date:From;
-        b=E+NaJ35K7Cw8gsBbSSqiZHpYh5Vb1gyQss8dnq3b9nmHZIshg6nTkgFYs6/wy5BdA
-         J2Cox6e486yRp5SR3kmqPxC2/BMShgvoZaiO8IXnNZ3LjvF/PiCTKSCGKrscJksK/H
-         KCQMSsWEPT5ICivt6UTaCPNtfSVyefFwTDO2qYCE=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        jarkko.sakkinen@linux.intel.com, Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Subject: Does IMA support SHA-256 PCR banks?
-Message-ID: <62e91411-d38d-8b75-bf0e-849fdd3c447f@linux.microsoft.com>
-Date:   Tue, 10 Dec 2019 14:37:18 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        Tue, 10 Dec 2019 17:37:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Message-ID:From:CC:To:Subject:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:
+        Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Q+RS+5a8o9wq+07+CMSVR9TYy1NNrDciltQqltE4G6k=; b=xWhtti5199BR6ifYz75OENW0V9
+        7ISVYz+mSvq8KvWJ9lxmuGHchd7aRqvyG9/jw9Twns+dfr6InaE/53IPQNGXnETzIiRygEHGglJCM
+        3MWObYtqHg1Tjx1K3bYHklgiimuhwoiPtqJfI15SQJ13R9Av4VsbpfYe4aRi66ToApx1pCcMM2DPR
+        ZUzdVSjTc0peeQsHlyG0L1q2qBfK6SitFZp9JDz2vsPLR7SeWtRwt77lXrsrsNq1SAJxgTSvIZNqL
+        wHpSd+/GgH7b4nggBmxRy+j8S3bE99zUrDAIR5vC9WI2jOWCLpQ/P2lnX20c0v8P2MP+UqbyUtUD9
+        LA0LU6zQ==;
+Received: from [2001:8b0:10b:1:18f8:340d:82f7:145f]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ieo8M-000739-3O; Tue, 10 Dec 2019 22:37:34 +0000
+Date:   Tue, 10 Dec 2019 22:37:31 +0000
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1576004020.3647.13.camel@HansenPartnership.com>
+References: <1575984010.3459.4.camel@HansenPartnership.com> <1575936272.31378.50.camel@HansenPartnership.com> <1575936367.31378.52.camel@HansenPartnership.com> <932257121039494734d97e290abb9159b1f5ca28.camel@infradead.org> <10037.1575986929@warthog.procyon.org.uk> <1576004020.3647.13.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 2/8] lib: add asn.1 encoder
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        David Howells <dhowells@redhat.com>
+CC:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        keyrings@vger.kernel.org
+From:   David Woodhouse <dwmw2@infradead.org>
+Message-ID: <35B37965-359E-40E0-8F44-836A56EC4756@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by merlin.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
 
-I noticed that even when SHA-256 is selected as the digest algorithm for 
-IMA measurement, the PCR hash is still SHA-1.
 
-A net search found the text given below in the following wiki:
-    https://wiki.strongswan.org/projects/strongswan/wiki/IMA
+On 10 December 2019 18:53:40 GMT, James Bottomley <James=2EBottomley@Hanse=
+nPartnership=2Ecom> wrote:
+>On Tue, 2019-12-10 at 14:08 +0000, David Howells wrote:
+>>   Please therefore put bounds checking and error handling in it=2E  And
+>> please *don't* just produce broken ASN=2E1 when something goes wrong=2E
+>
+>OK, I'll make it return an error and add a wrapper for my use case that
+>warns on error and causes the function to bail=2E
 
-**********************************************************************
-Since SHA-1 has been "shattered" we recommend to use SHA-256 for the 
-file measurement hashes.
+Traditionally we call that "error handling" :p
 
-IMA implementation does not support SHA-256 PCR banks yet, so the 
-SHA-256 file hashes are extended into SHA-1 PCR registers.
-**********************************************************************
-
-Is the above still true?
-
-In ima_init_digests() the digest algorithm for PCR extend is set from 
-the digest algorithm set in the PCR banks.
-
-Is there a way to configure IMA to use SHA-256 PCR banks?
-
-int __init ima_init_digests(void)
-{
-...
-	for (i = 0; i < ima_tpm_chip->nr_allocated_banks; i++)
-		digests[i].alg_id = ima_tpm_chip->allocated_banks[i].alg_id;
-...
-	
-}
-
-thanks,
-  -lakshmi
+--=20
+Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
