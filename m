@@ -2,100 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D30A011BAFB
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 19:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8FD11BB88
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 19:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730739AbfLKSGG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Dec 2019 13:06:06 -0500
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:45650 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730621AbfLKSGF (ORCPT
+        id S1729855AbfLKSSc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Dec 2019 13:18:32 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35984 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730056AbfLKSSc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Dec 2019 13:06:05 -0500
-Received: by mail-yb1-f195.google.com with SMTP id i3so9353945ybe.12
-        for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2019 10:06:05 -0800 (PST)
+        Wed, 11 Dec 2019 13:18:32 -0500
+Received: by mail-pg1-f196.google.com with SMTP id k3so10496050pgc.3
+        for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2019 10:18:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mzph4oRYSdP4XB6lnmsVX28t3uDJtwjo66piREwlnZo=;
-        b=CJ3seZm3TNcFL0JuYlD82O0DXLlJhLI2L0gi5h5SiNm2+s8CUp6Q8oweDq3/j38gpI
-         8tF1VvFdOXPaLMnJlwyE0+6HFdWAWF3tnAGlg7ZHd/VKihXM1V08GEOVE30822XMdn3I
-         dbFmsuJVyT64fcZSYlUTIXoNE3Huf8Nv9z5HDdOerv35oorKROPYxJ+V3Q1miJ1+bUCK
-         xDSHV6xMMTNN9n4Yt8cm5Ci7Dz+BgSTPbiECkALqzUHeRtihEJGe57bCcsf5nIeATGo8
-         7S4ssremZfvXcWA3rmNmKy6q00iTjk02pBPOBq3meSfS8dDy5el9GO388Xt/a0c6macK
-         Ab1g==
+        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tPPeeVDeYDqJ3/BkDOHHqJmeQk2RFS5XEnjcxyWStHk=;
+        b=JtcCZOdbZR8PvoN5+zpqDevpmQX8mn/wjqVymTZNjvRG2R3gH+KMAmI1tsgUoaEn0d
+         +Fmhha5vnwjhxmMZiyf1HWMUpB0kuoJFNNyL28RRSlL2Zxpm0Tl6AEtvGIHT3XSIGKPv
+         8xbbRb7kPcjao4YeZtCkalMoIxz/SqZFBwNzXBn3AO4pfEywAdYsHgw9onPkuNAneu2w
+         29BqS33e7MkozfghztMFnkQi7Am04h4ZcXqYMFLKYaXd7FJEYYfqS1ZtIjkU3IyxMEEh
+         ZIx+Fo+7ODJnLjnSVVsD1VrKB99YPuflcS5JXuFnGakwnDxDmAMB0BojWo7FxAJlHid9
+         jiTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mzph4oRYSdP4XB6lnmsVX28t3uDJtwjo66piREwlnZo=;
-        b=oE1ODQEir1zSuYFmJg22trxFWlZLWmZwHOSJQha3xIrMg/PU1oA3RPcKeRNEcoVA07
-         Uo4F1zWKJwUqBGa+SWwRZ4b19XZv71Bi52RtWbVQuQIa55pkTOBY49/QLax9ijGZmOb3
-         hYZoYTy6MoGJB4HLwe45C78xFP5uhX603j17eTufvmy7jvd+AB/py39S0aaekeEmRifu
-         guvvqb1ehw3c17GFhbAMG2ozFgF9qTAW2Ammy7iRmZGP4VXpDiXvM2poz38e8XoyC7AO
-         DgTBodMqlqeKmuCCbqHoAdNhl1FJeUkDcubsuOmH0BFeLwGmgNyT0aaMBeMT34yRXFbq
-         SyWA==
-X-Gm-Message-State: APjAAAV0Ta5Wbz+ADbn/C13IhuqLr9d2HGbQOOwFPYukRskW5VKeWqFk
-        y+lyM/kSopKSCL73Qicp8UxLwPwe4Y+08ew4tS9w5g==
-X-Google-Smtp-Source: APXvYqyO2/s0U2KFrlOdyOXWx12vh5Q2gWo9cY+d2QONSuipAFzpcXSOZnRUQukVA1QPy8HGFOxXm4YZ6Tzhcq5W7Bg=
-X-Received: by 2002:a25:5008:: with SMTP id e8mr940654ybb.277.1576087564293;
- Wed, 11 Dec 2019 10:06:04 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tPPeeVDeYDqJ3/BkDOHHqJmeQk2RFS5XEnjcxyWStHk=;
+        b=B+vWjNryVm+Mk7TypxA6z6BrgJzGSEpZhojp3gGNvxFa9hcgZheHR+QAeJ4yCFs8ak
+         ef23P0PKQWED4CrbcQQvd7QMU3EdhaNM1Qx1X+/gJYAvexyQ1Py789IfHLhO1QgOSrkt
+         xzY8bx5u5IqTK0YLBFzNcRYMzikCVuFptqC2DMTo0hXXybTGz2upIDVbHQyEGA9aLeyf
+         SL8LIxcqQbFTg54yIQ+WGPv8UudIqi6X+fb8+lj18NktIlfFblxPSLhLawWkD9OZfHvQ
+         J2piYokRP3eKvtdqQdM1emXyayBCTSx2lWDa6B0tNyTV5ooRLBKlh5ON6h0783LNef9c
+         b40g==
+X-Gm-Message-State: APjAAAVbThjnUw4aptq9M5Fzw/r4wYVLOxcjJ032+xoVA63801FVI49s
+        f5cQZty4bqw69zgZWlFCXJDmpvjRvKiXUw==
+X-Google-Smtp-Source: APXvYqybTyPeIsHQTSfJ39+zPwF7Awi2StSmIK5YsDEej2sjXZRE90XZupRWhjMpYCh+OuD4UJC6uw==
+X-Received: by 2002:a63:2355:: with SMTP id u21mr5522479pgm.179.1576088311800;
+        Wed, 11 Dec 2019 10:18:31 -0800 (PST)
+Received: from debian ([122.164.82.31])
+        by smtp.gmail.com with ESMTPSA id t8sm4136330pfq.92.2019.12.11.10.18.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2019 10:18:30 -0800 (PST)
+Date:   Wed, 11 Dec 2019 23:48:24 +0530
+From:   Jeffrin Jose <jeffrin@rajagiritech.edu.in>
+To:     Will Deacon <will@kernel.org>
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
+        jeffrin@rajagiritech.edu.in
+Subject: Re: [PROBLEM]:  WARNING: lock held when returning to user space!
+ (5.4.1 #16 Tainted: G )
+Message-ID: <20191211181824.GA13799@debian>
+References: <20191207173420.GA5280@debian>
+ <20191209103432.GC3306@willie-the-truck>
 MIME-Version: 1.0
-References: <20191210210735.9077-1-sashal@kernel.org> <20191210210735.9077-238-sashal@kernel.org>
- <CABXOdTdO16V4AtO1t=BwXW2=HAtT6CYoSddmrn5T2qZP9hs0eQ@mail.gmail.com> <20191211175651.GK4516@linux.intel.com>
-In-Reply-To: <20191211175651.GK4516@linux.intel.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 11 Dec 2019 10:05:52 -0800
-Message-ID: <CABXOdTcsnAVaPo-492tVPtjOYMbNtu2Zvz4GwSBGcDEHAMGw5Q@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.4 277/350] tpm: Add a flag to indicate TPM power
- is managed by firmware
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "# v4 . 10+" <stable@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andrey Pronin <apronin@chromium.org>,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191209103432.GC3306@willie-the-truck>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 9:57 AM Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Tue, Dec 10, 2019 at 01:32:15PM -0800, Guenter Roeck wrote:
-> > On Tue, Dec 10, 2019 at 1:12 PM Sasha Levin <sashal@kernel.org> wrote:
-> > >
-> > > From: Stephen Boyd <swboyd@chromium.org>
-> > >
-> > > [ Upstream commit 2e2ee5a2db06c4b81315514b01d06fe5644342e9 ]
-> > >
-> > > On some platforms, the TPM power is managed by firmware and therefore we
-> > > don't need to stop the TPM on suspend when going to a light version of
-> > > suspend such as S0ix ("freeze" suspend state). Add a chip flag,
-> > > TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED, to indicate this so that certain
-> > > platforms can probe for the usage of this light suspend and avoid
-> > > touching the TPM state across suspend/resume.
-> > >
-> >
-> > Are the patches needed to support CR50 (which need this patch) going
-> > to be applied to v5.4.y as well ? If not, what is the purpose of
-> > applying this patch to v5.4.y ?
-> >
-> > Thanks,
-> > Guenter
->
-> Thanks Guenter. I think not.
->
-Thought so. In that case this patch should be dropped.
+On Mon, Dec 09, 2019 at 10:34:32AM +0000, Will Deacon wrote: 
+> Can you reproduce this failure on v5.5-rc1?
 
-Guenter
+i compiled and tested v5.5-rc1 . Yes the failure was there
+
+--
+software engineer
+rajagiri school of engineering and technology
