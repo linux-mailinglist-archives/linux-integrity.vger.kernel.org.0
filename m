@@ -2,40 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D29E811BAC6
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 18:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E3211BA85
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 18:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730764AbfLKR5t (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Dec 2019 12:57:49 -0500
-Received: from mga14.intel.com ([192.55.52.115]:28533 "EHLO mga14.intel.com"
+        id S1729912AbfLKRmq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Dec 2019 12:42:46 -0500
+Received: from mga17.intel.com ([192.55.52.151]:45827 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729228AbfLKR5t (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Dec 2019 12:57:49 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1729599AbfLKRmq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 11 Dec 2019 12:42:46 -0500
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Dec 2019 09:37:18 -0800
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Dec 2019 09:42:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,302,1571727600"; 
-   d="scan'208";a="225610402"
+   d="scan'208";a="210841023"
 Received: from cmclough-mobl.ger.corp.intel.com (HELO localhost) ([10.251.85.152])
-  by orsmga002.jf.intel.com with ESMTP; 11 Dec 2019 09:37:13 -0800
-Date:   Wed, 11 Dec 2019 19:37:12 +0200
+  by fmsmga008.fm.intel.com with ESMTP; 11 Dec 2019 09:42:42 -0800
+Date:   Wed, 11 Dec 2019 19:42:40 +0200
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        arnd@arndb.de
-Subject: Re: [PATCH V2] tpm_tis_spi: use new `delay` structure for SPI
- transfer delays
-Message-ID: <20191211173700.GE4516@linux.intel.com>
-References: <20191204080049.32701-1-alexandru.ardelean@analog.com>
- <20191210065619.7395-1-alexandru.ardelean@analog.com>
+To:     Tadeusz Struk <tadeusz.struk@intel.com>
+Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org, jgg@ziepe.ca,
+        mingo@redhat.com, jeffrin@rajagiritech.edu.in,
+        linux-integrity@vger.kernel.org, will@kernel.org, peterhuewe@gmx.de
+Subject: Re: [PATCH] tpm: selftest: add test covering async mode
+Message-ID: <20191211174222.GF4516@linux.intel.com>
+References: <34e5340f-de75-f20e-7898-6142eac45c13@intel.com>
+ <157600469924.5042.14784541627191833405.stgit@tstruk-mobl1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191210065619.7395-1-alexandru.ardelean@analog.com>
+In-Reply-To: <157600469924.5042.14784541627191833405.stgit@tstruk-mobl1>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -43,18 +41,13 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Dec 10, 2019 at 08:56:19AM +0200, Alexandru Ardelean wrote:
-> In a recent change to the SPI subsystem [1], a new `delay` struct was added
-> to replace the `delay_usecs`. This change replaces the current `delay_usecs`
-> with `delay` for this driver.
+On Tue, Dec 10, 2019 at 11:04:59AM -0800, Tadeusz Struk wrote:
+> Add a test that sends a tpm cmd in an asyn mode.
+> Currently there is a gap in test coverage with regards
+> to this functionality.
 > 
-> The `spi_transfer_delay_exec()` function [in the SPI framework] makes sure
-> that both `delay_usecs` & `delay` are used (in this order to preserve
-> backwards compatibility).
-> 
-> [1] commit bebcfd272df6485 ("spi: introduce `delay` field for
-> `spi_transfer` + spi_transfer_delay_exec()")
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@intel.com>
 
-Not sure why you use ` and not '?
+Please include this with a bug fix to same patch set.
 
 /Jarkko
