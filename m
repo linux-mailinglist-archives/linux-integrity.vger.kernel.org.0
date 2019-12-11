@@ -2,102 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2381911BA5E
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 18:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E9911BA65
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 18:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729746AbfLKRd3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Dec 2019 12:33:29 -0500
-Received: from mga04.intel.com ([192.55.52.120]:57826 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729609AbfLKRd3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Dec 2019 12:33:29 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Dec 2019 09:33:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,302,1571727600"; 
-   d="scan'208";a="210837617"
-Received: from cmclough-mobl.ger.corp.intel.com (HELO localhost) ([10.251.85.152])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Dec 2019 09:33:23 -0800
-Date:   Wed, 11 Dec 2019 19:33:22 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     "Zhao, Shirley" <shirley.zhao@intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        'Mauro Carvalho Chehab' <mchehab+samsung@kernel.org>,
-        "Zhu, Bing" <bing.zhu@intel.com>,
-        "Chen, Luhai" <luhai.chen@intel.com>
-Subject: Re: One question about trusted key of keyring in Linux kernel.
-Message-ID: <20191211173322.GD4516@linux.intel.com>
-References: <1575260220.4080.17.camel@linux.ibm.com>
- <A888B25CD99C1141B7C254171A953E8E4909D360@shsmsx102.ccr.corp.intel.com>
- <1575267453.4080.26.camel@linux.ibm.com>
- <A888B25CD99C1141B7C254171A953E8E4909E381@shsmsx102.ccr.corp.intel.com>
- <1575269075.4080.31.camel@linux.ibm.com>
- <A888B25CD99C1141B7C254171A953E8E4909E399@shsmsx102.ccr.corp.intel.com>
- <1575312932.24227.13.camel@linux.ibm.com>
- <20191209194715.GD19243@linux.intel.com>
- <1575923513.31378.22.camel@linux.ibm.com>
- <20191211172345.GB4516@linux.intel.com>
+        id S1727334AbfLKRfO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Dec 2019 12:35:14 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:56954 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727185AbfLKRfO (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 11 Dec 2019 12:35:14 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id CDC0020B7187;
+        Wed, 11 Dec 2019 09:35:13 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CDC0020B7187
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1576085713;
+        bh=nSJ76MuThJZImWshPx8k80CuagJmlu+tb/uEOZgjAGg=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=ivQ0dab4ovb5UalORzdy7Dl6LYZMulUKi7xGZXL4l7sv08EU9q9nxr2kj7zcFfvB0
+         GXRxF2aDPvQsX+Q8e2OiJnMtHkaiDNRx1C244jipfbrwSPRMeQHKrSp0iYVkCyk09E
+         10bCMvKT0TSgX5XQYhsNf2TWzK+D4/F36RYRbOBA=
+Subject: Re: Does IMA support SHA-256 PCR banks?
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+References: <62e91411-d38d-8b75-bf0e-849fdd3c447f@linux.microsoft.com>
+ <36fb73d7534f47b6906c348792bd5d96@huawei.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <4673b391-6936-d2c1-bbd1-cd5daf6937f7@linux.microsoft.com>
+Date:   Wed, 11 Dec 2019 09:35:09 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191211172345.GB4516@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <36fb73d7534f47b6906c348792bd5d96@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 07:23:59PM +0200, Jarkko Sakkinen wrote:
-> On Mon, Dec 09, 2019 at 12:31:53PM -0800, James Bottomley wrote:
-> > On Mon, 2019-12-09 at 21:47 +0200, Jarkko Sakkinen wrote:
-> > > On Mon, Dec 02, 2019 at 10:55:32AM -0800, James Bottomley wrote:
-> > > > blob but it looks like we need to fix the API.  I suppose the good
-> > > > news is given this failure that we have the opportunity to rewrite
-> > > > the API since no-one else can have used it for anything because of
-> > > > this.  The
-> > > 
-> > > I did successfully run this test when I wrote it 5 years ago:
-> > > 
-> > > https://github.com/jsakkine-intel/tpm2-scripts/blob/master/keyctl-smo
-> > > ke.sh
-> > > 
-> > > Given that there is API a way must be found that backwards
-> > > compatibility
-> > > is not broken. New format is fine but it must co-exist.
-> > 
-> > The old API is unsupportable in the combination of policy + auth as I
-> > already explained.  The kernel doesn't have access to the nonces to
-> > generate the HMAC because the session was created by the user and the
-> > API has no way to pass them in (plus passing them in would be a huge
-> > security failure if we tried).  Given that Shirley appears to be the
-> > first person ever to try this, I don't think the old API has grown any
-> > policy users so its safe to remove it.  If we get a complaint, we can
-> > discuss adding it back.
-> 
-> It works within limits so it can be definitely be maintained for
-> backwards compatibility.
-> 
-> Also, you are making a claim of the users that we cannot verify.
-> 
-> Finally, the new feature neither handles sessions. You claim that
-> it could be added later. I have to deny that because until session
-> handling is there we have no ways to be sure about that.
-> 
-> I see your point but this needs more consideration. It does not
-> make sense to rush.
+On 12/11/19 12:45 AM, Roberto Sassu wrote:
 
-Also can test the current patch set as soon as I've done with
-release critical tpm_tis bug even if I don't agree on every
-point.
+> 
+> Hi Lakshmi
+> 
+> currently the SHA256 PCR bank is extended with a padded SHA1.
+> 
+> Some time ago, I posted some patches to support the TGC Crypto Agile format:
+> 
+> https://lkml.org/lkml/2017/5/16/369
+> 
+> However, this is a bit complicate because the current format does not follow
+> the TCG standard. A work to support the new IMA Canonical Event Log format
+> has been presented at LSS:
+> 
+> https://static.sched.com/hosted_files/lssna18/03/lss_2018_slides_V4.pdf
+> 
+> Given that the patches are very invasive, to me seems a good idea to split this
+> work in two parts: first, extend PCRs with the correct digest and second
+> change the measurement list format.
+> 
+> For the first part, the patch will be very simple, as IMA will just query the TPM
+> to get the list of hash algorithms and will calculate all the digests in
+> ima_calc_field_array_hash().
+> 
+> Also, the first part would be sufficient for remote attestation, as the data used
+> to calculate the digests is passed to the verifier. The verifier can calculate by
+> himself the digest of non-SHA1 PCR banks, even if they are not included in the
+> measurement list.
+> 
+> Roberto
+> 
 
-/Jarkko
+Thanks Roberto for the info and the link to the related patches posted 
+earlier. I'll take a look at the patches.
+
+thanks,
+  -lakshmi
+
