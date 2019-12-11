@@ -2,101 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A58AA11A62B
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 09:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300CF11A9CB
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 12:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbfLKIpJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Dec 2019 03:45:09 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2178 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725973AbfLKIpJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Dec 2019 03:45:09 -0500
-Received: from lhreml708-cah.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id BBB50C8AB48106930635;
-        Wed, 11 Dec 2019 08:45:07 +0000 (GMT)
-Received: from fraeml706-chm.china.huawei.com (10.206.15.55) by
- lhreml708-cah.china.huawei.com (10.201.108.49) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Wed, 11 Dec 2019 08:45:07 +0000
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1713.5; Wed, 11 Dec 2019 09:45:06 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1713.004;
- Wed, 11 Dec 2019 09:45:06 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        "david.safford@ge.com" <david.safford@ge.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: RE: Does IMA support SHA-256 PCR banks?
-Thread-Topic: Does IMA support SHA-256 PCR banks?
-Thread-Index: AQHVr6ptwzBz7E0SPkqTsqbIGjKxw6e0me/w
-Date:   Wed, 11 Dec 2019 08:45:06 +0000
-Message-ID: <36fb73d7534f47b6906c348792bd5d96@huawei.com>
-References: <62e91411-d38d-8b75-bf0e-849fdd3c447f@linux.microsoft.com>
-In-Reply-To: <62e91411-d38d-8b75-bf0e-849fdd3c447f@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.220.96.108]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727851AbfLKLXX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Dec 2019 06:23:23 -0500
+Received: from mga14.intel.com ([192.55.52.115]:56024 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727469AbfLKLXW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 11 Dec 2019 06:23:22 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Dec 2019 03:22:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,301,1571727600"; 
+   d="scan'208";a="210731486"
+Received: from unknown (HELO localhost) ([10.237.50.137])
+  by fmsmga008.fm.intel.com with ESMTP; 11 Dec 2019 03:22:54 -0800
+Date:   Wed, 11 Dec 2019 13:22:54 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 0/2] Revert patches fixing probing of interrupts
+Message-ID: <20191211112254.GC16450@linux.intel.com>
+References: <20191126131753.3424363-1-stefanb@linux.vnet.ibm.com>
+ <20191129223418.GA15726@linux.intel.com>
+ <6f6f60a2-3b55-e76d-c11a-4677fcb72c16@linux.ibm.com>
+ <20191202185520.57w2h3dgs5q7lhob@cantor>
+ <20191209194248.GC19243@linux.intel.com>
+ <20191209215535.pw6ewyetskaet2o6@cantor>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191209215535.pw6ewyetskaet2o6@cantor>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBsaW51eC1pbnRlZ3JpdHktb3du
-ZXJAdmdlci5rZXJuZWwub3JnIFttYWlsdG86bGludXgtaW50ZWdyaXR5LQ0KPiBvd25lckB2Z2Vy
-Lmtlcm5lbC5vcmddIE9uIEJlaGFsZiBPZiBMYWtzaG1pIFJhbWFzdWJyYW1hbmlhbg0KPiBTZW50
-OiBUdWVzZGF5LCBEZWNlbWJlciAxMCwgMjAxOSAxMTozNyBQTQ0KPiBUbzogSmFtZXMgQm90dG9t
-bGV5IDxKYW1lcy5Cb3R0b21sZXlASGFuc2VuUGFydG5lcnNoaXAuY29tPjsNCj4gamFya2tvLnNh
-a2tpbmVuQGxpbnV4LmludGVsLmNvbTsgTWltaSBab2hhciA8em9oYXJAbGludXguaWJtLmNvbT47
-DQo+IGxpbnV4LWludGVncml0eUB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogRG9lcyBJTUEg
-c3VwcG9ydCBTSEEtMjU2IFBDUiBiYW5rcz8NCj4gDQo+IEhpLA0KPiANCj4gSSBub3RpY2VkIHRo
-YXQgZXZlbiB3aGVuIFNIQS0yNTYgaXMgc2VsZWN0ZWQgYXMgdGhlIGRpZ2VzdCBhbGdvcml0aG0g
-Zm9yDQo+IElNQSBtZWFzdXJlbWVudCwgdGhlIFBDUiBoYXNoIGlzIHN0aWxsIFNIQS0xLg0KPiAN
-Cj4gQSBuZXQgc2VhcmNoIGZvdW5kIHRoZSB0ZXh0IGdpdmVuIGJlbG93IGluIHRoZSBmb2xsb3dp
-bmcgd2lraToNCj4gICAgIGh0dHBzOi8vd2lraS5zdHJvbmdzd2FuLm9yZy9wcm9qZWN0cy9zdHJv
-bmdzd2FuL3dpa2kvSU1BDQo+IA0KPiAqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqDQo+ICoqKioqKioqKioqKg0KPiBTaW5jZSBTSEEtMSBo
-YXMgYmVlbiAic2hhdHRlcmVkIiB3ZSByZWNvbW1lbmQgdG8gdXNlIFNIQS0yNTYgZm9yIHRoZQ0K
-PiBmaWxlIG1lYXN1cmVtZW50IGhhc2hlcy4NCj4gDQo+IElNQSBpbXBsZW1lbnRhdGlvbiBkb2Vz
-IG5vdCBzdXBwb3J0IFNIQS0yNTYgUENSIGJhbmtzIHlldCwgc28gdGhlDQo+IFNIQS0yNTYgZmls
-ZSBoYXNoZXMgYXJlIGV4dGVuZGVkIGludG8gU0hBLTEgUENSIHJlZ2lzdGVycy4NCj4gKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKg0KPiAq
-KioqKioqKioqKioNCj4gDQo+IElzIHRoZSBhYm92ZSBzdGlsbCB0cnVlPw0KPiANCj4gSW4gaW1h
-X2luaXRfZGlnZXN0cygpIHRoZSBkaWdlc3QgYWxnb3JpdGhtIGZvciBQQ1IgZXh0ZW5kIGlzIHNl
-dCBmcm9tDQo+IHRoZSBkaWdlc3QgYWxnb3JpdGhtIHNldCBpbiB0aGUgUENSIGJhbmtzLg0KPiAN
-Cj4gSXMgdGhlcmUgYSB3YXkgdG8gY29uZmlndXJlIElNQSB0byB1c2UgU0hBLTI1NiBQQ1IgYmFu
-a3M/DQo+IA0KPiBpbnQgX19pbml0IGltYV9pbml0X2RpZ2VzdHModm9pZCkNCj4gew0KPiAuLi4N
-Cj4gCWZvciAoaSA9IDA7IGkgPCBpbWFfdHBtX2NoaXAtPm5yX2FsbG9jYXRlZF9iYW5rczsgaSsr
-KQ0KPiAJCWRpZ2VzdHNbaV0uYWxnX2lkID0gaW1hX3RwbV9jaGlwLT5hbGxvY2F0ZWRfYmFua3Nb
-aV0uYWxnX2lkOw0KPiAuLi4NCg0KSGkgTGFrc2htaQ0KDQpjdXJyZW50bHkgdGhlIFNIQTI1NiBQ
-Q1IgYmFuayBpcyBleHRlbmRlZCB3aXRoIGEgcGFkZGVkIFNIQTEuDQoNClNvbWUgdGltZSBhZ28s
-IEkgcG9zdGVkIHNvbWUgcGF0Y2hlcyB0byBzdXBwb3J0IHRoZSBUR0MgQ3J5cHRvIEFnaWxlIGZv
-cm1hdDoNCg0KaHR0cHM6Ly9sa21sLm9yZy9sa21sLzIwMTcvNS8xNi8zNjkNCg0KSG93ZXZlciwg
-dGhpcyBpcyBhIGJpdCBjb21wbGljYXRlIGJlY2F1c2UgdGhlIGN1cnJlbnQgZm9ybWF0IGRvZXMg
-bm90IGZvbGxvdw0KdGhlIFRDRyBzdGFuZGFyZC4gQSB3b3JrIHRvIHN1cHBvcnQgdGhlIG5ldyBJ
-TUEgQ2Fub25pY2FsIEV2ZW50IExvZyBmb3JtYXQNCmhhcyBiZWVuIHByZXNlbnRlZCBhdCBMU1M6
-DQoNCmh0dHBzOi8vc3RhdGljLnNjaGVkLmNvbS9ob3N0ZWRfZmlsZXMvbHNzbmExOC8wMy9sc3Nf
-MjAxOF9zbGlkZXNfVjQucGRmDQoNCkdpdmVuIHRoYXQgdGhlIHBhdGNoZXMgYXJlIHZlcnkgaW52
-YXNpdmUsIHRvIG1lIHNlZW1zIGEgZ29vZCBpZGVhIHRvIHNwbGl0IHRoaXMNCndvcmsgaW4gdHdv
-IHBhcnRzOiBmaXJzdCwgZXh0ZW5kIFBDUnMgd2l0aCB0aGUgY29ycmVjdCBkaWdlc3QgYW5kIHNl
-Y29uZA0KY2hhbmdlIHRoZSBtZWFzdXJlbWVudCBsaXN0IGZvcm1hdC4NCg0KRm9yIHRoZSBmaXJz
-dCBwYXJ0LCB0aGUgcGF0Y2ggd2lsbCBiZSB2ZXJ5IHNpbXBsZSwgYXMgSU1BIHdpbGwganVzdCBx
-dWVyeSB0aGUgVFBNDQp0byBnZXQgdGhlIGxpc3Qgb2YgaGFzaCBhbGdvcml0aG1zIGFuZCB3aWxs
-IGNhbGN1bGF0ZSBhbGwgdGhlIGRpZ2VzdHMgaW4NCmltYV9jYWxjX2ZpZWxkX2FycmF5X2hhc2go
-KS4NCg0KQWxzbywgdGhlIGZpcnN0IHBhcnQgd291bGQgYmUgc3VmZmljaWVudCBmb3IgcmVtb3Rl
-IGF0dGVzdGF0aW9uLCBhcyB0aGUgZGF0YSB1c2VkDQp0byBjYWxjdWxhdGUgdGhlIGRpZ2VzdHMg
-aXMgcGFzc2VkIHRvIHRoZSB2ZXJpZmllci4gVGhlIHZlcmlmaWVyIGNhbiBjYWxjdWxhdGUgYnkN
-CmhpbXNlbGYgdGhlIGRpZ2VzdCBvZiBub24tU0hBMSBQQ1IgYmFua3MsIGV2ZW4gaWYgdGhleSBh
-cmUgbm90IGluY2x1ZGVkIGluIHRoZQ0KbWVhc3VyZW1lbnQgbGlzdC4NCg0KUm9iZXJ0bw0K
+On Mon, Dec 09, 2019 at 02:55:35PM -0700, Jerry Snitselaar wrote:
+> On Mon Dec 09 19, Jarkko Sakkinen wrote:
+> > On Mon, Dec 02, 2019 at 11:55:20AM -0700, Jerry Snitselaar wrote:
+> > > On Sun Dec 01 19, Stefan Berger wrote:
+> > > > On 11/29/19 5:37 PM, Jarkko Sakkinen wrote:
+> > > > > On Tue, Nov 26, 2019 at 08:17:51AM -0500, Stefan Berger wrote:
+> > > > > > From: Stefan Berger <stefanb@linux.ibm.com>
+> > > > > >
+> > > > > > Revert the patches that were fixing the probing of interrupts due
+> > > > > > to reports of interrupt stroms on some systems
+> > > > > Can you explain how reverting is going to fix the issue?
+> > > >
+> > > >
+> > > > The reverts fix 'the interrupt storm issue' that they are causing on
+> > > > some systems but don't fix the issue with the interrupt mode not being
+> > > > used. I was hoping Jerry would get access to a system faster but this
+> > > > didn't seem to be the case. So sending these patches seemed the better
+> > > > solution than leaving 5.4.x with the problem but going back to when it
+> > > > worked 'better.'
+> > > >
+> > > 
+> > > I finally heard back from IT support, and unfortunately they don't
+> > > have any T490s systems to give out on temp loan. So I can only send
+> > > patched kernels to the end user that had the problem.
+> > 
+> > At least it is a fact that tpm_chip_stop() is called too early and that
+> > is destined to cause issues.
+> > 
+> > Should I bake a patch or do you have already something?
+> > 
+> > /Jarkko
+> > 
+> 
+> This is what I'm currently building:
+
+With a quick skim looks what I had in mind.
+
+/Jarkko
