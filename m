@@ -2,83 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E9911BA65
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 18:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D29E811BAC6
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 18:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727334AbfLKRfO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Dec 2019 12:35:14 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:56954 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727185AbfLKRfO (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Dec 2019 12:35:14 -0500
-Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CDC0020B7187;
-        Wed, 11 Dec 2019 09:35:13 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CDC0020B7187
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1576085713;
-        bh=nSJ76MuThJZImWshPx8k80CuagJmlu+tb/uEOZgjAGg=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=ivQ0dab4ovb5UalORzdy7Dl6LYZMulUKi7xGZXL4l7sv08EU9q9nxr2kj7zcFfvB0
-         GXRxF2aDPvQsX+Q8e2OiJnMtHkaiDNRx1C244jipfbrwSPRMeQHKrSp0iYVkCyk09E
-         10bCMvKT0TSgX5XQYhsNf2TWzK+D4/F36RYRbOBA=
-Subject: Re: Does IMA support SHA-256 PCR banks?
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-References: <62e91411-d38d-8b75-bf0e-849fdd3c447f@linux.microsoft.com>
- <36fb73d7534f47b6906c348792bd5d96@huawei.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <4673b391-6936-d2c1-bbd1-cd5daf6937f7@linux.microsoft.com>
-Date:   Wed, 11 Dec 2019 09:35:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1730764AbfLKR5t (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Dec 2019 12:57:49 -0500
+Received: from mga14.intel.com ([192.55.52.115]:28533 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729228AbfLKR5t (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 11 Dec 2019 12:57:49 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Dec 2019 09:37:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,302,1571727600"; 
+   d="scan'208";a="225610402"
+Received: from cmclough-mobl.ger.corp.intel.com (HELO localhost) ([10.251.85.152])
+  by orsmga002.jf.intel.com with ESMTP; 11 Dec 2019 09:37:13 -0800
+Date:   Wed, 11 Dec 2019 19:37:12 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de
+Subject: Re: [PATCH V2] tpm_tis_spi: use new `delay` structure for SPI
+ transfer delays
+Message-ID: <20191211173700.GE4516@linux.intel.com>
+References: <20191204080049.32701-1-alexandru.ardelean@analog.com>
+ <20191210065619.7395-1-alexandru.ardelean@analog.com>
 MIME-Version: 1.0
-In-Reply-To: <36fb73d7534f47b6906c348792bd5d96@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191210065619.7395-1-alexandru.ardelean@analog.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 12/11/19 12:45 AM, Roberto Sassu wrote:
+On Tue, Dec 10, 2019 at 08:56:19AM +0200, Alexandru Ardelean wrote:
+> In a recent change to the SPI subsystem [1], a new `delay` struct was added
+> to replace the `delay_usecs`. This change replaces the current `delay_usecs`
+> with `delay` for this driver.
+> 
+> The `spi_transfer_delay_exec()` function [in the SPI framework] makes sure
+> that both `delay_usecs` & `delay` are used (in this order to preserve
+> backwards compatibility).
+> 
+> [1] commit bebcfd272df6485 ("spi: introduce `delay` field for
+> `spi_transfer` + spi_transfer_delay_exec()")
 
-> 
-> Hi Lakshmi
-> 
-> currently the SHA256 PCR bank is extended with a padded SHA1.
-> 
-> Some time ago, I posted some patches to support the TGC Crypto Agile format:
-> 
-> https://lkml.org/lkml/2017/5/16/369
-> 
-> However, this is a bit complicate because the current format does not follow
-> the TCG standard. A work to support the new IMA Canonical Event Log format
-> has been presented at LSS:
-> 
-> https://static.sched.com/hosted_files/lssna18/03/lss_2018_slides_V4.pdf
-> 
-> Given that the patches are very invasive, to me seems a good idea to split this
-> work in two parts: first, extend PCRs with the correct digest and second
-> change the measurement list format.
-> 
-> For the first part, the patch will be very simple, as IMA will just query the TPM
-> to get the list of hash algorithms and will calculate all the digests in
-> ima_calc_field_array_hash().
-> 
-> Also, the first part would be sufficient for remote attestation, as the data used
-> to calculate the digests is passed to the verifier. The verifier can calculate by
-> himself the digest of non-SHA1 PCR banks, even if they are not included in the
-> measurement list.
-> 
-> Roberto
-> 
+Not sure why you use ` and not '?
 
-Thanks Roberto for the info and the link to the related patches posted 
-earlier. I'll take a look at the patches.
-
-thanks,
-  -lakshmi
-
+/Jarkko
