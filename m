@@ -2,140 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5FB11AB80
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 14:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE14711B593
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2019 16:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729132AbfLKNER (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Dec 2019 08:04:17 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:14986 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728446AbfLKNER (ORCPT
+        id S1731413AbfLKPRP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Dec 2019 10:17:15 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:34742 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731992AbfLKPRK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Dec 2019 08:04:17 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBBCrDfA133146
-        for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2019 08:04:16 -0500
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wr8kyvb6j-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2019 08:04:14 -0500
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 11 Dec 2019 13:04:09 -0000
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 11 Dec 2019 13:04:05 -0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBBD44ls23265648
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Dec 2019 13:04:04 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 615E04203F;
-        Wed, 11 Dec 2019 13:04:04 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3F7AA42047;
-        Wed, 11 Dec 2019 13:04:03 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.221.15])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 11 Dec 2019 13:04:03 +0000 (GMT)
-Subject: Re: [PATCH v1 1/2] IMA: Define workqueue for early boot "key"
- measurements
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
-        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
-        sashal@kernel.org, jamorris@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
-Date:   Wed, 11 Dec 2019 08:04:02 -0500
-In-Reply-To: <1576028407.4579.77.camel@linux.ibm.com>
-References: <20191206012936.2814-1-nramas@linux.microsoft.com>
-         <20191206012936.2814-2-nramas@linux.microsoft.com>
-         <1576028407.4579.77.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19121113-0008-0000-0000-0000033FCCAE
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19121113-0009-0000-0000-00004A5F02D5
-Message-Id: <1576069442.4579.131.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-11_03:2019-12-11,2019-12-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- phishscore=0 bulkscore=0 clxscore=1015 adultscore=0 spamscore=0
- suspectscore=2 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912110110
+        Wed, 11 Dec 2019 10:17:10 -0500
+Received: by mail-pg1-f196.google.com with SMTP id r11so10931217pgf.1
+        for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2019 07:17:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lHzHnQGhN5tP71FlaevdaIuAFnoogD+yCbRZ8NYHtWo=;
+        b=sSUCr5hqdCnnJt3WZvMu8bQU7Alg+WbM4uglsvmVb980MLMQFRtNLsJzPhYRv4n0gG
+         KXONx1ZAMX4/7WbSKCNagj90q6wvdN9CclU6teSEllyr5FcVF7BpAwsW0jIpQIbxf6Qv
+         v3F+DTZ3ZUWhtf00PqhlFpjL7PnZlKru+3VvT6mMi88LBB0Ra2NaxzG/zBPThRa4BRlc
+         hRHYsP69ktcVYKUeJlXmsdltQT3NBYzL2/p6ittL41wHpn9lbcK4kA4arPLlUdfmWFkX
+         xTx0Vi0qjZZIprIpiQrnwGq/FEKDbW0eXek4SDpku8jp11WuSUqDuGjIQgJx2w2zoyw7
+         2gDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lHzHnQGhN5tP71FlaevdaIuAFnoogD+yCbRZ8NYHtWo=;
+        b=KjAtJ1vKvV6W8oOYP9PGQ4Z46l2ydEXALNCXyOSmsZucq/v8/MoGagZt9sNBDVWecA
+         pjtpINlpUYDJk9CxdGq6Fu3L+nInIAkFSTKBSU2kJk1JcIOw8kLEuzvYVz5o0uGLeTrz
+         gFdp84lU4Hi4xxOCI8UrcpiWGWFqO1Aci2OTwFuofq6ktLTSUU+gAV6Fqe0jaeYfc96b
+         QPbr9/ECLYJr76u6FsQeBh6taVjVUXwhPkhkmruuzq5y3PmPzsFpWQVpCHOeKMj2qbCf
+         puepdXm8/LhLmDh5X+Rn+uHzUtgS2Mij/UQQnTjtngPD+8GWd75hIEfzmmtzKBtoJQG2
+         oEYw==
+X-Gm-Message-State: APjAAAU2KNxyMRihVaUjzcvbVh+1mPt9y9dzyM50vJto4tpmjTgqEtfr
+        qO7bzpmG74wS9kHp5laEhcP1pw==
+X-Google-Smtp-Source: APXvYqxEy3hDiJI2lA1gpQG3Xx+YjI+4Pit9SHQzetSX/fKg3dymirOozItGH0VMVlafiz0cwPFbfw==
+X-Received: by 2002:a65:66c8:: with SMTP id c8mr4884729pgw.161.1576077429375;
+        Wed, 11 Dec 2019 07:17:09 -0800 (PST)
+Received: from debian ([122.164.82.31])
+        by smtp.gmail.com with ESMTPSA id t8sm3757537pfq.92.2019.12.11.07.17.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2019 07:17:08 -0800 (PST)
+Date:   Wed, 11 Dec 2019 20:47:01 +0530
+From:   Jeffrin Jose <jeffrin@rajagiritech.edu.in>
+To:     Tadeusz Struk <tadeusz.struk@intel.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Will Deacon <will@kernel.org>, peterz@infradead.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        jeffrin@rajagiritech.edu.in
+Subject: Re: [PROBLEM]: WARNING: lock held when returning to user space!
+ (5.4.1 #16 Tainted: G )
+Message-ID: <20191211151701.GA3643@debian>
+References: <20191207173420.GA5280@debian>
+ <20191209103432.GC3306@willie-the-truck>
+ <20191209202552.GK19243@linux.intel.com>
+ <34e5340f-de75-f20e-7898-6142eac45c13@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34e5340f-de75-f20e-7898-6142eac45c13@intel.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2019-12-10 at 20:40 -0500, Mimi Zohar wrote:
-> > +void ima_process_queued_keys_for_measurement(void)
-> > +{
-> > +	struct ima_measure_key_entry *entry, *tmp;
-> > +	LIST_HEAD(temp_ima_measure_keys);
-> > +
-> > +	if (ima_process_keys_for_measurement)
-> > +		return;
-> > +
-> > +	/*
-> > +	 * Any queued keys will be processed now. From here on
-> > +	 * keys should be processed right away.
-> > +	 */
-> > +	ima_process_keys_for_measurement = true;
+> diff --git a/drivers/char/tpm/tpm-dev-common.c
+> b/drivers/char/tpm/tpm-dev-common.c
+> index 2ec47a69a2a6..47f1c0c5c8de 100644
+> --- a/drivers/char/tpm/tpm-dev-common.c
+> +++ b/drivers/char/tpm/tpm-dev-common.c
+> @@ -61,6 +61,12 @@ static void tpm_dev_async_work(struct work_struct *work)
 > 
-> This function and the ima_queue_key_for_measurement() are not
-> exported, so don't require kernel-doc style comments, but at least
-> this comment should not be here.  It could be included as part of the
-> function description at the head of the function.
-
-Sorry, one more comment.  Appending "_for_measurement" or inserting
-"_measure_" makes these function names unnecessarily long.  This
-information can be included in the function descriptions.
-
-Mimi
-
-
+>  	mutex_lock(&priv->buffer_mutex);
+>  	priv->command_enqueued = false;
+> +	ret = tpm_try_get_ops(priv->chip);
+> +	if (ret) {
+> +		priv->response_length = ret;
+> +		goto out;
+> +	}
+> +
+>  	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
+>  			       sizeof(priv->data_buffer));
+>  	tpm_put_ops(priv->chip);
+> @@ -68,6 +74,7 @@ static void tpm_dev_async_work(struct work_struct *work)
+>  		priv->response_length = ret;
+>  		mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
+>  	}
+> +out:
+>  	mutex_unlock(&priv->buffer_mutex);
+>  	wake_up_interruptible(&priv->async_wait);
+>  }
+> @@ -205,6 +212,7 @@ ssize_t tpm_common_write(struct file *file, const
+> char __user *buf,
+>  		priv->command_enqueued = true;
+>  		queue_work(tpm_dev_wq, &priv->async_work);
+>  		mutex_unlock(&priv->buffer_mutex);
+> +		tpm_put_ops(priv->chip);
+>  		return size;
+>  	}
 > 
-> Remember we don't add code comments needlessly.  Refer to section "8)
-> Commenting" in Documentation/process/coding-style.rst.
 > 
-> > +
-> > +	/*
-> > +	 * To avoid holding the mutex when processing queued keys,
-> > +	 * transfer the queued keys with the mutex held to a temp list,
-> > +	 * release the mutex, and then process the queued keys from
-> > +	 * the temp list.
-> > +	 *
-> > +	 * Since ima_process_keys_for_measurement is set to true above,
-> > +	 * any new key will be processed immediately and not be queued.
-> > +	 */
-> > +	INIT_LIST_HEAD(&temp_ima_measure_keys);
-> > +
-> > +	mutex_lock(&ima_measure_keys_mutex);
-> > +
-> > +	list_for_each_entry_safe(entry, tmp, &ima_measure_keys, list)
-> > +		list_move_tail(&entry->list, &temp_ima_measure_keys);
-> > +
-> > +	mutex_unlock(&ima_measure_keys_mutex);
-> > +
-> > +	list_for_each_entry_safe(entry, tmp, &temp_ima_measure_keys, list) {
-> > +		process_buffer_measurement(entry->payload, entry->payload_len,
-> > +					   entry->keyring_name, KEY_CHECK, 0,
-> > +					   entry->keyring_name);
-> > +		list_del(&entry->list);
-> > +		ima_free_measure_key_entry(entry);
-> > +	}
-> > +}
-> > +
-> >  /**
-> >   * ima_post_key_create_or_update - measure asymmetric keys
-> >   * @keyring: keyring to which the key is linked to
 > 
+> -- 
+> Tadeusz
 
+above patch shows errors when i try to apply it.
+--------------------x------------------------x------------------
+error: git diff header lacks filename information when removing 1 leading pathname component (line 2)
+when i did  related to this "diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c"
+i get another error
+error: corrupt patch at line 27
+----------------------x------------------------x-----------------
+
+i use "git apply"
+
+--
+software engineer
+rajagiri school of engineering and technology
