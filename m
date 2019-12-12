@@ -2,76 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 842D611D2EC
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Dec 2019 17:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA45A11D47B
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Dec 2019 18:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730007AbfLLQ6G (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Dec 2019 11:58:06 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:53712 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729771AbfLLQ6G (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Dec 2019 11:58:06 -0500
-Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 88B0C20B7187;
-        Thu, 12 Dec 2019 08:58:05 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 88B0C20B7187
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1576169885;
-        bh=ySLNS1REyfh370oZ6WsELyIxjhx8R3R3aifd3RFR2iA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Ze9D4wHVjxSbbIKVNQ7i1ptu12wo4YtsTs/a2pItCcfOpI1vN00BlrdiJQlsDmMeX
-         BaEvYRG7w5IfwWj4jTijgMve5BKKur6XeNWn0FfbqFeu37gPGafT7BhdeVBDzRaFft
-         87r8dCPjuiaNA0IvEuVsdgXg+BP4hJWjbG8uqEGA=
-Subject: Re: [PATCH v11 0/6] KEYS: Measure keys when they are created or
- updated
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
-        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
-        sashal@kernel.org, jamorris@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
-References: <20191211164707.4698-1-nramas@linux.microsoft.com>
- <1576160916.4579.151.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <1f34f41a-f43d-0397-aed0-e43aab87ac42@linux.microsoft.com>
-Date:   Thu, 12 Dec 2019 08:58:05 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1729883AbfLLRsq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Dec 2019 12:48:46 -0500
+Received: from mga11.intel.com ([192.55.52.93]:42295 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729771AbfLLRsp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 12 Dec 2019 12:48:45 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Dec 2019 09:48:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,306,1571727600"; 
+   d="scan'208";a="414006006"
+Received: from tstruk-mobl1.jf.intel.com (HELO [127.0.1.1]) ([10.7.196.67])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Dec 2019 09:48:44 -0800
+Subject: [PATCH =v2 1/3] tpm: fix invalid locking in NONBLOCKING mode
+From:   Tadeusz Struk <tadeusz.struk@intel.com>
+To:     jarkko.sakkinen@linux.intel.com
+Cc:     tadeusz.struk@intel.com, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, jgg@ziepe.ca, mingo@redhat.com,
+        jeffrin@rajagiritech.edu.in, linux-integrity@vger.kernel.org,
+        will@kernel.org, peterhuewe@gmx.de
+Date:   Thu, 12 Dec 2019 09:48:47 -0800
+Message-ID: <157617292787.8172.9586296287013438621.stgit@tstruk-mobl1>
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
-In-Reply-To: <1576160916.4579.151.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 12/12/19 6:28 AM, Mimi Zohar wrote:
+When an application sends TPM commands in NONBLOCKING mode
+the driver holds chip->tpm_mutex returning from write(),
+which triggers: "WARNING: lock held when returning to user space".
+To fix this issue the driver needs to release the mutex before
+returning and acquire it again in tpm_dev_async_work() before
+sending the command.
 
-> Hi Lakshmi,
-> 
-> On Wed, 2019-12-11 at 08:47 -0800, Lakshmi Ramasubramanian wrote:
->> Keys created or updated in the system are currently not measured.
->> Therefore an attestation service, for instance, would not be able to
->> attest whether or not the trusted keys keyring(s), for instance, contain
->> only known good (trusted) keys.
->>
->> IMA measures system files, command line arguments passed to kexec,
->> boot aggregate, etc. It can be used to measure keys as well.
->> But there is no mechanism available in the kernel for IMA to
->> know when a key is created or updated.
->>
->> This change aims to address measuring keys created or updated
->> in the system.
-> 
-> Thank you!  This patch set is now queued in the next-integrity-testing
-> branch of https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-
-> integrity.git/.
-> 
-> Mimi
-> 
+Cc: stable@vger.kernel.org
+Fixes: 9e1b74a63f776 (tpm: add support for nonblocking operation)
+Reported-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+Signed-off-by: Tadeusz Struk <tadeusz.struk@intel.com>
+---
+Changes in v2:
+- Updated commit message as requested
+- Add the fix and test updates to the same series
+---
+ drivers/char/tpm/tpm-dev-common.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thanks Mimi.
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index 2ec47a69a2a6..b23b0b999232 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -61,6 +61,12 @@ static void tpm_dev_async_work(struct work_struct *work)
+ 
+ 	mutex_lock(&priv->buffer_mutex);
+ 	priv->command_enqueued = false;
++	ret = tpm_try_get_ops(priv->chip);
++	if (ret) {
++		priv->response_length = ret;
++		goto out;
++	}
++
+ 	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
+ 			       sizeof(priv->data_buffer));
+ 	tpm_put_ops(priv->chip);
+@@ -68,6 +74,7 @@ static void tpm_dev_async_work(struct work_struct *work)
+ 		priv->response_length = ret;
+ 		mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
+ 	}
++out:
+ 	mutex_unlock(&priv->buffer_mutex);
+ 	wake_up_interruptible(&priv->async_wait);
+ }
+@@ -204,6 +211,7 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+ 	if (file->f_flags & O_NONBLOCK) {
+ 		priv->command_enqueued = true;
+ 		queue_work(tpm_dev_wq, &priv->async_work);
++		tpm_put_ops(priv->chip);
+ 		mutex_unlock(&priv->buffer_mutex);
+ 		return size;
+ 	}
 
-  -lakshmi
