@@ -2,134 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0920D11D47D
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Dec 2019 18:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2687A11D4B2
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Dec 2019 18:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730000AbfLLRsv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Dec 2019 12:48:51 -0500
-Received: from mga12.intel.com ([192.55.52.136]:15317 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729771AbfLLRsv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Dec 2019 12:48:51 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Dec 2019 09:48:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,306,1571727600"; 
-   d="scan'208";a="414006040"
-Received: from tstruk-mobl1.jf.intel.com (HELO [127.0.1.1]) ([10.7.196.67])
-  by fmsmga005.fm.intel.com with ESMTP; 12 Dec 2019 09:48:50 -0800
-Subject: [PATCH =v2 2/3] tpm: selftest: add test covering async mode
-From:   Tadeusz Struk <tadeusz.struk@intel.com>
-To:     jarkko.sakkinen@linux.intel.com
-Cc:     tadeusz.struk@intel.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, jgg@ziepe.ca, mingo@redhat.com,
-        jeffrin@rajagiritech.edu.in, linux-integrity@vger.kernel.org,
-        will@kernel.org, peterhuewe@gmx.de
-Date:   Thu, 12 Dec 2019 09:48:53 -0800
-Message-ID: <157617293389.8172.8156104731485294664.stgit@tstruk-mobl1>
-In-Reply-To: <157617292787.8172.9586296287013438621.stgit@tstruk-mobl1>
-References: <157617292787.8172.9586296287013438621.stgit@tstruk-mobl1>
-User-Agent: StGit/0.17.1-dirty
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        id S1730033AbfLLR6i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Dec 2019 12:58:38 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:49404 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729771AbfLLR6i (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 12 Dec 2019 12:58:38 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id ADA428EE18E;
+        Thu, 12 Dec 2019 09:58:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1576173517;
+        bh=zSA5vEZXE9xCTtWGIKVrRDuKgN6VsdKbhb5/T3DsX/g=;
+        h=Subject:From:To:Cc:Date:From;
+        b=cbLToYKhJp+VoWeSyLJ6DfZEgqvS4fnbwmGdb/r+ueWRHo/oUympdMDo5+iJrqqhz
+         60k2Iuo1RM0gUFuslCUR9lvD0GPp6JJe2YaVQrFhoN7NBOxupfLARfJOyPVgrMxDuZ
+         VON754zrY+pfXC8HZ6xgh8UjkbBeOqX3zRXXRjDk=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id OTnLXpYwQLqE; Thu, 12 Dec 2019 09:58:37 -0800 (PST)
+Received: from [9.232.197.95] (unknown [129.33.253.145])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2135C8EE0C7;
+        Thu, 12 Dec 2019 09:58:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1576173517;
+        bh=zSA5vEZXE9xCTtWGIKVrRDuKgN6VsdKbhb5/T3DsX/g=;
+        h=Subject:From:To:Cc:Date:From;
+        b=cbLToYKhJp+VoWeSyLJ6DfZEgqvS4fnbwmGdb/r+ueWRHo/oUympdMDo5+iJrqqhz
+         60k2Iuo1RM0gUFuslCUR9lvD0GPp6JJe2YaVQrFhoN7NBOxupfLARfJOyPVgrMxDuZ
+         VON754zrY+pfXC8HZ6xgh8UjkbBeOqX3zRXXRjDk=
+Message-ID: <1576173515.15886.7.camel@HansenPartnership.com>
+Subject: [PATCH URGENT FIX] security: keys: trusted: fix lost handle flush
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Date:   Thu, 12 Dec 2019 12:58:35 -0500
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add a test that sends a tpm cmd in an async mode.
-Currently there is a gap in test coverage with regards
-to this functionality.
+The original code, before it was moved into security/keys/trusted-keys
+had a flush after the blob unseal.  Without that flush, the volatile
+handles increase in the TPM until it becomes unusable and the system
+either has to be rebooted or the TPM volatile area manually flushed. 
+Fix by adding back the lost flush, which we now have to export because
+of the relocation of the trusted key code may cause the consumer to be
+modular.
 
-Signed-off-by: Tadeusz Struk <tadeusz.struk@intel.com>
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Fixes: 2e19e10131a0 ("KEYS: trusted: Move TPM2 trusted keys code")
+
 ---
- tools/testing/selftests/tpm2/test_smoke.sh |    1 +
- tools/testing/selftests/tpm2/tpm2.py       |   19 +++++++++++++++++--
- tools/testing/selftests/tpm2/tpm2_tests.py |   13 +++++++++++++
- 3 files changed, 31 insertions(+), 2 deletions(-)
+ drivers/char/tpm/tpm.h                    | 1 -
+ drivers/char/tpm/tpm2-cmd.c               | 1 +
+ include/linux/tpm.h                       | 1 +
+ security/keys/trusted-keys/trusted_tpm2.c | 1 +
+ 4 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 80521d46220c..cb54ab637ea6 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -2,3 +2,4 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index b9e1547be6b5..5620747da0cf 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -218,7 +218,6 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 		    struct tpm_digest *digests);
+ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max);
+-void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
+ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
+ 			u32 *value, const char *desc);
  
- python -m unittest -v tpm2_tests.SmokeTest
-+python -m unittest -v tpm2_tests.AsyncTest
-diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
-index 828c18584624..d0fcb66a88a6 100644
---- a/tools/testing/selftests/tpm2/tpm2.py
-+++ b/tools/testing/selftests/tpm2/tpm2.py
-@@ -6,8 +6,8 @@ import socket
- import struct
- import sys
- import unittest
--from fcntl import ioctl
--
-+import fcntl
-+import select
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index fdb457704aa7..13696deceae8 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -362,6 +362,7 @@ void tpm2_flush_context(struct tpm_chip *chip, u32 handle)
+ 	tpm_transmit_cmd(chip, &buf, 0, "flushing context");
+ 	tpm_buf_destroy(&buf);
+ }
++EXPORT_SYMBOL_GPL(tpm2_flush_context);
  
- TPM2_ST_NO_SESSIONS = 0x8001
- TPM2_ST_SESSIONS = 0x8002
-@@ -352,6 +352,7 @@ def hex_dump(d):
- class Client:
-     FLAG_DEBUG = 0x01
-     FLAG_SPACE = 0x02
-+    FLAG_NONBLOCK = 0x04
-     TPM_IOC_NEW_SPACE = 0xa200
+ struct tpm2_get_cap_out {
+ 	u8 more_data;
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 0d6e949ba315..03e9b184411b 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -403,6 +403,7 @@ extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ extern int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen);
+ extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
+ extern struct tpm_chip *tpm_default_chip(void);
++void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
+ #else
+ static inline int tpm_is_tpm2(struct tpm_chip *chip)
+ {
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index a9810ac2776f..08ec7f48f01d 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -309,6 +309,7 @@ int tpm2_unseal_trusted(struct tpm_chip *chip,
+ 		return rc;
  
-     def __init__(self, flags = 0):
-@@ -362,13 +363,27 @@ class Client:
-         else:
-             self.tpm = open('/dev/tpmrm0', 'r+b', buffering=0)
+ 	rc = tpm2_unseal_cmd(chip, payload, options, blob_handle);
++	tpm2_flush_context(chip, blob_handle);
  
-+        if (self.flags & Client.FLAG_NONBLOCK):
-+            flags = fcntl.fcntl(self.tpm, fcntl.F_GETFL)
-+            flags |= os.O_NONBLOCK
-+            fcntl.fcntl(self.tpm, fcntl.F_SETFL, flags)
-+            self.tpm_poll = select.poll()
-+
-     def close(self):
-         self.tpm.close()
- 
-     def send_cmd(self, cmd):
-         self.tpm.write(cmd)
-+
-+        if (self.flags & Client.FLAG_NONBLOCK):
-+            self.tpm_poll.register(self.tpm, select.POLLIN)
-+            self.tpm_poll.poll(10000)
-+
-         rsp = self.tpm.read()
- 
-+        if (self.flags & Client.FLAG_NONBLOCK):
-+            self.tpm_poll.unregister(self.tpm)
-+
-         if (self.flags & Client.FLAG_DEBUG) != 0:
-             sys.stderr.write('cmd' + os.linesep)
-             sys.stderr.write(hex_dump(cmd) + os.linesep)
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index d4973be53493..728be7c69b76 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -288,3 +288,16 @@ class SpaceTest(unittest.TestCase):
- 
-         self.assertEqual(rc, tpm2.TPM2_RC_COMMAND_CODE |
-                          tpm2.TSS2_RESMGR_TPM_RC_LAYER)
-+
-+class AsyncTest(unittest.TestCase):
-+    def setUp(self):
-+        logging.basicConfig(filename='AsyncTest.log', level=logging.DEBUG)
-+
-+    def test_async(self):
-+        log = logging.getLogger(__name__)
-+        log.debug(sys._getframe().f_code.co_name)
-+
-+        async_client = tpm2.Client(tpm2.Client.FLAG_NONBLOCK)
-+        log.debug("Calling get_cap in a NON_BLOCKING mode")
-+        async_client.get_cap(tpm2.TPM2_CAP_HANDLES, tpm2.HR_LOADED_SESSION)
-+        async_client.close()
+ 	return rc;
+ }
+-- 
+2.16.4
 
