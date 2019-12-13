@@ -2,91 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B8711DB08
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2019 01:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D4611DB30
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2019 01:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731026AbfLMARi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Dec 2019 19:17:38 -0500
-Received: from mga06.intel.com ([134.134.136.31]:18547 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730882AbfLMARi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Dec 2019 19:17:38 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Dec 2019 16:17:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,307,1571727600"; 
-   d="scan'208";a="415463764"
-Received: from dwidzins-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.21.195])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Dec 2019 16:17:32 -0800
-Date:   Fri, 13 Dec 2019 02:17:31 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Guenter Roeck <groeck@google.com>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "# v4 . 10+" <stable@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andrey Pronin <apronin@chromium.org>,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.4 277/350] tpm: Add a flag to indicate TPM
- power is managed by firmware
-Message-ID: <20191213001654.GD7854@linux.intel.com>
-References: <20191210210735.9077-1-sashal@kernel.org>
- <20191210210735.9077-238-sashal@kernel.org>
- <CABXOdTdO16V4AtO1t=BwXW2=HAtT6CYoSddmrn5T2qZP9hs0eQ@mail.gmail.com>
- <20191211175651.GK4516@linux.intel.com>
- <CABXOdTcsnAVaPo-492tVPtjOYMbNtu2Zvz4GwSBGcDEHAMGw5Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABXOdTcsnAVaPo-492tVPtjOYMbNtu2Zvz4GwSBGcDEHAMGw5Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1731582AbfLMAmz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Dec 2019 19:42:55 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:49688 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731206AbfLMAmy (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 12 Dec 2019 19:42:54 -0500
+Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 186AC20B7187;
+        Thu, 12 Dec 2019 16:42:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 186AC20B7187
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1576197774;
+        bh=MwDgSi8SRb6LulSD+iVS0HUSRt7SlgQb45vWMq5h0QY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i7/XGZtzO2cCf1cjvkalaj+n8R1+/1UsB75CAX1TA2qA4HLznsV4nOeYphxxNIYl0
+         CNuntWIh4ghC3WwJsyxCxz5ynxe7Z7PG74i1+/MpJSWOb+XNbRo+efDSNaM9Hf3aBg
+         3OsmD8WrVVh6ENZF0XG1ji1uihtbmhEechvUSTsc=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
+        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
+        sashal@kernel.org, jamorris@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
+Subject: [PATCH v3 0/2] IMA: Deferred measurement of keys
+Date:   Thu, 12 Dec 2019 16:42:48 -0800
+Message-Id: <20191213004250.21132-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 10:05:52AM -0800, Guenter Roeck wrote:
-> On Wed, Dec 11, 2019 at 9:57 AM Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Tue, Dec 10, 2019 at 01:32:15PM -0800, Guenter Roeck wrote:
-> > > On Tue, Dec 10, 2019 at 1:12 PM Sasha Levin <sashal@kernel.org> wrote:
-> > > >
-> > > > From: Stephen Boyd <swboyd@chromium.org>
-> > > >
-> > > > [ Upstream commit 2e2ee5a2db06c4b81315514b01d06fe5644342e9 ]
-> > > >
-> > > > On some platforms, the TPM power is managed by firmware and therefore we
-> > > > don't need to stop the TPM on suspend when going to a light version of
-> > > > suspend such as S0ix ("freeze" suspend state). Add a chip flag,
-> > > > TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED, to indicate this so that certain
-> > > > platforms can probe for the usage of this light suspend and avoid
-> > > > touching the TPM state across suspend/resume.
-> > > >
-> > >
-> > > Are the patches needed to support CR50 (which need this patch) going
-> > > to be applied to v5.4.y as well ? If not, what is the purpose of
-> > > applying this patch to v5.4.y ?
-> > >
-> > > Thanks,
-> > > Guenter
-> >
-> > Thanks Guenter. I think not.
-> >
-> Thought so. In that case this patch should be dropped.
-> 
-> Guenter
+This patchset extends the previous version[1] by adding support for
+deferred processing of keys.
 
-I fully agree with you.
+With the patchset referenced above, the IMA subsystem supports
+measuring asymmetric keys when the key is created or updated.
+But keys created or updated before a custom IMA policy is loaded
+are currently not measured. This includes keys added to, for instance,
+.builtin_trusted_keys which happens early in the boot process.
 
-/Jarkko
+This change adds support for queuing keys created or updated before
+a custom IMA policy is loaded. The queued keys are processed when
+a custom policy is loaded. Keys created or updated after a custom policy
+is loaded are measured immediately (not queued).
+
+If the kernel is built with both CONFIG_IMA and
+CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE enabled then the IMA policy
+must be applied as a custom policy. Not providing a custom policy
+in the above configuration would result in asymmeteric keys being queued
+until a custom policy is loaded. This is by design.
+
+[1] https://lore.kernel.org/linux-integrity/20191211164707.4698-1-nramas@linux.microsoft.com/
+
+Testing performed:
+
+  * Booted the kernel with this change.
+  * Added .builtin_trusted_keys in "keyrings=" option in
+    the IMA policy and verified the keys added to this
+    keyring are measured.
+  * Specified only func=KEY_CHECK and not "keyrings=" option,
+    and verified the keys added to builtin_trusted_keys keyring
+    are processed.
+  * Added keys at runtime and verified they are measured
+    if the IMA policy permitted.
+      => For example, added keys to .ima keyring and verified.
+
+Changelog:
+
+  v3
+
+  => Defined ima_process_keys flag to be static.
+  => Set ima_process_keys with ima_keys_mutex held.
+  => Added a comment in ima_process_queued_keys() function
+     to state the use of temporary list for keys.
+
+  v2
+
+  => Rebased the changes to v5.5-rc1
+  => Updated function names, variable names, and code comments
+     to be less verbose.
+
+  v1
+
+  => Code cleanup
+
+  v0
+
+  => Based changes on v5.4-rc8
+  => The following patchsets should be applied in that order
+     https://lore.kernel.org/linux-integrity/1572492694-6520-1-git-send-email-zohar@linux.ibm.com
+     https://lore.kernel.org/linux-integrity/20191204224131.3384-1-nramas@linux.microsoft.com/
+  => Added functions to queue and dequeue keys, and process
+     the queued keys when custom IMA policies are applied.
+
+
+Lakshmi Ramasubramanian (2):
+  IMA: Define workqueue for early boot key measurements
+  IMA: Call workqueue functions to measure queued keys
+
+ security/integrity/ima/ima.h                 |  15 +++
+ security/integrity/ima/ima_asymmetric_keys.c | 127 +++++++++++++++++++
+ security/integrity/ima/ima_policy.c          |   3 +
+ 3 files changed, 145 insertions(+)
+
+-- 
+2.17.1
+
