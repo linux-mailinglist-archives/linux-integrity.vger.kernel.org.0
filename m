@@ -2,82 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B01C11E942
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2019 18:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCBA11EDEC
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2019 23:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728454AbfLMRbu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Dec 2019 12:31:50 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:40174 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728109AbfLMRbu (ORCPT
+        id S1725989AbfLMWg0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Dec 2019 17:36:26 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:35584 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbfLMWgZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Dec 2019 12:31:50 -0500
-Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0C6BA20B71AD;
-        Fri, 13 Dec 2019 09:31:49 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0C6BA20B71AD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1576258309;
-        bh=K8f1QxAwXDzLq4vB/wOBc1ZmhGBElxdEEuD/7WAuoGk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=aDF8A9pPBRvhWqxjVunYKVN/H6/GBV2B4zniutWLU6iqiAKdZpeqdBsQTQsqGPyAi
-         jpkmp60+UPv1NEbKt8kBuNhTDIKAsRKiffGLf5cEb+E/W6lzirp+WxLfCTsgkHTz8B
-         Qc3hsLbqJHf5es5VFTi5XXxURRHOd2TfKaTp1g3g=
-Subject: Re: [PATCH v4 2/2] IMA: Call workqueue functions to measure queued
- keys
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org
-Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
-        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
-        sashal@kernel.org, jamorris@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
-References: <20191213171827.28657-1-nramas@linux.microsoft.com>
- <20191213171827.28657-3-nramas@linux.microsoft.com>
- <1576257955.8504.20.camel@HansenPartnership.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <39624b97-245c-ed05-27c5-588787aacc00@linux.microsoft.com>
-Date:   Fri, 13 Dec 2019 09:31:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Fri, 13 Dec 2019 17:36:25 -0500
+Received: by mail-ot1-f65.google.com with SMTP id o9so928520ote.2;
+        Fri, 13 Dec 2019 14:36:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=aViRkDm5Q83Ziq8WvPrQQFLWmlznU7OM781DBB+jypg=;
+        b=ucND154++qoAxLmokTgA2eEdK6s5YKYYDcJ5pF5t0tyGwIbddMoGtivA0Wg+fU4wz0
+         8vhz78HoY/DWs1JxsnH/mHDzR1VWIB9UkCJzBrvm5HAMGUgCfLRGaUFXO0Yji/MqcFzx
+         NoGd/l2/VeyasbIRrswD6ocw1Q9QJEXZNNrTCpnBjmfOOtj8RwZ24+b5aj0VtHQcgooJ
+         E7X/dKc8aytc4HCPGXcuFkkKJ920A30MFpDRg1jKGQSAQedw0t397xpnHn9REHkVHpGb
+         rTWaFy0p9a4bA0rRsqJ1Kwc6mG1F5KCSl7lwMD7rfaQQfL/B3I2EsDLB4kNdT20KP6rC
+         bh1A==
+X-Gm-Message-State: APjAAAXEfS2TAXY7xDhJwpM4dlAZwxNiYMPArvynr1Wu4C3ppltt66cU
+        w1FLARk90hZ8wVdyxoElmA==
+X-Google-Smtp-Source: APXvYqw8SEx0ZsdXc4Aw+KPeDksSB3h46zpVT+15p6hwpJ1l8hKcJ9COeglbxaJdcO7zzSAu5R/efQ==
+X-Received: by 2002:a05:6830:1353:: with SMTP id r19mr17631952otq.288.1576276584871;
+        Fri, 13 Dec 2019 14:36:24 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id b15sm3832281oti.23.2019.12.13.14.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2019 14:36:24 -0800 (PST)
+Date:   Fri, 13 Dec 2019 16:36:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     amirmizi6@gmail.com
+Cc:     Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
+        oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
+        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        ayna@linux.vnet.ibm.com, Dan.Morav@nuvoton.com,
+        oren.tanami@nuvoton.com, shmulik.hager@nuvoton.com,
+        amir.mizinski@nuvoton.com
+Subject: Re: [PATCH v2 4/5] dt-bindings: tpm: Add YAML schema for TPM TIS I2C
+ options
+Message-ID: <20191213223623.GA14809@bogus>
+References: <20191202133332.178110-1-amirmizi6@gmail.com>
+ <20191202133332.178110-5-amirmizi6@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1576257955.8504.20.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191202133332.178110-5-amirmizi6@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 12/13/19 9:25 AM, James Bottomley wrote:
+On Mon, Dec 02, 2019 at 03:33:31PM +0200, amirmizi6@gmail.com wrote:
+> From: Amir Mizinski <amirmizi6@gmail.com>
+> 
+> Added a YAML schema to support tpm tis i2c realted dt-bindings for the I2c PTP based physical layer.
 
-Hi James,
+Wrap your commmit message. And TPM, TIS?, and I2C should be capitalized.
 
 > 
-> There's no locking around the ima_process_keys flag.  If you get two
-> policy updates in quick succession can't this flag change as you're
-> processing the second update meaning you lose it because the flag was
-> false when you decided to build it for the queue but becomes true
-> before you check above whether you need to queue it?
-> 
-> Note you don't need locking to fix this, you just need to ensure that
-> you use the same copy of the flag value for both tests.
-> 
-> James
-> 
+> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+> ---
+>  .../bindings/security/tpm/tpm-tis-i2c.yaml         | 38 ++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
 
-Same flag (ima_process_keys) is used for making the queuing decision.
+Please read my comments on v1 (The first v1 from 11/10, not the 2nd v1 
+you sent).
 
-Taking a lock to access ima_process_keys is required only if the flag is 
-false. That is handled in ima_queue_key() and ima_process_queued_keys() 
-functions.
-
-Queued keys are processed when the first policy update occurs. 
-Subsequently, the keys are processed immediately (not queued).
-
-Could you please review those functions in this patch and let me know if 
-you see a problem?
-
-thanks,
-  -lakshmi
-
+Rob
