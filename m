@@ -2,74 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B17611D9BA
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Dec 2019 23:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B8711DB08
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2019 01:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731143AbfLLW57 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Dec 2019 17:57:59 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:40726 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731131AbfLLW57 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Dec 2019 17:57:59 -0500
-Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7F3D020B7187;
-        Thu, 12 Dec 2019 14:57:58 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7F3D020B7187
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1576191478;
-        bh=IaY9QfPYlGX8LBGy1XQmQtegmcwNOQejtgEwB7A4BKM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ZK2aaBtqm/DdZi7fhP+jIagujLRcrIzUhHkusgPASPWi+e45zhO4QcV4EsrQnGWgG
-         cEVGInMrEE2PBMHOKGGNS/Hm6PfK2zTv6ao/pNu89hUpnw2783+PXhtB2SnSf+jXlV
-         FsTlSGsPyE0ttPj7kLXTEPBqZyXR+usBEscHngN0=
-Subject: Re: [PATCH v2 1/2] IMA: Define workqueue for early boot "key"
- measurements
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
-        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
-        sashal@kernel.org, jamorris@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
-References: <20191211185116.2740-1-nramas@linux.microsoft.com>
- <20191211185116.2740-2-nramas@linux.microsoft.com>
- <1576138743.4579.147.camel@linux.ibm.com>
- <0cc15a43-8e1b-9819-33fe-8325068f8df2@linux.microsoft.com>
- <1576185189.4579.165.camel@linux.ibm.com>
- <b4ff3607-076e-7b90-24d1-9a129d9ce720@linux.microsoft.com>
- <1576191258.4579.181.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <cd0d6b0c-1be4-493d-6ba7-72bd60f601cb@linux.microsoft.com>
-Date:   Thu, 12 Dec 2019 14:58:22 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1731026AbfLMARi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Dec 2019 19:17:38 -0500
+Received: from mga06.intel.com ([134.134.136.31]:18547 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730882AbfLMARi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 12 Dec 2019 19:17:38 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Dec 2019 16:17:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,307,1571727600"; 
+   d="scan'208";a="415463764"
+Received: from dwidzins-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.21.195])
+  by fmsmga006.fm.intel.com with ESMTP; 12 Dec 2019 16:17:32 -0800
+Date:   Fri, 13 Dec 2019 02:17:31 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Guenter Roeck <groeck@google.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "# v4 . 10+" <stable@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andrey Pronin <apronin@chromium.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.4 277/350] tpm: Add a flag to indicate TPM
+ power is managed by firmware
+Message-ID: <20191213001654.GD7854@linux.intel.com>
+References: <20191210210735.9077-1-sashal@kernel.org>
+ <20191210210735.9077-238-sashal@kernel.org>
+ <CABXOdTdO16V4AtO1t=BwXW2=HAtT6CYoSddmrn5T2qZP9hs0eQ@mail.gmail.com>
+ <20191211175651.GK4516@linux.intel.com>
+ <CABXOdTcsnAVaPo-492tVPtjOYMbNtu2Zvz4GwSBGcDEHAMGw5Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1576191258.4579.181.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABXOdTcsnAVaPo-492tVPtjOYMbNtu2Zvz4GwSBGcDEHAMGw5Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-On 12/12/2019 2:54 PM, Mimi Zohar wrote:
-
->>
->> I can also move the setting of ima_process_key flag inside the lock
->> along with the above change.
+On Wed, Dec 11, 2019 at 10:05:52AM -0800, Guenter Roeck wrote:
+> On Wed, Dec 11, 2019 at 9:57 AM Jarkko Sakkinen
+> <jarkko.sakkinen@linux.intel.com> wrote:
+> >
+> > On Tue, Dec 10, 2019 at 01:32:15PM -0800, Guenter Roeck wrote:
+> > > On Tue, Dec 10, 2019 at 1:12 PM Sasha Levin <sashal@kernel.org> wrote:
+> > > >
+> > > > From: Stephen Boyd <swboyd@chromium.org>
+> > > >
+> > > > [ Upstream commit 2e2ee5a2db06c4b81315514b01d06fe5644342e9 ]
+> > > >
+> > > > On some platforms, the TPM power is managed by firmware and therefore we
+> > > > don't need to stop the TPM on suspend when going to a light version of
+> > > > suspend such as S0ix ("freeze" suspend state). Add a chip flag,
+> > > > TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED, to indicate this so that certain
+> > > > platforms can probe for the usage of this light suspend and avoid
+> > > > touching the TPM state across suspend/resume.
+> > > >
+> > >
+> > > Are the patches needed to support CR50 (which need this patch) going
+> > > to be applied to v5.4.y as well ? If not, what is the purpose of
+> > > applying this patch to v5.4.y ?
+> > >
+> > > Thanks,
+> > > Guenter
+> >
+> > Thanks Guenter. I think not.
+> >
+> Thought so. In that case this patch should be dropped.
 > 
-> My concern is with the last sentence "Since ima_process_keys is set to
-> true above, any new key will be processed immediately and not queued."
->    It's unlikely, but possible, that a second process will wait for the
-> ima_keys_mutex.  Either we remove this sentence or move setting
-> ima_process_keys to after taking the lock.
-> 
-> Mimi
+> Guenter
 
-Sure - i'll move the setting of ima_process_keys flag inside the lock 
-and define the flag as static. Will keep the comment as is.
+I fully agree with you.
 
-thanks,
-  -lakshmi
-
+/Jarkko
