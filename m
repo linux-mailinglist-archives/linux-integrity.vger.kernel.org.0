@@ -2,88 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9580E11EE11
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2019 23:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DBC11F405
+	for <lists+linux-integrity@lfdr.de>; Sat, 14 Dec 2019 21:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726404AbfLMW56 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Dec 2019 17:57:58 -0500
-Received: from mail-yw1-f74.google.com ([209.85.161.74]:39274 "EHLO
-        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbfLMW56 (ORCPT
+        id S1726781AbfLNUhQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 14 Dec 2019 15:37:16 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:54520 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726484AbfLNUhQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Dec 2019 17:57:58 -0500
-Received: by mail-yw1-f74.google.com with SMTP id l12so672094ywk.6
-        for <linux-integrity@vger.kernel.org>; Fri, 13 Dec 2019 14:57:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=P50f0ZL2uY1UYmnaU7An9xVTQaVqLWmvMfnLqv/D8hE=;
-        b=ZAlVpNgsWpaWUGjJ3ydTk0SJUH+MiUY4V9eh/Ae51P4XpTimSh6/+uEOblVpA503HM
-         pFtt6fr8BSUWRLd92ZEVmMW5Yd/G8B2k6bJawctR9Ri5IwkNTpjAQfO2QXXLtcEhjmk6
-         T7OWqMDZqydbszrCR6xP5zyfESX4n+yxrqNj8O5Y13ecYiNEChaWjvkOREj1eTbEsigQ
-         n6f2IIKKQvJy4Bn/PjO+LoVv+ypMERF60BWJsKr1KJlkqgNtS+tbN3SxbBYRVDkOLzEo
-         s9QL8ilqIbc2ewf8hLot8UJFb4UpvK5FA4D2tdAiWwljVObfRYbl1xNqgVFBVcsMj1Ds
-         3SgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=P50f0ZL2uY1UYmnaU7An9xVTQaVqLWmvMfnLqv/D8hE=;
-        b=JTlEwaUPmYdKls07HrpZ9yja1Yq5OUfV2ZpIq/xWXXbtrfkUImBHJnYmAIzQqxKwdq
-         M7XScsQoe9fm4xf3SFlZza0VOnfxUoeHw8iAUagKJB0PAqGtdr2h4G4bmUXf5eZ6AOyb
-         hQQZ04TWDhPtOx9IqYJp1E3Dozztcx9I73dsKMQcvB3SqMmTKBshlWOnLRBElvfzLrgk
-         xkR4dDkW5Y5tCkm9q2zPiIcNlP094zDJ1a/KROkVy4jL5B+LeU78hhG5hN3WYrSQsudj
-         RaML/AmLqARVOdDJWVQebjGigThnvyE/32+QhMKFjBH8cLpvHYgkJaaVFgYS+QFKp+aY
-         lpXw==
-X-Gm-Message-State: APjAAAX00Uc0BpwX21lBjElcAUx1xZKIyK8T9hbo6KSennZwJf3fMRdp
-        R1WT1tT301A0/T08lOmEQ4aRFn35xooJKwssggwaiSN5Yz0Jrx8DDrybBvIddp7FE3bRrvvreaO
-        QMPYAmiCeNeQ4+sL+ojyyPp+C0pczZP6aeIFu4zv5da9vj/ek+JduCJTfsXs65Jtbwxha0mfp+i
-        CSIHyyy83IGxacIpavlJs=
-X-Google-Smtp-Source: APXvYqwfK2jbSJ51gES6pxnbB+Jx7JYOcFPHuY8kT3tTVj3kn1raRvsRONiY32BSyPg5RjbqyUNg7SevgSbxc9eN0nB2/A==
-X-Received: by 2002:a81:9c14:: with SMTP id m20mr10031332ywa.143.1576277875471;
- Fri, 13 Dec 2019 14:57:55 -0800 (PST)
-Date:   Fri, 13 Dec 2019 14:57:48 -0800
-Message-Id: <20191213225748.11256-1-matthewgarrett@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
-Subject: [PATCH] tpm: Don't make log failures fatal
-From:   Matthew Garrett <matthewgarrett@google.com>
+        Sat, 14 Dec 2019 15:37:16 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 700AD8EE0DA;
+        Sat, 14 Dec 2019 12:37:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1576355835;
+        bh=LzaReTAdtogW40UtKmhlbZw9yoAnrWbaFJSKReF451k=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=rjsTJDaxev8/jveZBK8tehg/R3zRuJYiN2ElIwclufxCtO0k5mXmiZl2h7sYURWFs
+         xOfMyPyTH7G8GDTi55RoMDf2TxID5jtW3JuosMoIwQMEyrj+9G3/6uo8SJMZ10cs8m
+         TeAxh9b4ydoowdTRXl+/q5g8O5ggr1IaOni9e7vc=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id RCmoDPvA22pW; Sat, 14 Dec 2019 12:37:15 -0800 (PST)
+Received: from jarvis.lan (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 92E9D8EE07B;
+        Sat, 14 Dec 2019 12:37:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1576355834;
+        bh=LzaReTAdtogW40UtKmhlbZw9yoAnrWbaFJSKReF451k=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=k2w8qJ7eXRuahExcgcIVlpXF94F6ljibM8ruaTqxNsmZhm543YRmXZ4e8+u2RuOYy
+         8VfvUJ9l1Ffw8pOuk4iL4OAMP84sC4gt4VyikgMt0OhFHtQyZRXxZgTxFVXD3BZnG5
+         F+3p5glGsdW6Zw3JQWNXbGmWmx65MZhkV2YX1DG4=
+Message-ID: <1576355832.4035.10.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 0/8] Fix TPM 2.0 trusted keys
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>, stable@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
+Date:   Sat, 14 Dec 2019 12:37:12 -0800
+In-Reply-To: <1575936272.31378.50.camel@HansenPartnership.com>
+References: <1575936272.31378.50.camel@HansenPartnership.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-If a TPM is in disabled state, it's reasonable for it to have an empty
-log. Bailing out of probe in this case means that the PPI interface
-isn't available, so there's no way to then enable the TPM from the OS.
-In general it seems reasonable to ignore log errors - they shouldn't
-itnerfere with any other TPM functionality.
+On Mon, 2019-12-09 at 16:04 -0800, James Bottomley wrote:
+[...]
+> The big problem with this patch is still that we can't yet combine
+> policy with authorization because that requires proper session
+> handling, but at least with this rewrite it becomes possible (whereas
+> it was never possible with the old external policy session code). 
+> Thus, when we have the TPM 2.0 security patch upstream, we'll be able
+> to use the session logic from that patch to imlement authorizations.
 
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Cc: stable@vger.kernel.org
----
- drivers/char/tpm/tpm-chip.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+I had a discussion with Ken Goldman on Friday where he told me this
+wasn't true: we can actually persuade a policy session to do a non-HMAC 
+authorization (for the interested, the trick is to use
+TPM2_PolicyPassword in place of TPM2_PolicyAuthValue.  It hashes to the
+same policy but the former sets the session up for non-HMAC and the
+latter for HMAC) so I'll add password based authorization to policies
+when I respin the patch set.
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 3d6d394a8661..58073836b555 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -596,9 +596,7 @@ int tpm_chip_register(struct tpm_chip *chip)
- 
- 	tpm_sysfs_add_device(chip);
- 
--	rc = tpm_bios_log_setup(chip);
--	if (rc != 0 && rc != -ENODEV)
--		return rc;
-+	tpm_bios_log_setup(chip);
- 
- 	tpm_add_ppi(chip);
- 
--- 
-2.24.1.735.g03f4e72817-goog
+James
 
