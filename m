@@ -2,76 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DBC11F405
-	for <lists+linux-integrity@lfdr.de>; Sat, 14 Dec 2019 21:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2E111F7C5
+	for <lists+linux-integrity@lfdr.de>; Sun, 15 Dec 2019 13:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726781AbfLNUhQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 14 Dec 2019 15:37:16 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:54520 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726484AbfLNUhQ (ORCPT
+        id S1726207AbfLOMor (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 15 Dec 2019 07:44:47 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5364 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726101AbfLOMoq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 14 Dec 2019 15:37:16 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 700AD8EE0DA;
-        Sat, 14 Dec 2019 12:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1576355835;
-        bh=LzaReTAdtogW40UtKmhlbZw9yoAnrWbaFJSKReF451k=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=rjsTJDaxev8/jveZBK8tehg/R3zRuJYiN2ElIwclufxCtO0k5mXmiZl2h7sYURWFs
-         xOfMyPyTH7G8GDTi55RoMDf2TxID5jtW3JuosMoIwQMEyrj+9G3/6uo8SJMZ10cs8m
-         TeAxh9b4ydoowdTRXl+/q5g8O5ggr1IaOni9e7vc=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RCmoDPvA22pW; Sat, 14 Dec 2019 12:37:15 -0800 (PST)
-Received: from jarvis.lan (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 92E9D8EE07B;
-        Sat, 14 Dec 2019 12:37:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1576355834;
-        bh=LzaReTAdtogW40UtKmhlbZw9yoAnrWbaFJSKReF451k=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=k2w8qJ7eXRuahExcgcIVlpXF94F6ljibM8ruaTqxNsmZhm543YRmXZ4e8+u2RuOYy
-         8VfvUJ9l1Ffw8pOuk4iL4OAMP84sC4gt4VyikgMt0OhFHtQyZRXxZgTxFVXD3BZnG5
-         F+3p5glGsdW6Zw3JQWNXbGmWmx65MZhkV2YX1DG4=
-Message-ID: <1576355832.4035.10.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 0/8] Fix TPM 2.0 trusted keys
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Date:   Sat, 14 Dec 2019 12:37:12 -0800
-In-Reply-To: <1575936272.31378.50.camel@HansenPartnership.com>
-References: <1575936272.31378.50.camel@HansenPartnership.com>
+        Sun, 15 Dec 2019 07:44:46 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBFCgPlW131518
+        for <linux-integrity@vger.kernel.org>; Sun, 15 Dec 2019 07:44:45 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2wwdxx2kb0-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Sun, 15 Dec 2019 07:44:45 -0500
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Sun, 15 Dec 2019 12:44:43 -0000
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Sun, 15 Dec 2019 12:44:40 -0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBFCidZk49348706
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 15 Dec 2019 12:44:39 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9CC9B42041;
+        Sun, 15 Dec 2019 12:44:39 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7C3DA4203F;
+        Sun, 15 Dec 2019 12:44:38 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.206.32])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 15 Dec 2019 12:44:38 +0000 (GMT)
+Subject: Re: [PATCH v3 1/2] IMA: Define workqueue for early boot "key"
+ measurements
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org
+Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
+        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
+        sashal@kernel.org, jamorris@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
+Date:   Sun, 15 Dec 2019 07:44:37 -0500
+In-Reply-To: <1576242406.4579.239.camel@linux.ibm.com>
+References: <20191213004250.21132-1-nramas@linux.microsoft.com>
+         <20191213004250.21132-2-nramas@linux.microsoft.com>
+         <1576202134.4579.189.camel@linux.ibm.com>
+         <6e0dad33-66f9-4807-d08d-ff30396cec5e@linux.microsoft.com>
+         <1576204377.4579.206.camel@linux.ibm.com>
+         <c60341a3-2329-cd92-c76c-6f8249a57b43@linux.microsoft.com>
+         <1576242406.4579.239.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19121512-0012-0000-0000-00000375088F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19121512-0013-0000-0000-000021B0EB8C
+Message-Id: <1576413877.4579.280.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-15_03:2019-12-13,2019-12-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ suspectscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912150121
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-12-09 at 16:04 -0800, James Bottomley wrote:
-[...]
-> The big problem with this patch is still that we can't yet combine
-> policy with authorization because that requires proper session
-> handling, but at least with this rewrite it becomes possible (whereas
-> it was never possible with the old external policy session code). 
-> Thus, when we have the TPM 2.0 security patch upstream, we'll be able
-> to use the session logic from that patch to imlement authorizations.
+On Fri, 2019-12-13 at 08:06 -0500, Mimi Zohar wrote:
+> On Thu, 2019-12-12 at 18:59 -0800, Lakshmi Ramasubramanian wrote:
+> > On 12/12/2019 6:32 PM, Mimi Zohar wrote:
+> > 
+> > >>>
+> > >>> Don't you need a test here, before setting ima_process_keys?
+> > >>>
+> > >>> 	if (ima_process_keys)
+> > >>> 		return;
+> 
+> > >> That check is done before the comment - at the start of
+> > >> ima_process_queued_keys().
+> > > 
+> > > The first test prevents taking the mutex unnecessarily.
+> > > 
+> > 
+> > I am trying to understand your concern here. Could you please clarify?
+> > 
+> >   => If ima_process_keys is false
+> >        -> With the mutex held, should check ima_process_keys again 
+> > before setting?
+> > 
+> > Let's say 2 or more threads are racing in calling ima_process_queued_keys():
+> > 
+> > The 1st one will set ima_process_keys and process queued keys.
+> > 
+> > The 2nd and subsequent ones - even if they have gone past the initial 
+> > check, will find an empty list of keys (the list "ima_keys") when they 
+> > take the mutex. So they'll not process any keys.
+> 
+> I just need to convince myself that this is correct.  Normally before
+> reading and writing a flag, there is some sort of locking.  With
+> taking the mutex before setting the flag, there is now only a lock
+> around the single writer.
+> 
+> Without taking a lock before reading the flag, will the queue always
+> be empty is the question.  If it is, then the comment is correct, but
+> the code assumes not and processes the list again.  Testing the flag
+> after taking the mutex just re-enforces the comment.
+> 
+> Bottom line, does reading the flag need to be lock protected?
 
-I had a discussion with Ken Goldman on Friday where he told me this
-wasn't true: we can actually persuade a policy session to do a non-HMAC 
-authorization (for the interested, the trick is to use
-TPM2_PolicyPassword in place of TPM2_PolicyAuthValue.  It hashes to the
-same policy but the former sets the session up for non-HMAC and the
-latter for HMAC) so I'll add password based authorization to policies
-when I respin the patch set.
+Reading the flag IS lock protected, just spread across two functions.
+ For performance, ima_post_key_create_or_update() checks
+ima_process_keys, before calling ima_queue_key(), which takes the
+mutex before checking ima_process_keys again.
 
-James
+As long as both the reader and writer, take the mutex before checking
+the flag, the locking is fine.  The additional check, before taking
+the mutex, is simply for performance.
+
+Mimi
+
+
+
+ 
+
 
