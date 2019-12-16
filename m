@@ -2,103 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 335FD120699
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Dec 2019 14:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D241207A7
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Dec 2019 14:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727553AbfLPNF1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Dec 2019 08:05:27 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20572 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727756AbfLPNF0 (ORCPT
+        id S1727807AbfLPNxt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Dec 2019 08:53:49 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36227 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727579AbfLPNxt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Dec 2019 08:05:26 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBGD2U4l120695
-        for <linux-integrity@vger.kernel.org>; Mon, 16 Dec 2019 08:05:25 -0500
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wwe4k0wcx-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 16 Dec 2019 08:05:25 -0500
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 16 Dec 2019 13:05:22 -0000
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 16 Dec 2019 13:05:18 -0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBGD5Hg754984824
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Dec 2019 13:05:17 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34F6A11C052;
-        Mon, 16 Dec 2019 13:05:17 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EFCB511C054;
-        Mon, 16 Dec 2019 13:05:15 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.187.190])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 16 Dec 2019 13:05:15 +0000 (GMT)
-Subject: Re: [PATCH v4 2/2] IMA: Call workqueue functions to measure queued
- keys
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
-        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
-        sashal@kernel.org, jamorris@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
-Date:   Mon, 16 Dec 2019 08:05:15 -0500
-In-Reply-To: <1576479187.3784.1.camel@HansenPartnership.com>
-References: <20191213171827.28657-1-nramas@linux.microsoft.com>
-         <20191213171827.28657-3-nramas@linux.microsoft.com>
-         <1576257955.8504.20.camel@HansenPartnership.com>
-         <39624b97-245c-ed05-27c5-588787aacc00@linux.microsoft.com>
-         <1576423353.3343.3.camel@HansenPartnership.com>
-         <1568ff14-316f-f2c4-84d4-7ca4c0a1936a@linux.microsoft.com>
-         <1576479187.3784.1.camel@HansenPartnership.com>
+        Mon, 16 Dec 2019 08:53:49 -0500
+Received: by mail-pf1-f195.google.com with SMTP id x184so5636107pfb.3;
+        Mon, 16 Dec 2019 05:53:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xgYwA15dG8l4/wpZxWioQV4WW+kSKdvUXyu4yhTQhow=;
+        b=srMiz4eIHwRt4AcKl94JS4sGdCgPVQsffWApQLSTrRA79QvkgaG79feUeSX0NrNwJm
+         WrGhPNr8BqkrhOnvK46V6PSKm2RGReFTD5aA8cAFBdZ4rcqHBAT4v1rprJd9e3vq2V+L
+         ap1RVlPQc6Wzn0SINx9L7yw8MX/FdKRxNBKcBgbwj9FhRDZ99NET6QateR8+cYFutQJG
+         7+IC4cNhOZErZjm8gwiL3wA1GZL/+plRTMJ867PLgNLshaipadQ6n6xxKhRI7nrHsmvN
+         B8bldV/Fk4m2SEepyOaACzyVEbAXyjnUe6fsCqHEgVZRpvzlCfgBsQpUGjB/Pg0CVXog
+         427A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xgYwA15dG8l4/wpZxWioQV4WW+kSKdvUXyu4yhTQhow=;
+        b=Pfb3sl+l47nNAma9EzJOuMCdogDDh1o9BLAG1ozmj/YyRoWNx3lM1T3DNS1l4Ru9vN
+         qFjHb2xAu1+e1qpsNZW6UTAd4wKi/vTDHgiGg1AAm2bLcOPVa/oPc+5wJt3lHd499Bn6
+         7eRokh2S4OPvkVjeJyBvkZEvU+/b0b/qUAnew2IbrADhDz/0NO0zoyh0nFaEAQNFWmv+
+         H+CjzDjXXMyspRV9uKg33TKxoh48c//vxpMwxbmBMWwlZVCDZ4K+HUzAap+HIxoO2VsP
+         mlmDvGM7Hon3Cg4/+3Y/WMiT06MJBuHUT5Cmls1bG3i/+gvh5HSEKYjVtjL5t0tOuGwf
+         ORAA==
+X-Gm-Message-State: APjAAAXk88iQEp0EAMGX7vIhes+Bju1v9YYRJBrYkUjBNBbvZc4aEcU6
+        TvAZOn7dZp3Xw6DiifKHqRbRmBXOrRrMFvzXpP0=
+X-Google-Smtp-Source: APXvYqydiSRLoIrO5tJIaDzEjthd12WbO2NO97JKasfyed/B32rvFQzDeiRf2fqpRNXZjFV6ZOujHqCMwIujhCKpeBg=
+X-Received: by 2002:a63:e0f:: with SMTP id d15mr18174165pgl.255.1576504428809;
+ Mon, 16 Dec 2019 05:53:48 -0800 (PST)
+MIME-Version: 1.0
+References: <20191202133332.178110-1-amirmizi6@gmail.com> <20191202133332.178110-5-amirmizi6@gmail.com>
+ <20191213223623.GA14809@bogus>
+In-Reply-To: <20191213223623.GA14809@bogus>
+From:   Amir Mizinski <amirmizi6@gmail.com>
+Date:   Mon, 16 Dec 2019 15:53:48 +0200
+Message-ID: <CAMHTsUW5dH-5LCW9GYzDnWEcqPt-Ch_21efQVpAKMdSvCXB00Q@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] dt-bindings: tpm: Add YAML schema for TPM TIS I2C options
+To:     Rob Herring <robh@kernel.org>
+Cc:     Eyal.Cohen@nuvoton.com,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Oshri Alkobi <oshrialkoby85@gmail.com>,
+        Alexander Steffen <alexander.steffen@infineon.com>,
+        Mark Rutland <mark.rutland@arm.com>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        IS20 Oshri Alkoby <oshri.alkoby@nuvoton.com>,
+        Tomer Maimon <tmaimon77@gmail.com>, gcwilson@us.ibm.com,
+        kgoldman@us.ibm.com, ayna@linux.vnet.ibm.com,
+        IS30 Dan Morav <Dan.Morav@nuvoton.com>,
+        oren.tanami@nuvoton.com, shmulik.hager@nuvoton.com,
+        amir.mizinski@nuvoton.com
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19121613-0012-0000-0000-0000037564B5
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19121613-0013-0000-0000-000021B14ACA
-Message-Id: <1576501515.4579.332.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-16_04:2019-12-16,2019-12-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 clxscore=1015 bulkscore=0 adultscore=0 mlxscore=0
- spamscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912160117
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2019-12-16 at 15:53 +0900, James Bottomley wrote:
-> That doesn't matter ... the question is, is the input assumption that
-> both pre/post have to be called or neither must correct?  If so, the
-> code is wrong, if not, explain why.
+On Sat, Dec 14, 2019 at 12:36 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Dec 02, 2019 at 03:33:31PM +0200, amirmizi6@gmail.com wrote:
+> > From: Amir Mizinski <amirmizi6@gmail.com>
+> >
+> > Added a YAML schema to support tpm tis i2c realted dt-bindings for the I2c PTP based physical layer.
+>
+> Wrap your commmit message. And TPM, TIS?, and I2C should be capitalized.
 
-Thanks, James, for looking at the locking.
+Thanks,  ill fix that.
 
-"ima_process_keys" is set once.  Once it is set, the keys are measured
-immediately.  For performance to avoid taking the mutex, both the
-reader and writer check "ima_process_keys" twice, once without taking
-the lock and, again, after taking the lock.  Based on the second test,
-the reader queues the "key" or not.  Refer to ima_queue_key().
+>
+> >
+> > Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+> > ---
+> >  .../bindings/security/tpm/tpm-tis-i2c.yaml         | 38 ++++++++++++++++++++++
+> >  1 file changed, 38 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+>
+> Please read my comments on v1 (The first v1 from 11/10, not the 2nd v1
+> you sent).
 
-The latest patch version sets "ima_process_keys" after taking the
-lock.  With this change, the comment in ima_process_queued_keys() is
-now correct.  We're now guaranteed to process the queued "keys" just
-once and not drop any "key" measurements.
+I sent a follow up comment regarding this:
+https://patchwork.kernel.org/patch/11236253/
+(2nd v1 was sent by mistake. sorry about that)
 
-I hope this answers your question.
+>
+> Rob
 
-Mimi
-
+Amir Mizinski
