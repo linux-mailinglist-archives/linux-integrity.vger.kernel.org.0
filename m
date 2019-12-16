@@ -2,203 +2,140 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF88120016
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Dec 2019 09:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA571205C0
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Dec 2019 13:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbfLPIne (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Dec 2019 03:43:34 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:53423 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726798AbfLPIne (ORCPT
+        id S1727822AbfLPMaY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Dec 2019 07:30:24 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25800 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727825AbfLPMaW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Dec 2019 03:43:34 -0500
-Received: from orion.localdomain ([77.2.44.177]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N2jO8-1hiOOQ3fYa-0137DZ; Mon, 16 Dec 2019 09:43:02 +0100
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] drivers: char: tpm: remove unneeded MODULE_VERSION() usage
-Date:   Mon, 16 Dec 2019 09:42:30 +0100
-Message-Id: <20191216084230.31412-1-info@metux.net>
-X-Mailer: git-send-email 2.11.0
-X-Provags-ID: V03:K1:ZRMRCvGtq21lbtgskvbS5prFUgst+5RwJZEQW66QiN+qjkuMlBc
- uGZLISeYLgQ9heOIGqmejXQW6EJ1Yj9dlSn4uQwVBS1GCATDsnRMdpuN2L0Y/QUQihyF0/5
- Py17FBwzilsZjijPn/vtG8iHe13gTG4QALNK+LcHtpbLNoRNZbWECYtzyjqi0Lcjg6loX+I
- NHKQcxcT7bFsh1zJN5JKA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Vjz3eEF+RtM=:F0xI2+yKDrF/uAcYVylI+4
- ahqQZRJcfO3yYU1eNu6//nO3A6Ja3NgWdT9Nc0GvRRrlI4wnqJCBw5wuAPKMKaGzyld0IL5St
- J9D92bkdON63U8qjqD1sZkeLSj8Qmc9EhmWtstpsHfeOrVDb7D0V19qwrQNJTwIMlwzfMLe3I
- cJaYKAmHjbNyjk6Q64WnKRg5GFFVlVwZmMyVOckx3/sD2MyJLgBrbqPvEBROBDJJgNDw8nnUe
- kEFF05o6SpkkOjCuZUYVZOL+aD4SaAbmeyn/ZuNesS4j30Qj3XMU89WnQC6r/PT+IZf7wX4iX
- m46zrRlJ1bx49wb/yBxbWbn6JK0F1zK9VZXpJpDLzccyjsVmvGCl9vWVZXEduyj94+mjCzT31
- jYOzPuGa8V5aOcBXAb0zpReZwFAt2IC4tB3byXiP7g7wUWhVuRTpVEBiUl4patVJzzpwRy0hk
- c5wllrnS1XY9Nq04xi6kK/2Qw/XzoKPKpydCQ8jW8ej2lhJCxpZEHtkTGxbQl5VW3LqPtnuZv
- VZqUp/x+JicXB9T8BVb9Nzf2Oj3NONihS5xbJI0CCbXIgdB/BQSE1D1nVZOy2WZgWcwY2yFno
- VQscnZT3NyJo4ev9PifZVok1856aobhigBtC0lyS1au2onN2P0dvdCdz+Z6hVY0hD0jir/F21
- /9q3/Oao7UyStGt3D4DJz3oDlX/pf0In9Iasp4HBcLtEUkqgqR6U754W+XX+Tf/cyG2JjB9qA
- KRvyBWA7jdZAyv6MJdsjja897fr69VHC02t1JPSbZUQO+kkOAVdWg3ZaM/uAXmXMxUvMa8Szn
- msY6NWOyGD9r64v0G6KPQeiLMug3ZEqarR12hTPzvc7w306zwmigf+dX8vM4f9re/a8GbP5UN
- gFgHs04gu0r0wfJ2MTnA==
+        Mon, 16 Dec 2019 07:30:22 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBGCR8B2050886
+        for <linux-integrity@vger.kernel.org>; Mon, 16 Dec 2019 07:30:21 -0500
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wvw5b0dgk-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 16 Dec 2019 07:30:21 -0500
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 16 Dec 2019 12:30:18 -0000
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 16 Dec 2019 12:30:15 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBGCUEVb43450644
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 Dec 2019 12:30:14 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A670B5204E;
+        Mon, 16 Dec 2019 12:30:14 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.187.190])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 869FE52057;
+        Mon, 16 Dec 2019 12:30:13 +0000 (GMT)
+Subject: Re: [PATCH v4 1/2] IMA: Define workqueue for early boot "key"
+ measurements
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org
+Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
+        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
+        sashal@kernel.org, jamorris@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
+In-Reply-To: <20191213171827.28657-2-nramas@linux.microsoft.com>
+References: <20191213171827.28657-1-nramas@linux.microsoft.com>
+         <20191213171827.28657-2-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Mon, 16 Dec 2019 07:30:00 -0500
+Mime-Version: 1.0
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19121612-0016-0000-0000-000002D55DE2
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19121612-0017-0000-0000-000033379141
+Message-Id: <1576499400.4579.305.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-16_04:2019-12-16,2019-12-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=2
+ mlxlogscore=999 mlxscore=0 bulkscore=0 adultscore=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912160112
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Remove MODULE_VERSION(), as it isn't needed at all: the only version
-making sense is the kernel version.
+On Fri, 2019-12-13 at 09:18 -0800, Lakshmi Ramasubramanian wrote:
 
-See also: https://lkml.org/lkml/2017/11/22/480
+> +/*
+> + * ima_process_queued_keys() - process keys queued for measurement
+> + *
+> + * This function sets ima_process_keys to true and processes queued keys.
+> + * From here on keys will be processed right away (not queued).
+> + */
+> +void ima_process_queued_keys(void)
+> +{
+> +	struct ima_key_entry *entry, *tmp;
+> +	LIST_HEAD(temp_ima_keys);
+> +	bool process = false;
+> +
+> +	if (ima_process_keys)
+> +		return;
+> +
+> +	/*
+> +	 * To avoid holding the mutex when processing queued keys,
+> +	 * transfer the queued keys with the mutex held to a temp list,
+> +	 * release the mutex, and then process the queued keys from
+> +	 * the temp list.
+> +	 *
+> +	 * Since ima_process_keys is set to true, any new key will be
+> +	 * processed immediately and not be queued.
+> +	 */
+> +	INIT_LIST_HEAD(&temp_ima_keys);
+> +
+> +	mutex_lock(&ima_keys_mutex);
+> +
+> +	if (!ima_process_keys) {
+> +		ima_process_keys = true;
 
-Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
----
- drivers/char/tpm/st33zp24/i2c.c      | 1 -
- drivers/char/tpm/st33zp24/spi.c      | 1 -
- drivers/char/tpm/st33zp24/st33zp24.c | 1 -
- drivers/char/tpm/tpm-interface.c     | 1 -
- drivers/char/tpm/tpm_atmel.c         | 1 -
- drivers/char/tpm/tpm_crb.c           | 1 -
- drivers/char/tpm/tpm_i2c_infineon.c  | 1 -
- drivers/char/tpm/tpm_ibmvtpm.c       | 1 -
- drivers/char/tpm/tpm_infineon.c      | 1 -
- drivers/char/tpm/tpm_nsc.c           | 1 -
- drivers/char/tpm/tpm_tis.c           | 1 -
- drivers/char/tpm/tpm_tis_core.c      | 1 -
- drivers/char/tpm/tpm_vtpm_proxy.c    | 1 -
- 13 files changed, 13 deletions(-)
+Thank you for moving the initialization here.  The comment is now
+valid and the following code is now guaranteed to execute just once.
 
-diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-index 35333b65acd1..71df056f14c9 100644
---- a/drivers/char/tpm/st33zp24/i2c.c
-+++ b/drivers/char/tpm/st33zp24/i2c.c
-@@ -313,5 +313,4 @@ module_i2c_driver(st33zp24_i2c_driver);
- 
- MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
- MODULE_DESCRIPTION("STM TPM 1.2 I2C ST33 Driver");
--MODULE_VERSION("1.3.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-index 26e09de50f1e..94ceced4d57d 100644
---- a/drivers/char/tpm/st33zp24/spi.c
-+++ b/drivers/char/tpm/st33zp24/spi.c
-@@ -430,5 +430,4 @@ module_spi_driver(st33zp24_spi_driver);
- 
- MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
- MODULE_DESCRIPTION("STM TPM 1.2 SPI ST33 Driver");
--MODULE_VERSION("1.3.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
-index 37bb13f516be..60269b6ac470 100644
---- a/drivers/char/tpm/st33zp24/st33zp24.c
-+++ b/drivers/char/tpm/st33zp24/st33zp24.c
-@@ -646,5 +646,4 @@ EXPORT_SYMBOL(st33zp24_pm_resume);
- 
- MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
- MODULE_DESCRIPTION("ST33ZP24 TPM 1.2 driver");
--MODULE_VERSION("1.3.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index a438b1206fcb..91d4584f399d 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -514,5 +514,4 @@ module_exit(tpm_exit);
- 
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_atmel.c b/drivers/char/tpm/tpm_atmel.c
-index 54a6750a6757..35bf249cc95a 100644
---- a/drivers/char/tpm/tpm_atmel.c
-+++ b/drivers/char/tpm/tpm_atmel.c
-@@ -231,5 +231,4 @@ module_exit(cleanup_atmel);
- 
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index a9dcf31eadd2..3e72b7b99cce 100644
---- a/drivers/char/tpm/tpm_crb.c
-+++ b/drivers/char/tpm/tpm_crb.c
-@@ -748,5 +748,4 @@ static struct acpi_driver crb_acpi_driver = {
- module_acpi_driver(crb_acpi_driver);
- MODULE_AUTHOR("Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>");
- MODULE_DESCRIPTION("TPM2 Driver");
--MODULE_VERSION("0.1");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_i2c_infineon.c b/drivers/char/tpm/tpm_i2c_infineon.c
-index a19d32cb4e94..8920b7c19fcb 100644
---- a/drivers/char/tpm/tpm_i2c_infineon.c
-+++ b/drivers/char/tpm/tpm_i2c_infineon.c
-@@ -731,5 +731,4 @@ static struct i2c_driver tpm_tis_i2c_driver = {
- module_i2c_driver(tpm_tis_i2c_driver);
- MODULE_AUTHOR("Peter Huewe <peter.huewe@infineon.com>");
- MODULE_DESCRIPTION("TPM TIS I2C Infineon Driver");
--MODULE_VERSION("2.2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
-index 78cc52690177..034d24758915 100644
---- a/drivers/char/tpm/tpm_ibmvtpm.c
-+++ b/drivers/char/tpm/tpm_ibmvtpm.c
-@@ -723,5 +723,4 @@ module_exit(ibmvtpm_module_exit);
- 
- MODULE_AUTHOR("adlai@us.ibm.com");
- MODULE_DESCRIPTION("IBM vTPM Driver");
--MODULE_VERSION("1.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
-index 9c924a1440a9..8a58966c5c9b 100644
---- a/drivers/char/tpm/tpm_infineon.c
-+++ b/drivers/char/tpm/tpm_infineon.c
-@@ -621,5 +621,4 @@ module_pnp_driver(tpm_inf_pnp_driver);
- 
- MODULE_AUTHOR("Marcel Selhorst <tpmdd@sirrix.com>");
- MODULE_DESCRIPTION("Driver for Infineon TPM SLD 9630 TT 1.1 / SLB 9635 TT 1.2");
--MODULE_VERSION("1.9.2");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_nsc.c b/drivers/char/tpm/tpm_nsc.c
-index 038701d48351..6ab2fe7e8782 100644
---- a/drivers/char/tpm/tpm_nsc.c
-+++ b/drivers/char/tpm/tpm_nsc.c
-@@ -412,5 +412,4 @@ module_exit(cleanup_nsc);
- 
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index e7df342a317d..713773ebff81 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -397,5 +397,4 @@ module_init(init_tis);
- module_exit(cleanup_tis);
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 8af2cee1a762..1aeb11e5fd5b 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -1150,5 +1150,4 @@ EXPORT_SYMBOL_GPL(tpm_tis_resume);
- 
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-index 91c772e38bb5..18f14162d1c1 100644
---- a/drivers/char/tpm/tpm_vtpm_proxy.c
-+++ b/drivers/char/tpm/tpm_vtpm_proxy.c
-@@ -729,5 +729,4 @@ module_exit(vtpm_module_exit);
- 
- MODULE_AUTHOR("Stefan Berger (stefanb@us.ibm.com)");
- MODULE_DESCRIPTION("vTPM Driver");
--MODULE_VERSION("0.1");
- MODULE_LICENSE("GPL");
--- 
-2.11.0
+> +
+> +		if (!list_empty(&ima_keys)) {
+> +			list_for_each_entry_safe(entry, tmp, &ima_keys, list)
+> +				list_move_tail(&entry->list, &temp_ima_keys);
+> +			process = true;
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&ima_keys_mutex);
+> +
+> +	if (!process)
+> +		return;
+
+The new changes - checking if the list is empty and this test - are
+unnecessary, as you implied earlier.
+
+Mimi
+
+> +
+> +	list_for_each_entry_safe(entry, tmp, &temp_ima_keys, list) {
+> +		process_buffer_measurement(entry->payload, entry->payload_len,
+> +					   entry->keyring_name, KEY_CHECK, 0,
+> +					   entry->keyring_name);
+> +		list_del(&entry->list);
+> +		ima_free_key_entry(entry);
+> +	}
+> +}
+> +
+>  /**
+>   * ima_post_key_create_or_update - measure asymmetric keys
+>   * @keyring: keyring to which the key is linked to
 
