@@ -2,105 +2,95 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5BE1239DC
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Dec 2019 23:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A38123A83
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Dec 2019 00:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbfLQWVm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Dec 2019 17:21:42 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:40970 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726569AbfLQWVm (ORCPT
+        id S1726401AbfLQXIf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Dec 2019 18:08:35 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49206 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726072AbfLQXIf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Dec 2019 17:21:42 -0500
-Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 6E22C20B4798;
-        Tue, 17 Dec 2019 14:21:41 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6E22C20B4798
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1576621301;
-        bh=9l7xQkDf03ilEjwohU/zhtjkixpnGAYFMtbXbBZSvxM=;
-        h=From:Subject:To:Cc:References:Date:In-Reply-To:From;
-        b=WEe+w1TeuZmWnymGKdDsY3f9DP8G7qfHy8EGMv1hOtCvhRlGy6Gmf3v9sMofUcNKK
-         3cyDtINBX0PEKcsTsyuAqU9gIugGq2FvqD7tHfgrT/UsGSX6w9i6b9oWjDj/AAep++
-         eisdpbZataBVn34Y29qsL5HzdXxLAPfRtxMb36nU=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Subject: Re: [PATCH v4 2/2] IMA: Call workqueue functions to measure queued
- keys
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org
-Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
-        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
-        sashal@kernel.org, jamorris@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
-References: <20191213171827.28657-1-nramas@linux.microsoft.com>
- <20191213171827.28657-3-nramas@linux.microsoft.com>
- <1576257955.8504.20.camel@HansenPartnership.com>
- <39624b97-245c-ed05-27c5-588787aacc00@linux.microsoft.com>
- <1576423353.3343.3.camel@HansenPartnership.com>
- <1568ff14-316f-f2c4-84d4-7ca4c0a1936a@linux.microsoft.com>
- <1576479187.3784.1.camel@HansenPartnership.com>
- <8844a360-6d1e-1435-db7c-fd7739487168@linux.microsoft.com>
- <1576531022.3365.6.camel@HansenPartnership.com>
- <35a6c241-9a46-2657-51d1-0c04d32a9fae@linux.microsoft.com>
- <f25b7299-1530-2e43-cdf4-2208c82fc768@linux.microsoft.com>
-Message-ID: <152580f3-2a1f-fa33-cc25-f25747a470a5@linux.microsoft.com>
-Date:   Tue, 17 Dec 2019 14:22:07 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
-MIME-Version: 1.0
-In-Reply-To: <f25b7299-1530-2e43-cdf4-2208c82fc768@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Tue, 17 Dec 2019 18:08:35 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBHN48Uq035230
+        for <linux-integrity@vger.kernel.org>; Tue, 17 Dec 2019 18:08:34 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wy41qyrah-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 17 Dec 2019 18:08:34 -0500
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Tue, 17 Dec 2019 23:08:31 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 17 Dec 2019 23:08:28 -0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBHN8Rbb65536022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Dec 2019 23:08:27 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 379E84203F;
+        Tue, 17 Dec 2019 23:08:27 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E1F2342047;
+        Tue, 17 Dec 2019 23:08:25 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.184.53])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 17 Dec 2019 23:08:25 +0000 (GMT)
+Subject: Re: [PATCH] integrity: Expose data structures required for
+ include/linux/integrity.h
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Florent Revest <revest@chromium.org>,
+        linux-integrity@vger.kernel.org
+Cc:     jmorris@namei.org, serge@hallyn.com, revest@google.com,
+        allison@lohutok.net, armijn@tjaldur.nl, bauerman@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Date:   Tue, 17 Dec 2019 18:08:25 -0500
+In-Reply-To: <e9e366d3-6c5d-743b-ffde-6b95b85884a2@schaufler-ca.com>
+References: <20191217134748.198011-1-revest@chromium.org>
+         <e9e366d3-6c5d-743b-ffde-6b95b85884a2@schaufler-ca.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19121723-0012-0000-0000-00000375F5E4
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19121723-0013-0000-0000-000021B1E249
+Message-Id: <1576624105.4579.379.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-17_04:2019-12-17,2019-12-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ adultscore=0 spamscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 mlxlogscore=877 clxscore=1015 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-1912170184
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi James,
+On Tue, 2019-12-17 at 08:25 -0800, Casey Schaufler wrote:
+> On 12/17/2019 5:47 AM, Florent Revest wrote:
+> > From: Florent Revest <revest@google.com>
+> >
+> > include/linux/integrity.h exposes the prototype of integrity_inode_get().
+> > However, it relies on struct integrity_iint_cache which is currently
+> > defined in an internal header, security/integrity/integrity.h.
+> >
+> > To allow the rest of the kernel to use integrity_inode_get,
+> 
+> Why do you want to do this?
 
->>>
->>> This is the problem: in the race case you may still be adding keys to
->>> the queue after the other thread has processed it. Those keys won't get
->>> processed because the flag is now false in the post check so the
->>> current thread won't process them either.
->>>
->>> James
->>>
-
-Please let me know if you still think there is a race condition.
-
-If yes, please explain how a key would be added to the queue after 
-ima_process_queued_keys() has processed queued keys.
-ima_process_keys flag will be true when queued keys have been processed.
+ditto
 
 > 
-> Please keep in mind that ima_queue_key() returns a boolean indicating 
-> whether or not the key was queued. This flag is set inside the lock - 
-> please see the code snippet from ima_queue_key() below:
-> 
-> +    mutex_lock(&ima_keys_mutex);
-> +    if (!ima_process_keys) {
-> +        list_add_tail(&entry->list, &ima_keys);
-> +        queued = true;
-> +    }
-> +    mutex_unlock(&ima_keys_mutex);
-> 
-> If ima_process_keys had changed from false to true, ima_queue_key() will 
-> not queue the key and return false to ima_post_key_create_or_update().
-> 
-> Code snippet in ima_post_key_create_or_update():
-> 
-> +    if (!ima_process_keys)
-> +        queued = ima_queue_key(keyring, payload, payload_len);
-> +
-> +    if (queued)
-> +        return;
-> 
-> If the "queued" is false, ima_post_key_create_or_update() will process 
-> the key immediately.
-> 
->   -lakshmi
+> >  this patch
+> > moves the definition of the necessary structures from a private header
+> > to a global kernel header.
+> >
 
-thanks,
-  -lakshmi
