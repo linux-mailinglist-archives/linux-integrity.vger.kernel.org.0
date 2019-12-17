@@ -2,80 +2,181 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D8E122B08
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Dec 2019 13:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B08D7122D64
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Dec 2019 14:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727648AbfLQMPR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Dec 2019 07:15:17 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:37105 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726690AbfLQMPR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Dec 2019 07:15:17 -0500
-Received: from [192.168.0.5] (ip5f5bf3f4.dynamic.kabel-deutschland.de [95.91.243.244])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D2D6B206441CD;
-        Tue, 17 Dec 2019 13:15:14 +0100 (CET)
-Subject: Re: [PATCH] tpm: Don't make log failures fatal
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Matthew Garrett <mjg59@google.com>, stable@vger.kernel.org
-References: <20191213225748.11256-1-matthewgarrett@google.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Message-ID: <3a472005-83a7-9787-0bfc-35673702be09@molgen.mpg.de>
-Date:   Tue, 17 Dec 2019 13:15:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1728512AbfLQNsT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Dec 2019 08:48:19 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40241 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728560AbfLQNsS (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 17 Dec 2019 08:48:18 -0500
+Received: by mail-wr1-f66.google.com with SMTP id c14so11373460wrn.7
+        for <linux-integrity@vger.kernel.org>; Tue, 17 Dec 2019 05:48:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VlkCjrCj9FNb19YZ9fC6iYkX/CBiUzWT6Vrxme6HlfA=;
+        b=bDPl+WMk3WFNbDnt68C+TUcj+PjNeEiRwmCcXiAjv5OmXwYRjJVufZyY8/EP24Sp5O
+         x1PDiNo6TSEHFIOG36fFFdJXNIOUDS2ZnXt36iPR1UlMyqBWhCM2tzTitLZiiSbyF8Ju
+         nDKoT7Ev17ZRuCPm88NkfrMi1Fz6a4Z5BI+8I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VlkCjrCj9FNb19YZ9fC6iYkX/CBiUzWT6Vrxme6HlfA=;
+        b=mhlqbsKJ2UB5e877kkW9Nzsbv038TACCvmQMt9EOfWJoMROfsgwb30PCZvk2jS+ybr
+         bnsZTaDJ9uwv2GDIUvyWLD4OuRAvR2SqofDiHfrN84D8f7TN38NmFXsXDfn0X1Ge5B8x
+         OjsFmqvRydMZIJnRoWDnYywCPB91MlY15jYi7znk7YFLLvvil3ZG7Lp+fYF99skBaC3K
+         dVGA5CywBvFsHPMCsudxXnlJiVhTfxdrar5gfEuxMTiSdbXwc8eFWtEsEr8AEkhZnJ36
+         3jrzi486vVgbbVERoqu6mHu8DS+CvoCnWvo3CV8z2Sx+QCHy03kjAhee0x60oMxVBrNJ
+         WPvA==
+X-Gm-Message-State: APjAAAULX4U1agoDKOIl33otNWcbfNUELHjemdsy3th2OaN9mqt/G98m
+        m4L83/JatkKPGdqOawzwakk9GVt6siAGefIX
+X-Google-Smtp-Source: APXvYqyEIazdI9XZRe+Nk4M8kem6L2MPcQn9k7JUIl+vLZ15bVV24SJ+Mt9dJ0qFgsi7U3cU0sCSnA==
+X-Received: by 2002:adf:a746:: with SMTP id e6mr38769834wrd.329.1576590496291;
+        Tue, 17 Dec 2019 05:48:16 -0800 (PST)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:51d1:d96e:f72e:c8c0])
+        by smtp.gmail.com with ESMTPSA id x18sm25227055wrr.75.2019.12.17.05.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2019 05:48:15 -0800 (PST)
+From:   Florent Revest <revest@chromium.org>
+To:     linux-integrity@vger.kernel.org
+Cc:     jmorris@namei.org, serge@hallyn.com, revest@google.com,
+        allison@lohutok.net, armijn@tjaldur.nl, bauerman@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH] integrity: Expose data structures required for include/linux/integrity.h
+Date:   Tue, 17 Dec 2019 14:47:48 +0100
+Message-Id: <20191217134748.198011-1-revest@chromium.org>
+X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
 MIME-Version: 1.0
-In-Reply-To: <20191213225748.11256-1-matthewgarrett@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dear Matthew,
+From: Florent Revest <revest@google.com>
 
+include/linux/integrity.h exposes the prototype of integrity_inode_get().
+However, it relies on struct integrity_iint_cache which is currently
+defined in an internal header, security/integrity/integrity.h.
 
-Am 13.12.19 um 23:57 schrieb Matthew Garrett:
-> If a TPM is in disabled state, it's reasonable for it to have an empty
-> log. Bailing out of probe in this case means that the PPI interface
-> isn't available, so there's no way to then enable the TPM from the OS.
-> In general it seems reasonable to ignore log errors - they shouldn't
-> itnerfere with any other TPM functionality.
+To allow the rest of the kernel to use integrity_inode_get, this patch
+moves the definition of the necessary structures from a private header
+to a global kernel header.
 
-interfere
+Signed-off-by: Florent Revest <revest@google.com>
+---
+ include/linux/integrity.h      | 37 ++++++++++++++++++++++++++++++++++
+ security/integrity/integrity.h | 37 ----------------------------------
+ 2 files changed, 37 insertions(+), 37 deletions(-)
 
-Can this be tested with QEMU somehow?
+diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+index 2271939c5c31..15a0d5e91737 100644
+--- a/include/linux/integrity.h
++++ b/include/linux/integrity.h
+@@ -18,6 +18,43 @@ enum integrity_status {
+ 	INTEGRITY_UNKNOWN,
+ };
+ 
++#define IMA_MAX_DIGEST_SIZE	64
++
++struct ima_digest_data {
++	u8 algo;
++	u8 length;
++	union {
++		struct {
++			u8 unused;
++			u8 type;
++		} sha1;
++		struct {
++			u8 type;
++			u8 algo;
++		} ng;
++		u8 data[2];
++	} xattr;
++	u8 digest[0];
++} __packed;
++
++/* integrity data associated with an inode */
++struct integrity_iint_cache {
++	struct rb_node rb_node;	/* rooted in integrity_iint_tree */
++	struct mutex mutex;	/* protects: version, flags, digest */
++	struct inode *inode;	/* back pointer to inode in question */
++	u64 version;		/* track inode changes */
++	unsigned long flags;
++	unsigned long measured_pcrs;
++	unsigned long atomic_flags;
++	enum integrity_status ima_file_status:4;
++	enum integrity_status ima_mmap_status:4;
++	enum integrity_status ima_bprm_status:4;
++	enum integrity_status ima_read_status:4;
++	enum integrity_status ima_creds_status:4;
++	enum integrity_status evm_status:4;
++	struct ima_digest_data *ima_hash;
++};
++
+ /* List of EVM protected security xattrs */
+ #ifdef CONFIG_INTEGRITY
+ extern struct integrity_iint_cache *integrity_inode_get(struct inode *inode);
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 65377848fbc5..2d5e69ab4646 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -77,25 +77,6 @@ struct evm_ima_xattr_data {
+ 	u8 digest[SHA1_DIGEST_SIZE];
+ } __packed;
+ 
+-#define IMA_MAX_DIGEST_SIZE	64
+-
+-struct ima_digest_data {
+-	u8 algo;
+-	u8 length;
+-	union {
+-		struct {
+-			u8 unused;
+-			u8 type;
+-		} sha1;
+-		struct {
+-			u8 type;
+-			u8 algo;
+-		} ng;
+-		u8 data[2];
+-	} xattr;
+-	u8 digest[0];
+-} __packed;
+-
+ /*
+  * signature format v2 - for using with asymmetric keys
+  */
+@@ -108,24 +89,6 @@ struct signature_v2_hdr {
+ 	uint8_t sig[0];		/* signature payload */
+ } __packed;
+ 
+-/* integrity data associated with an inode */
+-struct integrity_iint_cache {
+-	struct rb_node rb_node;	/* rooted in integrity_iint_tree */
+-	struct mutex mutex;	/* protects: version, flags, digest */
+-	struct inode *inode;	/* back pointer to inode in question */
+-	u64 version;		/* track inode changes */
+-	unsigned long flags;
+-	unsigned long measured_pcrs;
+-	unsigned long atomic_flags;
+-	enum integrity_status ima_file_status:4;
+-	enum integrity_status ima_mmap_status:4;
+-	enum integrity_status ima_bprm_status:4;
+-	enum integrity_status ima_read_status:4;
+-	enum integrity_status ima_creds_status:4;
+-	enum integrity_status evm_status:4;
+-	struct ima_digest_data *ima_hash;
+-};
+-
+ /* rbtree tree calls to lookup, insert, delete
+  * integrity data associated with an inode.
+  */
+-- 
+2.24.1.735.g03f4e72817-goog
 
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> Cc: stable@vger.kernel.org
-> ---
->   drivers/char/tpm/tpm-chip.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index 3d6d394a8661..58073836b555 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -596,9 +596,7 @@ int tpm_chip_register(struct tpm_chip *chip)
->   
->   	tpm_sysfs_add_device(chip);
->   
-> -	rc = tpm_bios_log_setup(chip);
-> -	if (rc != 0 && rc != -ENODEV)
-> -		return rc;
-> +	tpm_bios_log_setup(chip);
->   
->   	tpm_add_ppi(chip);
-
-Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
-
-
-Kind regards,
-
-Paul
