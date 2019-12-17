@@ -2,42 +2,40 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D231112216F
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Dec 2019 02:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B030F122173
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Dec 2019 02:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbfLQBZH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Dec 2019 20:25:07 -0500
-Received: from mga12.intel.com ([192.55.52.136]:43128 "EHLO mga12.intel.com"
+        id S1726368AbfLQB0P (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Dec 2019 20:26:15 -0500
+Received: from mga01.intel.com ([192.55.52.88]:1402 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725805AbfLQBZG (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Dec 2019 20:25:06 -0500
+        id S1725805AbfLQB0P (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 16 Dec 2019 20:26:15 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Dec 2019 17:25:06 -0800
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Dec 2019 17:26:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,323,1571727600"; 
-   d="scan'208";a="415280936"
+   d="scan'208";a="416654626"
 Received: from chauvina-mobl1.ger.corp.intel.com ([10.251.85.48])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Dec 2019 17:25:02 -0800
-Message-ID: <51dcaf500c7f081ccebf3386884e7f4826d83075.camel@linux.intel.com>
-Subject: Re: [PATCH v2] tpm_tis: reserve chip for duration of
- tpm_tis_core_init
+  by fmsmga006.fm.intel.com with ESMTP; 16 Dec 2019 17:26:12 -0800
+Message-ID: <f4ac8ac982daf33f5b2a5bdc0bf63f67fd40413a.camel@linux.intel.com>
+Subject: Re: [PATCH V2] tpm_tis_spi: use new `delay` structure for SPI
+ transfer delays
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christian Bundy <christianbundy@fraction.io>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        stable <stable@vger.kernel.org>, linux-integrity@vger.kernel.org
-Date:   Tue, 17 Dec 2019 03:25:01 +0200
-In-Reply-To: <CAPcyv4jUz9X-eyf7M78dfS-7pzi4Xqs+LdpUSD=eoeQjd1kxug@mail.gmail.com>
-References: <20191211231758.22263-1-jsnitsel@redhat.com>
-         <20191211235455.24424-1-jsnitsel@redhat.com>
-         <CAPcyv4j_FJ9teSyfodCjXs5Wz2Pj7BjqKX6Mx53OtPnVu0mjGA@mail.gmail.com>
-         <CAPcyv4jUz9X-eyf7M78dfS-7pzi4Xqs+LdpUSD=eoeQjd1kxug@mail.gmail.com>
+To:     "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "arnd@arndb.de" <arnd@arndb.de>
+Date:   Tue, 17 Dec 2019 03:26:11 +0200
+In-Reply-To: <6920bc5e8bc932dd85fa8e14755d2e6999512f25.camel@analog.com>
+References: <20191204080049.32701-1-alexandru.ardelean@analog.com>
+         <20191210065619.7395-1-alexandru.ardelean@analog.com>
+         <20191211173700.GE4516@linux.intel.com>
+         <6920bc5e8bc932dd85fa8e14755d2e6999512f25.camel@analog.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.34.1-2 
@@ -48,36 +46,22 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-12-11 at 18:18 -0800, Dan Williams wrote:
-> On Wed, Dec 11, 2019 at 6:15 PM Dan Williams <dan.j.williams@intel.com> wrote:
-> > On Wed, Dec 11, 2019 at 3:56 PM Jerry Snitselaar <jsnitsel@redhat.com> wrote:
-> > > Instead of repeatedly calling tpm_chip_start/tpm_chip_stop when
-> > > issuing commands to the tpm during initialization, just reserve the
-> > > chip after wait_startup, and release it when we are ready to call
-> > > tpm_chip_register.
-> > > 
-> > > Cc: Christian Bundy <christianbundy@fraction.io>
-> > > Cc: Dan Williams <dan.j.williams@intel.com>
-> > > Cc: Peter Huewe <peterhuewe@gmx.de>
-> > > Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > Cc: Stefan Berger <stefanb@linux.vnet.ibm.com>
-> > > Cc: stable@vger.kernel.org
-> > > Cc: linux-integrity@vger.kernel.org
-> > > Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
-> > > Fixes: 5b359c7c4372 ("tpm_tis_core: Turn on the TPM before probing IRQ's")
-> > 
-> > Ugh, sorry, I guess this jinxed it. This patch does not address the
-> > IRQ storm on the platform I reported earlier.
+On Thu, 2019-12-12 at 07:21 +0000, Ardelean, Alexandru wrote:
+> That's a habit from Github's Markdown.
+> We keep our kernel repo on Github and Markdown formats `text` into a
+> certain form.
+
+Ah.
+
+> When I open a PR, the PR text is formatted to highlight certain elements
+> [that I want highlighted].
+> I did not get any comments on it so far.
 > 
-> Are the reverts making their way upstream?
+> I can change it if you want.
+> 
+> As a secondary note: Markdown seems to be used on Gitlab and Bitbucket
 
-Not yet.
-
-Cannot randomly apply patches without answer to why. Given that
-some changes are already landed changes it would be better to
-create a patch based on reverts (in the sense of code change)
-and commit message what is going on.
+Please change it.
 
 /Jarkko
 
