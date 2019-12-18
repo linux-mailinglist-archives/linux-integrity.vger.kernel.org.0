@@ -2,40 +2,40 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CCEF123FBC
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Dec 2019 07:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 199A1123FC0
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Dec 2019 07:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbfLRGjY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Dec 2019 01:39:24 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42762 "EHLO
+        id S1726695AbfLRGju (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Dec 2019 01:39:50 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42794 "EHLO
         bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725797AbfLRGjX (ORCPT
+        by vger.kernel.org with ESMTP id S1725799AbfLRGju (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Dec 2019 01:39:23 -0500
+        Wed, 18 Dec 2019 01:39:50 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C78FA8EE18E;
-        Tue, 17 Dec 2019 22:39:22 -0800 (PST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0C63C8EE193;
+        Tue, 17 Dec 2019 22:39:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1576651162;
-        bh=UVsrWmNfLJsIHXR/kDlaqUyC8jUL+StD4OB643+XEZs=;
+        s=20151216; t=1576651190;
+        bh=VqwZ/3+z22mHG8djxbT81BfP7Dswb0A9A7olkdrIdt4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=acPOSna1gIbmo+5lShyzUPzkqLQ4PGKVjHthL22NjuxPfRI0IGiO2ZNUNWdiUm6n2
-         Y0jX8LEJ0XRCgei43mQ0eedDM+jUFfIs1pc+73e0K4TY7gbi/tzbEXRmQzdDXZHNjY
-         5jUixZaEnVWnqAvYoVwOSerpfoXKH8g2zguURIVc=
+        b=QQega7UM8OY0jDE1PkD/JMSxgnSlubcbBwvcS6/nV4KH+0EhWCLoE9NpiQr009QnM
+         ImGCAFKwvcA9KZsAACEjCRT80NE/Yba2RET5V14RZm9K3jN0My6qLSP/YkjdQcoC3V
+         kLcrNEGSyyYG7nVnEz8iTttvBPumGHSXPIyBDboU=
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id U5ORrC1Io16Z; Tue, 17 Dec 2019 22:39:22 -0800 (PST)
+        with ESMTP id t5W7xdDkVtbG; Tue, 17 Dec 2019 22:39:49 -0800 (PST)
 Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id B0EC88EE0DF;
-        Tue, 17 Dec 2019 22:39:21 -0800 (PST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 05EB08EE0DF;
+        Tue, 17 Dec 2019 22:39:48 -0800 (PST)
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Subject: [PATCH v3 7/9] security: keys: trusted: implement counter/timer policy
-Date:   Wed, 18 Dec 2019 15:31:40 +0900
-Message-Id: <20191218063142.23033-8-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v3 8/9] security: keys: trusted fix tpm2 authorizations
+Date:   Wed, 18 Dec 2019 15:31:41 +0900
+Message-Id: <20191218063142.23033-9-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191218063142.23033-1-James.Bottomley@HansenPartnership.com>
 References: <20191218063142.23033-1-James.Bottomley@HansenPartnership.com>
@@ -44,96 +44,77 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This is actually a generic policy allowing a range of comparisons
-against any value set in the TPM Clock, which includes things like the
-reset count, a monotonic millisecond count and the restart count.  The
-most useful comparison is against the millisecond count for expiring
-keys.  However, you have to remember that currently Linux doesn't try
-to sync the epoch timer with the TPM, so the expiration is actually
-measured in how long the TPM itself has been powered on ... the TPM
-timer doesn't count while the system is powered down.  The millisecond
-counter is a u64 quantity found at offset 8 in the timer structure,
-and the <= comparision operand is 9, so a policy set to expire after the
-TPM has been up for 100 seconds would look like
+In TPM 1.2 an authorization was a 20 byte number.  The spec actually
+recommended you to hash variable length passwords and use the sha1
+hash as the authorization.  Because the spec doesn't require this
+hashing, the current authorization for trusted keys is a 40 digit hex
+number.  For TPM 2.0 the spec allows the passing in of variable length
+passwords and passphrases directly, so we should allow that in trusted
+keys for ease of use.  Update the 'blobauth' parameter to take this
+into account, so we can now use plain text passwords for the keys.
 
-0000016d00000000000f424000080009
+so before
 
-Where 0x16d is the counter timer policy code and 0xf4240 is 100 000 in
-hex.
+keyctl add trusted kmk "new 32 blobauth=f572d396fae9206628714fb2ce00f72e94f2258f"
+
+after:
+
+keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001"
 
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
- Documentation/security/keys/trusted-encrypted.rst | 29 +++++++++++++++++++++++
- security/keys/trusted-keys/tpm2-policy.c          | 19 +++++++++++++++
- 2 files changed, 48 insertions(+)
+ include/keys/trusted-type.h               |  1 +
+ security/keys/trusted-keys/trusted_tpm1.c | 24 +++++++++++++++++++-----
+ 2 files changed, 20 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-index b68d3eb73f00..53a6196c7df9 100644
---- a/Documentation/security/keys/trusted-encrypted.rst
-+++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -241,3 +241,32 @@ about the usage can be found in the file
- Another new format 'enc32' has been defined in order to support encrypted keys
- with payload size of 32 bytes. This will initially be used for nvdimm security
- but may expand to other usages that require 32 bytes payload.
-+
-+Appendix
-+--------
-+
-+TPM 2.0 Policies
-+----------------
-+
-+The current TPM supports PCR lock policies as documented above and
-+CounterTimer policies which can be used to create expiring keys.  One
-+caveat with expiring keys is that the TPM millisecond counter does not
-+update while a system is powered off and Linux does not sync the TPM
-+millisecond count with its internal clock, so the best you can expire
-+in is in terms of how long any given TPM has been powered on.  (FIXME:
-+Linux should simply update the millisecond clock to the current number
-+of seconds past the epoch on boot).
-+
-+A CounterTimer policy is expressed in terms of length and offset
-+against the TPM clock structure (TPMS_TIME_INFO), which looks like the
-+packed structure::
-+
-+    struct tpms_time_info {
-+            u64 uptime;       /* time in ms since last start or reset */
-+	    u64 clock;        /* cumulative uptime in ms */
-+	    u32 resetcount;   /* numer of times the TPM has been reset */
-+	    u32 restartcount; /* number of times the TPM has been restarted */
-+	    u8  safe          /* time was safely loaded from NVRam */
-+    };
-+
-+The usual comparison for expiring keys is against clock, at offset 8.
-diff --git a/security/keys/trusted-keys/tpm2-policy.c b/security/keys/trusted-keys/tpm2-policy.c
-index 2606d3bb5b82..5698475b30cb 100644
---- a/security/keys/trusted-keys/tpm2-policy.c
-+++ b/security/keys/trusted-keys/tpm2-policy.c
-@@ -323,6 +323,25 @@ int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols,
- 			tpm_buf_append(&buf, pols->policies[i],
- 				       pols->len[i] - pols->hash_size);
+diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+index fc9c13802c06..c117bf598230 100644
+--- a/include/keys/trusted-type.h
++++ b/include/keys/trusted-type.h
+@@ -34,6 +34,7 @@ struct trusted_key_options {
+ 	uint16_t keytype;
+ 	uint32_t keyhandle;
+ 	unsigned char keyauth[TPM_DIGEST_SIZE];
++	uint32_t blobauth_len;
+ 	unsigned char blobauth[TPM_DIGEST_SIZE];
+ 	uint32_t pcrinfo_len;
+ 	unsigned char pcrinfo[MAX_PCRINFO_SIZE];
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index 668cbdc675b8..af269f4774de 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -785,12 +785,26 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+ 				return -EINVAL;
  			break;
-+		case TPM2_CC_POLICY_COUNTER_TIMER: {
+ 		case Opt_blobauth:
+-			if (strlen(args[0].from) != 2 * SHA1_DIGEST_SIZE)
+-				return -EINVAL;
+-			res = hex2bin(opt->blobauth, args[0].from,
+-				      SHA1_DIGEST_SIZE);
+-			if (res < 0)
 +			/*
-+			 * the format of this is the last two u16
-+			 * quantities are the offset and operation
-+			 * respectively.  The rest is operandB which
-+			 * must be zero padded in a hash digest
++			 * TPM 1.2 authorizations are sha1 hashes
++			 * passed in as hex strings.  TPM 2.0
++			 * authorizations are simple passwords
++			 * (although it can take a hash as well)
 +			 */
-+			u16 opb_len = pols->len[i] - 4;
-+
-+			if (opb_len > pols->hash_size)
-+				return -EINVAL;
-+
-+			tpm_buf_append_u16(&buf, opb_len);
-+			tpm_buf_append(&buf, pols->policies[i], opb_len);
-+			/* offset and operand*/
-+			tpm_buf_append(&buf, pols->policies[i] + opb_len, 4);
-+			failure = "Counter Timer";
-+			break;
-+		}
- 		default:
- 			failure = "unknown policy";
++			opt->blobauth_len = strlen(args[0].from);
++			if (opt->blobauth_len == 2 * TPM_DIGEST_SIZE) {
++				res = hex2bin(opt->blobauth, args[0].from,
++					      TPM_DIGEST_SIZE);
++				if (res < 0)
++					return -EINVAL;
++				opt->blobauth_len = TPM_DIGEST_SIZE;
++			} else if (tpm2 &&
++				   opt->blobauth_len <= sizeof(opt->blobauth)) {
++				memcpy(opt->blobauth, args[0].from,
++				       opt->blobauth_len);
++			} else {
+ 				return -EINVAL;
++			}
  			break;
+ 		case Opt_migratable:
+ 			if (*args[0].from == '0')
 -- 
 2.16.4
 
