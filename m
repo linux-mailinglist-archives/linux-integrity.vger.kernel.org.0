@@ -2,121 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FE51250DE
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Dec 2019 19:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B1E125760
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Dec 2019 00:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726960AbfLRSnq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Dec 2019 13:43:46 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37348 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726831AbfLRSnq (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Dec 2019 13:43:46 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBIIh8mB110056
-        for <linux-integrity@vger.kernel.org>; Wed, 18 Dec 2019 13:43:45 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wykb76kgf-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 18 Dec 2019 13:43:45 -0500
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 18 Dec 2019 18:43:42 -0000
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 18 Dec 2019 18:43:39 -0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBIIhcxr51314822
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Dec 2019 18:43:38 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 84CA84C04E;
-        Wed, 18 Dec 2019 18:43:38 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 10E5E4C044;
-        Wed, 18 Dec 2019 18:43:37 +0000 (GMT)
-Received: from dhcp-9-31-103-79.watson.ibm.com (unknown [9.31.103.79])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Dec 2019 18:43:36 +0000 (GMT)
-Subject: Re: [PATCH] integrity: Expose data structures required for
- include/linux/integrity.h
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Florent Revest <revest@chromium.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-integrity@vger.kernel.org, Matthew Garrett <mjg59@google.com>
-Cc:     jmorris@namei.org, serge@hallyn.com, revest@google.com,
-        allison@lohutok.net, armijn@tjaldur.nl, bauerman@linux.ibm.com,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kpsingh@chromium.org
-Date:   Wed, 18 Dec 2019 13:43:36 -0500
-In-Reply-To: <63f057fb98351324c8fc6210c42f3cbd76e85a68.camel@chromium.org>
-References: <20191217134748.198011-1-revest@chromium.org>
-         <e9e366d3-6c5d-743b-ffde-6b95b85884a2@schaufler-ca.com>
-         <1576624105.4579.379.camel@linux.ibm.com>
-         <2ae5127d76cbf78140fb2d6108c9ec70c7d8ae5d.camel@chromium.org>
-         <1576676087.4579.396.camel@linux.ibm.com>
-         <1576679307.4579.401.camel@linux.ibm.com>
-         <63f057fb98351324c8fc6210c42f3cbd76e85a68.camel@chromium.org>
+        id S1726561AbfLRXGw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Dec 2019 18:06:52 -0500
+Received: from mga06.intel.com ([134.134.136.31]:27557 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726518AbfLRXGw (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 18 Dec 2019 18:06:52 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Dec 2019 15:06:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,330,1571727600"; 
+   d="scan'208";a="240952181"
+Received: from jtreacy-mobl1.ger.corp.intel.com ([10.251.82.127])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Dec 2019 15:06:47 -0800
+Message-ID: <37f4ed0d6145dbe1e8724a5d05d0da82b593bf9c.camel@linux.intel.com>
+Subject: Re: [PATCH v2] tpm_tis: reserve chip for duration of
+ tpm_tis_core_init
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christian Bundy <christianbundy@fraction.io>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        stable <stable@vger.kernel.org>, linux-integrity@vger.kernel.org
+Date:   Thu, 19 Dec 2019 01:06:40 +0200
+In-Reply-To: <20191217171844.huqlj5csr262zkkk@cantor>
+References: <20191211231758.22263-1-jsnitsel@redhat.com>
+         <20191211235455.24424-1-jsnitsel@redhat.com>
+         <5aef0fbe28ed23b963c53d61445b0bac6f108642.camel@linux.intel.com>
+         <CAPcyv4h60z889bfbiwvVhsj6MxmOPiPY8ZuPB_skxkZx-N+OGw@mail.gmail.com>
+         <20191217020022.knh7uxt4pn77wk5m@cantor>
+         <CAPcyv4iepQup4bwMuWzq6r5gdx83hgYckUWFF7yF=rszjz3dtQ@mail.gmail.com>
+         <5d0763334def7d7ae1e7cf931ef9b14184dce238.camel@linux.intel.com>
+         <20191217171844.huqlj5csr262zkkk@cantor>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19121818-0016-0000-0000-000002D64333
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19121818-0017-0000-0000-00003338833F
-Message-Id: <1576694616.4579.412.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-18_06:2019-12-17,2019-12-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=3
- clxscore=1015 lowpriorityscore=0 bulkscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 malwarescore=0 phishscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912180147
+User-Agent: Evolution 3.34.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2019-12-18 at 17:56 +0100, Florent Revest wrote:
-> On Wed, 2019-12-18 at 09:28 -0500, Mimi Zohar wrote:
-> > [Cc'ing Matthew]
-> > 
-
-> > > There's a major difference between returning just the file hash and
-> > > making the integrity_iint_cache structure public. 
-> 
-> Certainly!
-> I am new to this subsystem so I just wanted to get the discussion
-> started. I am happy to make a more specific function.
-> 
-> > > Peter Moody's original code queried the cache[1].  Why do you need
-> > > access to the structure itself?
-> > > FYI, if/when we get to IMA namespacing, the cache structure will
-> > > change.
+On Tue, 2019-12-17 at 10:18 -0700, Jerry Snitselaar wrote:
+> On Tue Dec 17 19, Jarkko Sakkinen wrote:
+> > On Mon, 2019-12-16 at 18:14 -0800, Dan Williams wrote:
+> > > On Mon, Dec 16, 2019 at 6:00 PM Jerry Snitselaar <jsnitsel@redhat.com> wrote:
+> > > > On Mon Dec 16 19, Dan Williams wrote:
+> > > > > On Mon, Dec 16, 2019 at 4:59 PM Jarkko Sakkinen
+> > > > > <jarkko.sakkinen@linux.intel.com> wrote:
+> > > > > > On Wed, 2019-12-11 at 16:54 -0700, Jerry Snitselaar wrote:
+> > > > > > > Instead of repeatedly calling tpm_chip_start/tpm_chip_stop when
+> > > > > > > issuing commands to the tpm during initialization, just reserve the
+> > > > > > > chip after wait_startup, and release it when we are ready to call
+> > > > > > > tpm_chip_register.
+> > > > > > > 
+> > > > > > > Cc: Christian Bundy <christianbundy@fraction.io>
+> > > > > > > Cc: Dan Williams <dan.j.williams@intel.com>
+> > > > > > > Cc: Peter Huewe <peterhuewe@gmx.de>
+> > > > > > > Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > > > > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > > > > Cc: Stefan Berger <stefanb@linux.vnet.ibm.com>
+> > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > Cc: linux-integrity@vger.kernel.org
+> > > > > > > Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
+> > > > > > > Fixes: 5b359c7c4372 ("tpm_tis_core: Turn on the TPM before probing IRQ's")
+> > > > > > > Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> > > > > > 
+> > > > > > I pushed to my master with minor tweaks and added my tags.
+> > > > > > 
+> > > > > > Please check before I put it to linux-next.
+> > > > > 
+> > > > > I don't see it yet here:
+> > > > > 
+> > > > > http://git.infradead.org/users/jjs/linux-tpmdd.git/shortlog/refs/heads/master
+> > > > > 
+> > > > > However, I wanted to make sure you captured that this does *not* fix
+> > > > > the interrupt issue. I.e. make sure you remove the "Fixes:
+> > > > > 5b359c7c4372 ("tpm_tis_core: Turn on the TPM before probing IRQ's")"
+> > > > > tag.
+> > > > > 
+> > > > > With that said, are you going to include the revert of:
+> > > > > 
+> > > > > 1ea32c83c699 tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
+> > > > 
+> > > > Dan, with the above reverted do you still get the screaming interrupt?
 > > > 
-> > > [1] ima: add the ability to query ima for the hash of a given file.
+> > > Yes, the screaming interrupt goes away, although it is replaced by
+> > > these messages when the driver starts:
+> > > 
+> > > [    3.725131] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
+> > > [    3.725358] tpm tpm0: tpm_try_transmit: send(): error -5
+> > > [    3.725359] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
+> > > polling instead
+> > > 
+> > > If the choice is "error message + polled-mode" vs "pinning a cpu with
+> > > interrupts" I'd accept the former, but wanted Jarkko with his
+> > > maintainer hat to weigh in.
+> > > 
+> > > Is there a simple sanity check I can run to see if the TPM is still
+> > > operational in this state?
 > > 
-> > If you're using Peter's patch, or something similar, I'd appreciate
-> > your taking the time to upstream it.
+> > What about T490S?
+> > 
+> > /Jarkko
+> > 
 > 
-> Thank you for pointing me to Peter's patch! No one in my team was aware
-> of his work on this. Ugh!
-> It appears that Peter left the company while trying to upstream his
-> patch and the situation just got stuck there for 4+ years now.
+> Hi Jarkko, I'm waiting to hear back from the t490s user, but I imagine
+> it still has the problem as well.
 > 
-> If you are still positive about the idea of a ima_file_hash function, I
-> will take his v6 patch (this is the latest I could find on the
-> sourceforce archives of linux-ima-devel), rebase it, take your comments
-> into account and send a new version by the end of the week.
+> Christian, were you able to try this patch and verify it still
+> resolves the issue you were having with the kernel failing to get the
+> timeouts and durations from the tpm?
 
-Matthew also wasn't aware of Peter's patch, until I sent it to him.  I
-assume they're using it or something similar.  Please coordinate with
-him, before refreshing and posting the patch.
+Including those reverts would be a bogus change at this point.
 
-thanks,
+The fix that I already applied obviously fixes an issue even if
+it does not fix all the issues.
 
-Mimi
+/Jarkko
 
