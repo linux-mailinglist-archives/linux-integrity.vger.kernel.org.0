@@ -2,95 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A38123A83
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Dec 2019 00:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A38123CCD
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Dec 2019 03:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbfLQXIf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Dec 2019 18:08:35 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49206 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726072AbfLQXIf (ORCPT
+        id S1726402AbfLRCBq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Dec 2019 21:01:46 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:38146 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725975AbfLRCBq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Dec 2019 18:08:35 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBHN48Uq035230
-        for <linux-integrity@vger.kernel.org>; Tue, 17 Dec 2019 18:08:34 -0500
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wy41qyrah-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 17 Dec 2019 18:08:34 -0500
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 17 Dec 2019 23:08:31 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 17 Dec 2019 23:08:28 -0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBHN8Rbb65536022
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Dec 2019 23:08:27 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 379E84203F;
-        Tue, 17 Dec 2019 23:08:27 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E1F2342047;
-        Tue, 17 Dec 2019 23:08:25 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.184.53])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 17 Dec 2019 23:08:25 +0000 (GMT)
-Subject: Re: [PATCH] integrity: Expose data structures required for
- include/linux/integrity.h
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-integrity@vger.kernel.org
-Cc:     jmorris@namei.org, serge@hallyn.com, revest@google.com,
-        allison@lohutok.net, armijn@tjaldur.nl, bauerman@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Date:   Tue, 17 Dec 2019 18:08:25 -0500
-In-Reply-To: <e9e366d3-6c5d-743b-ffde-6b95b85884a2@schaufler-ca.com>
-References: <20191217134748.198011-1-revest@chromium.org>
-         <e9e366d3-6c5d-743b-ffde-6b95b85884a2@schaufler-ca.com>
+        Tue, 17 Dec 2019 21:01:46 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CDFA28EE18E;
+        Tue, 17 Dec 2019 18:01:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1576634504;
+        bh=T6tjpNiUMryOoxPh3ySPhu8SFS4EjI3JRGspCsj/mY8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=r9SWdWgPZAriNlUwRheZsGDyXOg8N1lSFivMjwZvcs+ophIOapruPvRXsEhfmMfEN
+         qRrH1AOGW67qWCDaoCu2AZBnv1IcjS6yhEjrafby6sDYBnZjsvVFVDyu3nDs81t1iO
+         0YBwnvhYd9O4QvJW+y11boi+fVFl7OcJJIXQub/0=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lww0zsdnfplq; Tue, 17 Dec 2019 18:01:44 -0800 (PST)
+Received: from [172.20.1.149] (s138.GtokyoFL8.vectant.ne.jp [222.228.122.138])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id E1E998EE0DF;
+        Tue, 17 Dec 2019 18:01:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1576634504;
+        bh=T6tjpNiUMryOoxPh3ySPhu8SFS4EjI3JRGspCsj/mY8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=r9SWdWgPZAriNlUwRheZsGDyXOg8N1lSFivMjwZvcs+ophIOapruPvRXsEhfmMfEN
+         qRrH1AOGW67qWCDaoCu2AZBnv1IcjS6yhEjrafby6sDYBnZjsvVFVDyu3nDs81t1iO
+         0YBwnvhYd9O4QvJW+y11boi+fVFl7OcJJIXQub/0=
+Message-ID: <1576634499.14900.10.camel@HansenPartnership.com>
+Subject: Re: [PATCH v4 2/2] IMA: Call workqueue functions to measure queued
+ keys
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
+        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
+        sashal@kernel.org, jamorris@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
+Date:   Wed, 18 Dec 2019 11:01:39 +0900
+In-Reply-To: <152580f3-2a1f-fa33-cc25-f25747a470a5@linux.microsoft.com>
+References: <20191213171827.28657-1-nramas@linux.microsoft.com>
+         <20191213171827.28657-3-nramas@linux.microsoft.com>
+         <1576257955.8504.20.camel@HansenPartnership.com>
+         <39624b97-245c-ed05-27c5-588787aacc00@linux.microsoft.com>
+         <1576423353.3343.3.camel@HansenPartnership.com>
+         <1568ff14-316f-f2c4-84d4-7ca4c0a1936a@linux.microsoft.com>
+         <1576479187.3784.1.camel@HansenPartnership.com>
+         <8844a360-6d1e-1435-db7c-fd7739487168@linux.microsoft.com>
+         <1576531022.3365.6.camel@HansenPartnership.com>
+         <35a6c241-9a46-2657-51d1-0c04d32a9fae@linux.microsoft.com>
+         <f25b7299-1530-2e43-cdf4-2208c82fc768@linux.microsoft.com>
+         <152580f3-2a1f-fa33-cc25-f25747a470a5@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19121723-0012-0000-0000-00000375F5E4
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19121723-0013-0000-0000-000021B1E249
-Message-Id: <1576624105.4579.379.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-17_04:2019-12-17,2019-12-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- adultscore=0 spamscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
- suspectscore=0 mlxscore=0 mlxlogscore=877 clxscore=1015 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-1912170184
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2019-12-17 at 08:25 -0800, Casey Schaufler wrote:
-> On 12/17/2019 5:47 AM, Florent Revest wrote:
-> > From: Florent Revest <revest@google.com>
-> >
-> > include/linux/integrity.h exposes the prototype of integrity_inode_get().
-> > However, it relies on struct integrity_iint_cache which is currently
-> > defined in an internal header, security/integrity/integrity.h.
-> >
-> > To allow the rest of the kernel to use integrity_inode_get,
+On Tue, 2019-12-17 at 14:22 -0800, Lakshmi Ramasubramanian wrote:
+> Hi James,
 > 
-> Why do you want to do this?
-
-ditto
-
+> > > > 
+> > > > This is the problem: in the race case you may still be adding
+> > > > keys to
+> > > > the queue after the other thread has processed it. Those keys
+> > > > won't get
+> > > > processed because the flag is now false in the post check so
+> > > > the
+> > > > current thread won't process them either.
+> > > > 
+> > > > James
+> > > > 
 > 
-> >  this patch
-> > moves the definition of the necessary structures from a private header
-> > to a global kernel header.
-> >
+> Please let me know if you still think there is a race condition.
+> 
+> If yes, please explain how a key would be added to the queue after 
+> ima_process_queued_keys() has processed queued keys.
+> ima_process_keys flag will be true when queued keys have been
+> processed.
+
+This code is confusing me:
+
++       /*
++        * To avoid holding the mutex when processing queued keys,
++        * transfer the queued keys with the mutex held to a temp list,
++        * release the mutex, and then process the queued keys from
++        * the temp list.
++        *
++        * Since ima_process_keys is set to true, any new key will be
++        * processed immediately and not be queued.
++        */
++       INIT_LIST_HEAD(&temp_ima_keys);
++
++       mutex_lock(&ima_keys_mutex);
++
++       if (!ima_process_keys) {
++               ima_process_keys = true;
++
++               if (!list_empty(&ima_keys)) {
++                       list_for_each_entry_safe(entry, tmp, &ima_keys, list)
++                               list_move_tail(&entry->list, &temp_ima_keys);
++                       process = true;
++               }
++       }
++
++       mutex_unlock(&ima_keys_mutex);
++
++       if (!process)
++               return;
++
++       list_for_each_entry_safe(entry, tmp, &temp_ima_keys, list) {
++               process_buffer_measurement(entry->payload, entry->payload_len,
++                                          entry->keyring_name, KEY_CHECK, 0,
++                                          entry->keyring_name);
++               list_del(&entry->list);
++               ima_free_key_entry(entry);
++       }
++}
++
+
+The direct implication of the comment and the lock dance with the
+temporary list and the processed flag is that stuff can be added to the
+ima_keys list after you drop the mutex.  Your explanation in the prior
+couple of emails says that nothing can be added because the
+ima_process_keys flag setting prevents it.  If the latter is true, you
+can simply drop the lock after setting the flag and rely on ima_keys
+not changing to run it through process_buffer_measurement without
+needing any of the intermediate list or the processed flag.  If the
+latter isn't true then any key added to ima_keys after the mutex is
+dropped is never processed.
+
+James
 
