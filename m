@@ -2,88 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFA712450C
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Dec 2019 11:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6564212453E
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Dec 2019 12:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbfLRKuW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Dec 2019 05:50:22 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:33357 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725828AbfLRKuW (ORCPT
+        id S1726831AbfLRLDO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Dec 2019 06:03:14 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:39439 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726141AbfLRLDN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Dec 2019 05:50:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576666221;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0az4KKJfuYN7DyGnSzwf/5QIFxpWRQz3eoiHmfUOP1s=;
-        b=Vw8ryD33etcQ+MAZc8qjYCNlKxFFA5+K/yWBFHa52gkcvzk1MbEwvQ4oY+6IZTCTe1QJuQ
-        B9A8eeaCDmNnwwrLeR+QggcI4l5HduK5MgXVKakbsKBQ+d7orUpcp+p1LKqiibfJXawup6
-        tGlu21PRWgCqsV6kuaSJpFfV9n88bqk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-22-3VFPngL1Me2UbZnC6X4zXQ-1; Wed, 18 Dec 2019 05:50:19 -0500
-X-MC-Unique: 3VFPngL1Me2UbZnC6X4zXQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 329A6107ACFB;
-        Wed, 18 Dec 2019 10:50:18 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-52.rdu2.redhat.com [10.10.120.52])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D84EC26DC6;
-        Wed, 18 Dec 2019 10:50:16 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <1576069352.2812.1.camel@HansenPartnership.com>
-References: <1576069352.2812.1.camel@HansenPartnership.com> <1575984010.3459.4.camel@HansenPartnership.com> <1575936272.31378.50.camel@HansenPartnership.com> <1575936367.31378.52.camel@HansenPartnership.com> <932257121039494734d97e290abb9159b1f5ca28.camel@infradead.org> <10037.1575986929@warthog.procyon.org.uk> <1576004020.3647.13.camel@HansenPartnership.com> <35B37965-359E-40E0-8F44-836A56EC4756@infradead.org>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     dhowells@redhat.com, David Woodhouse <dwmw2@infradead.org>,
-        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        keyrings@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] lib: add asn.1 encoder
+        Wed, 18 Dec 2019 06:03:13 -0500
+Received: by mail-wm1-f67.google.com with SMTP id 20so1269704wmj.4
+        for <linux-integrity@vger.kernel.org>; Wed, 18 Dec 2019 03:03:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=VaysA7IlqDXPOxdOsGsKdFEXVpxF1pTwFbagFkrgqas=;
+        b=U2faBm6YN6xKP04YNzJdCmz51sgXVZJdXiGPwmZIfoea9S2p56z2XfJkwcCH5vv8LI
+         +LoL/NJii26fgLloWu/qa9bF+t5ZyO+2iYLRDh7972llndvkCQdO0AnZ72/esc+eb2uW
+         4U9W/MqrU5Tc7sEGC1R1i0Wp8VSdrw3qE9GzQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=VaysA7IlqDXPOxdOsGsKdFEXVpxF1pTwFbagFkrgqas=;
+        b=ic+tz95eEy+a1pPw3QYfBW8LcSPieevuMH87QX0gxwrndcnyrt+yQOhpyiIm3rWkaL
+         pLIIwX/zgnl7gfrjiK5JDrwwvdVoLXb54BsjbgveuIVWv3bCRxKKi2oDDQuqp4mbgRux
+         5iHUJr8ppquVtCCZVYuNhPfxxbVaKOr7WMVXaEDxjdS36qHexlCZ3+GVwMd+g4fIC/WW
+         CFLG8CbSB3Pzm+wyQpXd23RHLDxc6N93uby0sa6htsrutxL1X7SdU0CP+T9i24VjIQOB
+         pRseBqpEnwY+uUcwlPZfs/tQgkl8sfQukdlnk7A/yEGbUue91YibToPKX3EtvZ1ej/gU
+         7cug==
+X-Gm-Message-State: APjAAAWfYeGT92K9P8wjWZaXNq7yq5DyLbloCjOd3+diPrLpZs0gQ9PA
+        H19+YuatTW2eACPUcA1gHRo+5A==
+X-Google-Smtp-Source: APXvYqwEDw33xSM9dXOl1KdYfEr2bPMTWkcfxRl2JYVvpLiSuj3PN1cLzNAr2b8ZKPibkIXBg/Q/Ug==
+X-Received: by 2002:a05:600c:2148:: with SMTP id v8mr2628992wml.111.1576666991755;
+        Wed, 18 Dec 2019 03:03:11 -0800 (PST)
+Received: from ?IPv6:2620:0:105f:304:c29:4454:35de:5c04? ([2620:0:105f:304:c29:4454:35de:5c04])
+        by smtp.gmail.com with ESMTPSA id 16sm2050765wmi.0.2019.12.18.03.03.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2019 03:03:10 -0800 (PST)
+Message-ID: <2ae5127d76cbf78140fb2d6108c9ec70c7d8ae5d.camel@chromium.org>
+Subject: Re: [PATCH] integrity: Expose data structures required for
+ include/linux/integrity.h
+From:   Florent Revest <revest@chromium.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-integrity@vger.kernel.org
+Cc:     jmorris@namei.org, serge@hallyn.com, revest@google.com,
+        allison@lohutok.net, armijn@tjaldur.nl, bauerman@linux.ibm.com,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, kpsingh@chromium.org
+Date:   Wed, 18 Dec 2019 12:03:09 +0100
+In-Reply-To: <1576624105.4579.379.camel@linux.ibm.com>
+References: <20191217134748.198011-1-revest@chromium.org>
+         <e9e366d3-6c5d-743b-ffde-6b95b85884a2@schaufler-ca.com>
+         <1576624105.4579.379.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <26945.1576666216.1@warthog.procyon.org.uk>
-Date:   Wed, 18 Dec 2019 10:50:16 +0000
-Message-ID: <26946.1576666216@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
+On Tue, 2019-12-17 at 18:08 -0500, Mimi Zohar wrote:
+> On Tue, 2019-12-17 at 08:25 -0800, Casey Schaufler wrote:
+> > On 12/17/2019 5:47 AM, Florent Revest wrote:
+> > > From: Florent Revest <revest@google.com>
+> > > 
+> > > include/linux/integrity.h exposes the prototype of
+> > > integrity_inode_get().
+> > > However, it relies on struct integrity_iint_cache which is
+> > > currently
+> > > defined in an internal header, security/integrity/integrity.h.
+> > > 
+> > > To allow the rest of the kernel to use integrity_inode_get,
+> > 
+> > Why do you want to do this?
+> 
+> ditto
 
-> +/**
-> + * asn1_encode_octet_string - encode an ASN.1 OCTET STRING
-> + * @data: pointer to encode at
-> + * @data_len: bytes remaining in @data buffer
-> + * @string: string to be encoded
-> + * @len: length of string
-> + *
-> + * Note ASN.1 octet strings may contain zeros, so the length is obligatory.
-> + */
-> +int asn1_encode_octet_string(unsigned char **data, int *data_len,
-> +			     const unsigned char *string, u32 len)
+My team works on KRSI (eBPF MAC policies presented at LSS by KP Singh).
+https://lkml.org/lkml/2019/9/10/393 We identified file hashes gathered
+from the integrity subsystem as an interesting field that we could
+potentially someday expose to eBPF programs through helpers.
 
-I wonder if it makes more sense to pass in an end pointer and return the new
-data pointer (or an error), ie.:
+One of the reason behind writing KRSI is to replace a custom kernel
+auditing module that currently needs to redefine those structures to
+access them. I imagine other kernel modules could benefit from a file
+hash API too.
 
-unsigned char *asn1_encode_octet_string(unsigned char *data,
-				        unsigned char *data_end,
-					const unsigned char *string, u32 len)
+This is the least intrusive patch I could come up with that allows us
+to lookup a hash from an inode. I was surprised to find that
+integrity_inode_get was exposed but not the structures it returns.
 
-Further, I wonder - does it actually make more sense to encode backwards,
-ie. start at the end of the buffer and do the last element first, working
-towards the front.
+If the community is interested in a different file hash API, I'd be
+happy to iterate on this patch based on your feedback.
 
-The disadvantage being that the data start would likely not be coincident with
-the buffer start.
-
-David
+> > >  this patch
+> > > moves the definition of the necessary structures from a private
+> > > header
+> > > to a global kernel header.
 
