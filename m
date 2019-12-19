@@ -2,156 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3B61257CC
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Dec 2019 00:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6898012582E
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Dec 2019 01:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbfLRXbf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Dec 2019 18:31:35 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:35835 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726559AbfLRXbf (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Dec 2019 18:31:35 -0500
-Received: by mail-oi1-f193.google.com with SMTP id k4so2147087oik.2
-        for <linux-integrity@vger.kernel.org>; Wed, 18 Dec 2019 15:31:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fUytKbh3fxwQeY78Sh0bP3Ypu5vGalHc1spY/K/2hYw=;
-        b=aADuHTHVDgDJIjYoRrFQtvCtQgjeTd6MHEuYXKaMBoChVpakmW017w1NLtNmg/nZ4l
-         H5v1X8hB8CMByDOWpfXPWHofB+iJSW9nDapGGfjLokjZE5hOW31GOpyjEraT6a1DZeal
-         W8GRIKnqG1PnBIys7m7zgJ0N6urSMEDsbWhgefJGgzaKP2bVaW181BgoAPKVD3VlNpRh
-         V/S9GeauYsL1CSHx6ZScqAWAPCiRrRdVqfD8wGeoepbfxNi3EZSoK8QPz2hpkJEffPiC
-         FMAz8yU4Zkloy5zq2XEwBj4Ht0LLW3Wc8GNqBQuwiFisiPGIeWod2EcIsTsENymsc+97
-         NtoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fUytKbh3fxwQeY78Sh0bP3Ypu5vGalHc1spY/K/2hYw=;
-        b=VN+Pq9e+UkcV4sAZPPAolzK6lIaQf+AOVx0fzMON6OtmFFwEhIM/bPAuCR1G54+O9Z
-         WUKbQ4YF1JEKYBjEsgAbT56ieZeb/wNOYa6AvaabZLbZGo28IVRVqo8spUmlun6/Sdh2
-         W4FIf6lCLgTmz6AR6W5oFOmlEcUdSlTERroWYbosev/pdJmyVBhhqUZYmf5cIuDmrdG5
-         9wu+YrahjN1U1hLwMqBKz78FPHMt17TrJkTFLLSfuQ1RaCqX8HppvGmU7z1oSI0pEfXX
-         6dMXVJk6Cs1FulueeAzvjPYuN5rcp1uAgFa4XvUByE/UC/nQGTvxMcNuvrSbCG255f/K
-         8BLg==
-X-Gm-Message-State: APjAAAUdYKoypBGlYs715v5tvM7Jdmmjj6AjKUKrWQJqIqU47WYwnnmm
-        FFWHQrpfZgpSsTVE6Cnwcp3VNOPfz232YqufK3BV0Q==
-X-Google-Smtp-Source: APXvYqzEXrvpAjwiv2G/9Vv+SQnMlU3rni98xmIEIgWEgRhXsiBl5svGAoocWfD5bq9Vmw3xbgHM/CcuxdesXarEq8Q=
-X-Received: by 2002:aca:4850:: with SMTP id v77mr1569292oia.70.1576711894829;
- Wed, 18 Dec 2019 15:31:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20191211231758.22263-1-jsnitsel@redhat.com> <20191211235455.24424-1-jsnitsel@redhat.com>
- <5aef0fbe28ed23b963c53d61445b0bac6f108642.camel@linux.intel.com>
- <CAPcyv4h60z889bfbiwvVhsj6MxmOPiPY8ZuPB_skxkZx-N+OGw@mail.gmail.com>
- <20191217020022.knh7uxt4pn77wk5m@cantor> <CAPcyv4iepQup4bwMuWzq6r5gdx83hgYckUWFF7yF=rszjz3dtQ@mail.gmail.com>
- <5d0763334def7d7ae1e7cf931ef9b14184dce238.camel@linux.intel.com>
- <20191217171844.huqlj5csr262zkkk@cantor> <37f4ed0d6145dbe1e8724a5d05d0da82b593bf9c.camel@linux.intel.com>
-In-Reply-To: <37f4ed0d6145dbe1e8724a5d05d0da82b593bf9c.camel@linux.intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Wed, 18 Dec 2019 15:31:23 -0800
-Message-ID: <CAPcyv4h8sK+geVvBb1534V9CgdvOnkpPeStV3B8Q1Qdve3is0A@mail.gmail.com>
-Subject: Re: [PATCH v2] tpm_tis: reserve chip for duration of tpm_tis_core_init
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christian Bundy <christianbundy@fraction.io>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        stable <stable@vger.kernel.org>, linux-integrity@vger.kernel.org
+        id S1726623AbfLSADM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Dec 2019 19:03:12 -0500
+Received: from mga06.intel.com ([134.134.136.31]:30626 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726518AbfLSADM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 18 Dec 2019 19:03:12 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Dec 2019 16:02:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,330,1571727600"; 
+   d="scan'208";a="248076103"
+Received: from jtreacy-mobl1.ger.corp.intel.com ([10.251.82.127])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Dec 2019 16:02:56 -0800
+Message-ID: <17c3fc41ea6ff890c686489b9977c2d886295d6e.camel@linux.intel.com>
+Subject: Re: [PATCH] tpm/ppi: replace assertion code with recovery in
+ tpm_eval_dsm
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Aditya Pakki <pakki001@umn.edu>
+Cc:     kjlu@umn.edu, Peter Huewe <peterhuewe@gmx.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20191218134513.GE17227@ziepe.ca>
+References: <20191215182314.32208-1-pakki001@umn.edu>
+         <20191218134513.GE17227@ziepe.ca>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160
+ Espoo
 Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Date:   Thu, 19 Dec 2019 02:02:18 +0200
+User-Agent: Evolution 3.34.1-2 
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 3:07 PM Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Tue, 2019-12-17 at 10:18 -0700, Jerry Snitselaar wrote:
-> > On Tue Dec 17 19, Jarkko Sakkinen wrote:
-> > > On Mon, 2019-12-16 at 18:14 -0800, Dan Williams wrote:
-> > > > On Mon, Dec 16, 2019 at 6:00 PM Jerry Snitselaar <jsnitsel@redhat.com> wrote:
-> > > > > On Mon Dec 16 19, Dan Williams wrote:
-> > > > > > On Mon, Dec 16, 2019 at 4:59 PM Jarkko Sakkinen
-> > > > > > <jarkko.sakkinen@linux.intel.com> wrote:
-> > > > > > > On Wed, 2019-12-11 at 16:54 -0700, Jerry Snitselaar wrote:
-> > > > > > > > Instead of repeatedly calling tpm_chip_start/tpm_chip_stop when
-> > > > > > > > issuing commands to the tpm during initialization, just reserve the
-> > > > > > > > chip after wait_startup, and release it when we are ready to call
-> > > > > > > > tpm_chip_register.
-> > > > > > > >
-> > > > > > > > Cc: Christian Bundy <christianbundy@fraction.io>
-> > > > > > > > Cc: Dan Williams <dan.j.williams@intel.com>
-> > > > > > > > Cc: Peter Huewe <peterhuewe@gmx.de>
-> > > > > > > > Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > > > > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > > > > > > Cc: Stefan Berger <stefanb@linux.vnet.ibm.com>
-> > > > > > > > Cc: stable@vger.kernel.org
-> > > > > > > > Cc: linux-integrity@vger.kernel.org
-> > > > > > > > Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
-> > > > > > > > Fixes: 5b359c7c4372 ("tpm_tis_core: Turn on the TPM before probing IRQ's")
-> > > > > > > > Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > > > > > >
-> > > > > > > I pushed to my master with minor tweaks and added my tags.
-> > > > > > >
-> > > > > > > Please check before I put it to linux-next.
-> > > > > >
-> > > > > > I don't see it yet here:
-> > > > > >
-> > > > > > http://git.infradead.org/users/jjs/linux-tpmdd.git/shortlog/refs/heads/master
-> > > > > >
-> > > > > > However, I wanted to make sure you captured that this does *not* fix
-> > > > > > the interrupt issue. I.e. make sure you remove the "Fixes:
-> > > > > > 5b359c7c4372 ("tpm_tis_core: Turn on the TPM before probing IRQ's")"
-> > > > > > tag.
-> > > > > >
-> > > > > > With that said, are you going to include the revert of:
-> > > > > >
-> > > > > > 1ea32c83c699 tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
-> > > > >
-> > > > > Dan, with the above reverted do you still get the screaming interrupt?
-> > > >
-> > > > Yes, the screaming interrupt goes away, although it is replaced by
-> > > > these messages when the driver starts:
-> > > >
-> > > > [    3.725131] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
-> > > > [    3.725358] tpm tpm0: tpm_try_transmit: send(): error -5
-> > > > [    3.725359] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
-> > > > polling instead
-> > > >
-> > > > If the choice is "error message + polled-mode" vs "pinning a cpu with
-> > > > interrupts" I'd accept the former, but wanted Jarkko with his
-> > > > maintainer hat to weigh in.
-> > > >
-> > > > Is there a simple sanity check I can run to see if the TPM is still
-> > > > operational in this state?
-> > >
-> > > What about T490S?
-> > >
-> > > /Jarkko
-> > >
-> >
-> > Hi Jarkko, I'm waiting to hear back from the t490s user, but I imagine
-> > it still has the problem as well.
-> >
-> > Christian, were you able to try this patch and verify it still
-> > resolves the issue you were having with the kernel failing to get the
-> > timeouts and durations from the tpm?
->
-> Including those reverts would be a bogus change at this point.
+On Wed, 2019-12-18 at 09:45 -0400, Jason Gunthorpe wrote:
+> On Sun, Dec 15, 2019 at 12:23:14PM -0600, Aditya Pakki wrote:
+> > In tpm_eval_dsm, BUG_ON on ppi_handle is used as an assertion.
+> > By returning NULL to the callers, instead of crashing, the error
+> > can be better handled.
+> > 
+> > Signed-off-by: Aditya Pakki <pakki001@umn.edu>
+> >  drivers/char/tpm/tpm_ppi.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+> > index b2dab941cb7f..4b6f6a9c0b48 100644
+> > +++ b/drivers/char/tpm/tpm_ppi.c
+> > @@ -42,7 +42,9 @@ static inline union acpi_object *
+> >  tpm_eval_dsm(acpi_handle ppi_handle, int func, acpi_object_type type,
+> >  	     union acpi_object *argv4, u64 rev)
+> >  {
+> > -	BUG_ON(!ppi_handle);
+> > +	if (!ppi_handle)
+> > +		return NULL;
+> 
+> If it can't happen the confusing if should either be omitted entirely
+> or written as 
+> 
+> if (WARN_ON(!ppi_handle))
+>        return NULL;
+> 
+> Leaving it as apparently operational code just creates confusion for
+> the reader that now has the task to figure out why ppi_handle can be
+> null.
+> 
+> I favour not including tests for impossible conditions. The kernel
+> will crash immediately if ppi_handle is null anyhow.
+> 
+> Jason
 
-I'm failing to see how you arrived at that conclusion.
+Absolutely should be changed WARN_ON() as it never should happen. I'll
+update the patch before sending PR to Linus since I have it already
+applied.
 
-> The fix that I already applied obviously fixes an issue even if
-> it does not fix all the issues.
+Thanks Jason for the remark!
 
-These patches take a usable system and make it unusable:
+/Jarkko
 
-1ea32c83c699 tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
-5b359c7c4372 tpm_tis_core: Turn on the TPM before probing IRQ's
-
-...they need to be reverted, or the regression needs to be fixed, but
-asserting that you fixed something else unrelated does not help.
