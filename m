@@ -2,91 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CD01288CB
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Dec 2019 12:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DC4128BE4
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Dec 2019 00:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726182AbfLULD2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 21 Dec 2019 06:03:28 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:35171 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbfLULD2 (ORCPT
+        id S1726847AbfLUXkr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 21 Dec 2019 18:40:47 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13682 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726828AbfLUXkq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 21 Dec 2019 06:03:28 -0500
-Received: by mail-lf1-f67.google.com with SMTP id 15so8998301lfr.2;
-        Sat, 21 Dec 2019 03:03:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+8wvoNTD0W8Mh3r1dJmeiND0yoDYzPWABA6vVSLjHPQ=;
-        b=E0bEi+w/IjeutYlkNNykm2LuYWGb1kOYoOTRgoQvuTSi4DZY8fBrtUrI5Mg5Yk6oAZ
-         ZHOpvJuJNrABS0H1pzxlmZWM6PdoKJsCUKO/tjcgUWeYUM2pu096sANiCJfu6rKYAFRa
-         dzLeIV1i3LoTSrgzCFVS99vL0g0vYzxeTSsjBn7Svkjx4r4dYAmXiiNwfVqth4Au0/Kz
-         j0pvLSaJpGKg3c7eLqX9XW9xmAavidkkMzEq1f55sbfw0zPW1oTeU0FpznVqAPtpzrXD
-         +14h9DnNOG9g/GeTM6umYRezqJS3r0tyyqsFe0fjp7agv+JaPclKdRVO1TL2n0FyyBD/
-         BOEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+8wvoNTD0W8Mh3r1dJmeiND0yoDYzPWABA6vVSLjHPQ=;
-        b=Ay6CitxG5FQVVOYfjViBtWE4jzRsuLXOKNLV7Xe+B77uSfWu7b3KV55ISaZAW2WvIx
-         VJOn+6Whxhyl01ViSmwhJ0WZCVNZbA1dXGXnXJk72tBIrsnDsPyIEewZNJb1ro1ueGZ9
-         PwqcrgZWkU6Qlirv07Z01mnqx2MC67ABF0YtW1fzr3M5KZjqgFdiHo69vXK8VImJG+Ww
-         POa4TZ/Yz2mRyeozSXdIPuKyth0niHmeyoqmR5ZalCWVwoQeo83LwbfDrTZFhV4suvI+
-         m3DA20jMV1T1eoVbGCz1juFbTszGJbxE60wdXlXyZEaG9Xj5CqyuDNWf6hcx7yk8VuNe
-         8VRA==
-X-Gm-Message-State: APjAAAWkqBYz4PoiVcscLn3UEcaHKcT5AChmxoZ7gTeEN3jBZ7Sni76W
-        UYFhGNOfMNGZOvGQice89sTqJQZHcewwLRQEgke3LA==
-X-Google-Smtp-Source: APXvYqy+cjTvEL52irzzFC/g87uyz5MBzbe8j7DMhCWXF3Qh7vS5DveaTa7jzNo5fmSrT/bvMZH4YTmOKzENlzd3VnA=
-X-Received: by 2002:a19:c1c1:: with SMTP id r184mr11986347lff.128.1576926206056;
- Sat, 21 Dec 2019 03:03:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20191220074929.8191-1-janne.karhunen@gmail.com>
- <1576850665.5241.52.camel@linux.ibm.com> <CAE=NcrZUyLe1Ftk5wOuEMJBPnw+DBx9LACbk1JPJcpg8VdDiJQ@mail.gmail.com>
-In-Reply-To: <CAE=NcrZUyLe1Ftk5wOuEMJBPnw+DBx9LACbk1JPJcpg8VdDiJQ@mail.gmail.com>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Sat, 21 Dec 2019 13:03:14 +0200
-Message-ID: <CAE=NcrY1aAriy7XRGODnQe9hiVObSrFFe7PPE+5drgMmnqTQpQ@mail.gmail.com>
-Subject: Re: [PATCH v1 - RFC] ima: export the measurement list when needed
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
-        monty.wiseman@ge.com
+        Sat, 21 Dec 2019 18:40:46 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBLNbGUf122334
+        for <linux-integrity@vger.kernel.org>; Sat, 21 Dec 2019 18:40:45 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2x1g55encc-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Sat, 21 Dec 2019 18:40:45 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Sat, 21 Dec 2019 23:40:43 -0000
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Sat, 21 Dec 2019 23:40:39 -0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBLNeclA30212178
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 21 Dec 2019 23:40:38 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 74882A404D;
+        Sat, 21 Dec 2019 23:40:38 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3EB19A4040;
+        Sat, 21 Dec 2019 23:40:37 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.234.212])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sat, 21 Dec 2019 23:40:37 +0000 (GMT)
+Subject: Re: [PATCH] IMA: Defined timer to process queued keys
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        James.Bottomley@HansenPartnership.com,
+        linux-integrity@vger.kernel.org
+Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
+        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
+        sashal@kernel.org, jamorris@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
+Date:   Sat, 21 Dec 2019 18:40:36 -0500
+In-Reply-To: <20191221015256.2775-1-nramas@linux.microsoft.com>
+References: <20191221015256.2775-1-nramas@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19122123-0028-0000-0000-000003CAF3A4
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19122123-0029-0000-0000-0000248E4B03
+Message-Id: <1576971636.5241.95.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-21_07:2019-12-17,2019-12-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ adultscore=0 suspectscore=0 spamscore=0 mlxlogscore=906 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912210212
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Dec 21, 2019 at 12:41 PM Janne Karhunen
-<janne.karhunen@gmail.com> wrote:
+On Fri, 2019-12-20 at 17:52 -0800, Lakshmi Ramasubramanian wrote:
+> keys queued for measurement should still be processed even if
+> a custom IMA policy was not loaded. Otherwise, the keys will
+> remain queued forever consuming kernel memory.
+> 
+> This patch defines a timer to handle the above scenario. The timer
+> is setup to expire 5 minutes after IMA initialization is completed.
+> 
+> If a custom IMA policy is loaded before the timer expires, the timer
+> is removed and any queued keys are processed. But if a custom policy
+> was not loaded, on timer expiration any queued keys are processed.
+> 
+> On timer expiration the keys are still processed. This will enable
+> keys to be measured in case the built-in IMA policy defines a key
+> measurement rule.
 
-> > Should the kernel be involved in writing the IMA measurement list to a
-> > file or, as Dave suggested, this should be delegated to a userspace
-> > application?
->
-> That is a good question. I went this way as it did not feel right to
-> me that the kernel would depend on periodic, reliable userspace
-> functionality to stay running (we would have a circular dependency).
-> The thing is, once the kernel starts to run low on memory, it may kill
-> that periodic daemon flushing the data for reasons unrelated to IMA.
+If there was a built-in policy rule for measuring the early boot keys,
+then there wouldn't be a need for queueing the "key" measurements.
+ Just free the queued keys.
 
-Besides the dependency, I think the requirement should be that we can
-survive the basic test of 'while true; do touch $RANDOM; done' at
-least until we run out of allocated diskspace. While arranging this
-with userspace flushers is not impossible, it is order of magnitude
-more complex to do correctly than just letting the kernel write the
-file. Even if it feels somewhat unorthodox.
+Mimi
 
-Above patch survives that test case with 3 line addition via a
-workqueue. Once the admin points IMA to some mount, the above test
-case (while loop creating files full speed) will run a long, long
-time. Effectively this is really just kernel doing its own memory
-management as it should. Flush out the dirty pages you do not really
-need to stay running.
-
-
---
-Janne
