@@ -2,125 +2,239 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A892E12997D
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Dec 2019 18:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 129FC129A91
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Dec 2019 20:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726766AbfLWRjW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Dec 2019 12:39:22 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20118 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726787AbfLWRjW (ORCPT
+        id S1726834AbfLWTrF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Dec 2019 14:47:05 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:41134 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726805AbfLWTrF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Dec 2019 12:39:22 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBNHbA3c133799
-        for <linux-integrity@vger.kernel.org>; Mon, 23 Dec 2019 12:39:21 -0500
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2x21hku416-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 23 Dec 2019 12:39:20 -0500
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 23 Dec 2019 17:39:18 -0000
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 23 Dec 2019 17:39:13 -0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBNHdDqT55902236
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Dec 2019 17:39:13 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F069E5204F;
-        Mon, 23 Dec 2019 17:39:12 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.238.12])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id F253852051;
-        Mon, 23 Dec 2019 17:39:11 +0000 (GMT)
-Subject: Re: [PATCH] ima: add the ability to query ima for the hash of a
- given file.
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-integrity@vger.kernel.org
-Cc:     kpsingh@chromium.org, mjg59@google.com,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Florent Revest <revest@google.com>
-Date:   Mon, 23 Dec 2019 12:39:11 -0500
-In-Reply-To: <8f4d9c4e-735d-8ba9-b84a-4f341030e0cf@linux.microsoft.com>
-References: <20191220163136.25010-1-revest@chromium.org>
-         <8f4d9c4e-735d-8ba9-b84a-4f341030e0cf@linux.microsoft.com>
+        Mon, 23 Dec 2019 14:47:05 -0500
+Received: by mail-ot1-f65.google.com with SMTP id r27so23362430otc.8
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Dec 2019 11:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zFugXbNXjuTa6MUeYElsmTqLleXZtVtXWa7qU/dvhHs=;
+        b=SN8HwSqpq/VHn71r5rosiHbn3JAeoPbdRMlzYznGgDelpBcJ1uXQQzmcNQGLuoDJ/J
+         DjgfzxVK2KrWxwM6Nhh7rwPitEWDF7dj3Q2VmEkNvKkPv58eyB81CCoHm5gHxvdSVaid
+         IfACfR9Yy7bHPA9K1sNnL5ARUsWrgVcBrLGMjvXZHpucgPrCh8yEZOvHXMT/LAcMMLJY
+         p9/6yDTWTNTnKmdfzt/aW0+jrLe5cT/AMPpBErNLjj3QA36jNpu/yn1vIUv5aCGLLqz1
+         tGnpyDsiEw2aGsyzGL34leDVlBBvSp1A0Rvm9LaKcTEJPaoYXKHi0KETPdbHkzs+i8RJ
+         XE4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zFugXbNXjuTa6MUeYElsmTqLleXZtVtXWa7qU/dvhHs=;
+        b=XXJWg/f+iAyMHYXsMb7q6zRzj6Es2+dw+3+pvx7fGNIKpGVwkCYdSqapCxutAAPzFk
+         D3xu1pyEPEKiPZujOh5JMYnbompxga5A1NQR6wGu9drFDr10s3D81P/KsoMkYd/0KOct
+         e9+OHVoGVdx9vgamAdY+ftwCS4SiHvSj5SE+R7A0oWwWMW54EWlhRvu+T7D2Sifbqnha
+         oaLH1jxtgeQORZlHfPqDWEXBgzrk4knQzUw1Y7LQLQy5a6xljmhAt6KoYpdqKK0pJkUy
+         y+3iivIOsLyNsVwlekTNYIraKMKeGBZ35GsgzRjWKvPd02DXNVCMpz1UUHKZN2HSkIH6
+         iOYQ==
+X-Gm-Message-State: APjAAAU0CY/TffiBirOPlpj+pWqP5RB1rDLv7IItc/4dbJ5HxM52LxEM
+        WIT/9MxQSwDQD5FcnzbClcvjvpjleM1nXemti2JK3w==
+X-Google-Smtp-Source: APXvYqyfMS95KOfmTenlUkjlprOqnr5a++lMI//c8tYJXN+PxN7viHyNmp3UYd9kVKO3vHUToL6ZZtVWwTDGUd7WYRU=
+X-Received: by 2002:a9d:7852:: with SMTP id c18mr28016742otm.247.1577130424187;
+ Mon, 23 Dec 2019 11:47:04 -0800 (PST)
+MIME-Version: 1.0
+References: <1577122577157232@kroah.com>
+In-Reply-To: <1577122577157232@kroah.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 23 Dec 2019 11:46:53 -0800
+Message-ID: <CAPcyv4jfpOX85GWgNTyugWksU=e-j=RhU_fcrcHBo4GMZ8_bhw@mail.gmail.com>
+Subject: Re: Patch "tpm_tis: reserve chip for duration of tpm_tis_core_init"
+ has been added to the 5.4-stable tree
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Christian Bundy <christianbundy@fraction.io>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        stable-commits@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19122317-0020-0000-0000-0000039AF936
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19122317-0021-0000-0000-000021F22FF1
-Message-Id: <1577122751.5241.144.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-23_07:2019-12-23,2019-12-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- mlxscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912230150
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2019-12-20 at 08:48 -0800, Lakshmi Ramasubramanian wrote:
-> On 12/20/2019 8:31 AM, Florent Revest wrote:
-> 
-> >   
-> > +/**
-> > + * ima_file_hash - return the stored measurement if a file has been hashed.
-> > + * @file: pointer to the file
-> > + * @buf: buffer in which to store the hash
-> > + * @buf_size: length of the buffer
-> > + *
-> > + * On success, output the hash into buf and return the hash algorithm (as
-> > + * defined in the enum hash_algo).
-> 
-> > + * If the hash is larger than buf, then only size bytes will be copied. It
-> > + * generally just makes sense to pass a buffer capable of holding the largest
-> > + * possible hash: IMA_MAX_DIGEST_SIZE
-> 
-> If the given buffer is smaller than the hash length, wouldn't it be 
-> better to return the required size and a status indicating the buffer is 
-> not enough. The caller can then call back with the required buffer.
-> 
-> If the hash is truncated the caller may not know if the hash is partial 
-> or not.
+Hi Greg,
 
-Based on the hash algorithm, the caller would know if the buffer
-provided was too small and was truncated.
+Please drop the:
 
-> 
-> > + *
-> > + * If IMA is disabled or if no measurement is available, return -EOPNOTSUPP.
-> > + * If the parameters are incorrect, return -EINVAL.
-> > + */
-> > +int ima_file_hash(struct file *file, char *buf, size_t buf_size)
-> > +{
-> > +	struct inode *inode;
-> > +	struct integrity_iint_cache *iint;
-> > +	size_t copied_size;
-> > +
-> > +	if (!file || !buf)
-> > +		return -EINVAL;
-> > +
+   Fixes: 5b359c7c4372 ("tpm_tis_core: Turn on the TPM before probing IRQ's")
 
-Other kernel functions provide a means of determining the needed
-buffer size by passing a NULL field.  Instead of failing here, if buf
-is NULL, how about returning the hash algorithm?
+...tag. I had asked Jarkko to do that here:
 
-Mimi
+https://lore.kernel.org/r/CAPcyv4h60z889bfbiwvVhsj6MxmOPiPY8ZuPB_skxkZx-N+OGw@mail.gmail.com/
 
-> > +	if (!ima_policy_flag)
-> > +		return -EOPNOTSUPP;
-> > +
+...but it didn't get picked up.
 
+On Mon, Dec 23, 2019 at 9:37 AM <gregkh@linuxfoundation.org> wrote:
+>
+>
+> This is a note to let you know that I've just added the patch titled
+>
+>     tpm_tis: reserve chip for duration of tpm_tis_core_init
+>
+> to the 5.4-stable tree which can be found at:
+>     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+>
+> The filename of the patch is:
+>      tpm_tis-reserve-chip-for-duration-of-tpm_tis_core_init.patch
+> and it can be found in the queue-5.4 subdirectory.
+>
+> If you, or anyone else, feels it should not be added to the stable tree,
+> please let <stable@vger.kernel.org> know about it.
+>
+>
+> From 21df4a8b6018b842d4db181a8b24166006bad3cd Mon Sep 17 00:00:00 2001
+> From: Jerry Snitselaar <jsnitsel@redhat.com>
+> Date: Wed, 11 Dec 2019 16:54:55 -0700
+> Subject: tpm_tis: reserve chip for duration of tpm_tis_core_init
+>
+> From: Jerry Snitselaar <jsnitsel@redhat.com>
+>
+> commit 21df4a8b6018b842d4db181a8b24166006bad3cd upstream.
+>
+> Instead of repeatedly calling tpm_chip_start/tpm_chip_stop when
+> issuing commands to the tpm during initialization, just reserve the
+> chip after wait_startup, and release it when we are ready to call
+> tpm_chip_register.
+>
+> Cc: Christian Bundy <christianbundy@fraction.io>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Peter Huewe <peterhuewe@gmx.de>
+> Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Stefan Berger <stefanb@linux.vnet.ibm.com>
+> Cc: stable@vger.kernel.org
+> Cc: linux-integrity@vger.kernel.org
+> Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
+> Fixes: 5b359c7c4372 ("tpm_tis_core: Turn on the TPM before probing IRQ's")
+> Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c |   35 ++++++++++++++++++-----------------
+>  1 file changed, 18 insertions(+), 17 deletions(-)
+>
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -899,13 +899,13 @@ int tpm_tis_core_init(struct device *dev
+>
+>         if (wait_startup(chip, 0) != 0) {
+>                 rc = -ENODEV;
+> -               goto out_err;
+> +               goto err_start;
+>         }
+>
+>         /* Take control of the TPM's interrupt hardware and shut it off */
+>         rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+>         if (rc < 0)
+> -               goto out_err;
+> +               goto err_start;
+>
+>         intmask |= TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_INT |
+>                    TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+> @@ -914,21 +914,21 @@ int tpm_tis_core_init(struct device *dev
+>
+>         rc = tpm_chip_start(chip);
+>         if (rc)
+> -               goto out_err;
+> +               goto err_start;
+> +
+>         rc = tpm2_probe(chip);
+> -       tpm_chip_stop(chip);
+>         if (rc)
+> -               goto out_err;
+> +               goto err_probe;
+>
+>         rc = tpm_tis_read32(priv, TPM_DID_VID(0), &vendor);
+>         if (rc < 0)
+> -               goto out_err;
+> +               goto err_probe;
+>
+>         priv->manufacturer_id = vendor;
+>
+>         rc = tpm_tis_read8(priv, TPM_RID(0), &rid);
+>         if (rc < 0)
+> -               goto out_err;
+> +               goto err_probe;
+>
+>         dev_info(dev, "%s TPM (device-id 0x%X, rev-id %d)\n",
+>                  (chip->flags & TPM_CHIP_FLAG_TPM2) ? "2.0" : "1.2",
+> @@ -937,13 +937,13 @@ int tpm_tis_core_init(struct device *dev
+>         probe = probe_itpm(chip);
+>         if (probe < 0) {
+>                 rc = -ENODEV;
+> -               goto out_err;
+> +               goto err_probe;
+>         }
+>
+>         /* Figure out the capabilities */
+>         rc = tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps);
+>         if (rc < 0)
+> -               goto out_err;
+> +               goto err_probe;
+>
+>         dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+>                 intfcaps);
+> @@ -977,10 +977,9 @@ int tpm_tis_core_init(struct device *dev
+>                 if (tpm_get_timeouts(chip)) {
+>                         dev_err(dev, "Could not get TPM timeouts and durations\n");
+>                         rc = -ENODEV;
+> -                       goto out_err;
+> +                       goto err_probe;
+>                 }
+>
+> -               tpm_chip_start(chip);
+>                 chip->flags |= TPM_CHIP_FLAG_IRQ;
+>                 if (irq) {
+>                         tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
+> @@ -991,18 +990,20 @@ int tpm_tis_core_init(struct device *dev
+>                 } else {
+>                         tpm_tis_probe_irq(chip, intmask);
+>                 }
+> -               tpm_chip_stop(chip);
+>         }
+>
+> +       tpm_chip_stop(chip);
+> +
+>         rc = tpm_chip_register(chip);
+>         if (rc)
+> -               goto out_err;
+> -
+> -       if (chip->ops->clk_enable != NULL)
+> -               chip->ops->clk_enable(chip, false);
+> +               goto err_start;
+>
+>         return 0;
+> -out_err:
+> +
+> +err_probe:
+> +       tpm_chip_stop(chip);
+> +
+> +err_start:
+>         if ((chip->ops != NULL) && (chip->ops->clk_enable != NULL))
+>                 chip->ops->clk_enable(chip, false);
+>
+>
+>
+> Patches currently in stable-queue which might be from jsnitsel@redhat.com are
+>
+> queue-5.4/iommu-fix-kasan-use-after-free-in-iommu_insert_resv_region.patch
+> queue-5.4/iommu-vt-d-fix-dmar-pte-read-access-not-set-error.patch
+> queue-5.4/iommu-set-group-default-domain-before-creating-direct-mappings.patch
+> queue-5.4/tpm_tis-reserve-chip-for-duration-of-tpm_tis_core_init.patch
+> queue-5.4/iommu-vt-d-allocate-reserved-region-for-isa-with-correct-permission.patch
+> queue-5.4/iommu-vt-d-set-isa-bridge-reserved-region-as-relaxable.patch
