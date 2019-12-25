@@ -2,65 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D995012A5E5
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Dec 2019 05:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C58FB12A673
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Dec 2019 07:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726359AbfLYEya (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Dec 2019 23:54:30 -0500
-Received: from mga12.intel.com ([192.55.52.136]:24181 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726352AbfLYEy3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Dec 2019 23:54:29 -0500
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Dec 2019 20:54:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,353,1571727600"; 
-   d="scan'208";a="417722317"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Dec 2019 20:54:28 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1ijygm-0005BK-5a; Wed, 25 Dec 2019 12:54:28 +0800
-Date:   Wed, 25 Dec 2019 12:54:16 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+        id S1725865AbfLYGn2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Dec 2019 01:43:28 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:54060 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725847AbfLYGn1 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 25 Dec 2019 01:43:27 -0500
+Received: from [10.137.112.111] (unknown [131.107.147.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1EAD420106B8;
+        Tue, 24 Dec 2019 22:43:27 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1EAD420106B8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1577256207;
+        bh=baLoyGkhawESeoveePMUdxJp7tHJKE5SxoKCegCjQBA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=UclcU4/jc2ZtDxv/N330UlJ+l35gf45ePAqWOIRgsagRdiaBymEJ1XGq+P9+n/hvu
+         z/3OqrBC+KRfkzCw4prpVqDHq4jYntwKoo5AYaaZd3mBeHW6XZcsFSaFvevZP2jw4O
+         +6Dv5gfbdBl9BFRjFQZXkLmakPmOdQxudwcWeRnk=
+Subject: Re: [RFC PATCH integrity] IMA: ima_queue_key() can be static
+To:     kbuild test robot <lkp@intel.com>
 Cc:     kbuild-all@lists.01.org, linux-integrity@vger.kernel.org,
         Mimi Zohar <zohar@linux.ibm.com>
-Subject: [RFC PATCH integrity] IMA: ima_queue_key() can be static
-Message-ID: <20191225045416.34tsl75acckhabsr@4978f4969bb8>
 References: <201912251234.hUAOr3cc%lkp@intel.com>
+ <20191225045416.34tsl75acckhabsr@4978f4969bb8>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <c31a5f8b-2db9-f8ad-51f6-b6e471b05737@linux.microsoft.com>
+Date:   Tue, 24 Dec 2019 22:43:48 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201912251234.hUAOr3cc%lkp@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20191225045416.34tsl75acckhabsr@4978f4969bb8>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Mimi,
 
-Fixes: 466a4c055a9b ("IMA: Define workqueue for early boot "key" measurements")
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
- ima_asymmetric_keys.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 12/24/2019 8:54 PM, kbuild test robot wrote:
+> 
+> Fixes: 466a4c055a9b ("IMA: Define workqueue for early boot "key" measurements")
+> Signed-off-by: kbuild test robot <lkp@intel.com>
+> ---
+>   ima_asymmetric_keys.c |    4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>   
+> -bool ima_queue_key(struct key *keyring, const void *payload,
+> -		   size_t payload_len)
+> +static bool ima_queue_key(struct key *keyring, const void *payload,
+> +			  size_t payload_len)
+>   {
+>   	bool queued = false;
+>   	struct ima_key_entry *entry;
+> 
 
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-index d520a67180d89..745bb90f1604f 100644
---- a/security/integrity/ima/ima_asymmetric_keys.c
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -67,8 +67,8 @@ static struct ima_key_entry *ima_alloc_key_entry(
- 	return entry;
- }
- 
--bool ima_queue_key(struct key *keyring, const void *payload,
--		   size_t payload_len)
-+static bool ima_queue_key(struct key *keyring, const void *payload,
-+			  size_t payload_len)
- {
- 	bool queued = false;
- 	struct ima_key_entry *entry;
+I'd defined ima_queue_key() as non-static when it could have been 
+defined as static.
+
+ From this patch I understand this change is done. Is there anything I 
+need to do to address this issue?
+
+thanks,
+  -lakshmi
