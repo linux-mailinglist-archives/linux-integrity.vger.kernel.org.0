@@ -2,128 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5DF12D4A2
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Dec 2019 22:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F97312D50E
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Dec 2019 00:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727733AbfL3VOT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Dec 2019 16:14:19 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:33292 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727691AbfL3VOS (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Dec 2019 16:14:18 -0500
-Received: from [10.137.112.108] (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 790912010C33;
-        Mon, 30 Dec 2019 13:14:17 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 790912010C33
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1577740457;
-        bh=Bu/8zUbgFjbXS2yKm478+Ao0RnZWaeg5lkupjtP5E20=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=R4GSPCV4i4L3hSCC5v4j4e4C8mOPWZrG8yxCrzHNEwPiopgjoJL2unWPBawMxBfUN
-         J49aaMvARp4xbVFz3Dq7Oi8HAFLG7gLa+X6EgzM7Ej4Mzi+1TAOsbSoSwUPiZGOZxX
-         K26E9RmJyUlOYKa0LjstXcvvCFO8fYElxNX/jI3I=
-Subject: Re: [IMA] 11b771ffff:
- BUG:sleeping_function_called_from_invalid_context_at_kernel/locking/mutex.c
-To:     kernel test robot <rong.a.chen@intel.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, lkp@lists.01.org
-References: <20191227142335.GE2760@shao2-debian>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <2a831fe9-30e5-63b4-af10-a69f327f7fb7@linux.microsoft.com>
-Date:   Mon, 30 Dec 2019 13:14:13 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1727766AbfL3X2m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Dec 2019 18:28:42 -0500
+Received: from mga17.intel.com ([192.55.52.151]:56340 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727740AbfL3X2l (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 30 Dec 2019 18:28:41 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Dec 2019 15:28:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,376,1571727600"; 
+   d="scan'208";a="215899055"
+Received: from fjkilken-mobl.ger.corp.intel.com ([10.252.8.107])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Dec 2019 15:28:37 -0800
+Message-ID: <2c4a80e0d30bf1dfe89c6e3469d1dbfb008275fa.camel@linux.intel.com>
+Subject: Re: Patch "tpm_tis: reserve chip for duration of tpm_tis_core_init"
+ has been added to the 5.4-stable tree
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Christian Bundy <christianbundy@fraction.io>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        stable-commits@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Tue, 31 Dec 2019 01:28:36 +0200
+In-Reply-To: <CAPcyv4iyQeXBWvp8V_UPBsOk29cfmTVZGYrrDgyYYqzsQvTjNA@mail.gmail.com>
+References: <1577122577157232@kroah.com>
+         <CAPcyv4jfpOX85GWgNTyugWksU=e-j=RhU_fcrcHBo4GMZ8_bhw@mail.gmail.com>
+         <c6ce34b130210d2d1330fc4079d6d82bd74dcef1.camel@linux.intel.com>
+         <50217a688ffa56cf5f150ffd358daba2a88cad48.camel@linux.intel.com>
+         <20191228151526.GA6971@linux.intel.com>
+         <CAPcyv4i_frm8jZeknniPexp8AAmGsaq0_DHegmL4XZHQi1ThxA@mail.gmail.com>
+         <CAPcyv4iyQeXBWvp8V_UPBsOk29cfmTVZGYrrDgyYYqzsQvTjNA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-In-Reply-To: <20191227142335.GE2760@shao2-debian>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 12/27/19 6:23 AM, kernel test robot wrote:
-
-Hi Rong,
-
+On Sun, 2019-12-29 at 23:41 -0800, Dan Williams wrote:
+> This looked like the wrong revert to me, and testing confirms that
+> this does not fix the problem.
+> 
+> As I mentioned in the original report [1] the commit that bisect flagged was:
+> 
+>     5b359c7c4372 tpm_tis_core: Turn on the TPM before probing IRQ's
+> 
+> That commit moved tpm_chip_start() before irq probing. Commit
+> 21df4a8b6018 "tpm_tis: reserve chip for duration of tpm_tis_core_init"
+> does not appear to change anything in that regard.
+> 
+> Perhaps this hardware has always had broken interrupts and needs to be
+> quirked off? I'm trying an experiment with tpm_tis_core.interrupts=0
+> workaround.
 > 
 > 
-> To reproduce:
-> 
->          # build kernel
-> 	cd linux
-> 	cp config-5.5.0-rc1-00011-g11b771ffff8fc .config
-> 	make HOSTCC=gcc-7 CC=gcc-7 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage
-> 
->          git clone https://github.com/intel/lkp-tests.git
->          cd lkp-tests
->          bin/lkp qemu -k <bzImage> job-script # job-script is attached in this email
-> 
-> 
-> 
-> Thanks,
-> Rong Chen
-> 
+> [1]: https://lore.kernel.org/linux-integrity/CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com/
 
-Thanks for reporting this issue.
+I think for short term, yes, it is better to revert the commits
+that make things more broken.
 
-I built the kernel with the config you'd provided.
+for-linus-v5.5-rc5 branch contains three commits that exactly do
+this i.e. the reverts that Stefan sent and revert to Jerry's earlier
+commit.
 
-When running lkp-tests using the command line given, I see the following 
-error and the test stops.
+After that is out of the table it is easier to analyze how the code
+should be actually refactored. Like, I have no idea when I get
+local HW that can reproduce this and Jerry still seems to have the
+same issue. It'd be nice make the exactly right changes instead of
+reverts but situation is what it is.
 
-	bin/lkp qemu -k ../linux-5.5/arch/x86/boot/bzImage job-script
+Please check the branch and ACK/NAK if I can add tested-by's (and
+other tags).
 
-/usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
-https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-rhel-7.6/gcc-7/11b771ffff8fc0bfc176b829d986896a7d97a44c/linux-headers.cgz 
--N -P 
-/root/.lkp/cache/pkg/linux/x86_64-rhel-7.6/gcc-7/11b771ffff8fc0bfc176b829d986896a7d97a44c
-
-Failed to download 
-pkg/linux/x86_64-rhel-7.6/gcc-7/11b771ffff8fc0bfc176b829d986896a7d97a44c/linux-headers.cgz
-
-Please let me know what I am missing.
-
-Full output of the command is given below:
-
-bin/lkp qemu -k ../linux-5.5/arch/x86/boot/bzImage job-script
-
-result_root: 
-/root/.lkp//result/kernel_selftests/kselftests-03/vm-snb/debian-x86_64-2019-11-14.cgz/x86_64-rhel-7.6/gcc-7/11b771ffff8fc0bfc176b829d986896a7d97a44c/8
-downloading initrds ...
-/usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
-https://download.01.org/0day-ci/lkp-qemu/osimage/debian/debian-x86_64-2019-11-14.cgz 
--N -P /root/.lkp/cache/osimage/debian
-408859 blocks
-/usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
-https://download.01.org/0day-ci/lkp-qemu/osimage/deps/debian-x86_64-2018-04-03.cgz/run-ipconfig_2018-04-03.cgz 
--N -P /root/.lkp/cache/osimage/deps/debian-x86_64-2018-04-03.cgz
-1414 blocks
-/usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
-https://download.01.org/0day-ci/lkp-qemu/osimage/deps/debian-x86_64-2018-04-03.cgz/lkp_2019-08-05.cgz 
--N -P /root/.lkp/cache/osimage/deps/debian-x86_64-2018-04-03.cgz
-1670 blocks
-/usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
-https://download.01.org/0day-ci/lkp-qemu/osimage/deps/debian-x86_64-2018-04-03.cgz/rsync-rootfs_2018-04-03.cgz 
--N -P /root/.lkp/cache/osimage/deps/debian-x86_64-2018-04-03.cgz
-8268 blocks
-/usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
-https://download.01.org/0day-ci/lkp-qemu/osimage/deps/debian-x86_64-2018-04-03.cgz/kernel_selftests_2019-12-25.cgz 
--N -P /root/.lkp/cache/osimage/deps/debian-x86_64-2018-04-03.cgz
-932372 blocks
-/usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
-https://download.01.org/0day-ci/lkp-qemu/osimage/pkg/debian-x86_64-2018-04-03.cgz/kernel_selftests-x86_64-0dcf36db-1_2019-12-25.cgz 
--N -P /root/.lkp/cache/osimage/pkg/debian-x86_64-2018-04-03.cgz
-30125 blocks
-/usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
-https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-rhel-7.6/gcc-7/11b771ffff8fc0bfc176b829d986896a7d97a44c/linux-headers.cgz 
--N -P 
-/root/.lkp/cache/pkg/linux/x86_64-rhel-7.6/gcc-7/11b771ffff8fc0bfc176b829d986896a7d97a44c
-Failed to download 
-pkg/linux/x86_64-rhel-7.6/gcc-7/11b771ffff8fc0bfc176b829d986896a7d97a44c/linux-headers.cgz
-
+/Jarkko
 
