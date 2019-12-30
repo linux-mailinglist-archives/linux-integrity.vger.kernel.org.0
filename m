@@ -2,108 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FBA12CD68
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Dec 2019 08:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3D812D25C
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Dec 2019 18:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727266AbfL3HmJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Dec 2019 02:42:09 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:32926 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727228AbfL3HmJ (ORCPT
+        id S1726675AbfL3RBu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Dec 2019 12:01:50 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36842 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727123AbfL3RBt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Dec 2019 02:42:09 -0500
-Received: by mail-ot1-f65.google.com with SMTP id b18so23448195otp.0
-        for <linux-integrity@vger.kernel.org>; Sun, 29 Dec 2019 23:42:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cwlK7F0OhgofZ2g1c0eZ3ZVDb9GpV5ov9doTgWC0/9U=;
-        b=BIp45yVziKNxpjGFASN8D5v/1fT7LjBa4Qn8eNSmrBq3xaVgnM44DM6PK7rx3YeBNi
-         BDWg9AfiT3EWhYCOfZdHIo3SkBFKNmNUONsZnmcUK7pdKNwI11KFuoPkBLfBAXS5n8Fr
-         mud8KAX20EIHYtiOXNQY/ktuH9N97++24K9VBM7ShhN4uC68X1Ta0t/VTCvKUNwQwhdV
-         kf4ZRtK6H5V1Z3I5V5BgOY7krjGLjDje15J+E3eKmtgyyS0N/uXeW19g4XAnM/Tqcdv5
-         jqhypWawBaFAHuyunqRhY0zOH+DDpiG8bRo7oS/Sx3iURFKo4RyorYe1PY4Q5ddsmfAZ
-         Q3Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cwlK7F0OhgofZ2g1c0eZ3ZVDb9GpV5ov9doTgWC0/9U=;
-        b=iHe+PPZVg6t98tuOaLFZCriV9wJNTpxnB4oZv6D46G2LHx9qdUUUZQUCup5pMseFiy
-         gPyGkIv27ESSvirr7KhwQd09EuJNWTxs7U5V7IvnnUI5xm1YsWK0mUEMKt3Kx6an2dyt
-         LM8J/7zMH0lJYkLlrEhFc492tPsHUb2C5Ni61qAj6KFXYwnXBRrZn1WFWlRGn6NUNH7u
-         Cx3y+fZNj21echqeb2hIv689BXh1zfttnbdCFcMQL5y33VbDPUN6T4ayZgygue9h6tgi
-         xUH5Wr0k/6GXyOuBNY4+hEQyZt1/S69paoMH4bYmb3wEXhzDm5K6q8ReMGNtN2Jg4hxY
-         LCdA==
-X-Gm-Message-State: APjAAAV6bWpX1RgbrCF4JBHqZC5EqbjfLiFjOhg71pPdZikmlxj9lBdB
-        hn9Oa4qtLXo4dv8NVLbJV+M7r5UeegQ6PNEDtoKlcQ==
-X-Google-Smtp-Source: APXvYqxZCdiUMDh71LNzQUqteO0QNtYqYbR0IterKvdS2rrqYRU7b1xSIGCSAE+kMAVQyN/LJmYR708bEBLXhWJ92iQ=
-X-Received: by 2002:a9d:7852:: with SMTP id c18mr64344596otm.247.1577691728093;
- Sun, 29 Dec 2019 23:42:08 -0800 (PST)
-MIME-Version: 1.0
-References: <1577122577157232@kroah.com> <CAPcyv4jfpOX85GWgNTyugWksU=e-j=RhU_fcrcHBo4GMZ8_bhw@mail.gmail.com>
- <c6ce34b130210d2d1330fc4079d6d82bd74dcef1.camel@linux.intel.com>
- <50217a688ffa56cf5f150ffd358daba2a88cad48.camel@linux.intel.com>
- <20191228151526.GA6971@linux.intel.com> <CAPcyv4i_frm8jZeknniPexp8AAmGsaq0_DHegmL4XZHQi1ThxA@mail.gmail.com>
-In-Reply-To: <CAPcyv4i_frm8jZeknniPexp8AAmGsaq0_DHegmL4XZHQi1ThxA@mail.gmail.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Sun, 29 Dec 2019 23:41:56 -0800
-Message-ID: <CAPcyv4iyQeXBWvp8V_UPBsOk29cfmTVZGYrrDgyYYqzsQvTjNA@mail.gmail.com>
-Subject: Re: Patch "tpm_tis: reserve chip for duration of tpm_tis_core_init"
- has been added to the 5.4-stable tree
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Christian Bundy <christianbundy@fraction.io>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        stable-commits@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Mon, 30 Dec 2019 12:01:49 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBUGxe71186171
+        for <linux-integrity@vger.kernel.org>; Mon, 30 Dec 2019 12:01:48 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2x6n491r3m-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 30 Dec 2019 12:01:48 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 30 Dec 2019 17:01:46 -0000
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 30 Dec 2019 17:01:43 -0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBUH1hB123986282
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 Dec 2019 17:01:43 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D566842041;
+        Mon, 30 Dec 2019 17:01:42 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C11842052;
+        Mon, 30 Dec 2019 17:01:42 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.184.68])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 30 Dec 2019 17:01:41 +0000 (GMT)
+Subject: Re: [IMA] 11b771ffff:
+ BUG:sleeping_function_called_from_invalid_context_at_kernel/locking/mutex.c
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     kernel test robot <rong.a.chen@intel.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, lkp@lists.01.org
+Date:   Mon, 30 Dec 2019 12:01:41 -0500
+In-Reply-To: <20191227142335.GE2760@shao2-debian>
+References: <20191227142335.GE2760@shao2-debian>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19123017-0028-0000-0000-000003CCF55E
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19123017-0029-0000-0000-000024905DBD
+Message-Id: <1577725301.5874.32.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-30_05:2019-12-27,2019-12-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=645 clxscore=1015
+ priorityscore=1501 bulkscore=0 malwarescore=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912300154
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Dec 28, 2019 at 9:17 AM Dan Williams <dan.j.williams@intel.com> wrote:
->
-> On Sat, Dec 28, 2019 at 7:15 AM Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Fri, Dec 27, 2019 at 08:11:50AM +0200, Jarkko Sakkinen wrote:
-> > > Dan, please also test the branch and tell if other patches are needed.
-> > > I'm a bit blind with this as I don't have direct access to the faulting
-> > > hardware. Thanks. [*]
-> > >
-> > > [*] https://lkml.org/lkml/2019/12/27/12
-> >
-> > Given that:
-> >
-> > 1. I cannot reproduce the bug locally.
-> > 2. Neither of the patches have any appropriate tags (tested-by and
-> >    reviewed-by). [*]
-> >
-> > I'm sorry but how am I expected to include these patches?
->
-> Thanks for the branch, I'll get it tested on the failing hardware.
-> Might be a few days due to holiday lag.
+Hi Lakshmi,
 
-This looked like the wrong revert to me, and testing confirms that
-this does not fix the problem.
+On Fri, 2019-12-27 at 22:23 +0800, kernel test robot wrote:
+> [  333.455345] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:281
+> [  333.457243] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 12395, name: userfaultfd
+> [  333.458888] CPU: 1 PID: 12395 Comm: userfaultfd Not tainted 5.5.0-rc1-00011-g11b771ffff8fc #1
+> [  333.461096] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1 04/01/2014
+> [  333.463893] Call Trace:
+> [  333.465287]  <IRQ>
+> [  333.466351]  dump_stack+0x66/0x8b
+> [  333.467346]  ___might_sleep+0x102/0x120
+> [  333.468385]  mutex_lock+0x1c/0x40
+> [  333.469421]  ima_process_queued_keys+0x24/0x110
+> [  333.470529]  ? ima_process_queued_keys+0x110/0x110
+> [  333.471656]  call_timer_fn+0x2d/0x140
+> [  333.472707]  run_timer_softirq+0x46f/0x4b0
+> [  333.473752]  ? enqueue_hrtimer+0x39/0xa0
+> [  333.474780]  __do_softirq+0xe3/0x2f8
+> [  333.475768]  irq_exit+0xd5/0xe0
+> [  333.476738]  smp_apic_timer_interrupt+0x74/0x140
+> [  333.477834]  apic_timer_interrupt+0xf/0x20
+> [  333.478858]  </IRQ>
 
-As I mentioned in the original report [1] the commit that bisect flagged was:
+I think this is an instance where defining timer_expired as atomic and
+then testing it using atomic_dec_and_test() would help.  Either the
+queued keys would be deleted in ima_timer_handler() or measured in
+ima_process_queued_keys().
 
-    5b359c7c4372 tpm_tis_core: Turn on the TPM before probing IRQ's
+Mimi
 
-That commit moved tpm_chip_start() before irq probing. Commit
-21df4a8b6018 "tpm_tis: reserve chip for duration of tpm_tis_core_init"
-does not appear to change anything in that regard.
-
-Perhaps this hardware has always had broken interrupts and needs to be
-quirked off? I'm trying an experiment with tpm_tis_core.interrupts=0
-workaround.
-
-
-[1]: https://lore.kernel.org/linux-integrity/CAA9_cmeLnHK4y+usQaWo72nUG3RNsripuZnS-koY4XTRC+mwJA@mail.gmail.com/
