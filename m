@@ -2,56 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F0312D550
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Dec 2019 01:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA7812D563
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Dec 2019 02:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727797AbfLaAeD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Dec 2019 19:34:03 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:50327 "EHLO
+        id S1727807AbfLaBDF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Dec 2019 20:03:05 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:59353 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727781AbfLaAeD (ORCPT
+        with ESMTP id S1727803AbfLaBDF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Dec 2019 19:34:03 -0500
+        Mon, 30 Dec 2019 20:03:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1577752442;
+        s=mimecast20190719; t=1577754183;
         h=from:from:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=qftNDtaZo3ULGRqvQSgu3WPfMkeZPf0iuGFu53nIq9A=;
-        b=FWgzqnoC0+cgC7z17B9NDaUxzoNpYN0IW9CaD77A3BVtprrZmmRs6qNFZ53njh2nTCb7MK
-        /U4xOS8gabOBbuicWe+AYoKMLeoHJ3VUO07I7CTdrSg744BrJxtPO+R/JXSu5etlkTeaNQ
-        /KU4cjRHc4gM/Cgjm6siPDlpUHtQCm4=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-223--eRxpYzgM1GMDrlYVCfAeg-1; Mon, 30 Dec 2019 19:34:00 -0500
-X-MC-Unique: -eRxpYzgM1GMDrlYVCfAeg-1
-Received: by mail-pj1-f72.google.com with SMTP id q88so685662pjb.2
-        for <linux-integrity@vger.kernel.org>; Mon, 30 Dec 2019 16:34:00 -0800 (PST)
+        bh=YEL59S0rEfaETJJxD2o4v2zyBJg6VbyRRupbe/gb39o=;
+        b=Une7X9Ha2woJYv1DZJfs756cwFLndhyLlL6ISItzQNH4mhvbHXS0dc8Zdw9eqD9g9TMmyX
+        VoWt2hDVSwMREW57IvIEE334gYPfMhfQVyzij1tUT15Q3A0Ij7I3FKUydO8gaNjTXLpzuQ
+        X2v4Av+bXv6PDZTp4D25gtDAYzNHc7U=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-262-83eL4MvPOb-KeaVrDQGDAA-1; Mon, 30 Dec 2019 20:03:02 -0500
+X-MC-Unique: 83eL4MvPOb-KeaVrDQGDAA-1
+Received: by mail-pg1-f200.google.com with SMTP id o21so11323880pgm.11
+        for <linux-integrity@vger.kernel.org>; Mon, 30 Dec 2019 17:03:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
          :mail-followup-to:references:mime-version:content-disposition
          :in-reply-to;
-        bh=qftNDtaZo3ULGRqvQSgu3WPfMkeZPf0iuGFu53nIq9A=;
-        b=PQe5i1oE0YHBsuJ/Pwj9mXUx1NvbGZohD2jY/FN77UmXvq8vXlQUSV7pOcakNPLPbR
-         AN4sivfG6BdZwcd8oJrsyb1H6L6S/26FUYvNvc65WYhrqNsYJexUL2DI9mcHnuK1Gguv
-         MRT3QZ64vEowFnmohghxH1jHWwjf3o8yZFnj9WuTBySGkWmjW2misUVlGqm+aHjrNRhd
-         8VYjvZtaURz/dAzYs76C04DumB5B98jVrzsG3UnoMUWytTwfGa9Ez8r1ZxTCtMgCXwrs
-         h0zhGIx6QJRTfLy5P1Ub4PJ7xWQko4+5DW2AMM+WbNE7jBhUVE8nq6vuj78DO+t9nmLk
-         0sOA==
-X-Gm-Message-State: APjAAAUCFGNq7wbnlUaVIhbWFR50e3eFCSdKZcreVwYNqNbaOzwkn60v
-        H5hHEU0MO6gEIue6I0fqz217a8MguD2MwoV5sCLJMxbEk+woM4iTTjjiXtFUIobg9HKTdzqtXJZ
-        HaUy2injx4ewOoTvhyUx1IjuQUK/m
-X-Received: by 2002:a63:cf08:: with SMTP id j8mr73919641pgg.292.1577752439963;
-        Mon, 30 Dec 2019 16:33:59 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwZwkkMBxFxll1aEN5EY1ibYiENvv7pvVZS4C3JEyBBDfqQzdb6HcWQEGzKVHCoU+cXWgAeDw==
-X-Received: by 2002:a63:cf08:: with SMTP id j8mr73919621pgg.292.1577752439734;
-        Mon, 30 Dec 2019 16:33:59 -0800 (PST)
+        bh=YEL59S0rEfaETJJxD2o4v2zyBJg6VbyRRupbe/gb39o=;
+        b=sBKeE80IZTJI4xwIUMTGr25KOBeuvNVGTIHsMo7KlRN/86hrnAw0efdOdwNec1/uey
+         sNP3Xr5bdsE3qdc/020Q2WC0RrQXH7hm+Z25fy3Bv407HeITdYE5Hv/4MM9W2nzG0IT2
+         7GqEhSFv9fq6bR53N3u4XlRwwh7HXuAnSROJV2dCxT+drxSXIUo2UHV5uHirylvqcv4K
+         nFHW4CTbcJJxyvIQbf8cQsugqOpLLIqZFnkjLIMx24KLakKwUqqXxAp043wG9DshYo1J
+         50s1CGTst1hQOP6sRezDlavBLgJ/0Vs2yzyvPhbYSoAP45x0RVNg/7SlKc68LStpWCbY
+         71jg==
+X-Gm-Message-State: APjAAAWVccHBQN24/Gj0vfHl/5zCSShujqMLR7jpBsG1q1FR08lEUY2r
+        T5/z4nJKGL1TPbd46BfuAZMMCFe2wRNaaFnmdlezDezhQW2exEUYEGQbO0qYhu9rHdEJx664Ri1
+        sDkfhxOMFt0jjEKU1DHb/vZOLhcTN
+X-Received: by 2002:a17:90a:d804:: with SMTP id a4mr2786104pjv.11.1577754181411;
+        Mon, 30 Dec 2019 17:03:01 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxwK4Yqf5oL3Te81ljRHdMSyXxTSGUUsEblOWjDi2X4q996dVxQThs2vKjVE4pqL+Ar/f4RFQ==
+X-Received: by 2002:a17:90a:d804:: with SMTP id a4mr2786074pjv.11.1577754181186;
+        Mon, 30 Dec 2019 17:03:01 -0800 (PST)
 Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id d2sm749409pjv.18.2019.12.30.16.33.58
+        by smtp.gmail.com with ESMTPSA id u7sm51013785pfh.128.2019.12.30.17.02.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2019 16:33:58 -0800 (PST)
-Date:   Mon, 30 Dec 2019 17:33:55 -0700
+        Mon, 30 Dec 2019 17:03:00 -0800 (PST)
+Date:   Mon, 30 Dec 2019 18:02:56 -0700
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Cc:     Dan Williams <dan.j.williams@intel.com>,
@@ -64,7 +64,7 @@ Cc:     Dan Williams <dan.j.williams@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: Patch "tpm_tis: reserve chip for duration of tpm_tis_core_init"
  has been added to the 5.4-stable tree
-Message-ID: <20191231003355.l4zhdingdw5h2ntx@cantor>
+Message-ID: <20191231010256.kymv4shwmx5jcmey@cantor>
 Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
 Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Dan Williams <dan.j.williams@intel.com>,
@@ -125,9 +125,13 @@ On Tue Dec 31 19, Jarkko Sakkinen wrote:
 >reverts but situation is what it is.
 >
 
-Unfortunately I haven't found a system yet where I get into this code
-path. So I've been relying on Dan's testing and the owner of the
-t490s.
+The only other thought I had was moving the tpm_chip_start/stop
+into tpm_tis_probe_irq_single around the tpm_tis_gen_interrupt call.
+I don't know why doing the clkrun bit after setting the interrupt
+register values would matter, but I'm not sure what else there is
+that would be different than when that stuff was happening in
+down in tpm_try_transmit. Without hardware to poke at it is hard
+to get anywhere.
 
 >Please check the branch and ACK/NAK if I can add tested-by's (and
 >other tags).
