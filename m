@@ -2,111 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0547A12EAE2
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Jan 2020 21:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52EE12EB8D
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Jan 2020 22:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725790AbgABUhD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Jan 2020 15:37:03 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26676 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725783AbgABUhD (ORCPT
+        id S1725871AbgABVzX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Jan 2020 16:55:23 -0500
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:50293 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725837AbgABVzX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Jan 2020 15:37:03 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 002KWXSZ128300
-        for <linux-integrity@vger.kernel.org>; Thu, 2 Jan 2020 15:37:01 -0500
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2x88jk9kp9-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 02 Jan 2020 15:37:01 -0500
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 2 Jan 2020 20:36:59 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 2 Jan 2020 20:36:57 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 002KaAUQ35717624
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Jan 2020 20:36:10 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74B36AE053;
-        Thu,  2 Jan 2020 20:36:56 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E09EEAE045;
-        Thu,  2 Jan 2020 20:36:55 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.148.97])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Jan 2020 20:36:55 +0000 (GMT)
-Subject: Re: IMA's use of the audit rule code
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        linux-integrity@vger.kernel.org
-Date:   Thu, 02 Jan 2020 15:36:55 -0500
-In-Reply-To: <28459dc3-1b5e-b3e0-7139-2a5dcb46476b@schaufler-ca.com>
-References: <a6c15a35-a8cb-7589-7960-a19e788b6c45.ref@schaufler-ca.com>
-         <a6c15a35-a8cb-7589-7960-a19e788b6c45@schaufler-ca.com>
-         <1577992707.5874.110.camel@linux.ibm.com>
-         <28459dc3-1b5e-b3e0-7139-2a5dcb46476b@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+        Thu, 2 Jan 2020 16:55:23 -0500
+Received: by mail-pf1-f202.google.com with SMTP id g69so30197665pfb.17
+        for <linux-integrity@vger.kernel.org>; Thu, 02 Jan 2020 13:55:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=5A2TnHWXdX+GMrk2nIFy/Of+t+wuSkOKHJdM2Pieu+Y=;
+        b=XNRPCvQaJciACBj9ko97H/R2oOfk+/OrjwGMYY6F6SqTMap7SPUZeD4EsCaOkH/zUY
+         p0K6GDDXeeDxLo+025Y8EKItiAbLFkwyfBFFgAz5MqiWuSAkaq0WkMuUFQq9Y0Pt8uMJ
+         aRjhZ3ZGKbylD/51Q93redxOmkuMgvf+rWckvY6LwaYKOI73/NuxwAHz6ezUpc1SSITU
+         4ShQajjXebecQIv+dYyaQjCzWQUf8S7E+vXeBgFqjnakpKmF2PBH+frDA5HOVkSBISVv
+         DT1vC/TKURzR9GLsCzZ9zeIhadYbk1MtiBm/qndqP94+3eiJeKY4WLYX8kiVU3nzkECD
+         Winw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=5A2TnHWXdX+GMrk2nIFy/Of+t+wuSkOKHJdM2Pieu+Y=;
+        b=DzTFxd9CcmlULCSnTIgBR2eSMG06r1m9Hq0MdvtLb85aplbxGMW7eJo2Y24uAHad0T
+         CdZIE8Pbi/ZXqginq025vY3TS9wOuzLa9SVfB1p5MuDpEwxugYyhK7JVJwk7n+9zq8wV
+         ykUu803RW/StJSk6VKgzeGNUAj44jYiuDY38uYNQABUmvmz/kiipP5/3OlhZP2Tf4Fo5
+         KqrtgExEReJo5t+Heg2RxWsUDrfuFzTu3sJMmXD4osSOGpNFXt0k115LvEWBZ0AL5R2i
+         loPJaClM46+F22S0wL2xFpHWjxdkaEH02abRD+QAdySd0a4G2eJAm73/TasNhHwnYrB8
+         2nxw==
+X-Gm-Message-State: APjAAAUgwnyk55o+sk4Y1gLvac8zvIy9XVgSCzk78ZkoXaPJGjfynp8N
+        ykYpRQKytQD7N8cWtNNqEs6LadAhIYDnJ3OTrMfUI/YNYPEMk31O1HdK4kzsyuKtPUIRUxyaaqR
+        8MYd3VYLBWRdj9BPmb6gNs0odn0a4pC0DYpcfHnQw9KGqC9X+j+pit2E0QV29nR+f9rqKK7P6Fi
+        +Rlw4ROzEx8XJWDEypRSk=
+X-Google-Smtp-Source: APXvYqzyxENAuCYJ9Qr0+Mi6C2N4HQ5Ypf46YGLeFibCO8yb9Jkqs+c8+2uwIQU05vbPaXil1pGBLWB7B72LaGQ5Jgt3Dw==
+X-Received: by 2002:a63:d358:: with SMTP id u24mr92354888pgi.218.1578002122409;
+ Thu, 02 Jan 2020 13:55:22 -0800 (PST)
+Date:   Thu,  2 Jan 2020 13:55:18 -0800
+Message-Id: <20200102215518.148051-1-matthewgarrett@google.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20010220-4275-0000-0000-000003942FBF
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20010220-4276-0000-0000-000038A8134F
-Message-Id: <1577997415.5874.122.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2020-01-02_06:2020-01-02,2020-01-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 impostorscore=0 phishscore=0
- mlxscore=0 malwarescore=0 spamscore=0 adultscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001020165
+X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
+Subject: [PATCH V2] tpm: Don't make log failures fatal
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-01-02 at 12:21 -0800, Casey Schaufler wrote:
-> On 1/2/2020 11:18 AM, Mimi Zohar wrote:
-> > On Thu, 2020-01-02 at 09:06 -0800, Casey Schaufler wrote:
-> >> IMA refines security_audit_rule_init to security_filter_rule_init.
-> >> I need to understand what, if any, relationship there is between
-> >> IMA's use of the audit rule mechanisms and the audit system's use.
-> >> Is this simple code reuse, or is there some interaction between IMA
-> >> and audit?
-> >>
-> >> I'm trying to sort out the problem of audit rules when
-> >> there are multiple security modules. It looks as if there is also a
-> >> problem for integrity rules, but it looks different. The "easy"
-> >> change for audit doesn't fit with what's in IMA. If there's no
-> >> interaction between the IMA and audit use of the rule infrastructure
-> >> it's reasonable to fix them separately. If there is interaction
-> >> things get messy.
-> > They're both comparing rules with LSM labels.  In IMA's case, the LSM
-> > labels are used to identify which files are in/out of the IMA policy -
-> > "measurement", "appraisal", and "audit".  I'm not sure how different
-> > this is than the audit subsystem.
-> 
-> On a system that has both SELinux and Smack the audit admin might
-> want to set a rule on the label "system_u:object_r:something_t".
-> The LSM infrastructure can't tell if this is an SELinux label or a
-> Smack label, as it's valid for both. This is easily handled by
-> keeping an array of pointers for LSM checks, with a value set for
-> any module that wants to look for that label.
->  
-> IMA uses a very different data representation for its events than
-> audit does, making it much less obvious how to go about retaining
-> the security module to IMA event mapping. I'm looking at options.
+If a TPM is in disabled state, it's reasonable for it to have an empty
+log. Bailing out of probe in this case means that the PPI interface
+isn't available, so there's no way to then enable the TPM from the OS.
+In general it seems reasonable to ignore log errors - they shouldn't
+interfere with any other TPM functionality.
 
-IMA converts the labels to an LSM value on initialization, or when the
-LSM policy is updated, by calling security_filter_rule_init(), a
-pseudonym for security_audit_rule_init().  I would assume audit is
-doing something similar.
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Cc: stable@vger.kernel.org
+---
 
-Mimi
+V2: make tpm_bios_log_setup() void, since we're not using the return
+code now. Fix typo in patch description.
+
+ drivers/char/tpm/eventlog/common.c | 12 ++++--------
+ drivers/char/tpm/tpm-chip.c        |  4 +---
+ drivers/char/tpm/tpm.h             |  2 +-
+ 3 files changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/char/tpm/eventlog/common.c b/drivers/char/tpm/eventlog/common.c
+index 7a0fca659b6a6..7460f230bae4c 100644
+--- a/drivers/char/tpm/eventlog/common.c
++++ b/drivers/char/tpm/eventlog/common.c
+@@ -99,11 +99,8 @@ static int tpm_read_log(struct tpm_chip *chip)
+  *
+  * If an event log is found then the securityfs files are setup to
+  * export it to userspace, otherwise nothing is done.
+- *
+- * Returns -ENODEV if the firmware has no event log or securityfs is not
+- * supported.
+  */
+-int tpm_bios_log_setup(struct tpm_chip *chip)
++void tpm_bios_log_setup(struct tpm_chip *chip)
+ {
+ 	const char *name = dev_name(&chip->dev);
+ 	unsigned int cnt;
+@@ -112,7 +109,7 @@ int tpm_bios_log_setup(struct tpm_chip *chip)
+ 
+ 	rc = tpm_read_log(chip);
+ 	if (rc < 0)
+-		return rc;
++		return;
+ 	log_version = rc;
+ 
+ 	cnt = 0;
+@@ -158,13 +155,12 @@ int tpm_bios_log_setup(struct tpm_chip *chip)
+ 		cnt++;
+ 	}
+ 
+-	return 0;
++	return;
+ 
+ err:
+-	rc = PTR_ERR(chip->bios_dir[cnt]);
+ 	chip->bios_dir[cnt] = NULL;
+ 	tpm_bios_log_teardown(chip);
+-	return rc;
++	return;
+ }
+ 
+ void tpm_bios_log_teardown(struct tpm_chip *chip)
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 3d6d394a86618..58073836b5555 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -596,9 +596,7 @@ int tpm_chip_register(struct tpm_chip *chip)
+ 
+ 	tpm_sysfs_add_device(chip);
+ 
+-	rc = tpm_bios_log_setup(chip);
+-	if (rc != 0 && rc != -ENODEV)
+-		return rc;
++	tpm_bios_log_setup(chip);
+ 
+ 	tpm_add_ppi(chip);
+ 
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index b9e1547be6b51..1df2cf40ab794 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -236,7 +236,7 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
+ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
+ 		      size_t *bufsiz);
+ 
+-int tpm_bios_log_setup(struct tpm_chip *chip);
++void tpm_bios_log_setup(struct tpm_chip *chip);
+ void tpm_bios_log_teardown(struct tpm_chip *chip);
+ int tpm_dev_common_init(void);
+ void tpm_dev_common_exit(void);
+-- 
+2.24.1.735.g03f4e72817-goog
 
