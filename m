@@ -2,86 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F04ED12FCFC
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2020 20:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA3212FD47
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2020 20:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728552AbgACTZt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 Jan 2020 14:25:49 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12702 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728550AbgACTZt (ORCPT
+        id S1728639AbgACTyn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 Jan 2020 14:54:43 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:35944 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728546AbgACTym (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 Jan 2020 14:25:49 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 003JLmOU058960
-        for <linux-integrity@vger.kernel.org>; Fri, 3 Jan 2020 14:25:48 -0500
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xa2cdfkgx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 03 Jan 2020 14:25:48 -0500
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 003JOur3020703
-        for <linux-integrity@vger.kernel.org>; Fri, 3 Jan 2020 19:25:47 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 2x5xp6u85a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 03 Jan 2020 19:25:47 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 003JPiXL63046044
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Jan 2020 19:25:44 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8907BE051;
-        Fri,  3 Jan 2020 19:25:44 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 572B4BE056;
-        Fri,  3 Jan 2020 19:25:44 +0000 (GMT)
-Received: from [9.2.202.58] (unknown [9.2.202.58])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Jan 2020 19:25:44 +0000 (GMT)
-Subject: Spec needed for ima-buf template - missing hash algorithm
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
-        Ken Goldman <kgoldman@us.ibm.com>
-References: <e2e2863e-9908-5156-8aca-32f8e583f0e3@linux.ibm.com>
- <1577996725.5874.114.camel@linux.ibm.com>
- <584145d6-bf12-e5ee-972f-91283aa66f74@linux.ibm.com>
- <1578007322.5874.128.camel@linux.ibm.com>
- <69ef3bb7-abdd-8c18-1afc-722d35a807c1@linux.ibm.com>
- <181344e2-d809-87c6-399a-0201626130f1@linux.ibm.com>
-From:   Ken Goldman <kgold@linux.ibm.com>
-Message-ID: <22cb85dc-0608-5000-9c9e-777f7314d98e@linux.ibm.com>
-Date:   Fri, 3 Jan 2020 14:25:44 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
-MIME-Version: 1.0
-In-Reply-To: <181344e2-d809-87c6-399a-0201626130f1@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2020-01-03_05:2020-01-02,2020-01-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- malwarescore=0 impostorscore=0 suspectscore=0 spamscore=0 bulkscore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1015
- mlxlogscore=766 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001030176
+        Fri, 3 Jan 2020 14:54:42 -0500
+Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EF3C92010C33;
+        Fri,  3 Jan 2020 11:54:41 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EF3C92010C33
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1578081282;
+        bh=Z1n2LzQpaCgWEDxC/fs/cZCzWQOEqpq+cd0+IedtQM4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=s+ylC9Vxkkcm0+bCBAIvfX7bVTOkBHZphgHD35s2dEevT7yj2qS4UB9VimYqHtK9y
+         2mleI2CwcRvPqD8pnKxWFTfZC3LtYxs1AWxCK1reTSTgS7BJf3I8CPnNdXkxxCbka9
+         ofnrU2FthUNgSIMj1rssnJfGfP9YSEx88rljjjWo=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+Cc:     James.Bottomley@HansenPartnership.com, eric.snowberg@oracle.com,
+        dhowells@redhat.com, mathew.j.martineau@linux.intel.com,
+        matthewgarrett@google.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+Subject: [PATCH v7 0/3] IMA: Deferred measurement of keys
+Date:   Fri,  3 Jan 2020 11:54:32 -0800
+Message-Id: <20200103195435.2647-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Another question about the ima-buf template.  I discovered a log where 
-the filename is blacklisted-hash.  It appears to be followed by 32-bytes 
-that could be a hash.
+The IMA subsystem supports measuring asymmetric keys when the key is
+created or updated[1]. But keys created or updated before a custom
+IMA policy is loaded are currently not measured. This includes keys
+added, for instance, to either the .ima or .builtin_trusted_keys keyrings,
+which happens early in the boot process.
 
-Normally, hashes have an ASCII algorithm, a : and nul terminated string. 
-  The one in my log omits the algorithm.  There are just 32 bytes.
+Measuring the early boot keys, by design, requires loading
+a custom IMA policy. This change adds support for queuing keys
+created or updated before a custom IMA policy is loaded.
+The queued keys are processed when a custom policy is loaded.
+Keys created or updated after a custom policy is loaded are measured
+immediately (not queued). In the case when a custom policy is not loaded
+within 5 minutes of IMA initialization, the queued keys are freed.
 
-1 - Is this a malformed log?
+[1] https://lore.kernel.org/linux-integrity/20191211164707.4698-1-nramas@linux.microsoft.com/
 
-2 - Is the algorithm picked up from the d-ng field?
+Testing performed:
 
-3 - If (2), what happens if there is a custom template like 'n-ng|buf' 
-and there is no d-ng to pick up the hash algorithm from?
+  * Ran kernel self-test following the instructions given in
+    https://www.kernel.org/doc/Documentation/kselftest.txt
+  * Ran the lkp-tests using the job script provided by
+    kernel test robot <rong.a.chen@intel.com>
+  * Booted the kernel with this change.
+  * Added .builtin_trusted_keys in "keyrings=" option in
+    the IMA policy and verified the keys added to this
+    keyring are measured.
+  * Specified only func=KEY_CHECK and not "keyrings=" option,
+    and verified the keys added to builtin_trusted_keys keyring
+    are processed.
+  * Added keys at runtime and verified they are measured
+    if the IMA policy permitted.
+      => For example, added keys to .ima keyring and verified.
+
+Changelog:
+
+  v7
+
+  => Updated cover letter per Mimi's suggestions.
+  => Updated "Reported-by" tag to be specific about
+     the issues fixed in the patch.
+
+  v6
+
+  => Replaced mutex with a spinlock to sychronize access to
+     queued keys. This fixes the problem reported by
+     "kernel test robot <rong.a.chen@intel.com>"
+     https://lore.kernel.org/linux-integrity/2a831fe9-30e5-63b4-af10-a69f327f7fb7@linux.microsoft.com/T/#t
+  => Changed ima_queue_key() to a static function. This fixes
+     the issue reported by "kbuild test robot <lkp@intel.com>"
+     https://lore.kernel.org/linux-integrity/1577370464.4487.10.camel@linux.ibm.com/
+  => Added the patch to free the queued keys if a custom IMA policy
+     was not loaded to this patch set.
+
+  v5
+
+  => Removed temp keys list in ima_process_queued_keys()
+
+  v4
+
+  => Check and set ima_process_keys flag with mutex held.
+
+  v3
+
+  => Defined ima_process_keys flag to be static.
+  => Set ima_process_keys with ima_keys_mutex held.
+  => Added a comment in ima_process_queued_keys() function
+     to state the use of temporary list for keys.
+
+  v2
+
+  => Rebased the changes to v5.5-rc1
+  => Updated function names, variable names, and code comments
+     to be less verbose.
+
+  v1
+
+  => Code cleanup
+
+  v0
+
+  => Based changes on v5.4-rc8
+  => The following patchsets should be applied in that order
+     https://lore.kernel.org/linux-integrity/1572492694-6520-1-git-send-email-zohar@linux.ibm.com
+     https://lore.kernel.org/linux-integrity/20191204224131.3384-1-nramas@linux.microsoft.com/
+  => Added functions to queue and dequeue keys, and process
+     the queued keys when custom IMA policies are applied.
+
+Lakshmi Ramasubramanian (3):
+  IMA: Define workqueue for early boot key measurements
+  IMA: Call workqueue functions to measure queued keys
+  IMA: Defined timer to free queued keys
+
+ security/integrity/ima/ima.h                 |  17 ++
+ security/integrity/ima/ima_asymmetric_keys.c | 159 +++++++++++++++++++
+ security/integrity/ima/ima_init.c            |   8 +-
+ security/integrity/ima/ima_policy.c          |   3 +
+ 4 files changed, 186 insertions(+), 1 deletion(-)
+
+-- 
+2.17.1
+
