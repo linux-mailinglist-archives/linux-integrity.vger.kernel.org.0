@@ -2,118 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC6512F1C7
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2020 00:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE66912F3F8
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2020 06:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726039AbgABXWM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Jan 2020 18:22:12 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31136 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725890AbgABXWL (ORCPT
+        id S1725928AbgACFFK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 Jan 2020 00:05:10 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:33883 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbgACFFJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Jan 2020 18:22:11 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 002N7RIh125195
-        for <linux-integrity@vger.kernel.org>; Thu, 2 Jan 2020 18:22:10 -0500
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2x88jwehy6-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 02 Jan 2020 18:22:10 -0500
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 2 Jan 2020 23:22:08 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 2 Jan 2020 23:22:05 -0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 002NLHHa13762912
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Jan 2020 23:21:17 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8747642041;
-        Thu,  2 Jan 2020 23:22:03 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8C0842042;
-        Thu,  2 Jan 2020 23:22:02 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.148.97])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Jan 2020 23:22:02 +0000 (GMT)
-Subject: Re: Spec needed for ima-modsig template
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Ken Goldman <kgold@linux.ibm.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>,
-        Ken Goldman <kgoldman@us.ibm.com>
-Date:   Thu, 02 Jan 2020 18:22:02 -0500
-In-Reply-To: <584145d6-bf12-e5ee-972f-91283aa66f74@linux.ibm.com>
-References: <e2e2863e-9908-5156-8aca-32f8e583f0e3@linux.ibm.com>
-         <1577996725.5874.114.camel@linux.ibm.com>
-         <584145d6-bf12-e5ee-972f-91283aa66f74@linux.ibm.com>
+        Fri, 3 Jan 2020 00:05:09 -0500
+Received: by mail-oi1-f176.google.com with SMTP id l136so13998115oig.1
+        for <linux-integrity@vger.kernel.org>; Thu, 02 Jan 2020 21:05:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9z+Xzh18caeqiaZuMDsgdyqgwWP0TZb4axKxH7OLyGI=;
+        b=A1/1WUmuXTjd1yXdCfALo+wxGXEPLsLX+BAYn8/BNRFmxZvl8Z33gbvQXfPkFFqtCB
+         F6j56ow0/9o5S0g8poVP3xTsTp14m4SUci5oo37DTXnA3Ob4OGO590q6CVsa4MAqotMY
+         UGjGYNMn4JNVSaTaNx+ftQqgJKCvfpHGbQa9QWs+UFcGNoODigf8g725Nww9cEGFSRzR
+         UQGmgBySDa6SYXeU9NK3ZfLtwfqSkpq82YyClO6nwW0TqWcO7wvEDrgpL0CywqwcQeLo
+         y1yxT7t6U8h3LrbaoNk0fBqzvJ5SFbID/WO9Hk9IRWZYLgvYbw4LJ2pNOP0h26qgPwIj
+         owyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9z+Xzh18caeqiaZuMDsgdyqgwWP0TZb4axKxH7OLyGI=;
+        b=Kq0vLnH5fxCWYOOo98VUBU01ldmpG3N2hzMT93KGny0Igr65C1O8l8DY3RUAGD1hvt
+         0CKXCiWil1bKSjdJ/WF3Cs2q/WEG7kuhpbDDRy5L7OwKFCVbh8CAHNGIuqRUCIquo6Mq
+         joTqM0s0kByZR8MXAYGpx6LCwTEb49OJvX9gbDuscv5D5o14ioLm0ZX0a50HbZvPZ+H+
+         2ykRl3LzB+81I2Le/mET6CAOke2KK7jtisXRplvEEz8jLiEd8weShNmgrKQ+230tD+CD
+         6Von05wgqmKuOrjikqeJG1mqGaY8AjnzjzUVaZHWmVHqyq0hN7WfzgmcH+wfiMsCvirs
+         J73g==
+X-Gm-Message-State: APjAAAXwPNZIHGxibSVe7U2DDP4IuckfjdQLhkTS0IzH6iyCC7e1Oh27
+        FZVMxtAn5YCiY2JmoZLw8Jt0+yI5R44Cqky5YM2cTQ==
+X-Google-Smtp-Source: APXvYqzNOBkuvb5Fm5vxCtZHUw/FW+/U6qZiPfzK9FMkum2L7VYmYLpZXlRDt2PKWLQIY3UYuhZboTNxMXP8ohFlBCc=
+X-Received: by 2002:aca:4c9:: with SMTP id 192mr3954800oie.105.1578027908725;
+ Thu, 02 Jan 2020 21:05:08 -0800 (PST)
+MIME-Version: 1.0
+References: <CAPcyv4jfpOX85GWgNTyugWksU=e-j=RhU_fcrcHBo4GMZ8_bhw@mail.gmail.com>
+ <c6ce34b130210d2d1330fc4079d6d82bd74dcef1.camel@linux.intel.com>
+ <50217a688ffa56cf5f150ffd358daba2a88cad48.camel@linux.intel.com>
+ <20191228151526.GA6971@linux.intel.com> <CAPcyv4i_frm8jZeknniPexp8AAmGsaq0_DHegmL4XZHQi1ThxA@mail.gmail.com>
+ <CAPcyv4iyQeXBWvp8V_UPBsOk29cfmTVZGYrrDgyYYqzsQvTjNA@mail.gmail.com>
+ <2c4a80e0d30bf1dfe89c6e3469d1dbfb008275fa.camel@linux.intel.com>
+ <20191231010256.kymv4shwmx5jcmey@cantor> <20191231155944.GA4790@linux.intel.com>
+ <be07a1e4-c290-4185-8c23-d97050279564@www.fastmail.com> <20200102171922.GA20989@linux.intel.com>
+ <CAPcyv4hXwujZ-+8f-5q2UthNOSszeHfNQxxjNVPQjOWeT0KDQg@mail.gmail.com>
+In-Reply-To: <CAPcyv4hXwujZ-+8f-5q2UthNOSszeHfNQxxjNVPQjOWeT0KDQg@mail.gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 2 Jan 2020 21:04:57 -0800
+Message-ID: <CAPcyv4gPEu+D+hRqG4HOU24+6xGpZsOb4Po8V+asvvFU-hk6ng@mail.gmail.com>
+Subject: Re: Patch "tpm_tis: reserve chip for duration of tpm_tis_core_init"
+ has been added to the 5.4-stable tree
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Christian Bundy <christianbundy@fraction.io>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        stable-commits@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20010223-4275-0000-0000-0000039435E4
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20010223-4276-0000-0000-000038A81993
-Message-Id: <1578007322.5874.128.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2020-01-02_07:2020-01-02,2020-01-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=714 mlxscore=0
- impostorscore=0 clxscore=1015 bulkscore=0 adultscore=0 spamscore=0
- malwarescore=0 priorityscore=1501 suspectscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001020185
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-01-02 at 17:24 -0500, Ken Goldman wrote:
-> On 1/2/2020 3:25 PM, Mimi Zohar wrote:
-> > On Thu, 2020-01-02 at 15:10 -0500, Ken Goldman wrote:
-> >> I'm trying to document the ima-modsig template and then write aparser.
-> >> Can anyone help me complete it?
-> >>
-> >> 1 - What the implementation does today is interesting.  Even betterwould
-> >> be what the implementation is permitted to do so that theparser will
-> >> handle future changes.
-> >>
-> >> 2 - My understanding so far:
-> >>
-> >>       ima-modsig        is        d-ng | n-ng | sig | d-modsig |modsig
-> >>
-> >>       where (both have a prepended uint32_t length)
-> >>
-> >>       d-modsig            is    d-ng, filedata hash, omitting the
-> >> appended modsig signature
-> >>       modsig                is     pkcs7DER, appended signature
-> >>
-> >> My immediate issue is that the d-modsig should be a length +
-> >> hashalgorithm + file data hash.  However, the length in my sample log
-> >> issometimes zero, which I did not expect.
-> >>
-> >> I.e., it it legal for an ima-modsig template to contain an emptyd-modsig
-> >> item?
-> >>
-> >> Can the modsig item also be empty?
-> > 
-> > Like the "sig" field in the "ima-sig" template, both the "d-modsig"
-> > and "modsig" fields in the "ima-modsig" template may be empty.
-> > 
-> 
-> I understand sig being empty is the file isn't signed.  Same with 
-> modsig.  The verifier could flag that.
-> 
-> However, d-modsig is a hash.  How should a parser interpret a missing 
-> [file data] hash?  Under what conditions would that be legal / illegal / 
-> something to flag to an admin UI?
+On Thu, Jan 2, 2020 at 11:20 AM Dan Williams <dan.j.williams@intel.com> wrote:
+>
+> On Thu, Jan 2, 2020 at 9:21 AM Jarkko Sakkinen
+> <jarkko.sakkinen@linux.intel.com> wrote:
+> >
+> > On Tue, Dec 31, 2019 at 11:47:37AM -0800, Christian Bundy wrote:
+> > > > Christian, were you having any issues with interrupts? You system was going
+> > > > into this code as well.
+> > >
+> > > Unfortunately I'm now unable to test, sorry for the trouble. I replaced my BIOS
+> > > with UEFI firmware and the problem has disappeared. Please let me know if there
+> > > is anything else I can do to help.
+> > >
+> > > Christian
+> >
+> > Takashi wrote yesterday [*]:
+> >
+> > "I'm building a test kernel package based on 5.5-rc4 with Jarkko's revert
+> > patches"
+>
+> Nice, I also built one of those. Just waiting for access to the system
+> again to gather results.
 
-The "d-modsig" is the hash of the file without the appended signature.
- That hash is needed to verify the appended signature.  If there isn't
-an appended signature, then there would be no reason for "d-modsig".
+Ok, it looks good.
 
-Mimi
+Tested-by: Dan Williams <dan.j.williams@intel.com>
+Tested-by: Xiaoping Zhou <xiaoping.zhou@intel.com>
 
+It does report:
+
+[    2.546660] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
+[    2.546823] tpm tpm0: tpm_try_transmit: send(): error -5
+[    2.546824] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
+polling instead
+
+...at boot, but tpm2_nvlist works ok.
