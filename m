@@ -2,108 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE66912F3F8
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2020 06:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71EE812F46C
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2020 06:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725928AbgACFFK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 Jan 2020 00:05:10 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:33883 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbgACFFJ (ORCPT
+        id S1726390AbgACF4O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 Jan 2020 00:56:14 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:43310 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725972AbgACF4O (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 Jan 2020 00:05:09 -0500
-Received: by mail-oi1-f176.google.com with SMTP id l136so13998115oig.1
-        for <linux-integrity@vger.kernel.org>; Thu, 02 Jan 2020 21:05:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9z+Xzh18caeqiaZuMDsgdyqgwWP0TZb4axKxH7OLyGI=;
-        b=A1/1WUmuXTjd1yXdCfALo+wxGXEPLsLX+BAYn8/BNRFmxZvl8Z33gbvQXfPkFFqtCB
-         F6j56ow0/9o5S0g8poVP3xTsTp14m4SUci5oo37DTXnA3Ob4OGO590q6CVsa4MAqotMY
-         UGjGYNMn4JNVSaTaNx+ftQqgJKCvfpHGbQa9QWs+UFcGNoODigf8g725Nww9cEGFSRzR
-         UQGmgBySDa6SYXeU9NK3ZfLtwfqSkpq82YyClO6nwW0TqWcO7wvEDrgpL0CywqwcQeLo
-         y1yxT7t6U8h3LrbaoNk0fBqzvJ5SFbID/WO9Hk9IRWZYLgvYbw4LJ2pNOP0h26qgPwIj
-         owyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9z+Xzh18caeqiaZuMDsgdyqgwWP0TZb4axKxH7OLyGI=;
-        b=Kq0vLnH5fxCWYOOo98VUBU01ldmpG3N2hzMT93KGny0Igr65C1O8l8DY3RUAGD1hvt
-         0CKXCiWil1bKSjdJ/WF3Cs2q/WEG7kuhpbDDRy5L7OwKFCVbh8CAHNGIuqRUCIquo6Mq
-         joTqM0s0kByZR8MXAYGpx6LCwTEb49OJvX9gbDuscv5D5o14ioLm0ZX0a50HbZvPZ+H+
-         2ykRl3LzB+81I2Le/mET6CAOke2KK7jtisXRplvEEz8jLiEd8weShNmgrKQ+230tD+CD
-         6Von05wgqmKuOrjikqeJG1mqGaY8AjnzjzUVaZHWmVHqyq0hN7WfzgmcH+wfiMsCvirs
-         J73g==
-X-Gm-Message-State: APjAAAXwPNZIHGxibSVe7U2DDP4IuckfjdQLhkTS0IzH6iyCC7e1Oh27
-        FZVMxtAn5YCiY2JmoZLw8Jt0+yI5R44Cqky5YM2cTQ==
-X-Google-Smtp-Source: APXvYqzNOBkuvb5Fm5vxCtZHUw/FW+/U6qZiPfzK9FMkum2L7VYmYLpZXlRDt2PKWLQIY3UYuhZboTNxMXP8ohFlBCc=
-X-Received: by 2002:aca:4c9:: with SMTP id 192mr3954800oie.105.1578027908725;
- Thu, 02 Jan 2020 21:05:08 -0800 (PST)
-MIME-Version: 1.0
-References: <CAPcyv4jfpOX85GWgNTyugWksU=e-j=RhU_fcrcHBo4GMZ8_bhw@mail.gmail.com>
- <c6ce34b130210d2d1330fc4079d6d82bd74dcef1.camel@linux.intel.com>
- <50217a688ffa56cf5f150ffd358daba2a88cad48.camel@linux.intel.com>
- <20191228151526.GA6971@linux.intel.com> <CAPcyv4i_frm8jZeknniPexp8AAmGsaq0_DHegmL4XZHQi1ThxA@mail.gmail.com>
- <CAPcyv4iyQeXBWvp8V_UPBsOk29cfmTVZGYrrDgyYYqzsQvTjNA@mail.gmail.com>
- <2c4a80e0d30bf1dfe89c6e3469d1dbfb008275fa.camel@linux.intel.com>
- <20191231010256.kymv4shwmx5jcmey@cantor> <20191231155944.GA4790@linux.intel.com>
- <be07a1e4-c290-4185-8c23-d97050279564@www.fastmail.com> <20200102171922.GA20989@linux.intel.com>
- <CAPcyv4hXwujZ-+8f-5q2UthNOSszeHfNQxxjNVPQjOWeT0KDQg@mail.gmail.com>
-In-Reply-To: <CAPcyv4hXwujZ-+8f-5q2UthNOSszeHfNQxxjNVPQjOWeT0KDQg@mail.gmail.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 2 Jan 2020 21:04:57 -0800
-Message-ID: <CAPcyv4gPEu+D+hRqG4HOU24+6xGpZsOb4Po8V+asvvFU-hk6ng@mail.gmail.com>
-Subject: Re: Patch "tpm_tis: reserve chip for duration of tpm_tis_core_init"
- has been added to the 5.4-stable tree
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Christian Bundy <christianbundy@fraction.io>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        stable-commits@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 3 Jan 2020 00:56:14 -0500
+Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D42AE200889D;
+        Thu,  2 Jan 2020 21:56:12 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D42AE200889D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1578030972;
+        bh=mUbhnYQd1Lx+xKj9BhxNIdNLn+5ftrFhg+QI68XZkgQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=beYHazErR6ghY31GFCe2rQKdxxgfZ5GirrF9ntk2g/tMKZHoR9enQ8AZhFgOK5Bu1
+         VmAzziLCkUIRj0pmOvxVcQ74QmOjlEgRBr6I7n3FjqRKz1uXOiUVD6uzZMLfSsJXII
+         Witfht8CXt05acVmVqUxO+nuyoxX3dwlFpjXDh/o=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, James.Bottomley@HansenPartnership.com,
+        linux-integrity@vger.kernel.org
+Cc:     eric.snowberg@oracle.com, dhowells@redhat.com,
+        mathew.j.martineau@linux.intel.com, matthewgarrett@google.com,
+        sashal@kernel.org, jamorris@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org
+Subject: [PATCH v6 0/3] IMA: Deferred measurement of keys
+Date:   Thu,  2 Jan 2020 21:56:05 -0800
+Message-Id: <20200103055608.22491-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jan 2, 2020 at 11:20 AM Dan Williams <dan.j.williams@intel.com> wrote:
->
-> On Thu, Jan 2, 2020 at 9:21 AM Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Tue, Dec 31, 2019 at 11:47:37AM -0800, Christian Bundy wrote:
-> > > > Christian, were you having any issues with interrupts? You system was going
-> > > > into this code as well.
-> > >
-> > > Unfortunately I'm now unable to test, sorry for the trouble. I replaced my BIOS
-> > > with UEFI firmware and the problem has disappeared. Please let me know if there
-> > > is anything else I can do to help.
-> > >
-> > > Christian
-> >
-> > Takashi wrote yesterday [*]:
-> >
-> > "I'm building a test kernel package based on 5.5-rc4 with Jarkko's revert
-> > patches"
->
-> Nice, I also built one of those. Just waiting for access to the system
-> again to gather results.
+This patchset extends the previous version[1] by adding support for
+deferred processing of keys.
 
-Ok, it looks good.
+With the patchset referenced above, the IMA subsystem supports
+measuring asymmetric keys when the key is created or updated.
+But keys created or updated before a custom IMA policy is loaded
+are currently not measured. This includes keys added to, for instance,
+.builtin_trusted_keys which happens early in the boot process.
 
-Tested-by: Dan Williams <dan.j.williams@intel.com>
-Tested-by: Xiaoping Zhou <xiaoping.zhou@intel.com>
+This change adds support for queuing keys created or updated before
+a custom IMA policy is loaded. The queued keys are processed when
+a custom policy is loaded. Keys created or updated after a custom policy
+is loaded are measured immediately (not queued).
 
-It does report:
+If the kernel is built with both CONFIG_IMA and
+CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE enabled then the IMA policy
+must be applied as a custom policy for the keys to be measured.
+If a custom IMA policy is not provided within 5 minutes after
+IMA is initialized, any queued keys will be freed.
+This is by design.
 
-[    2.546660] tpm_tis IFX0740:00: 2.0 TPM (device-id 0x1B, rev-id 16)
-[    2.546823] tpm tpm0: tpm_try_transmit: send(): error -5
-[    2.546824] tpm tpm0: [Firmware Bug]: TPM interrupt not working,
-polling instead
+[1] https://lore.kernel.org/linux-integrity/20191211164707.4698-1-nramas@linux.microsoft.com/
 
-...at boot, but tpm2_nvlist works ok.
+Testing performed:
+
+  * Ran kernel self-test following the instructions given in
+    https://www.kernel.org/doc/Documentation/kselftest.txt
+  * Ran the lkp-tests using the job script provided by
+    kernel test robot <rong.a.chen@intel.com>
+  * Booted the kernel with this change.
+  * Added .builtin_trusted_keys in "keyrings=" option in
+    the IMA policy and verified the keys added to this
+    keyring are measured.
+  * Specified only func=KEY_CHECK and not "keyrings=" option,
+    and verified the keys added to builtin_trusted_keys keyring
+    are processed.
+  * Added keys at runtime and verified they are measured
+    if the IMA policy permitted.
+      => For example, added keys to .ima keyring and verified.
+
+Changelog:
+
+  v6
+
+  => Replaced mutex with a spinlock to sychronize access to
+     queued keys. This fixes the problem reported by
+     "kernel test robot <rong.a.chen@intel.com>"
+     https://lore.kernel.org/linux-integrity/2a831fe9-30e5-63b4-af10-a69f327f7fb7@linux.microsoft.com/T/#t
+  => Changed ima_queue_key() to a static function. This fixes
+     the issue reported by "kbuild test robot <lkp@intel.com>"
+     https://lore.kernel.org/linux-integrity/1577370464.4487.10.camel@linux.ibm.com/
+  => Added the patch to free the queued keys if a custom IMA policy
+     was not loaded to this patch set.
+
+  v5
+
+  => Removed temp keys list in ima_process_queued_keys()
+
+  v4
+
+  => Check and set ima_process_keys flag with mutex held.
+
+  v3
+
+  => Defined ima_process_keys flag to be static.
+  => Set ima_process_keys with ima_keys_mutex held.
+  => Added a comment in ima_process_queued_keys() function
+     to state the use of temporary list for keys.
+
+  v2
+
+  => Rebased the changes to v5.5-rc1
+  => Updated function names, variable names, and code comments
+     to be less verbose.
+
+  v1
+
+  => Code cleanup
+
+  v0
+
+  => Based changes on v5.4-rc8
+  => The following patchsets should be applied in that order
+     https://lore.kernel.org/linux-integrity/1572492694-6520-1-git-send-email-zohar@linux.ibm.com
+     https://lore.kernel.org/linux-integrity/20191204224131.3384-1-nramas@linux.microsoft.com/
+  => Added functions to queue and dequeue keys, and process
+     the queued keys when custom IMA policies are applied.
+
+Lakshmi Ramasubramanian (3):
+  IMA: Define workqueue for early boot key measurements
+  IMA: Call workqueue functions to measure queued keys
+  IMA: Defined timer to free queued keys
+
+ security/integrity/ima/ima.h                 |  17 ++
+ security/integrity/ima/ima_asymmetric_keys.c | 159 +++++++++++++++++++
+ security/integrity/ima/ima_init.c            |   8 +-
+ security/integrity/ima/ima_policy.c          |   3 +
+ 4 files changed, 186 insertions(+), 1 deletion(-)
+
+-- 
+2.17.1
+
