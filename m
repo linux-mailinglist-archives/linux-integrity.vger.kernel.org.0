@@ -2,39 +2,39 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC661306BE
-	for <lists+linux-integrity@lfdr.de>; Sun,  5 Jan 2020 09:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C4A1306DC
+	for <lists+linux-integrity@lfdr.de>; Sun,  5 Jan 2020 10:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725881AbgAEIMU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 5 Jan 2020 03:12:20 -0500
-Received: from mga18.intel.com ([134.134.136.126]:38058 "EHLO mga18.intel.com"
+        id S1725828AbgAEJAc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 5 Jan 2020 04:00:32 -0500
+Received: from mga09.intel.com ([134.134.136.24]:56209 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725828AbgAEIMT (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 5 Jan 2020 03:12:19 -0500
+        id S1725535AbgAEJAc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 5 Jan 2020 04:00:32 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jan 2020 00:12:17 -0800
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jan 2020 01:00:29 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,397,1571727600"; 
-   d="gz'50?scan'50,208,50";a="217150817"
+X-IronPort-AV: E=Sophos;i="5.69,398,1571727600"; 
+   d="gz'50?scan'50,208,50";a="222571680"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Jan 2020 00:12:15 -0800
+  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2020 01:00:27 -0800
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1io11D-000CPu-04; Sun, 05 Jan 2020 16:12:15 +0800
-Date:   Sun, 5 Jan 2020 16:11:28 +0800
+        id 1io1lr-000GgV-Ek; Sun, 05 Jan 2020 17:00:27 +0800
+Date:   Sun, 5 Jan 2020 17:00:15 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 Cc:     kbuild-all@lists.01.org, linux-integrity@vger.kernel.org,
         Mimi Zohar <zohar@linux.ibm.com>
-Subject: [integrity:next-integrity-testing 3/5]
- security/integrity/ima/ima_asymmetric_keys.c:32:14: error: dereferencing
- pointer to incomplete type 'struct ima_key_entry'
-Message-ID: <202001051626.CfJ4q9oi%lkp@intel.com>
+Subject: [integrity:next-integrity-testing 5/5]
+ security/integrity/ima/ima_asymmetric_keys.c:53:6: error: redefinition of
+ 'ima_init_key_queue'
+Message-ID: <202001051708.DO90I9sl%lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="ld6oxxc3rvd5m6su"
+Content-Type: multipart/mixed; boundary="uyjyfjziwexz2pgl"
 Content-Disposition: inline
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-integrity-owner@vger.kernel.org
@@ -43,212 +43,106 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---ld6oxxc3rvd5m6su
+--uyjyfjziwexz2pgl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity-testing
 head:   cc3e145566e2f2b697e67f01ed973b3782ba8b83
-commit: f5d0a8ae6bd1e88c22a20daa2aab5acba2addb1d [3/5] IMA: Define workqueue for early boot key measurements
+commit: cc3e145566e2f2b697e67f01ed973b3782ba8b83 [5/5] IMA: Defined timer to free queued keys
 config: x86_64-randconfig-e003-20200105 (attached as .config)
 compiler: gcc-7 (Debian 7.5.0-3) 7.5.0
 reproduce:
-        git checkout f5d0a8ae6bd1e88c22a20daa2aab5acba2addb1d
+        git checkout cc3e145566e2f2b697e67f01ed973b3782ba8b83
         # save the attached .config to linux build tree
         make ARCH=x86_64 
 
 If you fix the issue, kindly add following tag
 Reported-by: kbuild test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> security/integrity/ima/ima_asymmetric_keys.c:29:39: warning: 'struct ima_key_entry' declared inside parameter list will not be visible outside of this definition or declaration
+>> security/integrity/ima/ima_asymmetric_keys.c:53:6: error: redefinition of 'ima_init_key_queue'
+    void ima_init_key_queue(void)
+         ^~~~~~~~~~~~~~~~~~
+   In file included from security/integrity/ima/ima_asymmetric_keys.c:16:0:
+   security/integrity/ima/ima.h:222:20: note: previous definition of 'ima_init_key_queue' was here
+    static inline void ima_init_key_queue(void) {}
+                       ^~~~~~~~~~~~~~~~~~
+   security/integrity/ima/ima_asymmetric_keys.c:60:39: warning: 'struct ima_key_entry' declared inside parameter list will not be visible outside of this definition or declaration
     static void ima_free_key_entry(struct ima_key_entry *entry)
                                           ^~~~~~~~~~~~~
    security/integrity/ima/ima_asymmetric_keys.c: In function 'ima_free_key_entry':
->> security/integrity/ima/ima_asymmetric_keys.c:32:14: error: dereferencing pointer to incomplete type 'struct ima_key_entry'
+   security/integrity/ima/ima_asymmetric_keys.c:63:14: error: dereferencing pointer to incomplete type 'struct ima_key_entry'
       kfree(entry->payload);
                  ^~
    security/integrity/ima/ima_asymmetric_keys.c: In function 'ima_alloc_key_entry':
-   security/integrity/ima/ima_asymmetric_keys.c:45:25: error: dereferencing pointer to incomplete type 'struct ima_key_entry'
+   security/integrity/ima/ima_asymmetric_keys.c:76:25: error: dereferencing pointer to incomplete type 'struct ima_key_entry'
      entry = kzalloc(sizeof(*entry), GFP_KERNEL);
                             ^~~~~~
->> security/integrity/ima/ima_asymmetric_keys.c:63:22: error: passing argument 1 of 'ima_free_key_entry' from incompatible pointer type [-Werror=incompatible-pointer-types]
+   security/integrity/ima/ima_asymmetric_keys.c:94:22: error: passing argument 1 of 'ima_free_key_entry' from incompatible pointer type [-Werror=incompatible-pointer-types]
       ima_free_key_entry(entry);
                          ^~~~~
-   security/integrity/ima/ima_asymmetric_keys.c:29:13: note: expected 'struct ima_key_entry *' but argument is of type 'struct ima_key_entry *'
+   security/integrity/ima/ima_asymmetric_keys.c:60:13: note: expected 'struct ima_key_entry *' but argument is of type 'struct ima_key_entry *'
     static void ima_free_key_entry(struct ima_key_entry *entry)
                 ^~~~~~~~~~~~~~~~~~
    security/integrity/ima/ima_asymmetric_keys.c: In function 'ima_queue_key':
-   security/integrity/ima/ima_asymmetric_keys.c:88:22: error: passing argument 1 of 'ima_free_key_entry' from incompatible pointer type [-Werror=incompatible-pointer-types]
+   security/integrity/ima/ima_asymmetric_keys.c:119:22: error: passing argument 1 of 'ima_free_key_entry' from incompatible pointer type [-Werror=incompatible-pointer-types]
       ima_free_key_entry(entry);
                          ^~~~~
-   security/integrity/ima/ima_asymmetric_keys.c:29:13: note: expected 'struct ima_key_entry *' but argument is of type 'struct ima_key_entry *'
+   security/integrity/ima/ima_asymmetric_keys.c:60:13: note: expected 'struct ima_key_entry *' but argument is of type 'struct ima_key_entry *'
     static void ima_free_key_entry(struct ima_key_entry *entry)
                 ^~~~~~~~~~~~~~~~~~
    security/integrity/ima/ima_asymmetric_keys.c: At top level:
->> security/integrity/ima/ima_asymmetric_keys.c:99:6: error: redefinition of 'ima_process_queued_keys'
+   security/integrity/ima/ima_asymmetric_keys.c:130:6: error: redefinition of 'ima_process_queued_keys'
     void ima_process_queued_keys(void)
          ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from security/integrity/ima/ima_asymmetric_keys.c:15:0:
-   security/integrity/ima/ima.h:220:20: note: previous definition of 'ima_process_queued_keys' was here
+   In file included from security/integrity/ima/ima_asymmetric_keys.c:16:0:
+   security/integrity/ima/ima.h:221:20: note: previous definition of 'ima_process_queued_keys' was here
     static inline void ima_process_queued_keys(void) {}
                        ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/key.h:14:0,
-                    from include/linux/key-type.h:11,
-                    from include/keys/asymmetric-type.h:13,
+   In file included from include/linux/timer.h:5:0,
                     from security/integrity/ima/ima_asymmetric_keys.c:14:
    security/integrity/ima/ima_asymmetric_keys.c: In function 'ima_process_queued_keys':
    include/linux/list.h:664:57: warning: left-hand operand of comma expression has no effect [-Wunused-value]
      for (pos = list_first_entry(head, typeof(*pos), member), \
                                                             ^
->> security/integrity/ima/ima_asymmetric_keys.c:123:2: note: in expansion of macro 'list_for_each_entry_safe'
+   security/integrity/ima/ima_asymmetric_keys.c:156:2: note: in expansion of macro 'list_for_each_entry_safe'
      list_for_each_entry_safe(entry, tmp, &ima_keys, list) {
      ^~~~~~~~~~~~~~~~~~~~~~~~
-   security/integrity/ima/ima_asymmetric_keys.c:128:22: error: passing argument 1 of 'ima_free_key_entry' from incompatible pointer type [-Werror=incompatible-pointer-types]
+   security/integrity/ima/ima_asymmetric_keys.c:164:22: error: passing argument 1 of 'ima_free_key_entry' from incompatible pointer type [-Werror=incompatible-pointer-types]
       ima_free_key_entry(entry);
                          ^~~~~
-   security/integrity/ima/ima_asymmetric_keys.c:29:13: note: expected 'struct ima_key_entry *' but argument is of type 'struct ima_key_entry *'
+   security/integrity/ima/ima_asymmetric_keys.c:60:13: note: expected 'struct ima_key_entry *' but argument is of type 'struct ima_key_entry *'
     static void ima_free_key_entry(struct ima_key_entry *entry)
                 ^~~~~~~~~~~~~~~~~~
-   At top level:
-   security/integrity/ima/ima_asymmetric_keys.c:70:13: warning: 'ima_queue_key' defined but not used [-Wunused-function]
-    static bool ima_queue_key(struct key *keyring, const void *payload,
-                ^~~~~~~~~~~~~
    cc1: some warnings being treated as errors
 
-vim +32 security/integrity/ima/ima_asymmetric_keys.c
+vim +/ima_init_key_queue +53 security/integrity/ima/ima_asymmetric_keys.c
 
-    13	
-  > 14	#include <keys/asymmetric-type.h>
-    15	#include "ima.h"
-    16	
-    17	/*
-    18	 * Flag to indicate whether a key can be processed
-    19	 * right away or should be queued for processing later.
-    20	 */
-    21	static bool ima_process_keys;
-    22	
-    23	/*
-    24	 * To synchronize access to the list of keys that need to be measured
-    25	 */
-    26	static DEFINE_SPINLOCK(ima_keys_lock);
-    27	static LIST_HEAD(ima_keys);
-    28	
-  > 29	static void ima_free_key_entry(struct ima_key_entry *entry)
-    30	{
-    31		if (entry) {
-  > 32			kfree(entry->payload);
-    33			kfree(entry->keyring_name);
-    34			kfree(entry);
-    35		}
-    36	}
-    37	
-    38	static struct ima_key_entry *ima_alloc_key_entry(
-    39		struct key *keyring,
-    40		const void *payload, size_t payload_len)
-    41	{
-    42		int rc = 0;
-    43		struct ima_key_entry *entry;
-    44	
-    45		entry = kzalloc(sizeof(*entry), GFP_KERNEL);
-    46		if (entry) {
-    47			entry->payload = kmemdup(payload, payload_len, GFP_KERNEL);
-    48			entry->keyring_name = kstrdup(keyring->description,
-    49						      GFP_KERNEL);
-    50			entry->payload_len = payload_len;
-    51		}
-    52	
-    53		if ((entry == NULL) || (entry->payload == NULL) ||
-    54		    (entry->keyring_name == NULL)) {
-    55			rc = -ENOMEM;
-    56			goto out;
-    57		}
-    58	
-    59		INIT_LIST_HEAD(&entry->list);
-    60	
-    61	out:
-    62		if (rc) {
-  > 63			ima_free_key_entry(entry);
-    64			entry = NULL;
-    65		}
-    66	
-    67		return entry;
-    68	}
-    69	
-    70	static bool ima_queue_key(struct key *keyring, const void *payload,
-    71				  size_t payload_len)
-    72	{
-    73		bool queued = false;
-    74		struct ima_key_entry *entry;
-    75	
-    76		entry = ima_alloc_key_entry(keyring, payload, payload_len);
-    77		if (!entry)
-    78			return false;
-    79	
-    80		spin_lock(&ima_keys_lock);
-    81		if (!ima_process_keys) {
-    82			list_add_tail(&entry->list, &ima_keys);
-    83			queued = true;
-    84		}
-    85		spin_unlock(&ima_keys_lock);
-    86	
-    87		if (!queued)
-  > 88			ima_free_key_entry(entry);
-    89	
-    90		return queued;
-    91	}
-    92	
-    93	/*
-    94	 * ima_process_queued_keys() - process keys queued for measurement
-    95	 *
-    96	 * This function sets ima_process_keys to true and processes queued keys.
-    97	 * From here on keys will be processed right away (not queued).
-    98	 */
-  > 99	void ima_process_queued_keys(void)
-   100	{
-   101		struct ima_key_entry *entry, *tmp;
-   102		bool process = false;
-   103	
-   104		if (ima_process_keys)
-   105			return;
-   106	
-   107		/*
-   108		 * Since ima_process_keys is set to true, any new key will be
-   109		 * processed immediately and not be queued to ima_keys list.
-   110		 * First one setting the ima_process_keys flag to true will
-   111		 * process the queued keys.
-   112		 */
-   113		spin_lock(&ima_keys_lock);
-   114		if (!ima_process_keys) {
-   115			ima_process_keys = true;
-   116			process = true;
-   117		}
-   118		spin_unlock(&ima_keys_lock);
-   119	
-   120		if (!process)
-   121			return;
-   122	
- > 123		list_for_each_entry_safe(entry, tmp, &ima_keys, list) {
-   124			process_buffer_measurement(entry->payload, entry->payload_len,
-   125						   entry->keyring_name, KEY_CHECK, 0,
-   126						   entry->keyring_name);
-   127			list_del(&entry->list);
-   128			ima_free_key_entry(entry);
-   129		}
-   130	}
-   131	
+    48	
+    49	/*
+    50	 * This function sets up a timer to free queued keys in case
+    51	 * custom IMA policy was never loaded.
+    52	 */
+  > 53	void ima_init_key_queue(void)
+    54	{
+    55		timer_setup(&ima_key_queue_timer, ima_timer_handler, 0);
+    56		mod_timer(&ima_key_queue_timer,
+    57			  jiffies + msecs_to_jiffies(ima_key_queue_timeout));
+    58	}
+    59	
 
 ---
 0-DAY kernel test infrastructure                 Open Source Technology Center
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
 
---ld6oxxc3rvd5m6su
+--uyjyfjziwexz2pgl
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICM6CEV4AAy5jb25maWcAlDzbcty2ku/5iinnJalTTiT5Eu9u6QEEwRlkSIIGwJFGLyxF
+H4sICImjEV4AAy5jb25maWcAlDzbcty2ku/5iinnJalTTiT5Eu9u6QEEwRlkSIIGwJFGLyxF
 Hvuoji15R9I59t9vN8BLAwTlbCqVaNCNW6PvaPDnn35esafH+y/Xj7c3158/f199OtwdjteP
 hw+rj7efD/+zytWqVnYlcml/A+Ty9u7p2+/f3r3t3r5evfntzW8nL483p6vt4Xh3+Lzi93cf
 bz89Qf/b+7uffv4J/v0ZGr98haGO/736dHPz8o/VL/nhr9vru9UfrverX/0fgMpVXch1x3kn
@@ -916,4 +810,4 @@ je4tmOZjwlUK83VLmeTT9uKTN78GwWlONFCEeyWkQSF86vYuTeCsZhFVWlIRMbm9MuRNc0ph
 k4upkVADJk2BlXNcVyhJyeMnanvvio1KqFLWzsoZ4Mp6LAXPSB4Lb7t4Eg8p3fwP4y6DdIY2
 AgA=
 
---ld6oxxc3rvd5m6su--
+--uyjyfjziwexz2pgl--
