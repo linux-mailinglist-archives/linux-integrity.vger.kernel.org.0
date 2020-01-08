@@ -2,71 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C08EB13407A
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jan 2020 12:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D791346CB
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jan 2020 16:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726252AbgAHL3e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Jan 2020 06:29:34 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:9125 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726098AbgAHL3d (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Jan 2020 06:29:33 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 8AAB3A4388C290F79247;
-        Wed,  8 Jan 2020 19:29:31 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.439.0; Wed, 8 Jan 2020 19:29:24 +0800
-From:   Chen Zhou <chenzhou10@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <jmorris@namei.org>
-CC:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chenzhou10@huawei.com>
-Subject: [PATCH] ima: use kmemdup
-Date:   Wed, 8 Jan 2020 19:25:13 +0800
-Message-ID: <20200108112513.39715-1-chenzhou10@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727148AbgAHP6q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Jan 2020 10:58:46 -0500
+Received: from mga06.intel.com ([134.134.136.31]:24326 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729151AbgAHP6p (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 8 Jan 2020 10:58:45 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jan 2020 07:58:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,410,1571727600"; 
+   d="scan'208";a="217546290"
+Received: from dkurtaev-mobl.ccr.corp.intel.com ([10.252.22.167])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Jan 2020 07:58:42 -0800
+Message-ID: <b469b7e8454a69402529cc8e25244860e136308e.camel@linux.intel.com>
+Subject: Re: [PATCH] tpm: handle negative priv->response_len in
+ tpm_common_read
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Tadeusz Struk <tadeusz.struk@intel.com>
+Cc:     keescook@chromium.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
+        labbott@redhat.com
+Date:   Wed, 08 Jan 2020 17:58:41 +0200
+In-Reply-To: <157843468820.24718.10808226634364669421.stgit@tstruk-mobl1>
+References: <b85fa669-d3aa-f6c9-9631-988ae47e392c@redhat.com>
+         <157843468820.24718.10808226634364669421.stgit@tstruk-mobl1>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Fix memdup.cocci warnings:
-./security/integrity/ima/ima_policy.c:268:10-17: WARNING opportunity for kmemdup
+On Tue, 2020-01-07 at 14:04 -0800, Tadeusz Struk wrote:
+> The priv->responce_length can hold the size of an response or
+> an negative error code, and the tpm_common_read() needs to handle
+> both cases correctly. Changed the type of responce_length to
+> signed and accounted for negative value in tpm_common_read()
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: d23d12484307 ("tpm: fix invalid locking in NONBLOCKING mode")
+> Reported-by: Laura Abbott <labbott@redhat.com>
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@intel.com>
 
-Use kmemdup rather than duplicating its implementation.
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
----
- security/integrity/ima/ima_policy.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Adding to the next PR.
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index ef8dfd4..e31649c 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -265,7 +265,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 	struct ima_rule_entry *nentry;
- 	int i, result;
- 
--	nentry = kmalloc(sizeof(*nentry), GFP_KERNEL);
-+	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
- 	if (!nentry)
- 		return NULL;
- 
-@@ -273,7 +273,6 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 	 * Immutable elements are copied over as pointers and data; only
- 	 * lsm rules can change
- 	 */
--	memcpy(nentry, entry, sizeof(*nentry));
- 	memset(nentry->lsm, 0, sizeof_field(struct ima_rule_entry, lsm));
- 
- 	for (i = 0; i < MAX_LSM_RULES; i++) {
--- 
-2.7.4
+/Jarkko
 
