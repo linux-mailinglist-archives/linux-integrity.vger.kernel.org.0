@@ -2,96 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF65135E5A
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jan 2020 17:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99B2135E72
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jan 2020 17:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729746AbgAIQdl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Jan 2020 11:33:41 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7810 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729700AbgAIQdl (ORCPT
+        id S2387727AbgAIQiQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Jan 2020 11:38:16 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:39062 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728159AbgAIQiP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Jan 2020 11:33:41 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 009GPRq4061616
-        for <linux-integrity@vger.kernel.org>; Thu, 9 Jan 2020 11:33:40 -0500
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xe7dv0y10-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 09 Jan 2020 11:33:39 -0500
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 9 Jan 2020 16:33:36 -0000
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 9 Jan 2020 16:33:30 -0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 009GXT0b40698010
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Jan 2020 16:33:29 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A49CBA4055;
-        Thu,  9 Jan 2020 16:33:29 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 52DFFA404D;
-        Thu,  9 Jan 2020 16:33:28 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.153.42])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Jan 2020 16:33:28 +0000 (GMT)
-Subject: Re: [PATCH v13 26/25] Audit: Multiple LSM support in audit rules
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
-        sds@tycho.nsa.gov,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>,
+        Thu, 9 Jan 2020 11:38:15 -0500
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id F2CAF2007684;
+        Thu,  9 Jan 2020 08:38:14 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F2CAF2007684
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1578587895;
+        bh=tLUd4VK7GfUjhPceZ2DEioxJk5pIIIxabfHz0xCY7KA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=DFTve4DqG+WRFl5jxDn11pDsh+qB2yu/lMwI7WyqHieA5FllIu/xbZkU0MaAkifBc
+         NyYW0i2hCHFPcRkMmbopmX8hrd/1BGS0PH44ZSZoF/hTwFh7ybOr3SNGZPDZiJq9u/
+         IIwnrGFXQ0vyBXacypwUIPAb26ZY2iUdu+ccNldc=
+Subject: Re: [PATCH v1] IMA: fix measuring asymmetric keys Kconfig
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
         linux-integrity@vger.kernel.org
-Date:   Thu, 09 Jan 2020 11:33:27 -0500
-In-Reply-To: <ee5e4cea-b6c1-fa12-30de-8fc9007d69e9@schaufler-ca.com>
-References: <20191224235939.7483-1-casey.ref@schaufler-ca.com>
-         <20191224235939.7483-1-casey@schaufler-ca.com>
-         <ee5e4cea-b6c1-fa12-30de-8fc9007d69e9@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+Cc:     dhowells@redhat.com, sashal@kernel.org,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+References: <20200108160508.5938-1-nramas@linux.microsoft.com>
+ <1578545543.5147.32.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <5411bc3d-74eb-6868-5768-bba3726a661a@linux.microsoft.com>
+Date:   Thu, 9 Jan 2020 08:38:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+In-Reply-To: <1578545543.5147.32.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20010916-0012-0000-0000-0000037BF9E3
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20010916-0013-0000-0000-000021B81BDA
-Message-Id: <1578587607.5147.63.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-09_03:2020-01-09,2020-01-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 adultscore=0 suspectscore=0
- phishscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001090140
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Casey,
+On 1/8/20 8:52 PM, Mimi Zohar wrote:
 
-On Fri, 2020-01-03 at 10:53 -0800, Casey Schaufler wrote:
-> With multiple possible security modules supporting audit rule
-> it is necessary to keep separate data for each module in the
-> audit rules. This affects IMA as well, as it re-uses the audit
-> rule list mechanisms.
+> 
+> For the time being, I've pushed out this patch with the existing patch
+> description to next-integrity-testing, but the patch description
+> should be rewritten clearer.  For example,
+> 
+> As a result of the asymmetric public keys subtype being defined as a
+> tristate, with the existing IMA Makefile, ima_asymmetric_keys.c could
+> be built as a kernel module.  To prevent this from happening, this
+> patch defines and uses an intermediate Kconfig boolean option named
+> IMA_MEASURE_ASYMMETRIC_KEYS.
+> 
+> Please let me know if you're ok with this wording.
+> 
+> thanks,
+> 
+> Mimi
+> 
 
-While reviewing this patch, I realized there was a bug in the base IMA
-code.  With Janne's bug fix, that he just posted, I think this patch
-can now be simplified.
+That sounds perfect. Thanks for your help Mimi.
 
-My main concern is the number of warning messages that will be
-generated.  Any time a new LSM policy is loaded, the labels will be
-re-evaulated whether or not they are applicable to the particular LSM,
-causing unnecessary warnings.
-
-Mimi
-
+  -lakshmi
