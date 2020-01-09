@@ -2,167 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A419135197
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jan 2020 03:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11265135248
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jan 2020 05:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728049AbgAICoE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Jan 2020 21:44:04 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:55050 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727984AbgAICoD (ORCPT
+        id S1727949AbgAIEwg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Jan 2020 23:52:36 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32310 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726913AbgAIEwg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Jan 2020 21:44:03 -0500
-Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1E93220B479D;
-        Wed,  8 Jan 2020 18:44:03 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1E93220B479D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1578537843;
-        bh=59YyHVNcW/QdFRQ8i/3QqqsbF0Ns+ie/nKbZAKZnaZU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T7Kl3zdZeFLZztO2dX1GYPwdNYFQhmX1U4YOogH4NuHdt4wtC1/2B8KcfnVb7Ju2a
-         LBGyKLlw5Hfqea+OA5FAUo7toQGgS/1sRaUGennmSihmpACSZmmgZUp6URNBhNL8Vq
-         mSWPN0e6rbS047N1rS68GdQnZck3o+ogJZ8WJDJw=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, James.Bottomley@HansenPartnership.com,
+        Wed, 8 Jan 2020 23:52:36 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0094qXqt009040
+        for <linux-integrity@vger.kernel.org>; Wed, 8 Jan 2020 23:52:35 -0500
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xdvguhjan-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 08 Jan 2020 23:52:35 -0500
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 9 Jan 2020 04:52:30 -0000
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 9 Jan 2020 04:52:26 -0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0094pcG138011312
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Jan 2020 04:51:38 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B2F414C046;
+        Thu,  9 Jan 2020 04:52:25 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8F3C34C044;
+        Thu,  9 Jan 2020 04:52:24 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.236.182])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Jan 2020 04:52:24 +0000 (GMT)
+Subject: Re: [PATCH v1] IMA: fix measuring asymmetric keys Kconfig
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
         linux-integrity@vger.kernel.org
-Cc:     dhowells@redhat.com, arnd@arndb.de, matthewgarrett@google.com,
-        sashal@kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
-Subject: [PATCH v8 3/3] IMA: Defined timer to free queued keys
-Date:   Wed,  8 Jan 2020 18:43:59 -0800
-Message-Id: <20200109024359.3410-4-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200109024359.3410-1-nramas@linux.microsoft.com>
-References: <20200109024359.3410-1-nramas@linux.microsoft.com>
+Cc:     dhowells@redhat.com, sashal@kernel.org,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Date:   Wed, 08 Jan 2020 23:52:23 -0500
+In-Reply-To: <20200108160508.5938-1-nramas@linux.microsoft.com>
+References: <20200108160508.5938-1-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20010904-4275-0000-0000-00000395FAC4
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20010904-4276-0000-0000-000038A9E990
+Message-Id: <1578545543.5147.32.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-08_07:2020-01-08,2020-01-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 impostorscore=0 bulkscore=0
+ malwarescore=0 priorityscore=1501 phishscore=0 mlxscore=0 clxscore=1015
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001090044
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-keys queued for measurement should be freed if a custom IMA policy
-was not loaded. Otherwise, the keys will remain queued forever
-consuming kernel memory.
+On Wed, 2020-01-08 at 08:05 -0800, Lakshmi Ramasubramanian wrote:
+> CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE is a tristate. If this config
+> is set to "=m", ima_asymmetric_keys.c is built as a kernel module.
+> 
+> Defined an intermediate boolean config namely
+> CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS that is
+> defined when CONFIG_IMA and CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE
+> are defined.
+> 
+> Asymmetric key structure is defined only when
+> CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE is defined. Since the IMA hook
+> measures asymmetric keys, the IMA hook is defined in
+> ima_asymmetric_keys.c which is built only if
+> CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS is defined.
+> 
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
-This patch defines a timer to handle the above scenario. The timer
-is setup to expire 5 minutes after IMA initialization is completed.
+For the time being, I've pushed out this patch with the existing patch
+description to next-integrity-testing, but the patch description
+should be rewritten clearer.  For example,
 
-If a custom IMA policy is loaded before the timer expires, the timer
-is removed and any queued keys are processed for measurement.
-But if a custom policy was not loaded, on timer expiration
-queued keys are just freed.
+As a result of the asymmetric public keys subtype being defined as a
+tristate, with the existing IMA Makefile, ima_asymmetric_keys.c could
+be built as a kernel module.  To prevent this from happening, this
+patch defines and uses an intermediate Kconfig boolean option named
+IMA_MEASURE_ASYMMETRIC_KEYS.
 
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Reported-by: kernel test robot <rong.a.chen@intel.com> # sleeping
-function called from invalid context
-Reported-by: kbuild test robot <lkp@intel.com> # redefinition of
-ima_init_key_queue() function.
----
- security/integrity/ima/ima.h                 |  2 +
- security/integrity/ima/ima_asymmetric_keys.c | 42 ++++++++++++++++++--
- security/integrity/ima/ima_init.c            |  8 +++-
- 3 files changed, 48 insertions(+), 4 deletions(-)
+Please let me know if you're ok with this wording.
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index c7fdf3d66b98..6bb3152b3e24 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -216,8 +216,10 @@ struct ima_key_entry {
- 	char *keyring_name;
- };
- void ima_process_queued_keys(void);
-+void ima_init_key_queue(void);
- #else
- static inline void ima_process_queued_keys(void) {}
-+static inline void ima_init_key_queue(void) {}
- #endif /* CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS */
- 
- /* LIM API function definitions */
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-index eb71cbf224c1..d1fa1706e03f 100644
---- a/security/integrity/ima/ima_asymmetric_keys.c
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -11,6 +11,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/timer.h>
- #include <keys/asymmetric-type.h>
- #include "ima.h"
- 
-@@ -26,6 +27,36 @@ static bool ima_process_keys;
- static DEFINE_SPINLOCK(ima_keys_lock);
- static LIST_HEAD(ima_keys);
- 
-+/*
-+ * If custom IMA policy is not loaded then keys queued up
-+ * for measurement should be freed. This timer is used
-+ * for handling this scenario.
-+ */
-+static long ima_key_queue_timeout = 300000; /* 5 Minutes */
-+static struct timer_list ima_key_queue_timer;
-+static bool timer_expired;
-+
-+/*
-+ * This timer callback function frees keys that may still be
-+ * queued up in case custom IMA policy was not loaded.
-+ */
-+static void ima_timer_handler(struct timer_list *timer)
-+{
-+	timer_expired = true;
-+	ima_process_queued_keys();
-+}
-+
-+/*
-+ * This function sets up a timer to free queued keys in case
-+ * custom IMA policy was never loaded.
-+ */
-+void ima_init_key_queue(void)
-+{
-+	timer_setup(&ima_key_queue_timer, ima_timer_handler, 0);
-+	mod_timer(&ima_key_queue_timer,
-+		  jiffies + msecs_to_jiffies(ima_key_queue_timeout));
-+}
-+
- static void ima_free_key_entry(struct ima_key_entry *entry)
- {
- 	if (entry) {
-@@ -120,10 +151,15 @@ void ima_process_queued_keys(void)
- 	if (!process)
- 		return;
- 
-+	del_timer(&ima_key_queue_timer);
-+
- 	list_for_each_entry_safe(entry, tmp, &ima_keys, list) {
--		process_buffer_measurement(entry->payload, entry->payload_len,
--					   entry->keyring_name, KEY_CHECK, 0,
--					   entry->keyring_name);
-+		if (!timer_expired)
-+			process_buffer_measurement(entry->payload,
-+						   entry->payload_len,
-+						   entry->keyring_name,
-+						   KEY_CHECK, 0,
-+						   entry->keyring_name);
- 		list_del(&entry->list);
- 		ima_free_key_entry(entry);
- 	}
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 5d55ade5f3b9..195cb4079b2b 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -131,5 +131,11 @@ int __init ima_init(void)
- 
- 	ima_init_policy();
- 
--	return ima_fs_init();
-+	rc = ima_fs_init();
-+	if (rc != 0)
-+		return rc;
-+
-+	ima_init_key_queue();
-+
-+	return rc;
- }
--- 
-2.17.1
+thanks,
+
+Mimi
 
