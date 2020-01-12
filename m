@@ -2,91 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2BF138909
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Jan 2020 01:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C467D1389A3
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Jan 2020 04:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387519AbgAMAI2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 12 Jan 2020 19:08:28 -0500
-Received: from mga11.intel.com ([192.55.52.93]:52692 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387460AbgAMAI2 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 12 Jan 2020 19:08:28 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jan 2020 16:08:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,426,1571727600"; 
-   d="scan'208";a="247554545"
-Received: from akurtz1-mobl.ger.corp.intel.com (HELO localhost) ([10.252.10.99])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Jan 2020 16:08:25 -0800
-Date:   Mon, 13 Jan 2020 02:08:24 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4] tpm: Add tpm_version_major sysfs file
-Message-ID: <20200113000824.GC16145@linux.intel.com>
-References: <20191030225843.23366-1-jsnitsel@redhat.com>
- <20191128010826.w4ixlix3s3ovta3m@cantor>
- <20191129235131.GA21546@linux.intel.com>
- <20200109214935.ud7p7uwjimilxvi7@cantor>
+        id S1733091AbgAMDPE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 12 Jan 2020 22:15:04 -0500
+Received: from mail01.vodafone.es ([217.130.24.71]:47174 "EHLO
+        mail01.vodafone.es" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733064AbgAMDPD (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 12 Jan 2020 22:15:03 -0500
+IronPort-SDR: 8iplrnjvZfOIR4koA25CFqWhCjK6xSmkl+MpUxBbTZpFfTVx82NtNUDCzCwVKgq4vdTDJFVAEW
+ vNVz751xoDSg==
+IronPort-PHdr: =?us-ascii?q?9a23=3AGHngYRbeX8myOt/NHKvXcXP/LSx+4OfEezUN45?=
+ =?us-ascii?q?9isYplN5qZrsy/bnLW6fgltlLVR4KTs6sC17ON9fq+CCddvt6oizMrSNR0TR?=
+ =?us-ascii?q?gLiMEbzUQLIfWuLgnFFsPsdDEwB89YVVVorDmROElRH9viNRWJ+iXhpTEdFQ?=
+ =?us-ascii?q?/iOgVrO+/7BpDdj9it1+C15pbffxhEiCCybL9vIhi6txvdu8gSjIdtKqs8yA?=
+ =?us-ascii?q?bCr2dVdehR2W5mP0+YkQzm5se38p5j8iBQtOwk+sVdT6j0fLk2QKJBAjg+PG?=
+ =?us-ascii?q?87+MPktR/YTQuS/XQcSXkZkgBJAwfe8h73WIr6vzbguep83CmaOtD2TawxVD?=
+ =?us-ascii?q?+/4apnVAPkhSEaPDI/923Zl9B/g7heoBOhvhBy3YnUYJuNNPp5ZKPSZ88aSn?=
+ =?us-ascii?q?RYUslPUSxNG5+xb5cTD+UbIelYr5fyp14Qohu4GQmgHf3gyjlRinHx2q061f?=
+ =?us-ascii?q?ouEAHf0AM+GdIFrXDYodvpOKsOVOy4yrTDwzfeYPNMwTrz5ojGcgo/r/+PQL?=
+ =?us-ascii?q?x/ftbex0Y0GgPZjFiftZDpMy+J2ugTtWWQ8upuVfioi24iswx/uCagxtsyhY?=
+ =?us-ascii?q?nTm4kaylfE9SN2wI0oItC4UFB0YcK6H5tKuSCaMI12Qsw5TmFooyY10aEJtY?=
+ =?us-ascii?q?SncygNzZQr3R7fa/+efoWO/xntV/6RLC9miH54er+znQu+/Ea8xuHmSMW530?=
+ =?us-ascii?q?xGoyRFn9TKq3sDzQbc6tKdRft45kqh3DGP2B3N5excOkA0kLbbK4Ymwr4tip?=
+ =?us-ascii?q?ofqUTDETHymEXxlKKWc18r+ums6+T9fLrmooOQOoBuhgHgNaQhh9awAeo/Mg?=
+ =?us-ascii?q?gIQWeX4/qz1Kb78U34RrVFkOE2n7HHvJzHJ8kXvLO1DgFJ3oo59RqyAC2q3d?=
+ =?us-ascii?q?oYkHUfKVJKYhOHj4znO1HUJ/D4CO+yg0yynzd32f/GJLPgApLLLnjMi7rhfa?=
+ =?us-ascii?q?195FVAxwYp0d9f4JdUBqsBIPLwQkPxrsDXDgclMwyoxObqENF91oIYWWKSDa?=
+ =?us-ascii?q?6VKaLSsVmU5u0xLOmMfo4VuCr9KvU++f7ugmE2mUUHcamqw5QXcna4EepiI0?=
+ =?us-ascii?q?mDZnrsmNgBQi82uV86Ter3mBiDVyJeaGyzQ7MU+D42EsSlAJ3FS4Trh6aOjx?=
+ =?us-ascii?q?22BplHWmcTMl2QHG2gSIKCVL9YcC+OL9V+lToLVbuhUIUq/R6rvQ7+jbFgK7?=
+ =?us-ascii?q?yH1DcfsMfb2cR4/aXskhc9vWhsAtiQyX6KSW5cnngCTHk926U5oU8rmQTL6r?=
+ =?us-ascii?q?Rxn/ENTI8b3PhOSApvbsaEwg=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2GUIwCo3xtemCMYgtlNGBoBAQEBAQE?=
+ =?us-ascii?q?BAQEDAQEBAREBAQECAgEBAQGBewIBGAEBgS6BTVIgEpNQgU0fg0OLY4EAgx4?=
+ =?us-ascii?q?VhggTDIFbDQEBAQEBNQIBAYRATgEXgQ8kOgQNAgMNAQEFAQEBAQEFBAEBAhA?=
+ =?us-ascii?q?BAQEBAQYNCwYphUqCHQweAQQBAQEBAwMDAQEMAYNdBxkPOUpMAQ4BU4MEgks?=
+ =?us-ascii?q?BATOcbwGNBA0NAoUdgkkECoEJgRojgTYBjBgagUE/gSMhgisIAYIBgn8BEgF?=
+ =?us-ascii?q?sgkiCWQSNQhIhgQeIKZgXgkEEdolMjAKCNwEPiAGEMQMQgkUPgQmIA4ROgX2?=
+ =?us-ascii?q?jN1eBDA16cTMagiYagSBPGA2IG44tQIEWEAJPiS6CMgEB?=
+X-IPAS-Result: =?us-ascii?q?A2GUIwCo3xtemCMYgtlNGBoBAQEBAQEBAQEDAQEBAREBA?=
+ =?us-ascii?q?QECAgEBAQGBewIBGAEBgS6BTVIgEpNQgU0fg0OLY4EAgx4VhggTDIFbDQEBA?=
+ =?us-ascii?q?QEBNQIBAYRATgEXgQ8kOgQNAgMNAQEFAQEBAQEFBAEBAhABAQEBAQYNCwYph?=
+ =?us-ascii?q?UqCHQweAQQBAQEBAwMDAQEMAYNdBxkPOUpMAQ4BU4MEgksBATOcbwGNBA0NA?=
+ =?us-ascii?q?oUdgkkECoEJgRojgTYBjBgagUE/gSMhgisIAYIBgn8BEgFsgkiCWQSNQhIhg?=
+ =?us-ascii?q?QeIKZgXgkEEdolMjAKCNwEPiAGEMQMQgkUPgQmIA4ROgX2jN1eBDA16cTMag?=
+ =?us-ascii?q?iYagSBPGA2IG44tQIEWEAJPiS6CMgEB?=
+X-IronPort-AV: E=Sophos;i="5.69,427,1571695200"; 
+   d="scan'208";a="304478847"
+Received: from mailrel04.vodafone.es ([217.130.24.35])
+  by mail01.vodafone.es with ESMTP; 13 Jan 2020 04:15:01 +0100
+Received: (qmail 24910 invoked from network); 12 Jan 2020 05:00:24 -0000
+Received: from unknown (HELO 192.168.1.3) (quesosbelda@[217.217.179.17])
+          (envelope-sender <peterwong@hsbc.com.hk>)
+          by mailrel04.vodafone.es (qmail-ldap-1.03) with SMTP
+          for <linux-integrity@vger.kernel.org>; 12 Jan 2020 05:00:24 -0000
+Date:   Sun, 12 Jan 2020 06:00:19 +0100 (CET)
+From:   Peter Wong <peterwong@hsbc.com.hk>
+Reply-To: Peter Wong <peterwonghkhsbc@gmail.com>
+To:     linux-integrity@vger.kernel.org
+Message-ID: <2060469.460950.1578805224018.JavaMail.cash@217.130.24.55>
+Subject: Investment opportunity
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200109214935.ud7p7uwjimilxvi7@cantor>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jan 09, 2020 at 02:49:35PM -0700, Jerry Snitselaar wrote:
-> On Sat Nov 30 19, Jarkko Sakkinen wrote:
-> > On Wed, Nov 27, 2019 at 06:08:26PM -0700, Jerry Snitselaar wrote:
-> > > On Wed Oct 30 19, Jerry Snitselaar wrote:
-> > > > Easily determining what TCG version a tpm device implements
-> > > > has been a pain point for userspace for a long time, so
-> > > > add a sysfs file to report the TCG major version of a tpm device.
-> > > >
-> > > > Also add an entry to Documentation/ABI/stable/sysfs-class-tpm
-> > > > describing the new file.
-> > > >
-> > > > Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > > Cc: Mimi Zohar <zohar@linux.ibm.com>
-> > > > Cc: Peter Huewe <peterhuewe@gmx.de>
-> > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > > Cc: linux-integrity@vger.kernel.org
-> > > > Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > > > ---
-> > > > v4: - Change file name to tpm_version_major
-> > > >    - Actually display just the major version.
-> > > >    - change structs to tpm1_* & tpm2_*
-> > > >      instead of tpm12_* tpm20_*.
-> > > > v3: - Change file name to version_major.
-> > > > v2: - Fix TCG usage in commit message.
-> > > >    - Add entry to sysfs-class-tpm in Documentation/ABI/stable
-> > > >
-> > > > Documentation/ABI/stable/sysfs-class-tpm | 11 ++++++++
-> > > > drivers/char/tpm/tpm-sysfs.c             | 34 +++++++++++++++++++-----
-> > > > 2 files changed, 38 insertions(+), 7 deletions(-)
-> > > >
-> > > 
-> > > Anyone else have feedback?
-> > 
-> > I can apply this after the issues on hand have been sorted out.
-> > 
-> > /Jarkko
-> > 
-> 
-> Hi Jarkko,
-> 
-> Will this get queued up for 5.6?
+Greetings,
+Please read the attached investment proposal and reply for more details.
+Are you interested in loan?
+Sincerely: Peter Wong
 
-Thanks for reminding and apologies for forgetting this!
 
-I'll see what I can do.
 
-/Jarkko
+
+----------------------------------------------------
+This email was sent by the shareware version of Postman Professional.
+
