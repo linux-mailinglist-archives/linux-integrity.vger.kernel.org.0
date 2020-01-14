@@ -2,87 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FE6139ED6
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2020 02:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED64513A40E
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2020 10:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729307AbgANBRq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Jan 2020 20:17:46 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42464 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729088AbgANBRq (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Jan 2020 20:17:46 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00E1H1dN181125
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Jan 2020 20:17:45 -0500
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xfavyd2x1-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Jan 2020 20:17:45 -0500
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 14 Jan 2020 01:17:43 -0000
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 14 Jan 2020 01:17:42 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00E1Hf468192182
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jan 2020 01:17:41 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1878AE058;
-        Tue, 14 Jan 2020 01:17:41 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4DDDFAE056;
-        Tue, 14 Jan 2020 01:17:41 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.237.5])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Jan 2020 01:17:41 +0000 (GMT)
-Subject: Re: ima pcr question
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-integrity@vger.kernel.org
-Date:   Mon, 13 Jan 2020 20:17:39 -0500
-In-Reply-To: <20200114000602.h5k5rr2k6zl3dlts@cantor>
-References: <20200114000602.h5k5rr2k6zl3dlts@cantor>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        id S1726169AbgANJqD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Jan 2020 04:46:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41244 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725820AbgANJqD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 Jan 2020 04:46:03 -0500
+Received: from dogfood.home (amontpellier-657-1-18-247.w109-210.abo.wanadoo.fr [109.210.65.247])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B5FCE24670;
+        Tue, 14 Jan 2020 09:46:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578995162;
+        bh=oXoVf5FYzK2l54ZMTKBmt/diqvZDokYRd/mYU7Iuj7w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ofFAsr0yMlwqOasIzmRJEYHG7eCD55Tw4XqWV8py/NHRxsNvvsm9h+vw/whb8uWXZ
+         6LhHsk/1b5w3U50AnfJon2zQ7Jyt2wPN4kOL/cG/Zp7TOb3w8YUjBw6r0CpUS/O3kn
+         t7N/DVvu3lAy41/P2bAc+9c+6VSwH5DisAhMffX4=
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     jarkko.sakkinen@linux.intel.com
+Cc:     linux-arm-kernel@lists.infradead.org, masahisa.kojima@linaro.org,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 0/2] synquacer: add TPM support
+Date:   Tue, 14 Jan 2020 10:45:03 +0100
+Message-Id: <20200114094505.11855-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20011401-0008-0000-0000-0000034918EB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20011401-0009-0000-0000-00004A6969B2
-Message-Id: <1578964659.5796.7.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-13_08:2020-01-13,2020-01-13 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- suspectscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
- malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001140009
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-01-13 at 17:06 -0700, Jerry Snitselaar wrote:
-> We had a report of messages from ima saying "Error communicating with
-> TPM".  Looking into it a bit, it looks like with some Dell systems
-> (possibly others as well) in the bios they can set the hash algorithm
-> being used. In this case with that set to sha256 the messages
-> appear. Flipping the system to using sha1 makes them disappear.
-> Looking at the ima code, ima_calc_boot_aggregate_tfm hard codes using
-> sha1. Should that be changed to use whatever the default is in the
-> config, or possibly find out from the tpm what algorithm is being used?
+This adds support for driving the TPM on Socionext SynQuacer platforms
+using the existing driver for a memory mapped TIS frame.
 
-The ima-ng template contains two digests.  The first digest is the
-value being extended into the TPM, while the second digest is either
-the boot aggregate or file data hash.  It sounds like the problem is
-with the first digest.  Changing the boot-aggregate to use sha256
-might be a good idea, but probably won't fix the problem.
+Ard Biesheuvel (2):
+  dt-bindings: tpm-tis-mmio: add compatible string for SynQuacer TPM
+  tpm: tis: add support for MMIO TPM on SynQuacer
 
-Mimi
+ Documentation/devicetree/bindings/security/tpm/tpm_tis_mmio.txt |  1 +
+ drivers/char/tpm/tpm_tis.c                                      | 31 ++++++++++++++++++--
+ 2 files changed, 30 insertions(+), 2 deletions(-)
+
+-- 
+2.20.1
 
