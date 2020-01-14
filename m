@@ -2,153 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A6513AC13
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2020 15:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125C213ACBC
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2020 15:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728939AbgANORJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Jan 2020 09:17:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33988 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725994AbgANORI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Jan 2020 09:17:08 -0500
-Received: from localhost.localdomain (aaubervilliers-681-1-7-206.w90-88.abo.wanadoo.fr [90.88.129.206])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 56EB92468B;
-        Tue, 14 Jan 2020 14:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579011428;
-        bh=aXlNmzU3c4DebfOZqxQIuf2kGpmEOcf7xtmQHre7OJk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y283MTURx/bz6qeJVYlyRxufy4OQzwRT+/RKaZbTkKKPRx9KkNxYxa38ldJI0MKTo
-         PhpPPic7On2n9h6QQ9BLKYRT/QN22QiLOMPlfe3cz/ABncAt3LpdvnQjdQ8vGtIQ6W
-         BwiFPQdK6rxTp6N2ALcE9tN9FEp57I+DthIxGnt4=
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ard Biesheuvel <ardb@kernel.org>, jarkko.sakkinen@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, masahisa.kojima@linaro.org,
-        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca
-Subject: [PATCH v2 2/2] tpm: tis: add support for MMIO TPM on SynQuacer
-Date:   Tue, 14 Jan 2020 15:16:47 +0100
-Message-Id: <20200114141647.109347-3-ardb@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200114141647.109347-1-ardb@kernel.org>
-References: <20200114141647.109347-1-ardb@kernel.org>
-MIME-Version: 1.0
+        id S1726450AbgANO5D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Jan 2020 09:57:03 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:3262 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725904AbgANO5D (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 Jan 2020 09:57:03 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00EEsplR094003
+        for <linux-integrity@vger.kernel.org>; Tue, 14 Jan 2020 09:57:01 -0500
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xhbpraexg-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 14 Jan 2020 09:57:01 -0500
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Tue, 14 Jan 2020 14:56:59 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 14 Jan 2020 14:56:55 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00EEusPu65208380
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jan 2020 14:56:54 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C0F552051;
+        Tue, 14 Jan 2020 14:56:54 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.223.52])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 47F0A5204F;
+        Tue, 14 Jan 2020 14:56:53 +0000 (GMT)
+Subject: Re: inconsistent lock state in ima_process_queued_keys
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+a4a503d7f37292ae1664@syzkaller.appspotmail.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Date:   Tue, 14 Jan 2020 09:56:52 -0500
+In-Reply-To: <CACT4Y+av-ipjsdtsXs4d55w=inNHJqho3s3XKfU0Jo7f98yi8w@mail.gmail.com>
+References: <000000000000486474059c19f4d7@google.com>
+         <CACT4Y+av-ipjsdtsXs4d55w=inNHJqho3s3XKfU0Jo7f98yi8w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20011414-0020-0000-0000-000003A09735
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20011414-0021-0000-0000-000021F80C57
+Message-Id: <1579013812.12230.21.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-14_04:2020-01-14,2020-01-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ mlxscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 suspectscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-2001140128
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When fitted, the SynQuacer platform exposes its SPI TPM via a MMIO
-window that is backed by the SPI command sequencer in the SPI bus
-controller. This arrangement has the limitation that only byte size
-accesses are supported, and so we'll need to provide a separate set
-of read and write accessors that take this into account.
+On Tue, 2020-01-14 at 14:58 +0100, Dmitry Vyukov wrote:
+> On Tue, Jan 14, 2020 at 2:56 PM syzbot
+> <syzbot+a4a503d7f37292ae1664@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    1b851f98 Add linux-next specific files for 20200114
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=12bcbb25e00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3e7d9cf7ebfa08ad
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=a4a503d7f37292ae1664
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> >
+> > Unfortunately, I don't have any reproducer for this crash yet.
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+a4a503d7f37292ae1664@syzkaller.appspotmail.com
+> 
+> +Lakshmi, you seem to have submitted a number of changes to this file recently.
+> 
+> This completely breaks linux-next testing for us, every kernel crashes
+> a few minutes after boot.
+> 
+> 2020/01/14 14:45:00 vm-26: crash: inconsistent lock state in
+> ima_process_queued_keys
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- drivers/char/tpm/tpm_tis.c | 50 +++++++++++++++++++-
- 1 file changed, 48 insertions(+), 2 deletions(-)
+Yikes!  Are you running with an IMA policy?  I assume this is being
+caused by commit 8f5d2d06f217 ("IMA: Defined timer to free queued
+keys".  Does reverting it prevent this from happening?
 
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index e7df342a317d..2466295fcfe8 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -32,6 +32,7 @@
- 
- struct tpm_info {
- 	struct resource res;
-+	const struct tpm_tis_phy_ops *ops;
- 	/* irq > 0 means: use irq $irq;
- 	 * irq = 0 means: autoprobe for an irq;
- 	 * irq = -1 means: no irq support
-@@ -186,6 +187,48 @@ static const struct tpm_tis_phy_ops tpm_tcg = {
- 	.write32 = tpm_tcg_write32,
- };
- 
-+static int tpm_tcg_read16_bw(struct tpm_tis_data *data, u32 addr, u16 *result)
-+{
-+	struct tpm_tis_tcg_phy *phy = to_tpm_tis_tcg_phy(data);
-+
-+	*result = (ioread8(phy->iobase + addr)) |
-+		  (ioread8(phy->iobase + addr + 1) << 8);
-+
-+	return 0;
-+}
-+
-+static int tpm_tcg_read32_bw(struct tpm_tis_data *data, u32 addr, u32 *result)
-+{
-+	struct tpm_tis_tcg_phy *phy = to_tpm_tis_tcg_phy(data);
-+
-+	*result = (ioread8(phy->iobase + addr)) |
-+		  (ioread8(phy->iobase + addr + 1) << 8) |
-+		  (ioread8(phy->iobase + addr + 2) << 16) |
-+		  (ioread8(phy->iobase + addr + 3) << 24);
-+
-+	return 0;
-+}
-+
-+static int tpm_tcg_write32_bw(struct tpm_tis_data *data, u32 addr, u32 value)
-+{
-+	struct tpm_tis_tcg_phy *phy = to_tpm_tis_tcg_phy(data);
-+
-+	iowrite8(value, phy->iobase + addr);
-+	iowrite8(value >> 8, phy->iobase + addr + 1);
-+	iowrite8(value >> 16, phy->iobase + addr + 2);
-+	iowrite8(value >> 24, phy->iobase + addr + 3);
-+
-+	return 0;
-+}
-+
-+static const struct tpm_tis_phy_ops tpm_tcg_bw = {
-+	.read_bytes	= tpm_tcg_read_bytes,
-+	.write_bytes	= tpm_tcg_write_bytes,
-+	.read16		= tpm_tcg_read16_bw,
-+	.read32		= tpm_tcg_read32_bw,
-+	.write32	= tpm_tcg_write32_bw,
-+};
-+
- static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
- {
- 	struct tpm_tis_tcg_phy *phy;
-@@ -210,7 +253,7 @@ static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
- 	if (itpm || is_itpm(ACPI_COMPANION(dev)))
- 		phy->priv.flags |= TPM_TIS_ITPM_WORKAROUND;
- 
--	return tpm_tis_core_init(dev, &phy->priv, irq, &tpm_tcg,
-+	return tpm_tis_core_init(dev, &phy->priv, irq, tpm_info->ops,
- 				 ACPI_HANDLE(dev));
- }
- 
-@@ -219,7 +262,7 @@ static SIMPLE_DEV_PM_OPS(tpm_tis_pm, tpm_pm_suspend, tpm_tis_resume);
- static int tpm_tis_pnp_init(struct pnp_dev *pnp_dev,
- 			    const struct pnp_device_id *pnp_id)
- {
--	struct tpm_info tpm_info = {};
-+	struct tpm_info tpm_info = { .ops = &tpm_tcg };
- 	struct resource *res;
- 
- 	res = pnp_get_resource(pnp_dev, IORESOURCE_MEM, 0);
-@@ -295,6 +338,8 @@ static int tpm_tis_plat_probe(struct platform_device *pdev)
- 			tpm_info.irq = 0;
- 	}
- 
-+	tpm_info.ops = of_device_get_match_data(&pdev->dev) ?: &tpm_tcg;
-+
- 	return tpm_tis_init(&pdev->dev, &tpm_info);
- }
- 
-@@ -311,6 +356,7 @@ static int tpm_tis_plat_remove(struct platform_device *pdev)
- #ifdef CONFIG_OF
- static const struct of_device_id tis_of_platform_match[] = {
- 	{.compatible = "tcg,tpm-tis-mmio"},
-+	{.compatible = "socionext,synquacer-tpm-mmio", .data = &tpm_tcg_bw},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, tis_of_platform_match);
--- 
-2.20.1
+Mimi
 
