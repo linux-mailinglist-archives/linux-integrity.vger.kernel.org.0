@@ -2,101 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 670B813CC34
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2020 19:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C36913CC6E
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2020 19:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729098AbgAOSga (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jan 2020 13:36:30 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49186 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728993AbgAOSga (ORCPT
+        id S1726587AbgAOSpv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jan 2020 13:45:51 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:53384 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728928AbgAOSpv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jan 2020 13:36:30 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00FIPnUT106645
-        for <linux-integrity@vger.kernel.org>; Wed, 15 Jan 2020 13:36:28 -0500
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xhbpsed3u-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 15 Jan 2020 13:36:28 -0500
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 15 Jan 2020 18:36:26 -0000
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 15 Jan 2020 18:36:23 -0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00FIaM6C57737346
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jan 2020 18:36:22 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B69C5A4055;
-        Wed, 15 Jan 2020 18:36:22 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1165AA4053;
-        Wed, 15 Jan 2020 18:36:22 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.153.48])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Jan 2020 18:36:21 +0000 (GMT)
-Subject: Re: [PATCH v4] ima: ima/lsm policy rule loading logic bug fixes
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Janne Karhunen <janne.karhunen@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Konsta Karsisto <konsta.karsisto@gmail.com>
-Date:   Wed, 15 Jan 2020 13:36:21 -0500
-In-Reply-To: <20200115154230.2048-1-janne.karhunen@gmail.com>
-References: <20200115154230.2048-1-janne.karhunen@gmail.com>
+        Wed, 15 Jan 2020 13:45:51 -0500
+Received: by mail-wm1-f66.google.com with SMTP id m24so1076755wmc.3
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jan 2020 10:45:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=XhG7oKm+eUCDXzWAmBj1ApEpGRAwwk7JTkSRtwr4uDc=;
+        b=SKYJhUZLU3m5uB+IwXigYsHxvV5o1M+7PQOjuaa8htp7C1d128jxoaBhSeOwMbUuZ5
+         asWpNenhoM1ou5bOufNnZam1MHduqFELyxinQh1KeJSyJE8ICbIB47RiLkeBZdpguPWq
+         NeayeqR6/qGB194gVdes9ah3JpJsuW5dMNdh8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=XhG7oKm+eUCDXzWAmBj1ApEpGRAwwk7JTkSRtwr4uDc=;
+        b=ptFQhwC+VGtYVeyzj5EsjeUEbJFazlxbJmFvHpTpagh00FgJc9eek+IKuDiKdnkA3m
+         YqxnXT5US/0Rsi57KOHInYuWJc0q9/GvPEV9hBO7Vchr5ZD99Za92nryms0Ccxh2sGg/
+         Dzw7mrMYfcXxbv3Us6bb685EgsLATqZBpiJ3CWEven1O7WyvgNf6IF0N5gowM6ayh5O1
+         b8NUEwSuQa3WhEMnTwc2pibRGE2I/zBX3gqjqXtz7pyL/GDRIRBCONFr+GBJnUxRMXW6
+         DW8/IUySjrVQ6l6RF64zdbscixzwM3g+ZdCY9lJG4zXOvuodMeC/sMJYupyD0xpWyAHa
+         /5HQ==
+X-Gm-Message-State: APjAAAVkaP8kQWZpgSwwf39C8FC+ruGqxNKQTfzL8/PnAASm+sLY9jfi
+        VZrCr7yHTrrTnhU0Gv3tuP4b6jdJPF7DjA==
+X-Google-Smtp-Source: APXvYqxJUJuymcgl6BW34ydWB72BE5+YHoGJoQlEbVg0nk9JyqjTNyO7XAGrpWf/djrH7Rdzmj5LAA==
+X-Received: by 2002:a1c:6755:: with SMTP id b82mr1380457wmc.126.1579113948983;
+        Wed, 15 Jan 2020 10:45:48 -0800 (PST)
+Received: from revest ([37.165.158.17])
+        by smtp.gmail.com with ESMTPSA id h17sm26445192wrs.18.2020.01.15.10.45.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2020 10:45:48 -0800 (PST)
+Message-ID: <b88cbb1fb39175611e4b31e12a47df240a46dd48.camel@chromium.org>
+Subject: Re: [PATCH v2] ima: add the ability to query the hash of a given
+ file.
+From:   Florent Revest <revest@chromium.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>, KP Singh <kpsingh@chromium.org>
+Cc:     linux-integrity@vger.kernel.org, mjg59@google.com,
+        nramas@linux.microsoft.com, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Florent Revest <revest@google.com>
+Date:   Wed, 15 Jan 2020 19:45:43 +0100
+In-Reply-To: <1579113367.5032.19.camel@linux.ibm.com>
+References: <20200106162524.164650-1-revest@chromium.org>
+         <20200113104830.GA28588@google.com>
+         <1579113367.5032.19.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+User-Agent: Evolution 3.30.5-1.1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20011518-4275-0000-0000-00000397DBEB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20011518-4276-0000-0000-000038ABD88E
-Message-Id: <1579113381.5032.20.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-15_02:2020-01-15,2020-01-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
- suspectscore=0 malwarescore=0 priorityscore=1501 adultscore=0 spamscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001150141
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-01-15 at 17:42 +0200, Janne Karhunen wrote:
-> Keep the ima policy rules around from the beginning even if they appear
-> invalid at the time of loading, as they may become active after an lsm
-> policy load. However, loading a custom IMA policy with unknown LSM
-> labels is only safe after we have transitioned from the "built-in"
-> policy rules to a custom IMA policy.
+On Wed, 2020-01-15 at 13:36 -0500, Mimi Zohar wrote:
+> On Mon, 2020-01-13 at 11:48 +0100, KP Singh wrote:
+> > On 06-Jan 17:25, Florent Revest wrote:
+> > > From: Florent Revest <revest@google.com>
+> > > 
+> > > This allows other parts of the kernel (perhaps a stacked LSM
+> > > allowing
+> > > system monitoring, eg. the proposed KRSI LSM [1]) to retrieve the
+> > > hash
+> > > of a given file from IMA if it's present in the iint cache.
+> > > 
+> > > It's true that the existence of the hash means that it's also in
+> > > the
+> > > audit logs or in
+> > > /sys/kernel/security/ima/ascii_runtime_measurements,
+> > > but it can be difficult to pull that information out for every
+> > > subsequent exec.  This is especially true if a given host has
+> > > been up
+> > > for a long time and the file was first measured a long time ago.
+> > > 
+> > > This is based on Peter Moody's patch:
+> > >  https://sourceforge.net/p/linux-ima/mailman/message/33036180/
+> > > 
+> > > [1] https://lkml.org/lkml/2019/9/10/393
+> > > 
+> > > Signed-off-by: Florent Revest <revest@google.com>
+> > 
+> > Thanks for adding this Florent!
+> > 
+> > Reviewed-by: KP Singh <kpsingh@chromium.org>
 > 
-> Patch also fixes the rule re-use during the lsm policy reload and makes
-> some prints a bit more human readable.
-> 
-> Changelog:
-> v4:
-> - Do not allow the initial policy load refer to non-existing lsm rules.
-> v3:
-> - Fix too wide policy rule matching for non-initialized LSMs
-> v2:
-> - Fix log prints
-> 
-> Fixes: b16942455193 ("ima: use the lsm policy update notifier")
-> Cc: Casey Schaufler <casey@schaufler-ca.com>
-> Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
-> Signed-off-by: Konsta Karsisto <konsta.karsisto@gmail.com>
+> Thanks, this patch is now queued in next-integrity-testing.
 
-Thanks, the updated patch is now queued in next-integrity-testing.
+Good to hear Mimi! Thank you.
 
-Mimi
+I would just like to make sure that you queued the v3 of this patch
+though...? (this thread is for the v2 :) ) The v3 includes a couple of
+comments you asked for.
 
