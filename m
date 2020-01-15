@@ -2,28 +2,28 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3093413BA0B
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2020 08:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5BF13BA1F
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2020 08:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbgAOHCf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jan 2020 02:02:35 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:9176 "EHLO huawei.com"
+        id S1725999AbgAOHJc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jan 2020 02:09:32 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:9177 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726018AbgAOHCf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jan 2020 02:02:35 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 2E0C26AAF424853E4FA2;
-        Wed, 15 Jan 2020 15:02:33 +0800 (CST)
-Received: from huawei.com (10.175.107.192) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Wed, 15 Jan 2020
- 15:02:24 +0800
+        id S1725962AbgAOHJc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 15 Jan 2020 02:09:32 -0500
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id DDFA057CB3E9AF955BB7;
+        Wed, 15 Jan 2020 15:09:29 +0800 (CST)
+Received: from huawei.com (10.175.107.192) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Wed, 15 Jan 2020
+ 15:09:20 +0800
 From:   wanghongzhe <wanghongzhe@huawei.com>
 To:     <peterhuewe@gmx.de>
 CC:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <zhangchenfeng1@huawei.com>, <wanghongzhe@huawei.com>
 Subject: [PATCH] tpm:tpm_tis_spi: set cs_change = 0 when timesout
-Date:   Tue, 15 Jan 2019 15:02:29 +0800
-Message-ID: <1547535749-23221-1-git-send-email-wanghongzhe@huawei.com>
+Date:   Wed, 15 Jan 2020 15:09:24 +0800
+Message-ID: <1579072164-23423-1-git-send-email-wanghongzhe@huawei.com>
 X-Mailer: git-send-email 1.7.12.4
 MIME-Version: 1.0
 Content-Type: text/plain
