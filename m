@@ -2,148 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9941401BE
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2020 03:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BBE140259
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2020 04:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732223AbgAQCS0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Jan 2020 21:18:26 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:54188 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731794AbgAQCS0 (ORCPT
+        id S1729866AbgAQDga (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Jan 2020 22:36:30 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56144 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729366AbgAQDg3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Jan 2020 21:18:26 -0500
-Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2B2B620B4798;
-        Thu, 16 Jan 2020 18:18:25 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2B2B620B4798
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1579227505;
-        bh=3DPtxdzEuRBvzO+EeSGb0wH3lYD0uB0b2KEtfivyzHM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=S27CgPjrSEEqIgHkbbHLBRnOjwZi0eK/hWi0J3rauKmjDqE0IIaMBThHyMWVye+DL
-         0E6aWpJcRIrUZgKrwxl3TePi6oDFRZsSlg01FH7UN28Nr/94Nru0byFqDv0GWtsJul
-         J2z7szb+pz0qE0MVqSmGGQvFlzKyB1myO10rwEVI=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+        Thu, 16 Jan 2020 22:36:29 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00H3VuJT103774
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Jan 2020 22:36:28 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xk0qqx814-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Jan 2020 22:36:28 -0500
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Fri, 17 Jan 2020 03:36:26 -0000
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 17 Jan 2020 03:36:23 -0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00H3aNOo47644822
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jan 2020 03:36:23 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6D89A405B;
+        Fri, 17 Jan 2020 03:36:22 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 307F8A4054;
+        Fri, 17 Jan 2020 03:36:22 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.212.27])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Jan 2020 03:36:22 +0000 (GMT)
+Subject: Re: [PATCH v2] IMA: pre-allocate buffer to hold keyrings string
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org
 Cc:     sashal@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] IMA: pre-allocate buffer to hold keyrings string
-Date:   Thu, 16 Jan 2020 18:18:21 -0800
-Message-Id: <20200117021821.2566-1-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
+Date:   Thu, 16 Jan 2020 22:36:21 -0500
+In-Reply-To: <20200117021821.2566-1-nramas@linux.microsoft.com>
+References: <20200117021821.2566-1-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20011703-0012-0000-0000-0000037E17C3
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20011703-0013-0000-0000-000021BA4D57
+Message-Id: <1579232181.5125.3.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-16_06:2020-01-16,2020-01-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ bulkscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-2001170025
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-ima_match_keyring() is called while holding rcu read lock. Since this
-function executes in atomic context, it should not call any function
-that can sleep (such as kstrdup()).
+On Thu, 2020-01-16 at 18:18 -0800, Lakshmi Ramasubramanian wrote:
+> ima_match_keyring() is called while holding rcu read lock. Since this
+> function executes in atomic context, it should not call any function
+> that can sleep (such as kstrdup()).
+> 
+> This patch pre-allocates a buffer to hold the keyrings string read from
+> the IMA policy and uses that to match the given keyring.
+> 
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Fixes: e9085e0ad38a ("IMA: Add support to limit measuring keys")
 
-This patch pre-allocates a buffer to hold the keyrings string read from
-the IMA policy and uses that to match the given keyring.
+Thanks!  This patch is now queued in next-integrity-testing.
 
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Fixes: e9085e0ad38a ("IMA: Add support to limit measuring keys")
----
- security/integrity/ima/ima_policy.c | 38 +++++++++++++++++++++++------
- 1 file changed, 30 insertions(+), 8 deletions(-)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 9963863d6c92..3e296051feea 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -208,6 +208,10 @@ static LIST_HEAD(ima_policy_rules);
- static LIST_HEAD(ima_temp_rules);
- static struct list_head *ima_rules;
- 
-+/* Pre-allocated buffer used for matching keyrings. */
-+static char *ima_keyrings;
-+static size_t ima_keyrings_len;
-+
- static int ima_policy __initdata;
- 
- static int __init default_measure_policy_setup(char *str)
-@@ -369,7 +373,7 @@ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
- static bool ima_match_keyring(struct ima_rule_entry *rule,
- 			      const char *keyring, const struct cred *cred)
- {
--	char *keyrings, *next_keyring, *keyrings_ptr;
-+	char *next_keyring, *keyrings_ptr;
- 	bool matched = false;
- 
- 	if ((rule->flags & IMA_UID) && !rule->uid_op(cred->uid, rule->uid))
-@@ -381,15 +385,13 @@ static bool ima_match_keyring(struct ima_rule_entry *rule,
- 	if (!keyring)
- 		return false;
- 
--	keyrings = kstrdup(rule->keyrings, GFP_KERNEL);
--	if (!keyrings)
--		return false;
-+	strcpy(ima_keyrings, rule->keyrings);
- 
- 	/*
- 	 * "keyrings=" is specified in the policy in the format below:
- 	 * keyrings=.builtin_trusted_keys|.ima|.evm
- 	 */
--	keyrings_ptr = keyrings;
-+	keyrings_ptr = ima_keyrings;
- 	while ((next_keyring = strsep(&keyrings_ptr, "|")) != NULL) {
- 		if (!strcmp(next_keyring, keyring)) {
- 			matched = true;
-@@ -397,8 +399,6 @@ static bool ima_match_keyring(struct ima_rule_entry *rule,
- 		}
- 	}
- 
--	kfree(keyrings);
--
- 	return matched;
- }
- 
-@@ -949,6 +949,7 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 	bool uid_token;
- 	struct ima_template_desc *template_desc;
- 	int result = 0;
-+	size_t keyrings_len;
- 
- 	ab = integrity_audit_log_start(audit_context(), GFP_KERNEL,
- 				       AUDIT_INTEGRITY_POLICY_RULE);
-@@ -1114,14 +1115,35 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 		case Opt_keyrings:
- 			ima_log_string(ab, "keyrings", args[0].from);
- 
-+			keyrings_len = strlen(args[0].from) + 1;
-+
- 			if ((entry->keyrings) ||
- 			    (entry->action != MEASURE) ||
--			    (entry->func != KEY_CHECK)) {
-+			    (entry->func != KEY_CHECK) ||
-+			    (keyrings_len < 2)) {
- 				result = -EINVAL;
- 				break;
- 			}
-+
-+			if (keyrings_len > ima_keyrings_len) {
-+				char *tmpbuf;
-+
-+				tmpbuf = krealloc(ima_keyrings, keyrings_len,
-+						  GFP_KERNEL);
-+				if (!tmpbuf) {
-+					result = -ENOMEM;
-+					break;
-+				}
-+
-+				ima_keyrings = tmpbuf;
-+				ima_keyrings_len = keyrings_len;
-+			}
-+
- 			entry->keyrings = kstrdup(args[0].from, GFP_KERNEL);
- 			if (!entry->keyrings) {
-+				kfree(ima_keyrings);
-+				ima_keyrings = NULL;
-+				ima_keyrings_len = 0;
- 				result = -ENOMEM;
- 				break;
- 			}
--- 
-2.17.1
+Mimi
 
