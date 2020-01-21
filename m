@@ -2,165 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7561714432A
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jan 2020 18:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8891144355
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jan 2020 18:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728829AbgAUR2e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Jan 2020 12:28:34 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:56564 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728186AbgAUR2e (ORCPT
+        id S1728829AbgAURex (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Jan 2020 12:34:53 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:60408 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728186AbgAURew (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Jan 2020 12:28:34 -0500
-Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9297920B4798;
-        Tue, 21 Jan 2020 09:28:33 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9297920B4798
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1579627713;
-        bh=Yrzpkvb87TbXLvF9TfCIuBMOL56A/1WZiADnLtuAVf4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rpybvopkl+F0IZf7mLfyeDg5aeqQ1l1WbjT924CGZqpvc2RopdEIY6sFCtGvnd6Zo
-         u0nwMqv4trWmeJz5tGTxoJQ8UMzkWmEaJWwy8mMwWCODikEf6KEW8kvJj6kbPewS0q
-         L+U4Z6+8UOArHu24c0vRXec2Rz1EnXH8ajn5yeTo=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+        Tue, 21 Jan 2020 12:34:52 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 597FC8EE180;
+        Tue, 21 Jan 2020 09:34:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1579628092;
+        bh=vcYNFOeLQG9On2rFmCpXuIKj7cjYAwyM8qk3B50z018=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=NUOVdFzkm+/32Ol+TaRpDzUod5DduXpbCNSF8OsNEf6HDz60bv/uluBHVBUMr8ik2
+         dCycmIpURSjQJn4fnBapBJys6DMybqorjLUWebT6pdJFytEB8mfcDEiw8Cgaq4+CEA
+         HfOF6FEiV5ZyD5km00z2s4lbdZv0+NwIq42pdxI8=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 8c7TChbFVXin; Tue, 21 Jan 2020 09:34:52 -0800 (PST)
+Received: from jarvis.lan (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 7AF088EE0C9;
+        Tue, 21 Jan 2020 09:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1579628092;
+        bh=vcYNFOeLQG9On2rFmCpXuIKj7cjYAwyM8qk3B50z018=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=NUOVdFzkm+/32Ol+TaRpDzUod5DduXpbCNSF8OsNEf6HDz60bv/uluBHVBUMr8ik2
+         dCycmIpURSjQJn4fnBapBJys6DMybqorjLUWebT6pdJFytEB8mfcDEiw8Cgaq4+CEA
+         HfOF6FEiV5ZyD5km00z2s4lbdZv0+NwIq42pdxI8=
+Message-ID: <1579628090.3390.28.camel@HansenPartnership.com>
+Subject: Re: [PATCH] IMA: Turn IMA_MEASURE_ASYMMETRIC_KEYS off by default
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        zohar@linux.ibm.com, linux-integrity@vger.kernel.org
 Cc:     sashal@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] IMA: Use delayed work to free queued keys
-Date:   Tue, 21 Jan 2020 09:28:29 -0800
-Message-Id: <20200121172829.15152-1-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
+Date:   Tue, 21 Jan 2020 09:34:50 -0800
+In-Reply-To: <20200121171302.4935-1-nramas@linux.microsoft.com>
+References: <20200121171302.4935-1-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-A timer is used to free queued keys if a custom IMA policy is not
-loaded within 5 minutes after IMA subsystem is initialized. Timer
-handler is called in interrupt context. Due to this a spinlock has
-to be used to synchronize access to critical section. A mutex cannot
-be used since a mutex can sleep.
+On Tue, 2020-01-21 at 09:13 -0800, Lakshmi Ramasubramanian wrote:
+> Enabling IMA and ASYMMETRIC_PUBLIC_KEY_SUBTYPE configs will
+> automatically enable the IMA hook to measure asymmetric keys. Keys
+> created or updated early in the boot process are queued up whether
+> or not a custom IMA policy is provided. Although the queued keys will
+> be freed if a custom IMA policy is not loaded within 5 minutes, it
+> could still cause significant performance impact on smaller systems.
 
-This patch uses a delayed work to free queued keys. Since a delayed
-work handler is called in process context a mutex can be used.
+What exactly do you expect distributions to do with this?  I can tell
+you that most of them will take the default option, so this gets set to
+N and you may as well not have got the patches upstream because you
+won't be able to use them in any distro with this setting.
 
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Fixes: 8f5d2d06f217 ("IMA: Defined timer to free queued keys")
----
- security/integrity/ima/ima_asymmetric_keys.c | 33 ++++++++++----------
- 1 file changed, 16 insertions(+), 17 deletions(-)
+> This patch turns the config IMA_MEASURE_ASYMMETRIC_KEYS off by
+> default.  Since a custom IMA policy that defines key measurement is
+> required to measure keys, systems that require key measurement can
+> enable this config option in addition to providing a custom IMA
+> policy.
 
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-index 381f51708e7b..fa1bdd54a9ff 100644
---- a/security/integrity/ima/ima_asymmetric_keys.c
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -11,7 +11,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
--#include <linux/timer.h>
-+#include <linux/workqueue.h>
- #include <keys/asymmetric-type.h>
- #include "ima.h"
- 
-@@ -24,37 +24,37 @@ static bool ima_process_keys;
- /*
-  * To synchronize access to the list of keys that need to be measured
-  */
--static DEFINE_SPINLOCK(ima_keys_lock);
-+static DEFINE_MUTEX(ima_keys_lock);
- static LIST_HEAD(ima_keys);
- 
- /*
-  * If custom IMA policy is not loaded then keys queued up
-- * for measurement should be freed. This timer is used
-+ * for measurement should be freed. This worker is used
-  * for handling this scenario.
-  */
- static long ima_key_queue_timeout = 300000; /* 5 Minutes */
--static struct timer_list ima_key_queue_timer;
-+static void ima_keys_handler(struct work_struct *work);
-+static DECLARE_DELAYED_WORK(ima_keys_delayed_work, ima_keys_handler);
- static bool timer_expired;
- 
- /*
-- * This timer callback function frees keys that may still be
-+ * This worker function frees keys that may still be
-  * queued up in case custom IMA policy was not loaded.
-  */
--static void ima_timer_handler(struct timer_list *timer)
-+static void ima_keys_handler(struct work_struct *work)
- {
- 	timer_expired = true;
- 	ima_process_queued_keys();
- }
- 
- /*
-- * This function sets up a timer to free queued keys in case
-+ * This function sets up a worker to free queued keys in case
-  * custom IMA policy was never loaded.
-  */
- void ima_init_key_queue(void)
- {
--	timer_setup(&ima_key_queue_timer, ima_timer_handler, 0);
--	mod_timer(&ima_key_queue_timer,
--		  jiffies + msecs_to_jiffies(ima_key_queue_timeout));
-+	schedule_delayed_work(&ima_keys_delayed_work,
-+			      msecs_to_jiffies(ima_key_queue_timeout));
- }
- 
- static void ima_free_key_entry(struct ima_key_entry *entry)
-@@ -103,18 +103,17 @@ static bool ima_queue_key(struct key *keyring, const void *payload,
- {
- 	bool queued = false;
- 	struct ima_key_entry *entry;
--	unsigned long flags;
- 
- 	entry = ima_alloc_key_entry(keyring, payload, payload_len);
- 	if (!entry)
- 		return false;
- 
--	spin_lock_irqsave(&ima_keys_lock, flags);
-+	mutex_lock(&ima_keys_lock);
- 	if (!ima_process_keys) {
- 		list_add_tail(&entry->list, &ima_keys);
- 		queued = true;
- 	}
--	spin_unlock_irqrestore(&ima_keys_lock, flags);
-+	mutex_unlock(&ima_keys_lock);
- 
- 	if (!queued)
- 		ima_free_key_entry(entry);
-@@ -132,7 +131,6 @@ void ima_process_queued_keys(void)
- {
- 	struct ima_key_entry *entry, *tmp;
- 	bool process = false;
--	unsigned long flags;
- 
- 	if (ima_process_keys)
- 		return;
-@@ -143,17 +141,18 @@ void ima_process_queued_keys(void)
- 	 * First one setting the ima_process_keys flag to true will
- 	 * process the queued keys.
- 	 */
--	spin_lock_irqsave(&ima_keys_lock, flags);
-+	mutex_lock(&ima_keys_lock);
- 	if (!ima_process_keys) {
- 		ima_process_keys = true;
- 		process = true;
- 	}
--	spin_unlock_irqrestore(&ima_keys_lock, flags);
-+	mutex_unlock(&ima_keys_lock);
- 
- 	if (!process)
- 		return;
- 
--	del_timer(&ima_key_queue_timer);
-+	if (!timer_expired)
-+		cancel_delayed_work_sync(&ima_keys_delayed_work);
- 
- 	list_for_each_entry_safe(entry, tmp, &ima_keys, list) {
- 		if (!timer_expired)
--- 
-2.17.1
+Well, no they can't ... it's rather rare nowadays for people to build
+their own kernels.  The vast majority of Linux consumers take what the
+distros give them.  Think carefully before you decide a config option
+is the solution to this problem.
+
+James
 
