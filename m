@@ -2,103 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 453B4145919
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jan 2020 16:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F854145CD1
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jan 2020 21:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbgAVP43 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Jan 2020 10:56:29 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:15818 "EHLO
+        id S1725827AbgAVUDM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Jan 2020 15:03:12 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:23030 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725868AbgAVP42 (ORCPT
+        by vger.kernel.org with ESMTP id S1725928AbgAVUDI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Jan 2020 10:56:28 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00MFmQ8e070712
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Jan 2020 10:56:27 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xnx9bqc1j-1
+        Wed, 22 Jan 2020 15:03:08 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00MJwC3g010214
+        for <linux-integrity@vger.kernel.org>; Wed, 22 Jan 2020 15:03:07 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xp1jhgs5r-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Jan 2020 10:56:27 -0500
+        for <linux-integrity@vger.kernel.org>; Wed, 22 Jan 2020 15:03:07 -0500
 Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 22 Jan 2020 15:56:25 -0000
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Wed, 22 Jan 2020 20:03:04 -0000
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 22 Jan 2020 15:56:21 -0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00MFuKQE37159168
+        Wed, 22 Jan 2020 20:03:01 -0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00MK30TE54263984
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jan 2020 15:56:20 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 792F252057;
-        Wed, 22 Jan 2020 15:56:20 +0000 (GMT)
+        Wed, 22 Jan 2020 20:03:01 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2906A4055;
+        Wed, 22 Jan 2020 20:03:00 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A2C6A4040;
+        Wed, 22 Jan 2020 20:03:00 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.146.245])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B2D8552054;
-        Wed, 22 Jan 2020 15:56:19 +0000 (GMT)
-Subject: Re: [PATCH v2] ima: export the measurement list when needed
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Jan 2020 20:03:00 +0000 (GMT)
+Subject: Re: [PATCH] IMA: Turn IMA_MEASURE_ASYMMETRIC_KEYS off by default
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Janne Karhunen <janne.karhunen@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Cc:     Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
-        monty.wiseman@ge.com
-Date:   Wed, 22 Jan 2020 10:56:19 -0500
-In-Reply-To: <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
-References: <20200108111743.23393-1-janne.karhunen@gmail.com>
-         <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc:     sashal@kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 22 Jan 2020 15:02:59 -0500
+In-Reply-To: <ac6c559e-2d68-afcb-d316-6ac49a570831@linux.microsoft.com>
+References: <20200121171302.4935-1-nramas@linux.microsoft.com>
+         <1579628090.3390.28.camel@HansenPartnership.com>
+         <1579634035.5125.311.camel@linux.ibm.com>
+         <1579636351.3390.35.camel@HansenPartnership.com>
+         <ac6c559e-2d68-afcb-d316-6ac49a570831@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-x-cbid: 20012215-0016-0000-0000-000002DFBE34
+x-cbid: 20012220-0012-0000-0000-0000037FC8B4
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20012215-0017-0000-0000-000033426A86
-Message-Id: <1579708579.5182.77.camel@linux.ibm.com>
+x-cbparentid: 20012220-0013-0000-0000-000021BC0D3A
+Message-Id: <1579723379.5182.130.camel@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-17_05:2020-01-16,2020-01-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=999 phishscore=0 mlxscore=0 suspectscore=2
+ definitions=2020-01-22_08:2020-01-22,2020-01-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 bulkscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=999 mlxscore=0 impostorscore=0 phishscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001220141
+ engine=8.12.0-1910280000 definitions=main-2001220169
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Janne,
-
-On Fri, 2020-01-10 at 10:48 +0200, Janne Karhunen wrote:
-> On Wed, Jan 8, 2020 at 1:18 PM Janne Karhunen <janne.karhunen@gmail.com> wrote:
-> >
-> > Some systems can end up carrying lots of entries in the ima
-> > measurement list. Since every entry is using a bit of kernel
-> > memory, allow the sysadmin to export the measurement list to
-> > the filesystem to free up some memory.
+On Tue, 2020-01-21 at 12:38 -0800, Lakshmi Ramasubramanian wrote:
+> On 1/21/2020 11:52 AM, James Bottomley wrote:
 > 
-> Hopefully this addressed comments from everyone. The flush event can
-> now be triggered by the admin anytime and unique file names can be
-> used for each flush (log.1, log.2, ...) etc, so getting to the correct
-> item should be easy.
+> >> - really small devices/sensors being able to queue certificates
+> > 
+> > seems like the answer to this one would be don't queue.  I realise it's
+> > after the submit design, but what about measuring when the key is added
+> > if there's a policy otherwise measure the keyring when the policy is
+> > added ... that way no queueing.
 > 
-> While it can now be argued that since this is an admin-driven event,
-> kernel does not need to write the file. However, the intention is to
-> bring out a second patch a bit later that adds a variable to define
-> the max number of entries to be kept in the kernel memory and
-> workqueue based automatic flushing. In those cases the kernel has to
-> be able to write the file without any help from the admin..
+> Without the "deferred key processing" changes, only keys added at 
+> runtime were measured (if policy permitted).
+> 
+> "deferred key processing" enabled queuing keys added early in the boot 
+> process and measured them when the policy is loaded.
+> 
+> We can make this (the queuing) optional through a config, but leave the 
+> runtime key measurement auto-enabled (as is the config 
+> IMA_MEASURE_ASYMMETRIC_KEYS now).
 
-I don't think it is common, and probably not acceptable, for the
-kernel to open a file for writing.
- 
-As exporting the binary measurement list should be the equivalent of
-displaying the binary measurement list and redirecting the output to a
-file, the same mechanism used for displaying the binary measurement
-list should be re-used for exporting it.  Just as carrying the
-measurement list across kexec re-uses the same method.
+Thanks, Lakshmi.  This requires moving the code around.  Instead of
+doing this on the current code base, I suggest posting a v9 version of
+the entire "IMA: Deferred measurement of keys".
+
+I suggest making the switch from spinlock to mutex, as you had it
+originally, before posting v9.  The commit history will then be a lot
+cleaner.
+
+thanks,
 
 Mimi
 
