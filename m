@@ -2,81 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 263931463A5
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Jan 2020 09:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAF81467D5
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 Jan 2020 13:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgAWIll (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 23 Jan 2020 03:41:41 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:34328 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725785AbgAWIll (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 23 Jan 2020 03:41:41 -0500
-Received: by mail-lf1-f67.google.com with SMTP id l18so1700600lfc.1;
-        Thu, 23 Jan 2020 00:41:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UyvUctf+qJyIsi+eU7dg970I4xk9OoLbCIf8MD5kDRY=;
-        b=MrHK1F061wna3tijOCU4KH6liyiYUCgR+POobFfZe5hQOhOScpnJ6ExdInWZO1jaSM
-         nfV9RsLqYojqpoLZ72Urxi0bm4i+e/568/6sMcBqmKmstw9PRz0Al+S498NNMqa0ImRM
-         iwzpXAgNJQrvFeylVEBdnN0NhmZWmhS6aOFAgGjeySe2BO1wYuffLRu7DCnaKbIG/gZ3
-         UDIwsdRhUC5f/OX6CsHPiKIhxYr6OS5SzBZNTBMvmSiFKAiYsDPGwUcme2syx6RjVGVF
-         XT5J1IFk+rTplhMR5sQjAhrQ1xxWlF5ZnR2r2hZxLBVSF41xpYoU6BGju6IVo2fyOMb+
-         ZDbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UyvUctf+qJyIsi+eU7dg970I4xk9OoLbCIf8MD5kDRY=;
-        b=fW9Br2zswysdZN6j4msuyhic52Gq5TF33ojGgiruVbkxGcYm1k85jH2iO/F2xY5+6Y
-         TNt72dOwVX25VYBCHo0A1HPpTQTtd9Agg2buWjCtzU9Dm+ht+fzVzh/3InPY6WdeDq0b
-         JfiZxxd/5sVYSjFJ49irscTzxMNaOe4NFl0eM/SOAT9FishSB/SW7Fi6bvxXciRoFCja
-         ACxRBcW6LemjU6eWNhU2YjWLNdv44nKWUroW7YZpyfpexqikCmTiG/EVa697jTis+Rhs
-         FIJyWU+JCpk6jEj0GZTIAAr/kuPc8tbpG8yDoMZK3XAoGfLMjairNM7VX8VCB+ZWhres
-         QMFw==
-X-Gm-Message-State: APjAAAXMTTrzpAN12WyI1VKu8E1U2S/6P0VF6fGvCxqC4A7P2vDYEPSs
-        FgOxXIepVnpRs5cVOYvG3ZXUKL9h44f7T5gGG/C4Ew==
-X-Google-Smtp-Source: APXvYqxq1PMY9h9u7/7/tbPcBgMeaIa+vVbpcKz5u/krFu8NV0KvjehPakfPqGeaYoSbwk4CqEMnZV7BqQ9wKAK/pI0=
-X-Received: by 2002:a05:6512:78:: with SMTP id i24mr4152255lfo.10.1579768899124;
- Thu, 23 Jan 2020 00:41:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20200108111743.23393-1-janne.karhunen@gmail.com>
- <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com> <1579708579.5182.77.camel@linux.ibm.com>
-In-Reply-To: <1579708579.5182.77.camel@linux.ibm.com>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Thu, 23 Jan 2020 10:41:27 +0200
-Message-ID: <CAE=NcraSfo0fwxCnFQd08Ga59DsvxPTch-n_iN7fxt+3RdmP+A@mail.gmail.com>
-Subject: Re: [PATCH v2] ima: export the measurement list when needed
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
-        monty.wiseman@ge.com
+        id S1726170AbgAWMWM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 23 Jan 2020 07:22:12 -0500
+Received: from mga07.intel.com ([134.134.136.100]:44063 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726026AbgAWMWM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 23 Jan 2020 07:22:12 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jan 2020 04:22:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,353,1574150400"; 
+   d="scan'208";a="220650513"
+Received: from wkalinsk-mobl.ger.corp.intel.com ([10.252.23.16])
+  by orsmga008.jf.intel.com with ESMTP; 23 Jan 2020 04:22:06 -0800
+Message-ID: <0effdeeeccdb9544cc69f185fd23cd06828ae8fc.camel@linux.intel.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: tpm-tis-mmio: add compatible string
+ for SynQuacer TPM
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, masahisa.kojima@linaro.org,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 23 Jan 2020 14:22:05 +0200
+In-Reply-To: <20200114141647.109347-2-ardb@kernel.org>
+References: <20200114141647.109347-1-ardb@kernel.org>
+         <20200114141647.109347-2-ardb@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 22, 2020 at 5:56 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+On Tue, 2020-01-14 at 15:16 +0100, Ard Biesheuvel wrote:
+> Add a compatible string for the SynQuacer TPM to the binding for a
+> TPM exposed via a memory mapped TIS frame. The MMIO window behaves
+> slightly differently on this hardware, so it requires its own
+> identifier.
+> 
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/security/tpm/tpm_tis_mmio.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/security/tpm/tpm_tis_mmio.txt b/Documentation/devicetree/bindings/security/tpm/tpm_tis_mmio.txt
+> index 7c6304426da1..b604c8688dc8 100644
+> --- a/Documentation/devicetree/bindings/security/tpm/tpm_tis_mmio.txt
+> +++ b/Documentation/devicetree/bindings/security/tpm/tpm_tis_mmio.txt
+> @@ -12,6 +12,7 @@ Required properties:
+>  - compatible: should contain a string below for the chip, followed by
+>                "tcg,tpm-tis-mmio". Valid chip strings are:
+>  	          * "atmel,at97sc3204"
+> +		  * "socionext,synquacer-tpm-mmio"
+>  - reg: The location of the MMIO registers, should be at least 0x5000 bytes
+>  - interrupts: An optional interrupt indicating command completion.
+>  
 
-> > While it can now be argued that since this is an admin-driven event,
-> > kernel does not need to write the file. However, the intention is to
-> > bring out a second patch a bit later that adds a variable to define
-> > the max number of entries to be kept in the kernel memory and
-> > workqueue based automatic flushing. In those cases the kernel has to
-> > be able to write the file without any help from the admin..
->
-> I don't think it is common, and probably not acceptable, for the
-> kernel to open a file for writing.
+Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-Ok. It just means that the kernel cannot do its own memory management
-and will depend on the user flushing the memory often enough to
-prevent something bad from happening. Is this more common in the
-kernel than writing out a file?
+Someone else needs to give reviewed-by as I am not expert on DT bindings.
 
+/Jarkko
 
--- 
-Janne
