@@ -2,101 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C60114A063
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jan 2020 10:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EDE14A7B4
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jan 2020 17:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729165AbgA0JDR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 27 Jan 2020 04:03:17 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:45209 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728783AbgA0JDR (ORCPT
+        id S1729583AbgA0QCS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Jan 2020 11:02:18 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7096 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729146AbgA0QCS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 27 Jan 2020 04:03:17 -0500
-Received: by mail-lf1-f65.google.com with SMTP id 203so5620504lfa.12;
-        Mon, 27 Jan 2020 01:03:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DXfnqEIQEOAhuNRF2FUN6s3o9e2/oC31wR3fFMNGkiE=;
-        b=qtxvWxObid+2MA4/tm/VpUDXwukFbWbCwYUzze8luXOh4IZFk0pwnYvJHB4Ii1lGO1
-         DWIgw8K1bL6pfUkhnjzdPadDlkK8IgmZ+35odazC5GSkIrsYKEwtFZVCgYzHBGX1QOfb
-         kLTHac/tjeLJxKSiHJhwaSVJBRA1yQD+ZQ/JR5xhBXC8x1Qp6kfnPuWgQSeXAp71tnR9
-         sYQafvmx6eUHXSJeBiExiTtKF3iiMMoEcABm9sPH/wgM2YaiX79QtV0t8tsTc0nB3tA9
-         LxIfuGB2ShaalZpofVsEz/EN53UgxnpTXGG8X4CwQgp1FvUs3uJYPJk5V4wWn1Gt1/g0
-         2hzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DXfnqEIQEOAhuNRF2FUN6s3o9e2/oC31wR3fFMNGkiE=;
-        b=ovZeNYH7sFg94Aw+c1AhL0SMeGoOtKJJRS7K2mtaYje5Dr932xfF4+U3v/cJ2nx4Ci
-         veqLiJFumVgDL1PYxejIGL+LLF6yF9QCbO0QWiwA2F9VS6asM98KmKBEs9sHPun4Qh1R
-         pLbKnls2zxnSeP3MR7Xk0OVis6W/+Z9Qa5H/vNmKiiNW4exXfgU5hNJsqVXhZ4Lk+UjD
-         ee2DjEqlowQHPAd04DuLacK87aigb1NnsvJYjZSqMuqhoF1vg6fDbM2pPT7wqHekcoWx
-         kX3fvxcGYgLJvpZpgxZLokpsad4mGJlQF1WJeZ62Fzp2G+MQXmxIm2YjLhKEhJrVZ4IP
-         Hm6w==
-X-Gm-Message-State: APjAAAVS1L85p5aWbggdHccKukXROxh9NF31iI+xxIzJzNOkogi/Ba/s
-        v88843KLcDb/CinXu1yaVACexXPJL2nqMVk94mU=
-X-Google-Smtp-Source: APXvYqxkofUqRYz+zn0PnNHWJ1ZSGZdXmiBbKJjh5pseS2rOXfP47mtwrF46PrrLbzfzuHkJK2Vd6GP+lBvoUKhaWwA=
-X-Received: by 2002:ac2:485c:: with SMTP id 28mr7533478lfy.118.1580115795046;
- Mon, 27 Jan 2020 01:03:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20200108111743.23393-1-janne.karhunen@gmail.com>
- <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
- <1579708579.5182.77.camel@linux.ibm.com> <CAE=NcraSfo0fwxCnFQd08Ga59DsvxPTch-n_iN7fxt+3RdmP+A@mail.gmail.com>
- <1580058069.5990.36.camel@linux.ibm.com>
-In-Reply-To: <1580058069.5990.36.camel@linux.ibm.com>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Mon, 27 Jan 2020 11:03:03 +0200
-Message-ID: <CAE=Ncrawp7BPikkg0-ww2dO2_+tDPkaGxCpwMbDX4yqYWuYBWQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ima: export the measurement list when needed
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
-        monty.wiseman@ge.com, "Serge E. Hallyn" <serge@hallyn.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 27 Jan 2020 11:02:18 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00RFtQcq146484
+        for <linux-integrity@vger.kernel.org>; Mon, 27 Jan 2020 11:02:16 -0500
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2xrg629w4a-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 27 Jan 2020 11:02:16 -0500
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 27 Jan 2020 16:02:14 -0000
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 27 Jan 2020 16:02:11 -0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00RG2AKr38928892
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jan 2020 16:02:10 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 61F32A405B;
+        Mon, 27 Jan 2020 16:02:10 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A03BDA4040;
+        Mon, 27 Jan 2020 16:02:09 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.185.238])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Jan 2020 16:02:09 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-kernel@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 1/2] ima: use the IMA configured hash algo to calculate the boot aggregate
+Date:   Mon, 27 Jan 2020 11:01:58 -0500
+X-Mailer: git-send-email 2.7.5
+X-TM-AS-GCONF: 00
+x-cbid: 20012716-0020-0000-0000-000003A46F40
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20012716-0021-0000-0000-000021FC1588
+Message-Id: <1580140919-6127-1-git-send-email-zohar@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-27_05:2020-01-24,2020-01-27 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
+ malwarescore=0 suspectscore=1 phishscore=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 clxscore=1015 bulkscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1911200001 definitions=main-2001270134
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Jan 26, 2020 at 7:01 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+The boot aggregate is a cumulative SHA1 hash over TPM registers 0 - 7.
+NIST has depreciated the usage of SHA1 in most instances.  Instead of
+continuing to use SHA1 to calculate the boot_aggregate, use the
+configured IMA default hash algorithm.
 
-> > > I don't think it is common, and probably not acceptable, for the
-> > > kernel to open a file for writing.
-> >
-> > Ok. It just means that the kernel cannot do its own memory management
-> > and will depend on the user flushing the memory often enough to
-> > prevent something bad from happening. Is this more common in the
-> > kernel than writing out a file?
->
-> Ok, there are examples of both passing a file descriptor and passing a
-> pathname from userspace, but even in the case of passing a pathname,
-> userspace normally creates the file.
+Although the IMA measurement list boot_aggregate template data contains
+the hash algorithm followed by the digest, allowing verifiers (e.g.
+attesttaion servers) to calculate and verify the boot_aggregate, the
+verifiers might not have the knowledge of what constitutes a good value
+based on a different hash algorithm.
 
-Sorry, I was slow to get your proposal. I'll try to see how that would
-look like.
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/ima/ima_init.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+index 195cb4079b2b..b1b334fe0db5 100644
+--- a/security/integrity/ima/ima_init.c
++++ b/security/integrity/ima/ima_init.c
+@@ -27,7 +27,7 @@ struct tpm_chip *ima_tpm_chip;
+ /* Add the boot aggregate to the IMA measurement list and extend
+  * the PCR register.
+  *
+- * Calculate the boot aggregate, a SHA1 over tpm registers 0-7,
++ * Calculate the boot aggregate, a hash over tpm registers 0-7,
+  * assuming a TPM chip exists, and zeroes if the TPM chip does not
+  * exist.  Add the boot aggregate measurement to the measurement
+  * list and extend the PCR register.
+@@ -51,14 +51,14 @@ static int __init ima_add_boot_aggregate(void)
+ 	int violation = 0;
+ 	struct {
+ 		struct ima_digest_data hdr;
+-		char digest[TPM_DIGEST_SIZE];
++		char digest[TPM_MAX_DIGEST_SIZE];
+ 	} hash;
+ 
+ 	memset(iint, 0, sizeof(*iint));
+ 	memset(&hash, 0, sizeof(hash));
+ 	iint->ima_hash = &hash.hdr;
+-	iint->ima_hash->algo = HASH_ALGO_SHA1;
+-	iint->ima_hash->length = SHA1_DIGEST_SIZE;
++	iint->ima_hash->algo = ima_hash_algo;
++	iint->ima_hash->length = hash_digest_size[ima_hash_algo];
+ 
+ 	if (ima_tpm_chip) {
+ 		result = ima_calc_boot_aggregate(&hash.hdr);
+-- 
+2.7.5
 
-> There's been discussion in the past of defining an integrity
-> capability.  Are we at that point where we really do need to define an
-> integrity capability or is everyone comfortable with relying on
-> CAP_SYS_ADMIN?
-
-Every time something like this is being proposed there is a lot of
-shouting from people that they want their root user (renamed as
-CAP_SYS_ADMIN) back. I'd be happy with such bit and several others,
-too.
-
-
-> When implementing this feature of exporting and truncating the
-> measurement list, please keep in mind how this would work in the
-> context of IMA namespaces.
-
-That could be rough. I'll try to think about it.
-
-
---
-Janne
