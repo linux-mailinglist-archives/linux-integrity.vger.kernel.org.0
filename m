@@ -2,202 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEC314BD1F
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jan 2020 16:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9031214BDC1
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jan 2020 17:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbgA1Pkz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Jan 2020 10:40:55 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38858 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726837AbgA1Pkv (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Jan 2020 10:40:51 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00SFbkbR037630
-        for <linux-integrity@vger.kernel.org>; Tue, 28 Jan 2020 10:40:50 -0500
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xrjq7muv4-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 28 Jan 2020 10:40:50 -0500
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 28 Jan 2020 15:40:48 -0000
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 28 Jan 2020 15:40:44 -0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00SFeiUM42467494
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jan 2020 15:40:44 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0570BA4040;
-        Tue, 28 Jan 2020 15:40:44 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36FCFA4053;
-        Tue, 28 Jan 2020 15:40:43 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.138.98])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Jan 2020 15:40:43 +0000 (GMT)
-Subject: Re: [PATCH 2/2] ima: support calculating the boot_aggregate based
- on different TPM banks
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        id S1726182AbgA1QbM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 Jan 2020 11:31:12 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2321 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726257AbgA1QbM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 28 Jan 2020 11:31:12 -0500
+Received: from lhreml702-cah.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id D57BD114EA464F2BBF81;
+        Tue, 28 Jan 2020 16:31:09 +0000 (GMT)
+Received: from fraeml703-chm.china.huawei.com (10.206.15.52) by
+ lhreml702-cah.china.huawei.com (10.201.108.43) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Tue, 28 Jan 2020 16:31:09 +0000
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1713.5; Tue, 28 Jan 2020 17:31:08 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1713.004;
+ Tue, 28 Jan 2020 17:31:08 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+CC:     Jerry Snitselaar <jsnitsel@redhat.com>,
         James Bottomley <James.Bottomley@HansenPartnership.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Tue, 28 Jan 2020 10:40:42 -0500
-In-Reply-To: <465015d0c9ca4e278ed32f78eb3eb4a4@huawei.com>
+Subject: RE: [PATCH 2/2] ima: support calculating the boot_aggregate based on
+ different TPM banks
+Thread-Topic: [PATCH 2/2] ima: support calculating the boot_aggregate based on
+ different TPM banks
+Thread-Index: AQHV1SsuUuwpXjLewk6D/BEn4qmmH6gAHIeggAAK9wCAAB1bAA==
+Date:   Tue, 28 Jan 2020 16:31:08 +0000
+Message-ID: <7dac65691a5848c69009aff7db7fdb2d@huawei.com>
 References: <1580140919-6127-1-git-send-email-zohar@linux.ibm.com>
          <1580140919-6127-2-git-send-email-zohar@linux.ibm.com>
          <465015d0c9ca4e278ed32f78eb3eb4a4@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20012815-0028-0000-0000-000003D5363D
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20012815-0029-0000-0000-000024997E80
-Message-Id: <1580226042.5088.90.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-28_05:2020-01-28,2020-01-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 bulkscore=0 adultscore=0 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 mlxscore=0 clxscore=1015 phishscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1911200001 definitions=main-2001280123
+ <1580226042.5088.90.camel@linux.ibm.com>
+In-Reply-To: <1580226042.5088.90.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.220.96.108]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-01-28 at 14:19 +0000, Roberto Sassu wrote:
-> > -----Original Message-----
-> > From: linux-integrity-owner@vger.kernel.org [mailto:linux-integrity-
-> > owner@vger.kernel.org] On Behalf Of Mimi Zohar
-> > Sent: Monday, January 27, 2020 5:02 PM
-> > To: linux-integrity@vger.kernel.org
-> > Cc: Jerry Snitselaar <jsnitsel@redhat.com>; James Bottomley
-> > <James.Bottomley@HansenPartnership.com>; linux-
-> > kernel@vger.kernel.org; Mimi Zohar <zohar@linux.ibm.com>
-> > Subject: [PATCH 2/2] ima: support calculating the boot_aggregate based on
-> > different TPM banks
-> > 
-> > Calculating the boot_aggregate attempts to read the TPM SHA1 bank,
-> > assuming it is always enabled.  With TPM 2.0 hash agility, TPM chips
-> > could support multiple TPM PCR banks, allowing firmware to configure and
-> > enable different banks.
-> > 
-> > Instead of hard coding the TPM 2.0 bank hash algorithm used for calculating
-> > the boot-aggregate, see if the configured IMA_DEFAULT_HASH algorithm is
-> > an allocated TPM bank, otherwise use the first allocated TPM bank.
-> > 
-> > For TPM 1.2 SHA1 is the only supported hash algorithm.
-> > 
-> > Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >  security/integrity/ima/ima_crypto.c | 37
-> > ++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 36 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/security/integrity/ima/ima_crypto.c
-> > b/security/integrity/ima/ima_crypto.c
-> > index 7967a6904851..b1b26d61f174 100644
-> > --- a/security/integrity/ima/ima_crypto.c
-> > +++ b/security/integrity/ima/ima_crypto.c
-> > @@ -656,8 +656,25 @@ static void __init ima_pcrread(u32 idx, struct
-> > tpm_digest *d)
-> >  		pr_err("Error Communicating to TPM chip\n");
-> >  }
-> > 
-> > +/* tpm2_hash_map is the same as defined in tpm2-cmd.c and
-> > trusted_tpm2.c */
-> > +static struct tpm2_hash tpm2_hash_map[] = {
-> > +	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
-> > +	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
-> > +	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
-> > +	{HASH_ALGO_SHA512, TPM_ALG_SHA512},
-> > +	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
-> > +};
-> > +
-> >  /*
-> > - * Calculate the boot aggregate hash
-> > + * The boot_aggregate is a cumulative hash over TPM registers 0 - 7.  With
-> > + * TPM 2.0 hash agility, TPM chips could support multiple TPM PCR banks,
-> > + * allowing firmware to configure and enable different banks.
-> > + *
-> > + * Instead of hard coding the TPM bank hash algorithm used for calculating
-> > + * the boot-aggregate, see if the configured IMA_DEFAULT_HASH
-> > algorithm is
-> > + * an allocated TPM bank, otherwise use the first allocated TPM bank.
-> > + *
-> > + * For TPM 1.2 SHA1 is the only hash algorithm.
-> >   */
-> >  static int __init ima_calc_boot_aggregate_tfm(char *digest,
-> >  					      struct crypto_shash *tfm)
-> > @@ -673,6 +690,24 @@ static int __init ima_calc_boot_aggregate_tfm(char
-> > *digest,
-> >  	if (rc != 0)
-> >  		return rc;
-> > 
-> > +	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
-> > +		if (tpm2_hash_map[i].crypto_id == ima_hash_algo) {
-> 
-> It is not necessary to define a new map. ima_tpm_chip->allocated_banks
-> has a crypto_id field.
-
-Ok, thanks.
-
-> 
-> > +			d.alg_id = tpm2_hash_map[i].tpm_id;
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	for (i = 0; i < ima_tpm_chip->nr_allocated_banks; i++) {
-> > +		if (ima_tpm_chip->allocated_banks[i].alg_id == d.alg_id)
-> > +			break;
-> > +	}
-> > +
-> > +	if (i == ima_tpm_chip->nr_allocated_banks)
-> > +		d.alg_id = ima_tpm_chip->allocated_banks[0].alg_id;
-> 
-> This code assumes that the algorithm used to calculate boot_aggregate and
-> the algorithm of the PCR bank can be different. I don't know if it is possible to
-> communicate to the verifier which bank has been selected (it depends on
-> the local configuration).
-
-Agreed, but defaulting to the first bank would only happen if the IMA
-default hash algorithm is not a configured TPM algorithm.
-
-> 
-> In my opinion the safest approach would be to use the same algorithm for the
-> digest and the PCR bank. If you agree to this, then the code above must be
-> moved to ima_calc_boot_aggregate() so that the algorithm of the selected
-> PCR bank can be passed to ima_alloc_tfm().
-
-Using the same hash algorithm, preferably the IMA hash default
-algorithm, for reading the TPM PCR bank and calculating the
-boot_aggregate makes sense.
-
-> 
-> The selected PCR bank might be not the first, if the algorithm is unknown to
-> the crypto subsystem.
-
-It sounds like you're suggesting finding a common configured hash
-algorithm between the TPM and the kernel. 
-
-> 
-> > +	pr_info("Calculating the boot-aggregregate, reading TPM PCR
-> 
-> Typo.
-
-thanks
-
-Mimi
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86
+em9oYXJAbGludXguaWJtLmNvbV0NCj4gU2VudDogVHVlc2RheSwgSmFudWFyeSAyOCwgMjAyMCA0
+OjQxIFBNDQo+IFRvOiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+OyBs
+aW51eC0NCj4gaW50ZWdyaXR5QHZnZXIua2VybmVsLm9yZw0KPiBDYzogSmVycnkgU25pdHNlbGFh
+ciA8anNuaXRzZWxAcmVkaGF0LmNvbT47IEphbWVzIEJvdHRvbWxleQ0KPiA8SmFtZXMuQm90dG9t
+bGV5QEhhbnNlblBhcnRuZXJzaGlwLmNvbT47IGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJuZWwu
+b3JnOyBTaWx2aXUgVmxhc2NlYW51IDxTaWx2aXUuVmxhc2NlYW51QGh1YXdlaS5jb20+DQo+IFN1
+YmplY3Q6IFJlOiBbUEFUQ0ggMi8yXSBpbWE6IHN1cHBvcnQgY2FsY3VsYXRpbmcgdGhlIGJvb3Rf
+YWdncmVnYXRlIGJhc2VkDQo+IG9uIGRpZmZlcmVudCBUUE0gYmFua3MNCj4gDQo+IE9uIFR1ZSwg
+MjAyMC0wMS0yOCBhdCAxNDoxOSArMDAwMCwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gPiA+IC0t
+LS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+ID4gPiBGcm9tOiBsaW51eC1pbnRlZ3JpdHktb3du
+ZXJAdmdlci5rZXJuZWwub3JnIFttYWlsdG86bGludXgtaW50ZWdyaXR5LQ0KPiA+ID4gb3duZXJA
+dmdlci5rZXJuZWwub3JnXSBPbiBCZWhhbGYgT2YgTWltaSBab2hhcg0KPiA+ID4gU2VudDogTW9u
+ZGF5LCBKYW51YXJ5IDI3LCAyMDIwIDU6MDIgUE0NCj4gPiA+IFRvOiBsaW51eC1pbnRlZ3JpdHlA
+dmdlci5rZXJuZWwub3JnDQo+ID4gPiBDYzogSmVycnkgU25pdHNlbGFhciA8anNuaXRzZWxAcmVk
+aGF0LmNvbT47IEphbWVzIEJvdHRvbWxleQ0KPiA+ID4gPEphbWVzLkJvdHRvbWxleUBIYW5zZW5Q
+YXJ0bmVyc2hpcC5jb20+OyBsaW51eC0NCj4gPiA+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IE1p
+bWkgWm9oYXIgPHpvaGFyQGxpbnV4LmlibS5jb20+DQo+ID4gPiBTdWJqZWN0OiBbUEFUQ0ggMi8y
+XSBpbWE6IHN1cHBvcnQgY2FsY3VsYXRpbmcgdGhlIGJvb3RfYWdncmVnYXRlIGJhc2VkDQo+IG9u
+DQo+ID4gPiBkaWZmZXJlbnQgVFBNIGJhbmtzDQo+ID4gPg0KPiA+ID4gQ2FsY3VsYXRpbmcgdGhl
+IGJvb3RfYWdncmVnYXRlIGF0dGVtcHRzIHRvIHJlYWQgdGhlIFRQTSBTSEExIGJhbmssDQo+ID4g
+PiBhc3N1bWluZyBpdCBpcyBhbHdheXMgZW5hYmxlZC4gIFdpdGggVFBNIDIuMCBoYXNoIGFnaWxp
+dHksIFRQTSBjaGlwcw0KPiA+ID4gY291bGQgc3VwcG9ydCBtdWx0aXBsZSBUUE0gUENSIGJhbmtz
+LCBhbGxvd2luZyBmaXJtd2FyZSB0byBjb25maWd1cmUNCj4gYW5kDQo+ID4gPiBlbmFibGUgZGlm
+ZmVyZW50IGJhbmtzLg0KPiA+ID4NCj4gPiA+IEluc3RlYWQgb2YgaGFyZCBjb2RpbmcgdGhlIFRQ
+TSAyLjAgYmFuayBoYXNoIGFsZ29yaXRobSB1c2VkIGZvcg0KPiBjYWxjdWxhdGluZw0KPiA+ID4g
+dGhlIGJvb3QtYWdncmVnYXRlLCBzZWUgaWYgdGhlIGNvbmZpZ3VyZWQgSU1BX0RFRkFVTFRfSEFT
+SA0KPiBhbGdvcml0aG0gaXMNCj4gPiA+IGFuIGFsbG9jYXRlZCBUUE0gYmFuaywgb3RoZXJ3aXNl
+IHVzZSB0aGUgZmlyc3QgYWxsb2NhdGVkIFRQTSBiYW5rLg0KPiA+ID4NCj4gPiA+IEZvciBUUE0g
+MS4yIFNIQTEgaXMgdGhlIG9ubHkgc3VwcG9ydGVkIGhhc2ggYWxnb3JpdGhtLg0KPiA+ID4NCj4g
+PiA+IFJlcG9ydGVkLWJ5OiBKZXJyeSBTbml0c2VsYWFyIDxqc25pdHNlbEByZWRoYXQuY29tPg0K
+PiA+ID4gU2lnbmVkLW9mZi1ieTogTWltaSBab2hhciA8em9oYXJAbGludXguaWJtLmNvbT4NCj4g
+PiA+IC0tLQ0KPiA+ID4gIHNlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX2NyeXB0by5jIHwgMzcN
+Cj4gPiA+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0NCj4gPiA+ICAxIGZp
+bGUgY2hhbmdlZCwgMzYgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiA+ID4NCj4gPiA+
+IGRpZmYgLS1naXQgYS9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV9jcnlwdG8uYw0KPiA+ID4g
+Yi9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV9jcnlwdG8uYw0KPiA+ID4gaW5kZXggNzk2N2E2
+OTA0ODUxLi5iMWIyNmQ2MWYxNzQgMTAwNjQ0DQo+ID4gPiAtLS0gYS9zZWN1cml0eS9pbnRlZ3Jp
+dHkvaW1hL2ltYV9jcnlwdG8uYw0KPiA+ID4gKysrIGIvc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9p
+bWFfY3J5cHRvLmMNCj4gPiA+IEBAIC02NTYsOCArNjU2LDI1IEBAIHN0YXRpYyB2b2lkIF9faW5p
+dCBpbWFfcGNycmVhZCh1MzIgaWR4LCBzdHJ1Y3QNCj4gPiA+IHRwbV9kaWdlc3QgKmQpDQo+ID4g
+PiAgCQlwcl9lcnIoIkVycm9yIENvbW11bmljYXRpbmcgdG8gVFBNIGNoaXBcbiIpOw0KPiA+ID4g
+IH0NCj4gPiA+DQo+ID4gPiArLyogdHBtMl9oYXNoX21hcCBpcyB0aGUgc2FtZSBhcyBkZWZpbmVk
+IGluIHRwbTItY21kLmMgYW5kDQo+ID4gPiB0cnVzdGVkX3RwbTIuYyAqLw0KPiA+ID4gK3N0YXRp
+YyBzdHJ1Y3QgdHBtMl9oYXNoIHRwbTJfaGFzaF9tYXBbXSA9IHsNCj4gPiA+ICsJe0hBU0hfQUxH
+T19TSEExLCBUUE1fQUxHX1NIQTF9LA0KPiA+ID4gKwl7SEFTSF9BTEdPX1NIQTI1NiwgVFBNX0FM
+R19TSEEyNTZ9LA0KPiA+ID4gKwl7SEFTSF9BTEdPX1NIQTM4NCwgVFBNX0FMR19TSEEzODR9LA0K
+PiA+ID4gKwl7SEFTSF9BTEdPX1NIQTUxMiwgVFBNX0FMR19TSEE1MTJ9LA0KPiA+ID4gKwl7SEFT
+SF9BTEdPX1NNM18yNTYsIFRQTV9BTEdfU00zXzI1Nn0sDQo+ID4gPiArfTsNCj4gPiA+ICsNCj4g
+PiA+ICAvKg0KPiA+ID4gLSAqIENhbGN1bGF0ZSB0aGUgYm9vdCBhZ2dyZWdhdGUgaGFzaA0KPiA+
+ID4gKyAqIFRoZSBib290X2FnZ3JlZ2F0ZSBpcyBhIGN1bXVsYXRpdmUgaGFzaCBvdmVyIFRQTSBy
+ZWdpc3RlcnMgMCAtIDcuDQo+IFdpdGgNCj4gPiA+ICsgKiBUUE0gMi4wIGhhc2ggYWdpbGl0eSwg
+VFBNIGNoaXBzIGNvdWxkIHN1cHBvcnQgbXVsdGlwbGUgVFBNIFBDUg0KPiBiYW5rcywNCj4gPiA+
+ICsgKiBhbGxvd2luZyBmaXJtd2FyZSB0byBjb25maWd1cmUgYW5kIGVuYWJsZSBkaWZmZXJlbnQg
+YmFua3MuDQo+ID4gPiArICoNCj4gPiA+ICsgKiBJbnN0ZWFkIG9mIGhhcmQgY29kaW5nIHRoZSBU
+UE0gYmFuayBoYXNoIGFsZ29yaXRobSB1c2VkIGZvcg0KPiBjYWxjdWxhdGluZw0KPiA+ID4gKyAq
+IHRoZSBib290LWFnZ3JlZ2F0ZSwgc2VlIGlmIHRoZSBjb25maWd1cmVkIElNQV9ERUZBVUxUX0hB
+U0gNCj4gPiA+IGFsZ29yaXRobSBpcw0KPiA+ID4gKyAqIGFuIGFsbG9jYXRlZCBUUE0gYmFuaywg
+b3RoZXJ3aXNlIHVzZSB0aGUgZmlyc3QgYWxsb2NhdGVkIFRQTSBiYW5rLg0KPiA+ID4gKyAqDQo+
+ID4gPiArICogRm9yIFRQTSAxLjIgU0hBMSBpcyB0aGUgb25seSBoYXNoIGFsZ29yaXRobS4NCj4g
+PiA+ICAgKi8NCj4gPiA+ICBzdGF0aWMgaW50IF9faW5pdCBpbWFfY2FsY19ib290X2FnZ3JlZ2F0
+ZV90Zm0oY2hhciAqZGlnZXN0LA0KPiA+ID4gIAkJCQkJICAgICAgc3RydWN0IGNyeXB0b19zaGFz
+aCAqdGZtKQ0KPiA+ID4gQEAgLTY3Myw2ICs2OTAsMjQgQEAgc3RhdGljIGludCBfX2luaXQNCj4g
+aW1hX2NhbGNfYm9vdF9hZ2dyZWdhdGVfdGZtKGNoYXINCj4gPiA+ICpkaWdlc3QsDQo+ID4gPiAg
+CWlmIChyYyAhPSAwKQ0KPiA+ID4gIAkJcmV0dXJuIHJjOw0KPiA+ID4NCj4gPiA+ICsJZm9yIChp
+ID0gMDsgaSA8IEFSUkFZX1NJWkUodHBtMl9oYXNoX21hcCk7IGkrKykgew0KPiA+ID4gKwkJaWYg
+KHRwbTJfaGFzaF9tYXBbaV0uY3J5cHRvX2lkID09IGltYV9oYXNoX2FsZ28pIHsNCj4gPg0KPiA+
+IEl0IGlzIG5vdCBuZWNlc3NhcnkgdG8gZGVmaW5lIGEgbmV3IG1hcC4gaW1hX3RwbV9jaGlwLT5h
+bGxvY2F0ZWRfYmFua3MNCj4gPiBoYXMgYSBjcnlwdG9faWQgZmllbGQuDQo+IA0KPiBPaywgdGhh
+bmtzLg0KDQpXaGVuIHlvdSBzZW5kIHRoZSBuZXcgdmVyc2lvbiwgcGxlYXNlIGluY2x1ZGUgcGF0
+Y2ggMS84IG9mIG15IHBhdGNoIHNldCwNCnRoYXQgc2V0cyBjcnlwdG9faWQgdG8gSEFTSF9BTEdP
+X19MQVNUIGlmIHRoZXJlIGlzIG5vIG1hcHBpbmcgYmV0d2Vlbg0KVFBNIElEIGFuZCBjcnlwdG8g
+SUQuDQoNClRoYW5rcw0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMgRHVlc3NlbGRv
+cmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywgTGkgSmlhbiwg
+U2hpIFlhbmxpDQo=
