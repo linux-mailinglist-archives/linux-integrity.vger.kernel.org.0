@@ -2,99 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BB914F91A
-	for <lists+linux-integrity@lfdr.de>; Sat,  1 Feb 2020 18:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED87C14FB09
+	for <lists+linux-integrity@lfdr.de>; Sun,  2 Feb 2020 01:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbgBARKI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 1 Feb 2020 12:10:08 -0500
-Received: from mga01.intel.com ([192.55.52.88]:55171 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726643AbgBARKI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 1 Feb 2020 12:10:08 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Feb 2020 09:10:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,390,1574150400"; 
-   d="scan'208";a="218924370"
-Received: from mtaylo3-mobl1.ger.corp.intel.com (HELO localhost) ([10.251.87.188])
-  by orsmga007.jf.intel.com with ESMTP; 01 Feb 2020 09:10:05 -0800
-Date:   Sat, 1 Feb 2020 19:10:04 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "james.bottomley@hansenpartnership.com" 
-        <james.bottomley@hansenpartnership.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: Re: [PATCH 1/8] tpm: initialize crypto_id of allocated_banks to
- HASH_ALGO__LAST
-Message-ID: <20200201171004.GC14875@linux.intel.com>
-References: <20200127170443.21538-1-roberto.sassu@huawei.com>
- <20200127170443.21538-2-roberto.sassu@huawei.com>
- <50afe1f50297b02af52621b6738ffff0c24f1bdf.camel@linux.intel.com>
- <8c15cf66708a4d38916b8ca39f26b5f6@huawei.com>
- <1580477590.6104.61.camel@linux.ibm.com>
+        id S1726712AbgBBATP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 1 Feb 2020 19:19:15 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42452 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726664AbgBBATP (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 1 Feb 2020 19:19:15 -0500
+Received: by mail-lj1-f196.google.com with SMTP id d10so10909750ljl.9
+        for <linux-integrity@vger.kernel.org>; Sat, 01 Feb 2020 16:19:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=guzman.io; s=google;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=vb60b9fB1hi2breaQKh2O/9Swlzf9GYb2tT75kQEfaw=;
+        b=XMxTWIy/k0UW5CwCevAleDrqFno+ELgfTgVOnRGaYqgSrrwok0fH46IepYIb31gRM3
+         T7opIICxXYg73oXIiEq2w02Y1FifRlXqDNQrOzDOoZPs77862ge9RyUYK7wMP3Dje+hj
+         yKm0iORmMAIBnTs7kcg9u9Vyb3+LYu4o9HUPE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=vb60b9fB1hi2breaQKh2O/9Swlzf9GYb2tT75kQEfaw=;
+        b=NwmptAWDS4WNM59O0GQB/fh2Dp4zT14+NQPhYh4gy/YcQaUkwqiQT2ICM67PZMePMZ
+         Ev7lSsG6oaK/oS4KR00iVxh3FTsGXQOc1WKnd5j1wn0y2YdhDlwJp34Tojo2Nv0p58xh
+         UJYOIJoGfT9w61+BaXfxoNWafxxS/8yN0BdaPOsvW+1tB0U2fqCCP6efCl8KWDOVyAAJ
+         ihaFKd8e07dHWIVv3bR4NxVnz36dTptbzDXAcyCEsU11rIECEgXpxDqA6YHNnlQljpts
+         fY5vVI9dU2Btx/Y7KsY33EfDDciXkbgZclQzeyHhvAw8oNvkDtQE5YGDniitgFqEm3M0
+         1f4Q==
+X-Gm-Message-State: APjAAAXWnDuvv43EXbXbHStcgeyHRbmnS7Ydsr3khVgnH71kuqqjC1C5
+        ovyd4YTllAJ1q5E/CDQ86+NzHzara7LnCb4LOrnPpaO7KFPpBQ==
+X-Google-Smtp-Source: APXvYqyQCWMs/pZyt7sO00Vg+ucrqJkdslFH2CDzv26m15lk6F4ZtUdncjyG3O/ZvykegCrGMtIF2JWbjzpNGorJKDE=
+X-Received: by 2002:a2e:9ad8:: with SMTP id p24mr9562407ljj.148.1580602751580;
+ Sat, 01 Feb 2020 16:19:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1580477590.6104.61.camel@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Alex Guzman <alex@guzman.io>
+Date:   Sat, 1 Feb 2020 16:19:01 -0800
+Message-ID: <CAJ7-PMaLw_H8Fc1tyoT95f5EWpS3nvJt1Wx9=xpuiSotJ2h9VA@mail.gmail.com>
+Subject: Debugging errors with Dell XPS 9560 TPM
+To:     linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jan 31, 2020 at 08:33:10AM -0500, Mimi Zohar wrote:
-> On Thu, 2020-01-30 at 16:11 +0000, Roberto Sassu wrote:
-> > > -----Original Message-----
-> > > From: Jarkko Sakkinen [mailto:jarkko.sakkinen@linux.intel.com]
-> > > Sent: Thursday, January 30, 2020 9:48 AM
-> > > To: Roberto Sassu <roberto.sassu@huawei.com>; zohar@linux.ibm.com;
-> > > james.bottomley@hansenpartnership.com; linux-integrity@vger.kernel.org
-> > > Cc: linux-security-module@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > > Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-> > > Subject: Re: [PATCH 1/8] tpm: initialize crypto_id of allocated_banks to
-> > > HASH_ALGO__LAST
-> > > 
-> > > On Mon, 2020-01-27 at 18:04 +0100, Roberto Sassu wrote:
-> > > > chip->allocated_banks contains the list of TPM algorithm IDs of allocated
-> > > > PCR banks. It also contains the corresponding ID of the crypto subsystem,
-> > > > so that users of the TPM driver can calculate a digest for a PCR extend
-> > > > operation.
-> > > >
-> > > > However, if there is no mapping between TPM algorithm ID and crypto ID,
-> > > the
-> > > > crypto_id field in chip->allocated_banks remains set to zero (the array is
-> > > > allocated and initialized with kcalloc() in tpm2_get_pcr_allocation()).
-> > > > Zero should not be used as value for unknown mappings, as it is a valid
-> > > > crypto ID (HASH_ALGO_MD4).
-> > > >
-> > > > This patch initializes crypto_id to HASH_ALGO__LAST.
-> > > >
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>---
-> > > 
-> > > Remarks:
-> > > 
-> > > * After the subsystem tag, short summary starts with a capital lettter.
-> > > * Missing fixes tag and cc tag to stable.
-> > > * A struct called allocated_banks does not exist.
-> > > * Please prefer using an imperative sentence when describing the action
-> > >   to take e.g. "Thus, initialize crypto_id to HASH_ALGO__LAST".
-> > 
-> > Thanks. I will fix these issues in the next version of the patch set.
-> 
-> Jarkko, I realize this is a TPM patch, but this patch set is dependent
-> on it.  When this patch is ready, could you create a topic branch,
-> which both of us could merge?
+Hey there! I reported a bug on the bug tracker a bit ago but haven't
+seen any movement, so I figured I'd drop in here. My XPS 9560 has been
+having issues with its TPM, and all commands will fail with error 1
+when operating on the TPM device. I managed to bisect it back to
+commit 4d6ebc4c4950595414722dfadd0b361f5a05d37e (tpm: fix invalid
+locking in NONBLOCKING mode) though it began failing with error 14
+(bad address) at that point.
 
-WFM.
+I reported the bug at
+https://bugzilla.kernel.org/show_bug.cgi?id=206275 and attached some
+dmesg logs from boot there. Does anyone have any suggestions for
+additional debugging or such to figure out what's happening here?
 
-/Jarkko
+- Alex
