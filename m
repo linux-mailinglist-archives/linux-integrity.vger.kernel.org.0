@@ -2,123 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D646150E3F
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2020 17:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF84A15138E
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2020 01:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727797AbgBCQ64 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Feb 2020 11:58:56 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:33092 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727540AbgBCQ64 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Feb 2020 11:58:56 -0500
-Received: by mail-pj1-f67.google.com with SMTP id m7so86689pjs.0;
-        Mon, 03 Feb 2020 08:58:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/YyTHPIBZyo/MqH3zpBfQtUfIWIJ/AY6jdQ6GQWRTFQ=;
-        b=H4PYtBpNnwNZ74ttAJKAvXj+XXpucjbenNa4WCoLfSGkMAEfWgHv37RfodC9wFUsLz
-         i9xOLmJvsImDMk9gqhxd4SmlznZPEqTCoO0grr+kJNl8WRmkvftYS9xd12xMV357JBC3
-         xTUHh0enPsXgV7bt8TAMhOTTyUj+8HwNq46Fy8joPbZ+NafT8l+ohQWfPg1wus+a4p9g
-         eZIPf7504WyS1c4N1YlkEw2+DABbPEFt6HWYuhvP/GFdEp8U+UOePR56Emf0fgJueqJ/
-         +Dwvgq1CBDDenZLiuRRQh1c2UQLuXp0Kxbt1vP7Quc7zqUNWp5jLv2HaKVrhut2j6sWK
-         dMKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/YyTHPIBZyo/MqH3zpBfQtUfIWIJ/AY6jdQ6GQWRTFQ=;
-        b=GnrI7b4PDRmm/UJOgaNSXzbbL1x/ATcmnKevPwmjWnAZgzR5+1RPKjjkiXJbC0kxPb
-         A4p/i3q3HkkfrC1SbyWvwJYL9xbDnN61TdroW8Atz3ZDy8wNficLG4mIUZeTE9qvfyBL
-         0IqjQ+RXoU+wzJV6zThhUnAMVkMRNgtJpElt603QaduztxN6bm23lGSN7dyp2ddlyhkW
-         607Vk2s3O0/VkzKTNoDhAl3d/Wz7W878ITPx8A6CRB9sYZJo3n6RP9LUgBKhkkDpe0JB
-         dhtY5yCXm6fs0TRBl9zo5wkvMjQD4oTGzJDsBQUoddix/uAF1cYAcJWUKgv+3g97Zh7I
-         N2YA==
-X-Gm-Message-State: APjAAAXzVcmS1e56A/Jys+G/jPWmWW8aK9nDGSg/UHwVFguVzF0Qy8Lc
-        ziig0berNLF7rrZqU1dWHs8=
-X-Google-Smtp-Source: APXvYqwmZlkmx1mhgCYn40rCLu59Po/tB6leuusgEMtreHvtJTa9BmD13/pTMEWfHIERTCB5tPT0mg==
-X-Received: by 2002:a17:902:8303:: with SMTP id bd3mr25050818plb.171.1580749135496;
-        Mon, 03 Feb 2020 08:58:55 -0800 (PST)
-Received: from jprestwo-test.jf.intel.com (jfdmzpr04-ext.jf.intel.com. [134.134.137.73])
-        by smtp.googlemail.com with ESMTPSA id h10sm20579298pfo.181.2020.02.03.08.58.54
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 03 Feb 2020 08:58:54 -0800 (PST)
-Message-ID: <5c593b6f23ae41e90e6b3799141ea68944bb4034.camel@gmail.com>
-Subject: Re: [PATCH v5 4/6] security: keys: trusted: use ASN.1 TPM2 key
- format for the blobs
-From:   James Prestwood <prestwoj@gmail.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Date:   Mon, 03 Feb 2020 08:54:40 -0800
-In-Reply-To: <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
-References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
-         <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726872AbgBDAAg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Feb 2020 19:00:36 -0500
+Received: from namei.org ([65.99.196.166]:43090 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726369AbgBDAAf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 3 Feb 2020 19:00:35 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 013Nxnn2015307;
+        Mon, 3 Feb 2020 23:59:49 GMT
+Date:   Tue, 4 Feb 2020 10:59:49 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     linux-security-module@vger.kernel.org
+cc:     linux-kernel@vger.kernel.org, lwn@lwn.net,
+        fedora-selinux-list@redhat.com, linux-crypto@vger.kernel.org,
+        kernel-hardening@lists.openwall.com,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        Audit-ML <linux-audit@redhat.com>, gentoo-hardened@gentoo.org,
+        keyrings@linux-nfs.org, tpmdd-devel@lists.sourceforge.net,
+        Linux Security Summit Program Committee 
+        <lss-pc@lists.linuxfoundation.org>
+Subject: [ANNOUNCE][CFP] Linux Security Summit North America 2020
+Message-ID: <alpine.LRH.2.21.2002041054320.12768@namei.org>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: multipart/mixed; BOUNDARY="1665246916-1737447927-1580774163=:12768"
+Content-ID: <alpine.LRH.2.21.2002041056360.12768@namei.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi James,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-<snip>
+--1665246916-1737447927-1580774163=:12768
+Content-Type: text/plain; CHARSET=ISO-8859-7
+Content-Transfer-Encoding: 8BIT
+Content-ID: <alpine.LRH.2.21.2002041056361.12768@namei.org>
 
-> diff --git a/security/keys/trusted-keys/tpm2key.asn1
-> b/security/keys/trusted-keys/tpm2key.asn1
-> new file mode 100644
-> index 000000000000..f930fd812db3
-> --- /dev/null
-> +++ b/security/keys/trusted-keys/tpm2key.asn1
-> @@ -0,0 +1,23 @@
-> +---
-> +--- Note: This isn't quite the definition in the standard
-> +---       However, the Linux asn.1 parser doesn't understand
-> +---       [2] EXPLICIT SEQUENCE OF OPTIONAL
-> +---       So there's an extra intermediate TPMPolicySequence
-> +---       definition to work around this
-> +
-> +TPMKey ::= SEQUENCE {
-> +	type		OBJECT IDENTIFIER ({tpmkey_type}),
-> +	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
-> +	policy		[1] EXPLICIT TPMPolicySequence OPTIONAL,
-> +	secret		[2] EXPLICIT OCTET STRING OPTIONAL,
-> +	parent		INTEGER ({tpmkey_parent}),
-> +	pubkey		OCTET STRING ({tpmkey_pub}),
-> +	privkey		OCTET STRING ({tpmkey_priv})
-> +	}
-> +
-> +TPMPolicySequence ::= SEQUENCE OF TPMPolicy
-> +
-> +TPMPolicy ::= SEQUENCE {
-> +	commandCode		[0] EXPLICIT INTEGER ({tpmkey_code}),
-> +	commandPolicy		[1] EXPLICIT OCTET STRING
-> ({tpmkey_policy})
-> +	}
+==============================================================================
+		   ANNOUNCEMENT AND CALL FOR PARTICIPATION
 
-I have been using your set of patches in order to get this ASN.1
-parser/definition. I am implementing an asymmetric key parser/type TPM2
-keys for enc/dec/sign/verify using keyctl. Note that this
-implementation goes in crypto/asymmetric_keys/, and your patches sit in
-security/keys/trusted-keys/.
+		   LINUX SECURITY SUMMIT NORTH AMERICA 2020
+                             
+			        24-26 JUNE
+			    AUSTIN, TEXAS, USA
+==============================================================================
 
-Currently I am just including "../../security/keys/trusted-
-keys/{tpm2key.asn1.h,tpm2-policy.h}" in order to use the ASN.1 parser
-to verify my keys, but this obviously isn't going to fly.
+DESCRIPTION
+ 
+Linux Security Summit North America (LSS-NA) is a technical forum for
+collaboration between Linux developers, researchers, and end-users.  Its
+primary aim is to foster community efforts in analyzing and solving Linux
+security challenges.
+ 
+ The program committee currently seeks proposals for:
+ 
+   * Refereed Presentations:
+     45 minutes in length.
+ 
+   * Panel Discussion Topics:
+     45 minutes in length.
+ 
+   * Short Topics:
+     30 minutes in total, including at least 10 minutes discussion.
+ 
+   * Tutorials
+     90 minutes in length.
+ 
+Tutorial sessions should be focused on advanced Linux security defense
+topics within areas such as the kernel, compiler, and security-related
+libraries.  Priority will be given to tutorials created for this conference,
+and those where the presenter a leading subject matter expert on the topic.
+ 
+Topic areas include, but are not limited to:
+ 
+   * Kernel self-protection
+   * Access control
+   * Cryptography and key management
+   * Integrity policy and enforcement
+   * Hardware Security
+   * IoT and embedded security
+   * Virtualization and containers
+   * System-specific system hardening
+   * Case studies
+   * Security tools
+   * Security UX
+   * Emerging technologies, threats & techniques
 
-Do you (or anyone) have any ideas as to how both trusted keys and
-asymmetric keys could share this ASN.1 parser/definition? Some common
-area that both security and crypto could include? Or maybe there is
-some common way the kernel does things like this?
+  Proposals should be submitted via:
 
-Thanks,
-James
+    https://events.linuxfoundation.org/linux-security-summit-north-america/program/cfp/
+ 
+
+DATES
+ 
+  * CFP close:            March 31
+  * CFP notifications:    April 13
+  * Schedule announced:   April 16
+  * Event:                June 24-26
 
 
+WHO SHOULD ATTEND
+ 
+We're seeking a diverse range of attendees and welcome participation by
+people involved in Linux security development, operations, and research.
+ 
+LSS-NA is a unique global event that provides the opportunity to present and
+discuss your work or research with key Linux security community members and
+maintainers.  It¢s also useful for those who wish to keep up with the latest
+in Linux security development and to provide input to the development
+process.
+
+WEB SITE
+
+    https://events.linuxfoundation.org/linux-security-summit-north-america/
+
+TWITTER
+
+  For event updates and announcements, follow:
+
+    https://twitter.com/LinuxSecSummit
+  
+    #linuxsecuritysummit
+
+PROGRAM COMMITTEE
+
+  The program committee for LSS 2020 is:
+
+    * James Morris, Microsoft
+    * Serge Hallyn, Cisco
+    * Paul Moore, Cisco
+    * Stephen Smalley, NSA
+    * Elena Reshetova, Intel
+    * John Johansen, Canonical
+    * Kees Cook, Google
+    * Casey Schaufler, Intel
+    * Mimi Zohar, IBM
+    * David A. Wheeler, Institute for Defense Analyses
+
+  The program committee may be contacted as a group via email:
+    lss-pc () lists.linuxfoundation.org
+--1665246916-1737447927-1580774163=:12768--
