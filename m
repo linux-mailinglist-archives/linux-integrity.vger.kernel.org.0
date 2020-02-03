@@ -2,95 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DA8150348
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2020 10:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D646150E3F
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2020 17:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbgBCJUm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Feb 2020 04:20:42 -0500
-Received: from smtp11.infineon.com ([217.10.52.105]:27099 "EHLO
-        smtp11.infineon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726244AbgBCJUm (ORCPT
+        id S1727797AbgBCQ64 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Feb 2020 11:58:56 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:33092 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727540AbgBCQ64 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Feb 2020 04:20:42 -0500
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Feb 2020 04:20:41 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1580721642; x=1612257642;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=S+aFt3xpcgLC1SHHmrUIQUyVr6Ob8IJ2Z341QwbK1Dw=;
-  b=btfmWO7ZFibYtWQTA+6iB1ZyZIQ54XzrEzO7pQjou9IW3rk4OhJYpI2J
-   0wZJgAnDJcplP0la9DmuZX5amcB0FP+aKhhGOSkIPD6MmpOZTOL1UZOU5
-   4b9p150Zbo9LySfsqgvL8sB5NFPY4T6Zevo9DZiYb6wPd3si+/NPdNfmj
-   I=;
-IronPort-SDR: 0I5YmOzQwtppJhTcYNFeSh1RQc9kh0GwWJKUsikBGmre1oF1gDyUj+tPLQhHdkgBluO40UUH3m
- rF7E4t+wVfix9NN3COPNew6PbW2rZPttOaZRQbq87spnvDK31BPPHfUG8VUOd8x+daDtMji9TY
- cRpAnQdNjjMYdGsRS0c0h1LdPSqZnA4M/nFgoXiq/mXeN40LSWPqxld3Ktfg/OrxiCtqxcrTST
- KEyZw6od2zKhQAnQ5sRBww7YO6jv/ToiG/QAAXrG74dBvI/vx2n8LelyqfiEGCZvIiC85DRjlQ
- f/U=
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6000,8403,9519"; a="147917928"
-X-IronPort-AV: E=Sophos;i="5.70,397,1574118000"; 
-   d="scan'208";a="147917928"
-Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2020 10:13:34 +0100
-Received: from MUCSE708.infineon.com (MUCSE708.infineon.com [172.23.7.82])
-        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
-        Mon,  3 Feb 2020 10:13:33 +0100 (CET)
-Received: from [10.154.32.73] (172.23.8.247) by MUCSE708.infineon.com
- (172.23.7.82) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1713.5; Mon, 3 Feb
- 2020 10:13:33 +0100
-Subject: Re: [PATCH v7 4/6] tpm: tpm_tis_spi: Support cr50 devices
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-CC:     Andrey Pronin <apronin@chromium.org>,
-        <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>
-References: <20190920183240.181420-1-swboyd@chromium.org>
- <20190920183240.181420-5-swboyd@chromium.org>
-From:   Alexander Steffen <Alexander.Steffen@infineon.com>
-Message-ID: <007dfd87-5170-684a-26dc-9e7533d42034@infineon.com>
-Date:   Mon, 3 Feb 2020 10:13:29 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <20190920183240.181420-5-swboyd@chromium.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+        Mon, 3 Feb 2020 11:58:56 -0500
+Received: by mail-pj1-f67.google.com with SMTP id m7so86689pjs.0;
+        Mon, 03 Feb 2020 08:58:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/YyTHPIBZyo/MqH3zpBfQtUfIWIJ/AY6jdQ6GQWRTFQ=;
+        b=H4PYtBpNnwNZ74ttAJKAvXj+XXpucjbenNa4WCoLfSGkMAEfWgHv37RfodC9wFUsLz
+         i9xOLmJvsImDMk9gqhxd4SmlznZPEqTCoO0grr+kJNl8WRmkvftYS9xd12xMV357JBC3
+         xTUHh0enPsXgV7bt8TAMhOTTyUj+8HwNq46Fy8joPbZ+NafT8l+ohQWfPg1wus+a4p9g
+         eZIPf7504WyS1c4N1YlkEw2+DABbPEFt6HWYuhvP/GFdEp8U+UOePR56Emf0fgJueqJ/
+         +Dwvgq1CBDDenZLiuRRQh1c2UQLuXp0Kxbt1vP7Quc7zqUNWp5jLv2HaKVrhut2j6sWK
+         dMKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/YyTHPIBZyo/MqH3zpBfQtUfIWIJ/AY6jdQ6GQWRTFQ=;
+        b=GnrI7b4PDRmm/UJOgaNSXzbbL1x/ATcmnKevPwmjWnAZgzR5+1RPKjjkiXJbC0kxPb
+         A4p/i3q3HkkfrC1SbyWvwJYL9xbDnN61TdroW8Atz3ZDy8wNficLG4mIUZeTE9qvfyBL
+         0IqjQ+RXoU+wzJV6zThhUnAMVkMRNgtJpElt603QaduztxN6bm23lGSN7dyp2ddlyhkW
+         607Vk2s3O0/VkzKTNoDhAl3d/Wz7W878ITPx8A6CRB9sYZJo3n6RP9LUgBKhkkDpe0JB
+         dhtY5yCXm6fs0TRBl9zo5wkvMjQD4oTGzJDsBQUoddix/uAF1cYAcJWUKgv+3g97Zh7I
+         N2YA==
+X-Gm-Message-State: APjAAAXzVcmS1e56A/Jys+G/jPWmWW8aK9nDGSg/UHwVFguVzF0Qy8Lc
+        ziig0berNLF7rrZqU1dWHs8=
+X-Google-Smtp-Source: APXvYqwmZlkmx1mhgCYn40rCLu59Po/tB6leuusgEMtreHvtJTa9BmD13/pTMEWfHIERTCB5tPT0mg==
+X-Received: by 2002:a17:902:8303:: with SMTP id bd3mr25050818plb.171.1580749135496;
+        Mon, 03 Feb 2020 08:58:55 -0800 (PST)
+Received: from jprestwo-test.jf.intel.com (jfdmzpr04-ext.jf.intel.com. [134.134.137.73])
+        by smtp.googlemail.com with ESMTPSA id h10sm20579298pfo.181.2020.02.03.08.58.54
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 03 Feb 2020 08:58:54 -0800 (PST)
+Message-ID: <5c593b6f23ae41e90e6b3799141ea68944bb4034.camel@gmail.com>
+Subject: Re: [PATCH v5 4/6] security: keys: trusted: use ASN.1 TPM2 key
+ format for the blobs
+From:   James Prestwood <prestwoj@gmail.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
+Date:   Mon, 03 Feb 2020 08:54:40 -0800
+In-Reply-To: <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
+References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
+         <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE707.infineon.com (172.23.7.81) To
- MUCSE708.infineon.com (172.23.7.82)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 20.09.2019 20:32, Stephen Boyd wrote:
-> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-> index a01c4cab902a..c96439f11c85 100644
-> --- a/drivers/char/tpm/Makefile
-> +++ b/drivers/char/tpm/Makefile
-> @@ -21,7 +21,9 @@ tpm-$(CONFIG_EFI) += eventlog/efi.o
->   tpm-$(CONFIG_OF) += eventlog/of.o
->   obj-$(CONFIG_TCG_TIS_CORE) += tpm_tis_core.o
->   obj-$(CONFIG_TCG_TIS) += tpm_tis.o
-> -obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
-> +obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi_mod.o
-> +tpm_tis_spi_mod-y := tpm_tis_spi.o
-> +tpm_tis_spi_mod-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
->   obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
->   obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
->   obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
+Hi James,
 
-This renames the driver module from tpm_tis_spi to tpm_tis_spi_mod, was 
-this done intentionally? When trying to upgrade the kernel, this just 
-broke my test system, since all scripts expect to be able to load 
-tpm_tis_spi, which does not exist anymore with that change.
+<snip>
 
-Alexander
+> diff --git a/security/keys/trusted-keys/tpm2key.asn1
+> b/security/keys/trusted-keys/tpm2key.asn1
+> new file mode 100644
+> index 000000000000..f930fd812db3
+> --- /dev/null
+> +++ b/security/keys/trusted-keys/tpm2key.asn1
+> @@ -0,0 +1,23 @@
+> +---
+> +--- Note: This isn't quite the definition in the standard
+> +---       However, the Linux asn.1 parser doesn't understand
+> +---       [2] EXPLICIT SEQUENCE OF OPTIONAL
+> +---       So there's an extra intermediate TPMPolicySequence
+> +---       definition to work around this
+> +
+> +TPMKey ::= SEQUENCE {
+> +	type		OBJECT IDENTIFIER ({tpmkey_type}),
+> +	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
+> +	policy		[1] EXPLICIT TPMPolicySequence OPTIONAL,
+> +	secret		[2] EXPLICIT OCTET STRING OPTIONAL,
+> +	parent		INTEGER ({tpmkey_parent}),
+> +	pubkey		OCTET STRING ({tpmkey_pub}),
+> +	privkey		OCTET STRING ({tpmkey_priv})
+> +	}
+> +
+> +TPMPolicySequence ::= SEQUENCE OF TPMPolicy
+> +
+> +TPMPolicy ::= SEQUENCE {
+> +	commandCode		[0] EXPLICIT INTEGER ({tpmkey_code}),
+> +	commandPolicy		[1] EXPLICIT OCTET STRING
+> ({tpmkey_policy})
+> +	}
+
+I have been using your set of patches in order to get this ASN.1
+parser/definition. I am implementing an asymmetric key parser/type TPM2
+keys for enc/dec/sign/verify using keyctl. Note that this
+implementation goes in crypto/asymmetric_keys/, and your patches sit in
+security/keys/trusted-keys/.
+
+Currently I am just including "../../security/keys/trusted-
+keys/{tpm2key.asn1.h,tpm2-policy.h}" in order to use the ASN.1 parser
+to verify my keys, but this obviously isn't going to fly.
+
+Do you (or anyone) have any ideas as to how both trusted keys and
+asymmetric keys could share this ASN.1 parser/definition? Some common
+area that both security and crypto could include? Or maybe there is
+some common way the kernel does things like this?
+
+Thanks,
+James
+
+
