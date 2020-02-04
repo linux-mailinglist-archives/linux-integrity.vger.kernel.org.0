@@ -2,149 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF84A15138E
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2020 01:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 307831513AC
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2020 01:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbgBDAAg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Feb 2020 19:00:36 -0500
-Received: from namei.org ([65.99.196.166]:43090 "EHLO namei.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726369AbgBDAAf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Feb 2020 19:00:35 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 013Nxnn2015307;
-        Mon, 3 Feb 2020 23:59:49 GMT
-Date:   Tue, 4 Feb 2020 10:59:49 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     linux-security-module@vger.kernel.org
-cc:     linux-kernel@vger.kernel.org, lwn@lwn.net,
-        fedora-selinux-list@redhat.com, linux-crypto@vger.kernel.org,
-        kernel-hardening@lists.openwall.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Audit-ML <linux-audit@redhat.com>, gentoo-hardened@gentoo.org,
-        keyrings@linux-nfs.org, tpmdd-devel@lists.sourceforge.net,
-        Linux Security Summit Program Committee 
-        <lss-pc@lists.linuxfoundation.org>
-Subject: [ANNOUNCE][CFP] Linux Security Summit North America 2020
-Message-ID: <alpine.LRH.2.21.2002041054320.12768@namei.org>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        id S1726561AbgBDAhS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Feb 2020 19:37:18 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:37236 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726369AbgBDAhS (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 3 Feb 2020 19:37:18 -0500
+Received: by mail-pj1-f66.google.com with SMTP id m13so561793pjb.2
+        for <linux-integrity@vger.kernel.org>; Mon, 03 Feb 2020 16:37:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:from:to:subject:cc:user-agent:date;
+        bh=5xp67ajba0eEYfuQWFHz2Q1LL+I8M21VgbW1mPqOZiM=;
+        b=PWYQGV03wKCsNXbzuSHLA8kf8THah3SW1Vmi1VohM14Ijyz7Nh9d9gjY1WpJ817EMC
+         MT4hMGre6d7iVp7ly2gGA1AKQgzRMsQFQUmpJV0iqABRgroFjgAWSBs6VP52gHqrRJXw
+         Ir4f73Jg9Nj1w8VXA8eg+VTxb+nWegKWN0hFo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:from:to:subject:cc
+         :user-agent:date;
+        bh=5xp67ajba0eEYfuQWFHz2Q1LL+I8M21VgbW1mPqOZiM=;
+        b=nfisFp1aZd8WS+UoDG3bkGO043+EKmiwrLfx2KHha86ojMnAMufNme46XQyfE823zQ
+         uZfYCBhExe00MXTMw9IDK7Hxtr9vRXAOW9oJwdH9rueGGIw5mnm8+O0ioQU7uVwASozG
+         /OCLPCmYC5OHYIG8AEnXA4jTMZumOxrQj45N39TMv0TCJbhJLamRcp5Wxe6fLQcM1a5X
+         X3pB8YtkshbQJM23A0LSWHHiOq4Z1/LlwH5JebdXaz1B/CILzaKNGt556VuuzuuTPDoS
+         l7C3/4L+CgT4n07OQsX2EgAByI+/lB6Voqaz3JjrQSURwor8VLFZROKsGuwy4TLmz17/
+         I8pg==
+X-Gm-Message-State: APjAAAV9NCeDP5Vl2SbJpOsPHyUMXmYfPpoOFoGkccOgd1Et1UjCqY2V
+        95kikE+R12kw9HTjV3bbg97nlA==
+X-Google-Smtp-Source: APXvYqyk8G1DkyHXQEPuiXrNHcLN5PgZGWYKE6wajbWdR4DdrJbTMCe2Ur8jIXXG1eqg5oY9kUCR7w==
+X-Received: by 2002:a17:902:462:: with SMTP id 89mr26639753ple.270.1580776637895;
+        Mon, 03 Feb 2020 16:37:17 -0800 (PST)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id x143sm21884895pgx.54.2020.02.03.16.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Feb 2020 16:37:17 -0800 (PST)
+Message-ID: <5e38bcbd.1c69fb81.a383.c572@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="1665246916-1737447927-1580774163=:12768"
-Content-ID: <alpine.LRH.2.21.2002041056360.12768@namei.org>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <007dfd87-5170-684a-26dc-9e7533d42034@infineon.com>
+References: <20190920183240.181420-1-swboyd@chromium.org> <20190920183240.181420-5-swboyd@chromium.org> <007dfd87-5170-684a-26dc-9e7533d42034@infineon.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v7 4/6] tpm: tpm_tis_spi: Support cr50 devices
+Cc:     Andrey Pronin <apronin@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>
+User-Agent: alot/0.8.1
+Date:   Mon, 03 Feb 2020 16:37:16 -0800
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Quoting Alexander Steffen (2020-02-03 01:13:29)
+> On 20.09.2019 20:32, Stephen Boyd wrote:
+> > diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+> > index a01c4cab902a..c96439f11c85 100644
+> > --- a/drivers/char/tpm/Makefile
+> > +++ b/drivers/char/tpm/Makefile
+> > @@ -21,7 +21,9 @@ tpm-$(CONFIG_EFI) +=3D eventlog/efi.o
+> >   tpm-$(CONFIG_OF) +=3D eventlog/of.o
+> >   obj-$(CONFIG_TCG_TIS_CORE) +=3D tpm_tis_core.o
+> >   obj-$(CONFIG_TCG_TIS) +=3D tpm_tis.o
+> > -obj-$(CONFIG_TCG_TIS_SPI) +=3D tpm_tis_spi.o
+> > +obj-$(CONFIG_TCG_TIS_SPI) +=3D tpm_tis_spi_mod.o
+> > +tpm_tis_spi_mod-y :=3D tpm_tis_spi.o
+> > +tpm_tis_spi_mod-$(CONFIG_TCG_TIS_SPI_CR50) +=3D tpm_tis_spi_cr50.o
+> >   obj-$(CONFIG_TCG_TIS_I2C_ATMEL) +=3D tpm_i2c_atmel.o
+> >   obj-$(CONFIG_TCG_TIS_I2C_INFINEON) +=3D tpm_i2c_infineon.o
+> >   obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) +=3D tpm_i2c_nuvoton.o
+>=20
+> This renames the driver module from tpm_tis_spi to tpm_tis_spi_mod, was=20
+> this done intentionally? When trying to upgrade the kernel, this just=20
+> broke my test system, since all scripts expect to be able to load=20
+> tpm_tis_spi, which does not exist anymore with that change.
+>=20
 
---1665246916-1737447927-1580774163=:12768
-Content-Type: text/plain; CHARSET=ISO-8859-7
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.LRH.2.21.2002041056361.12768@namei.org>
+I mentioned this during the review of this patch set. I thought nobody
+would care, given that it's just a module name.
 
-==============================================================================
-		   ANNOUNCEMENT AND CALL FOR PARTICIPATION
+Can your scripts load the module based on something besides the module
+name? Perhaps by using device attributes instead?
 
-		   LINUX SECURITY SUMMIT NORTH AMERICA 2020
-                             
-			        24-26 JUNE
-			    AUSTIN, TEXAS, USA
-==============================================================================
-
-DESCRIPTION
- 
-Linux Security Summit North America (LSS-NA) is a technical forum for
-collaboration between Linux developers, researchers, and end-users.  Its
-primary aim is to foster community efforts in analyzing and solving Linux
-security challenges.
- 
- The program committee currently seeks proposals for:
- 
-   * Refereed Presentations:
-     45 minutes in length.
- 
-   * Panel Discussion Topics:
-     45 minutes in length.
- 
-   * Short Topics:
-     30 minutes in total, including at least 10 minutes discussion.
- 
-   * Tutorials
-     90 minutes in length.
- 
-Tutorial sessions should be focused on advanced Linux security defense
-topics within areas such as the kernel, compiler, and security-related
-libraries.  Priority will be given to tutorials created for this conference,
-and those where the presenter a leading subject matter expert on the topic.
- 
-Topic areas include, but are not limited to:
- 
-   * Kernel self-protection
-   * Access control
-   * Cryptography and key management
-   * Integrity policy and enforcement
-   * Hardware Security
-   * IoT and embedded security
-   * Virtualization and containers
-   * System-specific system hardening
-   * Case studies
-   * Security tools
-   * Security UX
-   * Emerging technologies, threats & techniques
-
-  Proposals should be submitted via:
-
-    https://events.linuxfoundation.org/linux-security-summit-north-america/program/cfp/
- 
-
-DATES
- 
-  * CFP close:            March 31
-  * CFP notifications:    April 13
-  * Schedule announced:   April 16
-  * Event:                June 24-26
-
-
-WHO SHOULD ATTEND
- 
-We're seeking a diverse range of attendees and welcome participation by
-people involved in Linux security development, operations, and research.
- 
-LSS-NA is a unique global event that provides the opportunity to present and
-discuss your work or research with key Linux security community members and
-maintainers.  It¢s also useful for those who wish to keep up with the latest
-in Linux security development and to provide input to the development
-process.
-
-WEB SITE
-
-    https://events.linuxfoundation.org/linux-security-summit-north-america/
-
-TWITTER
-
-  For event updates and announcements, follow:
-
-    https://twitter.com/LinuxSecSummit
-  
-    #linuxsecuritysummit
-
-PROGRAM COMMITTEE
-
-  The program committee for LSS 2020 is:
-
-    * James Morris, Microsoft
-    * Serge Hallyn, Cisco
-    * Paul Moore, Cisco
-    * Stephen Smalley, NSA
-    * Elena Reshetova, Intel
-    * John Johansen, Canonical
-    * Kees Cook, Google
-    * Casey Schaufler, Intel
-    * Mimi Zohar, IBM
-    * David A. Wheeler, Institute for Defense Analyses
-
-  The program committee may be contacted as a group via email:
-    lss-pc () lists.linuxfoundation.org
---1665246916-1737447927-1580774163=:12768--
