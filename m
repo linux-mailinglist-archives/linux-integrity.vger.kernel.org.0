@@ -2,93 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB551539D6
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Feb 2020 22:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81592153A91
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Feb 2020 22:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727441AbgBEVAm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 5 Feb 2020 16:00:42 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24956 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727385AbgBEVAl (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 5 Feb 2020 16:00:41 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 015Kre9n119247
-        for <linux-integrity@vger.kernel.org>; Wed, 5 Feb 2020 16:00:41 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xyhmdp2yu-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 05 Feb 2020 16:00:40 -0500
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 5 Feb 2020 21:00:38 -0000
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 5 Feb 2020 21:00:34 -0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 015L0Xj460293240
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Feb 2020 21:00:33 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9BED942041;
-        Wed,  5 Feb 2020 21:00:33 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A65834204D;
-        Wed,  5 Feb 2020 21:00:32 +0000 (GMT)
-Received: from dhcp-9-31-103-105.watson.ibm.com (unknown [9.31.103.105])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  5 Feb 2020 21:00:32 +0000 (GMT)
-Subject: Re: [PATCH v2 2/8] ima: Switch to ima_hash_algo for boot aggregate
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        James.Bottomley@HansenPartnership.com,
-        jarkko.sakkinen@linux.intel.com
-Cc:     linux-integrity@vger.kernel.org,
+        id S1727165AbgBEV6B (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 5 Feb 2020 16:58:01 -0500
+Received: from mga02.intel.com ([134.134.136.20]:57372 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727106AbgBEV6A (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 5 Feb 2020 16:58:00 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Feb 2020 13:58:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,407,1574150400"; 
+   d="scan'208";a="231848039"
+Received: from gtobin-mobl1.ger.corp.intel.com (HELO localhost) ([10.251.85.85])
+  by orsmga003.jf.intel.com with ESMTP; 05 Feb 2020 13:57:57 -0800
+Date:   Wed, 5 Feb 2020 23:57:56 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     zohar@linux.ibm.com, James.Bottomley@HansenPartnership.com,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
         stable@vger.kernel.org
-Date:   Wed, 05 Feb 2020 16:00:32 -0500
-In-Reply-To: <20200205103317.29356-3-roberto.sassu@huawei.com>
+Subject: Re: [PATCH v2 1/8] tpm: Initialize crypto_id of allocated_banks to
+ HASH_ALGO__LAST
+Message-ID: <20200205215756.GA24468@linux.intel.com>
 References: <20200205103317.29356-1-roberto.sassu@huawei.com>
-         <20200205103317.29356-3-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20020521-0016-0000-0000-000002E406B5
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20020521-0017-0000-0000-00003346E93C
-Message-Id: <1580936432.5585.309.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-05_06:2020-02-04,2020-02-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=3
- spamscore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- mlxlogscore=843 malwarescore=0 impostorscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002050160
+ <20200205103317.29356-2-roberto.sassu@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200205103317.29356-2-roberto.sassu@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
-
-On Wed, 2020-02-05 at 11:33 +0100, Roberto Sassu wrote:
-
-<snip>
-
-> Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> Suggested-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+On Wed, Feb 05, 2020 at 11:33:10AM +0100, Roberto Sassu wrote:
+> chip->allocated_banks, an array of tpm_bank_info structures, contains the
+> list of TPM algorithm IDs of allocated PCR banks. It also contains the
+> corresponding ID of the crypto subsystem, so that users of the TPM driver
+> can calculate a digest for a PCR extend operation.
+> 
+> However, if there is no mapping between TPM algorithm ID and crypto ID, the
+> crypto_id field of tpm_bank_info remains set to zero (the array is
+> allocated and initialized with kcalloc() in tpm2_get_pcr_allocation()).
+> Zero should not be used as value for unknown mappings, as it is a valid
+> crypto ID (HASH_ALGO_MD4).
+> 
+> Thus, initialize crypto_id to HASH_ALGO__LAST.
+> 
+> Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms with PCR read")
 > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
 > Cc: stable@vger.kernel.org
 
-Cc'ing stable resulted in Sasha's automated message.  If you're going
-to Cc stable, then please include the stable kernel release (e.g. Cc: 
-stable@vger.kernel.org # v5.3).  Also please include a "Fixes" tag.
- Normally only bug fixes are backported.
+Cc should be first.
 
-Mimi
-
+/Jarkko
