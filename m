@@ -2,195 +2,164 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 164BC151F6B
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2020 18:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F3615292B
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Feb 2020 11:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727310AbgBDR1x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Feb 2020 12:27:53 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6532 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727358AbgBDR1x (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Feb 2020 12:27:53 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 014HJNSU122818
-        for <linux-integrity@vger.kernel.org>; Tue, 4 Feb 2020 12:27:52 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xxmkn2pmr-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 04 Feb 2020 12:27:51 -0500
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 4 Feb 2020 17:27:49 -0000
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 4 Feb 2020 17:27:46 -0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 014HRjJL54263904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Feb 2020 17:27:45 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D3F24C04A;
-        Tue,  4 Feb 2020 17:27:45 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AED4E4C040;
-        Tue,  4 Feb 2020 17:27:44 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.206.251])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Feb 2020 17:27:44 +0000 (GMT)
-Subject: Re: [PATCH v3 2/2] ima: support calculating the boot_aggregate
- based on different TPM banks
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Tue, 04 Feb 2020 12:27:44 -0500
-In-Reply-To: <01986ba728014571a3907fef9c69ff2c@huawei.com>
-References: <1580401363-5593-1-git-send-email-zohar@linux.ibm.com>
-         <1580401363-5593-2-git-send-email-zohar@linux.ibm.com>
-         <01986ba728014571a3907fef9c69ff2c@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20020417-0016-0000-0000-000002E3A4E3
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20020417-0017-0000-0000-0000334681A5
-Message-Id: <1580837264.5585.78.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-04_06:2020-02-04,2020-02-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015
- malwarescore=0 mlxscore=0 adultscore=0 impostorscore=0 spamscore=0
- suspectscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1911200001 definitions=main-2002040114
+        id S1727771AbgBEKe3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 5 Feb 2020 05:34:29 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2365 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727234AbgBEKe3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 5 Feb 2020 05:34:29 -0500
+Received: from lhreml702-cah.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 582EEB0DCAD44BEDC7FD;
+        Wed,  5 Feb 2020 10:34:27 +0000 (GMT)
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
+ by smtpsuk.huawei.com (10.201.108.43) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Wed, 5 Feb 2020 10:34:18 +0000
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <James.Bottomley@HansenPartnership.com>,
+        <jarkko.sakkinen@linux.intel.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 0/8] ima: support stronger algorithms for attestation
+Date:   Wed, 5 Feb 2020 11:33:09 +0100
+Message-ID: <20200205103317.29356-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.204.65.160]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-02-04 at 13:37 +0000, Roberto Sassu wrote:
-> > -----Original Message-----
-> > From: linux-integrity-owner@vger.kernel.org [mailto:linux-integrity-
-> > owner@vger.kernel.org] On Behalf Of Mimi Zohar
-> > Sent: Thursday, January 30, 2020 5:23 PM
-> > To: linux-integrity@vger.kernel.org
-> > Cc: Jerry Snitselaar <jsnitsel@redhat.com>; James Bottomley
-> > <James.Bottomley@HansenPartnership.com>; linux-
-> > kernel@vger.kernel.org; Mimi Zohar <zohar@linux.ibm.com>
-> > Subject: [PATCH v3 2/2] ima: support calculating the boot_aggregate based
-> > on different TPM banks
-> > 
-> > Calculating the boot_aggregate attempts to read the TPM SHA1 bank,
-> > assuming it is always enabled.  With TPM 2.0 hash agility, TPM chips
-> > could support multiple TPM PCR banks, allowing firmware to configure and
-> > enable different banks.
-> > 
-> > Instead of hard coding the TPM 2.0 bank hash algorithm used for calculating
-> > the boot-aggregate, use the same hash algorithm for reading the TPM PCRs
-> > as
-> > for calculating the boot aggregate digest.  Preference is given to the
-> > configured IMA default hash algorithm.
-> > 
-> > For TPM 1.2 SHA1 is the only supported hash algorithm.
-> > 
-> > Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > Suggested-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >  security/integrity/ima/ima_crypto.c | 45
-> > ++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 44 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/security/integrity/ima/ima_crypto.c
-> > b/security/integrity/ima/ima_crypto.c
-> > index 7967a6904851..a020aaefdea8 100644
-> > --- a/security/integrity/ima/ima_crypto.c
-> > +++ b/security/integrity/ima/ima_crypto.c
-> > @@ -656,13 +656,34 @@ static void __init ima_pcrread(u32 idx, struct
-> > tpm_digest *d)
-> >  		pr_err("Error Communicating to TPM chip\n");
-> >  }
-> > 
-> > +static enum hash_algo get_hash_algo(const char *algname)
-> > +{
-> > +	int i;
-> > +
-> > +	for (i = 0; i < HASH_ALGO__LAST; i++) {
-> > +		if (strcmp(algname, hash_algo_name[i]) == 0)
-> > +			break;
-> > +	}
-> > +
-> > +	return i;
-> > +}
-> > +
-> >  /*
-> > - * Calculate the boot aggregate hash
-> > + * The boot_aggregate is a cumulative hash over TPM registers 0 - 7.  With
-> > + * TPM 1.2 the boot_aggregate was based on reading the SHA1 PCRs, but
-> > with
-> > + * TPM 2.0 hash agility, TPM chips could support multiple TPM PCR banks,
-> > + * allowing firmware to configure and enable different banks.
-> > + *
-> > + * Knowing which TPM bank is read to calculate the boot_aggregate digest
-> > + * needs to be conveyed to a verifier.  For this reason, use the same
-> > + * hash algorithm for reading the TPM PCRs as for calculating the boot
-> > + * aggregate digest as stored in the measurement list.
-> >   */
-> >  static int __init ima_calc_boot_aggregate_tfm(char *digest,
-> >  					      struct crypto_shash *tfm)
-> >  {
-> >  	struct tpm_digest d = { .alg_id = TPM_ALG_SHA1, .digest = {0} };
-> > +	enum hash_algo crypto_id;
-> >  	int rc;
-> >  	u32 i;
-> >  	SHASH_DESC_ON_STACK(shash, tfm);
-> > @@ -673,6 +694,28 @@ static int __init ima_calc_boot_aggregate_tfm(char
-> > *digest,
-> >  	if (rc != 0)
-> >  		return rc;
-> > 
-> > +	crypto_id = get_hash_algo(crypto_shash_alg_name(tfm));
-> > +	if (crypto_id == HASH_ALGO__LAST) {
-> > +		pr_devel("unknown hash algorithm (%s), failing to read
-> > PCRs.\n",
-> > +			 crypto_shash_alg_name(tfm));
-> > +		return 0;
-> > +	}
-> > +
-> > +	for (i = 0; i < ima_tpm_chip->nr_allocated_banks; i++) {
-> > +		if (ima_tpm_chip->allocated_banks[i].crypto_id ==
-> > crypto_id) {
-> > +			d.alg_id = ima_tpm_chip->allocated_banks[i].alg_id;
-> > +			break;
-> > +		}
-> > +	}
-> > +	if (i == ima_tpm_chip->nr_allocated_banks) {
-> > +		pr_devel("TPM %s bank not allocated, failing to read
-> > PCRs.\n",
-> > +			 crypto_shash_alg_name(tfm));
-> > +		return 0;
-> > +	}
-> > +
-> > +	pr_devel("calculating the boot-aggregregate based on TPM
-> > bank: %04x\n",
-> > +		  d.alg_id);
-> > +
-> >  	/* cumulative sha1 over tpm registers 0-7 */
-> >  	for (i = TPM_PCR0; i < TPM_PCR8; i++) {
-> >  		ima_pcrread(i, &d);
-> 
-> The third argument of crypto_shash_update() should be
-> crypto_shash_digestsize(tfm).
+IMA extends Platform Configuration Registers (PCRs) of the TPM to give a
+proof to a remote verifier that the measurement list contains all
+measurements done by the kernel and that the list was not maliciously
+modified by an attacker.
 
-Thanks!  At this point we know the hash algorithm, so we could use
-hash_digest_size[].
+IMA was originally designed to extend PCRs with a SHA1 digest, provided
+with the measurement list, and was subsequently updated to extend all PCR
+banks in case a TPM 2.0 is used. Non-SHA1 PCR banks are not supposed to be
+used for remote attestation, as they are extended with a SHA1 digest padded
+with zeros, which does not increase the strength.
 
-Mimi
+This patch set addresses this issue by extending PCRs with the digest of
+the measurement entry calculated with the crypto subsystem. The list of
+algorithms used to calculate the digest are taken from
+ima_tpm_chip->allocated_banks, returned by the TPM driver. The SHA1 digest
+is always calculated, as SHA1 still remains the default algorithm for the
+template digest in the measurement list.
+
+This patch set also makes two additional modifications related to the usage
+of hash algorithms. First, since now the template digest for the default
+IMA algorithm is always calculated, this is used for hash collision
+detection, to check if there are duplicate measurement entries.
+
+Second, it uses the default IMA hash algorithm to calculate the boot
+aggregate, assuming that the corresponding PCR bank is currently allocated.
+Otherwise, it finds the SHA256 PCR bank (mandatory for TPM 2.0 in TCG PC
+Client specification). Lastly, if that bank was not found, it selects the
+first PCR bank. If the TPM algorithm ID of the first PCR bank is not mapped
+to a crypto ID, boot_aggregate is set to zero.
+
+This patch set does not yet modify the format of the measurement list to
+provide the digests passed to the TPM. However, reconstructing the value of
+the quoted PCR is still possible for the verifier by calculating the digest
+on measurement data found in binary_runtime_measurements.
+
+attest-tools (https://github.com/euleros/attest-tools, branch 0.2-devel)
+has the ability to parse the BIOS and IMA event logs, and to compare
+boot_aggregate with the digest of final PCR values obtained by performing
+in software the PCR extend operation with digests in the BIOS event log.
+
+To perform the test, it is necessary to have a complete BIOS event log and
+to apply the boot_aggregate patches. It would be possible to use qemu and
+swtpm from Stefan Berger, but at the moment it is necessary to change the
+ACPI parser in drivers/char/tpm/event_log/acpi.c to accept TPM 2.0 and to
+return EFI_TCG2_EVENT_LOG_FORMAT_TCG_2.
+
+Create req.json with this content:
+---
+{
+  "reqs":{
+    "dummy|verify":"",
+    "ima_boot_aggregate|verify":""
+  }
+}
+---
+
+With the requirements above, attest-tools verifies boot_aggregate and
+accepts any other entry in the event logs.
+
+On server side run:
+# attest_ra_server -p 10 -r req.json -s -i
+
+-s disables TPM signature verification
+-i allows IMA violations
+
+To enable TPM signature verification it is necessary to have a valid AK
+certificate. It can be obtained by following the instructions at:
+
+https://github.com/euleros/attest-tools/blob/0.2-devel/README
+
+On client side run:
+# echo test > aik_cert.pem
+# echo aik_cert.pem > list_privacy_ca
+# attest_ra_client -A
+
+The commands above generate an AK and tell attest-tools to use a dummy AK
+certificate.
+
+# attest_ra_client -s <server IP> -q -p 10 -P <PCR algo> -b -i
+
+The command above sends the TPM quote and the event logs to the RA server
+and gets the response (successful/failed verification).
+
+-b includes the BIOS event log from securityfs
+-i includes the IMA event log from securityfs
+
+To check that IMA extends non-SHA1 PCR banks with an appropriate digest,
+use -P sha256, so that attest_ra_client selects the SHA256 PCR bank. To
+check that boot_aggregate is calculated properly, set ima_hash=sha256 in
+the kernel command line.
+
+Changelog
+
+v1:
+- move ima_sha1_idx and ima_hash_algo_idx to ima_crypto.c
+- introduce ima_num_template_digests (suggested by Mimi)
+- determine ima_num_template_digests before allocating ima_algo_array
+  (suggested by Mimi)
+- replace kmalloc_array() with kcalloc() in ima_init_crypto() (suggested by
+  Mimi)
+- check if ima_tpm_chip is NULL
+
+Roberto Sassu (8):
+  tpm: Initialize crypto_id of allocated_banks to HASH_ALGO__LAST
+  ima: Switch to ima_hash_algo for boot aggregate
+  ima: Evaluate error in init_ima()
+  ima: Store template digest directly in ima_template_entry
+  ima: Switch to dynamically allocated buffer for template digests
+  ima: Allocate and initialize tfm for each PCR bank
+  ima: Calculate and extend PCR with digests in ima_template_entry
+  ima: Use ima_hash_algo for collision detection in the measurement list
+
+ drivers/char/tpm/tpm2-cmd.c           |   2 +
+ security/integrity/ima/ima.h          |   8 +-
+ security/integrity/ima/ima_api.c      |  20 +--
+ security/integrity/ima/ima_crypto.c   | 244 ++++++++++++++++++++++----
+ security/integrity/ima/ima_fs.c       |   4 +-
+ security/integrity/ima/ima_init.c     |  22 ++-
+ security/integrity/ima/ima_main.c     |   3 +
+ security/integrity/ima/ima_queue.c    |  36 ++--
+ security/integrity/ima/ima_template.c |  22 ++-
+ 9 files changed, 288 insertions(+), 73 deletions(-)
+
+-- 
+2.17.1
 
