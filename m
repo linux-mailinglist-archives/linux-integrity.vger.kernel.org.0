@@ -2,113 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D702115444E
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Feb 2020 13:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5101545D5
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Feb 2020 15:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727613AbgBFMyP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Feb 2020 07:54:15 -0500
-Received: from smtp11.infineon.com ([217.10.52.105]:19969 "EHLO
-        smtp11.infineon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726925AbgBFMyO (ORCPT
+        id S1728142AbgBFOOC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Feb 2020 09:14:02 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:1558 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727955AbgBFOOB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Feb 2020 07:54:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1580993654; x=1612529654;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=+LOsqSZOwaErmcvYyHE4Zb+x4vf935b6KUHXPd1MNms=;
-  b=aw4ldkm8Md1LM7VL5bRQJUDyL5I4e7EgbFkPrSvugGv221KpfDBJK+hD
-   Z9dAZ3soQ/5pl/+mUvXdrPiBPdEubNvkKsoKvD3Om2aiYLk4yIakyC1aR
-   bAqxIAthONLtztwNbTYWefXlSo/AqZ+FxglgYhPQczG7utA1FiU65ansS
-   I=;
-IronPort-SDR: 3ajDCj45i+l3AxOjLL+D8zjefXWLzfftgrflXh5BML42yHT+uQB5hSEemkvDpkt0h59+BHxbGi
- KZgI0Rep3ezmoyjdnn6aglQ6UbvOtqS9JiIC1Br+Yk34Sl6gdVzAbIx+1upgK5RunfniBKVjmW
- mkpR5kUBOcQu8StBaArcsOnWUKjFi1PT+GWtjBb8c3/2l0qqIS8KFnKxkQLFCla3GgQZxsoeM3
- lNYhpqfAMd3REvNnDouABWg4Er5OxL+hiMuwR5stp4cQ80qlAI28Oad8XgNdB2FsTo3/r6uHG9
- e5Y=
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6000,8403,9522"; a="148641042"
-X-IronPort-AV: E=Sophos;i="5.70,409,1574118000"; 
-   d="scan'208";a="148641042"
-Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2020 13:54:12 +0100
-Received: from MUCSE708.infineon.com (MUCSE708.infineon.com [172.23.7.82])
-        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
-        Thu,  6 Feb 2020 13:54:12 +0100 (CET)
-Received: from [10.154.32.73] (172.23.8.247) by MUCSE708.infineon.com
- (172.23.7.82) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1713.5; Thu, 6 Feb
- 2020 13:54:12 +0100
-Subject: Re: [PATCH] tpm: Revert tpm_tis_spi_mod.ko to tpm_tis_spi.ko.
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        <linux-integrity@vger.kernel.org>
-CC:     Andrey Pronin <apronin@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>, <stable@vger.kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200205203818.4679-1-jarkko.sakkinen@linux.intel.com>
-From:   Alexander Steffen <Alexander.Steffen@infineon.com>
-Message-ID: <f865a01e-83a1-b0e2-a9ca-45f874d86b4c@infineon.com>
-Date:   Thu, 6 Feb 2020 13:54:11 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <20200205203818.4679-1-jarkko.sakkinen@linux.intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE703.infineon.com (172.23.7.73) To
- MUCSE708.infineon.com (172.23.7.82)
+        Thu, 6 Feb 2020 09:14:01 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 016EC2ZH060986
+        for <linux-integrity@vger.kernel.org>; Thu, 6 Feb 2020 09:14:00 -0500
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2y0ktr9g1j-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 06 Feb 2020 09:14:00 -0500
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 6 Feb 2020 14:13:58 -0000
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 6 Feb 2020 14:13:55 -0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 016EDsud61276348
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Feb 2020 14:13:54 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0FE614C040;
+        Thu,  6 Feb 2020 14:13:54 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE1774C052;
+        Thu,  6 Feb 2020 14:13:52 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.140.59])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Feb 2020 14:13:52 +0000 (GMT)
+Subject: Re: [PATCH v2] ima: export the measurement list when needed
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Janne Karhunen <janne.karhunen@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Cc:     Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
+        monty.wiseman@ge.com, Amir Goldstein <amir73il@gmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Date:   Thu, 06 Feb 2020 09:13:52 -0500
+In-Reply-To: <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
+References: <20200108111743.23393-1-janne.karhunen@gmail.com>
+         <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20020614-0020-0000-0000-000003A799A8
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20020614-0021-0000-0000-000021FF691C
+Message-Id: <1580998432.5585.411.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-06_01:2020-02-06,2020-02-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ impostorscore=0 malwarescore=0 suspectscore=2 phishscore=0 adultscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002060107
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 05.02.2020 21:38, Jarkko Sakkinen wrote:
-> Revert tpm_tis_spi_mod.ko back to tpm_tis_spi.ko as the rename could break
-> the build script. This can be achieved by renaming tpm_tis_spi.c as
-> tpm_tis_spi_main.c. Then tpm_tis_spi-y can be used inside the makefile.
-> 
-> Cc: Andrey Pronin <apronin@chromium.org>
-> Cc: Stephen Boyd <swboyd@chromium.org>
-> Cc: stable@vger.kernel.org
-> Fixes: 797c0113c9a4 ("tpm: tpm_tis_spi: Support cr50 devices")
-> Reported-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> ---
->   drivers/char/tpm/Makefile                              | 8 +++++---
->   drivers/char/tpm/{tpm_tis_spi.c => tpm_tis_spi_main.c} | 0
->   2 files changed, 5 insertions(+), 3 deletions(-)
->   rename drivers/char/tpm/{tpm_tis_spi.c => tpm_tis_spi_main.c} (100%)
-> 
-> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-> index 5a0d99d4fec0..9567e5197f74 100644
-> --- a/drivers/char/tpm/Makefile
-> +++ b/drivers/char/tpm/Makefile
-> @@ -21,9 +21,11 @@ tpm-$(CONFIG_EFI) += eventlog/efi.o
->   tpm-$(CONFIG_OF) += eventlog/of.o
->   obj-$(CONFIG_TCG_TIS_CORE) += tpm_tis_core.o
->   obj-$(CONFIG_TCG_TIS) += tpm_tis.o
-> -obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi_mod.o
-> -tpm_tis_spi_mod-y := tpm_tis_spi.o
-> -tpm_tis_spi_mod-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
-> +
-> +obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
-> +tpm_tis_spi-y := tpm_tis_spi_main.o
-> +tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
-> +
->   obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
->   obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
->   obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
-> diff --git a/drivers/char/tpm/tpm_tis_spi.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> similarity index 100%
-> rename from drivers/char/tpm/tpm_tis_spi.c
-> rename to drivers/char/tpm/tpm_tis_spi_main.c
+Hi Janne,
 
-Works for me, thank you very much :)
+On Fri, 2020-01-10 at 10:48 +0200, Janne Karhunen wrote:
+> On Wed, Jan 8, 2020 at 1:18 PM Janne Karhunen <janne.karhunen@gmail.com> wrote:
+> >
+> > Some systems can end up carrying lots of entries in the ima
+> > measurement list. Since every entry is using a bit of kernel
+> > memory, allow the sysadmin to export the measurement list to
+> > the filesystem to free up some memory.
+> 
+> Hopefully this addressed comments from everyone. The flush event can
+> now be triggered by the admin anytime and unique file names can be
+> used for each flush (log.1, log.2, ...) etc, so getting to the correct
+> item should be easy.
+> 
+> While it can now be argued that since this is an admin-driven event,
+> kernel does not need to write the file. However, the intention is to
+> bring out a second patch a bit later that adds a variable to define
+> the max number of entries to be kept in the kernel memory and
+> workqueue based automatic flushing. In those cases the kernel has to
+> be able to write the file without any help from the admin..
 
-Alexander
+The implications of exporting and removing records from the IMA-
+measurement list needs to be considered carefully.  Verifying a TPM
+quote will become dependent on knowing where the measurements are
+stored.  The existing measurement list is stored in kernel memory and,
+barring a kernel memory attack, is protected from modification.
+ Before upstreaming this or a similar patch, there needs to be a
+discussion as to how the measurement list will be protected once is it
+exported to userspace.
+
+This patch now attempts to address two very different scenarios.  The
+first scenario is where userspace is requesting exporting and removing
+of the measurement list records.  The other scenario is the kernel
+exporting and removing of the measurement list records.  Conflating
+these two different use cases might not be the right solution, as we
+originally thought.
+
+The kernel already exports the IMA measurement list to userspace via a
+securityfs file.  From a userspace perspective, missing is the ability
+of removing N number of records.  In this scenario, userspace would be
+responsible for safely storing the measurements (e.g. blockchain).
+ The kernel would only be responsible for limiting permission, perhaps
+based on a capability, before removing records from the measurement
+list. 
+
+In the kernel usecase, somehow the kernel would need to safely export
+the measurement list, or some portion of the measurement list, to a
+file and then delete that portion.  What protects the exported records
+stored in a file from modification?
+
+Instead of exporting the measurement records, one option as suggested
+by Amir Goldstein, would be to use a vfs_tmpfile() to get an anonymous
+file for backing store.  The existing securityfs measurement lists
+would then read from this private copy of the anonymous file.
+
+I've Cc'ed fsdevel for additional comments/suggestions.
+
+thanks,
+
+Mimi
+
