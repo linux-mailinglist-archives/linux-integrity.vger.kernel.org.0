@@ -2,118 +2,158 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 054F5154A37
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Feb 2020 18:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8124B154ABF
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Feb 2020 19:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727390AbgBFRb0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Feb 2020 12:31:26 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:46186 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727358AbgBFRbZ (ORCPT
+        id S1727662AbgBFSFl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Feb 2020 13:05:41 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:21248 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727607AbgBFSFl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Feb 2020 12:31:25 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 016HT02e086564;
-        Thu, 6 Feb 2020 17:30:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=K7CsAWV2I/Wti1tewqOHLMGUyy3ZOyrmWzgUJOIuDs8=;
- b=cft+KM4yzNXLP8s8te4EHuys/zL2HE6HROTBRYHZHoNua5cV5+sHx6ovQBIPmYrPVqob
- YWStUNHZsixtEZIy1FOK0rUSIHLRnn7aojxNXfWR8D6t9m+X8845KYOQS7Qk8Reudja+
- VYxh3ESrExFP0vPGvfvHSVOIeV01KhnBx1+njmsOwHO1XWcSfpoDtPKF2sYiEzRDMRtZ
- YODeQUYUiqPRA3RfMhtcGoIk5ajMqFavzbP3c+Sn73izq07LRlu25aADSwwkrHhgFqqW
- wNkyPzCdM2UKkpJOkvJA6T6Bkvx8Nf9XVQVoH0IcYo8Kf1IKN9oxMWin/RLqlWljEJpx Qg== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2019-08-05; bh=K7CsAWV2I/Wti1tewqOHLMGUyy3ZOyrmWzgUJOIuDs8=;
- b=dHf6zWppr3Yia16MMaFkgbgR/O4RMxwWOWlQnBousthFxssHT7I0WbGPh3A5vDP3mWg3
- ADww0m2V2syA4CY2CDBHkT8OPLWOyd4rb/j7kt+0vBlocn3GUji+u42TAcBy7KSbZxJo
- +ZBySFbPx9okyIvV4sYJUSh9TFCAw2PMli3rW8gLNBlC1LY9Z/H/lcWhrShZPr1GPGWG
- 36N8x6XFCFDb2yMPwN5D85Q9ox0WUL7G03p1qzYBdq1rKsJsQtMmmntpe0fjghGiqU3Q
- lQ/uhEbusHi7lbyvB22hjYQW2cGB9yGMULLMblhEm7njR7PhIl308A75ysWYiw83LgmP Yw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2xykbpk84s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Feb 2020 17:30:51 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 016HTkeZ172387;
-        Thu, 6 Feb 2020 17:30:51 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 2y0mnk3g76-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Feb 2020 17:30:51 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 016HUmfl017145;
-        Thu, 6 Feb 2020 17:30:48 GMT
-Received: from dhcp-10-65-154-237.vpn.oracle.com (/10.65.154.237)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 06 Feb 2020 09:30:48 -0800
-Content-Type: text/plain; charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+        Thu, 6 Feb 2020 13:05:41 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 016HoGJr088904
+        for <linux-integrity@vger.kernel.org>; Thu, 6 Feb 2020 13:05:40 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2y0nnfcbym-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 06 Feb 2020 13:05:40 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 6 Feb 2020 18:05:37 -0000
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 6 Feb 2020 18:05:33 -0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 016I5V6m60293334
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Feb 2020 18:05:31 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C3ED4204F;
+        Thu,  6 Feb 2020 18:05:31 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E201E4204B;
+        Thu,  6 Feb 2020 18:05:29 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.140.59])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Feb 2020 18:05:29 +0000 (GMT)
 Subject: Re: [RFC PATCH 1/2] ima: Implement support for uncompressed module
  appended signatures
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-In-Reply-To: <fda8b3e4-e3aa-a83a-0ddc-8ec096e67316@linux.microsoft.com>
-Date:   Thu, 6 Feb 2020 10:30:45 -0700
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, dhowells@redhat.com, geert@linux-m68k.org,
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
+Cc:     dhowells@redhat.com, geert@linux-m68k.org,
         gregkh@linuxfoundation.org, nayna@linux.ibm.com,
         tglx@linutronix.de, bauerman@linux.ibm.com, mpe@ellerman.id.au,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9347B826-F924-4625-89CF-713303D8336D@oracle.com>
+Date:   Thu, 06 Feb 2020 13:05:29 -0500
+In-Reply-To: <20200206164226.24875-2-eric.snowberg@oracle.com>
 References: <20200206164226.24875-1-eric.snowberg@oracle.com>
- <20200206164226.24875-2-eric.snowberg@oracle.com>
- <fda8b3e4-e3aa-a83a-0ddc-8ec096e67316@linux.microsoft.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-X-Mailer: Apple Mail (2.3273)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9523 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2002060132
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9523 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2002060132
+         <20200206164226.24875-2-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20020618-0028-0000-0000-000003D8136F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20020618-0029-0000-0000-0000249C766C
+Message-Id: <1581012329.5585.439.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-06_01:2020-02-06,2020-02-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 clxscore=1015 mlxlogscore=999 adultscore=0 priorityscore=1501
+ bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002060133
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Eric,
 
-> On Feb 6, 2020, at 10:07 AM, Lakshmi Ramasubramanian =
-<nramas@linux.microsoft.com> wrote:
->=20
-> On 2/6/2020 8:42 AM, Eric Snowberg wrote:
->=20
->>  @@ -31,6 +32,7 @@ static const char * const =
-keyring_name[INTEGRITY_KEYRING_MAX] =3D {
->>  	".ima",
->>  #endif
->>  	".platform",
->> +	".builtin_trusted_keys",
->>  };
->>    #ifdef CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
->> @@ -45,8 +47,11 @@ static struct key *integrity_keyring_from_id(const =
-unsigned int id)
->>  		return ERR_PTR(-EINVAL);
->>    	if (!keyring[id]) {
->> -		keyring[id] =3D
->> -			request_key(&key_type_keyring, keyring_name[id], =
-NULL);
->> +		if (id =3D=3D INTEGRITY_KEYRING_KERNEL)
->> +			keyring[id] =3D VERIFY_USE_SECONDARY_KEYRING;
->=20
-> Since "Built-In Trusted Keyring" or "Secondary Trusted Keyring" is =
-used, would it be more appropriate to name this identifier =
-INTEGRITY_KEYRING_BUILTIN_OR_SECONDARY?
+On Thu, 2020-02-06 at 11:42 -0500, Eric Snowberg wrote:
+> Currently IMA can validate compressed modules containing appended
+> signatures.  This adds the ability to also validate uncompressed
+> modules when appraise_type=imasig|modsig.
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 
-I=E2=80=99m open to changing INTEGRITY_KEYRING_KERNEL to =
-INTEGRITY_KEYRING_BUILTIN_OR_SECONDARY if that seems more appropriate.
+Your patch description in no way matches the code.
+
+Mimi
+
+> ---
+>  security/integrity/digsig.c           | 9 +++++++--
+>  security/integrity/ima/ima_appraise.c | 3 +++
+>  security/integrity/integrity.h        | 3 ++-
+>  3 files changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+> index ea1aae3d07b3..5e0c4d04ab9d 100644
+> --- a/security/integrity/digsig.c
+> +++ b/security/integrity/digsig.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/key-type.h>
+>  #include <linux/digsig.h>
+>  #include <linux/vmalloc.h>
+> +#include <linux/verification.h>
+>  #include <crypto/public_key.h>
+>  #include <keys/system_keyring.h>
+>  
+> @@ -31,6 +32,7 @@ static const char * const keyring_name[INTEGRITY_KEYRING_MAX] = {
+>  	".ima",
+>  #endif
+>  	".platform",
+> +	".builtin_trusted_keys",
+>  };
+>  
+>  #ifdef CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+> @@ -45,8 +47,11 @@ static struct key *integrity_keyring_from_id(const unsigned int id)
+>  		return ERR_PTR(-EINVAL);
+>  
+>  	if (!keyring[id]) {
+> -		keyring[id] =
+> -			request_key(&key_type_keyring, keyring_name[id], NULL);
+> +		if (id == INTEGRITY_KEYRING_KERNEL)
+> +			keyring[id] = VERIFY_USE_SECONDARY_KEYRING;
+> +		else
+> +			keyring[id] = request_key(&key_type_keyring,
+> +						  keyring_name[id], NULL);
+>  		if (IS_ERR(keyring[id])) {
+>  			int err = PTR_ERR(keyring[id]);
+>  			pr_err("no %s keyring: %d\n", keyring_name[id], err);
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index 300c8d2943c5..4c009c55d620 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -294,6 +294,9 @@ static int modsig_verify(enum ima_hooks func, const struct modsig *modsig,
+>  	    func == KEXEC_KERNEL_CHECK)
+>  		rc = integrity_modsig_verify(INTEGRITY_KEYRING_PLATFORM,
+>  					     modsig);
+> +	if (rc && func == MODULE_CHECK)
+> +		rc = integrity_modsig_verify(INTEGRITY_KEYRING_KERNEL, modsig);
+> +
+>  	if (rc) {
+>  		*cause = "invalid-signature";
+>  		*status = INTEGRITY_FAIL;
+> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+> index 73fc286834d7..63f0e6bff0e0 100644
+> --- a/security/integrity/integrity.h
+> +++ b/security/integrity/integrity.h
+> @@ -145,7 +145,8 @@ int integrity_kernel_read(struct file *file, loff_t offset,
+>  #define INTEGRITY_KEYRING_EVM		0
+>  #define INTEGRITY_KEYRING_IMA		1
+>  #define INTEGRITY_KEYRING_PLATFORM	2
+> -#define INTEGRITY_KEYRING_MAX		3
+> +#define INTEGRITY_KEYRING_KERNEL	3
+> +#define INTEGRITY_KEYRING_MAX		4
+>  
+>  extern struct dentry *integrity_dir;
+>  
 
