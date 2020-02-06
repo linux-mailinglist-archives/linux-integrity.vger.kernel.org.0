@@ -2,135 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BD5154952
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Feb 2020 17:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D23154957
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Feb 2020 17:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727630AbgBFQfJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Feb 2020 11:35:09 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3810 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727390AbgBFQfI (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Feb 2020 11:35:08 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 016GZ2vE132723
-        for <linux-integrity@vger.kernel.org>; Thu, 6 Feb 2020 11:35:07 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xyhmperwm-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 06 Feb 2020 11:35:06 -0500
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 6 Feb 2020 16:34:02 -0000
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 6 Feb 2020 16:33:57 -0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 016GXudl22216952
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Feb 2020 16:33:56 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6FD234C040;
-        Thu,  6 Feb 2020 16:33:56 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8882D4C046;
-        Thu,  6 Feb 2020 16:33:55 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.140.59])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Feb 2020 16:33:55 +0000 (GMT)
-Subject: Re: [PATCH v2 5/8] ima: Switch to dynamically allocated buffer for
- template digests
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        id S1727556AbgBFQgd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Feb 2020 11:36:33 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2390 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727390AbgBFQgd (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 6 Feb 2020 11:36:33 -0500
+Received: from lhreml701-cah.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id A1480820A3DE03E99300;
+        Thu,  6 Feb 2020 16:36:29 +0000 (GMT)
+Received: from fraeml706-chm.china.huawei.com (10.206.15.55) by
+ lhreml701-cah.china.huawei.com (10.201.108.42) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Thu, 6 Feb 2020 16:36:28 +0000
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1713.5; Thu, 6 Feb 2020 17:36:28 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1713.004;
+ Thu, 6 Feb 2020 17:36:28 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
         "James.Bottomley@HansenPartnership.com" 
         <James.Bottomley@HansenPartnership.com>,
         "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Thu, 06 Feb 2020 11:33:54 -0500
-In-Reply-To: <0b91e6977bac4cd5a638041adb3e76eb@huawei.com>
+Subject: RE: [PATCH v2 5/8] ima: Switch to dynamically allocated buffer for
+ template digests
+Thread-Topic: [PATCH v2 5/8] ima: Switch to dynamically allocated buffer for
+ template digests
+Thread-Index: AQHV3A/+rAKtbF80BkqxEfHd/18hO6gORlUAgAAVOaD///H/AIAAEVJA
+Date:   Thu, 6 Feb 2020 16:36:28 +0000
+Message-ID: <5bbf950910db4a5a853aaaeba5b18529@huawei.com>
 References: <20200205103317.29356-1-roberto.sassu@huawei.com>
          <20200205103317.29356-6-roberto.sassu@huawei.com>
          <1581005284.5585.422.camel@linux.ibm.com>
          <0b91e6977bac4cd5a638041adb3e76eb@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20020616-0016-0000-0000-000002E4534F
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20020616-0017-0000-0000-000033473A06
-Message-Id: <1581006834.5585.430.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-06_01:2020-02-06,2020-02-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 clxscore=1015
- malwarescore=0 suspectscore=0 phishscore=0 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002060126
+ <1581006834.5585.430.camel@linux.ibm.com>
+In-Reply-To: <1581006834.5585.430.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.220.96.108]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-02-06 at 16:27 +0000, Roberto Sassu wrote:
-> > -----Original Message-----
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Thursday, February 6, 2020 5:08 PM
-> > To: Roberto Sassu <roberto.sassu@huawei.com>;
-> > James.Bottomley@HansenPartnership.com;
-> > jarkko.sakkinen@linux.intel.com
-> > Cc: linux-integrity@vger.kernel.org; linux-security-module@vger.kernel.org;
-> > linux-kernel@vger.kernel.org; Silviu Vlasceanu
-> > <Silviu.Vlasceanu@huawei.com>
-> > Subject: Re: [PATCH v2 5/8] ima: Switch to dynamically allocated buffer for
-> > template digests
-> > 
-> > Hi Roberto,
-> > 
-> > On Wed, 2020-02-05 at 11:33 +0100, Roberto Sassu wrote:
-> > > This patch dynamically allocates the array of tpm_digest structures in
-> > > ima_alloc_init_template() and ima_restore_template_data(). The size of
-> > the
-> > > array, stored in ima_num_template_digests, is initially equal to 1 (SHA1)
-> > > and will be determined in the upcoming patches depending on the
-> > allocated
-> > > PCR banks and the chosen default IMA algorithm.
-> > >
-> > > Calculating the SHA1 digest is mandatory, as SHA1 still remains the default
-> > > hash algorithm for the measurement list. When IMA will support the
-> > Crypto
-> > > Agile format, remaining digests will be also provided.
-> > >
-> > > The position in the array of the SHA1 digest is stored in the ima_sha1_idx
-> > > global variable and it is determined at IMA initialization time.
-> > >
-> > > Changelog
-> > >
-> > > v1:
-> > > - move ima_sha1_idx to ima_crypto.c
-> > > - introduce ima_num_template_digests (suggested by Mimi)
-> > 
-> > Instead of hardcoding "nr_allocated_banks + 1" or nr_allocated_banks +
-> > 2", I suggested defining "nr_allocated_banks + extra", where "extra"
-> > could be 0, 1, or 2.
-> > 
-> > The rest of the code would remain exactly the same as you had.
-> 
-> Ok. I did a small improvement. Since we determine the number of
-> required elements of ima_algo_array before kmalloc() I thought it
-> was ok to directly set that number of elements in a single variable.
-> 
-> If you think that having two variables is better, I will change it.
-
-The connection to nr_allocated_banks is then not as visible.  Using
-two variables is clearer.
-
-Mimi
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBvd25lci1saW51eC1zZWN1cml0
+eS1tb2R1bGVAdmdlci5rZXJuZWwub3JnIFttYWlsdG86b3duZXItbGludXgtDQo+IHNlY3VyaXR5
+LW1vZHVsZUB2Z2VyLmtlcm5lbC5vcmddIE9uIEJlaGFsZiBPZiBNaW1pIFpvaGFyDQo+IFNlbnQ6
+IFRodXJzZGF5LCBGZWJydWFyeSA2LCAyMDIwIDU6MzQgUE0NCj4gVG86IFJvYmVydG8gU2Fzc3Ug
+PHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT47DQo+IEphbWVzLkJvdHRvbWxleUBIYW5zZW5QYXJ0
+bmVyc2hpcC5jb207DQo+IGphcmtrby5zYWtraW5lbkBsaW51eC5pbnRlbC5jb20NCj4gQ2M6IGxp
+bnV4LWludGVncml0eUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LXNlY3VyaXR5LW1vZHVsZUB2Z2Vy
+Lmtlcm5lbC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFNpbHZpdSBWbGFz
+Y2VhbnUNCj4gPFNpbHZpdS5WbGFzY2VhbnVAaHVhd2VpLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQ
+QVRDSCB2MiA1LzhdIGltYTogU3dpdGNoIHRvIGR5bmFtaWNhbGx5IGFsbG9jYXRlZCBidWZmZXIg
+Zm9yDQo+IHRlbXBsYXRlIGRpZ2VzdHMNCj4gDQo+IE9uIFRodSwgMjAyMC0wMi0wNiBhdCAxNjoy
+NyArMDAwMCwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gPiA+IC0tLS0tT3JpZ2luYWwgTWVzc2Fn
+ZS0tLS0tDQo+ID4gPiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86em9oYXJAbGludXguaWJtLmNv
+bV0NCj4gPiA+IFNlbnQ6IFRodXJzZGF5LCBGZWJydWFyeSA2LCAyMDIwIDU6MDggUE0NCj4gPiA+
+IFRvOiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+Ow0KPiA+ID4gSmFt
+ZXMuQm90dG9tbGV5QEhhbnNlblBhcnRuZXJzaGlwLmNvbTsNCj4gPiA+IGphcmtrby5zYWtraW5l
+bkBsaW51eC5pbnRlbC5jb20NCj4gPiA+IENjOiBsaW51eC1pbnRlZ3JpdHlAdmdlci5rZXJuZWwu
+b3JnOyBsaW51eC1zZWN1cml0eS0NCj4gbW9kdWxlQHZnZXIua2VybmVsLm9yZzsNCj4gPiA+IGxp
+bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFNpbHZpdSBWbGFzY2VhbnUNCj4gPiA+IDxTaWx2
+aXUuVmxhc2NlYW51QGh1YXdlaS5jb20+DQo+ID4gPiBTdWJqZWN0OiBSZTogW1BBVENIIHYyIDUv
+OF0gaW1hOiBTd2l0Y2ggdG8gZHluYW1pY2FsbHkgYWxsb2NhdGVkIGJ1ZmZlcg0KPiBmb3INCj4g
+PiA+IHRlbXBsYXRlIGRpZ2VzdHMNCj4gPiA+DQo+ID4gPiBIaSBSb2JlcnRvLA0KPiA+ID4NCj4g
+PiA+IE9uIFdlZCwgMjAyMC0wMi0wNSBhdCAxMTozMyArMDEwMCwgUm9iZXJ0byBTYXNzdSB3cm90
+ZToNCj4gPiA+ID4gVGhpcyBwYXRjaCBkeW5hbWljYWxseSBhbGxvY2F0ZXMgdGhlIGFycmF5IG9m
+IHRwbV9kaWdlc3Qgc3RydWN0dXJlcyBpbg0KPiA+ID4gPiBpbWFfYWxsb2NfaW5pdF90ZW1wbGF0
+ZSgpIGFuZCBpbWFfcmVzdG9yZV90ZW1wbGF0ZV9kYXRhKCkuIFRoZSBzaXplDQo+IG9mDQo+ID4g
+PiB0aGUNCj4gPiA+ID4gYXJyYXksIHN0b3JlZCBpbiBpbWFfbnVtX3RlbXBsYXRlX2RpZ2VzdHMs
+IGlzIGluaXRpYWxseSBlcXVhbCB0byAxDQo+IChTSEExKQ0KPiA+ID4gPiBhbmQgd2lsbCBiZSBk
+ZXRlcm1pbmVkIGluIHRoZSB1cGNvbWluZyBwYXRjaGVzIGRlcGVuZGluZyBvbiB0aGUNCj4gPiA+
+IGFsbG9jYXRlZA0KPiA+ID4gPiBQQ1IgYmFua3MgYW5kIHRoZSBjaG9zZW4gZGVmYXVsdCBJTUEg
+YWxnb3JpdGhtLg0KPiA+ID4gPg0KPiA+ID4gPiBDYWxjdWxhdGluZyB0aGUgU0hBMSBkaWdlc3Qg
+aXMgbWFuZGF0b3J5LCBhcyBTSEExIHN0aWxsIHJlbWFpbnMgdGhlDQo+IGRlZmF1bHQNCj4gPiA+
+ID4gaGFzaCBhbGdvcml0aG0gZm9yIHRoZSBtZWFzdXJlbWVudCBsaXN0LiBXaGVuIElNQSB3aWxs
+IHN1cHBvcnQgdGhlDQo+ID4gPiBDcnlwdG8NCj4gPiA+ID4gQWdpbGUgZm9ybWF0LCByZW1haW5p
+bmcgZGlnZXN0cyB3aWxsIGJlIGFsc28gcHJvdmlkZWQuDQo+ID4gPiA+DQo+ID4gPiA+IFRoZSBw
+b3NpdGlvbiBpbiB0aGUgYXJyYXkgb2YgdGhlIFNIQTEgZGlnZXN0IGlzIHN0b3JlZCBpbiB0aGUN
+Cj4gaW1hX3NoYTFfaWR4DQo+ID4gPiA+IGdsb2JhbCB2YXJpYWJsZSBhbmQgaXQgaXMgZGV0ZXJt
+aW5lZCBhdCBJTUEgaW5pdGlhbGl6YXRpb24gdGltZS4NCj4gPiA+ID4NCj4gPiA+ID4gQ2hhbmdl
+bG9nDQo+ID4gPiA+DQo+ID4gPiA+IHYxOg0KPiA+ID4gPiAtIG1vdmUgaW1hX3NoYTFfaWR4IHRv
+IGltYV9jcnlwdG8uYw0KPiA+ID4gPiAtIGludHJvZHVjZSBpbWFfbnVtX3RlbXBsYXRlX2RpZ2Vz
+dHMgKHN1Z2dlc3RlZCBieSBNaW1pKQ0KPiA+ID4NCj4gPiA+IEluc3RlYWQgb2YgaGFyZGNvZGlu
+ZyAibnJfYWxsb2NhdGVkX2JhbmtzICsgMSIgb3IgbnJfYWxsb2NhdGVkX2JhbmtzICsNCj4gPiA+
+IDIiLCBJIHN1Z2dlc3RlZCBkZWZpbmluZyAibnJfYWxsb2NhdGVkX2JhbmtzICsgZXh0cmEiLCB3
+aGVyZSAiZXh0cmEiDQo+ID4gPiBjb3VsZCBiZSAwLCAxLCBvciAyLg0KPiA+ID4NCj4gPiA+IFRo
+ZSByZXN0IG9mIHRoZSBjb2RlIHdvdWxkIHJlbWFpbiBleGFjdGx5IHRoZSBzYW1lIGFzIHlvdSBo
+YWQuDQo+ID4NCj4gPiBPay4gSSBkaWQgYSBzbWFsbCBpbXByb3ZlbWVudC4gU2luY2Ugd2UgZGV0
+ZXJtaW5lIHRoZSBudW1iZXIgb2YNCj4gPiByZXF1aXJlZCBlbGVtZW50cyBvZiBpbWFfYWxnb19h
+cnJheSBiZWZvcmUga21hbGxvYygpIEkgdGhvdWdodCBpdA0KPiA+IHdhcyBvayB0byBkaXJlY3Rs
+eSBzZXQgdGhhdCBudW1iZXIgb2YgZWxlbWVudHMgaW4gYSBzaW5nbGUgdmFyaWFibGUuDQo+ID4N
+Cj4gPiBJZiB5b3UgdGhpbmsgdGhhdCBoYXZpbmcgdHdvIHZhcmlhYmxlcyBpcyBiZXR0ZXIsIEkg
+d2lsbCBjaGFuZ2UgaXQuDQo+IA0KPiBUaGUgY29ubmVjdGlvbiB0byBucl9hbGxvY2F0ZWRfYmFu
+a3MgaXMgdGhlbiBub3QgYXMgdmlzaWJsZS4gwqBVc2luZw0KPiB0d28gdmFyaWFibGVzIGlzIGNs
+ZWFyZXIuDQoNCk9rLCBubyBwcm9ibGVtLiBJIHdpbGwgY2hhbmdlIGl0IGluIHRoZSBuZXh0IHZl
+cnNpb24uDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9yZiBHbWJI
+LCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5nLCBMaSBKaWFuLCBTaGkgWWFu
+bGkNCg==
