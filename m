@@ -2,86 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BD9154C0D
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Feb 2020 20:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FB5154CEC
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Feb 2020 21:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbgBFTWq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Feb 2020 14:22:46 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35949 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727923AbgBFTWp (ORCPT
+        id S1727842AbgBFUZP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Feb 2020 15:25:15 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25880 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727845AbgBFUZP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Feb 2020 14:22:45 -0500
-Received: by mail-pg1-f193.google.com with SMTP id k3so3233364pgc.3
-        for <linux-integrity@vger.kernel.org>; Thu, 06 Feb 2020 11:22:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:cc:to:from:user-agent:date;
-        bh=77zEgP4+kvjzTDiKwzePB4Pg1qZYvQ9rh1jBzop1Cfo=;
-        b=UDJWWrKmyAku8utbdUF/Ir+N8v/ND76ypMceKgDu7fS4zXsNrq+sw4xiy6otRjvqNn
-         +ttDwYybEZg2A7GqfJwbjc3aV4UiF67/sYc9c/93Oy3JDYmIE5yKua4ATLykNnIjQh4k
-         81KgxcGBkJ3hKV6ws5TtT7IUmIpU437MTbHJE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:cc:to:from
-         :user-agent:date;
-        bh=77zEgP4+kvjzTDiKwzePB4Pg1qZYvQ9rh1jBzop1Cfo=;
-        b=pz5h3Ei8gAvDfnAEH6jh4Jqw4Vu0wOTpbQHlFjQ0Mf7xoJ/9FiD7SUz+t7oasywmiH
-         F+GkzTfEF8RnCVsWl/JbrJ6aDy7K3QjCk3IaYeA6GsmZd74btKOSQPZSWspRKiRbL6Uz
-         UZ3rMS3eA/LZkVk1XuV1KuoITBzOtRbuISj8JlnZ6uQGVza+Z5aRPo2U6Ps2lEH8VWAl
-         7wJgmT5EdDK9StkONHh9K8oMHCMMSPJjJr1J5fBneOkf6M8LzFbXrfBGMQ9CKndXjaZ7
-         7TlF3CE0w3ICyGZpqCrHBNxlCyHJeWiBg6ZJHf66ZhGTtPolTBDFga6iCNX+Aeb0g1n3
-         +JMw==
-X-Gm-Message-State: APjAAAVjaxrXzi4xsZxzYjeMMR1zW0xlxDKaGYq0SYlpkWAsWjLFB5XV
-        bEqYHdbgOarwqDOwZwGZ9JM0KA==
-X-Google-Smtp-Source: APXvYqx15GV6iXPlg6VEgBbt5XLtoCLhj9G1kgJ4mJJ+PUEVWX9tF8+ZXmb7/HjMq5ZD3BXw5H8Yng==
-X-Received: by 2002:a63:1f54:: with SMTP id q20mr5053928pgm.400.1581016965253;
-        Thu, 06 Feb 2020 11:22:45 -0800 (PST)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id e1sm171231pfl.98.2020.02.06.11.22.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2020 11:22:44 -0800 (PST)
-Message-ID: <5e3c6784.1c69fb81.34ded.0a42@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        Thu, 6 Feb 2020 15:25:15 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 016KDlEa060947;
+        Thu, 6 Feb 2020 15:22:12 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2y0kne6euw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Feb 2020 15:22:12 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 016KEXKf063196;
+        Thu, 6 Feb 2020 15:22:12 -0500
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2y0kne6eu6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Feb 2020 15:22:12 -0500
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 016KJUhW002391;
+        Thu, 6 Feb 2020 20:22:10 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma05wdc.us.ibm.com with ESMTP id 2xykc9qtdq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Feb 2020 20:22:10 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 016KM90S34799880
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Feb 2020 20:22:09 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 171E9BE053;
+        Thu,  6 Feb 2020 20:22:09 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9DE00BE054;
+        Thu,  6 Feb 2020 20:22:05 +0000 (GMT)
+Received: from swastik.ibm.com (unknown [9.160.44.62])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Feb 2020 20:22:05 +0000 (GMT)
+Subject: Re: [RFC PATCH 0/2] ima: uncompressed module appraisal support
+To:     Eric Snowberg <eric.snowberg@oracle.com>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
+Cc:     zohar@linux.ibm.com, dhowells@redhat.com, geert@linux-m68k.org,
+        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
+        tglx@linutronix.de, bauerman@linux.ibm.com, mpe@ellerman.id.au,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200206164226.24875-1-eric.snowberg@oracle.com>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+Message-ID: <5c246616-9a3a-3ed2-c1f9-f634cef511c9@linux.vnet.ibm.com>
+Date:   Thu, 6 Feb 2020 15:22:04 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200205203818.4679-1-jarkko.sakkinen@linux.intel.com>
-References: <20200205203818.4679-1-jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH] tpm: Revert tpm_tis_spi_mod.ko to tpm_tis_spi.ko.
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Andrey Pronin <apronin@chromium.org>, stable@vger.kernel.org,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity@vger.kernel.org
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Thu, 06 Feb 2020 11:22:44 -0800
+In-Reply-To: <20200206164226.24875-1-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-06_03:2020-02-06,2020-02-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002060149
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Quoting Jarkko Sakkinen (2020-02-05 12:38:18)
-> Revert tpm_tis_spi_mod.ko back to tpm_tis_spi.ko as the rename could break
-> the build script. This can be achieved by renaming tpm_tis_spi.c as
 
-Do you mean userspace scripts?
+On 2/6/20 11:42 AM, Eric Snowberg wrote:
+> When booting with either "ima_policy=secure_boot module.sig_enforce=1"
+> or building a kernel with CONFIG_IMA_ARCH_POLICY and booting with
+> "ima_policy=secure_boot", module loading behaves differently based on if
+> the module is compressed or not.  Originally when appraising a module
+> with ima it had to be uncompressed and ima signed.  Recent changes in 5.4
+> have allowed internally signed modules to load [1].  But this only works
+> if the internally signed module is compressed.  The uncompressed module
+> that is internally signed must still be ima signed. This patch series
+> tries to bring the two in line.
 
-> tpm_tis_spi_main.c. Then tpm_tis_spi-y can be used inside the makefile.
->=20
-> Cc: Andrey Pronin <apronin@chromium.org>
-> Cc: Stephen Boyd <swboyd@chromium.org>
-> Cc: stable@vger.kernel.org
-> Fixes: 797c0113c9a4 ("tpm: tpm_tis_spi: Support cr50 devices")
-> Reported-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> ---
+We (Mimi and I) have been trying to understand the cover letter. It 
+seems "by internally signed" you are referring to modules signed with 
+build time generated keys.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Our interpretation of the cover letter is that IMA originally did not 
+support appended signatures and now does. Since the modules are signed 
+with build time generated keys, the signature verification still fails, 
+as the keys are only available on the .builtin keyring and not the .ima 
+keyring.
+
+Lastly, there is nothing in these patches that indicate that the kernel 
+modules being compressed/uncompressed is related to the signature 
+verification.
+
+Thanks & Regards,
+
+      - Nayna
 
