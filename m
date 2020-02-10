@@ -2,22 +2,22 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7136C1580B5
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 18:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B891580BF
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 18:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727872AbgBJRJ7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Feb 2020 12:09:59 -0500
+        id S1728119AbgBJRKF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Feb 2020 12:10:05 -0500
 Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:36755 "EHLO
         herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727536AbgBJRJ6 (ORCPT
+        with ESMTP id S1727536AbgBJRKE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Feb 2020 12:09:58 -0500
+        Mon, 10 Feb 2020 12:10:04 -0500
 X-Greylist: delayed 2425 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Feb 2020 12:09:57 EST
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 01AGT7qd011297;
-        Mon, 10 Feb 2020 18:29:07 +0200
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 01AGT8JK011300;
+        Mon, 10 Feb 2020 18:29:08 +0200
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
-        id B87046032E; Mon, 10 Feb 2020 18:29:07 +0200 (IST)
+        id 820EB6032E; Mon, 10 Feb 2020 18:29:08 +0200 (IST)
 From:   amirmizi6@gmail.com
 To:     Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
         oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
@@ -29,9 +29,9 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
         shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
         Amir Mizinski <amirmizi6@gmail.com>
-Subject: [PATCH v3 5/7] tpm: Handle an exception for TPM Firmware Update mode.
-Date:   Mon, 10 Feb 2020 18:28:36 +0200
-Message-Id: <20200210162838.173903-6-amirmizi6@gmail.com>
+Subject: [PATCH v3 6/7] dt-bindings: tpm: Add YAML schema for TPM TIS I2C options
+Date:   Mon, 10 Feb 2020 18:28:37 +0200
+Message-Id: <20200210162838.173903-7-amirmizi6@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20200210162838.173903-1-amirmizi6@gmail.com>
 References: <20200210162838.173903-1-amirmizi6@gmail.com>
@@ -44,45 +44,70 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Amir Mizinski <amirmizi6@gmail.com>
 
-An extra precaution for TPM Firmware Update Mode.
- For example if TPM power was cut while in Firmware update, platform
- should ignore selftest failure and skip TPM initialization sequence.
+Added a YAML schema to support tpm tis i2c realted dt-bindings for the I2c
+ PTP based physical layer.
 
-This improvment was suggested by Benoit Houyere.
+This patch adds the documentation for corresponding device tree bindings of
+ I2C based Physical TPM.
+Refer to the 'I2C Interface Definition' section in
+ 'TCG PC Client PlatformTPMProfile(PTP) Specification' publication
+ for specification.
 
 Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
 ---
- drivers/char/tpm/tpm2-cmd.c | 4 ++++
- include/linux/tpm.h         | 1 +
- 2 files changed, 5 insertions(+)
+ .../bindings/security/tpm/tpm-tis-i2c.yaml         | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
 
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index 13696de..997b11e 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -725,6 +725,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
- 		goto out;
- 
- 	rc = tpm2_do_selftest(chip);
+diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+new file mode 100644
+index 0000000..ca16b59
+--- /dev/null
++++ b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/security/tpm/tpm-tis-i2c.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	if ((rc == TPM2_RC_UPGRADE) || (rc == TPM2_RC_COMMAND_CODE))
-+		return 0;
++title: I2C PTP based TPM Device Tree Bindings
 +
- 	if (rc && rc != TPM2_RC_INITIALIZE)
- 		goto out;
- 
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 03e9b18..5a2e031 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -199,6 +199,7 @@ enum tpm2_return_codes {
- 	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
- 	TPM2_RC_FAILURE		= 0x0101,
- 	TPM2_RC_DISABLED	= 0x0120,
-+	TPM2_RC_UPGRADE         = 0x012D,
- 	TPM2_RC_COMMAND_CODE    = 0x0143,
- 	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
- 	TPM2_RC_REFERENCE_H0	= 0x0910,
++maintainers:
++  - Amir Mizinski <amirmizi6@gmail.com>
++
++description:
++  Device Tree Bindings for I2C based Trusted Platform Module(TPM).
++
++properties:
++  compatible:
++    contains:
++      const: tcg,tpm-tis-i2c
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  crc-checksum:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      CRC checksum enable.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++examples:
++  - |
++    tpm-tis-i2c: tpm-tis-i2c@2e {
++       compatible = "tcg,tpm-tis-i2c";
++       reg = <0x2e>;
++       interrupts = <&gpio 24 GPIO_ACTIVE_HIGH>;
++       crc-checksum;
++    };
 -- 
 2.7.4
 
