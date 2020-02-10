@@ -2,106 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E963D156DD7
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 04:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79469157031
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 09:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgBJDRa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 9 Feb 2020 22:17:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54940 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726958AbgBJDRa (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 9 Feb 2020 22:17:30 -0500
-Received: from sol.localdomain (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 24D7A20870;
-        Mon, 10 Feb 2020 03:17:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581304649;
-        bh=4+xrRrrol/aiyGAllkyxm+BcBdBXEdtB/xYpBE5mqp0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZY3kL5ThzVIfNdnLnxnWJF8NCVdguistyR88GLQzeaLdSldvkzWM0WyvKl7S7//l2
-         h5CyQ8dnqSJ6Efw9f9tk5mkx4zoPvPz4vob/qxmC05uRe/5Cu6uam5Y2Ru8O1XGBik
-         yhe3fqyYtW+mYcZH3HutsVZ1Qs3A+LfbR5eQKDag=
-Date:   Sun, 9 Feb 2020 19:17:17 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] crypto: sm3 - add a new alias name sm3-256
-Message-ID: <20200210031717.GA5198@sol.localdomain>
-References: <20200207092219.115056-1-tianjia.zhang@linux.alibaba.com>
- <20200207092219.115056-2-tianjia.zhang@linux.alibaba.com>
+        id S1727436AbgBJIE4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Feb 2020 03:04:56 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:45502 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725468AbgBJIE4 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 10 Feb 2020 03:04:56 -0500
+Received: by mail-lj1-f194.google.com with SMTP id f25so5982211ljg.12;
+        Mon, 10 Feb 2020 00:04:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4A3TMLKRGhyPkPgiJ1U8mlnA1xT8oI0F78huS9wa9CU=;
+        b=pawlTy63fbpdEBYkv0CmRGyPqkZ8dqJQl4Aj79L8VP9AENrF7OfLO41WMjN4HCw2ZT
+         TjfUpxO5q6ucBK5/rvHkSecgrx48lkta+ZP5YVv2BgL1I0km8Vr4h2O/ux1+XdnCykPE
+         BkZOWVMl9ab+KUsALRf7dVvUNdFinjcWQYXEofq7aa1SONM6z9fPODpNcPQ2LqwJPtn8
+         2CToKALcN1IzvFMIa5BQOE/masPDovHJpejgEqFcQQ7N7yaDptXG+2KFqneOki5tHW10
+         nNU8lzz6W/nBpiuoP1Fvzs7H8RY5zEkVW4955Fa82jlC8pRfSp/9yZ9jbk1CspU9n6eu
+         qc9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4A3TMLKRGhyPkPgiJ1U8mlnA1xT8oI0F78huS9wa9CU=;
+        b=mRvbxQObNN6ONCYpn8mx4kgkuX+Zj/SGb4WhyBtnss8o8JueXRgBdyUTEJEo5nVwR2
+         giyQzpLN5zu3yUPnuHGso0XOrn7492UMSot9ZdRJFuZRkd7kSq+xiY6ToP5X0cNIJdjP
+         biB3u2KHCf7tbvQ2lXZPzRO+pNLIQPKULRyTnyOz1KesNVWAuUkuJuoZOUE6d84tasmr
+         nppZ1wbldKa573SBP4OaQkdkzwRFqAUHLRdZAM6llNTL1pyPf5MRxDz0yeD9sMr5d95n
+         jXGWEIYJND893RgOoadMxiZaKrneGuihnEymJTnT8pybh/T/gdZp0lZ4Dn5OceXhQp1a
+         KwqA==
+X-Gm-Message-State: APjAAAV++e87Xkr3gKWb3gHSBou+knExFK/nLuEqg7JmNlSS+wUytPd8
+        zGChhTHjdXVnE5CojoCunmoJIgntB1AXkG9Yv/M=
+X-Google-Smtp-Source: APXvYqxKYRfBdy1b8G3zgeigkBLLmIXOGUi3cZulxhpZITWH3+AT9urS6u3fQ+t/PjZxEM0Yoqhsm61H4Nnu/Wtc4ZE=
+X-Received: by 2002:a2e:8e95:: with SMTP id z21mr93361ljk.119.1581321893578;
+ Mon, 10 Feb 2020 00:04:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200207092219.115056-2-tianjia.zhang@linux.alibaba.com>
+References: <20200108111743.23393-1-janne.karhunen@gmail.com>
+ <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com> <1580998432.5585.411.camel@linux.ibm.com>
+In-Reply-To: <1580998432.5585.411.camel@linux.ibm.com>
+From:   Janne Karhunen <janne.karhunen@gmail.com>
+Date:   Mon, 10 Feb 2020 10:04:42 +0200
+Message-ID: <CAE=NcrYhz7zrhxZoVDSvfs+Cd-vNX30gGXU9Xu4K7ft-1ozN2g@mail.gmail.com>
+Subject: Re: [PATCH v2] ima: export the measurement list when needed
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
+        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Feb 07, 2020 at 05:22:18PM +0800, Tianjia Zhang wrote:
-> The name sm3-256 is defined in hash_algo_name in hash_info, but the
-> algorithm name implemented in sm3_generic.c is sm3, which will cause
-> the sm3-256 algorithm to be not found in some application scenarios of
-> the hash algorithm, and an ENOENT error will occur. For example,
-> IMA, keys, and other subsystems that reference hash_algo_name cannot use
-> the hash algorithm of sm3. This patch adds an alias name sm3-256 to sm3,
-> which can better solve the above problems.
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  crypto/sm3_generic.c | 21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
-> 
-> diff --git a/crypto/sm3_generic.c b/crypto/sm3_generic.c
-> index 3468975215ca..ded41031bd5f 100644
-> --- a/crypto/sm3_generic.c
-> +++ b/crypto/sm3_generic.c
-> @@ -163,7 +163,7 @@ int crypto_sm3_finup(struct shash_desc *desc, const u8 *data,
->  }
->  EXPORT_SYMBOL(crypto_sm3_finup);
->  
-> -static struct shash_alg sm3_alg = {
-> +static struct shash_alg sm3_algs[2] = { {
->  	.digestsize	=	SM3_DIGEST_SIZE,
->  	.init		=	sm3_base_init,
->  	.update		=	crypto_sm3_update,
-> @@ -176,16 +176,28 @@ static struct shash_alg sm3_alg = {
->  		.cra_blocksize	 =	SM3_BLOCK_SIZE,
->  		.cra_module	 =	THIS_MODULE,
->  	}
-> -};
-> +}, {
-> +	.digestsize	=	SM3_DIGEST_SIZE,
-> +	.init		=	sm3_base_init,
-> +	.update		=	crypto_sm3_update,
-> +	.final		=	sm3_final,
-> +	.finup		=	crypto_sm3_finup,
-> +	.descsize	=	sizeof(struct sm3_state),
-> +	.base		=	{
-> +		.cra_name	 =	"sm3-256",
-> +		.cra_blocksize	 =	SM3_BLOCK_SIZE,
-> +		.cra_module	 =	THIS_MODULE,
-> +	}
-> +} };
+On Thu, Feb 6, 2020 at 4:14 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
 
-According to https://tools.ietf.org/id/draft-oscca-cfrg-sm3-01.html,
-SM3 always produces a 256-bit hash value.  E.g., it says:
+> The implications of exporting and removing records from the IMA-
+> measurement list needs to be considered carefully.  Verifying a TPM
+> quote will become dependent on knowing where the measurements are
+> stored.  The existing measurement list is stored in kernel memory and,
+> barring a kernel memory attack, is protected from modification.
+>  Before upstreaming this or a similar patch, there needs to be a
+> discussion as to how the measurement list will be protected once is it
+> exported to userspace.
+>
+> This patch now attempts to address two very different scenarios.  The
+> first scenario is where userspace is requesting exporting and removing
+> of the measurement list records.  The other scenario is the kernel
+> exporting and removing of the measurement list records.  Conflating
+> these two different use cases might not be the right solution, as we
+> originally thought.
+>
+> The kernel already exports the IMA measurement list to userspace via a
+> securityfs file.  From a userspace perspective, missing is the ability
+> of removing N number of records.  In this scenario, userspace would be
+> responsible for safely storing the measurements (e.g. blockchain).
+>  The kernel would only be responsible for limiting permission, perhaps
+> based on a capability, before removing records from the measurement
+> list.
 
-	"SM3 produces an output hash value of 256 bits long"
+This is a good point. I will adapt the patch to this.
 
-and
 
-	"SM3 is a hash function that generates a 256-bit hash value."
+> In the kernel usecase, somehow the kernel would need to safely export
+> the measurement list, or some portion of the measurement list, to a
+> file and then delete that portion.  What protects the exported records
+> stored in a file from modification?
 
-I don't see any mention of "SM3-256".
+Are we looking at protecting this file from a root exploit and the
+potential DOS it might cause? In the original patch the file was root
+writable only. As far as further limitations go, the easiest would
+probably be to use the file immutable bit. If the kernel opens the
+file and sets the immutable bit, it is the only entity that can ever
+write to it - not even another root task could directly write to it.
+The kernel could, as long as it keeps the file open.
 
-So why not just keep it as "sm3" and change hash_info.c instead?
-Since the name there is currently wrong, no one can be using it yet.
 
-- Eric
+> Instead of exporting the measurement records, one option as suggested
+> by Amir Goldstein, would be to use a vfs_tmpfile() to get an anonymous
+> file for backing store.  The existing securityfs measurement lists
+> would then read from this private copy of the anonymous file.
+>
+> I've Cc'ed fsdevel for additional comments/suggestions.
+
+I didn't quickly see what the actual problem is that the vfs_tmpfile
+solves in this context, will check.
+
+
+--
+Janne
