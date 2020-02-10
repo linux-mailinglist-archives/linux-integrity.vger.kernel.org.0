@@ -2,166 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E271C158227
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 19:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 228EE15827C
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 19:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727079AbgBJSTE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Feb 2020 13:19:04 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:38540 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726809AbgBJSTD (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Feb 2020 13:19:03 -0500
-Received: by mail-qk1-f194.google.com with SMTP id z19so4421470qkj.5;
-        Mon, 10 Feb 2020 10:19:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=ALkbiNctHZ6GzjTicoN2UzzXl4LTRGejrnz8hGHjE/U=;
-        b=mrDG7c0jHD3cqB2dEaxrkEStzYV+dGXZqih52S7JRTv9LMkA40vFRsW4RJrsHMetCB
-         ixAdfk1P2iM+CdCBLmeeb/XJEXXpq5qkri8edwCPqrQvEOxq7enVpAeRgeXZjGw1mhTQ
-         MjWgsB/i5JJQUvi1kMsHYivEr5AlcjFaNlataTSWHpl3vBn+BelMDPhx6zc1K3SqcwUf
-         DrcCq9MCCXK7eN2bnlHGariXplTXh6oMmggvfjMJUJJWUAdCnOx4Uk+ObGeXpKB49GHq
-         laMFEs+mrLrrBJDxmaLzn8maKXAgpb/5GvZlWJw6wl+szYCVyDbgGWY5OTYECIjFqGw3
-         iezA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=ALkbiNctHZ6GzjTicoN2UzzXl4LTRGejrnz8hGHjE/U=;
-        b=uPVttZvlA1Tamipnv3wjtlidHZGOYQtHKxfCNOzMGXzJOkOAU75AI1+t6ayLnjBimT
-         4dDCbSRCOqyWXK+g27qmxurKApmMKRKafUjuA46JXCH4i6NNcnKCvdKkRfj5MPCSicVY
-         t4HUZKOztUXes6UnbfWpaZmWLhv9xhMa5o7SzAbtzcbUL6gIyhPLTy7KmPO9RtMgvptA
-         Bu4VtnL8LNTtLR/QyvqJ+8qhQQhUyV9v+QdLjd/7E5u/27ZjPsJFhizrhDVdcQPRW42E
-         vpZ8pwQuxT651CbyBbNu0HYNkYV3vFZvcDRh2vhw8EF+AiePN3AGECrZy/wKlJzeyLRk
-         7tHA==
-X-Gm-Message-State: APjAAAVs9HNALancsDQkxbZ5Tn6S2oZSsB4TrIqhUVW2rVWW6JP0sSiQ
-        kgGskTX3FOnhsvq28dZJuDM=
-X-Google-Smtp-Source: APXvYqxZeiNlEfjqFDKOhbWsPZKzvw40t8OIUDknwODZVJs/8CJbY4kWaG/8EIB4swV+RvMEfeKh5w==
-X-Received: by 2002:a05:620a:b04:: with SMTP id t4mr2647840qkg.7.1581358740795;
-        Mon, 10 Feb 2020 10:19:00 -0800 (PST)
-Received: from localhost.localdomain (pool-74-108-111-89.nycmny.fios.verizon.net. [74.108.111.89])
-        by smtp.gmail.com with ESMTPSA id y26sm560713qtv.28.2020.02.10.10.19.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2020 10:19:00 -0800 (PST)
-Message-ID: <40f780ffe2ddc879e5fa4443c098c0f1d331390f.camel@gmail.com>
-Subject: Re: [PATCH v2] ima: export the measurement list when needed
-From:   david.safford@gmail.com
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
+        id S1727008AbgBJSgY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Feb 2020 13:36:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52606 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727477AbgBJSgY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 10 Feb 2020 13:36:24 -0500
+Received: from gmail.com (unknown [104.132.1.77])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DB4DB20675;
+        Mon, 10 Feb 2020 18:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581359783;
+        bh=YRMERBGZ8987hvH9lRSoazOKWCQx+VOKpk/WDol0H0A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JxsQ+K2zIBVfotr5CTTHqBIGvls/92V7dMI9Q4pd9S/qqXtQzQ/DTiTFJUI3npQ3R
+         PJ2Ck3i7IkeQfROZ3y8tPQE45fTASFlLfqptL7woZj8iC/eKqU2rQ55B20v1zHg1+n
+         PfpB1g2nGA+Rj8i0Ze48HAcJSNKVtPfxYpW5QJ7w=
+Date:   Mon, 10 Feb 2020 10:36:21 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Ken Goldman <kgold@linux.ibm.com>
+Cc:     "Van Leeuwen, Pascal" <pvanleeuwen@rambus.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, linux-crypto@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Cc:     Ken Goldman <kgold@linux.ibm.com>, monty.wiseman@ge.com,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Date:   Mon, 10 Feb 2020 13:18:59 -0500
-In-Reply-To: <1580998432.5585.411.camel@linux.ibm.com>
-References: <20200108111743.23393-1-janne.karhunen@gmail.com>
-         <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
-         <1580998432.5585.411.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] crypto: sm3 - add a new alias name sm3-256
+Message-ID: <20200210183620.GA137710@gmail.com>
+References: <20200207092219.115056-1-tianjia.zhang@linux.alibaba.com>
+ <20200207092219.115056-2-tianjia.zhang@linux.alibaba.com>
+ <20200210031717.GA5198@sol.localdomain>
+ <1a623251-e83a-3b70-9fbd-8e929a23f7d8@linux.ibm.com>
+ <7a496bb15f264eab920bf081338d67af@MN2PR20MB2973.namprd20.prod.outlook.com>
+ <CY4PR0401MB36523805F71721000F188F2FC3190@CY4PR0401MB3652.namprd04.prod.outlook.com>
+ <9683f764-c8c7-e123-b5f6-4f155bd1b10b@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9683f764-c8c7-e123-b5f6-4f155bd1b10b@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-02-06 at 09:13 -0500, Mimi Zohar wrote:
-> Hi Janne,
+[Please fix your email client; you dropped all non-list recipients from Cc,
+and I had to manually add them back...]
+
+On Mon, Feb 10, 2020 at 01:02:42PM -0500, Ken Goldman wrote:
+> On 2/10/2020 12:01 PM, Van Leeuwen, Pascal wrote:
+> > Well, the current specification surely doesn't define anything else and is
+> > already over a decade old. So what would be the odds that they add a
+> > different blocksize variant_now_  AND still call that SM3-something?
 > 
-> On Fri, 2020-01-10 at 10:48 +0200, Janne Karhunen wrote:
-> > On Wed, Jan 8, 2020 at 1:18 PM Janne Karhunen <janne.karhunen@gmail.com> wrote:
-> > > Some systems can end up carrying lots of entries in the ima
-> > > measurement list. Since every entry is using a bit of kernel
-> > > memory, allow the sysadmin to export the measurement list to
-> > > the filesystem to free up some memory.
-> > 
-> > Hopefully this addressed comments from everyone. The flush event can
-> > now be triggered by the admin anytime and unique file names can be
-> > used for each flush (log.1, log.2, ...) etc, so getting to the correct
-> > item should be easy.
-> > 
-> > While it can now be argued that since this is an admin-driven event,
-> > kernel does not need to write the file. However, the intention is to
-> > bring out a second patch a bit later that adds a variable to define
-> > the max number of entries to be kept in the kernel memory and
-> > workqueue based automatic flushing. In those cases the kernel has to
-> > be able to write the file without any help from the admin..
+> I just got a note from a cryptographer who said there were discussions last
+> year about a future SM3 with 512 bit output.
 > 
-> The implications of exporting and removing records from the IMA-
-> measurement list needs to be considered carefully.  Verifying a TPM
-> quote will become dependent on knowing where the measurements are
-> stored.  The existing measurement list is stored in kernel memory and,
-> barring a kernel memory attack, is protected from modification.
->  Before upstreaming this or a similar patch, there needs to be a
-> discussion as to how the measurement list will be protected once is it
-> exported to userspace.
+> Given that, why not plan ahead and use sm3-256?  Is there any downside?
+> Is the cost any more than 4 bytes in some source code?
 
-"Protected" here can mean two different aspects: cryptographically
-protected from tampering, which is covered with the TPM_QUOTE, and
-availability protected from even accidental deletion, which is what
-I suspect you are concerned about. Certainly my original TLV patches
-were too flippant about this, as userspace had to be trusted not to
-drop any records. In this patch, the kernel writes the data in an
-atomic fashion. Either all records are successfully written, or none
-are, and an error is returned.
+If renaming sm3 to sm3-256 in the crypto API, no.  If adding sm3-256 alongside
+sm3, then yes there is a cost to that because from the crypto API's perspective
+they will be separate algorithms that each need to be registered, tested, etc.
 
-> This patch now attempts to address two very different scenarios.  The
-> first scenario is where userspace is requesting exporting and removing
-> of the measurement list records.  The other scenario is the kernel
-> exporting and removing of the measurement list records.  Conflating
-> these two different use cases might not be the right solution, as we
-> originally thought.
-
-Actually there are at least four significant use cases: userspace
-requested, and kernel initiated, both for running out of memory or
-for saving the list prior to a kexec. Exporting everything to a file
-prior to kexec can really simplify all the vaious use cases of 
-template vs TLV formatted lists across kexec. (Consider a modern
-TLV firmware kernel wanting to boot an older kernel that only
-understands template formats. How simple it would be for the first
-kernel to export its list to a file, and the second kernel keeps
-its list in template.)
-
-I have been testing this patch on all of these scenarios, and it
-provides a simple, powerful approach for all of them.
-
-> The kernel already exports the IMA measurement list to userspace via a
-> securityfs file.  From a userspace perspective, missing is the ability
-> of removing N number of records.  In this scenario, userspace would be
-> responsible for safely storing the measurements (e.g. blockchain).
->  The kernel would only be responsible for limiting permission, perhaps
-> based on a capability, before removing records from the measurement
-> list. 
-
-I don't think we want to export 'N' records, as this would
-be really hard to understand and coordinate with userspace.
-Exporting all or none seems simpler.
-
-> In the kernel usecase, somehow the kernel would need to safely export
-> the measurement list, or some portion of the measurement list, to a
-> file and then delete that portion.  What protects the exported records
-> stored in a file from modification?
-
-Tampering is prevented with the TPM_QUOTE. Accidental deletion is
-protected with CAP_SYS_ADMIN. If CAP_SYS_ADMIN is untrusted, you 
-have bigger problems, and even then it will be detected.
-
-> Instead of exporting the measurement records, one option as suggested
-> by Amir Goldstein, would be to use a vfs_tmpfile() to get an anonymous
-> file for backing store.  The existing securityfs measurement lists
-> would then read from this private copy of the anonymous file.
-
-This doesn't help in use cases where we really do want to
-export to a persistent file, without userspace help.
-
-> I've Cc'ed fsdevel for additional comments/suggestions.
-> 
-> thanks,
-> 
-> Mimi
-> 
-
+- Eric
