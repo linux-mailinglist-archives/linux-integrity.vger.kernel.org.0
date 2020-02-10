@@ -2,196 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FFD158438
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 21:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A274415844A
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 21:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727549AbgBJUY1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Feb 2020 15:24:27 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43698 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726563AbgBJUY1 (ORCPT
+        id S1727437AbgBJUeB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Feb 2020 15:34:01 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7248 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727003AbgBJUeB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Feb 2020 15:24:27 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01AKJM8u001208
-        for <linux-integrity@vger.kernel.org>; Mon, 10 Feb 2020 15:24:25 -0500
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2y1u9pd7vy-1
+        Mon, 10 Feb 2020 15:34:01 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01AKV8xF135731
+        for <linux-integrity@vger.kernel.org>; Mon, 10 Feb 2020 15:34:00 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2y1u56amps-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 10 Feb 2020 15:24:25 -0500
+        for <linux-integrity@vger.kernel.org>; Mon, 10 Feb 2020 15:34:00 -0500
 Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 10 Feb 2020 20:24:23 -0000
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Mon, 10 Feb 2020 20:33:57 -0000
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 10 Feb 2020 20:24:21 -0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01AKOKj058785940
+        Mon, 10 Feb 2020 20:33:53 -0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01AKXpFe52560028
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Feb 2020 20:24:20 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5491A11C052;
-        Mon, 10 Feb 2020 20:24:20 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 621D411C04C;
-        Mon, 10 Feb 2020 20:24:19 +0000 (GMT)
+        Mon, 10 Feb 2020 20:33:51 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BFA2D4C04E;
+        Mon, 10 Feb 2020 20:33:51 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 21EB04C040;
+        Mon, 10 Feb 2020 20:33:50 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.140.79])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Feb 2020 20:24:19 +0000 (GMT)
-Subject: Re: [PATCH v2] ima: export the measurement list when needed
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Feb 2020 20:33:50 +0000 (GMT)
+Subject: Re: [RFC PATCH 0/2] ima: uncompressed module appraisal support
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     david.safford@gmail.com, Janne Karhunen <janne.karhunen@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Cc:     Ken Goldman <kgold@linux.ibm.com>, monty.wiseman@ge.com,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Date:   Mon, 10 Feb 2020 15:24:18 -0500
-In-Reply-To: <40f780ffe2ddc879e5fa4443c098c0f1d331390f.camel@gmail.com>
-References: <20200108111743.23393-1-janne.karhunen@gmail.com>
-         <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
-         <1580998432.5585.411.camel@linux.ibm.com>
-         <40f780ffe2ddc879e5fa4443c098c0f1d331390f.camel@gmail.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     Nayna <nayna@linux.vnet.ibm.com>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
+        geert@linux-m68k.org, gregkh@linuxfoundation.org,
+        nayna@linux.ibm.com, tglx@linutronix.de, bauerman@linux.ibm.com,
+        mpe@ellerman.id.au, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 10 Feb 2020 15:33:49 -0500
+In-Reply-To: <90E53A33-530B-40FB-9982-2818FFD78D73@oracle.com>
+References: <20200206164226.24875-1-eric.snowberg@oracle.com>
+         <5c246616-9a3a-3ed2-c1f9-f634cef511c9@linux.vnet.ibm.com>
+         <09D68C13-75E2-4BD6-B4E6-F765B175C7FD@oracle.com>
+         <1581087096.5585.597.camel@linux.ibm.com>
+         <330BDFAC-E778-4E9D-A2D2-DD81B745F6AB@oracle.com>
+         <1581097201.5585.613.camel@linux.ibm.com>
+         <764C5FC8-DF0C-4B7A-8B5B-FD8B83F31568@oracle.com>
+         <1581100125.5585.623.camel@linux.ibm.com>
+         <992E95D5-D4B9-4913-A36F-BB47631DFE0A@oracle.com>
+         <1581101672.5585.628.camel@linux.ibm.com>
+         <C25E5885-F00B-48C0-AEF1-FA3014B2FDA6@oracle.com>
+         <1581205431.5585.645.camel@linux.ibm.com>
+         <0F13CB66-6962-44AC-A20D-CCBD82B43625@oracle.com>
+         <1581354556.5585.827.camel@linux.ibm.com>
+         <90E53A33-530B-40FB-9982-2818FFD78D73@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-x-cbid: 20021020-0008-0000-0000-000003519EFC
+x-cbid: 20021020-0012-0000-0000-000003859968
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20021020-0009-0000-0000-00004A723E07
-Message-Id: <1581366258.5585.891.camel@linux.ibm.com>
+x-cbparentid: 20021020-0013-0000-0000-000021C21253
+Message-Id: <1581366829.5585.898.camel@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-02-10_07:2020-02-10,2020-02-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 suspectscore=2 clxscore=1015 mlxlogscore=999 mlxscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002100147
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 impostorscore=0 bulkscore=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002100148
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-02-10 at 13:18 -0500, david.safford@gmail.com wrote:
-> On Thu, 2020-02-06 at 09:13 -0500, Mimi Zohar wrote:
-> > Hi Janne,
+On Mon, 2020-02-10 at 12:24 -0700, Eric Snowberg wrote:
+> > On Feb 10, 2020, at 10:09 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+
+> >> 
+> >> Ok, understood, “modsig” refers to strictly kernel module appended signatures
+> >> without regard to the keyring that verifies it.  Since there are inconsistencies
+> >> here, would you consider something like my first patch?  It will verify an 
+> >> uncompressed kernel module containing an appended signature  when the public key
+> >> is contained within the kernel keyring instead of the ima keyring.  Why force a 
+> >> person to add the same keys into the ima keyring for validation?  Especially when
+> >> the kernel keyring is now used to verify appended signatures in the compressed
+> >> modules.
 > > 
-> > On Fri, 2020-01-10 at 10:48 +0200, Janne Karhunen wrote:
-> > > On Wed, Jan 8, 2020 at 1:18 PM Janne Karhunen <janne.karhunen@gmail.com> wrote:
-> > > > Some systems can end up carrying lots of entries in the ima
-> > > > measurement list. Since every entry is using a bit of kernel
-> > > > memory, allow the sysadmin to export the measurement list to
-> > > > the filesystem to free up some memory.
-> > > 
-> > > Hopefully this addressed comments from everyone. The flush event can
-> > > now be triggered by the admin anytime and unique file names can be
-> > > used for each flush (log.1, log.2, ...) etc, so getting to the correct
-> > > item should be easy.
-> > > 
-> > > While it can now be argued that since this is an admin-driven event,
-> > > kernel does not need to write the file. However, the intention is to
-> > > bring out a second patch a bit later that adds a variable to define
-> > > the max number of entries to be kept in the kernel memory and
-> > > workqueue based automatic flushing. In those cases the kernel has to
-> > > be able to write the file without any help from the admin..
+> > Different use case scenarios have different requirements.  Suppose for
+> > example that the group creating the kernel image is not the same as
+> > using it.  The group using the kernel image could sign all files,
+> > including kernel modules (imasig), with their own private key. Only
+> > files that they signed would be permitted.  Your proposal would break
+> > the current expectations, allowing kernel modules signed by someone
+> > else to be loaded.
 > > 
-> > The implications of exporting and removing records from the IMA-
-> > measurement list needs to be considered carefully.  Verifying a TPM
-> > quote will become dependent on knowing where the measurements are
-> > stored.  The existing measurement list is stored in kernel memory and,
-> > barring a kernel memory attack, is protected from modification.
-> >  Before upstreaming this or a similar patch, there needs to be a
-> > discussion as to how the measurement list will be protected once is it
-> > exported to userspace.
 > 
-> "Protected" here can mean two different aspects: cryptographically
-> protected from tampering, which is covered with the TPM_QUOTE, and
-> availability protected from even accidental deletion, which is what
-> I suspect you are concerned about. Certainly my original TLV patches
-> were too flippant about this, as userspace had to be trusted not to
-> drop any records. In this patch, the kernel writes the data in an
-> atomic fashion. Either all records are successfully written, or none
-> are, and an error is returned.
+> All the end user needs to do is compress any module created by the group that built
+> the original kernel image to work around the scenario above.  Then the appended 
+> signature in the compressed module will be verified by the kernel keyring. Does 
+> this mean there is a security problem that should be fixed, if this is a concern?
 
-A third aspect, which I'm concerned about, is removing records from
-the measurement list.  This changes the existing userspace
-expectations of returning the entire measurement list.  Now userspace
-will need some out of band method of knowing where to look for the
-measurements.
-
-> 
-> > This patch now attempts to address two very different scenarios.  The
-> > first scenario is where userspace is requesting exporting and removing
-> > of the measurement list records.  The other scenario is the kernel
-> > exporting and removing of the measurement list records.  Conflating
-> > these two different use cases might not be the right solution, as we
-> > originally thought.
-> 
-> Actually there are at least four significant use cases: userspace
-> requested, and kernel initiated, both for running out of memory or
-> for saving the list prior to a kexec. Exporting everything to a file
-> prior to kexec can really simplify all the vaious use cases of 
-> template vs TLV formatted lists across kexec. (Consider a modern
-> TLV firmware kernel wanting to boot an older kernel that only
-> understands template formats. How simple it would be for the first
-> kernel to export its list to a file, and the second kernel keeps
-> its list in template.)
-
-When Thiago and I added support for carrying the measurement list
-across kexec, there were a number of additional measurements after the
-kexec load.  These additional measurements will need to be safely
-written out to file in order to validate the TPM quote.
-
-> I have been testing this patch on all of these scenarios, and it
-> provides a simple, powerful approach for all of them.
- 
-Were you able to walk the measurement list and validate the TPM quote
-after a kexec?
-
-> 
-> > The kernel already exports the IMA measurement list to userspace via a
-> > securityfs file.  From a userspace perspective, missing is the ability
-> > of removing N number of records.  In this scenario, userspace would be
-> > responsible for safely storing the measurements (e.g. blockchain).
-> >  The kernel would only be responsible for limiting permission, perhaps
-> > based on a capability, before removing records from the measurement
-> > list. 
-> 
-> I don't think we want to export 'N' records, as this would
-> be really hard to understand and coordinate with userspace.
-> Exporting all or none seems simpler.
-
-Userspace already has the ability of exporting the measurement list.
- However, beetween saving the measurement list to a file and telling
-the kernel to delete the records from the kernel, additional
-measurement could have been added.
-
-> 
-> > In the kernel usecase, somehow the kernel would need to safely export
-> > the measurement list, or some portion of the measurement list, to a
-> > file and then delete that portion.  What protects the exported records
-> > stored in a file from modification?
-> 
-> Tampering is prevented with the TPM_QUOTE. Accidental deletion is
-> protected with CAP_SYS_ADMIN. If CAP_SYS_ADMIN is untrusted, you 
-> have bigger problems, and even then it will be detected.
-
-Agreed, attestation will detect any tampering, but up to now we didn't
-have to rely on DAC/MAC to prevent tampering of the measurement list.
-
-> > Instead of exporting the measurement records, one option as suggested
-> > by Amir Goldstein, would be to use a vfs_tmpfile() to get an anonymous
-> > file for backing store.  The existing securityfs measurement lists
-> > would then read from this private copy of the anonymous file.
-> 
-> This doesn't help in use cases where we really do want to
-> export to a persistent file, without userspace help.
-
-Is to prevent needing to carry the measurement list across kexec the
-only reason for the kernel needing to write to a persistent file?
+Again, the issue isn't compressed/uncompressed kernel modules, but the
+syscall used to load the kernel module.  IMA can prevent using the the
+init_module syscall.  Refer to the ima_load_data() LOADING_MODULE
+case.
 
 Mimi
 
