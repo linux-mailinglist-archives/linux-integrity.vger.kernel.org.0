@@ -2,119 +2,174 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79469157031
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 09:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2095215724D
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2020 11:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727436AbgBJIE4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Feb 2020 03:04:56 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45502 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgBJIE4 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Feb 2020 03:04:56 -0500
-Received: by mail-lj1-f194.google.com with SMTP id f25so5982211ljg.12;
-        Mon, 10 Feb 2020 00:04:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4A3TMLKRGhyPkPgiJ1U8mlnA1xT8oI0F78huS9wa9CU=;
-        b=pawlTy63fbpdEBYkv0CmRGyPqkZ8dqJQl4Aj79L8VP9AENrF7OfLO41WMjN4HCw2ZT
-         TjfUpxO5q6ucBK5/rvHkSecgrx48lkta+ZP5YVv2BgL1I0km8Vr4h2O/ux1+XdnCykPE
-         BkZOWVMl9ab+KUsALRf7dVvUNdFinjcWQYXEofq7aa1SONM6z9fPODpNcPQ2LqwJPtn8
-         2CToKALcN1IzvFMIa5BQOE/masPDovHJpejgEqFcQQ7N7yaDptXG+2KFqneOki5tHW10
-         nNU8lzz6W/nBpiuoP1Fvzs7H8RY5zEkVW4955Fa82jlC8pRfSp/9yZ9jbk1CspU9n6eu
-         qc9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4A3TMLKRGhyPkPgiJ1U8mlnA1xT8oI0F78huS9wa9CU=;
-        b=mRvbxQObNN6ONCYpn8mx4kgkuX+Zj/SGb4WhyBtnss8o8JueXRgBdyUTEJEo5nVwR2
-         giyQzpLN5zu3yUPnuHGso0XOrn7492UMSot9ZdRJFuZRkd7kSq+xiY6ToP5X0cNIJdjP
-         biB3u2KHCf7tbvQ2lXZPzRO+pNLIQPKULRyTnyOz1KesNVWAuUkuJuoZOUE6d84tasmr
-         nppZ1wbldKa573SBP4OaQkdkzwRFqAUHLRdZAM6llNTL1pyPf5MRxDz0yeD9sMr5d95n
-         jXGWEIYJND893RgOoadMxiZaKrneGuihnEymJTnT8pybh/T/gdZp0lZ4Dn5OceXhQp1a
-         KwqA==
-X-Gm-Message-State: APjAAAV++e87Xkr3gKWb3gHSBou+knExFK/nLuEqg7JmNlSS+wUytPd8
-        zGChhTHjdXVnE5CojoCunmoJIgntB1AXkG9Yv/M=
-X-Google-Smtp-Source: APXvYqxKYRfBdy1b8G3zgeigkBLLmIXOGUi3cZulxhpZITWH3+AT9urS6u3fQ+t/PjZxEM0Yoqhsm61H4Nnu/Wtc4ZE=
-X-Received: by 2002:a2e:8e95:: with SMTP id z21mr93361ljk.119.1581321893578;
- Mon, 10 Feb 2020 00:04:53 -0800 (PST)
+        id S1726968AbgBJKBy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Feb 2020 05:01:54 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2392 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726451AbgBJKBy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 10 Feb 2020 05:01:54 -0500
+Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 9758D9C9E66D8A9052AC;
+        Mon, 10 Feb 2020 10:01:51 +0000 (GMT)
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
+ by smtpsuk.huawei.com (10.201.108.35) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Mon, 10 Feb 2020 10:01:43 +0000
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <James.Bottomley@HansenPartnership.com>,
+        <jarkko.sakkinen@linux.intel.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v3 0/8] ima: support stronger algorithms for attestation
+Date:   Mon, 10 Feb 2020 11:00:40 +0100
+Message-ID: <20200210100048.21448-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20200108111743.23393-1-janne.karhunen@gmail.com>
- <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com> <1580998432.5585.411.camel@linux.ibm.com>
-In-Reply-To: <1580998432.5585.411.camel@linux.ibm.com>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Mon, 10 Feb 2020 10:04:42 +0200
-Message-ID: <CAE=NcrYhz7zrhxZoVDSvfs+Cd-vNX30gGXU9Xu4K7ft-1ozN2g@mail.gmail.com>
-Subject: Re: [PATCH v2] ima: export the measurement list when needed
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.204.65.160]
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 6, 2020 at 4:14 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+IMA extends Platform Configuration Registers (PCRs) of the TPM to give a
+proof to a remote verifier that the measurement list contains all
+measurements done by the kernel and that the list was not maliciously
+modified by an attacker.
 
-> The implications of exporting and removing records from the IMA-
-> measurement list needs to be considered carefully.  Verifying a TPM
-> quote will become dependent on knowing where the measurements are
-> stored.  The existing measurement list is stored in kernel memory and,
-> barring a kernel memory attack, is protected from modification.
->  Before upstreaming this or a similar patch, there needs to be a
-> discussion as to how the measurement list will be protected once is it
-> exported to userspace.
->
-> This patch now attempts to address two very different scenarios.  The
-> first scenario is where userspace is requesting exporting and removing
-> of the measurement list records.  The other scenario is the kernel
-> exporting and removing of the measurement list records.  Conflating
-> these two different use cases might not be the right solution, as we
-> originally thought.
->
-> The kernel already exports the IMA measurement list to userspace via a
-> securityfs file.  From a userspace perspective, missing is the ability
-> of removing N number of records.  In this scenario, userspace would be
-> responsible for safely storing the measurements (e.g. blockchain).
->  The kernel would only be responsible for limiting permission, perhaps
-> based on a capability, before removing records from the measurement
-> list.
+IMA was originally designed to extend PCRs with a SHA1 digest, provided
+with the measurement list, and was subsequently updated to extend all PCR
+banks in case a TPM 2.0 is used. Non-SHA1 PCR banks are not supposed to be
+used for remote attestation, as they are extended with a SHA1 digest padded
+with zeros, which does not increase the strength.
 
-This is a good point. I will adapt the patch to this.
+This patch set addresses this issue by extending PCRs with the digest of
+the measurement entry calculated with the crypto subsystem. The list of
+algorithms used to calculate the digest are taken from
+ima_tpm_chip->allocated_banks, returned by the TPM driver. The SHA1 digest
+is always calculated, as SHA1 still remains the default algorithm for the
+template digest in the measurement list.
 
+This patch set also makes two additional modifications related to the usage
+of hash algorithms. First, since now the template digest for the default
+IMA algorithm is always calculated, this is used for hash collision
+detection, to check if there are duplicate measurement entries.
 
-> In the kernel usecase, somehow the kernel would need to safely export
-> the measurement list, or some portion of the measurement list, to a
-> file and then delete that portion.  What protects the exported records
-> stored in a file from modification?
+Second, it uses the default IMA hash algorithm to calculate the boot
+aggregate, assuming that the corresponding PCR bank is currently allocated.
+Otherwise, it finds the SHA256 PCR bank (mandatory for TPM 2.0 in TCG PC
+Client specification). Lastly, if that bank was not found, it selects the
+first PCR bank. If the TPM algorithm ID of the first PCR bank is not mapped
+to a crypto ID, boot_aggregate is set to zero.
 
-Are we looking at protecting this file from a root exploit and the
-potential DOS it might cause? In the original patch the file was root
-writable only. As far as further limitations go, the easiest would
-probably be to use the file immutable bit. If the kernel opens the
-file and sets the immutable bit, it is the only entity that can ever
-write to it - not even another root task could directly write to it.
-The kernel could, as long as it keeps the file open.
+This patch set does not yet modify the format of the measurement list to
+provide the digests passed to the TPM. However, reconstructing the value of
+the quoted PCR is still possible for the verifier by calculating the digest
+on measurement data found in binary_runtime_measurements.
 
+attest-tools (https://github.com/euleros/attest-tools, branch 0.2-devel)
+has the ability to parse the BIOS and IMA event logs, and to compare
+boot_aggregate with the digest of final PCR values obtained by performing
+in software the PCR extend operation with digests in the BIOS event log.
 
-> Instead of exporting the measurement records, one option as suggested
-> by Amir Goldstein, would be to use a vfs_tmpfile() to get an anonymous
-> file for backing store.  The existing securityfs measurement lists
-> would then read from this private copy of the anonymous file.
->
-> I've Cc'ed fsdevel for additional comments/suggestions.
+To perform the test, it is necessary to have a complete BIOS event log and
+to apply the boot_aggregate patches. It would be possible to use qemu and
+swtpm from Stefan Berger, but at the moment it is necessary to change the
+ACPI parser in drivers/char/tpm/event_log/acpi.c to accept TPM 2.0 and to
+return EFI_TCG2_EVENT_LOG_FORMAT_TCG_2.
 
-I didn't quickly see what the actual problem is that the vfs_tmpfile
-solves in this context, will check.
+Create req.json with this content:
+---
+{
+  "reqs":{
+    "dummy|verify":"",
+    "ima_boot_aggregate|verify":""
+  }
+}
+---
 
+With the requirements above, attest-tools verifies boot_aggregate and
+accepts any other entry in the event logs.
 
---
-Janne
+On server side run:
+# attest_ra_server -p 10 -r req.json -s -i
+
+-s disables TPM signature verification
+-i allows IMA violations
+
+To enable TPM signature verification it is necessary to have a valid AK
+certificate. It can be obtained by following the instructions at:
+
+https://github.com/euleros/attest-tools/blob/0.2-devel/README
+
+On client side run:
+# echo test > aik_cert.pem
+# echo aik_cert.pem > list_privacy_ca
+# attest_ra_client -A
+
+The commands above generate an AK and tell attest-tools to use a dummy AK
+certificate.
+
+# attest_ra_client -s <server IP> -q -p 10 -P <PCR algo> -b -i
+
+The command above sends the TPM quote and the event logs to the RA server
+and gets the response (successful/failed verification).
+
+-b includes the BIOS event log from securityfs
+-i includes the IMA event log from securityfs
+
+To check that IMA extends non-SHA1 PCR banks with an appropriate digest,
+use -P sha256, so that attest_ra_client selects the SHA256 PCR bank. To
+check that boot_aggregate is calculated properly, set ima_hash=sha256 in
+the kernel command line.
+
+Changelog
+
+v2:
+- add NR_BANKS macro to return zero if ima_tpm_chip is NULL
+- replace ima_num_template_digests with
+  NR_BANKS(ima_tpm_chip) + ima_extra_slots (suggested by Mimi)
+- add __ro_after_init to declaration of ima_sha1_idx ima_hash_algo_idx and
+  ima_extra_slots (suggested by Mimi)
+- declare ima_init_ima_crypto() as static (reported by kbuild test robot)
+- use ima_sha1_idx and ima_hash_algo_idx to access ima_algo_array elements
+  in ima_init_crypto()
+
+v1:
+- move ima_sha1_idx and ima_hash_algo_idx to ima_crypto.c
+- introduce ima_num_template_digests (suggested by Mimi)
+- determine ima_num_template_digests before allocating ima_algo_array
+  (suggested by Mimi)
+- replace kmalloc_array() with kcalloc() in ima_init_crypto() (suggested by
+  Mimi)
+- check if ima_tpm_chip is NULL
+
+Roberto Sassu (8):
+  tpm: Initialize crypto_id of allocated_banks to HASH_ALGO__LAST
+  ima: Switch to ima_hash_algo for boot aggregate
+  ima: Evaluate error in init_ima()
+  ima: Store template digest directly in ima_template_entry
+  ima: Switch to dynamically allocated buffer for template digests
+  ima: Allocate and initialize tfm for each PCR bank
+  ima: Calculate and extend PCR with digests in ima_template_entry
+  ima: Use ima_hash_algo for collision detection in the measurement list
+
+ drivers/char/tpm/tpm2-cmd.c           |   2 +
+ security/integrity/ima/ima.h          |  10 +-
+ security/integrity/ima/ima_api.c      |  20 +--
+ security/integrity/ima/ima_crypto.c   | 244 ++++++++++++++++++++++----
+ security/integrity/ima/ima_fs.c       |   4 +-
+ security/integrity/ima/ima_init.c     |  22 ++-
+ security/integrity/ima/ima_main.c     |   3 +
+ security/integrity/ima/ima_queue.c    |  36 ++--
+ security/integrity/ima/ima_template.c |  22 ++-
+ 9 files changed, 290 insertions(+), 73 deletions(-)
+
+-- 
+2.17.1
+
