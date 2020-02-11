@@ -2,114 +2,168 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EB0159BA4
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2020 22:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0468159CEF
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2020 00:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727054AbgBKVte (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Feb 2020 16:49:34 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50068 "EHLO
+        id S1727798AbgBKXKn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Feb 2020 18:10:43 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23046 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727111AbgBKVta (ORCPT
+        by vger.kernel.org with ESMTP id S1727787AbgBKXKn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Feb 2020 16:49:30 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01BLmkk5013975
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Feb 2020 16:49:28 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2y1ufmrw0v-1
+        Tue, 11 Feb 2020 18:10:43 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01BNAe2g008503
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Feb 2020 18:10:41 -0500
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2y3wxdg62u-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Feb 2020 16:49:28 -0500
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Feb 2020 18:10:41 -0500
 Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Tue, 11 Feb 2020 21:49:26 -0000
+        Tue, 11 Feb 2020 23:10:20 -0000
 Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 11 Feb 2020 21:49:22 -0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01BLnLwb34799720
+        Tue, 11 Feb 2020 23:10:19 -0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01BNAI4Q53674148
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Feb 2020 21:49:21 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 33A3011C058;
-        Tue, 11 Feb 2020 21:49:21 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E69B11C052;
-        Tue, 11 Feb 2020 21:49:19 +0000 (GMT)
+        Tue, 11 Feb 2020 23:10:18 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 15D85A405C;
+        Tue, 11 Feb 2020 23:10:18 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EFAE2A4054;
+        Tue, 11 Feb 2020 23:10:16 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.128.4])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Feb 2020 21:49:19 +0000 (GMT)
-Subject: Re: [PATCH 1/2] crypto: rename sm3-256 to sm3 in hash_algo_name
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Feb 2020 23:10:16 +0000 (GMT)
+Subject: Re: [PATCH v2] ima: export the measurement list when needed
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        ebiggers@kernel.org
-Cc:     linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 11 Feb 2020 16:49:19 -0500
-In-Reply-To: <20200210124440.23929-2-tianjia.zhang@linux.alibaba.com>
-References: <20200210124440.23929-1-tianjia.zhang@linux.alibaba.com>
-         <20200210124440.23929-2-tianjia.zhang@linux.alibaba.com>
+To:     david.safford@gmail.com, Janne Karhunen <janne.karhunen@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Cc:     Ken Goldman <kgold@linux.ibm.com>, monty.wiseman@ge.com,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Date:   Tue, 11 Feb 2020 18:10:16 -0500
+In-Reply-To: <fab03a0b8cc9dc93f2d0db51071521ce82e2b96b.camel@gmail.com>
+References: <20200108111743.23393-1-janne.karhunen@gmail.com>
+         <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
+         <1580998432.5585.411.camel@linux.ibm.com>
+         <40f780ffe2ddc879e5fa4443c098c0f1d331390f.camel@gmail.com>
+         <1581366258.5585.891.camel@linux.ibm.com>
+         <fab03a0b8cc9dc93f2d0db51071521ce82e2b96b.camel@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-x-cbid: 20021121-0016-0000-0000-000002E5F3FA
+x-cbid: 20021123-4275-0000-0000-000003A03FA9
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20021121-0017-0000-0000-00003348EC0C
-Message-Id: <1581457759.5125.18.camel@linux.ibm.com>
+x-cbparentid: 20021123-4276-0000-0000-000038B4789A
+Message-Id: <1581462616.5125.69.camel@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-11_06:2020-02-11,2020-02-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 priorityscore=1501 mlxscore=0 adultscore=0 clxscore=1015
- mlxlogscore=999 bulkscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002110141
+ definitions=2020-02-11_07:2020-02-11,2020-02-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ malwarescore=0 suspectscore=2 clxscore=1015 mlxscore=0 priorityscore=1501
+ bulkscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002110149
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-02-10 at 20:44 +0800, Tianjia Zhang wrote:
-> The name sm3-256 is defined in hash_algo_name in hash_info, but the
-> algorithm name implemented in sm3_generic.c is sm3, which will cause
-> the sm3-256 algorithm to be not found in some application scenarios of
-> the hash algorithm, and an ENOENT error will occur. For example,
-> IMA, keys, and other subsystems that reference hash_algo_name all use
-> the hash algorithm of sm3.
+On Tue, 2020-02-11 at 11:10 -0500, david.safford@gmail.com wrote:
+> On Mon, 2020-02-10 at 15:24 -0500, Mimi Zohar wrote:
+> > On Mon, 2020-02-10 at 13:18 -0500, david.safford@gmail.com wrote:
+> > > On Thu, 2020-02-06 at 09:13 -0500, Mimi Zohar wrote:
+> > > > Hi Janne,
+> > > > 
+> > > > On Fri, 2020-01-10 at 10:48 +0200, Janne Karhunen wrote:
+> > > > > On Wed, Jan 8, 2020 at 1:18 PM Janne Karhunen <janne.karhunen@gmail.com> wrote:
+> > > > > > Some systems can end up carrying lots of entries in the ima
+> > > > > > measurement list. Since every entry is using a bit of kernel
+> > > > > > memory, allow the sysadmin to export the measurement list to
+> > > > > > the filesystem to free up some memory.
+> > > > > 
+> > > > > Hopefully this addressed comments from everyone. The flush event can
+> > > > > now be triggered by the admin anytime and unique file names can be
+> > > > > used for each flush (log.1, log.2, ...) etc, so getting to the correct
+> > > > > item should be easy.
+> > > > > 
+> > > > > While it can now be argued that since this is an admin-driven event,
+> > > > > kernel does not need to write the file. However, the intention is to
+> > > > > bring out a second patch a bit later that adds a variable to define
+> > > > > the max number of entries to be kept in the kernel memory and
+> > > > > workqueue based automatic flushing. In those cases the kernel has to
+> > > > > be able to write the file without any help from the admin..
+> > > > 
+> > > > The implications of exporting and removing records from the IMA-
+> > > > measurement list needs to be considered carefully.  Verifying a TPM
+> > > > quote will become dependent on knowing where the measurements are
+> > > > stored.  The existing measurement list is stored in kernel memory and,
+> > > > barring a kernel memory attack, is protected from modification.
+> > > >  Before upstreaming this or a similar patch, there needs to be a
+> > > > discussion as to how the measurement list will be protected once is it
+> > > > exported to userspace.
+> > > 
+> > > "Protected" here can mean two different aspects: cryptographically
+> > > protected from tampering, which is covered with the TPM_QUOTE, and
+> > > availability protected from even accidental deletion, which is what
+> > > I suspect you are concerned about. Certainly my original TLV patches
+> > > were too flippant about this, as userspace had to be trusted not to
+> > > drop any records. In this patch, the kernel writes the data in an
+> > > atomic fashion. Either all records are successfully written, or none
+> > > are, and an error is returned.
+> > 
+> > A third aspect, which I'm concerned about, is removing records from
+> > the measurement list.  This changes the existing userspace
+> > expectations of returning the entire measurement list.  Now userspace
+> > will need some out of band method of knowing where to look for the
+> > measurements.
 > 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> This is a feature, not a bug. :-)
+> There is no reason to resend the same data for every attestation,
+> nor is there any reason to store already attested measurements anywhere
+> on the client. By versioning the log file names, userspace gets a
+> simple way to know what has and has not been attested, and for small
+> embedded devices we don't need to waste memory or filesystem space
+> on the data already attested.
 
-The "hash_map" needs to be updated to reflect this change.
+This new feature will require setting up some infrastructure for
+storing the partial measurement list(s) in order to validate a TPM
+quote.  Userspace already can save partial measurement list(s) without
+any kernel changes.  The entire measurement list does not need to be
+read each time.  lseek can read past the last record previously read.
+ The only new aspect is truncating the in kernel measurement list in
+order to free kernel memory.
 
-static struct tpm2_hash tpm2_hash_map[] = {
-        {HASH_ALGO_SHA1, TPM_ALG_SHA1},
-        {HASH_ALGO_SHA256, TPM_ALG_SHA256},
-        {HASH_ALGO_SHA384, TPM_ALG_SHA384},
-        {HASH_ALGO_SHA512, TPM_ALG_SHA512},
-        {HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
-};
+< snip> 
+
+> > > > Instead of exporting the measurement records, one option as suggested
+> > > > by Amir Goldstein, would be to use a vfs_tmpfile() to get an anonymous
+> > > > file for backing store.  The existing securityfs measurement lists
+> > > > would then read from this private copy of the anonymous file.
+> > > 
+> > > This doesn't help in use cases where we really do want to
+> > > export to a persistent file, without userspace help.
+> > 
+> > Is to prevent needing to carry the measurement list across kexec the
+> > only reason for the kernel needing to write to a persistent file?
+> 
+> Well, that and the other reasons mentioned, such as completely freeing
+> the data from the client after attestation, and simplicity of the
+> mechanism.
+
+Until there is proof that the measurement list can be exported to a
+file before kexec, instead of carrying the measurement list across
+kexec, and a TPM quote can be validated after the kexec, there isn't a
+compelling reason for the kernel needing to truncate the measurement
+list.
 
 Mimi
-
-> ---
->  crypto/hash_info.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/crypto/hash_info.c b/crypto/hash_info.c
-> index c754cb75dd1a..a49ff96bde77 100644
-> --- a/crypto/hash_info.c
-> +++ b/crypto/hash_info.c
-> @@ -26,7 +26,7 @@ const char *const hash_algo_name[HASH_ALGO__LAST] = {
->  	[HASH_ALGO_TGR_128]	= "tgr128",
->  	[HASH_ALGO_TGR_160]	= "tgr160",
->  	[HASH_ALGO_TGR_192]	= "tgr192",
-> -	[HASH_ALGO_SM3_256]	= "sm3-256",
-> +	[HASH_ALGO_SM3_256]	= "sm3",
->  	[HASH_ALGO_STREEBOG_256] = "streebog256",
->  	[HASH_ALGO_STREEBOG_512] = "streebog512",
->  };
 
