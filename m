@@ -2,299 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0488B158868
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2020 03:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7ECE158891
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2020 04:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727530AbgBKCsK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Feb 2020 21:48:10 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:49832 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727588AbgBKCsI (ORCPT
+        id S1727982AbgBKDKw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Feb 2020 22:10:52 -0500
+Received: from smtprelay0037.hostedemail.com ([216.40.44.37]:39617 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727962AbgBKDKw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Feb 2020 21:48:08 -0500
-Received: from tusharsu-Ubuntu.corp.microsoft.com (unknown [131.107.147.225])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 434DA20B9C2F;
-        Mon, 10 Feb 2020 18:48:07 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 434DA20B9C2F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1581389287;
-        bh=t+ShYf2XwSIyB1oBmjrPH0u1zCu+ztC602aYBU8hwlU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WfyVV4BIL9kMrlTb9lQHGt6nSvMxsefl04N3zwcZHLc2zdr+GvKhlRQz9cnIZw7fy
-         pwsBURPcx7b0iGSLJOxx8xJYuY30TyRD6UlRyGxevW1ooR55Ku6no/7L9Nqo6rVO94
-         h6pzj3uPyN6e/G4llia+vyBgEd8mvl+H+f3K/41A=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, joe@perches.com, skhan@linuxfoundation.org,
+        Mon, 10 Feb 2020 22:10:52 -0500
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 8AAEB181D3026;
+        Tue, 11 Feb 2020 03:10:50 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::,RULES_HIT:41:355:379:599:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1567:1593:1594:1711:1714:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3622:3865:3866:3867:3868:3870:3871:3873:4321:5007:10004:10400:10848:11026:11232:11658:11914:12048:12296:12297:12740:12760:12895:13069:13311:13357:13439:14659:14721:21060:21080:21611:21627:30030:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: group71_5e7f9e52c8b5d
+X-Filterd-Recvd-Size: 1344
+Received: from XPS-9350.home (unknown [47.151.143.254])
+        (Authenticated sender: joe@perches.com)
+        by omf06.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 11 Feb 2020 03:10:49 +0000 (UTC)
+Message-ID: <225b88ac1abcb293bf9d55ca53009015b1baa81c.camel@perches.com>
+Subject: Re: [PATCH v2 1/3] IMA: Update KBUILD_MODNAME for IMA files to ima
+From:   Joe Perches <joe@perches.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        zohar@linux.ibm.com, skhan@linuxfoundation.org,
         linux-integrity@vger.kernel.org
 Cc:     sashal@kernel.org, nramas@linux.microsoft.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] IMA: Add module name and base name prefix to log
-Date:   Mon, 10 Feb 2020 18:47:55 -0800
-Message-Id: <20200211024755.5579-3-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
+Date:   Mon, 10 Feb 2020 19:09:34 -0800
 In-Reply-To: <20200211024755.5579-1-tusharsu@linux.microsoft.com>
 References: <20200211024755.5579-1-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The #define for formatting log messages, pr_fmt, is duplicated in the
-files under security/integrity.
+On Mon, 2020-02-10 at 18:47 -0800, Tushar Sugandhi wrote:
+> Log statements from ima_mok.c, ima_asymmetric_keys.c, and
+> ima_queue_keys.c are prefixed with the respective file names
+> and not with the string "ima". 
 
-This change moves the definition to security/integrity/integrity.h and
-removes the duplicate definitions in the other files under
-security/integrity. Also, it adds KBUILD_MODNAME and KBUILD_BASENAME prefix
-to the log messages.
+Series seems sensible, thanks Tushar.
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Suggested-by: Joe Perches <joe@perches.com>
-Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
----
- security/integrity/digsig.c                  | 2 --
- security/integrity/digsig_asymmetric.c       | 2 --
- security/integrity/evm/evm_crypto.c          | 2 --
- security/integrity/evm/evm_main.c            | 2 --
- security/integrity/evm/evm_secfs.c           | 2 --
- security/integrity/ima/ima_asymmetric_keys.c | 2 --
- security/integrity/ima/ima_crypto.c          | 2 --
- security/integrity/ima/ima_fs.c              | 2 --
- security/integrity/ima/ima_init.c            | 2 --
- security/integrity/ima/ima_kexec.c           | 1 -
- security/integrity/ima/ima_main.c            | 2 --
- security/integrity/ima/ima_policy.c          | 2 --
- security/integrity/ima/ima_queue.c           | 2 --
- security/integrity/ima/ima_queue_keys.c      | 2 --
- security/integrity/ima/ima_template.c        | 2 --
- security/integrity/ima/ima_template_lib.c    | 2 --
- security/integrity/integrity.h               | 6 ++++++
- 17 files changed, 6 insertions(+), 31 deletions(-)
+Next time you might choose to use
 
-diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index ea1aae3d07b3..e9cbadade74b 100644
---- a/security/integrity/digsig.c
-+++ b/security/integrity/digsig.c
-@@ -6,8 +6,6 @@
-  * Dmitry Kasatkin <dmitry.kasatkin@intel.com>
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/err.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index 55aec161d0e1..4e0d6778277e 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -6,8 +6,6 @@
-  * Dmitry Kasatkin <dmitry.kasatkin@intel.com>
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/err.h>
- #include <linux/ratelimit.h>
- #include <linux/key-type.h>
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index d485f6fc908e..35682852ddea 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -10,8 +10,6 @@
-  *	 Using root's kernel master key (kmk), calculate the HMAC
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/export.h>
- #include <linux/crypto.h>
- #include <linux/xattr.h>
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index f9a81b187fae..d361d7fdafc4 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -11,8 +11,6 @@
-  *	evm_inode_removexattr, and evm_verifyxattr
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/init.h>
- #include <linux/crypto.h>
- #include <linux/audit.h>
-diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
-index c11c1f7b3ddd..39ad1038d45d 100644
---- a/security/integrity/evm/evm_secfs.c
-+++ b/security/integrity/evm/evm_secfs.c
-@@ -10,8 +10,6 @@
-  *	- Get the key and enable EVM
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/audit.h>
- #include <linux/uaccess.h>
- #include <linux/init.h>
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-index 7678f0e3e84d..aaae80c4e376 100644
---- a/security/integrity/ima/ima_asymmetric_keys.c
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -9,8 +9,6 @@
-  *       create or update.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <keys/asymmetric-type.h>
- #include "ima.h"
- 
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 7967a6904851..423c84f95a14 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -10,8 +10,6 @@
-  *	Calculates md5/sha1 file hash, template hash, boot-aggreate hash
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/kernel.h>
- #include <linux/moduleparam.h>
- #include <linux/ratelimit.h>
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 2000e8df0301..a71e822a6e92 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -12,8 +12,6 @@
-  *	current measurement list and IMA statistics
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/fcntl.h>
- #include <linux/slab.h>
- #include <linux/init.h>
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 195cb4079b2b..567468188a61 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -11,8 +11,6 @@
-  *             initialization and cleanup functions
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/init.h>
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 9e94eca48b89..121de3e04af2 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -6,7 +6,6 @@
-  * Thiago Jung Bauermann <bauerman@linux.vnet.ibm.com>
-  * Mimi Zohar <zohar@linux.vnet.ibm.com>
-  */
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/seq_file.h>
- #include <linux/vmalloc.h>
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index ee01ee34eec8..e78d0aa665f3 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -15,8 +15,6 @@
-  *	and ima_file_check.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/module.h>
- #include <linux/file.h>
- #include <linux/binfmts.h>
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 453427048999..c334e0dc6083 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -7,8 +7,6 @@
-  *	- initialize default measure policy rules
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/init.h>
- #include <linux/list.h>
- #include <linux/fs.h>
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index 1ce8b1701566..8753212ddb18 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -15,8 +15,6 @@
-  *       ever removed or changed during the boot-cycle.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/rculist.h>
- #include <linux/slab.h>
- #include "ima.h"
-diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
-index 6a9ee52649c4..ffd78f09c5b6 100644
---- a/security/integrity/ima/ima_queue_keys.c
-+++ b/security/integrity/ima/ima_queue_keys.c
-@@ -8,8 +8,6 @@
-  *       Enables deferred processing of keys
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/workqueue.h>
- #include <keys/asymmetric-type.h>
- #include "ima.h"
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 6aa6408603e3..062d9ad49afb 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -9,8 +9,6 @@
-  *      Helpers to manage template descriptors.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/rculist.h>
- #include "ima.h"
- #include "ima_template_lib.h"
-diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-index 32ae05d88257..9cd1e50f3ccc 100644
---- a/security/integrity/ima/ima_template_lib.c
-+++ b/security/integrity/ima/ima_template_lib.c
-@@ -9,8 +9,6 @@
-  *      Library of supported template fields.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include "ima_template_lib.h"
- 
- static bool ima_template_hash_algo_allowed(u8 algo)
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 73fc286834d7..b1bb4d2263be 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -6,6 +6,12 @@
-  * Mimi Zohar <zohar@us.ibm.com>
-  */
- 
-+#ifdef pr_fmt
-+#undef pr_fmt
-+#endif
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " KBUILD_BASENAME ": " fmt
-+
- #include <linux/types.h>
- #include <linux/integrity.h>
- #include <crypto/sha.h>
--- 
-2.17.1
+	git format-patch --cover-letter
+
+and write in the 0/n cover letter what the point
+of the patch series is.
+
+cheers and welcome... Joe
 
