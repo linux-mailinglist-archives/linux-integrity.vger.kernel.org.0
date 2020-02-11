@@ -2,200 +2,167 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E60E15947B
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2020 17:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9228B15963C
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2020 18:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730778AbgBKQKb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Feb 2020 11:10:31 -0500
-Received: from mail-qt1-f179.google.com ([209.85.160.179]:42407 "EHLO
-        mail-qt1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730627AbgBKQKa (ORCPT
+        id S1729031AbgBKRdz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Feb 2020 12:33:55 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:55534 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729669AbgBKRdz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Feb 2020 11:10:30 -0500
-Received: by mail-qt1-f179.google.com with SMTP id r5so6980886qtt.9;
-        Tue, 11 Feb 2020 08:10:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=5gn7PNGnnKsx59vxWJoK9+sfEplsTzQ66IX2VckdnIE=;
-        b=tevTrUd+3kG9XfkYEhmt1ngNjX6vVVcvqRFTcrAOixb7LiOX1xKX10nCE59TorIyFH
-         BkZhf8FV9Uxih4NQGLvOsjc6iI370ExVrNI+t0kN1r9ezWZVQemfWzh6US0CATjac1S0
-         Rn0nM+n1SSY2nkrB0QvbLKhn5vAnIOsoQ6gMP+wn2+UAQlLUPaJZHUnoKHlW2i+E2HoU
-         fltRv0DupASaMps7e6nHpR6zaxjfzmmUSMRXmDTVx7qheUGjzky4rzt3oav1QyH4uwyH
-         c97NwTwnTY6W1x93g4lH66ybAESJjCtJP7oEcC2OnV/uWOpKb8sL8Rt/ycde9HNpUX4R
-         SPrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=5gn7PNGnnKsx59vxWJoK9+sfEplsTzQ66IX2VckdnIE=;
-        b=SiJqTVavHad+pZhq9lNPh2VFUSD+k09uPTF3sjmRJwUnJRa9jl5NWlWBTk4nCb+C3O
-         dG4nitZ7kvEA1HyK4/UNPnn44LtAFGFw3CgsSnLwb95cb7JEczEzWpZskE6Evq/kqyJx
-         hCTO15lV4KiI/auZTA2ER2juRRKIucoMfEl5XZ8bHjmzqUTg5dZcmYzEytRKwZvjREJ2
-         09gZM38wPKNiOjZIVaERZfmhbafpVmo5lFaAqCPOR+bIXQg6QIbEHcS1PqhEAwnycEHP
-         lJYQ6Zcx/KZQM2RLJ8WOkdITwR5w1TugsUnvhaCXraZhXCnZS4LUWBglvKCColGpuWpG
-         gdqQ==
-X-Gm-Message-State: APjAAAX+B2yYurkpJMY8L/Yi9B3C90jyO+GE3rDexRXozl71/58X1TdD
-        ZFdHFyxrgrW554WAqFfNrMe2yrWCjyzRAg==
-X-Google-Smtp-Source: APXvYqxpiz/tshlrzMc9BCbWVROW2jW+BYzNbHiujtPHKdfCffbUqjYXk+IALG36Gjyamad68/8DKw==
-X-Received: by 2002:aed:2ce4:: with SMTP id g91mr3083079qtd.352.1581437427770;
-        Tue, 11 Feb 2020 08:10:27 -0800 (PST)
-Received: from localhost.localdomain (pool-74-108-111-89.nycmny.fios.verizon.net. [74.108.111.89])
-        by smtp.gmail.com with ESMTPSA id n32sm2465467qtk.66.2020.02.11.08.10.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2020 08:10:27 -0800 (PST)
-Message-ID: <fab03a0b8cc9dc93f2d0db51071521ce82e2b96b.camel@gmail.com>
-Subject: Re: [PATCH v2] ima: export the measurement list when needed
-From:   david.safford@gmail.com
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Cc:     Ken Goldman <kgold@linux.ibm.com>, monty.wiseman@ge.com,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Date:   Tue, 11 Feb 2020 11:10:26 -0500
-In-Reply-To: <1581366258.5585.891.camel@linux.ibm.com>
-References: <20200108111743.23393-1-janne.karhunen@gmail.com>
-         <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
-         <1580998432.5585.411.camel@linux.ibm.com>
-         <40f780ffe2ddc879e5fa4443c098c0f1d331390f.camel@gmail.com>
-         <1581366258.5585.891.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Tue, 11 Feb 2020 12:33:55 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01BHWZmD127875;
+        Tue, 11 Feb 2020 17:33:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2020-01-29; bh=ZTcGVgHgraMOZBpC35dpCZY9cj88Yni9DaxHSLbn1QI=;
+ b=ATvl/L3tQz/8dk9eq9GxVgTQvMIfyGT+39ALanE+ImerkpFi8HDNxocHp+jC+HkpcZuE
+ cR5oe3qXPp9yUzXKpTjHvvCPsUwUzRog2VGGbFeIpTQ7bAC/5F3KcOx1gZDnJQoSql/U
+ EeV+H742SPicBUvTDaxD4QSMaWrp5KWlgWy8/JLBKjxVwJC2ynOoG49Z0UV+azi47Y+z
+ eKEOe8JiEL1Hnzh43/RYiX1gPiERrGlVn3tSa4JHsXjG+Gx77q0Sea+bsgq8nbfmjf8v
+ GPZ3Xvvbw6a/nkn/y2KaHZVehmChTaAzNvmX70TvhWHJI0S//7U7g40/8K/83HdoZRJc CQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2y2jx656pm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 11 Feb 2020 17:33:16 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01BHSDoX010841;
+        Tue, 11 Feb 2020 17:33:16 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2y26hvarrt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Feb 2020 17:33:15 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 01BHX5HL032092;
+        Tue, 11 Feb 2020 17:33:05 GMT
+Received: from dhcp-10-65-186-145.vpn.oracle.com (/10.65.186.145)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 11 Feb 2020 09:33:05 -0800
+Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [RFC PATCH 0/2] ima: uncompressed module appraisal support
+From:   Eric Snowberg <eric.snowberg@oracle.com>
+In-Reply-To: <1581366829.5585.898.camel@linux.ibm.com>
+Date:   Tue, 11 Feb 2020 10:33:25 -0700
+Cc:     Nayna <nayna@linux.vnet.ibm.com>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
+        geert@linux-m68k.org, gregkh@linuxfoundation.org,
+        nayna@linux.ibm.com, tglx@linutronix.de, bauerman@linux.ibm.com,
+        mpe@ellerman.id.au, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0842A02F-3166-4E29-9CC5-9E4C5057E270@oracle.com>
+References: <20200206164226.24875-1-eric.snowberg@oracle.com>
+ <5c246616-9a3a-3ed2-c1f9-f634cef511c9@linux.vnet.ibm.com>
+ <09D68C13-75E2-4BD6-B4E6-F765B175C7FD@oracle.com>
+ <1581087096.5585.597.camel@linux.ibm.com>
+ <330BDFAC-E778-4E9D-A2D2-DD81B745F6AB@oracle.com>
+ <1581097201.5585.613.camel@linux.ibm.com>
+ <764C5FC8-DF0C-4B7A-8B5B-FD8B83F31568@oracle.com>
+ <1581100125.5585.623.camel@linux.ibm.com>
+ <992E95D5-D4B9-4913-A36F-BB47631DFE0A@oracle.com>
+ <1581101672.5585.628.camel@linux.ibm.com>
+ <C25E5885-F00B-48C0-AEF1-FA3014B2FDA6@oracle.com>
+ <1581205431.5585.645.camel@linux.ibm.com>
+ <0F13CB66-6962-44AC-A20D-CCBD82B43625@oracle.com>
+ <1581354556.5585.827.camel@linux.ibm.com>
+ <90E53A33-530B-40FB-9982-2818FFD78D73@oracle.com>
+ <1581366829.5585.898.camel@linux.ibm.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+X-Mailer: Apple Mail (2.3273)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9528 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ bulkscore=0 adultscore=0 malwarescore=0 suspectscore=3 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002110122
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9528 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ priorityscore=1501 adultscore=0 phishscore=0 impostorscore=0 spamscore=0
+ bulkscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=3 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2002110122
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-02-10 at 15:24 -0500, Mimi Zohar wrote:
-> On Mon, 2020-02-10 at 13:18 -0500, david.safford@gmail.com wrote:
-> > On Thu, 2020-02-06 at 09:13 -0500, Mimi Zohar wrote:
-> > > Hi Janne,
-> > > 
-> > > On Fri, 2020-01-10 at 10:48 +0200, Janne Karhunen wrote:
-> > > > On Wed, Jan 8, 2020 at 1:18 PM Janne Karhunen <janne.karhunen@gmail.com> wrote:
-> > > > > Some systems can end up carrying lots of entries in the ima
-> > > > > measurement list. Since every entry is using a bit of kernel
-> > > > > memory, allow the sysadmin to export the measurement list to
-> > > > > the filesystem to free up some memory.
-> > > > 
-> > > > Hopefully this addressed comments from everyone. The flush event can
-> > > > now be triggered by the admin anytime and unique file names can be
-> > > > used for each flush (log.1, log.2, ...) etc, so getting to the correct
-> > > > item should be easy.
-> > > > 
-> > > > While it can now be argued that since this is an admin-driven event,
-> > > > kernel does not need to write the file. However, the intention is to
-> > > > bring out a second patch a bit later that adds a variable to define
-> > > > the max number of entries to be kept in the kernel memory and
-> > > > workqueue based automatic flushing. In those cases the kernel has to
-> > > > be able to write the file without any help from the admin..
-> > > 
-> > > The implications of exporting and removing records from the IMA-
-> > > measurement list needs to be considered carefully.  Verifying a TPM
-> > > quote will become dependent on knowing where the measurements are
-> > > stored.  The existing measurement list is stored in kernel memory and,
-> > > barring a kernel memory attack, is protected from modification.
-> > >  Before upstreaming this or a similar patch, there needs to be a
-> > > discussion as to how the measurement list will be protected once is it
-> > > exported to userspace.
-> > 
-> > "Protected" here can mean two different aspects: cryptographically
-> > protected from tampering, which is covered with the TPM_QUOTE, and
-> > availability protected from even accidental deletion, which is what
-> > I suspect you are concerned about. Certainly my original TLV patches
-> > were too flippant about this, as userspace had to be trusted not to
-> > drop any records. In this patch, the kernel writes the data in an
-> > atomic fashion. Either all records are successfully written, or none
-> > are, and an error is returned.
-> 
-> A third aspect, which I'm concerned about, is removing records from
-> the measurement list.  This changes the existing userspace
-> expectations of returning the entire measurement list.  Now userspace
-> will need some out of band method of knowing where to look for the
-> measurements.
 
-This is a feature, not a bug. :-)
-There is no reason to resend the same data for every attestation,
-nor is there any reason to store already attested measurements anywhere
-on the client. By versioning the log file names, userspace gets a
-simple way to know what has and has not been attested, and for small
-embedded devices we don't need to waste memory or filesystem space
-on the data already attested.
+> On Feb 10, 2020, at 1:33 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+>=20
+> On Mon, 2020-02-10 at 12:24 -0700, Eric Snowberg wrote:
+>>> On Feb 10, 2020, at 10:09 AM, Mimi Zohar <zohar@linux.ibm.com> =
+wrote:
+>=20
+>>>>=20
+>>>> Ok, understood, =E2=80=9Cmodsig=E2=80=9D refers to strictly kernel =
+module appended signatures
+>>>> without regard to the keyring that verifies it.  Since there are =
+inconsistencies
+>>>> here, would you consider something like my first patch?  It will =
+verify an=20
+>>>> uncompressed kernel module containing an appended signature  when =
+the public key
+>>>> is contained within the kernel keyring instead of the ima keyring.  =
+Why force a=20
+>>>> person to add the same keys into the ima keyring for validation?  =
+Especially when
+>>>> the kernel keyring is now used to verify appended signatures in the =
+compressed
+>>>> modules.
+>>>=20
+>>> Different use case scenarios have different requirements.  Suppose =
+for
+>>> example that the group creating the kernel image is not the same as
+>>> using it.  The group using the kernel image could sign all files,
+>>> including kernel modules (imasig), with their own private key. Only
+>>> files that they signed would be permitted.  Your proposal would =
+break
+>>> the current expectations, allowing kernel modules signed by someone
+>>> else to be loaded.
+>>>=20
+>>=20
+>> All the end user needs to do is compress any module created by the =
+group that built
+>> the original kernel image to work around the scenario above.  Then =
+the appended=20
+>> signature in the compressed module will be verified by the kernel =
+keyring. Does=20
+>> this mean there is a security problem that should be fixed, if this =
+is a concern?
+>=20
+> Again, the issue isn't compressed/uncompressed kernel modules, but the
+> syscall used to load the kernel module.  IMA can prevent using the the
+> init_module syscall.  Refer to the ima_load_data() LOADING_MODULE
+> case.
 
-> When Thiago and I added support for carrying the measurement list
-> across kexec, there were a number of additional measurements after the
-> kexec load.  These additional measurements will need to be safely
-> written out to file in order to validate the TPM quote.
-> 
-> > I have been testing this patch on all of these scenarios, and it
-> > provides a simple, powerful approach for all of them.
->  
-> Were you able to walk the measurement list and validate the TPM quote
-> after a kexec?
+Within the ima_load_data() LOADING_MODULE case, to prevent IMA from =
+using
+the init_module syscall, is_module_sig_enforced() must return false. =
+Currently
+when is_module_sig_enforced() returns true, the kernel keyring is always =
+used
+for verification.
 
-I'm still working on this. (I've mainly been making sure this works
-for normal template and TLV lists.) I should be able to write out the
-remaining kexec measurements, but haven't actually validated that
-yet...
+What if I change this part of my patch from
 
-> > > The kernel already exports the IMA measurement list to userspace via a
-> > > securityfs file.  From a userspace perspective, missing is the ability
-> > > of removing N number of records.  In this scenario, userspace would be
-> > > responsible for safely storing the measurements (e.g. blockchain).
-> > >  The kernel would only be responsible for limiting permission, perhaps
-> > > based on a capability, before removing records from the measurement
-> > > list. 
-> > 
-> > I don't think we want to export 'N' records, as this would
-> > be really hard to understand and coordinate with userspace.
-> > Exporting all or none seems simpler.
-> 
-> Userspace already has the ability of exporting the measurement list.
->  However, beetween saving the measurement list to a file and telling
-> the kernel to delete the records from the kernel, additional
-> measurement could have been added.
++       if (rc && func =3D=3D MODULE_CHECK)
 
-This method of exporting is atomic, so only those items exported
-get deleted.
+to
 
-> > > In the kernel usecase, somehow the kernel would need to safely export
-> > > the measurement list, or some portion of the measurement list, to a
-> > > file and then delete that portion.  What protects the exported records
-> > > stored in a file from modification?
-> > 
-> > Tampering is prevented with the TPM_QUOTE. Accidental deletion is
-> > protected with CAP_SYS_ADMIN. If CAP_SYS_ADMIN is untrusted, you 
-> > have bigger problems, and even then it will be detected.
-> 
-> Agreed, attestation will detect any tampering, but up to now we didn't
-> have to rely on DAC/MAC to prevent tampering of the measurement list.
++       sig_enforce =3D is_module_sig_enforced();
++       if (sig_enforce && rc && func =3D=3D MODULE_CHECK)
 
-The userspace attestation process has always been able to tamper or
-delete the list data during its attestation, but we can detect this
-remotely.
-
-> > > Instead of exporting the measurement records, one option as suggested
-> > > by Amir Goldstein, would be to use a vfs_tmpfile() to get an anonymous
-> > > file for backing store.  The existing securityfs measurement lists
-> > > would then read from this private copy of the anonymous file.
-> > 
-> > This doesn't help in use cases where we really do want to
-> > export to a persistent file, without userspace help.
-> 
-> Is to prevent needing to carry the measurement list across kexec the
-> only reason for the kernel needing to write to a persistent file?
-
-Well, that and the other reasons mentioned, such as completely freeing
-the data from the client after attestation, and simplicity of the
-mechanism.
-
-dave
-
-> Mimi
-> 
+Now when the init_module syscall is available, finit_module syscall will =
+use
+both the ima keyring and kernel keyring for verification.  When the
+init_module syscall is blocked from use, the finit_module syscall will =
+only use
+the ima keyring for validation.  I believe this would satisfy both your =
+use
+case and mine.
 
