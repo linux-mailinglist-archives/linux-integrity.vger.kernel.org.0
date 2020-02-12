@@ -2,131 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D15315AB1A
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2020 15:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 082C415AB42
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2020 15:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727231AbgBLOlf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Feb 2020 09:41:35 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:36105 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727101AbgBLOlf (ORCPT
+        id S1728052AbgBLOtU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Feb 2020 09:49:20 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57292 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727665AbgBLOtU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Feb 2020 09:41:35 -0500
-Received: by mail-lf1-f65.google.com with SMTP id f24so1795250lfh.3
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Feb 2020 06:41:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Xh49jfoB3Bge1tU8RlKZ+Inb7/ixfd/21e15JuBlmtk=;
-        b=SnI15hSfsMwIFIY8C0YfyfYhaFqEpJNnMmdFgwsm/zWlJEsTFHNDH2UTIBXOBJihb/
-         9mRNRDaqo7tRkzWovTjbQccF4Ehhjk9puIUgim2DdvzsKRrkmgwi409O50vKOaL4o96b
-         LK2OYLffJaFlvI8xBvqt55rrW0sEemVD76MrmP91ubtOIYNPusNY/QQLqBsgTml3VJr0
-         eCOAbWfiw+4YJnMNpjYey/WzvsEwPApgqBVb3QDiiAb0SfkFDp5jbxuXgLuqokGtihak
-         dbtfYjqEebj9zVUt5SdMaKCUs07jfUktjvfuvenXiUEH3o+jiklqr+q46HXZ1DTCiqeh
-         4Ivw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Xh49jfoB3Bge1tU8RlKZ+Inb7/ixfd/21e15JuBlmtk=;
-        b=hl2Ijl4XaOLRMRw+NNKZQglMknazU5dNZ/JouPQGUtetoOWarh/Gn7qkVhQ+7Bnz4w
-         7GxEWLabthAp/fi1lixpysFUAtRVs5wSc9qqKdGelWPy1/oad404+2zhamzYVY17mGYU
-         o6HWY3R2IBaEkV1tbCz4kWqwyuwYJzL4MqTqOp4HW0eJ0SssLln7v6n5B2+bP2HhBmke
-         dnTEEc7uWMrKkTSpoje0eBLCJDGysKhZes9zNXoYTcNPLKhhHLBNket9HMa3sEepuUr1
-         fjg6FLUjLX3HVeIY7KT6xdzX1a3bco5NTu9MPghThfRpyYl9Wq7yeuiyoSCcM4vAIffk
-         7hZA==
-X-Gm-Message-State: APjAAAV8pTNMiUMOWdcyQgzIArUVlnPIdR9Ei3PE9lqtcaQKbr5dAUO7
-        tHCnGchPlRrt9eWAanEQ6Q0feiS2
-X-Google-Smtp-Source: APXvYqxMCa8Ggbkpra/nkRHg1QlFKhH5jKdY5W87uiuSyoCPOnQRVM1XogwnvG/di/8+2XsUYyHXIQ==
-X-Received: by 2002:a19:6449:: with SMTP id b9mr6874872lfj.5.1581518492844;
-        Wed, 12 Feb 2020 06:41:32 -0800 (PST)
-Received: from stp.localdomain ([109.204.238.30])
-        by smtp.gmail.com with ESMTPSA id h10sm405285ljc.39.2020.02.12.06.41.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2020 06:41:32 -0800 (PST)
-From:   Konsta Karsisto <konsta.karsisto@gmail.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Konsta Karsisto <konsta.karsisto@gmail.com>
-Subject: [PATCH] ima: more careful error checking in restore_template_fmt()
-Date:   Wed, 12 Feb 2020 16:41:05 +0200
-Message-Id: <20200212144105.4572-1-konsta.karsisto@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 12 Feb 2020 09:49:20 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01CEn77i114192
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Feb 2020 09:49:18 -0500
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2y3wtfbnhc-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Feb 2020 09:49:18 -0500
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 12 Feb 2020 14:49:16 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 12 Feb 2020 14:49:13 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01CEnCot31654022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Feb 2020 14:49:12 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 13A8F52092;
+        Wed, 12 Feb 2020 14:49:12 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.205.134])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 3F0885207E;
+        Wed, 12 Feb 2020 14:49:11 +0000 (GMT)
+Subject: Re: [PATCH v3 1/3] IMA: Update KBUILD_MODNAME for IMA files to ima
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>, joe@perches.com,
+        skhan@linuxfoundation.org, linux-integrity@vger.kernel.org
+Cc:     sashal@kernel.org, nramas@linux.microsoft.com,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 12 Feb 2020 09:49:10 -0500
+In-Reply-To: <20200211231414.6640-2-tusharsu@linux.microsoft.com>
+References: <20200211231414.6640-1-tusharsu@linux.microsoft.com>
+         <20200211231414.6640-2-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20021214-4275-0000-0000-000003A073E6
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20021214-4276-0000-0000-000038B4AF5D
+Message-Id: <1581518950.8515.51.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-12_07:2020-02-11,2020-02-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ mlxlogscore=999 malwarescore=0 phishscore=0 mlxscore=0 clxscore=1015
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002120114
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Fix a case where a failure in strdup() after a successful kzalloc()
-could lead to a crash later on. Also, change the function signature
-to allow returning an error code, which can be returned a the return
-value of ima_restore_measurement_list().
+On Tue, 2020-02-11 at 15:14 -0800, Tushar Sugandhi wrote:
+> Log statements from ima_mok.c, ima_asymmetric_keys.c, and
+> ima_queue_keys.c are prefixed with the respective file names
+> and not with the string "ima". 
 
-Signed-off-by: Konsta Karsisto <konsta.karsisto@gmail.com>
----
+Before listing the specific filenames, the patch description should
+provide a generic explanation of the problem.  For example, the kernel
+Makefile "obj-$CONFIG_XXXX" specifies object files which may be built
+as loadable kernel modules[1].
 
-Unfortunately, I'm not familiar with the ima kexec cofiguration,
-and thus this has been compile tested only.
+Mimi
 
- security/integrity/ima/ima_template.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+[1] Refer to Documentation/kbuild/makefiles.rst
 
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 6aa6408603e3..6b1964cbcbf5 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -270,7 +270,7 @@ int __init ima_init_template(void)
- 	return result;
- }
- 
--static struct ima_template_desc *restore_template_fmt(char *template_name)
-+static int restore_template_fmt(char *template_name, struct ima_template_desc **returned_desc)
- {
- 	struct ima_template_desc *template_desc = NULL;
- 	int ret;
-@@ -279,23 +279,27 @@ static struct ima_template_desc *restore_template_fmt(char *template_name)
- 	if (ret < 0) {
- 		pr_err("attempting to initialize the template \"%s\" failed\n",
- 			template_name);
--		goto out;
-+		return ret;
- 	}
- 
- 	template_desc = kzalloc(sizeof(*template_desc), GFP_KERNEL);
- 	if (!template_desc)
--		goto out;
-+		return -ENOMEM;
- 
- 	template_desc->name = "";
- 	template_desc->fmt = kstrdup(template_name, GFP_KERNEL);
--	if (!template_desc->fmt)
--		goto out;
-+	if (!template_desc->fmt) {
-+		kfree(template_desc);
-+		return -ENOMEM;
-+	}
- 
- 	spin_lock(&template_list);
- 	list_add_tail_rcu(&template_desc->list, &defined_templates);
- 	spin_unlock(&template_list);
--out:
--	return template_desc;
-+
-+	*returned_desc = template_desc;
-+
-+	return 0;
- }
- 
- static int ima_restore_template_data(struct ima_template_desc *template_desc,
-@@ -421,8 +425,8 @@ int ima_restore_measurement_list(loff_t size, void *buf)
- 
- 		template_desc = lookup_template_desc(template_name);
- 		if (!template_desc) {
--			template_desc = restore_template_fmt(template_name);
--			if (!template_desc)
-+			ret = restore_template_fmt(template_name, &template_desc);
-+			if (ret < 0)
- 				break;
- 		}
- 
--- 
-2.17.1
+> 
+> This change fixes the log statement prefix to be consistent with the rest
+> of the IMA files.
+> 
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> ---
+>  security/integrity/ima/Makefile | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/security/integrity/ima/Makefile b/security/integrity/ima/Makefile
+> index 064a256f8725..67dabca670e2 100644
+> --- a/security/integrity/ima/Makefile
+> +++ b/security/integrity/ima/Makefile
+> @@ -11,6 +11,6 @@ ima-y := ima_fs.o ima_queue.o ima_init.o ima_main.o ima_crypto.o ima_api.o \
+>  ima-$(CONFIG_IMA_APPRAISE) += ima_appraise.o
+>  ima-$(CONFIG_IMA_APPRAISE_MODSIG) += ima_modsig.o
+>  ima-$(CONFIG_HAVE_IMA_KEXEC) += ima_kexec.o
+> -obj-$(CONFIG_IMA_BLACKLIST_KEYRING) += ima_mok.o
+> -obj-$(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) += ima_asymmetric_keys.o
+> -obj-$(CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS) += ima_queue_keys.o
+> +ima-$(CONFIG_IMA_BLACKLIST_KEYRING) += ima_mok.o
+> +ima-$(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) += ima_asymmetric_keys.o
+> +ima-$(CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS) += ima_queue_keys.o
 
