@@ -2,44 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E5015AC57
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2020 16:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598DD15B277
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2020 22:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728627AbgBLPtJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Feb 2020 10:49:09 -0500
-Received: from smtprelay0242.hostedemail.com ([216.40.44.242]:49478 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727458AbgBLPtJ (ORCPT
+        id S1727947AbgBLVIS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Feb 2020 16:08:18 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:42422 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727138AbgBLVIS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Feb 2020 10:49:09 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 35642180A68D7;
-        Wed, 12 Feb 2020 15:49:07 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::,RULES_HIT:41:355:379:599:967:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1593:1594:1711:1714:1730:1747:1777:1792:2393:2525:2560:2563:2682:2685:2828:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3350:3622:3865:3867:3868:3870:3872:3873:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:5007:7903:8985:9025:10004:10400:10848:11232:11658:11914:12043:12048:12297:12555:12740:12760:12895:12986:13069:13095:13311:13357:13439:14181:14659:14721:21067:21080:21324:21433:21451:21611:21627:21740:30029:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:6,LUA_SUMMARY:none
-X-HE-Tag: play61_4f690e963e011
-X-Filterd-Recvd-Size: 1651
-Received: from XPS-9350.home (unknown [47.151.143.254])
-        (Authenticated sender: joe@perches.com)
-        by omf17.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 12 Feb 2020 15:49:05 +0000 (UTC)
-Message-ID: <b9acb7868a1e225db09830d859bfd4cc6ac6330d.camel@perches.com>
-Subject: Re: [PATCH v3 3/3] IMA: Add module name and base name prefix to log.
-From:   Joe Perches <joe@perches.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        skhan@linuxfoundation.org, linux-integrity@vger.kernel.org
-Cc:     sashal@kernel.org, nramas@linux.microsoft.com,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 12 Feb 2020 07:47:49 -0800
-In-Reply-To: <1581521161.3494.7.camel@HansenPartnership.com>
-References: <20200211231414.6640-1-tusharsu@linux.microsoft.com>
-         <20200211231414.6640-4-tusharsu@linux.microsoft.com>
-         <1581517770.8515.35.camel@linux.ibm.com>
-         <1581521161.3494.7.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+        Wed, 12 Feb 2020 16:08:18 -0500
+Received: by mail-qk1-f194.google.com with SMTP id o28so2189848qkj.9;
+        Wed, 12 Feb 2020 13:08:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=5skQ4pXUf/HDFGAeb5bLaBWEPVpcuLwc5TmCpIE/Zyo=;
+        b=RSaubYsu2PWhj6d5WiWqImtwe+11ZkV5ynHfHfILKjiCGuE++75mluwkFvI8SVZwZ2
+         FVcajjueWqco3jr0Ow8mWAloqkkz/nZRTVvMCaxsWYaaozSBLYtlqBPDl2d4JuFAqNKT
+         4eM2bs0OP/sfoQPzSkrUIs84Z3nu+rJZqi4v7IUXscqVEZZbW98vR/RBjUUqx2TtekX0
+         TdKQebQLkAL6NS0smHmAjLDkyMj9kl1d3gbFGuxjAksiARkiSvUrHsLzvzMMSA61Tl7B
+         H3vZG2gITk1NdYTBU9v+AdkE/hfM87Q4MMY58PzHJjTjgVBPmQ+ApC8uSo0XfEPwidZz
+         KPfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=5skQ4pXUf/HDFGAeb5bLaBWEPVpcuLwc5TmCpIE/Zyo=;
+        b=ZgokC7Y6FrXXjUb8B8PX2v5SAVc7i2e2srbpkKx3dM/zoKuJtZcFHD4jcw4AgT7BEc
+         n5aTpNgi5prO6A02lnr8BHCUySwzQkJ67y1fi0IsxtnnRnjO5Y+0EFguVEBzBhQmDi+K
+         9iRJcM95OOZzryonGPlvAYNVRB7hvQl4E5XZSgPYcYN7qnhUJX5d97lrhAt/LFDtsgni
+         HfXHUvIixJTJFCMutMhNBfuQz2V+65Q7taw0EHPKhzrNpNYWGVwpHkL+gPzydyqQrVvT
+         bgULXjYshikcMmdinIvOrzdMIXokg1B6GPwDa+W1AUC6E5ofotQdf1EcKfDTMq3qZn8m
+         d+5Q==
+X-Gm-Message-State: APjAAAVbjcMtDHiT6nSQcz1jAfYIGa+6b+IlMAGA7dxzsbpS6gKxmwni
+        RII/Kfa6Fk7KSB1sTKZgSKY=
+X-Google-Smtp-Source: APXvYqxNOTEW/N3+A4eKLqICOc+Xj7XuhY3/asbxxLTsVO2pIzik8Myh1FUcd23UCDxfesq9IpEl8Q==
+X-Received: by 2002:ae9:e10a:: with SMTP id g10mr9186036qkm.493.1581541697333;
+        Wed, 12 Feb 2020 13:08:17 -0800 (PST)
+Received: from localhost.localdomain (pool-74-108-111-89.nycmny.fios.verizon.net. [74.108.111.89])
+        by smtp.gmail.com with ESMTPSA id t7sm32885qkm.136.2020.02.12.13.08.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2020 13:08:16 -0800 (PST)
+Message-ID: <6b787049b965c8056d0e27360e2eaa8fa2f38b35.camel@gmail.com>
+Subject: Re: [PATCH v2] ima: export the measurement list when needed
+From:   david.safford@gmail.com
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Cc:     Ken Goldman <kgold@linux.ibm.com>, monty.wiseman@ge.com,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Date:   Wed, 12 Feb 2020 16:08:15 -0500
+In-Reply-To: <1581462616.5125.69.camel@linux.ibm.com>
+References: <20200108111743.23393-1-janne.karhunen@gmail.com>
+         <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
+         <1580998432.5585.411.camel@linux.ibm.com>
+         <40f780ffe2ddc879e5fa4443c098c0f1d331390f.camel@gmail.com>
+         <1581366258.5585.891.camel@linux.ibm.com>
+         <fab03a0b8cc9dc93f2d0db51071521ce82e2b96b.camel@gmail.com>
+         <1581462616.5125.69.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
@@ -47,16 +73,41 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-02-12 at 10:26 -0500, James Bottomley wrote:
-> Log messages are often consumed by log monitors, which mostly use
-> pattern matching to find messages they're interested in, so you have to
-> take some care when changing the messages the kernel spits out and you
-> have to make sure any change gets well notified so the distributions
-> can warn about it.
+On Tue, 2020-02-11 at 18:10 -0500, Mimi Zohar wrote:
+> On Tue, 2020-02-11 at 11:10 -0500, david.safford@gmail.com wrote:
+
+> > <snip>
+> > 
+> This new feature will require setting up some infrastructure for
+> storing the partial measurement list(s) in order to validate a TPM
+> quote.  Userspace already can save partial measurement list(s) without
+> any kernel changes.  The entire measurement list does not need to be
+> read each time.  lseek can read past the last record previously read.
+>  The only new aspect is truncating the in kernel measurement list in
+> order to free kernel memory.
+
+This is a pretty important new feature.
+A lot of people can't use IMA because of the memory issue.
+Also, I really think we need to let administrators choose the tradeoffs
+of keeping the list in memory, on a local file, or only on the 
+attestation server, as best fits their use cases.
 > 
-> For this one, can we see a "before" and "after" message so we know
-> what's happening?
+> < snip> 
+> 
+> Until there is proof that the measurement list can be exported to a
+> file before kexec, instead of carrying the measurement list across
+> kexec, and a TPM quote can be validated after the kexec, there isn't a
+> compelling reason for the kernel needing to truncate the measurement
+> list.
 
-https://patchwork.kernel.org/patch/11357335/#23134147
+If this approach doesn't work with all the kexec use cases, then it is 
+useless, and the ball is in my court to prove that it does. Fortunately
+I have to test that anyway for the coming TLV support.
 
+Working on it...
+
+dave
+
+> Mimi
+> 
 
