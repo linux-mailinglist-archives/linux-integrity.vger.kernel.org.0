@@ -2,116 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F0415AAFB
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2020 15:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D15315AB1A
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2020 15:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728174AbgBLO3m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Feb 2020 09:29:42 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1652 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727851AbgBLO3m (ORCPT
+        id S1727231AbgBLOlf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Feb 2020 09:41:35 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:36105 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727101AbgBLOlf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Feb 2020 09:29:42 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01CETcmt033389
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Feb 2020 09:29:41 -0500
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2y3pqgtrc9-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Feb 2020 09:29:40 -0500
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 12 Feb 2020 14:29:37 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 12 Feb 2020 14:29:33 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01CEScSX31129976
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Feb 2020 14:28:38 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BADD313A15D;
-        Wed, 12 Feb 2020 14:29:32 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D075013A157;
-        Wed, 12 Feb 2020 14:29:31 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.205.134])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Feb 2020 14:29:31 +0000 (GMT)
-Subject: Re: [PATCH v3 3/3] IMA: Add module name and base name prefix to log.
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>, joe@perches.com,
-        skhan@linuxfoundation.org, linux-integrity@vger.kernel.org
-Cc:     sashal@kernel.org, nramas@linux.microsoft.com,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 12 Feb 2020 09:29:30 -0500
-In-Reply-To: <20200211231414.6640-4-tusharsu@linux.microsoft.com>
-References: <20200211231414.6640-1-tusharsu@linux.microsoft.com>
-         <20200211231414.6640-4-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20021214-4275-0000-0000-000003A071B2
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20021214-4276-0000-0000-000038B4AD1C
-Message-Id: <1581517770.8515.35.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-12_07:2020-02-11,2020-02-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- bulkscore=0 malwarescore=0 mlxlogscore=999 adultscore=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002120114
+        Wed, 12 Feb 2020 09:41:35 -0500
+Received: by mail-lf1-f65.google.com with SMTP id f24so1795250lfh.3
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Feb 2020 06:41:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Xh49jfoB3Bge1tU8RlKZ+Inb7/ixfd/21e15JuBlmtk=;
+        b=SnI15hSfsMwIFIY8C0YfyfYhaFqEpJNnMmdFgwsm/zWlJEsTFHNDH2UTIBXOBJihb/
+         9mRNRDaqo7tRkzWovTjbQccF4Ehhjk9puIUgim2DdvzsKRrkmgwi409O50vKOaL4o96b
+         LK2OYLffJaFlvI8xBvqt55rrW0sEemVD76MrmP91ubtOIYNPusNY/QQLqBsgTml3VJr0
+         eCOAbWfiw+4YJnMNpjYey/WzvsEwPApgqBVb3QDiiAb0SfkFDp5jbxuXgLuqokGtihak
+         dbtfYjqEebj9zVUt5SdMaKCUs07jfUktjvfuvenXiUEH3o+jiklqr+q46HXZ1DTCiqeh
+         4Ivw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Xh49jfoB3Bge1tU8RlKZ+Inb7/ixfd/21e15JuBlmtk=;
+        b=hl2Ijl4XaOLRMRw+NNKZQglMknazU5dNZ/JouPQGUtetoOWarh/Gn7qkVhQ+7Bnz4w
+         7GxEWLabthAp/fi1lixpysFUAtRVs5wSc9qqKdGelWPy1/oad404+2zhamzYVY17mGYU
+         o6HWY3R2IBaEkV1tbCz4kWqwyuwYJzL4MqTqOp4HW0eJ0SssLln7v6n5B2+bP2HhBmke
+         dnTEEc7uWMrKkTSpoje0eBLCJDGysKhZes9zNXoYTcNPLKhhHLBNket9HMa3sEepuUr1
+         fjg6FLUjLX3HVeIY7KT6xdzX1a3bco5NTu9MPghThfRpyYl9Wq7yeuiyoSCcM4vAIffk
+         7hZA==
+X-Gm-Message-State: APjAAAV8pTNMiUMOWdcyQgzIArUVlnPIdR9Ei3PE9lqtcaQKbr5dAUO7
+        tHCnGchPlRrt9eWAanEQ6Q0feiS2
+X-Google-Smtp-Source: APXvYqxMCa8Ggbkpra/nkRHg1QlFKhH5jKdY5W87uiuSyoCPOnQRVM1XogwnvG/di/8+2XsUYyHXIQ==
+X-Received: by 2002:a19:6449:: with SMTP id b9mr6874872lfj.5.1581518492844;
+        Wed, 12 Feb 2020 06:41:32 -0800 (PST)
+Received: from stp.localdomain ([109.204.238.30])
+        by smtp.gmail.com with ESMTPSA id h10sm405285ljc.39.2020.02.12.06.41.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2020 06:41:32 -0800 (PST)
+From:   Konsta Karsisto <konsta.karsisto@gmail.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Konsta Karsisto <konsta.karsisto@gmail.com>
+Subject: [PATCH] ima: more careful error checking in restore_template_fmt()
+Date:   Wed, 12 Feb 2020 16:41:05 +0200
+Message-Id: <20200212144105.4572-1-konsta.karsisto@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-02-11 at 15:14 -0800, Tushar Sugandhi wrote:
-> The #define for formatting log messages, pr_fmt, is duplicated in the
-> files under security/integrity.
-> 
-> This change moves the definition to security/integrity/integrity.h and
-> removes the duplicate definitions in the other files under
-> security/integrity. Also, it adds KBUILD_MODNAME and KBUILD_BASENAME prefix
-> to the log messages.
-> 
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Suggested-by: Joe Perches <joe@perches.com>
-> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+Fix a case where a failure in strdup() after a successful kzalloc()
+could lead to a crash later on. Also, change the function signature
+to allow returning an error code, which can be returned a the return
+value of ima_restore_measurement_list().
 
-<snip>
+Signed-off-by: Konsta Karsisto <konsta.karsisto@gmail.com>
+---
 
-> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-> index 73fc286834d7..b1bb4d2263be 100644
-> --- a/security/integrity/integrity.h
-> +++ b/security/integrity/integrity.h
-> @@ -6,6 +6,12 @@
->   * Mimi Zohar <zohar@us.ibm.com>
->   */
->  
-> +#ifdef pr_fmt
-> +#undef pr_fmt
-> +#endif
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " KBUILD_BASENAME ": " fmt
-> +
->  #include <linux/types.h>
->  #include <linux/integrity.h>
->  #include <crypto/sha.h>
+Unfortunately, I'm not familiar with the ima kexec cofiguration,
+and thus this has been compile tested only.
 
-Joe, Shuah, including the pr_fmt() in integrity/integrity.h not only
-affects the integrity directory but everything below it.  Adding
-KBUILD_BASENAME to pr_fmt() modifies all of the existing IMA and EVM
-kernel messages.  Is that ok or should there be a separate pr_fmt()
-for the subdirectories?
+ security/integrity/ima/ima_template.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-thanks,
-
-Mimi
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index 6aa6408603e3..6b1964cbcbf5 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -270,7 +270,7 @@ int __init ima_init_template(void)
+ 	return result;
+ }
+ 
+-static struct ima_template_desc *restore_template_fmt(char *template_name)
++static int restore_template_fmt(char *template_name, struct ima_template_desc **returned_desc)
+ {
+ 	struct ima_template_desc *template_desc = NULL;
+ 	int ret;
+@@ -279,23 +279,27 @@ static struct ima_template_desc *restore_template_fmt(char *template_name)
+ 	if (ret < 0) {
+ 		pr_err("attempting to initialize the template \"%s\" failed\n",
+ 			template_name);
+-		goto out;
++		return ret;
+ 	}
+ 
+ 	template_desc = kzalloc(sizeof(*template_desc), GFP_KERNEL);
+ 	if (!template_desc)
+-		goto out;
++		return -ENOMEM;
+ 
+ 	template_desc->name = "";
+ 	template_desc->fmt = kstrdup(template_name, GFP_KERNEL);
+-	if (!template_desc->fmt)
+-		goto out;
++	if (!template_desc->fmt) {
++		kfree(template_desc);
++		return -ENOMEM;
++	}
+ 
+ 	spin_lock(&template_list);
+ 	list_add_tail_rcu(&template_desc->list, &defined_templates);
+ 	spin_unlock(&template_list);
+-out:
+-	return template_desc;
++
++	*returned_desc = template_desc;
++
++	return 0;
+ }
+ 
+ static int ima_restore_template_data(struct ima_template_desc *template_desc,
+@@ -421,8 +425,8 @@ int ima_restore_measurement_list(loff_t size, void *buf)
+ 
+ 		template_desc = lookup_template_desc(template_name);
+ 		if (!template_desc) {
+-			template_desc = restore_template_fmt(template_name);
+-			if (!template_desc)
++			ret = restore_template_fmt(template_name, &template_desc);
++			if (ret < 0)
+ 				break;
+ 		}
+ 
+-- 
+2.17.1
 
