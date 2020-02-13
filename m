@@ -2,106 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 223C915CB61
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Feb 2020 20:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF0815CBBC
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Feb 2020 21:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728144AbgBMTub (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Feb 2020 14:50:31 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:41416 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728089AbgBMTua (ORCPT
+        id S1728018AbgBMULr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Feb 2020 15:11:47 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7416 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728040AbgBMULr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Feb 2020 14:50:30 -0500
-Received: by mail-qt1-f194.google.com with SMTP id l21so5307287qtr.8
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Feb 2020 11:50:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=hzt8XbslsdiswWQVmdnVazMhSDm06KMVCyU2O+0BGmE=;
-        b=bBtGLz1CQrqbjYCYHiFeB2d7GTZWvvTRlXT6WnAOSAM8BsPgGUhHfoMWGo1F5pEge4
-         94c2ZX7MHD2AE3xko/8f0Cg413+93l9guQTeglN7+8GPUDFimVFM8YDsopLWhTlxhETc
-         wDD4bXB3gD+KhSxgeLotPdyM4xq+x66Ny04ax1uRn/rZY7yP62b1tWopbxG66dpU2lfT
-         zkLwChWR6S5Tci/SLOOrGjJiODJv6k1O61CIRPAnZ8GnP6RK/N342IJqxnYzrqpRVAVn
-         RqFVTLJURqT0di56YLJNT1GmapB+AqY2muHVicGzWyGbraOitWrAQOg+S0LOjs+U/nd7
-         enKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=hzt8XbslsdiswWQVmdnVazMhSDm06KMVCyU2O+0BGmE=;
-        b=Rvba9b3O6qefmTLXpIgzfkGyOmYbCjbYnLAdNGXubuHxR8eyuR9yYDHpmSS0rgkc7M
-         8qZdNE2GkhR1ph408cmvItLpM66tXlFs+gPfhsLssvaJqMDARNG7887MmUJ1vf+4Zh6A
-         X73IrWkcyljgyTraeA/xcupTh/KV2PeVlSXnHO5OpuYfy3+OWom1sKrslDT2fjIbog7Z
-         zcuM5YwpZDKn1BH2b0m9WAMuY5lsZkAc2kE92jUTzykBx6dA1a8zVb4LW7z+phTULitM
-         L0nLvIkLr4ftDBJX51x+xi70q7jXgutdRvU/hC0NGKd2Uq9Krch2yKe5ncNANGYTjsb+
-         bVow==
-X-Gm-Message-State: APjAAAVdA1vqCFdmMiieSWKDoMcM0bdkFlcY57FxnXMP82vgHiEItFYf
-        etlE+8U3HLP3IwWwpXN3eLSlUQ==
-X-Google-Smtp-Source: APXvYqzaVjNoq4PrtV5wCDMWzHnF/LP90+x7iaI7lc5kEgC2BCXBdlXyjg5EhEOoxDXViT6/M13QHg==
-X-Received: by 2002:ac8:7309:: with SMTP id x9mr17518032qto.338.1581623428031;
-        Thu, 13 Feb 2020 11:50:28 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-57-212.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.57.212])
-        by smtp.gmail.com with ESMTPSA id t2sm1893885qkc.31.2020.02.13.11.50.27
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 13 Feb 2020 11:50:27 -0800 (PST)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1j2KVG-0005ah-VX; Thu, 13 Feb 2020 15:50:26 -0400
-Date:   Thu, 13 Feb 2020 15:50:26 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Nayna <nayna@linux.vnet.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, aik@ozlabs.ru,
-        david@gibson.dropbear.id.au, linux-kernel@vger.kernel.org,
-        gcwilson@linux.ibm.com
-Subject: Re: [PATCH 3/3] tpm: ibmvtpm: Add support for TPM 2
-Message-ID: <20200213195026.GQ31668@ziepe.ca>
-References: <20200204132706.3220416-1-stefanb@linux.vnet.ibm.com>
- <20200204132706.3220416-4-stefanb@linux.vnet.ibm.com>
- <a23872ef-aa23-e6b0-4b69-602d79671d4b@linux.vnet.ibm.com>
- <d805c04b-3680-97d5-8ea7-82409c7ef308@linux.ibm.com>
- <20200213183508.GL31668@ziepe.ca>
- <b424faea-33a7-8e5a-caac-f322fad68118@linux.ibm.com>
- <20200213191108.GO31668@ziepe.ca>
- <1e301947-a8f3-0b7d-d86c-5bfe04a68a75@linux.ibm.com>
- <20200213193908.GP31668@ziepe.ca>
- <8406ff6d-c24f-0815-25f8-fa9a97dcde8b@linux.ibm.com>
+        Thu, 13 Feb 2020 15:11:47 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01DKBf5U057292;
+        Thu, 13 Feb 2020 15:11:44 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2y4qybcmgy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Feb 2020 15:11:43 -0500
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 01DKBgBZ057356;
+        Thu, 13 Feb 2020 15:11:42 -0500
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2y4qybcmdv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Feb 2020 15:11:42 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01DJtFYn006404;
+        Thu, 13 Feb 2020 20:11:31 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma02dal.us.ibm.com with ESMTP id 2y5bc0h0jv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Feb 2020 20:11:31 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01DKBUPj54395240
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Feb 2020 20:11:30 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D717124053;
+        Thu, 13 Feb 2020 20:11:30 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7EFD6124052;
+        Thu, 13 Feb 2020 20:11:30 +0000 (GMT)
+Received: from [9.2.202.60] (unknown [9.2.202.60])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 13 Feb 2020 20:11:30 +0000 (GMT)
+Subject: Re: [PATCH v2] ima: export the measurement list when needed
+To:     david.safford@gmail.com, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Cc:     monty.wiseman@ge.com
+References: <20200108111743.23393-1-janne.karhunen@gmail.com>
+ <CAE=NcrZrbRinOAbB+k1rjhcae3nqfJ8snC_EnY8njMDioM7=vg@mail.gmail.com>
+ <1580998432.5585.411.camel@linux.ibm.com>
+ <40f780ffe2ddc879e5fa4443c098c0f1d331390f.camel@gmail.com>
+ <1581366258.5585.891.camel@linux.ibm.com>
+ <fab03a0b8cc9dc93f2d0db51071521ce82e2b96b.camel@gmail.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+Message-ID: <f095a412-9967-416d-a4d9-d3b5799f8409@linux.ibm.com>
+Date:   Thu, 13 Feb 2020 15:11:30 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8406ff6d-c24f-0815-25f8-fa9a97dcde8b@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <fab03a0b8cc9dc93f2d0db51071521ce82e2b96b.camel@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-13_07:2020-02-12,2020-02-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ mlxscore=0 adultscore=0 spamscore=0 phishscore=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002130140
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 02:45:49PM -0500, Stefan Berger wrote:
-> > Any driver that knows the TPM must be started prior to Linux
-> > booting should not use the flag.  vtpm drivers in general would seem
-> > to be the case where we can make this statement.
-> 
-> Wouldn't this statement apply to all systems, including embedded ones? 
-> Basically all firmwares should implement the CRTM and do the TPM
-> initialization.
+On 2/11/2020 11:10 AM, david.safford@gmail.com wrote:
+> There is no reason to resend the same data for every attestation,
+> nor is there any reason to store already attested measurements anywhere
+> on the client. By versioning the log file names, userspace gets a
+> simple way to know what has and has not been attested, and for small
+> embedded devices we don't need to waste memory or filesystem space
+> on the data already attested.
 
-It is not mandatory that systems with TPMs start it in the
-firmware. That is only required if the TPM PCR feature is going to be
-used. A TPM can quite happily be used for key storage without FW
-support.
+Yes ... no.
 
-Arguably this is sort of done wrong. eg if the platform has provided
-TPM information through uEFI or something then we shouldn't try to
-auto start the system TPM. At least for TPM1 detecting a non-started
-TPM was harmless, so nobody really cared. I wonder if TPM2 is much
-different..
+There isn't any reason to resend measurements that a verifier has 
+already received.  In fact, the logic I coded also said "if PCR 10 
+didn't change, there's no need to even ask for the measurement log".
 
-But certainly auto startup should *not* be required to have a working
-TPM driver, that is just fundamentally wrong.
+However, don't you have to save already attested measurements for
+the case where there are multiple verifiers?  A different verifier would 
+have to receive all measurements.
 
-Jason
