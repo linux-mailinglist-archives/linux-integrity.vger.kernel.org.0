@@ -2,82 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D5015F32C
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Feb 2020 19:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D7815F559
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Feb 2020 19:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730742AbgBNPxQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Feb 2020 10:53:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60656 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731196AbgBNPxQ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:53:16 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2D6522465D;
-        Fri, 14 Feb 2020 15:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695596;
-        bh=Ni2uE3UrzUOKeHuUBp47BRf/YTw6+RTDvh2UjhiuMWU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zetdz+kUT07mO63PLzYlGX2wN4GNXUulW6SWAtDPO50seA1/1XBUnhpd4jv96BG7s
-         uYK+pEK85v2lxS3E+JsC3PumYW0J8xJusI+wAGYr0PyfKGdGkt7WBO13+RVLkGRH7R
-         mu/tNg3fNa/EmIFTkA///vpPivNYJ+NT0bx0SWnA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 201/542] IMA: Check IMA policy flag
-Date:   Fri, 14 Feb 2020 10:43:13 -0500
-Message-Id: <20200214154854.6746-201-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
-References: <20200214154854.6746-1-sashal@kernel.org>
+        id S1729542AbgBNScw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Feb 2020 13:32:52 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:44906 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729448AbgBNScv (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 14 Feb 2020 13:32:51 -0500
+Received: by mail-lf1-f65.google.com with SMTP id v201so7357309lfa.11
+        for <linux-integrity@vger.kernel.org>; Fri, 14 Feb 2020 10:32:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=guzman.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=Xk2bvgkNDRmIe9nwpYDUp5fxYuKKc9+qzgchVvlkEKQ=;
+        b=SaqXkxZGmmWUdgkNEHQWD8YQTUkPQw8Jr/8mnVB08wFja3qzgvp2niqt20NNYfZfhF
+         6ScaKahRf2tJEggqrKPghj3Ufaew7jr/tSoJvqgn/w4NOn4OIPH9ERiq2zS3cd42EVWH
+         3AZyTlOUyr2hOC0BSXya2g6ovJ+AAz+IkHmp0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=Xk2bvgkNDRmIe9nwpYDUp5fxYuKKc9+qzgchVvlkEKQ=;
+        b=V/Q85vYUGZ5/afeOO1tyS7lB9egFM+koOgRfF0ao8v2Vq07fSLsc5vjuUe+OojDs/y
+         TL1/Ro3qL6HA+zW1Os2l1QeKbeNPfZyX1xXzVprovadZ+y6vsFs1Oo7dbzqC1NraUaXD
+         LSGalNFi3ZVUDAZt4ZfDdBl9oiczCw1bRTffvJXNcVCbZcf0kT8XsNC6AZyKQD6hN4lC
+         LVYwUSOTqlHx+omu6H5RcrWYXHymh3xuEm+UhDPYUd5dzo3OTcpTHBFPbLWas9rEbsAd
+         IDqCSV4d2Od1evWfa61rjoanb28LvoFKqz04WTrpMvBaZ8omWOstY0oKbExpaS725UKd
+         JMxw==
+X-Gm-Message-State: APjAAAWLmp+dnzno3IUY1ZkH/ITuQhF7iv8BJak1jvkopRgkk1ay8XDM
+        m3xyhFVaPJpz2aEsE6zwhv/0z/EVREBI/bYMMybAdl9pHB2hVhwB
+X-Google-Smtp-Source: APXvYqzgxiJI57GaM/7bOWPdH0oRrj8i2f0dW3C3qD1eji9LTaqKOZ/ZnS7IqF1in4yXCqQqmdV0zc6zx51sThlOZbE=
+X-Received: by 2002:ac2:5e29:: with SMTP id o9mr2327740lfg.81.1581705169039;
+ Fri, 14 Feb 2020 10:32:49 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <CAJ7-PMaLw_H8Fc1tyoT95f5EWpS3nvJt1Wx9=xpuiSotJ2h9VA@mail.gmail.com>
+In-Reply-To: <CAJ7-PMaLw_H8Fc1tyoT95f5EWpS3nvJt1Wx9=xpuiSotJ2h9VA@mail.gmail.com>
+From:   Alex Guzman <alex@guzman.io>
+Date:   Fri, 14 Feb 2020 10:32:37 -0800
+Message-ID: <CAJ7-PMbJ5fiQAj-5QAzAcFW0eMNkxpQSs=r_wUEfED33XZAPDg@mail.gmail.com>
+Subject: Re: Debugging errors with Dell XPS 9560 TPM
+To:     linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Looks like someone had a look on the bug tracker
+(https://bugzilla.kernel.org/show_bug.cgi?id=206275#c6)
+and they figure it's definitely a regression in the kernel and should
+be reverted or rectified. They advised me to come ping here once more.
 
-[ Upstream commit c5563bad88e07017e08cce1142903e501598c80c ]
 
-process_buffer_measurement() may be called prior to IMA being
-initialized (for instance, when the IMA hook is called when
-a key is added to the .builtin_trusted_keys keyring), which
-would result in a kernel panic.
+- Alex
 
-This patch adds the check in process_buffer_measurement()
-to return immediately if IMA is not initialized yet.
-
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- security/integrity/ima/ima_main.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index d7e987baf1274..9b35db2fc777a 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -655,6 +655,9 @@ void process_buffer_measurement(const void *buf, int size,
- 	int action = 0;
- 	u32 secid;
- 
-+	if (!ima_policy_flag)
-+		return;
-+
- 	/*
- 	 * Both LSM hooks and auxilary based buffer measurements are
- 	 * based on policy.  To avoid code duplication, differentiate
--- 
-2.20.1
-
+On Sat, Feb 1, 2020 at 4:19 PM Alex Guzman <alex@guzman.io> wrote:
+>
+> Hey there! I reported a bug on the bug tracker a bit ago but haven't
+> seen any movement, so I figured I'd drop in here. My XPS 9560 has been
+> having issues with its TPM, and all commands will fail with error 1
+> when operating on the TPM device. I managed to bisect it back to
+> commit 4d6ebc4c4950595414722dfadd0b361f5a05d37e (tpm: fix invalid
+> locking in NONBLOCKING mode) though it began failing with error 14
+> (bad address) at that point.
+>
+> I reported the bug at
+> https://bugzilla.kernel.org/show_bug.cgi?id=206275 and attached some
+> dmesg logs from boot there. Does anyone have any suggestions for
+> additional debugging or such to figure out what's happening here?
+>
+> - Alex
