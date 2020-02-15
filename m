@@ -2,298 +2,137 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E6115FC39
-	for <lists+linux-integrity@lfdr.de>; Sat, 15 Feb 2020 02:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF9415FC2E
+	for <lists+linux-integrity@lfdr.de>; Sat, 15 Feb 2020 02:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727977AbgBOBrv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Feb 2020 20:47:51 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:57518 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727950AbgBOBru (ORCPT
+        id S1727740AbgBOBrt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Feb 2020 20:47:49 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42368 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727756AbgBOBrs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Feb 2020 20:47:50 -0500
-Received: from tusharsu-Ubuntu.corp.microsoft.com (unknown [131.107.147.225])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 690BE20B36F5;
-        Fri, 14 Feb 2020 17:47:49 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 690BE20B36F5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1581731269;
-        bh=tU7vvgQ5TRUvjtt9H5CouKqIQ8Q0T714eAJcnH0DQYM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=US3S/ZBA4XP5+s0oFAbCzK/TsEy+xe5NhjVuGca14vaOK1KV2CjepxmEM/fy48JVz
-         Sk2ifAHuRSY9aBoIcVYI/8bNvPsU8Fn549UDKOgrPhf1HvZxCRl8MWFIDddtdzYX3i
-         NOcLs4ZWYgToFYIyLXbJJB7eMbycxKa8wICn1r2g=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, joe@perches.com, skhan@linuxfoundation.org,
-        linux-integrity@vger.kernel.org
-Cc:     sashal@kernel.org, nramas@linux.microsoft.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] IMA: Remove duplicate pr_fmt definitions
-Date:   Fri, 14 Feb 2020 17:47:09 -0800
-Message-Id: <20200215014709.3006-4-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200215014709.3006-1-tusharsu@linux.microsoft.com>
-References: <20200215014709.3006-1-tusharsu@linux.microsoft.com>
+        Fri, 14 Feb 2020 20:47:48 -0500
+Received: by mail-pf1-f196.google.com with SMTP id 4so5721579pfz.9
+        for <linux-integrity@vger.kernel.org>; Fri, 14 Feb 2020 17:47:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=guzman.io; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=eklhHHzHdyU+LJw4mo3OBFYNn5N8J283Djo2bGhRVOE=;
+        b=RwFHF9OJ2wtYdxznzHn1vkOmjERmvfd6nf3Cmt6zh7p4+Z6cDQiIRnokIJHe6r/3NI
+         qU+ak4DW1t0o75Sg54xeFWrJvUYOgWQKZRGAbleSUITY+vtdKpjZXeTUsrvpSMUDChYp
+         xUEiuAi6VL1deOY8aangoFOI/MxeF9xtIJ9ZY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=eklhHHzHdyU+LJw4mo3OBFYNn5N8J283Djo2bGhRVOE=;
+        b=ajMMlw2Ho8pUtuQtRF+Ubxrsr5op99M0G57WbK3AtoMGvKcLSdZpEJWvDxolP0mdH6
+         nzBFGphvesk452U4hfZB5mPJq16+2qU/K9BV30i+KIDK6X1EJszMWsSnBqQlIttSh0vz
+         cdfh0cQtyslhgEcuM+QiNkcH09Jp6Auyk+WiiJABCO+mOfN41jCPWkfeQwQJRI052zhp
+         5BIe1LEVyEBabZec4NzvCvJLgGx1RFJ8lNTR1am1vn3gsUm1bVA2QX2/+PgADeZiDMyI
+         EWQIRjWM2+qc+8dq8svrlBA3UK4SS7ZJHevdNGNGZIkuVfnj7Hhg3+bbP0o/ZpEuN6y9
+         nzZA==
+X-Gm-Message-State: APjAAAUWSCMp/pK5cs+bUhJ5Jtky3OrZgRyhGZ1SLC9Ql+sb8+CBxf7p
+        +SFwo8kLBWqApOehD1o080umwA==
+X-Google-Smtp-Source: APXvYqzDVzwigbqhLxOIgF8+ogPtqNX1+fNWcJZl/hkq8RBE/fu7hWFuoMAc5LTGpTYtol9njv8mnQ==
+X-Received: by 2002:a63:c747:: with SMTP id v7mr6103129pgg.291.1581731266611;
+        Fri, 14 Feb 2020 17:47:46 -0800 (PST)
+Received: from [172.27.18.57] (mobile-166-171-249-27.mycingular.net. [166.171.249.27])
+        by smtp.gmail.com with ESMTPSA id 72sm8793212pfw.7.2020.02.14.17.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2020 17:47:45 -0800 (PST)
+Message-ID: <76b24921c76dbc8fe6ea04b44e695d8a5c89a356.camel@guzman.io>
+Subject: Re: Debugging errors with Dell XPS 9560 TPM
+From:   Alex Guzman <alex@guzman.io>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     linux-integrity@vger.kernel.org
+Date:   Fri, 14 Feb 2020 17:47:44 -0800
+In-Reply-To: <1581714273.16860.18.camel@HansenPartnership.com>
+References: <CAJ7-PMaLw_H8Fc1tyoT95f5EWpS3nvJt1Wx9=xpuiSotJ2h9VA@mail.gmail.com>
+         <CAJ7-PMbJ5fiQAj-5QAzAcFW0eMNkxpQSs=r_wUEfED33XZAPDg@mail.gmail.com>
+         <1581712162.16860.8.camel@HansenPartnership.com>
+         <20200214210203.dgzhkrvagiozezfi@cantor>
+         <1581714273.16860.18.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.5 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The #define for formatting log messages, pr_fmt, is duplicated in the
-files under security/integrity.
+On Fri, 2020-02-14 at 16:04 -0500, James Bottomley wrote:
+> On Fri, 2020-02-14 at 14:02 -0700, Jerry Snitselaar wrote:
+> > On Fri Feb 14 20, James Bottomley wrote:
+> > > On Fri, 2020-02-14 at 10:32 -0800, Alex Guzman wrote:
+> > > > Looks like someone had a look on the bug tracker
+> > > > (https://bugzilla.kernel.org/show_bug.cgi?id=206275#c6)
+> > > > and they figure it's definitely a regression in the kernel and
+> > > > should
+> > > > be reverted or rectified. They advised me to come ping here
+> > > > once
+> > > > more.
+> > > 
+> > > Reading the bugzilla, I don't get *what* needs to be
+> > > reverted.  The
+> > > commit 4d6ebc4c4950595414722dfadd0b361f5a05d37e isn't present in
+> > > upstream, so what kernel is it present in, or what is the full
+> > > commit message so we can find the upstream commit?
+> > > 
+> > > James
+> > > 
+> > > 
+> > > > - Alex
+> > > > 
+> > > > On Sat, Feb 1, 2020 at 4:19 PM Alex Guzman <alex@guzman.io>
+> > > > wrote:
+> > > > > Hey there! I reported a bug on the bug tracker a bit ago but
+> > > > > haven't seen any movement, so I figured I'd drop in here. My
+> > > > > XPS 9560 has been having issues with its TPM, and all
+> > > > > commands
+> > > > > will fail with error 1 when operating on the TPM device. I
+> > > > > managed to bisect it back to commit
+> > > > > 4d6ebc4c4950595414722dfadd0b361f5a05d37e (tpm: fix
+> > > > > invalid locking in NONBLOCKING mode) though it began failing
+> > > > > with error 14 (bad address) at that point.
+> > > > > 
+> > > > > I reported the bug at
+> > > > > https://bugzilla.kernel.org/show_bug.cgi?id=206275 and
+> > > > > attached
+> > > > > some dmesg logs from boot there. Does anyone have any
+> > > > > suggestions for additional debugging or such to figure out
+> > > > > what's happening here?
+> > > > > 
+> > > > > - Alex
+> > 
+> > d23d12484307 | 2019-12-17 | tpm: fix invalid locking in NONBLOCKING
+> > mode (Tadeusz Struk)
+> > 
+> > There is a commit that is a fix to this commit:
+> > 
+> > a430e67d9a2c | 2020-01-08 | tpm: Handle negative priv->response_len
+> > in tpm_common_read() (Tadeusz Struk)
+> 
+> Yes, I suspected it might be that ... in which case upstream should
+> have the fix, can we verify that 5.6-rc1 works just fine?
+> 
+> James
+> 
 
-This change moves the definition to security/integrity/integrity.h and
-removes the duplicate definitions in the other files under
-security/integrity.
+I just tested with 5.6_rc1. The behavior is still present:
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Suggested-by: Joe Perches <joe@perches.com>
-Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
----
- security/integrity/digsig.c                  | 2 --
- security/integrity/digsig_asymmetric.c       | 2 --
- security/integrity/evm/evm_crypto.c          | 2 --
- security/integrity/evm/evm_main.c            | 2 --
- security/integrity/evm/evm_secfs.c           | 2 --
- security/integrity/ima/ima_asymmetric_keys.c | 2 --
- security/integrity/ima/ima_crypto.c          | 2 --
- security/integrity/ima/ima_fs.c              | 2 --
- security/integrity/ima/ima_init.c            | 2 --
- security/integrity/ima/ima_kexec.c           | 1 -
- security/integrity/ima/ima_main.c            | 2 --
- security/integrity/ima/ima_policy.c          | 2 --
- security/integrity/ima/ima_queue.c           | 2 --
- security/integrity/ima/ima_queue_keys.c      | 2 --
- security/integrity/ima/ima_template.c        | 2 --
- security/integrity/ima/ima_template_lib.c    | 2 --
- security/integrity/integrity.h               | 6 ++++++
- 17 files changed, 6 insertions(+), 31 deletions(-)
 
-diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index ea1aae3d07b3..e9cbadade74b 100644
---- a/security/integrity/digsig.c
-+++ b/security/integrity/digsig.c
-@@ -6,8 +6,6 @@
-  * Dmitry Kasatkin <dmitry.kasatkin@intel.com>
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/err.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index 55aec161d0e1..4e0d6778277e 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -6,8 +6,6 @@
-  * Dmitry Kasatkin <dmitry.kasatkin@intel.com>
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/err.h>
- #include <linux/ratelimit.h>
- #include <linux/key-type.h>
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index d485f6fc908e..35682852ddea 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -10,8 +10,6 @@
-  *	 Using root's kernel master key (kmk), calculate the HMAC
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/export.h>
- #include <linux/crypto.h>
- #include <linux/xattr.h>
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index f9a81b187fae..d361d7fdafc4 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -11,8 +11,6 @@
-  *	evm_inode_removexattr, and evm_verifyxattr
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/init.h>
- #include <linux/crypto.h>
- #include <linux/audit.h>
-diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
-index c11c1f7b3ddd..39ad1038d45d 100644
---- a/security/integrity/evm/evm_secfs.c
-+++ b/security/integrity/evm/evm_secfs.c
-@@ -10,8 +10,6 @@
-  *	- Get the key and enable EVM
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/audit.h>
- #include <linux/uaccess.h>
- #include <linux/init.h>
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-index 7678f0e3e84d..aaae80c4e376 100644
---- a/security/integrity/ima/ima_asymmetric_keys.c
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -9,8 +9,6 @@
-  *       create or update.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <keys/asymmetric-type.h>
- #include "ima.h"
- 
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 7967a6904851..423c84f95a14 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -10,8 +10,6 @@
-  *	Calculates md5/sha1 file hash, template hash, boot-aggreate hash
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/kernel.h>
- #include <linux/moduleparam.h>
- #include <linux/ratelimit.h>
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 2000e8df0301..a71e822a6e92 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -12,8 +12,6 @@
-  *	current measurement list and IMA statistics
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/fcntl.h>
- #include <linux/slab.h>
- #include <linux/init.h>
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 195cb4079b2b..567468188a61 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -11,8 +11,6 @@
-  *             initialization and cleanup functions
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/init.h>
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 9e94eca48b89..121de3e04af2 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -6,7 +6,6 @@
-  * Thiago Jung Bauermann <bauerman@linux.vnet.ibm.com>
-  * Mimi Zohar <zohar@linux.vnet.ibm.com>
-  */
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/seq_file.h>
- #include <linux/vmalloc.h>
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index aac1c44fb11b..9d0abedeae77 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -15,8 +15,6 @@
-  *	and ima_file_check.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/module.h>
- #include <linux/file.h>
- #include <linux/binfmts.h>
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 453427048999..c334e0dc6083 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -7,8 +7,6 @@
-  *	- initialize default measure policy rules
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/init.h>
- #include <linux/list.h>
- #include <linux/fs.h>
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index 1ce8b1701566..8753212ddb18 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -15,8 +15,6 @@
-  *       ever removed or changed during the boot-cycle.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/rculist.h>
- #include <linux/slab.h>
- #include "ima.h"
-diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
-index c87c72299191..cb3e3f501593 100644
---- a/security/integrity/ima/ima_queue_keys.c
-+++ b/security/integrity/ima/ima_queue_keys.c
-@@ -8,8 +8,6 @@
-  *       Enables deferred processing of keys
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/workqueue.h>
- #include <keys/asymmetric-type.h>
- #include "ima.h"
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 6aa6408603e3..062d9ad49afb 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -9,8 +9,6 @@
-  *      Helpers to manage template descriptors.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include <linux/rculist.h>
- #include "ima.h"
- #include "ima_template_lib.h"
-diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-index 32ae05d88257..9cd1e50f3ccc 100644
---- a/security/integrity/ima/ima_template_lib.c
-+++ b/security/integrity/ima/ima_template_lib.c
-@@ -9,8 +9,6 @@
-  *      Library of supported template fields.
-  */
- 
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
- #include "ima_template_lib.h"
- 
- static bool ima_template_hash_algo_allowed(u8 algo)
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 73fc286834d7..298b73794d8b 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -6,6 +6,12 @@
-  * Mimi Zohar <zohar@us.ibm.com>
-  */
- 
-+#ifdef pr_fmt
-+#undef pr_fmt
-+#endif
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
- #include <linux/types.h>
- #include <linux/integrity.h>
- #include <crypto/sha.h>
--- 
-2.17.1
+ERROR:tcti:src/tss2-tcti/tcti-device.c:290:tcti_device_receive() Failed
+to read response from fd 3, got errno 1: Operation not permitted 
+ERROR:esys:src/tss2-
+esys/api/Esys_GetCapability.c:307:Esys_GetCapability_Finish() Received
+a non-TPM Error 
+ERROR:esys:src/tss2-
+esys/api/Esys_GetCapability.c:107:Esys_GetCapability() Esys Finish
+ErrorCode (0x000a000a) 
+ERROR: Esys_GetCapability(0xA000A) - tcti:IO failure
+ERROR: Unable to run tpm2_getcap
 
