@@ -2,41 +2,41 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18902162F95
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2020 20:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F71162FD4
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2020 20:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgBRTPP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Feb 2020 14:15:15 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:55030 "EHLO
+        id S1726380AbgBRTZ6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Feb 2020 14:25:58 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:58788 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726296AbgBRTPP (ORCPT
+        with ESMTP id S1726283AbgBRTZ5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Feb 2020 14:15:15 -0500
+        Tue, 18 Feb 2020 14:25:57 -0500
 Received: from [10.137.112.97] (unknown [131.107.147.225])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2B971200889D;
-        Tue, 18 Feb 2020 11:15:14 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2B971200889D
+        by linux.microsoft.com (Postfix) with ESMTPSA id 24D4720B9C02;
+        Tue, 18 Feb 2020 11:25:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 24D4720B9C02
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1582053314;
-        bh=0umdcWx5u5QC9x3/h90kpSlJ3mmjGBSlEzTLOgMKDP4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=hHcew2z5jnZZ4XiNgN5xBAQtdI/ctaW9YsmDmBKp81v4etNkIvFz0H1V3Y+C8Zq8W
-         DbdICo7w+Q0vAIoznAHIhhvXBwrULARcm5ajfTBM4rM91k39lfLq8Xw5XSiaRRvePe
-         HOSdnJ4SJFJkpjFMOXY4mT25Ry9rN7nUgc4xf8wg=
-Subject: Re: [PATCH v4 0/3] IMA: improve log messages
-To:     Mimi Zohar <zohar@linux.ibm.com>, joe@perches.com,
-        skhan@linuxfoundation.org, linux-integrity@vger.kernel.org
+        s=default; t=1582053957;
+        bh=IlZjYMt8348usfDsk/hmaIjApktRG/nXtvI4U//iFDw=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=T4bNp0VpB7uwx7OA32BD/YZwewN4xTZ4f+Ka9ScZtV4WJsvlWw8p2FMMtj3du515t
+         u64+c253RlXLIIUI/KB25ZGspmEMZ8f/oA5TWokG1ScEB0rQHFXNV/dMKdm+SHUMMs
+         5qf0oAa2QB82ysg7xNXk6Ad/ucn+M0Lr2c537Vj0=
+Subject: Re: [PATCH v4 1/3] IMA: Update KBUILD_MODNAME for IMA files to ima
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+To:     zohar@linux.ibm.com, joe@perches.com, skhan@linuxfoundation.org,
+        linux-integrity@vger.kernel.org
 Cc:     sashal@kernel.org, nramas@linux.microsoft.com,
         linux-kernel@vger.kernel.org
 References: <20200215014709.3006-1-tusharsu@linux.microsoft.com>
- <1581856840.8515.168.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <3e479e25-ccf2-0e5b-3b78-3c63600245b8@linux.microsoft.com>
-Date:   Tue, 18 Feb 2020 11:15:13 -0800
+ <20200215014709.3006-2-tusharsu@linux.microsoft.com>
+Message-ID: <857c8dc6-d09c-423e-c520-53bb85c6d46c@linux.microsoft.com>
+Date:   Tue, 18 Feb 2020 11:25:56 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <1581856840.8515.168.camel@linux.ibm.com>
+In-Reply-To: <20200215014709.3006-2-tusharsu@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -45,24 +45,26 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Mimi,
 
+On 2020-02-14 5:47 p.m., Tushar Sugandhi wrote:
+> The kbuild Makefile specifies object files for vmlinux in the $(obj-y)
+> lists. These lists depend on the kernel configuration[1].
+> 
+> The kbuild Makefile for IMA combines the object files for IMA into a
+> single object file namely ima.o. All the object files for IMA should be
+> combined into ima.o. But certain object files are being added to their
+> own $(obj-y). This results in the log messages from those modules getting
+> prefixed with their respective base file name, instead of "ima". This is
+> inconsistent with the log messages from the IMA modules that are combined
+> into ima.o.
+> 
+> This change fixes the above issue.
+> 
+> [1] Documentation\kbuild\makefiles.rst
+> 
+Is there any feedback on this patch description?
+I can address it in the next iteration.
 
-On 2020-02-16 4:40 a.m., Mimi Zohar wrote:
-> On Fri, 2020-02-14 at 17:47 -0800, Tushar Sugandhi wrote:
->> The log messages from IMA subsystem should be consistent for better
->> diagnosability and discoverability.
-> 
-> The change isn't limited to IMA.  I would change "IMA" to "integrity"
-> in the Subject line and in this patch description.
-> 
-Will do.
->> This patch set improves the logging by removing duplicate log formatting
->> macros, adding a consistent prefix to the log messages, and adding new
->> log messages where necessary.
-> 
-> Much better!
-> 
-> thanks,
-> 
-> Mimi
-> 
+Thanks,
+Tushar
