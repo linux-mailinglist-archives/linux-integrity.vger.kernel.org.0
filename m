@@ -2,79 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E6E166766
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2020 20:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482201667C1
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2020 20:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728383AbgBTTqF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 Feb 2020 14:46:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43458 "EHLO mail.kernel.org"
+        id S1728946AbgBTT7M (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 Feb 2020 14:59:12 -0500
+Received: from mga06.intel.com ([134.134.136.31]:16233 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728334AbgBTTqF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 Feb 2020 14:46:05 -0500
-Received: from dhcp-9-31-102-231.watson.ibm.com (unknown [129.34.9.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ABC28206F4;
-        Thu, 20 Feb 2020 19:46:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582227965;
-        bh=fWj4DricUfMFagu/vY1UD5Ak4KseFe0NphU6bFhigEk=;
-        h=Subject:From:To:Cc:Date:From;
-        b=Vsl69bltoqHLqv4yfsvsiBB8zK97DHc1G1Cj/PK0ciqD+Z59dlrOA6LNHeh7GaE8S
-         PRXKGrQxQvjKAEpkaSXapAO7n6ELO+WNEr9hcUeyPYHApFWZqaKmYa9m8GZDQU5d3I
-         416r4uGWRx3Qy6o2TVzZQIVdsN+YXAX/6k7j4zfA=
-Message-ID: <1582227963.19057.17.camel@kernel.org>
-Subject: [GIT PULL] integrity subsystem fixes for v5.6
-From:   Mimi Zohar <zohar@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Thu, 20 Feb 2020 14:46:03 -0500
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1728556AbgBTT7M (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 20 Feb 2020 14:59:12 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Feb 2020 11:59:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,465,1574150400"; 
+   d="scan'208";a="349230613"
+Received: from moriol-mobl.ger.corp.intel.com (HELO localhost) ([10.252.25.78])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Feb 2020 11:59:08 -0800
+Date:   Thu, 20 Feb 2020 21:59:06 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, aik@ozlabs.ru,
+        david@gibson.dropbear.id.au, linux-kernel@vger.kernel.org,
+        nayna@linux.vnet.ibm.com, gcwilson@linux.ibm.com, jgg@ziepe.ca
+Subject: Re: [PATCH v2 0/4] Enable vTPM 2.0 for the IBM vTPM driver
+Message-ID: <20200220195906.GB23349@linux.intel.com>
+References: <20200213202329.898607-1-stefanb@linux.vnet.ibm.com>
+ <f76ce5e5-0552-bc2c-4548-ae9552d4e3ba@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f76ce5e5-0552-bc2c-4548-ae9552d4e3ba@linux.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
+On Wed, Feb 19, 2020 at 02:23:29PM -0500, Stefan Berger wrote:
+> On 2/13/20 3:23 PM, Stefan Berger wrote:
+> > From: Stefan Berger <stefanb@linux.ibm.com>
+> > 
+> > QEMU 5.0 will support the PAPR vTPM device model for TPM 1.2 and TPM 2.0.
+> > This series of patches enables vTPM 2.0 support for the IBM vTPM driver.
+> 
+> 
+> If there are no more comments to this series, maybe Jarkko can queue it?
 
-Here are two bug fixes and an associated change for each.  The one
-that adds SM3 to the IMA list of supported hash algorithms is a simple
-change, but could be considered a new feature.
+Do not recall seeing this series before. Probably have missed it.
+I'll look into it next week.
 
-thanks,
-
-Mimi
-
-
-The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
-
-  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
-
-for you to fetch changes up to 5780b9abd530982c2bb1018e2c52c05ab3c30b45:
-
-  ima: add sm3 algorithm to hash algorithm configuration list (2020-02-18 07:35:49 -0500)
-
-----------------------------------------------------------------
-Ard Biesheuvel (1):
-      x86/ima: use correct identifier for SetupMode variable
-
-Javier Martinez Canillas (1):
-      efi: Only print errors about failing to get certs if EFI vars are found
-
-Tianjia Zhang (2):
-      crypto: rename sm3-256 to sm3 in hash_algo_name
-      ima: add sm3 algorithm to hash algorithm configuration list
-
- arch/x86/kernel/ima_arch.c                    |  6 ++--
- crypto/hash_info.c                            |  2 +-
- security/integrity/ima/Kconfig                |  5 ++++
- security/integrity/platform_certs/load_uefi.c | 40 +++++++++++++++++----------
- 4 files changed, 34 insertions(+), 19 deletions(-)
+/Jarkkko
