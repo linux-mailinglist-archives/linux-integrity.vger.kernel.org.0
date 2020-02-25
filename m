@@ -2,19 +2,19 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CCF16BF53
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Feb 2020 12:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE13816BF60
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Feb 2020 12:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729637AbgBYLIp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 Feb 2020 06:08:45 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38276 "EHLO
+        id S1728963AbgBYLNN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 Feb 2020 06:13:13 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38320 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729034AbgBYLIp (ORCPT
+        with ESMTP id S1727068AbgBYLNN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 Feb 2020 06:08:45 -0500
+        Tue, 25 Feb 2020 06:13:13 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: aragua)
-        with ESMTPSA id 3FBB12946F6
+        with ESMTPSA id E862029475A
 From:   Fabien Lahoudere <fabien.lahoudere@collabora.com>
 Cc:     swboyd@chromium.org, kernel@collabora.com,
         Fabien Lahoudere <fabien.lahoudere@collabora.com>,
@@ -24,9 +24,9 @@ Cc:     swboyd@chromium.org, kernel@collabora.com,
         Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: [PATCH 1/1] Add TPM 2.0 compatible I2C interface for chips with cr50 firmware.
-Date:   Tue, 25 Feb 2020 12:08:07 +0100
-Message-Id: <20200225110810.1321686-1-fabien.lahoudere@collabora.com>
+Subject: [PATCH 1/1] tpm: Add driver for cr50 on I2C
+Date:   Tue, 25 Feb 2020 12:12:51 +0100
+Message-Id: <20200225111253.1322538-1-fabien.lahoudere@collabora.com>
 X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -35,6 +35,11 @@ Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
+
+From: Duncan Laurie <dlaurie@chromium.org>
+      Stephen Boyd <swboyd@chromium.org>
+
+Add TPM 2.0 compatible I2C interface for chips with cr50 firmware.
 
 The firmware running on the currently supported H1 MCU requires a
 special driver to handle its specific protocol, and this makes it
