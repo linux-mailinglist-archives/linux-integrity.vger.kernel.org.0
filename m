@@ -2,164 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7691D170214
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Feb 2020 16:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9888D170630
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Feb 2020 18:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727265AbgBZPPR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Feb 2020 10:15:17 -0500
-Received: from mga01.intel.com ([192.55.52.88]:20755 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgBZPPR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Feb 2020 10:15:17 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 07:15:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,488,1574150400"; 
-   d="scan'208";a="384831657"
-Received: from avgorshk-mobl.ccr.corp.intel.com (HELO localhost) ([10.252.15.208])
-  by orsmga004.jf.intel.com with ESMTP; 26 Feb 2020 07:15:13 -0800
-Date:   Wed, 26 Feb 2020 17:15:12 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Subject: Re: [PATCH v5 3/6] security: keys: trusted fix tpm2 authorizations
-Message-ID: <20200226151512.GF3407@linux.intel.com>
-References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
- <20200130101812.6271-4-James.Bottomley@HansenPartnership.com>
- <20200225164850.GB15662@linux.intel.com>
+        id S1726642AbgBZRg0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Feb 2020 12:36:26 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55320 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726366AbgBZRg0 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 26 Feb 2020 12:36:26 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01QHU3fE115469;
+        Wed, 26 Feb 2020 12:35:19 -0500
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2ydqfuwb4a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Feb 2020 12:35:18 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01QHYpxm003952;
+        Wed, 26 Feb 2020 17:35:18 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma02dal.us.ibm.com with ESMTP id 2ydcmkrpgm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Feb 2020 17:35:18 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01QHZHF835127648
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Feb 2020 17:35:17 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 56E4FAE064;
+        Wed, 26 Feb 2020 17:35:17 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F4DBAE063;
+        Wed, 26 Feb 2020 17:35:17 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Feb 2020 17:35:17 +0000 (GMT)
+Subject: Re: [PATCH v2 3/4] tpm: Implement tpm2_init to call when
+ TPM_OPS_AUTO_STARTUP is not set
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, aik@ozlabs.ru,
+        david@gibson.dropbear.id.au, linux-kernel@vger.kernel.org,
+        nayna@linux.vnet.ibm.com, gcwilson@linux.ibm.com, jgg@ziepe.ca
+References: <20200213202329.898607-1-stefanb@linux.vnet.ibm.com>
+ <20200213202329.898607-4-stefanb@linux.vnet.ibm.com>
+ <20200225170015.GE15662@linux.intel.com>
+ <3813980a-6c5e-c99f-7b37-b20b72eb6a8a@linux.ibm.com>
+ <20200226150255.GB3407@linux.intel.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <c31ef080-1172-e10b-e7b1-ab8e1682c860@linux.ibm.com>
+Date:   Wed, 26 Feb 2020 12:35:17 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200225164850.GB15662@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200226150255.GB3407@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-26_06:2020-02-26,2020-02-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ malwarescore=0 suspectscore=0 priorityscore=1501 phishscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2002260115
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 06:48:50PM +0200, Jarkko Sakkinen wrote:
-> On Thu, Jan 30, 2020 at 11:18:09AM +0100, James Bottomley wrote:
-> > In TPM 1.2 an authorization was a 20 byte number.  The spec actually
-> > recommended you to hash variable length passwords and use the sha1
-> > hash as the authorization.  Because the spec doesn't require this
-> > hashing, the current authorization for trusted keys is a 40 digit hex
-> > number.  For TPM 2.0 the spec allows the passing in of variable length
-> > passwords and passphrases directly, so we should allow that in trusted
-> > keys for ease of use.  Update the 'blobauth' parameter to take this
-> > into account, so we can now use plain text passwords for the keys.
-> > 
-> > so before
-> > 
-> > keyctl add trusted kmk "new 32 blobauth=f572d396fae9206628714fb2ce00f72e94f2258f"
-> > 
-> > after we will accept both the old hex sha1 form as well as a new
-> > directly supplied password:
-> > 
-> > keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001"
-> > 
-> > Since a sha1 hex code must be exactly 40 bytes long and a direct
-> > password must be 20 or less, we use the length as the discriminator
-> > for which form is input.
-> > 
-> > Note this is both and enhancement and a potential bug fix.  The TPM
-> > 2.0 spec requires us to strip leading zeros, meaning empyty
-> > authorization is a zero length HMAC whereas we're currently passing in
-> > 20 bytes of zeros.  A lot of TPMs simply accept this as OK, but the
-> > Microsoft TPM emulator rejects it with TPM_RC_BAD_AUTH, so this patch
-> > makes the Microsoft TPM emulator work with trusted keys.
-> > 
-> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> 
-> Should have a fixes tag.
-> 
-> > ---
-> >  include/keys/trusted-type.h               |  1 +
-> >  security/keys/trusted-keys/trusted_tpm1.c | 26 +++++++++++++++++++++-----
-> >  security/keys/trusted-keys/trusted_tpm2.c | 10 ++++++----
-> >  3 files changed, 28 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-> > index a94c03a61d8f..b2ed3481c6a0 100644
-> > --- a/include/keys/trusted-type.h
-> > +++ b/include/keys/trusted-type.h
-> > @@ -30,6 +30,7 @@ struct trusted_key_options {
-> >  	uint16_t keytype;
-> >  	uint32_t keyhandle;
-> >  	unsigned char keyauth[TPM_DIGEST_SIZE];
-> > +	uint32_t blobauth_len;
-> >  	unsigned char blobauth[TPM_DIGEST_SIZE];
-> >  	uint32_t pcrinfo_len;
-> >  	unsigned char pcrinfo[MAX_PCRINFO_SIZE];
-> > diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-> > index d2c5ec1e040b..3f33d3f74d3c 100644
-> > --- a/security/keys/trusted-keys/trusted_tpm1.c
-> > +++ b/security/keys/trusted-keys/trusted_tpm1.c
-> > @@ -781,12 +781,28 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
-> >  				return -EINVAL;
-> >  			break;
-> >  		case Opt_blobauth:
-> > -			if (strlen(args[0].from) != 2 * SHA1_DIGEST_SIZE)
-> > -				return -EINVAL;
-> > -			res = hex2bin(opt->blobauth, args[0].from,
-> > -				      SHA1_DIGEST_SIZE);
-> > -			if (res < 0)
-> > +			/*
-> > +			 * TPM 1.2 authorizations are sha1 hashes
-> > +			 * passed in as hex strings.  TPM 2.0
-> > +			 * authorizations are simple passwords
-> > +			 * (although it can take a hash as well)
-> 
-> Justify to the 80 character line length.
-> 
-> > +			 */
-> > +			opt->blobauth_len = strlen(args[0].from);
-> > +			if (opt->blobauth_len == 2 * TPM_DIGEST_SIZE) {
-> > +				res = hex2bin(opt->blobauth, args[0].from,
-> > +					      TPM_DIGEST_SIZE);
-> > +				if (res < 0)
-> > +					return -EINVAL;
-> > +
-> > +				opt->blobauth_len = TPM_DIGEST_SIZE;
-> > +			} else if (tpm2 &&
-> > +				   opt->blobauth_len <= sizeof(opt->blobauth)) {
-> > +				memcpy(opt->blobauth, args[0].from,
-> > +				       opt->blobauth_len);
-> > +			} else {
-> >  				return -EINVAL;
-> > +			}
-> 
-> This starts to be unnecessarily complicated.
-> 
-> This is what I would suggest:
-> 
-> opt->blobauth_len = strlen(args[0].from);
-> if (opt->blobauth_len == 2 * TPM_DIGEST_SIZE) {
-> 	res = hex2bin(opt->blobauth, args[0].from,
-> 		      TPM_DIGEST_SIZE);
-> 	if (res < 0)
-> 		return -EINVAL;
-> 
-> 	opt->blobauth_len = TPM_DIGEST_SIZE;
-> 	return 0;
-> }
-> 
-> if (tpm2 && opt->blobauth_len <= sizeof(opt->blobauth)) {
-> 	memcpy(opt->blobauth, args[0].from,
-> 	       opt->blobauth_len);
-> 	return 0;
-> }
-> 
-> return -EINVAL;
-> 
-> Easier to see quickly "when happens what".
-> 
+On 2/26/20 10:02 AM, Jarkko Sakkinen wrote:
+> On Tue, Feb 25, 2020 at 01:20:39PM -0500, Stefan Berger wrote:
+>> On 2/25/20 12:00 PM, Jarkko Sakkinen wrote:
+>>> On Thu, Feb 13, 2020 at 03:23:28PM -0500, Stefan Berger wrote:
+>>>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>>>
+>>>> Implement tpm2_init() that gets the TPM 2 timeouts and command durations
+>>>> and command code attributes. This function is to be called in case the
+>>>> TPM_OPS_AUTO_STARTUP flag is not set and therefore tpm2_auto_startup()
+>>>> is not called.
+>>>>
+>>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>> The commit makes zero effort trying to explain what the heck tpm_init()
+>>> is and when it should be used and why the function name tpm2_init().
+>> Are you saying the explanation of when to use tpm2_init above is not enough?
+>> 'bviously we are trying to cover the case of using the TPM 2 by a driver
+>> that doesn't use the TPM_OPS_AUTO_STARTUP flag and therefore the TPM 2
+>> timeouts and command durations and command code attributes are not set as
+>> they would be if tpm2_auto_startup() was to be called and tpm2_init() is the
+>> alternative to call. I didn't like tpm2_init() either... any suggestions for
+>> a better name?
+> I'm not getting what this commit is trying to do in the first place.
+I sent out v3, maybe the text there is better.
+>
 > /Jarkko
 
-And in short summary "TPM2" instead of tpm2.
 
-/Jarkko
