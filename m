@@ -2,100 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB07816FE15
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Feb 2020 12:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023151701C0
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Feb 2020 16:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbgBZLob (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Feb 2020 06:44:31 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:60318 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726440AbgBZLoa (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Feb 2020 06:44:30 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01QBhANQ010112;
-        Wed, 26 Feb 2020 06:44:22 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com with ESMTP id 2ydcjt9uk8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Feb 2020 06:44:22 -0500
-Received: from SCSQMBX11.ad.analog.com (scsqmbx11.ad.analog.com [10.77.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 01QBiKUe022009
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Wed, 26 Feb 2020 06:44:20 -0500
-Received: from SCSQCASHYB6.ad.analog.com (10.77.17.132) by
- SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Wed, 26 Feb 2020 03:44:19 -0800
-Received: from SCSQMBX10.ad.analog.com (10.77.17.5) by
- SCSQCASHYB6.ad.analog.com (10.77.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Wed, 26 Feb 2020 03:43:54 -0800
-Received: from zeus.spd.analog.com (10.64.82.11) by SCSQMBX10.ad.analog.com
- (10.77.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Wed, 26 Feb 2020 03:44:19 -0800
-Received: from analog.ad.analog.com ([10.48.65.180])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 01QBiEll030621;
-        Wed, 26 Feb 2020 06:44:15 -0500
-From:   Sergiu Cuciurean <sergiu.cuciurean@analog.com>
-To:     <gregkh@linuxfoundation.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <peterhuewe@gmx.de>, <jarkko.sakkinen@linux.intel.com>,
-        <jgg@ziepe.ca>, <arnd@arndb.de>,
-        Sergiu Cuciurean <sergiu.cuciurean@analog.com>
-Subject: [PATCH] Char: tpm_tis_spi_cr50: use new structure for SPI transfer delays
-Date:   Wed, 26 Feb 2020 13:43:47 +0200
-Message-ID: <20200226114347.27126-1-sergiu.cuciurean@analog.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727483AbgBZPAz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Feb 2020 10:00:55 -0500
+Received: from mga04.intel.com ([192.55.52.120]:30051 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727468AbgBZPAz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 26 Feb 2020 10:00:55 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 07:00:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,488,1574150400"; 
+   d="scan'208";a="231425508"
+Received: from avgorshk-mobl.ccr.corp.intel.com (HELO localhost) ([10.252.15.208])
+  by orsmga008.jf.intel.com with ESMTP; 26 Feb 2020 07:00:51 -0800
+Date:   Wed, 26 Feb 2020 17:00:51 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, aik@ozlabs.ru,
+        david@gibson.dropbear.id.au, linux-kernel@vger.kernel.org,
+        nayna@linux.vnet.ibm.com, gcwilson@linux.ibm.com, jgg@ziepe.ca
+Subject: Re: [PATCH v2 2/4] tpm: ibmvtpm: Wait for buffer to be set before
+ proceeding
+Message-ID: <20200226150051.GA3407@linux.intel.com>
+References: <20200213202329.898607-1-stefanb@linux.vnet.ibm.com>
+ <20200213202329.898607-3-stefanb@linux.vnet.ibm.com>
+ <20200225165744.GD15662@linux.intel.com>
+ <8b61d1b4-8503-88e7-271f-da2ea0fc437f@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-26_03:2020-02-26,2020-02-26 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
- spamscore=0 clxscore=1011 priorityscore=1501 impostorscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002260087
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b61d1b4-8503-88e7-271f-da2ea0fc437f@linux.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-In a recent change to the SPI subsystem [1], a new `delay` struct was added
-to replace the `delay_usecs`. This change replaces the current
-`delay_usecs` with `delay` for this driver.
+On Tue, Feb 25, 2020 at 01:14:32PM -0500, Stefan Berger wrote:
+> On 2/25/20 11:57 AM, Jarkko Sakkinen wrote:
+> > On Thu, Feb 13, 2020 at 03:23:27PM -0500, Stefan Berger wrote:
+> > > From: Stefan Berger <stefanb@linux.ibm.com>
+> > > 
+> > > Synchronize with the results from the CRQs before continuing with
+> > > the initialization. This avoids trying to send TPM commands while
+> > > the rtce buffer has not been allocated, yet.
+> > What is CRQ anyway an acronym of?
+> 
+> Command request queue.
+> 
+> 
+> > 
+> > > This patch fixes an existing race condition that may occurr if the
+> > > hypervisor does not quickly respond to the VTPM_GET_RTCE_BUFFER_SIZE
+> > > request sent during initialization and therefore the ibmvtpm->rtce_buf
+> > > has not been allocated at the time the first TPM command is sent.
+> > If it fixes a race condition, why doesn't it have a fixes tag?
+> 
+> Which commit should I mention?
 
-The `spi_transfer_delay_exec()` function [in the SPI framework] makes sure
-that both `delay_usecs` & `delay` are used (in this order to preserve
-backwards compatibility).
+The one that introduced the race condition if there is such.
 
-[1] commit bebcfd272df6 ("spi: introduce `delay` field for
-`spi_transfer` + spi_transfer_delay_exec()")
-
-Signed-off-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
----
- drivers/char/tpm/tpm_tis_spi_cr50.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_tis_spi_cr50.c
-index 37d72e818335..ea759af25634 100644
---- a/drivers/char/tpm/tpm_tis_spi_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
-@@ -132,7 +132,12 @@ static void cr50_wake_if_needed(struct cr50_spi_phy *cr50_phy)
- 
- 	if (cr50_needs_waking(cr50_phy)) {
- 		/* Assert CS, wait 1 msec, deassert CS */
--		struct spi_transfer spi_cs_wake = { .delay_usecs = 1000 };
-+		struct spi_transfer spi_cs_wake = {
-+			.delay = {
-+				.value = 1000,
-+				.unit = SPI_DELAY_UNIT_USECS
-+			}
-+		};
- 
- 		spi_sync_transfer(phy->spi_device, &spi_cs_wake, 1);
- 		/* Wait for it to fully wake */
--- 
-2.17.1
-
+/Jarkko
