@@ -2,147 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4645B171890
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 14:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9DD17225B
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 16:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729088AbgB0NT5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 Feb 2020 08:19:57 -0500
-Received: from gateway33.websitewelcome.com ([192.185.146.68]:36911 "EHLO
-        gateway33.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729180AbgB0NT5 (ORCPT
+        id S1729140AbgB0Pi7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 Feb 2020 10:38:59 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:57938 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729089AbgB0Pi7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 Feb 2020 08:19:57 -0500
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id 2CDF6219DD
-        for <linux-integrity@vger.kernel.org>; Thu, 27 Feb 2020 06:55:53 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id 7Ihljpx4WvBMd7IhljlaIn; Thu, 27 Feb 2020 06:55:53 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4zTfqHtNR+JOFw1AL/0V9Tg2bWk099xhAe7F5IWAr+A=; b=odm+PZjBgpSmbCka5oSybjWmj2
-        TDatQyzhvlKp3qcc8uuPHnf2AD33gqeg49yXELgZeBhZ2x1es6HcFQrsef7lCeVKA3J+7neryuzhS
-        SqkY26fKqf36icZ8VgkCxFnUPTkhPXqC7Fh9FleYq9pZTqXoWlDGvUZAdq60rr+CWSUu1fK27gkwT
-        pL0ewQDQmbhgqxQrhrt8e4MAzozEeyig2V7xgCvAa+bu+VB5VzJiHjiayhXVngkup4zBe0pNPyCTt
-        CPjgMXIOkloq3w7pI4GjG7odckJ2B0DnZhS7Q4FjYPgKxJp9VKyAJKDcHz6M38ilzvkuTbyl+Ne00
-        kEFCS15Q==;
-Received: from [201.166.157.75] (port=39906 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1j7Ihh-000gWF-C4; Thu, 27 Feb 2020 06:55:50 -0600
-Date:   Thu, 27 Feb 2020 06:58:41 -0600
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] security: integrity: Replace zero-length array with
- flexible-array member
-Message-ID: <20200227125841.GA23703@embeddedor>
+        Thu, 27 Feb 2020 10:38:59 -0500
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id F302F72CCF1;
+        Thu, 27 Feb 2020 18:38:39 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id D2BCB4A4A16;
+        Thu, 27 Feb 2020 18:38:31 +0300 (MSK)
+Date:   Thu, 27 Feb 2020 18:38:31 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Mikhail Novosyolov <m.novosyolov@rosalinux.ru>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] ima-evm-utils: Fix compatibility with LibreSSL
+Message-ID: <20200227153825.ywas4clc3qa76rhc@altlinux.org>
+Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
+        Mikhail Novosyolov <m.novosyolov@rosalinux.ru>,
+        linux-integrity@vger.kernel.org
+References: <63ba8482-0085-f2d3-dbb9-70bb81990f07@rosalinux.ru>
+ <1582638298.10443.196.camel@linux.ibm.com>
+ <fac0bebb-22ce-77f9-bac9-7ca5f76d1ca1@rosalinux.ru>
+ <1582777694.10443.286.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 201.166.157.75
-X-Source-L: No
-X-Exim-ID: 1j7Ihh-000gWF-C4
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [201.166.157.75]:39906
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 10
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1582777694.10443.286.camel@linux.ibm.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The current codebase makes use of the zero-length array language
-extension to the C90 standard, but the preferred mechanism to declare
-variable-length types such as these ones is a flexible array member[1][2],
-introduced in C99:
+Mimi,
 
-struct foo {
-        int stuff;
-        struct boo array[];
-};
+On Wed, Feb 26, 2020 at 11:28:14PM -0500, Mimi Zohar wrote:
+> On Wed, 2020-02-26 at 12:51 +0300, Mikhail Novosyolov wrote:
+> > Hello Mimi, thanks for feedback.
+> > 25.02.2020 16:44, Mimi Zohar ÐÉÛÅÔ:
+> > > On Sun, 2020-02-16 at 14:10 +0300, Mikhail Novosyolov wrote:
+> > >> LibreSSL in most cases can be used as a drop-in replacement of OpenSSL.
+> > >> Commit 07d799cb6c37 "ima-evm-utils: Preload OpenSSL engine via '--engine' option"
+> > >> added OpenSSL-specific functions: "engines" were removed from LibreSSL long ago.
+> > >> Instead of requiring to attach GOST support via an external library ("engine"),
+> > >> LibreSSL has build-in implementation of GOST.
+> > >
+> > > OpenSSL had a builtin support for GOST, which was dropped.š From the
+> > > OpenSSL news "Changes between 1.0.2h and 1.1.0":
+> > >
+> > >šššš The GOST engine was out of date and therefore it has been removed. An up
+> > >šššš to date GOST engine is now being maintained in an external repository.
+> > >šššš See:šššš https://wiki.openssl.org/index.php/Binariesššš .š Libssl still retains
+> > >šššš support for GOST ciphersuites (these are only activated if a GOST engine
+> > >šššš is present).
+> > >
+> > > Please update the patch description to reflect the reason for OpenSSL
+> > > dropping GOST builtin support, while LibreSSL continues to build it
+> > > in.
+> 
+> > The reasons why OpenSSL decided to do it are out of my scope, I can
+> > just write that OpenSSL had GOST, then dropped it, then gost-engine
+> > appeared as an OpenSSL plugin and that LibreSSL has GOST built in
+> > and dropped engines API after forking from OpenSSL. Will it be OK?
+> 
+> The question is whether LibreSSL is using the back level version of
+> GOST that OpenSSL dropped or has it been updated? šThe patch
+> description should be updated accordingly.
 
-By making use of the mechanism above, we will get a compiler warning
-in case the flexible array does not occur last in the structure, which
-will help us prevent some kind of undefined behavior bugs from being
-inadvertently introduced[3] to the codebase from now on.
+AFAIK, LibreSSL is using independent implementation of Streebog. It
+wasn't exist in OpenSSL before split and different from what is in
+gost-engine (also having different authors).
 
-Also, notice that, dynamic memory allocations won't be affected by
-this change:
+I don't really understand reason to know implementation history, if,
+as library users, we should be enough to know they have compatible APIs.
 
-"Flexible array members have incomplete type, and so the sizeof operator
-may not be applied. As a quirk of the original implementation of
-zero-length arrays, sizeof evaluates to zero."[1]
-
-This issue was found with the help of Coccinelle.
-
-[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-[2] https://github.com/KSPP/linux/issues/21
-[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- security/integrity/ima/ima.h   | 2 +-
- security/integrity/integrity.h | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 64317d95363e..da4246ee7e35 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -95,7 +95,7 @@ struct ima_template_entry {
- 	u8 digest[TPM_DIGEST_SIZE];	/* sha1 or md5 measurement hash */
- 	struct ima_template_desc *template_desc; /* template descriptor */
- 	u32 template_data_len;
--	struct ima_field_data template_data[0];	/* template related data */
-+	struct ima_field_data template_data[];	/* template related data */
- };
- 
- struct ima_queue_entry {
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 543d277c7e48..3c7e8b902256 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -103,7 +103,7 @@ struct ima_digest_data {
- 		} ng;
- 		u8 data[2];
- 	} xattr;
--	u8 digest[0];
-+	u8 digest[];
- } __packed;
- 
- /*
-@@ -115,7 +115,7 @@ struct signature_v2_hdr {
- 	uint8_t	hash_algo;	/* Digest algorithm [enum hash_algo] */
- 	__be32 keyid;		/* IMA key identifier - not X509/PGP specific */
- 	__be16 sig_size;	/* signature size */
--	uint8_t sig[0];		/* signature payload */
-+	uint8_t sig[];		/* signature payload */
- } __packed;
- 
- /* integrity data associated with an inode */
--- 
-2.25.0
+Thanks,
 
