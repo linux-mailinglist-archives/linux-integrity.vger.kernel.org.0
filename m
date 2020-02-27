@@ -2,199 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD4017259E
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 18:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFB41728CC
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 20:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729506AbgB0Rtc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 Feb 2020 12:49:32 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:48942 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729232AbgB0Rtb (ORCPT
+        id S1730080AbgB0TiV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 Feb 2020 14:38:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46242 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730274AbgB0TiU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 Feb 2020 12:49:31 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3441D8EE181;
-        Thu, 27 Feb 2020 09:49:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1582825771;
-        bh=CeGIjB8Z8c/Mw0ttF8y1yqBMYzgjTDLgZPRhl2lA1jw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=uNLW7IT4ksDsyGAKI2OCYTUJUIcmnMS23tb9JraSTV0c0Sml814ntRNhIi4ZLnmWD
-         6GFoX6/bXNYOPufi0hhpwYUKTV8BdcTPEl2/HeADbhnYvwnb/npnEjH9r1boLgrk2s
-         dmGFUmO9Vxl4Wg8Fcivg5Z2F+rgIKgMgZ3cKBeeE=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id v7HU5a_T1Lqe; Thu, 27 Feb 2020 09:49:31 -0800 (PST)
-Received: from jarvis.ext.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id B8BE48EE079;
-        Thu, 27 Feb 2020 09:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1582825771;
-        bh=CeGIjB8Z8c/Mw0ttF8y1yqBMYzgjTDLgZPRhl2lA1jw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=uNLW7IT4ksDsyGAKI2OCYTUJUIcmnMS23tb9JraSTV0c0Sml814ntRNhIi4ZLnmWD
-         6GFoX6/bXNYOPufi0hhpwYUKTV8BdcTPEl2/HeADbhnYvwnb/npnEjH9r1boLgrk2s
-         dmGFUmO9Vxl4Wg8Fcivg5Z2F+rgIKgMgZ3cKBeeE=
-Message-ID: <1582825769.18445.18.camel@HansenPartnership.com>
-Subject: Re: [PATCH v5 3/6] security: keys: trusted fix tpm2 authorizations
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Date:   Thu, 27 Feb 2020 09:49:29 -0800
-In-Reply-To: <1582820506.18445.3.camel@HansenPartnership.com>
-References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
-         <20200130101812.6271-4-James.Bottomley@HansenPartnership.com>
-         <20200225164850.GB15662@linux.intel.com>
-         <1582765091.4245.33.camel@HansenPartnership.com>
-         <20200227161949.GD5140@linux.intel.com>
-         <1582820506.18445.3.camel@HansenPartnership.com>
+        Thu, 27 Feb 2020 14:38:20 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01RJURlZ088753
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Feb 2020 14:38:19 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ydcnhy2bu-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Feb 2020 14:38:18 -0500
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 27 Feb 2020 19:38:17 -0000
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 27 Feb 2020 19:38:13 -0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01RJcBHG58917066
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Feb 2020 19:38:11 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 586A5AE053;
+        Thu, 27 Feb 2020 19:38:11 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E862FAE045;
+        Thu, 27 Feb 2020 19:38:09 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.166.13])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 27 Feb 2020 19:38:09 +0000 (GMT)
+Subject: Re: [PATCH] ima: add a new CONFIG for loading arch-specific policies
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-efi@vger.kernel.org, linux-s390@vger.kernel.org
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Philipp Rudo <prudo@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 27 Feb 2020 14:38:09 -0500
+In-Reply-To: <1582749379.10443.246.camel@linux.ibm.com>
+References: <1582744207-25969-1-git-send-email-nayna@linux.ibm.com>
+         <94fe39a9-db9e-211d-d9b7-4cfe1a270e6f@linux.microsoft.com>
+         <1582749379.10443.246.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20022719-0012-0000-0000-0000038AEA57
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20022719-0013-0000-0000-000021C794C1
+Message-Id: <1582832289.10443.298.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-27_06:2020-02-26,2020-02-27 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 suspectscore=0 impostorscore=0 clxscore=1015
+ mlxscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=964
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002270136
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-02-27 at 08:21 -0800, James Bottomley wrote:
-> On Thu, 2020-02-27 at 18:19 +0200, Jarkko Sakkinen wrote:
-[...]
-> Ok, I'll add that commit as the fixes; it certainly makes no sense to
-> backport this change before the above commit.
+On Wed, 2020-02-26 at 15:36 -0500, Mimi Zohar wrote:
+> On Wed, 2020-02-26 at 11:21 -0800, Lakshmi Ramasubramanian wrote:
+> > Hi Nayna,
+> > 
+> > > +
+> > > +config IMA_SECURE_AND_OR_TRUSTED_BOOT
+> > > +	bool
+> > > +	depends on IMA
+> > > +	depends on IMA_ARCH_POLICY
+> > > +	default n
+> > > +	help
+> > > +	   This option is selected by architectures to enable secure and/or
+> > > +	   trusted boot based on IMA runtime policies.
+> > > 
+> > 
+> > Why is the default for this new config "n"?
+> > Is there any reason to not turn on this config if both IMA and 
+> > IMA_ARCH_POLICY are set to y?
+> 
+> Good catch.  Having "IMA_SECURE_AND_OR_TRUSTED_BOOT" depend on
+> "IMA_ARCH_POLICY" doesn't make sense.  "IMA_ARCH_POLICY" needs to be
+> selected.
 
-This is what I currently have.  Do you want me to resend the whole
-series?
+After discussing this some more with Nayna, the new Kconfig indicates
+that the architecture defines the arch_ima_get_secureboot() and
+arch_get_ima_policy() functions, but doesn't automatically enable
+IMA_ARCH_POLICY.  The decision to enable IMA_ARCH_POLICY is left up to
+whoever is building the kernel.  The patch, at least this aspect of
+it, is correct.
 
-James
-
-----8>8>8>-----
-
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v6 3/6] security: keys: trusted: fix TPM2 authorizations
-
-In TPM 1.2 an authorization was a 20 byte number.  The spec actually
-recommended you to hash variable length passwords and use the sha1
-hash as the authorization.  Because the spec doesn't require this
-hashing, the current authorization for trusted keys is a 40 digit hex
-number.  For TPM 2.0 the spec allows the passing in of variable length
-passwords and passphrases directly, so we should allow that in trusted
-keys for ease of use.  Update the 'blobauth' parameter to take this
-into account, so we can now use plain text passwords for the keys.
-
-so before
-
-keyctl add trusted kmk "new 32 blobauth=f572d396fae9206628714fb2ce00f72e94f2258f"
-
-after we will accept both the old hex sha1 form as well as a new
-directly supplied password:
-
-keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001"
-
-Since a sha1 hex code must be exactly 40 bytes long and a direct
-password must be 20 or less, we use the length as the discriminator
-for which form is input.
-
-Note this is both and enhancement and a potential bug fix.  The TPM
-2.0 spec requires us to strip leading zeros, meaning empyty
-authorization is a zero length HMAC whereas we're currently passing in
-20 bytes of zeros.  A lot of TPMs simply accept this as OK, but the
-Microsoft TPM emulator rejects it with TPM_RC_BAD_AUTH, so this patch
-makes the Microsoft TPM emulator work with trusted keys.
-
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-Fixes: 0fe5480303a1 ("keys, trusted: seal/unseal with TPM 2.0 chips")
-
----
-
-v6: change comment, eliminate else clauses and add fixes tag
-
-diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-index a94c03a61d8f..b2ed3481c6a0 100644
---- a/include/keys/trusted-type.h
-+++ b/include/keys/trusted-type.h
-@@ -30,6 +30,7 @@ struct trusted_key_options {
- 	uint16_t keytype;
- 	uint32_t keyhandle;
- 	unsigned char keyauth[TPM_DIGEST_SIZE];
-+	uint32_t blobauth_len;
- 	unsigned char blobauth[TPM_DIGEST_SIZE];
- 	uint32_t pcrinfo_len;
- 	unsigned char pcrinfo[MAX_PCRINFO_SIZE];
-diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index d2c5ec1e040b..add9f071d818 100644
---- a/security/keys/trusted-keys/trusted_tpm1.c
-+++ b/security/keys/trusted-keys/trusted_tpm1.c
-@@ -781,13 +781,33 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 				return -EINVAL;
- 			break;
- 		case Opt_blobauth:
--			if (strlen(args[0].from) != 2 * SHA1_DIGEST_SIZE)
--				return -EINVAL;
--			res = hex2bin(opt->blobauth, args[0].from,
--				      SHA1_DIGEST_SIZE);
--			if (res < 0)
--				return -EINVAL;
-+			/*
-+			 * TPM 1.2 authorizations are sha1 hashes passed in as
-+			 * hex strings.  TPM 2.0 authorizations are simple
-+			 * passwords (although it can take a hash as well)
-+			 */
-+			opt->blobauth_len = strlen(args[0].from);
-+
-+			if (opt->blobauth_len == 2 * TPM_DIGEST_SIZE) {
-+				res = hex2bin(opt->blobauth, args[0].from,
-+					      TPM_DIGEST_SIZE);
-+				if (res < 0)
-+					return -EINVAL;
-+
-+				opt->blobauth_len = TPM_DIGEST_SIZE;
-+				return 0;
-+			}
-+
-+			if (tpm2 && opt->blobauth_len <= sizeof(opt->blobauth)) {
-+				memcpy(opt->blobauth, args[0].from,
-+				       opt->blobauth_len);
-+				return 0;
-+			}
-+
-+			return -EINVAL;
-+
- 			break;
-+
- 		case Opt_migratable:
- 			if (*args[0].from == '0')
- 				pay->migratable = 0;
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 08ec7f48f01d..b4a5058107c2 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -91,10 +91,12 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 			     TPM_DIGEST_SIZE);
- 
- 	/* sensitive */
--	tpm_buf_append_u16(&buf, 4 + TPM_DIGEST_SIZE + payload->key_len + 1);
-+	tpm_buf_append_u16(&buf, 4 + options->blobauth_len + payload->key_len + 1);
-+
-+	tpm_buf_append_u16(&buf, options->blobauth_len);
-+	if (options->blobauth_len)
-+		tpm_buf_append(&buf, options->blobauth, options->blobauth_len);
- 
--	tpm_buf_append_u16(&buf, TPM_DIGEST_SIZE);
--	tpm_buf_append(&buf, options->blobauth, TPM_DIGEST_SIZE);
- 	tpm_buf_append_u16(&buf, payload->key_len + 1);
- 	tpm_buf_append(&buf, payload->key, payload->key_len);
- 	tpm_buf_append_u8(&buf, payload->migratable);
-@@ -258,7 +260,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
- 			     NULL /* nonce */, 0,
- 			     TPM2_SA_CONTINUE_SESSION,
- 			     options->blobauth /* hmac */,
--			     TPM_DIGEST_SIZE);
-+			     options->blobauth_len);
- 
- 	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
- 	if (rc > 0)
+Mimi
 
