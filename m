@@ -2,131 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7BA170D23
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 01:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9F4170D32
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 01:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728062AbgB0AZH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Feb 2020 19:25:07 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37611 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727987AbgB0AZH (ORCPT
+        id S1728056AbgB0A1D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Feb 2020 19:27:03 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58796 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727987AbgB0A1D (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Feb 2020 19:25:07 -0500
-Received: by mail-pf1-f195.google.com with SMTP id p14so644178pfn.4;
-        Wed, 26 Feb 2020 16:25:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=S3CadKvM+eCMUxmC/eeBKQK/q7RdQUMJE+pGfasasc0=;
-        b=eAvdWDWa4oIsZt/4lu6e6OLMh3JPN60GBnGWYZuD7+i5Ayp8Li4BnUCXtumPefXKwe
-         EJEKh9Kddo5aeD8Zy6AmZuoQqyQAZCfHHwuu8SKVXostYsmRvHW3imFfhkRtOjVJ5WZQ
-         zebz+DHmlUZtm/LoPIuC/x9NeGROmexu9qiJVskF84Bippje0NKGB07w31MjfpAQMumD
-         0sMrBR/btgs57xNdxJXTVVUTZC7KmPk0rkNOzW0tJw19Uagg5Z0Ymvi87tWgs7Iye4y0
-         Bs7D0IuBCBMvQUFhJRBiMfrpBEqub2AqaZlh+B2iEYC+T1LveoseoY2mQR0ude+FEkla
-         Jaig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=S3CadKvM+eCMUxmC/eeBKQK/q7RdQUMJE+pGfasasc0=;
-        b=q2ZXypJncpcH7f1BRiiBx/YROPJW8PkWqnMdjioyjwle69OJ9qvzjXYlD+3gjCWpKC
-         s0QI+iXc6iUJnU2DxuXWTZ0qhA2IK5CSqPtJ2dNhuygKdO00EiYEWwN7SHug64DCxn2X
-         AdwmIpVntUHb+7ERvIJ9gYiZV8dZItArWwucwWYtfpDFjF79KzVP0nz1P9gANgCGiIgd
-         CKWymtPZ0luhgckpRUG0RG+mlsc0CAV/8ZXtbF3OC+4gIt2OF4+NSJmdkwwW0zt0kWSI
-         2yGVoEQvOWxI/nI0oRpmtbNawzoR53zISFhAiW/aViycG3yp7eyvxoC9R5wug6zWlar8
-         SpJw==
-X-Gm-Message-State: APjAAAX8TTCKgUlSkRkFFIGkyXSt4kxZKCXrCC5xCTq1V622QP9Kx8JF
-        OF9UHLjBf0B5ro0KD46X9+Q=
-X-Google-Smtp-Source: APXvYqwBunRBcHBLq+dmv6mUtoq2op4kUNwYTpW7OgBcn4LrCXVlNEaV8iTwe61ev3QmYvVOPz+eSg==
-X-Received: by 2002:a05:6a00:5b:: with SMTP id i27mr1374646pfk.112.1582763105984;
-        Wed, 26 Feb 2020 16:25:05 -0800 (PST)
-Received: from jprestwo-test.jf.intel.com (jfdmzpr04-ext.jf.intel.com. [134.134.137.73])
-        by smtp.googlemail.com with ESMTPSA id d23sm4332535pfo.176.2020.02.26.16.25.05
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 26 Feb 2020 16:25:05 -0800 (PST)
-Message-ID: <f9b64fe39eb71a1560ca2d1887238d0b4f9f111a.camel@gmail.com>
-Subject: Re: [PATCH v5 4/6] security: keys: trusted: use ASN.1 TPM2 key
- format for the blobs
-From:   James Prestwood <prestwoj@gmail.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Date:   Wed, 26 Feb 2020 16:20:38 -0800
-In-Reply-To: <1582761736.4245.12.camel@HansenPartnership.com>
-References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
-         <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
-         <5c593b6f23ae41e90e6b3799141ea68944bb4034.camel@gmail.com>
-         <1582761736.4245.12.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Wed, 26 Feb 2020 19:27:03 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01R0KHul132601;
+        Wed, 26 Feb 2020 19:26:57 -0500
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2ydcp5asju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Feb 2020 19:26:57 -0500
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01R0NBCt013507;
+        Thu, 27 Feb 2020 00:26:56 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma04wdc.us.ibm.com with ESMTP id 2ydcmks5vp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Feb 2020 00:26:56 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01R0Qt5e49873184
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Feb 2020 00:26:55 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E5C028058;
+        Thu, 27 Feb 2020 00:26:55 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 854E928059;
+        Thu, 27 Feb 2020 00:26:55 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 27 Feb 2020 00:26:55 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     jarkko.sakkinen@linux.intel.com, linux-integrity@vger.kernel.org
+Cc:     aik@ozlabs.ru, david@gibson.dropbear.id.au,
+        linux-kernel@vger.kernel.org, nayna@linux.vnet.ibm.com,
+        gcwilson@linux.ibm.com, jgg@ziepe.ca,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v3 0/4]  Enable vTPM 2.0 for the IBM vTPM driver
+Date:   Wed, 26 Feb 2020 19:26:50 -0500
+Message-Id: <20200227002654.7536-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.24.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-26_09:2020-02-26,2020-02-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ adultscore=0 bulkscore=0 mlxscore=0 phishscore=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002270000
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> > I have been using your set of patches in order to get this ASN.1
-> > parser/definition. I am implementing an asymmetric key parser/type
-> > TPM2
-> > keys for enc/dec/sign/verify using keyctl. Note that this
-> > implementation goes in crypto/asymmetric_keys/, and your patches
-> > sit
-> > in
-> > security/keys/trusted-keys/.
-> > 
-> > Currently I am just including "../../security/keys/trusted-
-> > keys/{tpm2key.asn1.h,tpm2-policy.h}" in order to use the ASN.1
-> > parser
-> > to verify my keys, but this obviously isn't going to fly.
-> > 
-> > Do you (or anyone) have any ideas as to how both trusted keys and
-> > asymmetric keys could share this ASN.1 parser/definition? Some
-> > common
-> > area that both security and crypto could include? Or maybe there is
-> > some common way the kernel does things like this?
-> 
-> Actually TPM2 asymmetric keys was also on my list.  I was going to
-> use
-> the existing template and simply move it somewhere everyone could
-> use. 
-> I also think you need the policy parser pieces because at least one
-> implementation we'd need to be compatible with supports key policy.
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-In terms of policy, I haven't looked into that at all for asymmetric
-keys. I do already have enc/dec/sign/verify asymmetric key operations
-all working, and used your ASN1 template for parsing (just copied it
-into asymmetric_keys for now). Since the asymmetric operations use HMAC
-sessions I didn't see much carry over from your patches (but this could
-change if policy stuff gets introduced).
+QEMU 5.0 will support the PAPR vTPM device model for TPM 1.2 and TPM 2.0.
+This series of patches enables vTPM 2.0 support for the IBM vTPM driver.
 
-This will go in the eventual RFC soon but while I have you here:
+Regards,
+   Stefan
 
-I also implemented key wrapping. Exposing this as a keyctl API may take
-some rework, hopefully with some help from others in this subsystem. As
-it stand now you have to padd a key pair, then do a (new) pkey_wrap
-operation on it. This returns a DER with the wrapped TPM2 key. This
-required modifying the public_key type, which I really did not like
-since it now depends on TPM. Not sure if the route I went is gonna fly
-without tweaking, but this is all new to me :) Again, some guidance for
-how this should be is needed.
+- v2->v3:
+  - Added fixes tag to patch 2/4; the race seems to have existed
+    since the driver was first added
+  - Renamed tpm2_init to tpm2_init_commands in 3/4
 
-Before I send these patches I need to get some testing done on real
-TPM2 hardware. So far its just been emulation. But these patches should
-be coming very soon.
-
-Thanks,
-James
+- v1->v2:
+  - Addressed comments to v1; added patch 3 to handle case when
+    TPM_OPS_AUTO_STARTUP is not set
 
 
- 
+Stefan Berger (4):
+  tpm: of: Handle IBM,vtpm20 case when getting log parameters
+  tpm: ibmvtpm: Wait for buffer to be set before proceeding
+  tpm: Implement tpm2_init_commands to use in non-auto startup case
+  tpm: ibmvtpm: Add support for TPM 2
 
-> 
-> Regards,
-> 
-> James
-> 
+ drivers/char/tpm/eventlog/of.c   |  8 +++++++-
+ drivers/char/tpm/tpm-interface.c |  5 ++++-
+ drivers/char/tpm/tpm.h           |  1 +
+ drivers/char/tpm/tpm2-cmd.c      | 14 ++++++++++++++
+ drivers/char/tpm/tpm_ibmvtpm.c   | 13 +++++++++++++
+ drivers/char/tpm/tpm_ibmvtpm.h   |  1 +
+ 6 files changed, 40 insertions(+), 2 deletions(-)
+
+-- 
+2.23.0
 
