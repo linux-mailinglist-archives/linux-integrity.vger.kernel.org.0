@@ -2,103 +2,126 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E691709D6
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Feb 2020 21:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24602170CE7
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 01:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727379AbgBZUgb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Feb 2020 15:36:31 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7310 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727306AbgBZUga (ORCPT
+        id S1727992AbgB0ACS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Feb 2020 19:02:18 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:59630 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727974AbgB0ACS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Feb 2020 15:36:30 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01QKQ3Q1102856
-        for <linux-integrity@vger.kernel.org>; Wed, 26 Feb 2020 15:36:29 -0500
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ydqfv2nkf-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 26 Feb 2020 15:36:29 -0500
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 26 Feb 2020 20:36:27 -0000
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 26 Feb 2020 20:36:23 -0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01QKaLJj47448484
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Feb 2020 20:36:21 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F3B642042;
-        Wed, 26 Feb 2020 20:36:21 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 62F7D42047;
-        Wed, 26 Feb 2020 20:36:20 +0000 (GMT)
-Received: from dhcp-9-31-102-24.watson.ibm.com (unknown [9.31.102.24])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 26 Feb 2020 20:36:20 +0000 (GMT)
-Subject: Re: [PATCH] ima: add a new CONFIG for loading arch-specific policies
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-efi@vger.kernel.org, linux-s390@vger.kernel.org
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Philipp Rudo <prudo@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 26 Feb 2020 15:36:19 -0500
-In-Reply-To: <94fe39a9-db9e-211d-d9b7-4cfe1a270e6f@linux.microsoft.com>
-References: <1582744207-25969-1-git-send-email-nayna@linux.ibm.com>
-         <94fe39a9-db9e-211d-d9b7-4cfe1a270e6f@linux.microsoft.com>
+        Wed, 26 Feb 2020 19:02:18 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CB4BE8EE182;
+        Wed, 26 Feb 2020 16:02:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1582761737;
+        bh=TQ1e9SIyfMmS0UrMKDlw7s2ayCtwksvDJfQJeyINwfM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=nK+zuuE/jg97CJJCuGzXWwS6vZ2QtsRQoir81JfnrF50tU1u1a1wI9lKKQN4Cu0yg
+         VnPpgeBHWGT8KgLfHa4Qva/kbZvU+5OLRHigcVhcrrME3vNzfg7YGs+3pd2fzLPJ1E
+         leayAwUJo3OYGwL3gp/QwimDDtd6mRoCcmzAL4jo=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Z-_FMgbZsd_U; Wed, 26 Feb 2020 16:02:17 -0800 (PST)
+Received: from jarvis.ext.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1D36F8EE0D2;
+        Wed, 26 Feb 2020 16:02:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1582761737;
+        bh=TQ1e9SIyfMmS0UrMKDlw7s2ayCtwksvDJfQJeyINwfM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=nK+zuuE/jg97CJJCuGzXWwS6vZ2QtsRQoir81JfnrF50tU1u1a1wI9lKKQN4Cu0yg
+         VnPpgeBHWGT8KgLfHa4Qva/kbZvU+5OLRHigcVhcrrME3vNzfg7YGs+3pd2fzLPJ1E
+         leayAwUJo3OYGwL3gp/QwimDDtd6mRoCcmzAL4jo=
+Message-ID: <1582761736.4245.12.camel@HansenPartnership.com>
+Subject: Re: [PATCH v5 4/6] security: keys: trusted: use ASN.1 TPM2 key
+ format for the blobs
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     James Prestwood <prestwoj@gmail.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
+Date:   Wed, 26 Feb 2020 16:02:16 -0800
+In-Reply-To: <5c593b6f23ae41e90e6b3799141ea68944bb4034.camel@gmail.com>
+References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
+         <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
+         <5c593b6f23ae41e90e6b3799141ea68944bb4034.camel@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20022620-4275-0000-0000-000003A5C3E1
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20022620-4276-0000-0000-000038B9E0AE
-Message-Id: <1582749379.10443.246.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-26_07:2020-02-26,2020-02-26 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- malwarescore=0 suspectscore=3 priorityscore=1501 phishscore=0 adultscore=0
- bulkscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=903 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002260122
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-02-26 at 11:21 -0800, Lakshmi Ramasubramanian wrote:
-> Hi Nayna,
+On Mon, 2020-02-03 at 08:54 -0800, James Prestwood wrote:
+> Hi James,
 > 
+> <snip>
+> 
+> > diff --git a/security/keys/trusted-keys/tpm2key.asn1
+> > b/security/keys/trusted-keys/tpm2key.asn1
+> > new file mode 100644
+> > index 000000000000..f930fd812db3
+> > --- /dev/null
+> > +++ b/security/keys/trusted-keys/tpm2key.asn1
+> > @@ -0,0 +1,23 @@
+> > +---
+> > +--- Note: This isn't quite the definition in the standard
+> > +---       However, the Linux asn.1 parser doesn't understand
+> > +---       [2] EXPLICIT SEQUENCE OF OPTIONAL
+> > +---       So there's an extra intermediate TPMPolicySequence
+> > +---       definition to work around this
 > > +
-> > +config IMA_SECURE_AND_OR_TRUSTED_BOOT
-> > +	bool
-> > +	depends on IMA
-> > +	depends on IMA_ARCH_POLICY
-> > +	default n
-> > +	help
-> > +	   This option is selected by architectures to enable secure and/or
-> > +	   trusted boot based on IMA runtime policies.
-> > 
+> > +TPMKey ::= SEQUENCE {
+> > +	type		OBJECT IDENTIFIER ({tpmkey_type}),
+> > +	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
+> > +	policy		[1] EXPLICIT TPMPolicySequence
+> > OPTIONAL,
+> > +	secret		[2] EXPLICIT OCTET STRING OPTIONAL,
+> > +	parent		INTEGER ({tpmkey_parent}),
+> > +	pubkey		OCTET STRING ({tpmkey_pub}),
+> > +	privkey		OCTET STRING ({tpmkey_priv})
+> > +	}
+> > +
+> > +TPMPolicySequence ::= SEQUENCE OF TPMPolicy
+> > +
+> > +TPMPolicy ::= SEQUENCE {
+> > +	commandCode		[0] EXPLICIT INTEGER
+> > ({tpmkey_code}),
+> > +	commandPolicy		[1] EXPLICIT OCTET STRING
+> > ({tpmkey_policy})
+> > +	}
 > 
-> Why is the default for this new config "n"?
-> Is there any reason to not turn on this config if both IMA and 
-> IMA_ARCH_POLICY are set to y?
+> I have been using your set of patches in order to get this ASN.1
+> parser/definition. I am implementing an asymmetric key parser/type
+> TPM2
+> keys for enc/dec/sign/verify using keyctl. Note that this
+> implementation goes in crypto/asymmetric_keys/, and your patches sit
+> in
+> security/keys/trusted-keys/.
+> 
+> Currently I am just including "../../security/keys/trusted-
+> keys/{tpm2key.asn1.h,tpm2-policy.h}" in order to use the ASN.1 parser
+> to verify my keys, but this obviously isn't going to fly.
+> 
+> Do you (or anyone) have any ideas as to how both trusted keys and
+> asymmetric keys could share this ASN.1 parser/definition? Some common
+> area that both security and crypto could include? Or maybe there is
+> some common way the kernel does things like this?
 
-Good catch.  Having "IMA_SECURE_AND_OR_TRUSTED_BOOT" depend on
-"IMA_ARCH_POLICY" doesn't make sense.  "IMA_ARCH_POLICY" needs to be
-selected.
+Actually TPM2 asymmetric keys was also on my list.  I was going to use
+the existing template and simply move it somewhere everyone could use. 
+I also think you need the policy parser pieces because at least one
+implementation we'd need to be compatible with supports key policy.
 
-thanks,
+Regards,
 
-Mimi
+James
 
