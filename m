@@ -2,102 +2,238 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0E71723B8
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 17:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5356D172504
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 18:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730194AbgB0Ql7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 Feb 2020 11:41:59 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7780 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730235AbgB0Ql7 (ORCPT
+        id S1729988AbgB0RYW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 Feb 2020 12:24:22 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37493 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729678AbgB0RYW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 Feb 2020 11:41:59 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01RGd10M050806;
-        Thu, 27 Feb 2020 11:40:56 -0500
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2ye7120n9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Feb 2020 11:40:55 -0500
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01RGebP3030539;
-        Thu, 27 Feb 2020 16:40:53 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma01dal.us.ibm.com with ESMTP id 2ydcmm2dux-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Feb 2020 16:40:53 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01RGepGs50069896
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Feb 2020 16:40:51 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 70C88BE053;
-        Thu, 27 Feb 2020 16:40:51 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29C17BE051;
-        Thu, 27 Feb 2020 16:40:51 +0000 (GMT)
-Received: from t440p.yottatech.com (unknown [9.85.132.1])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Thu, 27 Feb 2020 16:40:50 +0000 (GMT)
-Received: (from gcwilson@localhost)
-        by t440p.yottatech.com (8.15.2/8.15.2/Submit) id 01RGekDr003315;
-        Thu, 27 Feb 2020 10:40:46 -0600
-X-Authentication-Warning: t440p.yottatech.com: gcwilson set sender to gcwilson@linux.ibm.com using -f
-Date:   Thu, 27 Feb 2020 10:40:46 -0600
-From:   George Wilson <gcwilson@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Nayna Jain <nayna@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        Linh Pham <phaml@us.ibm.com>
-Subject: Re: [PATCH] tpm: ibmvtpm: retry on H_CLOSED in tpm_ibmvtpm_send()
-Message-ID: <20200227164046.GA1936@us.ibm.com>
-References: <20200227155003.592321-1-gcwilson@linux.ibm.com>
- <20200227162339.GF5140@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200227162339.GF5140@linux.intel.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-27_05:2020-02-26,2020-02-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- clxscore=1015 mlxlogscore=797 adultscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002270125
+        Thu, 27 Feb 2020 12:24:22 -0500
+Received: by mail-pl1-f194.google.com with SMTP id q4so62999pls.4;
+        Thu, 27 Feb 2020 09:24:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ve6qlx8n2PD18qldHOCvvQzmVGt26kw1krXgvZVa2fA=;
+        b=RhtdcVGIp9Lr8sdyljy+TtnRoDkotEK9M9n5K/7aurWpF/DsuCn58K0pdtCc++BANB
+         xFfCMWwZblhiX15ykAyE3m0XGaz84oYiJlgLIp+UUW7NIlDOR8Ph38RbNkzv2KPiHoTu
+         C+zZbGCILXUaYTlHbHnPDCpfuaqXrlq3wRqQMgSfAXA0KrWKvOS/oQgBlKTjGQg6mmdB
+         AtewLVqMQd4DL5CbHPnMqndVareFVVx/KETxtypXGYtoKkcniusieiFmL95BkK5DvYS9
+         M+WCvlGF8GVqC6T2eV7Ne/mxCzn4aygjFBIZLLcCEaS2RvDMxCJ3fUOVGUirqpjdoUAL
+         9tog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ve6qlx8n2PD18qldHOCvvQzmVGt26kw1krXgvZVa2fA=;
+        b=mgsvNPLiLR/F2Pw3J3LyaVSbkRiUusIBfwIzge3QiYNxximCyTUaI3BJWIkDTy647m
+         BoqWNSQG1LQBEeateyLnlOpgQSJAt6xZah4ghxaXzP3sPz9w+XguH4mU8KXiiHOjcccs
+         XqoMlPewjSbuBOCLJB9nA+WfhCdOugWWwdjDTBkCHmZ89f7CxqWwxZNB989GMV3lnIIJ
+         dzNTAPWoYCtnZ5MGBfhpVBgT3zLCWXaP1RFGWZdwofD03xWdxhs+ZiZ1IQyZ51/qDh7t
+         TkAb9K8t1DaYRuZkNR5X/oO0v+LJklRNYeLP1t7UM1S1KbJ/xJL7D+xN2eQKbYKsp9r8
+         nJYw==
+X-Gm-Message-State: APjAAAWkkCePlBQkcnV4GhkLFwMrMgD1LK8HX6zPER6f2ZNO1/4mKxRj
+        d2+WKvpu+QMXFo9tvEPKiwfIPre6tlU=
+X-Google-Smtp-Source: APXvYqxD4FWx33tca2D/Y8lS4VB2ItILQV3VYsuBJ14UrRpGShMaOdukW0cIVqhvsZUrwielv/XN+g==
+X-Received: by 2002:a17:90a:d783:: with SMTP id z3mr15761pju.3.1582824259020;
+        Thu, 27 Feb 2020 09:24:19 -0800 (PST)
+Received: from jprestwo-test.jf.intel.com (jfdmzpr04-ext.jf.intel.com. [134.134.137.73])
+        by smtp.googlemail.com with ESMTPSA id d3sm7647681pfn.113.2020.02.27.09.24.18
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 27 Feb 2020 09:24:18 -0800 (PST)
+Message-ID: <17e025e222cb6aefb5680d6cdad64a9ecf76fa97.camel@gmail.com>
+Subject: Re: [PATCH v5 4/6] security: keys: trusted: use ASN.1 TPM2 key
+ format for the blobs
+From:   James Prestwood <prestwoj@gmail.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
+Date:   Thu, 27 Feb 2020 09:19:49 -0800
+In-Reply-To: <1582764844.4245.29.camel@HansenPartnership.com>
+References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
+         <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
+         <5c593b6f23ae41e90e6b3799141ea68944bb4034.camel@gmail.com>
+         <1582761736.4245.12.camel@HansenPartnership.com>
+         <f9b64fe39eb71a1560ca2d1887238d0b4f9f111a.camel@gmail.com>
+         <1582764844.4245.29.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 06:23:39PM +0200, Jarkko Sakkinen wrote:
-> On Thu, Feb 27, 2020 at 10:50:03AM -0500, George Wilson wrote:
-> > tpm_ibmvtpm_send() can fail during LPM resume with an H_CLOSED return
-> > from ibmvtpm_send_crq().  The PAPR says, 'The “partner partition
-> > suspended” transport event disables the associated CRQ such that any
-> > H_SEND_CRQ hcall() to the associated CRQ returns H_Closed until the CRQ
-> > has been explicitly enabled using the H_ENABLE_CRQ hcall.' This patch
-> > adds a check in tpm_ibmvtpm_send() for an H_CLOSED return from
-> > ibmvtpm_send_crq() and in that case calls tpm_ibmvtpm_resume() and
-> > retries the ibmvtpm_send_crq() once.
+On Wed, 2020-02-26 at 16:54 -0800, James Bottomley wrote:
+> On Wed, 2020-02-26 at 16:20 -0800, James Prestwood wrote:
+> > > > I have been using your set of patches in order to get this
+> > > > ASN.1
+> > > > parser/definition. I am implementing an asymmetric key
+> > > > parser/type TPM2 keys for enc/dec/sign/verify using keyctl.
+> > > > Note
+> > > > that this implementation goes in crypto/asymmetric_keys/, and
+> > > > your patches sit in security/keys/trusted-keys/.
+> > > > 
+> > > > Currently I am just including "../../security/keys/trusted-
+> > > > keys/{tpm2key.asn1.h,tpm2-policy.h}" in order to use the ASN.1
+> > > > parser to verify my keys, but this obviously isn't going to
+> > > > fly.
+> > > > 
+> > > > Do you (or anyone) have any ideas as to how both trusted keys
+> > > > and
+> > > > asymmetric keys could share this ASN.1 parser/definition? Some
+> > > > common area that both security and crypto could include? Or
+> > > > maybe
+> > > > there is some common way the kernel does things like this?
+> > > 
+> > > Actually TPM2 asymmetric keys was also on my list.  I was going
+> > > to
+> > > use the existing template and simply move it somewhere everyone
+> > > could use.  I also think you need the policy parser pieces
+> > > because
+> > > at least one implementation we'd need to be compatible with
+> > > supports key policy.
 > > 
-> > Reported-by: Linh Pham <phaml@us.ibm.com>
-> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Signed-off-by: George Wilson <gcwilson@linux.ibm.com>
+> > In terms of policy, I haven't looked into that at all for
+> > asymmetric
+> > keys. I do already have enc/dec/sign/verify asymmetric key
+> > operations
+> > all working, and used your ASN1 template for parsing (just copied
+> > it
+> > into asymmetric_keys for now). Since the asymmetric operations use
+> > HMAC sessions I didn't see much carry over from your patches (but
+> > this could change if policy stuff gets introduced).
 > 
-> What is LPM anyway?
+> There's a related patch that introduces HMAC and encryption sessions
+> for pretty much everything in the TPM:
+> 
+> 
+https://lore.kernel.org/r/1568031408.6613.29.camel@HansenPartnership.com
+> 
+> I didn't resend this time around because of patch overload, and
+> anyway,
+> the last patch needs updating for the current policy c
 
-It's PowerVM Live Partition Mobility.
+Well... I sure duplicated a lot of work. I haven't been on these lists
+long enough to see that come through. I am still reading through these
+patches, but noticed some differences already with how the session is
+started. I use the parent key handle for "salt key handle" rather than
+the null key. Also I used RSA/OAEP for encrypting the salt value rather
+than ECC. I hadn't read into the null key thing, but I will now. I
+would be more than happy to rip out the OAEP code though. I was just
+modeling everything how libtpms did it, which used OAEP.
+
+Obviously we don't want a bunch of duplicated code, but I am somewhat
+concerned about going right in and using these patches as they have
+been sitting around quite a while (plus you said they will need
+updating). Seems like the best route is get these merged, then
+update/send my patches.
 
 > 
-> /Jarkko
+> > This will go in the eventual RFC soon but while I have you here:
+> > 
+> > I also implemented key wrapping. Exposing this as a keyctl API may
+> > take some rework, hopefully with some help from others in this
+> > subsystem.
+> 
+> Wrapping for what?  The output privkey in the ASN.1 is wrapped by the
+> TPM using its internal AES key.  The ASN.1 also defines ECDH
+> wrapping,
+> that's what the secret element of the sequence is for, but you'd only
+> use that for creating a wrapped key to pass in to the TPM knowing the
+> parent.  The way current TPM crypto systems use this is they generate
+> an EC parent from the storage primary seed on the NIST P256 curve.
 
--- 
-George Wilson
-IBM Linux Technology Center
-Security Development
+I implemented CC_Import(). You generate the private key yourself
+(openssl or however) and import it into the TPM. Then the result of
+that is the TPM wrapped key that can be loaded later on. And yes this
+depends on knowing the parent handle.
+
+I basically just implemented:
+
+create_tpm2_key -w privkey.pem -p <handle> privkey.tpm
+
+My reasoning for this was because I had issues with the
+openssl_tpm2_engine, and just the whole TPM2 on Linux support as it
+stands now. I was able to get everything working on Debian, but then I
+went to test on real TPM hardware, which happened to be a Fedora box.
+This was a complete disaster; openssl_tpm2_engine did not compile due
+to (I think) a library versioning issue and build warnings. I ignored
+warnings, and manually built my own version of libtpms but this just
+resulted in create_tpm2_key to segfault. At this point I just thought
+it would be more worth my time to implement Import() myself.
+
+I think this was all a result of bad packaging on Fedora's part, but
+still, the experience didn't sit well with me and I felt it would be
+worth while to add support for this in keyctl.
+
+> 
+> It's on my todo list to accept bare primary identifiers as parents in
+> the kernel code and create the EC primary on the fly, but it's not in
+> this patch set.
+> 
+> There's also another policy problem in that generating an RSA2048 key
+> can lock the TPM up for ages, so there should likely be some type of
+> block on someone doing this.  I was thinking that an unprivileged
+> user
+> should be allowed to create EC keys but not RSA ones.
+
+I didn't have any plans for RSA key generation inside the TPM itself,
+just wrapping/asym operations.
+
+> 
+> > As it stand now you have to padd a key pair, then do a (new)
+> > pkey_wrap operation on it. This returns a DER with the wrapped TPM2
+> > key. This required modifying the public_key type, which I really
+> > did
+> > not like since it now depends on TPM. Not sure if the route I went
+> > is
+> > gonna fly without tweaking, but this is all new to me :) Again,
+> > some
+> > guidance for how this should be is needed.
+> 
+> The way it's defined to be done using the ASN.1 secret parameter is
+> simply the way the TPM2 command manual defines duplication with an
+> outer wrapper.  The TPM2 manual even has a coded example in section 4
+> and the secret is simply a TPM2B_ENCRYPTED_SECRET.
+
+I actually didn't do any inner/outer encryption when sending the key to
+the TPM (if this isn't what your talking about disregard). I just sent
+the private key over plainly. Maybe bus snooping is a concern, but as a
+first pass I just punted on this.
+
+> 
+> > Before I send these patches I need to get some testing done on real
+> > TPM2 hardware. So far its just been emulation. But these patches
+> > should be coming very soon.
+> 
+> Sure thing, but you may want to look at some of the existing code
+> that
+> this will need to interoperate with.  The most complete is the
+> openssl
+> engine, but there's also the intel version of that and openconnect
+> which all use the same key format:
+> 
+> 
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/
+
+Yes, as far as wrapping/enc/dec/sign/verify, these all inter-operate
+with openssl_tpm2_engine. I have not tried openconnect or the intel
+tools but I'll check those out to verify.
+
+Thanks,
+James
+
+> 
+> Regards,
+> 
+> James
+> 
+
