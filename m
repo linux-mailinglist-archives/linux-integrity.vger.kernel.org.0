@@ -2,132 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 588C9172984
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 21:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A6B1729B1
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2020 21:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729390AbgB0Ugo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 Feb 2020 15:36:44 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54052 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729351AbgB0Ugn (ORCPT
+        id S1729439AbgB0UtZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 Feb 2020 15:49:25 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:32923 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726758AbgB0UtZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 Feb 2020 15:36:43 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01RKTtZh098790
-        for <linux-integrity@vger.kernel.org>; Thu, 27 Feb 2020 15:36:42 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2yedd8tkt2-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 27 Feb 2020 15:36:42 -0500
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 27 Feb 2020 20:36:40 -0000
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 27 Feb 2020 20:36:39 -0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01RKacNF51970288
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Feb 2020 20:36:38 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 73871A4054;
-        Thu, 27 Feb 2020 20:36:38 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD637A4062;
-        Thu, 27 Feb 2020 20:36:37 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.166.13])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 27 Feb 2020 20:36:37 +0000 (GMT)
-Subject: Re: [PATCH] ima-evm-utils: Fix compatibility with LibreSSL
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mikhail Novosyolov <m.novosyolov@rosalinux.ru>,
+        Thu, 27 Feb 2020 15:49:25 -0500
+Received: by mail-pg1-f195.google.com with SMTP id 6so309734pgk.0;
+        Thu, 27 Feb 2020 12:49:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iE+0HSEqw566ptrftTKET2CN2Q2Su4g3nio6NsXBTe0=;
+        b=TEEIUEQcpRHLkKtqdB6Vi2wq0dyly4Ry5ExVyFrProz/78szjB2mQPWSvkclmIzHGf
+         CfVbdUyuvL25wvMpqq8JDT+kjAhuWMhr1O8zMXTLXlE3xzYQkPlMvo7N8jp6Y1RVvoql
+         Ndvwu2MTO5U7NjucyMn0uB2k6/7A0XoLP+rD4oPyKA9nsm3MCnhKdrRmrE2UHGWQ76hJ
+         lbTllQvDE2hhv2m3es/qlWX1FTKst3FKarmnm27DIlAzgR0s/LutcQwCIVlk9Ep5f4Fd
+         aedaazf1bDjk/77nlLnNcFSsClo2oJhOEzyMlwh/YxmFmtAz8rvVfMBE0pzDjv4KuKzV
+         bCDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iE+0HSEqw566ptrftTKET2CN2Q2Su4g3nio6NsXBTe0=;
+        b=et1ER87o7AxKOVAXoF5XVAfXPOt/1vXA2yd0tdkwKqKyLq8ofwidhYx2vl5oDvBi1q
+         /ugfz2wHRZgqbAwVWNbtnvHQrZtPqWUzFXRrd10Reh6BpSZk6eSa9ds4RKDFBV3QVTBb
+         xTGFIFOganideAgEY/52BccUhgj8P/GOPIAju3/OVCj8B9q1YVxoE6t6jRJ5uhBeeFa/
+         Zg6Bpz7A72LToJTuERJGhlODk1BIttQwfv87fYToLLpJyZ78ZT0UCRNoINvMzG4bdNZ4
+         dmpg483aWnSjxEzhlCzWOClINBTPNPmaNePlrTr57X/x1Pu5VNvsD5yAVhGVBVmccqts
+         atQA==
+X-Gm-Message-State: APjAAAWj/NIosl00OmRCLukisy4rsrMfbjkJHBv6+TxBII1ZFeJiwkvP
+        xL2Znt20oTXa/gjnzhYzpwzKPELEAqJQPA==
+X-Google-Smtp-Source: APXvYqzo1vW4ASGrpvYXNg3TiDL1ANJXugiEemGowi1L1Bn6nLrG39aygbWWAi822mJPiU8s4ALHAA==
+X-Received: by 2002:a63:e044:: with SMTP id n4mr1108211pgj.338.1582836564261;
+        Thu, 27 Feb 2020 12:49:24 -0800 (PST)
+Received: from jprestwo-test.jf.intel.com (jfdmzpr04-ext.jf.intel.com. [134.134.137.73])
+        by smtp.googlemail.com with ESMTPSA id n9sm4159107pfq.160.2020.02.27.12.49.23
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 27 Feb 2020 12:49:23 -0800 (PST)
+Message-ID: <57227f6880c2f33352d8f2228b16413dcf395128.camel@gmail.com>
+Subject: Re: [PATCH v5 4/6] security: keys: trusted: use ASN.1 TPM2 key
+ format for the blobs
+From:   James Prestwood <prestwoj@gmail.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         linux-integrity@vger.kernel.org
-Date:   Thu, 27 Feb 2020 15:36:37 -0500
-In-Reply-To: <20200227153825.ywas4clc3qa76rhc@altlinux.org>
-References: <63ba8482-0085-f2d3-dbb9-70bb81990f07@rosalinux.ru>
-         <1582638298.10443.196.camel@linux.ibm.com>
-         <fac0bebb-22ce-77f9-bac9-7ca5f76d1ca1@rosalinux.ru>
-         <1582777694.10443.286.camel@linux.ibm.com>
-         <20200227153825.ywas4clc3qa76rhc@altlinux.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
+Date:   Thu, 27 Feb 2020 12:44:53 -0800
+In-Reply-To: <1582835204.18538.21.camel@HansenPartnership.com>
+References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
+         <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
+         <5c593b6f23ae41e90e6b3799141ea68944bb4034.camel@gmail.com>
+         <1582761736.4245.12.camel@HansenPartnership.com>
+         <f9b64fe39eb71a1560ca2d1887238d0b4f9f111a.camel@gmail.com>
+         <1582764844.4245.29.camel@HansenPartnership.com>
+         <17e025e222cb6aefb5680d6cdad64a9ecf76fa97.camel@gmail.com>
+         <1582834760.18538.15.camel@HansenPartnership.com>
+         <1582835204.18538.21.camel@HansenPartnership.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20022720-0016-0000-0000-000002EAED60
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20022720-0017-0000-0000-0000334E238D
-Message-Id: <1582835797.10443.318.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-27_07:2020-02-26,2020-02-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=1 phishscore=0
- clxscore=1015 lowpriorityscore=0 priorityscore=1501 impostorscore=0
- adultscore=0 bulkscore=0 malwarescore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002270140
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Vitaly,
-
-On Thu, 2020-02-27 at 18:38 +0300, Vitaly Chikunov wrote:
-> Mimi,
+On Thu, 2020-02-27 at 12:26 -0800, James Bottomley wrote:
+> On Thu, 2020-02-27 at 12:19 -0800, James Bottomley wrote:
+> > On Thu, 2020-02-27 at 09:19 -0800, James Prestwood wrote:
 > 
-> On Wed, Feb 26, 2020 at 11:28:14PM -0500, Mimi Zohar wrote:
-> > On Wed, 2020-02-26 at 12:51 +0300, Mikhail Novosyolov wrote:
-> > > Hello Mimi, thanks for feedback.
-> > > 25.02.2020 16:44, Mimi Zohar пишет:
-> > > > On Sun, 2020-02-16 at 14:10 +0300, Mikhail Novosyolov wrote:
-> > > >> LibreSSL in most cases can be used as a drop-in replacement of OpenSSL.
-> > > >> Commit 07d799cb6c37 "ima-evm-utils: Preload OpenSSL engine via '--engine' option"
-> > > >> added OpenSSL-specific functions: "engines" were removed from LibreSSL long ago.
-> > > >> Instead of requiring to attach GOST support via an external library ("engine"),
-> > > >> LibreSSL has build-in implementation of GOST.
-> > > >
-> > > > OpenSSL had a builtin support for GOST, which was dropped.  From the
-> > > > OpenSSL news "Changes between 1.0.2h and 1.1.0":
-> > > >
-> > > >     The GOST engine was out of date and therefore it has been removed. An up
-> > > >     to date GOST engine is now being maintained in an external repository.
-> > > >     See:     https://wiki.openssl.org/index.php/Binaries    .  Libssl still retains
-> > > >     support for GOST ciphersuites (these are only activated if a GOST engine
-> > > >     is present).
-> > > >
-> > > > Please update the patch description to reflect the reason for OpenSSL
-> > > > dropping GOST builtin support, while LibreSSL continues to build it
-> > > > in.
+> [...]
+> > > I think this was all a result of bad packaging on Fedora's part,
+> > > but still, the experience didn't sit well with me and I felt it
+> > > would be worth while to add support for this in keyctl.
 > > 
-> > > The reasons why OpenSSL decided to do it are out of my scope, I can
-> > > just write that OpenSSL had GOST, then dropped it, then gost-engine
-> > > appeared as an OpenSSL plugin and that LibreSSL has GOST built in
-> > > and dropped engines API after forking from OpenSSL. Will it be OK?
+> > Well there's a list you can report problems to and get help:
 > > 
-> > The question is whether LibreSSL is using the back level version of
-> > GOST that OpenSSL dropped or has it been updated?  The patch
-> > description should be updated accordingly.
+> > openssl-tpm2-engine@groups.io
+> > 
+> > I've got to confess I develop on openSUSE and debian, so Fedora
+> > doesn't get much testing.
 > 
-> AFAIK, LibreSSL is using independent implementation of Streebog. It
-> wasn't exist in OpenSSL before split and different from what is in
-> gost-engine (also having different authors).
-
-Thank you for the explanation.
-
+> I should add that even though I don't test on fedora, the opensuse
+> build service does in my TPM build environment:
 > 
-> I don't really understand reason to know implementation history, if,
-> as library users, we should be enough to know they have compatible APIs.
+> 
+https://build.opensuse.org/package/show/home:jejb1:TPM/openssl_tpm2_engine
+> 
+> It says the builds for Fedora 26, 29 and Rawhide all succeeded.  The
+> build service does both building and testing with the swtpm, so the
+> engine on fedora gets a pretty extensive workout.
 
-The OpenSSL crypto team is way more experienced than me.  If LibreSSL
-was using the crypto version that OpenSSL deemed too old, why should
-ima-evm-utils support it?
-
-Last year you added OpenSSL "Engine" support.  Now I'm being asked to
-conditionally compile it out based on ifdefs.  As much as possible, I
-prefer avoiding ifdefs.
-
-Mimi
+Hmm, ok I will be trying this again then. Thanks.
+> 
+> James
+> 
 
