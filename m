@@ -2,107 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6454175DF4
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2020 16:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791D7175F6F
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2020 17:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726751AbgCBPLo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Mar 2020 10:11:44 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2497 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726621AbgCBPLo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Mar 2020 10:11:44 -0500
-Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id A2C0C91186757F875EB4;
-        Mon,  2 Mar 2020 15:11:42 +0000 (GMT)
-Received: from fraeml704-chm.china.huawei.com (10.206.15.53) by
- LHREML712-CAH.china.huawei.com (10.201.108.35) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Mon, 2 Mar 2020 15:11:42 +0000
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1713.5; Mon, 2 Mar 2020 16:11:41 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1713.004;
- Mon, 2 Mar 2020 16:11:42 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v3 2/8] ima: Switch to ima_hash_algo for boot aggregate
-Thread-Topic: [PATCH v3 2/8] ima: Switch to ima_hash_algo for boot aggregate
-Thread-Index: AQHV3/kpNT3OoKRF00CRxabm/9u1E6gU8McAgADT8jCAH5syAIAAFKYQ///9dQCAABQMwA==
-Date:   Mon, 2 Mar 2020 15:11:41 +0000
-Message-ID: <a5e0cdc4839e478d926b90bd5ba0857c@huawei.com>
-References: <20200210100048.21448-1-roberto.sassu@huawei.com>
-         <20200210100048.21448-3-roberto.sassu@huawei.com>
-         <1581373420.5585.920.camel@linux.ibm.com>
-         <6955307747034265bd282bf68c368f34@huawei.com>
-         <1583156506.8544.60.camel@linux.ibm.com>
-         <8a6fb34e18b147fa811e82c78fb30d66@huawei.com>
- <1583160394.8544.89.camel@linux.ibm.com>
-In-Reply-To: <1583160394.8544.89.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.220.96.108]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727075AbgCBQVo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Mar 2020 11:21:44 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50322 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727072AbgCBQVo (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 2 Mar 2020 11:21:44 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 022GJi8C022326;
+        Mon, 2 Mar 2020 11:21:36 -0500
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2yfk5m1vdj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Mar 2020 11:21:36 -0500
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 022G5q9C028755;
+        Mon, 2 Mar 2020 16:21:34 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma05wdc.us.ibm.com with ESMTP id 2yffk63k9c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Mar 2020 16:21:34 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 022GLXst60883238
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Mar 2020 16:21:33 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BC3696E04E;
+        Mon,  2 Mar 2020 16:21:33 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB9A56E053;
+        Mon,  2 Mar 2020 16:21:27 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  2 Mar 2020 16:21:27 +0000 (GMT)
+Subject: Re: [PATCH v5 3/3] tpm: ibmvtpm: Add support for TPM 2
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, aik@ozlabs.ru,
+        david@gibson.dropbear.id.au, linux-kernel@vger.kernel.org,
+        nayna@linux.vnet.ibm.com, gcwilson@linux.ibm.com, jgg@ziepe.ca
+References: <20200228030330.18081-1-stefanb@linux.vnet.ibm.com>
+ <20200228030330.18081-4-stefanb@linux.vnet.ibm.com>
+ <20200302111514.GC3979@linux.intel.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <2f8a9519-c1ab-8d46-18c4-4e0f9d53e3ff@linux.ibm.com>
+Date:   Mon, 2 Mar 2020 11:21:27 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+In-Reply-To: <20200302111514.GC3979@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-02_06:2020-03-02,2020-03-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 clxscore=1015 impostorscore=0 spamscore=0 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003020113
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86
-em9oYXJAbGludXguaWJtLmNvbV0NCj4gU2VudDogTW9uZGF5LCBNYXJjaCAyLCAyMDIwIDM6NDcg
-UE0NCj4gVG86IFJvYmVydG8gU2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT47DQo+IEph
-bWVzLkJvdHRvbWxleUBIYW5zZW5QYXJ0bmVyc2hpcC5jb207DQo+IGphcmtrby5zYWtraW5lbkBs
-aW51eC5pbnRlbC5jb207IERtaXRyeSBLYXNhdGtpbg0KPiA8ZG1pdHJ5Lmthc2F0a2luQGdtYWls
-LmNvbT4NCj4gQ2M6IGxpbnV4LWludGVncml0eUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LXNlY3Vy
-aXR5LW1vZHVsZUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
-cmc7IFNpbHZpdSBWbGFzY2VhbnUNCj4gPFNpbHZpdS5WbGFzY2VhbnVAaHVhd2VpLmNvbT47IHN0
-YWJsZUB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MyAyLzhdIGltYTog
-U3dpdGNoIHRvIGltYV9oYXNoX2FsZ28gZm9yIGJvb3QNCj4gYWdncmVnYXRlDQo+IA0KPiANCj4g
-PiA+ID4gPiBPbiBNb24sIDIwMjAtMDItMTAgYXQgMTE6MDAgKzAxMDAsIFJvYmVydG8gU2Fzc3Ug
-d3JvdGU6DQo+ID4gPiBNeSBpbml0aWFsIHBhdGNoIGF0dGVtcHRlZCB0byB1c2UgYW55IGNvbW1v
-biBUUE0gYW5kIGtlcm5lbCBoYXNoDQo+ID4gPiBhbGdvcml0aG0gdG8gY2FsY3VsYXRlIHRoZSBi
-b290X2FnZ3JlZ2F0ZS4gwqBUaGUgZGlzY3Vzc2lvbiB3aXRoIEphbWVzDQo+ID4gPiB3YXMgcHJl
-dHR5IGNsZWFyLCB3aGljaCB5b3UgZXZlbiBzdGF0ZWQgaW4gdGhlIENoYW5nZWxvZy4gwqBFaXRo
-ZXIgd2UNCj4gPiA+IHVzZSB0aGUgSU1BIGRlZmF1bHQgaGFzaCBhbGdvcml0aG0sIFNIQTI1NiBm
-b3IgVFBNIDIuMCBvciBTSEExIGZvcg0KPiBUUE0NCj4gPiA+IDEuMiBmb3IgdGhlIGJvb3QtYWdn
-cmVnYXRlLg0KPiA+DQo+ID4gT2ssIEkgZGlkbid0IHVuZGVyc3RhbmQgZnVsbHkuIEkgdGhvdWdo
-dCB3ZSBzaG91bGQgdXNlIHRoZSBkZWZhdWx0IElNQQ0KPiA+IGFsZ29yaXRobSBhbmQgc2VsZWN0
-IFNIQTI1NiBhcyBmYWxsYmFjayBjaG9pY2UgZm9yIFRQTSAyLjAgaWYgdGhlcmUgaXMgbm8NCj4g
-PiBQQ1IgYmFuayBmb3IgZGVmYXVsdCBhbGdvcml0aG0uDQo+IA0KPiBZZXMsIHByZWZlcmVuY2Ug
-aXMgZ2l2ZW4gdG8gdGhlIElNQSBkZWZhdWx0IGFsZ29yaXRobSwgYnV0IGl0IHNob3VsZA0KPiBm
-YWxsIGJhY2sgdG8gdXNpbmcgU0hBMjU2IG9yIFNIQTEsIGJhc2VkIG9uIHRoZSBUUE0uDQoNCk9r
-LiBUaGUgcGF0Y2ggYWxyZWFkeSBkb2VzIGl0IGV2ZW4gaWYgdGhlIFRQTSB2ZXJzaW9uIGlzIG5v
-dCBjaGVja2VkLg0KRm9yIFRQTSAxLjIsIGlmIHRoZSBkZWZhdWx0IGFsZ29yaXRobSBpcyBub3Qg
-U0hBMSB0aGUgcGF0Y2ggd2lsbCBzZWxlY3QNCnRoZSBmaXJzdCBQQ1IgYmFuayAoU0hBMSkuDQoN
-ClNob3VsZCBJIHNlbmQgYSBuZXcgcGF0Y2ggd2hpY2ggZXhwbGljaXRseSBjaGVja3MgdGhlIFRQ
-TSB2ZXJzaW9uPw0KDQo+ID4gSSBhZGRpdGlvbmFsbHkgaW1wbGVtZW50ZWQgdGhlIGxvZ2ljIHRv
-DQo+ID4gc2VsZWN0IHRoZSBmaXJzdCBQQ1IgYmFuayBpZiB0aGUgU0hBMjU2IFBDUiBiYW5rIGlz
-IG5vdCBhdmFpbGFibGUgYnV0IEkgY2FuDQo+ID4gcmVtb3ZlIGl0Lg0KPiA+DQo+ID4gU0hBMjU2
-IHNob3VsZCBiZSB0aGUgbWluaW11bSByZXF1aXJlbWVudCBmb3IgYm9vdCBhZ2dyZWdhdGUuIFRo
-ZQ0KPiA+IGFkdmFudGFnZSBvZiB1c2luZyB0aGUgZGVmYXVsdCBJTUEgYWxnb3JpdGhtIGlzIHRo
-YXQgaXQgd2lsbCBiZSBwb3NzaWJsZSB0bw0KPiA+IHNlbGVjdCBzdHJvbmdlciBhbGdvcml0aG1z
-IHdoZW4gdGhleSBhcmUgc3VwcG9ydGVkIGJ5IHRoZSBUUE0uIFdlDQo+IG1pZ2h0DQo+ID4gaW50
-cm9kdWNlIGEgbmV3IG9wdGlvbiB0byBzcGVjaWZ5IG9ubHkgdGhlIGFsZ29yaXRobSBmb3IgYm9v
-dCBhZ2dyZWdhdGUsDQo+ID4gbGlrZSBKYW1lcyBzdWdnZXN0ZWQgdG8gc3VwcG9ydCBlbWJlZGRl
-ZCBzeXN0ZW1zLiBMZXQgbWUga25vdyB3aGljaA0KPiA+IG9wdGlvbiB5b3UgcHJlZmVyLg0KPiAN
-Cj4gSSBkb24ndCByZW1lbWJlciBKYW1lcyBzYXlpbmcgdGhhdCwgYnV0IGlmIHRoZSBjb21tdW5p
-dHkgcmVhbGx5IHdhbnRzDQo+IHRoYXQgc3VwcG9ydCwgdGhlbiBpdCBzaG91bGQgYmUgdXBzdHJl
-YW1lZCBpbmRlcGVuZGVudGx5LCBhcyBhDQo+IHNlcGFyYXRlIHBhdGNoLiDCoExldCdzIGZpcnN0
-IGdldCB0aGUgYmFzaWNzIHdvcmtpbmcuDQoNCk9rLg0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpI
-VUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcg
-RGlyZWN0b3I6IExpIFBlbmcsIExpIEppYW4sIFNoaSBZYW5saQ0K
+On 3/2/20 6:15 AM, Jarkko Sakkinen wrote:
+> On Thu, Feb 27, 2020 at 10:03:30PM -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Support TPM 2 in the IBM vTPM driver. The hypervisor tells us what
+>> version of TPM is connected through the vio_device_id.
+> I'd prefer "TPM2" over "TPM 2".
+Fixed.
+>
+>> In case a TPM 2 is found, we set the TPM_CHIP_FLAG_TPM2 flag
+>> and get the command codes attributes table. The driver does
+>> not need the timeouts and durations, though.
+> A TPM2 what? TPM2 is not a thing.
+
+
+I don't know what you mean? Is it the word 'found' and it should be 
+'present' ? Otherwise a TPM2 is a 'thing' / object / device, at least to me.
+
+
+    Stefan
+
