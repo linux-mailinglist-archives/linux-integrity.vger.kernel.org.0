@@ -2,103 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5100B17636A
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2020 20:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455341765D9
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2020 22:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727427AbgCBTFh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Mar 2020 14:05:37 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39015 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727126AbgCBTFg (ORCPT
+        id S1726877AbgCBVVY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Mar 2020 16:21:24 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16080 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726695AbgCBVVX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Mar 2020 14:05:36 -0500
-Received: by mail-pg1-f196.google.com with SMTP id s2so268027pgv.6;
-        Mon, 02 Mar 2020 11:05:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=esuw7U2FE0e3pYIvYfD1yXI3wEQn68uhOSyyEHeSXF8=;
-        b=l9QalrK/RprPYztikGcXCQtBZf5ZDDumv3bnDJOrRTjLeKhb3a9dFxLx7kzP0nUUqs
-         TWR8we+f7WrV0+qFV6tJ6PD9q4fNPz8SCU88+2bcs2VT6qEyDXEMuZ5waj/+8VKHkJPR
-         wLMcrLcqqJ2VKc32XJFdqN6jM6mxKM0e4ePyjkloHlDOevRPFZwJLsfvIUWYV++R93tR
-         JI+eUpLGxVDTzAb20F6z8DkesSGnlqqlcJFVnRgyIRw9flTDK4nrkkIzeXsVw/2MBIRH
-         occMIj3l0U9gFJ3FbM8Bg4huBp04Sk4WwlUvt4MAfeUmXu2ajLxX1hYbfAGsqW0F1ZAB
-         Ob5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=esuw7U2FE0e3pYIvYfD1yXI3wEQn68uhOSyyEHeSXF8=;
-        b=FACHE97WPq6fE/CbBuVhsi160eSTUCAz/PSUt6jj9qH0WZNTV809A3eqeWChSbGqrD
-         fFj6WpCziaVBeoGYb0Ic1RYXHwjO3iDB8wcTFSTulMilODGJ7IkPZIn12eC8+xyosto/
-         eesef+kaoLxlUxBzkbNxWm2lxYFgfilarSCBklQtFIV9rBML1hlRXR0963zFqO4VsoF1
-         V+lhA/qhomX/BSx8meOsn8GqbSo8D/7ZOU+GkJz1gvDU02xWRr/xY2NUnVL7kL56VN+/
-         WOFIc/2JIHaLQ4afvo1LZEdyXP1pZfEcRFdDgawLB2jN2dEjXFFRLEI/2Btkor0WrjRQ
-         Ba4w==
-X-Gm-Message-State: ANhLgQ30qD2HcMj9nwjhxLMOQHdMHuZMVEUPaKHom0t5XtxlARLTudrd
-        PH1DzbzuU/3lXS7SREP6bDM=
-X-Google-Smtp-Source: ADFU+vsQonHmhjbJfPY/k+/wTLf99UzFSo/Wi+HMTOQ6iO7Rt92t7qrZjgZedgs9s05Vh9DtVRPkrA==
-X-Received: by 2002:a63:ad42:: with SMTP id y2mr300993pgo.445.1583175934117;
-        Mon, 02 Mar 2020 11:05:34 -0800 (PST)
-Received: from jprestwo-test.jf.intel.com (jfdmzpr04-ext.jf.intel.com. [134.134.137.73])
-        by smtp.googlemail.com with ESMTPSA id x18sm10020729pfo.148.2020.03.02.11.05.32
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 02 Mar 2020 11:05:32 -0800 (PST)
-Message-ID: <0795de67c8b9fc3a22beb61a327d1a5397a978c4.camel@gmail.com>
-Subject: Re: [PATCH v5 4/6] security: keys: trusted: use ASN.1 TPM2 key
- format for the blobs
-From:   James Prestwood <prestwoj@gmail.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Date:   Mon, 02 Mar 2020 11:00:54 -0800
-In-Reply-To: <1582834760.18538.15.camel@HansenPartnership.com>
-References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
-         <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
-         <5c593b6f23ae41e90e6b3799141ea68944bb4034.camel@gmail.com>
-         <1582761736.4245.12.camel@HansenPartnership.com>
-         <f9b64fe39eb71a1560ca2d1887238d0b4f9f111a.camel@gmail.com>
-         <1582764844.4245.29.camel@HansenPartnership.com>
-         <17e025e222cb6aefb5680d6cdad64a9ecf76fa97.camel@gmail.com>
-         <1582834760.18538.15.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Mon, 2 Mar 2020 16:21:23 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 022LLKUk090125
+        for <linux-integrity@vger.kernel.org>; Mon, 2 Mar 2020 16:21:23 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2yfnbf8580-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 02 Mar 2020 16:21:22 -0500
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <heiko.carstens@de.ibm.com>;
+        Mon, 2 Mar 2020 21:21:11 -0000
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 2 Mar 2020 21:21:09 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 022LK9AD37880264
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Mar 2020 21:20:09 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6FF295204F;
+        Mon,  2 Mar 2020 21:21:07 +0000 (GMT)
+Received: from osiris (unknown [9.145.25.181])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 0072952059;
+        Mon,  2 Mar 2020 21:21:06 +0000 (GMT)
+Date:   Mon, 2 Mar 2020 22:21:05 +0100
+From:   Heiko Carstens <heiko.carstens@de.ibm.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Philipp Rudo <prudo@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ima: add a new CONFIG for loading arch-specific policies
+References: <1582744207-25969-1-git-send-email-nayna@linux.ibm.com>
+ <1583160524.8544.91.camel@linux.ibm.com>
+ <CAKv+Gu_E9O05xB7i2Y8KiMJUjtZoq54GxSbHnyTFePcF6fqQNA@mail.gmail.com>
+ <1583161018.8544.96.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1583161018.8544.96.camel@linux.ibm.com>
+X-TM-AS-GCONF: 00
+x-cbid: 20030221-0012-0000-0000-0000038C6B98
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20030221-0013-0000-0000-000021C91FE8
+Message-Id: <20200302212105.GH4035@osiris>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-02_08:2020-03-02,2020-03-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 suspectscore=1 adultscore=0 mlxlogscore=999
+ clxscore=1011 priorityscore=1501 mlxscore=0 impostorscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003020138
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi James,
-
-> > > 
-> > > There's a related patch that introduces HMAC and encryption
-> > > sessions for pretty much everything in the TPM:
-> > > 
-> > > 
+On Mon, Mar 02, 2020 at 09:56:58AM -0500, Mimi Zohar wrote:
+> On Mon, 2020-03-02 at 15:52 +0100, Ard Biesheuvel wrote:
+> > On Mon, 2 Mar 2020 at 15:48, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > > > index beea77046f9b..cafa66313fe2 100644
+> > > > --- a/arch/x86/Kconfig
+> > > > +++ b/arch/x86/Kconfig
+> > > > @@ -230,6 +230,7 @@ config X86
+> > > >       select VIRT_TO_BUS
+> > > >       select X86_FEATURE_NAMES                if PROC_FS
+> > > >       select PROC_PID_ARCH_STATUS             if PROC_FS
+> > > > +     select IMA_SECURE_AND_OR_TRUSTED_BOOT   if EFI
+> > >
+> > > Not everyone is interested in enabling IMA or requiring IMA runtime
+> > > policies.  With this patch, enabling IMA_ARCH_POLICY is therefore
+> > > still left up to the person building the kernel.  As a result, I'm
+> > > seeing the following warning, which is kind of cool.
+> > >
+> > > WARNING: unmet direct dependencies detected for
+> > > IMA_SECURE_AND_OR_TRUSTED_BOOT
+> > >   Depends on [n]: INTEGRITY [=y] && IMA [=y] && IMA_ARCH_POLICY [=n]
+> > >   Selected by [y]:
+> > >   - X86 [=y] && EFI [=y]
+> > >
+> > > Ard, Michael, Martin, just making sure this type of warning is
+> > > acceptable before upstreaming this patch.  I would appreciate your
+> > > tags.
+> > >
 > > 
+> > Ehm, no, warnings like these are not really acceptable. It means there
+> > is an inconsistency in the way the Kconfig dependencies are defined.
 > > 
-https://lore.kernel.org/r/1568031408.6613.29.camel@HansenPartnership
-> > .
-> > com
-> > > 
-> > > I didn't resend this time around because of patch overload, and
-> > > anyway, the last patch needs updating for the current policy c
+> > Does this help:
 > > 
+> >   select IMA_SECURE_AND_OR_TRUSTED_BOOT   if EFI && IMA_ARCH_POLICY
+> > 
+> > ?
+> 
+> Yes, that's fine for x86.  Michael, Martin, do you want something
+> similar or would you prefer actually selecting IMA_ARCH_POLICY?
 
-You had mentioned the need for updating, but these (or at least patch
-1) failed to apply to v5.5. Looks like some headers had been shifted
-around since then. Could you rebase these when you get a chance? That
-way I can refactor my patches to use your session stuff.
+For s390 something like
 
-Its hard to to be completely certain but I think all I need is patch
-6/12. If that could be made to be a standalone patch and not depend on
-the previous sets that could work too.
+	select IMA_SECURE_AND_OR_TRUSTED_BOOT if IMA_ARCH_POLICY
+
+should be fine.
 
 Thanks,
-James
+Heiko
 
