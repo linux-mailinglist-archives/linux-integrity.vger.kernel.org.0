@@ -2,123 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A079A17594D
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2020 12:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A95175A77
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2020 13:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgCBLPT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Mar 2020 06:15:19 -0500
-Received: from mga01.intel.com ([192.55.52.88]:43024 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725996AbgCBLPS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Mar 2020 06:15:18 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Mar 2020 03:15:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,506,1574150400"; 
-   d="scan'208";a="412244791"
-Received: from aorourk1-mobl.ger.corp.intel.com (HELO localhost) ([10.251.86.123])
-  by orsmga005.jf.intel.com with ESMTP; 02 Mar 2020 03:15:15 -0800
-Date:   Mon, 2 Mar 2020 13:15:14 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, aik@ozlabs.ru,
-        david@gibson.dropbear.id.au, linux-kernel@vger.kernel.org,
-        nayna@linux.vnet.ibm.com, gcwilson@linux.ibm.com, jgg@ziepe.ca,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v5 3/3] tpm: ibmvtpm: Add support for TPM 2
-Message-ID: <20200302111514.GC3979@linux.intel.com>
-References: <20200228030330.18081-1-stefanb@linux.vnet.ibm.com>
- <20200228030330.18081-4-stefanb@linux.vnet.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200228030330.18081-4-stefanb@linux.vnet.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727715AbgCBM2Q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Mar 2020 07:28:16 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42400 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727519AbgCBM2Q (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 2 Mar 2020 07:28:16 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D55CD8EE17D;
+        Mon,  2 Mar 2020 04:28:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1583152095;
+        bh=aUrA8TpMQ8qYcAWkjQOPTgkVcNDl17+zqhBrmCjh+mE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=G1Hbcz7Cy7fgrKQ3T5d+DntHK7oOwX5YWNrH0LLANX0sg98owhGpx5qfF/z4oeYhU
+         9YZo4WYjh7VzhhVXHaUUR1LCM0cFnOFEOnu2M0szGGfSyPxadxHZv80Oqqnk+Vx0Yk
+         m/sCKT2xEIuOcMhEPc+ywGGMwqoMFn5B4x6Qic/U=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Y-XjYo-cQv8e; Mon,  2 Mar 2020 04:28:15 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id E89068EE11D;
+        Mon,  2 Mar 2020 04:28:13 -0800 (PST)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
+Subject: [PATCH v6 0/6] TPM 2.0 trusted keys with attached policy
+Date:   Mon,  2 Mar 2020 07:27:53 -0500
+Message-Id: <20200302122759.5204-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 10:03:30PM -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> Support TPM 2 in the IBM vTPM driver. The hypervisor tells us what
-> version of TPM is connected through the vio_device_id.
+This is a respin to update patch 3/6 with comment tidying and if/else
+untangling.
 
-I'd prefer "TPM2" over "TPM 2".
+General cover letter:
 
-> In case a TPM 2 is found, we set the TPM_CHIP_FLAG_TPM2 flag
-> and get the command codes attributes table. The driver does
-> not need the timeouts and durations, though.
+This patch updates the trusted key code to export keys in the ASN.1
+format used by current TPM key tools (openssl_tpm2_engine and
+openconnect).  It also simplifies the use of policy with keys because
+the ASN.1 format is designed to carry a description of how to
+construct the policy, with the result that simple policies (like
+authorization and PCR locking) can now be constructed and used in the
+kernel, bringing the TPM 2.0 policy use into line with how TPM 1.2
+works.
 
-A TPM2 what? TPM2 is not a thing.
+The key format is designed to be compatible with our two openssl
+engine implementations as well as with the format used by openconnect.
+I've added seal/unseal to my engine so I can use it for
+interoperability testing and I'll later use this for sealed symmetric
+keys via engine:
 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  drivers/char/tpm/tpm.h         | 1 +
->  drivers/char/tpm/tpm2-cmd.c    | 2 +-
->  drivers/char/tpm/tpm_ibmvtpm.c | 8 ++++++++
->  3 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 5620747da0cf..ad55c9824338 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -226,6 +226,7 @@ int tpm2_auto_startup(struct tpm_chip *chip);
->  void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
->  unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
->  int tpm2_probe(struct tpm_chip *chip);
-> +int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
->  int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
->  int tpm2_init_space(struct tpm_space *space);
->  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 13696deceae8..b6a0ee6bb03a 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -613,7 +613,7 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
->  	return rc;
->  }
->  
-> -static int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip)
-> +int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip)
->  {
->  	struct tpm_buf buf;
->  	u32 nr_commands;
-> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
-> index eee566eddb35..676a65148f82 100644
-> --- a/drivers/char/tpm/tpm_ibmvtpm.c
-> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
-> @@ -29,6 +29,7 @@ static const char tpm_ibmvtpm_driver_name[] = "tpm_ibmvtpm";
->  
->  static const struct vio_device_id tpm_ibmvtpm_device_table[] = {
->  	{ "IBM,vtpm", "IBM,vtpm"},
-> +	{ "IBM,vtpm", "IBM,vtpm20"},
->  	{ "", "" }
->  };
->  MODULE_DEVICE_TABLE(vio, tpm_ibmvtpm_device_table);
-> @@ -672,6 +673,13 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
->  	if (rc)
->  		goto init_irq_cleanup;
->  
-> +	if (!strcmp(id->compat, "IBM,vtpm20")) {
-> +		chip->flags |= TPM_CHIP_FLAG_TPM2;
-> +		rc = tpm2_get_cc_attrs_tbl(chip);
-> +		if (rc)
-> +			goto init_irq_cleanup;
-> +	}
-> +
->  	if (!wait_event_timeout(ibmvtpm->crq_queue.wq,
->  				ibmvtpm->rtce_buf != NULL,
->  				HZ)) {
-> -- 
-> 2.23.0
-> 
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/
 
-The code change looks fine.
+James
 
-/Jarkko
+---
+
+James Bottomley (6):
+  lib: add ASN.1 encoder
+  oid_registry: Add TCG defined OIDS for TPM keys
+  security: keys: trusted: fix TPM2 authorizations
+  security: keys: trusted: use ASN.1 TPM2 key format for the blobs
+  security: keys: trusted: add ability to specify arbitrary policy
+  security: keys: trusted: implement counter/timer policy
+
+ Documentation/security/keys/trusted-encrypted.rst |  64 ++-
+ include/keys/trusted-type.h                       |   7 +-
+ include/linux/asn1_encoder.h                      |  32 ++
+ include/linux/oid_registry.h                      |   5 +
+ include/linux/tpm.h                               |   8 +
+ lib/Makefile                                      |   2 +-
+ lib/asn1_encoder.c                                | 431 ++++++++++++++++++++
+ security/keys/Kconfig                             |   2 +
+ security/keys/trusted-keys/Makefile               |   2 +-
+ security/keys/trusted-keys/tpm2-policy.c          | 463 ++++++++++++++++++++++
+ security/keys/trusted-keys/tpm2-policy.h          |  31 ++
+ security/keys/trusted-keys/tpm2key.asn1           |  23 ++
+ security/keys/trusted-keys/trusted_tpm1.c         |  56 ++-
+ security/keys/trusted-keys/trusted_tpm2.c         | 370 +++++++++++++++--
+ 14 files changed, 1459 insertions(+), 37 deletions(-)
+ create mode 100644 include/linux/asn1_encoder.h
+ create mode 100644 lib/asn1_encoder.c
+ create mode 100644 security/keys/trusted-keys/tpm2-policy.c
+ create mode 100644 security/keys/trusted-keys/tpm2-policy.h
+ create mode 100644 security/keys/trusted-keys/tpm2key.asn1
+
+-- 
+2.16.4
+
