@@ -2,250 +2,137 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC77F175A99
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2020 13:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DE2175BF2
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2020 14:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727589AbgCBMfA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Mar 2020 07:35:00 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42702 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727361AbgCBMfA (ORCPT
+        id S1727823AbgCBNl5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Mar 2020 08:41:57 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46142 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727749AbgCBNl4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Mar 2020 07:35:00 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 727AF8EE17D;
-        Mon,  2 Mar 2020 04:35:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1583152500;
-        bh=E7A9rxqJCYWhGKJHrVCUf5EIaNdcgc0ex+Yo5fpTRWs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qi9tOUEgbriZki3fbTO+dCHROy23yrHSmi8/QmaJsdx8crfLDWWL7ZQuUsTbRbgBK
-         vqOW6FsIywX+nFtQnUmNvMG6DrkDzhjRBggwZIa2UzgdiWZjB84qHlbe0uRFJZ45i5
-         YuEnDRgpzNPSz8OD72CZUrXf4R5pzayar45lb15E=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UEkO_SEyZV4f; Mon,  2 Mar 2020 04:35:00 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 291EC8EE11D;
-        Mon,  2 Mar 2020 04:34:59 -0800 (PST)
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Subject: [PATCH v6 6/6] security: keys: trusted: implement counter/timer policy
-Date:   Mon,  2 Mar 2020 07:27:59 -0500
-Message-Id: <20200302122759.5204-7-James.Bottomley@HansenPartnership.com>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200302122759.5204-1-James.Bottomley@HansenPartnership.com>
-References: <20200302122759.5204-1-James.Bottomley@HansenPartnership.com>
+        Mon, 2 Mar 2020 08:41:56 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 022DZPZo129229
+        for <linux-integrity@vger.kernel.org>; Mon, 2 Mar 2020 08:41:55 -0500
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2yh0dtxkd2-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 02 Mar 2020 08:41:55 -0500
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 2 Mar 2020 13:41:53 -0000
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 2 Mar 2020 13:41:49 -0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 022Dfm5K59572276
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Mar 2020 13:41:48 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9644D11C04A;
+        Mon,  2 Mar 2020 13:41:48 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 87F6B11C050;
+        Mon,  2 Mar 2020 13:41:47 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.229.179])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  2 Mar 2020 13:41:47 +0000 (GMT)
+Subject: Re: [PATCH v3 2/8] ima: Switch to ima_hash_algo for boot aggregate
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "James.Bottomley@HansenPartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Date:   Mon, 02 Mar 2020 08:41:46 -0500
+In-Reply-To: <6955307747034265bd282bf68c368f34@huawei.com>
+References: <20200210100048.21448-1-roberto.sassu@huawei.com>
+         <20200210100048.21448-3-roberto.sassu@huawei.com>
+         <1581373420.5585.920.camel@linux.ibm.com>
+         <6955307747034265bd282bf68c368f34@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20030213-0016-0000-0000-000002EC466F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20030213-0017-0000-0000-0000334F8904
+Message-Id: <1583156506.8544.60.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-02_04:2020-03-02,2020-03-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 mlxscore=0
+ clxscore=1015 phishscore=0 bulkscore=0 spamscore=0 impostorscore=0
+ adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2001150001 definitions=main-2003020101
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This is actually a generic policy allowing a range of comparisons
-against any value set in the TPM Clock, which includes things like the
-reset count, a monotonic millisecond count and the restart count.  The
-most useful comparison is against the millisecond count for expiring
-keys.  However, you have to remember that currently Linux doesn't try
-to sync the epoch timer with the TPM, so the expiration is actually
-measured in how long the TPM itself has been powered on ... the TPM
-timer doesn't count while the system is powered down.  The millisecond
-counter is a u64 quantity found at offset 8 in the timer structure,
-and the <= comparision operand is 9, so a policy set to expire after the
-TPM has been up for 100 seconds would look like
+On Tue, 2020-02-11 at 10:09 +0000, Roberto Sassu wrote:
+> > -----Original Message-----
 
-0000016d00000000000f424000080009
+Please find/use a mailer that doesn't include this junk.
 
-Where 0x16d is the counter timer policy code and 0xf4240 is 100 000 in
-hex.
+> > On Mon, 2020-02-10 at 11:00 +0100, Roberto Sassu wrote:
+> > > boot_aggregate is the first entry of IMA measurement list. Its purpose is
+> > > to link pre-boot measurements to IMA measurements. As IMA was
+> > designed to
+> > > work with a TPM 1.2, the SHA1 PCR bank was always selected.
+> > >
+> > > Currently, even if a TPM 2.0 is used, the SHA1 PCR bank is selected.
+> > > However, the assumption that the SHA1 PCR bank is always available is not
+> > > correct, as PCR banks can be selected with the PCR_Allocate() TPM
+> > command.
+> > >
+> > > This patch tries to use ima_hash_algo as hash algorithm for
+> > boot_aggregate.
+> > > If no PCR bank uses that algorithm, the patch tries to find the SHA256 PCR
+> > > bank (which is mandatory in the TCG PC Client specification).
+> > 
+> > Up to here, the patch description matches the code.
+> > > If also this
+> > > bank is not found, the patch selects the first one. If the TPM algorithm
+> > > of that bank is not mapped to a crypto ID, boot_aggregate is set to zero.
+> > 
+> > This comment and the one inline are left over from previous version.
+> 
+> Hi Mimi
+> 
+> actually the code does what is described above. bank_idx is initially
+> set to zero and remains as it is if there is no PCR bank for the default
+> IMA algorithm or SHA256.
 
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- Documentation/security/keys/trusted-encrypted.rst | 29 ++++++++++++++++
- include/linux/tpm.h                               |  1 +
- security/keys/trusted-keys/tpm2-policy.c          | 40 ++++++++++++++++++++++-
- security/keys/trusted-keys/trusted_tpm2.c         | 36 +++++++++++++++++++-
- 4 files changed, 104 insertions(+), 2 deletions(-)
+Sorry for the delay in continuing to review this patch set.  It took a
+while to write ima-evm-utils regression tests for it.
 
-diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-index b68d3eb73f00..53a6196c7df9 100644
---- a/Documentation/security/keys/trusted-encrypted.rst
-+++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -241,3 +241,32 @@ about the usage can be found in the file
- Another new format 'enc32' has been defined in order to support encrypted keys
- with payload size of 32 bytes. This will initially be used for nvdimm security
- but may expand to other usages that require 32 bytes payload.
-+
-+Appendix
-+--------
-+
-+TPM 2.0 Policies
-+----------------
-+
-+The current TPM supports PCR lock policies as documented above and
-+CounterTimer policies which can be used to create expiring keys.  One
-+caveat with expiring keys is that the TPM millisecond counter does not
-+update while a system is powered off and Linux does not sync the TPM
-+millisecond count with its internal clock, so the best you can expire
-+in is in terms of how long any given TPM has been powered on.  (FIXME:
-+Linux should simply update the millisecond clock to the current number
-+of seconds past the epoch on boot).
-+
-+A CounterTimer policy is expressed in terms of length and offset
-+against the TPM clock structure (TPMS_TIME_INFO), which looks like the
-+packed structure::
-+
-+    struct tpms_time_info {
-+            u64 uptime;       /* time in ms since last start or reset */
-+	    u64 clock;        /* cumulative uptime in ms */
-+	    u32 resetcount;   /* numer of times the TPM has been reset */
-+	    u32 restartcount; /* number of times the TPM has been restarted */
-+	    u8  safe          /* time was safely loaded from NVRam */
-+    };
-+
-+The usual comparison for expiring keys is against clock, at offset 8.
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index e32e9728adce..5026a06977e1 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -233,6 +233,7 @@ enum tpm2_command_codes {
- 	TPM2_CC_PCR_EXTEND	        = 0x0182,
- 	TPM2_CC_EVENT_SEQUENCE_COMPLETE = 0x0185,
- 	TPM2_CC_HASH_SEQUENCE_START     = 0x0186,
-+	TPM2_CC_POLICY_PASSWORD		= 0x018c,
- 	TPM2_CC_CREATE_LOADED           = 0x0191,
- 	TPM2_CC_LAST		        = 0x0193, /* Spec 1.36 */
- };
-diff --git a/security/keys/trusted-keys/tpm2-policy.c b/security/keys/trusted-keys/tpm2-policy.c
-index 4cc478feaeb1..90da9fa4ca02 100644
---- a/security/keys/trusted-keys/tpm2-policy.c
-+++ b/security/keys/trusted-keys/tpm2-policy.c
-@@ -197,7 +197,8 @@ int tpm2_generate_policy_digest(struct tpm2_policies *pols,
- 			len = *plen;
- 		}
- 
--		crypto_shash_update(sdesc, policy, len);
-+		if (len)
-+			crypto_shash_update(sdesc, policy, len);
- 
- 		/* now output the intermediate to the policydigest */
- 		crypto_shash_final(sdesc, policydigest);
-@@ -332,6 +333,16 @@ int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols,
- 		u32 cmd = pols->code[i];
- 		struct tpm_buf buf;
- 
-+		if (cmd == TPM2_CC_POLICY_AUTHVALUE)
-+			/*
-+			 * both PolicyAuthValue and PolicyPassword
-+			 * hash to the same thing, but one triggers
-+			 * HMAC authentication and the other simple
-+			 * authentication.  Since we have no HMAC
-+			 * code, we're choosing the simple
-+			 */
-+			cmd = TPM2_CC_POLICY_PASSWORD;
-+
- 		rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, cmd);
- 		if (rc)
- 			return rc;
-@@ -352,8 +363,35 @@ int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols,
- 			tpm_buf_append(&buf, pols->policies[i],
- 				       pols->len[i] - pols->hash_size);
- 			break;
-+
-+		case TPM2_CC_POLICY_COUNTER_TIMER: {
-+			/*
-+			 * the format of this is the last two u16
-+			 * quantities are the offset and operation
-+			 * respectively.  The rest is operandB which
-+			 * must be zero padded in a hash digest
-+			 */
-+			u16 opb_len = pols->len[i] - 4;
-+
-+			if (opb_len > pols->hash_size)
-+				return -EINVAL;
-+
-+			tpm_buf_append_u16(&buf, opb_len);
-+			tpm_buf_append(&buf, pols->policies[i], opb_len);
-+
-+			/* offset and operand*/
-+			tpm_buf_append(&buf, pols->policies[i] + opb_len, 4);
-+			failure = "Counter Timer";
-+
-+			break;
-+		}
-+
- 		default:
- 			failure = "unknown policy";
-+			if (pols->len[i])
-+				tpm_buf_append(&buf, pols->policies[i],
-+					       pols->len[i]);
-+
- 			break;
- 		}
- 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 293db0aaada6..63b0ff1d3385 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -248,6 +248,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 	u32 flags;
- 	int i;
- 	int rc;
-+	static const int POLICY_SIZE = 2 * PAGE_SIZE;
- 
- 	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
- 		if (options->hash == tpm2_hash_map[i].crypto_id) {
-@@ -268,7 +269,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		/* 4 array len, 2 hash alg */
- 		const int len = 4 + 2 + options->pcrinfo_len;
- 
--		pols = kmalloc(sizeof(*pols) + len, GFP_KERNEL);
-+		pols = kmalloc(POLICY_SIZE, GFP_KERNEL);
- 		if (!pols)
- 			return -ENOMEM;
- 
-@@ -289,6 +290,39 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		return -EINVAL;
- 	}
- 
-+	/*
-+	 * if we already have a policy, we have to add authorization
-+	 * to it.  If we don't, we can simply follow the usual
-+	 * non-policy route.
-+	 */
-+	if (options->blobauth_len != 0 && payload->policies) {
-+		struct tpm2_policies *pols;
-+		static u8 *scratch;
-+		int i;
-+		bool found = false;
-+
-+		pols = payload->policies;
-+
-+		/* make sure it's not already in policy */
-+		for (i = 0; i < pols->count; i++) {
-+			if (pols->code[i] == TPM2_CC_POLICY_AUTHVALUE) {
-+				found = true;
-+
-+				break;
-+			}
-+		}
-+
-+		if (!found) {
-+			i = pols->count++;
-+			scratch = pols->policies[i - 1] + pols->len[i - 1];
-+
-+			/* the TPM2_PolicyPassword command has no payload */
-+			pols->policies[i] = scratch;
-+			pols->len[i] = 0;
-+			pols->code[i] = TPM2_CC_POLICY_AUTHVALUE;
-+		}
-+	}
-+
- 	if (payload->policies) {
- 		rc = tpm2_generate_policy_digest(payload->policies,
- 						 options->hash,
--- 
-2.16.4
+Dmitry and you were the ones that initiated ima-evm-utils, saying
+there should a single package for signing files and integrity testing.
+ The features in ima-evm-utils should reflect what is actually
+upstreamed in the kernel.  (Currently there are a few experimental
+features which were never upstreamed.  I'd like to remove them, but am
+a bit concerned that they are being used.)  I'd appreciate your help
+in keeping ima-evm-utils up to date.  It will help simplify
+upstreaming new kernel features.
+
+My initial patch attempted to use any common TPM and kernel hash
+algorithm to calculate the boot_aggregate.  The discussion with James
+was pretty clear, which you even stated in the Changelog.  Either we
+use the IMA default hash algorithm, SHA256 for TPM 2.0 or SHA1 for TPM
+1.2 for the boot-aggregate.
+
+thanks,
+
+Mimi
 
