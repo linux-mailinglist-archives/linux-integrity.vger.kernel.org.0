@@ -2,103 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE41F179397
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Mar 2020 16:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00974179456
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Mar 2020 17:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388253AbgCDPfg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Mar 2020 10:35:36 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:35696 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388222AbgCDPfg (ORCPT
+        id S1726748AbgCDQEP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Mar 2020 11:04:15 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:38096 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726275AbgCDQEO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Mar 2020 10:35:36 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id BB8D68EE11D;
-        Wed,  4 Mar 2020 07:35:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1583336135;
-        bh=yvUo8IjzRxclOUjv2L0BqatO0ZoZ57dg6J4dJmfyKiE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FQKMY/tgJYu79uu/Ab1FOmQPT/juFlN89GT+e2FMpLZ8cqHx1ddwMw2iKV4d/5zZy
-         0TqIUW+PmiFiMBkPi8i1o+M9tTlJoTA2jWGZZl877fmTR0miZrpGDWaEbOVlk1rBdv
-         Dy2XC5ARK0cSRzxALmpMKLJon41wBtUk0gNzmOI0=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id f31uS89INl0f; Wed,  4 Mar 2020 07:35:35 -0800 (PST)
-Received: from jarvis.ext.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C59938EE0FC;
-        Wed,  4 Mar 2020 07:35:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1583336135;
-        bh=yvUo8IjzRxclOUjv2L0BqatO0ZoZ57dg6J4dJmfyKiE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FQKMY/tgJYu79uu/Ab1FOmQPT/juFlN89GT+e2FMpLZ8cqHx1ddwMw2iKV4d/5zZy
-         0TqIUW+PmiFiMBkPi8i1o+M9tTlJoTA2jWGZZl877fmTR0miZrpGDWaEbOVlk1rBdv
-         Dy2XC5ARK0cSRzxALmpMKLJon41wBtUk0gNzmOI0=
-Message-ID: <1583336133.3284.1.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2] ima: add a new CONFIG for loading arch-specific
- policies
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-efi@vger.kernel.org, linux-s390@vger.kernel.org
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Philipp Rudo <prudo@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 04 Mar 2020 07:35:33 -0800
-In-Reply-To: <1583325309.6264.23.camel@linux.ibm.com>
-References: <1583289211-5420-1-git-send-email-nayna@linux.ibm.com>
-         <1583307813.3907.4.camel@HansenPartnership.com>
-         <1583325309.6264.23.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Wed, 4 Mar 2020 11:04:14 -0500
+Received: by mail-wr1-f67.google.com with SMTP id t11so3062827wrw.5;
+        Wed, 04 Mar 2020 08:04:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=U/EkvVl7FAi6+YEFd5JxFzG6+4DfZZOGAx7Rl8CToMk=;
+        b=E1JN1GbGM8dgvnEHDscwegwpfaMaQ7uNI35EyIvMcMf2sw+8icQudqTE5OJkyH//m4
+         sxWXzYGXuxf17vSkNtS6vwLBXIQN1WthG6PDuKUeppzQI0CbXr+99sBifnfdr0DVC4Q3
+         8bE9hDL/ExIVkl9SoyKHBUo6CqfBn1IS0o5oFHlidXR2mK4ZKIEIz++HhIJhkna/UIl5
+         DllgjA+teBq5a1OTvkme+RyeCZYdxgzYOG1sQhCRvEyEsa7KcgBiJCTz1VksSuA5zDxf
+         cUOwDWP2NiFZOJdu+ynWXIQaT2sOkz1YxEo3zJlhg9h+2kDeAC6hwj0992FeW9pGF4hf
+         sp7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=U/EkvVl7FAi6+YEFd5JxFzG6+4DfZZOGAx7Rl8CToMk=;
+        b=QXAWdMWEjunXo0OTwno+wW0dkJLOuonfEvdyC3R6YTyBbZrlyS3Mk1rpKMP+UUJGcR
+         cb9URABGVluJ7ntxmbseWfXrZHZiM+UEKvKKgpy46e1rXTTu6ifVUuXX0GYb8FBSJevd
+         wYHhLgIOEX6Xf5pNSr2t/gZspCjZlasaRRGYfMG3Lh6daTK4t7j2a83bG9q5nWv0Khc0
+         WWyfMnibqMi/xIlqwW/hDKk1r8Ry0pF91bCNBglsriXvoq/y9OGlSO29FEXkTpDS8fhr
+         znnqEhsb9jNNirhR+nnZw5Kk12nXd+0uSA4GUEYjQWC/goUDnhF0ObLdDtZkmZCTFZxL
+         rxyA==
+X-Gm-Message-State: ANhLgQ3malTn5gsTac5/EsWKGOSC/ttE5KiXstuD6oqLQp33e5ii3/K3
+        KMb+iHRJvJZ0RvnZYYuHD7k=
+X-Google-Smtp-Source: ADFU+vu6NnUvsLhagcO8Q4poilEAI652nzvJveCmlcKlhnSPTvayuVO6DjHuiAqzqYSqFm2261DWgw==
+X-Received: by 2002:a5d:4b51:: with SMTP id w17mr4544176wrs.231.1583337852868;
+        Wed, 04 Mar 2020 08:04:12 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2d16:4100:3093:39f0:d3ca:23c6])
+        by smtp.gmail.com with ESMTPSA id y1sm3699219wrh.65.2020.03.04.08.04.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 08:04:12 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Sumit Garg <sumit.garg@linaro.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        Sebastian Duda <sebastian.duda@fau.de>,
+        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust to trusted keys subsystem creation
+Date:   Wed,  4 Mar 2020 17:03:59 +0100
+Message-Id: <20200304160359.16809-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-03-04 at 07:35 -0500, Mimi Zohar wrote:
-> On Tue, 2020-03-03 at 23:43 -0800, James Bottomley wrote:
-> > On Tue, 2020-03-03 at 21:33 -0500, Nayna Jain wrote:
-> > > diff --git a/security/integrity/ima/Kconfig
-> > > b/security/integrity/ima/Kconfig
-> > > index 3f3ee4e2eb0d..d17972aa413a 100644
-> > > --- a/security/integrity/ima/Kconfig
-> > > +++ b/security/integrity/ima/Kconfig
-> > > @@ -327,3 +327,12 @@ config IMA_QUEUE_EARLY_BOOT_KEYS
-> > >  	depends on IMA_MEASURE_ASYMMETRIC_KEYS
-> > >  	depends on SYSTEM_TRUSTED_KEYRING
-> > >  	default y
-> > > +
-> > > +config IMA_SECURE_AND_OR_TRUSTED_BOOT
-> > > +	bool
-> > > +	depends on IMA
-> > > +	depends on IMA_ARCH_POLICY
-> > > +	default n
-> > 
-> > You can't do this: a symbol designed to be selected can't depend on
-> > other symbols because Kconfig doesn't see the dependencies during
-> > select.  We even have a doc for this now:
-> > 
-> > Documentation/kbuild/Kconfig.select-break
-> 
-> The document is discussing a circular dependency, where C selects B.
->  IMA_SECURE_AND_OR_TRUSTED_BOOT is not selecting anything, but is
-> being selected.  All of the Kconfig's are now dependent on
-> IMA_ARCH_POLICY being enabled before selecting
-> IMA_SECURE_AND_OR_TRUSTED_BOOT.
-> 
-> As Ard pointed out, both IMA and IMA_ARCH_POLICY are not needed, as
-> IMA_ARCH_POLICY is already dependent on IMA.
+Commit 47f9c2796891 ("KEYS: trusted: Create trusted keys subsystem")
+renamed trusted.h to trusted_tpm.h in include/keys/, and moved trusted.c
+to trusted-keys/trusted_tpm1.c in security/keys/.
 
-Then removing them is fine, if they're not necessary ... you just can't
- select a symbol with dependencies because the two Kconfig mechanisms
-don't mix.
+Since then, ./scripts/get_maintainer.pl --self-test complains:
 
-James
+  warning: no file matches F: security/keys/trusted.c
+  warning: no file matches F: include/keys/trusted.h
+
+Rectify the KEYS-TRUSTED entry in MAINTAINERS now.
+
+Co-developed-by: Sebastian Duda <sebastian.duda@fau.de>
+Signed-off-by: Sebastian Duda <sebastian.duda@fau.de>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Sumit, please ack.
+Jarkko, please pick this patch.
+
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5c755e03ddee..cf389058ca76 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9276,8 +9276,8 @@ L:	keyrings@vger.kernel.org
+ S:	Supported
+ F:	Documentation/security/keys/trusted-encrypted.rst
+ F:	include/keys/trusted-type.h
+-F:	security/keys/trusted.c
+-F:	include/keys/trusted.h
++F:	include/keys/trusted_tpm.h
++F:	security/keys/trusted-keys/trusted_tpm1.c
+ 
+ KEYS/KEYRINGS
+ M:	David Howells <dhowells@redhat.com>
+-- 
+2.17.1
 
