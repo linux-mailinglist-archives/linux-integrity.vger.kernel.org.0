@@ -2,68 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8844617AFBE
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2020 21:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD22417AFCD
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2020 21:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbgCEUce (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Mar 2020 15:32:34 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:50407 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726049AbgCEUce (ORCPT
+        id S1726173AbgCEUeu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Mar 2020 15:34:50 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:35081 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726049AbgCEUet (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Mar 2020 15:32:34 -0500
-Received: by mail-wm1-f65.google.com with SMTP id a5so15797wmb.0;
-        Thu, 05 Mar 2020 12:32:31 -0800 (PST)
+        Thu, 5 Mar 2020 15:34:49 -0500
+Received: by mail-wr1-f66.google.com with SMTP id r7so8678787wro.2;
+        Thu, 05 Mar 2020 12:34:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:date:to:cc:subject:in-reply-to:message-id:references
          :user-agent:mime-version;
-        bh=RQ/OfgFACJ0HisdDvqug2qr4vfTuZ/pxuVKJCyxS9zw=;
-        b=sRLEAu1aPYmaaq/kcEvKo4cbSXgVvYRa8fd2ovdQfBJiaEl4FnME2hUIOicSkOJj98
-         4byYuz7lfI4m9G9pQ3AlVupw9gP8rTKSa3081CpFJkVRflxBWzCdZJbAm7bTk0ZXYGxP
-         va4W1C9la/XQo2P9wK3pHfMtAIWuGdDd1stIxlMUQ83KGl8EUfB1ec6+2xVmCr6831G5
-         Bev9rhSlGDHDHIfMa6HL+RW+Fx++iFuIr7xgYqCXQ4PtZXCUogdihUBF6mmpVrQS1+v6
-         cJ4s8PyG7jVQ4dG9C1/8MKlsBSCuGVg2ZtAM9K/CNXHIB1tQVD8zCu5Xc7waKhx5ZClQ
-         wbnQ==
+        bh=IDOTEX11cunJSK+e5Q+/5P0CmencMvVLWVjAvP7JoBg=;
+        b=GP5tt6YW+x2vfFIOuHGuEtOwPJ31wSu8bMffq4kwjBcgfaoO+KGCdoN2vf+B9m6j3A
+         Y1TpOMUaA0QHkG+w8eGXnC9mhtw4dWqZ8z3NT+d1/XIKd3gEENs/eZ0CPuH3SQdF7/gY
+         b0zTewP08bXCMySJQALV9PXB5veSyZ+l+BLIhUZWbt24HMJYPAq5XnGlu7pefpOipgqR
+         JfWHSuoN5DDS5z8LT2odU4FA66bHlaxDOYXlZC8Tn7Ji0z1cCVpK/xenUJpvErk2rXj0
+         NzB42/iq4DKY1LZ9aTRCVkW96KIiAT/aJkLx2vkN5txyi+G6MKWDpoIqlWyEmntITab7
+         aOtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
          :references:user-agent:mime-version;
-        bh=RQ/OfgFACJ0HisdDvqug2qr4vfTuZ/pxuVKJCyxS9zw=;
-        b=fq33/SPseRrQQvzhKPCADK+YbYGSxB0dNjsel39JXfmIDHnq7vL4idZJtLcuBVOeeK
-         RtaQgAsaKP+Dp+hEPFWb2k00fRhmodVwePUzEPpdYQ09rMuKITB6dbQYyJh7e7WX+BxR
-         Wg3j+3oOvSsN8ezUfEf8f+2hIl7NsS3y1BUQFEwn2CCzDaKLKy3YOCxOHQxvRChiLs1D
-         Ome38960R5NRhaRWVbbdtaNXVMzvieHdwqSnvNGgHawGosz4j8Fj+2rv42Zej8DYD7s8
-         Gsej+yq/6sdNp91H1FLJYVoT0fvPZR8LnROVH7wFCcw6pFL4D32yR2a1g3UIGKg+RyLz
-         ORUg==
-X-Gm-Message-State: ANhLgQ1rMOUaGKI2A0SzbeVLigHLS5+kIYwWeOKXMa6P7HhOcFQjjfm3
-        ttBJZBI+pLp5zwSPcccmgO4=
-X-Google-Smtp-Source: ADFU+vvtBKJIt5WQ+US9N8veekkY03ax/HnHcOLwkT58OQwfs769GgQxQQjfgI8smdp+C9TedJJ27A==
-X-Received: by 2002:a1c:ed0c:: with SMTP id l12mr540568wmh.151.1583440351248;
-        Thu, 05 Mar 2020 12:32:31 -0800 (PST)
+        bh=IDOTEX11cunJSK+e5Q+/5P0CmencMvVLWVjAvP7JoBg=;
+        b=C2My93hjjVGB724sV+Jeuj9fTBuRx94JlD5CZgLUxaFT9aVl2AwL67pHFRHxikZOjF
+         MDUDt759hmYu0tnjQHEp2406d2tbk9RipDhhzdW5WydvUzGTvgrgHlqJIvKeMqrfbe2g
+         2hOZjTcZ+fAfZDnWEVjPl7ssawId35mScgJj58zBiGeOQ1ixV+S6HTk0XXuNeo+vwFc/
+         pz3xcIaxQOjkTDP+2cwebs3BuUbhiOH3l0tRgxdbsD8JXS4H55cFNKWb4YtmMVRKNoSX
+         SDAXiNz0ZCyAXk6xAOsGP0oas2LuohJ6A01g1nkOJ/XICBPEkrhdPRB/frHffTNMFpGp
+         dZHQ==
+X-Gm-Message-State: ANhLgQ1n/U2FO86imDgDgZUqpydvctweOsEvIamXn/TKNU1nfIuFPeTZ
+        gFZWit6GAlFgbDHFV3yuWOo=
+X-Google-Smtp-Source: ADFU+vtY445MTs3NyObNXlzsuoAccoC6ePupE9JkiNBaYEwr8Mdj9KfVCySxnpTg0Xp8bL4N3rdaoA==
+X-Received: by 2002:adf:9282:: with SMTP id 2mr734439wrn.124.1583440487893;
+        Thu, 05 Mar 2020 12:34:47 -0800 (PST)
 Received: from felia ([2001:16b8:2d7c:7000:ec58:d834:7ed:456a])
-        by smtp.gmail.com with ESMTPSA id b12sm18439987wro.66.2020.03.05.12.32.30
+        by smtp.gmail.com with ESMTPSA id c14sm32242324wro.36.2020.03.05.12.34.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2020 12:32:30 -0800 (PST)
+        Thu, 05 Mar 2020 12:34:47 -0800 (PST)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 X-Google-Original-From: Lukas Bulwahn <lukas@gmail.com>
-Date:   Thu, 5 Mar 2020 21:32:23 +0100 (CET)
+Date:   Thu, 5 Mar 2020 21:34:46 +0100 (CET)
 X-X-Sender: lukas@felia
-To:     Sumit Garg <sumit.garg@linaro.org>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
         James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         Sebastian Duda <sebastian.duda@fau.de>,
         Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] MAINTAINERS: adjust to trusted keys subsystem
- creation
-In-Reply-To: <CAFA6WYOfLONAM8qAhpiikrGkmDkLq0qcw_eGUTzG1AdgP0TB+w@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2003052130520.5431@felia>
-References: <20200304211254.5127-1-lukas.bulwahn@gmail.com> <CAFA6WYOfLONAM8qAhpiikrGkmDkLq0qcw_eGUTzG1AdgP0TB+w@mail.gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: adjust to trusted keys subsystem creation
+In-Reply-To: <9127f0318e8507ca0b4e146d9b99d9ecb27f7f28.camel@linux.intel.com>
+Message-ID: <alpine.DEB.2.21.2003052132540.5431@felia>
+References: <20200304160359.16809-1-lukas.bulwahn@gmail.com> <9127f0318e8507ca0b4e146d9b99d9ecb27f7f28.camel@linux.intel.com>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -74,30 +72,34 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 
-On Thu, 5 Mar 2020, Sumit Garg wrote:
+On Thu, 5 Mar 2020, Jarkko Sakkinen wrote:
 
-> On Thu, 5 Mar 2020 at 02:43, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
-> >
+> On Wed, 2020-03-04 at 17:03 +0100, Lukas Bulwahn wrote:
 > > Commit 47f9c2796891 ("KEYS: trusted: Create trusted keys subsystem")
 > > renamed trusted.h to trusted_tpm.h in include/keys/, and moved trusted.c
 > > to trusted-keys/trusted_tpm1.c in security/keys/.
-> >
+> > 
 > > Since then, ./scripts/get_maintainer.pl --self-test complains:
-> >
+> > 
 > >   warning: no file matches F: security/keys/trusted.c
 > >   warning: no file matches F: include/keys/trusted.h
-> >
-> > Rectify the KEYS-TRUSTED entry in MAINTAINERS now and ensure that all
-> > files in security/keys/ are identified as part of KEYS-TRUSTED.
-> >
+> > 
+> > Rectify the KEYS-TRUSTED entry in MAINTAINERS now.
+> > 
+> > Co-developed-by: Sebastian Duda <sebastian.duda@fau.de>
+> > Signed-off-by: Sebastian Duda <sebastian.duda@fau.de>
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> > Sumit, please ack.
+> > Jarkko, please pick this patch.
 > 
-> I guess you meant here security/keys/trusted-keys/ instead of security/keys/.
->
+> I'll pick it when it is done. I acknowledge the regression but I
+> see no reason for rushing as this does not break any systems in
+> the wild.
+> 
 
-Yes, that is what I meant. I rushed the patch v2 last night.
+Agree. No need to rush this. I sent out a v3, and I hope to get Sumit's 
+ACK and then you can pick it for the next merge window.
 
-Here is hopefully now a PATCH v3 you can ack:
-
-https://lore.kernel.org/linux-integrity/20200305203013.6189-1-lukas.bulwahn@gmail.com/T/#u
 
 Lukas
