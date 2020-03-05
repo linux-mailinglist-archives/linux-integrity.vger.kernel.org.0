@@ -2,30 +2,41 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE2C17B068
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2020 22:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E4217B0B2
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2020 22:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726211AbgCEVRD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Mar 2020 16:17:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36224 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726271AbgCEVQx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Mar 2020 16:16:53 -0500
-Received: from gmail.com (unknown [104.132.1.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726191AbgCEVa2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Mar 2020 16:30:28 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:27162 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726049AbgCEVa2 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 5 Mar 2020 16:30:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1583443827;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hkim17AcBCnxI/wSF69dkEpIuJDcwbjPUSIQZbbuoHA=;
+        b=VHSXHJ/Zq82XJV3Zom1VBSY/UDpOIZIJ2U4Td7bQvuZyEBP0IvjRduLlD+N6OLfcnT8RCz
+        WdorG8VhK8JXwtFVj8L5YsXrKqeqFC0bnVT/JZiO7oLxJcvnBTaN3HW3OTVAA/dd8ZWTNC
+        qis/CsKN85UHBEidMZReMGkKwmCp7Yg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-217-QZ2WNUImOeqq3Z_tfIAuGA-1; Thu, 05 Mar 2020 16:30:23 -0500
+X-MC-Unique: QZ2WNUImOeqq3Z_tfIAuGA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B21F820728;
-        Thu,  5 Mar 2020 21:16:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583443013;
-        bh=TwO5bwawSGBd1hvXvSkBLj+ILLCCIBlCvGCMPQ8I2c4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fdWl/xjGhfe8AKx4gpf1+pTdzly+8Vw6cUxr4Dy4g6e/giV8iCGLZTBYALqfTRnW7
-         Wq3TB/+Ek0YX+fvgK7QRy+qGFMS7sTmnHAakfRHiyKa6JB1O9V/GpM+BdgTzoGmYe2
-         nenXuvZHS0ixwjtE/x0jRLbXfYNFYqfxat8gl61M=
-Date:   Thu, 5 Mar 2020 13:16:51 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Waiman Long <longman@redhat.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 719268B789C;
+        Thu,  5 Mar 2020 21:30:20 +0000 (UTC)
+Received: from llong.remote.csb (dhcp-17-59.bos.redhat.com [10.18.17.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A47C49494C;
+        Thu,  5 Mar 2020 21:30:18 +0000 (UTC)
+Subject: Re: [PATCH] KEYS: Don't write out to userspace while holding key
+ semaphore
+To:     Eric Biggers <ebiggers@kernel.org>
 Cc:     David Howells <dhowells@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         James Morris <jmorris@namei.org>,
@@ -38,40 +49,53 @@ Cc:     David Howells <dhowells@redhat.com>,
         Jerry Snitselaar <jsnitsel@redhat.com>,
         Roberto Sassu <roberto.sassu@huawei.com>,
         Chris von Recklinghausen <crecklin@redhat.com>
-Subject: Re: [PATCH] KEYS: Don't write out to userspace while holding key
- semaphore
-Message-ID: <20200305211651.GA225345@gmail.com>
 References: <20200305210640.15315-1-longman@redhat.com>
+ <20200305211651.GA225345@gmail.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <f581aab4-1bad-64b8-59bf-2da6c34c53c5@redhat.com>
+Date:   Thu, 5 Mar 2020 16:30:18 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200305210640.15315-1-longman@redhat.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20200305211651.GA225345@gmail.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Mar 05, 2020 at 04:06:40PM -0500, Waiman Long wrote:
-> diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
-> index 9b898c969558..564a4d187329 100644
-> --- a/security/keys/keyctl.c
-> +++ b/security/keys/keyctl.c
-> @@ -846,14 +846,36 @@ long keyctl_read_key(key_serial_t keyid, char __user *buffer, size_t buflen)
->  can_read_key:
->  	ret = -EOPNOTSUPP;
->  	if (key->type->read) {
-> -		/* Read the data with the semaphore held (since we might sleep)
-> +		/*
-> +		 * Read the data with the semaphore held (since we might sleep)
->  		 * to protect against the key being updated or revoked.
-> +		 *
-> +		 * Allocating a temporary buffer to hold the keys before
-> +		 * transferring them to user buffer to avoid potential
-> +		 * deadlock involving page fault and mmap_sem.
->  		 */
-> +		char *tmpbuf = kmalloc(buflen, GFP_KERNEL);
+On 3/5/20 4:16 PM, Eric Biggers wrote:
+> On Thu, Mar 05, 2020 at 04:06:40PM -0500, Waiman Long wrote:
+>> diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
+>> index 9b898c969558..564a4d187329 100644
+>> --- a/security/keys/keyctl.c
+>> +++ b/security/keys/keyctl.c
+>> @@ -846,14 +846,36 @@ long keyctl_read_key(key_serial_t keyid, char __user *buffer, size_t buflen)
+>>  can_read_key:
+>>  	ret = -EOPNOTSUPP;
+>>  	if (key->type->read) {
+>> -		/* Read the data with the semaphore held (since we might sleep)
+>> +		/*
+>> +		 * Read the data with the semaphore held (since we might sleep)
+>>  		 * to protect against the key being updated or revoked.
+>> +		 *
+>> +		 * Allocating a temporary buffer to hold the keys before
+>> +		 * transferring them to user buffer to avoid potential
+>> +		 * deadlock involving page fault and mmap_sem.
+>>  		 */
+>> +		char *tmpbuf = kmalloc(buflen, GFP_KERNEL);
+> This is passing an arbitrarily large size from userspace into kmalloc().
+>
+> - Eric
+>
+That is true. Is there a limit of how much key data are expected to be
+returned from the kernel? We could set an internal limit here on how
+large the buffer can be.
 
-This is passing an arbitrarily large size from userspace into kmalloc().
+Cheers,
+Longman
 
-- Eric
