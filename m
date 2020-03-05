@@ -2,110 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A3F17AFB5
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2020 21:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8844617AFBE
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2020 21:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbgCEUa0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Mar 2020 15:30:26 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:43541 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgCEUa0 (ORCPT
+        id S1726142AbgCEUce (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Mar 2020 15:32:34 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:50407 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726049AbgCEUce (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Mar 2020 15:30:26 -0500
-Received: by mail-wr1-f65.google.com with SMTP id v9so2030269wrf.10;
-        Thu, 05 Mar 2020 12:30:24 -0800 (PST)
+        Thu, 5 Mar 2020 15:32:34 -0500
+Received: by mail-wm1-f65.google.com with SMTP id a5so15797wmb.0;
+        Thu, 05 Mar 2020 12:32:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=juYwq62t6R4eHfh+DtghPbycszS3hALzIrDdl9KbM1c=;
-        b=JggJGJZ74CId5O5W+ekRHBGRii5hGwwlVujhFs+0LWqATqCFf49ZWMlfjE7Fey199u
-         gbHwtr1I22EQ6hiNPyW5wjGztf6TdkwL1eSWjYbf6VfdYFFUU4wtaGKp/mX4X0hSuW/z
-         uH6UEnVsYpAtMZDoHL2NJVypq3/KYW2OlTifk5/woCgCWvo41+V6qeC6VV8RcsiXRaGm
-         EL4H9y5t2NRseP/T/dFdb3U+bQuD13EQtYu8G+an8LOvWem1Pwtx/3ms0q86TaSQ8w/n
-         QVdkdabYX71ROFgWS9afD4L4UxIFQlCbjmM8+FrA1XvVkO81g3AvkMeKC5jah7Ja/e1k
-         ogIA==
+        h=from:date:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=RQ/OfgFACJ0HisdDvqug2qr4vfTuZ/pxuVKJCyxS9zw=;
+        b=sRLEAu1aPYmaaq/kcEvKo4cbSXgVvYRa8fd2ovdQfBJiaEl4FnME2hUIOicSkOJj98
+         4byYuz7lfI4m9G9pQ3AlVupw9gP8rTKSa3081CpFJkVRflxBWzCdZJbAm7bTk0ZXYGxP
+         va4W1C9la/XQo2P9wK3pHfMtAIWuGdDd1stIxlMUQ83KGl8EUfB1ec6+2xVmCr6831G5
+         Bev9rhSlGDHDHIfMa6HL+RW+Fx++iFuIr7xgYqCXQ4PtZXCUogdihUBF6mmpVrQS1+v6
+         cJ4s8PyG7jVQ4dG9C1/8MKlsBSCuGVg2ZtAM9K/CNXHIB1tQVD8zCu5Xc7waKhx5ZClQ
+         wbnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=juYwq62t6R4eHfh+DtghPbycszS3hALzIrDdl9KbM1c=;
-        b=h5Yay2XQ5bflVGjiqkIBbPbSmefIz/32hUUPnCd3LDD/0BpZzEmKW8bHnAyN051J9E
-         fVtnRzTcLv1U0vd1Zz2zlyFR9l2k9u3HWgwWM5FCeRa3c+UMSjvN6Pk4D81EAkNsvJOw
-         MsiUqcTut9N9usRbDb1sJCBkOBngjt1gfCsiQb9VrOfmXBWH/60ed7UlQML3Ym7c4xYy
-         Pnhh+G0Ojn/49CLPAqoObxpySQY8ykpyu/hbb5smo3RSCHm7yKFR1DMCnYHA42dXNzdm
-         7xGiENOxe6I7dtBeqqDJltsYql+RIeXxO2ECNXcAcwmRRis2LI2OlVMdFZJybpjZh+SS
-         SbRg==
-X-Gm-Message-State: ANhLgQ00mkAiSC1dmJvnr7DnrDWhaTWymvyALF3N1bqYF0VLhzq6ZoJc
-        FoO7/VfQhm/CFxZ0BtcwG6c=
-X-Google-Smtp-Source: ADFU+vuPdn1HOnk75j4r99XPjPJh1599lKBBZ32CYxv+g/Sq9+FHWjKwmdgjb/JXnVfAnHyEpemCVg==
-X-Received: by 2002:adf:fdc3:: with SMTP id i3mr707308wrs.142.1583440224101;
-        Thu, 05 Mar 2020 12:30:24 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:2d7c:7000:ec58:d834:7ed:456a])
-        by smtp.gmail.com with ESMTPSA id k66sm8000310wmf.0.2020.03.05.12.30.22
+        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=RQ/OfgFACJ0HisdDvqug2qr4vfTuZ/pxuVKJCyxS9zw=;
+        b=fq33/SPseRrQQvzhKPCADK+YbYGSxB0dNjsel39JXfmIDHnq7vL4idZJtLcuBVOeeK
+         RtaQgAsaKP+Dp+hEPFWb2k00fRhmodVwePUzEPpdYQ09rMuKITB6dbQYyJh7e7WX+BxR
+         Wg3j+3oOvSsN8ezUfEf8f+2hIl7NsS3y1BUQFEwn2CCzDaKLKy3YOCxOHQxvRChiLs1D
+         Ome38960R5NRhaRWVbbdtaNXVMzvieHdwqSnvNGgHawGosz4j8Fj+2rv42Zej8DYD7s8
+         Gsej+yq/6sdNp91H1FLJYVoT0fvPZR8LnROVH7wFCcw6pFL4D32yR2a1g3UIGKg+RyLz
+         ORUg==
+X-Gm-Message-State: ANhLgQ1rMOUaGKI2A0SzbeVLigHLS5+kIYwWeOKXMa6P7HhOcFQjjfm3
+        ttBJZBI+pLp5zwSPcccmgO4=
+X-Google-Smtp-Source: ADFU+vvtBKJIt5WQ+US9N8veekkY03ax/HnHcOLwkT58OQwfs769GgQxQQjfgI8smdp+C9TedJJ27A==
+X-Received: by 2002:a1c:ed0c:: with SMTP id l12mr540568wmh.151.1583440351248;
+        Thu, 05 Mar 2020 12:32:31 -0800 (PST)
+Received: from felia ([2001:16b8:2d7c:7000:ec58:d834:7ed:456a])
+        by smtp.gmail.com with ESMTPSA id b12sm18439987wro.66.2020.03.05.12.32.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2020 12:30:23 -0800 (PST)
+        Thu, 05 Mar 2020 12:32:30 -0800 (PST)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Sumit Garg <sumit.garg@linaro.org>,
+X-Google-Original-From: Lukas Bulwahn <lukas@gmail.com>
+Date:   Thu, 5 Mar 2020 21:32:23 +0100 (CET)
+X-X-Sender: lukas@felia
+To:     Sumit Garg <sumit.garg@linaro.org>
+cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         James Bottomley <jejb@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
         Sebastian Duda <sebastian.duda@fau.de>,
         Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH v3] MAINTAINERS: adjust to trusted keys subsystem creation
-Date:   Thu,  5 Mar 2020 21:30:13 +0100
-Message-Id: <20200305203013.6189-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] MAINTAINERS: adjust to trusted keys subsystem
+ creation
+In-Reply-To: <CAFA6WYOfLONAM8qAhpiikrGkmDkLq0qcw_eGUTzG1AdgP0TB+w@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2003052130520.5431@felia>
+References: <20200304211254.5127-1-lukas.bulwahn@gmail.com> <CAFA6WYOfLONAM8qAhpiikrGkmDkLq0qcw_eGUTzG1AdgP0TB+w@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Commit 47f9c2796891 ("KEYS: trusted: Create trusted keys subsystem")
-renamed trusted.h to trusted_tpm.h in include/keys/, and moved trusted.c
-to trusted-keys/trusted_tpm1.c in security/keys/.
 
-Since then, ./scripts/get_maintainer.pl --self-test complains:
 
-  warning: no file matches F: security/keys/trusted.c
-  warning: no file matches F: include/keys/trusted.h
+On Thu, 5 Mar 2020, Sumit Garg wrote:
 
-Rectify the KEYS-TRUSTED entry in MAINTAINERS now and ensure that all
-files in security/keys/trusted-keys/ are identified as part of
-KEYS-TRUSTED.
+> On Thu, 5 Mar 2020 at 02:43, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> >
+> > Commit 47f9c2796891 ("KEYS: trusted: Create trusted keys subsystem")
+> > renamed trusted.h to trusted_tpm.h in include/keys/, and moved trusted.c
+> > to trusted-keys/trusted_tpm1.c in security/keys/.
+> >
+> > Since then, ./scripts/get_maintainer.pl --self-test complains:
+> >
+> >   warning: no file matches F: security/keys/trusted.c
+> >   warning: no file matches F: include/keys/trusted.h
+> >
+> > Rectify the KEYS-TRUSTED entry in MAINTAINERS now and ensure that all
+> > files in security/keys/ are identified as part of KEYS-TRUSTED.
+> >
+> 
+> I guess you meant here security/keys/trusted-keys/ instead of security/keys/.
+>
 
-Co-developed-by: Sebastian Duda <sebastian.duda@fau.de>
-Signed-off-by: Sebastian Duda <sebastian.duda@fau.de>
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Changes to v1:
-  - use a global pattern for matching the whole security/keys/trusted-keys/
-    directory.
-Changes to v2:
-  - name the correct directory in the commit message
+Yes, that is what I meant. I rushed the patch v2 last night.
 
-Sumit, please ack.
-Jarkko, please pick this patch v3.
+Here is hopefully now a PATCH v3 you can ack:
 
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+https://lore.kernel.org/linux-integrity/20200305203013.6189-1-lukas.bulwahn@gmail.com/T/#u
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5c755e03ddee..7f11ac752b91 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9276,8 +9276,8 @@ L:	keyrings@vger.kernel.org
- S:	Supported
- F:	Documentation/security/keys/trusted-encrypted.rst
- F:	include/keys/trusted-type.h
--F:	security/keys/trusted.c
--F:	include/keys/trusted.h
-+F:	include/keys/trusted_tpm.h
-+F:	security/keys/trusted-keys/
- 
- KEYS/KEYRINGS
- M:	David Howells <dhowells@redhat.com>
--- 
-2.17.1
-
+Lukas
