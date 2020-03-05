@@ -2,37 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C40B117A41B
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2020 12:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F7E17A425
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2020 12:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbgCELWA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Mar 2020 06:22:00 -0500
-Received: from mga02.intel.com ([134.134.136.20]:22736 "EHLO mga02.intel.com"
+        id S1726979AbgCELZP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Mar 2020 06:25:15 -0500
+Received: from mga02.intel.com ([134.134.136.20]:22975 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725880AbgCELV7 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Mar 2020 06:21:59 -0500
+        id S1725880AbgCELZP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 5 Mar 2020 06:25:15 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Mar 2020 03:21:59 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Mar 2020 03:25:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,517,1574150400"; 
-   d="scan'208";a="234385272"
+   d="scan'208";a="234385799"
 Received: from unknown (HELO jsakkine-mobl1) ([10.237.50.161])
-  by orsmga008.jf.intel.com with ESMTP; 05 Mar 2020 03:21:56 -0800
-Message-ID: <a54d6cffe536d568a9fde46f1f32616e89a42d30.camel@linux.intel.com>
-Subject: Re: [PATCH v6 3/3] tpm: ibmvtpm: Add support for TPM2
+  by orsmga008.jf.intel.com with ESMTP; 05 Mar 2020 03:25:11 -0800
+Message-ID: <9127f0318e8507ca0b4e146d9b99d9ecb27f7f28.camel@linux.intel.com>
+Subject: Re: [PATCH] MAINTAINERS: adjust to trusted keys subsystem creation
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     aik@ozlabs.ru, david@gibson.dropbear.id.au,
-        linux-kernel@vger.kernel.org, nayna@linux.vnet.ibm.com,
-        gcwilson@linux.ibm.com, jgg@ziepe.ca,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date:   Thu, 05 Mar 2020 13:21:56 +0200
-In-Reply-To: <20200304132243.179402-4-stefanb@linux.vnet.ibm.com>
-References: <20200304132243.179402-1-stefanb@linux.vnet.ibm.com>
-         <20200304132243.179402-4-stefanb@linux.vnet.ibm.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        Sebastian Duda <sebastian.duda@fau.de>,
+        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 05 Mar 2020 13:25:11 +0200
+In-Reply-To: <20200304160359.16809-1-lukas.bulwahn@gmail.com>
+References: <20200304160359.16809-1-lukas.bulwahn@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.35.92-1 
@@ -43,20 +44,28 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-03-04 at 08:22 -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
+On Wed, 2020-03-04 at 17:03 +0100, Lukas Bulwahn wrote:
+> Commit 47f9c2796891 ("KEYS: trusted: Create trusted keys subsystem")
+> renamed trusted.h to trusted_tpm.h in include/keys/, and moved trusted.c
+> to trusted-keys/trusted_tpm1.c in security/keys/.
 > 
-> Support TPM2 in the IBM vTPM driver. The hypervisor tells us what
-> version of TPM is connected through the vio_device_id.
+> Since then, ./scripts/get_maintainer.pl --self-test complains:
 > 
-> In case a TPM2 device is found, we set the TPM_CHIP_FLAG_TPM2 flag
-> and get the command codes attributes table. The driver does
-> not need the timeouts and durations, though.
+>   warning: no file matches F: security/keys/trusted.c
+>   warning: no file matches F: include/keys/trusted.h
 > 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Rectify the KEYS-TRUSTED entry in MAINTAINERS now.
+> 
+> Co-developed-by: Sebastian Duda <sebastian.duda@fau.de>
+> Signed-off-by: Sebastian Duda <sebastian.duda@fau.de>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> Sumit, please ack.
+> Jarkko, please pick this patch.
 
-There is huge bunch of people in the cc-list and these patches
-have total zero tested-by's. Why is that?
+I'll pick it when it is done. I acknowledge the regression but I
+see no reason for rushing as this does not break any systems in
+the wild.
 
 /Jarkko
 
