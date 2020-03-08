@@ -2,72 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76DF517D063
-	for <lists+linux-integrity@lfdr.de>; Sat,  7 Mar 2020 23:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D569717D50A
+	for <lists+linux-integrity@lfdr.de>; Sun,  8 Mar 2020 18:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726264AbgCGWA3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 7 Mar 2020 17:00:29 -0500
-Received: from mga17.intel.com ([192.55.52.151]:23789 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726252AbgCGWA3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 7 Mar 2020 17:00:29 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Mar 2020 14:00:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,527,1574150400"; 
-   d="scan'208";a="276010277"
-Received: from speryt-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.14.154])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Mar 2020 14:00:27 -0800
-Date:   Sun, 8 Mar 2020 00:00:26 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Subject: Re: [PATCH v7 4/6] security: keys: trusted: use ASN.1 TPM2 key
- format for the blobs
-Message-ID: <20200307220026.GA122868@linux.intel.com>
-References: <20200305022744.12492-1-James.Bottomley@HansenPartnership.com>
- <20200305022744.12492-5-James.Bottomley@HansenPartnership.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200305022744.12492-5-James.Bottomley@HansenPartnership.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1726360AbgCHREa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 8 Mar 2020 13:04:30 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:59574 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726338AbgCHREa (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 8 Mar 2020 13:04:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1583687069;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=xCWfIVVtXcNrPtfCAElXYhujkDeI7te8IIcxIOU/lhc=;
+        b=c2TdsSxA3pesaEURBvWFkLJS1Bk59+nDsuRko2oTc5TFWgdU3WXc5mlDvo1bXwzN/LLEBL
+        C94qdSmBJ4HARXtP64oYgAszbtL7I1exJ76V0SSHEnC7eqRuo95W79w9AbmshxD61ElhXd
+        v1zWvLkchJHfDlb6Yo7R0NfOYJIQ3eQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-272-9pF2p6WgPbuuHt77AJVMew-1; Sun, 08 Mar 2020 13:04:27 -0400
+X-MC-Unique: 9pF2p6WgPbuuHt77AJVMew-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9C2081005513;
+        Sun,  8 Mar 2020 17:04:25 +0000 (UTC)
+Received: from llong.com (ovpn-120-251.rdu2.redhat.com [10.10.120.251])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0ADEF5D9C5;
+        Sun,  8 Mar 2020 17:04:19 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Chris von Recklinghausen <crecklin@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 0/2] KEYS: Read keys to internal buffer & then copy to userspace
+Date:   Sun,  8 Mar 2020 13:04:08 -0400
+Message-Id: <20200308170410.14166-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Mar 04, 2020 at 06:27:42PM -0800, James Bottomley wrote:
-> Modify the TPM2 key format blob output to export and import in the
-> ASN.1 form for TPM2 sealed object keys.  For compatibility with prior
-> trusted keys, the importer will also accept two TPM2B quantities
-> representing the public and private parts of the key.  However, the
-> export via keyctl pipe will only output the ASN.1 format.
-> 
-> The benefit of the ASN.1 format is that it's a standard and thus the
-> exported key can be used by userspace tools (openssl_tpm2_engine,
-> openconnect and tpm2-tss-engine).  The format includes policy
-> specifications, thus it gets us out of having to construct policy
-> handles in userspace and the format includes the parent meaning you
-> don't have to keep passing it in each time.
-> 
-> This patch only implements basic handling for the ASN.1 format, so
-> keys with passwords but no policy.
-> 
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+v2:
+ - Handle NULL buffer and buflen properly in patch 1.
+ - Fix a bug in big_key.c.
+ - Add patch 2 to handle arbitrary large user-supplied buflen.
 
-Not yet sure but I get
+The current security key read methods are called with the key semaphore
+held.  The methods then copy out the key data to userspace which is
+subjected to page fault and may acquire the mmap semaphore. That can
+result in circular lock dependency and hence a chance to get into
+deadlock.
 
-keyctl add trusted kmk "new 32 keyhandle=0x81000001 hash=sha1 pcrinfo=03000001 6768033e216468247bd031a0a2d9876d79818f8f" @u
-add_key: No such device
+To avoid such a deadlock, an internal buffer is now allocated for getting
+out the necessary data first. After releasing the key semaphore, the
+key data are then copied out to userspace sidestepping the circular
+lock dependency.
 
-After applying 1/6-4/6.
+The keyutils test suite was run and the test passed with these patchset
+applied without any falure.
 
-At this point I'm assuming that I've made mistake somewhere, which is
-entirely possible.
+Waiman Long (2):
+  KEYS: Don't write out to userspace while holding key semaphore
+  KEYS: Avoid false positive ENOMEM error on key read
 
-/Jarkko
+ include/linux/key-type.h                  |  2 +-
+ security/keys/big_key.c                   | 11 ++---
+ security/keys/encrypted-keys/encrypted.c  |  7 ++-
+ security/keys/keyctl.c                    | 54 ++++++++++++++++++++++-
+ security/keys/keyring.c                   |  6 +--
+ security/keys/request_key_auth.c          |  7 ++-
+ security/keys/trusted-keys/trusted_tpm1.c | 14 +-----
+ security/keys/user_defined.c              |  5 +--
+ 8 files changed, 68 insertions(+), 38 deletions(-)
+
+-- 
+2.18.1
+
