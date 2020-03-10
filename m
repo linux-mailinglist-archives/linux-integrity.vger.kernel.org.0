@@ -2,119 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1DA17EBB1
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Mar 2020 23:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F18317EFD5
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2020 06:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726946AbgCIWI1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Mar 2020 18:08:27 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:57554 "EHLO
+        id S1726244AbgCJFJq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Mar 2020 01:09:46 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:35210 "EHLO
         bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726536AbgCIWI1 (ORCPT
+        by vger.kernel.org with ESMTP id S1725988AbgCJFJp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Mar 2020 18:08:27 -0400
+        Tue, 10 Mar 2020 01:09:45 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 891DD8EE130;
-        Mon,  9 Mar 2020 15:08:26 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 125CE8EE130;
+        Mon,  9 Mar 2020 22:09:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1583791706;
-        bh=8qnLnJ0TylGaGU7IaxmzGUxtMZPiNg594i7ggcqCpkA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=mzvjwi92O+3CZz8uMP/PH8JM5X6VMuN8t746Go6vbdzEqycr9l5IF8lqOoFuBuTVo
-         QeABWAknpH5MkOwu47xtEht+6a5tqL8a8Iumi63tHE8DZ01F8dBXQ2scChF4H06BP9
-         Ha8QQZt1yt9+gjtlRFceetlhEf0NvWox6HYbjpxM=
+        s=20151216; t=1583816985;
+        bh=VcSjdzhhad+WLctYez/Ugr+pEJsRP7dEqyZjdkDg2SY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uxwT1YKK9641IXggH91hD7bh5UjZ1c2JNGt9qSKnbXKqGF09JfD0hCTcF6Ikzz3FP
+         NPLh1BF7M2mme/U+mb2lcQBzYeVMiw3TJQtvjvdsWyzsAbCcCXPotrYNj727DXkHny
+         VWlbfLd8BucvFBB3PeeDs9fqiSoijDeaPL/10Ous=
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Ghq7l2BhfMVk; Mon,  9 Mar 2020 15:08:25 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 271968EE121;
-        Mon,  9 Mar 2020 15:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1583791704;
-        bh=8qnLnJ0TylGaGU7IaxmzGUxtMZPiNg594i7ggcqCpkA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=rC8YyA2zk7O7WnoScHtYy/0sY/aCiYf1JbDhgradTPdz+DlwDqI+Ik7AdBEVN2zRL
-         7Oe0ZLmEE3S75klM1depn0b74p7+P8FAaeS8mnG7bRsHYL9Po6KDSouNU+xg6l+fjd
-         yIIXVoDShJp0BxZtwBu2LD+pXcLXhVnnGUotGPCg=
-Message-ID: <1583791703.6009.3.camel@HansenPartnership.com>
-Subject: Re: [PATCH v7 4/6] security: keys: trusted: use ASN.1 TPM2 key
- format for the blobs
+        with ESMTP id jx22kbkeg-4K; Mon,  9 Mar 2020 22:09:44 -0700 (PDT)
+Received: from jarvis.lan (jarvis.ext.hansenpartnership.com [153.66.160.226])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2A4638EE121;
+        Mon,  9 Mar 2020 22:09:44 -0700 (PDT)
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Date:   Mon, 09 Mar 2020 15:08:23 -0700
-In-Reply-To: <1583762386.3429.6.camel@HansenPartnership.com>
-References: <20200305022744.12492-1-James.Bottomley@HansenPartnership.com>
-         <20200305022744.12492-5-James.Bottomley@HansenPartnership.com>
-         <20200307220026.GA122868@linux.intel.com>
-         <1583762386.3429.6.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v8 0/8] TPM 2.0 trusted keys with attached policy
+Date:   Mon,  9 Mar 2020 22:09:31 -0700
+Message-Id: <20200310050939.29251-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-03-09 at 06:59 -0700, James Bottomley wrote:
-> On Sun, 2020-03-08 at 00:00 +0200, Jarkko Sakkinen wrote:
-> > On Wed, Mar 04, 2020 at 06:27:42PM -0800, James Bottomley wrote:
-> > > Modify the TPM2 key format blob output to export and import in
-> > > the ASN.1 form for TPM2 sealed object keys.  For compatibility
-> > > with prior trusted keys, the importer will also accept two TPM2B
-> > > quantities representing the public and private parts of the
-> > > key.  However, the export via keyctl pipe will only output the
-> > > ASN.1 format.
-> > > 
-> > > The benefit of the ASN.1 format is that it's a standard and thus
-> > > the exported key can be used by userspace tools
-> > > (openssl_tpm2_engine, openconnect and tpm2-tss-engine).  The
-> > > format includes policy specifications, thus it gets us out of
-> > > having to construct policy handles in userspace and the format
-> > > includes the parent meaning you don't have to keep passing it in
-> > > each time.
-> > > 
-> > > This patch only implements basic handling for the ASN.1 format,
-> > > so keys with passwords but no policy.
-> > > 
-> > > Signed-off-by: James Bottomley
-> > > <James.Bottomley@HansenPartnership.com>
-> > 
-> > Not yet sure but I get
-> > 
-> > keyctl add trusted kmk "new 32 keyhandle=0x81000001 hash=sha1
-> > pcrinfo=03000001 6768033e216468247bd031a0a2d9876d79818f8f" @u
-> > add_key: No such device
-> 
-> What's the last hex string?  Is there supposed to be a command
-> preceding it (like blobauth since there's 40 hex chars?).
-> 
-> > After applying 1/6-4/6.
-> 
-> As you guessed for most of the rebases I've been testing the whole
-> set of patches.  Let me wind back to 4/6 and have a look.
-> 
-> > At this point I'm assuming that I've made mistake somewhere, which
-> > is entirely possible.
-> 
-> Heh, don't bet on it, I should be able to reconstruct the environment
-> today and try it out.
+This is a respin to separate patch 4 into the original three patches
+it was.  I've done testing with each of the three splinters, so I
+think I've got the split correct.
 
-OK, I got the environment constructed, and everything seems to work
-fine for me.
+General cover letter:
 
-However, there is still a problem with the patch.  It appears in going
-from v4->v5 two additional patches got folded into this one:
+This patch updates the trusted key code to export keys in the ASN.1
+format used by current TPM key tools (openssl_tpm2_engine and
+openconnect).  It also simplifies the use of policy with keys because
+the ASN.1 format is designed to carry a description of how to
+construct the policy, with the result that simple policies (like
+authorization and PCR locking) can now be constructed and used in the
+kernel, bringing the TPM 2.0 policy use into line with how TPM 1.2
+works.
 
-[PATCH v4 5/9] security: keys: trusted: Make sealed key properly
- interoperable
-[PATCH v4 6/9] security: keys: trusted: add PCR policy to TPM2 keys
+The key format is designed to be compatible with our two openssl
+engine implementations as well as with the format used by openconnect.
+I've added seal/unseal to my engine so I can use it for
+interoperability testing and I'll later use this for sealed symmetric
+keys via engine:
 
-I'll see if I can disentangle them otherwise the commit log saying we
-don't add policy is completely wrong.
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/
 
 James
+
+---
+
+James Bottomley (8):
+  lib: add ASN.1 encoder
+  oid_registry: Add TCG defined OIDS for TPM keys
+  security: keys: trusted: fix TPM2 authorizations
+  security: keys: trusted: use ASN.1 TPM2 key format for the blobs
+  security: keys: trusted: Make sealed key properly interoperable
+  security: keys: trusted: add PCR policy to TPM2 keys
+  security: keys: trusted: add ability to specify arbitrary policy
+  security: keys: trusted: implement counter/timer policy
+
+ Documentation/security/keys/trusted-encrypted.rst |  64 ++-
+ include/keys/trusted-type.h                       |   7 +-
+ include/linux/asn1_encoder.h                      |  32 ++
+ include/linux/oid_registry.h                      |   5 +
+ include/linux/tpm.h                               |   8 +
+ lib/Makefile                                      |   2 +-
+ lib/asn1_encoder.c                                | 431 ++++++++++++++++++++
+ security/keys/Kconfig                             |   2 +
+ security/keys/trusted-keys/Makefile               |   2 +-
+ security/keys/trusted-keys/tpm2-policy.c          | 463 ++++++++++++++++++++++
+ security/keys/trusted-keys/tpm2-policy.h          |  31 ++
+ security/keys/trusted-keys/tpm2key.asn1           |  23 ++
+ security/keys/trusted-keys/trusted_tpm1.c         |  56 ++-
+ security/keys/trusted-keys/trusted_tpm2.c         | 370 +++++++++++++++--
+ 14 files changed, 1459 insertions(+), 37 deletions(-)
+ create mode 100644 include/linux/asn1_encoder.h
+ create mode 100644 lib/asn1_encoder.c
+ create mode 100644 security/keys/trusted-keys/tpm2-policy.c
+ create mode 100644 security/keys/trusted-keys/tpm2-policy.h
+ create mode 100644 security/keys/trusted-keys/tpm2key.asn1
+
+-- 
+2.16.4
 
