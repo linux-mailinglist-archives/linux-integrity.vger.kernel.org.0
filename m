@@ -2,58 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C08180153
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2020 16:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 440291801B5
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2020 16:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727388AbgCJPOd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Mar 2020 11:14:33 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41626 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbgCJPOc (ORCPT
+        id S1727768AbgCJPXB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Mar 2020 11:23:01 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:45520 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726380AbgCJPXB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Mar 2020 11:14:32 -0400
-Received: by mail-lf1-f68.google.com with SMTP id q10so10454578lfo.8
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Mar 2020 08:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WlHYJpV9LDx+Kwr6eflFKbZEkhaqyVolWhtkZZvo7vI=;
-        b=bC9JS/jkIP7VzM51WtZVMaHlmsxxvIuljKiOKK6WFvu4qN/R/6XcBZns+Fks7pejna
-         +RUDKNesm0NBUjTZ8xigIJXZDl6cx8hggA/jtWCT7LMGP8LLo/nTKKmb2s1ifR/3JK0h
-         z2uB9XMLY5/c0TOBgeLArYwg+2yRT8+55nVRAEO5epqJnHhIKqGAy0ckBl8uH8iOiKJP
-         alppN1jCrU6vC8c1j5LES7mx4UgcV3au3pxUoyfw0HXgft5cspt+2fE1bwJbCvdfk4Is
-         udx0ktJUt2zyhtRv1gi4mzZ6veGz2FObycwZbNrUb5OB73XAZz+PMpMMpHaX+t/u3IB8
-         9OFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WlHYJpV9LDx+Kwr6eflFKbZEkhaqyVolWhtkZZvo7vI=;
-        b=koZbfjp3Z6TuvLAm+hdYxk0HxW1KYO47Meyj5+zBwMqA3vTwGk24LiaxR7rChfXybV
-         VjOwQ2EviCdpw3pMtZgWDtAdBfWEbQLzJaRCUqhGJM1T7sYzDT3FnhBhlyrsGQM2LV1p
-         gM3FW4SZngXo1HchUbxv/u+kjZIBvkLFTEgwiBTWphDYJ93pCT0o+gRHNy9vaOEJ8h9n
-         RlKacNCiisiHuYJuqvl+KGW+4v4JmS3sALQMBh2IgosfCJyEm9uO16hJUzxR60phxaoy
-         YePXrfkh3xOvw4sDT376aExMi7ndkuey8/m2bPWWhI8SrLL4wKNIlTHvQM6m63R/K2UT
-         QapA==
-X-Gm-Message-State: ANhLgQ24BMS2ukRpek72Sd3qZPK6Mf4vEJ8PKPZWAI/Ai/8iKowr/bKY
-        QVW/GufHm6cAEKEVwPzSrqIQeblsd6l8MbAAZQ==
-X-Google-Smtp-Source: ADFU+vux0gBcOt7g0H1jKQ8HRDO6Y0KtWq92qVSuP3ufFVJmDagqoUE8i7LA1GxQWV0FFXFOwlLboR1HEWm91KhLzgE=
-X-Received: by 2002:ac2:58ee:: with SMTP id v14mr12980253lfo.62.1583853268607;
- Tue, 10 Mar 2020 08:14:28 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab3:5705:0:0:0:0:0 with HTTP; Tue, 10 Mar 2020 08:14:28
- -0700 (PDT)
-Reply-To: cyeden1@gmail.com
-From:   "Cy.Eden" <asdam997@gmail.com>
-Date:   Tue, 10 Mar 2020 15:14:28 +0000
-Message-ID: <CAPN9pvTL4+hje0MhO+N4d_zdeed8wZx+-G7m3DqWQfbijdaYtA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        Tue, 10 Mar 2020 11:23:01 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C119D8EE130;
+        Tue, 10 Mar 2020 08:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1583853780;
+        bh=Qhp/hn6y0+PPWeQltwAXqcBWh81eIwGg4ZOYwHYMCB4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=awaDYWgp39AUrr/psnWbI5d38DagTcQtRLG2JR9LmTfRALw02A5fIksAzWS4ahDFi
+         VPA2BczaiZxaCkZmaxl0bF2GmrG2AUok8dsdzHpJYI1qmsA+o/id84ScK9tUM9+xo9
+         IWW3uaqOEAfNPYpOppdnVDRszphSQJ/03/kGIv5M=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id PoHMto9_6MhV; Tue, 10 Mar 2020 08:23:00 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 10C5C8EE0E2;
+        Tue, 10 Mar 2020 08:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1583853780;
+        bh=Qhp/hn6y0+PPWeQltwAXqcBWh81eIwGg4ZOYwHYMCB4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=awaDYWgp39AUrr/psnWbI5d38DagTcQtRLG2JR9LmTfRALw02A5fIksAzWS4ahDFi
+         VPA2BczaiZxaCkZmaxl0bF2GmrG2AUok8dsdzHpJYI1qmsA+o/id84ScK9tUM9+xo9
+         IWW3uaqOEAfNPYpOppdnVDRszphSQJ/03/kGIv5M=
+Message-ID: <1583853778.5686.14.camel@HansenPartnership.com>
+Subject: Re: [PATCH v8 1/8] lib: add ASN.1 encoder
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
+Date:   Tue, 10 Mar 2020 08:22:58 -0700
+In-Reply-To: <20200310050939.29251-2-James.Bottomley@HansenPartnership.com>
+References: <20200310050939.29251-1-James.Bottomley@HansenPartnership.com>
+         <20200310050939.29251-2-James.Bottomley@HansenPartnership.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello I have an important information from UNITED NATIONS for
-you,reply for more details
+On Mon, 2020-03-09 at 22:09 -0700, James Bottomley wrote:
+> We have a need in the TPM2 trusted keys to return the ASN.1 form of
+> the TPM key blob so it can be operated on by tools outside of the
+> kernel.  The specific tools are the openssl_tpm2_engine, openconnect
+> and the Intel tpm2-tss-engine.  To do that, we have to be able to
+> read and write the same binary key format the tools use.  The current
+> ASN.1 decoder does fine for reading, but we need pieces of an ASN.1
+> encoder to write the key blob in binary compatible form.
+> 
+> For backwards compatibility, the trusted key reader code will still
+> accept the two TPM2B quantities that it uses today, but the writer
+> will only output the ASN.1 form.
+> 
+> The current implementation only encodes the ASN.1 bits we actually
+> need.
+> 
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com
+> >
+
+Sorry, screwed up on tags here (forgot to add reviewed-by:).  I've
+resent the entire patch set here:
+
+https://lore.kernel.org/linux-integrity/20200310051607.30334-1-James.Bottomley@HansenPartnership.com/
+
+James
+
