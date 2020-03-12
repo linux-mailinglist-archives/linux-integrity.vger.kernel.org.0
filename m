@@ -2,53 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB1518359A
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Mar 2020 16:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5051D183591
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Mar 2020 16:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727303AbgCLP4o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Mar 2020 11:56:44 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56332 "EHLO
+        id S1726677AbgCLPzq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Mar 2020 11:55:46 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23642 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726571AbgCLP4o (ORCPT
+        by vger.kernel.org with ESMTP id S1726395AbgCLPzq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Mar 2020 11:56:44 -0400
+        Thu, 12 Mar 2020 11:55:46 -0400
 Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02CFqMTq095906;
-        Thu, 12 Mar 2020 11:55:36 -0400
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2yqpyau4a1-1
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02CFqR3W096163;
+        Thu, 12 Mar 2020 11:55:39 -0400
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2yqpyau4ct-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Mar 2020 11:55:35 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 02CFlGWq019512;
-        Thu, 12 Mar 2020 15:53:33 GMT
+        Thu, 12 Mar 2020 11:55:38 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 02CFlDjs028676;
+        Thu, 12 Mar 2020 15:53:34 GMT
 Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01wdc.us.ibm.com with ESMTP id 2ypjxr5yvr-1
+        by ppma03dal.us.ibm.com with ESMTP id 2ypjxs9fhu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Mar 2020 15:53:33 +0000
+        Thu, 12 Mar 2020 15:53:34 +0000
 Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02CFrXqQ13632068
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02CFrXMb13632070
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 12 Mar 2020 15:53:33 GMT
 Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0D1DEAE05C;
+        by IMSVA (Postfix) with ESMTP id 29F01AE05F;
         Thu, 12 Mar 2020 15:53:33 +0000 (GMT)
 Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8337AE05F;
-        Thu, 12 Mar 2020 15:53:32 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 11089AE062;
+        Thu, 12 Mar 2020 15:53:33 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 12 Mar 2020 15:53:32 +0000 (GMT)
+        Thu, 12 Mar 2020 15:53:33 +0000 (GMT)
 From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
 To:     jarkko.sakkinen@linux.intel.com, linux-integrity@vger.kernel.org
 Cc:     aik@ozlabs.ru, david@gibson.dropbear.id.au,
         linux-kernel@vger.kernel.org, nayna@linux.vnet.ibm.com,
         gcwilson@linux.ibm.com, jgg@ziepe.ca,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v7 0/3] Enable vTPM 2.0 for the IBM vTPM driver
-Date:   Thu, 12 Mar 2020 11:53:29 -0400
-Message-Id: <20200312155332.671464-1-stefanb@linux.vnet.ibm.com>
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>
+Subject: [PATCH v7 1/3] tpm: of: Handle IBM,vtpm20 case when getting log parameters
+Date:   Thu, 12 Mar 2020 11:53:30 -0400
+Message-Id: <20200312155332.671464-2-stefanb@linux.vnet.ibm.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200312155332.671464-1-stefanb@linux.vnet.ibm.com>
+References: <20200312155332.671464-1-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
@@ -66,49 +69,33 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Stefan Berger <stefanb@linux.ibm.com>
 
-QEMU 5.0 will support the PAPR vTPM device model for TPM 1.2 and TPM 2.0.
-This series of patches enables vTPM 2.0 support for the IBM vTPM driver.
+A vTPM 2.0 is identified by 'IBM,vtpm20' in the 'compatible' node in
+the device tree. Handle it in the same way as 'IBM,vtpm'.
 
-Regards,
-   Stefan
+The vTPM 2.0's log is written in little endian format so that for this
+aspect we can rely on existing code.
 
-- v6->v7:
-  - reverted changes in 1/3 due to xtensa not supporting API call;
-    removed Jarrko's Acked-by
-  - Added Nayna's Acked-by adn Tested-by to all patches
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Acked-by: Nayna Jain <nayna@linux.ibm.com>
+Tested-by: Nayna Jain <nayna@linux.ibm.com>
+---
+ drivers/char/tpm/eventlog/of.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-- v5->v6:
-  - Nits in commit texts
-
-- v4->v5:
-  - Added error path in case tpm2_get_cc_attrs_tbl() fails
-
-- v3->v4:
-  - Dropped patch 3; getting command code attributes table in IBM driver
-
-- v2->v3:
-  - Added fixes tag to patch 2/4; the race seems to have existed
-    since the driver was first added
-  - Renamed tpm2_init to tpm2_init_commands in 3/4
-
-- v1->v2:
-  - Addressed comments to v1; added patch 3 to handle case when
-    TPM_OPS_AUTO_STARTUP is not set
-
-
-
-Stefan Berger (3):
-  tpm: of: Handle IBM,vtpm20 case when getting log parameters
-  tpm: ibmvtpm: Wait for buffer to be set before proceeding
-  tpm: ibmvtpm: Add support for TPM2
-
- drivers/char/tpm/eventlog/of.c |  3 ++-
- drivers/char/tpm/tpm.h         |  1 +
- drivers/char/tpm/tpm2-cmd.c    |  2 +-
- drivers/char/tpm/tpm_ibmvtpm.c | 17 +++++++++++++++++
- drivers/char/tpm/tpm_ibmvtpm.h |  1 +
- 5 files changed, 22 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+index af347c190819..a9ce66d09a75 100644
+--- a/drivers/char/tpm/eventlog/of.c
++++ b/drivers/char/tpm/eventlog/of.c
+@@ -51,7 +51,8 @@ int tpm_read_log_of(struct tpm_chip *chip)
+ 	 * endian format. For this reason, vtpm doesn't need conversion
+ 	 * but physical tpm needs the conversion.
+ 	 */
+-	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0) {
++	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
++	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+ 		size = be32_to_cpup((__force __be32 *)sizep);
+ 		base = be64_to_cpup((__force __be64 *)basep);
+ 	} else {
 -- 
 2.23.0
 
