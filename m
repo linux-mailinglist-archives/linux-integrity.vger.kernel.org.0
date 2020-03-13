@@ -2,107 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A7218481F
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Mar 2020 14:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04700184A6D
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Mar 2020 16:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbgCMN34 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Mar 2020 09:29:56 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:45481 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726832AbgCMN34 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Mar 2020 09:29:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584106195;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3+ksI+XSY2k8kxQCweElbOHXEbbN3FX9hGarbW0qLpE=;
-        b=ExgfqPLCHFei3/BGbAitRC+ZfLQxDc1vIdgQBJY6bAad7v6hYR/0mT+vh8SRdM8MorYZNg
-        R05HXuGLNEhhc+1Li+bjuy5DHpiLStrE2BYt2KlqC/szqE9Ts6/9FPTZrigTq2ImZNjFs2
-        yyTo3bXmoIbBXwWLrXP3lG5GYjEqROI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-285-SOYfMbpkNq6cmHdbDSn14g-1; Fri, 13 Mar 2020 09:29:52 -0400
-X-MC-Unique: SOYfMbpkNq6cmHdbDSn14g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4302189F762;
-        Fri, 13 Mar 2020 13:29:49 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-125-21.rdu2.redhat.com [10.10.125.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E14A660CC0;
-        Fri, 13 Mar 2020 13:29:47 +0000 (UTC)
-Subject: Re: [PATCH v2 1/2] KEYS: Don't write out to userspace while holding
- key semaphore
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Chris von Recklinghausen <crecklin@redhat.com>
-References: <20200308170410.14166-1-longman@redhat.com>
- <20200308170410.14166-2-longman@redhat.com>
- <20200313010425.GA11360@linux.intel.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <e2dc038b-0283-0bf6-45f6-ad2dd0775e81@redhat.com>
-Date:   Fri, 13 Mar 2020 09:29:47 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726651AbgCMPSI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Mar 2020 11:18:08 -0400
+Received: from mga18.intel.com ([134.134.136.126]:18550 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726420AbgCMPSI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 13 Mar 2020 11:18:08 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Mar 2020 08:18:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,549,1574150400"; 
+   d="scan'208";a="237250642"
+Received: from mlitka-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.155.148])
+  by orsmga008.jf.intel.com with ESMTP; 13 Mar 2020 08:18:02 -0700
+Date:   Fri, 13 Mar 2020 17:18:00 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, aik@ozlabs.ru,
+        david@gibson.dropbear.id.au, linux-kernel@vger.kernel.org,
+        nayna@linux.vnet.ibm.com, gcwilson@linux.ibm.com, jgg@ziepe.ca,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>
+Subject: Re: [PATCH v7 1/3] tpm: of: Handle IBM,vtpm20 case when getting log
+ parameters
+Message-ID: <20200313151800.GA142269@linux.intel.com>
+References: <20200312155332.671464-1-stefanb@linux.vnet.ibm.com>
+ <20200312155332.671464-2-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200313010425.GA11360@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200312155332.671464-2-stefanb@linux.vnet.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/12/20 9:04 PM, Jarkko Sakkinen wrote:
-> On Sun, Mar 08, 2020 at 01:04:09PM -0400, Waiman Long wrote:
->> +		/*
->> +		 * Read methods will just return the required length
->> +		 * without any copying if the provided length isn't big
->> +		 * enough.
->> +		 */
->> +		if ((ret > 0) && (ret <= buflen) && buffer &&
->> +		    copy_to_user(buffer, tmpbuf, ret))
->> +			ret = -EFAULT;
-> Please, reorg and remove redundant parentheses:
->
-> /*
->  * Read methods will just return the required length
->  * without any copying if the provided length isn't big
->  * enough.
->  */
-> if (ret > 0 && ret <= buflen) {
-> 	if (buffer && copy_to_user(buffer, tmpbuf, ret))
-> 		ret = -EFAULT;
-> }
->
-> Now the comment is attached to the exact right thing. The previous
-> organization is a pain to look at when backtracking commits for
-> whatever reason in the future.
-Yes, I can reorganize the code.
-> I'm also wondering, would it be possible to rework the code in a way
-> that you don't have check whether buffer is valid on a constant basis?
+On Thu, Mar 12, 2020 at 11:53:30AM -0400, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> A vTPM 2.0 is identified by 'IBM,vtpm20' in the 'compatible' node in
+> the device tree. Handle it in the same way as 'IBM,vtpm'.
+> 
+> The vTPM 2.0's log is written in little endian format so that for this
+> aspect we can rely on existing code.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Nayna Jain <nayna@linux.ibm.com>
+> Tested-by: Nayna Jain <nayna@linux.ibm.com>
+> ---
+>  drivers/char/tpm/eventlog/of.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> index af347c190819..a9ce66d09a75 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -51,7 +51,8 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>  	 * endian format. For this reason, vtpm doesn't need conversion
+>  	 * but physical tpm needs the conversion.
+>  	 */
+> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0) {
+> +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
+> +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+>  		size = be32_to_cpup((__force __be32 *)sizep);
+>  		base = be64_to_cpup((__force __be64 *)basep);
+>  	} else {
+> -- 
+> 2.23.0
+> 
 
-One way to do that is to extract the down_read/up_read block into a
-helper function and then have 2 separate paths - one for length
-retrieval and another one for reading the key. I think that will make
-the code a bit easier easier to read.
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-Thanks,
-Longman
-
+/Jarkko
