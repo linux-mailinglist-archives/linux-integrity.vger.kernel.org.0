@@ -2,32 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EDA184CBB
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Mar 2020 17:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0910C184D12
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Mar 2020 17:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbgCMQnJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Mar 2020 12:43:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38914 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726406AbgCMQnJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Mar 2020 12:43:09 -0400
-Received: from sol.localdomain (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726550AbgCMQ54 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Mar 2020 12:57:56 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:39049 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726613AbgCMQ5z (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 13 Mar 2020 12:57:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584118674;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9j8OnyBfNlILX87ciN7BUxM/us5ynsXzxTQG5ddWEmM=;
+        b=eOWeSrCD7Uq7hUGuQbefMek4Q4vjgwhE3OQSSTh2l18haNxK86ffwAyJ/cTNYWYWRkTj0/
+        KUTl8jhiKcI5RKT0EDc/Gsiy1maFS3SO0Ragf0CAaZ/4AgbEfdTYTVJsD+wHC+OhSAc2aa
+        3RIQJMGdZIu4v3jr5P5T0DixNqKz0TU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-61-RJuFnENPPai3qqAECQMLXA-1; Fri, 13 Mar 2020 12:57:50 -0400
+X-MC-Unique: RJuFnENPPai3qqAECQMLXA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F872206BE;
-        Fri, 13 Mar 2020 16:43:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584117788;
-        bh=9uZEI+oOcFKGuYiAX/4oCsXo600bTwJmNKjcMRlMz9s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZCHJb8mk/tD9veVKos8z2FAbiYflpUdwh1BVM3NL5KiPVTBt0ISp3dxLCmlpy8Ent
-         dwWFZ/r8SWaEhaZ8yMnRUDZZWO2QPmFMvCySTZcr256MwJjE3eUOQzAwFQEoc7JMDk
-         ZCwEQAbwK6dV8lgwYLH1qlQq5X0gj2RVvz0JKkPU=
-Date:   Fri, 13 Mar 2020 09:43:06 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Waiman Long <longman@redhat.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 53604107ACC4;
+        Fri, 13 Mar 2020 16:57:47 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-125-21.rdu2.redhat.com [10.10.125.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C7D905D9CA;
+        Fri, 13 Mar 2020 16:57:44 +0000 (UTC)
+Subject: Re: [PATCH v2 1/2] KEYS: Don't write out to userspace while holding
+ key semaphore
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Cc:     David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Mimi Zohar <zohar@linux.ibm.com>, keyrings@vger.kernel.org,
@@ -37,93 +47,44 @@ Cc:     David Howells <dhowells@redhat.com>,
         Sumit Garg <sumit.garg@linaro.org>,
         Jerry Snitselaar <jsnitsel@redhat.com>,
         Roberto Sassu <roberto.sassu@huawei.com>,
+        Eric Biggers <ebiggers@google.com>,
         Chris von Recklinghausen <crecklin@redhat.com>
-Subject: Re: [PATCH v3 3/3] KEYS: Use kvmalloc() to better handle large
- buffer allocation
-Message-ID: <20200313164306.GA907@sol.localdomain>
-References: <20200313152102.1707-1-longman@redhat.com>
- <20200313152102.1707-4-longman@redhat.com>
+References: <20200308170410.14166-1-longman@redhat.com>
+ <20200308170410.14166-2-longman@redhat.com>
+ <20200313010425.GA11360@linux.intel.com>
+ <e2dc038b-0283-0bf6-45f6-ad2dd0775e81@redhat.com>
+ <20200313152837.GB142269@linux.intel.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <f4526e6f-0038-11f1-7950-e91ce90e49c1@redhat.com>
+Date:   Fri, 13 Mar 2020 12:57:44 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200313152102.1707-4-longman@redhat.com>
+In-Reply-To: <20200313152837.GB142269@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Mar 13, 2020 at 11:21:02AM -0400, Waiman Long wrote:
-> For large multi-page temporary buffer allocation, the security/keys
-> subsystem don't need contiguous physical pages. It will work perfectly
-> fine with virtually mapped pages.
-> 
-> Replace the kmalloc() call by kvmalloc() and provide a __kvzfree()
-> helper function to clear and free the kvmalloc'ed buffer. This will
-> reduce the chance of memory allocation failure just because of highly
-> fragmented pages.
-> 
-> Suggested-by: David Howells <dhowells@redhat.com>
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  security/keys/internal.h | 14 ++++++++++++++
->  security/keys/keyctl.c   | 10 +++++-----
->  2 files changed, 19 insertions(+), 5 deletions(-)
-> 
-> diff --git a/security/keys/internal.h b/security/keys/internal.h
-> index ba3e2da14cef..855b11eb73ee 100644
-> --- a/security/keys/internal.h
-> +++ b/security/keys/internal.h
-> @@ -16,6 +16,8 @@
->  #include <linux/keyctl.h>
->  #include <linux/refcount.h>
->  #include <linux/compat.h>
-> +#include <linux/mm.h>
-> +#include <linux/vmalloc.h>
->  
->  struct iovec;
->  
-> @@ -349,4 +351,16 @@ static inline void key_check(const struct key *key)
->  
->  #endif
->  
-> +/*
-> + * Helper function to clear and free a kvmalloc'ed memory object.
-> + */
-> +static inline void __kvzfree(const void *addr, size_t len)
-> +{
-> +	if (is_vmalloc_addr(addr)) {
-> +		memset((void *)addr, 0, len);
-> +		vfree(addr);
-> +	} else {
-> +		kzfree(addr);
-> +	}
-> +}
+On 3/13/20 11:28 AM, Jarkko Sakkinen wrote:
+> On Fri, Mar 13, 2020 at 09:29:47AM -0400, Waiman Long wrote:
+>> One way to do that is to extract the down_read/up_read block into a
+>> helper function and then have 2 separate paths - one for length
+>> retrieval and another one for reading the key. I think that will make
+>> the code a bit easier easier to read.
+>>
+>> Thanks,
+>> Longman
+> If it is not too much trouble for you, I think this would be a legit
+> cleanup to do.
 
-Since this takes the length as a parameter, it can be simplified to:
+Done. Please review the v3 patch.
 
-static inline void __kvzfree(const void *addr, size_t len)
-{
-	if (addr) {
-		memset((void *)addr, 0, len);
-		kvfree(addr);
-	}
-}
+Thanks,
+Longman
 
->  			if (!tmpbuf || unlikely(ret > tmpbuflen)) {
->  				if (unlikely(tmpbuf))
-> -					kzfree(tmpbuf);
-> +					__kvzfree(tmpbuf, tmpbuflen);
-
-Both kzfree() and __kvzfree() handle a NULL pointer, so there's no need for the
-NULL check first.
-
-> @@ -920,7 +920,7 @@ long keyctl_read_key(key_serial_t keyid, char __user *buffer, size_t buflen)
->  				ret = -EFAULT;
->  		}
->  		if (tmpbuf)
-> -			kzfree(tmpbuf);
-> +			__kvzfree(tmpbuf, tmpbuflen);
-
-Likewise here.  No need for the NULL check.
-
-- Eric
