@@ -2,98 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C08BD188D46
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2020 19:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4A0188E25
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2020 20:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbgCQSg6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Mar 2020 14:36:58 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:43347 "EHLO
+        id S1726756AbgCQTmq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Mar 2020 15:42:46 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:60792 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726294AbgCQSg6 (ORCPT
+        by vger.kernel.org with ESMTP id S1726692AbgCQTmo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Mar 2020 14:36:58 -0400
+        Tue, 17 Mar 2020 15:42:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584470217;
+        s=mimecast20190719; t=1584474162;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gwrf4J2FnOgQssJONp9zFLVSRMiMPIXEXh9xD+q8AIo=;
-        b=TZWAYBcRFpQX7+wZ1NCtypCkjFYJHUCZI+aRSDEphrfwhR9WyAVBxvi62K+m4Fhc1PajJX
-        gro5G9SqS6qoKvQdzB1jI4Ts9uUK53cfj8fPl2LFRBCvNtXyCcMS+oP8AZu9oJuLDV0x1Y
-        SPHElHAriMMWnd3ZxaruFTHitimCg4g=
+         to:to:cc:cc; bh=1fFQOEoei54nx8OzjJR+NcuP/thiJUDry70cCne9lJ0=;
+        b=DuT4cgBaZ4idPEoRtqF62j5aIjXyuJpyQQ8atuBQkC1KrTKZKdHwQNGHwv4NOhvpwzLAhu
+        K23P6aqEiDFfkOQcQ8IL8PqfmPUaD+QDuO+0uSQcHiMsvy/w0FtO3XGxxS+fqk0i+2rYyT
+        Y1V5BRaZ6GD8KZCAa2j6Ibu17QDSYUs=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-99-DopgLM-EMf20XOl6Py1l5w-1; Tue, 17 Mar 2020 14:36:55 -0400
-X-MC-Unique: DopgLM-EMf20XOl6Py1l5w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+ us-mta-121-x4VM4dJDOzCifI5d55Tjjg-1; Tue, 17 Mar 2020 15:42:38 -0400
+X-MC-Unique: x4VM4dJDOzCifI5d55Tjjg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A0B31405;
-        Tue, 17 Mar 2020 18:36:53 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-115-15.rdu2.redhat.com [10.10.115.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 76BFE6E3EE;
-        Tue, 17 Mar 2020 18:36:51 +0000 (UTC)
-Subject: Re: [PATCH v3 2/3] KEYS: Avoid false positive ENOMEM error on key
- read
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     David Howells <dhowells@redhat.com>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A4F6107ACCA;
+        Tue, 17 Mar 2020 19:42:36 +0000 (UTC)
+Received: from llong.com (ovpn-115-15.rdu2.redhat.com [10.10.115.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 70EDD10002AB;
+        Tue, 17 Mar 2020 19:42:26 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, Sumit Garg <sumit.garg@linaro.org>,
         Jerry Snitselaar <jsnitsel@redhat.com>,
         Roberto Sassu <roberto.sassu@huawei.com>,
         Eric Biggers <ebiggers@google.com>,
-        Chris von Recklinghausen <crecklin@redhat.com>
-References: <20200313152102.1707-1-longman@redhat.com>
- <20200313152102.1707-3-longman@redhat.com>
- <20200315213245.GF224162@linux.intel.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <98feb3ff-835a-e4cf-40a9-284d21e16993@redhat.com>
-Date:   Tue, 17 Mar 2020 14:36:50 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20200315213245.GF224162@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        Chris von Recklinghausen <crecklin@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v4 0/4] KEYS: Read keys to internal buffer & then copy to userspace
+Date:   Tue, 17 Mar 2020 15:41:36 -0400
+Message-Id: <20200317194140.6031-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/15/20 5:32 PM, Jarkko Sakkinen wrote:
-> On Fri, Mar 13, 2020 at 11:21:01AM -0400, Waiman Long wrote:
->> -		 * Read methods will just return the required length
->> -		 * without any copying if the provided length isn't big
->> -		 * enough.
->> +		 * We don't want an erronous -ENOMEM error due to an
->> +		 * arbitrary large user-supplied buflen. So if buflen
->> +		 * exceeds a threshold (1024 bytes in this case), we call
->> +		 * the read method twice. The first time to get the buffer
->> +		 * length and the second time to read out the key data.
->> +		 *
->> +		 * N.B. All the read methods will return the required
->> +		 *      buffer length with a NULL input buffer or when
->> +		 *      the input buffer length isn't large enough.
->>  		 */
->> +		if (buflen <= 0x400) {
-> 1. The overwhelmingly long comment. Will be destined to rotten.
-> 2. Magic number.
-> 3. The cap must be updated both in comment and code, and not only
->    that, but the numbers use a different base (dec and hex).
->
-> /Jarkko
->
-Thank for the comment. I will make the necessary change.
+v4:
+ - Remove the __user annotation from big_key_read() and user_read() in
+   patch 1.
+ - Add a new patch 2 to remove __user annotation from rxrpc_read().
+ - Add a new patch 3 to remove __user annotation from dns_resolver_read().
+ - Merge the original patches 2 and 3 into a single patch 4 and refactor
+   it as suggested by Jarkko and Eric.
 
-Cheers,
-Longman
+v3:
+ - Reorganize the keyctl_read_key() code to make it more readable as
+   suggested by Jarkko Sakkinen.
+ - Add patch 3 to use kvmalloc() for safer large buffer allocation as
+   suggested by David Howells.
+
+v2:
+ - Handle NULL buffer and buflen properly in patch 1.
+ - Fix a bug in big_key.c.
+ - Add patch 2 to handle arbitrary large user-supplied buflen.
+
+The current security key read methods are called with the key semaphore
+held.  The methods then copy out the key data to userspace which is
+subjected to page fault and may acquire the mmap semaphore. That can
+result in circular lock dependency and hence a chance to get into
+deadlock.
+
+To avoid such a deadlock, an internal buffer is now allocated for getting
+out the necessary data first. After releasing the key semaphore, the
+key data are then copied out to userspace sidestepping the circular
+lock dependency.
+
+The keyutils test suite was run and the test passed with these patchset
+applied without any falure.
+
+Waiman Long (4):
+  KEYS: Don't write out to userspace while holding key semaphore
+  KEYS: Remove __user annotation from rxrpc_read()
+  KEYS: Remove __user annotation from dns_resolver_read()
+  KEYS: Avoid false positive ENOMEM error on key read
+
+ include/keys/big_key-type.h               |  2 +-
+ include/keys/user-type.h                  |  3 +-
+ include/linux/key-type.h                  |  2 +-
+ net/dns_resolver/dns_key.c                |  2 +-
+ net/rxrpc/key.c                           | 27 +++----
+ security/keys/big_key.c                   | 11 ++-
+ security/keys/encrypted-keys/encrypted.c  |  7 +-
+ security/keys/internal.h                  | 12 ++++
+ security/keys/keyctl.c                    | 86 ++++++++++++++++++++---
+ security/keys/keyring.c                   |  6 +-
+ security/keys/request_key_auth.c          |  7 +-
+ security/keys/trusted-keys/trusted_tpm1.c | 14 +---
+ security/keys/user_defined.c              |  5 +-
+ 13 files changed, 116 insertions(+), 68 deletions(-)
+
+-- 
+2.18.1
 
