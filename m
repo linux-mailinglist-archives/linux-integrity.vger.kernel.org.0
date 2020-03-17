@@ -2,43 +2,43 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D97C188CD7
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2020 19:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4024188CDE
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2020 19:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726278AbgCQSKD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Mar 2020 14:10:03 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:24419 "EHLO
+        id S1726735AbgCQSKb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Mar 2020 14:10:31 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:27437 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726575AbgCQSKD (ORCPT
+        by vger.kernel.org with ESMTP id S1726770AbgCQSKb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Mar 2020 14:10:03 -0400
+        Tue, 17 Mar 2020 14:10:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584468602;
+        s=mimecast20190719; t=1584468630;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=g8ghW4p3mVYyvRQJA9R6SCfOZIEGrtXnAJnyhri2nak=;
-        b=K2VBSIqY3kFrjv22075ym6BCUviN++Wfrl7aN8M+TKZ8HNcJOwdhLpb3iEuRrxpqfa7jvn
-        /gCAp3vvVXEk8DFlforEI/drvBSw0aHb6/45XTDdfE8BU3zmoYOjLqtCfOq4SRiSpbZzex
-        niRRkDvSdvPPjl2HyxuA3q+xONgamfk=
+        bh=jC00Z6qh/Tdo08cJHrlqWaLr117ZyFvx6URUV4dogZI=;
+        b=Gt1i0zbHB8XMTx4n7d8dDm/uuxBeguk5lt2/shrajg+9cE5LKkTx270CwFAsMsDWqUfiyZ
+        xjbk0ZenONvtLgTC355YFrb+xfhrb9bzyNJ7UZwD6NH/K4xr1wAQ99HWBmbkWnMRUmuOKD
+        jl2RM2ocA2wFzEfzQp5YKzq6N9IoMic=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-167-6dx5OgrdMoywh3MbvXA60g-1; Tue, 17 Mar 2020 14:09:59 -0400
-X-MC-Unique: 6dx5OgrdMoywh3MbvXA60g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-21-KdywSIv7MtWkzjLf9Kj5ng-1; Tue, 17 Mar 2020 14:10:26 -0400
+X-MC-Unique: KdywSIv7MtWkzjLf9Kj5ng-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 758B2107ACC4;
-        Tue, 17 Mar 2020 18:09:56 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 988C9189F762;
+        Tue, 17 Mar 2020 18:10:24 +0000 (UTC)
 Received: from llong.remote.csb (ovpn-115-15.rdu2.redhat.com [10.10.115.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A8D7760BE0;
-        Tue, 17 Mar 2020 18:09:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5649390808;
+        Tue, 17 Mar 2020 18:10:23 +0000 (UTC)
 Subject: Re: [PATCH v3 1/3] KEYS: Don't write out to userspace while holding
  key semaphore
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Mimi Zohar <zohar@linux.ibm.com>, keyrings@vger.kernel.org,
         linux-kernel@vger.kernel.org,
@@ -49,47 +49,44 @@ Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Roberto Sassu <roberto.sassu@huawei.com>,
         Eric Biggers <ebiggers@google.com>,
         Chris von Recklinghausen <crecklin@redhat.com>
-References: <20200313152102.1707-2-longman@redhat.com>
+References: <20200315212706.GE224162@linux.intel.com>
  <20200313152102.1707-1-longman@redhat.com>
- <1797278.1584359451@warthog.procyon.org.uk>
+ <20200313152102.1707-2-longman@redhat.com>
+ <20200315192104.GD224162@linux.intel.com>
+ <1793253.1584357764@warthog.procyon.org.uk>
+ <c1138c83619553d018970a4b2d95f38fccebc99c.camel@linux.intel.com>
 From:   Waiman Long <longman@redhat.com>
 Organization: Red Hat
-Message-ID: <bfc84e1c-1a40-618a-fd7e-833c5a20063c@redhat.com>
-Date:   Tue, 17 Mar 2020 14:09:53 -0400
+Message-ID: <f07dee42-58e2-1e7a-8644-b55fae6ce8b0@redhat.com>
+Date:   Tue, 17 Mar 2020 14:10:22 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <1797278.1584359451@warthog.procyon.org.uk>
+In-Reply-To: <c1138c83619553d018970a4b2d95f38fccebc99c.camel@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/16/20 7:50 AM, David Howells wrote:
-> Waiman Long <longman@redhat.com> wrote:
+On 3/16/20 9:53 AM, Jarkko Sakkinen wrote:
+> On Mon, 2020-03-16 at 11:22 +0000, David Howells wrote:
+>> Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+>>
+>>> I guess we cannot sanely define fixes tag for this one, can we?
+>> Use:
+>>
+>> 	Fixes: ^1da177e4c3f4 ("Linux-2.6.12-rc2")
+>>
+>> David
+> Longmao, please include this to the next version.
 >
->>  include/linux/key-type.h                  |  2 +-
->>  security/keys/big_key.c                   | 11 ++---
->>  security/keys/encrypted-keys/encrypted.c  |  7 ++-
->>  security/keys/keyctl.c                    | 57 +++++++++++++++++++----
->>  security/keys/keyring.c                   |  6 +--
->>  security/keys/request_key_auth.c          |  7 ++-
->>  security/keys/trusted-keys/trusted_tpm1.c | 14 +-----
->>  security/keys/user_defined.c              |  5 +-
->> ...
->> -	long (*read)(const struct key *key, char __user *buffer, size_t buflen);
->> +	long (*read)(const struct key *key, char *buffer, size_t buflen);
-> Note that there are read functions outside of security/keys/ that also need
-> fixing - dns_resolver_read() and rxrpc_read().
+> /Jarkko
 >
-> David
-
-Yes, I am going to fix that. Sorry for the delay as I am juggling a few
-different tasks.
+Sure, will do.
 
 Cheers,
 Longman
