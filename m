@@ -2,196 +2,155 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D9A188E37
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2020 20:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744541890B9
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2020 22:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726895AbgCQTnN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Mar 2020 15:43:13 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:27113 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726877AbgCQTnM (ORCPT
+        id S1726476AbgCQVqQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Mar 2020 17:46:16 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51076 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726388AbgCQVqQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Mar 2020 15:43:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584474191;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=VP/33sULw/Y4pBnAwwPfa1aLW7Jli8KU3auzMsRKrNI=;
-        b=jCyRt2C20ssWhoG8HritFuDvBVYoDhlHj9E2xc//LiGttMdTyRbiKdYOPtzQ4/3dnRbJYA
-        6m8L4snO+2MEIQqy7FZy+4eOka8Fz6Z38qZu6Mh3wn2VzzToeLd3wwa+oF1BJRAti45uu7
-        eQDp0JvIOazeXuM1IYjdlTmtgbZvNiQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-454-3j8DzbXzMg2ZwixPszIWXg-1; Tue, 17 Mar 2020 15:43:07 -0400
-X-MC-Unique: 3j8DzbXzMg2ZwixPszIWXg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B2B9B80259A;
-        Tue, 17 Mar 2020 19:42:59 +0000 (UTC)
-Received: from llong.com (ovpn-115-15.rdu2.redhat.com [10.10.115.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 17FFD10027A3;
-        Tue, 17 Mar 2020 19:42:48 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     David Howells <dhowells@redhat.com>,
+        Tue, 17 Mar 2020 17:46:16 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02HLX7xk011319;
+        Tue, 17 Mar 2020 17:46:09 -0400
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2yrtwverjb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Mar 2020 17:46:09 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 02HLj0wm026781;
+        Tue, 17 Mar 2020 21:46:08 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma03dal.us.ibm.com with ESMTP id 2yrpw6ja7b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Mar 2020 21:46:08 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02HLk7FJ62587192
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Mar 2020 21:46:07 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 16897BE059;
+        Tue, 17 Mar 2020 21:46:07 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E423EBE053;
+        Tue, 17 Mar 2020 21:46:06 +0000 (GMT)
+Received: from crimini9.aus.stglabs.ibm.com (unknown [9.40.192.141])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Tue, 17 Mar 2020 21:46:06 +0000 (GMT)
+Received: (from gcwilson@localhost)
+        by crimini9.aus.stglabs.ibm.com (8.15.2/8.15.2/Submit) id 02HLk4Xm009611;
+        Tue, 17 Mar 2020 17:46:04 -0400
+X-Authentication-Warning: crimini9.aus.stglabs.ibm.com: gcwilson set sender to gcwilson@linux.ibm.com using -f
+From:   George Wilson <gcwilson@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Stefan Berger <stefanb@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, Sumit Garg <sumit.garg@linaro.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Chris von Recklinghausen <crecklin@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v4 4/4] KEYS: Avoid false positive ENOMEM error on key read
-Date:   Tue, 17 Mar 2020 15:41:40 -0400
-Message-Id: <20200317194140.6031-5-longman@redhat.com>
-In-Reply-To: <20200317194140.6031-1-longman@redhat.com>
-References: <20200317194140.6031-1-longman@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        Nayna Jain <nayna@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Linh Pham <phaml@us.ibm.com>
+Subject: [PATCH v2] tpm: ibmvtpm: retry on H_CLOSED in tpm_ibmvtpm_send()
+Date:   Tue, 17 Mar 2020 17:46:00 -0400
+Message-Id: <20200317214600.9561-1-gcwilson@linux.ibm.com>
+X-Mailer: git-send-email 2.24.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-17_09:2020-03-17,2020-03-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 phishscore=0 suspectscore=1
+ priorityscore=1501 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2003170082
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-By allocating a kernel buffer with a user-supplied buffer length, it
-is possible that a false positive ENOMEM error may be returned because
-the user-supplied length is just too large even if the system do have
-enough memory to hold the actual key data.
+tpm_ibmvtpm_send() can fail during PowerVM Live Partition Mobility resume
+with an H_CLOSED return from ibmvtpm_send_crq().  The PAPR says, 'The
+“partner partition suspended” transport event disables the associated CRQ
+such that any H_SEND_CRQ hcall() to the associated CRQ returns H_Closed
+until the CRQ has been explicitly enabled using the H_ENABLE_CRQ hcall.'
+This patch adds a check in tpm_ibmvtpm_send() for an H_CLOSED return from
+ibmvtpm_send_crq() and in that case calls tpm_ibmvtpm_resume() and
+retries the ibmvtpm_send_crq() once.
 
-Moreover, if the buffer length is larger than the maximum amount of
-memory that can be returned by kmalloc() (2^(MAX_ORDER-1) number of
-pages), a warning message will also be printed.
-
-To reduce this possibility, we set a threshold (PAGE_SIZE) over which we
-do check the actual key length first before allocating a buffer of the
-right size to hold it. The threshold is arbitrary, it is just used to
-trigger a buffer length check. It does not limit the actual key length
-as long as there is enough memory to satisfy the memory request.
-
-To further avoid large buffer allocation failure due to page
-fragmentation, kvmalloc() is used to allocate the buffer so that vmapped
-pages can be used when there is not a large enough contiguous set of
-pages available for allocation.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
+Reported-by: Linh Pham <phaml@us.ibm.com>
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Signed-off-by: George Wilson <gcwilson@linux.ibm.com>
+Tested-by: Linh Pham <phaml@us.ibm.com>
 ---
- security/keys/internal.h | 12 ++++++++++++
- security/keys/keyctl.c   | 41 ++++++++++++++++++++++++++++++++--------
- 2 files changed, 45 insertions(+), 8 deletions(-)
+ drivers/char/tpm/tpm_ibmvtpm.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/security/keys/internal.h b/security/keys/internal.h
-index ba3e2da14cef..6d0ca48ae9a5 100644
---- a/security/keys/internal.h
-+++ b/security/keys/internal.h
-@@ -16,6 +16,8 @@
- #include <linux/keyctl.h>
- #include <linux/refcount.h>
- #include <linux/compat.h>
-+#include <linux/mm.h>
-+#include <linux/vmalloc.h>
+diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+index 78cc52690177..ba3bd503e080 100644
+--- a/drivers/char/tpm/tpm_ibmvtpm.c
++++ b/drivers/char/tpm/tpm_ibmvtpm.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Copyright (C) 2012 IBM Corporation
++ * Copyright (C) 2012-2020 IBM Corporation
+  *
+  * Author: Ashley Lai <ashleydlai@gmail.com>
+  *
+@@ -25,6 +25,8 @@
+ #include "tpm.h"
+ #include "tpm_ibmvtpm.h"
  
- struct iovec;
- 
-@@ -349,4 +351,14 @@ static inline void key_check(const struct key *key)
- 
- #endif
- 
-+/*
-+ * Helper function to clear and free a kvmalloc'ed memory object.
-+ */
-+static inline void __kvzfree(const void *addr, size_t len)
-+{
-+	if (addr) {
-+		memset((void *)addr, 0, len);
-+		kvfree(addr);
-+	}
-+}
- #endif /* _INTERNAL_H */
-diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
-index 81f68e434b9f..07eaa46d344c 100644
---- a/security/keys/keyctl.c
-+++ b/security/keys/keyctl.c
-@@ -339,7 +339,7 @@ long keyctl_update_key(key_serial_t id,
- 	payload = NULL;
- 	if (plen) {
- 		ret = -ENOMEM;
--		payload = kmalloc(plen, GFP_KERNEL);
-+		payload = kvmalloc(plen, GFP_KERNEL);
- 		if (!payload)
- 			goto error;
- 
-@@ -360,7 +360,7 @@ long keyctl_update_key(key_serial_t id,
- 
- 	key_ref_put(key_ref);
- error2:
--	kzfree(payload);
-+	__kvzfree(payload, plen);
- error:
- 	return ret;
- }
-@@ -877,13 +877,24 @@ long keyctl_read_key(key_serial_t keyid, char __user *buffer, size_t buflen)
- 		 * transferring them to user buffer to avoid potential
- 		 * deadlock involving page fault and mmap_sem.
- 		 */
--		char *tmpbuf = kmalloc(buflen, GFP_KERNEL);
-+		char *tmpbuf = NULL;
-+		size_t tmpbuflen = buflen;
- 
--		if (!tmpbuf) {
--			ret = -ENOMEM;
--			goto error2;
-+		/*
-+		 * To prevent memory allocation failure with an arbitrary
-+		 * large user-supplied buflen, we do a key length check
-+		 * before allocating a buffer of the right size to hold
-+		 * key data if it exceeds a threshold (PAGE_SIZE).
-+		 */
-+		if (buflen <= PAGE_SIZE) {
-+allocbuf:
-+			tmpbuf = kvmalloc(tmpbuflen, GFP_KERNEL);
-+			if (!tmpbuf) {
-+				ret = -ENOMEM;
-+				goto error2;
-+			}
- 		}
--		ret = __keyctl_read_key(key, tmpbuf, buflen);
-+		ret = __keyctl_read_key(key, tmpbuf, tmpbuflen);
- 
- 		/*
- 		 * Read methods will just return the required length
-@@ -891,10 +902,24 @@ long keyctl_read_key(key_serial_t keyid, char __user *buffer, size_t buflen)
- 		 * enough.
- 		 */
- 		if ((ret > 0) && (ret <= buflen)) {
-+			/*
-+			 * It is possible, though unlikely, that the key
-+			 * changes in between the up_read->down_read period.
-+			 * If the key becomes longer, we will have to
-+			 * allocate a larger buffer and redo the key read
-+			 * again.
-+			 */
-+			if (!tmpbuf || unlikely(ret > tmpbuflen)) {
-+				if (unlikely(tmpbuf))
-+					__kvzfree(tmpbuf, tmpbuflen);
-+				tmpbuflen = ret;
-+				goto allocbuf;
-+			}
++static int tpm_ibmvtpm_resume(struct device *dev);
 +
- 			if (copy_to_user(buffer, tmpbuf, ret))
- 				ret = -EFAULT;
- 		}
--		kzfree(tmpbuf);
-+		__kvzfree(tmpbuf, tmpbuflen);
- 	}
+ static const char tpm_ibmvtpm_driver_name[] = "tpm_ibmvtpm";
  
- error2:
+ static const struct vio_device_id tpm_ibmvtpm_device_table[] = {
+@@ -147,6 +149,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ {
+ 	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
+ 	int rc, sig;
++	bool retry = true;
+ 
+ 	if (!ibmvtpm->rtce_buf) {
+ 		dev_err(ibmvtpm->dev, "ibmvtpm device is not ready\n");
+@@ -179,18 +182,28 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ 	 */
+ 	ibmvtpm->tpm_processing_cmd = true;
+ 
++again:
+ 	rc = ibmvtpm_send_crq(ibmvtpm->vdev,
+ 			IBMVTPM_VALID_CMD, VTPM_TPM_COMMAND,
+ 			count, ibmvtpm->rtce_dma_handle);
++
+ 	if (rc != H_SUCCESS) {
++		/*
++		 * H_CLOSED can be returned after LPM resume.  Call
++		 * tpm_ibmvtpm_resume() to re-enable the CRQ then retry
++		 * ibmvtpm_send_crq() once before failing.
++		 */
++		if (rc == H_CLOSED && retry) {
++			tpm_ibmvtpm_resume(ibmvtpm->dev);
++			retry = false;
++			goto again;
++		}
+ 		dev_err(ibmvtpm->dev, "tpm_ibmvtpm_send failed rc=%d\n", rc);
+-		rc = 0;
+ 		ibmvtpm->tpm_processing_cmd = false;
+-	} else
+-		rc = 0;
++	}
+ 
+ 	spin_unlock(&ibmvtpm->rtce_lock);
+-	return rc;
++	return 0;
+ }
+ 
+ static void tpm_ibmvtpm_cancel(struct tpm_chip *chip)
 -- 
-2.18.1
+2.24.1
 
