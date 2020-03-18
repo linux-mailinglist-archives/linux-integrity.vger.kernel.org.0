@@ -2,152 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A2018A3E2
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Mar 2020 21:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885A118A76E
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Mar 2020 22:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbgCRUn2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Mar 2020 16:43:28 -0400
-Received: from mga14.intel.com ([192.55.52.115]:12608 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726647AbgCRUn2 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Mar 2020 16:43:28 -0400
-IronPort-SDR: Z5XBmzZupuY2pX0gsQZS1NCjXnDUu17ml90/Ca90Uup0PpF3OvykjqLVmz2tK36FMVYkVwty9P
- JnvbekD/CMVw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2020 13:43:24 -0700
-IronPort-SDR: E8lgAwVq5wdZduiyLz5G/pTtWPWcpTbsCS3o1RpV488drpCa3ZPiAo0kzYW+LgabRnEno0nyGZ
- QjNIVZeyMq7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,568,1574150400"; 
-   d="scan'208";a="263509707"
-Received: from mbeldzik-mobl.ger.corp.intel.com (HELO localhost) ([10.252.55.127])
-  by orsmga002.jf.intel.com with ESMTP; 18 Mar 2020 13:43:20 -0700
-Date:   Wed, 18 Mar 2020 22:43:18 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     George Wilson <gcwilson@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Nayna Jain <nayna@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        Linh Pham <phaml@us.ibm.com>
-Subject: Re: [PATCH v2] tpm: ibmvtpm: retry on H_CLOSED in tpm_ibmvtpm_send()
-Message-ID: <20200318204318.GA48352@linux.intel.com>
-References: <20200317214600.9561-1-gcwilson@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        id S1727113AbgCRVzF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Mar 2020 17:55:05 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50576 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727116AbgCRVzB (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 18 Mar 2020 17:55:01 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02ILWb0X185066
+        for <linux-integrity@vger.kernel.org>; Wed, 18 Mar 2020 17:55:00 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2yu8adpwvk-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 18 Mar 2020 17:55:00 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 18 Mar 2020 21:54:57 -0000
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 18 Mar 2020 21:54:55 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02ILrrgZ39649772
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Mar 2020 21:53:53 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C0BD5204E;
+        Wed, 18 Mar 2020 21:54:54 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.207.40])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 4565352051;
+        Wed, 18 Mar 2020 21:54:53 +0000 (GMT)
+Subject: Re: [PATCH v3 7/8] ima: Calculate and extend PCR with digests in
+ ima_template_entry
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "James.Bottomley@HansenPartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Date:   Wed, 18 Mar 2020 17:54:52 -0400
+In-Reply-To: <fecf59c1880045769bfecc17b5670ac5@huawei.com>
+References: <20200210100418.22049-1-roberto.sassu@huawei.com>
+         <1583208222.8544.168.camel@linux.ibm.com>
+         <fecf59c1880045769bfecc17b5670ac5@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200317214600.9561-1-gcwilson@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-TM-AS-GCONF: 00
+x-cbid: 20031821-4275-0000-0000-000003AEABFD
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20031821-4276-0000-0000-000038C3D8E2
+Message-Id: <1584568492.5188.200.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-18_07:2020-03-18,2020-03-18 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 mlxscore=0 clxscore=1015 priorityscore=1501 spamscore=0
+ malwarescore=0 impostorscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003180092
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 05:46:00PM -0400, George Wilson wrote:
-> tpm_ibmvtpm_send() can fail during PowerVM Live Partition Mobility resume
-> with an H_CLOSED return from ibmvtpm_send_crq().  The PAPR says, 'The
-> “partner partition suspended” transport event disables the associated CRQ
-> such that any H_SEND_CRQ hcall() to the associated CRQ returns H_Closed
-> until the CRQ has been explicitly enabled using the H_ENABLE_CRQ hcall.'
-> This patch adds a check in tpm_ibmvtpm_send() for an H_CLOSED return from
-> ibmvtpm_send_crq() and in that case calls tpm_ibmvtpm_resume() and
-> retries the ibmvtpm_send_crq() once.
+On Wed, 2020-03-18 at 12:42 +0000, Roberto Sassu wrote:
+> > -----Original Message-----
+> > From: owner-linux-security-module@vger.kernel.org [mailto:owner-linux-
+> > security-module@vger.kernel.org] On Behalf Of Mimi Zohar
+> > Sent: Tuesday, March 3, 2020 5:04 AM
+> > To: Roberto Sassu <roberto.sassu@huawei.com>;
+> > James.Bottomley@HansenPartnership.com;
+> > jarkko.sakkinen@linux.intel.com
+> > Cc: linux-integrity@vger.kernel.org; linux-security-module@vger.kernel.org;
+> > linux-kernel@vger.kernel.org; Silviu Vlasceanu
+> > <Silviu.Vlasceanu@huawei.com>
+> > Subject: Re: [PATCH v3 7/8] ima: Calculate and extend PCR with digests in
+> > ima_template_entry
+> > 
+> > On Mon, 2020-02-10 at 11:04 +0100, Roberto Sassu wrote:
+> > 
+> > > @@ -219,6 +214,8 @@ int ima_restore_measurement_entry(struct
+> > ima_template_entry *entry)
+> > >
+> > >  int __init ima_init_digests(void)
+> > >  {
+> > > +	u16 digest_size;
+> > > +	u16 crypto_id;
+> > >  	int i;
+> > >
+> > >  	if (!ima_tpm_chip)
+> > > @@ -229,8 +226,17 @@ int __init ima_init_digests(void)
+> > >  	if (!digests)
+> > >  		return -ENOMEM;
+> > >
+> > > -	for (i = 0; i < ima_tpm_chip->nr_allocated_banks; i++)
+> > > +	for (i = 0; i < ima_tpm_chip->nr_allocated_banks; i++) {
+> > >  		digests[i].alg_id = ima_tpm_chip->allocated_banks[i].alg_id;
+> > > +		digest_size = ima_tpm_chip->allocated_banks[i].digest_size;
+> > > +		crypto_id = ima_tpm_chip->allocated_banks[i].crypto_id;
+> > > +
+> > > +		/* for unmapped TPM algorithms digest is still a padded
+> > SHA1 */
+> > > +		if (crypto_id == HASH_ALGO__LAST)
+> > > +			digest_size = SHA1_DIGEST_SIZE;
+> > > +
+> > > +		memset(digests[i].digest, 0xff, digest_size);
+> > 
+> > Shouldn't the memset here be of the actual digest size even for
+> > unmapped TPM algorithms.
 > 
-> Reported-by: Linh Pham <phaml@us.ibm.com>
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> Signed-off-by: George Wilson <gcwilson@linux.ibm.com>
-> Tested-by: Linh Pham <phaml@us.ibm.com>
-
-I think this should have a fixes tag.
-
-> ---
->  drivers/char/tpm/tpm_ibmvtpm.c | 23 ++++++++++++++++++-----
->  1 file changed, 18 insertions(+), 5 deletions(-)
+> This is consistent with ima_calc_field_array_hash(), so that a verifier
+> will always pad the SHA1 digest with zeros to obtain the final PCR value.
 > 
-> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
-> index 78cc52690177..ba3bd503e080 100644
-> --- a/drivers/char/tpm/tpm_ibmvtpm.c
-> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * Copyright (C) 2012 IBM Corporation
-> + * Copyright (C) 2012-2020 IBM Corporation
->   *
->   * Author: Ashley Lai <ashleydlai@gmail.com>
->   *
-> @@ -25,6 +25,8 @@
->  #include "tpm.h"
->  #include "tpm_ibmvtpm.h"
->  
-> +static int tpm_ibmvtpm_resume(struct device *dev);
-> +
+> I can set all bytes if you prefer.
 
-Instead, reposition this function before tpm_ibmvtpm_send().
+My concern is with violations.  The measurement list will be padded
+with 0's, but the value being extended into the TPM will only
+partially be 0xFF's.  When verifying the measurement list, replacing
+all 0x00's with all 0xFF's is simpler.
 
->  static const char tpm_ibmvtpm_driver_name[] = "tpm_ibmvtpm";
->  
->  static const struct vio_device_id tpm_ibmvtpm_device_table[] = {
-> @@ -147,6 +149,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
->  {
->  	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
->  	int rc, sig;
-> +	bool retry = true;
+Mimi
 
-Cosmetic: would be nice to have inits when possible in reverse
-Christmas tree order i.e.
-
-	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
-	bool retry = true;
-	int rc, sig;
-
-It is way more pleasing for the eye when you have to read the source
-code.
-
->  	if (!ibmvtpm->rtce_buf) {
->  		dev_err(ibmvtpm->dev, "ibmvtpm device is not ready\n");
-> @@ -179,18 +182,28 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
->  	 */
->  	ibmvtpm->tpm_processing_cmd = true;
->  
-> +again:
->  	rc = ibmvtpm_send_crq(ibmvtpm->vdev,
->  			IBMVTPM_VALID_CMD, VTPM_TPM_COMMAND,
->  			count, ibmvtpm->rtce_dma_handle);
-> +
-
-A dangling newline character.
-
->  	if (rc != H_SUCCESS) {
-> +		/*
-> +		 * H_CLOSED can be returned after LPM resume.  Call
-> +		 * tpm_ibmvtpm_resume() to re-enable the CRQ then retry
-> +		 * ibmvtpm_send_crq() once before failing.
-> +		 */
-> +		if (rc == H_CLOSED && retry) {
-> +			tpm_ibmvtpm_resume(ibmvtpm->dev);
-> +			retry = false;
-> +			goto again;
-> +		}
->  		dev_err(ibmvtpm->dev, "tpm_ibmvtpm_send failed rc=%d\n", rc);
-> -		rc = 0;
->  		ibmvtpm->tpm_processing_cmd = false;
-> -	} else
-> -		rc = 0;
-> +	}
->  
->  	spin_unlock(&ibmvtpm->rtce_lock);
-> -	return rc;
-> +	return 0;
->  }
->  
->  static void tpm_ibmvtpm_cancel(struct tpm_chip *chip)
-> -- 
-> 2.24.1
-> 
-
-/Jarkko
