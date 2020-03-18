@@ -2,134 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 885A118A76E
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Mar 2020 22:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A4718A7EB
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Mar 2020 23:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727113AbgCRVzF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Mar 2020 17:55:05 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50576 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727116AbgCRVzB (ORCPT
+        id S1727384AbgCRWPW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Mar 2020 18:15:22 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:49288 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727339AbgCRWPU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Mar 2020 17:55:01 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02ILWb0X185066
-        for <linux-integrity@vger.kernel.org>; Wed, 18 Mar 2020 17:55:00 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2yu8adpwvk-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 18 Mar 2020 17:55:00 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 18 Mar 2020 21:54:57 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 18 Mar 2020 21:54:55 -0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02ILrrgZ39649772
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Mar 2020 21:53:53 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C0BD5204E;
-        Wed, 18 Mar 2020 21:54:54 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.207.40])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 4565352051;
-        Wed, 18 Mar 2020 21:54:53 +0000 (GMT)
-Subject: Re: [PATCH v3 7/8] ima: Calculate and extend PCR with digests in
- ima_template_entry
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Wed, 18 Mar 2020 17:54:52 -0400
-In-Reply-To: <fecf59c1880045769bfecc17b5670ac5@huawei.com>
-References: <20200210100418.22049-1-roberto.sassu@huawei.com>
-         <1583208222.8544.168.camel@linux.ibm.com>
-         <fecf59c1880045769bfecc17b5670ac5@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20031821-4275-0000-0000-000003AEABFD
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20031821-4276-0000-0000-000038C3D8E2
-Message-Id: <1584568492.5188.200.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-18_07:2020-03-18,2020-03-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1015 priorityscore=1501 spamscore=0
- malwarescore=0 impostorscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003180092
+        Wed, 18 Mar 2020 18:15:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584569719;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=hYdi6uEYaESn05W64BXYLKDVbVzJzJ2IM2CBIwZRtco=;
+        b=H5KkmFXH6n/KESxx/sZBrU4gcjySDQfeNJhO9fbFb6F3s9HqWD6xgEoxpX1trswtThYM1y
+        Hx9X+11LeaGF44iGjqAwjVfafRvNAd22vL0KmhyLV+hAHSw9MiqU6YloEKxOcLmQcw9CQ5
+        rNFf5aI7DIFwHwA5TAE0wRcyEO+cGUw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-444-s6cnxxpyMqWS4UM_YEYicw-1; Wed, 18 Mar 2020 18:15:15 -0400
+X-MC-Unique: s6cnxxpyMqWS4UM_YEYicw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9502E13F8;
+        Wed, 18 Mar 2020 22:15:10 +0000 (UTC)
+Received: from llong.com (ovpn-120-114.rdu2.redhat.com [10.10.120.114])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 35C153AE;
+        Wed, 18 Mar 2020 22:15:04 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, Sumit Garg <sumit.garg@linaro.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Chris von Recklinghausen <crecklin@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v5 0/2] KEYS: Read keys to internal buffer & then copy to userspace
+Date:   Wed, 18 Mar 2020 18:14:55 -0400
+Message-Id: <20200318221457.1330-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-03-18 at 12:42 +0000, Roberto Sassu wrote:
-> > -----Original Message-----
-> > From: owner-linux-security-module@vger.kernel.org [mailto:owner-linux-
-> > security-module@vger.kernel.org] On Behalf Of Mimi Zohar
-> > Sent: Tuesday, March 3, 2020 5:04 AM
-> > To: Roberto Sassu <roberto.sassu@huawei.com>;
-> > James.Bottomley@HansenPartnership.com;
-> > jarkko.sakkinen@linux.intel.com
-> > Cc: linux-integrity@vger.kernel.org; linux-security-module@vger.kernel.org;
-> > linux-kernel@vger.kernel.org; Silviu Vlasceanu
-> > <Silviu.Vlasceanu@huawei.com>
-> > Subject: Re: [PATCH v3 7/8] ima: Calculate and extend PCR with digests in
-> > ima_template_entry
-> > 
-> > On Mon, 2020-02-10 at 11:04 +0100, Roberto Sassu wrote:
-> > 
-> > > @@ -219,6 +214,8 @@ int ima_restore_measurement_entry(struct
-> > ima_template_entry *entry)
-> > >
-> > >  int __init ima_init_digests(void)
-> > >  {
-> > > +	u16 digest_size;
-> > > +	u16 crypto_id;
-> > >  	int i;
-> > >
-> > >  	if (!ima_tpm_chip)
-> > > @@ -229,8 +226,17 @@ int __init ima_init_digests(void)
-> > >  	if (!digests)
-> > >  		return -ENOMEM;
-> > >
-> > > -	for (i = 0; i < ima_tpm_chip->nr_allocated_banks; i++)
-> > > +	for (i = 0; i < ima_tpm_chip->nr_allocated_banks; i++) {
-> > >  		digests[i].alg_id = ima_tpm_chip->allocated_banks[i].alg_id;
-> > > +		digest_size = ima_tpm_chip->allocated_banks[i].digest_size;
-> > > +		crypto_id = ima_tpm_chip->allocated_banks[i].crypto_id;
-> > > +
-> > > +		/* for unmapped TPM algorithms digest is still a padded
-> > SHA1 */
-> > > +		if (crypto_id == HASH_ALGO__LAST)
-> > > +			digest_size = SHA1_DIGEST_SIZE;
-> > > +
-> > > +		memset(digests[i].digest, 0xff, digest_size);
-> > 
-> > Shouldn't the memset here be of the actual digest size even for
-> > unmapped TPM algorithms.
-> 
-> This is consistent with ima_calc_field_array_hash(), so that a verifier
-> will always pad the SHA1 digest with zeros to obtain the final PCR value.
-> 
-> I can set all bytes if you prefer.
+v5:
+ - Merge v4 patches 2 and 3 into 1 to avoid sparse warning. Merge some of 
+   commit logs into patch 1 as well. There is no further change.
 
-My concern is with violations.  The measurement list will be padded
-with 0's, but the value being extended into the TPM will only
-partially be 0xFF's.  When verifying the measurement list, replacing
-all 0x00's with all 0xFF's is simpler.
+v4:
+ - Remove the __user annotation from big_key_read() and user_read() in
+   patch 1.
+ - Add a new patch 2 to remove __user annotation from rxrpc_read().
+ - Add a new patch 3 to remove __user annotation from dns_resolver_read().
+ - Merge the original patches 2 and 3 into a single patch 4 and refactor
+   it as suggested by Jarkko and Eric.
 
-Mimi
+v3:
+ - Reorganize the keyctl_read_key() code to make it more readable as
+   suggested by Jarkko Sakkinen.
+ - Add patch 3 to use kvmalloc() for safer large buffer allocation as
+   suggested by David Howells.
+
+v2:
+ - Handle NULL buffer and buflen properly in patch 1.
+ - Fix a bug in big_key.c.
+ - Add patch 2 to handle arbitrary large user-supplied buflen.
+
+The current security key read methods are called with the key semaphore
+held.  The methods then copy out the key data to userspace which is
+subjected to page fault and may acquire the mmap semaphore. That can
+result in circular lock dependency and hence a chance to get into
+deadlock.
+
+To avoid such a deadlock, an internal buffer is now allocated for getting
+out the necessary data first. After releasing the key semaphore, the
+key data are then copied out to userspace sidestepping the circular
+lock dependency.
+
+The keyutils test suite was run and the test passed with these patchset
+applied without any falure.
+
+Waiman Long (2):
+  KEYS: Don't write out to userspace while holding key semaphore
+  KEYS: Avoid false positive ENOMEM error on key read
+
+ include/keys/big_key-type.h               |  2 +-
+ include/keys/user-type.h                  |  3 +-
+ include/linux/key-type.h                  |  2 +-
+ net/dns_resolver/dns_key.c                |  2 +-
+ net/rxrpc/key.c                           | 27 +++----
+ security/keys/big_key.c                   | 11 ++-
+ security/keys/encrypted-keys/encrypted.c  |  7 +-
+ security/keys/internal.h                  | 12 ++++
+ security/keys/keyctl.c                    | 86 ++++++++++++++++++++---
+ security/keys/keyring.c                   |  6 +-
+ security/keys/request_key_auth.c          |  7 +-
+ security/keys/trusted-keys/trusted_tpm1.c | 14 +---
+ security/keys/user_defined.c              |  5 +-
+ 13 files changed, 116 insertions(+), 68 deletions(-)
+
+-- 
+2.18.1
 
