@@ -2,80 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3EC189F6C
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Mar 2020 16:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E6118A170
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Mar 2020 18:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727183AbgCRPOj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Mar 2020 11:14:39 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:34806 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727035AbgCRPOi (ORCPT
+        id S1726680AbgCRRWu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Mar 2020 13:22:50 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:48472 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbgCRRWu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Mar 2020 11:14:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584544477;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rDahFV9TPWnSHYGEo4pu2LmiluREcgL9pHQHEehqYmE=;
-        b=Dz15MQ4W0WxLh2CYuST0npl7v2oVIt0q2/wRZ+MMyN4B6ZkFYvBSBuH5dWqhqpFw9ExlmL
-        S7rRXktEgyZ3hUaNj4JLJhI/MYOIvOyJk3UpEsmton3cjKsBVpQ75LAvLKldf1rxsOtKmO
-        YFZ3UCNfG+vLr3geXcSbRnHyIIQMbUM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-115-zLovBwwuOPCXLkjvjN2tvw-1; Wed, 18 Mar 2020 11:14:34 -0400
-X-MC-Unique: zLovBwwuOPCXLkjvjN2tvw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 97683107ACC7;
-        Wed, 18 Mar 2020 15:14:31 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-113-126.rdu2.redhat.com [10.10.113.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0851A5C1D8;
-        Wed, 18 Mar 2020 15:14:25 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <e47bef56-9271-93e0-0e59-c77c253babea@redhat.com>
-References: <e47bef56-9271-93e0-0e59-c77c253babea@redhat.com> <20200317194140.6031-5-longman@redhat.com> <20200317194140.6031-1-longman@redhat.com> <2832139.1584520054@warthog.procyon.org.uk>
-To:     Waiman Long <longman@redhat.com>
-Cc:     dhowells@redhat.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, Sumit Garg <sumit.garg@linaro.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Chris von Recklinghausen <crecklin@redhat.com>
-Subject: Re: [PATCH v4 4/4] KEYS: Avoid false positive ENOMEM error on key read
+        Wed, 18 Mar 2020 13:22:50 -0400
+Received: from [192.168.0.109] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 25C7C20B9C02;
+        Wed, 18 Mar 2020 10:22:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 25C7C20B9C02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1584552169;
+        bh=R2z5utNegpjdpBUp8OL0jZwaYYNpLVfrrycstEKR12g=;
+        h=From:Subject:To:Cc:Date:From;
+        b=b4k7208q88j4NB5jbIcHZExTB0IQ41jmqpW/Awumd1uhyiVGCP25kr+lG3ql4Tf5/
+         /2IpZMZUCnQLWOgkYIAOCKO+dII/DV8e6CwA11Xgd41fzTuI4KGotuhlvcn6hwaixX
+         l/bzHc//G8vVvkGlWuTuyebEgNjwLOUOHgxVOMbA=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Subject: [RFC] IMA: Use Trusted Execution Environment to protect IMA keys and
+ operations
+To:     zohar@linux.ibm.com, James.Bottomley@HansenPartnership.com,
+        dhowells@redhat.com, linux-integrity@vger.kernel.org
+Cc:     sashal@kernel.org, keyrings@vger.kernel.org,
+        James Morris <jamorris@linuxonhyperv.com>,
+        balajib@microsoft.com,
+        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <f175c12e-24d8-745e-394d-6c850e01cf6c@linux.microsoft.com>
+Date:   Wed, 18 Mar 2020 10:22:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2866041.1584544464.1@warthog.procyon.org.uk>
-Date:   Wed, 18 Mar 2020 15:14:24 +0000
-Message-ID: <2866042.1584544464@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Waiman Long <longman@redhat.com> wrote:
+Linux kernel stores keys, secrets, and other such sensitive and high 
+value entities in memory. An attacker can exploit a kernel vulnerability 
+to modify existing entities or inject new ones to gain access to 
+privileged operations.
 
-> Doing this is micro-optimization. As the keys subsystem is that
-> performance critical, do we need to do that to save a cycle or two while
-> making the code a bit harder to read?
+IMA uses asymmetric keys stored in keyrings such as .ima, .evm to 
+validate digital signature of system files, kernel modules, etc. An 
+attacker can utilize a kernel exploit to modify or inject keys into 
+these system keyrings and hijack integrity operations performed by the 
+IMA subsystem.
 
-It was more sort of a musing comment.  Feel free to ignore it.  kvfree()
-doesn't do this.
+We can tackle this issue by storing such sensitive kernel data in
+a secure environment where they cannot be easily tampered with and
+performing the integrity operations in this environment.
 
-David
+For instance, ARM platform supports TrustZone (TZ) and Trusted Execution 
+Environment (TEE), Intel provides Software Guard Extensions (SGX), which 
+can be leveraged for this purpose.
 
+Proposal
+--------
+
+  Loading IMA Keyrings
+   => IMA keyrings and the keys in those keyrings will be maintained
+      inside TZ.
+   => These keyrings will be created and keys populated in the TZ when
+      the machine initializes TZ.
+   => Write access to these keyrings\keys will be blocked once they
+      are initialized.
+
+  Digital Signature Appraisal
+   Digital signature stored in security.ima, security.evm, or appended to
+   the module are verified by functions integrity_digsig_verify() or
+   integrity_modsig_verify().
+
+  The move to TZ\TEE can be done in phases:
+
+   Phase #1:
+    Maintain the keyrings\keys in TZ. Integrity functions execute in
+    the "Normal World" (Untrusted environment). They query the key
+    from TZ and validate signature.
+
+   Phase #2:
+    The integrity functions and their dependencies that validate
+    signature are executed in TEE.
+
+   Phase #3:
+    Integrity measurement, appraisal, and logging are executed in TEE.
+
+  Key Queries
+   KEYS subsystem need to be updated to route the calls to TZ
+   for queries for IMA keyrings such that callers (such as, user mode
+   utilities such as KEYCTL, EVMCTL, etc.) work seamlessly.
+
+Please provide comments\feedback on the proposal.
+
+Thanks,
+  -lakshmi
