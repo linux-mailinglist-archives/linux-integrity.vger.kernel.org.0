@@ -2,44 +2,44 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A611896D1
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Mar 2020 09:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F047E189707
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Mar 2020 09:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbgCRIXR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Mar 2020 04:23:17 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:38756 "EHLO
+        id S1727355AbgCRI1q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Mar 2020 04:27:46 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:57358 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726713AbgCRIXR (ORCPT
+        by vger.kernel.org with ESMTP id S1727041AbgCRI1q (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Mar 2020 04:23:17 -0400
+        Wed, 18 Mar 2020 04:27:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584519796;
+        s=mimecast20190719; t=1584520064;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=c5ZmniDWtOGgirD0ysXPKxoDj8zWagjtTzwo7m2KYVo=;
-        b=B5lDdxgkTX5fRPqzkA9SK5f1A6XqECeGNBi7bVOIO3WugYvbgBVn5BV4OhlGcdIHtv6c9/
-        oX//8VVkp8K8IiBQpTt7KeV2Pfrw+UTGE+iBrDmuBrHN0sMxecSx5sQq8bQmIIBc2zNiVl
-        hZtk8cMSmbCVhlmPBmGNxUW9Jr5QVBA=
+        bh=VH0+XlPo10NyA/xz91Ej5gjsjWF5TbKzK+mngsaI8Lo=;
+        b=GSpnlmeqjXBi4FlZq1RkzZJVl4+8Y7fXGX75YsK+vjCQPFLjt0zFuYYNVapjuQwh8My29g
+        DLNYuWMn3BDgegZ+R7x1bJykz0n8JD9G4FVTqhdnj9hchRi0Qkf1Nd4+e1kXowus2VKdHe
+        MkCbFywbgyfmsCqlJIqdUfLKZ8ikyBg=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-372-UnVQ4uV7PpGJbTpejA56sQ-1; Wed, 18 Mar 2020 04:23:15 -0400
-X-MC-Unique: UnVQ4uV7PpGJbTpejA56sQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-295-yA7fyRPiO0KsCqIveqAp5A-1; Wed, 18 Mar 2020 04:27:43 -0400
+X-MC-Unique: yA7fyRPiO0KsCqIveqAp5A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 240158010C8;
-        Wed, 18 Mar 2020 08:23:12 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D72D4800D4E;
+        Wed, 18 Mar 2020 08:27:40 +0000 (UTC)
 Received: from warthog.procyon.org.uk (ovpn-113-126.rdu2.redhat.com [10.10.113.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A427B60BEC;
-        Wed, 18 Mar 2020 08:23:05 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D081819C70;
+        Wed, 18 Mar 2020 08:27:34 +0000 (UTC)
 Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
         Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
         Kingdom.
         Registered in England and Wales under Company Registration No. 3798903
 From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20200317194140.6031-3-longman@redhat.com>
-References: <20200317194140.6031-3-longman@redhat.com> <20200317194140.6031-1-longman@redhat.com>
+In-Reply-To: <20200317194140.6031-5-longman@redhat.com>
+References: <20200317194140.6031-5-longman@redhat.com> <20200317194140.6031-1-longman@redhat.com>
 To:     Waiman Long <longman@redhat.com>
 Cc:     dhowells@redhat.com,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
@@ -56,21 +56,31 @@ Cc:     dhowells@redhat.com,
         Roberto Sassu <roberto.sassu@huawei.com>,
         Eric Biggers <ebiggers@google.com>,
         Chris von Recklinghausen <crecklin@redhat.com>
-Subject: Re: [PATCH v4 2/4] KEYS: Remove __user annotation from rxrpc_read()
+Subject: Re: [PATCH v4 4/4] KEYS: Avoid false positive ENOMEM error on key read
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2831785.1584519784.1@warthog.procyon.org.uk>
-Date:   Wed, 18 Mar 2020 08:23:04 +0000
-Message-ID: <2831786.1584519784@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-ID: <2832138.1584520054.1@warthog.procyon.org.uk>
+Date:   Wed, 18 Mar 2020 08:27:34 +0000
+Message-ID: <2832139.1584520054@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Patch 2 and 3 need to be rolled into patch 1 otherwise sparse will give
-warnings about mismatches in address spaces on patch 1.
+Waiman Long <longman@redhat.com> wrote:
 
-Thanks,
+> +static inline void __kvzfree(const void *addr, size_t len)
+> +{
+> +	if (addr) {
+> +		memset((void *)addr, 0, len);
+> +		kvfree(addr);
+> +	}
+> +}
+
+I wonder if that would be better as "kvfree(memset(...))" as memset() will
+return the address parameter.  If memset is not inline, it avoids the need for
+the compiler to save the parameter.
+
 David
 
