@@ -2,155 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 744541890B9
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2020 22:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A611896D1
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Mar 2020 09:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbgCQVqQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Mar 2020 17:46:16 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51076 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726388AbgCQVqQ (ORCPT
+        id S1726733AbgCRIXR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Mar 2020 04:23:17 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:38756 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726713AbgCRIXR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Mar 2020 17:46:16 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02HLX7xk011319;
-        Tue, 17 Mar 2020 17:46:09 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2yrtwverjb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Mar 2020 17:46:09 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 02HLj0wm026781;
-        Tue, 17 Mar 2020 21:46:08 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma03dal.us.ibm.com with ESMTP id 2yrpw6ja7b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Mar 2020 21:46:08 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02HLk7FJ62587192
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Mar 2020 21:46:07 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 16897BE059;
-        Tue, 17 Mar 2020 21:46:07 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E423EBE053;
-        Tue, 17 Mar 2020 21:46:06 +0000 (GMT)
-Received: from crimini9.aus.stglabs.ibm.com (unknown [9.40.192.141])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Tue, 17 Mar 2020 21:46:06 +0000 (GMT)
-Received: (from gcwilson@localhost)
-        by crimini9.aus.stglabs.ibm.com (8.15.2/8.15.2/Submit) id 02HLk4Xm009611;
-        Tue, 17 Mar 2020 17:46:04 -0400
-X-Authentication-Warning: crimini9.aus.stglabs.ibm.com: gcwilson set sender to gcwilson@linux.ibm.com using -f
-From:   George Wilson <gcwilson@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Stefan Berger <stefanb@linux.ibm.com>,
+        Wed, 18 Mar 2020 04:23:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584519796;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c5ZmniDWtOGgirD0ysXPKxoDj8zWagjtTzwo7m2KYVo=;
+        b=B5lDdxgkTX5fRPqzkA9SK5f1A6XqECeGNBi7bVOIO3WugYvbgBVn5BV4OhlGcdIHtv6c9/
+        oX//8VVkp8K8IiBQpTt7KeV2Pfrw+UTGE+iBrDmuBrHN0sMxecSx5sQq8bQmIIBc2zNiVl
+        hZtk8cMSmbCVhlmPBmGNxUW9Jr5QVBA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-372-UnVQ4uV7PpGJbTpejA56sQ-1; Wed, 18 Mar 2020 04:23:15 -0400
+X-MC-Unique: UnVQ4uV7PpGJbTpejA56sQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 240158010C8;
+        Wed, 18 Mar 2020 08:23:12 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-113-126.rdu2.redhat.com [10.10.113.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A427B60BEC;
+        Wed, 18 Mar 2020 08:23:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20200317194140.6031-3-longman@redhat.com>
+References: <20200317194140.6031-3-longman@redhat.com> <20200317194140.6031-1-longman@redhat.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     dhowells@redhat.com,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Nayna Jain <nayna@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Linh Pham <phaml@us.ibm.com>
-Subject: [PATCH v2] tpm: ibmvtpm: retry on H_CLOSED in tpm_ibmvtpm_send()
-Date:   Tue, 17 Mar 2020 17:46:00 -0400
-Message-Id: <20200317214600.9561-1-gcwilson@linux.ibm.com>
-X-Mailer: git-send-email 2.24.1
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, Sumit Garg <sumit.garg@linaro.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Chris von Recklinghausen <crecklin@redhat.com>
+Subject: Re: [PATCH v4 2/4] KEYS: Remove __user annotation from rxrpc_read()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-17_09:2020-03-17,2020-03-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 phishscore=0 suspectscore=1
- priorityscore=1501 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2003020000 definitions=main-2003170082
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2831785.1584519784.1@warthog.procyon.org.uk>
+Date:   Wed, 18 Mar 2020 08:23:04 +0000
+Message-ID: <2831786.1584519784@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-tpm_ibmvtpm_send() can fail during PowerVM Live Partition Mobility resume
-with an H_CLOSED return from ibmvtpm_send_crq().  The PAPR says, 'The
-“partner partition suspended” transport event disables the associated CRQ
-such that any H_SEND_CRQ hcall() to the associated CRQ returns H_Closed
-until the CRQ has been explicitly enabled using the H_ENABLE_CRQ hcall.'
-This patch adds a check in tpm_ibmvtpm_send() for an H_CLOSED return from
-ibmvtpm_send_crq() and in that case calls tpm_ibmvtpm_resume() and
-retries the ibmvtpm_send_crq() once.
+Patch 2 and 3 need to be rolled into patch 1 otherwise sparse will give
+warnings about mismatches in address spaces on patch 1.
 
-Reported-by: Linh Pham <phaml@us.ibm.com>
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Signed-off-by: George Wilson <gcwilson@linux.ibm.com>
-Tested-by: Linh Pham <phaml@us.ibm.com>
----
- drivers/char/tpm/tpm_ibmvtpm.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
-index 78cc52690177..ba3bd503e080 100644
---- a/drivers/char/tpm/tpm_ibmvtpm.c
-+++ b/drivers/char/tpm/tpm_ibmvtpm.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (C) 2012 IBM Corporation
-+ * Copyright (C) 2012-2020 IBM Corporation
-  *
-  * Author: Ashley Lai <ashleydlai@gmail.com>
-  *
-@@ -25,6 +25,8 @@
- #include "tpm.h"
- #include "tpm_ibmvtpm.h"
- 
-+static int tpm_ibmvtpm_resume(struct device *dev);
-+
- static const char tpm_ibmvtpm_driver_name[] = "tpm_ibmvtpm";
- 
- static const struct vio_device_id tpm_ibmvtpm_device_table[] = {
-@@ -147,6 +149,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
- {
- 	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
- 	int rc, sig;
-+	bool retry = true;
- 
- 	if (!ibmvtpm->rtce_buf) {
- 		dev_err(ibmvtpm->dev, "ibmvtpm device is not ready\n");
-@@ -179,18 +182,28 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
- 	 */
- 	ibmvtpm->tpm_processing_cmd = true;
- 
-+again:
- 	rc = ibmvtpm_send_crq(ibmvtpm->vdev,
- 			IBMVTPM_VALID_CMD, VTPM_TPM_COMMAND,
- 			count, ibmvtpm->rtce_dma_handle);
-+
- 	if (rc != H_SUCCESS) {
-+		/*
-+		 * H_CLOSED can be returned after LPM resume.  Call
-+		 * tpm_ibmvtpm_resume() to re-enable the CRQ then retry
-+		 * ibmvtpm_send_crq() once before failing.
-+		 */
-+		if (rc == H_CLOSED && retry) {
-+			tpm_ibmvtpm_resume(ibmvtpm->dev);
-+			retry = false;
-+			goto again;
-+		}
- 		dev_err(ibmvtpm->dev, "tpm_ibmvtpm_send failed rc=%d\n", rc);
--		rc = 0;
- 		ibmvtpm->tpm_processing_cmd = false;
--	} else
--		rc = 0;
-+	}
- 
- 	spin_unlock(&ibmvtpm->rtce_lock);
--	return rc;
-+	return 0;
- }
- 
- static void tpm_ibmvtpm_cancel(struct tpm_chip *chip)
--- 
-2.24.1
+Thanks,
+David
 
