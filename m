@@ -2,71 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B709A18B952
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Mar 2020 15:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3990B18BAD1
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Mar 2020 16:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727183AbgCSO1U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 19 Mar 2020 10:27:20 -0400
-Received: from mga14.intel.com ([192.55.52.115]:29627 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726892AbgCSO1U (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 19 Mar 2020 10:27:20 -0400
-IronPort-SDR: wnimBr6TMM/qvZ3Eq8LRWvp9TFzr5L76J8AEl0FA2N+sA0p7u6eDtbUy6VtQOHI/9vn2IdObx9
- VFZZhG4B719w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2020 07:27:19 -0700
-IronPort-SDR: EtchYp8B7uoiL7wXlFcN9kwhNz4PotBR5UDN4L88/9cjUnL/sX041L43u1+FsR1fQ8+fpnnp2x
- +Sf2pLhtxX4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,571,1574150400"; 
-   d="scan'208";a="245175060"
-Received: from awagner-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.86.227])
-  by orsmga003.jf.intel.com with ESMTP; 19 Mar 2020 07:27:15 -0700
-Date:   Thu, 19 Mar 2020 16:27:14 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sachinp@linux.vnet.ibm.com, mpe@ellerman.id.au
-Subject: Re: [PATCH] tpm2: Export tpm2_get_cc_attrs_tbl for ibmvtpm driver as
- module
-Message-ID: <20200319142714.GB3703@linux.intel.com>
-References: <20200317130819.720318-1-stefanb@linux.vnet.ibm.com>
- <20200318194247.GC48177@linux.intel.com>
- <4b2949a9-b251-906d-d513-1b2ccef758a0@linux.ibm.com>
+        id S1727425AbgCSPSp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Mar 2020 11:18:45 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:58986 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727352AbgCSPSp (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 19 Mar 2020 11:18:45 -0400
+Received: from [192.168.0.109] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 253B120B9C02;
+        Thu, 19 Mar 2020 08:18:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 253B120B9C02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1584631124;
+        bh=QXbCMqJK3blmQhRaOihhXcPebuZQScHW8X262FYOfe4=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=M38nE3ZtoKkWUdj6nB2QT5AP2l2c4BQB4AeL9vyDG0U/YQ4IOnM8K5cCrPMtfsm9V
+         CIKkufjykyhyabrgAX/fX9rMF2+M7imNNdGIZvxPRVMDNuBPfxWXCDJkpp7nElNAsR
+         mrugHpwEMM3o6/P1an2mNrhnxyVtdcSfWM/BBlAg=
+Subject: Re: [PATCH v7] ima-evm-utils: Add some tests for evmctl
+To:     Vitaly Chikunov <vt@altlinux.org>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+References: <20190817233348.22349-1-vt@altlinux.org>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <392fed51-095d-2a6f-5eda-317e3bbc8707@linux.microsoft.com>
+Date:   Thu, 19 Mar 2020 08:18:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b2949a9-b251-906d-d513-1b2ccef758a0@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20190817233348.22349-1-vt@altlinux.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 03:53:54PM -0400, Stefan Berger wrote:
-> On 3/18/20 3:42 PM, Jarkko Sakkinen wrote:
-> > On Tue, Mar 17, 2020 at 09:08:19AM -0400, Stefan Berger wrote:
-> > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > 
-> > > This patch fixes the following problem when the ibmvtpm driver
-> > > is built as a module:
-> > > 
-> > > ERROR: modpost: "tpm2_get_cc_attrs_tbl" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
-> > > make[1]: *** [scripts/Makefile.modpost:94: __modpost] Error 1
-> > > make: *** [Makefile:1298: modules] Error 2
-> > > 
-> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Hi, wrong tag (we use "tpm:"), missing fixes tag and please cc stable.
-> > Thanks.
-> 
-> I did not add the fixes tag because I do not know the final commit hash, or
-> is it the final commit hash once it is in linux-next? I doubt it with all
-> the merging that can occur.
+On 8/17/19 4:33 PM, Vitaly Chikunov wrote:
 
-Can you send me a new version after rc1 is out?
+Hi Vitaly,
 
-/Jarkko
+I assume this is the latest version of your patch set. I applied the 
+patch. Am seeing the errors given below.
+
+Also, are there any other changes in for ima-evm-utils (besides the 
+files listed below)?
+
+Please let me know if I am missing something.
+
+>   .gitignore             |   2 +-
+>   Makefile.am            |   2 +-
+>   configure.ac           |   1 +
+>   tests/.gitignore       |  16 +++
+>   tests/Makefile.am      |  12 ++
+>   tests/functions.sh     | 272 ++++++++++++++++++++++++++++++++++++
+>   tests/gen-keys.sh      |  97 +++++++++++++
+>   tests/ima_hash.test    |  80 +++++++++++
+>   tests/sign_verify.test | 366 +++++++++++++++++++++++++++++++++++++++++++++++++
+>   9 files changed, 846 insertions(+), 2 deletions(-)
+>   create mode 100644 tests/.gitignore
+>   create mode 100644 tests/Makefile.am
+>   create mode 100755 tests/functions.sh
+>   create mode 100755 tests/gen-keys.sh
+>   create mode 100755 tests/ima_hash.test
+>   create mode 100755 tests/sign_verify.test
+
+~/ima-evm-utils/$ ./configure
+config.status: error: cannot find input file: `tests/Makefile.in'
+
+~/ima-evm-utils/$ make
+
+Making all in tests
+make[2]: Entering directory '~/ima-evm-utils/tests'
+make[2]: *** No rule to make target 'all'.  Stop.
+
+thanks,
+  -lakshmi
