@@ -2,103 +2,140 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C00418C2A1
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Mar 2020 22:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1836C18C387
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 00:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbgCSV5Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 19 Mar 2020 17:57:24 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:58306 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbgCSV5Y (ORCPT
+        id S1727456AbgCSXRF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Mar 2020 19:17:05 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47390 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727452AbgCSXRF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 19 Mar 2020 17:57:24 -0400
-Received: from [192.168.0.109] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3380820B9C02;
-        Thu, 19 Mar 2020 14:57:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3380820B9C02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1584655043;
-        bh=JWJ/nAOiJJMbVqQNxoZVIzFIqPemU6NXJS5cVREdlaw=;
-        h=Subject:From:To:References:Date:In-Reply-To:From;
-        b=n2KUij4f9OmUOsBK1Q174b1u6EUF13NqKWRd+X7BCdD/ciMZTN4l2mz2VaKcsQ2qn
-         uhkuPpGw76tBMyTGKY4LCSyhawOY+zVTSGTAUYEb3yxvHnaL/c10/f4LKpN9xn4Dww
-         h3oIaeqikxDa3YCvR20GBWkQcBx5KWf9dChsTBwU=
-Subject: Re: [PATCH v7] ima-evm-utils: Add some tests for evmctl
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>
-References: <20190817233348.22349-1-vt@altlinux.org>
- <392fed51-095d-2a6f-5eda-317e3bbc8707@linux.microsoft.com>
- <20200319154957.ijh7tbfp4d7iwcef@altlinux.org>
- <a8b77ade-58bf-88ac-542b-b8fbdd651db4@linux.microsoft.com>
-Message-ID: <62502cc8-c861-0227-cdce-4bbea6b05f3e@linux.microsoft.com>
-Date:   Thu, 19 Mar 2020 14:57:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Thu, 19 Mar 2020 19:17:05 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02JN423h079616;
+        Thu, 19 Mar 2020 19:15:59 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2yu7ftjx6b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Mar 2020 19:15:59 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 02JN7DJq004569;
+        Thu, 19 Mar 2020 23:15:58 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma01wdc.us.ibm.com with ESMTP id 2yrpw6v020-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Mar 2020 23:15:58 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02JNFwn515008662
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Mar 2020 23:15:58 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 61715AC05E;
+        Thu, 19 Mar 2020 23:15:58 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40401AC05B;
+        Thu, 19 Mar 2020 23:15:58 +0000 (GMT)
+Received: from t440p.yottatech.com (unknown [9.85.138.240])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Thu, 19 Mar 2020 23:15:58 +0000 (GMT)
+Received: (from gcwilson@localhost)
+        by t440p.yottatech.com (8.15.2/8.15.2/Submit) id 02JNFq2I027749;
+        Thu, 19 Mar 2020 18:15:52 -0500
+X-Authentication-Warning: t440p.yottatech.com: gcwilson set sender to gcwilson@linux.ibm.com using -f
+Date:   Thu, 19 Mar 2020 18:15:52 -0500
+From:   George Wilson <gcwilson@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+        Linh Pham <phaml@us.ibm.com>
+Subject: Re: [PATCH v3] tpm: ibmvtpm: retry on H_CLOSED in tpm_ibmvtpm_send()
+Message-ID: <20200319231552.GA25351@us.ibm.com>
+References: <20200318234927.206075-1-gcwilson@linux.ibm.com>
+ <20200319195011.GB24804@linux.intel.com>
+ <20200319195503.GC24804@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <a8b77ade-58bf-88ac-542b-b8fbdd651db4@linux.microsoft.com>
-Content-Type: text/plain; charset=koi8-r; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200319195503.GC24804@linux.intel.com>
+User-Agent: Mutt/1.9.1 (2017-09-22)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-19_09:2020-03-19,2020-03-19 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ mlxlogscore=999 suspectscore=0 bulkscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 priorityscore=1501
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003190091
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Vitaly,
+On Thu, Mar 19, 2020 at 09:55:03PM +0200, Jarkko Sakkinen wrote:
+> On Thu, Mar 19, 2020 at 09:50:16PM +0200, Jarkko Sakkinen wrote:
+> > On Wed, Mar 18, 2020 at 07:49:27PM -0400, George Wilson wrote:
+> > > tpm_ibmvtpm_send() can fail during PowerVM Live Partition Mobility resume
+> > > with an H_CLOSED return from ibmvtpm_send_crq().  The PAPR says, 'The
+> > > “partner partition suspended” transport event disables the associated CRQ
+> > > such that any H_SEND_CRQ hcall() to the associated CRQ returns H_Closed
+> > > until the CRQ has been explicitly enabled using the H_ENABLE_CRQ hcall.'
+> > > This patch adds a check in tpm_ibmvtpm_send() for an H_CLOSED return from
+> > > ibmvtpm_send_crq() and in that case calls tpm_ibmvtpm_resume() and
+> > > retries the ibmvtpm_send_crq() once.
+> > > 
+> > > Reported-by: Linh Pham <phaml@us.ibm.com>
+> > > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > Signed-off-by: George Wilson <gcwilson@linux.ibm.com>
+> > > Tested-by: Linh Pham <phaml@us.ibm.com>
+> > > Fixes: 132f76294744 ("Add new device driver to support IBM vTPM")
+> > 
+> > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> 
+> Unfortunately have to take that back because it has checkpatch
+> errors:
+> 
+> $ scripts/checkpatch.pl 0001-tpm-ibmvtpm-retry-on-H_CLOSED-in-tpm_ibmvtpm_send.patch
+> WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+> #11:
+> “partner partition suspended” transport event disables the associated CRQ
 
-When I run the tests, all ima_hash tests pass.
-But most of sign_verify tests fail.
-I am not sure if I am missing anything in the test setup. Please let me 
-know.
+I'd noticed that but it appears to be a spurious checkpatch warning.
+The line is 73 chars long, the same as the first line of the commit
+description.  Maybe the quotes throw it off?
 
-In the file sign_verify.test, I commented out all the tests except the 
-following:
+> 
+> WARNING: Prefer using '"%s...", __func__' to using 'ibmvtpm_crq_send_init', this function's name, in a string
+> #61: FILE: drivers/char/tpm/tpm_ibmvtpm.c:152:
+> +			"ibmvtpm_crq_send_init failed rc=%d\n", rc);
 
-	sign_verify  rsa1024  sha1    0x0301 --rsa
+I didn't change that error string because it's in an unmodified existing
+function that I moved above the caller so a declaration wasn't required.
+All other examples in the file are the same.  I'm of course happy to
+change it in this function if you think it's appropriate to do so.
 
-The text file sha1.txt created by the test is signed fine. But the 
-signature verification fails.
+> 
+> Also the fixes tag is incorrect. Should be:
+> 
+> Fixes: 132f76294744 ("drivers/char/tpm: Add new device driver to support IBM vTPM")
 
-Please see the log at the end of the mail for more detail.
+I see it done different ways, mostly without the path, even for the TPM
+drivers.  For example, there's no path in Stefan's "[PATCH v7 2/3] tpm:
+ibmvtpm: Wait for buffer to be set before proceeding."  I'm certainly
+happy to change it, however, and it's good to know that's the preferred
+style going forward.
 
-evmctl fails to decode the key file when using the public key
-"test-rsa1024.pub"
+Separate topic:  Since this fixes a migration hang, do you think it
+should also be cc'd to stable?
 
-evmctl -v ima_verify --key test-rsa1024.pub --xattr-user --rsa sha1.txt
- >>> Failed to d2i_X509_fp key file: test-rsa1024.pub
+> 
+> /Jarkko
 
-But if I pass the certificate file, the file is decoded fine, but 
-signature verification fails.
-
-evmctl -v ima_verify --key test-rsa1024.cer --xattr-user --rsa sha1.txt
- >>> key 1: d33cbeb0 test-rsa1024.cer
-
-Test log
---------
-evmctl is ../src/evmctl
-openssl is /usr/bin/openssl
-xxd is /usr/bin/xxd
-getfattr is /usr/bin/getfattr
-- openssl dgst -sha1 sha1.txt
-- openssl dgst -sha1 -sign test-rsa1024.key -hex sha1.txt
-+ evmctl -v ima_sign --rsa --sigfile --hashalgo sha1 --key 
-test-rsa1024.key --xattr-user sha1.txt
-   hash(sha1): da39a3ee5e6b4b0d3255bfef95601890afd80709
-   sighash: 52d14dacbdb7e7b4195f302357f2324aba026af5
-   evm/ima signature-v1: 146 bytes
-   Writing to sha1.txt.sig
- 
-030130ca735e0000502a83d5a17c171e01040034d161431091513a700f0f9c92c43aee09b59e48a66123afcc4fc8ca6ab9993aa61df9a5d3e38fdaed2e091c6c24b85a3418c1229417d4f3aedb230fd018e7658a6b785de56d3f8e5c029601d77b303f9100b547b5db4adf7e53877874d807811d47eac9ecefcebe6bd5ef49e345671ac87b5fb27e51ea8565dd19a4b93a4a80
-+ evmctl -v ima_verify --key test-rsa1024.pub --xattr-user --rsa sha1.txt
-
-evmctl ima_verify failed with (1)
-   Failed to d2i_X509_fp key file: test-rsa1024.pub
-   openssl: error:0D0680A8:asn1 encoding routines:asn1_check_tlen:wrong tag
-   openssl: error:0D07803A:asn1 encoding 
-routines:asn1_item_embed_d2i:nested asn1 error
-   hash-v1: da39a3ee5e6b4b0d3255bfef95601890afd80709
-
-thanks,
-  -lakshmi
+-- 
+George Wilson
+IBM Linux Technology Center
+Security Development
