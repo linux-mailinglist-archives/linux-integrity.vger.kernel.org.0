@@ -2,42 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9F318CECD
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 14:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A8918CF91
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 14:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727152AbgCTN1O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Mar 2020 09:27:14 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:24251 "EHLO
+        id S1726809AbgCTN4v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Mar 2020 09:56:51 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:27913 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727135AbgCTN1N (ORCPT
+        by vger.kernel.org with ESMTP id S1726897AbgCTN4v (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Mar 2020 09:27:13 -0400
+        Fri, 20 Mar 2020 09:56:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584710832;
+        s=mimecast20190719; t=1584712610;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=POqaw/FzEI0CTYjogTPDNEyESdDoII+GoAasJ6PFXJc=;
-        b=AOugaLk+fvsm+Sh9/dYT7edGGoj/cEp/jrnYM09hLAKYKclgj2+lesXiWuFd38bIWmyN+N
-        n3wrQ+HaKuddTlxbA7cEw1AzWWZiEwrWvyGID07ldVMF/bSdKeIuLLs76zDF5JPjRRzora
-        RxA2EjtfJFTah2IA+lmds30J3AOz/kQ=
+        bh=aBKKCxuGzKiLvrrqPPRyma9kDDTtMDjNgcj+HYwHhTs=;
+        b=R5aulqqHutbJXeuhOGBj92E+UT18Hx/7fzRYMpvh2uIZM/euas2YVxhNUiTDGFnZR3ETQY
+        AFy0cSw37xYj10ikdXMZo271iFysm11/XPanSTUQK6pJ9L97a2dc4CS3FsipDycIDWMokY
+        04ZfUdW+FYBEAqVg+by58/6C92nKy+Y=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-370-wfUqiJITPG6-L5EefAJGvA-1; Fri, 20 Mar 2020 09:27:10 -0400
-X-MC-Unique: wfUqiJITPG6-L5EefAJGvA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-259-uCxcpSM7P_e66dxWVrksMQ-1; Fri, 20 Mar 2020 09:56:48 -0400
+X-MC-Unique: uCxcpSM7P_e66dxWVrksMQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E2697477;
-        Fri, 20 Mar 2020 13:27:07 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0FD92477;
+        Fri, 20 Mar 2020 13:56:46 +0000 (UTC)
 Received: from llong.remote.csb (ovpn-118-190.rdu2.redhat.com [10.10.118.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E3F4660BFB;
-        Fri, 20 Mar 2020 13:27:03 +0000 (UTC)
-Subject: Re: [PATCH v5 2/2] KEYS: Avoid false positive ENOMEM error on key
- read
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     David Howells <dhowells@redhat.com>,
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0641C62937;
+        Fri, 20 Mar 2020 13:56:42 +0000 (UTC)
+Subject: Re: [PATCH v5 1/2] KEYS: Don't write out to userspace while holding
+ key semaphore
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
@@ -51,61 +51,35 @@ Cc:     David Howells <dhowells@redhat.com>,
         Roberto Sassu <roberto.sassu@huawei.com>,
         Eric Biggers <ebiggers@google.com>,
         Chris von Recklinghausen <crecklin@redhat.com>
-References: <20200318221457.1330-1-longman@redhat.com>
- <20200318221457.1330-3-longman@redhat.com>
- <20200319194650.GA24804@linux.intel.com>
- <f22757ad-4d6f-ffd2-eed5-6b9bd1621b10@redhat.com>
- <20200320020717.GC183331@linux.intel.com>
+References: <20200318221457.1330-2-longman@redhat.com>
+ <20200318221457.1330-1-longman@redhat.com>
+ <3251035.1584692419@warthog.procyon.org.uk>
 From:   Waiman Long <longman@redhat.com>
 Organization: Red Hat
-Message-ID: <7dbc524f-6c16-026a-a372-2e80b40eab30@redhat.com>
-Date:   Fri, 20 Mar 2020 09:27:03 -0400
+Message-ID: <69678e1c-dfbe-7484-85ad-601ebe23c90d@redhat.com>
+Date:   Fri, 20 Mar 2020 09:56:42 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200320020717.GC183331@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <3251035.1584692419@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/19/20 10:07 PM, Jarkko Sakkinen wrote:
-> On Thu, Mar 19, 2020 at 08:07:55PM -0400, Waiman Long wrote:
->> On 3/19/20 3:46 PM, Jarkko Sakkinen wrote:
->>> On Wed, Mar 18, 2020 at 06:14:57PM -0400, Waiman Long wrote:
->>>> +			 * It is possible, though unlikely, that the key
->>>> +			 * changes in between the up_read->down_read period.
->>>> +			 * If the key becomes longer, we will have to
->>>> +			 * allocate a larger buffer and redo the key read
->>>> +			 * again.
->>>> +			 */
->>>> +			if (!tmpbuf || unlikely(ret > tmpbuflen)) {
->>> Shouldn't you check that tmpbuflen stays below buflen (why else
->>> you had made copy of buflen otherwise)?
->> The check above this thunk:
->>
->> if ((ret > 0) && (ret <= buflen)) {
->>
->> will make sure that ret will not be larger than buflen. So tmpbuflen
->> will never be bigger than buflen.
-> Ah right, of course, thanks.
+On 3/20/20 4:20 AM, David Howells wrote:
+> Waiman Long <longman@redhat.com> wrote:
 >
-> What would go wrong if the condition was instead
-> ((ret > 0) && (ret <= tmpbuflen))?
+>> +		if ((ret > 0) && (ret <= buflen)) {
+> That's a bit excessive on the bracketage, btw, but don't worry about it unless
+> you respin the patches.
 
-That if statement is a check to see if the actual key length is longer
-than the user-supplied buffer (buflen). If that is the case, it will
-just return the expected length without storing anything into the user
-buffer. For the case that buflen >= ret > tmpbuflen, the revised check
-above will incorrectly skip the storing step causing the caller to
-incorrectly think the key is there in the buffer.
+Got it.
 
-Maybe I should clarify that a bit more in the comment.
-
-Cheers,
+Thanks,
 Longman
 
