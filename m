@@ -2,79 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1EB18CCCD
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 12:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9F318CECD
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 14:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727014AbgCTLWp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Mar 2020 07:22:45 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:37284 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726894AbgCTLWp (ORCPT
+        id S1727152AbgCTN1O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Mar 2020 09:27:14 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:24251 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727135AbgCTN1N (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Mar 2020 07:22:45 -0400
-Received: by mail-ot1-f66.google.com with SMTP id i12so5607339otp.4
-        for <linux-integrity@vger.kernel.org>; Fri, 20 Mar 2020 04:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=XJkgpyFK4lIsWMfChDnvJ/ALUrWHAmuYirzarEXgkQQ3wW9NKzIMfKMCIXFwyG7+Ut
-         OPwjRPjO1Y3m6JpcnZQNjW4TSYMpYxm5YTJ9LsqasUPVUE2mioEuqyWZE5W4V9m70yw0
-         7NZOAvhPs5z6MYef2xvevH6W2PifGCQ7zShmlswdjonSWUmV4/f2g5YOlghWUTz+XRcS
-         piWUxv5G7vBidbcKUV3uQQWE5PXqiDDjraiRcnyEZHb1zu/UdVcuDH9G4ebEVvxRZuFb
-         E4Hx4h0EGhKzNkV6sjyXd27YYI89xOnFh2HyhS3m7SD2nSluDoT3t1WfBDxJX44nVZOj
-         LjPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=d3kGWhLbdoEgJPqSIzLiLLb7bZx/exdHGGWVPZSrx3Im5yqZBhKhJiCpUXXJDNZUQr
-         yuHFrQqbuZRGyph5X2/E2bh5Z+kPkcNTQASnWPfOUz6hY6voqZwbwEAXW52V4tQrsxGU
-         Vg2V3CEq1Ez4ryJnpbzAdhZBrPucyDmfBzSA2PiA0PYLiYEiJc6O6UdDkhxHTWNq3Qi2
-         78hiExbfNoUzK0IDJpibKFd7IEb8HHSpdRttUL48Bp9YNYBX96DKrQoi445NZvxqPNr9
-         74/t/iWSqvTzCLxSddTiLE7n2VPeG2MoULb8Mr0PzENdw2HaEuryZVaSlPVs+zckE0/V
-         0ZIA==
-X-Gm-Message-State: ANhLgQ3RFjwWr9kWk6l7b/N4U9qXgeBQFxC8p+Uiw4ws5pJzujT7x6oI
-        XrAbT4WtDqG3gAuG3bBssjl6zaLZWs7a4s354lA=
-X-Google-Smtp-Source: ADFU+vv1NQTigFV1njTIlVMNqYnxeZ/ZO4wgI3D4PpTzR8g0VVq8z61Bj7zoKwFi5urPyVnf/VqvCqlY/+6aEpXrqr4=
-X-Received: by 2002:a9d:12b4:: with SMTP id g49mr6537886otg.50.1584703364175;
- Fri, 20 Mar 2020 04:22:44 -0700 (PDT)
+        Fri, 20 Mar 2020 09:27:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584710832;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=POqaw/FzEI0CTYjogTPDNEyESdDoII+GoAasJ6PFXJc=;
+        b=AOugaLk+fvsm+Sh9/dYT7edGGoj/cEp/jrnYM09hLAKYKclgj2+lesXiWuFd38bIWmyN+N
+        n3wrQ+HaKuddTlxbA7cEw1AzWWZiEwrWvyGID07ldVMF/bSdKeIuLLs76zDF5JPjRRzora
+        RxA2EjtfJFTah2IA+lmds30J3AOz/kQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-370-wfUqiJITPG6-L5EefAJGvA-1; Fri, 20 Mar 2020 09:27:10 -0400
+X-MC-Unique: wfUqiJITPG6-L5EefAJGvA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E2697477;
+        Fri, 20 Mar 2020 13:27:07 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-118-190.rdu2.redhat.com [10.10.118.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E3F4660BFB;
+        Fri, 20 Mar 2020 13:27:03 +0000 (UTC)
+Subject: Re: [PATCH v5 2/2] KEYS: Avoid false positive ENOMEM error on key
+ read
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, Sumit Garg <sumit.garg@linaro.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Chris von Recklinghausen <crecklin@redhat.com>
+References: <20200318221457.1330-1-longman@redhat.com>
+ <20200318221457.1330-3-longman@redhat.com>
+ <20200319194650.GA24804@linux.intel.com>
+ <f22757ad-4d6f-ffd2-eed5-6b9bd1621b10@redhat.com>
+ <20200320020717.GC183331@linux.intel.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <7dbc524f-6c16-026a-a372-2e80b40eab30@redhat.com>
+Date:   Fri, 20 Mar 2020 09:27:03 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Received: by 2002:a05:6838:40c6:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:22:42
- -0700 (PDT)
-From:   ECOWAS COMMITEE <ecowasmonitoringcommitteeabj@gmail.com>
-Date:   Fri, 20 Mar 2020 11:22:42 +0000
-Message-ID: <CAHHubrZir2VPDquyV-mt0NSoHY=BnELkLL79r7L36=3NbcKYnQ@mail.gmail.com>
-Subject: HAPPY SURVIVAL OF CORONAVIRUS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200320020717.GC183331@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dear Sir/Madam
+On 3/19/20 10:07 PM, Jarkko Sakkinen wrote:
+> On Thu, Mar 19, 2020 at 08:07:55PM -0400, Waiman Long wrote:
+>> On 3/19/20 3:46 PM, Jarkko Sakkinen wrote:
+>>> On Wed, Mar 18, 2020 at 06:14:57PM -0400, Waiman Long wrote:
+>>>> +			 * It is possible, though unlikely, that the key
+>>>> +			 * changes in between the up_read->down_read period.
+>>>> +			 * If the key becomes longer, we will have to
+>>>> +			 * allocate a larger buffer and redo the key read
+>>>> +			 * again.
+>>>> +			 */
+>>>> +			if (!tmpbuf || unlikely(ret > tmpbuflen)) {
+>>> Shouldn't you check that tmpbuflen stays below buflen (why else
+>>> you had made copy of buflen otherwise)?
+>> The check above this thunk:
+>>
+>> if ((ret > 0) && (ret <= buflen)) {
+>>
+>> will make sure that ret will not be larger than buflen. So tmpbuflen
+>> will never be bigger than buflen.
+> Ah right, of course, thanks.
+>
+> What would go wrong if the condition was instead
+> ((ret > 0) && (ret <= tmpbuflen))?
 
-HAPPY SURVIVAL OF CORONAVIRUS
+That if statement is a check to see if the actual key length is longer
+than the user-supplied buffer (buflen). If that is the case, it will
+just return the expected length without storing anything into the user
+buffer. For the case that buflen >= ret > tmpbuflen, the revised check
+above will incorrectly skip the storing step causing the caller to
+incorrectly think the key is there in the buffer.
 
-We the West African Monitoring Committee of the West African Economic
-Community(ECOWAS)are contacting you for a business transaction which
-we feel will be of great interest to you.
+Maybe I should clarify that a bit more in the comment.
 
-Our duty is to see to the coming in and out of funds into this sub
-region.There is a fund which we confiscated worth of $12.5 million
-dollars.We will like you to receive this fund on your name in your
-account and as well helping us in the investment.
+Cheers,
+Longman
 
-You are advised to contact us as soon as you get this message for
-details of the transaction if you find it interesting.
-
-Best Regards,
-
-Mr John Aka
-
-Chairman
-ECOWAS
-West African Monitoring Committee
-Tel 00225 6716 6756
-Abidjan Cote D'Ivoire
