@@ -2,97 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4989618D662
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 18:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A7B18D844
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 20:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727313AbgCTR7r (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Mar 2020 13:59:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57132 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726801AbgCTR7q (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Mar 2020 13:59:46 -0400
-Received: from localhost (unknown [137.135.114.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727272AbgCTTTj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Mar 2020 15:19:39 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:38828 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726783AbgCTTTX (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 20 Mar 2020 15:19:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584731962;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=+XPAoEW7/aQaCwyJ8m3ZuKBIeslANj/gOeGSexPCoFw=;
+        b=Xah+5xo7jCkt9NY9n6GixpTYAHsATO4zuWkS7JnAfg0QPMspw4cyGCqWYcDVKLfwgABTvj
+        SN2NwNO2qORsFijDe9I+9dtqny055fm52SHDTO174i6uRKYa+ID/TcE1TlukPJuhleszpT
+        uwQTNHz3wdw/7MVl7yH60qg6LEZ2fi0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-5-VH2bTlNsPcqN0b-3DN_dRw-1; Fri, 20 Mar 2020 15:19:18 -0400
+X-MC-Unique: VH2bTlNsPcqN0b-3DN_dRw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6B8F920663;
-        Fri, 20 Mar 2020 17:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584727185;
-        bh=m85KmfGIa5J6kHFrbVlcvE04dIaNYgTd2clrhmeL70k=;
-        h=Date:From:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:From;
-        b=NTbJ/ctoChWlfVnXNUb+odQWShz8p41aNye1ayNP9Hs89E+UImKUWBytFkjwin8Zy
-         CB75xNcxL9Z/lV0axsrVio0h9IZqqR1gQuwPemq1Jj/QUXS6Y0/lbj6yerLDvNSAix
-         Z5hm3lnyhW4uMI6UGxKqjlMOGyV2AfBNtBglwhTg=
-Date:   Fri, 20 Mar 2020 17:59:44 +0000
-From:   Sasha Levin <sashal@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-To:     George Wilson <gcwilson@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     stable@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH v4] tpm: ibmvtpm: retry on H_CLOSED in tpm_ibmvtpm_send()
-In-Reply-To: <20200320032758.228088-1-gcwilson@linux.ibm.com>
-References: <20200320032758.228088-1-gcwilson@linux.ibm.com>
-Message-Id: <20200320175945.6B8F920663@mail.kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C472CDB61;
+        Fri, 20 Mar 2020 19:19:15 +0000 (UTC)
+Received: from llong.com (ovpn-118-190.rdu2.redhat.com [10.10.118.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D91BF7E301;
+        Fri, 20 Mar 2020 19:19:09 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, Sumit Garg <sumit.garg@linaro.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Chris von Recklinghausen <crecklin@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v6 0/2] KEYS: Read keys to internal buffer & then copy to userspace
+Date:   Fri, 20 Mar 2020 15:19:01 -0400
+Message-Id: <20200320191903.19494-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi
+v6:
+ - Make some variable name changes and revise comments as suggested by
+   Jarkko. No functional change from v5.
 
-[This is an automated email]
+v5:
+ - Merge v4 patches 2 and 3 into 1 to avoid sparse warning. Merge some of 
+   commit logs into patch 1 as well. There is no further change.
 
-This commit has been processed because it contains a "Fixes:" tag
-fixing commit: 132f76294744 ("drivers/char/tpm: Add new device driver to support IBM vTPM").
+v4:
+ - Remove the __user annotation from big_key_read() and user_read() in
+   patch 1.
+ - Add a new patch 2 to remove __user annotation from rxrpc_read().
+ - Add a new patch 3 to remove __user annotation from dns_resolver_read().
+ - Merge the original patches 2 and 3 into a single patch 4 and refactor
+   it as suggested by Jarkko and Eric.
 
-The bot has tested the following trees: v5.5.10, v5.4.26, v4.19.111, v4.14.173, v4.9.216, v4.4.216.
+v3:
+ - Reorganize the keyctl_read_key() code to make it more readable as
+   suggested by Jarkko Sakkinen.
+ - Add patch 3 to use kvmalloc() for safer large buffer allocation as
+   suggested by David Howells.
 
-v5.5.10: Build OK!
-v5.4.26: Build OK!
-v4.19.111: Build OK!
-v4.14.173: Build OK!
-v4.9.216: Failed to apply! Possible dependencies:
-    02ae1382882f ("tpm: redefine read_log() to handle ACPI/OF at runtime")
-    2528a64664f8 ("tpm: define a generic open() method for ascii & bios measurements")
-    402149c6470d ("tpm: vtpm_proxy: Suppress error logging when in closed state")
-    4d23cc323cdb ("tpm: add securityfs support for TPM 2.0 firmware event log")
-    745b361e989a ("tpm: infrastructure for TPM spaces")
-    748935eeb72c ("tpm: have event log use the tpm_chip")
-    7518a21a9da3 ("tpm: drop tpm1_chip_register(/unregister)")
-    b1a9b7b602c5 ("tpm: replace symbolic permission with octal for securityfs files")
-    cd9b7631a888 ("tpm: replace dynamically allocated bios_dir with a static array")
-    f5595f5baa30 ("tpm: Unify the send callback behaviour")
+v2:
+ - Handle NULL buffer and buflen properly in patch 1.
+ - Fix a bug in big_key.c.
+ - Add patch 2 to handle arbitrary large user-supplied buflen.
 
-v4.4.216: Failed to apply! Possible dependencies:
-    02ae1382882f ("tpm: redefine read_log() to handle ACPI/OF at runtime")
-    036bb38ffb3e ("tpm_tis: Ensure interrupts are disabled when the driver starts")
-    23d06ff700f5 ("tpm: drop tpm_atmel specific fields from tpm_vendor_specific")
-    25112048cd59 ("tpm: rework tpm_get_timeouts()")
-    402149c6470d ("tpm: vtpm_proxy: Suppress error logging when in closed state")
-    41a5e1cf1fe1 ("tpm/tpm_tis: Split tpm_tis driver into a core and TCG TIS compliant phy")
-    4d627e672bd0 ("tpm_tis: Do not fall back to a hardcoded address for TPM2")
-    4eea703caaac ("tpm: drop 'iobase' from struct tpm_vendor_specific")
-    51dd43dff74b ("tpm_tis: Use devm_ioremap_resource")
-    55a889c2cb13 ("tpm_crb: Use the common ACPI definition of struct acpi_tpm2")
-    56671c893e0e ("tpm: drop 'locality' from struct tpm_vendor_specific")
-    570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific")
-    57dacc2b4ce5 ("tpm: tpm_tis: Share common data between phys")
-    745b361e989a ("tpm: infrastructure for TPM spaces")
-    7ab4032fa579 ("tpm_tis: Get rid of the duplicate IRQ probing code")
-    d30b8e4f68ef ("tpm: cleanup tpm_tis_remove()")
-    d4956524f1b0 ("tpm: drop manufacturer_id from struct tpm_vendor_specific")
-    e3837e74a06d ("tpm_tis: Refactor the interrupt setup")
-    ee1779840d09 ("tpm: drop 'base' from struct tpm_vendor_specific")
-    ef7b81dc7864 ("tpm_tis: Disable interrupt auto probing on a per-device basis")
-    f5595f5baa30 ("tpm: Unify the send callback behaviour")
+The current security key read methods are called with the key semaphore
+held.  The methods then copy out the key data to userspace which is
+subjected to page fault and may acquire the mmap semaphore. That can
+result in circular lock dependency and hence a chance to get into
+deadlock.
 
+To avoid such a deadlock, an internal buffer is now allocated for getting
+out the necessary data first. After releasing the key semaphore, the
+key data are then copied out to userspace sidestepping the circular
+lock dependency.
 
-NOTE: The patch will not be queued to stable trees until it is upstream.
+The keyutils test suite was run and the test passed with these patchset
+applied without any falure.
 
-How should we proceed with this patch?
+Waiman Long (2):
+  KEYS: Don't write out to userspace while holding key semaphore
+  KEYS: Avoid false positive ENOMEM error on key read
+
+ include/keys/big_key-type.h               |  2 +-
+ include/keys/user-type.h                  |  3 +-
+ include/linux/key-type.h                  |  2 +-
+ net/dns_resolver/dns_key.c                |  2 +-
+ net/rxrpc/key.c                           | 27 +++-----
+ security/keys/big_key.c                   | 11 ++-
+ security/keys/encrypted-keys/encrypted.c  |  7 +-
+ security/keys/internal.h                  | 12 ++++
+ security/keys/keyctl.c                    | 84 ++++++++++++++++++++---
+ security/keys/keyring.c                   |  6 +-
+ security/keys/request_key_auth.c          |  7 +-
+ security/keys/trusted-keys/trusted_tpm1.c | 14 +---
+ security/keys/user_defined.c              |  5 +-
+ 13 files changed, 114 insertions(+), 68 deletions(-)
 
 -- 
-Thanks
-Sasha
+2.18.1
+
