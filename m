@@ -2,78 +2,79 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BAEC18C8E0
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 09:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1EB18CCCD
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 12:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbgCTIUc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Mar 2020 04:20:32 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:41490 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726834AbgCTIUc (ORCPT
+        id S1727014AbgCTLWp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Mar 2020 07:22:45 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37284 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726894AbgCTLWp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Mar 2020 04:20:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584692431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VVZY6TeI0YOm1FYG0w30u2dqA8tug6BHP6KzUJXch3w=;
-        b=a4kjuSEhnlV+sxVU67goBK717V+x8qLwYKvKdTd+2hWPjGHaN8vFRalFb5P/1SYdqAmzKC
-        FV+CDPFk/57hZ5yg/UMIJMjcJT9zo25O6QDsRWagCObcWw/HdUn/6qMSS3ZNjWwxitAh4O
-        uimRD7pr1zmHc0jhRy5jQMvU8gTS50A=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-111-Nm9VmDiBOxqeGfERJwsHVA-1; Fri, 20 Mar 2020 04:20:27 -0400
-X-MC-Unique: Nm9VmDiBOxqeGfERJwsHVA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B69A7800D5A;
-        Fri, 20 Mar 2020 08:20:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-113-126.rdu2.redhat.com [10.10.113.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E2B85D9CA;
-        Fri, 20 Mar 2020 08:20:20 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20200318221457.1330-2-longman@redhat.com>
-References: <20200318221457.1330-2-longman@redhat.com> <20200318221457.1330-1-longman@redhat.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     dhowells@redhat.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, Sumit Garg <sumit.garg@linaro.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Chris von Recklinghausen <crecklin@redhat.com>
-Subject: Re: [PATCH v5 1/2] KEYS: Don't write out to userspace while holding key semaphore
+        Fri, 20 Mar 2020 07:22:45 -0400
+Received: by mail-ot1-f66.google.com with SMTP id i12so5607339otp.4
+        for <linux-integrity@vger.kernel.org>; Fri, 20 Mar 2020 04:22:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
+        b=XJkgpyFK4lIsWMfChDnvJ/ALUrWHAmuYirzarEXgkQQ3wW9NKzIMfKMCIXFwyG7+Ut
+         OPwjRPjO1Y3m6JpcnZQNjW4TSYMpYxm5YTJ9LsqasUPVUE2mioEuqyWZE5W4V9m70yw0
+         7NZOAvhPs5z6MYef2xvevH6W2PifGCQ7zShmlswdjonSWUmV4/f2g5YOlghWUTz+XRcS
+         piWUxv5G7vBidbcKUV3uQQWE5PXqiDDjraiRcnyEZHb1zu/UdVcuDH9G4ebEVvxRZuFb
+         E4Hx4h0EGhKzNkV6sjyXd27YYI89xOnFh2HyhS3m7SD2nSluDoT3t1WfBDxJX44nVZOj
+         LjPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
+        b=d3kGWhLbdoEgJPqSIzLiLLb7bZx/exdHGGWVPZSrx3Im5yqZBhKhJiCpUXXJDNZUQr
+         yuHFrQqbuZRGyph5X2/E2bh5Z+kPkcNTQASnWPfOUz6hY6voqZwbwEAXW52V4tQrsxGU
+         Vg2V3CEq1Ez4ryJnpbzAdhZBrPucyDmfBzSA2PiA0PYLiYEiJc6O6UdDkhxHTWNq3Qi2
+         78hiExbfNoUzK0IDJpibKFd7IEb8HHSpdRttUL48Bp9YNYBX96DKrQoi445NZvxqPNr9
+         74/t/iWSqvTzCLxSddTiLE7n2VPeG2MoULb8Mr0PzENdw2HaEuryZVaSlPVs+zckE0/V
+         0ZIA==
+X-Gm-Message-State: ANhLgQ3RFjwWr9kWk6l7b/N4U9qXgeBQFxC8p+Uiw4ws5pJzujT7x6oI
+        XrAbT4WtDqG3gAuG3bBssjl6zaLZWs7a4s354lA=
+X-Google-Smtp-Source: ADFU+vv1NQTigFV1njTIlVMNqYnxeZ/ZO4wgI3D4PpTzR8g0VVq8z61Bj7zoKwFi5urPyVnf/VqvCqlY/+6aEpXrqr4=
+X-Received: by 2002:a9d:12b4:: with SMTP id g49mr6537886otg.50.1584703364175;
+ Fri, 20 Mar 2020 04:22:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3251034.1584692419.1@warthog.procyon.org.uk>
-Date:   Fri, 20 Mar 2020 08:20:19 +0000
-Message-ID: <3251035.1584692419@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Received: by 2002:a05:6838:40c6:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:22:42
+ -0700 (PDT)
+From:   ECOWAS COMMITEE <ecowasmonitoringcommitteeabj@gmail.com>
+Date:   Fri, 20 Mar 2020 11:22:42 +0000
+Message-ID: <CAHHubrZir2VPDquyV-mt0NSoHY=BnELkLL79r7L36=3NbcKYnQ@mail.gmail.com>
+Subject: HAPPY SURVIVAL OF CORONAVIRUS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Waiman Long <longman@redhat.com> wrote:
+Dear Sir/Madam
 
-> +		if ((ret > 0) && (ret <= buflen)) {
+HAPPY SURVIVAL OF CORONAVIRUS
 
-That's a bit excessive on the bracketage, btw, but don't worry about it unless
-you respin the patches.
+We the West African Monitoring Committee of the West African Economic
+Community(ECOWAS)are contacting you for a business transaction which
+we feel will be of great interest to you.
 
-David
+Our duty is to see to the coming in and out of funds into this sub
+region.There is a fund which we confiscated worth of $12.5 million
+dollars.We will like you to receive this fund on your name in your
+account and as well helping us in the investment.
 
+You are advised to contact us as soon as you get this message for
+details of the transaction if you find it interesting.
+
+Best Regards,
+
+Mr John Aka
+
+Chairman
+ECOWAS
+West African Monitoring Committee
+Tel 00225 6716 6756
+Abidjan Cote D'Ivoire
