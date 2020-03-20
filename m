@@ -2,84 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A8918CF91
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 14:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3572218CFC6
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2020 15:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgCTN4v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Mar 2020 09:56:51 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:27913 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726897AbgCTN4v (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Mar 2020 09:56:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584712610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aBKKCxuGzKiLvrrqPPRyma9kDDTtMDjNgcj+HYwHhTs=;
-        b=R5aulqqHutbJXeuhOGBj92E+UT18Hx/7fzRYMpvh2uIZM/euas2YVxhNUiTDGFnZR3ETQY
-        AFy0cSw37xYj10ikdXMZo271iFysm11/XPanSTUQK6pJ9L97a2dc4CS3FsipDycIDWMokY
-        04ZfUdW+FYBEAqVg+by58/6C92nKy+Y=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-259-uCxcpSM7P_e66dxWVrksMQ-1; Fri, 20 Mar 2020 09:56:48 -0400
-X-MC-Unique: uCxcpSM7P_e66dxWVrksMQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0FD92477;
-        Fri, 20 Mar 2020 13:56:46 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-118-190.rdu2.redhat.com [10.10.118.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0641C62937;
-        Fri, 20 Mar 2020 13:56:42 +0000 (UTC)
-Subject: Re: [PATCH v5 1/2] KEYS: Don't write out to userspace while holding
- key semaphore
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, Sumit Garg <sumit.garg@linaro.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Chris von Recklinghausen <crecklin@redhat.com>
-References: <20200318221457.1330-2-longman@redhat.com>
- <20200318221457.1330-1-longman@redhat.com>
- <3251035.1584692419@warthog.procyon.org.uk>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <69678e1c-dfbe-7484-85ad-601ebe23c90d@redhat.com>
-Date:   Fri, 20 Mar 2020 09:56:42 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727194AbgCTOMI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Mar 2020 10:12:08 -0400
+Received: from mga11.intel.com ([192.55.52.93]:61180 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726738AbgCTOMI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 20 Mar 2020 10:12:08 -0400
+IronPort-SDR: 6U9bv5gsSrAqXbT+aN4AXEij3e7otJOU0lXtg9sbnAstxyaAiIM9s+Gic3ks+Ea++qWikOb0dy
+ 4OElFHXd6kpA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2020 07:12:07 -0700
+IronPort-SDR: hce375dXCIda9G8W4yXD7ilFmrdFvIXS9qsOkqtGySPeCKXm3b2NXt5PVYdsMQ3hLhvA4j3chV
+ RKJgh6FgLNYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,284,1580803200"; 
+   d="scan'208";a="324863758"
+Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.161])
+  by orsmga001.jf.intel.com with ESMTP; 20 Mar 2020 07:12:04 -0700
+Date:   Fri, 20 Mar 2020 16:12:02 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     George Wilson <gcwilson@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+        Linh Pham <phaml@us.ibm.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v4] tpm: ibmvtpm: retry on H_CLOSED in tpm_ibmvtpm_send()
+Message-ID: <20200320141202.GA3629@linux.intel.com>
+References: <20200320032758.228088-1-gcwilson@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <3251035.1584692419@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200320032758.228088-1-gcwilson@linux.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/20/20 4:20 AM, David Howells wrote:
-> Waiman Long <longman@redhat.com> wrote:
->
->> +		if ((ret > 0) && (ret <= buflen)) {
-> That's a bit excessive on the bracketage, btw, but don't worry about it unless
-> you respin the patches.
+On Thu, Mar 19, 2020 at 11:27:58PM -0400, George Wilson wrote:
+> tpm_ibmvtpm_send() can fail during PowerVM Live Partition Mobility resume
+> with an H_CLOSED return from ibmvtpm_send_crq().  The PAPR says, 'The
+> "partner partition suspended" transport event disables the associated CRQ
+> such that any H_SEND_CRQ hcall() to the associated CRQ returns H_Closed
+> until the CRQ has been explicitly enabled using the H_ENABLE_CRQ hcall.'
+> This patch adds a check in tpm_ibmvtpm_send() for an H_CLOSED return from
+> ibmvtpm_send_crq() and in that case calls tpm_ibmvtpm_resume() and
+> retries the ibmvtpm_send_crq() once.
+> 
+> Reported-by: Linh Pham <phaml@us.ibm.com>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: George Wilson <gcwilson@linux.ibm.com>
+> Tested-by: Linh Pham <phaml@us.ibm.com>
+> Fixes: 132f76294744 ("drivers/char/tpm: Add new device driver to support IBM vTPM")
+> Cc: stable@vger.kernel.org
 
-Got it.
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-Thanks,
-Longman
+Thanks. Applied now.
 
+/Jarkko
