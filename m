@@ -2,47 +2,32 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7712818DC41
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Mar 2020 00:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F363D18DCF2
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Mar 2020 01:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbgCTXza (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Mar 2020 19:55:30 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:20933 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726851AbgCTXz0 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Mar 2020 19:55:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584748525;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YMUkk0ARH4QnFA1QZkDjLSOJImmLVHTfhOfgY4nYzeY=;
-        b=QT+7S1eksyex7pF4Vp4Q04/Z8nyQaQfAJ9sS4zWFWM897gs1Y9TakRIY52v0jnFk3kb4DJ
-        jYWu4geoEic+aRA/euVRKeZsyojYLff5nPJP8dJjamCrv/+7nw/xgWZWqL9qaKI8OY7aYc
-        DzCdGNMHQ+ICTA1MwjzD3jPTv4NvAzo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-276-J6Id791BNzebo-XDbrltLA-1; Fri, 20 Mar 2020 19:55:22 -0400
-X-MC-Unique: J6Id791BNzebo-XDbrltLA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C87AB8017CC;
-        Fri, 20 Mar 2020 23:55:19 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-113-126.rdu2.redhat.com [10.10.113.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 46CB660BF1;
-        Fri, 20 Mar 2020 23:55:11 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20200320143547.GB3629@linux.intel.com>
-References: <20200320143547.GB3629@linux.intel.com> <20200318221457.1330-1-longman@redhat.com> <20200318221457.1330-3-longman@redhat.com> <20200319194650.GA24804@linux.intel.com> <f22757ad-4d6f-ffd2-eed5-6b9bd1621b10@redhat.com> <20200320020717.GC183331@linux.intel.com> <7dbc524f-6c16-026a-a372-2e80b40eab30@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     dhowells@redhat.com, Waiman Long <longman@redhat.com>,
-        James Morris <jmorris@namei.org>,
+        id S1727046AbgCUA6e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Mar 2020 20:58:34 -0400
+Received: from mga04.intel.com ([192.55.52.120]:9574 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726840AbgCUA6e (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 20 Mar 2020 20:58:34 -0400
+IronPort-SDR: OPDhC3K0uJWneehod59t8t/OkyE6Onb7izNS+IF3qnJRFohes/RDm+J16MalsbZi+xXD8DODPG
+ gYXyq8w7mzog==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2020 17:58:32 -0700
+IronPort-SDR: esFDIly/Lw6QLsxmLW6BlhQWUi4C7fRdlmmnPM4Jrybw+OYXGoreE0IOS/iHsLeFYD8MLeQ9+A
+ BVnbEnYggYYg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,286,1580803200"; 
+   d="scan'208";a="249045762"
+Received: from ydubov-mobl1.ger.corp.intel.com (HELO localhost) ([10.254.147.149])
+  by orsmga006.jf.intel.com with ESMTP; 20 Mar 2020 17:58:22 -0700
+Date:   Sat, 21 Mar 2020 02:58:20 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Waiman Long <longman@redhat.com>, James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -55,23 +40,34 @@ Cc:     dhowells@redhat.com, Waiman Long <longman@redhat.com>,
         Roberto Sassu <roberto.sassu@huawei.com>,
         Eric Biggers <ebiggers@google.com>,
         Chris von Recklinghausen <crecklin@redhat.com>
-Subject: Re: [PATCH v5 2/2] KEYS: Avoid false positive ENOMEM error on key read
+Subject: Re: [PATCH v5 2/2] KEYS: Avoid false positive ENOMEM error on key
+ read
+Message-ID: <20200321005820.GC7166@linux.intel.com>
+References: <20200320143547.GB3629@linux.intel.com>
+ <20200318221457.1330-1-longman@redhat.com>
+ <20200318221457.1330-3-longman@redhat.com>
+ <20200319194650.GA24804@linux.intel.com>
+ <f22757ad-4d6f-ffd2-eed5-6b9bd1621b10@redhat.com>
+ <20200320020717.GC183331@linux.intel.com>
+ <7dbc524f-6c16-026a-a372-2e80b40eab30@redhat.com>
+ <3984029.1584748510@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3984028.1584748510.1@warthog.procyon.org.uk>
-Date:   Fri, 20 Mar 2020 23:55:10 +0000
-Message-ID: <3984029.1584748510@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3984029.1584748510@warthog.procyon.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+On Fri, Mar 20, 2020 at 11:55:10PM +0000, David Howells wrote:
+> Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> 
+> > /* Key data can change as we don not hold key->sem. */
+> 
+> I think you mean "we don't".
 
-> /* Key data can change as we don not hold key->sem. */
+Oops, typo. Yes, thanks.
 
-I think you mean "we don't".
-
-David
-
+/Jarkko
