@@ -2,115 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D021218ECD3
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2020 23:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E25018F6B7
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Mar 2020 15:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726814AbgCVWK4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 22 Mar 2020 18:10:56 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:48178 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726809AbgCVWKz (ORCPT
+        id S1725816AbgCWOXv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Mar 2020 10:23:51 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31930 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725807AbgCWOXv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 22 Mar 2020 18:10:55 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 8EA4472CCE7;
-        Mon, 23 Mar 2020 01:10:52 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 7CF204A4AE7;
-        Mon, 23 Mar 2020 01:10:52 +0300 (MSK)
-Date:   Mon, 23 Mar 2020 01:10:51 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
+        Mon, 23 Mar 2020 10:23:51 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02NE6w1V022464
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Mar 2020 10:23:50 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ywf2fur9n-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Mar 2020 10:23:49 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 23 Mar 2020 14:23:47 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 23 Mar 2020 14:23:45 -0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02NENi1e20775074
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Mar 2020 14:23:44 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BBC7CA4062;
+        Mon, 23 Mar 2020 14:23:44 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 26585A4066;
+        Mon, 23 Mar 2020 14:23:44 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.197.207])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 23 Mar 2020 14:23:43 +0000 (GMT)
 Subject: Re: [PATCH v7] ima-evm-utils: Add some tests for evmctl
-Message-ID: <20200322221051.nrbh2nukxenqinwj@altlinux.org>
-Mail-Followup-To: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-References: <20190817233348.22349-1-vt@altlinux.org>
- <392fed51-095d-2a6f-5eda-317e3bbc8707@linux.microsoft.com>
- <20200319154957.ijh7tbfp4d7iwcef@altlinux.org>
- <a8b77ade-58bf-88ac-542b-b8fbdd651db4@linux.microsoft.com>
- <62502cc8-c861-0227-cdce-4bbea6b05f3e@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <62502cc8-c861-0227-cdce-4bbea6b05f3e@linux.microsoft.com>
-User-Agent: NeoMutt/20171215-106-ac61c7
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Date:   Mon, 23 Mar 2020 10:23:42 -0400
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20032314-0020-0000-0000-000003B98F53
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20032314-0021-0000-0000-000022120B25
+Message-Id: <1584973422.5188.247.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-23_05:2020-03-21,2020-03-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ suspectscore=0 adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ malwarescore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003230078
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Lakshmi,
+Hi Vitaly,
 
-On Thu, Mar 19, 2020 at 02:57:22PM -0700, Lakshmi Ramasubramanian wrote:
-> 
-> When I run the tests, all ima_hash tests pass.
-> But most of sign_verify tests fail.
+I really appreciate your creating this set of tests!  However, when
+you first posted this patch, I asked you to break it up into more
+manageable pieces to review.  I understand this isn't the Linux
+kernel, "just" some tests, but there is good reason that the Linux
+kernel development requires large patches be broken up into more
+manageable small, logical changes.
 
-Please tell what version of ima-evm-utils you are using (what is head
-commit id).
+I've recently asked a few people to help review this patch.  I
+understand that it is a lot of work to break this patch up into
+smaller patches, but it will simplify review.
 
-> I am not sure if I am missing anything in the test setup. Please let me
-> know.
-> 
-> In the file sign_verify.test, I commented out all the tests except the
-> following:
-> 
-> 	sign_verify  rsa1024  sha1    0x0301 --rsa
-> 
-> The text file sha1.txt created by the test is signed fine. But the signature
-> verification fails.
-> 
-> Please see the log at the end of the mail for more detail.
-> 
-> evmctl fails to decode the key file when using the public key
-> "test-rsa1024.pub"
-> 
-> evmctl -v ima_verify --key test-rsa1024.pub --xattr-user --rsa sha1.txt
-> >>> Failed to d2i_X509_fp key file: test-rsa1024.pub
+If I was to break up this patch, I would start by making the test
+driver and each of the tests a separate patch.  The test driver patch
+description should reference the GNU documentation, with an
+explanation as to why a custom driver is preferred[1].
 
-Please show me content of your test-rsa1024.key and test-rsa1024.pub,
-and `getfattr -dm. sha1.txt`.
+thanks,
 
-Thanks,
+Mimi
 
+[1] https://www.gnu.org/software/automake/manual/html_node/Generalitie
+s-about-Testing.html#Generalities-about-Testing
 
-> 
-> But if I pass the certificate file, the file is decoded fine, but signature
-> verification fails.
-> 
-> evmctl -v ima_verify --key test-rsa1024.cer --xattr-user --rsa sha1.txt
-> >>> key 1: d33cbeb0 test-rsa1024.cer
-> 
-> Test log
-> --------
-> evmctl is ../src/evmctl
-> openssl is /usr/bin/openssl
-> xxd is /usr/bin/xxd
-> getfattr is /usr/bin/getfattr
-> - openssl dgst -sha1 sha1.txt
-> - openssl dgst -sha1 -sign test-rsa1024.key -hex sha1.txt
-> + evmctl -v ima_sign --rsa --sigfile --hashalgo sha1 --key test-rsa1024.key
-> --xattr-user sha1.txt
->   hash(sha1): da39a3ee5e6b4b0d3255bfef95601890afd80709
->   sighash: 52d14dacbdb7e7b4195f302357f2324aba026af5
->   evm/ima signature-v1: 146 bytes
->   Writing to sha1.txt.sig
-> 
-> 030130ca735e0000502a83d5a17c171e01040034d161431091513a700f0f9c92c43aee09b59e48a66123afcc4fc8ca6ab9993aa61df9a5d3e38fdaed2e091c6c24b85a3418c1229417d4f3aedb230fd018e7658a6b785de56d3f8e5c029601d77b303f9100b547b5db4adf7e53877874d807811d47eac9ecefcebe6bd5ef49e345671ac87b5fb27e51ea8565dd19a4b93a4a80
-> + evmctl -v ima_verify --key test-rsa1024.pub --xattr-user --rsa sha1.txt
-> 
-> evmctl ima_verify failed with (1)
->   Failed to d2i_X509_fp key file: test-rsa1024.pub
->   openssl: error:0D0680A8:asn1 encoding routines:asn1_check_tlen:wrong tag
->   openssl: error:0D07803A:asn1 encoding routines:asn1_item_embed_d2i:nested
-> asn1 error
->   hash-v1: da39a3ee5e6b4b0d3255bfef95601890afd80709
-> 
-> thanks,
->  -lakshmi
