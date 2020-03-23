@@ -2,93 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E25018F6B7
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Mar 2020 15:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FDD18F8EF
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Mar 2020 16:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725816AbgCWOXv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Mar 2020 10:23:51 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31930 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725807AbgCWOXv (ORCPT
+        id S1727321AbgCWPsw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Mar 2020 11:48:52 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:38368 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727176AbgCWPsw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Mar 2020 10:23:51 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02NE6w1V022464
-        for <linux-integrity@vger.kernel.org>; Mon, 23 Mar 2020 10:23:50 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2ywf2fur9n-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 23 Mar 2020 10:23:49 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 23 Mar 2020 14:23:47 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 23 Mar 2020 14:23:45 -0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02NENi1e20775074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Mar 2020 14:23:44 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BBC7CA4062;
-        Mon, 23 Mar 2020 14:23:44 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 26585A4066;
-        Mon, 23 Mar 2020 14:23:44 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.197.207])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 23 Mar 2020 14:23:43 +0000 (GMT)
+        Mon, 23 Mar 2020 11:48:52 -0400
+Received: from [192.168.0.109] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E55F820B4737;
+        Mon, 23 Mar 2020 08:48:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E55F820B4737
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1584978531;
+        bh=hua0P8STR7JJsHPei1P1PgDLg81VkTX0mtmKEHN/IZ0=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=US/A8C32RPPJhhm61yzbPH7GkMc3vAnwrH+d/maF6U2KcjdBPnUtvO+j89GBo1IAT
+         wXrEdrMBMYhMbEk9ufmkrteQ3aLqI2JZc6xA0ARRFk1Z5X6hCOEgi3tLkZFfMvdH+r
+         3lAVDlz+a8VWpwItJ5fXqug0lU+AKOz3lDfiHdXQ=
 Subject: Re: [PATCH v7] ima-evm-utils: Add some tests for evmctl
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Date:   Mon, 23 Mar 2020 10:23:42 -0400
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20032314-0020-0000-0000-000003B98F53
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20032314-0021-0000-0000-000022120B25
-Message-Id: <1584973422.5188.247.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-23_05:2020-03-21,2020-03-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- suspectscore=0 adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
- malwarescore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003230078
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+References: <20190817233348.22349-1-vt@altlinux.org>
+ <392fed51-095d-2a6f-5eda-317e3bbc8707@linux.microsoft.com>
+ <20200319154957.ijh7tbfp4d7iwcef@altlinux.org>
+ <a8b77ade-58bf-88ac-542b-b8fbdd651db4@linux.microsoft.com>
+ <62502cc8-c861-0227-cdce-4bbea6b05f3e@linux.microsoft.com>
+ <20200322221051.nrbh2nukxenqinwj@altlinux.org>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <9c75834e-18a7-61e7-5c16-0a207d39efe8@linux.microsoft.com>
+Date:   Mon, 23 Mar 2020 08:48:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20200322221051.nrbh2nukxenqinwj@altlinux.org>
+Content-Type: text/plain; charset=koi8-r; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Vitaly,
+On 3/22/20 3:10 PM, Vitaly Chikunov wrote:
 
-I really appreciate your creating this set of tests!  However, when
-you first posted this patch, I asked you to break it up into more
-manageable pieces to review.  I understand this isn't the Linux
-kernel, "just" some tests, but there is good reason that the Linux
-kernel development requires large patches be broken up into more
-manageable small, logical changes.
+> Please tell what version of ima-evm-utils you are using (what is head
+> commit id).
 
-I've recently asked a few people to help review this patch.  I
-understand that it is a lot of work to break this patch up into
-smaller patches, but it will simplify review.
+evmctl --version
+evmctl 1.2
 
-If I was to break up this patch, I would start by making the test
-driver and each of the tests a separate patch.  The test driver patch
-description should reference the GNU documentation, with an
-explanation as to why a custom driver is preferred[1].
+ima-evm-utils$ git log -1
+commit 515c99856ef52bbf680e6dd6c338acfb8d088614 (HEAD -> master, tag: 
+v1.2, origin/master, origin/HEAD)
+Author: Mimi Zohar <zohar@linux.ibm.com>
+Date:   Wed Jul 24 07:24:43 2019 -0400
+
+     ima-evm-utils: Release version 1.2
+
+> 
+> Please show me content of your test-rsa1024.key and test-rsa1024.pub,
+> and `getfattr -dm. sha1.txt`.
+> 
+
+getfattr -dm. sha1.txt
+# file: sha1.txt
+user.evm=0sAwEwynNeAABQKoPVoXwXHgEEAAmpCSf+2aCO+Wju3CCoc14f43oqquhhgs401WUd39JGdd7kMAWywyrVoz9bRbcTeIXbV0ylfi+snXHJxJwKRpDL07JCvE/XIFiQH0NIgyV85mzkuGZ6i/PGPghPsLAXY1UufCIgPrCAlXvxjUiIF1Vu5Z52UNoXED3zBqQulQqP
+
+cat test-rsa1024.key
+
+-----BEGIN PRIVATE KEY-----
+MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMJp/dT5ZOMV1+4j
+XmFvutwOIH24kVi+rxG8By10UFM4ESoX1qQFuOMpVWJSHsbHFQRbQy5/JGodDmQ+
+s3SlsHoLF60UOzPTmolmNFn31SoTN8yI+0hrlcewH/yv8PbRxVZXJwaRFsiHX9YS
+D02xA691B7sIVPxtMUVmMpjiLw4RAgMBAAECgYEAuOmTMoRa/tqB3NDrLgXVVwRg
+xvNL23rSjS2oLgWZeO209bJixvNiXT2tJq0w9KPaS6B6D7mCayNj0tkIWwRVCrcr
+b8aGZat0Rc/yfQcCf91qd1AFD8SpJ+SbBXJda0qIj21C5zwXg0guwB7m1AB6FS5D
+eFg5tWONC8sO2buaobkCQQDfx+UrXqkaEwHp/UrV64qGPwk7dYhR9eZD40GpaCEP
+KDSQjYKijjbiLBW+ztgOMm32Q+pVxaGyLyQh8mM43ybfAkEA3meyFe4T3PsAiARg
+OKiZXbMqDCWsnB8xQxcpDVcX8oRzF+HaNrzxWpzDf0YhrV8vC6dgYg5f2+UH9Zvu
+F7AZDwJAPMMnS85pNiZBF8rp/gn11BvbouR3/mE5g+d6FciraVUuaK2z8fWRm3oC
+8YtyiPBSgVLRlzaRgDNiqUEKhg+5mwJBAJH957zVh1xrt7GRjcgjhGkpjtRidqgV
+IbU0otIK9cFQiGyI6UE9TgF5HiuR0dGIxc0UlgRIA0zJTyw+q1AJXKkCQEcvowyb
+tIjDhgbMb68Euz5RQt6pktASQ7EBquRQ3Pe1MQwWBzF0pJW10f+idzNCHDY554cJ
+VD/C7jcQ1twWWNs=
+-----END PRIVATE KEY-----
+
+cat test-rsa1024.pub
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDCaf3U+WTjFdfuI15hb7rcDiB9
+uJFYvq8RvActdFBTOBEqF9akBbjjKVViUh7GxxUEW0MufyRqHQ5kPrN0pbB6Cxet
+FDsz05qJZjRZ99UqEzfMiPtIa5XHsB/8r/D20cVWVycGkRbIh1/WEg9NsQOvdQe7
+CFT8bTFFZjKY4i8OEQIDAQAB
+-----END PUBLIC KEY-----
 
 thanks,
-
-Mimi
-
-[1] https://www.gnu.org/software/automake/manual/html_node/Generalitie
-s-about-Testing.html#Generalities-about-Testing
-
+  -lakshmi
