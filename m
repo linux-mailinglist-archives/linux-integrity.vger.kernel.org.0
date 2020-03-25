@@ -2,30 +2,30 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CDA19262A
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Mar 2020 11:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3DF19263E
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Mar 2020 11:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbgCYKty (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 25 Mar 2020 06:49:54 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2591 "EHLO huawei.com"
+        id S1726658AbgCYKzI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Mar 2020 06:55:08 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2592 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726103AbgCYKty (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 25 Mar 2020 06:49:54 -0400
-Received: from lhreml702-cah.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 67A1A494717F79CB74E9;
-        Wed, 25 Mar 2020 10:49:52 +0000 (GMT)
+        id S1726139AbgCYKzI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 25 Mar 2020 06:55:08 -0400
+Received: from LHREML711-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 34CB0544EB9BE59D97D0;
+        Wed, 25 Mar 2020 10:55:06 +0000 (GMT)
 Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
- by smtpsuk.huawei.com (10.201.108.43) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Wed, 25 Mar 2020 10:49:43 +0000
+ by smtpsuk.huawei.com (10.201.108.34) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Wed, 25 Mar 2020 10:54:59 +0000
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>, <James.Bottomley@HansenPartnership.com>
 CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4 4/7] ima: Switch to dynamically allocated buffer for template digests
-Date:   Wed, 25 Mar 2020 11:47:09 +0100
-Message-ID: <20200325104712.25694-5-roberto.sassu@huawei.com>
+Subject: [PATCH v4 5/7] ima: Allocate and initialize tfm for each PCR bank
+Date:   Wed, 25 Mar 2020 11:52:48 +0100
+Message-ID: <20200325105248.26388-1-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200325104712.25694-1-roberto.sassu@huawei.com>
 References: <20200325104712.25694-1-roberto.sassu@huawei.com>
@@ -38,249 +38,238 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch dynamically allocates the array of tpm_digest structures in
-ima_alloc_init_template() and ima_restore_template_data(). The size of the
-array is equal to the number of PCR banks plus ima_extra_slots, to make
-room for SHA1 and the IMA default hash algorithm, when PCR banks with those
-algorithms are not allocated.
-
-Calculating the SHA1 digest is mandatory, as SHA1 still remains the default
-hash algorithm for the measurement list. When IMA will support the Crypto
-Agile format, remaining digests will be also provided.
-
-The position in the measurement entry array of the SHA1 digest is stored in
-the ima_sha1_idx global variable and is determined at IMA initialization
-time.
+This patch creates a crypto_shash structure for each allocated PCR bank and
+for SHA1 if a bank with that algorithm is not currently allocated.
 
 Changelog
 
-v3:
-- improve comment for ima_extra_slots (suggested by Mimi)
-- declare local variable digests in ima_alloc_init_template() and
-  ima_restore_template_data() (suggested by Mimi)
-
 v2:
-- add NR_BANKS macro to return zero if ima_tpm_chip is NULL
+- declare ima_init_ima_crypto() as static
 - replace ima_num_template_digests with
   NR_BANKS(ima_tpm_chip) + ima_extra_slots (suggested by Mimi)
-- add __ro_after_init to declaration of ima_sha1_idx and ima_extra_slots
-  (suggested by Mimi)
+- use ima_sha1_idx to access ima_algo_array elements in ima_init_crypto()
 
 v1:
-- move ima_sha1_idx to ima_crypto.c
-- introduce ima_num_template_digests (suggested by Mimi)
+- determine ima_num_template_digests before allocating ima_algo_array
+  (suggested by Mimi)
+- replace kmalloc_array() with kcalloc() in ima_init_crypto() (suggested by
+  Mimi)
+- check tfm first in ima_alloc_tfm()
+- check if ima_tpm_chip is NULL
 
+Reported-by: kbuild test robot <lkp@intel.com>
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/integrity/ima/ima.h          |  6 +++++-
- security/integrity/ima/ima_api.c      | 10 ++++++++++
- security/integrity/ima/ima_crypto.c   | 10 +++++++++-
- security/integrity/ima/ima_fs.c       |  4 ++--
- security/integrity/ima/ima_queue.c    | 10 ++++++----
- security/integrity/ima/ima_template.c | 15 +++++++++++++--
- 6 files changed, 45 insertions(+), 10 deletions(-)
+ security/integrity/ima/ima_crypto.c | 145 +++++++++++++++++++++++-----
+ 1 file changed, 119 insertions(+), 26 deletions(-)
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index a2dfe24e04c7..2a7ed68e6414 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -45,11 +45,15 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8 };
- #define IMA_TEMPLATE_IMA_NAME "ima"
- #define IMA_TEMPLATE_IMA_FMT "d|n"
- 
-+#define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks : 0)
-+
- /* current content of the policy */
- extern int ima_policy_flag;
- 
- /* set during initialization */
- extern int ima_hash_algo;
-+extern int ima_sha1_idx __ro_after_init;
-+extern int ima_extra_slots __ro_after_init;
- extern int ima_appraise;
- extern struct tpm_chip *ima_tpm_chip;
- 
-@@ -92,7 +96,7 @@ struct ima_template_desc {
- 
- struct ima_template_entry {
- 	int pcr;
--	u8 digest[TPM_DIGEST_SIZE];	/* sha1 or md5 measurement hash */
-+	struct tpm_digest *digests;
- 	struct ima_template_desc *template_desc; /* template descriptor */
- 	u32 template_data_len;
- 	struct ima_field_data template_data[0];	/* template related data */
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 2ef5a40c7ca5..78e0b0a7723e 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -27,6 +27,7 @@ void ima_free_template_entry(struct ima_template_entry *entry)
- 	for (i = 0; i < entry->template_desc->num_fields; i++)
- 		kfree(entry->template_data[i].data);
- 
-+	kfree(entry->digests);
- 	kfree(entry);
- }
- 
-@@ -38,6 +39,7 @@ int ima_alloc_init_template(struct ima_event_data *event_data,
- 			    struct ima_template_desc *desc)
- {
- 	struct ima_template_desc *template_desc;
-+	struct tpm_digest *digests;
- 	int i, result = 0;
- 
- 	if (desc)
-@@ -50,6 +52,14 @@ int ima_alloc_init_template(struct ima_event_data *event_data,
- 	if (!*entry)
- 		return -ENOMEM;
- 
-+	digests = kcalloc(NR_BANKS(ima_tpm_chip) + ima_extra_slots,
-+			  sizeof(*digests), GFP_NOFS);
-+	if (!digests) {
-+		result = -ENOMEM;
-+		goto out;
-+	}
-+
-+	(*entry)->digests = digests;
- 	(*entry)->template_desc = template_desc;
- 	for (i = 0; i < template_desc->num_fields; i++) {
- 		const struct ima_template_field *field =
 diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 03d73a4009ab..fe02eb28b32b 100644
+index fe02eb28b32b..ab1c05ad1314 100644
 --- a/security/integrity/ima/ima_crypto.c
 +++ b/security/integrity/ima/ima_crypto.c
-@@ -57,6 +57,13 @@ MODULE_PARM_DESC(ahash_bufsize, "Maximum ahash buffer size");
+@@ -57,14 +57,21 @@ MODULE_PARM_DESC(ahash_bufsize, "Maximum ahash buffer size");
  static struct crypto_shash *ima_shash_tfm;
  static struct crypto_ahash *ima_ahash_tfm;
  
-+int ima_sha1_idx __ro_after_init;
-+/*
-+ * Additional number of slots reserved, as needed, for SHA1
-+ * and IMA default algo.
-+ */
-+int ima_extra_slots __ro_after_init = 1;
++struct ima_algo_desc {
++	struct crypto_shash *tfm;
++	enum hash_algo algo;
++};
 +
- int __init ima_init_crypto(void)
+ int ima_sha1_idx __ro_after_init;
+ /*
+  * Additional number of slots reserved, as needed, for SHA1
+  * and IMA default algo.
+  */
+-int ima_extra_slots __ro_after_init = 1;
++int ima_extra_slots __ro_after_init;
+ 
+-int __init ima_init_crypto(void)
++static struct ima_algo_desc *ima_algo_array;
++
++static int __init ima_init_ima_crypto(void)
  {
  	long rc;
-@@ -502,7 +509,8 @@ static int ima_calc_field_array_hash_tfm(struct ima_field_data *field_data,
+ 
+@@ -83,26 +90,121 @@ int __init ima_init_crypto(void)
+ static struct crypto_shash *ima_alloc_tfm(enum hash_algo algo)
+ {
+ 	struct crypto_shash *tfm = ima_shash_tfm;
+-	int rc;
++	int rc, i;
+ 
+ 	if (algo < 0 || algo >= HASH_ALGO__LAST)
+ 		algo = ima_hash_algo;
+ 
+-	if (algo != ima_hash_algo) {
+-		tfm = crypto_alloc_shash(hash_algo_name[algo], 0, 0);
+-		if (IS_ERR(tfm)) {
+-			rc = PTR_ERR(tfm);
+-			pr_err("Can not allocate %s (reason: %d)\n",
+-			       hash_algo_name[algo], rc);
+-		}
++	if (algo == ima_hash_algo)
++		return tfm;
++
++	for (i = 0; i < NR_BANKS(ima_tpm_chip) + ima_extra_slots; i++)
++		if (ima_algo_array[i].tfm && ima_algo_array[i].algo == algo)
++			return ima_algo_array[i].tfm;
++
++	tfm = crypto_alloc_shash(hash_algo_name[algo], 0, 0);
++	if (IS_ERR(tfm)) {
++		rc = PTR_ERR(tfm);
++		pr_err("Can not allocate %s (reason: %d)\n",
++		       hash_algo_name[algo], rc);
+ 	}
+ 	return tfm;
+ }
+ 
++int __init ima_init_crypto(void)
++{
++	enum hash_algo algo;
++	long rc;
++	int i;
++
++	rc = ima_init_ima_crypto();
++	if (rc)
++		return rc;
++
++	ima_sha1_idx = -1;
++
++	for (i = 0; i < NR_BANKS(ima_tpm_chip); i++) {
++		algo = ima_tpm_chip->allocated_banks[i].crypto_id;
++		if (algo == HASH_ALGO_SHA1)
++			ima_sha1_idx = i;
++	}
++
++	if (ima_sha1_idx < 0)
++		ima_sha1_idx = NR_BANKS(ima_tpm_chip) + ima_extra_slots++;
++
++	ima_algo_array = kcalloc(NR_BANKS(ima_tpm_chip) + ima_extra_slots,
++				 sizeof(*ima_algo_array), GFP_KERNEL);
++	if (!ima_algo_array) {
++		rc = -ENOMEM;
++		goto out;
++	}
++
++	for (i = 0; i < NR_BANKS(ima_tpm_chip); i++) {
++		algo = ima_tpm_chip->allocated_banks[i].crypto_id;
++		ima_algo_array[i].algo = algo;
++
++		/* unknown TPM algorithm */
++		if (algo == HASH_ALGO__LAST)
++			continue;
++
++		if (algo == ima_hash_algo) {
++			ima_algo_array[i].tfm = ima_shash_tfm;
++			continue;
++		}
++
++		ima_algo_array[i].tfm = ima_alloc_tfm(algo);
++		if (IS_ERR(ima_algo_array[i].tfm)) {
++			if (algo == HASH_ALGO_SHA1) {
++				rc = PTR_ERR(ima_algo_array[i].tfm);
++				ima_algo_array[i].tfm = NULL;
++				goto out_array;
++			}
++
++			ima_algo_array[i].tfm = NULL;
++		}
++	}
++
++	if (ima_sha1_idx >= NR_BANKS(ima_tpm_chip)) {
++		if (ima_hash_algo == HASH_ALGO_SHA1) {
++			ima_algo_array[ima_sha1_idx].tfm = ima_shash_tfm;
++		} else {
++			ima_algo_array[ima_sha1_idx].tfm =
++						ima_alloc_tfm(HASH_ALGO_SHA1);
++			if (IS_ERR(ima_algo_array[ima_sha1_idx].tfm)) {
++				rc = PTR_ERR(ima_algo_array[ima_sha1_idx].tfm);
++				goto out_array;
++			}
++		}
++
++		ima_algo_array[ima_sha1_idx].algo = HASH_ALGO_SHA1;
++	}
++
++	return 0;
++out_array:
++	for (i = 0; i < NR_BANKS(ima_tpm_chip) + ima_extra_slots; i++) {
++		if (!ima_algo_array[i].tfm ||
++		    ima_algo_array[i].tfm == ima_shash_tfm)
++			continue;
++
++		crypto_free_shash(ima_algo_array[i].tfm);
++	}
++out:
++	crypto_free_shash(ima_shash_tfm);
++	return rc;
++}
++
+ static void ima_free_tfm(struct crypto_shash *tfm)
+ {
+-	if (tfm != ima_shash_tfm)
+-		crypto_free_shash(tfm);
++	int i;
++
++	if (tfm == ima_shash_tfm)
++		return;
++
++	for (i = 0; i < NR_BANKS(ima_tpm_chip) + ima_extra_slots; i++)
++		if (ima_algo_array[i].tfm == tfm)
++			return;
++
++	crypto_free_shash(tfm);
+ }
+ 
+ /**
+@@ -472,14 +574,14 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+  */
+ static int ima_calc_field_array_hash_tfm(struct ima_field_data *field_data,
+ 					 struct ima_template_entry *entry,
+-					 struct crypto_shash *tfm)
++					 int tfm_idx)
+ {
+-	SHASH_DESC_ON_STACK(shash, tfm);
++	SHASH_DESC_ON_STACK(shash, ima_algo_array[tfm_idx].tfm);
+ 	struct ima_template_desc *td = entry->template_desc;
+ 	int num_fields = entry->template_desc->num_fields;
+ 	int rc, i;
+ 
+-	shash->tfm = tfm;
++	shash->tfm = ima_algo_array[tfm_idx].tfm;
+ 
+ 	rc = crypto_shash_init(shash);
+ 	if (rc != 0)
+@@ -509,8 +611,7 @@ static int ima_calc_field_array_hash_tfm(struct ima_field_data *field_data,
  	}
  
  	if (!rc)
--		rc = crypto_shash_final(shash, entry->digest);
-+		rc = crypto_shash_final(shash,
-+					entry->digests[ima_sha1_idx].digest);
+-		rc = crypto_shash_final(shash,
+-					entry->digests[ima_sha1_idx].digest);
++		rc = crypto_shash_final(shash, entry->digests[tfm_idx].digest);
  
  	return rc;
  }
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index a71e822a6e92..8b030a1c5e0d 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -150,7 +150,7 @@ int ima_measurements_show(struct seq_file *m, void *v)
- 	ima_putc(m, &pcr, sizeof(e->pcr));
- 
- 	/* 2nd: template digest */
--	ima_putc(m, e->digest, TPM_DIGEST_SIZE);
-+	ima_putc(m, e->digests[ima_sha1_idx].digest, TPM_DIGEST_SIZE);
- 
- 	/* 3rd: template name size */
- 	namelen = !ima_canonical_fmt ? strlen(template_name) :
-@@ -233,7 +233,7 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
- 	seq_printf(m, "%2d ", e->pcr);
- 
- 	/* 2nd: SHA1 template hash */
--	ima_print_digest(m, e->digest, TPM_DIGEST_SIZE);
-+	ima_print_digest(m, e->digests[ima_sha1_idx].digest, TPM_DIGEST_SIZE);
- 
- 	/* 3th:  template name */
- 	seq_printf(m, " %s", template_name);
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index 8753212ddb18..49db71c200b4 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -55,7 +55,8 @@ static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
- 	key = ima_hash_key(digest_value);
- 	rcu_read_lock();
- 	hlist_for_each_entry_rcu(qe, &ima_htable.queue[key], hnext) {
--		rc = memcmp(qe->entry->digest, digest_value, TPM_DIGEST_SIZE);
-+		rc = memcmp(qe->entry->digests[ima_sha1_idx].digest,
-+			    digest_value, TPM_DIGEST_SIZE);
- 		if ((rc == 0) && (qe->entry->pcr == pcr)) {
- 			ret = qe;
- 			break;
-@@ -75,7 +76,7 @@ static int get_binary_runtime_size(struct ima_template_entry *entry)
- 	int size = 0;
- 
- 	size += sizeof(u32);	/* pcr */
--	size += sizeof(entry->digest);
-+	size += TPM_DIGEST_SIZE;
- 	size += sizeof(int);	/* template name size field */
- 	size += strlen(entry->template_desc->name);
- 	size += sizeof(entry->template_data_len);
-@@ -107,7 +108,7 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
- 
- 	atomic_long_inc(&ima_htable.len);
- 	if (update_htable) {
--		key = ima_hash_key(entry->digest);
-+		key = ima_hash_key(entry->digests[ima_sha1_idx].digest);
- 		hlist_add_head_rcu(&qe->hnext, &ima_htable.queue[key]);
- 	}
- 
-@@ -171,7 +172,8 @@ int ima_add_template_entry(struct ima_template_entry *entry, int violation,
- 
- 	mutex_lock(&ima_extend_list_mutex);
- 	if (!violation) {
--		memcpy(digest, entry->digest, sizeof(digest));
-+		memcpy(digest, entry->digests[ima_sha1_idx].digest,
-+		       sizeof(digest));
- 		if (ima_lookup_digest_entry(digest, entry->pcr)) {
- 			audit_cause = "hash_exists";
- 			result = -EEXIST;
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 062d9ad49afb..de84252e65e9 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -301,6 +301,7 @@ static int ima_restore_template_data(struct ima_template_desc *template_desc,
- 				     int template_data_size,
- 				     struct ima_template_entry **entry)
+@@ -518,17 +619,9 @@ static int ima_calc_field_array_hash_tfm(struct ima_field_data *field_data,
+ int ima_calc_field_array_hash(struct ima_field_data *field_data,
+ 			      struct ima_template_entry *entry)
  {
-+	struct tpm_digest *digests;
- 	int ret = 0;
- 	int i;
+-	struct crypto_shash *tfm;
+ 	int rc;
  
-@@ -309,11 +310,21 @@ static int ima_restore_template_data(struct ima_template_desc *template_desc,
- 	if (!*entry)
- 		return -ENOMEM;
+-	tfm = ima_alloc_tfm(HASH_ALGO_SHA1);
+-	if (IS_ERR(tfm))
+-		return PTR_ERR(tfm);
+-
+-	rc = ima_calc_field_array_hash_tfm(field_data, entry, tfm);
+-
+-	ima_free_tfm(tfm);
+-
++	rc = ima_calc_field_array_hash_tfm(field_data, entry, ima_sha1_idx);
+ 	return rc;
+ }
  
-+	digests = kcalloc(NR_BANKS(ima_tpm_chip) + ima_extra_slots,
-+			  sizeof(*digests), GFP_NOFS);
-+	if (!digests) {
-+		kfree(*entry);
-+		return -ENOMEM;
-+	}
-+
-+	(*entry)->digests = digests;
-+
- 	ret = ima_parse_buf(template_data, template_data + template_data_size,
- 			    NULL, template_desc->num_fields,
- 			    (*entry)->template_data, NULL, NULL,
- 			    ENFORCE_FIELDS | ENFORCE_BUFEND, "template data");
- 	if (ret < 0) {
-+		kfree((*entry)->digests);
- 		kfree(*entry);
- 		return ret;
- 	}
-@@ -445,8 +456,8 @@ int ima_restore_measurement_list(loff_t size, void *buf)
- 		if (ret < 0)
- 			break;
- 
--		memcpy(entry->digest, hdr[HDR_DIGEST].data,
--		       hdr[HDR_DIGEST].len);
-+		memcpy(entry->digests[ima_sha1_idx].digest,
-+		       hdr[HDR_DIGEST].data, hdr[HDR_DIGEST].len);
- 		entry->pcr = !ima_canonical_fmt ? *(hdr[HDR_PCR].data) :
- 			     le32_to_cpu(*(hdr[HDR_PCR].data));
- 		ret = ima_restore_measurement_entry(entry);
 -- 
 2.17.1
 
