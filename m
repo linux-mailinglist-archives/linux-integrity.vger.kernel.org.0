@@ -2,75 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D59A191C97
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2020 23:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE90191E8D
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Mar 2020 02:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728184AbgCXWRd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Mar 2020 18:17:33 -0400
-Received: from mail.rosalinux.ru ([195.19.76.54]:55870 "EHLO mail.rosalinux.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727664AbgCXWRd (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Mar 2020 18:17:33 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id BAEC3D8227178;
-        Wed, 25 Mar 2020 01:17:30 +0300 (MSK)
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id LY-EUSBAlXdS; Wed, 25 Mar 2020 01:17:15 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id 72D3BD8227177;
-        Wed, 25 Mar 2020 01:17:15 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru 72D3BD8227177
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
-        s=A1AAD92A-9767-11E6-A27F-AC75C9F78EF4; t=1585088235;
-        bh=rY+l9JSrhyFiaGT/BW2e9mYgROM6R/izk1+a6RVdGjU=;
-        h=To:From:Message-ID:Date:MIME-Version;
-        b=QGrinb5l80B80jcW4DQKy3G2lnMQusPYFeEYPVCS5GdSAa5UU//iYVoUjLkc98IzB
-         YCBzbb9SNrUbrfZgsNykqxcaHxiFg/Lp4crNaj9VKWqBCisf7jkAz8q4JqOxi4pitY
-         wZcKPINcGwn3sJfk5gk94nyoNuOmwmVoWo5RDeMG/E58rGaXwBGZIDpPaPDNLn+98E
-         nmBK+0NXruvG8XbUkqxxaZGCYGx3UnnSGIDIGkBksitvgZuYjCc6mMlaf8JOnYUET4
-         EsV5otC8lFZMivXyYNpiOqih1NNUECVaDpuPEplB6frWKRp6jUY46n6kz7Pjczy8Ix
-         o3Tnwt2FVVYcg==
-X-Virus-Scanned: amavisd-new at rosalinux.ru
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id HhoIIQdOQKJd; Wed, 25 Mar 2020 01:17:15 +0300 (MSK)
-Received: from [192.168.1.173] (broadband-90-154-70-243.ip.moscow.rt.ru [90.154.70.243])
-        by mail.rosalinux.ru (Postfix) with ESMTPSA id 46221D8227176;
-        Wed, 25 Mar 2020 01:17:15 +0300 (MSK)
+        id S1727205AbgCYBV1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Mar 2020 21:21:27 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29542 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727102AbgCYBV1 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 24 Mar 2020 21:21:27 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02P0Y06e069467
+        for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2020 20:48:14 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ywbuw3dah-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2020 20:48:14 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 25 Mar 2020 00:48:10 -0000
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 25 Mar 2020 00:48:09 -0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02P0mAtj59375842
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Mar 2020 00:48:10 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C382A4054;
+        Wed, 25 Mar 2020 00:48:10 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C546A405C;
+        Wed, 25 Mar 2020 00:48:09 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.132.168])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 25 Mar 2020 00:48:09 +0000 (GMT)
 Subject: Re: [PATCH] ima-evm-utils: Fix compatibility with LibreSSL
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Mikhail Novosyolov <m.novosyolov@rosalinux.ru>,
+        linux-integrity@vger.kernel.org
 Cc:     Vitaly Chikunov <vt@altlinux.org>
+Date:   Tue, 24 Mar 2020 20:48:08 -0400
+In-Reply-To: <fd03f51c-edec-328c-0f53-71a4bd4f35ac@rosalinux.ru>
 References: <85a96cad-dc04-a617-abfa-fb9427412e52@rosalinux.ru>
- <1585083940.5188.304.camel@linux.ibm.com>
-From:   Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
-Message-ID: <fd03f51c-edec-328c-0f53-71a4bd4f35ac@rosalinux.ru>
-Date:   Wed, 25 Mar 2020 01:17:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <1585083940.5188.304.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: ru-RU
-Content-Transfer-Encoding: quoted-printable
+         <1585083940.5188.304.camel@linux.ibm.com>
+         <fd03f51c-edec-328c-0f53-71a4bd4f35ac@rosalinux.ru>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20032500-0008-0000-0000-0000036352E3
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20032500-0009-0000-0000-00004A84C0E1
+Message-Id: <1585097288.5188.311.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-24_10:2020-03-23,2020-03-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 mlxscore=0 phishscore=0 impostorscore=0 mlxlogscore=999
+ suspectscore=18 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2003240119
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-25.03.2020 00:05, Mimi Zohar =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> Hi Mikhail,
->
-> On Wed, 2019-12-04 at 01:41 +0300, Mikhail Novosyolov wrote:
->> P.S. Patch is against commit 3eab1f93 "ima-evm-utils: Release
->> version 1.2.1", I did not find newer git.
-> This patch doesn't apply to my current working branch or to that tag.
->
-> Mimi
->
-Mimi, sorry for not replying for long, I was going to send a new version =
-of the patch in the next few days. Please point me to your working branch=
-, I failed to find it at sourceforge.
+On Wed, 2020-03-25 at 01:17 +0300, Mikhail Novosyolov wrote:
+> 25.03.2020 00:05, Mimi Zohar пишет:
+> > Hi Mikhail,
+> >
+> > On Wed, 2019-12-04 at 01:41 +0300, Mikhail Novosyolov wrote:
+> >> P.S. Patch is against commit 3eab1f93 "ima-evm-utils: Release
+> >> version 1.2.1", I did not find newer git.
+> > This patch doesn't apply to my current working branch or to that tag.
+> >
+> > Mimi
+> >
+> Mimi, sorry for not replying for long, I was going to send a new
+> version of the patch in the next few days. Please point me to your
+> working branch, I failed to find it at sourceforge.
 
-Thank you!
+The next branch is fine.  Everything else is still being reviewed.
+ Please remember to include in the patch description the hint on
+compiling ima-evm-utils with libressl.
+
+Mimi 
 
