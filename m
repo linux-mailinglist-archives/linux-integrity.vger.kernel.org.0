@@ -2,87 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6B4194440
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Mar 2020 17:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFF4194631
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Mar 2020 19:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbgCZQ1f (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Mar 2020 12:27:35 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:44589 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726163AbgCZQ1e (ORCPT
+        id S1727879AbgCZSMs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Mar 2020 14:12:48 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:54707 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726359AbgCZSMs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Mar 2020 12:27:34 -0400
-Received: by mail-wr1-f68.google.com with SMTP id m17so8518862wrw.11
-        for <linux-integrity@vger.kernel.org>; Thu, 26 Mar 2020 09:27:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZUae3Te9riZOBIxfGA3qHc809fSKi8eiW5NIMmtWsyI=;
-        b=FAbjombajR+rLaFUaNHhSR7Aeyv8DGJucgaN6JZAl1pIDtDmPJxwaMegbT8ngPnEql
-         B+kOcaCwJ5M8CQGnjxseNO/0Ne5pfsMjbW86Xr6MvNHr6fR2BQCVnl+o8b0DTWcP5xVp
-         GV2YKnf0PmCRfJZbmMaiHSx3fWIgzs5YSBiAO4ZESg16nAFB73FGwz/swRwW4t71pyPe
-         czRzMc71CJeOeZcI0I7F7KhYVvdMxNkjivL6PKAHkkPIkGAz1AChPFBUv+/H47H6A4bn
-         SuzVRd9z+BcCks/hw0JYjrcqbRymv7VGLcS3ZMTF6FoqWBuXS1CrxBjwc/l+KhEC1Gk7
-         MboQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZUae3Te9riZOBIxfGA3qHc809fSKi8eiW5NIMmtWsyI=;
-        b=iZ3sM1PqH/GnTGIM/YqsedA4QrRfAycLVbxtO4U0TJxEQ/IOhR0szgvai0dh2FiQgm
-         b7/TEkV0cAPdbxInMlgc24jHOgfURXa03NgUGeynIK9RY8xQhBg29eK6XpI5qqHc6EjT
-         UZZB00ApgwN2aj07QCCbUtewH+Ht9dsQZfESCCg/3mErg1RLE62E1Z8nOSqBPI2HetAl
-         8yNDuXjbUZb2l2SC68IvyeXOieZF2voqJVgLFZPvCSrLgYLWcAHEYMHpSxtL8cr/3G22
-         KxX23NVcLBNpGFeVjSrgLyjdHjNs5NnXlyLFRpmA8wv7tBDpQ2BXraSol4MaPP+jYG6y
-         9/1Q==
-X-Gm-Message-State: ANhLgQ0pTMOPREyO8LOwTs7h0zpUoUrojCj3J1S/waoHkW95w/uVjXhJ
-        jBFfO/hwKCTG0VljQMkSC+C4iUPj7/E=
-X-Google-Smtp-Source: ADFU+vsJx75Zaywe+7XKpusGT8RabTr0G893p86EReNWBWnCv4uVk6+spAtyGs43qab7RtsbxknFCg==
-X-Received: by 2002:adf:916f:: with SMTP id j102mr9768788wrj.335.1585240052167;
-        Thu, 26 Mar 2020 09:27:32 -0700 (PDT)
-Received: from lothlann.rup.mentorg.com (nat-min.mentorg.com. [139.181.32.34])
-        by smtp.gmail.com with ESMTPSA id n2sm3973192wrr.62.2020.03.26.09.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2020 09:27:30 -0700 (PDT)
-From:   dbaryshkov@gmail.com
-To:     linux-integrity@vger.kernel.org
-Cc:     Dmitry Baryshkov <dbaryshkov@gmail.com>
-Subject: [PATCH] evmctl: support verification of portable EVM signatures
-Date:   Thu, 26 Mar 2020 19:27:23 +0300
-Message-Id: <20200326162723.3716670-1-dbaryshkov@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 26 Mar 2020 14:12:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1585246367;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xSpHtNBxLLhtF34YSYaO2d4Hbj2Yy2CbluzS9RwRxJk=;
+        b=FzLA8EpXSrdW3UC1SAtLYlsuYFRdvQJ3UPlANlfuuqAxbO1ZV7e0fgD98EfGUeYc6kOsHz
+        iVqK68Oyp/rcVp9RXE8yuLVQYDuuIlMUlniLl4yoQvfkm7Xs4UXahNXSbqb+Lsm2TxQLjQ
+        zeBMvD/I/h+8pSDWBzJMKV/XTC9uhpE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-349-LYKPwtB9OVaVDStq5YqjMQ-1; Thu, 26 Mar 2020 14:12:43 -0400
+X-MC-Unique: LYKPwtB9OVaVDStq5YqjMQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BCD2B100550D;
+        Thu, 26 Mar 2020 18:12:40 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-113-126.rdu2.redhat.com [10.10.113.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C4E5960BF3;
+        Thu, 26 Mar 2020 18:12:32 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20200325.193056.1153970692429454819.davem@davemloft.net>
+References: <20200325.193056.1153970692429454819.davem@davemloft.net> <20200322011125.24327-1-longman@redhat.com>
+To:     David Miller <davem@davemloft.net>
+Cc:     dhowells@redhat.com, longman@redhat.com,
+        jarkko.sakkinen@linux.intel.com, jmorris@namei.org,
+        serge@hallyn.com, zohar@linux.ibm.com, kuba@kernel.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, sumit.garg@linaro.org,
+        jsnitsel@redhat.com, roberto.sassu@huawei.com, ebiggers@google.com,
+        crecklin@redhat.com
+Subject: Re: [PATCH v8 0/2] KEYS: Read keys to internal buffer & then copy to userspace
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <996367.1585246352.1@warthog.procyon.org.uk>
+Date:   Thu, 26 Mar 2020 18:12:32 +0000
+Message-ID: <996368.1585246352@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Dmitry Baryshkov <dbaryshkov@gmail.com>
+David Miller <davem@davemloft.net> wrote:
 
-EVM signature code checked explicitly checked for signature type to be
-EVM_IMA_XATTR_DIGSIG (0x03). Allow it to be either EVM_IMA_XATTR_DIGSIG
-or EVM_XATTR_PORTABLE_DIGSIG.
+> Who will integrate these changes?
 
-Signed-off-by: Dmitry Baryshkov <dbaryshkov@gmail.com>
----
- src/evmctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'll do it unless Jarkko wants to push it through his tree.
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index b02be8b1507a..b3f6f65523ef 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -824,7 +824,7 @@ static int verify_evm(const char *file)
- 		return len;
- 	}
- 
--	if (sig[0] != 0x03) {
-+	if (sig[0] != EVM_IMA_XATTR_DIGSIG || sig[0] != EVM_XATTR_PORTABLE_DIGSIG) {
- 		log_err("%s has no signature\n", xattr_evm);
- 		return -1;
- 	}
--- 
-2.25.1
+David
 
