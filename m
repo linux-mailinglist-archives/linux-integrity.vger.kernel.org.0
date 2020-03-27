@@ -2,66 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C990194BA4
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Mar 2020 23:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C0E194DB8
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Mar 2020 01:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727446AbgCZWjW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Mar 2020 18:39:22 -0400
-Received: from mga12.intel.com ([192.55.52.136]:38016 "EHLO mga12.intel.com"
+        id S1727560AbgC0AHU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Mar 2020 20:07:20 -0400
+Received: from namei.org ([65.99.196.166]:43772 "EHLO namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726067AbgCZWjV (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Mar 2020 18:39:21 -0400
-IronPort-SDR: pCY1fiuoo2euyUVHn5pIXqYw8Ia/0puaW00Ta5r8CMQioDkeBfJ2UaacnershhzjvQHUz5kPQQ
- e9LXdMkPn2KQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 15:39:21 -0700
-IronPort-SDR: CbGRbHx5FxUsTvFPh0ITjcnE0hZMIHPUuZ0/wEjbeMEYIezkBNz8AYlbvdktrD0OVjTSwJqngG
- 8EF6qQZLjYnA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,309,1580803200"; 
-   d="scan'208";a="240804376"
-Received: from alewando-mobl.ger.corp.intel.com ([10.252.40.24])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2020 15:39:15 -0700
-Message-ID: <c3a91d6d572d4975a8a5d3dbf004e46d7f59be78.camel@linux.intel.com>
-Subject: Re: [PATCH v8 0/2] KEYS: Read keys to internal buffer & then copy
- to userspace
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     David Howells <dhowells@redhat.com>,
-        David Miller <davem@davemloft.net>
-Cc:     longman@redhat.com, jmorris@namei.org, serge@hallyn.com,
-        zohar@linux.ibm.com, kuba@kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        id S1726067AbgC0AHU (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 26 Mar 2020 20:07:20 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 02R0771a016919;
+        Fri, 27 Mar 2020 00:07:07 GMT
+Date:   Fri, 27 Mar 2020 11:07:07 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+cc:     zohar@linux.ibm.com, James.Bottomley@HansenPartnership.com,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, netdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, sumit.garg@linaro.org,
-        jsnitsel@redhat.com, roberto.sassu@huawei.com, ebiggers@google.com,
-        crecklin@redhat.com
-In-Reply-To: <996368.1585246352@warthog.procyon.org.uk>
-References: <20200325.193056.1153970692429454819.davem@davemloft.net>
-         <20200322011125.24327-1-longman@redhat.com>
-         <996368.1585246352@warthog.procyon.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160
- Espoo
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v4 2/7] ima: Evaluate error in init_ima()
+In-Reply-To: <20200325104712.25694-3-roberto.sassu@huawei.com>
+Message-ID: <alpine.LRH.2.21.2003271107000.14767@namei.org>
+References: <20200325104712.25694-1-roberto.sassu@huawei.com> <20200325104712.25694-3-roberto.sassu@huawei.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Date:   Fri, 27 Mar 2020 00:37:30 +0200
-User-Agent: Evolution 3.35.92-1 
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-03-26 at 18:12 +0000, David Howells wrote:
-> David Miller <davem@davemloft.net> wrote:
-> 
-> > Who will integrate these changes?
-> 
-> I'll do it unless Jarkko wants to push it through his tree.
+On Wed, 25 Mar 2020, Roberto Sassu wrote:
 
-Please do.
+> Evaluate error in init_ima() before register_blocking_lsm_notifier() and
+> return if not zero.
+> 
+> Cc: stable@vger.kernel.org # 5.3.x
+> Fixes: b16942455193 ("ima: use the lsm policy update notifier")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/integrity/ima/ima_main.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 9d0abedeae77..f96f151294e6 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -792,6 +792,9 @@ static int __init init_ima(void)
+>  		error = ima_init();
+>  	}
+>  
+> +	if (error)
+> +		return error;
+> +
+>  	error = register_blocking_lsm_notifier(&ima_lsm_policy_notifier);
+>  	if (error)
+>  		pr_warn("Couldn't register LSM notifier, error %d\n", error);
+> 
 
-/Jarkko
+
+Reviewed-by: James Morris <jamorris@linux.microsoft.com>
+
+-- 
+James Morris
+<jmorris@namei.org>
 
