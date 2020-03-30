@@ -2,115 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9727E198220
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Mar 2020 19:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3621982A9
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Mar 2020 19:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727368AbgC3RVz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Mar 2020 13:21:55 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:45824 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727826AbgC3RVy (ORCPT
+        id S1728075AbgC3RrI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Mar 2020 13:47:08 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42112 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727905AbgC3RrI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Mar 2020 13:21:54 -0400
-Received: by mail-wr1-f68.google.com with SMTP id t7so22641605wrw.12
-        for <linux-integrity@vger.kernel.org>; Mon, 30 Mar 2020 10:21:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WElMqt9XeRNNodbxZJ9+lOH5NPD0UEnupQHtkJA+Poc=;
-        b=ujdU8xTsc1a2M6tpVeTxIim93BpeI4pZnLAd1UMPlVhMq2q9f6zd9vsQbB3ij2RELu
-         SRDimp9NIz94KUaSRrOsYmJQ0Hwt6YI6HJ6/SAjHSNN8skxkgMeoW/vObvCXGkgWBsOB
-         RvhKiYnh52yIadxHuBm0/VmUheZnjSOAff9MWy/fIxdGucOxyMVHmvnAkDxHgYkj2bYG
-         8OJSitNrDinWSTuaBQyFKFXIGVcqINBkglLKuIFM8hi6YO2qAU9S7+mvV0m1D7MOZghH
-         9p37tsgFfpc142KQwSiFJfDHa82dA2dUqzAmKpNjbLrqywrNjmga3GR3ksfYVG4knJw8
-         1U4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WElMqt9XeRNNodbxZJ9+lOH5NPD0UEnupQHtkJA+Poc=;
-        b=NsKhQIoKzoY2Hg6uiDusJi3qlBSd4SD78fjGm2TdrodNnJIU4v5p4m5+1BdyxWawai
-         0WbZ7xlTFthyQOQTxbjJmHnGyOa8fQXi92JkggFqxbDsgcOE1d0V5XdSOWHbuyEe4o9l
-         bg+8aIUtfGZWncRZ8VnJFPfPOSKVmgy6qgN0ZyRpjlULr6TrZO4tg5oVEE/nCUw6WiQB
-         mjuzQBBTb18SPs4QZ5NFAIaQYgvQMSuyChEa1OSEft/MpCjQ9yTvCkFeMgBenNYPUgGy
-         TH1MOtl2Nmj3s0q/Mn7URPgMwWOxHg4NXXAqtMGLJdTwC3k+YjzlkUGCNPa6y80NLE1G
-         CR7A==
-X-Gm-Message-State: ANhLgQ0dOjmCOO16ojZwUodIOVanijLuIVorYPJpZtkx5J8MdZx3TcvL
-        fIo27u9wLVpf+kxE327Ph5x/1M/YSgWWwcYJJck=
-X-Google-Smtp-Source: ADFU+vv2DGv5AGHK/bLpKmTIExonswXcG9e8nHAK1w9aR0bn6019+HctXxFVDgzAvqTgvt+uou8qvW+QBZpQ81ePGZY=
-X-Received: by 2002:adf:aac5:: with SMTP id i5mr14622188wrc.285.1585588911371;
- Mon, 30 Mar 2020 10:21:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200330122434.GB28214@kl> <1244b6bcc384413581da33c9b92743b8@huawei.com>
-In-Reply-To: <1244b6bcc384413581da33c9b92743b8@huawei.com>
-From:   "Lev R. Oshvang ." <levonshe@gmail.com>
-Date:   Mon, 30 Mar 2020 20:21:40 +0300
-Message-ID: <CAP22eLGbwcXzBDpc2QbMOGtjrdYsufUf-8vq4uHt8jjPoQanKQ@mail.gmail.com>
-Subject: Re: [PATCH] integrity ima_policy : Select files by suffix
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@us.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+        Mon, 30 Mar 2020 13:47:08 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7B0C18EE423;
+        Mon, 30 Mar 2020 10:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1585590427;
+        bh=pxAp1CiWV1gJzCg9Xe1pSaL5cSuIn1U4/TbV8gjeAmE=;
+        h=Subject:From:To:Date:In-Reply-To:References:From;
+        b=FAYpbI7CtdIXzUMoyoW/aVlfWkC6V3S79tPmg+pUZF2w98bZfYEGxeMWkPXhYAWsM
+         O1vH6oyLmgb1uOCNAx0hT6lnJ0UUcA07WB0HCZ/OZB0AQFs/ET6CGLpr7cno+H7Kqo
+         i/NA0kLg7xWLYdlq+jLBgWdcBMnO8ySotsLy0UEo=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9y28tf3442dC; Mon, 30 Mar 2020 10:47:07 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id B63398EE112;
+        Mon, 30 Mar 2020 10:47:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1585590427;
+        bh=pxAp1CiWV1gJzCg9Xe1pSaL5cSuIn1U4/TbV8gjeAmE=;
+        h=Subject:From:To:Date:In-Reply-To:References:From;
+        b=FAYpbI7CtdIXzUMoyoW/aVlfWkC6V3S79tPmg+pUZF2w98bZfYEGxeMWkPXhYAWsM
+         O1vH6oyLmgb1uOCNAx0hT6lnJ0UUcA07WB0HCZ/OZB0AQFs/ET6CGLpr7cno+H7Kqo
+         i/NA0kLg7xWLYdlq+jLBgWdcBMnO8ySotsLy0UEo=
+Message-ID: <1585590425.3295.2.camel@HansenPartnership.com>
+Subject: Re: [PATCH v8 0/2] ima-evm-utils: Add some tests for evmctl
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Date:   Mon, 30 Mar 2020 10:47:05 -0700
+In-Reply-To: <0432e72c-4f55-60bd-94c0-13eac1f244d0@linux.microsoft.com>
+References: <20200327042515.22315-1-vt@altlinux.org>
+         <d39b433e-4504-d0a4-116f-dd33ca238f7f@linux.microsoft.com>
+         <0432e72c-4f55-60bd-94c0-13eac1f244d0@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-I already answered to Mimi Zohar that applications expect file name in
-open() syscall.
-So there is no need to protect file name otherwise applications just
-stop to work.
-Even now when ima hash is not correct application stops to work.
-Put aside scripts for a second. A lot of programs are configured in
-.ini or .conf files.
-The suffix is a very convenient way to provide these files would be measured.
+On Mon, 2020-03-30 at 09:28 -0700, Lakshmi Ramasubramanian wrote:
+> On 3/30/20 9:16 AM, Lakshmi Ramasubramanian wrote:
+> 
+> > On 3/26/20 9:25 PM, Vitaly Chikunov wrote:
+> > > This series adds simple evmctl tests for hash, sign, and verify 
+> > > operations.
+> > 
+> > Could you please add the steps to initialize, configure, and run
+> > the tests in cover letter?
+> > 
+> > thanks,
+> >   -lakshmi
+> 
+> Sorry - forgot to reply-all.
 
-Now I returning to scripts.
-It is very hard to enforce IMA checks in interpreters. And thinks
-about perl scrips. awk. python scripts. etc
-The proposed suffix rule is easy and lightweight.
-I once had programmed BRM hook of LSM
-I had a very hard time trying to figure out whether shell is opening a
-script or data , how to get filename to check its signature.
-Sometimes script file does not have shebang or does not have
-executable permission.
+It looks like it's the standard autoreconf -fiv; ./configure; make;
+make check?
 
-I hope I convinced you.
+That's basically the universal autoconf way of running tests ... I'm
+not really sure documenting how to do this is a necessary requirement
+for the series.
 
-On Mon, Mar 30, 2020 at 7:45 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> > -----Original Message-----
-> > From: linux-integrity-owner@vger.kernel.org [mailto:linux-integrity-
-> > owner@vger.kernel.org] On Behalf Of Lev Olshvang
-> > Sent: Monday, March 30, 2020 2:28 PM
-> > To: linux-integrity@vger.kernel.org; Mimi Zohar <zohar@us.ibm.com>
-> > Subject: [PATCH] integrity ima_policy : Select files by suffix
-> >
-> > From: Lev Olshvang <levonshe@gmail.com>
-> > Date: Fri, 27 Mar 2020 20:50:01 +0300
-> > Reply-To:
-> > Subject: [PATCH] integrity ima_policy : Select files by suffix
-> >
-> > IMA policy rule allows to select files based on uid, gid, fsuid. etc.
-> > One tremendously useful selector(IMHO) is the file suffix.
-> >
-> > I think of systemd service files, configurution files, etc.
-> >
-> > But the real goal of the patch is the ability to validate shell scripts.
-> > Shell provides too many different ways to run the script:
-> > input redirrection, pipe, command line parameters.
->
-> Given that file name is not protected, I would suggest to look instead at
-> the execution permission of the file. This information is protected by EVM.
->
-> In a second time, we could consider to enforce the policy in the interpreters
-> that every script must be executable, as suggested here:
->
-> https://lkml.org/lkml/2019/4/15/825
->
-> Roberto
->
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Li Peng, Li Jian, Shi Yanli
+James
+
