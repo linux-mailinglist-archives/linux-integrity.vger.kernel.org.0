@@ -2,86 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71695198191
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Mar 2020 18:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 252011981F5
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Mar 2020 19:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727148AbgC3Qpt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Mar 2020 12:45:49 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2620 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729372AbgC3Qps (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Mar 2020 12:45:48 -0400
-Received: from lhreml730-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id A42FDB5919EEB1BC07AA;
-        Mon, 30 Mar 2020 17:45:46 +0100 (IST)
-Received: from fraeml701-chm.china.huawei.com (10.206.15.50) by
- lhreml730-chm.china.huawei.com (10.201.108.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.1713.5; Mon, 30 Mar 2020 17:45:46 +0100
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Mon, 30 Mar 2020 18:45:45 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
- Mon, 30 Mar 2020 18:45:45 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Lev Olshvang <levonshe@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@us.ibm.com>
-CC:     Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: RE: [PATCH] integrity ima_policy : Select files by suffix
-Thread-Topic: [PATCH] integrity ima_policy : Select files by suffix
-Thread-Index: AQHWBo65vCeWAgZAckG7CKI3oVYVLahhUH0w
-Date:   Mon, 30 Mar 2020 16:45:45 +0000
-Message-ID: <1244b6bcc384413581da33c9b92743b8@huawei.com>
-References: <20200330122434.GB28214@kl>
-In-Reply-To: <20200330122434.GB28214@kl>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.5.91]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1729616AbgC3RLz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Mar 2020 13:11:55 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:44402 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728261AbgC3RLz (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 30 Mar 2020 13:11:55 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 8A7E372CCED;
+        Mon, 30 Mar 2020 20:11:53 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 6DDF04A4A14;
+        Mon, 30 Mar 2020 20:11:53 +0300 (MSK)
+Date:   Mon, 30 Mar 2020 20:11:53 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v8 1/2] ima-evm-utils: Add some tests for evmctl
+Message-ID: <20200330171153.iwckfx5tc5ydkmhi@altlinux.org>
+Mail-Followup-To: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+References: <20200327042515.22315-1-vt@altlinux.org>
+ <20200327042515.22315-2-vt@altlinux.org>
+ <f9b36972-df5d-db9a-d840-52e9ff76d271@linux.microsoft.com>
+ <f6c1766f-20c0-782d-0c3c-a522babd9142@linux.microsoft.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f6c1766f-20c0-782d-0c3c-a522babd9142@linux.microsoft.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> -----Original Message-----
-> From: linux-integrity-owner@vger.kernel.org [mailto:linux-integrity-
-> owner@vger.kernel.org] On Behalf Of Lev Olshvang
-> Sent: Monday, March 30, 2020 2:28 PM
-> To: linux-integrity@vger.kernel.org; Mimi Zohar <zohar@us.ibm.com>
-> Subject: [PATCH] integrity ima_policy : Select files by suffix
+Lakshmi,
+
+On Mon, Mar 30, 2020 at 09:29:29AM -0700, Lakshmi Ramasubramanian wrote:
+> On 3/30/20 9:16 AM, Lakshmi Ramasubramanian wrote:
 > 
-> From: Lev Olshvang <levonshe@gmail.com>
-> Date: Fri, 27 Mar 2020 20:50:01 +0300
-> Reply-To:
-> Subject: [PATCH] integrity ima_policy : Select files by suffix
+> > On 3/26/20 9:25 PM, Vitaly Chikunov wrote:
+> > 
+> > > Run `make check' to execute the tests.
+> > 
+> > autogen.sh followed by configure need to be run. Could you please add
+> > that in the patch description?
+
+Why this patch should have this and not any other patch/commit?
+
+> > > diff --git a/tests/functions.sh b/tests/functions.sh
+> > > new file mode 100755
+> > > index 0000000..16c8d89
+> > > --- /dev/null
+> > > +++ b/tests/functions.sh
+> > > @@ -0,0 +1,272 @@
+> > > +#!/bin/bash
+> > > +# SPDX-License-Identifier: GPL-2.0
+> > 
+> > In some source files in the kernel repo I have seen the following:
+> > 
+> >  ššš // SPDX-License-Identifier: GPL-2.0+
+> > 
+> > Not sure if it is applicable here.
+
+I'm sure it's applicable.
+
+> > 
+> > > +check() {
+> > > +š local alg=$1 pref=$2 chash=$3 hash
+> > > +š local file=$alg-hash.txt
+> > > +
+> > > +š rm -f $file
+> > > +š touch $file
+> > > +š # Generate hash with openssl, if it's failed skip test,
+> > 
+> > "if it failed skip test"
+> > 
+> > > +š # unless it's negative test, then pass to evmctl
+> > > +š cmd="openssl dgst $OPENSSL_ENGINE -$alg $file"
+> > > +}
+> > > +
+> > 
+> > > +# check args: algo hdr-prefix canonic-hash
+> > > +expect_pass checkš md4ššššššš 0x01 31d6cfe0d16ae931b73c59d7e0c089c0
+> > > +expect_pass checkš md5ššššššš 0x01 d41d8cd98f00b204e9800998ecf8427e
+> > Is MD4 and MD5 tests still needed?
+
+If it's supported why it shouldn't be tested.
+
+> > 
+> > 
+> >  š-lakshmi
 > 
-> IMA policy rule allows to select files based on uid, gid, fsuid. etc.
-> One tremendously useful selector(IMHO) is the file suffix.
-> 
-> I think of systemd service files, configurution files, etc.
-> 
-> But the real goal of the patch is the ability to validate shell scripts.
-> Shell provides too many different ways to run the script:
-> input redirrection, pipe, command line parameters.
-
-Given that file name is not protected, I would suggest to look instead at
-the execution permission of the file. This information is protected by EVM.
-
-In a second time, we could consider to enforce the policy in the interpreters
-that every script must be executable, as suggested here:
-
-https://lkml.org/lkml/2019/4/15/825
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
+> + Mimi and linux-integrity
