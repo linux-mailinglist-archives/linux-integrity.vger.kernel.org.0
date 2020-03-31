@@ -2,65 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 578F81995E7
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Mar 2020 14:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8831995F0
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Mar 2020 14:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730357AbgCaMBe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Mar 2020 08:01:34 -0400
-Received: from mga05.intel.com ([192.55.52.43]:57920 "EHLO mga05.intel.com"
+        id S1730380AbgCaMEe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Mar 2020 08:04:34 -0400
+Received: from mga01.intel.com ([192.55.52.88]:3992 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730343AbgCaMBe (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Mar 2020 08:01:34 -0400
-IronPort-SDR: d9ROuewT2xCZ6nlyY5/smLR+nSlJlrsYE4RZZYTr1Hq9KJTR0mdO2XXE47fcEH3N2FwbqEV9Oz
- 5nbtzAEHxM4w==
+        id S1730343AbgCaMEe (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 31 Mar 2020 08:04:34 -0400
+IronPort-SDR: 8QlVzJmy3OinDRgfR/cmPLHanxkLLnY+OXwrDSxuMkJ1IpB2o6EB6pAMvkpF1jhoZUokh6zN8D
+ zAbDlAxpGjLg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2020 05:01:33 -0700
-IronPort-SDR: VMipwQDvzzjmcVAxC89TFAjfb3kqh6Mptuej9tNXBogG/WOEWnpjZTEBnlGHxWHUqGECANmN+x
- VllCkeGeHMsQ==
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2020 05:04:33 -0700
+IronPort-SDR: 8jl0lvYsbmsqMEXaBWfMO2XgkrGQ8/WLqMPFlBqryMdC5PajiPwPT+KZkGPKKKYrHOimzKU4qQ
+ hWR3x6t5sxyQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,327,1580803200"; 
-   d="scan'208";a="237679081"
+   d="scan'208";a="328061507"
 Received: from tking1-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.59.94])
-  by orsmga007.jf.intel.com with ESMTP; 31 Mar 2020 05:01:27 -0700
-Date:   Tue, 31 Mar 2020 15:01:25 +0300
+  by orsmga001.jf.intel.com with ESMTP; 31 Mar 2020 05:04:21 -0700
+Date:   Tue, 31 Mar 2020 15:04:20 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     zohar@linux.ibm.com, jejb@linux.ibm.com, corbet@lwn.net,
-        casey@schaufler-ca.com, janne.karhunen@gmail.com,
-        kgoldman@us.ibm.com, david.safford@ge.com, monty.wiseman@ge.com,
-        daniel.thompson@linaro.org, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org
-Subject: Re: [PATCH] doc: trusted-encrypted: updates with TEE as a new trust
- source
-Message-ID: <20200331120125.GE8295@linux.intel.com>
-References: <1585636165-22481-1-git-send-email-sumit.garg@linaro.org>
+To:     amirmizi6@gmail.com
+Cc:     Eyal.Cohen@nuvoton.com, oshrialkoby85@gmail.com,
+        alexander.steffen@infineon.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
+Subject: Re: [PATCH v4 1/7] tpm: tpm_tis: Make implementation of read16
+ read32 write32 optional
+Message-ID: <20200331120405.GF8295@linux.intel.com>
+References: <20200331113207.107080-1-amirmizi6@gmail.com>
+ <20200331113207.107080-2-amirmizi6@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1585636165-22481-1-git-send-email-sumit.garg@linaro.org>
+In-Reply-To: <20200331113207.107080-2-amirmizi6@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 11:59:25AM +0530, Sumit Garg wrote:
-> Update documentation for Trusted and Encrypted Keys with TEE as a new
-> trust source. Following is brief description of updates:
+On Tue, Mar 31, 2020 at 02:32:01PM +0300, amirmizi6@gmail.com wrote:
+> From: Amir Mizinski <amirmizi6@gmail.com>
 > 
-> - Add a section to demostrate a list of supported devices along with
->   their security properties/guarantees.
-> - Add a key generation section.
-> - Updates for usage section including differences specific to a trust
->   source.
+> Only tpm_tis can use memory mapped I/O, which is truly mapped into
+> the kernel's memory space. So using ioread16/ioread32/iowrite32 turn into a
+> straightforward pointer dereference.
+> Every other driver require more complicated operations to read more than 1
+> byte at a time and will just fall back to read_bytes/write_bytes.
+> Therefore, move this common code out of tpm_tis_spi into tpm_tis_core, so
+> that it is automatically used when low-level drivers do not implement the
+> specialized methods.
 > 
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> Co-developed-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
 
-Thanks for doing this. Looks like a lot of effort has gone to this.
-
-Giving better feedback later.
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
 /Jarkko
