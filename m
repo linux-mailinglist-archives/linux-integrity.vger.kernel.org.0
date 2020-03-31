@@ -2,134 +2,164 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 419C319A0E6
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Mar 2020 23:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C258119A147
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Mar 2020 23:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728245AbgCaVe5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Mar 2020 17:34:57 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:15660 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727955AbgCaVe5 (ORCPT
+        id S1731611AbgCaVt5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Mar 2020 17:49:57 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49820 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731598AbgCaVt4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Mar 2020 17:34:57 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02VLY8AI013715;
-        Tue, 31 Mar 2020 23:34:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=hogJljl3NSx7SbRBP5t51xt8cHudqMc3OCqtkkmKgFU=;
- b=yASCTbB1xg2nlN9WKX+WEs7JcLif3yHoyl6wHzPaJ4bKHSyCL4XUx5CBtxAp9I2b5iky
- 3ZqVA7x0AReUZu5/z4zRtqJg7ubIWtsl6H71432ju/7lzvlMynigy2bNIfcgKpOfC3UH
- QfIDsLrFMS9SX2z3L3UfkZvFfK0/IYgY1P1iKbZYuyyCOf6GVHB3Xt7Iuu38JIC/EK57
- pdkjbNGHkPRsofM2PCj4NKtKxBB6jC1q2Klm4uHkGSZV5vAYWYHwscwcEAy6Gxid6cxv
- f3g880PQFPP3s7BaUx7mC1ImGdGvnnSNYxEyLMOgZKsIE8onq1I0LZRys5DCcggKAZ6f jw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 301vkdsjj2-1
+        Tue, 31 Mar 2020 17:49:56 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02VLWq3M131931;
+        Tue, 31 Mar 2020 17:49:54 -0400
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3022qykyn0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Mar 2020 23:34:33 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E34A810002A;
-        Tue, 31 Mar 2020 23:34:28 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C08452067F3;
-        Tue, 31 Mar 2020 23:34:28 +0200 (CEST)
-Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 31 Mar
- 2020 23:34:28 +0200
-Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
- SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
- 15.00.1347.000; Tue, 31 Mar 2020 23:34:28 +0200
-From:   Benoit HOUYERE <benoit.houyere@st.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        "amirmizi6@gmail.com" <amirmizi6@gmail.com>
-CC:     "Eyal.Cohen@nuvoton.com" <Eyal.Cohen@nuvoton.com>,
-        "oshrialkoby85@gmail.com" <oshrialkoby85@gmail.com>,
-        "alexander.steffen@infineon.com" <alexander.steffen@infineon.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "oshri.alkoby@nuvoton.com" <oshri.alkoby@nuvoton.com>,
-        "tmaimon77@gmail.com" <tmaimon77@gmail.com>,
-        "gcwilson@us.ibm.com" <gcwilson@us.ibm.com>,
-        "kgoldman@us.ibm.com" <kgoldman@us.ibm.com>,
-        "Dan.Morav@nuvoton.com" <Dan.Morav@nuvoton.com>,
-        "oren.tanami@nuvoton.com" <oren.tanami@nuvoton.com>,
-        "shmulik.hager@nuvoton.com" <shmulik.hager@nuvoton.com>,
-        "amir.mizinski@nuvoton.com" <amir.mizinski@nuvoton.com>,
-        Olivier COLLART <olivier.collart@st.com>,
-        Yves MAGNAUD <yves.magnaud@st.com>
-Subject: RE: [PATCH v4 4/7] tpm: tpm_tis: Fix expected bit handling and send
- all bytes in one shot without last byte in exception
-Thread-Topic: [PATCH v4 4/7] tpm: tpm_tis: Fix expected bit handling and send
- all bytes in one shot without last byte in exception
-Thread-Index: AQHWB1ZoDft9Zu6RoU68XNbFk/pAW6hjMfyw
-Date:   Tue, 31 Mar 2020 21:34:28 +0000
-Message-ID: <19c8ae3023404ae9affcb1ce04b7ee4b@SFHDAG3NODE3.st.com>
-References: <20200331113207.107080-1-amirmizi6@gmail.com>
- <20200331113207.107080-5-amirmizi6@gmail.com>
- <20200331121720.GB9284@linux.intel.com>
-In-Reply-To: <20200331121720.GB9284@linux.intel.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.48]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 31 Mar 2020 17:49:54 -0400
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 02VLj9ci008838;
+        Tue, 31 Mar 2020 21:49:53 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma03wdc.us.ibm.com with ESMTP id 301x76m4tq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Mar 2020 21:49:53 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02VLnqJU56230190
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Mar 2020 21:49:52 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8658E6A057;
+        Tue, 31 Mar 2020 21:49:52 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EEF226A054;
+        Tue, 31 Mar 2020 21:49:50 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Mar 2020 21:49:50 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     linux-integrity@vger.kernel.org, jarkko.sakkinen@linux.intel.com,
+        linux-acpi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v3] acpi: Extend TPM2 ACPI table with missing log fields
+Date:   Tue, 31 Mar 2020 17:49:49 -0400
+Message-Id: <20200331214949.883781-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-03-31_07:2020-03-31,2020-03-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 impostorscore=0
+ suspectscore=0 adultscore=0 clxscore=1015 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003310176
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-> On Tue, Mar 31, 2020 at 02:32:04PM +0300, amirmizi6@gmail.com wrote:
-> > From: Amir Mizinski <amirmizi6@gmail.com>
-> >=20
-> > Today, actual implementation for send massage is not correct. We check=
-=20
-> > and loop only on TPM_STS.stsValid bit and next we single check=20
-> > TPM_STS.expect bit value.
-> > TPM_STS.expected bit shall be checked in the same time of=20
-> > TPM_STS.stsValid, and should be repeated until timeout_A.
-> > To aquire that, "wait_for_tpm_stat" function is modified to=20
-> > "wait_for_tpm_stat_result". this function read regulary status=20
-> > register and check bit defined by "mask" to reach value defined in "mas=
-k_result"
-> > (that way a bit in mask can be checked if reached 1 or 0).
-> >=20
-> > Respectively, to send message as defined in=20
-> >  TCG_DesignPrinciples_TPM2p0Driver_vp24_pubrev.pdf, all bytes should be=
-=20
-> > sent in one shot instead of sending last byte in exception.
-> >=20
-> > This improvment was suggested by Benoit Houyere.
+Recent extensions of the TPM2 ACPI table added 3 more fields
+including 12 bytes of start method specific parameters and Log Area
+Minimum Length (u32) and Log Area Start Address (u64). So, we extend
+the existing structure with these fields to allow non-UEFI systems
+to access the TPM2's log.
 
->Use suggested-by tag.
+The specification that has the new fields is the following:
+  TCG ACPI Specification
+  Family "1.2" and "2.0"
+  Version 1.2, Revision 8
 
->Also if something is not correct, please provide a fixes tag.
+Adapt all existing table size calculations to use
+offsetof(struct acpi_table_tpm2, start_method_specific)
+[where start_method_specific is a newly added field]
+rather than sizeof(struct acpi_table_tpm2) so that the addition
+of the new fields does not affect current systems that may not
+have them.
 
-> You are speaking now in theoretical level, which we don't really care tha=
-t much. Is this causing you real issues? If the answer is yes, please repor=
-t them. If the > >answer is no, we don't need this.
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Cc: linux-acpi@vger.kernel.org
+---
+ drivers/char/tpm/tpm_crb.c | 13 ++++++++++---
+ drivers/char/tpm/tpm_tis.c |  4 +++-
+ include/acpi/actbl3.h      |  5 +++--
+ 3 files changed, 16 insertions(+), 6 deletions(-)
 
-> /Jarkko
-
-I2C TPM specification introduce CRC calculation on TPM command bytes. CRC c=
-alculation take place from last byte acquired to  TPM_STS.expected bit rese=
-t (=3D0) .It introduces latency and actual incorrect implementation becomes=
- visible now under I2C on the contrary before that's all.=20
-The case where TPM keeps TPM_STS.expected bit set  with TPM_STS.stsValid se=
-t after last byte reception is possible and is not an issue. It's not theor=
-etical level, it's practical level now.
-
+diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+index a9dcf31eadd2..0565aa5482f9 100644
+--- a/drivers/char/tpm/tpm_crb.c
++++ b/drivers/char/tpm/tpm_crb.c
+@@ -669,7 +669,9 @@ static int crb_acpi_add(struct acpi_device *device)
+ 
+ 	status = acpi_get_table(ACPI_SIG_TPM2, 1,
+ 				(struct acpi_table_header **) &buf);
+-	if (ACPI_FAILURE(status) || buf->header.length < sizeof(*buf)) {
++	if (ACPI_FAILURE(status) || buf->header.length <
++			offsetof(struct acpi_table_tpm2,
++				 start_method_specific)) {
+ 		dev_err(dev, FW_BUG "failed to get TPM2 ACPI table\n");
+ 		return -EINVAL;
+ 	}
+@@ -684,14 +686,19 @@ static int crb_acpi_add(struct acpi_device *device)
+ 		return -ENOMEM;
+ 
+ 	if (sm == ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC) {
+-		if (buf->header.length < (sizeof(*buf) + sizeof(*crb_smc))) {
++		if (buf->header.length <
++			(offsetof(struct acpi_table_tpm2,
++				  start_method_specific) +
++			 sizeof(*crb_smc))) {
+ 			dev_err(dev,
+ 				FW_BUG "TPM2 ACPI table has wrong size %u for start method type %d\n",
+ 				buf->header.length,
+ 				ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC);
+ 			return -EINVAL;
+ 		}
+-		crb_smc = ACPI_ADD_PTR(struct tpm2_crb_smc, buf, sizeof(*buf));
++		crb_smc = ACPI_ADD_PTR(struct tpm2_crb_smc, buf,
++			   offsetof(struct acpi_table_tpm2,
++				    start_method_specific));
+ 		priv->smc_func_id = crb_smc->smc_func_id;
+ 	}
+ 
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index e7df342a317d..a80f36860bac 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -111,7 +111,9 @@ static int check_acpi_tpm2(struct device *dev)
+ 	 */
+ 	st =
+ 	    acpi_get_table(ACPI_SIG_TPM2, 1, (struct acpi_table_header **)&tbl);
+-	if (ACPI_FAILURE(st) || tbl->header.length < sizeof(*tbl)) {
++	if (ACPI_FAILURE(st) || tbl->header.length <
++			offsetof(struct acpi_table_tpm2,
++				 start_method_specific)) {
+ 		dev_err(dev, FW_BUG "failed to get TPM2 ACPI table\n");
+ 		return -EINVAL;
+ 	}
+diff --git a/include/acpi/actbl3.h b/include/acpi/actbl3.h
+index 2bf3baf819bb..b6118c67af0c 100644
+--- a/include/acpi/actbl3.h
++++ b/include/acpi/actbl3.h
+@@ -411,8 +411,9 @@ struct acpi_table_tpm2 {
+ 	u16 reserved;
+ 	u64 control_address;
+ 	u32 start_method;
+-
+-	/* Platform-specific data follows */
++	u8  start_method_specific[12];
++	u32 log_area_minimum_length;		/* optional */
++	u64 log_area_start_address;		/* optional */
+ };
+ 
+ /* Values for start_method above */
+-- 
+2.14.5
 
