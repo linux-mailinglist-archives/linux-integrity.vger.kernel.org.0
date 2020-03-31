@@ -2,108 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF95E19995F
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Mar 2020 17:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0D21999E9
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Mar 2020 17:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730391AbgCaPOr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Mar 2020 11:14:47 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:39946 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730541AbgCaPOr (ORCPT
+        id S1730560AbgCaPia (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Mar 2020 11:38:30 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:41378 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727703AbgCaPia (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Mar 2020 11:14:47 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id C00AE72CCE7;
-        Tue, 31 Mar 2020 18:14:44 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id A12254A4A14;
-        Tue, 31 Mar 2020 18:14:44 +0300 (MSK)
-Date:   Tue, 31 Mar 2020 18:14:44 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v8 1/2] ima-evm-utils: Add some tests for evmctl
-Message-ID: <20200331151444.o3ginofakm6byiu5@altlinux.org>
-Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-References: <20200327042515.22315-1-vt@altlinux.org>
- <20200327042515.22315-2-vt@altlinux.org>
- <1585664724.5188.572.camel@linux.ibm.com>
+        Tue, 31 Mar 2020 11:38:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=+gitPeRArdeA4p5pxqRTKKxGvRcHRsv7ZXkWGjwTB3M=; b=Yx4mVs54sJKW+wKK/7UWMK7Dvl
+        mm58Z5IMAkRBe1mjDlvif+ypG91g7ziA5DdWq8WcA2c0cBWfXqtd0JBgq3N8jqVto2VF5hbU7EOwE
+        q0Qc4WAzIpz67Q1v4X5L9PEHTWOj8uHnLc3sp25TooXlmnPpy5YuOONnn/tHaWhzMG8UdjzbRPF7B
+        liboyLjieOJ8z51KkVdDuYq8jYeKRR84WfVNBWCzxS+AM4dAy6Zk1sZl6vZKTFW6PUzq1YMtFVxnZ
+        Lo+POvvHdnUnLls+203QyYxDQKq4tpJdurI0X8ww3okBrX4ApMKOQn3Zp81m4D6VR/ykxOTT49yVd
+        j7n5UqRA==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jJIy6-0003mK-G1; Tue, 31 Mar 2020 15:38:22 +0000
+Subject: Re: [PATCH v4 7/7] tpm: tpm_tis: add tpm_tis_i2c driver
+To:     amirmizi6@gmail.com, Eyal.Cohen@nuvoton.com,
+        jarkko.sakkinen@linux.intel.com, oshrialkoby85@gmail.com,
+        alexander.steffen@infineon.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
+References: <20200331113207.107080-1-amirmizi6@gmail.com>
+ <20200331113207.107080-8-amirmizi6@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <a7365e83-06bf-e264-2b4d-3f34cc04ae2f@infradead.org>
+Date:   Tue, 31 Mar 2020 08:38:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1585664724.5188.572.camel@linux.ibm.com>
-User-Agent: NeoMutt/20171215-106-ac61c7
+In-Reply-To: <20200331113207.107080-8-amirmizi6@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi,
+Hi--
 
-On Tue, Mar 31, 2020 at 10:25:24AM -0400, Mimi Zohar wrote:
-> > +# For hard errors
-> > +red_always() {
-> > +  echo $@ $RED
+On 3/31/20 4:32 AM, amirmizi6@gmail.com wrote:
+> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> index aacdeed..b482bbf 100644
+> --- a/drivers/char/tpm/Kconfig
+> +++ b/drivers/char/tpm/Kconfig
+> @@ -74,6 +74,18 @@ config TCG_TIS_SPI_CR50
+>           If you have a H1 secure module running Cr50 firmware on SPI bus,
+>           say Yes and it will be accessible from within Linux.
 > 
-> A few functions - "red_always", "red_if_failure", "color_restore" -
-> šuse "$@", but none of the function callers pass any parameters. šIs
-> there a reason for the "$@" or just something left over from
-> debugging?
+> +config TCG_TIS_I2C
+> +       tristate "TPM I2C Interface Specification"
+> +       depends on I2C
+> +        depends on CRC_CCITT
+> +       select TCG_TIS_CORE
+> +       ---help---
+> +         If you have a TPM security chip which is connected to a regular
+> +         I2C master (i.e. most embedded platforms) that is compliant with the
+> +         TCG TPM I2C Interface Specification say Yes and it will be accessible from
+> +         within Linux. To compile this driver as a module, choose  M here;
+> +         the module will be called tpm_tis_i2c.
+> +
 
-It was to pass `-n` I think, but it is never needed in the end.
+Please do as Documenatation/process/coding-style.rst says:
 
-> > +  if [ "$chash" ] && [ "$chash" != "$hash" ]; then
-> > +    red_always
-> 
-> Only when "ima_hash.test" is invoked directly, the output is colored
-> red. šReally confusing.
+"Lines under a ``config`` definition
+are indented with one tab, while help text is indented an additional two
+spaces."
 
-Non-TTY output is never colored to not clutter log files.
-But logic is to color the errors in red.
+>  config TCG_TIS_I2C_ATMEL
+>         tristate "TPM Interface Specification 1.2 Interface (I2C - Atmel)"
+>         depends on I2C
 
-So it thought as 'always red', _when_ there is colored output (TTY).
 
-And it's "always" in contract to "red if failure" - which make text
-red only when the test is expected to pass (thus, this is real error
-condition), when the test is expected to fail there is no point to
-color it red, because it's not real error (to not confuse user).
+thanks.
+-- 
+~Randy
 
-Because it is unconditional (in that sense) is it named "red always".
-
-I can rename it to something like `color_red'. And rename
-`red_if_failure' to `color_red_on_failure'.
-
-> Nice! šThe code is very concisely written.
-> 
-> Reviewing this patch would be a lot easier, if it was broken up into
-> smaller pieces. šFor example, and this is only an example, the initial
-> patch could define the base ima_hash.test, a subsequent patch could
-> add coloring for the base ima_hash.test, another patch could introduce
-> "make check" and add its coloring. šThere's all sorts of ways to break
-> up this patch to simplify review.
-
-This would make following commits to change code which is already
-committed in previous commits. This would make editing code extra hard.
-Especially, when tests was reworked a lot.
-
-Also, I don't think splitting coloring into separate patch improves
-review. Instead, we can just remember the rule that (real) errors are 
-going to be printed in red.
-
-For example, if we prefix every error message with word "ERROR:" - why
-it would be easier to review if we split adding this prefix to every
-message in a separate commit?
-
-Red color, similarly to uppercase "ERROR", just improves visibility of
-errors. (Which is useful, because there is really a lot of tests).
-
-Thanks,
-
-> 
-> Mimi
