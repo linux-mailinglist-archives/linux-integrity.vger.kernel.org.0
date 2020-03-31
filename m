@@ -2,155 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B49D199314
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Mar 2020 12:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E824F19958E
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Mar 2020 13:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730153AbgCaKFz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Mar 2020 06:05:55 -0400
-Received: from mail-wm1-f42.google.com ([209.85.128.42]:40395 "EHLO
-        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729997AbgCaKFz (ORCPT
+        id S1730697AbgCaLqZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Mar 2020 07:46:25 -0400
+Received: from maillog.nuvoton.com ([202.39.227.15]:40906 "EHLO
+        maillog.nuvoton.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730617AbgCaLqZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Mar 2020 06:05:55 -0400
-Received: by mail-wm1-f42.google.com with SMTP id a81so1873435wmf.5
-        for <linux-integrity@vger.kernel.org>; Tue, 31 Mar 2020 03:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=D8yUbXH4HenCV8TgB7jhzyJ+fshkHd8iBN77HUZ44dk=;
-        b=EgeNGwGS8btJZL1tPH3RT6pRggqezoFtgFjQ6FosxBVW9NfU/iCpQfgRRbT/QR13H0
-         xu41THFtIA8Qt53FR/2jh3sNnBm+s1w9BzGKtAHZdsGBjpGuGXEMUbCVVMpExG2KjY33
-         +WmmoesVj1AUWSqlC6TkIsjeiuzhgOqh5MVpLB0N2W3fYktSa3iERjzHl9vHovNtN4wQ
-         LLigYUdvaI2z9w6BSqd3qfUDAHG2s1mLMoF8ob9cdpYeKW4auF1SVMz1voi1qLDAB6hv
-         FUW/HafaMEcN3OHwHoe3TRIXJmP39zQnJVeVN5NIuoWB2MNAUVaYFy1Ye/YPHgLlyQ2z
-         OBuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=D8yUbXH4HenCV8TgB7jhzyJ+fshkHd8iBN77HUZ44dk=;
-        b=QJAOFccijARn2I84lXe9hnN1PouwzChbJDvYqwA4ijIImyyg1FX3VulMOHidgpxwOH
-         fJq2Xyoi1xveUvCVBiQkjMiRVqFrPLb3pn/QpdVyLa1Jur19WxFlKCbmi4S+LnNk95JL
-         VZAPC4RuFm9l74d1oqJYxQUqEl3Qa1WNPYjO0i8oG1PZl3CY42o073M5gXP8BRAjs5nL
-         H8otQ+Ao68PJ1FjON9GiWTYrZfVUs4YsmT6RlIXnJB5y5UjByqksPDxjNpYucznu3PLQ
-         88HUehjNp8/1ymU30pja7jJwdWNj3U7AIGTJPtFj/Hyy6NkFVv3acuEm/NxKDN1YrltP
-         xX7w==
-X-Gm-Message-State: ANhLgQ1kQQLF/vdRsleMPBh6LEv5gwiPqJw2+rTL9so6Xbil4vA9GiEg
-        DbGJF+8Hgsnl04R99auRHnGVRrgyRCINcQ==
-X-Google-Smtp-Source: ADFU+vtpQZNsIcW1MaNslrVVGqnmX4gBExvRic6PaxmULTd88v9ek5XdpU5KbNqknjXTECR94S+fEA==
-X-Received: by 2002:a7b:caaa:: with SMTP id r10mr2608885wml.119.1585649153126;
-        Tue, 31 Mar 2020 03:05:53 -0700 (PDT)
-Received: from localhost ([87.71.129.31])
-        by smtp.gmail.com with ESMTPSA id i21sm3297470wmb.23.2020.03.31.03.05.52
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 31 Mar 2020 03:05:52 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 13:05:51 +0300
-From:   Lev Olshvang <levonshe@gmail.com>
-To:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com
-Subject: [RFC] Add more inode fields to inode metadata signature
-Message-ID: <20200331100551.GA8259@kl>
+        Tue, 31 Mar 2020 07:46:25 -0400
+Received: from NTHCCAS02.nuvoton.com (nthccas02.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 153561C80E1D;
+        Tue, 31 Mar 2020 19:33:03 +0800 (CST)
+Received: from NTILML02.nuvoton.com (10.190.1.46) by NTHCCAS02.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (TLS) id 15.0.1130.7; Tue, 31 Mar 2020
+ 19:33:02 +0800
+Received: from NTILML02.nuvoton.com (10.190.1.47) by NTILML02.nuvoton.com
+ (10.190.1.47) with Microsoft SMTP Server (TLS) id 15.0.1130.7; Tue, 31 Mar
+ 2020 14:32:59 +0300
+Received: from taln70.nuvoton.co.il (10.191.1.70) by NTILML02.nuvoton.com
+ (10.190.1.46) with Microsoft SMTP Server id 15.0.1130.7 via Frontend
+ Transport; Tue, 31 Mar 2020 14:32:59 +0300
+Received: from taln60.nuvoton.co.il (taln60 [10.191.1.180])
+        by taln70.nuvoton.co.il (Postfix) with ESMTP id 199B8250;
+        Tue, 31 Mar 2020 14:33:00 +0300 (IDT)
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
+        id DF0B0639AF; Tue, 31 Mar 2020 14:32:29 +0300 (IDT)
+From:   <amirmizi6@gmail.com>
+To:     <Eyal.Cohen@nuvoton.com>, <jarkko.sakkinen@linux.intel.com>,
+        <oshrialkoby85@gmail.com>, <alexander.steffen@infineon.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>, <arnd@arndb.de>, <gregkh@linuxfoundation.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <oshri.alkoby@nuvoton.com>,
+        <tmaimon77@gmail.com>, <gcwilson@us.ibm.com>,
+        <kgoldman@us.ibm.com>, <Dan.Morav@nuvoton.com>,
+        <oren.tanami@nuvoton.com>, <shmulik.hager@nuvoton.com>,
+        <amir.mizinski@nuvoton.com>, Amir Mizinski <amirmizi6@gmail.com>
+Subject: [PATCH v4 0/7] Add tpm i2c ptp driver
+Date:   Tue, 31 Mar 2020 14:32:00 +0300
+Message-ID: <20200331113207.107080-1-amirmizi6@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From b696085c6e65e82237150e13d14736a914a0b394 Mon Sep 17 00:00:00 2001
-From: Lev Olshvang <levonshe@gmail.com>
-Date: Mon, 30 Mar 2020 16:00:27 +0300
-Subject: [PATCH] integrity - add more inode metadata to signature, handle
- errors
+From: Amir Mizinski <amirmizi6@gmail.com>
 
-Add more inode fields to inode HMAC : times and flags.
-File flags define (affect) how OS utilities and filesystem treats
-them. For example immutable flag preserve file from removal or change.
-It is important to verify these flags were not changed.
-ctime and mtime may also affect programs that depends on files
-timestamps.
-File size might be used as a first indicator of file change and spare
-from other IMA/EVM checks.
+This patch set adds support for TPM devices that implement the I2C.
+Interface defined by TCG PTP specification:
+https://trustedcomputinggroup.org/wp-content/uploads/TCG_PC_Client_Platform_TPM_Profile_PTP_2.0_r1.03_v22.pdf
 
-Function hmac_add_misc() ignored errors from crypto functions
-This patch changes hmac_add_misc() not to be silent about errors
+The driver was tested on Raspberry-Pie 3, using Nuvoton NPCT75X TPM.
 
-Signed-off-by: Lev Olshvang <levonshe@gmail.com>
----
- security/integrity/evm/evm_crypto.c | 34 ++++++++++++++++++++++++-----
- 1 file changed, 28 insertions(+), 6 deletions(-)
+Interrupts are not implemented yet, preparing it for the next patch.
+This patch is based on initial work by oshri Alkoby, Alexander Steffen and Christophe Ricard
 
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index d485f6fc908e..9c71c321e988 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -139,15 +139,20 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
-  * (Additional directory/file metadata needs to be added for more complete
-  * protection.)
-  */
--static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
-+static int hmac_add_misc(struct shash_desc *desc, struct inode *inode,
- 			  char type, char *digest)
- {
-+	int rc = 0;
- 	struct h_misc {
- 		unsigned long ino;
- 		__u32 generation;
- 		uid_t uid;
- 		gid_t gid;
- 		umode_t mode;
-+		struct timespec64 ctime;
-+		struct timespec64 mtime;
-+		__u32   flags;
-+		__u32 filesize;
- 	} hmac_misc;
+Changes since version 1:
+-"char:tpm:Add check_data handle to tpm_tis_phy_ops in order to check data integrity"
+        - Fixed and extended commit description.
+        - Fixed an issue regarding handling max retries.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options":
+        -Converted "tpm_tis_i2c.txt" to "tpm-tis-i2c.yaml".
+        - Renamed "tpm_tis-i2c" to "tpm-tis-i2c".
+        - Removed interrupts properties.
+-"char: tpm: add tpm_tis_i2c driver"
+        - Replaced "tpm_tis-i2c" with "tpm-tis-i2c" in "tpm_tis_i2c.c".
+Addressed comments from:
+ - Jarkko Sakkinen: https://patchwork.kernel.org/patch/11236257/
+ - Rob Herring: https://patchwork.kernel.org/patch/11236253/
 
- 	memset(&hmac_misc, 0, sizeof(hmac_misc));
-@@ -169,11 +174,26 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
- 	hmac_misc.uid = from_kuid(&init_user_ns, inode->i_uid);
- 	hmac_misc.gid = from_kgid(&init_user_ns, inode->i_gid);
- 	hmac_misc.mode = inode->i_mode;
--	crypto_shash_update(desc, (const u8 *)&hmac_misc, sizeof(hmac_misc));
-+	hmac_misc.flags = inode->i_flags;
-+	hmac_misc.ctime = inode->i_ctime;
-+	hmac_misc.mtime = inode->i_mtime;
-+
-+	/* hardly imagine calculating hash for file  > 4G */
-+	if (likely(inode->i_size < 0xFFFFFFFF))
-+		hmac_misc.filesize = (__u32) inode->i_size;
-+	else
-+		return -E2BIG;
-+	rc = crypto_shash_update(desc, (const u8 *)&hmac_misc, sizeof(hmac_misc));
-+	if (unlikely(!rc))
-+		return rc;
- 	if ((evm_hmac_attrs & EVM_ATTR_FSUUID) &&
--	    type != EVM_XATTR_PORTABLE_DIGSIG)
--		crypto_shash_update(desc, (u8 *)&inode->i_sb->s_uuid, UUID_SIZE);
--	crypto_shash_final(desc, digest);
-+	    type != EVM_XATTR_PORTABLE_DIGSIG) {
-+		rc = crypto_shash_update(desc, (u8 *)&inode->i_sb->s_uuid, UUID_SIZE);
-+		if (unlikely(!rc))
-+			return rc;
-+	}
-+	rc = crypto_shash_final(desc, digest);
-+	return rc;
- }
+Changes since version 2:
+- Added 2 new commits with improvements suggested by Benoit Houyere.
+        -"Fix expected bit handling  and send all bytes in one shot without last byte in exception"
+        -"Handle an exeption for TPM Firmware Update mode."
+- Updated patch to latest v5.5
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options"
+        - Added "interrupts" and "crc-checksum" to properties.
+        - Updated binding description and commit info.
+-"char: tpm: add tpm_tis_i2c driver" (suggested by Benoit Houyere)
+        - Added repeat I2C frame after NACK.
+        - Checksum I2C feature activation in DTS file configuration.
+Addressed comments from:
+ - Rob Herring: https://lore.kernel.org/patchwork/patch/1161287/
 
- /*
-@@ -239,7 +259,9 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
- 		if (is_ima)
- 			ima_present = true;
- 	}
--	hmac_add_misc(desc, inode, type, data->digest);
-+	error = hmac_add_misc(desc, inode, type, data->digest);
-+	if (error < 0)
-+		return error;
+Changes since version 3:
+- Updated patch to latest v5.6
+- Updated commits headlines and development credit format by Jarkko Sakkinen suggestion
+-"tpm: tpm_tis: Make implementation of read16 read32 write32 optional"
+        - Updated commit description.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options"
+        - Fixed 'make dt_binding_check' errors on YAML file.
+        - Removed interrupts from required and examples since there is no use for them in current patch.
+Addressed comments from:
+ - Jarkko Sakkinen: https://lore.kernel.org/patchwork/patch/1192101/
+ - Rob Herring: https://lore.kernel.org/patchwork/patch/1192099/
 
- 	/* Portable EVM signatures must include an IMA hash */
- 	if (type == EVM_XATTR_PORTABLE_DIGSIG && !ima_present)
+Amir Mizinski (7):
+  tpm: tpm_tis: Make implementation of read16 read32 write32 optional
+  tpm: tpm_tis: Add check_data handle to tpm_tis_phy_ops      in order
+    to check data integrity
+  tpm: tpm_tis: rewrite "tpm_tis_req_canceled()"
+  tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot
+    without last byte in exception
+  tpm: Handle an exception for TPM Firmware Update mode.
+  dt-bindings: tpm: Add YAML schema for TPM TIS I2C options
+  tpm: tpm_tis: add tpm_tis_i2c driver
+
+ .../bindings/security/tpm/tpm-tis-i2c.yaml         |  43 +++
+ drivers/char/tpm/Kconfig                           |  12 +
+ drivers/char/tpm/Makefile                          |   1 +
+ drivers/char/tpm/tpm2-cmd.c                        |   4 +
+ drivers/char/tpm/tpm_tis_core.c                    | 182 ++++++-------
+ drivers/char/tpm/tpm_tis_core.h                    |  41 ++-
+ drivers/char/tpm/tpm_tis_i2c.c                     | 292 +++++++++++++++++++++
+ drivers/char/tpm/tpm_tis_spi_main.c                |  41 ---
+ include/linux/tpm.h                                |   1 +
+ 9 files changed, 482 insertions(+), 135 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+ create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
+
 --
-2.17.1
+2.7.4
 
 
+
+===========================================================================================
+The privileged confidential information contained in this email is intended for use only by the addressees as indicated by the original sender of this email. If you are not the addressee indicated in this email or are not responsible for delivery of the email to such a person, please kindly reply to the sender indicating this fact and delete all copies of it from your computer and network server immediately. Your cooperation is highly appreciated. It is advised that any unauthorized use of confidential information of Nuvoton is strictly prohibited; and any information in this email irrelevant to the official business of Nuvoton shall be deemed as neither given nor endorsed by Nuvoton.
