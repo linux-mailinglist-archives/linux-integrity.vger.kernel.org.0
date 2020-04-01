@@ -2,87 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 259DA19A837
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Apr 2020 11:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4310919A850
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Apr 2020 11:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730831AbgDAJFt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Apr 2020 05:05:49 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:35003 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728087AbgDAJFt (ORCPT
+        id S1731537AbgDAJKl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Apr 2020 05:10:41 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34438 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726536AbgDAJKl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Apr 2020 05:05:49 -0400
-Received: by mail-ot1-f68.google.com with SMTP id v2so20595618oto.2;
-        Wed, 01 Apr 2020 02:05:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3Fstvq6bf/isSvXClPNvU/mMqL1HK/pXGHf70k9sUOo=;
-        b=knfpKXqvnLZzXvI4ynzplYgQYdnP6nXqncQM723/3EkvYgkE8EvFWO8h7kwBfPe0LE
-         mR47Pa/+cZcdNO7lJ1j7mU6MnUQUYkeu/brEAhh+yD3V/ORqMjvEIThWQgx6N9mnXTBf
-         /ICtFFh6kAbCsUuMQZPoG1ebFbK4y/VLFaigUc6Vqbs3Jn5xW70VzlwQEZUxrhh9Dx6Q
-         k6wv2gO4S+nCGGTfVnikmavK+VJ2ScNXtbcamoFzeW38cOYbWRASDbpdPULRtYsozR9Z
-         tE7ZpyAmcExwoMq7HCGoM1xyLwNZM45biBlouJFHh7OTwn8BZYzMYgEeswn5Ob1zOTyl
-         +teg==
-X-Gm-Message-State: ANhLgQ22Can+bKJ/LOIqQ2x0xPwu9ilzU9hKTOf7NxggGDqph2uZLqNy
-        o7QV6PmuiZUzwWVa+B87f9PybZ8W7vrX1/8bVFLhWg==
-X-Google-Smtp-Source: ADFU+vs8rdELrg94gi2naBSfmudqSPJ7IVSOD/AD2w9UhPFDQZB/mQeMNupqUem7PyopiRqiRpQkRQR4+RbvnVUVUEk=
-X-Received: by 2002:a4a:7555:: with SMTP id g21mr16266455oof.46.1585731948303;
- Wed, 01 Apr 2020 02:05:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200331214949.883781-1-stefanb@linux.vnet.ibm.com> <20200401083729.GD17325@linux.intel.com>
-In-Reply-To: <20200401083729.GD17325@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Apr 2020 11:05:36 +0200
-Message-ID: <CAJZ5v0gQ04h1+zN4wHj1vkwPvqu3RPfsY60VJ+GOtgUrvWuxLQ@mail.gmail.com>
-Subject: Re: [PATCH v3] acpi: Extend TPM2 ACPI table with missing log fields
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+        Wed, 1 Apr 2020 05:10:41 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031933TE131020
+        for <linux-integrity@vger.kernel.org>; Wed, 1 Apr 2020 05:10:39 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 304h3w357n-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 01 Apr 2020 05:10:39 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <sachinp@linux.vnet.ibm.com>;
+        Wed, 1 Apr 2020 10:10:27 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 1 Apr 2020 10:10:24 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0319AXeI52953092
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Apr 2020 09:10:33 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D910A4C044;
+        Wed,  1 Apr 2020 09:10:33 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 13A504C050;
+        Wed,  1 Apr 2020 09:10:32 +0000 (GMT)
+Received: from [9.102.26.109] (unknown [9.102.26.109])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Apr 2020 09:10:31 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH v2] qtpm2: Export tpm2_get_cc_attrs_tbl for ibmvtpm driver
+ as module
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+In-Reply-To: <20200319195706.GD24804@linux.intel.com>
+Date:   Wed, 1 Apr 2020 14:40:30 +0530
 Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         linux-integrity@vger.kernel.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-next@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
         Stefan Berger <stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+References: <20200319010017.738677-1-stefanb@linux.vnet.ibm.com>
+ <20200319195706.GD24804@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-TM-AS-GCONF: 00
+x-cbid: 20040109-0008-0000-0000-000003685D2C
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20040109-0009-0000-0000-00004A89E4CF
+Message-Id: <2BF66599-184A-4647-BC57-105A1512F119@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-03-31_07:2020-03-31,2020-03-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ phishscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxlogscore=999 suspectscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004010083
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Apr 1, 2020 at 10:37 AM Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Tue, Mar 31, 2020 at 05:49:49PM -0400, Stefan Berger wrote:
-> > From: Stefan Berger <stefanb@linux.ibm.com>
-> >
-> > Recent extensions of the TPM2 ACPI table added 3 more fields
-> > including 12 bytes of start method specific parameters and Log Area
-> > Minimum Length (u32) and Log Area Start Address (u64). So, we extend
-> > the existing structure with these fields to allow non-UEFI systems
-> > to access the TPM2's log.
-> >
-> > The specification that has the new fields is the following:
-> >   TCG ACPI Specification
-> >   Family "1.2" and "2.0"
-> >   Version 1.2, Revision 8
-> >
-> > Adapt all existing table size calculations to use
-> > offsetof(struct acpi_table_tpm2, start_method_specific)
-> > [where start_method_specific is a newly added field]
-> > rather than sizeof(struct acpi_table_tpm2) so that the addition
-> > of the new fields does not affect current systems that may not
-> > have them.
-> >
-> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Cc: linux-acpi@vger.kernel.org
->
-> I think I'm cool with this but needs an ack from ACPI maintainer.
->
-> Rafael, given that this not an intrusive change in any possible means,
-> can I pick this patch and put it to my next pull request?
 
-Yes, please.
 
-Thanks!
+> On 20-Mar-2020, at 1:27 AM, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> 
+> On Wed, Mar 18, 2020 at 09:00:17PM -0400, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>> 
+>> This patch fixes the following problem when the ibmvtpm driver
+>> is built as a module:
+>> 
+>> ERROR: modpost: "tpm2_get_cc_attrs_tbl" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
+>> make[1]: *** [scripts/Makefile.modpost:94: __modpost] Error 1
+>> make: *** [Makefile:1298: modules] Error 2
+>> 
+>> Fixes: 18b3670d79ae ("tpm: ibmvtpm: Add support for TPM2")
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+>> Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+> 
+
+Ping. This failure can now be seen in mainline (cad18da0af) as well.
+
+Thanks
+-Sachin
