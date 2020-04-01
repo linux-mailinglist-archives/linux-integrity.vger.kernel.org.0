@@ -2,130 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D60F19B6E2
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Apr 2020 22:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E0319B817
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Apr 2020 00:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732441AbgDAUTq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Apr 2020 16:19:46 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:11694 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727178AbgDAUTq (ORCPT
+        id S1733085AbgDAWDa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Apr 2020 18:03:30 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7396 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732357AbgDAWDa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Apr 2020 16:19:46 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031KC3Rm001505;
-        Wed, 1 Apr 2020 22:18:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=5QlwJKLZCLk0nG0qWaS9k+T/qOC3AEsVlVtoxtMgP4U=;
- b=lrGWypf31O2KG3VrMaRQ5OnJUUP98evJkXxvPmgOvTq2dxnWQxL3tQhOqkpvHoTIYJd1
- t6ItmGFZKHI6HMM8vzTSxsONzHDx+E3QUqIpup4qDOIUFuKOZRjzB21s2ESbFZmjmTyI
- cDkKH2/XLJ+HKNE2mKy+VSDsAkSHsz2Brufl3UUIc1E0jEAwj9B3xsLfQnxaey28WAt3
- 5Wdx4beNpC5iYahdQbuSdwzuEp4aNkQ4hCAsFnYZKCEbnBHG79JFKhX3mYLK3cNjC2zo
- 6wNrUmgRHvQVPpz6rASZd4hw2HOOVGJ5k2jTdDpjxfgR6I4mPfPPMoWZGBeXqC3JSkga tg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 301w81751c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Apr 2020 22:18:22 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3569010002A;
-        Wed,  1 Apr 2020 22:18:15 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E3680206292;
-        Wed,  1 Apr 2020 22:18:14 +0200 (CEST)
-Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 1 Apr
- 2020 22:18:14 +0200
-Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
- SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
- 15.00.1347.000; Wed, 1 Apr 2020 22:18:14 +0200
-From:   Benoit HOUYERE <benoit.houyere@st.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        "amirmizi6@gmail.com" <amirmizi6@gmail.com>
-CC:     "Eyal.Cohen@nuvoton.com" <Eyal.Cohen@nuvoton.com>,
-        "oshrialkoby85@gmail.com" <oshrialkoby85@gmail.com>,
-        "alexander.steffen@infineon.com" <alexander.steffen@infineon.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "oshri.alkoby@nuvoton.com" <oshri.alkoby@nuvoton.com>,
-        "tmaimon77@gmail.com" <tmaimon77@gmail.com>,
-        "gcwilson@us.ibm.com" <gcwilson@us.ibm.com>,
-        "kgoldman@us.ibm.com" <kgoldman@us.ibm.com>,
-        "Dan.Morav@nuvoton.com" <Dan.Morav@nuvoton.com>,
-        "oren.tanami@nuvoton.com" <oren.tanami@nuvoton.com>,
-        "shmulik.hager@nuvoton.com" <shmulik.hager@nuvoton.com>,
-        "amir.mizinski@nuvoton.com" <amir.mizinski@nuvoton.com>,
-        Christophe Richard <hristophe-h.ricard@st.com>
-Subject: RE: [PATCH v4 2/7] tpm: tpm_tis: Add check_data handle to
- tpm_tis_phy_ops in order to check data integrity
-Thread-Topic: [PATCH v4 2/7] tpm: tpm_tis: Add check_data handle to
- tpm_tis_phy_ops in order to check data integrity
-Thread-Index: AQHWB/5sTOWTIuzRBUKbjmfl723Xlqhks7pQ
-Date:   Wed, 1 Apr 2020 20:18:14 +0000
-Message-ID: <173e4e392b9648b7afeb09680d8073b5@SFHDAG3NODE3.st.com>
-References: <20200331113207.107080-1-amirmizi6@gmail.com>
- <20200331113207.107080-3-amirmizi6@gmail.com>
- <20200401082019.GB17325@linux.intel.com>
-In-Reply-To: <20200401082019.GB17325@linux.intel.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.51]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
+        Wed, 1 Apr 2020 18:03:30 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031LXeSC154262
+        for <linux-integrity@vger.kernel.org>; Wed, 1 Apr 2020 18:03:28 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 305165k8x0-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 01 Apr 2020 18:03:27 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 1 Apr 2020 23:03:08 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 1 Apr 2020 23:03:05 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 031M3JRr52625636
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Apr 2020 22:03:19 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ED503A405E;
+        Wed,  1 Apr 2020 22:03:18 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 528B2A4053;
+        Wed,  1 Apr 2020 22:03:18 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.185.67])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Apr 2020 22:03:18 +0000 (GMT)
+Subject: [GIT PULL] integrity subsystem updates for v5.7
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Wed, 01 Apr 2020 18:03:17 -0400
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20040122-4275-0000-0000-000003B7D5C7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20040122-4276-0000-0000-000038CD29D9
+Message-Id: <1585778597.5188.665.camel@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-01_04:2020-03-31,2020-04-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ impostorscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
+ clxscore=1015 lowpriorityscore=0 suspectscore=0 bulkscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004010174
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
->>On Tue, Mar 31, 2020 at 02:32:02PM +0300, amirmizi6@gmail.com wrote:
->> From: Amir Mizinski <amirmizi6@gmail.com>
->>=20
->> In order to compute the crc over the data sent in lower layer  (I2C=20
->> for instance), tpm_tis_check_data() calls an operation (if available) =20
->> to check data integrity. If data integrity cannot be verified, a retry =
-=20
->> attempt to save the sent/received data is implemented.
->>=20
->> The current steps are done when sending a command:
->>     1. Host writes to TPM_STS.commandReady.
->>     2. Host writes command.
->>     3. Host checks that TPM received data is valid.
->>     4. If data is currupted go to step 1.
->>=20
->> When receiving data:
->>     1. Host checks that TPM_STS.dataAvail is set.
->>     2. Host saves received data.
->>     3. Host checks that received data is correct.
->>     4. If data is currupted Host writes to TPM_STS.responseRetry and go =
-to
->>         step 1.
->>=20
->> Co-developed-by: Christophe Richard <hristophe-h.ricard@st.com>
->> Signed-off-by: Christophe Richard <hristophe-h.ricard@st.com>
->> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+Hi Linus,
 
->The email is malformed.
+There's just a couple of updates for linux-5.7:
+- A new Kconfig option to enable IMA architecture specific runtime
+policy rules needed for secure and/or trusted boot, as requested.
 
->So.. How did Christophe participate on writing this patch? I haven't seen =
-him shouting anything about the subject and still his SOB is there.
+- Some message cleanup (eg. pr_fmt, additional error messages).
 
->/Jarkko
+thanks,
 
-Christophe sent patch to support I2C TCG TPM driver tpm_tis_i2c (https://pa=
-tchwork.kernel.org/patch/8628681/) in the same time that tpm_tis_spi. This =
-function was named tpm_tis_i2c_check_data.
+Mimi
 
-Best Regards,
+
+The following changes since commit f8788d86ab28f61f7b46eb6be375f8a726783636:
+
+  Linux 5.6-rc3 (2020-02-23 16:17:42 -0800)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+
+for you to fetch changes up to 9e2b4be377f0d715d9d910507890f9620cc22a9d:
+
+  ima: add a new CONFIG for loading arch-specific policies (2020-03-12 07:43:57 -0400)
+
+----------------------------------------------------------------
+Mimi Zohar (1):
+      Merge branch 'next-integrity.logging-cleanup' into next-integrity
+
+Nayna Jain (1):
+      ima: add a new CONFIG for loading arch-specific policies
+
+Tushar Sugandhi (3):
+      IMA: Update KBUILD_MODNAME for IMA files to ima
+      IMA: Add log statements for failure conditions
+      integrity: Remove duplicate pr_fmt definitions
+
+ arch/powerpc/Kconfig                         | 1 +
+ arch/s390/Kconfig                            | 1 +
+ arch/s390/kernel/Makefile                    | 2 +-
+ arch/x86/Kconfig                             | 1 +
+ arch/x86/kernel/Makefile                     | 4 +---
+ include/linux/ima.h                          | 3 +--
+ security/integrity/digsig.c                  | 2 --
+ security/integrity/digsig_asymmetric.c       | 2 --
+ security/integrity/evm/evm_crypto.c          | 2 --
+ security/integrity/evm/evm_main.c            | 2 --
+ security/integrity/evm/evm_secfs.c           | 2 --
+ security/integrity/ima/Kconfig               | 7 +++++++
+ security/integrity/ima/Makefile              | 6 +++---
+ security/integrity/ima/ima_asymmetric_keys.c | 2 --
+ security/integrity/ima/ima_crypto.c          | 2 --
+ security/integrity/ima/ima_fs.c              | 2 --
+ security/integrity/ima/ima_init.c            | 2 --
+ security/integrity/ima/ima_kexec.c           | 1 -
+ security/integrity/ima/ima_main.c            | 5 +++--
+ security/integrity/ima/ima_policy.c          | 2 --
+ security/integrity/ima/ima_queue.c           | 2 --
+ security/integrity/ima/ima_queue_keys.c      | 2 --
+ security/integrity/ima/ima_template.c        | 2 --
+ security/integrity/ima/ima_template_lib.c    | 2 --
+ security/integrity/integrity.h               | 6 ++++++
+ 25 files changed, 25 insertions(+), 40 deletions(-)
+
