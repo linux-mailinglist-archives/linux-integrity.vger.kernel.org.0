@@ -2,199 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2761019B504
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Apr 2020 20:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D60F19B6E2
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Apr 2020 22:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732256AbgDASBD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Apr 2020 14:01:03 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:6002 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730420AbgDASBD (ORCPT
+        id S1732441AbgDAUTq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Apr 2020 16:19:46 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:11694 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727178AbgDAUTq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Apr 2020 14:01:03 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031HYAiP066441
-        for <linux-integrity@vger.kernel.org>; Wed, 1 Apr 2020 14:01:02 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 304g86mfbq-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 01 Apr 2020 14:01:02 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 1 Apr 2020 19:00:58 +0100
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 1 Apr 2020 19:00:55 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 031I0uW040436062
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Apr 2020 18:00:56 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93AAE11C052;
-        Wed,  1 Apr 2020 18:00:56 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C62A311C069;
-        Wed,  1 Apr 2020 18:00:55 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.185.67])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Apr 2020 18:00:55 +0000 (GMT)
-Subject: Re: [PATCH v8 2/2] ima-evm-utils: Add sign/verify tests for evmctl
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Date:   Wed, 01 Apr 2020 14:00:55 -0400
-In-Reply-To: <20200327042515.22315-3-vt@altlinux.org>
-References: <20200327042515.22315-1-vt@altlinux.org>
-         <20200327042515.22315-3-vt@altlinux.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20040118-0028-0000-0000-000003F02CE5
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20040118-0029-0000-0000-000024B5B408
-Message-Id: <1585764055.5188.652.camel@linux.ibm.com>
+        Wed, 1 Apr 2020 16:19:46 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031KC3Rm001505;
+        Wed, 1 Apr 2020 22:18:22 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=5QlwJKLZCLk0nG0qWaS9k+T/qOC3AEsVlVtoxtMgP4U=;
+ b=lrGWypf31O2KG3VrMaRQ5OnJUUP98evJkXxvPmgOvTq2dxnWQxL3tQhOqkpvHoTIYJd1
+ t6ItmGFZKHI6HMM8vzTSxsONzHDx+E3QUqIpup4qDOIUFuKOZRjzB21s2ESbFZmjmTyI
+ cDkKH2/XLJ+HKNE2mKy+VSDsAkSHsz2Brufl3UUIc1E0jEAwj9B3xsLfQnxaey28WAt3
+ 5Wdx4beNpC5iYahdQbuSdwzuEp4aNkQ4hCAsFnYZKCEbnBHG79JFKhX3mYLK3cNjC2zo
+ 6wNrUmgRHvQVPpz6rASZd4hw2HOOVGJ5k2jTdDpjxfgR6I4mPfPPMoWZGBeXqC3JSkga tg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 301w81751c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Apr 2020 22:18:22 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3569010002A;
+        Wed,  1 Apr 2020 22:18:15 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E3680206292;
+        Wed,  1 Apr 2020 22:18:14 +0200 (CEST)
+Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 1 Apr
+ 2020 22:18:14 +0200
+Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
+ SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
+ 15.00.1347.000; Wed, 1 Apr 2020 22:18:14 +0200
+From:   Benoit HOUYERE <benoit.houyere@st.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        "amirmizi6@gmail.com" <amirmizi6@gmail.com>
+CC:     "Eyal.Cohen@nuvoton.com" <Eyal.Cohen@nuvoton.com>,
+        "oshrialkoby85@gmail.com" <oshrialkoby85@gmail.com>,
+        "alexander.steffen@infineon.com" <alexander.steffen@infineon.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "arnd@arndb.de" <arnd@arndb.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "oshri.alkoby@nuvoton.com" <oshri.alkoby@nuvoton.com>,
+        "tmaimon77@gmail.com" <tmaimon77@gmail.com>,
+        "gcwilson@us.ibm.com" <gcwilson@us.ibm.com>,
+        "kgoldman@us.ibm.com" <kgoldman@us.ibm.com>,
+        "Dan.Morav@nuvoton.com" <Dan.Morav@nuvoton.com>,
+        "oren.tanami@nuvoton.com" <oren.tanami@nuvoton.com>,
+        "shmulik.hager@nuvoton.com" <shmulik.hager@nuvoton.com>,
+        "amir.mizinski@nuvoton.com" <amir.mizinski@nuvoton.com>,
+        Christophe Richard <hristophe-h.ricard@st.com>
+Subject: RE: [PATCH v4 2/7] tpm: tpm_tis: Add check_data handle to
+ tpm_tis_phy_ops in order to check data integrity
+Thread-Topic: [PATCH v4 2/7] tpm: tpm_tis: Add check_data handle to
+ tpm_tis_phy_ops in order to check data integrity
+Thread-Index: AQHWB/5sTOWTIuzRBUKbjmfl723Xlqhks7pQ
+Date:   Wed, 1 Apr 2020 20:18:14 +0000
+Message-ID: <173e4e392b9648b7afeb09680d8073b5@SFHDAG3NODE3.st.com>
+References: <20200331113207.107080-1-amirmizi6@gmail.com>
+ <20200331113207.107080-3-amirmizi6@gmail.com>
+ <20200401082019.GB17325@linux.intel.com>
+In-Reply-To: <20200401082019.GB17325@linux.intel.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.51]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-01_03:2020-03-31,2020-04-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- impostorscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
- mlxlogscore=999 bulkscore=0 suspectscore=0 adultscore=0 mlxscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004010146
+ definitions=2020-04-01_04:2020-03-31,2020-04-01 signatures=0
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-03-27 at 07:25 +0300, Vitaly Chikunov wrote:
+>>On Tue, Mar 31, 2020 at 02:32:02PM +0300, amirmizi6@gmail.com wrote:
+>> From: Amir Mizinski <amirmizi6@gmail.com>
+>>=20
+>> In order to compute the crc over the data sent in lower layer  (I2C=20
+>> for instance), tpm_tis_check_data() calls an operation (if available) =20
+>> to check data integrity. If data integrity cannot be verified, a retry =
+=20
+>> attempt to save the sent/received data is implemented.
+>>=20
+>> The current steps are done when sending a command:
+>>     1. Host writes to TPM_STS.commandReady.
+>>     2. Host writes command.
+>>     3. Host checks that TPM received data is valid.
+>>     4. If data is currupted go to step 1.
+>>=20
+>> When receiving data:
+>>     1. Host checks that TPM_STS.dataAvail is set.
+>>     2. Host saves received data.
+>>     3. Host checks that received data is correct.
+>>     4. If data is currupted Host writes to TPM_STS.responseRetry and go =
+to
+>>         step 1.
+>>=20
+>> Co-developed-by: Christophe Richard <hristophe-h.ricard@st.com>
+>> Signed-off-by: Christophe Richard <hristophe-h.ricard@st.com>
+>> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
 
-<snip>
+>The email is malformed.
 
-> +# Perform sign and verify ima and evm testing
-> +sign_verify() {
-> +  local key=$1 alg=$2 pref="$3" opts="$4"
-> +  local file=$alg.txt
-> +
-> +  # Set defaults:
-> +  # Public key is different for v1 and v2 (where x509 cert is used).
-> +  if [[ $opts =~ --rsa ]]; then
-> +    KEY=test-$key.pub
-> +  else
-> +    KEY=test-$key.cer
-> +  fi
-> +  ALG=$alg
-> +  PREF=$pref
-> +  OPTS=$opts
-> +  FILE=$file
-> +
-> +  TYPE=ima
-> +  if expect_pass check_sign; then
-> +
-> +    # Normal verify with proper key should pass
-> +    expect_pass check_verify
-> +
-> +    # Multiple files and some don't verify
-> +    expect_fail check_verify FILE=/dev/null,$file
+>So.. How did Christophe participate on writing this patch? I haven't seen =
+him shouting anything about the subject and still his SOB is there.
 
-The comment and the code don't seem to be in sync.  This seems to be a
-single file, for example, named "/dev/null,sha1.txt", which properly
-fails.
+>/Jarkko
 
-____ START positive test: check_verify
-+ evmctl -vvv ima_verify --key test-rsa1024.pub --xattr-user --rsa
-sha1.txt
-  hash-v1: da39a3ee5e6b4b0d3255bfef95601890afd80709
-  sighash: e34807780b93cc17bdac89573df40ee4a3e984f1
-  sha1.txt: verification is OK
-^^^^ STOP (0) positive test: check_verify
-____ START negative test: check_verify FILE=/dev/null,sha1.txt
-- evmctl -vvv ima_verify --key test-rsa1024.pub --xattr-user --rsa
-/dev/null,sha1.txt
-evmctl ima_verify failed properly with (1)
-  getxattr failed: /dev/null,sha1.txt
-  errno: No such file or directory (2)
-^^^^ STOP (1) negative test: check_verify FILE=/dev/null,sha1.txt
+Christophe sent patch to support I2C TCG TPM driver tpm_tis_i2c (https://pa=
+tchwork.kernel.org/patch/8628681/) in the same time that tpm_tis_spi. This =
+function was named tpm_tis_i2c_check_data.
 
-> +  fi
-> +
-> +  TYPE=evm
-> +  # Avoid running blkid for evm tests which may require root
-> +  # No generation on overlayfs:
-> +  # ioctl(3, FS_IOC_GETVERSION, 0x7ffd8e0bd628) = -1 ENOTTY (Inappropriate ioctl for device)
-> +  OPTS="$opts --uuid --generation 0"
-> +  if expect_pass check_sign; then
-> +
-> +    # Normal verify with proper key
-> +    expect_pass check_verify
-> +
-> +    # Verify with wrong key
-> +    expect_fail check_verify KEY=rsa2048
-> +  fi
-> +
-> +  # Note: Leaving TYPE=evm and file is evm signed
-> +}
-> +
-> +# Test --keys
-> +try_different_keys() {
-> +  # This run after sign_verify which leaves
-> +  # TYPE=evm and file is evm signed
-> +
-> +  # v2 signing can work with multiple keys in --key option
-> +  if [[ ! $OPTS =~ --rsa ]]; then
-> +
-> +    # Have correct key in the key list
-> +    expect_pass check_verify KEY=test-rsa2048.cer,$KEY
-> +    expect_pass check_verify KEY=/dev/null,$KEY,
-
-First test has multiple keys in the key list.  The key list with
-"/dev/null" obviously fails to add the first key, so it lands up being
-a single key on the list.
-
-> +  fi
-> +
-> +  # Try key that is not used for signing
-> +  expect_fail check_verify KEY=rsa2048
-> +
-> +  # Try completely wrong key files
-> +  expect_fail check_verify KEY=/dev/null
-> +  expect_fail check_verify KEY=/dev/zero
-> +}
-> +
-> +try_different_sigs() {
-> +  # TYPE=evm and file is evm signed
-> +
-> +  # Test --imasig
-> +  if expect_pass check_sign OPTS="$OPTS --imasig"; then
-> +
-> +    # Verify both evm and ima sigs
-> +    expect_pass check_verify
-> +    expect_pass check_verify TYPE=ima
-> +  fi
-> +
-> +  # Test --imahash
-> +  if expect_pass check_sign OPTS="$OPTS --imahash"; then
-> +
-> +    expect_pass check_verify
-> +
-> +    # IMA hash is not verifiable by ima_verify
-> +    expect_fail check_verify TYPE=ima
-> +  fi
-> +
-> +  # Test --portable
-> +  expect_pass check_sign OPTS="$OPTS --portable" PREF=0x05
-> +  # Cannot be verified
-
-True, evmctl does not support verifying portable signatures, but it
-should be possible not only locally, but remotely to verify a portable
-signature.  That's the whole point of having portable EVM signatures.
- The comment is a bit misleading and could say something to that
-effect - "todo: add support for evmctl portable signature
-verification".
-
-Mimi
-
+Best Regards,
