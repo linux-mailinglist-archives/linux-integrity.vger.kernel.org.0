@@ -2,132 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E0319B817
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Apr 2020 00:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9731719BC87
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Apr 2020 09:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733085AbgDAWDa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Apr 2020 18:03:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7396 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732357AbgDAWDa (ORCPT
+        id S1728628AbgDBHTJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Apr 2020 03:19:09 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:43556 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726214AbgDBHTJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Apr 2020 18:03:30 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031LXeSC154262
-        for <linux-integrity@vger.kernel.org>; Wed, 1 Apr 2020 18:03:28 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 305165k8x0-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 01 Apr 2020 18:03:27 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 1 Apr 2020 23:03:08 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 1 Apr 2020 23:03:05 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 031M3JRr52625636
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Apr 2020 22:03:19 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED503A405E;
-        Wed,  1 Apr 2020 22:03:18 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 528B2A4053;
-        Wed,  1 Apr 2020 22:03:18 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.185.67])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Apr 2020 22:03:18 +0000 (GMT)
-Subject: [GIT PULL] integrity subsystem updates for v5.7
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Wed, 01 Apr 2020 18:03:17 -0400
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20040122-4275-0000-0000-000003B7D5C7
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20040122-4276-0000-0000-000038CD29D9
-Message-Id: <1585778597.5188.665.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-01_04:2020-03-31,2020-04-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- impostorscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
- clxscore=1015 lowpriorityscore=0 suspectscore=0 bulkscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004010174
+        Thu, 2 Apr 2020 03:19:09 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id B482E72CCEA;
+        Thu,  2 Apr 2020 10:19:07 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 7FB4D4A4A16;
+        Thu,  2 Apr 2020 10:19:07 +0300 (MSK)
+Date:   Thu, 2 Apr 2020 10:19:07 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v8 2/2] ima-evm-utils: Add sign/verify tests for evmctl
+Message-ID: <20200402071907.gyhm7gtg3kjjom4c@altlinux.org>
+Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+References: <20200327042515.22315-1-vt@altlinux.org>
+ <20200327042515.22315-3-vt@altlinux.org>
+ <1585764055.5188.652.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1585764055.5188.652.camel@linux.ibm.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
+Mimi,
 
-There's just a couple of updates for linux-5.7:
-- A new Kconfig option to enable IMA architecture specific runtime
-policy rules needed for secure and/or trusted boot, as requested.
+On Wed, Apr 01, 2020 at 02:00:55PM -0400, Mimi Zohar wrote:
+> On Fri, 2020-03-27 at 07:25 +0300, Vitaly Chikunov wrote:
+> 
+> <snip>
+> > +    # Multiple files and some don't verify
+> > +    expect_fail check_verify FILE=/dev/null,$file
+> 
+> The comment and the code don't seem to be in sync. šThis seems to be a
+> single file, for example, named "/dev/null,sha1.txt", which properly
+> fails.
 
-- Some message cleanup (eg. pr_fmt, additional error messages).
-
-thanks,
-
-Mimi
+Looks like my mistake. There was code that parse multiple files
+separated by comma. And it seems that there I thought this logic should
+be applicable here. Of course this should be space separated file list.
 
 
-The following changes since commit f8788d86ab28f61f7b46eb6be375f8a726783636:
+> > +# Test --keys
+> > +try_different_keys() {
+> > +  # This run after sign_verify which leaves
+> > +  # TYPE=evm and file is evm signed
+> > +
+> > +  # v2 signing can work with multiple keys in --key option
+> > +  if [[ ! $OPTS =~ --rsa ]]; then
+> > +
+> > +    # Have correct key in the key list
+> > +    expect_pass check_verify KEY=test-rsa2048.cer,$KEY
+> > +    expect_pass check_verify KEY=/dev/null,$KEY,
+> 
+> First test has multiple keys in the key list. šThe key list with
+> "/dev/null" obviously fails to add the first key, so it lands up being
+> a single key on the list.
 
-  Linux 5.6-rc3 (2020-02-23 16:17:42 -0800)
+All tests do obvious things. So I don't see a problem in this test. (There
+comma separated list is correct.)
 
-are available in the git repository at:
+> > +
+> > +  # Test --portable
+> > +  expect_pass check_sign OPTS="$OPTS --portable" PREF=0x05
+> > +  # Cannot be verified
+> 
+> True, evmctl does not support verifying portable signatures, but it
+> should be possible not only locally, but remotely to verify a portable
+> signature. šThat's the whole point of having portable EVM signatures.
+> šThe comment is a bit misleading and could say something to that
+> effect - "todo: add support for evmctl portable signature
+> verification".
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+Well, tests are not right place to note todos for other code.
+This todo would look like we need to add test case to the test, like
+test is missing something. While now it says that it impossible to test.
 
-for you to fetch changes up to 9e2b4be377f0d715d9d910507890f9620cc22a9d:
+I will change text to something like "Cannot be verified for now, until
+that support is added to evmctl".
 
-  ima: add a new CONFIG for loading arch-specific policies (2020-03-12 07:43:57 -0400)
+Thanks,
 
-----------------------------------------------------------------
-Mimi Zohar (1):
-      Merge branch 'next-integrity.logging-cleanup' into next-integrity
 
-Nayna Jain (1):
-      ima: add a new CONFIG for loading arch-specific policies
-
-Tushar Sugandhi (3):
-      IMA: Update KBUILD_MODNAME for IMA files to ima
-      IMA: Add log statements for failure conditions
-      integrity: Remove duplicate pr_fmt definitions
-
- arch/powerpc/Kconfig                         | 1 +
- arch/s390/Kconfig                            | 1 +
- arch/s390/kernel/Makefile                    | 2 +-
- arch/x86/Kconfig                             | 1 +
- arch/x86/kernel/Makefile                     | 4 +---
- include/linux/ima.h                          | 3 +--
- security/integrity/digsig.c                  | 2 --
- security/integrity/digsig_asymmetric.c       | 2 --
- security/integrity/evm/evm_crypto.c          | 2 --
- security/integrity/evm/evm_main.c            | 2 --
- security/integrity/evm/evm_secfs.c           | 2 --
- security/integrity/ima/Kconfig               | 7 +++++++
- security/integrity/ima/Makefile              | 6 +++---
- security/integrity/ima/ima_asymmetric_keys.c | 2 --
- security/integrity/ima/ima_crypto.c          | 2 --
- security/integrity/ima/ima_fs.c              | 2 --
- security/integrity/ima/ima_init.c            | 2 --
- security/integrity/ima/ima_kexec.c           | 1 -
- security/integrity/ima/ima_main.c            | 5 +++--
- security/integrity/ima/ima_policy.c          | 2 --
- security/integrity/ima/ima_queue.c           | 2 --
- security/integrity/ima/ima_queue_keys.c      | 2 --
- security/integrity/ima/ima_template.c        | 2 --
- security/integrity/ima/ima_template_lib.c    | 2 --
- security/integrity/integrity.h               | 6 ++++++
- 25 files changed, 25 insertions(+), 40 deletions(-)
-
+> 
+> Mimi
