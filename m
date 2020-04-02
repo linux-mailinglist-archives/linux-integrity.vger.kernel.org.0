@@ -2,76 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC30119CAE5
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Apr 2020 22:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C27719CCFC
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Apr 2020 00:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbgDBURM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Apr 2020 16:17:12 -0400
-Received: from mga07.intel.com ([134.134.136.100]:49357 "EHLO mga07.intel.com"
+        id S2390311AbgDBWpE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Apr 2020 18:45:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37174 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727412AbgDBURL (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Apr 2020 16:17:11 -0400
-IronPort-SDR: WoYS+8qKLMwoo753TKle50uWzAFDjZqrP49PNx7bb+UZ3U567sOcmRJbVDfz1Ebig3/9I1Z8Sr
- LEm+lb5SLvWA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2020 13:17:11 -0700
-IronPort-SDR: qibqd9S+az7ejxncAI8raSBbcCfwBpEuhv/Nu2BRMba++Z5SMzGaVWLlfTyJ5hOgqWZKvZdGfQ
- llSq6jQtbMQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,336,1580803200"; 
-   d="scan'208";a="238650846"
-Received: from hbriegel-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.39.101])
-  by orsmga007.jf.intel.com with ESMTP; 02 Apr 2020 13:17:01 -0700
-Date:   Thu, 2 Apr 2020 23:17:00 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Amir Mizinski <amirmizi6@gmail.com>
-Cc:     Eyal.Cohen@nuvoton.com, Oshri Alkobi <oshrialkoby85@gmail.com>,
-        Alexander Steffen <alexander.steffen@infineon.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        IS20 Oshri Alkoby <oshri.alkoby@nuvoton.com>,
-        Tomer Maimon <tmaimon77@gmail.com>, gcwilson@us.ibm.com,
-        kgoldman@us.ibm.com, IS30 Dan Morav <Dan.Morav@nuvoton.com>,
-        oren.tanami@nuvoton.com, shmulik.hager@nuvoton.com,
-        amir.mizinski@nuvoton.com,
-        Christophe Richard <hristophe-h.ricard@st.com>
-Subject: Re: [PATCH v4 2/7] tpm: tpm_tis: Add check_data handle to
- tpm_tis_phy_ops in order to check data integrity
-Message-ID: <20200402201700.GG10314@linux.intel.com>
-References: <20200331113207.107080-1-amirmizi6@gmail.com>
- <20200331113207.107080-3-amirmizi6@gmail.com>
- <20200401082019.GB17325@linux.intel.com>
- <CAMHTsUUvStPHNL-W7vtjGrtehQx22jUZbN8kLib4h+JWH3p7_w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMHTsUUvStPHNL-W7vtjGrtehQx22jUZbN8kLib4h+JWH3p7_w@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S2390316AbgDBWpD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 2 Apr 2020 18:45:03 -0400
+Subject: Re: [GIT PULL] integrity subsystem updates for v5.7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585867503;
+        bh=c9ETl+9+WA3T/vW2Fwgn72DysCMVBso1ewme4KBGaIg=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=rhheg33LUVg31zIEQdmJEuufZrQ87JAiMIm6wSIE1dRZ7RsiaJMHm0FYlONwSd2tS
+         46J0saAD6t4wbeyaVXQYbhBSacqthMNV4wTs4y9kwpj+A8Uxx1yDdvZQfV5x/ckELW
+         z3qV//G/jYKhEaR3aArhpHcigxqqH6GnDvMpohjo=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1585778597.5188.665.camel@linux.ibm.com>
+References: <1585778597.5188.665.camel@linux.ibm.com>
+X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1585778597.5188.665.camel@linux.ibm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+ next-integrity
+X-PR-Tracked-Commit-Id: 9e2b4be377f0d715d9d910507890f9620cc22a9d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7f218319caaaf6f2a43b22d8c82b898f32b4ec70
+Message-Id: <158586750335.2810.1251219729592050514.pr-tracker-bot@kernel.org>
+Date:   Thu, 02 Apr 2020 22:45:03 +0000
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Apr 01, 2020 at 12:19:39PM +0300, Amir Mizinski wrote:
->    this commit is based on Christophe work and was submitted in 2016:
->    https://patchwork.kernel.org/patch/8628661/
->    I followed you comments from the previous version on commit 1/7:
->    https://lore.kernel.org/patchwork/patch/1192101/
->    and fixed it in this one too. should i write it differently?
->    thank you,
->    Amir Mizinski
+The pull request you sent on Wed, 01 Apr 2020 18:03:17 -0400:
 
-No then it's correct thanks. Just wanted to verify.
+> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
 
-Please configure your email client:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7f218319caaaf6f2a43b22d8c82b898f32b4ec70
 
-https://www.kernel.org/doc/html/v4.10/process/email-clients.html
+Thank you!
 
-/Jarkko
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
