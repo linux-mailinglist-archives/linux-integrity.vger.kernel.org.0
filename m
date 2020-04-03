@@ -2,90 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4DC19D09B
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Apr 2020 09:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4840F19D623
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Apr 2020 13:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388302AbgDCHBc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 Apr 2020 03:01:32 -0400
-Received: from mga14.intel.com ([192.55.52.115]:18429 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730759AbgDCHBc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 Apr 2020 03:01:32 -0400
-IronPort-SDR: zP8KYOkfrF1Lh4tLJ2CYI5w74GdKOxSymxz8jVhmHZVE9SlR/xbFqCq7sbMQyeKBK094oL0TTm
- GkAcQhSlRMqw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2020 00:01:32 -0700
-IronPort-SDR: byiRMTrhb5XBXqTx15iVdR9oHh4AmpQIiQJnAKivtGn1djcuht1NL+AKYHxkpdiQnPxDzGdUr7
- GczmVQoc/6oQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,338,1580803200"; 
-   d="scan'208";a="253272312"
-Received: from kboulton-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.35.93])
-  by orsmga006.jf.intel.com with ESMTP; 03 Apr 2020 00:01:28 -0700
-Date:   Fri, 3 Apr 2020 10:01:26 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>
+        id S2390849AbgDCLzL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 Apr 2020 07:55:11 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56278 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726087AbgDCLzL (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 3 Apr 2020 07:55:11 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 033BY9J8036485;
+        Fri, 3 Apr 2020 07:55:09 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3020wgthgn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Apr 2020 07:55:09 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 033Bt1Qi007018;
+        Fri, 3 Apr 2020 11:55:08 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma04wdc.us.ibm.com with ESMTP id 301x778ptg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Apr 2020 11:55:08 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 033Bt7cx47907102
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Apr 2020 11:55:07 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D8A5AC060;
+        Fri,  3 Apr 2020 11:55:07 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29555AC059;
+        Fri,  3 Apr 2020 11:55:07 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Apr 2020 11:55:07 +0000 (GMT)
 Subject: Re: [PATCH v4 0/2] tpm2: Make TPM2 logs accessible for non-UEFI
  firmware
-Message-ID: <20200403070114.GD25305@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org
 References: <20200402225140.922789-1-stefanb@linux.vnet.ibm.com>
+ <20200403070114.GD25305@linux.intel.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <7205b5ee-cfb7-cfda-7834-b43323294282@linux.ibm.com>
+Date:   Fri, 3 Apr 2020 07:55:06 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200402225140.922789-1-stefanb@linux.vnet.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200403070114.GD25305@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-03_07:2020-04-02,2020-04-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 phishscore=0 mlxlogscore=992
+ adultscore=0 suspectscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004030097
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Apr 02, 2020 at 06:51:38PM -0400, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> This series of patches extends the existing TPM2 ACPI table with additional
-> fields found in the TPM2 TCG ACPI specification (reference is in the patch)
-> that allow access to the log's address and its size. We then modify the
-> code that so far only enables access to a TPM 1.2's log for a TPM2 as well.
-> This then enables access to the TPM2's log on non-UEFI system that for example
-> run SeaBIOS.
-> 
->    Stefan
-> 
-> v3->v4:
->   - Repost as one series
-> 
-> v2->v3:
->   - Split the series into two separate patches
->   - Added comments to ACPI table fields
->   - Added check for null pointer to log area and zero log size
-> 
-> v1->v2:
->   - Repost of the series
-> 
-> 
-> 
-> Stefan Berger (2):
->   acpi: Extend TPM2 ACPI table with missing log fields
->   tpm: Add support for event log pointer found in TPM2 ACPI table
-> 
->  drivers/char/tpm/eventlog/acpi.c | 56 +++++++++++++++++++++++++---------------
->  drivers/char/tpm/tpm_crb.c       | 13 +++++++---
->  drivers/char/tpm/tpm_tis.c       |  4 ++-
->  include/acpi/actbl3.h            |  5 ++--
->  4 files changed, 51 insertions(+), 27 deletions(-)
-> 
-> -- 
-> 2.14.5
-> 
+On 4/3/20 3:01 AM, Jarkko Sakkinen wrote:
+> Reviewed-by: Jarkko Sakkinen<jarkko.sakkinen@linux.intel.com>
+>
+> I'll apply this after I'll get Rafael's answer whether I can add his ack
+> to the commits.
+>
+> /Jarkko
 
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Thank you!
 
-I'll apply this after I'll get Rafael's answer whether I can add his ack
-to the commits.
+    Stefan
 
-/Jarkko
