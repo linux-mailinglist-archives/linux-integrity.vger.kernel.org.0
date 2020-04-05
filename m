@@ -2,21 +2,21 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 813F519EB59
-	for <lists+linux-integrity@lfdr.de>; Sun,  5 Apr 2020 14:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C94019EB4C
+	for <lists+linux-integrity@lfdr.de>; Sun,  5 Apr 2020 14:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726863AbgDEMzx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 5 Apr 2020 08:55:53 -0400
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:40270 "EHLO
+        id S1726556AbgDEMzF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 5 Apr 2020 08:55:05 -0400
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:40203 "EHLO
         herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726861AbgDEMzx (ORCPT
+        with ESMTP id S1726473AbgDEMzE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 5 Apr 2020 08:55:53 -0400
+        Sun, 5 Apr 2020 08:55:04 -0400
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 035CsSge005468;
-        Sun, 5 Apr 2020 15:54:28 +0300
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 035CsWYv005473;
+        Sun, 5 Apr 2020 15:54:32 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
-        id 318DD639B1; Sun,  5 Apr 2020 15:54:28 +0300 (IDT)
+        id 95F1E639B0; Sun,  5 Apr 2020 15:54:32 +0300 (IDT)
 From:   amirmizi6@gmail.com
 To:     Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
         oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
@@ -30,10 +30,10 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
         shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
         Amir Mizinski <amirmizi6@gmail.com>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>
-Subject: [PATCH v5 1/7] tpm: tpm_tis: Make implementation of read16 read32 write32 optional
-Date:   Sun,  5 Apr 2020 15:53:46 +0300
-Message-Id: <20200405125352.183693-2-amirmizi6@gmail.com>
+        Christophe Ricard <christophe-h.ricard@st.com>
+Subject: [PATCH v5 2/7] tpm: tpm_tis: Add check_data handle to tpm_tis_phy_ops in order to check data integrity
+Date:   Sun,  5 Apr 2020 15:53:47 +0300
+Message-Id: <20200405125352.183693-3-amirmizi6@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20200405125352.183693-1-amirmizi6@gmail.com>
 References: <20200405125352.183693-1-amirmizi6@gmail.com>
@@ -46,144 +46,191 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Amir Mizinski <amirmizi6@gmail.com>
 
-Only tpm_tis can use memory mapped I/O, which is truly mapped into
-the kernel's memory space. So using ioread16/ioread32/iowrite32 turn into a
-straightforward pointer dereference.
-Every other driver require more complicated operations to read more than 1
-byte at a time and will just fall back to read_bytes/write_bytes.
-Therefore, move this common code out of tpm_tis_spi into tpm_tis_core, so
-that it is automatically used when low-level drivers do not implement the
-specialized methods.
+In order to compute the crc over the data sent in lower layer
+(I2C for instance), tpm_tis_check_data() calls an operation (if available)
+to check data integrity. If data integrity cannot be verified, a retry
+attempt to save the sent/received data is implemented.
 
-Co-developed-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+The current steps are done when sending a command:
+   1. Host writes to TPM_STS.commandReady.
+   2. Host writes command.
+   3. Host checks that TPM received data is valid.
+   4. If data is currupted go to step 1.
+
+When receiving data:
+   1. Host checks that TPM_STS.dataAvail is set.
+   2. Host saves received data.
+   3. Host checks that received data is correct.
+   4. If data is currupted Host writes to TPM_STS.responseRetry and go to
+      step 1.
+
+Co-developed-by: Christophe Ricard <christophe-h.ricard@st.com>
+Signed-off-by: Christophe Ricard <christophe-h.ricard@st.com>
 Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 ---
- drivers/char/tpm/tpm_tis_core.h     | 38 +++++++++++++++++++++++++++++++---
- drivers/char/tpm/tpm_tis_spi_main.c | 41 -------------------------------------
- 2 files changed, 35 insertions(+), 44 deletions(-)
+ drivers/char/tpm/tpm_tis_core.c | 102 +++++++++++++++++++++++++---------------
+ drivers/char/tpm/tpm_tis_core.h |   3 ++
+ 2 files changed, 67 insertions(+), 38 deletions(-)
 
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 27c6ca0..6c4f232 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -242,6 +242,15 @@ static u8 tpm_tis_status(struct tpm_chip *chip)
+ 	return status;
+ }
+ 
++static bool tpm_tis_check_data(struct tpm_chip *chip, const u8 *buf, size_t len)
++{
++	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
++
++	if (priv->phy_ops->check_data)
++		return priv->phy_ops->check_data(priv, buf, len);
++	return true;
++}
++
+ static void tpm_tis_ready(struct tpm_chip *chip)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+@@ -308,47 +317,59 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 	int size = 0;
+-	int status;
++	int status, i;
+ 	u32 expected;
++	bool check_data = false;
+ 
+-	if (count < TPM_HEADER_SIZE) {
+-		size = -EIO;
+-		goto out;
+-	}
++	for (i = 0; i < TPM_RETRY; i++) {
++		if (count < TPM_HEADER_SIZE) {
++			size = -EIO;
++			goto out;
++		}
+ 
+-	size = recv_data(chip, buf, TPM_HEADER_SIZE);
+-	/* read first 10 bytes, including tag, paramsize, and result */
+-	if (size < TPM_HEADER_SIZE) {
+-		dev_err(&chip->dev, "Unable to read header\n");
+-		goto out;
+-	}
++		size = recv_data(chip, buf, TPM_HEADER_SIZE);
++		/* read first 10 bytes, including tag, paramsize, and result */
++		if (size < TPM_HEADER_SIZE) {
++			dev_err(&chip->dev, "Unable to read header\n");
++			goto out;
++		}
+ 
+-	expected = be32_to_cpu(*(__be32 *) (buf + 2));
+-	if (expected > count || expected < TPM_HEADER_SIZE) {
+-		size = -EIO;
+-		goto out;
+-	}
++		expected = be32_to_cpu(*(__be32 *) (buf + 2));
++		if (expected > count || expected < TPM_HEADER_SIZE) {
++			size = -EIO;
++			goto out;
++		}
+ 
+-	size += recv_data(chip, &buf[TPM_HEADER_SIZE],
+-			  expected - TPM_HEADER_SIZE);
+-	if (size < expected) {
+-		dev_err(&chip->dev, "Unable to read remainder of result\n");
+-		size = -ETIME;
+-		goto out;
+-	}
++		size += recv_data(chip, &buf[TPM_HEADER_SIZE],
++				  expected - TPM_HEADER_SIZE);
++		if (size < expected) {
++			dev_err(&chip->dev, "Unable to read remainder of result\n");
++			size = -ETIME;
++			goto out;
++		}
+ 
+-	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+-				&priv->int_queue, false) < 0) {
+-		size = -ETIME;
+-		goto out;
++		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
++				      &priv->int_queue, false) < 0) {
++			size = -ETIME;
++			goto out;
++		}
++
++		status = tpm_tis_status(chip);
++		if (status & TPM_STS_DATA_AVAIL) {	/* retry? */
++			dev_err(&chip->dev, "Error left over data\n");
++			size = -EIO;
++			goto out;
++		}
++
++		check_data = tpm_tis_check_data(chip, buf, size);
++		if (!check_data)
++			tpm_tis_write8(priv, TPM_STS(priv->locality),
++				       TPM_STS_RESPONSE_RETRY);
++		else
++			break;
+ 	}
+-	status = tpm_tis_status(chip);
+-	if (status & TPM_STS_DATA_AVAIL) {	/* retry? */
+-		dev_err(&chip->dev, "Error left over data\n");
++	if (!check_data)
+ 		size = -EIO;
+-		goto out;
+-	}
+-
+ out:
+ 	tpm_tis_ready(chip);
+ 	return size;
+@@ -453,14 +474,19 @@ static void disable_interrupts(struct tpm_chip *chip)
+ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-	int rc;
++	int rc, i;
+ 	u32 ordinal;
+ 	unsigned long dur;
++	bool data_valid = false;
+ 
+-	rc = tpm_tis_send_data(chip, buf, len);
+-	if (rc < 0)
+-		return rc;
+-
++	for (i = 0; i < TPM_RETRY && !data_valid; i++) {
++		rc = tpm_tis_send_data(chip, buf, len);
++		if (rc < 0)
++			return rc;
++		data_valid = tpm_tis_check_data(chip, buf, len);
++	}
++	if (!data_valid)
++		return -EIO;
+ 	/* go and do it */
+ 	rc = tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
+ 	if (rc < 0)
 diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index 7337819..d06c65b 100644
+index d06c65b..486c2e9 100644
 --- a/drivers/char/tpm/tpm_tis_core.h
 +++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -122,13 +122,35 @@ static inline int tpm_tis_read8(struct tpm_tis_data *data, u32 addr, u8 *result)
- static inline int tpm_tis_read16(struct tpm_tis_data *data, u32 addr,
- 				 u16 *result)
- {
--	return data->phy_ops->read16(data, addr, result);
-+	__le16 result_le;
-+	int rc;
-+
-+	if (data->phy_ops->read16)
-+		return data->phy_ops->read16(data, addr, result);
-+
-+	rc = data->phy_ops->read_bytes(data, addr, sizeof(u16),
-+				       (u8 *)&result_le);
-+	if (!rc)
-+		*result = le16_to_cpu(result_le);
-+
-+	return rc;
- }
- 
- static inline int tpm_tis_read32(struct tpm_tis_data *data, u32 addr,
- 				 u32 *result)
- {
--	return data->phy_ops->read32(data, addr, result);
-+	__le32 result_le;
-+	int rc;
-+
-+	if (data->phy_ops->read32)
-+		return data->phy_ops->read32(data, addr, result);
-+
-+	rc = data->phy_ops->read_bytes(data, addr, sizeof(u32),
-+				       (u8 *)&result_le);
-+	if (!rc)
-+		*result = le32_to_cpu(result_le);
-+
-+	return rc;
- }
- 
- static inline int tpm_tis_write_bytes(struct tpm_tis_data *data, u32 addr,
-@@ -145,7 +167,17 @@ static inline int tpm_tis_write8(struct tpm_tis_data *data, u32 addr, u8 value)
- static inline int tpm_tis_write32(struct tpm_tis_data *data, u32 addr,
- 				  u32 value)
- {
--	return data->phy_ops->write32(data, addr, value);
-+	__le32 value_le;
-+	int rc;
-+
-+	if (data->phy_ops->write32)
-+		return data->phy_ops->write32(data, addr, value);
-+
-+	value_le = cpu_to_le32(value);
-+	rc = data->phy_ops->write_bytes(data, addr, sizeof(u32),
-+					(u8 *)&value_le);
-+
-+	return rc;
- }
- 
- static inline bool is_bsw(void)
-diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-index d1754fd..95fef9d 100644
---- a/drivers/char/tpm/tpm_tis_spi_main.c
-+++ b/drivers/char/tpm/tpm_tis_spi_main.c
-@@ -152,44 +152,6 @@ static int tpm_tis_spi_write_bytes(struct tpm_tis_data *data, u32 addr,
- 	return tpm_tis_spi_transfer(data, addr, len, NULL, value);
- }
- 
--int tpm_tis_spi_read16(struct tpm_tis_data *data, u32 addr, u16 *result)
--{
--	__le16 result_le;
--	int rc;
--
--	rc = data->phy_ops->read_bytes(data, addr, sizeof(u16),
--				       (u8 *)&result_le);
--	if (!rc)
--		*result = le16_to_cpu(result_le);
--
--	return rc;
--}
--
--int tpm_tis_spi_read32(struct tpm_tis_data *data, u32 addr, u32 *result)
--{
--	__le32 result_le;
--	int rc;
--
--	rc = data->phy_ops->read_bytes(data, addr, sizeof(u32),
--				       (u8 *)&result_le);
--	if (!rc)
--		*result = le32_to_cpu(result_le);
--
--	return rc;
--}
--
--int tpm_tis_spi_write32(struct tpm_tis_data *data, u32 addr, u32 value)
--{
--	__le32 value_le;
--	int rc;
--
--	value_le = cpu_to_le32(value);
--	rc = data->phy_ops->write_bytes(data, addr, sizeof(u32),
--					(u8 *)&value_le);
--
--	return rc;
--}
--
- int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
- 		     int irq, const struct tpm_tis_phy_ops *phy_ops)
- {
-@@ -205,9 +167,6 @@ int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
- static const struct tpm_tis_phy_ops tpm_spi_phy_ops = {
- 	.read_bytes = tpm_tis_spi_read_bytes,
- 	.write_bytes = tpm_tis_spi_write_bytes,
--	.read16 = tpm_tis_spi_read16,
--	.read32 = tpm_tis_spi_read32,
--	.write32 = tpm_tis_spi_write32,
+@@ -34,6 +34,7 @@ enum tis_status {
+ 	TPM_STS_GO = 0x20,
+ 	TPM_STS_DATA_AVAIL = 0x10,
+ 	TPM_STS_DATA_EXPECT = 0x08,
++	TPM_STS_RESPONSE_RETRY = 0x02,
  };
  
- static int tpm_tis_spi_probe(struct spi_device *dev)
+ enum tis_int_flags {
+@@ -106,6 +107,8 @@ struct tpm_tis_phy_ops {
+ 	int (*read16)(struct tpm_tis_data *data, u32 addr, u16 *result);
+ 	int (*read32)(struct tpm_tis_data *data, u32 addr, u32 *result);
+ 	int (*write32)(struct tpm_tis_data *data, u32 addr, u32 src);
++	bool (*check_data)(struct tpm_tis_data *data, const u8 *buf,
++			   size_t len);
+ };
+ 
+ static inline int tpm_tis_read_bytes(struct tpm_tis_data *data, u32 addr,
 -- 
 2.7.4
 
