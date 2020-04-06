@@ -2,56 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3843C19EDD1
-	for <lists+linux-integrity@lfdr.de>; Sun,  5 Apr 2020 22:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BE519F482
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Apr 2020 13:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727242AbgDEUNn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 5 Apr 2020 16:13:43 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34326 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726887AbgDEUNn (ORCPT
+        id S1726873AbgDFLZN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Apr 2020 07:25:13 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38717 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726858AbgDFLZN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 5 Apr 2020 16:13:43 -0400
-Received: by mail-wr1-f68.google.com with SMTP id 65so14986276wrl.1
-        for <linux-integrity@vger.kernel.org>; Sun, 05 Apr 2020 13:13:40 -0700 (PDT)
+        Mon, 6 Apr 2020 07:25:13 -0400
+Received: by mail-wm1-f67.google.com with SMTP id f20so6348411wmh.3
+        for <linux-integrity@vger.kernel.org>; Mon, 06 Apr 2020 04:25:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+        h=date:from:to:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=HcEOM9bLPpF1FsrctOKBnWI104KAZE+flsRx/h7VsIY=;
-        b=j7CEHBnKGWOnPQcUHMsz40NYcWP9WvvpsB7XUJzluQITIchrX+toXFiTVHkFHBXb10
-         Mlc4eFmwGn2+qrSd2JJ/zRDbrp/k+cbLOQNeNAVHDoN5rCUJS5KqPV0ppbMy28wsdx5p
-         edx9IyW81er/q1q9l5xBlDPc/jDIqQHobtqbYFbnWk0DnqMKIkuHQl/EzQi57k9YI67o
-         ovisaXz9UHbQe0YUEtLvZbI4l0DYy9Hjy87Dfxk5+nwm1yBfV9f8YN7LkcLbLT41vVzR
-         S8ok2e4Kd36wlTrLnCY9E5G5sJAjSuj5L7jXYgnaN5MIA6b2eltoZBoaMhpWmXeSuezo
-         qduw==
+        bh=p01tcQYIV50I3M1bLTva1fqAmJhQog5D8h+bmFXeBpk=;
+        b=CmHfjmg4x18ZbT8wwzwwGVd7bfIHu20ZfmW19dzskPh37RE8Z8ytNYvioug3ZnzVe+
+         NKVBt83dM/3AyLdwfU48kEYvkIrWh1VGT5WcbJrqKFMkWHqA3977U7nRixTBLsB/XjYE
+         FhAs0p6GKBy05GYS6pDBEZOqv6ZaorXKThXQF3s2St+PTq1LoicGs5UWo5SaGohnSyXn
+         9zaggOj04NYfeSD3PpYQrvQ8jK7upKrQEuubTKXHdtQSr+ZwnRLqzpnJ/GwM9xiaS4KN
+         cifACHi/z5S+lDJBNpZU1nUXbnWKkWZiS5R5wzUpIjUkB43tOBI7bpG3cxtzUsxv/7nK
+         uf3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=HcEOM9bLPpF1FsrctOKBnWI104KAZE+flsRx/h7VsIY=;
-        b=ki8kSWyXy/9NluEjN5RcaiWWjTdDCC5cbtSQSNPuHWuBWXW5JnScyZYFoRIR/kD/EW
-         AjZDoabBNKvlZpza+bvf9J6dh/IkbFRLPcFG7FlXWhSfgzOd43eLiAu1bFFCiCxCHe1l
-         csAN1ota66TD93VJwCfXnrj2I13tVhyZoK7CmwcYvGPegdMxTKG7sReYrVYNTTjUn4qi
-         XN2GTphOhB/SH4EyCMGVYU/HnUP6LkQnluEGCY9b6Ffaw+4czgQGP5JI26i3HhQYC9kY
-         eMAmu02JPheia2pPW/lXmhuNOKPRJcdw5ekwDqAWncwDGo6idOlVhK528h6QoY6d5rAI
-         NOOw==
-X-Gm-Message-State: AGi0PuZinURmwQw75LgZWruas3K/05ZYWZQoeNkJFdjcG3wN23mVfeNo
-        r5lOhxEVKhxU/p7pVBTzfyY=
-X-Google-Smtp-Source: APiQypLhTrphrodbSR9yBPFAKLn6vJojtF5jZxehkpjWyqTXq/edJpRFg9k368drzw1RaZ5gyrLqdA==
-X-Received: by 2002:adf:f841:: with SMTP id d1mr7975644wrq.381.1586117620148;
-        Sun, 05 Apr 2020 13:13:40 -0700 (PDT)
+        bh=p01tcQYIV50I3M1bLTva1fqAmJhQog5D8h+bmFXeBpk=;
+        b=X4R3n5bF/2mdTYx9RB1LT8m9WDgAYlvOaeoCUmfOc8SJlIKKmVn1p92oMou6WLP7A6
+         Q8A0l1OBQHpKrxF02CTuhj2LG229ONV0S5Cjy8vrpLR5CBIOwV9rt4H22BSIMDyHlee0
+         l5h+eBF1Si6M5hDqw9xDzcpDMdi15yH27V7+E5iuhVXJHjXNl/x858pOzHZ4zVDX0H2V
+         auWNTO2Pvh8qoxqMzc2PpuZTv68o3wjWWRcBX6JPo879gfumbuo0TBOcHqwHuGeM1G8U
+         M/M74WtG2/BRY6sZbLdIOLchal+zUCBOlvSBzi8JIsR6f0DWnIxGiwJhZAwkyI1Okhfd
+         idMw==
+X-Gm-Message-State: AGi0PuZFTVVmT3/oPIcm+aBgSDi/NCSvrpRmsD8w97yyCtS+DDb7wPtO
+        cnRuh07zYP736OBWMLFV3RjEWLdzvmM=
+X-Google-Smtp-Source: APiQypLzIvS3yVZOMjLL9JBLMSyjc1Mh1MJ7PQ/h2bnnjfbF/ew7cBekz/RzQz0OAjjqDwp224OGzQ==
+X-Received: by 2002:a1c:2489:: with SMTP id k131mr22930907wmk.86.1586172310458;
+        Mon, 06 Apr 2020 04:25:10 -0700 (PDT)
 Received: from localhost ([87.71.128.21])
-        by smtp.gmail.com with ESMTPSA id c20sm7950246wmd.36.2020.04.05.13.13.38
+        by smtp.gmail.com with ESMTPSA id b7sm26789215wrn.67.2020.04.06.04.25.09
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 05 Apr 2020 13:13:39 -0700 (PDT)
-Date:   Sun, 5 Apr 2020 23:13:37 +0300
+        Mon, 06 Apr 2020 04:25:09 -0700 (PDT)
+Date:   Mon, 6 Apr 2020 14:25:08 +0300
 From:   Lev Olshvang <levonshe@gmail.com>
 To:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Vitaly Chikunov <vt@altlinux.org>
-Cc:     linux-integrity@vger.kernel.org
-Subject: [RFC PATCH] integrity : utils Add 2 more inode atributes to hash
-Message-ID: <20200405201337.GA10459@kl>
+        Vitaly Chikunov <vt@altlinux.org>,
+        linux-integrity@vger.kernel.org
+Subject: [RFC PATCH] integrity : Preserve i_flags of inode in signature hash
+Message-ID: <20200406112507.GA20611@kl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,425 +61,91 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From 0c48d5261ef653cc9ab73db7aa7bdf6bae4d9818 Mon Sep 17 00:00:00 2001
-From: Lev Olshvang <levonshe@gmail.com>
-Date: Sun, 5 Apr 2020 22:29:22 +0300
-Subject: [RFC PATCH] integrity : utils Add 2 more inode atributes to hash
 
-Added inode attr fields and  file size in to inode metadate hash.
-Inode attr is importent because it may influence how filesystem
-treats the file.
-I think that some use cases relies on immutable attribute on files or
-directories and some use cases marks encrypted files with a special
-attribute
-Therefore it is importent to check also integrity of inode->i_attr
-Code refactored a bit to avoid duplicate code paths
-I refactored also couple of very similar data types to avoid pointer conversions.
+From af94cf8c8e0976dfc7889d7f3d83dd1c9db96e59 Mon Sep 17 00:00:00 2001
+From: Lev Olshvang <levonshe@gmail.com>
+Date: Mon, 30 Mar 2020 16:00:27 +0300
+Subject: [RFC PATCH v1] integrity - add inode's i_flags to signature
+
+Add more inode fields to inode HMAC : attributes [i_flags].
+Naming is a but confusing - chattr, lsattr utilities uses
+attributes term, while inside inode they are stored in i_flags.
+
+File/directory attributes define (affect) how User space and
+filesystem behaves and should be considered therefore as
+file metadata content.
+
+For example immutable flag preserve file from removal or change.
+Files in ext4 filesystem might have encrypted attribute and
+in ubifs filesystem compressed attribute might be used.
+In a total 32 attributes might be in use.
+It is important to verify these attributes were not changed.
+
+Function hmac_add_misc() ignored errors from crypto functions
+This patch changes hmac_add_misc() not to be silent about errors
 
 Signed-off-by: Lev Olshvang <levonshe@gmail.com>
 ---
- src/evmctl.c | 244 ++++++++++++++++++++++++---------------------------
- src/imaevm.h |  34 +++----
- 2 files changed, 127 insertions(+), 151 deletions(-)
+ security/integrity/evm/evm_crypto.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 3d2a10b..9a6c13c 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -117,7 +117,13 @@ static char *ino_str;
- static char *uid_str;
- static char *gid_str;
- static char *mode_str;
-+static char *flags_str;
-+static char *size_str;
-+
-+
-+
- static char *generation_str;
-+static uint32_t generation = 0;
- static char *caps_str;
- static char *ima_str;
- static char *selinux_str;
-@@ -306,18 +312,24 @@ static int pack_uuid(const char *uuid_str, char *uuid)
- 	return 0;
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index d485f6fc908e..927fab54c67c 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -139,15 +139,17 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+  * (Additional directory/file metadata needs to be added for more complete
+  * protection.)
+  */
+-static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
++static int hmac_add_misc(struct shash_desc *desc, struct inode *inode,
+ 			  char type, char *digest)
+ {
++	int rc = 0;
+ 	struct h_misc {
+ 		unsigned long ino;
+ 		__u32 generation;
+ 		uid_t uid;
+ 		gid_t gid;
+ 		umode_t mode;
++		__u32   flags;
+ 	} hmac_misc;
+
+ 	memset(&hmac_misc, 0, sizeof(hmac_misc));
+@@ -169,11 +171,18 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
+ 	hmac_misc.uid = from_kuid(&init_user_ns, inode->i_uid);
+ 	hmac_misc.gid = from_kgid(&init_user_ns, inode->i_gid);
+ 	hmac_misc.mode = inode->i_mode;
+-	crypto_shash_update(desc, (const u8 *)&hmac_misc, sizeof(hmac_misc));
++	hmac_misc.flags = inode->i_flags;
++	rc = crypto_shash_update(desc, (const u8 *)&hmac_misc, sizeof(hmac_misc));
++	if (unlikely(!rc))
++		return rc;
+ 	if ((evm_hmac_attrs & EVM_ATTR_FSUUID) &&
+-	    type != EVM_XATTR_PORTABLE_DIGSIG)
+-		crypto_shash_update(desc, (u8 *)&inode->i_sb->s_uuid, UUID_SIZE);
+-	crypto_shash_final(desc, digest);
++	    type != EVM_XATTR_PORTABLE_DIGSIG) {
++		rc = crypto_shash_update(desc, (u8 *)&inode->i_sb->s_uuid, UUID_SIZE);
++		if (unlikely(!rc))
++			return rc;
++	}
++	rc = crypto_shash_final(desc, digest);
++	return rc;
  }
 
--static int get_uuid(struct stat *st, char *uuid)
-+static int get_uuid(const char *const file, char *uuid)
- {
- 	uint32_t dev;
- 	unsigned minor, major;
- 	char path[PATH_MAX], _uuid[37];
- 	FILE *fp;
- 	size_t len;
-+	struct stat st;
-
- 	if (uuid_str)
- 		return pack_uuid(uuid_str, uuid);
-
--	dev = st->st_dev;
-+	if (lstat(file, &st)) {
-+		log_err("Failed to stat: %s\n", file);
-+		return -1;
-+	}
-+
-+	dev = st.st_dev;
- 	major = (dev & 0xfff00) >> 8;
- 	minor = (dev & 0xff) | ((dev >> 12) & 0xfff00);
-
-@@ -338,33 +350,42 @@ err:
- 	log_err("Failed to read UUID. Root access might require.\n");
- 	return -1;
- }
-+static void store_inode_meta(uint32_t attr, file_common_t *hmac, const struct stat * const st) {
-+	hmac->uid = st->st_uid;
-+	hmac->gid = st->st_gid;
-+	hmac->mode = st->st_mode;
-+	hmac->attr = attr;
-+	hmac->filesize = (uint32_t) st->st_size;
-+}
-
--static int calc_evm_hash(const char *file, unsigned char *hash)
--{
--        const EVP_MD *md;
-+static int fill_hmac(const char * const file,  file_meta_t * hmac_misc) {
-+	uint16_t hmac_size = sizeof(*hmac_misc);
-+	uint32_t attr = 0;
- 	struct stat st;
--	int err;
--	uint32_t generation = 0;
--	EVP_MD_CTX *pctx;
--	unsigned int mdlen;
--	char **xattrname;
--	char xattr_value[1024];
--	char list[1024];
--	ssize_t list_size;
--	char uuid[16];
--	struct h_misc_64 hmac_misc;
--	int hmac_size;
--#if OPENSSL_VERSION_NUMBER < 0x10100000
--	EVP_MD_CTX ctx;
--	pctx = &ctx;
--#else
--	pctx = EVP_MD_CTX_new();
--#endif
-+
-+	generation = 0;
-
- 	if (lstat(file, &st)) {
- 		log_err("Failed to stat: %s\n", file);
- 		return -1;
+ /*
+@@ -239,7 +248,9 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 		if (is_ima)
+ 			ima_present = true;
  	}
-+	if ( st.st_size > 0xFFFFFFFF) {
-+		log_err("File too big %s\n", file);
-+		return -E2BIG;
-+	}
-+	int fd = open(file, 0);
-+	if (fd < 0) {
-+				log_err("Failed to open: %s\n", file);
-+				return -1;
-+	}
-+	int rc = ioctl(fd, FS_IOC_GETFLAGS, &attr);
-+	if (rc) {
-+			log_err("ioctl() FS_IOC_GETFLAGS failed, rc=%d\n", rc);
-+			close(fd);
-+			return -1;
-+		}
-+	close(fd);
-+	log_info("attr: %x\n", attr);
+-	hmac_add_misc(desc, inode, type, data->digest);
++	error = hmac_add_misc(desc, inode, type, data->digest);
++	if (error < 0)
++		return error;
 
- 	if (generation_str)
- 		generation = strtoul(generation_str, NULL, 10);
-@@ -376,6 +397,10 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 		st.st_gid = strtoul(gid_str, NULL, 10);
- 	if (mode_str)
- 		st.st_mode = strtoul(mode_str, NULL, 10);
-+	if (size_str)
-+		st.st_size = strtoul(size_str, NULL, 10);
-+	if (flags_str)
-+		st.st_size = strtoul(flags_str, NULL, 10);
-
- 	if (!evm_immutable) {
- 		if ((S_ISREG(st.st_mode) || S_ISDIR(st.st_mode)) && !generation_str) {
-@@ -396,6 +421,57 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 		}
- 		log_info("generation: %u\n", generation);
- 	}
-+
-+	memset(hmac_misc, 0, hmac_size);
-+
-+	if (evm_immutable) {
-+		// hmac_dig_sig, portable
-+		file_common_t *hmac = &(hmac_misc->portable_fstat);
-+
-+		hmac_size = sizeof(*hmac);
-+		store_inode_meta(attr, hmac, &st);
-+
-+	} else {
-+		file_extra_t *hmac = &(hmac_misc->non_portable_fstat);
-+		hmac_size = sizeof(*hmac);
-+		if (!evm_portable) {
-+			hmac->ino = st.st_ino;
-+			hmac->generation = generation;
-+		}
-+		file_common_t *hmac_p = &(hmac_misc->portable_fstat);
-+		store_inode_meta(attr, hmac_p, &st);
-+	}
-+	return hmac_size;
-+}
-+
-+static int calc_evm_hash(const char *file, unsigned char *hash)
-+{
-+    const EVP_MD *md;
-+	int err;
-+	uint16_t hmac_size;
-+	EVP_MD_CTX *pctx;
-+	unsigned int mdlen;
-+	char **xattrname;
-+	char xattr_value[1024];
-+	char list[1024];
-+	ssize_t list_size;
-+	char uuid[16];
-+	file_meta_t hmac_misc;
-+
-+	err = fill_hmac(file, &hmac_misc);
-+	if  (err < 0) {
-+		return err;
-+	}
-+	hmac_size = (uint16_t) err;
-+	log_debug("hmac_misc (%d): ", hmac_size);
-+	log_debug_dump(&hmac_misc, hmac_size);
-+
-+#if OPENSSL_VERSION_NUMBER < 0x10100000
-+	EVP_MD_CTX ctx;
-+	pctx = &ctx;
-+#else
-+	pctx = EVP_MD_CTX_new();
-+#endif
-
- 	list_size = llistxattr(file, list, sizeof(list));
- 	if (list_size < 0) {
-@@ -464,51 +540,8 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 		}
- 	}
-
--	memset(&hmac_misc, 0, sizeof(hmac_misc));
--
--	if (evm_immutable) {
--		struct h_misc_digsig *hmac = (struct h_misc_digsig *)&hmac_misc;
--
--		hmac_size = sizeof(*hmac);
--		hmac->uid = st.st_uid;
--		hmac->gid = st.st_gid;
--		hmac->mode = st.st_mode;
--	} else if (msize == 0) {
--		struct h_misc *hmac = (struct h_misc *)&hmac_misc;
-
--		hmac_size = sizeof(*hmac);
--		if (!evm_portable) {
--			hmac->ino = st.st_ino;
--			hmac->generation = generation;
--		}
--		hmac->uid = st.st_uid;
--		hmac->gid = st.st_gid;
--		hmac->mode = st.st_mode;
--	} else if (msize == 64) {
--		struct h_misc_64 *hmac = (struct h_misc_64 *)&hmac_misc;
--
--		hmac_size = sizeof(*hmac);
--		if (!evm_portable) {
--			hmac->ino = st.st_ino;
--			hmac->generation = generation;
--		}
--		hmac->uid = st.st_uid;
--		hmac->gid = st.st_gid;
--		hmac->mode = st.st_mode;
--	} else {
--		struct h_misc_32 *hmac = (struct h_misc_32 *)&hmac_misc;
--
--		hmac_size = sizeof(*hmac);
--		if (!evm_portable) {
--			hmac->ino = st.st_ino;
--			hmac->generation = generation;
--		}
--		hmac->uid = st.st_uid;
--		hmac->gid = st.st_gid;
--		hmac->mode = st.st_mode;
--	}
--
--	log_debug("hmac_misc (%d): ", hmac_size);
-+	log_debug("hmac_misc (%u): ", hmac_size);
- 	log_debug_dump(&hmac_misc, hmac_size);
-
- 	err = EVP_DigestUpdate(pctx, &hmac_misc, hmac_size);
-@@ -519,7 +552,7 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
-
- 	if (!evm_immutable && !evm_portable &&
- 	    !(hmac_flags & HMAC_FLAG_NO_UUID)) {
--		err = get_uuid(&st, uuid);
-+		err = get_uuid(file, uuid);
- 		if (err)
- 			return -1;
-
-@@ -1064,10 +1097,9 @@ static int cmd_setxattr_ima(struct command *cmd)
-
- static int calc_evm_hmac(const char *file, const char *keyfile, unsigned char *hash)
- {
--        const EVP_MD *md;
--	struct stat st;
-+    const EVP_MD *md;
-+
- 	int err = -1;
--	uint32_t generation = 0;
- 	HMAC_CTX *pctx;
- 	unsigned int mdlen;
- 	char **xattrname;
-@@ -1077,8 +1109,19 @@ static int calc_evm_hmac(const char *file, const char *keyfile, unsigned char *h
- 	unsigned char evmkey[MAX_KEY_SIZE];
- 	char list[1024];
- 	ssize_t list_size;
--	struct h_misc_64 hmac_misc;
-+	file_meta_t hmac_misc;
- 	int hmac_size;
-+
-+
-+	hmac_size = fill_hmac(file, &hmac_misc);
-+	if  (hmac_size < 0) {
-+		return hmac_size;
-+	}
-+
-+	log_debug("hmac_misc (%d): ", hmac_size);
-+	log_debug_dump(&hmac_misc, hmac_size);
-+
-+
- #if OPENSSL_VERSION_NUMBER < 0x10100000
- 	HMAC_CTX ctx;
- 	pctx = &ctx;
-@@ -1101,30 +1144,7 @@ static int calc_evm_hmac(const char *file, const char *keyfile, unsigned char *h
- 	memcpy(evmkey, key, keylen);
- 	memset(evmkey + keylen, 0, sizeof(evmkey) - keylen);
-
--	if (lstat(file, &st)) {
--		log_err("Failed to stat: %s\n", file);
--		goto out;
--	}
--
--	if (S_ISREG(st.st_mode) || S_ISDIR(st.st_mode)) {
--		/* we cannot at the momement to get generation of special files..
--		 * kernel API does not support it */
--		int fd = open(file, 0);
--
--		if (fd < 0) {
--			log_err("Failed to open %s\n", file);
--			goto out;
--		}
--		if (ioctl(fd, FS_IOC_GETVERSION, &generation)) {
--			log_err("ioctl() failed\n");
--			close(fd);
--			goto out;
--		}
--		close(fd);
--	}
--
--	log_info("generation: %u\n", generation);
--
-+
- 	list_size = llistxattr(file, list, sizeof(list));
- 	if (list_size <= 0) {
- 		log_err("llistxattr() failed: %s\n", file);
-@@ -1164,40 +1184,6 @@ static int calc_evm_hmac(const char *file, const char *keyfile, unsigned char *h
- 		}
- 	}
-
--	memset(&hmac_misc, 0, sizeof(hmac_misc));
--
--	if (msize == 0) {
--		struct h_misc *hmac = (struct h_misc *)&hmac_misc;
--
--		hmac_size = sizeof(*hmac);
--		hmac->ino = st.st_ino;
--		hmac->generation = generation;
--		hmac->uid = st.st_uid;
--		hmac->gid = st.st_gid;
--		hmac->mode = st.st_mode;
--	} else if (msize == 64) {
--		struct h_misc_64 *hmac = (struct h_misc_64 *)&hmac_misc;
--
--		hmac_size = sizeof(*hmac);
--		hmac->ino = st.st_ino;
--		hmac->generation = generation;
--		hmac->uid = st.st_uid;
--		hmac->gid = st.st_gid;
--		hmac->mode = st.st_mode;
--	} else {
--		struct h_misc_32 *hmac = (struct h_misc_32 *)&hmac_misc;
--
--		hmac_size = sizeof(*hmac);
--		hmac->ino = st.st_ino;
--		hmac->generation = generation;
--		hmac->uid = st.st_uid;
--		hmac->gid = st.st_gid;
--		hmac->mode = st.st_mode;
--	}
--
--	log_debug("hmac_misc (%d): ", hmac_size);
--	log_debug_dump(&hmac_misc, hmac_size);
--
- 	err = !HMAC_Update(pctx, (const unsigned char *)&hmac_misc, hmac_size);
- 	if (err) {
- 		log_err("HMAC_Update() failed\n");
-diff --git a/src/imaevm.h b/src/imaevm.h
-index b881d92..6bc66e8 100644
---- a/src/imaevm.h
-+++ b/src/imaevm.h
-@@ -90,35 +90,25 @@ enum evm_ima_xattr_type {
- 	EVM_XATTR_PORTABLE_DIGSIG,
- };
-
--struct h_misc {
--	unsigned long ino;
--	uint32_t generation;
-+typedef struct _common {
- 	uid_t uid;
- 	gid_t gid;
- 	unsigned short mode;
--};
-+	uint32_t attr;
-+	uint32_t filesize;
-+} file_common_t;
-
--struct h_misc_32 {
--	uint32_t ino;
-+typedef struct _extra {
-+	file_common_t inode_common;
- 	uint32_t generation;
--	uid_t uid;
--	gid_t gid;
--	unsigned short mode;
--};
--
--struct h_misc_64 {
- 	uint64_t ino;
--	uint32_t generation;
--	uid_t uid;
--	gid_t gid;
--	unsigned short mode;
--};
-+} file_extra_t;
-+
-+typedef union _extended {
-+	file_common_t portable_fstat;
-+	file_extra_t  non_portable_fstat;
-+} file_meta_t;
-
--struct h_misc_digsig {
--	uid_t uid;
--	gid_t gid;
--	unsigned short mode;
--};
-
- enum pubkey_algo {
- 	PUBKEY_ALGO_RSA,
+ 	/* Portable EVM signatures must include an IMA hash */
+ 	if (type == EVM_XATTR_PORTABLE_DIGSIG && !ima_present)
 --
 2.17.1
 
