@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 845D819FC3A
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Apr 2020 19:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4F419FC3F
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Apr 2020 19:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727620AbgDFR71 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Apr 2020 13:59:27 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:51774 "EHLO
+        id S1727703AbgDFR72 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Apr 2020 13:59:28 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:51776 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726787AbgDFR70 (ORCPT
+        with ESMTP id S1727376AbgDFR71 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Apr 2020 13:59:26 -0400
+        Mon, 6 Apr 2020 13:59:27 -0400
 Received: from dede-linux.corp.microsoft.com (unknown [131.107.147.242])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0907020A0864;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 39AAA20A0866;
         Mon,  6 Apr 2020 10:59:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0907020A0864
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 39AAA20A0866
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1586195964;
         bh=pp2JNwWm8aiM6z3AlwB0sPXCjj9odJHaB9Ic7PhOYoU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vcpzm5KpAdG0lGZX2cn+EEZ+5oaFQCHTcTOhFlPdl09d+ybih8o6oUYURFmuNc6Q3
-         83iH0BKULoSHzTSGOLHLm+p08P35o76148yBsl4O8bqtEemtT4otpalj3wdURF8j/s
-         5kFz5poWSUoKN4mP8Z3uFHLmU+2D3QrLRjebjSGw=
+        b=KUrj+Irvb3Tof0O53yp13T2K1Qif+6raSYdo8mDoeJm8eFhxxWKoTerId/qCWN6Pw
+         dxJAbSuRPGWKlL0rcn7xf18vbihMIYN4L+ux9x1gOe1KaTU81Pz/E+PRwIA40EKiKv
+         7RioTegR67nf41QpFbqpmcn3UEWLUTO9SWfLlNuw=
 From:   deven.desai@linux.microsoft.com
 To:     agk@redhat.com, axboe@kernel.dk, snitzer@redhat.com,
         jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
@@ -32,9 +32,9 @@ To:     agk@redhat.com, axboe@kernel.dk, snitzer@redhat.com,
 Cc:     tyhicks@linux.microsoft.com, pasha.tatashin@soleen.com,
         mdsakib@microsoft.com, sashal@kernel.org,
         jaskarankhurana@linux.microsoft.com, nramas@linux.microsoft.com
-Subject: [PATCH 05/11] dm|dm-verity: refactor root-hash signature option
-Date:   Mon,  6 Apr 2020 10:59:12 -0700
-Message-Id: <20200406175919.1023205-6-deven.desai@linux.microsoft.com>
+Subject: [PATCH 05/11] dm-verity: move signature check after tree validation
+Date:   Mon,  6 Apr 2020 10:59:13 -0700
+Message-Id: <20200406175919.1023205-7-deven.desai@linux.microsoft.com>
 X-Mailer: git-send-email 2.26.0
 In-Reply-To: <20200406175919.1023205-1-deven.desai@linux.microsoft.com>
 References: <20200406175919.1023205-1-deven.desai@linux.microsoft.com>
