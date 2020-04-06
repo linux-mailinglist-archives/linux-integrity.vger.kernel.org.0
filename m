@@ -2,73 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B9C19FD27
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Apr 2020 20:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133C819FD46
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Apr 2020 20:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725887AbgDFS3H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Apr 2020 14:29:07 -0400
-Received: from mga18.intel.com ([134.134.136.126]:60637 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725787AbgDFS3H (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Apr 2020 14:29:07 -0400
-IronPort-SDR: zdY2ZwOyo9enom4KOHelaPIJyTNC1sTqT302hfq6AuZnJAUvtGO2pxmqMuozJBLEU4gMhDKEnw
- 9M9yLFGf7KEw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2020 11:29:05 -0700
-IronPort-SDR: Xkt7Xtn/+sHG0FniHBkUYaEK4aGrUhaQuxkz8qhNnpo04b6z/seQo7xmHzFRH2j/1mbmy15gPb
- G3wEuwtNtIFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,352,1580803200"; 
-   d="scan'208";a="452163192"
-Received: from yweiss1-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.159])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Apr 2020 11:29:00 -0700
-Date:   Mon, 6 Apr 2020 21:28:59 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     amirmizi6@gmail.com
-Cc:     Eyal.Cohen@nuvoton.com, oshrialkoby85@gmail.com,
-        alexander.steffen@infineon.com, robh+dt@kernel.org,
-        peterhuewe@gmx.de, christophe-h.richard@st.com, jgg@ziepe.ca,
-        arnd@arndb.de, gregkh@linuxfoundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
-        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
-        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
-        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
-        Christophe Ricard <christophe-h.ricard@st.com>
-Subject: Re: [PATCH v5 2/7] tpm: tpm_tis: Add check_data handle to
- tpm_tis_phy_ops in order to check data integrity
-Message-ID: <20200406182859.GC20105@linux.intel.com>
-References: <20200405125352.183693-1-amirmizi6@gmail.com>
- <20200405125352.183693-3-amirmizi6@gmail.com>
+        id S1725933AbgDFSgU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Apr 2020 14:36:20 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37184 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725787AbgDFSgU (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 6 Apr 2020 14:36:20 -0400
+Received: by linux.microsoft.com (Postfix, from userid 1033)
+        id 51D582072933; Mon,  6 Apr 2020 11:36:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 51D582072933
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1586198179;
+        bh=OEudVpLjqf3g5HvN9ndvJvlBTCIbEu5ziBVGQiVKHgc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mjOaUnzZEyI7GxQRyFYX8vUHitCF4H6PoK7lk1pRlv++G6IrJNeTmOhb5EmVTDcpn
+         n4FZscaj5ktDqCf4NumeUWpz8LTOqGZ+AsgyYH9Oa+oNGv29ryXsRcZJ86GfLisr1p
+         aA1qDBBjfw5eGwWYF/LZ9c8SGFA/0qtV/TqlO1/U=
+Date:   Mon, 6 Apr 2020 11:36:19 -0700
+From:   Deven Bowers <deven.desai@linux.microsoft.com>
+To:     agk@redhat.com, axboe@kernel.dk, snitzer@redhat.com,
+        jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, dm-devel@redhat.com,
+        linux-block@vger.kernel.org
+Cc:     tyhicks@linux.microsoft.com, pasha.tatashin@soleen.com,
+        sashal@kernel.org, jaskarankhurana@linux.microsoft.com,
+        nramas@linux.microsoft.com, mdsakib@linux.microsoft.com
+Subject: Re: [RESEND PATCH 00/11] Integrity Policy Enforcement LSM (IPE)
+Message-ID: <20200406183619.GA77626@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20200406181045.1024164-1-deven.desai@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200405125352.183693-3-amirmizi6@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200406181045.1024164-1-deven.desai@linux.microsoft.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Short summary could just be:
 
-"Add check_data handle() to struct tpm_tis_phy_ops"
 
-and leave the reasoning to the long description.
+This was resent due to an incorrect domain for dm-devel (redhat.org vs redhat.com), and an email address
+that was bouncing.
 
-On Sun, Apr 05, 2020 at 03:53:47PM +0300, amirmizi6@gmail.com wrote:
-> From: Amir Mizinski <amirmizi6@gmail.com>
-> 
-> In order to compute the crc over the data sent in lower layer
-> (I2C for instance), tpm_tis_check_data() calls an operation (if available)
-> to check data integrity. If data integrity cannot be verified, a retry
-> attempt to save the sent/received data is implemented.
+Additionally, this is an RFC, and this tag will be added in the next iteration.
 
-It does not. The existing code does not do that.
-
-Also it is not clear whether the steps are from existing code or
-after this commit has been applied.
-
-/Jarkko
+- Deven
