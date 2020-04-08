@@ -2,132 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 284571A1EA9
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Apr 2020 12:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C61A1A2276
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Apr 2020 15:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727982AbgDHKTl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Apr 2020 06:19:41 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:40846 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgDHKTk (ORCPT
+        id S1728114AbgDHNBq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Apr 2020 09:01:46 -0400
+Received: from mail-wm1-f52.google.com ([209.85.128.52]:51325 "EHLO
+        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727896AbgDHNBq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Apr 2020 06:19:40 -0400
-Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 752B420B4737;
-        Wed,  8 Apr 2020 03:19:39 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 752B420B4737
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1586341180;
-        bh=VEgymowXS2QT/1anQwq+eRkRBbBRYxE6H/1TZdqBpfk=;
-        h=To:Cc:From:Subject:Date:From;
-        b=h6HqB36Qw1laYbDWb5ngYhIpA1irhLyOxMLZZAPTeeCY6FLL2zBTShVGhliAyiuea
-         HwekIYGeYlmlYudb1n/d3ANKWdM7S/rZyG+8+Gd0Mu/yEXQU/lGMN3OZY7V8xkUtFe
-         PqoXWgz3MvG9DKPYaQ3FCj2Qdf/TyLmzAphOOE/U=
-To:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        dm-devel@redhat.com
-Cc:     jmorris@namei.org, chpebeni@linux.microsoft.com,
-        nramas@linux.microsoft.com, balajib@microsoft.com,
-        sashal@kernel.org, suredd@microsoft.com
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Subject: [RFC] IMA: New IMA measurements for dm-crypt and selinux
-Message-ID: <f92bef0f-eb40-0e07-540c-321134e4b070@linux.microsoft.com>
-Date:   Wed, 8 Apr 2020 03:19:38 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Wed, 8 Apr 2020 09:01:46 -0400
+Received: by mail-wm1-f52.google.com with SMTP id z7so5048059wmk.1
+        for <linux-integrity@vger.kernel.org>; Wed, 08 Apr 2020 06:01:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=8l1aZdcpit5m5OIdWtAU9/DApi2eJFfd+OIGzCMkfE0=;
+        b=nrvlsKQPqxdQKrZRMV3LfhATEeubTeuvYz8H4opYfgzZVnnZ0npgLJTuC+DfOypxKR
+         foqcdJn6dxwss4/0iZMVfr56N2pIk2foKItvgkaN5v0Pu7OrOezuwu8nHmVnpV01qBkJ
+         pCrfONKhYnWRa4TWJnhEHs7VUDv9yT/JVzMkiK6db1RivRG58OtRB7+aP0B4pR+RjZmC
+         UxO2lvbEd77IX90dzFx0GkdGGpViuDgVvC89teaUE9XVMGcucQ/toCizjxICwVQIerGz
+         fnUFEbPENvUHRLAEC6n7aakwv/eL3SKveO6NPsYY23RC6e94mQE5T5N6vKTHC05JGniV
+         jMQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=8l1aZdcpit5m5OIdWtAU9/DApi2eJFfd+OIGzCMkfE0=;
+        b=iiWHajhbNoMooq9Vfh/4+PC6vpMnwN24DYgYUhGO0hyHKgLsG7ThhDlQjbad8Xa80T
+         gbradAzjtvQEBAmdn9Pl4wlJ0e4/1Y5Wrv8yNdFV+B7+GCtXgsnI/f3rdD+gwIi5YKEJ
+         gAvT5Bkqy0I4btqdUy3vg1H9BmQBc03sDv0NSwci3jN6AHvdGYK0YCn2DtwwX1uI/tOi
+         qVp4fg8dFXb983BUQdZltDXsUVgP9WsNJ896qrUrXiPnuhVJYKldlq3OTpyAWqKqGXmj
+         R26+P+lBIdIAenr325+YhttyFqUo1StRw2ILw1bOVaNhkS/z69WehrsXN8/3o9JpkTZV
+         GK0A==
+X-Gm-Message-State: AGi0PubPAp5EvC/lNTj+5uQjHPKeniMuBBdeeqTDvknA2ucivHa92GaI
+        aRHFWTtrQjWKbXc/Jos4ylMwmT9jJxnmBHI01mwy21OM
+X-Google-Smtp-Source: APiQypJqayCJa/ndVUHGtC7IXQDSkK0nRiG5zXipY3SemdCrYRhPqMSP99VGScWgNC0+/T1mVth/eiuKluE+XlVKG+U=
+X-Received: by 2002:a1c:f205:: with SMTP id s5mr4519594wmc.101.1586350903760;
+ Wed, 08 Apr 2020 06:01:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   "Lev R. Oshvang ." <levonshe@gmail.com>
+Date:   Wed, 8 Apr 2020 16:01:31 +0300
+Message-ID: <CAP22eLEgfrXW6i+S3bYq6NUHd9S-Wi85wcqU9-Ju1oU2uJe-Ag@mail.gmail.com>
+Subject: [RFC] Use file change time instead of generation
+To:     linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The goals of the kernel integrity subsystem are to detect if files have
-been accidentally or maliciously altered, both remotely and locally,
-appraise a file's measurement against a "good" value stored as an
-extended attribute, and enforce local file integrity [1].
-
-To achieve these goals, IMA subsystem measures several in-memory
-constructs and files.
-
-We propose to measure constructs in dm-crypt and selinux to further
-enhance measuring capabilities of IMA.
-
-If there is existing or planned work to measure dm-crypt and selinux
-constructs, we would like to contribute to that.
-
-dm-crypt is a subsystem used for encryption of the block device, which
-is essential for ensuring protection of data and secrets at rest.
-
-Measuring encryption status of the device will ensure the device is not
-maliciously reporting false encryption status - thus, it can be
-entrusted with sensitive data to be protected at rest.
-
-SELinux is an implementation of mandatory access controls (MAC) on
-Linux. Mandatory access controls allow an administrator of a system to
-define how applications and users can access different resources - such
-as files, devices, networks and inter-process communication. With
-SELinux an administrator can differentiate a user from the applications
-a user runs [2].
-
-Measuring SELinux status and various SELinux policies can help ensure
-mandatory access control of the system is not compromised.
-
-Proposal:
----------
-A. Measuring dmcrypt constructs:
-     We can add an IMA hook in crypt_ctr() present in
-     drivers/md/dm-crypt.c, so that IMA can start measuring the status of
-     various dm-crypt targets (represented by crypt_target struct - also
-     defined in dm-crypt.c).
-     The mapping table[3] has information of devices being encrypted
-     (start sector, size, target name, cypher, key, device path, and
-     other optional parameters.)
-     e.g.
-     0 417792 crypt serpent-cbc-essiv:sha256
-     a7f67ad520bd83b9725df6ebd76c3eee 0 /dev/sdb 0 1 allow_discards
-
-     We can pass various attributes of mapping table to IMA through a key
-     value pair of various dmcrypt constructs.
-
-     Proposed Function Signature of the IMA hook:
-     void ima_dmcrypt_status(void *dmcrypt_status, int len);
-
-B. Measuring selinux constructs:
-     We propose to add an IMA hook in enforcing_set() present under
-     security/selinux/include/security.h.
-     enforcing_set() sets the selinux state to enforcing/permissive etc.
-     and is called from key places like selinux_init(),
-     sel_write_enforce() etc.
-     The hook will measure various attributes related to selinux status.
-     Majority of the attributes are present in the struct selinux_state
-     present in security/selinux/include/security.h
-     e.g.
-     $sestatus
-            SELinux status:              enabled
-            SELinuxfs mount:             /sys/fs/selinux
-            SELinux root directory:      /etc/selinux
-            Loaded policy name:          default
-            Current mode:                permissive
-            Mode from config file:       permissive
-            Policy MLS status:           enabled
-            Policy deny_unknown status:  allowed
-            Memory protection checking:  requested (insecure)
-            Max kernel policy version:   32
-
-     The above attributes will be serialized into a set of key=value
-     pairs when passed to IMA for measurement.
-
-     Proposed Function Signature of the IMA hook:
-     void ima_selinux_status(void *selinux_status, int len);
-
-Please provide comments\feedback on the proposal.
-
-Thanks,
-Tushar
-
-[1] https://sourceforge.net/p/linux-ima/wiki/Home/
-[2] https://selinuxproject.org/page/FAQ
-[3] https://gitlab.com/cryptsetup/cryptsetup/wikis/DMCrypt
+There are file systems that do not support inode i_generaton.
+Why ctime of inode can not be used instead?
