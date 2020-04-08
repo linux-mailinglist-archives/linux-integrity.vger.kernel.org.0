@@ -2,151 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ED31A1DC9
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Apr 2020 11:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284571A1EA9
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Apr 2020 12:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727815AbgDHJD0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Apr 2020 05:03:26 -0400
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:59365 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726996AbgDHJD0 (ORCPT
+        id S1727982AbgDHKTl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Apr 2020 06:19:41 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:40846 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbgDHKTk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Apr 2020 05:03:26 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01419;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0TuyXpqc_1586336574;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0TuyXpqc_1586336574)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 08 Apr 2020 17:02:55 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ima: Simplify the implementation of ima_fs_init function
-Date:   Wed,  8 Apr 2020 17:02:54 +0800
-Message-Id: <20200408090254.99525-1-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 8 Apr 2020 06:19:40 -0400
+Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 752B420B4737;
+        Wed,  8 Apr 2020 03:19:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 752B420B4737
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1586341180;
+        bh=VEgymowXS2QT/1anQwq+eRkRBbBRYxE6H/1TZdqBpfk=;
+        h=To:Cc:From:Subject:Date:From;
+        b=h6HqB36Qw1laYbDWb5ngYhIpA1irhLyOxMLZZAPTeeCY6FLL2zBTShVGhliAyiuea
+         HwekIYGeYlmlYudb1n/d3ANKWdM7S/rZyG+8+Gd0Mu/yEXQU/lGMN3OZY7V8xkUtFe
+         PqoXWgz3MvG9DKPYaQ3FCj2Qdf/TyLmzAphOOE/U=
+To:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        dm-devel@redhat.com
+Cc:     jmorris@namei.org, chpebeni@linux.microsoft.com,
+        nramas@linux.microsoft.com, balajib@microsoft.com,
+        sashal@kernel.org, suredd@microsoft.com
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Subject: [RFC] IMA: New IMA measurements for dm-crypt and selinux
+Message-ID: <f92bef0f-eb40-0e07-540c-321134e4b070@linux.microsoft.com>
+Date:   Wed, 8 Apr 2020 03:19:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-ima_fs_init() has more redundant code, a lot of repetitive code
-makes this function ugly, it is inconvenient to add additional
-functions, this patch optimizes the implementation of this function,
-uses an array and loop to simplify the function process.
+The goals of the kernel integrity subsystem are to detect if files have
+been accidentally or maliciously altered, both remotely and locally,
+appraise a file's measurement against a "good" value stored as an
+extended attribute, and enforce local file integrity [1].
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- security/integrity/ima/ima_fs.c | 72 ++++++++++++++++-----------------
- 1 file changed, 35 insertions(+), 37 deletions(-)
+To achieve these goals, IMA subsystem measures several in-memory
+constructs and files.
 
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index a71e822a6e92..6763d6cee78d 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -355,10 +355,6 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
- 
- static struct dentry *ima_dir;
- static struct dentry *ima_symlink;
--static struct dentry *binary_runtime_measurements;
--static struct dentry *ascii_runtime_measurements;
--static struct dentry *runtime_measurements_count;
--static struct dentry *violations;
- static struct dentry *ima_policy;
- 
- enum ima_fs_flags {
-@@ -447,8 +443,24 @@ static const struct file_operations ima_measure_policy_ops = {
- 	.llseek = generic_file_llseek,
- };
- 
-+static struct ima_fs_file {
-+	const char *name;
-+	const struct file_operations *fops;
-+	struct dentry *dentry;
-+} ima_fs_entries[] = {
-+	{ "binary_runtime_measurements", &ima_measurements_ops },
-+	{ "ascii_runtime_measurements", &ima_ascii_measurements_ops },
-+	{ "runtime_measurements_count", &ima_measurements_count_ops },
-+	{ "violations", &ima_htable_violations_ops },
-+	{ NULL }
-+};
-+
- int __init ima_fs_init(void)
- {
-+	struct dentry *dentry;
-+	struct ima_fs_file *iff;
-+	int i;
-+
- 	ima_dir = securityfs_create_dir("ima", integrity_dir);
- 	if (IS_ERR(ima_dir))
- 		return -1;
-@@ -458,47 +470,33 @@ int __init ima_fs_init(void)
- 	if (IS_ERR(ima_symlink))
- 		goto out;
- 
--	binary_runtime_measurements =
--	    securityfs_create_file("binary_runtime_measurements",
--				   S_IRUSR | S_IRGRP, ima_dir, NULL,
--				   &ima_measurements_ops);
--	if (IS_ERR(binary_runtime_measurements))
-+	ima_policy = securityfs_create_file("ima_policy", POLICY_FILE_FLAGS,
-+					ima_dir, NULL,
-+					&ima_measure_policy_ops);
-+	if (IS_ERR(ima_policy))
- 		goto out;
- 
--	ascii_runtime_measurements =
--	    securityfs_create_file("ascii_runtime_measurements",
--				   S_IRUSR | S_IRGRP, ima_dir, NULL,
--				   &ima_ascii_measurements_ops);
--	if (IS_ERR(ascii_runtime_measurements))
--		goto out;
-+	for (i = 0; ; i++) {
-+		iff = &ima_fs_entries[i];
-+		if (!iff->name)
-+			return 0;
- 
--	runtime_measurements_count =
--	    securityfs_create_file("runtime_measurements_count",
--				   S_IRUSR | S_IRGRP, ima_dir, NULL,
--				   &ima_measurements_count_ops);
--	if (IS_ERR(runtime_measurements_count))
--		goto out;
-+		dentry = securityfs_create_file(iff->name, S_IRUSR | S_IRGRP,
-+						ima_dir, NULL, iff->fops);
-+		if (IS_ERR(dentry))
-+			break;
- 
--	violations =
--	    securityfs_create_file("violations", S_IRUSR | S_IRGRP,
--				   ima_dir, NULL, &ima_htable_violations_ops);
--	if (IS_ERR(violations))
--		goto out;
-+		iff->dentry = dentry;
-+	}
- 
--	ima_policy = securityfs_create_file("policy", POLICY_FILE_FLAGS,
--					    ima_dir, NULL,
--					    &ima_measure_policy_ops);
--	if (IS_ERR(ima_policy))
--		goto out;
-+	for (i--; i >= 0; i--) {
-+		iff = &ima_fs_entries[i];
-+		securityfs_remove(iff->dentry);
-+		iff->dentry = NULL;
-+	}
- 
--	return 0;
- out:
--	securityfs_remove(violations);
--	securityfs_remove(runtime_measurements_count);
--	securityfs_remove(ascii_runtime_measurements);
--	securityfs_remove(binary_runtime_measurements);
- 	securityfs_remove(ima_symlink);
- 	securityfs_remove(ima_dir);
--	securityfs_remove(ima_policy);
- 	return -1;
- }
--- 
-2.17.1
+We propose to measure constructs in dm-crypt and selinux to further
+enhance measuring capabilities of IMA.
 
+If there is existing or planned work to measure dm-crypt and selinux
+constructs, we would like to contribute to that.
+
+dm-crypt is a subsystem used for encryption of the block device, which
+is essential for ensuring protection of data and secrets at rest.
+
+Measuring encryption status of the device will ensure the device is not
+maliciously reporting false encryption status - thus, it can be
+entrusted with sensitive data to be protected at rest.
+
+SELinux is an implementation of mandatory access controls (MAC) on
+Linux. Mandatory access controls allow an administrator of a system to
+define how applications and users can access different resources - such
+as files, devices, networks and inter-process communication. With
+SELinux an administrator can differentiate a user from the applications
+a user runs [2].
+
+Measuring SELinux status and various SELinux policies can help ensure
+mandatory access control of the system is not compromised.
+
+Proposal:
+---------
+A. Measuring dmcrypt constructs:
+     We can add an IMA hook in crypt_ctr() present in
+     drivers/md/dm-crypt.c, so that IMA can start measuring the status of
+     various dm-crypt targets (represented by crypt_target struct - also
+     defined in dm-crypt.c).
+     The mapping table[3] has information of devices being encrypted
+     (start sector, size, target name, cypher, key, device path, and
+     other optional parameters.)
+     e.g.
+     0 417792 crypt serpent-cbc-essiv:sha256
+     a7f67ad520bd83b9725df6ebd76c3eee 0 /dev/sdb 0 1 allow_discards
+
+     We can pass various attributes of mapping table to IMA through a key
+     value pair of various dmcrypt constructs.
+
+     Proposed Function Signature of the IMA hook:
+     void ima_dmcrypt_status(void *dmcrypt_status, int len);
+
+B. Measuring selinux constructs:
+     We propose to add an IMA hook in enforcing_set() present under
+     security/selinux/include/security.h.
+     enforcing_set() sets the selinux state to enforcing/permissive etc.
+     and is called from key places like selinux_init(),
+     sel_write_enforce() etc.
+     The hook will measure various attributes related to selinux status.
+     Majority of the attributes are present in the struct selinux_state
+     present in security/selinux/include/security.h
+     e.g.
+     $sestatus
+            SELinux status:              enabled
+            SELinuxfs mount:             /sys/fs/selinux
+            SELinux root directory:      /etc/selinux
+            Loaded policy name:          default
+            Current mode:                permissive
+            Mode from config file:       permissive
+            Policy MLS status:           enabled
+            Policy deny_unknown status:  allowed
+            Memory protection checking:  requested (insecure)
+            Max kernel policy version:   32
+
+     The above attributes will be serialized into a set of key=value
+     pairs when passed to IMA for measurement.
+
+     Proposed Function Signature of the IMA hook:
+     void ima_selinux_status(void *selinux_status, int len);
+
+Please provide comments\feedback on the proposal.
+
+Thanks,
+Tushar
+
+[1] https://sourceforge.net/p/linux-ima/wiki/Home/
+[2] https://selinuxproject.org/page/FAQ
+[3] https://gitlab.com/cryptsetup/cryptsetup/wikis/DMCrypt
