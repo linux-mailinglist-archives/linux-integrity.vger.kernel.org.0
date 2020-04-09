@@ -2,192 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4482C1A328A
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Apr 2020 12:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB15D1A37EF
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Apr 2020 18:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725828AbgDIKet (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Apr 2020 06:34:49 -0400
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:40088 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726589AbgDIKes (ORCPT
+        id S1726796AbgDIQZ6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Apr 2020 12:25:58 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:54992 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726621AbgDIQZ6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Apr 2020 06:34:48 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01355;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Tv2JngC_1586428482;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Tv2JngC_1586428482)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 09 Apr 2020 18:34:43 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, zhangliguang@linux.alibaba.com,
-        zhang.jia@linux.alibaba.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tianjia.zhang@linux.alibaba.com
-Subject: [PATCH v2 2/2] ima: support to tune appraise mode in runtime
-Date:   Thu,  9 Apr 2020 18:34:40 +0800
-Message-Id: <20200409103440.47946-3-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200409103440.47946-1-tianjia.zhang@linux.alibaba.com>
-References: <20200409103440.47946-1-tianjia.zhang@linux.alibaba.com>
+        Thu, 9 Apr 2020 12:25:58 -0400
+Received: from [10.137.106.115] (unknown [131.107.174.243])
+        by linux.microsoft.com (Postfix) with ESMTPSA id CC37A2007679;
+        Thu,  9 Apr 2020 09:25:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CC37A2007679
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1586449558;
+        bh=mxgHZSJk9nY2+sfPQybAXK1hYlxOn5wF6OLSUaiTeXQ=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=SVIUfVQPfYXivTtnf81II2+cuX+VuuFT/cdRyrSfPQa/NspfBGhnRo9yWKcDnzRbk
+         LJ3Ki75Ows6uAhw3zh0yXVdiT1bgycAFmEUG1RPPnFEYcitcKAqCmE0Cd8qQo22Fey
+         1mwwxBUG5vr/LHYHNEZymvqJ6fmpTEryjbQU2kPw=
+Subject: Re: [RFC PATCH v2 00/12] Integrity Policy Enforcement LSM (IPE)
+To:     Nayna <nayna@linux.vnet.ibm.com>
+Cc:     agk@redhat.com, axboe@kernel.dk, snitzer@redhat.com,
+        jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, tyhicks@linux.microsoft.com,
+        pasha.tatashin@soleen.com, sashal@kernel.org,
+        jaskarankhurana@linux.microsoft.com, nramas@linux.microsoft.com,
+        mdsakib@linux.microsoft.com, linux-kernel@vger.kernel.org
+References: <20200406221439.1469862-1-deven.desai@linux.microsoft.com>
+ <c1466cc8-8a08-708a-4629-234485bb833e@linux.vnet.ibm.com>
+From:   Deven Bowers <deven.desai@linux.microsoft.com>
+Message-ID: <35afdffe-179c-aedd-333a-9dfc20635fc3@linux.microsoft.com>
+Date:   Thu, 9 Apr 2020 09:25:57 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <c1466cc8-8a08-708a-4629-234485bb833e@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-In order to tune appraise mode in runtime, writing a PKCS#7 signature
-corresponding the signed content is required. The content should be off,
-enforce, log or fix. Given a simple way to archive this:
+On 4/7/2020 2:31 PM, Nayna wrote:
 
-$ echo -n off > mode
-$ openssl smime -sign -nocerts -noattr -binary \
-    -in mode -inkey <system_trusted_key> \
-    -signer <cert> -outform der -out mode.p7s
-$ sudo cat mode.p7s \
-    > /sys/kernel/security/ima/appraise_mode
+>
+> On 4/6/20 6:14 PM, deven.desai@linux.microsoft.com wrote:
+>> From: Deven Bowers <deven.desai@linux.microsoft.com>
+>>
+>> Changelog:
+>> ------------------------------------
+>>
+>> v1: Introduced
+>>
+>> v2:
+>>    Split the second patch of the previous series into two.
+>>    Minor corrections in the cover-letter and documentation
+>>    comments regarding CAP_MAC_ADMIN checks in IPE.
+>>
+>> Overview:
+>> ------------------------------------
+>> IPE is a Linux Security Module, which allows for a configurable
+>> policy to enforce integrity requirements on the whole system. It
+>> attempts to solve the issue of Code Integrity: that any code being
+>> executed (or files being read), are identical to the version that
+>> was built by a trusted source.
+>
+> Can you please clarify the "motivation" for this patch set more 
+> clearly? It seems to define a policy layer on top of dm-verity, which 
+> may be compiled into the kernel. In the motivation, can you please 
+> also make it explicit why existing mechanisms cannot be extended to 
+> achieve your purpose?
+>
+This LSM was born out of a motivation to provide strong integrity 
+guarantees without a dependency on file-metadata, allow the integrity 
+claims to be configurable on a hot system, and allow for the mechanisms 
+for ensuring integrity to be extendable.
 
-Note that the signing key must be a trust key located in
-system trusted keyring. So even the root privilege cannot
-simply disable the enforcement.
+This naturally had to be an LSM, as controlling execution at the block 
+or filesystem layer does not make sense. Existing LSM implementations 
+use filesystem metadata, and since one of IPE's goals is to secure file 
+metadata, it is circular to depend on the file metadata itself to make 
+decisions about whether the file has been modified.
 
-Signed-off-by: luanshi <zhangliguang@linux.alibaba.com>
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- security/integrity/ima/ima_fs.c | 108 ++++++++++++++++++++++++++++++++
- 1 file changed, 108 insertions(+)
+Additionally, IPE while IPE currently provides dm-verity support and the 
+trust root support, it can be easily extended to other implementations 
+such as fs-verity. At it's core, IPE is attempting to separate mechanism 
+(dm-verity, fs-verity, etc.) from policy (IPE).
 
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 65384f6ac0d9..4de904c5623d 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -20,11 +20,15 @@
- #include <linux/rcupdate.h>
- #include <linux/parser.h>
- #include <linux/vmalloc.h>
-+#include <linux/verification.h>
- 
- #include "ima.h"
- 
- static DEFINE_MUTEX(ima_write_mutex);
- 
-+/* maximum length of token allowed for signed appraise mode */
-+#define APPRAISE_MAX_TOKEN_SIZE (512 * 1024)
-+
- bool ima_canonical_fmt;
- static int __init default_canonical_fmt_setup(char *str)
- {
-@@ -466,8 +470,112 @@ static ssize_t ima_appraise_mode_read(struct file *filp,
- 	return simple_read_from_buffer(buf, count, ppos, mode, strlen(mode));
- }
- 
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+
-+static int check_signature_info(char *buf, size_t count)
-+{
-+	u8 *p;
-+
-+	/*
-+	 * In order to tune the appraise mode, a PKCS#7 signature is
-+	 * supplied.
-+	 *
-+	 * Assuming ASN.1 encoding supplied, the minimal length would be
-+	 * 4-byte header plus at least 256-byte payload.
-+	 */
-+	if (count < 260)
-+		return -EINVAL;
-+
-+	p = (u8 *)buf;
-+
-+	/* The primitive type must be a sequence */
-+	if (p[0] != 0x30 || p[1] != 0x82)
-+		return -EINVAL;
-+
-+	/* Match up the length of the supplied buffer */
-+	if (be16_to_cpup((__be16 *)(p + 2)) != count - 4)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+/* Verify the supplied PKCS#7 signature. The signed content may be off,
-+ * enforce, log, fix.
-+ */
-+static int repopulate_ima_appraise_mode(void *pkcs7, size_t pkcs7_len)
-+{
-+	static char *appraise_mode_strings[] = { "off", "enforce", "fix", "log" };
-+	static int appraise_modes[] = {
-+		0,
-+		IMA_APPRAISE_ENFORCE,
-+		IMA_APPRAISE_FIX,
-+		IMA_APPRAISE_LOG,
-+	};
-+	int index, ret = -1;
-+	const char *s;
-+	int size = ARRAY_SIZE(appraise_mode_strings);
-+
-+	for (index = 0; index < size; index++) {
-+		s = appraise_mode_strings[index];
-+		ret = verify_pkcs7_signature(s, strlen(s), pkcs7, pkcs7_len,
-+					    NULL, VERIFYING_UNSPECIFIED_SIGNATURE,
-+					    NULL, NULL);
-+		if (!ret)
-+			break;
-+	}
-+
-+	if (index == size)
-+		goto out;
-+
-+	ima_appraise = appraise_modes[index];
-+
-+out:
-+	return ret;
-+}
-+
-+static ssize_t ima_appraise_mode_write(struct file *filp,
-+					const char __user *ubuf,
-+					size_t count, loff_t *ppos)
-+{
-+	char *buf;
-+	ssize_t ret;
-+
-+	if (*ppos > 1)
-+		return -EFBIG;
-+
-+	if (count > APPRAISE_MAX_TOKEN_SIZE)
-+		return -EFBIG;
-+
-+	buf = kmalloc(count, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	ret = simple_write_to_buffer(buf, count, ppos, ubuf, count);
-+	if (ret <= 0)
-+		goto out;
-+
-+	ret = check_signature_info(buf, count);
-+	if (ret)
-+		goto out;
-+
-+	ret = repopulate_ima_appraise_mode(buf, count);
-+	if (ret)
-+		goto out;
-+
-+	ret = count;
-+
-+out:
-+	kfree(buf);
-+	return ret;
-+}
-+
-+#endif
-+
- static const struct file_operations ima_appraise_mode_ops = {
- 	.read = ima_appraise_mode_read,
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+	.write = ima_appraise_mode_write,
-+#endif
- 	.llseek = generic_file_llseek,
- };
- 
--- 
-2.17.1
-
+> Also, AFIK, the changelog should be moved to the end of the patch 
+> description.
+>
+Thanks! I'll move the changelog.
