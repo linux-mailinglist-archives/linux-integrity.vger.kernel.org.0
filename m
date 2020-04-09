@@ -2,30 +2,30 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0AE1A37F5
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Apr 2020 18:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DA21A3829
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Apr 2020 18:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726627AbgDIQ1M (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Apr 2020 12:27:12 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55450 "EHLO
+        id S1726846AbgDIQlo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Apr 2020 12:41:44 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:60572 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726621AbgDIQ1M (ORCPT
+        with ESMTP id S1726583AbgDIQlo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Apr 2020 12:27:12 -0400
+        Thu, 9 Apr 2020 12:41:44 -0400
 Received: from [10.137.106.115] (unknown [131.107.174.243])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A0CB220B46F0;
-        Thu,  9 Apr 2020 09:27:09 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A0CB220B46F0
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4300320B4737;
+        Thu,  9 Apr 2020 09:41:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4300320B4737
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1586449629;
-        bh=Y1A7YlkNPRreFyW0mblh72K/P5DiVCPwPbIFvJw8IOM=;
+        s=default; t=1586450501;
+        bh=Mpb/G/NVTOIhERILOATwSbhjL5r8uqx4pyEEjF7Z0SA=;
         h=From:Subject:To:Cc:References:Date:In-Reply-To:From;
-        b=BMGAzsK8KFEEnWZ0ZrtSrCOKZQNVRX2AYu8TXH3Rsv1GM6La0bP8yDFVAvNI5ubk2
-         7DxwESV8ULhCeUf2ofF/h/34/WyyeFAx4R2ZCOx4Um8+zNLvmu0CUozujDKhqQQt0t
-         SxSd7L0kJIn1T6TLT9o7WHHGSDhG0N55sNs6S1Q4=
+        b=qkmKi+2l8XDp2qnTd2nU9WNUzjlc+K67NP6dvv3L7gFH/t2WtxOdu+RIW5nvC2qp0
+         Npvf2YJuVRIh7HkOP4QE29w/rYbzeLOGzfxrfoi21zI662i8YMqHetZSwP44hFYjV6
+         rvrOAtSNmtfaOaXynH1AhkAhrkvCogVyTGBOuw8I=
 From:   Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v2 02/12] security: add ipe lsm evaluation loop and
- audit system
+Subject: Re: [RFC PATCH v2 03/12] security: add ipe lsm policy parser and
+ policy loading
 To:     Jann Horn <jannh@google.com>
 Cc:     agk@redhat.com, Jens Axboe <axboe@kernel.dk>, snitzer@redhat.com,
         James Morris <jmorris@namei.org>,
@@ -41,16 +41,16 @@ Cc:     agk@redhat.com, Jens Axboe <axboe@kernel.dk>, snitzer@redhat.com,
         mdsakib@linux.microsoft.com,
         kernel list <linux-kernel@vger.kernel.org>
 References: <20200406221439.1469862-1-deven.desai@linux.microsoft.com>
- <20200406221439.1469862-3-deven.desai@linux.microsoft.com>
- <CAG48ez3oT4PvLThTqyruoTaNuYRcM_-dy5Vtdpugk2-7zJ8bXw@mail.gmail.com>
-Message-ID: <d827fa51-7047-0e4d-0d1e-6047ae8bcf13@linux.microsoft.com>
-Date:   Thu, 9 Apr 2020 09:27:09 -0700
+ <20200406221439.1469862-4-deven.desai@linux.microsoft.com>
+ <CAG48ez2FfRK-ivZ0cJ4k-UqKfduQS_b2WCcD5Aj45sJKAqS58Q@mail.gmail.com>
+Message-ID: <cf3ea4c8-19c8-d859-21a2-c6eb4c1755f3@linux.microsoft.com>
+Date:   Thu, 9 Apr 2020 09:41:40 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <CAG48ez3oT4PvLThTqyruoTaNuYRcM_-dy5Vtdpugk2-7zJ8bXw@mail.gmail.com>
+In-Reply-To: <CAG48ez2FfRK-ivZ0cJ4k-UqKfduQS_b2WCcD5Aj45sJKAqS58Q@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
@@ -58,558 +58,617 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 4/7/2020 5:13 AM, Jann Horn wrote:
+On 4/7/2020 8:39 AM, Jann Horn wrote:
 > On Tue, Apr 7, 2020 at 12:14 AM<deven.desai@linux.microsoft.com>  wrote:
->> Add the core logic of the IPE LSM, the evaluation loop (engine),
->> the audit system, and the skeleton of the policy structure.
-> Here's a first review pass for this patch without really understanding
-> your data structures yet:
->
 > [...]
->> diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
->> new file mode 100644
->> index 000000000000..0c67cd049d0c
->> --- /dev/null
->> +++ b/security/ipe/Kconfig
->> @@ -0,0 +1,41 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +#
->> +# Integrity Policy Enforcement (IPE) configuration
->> +#
+>> Adds the policy parser and the policy loading to IPE, along with the
+>> related sysfs and securityfs entries.
+> [...]
+>> diff --git a/security/ipe/ipe-parse.c b/security/ipe/ipe-parse.c
+> [...]
+>> +/* Internal Type Definitions */
+>> +enum property_priority {
+>> +       other = 0,
+>> +       action = 1,
+>> +       op = 2,
+>> +       default_action = 3,
+>> +       policy_ver = 4,
+>> +       policy_name = 5,
+>> +};
 >> +
->> +menuconfig SECURITY_IPE
->> +       bool "Integrity Policy Enforcement (IPE)"
->> +       depends on SECURITY && AUDIT
->> +       select SYSTEM_DATA_VERIFICATION
->> +       help
->> +         This option enables the Integrity Policy Enforcement subsystem,
->> +         allowing systems to enforce integrity requirements on various
->> +         aspects of user-mode applications. These requirements are
->> +         controlled by a policy.
-> This text is very generic and doesn't really make it clear how IPE is
-> different from other LSMs; could you perhaps add some more text here
-> on the parts of IPE that distinguish it from other LSMs?
->
-> In the cover letter, you have this stuff at the top:
->
-> """
-> The type of system for which IPE is designed for use is an embedded device
-> with a specific purpose (e.g. network firewall device in a data center),
-> where all software and configuration is built and provisioned by the owner.
->
-> Specifically, a system which leverages IPE is not intended for general
-> purpose computing and does not utilize any software or configuration
-> built by a third party. An ideal system to leverage IPE has both mutable
-> and immutable components, however, all binary executable code is immutable.
->
-> The scope of IPE is constrained to the OS. It is assumed that platform
-> firmware verifies the the kernel and optionally the root filesystem (e.g.
-> via U-Boot verified boot). IPE then utilizes LSM hooks to enforce a
-> flexible, kernel-resident integrity verification policy.
->
-> IPE differs from other LSMs which provide integrity checking (for instance,
-> IMA), as it has no dependency on the filesystem metadata itself. The
-> attributes that IPE checks are deterministic properties that exist solely
-> in the kernel. Additionally, IPE provides no additional mechanisms of
-> verifying these files (e.g. IMA Signatures) - all of the attributes of
-> verifying files are existing features within the kernel, such as dm-verity
-> or fsverity.
->
-> IPE provides a policy that allows owners of the system to easily specify
-> integrity requirements and uses dm-verity signatures to simplify the
-> authentication of allowed objects like authorized code and data.
-> """
->
-> Perhaps you could add a summary of that here?
-Sure, no problem. I'll add a bit more detail to the Kconfig in v3, 
-something
-like:
-
-"""
-This option enables the Integrity Policy Enforcement subsystem
-allowing systems to enforce integrity requirements on user land
-binaries. IPE differs from other LSMs by removing dependencies
-on filesystem metadata, making its decisions based off of kernel-
-resident features and data structures. A key feature of IPE is a
-customizable policy to allow admins to reconfigure integrity
-requirements on the fly.
-"""
+>> +struct token {
+>> +       struct list_head        next_tok;
+>> +       const char              *key;
+>> +       enum property_priority  key_priority;
+>> +       const char              *val;
+>> +};
+>> +
 > [...]
->> diff --git a/security/ipe/ipe-audit.c b/security/ipe/ipe-audit.c
-> [...]
->> +void ipe_audit_mode(void)
+>> +/**
+>> + * ipe_free_policy: Deallocate an ipe_policy structure.
+>> + * @pol: Policy to free.
+>> + */
+>> +void ipe_free_policy(struct ipe_policy *pol)
 >> +{
->> +       struct audit_buffer *ab;
+>> +       size_t i;
+>> +       struct ipe_rule *ptr;
+>> +       struct ipe_rule_table *op;
+>> +       struct list_head *l_ptr, *l_next;
 >> +
->> +       ab = audit_log_start(audit_context(), GFP_ATOMIC | __GFP_NOWARN,
->> +                            AUDIT_INTEGRITY_MODE);
-> Why is this GFP_ATOMIC? ipe_audit_mode() is used from
-> ipe_switch_mode(), which is allowed to sleep, right?
-
-Yeah, that's a fair point. I had originally based _all_ of these audit
-functions off of common_lsm_audit which utilizes these two flags.
-We chose not to use that specific function for several reasons, but
-there's no reason to keep these allocator flags. I'll move it to
-GFP_KERNEL.
->> +       if (!ab)
+>> +       if (IS_ERR_OR_NULL(pol))
 >> +               return;
 >> +
->> +       audit_log_format(ab, "IPE mode=%s", (enforce) ? IPE_MODE_ENFORCE :
->> +                                                       IPE_MODE_PERMISSIVE);
+>> +       for (i = 0; i < ARRAY_SIZE(pol->ops); ++i) {
+>> +               op = &pol->ops[i];
 >> +
->> +       audit_log_end(ab);
->> +}
-> [...]
->> +/**
->> + * ipe_audit_ignore_line: Emit a warning that the line was not understood by
->> + *                       IPE's parser and the line will be ignored and not
->> + *                       parsed.
->> + * @line_num: line number that is being ignored.
->> + */
->> +void ipe_audit_ignore_line(size_t i)
->> +{
->> +       pr_warn("failed to parse line number %zu, ignoring", i);
->> +}
-> It seems a bit silly to have an extra method just for this?
-Fair point. I wanted to collapse as much of the *common* user-facing 
-strings
-into one file, and I was trying to adhere to the 80-character limit.
-
-I'll remove the function and inline it.
->> +/**
->> + * ipe_audit_policy_activation: Emit an audit event that a specific policy
->> + *                             was activated as the active policy.
->> + * @pol: policy that is being activated
->> + */
->> +void ipe_audit_policy_activation(const struct ipe_policy *pol)
->> +{
->> +       struct audit_buffer *ab;
->> +
->> +       ab = audit_log_start(audit_context(), GFP_ATOMIC | __GFP_NOWARN,
->> +                            AUDIT_INTEGRITY_POLICY_ACTIVATE);
-> Again, this runs in sleepable context and GFP_ATOMIC is unnecessary, right?
-Yep. I'll fix it in v3. Same with ipe_audit_policy_activation, below. 
-The only one
-that runs in non-sleepable context is ipe_audit_match.
->> +       if (!ab)
->> +               return;
->> +
->> +       audit_log_format(ab, POLICY_ACTIVATE_STR, pol->policy_name,
->> +                        pol->policy_version.major, pol->policy_version.minor,
->> +                        pol->policy_version.rev);
->> +
->> +       audit_log_end(ab);
->> +}
-> [...]
->> diff --git a/security/ipe/ipe-engine.c b/security/ipe/ipe-engine.c
-> [...]
->> +/**
->> + * get_audit_pathname: Return the absolute path of the file struct passed in
->> + * @file: file to derive an absolute path from.
->> + *
->> + * This function walks past chroots and mount points.
-> [...]
->> + */
->> +static char *get_audit_pathname(const struct file *file)
->> +{
-> [...]
->> +       sb = file->f_path.dentry->d_sb;
->> +
->> +       pathbuf = __getname();
->> +       if (!pathbuf) {
->> +               rc = -ENOMEM;
->> +               goto err;
->> +       }
->> +
->> +       pos = d_absolute_path(&file->f_path, pathbuf, PATH_MAX);
-> Just as an FYI, no change required: d_absolute_path() will also
-> succeed for files that are not contained within the filesystem root of
-> the current process; in that case, you'll get stuff like paths rooted
-> in a different mount namespace.
->
->> +       if (IS_ERR(pos)) {
->> +               rc = PTR_ERR(pos);
->> +               goto err;
->> +       }
->> +
->> +       temp_path = __getname();
->> +       if (!temp_path) {
->> +               rc = -ENOMEM;
->> +               goto err;
->> +       }
->> +
->> +       strlcpy(temp_path, pos, PATH_MAX);
->> +
->> +       if (pathbuf)
-> This check seems superfluous.
-I'll remove it.
->> +               __putname(pathbuf);
->> +
->> +       return temp_path;
->> +err:
->> +       if (pathbuf)
->> +               __putname(pathbuf);
->> +       if (temp_path)
->> +               __putname(temp_path);
->> +
->> +       return ERR_PTR(rc);
->> +}
-> [...]
->> +/**
->> + * prealloc_cache: preallocate the cache tree for all ipe properties, so
->> + *                that this data maybe used later in the read side critical
-> s/maybe/may be/
-Thanks!
->> + *                section.
->> + * @ctx: Ipe engine context structure passed to the property prealloc function.
->> + * @cache: Root of the cache tree to insert nodes under.
->> + *
->> + * Return:
->> + * 0 - OK
->> + * -ENOMEM - Out of memory
->> + * Other - See individual property preallocator functions.
->> + */
->> +static int prealloc_cache(struct ipe_engine_ctx *ctx,
->> +                         struct rb_root *cache)
->> +{
->> +       int rc = 0;
->> +       struct rb_node *node;
->> +       struct ipe_prop_reg *reg;
->> +       struct ipe_prop_cache *storage;
->> +
->> +       for (node = rb_first(&ipe_registry_root); node; node = rb_next(node)) {
->> +               reg = container_of(node, struct ipe_prop_reg, node);
->> +
->> +               storage = insert_or_find_cache(cache, reg->prop);
->> +               if (IS_ERR(storage))
->> +                       return PTR_ERR(storage);
->> +
->> +               if (reg->prop->prealloc) {
->> +                       rc = reg->prop->prealloc(ctx, &storage->storage);
->> +                       if (rc != 0)
->> +                               return rc;
+>> +               list_for_each_safe(l_ptr, l_next, &op->rules) {
+>> +                       ptr = list_entry(l_ptr, struct ipe_rule, next);
+>> +                       list_del(l_ptr);
+>> +                       ipe_free_rule(ptr);
 >> +               }
 >> +       }
 >> +
->> +       return rc;
+>> +       kfree(pol->policy_name);
+>> +       kfree(pol);
+>> +       pol = NULL;
+> What is this assignment supposed to do?
+
+Apologies, it's a useless statement. I occasionally forget to strip this
+pattern throughout my code. It's supposed to help avoid double-free
+but ultimately it's useless.
+
 >> +}
->> +
+> [...]
+>> diff --git a/security/ipe/ipe-policy.c b/security/ipe/ipe-policy.c
+> [...]
 >> +/**
->> + * evaluate: Process an @ctx against IPE's current active policy.
->> + * @ctx: the engine ctx to perform an evaluation on.
->> + * @cache: the red-black tree root that is used for cache storage.
+>> + * ipe_is_active_policy: Determine if @policy is the currently active policy.
+>> + * @policy: Policy to check if it's the active policy.
 >> + *
->> + * This uses a preallocated @cache as storage for the properties to avoid
->> + * re-evaulation.
+>> + * NOTE: If this attribute is needed to be consistent over a critical section,
+>> + *       do not use this function, as it does not hold the read lock over the
+>> + *       entirety of the critical section.
 >> + *
 >> + * Return:
->> + * -EACCES - A match occurred against a "action=DENY" rule
->> + * -ENOMEM - Out of memory
+>> + * true - @policy is the active policy
+>> + * false - @policy is not the active policy
 >> + */
->> +static int evaluate(struct ipe_engine_ctx *ctx, struct rb_root *cache)
+>> +bool ipe_is_active_policy(const struct ipe_policy *policy)
 >> +{
->> +       int rc = 0;
->> +       bool match = false;
->> +       enum ipe_action action;
->> +       struct ipe_prop_cache *c;
->> +       enum ipe_match match_type;
->> +       const struct ipe_rule *rule;
->> +       const struct ipe_policy *pol;
->> +       const struct ipe_rule_table *rules;
->> +       const struct ipe_prop_container *prop;
->> +
->> +       if (!ipe_active_policy)
-> Please use rcu_access_pointer() here.
-Thanks. I'm still new to rcu - any comments or corrections regarding it
-are greatly appreciated.
->> +               return rc;
+>> +       bool result;
 >> +
 >> +       rcu_read_lock();
 >> +
->> +       pol = rcu_dereference(ipe_active_policy);
->> +
->> +       rules = &pol->ops[ctx->op];
->> +
->> +       list_for_each_entry(rule, &rules->rules, next) {
->> +               match = true;
->> +
->> +               list_for_each_entry(prop, &rule->props, next) {
->> +                       void *cache = NULL;
->> +
->> +                       if (prop->prop->prealloc) {
->> +                               c = insert_or_find_cache(cache, prop->prop);
-> What's going on with the `cache` pointer here? We give
-> insert_or_find_cache() a NULL cache, and then in
-> insert_or_find_cache() `new` will be a near-NULL pointer, and it'll
-> crash immediately at `while (*new)`? Am I missing something?
->
-> Also, I think the intent here is that the preceding call to
-> prealloc_cache() should have allocated memory for us. If so, can you
-> please add a short comment here, something like "/* won't sleep
-> because of preceding prealloc_cache() */"?
-
-Well, this is embarrassing. This is supposed to be the argument, cache,
-not the variable, cache. The variable shadowing does indeed do what you
-describe.
-
-This didn't come up in any of my testing because none of the
-properties introduced in this patch series utilize the cache. It's kept in
-to facilitate the storage of potentially expensive operations.
-
-I'm just going to cut out all of this code. It'll be re-added
-if something actually needs it.
-
->> +                               if (IS_ERR(c))
->> +                                       return PTR_ERR(c);
->> +
->> +                               cache = c->storage;
->> +                       }
->> +
->> +                       match = match && prop->prop->eval(ctx, prop->value,
->> +                                                         &cache);
->> +               }
->> +
->> +               if (match)
->> +                       break;
->> +       }
->> +
->> +       if (match) {
->> +               match_type = ipe_match_rule;
->> +               action = rule->action;
->> +       } else if (rules->def != ipe_action_unset) {
->> +               match_type = ipe_match_table;
->> +               action = rules->def;
->> +               rule = NULL;
->> +       } else {
->> +               match_type = ipe_match_global;
->> +               action = pol->def;
->> +               rule = NULL;
->> +       }
->> +
->> +       ipe_audit_match(ctx, cache, match_type, action, rule);
->> +
->> +       if (action == ipe_action_deny)
->> +               rc = -EACCES;
->> +
->> +       if (enforce == 0)
->> +               rc = 0;
+>> +       result = rcu_dereference(ipe_active_policy) == policy;
 >> +
 >> +       rcu_read_unlock();
->> +       return rc;
+> You're not actually accessing the pointer, so you can use rcu_access_pointer()
+> and get rid of the rcu_read_lock()/rcu_read_unlock(). Then this helper turns
+> into a one-liner.
+Got it. There's several places it looks like I did this. I'll fix it all.
+>> +       return result;
 >> +}
 >> +
 >> +/**
->> + * ipe_process_event: Perform an evaluation of @file, @op, and @hook against
->> + *                   IPE's current active policy.
->> + * @file: File that is being evaluated against IPE policy.
->> + * @op: Operation that the file is being evaluated against.
->> + * @hook: Specific hook that the file is being evaluated through.
+>> + * ipe_update_active_policy: Determine if @old is the active policy, and update
+>> + *                          the active policy if necessary.
+>> + * @old: The previous policy that the update is trying to replace.
+>> + * @new: The new policy attempting to replace @old.
+>> + *
+>> + * If @old is not the active policy, nothing will be done.
 >> + *
 >> + * Return:
->> + * -ENOMEM: (No Memory)
->> + * -EACCES: (A match occurred against a "action=DENY" rule)
+>> + * 0 - OK
+>> + * -EBADMSG - Invalid Policy
 >> + */
->> +int ipe_process_event(const struct file *file, enum ipe_op op,
->> +                     enum ipe_hook hook)
+>> +int ipe_update_active_policy(const struct ipe_policy *old,
+>> +                            const struct ipe_policy *new)
 >> +{
 >> +       int rc = 0;
->> +       struct ipe_engine_ctx *ctx;
->> +       struct rb_root cache = RB_ROOT;
+>> +       const struct ipe_policy *curr_policy = NULL;
 >> +
->> +       ctx = build_ctx(file, op, hook);
->> +       if (IS_ERR(ctx))
+>> +       /* no active policy, safe to update */
+>> +       if (!ipe_active_policy)
+> This should be rcu_access_pointer().
+Got it.
+>> +               return 0;
+> [...]
+>> +}
+> [...]
+>> diff --git a/security/ipe/ipe-secfs.c b/security/ipe/ipe-secfs.c
+> [...]
+>> +/**
+>> + * alloc_callback: Callback given to verify_pkcs7_signature function to set
+>> + *                the inner content reference and parse the policy.
+>> + * @ctx: "ipe_policy_node" to set inner content, size and parsed policy of.
+>> + * @data: Start of PKCS#7 inner content.
+>> + * @len: Length of @data.
+>> + * @asn1hdrlen: Unused.
+>> + *
+>> + * Return:
+>> + * 0 - OK
+>> + * ERR_PTR(-EBADMSG) - Invalid policy syntax
+>> + * ERR_PTR(-ENOMEM) - Out of memory
+>> + */
+>> +static int alloc_callback(void *ctx, const void *data, size_t len,
+>> +                         size_t asn1hdrlen)
+>> +{
+>> +       char *cpy = NULL;
+>> +       struct ipe_policy *pol = NULL;
+>> +       struct ipe_policy_node *n = (struct ipe_policy_node *)ctx;
+>> +
+>> +       n->content = (const u8 *)data;
+>> +       n->content_size = len;
+>> +
+>> +       if (len == 0)
+>> +               return -EBADMSG;
+>> +
+>> +       cpy = kzalloc(len + 1, GFP_KERNEL);
+>> +       if (!cpy)
+>> +               return -ENOMEM;
+>> +
+>> +       (void)strncpy(cpy, data, len);
+> Shouldn't this just be memcpy()?
+Good point. It won't ever be null terminated because of the
+signature format, so it's effectively memcpy. I'll change it.
+>> +       pol = ipe_parse_policy(cpy);
+>> +       if (IS_ERR(pol)) {
+>> +               kfree(cpy);
+>> +               return PTR_ERR(pol);
+>> +       }
+>> +
+>> +       n->parsed = pol;
+>> +       kfree(cpy);
+>> +       return 0;
+>> +}
+> [...]
+>> +static ssize_t ipe_secfs_new_policy(struct file *f, const char __user *data,
+>> +                                   size_t len, loff_t *offset)
+>> +{
+>> +       ssize_t rc = 0;
+>> +       u8 *cpy = NULL;
+>> +       ssize_t written = 0;
+>> +
+>> +       if (!ns_capable(current_user_ns(), CAP_MAC_ADMIN))
+>> +               return -EPERM;
+> Use file_ns_capable(f, &init_user_ns, CAP_MAC_ADMIN) instead, both here and
+> elsewhere.
+Thanks.
+>> +       cpy = kzalloc(len, GFP_KERNEL);
+>> +       if (!cpy) {
+>> +               rc = -ENOMEM;
+>> +               goto err;
+>> +       }
+>> +
+>> +       written = simple_write_to_buffer(cpy, len, offset, data, len);
+>> +       if (written < 0) {
+>> +               rc = written;
+>> +               goto err;
+>> +       }
+> This should probably be memdup_user() instead of
+> kzalloc()+simple_write_to_buffer()?
+I wasn't aware of memdup_user. I'll change it next iteration.
+>> +       rc = ipe_build_policy_secfs_node(cpy, written);
+>> +err:
+>> +       kfree(cpy);
+>> +       return rc < 0 ? rc : written;
+>> +}
+>> +
+>> +/**
+>> + * retrieve_backed_dentry: Retrieve a dentry with a backing inode, identified
+>> + *                        by @name, under @parent.
+>> + * @name: Name of the dentry under @parent.
+>> + * @parent: The parent dentry to search under for @name.
+>> + * @size: Length of @name.
+>> + *
+>> + * This takes a reference to the returned dentry. Caller needs to call dput
+>> + * to drop the reference.
+>> + *
+>> + * Return:
+>> + * valid dentry - OK
+>> + * ERR_PTR - Error, see lookup_one_len_unlocked
+>> + * NULL - No backing inode was found
+>> + */
+>> +static struct dentry *retrieve_backed_dentry(const char *name,
+>> +                                            struct dentry *parent,
+>> +                                            size_t size)
+>> +{
+>> +       int rc = 0;
+>> +       struct dentry *tmp = NULL;
+>> +
+>> +       tmp = lookup_one_len_unlocked(name, parent, size);
+>> +       if (IS_ERR(tmp)) {
+>> +               rc = PTR_ERR(tmp);
+>> +               goto out;
+>> +       }
+> You could just "return tmp;" here.
+>
+>> +
+>> +       if (!d_really_is_positive(tmp))
+>> +               goto out1;
+> And here "return NULL;".
+>
+>> +       return tmp;
+>> +out1:
+>> +       tmp = NULL;
+> This just sets a variable that is never read again to NULL?
+Thanks, I'll fix these up.
+>> +out:
+>> +       return rc == 0 ? NULL : ERR_PTR(rc);
+>> +}
+>> +
+>> +/**
+>> + * ipe_secfs_del_policy: Delete a policy indicated by the name provided by
+>> + *                      @data
+>> + * @f: Unused.
+>> + * @data: Buffer containing the policy id to delete.
+>> + * @len: Length of @data.
+>> + * @offset: Offset into @data.
+>> + *
+>> + * NOTE: Newlines are treated as part of the name, if using echo to test,
+>> + * use -n to prohibit the silent addition of a newline.
+>> + *
+>> + * Return:
+>> + * > 0 - OK
+>> + * -ENOMEM - Out of memory
+>> + * -EPERM - Policy is active
+>> + * -ENOENT - Policy does not exist
+>> + * -EPERM - if a MAC subsystem is enabled, missing CAP_MAC_ADMIN
+>> + * Other - See retrieve_backed_dentry
+>> + */
+>> +static ssize_t ipe_secfs_del_policy(struct file *f, const char __user *data,
+>> +                                   size_t len, loff_t *offset)
+>> +{
+>> +       ssize_t rc = 0;
+>> +       char *id = NULL;
+>> +       ssize_t written = 0;
+>> +       struct dentry *raw = NULL;
+>> +       struct dentry *content = NULL;
+>> +       struct inode *policy_i = NULL;
+>> +       struct dentry *policy_root = NULL;
+>> +       struct inode *policies_root = NULL;
+>> +       const struct ipe_policy *target = NULL;
+>> +
+>> +       if (!ns_capable(current_user_ns(), CAP_MAC_ADMIN))
+>> +               return -EPERM;
+>> +
+>> +       id = kzalloc(len, GFP_KERNEL);
+>> +       if (!id) {
+>> +               rc = -ENOMEM;
+>> +               goto out;
+>> +       }
+>> +
+>> +       written = simple_write_to_buffer(id, len, offset, data, len);
+>> +       if (written < 0) {
+>> +               rc = written;
+>> +               goto out;
+>> +       }
+>> +
+>> +       policies_root = d_inode(ipe_policies_root);
+>> +
+>> +       policy_root = retrieve_backed_dentry(id, ipe_policies_root, written);
+>> +       if (IS_ERR_OR_NULL(policy_root)) {
+>> +               rc = IS_ERR(policy_root) ? PTR_ERR(policy_root) : -ENOENT;
+>> +               goto out;
+>> +       }
+>> +
+>> +       policy_i = d_inode(policy_root);
+>> +
+>> +       /* if the found dentry matches boot policy, fail */
+>> +       if (boot_policy_node == policy_root) {
+>> +               rc = -EACCES;
+>> +               goto out1;
+>> +       }
+>> +
+>> +       target = ((struct ipe_policy_node *)policy_i->i_private)->parsed;
+>> +
+>> +       /* fail if it's the active policy */
+>> +       if (ipe_is_active_policy(target)) {
+>> +               rc = -EPERM;
+>> +               goto out1;
+>> +       }
+> Why can it not become the active policy after this check?
+Ah, good catch. (The test suite just caught this as well). So this needs to
+be synchronized with the active policy  functions. I'm pretty sure I should
+just move the policy lock from the activation functions to be locked &
+unlocked here. That'll enforce that both are checked in blocking sections.
+>> +       raw = retrieve_backed_dentry(IPE_FULL_CONTENT, policy_root,
+>> +                                    strlen(IPE_FULL_CONTENT));
+>> +       if (IS_ERR_OR_NULL(raw)) {
+>> +               rc = IS_ERR(raw) ? PTR_ERR(raw) : -ENOENT;
+>> +               goto out1;
+>> +       }
+>> +
+>> +       content = retrieve_backed_dentry(IPE_INNER_CONTENT, policy_root,
+>> +                                        strlen(IPE_INNER_CONTENT));
+>> +       if (IS_ERR_OR_NULL(content)) {
+>> +               rc = IS_ERR(content) ? PTR_ERR(content) : -ENOENT;
+>> +               goto out2;
+>> +       }
+>> +
+>> +       inode_lock(policies_root);
+>> +       ipe_free_policy_node(policy_i->i_private);
+>> +       policy_i->i_private = NULL;
+>> +       inode_unlock(policies_root);
+>> +
+>> +       dput(raw);
+>> +       dput(content);
+>> +       dput(policy_root);
+>> +       securityfs_remove(raw);
+>> +       securityfs_remove(content);
+>> +       securityfs_remove(policy_root);
+>> +
+>> +       kfree(id);
+>> +       return written;
+>> +out2:
+>> +       dput(raw);
+>> +out1:
+>> +       dput(policy_root);
+>> +out:
+>> +       kfree(id);
+>> +       return rc;
+>> +}
+>> +
+>> +/**
+>> + * ipe_secfs_rd_policy: Read the raw content (full enveloped PKCS7) data of
+>> + *                     the policy stored within the file's parent inode.
+>> + * @f: File representing the securityfs entry.
+>> + * @data: User mode buffer to place the raw pkcs7.
+>> + * @len: Length of @data.
+>> + * @offset: Offset into @data.
+>> + *
+>> + * Return:
+>> + * > 0 - OK
+>> + * -ENOMEM - Out of memory
+>> + */
+>> +static ssize_t ipe_secfs_rd_policy(struct file *f, char __user *data,
+>> +                                  size_t size, loff_t *offset)
+>> +{
+>> +       ssize_t rc = 0;
+>> +       size_t avail = 0;
+>> +       u8 *buffer = NULL;
+>> +       struct inode *root = NULL;
+>> +       const struct ipe_policy_node *node = NULL;
+>> +
+>> +       root = d_inode(f->f_path.dentry->d_parent);
+>> +
+>> +       inode_lock_shared(root);
+>> +       node = (const struct ipe_policy_node *)root->i_private;
+>> +
+>> +       avail = node->data_len;
+>> +       buffer = kmemdup(node->data, avail, GFP_KERNEL);
+>> +       if (!buffer) {
+>> +               rc = -ENOMEM;
 >> +               goto cleanup;
+>> +       }
 >> +
->> +       rc = prealloc_cache(ctx, &cache);
->> +       if (rc != 0)
->> +               goto cleanup;
->> +
->> +       rc = evaluate(ctx, &cache);
->> +
+>> +       rc = simple_read_from_buffer(data, size, offset, buffer, avail);
 >> +cleanup:
->> +       free_ctx(ctx);
->> +       destroy_cache(&cache);
+>> +       inode_unlock_shared(root);
+> Same thing as in ipe_secfs_rd_content(): simple_read_from_buffer() needlessly
+> within locked section, buffer not freed.
+I don't know how I missed such an obvious memleak. I'll remove the 
+unnecessary
+kmemdup.
+>> +
+>> +       return rc;
+>> +}
+>> +
+>> +/**
+>> + * ipe_secfs_ud_policy: Update a policy in place with a new PKCS7 policy.
+>> + * @f: File representing the securityfs entry.
+>> + * @data: Buffer user mode to place the raw pkcs7.
+>> + * @len: Length of @data.
+>> + * @offset: Offset into @data.
+>> + *
+>> + * Return:
+>> + * 0 - OK
+>> + * -EBADMSG - Invalid policy format
+>> + * -ENOMEM - Out of memory
+>> + * -EPERM - if a MAC subsystem is enabled, missing CAP_MAC_ADMIN
+>> + * -EINVAL - Incorrect policy name for this node, or version is < current
+>> + */
+>> +static ssize_t ipe_secfs_ud_policy(struct file *f, const char __user *data,
+>> +                                  size_t len, loff_t *offset)
+>> +{
+>> +       ssize_t rc = 0;
+>> +       u8 *cpy = NULL;
+>> +       ssize_t written = 0;
+>> +       struct inode *root = NULL;
+>> +       struct crypto_shash *tfm = NULL;
+>> +       struct ipe_policy_node *new = NULL;
+>> +       struct ipe_policy_node *old = NULL;
+>> +
+>> +       if (!ns_capable(current_user_ns(), CAP_MAC_ADMIN))
+>> +               return -EPERM;
+>> +
+>> +       cpy = kzalloc(len, GFP_KERNEL);
+>> +       if (!cpy) {
+>> +               rc = -ENOMEM;
+>> +               goto out;
+>> +       }
+>> +
+>> +       written = simple_write_to_buffer(cpy, len, offset, data, len);
+>> +       if (written < 0) {
+>> +               rc = written;
+>> +               goto out;
+>> +       }
+> You'd probably be better off just doing memdup_user() here.
+> simple_write_to_buffer() only makes sense if you have a buffer that can be
+> continuously updated with multiple writes.
+Thanks, I'll fix it.
+>> +       new = ipe_alloc_policy_node(cpy, len);
+>> +       if (IS_ERR(new)) {
+>> +               rc = PTR_ERR(new);
+>> +               goto out;
+>> +       }
+>> +
+>> +       tfm = crypto_alloc_shash("sha1", 0, 0);
+>> +       if (IS_ERR(tfm))
+>> +               goto out2;
+>> +
+>> +       root = d_inode(f->f_path.dentry->d_parent);
+>> +       inode_lock(root);
+>> +
+>> +       old = (struct ipe_policy_node *)root->i_private;
+>> +
+>> +       if (strcmp(old->parsed->policy_name, new->parsed->policy_name)) {
+>> +               rc = -EINVAL;
+>> +               goto out3;
+>> +       }
+>> +
+>> +       if (!ipe_is_valid_policy(old->parsed, new->parsed)) {
+>> +               rc = -EINVAL;
+>> +               goto out3;
+>> +       }
+>> +
+>> +       rc = ipe_update_active_policy(old->parsed, new->parsed);
+>> +       if (rc != 0)
+>> +               goto out3;
+>> +
+>> +       ipe_audit_policy_load(new->parsed, new->data, new->data_len, tfm);
+>> +       swap(root->i_private, new);
+>> +
+>> +       inode_unlock(root);
+>> +       kfree(cpy);
+>> +       ipe_free_policy_node(new);
+>> +       crypto_free_shash(tfm);
+>> +
+>> +       return written;
+>> +out3:
+>> +       inode_unlock(root);
+>> +       ipe_free_policy_node(new);
+>> +out2:
+>> +       crypto_free_shash(tfm);
+>> +out:
+>> +       kfree(cpy);
 >> +       return rc;
 >> +}
 > [...]
->> diff --git a/security/ipe/ipe-hooks.c b/security/ipe/ipe-hooks.c
-> [..]
->> +#define HAS_EXEC(_p, _rp) (((_rp) & PROT_EXEC) || ((_p) & PROT_EXEC))
-> This should be unnecessary; reqprot are the protections requested by
-> userspace, prot are the possibly expanded protections the kernel is
-> applying. I think you just want to use prot and ignore reqprot.
-Thanks, I'll correct it.
-> [...]
->> diff --git a/security/ipe/ipe-policy.h b/security/ipe/ipe-policy.h
-> [...]
->> +extern const char *const ipe_boot_policy;
-> I don't see anything in the entire patch series that actually sets
-> this variable. Am I missing something?
-This variable is set by an auto-generated file, invoked by the tool created
-in the first patch of this series. It creates a file called "ipe-bp.c" 
-whose
-only purpose is to set this variable.
->> +extern const struct ipe_policy *ipe_active_policy;
-> [...]
->> diff --git a/security/ipe/ipe-property.c b/security/ipe/ipe-property.c
-> [...]
->> +/* global root containing all registered properties */
->> +struct rb_root ipe_registry_root = RB_ROOT;
-> [...]
->> +static struct ipe_prop_reg *reg_lookup(const char *key)
+>> +static ssize_t ipe_secfs_rd_content(struct file *f, char __user *data,
+>> +                                   size_t size, loff_t *offset)
 >> +{
->> +       struct rb_node *n = ipe_registry_root.rb_node;
+>> +       ssize_t rc = 0;
+>> +       size_t avail = 0;
+>> +       u8 *buffer = NULL;
+>> +       struct inode *root = NULL;
+>> +       const struct ipe_policy_node *node = NULL;
 >> +
->> +       while (n) {
->> +               int r;
->> +               struct ipe_prop_reg *reg =
->> +                       container_of(n, struct ipe_prop_reg, node);
+>> +       root = d_inode(f->f_path.dentry->d_parent);
 >> +
->> +               r = strcmp(reg->prop->property_name, key);
->> +               if (r == 0)
->> +                       return reg;
->> +               else if (r > 0)
->> +                       n = n->rb_right;
->> +               else
->> +                       n = n->rb_left;
+>> +       inode_lock(root);
+>> +       node = (const struct ipe_policy_node *)root->i_private;
+>> +
+>> +       avail = node->content_size;
+>> +       buffer = kmemdup(node->content, avail, GFP_KERNEL);
+>> +       if (!buffer) {
+>> +               rc = -ENOMEM;
+>> +               goto cleanup;
 >> +       }
 >> +
->> +       return NULL;
+>> +       rc = simple_read_from_buffer(data, size, offset, buffer, avail);
+>> +cleanup:
+>> +       inode_unlock(root);
+> Why are you nod doing the simple_read_from_buffer() after inode_unlock()?
+> The way you're doing it now, there isn't really a point in the kmemdup() at
+> all...
+> Also, you'll have to free the buffer before returning.
+I don't know how I missed such an obvious memleak. I'll remove the 
+unnecessary
+kmemdup.
+>
+>> +       return rc;
 >> +}
-> Where is the locking for ipe_registry_root? I've looked through the
-> callers and can't find it. Also, please add a lockdep assertion
-> (`lockdep_assert_held(...)`) here if possible to ensure that when the
-> kernel is buildt with appropriate debugging options turned on
-> (CONFIG_LOCKDEP), it will warn about calling this method with
-> inappropriate locking.
-I'm not sure why locking is necessary on this structure? This structure is
-only added to, synchronously, at lsm_init. The first time it's queried 
-after
-that is core_init with ipe_securityfs_init. Every subsequent time is when
-user mode is setup and 1.) IPE is evaluating a binary, or 2.) IPE is 
-loading
-a policy. We don't support the run time loading of properties, nor do we
-support the removal of policies, so the tree should be stable without locks?
 > [...]
->> +/**
->> + * ipe_register_property: Insert a property into the registration system.
->> + * @prop: Read-only property structure containing the property_name, as well
->> + *       as the necessary function pointers for a property.
->> + *
->> + * The caller needs to maintain the lifetime of @prop throughout the life of
->> + * the system, after calling ipe_register_property.
->> + *
->> + * All necessary properties need to be loaded via this method before
->> + * loading a policy, otherwise the properties will be ignored as unknown.
->> + *
->> + * Return:
->> + * 0 - OK
->> + * -EEXIST - A key exists with the name @prop->property_name
->> + * -ENOMEM - Out of memory
->> + */
->> +int ipe_register_property(const struct ipe_property *prop);
-> Normal Linux kernel style is to have comments on the definitions of
-> methods (in the .c files), not in the headers. It looks like you
-> duplicated the same comment between the header and the .c file -
-> please don't do that. Same thing in a bunch of other places.
-Thanks, I'll strip the header comments.
->> +#endif /* IPE_PROPERTY_H */
 >> diff --git a/security/ipe/ipe-sysfs.c b/security/ipe/ipe-sysfs.c
 > [...]
->> +#else /* !CONFIG_SYSCTL */
+>> +static int ipe_switch_active_policy(struct ctl_table *table, int write,
+>> +                                   void __user *buffer, size_t *lenp,
+>> +                                   loff_t *ppos)
+>> +{
+>> +       int rc = 0;
+>> +       char *id = NULL;
+>> +       size_t size = 0;
 >> +
->> +/**
->> + * ipe_sysctl_init: Initialize IPE's sysfs entries.
->> + *
->> + * Return:
->> + * 0 - OK
->> + * -ENOMEM - Sysctl registration failed
->> + */
->> +inline int __init ipe_sysctl_init(void)
-> "inline" doesn't make sense to me if the caller is in a different
-> compilation unit
-I'll remove it.
+>> +       if (write) {
+>> +               id = kzalloc((*lenp) + 1, GFP_KERNEL);
+>> +               if (!id)
+>> +                       return -ENOMEM;
+>> +
+>> +               table->data = id;
+>> +               table->maxlen = (*lenp) + 1;
+>> +
+>> +               rc = proc_dostring(table, write, buffer, lenp, ppos);
+>> +               if (rc != 0)
+>> +                       goto out;
+>> +
+>> +               rc = ipe_set_active_policy(id, strlen(id));
+>> +       } else {
+>> +               rcu_read_lock();
+>> +               size = strlen(rcu_dereference(ipe_active_policy)->policy_name);
+> Can't `ipe_active_policy` be NULL here?
+>
+>> +               rcu_read_unlock();
+>> +
+>> +               id = kzalloc(size + 1, GFP_KERNEL);
+> The `+ 1` seems unnecessary.
+This is actually necessary. size would point to the string without 
+nullterm. strncpy
+below is due to if the active policy changes: if it's bigger, then we 
+truncate, if it's
+smaller, we'll exit early. Either way, it's guaranteed to be null 
+terminated.
+
+Later, in proc_dostring, strlen is called, and as a result KASAN catches 
+an OOB
+read without the +1.
+>
+>> +               if (!id)
+>> +                       return -ENOMEM;
+>> +
+>> +               rcu_read_lock();
+>> +               strncpy(id, rcu_dereference(ipe_active_policy)->policy_name,
+>> +                       size);
+>> +               rcu_read_unlock();
+>> +
+>> +               table->data = id;
+>> +               table->maxlen = size;
+>> +
+>> +               rc = proc_dostring(table, write, buffer, lenp, ppos);
+>> +       }
+>> +out:
+>> +       kfree(id);
+>> +       return rc;
+>> +}
+>> +
+>> +#endif /* CONFIG_SECURITYFS */
 > [...]
 >> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
 > [...]
->> +/**
->> + * ipe_load_properties: Call the property entry points for all the IPE modules
->> + *                     that were selected at kernel build-time.
->> + *
->> + * Return:
->> + * 0 - OK
->> + */
->> +static int __init ipe_load_properties(void)
->> +{
->> +       return 0;
->> +}
-> this belongs in patch 4 ("ipe: add property for trust of boot volume")
-I'll move it forward.
-> [...]
->> +static int __init ipe_init(void)
->> +{
->> +       int rc = 0;
-> useless initialization
-I'll fix it.
->> +       rc = ipe_sysctl_init();
->> +       if (rc != 0)
->> +               pr_err("failed to configure sysctl: %d", -rc);
-> pr_err() needs to have an explicit \n at the end of the message unless
-> you're planning to continue printing more text on the same line via
-> pr_cont(). Same issue in many other places.
-Easily fixed by adding a \n to pr_fmt. Will be fixed in next iteration.
 >> +
->> +       pr_info("mode=%s", (enforce == 1) ? IPE_MODE_ENFORCE :
->> +                                           IPE_MODE_PERMISSIVE);
->> +
->> +       RCU_INIT_POINTER(ipe_active_policy, NULL);
-> Why? Statically allocated variables are zero-initialized by default in C.
-This is my inexperience with rcu. I recognize statically allocated 
-variables
-are zero-initialized, however, I thought that the rcu system needed to set
-things up with the pointer through this method before it can be used.
-I'll remove it.
->> +       security_add_hooks(ipe_hooks, ARRAY_SIZE(ipe_hooks), "IPE");
->> +
->> +       return rc;
->> +}
-> [...]
 >> +/**
->> + * enforce: Kernel command line parameter to set the permissive mode for IPE
->> + *         at system startup. By default, this will always be in enforce mode.
->> + *
->> + * This is also controlled by the sysctl, "ipe.enforce".
+>> + * strict_parse: Kernel command line parameter to enable strict parsing of
+>> + *              IPE policies - causing unrecognized properties to fail
+>> + *              parsing. This breaks backwards compatibility of IPE policies,
+>> + *              when enabled.
+> I guess the backwards compatibility stuff is referring to an out-of-tree version
+> of this series that you've already shipped?
+Actually no. The backwards compatibility stuff is intended to help 
+divorcing kernel updates from policy updates.
+At the moment, the default behavior of IPE is to ignore any lines that 
+do not parse successfully. This allows policies
+written for newer versions of IPE to parse and apply successfully. Thus, 
+policy can be updated without a dependency
+on the kernel being updated.
+
+If that behavior isn't desirable, then you can enable this sysctl / 
+kernel command line parameter to cause the
+unrecognized lines to error fatally.  Operationally, I see merits to 
+both methods, at the cost of what boils down
+to an if statement, so I kept this as a configurable option.
+>
+>> + * This is also controlled by the sysctl, "ipe.strict_parse".
 >> + */
->> +module_param(enforce, int, 0644);
->> +MODULE_PARM_DESC(enforce, "enforce/permissive mode switch");
-> [...]
->> +/**
->> + * success_audit: Kernel command line parameter to enable success auditing
->> + *               (emit an audit event when a file is allowed) at system
->> + *               startup. By default, this will be off.
->> + *
->> + * This is also controlled by the sysctl, "ipe.success_audit".
->> + */
->> +int success_audit;
->> +module_param(success_audit, int, 0644);
->> +MODULE_PARM_DESC(success_audit, "audit message on allow");
-> There is a pending patch series that will allow setting arbitrary
-> sysctls from the kernel command line
-> (https://lore.kernel.org/lkml/20200330115535.3215-1-vbabka@suse.cz/);
-> if that also works for your usecase, you should probably avoid
-> explicitly adding module parameters here, unless that is necessary
-> because the pending series sets the sysctls too late.
-Ah, this is great! It's not a problem with the sysctls being set too 
-late - the
-enforce and success_audit sysctls only come into play once user land is 
-setup
-after kernel boot,
->> diff --git a/security/ipe/ipe.h b/security/ipe/ipe.h
-> [...]
->> +extern int enforce;
->> +extern int success_audit;
-> You probably shouldn't be defining global symbols with such broad
-> names to avoid colliding with global symbols defined elsewhere in the
-> kernel. Consider adding "ipe_" prefixes to the variable names, or
-> something like that.
-I'll add the prefixes. Thanks.
+> (Also, same thing as in the other patch re sysctls and kernel command line
+> parameters for the same feature.)
+Yes, I am going to strip out all this.
