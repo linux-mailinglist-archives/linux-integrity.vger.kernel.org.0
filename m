@@ -1,84 +1,81 @@
 Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 752AD1A5F27
-	for <lists+linux-integrity@lfdr.de>; Sun, 12 Apr 2020 17:02:33 +0200 (CEST)
+Received: from vger.kernel.org (unknown [209.132.180.67])
+	by mail.lfdr.de (Postfix) with ESMTP id B8D1F1A5F7C
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Apr 2020 19:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726689AbgDLPCc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 12 Apr 2020 11:02:32 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53264 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbgDLPCb (ORCPT
+        id S1727229AbgDLRKJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 12 Apr 2020 13:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:58964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727201AbgDLRKG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 12 Apr 2020 11:02:31 -0400
-Received: by mail-wm1-f68.google.com with SMTP id d77so7229869wmd.3
-        for <linux-integrity@vger.kernel.org>; Sun, 12 Apr 2020 08:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=easyb-ch.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=0yqa+EKJqOMZqIixsYzmlt55IzP82TkpcbHu7uxFT4o=;
-        b=i7Z8LvyenibZTZyXkEsEEE3K8RDOujJ5674sYvNfURpQHNE2oBiWWT7e/r2jmyhWQD
-         y1+2fnERImX69QvnWOISWrNrpamrprTbjTLcqfhrku9LoEMEmGG9qEuMsikEqSsaxSqK
-         Y79t6ml2mxu6Bg8wZRcptCDJfETVDXs2SZK8GQltSXQNOiaJe/6CdZyheSlXoFomAFYU
-         BHejmk7ZGe37MV75QLmNKF23jBsXVadUdm/DzLwRTeJn8gbN5K6kRtSZybzhaMVIOrrG
-         kkpACiuBfCAkHXBTZasQv7jicUw7dN29mk5V0RP+E4nBX49iA5hmeuiTzHvVhCaBoAUV
-         g05g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=0yqa+EKJqOMZqIixsYzmlt55IzP82TkpcbHu7uxFT4o=;
-        b=V7pvCMFDreHo27HzTm6zAYFavTSoAqFuTr/2rbSNkpNgLExjLkYuHAN0KpPxXNHpdh
-         1wc+a9U8m5Ef8IG3EOs6iUSfI7c0Yfia0y76VYFilRCtXRbuAYIID7vlUTXK4w2W3FJS
-         EYGG5ZvXkryN63I1DQEAnOqWt8Ijmv1lQlLgYOocvwBAJ/q3OXl0VcyY6FDyoTWCaxQu
-         loQcQ0BxTmkKaTjaPJBs4gPlctrfK3Gz682LWb1PaEJXSUixkCBTTKaWhWSqUxnD1I8a
-         vKL8kq48Gq/mYcDU/od8nbLkKh/6WurYN6L3EnFtHiCtUqln/BsCa2Y2jiylizDxJaYe
-         d2OA==
-X-Gm-Message-State: AGi0PuYeI6cRC0XlnSGHvaImsDO7UIAOKrtwse2n8TfxsebWiQeUTPkW
-        FY2DZM2mSAd9BVIHURYfGuh/NA==
-X-Google-Smtp-Source: APiQypJ5G4BL6g1G/EhYOU8fMFTZs+je8F9lWXNuf0JLZA90eJeTelxDQNlTSUguKI6gLklzRQKBzw==
-X-Received: by 2002:a1c:a553:: with SMTP id o80mr14005777wme.159.1586703750678;
-        Sun, 12 Apr 2020 08:02:30 -0700 (PDT)
-Received: from ?IPv6:2001:1715:4e3a:130:cca:5c89:8758:a721? ([2001:1715:4e3a:130:cca:5c89:8758:a721])
-        by smtp.gmail.com with ESMTPSA id i13sm5808364wro.50.2020.04.12.08.02.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 12 Apr 2020 08:02:30 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.5\))
-Subject: Re: [PATCH] selftests/tpm2: Change exception handling to be Python 3
- compatible
-From:   Ezra Buehler <ezra@easyb.ch>
-In-Reply-To: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
-Date:   Sun, 12 Apr 2020 17:02:27 +0200
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
-References: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-X-Mailer: Apple Mail (2.3445.9.5)
+        Sun, 12 Apr 2020 13:10:06 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F17AC0A3BF9;
+        Sun, 12 Apr 2020 10:04:22 -0700 (PDT)
+IronPort-SDR: 7LuXZj+dZEiceUCK23Pi75vIRpBaYJzdgXmuW9+ZwiRqt7GXnucH6eKa+2gv0c4wUuo5AEzU65
+ KyrtoDeCfcVA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 10:04:22 -0700
+IronPort-SDR: DTTdKPJHO0uXGagxqHZl2vgjFStjmywwfVSPECr7jUaNvuTE4PuiP7PhBzKK+tCJhqa2W1kmBw
+ ICtY9IPRFwPQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,375,1580803200"; 
+   d="scan'208";a="298228946"
+Received: from apresura-mobl.ger.corp.intel.com (HELO localhost) ([10.252.61.246])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2020 10:04:19 -0700
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] tpm/tpm_tis: Free IRQ if probing fails
+Date:   Sun, 12 Apr 2020 20:04:12 +0300
+Message-Id: <20200412170412.324200-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkkon,
+Call devm_free_irq() if we have to revert to polling in order not to
+unnecessarily reserve the IRQ for the life-cycle of the driver.
 
-> On 12 Apr 2020, at 16:36, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
-> +        except ProtocolError(e):
+Cc: stable@vger.kernel.org # 4.5.x
+Reported-by: Hans de Goede <hdegoede@redhat.com>
+Fixes: e3837e74a06d ("tpm_tis: Refactor the interrupt setup")
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+ drivers/char/tpm/tpm_tis_core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Should this not be
-
-        except ProtocolError as e:
-
-?
-
-Cheers,
-Ezra.
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 27c6ca031e23..ae6868e7b696 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -1062,9 +1062,12 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		if (irq) {
+ 			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
+ 						 irq);
+-			if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
++			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+ 				dev_err(&chip->dev, FW_BUG
+ 					"TPM interrupt not working, polling instead\n");
++				devm_free_irq(chip->dev.parent, priv->irq,
++					      chip);
++			}
+ 		} else {
+ 			tpm_tis_probe_irq(chip, intmask);
+ 		}
+-- 
+2.25.1
 
