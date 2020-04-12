@@ -2,91 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E87F1A53D1
-	for <lists+linux-integrity@lfdr.de>; Sat, 11 Apr 2020 23:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4EAD1A5D6E
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Apr 2020 10:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgDKVnw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 11 Apr 2020 17:43:52 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52980 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726029AbgDKVnw (ORCPT
+        id S1725911AbgDLIPT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 12 Apr 2020 04:15:19 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:41593 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725832AbgDLIPT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 11 Apr 2020 17:43:52 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03BLX4Fe008984;
-        Sat, 11 Apr 2020 17:43:43 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30b6ttftpy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Apr 2020 17:43:43 -0400
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 03BLaZ5M013776;
-        Sat, 11 Apr 2020 17:43:43 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30b6ttftpp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Apr 2020 17:43:43 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03BLfMVK007615;
-        Sat, 11 Apr 2020 21:43:42 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma03dal.us.ibm.com with ESMTP id 30b5h5xayg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Apr 2020 21:43:42 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03BLhfVn12452540
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 11 Apr 2020 21:43:41 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A71392805E;
-        Sat, 11 Apr 2020 21:43:41 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BF3EA28058;
-        Sat, 11 Apr 2020 21:43:40 +0000 (GMT)
-Received: from swastik.ibm.com (unknown [9.65.249.129])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Sat, 11 Apr 2020 21:43:40 +0000 (GMT)
-Subject: Re: [PATCH v2 0/2] support to read and tune appraise mode in runtime
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        zhang.jia@linux.alibaba.com
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, zhangliguang@linux.alibaba.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200409103440.47946-1-tianjia.zhang@linux.alibaba.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-Message-ID: <1e160d08-788a-0c3b-0f9f-2077e55b286a@linux.vnet.ibm.com>
-Date:   Sat, 11 Apr 2020 17:43:40 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Sun, 12 Apr 2020 04:15:19 -0400
+Received: by mail-il1-f194.google.com with SMTP id f82so2564546ilh.8;
+        Sun, 12 Apr 2020 01:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c/Lb56tGiXdOhLm4M0kNSqw6FPBoSkeoJ2b2tzoaiUg=;
+        b=iRvO0GRYfEo4FFqysv7xd+IiXgg0sCKSfGiHmvfUxmpMGq6KSHM0FgxKyAerPrSXUy
+         ygV2w/l83K4YkNx3WLdTN5oIQSbVKFKsHYjTJY9hCD26mBcf+XPK5/seWl+kUUqcJd/j
+         QNgLhyQHicAa8q182Ay4mCTd7ZSSZnliZHzDse9zKEXKMZThNX93DXxHWMX/xth0KG+P
+         56zSOOcfPOuykxyB3GhIV6/4JGfUgk7FhvHzES9vbVEQCS8p/Or9cogYC7jMTP9Yb3Hf
+         Rw2h1jfTgxVbdwm/lQTETv9ln5tS6086/Vtk9Xmfz8JbkuIecdGuPQauxqD2mMIMQJ6S
+         sSxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c/Lb56tGiXdOhLm4M0kNSqw6FPBoSkeoJ2b2tzoaiUg=;
+        b=TkiWVOOkzDl+QnJtUDX7cZmJIoknklZH5QjxOWnbIXBGqcPnCweKEFL0HNUyCrQSOG
+         Hz7TgDWZCmbLYMu0Lw1bnlrLORDU7PwCKiqdY0lHQRra7YLK0UXbE+4u3a3fBUaIeZw2
+         +g22leqSBoxqAh7g3UtntcUOxUXmxi25i2WDL2V/273Fp0eTHOBvJY0KV/OrN6dSgcvX
+         oPd5TEk50NcMXbUM45D5aA6ISIrmnMo5P169Xm7W8OLA0hzw7RiiHy+kKQm0T8Ec5b3X
+         D6zUNuPRqI7OJK81MHXk+hRVh+63mDehvd44dcQojWhfLVr4+KULxBP1HcyTgnE/FC/H
+         wPSg==
+X-Gm-Message-State: AGi0PuYUGhMbl1soWbnDuc42eu6nqnvbCB9LqiVrpVXkH5trjmERHoDx
+        dbo/8H8VkiZlxbbHd/UGyoFOA9us4th2NhiFRy2vycru6nk=
+X-Google-Smtp-Source: APiQypLrgetzg3xkZ+c4aa3/NRG/TMq0oNUgTRtFJ+4YwTFwuFx2KOSYw7Q3K9sS6y5hElbohZU31ooLD7r7jKIxFiI=
+X-Received: by 2002:a92:dc43:: with SMTP id x3mr4747407ilq.102.1586679317629;
+ Sun, 12 Apr 2020 01:15:17 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200409103440.47946-1-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-11_06:2020-04-11,2020-04-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 mlxscore=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 mlxlogscore=983
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004110193
+References: <f92bef0f-eb40-0e07-540c-321134e4b070@linux.microsoft.com> <CAB9W1A1=JyOV3-+6jn3xX-M+GKWBB2cCNh-VWB_kzf+YiR_d2Q@mail.gmail.com>
+In-Reply-To: <CAB9W1A1=JyOV3-+6jn3xX-M+GKWBB2cCNh-VWB_kzf+YiR_d2Q@mail.gmail.com>
+From:   "Lev R. Oshvang ." <levonshe@gmail.com>
+Date:   Sun, 12 Apr 2020 11:15:06 +0300
+Message-ID: <CAP22eLGJbSvUU=W0Jp=gvOFv-nxLC8YTnta3OU2PKbh746MCkQ@mail.gmail.com>
+Subject: Re: [RFC] IMA: New IMA measurements for dm-crypt and selinux
+To:     Stephen Smalley <stephen.smalley@gmail.com>
+Cc:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        SELinux <selinux@vger.kernel.org>, dm-devel@redhat.com,
+        James Morris <jmorris@namei.org>, chpebeni@linux.microsoft.com,
+        nramas@linux.microsoft.com, balajib@microsoft.com,
+        sashal@kernel.org, suredd@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-On 4/9/20 6:34 AM, Tianjia Zhang wrote:
-> Support the read and write operations of ima_appraise by adding a
-> securifyfs file 'appraise_mode'.
+On Sat, Apr 11, 2020 at 10:07 PM Stephen Smalley
+<stephen.smalley@gmail.com> wrote:
 >
-> In order to tune appraise mode in runtime, writing a PKCS#7 signature
+> On Wed, Apr 8, 2020 at 6:28 AM Tushar Sugandhi
+> <tusharsu@linux.microsoft.com> wrote:
+> > Measuring SELinux status and various SELinux policies can help ensure
+> > mandatory access control of the system is not compromised.
+> <snip>
+> > B. Measuring selinux constructs:
+> >      We propose to add an IMA hook in enforcing_set() present under
+> >      security/selinux/include/security.h.
+> >      enforcing_set() sets the selinux state to enforcing/permissive etc.
+> >      and is called from key places like selinux_init(),
+> >      sel_write_enforce() etc.
+> >      The hook will measure various attributes related to selinux status.
+> >      Majority of the attributes are present in the struct selinux_state
+> >      present in security/selinux/include/security.h
+> >      e.g.
+> >      $sestatus
+> >             SELinux status:              enabled
+> >             SELinuxfs mount:             /sys/fs/selinux
+> >             SELinux root directory:      /etc/selinux
+> >             Loaded policy name:          default
+> >             Current mode:                permissive
+> >             Mode from config file:       permissive
+> >             Policy MLS status:           enabled
+> >             Policy deny_unknown status:  allowed
+> >             Memory protection checking:  requested (insecure)
+> >             Max kernel policy version:   32
+> >
+> >      The above attributes will be serialized into a set of key=value
+> >      pairs when passed to IMA for measurement.
+> >
+> >      Proposed Function Signature of the IMA hook:
+> >      void ima_selinux_status(void *selinux_status, int len);
+>
+> This won't detect changes to any of these state variables via a kernel
+> write vulnerability,
+> so it would be good to provide a way to trigger measurement of the
+> current values on
+> demand.
+> You'll also likely want to measure parts of the child structures of
+> selinux_state, e.g. selinux_ss,
+> especially selinux_map and policydb.  You can simplify measurement of
+> the policydb by
+> serializing it first via policydb_write() and hashing the result. I
+> suppose one question is whether you can do all of this
+> already from userspace by just having userspace read
+> /sys/fs/selinux/enforce, /sys/fs/selinux/policy, etc.
 
-I am curious to know why would you tune appraise mode in runtime ?
-
-Thanks & Regards,
-
-       - Nayna
-
+It sees to me that  LKRG (kernel run time guard)  takes the role of
+measuring kernel structures.  Perhaps you need to consult with LKRG
+guys.
+Lev.
