@@ -2,80 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D1F1A5F7C
-	for <lists+linux-integrity@lfdr.de>; Sun, 12 Apr 2020 19:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 978EC1A5F7F
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Apr 2020 19:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727229AbgDLRKJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 12 Apr 2020 13:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:58964 "EHLO
+        id S1727209AbgDLRPG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 12 Apr 2020 13:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727201AbgDLRKG (ORCPT
+        with ESMTP id S1727196AbgDLRPG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 12 Apr 2020 13:10:06 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F17AC0A3BF9;
-        Sun, 12 Apr 2020 10:04:22 -0700 (PDT)
-IronPort-SDR: 7LuXZj+dZEiceUCK23Pi75vIRpBaYJzdgXmuW9+ZwiRqt7GXnucH6eKa+2gv0c4wUuo5AEzU65
- KyrtoDeCfcVA==
+        Sun, 12 Apr 2020 13:15:06 -0400
+X-Greylist: delayed 464 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Apr 2020 13:15:06 EDT
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC26C0A3BF0;
+        Sun, 12 Apr 2020 10:07:22 -0700 (PDT)
+IronPort-SDR: lQDYthYjuAhHSUjxlcGVfMtCP9BdVf6pRYeZsIEuLVgv+aw+RpPPs5rzS9wUfFIRnTXLOuamr0
+ GUJasPAqg8Yw==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 10:04:22 -0700
-IronPort-SDR: DTTdKPJHO0uXGagxqHZl2vgjFStjmywwfVSPECr7jUaNvuTE4PuiP7PhBzKK+tCJhqa2W1kmBw
- ICtY9IPRFwPQ==
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 10:07:22 -0700
+IronPort-SDR: SmiQxsz75gR7NkwXRwXj40onoVS8+6VYMMeh1GH4lu/xkkcnBrYaSGbxy/tBJmQF4cCgOa6TwY
+ sgONkR7vLNfw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,375,1580803200"; 
-   d="scan'208";a="298228946"
+   d="scan'208";a="453997712"
 Received: from apresura-mobl.ger.corp.intel.com (HELO localhost) ([10.252.61.246])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2020 10:04:19 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 12 Apr 2020 10:07:20 -0700
+Date:   Sun, 12 Apr 2020 20:07:19 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] tpm/tpm_tis: Free IRQ if probing fails
-Date:   Sun, 12 Apr 2020 20:04:12 +0300
-Message-Id: <20200412170412.324200-1-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+To:     Ezra Buehler <ezra@easyb.ch>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Tadeusz Struk <tadeusz.struk@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/tpm2: Change exception handling to be Python 3
+ compatible
+Message-ID: <20200412170719.GA324408@linux.intel.com>
+References: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
+ <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Call devm_free_irq() if we have to revert to polling in order not to
-unnecessarily reserve the IRQ for the life-cycle of the driver.
+On Sun, Apr 12, 2020 at 05:02:27PM +0200, Ezra Buehler wrote:
+> Hi Jarkkon,
+> 
+> > On 12 Apr 2020, at 16:36, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> > +        except ProtocolError(e):
+> 
+> Should this not be
+> 
+>         except ProtocolError as e:
 
-Cc: stable@vger.kernel.org # 4.5.x
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Fixes: e3837e74a06d ("tpm_tis: Refactor the interrupt setup")
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- drivers/char/tpm/tpm_tis_core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Unless there is a functional difference, does it matter?
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 27c6ca031e23..ae6868e7b696 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -1062,9 +1062,12 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 		if (irq) {
- 			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
- 						 irq);
--			if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
-+			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
- 				dev_err(&chip->dev, FW_BUG
- 					"TPM interrupt not working, polling instead\n");
-+				devm_free_irq(chip->dev.parent, priv->irq,
-+					      chip);
-+			}
- 		} else {
- 			tpm_tis_probe_irq(chip, intmask);
- 		}
--- 
-2.25.1
-
+/Jarkko
