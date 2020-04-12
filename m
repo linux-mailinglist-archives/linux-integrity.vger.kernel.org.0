@@ -2,72 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD0B1A5ED5
-	for <lists+linux-integrity@lfdr.de>; Sun, 12 Apr 2020 15:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508091A5EE6
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Apr 2020 16:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726934AbgDLNxq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 12 Apr 2020 09:53:46 -0400
-Received: from mga14.intel.com ([192.55.52.115]:43942 "EHLO mga14.intel.com"
+        id S1727070AbgDLOL0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 12 Apr 2020 10:11:26 -0400
+Received: from mga07.intel.com ([134.134.136.100]:57266 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725909AbgDLNxq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 12 Apr 2020 09:53:46 -0400
-IronPort-SDR: YSskhaiSOLg+TKevmKGqzvz1cOX05k9fgjrRiYnxIV90L4KBGaff06k22Z2wQ1+oFtPcIf2IfN
- 8/PN3NyKCfBg==
+        id S1726805AbgDLOL0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 12 Apr 2020 10:11:26 -0400
+IronPort-SDR: 7jqYE0Hh2SrjJnTWDHl1/XOTjdYluOn4wHPcNMqQ83w0r72Z6+RNIqej9IIeUoUrfKnyb/vmN4
+ mEI1eBOZ9Utg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 06:53:46 -0700
-IronPort-SDR: IsDGhEKfyeBItsAE95C1LrP1UtZa3IOkzqwjtcURdqaKPfA2bBzVy/Csk8I+sZg9VBGzjJ6drV
- dX8yJy80GvSw==
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 07:11:23 -0700
+IronPort-SDR: YcF9grRNMDlNiy+jJV6ObXJCi7szAvUALbUtLto5Lo6282uVrQe3ew4QxGUyba7qEbbivq1+ls
+ 5wT6Yk3yOGKg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,374,1580803200"; 
-   d="scan'208";a="399379453"
+   d="scan'208";a="287651096"
 Received: from apresura-mobl.ger.corp.intel.com (HELO localhost) ([10.252.61.246])
-  by orsmga004.jf.intel.com with ESMTP; 12 Apr 2020 06:53:40 -0700
-Date:   Sun, 12 Apr 2020 16:53:40 +0300
+  by fmsmga002.fm.intel.com with ESMTP; 12 Apr 2020 07:11:21 -0700
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Amir Mizinski <amirmizi6@gmail.com>
-Cc:     Eyal.Cohen@nuvoton.com, Oshri Alkobi <oshrialkoby85@gmail.com>,
-        Alexander Steffen <alexander.steffen@infineon.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        IS20 Oshri Alkoby <oshri.alkoby@nuvoton.com>,
-        Tomer Maimon <tmaimon77@gmail.com>, gcwilson@us.ibm.com,
-        kgoldman@us.ibm.com, IS30 Dan Morav <Dan.Morav@nuvoton.com>,
-        oren.tanami@nuvoton.com, shmulik.hager@nuvoton.com,
-        amir.mizinski@nuvoton.com,
-        Christophe Ricard <christophe-h.ricard@st.com>
-Subject: Re: [PATCH v6 2/7] tpm: tpm_tis: Add check_data handle to
- tpm_tis_phy_ops
-Message-ID: <20200412135340.GA68975@linux.intel.com>
-References: <20200407162044.168890-1-amirmizi6@gmail.com>
- <20200407162044.168890-3-amirmizi6@gmail.com>
- <20200408183324.GB33486@linux.intel.com>
- <CAMHTsUUzQ9rpPfsnEtJruAC3THr+XNA=5Wk7OCteqZXOQ0L=UA@mail.gmail.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
+        Tadeusz Struk <tadeusz.struk@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] selftests/tpm: Fix runtime error
+Date:   Sun, 12 Apr 2020 17:11:17 +0300
+Message-Id: <20200412141118.70688-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMHTsUUzQ9rpPfsnEtJruAC3THr+XNA=5Wk7OCteqZXOQ0L=UA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-There is something seriously wrong in your email client.
-Please reconfigure your email client according to:
+There is some random clutter in test_smoke.sh:
 
-https://www.kernel.org/doc/html/v5.5/process/email-clients.html
+  ./test_smoke.sh: line 3: self.flags: command not found
 
-Then re-response.
+Remove it.
 
-This is.. I've lost to the count how many times I've requsted this.
+Fixes: b32694cd0724 ("Kernel selftests: tpm2: check for tpm support")
+Cc: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+I rely on these tests and this was not even cc'd to me and obviously
+was untested. There is neither reviewed-by nor tested-by tags in the
+commit (not to mention some cosmetic things like short summary
+formatted wrong and the extra newline character).
 
-Thanks.
+Please do not do this next time. Thanks.
+ tools/testing/selftests/tpm2/test_smoke.sh | 2 --
+ 1 file changed, 2 deletions(-)
 
-/Jarkko
+diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
+index b630c7b5950a..e55d3e400666 100755
+--- a/tools/testing/selftests/tpm2/test_smoke.sh
++++ b/tools/testing/selftests/tpm2/test_smoke.sh
+@@ -1,11 +1,9 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+-self.flags = flags
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+ 
+-
+ if [ -f /dev/tpm0 ] ; then
+ 	python -m unittest -v tpm2_tests.SmokeTest
+ 	python -m unittest -v tpm2_tests.AsyncTest
+-- 
+2.25.1
+
