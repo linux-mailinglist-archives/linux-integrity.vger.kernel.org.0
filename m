@@ -2,129 +2,126 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB641A6EB9
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Apr 2020 23:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D081A6EC7
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Apr 2020 23:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389329AbgDMVxg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Apr 2020 17:53:36 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:24944 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389288AbgDMVwp (ORCPT
+        id S2389362AbgDMV4L (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Apr 2020 17:56:11 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49228 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389360AbgDMV4J (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Apr 2020 17:52:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586814764;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wxqewLP4iDn0WQn56N4JoZnVO/VnkSCHun6WFS8TA58=;
-        b=ZtXlUR+jTPnPN3iCA/WKmMCiPRo/hAbmohSMyJGHGYT5o6A8cEKHi7627TDTDbNJ1TeeIo
-        p8bBsVkbQlAOOZyLatf6AQfHgPPE8r3rc+shdpzSFQy3NMuUjhIpz78Cva0U8Z66l77Jjy
-        UVK9pTbtiTQkMRsi9aA4mLn8axE6Yp8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-238-R_QYnAHVPD67nMQL-Amo0w-1; Mon, 13 Apr 2020 17:52:38 -0400
-X-MC-Unique: R_QYnAHVPD67nMQL-Amo0w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F1B928018AA;
-        Mon, 13 Apr 2020 21:52:32 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-115-28.rdu2.redhat.com [10.10.115.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB5E15C1B2;
-        Mon, 13 Apr 2020 21:52:24 +0000 (UTC)
-Subject: Re: [PATCH 2/2] crypto: Remove unnecessary memzero_explicit()
-To:     Joe Perches <joe@perches.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>
-Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-References: <20200413211550.8307-1-longman@redhat.com>
- <20200413211550.8307-3-longman@redhat.com>
- <efd6ceb1f182aa7364e9706422768a1c1335aee4.camel@perches.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <7e13a94b-2e92-850f-33f7-0f42cfcd9009@redhat.com>
-Date:   Mon, 13 Apr 2020 17:52:24 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <efd6ceb1f182aa7364e9706422768a1c1335aee4.camel@perches.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+        Mon, 13 Apr 2020 17:56:09 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03DLXhi8015949
+        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 17:56:07 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30bad81rax-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 17:56:07 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 13 Apr 2020 22:55:26 +0100
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 13 Apr 2020 22:55:22 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03DLssww49349012
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Apr 2020 21:54:54 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1CEB3A4054;
+        Mon, 13 Apr 2020 21:56:00 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC7C2A405B;
+        Mon, 13 Apr 2020 21:55:58 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.178.165])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 13 Apr 2020 21:55:58 +0000 (GMT)
+Subject: Re: [PATCH 0/2] support to read and tune appraise mode in runtime
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        zhangliguang@linux.alibaba.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>
+Date:   Mon, 13 Apr 2020 17:55:58 -0400
+In-Reply-To: <20200409033907.102833-1-tianjia.zhang@linux.alibaba.com>
+References: <20200409033907.102833-1-tianjia.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20041321-0020-0000-0000-000003C73DFB
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20041321-0021-0000-0000-000022201479
+Message-Id: <1586814958.7311.92.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-13_11:2020-04-13,2020-04-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 priorityscore=1501 suspectscore=0
+ impostorscore=0 phishscore=0 spamscore=0 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004130156
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 4/13/20 5:31 PM, Joe Perches wrote:
-> On Mon, 2020-04-13 at 17:15 -0400, Waiman Long wrote:
->> Since kfree_sensitive() will do an implicit memzero_explicit(), there
->> is no need to call memzero_explicit() before it. Eliminate those
->> memzero_explicit() and simplify the call sites.
-> 2 bits of trivia:
->
->> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-> []
->> @@ -391,10 +388,7 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
->>  		dev_dbg(ce->dev, "ERROR: Invalid keylen %u\n", keylen);
->>  		return -EINVAL;
->>  	}
->> -	if (op->key) {
->> -		memzero_explicit(op->key, op->keylen);
->> -		kfree(op->key);
->> -	}
->> +	kfree_sensitive(op->key);
->>  	op->keylen = keylen;
->>  	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
->>  	if (!op->key)
-> It might be a defect to set op->keylen before the kmemdup succeeds.
-It could be. I can move it down after the op->key check.
->> @@ -416,10 +410,7 @@ int sun8i_ce_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
->>  	if (err)
->>  		return err;
->>  
->> -	if (op->key) {
->> -		memzero_explicit(op->key, op->keylen);
->> -		kfree(op->key);
->> -	}
->> +	free_sensitive(op->key, op->keylen);
-> Why not kfree_sensitive(op->key) ?
+On Thu, 2020-04-09 at 11:39 +0800, Tianjia Zhang wrote:
+> Support the read and write operations of ima_appraise by adding a
+> securifyfs file 'appraise_mode'.
+> 
+> In order to tune appraise mode in runtime, writing a PKCS#7 signature
+> corresponding the signed content is required. The content should be off,
+> enforce, log or fix. Given a simple way to archive this:
+> 
+> $ echo -n off > mode
+> $ openssl smime -sign -nocerts -noattr -binary \
+>     -in mode -inkey <system_trusted_key> \
+>     -signer <cert> -outform der -out mode.p7s
+> $ sudo cat mode.p7s \
+>     > /sys/kernel/security/ima/appraise_mode
+> 
+> Note that the signing key must be a trust key located in
+> system trusted keyring. So even the root privilege cannot
+> simply disable the enforcement.
 
-Oh, it is a bug. I will send out v2 to fix that.
+There are major problems with disabling IMA appraisal.  This patch set
+proposes disabling IMA appraisal without even providing the motivation
+for such support.
 
-Thanks for spotting it.
+A lot of effort went into preventing custom IMA policies from
+disabling appraising the kexec or kernel module signatures.  In
+addition, the "lockdown" patch set was upstreamed permitting IMA
+signature verification.  This patch set would break both of these
+features.
 
-Cheers,
-Longman
+IMA relies on its own keyring for verifying file signatures, not the
+builtin or secondary trusted kernel keyrings.
 
+Two methods already exist - xattr and appended signatures - for
+verifying file signatures.  This patch set assumes creating and
+signing a file, which is then written to a securityfs file.  Like for
+loading a custom IMA policy, instead of cat'ing the file, write the
+pathname to the securityfs file.
 
->
->
+If you must define a new IMA method for verifying file signatures,
+then it needs to be generic and added to ima_appraise_measurement().
+ (Refer to the new IMA appended signature support.)
+
+Mimi
+
+> 
+> Tianjia Zhang (2):
+>   ima: support to read appraise mode
+>   ima: support to tune appraise mode in runtime
+> 
+>  security/integrity/ima/ima_fs.c | 134 +++++++++++++++++++++++++++++++-
+>  1 file changed, 133 insertions(+), 1 deletion(-)
+> 
 
