@@ -2,126 +2,244 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D081A6EC7
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Apr 2020 23:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26C11A6F37
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 00:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389362AbgDMV4L (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Apr 2020 17:56:11 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49228 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389360AbgDMV4J (ORCPT
+        id S2389595AbgDMW3m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Apr 2020 18:29:42 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:20879 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2389567AbgDMW30 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Apr 2020 17:56:09 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03DLXhi8015949
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 17:56:07 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30bad81rax-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 17:56:07 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Mon, 13 Apr 2020 22:55:26 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 13 Apr 2020 22:55:22 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03DLssww49349012
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Apr 2020 21:54:54 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1CEB3A4054;
-        Mon, 13 Apr 2020 21:56:00 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EC7C2A405B;
-        Mon, 13 Apr 2020 21:55:58 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.178.165])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Apr 2020 21:55:58 +0000 (GMT)
-Subject: Re: [PATCH 0/2] support to read and tune appraise mode in runtime
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        zhangliguang@linux.alibaba.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>
-Date:   Mon, 13 Apr 2020 17:55:58 -0400
-In-Reply-To: <20200409033907.102833-1-tianjia.zhang@linux.alibaba.com>
-References: <20200409033907.102833-1-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20041321-0020-0000-0000-000003C73DFB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20041321-0021-0000-0000-000022201479
-Message-Id: <1586814958.7311.92.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-13_11:2020-04-13,2020-04-13 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- mlxlogscore=999 adultscore=0 priorityscore=1501 suspectscore=0
- impostorscore=0 phishscore=0 spamscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004130156
+        Mon, 13 Apr 2020 18:29:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586816965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
+        bh=xENEjcmhPGwc2y5vLor/EJ6DRudCRi6D5WVSWBMRKcI=;
+        b=a2qwqlIcjP8lL2vgPnpktyZwxQJ3Gd8V799zI1IUP4hWTClZUbXZ7IPVt41XBZekaJ1cPz
+        JEkivVeYCabn0j9j1E4/d1K0J6VRG2By3j5kqgfg8x4IdE/P1X82aDPN4bpmhLR/JqzxFJ
+        9BTw5wYu52FL9ORzJX5cBeNfcl2diUc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-285-8AaFvKVINBm7IlQx6B5FDA-1; Mon, 13 Apr 2020 18:29:20 -0400
+X-MC-Unique: 8AaFvKVINBm7IlQx6B5FDA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CC5481005513;
+        Mon, 13 Apr 2020 22:29:15 +0000 (UTC)
+Received: from llong.com (ovpn-115-28.rdu2.redhat.com [10.10.115.28])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3589D100164D;
+        Mon, 13 Apr 2020 22:29:07 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>
+Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
+        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 2/2] crypto: Remove unnecessary memzero_explicit()
+Date:   Mon, 13 Apr 2020 18:28:46 -0400
+Message-Id: <20200413222846.24240-1-longman@redhat.com>
+In-Reply-To: <20200413211550.8307-1-longman@redhat.com>
+References: <20200413211550.8307-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-04-09 at 11:39 +0800, Tianjia Zhang wrote:
-> Support the read and write operations of ima_appraise by adding a
-> securifyfs file 'appraise_mode'.
-> 
-> In order to tune appraise mode in runtime, writing a PKCS#7 signature
-> corresponding the signed content is required. The content should be off,
-> enforce, log or fix. Given a simple way to archive this:
-> 
-> $ echo -n off > mode
-> $ openssl smime -sign -nocerts -noattr -binary \
->     -in mode -inkey <system_trusted_key> \
->     -signer <cert> -outform der -out mode.p7s
-> $ sudo cat mode.p7s \
->     > /sys/kernel/security/ima/appraise_mode
-> 
-> Note that the signing key must be a trust key located in
-> system trusted keyring. So even the root privilege cannot
-> simply disable the enforcement.
+Since kfree_sensitive() will do an implicit memzero_explicit(), there
+is no need to call memzero_explicit() before it. Eliminate those
+memzero_explicit() and simplify the call sites. For better correctness,
+the setting of keylen is also moved down after the key pointer check.
 
-There are major problems with disabling IMA appraisal.  This patch set
-proposes disabling IMA appraisal without even providing the motivation
-for such support.
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ .../allwinner/sun8i-ce/sun8i-ce-cipher.c      | 19 +++++-------------
+ .../allwinner/sun8i-ss/sun8i-ss-cipher.c      | 20 +++++--------------
+ drivers/crypto/amlogic/amlogic-gxl-cipher.c   | 12 +++--------
+ drivers/crypto/inside-secure/safexcel_hash.c  |  3 +--
+ 4 files changed, 14 insertions(+), 40 deletions(-)
 
-A lot of effort went into preventing custom IMA policies from
-disabling appraising the kexec or kernel module signatures.  In
-addition, the "lockdown" patch set was upstreamed permitting IMA
-signature verification.  This patch set would break both of these
-features.
-
-IMA relies on its own keyring for verifying file signatures, not the
-builtin or secondary trusted kernel keyrings.
-
-Two methods already exist - xattr and appended signatures - for
-verifying file signatures.  This patch set assumes creating and
-signing a file, which is then written to a securityfs file.  Like for
-loading a custom IMA policy, instead of cat'ing the file, write the
-pathname to the securityfs file.
-
-If you must define a new IMA method for verifying file signatures,
-then it needs to be generic and added to ima_appraise_measurement().
- (Refer to the new IMA appended signature support.)
-
-Mimi
-
-> 
-> Tianjia Zhang (2):
->   ima: support to read appraise mode
->   ima: support to tune appraise mode in runtime
-> 
->  security/integrity/ima/ima_fs.c | 134 +++++++++++++++++++++++++++++++-
->  1 file changed, 133 insertions(+), 1 deletion(-)
-> 
+diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+index aa4e8fdc2b32..8358fac98719 100644
+--- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
++++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+@@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tfm)
+ {
+ 	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
+ 
+-	if (op->key) {
+-		memzero_explicit(op->key, op->keylen);
+-		kfree(op->key);
+-	}
++	kfree_sensitive(op->key);
+ 	crypto_free_sync_skcipher(op->fallback_tfm);
+ 	pm_runtime_put_sync_suspend(op->ce->dev);
+ }
+@@ -391,14 +388,11 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
+ 		dev_dbg(ce->dev, "ERROR: Invalid keylen %u\n", keylen);
+ 		return -EINVAL;
+ 	}
+-	if (op->key) {
+-		memzero_explicit(op->key, op->keylen);
+-		kfree(op->key);
+-	}
+-	op->keylen = keylen;
++	kfree_sensitive(op->key);
+ 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+ 	if (!op->key)
+ 		return -ENOMEM;
++	op->keylen = keylen;
+ 
+ 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
+ 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
+@@ -416,14 +410,11 @@ int sun8i_ce_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
+ 	if (err)
+ 		return err;
+ 
+-	if (op->key) {
+-		memzero_explicit(op->key, op->keylen);
+-		kfree(op->key);
+-	}
+-	op->keylen = keylen;
++	kfree_sensitive(op->key);
+ 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+ 	if (!op->key)
+ 		return -ENOMEM;
++	op->keylen = keylen;
+ 
+ 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
+ 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
+diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
+index 5246ef4f5430..0495fbc27fcc 100644
+--- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
++++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
+@@ -249,7 +249,6 @@ static int sun8i_ss_cipher(struct skcipher_request *areq)
+ 			offset = areq->cryptlen - ivsize;
+ 			if (rctx->op_dir & SS_DECRYPTION) {
+ 				memcpy(areq->iv, backup_iv, ivsize);
+-				memzero_explicit(backup_iv, ivsize);
+ 				kfree_sensitive(backup_iv);
+ 			} else {
+ 				scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
+@@ -367,10 +366,7 @@ void sun8i_ss_cipher_exit(struct crypto_tfm *tfm)
+ {
+ 	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
+ 
+-	if (op->key) {
+-		memzero_explicit(op->key, op->keylen);
+-		kfree(op->key);
+-	}
++	kfree_sensitive(op->key);
+ 	crypto_free_sync_skcipher(op->fallback_tfm);
+ 	pm_runtime_put_sync(op->ss->dev);
+ }
+@@ -392,14 +388,11 @@ int sun8i_ss_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
+ 		dev_dbg(ss->dev, "ERROR: Invalid keylen %u\n", keylen);
+ 		return -EINVAL;
+ 	}
+-	if (op->key) {
+-		memzero_explicit(op->key, op->keylen);
+-		kfree(op->key);
+-	}
+-	op->keylen = keylen;
++	kfree_sensitive(op->key);
+ 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+ 	if (!op->key)
+ 		return -ENOMEM;
++	op->keylen = keylen;
+ 
+ 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
+ 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
+@@ -418,14 +411,11 @@ int sun8i_ss_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (op->key) {
+-		memzero_explicit(op->key, op->keylen);
+-		kfree(op->key);
+-	}
+-	op->keylen = keylen;
++	kfree_sensitive(op->key);
+ 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+ 	if (!op->key)
+ 		return -ENOMEM;
++	op->keylen = keylen;
+ 
+ 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
+ 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
+diff --git a/drivers/crypto/amlogic/amlogic-gxl-cipher.c b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
+index fd1269900d67..6aa9ce7bbbd4 100644
+--- a/drivers/crypto/amlogic/amlogic-gxl-cipher.c
++++ b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
+@@ -341,10 +341,7 @@ void meson_cipher_exit(struct crypto_tfm *tfm)
+ {
+ 	struct meson_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
+ 
+-	if (op->key) {
+-		memzero_explicit(op->key, op->keylen);
+-		kfree(op->key);
+-	}
++	kfree_sensitive(op->key);
+ 	crypto_free_sync_skcipher(op->fallback_tfm);
+ }
+ 
+@@ -368,14 +365,11 @@ int meson_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
+ 		dev_dbg(mc->dev, "ERROR: Invalid keylen %u\n", keylen);
+ 		return -EINVAL;
+ 	}
+-	if (op->key) {
+-		memzero_explicit(op->key, op->keylen);
+-		kfree(op->key);
+-	}
+-	op->keylen = keylen;
++	kfree_sensitive(op->key);
+ 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+ 	if (!op->key)
+ 		return -ENOMEM;
++	op->keylen = keylen;
+ 
+ 	return crypto_sync_skcipher_setkey(op->fallback_tfm, key, keylen);
+ }
+diff --git a/drivers/crypto/inside-secure/safexcel_hash.c b/drivers/crypto/inside-secure/safexcel_hash.c
+index 43962bc709c6..4a2d162914de 100644
+--- a/drivers/crypto/inside-secure/safexcel_hash.c
++++ b/drivers/crypto/inside-secure/safexcel_hash.c
+@@ -1081,8 +1081,7 @@ static int safexcel_hmac_init_pad(struct ahash_request *areq,
+ 		}
+ 
+ 		/* Avoid leaking */
+-		memzero_explicit(keydup, keylen);
+-		kfree(keydup);
++		kfree_sensitive(keydup);
+ 
+ 		if (ret)
+ 			return ret;
+-- 
+2.18.1
 
