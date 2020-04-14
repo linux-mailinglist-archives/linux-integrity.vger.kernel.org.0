@@ -2,132 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D8C1A8ADC
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 21:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A081A8AF2
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 21:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504871AbgDNTeq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Apr 2020 15:34:46 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60298 "EHLO mx2.suse.de"
+        id S2504910AbgDNTfr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Apr 2020 15:35:47 -0400
+Received: from mga11.intel.com ([192.55.52.93]:45322 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2504805AbgDNTdv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Apr 2020 15:33:51 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 63506AC2C;
-        Tue, 14 Apr 2020 19:16:04 +0000 (UTC)
-Date:   Tue, 14 Apr 2020 21:16:01 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-crypto@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] crypto: Remove unnecessary memzero_explicit()
-Message-ID: <20200414191601.GZ25468@kitsune.suse.cz>
-References: <20200413211550.8307-1-longman@redhat.com>
- <20200413222846.24240-1-longman@redhat.com>
- <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
- <e194a51f-a5e5-a557-c008-b08cac558572@redhat.com>
+        id S2504805AbgDNTfq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 Apr 2020 15:35:46 -0400
+IronPort-SDR: BBNag4/vldgH1A6t2E9Xw8IV8nUBrHeLJoh/rhwstwKu8DFYwU8T44+uqjP/rZWcHGT17vEcdb
+ rytmZlYBcX2g==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 12:35:45 -0700
+IronPort-SDR: PdFZVdsop4wEI6kZ5uvPu49uwWNzttYDZCiEVJdjagXQLZy9j0X5G1FOz2eBNwHw/E3YIfFHTY
+ cVdZQfx1tDBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,384,1580803200"; 
+   d="scan'208";a="253291808"
+Received: from jclobus-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.42.176])
+  by orsmga003.jf.intel.com with ESMTP; 14 Apr 2020 12:35:43 -0700
+Date:   Tue, 14 Apr 2020 22:35:42 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "arnd@arndb.de" <arnd@arndb.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "zhang.jia@linux.alibaba.com" <zhang.jia@linux.alibaba.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Subject: Re: [PATCH] tpm: fix wrong return value in tpm_pcr_extend
+Message-ID: <20200414193542.GB13000@linux.intel.com>
+References: <20200414114226.96691-1-tianjia.zhang@linux.alibaba.com>
+ <76d46ffbad294a6385779c29c4e5cafd@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e194a51f-a5e5-a557-c008-b08cac558572@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <76d46ffbad294a6385779c29c4e5cafd@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 12:24:36PM -0400, Waiman Long wrote:
-> On 4/14/20 2:08 AM, Christophe Leroy wrote:
-> >
-> >
-> > Le 14/04/2020 à 00:28, Waiman Long a écrit :
-> >> Since kfree_sensitive() will do an implicit memzero_explicit(), there
-> >> is no need to call memzero_explicit() before it. Eliminate those
-> >> memzero_explicit() and simplify the call sites. For better correctness,
-> >> the setting of keylen is also moved down after the key pointer check.
-> >>
-> >> Signed-off-by: Waiman Long <longman@redhat.com>
-> >> ---
-> >>   .../allwinner/sun8i-ce/sun8i-ce-cipher.c      | 19 +++++-------------
-> >>   .../allwinner/sun8i-ss/sun8i-ss-cipher.c      | 20 +++++--------------
-> >>   drivers/crypto/amlogic/amlogic-gxl-cipher.c   | 12 +++--------
-> >>   drivers/crypto/inside-secure/safexcel_hash.c  |  3 +--
-> >>   4 files changed, 14 insertions(+), 40 deletions(-)
-> >>
-> >> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-> >> b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-> >> index aa4e8fdc2b32..8358fac98719 100644
-> >> --- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-> >> +++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-> >> @@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tfm)
-> >>   {
-> >>       struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
-> >>   -    if (op->key) {
-> >> -        memzero_explicit(op->key, op->keylen);
-> >> -        kfree(op->key);
-> >> -    }
-> >> +    kfree_sensitive(op->key);
-> >>       crypto_free_sync_skcipher(op->fallback_tfm);
-> >>       pm_runtime_put_sync_suspend(op->ce->dev);
-> >>   }
-> >> @@ -391,14 +388,11 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher
-> >> *tfm, const u8 *key,
-> >>           dev_dbg(ce->dev, "ERROR: Invalid keylen %u\n", keylen);
-> >>           return -EINVAL;
-> >>       }
-> >> -    if (op->key) {
-> >> -        memzero_explicit(op->key, op->keylen);
-> >> -        kfree(op->key);
-> >> -    }
-> >> -    op->keylen = keylen;
-> >> +    kfree_sensitive(op->key);
-> >>       op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
-> >>       if (!op->key)
-> >>           return -ENOMEM;
-> >> +    op->keylen = keylen;
-> >
-> > Does it matter at all to ensure op->keylen is not set when of->key is
-> > NULL ? I'm not sure.
-> >
-> > But if it does, then op->keylen should be set to 0 when freeing op->key. 
+On Tue, Apr 14, 2020 at 11:55:43AM +0000, Roberto Sassu wrote:
+> > -----Original Message-----
+> > From: linux-integrity-owner@vger.kernel.org [mailto:linux-integrity-
+> > owner@vger.kernel.org] On Behalf Of Tianjia Zhang
+> > Sent: Tuesday, April 14, 2020 1:42 PM
+> > To: peterhuewe@gmx.de; jarkko.sakkinen@linux.intel.com; jgg@ziepe.ca;
+> > arnd@arndb.de; gregkh@linuxfoundation.org; zhang.jia@linux.alibaba.com
+> > Cc: linux-integrity@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > tianjia.zhang@linux.alibaba.com
+> > Subject: [PATCH] tpm: fix wrong return value in tpm_pcr_extend
+> > 
+> > For the algorithm that does not match the bank, a positive
+> > value EINVAL is returned here. I think this is a typo error.
+> > It is necessary to return an error value.
 > 
-> My thinking is that if memory allocation fails, we just don't touch
-> anything and return an error code. I will not explicitly set keylen to 0
-> in this case unless it is specified in the API documentation.
-You already freed the key by now so not touching anything is not
-possible. The key is set to NULL on allocation failure so setting keylen
-to 0 should be redundant. However, setting keylen to 0 is consisent with
-not having a key, and it avoids the possibility of leaking the length
-later should that ever cause any problem.
+> Yes, thanks.
+> 
+> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Thanks
+Happen to have the commit ID at hand for fixes?
 
-Michal
+Thanks.
+
+/Jarkko
