@@ -2,42 +2,43 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB0B1A81B5
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 17:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537971A820D
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 17:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436792AbgDNPMV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Apr 2020 11:12:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58636 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437165AbgDNPMR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Apr 2020 11:12:17 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 60A7420768;
-        Tue, 14 Apr 2020 15:12:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586877136;
-        bh=jOYnQgEdoWq4y2CKsrYEfzMWlFKzgnaeEaW9TveH6kc=;
+        id S2407317AbgDNPRX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Apr 2020 11:17:23 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:53402 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405617AbgDNPRQ (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 Apr 2020 11:17:16 -0400
+Received: from [192.168.0.109] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 350C720B4737;
+        Tue, 14 Apr 2020 08:17:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 350C720B4737
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1586877435;
+        bh=4Tq3FB+xGJtxT6ZUJb0cf3A21zkjTaUDbsRjLeb16W4=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=IPRaOyZBtaqJUX/tVd0sTyF9Ot7yOROuyg9Dc35Kq+xIyQ8aDRtgFLwa5JQG0+8WC
-         6l38Be47MPOdkKgXoYqL6vPfwTY57TPVvePiOcmzNYJhS9JXjx8i6mEn7UIbOjAjLK
-         rfDYYdqfLZqin3P/nGF4EPepHKkXA8O0YnVhC5Jg=
-Subject: Re: [PATCH] Revert "Kernel selftests: tpm2: check for tpm support"
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        shuah <shuah@kernel.org>
-References: <20200412142309.71807-1-jarkko.sakkinen@linux.intel.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <3921a93f-120c-0201-4af5-591bf4e6a0b0@kernel.org>
-Date:   Tue, 14 Apr 2020 09:12:05 -0600
+        b=rONCojIm0QhclazO1zFbIqpb0Fg7wgDbsdQRc+yc8GRjqaScZWdOx870Nq7D+agOO
+         rsG2DlIToXNm6Yvf6yRt46/RvdMZKpDB29hFSxGQiL2i9OJAADLibOXrKhXrehXpkM
+         iG1yYDoJpXtG22gfeY00WDEciLw4dvRHjFdQQEu4=
+Subject: Re: [PATCH 1/2] ima: simplify function ima_store_template
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, zhangliguang@linux.alibaba.com,
+        zhang.jia@linux.alibaba.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200414114850.98622-1-tianjia.zhang@linux.alibaba.com>
+ <20200414114850.98622-2-tianjia.zhang@linux.alibaba.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <36c7b81e-ac42-b34a-808b-92107ff85805@linux.microsoft.com>
+Date:   Tue, 14 Apr 2020 08:17:14 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200412142309.71807-1-jarkko.sakkinen@linux.intel.com>
+In-Reply-To: <20200414114850.98622-2-tianjia.zhang@linux.alibaba.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -46,24 +47,32 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 4/12/20 8:23 AM, Jarkko Sakkinen wrote:
-> This reverts commit b32694cd0724d4ceca2c62cc7c3d3a8d1ffa11fc.
+On 4/14/20 4:48 AM, Tianjia Zhang wrote:
+
+> The 'result' here is not necessary, remove redundant code,
+> the code is more concise.
 > 
-> The original comment
-
-commit I assume.
-
-  was neither reviewed nor tested. Thus, this the
-> *only* possible action to take.
-> 
-
-Bummer. I will apply this right away.
-
-
-> Cc: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 > ---
+>   security/integrity/ima/ima_api.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+> index f6bc00914aa5..9121257c9dc6 100644
+> --- a/security/integrity/ima/ima_api.c
+> +++ b/security/integrity/ima/ima_api.c
+> @@ -118,8 +118,7 @@ int ima_store_template(struct ima_template_entry *entry,
+>   		memcpy(entry->digest, hash.hdr.digest, hash.hdr.length);
+>   	}
+>   	entry->pcr = pcr;
+> -	result = ima_add_template_entry(entry, violation, op, inode, filename);
+> -	return result;
+> +	return ima_add_template_entry(entry, violation, op, inode, filename);
+>   }
+>   
+>   /*
+> 
 
-thanks,
--- Shuah
+
+Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
