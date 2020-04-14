@@ -2,109 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 242531A87D6
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 19:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117441A889A
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 20:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502330AbgDNRor (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Apr 2020 13:44:47 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:20281 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2502269AbgDNRol (ORCPT
+        id S2503405AbgDNSHn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Apr 2020 14:07:43 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7863 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2503393AbgDNSHm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Apr 2020 13:44:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586886278;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=eFpvihWvp4gtK9CNYDR6vOir4WNetUr/OAKV/hebSIc=;
-        b=E5TdohfumrqXGObb4HOtYZ8waBd3MnhpYkYij7wvxzYazKtM3up4pf9FTPBkRwV8armrXv
-        sYTBCihYS+F6o3XptbyubNUSU2swCO60YzIw+Zv5RpHqTx4mgZKAlTo4EWJNaVj+b3P5IA
-        1NrMIvgh+xo/5j0eCPqGAzi6C2B1AnA=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-222-uHIINsbqPNGHkqWF6b1ZEw-1; Tue, 14 Apr 2020 13:44:36 -0400
-X-MC-Unique: uHIINsbqPNGHkqWF6b1ZEw-1
-Received: by mail-qv1-f70.google.com with SMTP id y18so535604qvx.1
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Apr 2020 10:44:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=eFpvihWvp4gtK9CNYDR6vOir4WNetUr/OAKV/hebSIc=;
-        b=MAnXyQ27/SudrK36MT8Qdav940qRzPvPz3N3beU7WrWHVJpdSHwZCQAv+HTEno9qgM
-         utNceJIWsVV6Ul6f7RcsbedPD5LlM/bmA8PM/+uSuIMemklfOXaHWci0AerEb47mBuYs
-         hpGdQUWhFYqi+BigDWrH0jaHmFLp6p258BFIUYW/7RMMxYBA8DvHwn496aFCWWAIrYZU
-         b/cTczoD1MFkJ6bKc8eZch1X5E8mH+fIjOb7tf8e9NR7+Y/5BDxa+b6Cy9PbblSsleCo
-         CCz0rSPLm04lCaBo/FGBg3WZKZYddRtyVlLIar6wYjo/YiIXPNDwLORehGEsEqlu63XH
-         7DuQ==
-X-Gm-Message-State: AGi0PuYxeqS+mOJk17/IqsF1f0IYNjdelbg92VLOqprl+acSavq1YtCa
-        xkk+BuxyAY3HO27ZFLk1gkvftp2yuJ92Ybx3+KG0G32EwW/CPFAj0Afyk0GXAzuSigaifSSXCXo
-        ppTMHTmEQA+sdDSPBweSGf/KE8drj
-X-Received: by 2002:a37:ad0b:: with SMTP id f11mr21940882qkm.125.1586886275973;
-        Tue, 14 Apr 2020 10:44:35 -0700 (PDT)
-X-Google-Smtp-Source: APiQypJYfBk2h0H8kc8exxOZkFIy1sLPsElXTf4qLvH7T7gLHtQ4/wiS4m/ec27gQD++W2BOzcWXBg==
-X-Received: by 2002:a37:ad0b:: with SMTP id f11mr21940859qkm.125.1586886275728;
-        Tue, 14 Apr 2020 10:44:35 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id m11sm10633233qkg.130.2020.04.14.10.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 10:44:34 -0700 (PDT)
-Date:   Tue, 14 Apr 2020 10:44:33 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] tpm_tis_core: Disable broken IRQ handling code
-Message-ID: <20200414174433.r54hawtqxlgo3d7y@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-References: <20200409211044.21625-1-hdegoede@redhat.com>
- <20200410163826.GM11886@ziepe.ca>
+        Tue, 14 Apr 2020 14:07:42 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03EI4Jis162387;
+        Tue, 14 Apr 2020 14:07:32 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30dc3rkjdn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Apr 2020 14:07:30 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 03EI4V2c163496;
+        Tue, 14 Apr 2020 14:07:30 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30dc3rkjcs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Apr 2020 14:07:30 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03EHwQMJ013910;
+        Tue, 14 Apr 2020 18:07:28 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma01dal.us.ibm.com with ESMTP id 30b5h6seec-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Apr 2020 18:07:28 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03EI7RUY52953438
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Apr 2020 18:07:27 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34E9BAE05C;
+        Tue, 14 Apr 2020 18:07:27 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7901AAE063;
+        Tue, 14 Apr 2020 18:07:26 +0000 (GMT)
+Received: from [9.80.213.149] (unknown [9.80.213.149])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Apr 2020 18:07:26 +0000 (GMT)
+Subject: Re: [PATCH] ima: optimize ima_pcr_extend function by asynchronous
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, zhangliguang@linux.alibaba.com,
+        zhang.jia@linux.alibaba.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200414115020.99288-1-tianjia.zhang@linux.alibaba.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+Message-ID: <0fdd1c13-51c6-e65c-1ca5-38621fa21f53@linux.ibm.com>
+Date:   Tue, 14 Apr 2020 14:07:26 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200410163826.GM11886@ziepe.ca>
+In-Reply-To: <20200414115020.99288-1-tianjia.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-14_08:2020-04-14,2020-04-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ clxscore=1011 spamscore=0 mlxlogscore=778 lowpriorityscore=0 phishscore=0
+ bulkscore=0 impostorscore=0 suspectscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004140131
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Apr 10 20, Jason Gunthorpe wrote:
->On Thu, Apr 09, 2020 at 11:10:44PM +0200, Hans de Goede wrote:
->> Since commit dda8b2af395b ("tpm: Revert "tpm_tis_core: Set
->> TPM_CHIP_FLAG_IRQ before probing for interrupts"") we no longer set
->> the TPM_CHIP_FLAG_IRQ ever.
->
->This all used to work..
+I wonder if there's a different issue?  I just ran selftest with 
+fullTest = yes in two different TPM vendors.
 
-IIRC this goes all the way back to 570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific")
-when the flag was added. There was never anything initially setting it in the tpm_tis code.
-There were checks added, but the only place it got set was where it did the interrupt test in
-tpm_tis_send, and it can only get down to that code if the flag is set. Stefan's patch was enabling
-the flag, but with the flag enabled some systems were seeing interrupt storms. I believe it has
-been seen with both the t490 and an internal system that Dan Williams was working on at Intel.
-Without access to hw seeing the problem the decision was to revert Stefan's patches while
-we try to figure out the issues.
+One took 230 msec, the other 320 msec.
 
->
->> So the whole IRQ probing code is not useful, worse we rely on the
->> IRQ-test path of tpm_tis_send() to call disable_interrupts() if
->> interrupts do not work, but that path never gets entered because we
->> never set the TPM_CHIP_FLAG_IRQ.
->
->The IRQ probing code should be deleted.
->
->> On some systems, e.g. the Lenovo X1 8th gen,  the interrupt we try
->> to use and never free creates an interrupt storm followed by
->> an "irq XX: nobody cared" oops.
->
->Is this related to probing?
->
->Jason
->
+I've never seen anything near 10 seconds.
+
+Note that this is worse than the worst case because it's forcing a full 
+retest.  The TPM typically starts its self test immediately at power up 
+and could be complete by the time the OS starts to boot.
+
+When I run selftest with fullTest = no, I get 30 msec, probably
+because it's not doing anything.
+
+On 4/14/2020 7:50 AM, Tianjia Zhang wrote:
+> Because ima_pcr_extend() to operate the TPM chip, this process is
+> very time-consuming, for IMA, this is a blocking action, especially
+> when the TPM is in self test state, this process will block for up
+> to ten seconds.
+
 
