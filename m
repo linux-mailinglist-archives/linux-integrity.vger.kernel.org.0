@@ -2,103 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF721A71E0
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 05:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CFB1A731C
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 07:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404833AbgDNDg0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Apr 2020 23:36:26 -0400
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:41976 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404832AbgDNDgY (ORCPT
+        id S2405578AbgDNFpj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Apr 2020 01:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405575AbgDNFph (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Apr 2020 23:36:24 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R821e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04427;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0TvUm.hu_1586835380;
-Received: from 30.27.118.45(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0TvUm.hu_1586835380)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 14 Apr 2020 11:36:21 +0800
-Subject: Re: [PATCH 0/2] support to read and tune appraise mode in runtime
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, zhangliguang@linux.alibaba.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>
-References: <20200409033907.102833-1-tianjia.zhang@linux.alibaba.com>
- <1586814958.7311.92.camel@linux.ibm.com>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Message-ID: <a767d0e0-6c57-254a-3c95-f78026e80c1d@linux.alibaba.com>
-Date:   Tue, 14 Apr 2020 11:36:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <1586814958.7311.92.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Tue, 14 Apr 2020 01:45:37 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E30C008748
+        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 22:45:36 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id a25so12874537wrd.0
+        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 22:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=easyb-ch.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=rOW6dynMAKqu/sCeM7R667FUjDdvESgKXrplFT0QsGs=;
+        b=tXhojAcIq9fWYzR/qYmF2Jswf+ij4dvIINeUt2DYgDTlv7KAKac7GsBulV0wPb0PFt
+         pS9mMwfiKlSSWzUXnXLwj7au8zClvISJPZJsXU1SSFgF067caAsSq6uap5r6UZatUCuR
+         GuHYMhmBfhYlIKQvJ/7DgFJ1itLJd485ZPUBeGgQMurktfe1EpXFB/PGuaLLYQ6atrpU
+         PPZtKFVyE3xY8LG40hjE3/mpCuMWcFMqPAARs0E50++KVg9BDVfP9E4blL7U0yUxpO60
+         Pm+hD4xzj5VTxNiymjpwELtVnNjH1and1zV+TfspiTh4nLip8PQ3tly0Ok1xOFDUUtml
+         n3Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=rOW6dynMAKqu/sCeM7R667FUjDdvESgKXrplFT0QsGs=;
+        b=etBKjO65AixBUXuxaWjJUaVcKznCK/3qJkkYVx7p+u4U9VUuBSuRL101RN8T6vbSYx
+         duVgvLS1cl43mnfp7aIbPoeziFxZqVciDpF2U62kIGVINSI+EHc50h/aIlEgRXomSCyb
+         yXIYjdy4i6qG2LsuTKUYDsXLgRnSpAStBFt6MKlziZ7NV2pSpyStOQGYEqXaJshGCHWt
+         fHEfiwqefJ6TJATHSQiqM1HkbIAQIfSilSM+g0wvuiJM8vMmzKUc5sxMFipqdoCA+sLc
+         6eFwVCjqb+ybAI1o3T9n3yZGj57BeZpxjpPVUBbTnIftbvZX7NtETNmPfyzK3tcWny9F
+         OE4g==
+X-Gm-Message-State: AGi0PuYb2xqSn50rH+nQaKb0GkdS87od6c95KVl7lpOHTK2XeRaCCc0m
+        6dO5e9Ov4yJhGTFWfYZJVNzUtA==
+X-Google-Smtp-Source: APiQypLSttSZrGrEgTtplDxJ+UK+MznmvqNTa43NMUUVrP68zcrT86TO44l3G2xk/zWlTHqgV5slEQ==
+X-Received: by 2002:a5d:4452:: with SMTP id x18mr21133563wrr.231.1586843135531;
+        Mon, 13 Apr 2020 22:45:35 -0700 (PDT)
+Received: from ?IPv6:2001:1715:4e3a:130:e4d1:deb8:5cd5:74eb? ([2001:1715:4e3a:130:e4d1:deb8:5cd5:74eb])
+        by smtp.gmail.com with ESMTPSA id j13sm18438662wro.51.2020.04.13.22.45.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 13 Apr 2020 22:45:34 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.5\))
+Subject: Re: [PATCH] selftests/tpm2: Change exception handling to be Python 3
+ compatible
+From:   Ezra Buehler <ezra@easyb.ch>
+In-Reply-To: <20200413180440.GA10917@linux.intel.com>
+Date:   Tue, 14 Apr 2020 07:45:33 +0200
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Tadeusz Struk <tadeusz.struk@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D670A3F7-6FE2-4A07-8251-680C2ED27764@easyb.ch>
+References: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
+ <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
+ <20200412170719.GA324408@linux.intel.com>
+ <531D50E8-E8FC-402E-9226-6000E8B6E960@easyb.ch>
+ <20200413180440.GA10917@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+X-Mailer: Apple Mail (2.3445.9.5)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Jarkko,
 
+On 13 Apr 2020, at 20:04, Jarkko Sakkinen =
+<jarkko.sakkinen@linux.intel.com> wrote:
+>=20
+> On Mon, Apr 13, 2020 at 07:02:20AM +0200, Ezra Buehler wrote:
+>> Hi Jarkko,
+>>=20
+>> On 12 Apr 2020, at 19:07, Jarkko Sakkinen =
+<jarkko.sakkinen@linux.intel.com> wrote:
+>>>=20
+>>> On Sun, Apr 12, 2020 at 05:02:27PM +0200, Ezra Buehler wrote:
+>>>> Hi Jarkkon,
+>>>>=20
+>>>>> On 12 Apr 2020, at 16:36, Jarkko Sakkinen =
+<jarkko.sakkinen@linux.intel.com> wrote:
+>>>>> +        except ProtocolError(e):
+>>>>=20
+>>>> Should this not be
+>>>>=20
+>>>>       except ProtocolError as e:
+>>>=20
+>>> Unless there is a functional difference, does it matter?
+>>>=20
+>>> /Jarkko
+>>=20
+>> Well, your patch confuses me a lot. It looks to me like you are =
+passing
+>> the undefined `e` variable to the constructor.
+>>=20
+>> When I run flake8 on it I get following error (among others):
+>>=20
+>>    F821 undefined name 'e'
+>=20
+> I don't know what flake8 is.
 
-On 2020/4/14 5:55, Mimi Zohar wrote:
-> On Thu, 2020-04-09 at 11:39 +0800, Tianjia Zhang wrote:
->> Support the read and write operations of ima_appraise by adding a
->> securifyfs file 'appraise_mode'.
->>
->> In order to tune appraise mode in runtime, writing a PKCS#7 signature
->> corresponding the signed content is required. The content should be off,
->> enforce, log or fix. Given a simple way to archive this:
->>
->> $ echo -n off > mode
->> $ openssl smime -sign -nocerts -noattr -binary \
->>      -in mode -inkey <system_trusted_key> \
->>      -signer <cert> -outform der -out mode.p7s
->> $ sudo cat mode.p7s \
->>      > /sys/kernel/security/ima/appraise_mode
->>
->> Note that the signing key must be a trust key located in
->> system trusted keyring. So even the root privilege cannot
->> simply disable the enforcement.
-> 
-> There are major problems with disabling IMA appraisal.  This patch set
-> proposes disabling IMA appraisal without even providing the motivation
-> for such support.
-> 
-> A lot of effort went into preventing custom IMA policies from
-> disabling appraising the kexec or kernel module signatures.  In
-> addition, the "lockdown" patch set was upstreamed permitting IMA
-> signature verification.  This patch set would break both of these
-> features.
-> 
-> IMA relies on its own keyring for verifying file signatures, not the
-> builtin or secondary trusted kernel keyrings.
-> 
-> Two methods already exist - xattr and appended signatures - for
-> verifying file signatures.  This patch set assumes creating and
-> signing a file, which is then written to a securityfs file.  Like for
-> loading a custom IMA policy, instead of cat'ing the file, write the
-> pathname to the securityfs file.
-> 
-> If you must define a new IMA method for verifying file signatures,
-> then it needs to be generic and added to ima_appraise_measurement().
->   (Refer to the new IMA appended signature support.)
-> 
-> Mimi
-> 
->>
->> Tianjia Zhang (2):
->>    ima: support to read appraise mode
->>    ima: support to tune appraise mode in runtime
->>
->>   security/integrity/ima/ima_fs.c | 134 +++++++++++++++++++++++++++++++-
->>   1 file changed, 133 insertions(+), 1 deletion(-)
->>
+https://flake8.pycqa.org/en/latest/
 
-Thanks for your suggestion, the way to close the appraise mode here is 
-indeed a bit rude, I will reconsider again according to your suggestions.
+>> What I suggested is the standard syntax:
+>> https://docs.python.org/3/tutorial/errors.html
+>=20
+> It passed the Python 3 interpreter.
 
-In addition, [PATCH 1/2] ima: support to read appraise mode, by the way, 
-see if this patch is acceptable.
+That is because it is technically valid syntax.
 
-Thanks and best,
-Tianjia
+>> Did you test this? You should get an error as soon as an exception
+>> occurs.
+>=20
+> Yes. Interpreter did not complain. I did not know that the language
+> is broken that way that you have to exercise the code path to get
+> a syntax error.
+
+That is due to the dynamic nature of Python. You won=E2=80=99t get a =
+syntax
+error. You will get an exception:
+
+    NameError: name 'e' is not defined
+
+Python has to assume that `e` might be defined at runtime. However,
+style checkers will complain.
+
+>=20
+> /Jarkko
+
+Cheers,
+Ezra.
+
