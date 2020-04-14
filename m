@@ -2,159 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9497A1A84B6
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 18:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89CB1A858A
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 18:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391514AbgDNQZn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Apr 2020 12:25:43 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:24250 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2391468AbgDNQZF (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Apr 2020 12:25:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586881501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yW8t58m2bp1NhazlqC7/k8J+nPWsrZBYDWUsjTyk2qQ=;
-        b=NsgcQPq0gDRRzr+WCv6O+IejAhACeGf91UcZUch7xVIEkk4F0++6WsAKwkQ+6nkMoq/jD7
-        lzSV3f1EuKP3Hxnp2JivHQcF6Vr/Z22M++foNVb8RdxR7eWsyL6QJbeO4NazIgQ9svAhXl
-        7AFa78Hn9YCF68TMh9hKXOVlm2kXUcc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-87-m_CJjLwlPvyXxruKyZ4cKA-1; Tue, 14 Apr 2020 12:24:56 -0400
-X-MC-Unique: m_CJjLwlPvyXxruKyZ4cKA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 12123107ACC4;
-        Tue, 14 Apr 2020 16:24:50 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-118-173.rdu2.redhat.com [10.10.118.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E02D118DEE;
-        Tue, 14 Apr 2020 16:24:36 +0000 (UTC)
-Subject: Re: [PATCH v2 2/2] crypto: Remove unnecessary memzero_explicit()
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>
-Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-References: <20200413211550.8307-1-longman@redhat.com>
- <20200413222846.24240-1-longman@redhat.com>
- <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <e194a51f-a5e5-a557-c008-b08cac558572@redhat.com>
-Date:   Tue, 14 Apr 2020 12:24:36 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2438786AbgDNQpr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Apr 2020 12:45:47 -0400
+Received: from mga01.intel.com ([192.55.52.88]:24750 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2437673AbgDNQpq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 Apr 2020 12:45:46 -0400
+IronPort-SDR: UEx0Wz/tcgCqqc+75yEB8UooHTd3KJopeDo88nLZyCZcz9hcQaOvbR1VGrKbIXjIQ/FeeaLvFc
+ HiXXgX9imGUw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 09:45:43 -0700
+IronPort-SDR: z7JprYkC0W+GU1lzE/oFAicDp7GOQzPHqlDgEhs7DAGPt7JLtYBPuj0y15Sz0nc6otbpAXgcNr
+ add1aAMJskLQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,383,1580803200"; 
+   d="scan'208";a="454616261"
+Received: from shiyaowa-mobl.ger.corp.intel.com (HELO localhost) ([10.249.43.105])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Apr 2020 09:45:42 -0700
+Date:   Tue, 14 Apr 2020 19:45:42 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm/tpm_tis: Free IRQ if probing fails
+Message-ID: <20200414164542.GC32775@linux.intel.com>
+References: <20200412170412.324200-1-jarkko.sakkinen@linux.intel.com>
+ <b909aaee-3fff-4dca-40f4-4c5348474426@redhat.com>
+ <20200413180732.GA11147@linux.intel.com>
+ <7df7f8bd-c65e-1435-7e82-b9f4ecd729de@redhat.com>
+ <20200414071349.GA8403@linux.intel.com>
+ <d6684575-ce91-fe72-6035-11834a05cd54@redhat.com>
+ <20200414160404.GA32775@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200414160404.GA32775@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 4/14/20 2:08 AM, Christophe Leroy wrote:
->
->
-> Le 14/04/2020 =C3=A0 00:28, Waiman Long a =C3=A9crit=C2=A0:
->> Since kfree_sensitive() will do an implicit memzero_explicit(), there
->> is no need to call memzero_explicit() before it. Eliminate those
->> memzero_explicit() and simplify the call sites. For better correctness=
-,
->> the setting of keylen is also moved down after the key pointer check.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->> =C2=A0 .../allwinner/sun8i-ce/sun8i-ce-cipher.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 19 +++++-------------
->> =C2=A0 .../allwinner/sun8i-ss/sun8i-ss-cipher.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 20 +++++--------------
->> =C2=A0 drivers/crypto/amlogic/amlogic-gxl-cipher.c=C2=A0=C2=A0 | 12 ++=
-+--------
->> =C2=A0 drivers/crypto/inside-secure/safexcel_hash.c=C2=A0 |=C2=A0 3 +-=
--
->> =C2=A0 4 files changed, 14 insertions(+), 40 deletions(-)
->>
->> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->> b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->> index aa4e8fdc2b32..8358fac98719 100644
->> --- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->> +++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->> @@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tfm)
->> =C2=A0 {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct sun8i_cipher_tfm_ctx *op =3D cry=
-pto_tfm_ctx(tfm);
->> =C2=A0 -=C2=A0=C2=A0=C2=A0 if (op->key) {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memzero_explicit(op->key, =
-op->keylen);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->key);
->> -=C2=A0=C2=A0=C2=A0 }
->> +=C2=A0=C2=A0=C2=A0 kfree_sensitive(op->key);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 crypto_free_sync_skcipher(op->fallback_=
-tfm);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pm_runtime_put_sync_suspend(op->ce->dev=
-);
->> =C2=A0 }
->> @@ -391,14 +388,11 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher
->> *tfm, const u8 *key,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(ce->dev=
-, "ERROR: Invalid keylen %u\n", keylen);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->> -=C2=A0=C2=A0=C2=A0 if (op->key) {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memzero_explicit(op->key, =
-op->keylen);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->key);
->> -=C2=A0=C2=A0=C2=A0 }
->> -=C2=A0=C2=A0=C2=A0 op->keylen =3D keylen;
->> +=C2=A0=C2=A0=C2=A0 kfree_sensitive(op->key);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 op->key =3D kmemdup(key, keylen, GFP_KE=
-RNEL | GFP_DMA);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!op->key)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENOMEM;
->> +=C2=A0=C2=A0=C2=A0 op->keylen =3D keylen;
->
-> Does it matter at all to ensure op->keylen is not set when of->key is
-> NULL ? I'm not sure.
->
-> But if it does, then op->keylen should be set to 0 when freeing op->key=
-.=20
+On Tue, Apr 14, 2020 at 07:04:07PM +0300, Jarkko Sakkinen wrote:
+> On Tue, Apr 14, 2020 at 10:26:32AM +0200, Hans de Goede wrote:
+> > Hi,
+> > 
+> > On 4/14/20 9:13 AM, Jarkko Sakkinen wrote:
+> > > On Mon, Apr 13, 2020 at 08:11:15PM +0200, Hans de Goede wrote:
+> > > > Hi,
+> > > > 
+> > > > On 4/13/20 8:07 PM, Jarkko Sakkinen wrote:
+> > > > > On Mon, Apr 13, 2020 at 12:04:25PM +0200, Hans de Goede wrote:
+> > > > > > Hi Jarkko,
+> > > > > > 
+> > > > > > On 4/12/20 7:04 PM, Jarkko Sakkinen wrote:
+> > > > > > > Call devm_free_irq() if we have to revert to polling in order not to
+> > > > > > > unnecessarily reserve the IRQ for the life-cycle of the driver.
+> > > > > > > 
+> > > > > > > Cc: stable@vger.kernel.org # 4.5.x
+> > > > > > > Reported-by: Hans de Goede <hdegoede@redhat.com>
+> > > > > > > Fixes: e3837e74a06d ("tpm_tis: Refactor the interrupt setup")
+> > > > > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > > > > > > ---
+> > > > > > >     drivers/char/tpm/tpm_tis_core.c | 5 ++++-
+> > > > > > >     1 file changed, 4 insertions(+), 1 deletion(-)
+> > > > > > > 
+> > > > > > > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> > > > > > > index 27c6ca031e23..ae6868e7b696 100644
+> > > > > > > --- a/drivers/char/tpm/tpm_tis_core.c
+> > > > > > > +++ b/drivers/char/tpm/tpm_tis_core.c
+> > > > > > > @@ -1062,9 +1062,12 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+> > > > > > >     		if (irq) {
+> > > > > > >     			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
+> > > > > > >     						 irq);
+> > > > > > > -			if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
+> > > > > > > +			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+> > > > > > >     				dev_err(&chip->dev, FW_BUG
+> > > > > > >     					"TPM interrupt not working, polling instead\n");
+> > > > > > > +				devm_free_irq(chip->dev.parent, priv->irq,
+> > > > > > > +					      chip);
+> > > > > > > +			}
+> > > > > > 
+> > > > > > My initial plan was actually to do something similar, but if the probe code
+> > > > > > is actually ever fixed to work as intended again then this will lead to a
+> > > > > > double free as then the IRQ-test path of tpm_tis_send() will have called
+> > > > > > disable_interrupts() which already calls devm_free_irq().
+> > > > > > 
+> > > > > > You could check for chip->irq != 0 here to avoid that.
+> > 
+> > Erm in case you haven't figured it out yet this should be priv->irq != 0, sorry.
+> 
+> Yup.
+> 
+> > > > > > 
+> > > > > > But it all is rather messy, which is why I went with the "#if 0" approach
+> > > > > > in my patch.
+> > > > > 
+> > > > > I think it is right way to fix it. It is a bug independent of the issue
+> > > > > we are experiencing.
+> > > > > 
+> > > > > However, what you are suggesting should be done in addition. Do you have
+> > > > > a patch in place or do you want me to refine mine?
+> > > > 
+> > > > I do not have a patch ready for this, if you can refine yours that would
+> > > > be great.
+> > > 
+> > > Thanks! Just wanted to confirm.
+> > 
+> > And thank you for working on a (temporary?) fix for this.
+> 
+> As far as I see it, it is orthogonal fix that needs to be backported
+> to stable kernels. This bug predates the issue we're seeing now.
 
-My thinking is that if memory allocation fails, we just don't touch
-anything and return an error code. I will not explicitly set keylen to 0
-in this case unless it is specified in the API documentation.
+Hey, I came to other thoughts on "how". Would probably make sense
+to always call disable_interrupts() aka no sense to add two separate
+code paths. What do you think?
 
-Cheers,
-Longman
-
+/Jarkko
