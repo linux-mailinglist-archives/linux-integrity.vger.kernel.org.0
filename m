@@ -2,99 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 117441A889A
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 20:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF0C1A8971
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 20:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503405AbgDNSHn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Apr 2020 14:07:43 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7863 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2503393AbgDNSHm (ORCPT
+        id S2503937AbgDNS1Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Apr 2020 14:27:24 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:41365 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2503920AbgDNS1G (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Apr 2020 14:07:42 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03EI4Jis162387;
-        Tue, 14 Apr 2020 14:07:32 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30dc3rkjdn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Apr 2020 14:07:30 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 03EI4V2c163496;
-        Tue, 14 Apr 2020 14:07:30 -0400
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30dc3rkjcs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Apr 2020 14:07:30 -0400
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03EHwQMJ013910;
-        Tue, 14 Apr 2020 18:07:28 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma01dal.us.ibm.com with ESMTP id 30b5h6seec-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Apr 2020 18:07:28 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03EI7RUY52953438
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Apr 2020 18:07:27 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34E9BAE05C;
-        Tue, 14 Apr 2020 18:07:27 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7901AAE063;
-        Tue, 14 Apr 2020 18:07:26 +0000 (GMT)
-Received: from [9.80.213.149] (unknown [9.80.213.149])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Apr 2020 18:07:26 +0000 (GMT)
-Subject: Re: [PATCH] ima: optimize ima_pcr_extend function by asynchronous
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, zhangliguang@linux.alibaba.com,
-        zhang.jia@linux.alibaba.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200414115020.99288-1-tianjia.zhang@linux.alibaba.com>
-From:   Ken Goldman <kgold@linux.ibm.com>
-Message-ID: <0fdd1c13-51c6-e65c-1ca5-38621fa21f53@linux.ibm.com>
-Date:   Tue, 14 Apr 2020 14:07:26 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 14 Apr 2020 14:27:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586888825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TLv7+DlAPTIRbMlPGq/MKTxn9g95YUGNwTJol6ZbUDE=;
+        b=evzNfjaBoC6wCoS1V+bzcOYtHbD9SzXUS83ZXqorselZop7fMYVcJA2XhtVcujpFYBL4ZR
+        tfmaAyfvPWvASv2oK5uwpQSjcj3C1oCqIsgQPNL61hTJ/MHoA/ncXstn457cJWAIA7hwex
+        B+PnsH/bRW41yP4beWIBSvT1KRsWynM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-449-lrwga1poPzOYOa4E2pXY4A-1; Tue, 14 Apr 2020 14:27:01 -0400
+X-MC-Unique: lrwga1poPzOYOa4E2pXY4A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E975D13FA;
+        Tue, 14 Apr 2020 18:26:55 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-118-173.rdu2.redhat.com [10.10.118.173])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 936D410013A1;
+        Tue, 14 Apr 2020 18:26:48 +0000 (UTC)
+Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+To:     dsterba@suse.cz, Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-crypto@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
+        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+References: <20200413211550.8307-1-longman@redhat.com>
+ <20200413211550.8307-2-longman@redhat.com>
+ <20200414124854.GQ5920@twin.jikos.cz>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <3d8c80cb-68e5-9211-9eda-bc343ed7d894@redhat.com>
+Date:   Tue, 14 Apr 2020 14:26:48 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200414115020.99288-1-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
+In-Reply-To: <20200414124854.GQ5920@twin.jikos.cz>
+Content-Type: text/plain; charset=windows-1252
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-14_08:2020-04-14,2020-04-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- clxscore=1011 spamscore=0 mlxlogscore=778 lowpriorityscore=0 phishscore=0
- bulkscore=0 impostorscore=0 suspectscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2004140131
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-I wonder if there's a different issue?  I just ran selftest with 
-fullTest = yes in two different TPM vendors.
+On 4/14/20 8:48 AM, David Sterba wrote:
+> On Mon, Apr 13, 2020 at 05:15:49PM -0400, Waiman Long wrote:
+>>  fs/btrfs/ioctl.c                              |  2 +-
+>
+>> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+>> index 40b729dce91c..eab3f8510426 100644
+>> --- a/fs/btrfs/ioctl.c
+>> +++ b/fs/btrfs/ioctl.c
+>> @@ -2691,7 +2691,7 @@ static int btrfs_ioctl_get_subvol_info(struct file *file, void __user *argp)
+>>  	btrfs_put_root(root);
+>>  out_free:
+>>  	btrfs_free_path(path);
+>> -	kzfree(subvol_info);
+>> +	kfree_sensitive(subvol_info);
+> This is not in a sensitive context so please switch it to plain kfree.
+> With that you have my acked-by. Thanks.
+>
+Thanks for letting me know about. I think I will send it out as a
+separate patch.
 
-One took 230 msec, the other 320 msec.
-
-I've never seen anything near 10 seconds.
-
-Note that this is worse than the worst case because it's forcing a full 
-retest.  The TPM typically starts its self test immediately at power up 
-and could be complete by the time the OS starts to boot.
-
-When I run selftest with fullTest = no, I get 30 msec, probably
-because it's not doing anything.
-
-On 4/14/2020 7:50 AM, Tianjia Zhang wrote:
-> Because ima_pcr_extend() to operate the TPM chip, this process is
-> very time-consuming, for IMA, this is a blocking action, especially
-> when the TPM is in self test state, this process will block for up
-> to ten seconds.
-
+Cheers,
+Longman
 
