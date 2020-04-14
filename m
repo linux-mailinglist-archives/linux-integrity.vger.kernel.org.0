@@ -2,121 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A49291A7BEA
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 15:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56C71A7E96
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 15:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502623AbgDNNJe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Apr 2020 09:09:34 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:55538 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2502595AbgDNNJG (ORCPT
+        id S1732607AbgDNNlg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Apr 2020 09:41:36 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28548 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732574AbgDNNl0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Apr 2020 09:09:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586869745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hBYiVbPBfUS+AcwD+sXBpDKSbw0tQLOGN9sYzZKYAmI=;
-        b=BTAN21WocSEZDEQm2BhK4woJchErWB0xzslg0PRL+jaW73JuBBrb4U+r4OkMNKBbmzZ4UU
-        SCbUG2wUypFUui+uF2bDpjjfzTzcGjJONpKqua7ehfBP327KAv9KBAk5zaFQIpt7gAzXFP
-        mOe73lGOE/I3IOT6gqpXRWTm7whysyw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-106-PA7uLtZsM327ACx1G3T_7g-1; Tue, 14 Apr 2020 09:07:49 -0400
-X-MC-Unique: PA7uLtZsM327ACx1G3T_7g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 96CEA8048E4;
-        Tue, 14 Apr 2020 13:07:05 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-113-129.rdu2.redhat.com [10.10.113.129])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5AB5418A8E;
-        Tue, 14 Apr 2020 13:06:57 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
-References: <20200413211550.8307-2-longman@redhat.com> <20200413211550.8307-1-longman@redhat.com>
-To:     Waiman Long <longman@redhat.com>, herbert@gondor.apana.org.au
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-crypto@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3807473.1586869616.1@warthog.procyon.org.uk>
-Date:   Tue, 14 Apr 2020 14:06:56 +0100
-Message-ID: <3807474.1586869616@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+        Tue, 14 Apr 2020 09:41:26 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03EDXRp2009621
+        for <linux-integrity@vger.kernel.org>; Tue, 14 Apr 2020 09:41:22 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30b6sg59dm-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 14 Apr 2020 09:41:22 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Tue, 14 Apr 2020 14:40:46 +0100
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 14 Apr 2020 14:40:43 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03EDeA2H46727520
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Apr 2020 13:40:10 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 192B84204D;
+        Tue, 14 Apr 2020 13:41:16 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BE55442041;
+        Tue, 14 Apr 2020 13:41:14 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.236.92])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Apr 2020 13:41:14 +0000 (GMT)
+Subject: Re: [PATCH 0/2] support to read and tune appraise mode in runtime
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        zhangliguang@linux.alibaba.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>
+Date:   Tue, 14 Apr 2020 09:41:14 -0400
+In-Reply-To: <a767d0e0-6c57-254a-3c95-f78026e80c1d@linux.alibaba.com>
+References: <20200409033907.102833-1-tianjia.zhang@linux.alibaba.com>
+         <1586814958.7311.92.camel@linux.ibm.com>
+         <a767d0e0-6c57-254a-3c95-f78026e80c1d@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20041413-4275-0000-0000-000003BFBABE
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20041413-4276-0000-0000-000038D52DA2
+Message-Id: <1586871674.7311.189.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-14_06:2020-04-14,2020-04-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 bulkscore=0 malwarescore=0 clxscore=1015 mlxscore=0
+ phishscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2004140112
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Waiman Long <longman@redhat.com> wrote:
+On Tue, 2020-04-14 at 11:36 +0800, Tianjia Zhang wrote:
+> 
+> On 2020/4/14 5:55, Mimi Zohar wrote:
+> > On Thu, 2020-04-09 at 11:39 +0800, Tianjia Zhang wrote:
+> >> Support the read and write operations of ima_appraise by adding a
+> >> securifyfs file 'appraise_mode'.
+> >>
+> >> In order to tune appraise mode in runtime, writing a PKCS#7 signature
+> >> corresponding the signed content is required. The content should be off,
+> >> enforce, log or fix. Given a simple way to archive this:
+> >>
+> >> $ echo -n off > mode
+> >> $ openssl smime -sign -nocerts -noattr -binary \
+> >>      -in mode -inkey <system_trusted_key> \
+> >>      -signer <cert> -outform der -out mode.p7s
+> >> $ sudo cat mode.p7s \
+> >>      > /sys/kernel/security/ima/appraise_mode
+> >>
+> >> Note that the signing key must be a trust key located in
+> >> system trusted keyring. So even the root privilege cannot
+> >> simply disable the enforcement.
+> > 
+> > There are major problems with disabling IMA appraisal.  This patch set
+> > proposes disabling IMA appraisal without even providing the motivation
+> > for such support.
+> > 
+> > A lot of effort went into preventing custom IMA policies from
+> > disabling appraising the kexec or kernel module signatures.  In
+> > addition, the "lockdown" patch set was upstreamed permitting IMA
+> > signature verification.  This patch set would break both of these
+> > features.
+> > 
+> > IMA relies on its own keyring for verifying file signatures, not the
+> > builtin or secondary trusted kernel keyrings.
+> > 
+> > Two methods already exist - xattr and appended signatures - for
+> > verifying file signatures.  This patch set assumes creating and
+> > signing a file, which is then written to a securityfs file.  Like for
+> > loading a custom IMA policy, instead of cat'ing the file, write the
+> > pathname to the securityfs file.
+> > 
+> > If you must define a new IMA method for verifying file signatures,
+> > then it needs to be generic and added to ima_appraise_measurement().
+> >   (Refer to the new IMA appended signature support.)
+> > 
+> > Mimi
+> > 
+> >>
+> >> Tianjia Zhang (2):
+> >>    ima: support to read appraise mode
+> >>    ima: support to tune appraise mode in runtime
+> >>
+> >>   security/integrity/ima/ima_fs.c | 134 +++++++++++++++++++++++++++++++-
+> >>   1 file changed, 133 insertions(+), 1 deletion(-)
+> >>
+> 
+> Thanks for your suggestion, the way to close the appraise mode here is 
+> indeed a bit rude, I will reconsider again according to your suggestions.
+> 
+> In addition, [PATCH 1/2] ima: support to read appraise mode, by the way, 
+> see if this patch is acceptable.
 
-> As said by Linus:
-> 
->   A symmetric naming is only helpful if it implies symmetries in use.
->   Otherwise it's actively misleading.
-> 
->   In "kzalloc()", the z is meaningful and an important part of what the
->   caller wants.
-> 
->   In "kzfree()", the z is actively detrimental, because maybe in the
->   future we really _might_ want to use that "memfill(0xdeadbeef)" or
->   something. The "zero" part of the interface isn't even _relevant_.
-> 
-> The main reason that kzfree() exists is to clear sensitive information
-> that should not be leaked to other future users of the same memory
-> objects.
-> 
-> Rename kzfree() to kfree_sensitive() to follow the example of the
-> recently added kvfree_sensitive() and make the intention of the API
-> more explicit. In addition, memzero_explicit() is used to clear the
-> memory to make sure that it won't get optimized away by the compiler.
-> 
-> The renaming is done by using the command sequence:
-> 
->   git grep -w --name-only kzfree |\
->   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
-> 
-> followed by some editing of the kfree_sensitive() kerneldoc and the
-> use of memzero_explicit() instead of memset().
-> 
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Waiman Long <longman@redhat.com>
+My comments were not meant as suggestions, but as an explanation as to
+how IMA works.  More details follow.
 
-Since this changes a lot of crypto stuff, does it make sense for it to go via
-the crypto tree?
+IMA is based on policy.  That decision was made a long time ago.  It
+allowed distros to configure IMA, allowing customers to experiment
+with it.  You have one opportunity to totally change the boot time
+policy rules, by loading a custom policy.  After that, rules may only
+be added.
 
-Acked-by: David Howells <dhowells@redhat.com>
+There is no valid reason for "turning off" the policy once it has been
+enabled.  It breaks existing expectations.
+
+Mimi
 
