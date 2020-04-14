@@ -2,127 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE61C1A701E
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 02:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51AD1A7044
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 02:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390478AbgDNAaC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Apr 2020 20:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390468AbgDNAaB (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Apr 2020 20:30:01 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055DCC008617
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 17:30:01 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id r20so3624530pfh.9
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 17:30:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=GtP40NBc6K+wY7TevCqJVJVyGGxw6eyhk3x6njvRZbI=;
-        b=PMRE9MFBjRNguCLZJxvQ0tC6cbj5HN/L0mNJHOjg1H5naWvyPaji8Uw6CjXqOQ2azW
-         MhWs/LuNrHlvICFisvb7Cy6SJ3VKQrmiHJlokad5hGoOXcGXzDY3vorrrgpyAZrAVUDE
-         dUN76VdbMCLvs9G10TRyVoj/R2uKEUPKhrkRhwWPh9Qq6Oj8zqhrDAXwnWHye+K8R3ym
-         lDZQumSHVx6+RupP9U0o1EyjztcXPr7zTXefIIyzd+nYkxQBJg3bKkumuWN4k6N/hrZC
-         eN210smaNX58gX6QVglgalvDGfi5xzWfnOSt7/cWPG1d3xQeaexIo7gZ03EO3NRYAH/8
-         2wUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=GtP40NBc6K+wY7TevCqJVJVyGGxw6eyhk3x6njvRZbI=;
-        b=pOH9cNS1Z3BfrQqlcKFieN/QbZpor7fmqnYYts4KHIwbR85RGLWYBQ/n9JCjfHlIko
-         nfr0BXTQogKwprkNH1NJ8anbiv2CFcRkCceteLHKEa4nJLuc7Fd6GkJE+pmXc5msJ39m
-         QbLq1msBjfttBg2X4xt+0zJrJnkxl8lk2uHMQZ+T1ofhyYMGyqLgmgPBn6CEuHr2uiIj
-         g2qvYZXCPYYJEGcmNQ0IEvDTQZTgEFBEp2uJxrlgg/Bwhw+hOj9vu205hCKiIFITXriX
-         tvEiznEU7EkGm0QzNylXFekfvxN8rqyRSlXz80ABPPVo/xXS844Fp1U5WPVRHRPQoFqv
-         fizg==
-X-Gm-Message-State: AGi0PuaPuU6Z18r1rikA+DxsL69yd1hVRa9xuKH//MPQUfoqMH322VVh
-        /3GPWjvjBjGelVZ0aCbQlW1+jg==
-X-Google-Smtp-Source: APiQypL5W5g7xmsU3GZXO1UecYYPwVLK1dPD412glciRM3pdZ8NSkRu/LjnNHn8Pg6Fxg4L/cgCpIw==
-X-Received: by 2002:a62:dd48:: with SMTP id w69mr10144721pff.86.1586824199909;
-        Mon, 13 Apr 2020 17:29:59 -0700 (PDT)
-Received: from [2620:15c:17:3:3a5:23a7:5e32:4598] ([2620:15c:17:3:3a5:23a7:5e32:4598])
-        by smtp.gmail.com with ESMTPSA id g11sm10055136pjs.17.2020.04.13.17.29.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 17:29:59 -0700 (PDT)
-Date:   Mon, 13 Apr 2020 17:29:58 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-X-X-Sender: rientjes@chino.kir.corp.google.com
-To:     Waiman Long <longman@redhat.com>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-crypto@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
-In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
-Message-ID: <alpine.DEB.2.21.2004131729410.260270@chino.kir.corp.google.com>
-References: <20200413211550.8307-1-longman@redhat.com> <20200413211550.8307-2-longman@redhat.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S2390598AbgDNAvj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Apr 2020 20:51:39 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:53455 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390589AbgDNAvh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 13 Apr 2020 20:51:37 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 491Rkp6QyRz9sSk;
+        Tue, 14 Apr 2020 10:51:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1586825491;
+        bh=Lu+lnFaV1xSDWR81mSR54x4nl15RVb3+4B7MuYkt1g0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=YlEB2G4L51G4Z0CbLAgGzQc/vGjKnbCq9KXxcegdigB4DRQklBa7IBu8dK4izaEb6
+         v687sHdCGAZpeS1DxBs5R9kJrF9bdDIhPhGazL0Nd+K/ssVh+gdzWUIb/hBEoszcHE
+         frEaMXbSFVIubwOihvFtfknrgbSbdhdEBk3reW2RBYIV3VbLfOupyyrSG4OiTvIFNG
+         wdE1E0IOpqH91p7JNhYelJMCtg8VXhzuAZkqds3a403iWenYza6oqoaZcMf/LT22i0
+         JCPFbkrKzEyFveJh+Y5gP183qZX4QyjkK8fB7vlb+2sINn1sq1ABQRbYVogPBcdw0h
+         Yd78MVLfPPHew==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Sachin Sant <sachinp@linux.vnet.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-next@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v2] qtpm2: Export tpm2_get_cc_attrs_tbl for ibmvtpm driver as module
+In-Reply-To: <20200402193134.GC10314@linux.intel.com>
+References: <20200319010017.738677-1-stefanb@linux.vnet.ibm.com> <20200319195706.GD24804@linux.intel.com> <2BF66599-184A-4647-BC57-105A1512F119@linux.vnet.ibm.com> <20200402193134.GC10314@linux.intel.com>
+Date:   Tue, 14 Apr 2020 10:51:37 +1000
+Message-ID: <87k12ikhye.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 13 Apr 2020, Waiman Long wrote:
+Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> writes:
+> On Wed, Apr 01, 2020 at 02:40:30PM +0530, Sachin Sant wrote:
+>> > On 20-Mar-2020, at 1:27 AM, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+>> > 
+>> > On Wed, Mar 18, 2020 at 09:00:17PM -0400, Stefan Berger wrote:
+>> >> From: Stefan Berger <stefanb@linux.ibm.com>
+>> >> 
+>> >> This patch fixes the following problem when the ibmvtpm driver
+>> >> is built as a module:
+>> >> 
+>> >> ERROR: modpost: "tpm2_get_cc_attrs_tbl" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
+>> >> make[1]: *** [scripts/Makefile.modpost:94: __modpost] Error 1
+>> >> make: *** [Makefile:1298: modules] Error 2
+>> >> 
+>> >> Fixes: 18b3670d79ae ("tpm: ibmvtpm: Add support for TPM2")
+>> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> >> Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+>> >> Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+>> > 
+>> 
+>> Ping. This failure can now be seen in mainline (cad18da0af) as well.
+>
+> It is in my tree
 
-> As said by Linus:
-> 
->   A symmetric naming is only helpful if it implies symmetries in use.
->   Otherwise it's actively misleading.
-> 
->   In "kzalloc()", the z is meaningful and an important part of what the
->   caller wants.
-> 
->   In "kzfree()", the z is actively detrimental, because maybe in the
->   future we really _might_ want to use that "memfill(0xdeadbeef)" or
->   something. The "zero" part of the interface isn't even _relevant_.
-> 
-> The main reason that kzfree() exists is to clear sensitive information
-> that should not be leaked to other future users of the same memory
-> objects.
-> 
-> Rename kzfree() to kfree_sensitive() to follow the example of the
-> recently added kvfree_sensitive() and make the intention of the API
-> more explicit. In addition, memzero_explicit() is used to clear the
-> memory to make sure that it won't get optimized away by the compiler.
-> 
-> The renaming is done by using the command sequence:
-> 
->   git grep -w --name-only kzfree |\
->   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
-> 
-> followed by some editing of the kfree_sensitive() kerneldoc and the
-> use of memzero_explicit() instead of memset().
-> 
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Waiman Long <longman@redhat.com>
+Can you please send it to Linus?
 
-Acked-by: David Rientjes <rientjes@google.com>
+cheers
