@@ -2,142 +2,282 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CFB1A731C
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 07:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C9F1A7352
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2020 08:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405578AbgDNFpj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Apr 2020 01:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405575AbgDNFph (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Apr 2020 01:45:37 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E30C008748
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 22:45:36 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id a25so12874537wrd.0
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2020 22:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=easyb-ch.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=rOW6dynMAKqu/sCeM7R667FUjDdvESgKXrplFT0QsGs=;
-        b=tXhojAcIq9fWYzR/qYmF2Jswf+ij4dvIINeUt2DYgDTlv7KAKac7GsBulV0wPb0PFt
-         pS9mMwfiKlSSWzUXnXLwj7au8zClvISJPZJsXU1SSFgF067caAsSq6uap5r6UZatUCuR
-         GuHYMhmBfhYlIKQvJ/7DgFJ1itLJd485ZPUBeGgQMurktfe1EpXFB/PGuaLLYQ6atrpU
-         PPZtKFVyE3xY8LG40hjE3/mpCuMWcFMqPAARs0E50++KVg9BDVfP9E4blL7U0yUxpO60
-         Pm+hD4xzj5VTxNiymjpwELtVnNjH1and1zV+TfspiTh4nLip8PQ3tly0Ok1xOFDUUtml
-         n3Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=rOW6dynMAKqu/sCeM7R667FUjDdvESgKXrplFT0QsGs=;
-        b=etBKjO65AixBUXuxaWjJUaVcKznCK/3qJkkYVx7p+u4U9VUuBSuRL101RN8T6vbSYx
-         duVgvLS1cl43mnfp7aIbPoeziFxZqVciDpF2U62kIGVINSI+EHc50h/aIlEgRXomSCyb
-         yXIYjdy4i6qG2LsuTKUYDsXLgRnSpAStBFt6MKlziZ7NV2pSpyStOQGYEqXaJshGCHWt
-         fHEfiwqefJ6TJATHSQiqM1HkbIAQIfSilSM+g0wvuiJM8vMmzKUc5sxMFipqdoCA+sLc
-         6eFwVCjqb+ybAI1o3T9n3yZGj57BeZpxjpPVUBbTnIftbvZX7NtETNmPfyzK3tcWny9F
-         OE4g==
-X-Gm-Message-State: AGi0PuYb2xqSn50rH+nQaKb0GkdS87od6c95KVl7lpOHTK2XeRaCCc0m
-        6dO5e9Ov4yJhGTFWfYZJVNzUtA==
-X-Google-Smtp-Source: APiQypLSttSZrGrEgTtplDxJ+UK+MznmvqNTa43NMUUVrP68zcrT86TO44l3G2xk/zWlTHqgV5slEQ==
-X-Received: by 2002:a5d:4452:: with SMTP id x18mr21133563wrr.231.1586843135531;
-        Mon, 13 Apr 2020 22:45:35 -0700 (PDT)
-Received: from ?IPv6:2001:1715:4e3a:130:e4d1:deb8:5cd5:74eb? ([2001:1715:4e3a:130:e4d1:deb8:5cd5:74eb])
-        by smtp.gmail.com with ESMTPSA id j13sm18438662wro.51.2020.04.13.22.45.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 Apr 2020 22:45:34 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.5\))
-Subject: Re: [PATCH] selftests/tpm2: Change exception handling to be Python 3
- compatible
-From:   Ezra Buehler <ezra@easyb.ch>
-In-Reply-To: <20200413180440.GA10917@linux.intel.com>
-Date:   Tue, 14 Apr 2020 07:45:33 +0200
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D670A3F7-6FE2-4A07-8251-680C2ED27764@easyb.ch>
-References: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
- <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
- <20200412170719.GA324408@linux.intel.com>
- <531D50E8-E8FC-402E-9226-6000E8B6E960@easyb.ch>
- <20200413180440.GA10917@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-X-Mailer: Apple Mail (2.3445.9.5)
+        id S2405779AbgDNGIm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Apr 2020 02:08:42 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:51680 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405711AbgDNGIj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 Apr 2020 02:08:39 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 491Zmc64yLz9txkH;
+        Tue, 14 Apr 2020 08:08:32 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=swLCNyX7; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id 4yni2YpdXT3P; Tue, 14 Apr 2020 08:08:32 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 491Zmc4L0Rz9txkG;
+        Tue, 14 Apr 2020 08:08:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1586844512; bh=AyML/oaUiIiNPJKHTIdsIrbz6fYQpNyy/73cMAJtVGI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=swLCNyX719PsbdWXJyAjua3tpVkuZHN/PgaRAzIUI6j3FuSDm374UPnlGZYSrGzxT
+         ndt6dm09KOl8ksmzmfqqYKRuIRIOuM5gK03jv/9oM2sodvHG7ZsAdW0K43bNG1m7AR
+         C9uF0GCYNnsgDDdT0CCsxA/cfFfbv77mzxAhptqM=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5B4A48B77D;
+        Tue, 14 Apr 2020 08:08:33 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id IsbJC8uJ2iOV; Tue, 14 Apr 2020 08:08:33 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 997728B752;
+        Tue, 14 Apr 2020 08:08:30 +0200 (CEST)
+Subject: Re: [PATCH v2 2/2] crypto: Remove unnecessary memzero_explicit()
+To:     Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>
+Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
+        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+References: <20200413211550.8307-1-longman@redhat.com>
+ <20200413222846.24240-1-longman@redhat.com>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
+Date:   Tue, 14 Apr 2020 08:08:22 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <20200413222846.24240-1-longman@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko,
 
-On 13 Apr 2020, at 20:04, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->=20
-> On Mon, Apr 13, 2020 at 07:02:20AM +0200, Ezra Buehler wrote:
->> Hi Jarkko,
->>=20
->> On 12 Apr 2020, at 19:07, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->>>=20
->>> On Sun, Apr 12, 2020 at 05:02:27PM +0200, Ezra Buehler wrote:
->>>> Hi Jarkkon,
->>>>=20
->>>>> On 12 Apr 2020, at 16:36, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->>>>> +        except ProtocolError(e):
->>>>=20
->>>> Should this not be
->>>>=20
->>>>       except ProtocolError as e:
->>>=20
->>> Unless there is a functional difference, does it matter?
->>>=20
->>> /Jarkko
->>=20
->> Well, your patch confuses me a lot. It looks to me like you are =
-passing
->> the undefined `e` variable to the constructor.
->>=20
->> When I run flake8 on it I get following error (among others):
->>=20
->>    F821 undefined name 'e'
->=20
-> I don't know what flake8 is.
 
-https://flake8.pycqa.org/en/latest/
+Le 14/04/2020 à 00:28, Waiman Long a écrit :
+> Since kfree_sensitive() will do an implicit memzero_explicit(), there
+> is no need to call memzero_explicit() before it. Eliminate those
+> memzero_explicit() and simplify the call sites. For better correctness,
+> the setting of keylen is also moved down after the key pointer check.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   .../allwinner/sun8i-ce/sun8i-ce-cipher.c      | 19 +++++-------------
+>   .../allwinner/sun8i-ss/sun8i-ss-cipher.c      | 20 +++++--------------
+>   drivers/crypto/amlogic/amlogic-gxl-cipher.c   | 12 +++--------
+>   drivers/crypto/inside-secure/safexcel_hash.c  |  3 +--
+>   4 files changed, 14 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+> index aa4e8fdc2b32..8358fac98719 100644
+> --- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+> +++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+> @@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tfm)
+>   {
+>   	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
+>   
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> +	kfree_sensitive(op->key);
+>   	crypto_free_sync_skcipher(op->fallback_tfm);
+>   	pm_runtime_put_sync_suspend(op->ce->dev);
+>   }
+> @@ -391,14 +388,11 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
+>   		dev_dbg(ce->dev, "ERROR: Invalid keylen %u\n", keylen);
+>   		return -EINVAL;
+>   	}
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> -	op->keylen = keylen;
+> +	kfree_sensitive(op->key);
+>   	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+>   	if (!op->key)
+>   		return -ENOMEM;
+> +	op->keylen = keylen;
 
->> What I suggested is the standard syntax:
->> https://docs.python.org/3/tutorial/errors.html
->=20
-> It passed the Python 3 interpreter.
+Does it matter at all to ensure op->keylen is not set when of->key is 
+NULL ? I'm not sure.
 
-That is because it is technically valid syntax.
+But if it does, then op->keylen should be set to 0 when freeing op->key.
 
->> Did you test this? You should get an error as soon as an exception
->> occurs.
->=20
-> Yes. Interpreter did not complain. I did not know that the language
-> is broken that way that you have to exercise the code path to get
-> a syntax error.
+>   
+>   	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
+>   	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
+> @@ -416,14 +410,11 @@ int sun8i_ce_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
+>   	if (err)
+>   		return err;
+>   
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> -	op->keylen = keylen;
+> +	kfree_sensitive(op->key);
+>   	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+>   	if (!op->key)
+>   		return -ENOMEM;
+> +	op->keylen = keylen;
 
-That is due to the dynamic nature of Python. You won=E2=80=99t get a =
-syntax
-error. You will get an exception:
+Same comment as above.
 
-    NameError: name 'e' is not defined
+>   
+>   	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
+>   	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
+> diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
+> index 5246ef4f5430..0495fbc27fcc 100644
+> --- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
+> +++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
+> @@ -249,7 +249,6 @@ static int sun8i_ss_cipher(struct skcipher_request *areq)
+>   			offset = areq->cryptlen - ivsize;
+>   			if (rctx->op_dir & SS_DECRYPTION) {
+>   				memcpy(areq->iv, backup_iv, ivsize);
+> -				memzero_explicit(backup_iv, ivsize);
+>   				kfree_sensitive(backup_iv);
+>   			} else {
+>   				scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
+> @@ -367,10 +366,7 @@ void sun8i_ss_cipher_exit(struct crypto_tfm *tfm)
+>   {
+>   	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
+>   
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> +	kfree_sensitive(op->key);
+>   	crypto_free_sync_skcipher(op->fallback_tfm);
+>   	pm_runtime_put_sync(op->ss->dev);
+>   }
+> @@ -392,14 +388,11 @@ int sun8i_ss_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
+>   		dev_dbg(ss->dev, "ERROR: Invalid keylen %u\n", keylen);
+>   		return -EINVAL;
+>   	}
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> -	op->keylen = keylen;
+> +	kfree_sensitive(op->key);
+>   	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+>   	if (!op->key)
+>   		return -ENOMEM;
+> +	op->keylen = keylen;
 
-Python has to assume that `e` might be defined at runtime. However,
-style checkers will complain.
+Same comment as above.
 
->=20
-> /Jarkko
+>   
+>   	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
+>   	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
+> @@ -418,14 +411,11 @@ int sun8i_ss_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
+>   		return -EINVAL;
+>   	}
+>   
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> -	op->keylen = keylen;
+> +	kfree_sensitive(op->key);
+>   	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+>   	if (!op->key)
+>   		return -ENOMEM;
+> +	op->keylen = keylen;
 
-Cheers,
-Ezra.
+Same comment as above.
 
+>   
+>   	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
+>   	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
+> diff --git a/drivers/crypto/amlogic/amlogic-gxl-cipher.c b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
+> index fd1269900d67..6aa9ce7bbbd4 100644
+> --- a/drivers/crypto/amlogic/amlogic-gxl-cipher.c
+> +++ b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
+> @@ -341,10 +341,7 @@ void meson_cipher_exit(struct crypto_tfm *tfm)
+>   {
+>   	struct meson_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
+>   
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> +	kfree_sensitive(op->key);
+>   	crypto_free_sync_skcipher(op->fallback_tfm);
+>   }
+>   
+> @@ -368,14 +365,11 @@ int meson_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
+>   		dev_dbg(mc->dev, "ERROR: Invalid keylen %u\n", keylen);
+>   		return -EINVAL;
+>   	}
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> -	op->keylen = keylen;
+> +	kfree_sensitive(op->key);
+>   	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+>   	if (!op->key)
+>   		return -ENOMEM;
+> +	op->keylen = keylen;
+
+Same comment as above.
+
+>   
+>   	return crypto_sync_skcipher_setkey(op->fallback_tfm, key, keylen);
+>   }
+> diff --git a/drivers/crypto/inside-secure/safexcel_hash.c b/drivers/crypto/inside-secure/safexcel_hash.c
+> index 43962bc709c6..4a2d162914de 100644
+> --- a/drivers/crypto/inside-secure/safexcel_hash.c
+> +++ b/drivers/crypto/inside-secure/safexcel_hash.c
+> @@ -1081,8 +1081,7 @@ static int safexcel_hmac_init_pad(struct ahash_request *areq,
+>   		}
+>   
+>   		/* Avoid leaking */
+> -		memzero_explicit(keydup, keylen);
+> -		kfree(keydup);
+> +		kfree_sensitive(keydup);
+>   
+>   		if (ret)
+>   			return ret;
+> 
+
+
+Christophe
