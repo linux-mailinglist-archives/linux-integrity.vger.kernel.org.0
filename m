@@ -2,105 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2ED41A97AF
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2020 10:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EBD1AABC6
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2020 17:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408195AbgDOI5V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Apr 2020 04:57:21 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50137 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408190AbgDOI5Q (ORCPT
+        id S2506402AbgDOPVC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Apr 2020 11:21:02 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:37385 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730523AbgDOPVA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Apr 2020 04:57:16 -0400
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jlu@pengutronix.de>)
-        id 1jOdqx-0005eL-B9; Wed, 15 Apr 2020 10:57:03 +0200
-Received: from localhost ([127.0.0.1])
-        by ptx.hi.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <jlu@pengutronix.de>)
-        id 1jOdqv-0000wl-L6; Wed, 15 Apr 2020 10:57:01 +0200
-Message-ID: <71a4f99edb960e0f04ec5e7d8276282f3da95c21.camel@pengutronix.de>
-Subject: Re: [PATCH] tpm_tis_core: Disable broken IRQ handling code
-From:   Jan =?ISO-8859-1?Q?L=FCbbe?= <jlu@pengutronix.de>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org
-Date:   Wed, 15 Apr 2020 10:57:01 +0200
-In-Reply-To: <20200414174433.r54hawtqxlgo3d7y@cantor>
-References: <20200409211044.21625-1-hdegoede@redhat.com>
-         <20200410163826.GM11886@ziepe.ca> <20200414174433.r54hawtqxlgo3d7y@cantor>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.1-1 
+        Wed, 15 Apr 2020 11:21:00 -0400
+Received: by mail-oi1-f196.google.com with SMTP id r25so3901211oij.4;
+        Wed, 15 Apr 2020 08:20:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1BfqGTsRG/XiRfj9IrPOvmGGbY0WhRE/e/njJVbckvY=;
+        b=nTTxldL/ABQjXu8h9JcdjFe58Tes9e7BP2Vw/Shhgv7pPg0G1/EI42/HTEPa5f5tee
+         /XunlSBdHshn5HxnHomNl2LLUrVeUyhoOHvKG+19apTaOD9CJSRd6Z3Kk1ixhXXBscVB
+         3cgOhyvUimx2daeRpB/DXgLXmB1CMCFCOP+Y/bonZzcTgzl6HEIk3+ZhfW+wIEjdCbM5
+         my4WN4M57EQQCEEGqO23WTnV02FPpjcEFN/kq5jNOvYT1zO3qS6+qb/l0kxZHIvkjzNf
+         ZyBxGaZGoipAyCeD5Z36hAvvG3ZKwNp01OnxBPh0PSyi3L9pWchb+XjK2UVNYleGv9dt
+         ZIjQ==
+X-Gm-Message-State: AGi0PuZ8CnMYxM2hYSZsfpH0yK/DcUG4mrij5fRTS20am2mzyBHpQbeF
+        qnt1cHplWjKhtbKob9cNtA==
+X-Google-Smtp-Source: APiQypJR6hUytgfto/sijH40XT6ONP45zrE8EFcxOW+Q+9Qc/j3M0QXAmAu6+xJRDcVihpLynYMw6w==
+X-Received: by 2002:aca:c145:: with SMTP id r66mr18690858oif.90.1586964058634;
+        Wed, 15 Apr 2020 08:20:58 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id k132sm6477456oih.9.2020.04.15.08.20.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2020 08:20:57 -0700 (PDT)
+Received: (nullmailer pid 9564 invoked by uid 1000);
+        Wed, 15 Apr 2020 15:20:56 -0000
+Date:   Wed, 15 Apr 2020 10:20:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     amirmizi6@gmail.com
+Cc:     Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
+        oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
+        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
+Subject: Re: [PATCH v6 6/7] dt-bindings: tpm: Add YAML schema for TPM TIS I2C
+ options
+Message-ID: <20200415152056.GA30547@bogus>
+References: <20200407162044.168890-1-amirmizi6@gmail.com>
+ <20200407162044.168890-7-amirmizi6@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: jlu@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200407162044.168890-7-amirmizi6@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-04-14 at 10:44 -0700, Jerry Snitselaar wrote:
-> On Fri Apr 10 20, Jason Gunthorpe wrote:
+On Tue, Apr 07, 2020 at 07:20:43PM +0300, amirmizi6@gmail.com wrote:
+> From: Amir Mizinski <amirmizi6@gmail.com>
 > 
-> > On Thu, Apr 09, 2020 at 11:10:44PM +0200, Hans de Goede wrote:
-> > > Since commit dda8b2af395b ("tpm: Revert "tpm_tis_core: Set
-> > > TPM_CHIP_FLAG_IRQ before probing for interrupts"") we no longer set
-> > > the TPM_CHIP_FLAG_IRQ ever.
-> > This all used to work..
+> Added a YAML schema to support tpm tis i2c realted dt-bindings for the I2c
+> PTP based physical layer.
 > 
+> This patch adds the documentation for corresponding device tree bindings of
+> I2C based Physical TPM.
+> Refer to the 'I2C Interface Definition' section in
+> 'TCG PC Client PlatformTPMProfile(PTP) Specification' publication
+> for specification.
 > 
-> IIRC this goes all the way back to 570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific")
-> when the flag was added. There was never anything initially setting it in the tpm_tis code.
-> There were checks added, but the only place it got set was where it did the interrupt test in
-> tpm_tis_send, and it can only get down to that code if the flag is set. Stefan's patch was enabling
-> the flag, but with the flag enabled some systems were seeing interrupt storms. I believe it has
-> been seen with both the t490 and an internal system that Dan Williams was working on at Intel.
-> Without access to hw seeing the problem the decision was to revert Stefan's patches while
-> we try to figure out the issues.
+> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+> ---
+>  .../bindings/security/tpm/tpm-tis-i2c.yaml         | 47 ++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+> new file mode 100644
+> index 0000000..13d7c2c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/security/tpm/tpm-tis-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: I2C PTP based TPM Device Tree Bindings
+> +
+> +maintainers:
+> +  - Amir Mizinski <amirmizi6@gmail.com>
+> +
+> +description:
+> +  Device Tree Bindings for I2C based Trusted Platform Module(TPM).
+> +
+> +properties:
+> +  compatible:
+> +    contains:
+> +      const: tcg,tpm-tis-i2c
 
-I stumbled across this when debugging a sporadic "tpm tpm0:
-tpm_try_transmit: send(): error -62 (-ETIME)" we see on a i.MX6 board
-with a TPM2 connected via SPI. It seems that comes from down in
-wait_for_tpm_stat() when the TPM doesn't become ready quickly enough.
+This is not sufficient. I assume you are testing on some specific TPM 
+chip.
 
-As this board actually has the IRQ connected, but is falling back to
-polling, I took another look and what's wrong with the IRQ support. I
-don't have it working yet, but have found some things I'd like to share
-(and maybe get some fresh ideas).
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupt:
+> +    maxItems: 1
+> +
+> +  crc-checksum:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      CRC checksum enable.
 
-I used Stefan Berger's "tpm_tis_core: Turn on the TPM before probing
-IRQ's" and "tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for
-interrupts" to get it into the IRQ verification code in tpm_tis_send().
+Why would you not want CRC? Some chips support and some don't? If so, 
+the compatible for the chip should imply that.
 
-Then I changed the IRQ to threaded with IRQF_ONESHOT, as the handler is
-calling into the SPI stack (which can sleep). A related problem exists
-in wait_for_tpm_stat(), which uses the potentially sleeping
-wait_for_tpm_stat_cond() as the condition check in
-wait_event_interruptible_timeout(). This leads to a:
-[   41.799086] do not call blocking ops when !TASK_RUNNING; state=1 set at [<f02406bc>] prepare_to_wait_event+0x84/0x1a4
-seems to lead to working transfers, but nevertheless needs to be
-changed to be compatible with sleeping busses.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      tpm-tis-i2c@2e {
 
-So I think this probably only worked on systems which don't use SPI.
+tpm@2e
 
-What still confuses me, is that after a few successful transfers I keep
-getting IRQs with TPM_INTF_CMD_READY_INT set, although the handler
-clear that bit. If i read the TIS spec correctly, it should only be
-asserted by a 0->1 transition of
-TPM_INT_STATUS_x.commandReadyIntOccured flag, which shouldn't happend
-so often.
-
-Regards,
-Jan
-
+> +        compatible = "tcg,tpm-tis-i2c";
+> +        reg = <0x2e>;
+> +        crc-checksum;
+> +      };
+> +    };
+> +...
+> -- 
+> 2.7.4
+> 
