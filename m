@@ -2,89 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C2A1ACCE5
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2020 18:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AD01ACE35
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2020 19:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504275AbgDPQLq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Apr 2020 12:11:46 -0400
-Received: from mga02.intel.com ([134.134.136.20]:59774 "EHLO mga02.intel.com"
+        id S1728487AbgDPRBO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Apr 2020 13:01:14 -0400
+Received: from mga03.intel.com ([134.134.136.65]:59583 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729590AbgDPQLp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Apr 2020 12:11:45 -0400
-IronPort-SDR: GDEFM96pkWk7SITHruncP6SCCHuoCEc4+tNp9fBWpTAU/C1tpfYG72y1Yw7Mkp3VlXsHk7ubIr
- zQfHV1RD5GyA==
+        id S1728049AbgDPRBN (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 16 Apr 2020 13:01:13 -0400
+IronPort-SDR: +craSK3CPgv65dn5NHFF5BSkUzcW5YwxmtXrhkK651na5NR7L/bDcF94zwlihBUTiLt2fcP3AN
+ iA6uc1jFoZfg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 09:11:44 -0700
-IronPort-SDR: q5OWoPoACa6Z3qbloJMXeX+bcgoLmhw37ndlmffyLuRUZLNvt/iYRC/1fjvi6j0MpupWgYVHQd
- c0dpwSj3rnfQ==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 10:01:11 -0700
+IronPort-SDR: Ex3s0ieIv57jgUalA6qTy12II0DVlueLaxt/cd9TH3ihZuVMBR+zkD1RImWcSchrMlXJsuYqFc
+ FyrfatnGa6EQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,391,1580803200"; 
-   d="scan'208";a="272118808"
+   d="scan'208";a="246044853"
 Received: from otazetdi-mobl.ccr.corp.intel.com (HELO localhost) ([10.249.42.128])
-  by orsmga002.jf.intel.com with ESMTP; 16 Apr 2020 09:11:42 -0700
-Date:   Thu, 16 Apr 2020 19:11:41 +0300
+  by fmsmga008.fm.intel.com with ESMTP; 16 Apr 2020 10:01:09 -0700
+Date:   Thu, 16 Apr 2020 20:01:08 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "zhang.jia@linux.alibaba.com" <zhang.jia@linux.alibaba.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: Re: [PATCH] tpm: fix wrong return value in tpm_pcr_extend
-Message-ID: <20200416161141.GA181141@linux.intel.com>
-References: <20200414114226.96691-1-tianjia.zhang@linux.alibaba.com>
- <76d46ffbad294a6385779c29c4e5cafd@huawei.com>
- <20200414193542.GB13000@linux.intel.com>
- <20200414202615.stnurisucqxblenj@cantor>
+To:     shuah <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
+        Tadeusz Struk <tadeusz.struk@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Revert "Kernel selftests: tpm2: check for tpm support"
+Message-ID: <20200416170108.GB199110@linux.intel.com>
+References: <20200412142309.71807-1-jarkko.sakkinen@linux.intel.com>
+ <3921a93f-120c-0201-4af5-591bf4e6a0b0@kernel.org>
+ <20200414193722.GD13000@linux.intel.com>
+ <20200414193800.GE13000@linux.intel.com>
+ <ac896427-581d-6fd0-e088-3bc519b6ed66@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200414202615.stnurisucqxblenj@cantor>
+In-Reply-To: <ac896427-581d-6fd0-e088-3bc519b6ed66@kernel.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 01:26:15PM -0700, Jerry Snitselaar wrote:
-> On Tue Apr 14 20, Jarkko Sakkinen wrote:
-> > On Tue, Apr 14, 2020 at 11:55:43AM +0000, Roberto Sassu wrote:
-> > > > -----Original Message-----
-> > > > From: linux-integrity-owner@vger.kernel.org [mailto:linux-integrity-
-> > > > owner@vger.kernel.org] On Behalf Of Tianjia Zhang
-> > > > Sent: Tuesday, April 14, 2020 1:42 PM
-> > > > To: peterhuewe@gmx.de; jarkko.sakkinen@linux.intel.com; jgg@ziepe.ca;
-> > > > arnd@arndb.de; gregkh@linuxfoundation.org; zhang.jia@linux.alibaba.com
-> > > > Cc: linux-integrity@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > > > tianjia.zhang@linux.alibaba.com
-> > > > Subject: [PATCH] tpm: fix wrong return value in tpm_pcr_extend
-> > > >
-> > > > For the algorithm that does not match the bank, a positive
-> > > > value EINVAL is returned here. I think this is a typo error.
-> > > > It is necessary to return an error value.
+On Tue, Apr 14, 2020 at 02:52:12PM -0600, shuah wrote:
+> On 4/14/20 1:38 PM, Jarkko Sakkinen wrote:
+> > On Tue, Apr 14, 2020 at 10:37:25PM +0300, Jarkko Sakkinen wrote:
+> > > On Tue, Apr 14, 2020 at 09:12:05AM -0600, shuah wrote:
+> > > > On 4/12/20 8:23 AM, Jarkko Sakkinen wrote:
+> > > > > This reverts commit b32694cd0724d4ceca2c62cc7c3d3a8d1ffa11fc.
+> > > > > 
+> > > > > The original comment
+> > > > 
+> > > > commit I assume.
+> > > > 
+> > > >   was neither reviewed nor tested. Thus, this the
+> > > > > *only* possible action to take.
+> > > > > 
+> > > > 
+> > > > Bummer. I will apply this right away.
 > > > 
-> > > Yes, thanks.
-> > > 
-> > > Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Happen to have the commit ID at hand for fixes?
-> > 
-> > Thanks.
-> > 
-> > /Jarkko
+> > > No worries, and fine with the change as long as I'm able to
+> > > review and try it out :-) Sorry for the dull tone!
 > > 
 > 
-> 9f75c8224631 ("KEYS: trusted: correctly initialize digests and fix locking issue")
+> I usually wait for test authors to do the review. This patch
+> was sent a while back and I ended up picking it up. It stayed
+> in next for a while. It is fixed now.
+> 
+> > I mean refined change after this revert has been applied.
+> > 
+> Of course. I applied your revert to for my next pull request
+> to linux-kselftest next
+> 
+> thanks,
+> -- Shuah
 
 Thanks.
-
-Also added:
-
-Cc: stable@vger.kernel.org # 5.4.x
 
 /Jarkko
