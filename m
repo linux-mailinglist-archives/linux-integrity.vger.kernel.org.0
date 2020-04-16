@@ -2,108 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 882E21AB7E1
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2020 08:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B672F1AC220
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2020 15:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407793AbgDPGWT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Apr 2020 02:22:19 -0400
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:36657 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2407768AbgDPGWQ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Apr 2020 02:22:16 -0400
-Received: from [192.168.0.4] (ip5f5af6d1.dynamic.kabel-deutschland.de [95.90.246.209])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6F29F206442D0;
-        Thu, 16 Apr 2020 08:22:11 +0200 (CEST)
-Subject: Re: [PATCH v2] tpm_tis: work around status register bug in
- STMicroelectronics TPM
-To:     Omar Sandoval <osandov@osandov.com>,
+        id S2894972AbgDPNOD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Apr 2020 09:14:03 -0400
+Received: from mga14.intel.com ([192.55.52.115]:27289 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2894939AbgDPNOC (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 16 Apr 2020 09:14:02 -0400
+IronPort-SDR: CcmgXTLjx0NJ1DluPc8qvyzD++5ZOQo8ZhR4P5O+DATiRMyqdPHLkv/SUgOhVYm5BdJYBNgA/I
+ /PwBQCvCF3Kw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 06:13:42 -0700
+IronPort-SDR: WvI81BDYmtxqUsTDFRbJ7tWkzpztLdDLQPZXYSdcA4+j62BciXmPy3JbTTpOaVrSVcm/25Ai/b
+ yJajpsV9fqOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,391,1580803200"; 
+   d="scan'208";a="332834202"
+Received: from otazetdi-mobl.ccr.corp.intel.com (HELO localhost) ([10.249.42.128])
+  by orsmga001.jf.intel.com with ESMTP; 16 Apr 2020 06:13:39 -0700
+Date:   Thu, 16 Apr 2020 16:13:39 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
         Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org
-Cc:     kernel-team@fb.com
-References: <c0ba1e2931ca7c46a21a43f2b9a6add2e188d6c8.1586996553.git.osandov@fb.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Message-ID: <19d930ef-4090-3339-1088-c3579e8a080f@molgen.mpg.de>
-Date:   Thu, 16 Apr 2020 08:22:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm/tpm_tis: Free IRQ if probing fails
+Message-ID: <20200416131339.GB65786@linux.intel.com>
+References: <20200412170412.324200-1-jarkko.sakkinen@linux.intel.com>
+ <b909aaee-3fff-4dca-40f4-4c5348474426@redhat.com>
+ <20200413180732.GA11147@linux.intel.com>
+ <7df7f8bd-c65e-1435-7e82-b9f4ecd729de@redhat.com>
+ <20200414071349.GA8403@linux.intel.com>
+ <d6684575-ce91-fe72-6035-11834a05cd54@redhat.com>
+ <20200414160404.GA32775@linux.intel.com>
+ <20200414164542.GC32775@linux.intel.com>
+ <df580835-f887-1918-c933-6509e5a1ad47@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <c0ba1e2931ca7c46a21a43f2b9a6add2e188d6c8.1586996553.git.osandov@fb.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <df580835-f887-1918-c933-6509e5a1ad47@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dear Omar,
-
-
-Am 16.04.20 um 02:23 schrieb Omar Sandoval:
-> From: Omar Sandoval <osandov@fb.com>
-
-Thank you for the patch.
-
-> We've encountered a particular model of STMicroelectronics TPM that
-
-Please add models you are encountering this with to the commit message.
-
-> transiently returns a bad value in the status register. This causes the
-
-Have you contacted STMMicroelectronics?
-
-> kernel to believe that the TPM is ready to receive a command when it
-> actually isn't, which in turn causes the send to time out in
-> get_burstcount(). In testing, reading the status register one extra time
-> convinces the TPM to return a valid value.
+On Tue, Apr 14, 2020 at 07:15:08PM +0200, Hans de Goede wrote:
+> Sounds good, I guess it would be best to combine that with a:
 > 
-> Signed-off-by: Omar Sandoval <osandov@fb.com>
-> ---
->   drivers/char/tpm/tpm_tis_core.c | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
+> 	if (priv->irq == 0)
+> 		return;
 > 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 27c6ca031e23..5a2f6acaf768 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -238,6 +238,25 @@ static u8 tpm_tis_status(struct tpm_chip *chip)
->   	rc = tpm_tis_read8(priv, TPM_STS(priv->locality), &status);
->   	if (rc < 0)
->   		return 0;
-> +	/*
-> +	 * Some STMicroelectronics TPMs have a bug where the status register is
-> +	 * sometimes bogus (all 1s) if read immediately after the access
-> +	 * register is written to. Bits 0, 1, and 5 are always supposed to read
-> +	 * as 0, so this is clearly invalid. Reading the register a second time
-> +	 * returns a valid value.
-> +	 */
-> +	if (unlikely(status == 0xff)) {
+> At the top of disable_interrupts() and then unconditionally
+> call disable_interrupts() where your v1 of this patch
+> calls devm_free_irq(). That would be a reasonable clean
+> solution I think.
 
-I’d like to see a debug message here, saying the TPM is buggy. Maybe the 
-model can be printed to, and that the TPM manufacturer should be contacted.
+Great, this was my plan (just wanted to double check).
 
-> +		rc = tpm_tis_read8(priv, TPM_STS(priv->locality), &status);
-> +		if (rc < 0)
-> +			return 0;
-> +		/*
-> +		 * The status is somehow still bad. This hasn't been observed in
-> +		 * practice, but clear it just in case so that it doesn't appear
-> +		 * to be ready.
-> +		 */
-> +		if (unlikely(status == 0xff))
-> +			status = 0;
-> +	}
->   
->   	return status;
->   }
-
-
-Kind regards,
-
-Paul
+/Jarkko
