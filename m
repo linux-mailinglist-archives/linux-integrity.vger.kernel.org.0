@@ -2,76 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B0D1AD3DB
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2020 02:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A18E1AD56B
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2020 06:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbgDQAx5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Apr 2020 20:53:57 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:56924 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725858AbgDQAx5 (ORCPT
+        id S1725830AbgDQE5P (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Apr 2020 00:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726453AbgDQE5O (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Apr 2020 20:53:57 -0400
-Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B5E5320B46F0;
-        Thu, 16 Apr 2020 17:53:55 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B5E5320B46F0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1587084837;
-        bh=KyuX1Ycfzax8gZMWL41S2/d1pP4VYABr3m40XeTwWWc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=IJ4e3Znk3ZcG0b0X/+YmpQJKVfLR34CsKJCRcPFbWpyR0kMXhiOzLI1kiRJk9g61t
-         3g6oNeIcsPgeB/RGqoNLFivPx3Zu9FSzQpR7tM/JnsuEZCzCN8WXCEQMePWuc57HVA
-         +EpMg4E+ngzxcKNnp8kHdx7dcY/DSW/5fZogi6eQ=
-Subject: Re: [RFC] IMA: New IMA measurements for dm-crypt and selinux
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Lev R. Oshvang ." <levonshe@gmail.com>,
-        Stephen Smalley <stephen.smalley@gmail.com>
-Cc:     linux-integrity@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        SELinux <selinux@vger.kernel.org>, dm-devel@redhat.com,
-        James Morris <jmorris@namei.org>, chpebeni@linux.microsoft.com,
-        nramas@linux.microsoft.com, balajib@microsoft.com,
-        sashal@kernel.org, suredd@microsoft.com
-References: <f92bef0f-eb40-0e07-540c-321134e4b070@linux.microsoft.com>
- <CAB9W1A1=JyOV3-+6jn3xX-M+GKWBB2cCNh-VWB_kzf+YiR_d2Q@mail.gmail.com>
- <CAP22eLGJbSvUU=W0Jp=gvOFv-nxLC8YTnta3OU2PKbh746MCkQ@mail.gmail.com>
- <1586826679.7311.174.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <96c53a34-315c-946d-3264-e6e2cd19f583@linux.microsoft.com>
-Date:   Thu, 16 Apr 2020 17:53:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 17 Apr 2020 00:57:14 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D89C061A0F
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Apr 2020 21:57:14 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id r17so761235lff.2
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Apr 2020 21:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RAXLh21D1H+VdzVaEm6UUMdNn6pp4CFR+JZITSbC43A=;
+        b=omvUtMObZ4ytZy4ga07liDJn7z889vwFl09t5zHlrYCBSU49S9IkMFuqiBa9d39etu
+         KsKWpvl2Cki8Uu9FJKXae1I2yYCBUCOx3AyCTHGEeoS1ix4CgHBdno3vZaqUAXNA0R2B
+         AGO/9LMYemZFLFg/pxQGFrL7TJz2koP+sVQBzb9UzeV3F+Etcqqu7tVjIFBPhPmW7d/Z
+         N05JLYgt+palNlhbjz4Wf9+lQ78ol/d6WZ5eos9IdYe0iecp28/MsKfb0/lJAwUQZoTP
+         HXyeky6W5Flv/7ss9Inw39okRWqUUCnUfmLr5iNWoZ3U6z31XtvM1XlmyLiQAC/OvFeo
+         6n9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RAXLh21D1H+VdzVaEm6UUMdNn6pp4CFR+JZITSbC43A=;
+        b=U2gFHmP2/7SR5HxHHdBhZKKYNDSd3lLcXm/xSDHwzgPW1D1HNkxXi8YYvP9qAgiMHm
+         QxEwSuqoljFl+/EJpZ3dlqrdULJSaiIiFqYieA7H/JXII0McJCS50J/yE9zRNcFxWurJ
+         v/DHlZzLwFQ4AaGKibMgT/JKh4aJdp3uAJN5In+YgNhE1ZSMSDkOdtr2n3TXiJxeRyiP
+         0ewT8cK5mqAoDoPG45XpdKTs13JkF8Xn9oSL/tTo05Tb48GICB1EzKtV2y1sLnu7YIoD
+         noG9A1zOFQ5bIxf+Zt0Ip8C+szzNLOOvOspDMewdcSFl2ujVF37MxZ5S6xmZv9gJFR3K
+         VOfg==
+X-Gm-Message-State: AGi0PuaQBlsL/aLI2Hq9zUg9L0v3g5mh4tLJy4KqeY/OuB9lZ/Cv/Mgl
+        noIn8v15HhWJjQnaw+mHdGyk8MvwkvuJfZEaQ5rrAQ==
+X-Google-Smtp-Source: APiQypLUdzsG2tylnYP/76UWnLr0a8aCftlJOk0jhGyINMlUAKjyl7H4IKqA4OZZlwWqjW74t1URhYwOm29xZbRW2S4=
+X-Received: by 2002:ac2:5c07:: with SMTP id r7mr840725lfp.160.1587099432900;
+ Thu, 16 Apr 2020 21:57:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1586826679.7311.174.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1585636165-22481-1-git-send-email-sumit.garg@linaro.org> <20200416174617.GI199110@linux.intel.com>
+In-Reply-To: <20200416174617.GI199110@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 17 Apr 2020 10:27:01 +0530
+Message-ID: <CAFA6WYNJuxGToM1R02RsrZ_xK6Rfi1SndY1oVYaAbizMpeGPbg@mail.gmail.com>
+Subject: Re: [PATCH] doc: trusted-encrypted: updates with TEE as a new trust source
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>, kgoldman@us.ibm.com,
+        "Safford, David (GE Global Research, US)" <david.safford@ge.com>,
+        monty.wiseman@ge.com, Daniel Thompson <daniel.thompson@linaro.org>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, 16 Apr 2020 at 23:16, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Tue, Mar 31, 2020 at 11:59:25AM +0530, Sumit Garg wrote:
+> > Update documentation for Trusted and Encrypted Keys with TEE as a new
+> > trust source. Following is brief description of updates:
+> >
+> > - Add a section to demostrate a list of supported devices along with
+> >   their security properties/guarantees.
+> > - Add a key generation section.
+> > - Updates for usage section including differences specific to a trust
+> >   source.
+> >
+> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+>
+> Overally this works for me. Can you bundle this with the code
+> changes. Maybe some details needs to be fine tuned but easier
+> to look into them in the context of rest of the patches.
+>
 
+Sure, I will send next version of complete patch-set.
 
-On 2020-04-13 6:11 p.m., Mimi Zohar wrote:
-> On Sun, 2020-04-12 at 11:15 +0300, Lev R. Oshvang . wrote:
->> On Sat, Apr 11, 2020 at 10:07 PM Stephen Smalley
->> It sees to me that  LKRG (kernel run time guard)  takes the role of
->> measuring kernel structures.  Perhaps you need to consult with LKRG
->> guys.
-> 
-> There definitely sounds like there is some overlap.  LKRG seems to be
-> measuring kernel structures for enforcing local integrity.  In the
-> context of IMA, measurements are included in the IMA measurement list
-> and used to extend a TPM PCR so that it can be quoted.
-> 
-> A generic method for measuring structures and including them in the
-> IMA measurement list sounds interesting.
-Thanks for the feedback Mimi.
-We were also thinking along the same lines of generic method
-for measuring structures.
-We will take this feedback into account while implementing.
-> 
-> Mimi
-> 
+-Sumit
+
+> /Jarkko
