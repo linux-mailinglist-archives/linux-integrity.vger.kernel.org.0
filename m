@@ -2,47 +2,49 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD39D1AD3BF
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2020 02:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E781AD3D7
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2020 02:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728040AbgDQAtq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Apr 2020 20:49:46 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55392 "EHLO
+        id S1728449AbgDQAwG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Apr 2020 20:52:06 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:56274 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbgDQAtp (ORCPT
+        with ESMTP id S1727791AbgDQAwG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Apr 2020 20:49:45 -0400
+        Thu, 16 Apr 2020 20:52:06 -0400
 Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7355420B4737;
-        Thu, 16 Apr 2020 17:49:44 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7355420B4737
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6153720B4737;
+        Thu, 16 Apr 2020 17:52:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6153720B4737
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1587084584;
-        bh=QV36QWIYM6W7LdgpJqSP6H4kiHWCR20PTc2rSdaxqZg=;
+        s=default; t=1587084725;
+        bh=Kc9vbyWANy9NqImaMvoEFw8DXdkj1IeIHyGCoq6h7os=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=MnVlDzvmbHWZnrYV5o56wOdeu0ricWbz4vhV1FtrbcDo81EY+VuIQ5oUYWKDBiFKv
-         VgCUE5EMclF6kSr8VNuLc/6pvXB24BA8Tq0es/oR8P1FexQWL+wGBpem4yX79VzX5c
-         qViIQVrWpEBf1qjOWqMlDHloeY9CQOkZRDgK4a5U=
+        b=FKSLSHe1ocGFsx+cS4/k1BV5pKS5njlwZv47XWo1bGojsxMEjJLAm2qVR/L9IpDdL
+         YrJvLvvDIchtfd5gayScARGGcOPTbKVFhJDiHiDx5G1CJXzfVWQ0Q9+plc61cyLKiv
+         0FrFgXsS4RvaVVQZRVo8LBvuIGD5s4oNfKuyMSwA=
 Subject: Re: [RFC] IMA: New IMA measurements for dm-crypt and selinux
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        dm-devel@redhat.com
-Cc:     jmorris@namei.org, chpebeni@linux.microsoft.com,
+To:     "Lev R. Oshvang ." <levonshe@gmail.com>,
+        Stephen Smalley <stephen.smalley@gmail.com>
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        SELinux <selinux@vger.kernel.org>, dm-devel@redhat.com,
+        James Morris <jmorris@namei.org>, chpebeni@linux.microsoft.com,
         nramas@linux.microsoft.com, balajib@microsoft.com,
         sashal@kernel.org, suredd@microsoft.com
 References: <f92bef0f-eb40-0e07-540c-321134e4b070@linux.microsoft.com>
- <b8dcaa3d-5006-2730-aa57-fb99e13c4472@schaufler-ca.com>
+ <CAB9W1A1=JyOV3-+6jn3xX-M+GKWBB2cCNh-VWB_kzf+YiR_d2Q@mail.gmail.com>
+ <CAP22eLGJbSvUU=W0Jp=gvOFv-nxLC8YTnta3OU2PKbh746MCkQ@mail.gmail.com>
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <1feebdbe-94a8-16f7-deea-704e858a40a4@linux.microsoft.com>
-Date:   Thu, 16 Apr 2020 17:49:44 -0700
+Message-ID: <e0e214c7-09d2-46c1-fe63-febd23488720@linux.microsoft.com>
+Date:   Thu, 16 Apr 2020 17:52:05 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <b8dcaa3d-5006-2730-aa57-fb99e13c4472@schaufler-ca.com>
+In-Reply-To: <CAP22eLGJbSvUU=W0Jp=gvOFv-nxLC8YTnta3OU2PKbh746MCkQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
@@ -50,58 +52,12 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 
-On 2020-04-08 9:34 a.m., Casey Schaufler wrote:
-> On 4/8/2020 3:19 AM, Tushar Sugandhi wrote:
+On 2020-04-12 1:15 a.m., Lev R. Oshvang . wrote:
 <snip>
->>
->> B. Measuring selinux constructs:
->>      We propose to add an IMA hook in enforcing_set() present under
->>      security/selinux/include/security.h.
->>      enforcing_set() sets the selinux state to enforcing/permissive etc.
->>      and is called from key places like selinux_init(),
->>      sel_write_enforce() etc.
->>      The hook will measure various attributes related to selinux status.
->>      Majority of the attributes are present in the struct selinux_state
->>      present in security/selinux/include/security.h
->>      e.g.
->>      $sestatus
->>             SELinux status:              enabled
->>             SELinuxfs mount:             /sys/fs/selinux
->>             SELinux root directory:      /etc/selinux
->>             Loaded policy name:          default
->>             Current mode:                permissive
->>             Mode from config file:       permissive
->>             Policy MLS status:           enabled
->>             Policy deny_unknown status:  allowed
->>             Memory protection checking:  requested (insecure)
->>             Max kernel policy version:   32
->>
->>      The above attributes will be serialized into a set of key=value
->>      pairs when passed to IMA for measurement.
->>
->>      Proposed Function Signature of the IMA hook:
->>      void ima_selinux_status(void *selinux_status, int len);
->>
->> Please provide comments\feedback on the proposal.
 > 
-> TL;DR - Why make this SELinux specific?
+> It sees to me that  LKRG (kernel run time guard)  takes the role of
+> measuring kernel structures.  Perhaps you need to consult with LKRG
+Thanks Lev for the feedback. I will investigate more into it.
+> guys.
+> Lev.
 > 
-> Integrating IMA and SELinux is a layering violation at best.
-> Why isn't this ima_lsm_status(void *lsm_status, int len)?
-That seems like a good idea.
-I will investigate where can I place the hook for LSM.
-Please let me know if you have any recommendations.
-> Or, better yet, how about ima_lsm_status(char *name, void *value, int len),
-> and you pass each name/value pair separately? That makes the
-> interface generally useful.
-> 
-> Believe it or not, there *ARE* security modules that
-> are not SELinux.
-> 
->>
->> Thanks,
->> Tushar
->>
->> [1] https://sourceforge.net/p/linux-ima/wiki/Home/
->> [2] https://selinuxproject.org/page/FAQ
->> [3] https://gitlab.com/cryptsetup/cryptsetup/wikis/DMCrypt
