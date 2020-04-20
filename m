@@ -2,161 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84ABD1B197C
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Apr 2020 00:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C57D1B199C
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Apr 2020 00:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726991AbgDTW2J (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Apr 2020 18:28:09 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:59676 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726262AbgDTW2J (ORCPT
+        id S1726181AbgDTWg3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Apr 2020 18:36:29 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15808 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725958AbgDTWg3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Apr 2020 18:28:09 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id F22998EE17B;
-        Mon, 20 Apr 2020 15:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1587421689;
-        bh=SwjsJe4PvxQ16YGtb7jybezJ0G6d0YoVjLD7KzTwv6U=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=fGatc6hXHI1HovdfP0O7oVunYhOEywq4HeAjbdMkybgGeZ4BW+VRjA+xZ6Lx0gnfc
-         5CQUpZQ8HocHR/wto4h/YZKV/5vPIxphxleZbs8os8ajGub8EGeoV5S5yql2AlUSzc
-         u2idUYaTDzyjXaxLyYSaxBIZ5tA6ULHtUtg5bA3U=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RSosx6i5XlqN; Mon, 20 Apr 2020 15:28:08 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6392A8EE0B9;
-        Mon, 20 Apr 2020 15:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1587421688;
-        bh=SwjsJe4PvxQ16YGtb7jybezJ0G6d0YoVjLD7KzTwv6U=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=qd2xvTqYeGnCE3b7xCxa2uvdml11EvH7UAjyVIDenvGcXytxVziVmJDW750kEEEPB
-         qLXjBY04DA+Yd/+rN5oCwVwm6jJT5ZOfBfojEmnWpuEbxy7QR2llfypLx6KscdO06M
-         2IaQKOCrg4wQFPh6Nkkh7hYza4o8wDgxaKIpWvqs=
-Message-ID: <1587421686.3493.2.camel@HansenPartnership.com>
-Subject: Re: [PATCH] tpm_tis: work around status register bug in
+        Mon, 20 Apr 2020 18:36:29 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03KMVNZv086931;
+        Mon, 20 Apr 2020 18:36:13 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30gcs3qm4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Apr 2020 18:36:13 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 03KMWx4C090318;
+        Mon, 20 Apr 2020 18:36:13 -0400
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30gcs3qm46-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Apr 2020 18:36:13 -0400
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03KMZJDA007844;
+        Mon, 20 Apr 2020 22:36:12 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma02wdc.us.ibm.com with ESMTP id 30fs66ccpd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Apr 2020 22:36:12 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03KMaC2O55312844
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Apr 2020 22:36:12 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B8FBAE06A;
+        Mon, 20 Apr 2020 22:36:12 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7EA6AE068;
+        Mon, 20 Apr 2020 22:36:11 +0000 (GMT)
+Received: from [9.85.190.235] (unknown [9.85.190.235])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Apr 2020 22:36:11 +0000 (GMT)
+Subject: Re: [PATCH v2] tpm_tis: work around status register bug in
  STMicroelectronics TPM
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        zohar@linux.ibm.com
-Cc:     Omar Sandoval <osandov@osandov.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Date:   Mon, 20 Apr 2020 15:28:06 -0700
-In-Reply-To: <20200420204641.GA14637@linux.intel.com>
-References: <6c55d7c1fb84e5bf2ace9f05ec816ef67bd873e1.1586990595.git.osandov@fb.com>
-         <1586994699.3931.18.camel@HansenPartnership.com>
-         <20200416001605.GA673482@vader> <20200416002442.GB673482@vader>
-         <1587060171.15329.7.camel@HansenPartnership.com>
-         <20200417235527.GB85230@linux.intel.com>
-         <1587168748.5867.2.camel@HansenPartnership.com>
-         <20200420204641.GA14637@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+To:     Omar Sandoval <osandov@osandov.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-integrity@vger.kernel.org, kernel-team@fb.com
+References: <c0ba1e2931ca7c46a21a43f2b9a6add2e188d6c8.1586996553.git.osandov@fb.com>
+ <19d930ef-4090-3339-1088-c3579e8a080f@molgen.mpg.de>
+ <20200416190249.GC701157@vader>
+From:   Ken Goldman <kgold@linux.ibm.com>
+Message-ID: <addd6865-160b-c347-7607-0385ca514289@linux.ibm.com>
+Date:   Mon, 20 Apr 2020 18:36:11 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <20200416190249.GC701157@vader>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-20_09:2020-04-20,2020-04-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ phishscore=0 adultscore=0 clxscore=1011 spamscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004200173
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-04-20 at 23:46 +0300, Jarkko Sakkinen wrote:
-> On Fri, Apr 17, 2020 at 05:12:28PM -0700, James Bottomley wrote:
-> > On Sat, 2020-04-18 at 02:55 +0300, Jarkko Sakkinen wrote:
-> > > On Thu, Apr 16, 2020 at 11:02:51AM -0700, James Bottomley wrote:
-> > > > On Wed, 2020-04-15 at 17:24 -0700, Omar Sandoval wrote:
-> > > > > On Wed, Apr 15, 2020 at 05:16:05PM -0700, Omar Sandoval
-> > > > > wrote:
-> > > > > > On Wed, Apr 15, 2020 at 04:51:39PM -0700, James Bottomley
-> > > > > > wrote:
-> > > > > > > On Wed, 2020-04-15 at 15:45 -0700, Omar Sandoval wrote:
-> > > > > > > > From: Omar Sandoval <osandov@fb.com>
-> > > > > > > > 
-> > > > > > > > We've encountered a particular model of
-> > > > > > > > STMicroelectronics
-> > > > > > > > TPM
-> > > > > > > > that transiently returns a bad value in the status
-> > > > > > > > register.
-> > > > > > > > This causes the kernel to believe that the TPM is ready
-> > > > > > > > to
-> > > > > > > > receive a command when it actually isn't, which in turn
-> > > > > > > > causes
-> > > > > > > > the send to time out in get_burstcount(). In testing,
-> > > > > > > > reading
-> > > > > > > > the status register one extra time convinces the TPM to
-> > > > > > > > return
-> > > > > > > > a valid value.
-> > > > > > > 
-> > > > > > > Interesting, I've got a very early upgradeable nuvoton
-> > > > > > > that seems to be behaving like this.
-> > > > > > 
-> > > > > > I'll attach the userspace reproducer I used to figure this
-> > > > > > out. I'd be interested to see if it times out on your TPM,
-> > > > > > too. Note that it bangs on /dev/mem and assumes that the
-> > > > > > MMIO address is 0xfed40000. That seems to be the hard-
-> > > > > > coded 
-> > > > > > address for x86 in the kernel, but just to be safe you
-> > > > > > might want to check `grep MSFT0101 /proc/iomem`.
-> > > > > 
-> > > > > Forgot to attach it, of course...
-> > > > 
-> > > > 
-> > > > Thanks!  You facebook guys run with interesting kernel options
-> > > > ... I eventually had to disable CONFIG_STRICT_DEVMEM and
-> > > > rebuild my kernel to get it to run.
-> > > > 
-> > > > However, the bad news is that this isn't my problem, it seems
-> > > > to be more timeout related  I get the same symptoms: logs full
-> > > > of
-> > > > 
-> > > > [14570.626594] tpm tpm0: tpm_try_transmit: tpm_send: error -62
-> > > > 
-> > > > and the TPM won't recover until the box is reset.  To get my
-> > > > TPM to be usable, I have to fiddle our default timeouts like
-> > > > this:
-> > > > 
-> > > > --- a/drivers/char/tpm/tpm.h
-> > > > +++ b/drivers/char/tpm/tpm.h
-> > > > @@ -41,8 +41,8 @@ enum tpm_timeout {
-> > > >         TPM_TIMEOUT_RETRY = 100, /* msecs */
-> > > >         TPM_TIMEOUT_RANGE_US = 300,     /* usecs */
-> > > >         TPM_TIMEOUT_POLL = 1,   /* msecs */
-> > > > -       TPM_TIMEOUT_USECS_MIN = 100,      /* usecs */
-> > > > -       TPM_TIMEOUT_USECS_MAX = 500      /* usecs */
-> > > > +       TPM_TIMEOUT_USECS_MIN = 750,      /* usecs */
-> > > > +       TPM_TIMEOUT_USECS_MAX = 1000,      /* usecs */
-> > > >  };
-> > > > 
-> > > > But I think the problem is unique to my nuvoton because there
-> > > > haven't been any other reports of problems like this ... and
-> > > > with these timeouts my system functions normally in spite of me
-> > > > being a heavy TPM user.
-> > > 
-> > > What downsides there would be to increase these a bit?
-> > 
-> > PCR writes would take longer meaning IMA initialization would
-> > become slower.
-> 
-> Does it matter?
+The model information is returned by getcapability.
 
-Not if you're the one telling Mimi ... and I'm at least 1 mile from the
-blast radius.
+TSSes like this one https://sourceforge.net/projects/ibmtpm20tss/ 
+(shameless plug) have command line tools that will return the information.
 
-But more seriously: Nayna Jain did a series of patches improving the
-time it takes to poll the TPM for operations precisely because the TPM
-PCR extend was going so slowly:
+E.g., this returns the TPM spec revision, TPM vendor part number, TPM 
+firmware version, etc.
 
-https://lore.kernel.org/linux-integrity/20180516055125.5685-1-nayna@linux.vnet.ibm.com/
+getcapability -cap 6 -pc 13
 
-I also reported the issue shortly after that patch was integrated, but
-everyone seemed to think it was just a problem with my TPM chip (it's
-an early Nuvoton field upgraded to 2.0):
+I assume other TSSes have similar tools.  If you want to experiment with 
+TPMs, the command line tools are convenient.
 
-https://lore.kernel.org/linux-integrity/1531328689.3260.8.camel@HansenPartnership.com/
-
-James
+On 4/16/2020 3:02 PM, Omar Sandoval wrote:
+> How can I get the model information? (Sorry, I'm not very familiar with
+> TPMs, I'm just the guy on the team that ended up tracking this down.)
 
