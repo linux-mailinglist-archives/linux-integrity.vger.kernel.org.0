@@ -2,85 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 532001B3120
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Apr 2020 22:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888511B3126
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Apr 2020 22:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726050AbgDUUZX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Apr 2020 16:25:23 -0400
-Received: from mga02.intel.com ([134.134.136.20]:24584 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725930AbgDUUZX (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Apr 2020 16:25:23 -0400
-IronPort-SDR: wZvBX/QUL3ag9cfwW5FiVpJdfRbkvDdp2L8rhhmjJeTS/blngDWjr+Qtss58dktDJMshpli1fP
- bsAm+FlTN2Bg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2020 13:25:22 -0700
-IronPort-SDR: WOGUGKT4+Iqbi0O4JIFGwGUrQuOtBhBeBY8gl6IhkS9Q33LF9oFsK1ovOJJHfGqaYLPqgbAKV6
- 5U5BXr5jTDpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,411,1580803200"; 
-   d="scan'208";a="245778923"
-Received: from mnchalux-mobl2.gar.corp.intel.com (HELO localhost) ([10.252.44.234])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2020 13:25:20 -0700
-Date:   Tue, 21 Apr 2020 23:25:20 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Omar Sandoval <osandov@osandov.com>,
+        id S1726358AbgDUUZy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Apr 2020 16:25:54 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45180 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725930AbgDUUZx (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 21 Apr 2020 16:25:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587500751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BNhmHt4RMHenaofqoWMv475WdAp14sVTXvWnABShIgI=;
+        b=OT518kKH/0Gbym1/jMa2SC1w+lcH8Mjg0nfZG7UFCAnGI1RqMG3cCvsYXkxr/F2Jl5KKD9
+        +6iljwAJBfRB7xVz2DhlH/m9jqlKxVjYzU+JKN8zt6L0yOCdgQBN8ysZln54s4fJCoYg/t
+        OP88Xio04EFNXhVMXSTvsCVG4+e5HUI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-352-38uTTPYANmWpQi9plW7ffQ-1; Tue, 21 Apr 2020 16:25:45 -0400
+X-MC-Unique: 38uTTPYANmWpQi9plW7ffQ-1
+Received: by mail-wm1-f72.google.com with SMTP id h184so1973071wmf.5
+        for <linux-integrity@vger.kernel.org>; Tue, 21 Apr 2020 13:25:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BNhmHt4RMHenaofqoWMv475WdAp14sVTXvWnABShIgI=;
+        b=extsb87VNRkaHFST/BBigOvRKz+05PcS5sNrUNtRE8YiCjbH37GiV+XZjA4LHz/xBE
+         D9Vx13hq9w5luFxSAzxdfp1X2D1yyC0gkd0to4o1RF/bStVWwdEcoDZpERsi/MRDnf7A
+         cLlQgdfzceH1i27oDOYWYQRYDaqDq6n4Gn9GqbUxtuytm6qUMv2Ii0skAlaMqfisTxqU
+         DbgsfTY+yBclNWRuXB2isY6pPBG+i94D53XlCbly6Aui/dtkJhRRzKkaXu3LYQUkye16
+         8JAnGEpiazdvH8yStvh6V0wvWxjxrXMMXlTBLmZk2qb0r0sHHnNQbjQCjdBdB7roo0CI
+         SL9g==
+X-Gm-Message-State: AGi0Pua2WDsj9zflJt6pcmTuvZLoduzP3SJddsmJ0YkmeqqhLjXIxiRt
+        A39lmnCQ02wA5GJY1LT4+Am7SIXGZ/w3d/KDEWQtIcy4NqEevD7bkMLbIhGOX7zg5ie2ZYc47Wc
+        sBC5CFbcuCSJUQK3WXSWCAJGxWtJN
+X-Received: by 2002:a1c:7d90:: with SMTP id y138mr7105636wmc.121.1587500744439;
+        Tue, 21 Apr 2020 13:25:44 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKEl1/LaKqe5TKbNDkzBHlY5TT0KgVkGRX8P7aeJwKLOlLKLxxk/V4PeDMiOLVOh9I8f0byQQ==
+X-Received: by 2002:a1c:7d90:: with SMTP id y138mr7105610wmc.121.1587500744175;
+        Tue, 21 Apr 2020 13:25:44 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id 17sm4730210wmo.2.2020.04.21.13.25.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Apr 2020 13:25:43 -0700 (PDT)
+Subject: Re: [PATCH v2] tpm/tpm_tis: Free IRQ if probing fails
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
         Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] tpm_tis: work around status register bug in
- STMicroelectronics TPM
-Message-ID: <20200421202520.GD46589@linux.intel.com>
-References: <6c55d7c1fb84e5bf2ace9f05ec816ef67bd873e1.1586990595.git.osandov@fb.com>
- <1586994699.3931.18.camel@HansenPartnership.com>
- <20200416001605.GA673482@vader>
- <20200416002442.GB673482@vader>
- <1587060171.15329.7.camel@HansenPartnership.com>
- <20200417235527.GB85230@linux.intel.com>
- <1587168748.5867.2.camel@HansenPartnership.com>
- <20200420204641.GA14637@linux.intel.com>
- <1587421686.3493.2.camel@HansenPartnership.com>
- <1587479764.5149.27.camel@linux.ibm.com>
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200416160751.180791-1-jarkko.sakkinen@linux.intel.com>
+ <fa25cd78-2535-d26d-dd66-d64111af857a@redhat.com>
+ <20200421195403.GA46589@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <2692261d-5395-b03c-2a6f-1694212cd2d4@redhat.com>
+Date:   Tue, 21 Apr 2020 22:25:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1587479764.5149.27.camel@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200421195403.GA46589@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 10:36:04AM -0400, Mimi Zohar wrote:
-> On Mon, 2020-04-20 at 15:28 -0700, James Bottomley wrote:
-> > On Mon, 2020-04-20 at 23:46 +0300, Jarkko Sakkinen wrote:
-> 
-> <snip>
-> 
-> > But more seriously: Nayna Jain did a series of patches improving the
-> > time it takes to poll the TPM for operations precisely because the TPM
-> > PCR extend was going so slowly:
-> > 
-> > https://lore.kernel.org/linux-integrity/20180516055125.5685-1-nayna@linux.vnet.ibm.com/
-> 
-> The original reason for us needing to improve the TPM performance was
-> due to the kernel scheduler change.  Refer to commit a233a0289cf9
-> ("tpm: msleep() delays - replace with usleep_range() in i2c nuvoton
-> driver").  That scheduler change prevented systems from booting.
->  Bisecting the kernel to figure out the problem wasn't very
-> productive.
-> 
-> At least any TPM changes that affect the TPM performance really need
-> to take into account IMA requirements.
+Hi,
 
-Thanks Mimi.
+On 4/21/20 9:54 PM, Jarkko Sakkinen wrote:
+> On Tue, Apr 21, 2020 at 03:23:19PM +0200, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 4/16/20 6:07 PM, Jarkko Sakkinen wrote:
+>>> Call disable_interrupts() if we have to revert to polling in order not to
+>>> unnecessarily reserve the IRQ for the life-cycle of the driver.
+>>>
+>>> Cc: stable@vger.kernel.org # 4.5.x
+>>> Reported-by: Hans de Goede <hdegoede@redhat.com>
+>>> Fixes: e3837e74a06d ("tpm_tis: Refactor the interrupt setup")
+>>> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>>
+>> I can confirm that this fixes the "irq 31 nobody cared" oops for me:
+>>
+>> Tested-by: Hans de Goede <hdegoede@redhat.com>
+> 
+> Hi, thanks a lot! Unfortunately I already put this out given the
+> criticality of the issue:
+> 
+> https://lkml.org/lkml/2020/4/20/1544
+> 
+> Sincere apologies that I couldn't include your tested-by
 
-With my dynamic proposal it would work as it works now for system
-where it worked anyway, and would fix the systems where timeouts
-were too short.
+No problem.
 
-/Jarkko
+> but the most
+> important thing is to know that it works now.
+
+Agreed.
+
+Regards,
+
+Hans
+
