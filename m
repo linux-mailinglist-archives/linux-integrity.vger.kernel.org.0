@@ -2,101 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 758D41B22A9
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Apr 2020 11:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7CC1B2477
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Apr 2020 12:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbgDUJ0n (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Apr 2020 05:26:43 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2068 "EHLO huawei.com"
+        id S1726628AbgDUK6e convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Apr 2020 06:58:34 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2071 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726018AbgDUJ0n (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Apr 2020 05:26:43 -0400
-Received: from lhreml734-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 60B65544B3EF810A1305;
-        Tue, 21 Apr 2020 10:26:41 +0100 (IST)
+        id S1726120AbgDUK6d (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 21 Apr 2020 06:58:33 -0400
+Received: from lhreml726-chm.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 77D44663B228197638C8;
+        Tue, 21 Apr 2020 11:58:32 +0100 (IST)
+Received: from fraeml705-chm.china.huawei.com (10.206.15.54) by
+ lhreml726-chm.china.huawei.com (10.201.108.77) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Tue, 21 Apr 2020 11:58:32 +0100
 Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- lhreml734-chm.china.huawei.com (10.201.108.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Tue, 21 Apr 2020 10:26:41 +0100
-Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
- by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Tue, 21 Apr 2020 11:26:40 +0200
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Tue, 21 Apr 2020 12:58:31 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Tue, 21 Apr 2020 12:58:31 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <mjg59@google.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH] ima: Allow imasig requirement to be satisfied by EVM portable signatures
-Date:   Tue, 21 Apr 2020 11:24:18 +0200
-Message-ID: <20200421092418.25151-1-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.17.1
+To:     Mimi Zohar <zohar@linux.ibm.com>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Subject: vfs_getxattr_alloc() problem
+Thread-Topic: vfs_getxattr_alloc() problem
+Thread-Index: AdYXttYwp+95NXWLRayeH298ep/JJw==
+Date:   Tue, 21 Apr 2020 10:58:31 +0000
+Message-ID: <a47df5af2e2d4bc4bc4757e956c882eb@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.220.65.11]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.204.65.160]
-X-ClientProxiedBy: lhreml740-chm.china.huawei.com (10.201.108.190) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
 X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-System administrators can require that all accessed files have a signature
-by specifying appraise_type=imasig in a policy rule.
+Hi Mimi
 
-Currently, only IMA signatures satisfy this requirement. However, also EVM
-portable signatures can satisfy it. Metadata, including security.ima, are
-signed and cannot change.
+I found a problem in the calculation of the EVM digest.
 
-This patch helps in the scenarios where system administrators want to
-enforce this restriction but only EVM portable signatures are available.
-The patch makes the following changes:
+If an xattr is in the security domain, vfs_getxattr() calls xattr_getsecurity(),
+which is implemented by LSMs. vfs_getxattr_alloc() instead calls directly
+the filesystem function to read xattrs.
 
-file xattr types:
-security.ima: IMA_XATTR_DIGEST/IMA_XATTR_DIGEST_NG
-security.evm: EVM_XATTR_PORTABLE_DIGSIG
+The problem arises for example when you have a file with a portable
+signature on the correct SELinux label (with \0) and you set security.selinux
+manually:
 
-execve(), mmap(), open() behavior (with appraise_type=imasig):
-before: denied (file without IMA signature, imasig requirement not met)
-after: allowed (file with EVM portable signature, imasig requirement met)
+setfattr -n security.selinux -v "system_u:object_r:bin_t:s0" cat
 
-open(O_WRONLY) behavior (without appraise_type=imasig):
-before: allowed (file without IMA signature, not immutable)
-after: denied (file with EVM portable signature, immutable)
+Although the length passed is 26 bytes (without \0), you get:
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima_appraise.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+# attr -l cat
+Attribute "selinux" has a 27 byte value for cat
 
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index a9649b04b9f1..69a6a958f811 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -219,12 +219,16 @@ static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
- 		hash_start = 1;
- 		/* fall through */
- 	case IMA_XATTR_DIGEST:
--		if (iint->flags & IMA_DIGSIG_REQUIRED) {
--			*cause = "IMA-signature-required";
--			*status = INTEGRITY_FAIL;
--			break;
-+		if (*status != INTEGRITY_PASS_IMMUTABLE) {
-+			if (iint->flags & IMA_DIGSIG_REQUIRED) {
-+				*cause = "IMA-signature-required";
-+				*status = INTEGRITY_FAIL;
-+				break;
-+			}
-+			clear_bit(IMA_DIGSIG, &iint->atomic_flags);
-+		} else {
-+			set_bit(IMA_DIGSIG, &iint->atomic_flags);
- 		}
--		clear_bit(IMA_DIGSIG, &iint->atomic_flags);
- 		if (xattr_len - sizeof(xattr_value->type) - hash_start >=
- 				iint->ima_hash->length)
- 			/*
--- 
-2.17.1
+which includes \0.
 
+From user space, evmctl does not complain (the signature is ok) because
+it calculates the EVM digest with \0, but EVM verification fails (because it
+calculates the digest without \0).
+
+Should this problem be fixed?
+
+Thanks
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
