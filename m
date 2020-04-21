@@ -2,99 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C57D1B199C
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Apr 2020 00:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C295D1B2255
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Apr 2020 11:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbgDTWg3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Apr 2020 18:36:29 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15808 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725958AbgDTWg3 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Apr 2020 18:36:29 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03KMVNZv086931;
-        Mon, 20 Apr 2020 18:36:13 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30gcs3qm4e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Apr 2020 18:36:13 -0400
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 03KMWx4C090318;
-        Mon, 20 Apr 2020 18:36:13 -0400
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30gcs3qm46-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Apr 2020 18:36:13 -0400
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03KMZJDA007844;
-        Mon, 20 Apr 2020 22:36:12 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02wdc.us.ibm.com with ESMTP id 30fs66ccpd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Apr 2020 22:36:12 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03KMaC2O55312844
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Apr 2020 22:36:12 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1B8FBAE06A;
-        Mon, 20 Apr 2020 22:36:12 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D7EA6AE068;
-        Mon, 20 Apr 2020 22:36:11 +0000 (GMT)
-Received: from [9.85.190.235] (unknown [9.85.190.235])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Apr 2020 22:36:11 +0000 (GMT)
-Subject: Re: [PATCH v2] tpm_tis: work around status register bug in
- STMicroelectronics TPM
-To:     Omar Sandoval <osandov@osandov.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity@vger.kernel.org, kernel-team@fb.com
-References: <c0ba1e2931ca7c46a21a43f2b9a6add2e188d6c8.1586996553.git.osandov@fb.com>
- <19d930ef-4090-3339-1088-c3579e8a080f@molgen.mpg.de>
- <20200416190249.GC701157@vader>
-From:   Ken Goldman <kgold@linux.ibm.com>
-Message-ID: <addd6865-160b-c347-7607-0385ca514289@linux.ibm.com>
-Date:   Mon, 20 Apr 2020 18:36:11 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728131AbgDUJHr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Apr 2020 05:07:47 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2067 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726095AbgDUJHr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 21 Apr 2020 05:07:47 -0400
+Received: from lhreml725-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id E92A03756FD049E7F83F;
+        Tue, 21 Apr 2020 10:07:44 +0100 (IST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ lhreml725-chm.china.huawei.com (10.201.108.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Tue, 21 Apr 2020 10:07:44 +0100
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
+ by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Tue, 21 Apr 2020 11:07:43 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] ima: Fix return value of ima_write_policy()
+Date:   Tue, 21 Apr 2020 11:04:42 +0200
+Message-ID: <20200421090442.22693-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20200416190249.GC701157@vader>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-20_09:2020-04-20,2020-04-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- impostorscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
- phishscore=0 adultscore=0 clxscore=1011 spamscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004200173
+Content-Type: text/plain
+X-Originating-IP: [10.204.65.160]
+X-ClientProxiedBy: lhreml706-chm.china.huawei.com (10.201.108.55) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The model information is returned by getcapability.
+Return datalen instead of zero if there is a rule to appraise the policy
+but that rule is not enforced.
 
-TSSes like this one https://sourceforge.net/projects/ibmtpm20tss/ 
-(shameless plug) have command line tools that will return the information.
+Cc: stable@vger.kernel.org
+Fixes: 19f8a84713edc ("ima: measure and appraise the IMA policy itself")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima_fs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-E.g., this returns the TPM spec revision, TPM vendor part number, TPM 
-firmware version, etc.
-
-getcapability -cap 6 -pc 13
-
-I assume other TSSes have similar tools.  If you want to experiment with 
-TPMs, the command line tools are convenient.
-
-On 4/16/2020 3:02 PM, Omar Sandoval wrote:
-> How can I get the model information? (Sorry, I'm not very familiar with
-> TPMs, I'm just the guy on the team that ended up tracking this down.)
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index a71e822a6e92..2c2ea814b954 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -340,6 +340,8 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
+ 				    1, 0);
+ 		if (ima_appraise & IMA_APPRAISE_ENFORCE)
+ 			result = -EACCES;
++		else
++			result = datalen;
+ 	} else {
+ 		result = ima_parse_add_rule(data);
+ 	}
+-- 
+2.17.1
 
