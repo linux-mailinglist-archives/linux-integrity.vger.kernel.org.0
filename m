@@ -2,96 +2,183 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BCE1B3295
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Apr 2020 00:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B54F1B39C9
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Apr 2020 10:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726055AbgDUWW7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Apr 2020 18:22:59 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:32220 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725850AbgDUWW7 (ORCPT
+        id S1726415AbgDVIP7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Apr 2020 04:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725810AbgDVIP7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Apr 2020 18:22:59 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03LMJ3JC025250;
-        Wed, 22 Apr 2020 00:22:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=dZJTlWIIHeyrkFVNdA42HBD5FKoXjONJpYRa6ljj15E=;
- b=gF1ZBaLNrbSVnicucQosBG5LnD+4Z6hIdbgqmNMqEbiP5ipsQIxYqfdXfsMBHCVbhiQB
- LSUeQRizPJHT2iBID8Pwprv2CffMaMbO32dylZoeYHuDCRBeAOO3GEJavjRqiiKKJQ9Y
- dffhPg1XWF+vSH3j91pfTVQnARUUQ793aqHxoiOPyd9HV9cddseji051qR0PkMlNrdCU
- no3Va+T4kwgceaWVWuvgtTKynPqh2dS1DM4B0BBVrkROPq4Kg3Ea3elG1bgRMLDTkUEU
- 3BWZCwoqLJdURDQcJrNOkJGvPMiv3OAcoq0AX8NeuEhN2WWn7dkx/N80eIUFhYhFTuZ2 kw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 30fqawag0y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Apr 2020 00:22:31 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 54670100034;
-        Wed, 22 Apr 2020 00:22:30 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2D137207495;
-        Wed, 22 Apr 2020 00:22:30 +0200 (CEST)
-Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG3NODE3.st.com
- (10.75.127.9) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 22 Apr
- 2020 00:22:29 +0200
-Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
- SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
- 15.00.1347.000; Wed, 22 Apr 2020 00:22:29 +0200
-From:   Benoit HOUYERE <benoit.houyere@st.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Omar Sandoval <osandov@osandov.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Amir Mizinski <amirmizi6@gmail.com>
-CC:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "James Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>
-Subject: RE: [PATCH v2] tpm_tis: work around status register bug in
- STMicroelectronics TPM
-Thread-Topic: [PATCH v2] tpm_tis: work around status register bug in
- STMicroelectronics TPM
-Thread-Index: AQHWGCqZKczi/o3brkCk2ElxkuJuPKiEJXBA
-Date:   Tue, 21 Apr 2020 22:22:29 +0000
-Message-ID: <35489c2c876b483fbe5a0283391e8e65@SFHDAG3NODE3.st.com>
-References: <c0ba1e2931ca7c46a21a43f2b9a6add2e188d6c8.1586996553.git.osandov@fb.com>
-         <19d930ef-4090-3339-1088-c3579e8a080f@molgen.mpg.de>
-         <20200416190249.GC701157@vader> <1587476664.5149.14.camel@linux.ibm.com>
-         <3766ead79aa4415198bc5a8324f02f6e@SFHDAG3NODE3.st.com>
- <1587507430.5053.16.camel@linux.ibm.com>
-In-Reply-To: <1587507430.5053.16.camel@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.45]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 22 Apr 2020 04:15:59 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A4EC03C1A6;
+        Wed, 22 Apr 2020 01:15:58 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id k1so1273013wrx.4;
+        Wed, 22 Apr 2020 01:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=W1bwVVy/NtLxRgnoJUy2zNxPLp+Z6h7qsHb9WOhUubo=;
+        b=fEMC7jx1CLTOOK/5ySAQ9yyKtT2HbPV/yROeiAslCfHYmhzFoSmSvICfSP3N7z1/0C
+         G5VAOfKlIm0cds8bHhPXuAd4v33j8AtQTNB6NmCrU8a+x1KsGlmRxbwxWB8itzYZm5bG
+         6aO73LwdXbKtwIc4wJAwZHXC0jdGniNHJHJhYXvk84wOdG3RvGNDKQdry/v8CmCkFHgU
+         PZQscstx/0LQJb3YnDiAQkcTTeisPBwvLaLTz6nxTOvRuCG7DP4JCd+Go0N2EZGELaXr
+         H+f9hSZkviBHK/hB8uVVYgOblQNbX3HLgl3YQ36ocrKBf//ISRi5bwdulF8NQ+zJiueo
+         kd4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=W1bwVVy/NtLxRgnoJUy2zNxPLp+Z6h7qsHb9WOhUubo=;
+        b=AwovcF7OD+PP1vPA/BVkhmDB9bjgvXpW6HOGBXCeBjwBUfmvIV26gECyRLM4/62HRb
+         5cgWgx/rerKPmXpmG5ieperfL0V3TyH+tJZn6fDCjloO4TK57R5bCRplgO9iRAOahefV
+         D2S5+pro0xOMavIa9HvaZsQM15dI1k+HrxCzIRrsP9nuPCP3ZIMimLeWVeM1z8M5eWdB
+         PNbSPK0D0BbNfRMLtUxL2PTEof4roFbI+Ns4zbsyaJBnwxkDkvnLQUoNN8T7keLGSGWA
+         bVr4kHpFMOiztVeGk+PRBdXRVRstNYiq4JgHAv+tOtvx7ECtAq9cB8SXsJe92tmVdJkE
+         0xXg==
+X-Gm-Message-State: AGi0PubIkizTG1qAQqQWaBte5OxUo/arllrkctDQGqzVzWw31pxIMpAD
+        wjn91uxVAYeHghZub/bxDFnuoOwpVq4=
+X-Google-Smtp-Source: APiQypLNP3FKxLdejyFGmo/PZCFB4G9yydsMN1CISrxGbgYnQpBB7EGeKZnnv9vuQkhjVUwPsH/F/Q==
+X-Received: by 2002:a5d:49c7:: with SMTP id t7mr26964145wrs.22.1587543357363;
+        Wed, 22 Apr 2020 01:15:57 -0700 (PDT)
+Received: from [192.168.43.138] ([37.142.175.196])
+        by smtp.gmail.com with ESMTPSA id e5sm7154063wru.92.2020.04.22.01.15.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Apr 2020 01:15:56 -0700 (PDT)
+Subject: Re: [PATCH v6 6/7] dt-bindings: tpm: Add YAML schema for TPM TIS I2C
+ options
+To:     Rob Herring <robh@kernel.org>
+Cc:     Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
+        oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
+        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
+References: <20200407162044.168890-1-amirmizi6@gmail.com>
+ <20200407162044.168890-7-amirmizi6@gmail.com> <20200415152056.GA30547@bogus>
+From:   Amir Mizinski <amirmizi6@gmail.com>
+Message-ID: <5142cad6-7d22-bc80-a743-e3c75f7a237b@gmail.com>
+Date:   Wed, 22 Apr 2020 08:15:52 +0000
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-21_09:2020-04-21,2020-04-21 signatures=0
+In-Reply-To: <20200415152056.GA30547@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-DQpPbiBUdWUsIDIwMjAtMDQtMjEgYXQgMjA6NTYgKzAwMDAsIEJlbm9pdCBIT1VZRVJFIHdyb3Rl
-Og0KDQo+PiBJc3N1ZSBvY2N1cnMgb24gc2V2ZXJhbCBsZWdhY3kgbW9kZWxzIGFuZCBjb3JyZWN0
-ZWQgb24gbGF0ZXN0IFRQTSANCj4+IHZlcnNpb25zLiBTZXZlcmFsIGNvcnJlY3Rpb25zIGFyZSBw
-b3NzaWJsZS4gT21hcidzIHByb3Bvc2FsIGlzIHF1aXRlIA0KPj4gc2ltcGxlLCBzaG9ydCBhbmQg
-ZWZmaWNpZW50LiBQZW5hbHR5IHRpbWUgaXMgb25seSBjb25kaXRpb24gY2hlY2sgYnV0IA0KPj4g
-Zm9yIGFsbCBUUE1fc3RhdHVzIGFjY2Vzcy4NCj4+IA0KPj4gT3RoZXIgcG9zc2liaWxpdHkgIGlz
-IHRvIGNoZWNrIHN0YXR1cyByZWdpc3RlciB2YWxpZGl0eSAoYml0IDUgaXMgDQo+PiBhbHdheXMg
-YXQgMCkgYXQgdGhlIGZpcnN0IHJlYWRpbmcgYW5kIG1vZGlmeSB3YWl0X2Zvcl9zdGF0IGZ1bmN0
-aW9uIA0KPj4gKGFscmVhZHkgaW5zZXJ0ZWQgZm9yIEkyQyBwYXRjaCkuDQoNCj5CZW5vaXQsIHRo
-YW5rIHlvdSBmb3IgdGhlIGV4cGxhbmF0aW9uLg0KDQo+SXQgc291bmRzIGxpa2UgYnkgImFscmVh
-ZHkgaW5zZXJ0ZWQgZm9yIEkyQyBwYXRjaCIsIHlvdSBtZWFuIHRoYXQgdGhpcyBwcm9wb3NlZCBz
-b2x1dGlvbiBpcyBwYXJ0IG9mIHRoZSBpMmMgcGF0Y2ggc2V0LiDCoElmIHRoYXQgaXMgdGhlIGNh
-c2UsIHRvIHNpbXBsaWZ5IGJhY2twb3J0aW5nLCB0aGUgZml4IHNob3VsZCBiZSB0aGUgZmlyc3Qg
-cGF0Y2ggaW4gdGhlIGkyYyBwYXRjaCBzZXQuDQoNCj5NaW1pDQpPaywgSSB3aWxsIGNoZWNrIHdp
-dGggQW1pciBiZWZvcmUuDQoNCg==
+
+On 2020-04-15 15:20, Rob Herring wrote:
+> On Tue, Apr 07, 2020 at 07:20:43PM +0300, amirmizi6@gmail.com wrote:
+>> From: Amir Mizinski <amirmizi6@gmail.com>
+>>
+>> Added a YAML schema to support tpm tis i2c realted dt-bindings for the I2c
+>> PTP based physical layer.
+>>
+>> This patch adds the documentation for corresponding device tree bindings of
+>> I2C based Physical TPM.
+>> Refer to the 'I2C Interface Definition' section in
+>> 'TCG PC Client PlatformTPMProfile(PTP) Specification' publication
+>> for specification.
+>>
+>> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+>> ---
+>>  .../bindings/security/tpm/tpm-tis-i2c.yaml         | 47 ++++++++++++++++++++++
+>>  1 file changed, 47 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+>> new file mode 100644
+>> index 0000000..13d7c2c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+>> @@ -0,0 +1,47 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/security/tpm/tpm-tis-i2c.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: I2C PTP based TPM Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Amir Mizinski <amirmizi6@gmail.com>
+>> +
+>> +description:
+>> +  Device Tree Bindings for I2C based Trusted Platform Module(TPM).
+>> +
+>> +properties:
+>> +  compatible:
+>> +    contains:
+>> +      const: tcg,tpm-tis-i2c
+>
+> This is not sufficient. I assume you are testing on some specific TPM
+> chip.
+>
+
+I am, but this implementation follows the "TCG PC client Device Driver Design Principles for TPM 2.0"
+It's not meant solely for out chip.
+
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupt:
+>> +    maxItems: 1
+>> +
+>> +  crc-checksum:
+>> +    $ref: /schemas/types.yaml#/definitions/flag
+>> +    description:
+>> +      CRC checksum enable.
+>
+> Why would you not want CRC? Some chips support and some don't? If so,
+> the compatible for the chip should imply that.
+>
+
+There's an Enable/Disable CRC option in the TPM chip, not all vendors
+use this by default.
+
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +examples:
+>> +  - |
+>> +    i2c {
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      tpm-tis-i2c@2e {
+>
+> tpm@2e
+>
+
+I understand why i should remove "i2c", but i think it should be "tpm_tis@2e".
+Respectively with "tpm_tis_spi.txt" and "tpm_tis_mmio.txt".
+
+>> +        compatible = "tcg,tpm-tis-i2c";
+>> +        reg = <0x2e>;
+>> +        crc-checksum;
+>> +      };
+>> +    };
+>> +...
+>> --
+>> 2.7.4
+>>
+
+Thank you for your feedback.
+Best regards,
+Amir Mizinski
+
