@@ -2,130 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC3F1B43D9
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Apr 2020 14:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600BB1B45C3
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Apr 2020 15:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbgDVMDJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Apr 2020 08:03:09 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:65492 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726835AbgDVMDJ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Apr 2020 08:03:09 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03MC2Dvm151478
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Apr 2020 08:03:08 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30jms9hkba-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Apr 2020 08:03:08 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 22 Apr 2020 13:02:30 +0100
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 22 Apr 2020 13:02:27 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03MC32sU56033566
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Apr 2020 12:03:02 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7758A11C054;
-        Wed, 22 Apr 2020 12:03:02 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 79CA111C050;
-        Wed, 22 Apr 2020 12:03:01 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.220.15])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 22 Apr 2020 12:03:01 +0000 (GMT)
-Subject: Re: [PATCH 1/5] ima: Set file->f_mode instead of file->f_flags in
- ima_calc_file_hash()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.struczynski@huawei.com,
-        silviu.vlasceanu@huawei.com, stable@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>
-Date:   Wed, 22 Apr 2020 08:03:01 -0400
-In-Reply-To: <20200325161116.7082-1-roberto.sassu@huawei.com>
-References: <20200325161116.7082-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        id S1726116AbgDVNBk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Apr 2020 09:01:40 -0400
+Received: from mga02.intel.com ([134.134.136.20]:10462 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725895AbgDVNBk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 22 Apr 2020 09:01:40 -0400
+IronPort-SDR: vPxbnUpkYERInsHliMZfVe5Ks4vJ0iNsJg5DxTL0DfvnCInOBsJFiTAdF7nIZRtDkNz55M+9AD
+ uYy8lAOXpRYA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 06:01:39 -0700
+IronPort-SDR: RMT5qV6boQujN1WL1nAGNeMAy8ec4xqBGnY9CyTbkUR/vtrwFCfyGXAuGCC9gkVTR76IztjYqp
+ 2dp50XvP43OQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,414,1580803200"; 
+   d="scan'208";a="457133226"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2020 06:01:37 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4B22658F; Wed, 22 Apr 2020 16:01:36 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] tpm/tpm_ftpm_tee: Use UUID API for exporting the UUID
+Date:   Wed, 22 Apr 2020 16:01:35 +0300
+Message-Id: <20200422130135.38555-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.26.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20042212-0008-0000-0000-0000037558B1
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20042212-0009-0000-0000-00004A9721D8
-Message-Id: <1587556981.5738.7.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-22_03:2020-04-22,2020-04-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- spamscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1015
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2003020000 definitions=main-2004220093
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[CC'ing Goldwyn Rodrigues]
+There is export_uuid() function which exports uuid_t to the u8 array.
+Use it instead of open coding variant.
 
-Hi Roberto,
+This allows to hide the uuid_t internals.
 
-On Wed, 2020-03-25 at 17:11 +0100, Roberto Sassu wrote:
-> Commit a408e4a86b36 ("ima: open a new file instance if no read
-> permissions") tries to create a new file descriptor to calculate a file
-> digest if the file has not been opened with O_RDONLY flag. However, if a
-> new file descriptor cannot be obtained, it sets the FMODE_READ flag to
-> file->f_flags instead of file->f_mode.
-> 
-> This patch fixes this issue by replacing f_flags with f_mode as it was
-> before that commit.
-> 
-> Cc: stable@vger.kernel.org # 4.20.x
-> Fixes: a408e4a86b36 ("ima: open a new file instance if no read permissions")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/integrity/ima/ima_crypto.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-> index 423c84f95a14..8ab17aa867dd 100644
-> --- a/security/integrity/ima/ima_crypto.c
-> +++ b/security/integrity/ima/ima_crypto.c
-> @@ -436,7 +436,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
->  			 */
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks, Roberto.  The comment above here and the rest of the code
-refers to flags.  Both should be updated as well to reflect using
-f_mode.
-
->  			pr_info_ratelimited("Unable to reopen file for reading.\n");
->  			f = file;
-> -			f->f_flags |= FMODE_READ;
-> +			f->f_mode |= FMODE_READ;
->  			modified_flags = true;
-
-The variable should be changed to "modified_mode".
-
-thanks,
-
-Mimi
-
->  		} else {
->  			new_file_instance = true;
-> @@ -456,7 +456,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
->  	if (new_file_instance)
->  		fput(f);
->  	else if (modified_flags)
-> -		f->f_flags &= ~FMODE_READ;
-> +		f->f_mode &= ~FMODE_READ;
->  	return rc;
->  }
->  
+diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+index 22bf553ccf9df..2491a2cb54a22 100644
+--- a/drivers/char/tpm/tpm_ftpm_tee.c
++++ b/drivers/char/tpm/tpm_ftpm_tee.c
+@@ -241,7 +241,7 @@ static int ftpm_tee_probe(struct platform_device *pdev)
+ 
+ 	/* Open a session with fTPM TA */
+ 	memset(&sess_arg, 0, sizeof(sess_arg));
+-	memcpy(sess_arg.uuid, ftpm_ta_uuid.b, TEE_IOCTL_UUID_LEN);
++	export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
+ 	sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+ 	sess_arg.num_params = 0;
+ 
+-- 
+2.26.1
 
