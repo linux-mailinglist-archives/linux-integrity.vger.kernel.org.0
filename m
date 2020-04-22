@@ -2,127 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7563A1B467A
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Apr 2020 15:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598001B483B
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Apr 2020 17:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgDVNpL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Apr 2020 09:45:11 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37384 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726796AbgDVNpL (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Apr 2020 09:45:11 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03MD3uSt124278
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Apr 2020 09:45:10 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30gmv0v7gm-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Apr 2020 09:45:10 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 22 Apr 2020 14:44:14 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 22 Apr 2020 14:44:11 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03MDj4OJ52691146
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Apr 2020 13:45:04 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 11BA9AE065;
-        Wed, 22 Apr 2020 13:45:04 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30EBFAE059;
-        Wed, 22 Apr 2020 13:45:03 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.220.15])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 22 Apr 2020 13:45:03 +0000 (GMT)
-Subject: Re: [PATCH 2/5] evm: Check also if *tfm is an error pointer in
- init_desc()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.struczynski@huawei.com,
-        silviu.vlasceanu@huawei.com, stable@vger.kernel.org
-Date:   Wed, 22 Apr 2020 09:45:02 -0400
-In-Reply-To: <20200325161116.7082-2-roberto.sassu@huawei.com>
-References: <20200325161116.7082-1-roberto.sassu@huawei.com>
-         <20200325161116.7082-2-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20042213-0020-0000-0000-000003CC8FC6
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20042213-0021-0000-0000-000022258C03
-Message-Id: <1587563102.5738.32.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-22_06:2020-04-22,2020-04-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 adultscore=0 malwarescore=0
- suspectscore=0 phishscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004220104
+        id S1726192AbgDVPHp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Apr 2020 11:07:45 -0400
+Received: from mga02.intel.com ([134.134.136.20]:18564 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726050AbgDVPHp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 22 Apr 2020 11:07:45 -0400
+IronPort-SDR: w1xeYJ5X17w5OTrj6V5vcF3MLy9NMzXXd9CQgIMmZtcP6ymIzEdRoRu776LIXb8Vr0KaLIPfVB
+ /DbCoCVLpqDA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 08:07:45 -0700
+IronPort-SDR: hxer6s5qRRnr/lfuuvFEsiyVKmVrOMPPo8v4jO03VWWF80/J8YJ32hWeCYMBgB+8mpAf/MJYHF
+ x9WxZ8U4tMpw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,414,1583222400"; 
+   d="scan'208";a="259098214"
+Received: from ryanchev-mobl.ger.corp.intel.com (HELO localhost) ([10.252.45.252])
+  by orsmga006.jf.intel.com with ESMTP; 22 Apr 2020 08:07:43 -0700
+Date:   Wed, 22 Apr 2020 18:07:42 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v1] tpm/tpm_ftpm_tee: Use UUID API for exporting the UUID
+Message-ID: <20200422150742.GA89432@linux.intel.com>
+References: <20200422130135.38555-1-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200422130135.38555-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto, Krzysztof,
-
-On Wed, 2020-03-25 at 17:11 +0100, Roberto Sassu wrote:
-> The mutex in init_desc(), introduced by commit 97426f985729 ("evm: prevent
-> racing during tfm allocation") prevents two tasks to concurrently set *tfm.
-> However, checking if *tfm is NULL is not enough, as crypto_alloc_shash()
-> can return an error pointer. The following sequence can happen:
+On Wed, Apr 22, 2020 at 04:01:35PM +0300, Andy Shevchenko wrote:
+> There is export_uuid() function which exports uuid_t to the u8 array.
+> Use it instead of open coding variant.
 > 
-> Task A: *tfm = crypto_alloc_shash() <= error pointer
-> Task B: if (*tfm == NULL) <= *tfm is not NULL, use it
-> Task B: rc = crypto_shash_init(desc) <= panic
-> Task A: *tfm = NULL
+> This allows to hide the uuid_t internals.
 > 
-> This patch uses the IS_ERR_OR_NULL macro to determine whether or not a new
-> crypto context must be created.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 97426f985729 ("evm: prevent racing during tfm allocation")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thank you.  True, this commit introduced the mutex, but the actual
-problem is most likely the result of a crypto algorithm not being
-configured.  Depending on the kernel and which crypto algorithms are
-enabled, verifying an EVM signature might not be possible.  In the
-embedded environment, where the entire filesystem is updated, there
-shouldn't be any unknown EVM signature algorithms.
+Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-In case Greg or Sasha decide this patch should be backported,
-including the context/motivation in the patch description (first
-paragraph) would be helpful.
+I guess no need for backports?
 
-Mimi
-
-> Co-developed-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-> Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/integrity/evm/evm_crypto.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-> index 35682852ddea..77ad1e5a93e4 100644
-> --- a/security/integrity/evm/evm_crypto.c
-> +++ b/security/integrity/evm/evm_crypto.c
-> @@ -91,7 +91,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
->  		algo = hash_algo_name[hash_algo];
->  	}
->  
-> -	if (*tfm == NULL) {
-> +	if (IS_ERR_OR_NULL(*tfm)) {
->  		mutex_lock(&mutex);
->  		if (*tfm)
->  			goto out;
-
+/Jarkko
