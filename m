@@ -2,118 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BECC31B6A28
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2020 01:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78F71B7223
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2020 12:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbgDWXv5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 23 Apr 2020 19:51:57 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38306 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725936AbgDWXv4 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 23 Apr 2020 19:51:56 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03NNfOWL060889
-        for <linux-integrity@vger.kernel.org>; Thu, 23 Apr 2020 19:51:55 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30kk5stpc5-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Thu, 23 Apr 2020 19:51:55 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-integrity@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 24 Apr 2020 00:51:28 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 24 Apr 2020 00:51:26 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03NNpowC24313896
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Apr 2020 23:51:50 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5BA1B11C04C;
-        Thu, 23 Apr 2020 23:51:50 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4AF6F11C052;
-        Thu, 23 Apr 2020 23:51:49 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.178.107])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 23 Apr 2020 23:51:49 +0000 (GMT)
-Subject: Re: vfs_getxattr_alloc() problem
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Matthew Garrett <mjg59@google.com>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        id S1726815AbgDXKkA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 24 Apr 2020 06:40:00 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2095 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726778AbgDXKkA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 24 Apr 2020 06:40:00 -0400
+Received: from lhreml731-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 08733653FF91A7DEF629;
+        Fri, 24 Apr 2020 11:39:58 +0100 (IST)
+Received: from fraeml706-chm.china.huawei.com (10.206.15.55) by
+ lhreml731-chm.china.huawei.com (10.201.108.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Fri, 24 Apr 2020 11:39:57 +0100
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Fri, 24 Apr 2020 12:39:56 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Fri, 24 Apr 2020 12:39:56 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "mjg59@google.com" <mjg59@google.com>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Thu, 23 Apr 2020 19:51:48 -0400
-In-Reply-To: <a47df5af2e2d4bc4bc4757e956c882eb@huawei.com>
-References: <a47df5af2e2d4bc4bc4757e956c882eb@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20042323-0012-0000-0000-000003AA27E4
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20042323-0013-0000-0000-000021E77E23
-Message-Id: <1587685908.5610.91.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-23_19:2020-04-23,2020-04-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 adultscore=0 mlxscore=0 bulkscore=0 clxscore=1015
- priorityscore=1501 suspectscore=0 impostorscore=0 malwarescore=0
- mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2003020000 definitions=main-2004230169
+Subject: RE: [PATCH] ima: Allow imasig requirement to be satisfied by EVM
+ portable signatures
+Thread-Topic: [PATCH] ima: Allow imasig requirement to be satisfied by EVM
+ portable signatures
+Thread-Index: AQHWF772Ra31Za7Rnki0v4dh4iikmaiHEPYAgAEEbgA=
+Date:   Fri, 24 Apr 2020 10:39:56 +0000
+Message-ID: <735d0814399f430a8809af8c28b1a62d@huawei.com>
+References: <20200421092418.25151-1-roberto.sassu@huawei.com>
+ <1587675102.5610.66.camel@linux.ibm.com>
+In-Reply-To: <1587675102.5610.66.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.14.239]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Cc'ing Matthew]
-
-Hi Roberto,
-
-On Tue, 2020-04-21 at 10:58 +0000, Roberto Sassu wrote:
-> Hi Mimi
-> 
-> I found a problem in the calculation of the EVM digest.
-> 
-> If an xattr is in the security domain, vfs_getxattr() calls xattr_getsecurity(),
-> which is implemented by LSMs. vfs_getxattr_alloc() instead calls directly
-> the filesystem function to read xattrs.
-> 
-> The problem arises for example when you have a file with a portable
-> signature on the correct SELinux label (with \0) and you set security.selinux
-> manually:
-> 
-> setfattr -n security.selinux -v "system_u:object_r:bin_t:s0" cat
-> 
-> Although the length passed is 26 bytes (without \0), you get:
-> 
-> # attr -l cat
-> Attribute "selinux" has a 27 byte value for cat
-> 
-> which includes \0.
-> 
-> From user space, evmctl does not complain (the signature is ok) because
-> it calculates the EVM digest with \0, but EVM verification fails (because it
-> calculates the digest without \0).
-> 
-> Should this problem be fixed?
-
-I don't seem to be having any problems verifying the EVM immutable &
-portable signatures.  To test, I've copied a properly labeled file
-twice, once with the "--preserve=xattr" and once without it.  I signed
-the properly labeled file with the EVM immutable & portable signature.
- On the other file, I first set the selinux label before signing it.
-If there was a problem manually writing the SELinux label, the
-security.evm labels would be different, which they aren't.
-
-Matthew, are you able to reproduce Roberto's problem?
-
-Mimi
-
-
-
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86
+em9oYXJAbGludXguaWJtLmNvbV0NCj4gU2VudDogVGh1cnNkYXksIEFwcmlsIDIzLCAyMDIwIDEw
+OjUyIFBNDQo+IFRvOiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+OyBt
+amc1OUBnb29nbGUuY29tDQo+IENjOiBsaW51eC1pbnRlZ3JpdHlAdmdlci5rZXJuZWwub3JnOyBs
+aW51eC1zZWN1cml0eS1tb2R1bGVAdmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdl
+ci5rZXJuZWwub3JnOyBTaWx2aXUgVmxhc2NlYW51DQo+IDxTaWx2aXUuVmxhc2NlYW51QGh1YXdl
+aS5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIGltYTogQWxsb3cgaW1hc2lnIHJlcXVpcmVt
+ZW50IHRvIGJlIHNhdGlzZmllZCBieSBFVk0NCj4gcG9ydGFibGUgc2lnbmF0dXJlcw0KPiANCj4g
+T24gVHVlLCAyMDIwLTA0LTIxIGF0IDExOjI0ICswMjAwLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0K
+PiA+IFN5c3RlbSBhZG1pbmlzdHJhdG9ycyBjYW4gcmVxdWlyZSB0aGF0IGFsbCBhY2Nlc3NlZCBm
+aWxlcyBoYXZlIGEgc2lnbmF0dXJlDQo+ID4gYnkgc3BlY2lmeWluZyBhcHByYWlzZV90eXBlPWlt
+YXNpZyBpbiBhIHBvbGljeSBydWxlLg0KPiA+DQo+ID4gQ3VycmVudGx5LCBvbmx5IElNQSBzaWdu
+YXR1cmVzIHNhdGlzZnkgdGhpcyByZXF1aXJlbWVudC4gSG93ZXZlciwgYWxzbw0KPiBFVk0NCj4g
+PiBwb3J0YWJsZSBzaWduYXR1cmVzIGNhbiBzYXRpc2Z5IGl0LiBNZXRhZGF0YSwgaW5jbHVkaW5n
+IHNlY3VyaXR5LmltYSwgYXJlDQo+ID4gc2lnbmVkIGFuZCBjYW5ub3QgY2hhbmdlLg0KPiANCj4g
+UGxlYXNlIGV4cGFuZCB0aGlzIHBhcmFncmFwaCB3aXRoIGEgc2hvcnQgY29tcGFyaXNvbiBvZiB0
+aGUgc2VjdXJpdHkNCj4gZ3VhcmFudGVlcyBwcm92aWRlZCBieSBFVk0gaW1tdXRhYmxlLCBwb3J0
+YWJsZSBzaWduYXR1cmVzIHZlcnN1cyBpbWEtDQo+IHNpZy4NCj4gDQo+ID4NCj4gPiBUaGlzIHBh
+dGNoIGhlbHBzIGluIHRoZSBzY2VuYXJpb3Mgd2hlcmUgc3lzdGVtIGFkbWluaXN0cmF0b3JzIHdh
+bnQgdG8NCj4gPiBlbmZvcmNlIHRoaXMgcmVzdHJpY3Rpb24gYnV0IG9ubHkgRVZNIHBvcnRhYmxl
+IHNpZ25hdHVyZXMgYXJlIGF2YWlsYWJsZS4NCj4gDQo+IFllcywgSSBhZ3JlZSBpdCAiaGVscHMi
+LCBidXQgd2Ugc3RpbGwgbmVlZCB0byBhZGRyZXNzIHRoZSBhYmlsaXR5IG9mDQo+IHNldHRpbmcv
+cmVtb3Zpbmcgc2VjdXJpdHkuaW1hLCB3aGljaCBpc24ndCBwb3NzaWJsZSB3aXRoIGFuIElNQQ0K
+PiBzaWduYXR1cmUuIMKgVGhpcyBzb3VuZHMgbGlrZSB3ZSBuZWVkIHRvIGRlZmluZSBhbiBpbW11
+dGFibGUgZmlsZSBoYXNoLg0KDQpJIGRpZG4ndCB1bmRlcnN0YW5kLiBDYW4geW91IGV4cGxhaW4g
+YmV0dGVyPw0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNz
+ZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIExpIEpp
+YW4sIFNoaSBZYW5saQ0KDQoNCj4gwqBXaGF0IGRvIHlvdSB0aGluaz8NCj4gDQo+ID4gVGhlIHBh
+dGNoIG1ha2VzIHRoZSBmb2xsb3dpbmcgY2hhbmdlczoNCj4gPg0KPiA+IGZpbGUgeGF0dHIgdHlw
+ZXM6DQo+ID4gc2VjdXJpdHkuaW1hOiBJTUFfWEFUVFJfRElHRVNUL0lNQV9YQVRUUl9ESUdFU1Rf
+TkcNCj4gPiBzZWN1cml0eS5ldm06IEVWTV9YQVRUUl9QT1JUQUJMRV9ESUdTSUcNCj4gPg0KPiA+
+IGV4ZWN2ZSgpLCBtbWFwKCksIG9wZW4oKSBiZWhhdmlvciAod2l0aCBhcHByYWlzZV90eXBlPWlt
+YXNpZyk6DQo+ID4gYmVmb3JlOiBkZW5pZWQgKGZpbGUgd2l0aG91dCBJTUEgc2lnbmF0dXJlLCBp
+bWFzaWcgcmVxdWlyZW1lbnQgbm90IG1ldCkNCj4gPiBhZnRlcjogYWxsb3dlZCAoZmlsZSB3aXRo
+IEVWTSBwb3J0YWJsZSBzaWduYXR1cmUsIGltYXNpZyByZXF1aXJlbWVudCBtZXQpDQo+ID4NCj4g
+PiBvcGVuKE9fV1JPTkxZKSBiZWhhdmlvciAod2l0aG91dCBhcHByYWlzZV90eXBlPWltYXNpZyk6
+DQo+ID4gYmVmb3JlOiBhbGxvd2VkIChmaWxlIHdpdGhvdXQgSU1BIHNpZ25hdHVyZSwgbm90IGlt
+bXV0YWJsZSkNCj4gPiBhZnRlcjogZGVuaWVkIChmaWxlIHdpdGggRVZNIHBvcnRhYmxlIHNpZ25h
+dHVyZSwgaW1tdXRhYmxlKQ0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUm9iZXJ0byBTYXNzdSA8
+cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPg0KPiA+IC0tLQ0KPiA+ICBzZWN1cml0eS9pbnRlZ3Jp
+dHkvaW1hL2ltYV9hcHByYWlzZS5jIHwgMTQgKysrKysrKysrLS0tLS0NCj4gPiAgMSBmaWxlIGNo
+YW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1n
+aXQgYS9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV9hcHByYWlzZS5jDQo+IGIvc2VjdXJpdHkv
+aW50ZWdyaXR5L2ltYS9pbWFfYXBwcmFpc2UuYw0KPiA+IGluZGV4IGE5NjQ5YjA0YjlmMS4uNjlh
+NmE5NThmODExIDEwMDY0NA0KPiA+IC0tLSBhL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX2Fw
+cHJhaXNlLmMNCj4gPiArKysgYi9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV9hcHByYWlzZS5j
+DQo+ID4gQEAgLTIxOSwxMiArMjE5LDE2IEBAIHN0YXRpYyBpbnQgeGF0dHJfdmVyaWZ5KGVudW0g
+aW1hX2hvb2tzIGZ1bmMsDQo+IHN0cnVjdCBpbnRlZ3JpdHlfaWludF9jYWNoZSAqaWludCwNCj4g
+PiAgCQloYXNoX3N0YXJ0ID0gMTsNCj4gPiAgCQkvKiBmYWxsIHRocm91Z2ggKi8NCj4gPiAgCWNh
+c2UgSU1BX1hBVFRSX0RJR0VTVDoNCj4gPiAtCQlpZiAoaWludC0+ZmxhZ3MgJiBJTUFfRElHU0lH
+X1JFUVVJUkVEKSB7DQo+ID4gLQkJCSpjYXVzZSA9ICJJTUEtc2lnbmF0dXJlLXJlcXVpcmVkIjsN
+Cj4gPiAtCQkJKnN0YXR1cyA9IElOVEVHUklUWV9GQUlMOw0KPiA+IC0JCQlicmVhazsNCj4gPiAr
+CQlpZiAoKnN0YXR1cyAhPSBJTlRFR1JJVFlfUEFTU19JTU1VVEFCTEUpIHsNCj4gPiArCQkJaWYg
+KGlpbnQtPmZsYWdzICYgSU1BX0RJR1NJR19SRVFVSVJFRCkgew0KPiA+ICsJCQkJKmNhdXNlID0g
+IklNQS1zaWduYXR1cmUtcmVxdWlyZWQiOw0KPiA+ICsJCQkJKnN0YXR1cyA9IElOVEVHUklUWV9G
+QUlMOw0KPiA+ICsJCQkJYnJlYWs7DQo+ID4gKwkJCX0NCj4gPiArCQkJY2xlYXJfYml0KElNQV9E
+SUdTSUcsICZpaW50LT5hdG9taWNfZmxhZ3MpOw0KPiA+ICsJCX0gZWxzZSB7DQo+ID4gKwkJCXNl
+dF9iaXQoSU1BX0RJR1NJRywgJmlpbnQtPmF0b21pY19mbGFncyk7DQo+ID4gIAkJfQ0KPiA+IC0J
+CWNsZWFyX2JpdChJTUFfRElHU0lHLCAmaWludC0+YXRvbWljX2ZsYWdzKTsNCj4gPiAgCQlpZiAo
+eGF0dHJfbGVuIC0gc2l6ZW9mKHhhdHRyX3ZhbHVlLT50eXBlKSAtIGhhc2hfc3RhcnQgPj0NCj4g
+PiAgCQkJCWlpbnQtPmltYV9oYXNoLT5sZW5ndGgpDQo+ID4gIAkJCS8qDQo+IA0KPiBOaWNlIQ0K
+PiANCj4gTWltaQ0KDQo=
