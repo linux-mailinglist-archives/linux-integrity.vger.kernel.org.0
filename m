@@ -2,222 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3181B7809
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2020 16:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF25F1B7856
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2020 16:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbgDXOJ1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 24 Apr 2020 10:09:27 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2098 "EHLO huawei.com"
+        id S1726946AbgDXOcI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 24 Apr 2020 10:32:08 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2099 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726993AbgDXOJ1 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 24 Apr 2020 10:09:27 -0400
-Received: from LHREML714-CAH.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id E89B111AB5F90280ABA8;
-        Fri, 24 Apr 2020 15:09:25 +0100 (IST)
+        id S1726698AbgDXOcH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 24 Apr 2020 10:32:07 -0400
+Received: from lhreml720-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 1855D9843B161C089E04;
+        Fri, 24 Apr 2020 15:32:06 +0100 (IST)
+Received: from fraeml706-chm.china.huawei.com (10.206.15.55) by
+ lhreml720-chm.china.huawei.com (10.201.108.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Fri, 24 Apr 2020 15:32:05 +0100
 Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- LHREML714-CAH.china.huawei.com (10.201.108.37) with Microsoft SMTP Server
- (TLS) id 14.3.487.0; Fri, 24 Apr 2020 15:09:25 +0100
-Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
- by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Fri, 24 Apr 2020 16:09:25 +0200
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Fri, 24 Apr 2020 16:32:04 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Fri, 24 Apr 2020 16:32:04 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>
-CC:     <linux-integrity@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
-        "Roberto Sassu" <roberto.sassu@huawei.com>
-Subject: [PATCH] ima: Add stats interface
-Date:   Fri, 24 Apr 2020 16:07:01 +0200
-Message-ID: <20200424140701.32582-1-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.17.1
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Matthew Garrett <mjg59@google.com>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Subject: RE: vfs_getxattr_alloc() problem
+Thread-Topic: vfs_getxattr_alloc() problem
+Thread-Index: AdYXttYwp+95NXWLRayeH298ep/JJwCAo0gAACKQH0A=
+Date:   Fri, 24 Apr 2020 14:32:04 +0000
+Message-ID: <39806fcd829a44e98932dfa383227699@huawei.com>
+References: <a47df5af2e2d4bc4bc4757e956c882eb@huawei.com>
+ <1587685908.5610.91.camel@linux.ibm.com>
+In-Reply-To: <1587685908.5610.91.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.14.239]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.204.65.160]
-X-ClientProxiedBy: lhreml718-chm.china.huawei.com (10.201.108.69) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
 X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch introduces the stats interface in securityfs to return useful
-information about the measurement list and the hash table. It provides the
-following output:
-
-Runtime measurements: <value>
-Violations: <value>
-Slots (used/available): <value>/<value>
-Max depth hash table: <value>
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima.h       |  2 +
- security/integrity/ima/ima_fs.c    | 74 ++++++++++++++++++------------
- security/integrity/ima/ima_queue.c |  7 +++
- 3 files changed, 53 insertions(+), 30 deletions(-)
-
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 04cf9b2d7167..55ef51cf9cda 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -175,6 +175,8 @@ extern spinlock_t ima_queue_lock;
- struct ima_h_table {
- 	atomic_long_t len;	/* number of stored measurements in the list */
- 	atomic_long_t violations;
-+	int used_slots;
-+	int max_depth;
- 	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
- };
- extern struct ima_h_table ima_htable;
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index ff12c564c710..17738cbbb4cb 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -25,6 +25,15 @@
- 
- static DEFINE_MUTEX(ima_write_mutex);
- 
-+static struct dentry *ima_dir;
-+static struct dentry *ima_symlink;
-+static struct dentry *binary_runtime_measurements;
-+static struct dentry *ascii_runtime_measurements;
-+static struct dentry *runtime_measurements_count;
-+static struct dentry *violations;
-+static struct dentry *ima_policy;
-+static struct dentry *stats;
-+
- bool ima_canonical_fmt;
- static int __init default_canonical_fmt_setup(char *str)
- {
-@@ -37,38 +46,44 @@ __setup("ima_canonical_fmt", default_canonical_fmt_setup);
- 
- static int valid_policy = 1;
- 
--static ssize_t ima_show_htable_value(char __user *buf, size_t count,
--				     loff_t *ppos, atomic_long_t *val)
-+static ssize_t ima_show_htable_value(struct file *filp, char __user *buf,
-+				     size_t count, loff_t *ppos)
- {
--	char tmpbuf[32];	/* greater than largest 'long' string value */
--	ssize_t len;
-+	char tmpbuf[512];	/* greater than largest 'long' string value */
-+	ssize_t len = 0;
-+
-+	if (file_dentry(filp) == runtime_measurements_count)
-+		len = scnprintf(tmpbuf, sizeof(tmpbuf), "%li\n",
-+				atomic_long_read(&ima_htable.len));
-+	else if (file_dentry(filp) == violations)
-+		len = scnprintf(tmpbuf, sizeof(tmpbuf), "%li\n",
-+				atomic_long_read(&ima_htable.violations));
-+	else if (file_dentry(filp) == stats)
-+		len = scnprintf(tmpbuf, sizeof(tmpbuf),
-+				"Runtime measurements: %li\n"
-+				"Violations: %li\n"
-+				"Slots (used/available): %i/%i\n"
-+				"Max depth hash table: %i\n",
-+				atomic_long_read(&ima_htable.len),
-+				atomic_long_read(&ima_htable.violations),
-+				ima_htable.used_slots, IMA_MEASURE_HTABLE_SIZE,
-+				ima_htable.max_depth);
- 
--	len = scnprintf(tmpbuf, sizeof(tmpbuf), "%li\n", atomic_long_read(val));
- 	return simple_read_from_buffer(buf, count, ppos, tmpbuf, len);
- }
- 
--static ssize_t ima_show_htable_violations(struct file *filp,
--					  char __user *buf,
--					  size_t count, loff_t *ppos)
--{
--	return ima_show_htable_value(buf, count, ppos, &ima_htable.violations);
--}
--
- static const struct file_operations ima_htable_violations_ops = {
--	.read = ima_show_htable_violations,
-+	.read = ima_show_htable_value,
- 	.llseek = generic_file_llseek,
- };
- 
--static ssize_t ima_show_measurements_count(struct file *filp,
--					   char __user *buf,
--					   size_t count, loff_t *ppos)
--{
--	return ima_show_htable_value(buf, count, ppos, &ima_htable.len);
--
--}
--
- static const struct file_operations ima_measurements_count_ops = {
--	.read = ima_show_measurements_count,
-+	.read = ima_show_htable_value,
-+	.llseek = generic_file_llseek,
-+};
-+
-+static const struct file_operations ima_measurements_stats_ops = {
-+	.read = ima_show_htable_value,
- 	.llseek = generic_file_llseek,
- };
- 
-@@ -355,14 +370,6 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
- 	return result;
- }
- 
--static struct dentry *ima_dir;
--static struct dentry *ima_symlink;
--static struct dentry *binary_runtime_measurements;
--static struct dentry *ascii_runtime_measurements;
--static struct dentry *runtime_measurements_count;
--static struct dentry *violations;
--static struct dentry *ima_policy;
--
- enum ima_fs_flags {
- 	IMA_FS_BUSY,
- };
-@@ -487,6 +494,12 @@ int __init ima_fs_init(void)
- 	if (IS_ERR(violations))
- 		goto out;
- 
-+	stats = securityfs_create_file("stats", S_IRUSR | S_IRGRP,
-+				       ima_dir, NULL,
-+				       &ima_measurements_stats_ops);
-+	if (IS_ERR(stats))
-+		goto out;
-+
- 	ima_policy = securityfs_create_file("policy", POLICY_FILE_FLAGS,
- 					    ima_dir, NULL,
- 					    &ima_measure_policy_ops);
-@@ -495,6 +508,7 @@ int __init ima_fs_init(void)
- 
- 	return 0;
- out:
-+	securityfs_remove(stats);
- 	securityfs_remove(violations);
- 	securityfs_remove(runtime_measurements_count);
- 	securityfs_remove(ascii_runtime_measurements);
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index fb4ec270f620..d5443f5c3ee4 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -95,6 +95,7 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
- {
- 	struct ima_queue_entry *qe;
- 	unsigned int key;
-+	int cur_max_depth = 0;
- 
- 	qe = kmalloc(sizeof(*qe), GFP_KERNEL);
- 	if (qe == NULL) {
-@@ -109,7 +110,13 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
- 	atomic_long_inc(&ima_htable.len);
- 	if (update_htable) {
- 		key = ima_hash_key(entry->digests[ima_hash_algo_idx].digest);
-+		if (hlist_empty(&ima_htable.queue[key]))
-+			ima_htable.used_slots++;
- 		hlist_add_head_rcu(&qe->hnext, &ima_htable.queue[key]);
-+		hlist_for_each_entry_rcu(qe, &ima_htable.queue[key], hnext)
-+			cur_max_depth++;
-+		ima_htable.max_depth = max(ima_htable.max_depth,
-+					    cur_max_depth);
- 	}
- 
- 	if (binary_runtime_size != ULONG_MAX) {
--- 
-2.17.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86
+em9oYXJAbGludXguaWJtLmNvbV0NCj4gU2VudDogRnJpZGF5LCBBcHJpbCAyNCwgMjAyMCAxOjUy
+IEFNDQo+IFRvOiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+OyBNYXR0
+aGV3IEdhcnJldHQNCj4gPG1qZzU5QGdvb2dsZS5jb20+DQo+IENjOiBsaW51eC1pbnRlZ3JpdHlA
+dmdlci5rZXJuZWwub3JnOyBTaWx2aXUgVmxhc2NlYW51DQo+IDxTaWx2aXUuVmxhc2NlYW51QGh1
+YXdlaS5jb20+DQo+IFN1YmplY3Q6IFJlOiB2ZnNfZ2V0eGF0dHJfYWxsb2MoKSBwcm9ibGVtDQo+
+IA0KPiBbQ2MnaW5nIE1hdHRoZXddDQo+IA0KPiBIaSBSb2JlcnRvLA0KPiANCj4gT24gVHVlLCAy
+MDIwLTA0LTIxIGF0IDEwOjU4ICswMDAwLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+IEhpIE1p
+bWkNCj4gPg0KPiA+IEkgZm91bmQgYSBwcm9ibGVtIGluIHRoZSBjYWxjdWxhdGlvbiBvZiB0aGUg
+RVZNIGRpZ2VzdC4NCj4gPg0KPiA+IElmIGFuIHhhdHRyIGlzIGluIHRoZSBzZWN1cml0eSBkb21h
+aW4sIHZmc19nZXR4YXR0cigpIGNhbGxzIHhhdHRyX2dldHNlY3VyaXR5KCksDQo+ID4gd2hpY2gg
+aXMgaW1wbGVtZW50ZWQgYnkgTFNNcy4gdmZzX2dldHhhdHRyX2FsbG9jKCkgaW5zdGVhZCBjYWxs
+cyBkaXJlY3RseQ0KPiA+IHRoZSBmaWxlc3lzdGVtIGZ1bmN0aW9uIHRvIHJlYWQgeGF0dHJzLg0K
+PiA+DQo+ID4gVGhlIHByb2JsZW0gYXJpc2VzIGZvciBleGFtcGxlIHdoZW4geW91IGhhdmUgYSBm
+aWxlIHdpdGggYSBwb3J0YWJsZQ0KPiA+IHNpZ25hdHVyZSBvbiB0aGUgY29ycmVjdCBTRUxpbnV4
+IGxhYmVsICh3aXRoIFwwKSBhbmQgeW91IHNldA0KPiBzZWN1cml0eS5zZWxpbnV4DQo+ID4gbWFu
+dWFsbHk6DQo+ID4NCj4gPiBzZXRmYXR0ciAtbiBzZWN1cml0eS5zZWxpbnV4IC12ICJzeXN0ZW1f
+dTpvYmplY3RfcjpiaW5fdDpzMCIgY2F0DQo+ID4NCj4gPiBBbHRob3VnaCB0aGUgbGVuZ3RoIHBh
+c3NlZCBpcyAyNiBieXRlcyAod2l0aG91dCBcMCksIHlvdSBnZXQ6DQo+ID4NCj4gPiAjIGF0dHIg
+LWwgY2F0DQo+ID4gQXR0cmlidXRlICJzZWxpbnV4IiBoYXMgYSAyNyBieXRlIHZhbHVlIGZvciBj
+YXQNCj4gPg0KPiA+IHdoaWNoIGluY2x1ZGVzIFwwLg0KPiA+DQo+ID4gRnJvbSB1c2VyIHNwYWNl
+LCBldm1jdGwgZG9lcyBub3QgY29tcGxhaW4gKHRoZSBzaWduYXR1cmUgaXMgb2spIGJlY2F1c2UN
+Cj4gPiBpdCBjYWxjdWxhdGVzIHRoZSBFVk0gZGlnZXN0IHdpdGggXDAsIGJ1dCBFVk0gdmVyaWZp
+Y2F0aW9uIGZhaWxzIChiZWNhdXNlIGl0DQo+ID4gY2FsY3VsYXRlcyB0aGUgZGlnZXN0IHdpdGhv
+dXQgXDApLg0KPiA+DQo+ID4gU2hvdWxkIHRoaXMgcHJvYmxlbSBiZSBmaXhlZD8NCj4gDQo+IEkg
+ZG9uJ3Qgc2VlbSB0byBiZSBoYXZpbmcgYW55IHByb2JsZW1zIHZlcmlmeWluZyB0aGUgRVZNIGlt
+bXV0YWJsZSAmDQo+IHBvcnRhYmxlIHNpZ25hdHVyZXMuIMKgVG8gdGVzdCwgSSd2ZSBjb3BpZWQg
+YSBwcm9wZXJseSBsYWJlbGVkIGZpbGUNCj4gdHdpY2UsIG9uY2Ugd2l0aCB0aGUgIi0tcHJlc2Vy
+dmU9eGF0dHIiIGFuZCBvbmNlIHdpdGhvdXQgaXQuIMKgSSBzaWduZWQNCj4gdGhlIHByb3Blcmx5
+IGxhYmVsZWQgZmlsZSB3aXRoIHRoZSBFVk0gaW1tdXRhYmxlICYgcG9ydGFibGUgc2lnbmF0dXJl
+Lg0KPiDCoE9uIHRoZSBvdGhlciBmaWxlLCBJIGZpcnN0IHNldCB0aGUgc2VsaW51eCBsYWJlbCBi
+ZWZvcmUgc2lnbmluZyBpdC4NCj4gSWYgdGhlcmUgd2FzIGEgcHJvYmxlbSBtYW51YWxseSB3cml0
+aW5nIHRoZSBTRUxpbnV4IGxhYmVsLCB0aGUNCj4gc2VjdXJpdHkuZXZtIGxhYmVscyB3b3VsZCBi
+ZSBkaWZmZXJlbnQsIHdoaWNoIHRoZXkgYXJlbid0Lg0KDQpbcm9vdEB2bSBkZW1vXSMgbHMgLWxa
+IC9iaW4vY2F0DQotcnd4ci14ci14LiAxIHJvb3Qgcm9vdCBzeXN0ZW1fdTpvYmplY3RfcjpiaW5f
+dDpzMCA4NTUyMCBBcHIgMjQgMTY6MjAgL2Jpbi9jYXQNCltyb290QHZtIGRlbW9dIyBldm1jdGwg
+c2lnbiAtbyAtYSBzaGEyNTYgLS1pbWFoYXNoIC0ta2V5ICRQV0Qvc2lnbmluZ19rZXkucGVtIC9i
+aW4vY2F0IC12IC12DQpoYXNoKHNoYTI1Nik6IDA0MDRkM2Q3OGQ4MjQ5MzE3ZWQ1MDA1NmVjN2Qw
+NGRhMzgyNDg4ZjM2YTYxMjdmNGU5MTYxNzkyZDk3ZjEzZTEwYmM2DQpuYW1lOiBzZWN1cml0eS5z
+ZWxpbnV4LCBzaXplOiAyNw0KNzM3OTczNzQ2NTZkNWY3NTNhNmY2MjZhNjU2Mzc0NWY3MjNhNjI2
+OTZlNWY3NDNhNzMzMDAwDQpubyB4YXR0cjogc2VjdXJpdHkuU01BQ0s2NA0Kbm8geGF0dHI6IHNl
+Y3VyaXR5LmFwcGFybW9yDQpuYW1lOiBzZWN1cml0eS5pbWEsIHNpemU6IDM0DQowNDA0ZDNkNzhk
+ODI0OTMxN2VkNTAwNTZlYzdkMDRkYTM4MjQ4OGYzNmE2MTI3ZjRlOTE2MTc5MmQ5N2YxM2UxMGJj
+Ng0Kbm8geGF0dHI6IHNlY3VyaXR5LmNhcGFiaWxpdHkNCmNhbGNfZXZtX2hhc2g6NTMyIGhtYWNf
+bWlzYyAoMjQpOiAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwZWQ4MTAw
+MDANCmhhc2goc2hhMjU2KTogMzMxZTM2Y2UxYjMyMzc0YTIyZTEyZGYyOGI1OGQ3OTUzNmMwZWU5
+N2JhMDE0NTFiZDYwMzQzMTkxYzA3M2I1NQ0KY2FsY19rZXlpZF92Mjo3MzUga2V5aWQ6IGFlY2Vj
+Mjg2DQprZXlpZDogYWVjZWMyODYNCmV2bS9pbWEgc2lnbmF0dXJlOiA1MjAgYnl0ZXMNCi4uLg0K
+W3Jvb3RAdm0gZGVtb10jIGNhdA0KXkMNCltyb290QHZtIGRlbW9dIyBzZXRmYXR0ciAtbiBzZWN1
+cml0eS5zZWxpbnV4IC12ICJzeXN0ZW1fdTpvYmplY3RfcjpiaW5fdDpzMCIgL2Jpbi9jYXQNClty
+b290QHZtIGRlbW9dIyBldm1jdGwgdmVyaWZ5IC1vIC1hIHNoYTI1NiAtLWltYWhhc2ggL2Jpbi9j
+YXQgLXYgLXYNCmNhbGNfa2V5aWRfdjI6NzM1IGtleWlkOiBhZWNlYzI4Ng0Ka2V5aWQ6IGFlY2Vj
+Mjg2DQprZXkgMTogYWVjZWMyODYgL2V0Yy9rZXlzL3g1MDlfZXZtLmRlcg0KbmFtZTogc2VjdXJp
+dHkuc2VsaW51eCwgc2l6ZTogMjcNCjczNzk3Mzc0NjU2ZDVmNzUzYTZmNjI2YTY1NjM3NDVmNzIz
+YTYyNjk2ZTVmNzQzYTczMzAwMA0Kbm8geGF0dHI6IHNlY3VyaXR5LlNNQUNLNjQNCm5vIHhhdHRy
+OiBzZWN1cml0eS5hcHBhcm1vcg0KbmFtZTogc2VjdXJpdHkuaW1hLCBzaXplOiAzNA0KMDQwNGQz
+ZDc4ZDgyNDkzMTdlZDUwMDU2ZWM3ZDA0ZGEzODI0ODhmMzZhNjEyN2Y0ZTkxNjE3OTJkOTdmMTNl
+MTBiYzYNCm5vIHhhdHRyOiBzZWN1cml0eS5jYXBhYmlsaXR5DQpjYWxjX2V2bV9oYXNoOjUzMiBo
+bWFjX21pc2MgKDI0KTogMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMGVk
+ODEwMDAwDQpoYXNoKHNoYTI1Nik6IDMzMWUzNmNlMWIzMjM3NGEyMmUxMmRmMjhiNThkNzk1MzZj
+MGVlOTdiYTAxNDUxYmQ2MDM0MzE5MWMwNzNiNTUNCi9iaW4vY2F0OiB2ZXJpZmljYXRpb24gaXMg
+T0sNCltyb290QHZtIGRlbW9dIyBjYXQNCi1iYXNoOiAvdXNyL2Jpbi9jYXQ6IFBlcm1pc3Npb24g
+ZGVuaWVkDQpbcm9vdEB2bSBkZW1vXSMNCg0KSXQgZmFpbHMgYmVjYXVzZSB0aGUgYWN0dWFsIHhh
+dHRyIGluIHRoZSBmaWxlc3lzdGVtIGlzOg0KDQpuYW1lOiBzZWN1cml0eS5zZWxpbnV4LCBzaXpl
+OiAyNg0KNzM3OTczNzQ2NTZkNWY3NTNhNmY2MjZhNjU2Mzc0NWY3MjNhNjI2OTZlNWY3NDNhNzMz
+MA0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJC
+IDU2MDYzDQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywgTGkgSmlhbiwgU2hpIFlhbmxpDQo=
