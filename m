@@ -2,165 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 462781B7881
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2020 16:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1CC1B9FB5
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2020 11:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgDXOqB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 24 Apr 2020 10:46:01 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58570 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726900AbgDXOqA (ORCPT
+        id S1726243AbgD0JUr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Apr 2020 05:20:47 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:34786 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726507AbgD0JUr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 24 Apr 2020 10:46:00 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03OEXs8s090025;
-        Fri, 24 Apr 2020 10:45:51 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30jtk3xcwf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Apr 2020 10:45:51 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03OEjc79018177;
-        Fri, 24 Apr 2020 14:45:49 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 30fs65h4yc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Apr 2020 14:45:49 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03OEjl9u58589366
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Apr 2020 14:45:47 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 012A6A4051;
-        Fri, 24 Apr 2020 14:45:47 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A7903A4040;
-        Fri, 24 Apr 2020 14:45:45 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.204.171])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 24 Apr 2020 14:45:45 +0000 (GMT)
-Message-ID: <1587739544.5190.14.camel@linux.ibm.com>
-Subject: Re: [PATCH 3/5] ima: Fix ima digest hash table key calculation
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Date:   Fri, 24 Apr 2020 10:45:44 -0400
-In-Reply-To: <59a280b928db4c478f660d14c33cdd87@huawei.com>
-References: <20200325161116.7082-1-roberto.sassu@huawei.com>
-         <20200325161116.7082-3-roberto.sassu@huawei.com>
-         <1587588987.5165.20.camel@linux.ibm.com>
-         <11984a05a5624f64aed1ec6b0d0b75ff@huawei.com>
-         <1587660781.5610.15.camel@linux.ibm.com>
-         <59a280b928db4c478f660d14c33cdd87@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Mon, 27 Apr 2020 05:20:47 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 20C9E72CCDC;
+        Mon, 27 Apr 2020 12:20:44 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [83.220.44.62])
+        by imap.altlinux.org (Postfix) with ESMTPSA id C922D4A4AEE;
+        Mon, 27 Apr 2020 12:20:43 +0300 (MSK)
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH v10 0/2] ima-evm-utils: Add some tests for evmctl
+Date:   Mon, 27 Apr 2020 12:20:25 +0300
+Message-Id: <20200427092027.8639-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.11.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-24_07:2020-04-24,2020-04-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- spamscore=0 mlxlogscore=999 bulkscore=0 clxscore=1011 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 impostorscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004240117
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-04-24 at 12:18 +0000, Roberto Sassu wrote:
+This series adds simple evmctl tests for hash, sign, and verify operations.
+Diff of v10 from v9: https://github.com/vt-alt/ima-evm-utils/compare/tests-v9..tests-v10
 
-> > On Thu, 2020-04-23 at 10:21 +0000, Roberto Sassu wrote:
-> > > > Hi Roberto, Krsysztof,
-> > > >
-> > > > On Wed, 2020-03-25 at 17:11 +0100, Roberto Sassu wrote:
-> > > > > From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-> > > > >
-> > > > > Function hash_long() accepts unsigned long, while currently only one
-> > byte
-> > > > > is passed from ima_hash_key(), which calculates a key for ima_htable.
-> > > > Use
-> > > > > more bytes to avoid frequent collisions.
-> > > > >
-> > > > > Length of the buffer is not explicitly passed as a function parameter,
-> > > > > because this function expects a digest whose length is greater than
-> > the
-> > > > > size of unsigned long.
-> > > >
-> > > > Somehow I missed the original report of this problem https://lore.kern
-> > > > el.org/patchwork/patch/674684/.  This patch is definitely better, but
-> > > > how many unique keys are actually being used?  Is it anywhere near
-> > > > IMA_MEASURE_HTABLE_SIZE(512)?
-> > >
-> > > I did a small test (with 1043 measurements):
-> > >
-> > > slots: 250, max depth: 9 (without the patch)
-> > > slots: 448, max depth: 7 (with the patch)
-> > 
-> > 448 out of 512 slots are used.
-> > 
-> > >
-> > > Then, I increased the number of bits to 10:
-> > >
-> > > slots: 251, max depth: 9 (without the patch)
-> > > slots: 660, max depth: 4 (with the patch)
-> > 
-> > 660 out of 1024 slots are used.
-> > 
-> > I wonder if there is any benefit to hashing a digest, instead of just
-> > using the first bits.
-> 
-> Before I calculated max depth until there is a match, not the full depth.
-> 
-> #1
-> return hash_long(*((unsigned long *)digest), IMA_HASH_BITS);
-> #define IMA_HASH_BITS 9
-> 
-> Runtime measurements: 1488
-> Violations: 0
-> Slots (used/available): 484/512
-> Max depth hash table: 10
-> 
-> #2
-> return *(unsigned long *)digest % IMA_MEASURE_HTABLE_SIZE;
-> #define IMA_HASH_BITS 9
-> 
-> Runtime measurements: 1491
-> Violations: 2
-> Slots (used/available): 489/512
-> Max depth hash table: 10
-> 
-> #3
-> return hash_long(*((unsigned long *)digest), IMA_HASH_BITS);
-> #define IMA_HASH_BITS 10
-> 
-> Runtime measurements: 1489
-> Violations: 0
-> Slots (used/available): 780/1024
-> Max depth hash table: 6
-> 
-> #4
-> return *(unsigned long *)digest % IMA_MEASURE_HTABLE_SIZE;
-> #define IMA_HASH_BITS 10
-> 
-> Runtime measurements: 1489
-> Violations: 0
-> Slots (used/available): 793/1024
-> Max depth hash table: 6
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+---
+Changelog since v9:
+- Add more quotes to colors and return values to quiet shellcheck.
+- Expand comments about keyid handling as suggested by Mimi Zohar, also,
+  make keyid handling move explicit.
+- Quiet shellcheck false positives.
 
-At least for this measurement list sample, there doesn't seem to be
-any benefit to hashing the digest.  In terms of increasing the number
-of slots, the additional memory is minimal and shouldn't negatively
-affect small embedded devices.  Please make sure checkpatch doesn't
-flag it.
+Changelog since v8:
+- Small corrections (like adding double quotes) to satisfy shellcheck.
+- Rename coloring helper functions.
+- Always define VERBOSE. -- All above by Mimi Zohar request.
+- Spelling correction by Lakshmi Ramasubramanian.
 
-thanks,
+Changelog since v7:
+- Absence of key file cause test skip instead of fail.
+- Mono patch is split into two by Mimi Zohar request.
 
-Mimi
+Changelog since v6:
+- ima_hash.test: Compare generated hashes with known values.
+  I found that on power8 qemu with default -cpu calculates hashes wrongly.
+  For exmaple: `openssl dgst -sha224 -hex /dev/null' results in
+  83b2514951547ee00c7062fa3eb42079ff19f280ec81eedbdb0e3997 instead of
+  d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f.
+- Make `_keyid' use temporary files to not rely on presence of `/des/stdout'.
+- evm sign: add `--generation 0' option.
+  I found that on overlay fs (with ext4 over 9p) FS_IOC_GETVERSION does
+  not work.
+- gen-keys.sh: allows `force' argument to regenerate all test keys.
+
+Changelog since v5:
+- Fix tests if gost-engine is not present. Thx to Mimi Zohar for testing on
+  Xenial.
+
+Changelog since v4:
+- Fix bugs found by Mimi Zohar:
+ - Fix typos in variable names
+ - Fix `-out -' in asn1parse for openssl 1.0.x
+
+Changelog since v3:
+- Apply changes based on some suggestions from Petr Vorel, such as
+- Add .gitignore
+- Do not color output if stdout is not tty.
+- Fix blkid error with --uuid option.
+- Remove or change some comments
+- Replace ENGINE with EVMCTL_ENGINE and OPENSSL_ENGINE.
+- All tests pass over next branch.
+
+Changelog since v2:
+- ima_sign.test and ima_verify.test merged into sign_verify.test
+  which is also able to test evm signatures.
+- Apply Mimi Zohar suggestions regarding commenting, variable renaming,
+  code rearranging, etc. with intent to simplify the code and review.
+
+Changelog since v1:
+- Apply suggestions by Petr Vorel:
+ - Rename function names and variables to be more understandable.
+ - Rename tests/functions to tests/functions.sh.
+ - Define exit codes (77, 99, ...) as variables.
+- Added more comments and remove single letter variables (for Mimi Zohar).
+- Move getfattr check into function.
+- Move evmctl run and check into single function.
+- Add sign/verify tests for v1 signatures.
+- Minor improvements.
+- Since I still edit all 5 files I did not split the patch into multiple
+  commits to separate the files, otherwise editing will become too
+  complicated, as I ought to continuously rebase and edit different
+  commits. This was really non-productive suggestion.
+
+Vitaly Chikunov (2):
+  ima-evm-utils: Add some tests for evmctl
+  ima-evm-utils: Add sign/verify tests for evmctl
+
+ .gitignore             |   2 +-
+ Makefile.am            |   2 +-
+ configure.ac           |   1 +
+ tests/.gitignore       |  16 +++
+ tests/Makefile.am      |  12 ++
+ tests/functions.sh     | 274 ++++++++++++++++++++++++++++++++++++
+ tests/gen-keys.sh      |  97 +++++++++++++
+ tests/ima_hash.test    |  80 +++++++++++
+ tests/sign_verify.test | 370 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 9 files changed, 852 insertions(+), 2 deletions(-)
+ create mode 100644 tests/.gitignore
+ create mode 100644 tests/Makefile.am
+ create mode 100755 tests/functions.sh
+ create mode 100755 tests/gen-keys.sh
+ create mode 100755 tests/ima_hash.test
+ create mode 100755 tests/sign_verify.test
+
+-- 
+2.11.0
+
