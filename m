@@ -2,30 +2,32 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1CC1B9FB5
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2020 11:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4501B9FB6
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2020 11:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726243AbgD0JUr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 27 Apr 2020 05:20:47 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:34786 "EHLO
+        id S1726604AbgD0JUy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Apr 2020 05:20:54 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:34900 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726507AbgD0JUr (ORCPT
+        with ESMTP id S1726507AbgD0JUy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 27 Apr 2020 05:20:47 -0400
+        Mon, 27 Apr 2020 05:20:54 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 20C9E72CCDC;
-        Mon, 27 Apr 2020 12:20:44 +0300 (MSK)
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 0800472CCDC;
+        Mon, 27 Apr 2020 12:20:51 +0300 (MSK)
 Received: from beacon.altlinux.org (unknown [83.220.44.62])
-        by imap.altlinux.org (Postfix) with ESMTPSA id C922D4A4AEE;
-        Mon, 27 Apr 2020 12:20:43 +0300 (MSK)
+        by imap.altlinux.org (Postfix) with ESMTPSA id DFE5E4A4AEE;
+        Mon, 27 Apr 2020 12:20:50 +0300 (MSK)
 From:   Vitaly Chikunov <vt@altlinux.org>
 To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: [PATCH v10 0/2] ima-evm-utils: Add some tests for evmctl
-Date:   Mon, 27 Apr 2020 12:20:25 +0300
-Message-Id: <20200427092027.8639-1-vt@altlinux.org>
+Subject: [PATCH v10 1/2] ima-evm-utils: Add some tests for evmctl
+Date:   Mon, 27 Apr 2020 12:20:26 +0300
+Message-Id: <20200427092027.8639-2-vt@altlinux.org>
 X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20200427092027.8639-1-vt@altlinux.org>
+References: <20200427092027.8639-1-vt@altlinux.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
@@ -33,99 +35,460 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This series adds simple evmctl tests for hash, sign, and verify operations.
-Diff of v10 from v9: https://github.com/vt-alt/ima-evm-utils/compare/tests-v9..tests-v10
+Run `make check' to execute the tests.
+This commit only adds ima_hash test.
 
 Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
 ---
-Changelog since v9:
-- Add more quotes to colors and return values to quiet shellcheck.
-- Expand comments about keyid handling as suggested by Mimi Zohar, also,
-  make keyid handling move explicit.
-- Quiet shellcheck false positives.
-
-Changelog since v8:
-- Small corrections (like adding double quotes) to satisfy shellcheck.
-- Rename coloring helper functions.
-- Always define VERBOSE. -- All above by Mimi Zohar request.
-- Spelling correction by Lakshmi Ramasubramanian.
-
-Changelog since v7:
-- Absence of key file cause test skip instead of fail.
-- Mono patch is split into two by Mimi Zohar request.
-
-Changelog since v6:
-- ima_hash.test: Compare generated hashes with known values.
-  I found that on power8 qemu with default -cpu calculates hashes wrongly.
-  For exmaple: `openssl dgst -sha224 -hex /dev/null' results in
-  83b2514951547ee00c7062fa3eb42079ff19f280ec81eedbdb0e3997 instead of
-  d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f.
-- Make `_keyid' use temporary files to not rely on presence of `/des/stdout'.
-- evm sign: add `--generation 0' option.
-  I found that on overlay fs (with ext4 over 9p) FS_IOC_GETVERSION does
-  not work.
-- gen-keys.sh: allows `force' argument to regenerate all test keys.
-
-Changelog since v5:
-- Fix tests if gost-engine is not present. Thx to Mimi Zohar for testing on
-  Xenial.
-
-Changelog since v4:
-- Fix bugs found by Mimi Zohar:
- - Fix typos in variable names
- - Fix `-out -' in asn1parse for openssl 1.0.x
-
-Changelog since v3:
-- Apply changes based on some suggestions from Petr Vorel, such as
-- Add .gitignore
-- Do not color output if stdout is not tty.
-- Fix blkid error with --uuid option.
-- Remove or change some comments
-- Replace ENGINE with EVMCTL_ENGINE and OPENSSL_ENGINE.
-- All tests pass over next branch.
-
-Changelog since v2:
-- ima_sign.test and ima_verify.test merged into sign_verify.test
-  which is also able to test evm signatures.
-- Apply Mimi Zohar suggestions regarding commenting, variable renaming,
-  code rearranging, etc. with intent to simplify the code and review.
-
-Changelog since v1:
-- Apply suggestions by Petr Vorel:
- - Rename function names and variables to be more understandable.
- - Rename tests/functions to tests/functions.sh.
- - Define exit codes (77, 99, ...) as variables.
-- Added more comments and remove single letter variables (for Mimi Zohar).
-- Move getfattr check into function.
-- Move evmctl run and check into single function.
-- Add sign/verify tests for v1 signatures.
-- Minor improvements.
-- Since I still edit all 5 files I did not split the patch into multiple
-  commits to separate the files, otherwise editing will become too
-  complicated, as I ought to continuously rebase and edit different
-  commits. This was really non-productive suggestion.
-
-Vitaly Chikunov (2):
-  ima-evm-utils: Add some tests for evmctl
-  ima-evm-utils: Add sign/verify tests for evmctl
-
- .gitignore             |   2 +-
- Makefile.am            |   2 +-
- configure.ac           |   1 +
- tests/.gitignore       |  16 +++
- tests/Makefile.am      |  12 ++
- tests/functions.sh     | 274 ++++++++++++++++++++++++++++++++++++
- tests/gen-keys.sh      |  97 +++++++++++++
- tests/ima_hash.test    |  80 +++++++++++
- tests/sign_verify.test | 370 +++++++++++++++++++++++++++++++++++++++++++++++++
- 9 files changed, 852 insertions(+), 2 deletions(-)
+ .gitignore          |   2 +-
+ Makefile.am         |   2 +-
+ configure.ac        |   1 +
+ tests/.gitignore    |  16 +++
+ tests/Makefile.am   |   7 ++
+ tests/functions.sh  | 274 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tests/ima_hash.test |  80 +++++++++++++++
+ 7 files changed, 380 insertions(+), 2 deletions(-)
  create mode 100644 tests/.gitignore
  create mode 100644 tests/Makefile.am
  create mode 100755 tests/functions.sh
- create mode 100755 tests/gen-keys.sh
  create mode 100755 tests/ima_hash.test
- create mode 100755 tests/sign_verify.test
 
+diff --git a/.gitignore b/.gitignore
+index cb82166..c579199 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -21,7 +21,7 @@ missing
+ compile
+ libtool
+ ltmain.sh
+-
++test-driver
+ 
+ # Compiled executables
+ *.o
+diff --git a/Makefile.am b/Makefile.am
+index dba408d..45c6f82 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,4 +1,4 @@
+-SUBDIRS = src
++SUBDIRS = src tests
+ dist_man_MANS = evmctl.1
+ 
+ doc_DATA =  examples/ima-genkey-self.sh examples/ima-genkey.sh examples/ima-gen-local-ca.sh
+diff --git a/configure.ac b/configure.ac
+index 099c3b1..f246182 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -72,6 +72,7 @@ EVMCTL_MANPAGE_DOCBOOK_XSL
+ 
+ AC_CONFIG_FILES([Makefile
+ 		src/Makefile
++		tests/Makefile
+ 		packaging/ima-evm-utils.spec
+ 		])
+ AC_OUTPUT
+diff --git a/tests/.gitignore b/tests/.gitignore
+new file mode 100644
+index 0000000..9ecc984
+--- /dev/null
++++ b/tests/.gitignore
+@@ -0,0 +1,16 @@
++# Generated by test driver
++*.log
++*.trs
++
++# Generated by tests
++*.txt
++*.out
++*.sig
++*.sig2
++
++# Generated certs and keys (by gen-keys.sh)
++*.cer
++*.pub
++*.key
++*.conf
++
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+new file mode 100644
+index 0000000..e37b958
+--- /dev/null
++++ b/tests/Makefile.am
+@@ -0,0 +1,7 @@
++check_SCRIPTS =
++TESTS = $(check_SCRIPTS)
++
++check_SCRIPTS += ima_hash.test
++
++clean-local:
++	-rm -f *.txt *.out *.sig *.sig2
+diff --git a/tests/functions.sh b/tests/functions.sh
+new file mode 100755
+index 0000000..91cd5d9
+--- /dev/null
++++ b/tests/functions.sh
+@@ -0,0 +1,274 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# ima-evm-utils tests bash functions
++#
++# Copyright (C) 2020 Vitaly Chikunov <vt@altlinux.org>
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2, or (at your option)
++# any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++
++# Tests accounting
++declare -i testspass=0 testsfail=0 testsskip=0
++
++# Exit codes (compatible with automake)
++declare -r OK=0
++declare -r FAIL=1
++declare -r HARDFAIL=99 # hard failure no matter testing mode
++declare -r SKIP=77
++
++# You can set env VERBOSE=1 to see more output from evmctl
++VERBOSE=${VERBOSE:-0}
++V=vvvv
++V=${V:0:$VERBOSE}
++V=${V:+-$V}
++
++# Exit if env FAILEARLY is defined.
++# Used in expect_{pass,fail}.
++exit_early() {
++  if [ "$FAILEARLY" ]; then
++    exit "$1"
++  fi
++}
++
++# Require particular executables to be present
++_require() {
++  ret=
++  for i; do
++    if ! type $i; then
++      echo "$i is required for test"
++      ret=1
++    fi
++  done
++  [ $ret ] && exit "$HARDFAIL"
++}
++
++# Non-TTY output is never colored
++if [ -t 1 ]; then
++     RED=$'\e[1;31m'
++   GREEN=$'\e[1;32m'
++  YELLOW=$'\e[1;33m'
++    BLUE=$'\e[1;34m'
++    CYAN=$'\e[1;36m'
++    NORM=$'\e[m'
++  export RED GREEN YELLOW BLUE CYAN NORM
++fi
++
++# Test mode determined by TFAIL variable:
++#   undefined: to success testing
++#   defined: failure testing
++TFAIL=
++TMODE=+ # mode character to prepend running command in log
++declare -i TNESTED=0 # just for sanity checking
++
++# Run positive test (one that should pass) and account its result
++expect_pass() {
++  local -i ret
++
++  if [ $TNESTED -gt 0 ]; then
++    echo $RED"expect_pass should not be run nested"$NORM
++    testsfail+=1
++    exit "$HARDFAIL"
++  fi
++  TFAIL=
++  TMODE=+
++  TNESTED+=1
++  [ "$VERBOSE" -gt 1 ] && echo "____ START positive test: $*"
++  "$@"
++  ret=$?
++  [ "$VERBOSE" -gt 1 ] && echo "^^^^ STOP ($ret) positive test: $*"
++  TNESTED+=-1
++  case $ret in
++    0)  testspass+=1 ;;
++    77) testsskip+=1 ;;
++    99) testsfail+=1; exit_early 1 ;;
++    *)  testsfail+=1; exit_early 2 ;;
++  esac
++  return $ret
++}
++
++# Eval negative test (one that should fail) and account its result
++expect_fail() {
++  local ret
++
++  if [ $TNESTED -gt 0 ]; then
++    echo $RED"expect_fail should not be run nested"$NORM
++    testsfail+=1
++    exit "$HARDFAIL"
++  fi
++
++  TFAIL=yes
++  TMODE=-
++  TNESTED+=1
++  [ "$VERBOSE" -gt 1 ] && echo "____ START negative test: $*"
++  "$@"
++  ret=$?
++  [ "$VERBOSE" -gt 1 ] && echo "^^^^ STOP ($ret) negative test: $*"
++  TNESTED+=-1
++  case $ret in
++    0)  testsfail+=1; exit_early 3 ;;
++    77) testsskip+=1 ;;
++    99) testsfail+=1; exit_early 4 ;;
++    *)  testspass+=1 ;;
++  esac
++  # Restore defaults (as in positive tests)
++  # for tests to run without wrappers
++  TFAIL=
++  TMODE=+
++  return $ret
++}
++
++# return true if current test is positive
++_test_expected_to_pass() {
++  [ ! $TFAIL ]
++}
++
++# return true if current test is negative
++_test_expected_to_fail() {
++  [ $TFAIL ]
++}
++
++# Show blank line and color following text to red
++# if it's real error (ie we are in expect_pass mode).
++color_red_on_failure() {
++  if _test_expected_to_pass; then
++    echo "$RED"
++    COLOR_RESTORE=true
++  fi
++}
++
++# For hard errors
++color_red() {
++  echo "$RED"
++  COLOR_RESTORE=true
++}
++
++color_restore() {
++  [ $COLOR_RESTORE ] && echo "$NORM"
++  COLOR_RESTORE=
++}
++
++ADD_DEL=
++ADD_TEXT_FOR=
++# _evmctl_run should be run as `_evmctl_run ... || return'
++_evmctl_run() {
++  local op=$1 out=$1-$$.out
++  local text_for=${FOR:+for $ADD_TEXT_FOR}
++  # Additional parameters:
++  # ADD_DEL: additional files to rm on failure
++  # ADD_TEXT_FOR: append to text as 'for $ADD_TEXT_FOR'
++
++  cmd="evmctl $V $EVMCTL_ENGINE $*"
++  echo $YELLOW$TMODE "$cmd"$NORM
++  $cmd >"$out" 2>&1
++  ret=$?
++
++  # Shell special and signal exit codes (except 255)
++  if [ $ret -ge 126 ] && [ $ret -lt 255 ]; then
++    color_red
++    echo "evmctl $op failed hard with ($ret) $text_for"
++    sed 's/^/  /' "$out"
++    color_restore
++    rm "$out" $ADD_DEL
++    ADD_DEL=
++    ADD_TEXT_FOR=
++    return "$HARDFAIL"
++  elif [ $ret -gt 0 ]; then
++    color_red_on_failure
++    echo "evmctl $op failed" ${TFAIL:+properly} "with ($ret) $text_for"
++    # Show evmctl output only in verbose mode or if real failure.
++    if _test_expected_to_pass || [ "$VERBOSE" ]; then
++      sed 's/^/  /' "$out"
++    fi
++    color_restore
++    rm "$out" $ADD_DEL
++    ADD_DEL=
++    ADD_TEXT_FOR=
++    return "$FAIL"
++  elif _test_expected_to_fail; then
++    color_red
++    echo "evmctl $op wrongly succeeded $text_for"
++    sed 's/^/  /' "$out"
++    color_restore
++  else
++    [ "$VERBOSE" ] && sed 's/^/  /' "$out"
++  fi
++  rm "$out"
++  ADD_DEL=
++  ADD_TEXT_FOR=
++  return "$OK"
++}
++
++# Extract xattr $attr from $file into $out file skipping $pref'ix
++_extract_xattr() {
++  local file=$1 attr=$2 out=$3 pref=$4
++
++  getfattr -n "$attr" -e hex "$file" \
++    | grep "^$attr=" \
++    | sed "s/^$attr=$pref//" \
++    | xxd -r -p > "$out"
++}
++
++# Test if xattr $attr in $file matches $prefix
++# Show error and fail otherwise.
++_test_xattr() {
++  local file=$1 attr=$2 prefix=$3
++  local text_for=${ADD_TEXT_FOR:+ for $ADD_TEXT_FOR}
++
++  if ! getfattr -n "$attr" -e hex "$file" | egrep -qx "$attr=$prefix"; then
++    color_red_on_failure
++    echo "Did not find expected hash$text_for:"
++    echo "    $attr=$prefix"
++    echo ""
++    echo "Actual output below:"
++    getfattr -n "$attr" -e hex "$file" | sed 's/^/    /'
++    color_restore
++    rm "$file"
++    ADD_TEXT_FOR=
++    return "$FAIL"
++  fi
++  ADD_TEXT_FOR=
++}
++
++# Try to enable gost-engine if needed.
++_enable_gost_engine() {
++  # Do not enable if it's already working (enabled by user)
++  if ! openssl md_gost12_256 /dev/null >/dev/null 2>&1 \
++    && openssl engine gost >/dev/null 2>&1; then
++    export EVMCTL_ENGINE="--engine gost"
++    export OPENSSL_ENGINE="-engine gost"
++  fi
++}
++
++# Show test stats and exit into automake test system
++# with proper exit code (same as ours).
++_report_exit() {
++  if [ $testsfail -gt 0 ]; then
++    echo "================================="
++    echo " Run with FAILEARLY=1 $0 $*"
++    echo " To stop after first failure"
++    echo "================================="
++  fi
++  [ $testspass -gt 0 ] && echo -n "$GREEN" || echo -n "$NORM"
++  echo -n "PASS: $testspass"
++  [ $testsskip -gt 0 ] && echo -n "$YELLOW" || echo -n "$NORM"
++  echo -n " SKIP: $testsskip"
++  [ $testsfail -gt 0 ] && echo -n "$RED" || echo -n "$NORM"
++  echo " FAIL: $testsfail"
++  echo "$NORM"
++  if [ $testsfail -gt 0 ]; then
++    exit "$FAIL"
++  elif [ $testspass -gt 0 ]; then
++    exit "$OK"
++  else
++    exit "$SKIP"
++  fi
++}
++
+diff --git a/tests/ima_hash.test b/tests/ima_hash.test
+new file mode 100755
+index 0000000..8d66e59
+--- /dev/null
++++ b/tests/ima_hash.test
+@@ -0,0 +1,80 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# evmctl ima_hash tests
++#
++# Copyright (C) 2020 Vitaly Chikunov <vt@altlinux.org>
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2, or (at your option)
++# any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++
++cd "$(dirname "$0")" || exit 1
++PATH=../src:$PATH
++source ./functions.sh
++_require evmctl openssl getfattr
++
++trap _report_exit EXIT
++set -f # disable globbing
++
++check() {
++  local alg=$1 prefix=$2 chash=$3 hash
++  local file=$alg-hash.txt
++
++  rm -f "$file"
++  touch "$file"
++  # Generate hash with openssl, if it failed skip test,
++  # unless it's negative test, then pass to evmctl
++  cmd="openssl dgst $OPENSSL_ENGINE -$alg $file"
++  echo - "$cmd"
++  hash=$(set -o pipefail; $cmd 2>/dev/null | cut -d' ' -f2)
++  if [ $? -ne 0 ] && _test_expected_to_pass; then
++    echo "${CYAN}$alg test is skipped$NORM"
++    rm "$file"
++    return "$SKIP"
++  fi
++  if [ "$chash" ] && [ "$chash" != "$hash" ]; then
++    color_red
++    echo "Invalid hash for $alg from openssl"
++    echo "Expected: $chash"
++    echo "Returned: $hash"
++    color_restore
++    rm "$file"
++    return "$HARDFAIL"
++  fi
++
++  ADD_TEXT_FOR=$alg ADD_DEL=$file \
++    _evmctl_run ima_hash --hashalgo "$alg" --xattr-user "$file" || return
++  ADD_TEXT_FOR=$alg \
++    _test_xattr "$file" user.ima "$prefix$hash" || return
++  rm "$file"
++  return "$OK"
++}
++
++# check args: algo hdr-prefix canonic-hash
++expect_pass check  md4        0x01 31d6cfe0d16ae931b73c59d7e0c089c0
++expect_pass check  md5        0x01 d41d8cd98f00b204e9800998ecf8427e
++expect_pass check  sha1       0x01 da39a3ee5e6b4b0d3255bfef95601890afd80709
++expect_fail check  SHA1       0x01 # uppercase
++expect_fail check  sha512-224 0x01 # valid for pkcs1
++expect_fail check  sha512-256 0x01 # valid for pkcs1
++expect_fail check  unknown    0x01 # nonexistent
++expect_pass check  sha224     0x0407 d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f
++expect_pass check  sha256     0x0404 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
++expect_pass check  sha384     0x0405 38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b
++expect_pass check  sha512     0x0406 cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e
++expect_pass check  rmd160     0x0403 9c1185a5c5e9fc54612808977ee8f548b2258d31
++expect_fail check  sm3        0x01
++expect_fail check  sm3-256    0x01
++_enable_gost_engine
++expect_pass check  md_gost12_256 0x0412 3f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
++expect_pass check  streebog256   0x0412 3f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
++expect_pass check  md_gost12_512 0x0413 8e945da209aa869f0455928529bcae4679e9873ab707b55315f56ceb98bef0a7362f715528356ee83cda5f2aac4c6ad2ba3a715c1bcd81cb8e9f90bf4c1c1a8a
++expect_pass check  streebog512   0x0413 8e945da209aa869f0455928529bcae4679e9873ab707b55315f56ceb98bef0a7362f715528356ee83cda5f2aac4c6ad2ba3a715c1bcd81cb8e9f90bf4c1c1a8a
++
 -- 
 2.11.0
 
