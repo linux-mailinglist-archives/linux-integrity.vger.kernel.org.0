@@ -2,36 +2,35 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 463901BA13F
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2020 12:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9C81BA141
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2020 12:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727102AbgD0Kbo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        id S1727099AbgD0Kbo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Mon, 27 Apr 2020 06:31:44 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2107 "EHLO huawei.com"
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2108 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726955AbgD0Kbn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        id S1726537AbgD0Kbn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
         Mon, 27 Apr 2020 06:31:43 -0400
-Received: from lhreml722-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 7B7784AEC8FCA8D2792F;
-        Mon, 27 Apr 2020 11:31:41 +0100 (IST)
+Received: from lhreml725-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 459A0124F449A199D767;
+        Mon, 27 Apr 2020 11:31:42 +0100 (IST)
 Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- lhreml722-chm.china.huawei.com (10.201.108.73) with Microsoft SMTP Server
+ lhreml725-chm.china.huawei.com (10.201.108.76) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Mon, 27 Apr 2020 11:31:41 +0100
+ 15.1.1913.5; Mon, 27 Apr 2020 11:31:42 +0100
 Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
  by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Mon, 27 Apr 2020 12:31:40 +0200
+ 15.1.1913.5; Mon, 27 Apr 2020 12:31:41 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>, <rgoldwyn@suse.de>
 CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
-        <krzysztof.struczynski@huawei.com>, <stable@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 3/6] ima: Fix ima digest hash table key calculation
-Date:   Mon, 27 Apr 2020 12:28:57 +0200
-Message-ID: <20200427102900.18887-3-roberto.sassu@huawei.com>
+        <krzysztof.struczynski@huawei.com>
+Subject: [PATCH v2 4/6] ima: Remove redundant policy rule set in add_rules()
+Date:   Mon, 27 Apr 2020 12:28:58 +0200
+Message-ID: <20200427102900.18887-4-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200427102900.18887-1-roberto.sassu@huawei.com>
 References: <20200427102900.18887-1-roberto.sassu@huawei.com>
@@ -48,48 +47,32 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 
-Function hash_long() accepts unsigned long, while currently only one byte
-is passed from ima_hash_key(), which calculates a key for ima_htable.
+Function ima_appraise_flag() returns the flag to be set in
+temp_ima_appraise depending on the hook identifier passed as an argument.
+It is not necessary to set the flag again for the POLICY_CHECK hook.
 
-Given that hashing the digest does not give clear benefits compared to
-using the digest itself, remove hash_long() and return the modulus
-calculated on the beginning of the digest with the number of slots. Also
-reduce the depth of the hash table by doubling the number of slots.
-
-Cc: stable@vger.kernel.org
-Fixes: 3323eec921ef ("integrity: IMA as an integrity service provider")
-Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 ---
- security/integrity/ima/ima.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ security/integrity/ima/ima_policy.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 467dfdbea25c..6ee458cf124a 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -36,7 +36,7 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8 };
- #define IMA_DIGEST_SIZE		SHA1_DIGEST_SIZE
- #define IMA_EVENT_NAME_LEN_MAX	255
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index c334e0dc6083..ea9b991f0232 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -643,11 +643,8 @@ static void add_rules(struct ima_rule_entry *entries, int count,
  
--#define IMA_HASH_BITS 9
-+#define IMA_HASH_BITS 10
- #define IMA_MEASURE_HTABLE_SIZE (1 << IMA_HASH_BITS)
- 
- #define IMA_TEMPLATE_FIELD_ID_MAX_LEN	16
-@@ -179,9 +179,9 @@ struct ima_h_table {
- };
- extern struct ima_h_table ima_htable;
- 
--static inline unsigned long ima_hash_key(u8 *digest)
-+static inline unsigned int ima_hash_key(u8 *digest)
- {
--	return hash_long(*digest, IMA_HASH_BITS);
-+	return (*(unsigned int *)digest % IMA_MEASURE_HTABLE_SIZE);
+ 			list_add_tail(&entry->list, &ima_policy_rules);
+ 		}
+-		if (entries[i].action == APPRAISE) {
++		if (entries[i].action == APPRAISE)
+ 			temp_ima_appraise |= ima_appraise_flag(entries[i].func);
+-			if (entries[i].func == POLICY_CHECK)
+-				temp_ima_appraise |= IMA_APPRAISE_POLICY;
+-		}
+ 	}
  }
  
- #define __ima_hooks(hook)		\
 -- 
 2.17.1
 
