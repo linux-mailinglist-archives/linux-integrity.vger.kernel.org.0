@@ -2,110 +2,182 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F19351BA1CE
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2020 13:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AAB1BA3D7
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2020 14:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbgD0LAM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 27 Apr 2020 07:00:12 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:54996 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726855AbgD0LAL (ORCPT
+        id S1726786AbgD0Mv3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Apr 2020 08:51:29 -0400
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:47695 "EHLO
+        herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726604AbgD0Mv2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 27 Apr 2020 07:00:11 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-191-HECg1l8bNsO4jduJXHGeUw-1; Mon, 27 Apr 2020 12:00:07 +0100
-X-MC-Unique: HECg1l8bNsO4jduJXHGeUw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Mon, 27 Apr 2020 12:00:06 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Mon, 27 Apr 2020 12:00:06 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Roberto Sassu' <roberto.sassu@huawei.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "rgoldwyn@suse.de" <rgoldwyn@suse.de>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "silviu.vlasceanu@huawei.com" <silviu.vlasceanu@huawei.com>,
-        "krzysztof.struczynski@huawei.com" <krzysztof.struczynski@huawei.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2 3/6] ima: Fix ima digest hash table key calculation
-Thread-Topic: [PATCH v2 3/6] ima: Fix ima digest hash table key calculation
-Thread-Index: AQHWHH8SDZUC+XMi6UOqF9nBthnXX6iMzGEg
-Date:   Mon, 27 Apr 2020 11:00:06 +0000
-Message-ID: <84ecd8f2576849b29876448df66824fc@AcuMS.aculab.com>
-References: <20200427102900.18887-1-roberto.sassu@huawei.com>
- <20200427102900.18887-3-roberto.sassu@huawei.com>
-In-Reply-To: <20200427102900.18887-3-roberto.sassu@huawei.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 27 Apr 2020 08:51:28 -0400
+Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 03RCoeTl024044;
+        Mon, 27 Apr 2020 15:50:40 +0300
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
+        id 75FEC639B1; Mon, 27 Apr 2020 15:50:40 +0300 (IDT)
+From:   amirmizi6@gmail.com
+To:     Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
+        oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, peterhuewe@gmx.de,
+        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
+        benoit.houyere@st.com, eajames@linux.ibm.com, joel@jms.id.au
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: [PATCH v7 0/7] Add tpm i2c ptp driver
+Date:   Mon, 27 Apr 2020 15:49:24 +0300
+Message-Id: <20200427124931.115697-1-amirmizi6@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu
-> Sent: 27 April 2020 11:29
-> Function hash_long() accepts unsigned long, while currently only one byte
-> is passed from ima_hash_key(), which calculates a key for ima_htable.
-> 
-> Given that hashing the digest does not give clear benefits compared to
-> using the digest itself, remove hash_long() and return the modulus
-> calculated on the beginning of the digest with the number of slots. Also
-> reduce the depth of the hash table by doubling the number of slots.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 3323eec921ef ("integrity: IMA as an integrity service provider")
-> Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-> ---
->  security/integrity/ima/ima.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 467dfdbea25c..6ee458cf124a 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -36,7 +36,7 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8 };
->  #define IMA_DIGEST_SIZE		SHA1_DIGEST_SIZE
->  #define IMA_EVENT_NAME_LEN_MAX	255
-> 
-> -#define IMA_HASH_BITS 9
-> +#define IMA_HASH_BITS 10
->  #define IMA_MEASURE_HTABLE_SIZE (1 << IMA_HASH_BITS)
-> 
->  #define IMA_TEMPLATE_FIELD_ID_MAX_LEN	16
-> @@ -179,9 +179,9 @@ struct ima_h_table {
->  };
->  extern struct ima_h_table ima_htable;
-> 
-> -static inline unsigned long ima_hash_key(u8 *digest)
-> +static inline unsigned int ima_hash_key(u8 *digest)
->  {
-> -	return hash_long(*digest, IMA_HASH_BITS);
-> +	return (*(unsigned int *)digest % IMA_MEASURE_HTABLE_SIZE);
+From: Amir Mizinski <amirmizi6@gmail.com>
 
-That almost certainly isn't right.
-It falls foul of the *(integer_type *)ptr being almost always wrong.
+This patch set adds support for TPM devices that implement the I2C.
+Interface defined by TCG PTP specification:
+https://trustedcomputinggroup.org/wp-content/uploads/TCG_PC_Client_Platform_TPM_Profile_PTP_2.0_r1.03_v22.pdf
 
-	David
+The driver was tested on Raspberry-Pie 3, using Nuvoton NPCT75X TPM.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Interrupts are not implemented yet, preparing it for the next patch.
+This patch is based on initial work by oshri Alkoby, Alexander Steffen and Christophe Ricard
+
+Changes since version 1:
+-"char:tpm:Add check_data handle to tpm_tis_phy_ops in order to check data integrity"
+        - Fixed and extended commit description.
+        - Fixed an issue regarding handling max retries.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options":
+        -Converted "tpm_tis_i2c.txt" to "tpm-tis-i2c.yaml".
+        - Renamed "tpm_tis-i2c" to "tpm-tis-i2c".
+        - Removed interrupts properties.
+-"char: tpm: add tpm_tis_i2c driver"
+        - Replaced "tpm_tis-i2c" with "tpm-tis-i2c" in "tpm_tis_i2c.c".
+Addressed comments from:
+ - Jarkko Sakkinen: https://patchwork.kernel.org/patch/11236257/
+ - Rob Herring: https://patchwork.kernel.org/patch/11236253/
+
+Changes since version 2:
+- Added 2 new commits with improvements suggested by Benoit Houyere.
+        -"Fix expected bit handling and send all bytes in one shot without last byte in exception"
+        -"Handle an exception for TPM Firmware Update mode."
+- Updated patch to latest v5.5
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options"
+        - Added "interrupts" and "crc-checksum" to properties.
+        - Updated binding description and commit info.
+-"char: tpm: add tpm_tis_i2c driver" (suggested by Benoit Houyere)
+        - Added repeat I2C frame after NACK.
+        - Checksum I2C feature activation in DTS file configuration.
+Addressed comments from:
+ - Rob Herring: https://lore.kernel.org/patchwork/patch/1161287/
+
+Changes since version 3:
+- Updated patch to latest v5.6
+- Updated commits headlines and development credit format by Jarkko Sakkinen suggestion
+-"tpm: tpm_tis: Make implementation of read16 read32 write32 optional"
+        - Updated commit description.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options"
+        - Fixed 'make dt_binding_check' errors on YAML file.
+        - Removed interrupts from required and examples since there is no use for them in current patch.
+Addressed comments from:
+ - Jarkko Sakkinen: https://lore.kernel.org/patchwork/patch/1192101/
+ - Rob Herring: https://lore.kernel.org/patchwork/patch/1192099/
+
+Changes since version 4:
+-"tpm: tpm_tis: Make implementation of read16 read32 write32 optional"
+        -Added a "Reviewed-by" tag:
+-"tpm: tpm_tis: Add check_data handle to tpm_tis_phy_ops in order to check data integrity"
+        -Fixed credit typos.
+-"tpm: tpm_tis: rewrite "tpm_tis_req_canceled()""
+        -Added fixes tag and removed changes for STM.
+-"tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception"
+        -Fixed typos, edited description to be clearer, and added a "Suggested-by" tag.
+-"tpm: Handle an exception for TPM Firmware Update mode."
+        -Added a "Suggested-by" tag.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options"
+        -Fixed 'make dt_binding_check' errors.
+-"tpm: tpm_tis: add tpm_tis_i2c driver"
+        -Added tested-by tag by Eddie James.
+        -Fixed indent in Kconfig file.
+        -Fixed 'MODULE_DESCRIPTION'.
+Addressed comments from:
+ - Jarkko Sakkinen: https://patchwork.kernel.org/patch/11467645/
+                https://patchwork.kernel.org/patch/11467655/
+                https://patchwork.kernel.org/patch/11467643/
+                https://patchwork.kernel.org/patch/11467659/
+                https://patchwork.kernel.org/patch/11467651/
+ - Rob Herring: https://patchwork.kernel.org/patch/11467653/
+ - Randy Dunlap: https://patchwork.kernel.org/patch/11467651/
+ - Eddie James: https://lore.kernel.org/patchwork/patch/1192104/
+
+Changes since version 5:
+-"tpm: tpm_tis: Add check_data handle to tpm_tis_phy_ops"
+        -Updated short description and fixed long description to be more clear.
+Addressed comments from:
+ - Jarkko Sakkinen: https://lkml.org/lkml/2020/4/6/748
+
+Changes since version 6:
+-"tpm: tpm_tis: Make implementation of read16, read32 and write32 optional"
+        -Fixed short description.
+        -Fixed long description proofreading issues.
+-"tpm: tpm_tis: Add check_data handle to tpm_tis_phy_ops"
+        -Fixed long description by Jarkko comments and proofreading issues.
+        -Replaced "check_data" with verify_data_integrity".
+        -New line before return statement.
+-"tpm: tpm_tis: rewrite "tpm_tis_req_canceled()"
+        -Fixed line over 80 characters.
+        -Fixed long description proofreading issues.
+-" tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot"
+        -Fixed long description proofreading issues.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C option"
+        -Replaced "tpm-tis-i2c@2e" with "tpm_tis@2e".
+        -Fixed CRC_Checksum description.
+-"tpm: tpm_tis: add tpm_tis_i2c driver"
+        -Replaced "depends on CRC_CCIT" with "select CRC_CCIT".
+        -Added tested-by tag by Joel Stanley.
+        -Fixed checkpatch.pl warnings.
+Addressed comments from:
+ - Jarkko Sakkinen:
+        https://lore.kernel.org/patchwork/patch/1221336/
+        https://lore.kernel.org/patchwork/patch/1221337/
+        https://lore.kernel.org/patchwork/patch/1221339/
+ - Joel Stanley:
+        https://lore.kernel.org/patchwork/patch/1220543/
+ - Rob Herring:
+        https://lore.kernel.org/patchwork/patch/1221334/
+
+Amir Mizinski (7):
+  tpm: tpm_tis: Make implementation of read16, read32 and write32
+    optional
+  tpm: tpm_tis: Add verify_data_integrity handle toy tpm_tis_phy_ops
+  tpm: tpm_tis: Rewrite "tpm_tis_req_canceled()"
+  tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot
+    without last byte in exception
+  tpm: Handle an exception for TPM Firmware Update mode.
+  tpm: Add YAML schema for TPM TIS I2C options
+  tpm: tpm_tis: add tpm_tis_i2c driver
+
+ .../bindings/security/tpm/tpm-tis-i2c.yaml         |  47 ++++
+ drivers/char/tpm/Kconfig                           |  12 +
+ drivers/char/tpm/Makefile                          |   1 +
+ drivers/char/tpm/tpm2-cmd.c                        |   4 +
+ drivers/char/tpm/tpm_tis_core.c                    | 180 +++++++------
+ drivers/char/tpm/tpm_tis_core.h                    |  41 ++-
+ drivers/char/tpm/tpm_tis_i2c.c                     | 291 +++++++++++++++++++++
+ drivers/char/tpm/tpm_tis_spi_main.c                |  41 ---
+ include/linux/tpm.h                                |   1 +
+ 9 files changed, 490 insertions(+), 128 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+ create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
+
+-- 
+2.7.4
 
