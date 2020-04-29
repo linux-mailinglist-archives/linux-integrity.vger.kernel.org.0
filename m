@@ -2,63 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD191BE51D
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2020 19:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348BE1BE6E1
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2020 21:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726781AbgD2RXB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Apr 2020 13:23:01 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:33056 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726524AbgD2RXA (ORCPT
+        id S1727097AbgD2TCD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Apr 2020 15:02:03 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:44269 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726511AbgD2TCD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Apr 2020 13:23:00 -0400
-Received: from [192.168.0.109] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2070820B4737;
-        Wed, 29 Apr 2020 10:23:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2070820B4737
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1588180980;
-        bh=dXAt2PJpTkQ9MnX44sOk0KMteaTwRrL51u5353hkQ94=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=DX66KKJLYlVCgw3mkUmwBYA5r5p9uA0owtBrZiqT/fvRcYj2ij8ej744ulJGGriIP
-         M+TtRbsGp1WRXWWOXXaasL/93q3GfwfUdI4zMPJgNFS6mdR881LmoXxWpJMxRDa8sZ
-         U8F3tYpm+QUpp1oP42gQw04i0AJhfgXXhXdh67o4=
-Subject: Re: [PATCH 2/2] ima: add policy support for the new file open
- MAY_OPENEXEC flag
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Mickael Salaun <mic@digikod.net>, Steve Grubb <sgrubb@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1588167523-7866-1-git-send-email-zohar@linux.ibm.com>
- <1588167523-7866-3-git-send-email-zohar@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <5c7a4ef6-db0b-431a-b745-987176fa41ed@linux.microsoft.com>
-Date:   Wed, 29 Apr 2020 10:22:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 29 Apr 2020 15:02:03 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MUY9w-1jcdPt3kW0-00QWZG; Wed, 29 Apr 2020 21:01:22 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Ard Biesheuvel <ardb@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Dave Young <dyoung@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>, Lyude Paul <lyude@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Octavian Purdila <octavian.purdila@intel.com>,
+        Peter Jones <pjones@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Scott Talbert <swt@techie.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] efi/tpm: fix section mismatch warning
+Date:   Wed, 29 Apr 2020 21:01:08 +0200
+Message-Id: <20200429190119.43595-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-In-Reply-To: <1588167523-7866-3-git-send-email-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:ZQnTjnUaD3Ot3Nx9eVP2/03GaU0JA4GRDpusvqc79KiO4fUHV7z
+ xbCc99Kr8a1zJJE/r4bO0Q47fh+gOYXqvMEruI2hqCMZW/f96D/07cYwGJnjvGbRf0QYvGa
+ AMxgwBy1kWiVvyyalES1BaAtiU6NPyGlrSvjv+GzdcJsq9wtDZIW17AmoNdVJMst0obhgPq
+ ZtBIEXgn3++a0vuwB8Rrg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eoASaEfANZA=:UKYNanq8Tate2hME67jf0h
+ HFfVw5eEnAwV2ivqhWR10qdqEdCv1a/qH6+I1GUsQxdb5fSJg2p6lrkbKfR5fE+VkR1jStuAE
+ vdlwseanNyzYnYPr/IK92xAXWRJsKbD8hzPQy+wW4OCnLKAu4mr7PZVANZ/2Vvyw9aAo+/kfv
+ HOGPCihZSJ5NHcXqDB4sMDZnWEx4EFDNwPRN2zlmFMkWQpEt7qNQxV7Cko6eYgRTKPFKYw8ug
+ luD8JtZccLzQ1F614k8UJnfxA/4Hm/lf2RrzFDzl6skwPh2C533wIsyYwh0kdjZb925DZIviL
+ qkk+iKL0wG19l3fDIu8L5nKkjz4FqOV6qe3lbbV3PwZcZyF6EAdLuLHI+WtqQRHQaK42K36k+
+ vfTQhNM6n1RRXh4GU4SDRXXr7rs1Q0+X2ygEeFZZ2zPdtMf1IbrvSIoI0b6eukMM7JuKCYGoR
+ 62odyLSl1Mh+mEkFX9rq7IILGbbNuIM8m0xGW5OXbdVwgccDWLRwFPS48XvKePoM6uvfFIrJe
+ VWLVZP99LysMhyAwj6vAP8nM1xuHPt0oYb2Z38d6GUZIpbo0VrQyqElgoNlHkXWgHoBvdu7Sy
+ ssYDxqMdy3rDwOas9hhs04+3fSHEDkxcdkLIQdI3TfBNoYO10BFb52q5HynGfHvlBS7HypmOp
+ Xzy8IVQOlKP42yNGNIXWOOq745r7tsoZOtd4hlQlnBd4bZf3bCZRVi8uBfE7NefGf3vG145yF
+ VH/3/ipt6Udrv4zPUIsxu7sC36zEbaKDVaR9OxAi+Kdh25JO5JtPuaitxehAnkJSWdPU9BHAg
+ hEn5TMsMst+vMlNCOwANobfLlaTMcLgSm+Prswy1rgbevxfr9U=
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 4/29/20 6:38 AM, Mimi Zohar wrote:
-> The kernel has no way of differentiating between a file containing data
-> or code being opened by an interpreter.  The proposed RESOLVE_MAYEXEC
-> openat2(2) flag bridges this gap by defining and enabling the MAY_OPENEXEC
-> flag.
-> 
-> This patch adds IMA policy support for the new MAY_OPENEXEC flag.
-> 
-> Example:
-> measure func=FILE_CHECK mask=^MAY_OPENEXEC
-> appraise func=FILE_CHECK appraise_type=imasig mask=^MAY_OPENEXEC
-> 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Building with gcc-10 causes a harmless warning about a section mismatch:
 
-Reviewed.
+WARNING: modpost: vmlinux.o(.text.unlikely+0x5e191): Section mismatch in reference from the function tpm2_calc_event_log_size() to the function .init.text:early_memunmap()
+The function tpm2_calc_event_log_size() references
+the function __init early_memunmap().
+This is often because tpm2_calc_event_log_size lacks a __init
+annotation or the annotation of early_memunmap is wrong.
+
+Add the missing annotation.
+
+Fixes: e658c82be556 ("efi/tpm: Only set 'efi_tpm_final_log_size' after successful event log parsing")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/firmware/efi/tpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
+index 31f9f0e369b9..55b031d2c989 100644
+--- a/drivers/firmware/efi/tpm.c
++++ b/drivers/firmware/efi/tpm.c
+@@ -16,7 +16,7 @@
+ int efi_tpm_final_log_size;
+ EXPORT_SYMBOL(efi_tpm_final_log_size);
+ 
+-static int tpm2_calc_event_log_size(void *data, int count, void *size_info)
++static int __init tpm2_calc_event_log_size(void *data, int count, void *size_info)
+ {
+ 	struct tcg_pcr_event2_head *header;
+ 	int event_size, size = 0;
+-- 
+2.26.0
 
