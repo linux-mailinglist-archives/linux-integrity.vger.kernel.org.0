@@ -2,104 +2,252 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB1B1BD4C8
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2020 08:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC5E1BD64A
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2020 09:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726426AbgD2Gnh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Apr 2020 02:43:37 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2124 "EHLO huawei.com"
+        id S1726635AbgD2HmM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Apr 2020 03:42:12 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2125 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726158AbgD2Gng (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Apr 2020 02:43:36 -0400
-Received: from LHREML713-CAH.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 0529315BC91E05DB2692;
-        Wed, 29 Apr 2020 07:43:35 +0100 (IST)
-Received: from fraeml704-chm.china.huawei.com (10.206.15.53) by
- LHREML713-CAH.china.huawei.com (10.201.108.36) with Microsoft SMTP Server
- (TLS) id 14.3.487.0; Wed, 29 Apr 2020 07:43:34 +0100
-Received: from lhreml722-chm.china.huawei.com (10.201.108.73) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+        id S1726477AbgD2HmL (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 29 Apr 2020 03:42:11 -0400
+Received: from lhreml709-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id B962F5BF6C391C3AAF11;
+        Wed, 29 Apr 2020 08:42:09 +0100 (IST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ lhreml709-chm.china.huawei.com (10.201.108.58) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Wed, 29 Apr 2020 08:43:33 +0200
-Received: from lhreml722-chm.china.huawei.com ([10.201.108.73]) by
- lhreml722-chm.china.huawei.com ([10.201.108.73]) with mapi id 15.01.1913.007;
- Wed, 29 Apr 2020 07:43:33 +0100
-From:   Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
+ 15.1.1913.5; Wed, 29 Apr 2020 08:42:09 +0100
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
+ by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Wed, 29 Apr 2020 09:42:08 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <david.safford@gmail.com>,
+        <viro@zeniv.linux.org.uk>, <jmorris@namei.org>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2 6/6] ima: Fix return value of ima_write_policy()
-Thread-Topic: [PATCH v2 6/6] ima: Fix return value of ima_write_policy()
-Thread-Index: AQHWHH9bJMB74MHPBU+JlJn2oiegG6iOwCwAgADnE9A=
-Date:   Wed, 29 Apr 2020 06:43:33 +0000
-Message-ID: <cee0cd9d63864ed4a39422c6be818e36@huawei.com>
-References: <20200427102900.18887-1-roberto.sassu@huawei.com>
-         <20200427103128.19229-1-roberto.sassu@huawei.com>
- <1588095998.5195.49.camel@linux.ibm.com>
-In-Reply-To: <1588095998.5195.49.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.9.247]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+Date:   Wed, 29 Apr 2020 09:39:33 +0200
+Message-ID: <20200429073935.11913-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.204.65.160]
+X-ClientProxiedBy: lhreml701-chm.china.huawei.com (10.201.108.50) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
 X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SGkgTWltaSwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNaW1pIFpv
-aGFyIFttYWlsdG86em9oYXJAbGludXguaWJtLmNvbV0NCj4gU2VudDogVHVlc2RheSwgQXByaWwg
-MjgsIDIwMjAgNzo0NyBQTQ0KPiBUbzogUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3
-ZWkuY29tPjsgS3J6eXN6dG9mIFN0cnVjenluc2tpDQo+IDxrcnp5c3p0b2Yuc3RydWN6eW5za2lA
-aHVhd2VpLmNvbT4NCj4gQ2M6IGxpbnV4LWludGVncml0eUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4
-LXNlY3VyaXR5LW1vZHVsZUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
-cm5lbC5vcmc7IFNpbHZpdSBWbGFzY2VhbnUNCj4gPFNpbHZpdS5WbGFzY2VhbnVAaHVhd2VpLmNv
-bT47IEtyenlzenRvZiBTdHJ1Y3p5bnNraQ0KPiA8a3J6eXN6dG9mLnN0cnVjenluc2tpQGh1YXdl
-aS5jb20+OyBzdGFibGVAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjIg
-Ni82XSBpbWE6IEZpeCByZXR1cm4gdmFsdWUgb2YgaW1hX3dyaXRlX3BvbGljeSgpDQo+IA0KPiBI
-aSBSb2JlcnRvLA0KPiANCj4gT24gTW9uLCAyMDIwLTA0LTI3IGF0IDEyOjMxICswMjAwLCBSb2Jl
-cnRvIFNhc3N1IHdyb3RlOg0KPiA+IFRoaXMgcGF0Y2ggZml4ZXMgdGhlIHJldHVybiB2YWx1ZSBv
-ZiBpbWFfd3JpdGVfcG9saWN5KCkgd2hlbiBhIG5ldw0KPiA+IHBvbGljeSBpcyBkaXJlY3RseSBw
-YXNzZWQgdG8gSU1BIGFuZCB0aGUgY3VycmVudCBwb2xpY3kgcmVxdWlyZXMNCj4gPiBhcHByYWlz
-YWwgb2YgdGhlIGZpbGUgY29udGFpbmluZyB0aGUgcG9saWN5LiBDdXJyZW50bHksIGlmIGFwcHJh
-aXNhbA0KPiA+IGlzIG5vdCBpbiBFTkZPUkNFIG1vZGUsDQo+ID4gaW1hX3dyaXRlX3BvbGljeSgp
-IHJldHVybnMgMCBhbmQgbGVhZHMgdXNlciBzcGFjZSBhcHBsaWNhdGlvbnMgdG8gYW4NCj4gPiBl
-bmRsZXNzIGxvb3AuIEZpeCB0aGlzIGlzc3VlIGJ5IGRlbnlpbmcgdGhlIG9wZXJhdGlvbiByZWdh
-cmRsZXNzIG9mDQo+ID4gdGhlIGFwcHJhaXNhbCBtb2RlLg0KPiA+DQo+ID4gQ2hhbmdlbG9nDQo+
-ID4NCj4gPiB2MToNCj4gPiAtIGRlbnkgdGhlIG9wZXJhdGlvbiBpbiBhbGwgY2FzZXMgKHN1Z2dl
-c3RlZCBieSBNaW1pLCBLcnp5c3p0b2YpDQo+IA0KPiBSZWxhdGl2ZWx5IHJlY2VudGx5LCBwZW9w
-bGUgaGF2ZSBtb3ZlZCBhd2F5IGZyb20gaW5jbHVkaW5nIHRoZSAiQ2hhbmdlbG9nIg0KPiBpbiB0
-aGUgdXBzdHJlYW0gY29tbWl0LiAoSSdtIHJlbW92aW5nIHRoZW0gbm93LikNCj4gDQo+ID4NCj4g
-PiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZyAjIDQuMTAueA0KPiA+IEZpeGVzOiAxOWY4YTg0
-NzEzZWRjICgiaW1hOiBtZWFzdXJlIGFuZCBhcHByYWlzZSB0aGUgSU1BIHBvbGljeQ0KPiA+IGl0
-c2VsZiIpDQo+ID4gU2lnbmVkLW9mZi1ieTogUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBo
-dWF3ZWkuY29tPg0KPiANCj4gV2l0aG91dCB0aGUgQ2hhbmdlbG9nLCB0aGUgb25seSB3YXkgb2Yg
-YWNrbm93bGVkZ2luZyBwZW9wbGUncyBjb250cmlidXRpb25zDQo+IGlzIGJ5IGluY2x1ZGluZyB0
-aGVpciB0YWdzLiDCoEtyenlzenRvZiwgZGlkIHlvdSB3YW50IHRvIGFkZCB5b3VyICJSZXZpZXdl
-ZC1ieSINCj4gdGFnPw0KDQpQbGVhc2UgYWRkOg0KUmV2aWV3ZWQtYnk6IEtyenlzenRvZiBTdHJ1
-Y3p5bnNraSA8a3J6eXN6dG9mLnN0cnVjenluc2tpQGh1YXdlaS5jb20+DQoNClRoYW5rcywNCkty
-enlzenRvZg0KDQo+IA0KPiA+IC0tLQ0KPiANCj4gUGVvcGxlIGhhdmUgc3RhcnRlZCBwdXR0aW5n
-IHRoZSBDaGFuZ2Vsb2cgb3IgYW55IGNvbW1lbnRzIGltbWVkaWF0ZWx5DQo+IGJlbG93IHRoZSBz
-ZXBhcmF0b3IgIi0tLSIgaGVyZS4NCj4gDQo+IHRoYW5rcywNCj4gDQo+IE1pbWkNCj4gDQo+ID4g
-IHNlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX2ZzLmMgfCAzICstLQ0KPiA+ICAxIGZpbGUgY2hh
-bmdlZCwgMSBpbnNlcnRpb24oKyksIDIgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0
-IGEvc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfZnMuYw0KPiA+IGIvc2VjdXJpdHkvaW50ZWdy
-aXR5L2ltYS9pbWFfZnMuYyBpbmRleCA4YjAzMGExYzVlMGQuLmUzZmNhZDg3MTg2MQ0KPiA+IDEw
-MDY0NA0KPiA+IC0tLSBhL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX2ZzLmMNCj4gPiArKysg
-Yi9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV9mcy5jDQo+ID4gQEAgLTMzOCw4ICszMzgsNyBA
-QCBzdGF0aWMgc3NpemVfdCBpbWFfd3JpdGVfcG9saWN5KHN0cnVjdCBmaWxlICpmaWxlLCBjb25z
-dA0KPiBjaGFyIF9fdXNlciAqYnVmLA0KPiA+ICAJCWludGVncml0eV9hdWRpdF9tc2coQVVESVRf
-SU5URUdSSVRZX1NUQVRVUywgTlVMTCwgTlVMTCwNCj4gPiAgCQkJCSAgICAicG9saWN5X3VwZGF0
-ZSIsICJzaWduZWQgcG9saWN5IHJlcXVpcmVkIiwNCj4gPiAgCQkJCSAgICAxLCAwKTsNCj4gPiAt
-CQlpZiAoaW1hX2FwcHJhaXNlICYgSU1BX0FQUFJBSVNFX0VORk9SQ0UpDQo+ID4gLQkJCXJlc3Vs
-dCA9IC1FQUNDRVM7DQo+ID4gKwkJcmVzdWx0ID0gLUVBQ0NFUzsNCj4gPiAgCX0gZWxzZSB7DQo+
-ID4gIAkJcmVzdWx0ID0gaW1hX3BhcnNlX2FkZF9ydWxlKGRhdGEpOw0KPiA+ICAJfQ0KDQo=
+EVM is a module for the protection of the integrity of file metadata. It
+protects security-relevant extended attributes, and some file attributes
+such as the UID and the GID. It protects their integrity with an HMAC or
+with a signature.
+
+What makes EVM different from other LSMs is that it makes a security
+decision depending on multiple pieces of information, which cannot be
+managed atomically by the system.
+
+Example: cp -a file.orig file.dest
+
+If security.selinux, security.ima and security.evm must be preserved, cp
+will invoke setxattr() for each xattr, and EVM performs a verification
+during each operation. The problem is that copying security.evm from
+file.orig to file.dest will likely break the following EVM verifications if
+some metadata still have to be copied. EVM has no visibility on the
+metadata of the source file, so it cannot determine when the copy can be
+considered complete.
+
+On the other hand, EVM has to check metadata during every operation to
+ensure that there is no transition from corrupted metadata, e.g. after an
+offline attack, to valid ones after the operation. An HMAC update would
+prevent the corruption to be detected, as the HMAC on the new values would
+be correct. Thus, to avoid this issue, EVM has to return an error to the
+system call so that its execution will be interrupted.
+
+A solution that would satisfy both requirements, not breaking user space
+applications and detecting corrupted metadata is to let metadata operations
+be completed successfully and to pass the result of the EVM verification
+from the pre hooks to the post hooks. In this way, the HMAC update can be
+avoided if the verification wasn't successful.
+
+This approach will bring another important benefit: it is no longer
+required that every file has a valid HMAC or signature. Instead of always
+enforcing metadata integrity, even when it is not relevant for IMA, EVM
+will let IMA decide for files selected with the appraisal policy,
+depending on the result of the requested verification.
+
+The main problem is that the result of the verification currently cannot be
+passed from the pre hooks to the post hooks, due to how the LSM API is
+defined. A possible solution would be to use integrity_iint_cache for this
+purpose, but it will increase the memory pressure, as new structures will
+be allocated also for metadata operations, not only for measurement,
+appraisal and audit. Another solution would be to extend the LSM API, but
+it seems not worthwhile as EVM would be the only module getting a benefit
+from this change.
+
+Given that pre and post hooks are called from the same system call, a more
+efficient solution seems to move the hooks outside the LSM infrastructure,
+so that the return value of the pre hooks can be passed to the post hooks.
+A predefined error (-EAGAIN) will be used to signal to the system call to
+continue the execution. Otherwise, if the pre hooks return -EPERM, the
+system calls will behave as before and will immediately return before
+metadata are changed.
+
+Overview of the changes:
+
+evm_inode_init_security()	LSM (no change)
+evm_inode_setxattr()		LSM -> vfs_setxattr()
+evm_inode_post_setxattr()	LSM -> vfs_setxattr()
+evm_inode_removexattr()		LSM -> vfs_removexattr()
+evm_inode_post_removexattr()	vfs_removexattr() (no change)
+evm_inode_setattr()		LSM -> vfs_setattr()
+evm_inode_post_setattr()	vfs_setattr() (no change)
+evm_verifyxattr()		outside LSM (no change)
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ fs/attr.c           |  5 ++++-
+ fs/xattr.c          | 17 +++++++++++++++--
+ security/security.c | 18 +++---------------
+ 3 files changed, 22 insertions(+), 18 deletions(-)
+
+diff --git a/fs/attr.c b/fs/attr.c
+index b4bbdbd4c8ca..8f26d7d2e3b4 100644
+--- a/fs/attr.c
++++ b/fs/attr.c
+@@ -224,7 +224,7 @@ int notify_change(struct dentry * dentry, struct iattr * attr, struct inode **de
+ {
+ 	struct inode *inode = dentry->d_inode;
+ 	umode_t mode = inode->i_mode;
+-	int error;
++	int error, evm_error;
+ 	struct timespec64 now;
+ 	unsigned int ia_valid = attr->ia_valid;
+ 
+@@ -328,6 +328,9 @@ int notify_change(struct dentry * dentry, struct iattr * attr, struct inode **de
+ 	error = security_inode_setattr(dentry, attr);
+ 	if (error)
+ 		return error;
++	evm_error = evm_inode_setattr(dentry, attr);
++	if (evm_error)
++		return evm_error;
+ 	error = try_break_deleg(inode, delegated_inode);
+ 	if (error)
+ 		return error;
+diff --git a/fs/xattr.c b/fs/xattr.c
+index e13265e65871..3b323b75b741 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -183,6 +183,7 @@ int __vfs_setxattr_noperm(struct dentry *dentry, const char *name,
+ 			fsnotify_xattr(dentry);
+ 			security_inode_post_setxattr(dentry, name, value,
+ 						     size, flags);
++			evm_inode_post_setxattr(dentry, name, value, size);
+ 		}
+ 	} else {
+ 		if (unlikely(is_bad_inode(inode)))
+@@ -210,7 +211,7 @@ vfs_setxattr(struct dentry *dentry, const char *name, const void *value,
+ 		size_t size, int flags)
+ {
+ 	struct inode *inode = dentry->d_inode;
+-	int error;
++	int error, evm_error;
+ 
+ 	error = xattr_permission(inode, name, MAY_WRITE);
+ 	if (error)
+@@ -221,6 +222,12 @@ vfs_setxattr(struct dentry *dentry, const char *name, const void *value,
+ 	if (error)
+ 		goto out;
+ 
++	evm_error = evm_inode_setxattr(dentry, name, value, size);
++	if (evm_error) {
++		error = evm_error;
++		goto out;
++	}
++
+ 	error = __vfs_setxattr_noperm(dentry, name, value, size, flags);
+ 
+ out:
+@@ -382,7 +389,7 @@ int
+ vfs_removexattr(struct dentry *dentry, const char *name)
+ {
+ 	struct inode *inode = dentry->d_inode;
+-	int error;
++	int error, evm_error;
+ 
+ 	error = xattr_permission(inode, name, MAY_WRITE);
+ 	if (error)
+@@ -393,6 +400,12 @@ vfs_removexattr(struct dentry *dentry, const char *name)
+ 	if (error)
+ 		goto out;
+ 
++	evm_error = evm_inode_removexattr(dentry, name);
++	if (evm_error) {
++		error = evm_error;
++		goto out;
++	}
++
+ 	error = __vfs_removexattr(dentry, name);
+ 
+ 	if (!error) {
+diff --git a/security/security.c b/security/security.c
+index 7fed24b9d57e..e1368ab34cee 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1255,14 +1255,9 @@ int security_inode_permission(struct inode *inode, int mask)
+ 
+ int security_inode_setattr(struct dentry *dentry, struct iattr *attr)
+ {
+-	int ret;
+-
+ 	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+ 		return 0;
+-	ret = call_int_hook(inode_setattr, 0, dentry, attr);
+-	if (ret)
+-		return ret;
+-	return evm_inode_setattr(dentry, attr);
++	return call_int_hook(inode_setattr, 0, dentry, attr);
+ }
+ EXPORT_SYMBOL_GPL(security_inode_setattr);
+ 
+@@ -1291,10 +1286,7 @@ int security_inode_setxattr(struct dentry *dentry, const char *name,
+ 		ret = cap_inode_setxattr(dentry, name, value, size, flags);
+ 	if (ret)
+ 		return ret;
+-	ret = ima_inode_setxattr(dentry, name, value, size);
+-	if (ret)
+-		return ret;
+-	return evm_inode_setxattr(dentry, name, value, size);
++	return ima_inode_setxattr(dentry, name, value, size);
+ }
+ 
+ void security_inode_post_setxattr(struct dentry *dentry, const char *name,
+@@ -1303,7 +1295,6 @@ void security_inode_post_setxattr(struct dentry *dentry, const char *name,
+ 	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+ 		return;
+ 	call_void_hook(inode_post_setxattr, dentry, name, value, size, flags);
+-	evm_inode_post_setxattr(dentry, name, value, size);
+ }
+ 
+ int security_inode_getxattr(struct dentry *dentry, const char *name)
+@@ -1335,10 +1326,7 @@ int security_inode_removexattr(struct dentry *dentry, const char *name)
+ 		ret = cap_inode_removexattr(dentry, name);
+ 	if (ret)
+ 		return ret;
+-	ret = ima_inode_removexattr(dentry, name);
+-	if (ret)
+-		return ret;
+-	return evm_inode_removexattr(dentry, name);
++	return ima_inode_removexattr(dentry, name);
+ }
+ 
+ int security_inode_need_killpriv(struct dentry *dentry)
+-- 
+2.17.1
+
