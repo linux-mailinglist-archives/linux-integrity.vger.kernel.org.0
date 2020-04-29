@@ -2,42 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A98811BE51A
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2020 19:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD191BE51D
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2020 19:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgD2RWh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Apr 2020 13:22:37 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:32904 "EHLO
+        id S1726781AbgD2RXB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Apr 2020 13:23:01 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:33056 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726524AbgD2RWh (ORCPT
+        with ESMTP id S1726524AbgD2RXA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Apr 2020 13:22:37 -0400
+        Wed, 29 Apr 2020 13:23:00 -0400
 Received: from [192.168.0.109] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id F2DF9201E7E5;
-        Wed, 29 Apr 2020 10:22:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F2DF9201E7E5
+        by linux.microsoft.com (Postfix) with ESMTPSA id 2070820B4737;
+        Wed, 29 Apr 2020 10:23:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2070820B4737
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1588180957;
-        bh=sejNNHE6Un9l9iyWcXAw0ccsHgdDT73GrYnZBNmWzVQ=;
+        s=default; t=1588180980;
+        bh=dXAt2PJpTkQ9MnX44sOk0KMteaTwRrL51u5353hkQ94=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KDoQ7LILwDZg8ExtQu3YhpjNlODL4eQ421nHBrTAX4NLHGXa3dy2npY+K9G41Pcpx
-         5zSP9w2WDGxsUqMf5K+znWkkxSJPfCm3kGDts6OSh13DFn7JzM5Yb6lBYddz0tk4Fb
-         W9OQiU/OhfMMj4lLMazxp988zP/XD12Emxz/D8vs=
-Subject: Re: [PATCH 1/2] ima: add policy support for identifying file execute
- mode bit
+        b=DX66KKJLYlVCgw3mkUmwBYA5r5p9uA0owtBrZiqT/fvRcYj2ij8ej744ulJGGriIP
+         M+TtRbsGp1WRXWWOXXaasL/93q3GfwfUdI4zMPJgNFS6mdR881LmoXxWpJMxRDa8sZ
+         U8F3tYpm+QUpp1oP42gQw04i0AJhfgXXhXdh67o4=
+Subject: Re: [PATCH 2/2] ima: add policy support for the new file open
+ MAY_OPENEXEC flag
 To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
 Cc:     Mickael Salaun <mic@digikod.net>, Steve Grubb <sgrubb@redhat.com>,
         Jann Horn <jannh@google.com>,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1588167523-7866-1-git-send-email-zohar@linux.ibm.com>
- <1588167523-7866-2-git-send-email-zohar@linux.ibm.com>
+ <1588167523-7866-3-git-send-email-zohar@linux.ibm.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <0708f375-b293-c576-89b8-02379d7a807b@linux.microsoft.com>
-Date:   Wed, 29 Apr 2020 10:22:36 -0700
+Message-ID: <5c7a4ef6-db0b-431a-b745-987176fa41ed@linux.microsoft.com>
+Date:   Wed, 29 Apr 2020 10:22:59 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <1588167523-7866-2-git-send-email-zohar@linux.ibm.com>
+In-Reply-To: <1588167523-7866-3-git-send-email-zohar@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -47,15 +47,18 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 On 4/29/20 6:38 AM, Mimi Zohar wrote:
-
-> Extend the IMA policy language with "mode=IXUGO" to identify files with
-> the execute mode bit enabled.
+> The kernel has no way of differentiating between a file containing data
+> or code being opened by an interpreter.  The proposed RESOLVE_MAYEXEC
+> openat2(2) flag bridges this gap by defining and enabling the MAY_OPENEXEC
+> flag.
 > 
-> Examples:
-> measure func=FILE_CHECK mode=IXUGO
-> appraise func=FILE_CHECK appraise_type=imasig mode=IXUGO
+> This patch adds IMA policy support for the new MAY_OPENEXEC flag.
 > 
-> Suggested-by: Steve Grubb <sgrubb@redhat.com> (based on execute mode bit)
+> Example:
+> measure func=FILE_CHECK mask=^MAY_OPENEXEC
+> appraise func=FILE_CHECK appraise_type=imasig mask=^MAY_OPENEXEC
+> 
 > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 
 Reviewed.
+
