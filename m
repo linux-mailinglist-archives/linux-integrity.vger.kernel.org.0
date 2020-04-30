@@ -2,72 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E801BEEDE
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Apr 2020 06:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBC01BF1FC
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Apr 2020 10:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726404AbgD3EAs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Apr 2020 00:00:48 -0400
-Received: from mga11.intel.com ([192.55.52.93]:17334 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726354AbgD3EAs (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Apr 2020 00:00:48 -0400
-IronPort-SDR: yj8TmLWwsReHG7GSMisHqz8qQxN9UgmsjVFCm+9i+ITXNwGI2Ia98G1veCLs3In1ea1CLkgAfz
- 10eAswiE8XXw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 21:00:48 -0700
-IronPort-SDR: sNz80AeppAXBoljxGVY/kL4RfiCytDXDWrKQuUVh9PAEvJaIEdaCuxfnhhn2s0EOSt9Ims/Xg0
- xJgVnmF7tD2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,333,1583222400"; 
-   d="scan'208";a="432812986"
-Received: from aanderso-mobl3.amr.corp.intel.com (HELO localhost) ([10.252.52.101])
-  by orsmga005.jf.intel.com with ESMTP; 29 Apr 2020 21:00:39 -0700
-Date:   Thu, 30 Apr 2020 07:00:38 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        Dave Young <dyoung@redhat.com>, Lukas Wunner <lukas@wunner.de>,
-        Lyude Paul <lyude@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Octavian Purdila <octavian.purdila@intel.com>,
-        Peter Jones <pjones@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Scott Talbert <swt@techie.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] efi/tpm: fix section mismatch warning
-Message-ID: <20200430040038.GD31820@linux.intel.com>
-References: <20200429190119.43595-1-arnd@arndb.de>
+        id S1726545AbgD3IDx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Apr 2020 04:03:53 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:31732 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726511AbgD3IDw (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 30 Apr 2020 04:03:52 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-188-QwramPYPODaeNg-qytVVbw-1; Thu, 30 Apr 2020 09:03:47 +0100
+X-MC-Unique: QwramPYPODaeNg-qytVVbw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Thu, 30 Apr 2020 09:03:47 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 30 Apr 2020 09:03:47 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Roberto Sassu' <roberto.sassu@huawei.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "rgoldwyn@suse.de" <rgoldwyn@suse.de>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "silviu.vlasceanu@huawei.com" <silviu.vlasceanu@huawei.com>,
+        "krzysztof.struczynski@huawei.com" <krzysztof.struczynski@huawei.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [RESEND][PATCH v2 3/6] ima: Fix ima digest hash table key
+ calculation
+Thread-Topic: [RESEND][PATCH v2 3/6] ima: Fix ima digest hash table key
+ calculation
+Thread-Index: AQHWHS80o0OMQYVPmUqc5kiRSsIx16iRUJzg
+Date:   Thu, 30 Apr 2020 08:03:47 +0000
+Message-ID: <060c71f88c8d4c6a9fafca4b329605c5@AcuMS.aculab.com>
+References: <20200427102900.18887-3-roberto.sassu@huawei.com>
+ <20200428073010.25631-1-roberto.sassu@huawei.com>
+In-Reply-To: <20200428073010.25631-1-roberto.sassu@huawei.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200429190119.43595-1-arnd@arndb.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Apr 29, 2020 at 09:01:08PM +0200, Arnd Bergmann wrote:
-> Building with gcc-10 causes a harmless warning about a section mismatch:
+From: Roberto Sassu
+> Sent: 28 April 2020 08:30
+> From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 > 
-> WARNING: modpost: vmlinux.o(.text.unlikely+0x5e191): Section mismatch in reference from the function tpm2_calc_event_log_size() to the function .init.text:early_memunmap()
-> The function tpm2_calc_event_log_size() references
-> the function __init early_memunmap().
-> This is often because tpm2_calc_event_log_size lacks a __init
-> annotation or the annotation of early_memunmap is wrong.
+> Function hash_long() accepts unsigned long, while currently only one byte
+> is passed from ima_hash_key(), which calculates a key for ima_htable.
 > 
-> Add the missing annotation.
+> Given that hashing the digest does not give clear benefits compared to
+> using the digest itself, remove hash_long() and return the modulus
+> calculated on the first two bytes of the digest with the number of slots.
+> Also reduce the depth of the hash table by doubling the number of slots.
 > 
-> Fixes: e658c82be556 ("efi/tpm: Only set 'efi_tpm_final_log_size' after successful event log parsing")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Changelog
+> 
+> v2: directly access the first two bytes of the digest to avoid memory
+>     access issues on big endian systems (suggested by David Laight)
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 3323eec921ef ("integrity: IMA as an integrity service provider")
+> Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 
-Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Acked-by: David.Laight@aculab.com
 
-/Jarkko
+> ---
+>  security/integrity/ima/ima.h | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 467dfdbea25c..02796473238b 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -36,7 +36,7 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8 };
+>  #define IMA_DIGEST_SIZE		SHA1_DIGEST_SIZE
+>  #define IMA_EVENT_NAME_LEN_MAX	255
+> 
+> -#define IMA_HASH_BITS 9
+> +#define IMA_HASH_BITS 10
+>  #define IMA_MEASURE_HTABLE_SIZE (1 << IMA_HASH_BITS)
+> 
+>  #define IMA_TEMPLATE_FIELD_ID_MAX_LEN	16
+> @@ -179,9 +179,10 @@ struct ima_h_table {
+>  };
+>  extern struct ima_h_table ima_htable;
+> 
+> -static inline unsigned long ima_hash_key(u8 *digest)
+> +static inline unsigned int ima_hash_key(u8 *digest)
+>  {
+> -	return hash_long(*digest, IMA_HASH_BITS);
+> +	/* there is no point in taking a hash of part of a digest */
+> +	return (digest[0] | digest[1] << 8) % IMA_MEASURE_HTABLE_SIZE;
+>  }
+> 
+>  #define __ima_hooks(hook)		\
+> --
+> 2.17.1
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
