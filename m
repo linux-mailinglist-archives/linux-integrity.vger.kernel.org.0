@@ -2,137 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5AE1C0262
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Apr 2020 18:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215C61C08F7
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Apr 2020 23:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726859AbgD3QZp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Apr 2020 12:25:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35398 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726860AbgD3QZp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Apr 2020 12:25:45 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A321F20873;
-        Thu, 30 Apr 2020 16:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588263944;
-        bh=os4gyJyASyV9Bl1//dDXxv3YvH/j3vKkp6g69zvRTVo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Uen/x7p2E9/c4pH6LftTDc+ScUsz4cz5/91wrw5F60WJFHX50qQ28cakvaCcleFhM
-         n08l65mcjivWWuYcsiAq3uV5koXl25ln+h9e6b44Zk+6OPGTNrqg5IxHKIhc7ZLMRr
-         Z2AuDpKbTXd8hBUBx2DVQwION0auHo23cLEwNePY=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 7C1403522697; Thu, 30 Apr 2020 09:25:44 -0700 (PDT)
-Date:   Thu, 30 Apr 2020 09:25:44 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     madhuparnabhowmik10@gmail.com
-Cc:     zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@joelfernandes.org,
-        frextrite@gmail.com, linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] integrity: evm: Fix RCU list related warnings.
-Message-ID: <20200430162544.GT7560@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200430160205.17798-1-madhuparnabhowmik10@gmail.com>
+        id S1726742AbgD3VPY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Apr 2020 17:15:24 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:47725 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726427AbgD3VPX (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 30 Apr 2020 17:15:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588281321;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=Gpgo8QhStYUhDPmOT7znh0qOxQgcHTQeTAkj6k74Xck=;
+        b=PnIOo7UDLGhEyKckUeVzoFRUYhig4DHPOdd4KhUWTKAKkyqhS6/pBKCCC6H40eXYQkf/rA
+        2VK9YkHSLR65D4XTkVygk6HtwnJg4utbKb2Nk5hbg98WesPxw15rdVXYBfhrAPy4v9jFsa
+        DlzVik4NazzP+0SPupDvzfLJD/6Cv3k=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-53-bl7zWQo7OKiOoS11DJ_lMw-1; Thu, 30 Apr 2020 17:15:20 -0400
+X-MC-Unique: bl7zWQo7OKiOoS11DJ_lMw-1
+Received: by mail-qk1-f198.google.com with SMTP id y64so7843253qkb.12
+        for <linux-integrity@vger.kernel.org>; Thu, 30 Apr 2020 14:15:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=Gpgo8QhStYUhDPmOT7znh0qOxQgcHTQeTAkj6k74Xck=;
+        b=UedevOnHc/c5ogKWdtomlFj9bk0pKbw6/QfbdjZBUu4SEezhSX74L2L6DXtZoVgLlF
+         dgOY4SHmQ8zr4SMUIYF6W+UDn9Tj3c3ERUxo5neXq3HfiNRdxYqAtczAzF5ugnw6gevC
+         FV6NkWdJqMPqTEzcViRC3gBKlvSu6qBhIRdZp2Jb+WwU2Im7xGVs7aClB7r4ML+LsGcr
+         RMk2rL+VEmlg3BS78C5jjuM2KEM+6vkoclfsPiSYaRQTkv5rY6zFa0M2809Ist5P/LaH
+         F6UqDKZmDDx0yEYG6UjON/sS2NDi9AnVCLAZTKT2Phw7sJXGE+w76ly1Z7ezspJyhNpo
+         JlcQ==
+X-Gm-Message-State: AGi0PualbAliKznrp5t6vJEVUMpBJotFvFEoP+p+d/gWFK+mzRnjgJ70
+        TWxnwJsxmKmV/GkMCKSUH/xOoVojUj1srP1tktphapYAqZBY1IfJWtSEa6walcDN9oWf9Lnx+zg
+        nJVeL5h25S6CA5K9/P8LcjyG5Fekg
+X-Received: by 2002:a37:9b0f:: with SMTP id d15mr557179qke.62.1588281319660;
+        Thu, 30 Apr 2020 14:15:19 -0700 (PDT)
+X-Google-Smtp-Source: APiQypK47/YxDMcJQ0hvZtrevVhbt6vQJ5blpDkAeoLIO/G7QMniCYPHE7M/pzWYGebnwVKPPApSsA==
+X-Received: by 2002:a37:9b0f:: with SMTP id d15mr557149qke.62.1588281319422;
+        Thu, 30 Apr 2020 14:15:19 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id h6sm766622qtd.79.2020.04.30.14.15.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2020 14:15:18 -0700 (PDT)
+Date:   Thu, 30 Apr 2020 14:15:16 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Dave Young <dyoung@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>, Lyude Paul <lyude@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Octavian Purdila <octavian.purdila@intel.com>,
+        Peter Jones <pjones@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Scott Talbert <swt@techie.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] efi/tpm: fix section mismatch warning
+Message-ID: <20200430211516.gkwaefjrzj2dypmr@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+Mail-Followup-To: Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Dave Young <dyoung@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>, Lyude Paul <lyude@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Octavian Purdila <octavian.purdila@intel.com>,
+        Peter Jones <pjones@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Scott Talbert <swt@techie.net>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-efi@vger.kernel.org,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200429190119.43595-1-arnd@arndb.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20200430160205.17798-1-madhuparnabhowmik10@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200429190119.43595-1-arnd@arndb.de>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Apr 30, 2020 at 09:32:05PM +0530, madhuparnabhowmik10@gmail.com wrote:
-> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
-> 
-> This patch fixes the following warning and few other
-> instances of traversal of evm_config_xattrnames list:
-> 
-> [   32.848432] =============================
-> [   32.848707] WARNING: suspicious RCU usage
-> [   32.848966] 5.7.0-rc1-00006-ga8d5875ce5f0b #1 Not tainted
-> [   32.849308] -----------------------------
-> [   32.849567] security/integrity/evm/evm_main.c:231 RCU-list traversed in non-reader section!!
-> 
-> Since entries are only added to the list and never deleted,
-> use list_For_each_entry_lockless() instead of
-> list_for_each_entry_rcu() for traversing the list.
-> Also, add a relevant comment in evm_secfs.c to indicate this fact.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-> Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+On Wed Apr 29 20, Arnd Bergmann wrote:
+>Building with gcc-10 causes a harmless warning about a section mismatch:
+>
+>WARNING: modpost: vmlinux.o(.text.unlikely+0x5e191): Section mismatch in reference from the function tpm2_calc_event_log_size() to the function .init.text:early_memunmap()
+>The function tpm2_calc_event_log_size() references
+>the function __init early_memunmap().
+>This is often because tpm2_calc_event_log_size lacks a __init
+>annotation or the annotation of early_memunmap is wrong.
+>
+>Add the missing annotation.
+>
+>Fixes: e658c82be556 ("efi/tpm: Only set 'efi_tpm_final_log_size' after successful event log parsing")
+>Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-From an RCU viewpoint:
+Minor thing, but should the Fixes be c46f3405692d ("tpm: Reserve the TPM final events table")? Or what am I missing
+about e658c82be556 that causes this? Just trying to understand what I did. :)
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Regards,
+Jerry
 
-> ---
->  security/integrity/evm/evm_crypto.c | 2 +-
->  security/integrity/evm/evm_main.c   | 4 ++--
->  security/integrity/evm/evm_secfs.c  | 9 ++++++++-
->  3 files changed, 11 insertions(+), 4 deletions(-)
-> 
-> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-> index 35682852ddea..b2dc87da5f50 100644
-> --- a/security/integrity/evm/evm_crypto.c
-> +++ b/security/integrity/evm/evm_crypto.c
-> @@ -207,7 +207,7 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
->  	data->hdr.length = crypto_shash_digestsize(desc->tfm);
->  
->  	error = -ENODATA;
-> -	list_for_each_entry_rcu(xattr, &evm_config_xattrnames, list) {
-> +	list_for_each_entry_lockless(xattr, &evm_config_xattrnames, list) {
->  		bool is_ima = false;
->  
->  		if (strcmp(xattr->name, XATTR_NAME_IMA) == 0)
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> index d361d7fdafc4..0d36259b690d 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -97,7 +97,7 @@ static int evm_find_protected_xattrs(struct dentry *dentry)
->  	if (!(inode->i_opflags & IOP_XATTR))
->  		return -EOPNOTSUPP;
->  
-> -	list_for_each_entry_rcu(xattr, &evm_config_xattrnames, list) {
-> +	list_for_each_entry_lockless(xattr, &evm_config_xattrnames, list) {
->  		error = __vfs_getxattr(dentry, inode, xattr->name, NULL, 0);
->  		if (error < 0) {
->  			if (error == -ENODATA)
-> @@ -228,7 +228,7 @@ static int evm_protected_xattr(const char *req_xattr_name)
->  	struct xattr_list *xattr;
->  
->  	namelen = strlen(req_xattr_name);
-> -	list_for_each_entry_rcu(xattr, &evm_config_xattrnames, list) {
-> +	list_for_each_entry_lockless(xattr, &evm_config_xattrnames, list) {
->  		if ((strlen(xattr->name) == namelen)
->  		    && (strncmp(req_xattr_name, xattr->name, namelen) == 0)) {
->  			found = 1;
-> diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
-> index 39ad1038d45d..cfc3075769bb 100644
-> --- a/security/integrity/evm/evm_secfs.c
-> +++ b/security/integrity/evm/evm_secfs.c
-> @@ -232,7 +232,14 @@ static ssize_t evm_write_xattrs(struct file *file, const char __user *buf,
->  		goto out;
->  	}
->  
-> -	/* Guard against races in evm_read_xattrs */
-> +	/*
-> +	 * xattr_list_mutex guards against races in evm_read_xattrs().
-> +	 * Entries are only added to the evm_config_xattrnames list
-> +	 * and never deleted. Therefore, the list is traversed
-> +	 * using list_for_each_entry_lockless() without holding
-> +	 * the mutex in evm_calc_hmac_or_hash(), evm_find_protected_xattrs()
-> +	 * and evm_protected_xattr().
-> +	 */
->  	mutex_lock(&xattr_list_mutex);
->  	list_for_each_entry(tmp, &evm_config_xattrnames, list) {
->  		if (strcmp(xattr->name, tmp->name) == 0) {
-> -- 
-> 2.17.1
-> 
+>---
+> drivers/firmware/efi/tpm.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
+>index 31f9f0e369b9..55b031d2c989 100644
+>--- a/drivers/firmware/efi/tpm.c
+>+++ b/drivers/firmware/efi/tpm.c
+>@@ -16,7 +16,7 @@
+> int efi_tpm_final_log_size;
+> EXPORT_SYMBOL(efi_tpm_final_log_size);
+>
+>-static int tpm2_calc_event_log_size(void *data, int count, void *size_info)
+>+static int __init tpm2_calc_event_log_size(void *data, int count, void *size_info)
+> {
+> 	struct tcg_pcr_event2_head *header;
+> 	int event_size, size = 0;
+>-- 
+>2.26.0
+>
+
