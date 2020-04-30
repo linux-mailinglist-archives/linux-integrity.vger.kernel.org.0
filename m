@@ -2,123 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBC01BF1FC
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Apr 2020 10:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5C91BF531
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Apr 2020 12:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgD3IDx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Apr 2020 04:03:53 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:31732 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726511AbgD3IDw (ORCPT
+        id S1726127AbgD3KTW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Apr 2020 06:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725280AbgD3KTU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Apr 2020 04:03:52 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-188-QwramPYPODaeNg-qytVVbw-1; Thu, 30 Apr 2020 09:03:47 +0100
-X-MC-Unique: QwramPYPODaeNg-qytVVbw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 30 Apr 2020 09:03:47 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 30 Apr 2020 09:03:47 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Roberto Sassu' <roberto.sassu@huawei.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "rgoldwyn@suse.de" <rgoldwyn@suse.de>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "silviu.vlasceanu@huawei.com" <silviu.vlasceanu@huawei.com>,
-        "krzysztof.struczynski@huawei.com" <krzysztof.struczynski@huawei.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [RESEND][PATCH v2 3/6] ima: Fix ima digest hash table key
- calculation
-Thread-Topic: [RESEND][PATCH v2 3/6] ima: Fix ima digest hash table key
- calculation
-Thread-Index: AQHWHS80o0OMQYVPmUqc5kiRSsIx16iRUJzg
-Date:   Thu, 30 Apr 2020 08:03:47 +0000
-Message-ID: <060c71f88c8d4c6a9fafca4b329605c5@AcuMS.aculab.com>
-References: <20200427102900.18887-3-roberto.sassu@huawei.com>
- <20200428073010.25631-1-roberto.sassu@huawei.com>
-In-Reply-To: <20200428073010.25631-1-roberto.sassu@huawei.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 30 Apr 2020 06:19:20 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545DDC035494;
+        Thu, 30 Apr 2020 03:19:20 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id 188so1209357wmc.2;
+        Thu, 30 Apr 2020 03:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=sbJYXBlwGOLyg45ji2Ben6BeJhkkj20b9i5FNHgQc7E=;
+        b=TFJz3jN9l51rL4sTRvaVWsNqtueSOmy0YG5dmVZvHcJy4oBNjiahe+LWXBQ0omqKGM
+         k7U8HX+i6gwboswmMM7LMM5IqcT/1ixfnPbCg01AUcEawoXsvhW+xg4wFcvwqXc43gCn
+         YIs3qJp5bEZip/9tf6qhMdsNPfeL35Mpa1g65e2pAW+fWeuDCst9JFRU/M8BgsFUinDW
+         57orgljHmHwzOmTgSVrus7Z8x+jt8+/w2xmYoJvrSoURGhlCdILwZFdpxVXbagM+kb+r
+         qUJPqKJ/EMBwrKf1/klC0EuRmjlzYmMorc7Q1VCfgjiqikXPAyLFcaqhN/744J1VABTH
+         Yr5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=sbJYXBlwGOLyg45ji2Ben6BeJhkkj20b9i5FNHgQc7E=;
+        b=eVl4mfW0dlC4oxXblQ8IiUuenVskuu06Ms6bGxi1cAGPUSBe5eW1PlRDcG0tQ43x0j
+         7txD2WPTuw++wIuAKrncABDfRpb9FkeWNkEnYtshLh5mL42PkWvkMhsy9rX6TLaywPby
+         bPt9d6O7Y8/LzQZ3vwPJD7BzpYxhPADSUCGrZxkno6eqg0KsdMlKw8gY6el9NCwAzhON
+         HRimerOkVI1XIhyp6aBHxp4FzpV/kiagfNeDL+Un2kWFnpbJcfr+C2OeG3wa5nFL+DvS
+         cBKjYYQvLtLVcKqzSJSn4ph2Cb/UET0dNf168qgGtyBhinbbkdA6nc/MwNy/T2s04e41
+         lBLg==
+X-Gm-Message-State: AGi0PuZSBVobo2mHZwWZTphV4Tcj8r3DL9M6J3L0WdxmGzZ+UmmdFnUV
+        lIHdnH233VqSvJe9Iv1uwuc=
+X-Google-Smtp-Source: APiQypIFiyR1IL2f8nMpAUjauJb0orpbTeK/JIXN9qbR7trpNDpfeWSNlZ611isWlDjsKZ6MpJqPYA==
+X-Received: by 2002:a1c:770f:: with SMTP id t15mr2141356wmi.178.1588241956107;
+        Thu, 30 Apr 2020 03:19:16 -0700 (PDT)
+Received: from [192.168.43.138] ([37.142.166.235])
+        by smtp.gmail.com with ESMTPSA id 185sm13450326wmc.32.2020.04.30.03.19.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Apr 2020 03:19:15 -0700 (PDT)
+Subject: Re: [PATCH v7 2/7] tpm: tpm_tis: Add verify_data_integrity handle toy
+ tpm_tis_phy_ops
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Eyal.Cohen@nuvoton.com, oshrialkoby85@gmail.com,
+        alexander.steffen@infineon.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org, benoit.houyere@st.com,
+        eajames@linux.ibm.com, joel@jms.id.au, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        oshri.alkoby@nuvoton.com, tmaimon77@gmail.com, gcwilson@us.ibm.com,
+        kgoldman@us.ibm.com, Dan.Morav@nuvoton.com,
+        oren.tanami@nuvoton.com, shmulik.hager@nuvoton.com,
+        amir.mizinski@nuvoton.com,
+        Christophe Ricard <christophe-h.ricard@st.com>
+References: <20200427124931.115697-1-amirmizi6@gmail.com>
+ <20200427124931.115697-3-amirmizi6@gmail.com>
+ <20200429053456.GE8452@linux.intel.com>
+From:   Amir Mizinski <amirmizi6@gmail.com>
+Message-ID: <d0eec29a-20f5-1187-f0c3-c564879d7878@gmail.com>
+Date:   Thu, 30 Apr 2020 10:19:09 +0000
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200429053456.GE8452@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu
-> Sent: 28 April 2020 08:30
-> From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-> 
-> Function hash_long() accepts unsigned long, while currently only one byte
-> is passed from ima_hash_key(), which calculates a key for ima_htable.
-> 
-> Given that hashing the digest does not give clear benefits compared to
-> using the digest itself, remove hash_long() and return the modulus
-> calculated on the first two bytes of the digest with the number of slots.
-> Also reduce the depth of the hash table by doubling the number of slots.
-> 
-> Changelog
-> 
-> v2: directly access the first two bytes of the digest to avoid memory
->     access issues on big endian systems (suggested by David Laight)
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 3323eec921ef ("integrity: IMA as an integrity service provider")
-> Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 
-Acked-by: David.Laight@aculab.com
+On 2020-04-29 05:34, Jarkko Sakkinen wrote:
+> On Mon, Apr 27, 2020 at 03:49:26PM +0300, amirmizi6@gmail.com wrote:
+>> +    bool (*verify_data_integrity)(struct tpm_tis_data *data, const u8 *buf,
+>> +                      size_t len);
+>
+> Why can't the i2c driver verify this in the end of read_bytes()?
+>
 
-> ---
->  security/integrity/ima/ima.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 467dfdbea25c..02796473238b 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -36,7 +36,7 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8 };
->  #define IMA_DIGEST_SIZE		SHA1_DIGEST_SIZE
->  #define IMA_EVENT_NAME_LEN_MAX	255
-> 
-> -#define IMA_HASH_BITS 9
-> +#define IMA_HASH_BITS 10
->  #define IMA_MEASURE_HTABLE_SIZE (1 << IMA_HASH_BITS)
-> 
->  #define IMA_TEMPLATE_FIELD_ID_MAX_LEN	16
-> @@ -179,9 +179,10 @@ struct ima_h_table {
->  };
->  extern struct ima_h_table ima_htable;
-> 
-> -static inline unsigned long ima_hash_key(u8 *digest)
-> +static inline unsigned int ima_hash_key(u8 *digest)
->  {
-> -	return hash_long(*digest, IMA_HASH_BITS);
-> +	/* there is no point in taking a hash of part of a digest */
-> +	return (digest[0] | digest[1] << 8) % IMA_MEASURE_HTABLE_SIZE;
->  }
-> 
->  #define __ima_hooks(hook)		\
-> --
-> 2.17.1
+The TPM calculates the checksum of the entire command data at the end
+of command transmission or the checksum of the entire response data at the
+end of response transmission.
+read_bytes is not necessarily called at the end of response transmission. Same for write_bytes.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+> /Jarkko
 
