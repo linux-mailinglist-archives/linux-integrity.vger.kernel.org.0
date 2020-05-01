@@ -2,35 +2,35 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 363DC1C1CB9
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 May 2020 20:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197F71C1CBB
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 May 2020 20:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730403AbgEASQK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        id S1730411AbgEASQK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Fri, 1 May 2020 14:16:10 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:44938 "EHLO
+Received: from linux.microsoft.com ([13.77.154.182]:44940 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730199AbgEASQG (ORCPT
+        with ESMTP id S1730353AbgEASQH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 1 May 2020 14:16:06 -0400
+        Fri, 1 May 2020 14:16:07 -0400
 Received: from prsriva-linux.hsd1.wa.comcast.net (c-24-19-135-168.hsd1.wa.comcast.net [24.19.135.168])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B755120B71B7;
-        Fri,  1 May 2020 11:16:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B755120B71B7
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0F06220B71CC;
+        Fri,  1 May 2020 11:16:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0F06220B71CC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1588356964;
-        bh=C+sd6G4UJ2+JexgAlN+GBQQZCYjDYuFZwBIY4qNTUnY=;
+        s=default; t=1588356965;
+        bh=9BrQRipJ8L0+PR7w+BHorvxfJzUA9j4XBGTJLVfj2wo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FE0K67KH+iGidLYRls0/tiJkubLxoQ97ysvuINZ+xG2xvYUCwLhOFGRAmQ57mjcZ3
-         U7EJ113gNu57dLZYNAlxPJJ016v2Tss/REEh4OqO/bi6yspMuhUqiDJDB5K+lezddi
-         rR7MPR2Q+LAq8zxI1SLR7tOfLd/BUHuqwDvrX648=
+        b=dXYWCe/pEjs7Fi+XnQMu+RMkIpt/9h3MnBgm7Q2+VEwBZbdx6sDVTTyAjkCdiPNUA
+         YuT/NVpsY75qZMUOKFCTlbiON1R7yy/eMQl1CVsrBmjDY6z8QT95kPpOKND+zuw90X
+         6PhjVOiroY80SgIAOZcHNthBRtuqmz04guUW5w3g=
 From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
 To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     nramas@linux.microsoft.com, prsriva@linux.microsoft.com,
         tusharsu@linux.microsoft.com, balajib@linux.microsoft.com
-Subject: [RFC]{PATCH 1/2] Add a layer of abstraction to use the memory reserved by device tree for ima buffer pass.
-Date:   Fri,  1 May 2020 11:15:51 -0700
-Message-Id: <20200501181552.1184827-2-prsriva@linux.microsoft.com>
+Subject: [RFC][PATCH 2/2] Add support for ima buffer pass using reserved memory arm64
+Date:   Fri,  1 May 2020 11:15:52 -0700
+Message-Id: <20200501181552.1184827-3-prsriva@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200501181552.1184827-1-prsriva@linux.microsoft.com>
 References: <20200501181552.1184827-1-prsriva@linux.microsoft.com>
@@ -41,258 +41,257 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Introduce a device tree layer for to read and store ima buffer
-from the reserved memory section of a device tree.
+ Add support for ima buffer pass using reserved memory for
+ arm64 kexec. Update the arch sepcific code path in kexec file load to store
+ the ima buffer in the reserved memory. The same reserved memory is read on
+ kexec or cold boot.
 
 Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 ---
- drivers/of/Kconfig  |   6 ++
- drivers/of/Makefile |   1 +
- drivers/of/of_ima.c | 165 ++++++++++++++++++++++++++++++++++++++++++++
- include/linux/of.h  |  34 +++++++++
- 4 files changed, 206 insertions(+)
- create mode 100644 drivers/of/of_ima.c
+ arch/arm64/Kconfig                     |  1 +
+ arch/arm64/include/asm/ima.h           | 22 +++++++++
+ arch/arm64/include/asm/kexec.h         |  5 ++
+ arch/arm64/kernel/Makefile             |  1 +
+ arch/arm64/kernel/ima_kexec.c          | 64 ++++++++++++++++++++++++++
+ arch/arm64/kernel/machine_kexec_file.c |  1 +
+ arch/powerpc/include/asm/ima.h         |  3 +-
+ arch/powerpc/kexec/ima.c               | 14 +++++-
+ security/integrity/ima/ima_kexec.c     | 15 ++++--
+ 9 files changed, 119 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
 
-diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-index d91618641be6..edb3c39740fb 100644
---- a/drivers/of/Kconfig
-+++ b/drivers/of/Kconfig
-@@ -107,4 +107,10 @@ config OF_DMA_DEFAULT_COHERENT
- 	# arches should select this if DMA is coherent by default for OF devices
- 	bool
- 
-+config OF_IMA
-+	def_bool y
-+	help
-+	  IMA related wrapper functions to add/remove ima measurement logs during
-+	  kexec_file_load call.
-+
- endif # OF
-diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-index 663a4af0cccd..b4caf083df4e 100644
---- a/drivers/of/Makefile
-+++ b/drivers/of/Makefile
-@@ -14,5 +14,6 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
- obj-$(CONFIG_OF_RESOLVE)  += resolver.o
- obj-$(CONFIG_OF_OVERLAY) += overlay.o
- obj-$(CONFIG_OF_NUMA) += of_numa.o
-+obj-$(CONFIG_OF_IMA) += of_ima.o
- 
- obj-$(CONFIG_OF_UNITTEST) += unittest-data/
-diff --git a/drivers/of/of_ima.c b/drivers/of/of_ima.c
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 40fb05d96c60..bc9e1a91686b 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1069,6 +1069,7 @@ config KEXEC
+ config KEXEC_FILE
+ 	bool "kexec file based system call"
+ 	select KEXEC_CORE
++	select HAVE_IMA_KEXEC
+ 	help
+ 	  This is new version of kexec system call. This system call is
+ 	  file based and takes file descriptors as system call argument
+diff --git a/arch/arm64/include/asm/ima.h b/arch/arm64/include/asm/ima.h
 new file mode 100644
-index 000000000000..131f68d81e2e
+index 000000000000..58033b427e59
 --- /dev/null
-+++ b/drivers/of/of_ima.c
-@@ -0,0 +1,165 @@
++++ b/arch/arm64/include/asm/ima.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_ARM64_IMA_H
++#define _ASM_ARM64_IMA_H
++
++struct kimage;
++
++int is_ima_memory_reserved(void);
++int ima_get_kexec_buffer(void **addr, size_t *size);
++int ima_free_kexec_buffer(void);
++
++#ifdef CONFIG_IMA_KEXEC
++int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
++			      void *buffer, size_t size);
++
++#else
++int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
++			      void *buffer, size_t size)
++{
++	return 0;
++}
++#endif /* CONFIG_IMA_KEXEC */
++#endif /* _ASM_ARM64_IMA_H */
+diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
+index d24b527e8c00..2bd19ccb6c43 100644
+--- a/arch/arm64/include/asm/kexec.h
++++ b/arch/arm64/include/asm/kexec.h
+@@ -100,6 +100,11 @@ struct kimage_arch {
+ 	void *elf_headers;
+ 	unsigned long elf_headers_mem;
+ 	unsigned long elf_headers_sz;
++
++#ifdef CONFIG_IMA_KEXEC
++	phys_addr_t ima_buffer_addr;
++	size_t ima_buffer_size;
++#endif
+ };
+ 
+ extern const struct kexec_file_ops kexec_image_ops;
+diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
+index 4e5b8ee31442..cd3cb7690d51 100644
+--- a/arch/arm64/kernel/Makefile
++++ b/arch/arm64/kernel/Makefile
+@@ -55,6 +55,7 @@ obj-$(CONFIG_RANDOMIZE_BASE)		+= kaslr.o
+ obj-$(CONFIG_HIBERNATION)		+= hibernate.o hibernate-asm.o
+ obj-$(CONFIG_KEXEC_CORE)		+= machine_kexec.o relocate_kernel.o	\
+ 					   cpu-reset.o
++obj-$(CONFIG_HAVE_IMA_KEXEC)		+= ima_kexec.o
+ obj-$(CONFIG_KEXEC_FILE)		+= machine_kexec_file.o kexec_image.o
+ obj-$(CONFIG_ARM64_RELOC_TEST)		+= arm64-reloc-test.o
+ arm64-reloc-test-y := reloc_test_core.o reloc_test_syms.o
+diff --git a/arch/arm64/kernel/ima_kexec.c b/arch/arm64/kernel/ima_kexec.c
+new file mode 100644
+index 000000000000..ff5649333c7c
+--- /dev/null
++++ b/arch/arm64/kernel/ima_kexec.c
+@@ -0,0 +1,64 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (C) 2020 Microsoft Corporation.
++ * Copyright (C) 2019 Microsoft Corporation.
++ *
++ * Authors:
++ * Prakhar Srivastava <prsriva@linux.microsoft.com>
 + */
 +
-+#include <linux/slab.h>
 +#include <linux/kexec.h>
 +#include <linux/of.h>
-+#include <linux/memblock.h>
-+#include <linux/libfdt.h>
-+#include <linux/of_address.h>
-+
-+static bool dtb_status_enabled;
-+static struct resource mem_res;
-+static void *vaddr;
 +
 +
 +/**
-+ * of_is_ima_memory_reserved - check if memory is reserved via device
-+ *							tree.
-+ *	Return: zero when memory is not reserved.
-+ *			positive number on success.
++ * is_ima_memory_reserved - check if memory is reserved via device
++ *			    tree.
++ *	Return: negative or zero when memory is not reserved.
++ *	positive number on success.
 + *
 + */
-+int of_is_ima_memory_reserved(void)
++int is_ima_memory_reserved(void)
 +{
-+	return dtb_status_enabled;
++	return of_is_ima_memory_reserved();
 +}
 +
 +/**
-+ * of_ima_write_buffer - Write the ima buffer into the reserved memory.
-+ *
-+ * ima_buffer - buffer starting address.
-+ * ima_buffer_size - size of segment.
++ * ima_get_kexec_buffer - get IMA buffer from the previous kernel
++ * @addr:	On successful return, set to point to the buffer contents.
++ * @size:	On successful return, set to the buffer size.
 + *
 + * Return: 0 on success, negative errno on error.
 + */
-+int of_ima_write_buffer(void *ima_buffer, size_t ima_buffer_size)
++int ima_get_kexec_buffer(void **addr, size_t *size)
 +{
-+	void *addr;
-+
-+	if (!dtb_status_enabled)
-+		return -EOPNOTSUPP;
-+
-+	vaddr = memremap(mem_res.start, resource_size(&mem_res), MEMREMAP_WB);
-+	pr_info("Mapped reserved memory, vaddr: 0x%0llX, paddr: 0x%0llX\n , size : %lld",
-+	(u64)vaddr, mem_res.start, resource_size(&mem_res));
-+
-+	if (vaddr) {
-+		memcpy(vaddr, &ima_buffer_size, sizeof(size_t));
-+		addr =  vaddr + sizeof(size_t);
-+		memcpy(addr, ima_buffer, ima_buffer_size);
-+		memunmap(vaddr);
-+		vaddr = NULL;
-+	}
-+
-+	return 0;
++	return of_get_ima_buffer(addr, size);
 +}
 +
 +/**
-+ * of_remove_ima_buffer - Write 0(Zero length buffer to read)to the
-+ *                        size location of the buffer.
++ * ima_free_kexec_buffer - free memory used by the IMA buffer
 + *
 + * Return: 0 on success, negative errno on error.
 + */
-+int of_remove_ima_buffer(void)
++int ima_free_kexec_buffer(void)
 +{
-+	size_t empty_buffer_size = 0;
-+
-+	if (!dtb_status_enabled)
-+		return -ENOTSUPP;
-+
-+	if (vaddr) {
-+		memcpy(vaddr, &empty_buffer_size, sizeof(size_t));
-+		memunmap(vaddr);
-+		vaddr = NULL;
-+	}
-+
-+	return 0;
++	return of_remove_ima_buffer();
 +}
 +
++#ifdef CONFIG_IMA_KEXEC
 +/**
-+ * of_ima_get_size_allocated - Get the usable buffer size thats allocated in
-+ *                             the device-tree.
-+ *
-+ * Return: 0 on unavailable node, size of the memory block - (size_t)
-+ */
-+size_t of_ima_get_size_allocated(void)
-+{
-+	size_t size = 0;
-+
-+	if (!dtb_status_enabled)
-+		return size;
-+
-+	size = resource_size(&mem_res) - sizeof(size_t);
-+	return size;
-+}
-+
-+/**
-+ * of_get_ima_buffer - Get IMA buffer address.
-+ *
-+ * @addr:       On successful return, set to point to the buffer contents.
-+ * @size:       On successful return, set to the buffer size.
++ * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA
++ *	measurement log.
++ * @image: - pointer to the kimage, to store the address and size of the
++ *	IMA measurement log.
++ * @load_addr: - the address where the IMA measurement log is stored.
++ * @size - size of the IMA measurement log.
 + *
 + * Return: 0 on success, negative errno on error.
 + */
-+int of_get_ima_buffer(void **addr, size_t *size)
++int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
++			      void *buffer, size_t size)
 +{
-+	if (!dtb_status_enabled)
-+		return -ENOTSUPP;
-+
-+	vaddr = memremap(mem_res.start, resource_size(&mem_res), MEMREMAP_WB);
-+	pr_info("Mapped reserved memory, vaddr: 0x%0llX, paddr: 0x%0llX,\n allocated size : %lld, ima_buffer_size: %ld ",
-+	(u64)vaddr, mem_res.start, resource_size(&mem_res), *(size_t *)vaddr);
-+
-+	*size = *(size_t *)vaddr;
-+	*addr = vaddr + sizeof(size_t);
++	of_ima_write_buffer(buffer, size);
 +	return 0;
 +}
-+
-+static const struct of_device_id ima_buffer_pass_ids[] = {
-+	{
-+		.compatible = "linux,ima_buffer_pass",
-+	},
-+	{}
-+};
-+
-+static const struct of_device_id ima_buffer_pass_match[] = {
-+	{
-+		.name = "ima_buffer_pass",
-+	},
-+};
-+MODULE_DEVICE_TABLE(of, ima_buffer_pass_match);
-+
-+static int __init ima_buffer_pass_init(void)
-+{
-+	int ret = 0;
-+	struct device_node *memnp;
-+	struct device_node *ima_buffer_pass_node;
-+
-+	ima_buffer_pass_node = of_find_matching_node(NULL, ima_buffer_pass_ids);
-+	if (!ima_buffer_pass_node)
-+		return -ENOENT;
-+
-+	memnp = of_parse_phandle(ima_buffer_pass_node, "memory-region", 0);
-+	if (!memnp)
-+		return -ENXIO;
-+
-+	ret = of_address_to_resource(memnp, 0, &mem_res);
-+	if (ret < 0)
-+		return -ENOENT;
-+
-+	of_node_put(memnp);
-+	dtb_status_enabled = true;
-+
-+	return ret;
-+}
-+
-+static void __exit ima_buffer_pass_exit(void)
-+{
-+	pr_info("trying to exit the ima driver\n");
-+}
-+
-+module_init(ima_buffer_pass_init);
-+module_exit(ima_buffer_pass_exit);
-diff --git a/include/linux/of.h b/include/linux/of.h
-index c669c0a4732f..85ce2f24024f 100644
---- a/include/linux/of.h
-+++ b/include/linux/of.h
-@@ -1485,4 +1485,38 @@ static inline int of_overlay_notifier_unregister(struct notifier_block *nb)
++#endif /* CONFIG_IMA_KEXEC */
+diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+index b40c3b0def92..8dc25511142d 100644
+--- a/arch/arm64/kernel/machine_kexec_file.c
++++ b/arch/arm64/kernel/machine_kexec_file.c
+@@ -22,6 +22,7 @@
+ #include <linux/types.h>
+ #include <linux/vmalloc.h>
+ #include <asm/byteorder.h>
++#include <asm/ima.h>
  
- #endif
+ /* relevant device tree properties */
+ #define FDT_PROP_KEXEC_ELFHDR	"linux,elfcorehdr"
+diff --git a/arch/powerpc/include/asm/ima.h b/arch/powerpc/include/asm/ima.h
+index ead488cf3981..a8febc620b42 100644
+--- a/arch/powerpc/include/asm/ima.h
++++ b/arch/powerpc/include/asm/ima.h
+@@ -4,6 +4,7 @@
  
-+#ifdef CONFIG_OF_IMA
-+int of_is_ima_memory_reserved(void);
-+int of_remove_ima_buffer(void);
-+int of_get_ima_buffer(void **addr, size_t *size);
-+size_t of_ima_get_size_allocated(void);
-+int of_ima_write_buffer(void *ima_buffer,
-+		size_t ima_buffer_size);
-+#else
-+static inline int of_is_ima_memory_reserved(void)
+ struct kimage;
+ 
++int is_ima_memory_reserved(void);
+ int ima_get_kexec_buffer(void **addr, size_t *size);
+ int ima_free_kexec_buffer(void);
+ 
+@@ -15,7 +16,7 @@ static inline void remove_ima_buffer(void *fdt, int chosen_node) {}
+ 
+ #ifdef CONFIG_IMA_KEXEC
+ int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
+-			      size_t size);
++			      void *buffer, size_t size);
+ 
+ int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node);
+ #else
+diff --git a/arch/powerpc/kexec/ima.c b/arch/powerpc/kexec/ima.c
+index 720e50e490b6..3823539d4e07 100644
+--- a/arch/powerpc/kexec/ima.c
++++ b/arch/powerpc/kexec/ima.c
+@@ -46,6 +46,18 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
+ 	return 0;
+ }
+ 
++/**
++ * is_ima_memory_reserved - check if memory is reserved via device
++ *			    tree.
++ *	Return: negative or zero when memory is not reserved.
++ *	positive number on success.
++ *
++ */
++int is_ima_memory_reserved(void)
 +{
-+	return -ENOTSUPP;
-+};
-+static inline int of_remove_ima_buffer(void)
-+{
-+	return -ENOTSUPP;
-+};
++	return -EOPNOTSUPP;
++}
 +
-+static inline int of_get_ima_buffer(void **addr, size_t *size)
-+{
-+	return -ENOTSUPP;
-+};
+ /**
+  * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+  * @addr:	On successful return, set to point to the buffer contents.
+@@ -137,7 +149,7 @@ void remove_ima_buffer(void *fdt, int chosen_node)
+  * Return: 0 on success, negative errno on error.
+  */
+ int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
+-			      size_t size)
++			      void *buffer, size_t size)
+ {
+ 	image->arch.ima_buffer_addr = load_addr;
+ 	image->arch.ima_buffer_size = size;
+diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+index 121de3e04af2..3749472c7e18 100644
+--- a/security/integrity/ima/ima_kexec.c
++++ b/security/integrity/ima/ima_kexec.c
+@@ -116,13 +116,18 @@ void ima_add_kexec_buffer(struct kimage *image)
+ 	kbuf.buffer = kexec_buffer;
+ 	kbuf.bufsz = kexec_buffer_size;
+ 	kbuf.memsz = kexec_segment_size;
+-	ret = kexec_add_buffer(&kbuf);
+-	if (ret) {
+-		pr_err("Error passing over kexec measurement buffer.\n");
+-		return;
 +
-+static inline size_t of_ima_get_size_allocated(void)
-+{
-+	return 0;
-+};
++	if (!is_ima_memory_reserved()) {
 +
-+static inline int of_ima_write_buffer(void *ima_buffer,
-+				      size_t ima_buffer_size)
-+{
-+	return -ENOTSUPP;
-+};
-+#endif
-+
- #endif /* _LINUX_OF_H */
++		ret = kexec_add_buffer(&kbuf);
++		if (ret) {
++			pr_err("Error passing over kexec measurement buffer.\n");
++			return;
++		}
+ 	}
+ 
+-	ret = arch_ima_add_kexec_buffer(image, kbuf.mem, kexec_segment_size);
++	ret = arch_ima_add_kexec_buffer(image, kbuf.mem, kexec_buffer,
++					kexec_segment_size);
+ 	if (ret) {
+ 		pr_err("Error passing over kexec measurement buffer.\n");
+ 		return;
 -- 
 2.25.1
 
