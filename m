@@ -2,117 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 041C81C1787
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 May 2020 16:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7566E1C1CB6
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 May 2020 20:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728886AbgEAORP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 1 May 2020 10:17:15 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36650 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728840AbgEAORO (ORCPT
+        id S1730372AbgEASQF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 1 May 2020 14:16:05 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:44936 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729323AbgEASQF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 1 May 2020 10:17:14 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 041EDOVo167060;
-        Fri, 1 May 2020 10:17:02 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30r825ts9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 May 2020 10:17:01 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 041EG4uh013887;
-        Fri, 1 May 2020 14:17:00 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 30mcu5vu75-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 May 2020 14:17:00 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 041EGvQp57016532
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 1 May 2020 14:16:57 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 50247AE045;
-        Fri,  1 May 2020 14:16:57 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA5C9AE053;
-        Fri,  1 May 2020 14:16:55 +0000 (GMT)
-Received: from swastik.ibm.com (unknown [9.65.217.16])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  1 May 2020 14:16:55 +0000 (GMT)
-From:   Nayna Jain <nayna@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: [PATCH v2] powerpc/ima: fix secure boot rules in ima arch policy
-Date:   Fri,  1 May 2020 10:16:52 -0400
-Message-Id: <1588342612-14532-1-git-send-email-nayna@linux.ibm.com>
-X-Mailer: git-send-email 1.8.3.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-05-01_07:2020-04-30,2020-05-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- impostorscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 bulkscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005010107
+        Fri, 1 May 2020 14:16:05 -0400
+Received: from prsriva-linux.hsd1.wa.comcast.net (c-24-19-135-168.hsd1.wa.comcast.net [24.19.135.168])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 69B0E20B717B;
+        Fri,  1 May 2020 11:16:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 69B0E20B717B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1588356964;
+        bh=6P2paN9NO0FWx6B7UbSmB/LcZk3eOjU9tLNhjVjgu2E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I6WH2P/pdHyLi0Ms0NIftrxrXe+LggJ7hhRdRSjWQPWtUqGQ8sApqO1Yf7/gxwjfg
+         jBqK2KkRxnCcN27BqziSFWkTve5Jm5Q/+7D6JhxzDCv21tke7HbHnUVOrygX8vNyQI
+         /1gcdaR3+NpGBfJMe+P1m0qXBpt+Z+roB+ziaAsk=
+From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
+To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     nramas@linux.microsoft.com, prsriva@linux.microsoft.com,
+        tusharsu@linux.microsoft.com, balajib@linux.microsoft.com
+Subject: [RFC][PATCH 0/2] Add support for using reserved memory for ima buffer pass
+Date:   Fri,  1 May 2020 11:15:50 -0700
+Message-Id: <20200501181552.1184827-1-prsriva@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-To prevent verifying the kernel module appended signature twice
-(finit_module), once by the module_sig_check() and again by IMA, powerpc
-secure boot rules define an IMA architecture specific policy rule
-only if CONFIG_MODULE_SIG_FORCE is not enabled. This, unfortunately, does
-not take into account the ability of enabling "sig_enforce" on the boot
-command line (module.sig_enforce=1).
+IMA during kexec(kexec file load) verifies the kernel signature and measures
+the signature of the kernel. The signature in the logs can be used to verfiy the 
+authenticity of the kernel. The logs don not get carried over kexec and thus
+remote attesation cannot verify the signature of the running kernel.
 
-Including the IMA module appraise rule results in failing the finit_module
-syscall, unless the module signing public key is loaded onto the IMA
-keyring.
+Introduce an ABI to carry forward the ima logs over kexec.
+Memory reserved via device tree reservation can be used to store and read
+via the of_* functions.
 
-This patch fixes secure boot policy rules to be based on CONFIG_MODULE_SIG
-instead.
+Reserved memory stores the size(sizeof(size_t)) of the buffer in the starting
+address, followed by the IMA log contents.
 
-Fixes: 4238fad366a6 ("powerpc/ima: Add support to initialize ima policy rules")
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
----
-v2:
-* Fixes the patch description to specify the problem more clearly as asked 
-by Michael Ellerman.
+Tested on:
+  arm64 with Uboot
 
- arch/powerpc/kernel/ima_arch.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Prakhar Srivastava (2):
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
 
-diff --git a/arch/powerpc/kernel/ima_arch.c b/arch/powerpc/kernel/ima_arch.c
-index e34116255ced..957abd592075 100644
---- a/arch/powerpc/kernel/ima_arch.c
-+++ b/arch/powerpc/kernel/ima_arch.c
-@@ -19,12 +19,12 @@ bool arch_ima_get_secureboot(void)
-  * to be stored as an xattr or as an appended signature.
-  *
-  * To avoid duplicate signature verification as much as possible, the IMA
-- * policy rule for module appraisal is added only if CONFIG_MODULE_SIG_FORCE
-+ * policy rule for module appraisal is added only if CONFIG_MODULE_SIG
-  * is not enabled.
-  */
- static const char *const secure_rules[] = {
- 	"appraise func=KEXEC_KERNEL_CHECK appraise_flag=check_blacklist appraise_type=imasig|modsig",
--#ifndef CONFIG_MODULE_SIG_FORCE
-+#ifndef CONFIG_MODULE_SIG
- 	"appraise func=MODULE_CHECK appraise_flag=check_blacklist appraise_type=imasig|modsig",
- #endif
- 	NULL
-@@ -50,7 +50,7 @@ static const char *const secure_and_trusted_rules[] = {
- 	"measure func=KEXEC_KERNEL_CHECK template=ima-modsig",
- 	"measure func=MODULE_CHECK template=ima-modsig",
- 	"appraise func=KEXEC_KERNEL_CHECK appraise_flag=check_blacklist appraise_type=imasig|modsig",
--#ifndef CONFIG_MODULE_SIG_FORCE
-+#ifndef CONFIG_MODULE_SIG
- 	"appraise func=MODULE_CHECK appraise_flag=check_blacklist appraise_type=imasig|modsig",
- #endif
- 	NULL
+ arch/arm64/Kconfig                     |   1 +
+ arch/arm64/include/asm/ima.h           |  22 ++++
+ arch/arm64/include/asm/kexec.h         |   5 +
+ arch/arm64/kernel/Makefile             |   1 +
+ arch/arm64/kernel/ima_kexec.c          |  64 ++++++++++
+ arch/arm64/kernel/machine_kexec_file.c |   1 +
+ arch/powerpc/include/asm/ima.h         |   3 +-
+ arch/powerpc/kexec/ima.c               |  14 ++-
+ drivers/of/Kconfig                     |   6 +
+ drivers/of/Makefile                    |   1 +
+ drivers/of/of_ima.c                    | 165 +++++++++++++++++++++++++
+ include/linux/of.h                     |  34 +++++
+ security/integrity/ima/ima_kexec.c     |  15 ++-
+ 13 files changed, 325 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
+ create mode 100644 drivers/of/of_ima.c
+
 -- 
-2.18.1
+2.25.1
 
