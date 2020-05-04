@@ -2,58 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4011A1C2A6B
-	for <lists+linux-integrity@lfdr.de>; Sun,  3 May 2020 08:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E921C4866
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 May 2020 22:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727093AbgECGw2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 3 May 2020 02:52:28 -0400
-Received: from sonic308-19.consmr.mail.ir2.yahoo.com ([77.238.178.147]:36313
-        "EHLO sonic308-19.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727086AbgECGw2 (ORCPT
+        id S1726476AbgEDUij (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 May 2020 16:38:39 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:34860 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726111AbgEDUij (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 3 May 2020 02:52:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1588488747; bh=HCBdmXO5/l665w/MwYeTKYgprR4CxrsZjPuQNxf8ZBg=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Vv2+uM6nj7NBa97+9iZ6RXO1cBFs3xJP+HRgPl7HgBjtac8RCvfVQ08EkPf9wvtd6a7EGGj+65Am/zblOQf2tenQRtvyQrTaIkxXi0EaPIuJpe67rZ3l/Rac9nowsccpN05nO4XwQN1Bl83IiVkZk+PCXz4hbCrHPwUB6SNu4jITnKKUTZdEoCMXqdjT4jWOrO6TpESSIhocxcAqZV9WUJwckZ7TyfJpbzXfKEyxRwuYv169weQ6N8jT98xSqTqVPhxkXoCz3tisDKt2N+pi35Ju6EaQ4WourUcWXTOyEgg9GxvXOyEOmjFjs70KkR4wBaRIEKMcEDlXV8WNGuidjA==
-X-YMail-OSG: oiMm6S0VM1lm7JxgEsjb6A.UbPyn83nGg7OaotgBSllRQUIyNXVcxaO7lANcZMU
- aHnkUmO3iHTwTH2Mh2L3sU4DIvkvWYYQkxuxnWwUUS1JVXyVchvVojh1INFmb.R7DeZGRDiS9I2c
- XXKAv588Awk2rTYAX7bSoqQsoh7Nys2yX891FS5Zd4GaTmY2brNX_G6qPothhB5UNnDvLBGNw_QE
- 7mdSKynpbGjLpJOeXiSeJjprLNCFxzn9v1CaliBs9O0Pv_79LB875TTdcQU6SUO7_wkx8jqix7Rj
- 5azy63OZ0mFXBIORIYyYUh8wcgVYoLMC7NFChvuGd54aHClywbKsU2r_5CkyO66ck5MI21NOHvIG
- i614CwvPjlRhbymGtF968AJ3n9l2FanPXnfoU8NseEIT.6Rq6a1xo3e3e7bXIe6s0p.XPE_ttZch
- wJPufl5gS36qYWe0Uc5KP1YHtE.ZiiGIr2pJl.XMnBwR_EXsYbfXCtQpVgzwy1YYk6PLIKU9Kmo1
- 29ebFRjkmXNNEEIYH0ZWnjLp9ceL6Cwyu0j7EAc6uF2DfWm16A5ScpXBtUi7elYdGQt6kW5kMUHx
- XuuqCnSuslenjvgqmLhiRxwrY5Ia34HiYzAziX_CRPe6uI6BYfqPdRIjvta7Zl69U7Y1iiTpdiZO
- ha4VKfbUaCqBpR.WgbLLybVcTNWeMZmbJCz_6sm5fl.Q6FzNNLJsq7sX1rv4wNzXCTPrdA8NlWmu
- vJYLG28PIY6.bHeWmSc3WB6nH75QDi629guHNtjDQBLfvEXdpuXzXHwezEnWEEUP7hejcFZ.Bokp
- bxRMWISZhb29Ijt3CqTLd5LAhKoyBsB0.il4dznwP6xpomhTxbS9LYNSYCCDONk_gNlmkSAgwLgn
- KgU1rd29XERkdeBTv3CxzAbtoNJCQZGksbuNqtMh7WOINDDvcNT87CWTTPtw7sjXLSkg_X7VhHQF
- pHgXNaJ6qq5ztcoZ0rRbHh7M3nU_qf4v8QZmnVVrYgAu12uFUbT5gztDZ0hde2W.7e9nLr1CDekM
- oxJiXBIOmqBy_Dn6qm1N9p0eMg6gBGTWW1OqTqRme3uM87ddfPximYkTty6AK_Fo0tcptM6dqQ4D
- ul7nHg2UlwhF8XhoaQnWljb9f8R5Kjs_XvIoguNyhLtDC9dhtjOdX2niFKDstUZSEGtBK.4J.I51
- FjPl_Ht7VmocFuXXt8KgN1fXkseNMoLN4Um2qnYmrR9FO5n8firFT1zY3_MQ.uuY0CyL_2gAdNT6
- dOjVTCauGElamXzGprJneoYzJOMOoPCUZ.ItPCDBpMUboLac_VEnYzinMKXX1_UvF2EoII_pRqw-
- -
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ir2.yahoo.com with HTTP; Sun, 3 May 2020 06:52:27 +0000
-Date:   Sun, 3 May 2020 06:52:26 +0000 (UTC)
-From:   Miss Pamela Render <pamelarender45@gmail.com>
-Reply-To: pamelarender45@gmail.com
-Message-ID: <1137921726.642686.1588488746422@mail.yahoo.com>
-Subject: Greetings From Miss Pamela Render Please I Need Your Urgent Reply!
+        Mon, 4 May 2020 16:38:39 -0400
+Received: from prsriva-linux.hsd1.wa.comcast.net (c-24-19-135-168.hsd1.wa.comcast.net [24.19.135.168])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6895820B717B;
+        Mon,  4 May 2020 13:38:37 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6895820B717B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1588624718;
+        bh=6P2paN9NO0FWx6B7UbSmB/LcZk3eOjU9tLNhjVjgu2E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=K3BUKLXFPzHk5/vc18E2X2yGYsVoVrEVR3Bjxnk0kkNoK1RyGJF07VpR4jNjPdswq
+         PTdElXCTeIvlEoVsKZH0Tk/UjQ3124JQLUs2fMp9IFj0dQ3idwPz+efdmEETdAO+dm
+         kf7mZQNd1GyWhA36D3uKZsPysbTHSk1ty11ir9Jk=
+From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, robh+dt@kernel.org,
+        frowand.list@gmail.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, vincenzo.frascino@arm.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, james.morse@arm.com,
+        bhsharma@redhat.com, mbrugger@suse.com, hsinyi@chromium.org,
+        tao.li@vivo.com, christophe.leroy@c-s.fr,
+        gregkh@linuxfoundation.org, nramas@linux.microsoft.com,
+        prsriva@linux.microsoft.com, tusharsu@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: [RFC][PATCH 0/2] Add support for using reserved memory for ima buffer pass
+Date:   Mon,  4 May 2020 13:38:27 -0700
+Message-Id: <20200504203829.6330-1-prsriva@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1137921726.642686.1588488746422.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15756 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:75.0) Gecko/20100101 Firefox/75.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+IMA during kexec(kexec file load) verifies the kernel signature and measures
+the signature of the kernel. The signature in the logs can be used to verfiy the 
+authenticity of the kernel. The logs don not get carried over kexec and thus
+remote attesation cannot verify the signature of the running kernel.
 
+Introduce an ABI to carry forward the ima logs over kexec.
+Memory reserved via device tree reservation can be used to store and read
+via the of_* functions.
 
-Greetings From Miss Pamela Render Please I Need Your Urgent Reply!
+Reserved memory stores the size(sizeof(size_t)) of the buffer in the starting
+address, followed by the IMA log contents.
 
-I'm Pamela Render, from USA. I am a highly motivated and willing to learn, I'm also hard working lady, very relaible. I really want to establish mutual friendship with you, I will introduce myself better as soon as i receive your email response.
+Tested on:
+  arm64 with Uboot
 
-Kind regards
-Miss Pamela Render
+Prakhar Srivastava (2):
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
+
+ arch/arm64/Kconfig                     |   1 +
+ arch/arm64/include/asm/ima.h           |  22 ++++
+ arch/arm64/include/asm/kexec.h         |   5 +
+ arch/arm64/kernel/Makefile             |   1 +
+ arch/arm64/kernel/ima_kexec.c          |  64 ++++++++++
+ arch/arm64/kernel/machine_kexec_file.c |   1 +
+ arch/powerpc/include/asm/ima.h         |   3 +-
+ arch/powerpc/kexec/ima.c               |  14 ++-
+ drivers/of/Kconfig                     |   6 +
+ drivers/of/Makefile                    |   1 +
+ drivers/of/of_ima.c                    | 165 +++++++++++++++++++++++++
+ include/linux/of.h                     |  34 +++++
+ security/integrity/ima/ima_kexec.c     |  15 ++-
+ 13 files changed, 325 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
+ create mode 100644 drivers/of/of_ima.c
+
+-- 
+2.25.1
+
