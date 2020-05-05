@@ -2,145 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4824C1C5B6E
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2020 17:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF3F1C5C5C
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2020 17:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730021AbgEEPdW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 5 May 2020 11:33:22 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:3206 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730347AbgEEPdQ (ORCPT
+        id S1729464AbgEEPrU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 5 May 2020 11:47:20 -0400
+Received: from smtp-190c.mail.infomaniak.ch ([185.125.25.12]:55737 "EHLO
+        smtp-190c.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729317AbgEEPrU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 5 May 2020 11:33:16 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 045FV0Vs191030;
-        Tue, 5 May 2020 11:33:12 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30u9aybp9w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 May 2020 11:33:12 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 045FVenr193308;
-        Tue, 5 May 2020 11:33:11 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30u9aybp8r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 May 2020 11:33:10 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 045FUr9J031283;
-        Tue, 5 May 2020 15:33:08 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 30s0g5q982-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 May 2020 15:33:08 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 045FX6Do55967892
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 5 May 2020 15:33:06 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B9EFA405B;
-        Tue,  5 May 2020 15:33:06 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D7BFA405C;
-        Tue,  5 May 2020 15:33:05 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.200.227])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  5 May 2020 15:33:05 +0000 (GMT)
-Message-ID: <1588692785.5157.11.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH] ima: verify mprotect change is consistent with mmap
- policy
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Jann Horn <jannh@google.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 05 May 2020 11:33:05 -0400
-In-Reply-To: <7812a3a7-f47d-c924-c12e-f417bb6f43dc@linux.microsoft.com>
-References: <1588627060-7399-1-git-send-email-zohar@linux.ibm.com>
-         <7812a3a7-f47d-c924-c12e-f417bb6f43dc@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Tue, 5 May 2020 11:47:20 -0400
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49GkMz6zCDzlhnlg;
+        Tue,  5 May 2020 17:36:15 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49GkMy4bmmzlvfCB;
+        Tue,  5 May 2020 17:36:14 +0200 (CEST)
+Subject: Re: [PATCH v5 0/6] Add support for O_MAYEXEC
+To:     linux-kernel@vger.kernel.org
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20200505153156.925111-1-mic@digikod.net>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <d4616bc0-39df-5d6c-9f5b-d84cf6e65960@digikod.net>
+Date:   Tue, 5 May 2020 17:36:14 +0200
+User-Agent: 
+MIME-Version: 1.0
+In-Reply-To: <20200505153156.925111-1-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: fr
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-05-05_08:2020-05-04,2020-05-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
- malwarescore=0 clxscore=1015 mlxscore=0 phishscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2005050121
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-05-04 at 15:51 -0700, Lakshmi Ramasubramanian wrote:
-> On 5/4/20 2:17 PM, Mimi Zohar wrote:
-> 
-> Hi Mimi,
-> 
-> > +int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
-> > +{
-> > +	struct ima_template_desc *template;
-> > +	struct inode *inode;
-> > +	int result = 0;
-> > +	int action;
-> > +	u32 secid;
-> > +	int pcr;
-> > +
-> > +	if (vma->vm_file && (prot & PROT_EXEC) && !(vma->vm_flags & VM_EXEC)) {
-> 
-> Just a suggestion:
-> Maybe you could do the negative of the above check and return, so that 
-> the block within the if statement doesn't have to be indented.
 
-Good suggestion.
-
+On 05/05/2020 17:31, Mickaël Salaün wrote:
+> Hi,
 > 
-> > +		inode = file_inode(vma->vm_file);
-> > +
-> > +		security_task_getsecid(current, &secid);
-> > +		action = ima_get_action(inode, current_cred(), secid, MAY_EXEC,
-> > +					MMAP_CHECK, &pcr, &template, 0);
-> > +
-> > +		if (action & IMA_APPRAISE_SUBMASK)
-> > +			result = -EPERM;
-> > +
-> > +		if ((action & IMA_APPRAISE_SUBMASK) || (action & IMA_MEASURE)) {
+> This fifth patch series add new kernel configurations (OMAYEXEC_STATIC,
+> OMAYEXEC_ENFORCE_MOUNT, and OMAYEXEC_ENFORCE_FILE) to enable to
+> configure the security policy at kernel build time.  As requested by
+> Mimi Zohar, I completed the series with one of her patches for IMA.
 > 
-> action is checked for IMA_APPRAISE_SUBMASK bits in the previous if 
-> statement. Does it need to be checked again in the above if statement?
-
-Agreed, the code should be cleaned up here too.  In either the
-measurement or the appraisal case, mprotect modifying the execute mmap
-flag should be audited, but only in the appraisal case is the request
-denied.
-
-Mimi
-
+> The goal of this patch series is to enable to control script execution
+> with interpreters help.  A new O_MAYEXEC flag, usable through
+> openat2(2), is added to enable userspace script interpreter to delegate
+> to the kernel (and thus the system security policy) the permission to
+> interpret/execute scripts or other files containing what can be seen as
+> commands.
 > 
-> > +			struct file *file = vma->vm_file;
-> > +			char *pathbuf = NULL;
-> > +			const char *pathname;
-> > +			char filename[NAME_MAX];
-> > +
-> > +			pathname = ima_d_path(&file->f_path, &pathbuf,
-> > +					      filename);
-> > +			integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode,
-> > +					    pathname, "collect_data",
-> > +					    "failed-mprotect", result, 0);
-> > +
-> > +			if (pathbuf)
-> > +				__putname(pathbuf);
-> > +		}
-> > +	}
-> > +	return result;
-> > +}
+> A simple system-wide security policy can be enforced by the system
+> administrator through a sysctl configuration consistent with the mount
+> points or the file access rights.  The documentation patch explains the
+> prerequisites.
 > 
-> thanks,
->   -lakshmi
+> Furthermore, the security policy can also be delegated to an LSM, either
+> a MAC system or an integrity system.  For instance, the new kernel
+> MAY_OPENEXEC flag closes a major IMA measurement/appraisal interpreter
+> integrity gap by bringing the ability to check the use of scripts [1].
+> Other uses are expected, such as for openat2(2) [2], SGX integration
+> [3], bpffs [4] or IPE [5].
 > 
+> Userspace needs to adapt to take advantage of this new feature.  For
+> example, the PEP 578 [6] (Runtime Audit Hooks) enables Python 3.8 to be
+> extended with policy enforcement points related to code interpretation,
+> which can be used to align with the PowerShell audit features.
+> Additional Python security improvements (e.g. a limited interpreter
+> withou -c, stdin piping of code) are on their way.
+> 
+> The initial idea come from CLIP OS 4 and the original implementation has
+> been used for more than 12 years:
+> https://github.com/clipos-archive/clipos4_doc
+> 
+> An introduction to O_MAYEXEC was given at the Linux Security Summit
+> Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+> https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+> The "write xor execute" principle was explained at Kernel Recipes 2018 -
+> CLIP OS: a defense-in-depth OS:
+> https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+> 
+> This patch series can be applied on top of v5.7-rc4.  This can be tested
+> with CONFIG_SYSCTL.  I would really appreciate constructive comments on
+> this patch series.
+> 
+> Previous version:
+> https://lore.kernel.org/lkml/20200428175129.634352-1-mic@digikod.net/
 
+The previous version (v4) is
+https://lore.kernel.org/lkml/20200430132320.699508-1-mic@digikod.net/
