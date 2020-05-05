@@ -2,24 +2,36 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF3F1C5C5C
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2020 17:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F101C5C16
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2020 17:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729464AbgEEPrU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 5 May 2020 11:47:20 -0400
-Received: from smtp-190c.mail.infomaniak.ch ([185.125.25.12]:55737 "EHLO
-        smtp-190c.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729317AbgEEPrU (ORCPT
+        id S1730299AbgEEPom (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 5 May 2020 11:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729510AbgEEPom (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 5 May 2020 11:47:20 -0400
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49GkMz6zCDzlhnlg;
-        Tue,  5 May 2020 17:36:15 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49GkMy4bmmzlvfCB;
-        Tue,  5 May 2020 17:36:14 +0200 (CEST)
-Subject: Re: [PATCH v5 0/6] Add support for O_MAYEXEC
-To:     linux-kernel@vger.kernel.org
+        Tue, 5 May 2020 11:44:42 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F6DC061A0F;
+        Tue,  5 May 2020 08:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=4pG9Q3mxGfQII0zN/KiOtZT4U+FTy9kLkMvMkZu6fuA=; b=aDgjCnQ88jQ8GWFdgLyeqhtywg
+        4RPASZALdwfDM4GEFmKBqGjztwc5XP2UhxJQ4+jaUW9tf6+iQklDSbXlEDQayXqxCOiWMpxtilwdA
+        qp5fykFBHZVnEqCXoKwGlpmPY9ZWatL+x47eD0VMek2+hRum8YLdbmR0a2Iyqi3M2nRUbRoaQqIlP
+        jsZladMw2HtoZURiCgQsp/MwTnPYCsFnoE4TLRv+s9p+GYNhWayJPcsnIm0MxlP2fGRWP2lWct/uo
+        oHca+LId/MCvpFZSlrm3j1tjVqMkj42sniuYrbHH/nWWF0D1RfTSFI3Hs29hcwIOnq1v7hwdGeZ94
+        Ibk/A2Ng==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jVzkM-0004EJ-PU; Tue, 05 May 2020 15:44:38 +0000
+Subject: Re: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
+ through O_MAYEXEC
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org
 Cc:     Aleksa Sarai <cyphar@cyphar.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
@@ -52,74 +64,70 @@ Cc:     Aleksa Sarai <cyphar@cyphar.com>,
         linux-security-module@vger.kernel.org,
         linux-fsdevel@vger.kernel.org
 References: <20200505153156.925111-1-mic@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <d4616bc0-39df-5d6c-9f5b-d84cf6e65960@digikod.net>
-Date:   Tue, 5 May 2020 17:36:14 +0200
-User-Agent: 
+ <20200505153156.925111-4-mic@digikod.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <fb6e2d7d-a372-3e79-214d-3ac9a451cd0a@infradead.org>
+Date:   Tue, 5 May 2020 08:44:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200505153156.925111-1-mic@digikod.net>
+In-Reply-To: <20200505153156.925111-4-mic@digikod.net>
 Content-Type: text/plain; charset=utf-8
-Content-Language: fr
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 5/5/20 8:31 AM, Mickaël Salaün wrote:
+> diff --git a/security/Kconfig b/security/Kconfig
+> index cd3cc7da3a55..d8fac9240d14 100644
+> --- a/security/Kconfig
+> +++ b/security/Kconfig
+> @@ -230,6 +230,32 @@ config STATIC_USERMODEHELPER_PATH
+>  	  If you wish for all usermode helper programs to be disabled,
+>  	  specify an empty string here (i.e. "").
+>  
+> +menuconfig OMAYEXEC_STATIC
+> +	tristate "Configure O_MAYEXEC behavior at build time"
+> +	---help---
+> +	  Enable to enforce O_MAYEXEC at build time, and disable the dedicated
+> +	  fs.open_mayexec_enforce sysctl.
 
-On 05/05/2020 17:31, Mickaël Salaün wrote:
-> Hi,
-> 
-> This fifth patch series add new kernel configurations (OMAYEXEC_STATIC,
-> OMAYEXEC_ENFORCE_MOUNT, and OMAYEXEC_ENFORCE_FILE) to enable to
-> configure the security policy at kernel build time.  As requested by
-> Mimi Zohar, I completed the series with one of her patches for IMA.
-> 
-> The goal of this patch series is to enable to control script execution
-> with interpreters help.  A new O_MAYEXEC flag, usable through
-> openat2(2), is added to enable userspace script interpreter to delegate
-> to the kernel (and thus the system security policy) the permission to
-> interpret/execute scripts or other files containing what can be seen as
-> commands.
-> 
-> A simple system-wide security policy can be enforced by the system
-> administrator through a sysctl configuration consistent with the mount
-> points or the file access rights.  The documentation patch explains the
-> prerequisites.
-> 
-> Furthermore, the security policy can also be delegated to an LSM, either
-> a MAC system or an integrity system.  For instance, the new kernel
-> MAY_OPENEXEC flag closes a major IMA measurement/appraisal interpreter
-> integrity gap by bringing the ability to check the use of scripts [1].
-> Other uses are expected, such as for openat2(2) [2], SGX integration
-> [3], bpffs [4] or IPE [5].
-> 
-> Userspace needs to adapt to take advantage of this new feature.  For
-> example, the PEP 578 [6] (Runtime Audit Hooks) enables Python 3.8 to be
-> extended with policy enforcement points related to code interpretation,
-> which can be used to align with the PowerShell audit features.
-> Additional Python security improvements (e.g. a limited interpreter
-> withou -c, stdin piping of code) are on their way.
-> 
-> The initial idea come from CLIP OS 4 and the original implementation has
-> been used for more than 12 years:
-> https://github.com/clipos-archive/clipos4_doc
-> 
-> An introduction to O_MAYEXEC was given at the Linux Security Summit
-> Europe 2018 - Linux Kernel Security Contributions by ANSSI:
-> https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
-> The "write xor execute" principle was explained at Kernel Recipes 2018 -
-> CLIP OS: a defense-in-depth OS:
-> https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
-> 
-> This patch series can be applied on top of v5.7-rc4.  This can be tested
-> with CONFIG_SYSCTL.  I would really appreciate constructive comments on
-> this patch series.
-> 
-> Previous version:
-> https://lore.kernel.org/lkml/20200428175129.634352-1-mic@digikod.net/
+That help message is a bit confusing IMO.  Does setting/enabling OMAYEXEC_STATIC
+both enforce O_MAYEXEC at build time and also disable the dedicated sysctl?
 
-The previous version (v4) is
-https://lore.kernel.org/lkml/20200430132320.699508-1-mic@digikod.net/
+Or are these meant to be alternatives, one for what Enabling this kconfig symbol
+does and the other for what Disabling this symbol does?  If so, it doesn't
+say that.
+
+> +
+> +	  See Documentation/admin-guide/sysctl/fs.rst for more details.
+> +
+> +if OMAYEXEC_STATIC
+> +
+> +config OMAYEXEC_ENFORCE_MOUNT
+> +	bool "Mount restriction"
+> +	default y
+> +	---help---
+> +	  Forbid opening files with the O_MAYEXEC option if their underlying VFS is
+> +	  mounted with the noexec option or if their superblock forbids execution
+> +	  of its content (e.g., /proc).
+> +
+> +config OMAYEXEC_ENFORCE_FILE
+> +	bool "File permission restriction"
+> +	---help---
+> +	  Forbid opening files with the O_MAYEXEC option if they are not marked as
+> +	  executable for the current process (e.g., POSIX permissions).
+> +
+> +endif # OMAYEXEC_STATIC
+> +
+>  source "security/selinux/Kconfig"
+>  source "security/smack/Kconfig"
+>  source "security/tomoyo/Kconfig"
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
