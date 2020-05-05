@@ -2,198 +2,148 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D23621C5EDD
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2020 19:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE551C5F06
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2020 19:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730563AbgEERbJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 5 May 2020 13:31:09 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56558 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729199AbgEERbJ (ORCPT
+        id S1729729AbgEERkl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 5 May 2020 13:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728804AbgEERkl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 5 May 2020 13:31:09 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 045H2DC3174902;
-        Tue, 5 May 2020 13:31:06 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30s1sx6e6a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 May 2020 13:31:05 -0400
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 045HQ1gP047636;
-        Tue, 5 May 2020 13:31:05 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30s1sx6e5e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 May 2020 13:31:05 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 045HKTBc015153;
-        Tue, 5 May 2020 17:31:03 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 30s0g5qfa8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 May 2020 17:31:03 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 045HV1kV1835350
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 5 May 2020 17:31:01 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04690A4062;
-        Tue,  5 May 2020 17:31:01 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BBEE3A4060;
-        Tue,  5 May 2020 17:30:59 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.161.225])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  5 May 2020 17:30:59 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, Jann Horn <jannh@google.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1] ima: verify mprotect change is consistent with mmap policy
-Date:   Tue,  5 May 2020 13:30:45 -0400
-Message-Id: <1588699845-6196-1-git-send-email-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.7.5
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-05-05_09:2020-05-04,2020-05-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 phishscore=0 adultscore=0
- impostorscore=0 mlxlogscore=915 bulkscore=0 clxscore=1015 suspectscore=3
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005050129
+        Tue, 5 May 2020 13:40:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3DDC061A0F;
+        Tue,  5 May 2020 10:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=+xKysGAdhf/irwW/OUccg7CXNaBzgyUUi6WNfDZAgIs=; b=pzz9Y2va31nko2N6/Sd/aAdmjx
+        11wG4XS7B/vo1wmHvyi3AFEd0zfPTEKsKen7bxEghsLS74BaQbKY01v1JfH3xwGat+/KNFwZDIwp4
+        /aDKWkwFByer7OhgWm9/PL6eP0EQ61MWoI4qJeXAROCPhhIxPL7EDhjJb6zhjYvrA4omRhDOlcXjq
+        QXqgN7v/sjP+qH40Vhfb71Xok/cS5MqQ14q+s7zAsFTAwk0iUF3gE/hqWYnvyifWpe4FRFO/WwY6k
+        oBjhGo1wwmn4PzG9WByt+gnbe2jdgrjeZ2VCpyEQHAIIdaE1yKHTmOpY4M2gUEzmgJBl1+nbicnfi
+        +akUAe6w==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jW1YX-0003GE-34; Tue, 05 May 2020 17:40:33 +0000
+Subject: Re: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
+ through O_MAYEXEC
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20200505153156.925111-1-mic@digikod.net>
+ <20200505153156.925111-4-mic@digikod.net>
+ <fb6e2d7d-a372-3e79-214d-3ac9a451cd0a@infradead.org>
+ <3555aab7-f4e0-80eb-0dfc-a87cfcba5e68@digikod.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <9e3ec812-128d-cc46-5206-ab72b737b274@infradead.org>
+Date:   Tue, 5 May 2020 10:40:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <3555aab7-f4e0-80eb-0dfc-a87cfcba5e68@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Files can be mmap'ed read/write and later changed to execute to circumvent
-IMA's mmap appraise policy rules.  Due to locking issues (mmap semaphore
-would be taken prior to i_mutex), files can not be measured or appraised at
-this point.  Eliminate this integrity gap, by denying the mprotect
-PROT_EXECUTE change, if an mmap appraise policy rule exists.
+On 5/5/20 9:55 AM, Mickaël Salaün wrote:
+> 
+> 
+> On 05/05/2020 17:44, Randy Dunlap wrote:
+>> On 5/5/20 8:31 AM, Mickaël Salaün wrote:
+>>> diff --git a/security/Kconfig b/security/Kconfig
+>>> index cd3cc7da3a55..d8fac9240d14 100644
+>>> --- a/security/Kconfig
+>>> +++ b/security/Kconfig
+>>> @@ -230,6 +230,32 @@ config STATIC_USERMODEHELPER_PATH
+>>>  	  If you wish for all usermode helper programs to be disabled,
+>>>  	  specify an empty string here (i.e. "").
+>>>  
+>>> +menuconfig OMAYEXEC_STATIC
+>>> +	tristate "Configure O_MAYEXEC behavior at build time"
+>>> +	---help---
+>>> +	  Enable to enforce O_MAYEXEC at build time, and disable the dedicated
+>>> +	  fs.open_mayexec_enforce sysctl.
+>>
+>> That help message is a bit confusing IMO.  Does setting/enabling OMAYEXEC_STATIC
+>> both enforce O_MAYEXEC at build time and also disable the dedicated sysctl?
+> 
+> Yes. What about this?
+> "Define the O_MAYEXEC policy at build time only. As a side effect, this
+> also disables the fs.open_mayexec_enforce sysctl."
+> 
 
-On mprotect change success, return 0.  On failure, return -EACESS.
+Yes, much better. Thanks.
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
-Changelog v1:
-- Reverse tests to remove code indentation. (Lakshmi Ramasubramanian)
-- General code cleanup, including adding comments.
+>>
+>> Or are these meant to be alternatives, one for what Enabling this kconfig symbol
+>> does and the other for what Disabling this symbol does?  If so, it doesn't
+>> say that.
+>>
+>>> +
+>>> +	  See Documentation/admin-guide/sysctl/fs.rst for more details.
+>>> +
+>>> +if OMAYEXEC_STATIC
+>>> +
+>>> +config OMAYEXEC_ENFORCE_MOUNT
+>>> +	bool "Mount restriction"
+>>> +	default y
+>>> +	---help---
+>>> +	  Forbid opening files with the O_MAYEXEC option if their underlying VFS is
+>>> +	  mounted with the noexec option or if their superblock forbids execution
+>>> +	  of its content (e.g., /proc).
+>>> +
+>>> +config OMAYEXEC_ENFORCE_FILE
+>>> +	bool "File permission restriction"
+>>> +	---help---
+>>> +	  Forbid opening files with the O_MAYEXEC option if they are not marked as
+>>> +	  executable for the current process (e.g., POSIX permissions).
+>>> +
+>>> +endif # OMAYEXEC_STATIC
+>>> +
+>>>  source "security/selinux/Kconfig"
+>>>  source "security/smack/Kconfig"
+>>>  source "security/tomoyo/Kconfig"
+>>
+>>
 
- include/linux/ima.h               |  7 ++++++
- security/integrity/ima/ima_main.c | 51 +++++++++++++++++++++++++++++++++++++++
- security/security.c               |  7 +++++-
- 3 files changed, 64 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index aefe758f4466..9164e1534ec9 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -18,6 +18,7 @@ extern int ima_file_check(struct file *file, int mask);
- extern void ima_post_create_tmpfile(struct inode *inode);
- extern void ima_file_free(struct file *file);
- extern int ima_file_mmap(struct file *file, unsigned long prot);
-+extern int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot);
- extern int ima_load_data(enum kernel_load_data_id id);
- extern int ima_read_file(struct file *file, enum kernel_read_file_id id);
- extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
-@@ -70,6 +71,12 @@ static inline int ima_file_mmap(struct file *file, unsigned long prot)
- 	return 0;
- }
- 
-+static inline int ima_file_mprotect(struct vm_area_struct *vma,
-+				    unsigned long prot)
-+{
-+	return 0;
-+}
-+
- static inline int ima_load_data(enum kernel_load_data_id id)
- {
- 	return 0;
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index f96f151294e6..800fb3bba418 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -394,6 +394,57 @@ int ima_file_mmap(struct file *file, unsigned long prot)
- }
- 
- /**
-+ * ima_file_mprotect - based on policy, limit mprotect change
-+ * @prot: contains the protection that will be applied by the kernel.
-+ *
-+ * Files can be mmap'ed read/write and later changed to execute to circumvent
-+ * IMA's mmap appraisal policy rules.  Due to locking issues (mmap semaphore
-+ * would be taken before i_mutex), files can not be measured or appraised at
-+ * this point.  Eliminate this integrity gap by denying the mprotect
-+ * PROT_EXECUTE change, if an mmap appraise policy rule exists.
-+ *
-+ * On mprotect change success, return 0.  On failure, return -EACESS.
-+ */
-+int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
-+{
-+	struct ima_template_desc *template;
-+	struct file *file = vma->vm_file;
-+	char filename[NAME_MAX];
-+	char *pathbuf = NULL;
-+	const char *pathname = NULL;
-+	struct inode *inode;
-+	int result = 0;
-+	int action;
-+	u32 secid;
-+	int pcr;
-+
-+	/* Is mprotect making an mmap'ed file executable? */
-+	if (!vma->vm_file || !(prot & PROT_EXEC) || (vma->vm_flags & VM_EXEC))
-+		return 0;
-+
-+	security_task_getsecid(current, &secid);
-+	inode = file_inode(vma->vm_file);
-+	action = ima_get_action(inode, current_cred(), secid, MAY_EXEC,
-+				MMAP_CHECK, &pcr, &template, 0);
-+
-+	/* Is the mmap'ed file in policy? */
-+	if (!(action & (IMA_MEASURE | IMA_APPRAISE_SUBMASK)))
-+		return 0;
-+
-+	if (action & IMA_APPRAISE_SUBMASK)
-+		result = -EPERM;
-+
-+	file = vma->vm_file;
-+	pathname = ima_d_path(&file->f_path, &pathbuf, filename);
-+	integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, pathname,
-+			    "collect_data", "failed-mprotect", result, 0);
-+	if (pathbuf)
-+		__putname(pathbuf);
-+
-+	return result;
-+}
-+
-+/**
-  * ima_bprm_check - based on policy, collect/store measurement.
-  * @bprm: contains the linux_binprm structure
-  *
-diff --git a/security/security.c b/security/security.c
-index 7fed24b9d57e..dd0917c5bfe9 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -1512,7 +1512,12 @@ int security_mmap_addr(unsigned long addr)
- int security_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
- 			    unsigned long prot)
- {
--	return call_int_hook(file_mprotect, 0, vma, reqprot, prot);
-+	int ret;
-+
-+	ret = call_int_hook(file_mprotect, 0, vma, reqprot, prot);
-+	if (ret)
-+		return ret;
-+	return ima_file_mprotect(vma, prot);
- }
- 
- int security_file_lock(struct file *file, unsigned int cmd)
 -- 
-2.7.5
+~Randy
 
