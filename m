@@ -2,112 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C98951C79D9
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 May 2020 21:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB6C1C7A70
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 May 2020 21:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbgEFTDL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 6 May 2020 15:03:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60740 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725985AbgEFTDK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 6 May 2020 15:03:10 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2539520A8B;
-        Wed,  6 May 2020 19:03:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588791790;
-        bh=Yqg0FR03ICsngX2rB2sb2xuYkFg82NaW1zU2YIloR8Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bflTPGqsgd+C46NDp/kwSeS28/ILDYVhFL2jv6BZuKjpMUR/ktwXLjhxxhqV4DNxw
-         BdV11rDjdoML/1GZLEggZCBW3Rv5+aD1y+3mF+n45ozmDuANoOdC0IriusDb27jvo9
-         q1hg6eJ4AJRQ26qvWHRcDAwDx1PTrIFvQ0txMZVk=
-Received: by mail-ot1-f43.google.com with SMTP id i27so2269092ota.7;
-        Wed, 06 May 2020 12:03:10 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZEh5UQxYharW/JZCj4jfLCggDzrUz/geGqhTsr1EzUkIr8Vxo1
-        KmI4Uxy3tiSQbG9DLSvOB1Gbilms3QdG7gAbiQ==
-X-Google-Smtp-Source: APiQypK+MaFY1Iurl8mjdABioyqSrQP03zlo2Xmdf7/+1qRLRnupLAu9sz8qI0nEExTPXKjiGpEvDyKMczIxLkNxBhk=
-X-Received: by 2002:a9d:1441:: with SMTP id h59mr7763912oth.192.1588791789287;
- Wed, 06 May 2020 12:03:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200427124931.115697-1-amirmizi6@gmail.com> <20200427124931.115697-7-amirmizi6@gmail.com>
- <20200505161226.GA555@bogus> <c2760659-ec14-237e-e060-5d9a2d7c7e4a@gmail.com>
-In-Reply-To: <c2760659-ec14-237e-e060-5d9a2d7c7e4a@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 6 May 2020 14:02:57 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLEkoa1+nnWBQHah14_6BozkMzjcSpbk-hhLS=Rnqaa8Q@mail.gmail.com>
-Message-ID: <CAL_JsqLEkoa1+nnWBQHah14_6BozkMzjcSpbk-hhLS=Rnqaa8Q@mail.gmail.com>
-Subject: Re: [PATCH v7 6/7] tpm: Add YAML schema for TPM TIS I2C options
-To:     Amir Mizinski <amirmizi6@gmail.com>
-Cc:     Eyal.Cohen@nuvoton.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Oshri Alkobi <oshrialkoby85@gmail.com>,
-        Alexander Steffen <alexander.steffen@infineon.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        benoit.houyere@st.com, Eddie James <eajames@linux.ibm.com>,
-        Joel Stanley <joel@jms.id.au>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        IS20 Oshri Alkoby <oshri.alkoby@nuvoton.com>,
-        Tomer Maimon <tmaimon77@gmail.com>, gcwilson@us.ibm.com,
-        kgoldman@us.ibm.com, IS30 Dan Morav <Dan.Morav@nuvoton.com>,
-        oren.tanami@nuvoton.com, shmulik.hager@nuvoton.com,
-        amir.mizinski@nuvoton.com
+        id S1726538AbgEFTpH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 6 May 2020 15:45:07 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50670 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729402AbgEFTpH (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 6 May 2020 15:45:07 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 046JebdV000769;
+        Wed, 6 May 2020 15:45:00 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30u8t7a58p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 May 2020 15:45:00 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 046JeaWT000630;
+        Wed, 6 May 2020 15:44:59 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30u8t7a57n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 May 2020 15:44:59 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 046JUXjf028572;
+        Wed, 6 May 2020 19:44:57 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 30s0g5sugr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 May 2020 19:44:56 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 046Jisow524580
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 May 2020 19:44:54 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A9D294203F;
+        Wed,  6 May 2020 19:44:54 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8BA9542045;
+        Wed,  6 May 2020 19:44:53 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.197.80])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  6 May 2020 19:44:53 +0000 (GMT)
+Message-ID: <1588794293.4624.21.camel@linux.ibm.com>
+Subject: Re: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, david.safford@gmail.com,
+        viro@zeniv.linux.org.uk, jmorris@namei.org,
+        John Johansen <john.johansen@canonical.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com
+Date:   Wed, 06 May 2020 15:44:53 -0400
+In-Reply-To: <20200429073935.11913-1-roberto.sassu@huawei.com>
+References: <20200429073935.11913-1-roberto.sassu@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-06_09:2020-05-05,2020-05-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 suspectscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ malwarescore=0 priorityscore=1501 phishscore=0 clxscore=1011
+ impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005060154
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 6, 2020 at 10:20 AM Amir Mizinski <amirmizi6@gmail.com> wrote:
->
->
-> On 2020-05-05 16:12, Rob Herring wrote:
-> > On Mon, Apr 27, 2020 at 03:49:30PM +0300, amirmizi6@gmail.com wrote:
-> >> From: Amir Mizinski <amirmizi6@gmail.com>
-> >>
-> >> Added a YAML schema to support tpm tis i2c related dt-bindings for the I2c
-> >> PTP based physical layer.
-> >>
-> >> This patch adds the documentation for corresponding device tree bindings of
-> >> I2C based Physical TPM.
-> >> Refer to the 'I2C Interface Definition' section in
-> >> 'TCG PC Client PlatformTPMProfile(PTP) Specification' publication
-> >> for specification.
-> >
-> > Again, DT bindings describe h/w devices, not just a protocol. A device
-> > is more than just a protocol interface. There's clocks, power rails,
-> > resets, interrupts, firmware, etc.
-> >
-> > Unless there's something special about TPM chips that makes none of this
-> > applicable and no chip will ever have any quirks (or extensions) in
-> > their protocol to work-around, then you need compatible string(s) that
-> > are specific to the TPM chip. You can have tcg,tpm-tis-i2c as a
-> > fallback, but you need specific compatible to handle any quirks.
-> >
-> > Rob
->
-> Hello Rob, currently yes. All TPM chip are implemented according to the TGC specs and should use the same properties for this I2C driver.
-> I can't say for sure that it will be the case in the future.
+[Cc: John Johansen] 
 
-Exactly. That's the issue. If you have just "tcg,tpm-tis-i2c" and need
-to handle some difference in the future, then you can't without
-updating the DT. You must be able to handle future issues without
-updating the DT.
+On Wed, 2020-04-29 at 09:39 +0200, Roberto Sassu wrote:
+> EVM is a module for the protection of the integrity of file metadata. It
+> protects security-relevant extended attributes, and some file attributes
+> such as the UID and the GID. It protects their integrity with an HMAC or
+> with a signature.
+> 
+> What makes EVM different from other LSMs is that it makes a security
+> decision depending on multiple pieces of information, which cannot be
+> managed atomically by the system.
+> 
+> Example: cp -a file.orig file.dest
+> 
+> If security.selinux, security.ima and security.evm must be preserved, cp
+> will invoke setxattr() for each xattr, and EVM performs a verification
+> during each operation. The problem is that copying security.evm from
+> file.orig to file.dest will likely break the following EVM verifications if
+> some metadata still have to be copied. EVM has no visibility on the
+> metadata of the source file, so it cannot determine when the copy can be
+> considered complete.
 
-> Shouldn't we use the standard "tcg,tpm-tis-i2c" compatible, and if a specific TPM chip will deviate from the specs, the vendor should add an additional compatible string for it?
+I remember having a similar discussion in the past.  At the time,
+there wasn't EVM portable and immutable signature support, just the
+HMAC and original signature types.  Neither of these EVM xattrs types
+should be copied.
 
-Name something where multiple vendors have implemented a spec and
-there's no deviation. It simply doesn't exist. How would you know?
+Calling evm_verifyxattr() is not limited to IMA, but may be called by
+other LSMs/subsystems as well.  At some point, there was some
+discussion about AppArmor calling it directly.  Not sure if that is
+still being discussed.
 
-Does the TPM spec define all the things I listed above outside of just
-the I2C protocol?
+Since copying the EVM HMAC or original signature isn't applicable, I
+would prefer exploring an EVM portable and immutable signature only
+solution.
 
-Also, what version of the spec is "tcg,tpm-tis-i2c"? Few specs have
-only 1 version.
-
-Rob
+Mimi
