@@ -2,191 +2,303 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F591C752F
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 May 2020 17:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E90181C75DF
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 May 2020 18:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729723AbgEFPlw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 6 May 2020 11:41:52 -0400
-Received: from mout-p-101.mailbox.org ([80.241.56.151]:24776 "EHLO
-        mout-p-101.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729066AbgEFPlu (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 6 May 2020 11:41:50 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 49HLRq0L5BzKmVK;
-        Wed,  6 May 2020 17:41:43 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117]) (amavisd-new, port 10030)
-        with ESMTP id iNb9taX10f5N; Wed,  6 May 2020 17:41:38 +0200 (CEST)
-Date:   Thu, 7 May 2020 01:41:17 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     "Lev R. Oshvang ." <levonshe@gmail.com>
-Cc:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Philippe =?utf-8?Q?Tr=C3=A9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v5 0/6] Add support for O_MAYEXEC
-Message-ID: <20200506154117.gibiibfytrdl4exo@yavin.dot.cyphar.com>
-References: <20200505153156.925111-1-mic@digikod.net>
- <d4616bc0-39df-5d6c-9f5b-d84cf6e65960@digikod.net>
- <CAP22eLHres_shVWEC+2=wcKXRsQzfNKDAnyRd8yuO_gJ3Wi_JA@mail.gmail.com>
+        id S1729644AbgEFQLS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 6 May 2020 12:11:18 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2159 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730208AbgEFQLO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 6 May 2020 12:11:14 -0400
+Received: from lhreml703-cah.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 08BA7A6B66337BCE45B5;
+        Wed,  6 May 2020 17:11:12 +0100 (IST)
+Received: from fraeml704-chm.china.huawei.com (10.206.15.53) by
+ lhreml703-cah.china.huawei.com (10.201.108.44) with Microsoft SMTP Server
+ (TLS) id 14.3.487.0; Wed, 6 May 2020 17:11:11 +0100
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Wed, 6 May 2020 18:11:10 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Wed, 6 May 2020 18:11:10 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "david.safford@gmail.com" <david.safford@gmail.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jmorris@namei.org" <jmorris@namei.org>
+CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Subject: RE: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+Thread-Topic: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+Thread-Index: AQHWHfmwvisCdHYC6kmVk7fgFWuzYaibRKAQ
+Date:   Wed, 6 May 2020 16:11:10 +0000
+Message-ID: <96ef56e0bcb64b83a0180b09b87a67e6@huawei.com>
+References: <20200429073935.11913-1-roberto.sassu@huawei.com>
+In-Reply-To: <20200429073935.11913-1-roberto.sassu@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.220.71.158]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ljnqns477wlvxj5l"
-Content-Disposition: inline
-In-Reply-To: <CAP22eLHres_shVWEC+2=wcKXRsQzfNKDAnyRd8yuO_gJ3Wi_JA@mail.gmail.com>
-X-Rspamd-Queue-Id: BECC31754
-X-Rspamd-Score: -7.67 / 15.00 / 15.00
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+> -----Original Message-----
+> From: Roberto Sassu
+> Sent: Wednesday, April 29, 2020 9:40 AM
+> To: zohar@linux.ibm.com; david.safford@gmail.com;
+> viro@zeniv.linux.org.uk; jmorris@namei.org
+> Cc: linux-fsdevel@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
+> security-module@vger.kernel.org; linux-kernel@vger.kernel.org; Silviu
+> Vlasceanu <Silviu.Vlasceanu@huawei.com>; Roberto Sassu
+> <roberto.sassu@huawei.com>
+> Subject: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
 
---ljnqns477wlvxj5l
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Any thought on this? The implementation can be discussed later.
 
-On 2020-05-06, Lev R. Oshvang . <levonshe@gmail.com> wrote:
-> On Tue, May 5, 2020 at 6:36 PM Micka=EBl Sala=FCn <mic@digikod.net> wrote:
-> >
-> >
-> > On 05/05/2020 17:31, Micka=EBl Sala=FCn wrote:
-> > > Hi,
-> > >
-> > > This fifth patch series add new kernel configurations (OMAYEXEC_STATI=
-C,
-> > > OMAYEXEC_ENFORCE_MOUNT, and OMAYEXEC_ENFORCE_FILE) to enable to
-> > > configure the security policy at kernel build time.  As requested by
-> > > Mimi Zohar, I completed the series with one of her patches for IMA.
-> > >
-> > > The goal of this patch series is to enable to control script execution
-> > > with interpreters help.  A new O_MAYEXEC flag, usable through
-> > > openat2(2), is added to enable userspace script interpreter to delega=
-te
-> > > to the kernel (and thus the system security policy) the permission to
-> > > interpret/execute scripts or other files containing what can be seen =
-as
-> > > commands.
-> > >
-> > > A simple system-wide security policy can be enforced by the system
-> > > administrator through a sysctl configuration consistent with the mount
-> > > points or the file access rights.  The documentation patch explains t=
-he
-> > > prerequisites.
-> > >
-> > > Furthermore, the security policy can also be delegated to an LSM, eit=
-her
-> > > a MAC system or an integrity system.  For instance, the new kernel
-> > > MAY_OPENEXEC flag closes a major IMA measurement/appraisal interpreter
-> > > integrity gap by bringing the ability to check the use of scripts [1].
-> > > Other uses are expected, such as for openat2(2) [2], SGX integration
-> > > [3], bpffs [4] or IPE [5].
-> > >
-> > > Userspace needs to adapt to take advantage of this new feature.  For
-> > > example, the PEP 578 [6] (Runtime Audit Hooks) enables Python 3.8 to =
-be
-> > > extended with policy enforcement points related to code interpretatio=
-n,
-> > > which can be used to align with the PowerShell audit features.
-> > > Additional Python security improvements (e.g. a limited interpreter
-> > > withou -c, stdin piping of code) are on their way.
-> > >
-> > > The initial idea come from CLIP OS 4 and the original implementation =
-has
-> > > been used for more than 12 years:
-> > > https://github.com/clipos-archive/clipos4_doc
-> > >
-> > > An introduction to O_MAYEXEC was given at the Linux Security Summit
-> > > Europe 2018 - Linux Kernel Security Contributions by ANSSI:
-> > > https://www.youtube.com/watch?v=3DchNjCRtPKQY&t=3D17m15s
-> > > The "write xor execute" principle was explained at Kernel Recipes 201=
-8 -
-> > > CLIP OS: a defense-in-depth OS:
-> > > https://www.youtube.com/watch?v=3DPjRE0uBtkHU&t=3D11m14s
-> > >
-> > > This patch series can be applied on top of v5.7-rc4.  This can be tes=
-ted
-> > > with CONFIG_SYSCTL.  I would really appreciate constructive comments =
-on
-> > > this patch series.
-> > >
-> > > Previous version:
-> > > https://lore.kernel.org/lkml/20200428175129.634352-1-mic@digikod.net/
-> >
-> > The previous version (v4) is
-> > https://lore.kernel.org/lkml/20200430132320.699508-1-mic@digikod.net/
->=20
->=20
-> Hi Michael
->=20
-> I have couple of question
-> 1. Why you did not add O_MAYEXEC to open()?
-> Some time ago (around v4.14) open() did not return EINVAL when
-> VALID_OPEN_FLAGS check failed.
-> Now it does, so I do not see a problem that interpreter will use
-> simple open(),  ( Although that path might be manipulated, but file
-> contents will be verified by IMA)
+I just wanted a feedback on the approach, if this is the right direction
+to solve the problem.
 
-You don't get -EINVAL from open() in the case of unknown flags, that's
-something only openat2() does in the open*() family. Hence why it's only
-introduced for openat2().
+Thanks
 
-> 2. When you apply a new flag to mount, it means that IMA will check
-> all files under this mount and it does not matter whether the file in
-> question is a script or not.
-> IMHO it is too hard overhead for performance reasons.
->=20
-> Regards,
-> LEv
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
 
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+> EVM is a module for the protection of the integrity of file metadata. It
+> protects security-relevant extended attributes, and some file attributes
+> such as the UID and the GID. It protects their integrity with an HMAC or
+> with a signature.
+> 
+> What makes EVM different from other LSMs is that it makes a security
+> decision depending on multiple pieces of information, which cannot be
+> managed atomically by the system.
+> 
+> Example: cp -a file.orig file.dest
+> 
+> If security.selinux, security.ima and security.evm must be preserved, cp
+> will invoke setxattr() for each xattr, and EVM performs a verification
+> during each operation. The problem is that copying security.evm from
+> file.orig to file.dest will likely break the following EVM verifications if
+> some metadata still have to be copied. EVM has no visibility on the
+> metadata of the source file, so it cannot determine when the copy can be
+> considered complete.
+> 
+> On the other hand, EVM has to check metadata during every operation to
+> ensure that there is no transition from corrupted metadata, e.g. after an
+> offline attack, to valid ones after the operation. An HMAC update would
+> prevent the corruption to be detected, as the HMAC on the new values
+> would
+> be correct. Thus, to avoid this issue, EVM has to return an error to the
+> system call so that its execution will be interrupted.
+> 
+> A solution that would satisfy both requirements, not breaking user space
+> applications and detecting corrupted metadata is to let metadata operations
+> be completed successfully and to pass the result of the EVM verification
+> from the pre hooks to the post hooks. In this way, the HMAC update can be
+> avoided if the verification wasn't successful.
+> 
+> This approach will bring another important benefit: it is no longer
+> required that every file has a valid HMAC or signature. Instead of always
+> enforcing metadata integrity, even when it is not relevant for IMA, EVM
+> will let IMA decide for files selected with the appraisal policy,
+> depending on the result of the requested verification.
+> 
+> The main problem is that the result of the verification currently cannot be
+> passed from the pre hooks to the post hooks, due to how the LSM API is
+> defined. A possible solution would be to use integrity_iint_cache for this
+> purpose, but it will increase the memory pressure, as new structures will
+> be allocated also for metadata operations, not only for measurement,
+> appraisal and audit. Another solution would be to extend the LSM API, but
+> it seems not worthwhile as EVM would be the only module getting a benefit
+> from this change.
+> 
+> Given that pre and post hooks are called from the same system call, a more
+> efficient solution seems to move the hooks outside the LSM infrastructure,
+> so that the return value of the pre hooks can be passed to the post hooks.
+> A predefined error (-EAGAIN) will be used to signal to the system call to
+> continue the execution. Otherwise, if the pre hooks return -EPERM, the
+> system calls will behave as before and will immediately return before
+> metadata are changed.
+> 
+> Overview of the changes:
+> 
+> evm_inode_init_security()	LSM (no change)
+> evm_inode_setxattr()		LSM -> vfs_setxattr()
+> evm_inode_post_setxattr()	LSM -> vfs_setxattr()
+> evm_inode_removexattr()		LSM -> vfs_removexattr()
+> evm_inode_post_removexattr()	vfs_removexattr() (no change)
+> evm_inode_setattr()		LSM -> vfs_setattr()
+> evm_inode_post_setattr()	vfs_setattr() (no change)
+> evm_verifyxattr()		outside LSM (no change)
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  fs/attr.c           |  5 ++++-
+>  fs/xattr.c          | 17 +++++++++++++++--
+>  security/security.c | 18 +++---------------
+>  3 files changed, 22 insertions(+), 18 deletions(-)
+> 
+> diff --git a/fs/attr.c b/fs/attr.c
+> index b4bbdbd4c8ca..8f26d7d2e3b4 100644
+> --- a/fs/attr.c
+> +++ b/fs/attr.c
+> @@ -224,7 +224,7 @@ int notify_change(struct dentry * dentry, struct iattr
+> * attr, struct inode **de
+>  {
+>  	struct inode *inode = dentry->d_inode;
+>  	umode_t mode = inode->i_mode;
+> -	int error;
+> +	int error, evm_error;
+>  	struct timespec64 now;
+>  	unsigned int ia_valid = attr->ia_valid;
+> 
+> @@ -328,6 +328,9 @@ int notify_change(struct dentry * dentry, struct iattr
+> * attr, struct inode **de
+>  	error = security_inode_setattr(dentry, attr);
+>  	if (error)
+>  		return error;
+> +	evm_error = evm_inode_setattr(dentry, attr);
+> +	if (evm_error)
+> +		return evm_error;
+>  	error = try_break_deleg(inode, delegated_inode);
+>  	if (error)
+>  		return error;
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index e13265e65871..3b323b75b741 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -183,6 +183,7 @@ int __vfs_setxattr_noperm(struct dentry *dentry,
+> const char *name,
+>  			fsnotify_xattr(dentry);
+>  			security_inode_post_setxattr(dentry, name, value,
+>  						     size, flags);
+> +			evm_inode_post_setxattr(dentry, name, value,
+> size);
+>  		}
+>  	} else {
+>  		if (unlikely(is_bad_inode(inode)))
+> @@ -210,7 +211,7 @@ vfs_setxattr(struct dentry *dentry, const char
+> *name, const void *value,
+>  		size_t size, int flags)
+>  {
+>  	struct inode *inode = dentry->d_inode;
+> -	int error;
+> +	int error, evm_error;
+> 
+>  	error = xattr_permission(inode, name, MAY_WRITE);
+>  	if (error)
+> @@ -221,6 +222,12 @@ vfs_setxattr(struct dentry *dentry, const char
+> *name, const void *value,
+>  	if (error)
+>  		goto out;
+> 
+> +	evm_error = evm_inode_setxattr(dentry, name, value, size);
+> +	if (evm_error) {
+> +		error = evm_error;
+> +		goto out;
+> +	}
+> +
+>  	error = __vfs_setxattr_noperm(dentry, name, value, size, flags);
+> 
+>  out:
+> @@ -382,7 +389,7 @@ int
+>  vfs_removexattr(struct dentry *dentry, const char *name)
+>  {
+>  	struct inode *inode = dentry->d_inode;
+> -	int error;
+> +	int error, evm_error;
+> 
+>  	error = xattr_permission(inode, name, MAY_WRITE);
+>  	if (error)
+> @@ -393,6 +400,12 @@ vfs_removexattr(struct dentry *dentry, const char
+> *name)
+>  	if (error)
+>  		goto out;
+> 
+> +	evm_error = evm_inode_removexattr(dentry, name);
+> +	if (evm_error) {
+> +		error = evm_error;
+> +		goto out;
+> +	}
+> +
+>  	error = __vfs_removexattr(dentry, name);
+> 
+>  	if (!error) {
+> diff --git a/security/security.c b/security/security.c
+> index 7fed24b9d57e..e1368ab34cee 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1255,14 +1255,9 @@ int security_inode_permission(struct inode
+> *inode, int mask)
+> 
+>  int security_inode_setattr(struct dentry *dentry, struct iattr *attr)
+>  {
+> -	int ret;
+> -
+>  	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+>  		return 0;
+> -	ret = call_int_hook(inode_setattr, 0, dentry, attr);
+> -	if (ret)
+> -		return ret;
+> -	return evm_inode_setattr(dentry, attr);
+> +	return call_int_hook(inode_setattr, 0, dentry, attr);
+>  }
+>  EXPORT_SYMBOL_GPL(security_inode_setattr);
+> 
+> @@ -1291,10 +1286,7 @@ int security_inode_setxattr(struct dentry *dentry,
+> const char *name,
+>  		ret = cap_inode_setxattr(dentry, name, value, size, flags);
+>  	if (ret)
+>  		return ret;
+> -	ret = ima_inode_setxattr(dentry, name, value, size);
+> -	if (ret)
+> -		return ret;
+> -	return evm_inode_setxattr(dentry, name, value, size);
+> +	return ima_inode_setxattr(dentry, name, value, size);
+>  }
+> 
+>  void security_inode_post_setxattr(struct dentry *dentry, const char
+> *name,
+> @@ -1303,7 +1295,6 @@ void security_inode_post_setxattr(struct dentry
+> *dentry, const char *name,
+>  	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+>  		return;
+>  	call_void_hook(inode_post_setxattr, dentry, name, value, size,
+> flags);
+> -	evm_inode_post_setxattr(dentry, name, value, size);
+>  }
+> 
+>  int security_inode_getxattr(struct dentry *dentry, const char *name)
+> @@ -1335,10 +1326,7 @@ int security_inode_removexattr(struct dentry
+> *dentry, const char *name)
+>  		ret = cap_inode_removexattr(dentry, name);
+>  	if (ret)
+>  		return ret;
+> -	ret = ima_inode_removexattr(dentry, name);
+> -	if (ret)
+> -		return ret;
+> -	return evm_inode_removexattr(dentry, name);
+> +	return ima_inode_removexattr(dentry, name);
+>  }
+> 
+>  int security_inode_need_killpriv(struct dentry *dentry)
+> --
+> 2.17.1
 
---ljnqns477wlvxj5l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXrLamgAKCRCdlLljIbnQ
-Eo2EAQDv6NtU9F0Nl45n0HGqLDKRn1IEH5GBUZwhlkUR72xbbAD8CqwZXGFnsYZB
-+Che7WXy1zSGWAJq84tQAqCqj97ABAQ=
-=EWAe
------END PGP SIGNATURE-----
-
---ljnqns477wlvxj5l--
