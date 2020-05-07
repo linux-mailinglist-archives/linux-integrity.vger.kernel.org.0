@@ -2,48 +2,43 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E361C8449
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 10:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B0F1C84D4
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 10:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgEGIFM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 04:05:12 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:53142 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725966AbgEGIFJ (ORCPT
+        id S1726222AbgEGIaP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 04:30:15 -0400
+Received: from smtp-190e.mail.infomaniak.ch ([185.125.25.14]:36981 "EHLO
+        smtp-190e.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725953AbgEGIaP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 04:05:09 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-222-zMK3yQ5kPIe6BMT91EbWpA-1; Thu, 07 May 2020 09:05:05 +0100
-X-MC-Unique: zMK3yQ5kPIe6BMT91EbWpA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 7 May 2020 09:05:04 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 7 May 2020 09:05:04 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     =?utf-8?B?J01pY2thw6tsIFNhbGHDvG4n?= <mic@digikod.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Aleksa Sarai <cyphar@cyphar.com>,
+        Thu, 7 May 2020 04:30:15 -0400
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49HmqS2fKzzlj47t;
+        Thu,  7 May 2020 10:30:12 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 49HmqJ429fzlpk1S;
+        Thu,  7 May 2020 10:30:04 +0200 (CEST)
+Subject: Re: [PATCH v5 0/6] Add support for O_MAYEXEC
+To:     "Lev R. Oshvang ." <levonshe@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        "Al Viro" <viro@zeniv.linux.org.uk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
-        "Christian Heimes" <christian@python.org>,
+        Christian Heimes <christian@python.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "Deven Bowers" <deven.desai@linux.microsoft.com>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
         Eric Chiang <ericchiang@google.com>,
         Florian Weimer <fweimer@redhat.com>,
         James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
         Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
-        "Lakshmi Ramasubramanian" <nramas@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         Matthew Garrett <mjg59@google.com>,
         Matthew Wilcox <willy@infradead.org>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?utf-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        =?utf-8?B?UGhpbGlwcGUgVHLDqWJ1Y2hldA==?= 
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
         <philippe.trebuchet@ssi.gouv.fr>,
         Scott Shell <scottsh@microsoft.com>,
         Sean Christopherson <sean.j.christopherson@intel.com>,
@@ -52,82 +47,110 @@ CC:     Aleksa Sarai <cyphar@cyphar.com>,
         Steve Grubb <sgrubb@redhat.com>,
         Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
         Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        "kernel-hardening@lists.openwall.com" 
-        <kernel-hardening@lists.openwall.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: RE: [PATCH v5 0/6] Add support for O_MAYEXEC
-Thread-Topic: [PATCH v5 0/6] Add support for O_MAYEXEC
-Thread-Index: AQHWIvJxeV/0BLZ+8kuLT1dTVkm+SqicRhNg
-Date:   Thu, 7 May 2020 08:05:04 +0000
-Message-ID: <20b24b9ca0a64afb9389722845738ec8@AcuMS.aculab.com>
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
 References: <20200505153156.925111-1-mic@digikod.net>
-In-Reply-To: <20200505153156.925111-1-mic@digikod.net>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <d4616bc0-39df-5d6c-9f5b-d84cf6e65960@digikod.net>
+ <CAP22eLHres_shVWEC+2=wcKXRsQzfNKDAnyRd8yuO_gJ3Wi_JA@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <db3c1f05-11d4-077e-4574-03ecb585bc21@digikod.net>
+Date:   Thu, 7 May 2020 10:30:04 +0200
+User-Agent: 
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+In-Reply-To: <CAP22eLHres_shVWEC+2=wcKXRsQzfNKDAnyRd8yuO_gJ3Wi_JA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-RnJvbTogTWlja2HDq2wgU2FsYcO8bg0KPiBTZW50OiAwNSBNYXkgMjAyMCAxNjozMg0KPiANCj4g
-VGhpcyBmaWZ0aCBwYXRjaCBzZXJpZXMgYWRkIG5ldyBrZXJuZWwgY29uZmlndXJhdGlvbnMgKE9N
-QVlFWEVDX1NUQVRJQywNCj4gT01BWUVYRUNfRU5GT1JDRV9NT1VOVCwgYW5kIE9NQVlFWEVDX0VO
-Rk9SQ0VfRklMRSkgdG8gZW5hYmxlIHRvDQo+IGNvbmZpZ3VyZSB0aGUgc2VjdXJpdHkgcG9saWN5
-IGF0IGtlcm5lbCBidWlsZCB0aW1lLiAgQXMgcmVxdWVzdGVkIGJ5DQo+IE1pbWkgWm9oYXIsIEkg
-Y29tcGxldGVkIHRoZSBzZXJpZXMgd2l0aCBvbmUgb2YgaGVyIHBhdGNoZXMgZm9yIElNQS4NCj4g
-DQo+IFRoZSBnb2FsIG9mIHRoaXMgcGF0Y2ggc2VyaWVzIGlzIHRvIGVuYWJsZSB0byBjb250cm9s
-IHNjcmlwdCBleGVjdXRpb24NCj4gd2l0aCBpbnRlcnByZXRlcnMgaGVscC4gIEEgbmV3IE9fTUFZ
-RVhFQyBmbGFnLCB1c2FibGUgdGhyb3VnaA0KPiBvcGVuYXQyKDIpLCBpcyBhZGRlZCB0byBlbmFi
-bGUgdXNlcnNwYWNlIHNjcmlwdCBpbnRlcnByZXRlciB0byBkZWxlZ2F0ZQ0KPiB0byB0aGUga2Vy
-bmVsIChhbmQgdGh1cyB0aGUgc3lzdGVtIHNlY3VyaXR5IHBvbGljeSkgdGhlIHBlcm1pc3Npb24g
-dG8NCj4gaW50ZXJwcmV0L2V4ZWN1dGUgc2NyaXB0cyBvciBvdGhlciBmaWxlcyBjb250YWluaW5n
-IHdoYXQgY2FuIGJlIHNlZW4gYXMNCj4gY29tbWFuZHMuDQo+IA0KPiBBIHNpbXBsZSBzeXN0ZW0t
-d2lkZSBzZWN1cml0eSBwb2xpY3kgY2FuIGJlIGVuZm9yY2VkIGJ5IHRoZSBzeXN0ZW0NCj4gYWRt
-aW5pc3RyYXRvciB0aHJvdWdoIGEgc3lzY3RsIGNvbmZpZ3VyYXRpb24gY29uc2lzdGVudCB3aXRo
-IHRoZSBtb3VudA0KPiBwb2ludHMgb3IgdGhlIGZpbGUgYWNjZXNzIHJpZ2h0cy4gIFRoZSBkb2N1
-bWVudGF0aW9uIHBhdGNoIGV4cGxhaW5zIHRoZQ0KPiBwcmVyZXF1aXNpdGVzLg0KPiANCj4gRnVy
-dGhlcm1vcmUsIHRoZSBzZWN1cml0eSBwb2xpY3kgY2FuIGFsc28gYmUgZGVsZWdhdGVkIHRvIGFu
-IExTTSwgZWl0aGVyDQo+IGEgTUFDIHN5c3RlbSBvciBhbiBpbnRlZ3JpdHkgc3lzdGVtLiAgRm9y
-IGluc3RhbmNlLCB0aGUgbmV3IGtlcm5lbA0KPiBNQVlfT1BFTkVYRUMgZmxhZyBjbG9zZXMgYSBt
-YWpvciBJTUEgbWVhc3VyZW1lbnQvYXBwcmFpc2FsIGludGVycHJldGVyDQo+IGludGVncml0eSBn
-YXAgYnkgYnJpbmdpbmcgdGhlIGFiaWxpdHkgdG8gY2hlY2sgdGhlIHVzZSBvZiBzY3JpcHRzIFsx
-XS4NCj4gT3RoZXIgdXNlcyBhcmUgZXhwZWN0ZWQsIHN1Y2ggYXMgZm9yIG9wZW5hdDIoMikgWzJd
-LCBTR1ggaW50ZWdyYXRpb24NCj4gWzNdLCBicGZmcyBbNF0gb3IgSVBFIFs1XS4NCj4gDQo+IFVz
-ZXJzcGFjZSBuZWVkcyB0byBhZGFwdCB0byB0YWtlIGFkdmFudGFnZSBvZiB0aGlzIG5ldyBmZWF0
-dXJlLiAgRm9yDQo+IGV4YW1wbGUsIHRoZSBQRVAgNTc4IFs2XSAoUnVudGltZSBBdWRpdCBIb29r
-cykgZW5hYmxlcyBQeXRob24gMy44IHRvIGJlDQo+IGV4dGVuZGVkIHdpdGggcG9saWN5IGVuZm9y
-Y2VtZW50IHBvaW50cyByZWxhdGVkIHRvIGNvZGUgaW50ZXJwcmV0YXRpb24sDQo+IHdoaWNoIGNh
-biBiZSB1c2VkIHRvIGFsaWduIHdpdGggdGhlIFBvd2VyU2hlbGwgYXVkaXQgZmVhdHVyZXMuDQo+
-IEFkZGl0aW9uYWwgUHl0aG9uIHNlY3VyaXR5IGltcHJvdmVtZW50cyAoZS5nLiBhIGxpbWl0ZWQg
-aW50ZXJwcmV0ZXINCj4gd2l0aG91IC1jLCBzdGRpbiBwaXBpbmcgb2YgY29kZSkgYXJlIG9uIHRo
-ZWlyIHdheS4NCj4gDQo+IFRoZSBpbml0aWFsIGlkZWEgY29tZSBmcm9tIENMSVAgT1MgNCBhbmQg
-dGhlIG9yaWdpbmFsIGltcGxlbWVudGF0aW9uIGhhcw0KPiBiZWVuIHVzZWQgZm9yIG1vcmUgdGhh
-biAxMiB5ZWFyczoNCj4gaHR0cHM6Ly9naXRodWIuY29tL2NsaXBvcy1hcmNoaXZlL2NsaXBvczRf
-ZG9jDQo+IA0KPiBBbiBpbnRyb2R1Y3Rpb24gdG8gT19NQVlFWEVDIHdhcyBnaXZlbiBhdCB0aGUg
-TGludXggU2VjdXJpdHkgU3VtbWl0DQo+IEV1cm9wZSAyMDE4IC0gTGludXggS2VybmVsIFNlY3Vy
-aXR5IENvbnRyaWJ1dGlvbnMgYnkgQU5TU0k6DQo+IGh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dh
-dGNoP3Y9Y2hOakNSdFBLUVkmdD0xN20xNXMNCj4gVGhlICJ3cml0ZSB4b3IgZXhlY3V0ZSIgcHJp
-bmNpcGxlIHdhcyBleHBsYWluZWQgYXQgS2VybmVsIFJlY2lwZXMgMjAxOCAtDQo+IENMSVAgT1M6
-IGEgZGVmZW5zZS1pbi1kZXB0aCBPUzoNCj4gaHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/
-dj1QalJFMHVCdGtIVSZ0PTExbTE0cw0KPiANCj4gVGhpcyBwYXRjaCBzZXJpZXMgY2FuIGJlIGFw
-cGxpZWQgb24gdG9wIG9mIHY1LjctcmM0LiAgVGhpcyBjYW4gYmUgdGVzdGVkDQo+IHdpdGggQ09O
-RklHX1NZU0NUTC4gIEkgd291bGQgcmVhbGx5IGFwcHJlY2lhdGUgY29uc3RydWN0aXZlIGNvbW1l
-bnRzIG9uDQo+IHRoaXMgcGF0Y2ggc2VyaWVzLg0KDQpOb25lIG9mIHRoYXQgZGVzY3JpcHRpb24g
-YWN0dWFsbHkgc2F5cyB3aGF0IHRoZSBwYXRjaCBhY3R1YWxseSBkb2VzLg0KDQoJRGF2aWQNCg0K
-LQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0s
-IE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdh
-bGVzKQ0K
 
+On 06/05/2020 15:58, Lev R. Oshvang . wrote:
+> On Tue, May 5, 2020 at 6:36 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>
+>>
+>> On 05/05/2020 17:31, Mickaël Salaün wrote:
+>>> Hi,
+>>>
+>>> This fifth patch series add new kernel configurations (OMAYEXEC_STATIC,
+>>> OMAYEXEC_ENFORCE_MOUNT, and OMAYEXEC_ENFORCE_FILE) to enable to
+>>> configure the security policy at kernel build time.  As requested by
+>>> Mimi Zohar, I completed the series with one of her patches for IMA.
+>>>
+>>> The goal of this patch series is to enable to control script execution
+>>> with interpreters help.  A new O_MAYEXEC flag, usable through
+>>> openat2(2), is added to enable userspace script interpreter to delegate
+>>> to the kernel (and thus the system security policy) the permission to
+>>> interpret/execute scripts or other files containing what can be seen as
+>>> commands.
+>>>
+>>> A simple system-wide security policy can be enforced by the system
+>>> administrator through a sysctl configuration consistent with the mount
+>>> points or the file access rights.  The documentation patch explains the
+>>> prerequisites.
+>>>
+>>> Furthermore, the security policy can also be delegated to an LSM, either
+>>> a MAC system or an integrity system.  For instance, the new kernel
+>>> MAY_OPENEXEC flag closes a major IMA measurement/appraisal interpreter
+>>> integrity gap by bringing the ability to check the use of scripts [1].
+>>> Other uses are expected, such as for openat2(2) [2], SGX integration
+>>> [3], bpffs [4] or IPE [5].
+>>>
+>>> Userspace needs to adapt to take advantage of this new feature.  For
+>>> example, the PEP 578 [6] (Runtime Audit Hooks) enables Python 3.8 to be
+>>> extended with policy enforcement points related to code interpretation,
+>>> which can be used to align with the PowerShell audit features.
+>>> Additional Python security improvements (e.g. a limited interpreter
+>>> withou -c, stdin piping of code) are on their way.
+>>>
+>>> The initial idea come from CLIP OS 4 and the original implementation has
+>>> been used for more than 12 years:
+>>> https://github.com/clipos-archive/clipos4_doc
+>>>
+>>> An introduction to O_MAYEXEC was given at the Linux Security Summit
+>>> Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+>>> https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+>>> The "write xor execute" principle was explained at Kernel Recipes 2018 -
+>>> CLIP OS: a defense-in-depth OS:
+>>> https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+>>>
+>>> This patch series can be applied on top of v5.7-rc4.  This can be tested
+>>> with CONFIG_SYSCTL.  I would really appreciate constructive comments on
+>>> this patch series.
+>>>
+>>> Previous version:
+>>> https://lore.kernel.org/lkml/20200428175129.634352-1-mic@digikod.net/
+>>
+>> The previous version (v4) is
+>> https://lore.kernel.org/lkml/20200430132320.699508-1-mic@digikod.net/
+> 
+> 
+> Hi Michael
+> 
+> I have couple of question
+> 1. Why you did not add O_MAYEXEC to open()?
+> Some time ago (around v4.14) open() did not return EINVAL when
+> VALID_OPEN_FLAGS check failed.
+> Now it does, so I do not see a problem that interpreter will use
+> simple open(),  ( Although that path might be manipulated, but file
+> contents will be verified by IMA)
+
+Aleksa replied to this.
+
+> 2. When you apply a new flag to mount, it means that IMA will check
+> all files under this mount and it does not matter whether the file in
+> question is a script or not.
+> IMHO it is too hard overhead for performance reasons.
+
+This patch series doesn't change the way IMA handles mount points.
+
+> 
+> Regards,
+> LEv
+> 
