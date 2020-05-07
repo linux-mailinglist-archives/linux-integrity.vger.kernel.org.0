@@ -2,34 +2,34 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A90211C99C4
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 20:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4867F1C99E7
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 20:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728395AbgEGSt0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 14:49:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50732 "EHLO mail.kernel.org"
+        id S1727930AbgEGSwj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 14:52:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53434 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728097AbgEGStZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 14:49:25 -0400
+        id S1726598AbgEGSwi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 7 May 2020 14:52:38 -0400
 Received: from embeddedor (unknown [189.207.59.248])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0943124957;
-        Thu,  7 May 2020 18:49:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CDEB62495D;
+        Thu,  7 May 2020 18:52:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588877365;
-        bh=pk7QrAL3NDjeA4BB8U07kjEUUtfctxSRQ394nM277v4=;
+        s=default; t=1588877558;
+        bh=3p7eu1MK3/DsGvUUePG2CQuwCI8FRfOqNY3jSgtHysA=;
         h=Date:From:To:Cc:Subject:From;
-        b=ewFUKtOokui8KqvgXxgQbs1XcpdPapWxul2Zw+SPUBSPM2TvMrwTGaDW6+kek18ka
-         khLJOC525uEUctcdf8bKfyhasQTJbEx3L70DCvIEMkBkdyc+QyCzuhl45XzC9igQvQ
-         VnELWJfggr5xFYGVJEg14g8TdtP6OPk9dbZ4UX2E=
-Date:   Thu, 7 May 2020 13:53:51 -0500
+        b=zB00JXfY5N8MCu9LU/I8NuwjUD5M9q/ClnQmv+hVQlVvpsXrkVTu3m56rngM3C+n9
+         Go00HNUmFc1Vkx/dki3yRfaduBm2NW11l74aOfqScy+rrRBylrS/cWl15Ebsj1aPR6
+         OrghsOeoKArBE2ljeAIM/cWfp/6EDDLxNGtUNN/I=
+Date:   Thu, 7 May 2020 13:57:04 -0500
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ima: Replace zero-length array with flexible-array
-Message-ID: <20200507185351.GA14519@embeddedor>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] encrypted-keys: Replace zero-length array with flexible-array
+Message-ID: <20200507185704.GA14874@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -76,20 +76,20 @@ This issue was found with the help of Coccinelle.
 
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- security/integrity/ima/ima.h |    2 +-
+ include/keys/encrypted-type.h |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 64317d95363e..da4246ee7e35 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -95,7 +95,7 @@ struct ima_template_entry {
- 	u8 digest[TPM_DIGEST_SIZE];	/* sha1 or md5 measurement hash */
- 	struct ima_template_desc *template_desc; /* template descriptor */
- 	u32 template_data_len;
--	struct ima_field_data template_data[0];	/* template related data */
-+	struct ima_field_data template_data[];	/* template related data */
+diff --git a/include/keys/encrypted-type.h b/include/keys/encrypted-type.h
+index 9e9ccb20d586..38afb341c3f2 100644
+--- a/include/keys/encrypted-type.h
++++ b/include/keys/encrypted-type.h
+@@ -27,7 +27,7 @@ struct encrypted_key_payload {
+ 	unsigned short payload_datalen;		/* payload data length */
+ 	unsigned short encrypted_key_format;	/* encrypted key format */
+ 	u8 *decrypted_data;	/* decrypted data */
+-	u8 payload_data[0];	/* payload data + datablob + hmac */
++	u8 payload_data[];	/* payload data + datablob + hmac */
  };
  
- struct ima_queue_entry {
+ extern struct key_type key_type_encrypted;
 
