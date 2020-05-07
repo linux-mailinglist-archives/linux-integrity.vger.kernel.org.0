@@ -2,186 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F5E1C8337
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 09:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D7A1C838A
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 09:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725949AbgEGHHc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 03:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725783AbgEGHHb (ORCPT
+        id S1725802AbgEGHgB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 03:36:01 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:36970 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726579AbgEGHfz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 03:07:31 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287B2C061A10;
-        Thu,  7 May 2020 00:07:31 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id p16so4425056edm.10;
-        Thu, 07 May 2020 00:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RQbMvC1ag/SPzt3A0iv4z8R55U/VKwxU9VmHI0/FJRU=;
-        b=HuBe5N6XnGvBabUFlomvKFuULmswvV6IlY50t+tlQh3qqFeVo5mlJMIvc7M96A6QjC
-         j3LZOLKTSOkTavRzmk9QLDOed90qTi8J5m3bCK/GvzbOX5+fQnqzZ2lrFFlL9zSBb7bK
-         XAFcn2P2vqnrYdpevPVAct9mZB7yGVFNe7rfbteS1bSoApWNTeI58mDIb5AlotWlL2pa
-         f6sensKTOJeJLEEFoM777CUpUg8U1KZPaHrhXNqS+3kVcZqWfT9/i1vrGvq/wP09QPjM
-         JTwRcQ3BaHtmTWAgaJUkpGH6Yyk3vceaghoSvRuvmphb3vT0EJ+OnF4YC8Ni9cgd0/t6
-         EkYA==
+        Thu, 7 May 2020 03:35:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588836953;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=vg3gAjb3Sk7KQVtWk6M+0e8g6+k5TaLScfnxont+BAw=;
+        b=TDDTOKm0U4K+Rd4tuZbKKSRxjOeH8bFMSD78maemvClyGKcWqUfdxTU7YgKTMie3pKuBVJ
+        Xmd6XPTan+KmGMcvVTQEhSqdHF8WmeA9znJJwfBUQ9TD757OjJ9WUQbjYO+7NfpP899ynS
+        RcC9EcO49xwPvyYUBBT10kuo8Ln84Uc=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-194-jJthUEciNVydfSUzNgEdVw-1; Thu, 07 May 2020 03:35:51 -0400
+X-MC-Unique: jJthUEciNVydfSUzNgEdVw-1
+Received: by mail-qk1-f198.google.com with SMTP id l4so4760953qke.2
+        for <linux-integrity@vger.kernel.org>; Thu, 07 May 2020 00:35:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RQbMvC1ag/SPzt3A0iv4z8R55U/VKwxU9VmHI0/FJRU=;
-        b=JYeLO9dHPTzWxV9rikm52SnOuuYoqMEldFpJ+gg6ZLxz+tvlAvCX8NaMjwEmUo72Gx
-         n3IwQFLcYTinN5PyuM1JAmUapM2H9nAkEOZXQnomgHsgbjNhVAVk2PKOri57lwrpgqhI
-         fZQx3hE+0PY0t6DBO+vElxTFLQr3z8mg+j2hJnaNynMTKuSHNcW4Ck8QOsf3XJgJs6m7
-         G64im3xAYzUgEpS8ifFlAvT+9vUkr8Yfyde4u2Hv/XLh82U8vHHstEC7De2l4cz+FftN
-         UNtHZlyHr6QWOMBwM8LVUYFVjNMrZVDVOGmB04aBX1h9JHjCn7vuHWVf2ponHMcz9zCU
-         fZ3Q==
-X-Gm-Message-State: AGi0PuYpW/7u6VPnOyxQmZbuk5qXyzbdq+8jseb14Hp3LrbzKDBq2n07
-        XMmBWAjw18oPjF0INRW9VPqAlApOOHvd2zoOSRfgriNAQIlCRw==
-X-Google-Smtp-Source: APiQypL8AC7ZUZnP0qgOLELJh2mB0qf4DRtMwN4Iryo60fDs4rqEG8PDwXDJX033RYCz1rFZGBj6H05V6VK++Hv+CxM=
-X-Received: by 2002:aa7:c2d2:: with SMTP id m18mr10709938edp.142.1588835249498;
- Thu, 07 May 2020 00:07:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=vg3gAjb3Sk7KQVtWk6M+0e8g6+k5TaLScfnxont+BAw=;
+        b=TtHd2TYO4YcrQyuMG3VC++bSQGd1IQwaQRvukzAxzNnV5RK9QtbyUBG/RzKlQN6aNe
+         mnML/a1cRGb7M/vi8SNBIUlU0kt46y1Pd+v8jqjdPPeDRiSaMuUj2aoCgzYT72n81sWz
+         JM9VFXCKJPvI2bosvlzA/GJhK/+4lbGZhE1HgsyYKxP4x4MoPdz69aA+2AsSFj/73Pku
+         OBAJW88awJ5xgYbMCznLHtpZ96KnEzJAfXaz4mwqeFjLRacUYuCvphA92Ara6S9o4t6B
+         YM1ofj2ScGhQ+L0WezLGAqfUGzIFTzIMOH3uJZtTpdqiS1ouRXRJA3z77tRc5qQhkjsA
+         Dk1A==
+X-Gm-Message-State: AGi0PubfeZGLtx6yEbioFL4EoijMbsQlRrRF0OnSO/Y1UxnCrIuXYpW0
+        73xgzFZdudAHtITW0qzDsZrIqG7nPbKRfod9BrCMX9OJu5wg2oiRvfZln4XtONunFsuGr6qHyj1
+        FE5fUWubLE5iAsIar8BIm+64MaKUz
+X-Received: by 2002:ad4:4c03:: with SMTP id bz3mr12014981qvb.224.1588836950727;
+        Thu, 07 May 2020 00:35:50 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKsIDzKPVv/RmwQ/8PNSoblJXiXsLw/dYsVOYjxUx6G3cNhODMwrYk+IG49+IvlIerI67MsUw==
+X-Received: by 2002:ad4:4c03:: with SMTP id bz3mr12014966qvb.224.1588836950439;
+        Thu, 07 May 2020 00:35:50 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id g16sm3580317qkk.122.2020.05.07.00.35.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2020 00:35:49 -0700 (PDT)
+Date:   Thu, 7 May 2020 00:35:48 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Ken Goldman <kgold@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Ken Goldman <kgoldman@us.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: Disparity in tpm pcr5 value
+Message-ID: <20200507073548.zpyv3u7rv3u7jqrs@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+References: <20200505222731.whnkisag7tlrbcie@cantor>
+ <4b3be2e9-35f7-d730-8e3b-b252ba5cb095@linux.ibm.com>
 MIME-Version: 1.0
-References: <alpine.LRH.2.21.2002041054320.12768@namei.org> <CALrft9_tam87oevNC6LDG_bZoH+BgfrD4Or3yQudDoVqTqBdvg@mail.gmail.com>
-In-Reply-To: <CALrft9_tam87oevNC6LDG_bZoH+BgfrD4Or3yQudDoVqTqBdvg@mail.gmail.com>
-From:   Elena Reshetova <elena.reshetova@gmail.com>
-Date:   Thu, 7 May 2020 10:07:18 +0300
-Message-ID: <CALrft98SzLkw3M0shurUsNxsNSuSR3qN236rX4mEvC8GsrnnWQ@mail.gmail.com>
-Subject: [ANNOUNCE][CFP] Linux Security Summit Europe 2020
-To:     linux-security-module@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, lwn@lwn.net,
-        fedora-selinux-list@redhat.com, linux-crypto@vger.kernel.org,
-        kernel-hardening@lists.openwall.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Audit-ML <linux-audit@redhat.com>, gentoo-hardened@gentoo.org,
-        keyrings@linux-nfs.org, tpmdd-devel@lists.sourceforge.net,
-        Linux Security Summit Program Committee 
-        <lss-pc@lists.linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <4b3be2e9-35f7-d730-8e3b-b252ba5cb095@linux.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-                   ANNOUNCEMENT AND CALL FOR PARTICIPATION
+On Wed May 06 20, Ken Goldman wrote:
+>On 5/5/2020 6:27 PM, Jerry Snitselaar wrote:
+>>On some systems we've had reports of the value of pcr5 doesn't match 
+>>the digests in the tpm event log.
+>>It looks like I'm able to reproduce here with 5.7-rc4 on a dell 
+>>system using this parser:
+>>
+>>https://github.com/ValdikSS/binary_bios_measurements_parser
+>>
+>>Any thoughts on where to start digging? Is there another tool I 
+>>should use to parse this?
+>
+>If you email me the event log in binary, I can run it through the IBM 
+>calculator and see if I get the same error.
+>
+>
 
-                        LINUX SECURITY SUMMIT EUROPE 2020
+A couple other data points:
 
-                                     29-30 OCTOBER
-                                    DUBLIN, IRELAND
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
+- On the Dell system where I did this if I change it in the bios to use sha256
+   instead of sha1, then using tsseventextend to parse matches the value in the tpm.
+   In the sha256 case there is a final events log.
 
-DESCRIPTION
+- I have a nuc5 here, which also extends into sha1, and the parse matches there.
 
-Linux Security Summit Europe (LSS-EU) is a technical forum for
-collaboration between Linux developers, researchers, and end-users.  Its
-primary aim is to foster community efforts in analyzing and solving Linux
-security challenges.
+- Javier has also reproduced it when passing through swtpm to a vm.
 
- The program committee currently seeks proposals for:
+- I added some debugging code, and there is nothing extending pcr5 with tpm_pcr_extend.
 
-   * Refereed Presentations:
-     45 minutes in length.
+- Ken's parse of the log also shows the disparity, which I've now done as well with
+   the tpm1.2 version of the tsseventextend tool.
 
-   * Panel Discussion Topics:
-     45 minutes in length.
-
-   * Short Topics:
-     30 minutes in total, including at least 10 minutes discussion.
-
-   * Tutorials
-     90 minutes in length.
-
-Tutorial sessions should be focused on advanced Linux security defense
-topics within areas such as the kernel, compiler, and security-related
-libraries.  Priority will be given to tutorials created for this conference=
-,
-and those where the presenter a leading subject matter expert on the topic.
-
-Topic areas include, but are not limited to:
-
-   * Kernel self-protection
-   * Access control
-   * Cryptography and key management
-   * Integrity policy and enforcement
-   * Hardware Security
-   * IoT and embedded security
-   * Virtualization and containers
-   * System-specific system hardening
-   * Case studies
-   * Security tools
-   * Security UX
-   * Emerging technologies, threats & techniques
-
-  Proposals should be submitted via:
-
-   https://events.linuxfoundation.org/linux-security-summit-europe/program/=
-cfp/
-
-DATES
-
-  * CFP close:            July 31
-  * CFP notifications:    August 10
-  * Schedule announced:   September 1
-  * Event:                October 29-30
-
-COVID-19 SITUATION
-
-Currently LSS-EU is planned as in-person event, however this would be
-re-evaluated closer to the event itself and if the situation in Europe does
-not permit such events, it would be switched to a virtual event, similarly
-as this year=E2=80=99s LSS-NA.
-
-WHO SHOULD ATTEND
-
-We're seeking a diverse range of attendees and welcome participation by
-people involved in Linux security development, operations, and research.
-
-LSS-EU is a unique global event that provides the opportunity to present an=
-d
-discuss your work or research with key Linux security community members and
-maintainers.  It=E2=80=99s also useful for those who wish to keep up with t=
-he latest
-in Linux security development and to provide input to the development
-process.
-
-WEB SITE
-
-    https://events.linuxfoundation.org/linux-security-summit-europe/
-
-TWITTER
-
-  For event updates and announcements, follow:
-
-    https://twitter.com/LinuxSecSummit
-
-    #linuxsecuritysummit
-
-PROGRAM COMMITTEE
-
-  The program committee for LSS 2020 is:
-
-    * James Morris, Microsoft
-    * Serge Hallyn, Cisco
-    * Paul Moore, Cisco
-    * Stephen Smalley, NSA
-    * Elena Reshetova, Intel
-    * John Johansen, Canonical
-    * Kees Cook, Google
-    * Casey Schaufler, Intel
-    * Mimi Zohar, IBM
-    * David A. Wheeler, Institute for Defense Analyses
-
-  The program committee may be contacted as a group via email:
-    lss-pc () lists.linuxfoundation.org
