@@ -2,105 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D7A1C838A
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 09:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846811C83DB
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 09:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725802AbgEGHgB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 03:36:01 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:36970 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726579AbgEGHfz (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 03:35:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588836953;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=vg3gAjb3Sk7KQVtWk6M+0e8g6+k5TaLScfnxont+BAw=;
-        b=TDDTOKm0U4K+Rd4tuZbKKSRxjOeH8bFMSD78maemvClyGKcWqUfdxTU7YgKTMie3pKuBVJ
-        Xmd6XPTan+KmGMcvVTQEhSqdHF8WmeA9znJJwfBUQ9TD757OjJ9WUQbjYO+7NfpP899ynS
-        RcC9EcO49xwPvyYUBBT10kuo8Ln84Uc=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-194-jJthUEciNVydfSUzNgEdVw-1; Thu, 07 May 2020 03:35:51 -0400
-X-MC-Unique: jJthUEciNVydfSUzNgEdVw-1
-Received: by mail-qk1-f198.google.com with SMTP id l4so4760953qke.2
-        for <linux-integrity@vger.kernel.org>; Thu, 07 May 2020 00:35:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=vg3gAjb3Sk7KQVtWk6M+0e8g6+k5TaLScfnxont+BAw=;
-        b=TtHd2TYO4YcrQyuMG3VC++bSQGd1IQwaQRvukzAxzNnV5RK9QtbyUBG/RzKlQN6aNe
-         mnML/a1cRGb7M/vi8SNBIUlU0kt46y1Pd+v8jqjdPPeDRiSaMuUj2aoCgzYT72n81sWz
-         JM9VFXCKJPvI2bosvlzA/GJhK/+4lbGZhE1HgsyYKxP4x4MoPdz69aA+2AsSFj/73Pku
-         OBAJW88awJ5xgYbMCznLHtpZ96KnEzJAfXaz4mwqeFjLRacUYuCvphA92Ara6S9o4t6B
-         YM1ofj2ScGhQ+L0WezLGAqfUGzIFTzIMOH3uJZtTpdqiS1ouRXRJA3z77tRc5qQhkjsA
-         Dk1A==
-X-Gm-Message-State: AGi0PubfeZGLtx6yEbioFL4EoijMbsQlRrRF0OnSO/Y1UxnCrIuXYpW0
-        73xgzFZdudAHtITW0qzDsZrIqG7nPbKRfod9BrCMX9OJu5wg2oiRvfZln4XtONunFsuGr6qHyj1
-        FE5fUWubLE5iAsIar8BIm+64MaKUz
-X-Received: by 2002:ad4:4c03:: with SMTP id bz3mr12014981qvb.224.1588836950727;
-        Thu, 07 May 2020 00:35:50 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKsIDzKPVv/RmwQ/8PNSoblJXiXsLw/dYsVOYjxUx6G3cNhODMwrYk+IG49+IvlIerI67MsUw==
-X-Received: by 2002:ad4:4c03:: with SMTP id bz3mr12014966qvb.224.1588836950439;
-        Thu, 07 May 2020 00:35:50 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id g16sm3580317qkk.122.2020.05.07.00.35.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 00:35:49 -0700 (PDT)
-Date:   Thu, 7 May 2020 00:35:48 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Ken Goldman <kgold@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Ken Goldman <kgoldman@us.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: Disparity in tpm pcr5 value
-Message-ID: <20200507073548.zpyv3u7rv3u7jqrs@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-References: <20200505222731.whnkisag7tlrbcie@cantor>
- <4b3be2e9-35f7-d730-8e3b-b252ba5cb095@linux.ibm.com>
+        id S1725914AbgEGHxi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 03:53:38 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2161 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725900AbgEGHxh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 7 May 2020 03:53:37 -0400
+Received: from lhreml737-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 7AAF388BEEFFBA9EA804;
+        Thu,  7 May 2020 08:53:35 +0100 (IST)
+Received: from fraeml705-chm.china.huawei.com (10.206.15.54) by
+ lhreml737-chm.china.huawei.com (10.201.108.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Thu, 7 May 2020 08:53:35 +0100
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Thu, 7 May 2020 09:53:34 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Thu, 7 May 2020 09:53:34 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "david.safford@gmail.com" <david.safford@gmail.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "John Johansen" <john.johansen@canonical.com>
+CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Subject: RE: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+Thread-Topic: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+Thread-Index: AQHWHfmwvisCdHYC6kmVk7fgFWuzYaibYCWAgAAX0QCAAMB1IA==
+Date:   Thu, 7 May 2020 07:53:34 +0000
+Message-ID: <ab879f9e66874736a40e9c566cadc272@huawei.com>
+References: <20200429073935.11913-1-roberto.sassu@huawei.com>
+         <1588794293.4624.21.camel@linux.ibm.com>
+ <1588799408.4624.28.camel@linux.ibm.com>
+In-Reply-To: <1588799408.4624.28.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.220.65.97]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <4b3be2e9-35f7-d730-8e3b-b252ba5cb095@linux.ibm.com>
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed May 06 20, Ken Goldman wrote:
->On 5/5/2020 6:27 PM, Jerry Snitselaar wrote:
->>On some systems we've had reports of the value of pcr5 doesn't match 
->>the digests in the tpm event log.
->>It looks like I'm able to reproduce here with 5.7-rc4 on a dell 
->>system using this parser:
->>
->>https://github.com/ValdikSS/binary_bios_measurements_parser
->>
->>Any thoughts on where to start digging? Is there another tool I 
->>should use to parse this?
->
->If you email me the event log in binary, I can run it through the IBM 
->calculator and see if I get the same error.
->
->
-
-A couple other data points:
-
-- On the Dell system where I did this if I change it in the bios to use sha256
-   instead of sha1, then using tsseventextend to parse matches the value in the tpm.
-   In the sha256 case there is a final events log.
-
-- I have a nuc5 here, which also extends into sha1, and the parse matches there.
-
-- Javier has also reproduced it when passing through swtpm to a vm.
-
-- I added some debugging code, and there is nothing extending pcr5 with tpm_pcr_extend.
-
-- Ken's parse of the log also shows the disparity, which I've now done as well with
-   the tpm1.2 version of the tsseventextend tool.
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86
+em9oYXJAbGludXguaWJtLmNvbV0NCj4gU2VudDogV2VkbmVzZGF5LCBNYXkgNiwgMjAyMCAxMTox
+MCBQTQ0KPiBUbzogUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPjsgZGF2
+aWQuc2FmZm9yZEBnbWFpbC5jb207DQo+IHZpcm9AemVuaXYubGludXgub3JnLnVrOyBqbW9ycmlz
+QG5hbWVpLm9yZzsgSm9obiBKb2hhbnNlbg0KPiA8am9obi5qb2hhbnNlbkBjYW5vbmljYWwuY29t
+Pg0KPiBDYzogbGludXgtZnNkZXZlbEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWludGVncml0eUB2
+Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBzZWN1cml0eS1tb2R1bGVAdmdlci5rZXJuZWwub3Jn
+OyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBTaWx2aXUNCj4gVmxhc2NlYW51IDxTaWx2
+aXUuVmxhc2NlYW51QGh1YXdlaS5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUkZDXVtQQVRDSCAxLzNd
+IGV2bTogTW92ZSBob29rcyBvdXRzaWRlIExTTSBpbmZyYXN0cnVjdHVyZQ0KPiANCj4gT24gV2Vk
+LCAyMDIwLTA1LTA2IGF0IDE1OjQ0IC0wNDAwLCBNaW1pIFpvaGFyIHdyb3RlOg0KPiA+IFNpbmNl
+IGNvcHlpbmcgdGhlIEVWTSBITUFDIG9yIG9yaWdpbmFsIHNpZ25hdHVyZSBpc24ndCBhcHBsaWNh
+YmxlLCBJDQo+ID4gd291bGQgcHJlZmVyIGV4cGxvcmluZyBhbiBFVk0gcG9ydGFibGUgYW5kIGlt
+bXV0YWJsZSBzaWduYXR1cmUgb25seQ0KPiA+IHNvbHV0aW9uLg0KPiANCj4gVG8gcHJldmVudCBj
+b3B5aW5nIHRoZSBFVk0geGF0dHIsIHdlIGFkZGVkICJzZWN1cml0eS5ldm0iIHRvDQo+IC9ldGMv
+eGF0dHIuY29uZi4gwqBUbyBzdXBwb3J0IGNvcHlpbmcganVzdCB0aGUgRVZNIHBvcnRhYmxlIGFu
+ZA0KPiBpbW11dGFibGUgc2lnbmF0dXJlcyB3aWxsIHJlcXVpcmUgYSBkaWZmZXJlbnQgc29sdXRp
+b24uDQoNClRoaXMgcGF0Y2ggc2V0IHJlbW92ZXMgdGhlIG5lZWQgZm9yIGlnbm9yaW5nIHNlY3Vy
+aXR5LmV2bS4gSXQgY2FuIGJlIGFsd2F5cw0KY29waWVkLCBldmVuIGlmIGl0IGlzIGFuIEhNQUMu
+IEVWTSB3aWxsIHVwZGF0ZSBpdCBvbmx5IHdoZW4gdmVyaWZpY2F0aW9uIGluDQp0aGUgcHJlIGhv
+b2sgaXMgc3VjY2Vzc2Z1bC4gQ29tYmluZWQgd2l0aCB0aGUgYWJpbGl0eSBvZiBwcm90ZWN0aW5n
+IGEgc3Vic2V0DQpvZiBmaWxlcyB3aXRob3V0IGludHJvZHVjaW5nIGFuIEVWTSBwb2xpY3ksIHRo
+ZXNlIGFkdmFudGFnZXMgc2VlbSB0bw0Kb3V0d2VpZ2ggdGhlIGVmZm9ydCBuZWNlc3NhcnkgdG8g
+bWFrZSB0aGUgc3dpdGNoLg0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMgRHVlc3Nl
+bGRvcmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywgTGkgSmlh
+biwgU2hpIFlhbmxpDQo=
