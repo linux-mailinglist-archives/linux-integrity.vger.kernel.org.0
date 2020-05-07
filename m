@@ -2,150 +2,155 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8235A1C8685
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 12:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826E21C8C8D
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 15:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbgEGKVm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 06:21:42 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2162 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725857AbgEGKVl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 06:21:41 -0400
-Received: from lhreml716-chm.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id A05E31662E4C4547931E;
-        Thu,  7 May 2020 11:21:38 +0100 (IST)
-Received: from fraeml712-chm.china.huawei.com (10.206.15.61) by
- lhreml716-chm.china.huawei.com (10.201.108.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 7 May 2020 11:21:38 +0100
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 7 May 2020 12:21:38 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
- Thu, 7 May 2020 12:21:37 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        id S1727111AbgEGNi1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 09:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725939AbgEGNi0 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 7 May 2020 09:38:26 -0400
+Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [IPv6:2001:1600:3:17::1909])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5468AC05BD43
+        for <linux-integrity@vger.kernel.org>; Thu,  7 May 2020 06:38:26 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49Hvg31J1fzlhS6J;
+        Thu,  7 May 2020 15:38:23 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 49Hvg01x5Gzlpmph;
+        Thu,  7 May 2020 15:38:20 +0200 (CEST)
+Subject: Re: [PATCH v5 0/6] Add support for O_MAYEXEC
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        "mjg59@google.com" <mjg59@google.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        "kernel-hardening@lists.openwall.com" 
+        <kernel-hardening@lists.openwall.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: RE: [PATCH] ima: Allow imasig requirement to be satisfied by EVM
- portable signatures
-Thread-Topic: [PATCH] ima: Allow imasig requirement to be satisfied by EVM
- portable signatures
-Thread-Index: AQHWF772Ra31Za7Rnki0v4dh4iikmaiHEPYAgAEEbgCAFGpBIA==
-Date:   Thu, 7 May 2020 10:21:37 +0000
-Message-ID: <1e206d0da3dd485b90f88ba07dfdf140@huawei.com>
-References: <20200421092418.25151-1-roberto.sassu@huawei.com>
- <1587675102.5610.66.camel@linux.ibm.com>
- <735d0814399f430a8809af8c28b1a62d@huawei.com>
-In-Reply-To: <735d0814399f430a8809af8c28b1a62d@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.220.65.97]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+References: <20200505153156.925111-1-mic@digikod.net>
+ <20b24b9ca0a64afb9389722845738ec8@AcuMS.aculab.com>
+ <907109c8-9b19-528a-726f-92c3f61c1563@digikod.net>
+ <ad28ab5fe7854b41a575656e95b4da17@AcuMS.aculab.com>
+ <64426377-7fc4-6f37-7371-2e2a584e3032@digikod.net>
+ <635df0655b644408ac4822def8900383@AcuMS.aculab.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <1ced6f5f-7181-1dc5-2da7-abf4abd5ad23@digikod.net>
+Date:   Thu, 7 May 2020 15:38:19 +0200
+User-Agent: 
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+In-Reply-To: <635df0655b644408ac4822def8900383@AcuMS.aculab.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBsaW51eC1pbnRlZ3JpdHktb3du
-ZXJAdmdlci5rZXJuZWwub3JnIFttYWlsdG86bGludXgtaW50ZWdyaXR5LQ0KPiBvd25lckB2Z2Vy
-Lmtlcm5lbC5vcmddIE9uIEJlaGFsZiBPZiBSb2JlcnRvIFNhc3N1DQo+IFNlbnQ6IEZyaWRheSwg
-QXByaWwgMjQsIDIwMjAgMTI6NDAgUE0NCj4gVG86IE1pbWkgWm9oYXIgPHpvaGFyQGxpbnV4Lmli
-bS5jb20+OyBtamc1OUBnb29nbGUuY29tDQo+IENjOiBsaW51eC1pbnRlZ3JpdHlAdmdlci5rZXJu
-ZWwub3JnOyBsaW51eC1zZWN1cml0eS1tb2R1bGVAdmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1r
-ZXJuZWxAdmdlci5rZXJuZWwub3JnOyBTaWx2aXUgVmxhc2NlYW51DQo+IDxTaWx2aXUuVmxhc2Nl
-YW51QGh1YXdlaS5jb20+DQo+IFN1YmplY3Q6IFJFOiBbUEFUQ0hdIGltYTogQWxsb3cgaW1hc2ln
-IHJlcXVpcmVtZW50IHRvIGJlIHNhdGlzZmllZCBieSBFVk0NCj4gcG9ydGFibGUgc2lnbmF0dXJl
-cw0KPiANCj4gPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+IEZyb206IE1pbWkgWm9o
-YXIgW21haWx0bzp6b2hhckBsaW51eC5pYm0uY29tXQ0KPiA+IFNlbnQ6IFRodXJzZGF5LCBBcHJp
-bCAyMywgMjAyMCAxMDo1MiBQTQ0KPiA+IFRvOiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1
-QGh1YXdlaS5jb20+OyBtamc1OUBnb29nbGUuY29tDQo+ID4gQ2M6IGxpbnV4LWludGVncml0eUB2
-Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LXNlY3VyaXR5LQ0KPiBtb2R1bGVAdmdlci5rZXJuZWwub3Jn
-Ow0KPiA+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFNpbHZpdSBWbGFzY2VhbnUNCj4g
-PiA8U2lsdml1LlZsYXNjZWFudUBodWF3ZWkuY29tPg0KPiA+IFN1YmplY3Q6IFJlOiBbUEFUQ0hd
-IGltYTogQWxsb3cgaW1hc2lnIHJlcXVpcmVtZW50IHRvIGJlIHNhdGlzZmllZCBieQ0KPiBFVk0N
-Cj4gPiBwb3J0YWJsZSBzaWduYXR1cmVzDQo+ID4NCj4gPiBPbiBUdWUsIDIwMjAtMDQtMjEgYXQg
-MTE6MjQgKzAyMDAsIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4gPiBTeXN0ZW0gYWRtaW5pc3Ry
-YXRvcnMgY2FuIHJlcXVpcmUgdGhhdCBhbGwgYWNjZXNzZWQgZmlsZXMgaGF2ZSBhIHNpZ25hdHVy
-ZQ0KPiA+ID4gYnkgc3BlY2lmeWluZyBhcHByYWlzZV90eXBlPWltYXNpZyBpbiBhIHBvbGljeSBy
-dWxlLg0KPiA+ID4NCj4gPiA+IEN1cnJlbnRseSwgb25seSBJTUEgc2lnbmF0dXJlcyBzYXRpc2Z5
-IHRoaXMgcmVxdWlyZW1lbnQuIEhvd2V2ZXIsIGFsc28NCj4gPiBFVk0NCj4gPiA+IHBvcnRhYmxl
-IHNpZ25hdHVyZXMgY2FuIHNhdGlzZnkgaXQuIE1ldGFkYXRhLCBpbmNsdWRpbmcgc2VjdXJpdHku
-aW1hLCBhcmUNCj4gPiA+IHNpZ25lZCBhbmQgY2Fubm90IGNoYW5nZS4NCj4gPg0KPiA+IFBsZWFz
-ZSBleHBhbmQgdGhpcyBwYXJhZ3JhcGggd2l0aCBhIHNob3J0IGNvbXBhcmlzb24gb2YgdGhlIHNl
-Y3VyaXR5DQo+ID4gZ3VhcmFudGVlcyBwcm92aWRlZCBieSBFVk0gaW1tdXRhYmxlLCBwb3J0YWJs
-ZSBzaWduYXR1cmVzIHZlcnN1cyBpbWEtDQo+ID4gc2lnLg0KPiA+DQo+ID4gPg0KPiA+ID4gVGhp
-cyBwYXRjaCBoZWxwcyBpbiB0aGUgc2NlbmFyaW9zIHdoZXJlIHN5c3RlbSBhZG1pbmlzdHJhdG9y
-cyB3YW50IHRvDQo+ID4gPiBlbmZvcmNlIHRoaXMgcmVzdHJpY3Rpb24gYnV0IG9ubHkgRVZNIHBv
-cnRhYmxlIHNpZ25hdHVyZXMgYXJlIGF2YWlsYWJsZS4NCj4gPg0KPiA+IFllcywgSSBhZ3JlZSBp
-dCAiaGVscHMiLCBidXQgd2Ugc3RpbGwgbmVlZCB0byBhZGRyZXNzIHRoZSBhYmlsaXR5IG9mDQo+
-ID4gc2V0dGluZy9yZW1vdmluZyBzZWN1cml0eS5pbWEsIHdoaWNoIGlzbid0IHBvc3NpYmxlIHdp
-dGggYW4gSU1BDQo+ID4gc2lnbmF0dXJlLiDCoFRoaXMgc291bmRzIGxpa2Ugd2UgbmVlZCB0byBk
-ZWZpbmUgYW4gaW1tdXRhYmxlIGZpbGUgaGFzaC4NCj4gDQo+IEkgZGlkbid0IHVuZGVyc3RhbmQu
-IENhbiB5b3UgZXhwbGFpbiBiZXR0ZXI/DQoNCk9rLCBnb3QgaXQuDQoNCkkgd291bGRuJ3QgZ3Jh
-bnQgYWNjZXNzIHRvIG5ldyBmaWxlIGRlcGVuZGluZyBvbiB0aGUgc2VjdXJpdHkuaW1hIHR5cGUN
-CmJ1dCBkZXBlbmRpbmcgb24gdGhlIElNQV9ESUdTSUcgYml0LiBJbiBib3RoIGNhc2VzLCBJTUEg
-c2lnbmF0dXJlIGFuZA0KRVZNIHBvcnRhYmxlIHNpZ25hdHVyZSwgdGhlIGJpdCBpcyBzZXQuDQoN
-ClRoZXJlIGlzIG9uZSByZW1haW5pbmcgaXNzdWUuIE1heWJlIHRoZSBzaWduYXR1cmUgaXMgcG9y
-dGFibGUsIGJ1dCB5b3UNCmRvbid0IGdldCBpdCBmcm9tIGV2bV92ZXJpZnl4YXR0cigpIGlmIHZl
-cmlmaWNhdGlvbiBmYWlscy4gVGhlcmUgaXMgYSBsZWdpdGltYXRlDQpjYXNlIHdoZW4gaXQgaGFw
-cGVucywgd2hpY2ggaXMgd2hlbiB5b3UgZXh0cmFjdCBhIGZpbGUgd2l0aCBhIHBvcnRhYmxlDQpz
-aWduYXR1cmUgd2l0aCB0YXIsIGFuZCB0aGUgaW5vZGUgdWlkL2dpZCBhcmUgbm90IHlldCBjb3Jy
-ZWN0IChmY2hvd24oKSBpcw0KY2FsbGVkIGxhdGVyIGFmdGVyIHRoZSBvcGVuKCkpLiBJbiB0aGlz
-IGNhc2UsIElNQV9ESUdTSUcgaXMgbm90IHNldCBhbmQgdGhlDQpvcGVuKCkgZmFpbHMuDQoNClRv
-IGF2b2lkIHRoaXMgaXNzdWUgSSB3b3VsZCBpbnRyb2R1Y2UgdGhlIG5ldyBzdGF0dXMgSU5URUdS
-SVRZX0ZBSUxfSU1NVVRBQkxFLA0Kc28gdGhhdCBJTUFfRElHU0lHIGlzIHNldCBldmVuIGlmIHRo
-ZSB2ZXJpZmljYXRpb24gb2YgdGhlIHBvcnRhYmxlIHNpZ25hdHVyZQ0KZmFpbHMuDQoNClJvYmVy
-dG8NCg0KSFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1h
-bmFnaW5nIERpcmVjdG9yOiBMaSBQZW5nLCBMaSBKaWFuLCBTaGkgWWFubGkNCg0KDQo+IFRoYW5r
-cw0KPiANCj4gUm9iZXJ0bw0KPiANCj4gSFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9yZiBH
-bWJILCBIUkIgNTYwNjMNCj4gTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIExpIEppYW4sIFNo
-aSBZYW5saQ0KPiANCj4gDQo+ID4gwqBXaGF0IGRvIHlvdSB0aGluaz8NCj4gPg0KPiA+ID4gVGhl
-IHBhdGNoIG1ha2VzIHRoZSBmb2xsb3dpbmcgY2hhbmdlczoNCj4gPiA+DQo+ID4gPiBmaWxlIHhh
-dHRyIHR5cGVzOg0KPiA+ID4gc2VjdXJpdHkuaW1hOiBJTUFfWEFUVFJfRElHRVNUL0lNQV9YQVRU
-Ul9ESUdFU1RfTkcNCj4gPiA+IHNlY3VyaXR5LmV2bTogRVZNX1hBVFRSX1BPUlRBQkxFX0RJR1NJ
-Rw0KPiA+ID4NCj4gPiA+IGV4ZWN2ZSgpLCBtbWFwKCksIG9wZW4oKSBiZWhhdmlvciAod2l0aCBh
-cHByYWlzZV90eXBlPWltYXNpZyk6DQo+ID4gPiBiZWZvcmU6IGRlbmllZCAoZmlsZSB3aXRob3V0
-IElNQSBzaWduYXR1cmUsIGltYXNpZyByZXF1aXJlbWVudCBub3QgbWV0KQ0KPiA+ID4gYWZ0ZXI6
-IGFsbG93ZWQgKGZpbGUgd2l0aCBFVk0gcG9ydGFibGUgc2lnbmF0dXJlLCBpbWFzaWcgcmVxdWly
-ZW1lbnQNCj4gbWV0KQ0KPiA+ID4NCj4gPiA+IG9wZW4oT19XUk9OTFkpIGJlaGF2aW9yICh3aXRo
-b3V0IGFwcHJhaXNlX3R5cGU9aW1hc2lnKToNCj4gPiA+IGJlZm9yZTogYWxsb3dlZCAoZmlsZSB3
-aXRob3V0IElNQSBzaWduYXR1cmUsIG5vdCBpbW11dGFibGUpDQo+ID4gPiBhZnRlcjogZGVuaWVk
-IChmaWxlIHdpdGggRVZNIHBvcnRhYmxlIHNpZ25hdHVyZSwgaW1tdXRhYmxlKQ0KPiA+ID4NCj4g
-PiA+IFNpZ25lZC1vZmYtYnk6IFJvYmVydG8gU2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNv
-bT4NCj4gPiA+IC0tLQ0KPiA+ID4gIHNlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX2FwcHJhaXNl
-LmMgfCAxNCArKysrKysrKystLS0tLQ0KPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCA5IGluc2VydGlv
-bnMoKyksIDUgZGVsZXRpb25zKC0pDQo+ID4gPg0KPiA+ID4gZGlmZiAtLWdpdCBhL3NlY3VyaXR5
-L2ludGVncml0eS9pbWEvaW1hX2FwcHJhaXNlLmMNCj4gPiBiL3NlY3VyaXR5L2ludGVncml0eS9p
-bWEvaW1hX2FwcHJhaXNlLmMNCj4gPiA+IGluZGV4IGE5NjQ5YjA0YjlmMS4uNjlhNmE5NThmODEx
-IDEwMDY0NA0KPiA+ID4gLS0tIGEvc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfYXBwcmFpc2Uu
-Yw0KPiA+ID4gKysrIGIvc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfYXBwcmFpc2UuYw0KPiA+
-ID4gQEAgLTIxOSwxMiArMjE5LDE2IEBAIHN0YXRpYyBpbnQgeGF0dHJfdmVyaWZ5KGVudW0gaW1h
-X2hvb2tzIGZ1bmMsDQo+ID4gc3RydWN0IGludGVncml0eV9paW50X2NhY2hlICppaW50LA0KPiA+
-ID4gIAkJaGFzaF9zdGFydCA9IDE7DQo+ID4gPiAgCQkvKiBmYWxsIHRocm91Z2ggKi8NCj4gPiA+
-ICAJY2FzZSBJTUFfWEFUVFJfRElHRVNUOg0KPiA+ID4gLQkJaWYgKGlpbnQtPmZsYWdzICYgSU1B
-X0RJR1NJR19SRVFVSVJFRCkgew0KPiA+ID4gLQkJCSpjYXVzZSA9ICJJTUEtc2lnbmF0dXJlLXJl
-cXVpcmVkIjsNCj4gPiA+IC0JCQkqc3RhdHVzID0gSU5URUdSSVRZX0ZBSUw7DQo+ID4gPiAtCQkJ
-YnJlYWs7DQo+ID4gPiArCQlpZiAoKnN0YXR1cyAhPSBJTlRFR1JJVFlfUEFTU19JTU1VVEFCTEUp
-IHsNCj4gPiA+ICsJCQlpZiAoaWludC0+ZmxhZ3MgJiBJTUFfRElHU0lHX1JFUVVJUkVEKSB7DQo+
-ID4gPiArCQkJCSpjYXVzZSA9ICJJTUEtc2lnbmF0dXJlLXJlcXVpcmVkIjsNCj4gPiA+ICsJCQkJ
-KnN0YXR1cyA9IElOVEVHUklUWV9GQUlMOw0KPiA+ID4gKwkJCQlicmVhazsNCj4gPiA+ICsJCQl9
-DQo+ID4gPiArCQkJY2xlYXJfYml0KElNQV9ESUdTSUcsICZpaW50LT5hdG9taWNfZmxhZ3MpOw0K
-PiA+ID4gKwkJfSBlbHNlIHsNCj4gPiA+ICsJCQlzZXRfYml0KElNQV9ESUdTSUcsICZpaW50LT5h
-dG9taWNfZmxhZ3MpOw0KPiA+ID4gIAkJfQ0KPiA+ID4gLQkJY2xlYXJfYml0KElNQV9ESUdTSUcs
-ICZpaW50LT5hdG9taWNfZmxhZ3MpOw0KPiA+ID4gIAkJaWYgKHhhdHRyX2xlbiAtIHNpemVvZih4
-YXR0cl92YWx1ZS0+dHlwZSkgLSBoYXNoX3N0YXJ0ID49DQo+ID4gPiAgCQkJCWlpbnQtPmltYV9o
-YXNoLT5sZW5ndGgpDQo+ID4gPiAgCQkJLyoNCj4gPg0KPiA+IE5pY2UhDQo+ID4NCj4gPiBNaW1p
-DQoNCg==
+
+On 07/05/2020 11:44, David Laight wrote:
+> From: Mickaël Salaün <mic@digikod.net>
+>> Sent: 07 May 2020 10:30
+>> On 07/05/2020 11:00, David Laight wrote:
+>>> From: Mickaël Salaün
+>>>> Sent: 07 May 2020 09:37
+>>> ...
+>>>>> None of that description actually says what the patch actually does.
+>>>>
+>>>> "Add support for O_MAYEXEC" "to enable to control script execution".
+>>>> What is not clear here? This seems well understood by other commenters.
+>>>> The documentation patch and the talks can also help.
+>>>
+>>> I'm guessing that passing O_MAYEXEC to open() requests the kernel
+>>> check for execute 'x' permissions (as well as read).
+>>
+>> Yes, but only with openat2().
+> 
+> It can't matter if the flag is ignored.
+> It just means the kernel isn't enforcing the policy.
+> If openat2() fail because the flag is unsupported then
+> the application will need to retry without the flag.
+
+I don't get what you want to prove. Please read carefully the cover
+letter, the use case and the threat model.
+
+> 
+> So if the user has any ability create executable files this
+> is all pointless (from a security point of view).
+> The user can either copy the file or copy in an interpreter
+> that doesn't request O_MAYEXEC.>
+> It might stop accidental issues, but nothing malicious.
+
+The execute permission (like the write permission) does not only depends
+on the permission set on files, but it also depends on the
+options/permission of their mount points, the MAC policy, etc. The
+initial use case to enforce O_MAYEXEC is to rely on the noexec mount option.
+
+If you want a consistent policy, you need to make one. Only dealing with
+file properties may not be enough. This is explain in the cover letter
+and the patches. If you allow all users to write and execute their
+files, then there is no point in enforcing anything with O_MAYEXEC.
+
+> 
+>>> Then kernel policy determines whether 'read' access is actually enough,
+>>> or whether 'x' access (possibly masked by mount permissions) is needed.
+>>>
+>>> If that is true, two lines say what is does.
+>>
+>> The "A simple system-wide security policy" paragraph introduce that, but
+>> I'll highlight it in the next cover letter.
+> 
+> No it doesn't.
+> It just says there is some kind of policy that some flags change.
+> It doesn't say what is being checked for.
+
+It said "the mount points or the file access rights". Please take a look
+at the documentation patch.
+
+> 
+>> The most important point is
+>> to understand why it is required, before getting to how it will be
+>> implemented.
+> 
+> But you don't say what is required.
+
+A consistent policy. Please take a look at the documentation patch which
+explains the remaining prerequisites. You can also take a look at the
+talks for further details.
+
+> Just a load of buzzword ramblings.
+
+It is a summary. Can you please suggest something better?
