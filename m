@@ -2,87 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8F01C7C04
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 May 2020 23:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0596F1C7FEA
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 04:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729737AbgEFVKY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 6 May 2020 17:10:24 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4834 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729614AbgEFVKX (ORCPT
+        id S1726864AbgEGCFe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 6 May 2020 22:05:34 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52570 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725869AbgEGCFd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 6 May 2020 17:10:23 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 046L2uck009087;
-        Wed, 6 May 2020 17:10:15 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30ux6e5gpx-1
+        Wed, 6 May 2020 22:05:33 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 047242Xu083334;
+        Wed, 6 May 2020 22:05:21 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30s4r5wfcr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 May 2020 17:10:15 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 046L32AI009603;
-        Wed, 6 May 2020 17:10:15 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30ux6e5gnu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 May 2020 17:10:14 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 046L9irg032318;
-        Wed, 6 May 2020 21:10:12 GMT
+        Wed, 06 May 2020 22:05:21 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 04722dhg012142;
+        Thu, 7 May 2020 02:05:19 GMT
 Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma01fra.de.ibm.com with ESMTP id 30s0g5c241-1
+        by ppma05fra.de.ibm.com with ESMTP id 30s0g5m5wd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 May 2020 21:10:12 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 046L90UQ66584994
+        Thu, 07 May 2020 02:05:19 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0472479U64880896
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 May 2020 21:09:00 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 56C75A4054;
-        Wed,  6 May 2020 21:10:10 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0986BA405F;
-        Wed,  6 May 2020 21:10:09 +0000 (GMT)
+        Thu, 7 May 2020 02:04:07 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 57D6111C052;
+        Thu,  7 May 2020 02:05:17 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 83BEC11C04A;
+        Thu,  7 May 2020 02:05:16 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.197.80])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  6 May 2020 21:10:08 +0000 (GMT)
-Message-ID: <1588799408.4624.28.camel@linux.ibm.com>
-Subject: Re: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  7 May 2020 02:05:16 +0000 (GMT)
+Message-ID: <1588817116.4624.51.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] powerpc/ima: fix secure boot rules in ima arch policy
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, david.safford@gmail.com,
-        viro@zeniv.linux.org.uk, jmorris@namei.org,
-        John Johansen <john.johansen@canonical.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com
-Date:   Wed, 06 May 2020 17:10:08 -0400
-In-Reply-To: <1588794293.4624.21.camel@linux.ibm.com>
-References: <20200429073935.11913-1-roberto.sassu@huawei.com>
-         <1588794293.4624.21.camel@linux.ibm.com>
+To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
+Date:   Wed, 06 May 2020 22:05:16 -0400
+In-Reply-To: <1588342612-14532-1-git-send-email-nayna@linux.ibm.com>
+References: <1588342612-14532-1-git-send-email-nayna@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-06_09:2020-05-05,2020-05-06 signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 mlxscore=0 bulkscore=0 mlxlogscore=951 malwarescore=0
- spamscore=0 suspectscore=0 phishscore=0 priorityscore=1501 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005060170
+ mlxlogscore=999 clxscore=1011 priorityscore=1501 malwarescore=0
+ impostorscore=0 bulkscore=0 suspectscore=0 adultscore=0 phishscore=0
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005070007
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-05-06 at 15:44 -0400, Mimi Zohar wrote:
-> Since copying the EVM HMAC or original signature isn't applicable, I
-> would prefer exploring an EVM portable and immutable signature only
-> solution.
+On Fri, 2020-05-01 at 10:16 -0400, Nayna Jain wrote:
+> To prevent verifying the kernel module appended signature twice
+> (finit_module), once by the module_sig_check() and again by IMA, powerpc
+> secure boot rules define an IMA architecture specific policy rule
+> only if CONFIG_MODULE_SIG_FORCE is not enabled. This, unfortunately, does
+> not take into account the ability of enabling "sig_enforce" on the boot
+> command line (module.sig_enforce=1).
+> 
+> Including the IMA module appraise rule results in failing the finit_module
+> syscall, unless the module signing public key is loaded onto the IMA
+> keyring.
+> 
+> This patch fixes secure boot policy rules to be based on CONFIG_MODULE_SIG
+> instead.
+> 
+> Fixes: 4238fad366a6 ("powerpc/ima: Add support to initialize ima policy rules")
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
 
-To prevent copying the EVM xattr, we added "security.evm" to
-/etc/xattr.conf.  To support copying just the EVM portable and
-immutable signatures will require a different solution.
+Thanks, Nayna.
 
-Mimi
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
