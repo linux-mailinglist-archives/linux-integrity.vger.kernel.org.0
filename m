@@ -2,253 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFF21C9F10
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 01:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906DF1C9EFC
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 01:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbgEGXQe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 19:16:34 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:33604 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726518AbgEGXQe (ORCPT
+        id S1726612AbgEGXMj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 19:12:39 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:25937 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726514AbgEGXMj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 19:16:34 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0C6288EE268;
-        Thu,  7 May 2020 16:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1588893394;
-        bh=Vq4fJAR4c3n+7/s91qY+VIDyQxaRyUpDsyF2fK3Q/lE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MgFxpiZ42tJn3dM/OG+DSskaCH1Wmp/BjSemtmZ01mOuaIjzuMjaL2bNetQ24FD7x
-         P0se1cELArLiFqCViCDkY9WTMYu87ohd9sUJvIC1xh5F39maGLTS6ghAdR3G7fcya6
-         DGX4C1DsQlLsxxY3u6Rc+dHuPMGo6B4QBQ7jvbSk=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id byLDFkJpnzbo; Thu,  7 May 2020 16:16:33 -0700 (PDT)
-Received: from jarvis.lan (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 88CA18EE181;
-        Thu,  7 May 2020 16:16:33 -0700 (PDT)
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Thu, 7 May 2020 19:12:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588893157;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rdRFLYYJMNCbccjIYx9pUAfHwyQ1QtQrFmV7wZWi5j4=;
+        b=eeq7SMMcTZfW1RflMn3uSRdRs/XU9IjJpb1OYMp5u58WnRHtXmArNNHY9en6US0KCnB5Yx
+        qXxEmyQJJ0aCluy8YS71j/CuYpCaWugGBKL2EQlPJH3I9rIm6PmElK+27UsPd7+5wp12+8
+        hyH1Kfp7nf/LEZly3rh+9M6TsoBC/t8=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-463-CJwfQuj7NN2RGDwVSk8d4w-1; Thu, 07 May 2020 19:12:35 -0400
+X-MC-Unique: CJwfQuj7NN2RGDwVSk8d4w-1
+Received: by mail-qt1-f198.google.com with SMTP id v18so8649461qtq.22
+        for <linux-integrity@vger.kernel.org>; Thu, 07 May 2020 16:12:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=rdRFLYYJMNCbccjIYx9pUAfHwyQ1QtQrFmV7wZWi5j4=;
+        b=g1dNQyNobgbozaa6DmwPbL296eh3/cL8Twv9s89FabI+T4hUNl8VqiMwdyC5R31/om
+         qiy+YirsPs1YGrZmnfMuPl8p+zbfAZOmjojawCbsSw8n4FSauP56lnYki68RviLg+pVj
+         w/8nIFqlW4qQT7ErNkugf13iI1+G/Zn4fybdJ08mYjZ7aLfXTM2d56hZHQer5y0n81Fu
+         u0KUjjrjyjPD7vhZ5jw7q5DqTJ4xsIvYAngNySlxgidoaS6ii3V85gOymSEPEXmTmDbg
+         Kcs8vo03JMkwtTbd3zLeUVAC+kLx8LF5rdz37mTgnmD6vMYD8NKR7vRU+mDh3GT6Woq+
+         bXqQ==
+X-Gm-Message-State: AGi0PuZQM76b9KkfbcypTNrewYrDEA64nDIqg7F1QhT1CK4dCmTPFQZb
+        ZVi5WE4sVQicrYzYw1sueH8wULmzkSDdNaEj23mLpTZuQvpOzm/9WkligtXQSoZeutHfTbuoyyj
+        5SBfLPY7RvbT32H8U06scMi3sSG2z
+X-Received: by 2002:aed:3f21:: with SMTP id p30mr16381173qtf.335.1588893154365;
+        Thu, 07 May 2020 16:12:34 -0700 (PDT)
+X-Google-Smtp-Source: APiQypIHHumXlMugE+qZp9PnjMskuvAbMSHHncUCYOm0qs205cQodLrMSGfj9yALgQObwpJlrY93Vg==
+X-Received: by 2002:aed:3f21:: with SMTP id p30mr16381150qtf.335.1588893154044;
+        Thu, 07 May 2020 16:12:34 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id e27sm4473355qkl.47.2020.05.07.16.12.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2020 16:12:33 -0700 (PDT)
+Date:   Thu, 7 May 2020 16:12:31 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Ken Goldman <kgold@linux.ibm.com>, linux-integrity@vger.kernel.org,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: [PATCH v9 8/8] security: keys: trusted: implement counter/timer policy
-Date:   Thu,  7 May 2020 16:11:47 -0700
-Message-Id: <20200507231147.27025-9-James.Bottomley@HansenPartnership.com>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20200507231147.27025-1-James.Bottomley@HansenPartnership.com>
-References: <20200507231147.27025-1-James.Bottomley@HansenPartnership.com>
+        Matthew Garrett <mjg59@google.com>,
+        Ken Goldman <kgoldman@us.ibm.com>
+Subject: Re: Disparity in tpm pcr5 value
+Message-ID: <20200507231231.vi5he2my42ngnbm4@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+References: <20200505222731.whnkisag7tlrbcie@cantor>
+ <4b3be2e9-35f7-d730-8e3b-b252ba5cb095@linux.ibm.com>
+ <20200507073548.zpyv3u7rv3u7jqrs@cantor>
+ <1588863053.5685.62.camel@linux.ibm.com>
+ <20200507162624.4eqi6tvfmfabn6vj@cantor>
+ <1588885034.5685.121.camel@linux.ibm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <1588885034.5685.121.camel@linux.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This is actually a generic policy allowing a range of comparisons
-against any value set in the TPM Clock, which includes things like the
-reset count, a monotonic millisecond count and the restart count.  The
-most useful comparison is against the millisecond count for expiring
-keys.  However, you have to remember that currently Linux doesn't try
-to sync the epoch timer with the TPM, so the expiration is actually
-measured in how long the TPM itself has been powered on ... the TPM
-timer doesn't count while the system is powered down.  The millisecond
-counter is a u64 quantity found at offset 8 in the timer structure,
-and the <= comparision operand is 9, so a policy set to expire after the
-TPM has been up for 100 seconds would look like
+On Thu May 07 20, Mimi Zohar wrote:
+>On Thu, 2020-05-07 at 09:26 -0700, Jerry Snitselaar wrote:
+>> On Thu May 07 20, Mimi Zohar wrote:
+>> >On Thu, 2020-05-07 at 00:35 -0700, Jerry Snitselaar wrote:
+>> >> On Wed May 06 20, Ken Goldman wrote:
+>> >> >On 5/5/2020 6:27 PM, Jerry Snitselaar wrote:
+>> >> >>On some systems we've had reports of the value of pcr5 doesn't match
+>> >> >>the digests in the tpm event log.
+>> >> >>It looks like I'm able to reproduce here with 5.7-rc4 on a dell
+>> >> >>system using this parser:
+>> >> >>
+>> >> >>https://github.com/ValdikSS/binary_bios_measurements_parser
+>> >> >>
+>> >> >>Any thoughts on where to start digging? Is there another tool I
+>> >> >>should use to parse this?
+>> >> >
+>> >> >If you email me the event log in binary, I can run it through the IBM
+>> >> >calculator and see if I get the same error.
+>> >> >
+>> >> >
+>> >>
+>> >> A couple other data points:
+>> >>
+>> >> - On the Dell system where I did this if I change it in the bios to use sha256
+>> >>    instead of sha1, then using tsseventextend to parse matches the value in the tpm.
+>> >>    In the sha256 case there is a final events log.
+>> >>
+>> >> - I have a nuc5 here, which also extends into sha1, and the parse matches there.
+>> >>
+>> >> - Javier has also reproduced it when passing through swtpm to a vm.
+>> >>
+>> >> - I added some debugging code, and there is nothing extending pcr5 with tpm_pcr_extend.
+>> >>
+>> >> - Ken's parse of the log also shows the disparity, which I've now done as well with
+>> >>    the tpm1.2 version of the tsseventextend tool.
+>> >
+>> >Thanks, Jerry.  You've eliminated the kernel extending into the PCR.
+>> > For SHA256, the event log has to be TPM 2.0 format.  I've seen TPM
+>> >2.0's for SHA1 use the TPM 1.2 event log format.  When using SHA1, is
+>> >it a TPM 1.2 or 2.0 event log format?
+>>
+>> It is the 1.2 event log format.
+>
+>From everything you've said, it sounds like buggy firmware.  Either an
+>additional event is added to the list, but does not extend the TPM.
+> Or an event extends the TPM, but is not added to the event log.  This
+>isn't a kernel problem and can't be addressed by the kernel.
+> Hopefully the vendor will be willing to address it.
+>
+>Mimi
+>
 
-0000016d00000000000f424000080009
-
-Where 0x16d is the counter timer policy code and 0xf4240 is 100 000 in
-hex.
-
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- .../security/keys/trusted-encrypted.rst       | 29 ++++++++++++++
- include/linux/tpm.h                           |  1 +
- security/keys/trusted-keys/tpm2-policy.c      | 40 ++++++++++++++++++-
- security/keys/trusted-keys/trusted_tpm2.c     | 36 ++++++++++++++++-
- 4 files changed, 104 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-index b68d3eb73f00..53a6196c7df9 100644
---- a/Documentation/security/keys/trusted-encrypted.rst
-+++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -241,3 +241,32 @@ about the usage can be found in the file
- Another new format 'enc32' has been defined in order to support encrypted keys
- with payload size of 32 bytes. This will initially be used for nvdimm security
- but may expand to other usages that require 32 bytes payload.
-+
-+Appendix
-+--------
-+
-+TPM 2.0 Policies
-+----------------
-+
-+The current TPM supports PCR lock policies as documented above and
-+CounterTimer policies which can be used to create expiring keys.  One
-+caveat with expiring keys is that the TPM millisecond counter does not
-+update while a system is powered off and Linux does not sync the TPM
-+millisecond count with its internal clock, so the best you can expire
-+in is in terms of how long any given TPM has been powered on.  (FIXME:
-+Linux should simply update the millisecond clock to the current number
-+of seconds past the epoch on boot).
-+
-+A CounterTimer policy is expressed in terms of length and offset
-+against the TPM clock structure (TPMS_TIME_INFO), which looks like the
-+packed structure::
-+
-+    struct tpms_time_info {
-+            u64 uptime;       /* time in ms since last start or reset */
-+	    u64 clock;        /* cumulative uptime in ms */
-+	    u32 resetcount;   /* numer of times the TPM has been reset */
-+	    u32 restartcount; /* number of times the TPM has been restarted */
-+	    u8  safe          /* time was safely loaded from NVRam */
-+    };
-+
-+The usual comparison for expiring keys is against clock, at offset 8.
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index e32e9728adce..5026a06977e1 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -233,6 +233,7 @@ enum tpm2_command_codes {
- 	TPM2_CC_PCR_EXTEND	        = 0x0182,
- 	TPM2_CC_EVENT_SEQUENCE_COMPLETE = 0x0185,
- 	TPM2_CC_HASH_SEQUENCE_START     = 0x0186,
-+	TPM2_CC_POLICY_PASSWORD		= 0x018c,
- 	TPM2_CC_CREATE_LOADED           = 0x0191,
- 	TPM2_CC_LAST		        = 0x0193, /* Spec 1.36 */
- };
-diff --git a/security/keys/trusted-keys/tpm2-policy.c b/security/keys/trusted-keys/tpm2-policy.c
-index 87a13e607eca..bd8eb02e1094 100644
---- a/security/keys/trusted-keys/tpm2-policy.c
-+++ b/security/keys/trusted-keys/tpm2-policy.c
-@@ -197,7 +197,8 @@ int tpm2_generate_policy_digest(struct tpm2_policies *pols,
- 			len = *plen;
- 		}
- 
--		crypto_shash_update(sdesc, policy, len);
-+		if (len)
-+			crypto_shash_update(sdesc, policy, len);
- 
- 		/* now output the intermediate to the policydigest */
- 		crypto_shash_final(sdesc, policydigest);
-@@ -332,6 +333,16 @@ int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols,
- 		u32 cmd = pols->code[i];
- 		struct tpm_buf buf;
- 
-+		if (cmd == TPM2_CC_POLICY_AUTHVALUE)
-+			/*
-+			 * both PolicyAuthValue and PolicyPassword
-+			 * hash to the same thing, but one triggers
-+			 * HMAC authentication and the other simple
-+			 * authentication.  Since we have no HMAC
-+			 * code, we're choosing the simple
-+			 */
-+			cmd = TPM2_CC_POLICY_PASSWORD;
-+
- 		rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, cmd);
- 		if (rc)
- 			return rc;
-@@ -352,8 +363,35 @@ int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols,
- 			tpm_buf_append(&buf, pols->policies[i],
- 				       pols->len[i] - pols->hash_size);
- 			break;
-+
-+		case TPM2_CC_POLICY_COUNTER_TIMER: {
-+			/*
-+			 * the format of this is the last two u16
-+			 * quantities are the offset and operation
-+			 * respectively.  The rest is operandB which
-+			 * must be zero padded in a hash digest
-+			 */
-+			u16 opb_len = pols->len[i] - 4;
-+
-+			if (opb_len > pols->hash_size)
-+				return -EINVAL;
-+
-+			tpm_buf_append_u16(&buf, opb_len);
-+			tpm_buf_append(&buf, pols->policies[i], opb_len);
-+
-+			/* offset and operand*/
-+			tpm_buf_append(&buf, pols->policies[i] + opb_len, 4);
-+			failure = "Counter Timer";
-+
-+			break;
-+		}
-+
- 		default:
- 			failure = "unknown policy";
-+			if (pols->len[i])
-+				tpm_buf_append(&buf, pols->policies[i],
-+					       pols->len[i]);
-+
- 			break;
- 		}
- 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 98c65431ca75..3ec01ed874d9 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -248,6 +248,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 	u32 flags;
- 	int i;
- 	int rc;
-+	static const int POLICY_SIZE = 2 * PAGE_SIZE;
- 
- 	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
- 		if (options->hash == tpm2_hash_map[i].crypto_id) {
-@@ -268,7 +269,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		/* 4 array len, 2 hash alg */
- 		const int len = 4 + 2 + options->pcrinfo_len;
- 
--		pols = kmalloc(sizeof(*pols) + len, GFP_KERNEL);
-+		pols = kmalloc(POLICY_SIZE, GFP_KERNEL);
- 		if (!pols)
- 			return -ENOMEM;
- 
-@@ -289,6 +290,39 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		return -EINVAL;
- 	}
- 
-+	/*
-+	 * if we already have a policy, we have to add authorization
-+	 * to it.  If we don't, we can simply follow the usual
-+	 * non-policy route.
-+	 */
-+	if (options->blobauth_len != 0 && payload->policies) {
-+		struct tpm2_policies *pols;
-+		static u8 *scratch;
-+		int i;
-+		bool found = false;
-+
-+		pols = payload->policies;
-+
-+		/* make sure it's not already in policy */
-+		for (i = 0; i < pols->count; i++) {
-+			if (pols->code[i] == TPM2_CC_POLICY_AUTHVALUE) {
-+				found = true;
-+
-+				break;
-+			}
-+		}
-+
-+		if (!found) {
-+			i = pols->count++;
-+			scratch = pols->policies[i - 1] + pols->len[i - 1];
-+
-+			/* the TPM2_PolicyPassword command has no payload */
-+			pols->policies[i] = scratch;
-+			pols->len[i] = 0;
-+			pols->code[i] = TPM2_CC_POLICY_AUTHVALUE;
-+		}
-+	}
-+
- 	if (payload->policies) {
- 		rc = tpm2_generate_policy_digest(payload->policies,
- 						 options->hash,
--- 
-2.26.1
+It appears to be the latter case. The value in the tpm doesn't show up
+in the intermediate values of the parse. Yeah, it doesn't seem to be
+an issue on the kernel side.
 
