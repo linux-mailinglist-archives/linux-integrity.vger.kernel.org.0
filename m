@@ -2,128 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAAB1C9CD1
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 22:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A857C1C9DEC
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 23:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbgEGU5X (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 16:57:23 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64718 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726268AbgEGU5X (ORCPT
+        id S1726572AbgEGVv4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 17:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726437AbgEGVv4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 16:57:23 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 047KYFdp163596;
-        Thu, 7 May 2020 16:57:20 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30vmp6t0kj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 May 2020 16:57:20 -0400
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 047KZ5Pt165588;
-        Thu, 7 May 2020 16:57:19 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30vmp6t0ju-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 May 2020 16:57:19 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 047KpPL2004052;
-        Thu, 7 May 2020 20:57:18 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 30s0g5cx9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 May 2020 20:57:17 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 047KvFjP54526114
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 7 May 2020 20:57:15 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B69D3A4040;
-        Thu,  7 May 2020 20:57:15 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B152CA4051;
-        Thu,  7 May 2020 20:57:14 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.135.201])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  7 May 2020 20:57:14 +0000 (GMT)
-Message-ID: <1588885034.5685.121.camel@linux.ibm.com>
-Subject: Re: Disparity in tpm pcr5 value
-From:   Mimi Zohar <zohar@linux.ibm.com>
+        Thu, 7 May 2020 17:51:56 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EA4C05BD43
+        for <linux-integrity@vger.kernel.org>; Thu,  7 May 2020 14:51:55 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id a2so5921536ejx.5
+        for <linux-integrity@vger.kernel.org>; Thu, 07 May 2020 14:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=80odJHq5iNnD4K/PwadcA419/qQfhCPstKrgbgDEwTI=;
+        b=troJMdqMQUJ1T2WLPStS5iGPMi8Be2mPb93HwA0lSHHHCXx0xPhnOoGsno4Q179Iwj
+         SBuE3gkGyHChGGbs8UV+Oko8hOB0csfG3RSizv9MjDlDbDEy6Y0o3s1Hs9gzz++Yns7f
+         Od7bB+1n+xAqAobDs46x5+Wf52YhTxall7CaYi9gpiQ4S/v33Cwm3ykC5hYQlKa+a7Ra
+         MTssJXOBv691jHRI3GIn9bfktjSpd2xW+kxblMKFdTu2ZP2WtJgxqaBItziiJVeO2pNg
+         psgPsfbBsf53qUP3qKY5WD/V1hQu7DdUZPyUn0Lf29vdsqAc41Jt35ItxlTacHplae1I
+         DXdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=80odJHq5iNnD4K/PwadcA419/qQfhCPstKrgbgDEwTI=;
+        b=D0/nkUC7YwAn833KtGpESsCDnUWtWQMOQnQdFaj9gg6A3RqvBaxfCsc9C2UXagIjB6
+         YNhgjDW6CtrJFc/5MmpGwLz92/Xk+puFNih/LBnfMBt2oe094mNDHNV5cJgGrTQr0EzE
+         JAMJKyXJnqEg8Nk2FO7N4b3+Pv9Zqp9po/OxTEF7Ixv3wdv6A12w+YYhu/CTA/B4FZVI
+         MBIYfN50qTP3/oKyqKt/SWPSKlbHXRYTfgqYPQBuNPyaSkBC+Thgr1DtcCvcyqa1dSqd
+         L6INe2c5DkoF70FsTtyj5TJxSjG10lwiB3FlVMqlhYxkLy+3vuuftzNEtA/paj4vCprJ
+         voUQ==
+X-Gm-Message-State: AGi0PuYgSQlJAT+CkptAfwMHlNSh4ntro01euBeBs3g4BPo26GKBVKgU
+        OenMIH3zq/TAvkSnXNlDhv6nx/x+VgR1mgUpJDv2vg==
+X-Google-Smtp-Source: APiQypIQP13MF6NvFhPpn4m/eD6P3j3XAGhd5JX5CgB5Pj+pyekGGwt33sQKVfcex2UoaL0UG/HdXFyvYZtaeb3DoEA=
+X-Received: by 2002:a17:906:855a:: with SMTP id h26mr14608386ejy.56.1588888314504;
+ Thu, 07 May 2020 14:51:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200409211044.21625-1-hdegoede@redhat.com> <20200410210652.GA16905@linux.intel.com>
+ <b8865c10-3733-7179-c524-afa4c4386de6@redhat.com> <20200507141707.pltaa6dxkqkopjoa@cantor>
+In-Reply-To: <20200507141707.pltaa6dxkqkopjoa@cantor>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 7 May 2020 14:51:43 -0700
+Message-ID: <CAPcyv4j4-GRkwdSHNVUGLzehBVC6hUR4pNeez_=E6FKjS_DmNQ@mail.gmail.com>
+Subject: Re: [PATCH] tpm_tis_core: Disable broken IRQ handling code
 To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     Ken Goldman <kgold@linux.ibm.com>, linux-integrity@vger.kernel.org,
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Ken Goldman <kgoldman@us.ibm.com>
-Date:   Thu, 07 May 2020 16:57:14 -0400
-In-Reply-To: <20200507162624.4eqi6tvfmfabn6vj@cantor>
-References: <20200505222731.whnkisag7tlrbcie@cantor>
-         <4b3be2e9-35f7-d730-8e3b-b252ba5cb095@linux.ibm.com>
-         <20200507073548.zpyv3u7rv3u7jqrs@cantor>
-         <1588863053.5685.62.camel@linux.ibm.com>
-         <20200507162624.4eqi6tvfmfabn6vj@cantor>
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, Mark Pearson <mpearson@lenovo.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-07_13:2020-05-07,2020-05-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- priorityscore=1501 suspectscore=0 malwarescore=0 impostorscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005070159
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-05-07 at 09:26 -0700, Jerry Snitselaar wrote:
-> On Thu May 07 20, Mimi Zohar wrote:
-> >On Thu, 2020-05-07 at 00:35 -0700, Jerry Snitselaar wrote:
-> >> On Wed May 06 20, Ken Goldman wrote:
-> >> >On 5/5/2020 6:27 PM, Jerry Snitselaar wrote:
-> >> >>On some systems we've had reports of the value of pcr5 doesn't match
-> >> >>the digests in the tpm event log.
-> >> >>It looks like I'm able to reproduce here with 5.7-rc4 on a dell
-> >> >>system using this parser:
-> >> >>
-> >> >>https://github.com/ValdikSS/binary_bios_measurements_parser
-> >> >>
-> >> >>Any thoughts on where to start digging? Is there another tool I
-> >> >>should use to parse this?
-> >> >
-> >> >If you email me the event log in binary, I can run it through the IBM
-> >> >calculator and see if I get the same error.
-> >> >
-> >> >
-> >>
-> >> A couple other data points:
-> >>
-> >> - On the Dell system where I did this if I change it in the bios to use sha256
-> >>    instead of sha1, then using tsseventextend to parse matches the value in the tpm.
-> >>    In the sha256 case there is a final events log.
-> >>
-> >> - I have a nuc5 here, which also extends into sha1, and the parse matches there.
-> >>
-> >> - Javier has also reproduced it when passing through swtpm to a vm.
-> >>
-> >> - I added some debugging code, and there is nothing extending pcr5 with tpm_pcr_extend.
-> >>
-> >> - Ken's parse of the log also shows the disparity, which I've now done as well with
-> >>    the tpm1.2 version of the tsseventextend tool.
+On Thu, May 7, 2020 at 7:17 AM Jerry Snitselaar <jsnitsel@redhat.com> wrote:
+>
+> On Thu May 07 20, Hans de Goede wrote:
+> >Hi All,
 > >
-> >Thanks, Jerry.  You've eliminated the kernel extending into the PCR.
-> > For SHA256, the event log has to be TPM 2.0 format.  I've seen TPM
-> >2.0's for SHA1 use the TPM 1.2 event log format.  When using SHA1, is
-> >it a TPM 1.2 or 2.0 event log format?
-> 
-> It is the 1.2 event log format.
+> >On 4/10/20 11:06 PM, Jarkko Sakkinen wrote:
+> >>On Thu, Apr 09, 2020 at 11:10:44PM +0200, Hans de Goede wrote:
+> >>>Since commit dda8b2af395b ("tpm: Revert "tpm_tis_core: Set
+> >>>TPM_CHIP_FLAG_IRQ before probing for interrupts"") we no longer set
+> >>>the TPM_CHIP_FLAG_IRQ ever.
+> >>>
+> >>>So the whole IRQ probing code is not useful, worse we rely on the
+> >>>IRQ-test path of tpm_tis_send() to call disable_interrupts() if
+> >>>interrupts do not work, but that path never gets entered because we
+> >>>never set the TPM_CHIP_FLAG_IRQ.
+> >>>
+> >>>So the remaining IRQ probe code calls request_irq() and never calls
+> >>>free_irq() even when the interrupt is not working.
+> >>>
+> >>>On some systems, e.g. the Lenovo X1 8th gen,  the interrupt we try
+> >>>to use and never free creates an interrupt storm followed by
+> >>>an "irq XX: nobody cared" oops.
+> >>>
+> >>>Since it is non-functional at the moment anyways, lets just completely
+> >>>disable the IRQ code in tpm_tis_core for now.
+> >>>
+> >>>Fixes: dda8b2af395b ("tpm: Revert "tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts"")
+> >>>Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> >>>---
+> >>>Note I'm working with Lenovo to try and get to the bottom of this.
+> >>>---
+> >>
+> >>OK if I recall correctly the reason for reverting was that the fixes
+> >>Stefan was sending were broken and no access to hardware were the
+> >>issues would be visible. The reason for not doing anything til this
+> >>day is that we don't have T490 available.
+> >
+> >So as promised I have been in contact with Lenovo about this.
+> >
+> >Specifically I have been in contact with Lenovo about seeing an
+> >IRQ storm when the tpm_tis code tries to use the IRQ on a X1 carbon
+> >8th gen (X1C8), because of the now public plan that Lenovo will
+> >offer ordering this model with Fedora pre-installed:
+> >https://lwn.net/Articles/818595/
+> >
+> >On the X1C8 the problem has been diagnosed to be a misconfigured
+> >GPIO pin on the CPU (the SoC). The X1C8 uses an SPI connected
+> >TPM chip with its IRQ connected to a GPIO on the SoC which is
+> >configured in Direct IRQ mode, so that it directly asserts
+> >IRQs on one of the APIC IRQs.  The problem is that due to the
+> >misconfiguration as soon as the IRQ is enabled it fires
+> >continuously.
+> >
+> >For the X1C8 this should be fixed in the BIOS of the first
+> >batch which gets shipped out to customers so there we should
+> >not have to worry about this.
+> >
+> >It is likely (but not yet confirmed) that the issue on the T490
+> >is the same, although on my test X1C8 device I got an IRQ storm,
+> >followed by the kernel disabling the IRQ, not a non booting system.
+> >I guess this might be due to kernel configuration differences.
+> >
+> >Assuming that the issue on the T490 is the same, we might see a
+> >BIOS update fixing this, but given that non-booting is
+> >'not good ("tm")' even if there will be a BIOS fix we should
+> >still do something at the kernel level to also work with the
+> >older unfixed BIOS which is already out there.
+> >
+> >I've been thinking about this and I'm afraid that the only thing
+> >what we can do is add a DMI product-name (product-version for Lenovo)
+> >string based blacklist for IRQ usage to drivers/char/tpm/tpm_tis.c
+> >and set tpm_info.irq = -1 for devices on that list.
+> >
+> >My plan is to prepare a RFC patch of such a blacklist, while we
+> >wait for confirmation that the root cause on the T490 is the same
+> >as on the X1C8, but before I work on that I'm wondering if
+> >people agree that that is the best approach, or if there are
+> >other suggestions for dealing with this ?
+> >
+> >Regards,
+> >
+> >Hans
+> >
+>
+> Dan,
+>
+> Could this be the cause of the problem on the system you were
+> seeing the issue with, or was that using PTT?
 
-From everything you've said, it sounds like buggy firmware.  Either an
-additional event is added to the list, but does not extend the TPM.
- Or an event extends the TPM, but is not added to the event log.  This
-isn't a kernel problem and can't be addressed by the kernel.
- Hopefully the vendor will be willing to address it.
+It sounds similar, I'm just not immediately aware of where I can find
+out how the GPIOs are routed on that development board. I'll poke
+around.
 
-Mimi
+What's PTT?
+
+My concern with a blacklist is that the existing tpm_tis module
+parameter to disable interrupts, IIRC, did not help mitigate this
+problem. So I would think that if there is a blackilst it should at
+least be amenable by module parameter for new platforms, or that
+specifying "interrupts=0" to tpm_tis.ko behaves identically to the
+device being placed on the list.
