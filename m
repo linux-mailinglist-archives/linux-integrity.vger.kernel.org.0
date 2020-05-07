@@ -2,155 +2,158 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 826E21C8C8D
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 15:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C781C8D58
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 16:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727111AbgEGNi1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 09:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725939AbgEGNi0 (ORCPT
+        id S1726531AbgEGOCp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 10:02:45 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:58582 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726913AbgEGOCo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 09:38:26 -0400
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [IPv6:2001:1600:3:17::1909])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5468AC05BD43
-        for <linux-integrity@vger.kernel.org>; Thu,  7 May 2020 06:38:26 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49Hvg31J1fzlhS6J;
-        Thu,  7 May 2020 15:38:23 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 49Hvg01x5Gzlpmph;
-        Thu,  7 May 2020 15:38:20 +0200 (CEST)
-Subject: Re: [PATCH v5 0/6] Add support for O_MAYEXEC
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        "kernel-hardening@lists.openwall.com" 
-        <kernel-hardening@lists.openwall.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-References: <20200505153156.925111-1-mic@digikod.net>
- <20b24b9ca0a64afb9389722845738ec8@AcuMS.aculab.com>
- <907109c8-9b19-528a-726f-92c3f61c1563@digikod.net>
- <ad28ab5fe7854b41a575656e95b4da17@AcuMS.aculab.com>
- <64426377-7fc4-6f37-7371-2e2a584e3032@digikod.net>
- <635df0655b644408ac4822def8900383@AcuMS.aculab.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <1ced6f5f-7181-1dc5-2da7-abf4abd5ad23@digikod.net>
-Date:   Thu, 7 May 2020 15:38:19 +0200
-User-Agent: 
+        Thu, 7 May 2020 10:02:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588860163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FJAQX97h/73fz6F5oJeyWiUgnE5xCKILGZxmqYUzLLw=;
+        b=en7IuiTDS5/PSRhfwhjBNzr7TLOwqbCUhUzWL+yakbjRg1fENKIK9dsnV0CfmWhA8XKefA
+        x83a23JQHSOO6c+wi2RXXEl2j91rk4H4Cd/xA/d1KheGhl2DV+m+1IlrmpnuZtPr6s/hN9
+        GXEoYUa/K9DoY8rmOOb25ReQWiZbROI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-253-uynt-HXVMwqmtKAwYH0Hsg-1; Thu, 07 May 2020 10:02:32 -0400
+X-MC-Unique: uynt-HXVMwqmtKAwYH0Hsg-1
+Received: by mail-wm1-f72.google.com with SMTP id f17so2580741wmm.5
+        for <linux-integrity@vger.kernel.org>; Thu, 07 May 2020 07:02:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FJAQX97h/73fz6F5oJeyWiUgnE5xCKILGZxmqYUzLLw=;
+        b=lO1pwwxpq9FBkNuSeNIpsKZtjqt3rJmW2M04ezx9Lz6wb5pEzkVbMZHsh4Q3/LpB04
+         LJYYe06mYVxVNNZmsFpVp12Jox7vTj4HbotPmEIVUNZtxQ5fIlUEoEdRl/Mx2YPZZlBE
+         7FlOcB8njv+EbA17H6e1vFUcrbTL/6lH9lx+xt9v0TRUEQ6um6RngoGijsmDjPCjtqUf
+         E1cxFLFKzy6YPm2R7FBQqJC3iUnGHHMZAYCP5cNht7lfXqxPY4PKRDZf871XEkWdG3Hw
+         AFcVk/YOcIomsSmXALaM9v763cJ+iOYGhKeeoxtm+LIDDdQxDhupdc6tZmdM91WQmfZL
+         6bcw==
+X-Gm-Message-State: AGi0PuYI2VHxYnEqk6q3PX8qXKq7t4Qs/btUCd0x6MGNsfuReEdZOvBt
+        l6lANSNmVth+geSlZ2otwV/L9UH95uuT1I014joplJRSaNz3o6jPZnL9C5q+r1YdcX50MxUIaWO
+        H3S71VI6L10K10auFNnP1CgG0SxHR
+X-Received: by 2002:adf:ff89:: with SMTP id j9mr15492650wrr.245.1588860150949;
+        Thu, 07 May 2020 07:02:30 -0700 (PDT)
+X-Google-Smtp-Source: APiQypIPvoaYCurDekntvYlLb8+t0hGTWO84sSUT3CbR82pBqkKg39Q+0URvwlu0H+uaRnQnW4IjfQ==
+X-Received: by 2002:adf:ff89:: with SMTP id j9mr15492614wrr.245.1588860150652;
+        Thu, 07 May 2020 07:02:30 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id v5sm8386756wrr.93.2020.05.07.07.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 May 2020 07:02:29 -0700 (PDT)
+Subject: Re: [PATCH] tpm_tis_core: Disable broken IRQ handling code
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, Mark Pearson <mpearson@lenovo.com>
+References: <20200409211044.21625-1-hdegoede@redhat.com>
+ <20200410210652.GA16905@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <f2ac1770-56aa-0ce0-5451-6f1816abca73@redhat.com>
+Date:   Thu, 7 May 2020 16:02:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <635df0655b644408ac4822def8900383@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200410210652.GA16905@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi All,
 
-On 07/05/2020 11:44, David Laight wrote:
-> From: Mickaël Salaün <mic@digikod.net>
->> Sent: 07 May 2020 10:30
->> On 07/05/2020 11:00, David Laight wrote:
->>> From: Mickaël Salaün
->>>> Sent: 07 May 2020 09:37
->>> ...
->>>>> None of that description actually says what the patch actually does.
->>>>
->>>> "Add support for O_MAYEXEC" "to enable to control script execution".
->>>> What is not clear here? This seems well understood by other commenters.
->>>> The documentation patch and the talks can also help.
->>>
->>> I'm guessing that passing O_MAYEXEC to open() requests the kernel
->>> check for execute 'x' permissions (as well as read).
+On 4/10/20 11:06 PM, Jarkko Sakkinen wrote:
+> On Thu, Apr 09, 2020 at 11:10:44PM +0200, Hans de Goede wrote:
+>> Since commit dda8b2af395b ("tpm: Revert "tpm_tis_core: Set
+>> TPM_CHIP_FLAG_IRQ before probing for interrupts"") we no longer set
+>> the TPM_CHIP_FLAG_IRQ ever.
 >>
->> Yes, but only with openat2().
-> 
-> It can't matter if the flag is ignored.
-> It just means the kernel isn't enforcing the policy.
-> If openat2() fail because the flag is unsupported then
-> the application will need to retry without the flag.
-
-I don't get what you want to prove. Please read carefully the cover
-letter, the use case and the threat model.
-
-> 
-> So if the user has any ability create executable files this
-> is all pointless (from a security point of view).
-> The user can either copy the file or copy in an interpreter
-> that doesn't request O_MAYEXEC.>
-> It might stop accidental issues, but nothing malicious.
-
-The execute permission (like the write permission) does not only depends
-on the permission set on files, but it also depends on the
-options/permission of their mount points, the MAC policy, etc. The
-initial use case to enforce O_MAYEXEC is to rely on the noexec mount option.
-
-If you want a consistent policy, you need to make one. Only dealing with
-file properties may not be enough. This is explain in the cover letter
-and the patches. If you allow all users to write and execute their
-files, then there is no point in enforcing anything with O_MAYEXEC.
-
-> 
->>> Then kernel policy determines whether 'read' access is actually enough,
->>> or whether 'x' access (possibly masked by mount permissions) is needed.
->>>
->>> If that is true, two lines say what is does.
+>> So the whole IRQ probing code is not useful, worse we rely on the
+>> IRQ-test path of tpm_tis_send() to call disable_interrupts() if
+>> interrupts do not work, but that path never gets entered because we
+>> never set the TPM_CHIP_FLAG_IRQ.
 >>
->> The "A simple system-wide security policy" paragraph introduce that, but
->> I'll highlight it in the next cover letter.
+>> So the remaining IRQ probe code calls request_irq() and never calls
+>> free_irq() even when the interrupt is not working.
+>>
+>> On some systems, e.g. the Lenovo X1 8th gen,  the interrupt we try
+>> to use and never free creates an interrupt storm followed by
+>> an "irq XX: nobody cared" oops.
+>>
+>> Since it is non-functional at the moment anyways, lets just completely
+>> disable the IRQ code in tpm_tis_core for now.
+>>
+>> Fixes: dda8b2af395b ("tpm: Revert "tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts"")
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>> Note I'm working with Lenovo to try and get to the bottom of this.
+>> ---
 > 
-> No it doesn't.
-> It just says there is some kind of policy that some flags change.
-> It doesn't say what is being checked for.
+> OK if I recall correctly the reason for reverting was that the fixes
+> Stefan was sending were broken and no access to hardware were the
+> issues would be visible. The reason for not doing anything til this
+> day is that we don't have T490 available.
 
-It said "the mount points or the file access rights". Please take a look
-at the documentation patch.
+So as promised I have been in contact with Lenovo about this.
 
-> 
->> The most important point is
->> to understand why it is required, before getting to how it will be
->> implemented.
-> 
-> But you don't say what is required.
+Specifically I have been in contact with Lenovo about seeing an
+IRQ storm when the tpm_tis code tries to use the IRQ on a X1 carbon
+8th gen (X1C8), because of the now public plan that Lenovo will
+offer ordering this model with Fedora pre-installed:
+https://lwn.net/Articles/818595/
 
-A consistent policy. Please take a look at the documentation patch which
-explains the remaining prerequisites. You can also take a look at the
-talks for further details.
+On the X1C8 the problem has been diagnosed to be a misconfigured
+GPIO pin on the CPU (the SoC). The X1C8 uses an SPI connected
+TPM chip with its IRQ connected to a GPIO on the SoC which is
+configured in Direct IRQ mode, so that it directly asserts
+IRQs on one of the APIC IRQs.  The problem is that due to the
+misconfiguration as soon as the IRQ is enabled it fires
+continuously.
 
-> Just a load of buzzword ramblings.
+For the X1C8 this should be fixed in the BIOS of the first
+batch which gets shipped out to customers so there we should
+not have to worry about this.
 
-It is a summary. Can you please suggest something better?
+It is likely (but not yet confirmed) that the issue on the T490
+is the same, although on my test X1C8 device I got an IRQ storm,
+followed by the kernel disabling the IRQ, not a non booting system.
+I guess this might be due to kernel configuration differences.
+
+Assuming that the issue on the T490 is the same, we might see a
+BIOS update fixing this, but given that non-booting is
+'not good ("tm")' even if there will be a BIOS fix we should
+still do something at the kernel level to also work with the
+older unfixed BIOS which is already out there.
+
+I've been thinking about this and I'm afraid that the only thing
+what we can do is add a DMI product-name (product-version for Lenovo)
+string based blacklist for IRQ usage to drivers/char/tpm/tpm_tis.c
+and set tpm_info.irq = -1 for devices on that list.
+
+My plan is to prepare a RFC patch of such a blacklist, while we
+wait for confirmation that the root cause on the T490 is the same
+as on the X1C8, but before I work on that I'm wondering if
+people agree that that is the best approach, or if there are
+other suggestions for dealing with this ?
+
+Regards,
+
+Hans
+
