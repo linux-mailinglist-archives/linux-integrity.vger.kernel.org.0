@@ -2,87 +2,170 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0596F1C7FEA
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 04:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F761C80B2
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 06:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbgEGCFe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 6 May 2020 22:05:34 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52570 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725869AbgEGCFd (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 6 May 2020 22:05:33 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 047242Xu083334;
-        Wed, 6 May 2020 22:05:21 -0400
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30s4r5wfcr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 May 2020 22:05:21 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 04722dhg012142;
-        Thu, 7 May 2020 02:05:19 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma05fra.de.ibm.com with ESMTP id 30s0g5m5wd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 May 2020 02:05:19 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0472479U64880896
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 7 May 2020 02:04:07 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 57D6111C052;
-        Thu,  7 May 2020 02:05:17 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83BEC11C04A;
-        Thu,  7 May 2020 02:05:16 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.197.80])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  7 May 2020 02:05:16 +0000 (GMT)
-Message-ID: <1588817116.4624.51.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] powerpc/ima: fix secure boot rules in ima arch policy
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
-Date:   Wed, 06 May 2020 22:05:16 -0400
-In-Reply-To: <1588342612-14532-1-git-send-email-nayna@linux.ibm.com>
-References: <1588342612-14532-1-git-send-email-nayna@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-06_09:2020-05-05,2020-05-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 clxscore=1011 priorityscore=1501 malwarescore=0
- impostorscore=0 bulkscore=0 suspectscore=0 adultscore=0 phishscore=0
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005070007
+        id S1725793AbgEGEEr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 00:04:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45776 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725446AbgEGEEr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 7 May 2020 00:04:47 -0400
+Received: from embeddedor (unknown [189.207.59.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E87BA207DD;
+        Thu,  7 May 2020 04:04:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588824286;
+        bh=GnLUxgmdXtnzY66D3hGDvqn+bBMebpp1lc+6hwlGfAo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ARhYmz2v+xSNYnTjr+O0bRqASsMPYHF68/hkeORs0hdYuJpIGt6+5S+XBbMJxInm0
+         fXVi6sK25p7Q7O9Me3ZaGCcKlv+MHDwpZ/cxELS/ewgC+/pcIENDfv/ukf9rw90M8B
+         ux2C56xh1pcJrsZxCW+7lg8KF2cXVlyicH+HBn1U=
+Date:   Wed, 6 May 2020 23:09:12 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH RESEND] tpm: eventlog: Replace zero-length array with
+ flexible-array member
+Message-ID: <20200507040912.GA31382@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-05-01 at 10:16 -0400, Nayna Jain wrote:
-> To prevent verifying the kernel module appended signature twice
-> (finit_module), once by the module_sig_check() and again by IMA, powerpc
-> secure boot rules define an IMA architecture specific policy rule
-> only if CONFIG_MODULE_SIG_FORCE is not enabled. This, unfortunately, does
-> not take into account the ability of enabling "sig_enforce" on the boot
-> command line (module.sig_enforce=1).
-> 
-> Including the IMA module appraise rule results in failing the finit_module
-> syscall, unless the module signing public key is loaded onto the IMA
-> keyring.
-> 
-> This patch fixes secure boot policy rules to be based on CONFIG_MODULE_SIG
-> instead.
-> 
-> Fixes: 4238fad366a6 ("powerpc/ima: Add support to initialize ima policy rules")
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+The current codebase makes use of the zero-length array language
+extension to the C90 standard, but the preferred mechanism to declare
+variable-length types such as these ones is a flexible array member[1][2],
+introduced in C99:
 
-Thanks, Nayna.
+struct foo {
+        int stuff;
+        struct boo array[];
+};
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last in the structure, which
+will help us prevent some kind of undefined behavior bugs from being
+inadvertently introduced[3] to the codebase from now on.
+
+Also, notice that, dynamic memory allocations won't be affected by
+this change:
+
+"Flexible array members have incomplete type, and so the sizeof operator
+may not be applied. As a quirk of the original implementation of
+zero-length arrays, sizeof evaluates to zero."[1]
+
+sizeof(flexible-array-member) triggers a warning because flexible array
+members have incomplete type[1]. There are some instances of code in
+which the sizeof operator is being incorrectly/erroneously applied to
+zero-length arrays and the result is zero. Such instances may be hiding
+some bugs. So, this work (flexible-array member conversions) will also
+help to get completely rid of those sorts of issues.
+
+Also, the following issue shows up due to the flexible-array member
+having incomplete type[4]:
+
+drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_bios_measurements_start’:
+drivers/char/tpm/eventlog/tpm2.c:54:46: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
+   54 |  size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
+      |                                              ^
+drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_bios_measurements_next’:
+drivers/char/tpm/eventlog/tpm2.c:102:10: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
+  102 |    sizeof(event_header->event) + event_header->event_size;
+      |          ^
+drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_binary_bios_measurements_show’:
+drivers/char/tpm/eventlog/tpm2.c:140:10: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
+  140 |    sizeof(event_header->event) + event_header->event_size;
+      |          ^
+scripts/Makefile.build:266: recipe for target 'drivers/char/tpm/eventlog/tpm2.o' failed
+make[3]: *** [drivers/char/tpm/eventlog/tpm2.o] Error 1
+
+As mentioned above: "Flexible array members have incomplete type, and
+so the sizeof operator may not be applied. As a quirk of the original
+implementation of zero-length arrays, sizeof evaluates to zero."[1] So,
+the sizeof(flexible-array) can be safely removed to fix the error above.
+
+Lastly, prefer sizeof(*ptr) over sizeof(struct foo).
+
+This issue was found with the help of Coccinelle.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+[2] https://github.com/KSPP/linux/issues/21
+[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+[4] https://github.com/KSPP/linux/issues/43
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+Hi,
+
+I'm resending this because LKML is eating some messages, recently.
+Sorry for the noise in case you've already received this patch.
+
+Thanks
+
+ drivers/char/tpm/eventlog/tpm2.c | 10 +++-------
+ include/linux/tpm_eventlog.h     |  2 +-
+ 2 files changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
+index e741b1157525..351a2989b3c6 100644
+--- a/drivers/char/tpm/eventlog/tpm2.c
++++ b/drivers/char/tpm/eventlog/tpm2.c
+@@ -51,8 +51,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ 	int i;
+ 
+ 	event_header = addr;
+-	size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
+-		+ event_header->event_size;
++	size = sizeof(*event_header) + event_header->event_size;
+ 
+ 	if (*pos == 0) {
+ 		if (addr + size < limit) {
+@@ -98,8 +97,7 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
+ 	event_header = log->bios_event_log;
+ 
+ 	if (v == SEQ_START_TOKEN) {
+-		event_size = sizeof(struct tcg_pcr_event) -
+-			sizeof(event_header->event) + event_header->event_size;
++		event_size = sizeof(*event_header) + event_header->event_size;
+ 		marker = event_header;
+ 	} else {
+ 		event = v;
+@@ -136,9 +134,7 @@ static int tpm2_binary_bios_measurements_show(struct seq_file *m, void *v)
+ 	size_t size;
+ 
+ 	if (v == SEQ_START_TOKEN) {
+-		size = sizeof(struct tcg_pcr_event) -
+-			sizeof(event_header->event) + event_header->event_size;
+-
++		size = sizeof(*event_header) + event_header->event_size;
+ 		temp_ptr = event_header;
+ 
+ 		if (size > 0)
+diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
+index c253461b1c4e..4f8c90c93c29 100644
+--- a/include/linux/tpm_eventlog.h
++++ b/include/linux/tpm_eventlog.h
+@@ -97,7 +97,7 @@ struct tcg_pcr_event {
+ 	u32 event_type;
+ 	u8 digest[20];
+ 	u32 event_size;
+-	u8 event[0];
++	u8 event[];
+ } __packed;
+ 
+ struct tcg_event_field {
+-- 
+2.26.2
+
