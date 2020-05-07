@@ -2,126 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D391C94B7
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 17:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9D11C9675
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2020 18:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgEGPRl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 11:17:41 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29956 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726267AbgEGPRl (ORCPT
+        id S1726678AbgEGQ0d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 May 2020 12:26:33 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:37640 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726636AbgEGQ0c (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 11:17:41 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 047F4hU7112011;
-        Thu, 7 May 2020 11:17:28 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30sp8n4cfc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 May 2020 11:17:26 -0400
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 047F5Khg113846;
-        Thu, 7 May 2020 11:17:20 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30sp8n4cb4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 May 2020 11:17:19 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 047FAaca015722;
-        Thu, 7 May 2020 15:17:12 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 30s0g5uk0t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 May 2020 15:17:12 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 047FHAFT33292412
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 7 May 2020 15:17:10 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 854BFAE053;
-        Thu,  7 May 2020 15:17:10 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41963AE05A;
-        Thu,  7 May 2020 15:17:09 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.135.201])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  7 May 2020 15:17:09 +0000 (GMT)
-Message-ID: <1588864628.5685.78.camel@linux.ibm.com>
-Subject: Re: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "david.safford@gmail.com" <david.safford@gmail.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        John Johansen <john.johansen@canonical.com>
-Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Thu, 07 May 2020 11:17:08 -0400
-In-Reply-To: <ab879f9e66874736a40e9c566cadc272@huawei.com>
-References: <20200429073935.11913-1-roberto.sassu@huawei.com>
-         <1588794293.4624.21.camel@linux.ibm.com>
-         <1588799408.4624.28.camel@linux.ibm.com>
-         <ab879f9e66874736a40e9c566cadc272@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Thu, 7 May 2020 12:26:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588868791;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DtpmifdZVltweHRusfE5X8VRHfeIU9bIYgL82hdmxQg=;
+        b=AqAt+X+sD8GRMIS33zqEcWgIKMxSjSPTj9bP/o9bowllEJspo2FpF70f8421UKpa6gm89y
+        AYvXJcGvqkEQf7+uLtrXhXFfq/d+EoT0piUifTi3tywsqayUdL5EZHm1NQd/ARabUbIL5y
+        jfUp/w+v1VUwxvQl6PfS8OIj0GxtIzg=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-169-NAOva2vXNz2oPEOhh0f2Aw-1; Thu, 07 May 2020 12:26:27 -0400
+X-MC-Unique: NAOva2vXNz2oPEOhh0f2Aw-1
+Received: by mail-qv1-f69.google.com with SMTP id bm3so6425314qvb.0
+        for <linux-integrity@vger.kernel.org>; Thu, 07 May 2020 09:26:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=DtpmifdZVltweHRusfE5X8VRHfeIU9bIYgL82hdmxQg=;
+        b=SXlMOrRaldUCSLrfhuCsSDUC5ycJIg6oH07N66I1REy1kcJEeFlsPNdRhFXdkfWX6X
+         UZ55S7sJWXok1ciYiSWw1SEkSJrPe6ZWusMI/kFpW6q52RXuNhnYz2rGrozY7/17evcY
+         mcjT8X/0S071zZsBJ6d9J8iD0Q+9BZTDiqhukxC0Epy3qDrDpVAS9pWX2yCy9BL9m3kK
+         MP7uifBeW30jFR5SiApLKE3MlNr0gvb22yVa225jeO3Yvd94zJ47E2b0VHlBLMFirwc9
+         BYpnqzmbMzzYUDZCKKZOO7CJ5QYLucdRmNq4p3+55+0iiDx+WiYpUWWCe6aQm1dx8FsS
+         A2Vg==
+X-Gm-Message-State: AGi0PuZ35AVaRuyVex8kVVt27O2qhlWr3SO8AgcB9BoGGDbSQc1tclms
+        yROupCDsSHhQ7lmzwzUcrWUfn41YWuACrwRaHT8MEZkaVD2saSg49mYrBrmhgeYFhiZeD0QxuCA
+        GaAcF7Hb9pCZHO4/CbZm3caCwAwVO
+X-Received: by 2002:a05:6214:188a:: with SMTP id cx10mr14205388qvb.119.1588868786838;
+        Thu, 07 May 2020 09:26:26 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKJ8QitiMlwdEtTw55Tphs2ib5S8jmz/TAlYmMgbxHiSY6ZYnPeWmHe0kAZyUkdsPrjHsmyrg==
+X-Received: by 2002:a05:6214:188a:: with SMTP id cx10mr14205364qvb.119.1588868786579;
+        Thu, 07 May 2020 09:26:26 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id 33sm4508181qtc.82.2020.05.07.09.26.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2020 09:26:25 -0700 (PDT)
+Date:   Thu, 7 May 2020 09:26:24 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Ken Goldman <kgold@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Ken Goldman <kgoldman@us.ibm.com>
+Subject: Re: Disparity in tpm pcr5 value
+Message-ID: <20200507162624.4eqi6tvfmfabn6vj@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+References: <20200505222731.whnkisag7tlrbcie@cantor>
+ <4b3be2e9-35f7-d730-8e3b-b252ba5cb095@linux.ibm.com>
+ <20200507073548.zpyv3u7rv3u7jqrs@cantor>
+ <1588863053.5685.62.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-07_09:2020-05-07,2020-05-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- malwarescore=0 suspectscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- mlxscore=0 lowpriorityscore=0 mlxlogscore=999 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2005070123
+In-Reply-To: <1588863053.5685.62.camel@linux.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-05-07 at 07:53 +0000, Roberto Sassu wrote:
-> > -----Original Message-----
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Wednesday, May 6, 2020 11:10 PM
-> > To: Roberto Sassu <roberto.sassu@huawei.com>; david.safford@gmail.com;
-> > viro@zeniv.linux.org.uk; jmorris@namei.org; John Johansen
-> > <john.johansen@canonical.com>
-> > Cc: linux-fsdevel@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> > security-module@vger.kernel.org; linux-kernel@vger.kernel.org; Silviu
-> > Vlasceanu <Silviu.Vlasceanu@huawei.com>
-> > Subject: Re: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+On Thu May 07 20, Mimi Zohar wrote:
+>On Thu, 2020-05-07 at 00:35 -0700, Jerry Snitselaar wrote:
+>> On Wed May 06 20, Ken Goldman wrote:
+>> >On 5/5/2020 6:27 PM, Jerry Snitselaar wrote:
+>> >>On some systems we've had reports of the value of pcr5 doesn't match
+>> >>the digests in the tpm event log.
+>> >>It looks like I'm able to reproduce here with 5.7-rc4 on a dell
+>> >>system using this parser:
+>> >>
+>> >>https://github.com/ValdikSS/binary_bios_measurements_parser
+>> >>
+>> >>Any thoughts on where to start digging? Is there another tool I
+>> >>should use to parse this?
+>> >
+>> >If you email me the event log in binary, I can run it through the IBM
+>> >calculator and see if I get the same error.
+>> >
+>> >
+>>
+>> A couple other data points:
+>>
+>> - On the Dell system where I did this if I change it in the bios to use sha256
+>>    instead of sha1, then using tsseventextend to parse matches the value in the tpm.
+>>    In the sha256 case there is a final events log.
+>>
+>> - I have a nuc5 here, which also extends into sha1, and the parse matches there.
+>>
+>> - Javier has also reproduced it when passing through swtpm to a vm.
+>>
+>> - I added some debugging code, and there is nothing extending pcr5 with tpm_pcr_extend.
+>>
+>> - Ken's parse of the log also shows the disparity, which I've now done as well with
+>>    the tpm1.2 version of the tsseventextend tool.
+>
+>Thanks, Jerry.  You've eliminated the kernel extending into the PCR.
+> For SHA256, the event log has to be TPM 2.0 format.  I've seen TPM
+>2.0's for SHA1 use the TPM 1.2 event log format.  When using SHA1, is
+>it a TPM 1.2 or 2.0 event log format?
+>
+>Mimi
+>
 
-Roberto, please fix your mailer or at least manually remove this sort
-of info from the email.
+It is the 1.2 event log format.
 
-> > 
-> > On Wed, 2020-05-06 at 15:44 -0400, Mimi Zohar wrote:
-> > > Since copying the EVM HMAC or original signature isn't applicable, I
-> > > would prefer exploring an EVM portable and immutable signature only
-> > > solution.
-> > 
-> > To prevent copying the EVM xattr, we added "security.evm" to
-> > /etc/xattr.conf.  To support copying just the EVM portable and
-> > immutable signatures will require a different solution.
-> 
-> This patch set removes the need for ignoring security.evm. It can be always
-> copied, even if it is an HMAC. EVM will update it only when verification in
-> the pre hook is successful. Combined with the ability of protecting a subset
-> of files without introducing an EVM policy, these advantages seem to
-> outweigh the effort necessary to make the switch.
-
-As the EVM file HMAC and original signature contain inode specific
-information (eg. i_version, i_generation), these xattrs cannot ever be
-copied.  The proposed change is in order to support just the new EVM
-signatures.
-
-At least IMA file hashes should always be used in conjunction with
-EVM.  EVM xattrs should always require a security.ima xattr to bind
-the file metadata to the file data.  The IMA and EVM policies really
-need to be in sync.
-
-Mimi
