@@ -2,93 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4BD1CA00A
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 03:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9BB1CA270
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 06:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbgEHBVa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 May 2020 21:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726495AbgEHBVa (ORCPT
+        id S1726009AbgEHEyT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 8 May 2020 00:54:19 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:21175 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725829AbgEHEyS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 May 2020 21:21:30 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995C0C05BD43;
-        Thu,  7 May 2020 18:21:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49JCGC0TrHz9sSk;
-        Fri,  8 May 2020 11:21:23 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1588900885;
-        bh=fn1FAITXWrHoD5p0YkLk4NDvgXCTxZCopaiWSoAE24M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NucDWMIHzyEWKhv2Jpz5V57pCJSGVwKFECNyZ49I5pY1ukFXmrdSaz/00q2KpJDbG
-         EWLv3FYAKffEQaBXd+sOR9qlvTBznRmAqjavXEhcZjrKMl21SATXigYcr4tbNlyzQh
-         LO51vcA7p09iXpAntaH3rroJpzap350FUwdpbwPhGyiGuMajhFMQvdhcwTjZk4XvX6
-         G0uZxVdYMDn1xLuA7ffyANP3YNjHI4Dm3OcCE7Iyy/sdLK4IVaRP0dKDCAajrN0BVY
-         oKN7dnuctm+yzNgINA/ovWbnsNKaMaQHaqsWKxt52evUDbcrR1oWWSEzL2otnQG0AY
-         Py7s4KqVpoUUA==
-Date:   Fri, 8 May 2020 11:21:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
+        Fri, 8 May 2020 00:54:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588913657;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W+BH4TenlCplFqY4LfV4/xPxDpNHfh9hRZl8/P0YOWA=;
+        b=jMu44hv/uGIfGIacGSfHEyXuTB/MXfdqWW+fQcJOhyWmWsqRgt2An/7IBXhtQ3Fc6TTbIH
+        4m6J46b92hsiiGD1X8LKXuuimKhIqWcJNusLrByB942DV6iT3UVxjTmuI3jQK1kVOlzcDf
+        CCjrktvvFhzQM4XZviiWZQ418CevwOQ=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-205-Q4DODXDEO_6ABWzDOMvRoQ-1; Fri, 08 May 2020 00:54:13 -0400
+X-MC-Unique: Q4DODXDEO_6ABWzDOMvRoQ-1
+Received: by mail-qv1-f69.google.com with SMTP id q4so575142qve.19
+        for <linux-integrity@vger.kernel.org>; Thu, 07 May 2020 21:54:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=W+BH4TenlCplFqY4LfV4/xPxDpNHfh9hRZl8/P0YOWA=;
+        b=cmk8OR/LcRAxDritseCg6bY1b3Sy9hYivTCJfWe4r7zHrO/znj04P6OxMcXjEbahcz
+         GE+SZsfaOu9H8q03aK44/7u81PrpH4KYPBvMvv58tm796a04qN6FzkE37aPVJLJmAZwJ
+         hd8YVRKEWIEdb8f4R+O8f01s2u5SAYIcfWfVOVBHQpC+kXQ1ZdKPjv8T6s0SZN6qTo8Q
+         5PEzeWcEmeyC0pB3eAukm3VynsnzhLZL/fjLsxvWYHtU1/n/n+hSmcfXFEHXy4DQdNHy
+         lVgBur6DZwqu1kwLtvlreGbVhUiiLpLGC+XFBgLoQDj9mGjddpKTUM8Abk2iyErTRZty
+         09lw==
+X-Gm-Message-State: AGi0Pua8M3kUEZT3ZZmxucqSmHrZfOEbqc3pEF68LtKPqX68p7+W2WQ2
+        7VoxjK+dxzeXfa0sueEiBUpAyazyov8xMe+fzuqDzVAxHK7GufE8jJx8Uspm180MfyqOnKmVk/2
+        Hhwy+Iz0SMxWClXLz8IitlalPDyxU
+X-Received: by 2002:a05:620a:137a:: with SMTP id d26mr981422qkl.326.1588913653470;
+        Thu, 07 May 2020 21:54:13 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKpCzh7dC75r/MEmmnhuO4dvSN1lWqIA2UHRHPDduq9JF8X3WqJrMJ1jfKbHh4DRXapi4o3bQ==
+X-Received: by 2002:a05:620a:137a:: with SMTP id d26mr981403qkl.326.1588913653191;
+        Thu, 07 May 2020 21:54:13 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id j20sm565484qtr.5.2020.05.07.21.54.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2020 21:54:12 -0700 (PDT)
+Date:   Thu, 7 May 2020 21:54:10 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     madhuparnabhowmik10@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        paulmck@kernel.org, linux-integrity@vger.kernel.org,
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        James.Bottomley@hansenpartnership.com,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@joelfernandes.org,
-        frextrite@gmail.com, linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] integrity: evm: Fix RCU list related warnings.
-Message-ID: <20200508112121.6f665d74@canb.auug.org.au>
-In-Reply-To: <1588897421.5685.152.camel@linux.ibm.com>
-References: <20200430160205.17798-1-madhuparnabhowmik10@gmail.com>
-        <20200508101402.267ca0f2@canb.auug.org.au>
-        <1588897421.5685.152.camel@linux.ibm.com>
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v4 1/7] ima: Switch to ima_hash_algo for boot aggregate
+Message-ID: <20200508045410.t7gawyklyecupe2u@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+Mail-Followup-To: Mimi Zohar <zohar@linux.ibm.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        James.Bottomley@hansenpartnership.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+        silviu.vlasceanu@huawei.com, stable@vger.kernel.org
+References: <20200325104712.25694-1-roberto.sassu@huawei.com>
+ <20200325104712.25694-2-roberto.sassu@huawei.com>
+ <1585871617.7311.5.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.D+o4SMW3l1UQxFqbqJwcNG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1585871617.7311.5.camel@linux.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---Sig_/.D+o4SMW3l1UQxFqbqJwcNG
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Thu Apr 02 20, Mimi Zohar wrote:
+>Hi Roberto,
+>
+>On Wed, 2020-03-25 at 11:47 +0100, Roberto Sassu wrote:
+>> boot_aggregate is the first entry of IMA measurement list. Its purpose is
+>> to link pre-boot measurements to IMA measurements. As IMA was designed to
+>> work with a TPM 1.2, the SHA1 PCR bank was always selected even if a
+>> TPM 2.0 with support for stronger hash algorithms is available.
+>>
+>> This patch first tries to find a PCR bank with the IMA default hash
+>> algorithm. If it does not find it, it selects the SHA256 PCR bank for
+>> TPM 2.0 and SHA1 for TPM 1.2. Ultimately, it selects SHA1 also for TPM 2.0
+>> if the SHA256 PCR bank is not found.
+>>
+>> If none of the PCR banks above can be found, boot_aggregate file digest is
+>> filled with zeros, as for TPM bypass, making it impossible to perform a
+>> remote attestation of the system.
+>>
+>> Cc: stable@vger.kernel.org # 5.1.x
+>> Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms with PCR read")
+>> Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
+>> Suggested-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+>
+>Thank you!  This patch set is now queued in next-integrity-testing
+>during the open window.  Jerry, I assume this works for you.  Could we
+>get your tag?
+>
+>thanks!
+>
+>Mimi
+>
 
 Hi Mimi,
 
-On Thu, 07 May 2020 20:23:41 -0400 Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> Sorry for the delay in pushing this and other fixes to the next-
-> integrity branch. =C2=A0It's in my next-integrity-testing branch.
+Yes, I no longer get the errors with this patch.
 
-OK, thanks.
 
-> This isn't a bug per-se, just annotating the reason for the lack of
-> locking.
+Tested-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-Yes, but these warnings stop the syzbot's testing in its tracks :-(
 
---=20
-Cheers,
-Stephen Rothwell
+Regards,
+Jerry
 
---Sig_/.D+o4SMW3l1UQxFqbqJwcNG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl60tBEACgkQAVBC80lX
-0Gy1kQf7BffVVaIpxbElKwALAau8rs7TlHqdions0ViHqWb9XbhY3sNQ1phj1nt5
-QORcaLptQ5HmVAVz227Gdg15fnkJPeHg0/w5rUHyzV7f8PePzYE9wZGVvOik+9Sg
-1d1QxHj8AHnRM+Ag+zCc7erThznlgkSKnMOWHonbV73Li9C9aGYE9jTE3L7rFcuh
-b1AN0cliyojwb4E9bIbadn3fSUXivHKR0kHFcx5OFLZmsimBVjMYI19tZQm1RslG
-HYHdEDBG2uGLgVRF6O53nj4FMTVNHJuMNa/gSJU/FgZIF5vAGnSuEE6od7LhT++3
-+/bdVfFcjwWMKQ447SfxBZXwlos1Mg==
-=FC49
------END PGP SIGNATURE-----
-
---Sig_/.D+o4SMW3l1UQxFqbqJwcNG--
