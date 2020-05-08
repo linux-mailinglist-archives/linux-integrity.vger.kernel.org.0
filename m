@@ -2,87 +2,165 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 993371CB442
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 18:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870651CB504
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 18:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727923AbgEHQBi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 8 May 2020 12:01:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59286 "EHLO mail.kernel.org"
+        id S1726906AbgEHQeA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 8 May 2020 12:34:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35328 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727803AbgEHQBh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 8 May 2020 12:01:37 -0400
+        id S1726797AbgEHQeA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 8 May 2020 12:34:00 -0400
 Received: from embeddedor (unknown [189.207.59.248])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BF1F220725;
-        Fri,  8 May 2020 16:01:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588953697;
-        bh=e/q+X2llUESDXjknVyD37ZTb95TJ/m5mQMoLaK/Zq5s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bu0EOWe3AR5ZE9lofciPSHX8kg17gXFgLXHZhP4cxL90fG3kmEzp+KGkypxpQoBTN
-         bzC20fYQBpgzPgI1cLZUbWrFU4R3x94Z/QlASK96dd66zk6hRxh6oiTi1gDVNRnH36
-         BSvVZlEPlc8DxFjnegGZxnsM/oOWQsPny7P98ZDc=
-Date:   Fri, 8 May 2020 11:06:04 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 1E72C20CC7;
+        Fri,  8 May 2020 16:33:59 +0000 (UTC)
+Date:   Fri, 8 May 2020 11:38:26 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: Re: [PATCH RESEND] tpm: eventlog: Replace zero-length array with
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH v2] tpm: eventlog: Replace zero-length array with
  flexible-array member
-Message-ID: <20200508160604.GA23375@embeddedor>
-References: <20200507040912.GA31382@embeddedor>
- <202005071058.A2234694ED@keescook>
+Message-ID: <20200508163826.GA768@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202005071058.A2234694ED@keescook>
+Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 07, 2020 at 11:02:18AM -0700, Kees Cook wrote:
-> On Wed, May 06, 2020 at 11:09:12PM -0500, Gustavo A. R. Silva wrote:
-> > As mentioned above: "Flexible array members have incomplete type, and
-> > so the sizeof operator may not be applied. As a quirk of the original
-> > implementation of zero-length arrays, sizeof evaluates to zero."[1] So,
-> > the sizeof(flexible-array) can be safely removed to fix the error above.
-> 
-> As in "sizeof(event_header->event) always evaluated to 0, so removing it
-> has no effect".
-> 
+The current codebase makes use of the zero-length array language
+extension to the C90 standard, but the preferred mechanism to declare
+variable-length types such as these ones is a flexible array member[1][2],
+introduced in C99:
 
-Thanks for this.  I wanted to make a more general statement, but I'll
-update the changelog text. :)
+struct foo {
+        int stuff;
+        struct boo array[];
+};
 
-> > [...]
-> > diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
-> > index e741b1157525..351a2989b3c6 100644
-> > --- a/drivers/char/tpm/eventlog/tpm2.c
-> > +++ b/drivers/char/tpm/eventlog/tpm2.c
-> > @@ -51,8 +51,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
-> >  	int i;
-> >  
-> >  	event_header = addr;
-> > -	size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
-> > -		+ event_header->event_size;
-> > +	size = sizeof(*event_header) + event_header->event_size;
-> 
-> That said, I think it would be better to stick to the struct_size()
-> idiom for dealing with flexible arrays here:
-> 
-> 	size = struct_size(event_header, event, event_size);
-> 
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last in the structure, which
+will help us prevent some kind of undefined behavior bugs from being
+inadvertently introduced[3] to the codebase from now on.
 
-Yep, I agree. I'll add this and send v2, shortly.
+Also, notice that, dynamic memory allocations won't be affected by
+this change:
 
-Thanks
---
-Gustavo
+"Flexible array members have incomplete type, and so the sizeof operator
+may not be applied. As a quirk of the original implementation of
+zero-length arrays, sizeof evaluates to zero."[1]
+
+sizeof(flexible-array-member) triggers a warning because flexible array
+members have incomplete type[1]. There are some instances of code in
+which the sizeof operator is being incorrectly/erroneously applied to
+zero-length arrays and the result is zero. Such instances may be hiding
+some bugs. So, this work (flexible-array member conversions) will also
+help to get completely rid of those sorts of issues.
+
+Also, the following issue shows up due to the flexible-array member
+having incomplete type[4]:
+
+drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_bios_measurements_start’:
+drivers/char/tpm/eventlog/tpm2.c:54:46: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
+   54 |  size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
+      |                                              ^
+drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_bios_measurements_next’:
+drivers/char/tpm/eventlog/tpm2.c:102:10: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
+  102 |    sizeof(event_header->event) + event_header->event_size;
+      |          ^
+drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_binary_bios_measurements_show’:
+drivers/char/tpm/eventlog/tpm2.c:140:10: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
+  140 |    sizeof(event_header->event) + event_header->event_size;
+      |          ^
+scripts/Makefile.build:266: recipe for target 'drivers/char/tpm/eventlog/tpm2.o' failed
+make[3]: *** [drivers/char/tpm/eventlog/tpm2.o] Error 1
+
+As mentioned above: "Flexible array members have incomplete type, and
+so the sizeof operator may not be applied. As a quirk of the original
+implementation of zero-length arrays, sizeof evaluates to zero."[1] As
+in "sizeof(event_header->event) always evaluated to 0, so removing it
+has no effect".
+
+Lastly, make use of the struct_size() helper to deal with the
+flexible array member and its host structure.
+
+This issue was found with the help of Coccinelle.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+[2] https://github.com/KSPP/linux/issues/21
+[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+[4] https://github.com/KSPP/linux/issues/43
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+Changes in v2:
+ - Update changelog text.
+ - Make use of the struct_size() helper.
+
+ drivers/char/tpm/eventlog/tpm2.c | 12 +++++-------
+ include/linux/tpm_eventlog.h     |  2 +-
+ 2 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
+index e741b1157525..37a05800980c 100644
+--- a/drivers/char/tpm/eventlog/tpm2.c
++++ b/drivers/char/tpm/eventlog/tpm2.c
+@@ -51,8 +51,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ 	int i;
+ 
+ 	event_header = addr;
+-	size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
+-		+ event_header->event_size;
++	size = struct_size(event_header, event, event_header->event_size);
+ 
+ 	if (*pos == 0) {
+ 		if (addr + size < limit) {
+@@ -98,8 +97,8 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
+ 	event_header = log->bios_event_log;
+ 
+ 	if (v == SEQ_START_TOKEN) {
+-		event_size = sizeof(struct tcg_pcr_event) -
+-			sizeof(event_header->event) + event_header->event_size;
++		event_size = struct_size(event_header, event,
++					 event_header->event_size);
+ 		marker = event_header;
+ 	} else {
+ 		event = v;
+@@ -136,9 +135,8 @@ static int tpm2_binary_bios_measurements_show(struct seq_file *m, void *v)
+ 	size_t size;
+ 
+ 	if (v == SEQ_START_TOKEN) {
+-		size = sizeof(struct tcg_pcr_event) -
+-			sizeof(event_header->event) + event_header->event_size;
+-
++		size = struct_size(event_header, event,
++				   event_header->event_size);
+ 		temp_ptr = event_header;
+ 
+ 		if (size > 0)
+diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
+index c253461b1c4e..4f8c90c93c29 100644
+--- a/include/linux/tpm_eventlog.h
++++ b/include/linux/tpm_eventlog.h
+@@ -97,7 +97,7 @@ struct tcg_pcr_event {
+ 	u32 event_type;
+ 	u8 digest[20];
+ 	u32 event_size;
+-	u8 event[0];
++	u8 event[];
+ } __packed;
+ 
+ struct tcg_event_field {
+-- 
+2.26.2
 
