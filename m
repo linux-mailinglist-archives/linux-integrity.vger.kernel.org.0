@@ -2,74 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2CE1CB562
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 19:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A3A1CB5F7
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 19:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbgEHRIX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 8 May 2020 13:08:23 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31736 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726750AbgEHRIX (ORCPT
+        id S1726825AbgEHR3x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 8 May 2020 13:29:53 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7586 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726767AbgEHR3x (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 8 May 2020 13:08:23 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 048H1aow181718;
-        Fri, 8 May 2020 13:08:12 -0400
+        Fri, 8 May 2020 13:29:53 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 048H2EhP128834;
+        Fri, 8 May 2020 13:29:43 -0400
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30vtw0tstj-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30vtsgud79-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 May 2020 13:08:11 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 048H2GHA183411;
-        Fri, 8 May 2020 13:08:11 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30vtw0tssw-1
+        Fri, 08 May 2020 13:29:42 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 048HTCHp116150;
+        Fri, 8 May 2020 13:29:42 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30vtsgud61-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 May 2020 13:08:11 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 048H4s14002508;
-        Fri, 8 May 2020 17:08:09 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma01fra.de.ibm.com with ESMTP id 30s0g5dn2c-1
+        Fri, 08 May 2020 13:29:42 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 048H4rFB032591;
+        Fri, 8 May 2020 17:29:40 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 30s0g5wtd9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 May 2020 17:08:09 +0000
+        Fri, 08 May 2020 17:29:39 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 048H87PH8847814
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 048HTbZO44695568
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 May 2020 17:08:07 GMT
+        Fri, 8 May 2020 17:29:37 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37D1EA405C;
-        Fri,  8 May 2020 17:08:07 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id A8924A405B;
+        Fri,  8 May 2020 17:29:37 +0000 (GMT)
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C3B4FA4065;
-        Fri,  8 May 2020 17:08:05 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 8765EA4054;
+        Fri,  8 May 2020 17:29:36 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.139.55])
         by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  8 May 2020 17:08:05 +0000 (GMT)
-Message-ID: <1588957684.5146.70.camel@linux.ibm.com>
-Subject: Re: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+        Fri,  8 May 2020 17:29:36 +0000 (GMT)
+Message-ID: <1588958976.5146.83.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 1/7] ima: Switch to ima_hash_algo for boot aggregate
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "david.safford@gmail.com" <david.safford@gmail.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        John Johansen <john.johansen@canonical.com>
-Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Fri, 08 May 2020 13:08:04 -0400
-In-Reply-To: <84e6acad739a415aa3e2457b5c37979f@huawei.com>
-References: <20200429073935.11913-1-roberto.sassu@huawei.com>
-         <1588794293.4624.21.camel@linux.ibm.com>
-         <1588799408.4624.28.camel@linux.ibm.com>
-         <ab879f9e66874736a40e9c566cadc272@huawei.com>
-         <1588864628.5685.78.camel@linux.ibm.com>
-         <750ab4e0990f47e4aea10d0e580b1074@huawei.com>
-         <1588884313.5685.110.camel@linux.ibm.com>
-         <84e6acad739a415aa3e2457b5c37979f@huawei.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        James.Bottomley@hansenpartnership.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+Date:   Fri, 08 May 2020 13:29:36 -0400
+In-Reply-To: <20200508045410.t7gawyklyecupe2u@cantor>
+References: <20200325104712.25694-1-roberto.sassu@huawei.com>
+         <20200325104712.25694-2-roberto.sassu@huawei.com>
+         <1585871617.7311.5.camel@linux.ibm.com>
+         <20200508045410.t7gawyklyecupe2u@cantor>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
@@ -77,49 +70,58 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-08_15:2020-05-08,2020-05-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- clxscore=1015 mlxlogscore=999 phishscore=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 priorityscore=1501 spamscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
+ spamscore=0 phishscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2005080142
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-05-08 at 10:20 +0000, Roberto Sassu wrote:
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > On Thu, 2020-05-07 at 16:47 +0000, Roberto Sassu wrote:
-
-<snip>
-
-> > > > the file metadata to the file data.  The IMA and EVM policies really
-> > > > need to be in sync.
-> > >
-> > > It would be nice, but at the moment EVM considers also files that are
-> > > not selected by the IMA policy. An example of why this is a problem is
-> > > the audit service that fails to start when it tries to adjust the permissions
-> > > of the log files. Those files don't have security.evm because they are
-> > > not appraised by IMA, but EVM denies the operation.
-> > 
-> > No, this is a timing issue as to whether or not the builtin policy or
-> > a custom policy has been loaded.  A custom policy could exclude the
-> > log files based on LSM labels, but they are included in the builtin
-> > policy.
+On Thu, 2020-05-07 at 21:54 -0700, Jerry Snitselaar wrote:
+> On Thu Apr 02 20, Mimi Zohar wrote:
+> >Hi Roberto,
+> >
+> >On Wed, 2020-03-25 at 11:47 +0100, Roberto Sassu wrote:
+> >> boot_aggregate is the first entry of IMA measurement list. Its purpose is
+> >> to link pre-boot measurements to IMA measurements. As IMA was designed to
+> >> work with a TPM 1.2, the SHA1 PCR bank was always selected even if a
+> >> TPM 2.0 with support for stronger hash algorithms is available.
+> >>
+> >> This patch first tries to find a PCR bank with the IMA default hash
+> >> algorithm. If it does not find it, it selects the SHA256 PCR bank for
+> >> TPM 2.0 and SHA1 for TPM 1.2. Ultimately, it selects SHA1 also for TPM 2.0
+> >> if the SHA256 PCR bank is not found.
+> >>
+> >> If none of the PCR banks above can be found, boot_aggregate file digest is
+> >> filled with zeros, as for TPM bypass, making it impossible to perform a
+> >> remote attestation of the system.
+> >>
+> >> Cc: stable@vger.kernel.org # 5.1.x
+> >> Fixes: 879b589210a9 ("tpm: retrieve digest size of unknown algorithms with PCR read")
+> >> Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> >> Suggested-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> >> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> >
+> >Thank you!  This patch set is now queued in next-integrity-testing
+> >during the open window.  Jerry, I assume this works for you.  Could we
+> >get your tag?
+> >
 > 
-> Yes, I was referring to a custom policy. In this case, EVM will not adapt
-> to the custom policy but still verifies all files. If access control is done
-> exclusively by IMA at the time evm_verifyxattr() is called, we wouldn't
-> need to add security.evm to all files.
+> Yes, I no longer get the errors with this patch.
+> 
+> 
+> Tested-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-Roberto, EVM is only triggered by IMA, unless you've modified the
-kernel to do otherwise.
+Thanks, Jerry.  I really do appreciate receiving your tag.
 
-I'm not interested in a complicated solution, just one that addresses
-the new EVM immutable and portable signature.  It might require EVM
-HMAC, IMA differentiating between a new file and an existing file, or
-it might require writing the new EVM signature last, after all the
-other xattrs or metadata are updated.  Please nothing that changes
-existing expectations.
+Not all, but a lot of subsystems, do not rebase their branch, at least
+once it is in linux-next.  Adding tags is considered rebasing.  For
+this reason, I've started staging patches in the next-integrity-
+testing branch, before moving them to next-integrity.
+
+thanks,
 
 Mimi
