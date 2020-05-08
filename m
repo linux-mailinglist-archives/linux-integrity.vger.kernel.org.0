@@ -2,130 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D23D1CB417
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 17:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993371CB442
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 18:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbgEHPzQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 8 May 2020 11:55:16 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:42558 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728038AbgEHPzQ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 8 May 2020 11:55:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588953315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o2NuVDMsNek1XqDZ23KXOT0aYU3U9mtuti+eij0cQ3Y=;
-        b=RH/5e3x/Aznsbd5AM1J6BO+2cqjJRQKQ+ghv58yZ4onqXKu52Yll3jfDrYllFqRXnZ0nKO
-        3f2rtaNllTzDrvWbaSRolJ2itxGSdcZE0opMh4qcFX2KXuNbcI3CtqooBvkUkAiwE+/gsb
-        us/8o0UifSojcAi6TAgXtPfpSD3kH2Q=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-172-tB1ktjf7Nd6ZDjXX8AJRsw-1; Fri, 08 May 2020 11:55:11 -0400
-X-MC-Unique: tB1ktjf7Nd6ZDjXX8AJRsw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1727923AbgEHQBi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 8 May 2020 12:01:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59286 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727803AbgEHQBh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 8 May 2020 12:01:37 -0400
+Received: from embeddedor (unknown [189.207.59.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 59A41107ACCA;
-        Fri,  8 May 2020 15:55:09 +0000 (UTC)
-Received: from w520.home (ovpn-113-111.phx2.redhat.com [10.3.113.111])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 615F6341E3;
-        Fri,  8 May 2020 15:55:08 +0000 (UTC)
-Date:   Fri, 8 May 2020 09:55:07 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        by mail.kernel.org (Postfix) with ESMTPSA id BF1F220725;
+        Fri,  8 May 2020 16:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588953697;
+        bh=e/q+X2llUESDXjknVyD37ZTb95TJ/m5mQMoLaK/Zq5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Bu0EOWe3AR5ZE9lofciPSHX8kg17gXFgLXHZhP4cxL90fG3kmEzp+KGkypxpQoBTN
+         bzC20fYQBpgzPgI1cLZUbWrFU4R3x94Z/QlASK96dd66zk6hRxh6oiTi1gDVNRnH36
+         BSvVZlEPlc8DxFjnegGZxnsM/oOWQsPny7P98ZDc=
+Date:   Fri, 8 May 2020 11:06:04 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, kvm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 08/12] vfio: use __anon_inode_getfd
-Message-ID: <20200508095507.54051943@w520.home>
-In-Reply-To: <20200508153634.249933-9-hch@lst.de>
-References: <20200508153634.249933-1-hch@lst.de>
-        <20200508153634.249933-9-hch@lst.de>
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: Re: [PATCH RESEND] tpm: eventlog: Replace zero-length array with
+ flexible-array member
+Message-ID: <20200508160604.GA23375@embeddedor>
+References: <20200507040912.GA31382@embeddedor>
+ <202005071058.A2234694ED@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202005071058.A2234694ED@keescook>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri,  8 May 2020 17:36:30 +0200
-Christoph Hellwig <hch@lst.de> wrote:
-
-> Use __anon_inode_getfd instead of opencoding the logic using
-> get_unused_fd_flags + anon_inode_getfile.
+On Thu, May 07, 2020 at 11:02:18AM -0700, Kees Cook wrote:
+> On Wed, May 06, 2020 at 11:09:12PM -0500, Gustavo A. R. Silva wrote:
+> > As mentioned above: "Flexible array members have incomplete type, and
+> > so the sizeof operator may not be applied. As a quirk of the original
+> > implementation of zero-length arrays, sizeof evaluates to zero."[1] So,
+> > the sizeof(flexible-array) can be safely removed to fix the error above.
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/vfio/vfio.c | 37 ++++++++-----------------------------
->  1 file changed, 8 insertions(+), 29 deletions(-)
+> As in "sizeof(event_header->event) always evaluated to 0, so removing it
+> has no effect".
+> 
 
+Thanks for this.  I wanted to make a more general statement, but I'll
+update the changelog text. :)
 
-Thanks!
+> > [...]
+> > diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
+> > index e741b1157525..351a2989b3c6 100644
+> > --- a/drivers/char/tpm/eventlog/tpm2.c
+> > +++ b/drivers/char/tpm/eventlog/tpm2.c
+> > @@ -51,8 +51,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+> >  	int i;
+> >  
+> >  	event_header = addr;
+> > -	size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
+> > -		+ event_header->event_size;
+> > +	size = sizeof(*event_header) + event_header->event_size;
+> 
+> That said, I think it would be better to stick to the struct_size()
+> idiom for dealing with flexible arrays here:
+> 
+> 	size = struct_size(event_header, event, event_size);
+> 
 
-Acked-by: Alex Williamson <alex.williamson@redhat.com>
+Yep, I agree. I'll add this and send v2, shortly.
 
-> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-> index 765e0e5d83ed9..33a88103f857f 100644
-> --- a/drivers/vfio/vfio.c
-> +++ b/drivers/vfio/vfio.c
-> @@ -1451,42 +1451,21 @@ static int vfio_group_get_device_fd(struct vfio_group *group, char *buf)
->  		return ret;
->  	}
->  
-> -	/*
-> -	 * We can't use anon_inode_getfd() because we need to modify
-> -	 * the f_mode flags directly to allow more than just ioctls
-> -	 */
-> -	ret = get_unused_fd_flags(O_CLOEXEC);
-> -	if (ret < 0) {
-> -		device->ops->release(device->device_data);
-> -		vfio_device_put(device);
-> -		return ret;
-> -	}
-> -
-> -	filep = anon_inode_getfile("[vfio-device]", &vfio_device_fops,
-> -				   device, O_RDWR);
-> -	if (IS_ERR(filep)) {
-> -		put_unused_fd(ret);
-> -		ret = PTR_ERR(filep);
-> -		device->ops->release(device->device_data);
-> -		vfio_device_put(device);
-> -		return ret;
-> -	}
-> -
-> -	/*
-> -	 * TODO: add an anon_inode interface to do this.
-> -	 * Appears to be missing by lack of need rather than
-> -	 * explicitly prevented.  Now there's need.
-> -	 */
-> +	ret = __anon_inode_getfd("[vfio-device]", &vfio_device_fops,
-> +				   device, O_CLOEXEC | O_RDWR, &filep);
-> +	if (ret < 0)
-> +		goto release;
->  	filep->f_mode |= (FMODE_LSEEK | FMODE_PREAD | FMODE_PWRITE);
-> -
->  	atomic_inc(&group->container_users);
-> -
->  	fd_install(ret, filep);
->  
->  	if (group->noiommu)
->  		dev_warn(device->dev, "vfio-noiommu device opened by user "
->  			 "(%s:%d)\n", current->comm, task_pid_nr(current));
-> -
-> +	return ret;
-> +release:
-> +	device->ops->release(device->device_data);
-> +	vfio_device_put(device);
->  	return ret;
->  }
->  
+Thanks
+--
+Gustavo
 
