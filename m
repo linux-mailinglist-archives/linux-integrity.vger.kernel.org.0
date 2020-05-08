@@ -2,165 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 870651CB504
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 18:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2CE1CB562
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2020 19:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbgEHQeA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 8 May 2020 12:34:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35328 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726797AbgEHQeA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 8 May 2020 12:34:00 -0400
-Received: from embeddedor (unknown [189.207.59.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1E72C20CC7;
-        Fri,  8 May 2020 16:33:59 +0000 (UTC)
-Date:   Fri, 8 May 2020 11:38:26 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH v2] tpm: eventlog: Replace zero-length array with
- flexible-array member
-Message-ID: <20200508163826.GA768@embeddedor>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        id S1726825AbgEHRIX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 8 May 2020 13:08:23 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31736 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726750AbgEHRIX (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 8 May 2020 13:08:23 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 048H1aow181718;
+        Fri, 8 May 2020 13:08:12 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30vtw0tstj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 May 2020 13:08:11 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 048H2GHA183411;
+        Fri, 8 May 2020 13:08:11 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30vtw0tssw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 May 2020 13:08:11 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 048H4s14002508;
+        Fri, 8 May 2020 17:08:09 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 30s0g5dn2c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 May 2020 17:08:09 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 048H87PH8847814
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 8 May 2020 17:08:07 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 37D1EA405C;
+        Fri,  8 May 2020 17:08:07 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C3B4FA4065;
+        Fri,  8 May 2020 17:08:05 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.139.55])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  8 May 2020 17:08:05 +0000 (GMT)
+Message-ID: <1588957684.5146.70.camel@linux.ibm.com>
+Subject: Re: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "david.safford@gmail.com" <david.safford@gmail.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        John Johansen <john.johansen@canonical.com>
+Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Date:   Fri, 08 May 2020 13:08:04 -0400
+In-Reply-To: <84e6acad739a415aa3e2457b5c37979f@huawei.com>
+References: <20200429073935.11913-1-roberto.sassu@huawei.com>
+         <1588794293.4624.21.camel@linux.ibm.com>
+         <1588799408.4624.28.camel@linux.ibm.com>
+         <ab879f9e66874736a40e9c566cadc272@huawei.com>
+         <1588864628.5685.78.camel@linux.ibm.com>
+         <750ab4e0990f47e4aea10d0e580b1074@huawei.com>
+         <1588884313.5685.110.camel@linux.ibm.com>
+         <84e6acad739a415aa3e2457b5c37979f@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-08_15:2020-05-08,2020-05-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ clxscore=1015 mlxlogscore=999 phishscore=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005080142
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The current codebase makes use of the zero-length array language
-extension to the C90 standard, but the preferred mechanism to declare
-variable-length types such as these ones is a flexible array member[1][2],
-introduced in C99:
+On Fri, 2020-05-08 at 10:20 +0000, Roberto Sassu wrote:
+> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > On Thu, 2020-05-07 at 16:47 +0000, Roberto Sassu wrote:
 
-struct foo {
-        int stuff;
-        struct boo array[];
-};
+<snip>
 
-By making use of the mechanism above, we will get a compiler warning
-in case the flexible array does not occur last in the structure, which
-will help us prevent some kind of undefined behavior bugs from being
-inadvertently introduced[3] to the codebase from now on.
+> > > > the file metadata to the file data.  The IMA and EVM policies really
+> > > > need to be in sync.
+> > >
+> > > It would be nice, but at the moment EVM considers also files that are
+> > > not selected by the IMA policy. An example of why this is a problem is
+> > > the audit service that fails to start when it tries to adjust the permissions
+> > > of the log files. Those files don't have security.evm because they are
+> > > not appraised by IMA, but EVM denies the operation.
+> > 
+> > No, this is a timing issue as to whether or not the builtin policy or
+> > a custom policy has been loaded.  A custom policy could exclude the
+> > log files based on LSM labels, but they are included in the builtin
+> > policy.
+> 
+> Yes, I was referring to a custom policy. In this case, EVM will not adapt
+> to the custom policy but still verifies all files. If access control is done
+> exclusively by IMA at the time evm_verifyxattr() is called, we wouldn't
+> need to add security.evm to all files.
 
-Also, notice that, dynamic memory allocations won't be affected by
-this change:
+Roberto, EVM is only triggered by IMA, unless you've modified the
+kernel to do otherwise.
 
-"Flexible array members have incomplete type, and so the sizeof operator
-may not be applied. As a quirk of the original implementation of
-zero-length arrays, sizeof evaluates to zero."[1]
+I'm not interested in a complicated solution, just one that addresses
+the new EVM immutable and portable signature.  It might require EVM
+HMAC, IMA differentiating between a new file and an existing file, or
+it might require writing the new EVM signature last, after all the
+other xattrs or metadata are updated.  Please nothing that changes
+existing expectations.
 
-sizeof(flexible-array-member) triggers a warning because flexible array
-members have incomplete type[1]. There are some instances of code in
-which the sizeof operator is being incorrectly/erroneously applied to
-zero-length arrays and the result is zero. Such instances may be hiding
-some bugs. So, this work (flexible-array member conversions) will also
-help to get completely rid of those sorts of issues.
-
-Also, the following issue shows up due to the flexible-array member
-having incomplete type[4]:
-
-drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_bios_measurements_start’:
-drivers/char/tpm/eventlog/tpm2.c:54:46: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
-   54 |  size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
-      |                                              ^
-drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_bios_measurements_next’:
-drivers/char/tpm/eventlog/tpm2.c:102:10: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
-  102 |    sizeof(event_header->event) + event_header->event_size;
-      |          ^
-drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_binary_bios_measurements_show’:
-drivers/char/tpm/eventlog/tpm2.c:140:10: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
-  140 |    sizeof(event_header->event) + event_header->event_size;
-      |          ^
-scripts/Makefile.build:266: recipe for target 'drivers/char/tpm/eventlog/tpm2.o' failed
-make[3]: *** [drivers/char/tpm/eventlog/tpm2.o] Error 1
-
-As mentioned above: "Flexible array members have incomplete type, and
-so the sizeof operator may not be applied. As a quirk of the original
-implementation of zero-length arrays, sizeof evaluates to zero."[1] As
-in "sizeof(event_header->event) always evaluated to 0, so removing it
-has no effect".
-
-Lastly, make use of the struct_size() helper to deal with the
-flexible array member and its host structure.
-
-This issue was found with the help of Coccinelle.
-
-[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-[2] https://github.com/KSPP/linux/issues/21
-[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-[4] https://github.com/KSPP/linux/issues/43
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
-Changes in v2:
- - Update changelog text.
- - Make use of the struct_size() helper.
-
- drivers/char/tpm/eventlog/tpm2.c | 12 +++++-------
- include/linux/tpm_eventlog.h     |  2 +-
- 2 files changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
-index e741b1157525..37a05800980c 100644
---- a/drivers/char/tpm/eventlog/tpm2.c
-+++ b/drivers/char/tpm/eventlog/tpm2.c
-@@ -51,8 +51,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
- 	int i;
- 
- 	event_header = addr;
--	size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
--		+ event_header->event_size;
-+	size = struct_size(event_header, event, event_header->event_size);
- 
- 	if (*pos == 0) {
- 		if (addr + size < limit) {
-@@ -98,8 +97,8 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
- 	event_header = log->bios_event_log;
- 
- 	if (v == SEQ_START_TOKEN) {
--		event_size = sizeof(struct tcg_pcr_event) -
--			sizeof(event_header->event) + event_header->event_size;
-+		event_size = struct_size(event_header, event,
-+					 event_header->event_size);
- 		marker = event_header;
- 	} else {
- 		event = v;
-@@ -136,9 +135,8 @@ static int tpm2_binary_bios_measurements_show(struct seq_file *m, void *v)
- 	size_t size;
- 
- 	if (v == SEQ_START_TOKEN) {
--		size = sizeof(struct tcg_pcr_event) -
--			sizeof(event_header->event) + event_header->event_size;
--
-+		size = struct_size(event_header, event,
-+				   event_header->event_size);
- 		temp_ptr = event_header;
- 
- 		if (size > 0)
-diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
-index c253461b1c4e..4f8c90c93c29 100644
---- a/include/linux/tpm_eventlog.h
-+++ b/include/linux/tpm_eventlog.h
-@@ -97,7 +97,7 @@ struct tcg_pcr_event {
- 	u32 event_type;
- 	u8 digest[20];
- 	u32 event_size;
--	u8 event[0];
-+	u8 event[];
- } __packed;
- 
- struct tcg_event_field {
--- 
-2.26.2
-
+Mimi
