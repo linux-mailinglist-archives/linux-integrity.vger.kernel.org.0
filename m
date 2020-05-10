@@ -2,153 +2,199 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C380C1CC9AD
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2020 11:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6DA1CCD0E
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2020 20:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726863AbgEJJ2W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 10 May 2020 05:28:22 -0400
-Received: from smtp-8fad.mail.infomaniak.ch ([83.166.143.173]:54529 "EHLO
-        smtp-8fad.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726687AbgEJJ2W (ORCPT
+        id S1729240AbgEJSow (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 10 May 2020 14:44:52 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:40820 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728866AbgEJSou (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 10 May 2020 05:28:22 -0400
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49Kdz73c83zlhlbf;
-        Sun, 10 May 2020 11:28:19 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 49Kdz52pvmzmgvLW;
-        Sun, 10 May 2020 11:28:17 +0200 (CEST)
-Subject: Re: [RFC PATCH v3 00/12] Integrity Policy Enforcement LSM (IPE)
-To:     deven.desai@linux.microsoft.com, agk@redhat.com, axboe@kernel.dk,
-        snitzer@redhat.com, jmorris@namei.org, serge@hallyn.com,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, jannh@google.com
-Cc:     tyhicks@linux.microsoft.com, pasha.tatashin@soleen.com,
-        sashal@kernel.org, jaskarankhurana@linux.microsoft.com,
-        nramas@linux.microsoft.com, mdsakib@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, corbet@lwn.net
-References: <20200415162550.2324-1-deven.desai@linux.microsoft.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <b07ac7e1-7cf5-92c9-81d0-64174c3d5024@digikod.net>
-Date:   Sun, 10 May 2020 11:28:16 +0200
-User-Agent: 
-MIME-Version: 1.0
-In-Reply-To: <20200415162550.2324-1-deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset=iso-8859-15
+        Sun, 10 May 2020 14:44:50 -0400
+Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 8638240507;
+        Sun, 10 May 2020 18:44:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1589136290; bh=q4yMUYxy7IbxuEFWHFtTBwZR3EjIUP/s0d1is1lGyms=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=a57mKTuIQCudNKwKUUnA1BQHdbPACj/JCsofoHCw2AmtEtSvM+zwB68P3UkD2gH+y
+         Lvoo3sv4yzAgAJryEpaygrU6BDKty4AtfWrQ0voVBC5lAaXCbSGz8Zf6FaxjM0TLqw
+         Rseao577qCmFrhBjY8o+GX0QpAUY6dFma0ZVpVEGirz7KOSIgrQVtKvy4Tq7Y7S4HS
+         yGIo8sbm5iYqmwg0dYdT5rLVqUInnj+YDRmfETjn+u0gGic/VSLK4UkJbUrynCSooF
+         qfDFvNeAqPZ0LDYUURpMfYX19XXnD2UGIn0GlL5UhYIv90gk09186AstcqZkWPbSM0
+         kZCF6OOMhPe9A==
+Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 569D2A006E;
+        Sun, 10 May 2020 18:44:47 +0000 (UTC)
+Received: from us01hybrid1.internal.synopsys.com (10.200.27.51) by
+ US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Sun, 10 May 2020 11:44:47 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.202.3.67) by
+ mrs.synopsys.com (10.200.27.51) with Microsoft SMTP Server (TLS) id
+ 14.3.487.0; Sun, 10 May 2020 11:44:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jj9XAsBZPmyjZacF1lN1QsAxM5WQkS/648+TgBzlhHiN0ecvBt+vbtZgpVthpcA3dGFHrM3QVm6U6yrRYJTQj88M3utnPl7AIDMh2wQaxIgNEFoJaeK/jwm/cK+myuXTKsc2kJrMvIYbeevr4H5eBaf8/sXuslI6YdhYQznaTE2e70tLjx2RECXj1fQS/8Z2Lathup9gyyYGtMKMwluLa0LSFeS2GZs+E1qK5RFCt0Nw6L60MXFnrWAu4IlgwvcjeH7mpAr+ImHQmYp3xL+52UjesC5yQOYpPPuT+yUUyFBMPi0G9YzfWnlA5vF3YgEoE1ANCjMI2CM4+40ZRa3g8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tz7SZcvwsMIgiaTRAmc25u5K7X9zEzGssPuGBFFu+PA=;
+ b=FrMWfj8pG6KNiNSdt9fMRtqP1kKpmzUPClRa5QGB3HL9qAbbYXwCsgWRT0Wy0isBpUiOHcXazBxK0ClsTR0njG3aTwVwXg1VmQZsVXz2dB7ZtbPRdcwqPEZ6yrIts60m3fun+jhRfgG9pn5Rj5SPaz0QLL5b/kYHGErzC58O5CUQt8T067LSGKb0aE9CVre9m8gRDNxkbha4K8JR7Znu5W4D5d15c8E8iwQD2UfPJyNV8IvKLM42YwE9CVqhz1xadiHntVr1wZx6paauT5HpbDH1e0hnJFQnpIAn8xXz/6G6yLpLd9QA2vKol+MqRLHCs+IqHTcsNZFeP50k+mI/bA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tz7SZcvwsMIgiaTRAmc25u5K7X9zEzGssPuGBFFu+PA=;
+ b=KcvOQJUTbylvdpCWEDDlBF6LojqakkS2EhF6V4zMCI7kLnnqN08WW8xyK9GBGrodl8VApzb3AvIK7eaEuYRCEWz2q0O7VRKX/ibWZwHcckxiaZsi92pqoRKJj48PUKgTY38+YMZgMdf/6Pc6vsM95XW+gEt/Pay/qDTjbmd5pvI=
+Received: from DM6PR12MB2684.namprd12.prod.outlook.com (2603:10b6:5:4a::33) by
+ DM6PR12MB3146.namprd12.prod.outlook.com (2603:10b6:5:11b::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2979.34; Sun, 10 May 2020 18:44:45 +0000
+Received: from DM6PR12MB2684.namprd12.prod.outlook.com
+ ([fe80::f913:a5d2:ee95:5157]) by DM6PR12MB2684.namprd12.prod.outlook.com
+ ([fe80::f913:a5d2:ee95:5157%5]) with mapi id 15.20.2979.033; Sun, 10 May 2020
+ 18:44:45 +0000
+From:   Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Tadeusz Struk <tadeusz.struk@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+        "Eugeniy Paltsev" <Eugeniy.Paltsev@synopsys.com>
+Subject: RE: [PATCH] selftests/tpm: Fix runtime error
+Thread-Topic: [PATCH] selftests/tpm: Fix runtime error
+Thread-Index: AQHWENRSg161NCxUUEaLItlFtz6YTqihyzSQ
+Date:   Sun, 10 May 2020 18:44:45 +0000
+Message-ID: <DM6PR12MB26848928AB4CE7B1D5BAC4B3D9A00@DM6PR12MB2684.namprd12.prod.outlook.com>
+References: <20200412141118.70688-1-jarkko.sakkinen@linux.intel.com>
+In-Reply-To: <20200412141118.70688-1-jarkko.sakkinen@linux.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none
+ header.from=synopsys.com;
+x-originating-ip: [46.47.223.253]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5445fdbb-e229-4796-658a-08d7f51235a8
+x-ms-traffictypediagnostic: DM6PR12MB3146:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR12MB31462E4D59623935571957F9D9A00@DM6PR12MB3146.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 039975700A
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UnxGVObGapqUguxIPr87Rtc0LrPdqbmOLJ1wOZ+8Pe3C1RpDRXJ3r1INNKkfawxsmZCre3ub6Wg3siIGNYQ+vthtxztoQUTdJLJupi5yds5yHqi1sKYvUx4UZxAvhptLP1Bdd38F9cf0k+VyRars5+MrspK1Da0zQHrgTZsv/KDJzC1jCy9Bfq3pyWbjmtK5n38tBzi8ihzDXpevPeSLs+qUNv1X0UDo7zF0Mpc4+Fb52RJXdn7mTqFIe+gSrpTeRRrn3+Y1cCYW8k27/4ma34UG+SFIhOTKGZfjFZIk1R4EC9FMnPQGpY0hg/7jCCLDMWHs+gE804jKWCAuTL7EuTtWoNtrI0/SLw9tu+pQWBN9BtP4LasXDAG59hvDfusfAYjqm4wRHmmm7o9zE6dIHz9BqDlq6IlqHpgAg6FVJ1GWnz8pmrCaSNFCBoMURiovognDKZ4qRT+ZvvSbNyn3zVwWLFT2wsaXy+bdfdFLqIFvtqRiLgHmt3ozJLILnle8ucW9TFdx3ZPkyaNLqA6DmA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2684.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(376002)(366004)(136003)(39850400004)(396003)(33430700001)(76116006)(66476007)(66446008)(9686003)(53546011)(66946007)(55016002)(66556008)(64756008)(6506007)(86362001)(71200400001)(52536014)(7696005)(8936002)(316002)(8676002)(186003)(107886003)(54906003)(4326008)(2906002)(33440700001)(110136005)(26005)(19627235002)(33656002)(478600001)(5660300002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: X52PfnVLfRGI6t7Iv/T5h26HrZUfMJ1toRqQSCm4VlMIW71FCDDmxMTcXBv7cRJFqfNd3y4UFBpbBIvU258m52pNvwVyuvkRfzsXH6TDgSk0oJIXxy+khL8j1S9Qv+0hTpM7yXnMMhc4acTtNFqeLoWUJ3NUi2p2b6jup/mXHF4AGLSUyctubbU0BI0PHXXL02Gs3b6g488PY/C3Wn4tV5/x1uYSJArEFznD5uMytCrBB3Z6IH0dBNA8ya3aci2X/aAo4wcdhODN6zkQNY7jgqMzlkkDI5RBYWVVgyXc/jDPwFq2c1ARTYMqyadGLrlraj26X6s32/1uO241/GfqwzMwFiJMGayatT9Pc78z4UevxA113O2ioFRjjizoF7OANkU2++zJZeMzDO+cSnfZoaeKP9Blo0Gp0+oOef5ycwCg/al6SzMgY5wMmy2InEcZCq7tYAehQGFNL++s8c0o/GjTTSfgl4F/qWf5dmawzWs=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5445fdbb-e229-4796-658a-08d7f51235a8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2020 18:44:45.2990
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0ENgsWdbtDUmAv3z3ejI9Iyq5hCCk/BPpHRirZx+dmdicHFKGvu4nJ8ZXPrXbz77012s6nEoCv7QkAkEmqKu3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3146
+X-OriginatorOrg: synopsys.com
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi, Jarkko Sakkinen, all!
 
-On 15/04/2020 18:25, deven.desai@linux.microsoft.com wrote:
-> From: Deven Bowers <deven.desai@linux.microsoft.com>
-> 
-> Overview:
-> ------------------------------------
-> 
-> IPE is a Linux Security Module which allows for a configurable
-> policy to enforce integrity requirements on the whole system. It
-> attempts to solve the issue of Code Integrity: that any code being
-> executed (or files being read), are identical to the version that
-> was built by a trusted source.
-> 
-> The type of system for which IPE is designed for use is an embedded device
-> with a specific purpose (e.g. network firewall device in a data center),
-> where all software and configuration is built and provisioned by the owner.
-> 
-> Specifically, a system which leverages IPE is not intended for general
-> purpose computing and does not utilize any software or configuration
-> built by a third party. An ideal system to leverage IPE has both mutable
-> and immutable components, however, all binary executable code is immutable.
-> 
-> The scope of IPE is constrained to the OS. It is assumed that platform
-> firmware verifies the the kernel and optionally the root filesystem (e.g.
-> via U-Boot verified boot). IPE then utilizes LSM hooks to enforce a
-> flexible, kernel-resident integrity verification policy.
-> 
-> IPE differs from other LSMs which provide integrity checking (for instance,
-> IMA), as it has no dependency on the filesystem metadata itself. The
-> attributes that IPE checks are deterministic properties that exist solely
-> in the kernel. Additionally, IPE provides no additional mechanisms of
-> verifying these files (e.g. IMA Signatures) - all of the attributes of
-> verifying files are existing features within the kernel, such as dm-verity
-> or fsverity.
-> 
-> IPE provides a policy that allows owners of the system to easily specify
-> integrity requirements and uses dm-verity signatures to simplify the
-> authentication of allowed objects like authorized code and data.
-> 
-> IPE supports two modes, permissive (similar to SELinux's permissive mode)
-> and enforce. Permissive mode performs the same checks, and logs policy
-> violations as enforce mode, but will not enforce the policy. This allows
-> users to test policies before enforcing them.
-> 
-> The default mode is enforce, and can be changed via the kernel commandline
-> parameter `ipe.enforce=(0|1)`, or the sysctl `ipe.enforce=(0|1)`. The
-> ability to switch modes can be compiled out of the LSM via setting the
-> config CONFIG_SECURITY_IPE_PERMISSIVE_SWITCH to N.
-> 
-> IPE additionally supports success auditing. When enabled, all events
-> that pass IPE policy and are not blocked will emit an audit event. This
-> is disabled by default, and can be enabled via the kernel commandline
-> `ipe.success_audit=(0|1)` or the sysctl `ipe.success_audit=(0|1)`.
-> 
-> Policies can be staged at runtime through securityfs and activated through
-> sysfs. Please see the Deploying Policies section of this cover letter for
-> more information.
-> 
-> The IPE LSM is compiled under CONFIG_SECURITY_IPE.
-> 
-> Policy:
-> ------------------------------------
-> 
-> IPE policy is designed to be both forward compatible and backwards
-> compatible. There is one required line, at the top of the policy,
-> indicating the policy name, and the policy version, for instance:
-> 
->   policy_name="Ex Policy" policy_version=0.0.0
-> 
-> The policy version indicates the current version of the policy (NOT the
-> policy syntax version). This is used to prevent roll-back of policy to
-> potentially insecure previous versions of the policy.
-> 
-> The next portion of IPE policy, are rules. Rules are formed by key=value
-> pairs, known as properties. IPE rules require two properties: "action",
-> which determines what IPE does when it encounters a match against the
-> policy, and "op", which determines when that rule should be evaluated.
-> Thus, a minimal rule is:
-> 
->   op=EXECUTE action=ALLOW
-> 
-> This example will allow any execution. Additional properties are used to
-> restrict attributes about the files being evaluated. These properties are
-> intended to be deterministic attributes that are resident in the kernel.
-> Available properties for IPE described in the properties section of this
-> cover-letter, the repository available in Appendix A, and the kernel
-> documentation page.
-> 
-> Order does not matter for the rule's properties - they can be listed in
-> any order, however it is encouraged to have the "op" property be first,
-> and the "action" property be last, for readability.
-> 
-> Additionally, rules are evaluated top-to-bottom. As a result, any
-> revocation rules, or denies should be placed early in the file to ensure
-> that these rules are evaluated before a rule with "action=ALLOW" is hit.
-> 
-> IPE policy is designed to be forward compatible and backwards compatible,
-> thus any failure to parse a rule will result in the line being ignored,
-> and a warning being emitted. If backwards compatibility is not required,
-> the kernel commandline parameter and sysctl, ipe.strict_parse can be
-> enabled, which will cause these warnings to be fatal.
+Thank you for your notes about commit and sorry for not copying the message=
+ to you!
 
-Ignoring unknown command may lead to inconsistent beaviors. To achieve
-forward compatibility, I think it would be better to never ignore
-unknown rule but to give a way to userspace to known what is the current
-kernel ABI. This could be done with a securityfs file listing the
-current policy grammar.
+There is definitely unwanted line of code in the commit.
+After deleting that one, introduced changes work fine.
+
+There is a hardcoded usage of /dev/tpm2 in the kernel selftest. And if ther=
+e is no such device - test fails.
+I believe this is not a behavior, that we expect. Test should be skipped in=
+ such case, should it?
+That is what my commit makes.
+
+So, after deleting unwanted line of code and making cosmetic changes (new d=
+escription + deleting
+excess newline character), can commit be submitted again?
+
+You also mentioned reviewed-by nor tested-by tags in your message. Who shou=
+ld make these tags?
+
+P.S.
+Also there was a question: why do I declare exit code with a constant inste=
+ad of just exit 4.
+I chose this style because it is used in other kernel selftests for such ki=
+nd of checks.
+It is proper to follow common style rules. Should I argument this decision =
+in commit message?=20
+
+-Nikita
+
+> -----Original Message-----
+> From: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Sent: Sunday, April 12, 2020 5:11 PM
+> To: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org; linux-integrity@vger.kernel.org; Jar=
+kko
+> Sakkinen <jarkko.sakkinen@linux.intel.com>; Nikita Sobolev
+> <sobolev@synopsys.com>; Tadeusz Struk <tadeusz.struk@intel.com>; open
+> list <linux-kernel@vger.kernel.org>
+> Subject: [PATCH] selftests/tpm: Fix runtime error
+>=20
+> There is some random clutter in test_smoke.sh:
+>=20
+>   ./test_smoke.sh: line 3: self.flags: command not found
+>=20
+> Remove it.
+>=20
+> Fixes: b32694cd0724 ("Kernel selftests: tpm2: check for tpm support")
+> Cc: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> ---
+> I rely on these tests and this was not even cc'd to me and obviously was
+> untested. There is neither reviewed-by nor tested-by tags in the commit (=
+not
+> to mention some cosmetic things like short summary formatted wrong and th=
+e
+> extra newline character).
+>=20
+> Please do not do this next time. Thanks.
+>  tools/testing/selftests/tpm2/test_smoke.sh | 2 --
+>  1 file changed, 2 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/tpm2/test_smoke.sh
+> b/tools/testing/selftests/tpm2/test_smoke.sh
+> index b630c7b5950a..e55d3e400666 100755
+> --- a/tools/testing/selftests/tpm2/test_smoke.sh
+> +++ b/tools/testing/selftests/tpm2/test_smoke.sh
+> @@ -1,11 +1,9 @@
+>  #!/bin/bash
+>  # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) -self.flags =3D fla=
+gs
+>=20
+>  # Kselftest framework requirement - SKIP code is 4.
+>  ksft_skip=3D4
+>=20
+> -
+>  if [ -f /dev/tpm0 ] ; then
+>  	python -m unittest -v tpm2_tests.SmokeTest
+>  	python -m unittest -v tpm2_tests.AsyncTest
+> --
+> 2.25.1
+
