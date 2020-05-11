@@ -2,102 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 399821CE205
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 May 2020 19:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BF71CE233
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 May 2020 20:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgEKRt2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 11 May 2020 13:49:28 -0400
-Received: from mga12.intel.com ([192.55.52.136]:4902 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726310AbgEKRt2 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 11 May 2020 13:49:28 -0400
-IronPort-SDR: mEQKgvh9XzAxTQA0VtUu/0sR9rhO7PoDlx6TZ1rSefRaL83NbErSLgaawqDl7YRPXqY1Ask7JJ
- u2jesZqGPgZg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2020 10:49:28 -0700
-IronPort-SDR: /Z8i/fuJygarGA6V+3n/cpspDv2ELTSCmULspU9V6zDGbAwPRM7WUXWM4vwtJELMcdmcshokHV
- ISNKmIpLXERQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,380,1583222400"; 
-   d="scan'208";a="340624988"
-Received: from orsmsx102.amr.corp.intel.com ([10.22.225.129])
-  by orsmga001.jf.intel.com with ESMTP; 11 May 2020 10:49:27 -0700
-Received: from orsmsx101.amr.corp.intel.com ([169.254.8.204]) by
- ORSMSX102.amr.corp.intel.com ([169.254.3.107]) with mapi id 14.03.0439.000;
- Mon, 11 May 2020 10:49:25 -0700
-From:   "Roberts, William C" <william.c.roberts@intel.com>
-To:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: Questions on SHA1 in ima_init
-Thread-Topic: Questions on SHA1 in ima_init
-Thread-Index: AdYnu1hfyrMZKMH8Qlu6i128wocGgg==
-Date:   Mon, 11 May 2020 17:49:25 +0000
-Message-ID: <476DC76E7D1DF2438D32BFADF679FC5649EDCB91@ORSMSX101.amr.corp.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.0.600.7
-dlp-reaction: no-action
-x-originating-ip: [10.22.254.138]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1731043AbgEKSDd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 11 May 2020 14:03:33 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:33770 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726891AbgEKSDc (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 11 May 2020 14:03:32 -0400
+Received: from [10.137.106.115] (unknown [131.107.174.243])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A459320B717B;
+        Mon, 11 May 2020 11:03:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A459320B717B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1589220212;
+        bh=rwCBjFjDRVRa/3cB9IsEzNvfLiKX6lRSr9M18CC7//4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=QiKdEKorw3cyT1qWZiMET9W5veSrPG4eNvJe3qaXWcFMXz1t90fAPlv3CSYWjU6is
+         1U+rcd04LKlXY+H4saO7e/yVSmO+N7R04feR23EWhVyWDS+8htuwyPBoJbD80fxF69
+         MRo3aLdTplD7OzjW3HYeo901uWPxV5t777MZqC54=
+Subject: Re: [RFC PATCH v3 00/12] Integrity Policy Enforcement LSM (IPE)
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        agk@redhat.com, axboe@kernel.dk, snitzer@redhat.com,
+        jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, jannh@google.com
+Cc:     tyhicks@linux.microsoft.com, pasha.tatashin@soleen.com,
+        sashal@kernel.org, jaskarankhurana@linux.microsoft.com,
+        nramas@linux.microsoft.com, mdsakib@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, corbet@lwn.net
+References: <20200415162550.2324-1-deven.desai@linux.microsoft.com>
+ <b07ac7e1-7cf5-92c9-81d0-64174c3d5024@digikod.net>
+From:   Deven Bowers <deven.desai@linux.microsoft.com>
+Message-ID: <0001755a-6b2a-b13b-960c-eb0b065c8e3c@linux.microsoft.com>
+Date:   Mon, 11 May 2020 11:03:31 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <b07ac7e1-7cf5-92c9-81d0-64174c3d5024@digikod.net>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello,
-
-I'm part of the tpm2 users pace tooling and libraries, and I am trying to track down an issue in where boot aggregate is only extended in the SHA1
-bank of PCR10.
-
-You can read the details on the link below, but ill summarize here
-  - https://lists.01.org/hyperkitty/list/tpm2@lists.01.org/thread/FUBD3MY5U5YICNUYSF3NE2STO3YAW7Y4/
-
-It looks like ima_add_boot_aggregate() is hardcoded to SHA1, our guess is, that it's so it works between TPM 1.X and TPM2.0 chips. Is that
-correct?
-
-I was wondering if that synopsis is correct and if there would be traction to add something like querying the tpm chip and getting the version
-And picking SHA256 if its tpm2.0, as a sample to guide the discussion I included the patch below (totally untested/not-compiled). The main
-downside would be leaking TPM versions into IMA to make a decisions, so it may be better to have a helper in the tpm code to pick the best
-default algorithm where it could pick SHA1 for TPM1.X and SHA256 for TPM2.0. Thoughts?
-
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 567468188a61..d0513bafeebf 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -15,6 +15,7 @@
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/err.h>
-+#include <linux/printk.h>
- 
- #include "ima.h"
- 
-@@ -59,6 +60,16 @@ static int __init ima_add_boot_aggregate(void)
-        iint->ima_hash->length = SHA1_DIGEST_SIZE;
- 
-        if (ima_tpm_chip) {
-+               result = tpm_is_tpm2(ima_tpm_chip);
-+               if (result > 0) {
-+                       /* yes it's a TPM2 chipset use sha256 */
-+                       iint->ima_hash->algo = HASH_ALGO_SHA256;
-+                       iint->ima_hash->length = SHA256_DIGEST_SIZE;
-+               } else if (result < 0) {
-+                       /* ignore errors here, as we can just move on with SHA1 */
-+                       pr_warn("Could not query TPM chip version, got: %d\n", result);
-+               }
-+
-                result = ima_calc_boot_aggregate(&hash.hdr);
-                if (result < 0) {
-                        audit_cause = "hashing_error";
 
 
+On 5/10/2020 2:28 AM, Mickaël Salaün wrote:
+
+[...snip]
+
+>>
+>> Additionally, rules are evaluated top-to-bottom. As a result, any
+>> revocation rules, or denies should be placed early in the file to ensure
+>> that these rules are evaluated before a rule with "action=ALLOW" is hit.
+>>
+>> IPE policy is designed to be forward compatible and backwards compatible,
+>> thus any failure to parse a rule will result in the line being ignored,
+>> and a warning being emitted. If backwards compatibility is not required,
+>> the kernel commandline parameter and sysctl, ipe.strict_parse can be
+>> enabled, which will cause these warnings to be fatal.
+> 
+> Ignoring unknown command may lead to inconsistent beaviors. To achieve
+> forward compatibility, I think it would be better to never ignore
+> unknown rule but to give a way to userspace to known what is the current
+> kernel ABI. This could be done with a securityfs file listing the
+> current policy grammar.
+> 
+
+That's a fair point. From a manual perspective, I think this is fine.
+A human-user can interpret a grammar successfully on their own when new
+syntax is introduced.
+
+ From a producing API perspective, I'd have to think about it a bit 
+more. Ideally, the grammar would be structured in such a way that the 
+userland
+interpreter of this grammar would not have to be updated once new syntax
+is introduced, avoiding the need to update the userland binary. To do so
+generically ("op=%s") is easy, but doesn't necessarily convey sufficient
+information (what happens when a new "op" token is introduced?). I think
+this may come down to regular expression representations of valid values
+for these tokens, which worries me as regular expressions are incredibly
+error-prone[1].
+
+I'll see what I can come up with regarding this.
 
 
-
+[1] 
+https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/
