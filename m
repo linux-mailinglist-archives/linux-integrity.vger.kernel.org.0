@@ -2,67 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD651CF9A6
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 17:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AF41CFABC
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 18:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730621AbgELPuv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 11:50:51 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32094 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726388AbgELPuv (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 11:50:51 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04CFZgS0193662;
-        Tue, 12 May 2020 11:50:29 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30wrw55wxr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 May 2020 11:50:29 -0400
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04CFbG10007232;
-        Tue, 12 May 2020 11:50:28 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30wrw55wx9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 May 2020 11:50:28 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 04CFoBnV004421;
-        Tue, 12 May 2020 15:50:27 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 30wm55esms-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 May 2020 15:50:26 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04CFnDnQ64225606
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 May 2020 15:49:13 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C3292A405C;
-        Tue, 12 May 2020 15:50:24 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C4B7A405F;
-        Tue, 12 May 2020 15:50:23 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.144.67])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 12 May 2020 15:50:23 +0000 (GMT)
-Message-ID: <1589298622.5098.67.camel@linux.ibm.com>
-Subject: Re: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        id S1727889AbgELQbj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 12:31:39 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2200 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727778AbgELQbj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 12 May 2020 12:31:39 -0400
+Received: from lhreml731-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 6A6C8B1834534D466D91;
+        Tue, 12 May 2020 17:31:32 +0100 (IST)
+Received: from fraeml703-chm.china.huawei.com (10.206.15.52) by
+ lhreml731-chm.china.huawei.com (10.201.108.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Tue, 12 May 2020 17:31:32 +0100
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Tue, 12 May 2020 18:31:31 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Tue, 12 May 2020 18:31:31 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
         "david.safford@gmail.com" <david.safford@gmail.com>,
         "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
         "jmorris@namei.org" <jmorris@namei.org>,
-        John Johansen <john.johansen@canonical.com>,
+        "John Johansen" <john.johansen@canonical.com>,
         "matthewgarrett@google.com" <matthewgarrett@google.com>
-Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Tue, 12 May 2020 11:50:22 -0400
-In-Reply-To: <d3f4a53e386d4bb1b8c608ac8b6bec1f@huawei.com>
+Subject: RE: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+Thread-Topic: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+Thread-Index: AQHWHfmwvisCdHYC6kmVk7fgFWuzYaibYCWAgAAX0QCAAMB1IIAAb0AAgAApg3CAADIngIAAzgGAgACHqACABHSroIAAjWsAgAC7FtCAAFxigIAAJvQA///zHACAACsKoA==
+Date:   Tue, 12 May 2020 16:31:31 +0000
+Message-ID: <fcdb168d27214b5e85c3b741f184cde9@huawei.com>
 References: <20200429073935.11913-1-roberto.sassu@huawei.com>
          <1588794293.4624.21.camel@linux.ibm.com>
          <1588799408.4624.28.camel@linux.ibm.com>
@@ -77,116 +57,101 @@ References: <20200429073935.11913-1-roberto.sassu@huawei.com>
          <09ee169cfd70492cb526bcb30f99d693@huawei.com>
          <1589293025.5098.53.camel@linux.ibm.com>
          <d3f4a53e386d4bb1b8c608ac8b6bec1f@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-12_04:2020-05-11,2020-05-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- spamscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 mlxscore=0 clxscore=1015 adultscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005120115
+ <1589298622.5098.67.camel@linux.ibm.com>
+In-Reply-To: <1589298622.5098.67.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.12.77]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-05-12 at 15:31 +0000, Roberto Sassu wrote:
-> > From: owner-linux-security-module@vger.kernel.org [mailto:owner-linux-
-> > security-module@vger.kernel.org] On Behalf Of Mimi Zohar
-> > Sent: Tuesday, May 12, 2020 4:17 PM
-> > On Tue, 2020-05-12 at 07:54 +0000, Roberto Sassu wrote:
-> > > > > > Roberto, EVM is only triggered by IMA, unless you've modified the
-> > > > > > kernel to do otherwise.
-> > > > >
-> > > > > EVM would deny xattr/attr operations even if IMA is disabled in the
-> > > > > kernel configuration. For example, evm_setxattr() returns the value
-> > > > > from evm_protect_xattr(). IMA is not involved there.
-> > > >
-> > > > Commit ae1ba1676b88 ("EVM: Allow userland to permit modification of
-> > > > EVM-protected metadata")
-> > introduced EVM_ALLOW_METADATA_WRITES
-> > > > to allow writing the EVM portable and immutable file signatures.
-> > >
-> > > According to Documentation/ABI/testing/evm:
-> > >
-> > > Note that once a key has been loaded, it will no longer be
-> > > possible to enable metadata modification.
-> > 
-> > Not any key, but the HMAC key.
-> > 
-> > 2         Permit modification of EVM-protected metadata at
-> >           runtime. Not supported if HMAC validation and
-> >           creation is enabled.
-> 
-> #ifdef CONFIG_EVM_LOAD_X509
-> void __init evm_load_x509(void)
-> {
-> [...]
->         rc = integrity_load_x509(INTEGRITY_KEYRING_EVM, CONFIG_EVM_X509_PATH);
->         if (!rc)
->                 evm_initialized |= EVM_INIT_X509;
-> 
-> 
-> static ssize_t evm_write_key(struct file *file, const char __user *buf,
->                              size_t count, loff_t *ppos)
-> {
-> [...]
->         /* Don't allow a request to freshly enable metadata writes if
->          * keys are loaded.
->          */
->         if ((i & EVM_ALLOW_METADATA_WRITES) &&
->             ((evm_initialized & EVM_KEY_MASK) != 0) &&
->             !(evm_initialized & EVM_ALLOW_METADATA_WRITES))
->                 return -EPERM;
-> 
-> Should have been:
-> 
->         if ((i & EVM_ALLOW_METADATA_WRITES) &&
->             ((evm_initialized & EVM_INIT_HMAC) != 0) &&
->             !(evm_initialized & EVM_ALLOW_METADATA_WRITES))
->                 return -EPERM;
-
-Ok
-
-> 
-> > Each time the EVM protected file metadata is updated, the EVM HMAC is
-> > updated, assuming the existing EVM HMAC is valid.  Userspace should
-> > not have access to the HMAC key, so we only allow writing EVM
-> > signatures.
-> > 
-> > The only difference between writing the original EVM signature and the
-> > new portable and immutable signature is the security.ima xattr
-> > requirement.  Since the new EVM signature does not include the
-> > filesystem specific data, something else needs to bind the file
-> > metadata to the file data.  Thus the IMA xattr requirement.
-> > 
-> > Assuming that the new EVM signature is written last, as long as there
-> > is an IMA xattr, there shouldn't be a problem writing the new EVM
-> > signature.
-> 
->         /* first need to know the sig type */
->         rc = vfs_getxattr_alloc(dentry, XATTR_NAME_EVM, (char **)&xattr_data, 0,
->                                 GFP_NOFS);
->         if (rc <= 0) {
->                 evm_status = INTEGRITY_FAIL;
->                 if (rc == -ENODATA) {
->                         rc = evm_find_protected_xattrs(dentry);
->                         if (rc > 0)
->                                 evm_status = INTEGRITY_NOLABEL;
->                         else if (rc == 0)
->                                 evm_status = INTEGRITY_NOXATTRS; /* new file */
-> 
-> If EVM_ALLOW_METADATA_WRITES is cleared, only the first xattr
-> can be written (status INTEGRITY_NOXATTRS is ok). After,
-> evm_find_protected_xattrs() returns rc > 0, so the status is
-> INTEGRITY_NOLABEL, which is not ignored by evm_protect_xattr().
-
-With EVM HMAC enabled, as a result of writing the first protected
-xattr, an EVM HMAC should be calculated and written in
-evm_inode_post_setxattr().
-
-Mimi
+PiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86em9oYXJAbGludXguaWJtLmNvbV0NCj4gU2VudDog
+VHVlc2RheSwgTWF5IDEyLCAyMDIwIDU6NTAgUE0NCj4gT24gVHVlLCAyMDIwLTA1LTEyIGF0IDE1
+OjMxICswMDAwLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+ID4gRnJvbTogb3duZXItbGludXgt
+c2VjdXJpdHktbW9kdWxlQHZnZXIua2VybmVsLm9yZyBbbWFpbHRvOm93bmVyLQ0KPiBsaW51eC0N
+Cj4gPiA+IHNlY3VyaXR5LW1vZHVsZUB2Z2VyLmtlcm5lbC5vcmddIE9uIEJlaGFsZiBPZiBNaW1p
+IFpvaGFyDQo+ID4gPiBTZW50OiBUdWVzZGF5LCBNYXkgMTIsIDIwMjAgNDoxNyBQTQ0KPiA+ID4g
+T24gVHVlLCAyMDIwLTA1LTEyIGF0IDA3OjU0ICswMDAwLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0K
+PiA+ID4gPiA+ID4gPiBSb2JlcnRvLCBFVk0gaXMgb25seSB0cmlnZ2VyZWQgYnkgSU1BLCB1bmxl
+c3MgeW91J3ZlIG1vZGlmaWVkDQo+IHRoZQ0KPiA+ID4gPiA+ID4gPiBrZXJuZWwgdG8gZG8gb3Ro
+ZXJ3aXNlLg0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IEVWTSB3b3VsZCBkZW55IHhhdHRyL2F0
+dHIgb3BlcmF0aW9ucyBldmVuIGlmIElNQSBpcyBkaXNhYmxlZCBpbg0KPiB0aGUNCj4gPiA+ID4g
+PiA+IGtlcm5lbCBjb25maWd1cmF0aW9uLiBGb3IgZXhhbXBsZSwgZXZtX3NldHhhdHRyKCkgcmV0
+dXJucyB0aGUNCj4gdmFsdWUNCj4gPiA+ID4gPiA+IGZyb20gZXZtX3Byb3RlY3RfeGF0dHIoKS4g
+SU1BIGlzIG5vdCBpbnZvbHZlZCB0aGVyZS4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IENvbW1pdMKg
+YWUxYmExNjc2Yjg4ICgiRVZNOiBBbGxvdyB1c2VybGFuZCB0byBwZXJtaXQgbW9kaWZpY2F0aW9u
+DQo+IG9mDQo+ID4gPiA+ID4gRVZNLXByb3RlY3RlZCBtZXRhZGF0YSIpDQo+ID4gPiBpbnRyb2R1
+Y2VkwqBFVk1fQUxMT1dfTUVUQURBVEFfV1JJVEVTDQo+ID4gPiA+ID4gdG8gYWxsb3cgd3JpdGlu
+ZyB0aGUgRVZNIHBvcnRhYmxlIGFuZCBpbW11dGFibGUgZmlsZSBzaWduYXR1cmVzLg0KPiA+ID4g
+Pg0KPiA+ID4gPiBBY2NvcmRpbmcgdG8gRG9jdW1lbnRhdGlvbi9BQkkvdGVzdGluZy9ldm06DQo+
+ID4gPiA+DQo+ID4gPiA+IE5vdGUgdGhhdCBvbmNlIGEga2V5IGhhcyBiZWVuIGxvYWRlZCwgaXQg
+d2lsbCBubyBsb25nZXIgYmUNCj4gPiA+ID4gcG9zc2libGUgdG8gZW5hYmxlIG1ldGFkYXRhIG1v
+ZGlmaWNhdGlvbi4NCj4gPiA+DQo+ID4gPiBOb3QgYW55IGtleSwgYnV0IHRoZSBITUFDIGtleS4N
+Cj4gPiA+DQo+ID4gPiAywqDCoMKgwqDCoMKgwqDCoMKgUGVybWl0IG1vZGlmaWNhdGlvbiBvZiBF
+Vk0tcHJvdGVjdGVkIG1ldGFkYXRhIGF0DQo+ID4gPiDCoCDCoCDCoCDCoCDCoCBydW50aW1lLiBO
+b3Qgc3VwcG9ydGVkIGlmIEhNQUMgdmFsaWRhdGlvbiBhbmQNCj4gPiA+IMKgIMKgIMKgIMKgIMKg
+IGNyZWF0aW9uIGlzIGVuYWJsZWQuDQo+ID4NCj4gPiAjaWZkZWYgQ09ORklHX0VWTV9MT0FEX1g1
+MDkNCj4gPiB2b2lkIF9faW5pdCBldm1fbG9hZF94NTA5KHZvaWQpDQo+ID4gew0KPiA+IFsuLi5d
+DQo+ID4gICAgICAgICByYyA9IGludGVncml0eV9sb2FkX3g1MDkoSU5URUdSSVRZX0tFWVJJTkdf
+RVZNLA0KPiBDT05GSUdfRVZNX1g1MDlfUEFUSCk7DQo+ID4gICAgICAgICBpZiAoIXJjKQ0KPiA+
+ICAgICAgICAgICAgICAgICBldm1faW5pdGlhbGl6ZWQgfD0gRVZNX0lOSVRfWDUwOTsNCj4gPg0K
+PiA+DQo+ID4gc3RhdGljIHNzaXplX3QgZXZtX3dyaXRlX2tleShzdHJ1Y3QgZmlsZSAqZmlsZSwg
+Y29uc3QgY2hhciBfX3VzZXIgKmJ1ZiwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHNpemVfdCBjb3VudCwgbG9mZl90ICpwcG9zKQ0KPiA+IHsNCj4gPiBbLi4uXQ0KPiA+ICAgICAg
+ICAgLyogRG9uJ3QgYWxsb3cgYSByZXF1ZXN0IHRvIGZyZXNobHkgZW5hYmxlIG1ldGFkYXRhIHdy
+aXRlcyBpZg0KPiA+ICAgICAgICAgICoga2V5cyBhcmUgbG9hZGVkLg0KPiA+ICAgICAgICAgICov
+DQo+ID4gICAgICAgICBpZiAoKGkgJiBFVk1fQUxMT1dfTUVUQURBVEFfV1JJVEVTKSAmJg0KPiA+
+ICAgICAgICAgICAgICgoZXZtX2luaXRpYWxpemVkICYgRVZNX0tFWV9NQVNLKSAhPSAwKSAmJg0K
+PiA+ICAgICAgICAgICAgICEoZXZtX2luaXRpYWxpemVkICYgRVZNX0FMTE9XX01FVEFEQVRBX1dS
+SVRFUykpDQo+ID4gICAgICAgICAgICAgICAgIHJldHVybiAtRVBFUk07DQo+ID4NCj4gPiBTaG91
+bGQgaGF2ZSBiZWVuOg0KPiA+DQo+ID4gICAgICAgICBpZiAoKGkgJiBFVk1fQUxMT1dfTUVUQURB
+VEFfV1JJVEVTKSAmJg0KPiA+ICAgICAgICAgICAgICgoZXZtX2luaXRpYWxpemVkICYgRVZNX0lO
+SVRfSE1BQykgIT0gMCkgJiYNCj4gPiAgICAgICAgICAgICAhKGV2bV9pbml0aWFsaXplZCAmIEVW
+TV9BTExPV19NRVRBREFUQV9XUklURVMpKQ0KPiA+ICAgICAgICAgICAgICAgICByZXR1cm4gLUVQ
+RVJNOw0KPiANCj4gT2sNCj4gDQo+ID4NCj4gPiA+IEVhY2ggdGltZSB0aGUgRVZNIHByb3RlY3Rl
+ZCBmaWxlIG1ldGFkYXRhIGlzIHVwZGF0ZWQsIHRoZSBFVk0gSE1BQw0KPiBpcw0KPiA+ID4gdXBk
+YXRlZCwgYXNzdW1pbmcgdGhlIGV4aXN0aW5nIEVWTSBITUFDIGlzIHZhbGlkLiDCoFVzZXJzcGFj
+ZSBzaG91bGQNCj4gPiA+IG5vdCBoYXZlIGFjY2VzcyB0byB0aGUgSE1BQyBrZXksIHNvIHdlIG9u
+bHkgYWxsb3cgd3JpdGluZyBFVk0NCj4gPiA+IHNpZ25hdHVyZXMuDQo+ID4gPg0KPiA+ID4gVGhl
+IG9ubHkgZGlmZmVyZW5jZSBiZXR3ZWVuIHdyaXRpbmcgdGhlIG9yaWdpbmFsIEVWTSBzaWduYXR1
+cmUgYW5kIHRoZQ0KPiA+ID4gbmV3IHBvcnRhYmxlIGFuZCBpbW11dGFibGUgc2lnbmF0dXJlIGlz
+IHRoZSBzZWN1cml0eS5pbWEgeGF0dHINCj4gPiA+IHJlcXVpcmVtZW50LiDCoFNpbmNlIHRoZSBu
+ZXcgRVZNIHNpZ25hdHVyZSBkb2VzIG5vdCBpbmNsdWRlIHRoZQ0KPiA+ID4gZmlsZXN5c3RlbSBz
+cGVjaWZpYyBkYXRhLCBzb21ldGhpbmcgZWxzZSBuZWVkcyB0byBiaW5kIHRoZSBmaWxlDQo+ID4g
+PiBtZXRhZGF0YSB0byB0aGUgZmlsZSBkYXRhLiDCoFRodXMgdGhlIElNQSB4YXR0ciByZXF1aXJl
+bWVudC4NCj4gPiA+DQo+ID4gPiBBc3N1bWluZyB0aGF0IHRoZSBuZXcgRVZNIHNpZ25hdHVyZSBp
+cyB3cml0dGVuIGxhc3QsIGFzIGxvbmcgYXMgdGhlcmUNCj4gPiA+IGlzIGFuIElNQSB4YXR0ciwg
+dGhlcmUgc2hvdWxkbid0IGJlIGEgcHJvYmxlbSB3cml0aW5nIHRoZSBuZXcgRVZNDQo+ID4gPiBz
+aWduYXR1cmUuDQo+ID4NCj4gPiAgICAgICAgIC8qIGZpcnN0IG5lZWQgdG8ga25vdyB0aGUgc2ln
+IHR5cGUgKi8NCj4gPiAgICAgICAgIHJjID0gdmZzX2dldHhhdHRyX2FsbG9jKGRlbnRyeSwgWEFU
+VFJfTkFNRV9FVk0sIChjaGFyDQo+ICoqKSZ4YXR0cl9kYXRhLCAwLA0KPiA+ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgR0ZQX05PRlMpOw0KPiA+ICAgICAgICAgaWYgKHJjIDw9IDAp
+IHsNCj4gPiAgICAgICAgICAgICAgICAgZXZtX3N0YXR1cyA9IElOVEVHUklUWV9GQUlMOw0KPiA+
+ICAgICAgICAgICAgICAgICBpZiAocmMgPT0gLUVOT0RBVEEpIHsNCj4gPiAgICAgICAgICAgICAg
+ICAgICAgICAgICByYyA9IGV2bV9maW5kX3Byb3RlY3RlZF94YXR0cnMoZGVudHJ5KTsNCj4gPiAg
+ICAgICAgICAgICAgICAgICAgICAgICBpZiAocmMgPiAwKQ0KPiA+ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgZXZtX3N0YXR1cyA9IElOVEVHUklUWV9OT0xBQkVMOw0KPiA+ICAgICAg
+ICAgICAgICAgICAgICAgICAgIGVsc2UgaWYgKHJjID09IDApDQo+ID4gICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBldm1fc3RhdHVzID0gSU5URUdSSVRZX05PWEFUVFJTOyAvKiBuZXcg
+ZmlsZSAqLw0KPiA+DQo+ID4gSWYgRVZNX0FMTE9XX01FVEFEQVRBX1dSSVRFUyBpcyBjbGVhcmVk
+LCBvbmx5IHRoZSBmaXJzdCB4YXR0cg0KPiA+IGNhbiBiZSB3cml0dGVuIChzdGF0dXMgSU5URUdS
+SVRZX05PWEFUVFJTIGlzIG9rKS4gQWZ0ZXIsDQo+ID4gZXZtX2ZpbmRfcHJvdGVjdGVkX3hhdHRy
+cygpIHJldHVybnMgcmMgPiAwLCBzbyB0aGUgc3RhdHVzIGlzDQo+ID4gSU5URUdSSVRZX05PTEFC
+RUwsIHdoaWNoIGlzIG5vdCBpZ25vcmVkIGJ5IGV2bV9wcm90ZWN0X3hhdHRyKCkuDQo+IA0KPiBX
+aXRoIEVWTSBITUFDIGVuYWJsZWQsIGFzIGEgcmVzdWx0IG9mIHdyaXRpbmcgdGhlIGZpcnN0IHBy
+b3RlY3RlZA0KPiB4YXR0ciwgYW4gRVZNIEhNQUMgc2hvdWxkIGJlIGNhbGN1bGF0ZWQgYW5kIHdy
+aXR0ZW4gaW4NCj4gZXZtX2lub2RlX3Bvc3Rfc2V0eGF0dHIoKS4NCg0KVG8gc29sdmUgdGhlIG9y
+ZGVyaW5nIGlzc3VlLCB3b3VsZG4ndCBhbGxvd2luZyBzZXR4YXR0cigpIG9uIGEgZmlsZQ0Kd2l0
+aCBwb3J0YWJsZSBzaWduYXR1cmUgdGhhdCBkb2VzIG5vdCB5ZXQgcGFzcyB2ZXJpZmljYXRpb24g
+YmUgc2FmZT8NCmV2bV91cGRhdGVfZXZteGF0dHIoKSBjaGVja3MgaWYgdGhlIHNpZ25hdHVyZSBp
+cyBwb3J0YWJsZSBhbmQNCmlmIHllcywgZG9lcyBub3QgY2FsY3VsYXRlIHRoZSBITUFDLg0KDQpS
+b2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYz
+DQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywgTGkgSmlhbiwgU2hpIFlhbmxpDQo=
