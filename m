@@ -2,160 +2,177 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AC41D029C
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2020 00:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1711D02CA
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2020 01:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731538AbgELW4w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 18:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731308AbgELW4u (ORCPT
+        id S1726031AbgELXFO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 19:05:14 -0400
+Received: from mail-oo1-f66.google.com ([209.85.161.66]:41309 "EHLO
+        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725938AbgELXFO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 18:56:50 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E60FC05BD09
-        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 15:56:49 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id a5so10253374pjh.2
-        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 15:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=IXpIsoQged7M/ri/embTMdJh9eC3HGIEafUuSr0Sgp4=;
-        b=N9/eEWjx4KryymG7ZL/gSXanLr0DYNDcTqpqniqQuUXfGEZEOCiOVCUM31Rkg5hbPF
-         RYrLa1KR6sZdrXCo182VyfY9tc7Dc8vFc162i/vIcqYJQGy8FcEAaac5BV+8lc+P9xKZ
-         wBGT4FqmIHHPX2e1wzE8uLoPmiAHm59yHXR8U=
+        Tue, 12 May 2020 19:05:14 -0400
+Received: by mail-oo1-f66.google.com with SMTP id t3so3076239oou.8;
+        Tue, 12 May 2020 16:05:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=IXpIsoQged7M/ri/embTMdJh9eC3HGIEafUuSr0Sgp4=;
-        b=BmnLL5GfJVpw7PTS8wDRVaXAKE3HHzaxGYugyExtXS+re3dRWrZHy76A8nno6n9lQd
-         Lu5MUW+dGIc1qCiNLDPnnFBR1J/U4ckTTctYL3HYJDQBVjlMGAoEHFdnVk2pVPnCGCVC
-         CWpmgaP7U+M3tb8hLZ9HmUXJInaY2wq58IBtaocRBm4S7oxuyS0Ph/XBpUOboG8c3FuW
-         zcryQ8nVRHUdecFMmpmtdllsZ1unCL3p+b7J++eoDFnmazZR77De7XM1AHMfiLvOwWot
-         6ods8zaVJb9OJfusXopKoJ3pRgQxx22gqMFntEjWF0p9ll96U/GBjjMcwi4UuCGkjemr
-         dqZA==
-X-Gm-Message-State: AGi0PuYo1+sqBQGIfioR7fOJCdyLiKfFuei05Xnp7ZuiZ7KC+kv5GixE
-        zGv6Wotvh+HZbPO/hYa2b2Rbpg==
-X-Google-Smtp-Source: APiQypKzgC0TF704AZj7wxJgs6uVQ1eXdDqzXBGagWKY3u4jWSDcjnfhuh2eV/DDEm8B+zOSyJm0Nw==
-X-Received: by 2002:a17:90a:7788:: with SMTP id v8mr30342795pjk.111.1589324208728;
-        Tue, 12 May 2020 15:56:48 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u5sm11217857pgi.70.2020.05.12.15.56.47
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XSdR85TAgJOs38DEsZUyX0dfieZdKEmO5MKyADhHcpo=;
+        b=NcQjP7BHlZMbcdCdChoCutzNNtPG6tQ7ulx3OiXJhrNS8Q0/wFGINaNWmmXiJPRslI
+         IYyh/vy+7oBMx2G+jayaMTGsFf+AUZ7HAU5WHP7/s6Emyt8ZH4NOp0aty+xSBKaZvCqi
+         3mUR31bBUA+lFdjCxCEg9wyfkHZ0dx2QanryYEfkJtnFC60frRkwl3DcrA2purNE6jco
+         RjebZ7l22nkIyoq1fELOFYCfWSSStw9vk4FRZ1tqDATjwVjcqYod9vQU17ExuntF/mzR
+         NFns83E4y0KwkIWU8ogurmEKpjWGy3D8pfXIVC5wP+A/Kltq7ergycZU50uB8QH8wlrH
+         Pq4A==
+X-Gm-Message-State: AGi0PuZr/bRPANgnBWMTGYvAy/gWEpeM+ggo1xnLeC2tbuFdylrVeiKH
+        w6CpalTgnEvNsZ3jCcYEcA==
+X-Google-Smtp-Source: APiQypJzTOsA4MMcw+8ySuTf7bsiFc+0EPM0GrRH186HNMYZE+s5iB7eFAI4H9VokzQcmzwFYB4qXw==
+X-Received: by 2002:a4a:9413:: with SMTP id h19mr15437109ooi.52.1589324712398;
+        Tue, 12 May 2020 16:05:12 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id f8sm1601703oto.47.2020.05.12.16.05.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 15:56:47 -0700 (PDT)
-Date:   Tue, 12 May 2020 15:56:46 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christian Heimes <christian@python.org>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        Tue, 12 May 2020 16:05:11 -0700 (PDT)
+Received: (nullmailer pid 9890 invoked by uid 1000);
+        Tue, 12 May 2020 23:05:09 -0000
+Date:   Tue, 12 May 2020 18:05:09 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Prakhar Srivastava <prsriva@linux.microsoft.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v5 1/6] fs: Add support for an O_MAYEXEC flag on
- openat2(2)
-Message-ID: <202005121555.0A446763@keescook>
-References: <20200505153156.925111-1-mic@digikod.net>
- <20200505153156.925111-2-mic@digikod.net>
- <202005121258.4213DC8A2@keescook>
- <0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org>
+        linux-security-module@vger.kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, frowand.list@gmail.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, vincenzo.frascino@arm.com,
+        masahiroy@kernel.org, james.morse@arm.com, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr, gregkh@linuxfoundation.org,
+        nramas@linux.microsoft.com, tusharsu@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: Re: [RFC][PATCH 0/2] Add support for using reserved memory for ima
+ buffer pass
+Message-ID: <20200512230509.GA2654@bogus>
+References: <20200504203829.6330-1-prsriva@linux.microsoft.com>
+ <20200505095620.GA82424@C02TD0UTHF1T.local>
+ <e8c7d74e-74bf-caa3-452d-23faa649e825@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org>
+In-Reply-To: <e8c7d74e-74bf-caa3-452d-23faa649e825@linux.microsoft.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, May 12, 2020 at 11:40:35PM +0200, Christian Heimes wrote:
-> On 12/05/2020 23.05, Kees Cook wrote:
-> > On Tue, May 05, 2020 at 05:31:51PM +0200, Mickaël Salaün wrote:
-> >> When the O_MAYEXEC flag is passed, openat2(2) may be subject to
-> >> additional restrictions depending on a security policy managed by the
-> >> kernel through a sysctl or implemented by an LSM thanks to the
-> >> inode_permission hook.  This new flag is ignored by open(2) and
-> >> openat(2).
-> >>
-> >> The underlying idea is to be able to restrict scripts interpretation
-> >> according to a policy defined by the system administrator.  For this to
-> >> be possible, script interpreters must use the O_MAYEXEC flag
-> >> appropriately.  To be fully effective, these interpreters also need to
-> >> handle the other ways to execute code: command line parameters (e.g.,
-> >> option -e for Perl), module loading (e.g., option -m for Python), stdin,
-> >> file sourcing, environment variables, configuration files, etc.
-> >> According to the threat model, it may be acceptable to allow some script
-> >> interpreters (e.g. Bash) to interpret commands from stdin, may it be a
-> >> TTY or a pipe, because it may not be enough to (directly) perform
-> >> syscalls.  Further documentation can be found in a following patch.
-> > 
-> > You touch on this lightly in the cover letter, but it seems there are
-> > plans for Python to restrict stdin parsing? Are there patches pending
-> > anywhere for other interpreters? (e.g. does CLIP OS have such patches?)
-> > 
-> > There's always a push-back against adding features that have external
-> > dependencies, and then those external dependencies can't happen without
-> > the kernel first adding a feature. :) I like getting these catch-22s
-> > broken, and I think the kernel is the right place to start, especially
-> > since the threat model (and implementation) is already proven out in
-> > CLIP OS, and now with IMA. So, while the interpreter side of this is
-> > still under development, this gives them the tool they need to get it
-> > done on the kernel side. So showing those pieces (as you've done) is
-> > great, and I think finding a little bit more detail here would be even
-> > better.
-> 
-> Hi,
-> 
-> Python core dev here.
-> 
-> Yes, there are plans to use feature for Python in combination with
-> additional restrictions. For backwards compatibility reasons we cannot
-> change the behavior of the default Python interpreter. I have plans to
-> provide a restricted Python binary that prohibits piping from stdin,
-> disables -c "some_code()", restricts import locations, and a couple of
-> other things. O_MAYEXEC flag makes it easier to block imports from
-> noexec filesystems.
-> 
-> My PoC [1] for a talk [2] last year is inspired by IMA appraisal and a
-> previous talk by Mickaël on O_MAYEXEC.
-> 
-> Christian
-> 
-> [1] https://github.com/zooba/spython/blob/master/linux_xattr/spython.c
-> [2]
-> https://speakerdeck.com/tiran/europython-2019-auditing-hooks-and-security-transparency-for-cpython
+On Wed, May 06, 2020 at 10:50:04PM -0700, Prakhar Srivastava wrote:
+> Hi Mark,
 
-Ah, fantastic; thank you! Yes, this will go a long way for helping
-demonstration to other folks that there are people who will be using
-this feature. :)
+Please don't top post.
 
--- 
-Kees Cook
+> This patch set currently only address the Pure DT implementation.
+> EFI and ACPI implementations will be posted in subsequent patchsets.
+> 
+> The logs are intended to be carried over the kexec and once read the
+> logs are no longer needed and in prior conversation with James(
+> https://lore.kernel.org/linux-arm-kernel/0053eb68-0905-4679-c97a-00c5cb6f1abb@arm.com/)
+> the apporach of using a chosen node doesn't
+> support the case.
+> 
+> The DT entries make the reservation permanent and thus doesnt need kernel
+> segments to be used for this, however using a chosen-node with
+> reserved memory only changes the node information but memory still is
+> reserved via reserved-memory section.
+
+I think Mark's point was whether it needs to be permanent. We don't 
+hardcode the initrd address for example.
+
+> On 5/5/20 2:59 AM, Mark Rutland wrote:
+> > Hi Prakhar,
+> > 
+> > On Mon, May 04, 2020 at 01:38:27PM -0700, Prakhar Srivastava wrote:
+> > > IMA during kexec(kexec file load) verifies the kernel signature and measures
+
+What's IMA?
+
+> > > the signature of the kernel. The signature in the logs can be used to verfiy the
+> > > authenticity of the kernel. The logs don not get carried over kexec and thus
+> > > remote attesation cannot verify the signature of the running kernel.
+> > > 
+> > > Introduce an ABI to carry forward the ima logs over kexec.
+> > > Memory reserved via device tree reservation can be used to store and read
+> > > via the of_* functions.
+> > 
+> > This flow needs to work for:
+> > 
+> > 1) Pure DT
+> > 2) DT + EFI memory map
+> > 3) ACPI + EFI memory map
+> > 
+> > ... and if this is just for transiently passing the log, I don't think
+> > that a reserved memory region is the right thing to use, since they're
+> > supposed to be more permanent.
+> > 
+> > This sounds analogous to passing the initrd, and should probably use
+> > properties under the chosen node (which can be used for all three boot
+> > flows above).
+> > 
+> > For reference, how big is the IMA log likely to be? Does it need
+> > physically contiguous space?
+> 
+> It purely depends on the policy used and the modules/files that are accessed
+> for my local testing over a kexec session the log in
+> about 30KB.
+> 
+> Current implementation expects enough contiguous memory to allocated to
+> carry forward the logs. If the log size exceeds the reserved memory the
+> call will fail.
+> 
+> Thanks,
+> Prakhar Srivastava
+> > 
+> > Thanks,
+> > Mark.
+> > 
+> > > 
+> > > Reserved memory stores the size(sizeof(size_t)) of the buffer in the starting
+> > > address, followed by the IMA log contents.
+> > > 
+> > > Tested on:
+> > >    arm64 with Uboot
+> > > 
+> > > Prakhar Srivastava (2):
+> > >    Add a layer of abstraction to use the memory reserved by device tree
+> > >      for ima buffer pass.
+> > >    Add support for ima buffer pass using reserved memory for arm64 kexec.
+> > >      Update the arch sepcific code path in kexec file load to store the
+> > >      ima buffer in the reserved memory. The same reserved memory is read
+> > >      on kexec or cold boot.
+> > > 
+> > >   arch/arm64/Kconfig                     |   1 +
+> > >   arch/arm64/include/asm/ima.h           |  22 ++++
+> > >   arch/arm64/include/asm/kexec.h         |   5 +
+> > >   arch/arm64/kernel/Makefile             |   1 +
+> > >   arch/arm64/kernel/ima_kexec.c          |  64 ++++++++++
+> > >   arch/arm64/kernel/machine_kexec_file.c |   1 +
+> > >   arch/powerpc/include/asm/ima.h         |   3 +-
+> > >   arch/powerpc/kexec/ima.c               |  14 ++-
+> > >   drivers/of/Kconfig                     |   6 +
+> > >   drivers/of/Makefile                    |   1 +
+> > >   drivers/of/of_ima.c                    | 165 +++++++++++++++++++++++++
+> > >   include/linux/of.h                     |  34 +++++
+> > >   security/integrity/ima/ima_kexec.c     |  15 ++-
+> > >   13 files changed, 325 insertions(+), 7 deletions(-)
+> > >   create mode 100644 arch/arm64/include/asm/ima.h
+> > >   create mode 100644 arch/arm64/kernel/ima_kexec.c
+> > >   create mode 100644 drivers/of/of_ima.c
+> > > 
+> > > -- 
+> > > 2.25.1
+> > > 
