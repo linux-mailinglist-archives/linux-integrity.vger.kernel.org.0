@@ -2,58 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4F11D0171
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2020 00:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AC41D029C
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2020 00:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731285AbgELWAW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 18:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731329AbgELWAV (ORCPT
+        id S1731538AbgELW4w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 18:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731308AbgELW4u (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 18:00:21 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B9EC05BD0A
-        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 15:00:21 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id y9so3397843plk.10
-        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 15:00:21 -0700 (PDT)
+        Tue, 12 May 2020 18:56:50 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E60FC05BD09
+        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 15:56:49 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id a5so10253374pjh.2
+        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 15:56:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=+79i6CNjIBAM9t+ay0r61vFhVwB4nVo6+b6hHSQ4Fro=;
-        b=Z/kjEVE7ijoWI2BF5GmEwAS2TVMlcwmQ3piX8x8xKGksNXYU58li/dNrs7QXxUoz7v
-         WcPUKAYo4D+A3Vjcp2GxS4KQ9NMekKqFlUGG2RHxbDNQhoqZoY/xpwrNADyPpkJA3XMs
-         ldEER+nN+tYegKNCyBNg4B35WbSpqTnd27sU0=
+        bh=IXpIsoQged7M/ri/embTMdJh9eC3HGIEafUuSr0Sgp4=;
+        b=N9/eEWjx4KryymG7ZL/gSXanLr0DYNDcTqpqniqQuUXfGEZEOCiOVCUM31Rkg5hbPF
+         RYrLa1KR6sZdrXCo182VyfY9tc7Dc8vFc162i/vIcqYJQGy8FcEAaac5BV+8lc+P9xKZ
+         wBGT4FqmIHHPX2e1wzE8uLoPmiAHm59yHXR8U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=+79i6CNjIBAM9t+ay0r61vFhVwB4nVo6+b6hHSQ4Fro=;
-        b=c32rRWxMUOgkkrdIHKN6YIrNfZ/F+vdbXFiuGzNn7vrbDmCNqjV3yzvq0jYiV+qAkQ
-         ix6ipuqbb5vybd7dUxARk+hGq3pzK2iA16mR7EWp828KW4uyYNI3WUoDMqQ84q/0oJIN
-         dysPptHK3ZhYJHTrSREax1bw3yf3EWeCmQSdP0WX5uAoI/XDdljo2nxBhXI48J7UyTga
-         Q4t9JItayEY0nxbDEs5dTX1L4jYMi267oRrc0z3TqbT0dmMI7Z4iEadbKgayh6fTgfaL
-         7NVUohDXRR0/6O3rxAHYQTyTWeJpbk421Ak+tSlIcKY1apRNb0/q1T7ow9vShWE4RD7t
-         7C6w==
-X-Gm-Message-State: AGi0PuaShjZPCndJhKKxvLf3QGeLH8gNmtTuN3Ooifa7HGthbV4RT623
-        QVKgrD5JrT+xUSiEqUr0CdQrWg==
-X-Google-Smtp-Source: APiQypKLh7L5M6Z91bm0o0e2Xo3kz9JFIjZHGl9tokP3YDbmJ9kq2VCMFUVZ8H/2dEcftnriFb6DmQ==
-X-Received: by 2002:a17:90a:6343:: with SMTP id v3mr31509425pjs.127.1589320820943;
-        Tue, 12 May 2020 15:00:20 -0700 (PDT)
+        bh=IXpIsoQged7M/ri/embTMdJh9eC3HGIEafUuSr0Sgp4=;
+        b=BmnLL5GfJVpw7PTS8wDRVaXAKE3HHzaxGYugyExtXS+re3dRWrZHy76A8nno6n9lQd
+         Lu5MUW+dGIc1qCiNLDPnnFBR1J/U4ckTTctYL3HYJDQBVjlMGAoEHFdnVk2pVPnCGCVC
+         CWpmgaP7U+M3tb8hLZ9HmUXJInaY2wq58IBtaocRBm4S7oxuyS0Ph/XBpUOboG8c3FuW
+         zcryQ8nVRHUdecFMmpmtdllsZ1unCL3p+b7J++eoDFnmazZR77De7XM1AHMfiLvOwWot
+         6ods8zaVJb9OJfusXopKoJ3pRgQxx22gqMFntEjWF0p9ll96U/GBjjMcwi4UuCGkjemr
+         dqZA==
+X-Gm-Message-State: AGi0PuYo1+sqBQGIfioR7fOJCdyLiKfFuei05Xnp7ZuiZ7KC+kv5GixE
+        zGv6Wotvh+HZbPO/hYa2b2Rbpg==
+X-Google-Smtp-Source: APiQypKzgC0TF704AZj7wxJgs6uVQ1eXdDqzXBGagWKY3u4jWSDcjnfhuh2eV/DDEm8B+zOSyJm0Nw==
+X-Received: by 2002:a17:90a:7788:: with SMTP id v8mr30342795pjk.111.1589324208728;
+        Tue, 12 May 2020 15:56:48 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j2sm13193542pfb.73.2020.05.12.15.00.19
+        by smtp.gmail.com with ESMTPSA id u5sm11217857pgi.70.2020.05.12.15.56.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 15:00:20 -0700 (PDT)
-Date:   Tue, 12 May 2020 15:00:19 -0700
+        Tue, 12 May 2020 15:56:47 -0700 (PDT)
+Date:   Tue, 12 May 2020 15:56:46 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+To:     Christian Heimes <christian@python.org>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
-        Christian Heimes <christian@python.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Deven Bowers <deven.desai@linux.microsoft.com>,
         Eric Chiang <ericchiang@google.com>,
@@ -79,33 +79,83 @@ Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v5 5/6] doc: Add documentation for the
- fs.open_mayexec_enforce sysctl
-Message-ID: <202005121459.158C3AE75@keescook>
+Subject: Re: [PATCH v5 1/6] fs: Add support for an O_MAYEXEC flag on
+ openat2(2)
+Message-ID: <202005121555.0A446763@keescook>
 References: <20200505153156.925111-1-mic@digikod.net>
- <20200505153156.925111-6-mic@digikod.net>
+ <20200505153156.925111-2-mic@digikod.net>
+ <202005121258.4213DC8A2@keescook>
+ <0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200505153156.925111-6-mic@digikod.net>
+In-Reply-To: <0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, May 05, 2020 at 05:31:55PM +0200, Mickaël Salaün wrote:
-> This sysctl enables to propagate executable permission to userspace
-> thanks to the O_MAYEXEC flag.
+On Tue, May 12, 2020 at 11:40:35PM +0200, Christian Heimes wrote:
+> On 12/05/2020 23.05, Kees Cook wrote:
+> > On Tue, May 05, 2020 at 05:31:51PM +0200, Mickaël Salaün wrote:
+> >> When the O_MAYEXEC flag is passed, openat2(2) may be subject to
+> >> additional restrictions depending on a security policy managed by the
+> >> kernel through a sysctl or implemented by an LSM thanks to the
+> >> inode_permission hook.  This new flag is ignored by open(2) and
+> >> openat(2).
+> >>
+> >> The underlying idea is to be able to restrict scripts interpretation
+> >> according to a policy defined by the system administrator.  For this to
+> >> be possible, script interpreters must use the O_MAYEXEC flag
+> >> appropriately.  To be fully effective, these interpreters also need to
+> >> handle the other ways to execute code: command line parameters (e.g.,
+> >> option -e for Perl), module loading (e.g., option -m for Python), stdin,
+> >> file sourcing, environment variables, configuration files, etc.
+> >> According to the threat model, it may be acceptable to allow some script
+> >> interpreters (e.g. Bash) to interpret commands from stdin, may it be a
+> >> TTY or a pipe, because it may not be enough to (directly) perform
+> >> syscalls.  Further documentation can be found in a following patch.
+> > 
+> > You touch on this lightly in the cover letter, but it seems there are
+> > plans for Python to restrict stdin parsing? Are there patches pending
+> > anywhere for other interpreters? (e.g. does CLIP OS have such patches?)
+> > 
+> > There's always a push-back against adding features that have external
+> > dependencies, and then those external dependencies can't happen without
+> > the kernel first adding a feature. :) I like getting these catch-22s
+> > broken, and I think the kernel is the right place to start, especially
+> > since the threat model (and implementation) is already proven out in
+> > CLIP OS, and now with IMA. So, while the interpreter side of this is
+> > still under development, this gives them the tool they need to get it
+> > done on the kernel side. So showing those pieces (as you've done) is
+> > great, and I think finding a little bit more detail here would be even
+> > better.
 > 
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> Reviewed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-> Cc: Aleksa Sarai <cyphar@cyphar.com>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Kees Cook <keescook@chromium.org>
+> Hi,
+> 
+> Python core dev here.
+> 
+> Yes, there are plans to use feature for Python in combination with
+> additional restrictions. For backwards compatibility reasons we cannot
+> change the behavior of the default Python interpreter. I have plans to
+> provide a restricted Python binary that prohibits piping from stdin,
+> disables -c "some_code()", restricts import locations, and a couple of
+> other things. O_MAYEXEC flag makes it easier to block imports from
+> noexec filesystems.
+> 
+> My PoC [1] for a talk [2] last year is inspired by IMA appraisal and a
+> previous talk by Mickaël on O_MAYEXEC.
+> 
+> Christian
+> 
+> [1] https://github.com/zooba/spython/blob/master/linux_xattr/spython.c
+> [2]
+> https://speakerdeck.com/tiran/europython-2019-auditing-hooks-and-security-transparency-for-cpython
 
-I think this should be folded into the patch that adds the sysctl.
+Ah, fantastic; thank you! Yes, this will go a long way for helping
+demonstration to other folks that there are people who will be using
+this feature. :)
 
 -- 
 Kees Cook
