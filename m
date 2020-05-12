@@ -2,157 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67ACE1CEE93
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 09:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB591CF16F
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 11:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725987AbgELHyq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 03:54:46 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2190 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726067AbgELHyq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 03:54:46 -0400
-Received: from lhreml707-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 22CA67EF6883194331E5;
-        Tue, 12 May 2020 08:54:43 +0100 (IST)
-Received: from fraeml705-chm.china.huawei.com (10.206.15.54) by
- lhreml707-chm.china.huawei.com (10.201.108.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Tue, 12 May 2020 08:54:42 +0100
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Tue, 12 May 2020 09:54:42 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
- Tue, 12 May 2020 09:54:42 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "david.safford@gmail.com" <david.safford@gmail.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "John Johansen" <john.johansen@canonical.com>,
-        "matthewgarrett@google.com" <matthewgarrett@google.com>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: RE: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
-Thread-Topic: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
-Thread-Index: AQHWHfmwvisCdHYC6kmVk7fgFWuzYaibYCWAgAAX0QCAAMB1IIAAb0AAgAApg3CAADIngIAAzgGAgACHqACABHSroIAAjWsAgAC7FtA=
-Date:   Tue, 12 May 2020 07:54:42 +0000
-Message-ID: <09ee169cfd70492cb526bcb30f99d693@huawei.com>
-References: <20200429073935.11913-1-roberto.sassu@huawei.com>
-         <1588794293.4624.21.camel@linux.ibm.com>
-         <1588799408.4624.28.camel@linux.ibm.com>
-         <ab879f9e66874736a40e9c566cadc272@huawei.com>
-         <1588864628.5685.78.camel@linux.ibm.com>
-         <750ab4e0990f47e4aea10d0e580b1074@huawei.com>
-         <1588884313.5685.110.camel@linux.ibm.com>
-         <84e6acad739a415aa3e2457b5c37979f@huawei.com>
-         <1588957684.5146.70.camel@linux.ibm.com>
-         <414644a0be9e4af880452f4b5079aba1@huawei.com>
- <1589233010.5091.49.camel@linux.ibm.com>
-In-Reply-To: <1589233010.5091.49.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.12.77]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1729125AbgELJVB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 05:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729288AbgELJU4 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 12 May 2020 05:20:56 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA8CC061A0C
+        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 02:20:55 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id g4so12794973ljl.2
+        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 02:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hNH+m8omjPnk476jGLpu8Vt8kPOpg3agkUbWl32XtLw=;
+        b=RTRXN6UpK2F7NEYSZFbq/6CmZAZUEetFV4/nF5JiSYvyNI5g4nTSNhLFkFoHjZwByP
+         Zlg/5cua8es2+gXO0jg7lEsyOvayqu+1Hiy9tJXNKfbH9AVH8hYCjEcmgZTtRBulz2Nv
+         j6Mr9nFwWAwPdaQvT4mLPIwg+38zt89Y0MZnSr1WSC3bzYdVCOHwU9KexFMQP8ObqJiA
+         nBLhku7TpS+EYOBoPcY4ND81ZhxYJsgVdGS/XnsbZtHryPTOr7O9aoNvFmt04d5nNqBj
+         9UF8fA1bnUgTKmVgdIIWE7HfRRJy9I5vVOQGLLjoyfo8I+eVeGK3r5ReIXgumar2WDhx
+         uWLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hNH+m8omjPnk476jGLpu8Vt8kPOpg3agkUbWl32XtLw=;
+        b=kXsCel4WLTlcCyBIem8Vv+1msXxAzVHkO0Yc0pHW6EFHIafY5qOPfbtYBL6+Byc8O7
+         Hik5J3ONrX8BDbe+uOmkm5bosGgN3NcgBEqwGHDe0elc5Cq27a0Oa+JIteoNOSxKjd8R
+         kWFd4rC00yWMlux8GSZ3V2yqUMX3DCFswbjGvWCOcWax2vyu9HP1Wj6/QygM7K9v+SnL
+         hzm9SvoOBhcvrtxAda/W6awEHCGAixs3X5evQ0h5iYdXjGvXeIM5iK2D6bJjmI3HcpE+
+         +JP5djQaUERtQy6ftb/pLXGFp33DOveFlE2sVNzoccVtO+BAWuzfd58WsVL3AQAuk+5H
+         eYrw==
+X-Gm-Message-State: AOAM531sm2pi2O1/Mm7nDEec5863r0DlrqUCIuFkCHpwgoIEtOQ32D+b
+        3UUlOCeAQ1ziabWHEg6FjXuSMDK/C9V19iD5M2ezMA==
+X-Google-Smtp-Source: ABdhPJxY70vedCXTAc/sVhR66GczTIpt7w0KW9ze1vEeSXLFO3Eq/mp5nh3QrQuPhD0UQIwMuEug7EhXdEzryApWOnc=
+X-Received: by 2002:a05:651c:1b9:: with SMTP id c25mr9138973ljn.285.1589275253855;
+ Tue, 12 May 2020 02:20:53 -0700 (PDT)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+References: <1588758017-30426-1-git-send-email-sumit.garg@linaro.org>
+In-Reply-To: <1588758017-30426-1-git-send-email-sumit.garg@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Tue, 12 May 2020 14:50:42 +0530
+Message-ID: <CAFA6WYNgBQDBY+670fG38Yrg8tMg6U74TW12WON=9dVvsT0t6w@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Introduce TEE based Trusted Keys support
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     dhowells@redhat.com, Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86em9oYXJAbGludXguaWJtLmNvbV0NCj4gU2VudDog
-TW9uZGF5LCBNYXkgMTEsIDIwMjAgMTE6MzcgUE0NCj4gT24gTW9uLCAyMDIwLTA1LTExIGF0IDE0
-OjEzICswMDAwLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+ID4gRnJvbTogTWltaSBab2hhciBb
-bWFpbHRvOnpvaGFyQGxpbnV4LmlibS5jb21dDQo+ID4gPiBTZW50OiBGcmlkYXksIE1heSA4LCAy
-MDIwIDc6MDggUE0NCj4gPiA+IE9uIEZyaSwgMjAyMC0wNS0wOCBhdCAxMDoyMCArMDAwMCwgUm9i
-ZXJ0byBTYXNzdSB3cm90ZToNCj4gPiA+ID4gPiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86em9o
-YXJAbGludXguaWJtLmNvbV0NCj4gPiA+ID4gPiBPbiBUaHUsIDIwMjAtMDUtMDcgYXQgMTY6NDcg
-KzAwMDAsIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4gPg0KPiA+ID4gPHNuaXA+DQo+ID4gPg0K
-PiA+ID4gPiA+ID4gPiB0aGUgZmlsZSBtZXRhZGF0YSB0byB0aGUgZmlsZSBkYXRhLiDCoFRoZSBJ
-TUEgYW5kIEVWTSBwb2xpY2llcw0KPiByZWFsbHkNCj4gPiA+ID4gPiA+ID4gbmVlZCB0byBiZSBp
-biBzeW5jLg0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IEl0IHdvdWxkIGJlIG5pY2UsIGJ1dCBh
-dCB0aGUgbW9tZW50IEVWTSBjb25zaWRlcnMgYWxzbyBmaWxlcyB0aGF0DQo+IGFyZQ0KPiA+ID4g
-PiA+ID4gbm90IHNlbGVjdGVkIGJ5IHRoZSBJTUEgcG9saWN5LiBBbiBleGFtcGxlIG9mIHdoeSB0
-aGlzIGlzIGENCj4gcHJvYmxlbSBpcw0KPiA+ID4gPiA+ID4gdGhlIGF1ZGl0IHNlcnZpY2UgdGhh
-dCBmYWlscyB0byBzdGFydCB3aGVuIGl0IHRyaWVzIHRvIGFkanVzdCB0aGUNCj4gPiA+IHBlcm1p
-c3Npb25zDQo+ID4gPiA+ID4gPiBvZiB0aGUgbG9nIGZpbGVzLiBUaG9zZSBmaWxlcyBkb24ndCBo
-YXZlIHNlY3VyaXR5LmV2bSBiZWNhdXNlIHRoZXkNCj4gYXJlDQo+ID4gPiA+ID4gPiBub3QgYXBw
-cmFpc2VkIGJ5IElNQSwgYnV0IEVWTSBkZW5pZXMgdGhlIG9wZXJhdGlvbi4NCj4gPiA+ID4gPg0K
-PiA+ID4gPiA+IE5vLCB0aGlzIGlzIGEgdGltaW5nIGlzc3VlIGFzIHRvIHdoZXRoZXIgb3Igbm90
-IHRoZSBidWlsdGluIHBvbGljeSBvcg0KPiA+ID4gPiA+IGEgY3VzdG9tIHBvbGljeSBoYXMgYmVl
-biBsb2FkZWQuIMKgQSBjdXN0b20gcG9saWN5IGNvdWxkIGV4Y2x1ZGUgdGhlDQo+ID4gPiA+ID4g
-bG9nIGZpbGVzIGJhc2VkIG9uIExTTSBsYWJlbHMsIGJ1dCB0aGV5IGFyZSBpbmNsdWRlZCBpbiB0
-aGUgYnVpbHRpbg0KPiA+ID4gPiA+IHBvbGljeS4NCj4gPiA+ID4NCj4gPiA+ID4gWWVzLCBJIHdh
-cyByZWZlcnJpbmcgdG8gYSBjdXN0b20gcG9saWN5LiBJbiB0aGlzIGNhc2UsIEVWTSB3aWxsIG5v
-dCBhZGFwdA0KPiA+ID4gPiB0byB0aGUgY3VzdG9tIHBvbGljeSBidXQgc3RpbGwgdmVyaWZpZXMg
-YWxsIGZpbGVzLiBJZiBhY2Nlc3MgY29udHJvbCBpcyBkb25lDQo+ID4gPiA+IGV4Y2x1c2l2ZWx5
-IGJ5IElNQSBhdCB0aGUgdGltZSBldm1fdmVyaWZ5eGF0dHIoKSBpcyBjYWxsZWQsIHdlIHdvdWxk
-bid0DQo+ID4gPiA+IG5lZWQgdG8gYWRkIHNlY3VyaXR5LmV2bSB0byBhbGwgZmlsZXMuDQo+ID4g
-Pg0KPiA+ID4gUm9iZXJ0bywgRVZNIGlzIG9ubHkgdHJpZ2dlcmVkIGJ5IElNQSwgdW5sZXNzIHlv
-dSd2ZSBtb2RpZmllZCB0aGUNCj4gPiA+IGtlcm5lbCB0byBkbyBvdGhlcndpc2UuDQo+ID4NCj4g
-PiBFVk0gd291bGQgZGVueSB4YXR0ci9hdHRyIG9wZXJhdGlvbnMgZXZlbiBpZiBJTUEgaXMgZGlz
-YWJsZWQgaW4gdGhlDQo+ID4ga2VybmVsIGNvbmZpZ3VyYXRpb24uIEZvciBleGFtcGxlLCBldm1f
-c2V0eGF0dHIoKSByZXR1cm5zIHRoZSB2YWx1ZQ0KPiA+IGZyb20gZXZtX3Byb3RlY3RfeGF0dHIo
-KS4gSU1BIGlzIG5vdCBpbnZvbHZlZCB0aGVyZS4NCj4gDQo+IENvbW1pdMKgYWUxYmExNjc2Yjg4
-ICgiRVZNOiBBbGxvdyB1c2VybGFuZCB0byBwZXJtaXQgbW9kaWZpY2F0aW9uIG9mDQo+IEVWTS1w
-cm90ZWN0ZWQgbWV0YWRhdGEiKSBpbnRyb2R1Y2VkwqBFVk1fQUxMT1dfTUVUQURBVEFfV1JJVEVT
-DQo+IHRvIGFsbG93DQo+IHdyaXRpbmcgdGhlIEVWTSBwb3J0YWJsZSBhbmQgaW1tdXRhYmxlIGZp
-bGUgc2lnbmF0dXJlcy4NCg0KQWNjb3JkaW5nIHRvIERvY3VtZW50YXRpb24vQUJJL3Rlc3Rpbmcv
-ZXZtOg0KDQpOb3RlIHRoYXQgb25jZSBhIGtleSBoYXMgYmVlbiBsb2FkZWQsIGl0IHdpbGwgbm8g
-bG9uZ2VyIGJlDQpwb3NzaWJsZSB0byBlbmFibGUgbWV0YWRhdGEgbW9kaWZpY2F0aW9uLg0KDQpX
-ZSBsb2FkIHRoZSBFVk0ga2V5IGZyb20gL2V0Yy9rZXlzL3g1MDlfZXZtLmRlciwgZHVyaW5nIGtl
-cm5lbA0KaW5pdGlhbGl6YXRpb24sIHdoaWNoIGV4Y2x1ZGVzIHRoZSBwb3NzaWJpbGl0eSBvZiB1
-c2luZyB0aGF0IGZsYWcuIERlZmVycmluZw0KdGhlIGxvYWRpbmcgb2YgdGhlIGtleSBpcyBub3Qg
-cG9zc2libGUgaWYgdGhhdCBrZXkgaXMgdXNlZCBmb3IgYXBwcmFpc2FsIGFuZA0KZW5mb3JjZW1l
-bnQgaXMgZW5hYmxlZCBmcm9tIHRoZSBiZWdpbm5pbmcuDQoNCkFsc28sIG9uY2UgdGhlIGZsYWcg
-aXMgY2xlYXJlZCBwb3J0YWJsZSBzaWduYXR1cmVzIGNhbm5vdCBiZSBpbnN0YWxsZWQNCnVudGls
-IHJlYm9vdC4gVGhpcyBzZWVtcyBhIGJpZyBsaW1pdGF0aW9uIGVzcGVjaWFsbHkgd2hlbiBzb2Z0
-d2FyZQ0KdXBkYXRlcyBhcmUgaW5zdGFsbGVkIG9uIGEgcnVubmluZyBzeXN0ZW0uDQoNCj4gPiA+
-IEknbSBub3QgaW50ZXJlc3RlZCBpbiBhIGNvbXBsaWNhdGVkIHNvbHV0aW9uLCBqdXN0IG9uZSB0
-aGF0IGFkZHJlc3Nlcw0KPiA+ID4gdGhlIG5ldyBFVk0gaW1tdXRhYmxlIGFuZCBwb3J0YWJsZSBz
-aWduYXR1cmUuIMKgSXQgbWlnaHQgcmVxdWlyZSBFVk0NCj4gPiA+IEhNQUMsIElNQSBkaWZmZXJl
-bnRpYXRpbmcgYmV0d2VlbiBhIG5ldyBmaWxlIGFuZCBhbiBleGlzdGluZyBmaWxlLCBvcjpxDQo+
-IA0KPiA+ID4gaXQgbWlnaHQgcmVxdWlyZSB3cml0aW5nIHRoZSBuZXcgRVZNIHNpZ25hdHVyZSBs
-YXN0LCBhZnRlciBhbGwgdGhlDQo+ID4gPiBvdGhlciB4YXR0cnMgb3IgbWV0YWRhdGEgYXJlIHVw
-ZGF0ZWQuIMKgUGxlYXNlIG5vdGhpbmcgdGhhdCBjaGFuZ2VzDQo+ID4gPiBleGlzdGluZyBleHBl
-Y3RhdGlvbnMuDQo+ID4NCj4gPiBPay4gSW50cm9kdWNpbmcgdGhlIG5ldyBzdGF0dXMgSU5URUdS
-SVRZX0ZBSUxfSU1NVVRBQkxFLCBhcyBJDQo+ID4gbWVudGlvbmVkIGluICdbUEFUQ0hdIGltYTog
-QWxsb3cgaW1hc2lnIHJlcXVpcmVtZW50IHRvIGJlIHNhdGlzZmllZCBieQ0KPiA+IEVWTSBwb3J0
-YWJsZSBzaWduYXR1cmVzJyBzZWVtcyB0byBoYXZlIGFuIGFkZGl0aW9uYWwgYmVuZWZpdC4gV2UN
-Cj4gPiBjb3VsZCBpbnRyb2R1Y2UgYW4gYWRkaXRpb25hbCBleGNlcHRpb24gaW4gZXZtX3Byb3Rl
-Y3RfeGF0dHIoKSwgb3RoZXINCj4gPiB0aGFuIElOVEVHUklUWV9OT1hBVFRSUywgYXMgd2Uga25v
-dyB0aGF0IHhhdHRyL2F0dHIgdXBkYXRlIHdvbid0DQo+ID4gY2F1c2UgSE1BQyB1cGRhdGUuDQo+
-IA0KPiBSZWZlciB0byBEb2N1bWVudGF0aW9uL0FCSS90ZXN0aW5nL2V2bSBkZXNjcmliZXMgb24g
-aG93IHRvIHBlcm1pdA0KPiB3cml0aW5nIHRoZSBzZWN1cml0eS5ldm0gc2lnbmF0dXJlcy4NCg0K
-SXQgZG9lc24ndCBzZWVtIHRoZXJlIGlzIGEgc29sdXRpb24gZm9yIGFkZGluZyBwb3J0YWJsZSBz
-aWduYXR1cmVzIGF0DQpydW4tdGltZS4NCg0KPiA+IEhvd2V2ZXIsIGl0IHdvbid0IHdvcmsgdW5s
-ZXNzIHRoZSBJTUEgcG9saWN5IHNheXMgdGhhdCB0aGUgZmlsZSBzaG91bGQNCj4gPiBiZSBhcHBy
-YWlzZWQgd2hlbiB0aGUgbWtub2QoKSBzeXN0ZW0gY2FsbCBpcyBleGVjdXRlZC4gT3RoZXJ3aXNl
-LA0KPiA+IGludGVncml0eV9paW50X2NhY2hlIGlzIG5vdCBjcmVhdGVkIGZvciB0aGUgZmlsZSBh
-bmQgdGhlIElNQV9ORVdfRklMRQ0KPiA+IGZsYWcgaXMgbm90IHNldC4NCj4gPg0KPiA+IEdyYW50
-aW5nIGFuIGV4Y2VwdGlvbiBmb3IgSU5URUdSSVRZX0ZBSUxfSU1NVVRBQkxFIHNvbHZlcyB0aGUg
-Y2FzZQ0KPiA+IHdoZXJlIHNlY3VyaXR5LmV2bSBpcyB0aGUgZmlyc3QgeGF0dHIgc2V0LiBJZiBh
-IHByb3RlY3RlZCB4YXR0ciBpcyB0aGUgZmlyc3QgdG8NCj4gPiBiZSBhZGRlZCwgdGhlbiB3ZSBh
-bHNvIGhhdmUgdG8gaGFuZGxlIHRoZSBJTlRFR1JJVFlfTk9MQUJFTCBlcnJvci4NCj4gPiBJdCBz
-aG91bGQgYmUgZmluZSB0byBhZGQgYW4gZXhjZXB0aW9uIGZvciB0aGlzIGVycm9yIGlmIHRoZSBI
-TUFDIGtleSBpcyBub3QNCj4gPiBsb2FkZWQuDQo+ID4NCj4gPiBUaGlzIHN0aWxsIGRvZXMgbm90
-IHNvbHZlIGFsbCBwcm9ibGVtcy4gSU5URUdSSVRZX05PTEFCRUwgY2Fubm90IGJlDQo+ID4gaWdu
-b3JlZCBpZiB0aGUgSE1BQyBrZXkgaXMgbG9hZGVkLCB3aGljaCBtZWFucyB0aGF0IGFsbCBmaWxl
-cyBuZWVkIHRvIGJlDQo+ID4gcHJvdGVjdGVkIGJ5IEVWTSB0byBhdm9pZCBpc3N1ZXMgbGlrZSB0
-aGUgb25lIEkgZGVzY3JpYmVkIChhdWRpdGQpLg0KPiANCj4gVGhlIGFwcGxpY2F0aW9uIHN0aWxs
-IG5lZWRzIHRvIGRlZmVyIHdyaXRpbmcgdGhlIEVWTSBwb3J0YWJsZSBhbmQNCj4gaW1tdXRhYmxl
-IGZpbGUgc2lnbmF0dXJlcyB1bnRpbCBhZnRlciBhbGwgdGhlIG90aGVyIHhhdHRycyBhcmUgd3Jp
-dHRlbg0KPiBvdGhlcndpc2UgaXQgd29uJ3QgdmFsaWRhdGUuDQoNCkVWTSB3b24ndCBhbGxvdyB0
-aGF0IGJlY2F1c2UgYXQgdGhlIHNlY29uZCBzZXR4YXR0cigpIGl0IHdpbGwgZmluZCB0aGF0DQpz
-ZWN1cml0eS5ldm0gaXMgbWlzc2luZy4NCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVT
-IER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcs
-IExpIEppYW4sIFNoaSBZYW5saQ0K
+On Wed, 6 May 2020 at 15:10, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> Add support for TEE based trusted keys where TEE provides the functionality
+> to seal and unseal trusted keys using hardware unique key. Also, this is
+> an alternative in case platform doesn't possess a TPM device.
+>
+> This patch-set has been tested with OP-TEE based early TA which can be
+> found here [1].
+>
+> [1] https://github.com/OP-TEE/optee_os/pull/3838
+
+Fyi, this PR has been merged in OP-TEE OS as commit [1]. Looking
+forward to any further comments/feedback on this patch-set.
+
+[1] https://github.com/OP-TEE/optee_os/commit/f86ab8e7e0de869dfa25ca05a37ee070d7e5b86b
+
+-Sumit
+
+>
+> Changes in v4:
+> 1. Pushed independent TEE features separately:
+>   - Part of recent TEE PR: https://lkml.org/lkml/2020/5/4/1062
+> 2. Updated trusted-encrypted doc with TEE as a new trust source.
+> 3. Rebased onto latest tpmdd/master.
+>
+> Changes in v3:
+> 1. Update patch #2 to support registration of multiple kernel pages.
+> 2. Incoporate dependency patch #4 in this patch-set:
+>    https://patchwork.kernel.org/patch/11091435/
+>
+> Changes in v2:
+> 1. Add reviewed-by tags for patch #1 and #2.
+> 2. Incorporate comments from Jens for patch #3.
+> 3. Switch to use generic trusted keys framework.
+>
+> Sumit Garg (4):
+>   KEYS: trusted: Add generic trusted keys framework
+>   KEYS: trusted: Introduce TEE based Trusted Keys
+>   doc: trusted-encrypted: updates with TEE as a new trust source
+>   MAINTAINERS: Add entry for TEE based Trusted Keys
+>
+>  Documentation/security/keys/trusted-encrypted.rst | 203 ++++++++++---
+>  MAINTAINERS                                       |   8 +
+>  include/keys/trusted-type.h                       |  48 ++++
+>  include/keys/trusted_tee.h                        |  66 +++++
+>  include/keys/trusted_tpm.h                        |  15 -
+>  security/keys/Kconfig                             |   3 +
+>  security/keys/trusted-keys/Makefile               |   2 +
+>  security/keys/trusted-keys/trusted_common.c       | 336 ++++++++++++++++++++++
+>  security/keys/trusted-keys/trusted_tee.c          | 282 ++++++++++++++++++
+>  security/keys/trusted-keys/trusted_tpm1.c         | 335 ++++-----------------
+>  10 files changed, 974 insertions(+), 324 deletions(-)
+>  create mode 100644 include/keys/trusted_tee.h
+>  create mode 100644 security/keys/trusted-keys/trusted_common.c
+>  create mode 100644 security/keys/trusted-keys/trusted_tee.c
+>
+> --
+> 2.7.4
+>
