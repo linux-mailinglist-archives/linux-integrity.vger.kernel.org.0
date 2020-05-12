@@ -2,156 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AF41CFABC
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 18:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886A01CFC89
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 19:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727889AbgELQbj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 12:31:39 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2200 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727778AbgELQbj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 12:31:39 -0400
-Received: from lhreml731-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 6A6C8B1834534D466D91;
-        Tue, 12 May 2020 17:31:32 +0100 (IST)
-Received: from fraeml703-chm.china.huawei.com (10.206.15.52) by
- lhreml731-chm.china.huawei.com (10.201.108.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.1913.5; Tue, 12 May 2020 17:31:32 +0100
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Tue, 12 May 2020 18:31:31 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
- Tue, 12 May 2020 18:31:31 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "david.safford@gmail.com" <david.safford@gmail.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "John Johansen" <john.johansen@canonical.com>,
-        "matthewgarrett@google.com" <matthewgarrett@google.com>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: RE: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
-Thread-Topic: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
-Thread-Index: AQHWHfmwvisCdHYC6kmVk7fgFWuzYaibYCWAgAAX0QCAAMB1IIAAb0AAgAApg3CAADIngIAAzgGAgACHqACABHSroIAAjWsAgAC7FtCAAFxigIAAJvQA///zHACAACsKoA==
-Date:   Tue, 12 May 2020 16:31:31 +0000
-Message-ID: <fcdb168d27214b5e85c3b741f184cde9@huawei.com>
-References: <20200429073935.11913-1-roberto.sassu@huawei.com>
-         <1588794293.4624.21.camel@linux.ibm.com>
-         <1588799408.4624.28.camel@linux.ibm.com>
-         <ab879f9e66874736a40e9c566cadc272@huawei.com>
-         <1588864628.5685.78.camel@linux.ibm.com>
-         <750ab4e0990f47e4aea10d0e580b1074@huawei.com>
-         <1588884313.5685.110.camel@linux.ibm.com>
-         <84e6acad739a415aa3e2457b5c37979f@huawei.com>
-         <1588957684.5146.70.camel@linux.ibm.com>
-         <414644a0be9e4af880452f4b5079aba1@huawei.com>
-         <1589233010.5091.49.camel@linux.ibm.com>
-         <09ee169cfd70492cb526bcb30f99d693@huawei.com>
-         <1589293025.5098.53.camel@linux.ibm.com>
-         <d3f4a53e386d4bb1b8c608ac8b6bec1f@huawei.com>
- <1589298622.5098.67.camel@linux.ibm.com>
-In-Reply-To: <1589298622.5098.67.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.12.77]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1725950AbgELRqJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 13:46:09 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:36071 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725554AbgELRqJ (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 12 May 2020 13:46:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1589305568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VlHK3MD9mslQAtaYQzirsJP3rdEAoipwCXorCnBdiew=;
+        b=I28q1pZth5Uilj1VllM0y1vG6m0YYzQvc+X874ta66trqdcbL1eFOLEHawwlyiu5EH9Fnc
+        KNX6HVgC0quk0kP9N32WkhNmVLULJurRVGOlqvN52qiWMlOnTn68q/5DGDEftAcyJH9qEd
+        FP9tdweQ77PvOneUB2AikW1s5S39eKQ=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-399-vG7q-43sOzOgXCGerf9v2A-1; Tue, 12 May 2020 13:46:06 -0400
+X-MC-Unique: vG7q-43sOzOgXCGerf9v2A-1
+Received: by mail-lf1-f70.google.com with SMTP id 74so5094195lfn.4
+        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 10:46:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VlHK3MD9mslQAtaYQzirsJP3rdEAoipwCXorCnBdiew=;
+        b=rabdaIacwcCuyz6HxPwX91SkpMYj9+mdq92+XOXSThk9sDTgY6mFU2z/IoO6o97lu5
+         2dM5I0YfrhCGhE+Gt9MnI65kXiqRZz2/sosew+ImBnxuC+51YapRX3TyoXch7L7UvMZZ
+         +TpTZzaW9JBxLvTzvUgEE1jAhR0FEzsD9TlmBdhuY6begNCRS4dWn4LinW6dn6gq525v
+         lLwd3EwaVZN4Tm5NbF2GH3Bn/wcxAGXEKZIT+afjNuSl2Q57shBiRbGz17OaRYdD4G0A
+         wmvcOcI8tz1sSEQ8zR82nxNQW9CCTR2lPh5WUAJFgo67ExsdmINIU8yODmh6O34RbI1a
+         HKWA==
+X-Gm-Message-State: AOAM533r+uIXnsu5dYaLZwklg50KWOuOt4Ep4zZNr5p3A787wT8RwMDp
+        1by+lw9++fLBPQPptSQDi8yKbAudj632CJvBxnGt+o+l6wGlXt7dlVBx9Fs5c9RRH31ExGmiZbq
+        HiWo25ZOr6aRsmUkfdq4+nBR1D0OiEMDYMbMBa5S0KFAd
+X-Received: by 2002:a19:d55:: with SMTP id 82mr15462497lfn.89.1589305565165;
+        Tue, 12 May 2020 10:46:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx2rJ7GkPyduqApdhohXjMBvp1QWYTQ9kph1gg5Iet5LK7XYhRimhH3mknNMnGMFIY/8nws8y4z70rY47juR3I=
+X-Received: by 2002:a19:d55:: with SMTP id 82mr15462483lfn.89.1589305564897;
+ Tue, 12 May 2020 10:46:04 -0700 (PDT)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+References: <20200512040113.277768-1-loic.yhuel@gmail.com>
+In-Reply-To: <20200512040113.277768-1-loic.yhuel@gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+Date:   Tue, 12 May 2020 19:45:53 +0200
+Message-ID: <CAFOAJEfFcL5EYXnwd=Yqdj065efD2ojYVjpJ+4rOZqGcxmTAsA@mail.gmail.com>
+Subject: Re: [PATCH] tpm: check event log version before reading final events
+To:     =?UTF-8?Q?Lo=C3=AFc_Yhuel?= <loic.yhuel@gmail.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBNaW1pIFpvaGFyIFttYWlsdG86em9oYXJAbGludXguaWJtLmNvbV0NCj4gU2VudDog
-VHVlc2RheSwgTWF5IDEyLCAyMDIwIDU6NTAgUE0NCj4gT24gVHVlLCAyMDIwLTA1LTEyIGF0IDE1
-OjMxICswMDAwLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+ID4gRnJvbTogb3duZXItbGludXgt
-c2VjdXJpdHktbW9kdWxlQHZnZXIua2VybmVsLm9yZyBbbWFpbHRvOm93bmVyLQ0KPiBsaW51eC0N
-Cj4gPiA+IHNlY3VyaXR5LW1vZHVsZUB2Z2VyLmtlcm5lbC5vcmddIE9uIEJlaGFsZiBPZiBNaW1p
-IFpvaGFyDQo+ID4gPiBTZW50OiBUdWVzZGF5LCBNYXkgMTIsIDIwMjAgNDoxNyBQTQ0KPiA+ID4g
-T24gVHVlLCAyMDIwLTA1LTEyIGF0IDA3OjU0ICswMDAwLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0K
-PiA+ID4gPiA+ID4gPiBSb2JlcnRvLCBFVk0gaXMgb25seSB0cmlnZ2VyZWQgYnkgSU1BLCB1bmxl
-c3MgeW91J3ZlIG1vZGlmaWVkDQo+IHRoZQ0KPiA+ID4gPiA+ID4gPiBrZXJuZWwgdG8gZG8gb3Ro
-ZXJ3aXNlLg0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IEVWTSB3b3VsZCBkZW55IHhhdHRyL2F0
-dHIgb3BlcmF0aW9ucyBldmVuIGlmIElNQSBpcyBkaXNhYmxlZCBpbg0KPiB0aGUNCj4gPiA+ID4g
-PiA+IGtlcm5lbCBjb25maWd1cmF0aW9uLiBGb3IgZXhhbXBsZSwgZXZtX3NldHhhdHRyKCkgcmV0
-dXJucyB0aGUNCj4gdmFsdWUNCj4gPiA+ID4gPiA+IGZyb20gZXZtX3Byb3RlY3RfeGF0dHIoKS4g
-SU1BIGlzIG5vdCBpbnZvbHZlZCB0aGVyZS4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IENvbW1pdMKg
-YWUxYmExNjc2Yjg4ICgiRVZNOiBBbGxvdyB1c2VybGFuZCB0byBwZXJtaXQgbW9kaWZpY2F0aW9u
-DQo+IG9mDQo+ID4gPiA+ID4gRVZNLXByb3RlY3RlZCBtZXRhZGF0YSIpDQo+ID4gPiBpbnRyb2R1
-Y2VkwqBFVk1fQUxMT1dfTUVUQURBVEFfV1JJVEVTDQo+ID4gPiA+ID4gdG8gYWxsb3cgd3JpdGlu
-ZyB0aGUgRVZNIHBvcnRhYmxlIGFuZCBpbW11dGFibGUgZmlsZSBzaWduYXR1cmVzLg0KPiA+ID4g
-Pg0KPiA+ID4gPiBBY2NvcmRpbmcgdG8gRG9jdW1lbnRhdGlvbi9BQkkvdGVzdGluZy9ldm06DQo+
-ID4gPiA+DQo+ID4gPiA+IE5vdGUgdGhhdCBvbmNlIGEga2V5IGhhcyBiZWVuIGxvYWRlZCwgaXQg
-d2lsbCBubyBsb25nZXIgYmUNCj4gPiA+ID4gcG9zc2libGUgdG8gZW5hYmxlIG1ldGFkYXRhIG1v
-ZGlmaWNhdGlvbi4NCj4gPiA+DQo+ID4gPiBOb3QgYW55IGtleSwgYnV0IHRoZSBITUFDIGtleS4N
-Cj4gPiA+DQo+ID4gPiAywqDCoMKgwqDCoMKgwqDCoMKgUGVybWl0IG1vZGlmaWNhdGlvbiBvZiBF
-Vk0tcHJvdGVjdGVkIG1ldGFkYXRhIGF0DQo+ID4gPiDCoCDCoCDCoCDCoCDCoCBydW50aW1lLiBO
-b3Qgc3VwcG9ydGVkIGlmIEhNQUMgdmFsaWRhdGlvbiBhbmQNCj4gPiA+IMKgIMKgIMKgIMKgIMKg
-IGNyZWF0aW9uIGlzIGVuYWJsZWQuDQo+ID4NCj4gPiAjaWZkZWYgQ09ORklHX0VWTV9MT0FEX1g1
-MDkNCj4gPiB2b2lkIF9faW5pdCBldm1fbG9hZF94NTA5KHZvaWQpDQo+ID4gew0KPiA+IFsuLi5d
-DQo+ID4gICAgICAgICByYyA9IGludGVncml0eV9sb2FkX3g1MDkoSU5URUdSSVRZX0tFWVJJTkdf
-RVZNLA0KPiBDT05GSUdfRVZNX1g1MDlfUEFUSCk7DQo+ID4gICAgICAgICBpZiAoIXJjKQ0KPiA+
-ICAgICAgICAgICAgICAgICBldm1faW5pdGlhbGl6ZWQgfD0gRVZNX0lOSVRfWDUwOTsNCj4gPg0K
-PiA+DQo+ID4gc3RhdGljIHNzaXplX3QgZXZtX3dyaXRlX2tleShzdHJ1Y3QgZmlsZSAqZmlsZSwg
-Y29uc3QgY2hhciBfX3VzZXIgKmJ1ZiwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHNpemVfdCBjb3VudCwgbG9mZl90ICpwcG9zKQ0KPiA+IHsNCj4gPiBbLi4uXQ0KPiA+ICAgICAg
-ICAgLyogRG9uJ3QgYWxsb3cgYSByZXF1ZXN0IHRvIGZyZXNobHkgZW5hYmxlIG1ldGFkYXRhIHdy
-aXRlcyBpZg0KPiA+ICAgICAgICAgICoga2V5cyBhcmUgbG9hZGVkLg0KPiA+ICAgICAgICAgICov
-DQo+ID4gICAgICAgICBpZiAoKGkgJiBFVk1fQUxMT1dfTUVUQURBVEFfV1JJVEVTKSAmJg0KPiA+
-ICAgICAgICAgICAgICgoZXZtX2luaXRpYWxpemVkICYgRVZNX0tFWV9NQVNLKSAhPSAwKSAmJg0K
-PiA+ICAgICAgICAgICAgICEoZXZtX2luaXRpYWxpemVkICYgRVZNX0FMTE9XX01FVEFEQVRBX1dS
-SVRFUykpDQo+ID4gICAgICAgICAgICAgICAgIHJldHVybiAtRVBFUk07DQo+ID4NCj4gPiBTaG91
-bGQgaGF2ZSBiZWVuOg0KPiA+DQo+ID4gICAgICAgICBpZiAoKGkgJiBFVk1fQUxMT1dfTUVUQURB
-VEFfV1JJVEVTKSAmJg0KPiA+ICAgICAgICAgICAgICgoZXZtX2luaXRpYWxpemVkICYgRVZNX0lO
-SVRfSE1BQykgIT0gMCkgJiYNCj4gPiAgICAgICAgICAgICAhKGV2bV9pbml0aWFsaXplZCAmIEVW
-TV9BTExPV19NRVRBREFUQV9XUklURVMpKQ0KPiA+ICAgICAgICAgICAgICAgICByZXR1cm4gLUVQ
-RVJNOw0KPiANCj4gT2sNCj4gDQo+ID4NCj4gPiA+IEVhY2ggdGltZSB0aGUgRVZNIHByb3RlY3Rl
-ZCBmaWxlIG1ldGFkYXRhIGlzIHVwZGF0ZWQsIHRoZSBFVk0gSE1BQw0KPiBpcw0KPiA+ID4gdXBk
-YXRlZCwgYXNzdW1pbmcgdGhlIGV4aXN0aW5nIEVWTSBITUFDIGlzIHZhbGlkLiDCoFVzZXJzcGFj
-ZSBzaG91bGQNCj4gPiA+IG5vdCBoYXZlIGFjY2VzcyB0byB0aGUgSE1BQyBrZXksIHNvIHdlIG9u
-bHkgYWxsb3cgd3JpdGluZyBFVk0NCj4gPiA+IHNpZ25hdHVyZXMuDQo+ID4gPg0KPiA+ID4gVGhl
-IG9ubHkgZGlmZmVyZW5jZSBiZXR3ZWVuIHdyaXRpbmcgdGhlIG9yaWdpbmFsIEVWTSBzaWduYXR1
-cmUgYW5kIHRoZQ0KPiA+ID4gbmV3IHBvcnRhYmxlIGFuZCBpbW11dGFibGUgc2lnbmF0dXJlIGlz
-IHRoZSBzZWN1cml0eS5pbWEgeGF0dHINCj4gPiA+IHJlcXVpcmVtZW50LiDCoFNpbmNlIHRoZSBu
-ZXcgRVZNIHNpZ25hdHVyZSBkb2VzIG5vdCBpbmNsdWRlIHRoZQ0KPiA+ID4gZmlsZXN5c3RlbSBz
-cGVjaWZpYyBkYXRhLCBzb21ldGhpbmcgZWxzZSBuZWVkcyB0byBiaW5kIHRoZSBmaWxlDQo+ID4g
-PiBtZXRhZGF0YSB0byB0aGUgZmlsZSBkYXRhLiDCoFRodXMgdGhlIElNQSB4YXR0ciByZXF1aXJl
-bWVudC4NCj4gPiA+DQo+ID4gPiBBc3N1bWluZyB0aGF0IHRoZSBuZXcgRVZNIHNpZ25hdHVyZSBp
-cyB3cml0dGVuIGxhc3QsIGFzIGxvbmcgYXMgdGhlcmUNCj4gPiA+IGlzIGFuIElNQSB4YXR0ciwg
-dGhlcmUgc2hvdWxkbid0IGJlIGEgcHJvYmxlbSB3cml0aW5nIHRoZSBuZXcgRVZNDQo+ID4gPiBz
-aWduYXR1cmUuDQo+ID4NCj4gPiAgICAgICAgIC8qIGZpcnN0IG5lZWQgdG8ga25vdyB0aGUgc2ln
-IHR5cGUgKi8NCj4gPiAgICAgICAgIHJjID0gdmZzX2dldHhhdHRyX2FsbG9jKGRlbnRyeSwgWEFU
-VFJfTkFNRV9FVk0sIChjaGFyDQo+ICoqKSZ4YXR0cl9kYXRhLCAwLA0KPiA+ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgR0ZQX05PRlMpOw0KPiA+ICAgICAgICAgaWYgKHJjIDw9IDAp
-IHsNCj4gPiAgICAgICAgICAgICAgICAgZXZtX3N0YXR1cyA9IElOVEVHUklUWV9GQUlMOw0KPiA+
-ICAgICAgICAgICAgICAgICBpZiAocmMgPT0gLUVOT0RBVEEpIHsNCj4gPiAgICAgICAgICAgICAg
-ICAgICAgICAgICByYyA9IGV2bV9maW5kX3Byb3RlY3RlZF94YXR0cnMoZGVudHJ5KTsNCj4gPiAg
-ICAgICAgICAgICAgICAgICAgICAgICBpZiAocmMgPiAwKQ0KPiA+ICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgZXZtX3N0YXR1cyA9IElOVEVHUklUWV9OT0xBQkVMOw0KPiA+ICAgICAg
-ICAgICAgICAgICAgICAgICAgIGVsc2UgaWYgKHJjID09IDApDQo+ID4gICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBldm1fc3RhdHVzID0gSU5URUdSSVRZX05PWEFUVFJTOyAvKiBuZXcg
-ZmlsZSAqLw0KPiA+DQo+ID4gSWYgRVZNX0FMTE9XX01FVEFEQVRBX1dSSVRFUyBpcyBjbGVhcmVk
-LCBvbmx5IHRoZSBmaXJzdCB4YXR0cg0KPiA+IGNhbiBiZSB3cml0dGVuIChzdGF0dXMgSU5URUdS
-SVRZX05PWEFUVFJTIGlzIG9rKS4gQWZ0ZXIsDQo+ID4gZXZtX2ZpbmRfcHJvdGVjdGVkX3hhdHRy
-cygpIHJldHVybnMgcmMgPiAwLCBzbyB0aGUgc3RhdHVzIGlzDQo+ID4gSU5URUdSSVRZX05PTEFC
-RUwsIHdoaWNoIGlzIG5vdCBpZ25vcmVkIGJ5IGV2bV9wcm90ZWN0X3hhdHRyKCkuDQo+IA0KPiBX
-aXRoIEVWTSBITUFDIGVuYWJsZWQsIGFzIGEgcmVzdWx0IG9mIHdyaXRpbmcgdGhlIGZpcnN0IHBy
-b3RlY3RlZA0KPiB4YXR0ciwgYW4gRVZNIEhNQUMgc2hvdWxkIGJlIGNhbGN1bGF0ZWQgYW5kIHdy
-aXR0ZW4gaW4NCj4gZXZtX2lub2RlX3Bvc3Rfc2V0eGF0dHIoKS4NCg0KVG8gc29sdmUgdGhlIG9y
-ZGVyaW5nIGlzc3VlLCB3b3VsZG4ndCBhbGxvd2luZyBzZXR4YXR0cigpIG9uIGEgZmlsZQ0Kd2l0
-aCBwb3J0YWJsZSBzaWduYXR1cmUgdGhhdCBkb2VzIG5vdCB5ZXQgcGFzcyB2ZXJpZmljYXRpb24g
-YmUgc2FmZT8NCmV2bV91cGRhdGVfZXZteGF0dHIoKSBjaGVja3MgaWYgdGhlIHNpZ25hdHVyZSBp
-cyBwb3J0YWJsZSBhbmQNCmlmIHllcywgZG9lcyBub3QgY2FsY3VsYXRlIHRoZSBITUFDLg0KDQpS
-b2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYz
-DQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywgTGkgSmlhbiwgU2hpIFlhbmxpDQo=
+Hello Lo=C3=AFc,
+
+On Tue, May 12, 2020 at 6:02 AM Lo=C3=AFc Yhuel <loic.yhuel@gmail.com> wrot=
+e:
+>
+> This fixes the boot issues since 5.3 on several Dell models when the TPM
+> is enabled. Depending on the exact grub binary, booting the kernel would
+> freeze early, or just report an error parsing the final events log.
+>
+> We get an event log in the SHA-1 format, which doesn't have a
+> tcg_efi_specid_event_head in the first event, and there is a final events
+> table which doesn't match the crypto agile format.
+> __calc_tpm2_event_size reads bad "count" and "efispecid->num_algs", and
+> either fails, or loops long enough for the machine to be appear frozen.
+>
+> So we now only parse the final events table, which is per the spec always
+> supposed to be in the crypto agile format, when we got a event log in thi=
+s
+> format.
+>
+> Fixes: c46f3405692de ("tpm: Reserve the TPM final events table")
+> Fixes: 166a2809d65b2 ("tpm: Don't duplicate events from the final event l=
+og in the TCG2 log")
+> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=3D1779611
+> Signed-off-by: Lo=C3=AFc Yhuel <loic.yhuel@gmail.com>
+> ---
+
+As you mention, that's what the TCG EFI Protocol Specification says
+about the EFI Final Events Table so I agree with your patch.
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+Best regards,
+Javier
+
