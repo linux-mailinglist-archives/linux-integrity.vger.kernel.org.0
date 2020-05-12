@@ -2,137 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E69E1CF35D
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 13:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A511CF382
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 13:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgELLb4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 07:31:56 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2195 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726187AbgELLb4 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 07:31:56 -0400
-Received: from lhreml734-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 93B077B62A5966C73782;
-        Tue, 12 May 2020 12:31:54 +0100 (IST)
-Received: from fraeml705-chm.china.huawei.com (10.206.15.54) by
- lhreml734-chm.china.huawei.com (10.201.108.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.1913.5; Tue, 12 May 2020 12:31:54 +0100
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Tue, 12 May 2020 13:31:53 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
- Tue, 12 May 2020 13:31:53 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: RE: [bug report] evm: Check also if *tfm is an error pointer in
- init_desc()
-Thread-Topic: [bug report] evm: Check also if *tfm is an error pointer in
- init_desc()
-Thread-Index: AQHWKEtaMY8eDHenCUWhAoTwHpVMaaikTD1Q
-Date:   Tue, 12 May 2020 11:31:53 +0000
-Message-ID: <267804d00f2e457186509a6ae40c9c7f@huawei.com>
-References: <20200512104809.GA262740@mwanda>
-In-Reply-To: <20200512104809.GA262740@mwanda>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.12.77]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1727783AbgELLkW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 07:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgELLkW (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 12 May 2020 07:40:22 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32562C061A0C
+        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 04:40:22 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id e18so644985iog.9
+        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 04:40:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=d6I2nBaTdCMDd3hvG+KBjRfJdt5k5+1ubGaOtAwQk5k=;
+        b=UdV18JUOBzhIMLSq2GVOGaUO7lpT4eaCx8zQDU2lJHSfb0U+A+FcptsDC+rzCQPXIa
+         0KWhfObyGcaVoU61owIF+jvAzTkNEdiuD4N2mR42iICEKeiP2kK0I88TNGPCK8KmNu8N
+         j8GXzlzthG89Nd4RDxvq/rHrjmu+0W/JnuP74cZ8v/vonFUJN8s3wNBOZV0xKwm/YBzO
+         1t7Pbgz51JwYuUYkBB82Zgwc8+/cg6TdmAy/YUv2KjSHiBy8AnOzFo2ez99dK0Yfvm6r
+         OlhPx7RQ5yazCrWIrBQk8/cvxyhg6imLRavkx0XP1oFo1/rkr9nAZGERjx69XDMjhe1z
+         9RLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=d6I2nBaTdCMDd3hvG+KBjRfJdt5k5+1ubGaOtAwQk5k=;
+        b=Hz2ICtRWAR7t/BX4adDslu4WQFKs+y2Mb8W4/50yh4SBnNGYVOpcOXiOsJcCvs7iNy
+         aElCvPiAamjVzdK8wRUnSU5ttCg0VGy6M7pxYtorPHsHJVOKbNkbxwmSEXmPID59gawV
+         jQwMlKf4bxEyOBgQ2WPMDP0TxdO7+ZkEsG5MkXHxgZMqxIZj4eLbbsWXh6cTMW2Fpqdn
+         Ivozgj17aRIIngCm9TCEHQzbQkr02BNOcPbbI9K6N/EswRDd9cuMii32c3aF1eC4QMq9
+         HXM2ugI5PQlf6E7n9I5V0IV704Z5XiXTptAXjNSDCzjO6Pe5my1E+MzMxb+CPtFkvlCa
+         j7mQ==
+X-Gm-Message-State: AGi0PuZ3ubYrJKXGVzWlitfBko8/WSdtocur8VpA+oaOP6yqurLpqDmy
+        kIVZ3V5jAH8p/Fe2Pj8S1xAkMPuVgkdGtEBhjuI=
+X-Google-Smtp-Source: APiQypJrzFtnXhFOkFi0kUmpKg3B/1oVZ4dO4nu4CAnrn7h56jeyC5S0MJWuJG0mCBSNHv8+ikE2Vc+nDEQmDEUg+nY=
+X-Received: by 2002:a5e:9703:: with SMTP id w3mr20412697ioj.111.1589283621510;
+ Tue, 12 May 2020 04:40:21 -0700 (PDT)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+References: <20200512040113.277768-1-loic.yhuel@gmail.com> <CAMj1kXFfLvUXU1A-7jnh3KMy5Qguhq0k9Cw=O0iBmbToowV_8A@mail.gmail.com>
+In-Reply-To: <CAMj1kXFfLvUXU1A-7jnh3KMy5Qguhq0k9Cw=O0iBmbToowV_8A@mail.gmail.com>
+From:   =?UTF-8?Q?Lo=C3=AFc_Yhuel?= <loic.yhuel@gmail.com>
+Date:   Tue, 12 May 2020 13:40:10 +0200
+Message-ID: <CANMwUkg+2O2nK8z38HZw6z0NdLUPwj40m4DPKmn1sf9oDqG7Pw@mail.gmail.com>
+Subject: Re: [PATCH] tpm: check event log version before reading final events
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        javierm@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Dan Carpenter [mailto:dan.carpenter@oracle.com]
-> Sent: Tuesday, May 12, 2020 12:48 PM
-> 
-> Hello Roberto Sassu,
-> 
-> The patch 53de3b080d5e: "evm: Check also if *tfm is an error pointer
-> in init_desc()" from Apr 27, 2020, leads to the following static
-> checker warning:
-> 
-> 	security/integrity/evm/evm_crypto.c:119 init_desc()
-> 	error: '*tfm' dereferencing possible ERR_PTR()
-> 
-> security/integrity/evm/evm_crypto.c
->     89
->     90                  tfm = &evm_tfm[hash_algo];
->     91                  algo = hash_algo_name[hash_algo];
->     92          }
->     93
->     94          if (IS_ERR_OR_NULL(*tfm)) {
-> 
-> This used to be a "if (!*tfm)" check.
-> 
->     95                  mutex_lock(&mutex);
->     96                  if (*tfm)
->     97                          goto out;
-> 
-> Then we test again with the lock held.  But in the new code if "*tfm"
-> is an error pointer then we jump directly to the unlock and crash on the
-> next line.  I can't see how the commit would fix anything.
+Le mar. 12 mai 2020 =C3=A0 08:45, Ard Biesheuvel <ardb@kernel.org> a =C3=A9=
+crit :
+> So what functionality do we lose here? Can we still make meaningful
+> use of the event log without the final log? I thought one was
+> incomplete without the other?
+The char driver (drivers/char/tpm/eventlog/efi.c), already ignores
+efi.tpm_final_log
+if the event log version isn't EFI_TCG2_EVENT_LOG_FORMAT_TCG_2.
+So there currently no code making use of the final log contents on
+those machines,
+besides the two cases I patched which only try to determine its size.
 
-Hello Dan
-
-you are right. The fix should be applied in both places.
-
-if (!IS_ERR_OR_NULL(*tfm))
-	goto out;
-
->     98                  *tfm = crypto_alloc_shash(algo, 0, CRYPTO_NOLOAD);
->     99                  if (IS_ERR(*tfm)) {
->    100                          rc = PTR_ERR(*tfm);
->    101                          pr_err("Can not allocate %s (reason: %ld)\n", algo, rc);
->    102                          *tfm = NULL;
->    103                          mutex_unlock(&mutex);
->    104                          return ERR_PTR(rc);
->    105                  }
->    106                  if (type == EVM_XATTR_HMAC) {
->    107                          rc = crypto_shash_setkey(*tfm, evmkey, evmkey_len);
->    108                          if (rc) {
->    109                                  crypto_free_shash(*tfm);
->    110                                  *tfm = NULL;
->    111                                  mutex_unlock(&mutex);
->    112                                  return ERR_PTR(rc);
->    113                          }
->    114                  }
->    115  out:
->    116                  mutex_unlock(&mutex);
->    117          }
->    118
->    119          desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
->                                                                      ^^^^
-> I don't understand how using *tfm outside of a lock is safe at all
-> anyway.
-
-I think the purpose of the mutex is just to  prevent two concurrent
-allocations. Later, it should not be a problem, as *tfm is never freed.
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
-
-
->    120                          GFP_KERNEL);
->    121          if (!desc)
->    122                  return ERR_PTR(-ENOMEM);
->    123
-> 
-> regards,
-> dan carpenter
+I don't know if the table contains bad data, or just doesn't follow
+the specification
+and uses the older SHA-1 log format. If this is the case, perhaps we
+could try to
+support it, and modify the code to allow returning the additional
+events it might
+contain to the userspace.
