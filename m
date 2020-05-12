@@ -2,136 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB591CF16F
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 11:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3921CF2E2
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 12:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729125AbgELJVB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 05:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729288AbgELJU4 (ORCPT
+        id S1729229AbgELKvt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 06:51:49 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:38240 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726193AbgELKvt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 05:20:56 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA8CC061A0C
-        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 02:20:55 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id g4so12794973ljl.2
-        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 02:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hNH+m8omjPnk476jGLpu8Vt8kPOpg3agkUbWl32XtLw=;
-        b=RTRXN6UpK2F7NEYSZFbq/6CmZAZUEetFV4/nF5JiSYvyNI5g4nTSNhLFkFoHjZwByP
-         Zlg/5cua8es2+gXO0jg7lEsyOvayqu+1Hiy9tJXNKfbH9AVH8hYCjEcmgZTtRBulz2Nv
-         j6Mr9nFwWAwPdaQvT4mLPIwg+38zt89Y0MZnSr1WSC3bzYdVCOHwU9KexFMQP8ObqJiA
-         nBLhku7TpS+EYOBoPcY4ND81ZhxYJsgVdGS/XnsbZtHryPTOr7O9aoNvFmt04d5nNqBj
-         9UF8fA1bnUgTKmVgdIIWE7HfRRJy9I5vVOQGLLjoyfo8I+eVeGK3r5ReIXgumar2WDhx
-         uWLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hNH+m8omjPnk476jGLpu8Vt8kPOpg3agkUbWl32XtLw=;
-        b=kXsCel4WLTlcCyBIem8Vv+1msXxAzVHkO0Yc0pHW6EFHIafY5qOPfbtYBL6+Byc8O7
-         Hik5J3ONrX8BDbe+uOmkm5bosGgN3NcgBEqwGHDe0elc5Cq27a0Oa+JIteoNOSxKjd8R
-         kWFd4rC00yWMlux8GSZ3V2yqUMX3DCFswbjGvWCOcWax2vyu9HP1Wj6/QygM7K9v+SnL
-         hzm9SvoOBhcvrtxAda/W6awEHCGAixs3X5evQ0h5iYdXjGvXeIM5iK2D6bJjmI3HcpE+
-         +JP5djQaUERtQy6ftb/pLXGFp33DOveFlE2sVNzoccVtO+BAWuzfd58WsVL3AQAuk+5H
-         eYrw==
-X-Gm-Message-State: AOAM531sm2pi2O1/Mm7nDEec5863r0DlrqUCIuFkCHpwgoIEtOQ32D+b
-        3UUlOCeAQ1ziabWHEg6FjXuSMDK/C9V19iD5M2ezMA==
-X-Google-Smtp-Source: ABdhPJxY70vedCXTAc/sVhR66GczTIpt7w0KW9ze1vEeSXLFO3Eq/mp5nh3QrQuPhD0UQIwMuEug7EhXdEzryApWOnc=
-X-Received: by 2002:a05:651c:1b9:: with SMTP id c25mr9138973ljn.285.1589275253855;
- Tue, 12 May 2020 02:20:53 -0700 (PDT)
+        Tue, 12 May 2020 06:51:49 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04CAmH8D029284;
+        Tue, 12 May 2020 10:48:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=wVc9fpSrodGxYb5RZEktGgdm8O/3nO6kNy0sc9lTw+0=;
+ b=sWtwsGuwod2beAvzDczkLArxcbMvXsPNDHE4njhlEO55htEluwHx9hnRFuTcFngv6qdW
+ 9E2puxiexZz43RFWA7YnVA9xVhrYAmelrRq5e03EWUfQhBOXC1gKcuw//iMinBJ6hoQF
+ 3A6bT3Z/BQ0PAnuIFoeAf9k6kR/XE5JHzOU9kz2cCOV6nCF7Vvk9hb4Gm+fsyNlU5fKJ
+ RPhZJdFaIJKi/ZC3Ryi2aQCmpOgogqUeuaKgjvtCsYib018NKcCyI7otC0HpkHN3HxRZ
+ Mz412ehNx9Zl5talbtqkFsHCLyPjJ3TBnXZMcWUTi/TxPx5wzpnDW0U8BbWN62jNWfDd yA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 30x3gmj8j6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 May 2020 10:48:19 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04CAMZKF039405;
+        Tue, 12 May 2020 10:48:18 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 30xbgj4f65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 May 2020 10:48:18 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04CAmGEX021124;
+        Tue, 12 May 2020 10:48:17 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 12 May 2020 03:48:16 -0700
+Date:   Tue, 12 May 2020 13:48:09 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     roberto.sassu@huawei.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [bug report] evm: Check also if *tfm is an error pointer in
+ init_desc()
+Message-ID: <20200512104809.GA262740@mwanda>
 MIME-Version: 1.0
-References: <1588758017-30426-1-git-send-email-sumit.garg@linaro.org>
-In-Reply-To: <1588758017-30426-1-git-send-email-sumit.garg@linaro.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 12 May 2020 14:50:42 +0530
-Message-ID: <CAFA6WYNgBQDBY+670fG38Yrg8tMg6U74TW12WON=9dVvsT0t6w@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Introduce TEE based Trusted Keys support
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>
-Cc:     dhowells@redhat.com, Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Markus Wamser <Markus.Wamser@mixed-mode.de>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        op-tee@lists.trustedfirmware.org,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ spamscore=0 suspectscore=10 phishscore=0 bulkscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005120078
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ clxscore=1011 spamscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 priorityscore=1501 mlxscore=0 suspectscore=10
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005120079
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 6 May 2020 at 15:10, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> Add support for TEE based trusted keys where TEE provides the functionality
-> to seal and unseal trusted keys using hardware unique key. Also, this is
-> an alternative in case platform doesn't possess a TPM device.
->
-> This patch-set has been tested with OP-TEE based early TA which can be
-> found here [1].
->
-> [1] https://github.com/OP-TEE/optee_os/pull/3838
+Hello Roberto Sassu,
 
-Fyi, this PR has been merged in OP-TEE OS as commit [1]. Looking
-forward to any further comments/feedback on this patch-set.
+The patch 53de3b080d5e: "evm: Check also if *tfm is an error pointer
+in init_desc()" from Apr 27, 2020, leads to the following static
+checker warning:
 
-[1] https://github.com/OP-TEE/optee_os/commit/f86ab8e7e0de869dfa25ca05a37ee070d7e5b86b
+	security/integrity/evm/evm_crypto.c:119 init_desc()
+	error: '*tfm' dereferencing possible ERR_PTR()
 
--Sumit
+security/integrity/evm/evm_crypto.c
+    89  
+    90                  tfm = &evm_tfm[hash_algo];
+    91                  algo = hash_algo_name[hash_algo];
+    92          }
+    93  
+    94          if (IS_ERR_OR_NULL(*tfm)) {
 
->
-> Changes in v4:
-> 1. Pushed independent TEE features separately:
->   - Part of recent TEE PR: https://lkml.org/lkml/2020/5/4/1062
-> 2. Updated trusted-encrypted doc with TEE as a new trust source.
-> 3. Rebased onto latest tpmdd/master.
->
-> Changes in v3:
-> 1. Update patch #2 to support registration of multiple kernel pages.
-> 2. Incoporate dependency patch #4 in this patch-set:
->    https://patchwork.kernel.org/patch/11091435/
->
-> Changes in v2:
-> 1. Add reviewed-by tags for patch #1 and #2.
-> 2. Incorporate comments from Jens for patch #3.
-> 3. Switch to use generic trusted keys framework.
->
-> Sumit Garg (4):
->   KEYS: trusted: Add generic trusted keys framework
->   KEYS: trusted: Introduce TEE based Trusted Keys
->   doc: trusted-encrypted: updates with TEE as a new trust source
->   MAINTAINERS: Add entry for TEE based Trusted Keys
->
->  Documentation/security/keys/trusted-encrypted.rst | 203 ++++++++++---
->  MAINTAINERS                                       |   8 +
->  include/keys/trusted-type.h                       |  48 ++++
->  include/keys/trusted_tee.h                        |  66 +++++
->  include/keys/trusted_tpm.h                        |  15 -
->  security/keys/Kconfig                             |   3 +
->  security/keys/trusted-keys/Makefile               |   2 +
->  security/keys/trusted-keys/trusted_common.c       | 336 ++++++++++++++++++++++
->  security/keys/trusted-keys/trusted_tee.c          | 282 ++++++++++++++++++
->  security/keys/trusted-keys/trusted_tpm1.c         | 335 ++++-----------------
->  10 files changed, 974 insertions(+), 324 deletions(-)
->  create mode 100644 include/keys/trusted_tee.h
->  create mode 100644 security/keys/trusted-keys/trusted_common.c
->  create mode 100644 security/keys/trusted-keys/trusted_tee.c
->
-> --
-> 2.7.4
->
+This used to be a "if (!*tfm)" check.
+
+    95                  mutex_lock(&mutex);
+    96                  if (*tfm)
+    97                          goto out;
+
+Then we test again with the lock held.  But in the new code if "*tfm"
+is an error pointer then we jump directly to the unlock and crash on the
+next line.  I can't see how the commit would fix anything.
+
+    98                  *tfm = crypto_alloc_shash(algo, 0, CRYPTO_NOLOAD);
+    99                  if (IS_ERR(*tfm)) {
+   100                          rc = PTR_ERR(*tfm);
+   101                          pr_err("Can not allocate %s (reason: %ld)\n", algo, rc);
+   102                          *tfm = NULL;
+   103                          mutex_unlock(&mutex);
+   104                          return ERR_PTR(rc);
+   105                  }
+   106                  if (type == EVM_XATTR_HMAC) {
+   107                          rc = crypto_shash_setkey(*tfm, evmkey, evmkey_len);
+   108                          if (rc) {
+   109                                  crypto_free_shash(*tfm);
+   110                                  *tfm = NULL;
+   111                                  mutex_unlock(&mutex);
+   112                                  return ERR_PTR(rc);
+   113                          }
+   114                  }
+   115  out:
+   116                  mutex_unlock(&mutex);
+   117          }
+   118  
+   119          desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
+                                                                     ^^^^
+I don't understand how using *tfm outside of a lock is safe at all
+anyway.
+
+   120                          GFP_KERNEL);
+   121          if (!desc)
+   122                  return ERR_PTR(-ENOMEM);
+   123  
+
+regards,
+dan carpenter
