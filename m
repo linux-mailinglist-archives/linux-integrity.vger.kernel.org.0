@@ -2,398 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2131CF6C7
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 16:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08A71CF6DE
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 16:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730376AbgELOQI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 10:16:08 -0400
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:48574 "EHLO
-        herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730130AbgELOQA (ORCPT
+        id S1730012AbgELORa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 10:17:30 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2956 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729336AbgELORa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 10:16:00 -0400
-Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 04CEFOab011264;
-        Tue, 12 May 2020 17:15:24 +0300
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
-        id 95438639BE; Tue, 12 May 2020 17:15:24 +0300 (IDT)
-From:   amirmizi6@gmail.com
-To:     Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
-        oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
-        robh+dt@kernel.org,
-        "benoit.houyere@st.com--to=mark.rutland"@arm.com,
-        peterhuewe@gmx.de, christophe-h.richard@st.com, jgg@ziepe.ca,
-        arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
-        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
-        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
-        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
-        Amir Mizinski <amirmizi6@gmail.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Joel Stanley <joel@jms.id.au>
-Subject: [PATCH v8 8/8] tpm: tpm_tis: add tpm_tis_i2c driver
-Date:   Tue, 12 May 2020 17:14:31 +0300
-Message-Id: <20200512141431.83833-9-amirmizi6@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200512141431.83833-1-amirmizi6@gmail.com>
-References: <20200512141431.83833-1-amirmizi6@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Tue, 12 May 2020 10:17:30 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04CEBH1m009256;
+        Tue, 12 May 2020 10:17:12 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30ws5f45jh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 May 2020 10:17:12 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04CEBVxM010678;
+        Tue, 12 May 2020 10:17:11 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30ws5f45gf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 May 2020 10:17:11 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 04CEGHW2001007;
+        Tue, 12 May 2020 14:17:09 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 30wm55en15-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 May 2020 14:17:09 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04CEH7du46203022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 May 2020 14:17:07 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAF424C064;
+        Tue, 12 May 2020 14:17:06 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AC2FB4C046;
+        Tue, 12 May 2020 14:17:05 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.144.67])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 May 2020 14:17:05 +0000 (GMT)
+Message-ID: <1589293025.5098.53.camel@linux.ibm.com>
+Subject: Re: [RFC][PATCH 1/3] evm: Move hooks outside LSM infrastructure
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "david.safford@gmail.com" <david.safford@gmail.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        John Johansen <john.johansen@canonical.com>,
+        "matthewgarrett@google.com" <matthewgarrett@google.com>
+Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Date:   Tue, 12 May 2020 10:17:05 -0400
+In-Reply-To: <09ee169cfd70492cb526bcb30f99d693@huawei.com>
+References: <20200429073935.11913-1-roberto.sassu@huawei.com>
+         <1588794293.4624.21.camel@linux.ibm.com>
+         <1588799408.4624.28.camel@linux.ibm.com>
+         <ab879f9e66874736a40e9c566cadc272@huawei.com>
+         <1588864628.5685.78.camel@linux.ibm.com>
+         <750ab4e0990f47e4aea10d0e580b1074@huawei.com>
+         <1588884313.5685.110.camel@linux.ibm.com>
+         <84e6acad739a415aa3e2457b5c37979f@huawei.com>
+         <1588957684.5146.70.camel@linux.ibm.com>
+         <414644a0be9e4af880452f4b5079aba1@huawei.com>
+         <1589233010.5091.49.camel@linux.ibm.com>
+         <09ee169cfd70492cb526bcb30f99d693@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-12_03:2020-05-11,2020-05-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ phishscore=0 spamscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999
+ lowpriorityscore=0 bulkscore=0 adultscore=0 priorityscore=1501 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005120106
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Amir Mizinski <amirmizi6@gmail.com>
+On Tue, 2020-05-12 at 07:54 +0000, Roberto Sassu wrote:
+> > > > Roberto, EVM is only triggered by IMA, unless you've modified the
+> > > > kernel to do otherwise.
+> > >
+> > > EVM would deny xattr/attr operations even if IMA is disabled in the
+> > > kernel configuration. For example, evm_setxattr() returns the value
+> > > from evm_protect_xattr(). IMA is not involved there.
+> > 
+> > Commit ae1ba1676b88 ("EVM: Allow userland to permit modification of
+> > EVM-protected metadata") introduced EVM_ALLOW_METADATA_WRITES
+> > to allow writing the EVM portable and immutable file signatures.
+> 
+> According to Documentation/ABI/testing/evm:
+> 
+> Note that once a key has been loaded, it will no longer be
+> possible to enable metadata modification.
 
-Implements the functionality needed to communicate with an I2C TPM
-according to the TCG TPM I2C Interface Specification.
+Not any key, but the HMAC key.
+ 
+2         Permit modification of EVM-protected metadata at
+          runtime. Not supported if HMAC validation and
+          creation is enabled.
 
-Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
-Tested-by: Eddie James <eajames@linux.ibm.com>
-Tested-by: Joel Stanley <joel@jms.id.au>
----
- drivers/char/tpm/Kconfig       |  12 ++
- drivers/char/tpm/Makefile      |   1 +
- drivers/char/tpm/tpm_tis_i2c.c | 292 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 305 insertions(+)
- create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
+Each time the EVM protected file metadata is updated, the EVM HMAC is
+updated, assuming the existing EVM HMAC is valid.  Userspace should
+not have access to the HMAC key, so we only allow writing EVM
+signatures.
 
-diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-index aacdeed..2116d94 100644
---- a/drivers/char/tpm/Kconfig
-+++ b/drivers/char/tpm/Kconfig
-@@ -74,6 +74,18 @@ config TCG_TIS_SPI_CR50
- 	  If you have a H1 secure module running Cr50 firmware on SPI bus,
- 	  say Yes and it will be accessible from within Linux.
- 
-+config TCG_TIS_I2C
-+	tristate "TPM I2C Interface Specification"
-+	depends on I2C
-+	select CRC_CCITT
-+	select TCG_TIS_CORE
-+	help
-+	  If you have a TPM security chip which is connected to a regular
-+	  I2C master (i.e. most embedded platforms) that is compliant with the
-+	  TCG TPM I2C Interface Specification say Yes and it will be accessible from
-+	  within Linux. To compile this driver as a module, choose  M here;
-+	  the module will be called tpm_tis_i2c.
-+
- config TCG_TIS_I2C_ATMEL
- 	tristate "TPM Interface Specification 1.2 Interface (I2C - Atmel)"
- 	depends on I2C
-diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-index 9567e51..97999cf 100644
---- a/drivers/char/tpm/Makefile
-+++ b/drivers/char/tpm/Makefile
-@@ -26,6 +26,7 @@ obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
- tpm_tis_spi-y := tpm_tis_spi_main.o
- tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
- 
-+obj-$(CONFIG_TCG_TIS_I2C) += tpm_tis_i2c.o
- obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
- obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
- obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
-diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-new file mode 100644
-index 0000000..4c9bad0
---- /dev/null
-+++ b/drivers/char/tpm/tpm_tis_i2c.c
-@@ -0,0 +1,292 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2014-2019 Nuvoton Technology corporation
-+ *
-+ * TPM TIS I2C
-+ *
-+ * TPM TIS I2C Device Driver Interface for devices that implement the TPM I2C
-+ * Interface defined by TCG PC Client Platform TPM Profile (PTP) Specification
-+ * Revision 01.03 v22 at www.trustedcomputinggroup.org
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/moduleparam.h>
-+#include <linux/slab.h>
-+#include <linux/interrupt.h>
-+#include <linux/wait.h>
-+#include <linux/acpi.h>
-+#include <linux/freezer.h>
-+#include <linux/crc-ccitt.h>
-+
-+#include <linux/module.h>
-+#include <linux/i2c.h>
-+#include <linux/gpio.h>
-+#include <linux/of_irq.h>
-+#include <linux/of_gpio.h>
-+#include <linux/tpm.h>
-+#include "tpm.h"
-+#include "tpm_tis_core.h"
-+
-+#define TPM_LOC_SEL                    0x04
-+#define TPM_I2C_INTERFACE_CAPABILITY   0x30
-+#define TPM_I2C_DEVICE_ADDRESS         0x38
-+#define TPM_DATA_CSUM_ENABLE           0x40
-+#define TPM_DATA_CSUM                  0x44
-+#define TPM_I2C_DID_VID                        0x48
-+#define TPM_I2C_RID                    0x4C
-+
-+//#define I2C_IS_TPM2 1
-+
-+struct tpm_tis_i2c_phy {
-+	struct tpm_tis_data priv;
-+	struct i2c_client *i2c_client;
-+	bool data_csum;
-+	u8 *iobuf;
-+};
-+
-+static inline struct tpm_tis_i2c_phy *to_tpm_tis_i2c_phy(struct tpm_tis_data
-+							 *data)
-+{
-+	return container_of(data, struct tpm_tis_i2c_phy, priv);
-+}
-+
-+static u8 address_to_register(u32 addr)
-+{
-+	addr &= 0xFFF;
-+
-+	switch (addr) {
-+		// adapt register addresses that have changed compared to
-+		// older TIS versions
-+	case TPM_ACCESS(0):
-+		return 0x04;
-+	case TPM_LOC_SEL:
-+		return 0x00;
-+	case TPM_DID_VID(0):
-+		return 0x48;
-+	case TPM_RID(0):
-+		return 0x4C;
-+	default:
-+		return addr;
-+	}
-+}
-+
-+static int tpm_tis_i2c_read_bytes(struct tpm_tis_data *data, u32 addr,
-+				  u16 len, u8 *result)
-+{
-+	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
-+	int ret = 0;
-+	int i = 0;
-+	u8 reg = address_to_register(addr);
-+	struct i2c_msg msgs[] = {
-+		{
-+			.addr = phy->i2c_client->addr,
-+			.len = sizeof(reg),
-+			.buf = &reg,
-+		},
-+		{
-+			.addr = phy->i2c_client->addr,
-+			.len = len,
-+			.buf = result,
-+			.flags = I2C_M_RD,
-+		},
-+	};
-+
-+	do {
-+		ret = i2c_transfer(phy->i2c_client->adapter, msgs,
-+				   ARRAY_SIZE(msgs));
-+		usleep_range(250, 300); // wait default GUARD_TIME of 250µs
-+
-+	} while (ret < 0 && i++ < TPM_RETRY);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int tpm_tis_i2c_write_bytes(struct tpm_tis_data *data, u32 addr,
-+				   u16 len, const u8 *value)
-+{
-+	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
-+	int ret = 0;
-+	int i = 0;
-+
-+	if (phy->iobuf) {
-+		if (len > TPM_BUFSIZE - 1)
-+			return -EIO;
-+
-+		phy->iobuf[0] = address_to_register(addr);
-+		memcpy(phy->iobuf + 1, value, len);
-+
-+		{
-+			struct i2c_msg msgs[] = {
-+				{
-+					.addr = phy->i2c_client->addr,
-+					.len = len + 1,
-+					.buf = phy->iobuf,
-+				},
-+			};
-+
-+			do {
-+				ret = i2c_transfer(phy->i2c_client->adapter,
-+						   msgs, ARRAY_SIZE(msgs));
-+				// wait default GUARD_TIME of 250µs
-+				usleep_range(250, 300);
-+			} while (ret < 0 && i++ < TPM_RETRY);
-+		}
-+	} else {
-+		u8 reg = address_to_register(addr);
-+
-+		struct i2c_msg msgs[] = {
-+			{
-+				.addr = phy->i2c_client->addr,
-+				.len = sizeof(reg),
-+				.buf = &reg,
-+			},
-+			{
-+				.addr = phy->i2c_client->addr,
-+				.len = len,
-+				.buf = (u8 *)value,
-+				.flags = I2C_M_NOSTART,
-+			},
-+		};
-+		do {
-+			ret = i2c_transfer(phy->i2c_client->adapter, msgs,
-+					   ARRAY_SIZE(msgs));
-+			// wait default GUARD_TIME of 250µs
-+			usleep_range(250, 300);
-+		} while (ret < 0 && i++ < TPM_RETRY);
-+	}
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static bool tpm_tis_i2c_verify_data_integrity(struct tpm_tis_data *data,
-+					      const u8 *buf, size_t len)
-+{
-+	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
-+	u16 crc, crc_tpm;
-+	int rc;
-+
-+	if (phy->data_csum) {
-+		crc = crc_ccitt(0x0000, buf, len);
-+		rc = tpm_tis_read16(data, TPM_DATA_CSUM, &crc_tpm);
-+		if (rc < 0)
-+			return false;
-+
-+		crc_tpm = be16_to_cpu(crc_tpm);
-+		return crc == crc_tpm;
-+	}
-+
-+	return true;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(tpm_tis_pm, tpm_pm_suspend, tpm_tis_resume);
-+
-+static int csum_state_store(struct tpm_tis_data *data, u8 new_state)
-+{
-+	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
-+	u8 cur_state;
-+	int rc;
-+
-+	rc = tpm_tis_i2c_write_bytes(&phy->priv, TPM_DATA_CSUM_ENABLE,
-+				     1, &new_state);
-+	if (rc < 0)
-+		return rc;
-+
-+	rc = tpm_tis_i2c_read_bytes(&phy->priv, TPM_DATA_CSUM_ENABLE,
-+				    1, &cur_state);
-+	if (rc < 0)
-+		return rc;
-+
-+	if (new_state == cur_state)
-+		phy->data_csum = (bool)new_state;
-+
-+	return rc;
-+}
-+
-+static const struct tpm_tis_phy_ops tpm_i2c_phy_ops = {
-+	.read_bytes = tpm_tis_i2c_read_bytes,
-+	.write_bytes = tpm_tis_i2c_write_bytes,
-+	.verify_data_integrity = tpm_tis_i2c_verify_data_integrity,
-+};
-+
-+static int tpm_tis_i2c_probe(struct i2c_client *dev,
-+			     const struct i2c_device_id *id)
-+{
-+	struct tpm_tis_i2c_phy *phy;
-+	int rc;
-+	int crc_checksum = 0;
-+	const u8 loc_init = 0;
-+	struct device_node *np;
-+
-+	phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_i2c_phy),
-+			   GFP_KERNEL);
-+	if (!phy)
-+		return -ENOMEM;
-+
-+	phy->i2c_client = dev;
-+
-+	if (!i2c_check_functionality(dev->adapter, I2C_FUNC_NOSTART)) {
-+		phy->iobuf = devm_kmalloc(&dev->dev, TPM_BUFSIZE, GFP_KERNEL);
-+		if (!phy->iobuf)
-+			return -ENOMEM;
-+	}
-+
-+	// select locality 0 (the driver will access only via locality 0)
-+	rc = tpm_tis_i2c_write_bytes(&phy->priv, TPM_LOC_SEL, 1, &loc_init);
-+	if (rc < 0)
-+		return rc;
-+
-+	// set CRC checksum calculation enable
-+	np = dev->dev.of_node;
-+	if (of_property_read_bool(np, "crc-checksum"))
-+		crc_checksum = 1;
-+
-+	rc = csum_state_store(&phy->priv, crc_checksum);
-+	if (rc < 0)
-+		return rc;
-+
-+	return tpm_tis_core_init(&dev->dev, &phy->priv, -1, &tpm_i2c_phy_ops,
-+					NULL);
-+}
-+
-+static const struct i2c_device_id tpm_tis_i2c_id[] = {
-+	{"tpm_tis_i2c", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
-+
-+static const struct of_device_id of_tis_i2c_match[] = {
-+	{ .compatible = "nuvoton,npct75x", },
-+	{ .compatible = "tcg,tpm-tis-i2c", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
-+
-+static const struct acpi_device_id acpi_tis_i2c_match[] = {
-+	{"SMO0768", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, acpi_tis_i2c_match);
-+
-+static struct i2c_driver tpm_tis_i2c_driver = {
-+	.driver = {
-+		.owner = THIS_MODULE,
-+		.name = "tpm_tis_i2c",
-+		.pm = &tpm_tis_pm,
-+		.of_match_table = of_match_ptr(of_tis_i2c_match),
-+		.acpi_match_table = ACPI_PTR(acpi_tis_i2c_match),
-+	},
-+	.probe = tpm_tis_i2c_probe,
-+	.id_table = tpm_tis_i2c_id,
-+};
-+
-+module_i2c_driver(tpm_tis_i2c_driver);
-+
-+MODULE_DESCRIPTION("TPM Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.7.4
+The only difference between writing the original EVM signature and the
+new portable and immutable signature is the security.ima xattr
+requirement.  Since the new EVM signature does not include the
+filesystem specific data, something else needs to bind the file
+metadata to the file data.  Thus the IMA xattr requirement.
 
+Assuming that the new EVM signature is written last, as long as there
+is an IMA xattr, there shouldn't be a problem writing the new EVM
+signature.
+
+Mimi
