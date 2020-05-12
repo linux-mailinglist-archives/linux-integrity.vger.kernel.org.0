@@ -2,171 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4F91D001B
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 23:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7291E1D0024
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 23:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731065AbgELVGC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 17:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S1729619AbgELVIY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 17:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728882AbgELVGC (ORCPT
+        by vger.kernel.org with ESMTP id S1726324AbgELVIX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 17:06:02 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F9AC05BD0A
-        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 14:06:01 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id z1so6981502pfn.3
-        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 14:06:01 -0700 (PDT)
+        Tue, 12 May 2020 17:08:23 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E19C061A0C
+        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 14:08:23 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id e2so12236019eje.13
+        for <linux-integrity@vger.kernel.org>; Tue, 12 May 2020 14:08:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=j5G1rGAozMzMgyU1JqMyrq0LCgr5U8CbIe+eoAehnBE=;
-        b=fWqISwwRV1Cp0p3hEIqz2JPs/e51xAIhgluD2cuw0MLbuwAWZiAixmlmK1amD62n0U
-         zEQ5N4AJ8vz2XOrZ+RhHCzUw5fVQcoBhK7chafzRSx6BalK67W842qUqQqIuEGuNgMus
-         4D8mn/v3Y3cMZJodmDA2PR3tRpAyvxPruVwsA=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=w8JOus3tEhMnN2cfL3QPpAIIsHfMOKD02XrcRKd0P7k=;
+        b=e75w4x6AX6kehD/DiafJWjDpvUHaoblWNXmgGKmTTQM/0RU/LNZMA4o1DW6+qaKNl6
+         qC+Kuu6APblMZXJJjUqdJkqKEpfuZ7fr+e+K7bPboWQWqcVzdbf4Qw6eSVS2c9ea0d+o
+         sMsGROmKMMWZewcMq/HD2Xbkxr/jxbJinsTjKiGrkvHNlmfxLMwFj49a4yZz/RKbST++
+         RDoIJh8rb2DA+KlQQLbFK4/5hVIJxrkkws0zgE0luMP/iU3UfAIhw7IeGsG8iL60aDLp
+         6RpfKONhZK6Qdbh6bvaoSw3K4Su48sAB4rReb2SajcUPNgIuaRFGRmX5fbW8PeGw9rO2
+         8sFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=j5G1rGAozMzMgyU1JqMyrq0LCgr5U8CbIe+eoAehnBE=;
-        b=nqjvr+WXsG/6XQkoxuni8V2vFTkynhobEJnABj1V6bgkOFfHLZwBjN8wORNwVx/awL
-         c1wmM6Aei/ANvX+3ijGxdMPTAuJbwzfLyeVW4gXH75GRYIRnSfiLCDQKwcTKfj71dz+i
-         j3lWMa5Gg5oN2B592GMCCeLHzbdN3lukL5CCBEo8kr4N34JtaW7CmlUez7T7DBglHTRl
-         xyoC12ZShrSRXt3WjcMU4oqJWw7YgwwBcmpvznXUAWYMvaAPdxeF8oq5UBnDI1H4fTp2
-         x3K83TlIV4EQRByRsqgr7rkUppC6hpCfW4hf2y2qwW/WOCyG133HcsKbfFrxNBPqS7mc
-         xtog==
-X-Gm-Message-State: AGi0PuZotQPyZebuoEkgHBM1lKNoSQlaQBkxAc2E8yT+l1uixYbKbSby
-        xeq8fo7LkJrTYpObHK6PNGDmZQ==
-X-Google-Smtp-Source: APiQypKxymAGHHHmKkMira04oLA2EHbqSrasctJGjgDtYRDvErfuyi2FNoZWH/riiCdh9qC4B+d6Ug==
-X-Received: by 2002:a63:111e:: with SMTP id g30mr20764600pgl.446.1589317561085;
-        Tue, 12 May 2020 14:06:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p9sm4128699pgb.19.2020.05.12.14.05.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 14:05:59 -0700 (PDT)
-Date:   Tue, 12 May 2020 14:05:58 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v5 1/6] fs: Add support for an O_MAYEXEC flag on
- openat2(2)
-Message-ID: <202005121258.4213DC8A2@keescook>
-References: <20200505153156.925111-1-mic@digikod.net>
- <20200505153156.925111-2-mic@digikod.net>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=w8JOus3tEhMnN2cfL3QPpAIIsHfMOKD02XrcRKd0P7k=;
+        b=LVNOEpd/MaTFAAnSuwGqMf0uT9sbRwDpVYJnMfM2GpzFL1azfpIeH6btTEicbIV/MB
+         WYjiOc/9Dl6gGL3OJmWpzNfOZuj/ZYq68gUC08AAJMdSNdOy5tFgoTfzK1BP0N1QvcYP
+         tzi7gpqnAAma3ncem/54AahliQnY3PWGe2X5QOw0H1CnlDjS69Ded1UEwTbSQPNDfYl9
+         iGNvUQ64hR4ZUg2L6M799zZv7ayGI1Ey51uxOomPeV9jpLjrEo6ecNYvKj5k/hsKU94Q
+         1A4O+FbB4Bit8EU2WZq7DQ9HIU/3pkJb4DiBH0hXxNOhpr0bMQIh0P+AbkbSWOkQPBHy
+         P1kQ==
+X-Gm-Message-State: AGi0PuYddON7Ee6D//Ympb8XeQkoqsRCsQauH+r6Q8Ogj7IQZqljmvp4
+        hsToA0eMqo3xMLjMYhEzkgeqgO/Za1JCYZFv3oc=
+X-Google-Smtp-Source: APiQypKmivbg+k/nNWGc4OeTRu97KU/wvoQFiJzO3fNI8yGKaOpWLQ/2v6hAUA+oxPHIrTqdsVZd9csk/k9tF+YFm/U=
+X-Received: by 2002:a17:906:1e47:: with SMTP id i7mr19965805ejj.61.1589317701853;
+ Tue, 12 May 2020 14:08:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200505153156.925111-2-mic@digikod.net>
+Received: by 2002:a50:ed8e:0:0:0:0:0 with HTTP; Tue, 12 May 2020 14:08:21
+ -0700 (PDT)
+Reply-To: mrsnicole.france1958@outlook.com
+From:   Mrs Nicole Marois Benoite <mrsnicolefrance1958@gmail.com>
+Date:   Tue, 12 May 2020 14:08:21 -0700
+Message-ID: <CAJKBOP==1Ks-axi-n2sRN567ms1EabyZLfp_+RMjpAOQGskf5w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, May 05, 2020 at 05:31:51PM +0200, Mickaël Salaün wrote:
-> When the O_MAYEXEC flag is passed, openat2(2) may be subject to
-> additional restrictions depending on a security policy managed by the
-> kernel through a sysctl or implemented by an LSM thanks to the
-> inode_permission hook.  This new flag is ignored by open(2) and
-> openat(2).
-> 
-> The underlying idea is to be able to restrict scripts interpretation
-> according to a policy defined by the system administrator.  For this to
-> be possible, script interpreters must use the O_MAYEXEC flag
-> appropriately.  To be fully effective, these interpreters also need to
-> handle the other ways to execute code: command line parameters (e.g.,
-> option -e for Perl), module loading (e.g., option -m for Python), stdin,
-> file sourcing, environment variables, configuration files, etc.
-> According to the threat model, it may be acceptable to allow some script
-> interpreters (e.g. Bash) to interpret commands from stdin, may it be a
-> TTY or a pipe, because it may not be enough to (directly) perform
-> syscalls.  Further documentation can be found in a following patch.
+Dear Beloved,
 
-You touch on this lightly in the cover letter, but it seems there are
-plans for Python to restrict stdin parsing? Are there patches pending
-anywhere for other interpreters? (e.g. does CLIP OS have such patches?)
+I am Mrs Nicole Benoite Marois and i have been suffering from ovarian
+cancer disease and the doctor says that i have just few days to leave.
+I am from (Paris) France but based in Africa Burkina Faso since eight
+years ago as a business woman dealing with gold exportation.
 
-There's always a push-back against adding features that have external
-dependencies, and then those external dependencies can't happen without
-the kernel first adding a feature. :) I like getting these catch-22s
-broken, and I think the kernel is the right place to start, especially
-since the threat model (and implementation) is already proven out in
-CLIP OS, and now with IMA. So, while the interpreter side of this is
-still under development, this gives them the tool they need to get it
-done on the kernel side. So showing those pieces (as you've done) is
-great, and I think finding a little bit more detail here would be even
-better.
+Now that i am about to end the race like this, without any family
+members and no child. I have $3 Million US DOLLARS in Africa
+Development Bank (ADB) Burkina Faso which i instructed the bank to remit and
+give to Orphanage & Teaching Volunteer Work in Burkina Faso.But my
+mind is not at
+rest because i am writing this letter now through the help of my
+computer beside my sick bed.
 
-> A simple security policy implementation, configured through a dedicated
-> sysctl, is available in a following patch.
-> 
-> This is an updated subset of the patch initially written by Vincent
-> Strubel for CLIP OS 4:
-> https://github.com/clipos-archive/src_platform_clip-patches/blob/f5cb330d6b684752e403b4e41b39f7004d88e561/1901_open_mayexec.patch
-> This patch has been used for more than 11 years with customized script
-> interpreters.  Some examples (with the original name O_MAYEXEC) can be
-> found here:
-> https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
-> 
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> Signed-off-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-> Signed-off-by: Vincent Strubel <vincent.strubel@ssi.gouv.fr>
+I also have $4.5 Million US Dollars at Eco-Bank here in Burkina Faso
+and i instructed the bank to transfer the fund to you as foreigner
+that will apply to the bank after i have gone, that they should
+release the fund to him/her,but you will assure me that you will take
+50% of the fund and give 50% to the orphanages home in your country
+for my heart to rest.
 
-nit: this needs to be reordered. It's expected that the final SoB
-matches the sender. If you're trying to show co-authorship, please
-see:
+Respond to me immediately via my private email address
+(mrsnicole.france1958@outlook.com) for further details since I have just
+few days to end my life due to the ovarian cancer disease, hoping you
+will understand my point
 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+Yours fairly friend,
 
-Based on what I've inferred about author ordering, I think you want:
-
-Co-developed-by: Vincent Strubel <vincent.strubel@ssi.gouv.fr>
-Signed-off-by: Vincent Strubel <vincent.strubel@ssi.gouv.fr>
-Co-developed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-Signed-off-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-Co-developed-by: Mickaël Salaün <mic@digikod.net>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-
-> Reviewed-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> Cc: Aleksa Sarai <cyphar@cyphar.com>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Kees Cook <keescook@chromium.org>
-
-Everything else appears good to me, but Al and Aleksa know VFS internals
-way better. :)
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+Mrs Nicole Benoite Marois.
