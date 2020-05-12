@@ -2,21 +2,21 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E31C21CF6BB
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 16:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10C41CF6CA
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 May 2020 16:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730200AbgELOPx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 May 2020 10:15:53 -0400
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:48553 "EHLO
+        id S1730380AbgELOQI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 May 2020 10:16:08 -0400
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:48551 "EHLO
         herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730130AbgELOPp (ORCPT
+        with ESMTP id S1729408AbgELOPn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 May 2020 10:15:45 -0400
+        Tue, 12 May 2020 10:15:43 -0400
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 04CEFGoe011252;
-        Tue, 12 May 2020 17:15:16 +0300
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 04CEFIAb011255;
+        Tue, 12 May 2020 17:15:18 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
-        id A5185639BE; Tue, 12 May 2020 17:15:16 +0300 (IDT)
+        id 648BD639BE; Tue, 12 May 2020 17:15:18 +0300 (IDT)
 From:   amirmizi6@gmail.com
 To:     Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
         oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
@@ -31,9 +31,9 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
         Amir Mizinski <amirmizi6@gmail.com>,
         Benoit Houyere <benoit.houyere@st.com>
-Subject: [PATCH v8 4/8] tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception
-Date:   Tue, 12 May 2020 17:14:27 +0300
-Message-Id: <20200512141431.83833-5-amirmizi6@gmail.com>
+Subject: [PATCH v8 5/8] tpm: Handle an exception for TPM Firmware Update mode.
+Date:   Tue, 12 May 2020 17:14:28 +0300
+Message-Id: <20200512141431.83833-6-amirmizi6@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20200512141431.83833-1-amirmizi6@gmail.com>
 References: <20200512141431.83833-1-amirmizi6@gmail.com>
@@ -46,185 +46,44 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Amir Mizinski <amirmizi6@gmail.com>
 
-Incorrect implementation of send message was detected. We polled only
-TPM_STS.stsValid bit and then we single-checked the TPM_STS.expect bit
-value.
-TPM_STS.expected bit should be checked at the same time as
-TPM_STS.stsValid bit, and this should be repeated until timeout_A.
-
-To detect a TPM_STS.expected bit reset, the "wait_for_tpm_stat" function is
-modified to "wait_for_tpm_stat_result". This function regularly reads the
-status register and check the bits defined by "mask" to reach the value
-defined in "mask_result".
-
-This correct implementation is required for using the new CRC calculation
-on I2C TPM command bytes or I2C TPM answer bytes. TPM_STS.expected bit is
-reset after all bytes are acquired and the CRC result is inserted in the
-dedicated register. It introduces a normal latency for TPM_STS.expected
-bit reset.
-
-Respectively, to send a message, as defined in
-TCG_DesignPrinciples_TPM2p0Driver_vp24_pubrev.pdf, all bytes should be
-sent in one shot instead of sending the last byte separately.
+An extra precaution for TPM Firmware Update Mode.
+For example if TPM power was cut while in Firmware update, platform
+should ignore "selftest" failure and skip TPM initialization sequence.
 
 Suggested-by: Benoit Houyere <benoit.houyere@st.com>
 Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
 ---
- drivers/char/tpm/tpm_tis_core.c | 74 +++++++++++++++++------------------------
- 1 file changed, 30 insertions(+), 44 deletions(-)
+ drivers/char/tpm/tpm2-cmd.c | 4 ++++
+ include/linux/tpm.h         | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 682f950..f71ecd8 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -44,9 +44,10 @@ static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
- 	return false;
- }
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index 7603295..6e42946 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -727,6 +727,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+ 		goto out;
  
--static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
--		unsigned long timeout, wait_queue_head_t *queue,
--		bool check_cancel)
-+static int wait_for_tpm_stat_result(struct tpm_chip *chip, u8 mask,
-+				    u8 mask_result, unsigned long timeout,
-+				    wait_queue_head_t *queue,
-+				    bool check_cancel)
- {
- 	unsigned long stop;
- 	long rc;
-@@ -55,7 +56,7 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+ 	rc = tpm2_do_selftest(chip);
++
++	if (rc == TPM2_RC_UPGRADE || rc == TPM2_RC_COMMAND_CODE)
++		return 0;
++
+ 	if (rc && rc != TPM2_RC_INITIALIZE)
+ 		goto out;
  
- 	/* check current status */
- 	status = chip->ops->status(chip);
--	if ((status & mask) == mask)
-+	if ((status & mask) == mask_result)
- 		return 0;
- 
- 	stop = jiffies + timeout;
-@@ -83,7 +84,7 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
- 			usleep_range(TPM_TIMEOUT_USECS_MIN,
- 				     TPM_TIMEOUT_USECS_MAX);
- 			status = chip->ops->status(chip);
--			if ((status & mask) == mask)
-+			if ((status & mask) == mask_result)
- 				return 0;
- 		} while (time_before(jiffies, stop));
- 	}
-@@ -292,10 +293,13 @@ static int recv_data(struct tpm_chip *chip, u8 *buf, size_t count)
- 	int size = 0, burstcnt, rc;
- 
- 	while (size < count) {
--		rc = wait_for_tpm_stat(chip,
--				 TPM_STS_DATA_AVAIL | TPM_STS_VALID,
--				 chip->timeout_c,
--				 &priv->read_queue, true);
-+		rc = wait_for_tpm_stat_result(chip,
-+					      TPM_STS_DATA_AVAIL |
-+					      TPM_STS_VALID,
-+					      TPM_STS_DATA_AVAIL |
-+					      TPM_STS_VALID,
-+					      chip->timeout_c,
-+					      &priv->read_queue, true);
- 		if (rc < 0)
- 			return rc;
- 		burstcnt = get_burstcount(chip);
-@@ -350,8 +354,9 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
- 			goto out;
- 		}
- 
--		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
--				      &priv->int_queue, false) < 0) {
-+		if (wait_for_tpm_stat_result(chip, TPM_STS_VALID,
-+					     TPM_STS_VALID, chip->timeout_c,
-+					     &priv->int_queue, false) < 0) {
- 			size = -ETIME;
- 			goto out;
- 		}
-@@ -387,61 +392,40 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
- 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
- 	int rc, status, burstcnt;
- 	size_t count = 0;
--	bool itpm = priv->flags & TPM_TIS_ITPM_WORKAROUND;
- 
- 	status = tpm_tis_status(chip);
- 	if ((status & TPM_STS_COMMAND_READY) == 0) {
- 		tpm_tis_ready(chip);
--		if (wait_for_tpm_stat
--		    (chip, TPM_STS_COMMAND_READY, chip->timeout_b,
--		     &priv->int_queue, false) < 0) {
-+		if (wait_for_tpm_stat_result(chip, TPM_STS_COMMAND_READY,
-+					     TPM_STS_COMMAND_READY,
-+					     chip->timeout_b,
-+					     &priv->int_queue, false) < 0) {
- 			rc = -ETIME;
- 			goto out_err;
- 		}
- 	}
- 
--	while (count < len - 1) {
-+	while (count < len) {
- 		burstcnt = get_burstcount(chip);
- 		if (burstcnt < 0) {
- 			dev_err(&chip->dev, "Unable to read burstcount\n");
- 			rc = burstcnt;
- 			goto out_err;
- 		}
--		burstcnt = min_t(int, burstcnt, len - count - 1);
-+		burstcnt = min_t(int, burstcnt, len - count);
- 		rc = tpm_tis_write_bytes(priv, TPM_DATA_FIFO(priv->locality),
- 					 burstcnt, buf + count);
- 		if (rc < 0)
- 			goto out_err;
- 
- 		count += burstcnt;
--
--		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
--					&priv->int_queue, false) < 0) {
--			rc = -ETIME;
--			goto out_err;
--		}
--		status = tpm_tis_status(chip);
--		if (!itpm && (status & TPM_STS_DATA_EXPECT) == 0) {
--			rc = -EIO;
--			goto out_err;
--		}
- 	}
--
--	/* write last byte */
--	rc = tpm_tis_write8(priv, TPM_DATA_FIFO(priv->locality), buf[count]);
--	if (rc < 0)
--		goto out_err;
--
--	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
--				&priv->int_queue, false) < 0) {
-+	if (wait_for_tpm_stat_result(chip, TPM_STS_VALID | TPM_STS_DATA_EXPECT,
-+				     TPM_STS_VALID, chip->timeout_a,
-+				     &priv->int_queue, false) < 0) {
- 		rc = -ETIME;
- 		goto out_err;
- 	}
--	status = tpm_tis_status(chip);
--	if (!itpm && (status & TPM_STS_DATA_EXPECT) != 0) {
--		rc = -EIO;
--		goto out_err;
--	}
- 
- 	return 0;
- 
-@@ -498,9 +482,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
- 		ordinal = be32_to_cpu(*((__be32 *) (buf + 6)));
- 
- 		dur = tpm_calc_ordinal_duration(chip, ordinal);
--		if (wait_for_tpm_stat
--		    (chip, TPM_STS_DATA_AVAIL | TPM_STS_VALID, dur,
--		     &priv->read_queue, false) < 0) {
-+		if (wait_for_tpm_stat_result(chip,
-+					     TPM_STS_DATA_AVAIL | TPM_STS_VALID,
-+					     TPM_STS_DATA_AVAIL | TPM_STS_VALID,
-+					     dur,
-+					     &priv->read_queue, false) < 0) {
- 			rc = -ETIME;
- 			goto out_err;
- 		}
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 03e9b18..5a2e031 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -199,6 +199,7 @@ enum tpm2_return_codes {
+ 	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
+ 	TPM2_RC_FAILURE		= 0x0101,
+ 	TPM2_RC_DISABLED	= 0x0120,
++	TPM2_RC_UPGRADE         = 0x012D,
+ 	TPM2_RC_COMMAND_CODE    = 0x0143,
+ 	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
+ 	TPM2_RC_REFERENCE_H0	= 0x0910,
 -- 
 2.7.4
 
