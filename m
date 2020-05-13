@@ -2,233 +2,198 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA62D1D1919
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2020 17:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC1C1D199A
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2020 17:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389219AbgEMPVU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 May 2020 11:21:20 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:45436 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389208AbgEMPVS (ORCPT
+        id S2388493AbgEMPh2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 May 2020 11:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729483AbgEMPh2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 May 2020 11:21:18 -0400
-Received: by mail-pg1-f195.google.com with SMTP id r22so6331688pga.12;
-        Wed, 13 May 2020 08:21:17 -0700 (PDT)
+        Wed, 13 May 2020 11:37:28 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B667C061A0C;
+        Wed, 13 May 2020 08:37:28 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id p127so2301511oia.13;
+        Wed, 13 May 2020 08:37:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JesLt0wnnXQRtMcIHg+I5khr0BA/8cCmiohenjE2ta4=;
+        b=ErjuYfLQPK801OItCcYqBQDTNpGUtD2W7nLO68xLL9Zs3t7SXdMHPvJFYcFXgU0oY4
+         tVKWCqPzr0IjBic4LQ7O5s3+CKc1XmGPgyzgrkGteK2wp7Uh5ppMeJRJrbbkILA8gGTE
+         YxH9X5yYsM6dJbD68EAxWQx07chav4YEvVZnvf4BgcXmcsp2lkQzBshZbjMvlXhtj2pF
+         dwhbeaKI3v+dx4HUbbm/1DAkLRFTqi+Bd3u2xHt/K5RGIEzi0OetKzpz/MPsOL7cJirm
+         jfgiLNLDsUOub1+/Hm3NxIpAytmgc0YR6KH+CgSTqkq1pJiz4MeFvGI3nYbPY9U6X4m8
+         saIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sVPbNXCCooK7xs5q4tPUuYOkgiYvbFLYSsM11573Kow=;
-        b=YhDWrrl2YmwuH6C/D6LSsdpjxidKPlizPVkQWMRXllgx3ceBr1IntjbXMl+ifzoTgR
-         aizwY8YDCsWmkTD7K8C9/kivgxMwnQux5aKY8JenJKS03v0FG0HFkhDNudYu02LpQys6
-         uUV0FwO1GEZJ/DbCJuA07svfqThOgwRcC8gXcG+NYmc/xyg/s6SN6gT6XT46DYB3s8fC
-         0nLIBE3rEF22KDUq1G3ixdZE3pAyptD/8DEAxcA+gZLe45GbFLz6HYV5kTsGRuUXag0x
-         u3Wvd01dxdkBUFxg4tJC4c6/89w8bSSwdhOt6ywUp2aYYnLc9KFPwrpA7CM/mP5z+kl/
-         TH7Q==
-X-Gm-Message-State: AGi0PuZLuVf1EFRDhDUZWmNPZCkJcBFjgNqn5zVWX/2dUBFxFxQM8ZjR
-        IniRsMUxCEKVz47lxsO0Uv/VccKXZBxNuQ==
-X-Google-Smtp-Source: APiQypKJxNQFZPpCeObFfzlvgoO/y5iJXbbt0fp6k+Bh0324QO2zLbObQGGHUWDJ+UruNtob9Uv7wQ==
-X-Received: by 2002:aa7:80cf:: with SMTP id a15mr28046474pfn.124.1589383276926;
-        Wed, 13 May 2020 08:21:16 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id n23sm15605462pjq.18.2020.05.13.08.21.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 08:21:13 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 7045741D95; Wed, 13 May 2020 15:21:12 +0000 (UTC)
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
-        rafael@kernel.org, ebiederm@xmission.com, jeyu@kernel.org,
-        jmorris@namei.org, keescook@chromium.org, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        nayna@linux.ibm.com, zohar@linux.ibm.com
-Cc:     scott.branden@broadcom.com, dan.carpenter@oracle.com,
-        skhan@linuxfoundation.org, geert@linux-m68k.org,
-        tglx@linutronix.de, bauerman@linux.ibm.com, dhowells@redhat.com,
-        linux-integrity@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 3/3] fs: move kernel_read*() calls to its own symbol namespace
-Date:   Wed, 13 May 2020 15:21:08 +0000
-Message-Id: <20200513152108.25669-4-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.23.0.rc1
-In-Reply-To: <20200513152108.25669-1-mcgrof@kernel.org>
-References: <20200513152108.25669-1-mcgrof@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JesLt0wnnXQRtMcIHg+I5khr0BA/8cCmiohenjE2ta4=;
+        b=efsib6pjLc5zA6dlp8jlXiebMN/7+ANfsOjGybf1n2LwzkxbQmMrBxkEjH4MMsJHc5
+         MPq96GuXf0pqv//4MFFYJsmAl3kAye+cadCq0gqI7+JSvOUzOJCzn7oo9dY0RM3aAXAl
+         BRnv0IdRrE6mkiUN0LTvub0T6dmHih9/1+DwqiNGm+TNnJ7EGvsCx4vfcKQVY07TINhz
+         Nmm6ncpTYfGxsvCgcjTwVLNEj/4vsHip2prsZktbcfjGjxd8saQk/O23bo+6U6LO0LcB
+         ax+qqDaWhCIpiKPWlk8BoRa2TeiYLT/7Z8bpvFcDk+MtXSK8gAl5YHt659vwH9Yych1a
+         XmuQ==
+X-Gm-Message-State: AGi0PuakD9+X1SVfK/Lsprqx95SGoxxkVkLL0+8MG7kncfZiCzXSftQo
+        J1s5aHgJAwbsuX1TKoH7tOZGLhU/H8UpiTxLjzc=
+X-Google-Smtp-Source: APiQypI+NDJoITHYfkqfEHsy2flEkLfDB5ZZom8ahxgSAc1RCzwvPgqRJlVhbVAW3EqoZWFQfSQrU6Gi8kmLlaY03xI=
+X-Received: by 2002:aca:5e0b:: with SMTP id s11mr26174094oib.160.1589384247535;
+ Wed, 13 May 2020 08:37:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200505153156.925111-1-mic@digikod.net> <20200505153156.925111-4-mic@digikod.net>
+In-Reply-To: <20200505153156.925111-4-mic@digikod.net>
+From:   Stephen Smalley <stephen.smalley.work@gmail.com>
+Date:   Wed, 13 May 2020 11:37:16 -0400
+Message-ID: <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
+ through O_MAYEXEC
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- drivers/base/firmware_loader/main.c | 1 +
- fs/exec.c                           | 6 +++---
- kernel/kexec_file.c                 | 2 ++
- kernel/module.c                     | 1 +
- security/integrity/digsig.c         | 3 +++
- security/integrity/ima/ima_fs.c     | 3 +++
- security/integrity/ima/ima_main.c   | 2 ++
- security/loadpin/loadpin.c          | 2 ++
- security/security.c                 | 2 ++
- security/selinux/hooks.c            | 2 ++
- 10 files changed, 21 insertions(+), 3 deletions(-)
+On Tue, May 5, 2020 at 11:33 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+>
+> Enable to forbid access to files open with O_MAYEXEC.  Thanks to the
+> noexec option from the underlying VFS mount, or to the file execute
+> permission, userspace can enforce these execution policies.  This may
+> allow script interpreters to check execution permission before reading
+> commands from a file, or dynamic linkers to allow shared object loading.
+>
+> Add a new sysctl fs.open_mayexec_enforce to enable system administrators
+> to enforce two complementary security policies according to the
+> installed system: enforce the noexec mount option, and enforce
+> executable file permission.  Indeed, because of compatibility with
+> installed systems, only system administrators are able to check that
+> this new enforcement is in line with the system mount points and file
+> permissions.  A following patch adds documentation.
+>
+> For tailored Linux distributions, it is possible to enforce such
+> restriction at build time thanks to the CONFIG_OMAYEXEC_STATIC option.
+> The policy can then be configured with CONFIG_OMAYEXEC_ENFORCE_MOUNT and
+> CONFIG_OMAYEXEC_ENFORCE_FILE.
+>
+> Being able to restrict execution also enables to protect the kernel by
+> restricting arbitrary syscalls that an attacker could perform with a
+> crafted binary or certain script languages.  It also improves multilevel
+> isolation by reducing the ability of an attacker to use side channels
+> with specific code.  These restrictions can natively be enforced for ELF
+> binaries (with the noexec mount option) but require this kernel
+> extension to properly handle scripts (e.g., Python, Perl).  To get a
+> consistent execution policy, additional memory restrictions should also
+> be enforced (e.g. thanks to SELinux).
+>
+> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+> Reviewed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
+> Cc: Aleksa Sarai <cyphar@cyphar.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
 
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index 5296aaca35cf..a5ed796a9166 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -44,6 +44,7 @@
- MODULE_AUTHOR("Manuel Estrada Sainz");
- MODULE_DESCRIPTION("Multi purpose firmware loading support");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(CORE_FS_READ);
- 
- struct firmware_cache {
- 	/* firmware_buf instance will be added into the below list */
-diff --git a/fs/exec.c b/fs/exec.c
-index 30bd800ab1d6..bbe2a35ea2e0 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1008,7 +1008,7 @@ int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
- 	fput(file);
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
-+EXPORT_SYMBOL_NS_GPL(kernel_read_file_from_path, CORE_FS_READ);
- 
- int kernel_read_file_from_path_initns(const char *path, void **buf,
- 				      loff_t *size, loff_t max_size,
-@@ -1034,7 +1034,7 @@ int kernel_read_file_from_path_initns(const char *path, void **buf,
- 	fput(file);
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(kernel_read_file_from_path_initns);
-+EXPORT_SYMBOL_NS_GPL(kernel_read_file_from_path_initns, CORE_FS_READ);
- 
- int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
- 			     enum kernel_read_file_id id)
-@@ -1050,7 +1050,7 @@ int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
- 	fdput(f);
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(kernel_read_file_from_fd);
-+EXPORT_SYMBOL_NS_GPL(kernel_read_file_from_fd, CORE_FS_READ);
- 
- ssize_t read_code(struct file *file, unsigned long addr, loff_t pos, size_t len)
- {
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index bb05fd52de85..d96b7c05b0a5 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -28,6 +28,8 @@
- #include <linux/vmalloc.h>
- #include "kexec_internal.h"
- 
-+MODULE_IMPORT_NS(CORE_FS_READ);
-+
- static int kexec_calculate_store_digests(struct kimage *image);
- 
- /*
-diff --git a/kernel/module.c b/kernel/module.c
-index 8973a463712e..f14868980080 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -60,6 +60,7 @@
- #include "module-internal.h"
- 
- MODULE_IMPORT_NS(SECURITY_READ);
-+MODULE_IMPORT_NS(CORE_FS_READ);
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/module.h>
-diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index e9cbadade74b..d68ef41a3987 100644
---- a/security/integrity/digsig.c
-+++ b/security/integrity/digsig.c
-@@ -13,11 +13,14 @@
- #include <linux/key-type.h>
- #include <linux/digsig.h>
- #include <linux/vmalloc.h>
-+#include <linux/module.h>
- #include <crypto/public_key.h>
- #include <keys/system_keyring.h>
- 
- #include "integrity.h"
- 
-+MODULE_IMPORT_NS(CORE_FS_READ);
-+
- static struct key *keyring[INTEGRITY_KEYRING_MAX];
- 
- static const char * const keyring_name[INTEGRITY_KEYRING_MAX] = {
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index e3fcad871861..41fd03281ae1 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -20,6 +20,9 @@
- #include <linux/rcupdate.h>
- #include <linux/parser.h>
- #include <linux/vmalloc.h>
-+#include <linux/module.h>
-+
-+MODULE_IMPORT_NS(CORE_FS_READ);
- 
- #include "ima.h"
- 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index f96f151294e6..ffa7a14deef1 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -28,6 +28,8 @@
- 
- #include "ima.h"
- 
-+MODULE_IMPORT_NS(CORE_FS_READ);
-+
- #ifdef CONFIG_IMA_APPRAISE
- int ima_appraise = IMA_APPRAISE_ENFORCE;
- #else
-diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
-index ee5cb944f4ad..ca2022ad5f88 100644
---- a/security/loadpin/loadpin.c
-+++ b/security/loadpin/loadpin.c
-@@ -17,6 +17,8 @@
- #include <linux/sched.h>	/* current */
- #include <linux/string_helpers.h>
- 
-+MODULE_IMPORT_NS(CORE_FS_READ);
-+
- static void report_load(const char *origin, struct file *file, char *operation)
- {
- 	char *cmdline, *pathname;
-diff --git a/security/security.c b/security/security.c
-index bdbd1fc5105a..c865f1de4b03 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -29,6 +29,8 @@
- #include <linux/msg.h>
- #include <net/flow.h>
- 
-+MODULE_IMPORT_NS(CORE_FS_READ);
-+
- #define MAX_LSM_EVM_XATTR	2
- 
- /* How many LSMs were built into the kernel? */
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 9979b45e0a34..6dc4abfbfb78 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -103,6 +103,8 @@
- #include "audit.h"
- #include "avc_ss.h"
- 
-+MODULE_IMPORT_NS(CORE_FS_READ);
-+
- struct selinux_state selinux_state;
- 
- /* SECMARK reference count */
--- 
-2.26.2
+> diff --git a/fs/namei.c b/fs/namei.c
+> index 33b6d372e74a..70f179f6bc6c 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -411,10 +412,90 @@ static int sb_permission(struct super_block *sb, st=
+ruct inode *inode, int mask)
+<snip>
+> +#if defined(CONFIG_SYSCTL) && !defined(CONFIG_OMAYEXEC_STATIC)
+> +int proc_omayexec(struct ctl_table *table, int write, void __user *buffe=
+r,
+> +               size_t *lenp, loff_t *ppos)
+> +{
+> +       int error;
+> +
+> +       if (write) {
+> +               struct ctl_table table_copy;
+> +               int tmp_mayexec_enforce;
+> +
+> +               if (!capable(CAP_MAC_ADMIN))
+> +                       return -EPERM;
 
+Not fond of using CAP_MAC_ADMIN here (or elsewhere outside of security
+modules).  The ability to set this sysctl is not equivalent to being
+able to load a MAC policy, set arbitrary MAC labels on
+processes/files, etc.
+
+> + * omayexec_inode_permission - Check O_MAYEXEC before accessing an inode
+> + *
+> + * @inode: Inode to check permission on
+> + * @mask: Right to check for (%MAY_OPENEXEC, %MAY_EXECMOUNT, %MAY_EXEC)
+> + *
+> + * Returns 0 if access is permitted, -EACCES otherwise.
+> + */
+> +static inline int omayexec_inode_permission(struct inode *inode, int mas=
+k)
+> +{
+> +       if (!(mask & MAY_OPENEXEC))
+> +               return 0;
+> +
+> +       if ((sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_MOUNT) &&
+> +                       !(mask & MAY_EXECMOUNT))
+> +               return -EACCES;
+> +
+> +       if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_FILE)
+> +               return generic_permission(inode, MAY_EXEC);
+> +
+> +       return 0;
+> +}
+
+I'm wondering if this is being done at the wrong level.  I would think
+that OMAYEXEC_ENFORCE_FILE would mean to check file execute permission
+with respect to all mechanisms/policies, including DAC,
+filesystem-specific checking (inode->i_op->permission), security
+modules, etc.  That requires more than just calling
+generic_permission() with MAY_EXEC, which only covers the default
+DAC/ACL logic; you'd need to take the handling up a level to
+inode_permission() and re-map MAY_OPENEXEC to MAY_EXEC for
+do_inode_permission() and security_inode_permission() at least.
+Alternatively, we can modify each individual filesystem (that
+implements its own i_op->permission) and security module to start
+handling MAY_OPENEXEC and have them choose to remap it to a file
+execute check (or not) independent of the sysctl.  Not sure of your
+intent.  As it stands, selinux_inode_permission() will ignore the new
+MAY_OPENEXEC flag until someone updates it.  Likewise for Smack.
+AppArmor/TOMOYO would probably need to check and handle FMODE_EXEC in
+their file_open hooks since they don't implement inode_permission().
