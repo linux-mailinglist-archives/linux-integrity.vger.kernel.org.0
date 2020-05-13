@@ -2,179 +2,245 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2EBD1D22DC
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 01:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1F61D2304
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 01:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732337AbgEMXRj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 May 2020 19:17:39 -0400
-Received: from mga05.intel.com ([192.55.52.43]:59913 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732161AbgEMXRj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 May 2020 19:17:39 -0400
-IronPort-SDR: 5cFd2ESeM1t13rxrmZF/eEC+3XEj/3WS+NyuWAGuX3hLu2sIEGoFvpbFaUyi07Ymz+jQBBIbeM
- L/e6bEQ3+f0A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 16:17:38 -0700
-IronPort-SDR: 28JTCwJ+4DmAUcv9FPKxsgcJ4jJOUzkSUj3R3Kh76MHAUCrISs355T5EXCQmbvEtAjGDpMQ/q7
- lkfJJx4RUHDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,389,1583222400"; 
-   d="scan'208";a="306922482"
-Received: from rthurerx-mobl.ger.corp.intel.com ([10.249.36.107])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 May 2020 16:17:35 -0700
-Message-ID: <6f7ad09530fa7491dd7a6b12f7723923544b53b4.camel@linux.intel.com>
-Subject: Re: [PATCH v2] tpm: eventlog: Replace zero-length array with
- flexible-array member
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>
-Date:   Thu, 14 May 2020 02:17:34 +0300
-In-Reply-To: <20200508163826.GA768@embeddedor>
-References: <20200508163826.GA768@embeddedor>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.1-2 
+        id S1732621AbgEMX1q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 May 2020 19:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732478AbgEMX1n (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 13 May 2020 19:27:43 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7AAC05BD09
+        for <linux-integrity@vger.kernel.org>; Wed, 13 May 2020 16:27:42 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id ms17so11653357pjb.0
+        for <linux-integrity@vger.kernel.org>; Wed, 13 May 2020 16:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=La9vx7MorJZiXlhnoB2rsDbVVQSOuPLVZzpor9e1jzY=;
+        b=Wa8oSycZdrRGG9QzrXLSvC3JtiTdaDaWMWTkLnJQoXczSccdfdpa/foDgwormTcGd3
+         lCWEZlKy3aMd52zDNur9MoU3QPPOlOcYNR41xdzDe+rf1dGAB3b96ER0Jiw696cDQ6Jl
+         XgDzqQNY94eOTZ2bsqEhqcwW5vrA6XRf62WuY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=La9vx7MorJZiXlhnoB2rsDbVVQSOuPLVZzpor9e1jzY=;
+        b=Q+/GipL6jBIdD6FhTDhGjY1glkZ6V5od7S8p+CIRovMBTmHG7gqgV58gQoSsi2r+Ma
+         DEJaMV2L4eJMPfQmgl+727RZKQ/rxH5nBuAO0FRHNEqrEAHrOGxl+sDr8ea9juoFfpXn
+         PxZX6T+ayDZhvVeSiq1+mtlsxheFFEloH6OG054nDgHBXrcFlwcVesgeBcdTc/uauyFG
+         G4rPlYElSJweXOrUEJgO5GhMY0SisK8SZsQ950k9DfNj+KNMzBOZlM5hUWcQC37370Mh
+         6ux01Xx5a1y2l/5sBJq2MwwjRkLrgdeRujwlqMuzl8DepHrafyyFFILaqP/Q/+XhYE5V
+         tTlw==
+X-Gm-Message-State: AGi0PuYtUPLi74g5BS512YykD+zwgqMwzSC1mSgljXgLxdRDm81loq1/
+        3F2MTz4aftzTKK+wspCJJeHSRg==
+X-Google-Smtp-Source: APiQypIeI54Fvrp03N2maBa5wYVxGJm1Ex5179pufUMVk1LSHDGPtPwnQZGN9lE8wfIRPM/0r7V1NA==
+X-Received: by 2002:a17:90b:2388:: with SMTP id mr8mr37723319pjb.107.1589412461619;
+        Wed, 13 May 2020 16:27:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x66sm543404pfb.173.2020.05.13.16.27.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 May 2020 16:27:40 -0700 (PDT)
+Date:   Wed, 13 May 2020 16:27:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
+ through O_MAYEXEC
+Message-ID: <202005131525.D08BFB3@keescook>
+References: <20200505153156.925111-1-mic@digikod.net>
+ <20200505153156.925111-4-mic@digikod.net>
+ <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-05-08 at 11:38 -0500, Gustavo A. R. Silva wrote:
-> The current codebase makes use of the zero-length array language
-> extension to the C90 standard, but the preferred mechanism to declare
-> variable-length types such as these ones is a flexible array member[1][2],
-> introduced in C99:
+On Wed, May 13, 2020 at 11:37:16AM -0400, Stephen Smalley wrote:
+> On Tue, May 5, 2020 at 11:33 AM Micka�l Sala�n <mic@digikod.net> wrote:
+> >
+> > Enable to forbid access to files open with O_MAYEXEC.  Thanks to the
+> > noexec option from the underlying VFS mount, or to the file execute
+> > permission, userspace can enforce these execution policies.  This may
+> > allow script interpreters to check execution permission before reading
+> > commands from a file, or dynamic linkers to allow shared object loading.
+> >
+> > Add a new sysctl fs.open_mayexec_enforce to enable system administrators
+> > to enforce two complementary security policies according to the
+> > installed system: enforce the noexec mount option, and enforce
+> > executable file permission.  Indeed, because of compatibility with
+> > installed systems, only system administrators are able to check that
+> > this new enforcement is in line with the system mount points and file
+> > permissions.  A following patch adds documentation.
+> >
+> > For tailored Linux distributions, it is possible to enforce such
+> > restriction at build time thanks to the CONFIG_OMAYEXEC_STATIC option.
+> > The policy can then be configured with CONFIG_OMAYEXEC_ENFORCE_MOUNT and
+> > CONFIG_OMAYEXEC_ENFORCE_FILE.
+> >
+> > Being able to restrict execution also enables to protect the kernel by
+> > restricting arbitrary syscalls that an attacker could perform with a
+> > crafted binary or certain script languages.  It also improves multilevel
+> > isolation by reducing the ability of an attacker to use side channels
+> > with specific code.  These restrictions can natively be enforced for ELF
+> > binaries (with the noexec mount option) but require this kernel
+> > extension to properly handle scripts (e.g., Python, Perl).  To get a
+> > consistent execution policy, additional memory restrictions should also
+> > be enforced (e.g. thanks to SELinux).
+> >
+> > Signed-off-by: Micka�l Sala�n <mic@digikod.net>
+> > Reviewed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
+> > Cc: Aleksa Sarai <cyphar@cyphar.com>
+> > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > ---
 > 
-> struct foo {
->         int stuff;
->         struct boo array[];
-> };
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > index 33b6d372e74a..70f179f6bc6c 100644
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -411,10 +412,90 @@ static int sb_permission(struct super_block *sb, struct inode *inode, int mask)
+> <snip>
+> > +#if defined(CONFIG_SYSCTL) && !defined(CONFIG_OMAYEXEC_STATIC)
+> > +int proc_omayexec(struct ctl_table *table, int write, void __user *buffer,
+> > +               size_t *lenp, loff_t *ppos)
+> > +{
+> > +       int error;
+> > +
+> > +       if (write) {
+> > +               struct ctl_table table_copy;
+> > +               int tmp_mayexec_enforce;
+> > +
+> > +               if (!capable(CAP_MAC_ADMIN))
+> > +                       return -EPERM;
 > 
-> By making use of the mechanism above, we will get a compiler warning
-> in case the flexible array does not occur last in the structure, which
-> will help us prevent some kind of undefined behavior bugs from being
-> inadvertently introduced[3] to the codebase from now on.
-> 
-> Also, notice that, dynamic memory allocations won't be affected by
-> this change:
-> 
-> "Flexible array members have incomplete type, and so the sizeof operator
-> may not be applied. As a quirk of the original implementation of
-> zero-length arrays, sizeof evaluates to zero."[1]
-> 
-> sizeof(flexible-array-member) triggers a warning because flexible array
-> members have incomplete type[1]. There are some instances of code in
-> which the sizeof operator is being incorrectly/erroneously applied to
-> zero-length arrays and the result is zero. Such instances may be hiding
-> some bugs. So, this work (flexible-array member conversions) will also
-> help to get completely rid of those sorts of issues.
-> 
-> Also, the following issue shows up due to the flexible-array member
-> having incomplete type[4]:
-> 
-> drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_bios_measurements_start’:
-> drivers/char/tpm/eventlog/tpm2.c:54:46: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
->    54 |  size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
->       |                                              ^
-> drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_bios_measurements_next’:
-> drivers/char/tpm/eventlog/tpm2.c:102:10: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
->   102 |    sizeof(event_header->event) + event_header->event_size;
->       |          ^
-> drivers/char/tpm/eventlog/tpm2.c: In function ‘tpm2_binary_bios_measurements_show’:
-> drivers/char/tpm/eventlog/tpm2.c:140:10: error: invalid application of ‘sizeof’ to incomplete type ‘u8[]’ {aka ‘unsigned char[]’}
->   140 |    sizeof(event_header->event) + event_header->event_size;
->       |          ^
-> scripts/Makefile.build:266: recipe for target 'drivers/char/tpm/eventlog/tpm2.o' failed
-> make[3]: *** [drivers/char/tpm/eventlog/tpm2.o] Error 1
-> 
-> As mentioned above: "Flexible array members have incomplete type, and
-> so the sizeof operator may not be applied. As a quirk of the original
-> implementation of zero-length arrays, sizeof evaluates to zero."[1] As
-> in "sizeof(event_header->event) always evaluated to 0, so removing it
-> has no effect".
-> 
-> Lastly, make use of the struct_size() helper to deal with the
-> flexible array member and its host structure.
-> 
-> This issue was found with the help of Coccinelle.
-> 
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> [2] https://github.com/KSPP/linux/issues/21
-> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-> [4] https://github.com/KSPP/linux/issues/43
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> Not fond of using CAP_MAC_ADMIN here (or elsewhere outside of security
+> modules).  The ability to set this sysctl is not equivalent to being
+> able to load a MAC policy, set arbitrary MAC labels on
+> processes/files, etc.
 
+That's fair. In that case, perhaps this could just use the existing
+_sysadmin helper? (Though I should note that these perm checks actually
+need to be in the open, not the read/write ... I thought there was a
+series to fix that, but I can't find it now. Regardless, that's
+orthogonal to this series.)
 
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-
-/Jarkko
-
-> ---
-> Changes in v2:
->  - Update changelog text.
->  - Make use of the struct_size() helper.
+> > + * omayexec_inode_permission - Check O_MAYEXEC before accessing an inode
+> > + *
+> > + * @inode: Inode to check permission on
+> > + * @mask: Right to check for (%MAY_OPENEXEC, %MAY_EXECMOUNT, %MAY_EXEC)
+> > + *
+> > + * Returns 0 if access is permitted, -EACCES otherwise.
+> > + */
+> > +static inline int omayexec_inode_permission(struct inode *inode, int mask)
+> > +{
+> > +       if (!(mask & MAY_OPENEXEC))
+> > +               return 0;
+> > +
+> > +       if ((sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_MOUNT) &&
+> > +                       !(mask & MAY_EXECMOUNT))
+> > +               return -EACCES;
+> > +
+> > +       if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_FILE)
+> > +               return generic_permission(inode, MAY_EXEC);
+> > +
+> > +       return 0;
+> > +}
 > 
->  drivers/char/tpm/eventlog/tpm2.c | 12 +++++-------
->  include/linux/tpm_eventlog.h     |  2 +-
->  2 files changed, 6 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
-> index e741b1157525..37a05800980c 100644
-> --- a/drivers/char/tpm/eventlog/tpm2.c
-> +++ b/drivers/char/tpm/eventlog/tpm2.c
-> @@ -51,8 +51,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
->  	int i;
->  
->  	event_header = addr;
-> -	size = sizeof(struct tcg_pcr_event) - sizeof(event_header->event)
-> -		+ event_header->event_size;
-> +	size = struct_size(event_header, event, event_header->event_size);
->  
->  	if (*pos == 0) {
->  		if (addr + size < limit) {
-> @@ -98,8 +97,8 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
->  	event_header = log->bios_event_log;
->  
->  	if (v == SEQ_START_TOKEN) {
-> -		event_size = sizeof(struct tcg_pcr_event) -
-> -			sizeof(event_header->event) + event_header->event_size;
-> +		event_size = struct_size(event_header, event,
-> +					 event_header->event_size);
->  		marker = event_header;
->  	} else {
->  		event = v;
-> @@ -136,9 +135,8 @@ static int tpm2_binary_bios_measurements_show(struct seq_file *m, void *v)
->  	size_t size;
->  
->  	if (v == SEQ_START_TOKEN) {
-> -		size = sizeof(struct tcg_pcr_event) -
-> -			sizeof(event_header->event) + event_header->event_size;
-> -
-> +		size = struct_size(event_header, event,
-> +				   event_header->event_size);
->  		temp_ptr = event_header;
->  
->  		if (size > 0)
-> diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
-> index c253461b1c4e..4f8c90c93c29 100644
-> --- a/include/linux/tpm_eventlog.h
-> +++ b/include/linux/tpm_eventlog.h
-> @@ -97,7 +97,7 @@ struct tcg_pcr_event {
->  	u32 event_type;
->  	u8 digest[20];
->  	u32 event_size;
-> -	u8 event[0];
-> +	u8 event[];
->  } __packed;
->  
->  struct tcg_event_field {
+> I'm wondering if this is being done at the wrong level.  I would think
+> that OMAYEXEC_ENFORCE_FILE would mean to check file execute permission
+> with respect to all mechanisms/policies, including DAC,
+> filesystem-specific checking (inode->i_op->permission), security
+> modules, etc.  That requires more than just calling
+> generic_permission() with MAY_EXEC, which only covers the default
+> DAC/ACL logic; you'd need to take the handling up a level to
+> inode_permission() and re-map MAY_OPENEXEC to MAY_EXEC for
+> do_inode_permission() and security_inode_permission() at least.
 
+Oh, yeah, that's a good point. Does this need to be a two-pass check, or
+can MAY_OPENEXEC get expanded to MAY_EXEC here? Actually, why is this so
+deep at all? Shouldn't this be in may_open()?
+
+Like, couldn't just the entire thing just be:
+
+diff --git a/fs/namei.c b/fs/namei.c
+index a320371899cf..0ab18e19f5da 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -2849,6 +2849,13 @@ static int may_open(const struct path *path, int acc_mode, int flag)
+ 		break;
+ 	}
+ 
++	if (unlikely(mask & MAY_OPENEXEC)) {
++		if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_MOUNT &&
++		    path_noexec(path))
++			return -EACCES;
++		if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_FILE)
++			acc_mode |= MAY_EXEC;
++	}
+ 	error = inode_permission(inode, MAY_OPEN | acc_mode);
+ 	if (error)
+ 		return error;
+
+> Alternatively, we can modify each individual filesystem (that
+> implements its own i_op->permission) and security module to start
+> handling MAY_OPENEXEC and have them choose to remap it to a file
+> execute check (or not) independent of the sysctl.  Not sure of your
+
+Eek, no, this should be centralized in the VFS, not per-filesystem, but
+I do see that it might be possible for a filesystem to actually do the
+MAY_OPENEXEC test internally, so the two-pass check wouldn't be needed.
+But... I think that can't happen until _everything_ can do the single
+pass check, so we always have to make the second call too.
+
+> intent.  As it stands, selinux_inode_permission() will ignore the new
+> MAY_OPENEXEC flag until someone updates it.  Likewise for Smack.
+> AppArmor/TOMOYO would probably need to check and handle FMODE_EXEC in
+> their file_open hooks since they don't implement inode_permission().
+
+Is there any need to teach anything about MAY_OPENEXEC? It'll show up
+for the LSMs as (MAY_OPEN | MAY_EXEC).
+
+-- 
+Kees Cook
