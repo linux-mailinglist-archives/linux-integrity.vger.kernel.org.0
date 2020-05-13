@@ -2,120 +2,152 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 139E11D2108
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2020 23:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2661D2116
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2020 23:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728945AbgEMV2v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 May 2020 17:28:51 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:50457 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728879AbgEMV2u (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 May 2020 17:28:50 -0400
-Received: by mail-pj1-f65.google.com with SMTP id t9so11666936pjw.0;
-        Wed, 13 May 2020 14:28:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=jFpZxJjBWza/kWR3tD171A9RdRcfWTU4Z4g63bnqZJQ=;
-        b=MXCkU6xI6IpcuACtIHMntxwRWcX5rt9K4YNzkCn+FF6wXtHQSwhfb84wUHf8iSNe4J
-         +KmNJgVPnwCnIdC9PujSz50jeePyRF4FfjbkCbtU9s3Ph+OzvS5q1nEQMSu10koDvjjC
-         bU3B53dxr9P/pF856iTKjhEyRi7j5BeWoSVks68BEDRCUfQ+zNs2zQwygxZ27dilh+L1
-         iutpZRFnjZTHs5PIwGUzeBdUZMjB9YRMrGlFeFFalyorWVRym2bFqM847OOjaEkF35/u
-         14h7gaxzyBEp0VCpdz8ZGdoQ4plJJzosX4wo5j+SzydlgtOXz1v+MzPDDDM1Bq3VUBrH
-         fTDA==
-X-Gm-Message-State: AGi0Pua5Q5h8OqRvZ/Lnh2+pXKFC/ecP3QSamFmB54DeI5khulfXSr64
-        byHbXx66Z7hapTqZV3ADv0N7sh449Mlmlg==
-X-Google-Smtp-Source: APiQypIK+uC5UrzbKxzZc1CCBNVsrdbUnp3vZEUQzYdaSLvxgjqSKS3rrrSs5sXQv9l3ptXF/JHruw==
-X-Received: by 2002:a17:90a:9311:: with SMTP id p17mr36891312pjo.145.1589405329840;
-        Wed, 13 May 2020 14:28:49 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id 82sm414078pfv.214.2020.05.13.14.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 14:28:48 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id D5FDC4063E; Wed, 13 May 2020 21:28:47 +0000 (UTC)
-Date:   Wed, 13 May 2020 21:28:47 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Mimi Zohar <zohar@kernel.org>
-Cc:     Scott Branden <scott.branden@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        id S1728718AbgEMVbr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 May 2020 17:31:47 -0400
+Received: from mga06.intel.com ([134.134.136.31]:2436 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728711AbgEMVbq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 13 May 2020 17:31:46 -0400
+IronPort-SDR: 6hIasgKj95sDiuDySXMzi2ePXGvVn0K7lnyhDUCtkixlRSM4kY3LlC2rzPF7UW0OaDKUG2WLD/
+ BiIYkDF7ZPPg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 14:31:44 -0700
+IronPort-SDR: HmR9/vmwmZv46JOdreYyGbIj6PA977YaS8eFYkh/8qDJJvDaspd2JDMkRtaIZ6I3OyZPVyGdJ1
+ Gn+uhU7ODC/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,389,1583222400"; 
+   d="scan'208";a="266017890"
+Received: from rthurerx-mobl.ger.corp.intel.com (HELO localhost) ([10.249.36.107])
+  by orsmga006.jf.intel.com with ESMTP; 13 May 2020 14:31:38 -0700
+Date:   Thu, 14 May 2020 00:31:24 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH v5 1/7] fs: introduce kernel_pread_file* support
-Message-ID: <20200513212847.GT11244@42.do-not-panic.com>
-References: <20200508002739.19360-1-scott.branden@broadcom.com>
- <20200508002739.19360-2-scott.branden@broadcom.com>
- <1589395153.5098.158.camel@kernel.org>
- <0e6b5f65-8c61-b02e-7d35-b4ae52aebcf3@broadcom.com>
- <1589396593.5098.166.camel@kernel.org>
- <e1b92047-7003-0615-3d58-1388ec27c78a@broadcom.com>
- <1589398747.5098.178.camel@kernel.org>
- <a228ae0f-d551-e0e8-446e-5ae63462c520@broadcom.com>
- <1589404814.5098.185.camel@kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, Mark Pearson <mpearson@lenovo.com>
+Subject: Re: [PATCH] tpm_tis_core: Disable broken IRQ handling code
+Message-ID: <20200513213114.GA31974@linux.intel.com>
+References: <20200409211044.21625-1-hdegoede@redhat.com>
+ <20200410210652.GA16905@linux.intel.com>
+ <b8865c10-3733-7179-c524-afa4c4386de6@redhat.com>
+ <20200507141707.pltaa6dxkqkopjoa@cantor>
+ <CAPcyv4j4-GRkwdSHNVUGLzehBVC6hUR4pNeez_=E6FKjS_DmNQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1589404814.5098.185.camel@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAPcyv4j4-GRkwdSHNVUGLzehBVC6hUR4pNeez_=E6FKjS_DmNQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 13, 2020 at 05:20:14PM -0400, Mimi Zohar wrote:
-> On Wed, 2020-05-13 at 12:41 -0700, Scott Branden wrote:
-> > 
-> > On 2020-05-13 12:39 p.m., Mimi Zohar wrote:
-> > > On Wed, 2020-05-13 at 12:18 -0700, Scott Branden wrote:
-> > >> On 2020-05-13 12:03 p.m., Mimi Zohar wrote:
-> > >>> On Wed, 2020-05-13 at 11:53 -0700, Scott Branden wrote:
-> > >> Even if the kernel successfully verified the firmware file signature it
-> > >> would just be wasting its time.  The kernel in these use cases is not always
-> > >> trusted.  The device needs to authenticate the firmware image itself.
-> > > There are also environments where the kernel is trusted and limits the
-> > > firmware being provided to the device to one which they signed.
+On Thu, May 07, 2020 at 02:51:43PM -0700, Dan Williams wrote:
+> On Thu, May 7, 2020 at 7:17 AM Jerry Snitselaar <jsnitsel@redhat.com> wrote:
+> >
+> > On Thu May 07 20, Hans de Goede wrote:
+> > >Hi All,
 > > >
-> > >>> The device firmware is being downloaded piecemeal from somewhere and
-> > >>> won't be measured?
-> > >> It doesn't need to be measured for current driver needs.
-> > > Sure the device doesn't need the kernel measuring the firmware, but
-> > > hardened environments do measure firmware.
+> > >On 4/10/20 11:06 PM, Jarkko Sakkinen wrote:
+> > >>On Thu, Apr 09, 2020 at 11:10:44PM +0200, Hans de Goede wrote:
+> > >>>Since commit dda8b2af395b ("tpm: Revert "tpm_tis_core: Set
+> > >>>TPM_CHIP_FLAG_IRQ before probing for interrupts"") we no longer set
+> > >>>the TPM_CHIP_FLAG_IRQ ever.
+> > >>>
+> > >>>So the whole IRQ probing code is not useful, worse we rely on the
+> > >>>IRQ-test path of tpm_tis_send() to call disable_interrupts() if
+> > >>>interrupts do not work, but that path never gets entered because we
+> > >>>never set the TPM_CHIP_FLAG_IRQ.
+> > >>>
+> > >>>So the remaining IRQ probe code calls request_irq() and never calls
+> > >>>free_irq() even when the interrupt is not working.
+> > >>>
+> > >>>On some systems, e.g. the Lenovo X1 8th gen,  the interrupt we try
+> > >>>to use and never free creates an interrupt storm followed by
+> > >>>an "irq XX: nobody cared" oops.
+> > >>>
+> > >>>Since it is non-functional at the moment anyways, lets just completely
+> > >>>disable the IRQ code in tpm_tis_core for now.
+> > >>>
+> > >>>Fixes: dda8b2af395b ("tpm: Revert "tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts"")
+> > >>>Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> > >>>---
+> > >>>Note I'm working with Lenovo to try and get to the bottom of this.
+> > >>>---
+> > >>
+> > >>OK if I recall correctly the reason for reverting was that the fixes
+> > >>Stefan was sending were broken and no access to hardware were the
+> > >>issues would be visible. The reason for not doing anything til this
+> > >>day is that we don't have T490 available.
 > > >
-> > >> If someone has such need the infrastructure could be added to the kernel
-> > >> at a later date.  Existing functionality is not broken in any way by
-> > >> this patch series.
-> > > Wow!  You're saying that your patch set takes precedence over the
-> > > existing expectations and can break them.
-> > Huh? I said existing functionality is NOT broken by this patch series.
+> > >So as promised I have been in contact with Lenovo about this.
+> > >
+> > >Specifically I have been in contact with Lenovo about seeing an
+> > >IRQ storm when the tpm_tis code tries to use the IRQ on a X1 carbon
+> > >8th gen (X1C8), because of the now public plan that Lenovo will
+> > >offer ordering this model with Fedora pre-installed:
+> > >https://lwn.net/Articles/818595/
+> > >
+> > >On the X1C8 the problem has been diagnosed to be a misconfigured
+> > >GPIO pin on the CPU (the SoC). The X1C8 uses an SPI connected
+> > >TPM chip with its IRQ connected to a GPIO on the SoC which is
+> > >configured in Direct IRQ mode, so that it directly asserts
+> > >IRQs on one of the APIC IRQs.  The problem is that due to the
+> > >misconfiguration as soon as the IRQ is enabled it fires
+> > >continuously.
+> > >
+> > >For the X1C8 this should be fixed in the BIOS of the first
+> > >batch which gets shipped out to customers so there we should
+> > >not have to worry about this.
+> > >
+> > >It is likely (but not yet confirmed) that the issue on the T490
+> > >is the same, although on my test X1C8 device I got an IRQ storm,
+> > >followed by the kernel disabling the IRQ, not a non booting system.
+> > >I guess this might be due to kernel configuration differences.
+> > >
+> > >Assuming that the issue on the T490 is the same, we might see a
+> > >BIOS update fixing this, but given that non-booting is
+> > >'not good ("tm")' even if there will be a BIOS fix we should
+> > >still do something at the kernel level to also work with the
+> > >older unfixed BIOS which is already out there.
+> > >
+> > >I've been thinking about this and I'm afraid that the only thing
+> > >what we can do is add a DMI product-name (product-version for Lenovo)
+> > >string based blacklist for IRQ usage to drivers/char/tpm/tpm_tis.c
+> > >and set tpm_info.irq = -1 for devices on that list.
+> > >
+> > >My plan is to prepare a RFC patch of such a blacklist, while we
+> > >wait for confirmation that the root cause on the T490 is the same
+> > >as on the X1C8, but before I work on that I'm wondering if
+> > >people agree that that is the best approach, or if there are
+> > >other suggestions for dealing with this ?
+> > >
+> > >Regards,
+> > >
+> > >Hans
+> > >
+> >
+> > Dan,
+> >
+> > Could this be the cause of the problem on the system you were
+> > seeing the issue with, or was that using PTT?
 > 
-> Assuming a system is configured to measure and appraise firmware
-> (rules below), with this change the firmware file will not be properly
-> measured and will fail signature verification.
+> It sounds similar, I'm just not immediately aware of where I can find
+> out how the GPIOs are routed on that development board. I'll poke
+> around.
 > 
-> Sample IMA policy rules:
-> measure func=FIRMWARE_CHECK
-> appraise func=FIRMWARE_CHECK appraise_type=imasig
+> What's PTT?
 
-Would a pre and post lsm hook for pread do it?
+Intel fTPM.
 
-  Luis
+/Jarkko
