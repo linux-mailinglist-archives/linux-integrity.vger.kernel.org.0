@@ -2,245 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1F61D2304
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 01:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8881D231D
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 01:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732621AbgEMX1q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 May 2020 19:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        id S1732726AbgEMXeS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 May 2020 19:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732478AbgEMX1n (ORCPT
+        by vger.kernel.org with ESMTP id S1732716AbgEMXeR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 May 2020 19:27:43 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7AAC05BD09
-        for <linux-integrity@vger.kernel.org>; Wed, 13 May 2020 16:27:42 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id ms17so11653357pjb.0
-        for <linux-integrity@vger.kernel.org>; Wed, 13 May 2020 16:27:42 -0700 (PDT)
+        Wed, 13 May 2020 19:34:17 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40D5C05BD09
+        for <linux-integrity@vger.kernel.org>; Wed, 13 May 2020 16:34:16 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id u15so444165plm.2
+        for <linux-integrity@vger.kernel.org>; Wed, 13 May 2020 16:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=La9vx7MorJZiXlhnoB2rsDbVVQSOuPLVZzpor9e1jzY=;
-        b=Wa8oSycZdrRGG9QzrXLSvC3JtiTdaDaWMWTkLnJQoXczSccdfdpa/foDgwormTcGd3
-         lCWEZlKy3aMd52zDNur9MoU3QPPOlOcYNR41xdzDe+rf1dGAB3b96ER0Jiw696cDQ6Jl
-         XgDzqQNY94eOTZ2bsqEhqcwW5vrA6XRf62WuY=
+        bh=9+kHGmySmNxox5wuBQoQwck1bLpTOuP5gTxm3+9miDE=;
+        b=a5bkxw4lZ5KtU/7XSy6vFoZNzxoQzbwCg8Ve+eRR31EJupSDG7nd9WLXO+x/fuH+oD
+         T1iajkovrL+KE9IJDAnGZnwmEOeil6jnqMj0ZttdnSHvAjbD2Xl9s8EUwYBVXUeQAo9q
+         t1ZXN1sRSkY/OXB5O/18TcHvWPlpTqquHyqAw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=La9vx7MorJZiXlhnoB2rsDbVVQSOuPLVZzpor9e1jzY=;
-        b=Q+/GipL6jBIdD6FhTDhGjY1glkZ6V5od7S8p+CIRovMBTmHG7gqgV58gQoSsi2r+Ma
-         DEJaMV2L4eJMPfQmgl+727RZKQ/rxH5nBuAO0FRHNEqrEAHrOGxl+sDr8ea9juoFfpXn
-         PxZX6T+ayDZhvVeSiq1+mtlsxheFFEloH6OG054nDgHBXrcFlwcVesgeBcdTc/uauyFG
-         G4rPlYElSJweXOrUEJgO5GhMY0SisK8SZsQ950k9DfNj+KNMzBOZlM5hUWcQC37370Mh
-         6ux01Xx5a1y2l/5sBJq2MwwjRkLrgdeRujwlqMuzl8DepHrafyyFFILaqP/Q/+XhYE5V
-         tTlw==
-X-Gm-Message-State: AGi0PuYtUPLi74g5BS512YykD+zwgqMwzSC1mSgljXgLxdRDm81loq1/
-        3F2MTz4aftzTKK+wspCJJeHSRg==
-X-Google-Smtp-Source: APiQypIeI54Fvrp03N2maBa5wYVxGJm1Ex5179pufUMVk1LSHDGPtPwnQZGN9lE8wfIRPM/0r7V1NA==
-X-Received: by 2002:a17:90b:2388:: with SMTP id mr8mr37723319pjb.107.1589412461619;
-        Wed, 13 May 2020 16:27:41 -0700 (PDT)
+        bh=9+kHGmySmNxox5wuBQoQwck1bLpTOuP5gTxm3+9miDE=;
+        b=abaGWQg+aWkHquSjpDONMnKNfsE58VW4tWp6E/PrSPr3lYuM8V1bdEtTDHluZKYvux
+         2cUERe3Qsq0MyKtq9eYTejMY5RxofwHRneIfaZrjN/ciysaczCIWG0K44RX5ndPgSB/P
+         DTk5F76HF+fhIqvk0zur/ueYSwcasZD66HzEH8MJ1kFFsqQ4i/Z5QqKFp0X2baKr4+B+
+         jMvc9WgEPZ5WddAFBqElywkvGNwr/PoWWjtHQaEGRxHfQXjHXg2qxb7pka8thDUyP6Ly
+         P7IZL28xAiyHo5uPr5SsIyjtww7nbR6EY7Bt77JxPfs03pl0JLdx0Rd+Jam51/Ty7dE4
+         9G9g==
+X-Gm-Message-State: AOAM530uyYhrlOPMjsjvHkpkYYXMeqoEo5P4g7ZHd07x3hr5uI7F2rHX
+        o5hdONqXaNMi2OaXguvPEisPcQ==
+X-Google-Smtp-Source: ABdhPJx1Ph3/b2uAHkh09Mf7p8FRkdK0oKGy1ttISPQpTjgvGcQqjdCtv4Wgy2sxJ8WWEUMPB5YOOA==
+X-Received: by 2002:a17:90b:1994:: with SMTP id mv20mr863273pjb.41.1589412856445;
+        Wed, 13 May 2020 16:34:16 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x66sm543404pfb.173.2020.05.13.16.27.39
+        by smtp.gmail.com with ESMTPSA id k2sm568374pfd.108.2020.05.13.16.34.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 16:27:40 -0700 (PDT)
-Date:   Wed, 13 May 2020 16:27:39 -0700
+        Wed, 13 May 2020 16:34:15 -0700 (PDT)
+Date:   Wed, 13 May 2020 16:34:14 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
- through O_MAYEXEC
-Message-ID: <202005131525.D08BFB3@keescook>
-References: <20200505153156.925111-1-mic@digikod.net>
- <20200505153156.925111-4-mic@digikod.net>
- <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
+To:     Mimi Zohar <zohar@kernel.org>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH v5 1/7] fs: introduce kernel_pread_file* support
+Message-ID: <202005131630.8B1ECE0@keescook>
+References: <0e6b5f65-8c61-b02e-7d35-b4ae52aebcf3@broadcom.com>
+ <1589396593.5098.166.camel@kernel.org>
+ <e1b92047-7003-0615-3d58-1388ec27c78a@broadcom.com>
+ <1589398747.5098.178.camel@kernel.org>
+ <a228ae0f-d551-e0e8-446e-5ae63462c520@broadcom.com>
+ <1589404814.5098.185.camel@kernel.org>
+ <20200513212847.GT11244@42.do-not-panic.com>
+ <1589407924.5098.208.camel@kernel.org>
+ <f8de785c-60df-3fec-c2c6-b1dd2c77db17@broadcom.com>
+ <1589410843.5098.220.camel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
+In-Reply-To: <1589410843.5098.220.camel@kernel.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 13, 2020 at 11:37:16AM -0400, Stephen Smalley wrote:
-> On Tue, May 5, 2020 at 11:33 AM Mickaël Salaün <mic@digikod.net> wrote:
-> >
-> > Enable to forbid access to files open with O_MAYEXEC.  Thanks to the
-> > noexec option from the underlying VFS mount, or to the file execute
-> > permission, userspace can enforce these execution policies.  This may
-> > allow script interpreters to check execution permission before reading
-> > commands from a file, or dynamic linkers to allow shared object loading.
-> >
-> > Add a new sysctl fs.open_mayexec_enforce to enable system administrators
-> > to enforce two complementary security policies according to the
-> > installed system: enforce the noexec mount option, and enforce
-> > executable file permission.  Indeed, because of compatibility with
-> > installed systems, only system administrators are able to check that
-> > this new enforcement is in line with the system mount points and file
-> > permissions.  A following patch adds documentation.
-> >
-> > For tailored Linux distributions, it is possible to enforce such
-> > restriction at build time thanks to the CONFIG_OMAYEXEC_STATIC option.
-> > The policy can then be configured with CONFIG_OMAYEXEC_ENFORCE_MOUNT and
-> > CONFIG_OMAYEXEC_ENFORCE_FILE.
-> >
-> > Being able to restrict execution also enables to protect the kernel by
-> > restricting arbitrary syscalls that an attacker could perform with a
-> > crafted binary or certain script languages.  It also improves multilevel
-> > isolation by reducing the ability of an attacker to use side channels
-> > with specific code.  These restrictions can natively be enforced for ELF
-> > binaries (with the noexec mount option) but require this kernel
-> > extension to properly handle scripts (e.g., Python, Perl).  To get a
-> > consistent execution policy, additional memory restrictions should also
-> > be enforced (e.g. thanks to SELinux).
-> >
-> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> > Reviewed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-> > Cc: Aleksa Sarai <cyphar@cyphar.com>
-> > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > ---
+On Wed, May 13, 2020 at 07:00:43PM -0400, Mimi Zohar wrote:
+> On Wed, 2020-05-13 at 15:48 -0700, Scott Branden wrote:
+> > 
+> > On 2020-05-13 3:12 p.m., Mimi Zohar wrote:
+> > > On Wed, 2020-05-13 at 21:28 +0000, Luis Chamberlain wrote:
+> > >> On Wed, May 13, 2020 at 05:20:14PM -0400, Mimi Zohar wrote:
+> > >>> On Wed, 2020-05-13 at 12:41 -0700, Scott Branden wrote:
+> > >>>> On 2020-05-13 12:39 p.m., Mimi Zohar wrote:
+> > >>>>> On Wed, 2020-05-13 at 12:18 -0700, Scott Branden wrote:
+> > >>>>>> On 2020-05-13 12:03 p.m., Mimi Zohar wrote:
+> > >>>>>>> On Wed, 2020-05-13 at 11:53 -0700, Scott Branden wrote:
+> > >>>>>> Even if the kernel successfully verified the firmware file signature it
+> > >>>>>> would just be wasting its time.  The kernel in these use cases is not always
+> > >>>>>> trusted.  The device needs to authenticate the firmware image itself.
+> > >>>>> There are also environments where the kernel is trusted and limits the
+> > >>>>> firmware being provided to the device to one which they signed.
+> > >>>>>
+> > >>>>>>> The device firmware is being downloaded piecemeal from somewhere and
+> > >>>>>>> won't be measured?
+> > >>>>>> It doesn't need to be measured for current driver needs.
+> > >>>>> Sure the device doesn't need the kernel measuring the firmware, but
+> > >>>>> hardened environments do measure firmware.
+> > >>>>>
+> > >>>>>> If someone has such need the infrastructure could be added to the kernel
+> > >>>>>> at a later date.  Existing functionality is not broken in any way by
+> > >>>>>> this patch series.
+> > >>>>> Wow!  You're saying that your patch set takes precedence over the
+> > >>>>> existing expectations and can break them.
+> > >>>> Huh? I said existing functionality is NOT broken by this patch series.
+> > >>> Assuming a system is configured to measure and appraise firmware
+> > >>> (rules below), with this change the firmware file will not be properly
+> > >>> measured and will fail signature verification.
+> > So no existing functionality has been broken.
+> > >>>
+> > >>> Sample IMA policy rules:
+> > >>> measure func=FIRMWARE_CHECK
+> > >>> appraise func=FIRMWARE_CHECK appraise_type=imasig
+> > >> Would a pre and post lsm hook for pread do it?
+> > > IMA currently measures and verifies the firmware file signature on the
+> > > post hook.  The file is read once into a buffer.  With this change,
+> > > IMA would need to be on the pre hook, to read the entire file,
+> > > calculating the file hash and verifying the file signature.  Basically
+> > > the firmware would be read once for IMA and again for the device.
+> > The entire file may not fit into available memory to measure and 
+> > verify.  Hence the reason for a partial read.
 > 
-> > diff --git a/fs/namei.c b/fs/namei.c
-> > index 33b6d372e74a..70f179f6bc6c 100644
-> > --- a/fs/namei.c
-> > +++ b/fs/namei.c
-> > @@ -411,10 +412,90 @@ static int sb_permission(struct super_block *sb, struct inode *inode, int mask)
-> <snip>
-> > +#if defined(CONFIG_SYSCTL) && !defined(CONFIG_OMAYEXEC_STATIC)
-> > +int proc_omayexec(struct ctl_table *table, int write, void __user *buffer,
-> > +               size_t *lenp, loff_t *ppos)
-> > +{
-> > +       int error;
-> > +
-> > +       if (write) {
-> > +               struct ctl_table table_copy;
-> > +               int tmp_mayexec_enforce;
-> > +
-> > +               if (!capable(CAP_MAC_ADMIN))
-> > +                       return -EPERM;
-> 
-> Not fond of using CAP_MAC_ADMIN here (or elsewhere outside of security
-> modules).  The ability to set this sysctl is not equivalent to being
-> able to load a MAC policy, set arbitrary MAC labels on
-> processes/files, etc.
+> Previously, IMA pre-read the file in page size chunks in order to
+> calculate the file hash.  To avoid reading the file twice, the file is
+> now read into a buffer.
 
-That's fair. In that case, perhaps this could just use the existing
-_sysadmin helper? (Though I should note that these perm checks actually
-need to be in the open, not the read/write ... I thought there was a
-series to fix that, but I can't find it now. Regardless, that's
-orthogonal to this series.)
+Can the VFS be locked in some way and then using the partial reads would
+trigger the "read twice" mode? I.e. something like:
 
-> > + * omayexec_inode_permission - Check O_MAYEXEC before accessing an inode
-> > + *
-> > + * @inode: Inode to check permission on
-> > + * @mask: Right to check for (%MAY_OPENEXEC, %MAY_EXECMOUNT, %MAY_EXEC)
-> > + *
-> > + * Returns 0 if access is permitted, -EACCES otherwise.
-> > + */
-> > +static inline int omayexec_inode_permission(struct inode *inode, int mask)
-> > +{
-> > +       if (!(mask & MAY_OPENEXEC))
-> > +               return 0;
-> > +
-> > +       if ((sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_MOUNT) &&
-> > +                       !(mask & MAY_EXECMOUNT))
-> > +               return -EACCES;
-> > +
-> > +       if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_FILE)
-> > +               return generic_permission(inode, MAY_EXEC);
-> > +
-> > +       return 0;
-> > +}
-> 
-> I'm wondering if this is being done at the wrong level.  I would think
-> that OMAYEXEC_ENFORCE_FILE would mean to check file execute permission
-> with respect to all mechanisms/policies, including DAC,
-> filesystem-specific checking (inode->i_op->permission), security
-> modules, etc.  That requires more than just calling
-> generic_permission() with MAY_EXEC, which only covers the default
-> DAC/ACL logic; you'd need to take the handling up a level to
-> inode_permission() and re-map MAY_OPENEXEC to MAY_EXEC for
-> do_inode_permission() and security_inode_permission() at least.
-
-Oh, yeah, that's a good point. Does this need to be a two-pass check, or
-can MAY_OPENEXEC get expanded to MAY_EXEC here? Actually, why is this so
-deep at all? Shouldn't this be in may_open()?
-
-Like, couldn't just the entire thing just be:
-
-diff --git a/fs/namei.c b/fs/namei.c
-index a320371899cf..0ab18e19f5da 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -2849,6 +2849,13 @@ static int may_open(const struct path *path, int acc_mode, int flag)
- 		break;
- 	}
- 
-+	if (unlikely(mask & MAY_OPENEXEC)) {
-+		if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_MOUNT &&
-+		    path_noexec(path))
-+			return -EACCES;
-+		if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_FILE)
-+			acc_mode |= MAY_EXEC;
-+	}
- 	error = inode_permission(inode, MAY_OPEN | acc_mode);
- 	if (error)
- 		return error;
-
-> Alternatively, we can modify each individual filesystem (that
-> implements its own i_op->permission) and security module to start
-> handling MAY_OPENEXEC and have them choose to remap it to a file
-> execute check (or not) independent of the sysctl.  Not sure of your
-
-Eek, no, this should be centralized in the VFS, not per-filesystem, but
-I do see that it might be possible for a filesystem to actually do the
-MAY_OPENEXEC test internally, so the two-pass check wouldn't be needed.
-But... I think that can't happen until _everything_ can do the single
-pass check, so we always have to make the second call too.
-
-> intent.  As it stands, selinux_inode_permission() will ignore the new
-> MAY_OPENEXEC flag until someone updates it.  Likewise for Smack.
-> AppArmor/TOMOYO would probably need to check and handle FMODE_EXEC in
-> their file_open hooks since they don't implement inode_permission().
-
-Is there any need to teach anything about MAY_OPENEXEC? It'll show up
-for the LSMs as (MAY_OPEN | MAY_EXEC).
+open
+first partial read:
+	lock file contents (?)
+	perform full page-at-a-time-read-and-measure
+	rewind, read partial
+other partial reads
+final partial read
+	unlock
 
 -- 
 Kees Cook
