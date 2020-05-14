@@ -2,128 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 987B31D2C47
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 12:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8741D2D84
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 12:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726037AbgENKOD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 May 2020 06:14:03 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:50125 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725955AbgENKOD (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 May 2020 06:14:03 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-29-y0BDf4GNOjC8TdKy0usypQ-1; Thu, 14 May 2020 11:12:35 +0100
-X-MC-Unique: y0BDf4GNOjC8TdKy0usypQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 14 May 2020 11:12:34 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 14 May 2020 11:12:34 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kees Cook' <keescook@chromium.org>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>
-CC:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        Christian Heimes <christian@python.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, "Jan Kara" <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        =?iso-8859-1?Q?Philippe_Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        "Scott Shell" <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        "kernel-hardening@lists.openwall.com" 
-        <kernel-hardening@lists.openwall.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>
-Subject: RE: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
- through O_MAYEXEC
-Thread-Topic: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
- through O_MAYEXEC
-Thread-Index: AQHWKZyBpmhTpEnBl0+f5QrKafolWKinXOJQ
-Date:   Thu, 14 May 2020 10:12:34 +0000
-Message-ID: <33eba9f60af54f1585ba82af73be4eb2@AcuMS.aculab.com>
-References: <20200505153156.925111-1-mic@digikod.net>
- <20200505153156.925111-4-mic@digikod.net>
- <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
- <202005131525.D08BFB3@keescook> <202005132002.91B8B63@keescook>
-In-Reply-To: <202005132002.91B8B63@keescook>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1726202AbgENKv4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 May 2020 06:51:56 -0400
+Received: from mga06.intel.com ([134.134.136.31]:23270 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726015AbgENKv4 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 14 May 2020 06:51:56 -0400
+IronPort-SDR: tefQ+fuE/yM/C0NNxBEbpuXQqERNCz0lwggjminhOS8x6ic0q6BErv2goSbGmhK8rXsV3MhVJy
+ jZ4IdA9uakVw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 03:51:55 -0700
+IronPort-SDR: 46gXR2FOU1CoYboCW4wd1pF2D2k8gL53ixan8bWkgETCODT1YK9wVtHmz6WXGaeemSCYbludmZ
+ CbO8F9kw3+Dw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,391,1583222400"; 
+   d="scan'208";a="266202646"
+Received: from apogrebi-mobl2.ger.corp.intel.com ([10.249.39.119])
+  by orsmga006.jf.intel.com with ESMTP; 14 May 2020 03:51:53 -0700
+Message-ID: <aa633c59f845817f7ada8089f29638bdfdb016a3.camel@linux.intel.com>
+Subject: Re: [PATCH] tpm: check event log version before reading final events
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        =?ISO-8859-1?Q?Lo=EFc?= Yhuel <loic.yhuel@gmail.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Matthew Garrett <matthewgarrett@google.com>, javierm@redhat.com
+Date:   Thu, 14 May 2020 13:51:53 +0300
+In-Reply-To: <CAMj1kXFPt4eSDCC61paWhyfOaEeWUgUQSnczwZJ7Eny8t7ow5g@mail.gmail.com>
+References: <20200512040113.277768-1-loic.yhuel@gmail.com>
+         <CAMj1kXFfLvUXU1A-7jnh3KMy5Qguhq0k9Cw=O0iBmbToowV_8A@mail.gmail.com>
+         <CANMwUkg+2O2nK8z38HZw6z0NdLUPwj40m4DPKmn1sf9oDqG7Pw@mail.gmail.com>
+         <CAMj1kXFPt4eSDCC61paWhyfOaEeWUgUQSnczwZJ7Eny8t7ow5g@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.1-2 
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Kees Cook
-> Sent: 14 May 2020 04:05
-> On Wed, May 13, 2020 at 04:27:39PM -0700, Kees Cook wrote:
-> > Like, couldn't just the entire thing just be:
-> >
-> > diff --git a/fs/namei.c b/fs/namei.c
-> > index a320371899cf..0ab18e19f5da 100644
-> > --- a/fs/namei.c
-> > +++ b/fs/namei.c
-> > @@ -2849,6 +2849,13 @@ static int may_open(const struct path *path, int acc_mode, int flag)
-> >  		break;
-> >  	}
-> >
-> > +	if (unlikely(mask & MAY_OPENEXEC)) {
-> > +		if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_MOUNT &&
-> > +		    path_noexec(path))
-> > +			return -EACCES;
-> > +		if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_FILE)
-> > +			acc_mode |= MAY_EXEC;
-> > +	}
-> >  	error = inode_permission(inode, MAY_OPEN | acc_mode);
-> >  	if (error)
-> >  		return error;
-> >
+On Tue, 2020-05-12 at 14:30 +0200, Ard Biesheuvel wrote:
+> On Tue, 12 May 2020 at 13:40, Loïc Yhuel <loic.yhuel@gmail.com> wrote:
+> > Le mar. 12 mai 2020 à 08:45, Ard Biesheuvel <ardb@kernel.org> a écrit :
+> > > So what functionality do we lose here? Can we still make meaningful
+> > > use of the event log without the final log? I thought one was
+> > > incomplete without the other?
+> > The char driver (drivers/char/tpm/eventlog/efi.c), already ignores
+> > efi.tpm_final_log
+> > if the event log version isn't EFI_TCG2_EVENT_LOG_FORMAT_TCG_2.
+> > So there currently no code making use of the final log contents on
+> > those machines,
+> > besides the two cases I patched which only try to determine its size.
+> > 
 > 
-> FYI, I've confirmed this now. Effectively with patch 2 dropped, patch 3
-> reduced to this plus the Kconfig and sysctl changes, the self tests
-> pass.
-> 
-> I think this makes things much cleaner and correct.
+> Ah ok, thanks for clarifying. If we never consume it anyway, then I
+> agree this is the correct fix.
 
-And a summary of that would be right for the 0/n patch email.
+I think issuing a warning would not be a bad idea given the incompleteness
+of the even log.
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+/Jarkko
 
