@@ -2,65 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 421E71D2386
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 02:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7831D2394
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 02:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732898AbgENATE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 May 2020 20:19:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37838 "EHLO mail.kernel.org"
+        id S1732973AbgENAZ1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 May 2020 20:25:27 -0400
+Received: from mga01.intel.com ([192.55.52.88]:53240 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732847AbgENATE (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 May 2020 20:19:04 -0400
-Received: from embeddedor (unknown [189.207.59.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6AB0120693;
-        Thu, 14 May 2020 00:19:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589415544;
-        bh=CD4N2kYHsBTuzKadIQVU6xv0hw2/L6I5nqN2IoegrMk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iljR2kEvoMGCgeKYu1CpDI03KJtk5CLSDGaxm9j1dl8hFoO9d4XC3ZGRzRl2ks1yt
-         TPR1i2ld9vaYI+otu5Zgxc5q6HWOA+fw4neL9si/NuNbi86CrR8/P/KPZDY3ixR/BD
-         XBxFOGorkdIoMlDMi2XijG+66gQRY32nk2evGSsc=
-Date:   Wed, 13 May 2020 19:23:39 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: eventlog: Replace zero-length array with
- flexible-array member
-Message-ID: <20200514002339.GR4897@embeddedor>
-References: <20200508163826.GA768@embeddedor>
- <202005112224.9EFD07F5@keescook>
- <2a77f3bc9e7ed88343bbd206eaf25f10a697de90.camel@linux.intel.com>
+        id S1732946AbgENAZ0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 13 May 2020 20:25:26 -0400
+IronPort-SDR: pw48jvxnERiPyZBSrKdMTKCsAM/mOxATAGPHq+ahdRvbcbobJR3CJmk+E8d8dCqr2XfgWJM5cf
+ 6NZtcSQQgggg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 17:25:26 -0700
+IronPort-SDR: LmigXyC+PKXEwMmfY0sVl4rNnEd46L+o3kglBun/40P0Ry5MzcqKSfH2nUh0qUui+AXBzt99h0
+ L6gOZAQubFMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,389,1583222400"; 
+   d="scan'208";a="262661894"
+Received: from gliber-mobl1.ger.corp.intel.com ([10.249.38.41])
+  by orsmga003.jf.intel.com with ESMTP; 13 May 2020 17:25:20 -0700
+Message-ID: <07bb6080f8be9f6613f460e2d6e19f3d456e219c.camel@linux.intel.com>
+Subject: Re: [PATCH v4 1/4] KEYS: trusted: Add generic trusted keys framework
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Sumit Garg <sumit.garg@linaro.org>, zohar@linux.ibm.com,
+        jejb@linux.ibm.com
+Cc:     dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
+        jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
+        janne.karhunen@gmail.com, daniel.thompson@linaro.org,
+        Markus.Wamser@mixed-mode.de, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org, tee-dev@lists.linaro.org
+Date:   Thu, 14 May 2020 03:25:14 +0300
+In-Reply-To: <1588758017-30426-2-git-send-email-sumit.garg@linaro.org>
+References: <1588758017-30426-1-git-send-email-sumit.garg@linaro.org>
+         <1588758017-30426-2-git-send-email-sumit.garg@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a77f3bc9e7ed88343bbd206eaf25f10a697de90.camel@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 14, 2020 at 03:08:58AM +0300, Jarkko Sakkinen wrote:
-> > > 
-> > > Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-> > 
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
+On Wed, 2020-05-06 at 15:10 +0530, Sumit Garg wrote:
+> Current trusted keys framework is tightly coupled to use TPM device as
+> an underlying implementation which makes it difficult for implementations
+> like Trusted Execution Environment (TEE) etc. to provide trusked keys
+> support in case platform doesn't posses a TPM device.
 > 
-> Thank you.
+> So this patch tries to add generic trusted keys framework where underlying
+> implemtations like TPM, TEE etc. could be easily plugged-in.
 > 
-> I applied this patch, will include it to the next PR.
-> 
+> Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 
-Awesome. :)
+I tend to agree how this is implemented and could merge it as such.
 
-Thanks, Jarkko.
---
-Gustavo
+I'm just thinking if we could refine this patch in a way that instead of
+copying TRUSTED_DEBUG macro we could just replace pr_info() statements
+with pr_debug()?
+
+/Jarkko
+
