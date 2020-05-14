@@ -2,47 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FEA1D29BA
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 10:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BFA1D29C4
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 10:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725925AbgENIKa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 May 2020 04:10:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49114 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725886AbgENIK3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 May 2020 04:10:29 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 450FE2065D
-        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 08:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589443829;
-        bh=Xf8DEKxe/HcjD/EnXUO0eGUCvnkUXJ1xE0FLARkXWGA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=duE6MUlt6a33ZXoDy7N06eQHQyJ/iHiLmi5D2wHAxeAgbOknJICTp+xqAdplGkW2j
-         i5XrVwIx/uQ1IcFBHeuzfv3bUp8sGlSKGrLqMK59hWGrvIfGZqLtF7vo9qIqTLR6Du
-         Lpp/rMgvabhQTGnRggk1LoQiN29/oHbTvEp1DotI=
-Received: by mail-il1-f169.google.com with SMTP id b15so840349ilq.12
-        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 01:10:29 -0700 (PDT)
-X-Gm-Message-State: AOAM533m1h3cqi4ZGA9I9Q0jmqODYuIE+yJ0A3BjoNzAyhXYLqjVbkKC
-        TgR99vwC0ag3ughtTKvvEXHOszATxku9PpKFzRs=
-X-Google-Smtp-Source: ABdhPJzLDW5i+bsVSa0+yv6nTiwlQQoNIUBFaLtTnTHWfUUOiQdB3YRebMCuPtmgfnVQxRKwkMV+5PD5wlM31zp8nLY=
-X-Received: by 2002:a92:a312:: with SMTP id a18mr3541237ili.80.1589443828605;
- Thu, 14 May 2020 01:10:28 -0700 (PDT)
+        id S1725955AbgENIOR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 May 2020 04:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725935AbgENIOQ (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 14 May 2020 04:14:16 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BF3C061A0C;
+        Thu, 14 May 2020 01:14:16 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id l20so269957ilj.10;
+        Thu, 14 May 2020 01:14:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nW/L8VcZBCn80T+Kxyr4Dt/TzE3U0N3QD8lxLQvkAAk=;
+        b=S5Hfe/92gHJ2Kc5wk3x43B4+o6swGaM2Z99CePQdyLGPJPMn30W1UreaPgeaV7cbVx
+         6Ksj0zhjZIigUVz3G05Ipvagq3eQpb1Q/Q/Tx8tyQa+Y3+yu0Go8cUlgCEqV6W7Cl/13
+         w0tULc6B16J+R+YpVtDBGL0dmKDdpkX/lRVs2dX0SK5Ff3zLv8WUeueCQedF96giMbNd
+         /6pcYHqFmFrjBvh+QkmsZoYCmdDYs9frT687Ym8rCKaV5JeSURUb2M9GFNDf+CfgHlRj
+         3gpOiN0aHTJt4SRY/3RyuY/0GLK+031DG3E9DyxAiHEq0GrDJ8iLgIcf7dZVSGgZlVW3
+         7i/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nW/L8VcZBCn80T+Kxyr4Dt/TzE3U0N3QD8lxLQvkAAk=;
+        b=uUBl6+o/RHM3/5bJzWZqr0Vuil9ByFu3NsDOiBTUI56A81FmhV6g9aU2zil4cf2K06
+         zl2dXqvHcvGRaDfxw5SMnpzy1Cev0Bs9aPzw8DDbP5OtUTv0zvzL+b2tuC1s52Yav2Cj
+         kVE+e2R4I+V1SigKaVBXKWxfoK5jzgpRXmzPPRB/4LViZG+KrBAvCylroEHaVAksaFy7
+         rNW47U7r9D4htfInIkmBDQubLjsDwLGSgn2r0TNrZsX7/CzISfHvZeuL2PRhniXt3ugW
+         R5+aZNmlTXl7xge74CUsapZWCaGhn7Vi785RnV7Qv48trAnexe2kMnXbz3p5ru26zPmS
+         P4dQ==
+X-Gm-Message-State: AOAM531ogXL2IUXX4V41UF0oZaaSaJdEF5Hjep0lMoF45+bGxtVwmQTk
+        339b4dj8iIIkxfL0TVnJJZF56bHgzvleluen7uk=
+X-Google-Smtp-Source: ABdhPJxcM2ITNF+8krp3jsHuj5Njt/CXRsPi+FnkXodqYy9dz/7KlWDbKIAYy/B1u704BgQzZ5vke1Oax5ReAe5a8IA=
+X-Received: by 2002:a92:84d6:: with SMTP id y83mr1157606ilk.73.1589444055744;
+ Thu, 14 May 2020 01:14:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200512040113.277768-1-loic.yhuel@gmail.com> <CAMj1kXFfLvUXU1A-7jnh3KMy5Qguhq0k9Cw=O0iBmbToowV_8A@mail.gmail.com>
- <ab9df4468cc294c67a67ef336019379033e7c90c.camel@linux.intel.com>
-In-Reply-To: <ab9df4468cc294c67a67ef336019379033e7c90c.camel@linux.intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 14 May 2020 10:10:17 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHX2Hf_QeKF4m-4yfjzcM2=AFV-EzthQvDO1pOsyaSsZw@mail.gmail.com>
-Message-ID: <CAMj1kXHX2Hf_QeKF4m-4yfjzcM2=AFV-EzthQvDO1pOsyaSsZw@mail.gmail.com>
-Subject: Re: [PATCH] tpm: check event log version before reading final events
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     =?UTF-8?Q?Lo=C3=AFc_Yhuel?= <loic.yhuel@gmail.com>,
+References: <20200505153156.925111-1-mic@digikod.net> <20200505153156.925111-3-mic@digikod.net>
+ <202005121407.A339D31A@keescook>
+In-Reply-To: <202005121407.A339D31A@keescook>
+From:   "Lev R. Oshvang ." <levonshe@gmail.com>
+Date:   Thu, 14 May 2020 11:14:04 +0300
+Message-ID: <CAP22eLEWW+KjD5rHosZV8vSuBB4YBLh0BQ=4-=kJQt9o=Fx1ig@mail.gmail.com>
+Subject: Re: [PATCH v5 2/6] fs: Add a MAY_EXECMOUNT flag to infer the noexec
+ mount property
+To:     Kees Cook <keescook@chromium.org>
+Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        Matthew Garrett <matthewgarrett@google.com>, javierm@redhat.com
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
@@ -50,57 +92,95 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 14 May 2020 at 03:09, Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
+On Wed, May 13, 2020 at 12:09 AM Kees Cook <keescook@chromium.org> wrote:
 >
-> On Tue, 2020-05-12 at 08:44 +0200, Ard Biesheuvel wrote:
-> > Hi Lo=C3=AFc,
+> On Tue, May 05, 2020 at 05:31:52PM +0200, Micka=C3=ABl Sala=C3=BCn wrote:
+> > This new MAY_EXECMOUNT flag enables to check if the underlying mount
+> > point of an inode is marked as executable.  This is useful to implement
+> > a security policy taking advantage of the noexec mount option.
 > >
-> > Thanks for the fix.
+Security policy is expressed by sysadmin by mount -noexec very clear,
+I don't think there is a need
+in sysctl, wish is system-wide
+
+> > This flag is set according to path_noexec(), which checks if a mount
+> > point is mounted with MNT_NOEXEC or if the underlying superblock is
+> > SB_I_NOEXEC.
 > >
-> > On Tue, 12 May 2020 at 06:01, Lo=C3=AFc Yhuel <loic.yhuel@gmail.com> wr=
-ote:
-> > > This fixes the boot issues since 5.3 on several Dell models when the =
-TPM
-> > > is enabled. Depending on the exact grub binary, booting the kernel wo=
-uld
-> > > freeze early, or just report an error parsing the final events log.
-> > >
-> > > We get an event log in the SHA-1 format, which doesn't have a
-> > > tcg_efi_specid_event_head in the first event, and there is a final ev=
-ents
-> > > table which doesn't match the crypto agile format.
-> > > __calc_tpm2_event_size reads bad "count" and "efispecid->num_algs", a=
-nd
-> > > either fails, or loops long enough for the machine to be appear froze=
-n.
-> > >
-> > > So we now only parse the final events table, which is per the spec al=
-ways
-> > > supposed to be in the crypto agile format, when we got a event log in=
- this
-> > > format.
-> > >
+> > Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+> > Reviewed-by: Philippe Tr=C3=A9buchet <philippe.trebuchet@ssi.gouv.fr>
+> > Reviewed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
+> > Cc: Aleksa Sarai <cyphar@cyphar.com>
+> > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > ---
+> >  fs/namei.c         | 2 ++
+> >  include/linux/fs.h | 2 ++
+> >  2 files changed, 4 insertions(+)
 > >
-> > So what functionality do we lose here? Can we still make meaningful
-> > use of the event log without the final log? I thought one was
-> > incomplete without the other?
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > index a320371899cf..33b6d372e74a 100644
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -2849,6 +2849,8 @@ static int may_open(const struct path *path, int =
+acc_mode, int flag)
+> >               break;
+> >       }
+> >
+> > +     /* Pass the mount point executability. */
+> > +     acc_mode |=3D path_noexec(path) ? 0 : MAY_EXECMOUNT;
+> >       error =3D inode_permission(inode, MAY_OPEN | acc_mode);
+> >       if (error)
+> >               return error;
+> > diff --git a/include/linux/fs.h b/include/linux/fs.h
+> > index 313c934de9ee..79435fca6c3e 100644
+> > --- a/include/linux/fs.h
+> > +++ b/include/linux/fs.h
+> > @@ -103,6 +103,8 @@ typedef int (dio_iodone_t)(struct kiocb *iocb, loff=
+_t offset,
+> >  #define MAY_NOT_BLOCK                0x00000080
+> >  /* the inode is opened with O_MAYEXEC */
+> >  #define MAY_OPENEXEC         0x00000100
+> > +/* the mount point is marked as executable */
+> > +#define MAY_EXECMOUNT                0x00000200
+> >
+> >  /*
+> >   * flags in file.f_mode.  Note that FMODE_READ and FMODE_WRITE must co=
+rrespond
 >
+> I find this name unintuitive, but I cannot think of anything better,
+> since I think my problem is that "MAY" doesn't map to the language I
+> want to use to describe what this flag is indicating.
 >
-> Nope it would be incomplete [*].
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 >
-> So probably would make sense to at least issue a warning in this case.
->
-> [*] https://www.kernel.org/doc/Documentation/security/tpm/tpm_event_log.r=
-st
->
+> --
+> Kees Cook
 
-Right.
 
-I'll take the current patch as a fix for now.
+I think that the original patch was perfect, I quite it again
+@@ -3167,6 +3167,14 @@ static int may_open(struct path *path, int
+acc_mode, int flag)
 
-I agree it makes sense to add a warning, but I'd like to understand
-better which exact condition we should warn about.
-Currently, tpm_read_log_efi() simply disregards the final log if it is
-not in crypto agile format, but is there any point to exposing
-anything in that case?
++
++ if ((acc_mode & MAY_OPENEXEC)
++ && (S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode))
++ && (path->mnt && (path->mnt->mnt_flags & MNT_NOEXEC)))
++            return -EACCES;
++
++
++
+error =3D inode_permission(inode, MAY_OPEN | acc_mode);
+
+As I said in the inline comment above, sysadmin had already express
+security policy in a very clear way,
+mount -noexec !
+I would only check inside inode_permission() whether the file mode is
+any  ---x  permission and deny such
+open when file is opened with O_MAYEXEC under MNT_NOEXEC mount point
+
+New sysctl is indeed required to allow userspace that places scripts
+or libs under noexec mounts.
+fs.mnt_noexec_strict =3D0 (allow, e) , 1 (deny any file with --x
+permission), 2 (deny when O_MAYEXEC absent), for any file with ---x
+permissions)
