@@ -2,57 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCB91D359F
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 17:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA381D360D
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 18:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726240AbgENPwU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 May 2020 11:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S1727853AbgENQKs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 May 2020 12:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726117AbgENPwT (ORCPT
+        with ESMTP id S1726073AbgENQKs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 May 2020 11:52:19 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF8AC061A0C;
-        Thu, 14 May 2020 08:52:19 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id p127so5444734oia.13;
-        Thu, 14 May 2020 08:52:19 -0700 (PDT)
+        Thu, 14 May 2020 12:10:48 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE62CC061A0C;
+        Thu, 14 May 2020 09:10:43 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id c12so24004768oic.1;
+        Thu, 14 May 2020 09:10:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ts3exPU5b4D6Eif+mpAKX6mXkCcZa+SnvdeaxQ9mZeM=;
-        b=n73P5w0/ZNHj6r9xqk6zxWRaFGCxbL5c36nerRqhbZ5NOMMw/V3LHaS6GjNroeq11B
-         hkLhReslaIkbpZbAmEJwH90HGvHSvkx5StDy556cfRaMyefW6OB07aO5MhmBrmm8vThA
-         4JJ/S6xJSxyXUNLyTP60+uVZXT6qbnH2OnlRXyadY3R8dgUg7BeoW+9BjOZVroQby/pn
-         ScWezo6502Bf69Wwn8oTIxxwvwWJwv33hZiiPV00+mteAt3qiPDxB+ZEIrcjT3VvOlRg
-         /D0Qa8Pd9eVeK3/GHbPGEp1qFGbWcZ72unt4SIogHXcUPb+Kfgl4E8kmDFv+SLZVW6UY
-         FV3A==
+        bh=D5CbZd976r0FX8cps+cJg5GK1CX9lUZ+rR6vnN8xQ1g=;
+        b=ME8yQCgbH2SZIDcdab7oOsHlv314+eYedrIFbgnDiv53fMIMW6h9hp1VKmEFSyrYZI
+         ZSs829U1wHjFRgb8Z16vo5mQfCn03DReReAjYmZtQ2fcNZlTCtKTUnI1QwBesLOPRl0W
+         d6vcjzwONEDKS9hHqk07r5NGbdWF3yHtjy/r+Rr5V0YC3Dp2aEo4V12d2OectxjEIosS
+         WdY7O9cXLsRXiweqFenSDiCPZmyIDpM4iTXd71EmDlwoyHHu3I7PSr8magZZobs/ZFZB
+         fiIstOhiEvBiglPKnuaRHDddwv4WaI/VifjsX4Xw/CdRzk8xvmHD8S4XS0Uz/yRBSm0f
+         gNeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ts3exPU5b4D6Eif+mpAKX6mXkCcZa+SnvdeaxQ9mZeM=;
-        b=QNANLJO9r6CYlMmN0PWwhRnuUIm5mqeG3EQ+wxMlaTPgf6OiY/tYKQbLwNYDA4MBo7
-         60zLGdZLaD2uh+PjfzBtYNhhEVTeUoxPH2DsivFsNVS914jaHb0anNImffH3T17PZH5P
-         WD/L7m5i8kW7A/KpNiwd694YXbxxEAQsGCDfvWAM4Zp3QcQ58ehuCPjfYO8GMJ31Vo0V
-         AfIsreex6NeuvfDF/h/kOlhS+c/VB2d+IuTLKDd23fc+9uhROgIVPShQrQUxSd1gp4ZZ
-         3uDp22R0m482APgAf5NaPFfR12Zc4nhDduZcV7yrlFtIQ6gO/9Zl4Lr+jxCnhCsuKhdf
-         PfgA==
-X-Gm-Message-State: AOAM533e2/uCCZn3c6B4xnQgusuAUXvjI80AIt1ZZm2mQyZmw4LeNWra
-        k0DUhqPeNR483w8r4SIltIAxSKNig7Bc407LORg=
-X-Google-Smtp-Source: ABdhPJyTq5NgHHXOOIt7GEAvBuXGY23iCp2ui/mBClBnszl5WhyiAHvYPhzgbDeRnkGUD739ES1OpYBXdtop71nCBtY=
-X-Received: by 2002:aca:210a:: with SMTP id 10mr6129577oiz.92.1589471539001;
- Thu, 14 May 2020 08:52:19 -0700 (PDT)
+        bh=D5CbZd976r0FX8cps+cJg5GK1CX9lUZ+rR6vnN8xQ1g=;
+        b=pcG74EqGa3HTz9NLzLGwtB1vzr8JkBWiP82bMyF5J+Olxs2771Hxu490B7w9qqd8iO
+         2xeXbnOxCWNjKlPzlVpiM0TOjdfO2BirarUbZ01Xs9xVayD5MyAYd3dgUdat5GEgAW46
+         xKvvHaHBxSJ5D88VnMyC5FYae5+CWPQTW5OBO5Xv9d7GSrqMfU9tFVJIR2EjIkv4RsQB
+         iTtF7LLp9U9TaUPgmKqJtw+V8ZyzcerzaaYSDefifhozyZzSF/gEWzFU8+BlsZsHtHO7
+         ggtBnNZOoMDoLf/uIz2aGp1jBdpg7YIeQyOXoPD44079O1baAgu6D2P5R41KjMRlbqcj
+         5yWA==
+X-Gm-Message-State: AGi0PuaDKdl5VQO8o9wwHt9zkzkyL4VOkSoS4ZANkOdkny6ehVmMN58z
+        neXRoTaoj1FFi8iaMQ/oVaXmGD91CO1c9j1vMJQ=
+X-Google-Smtp-Source: APiQypKtIw3xzkHAtALvSyqt4k9eNzYlxJoUxyheJsa+r6YEEdui4LketFU7MqwuU2v/F0vGykL4KdxDlzE9Lo0hTmQ=
+X-Received: by 2002:aca:5e0b:: with SMTP id s11mr29579870oib.160.1589472642862;
+ Thu, 14 May 2020 09:10:42 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200505153156.925111-1-mic@digikod.net> <20200505153156.925111-4-mic@digikod.net>
  <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
  <202005131525.D08BFB3@keescook> <202005132002.91B8B63@keescook>
- <CAEjxPJ7WjeQAz3XSCtgpYiRtH+Jx-UkSTaEcnVyz_jwXKE3dkw@mail.gmail.com> <202005140739.F3A4D8F3@keescook>
-In-Reply-To: <202005140739.F3A4D8F3@keescook>
+ <CAEjxPJ7WjeQAz3XSCtgpYiRtH+Jx-UkSTaEcnVyz_jwXKE3dkw@mail.gmail.com> <202005140830.2475344F86@keescook>
+In-Reply-To: <202005140830.2475344F86@keescook>
 From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-Date:   Thu, 14 May 2020 11:52:07 -0400
-Message-ID: <CAEjxPJ5dPmBo7cORWq9U-Ma9BcT2cnMR39RG9_7uAZXwsPxb9w@mail.gmail.com>
+Date:   Thu, 14 May 2020 12:10:31 -0400
+Message-ID: <CAEjxPJ4R_juwvRbKiCg5OGuhAi1ZuVytK4fKCDT_kT6VKc8iRg@mail.gmail.com>
 Subject: Re: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
  through O_MAYEXEC
 To:     Kees Cook <keescook@chromium.org>
@@ -94,7 +94,7 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 14, 2020 at 10:41 AM Kees Cook <keescook@chromium.org> wrote:
+On Thu, May 14, 2020 at 11:45 AM Kees Cook <keescook@chromium.org> wrote:
 >
 > On Thu, May 14, 2020 at 08:22:01AM -0400, Stephen Smalley wrote:
 > > On Wed, May 13, 2020 at 11:05 PM Kees Cook <keescook@chromium.org> wrote:
@@ -134,14 +134,26 @@ On Thu, May 14, 2020 at 10:41 AM Kees Cook <keescook@chromium.org> wrote:
 > > the open file and then they need to check for that in their file_open
 > > hooks.
 >
-> Does there need to be an FMODE_OPENEXEC, or is the presence of
-> FMODE_OPEN with FMODE_EXEC sufficient?
+> I kept confusing myself about what order things happened in, so I made
+> these handy notes about the call graph:
+>
+> openat2(dfd, char * filename, open_how)
+>     do_filp_open(dfd, filename, open_flags)
+>         path_openat(nameidata, open_flags, flags)
+>             do_open(nameidata, file, open_flags)
+>                 may_open(path, acc_mode, open_flag)
+>                     inode_permission(inode, MAY_OPEN | acc_mode)
+>                         security_inode_permission(inode, acc_mode)
+>                 vfs_open(path, file)
+>                     do_dentry_open(file, path->dentry->d_inode, open)
+>                         if (unlikely(f->f_flags & FMODE_EXEC && !S_ISREG(inode->i_mode))) ...
+>                         security_file_open(f)
+>                         open()
+>
+> So, it looks like adding FMODE_EXEC into f_flags in do_open() is needed in
+> addition to injecting MAY_EXEC into acc_mode in do_open()? Hmmm
 
-I don't think we need an extra flag/mode bit.  But note that 1)
-FMODE_OPENED isn't set until after security_file_open() is called so
-we can't rely on it there, 2) __FMODE_EXEC aka FMODE_EXEC is set in
-f_flags not f_mode, 3) FMODE_EXEC was originally introduced for
-distributed filesystems so that they could return ETXTBUSY if the file
-was opened for write and execute on different nodes, 4) AppArmor and
-TOMOYO have special handling of execve based on current->in_execve so
-I guess the only overlap would be for uselib(2).
+Just do both in build_open_flags() and be done with it? Looks like he
+was already setting FMODE_EXEC in patch 1 so we just need to teach
+AppArmor/TOMOYO to check for it and perform file execute checking in
+that case if !current->in_execve?
