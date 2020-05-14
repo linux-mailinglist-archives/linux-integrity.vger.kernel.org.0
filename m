@@ -2,130 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 071C11D2E1E
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 13:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE251D2E2D
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 13:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727933AbgENLT1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 May 2020 07:19:27 -0400
-Received: from mga03.intel.com ([134.134.136.65]:20938 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726216AbgENLT0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 May 2020 07:19:26 -0400
-IronPort-SDR: +dW7hjW5yv+6ZkWKMSKpm7WwXe0SaaJEN1nsPp42ipPZHRSvS/bSDa/K2ZEjGQZ8cxNvJc5qAr
- uA56TquXe9ew==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 04:19:25 -0700
-IronPort-SDR: pI8PuaqsLtGJiFrUo5CHjobhm/q1KimyjU5udwk1yKSsXmBi7OJ4w2aheIRx4lWN54kDhGXjvK
- 9eZ+hg7IjwuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,391,1583222400"; 
-   d="scan'208";a="251630950"
-Received: from apogrebi-mobl2.ger.corp.intel.com ([10.249.39.119])
-  by orsmga007.jf.intel.com with ESMTP; 14 May 2020 04:19:22 -0700
-Message-ID: <911b3ebeb912ee82e205be96c738b33022740dfb.camel@linux.intel.com>
-Subject: Re: [PATCH v9 3/8] security: keys: trusted: fix TPM2 authorizations
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Date:   Thu, 14 May 2020 14:19:21 +0300
-In-Reply-To: <1589420469.9117.12.camel@HansenPartnership.com>
-References: <20200507231147.27025-1-James.Bottomley@HansenPartnership.com>
-         <20200507231147.27025-4-James.Bottomley@HansenPartnership.com>
-         <00325dff8292a18212bbdaa3fd81cebee2a60bc2.camel@linux.intel.com>
-         <664f00cf18c68e3f6316b50679b2fd56919d5aeb.camel@linux.intel.com>
-         <1589420469.9117.12.camel@HansenPartnership.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.1-2 
+        id S1726037AbgENLXs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 May 2020 07:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726051AbgENLXr (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 14 May 2020 07:23:47 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E606C05BD09
+        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 04:23:47 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id a9so2288317lfb.8
+        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 04:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=52Rzrrj4E2al2tTGlHFyR6M/8l4BjJi9pTbsEHvkafw=;
+        b=AQB8AjMyAZSGOL4e97UU90oVl9kAMguV5p4dTDDqcw0/yek+GT5FWuN2tscAVlKFEs
+         EGzg8HjoW6dtHzhFbCevirz+96qH21ZW9fHpy2kzigcrKVJlygWbNXwPaiOUs6uFh063
+         aPAdVZthuA7Y6Oqs1VLm4MDl2Ymqdb56dcWwjCBZ0og7DZpzl8xsqkqa05M1swjos7Gz
+         BvCnthOJZ3OAhbZMPq0iz6CbKdHXINgpBnT6TT6KscyzM/JwxVG6ZXzKdHQmih4z9i43
+         mHHs4GZHjvk6LTACjAngtXARfd2tJBCvG7KpSeW1akMKIkbng2rYc0JDaLTV5N6BoPB4
+         oObw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=52Rzrrj4E2al2tTGlHFyR6M/8l4BjJi9pTbsEHvkafw=;
+        b=oJ8Jml3wVO6PqclDl7OXTNDaVxkHH2xufjVupYgjFSXIZfvMqOXIV7G61iCNKgYKEm
+         rjY5hRWQ7co2aoOy8lJz4207Nx+9NT1sGJ6Rf0oKl9qLMiv5HDDRB/Z7VqpvXxiWIToM
+         RqlZ+lC9YSjzFgaV2KdYfV2MANa6fNG5t4l1zQvR/PUNKpIiBSCCC3b1v2emAiRjxGqa
+         rOQPiqmaeHRwu5EA6Nw7Wv8BZM0nj60oorDbrAwRzJ5GBw+3QH7Hd9I2QpwIenrVB/Gt
+         KCwoyU2/M89vG6uvXClnVZFNkTZfgYJnt4uBkpW/ly281Lwy8fTcsnCIPv9nHG7aHmPR
+         2ZMg==
+X-Gm-Message-State: AOAM530/JXy5ZJCQ6CAp3mVG/TPmNMezUXsNrZCLJQLPwmrFS1muBqQG
+        Fo1tkDQzMokgLAMxVlbRT0s0Ro92gRHoOVNa9f5nqw==
+X-Google-Smtp-Source: ABdhPJyJHVIeFpsuP6hWyR4T3t3i5l95UvM1ck7qhqVExGI1lWc37GndFTYXCpQQGciey+GLFpqutzOT/FYhOL3syjg=
+X-Received: by 2002:ac2:44bb:: with SMTP id c27mr3095483lfm.40.1589455425658;
+ Thu, 14 May 2020 04:23:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <1588758017-30426-1-git-send-email-sumit.garg@linaro.org>
+ <1588758017-30426-2-git-send-email-sumit.garg@linaro.org> <07bb6080f8be9f6613f460e2d6e19f3d456e219c.camel@linux.intel.com>
+In-Reply-To: <07bb6080f8be9f6613f460e2d6e19f3d456e219c.camel@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 14 May 2020 16:53:34 +0530
+Message-ID: <CAFA6WYMciZ=qkG3N_9YWzt_DJr2dGwdAy9diMXCJSNjr2o5ONA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] KEYS: trusted: Add generic trusted keys framework
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>, dhowells@redhat.com,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-05-13 at 18:41 -0700, James Bottomley wrote:
-> On Thu, 2020-05-14 at 04:12 +0300, Jarkko Sakkinen wrote:
-> > On Thu, 2020-05-14 at 04:11 +0300, Jarkko Sakkinen wrote:
-> > > On Thu, 2020-05-07 at 16:11 -0700, James Bottomley wrote:
-> > > > In TPM 1.2 an authorization was a 20 byte number.  The spec
-> > > > actually recommended you to hash variable length passwords and
-> > > > use the sha1 hash as the authorization.  Because the spec doesn't
-> > > > require this hashing, the current authorization for trusted keys
-> > > > is a 40 digit hex number.  For TPM 2.0 the spec allows the
-> > > > passing in of variable length passwords and passphrases directly,
-> > > > so we should allow that in trusted keys for ease of use.  Update
-> > > > the 'blobauth' parameter to take this into account, so we can now
-> > > > use plain text passwords for the keys.
-> > > > 
-> > > > so before
-> > > > 
-> > > > keyctl add trusted kmk "new 32
-> > > > blobauth=f572d396fae9206628714fb2ce00f72e94f2258f"
-> > > > 
-> > > > after we will accept both the old hex sha1 form as well as a new
-> > > > directly supplied password:
-> > > > 
-> > > > keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001"
-> > > > 
-> > > > Since a sha1 hex code must be exactly 40 bytes long and a direct
-> > > > password must be 20 or less, we use the length as the
-> > > > discriminator for which form is input.
-> > > > 
-> > > > Note this is both and enhancement and a potential bug fix.  The
-> > > > TPM 2.0 spec requires us to strip leading zeros, meaning empyty
-> > > > authorization is a zero length HMAC whereas we're currently
-> > > > passing in 20 bytes of zeros.  A lot of TPMs simply accept this
-> > > > as OK, but the Microsoft TPM emulator rejects it with
-> > > > TPM_RC_BAD_AUTH, so this patch makes the Microsoft TPM emulator
-> > > > work with trusted keys.
-> > > > 
-> > > > Fixes: 0fe5480303a1 ("keys, trusted: seal/unseal with TPM 2.0
-> > > > chips")
-> > > > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership
-> > > > .com>
-> > > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > 
-> > > Have not checked yet the tail. Probably won't check before PR for
-> > > v5.8 is out.
-> > > 
-> > > Just wondering would it hurt to merge everything up until this
-> > > patch?
-> 
-> Everything would be OK if you applied 1, 2 and 3.  Except we'd have an
-> ASN.1 API in the tree with no consumers, which excites some people.
-> 
-> > I.e. could land it also to the release.
-> 
-> That would likely be fine and should satisfy the API with no consumers
-> issue.
+On Thu, 14 May 2020 at 05:55, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Wed, 2020-05-06 at 15:10 +0530, Sumit Garg wrote:
+> > Current trusted keys framework is tightly coupled to use TPM device as
+> > an underlying implementation which makes it difficult for implementations
+> > like Trusted Execution Environment (TEE) etc. to provide trusked keys
+> > support in case platform doesn't posses a TPM device.
+> >
+> > So this patch tries to add generic trusted keys framework where underlying
+> > implemtations like TPM, TEE etc. could be easily plugged-in.
+> >
+> > Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+>
+> I tend to agree how this is implemented and could merge it as such.
+>
+> I'm just thinking if we could refine this patch in a way that instead of
+> copying TRUSTED_DEBUG macro we could just replace pr_info() statements
+> with pr_debug()?
 
-Hmm. Right, it does not sense to merge unused API.
+AFAIU, TRUSTED_DEBUG being a security sensitive operation is only
+meant to be used in development environments and should be strictly
+disabled in production environments. But it may not always be true
+with pr_debug() with CONFIG_DYNAMIC_DEBUG=y which allows the debug
+paths to be compiled into the kernel which can be enabled/disabled at
+runtime.
 
-I'd like to still pick this patch (3/8) but you need to fix these first:
+IMO we should keep this TRUSTED_DEBUG macro, so that users are aware
+of its security sensitive nature and need to explicitly enable it to
+debug.
 
-WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-#17: 
-keyctl add trusted kmk "new 32 blobauth=f572d396fae9206628714fb2ce00f72e94f2258f"
+-Sumit
 
-WARNING: line over 80 characters
-#89: FILE: security/keys/trusted-keys/trusted_tpm1.c:801:
-+			if (tpm2 && opt->blobauth_len <= sizeof(opt->blobauth)) {
-
-WARNING: line over 80 characters
-#111: FILE: security/keys/trusted-keys/trusted_tpm2.c:94:
-+	tpm_buf_append_u16(&buf, 4 + options->blobauth_len + payload->key_len + 1);
-
-The best way is probably to encapsulate into helper function. It is more or
-less a sign that the code is too complicated to live inside a switch-case
-statement.
-
-Can you do that and send it as a separate patch?
-
-/Jarkko
-
+>
+> /Jarkko
+>
