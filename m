@@ -2,177 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0001D28BA
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 09:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FEA1D29BA
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 10:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbgENH1u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 May 2020 03:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726067AbgENH1u (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 May 2020 03:27:50 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06976C061A0E
-        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 00:27:48 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id r17so1710987lff.9
-        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 00:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OvIg8OTmvpD4AIra61gchuv+YQzJPkLcRjdOE9A6l2A=;
-        b=T58w69kBOxFktle1yYsy3hLN3gMn/osjm5YR8FTXl4uYp8PjKu2TZzOiHNgCx36vrE
-         Wl/ZIQZLvdR8y6+piwx3KEwGBHD8kyjMwzas/eYyJaxuJxY8/KGnPz4HlvtDAulI9I15
-         lGRt7VR2EK+bxqp2oZhR93/egU4OCxQtySGt6pV8RF67V5Vj3IcxPdw3Km1KhdoaRiaq
-         bSo22sNuywieNiZ1fpmYK7epfyyHEaUnQ1U7yB7K1aXP/AJXWde5jIFrUkDbeeALECIL
-         u0FuTV6q/ZfQm1Z7KARSGRX7zu3oek6QkvyBvFcfjjmEMIagj6XaGUbGVW2NX71/UJ7h
-         Omtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OvIg8OTmvpD4AIra61gchuv+YQzJPkLcRjdOE9A6l2A=;
-        b=i5MU5DxgwlDmQSJeR7865f6GqMOoKVruc6Gc/seuk4cDqrIPxJmzHeeXpLWgUfYk8+
-         VxQuHDxOCbzfl9s6uRf14Qrzjg737kP1QV+mwnY9o/YNb3Yh2yH0iolHl4s3TEYsX+/d
-         /VeUCgBmdtFFw87ysNGBsZZKvFCWn82V0i+XKfhxaDwtYWBKteeczrkUctOkv3wucaNQ
-         qMXYGeU9a1BAhpUeokZWNron7RGRUNA5cOZdhLc4CswO9H/Uaq8trGEKaHl/PJCfzl1V
-         fTehDmxJfFQq+VhUk7vdkv2OwfxU6vgpY3VtswE40Px30uXVPwZwScvUXjjLvI2socg9
-         883g==
-X-Gm-Message-State: AOAM532x31OBaGWbrL2gF7YMWU1ELDuDhliJmNq4N3yzdFOyXtE40BEq
-        t5KAFpIWWZplHjDnMdqyf2rxgsA59xatBDyfjvU77Q==
-X-Google-Smtp-Source: ABdhPJzL0WsvMihqen9758VYmk6yEgm/ZN9/XilvuCWzmgJOy/SB9sZscduKIMjRAKM98dv/ishZnbn+Lr4DfqPaa0A=
-X-Received: by 2002:a19:ccce:: with SMTP id c197mr2356496lfg.59.1589441267234;
- Thu, 14 May 2020 00:27:47 -0700 (PDT)
+        id S1725925AbgENIKa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 May 2020 04:10:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49114 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725886AbgENIK3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 14 May 2020 04:10:29 -0400
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 450FE2065D
+        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 08:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589443829;
+        bh=Xf8DEKxe/HcjD/EnXUO0eGUCvnkUXJ1xE0FLARkXWGA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=duE6MUlt6a33ZXoDy7N06eQHQyJ/iHiLmi5D2wHAxeAgbOknJICTp+xqAdplGkW2j
+         i5XrVwIx/uQ1IcFBHeuzfv3bUp8sGlSKGrLqMK59hWGrvIfGZqLtF7vo9qIqTLR6Du
+         Lpp/rMgvabhQTGnRggk1LoQiN29/oHbTvEp1DotI=
+Received: by mail-il1-f169.google.com with SMTP id b15so840349ilq.12
+        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 01:10:29 -0700 (PDT)
+X-Gm-Message-State: AOAM533m1h3cqi4ZGA9I9Q0jmqODYuIE+yJ0A3BjoNzAyhXYLqjVbkKC
+        TgR99vwC0ag3ughtTKvvEXHOszATxku9PpKFzRs=
+X-Google-Smtp-Source: ABdhPJzLDW5i+bsVSa0+yv6nTiwlQQoNIUBFaLtTnTHWfUUOiQdB3YRebMCuPtmgfnVQxRKwkMV+5PD5wlM31zp8nLY=
+X-Received: by 2002:a92:a312:: with SMTP id a18mr3541237ili.80.1589443828605;
+ Thu, 14 May 2020 01:10:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <1588758017-30426-1-git-send-email-sumit.garg@linaro.org>
- <1588758017-30426-3-git-send-email-sumit.garg@linaro.org> <ef2093f96eae7e9e6785f2c0ad00604d8adfd3be.camel@linux.intel.com>
-In-Reply-To: <ef2093f96eae7e9e6785f2c0ad00604d8adfd3be.camel@linux.intel.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 14 May 2020 12:57:35 +0530
-Message-ID: <CAFA6WYPr1iL-uJgSRu_61uv=2DhuEdDVdQLDuyPEOOK2jEgvyg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] KEYS: trusted: Introduce TEE based Trusted Keys
+References: <20200512040113.277768-1-loic.yhuel@gmail.com> <CAMj1kXFfLvUXU1A-7jnh3KMy5Qguhq0k9Cw=O0iBmbToowV_8A@mail.gmail.com>
+ <ab9df4468cc294c67a67ef336019379033e7c90c.camel@linux.intel.com>
+In-Reply-To: <ab9df4468cc294c67a67ef336019379033e7c90c.camel@linux.intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 14 May 2020 10:10:17 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHX2Hf_QeKF4m-4yfjzcM2=AFV-EzthQvDO1pOsyaSsZw@mail.gmail.com>
+Message-ID: <CAMj1kXHX2Hf_QeKF4m-4yfjzcM2=AFV-EzthQvDO1pOsyaSsZw@mail.gmail.com>
+Subject: Re: [PATCH] tpm: check event log version before reading final events
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>, dhowells@redhat.com,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Markus Wamser <Markus.Wamser@mixed-mode.de>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+Cc:     =?UTF-8?Q?Lo=C3=AFc_Yhuel?= <loic.yhuel@gmail.com>,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        op-tee@lists.trustedfirmware.org,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
-Content-Type: multipart/mixed; boundary="00000000000021218505a596a2dc"
+        Matthew Garrett <matthewgarrett@google.com>, javierm@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---00000000000021218505a596a2dc
-Content-Type: text/plain; charset="UTF-8"
-
-On Thu, 14 May 2020 at 05:58, Jarkko Sakkinen
+On Thu, 14 May 2020 at 03:09, Jarkko Sakkinen
 <jarkko.sakkinen@linux.intel.com> wrote:
 >
-> On Wed, 2020-05-06 at 15:10 +0530, Sumit Garg wrote:
-> > Add support for TEE based trusted keys where TEE provides the functionality
-> > to seal and unseal trusted keys using hardware unique key.
+> On Tue, 2020-05-12 at 08:44 +0200, Ard Biesheuvel wrote:
+> > Hi Lo=C3=AFc,
 > >
-> > Refer to Documentation/tee.txt for detailed information about TEE.
+> > Thanks for the fix.
 > >
-> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> > On Tue, 12 May 2020 at 06:01, Lo=C3=AFc Yhuel <loic.yhuel@gmail.com> wr=
+ote:
+> > > This fixes the boot issues since 5.3 on several Dell models when the =
+TPM
+> > > is enabled. Depending on the exact grub binary, booting the kernel wo=
+uld
+> > > freeze early, or just report an error parsing the final events log.
+> > >
+> > > We get an event log in the SHA-1 format, which doesn't have a
+> > > tcg_efi_specid_event_head in the first event, and there is a final ev=
+ents
+> > > table which doesn't match the crypto agile format.
+> > > __calc_tpm2_event_size reads bad "count" and "efispecid->num_algs", a=
+nd
+> > > either fails, or loops long enough for the machine to be appear froze=
+n.
+> > >
+> > > So we now only parse the final events table, which is per the spec al=
+ways
+> > > supposed to be in the crypto agile format, when we got a event log in=
+ this
+> > > format.
+> > >
+> >
+> > So what functionality do we lose here? Can we still make meaningful
+> > use of the event log without the final log? I thought one was
+> > incomplete without the other?
 >
-> The implementation looks solid but how or who could possibly test this?
 >
-> I do posses (personally, not from employer) bunch of ARM boards but my
-> TZ knowledge is somewhat limited (e.g. how can I get something running
-> in TZ).
+> Nope it would be incomplete [*].
 >
-
-Although, it should be fairly easy to test this implementation on an
-ARM board which supports OP-TEE. But since you are new to ARM
-TrustZone world, I would suggest you get used to OP-TEE on Qemu based
-setup. You could find pretty good documentation for this here [1] but
-for simplicity let me document steps here to test this trusted keys
-feature from scratch:
-
-# Install prerequisites as mentioned here [2]
-
-# Get the source code
-$ mkdir -p <optee-project>
-$ cd <optee-project>
-$ repo init -u https://github.com/OP-TEE/manifest.git -m qemu_v8.xml
-$ repo sync -j4 --no-clone-bundle
-
-# Get the toolchain
-$ cd <optee-project>/build
-$ make -j2 toolchains
-
-# As trusted keys work is based on latest tpmdd/master, so we can
-change Linux base as follows:
-$ cd <optee-project>/linux
-$ git remote add tpmdd git://git.infradead.org/users/jjs/linux-tpmdd.git
-$ git pull tpmdd
-$ git checkout -b tpmdd-master remotes/tpmdd/master
-# Cherry-pick and apply TEE features patch-set from this PR[3]
-# Apply this Linux trusted keys patch-set.
-
-# Now move on to build the source code
-$ cd <optee-project>/build
-# Apply attached "keyctl_change" patch
-$ patch -p1 < keyctl_change
-$ make -j`nproc`
-CFG_IN_TREE_EARLY_TAS=trusted_keys/f04a0fe7-1f5d-4b9b-abf7-619b85b4ce8c
-
-# Run QEMU setup
-$ make run-only
-# Type "c" on QEMU console to continue boot
-
-# Now there should be two virtual consoles up, one for OP-TEE and
-other for Linux
-# On Linux console, you can play with "keyctl" utility to have trusted
-and encrypted keys based on TEE.
-
-Do let me know in case you are stuck while following the above steps.
-
-[1] https://optee.readthedocs.io/en/latest/building/devices/qemu.html#qemu-v8
-[2] https://optee.readthedocs.io/en/latest/building/prerequisites.html#prerequisites
-[3] https://lkml.org/lkml/2020/5/4/1062
-
--Sumit
-
-> /Jarkko
+> So probably would make sense to at least issue a warning in this case.
+>
+> [*] https://www.kernel.org/doc/Documentation/security/tpm/tpm_event_log.r=
+st
 >
 
---00000000000021218505a596a2dc
-Content-Type: application/octet-stream; name=keyctl_change
-Content-Disposition: attachment; filename=keyctl_change
-Content-Transfer-Encoding: base64
-Content-ID: <f_ka6g56md0>
-X-Attachment-Id: f_ka6g56md0
+Right.
 
-ZGlmZiAtLWdpdCBhL2NvbW1vbi5tayBiL2NvbW1vbi5tawppbmRleCBhZWI3YjQxLi42NjNlNTI4
-IDEwMDY0NAotLS0gYS9jb21tb24ubWsKKysrIGIvY29tbW9uLm1rCkBAIC0yMjksNiArMjI5LDcg
-QEAgQlIyX1BBQ0tBR0VfT1BURUVfVEVTVF9TREsgPz0gJChPUFRFRV9PU19UQV9ERVZfS0lUX0RJ
-UikKIEJSMl9QQUNLQUdFX09QVEVFX1RFU1RfU0lURSA/PSAkKE9QVEVFX1RFU1RfUEFUSCkKIEJS
-Ml9QQUNLQUdFX1NUUkFDRSA/PSB5CiBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVCA/PSAk
-KGlmICQoQ0ZHX05XX0NPTlNPTEVfVUFSVCksdHR5QU1BJChDRkdfTldfQ09OU09MRV9VQVJUKSx0
-dHlBTUEwKQorQlIyX1BBQ0tBR0VfS0VZVVRJTFMgOj0geQogCiAjIEFsbCBCUjJfKiB2YXJpYWJs
-ZXMgZnJvbSB0aGUgbWFrZWZpbGUgb3IgdGhlIGVudmlyb25tZW50IGFyZSBhcHBlbmRlZCB0bwog
-IyAuLi9vdXQtYnIvZXh0cmEuY29uZi4gQWxsIHZhbHVlcyBhcmUgcXVvdGVkICIuLi4iIGV4Y2Vw
-dCB5IGFuZCBuLgpkaWZmIC0tZ2l0IGEva2NvbmZpZ3MvcWVtdS5jb25mIGIva2NvbmZpZ3MvcWVt
-dS5jb25mCmluZGV4IDM2OGMxOGEuLjgzMmFiNzQgMTAwNjQ0Ci0tLSBhL2tjb25maWdzL3FlbXUu
-Y29uZgorKysgYi9rY29uZmlncy9xZW11LmNvbmYKQEAgLTIwLDMgKzIwLDUgQEAgQ09ORklHXzlQ
-X0ZTPXkKIENPTkZJR185UF9GU19QT1NJWF9BQ0w9eQogQ09ORklHX0hXX1JBTkRPTT15CiBDT05G
-SUdfSFdfUkFORE9NX1ZJUlRJTz15CitDT05GSUdfVFJVU1RFRF9LRVlTPXkKK0NPTkZJR19FTkNS
-WVBURURfS0VZUz15Cg==
---00000000000021218505a596a2dc--
+I'll take the current patch as a fix for now.
+
+I agree it makes sense to add a warning, but I'd like to understand
+better which exact condition we should warn about.
+Currently, tpm_read_log_efi() simply disregards the final log if it is
+not in crypto agile format, but is there any point to exposing
+anything in that case?
