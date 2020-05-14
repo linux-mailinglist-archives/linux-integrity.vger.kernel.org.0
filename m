@@ -2,125 +2,150 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 036121D390E
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 20:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010291D3D46
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 21:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726389AbgENSWR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 May 2020 14:22:17 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39696 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726075AbgENSWQ (ORCPT
+        id S1727839AbgENTQV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 May 2020 15:16:21 -0400
+Received: from smtp-bc0c.mail.infomaniak.ch ([45.157.188.12]:54185 "EHLO
+        smtp-bc0c.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727772AbgENTQT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 May 2020 14:22:16 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04EIJAGZ051328;
-        Thu, 14 May 2020 14:21:57 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 310x56a4xb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 May 2020 14:21:57 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 04EIB0Ih019287;
-        Thu, 14 May 2020 18:21:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3100ubc5h3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 May 2020 18:21:55 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04EILrK665733002
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 May 2020 18:21:53 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74F104C044;
-        Thu, 14 May 2020 18:21:53 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 511364C04E;
-        Thu, 14 May 2020 18:21:52 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.165.117])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 14 May 2020 18:21:52 +0000 (GMT)
-Message-ID: <1589480510.4757.5.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] evm: Fix a small race in init_desc()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@nokia.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Date:   Thu, 14 May 2020 14:21:50 -0400
-In-Reply-To: <19452750e36d462088f4fca3d627a090@huawei.com>
-References: <c7743ab21a574eeeac40d783e0b8581c@huawei.com>
-         <20200512174706.GA298379@mwanda>
-         <a30fdceccef443b0a6ac8e0b06b83efc@huawei.com>
-         <19452750e36d462088f4fca3d627a090@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Thu, 14 May 2020 15:16:19 -0400
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49NLqj360nzlhjYr;
+        Thu, 14 May 2020 21:16:17 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49NLqf39VKzljTrt;
+        Thu, 14 May 2020 21:16:14 +0200 (CEST)
+Subject: Re: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
+ through O_MAYEXEC
+To:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        John Johansen <john.johansen@canonical.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>
+References: <20200505153156.925111-1-mic@digikod.net>
+ <20200505153156.925111-4-mic@digikod.net>
+ <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
+ <202005131525.D08BFB3@keescook> <202005132002.91B8B63@keescook>
+ <CAEjxPJ7WjeQAz3XSCtgpYiRtH+Jx-UkSTaEcnVyz_jwXKE3dkw@mail.gmail.com>
+ <202005140830.2475344F86@keescook>
+ <CAEjxPJ4R_juwvRbKiCg5OGuhAi1ZuVytK4fKCDT_kT6VKc8iRg@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <b740d658-a2da-5773-7a10-59a0ca52ac6b@digikod.net>
+Date:   Thu, 14 May 2020 21:16:13 +0200
+User-Agent: 
+MIME-Version: 1.0
+In-Reply-To: <CAEjxPJ4R_juwvRbKiCg5OGuhAi1ZuVytK4fKCDT_kT6VKc8iRg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-14_05:2020-05-14,2020-05-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- mlxscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
- adultscore=0 clxscore=1011 cotscore=-2147483648 lowpriorityscore=0
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005140156
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-05-14 at 07:11 +0000, Krzysztof Struczynski wrote:
-> > > From: Dan Carpenter [mailto:dan.carpenter@oracle.com]
-> > > This patch avoids a kernel panic due to accessing an error pointer set
-> > > by crypto_alloc_shash(). It occurs especially when there are many
-> > > files that require an unsupported algorithm, as it would increase the
-> > > likelihood of the following race condition.
-> > >
-> > > Imagine we have two threads and in the first thread
-> > > crypto_alloc_shash() fails and returns an error pointer.
-> > >
-> > > 		*tfm = crypto_alloc_shash(algo, 0, CRYPTO_NOLOAD);
-> > > 		if (IS_ERR(*tfm)) {
-> > > 			rc = PTR_ERR(*tfm); <--- FIRST THREAD HERE!
-> > > 			pr_err("Can not allocate %s (reason: %ld)\n", algo, rc);
-> > > 			*tfm = NULL;
-> > >
-> > > And the second thread is here:
-> > >
-> > > 	if (*tfm == NULL) {  <--- SECOND THREAD HERE!
-> > > 		mutex_lock(&mutex);
-> > > 		if (*tfm)
-> > > 			goto out;
-> > >
-> > > Since "*tfm" is non-NULL, we assume that it is valid and that leads to
-> > > a crash when it dereferences "*tfm".
-> > >
-> > > 	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
-> > >                                                              ^^^^
-> > >
-> > > This patch fixes the problem by introducing a temporary "tmp_tfm" and
-> > > only setting "*tfm" at the very end after everything has succeeded.
-> > > The other change is that I reversed the initial "if (!*tfm) {"
-> > > condition and pull the code in one indent level.
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: d46eb3699502b ("evm: crypto hash replaced by shash")
-> > > Reported-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > Reported-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-> > > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > 
-> > Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+On 14/05/2020 18:10, Stephen Smalley wrote:
+> On Thu, May 14, 2020 at 11:45 AM Kees Cook <keescook@chromium.org> wrote:
+>>
+>> On Thu, May 14, 2020 at 08:22:01AM -0400, Stephen Smalley wrote:
+>>> On Wed, May 13, 2020 at 11:05 PM Kees Cook <keescook@chromium.org> wrote:
+>>>>
+>>>> On Wed, May 13, 2020 at 04:27:39PM -0700, Kees Cook wrote:
+>>>>> Like, couldn't just the entire thing just be:
+>>>>>
+>>>>> diff --git a/fs/namei.c b/fs/namei.c
+>>>>> index a320371899cf..0ab18e19f5da 100644
+>>>>> --- a/fs/namei.c
+>>>>> +++ b/fs/namei.c
+>>>>> @@ -2849,6 +2849,13 @@ static int may_open(const struct path *path, int acc_mode, int flag)
+>>>>>               break;
+>>>>>       }
+>>>>>
+>>>>> +     if (unlikely(mask & MAY_OPENEXEC)) {
+>>>>> +             if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_MOUNT &&
+>>>>> +                 path_noexec(path))
+>>>>> +                     return -EACCES;
+>>>>> +             if (sysctl_omayexec_enforce & OMAYEXEC_ENFORCE_FILE)
+>>>>> +                     acc_mode |= MAY_EXEC;
+>>>>> +     }
+>>>>>       error = inode_permission(inode, MAY_OPEN | acc_mode);
+>>>>>       if (error)
+>>>>>               return error;
+>>>>>
+>>>>
+>>>> FYI, I've confirmed this now. Effectively with patch 2 dropped, patch 3
+>>>> reduced to this plus the Kconfig and sysctl changes, the self tests
+>>>> pass.
+>>>>
+>>>> I think this makes things much cleaner and correct.
+>>>
+>>> I think that covers inode-based security modules but not path-based
+>>> ones (they don't implement the inode_permission hook).  For those, I
+>>> would tentatively guess that we need to make sure FMODE_EXEC is set on
+>>> the open file and then they need to check for that in their file_open
+>>> hooks.
+>>
+>> I kept confusing myself about what order things happened in, so I made
+>> these handy notes about the call graph:
+>>
+>> openat2(dfd, char * filename, open_how)
+>>     do_filp_open(dfd, filename, open_flags)
+>>         path_openat(nameidata, open_flags, flags)
+>>             do_open(nameidata, file, open_flags)
+>>                 may_open(path, acc_mode, open_flag)
+>>                     inode_permission(inode, MAY_OPEN | acc_mode)
+>>                         security_inode_permission(inode, acc_mode)
+>>                 vfs_open(path, file)
+>>                     do_dentry_open(file, path->dentry->d_inode, open)
+>>                         if (unlikely(f->f_flags & FMODE_EXEC && !S_ISREG(inode->i_mode))) ...
+>>                         security_file_open(f)
+>>                         open()
+>>
+>> So, it looks like adding FMODE_EXEC into f_flags in do_open() is needed in
+>> addition to injecting MAY_EXEC into acc_mode in do_open()? Hmmm
 > 
-> Acked-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
+> Just do both in build_open_flags() and be done with it? Looks like he
+> was already setting FMODE_EXEC in patch 1 so we just need to teach
+> AppArmor/TOMOYO to check for it and perform file execute checking in
+> that case if !current->in_execve?
 
-Thanks, Roberto and Krzysztof.
-
-This patch is now queued in the "fixes" branch.
-
-Mimi
+I can postpone the file permission check for another series to make this
+one simpler (i.e. mount noexec only). Because it depends on the sysctl
+setting, it is OK to add this check later, if needed. In the meantime,
+AppArmor and Tomoyo could be getting ready for this.
