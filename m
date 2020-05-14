@@ -2,80 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F21D1D2475
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 03:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DEA1D2478
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 03:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726070AbgENBJR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 May 2020 21:09:17 -0400
-Received: from mga17.intel.com ([192.55.52.151]:36826 "EHLO mga17.intel.com"
+        id S1725977AbgENBLr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 May 2020 21:11:47 -0400
+Received: from mga04.intel.com ([192.55.52.120]:3479 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725943AbgENBJR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 May 2020 21:09:17 -0400
-IronPort-SDR: RC1slc/ec3LpppMX+N9NLRGBTilQqN4p3mctnDBHJMLkf30ThmwE26OWzdV1+n93nBts3SV1AE
- EG3ePw9SG3mA==
+        id S1725943AbgENBLr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 13 May 2020 21:11:47 -0400
+IronPort-SDR: zVy8JUGXZYoiPcRIFbu8aRR8tBUy5E8srdppMWIrN9bn9U6ebbxL4AJjZv3pR+cZdufJk7QYzM
+ Izg4BcMfq6GA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:09:16 -0700
-IronPort-SDR: YiIAlxpI4EtN9VTx0Vegwpwfu9sU8tkDAOEDfFqZnoYZRKQuayv5Vc/ogZVPhGmYCmunH+QNzO
- aA8klNpyns3w==
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:11:46 -0700
+IronPort-SDR: 2riP92HJXoTs4+2KeUluddBFfW61upoGPGWR2c4ITbdKxk75kqOiJ3x8aPmJfq455a6+2/3/8n
+ x/LY9S2DSFHw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,389,1583222400"; 
-   d="scan'208";a="253346471"
+   d="scan'208";a="372079754"
 Received: from gliber-mobl1.ger.corp.intel.com ([10.249.38.41])
-  by fmsmga008.fm.intel.com with ESMTP; 13 May 2020 18:09:14 -0700
-Message-ID: <ab9df4468cc294c67a67ef336019379033e7c90c.camel@linux.intel.com>
-Subject: Re: [PATCH] tpm: check event log version before reading final events
+  by fmsmga001.fm.intel.com with ESMTP; 13 May 2020 18:11:44 -0700
+Message-ID: <00325dff8292a18212bbdaa3fd81cebee2a60bc2.camel@linux.intel.com>
+Subject: Re: [PATCH v9 3/8] security: keys: trusted: fix TPM2 authorizations
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        =?ISO-8859-1?Q?Lo=EFc?= Yhuel <loic.yhuel@gmail.com>
-Cc:     linux-integrity@vger.kernel.org, matthewgarrett@google.com,
-        javierm@redhat.com
-Date:   Thu, 14 May 2020 04:09:13 +0300
-In-Reply-To: <CAMj1kXFfLvUXU1A-7jnh3KMy5Qguhq0k9Cw=O0iBmbToowV_8A@mail.gmail.com>
-References: <20200512040113.277768-1-loic.yhuel@gmail.com>
-         <CAMj1kXFfLvUXU1A-7jnh3KMy5Qguhq0k9Cw=O0iBmbToowV_8A@mail.gmail.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
+Date:   Thu, 14 May 2020 04:11:43 +0300
+In-Reply-To: <20200507231147.27025-4-James.Bottomley@HansenPartnership.com>
+References: <20200507231147.27025-1-James.Bottomley@HansenPartnership.com>
+         <20200507231147.27025-4-James.Bottomley@HansenPartnership.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.1-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-05-12 at 08:44 +0200, Ard Biesheuvel wrote:
-> Hi Loïc,
+On Thu, 2020-05-07 at 16:11 -0700, James Bottomley wrote:
+> In TPM 1.2 an authorization was a 20 byte number.  The spec actually
+> recommended you to hash variable length passwords and use the sha1
+> hash as the authorization.  Because the spec doesn't require this
+> hashing, the current authorization for trusted keys is a 40 digit hex
+> number.  For TPM 2.0 the spec allows the passing in of variable length
+> passwords and passphrases directly, so we should allow that in trusted
+> keys for ease of use.  Update the 'blobauth' parameter to take this
+> into account, so we can now use plain text passwords for the keys.
 > 
-> Thanks for the fix.
+> so before
 > 
-> On Tue, 12 May 2020 at 06:01, Loïc Yhuel <loic.yhuel@gmail.com> wrote:
-> > This fixes the boot issues since 5.3 on several Dell models when the TPM
-> > is enabled. Depending on the exact grub binary, booting the kernel would
-> > freeze early, or just report an error parsing the final events log.
-> > 
-> > We get an event log in the SHA-1 format, which doesn't have a
-> > tcg_efi_specid_event_head in the first event, and there is a final events
-> > table which doesn't match the crypto agile format.
-> > __calc_tpm2_event_size reads bad "count" and "efispecid->num_algs", and
-> > either fails, or loops long enough for the machine to be appear frozen.
-> > 
-> > So we now only parse the final events table, which is per the spec always
-> > supposed to be in the crypto agile format, when we got a event log in this
-> > format.
-> > 
+> keyctl add trusted kmk "new 32 blobauth=f572d396fae9206628714fb2ce00f72e94f2258f"
 > 
-> So what functionality do we lose here? Can we still make meaningful
-> use of the event log without the final log? I thought one was
-> incomplete without the other?
+> after we will accept both the old hex sha1 form as well as a new
+> directly supplied password:
+> 
+> keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001"
+> 
+> Since a sha1 hex code must be exactly 40 bytes long and a direct
+> password must be 20 or less, we use the length as the discriminator
+> for which form is input.
+> 
+> Note this is both and enhancement and a potential bug fix.  The TPM
+> 2.0 spec requires us to strip leading zeros, meaning empyty
+> authorization is a zero length HMAC whereas we're currently passing in
+> 20 bytes of zeros.  A lot of TPMs simply accept this as OK, but the
+> Microsoft TPM emulator rejects it with TPM_RC_BAD_AUTH, so this patch
+> makes the Microsoft TPM emulator work with trusted keys.
+> 
+> Fixes: 0fe5480303a1 ("keys, trusted: seal/unseal with TPM 2.0 chips")
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
+Have not checked yet the tail. Probably won't check before PR for v5.8
+is out.
 
-Nope it would be incomplete [*].
+Just wondering would it hurt to merge everything up until this patch?
 
-So probably would make sense to at least issue a warning in this case.
-
-[*] https://www.kernel.org/doc/Documentation/security/tpm/tpm_event_log.rst
 
 /Jarkko
 
