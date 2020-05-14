@@ -2,50 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52681D3340
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 16:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC401D3573
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2020 17:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727082AbgENOlo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 May 2020 10:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
+        id S1726191AbgENPpQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 May 2020 11:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726176AbgENOlo (ORCPT
+        with ESMTP id S1726140AbgENPpQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 May 2020 10:41:44 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D06AC061A0F
-        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 07:41:44 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id a5so12627754pjh.2
-        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 07:41:44 -0700 (PDT)
+        Thu, 14 May 2020 11:45:16 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE1DC061A0E
+        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 08:45:15 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id ms17so12619065pjb.0
+        for <linux-integrity@vger.kernel.org>; Thu, 14 May 2020 08:45:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=IpKyFs1yszxKs0lfKzxRyfm8sy/4V4zXUkzdtSdkHLU=;
-        b=X+1M/fmbQRViUiNWq5i8Wnhzf2ZxZWa44EfPqXFdhzGNfFrnMMGFlC9RiMxXJ091Ma
-         NG/CNZqhzV1Qho131HIRtHnMmH2dd1a0u/Lnxs7n0oy487ROOuwOgwTDBO2IRRCDsPb3
-         hmLh+/ITWKzvGRhNGI8R89GJSU8kqpyPsfmQQ=
+        bh=C14dFYivD8qv8BpAvB7kTDBgmObt0Bwj81tS0Zc4/E8=;
+        b=WeBSVMSYQ4gtB5dULeEkKU/Ya0fz/EW/RpuUt7D8OeJEBKAKV2pF5kPidP02iOR39J
+         G1MttEPeItqlTkRXkO6DaVmCrP7nH7+PO7my0CuD5d86lDI5xv46HrYCZiFQuNjdOnTz
+         5lq27uwgV1aYUO8FPK6JNzqOwNdl1+mzKbYGk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=IpKyFs1yszxKs0lfKzxRyfm8sy/4V4zXUkzdtSdkHLU=;
-        b=d5ukMEaDDTlEDvd3rW4d8s4GA0Iu0ryKbR5s5wJ6GGx4lyUlKeimYpcR7BAfEed7YY
-         E7Xa7GdGdwhveLJeiCsYQZaBNgW2DA9EosTCcA6GdH0f7qLKDeo3Ge7XQDZYuXQ7g+fL
-         CDyAeGmfGv+RePOEgTygTy/5/Lsq8Jcb1XcEQw0sNFT8lf/bjKIWioa2P0oOEGo1mah/
-         QJGfBdtEyh+FQOidLNCob7fbqjHJlTkheBBT3FcD3FnzUzTcEOc4AoGm+xp1bMw03dBp
-         RwFtdbiWbNBp7U3WOMY6bhFzUNIM8ny/InIF/32apYIBYXGLi3nKBb3HbGc2bHS6EAua
-         1qlw==
-X-Gm-Message-State: AOAM533ENVf3T757SK+FvUTodCFGzFuH1yuWB25KzZ3LvTBelkurkvu8
-        Ks8qG1dKa+V+1y43l2kpt66JNA==
-X-Google-Smtp-Source: ABdhPJw803NLliwJdw3Qk5o4x+XH/SQaDwZsQ2JFMZ1iNHIhcyH1GCLb3+bU8sx5k7WA09KC4Ps+iQ==
-X-Received: by 2002:a17:902:b608:: with SMTP id b8mr4282064pls.163.1589467303571;
-        Thu, 14 May 2020 07:41:43 -0700 (PDT)
+        bh=C14dFYivD8qv8BpAvB7kTDBgmObt0Bwj81tS0Zc4/E8=;
+        b=PMP/IjkTefyAnHW+GrvDV97MV+UyRd2rEq4yyL1BBLaA4VpyoNOVK9Vo8ed1GbEFTJ
+         YRW1X22lYpl/I8t6nrA5UpoPgfFZN6ajTtWlsHLRuSUzIbTVWevZ/FTMCpdzSqtlpF5U
+         VSro6h4I1YtWeyt6WcbzpiPzELVE2UhSk4bPvSJp1X75BZGvoYpCWsmWNO9IAC/0cziE
+         li6QHBwaOCl9Kv5+8mpe2xjX0RsgV7yXGn9iLz5MxcMnxZBX3aak/6RnM6w7FLdgTHhE
+         4xjevNrr8jojiiMtH9SOIajvEukRt8icnUJir6Q85nTRMzZmFotcZd7ufalRqzeEG/qU
+         f9Jg==
+X-Gm-Message-State: AOAM532vusvYTCDh8eQStXIrAz21ZgVGCRADFtktd2Qie2KkzPG5uFLT
+        2cJnPedhAMU6ewLyIniqloKstw==
+X-Google-Smtp-Source: ABdhPJyhzYoT7OtYhHCXKJ4eWD6sNRzKX5qxh8oQ2rT3RB19/hswKImd/xT2ezGyqupFNS8qGCcfOg==
+X-Received: by 2002:a17:902:c113:: with SMTP id 19mr4514772pli.95.1589471115414;
+        Thu, 14 May 2020 08:45:15 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g10sm2542952pfk.103.2020.05.14.07.41.41
+        by smtp.gmail.com with ESMTPSA id e15sm1909094pfh.23.2020.05.14.08.45.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2020 07:41:41 -0700 (PDT)
-Date:   Thu, 14 May 2020 07:41:40 -0700
+        Thu, 14 May 2020 08:45:14 -0700 (PDT)
+Date:   Thu, 14 May 2020 08:45:13 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Stephen Smalley <stephen.smalley.work@gmail.com>
 Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
@@ -82,7 +82,7 @@ Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
         Linux FS Devel <linux-fsdevel@vger.kernel.org>
 Subject: Re: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
  through O_MAYEXEC
-Message-ID: <202005140739.F3A4D8F3@keescook>
+Message-ID: <202005140830.2475344F86@keescook>
 References: <20200505153156.925111-1-mic@digikod.net>
  <20200505153156.925111-4-mic@digikod.net>
  <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
@@ -136,8 +136,24 @@ On Thu, May 14, 2020 at 08:22:01AM -0400, Stephen Smalley wrote:
 > the open file and then they need to check for that in their file_open
 > hooks.
 
-Does there need to be an FMODE_OPENEXEC, or is the presence of
-FMODE_OPEN with FMODE_EXEC sufficient?
+I kept confusing myself about what order things happened in, so I made
+these handy notes about the call graph:
+
+openat2(dfd, char * filename, open_how)
+    do_filp_open(dfd, filename, open_flags)
+        path_openat(nameidata, open_flags, flags)
+            do_open(nameidata, file, open_flags) 
+                may_open(path, acc_mode, open_flag)
+                    inode_permission(inode, MAY_OPEN | acc_mode)
+                        security_inode_permission(inode, acc_mode)
+                vfs_open(path, file)
+                    do_dentry_open(file, path->dentry->d_inode, open)
+                        if (unlikely(f->f_flags & FMODE_EXEC && !S_ISREG(inode->i_mode))) ...
+                        security_file_open(f)
+                        open()
+
+So, it looks like adding FMODE_EXEC into f_flags in do_open() is needed in
+addition to injecting MAY_EXEC into acc_mode in do_open()? Hmmm
 
 -- 
 Kees Cook
