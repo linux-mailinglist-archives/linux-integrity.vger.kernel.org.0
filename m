@@ -2,74 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D171D41F0
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2020 02:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DC41D4299
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2020 03:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgEOAD0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 May 2020 20:03:26 -0400
-Received: from mga06.intel.com ([134.134.136.31]:17796 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726088AbgEOAD0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 May 2020 20:03:26 -0400
-IronPort-SDR: g/0Sb2OIhduRYzLkFPrXOhvrbY3ujtNR8RJfYR/Xh4U1kCyXZl2cvs+fSCCisw2Dy097Gy7ynF
- FvRyeryR4hSw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 17:03:25 -0700
-IronPort-SDR: IMU8mvYF/BX3FJs5oOTyEUMla3XtzozhJcao0jL/7xZKH3ZpBvjZISrte25WPNwTCkEYZJTpJj
- m13mDz2d9sZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,392,1583222400"; 
-   d="scan'208";a="266422263"
-Received: from ashadrin-mobl1.ccr.corp.intel.com ([10.249.38.112])
-  by orsmga006.jf.intel.com with ESMTP; 14 May 2020 17:03:23 -0700
-Message-ID: <7dadd27c89860c03d6c2eb0922838ef3e29e8f9b.camel@linux.intel.com>
-Subject: Re: [PATCH] tpm: check event log version before reading final events
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        =?ISO-8859-1?Q?Lo=EFc?= Yhuel <loic.yhuel@gmail.com>
-Cc:     Matthew Garrett <mjg59@google.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Date:   Fri, 15 May 2020 03:03:10 +0300
-In-Reply-To: <CAMj1kXEUTdmudiB5aKeDAkYhv5jbwzBQ4cOrxK8VOt8O8Xjk=Q@mail.gmail.com>
-References: <20200512040113.277768-1-loic.yhuel@gmail.com>
-         <CACdnJuv8OyQpO4achWJb2HeB8Jb6Ejq9LsG64659JSay-a9O5A@mail.gmail.com>
-         <116341780ff56884d2f03aa9b90a8f9566b91540.camel@linux.intel.com>
-         <CANMwUkir2WTA7-J--Y_QFz8ZX5dHNTtLru19FHYew1uyxyKYNA@mail.gmail.com>
-         <CAMj1kXEUTdmudiB5aKeDAkYhv5jbwzBQ4cOrxK8VOt8O8Xjk=Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.1-2 
+        id S1728201AbgEOBAn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 May 2020 21:00:43 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:57799 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726170AbgEOBAm (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 14 May 2020 21:00:42 -0400
+Received: from fsav106.sakura.ne.jp (fsav106.sakura.ne.jp [27.133.134.233])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 04F0w5Dv079234;
+        Fri, 15 May 2020 09:58:05 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav106.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp);
+ Fri, 15 May 2020 09:58:05 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 04F0w5cY079230
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Fri, 15 May 2020 09:58:05 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH v5 3/6] fs: Enable to enforce noexec mounts or file exec
+ through O_MAYEXEC
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        John Johansen <john.johansen@canonical.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>
+References: <20200505153156.925111-1-mic@digikod.net>
+ <20200505153156.925111-4-mic@digikod.net>
+ <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
+ <202005131525.D08BFB3@keescook> <202005132002.91B8B63@keescook>
+ <CAEjxPJ7WjeQAz3XSCtgpYiRtH+Jx-UkSTaEcnVyz_jwXKE3dkw@mail.gmail.com>
+ <202005140830.2475344F86@keescook>
+ <CAEjxPJ4R_juwvRbKiCg5OGuhAi1ZuVytK4fKCDT_kT6VKc8iRg@mail.gmail.com>
+ <b740d658-a2da-5773-7a10-59a0ca52ac6b@digikod.net>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <5263f2ea-1267-7370-6463-da8c9d9145fd@i-love.sakura.ne.jp>
+Date:   Fri, 15 May 2020 09:58:00 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <b740d658-a2da-5773-7a10-59a0ca52ac6b@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-05-14 at 13:31 +0200, Ard Biesheuvel wrote:
-> On Thu, 14 May 2020 at 13:28, Loïc Yhuel <loic.yhuel@gmail.com> wrote:
-> > Le jeu. 14 mai 2020 à 12:54, Jarkko Sakkinen
-> > <jarkko.sakkinen@linux.intel.com> a écrit :
-> > > So it is clear that "pr_warn(FW_BUG ..." would be a sane to have there.
-> > So only to tell the UEFI might have logged events the kernel can't read ?
-> > There is no warning if the table is missing, which would have the same result.
-> > 
-> > I can try to dump it, perhaps it is using the SHA-1 log format.
-> > If so, would a patch to support this non-standard behavior be accepted ?
-> 
-> That is why I was asking the question: what exact condition should we
-> warn about? And at which point?
+On 2020/05/06 0:31, Mickaël Salaün wrote:
+> The goal of this patch series is to enable to control script execution
+> with interpreters help.  A new O_MAYEXEC flag, usable through
+> openat2(2), is added to enable userspace script interpreter to delegate
+> to the kernel (and thus the system security policy) the permission to
+> interpret/execute scripts or other files containing what can be seen as
+> commands.
 
-Always when final table is missing there should be some sort of notification
-because the event log is incomplete.
+Since TOMOYO considers that any file (even standard input which is connected
+to keyboard) can provide data which can be interpreted as executable, TOMOYO
+does not check traditional "execute permission". TOMOYO's execute permission
+serves as a gate for replacing current process with a new file using execve()
+syscall. All other calls (e.g. uselib(), open()) are simply treated as
+opening a file for read/write/append etc. Therefore,
 
-I.e. it misses PCR5 extends from GetEventLog().
-
-No additional info, just a note that we don't have the tail. I'm fine with
-info level message too.
-
-/Jarkko
+On 14/05/2020 18:10, Stephen Smalley wrote:> Just do both in build_open_flags() and be done with it? Looks like he
+> was already setting FMODE_EXEC in patch 1 so we just need to teach> AppArmor/TOMOYO to check for it and perform file execute checking in> that case if !current->in_execve?
+regarding TOMOYO, I don't think that TOMOYO needs to perform file execute
+checking if !current->in_execve , even if O_MAYEXEC is introduced.
 
