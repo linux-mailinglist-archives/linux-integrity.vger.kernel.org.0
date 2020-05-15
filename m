@@ -2,133 +2,140 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5BE1D4422
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2020 05:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B473B1D4796
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2020 10:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbgEODo1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 May 2020 23:44:27 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:41926 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726176AbgEODo0 (ORCPT
+        id S1727853AbgEOIBj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 May 2020 04:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727001AbgEOIBg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 May 2020 23:44:26 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 8213A8EE2B2;
-        Thu, 14 May 2020 20:44:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1589514265;
-        bh=Pap4SSzXaAz3qlkjmLgUnEFiE3PZuWsdUzZD0OJ7fiA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=TGUEdkRThl20DBgXdJaUabwDybzxIbl5+ur31mOYD4jaFMaU2uMgbnrrQ8Evu1koK
-         HhpuOcHE6eEOaVk7aTXxQKwehOEMgqdwcwE1riUKG7R0zEJJe+GZcC5UkNkDuSD5p4
-         zn1czUf6ZfUBQUZS1c/iSE5y+iXMXh/+R1Yu/MH8=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id uyMGBPmMGRkA; Thu, 14 May 2020 20:44:25 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id DF2FC8EE165;
-        Thu, 14 May 2020 20:44:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1589514265;
-        bh=Pap4SSzXaAz3qlkjmLgUnEFiE3PZuWsdUzZD0OJ7fiA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=TGUEdkRThl20DBgXdJaUabwDybzxIbl5+ur31mOYD4jaFMaU2uMgbnrrQ8Evu1koK
-         HhpuOcHE6eEOaVk7aTXxQKwehOEMgqdwcwE1riUKG7R0zEJJe+GZcC5UkNkDuSD5p4
-         zn1czUf6ZfUBQUZS1c/iSE5y+iXMXh/+R1Yu/MH8=
-Message-ID: <1589514263.5759.25.camel@HansenPartnership.com>
-Subject: Re: [PATCH v9 0/8] TPM 2.0 trusted keys with attached policy
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Date:   Thu, 14 May 2020 20:44:23 -0700
-In-Reply-To: <483c4f1af7be41c8d091b11d4484b606ebd319b7.camel@linux.intel.com>
-References: <20200507231147.27025-1-James.Bottomley@HansenPartnership.com>
-         <23639de13874c00e6bb2b816b4db0b586c9a074c.camel@linux.intel.com>
-         <483c4f1af7be41c8d091b11d4484b606ebd319b7.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Fri, 15 May 2020 04:01:36 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751C6C061A0C
+        for <linux-integrity@vger.kernel.org>; Fri, 15 May 2020 01:01:35 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id x13so595059pfn.11
+        for <linux-integrity@vger.kernel.org>; Fri, 15 May 2020 01:01:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Ur+hb+yciYy1xQ68pS5XyzW31c915My4tqJ2beLm4bQ=;
+        b=lKBBB6TBcN0o1HU4UgdMxAG6vhpa1qK6VNim7Q3I07ra18sLY43itwc35OZNGOPACS
+         ymYWlFxO9PvwCf0zrIQ1pxa6GzHHGDHo1jgwyp6aBR8wZKa0Hx5uKMGpHEAZGyjeZ8iK
+         mxsL/SfdN7bkAODR1xFfclPFJE9UsG7Mt5GjM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Ur+hb+yciYy1xQ68pS5XyzW31c915My4tqJ2beLm4bQ=;
+        b=l6ZDx37m7JFl34GbDuPOZyW9SxzCRmMtd5JGwa+3uugiSfuiu+AA8nHfjMTfu+e+tT
+         yfcifsgyjEoJQ0ifkLH/mzC+sHIF2PV8wzXdRQxiR/J5EUJIY5ZruaMkQ6s3N+Pnyfie
+         nlot54kTXnCYHfrLBKvsLQKA1MBqXfPkL+EoZGNV0zaAJqRs6Ul5KOiuSWaqn34+PHkw
+         D2wRKrxyZzV22F5MAJED/eSTH5H+eoeMX+IlKZeDg2L+vCNQhsrCtk9+0DODFNGrLAla
+         otEF5fB8PisMv4skw6LWqvu9RJWl5qyJxG6PrRGdSuTcfn6MIXIrXIFRtQQOB3qkfFbI
+         4vpw==
+X-Gm-Message-State: AOAM533UoMY4mD/4fgYhpIwpUM3lnRyqEnnhLuAYnHGVe2HcDsj7mtNV
+        +69vcsC8y0hJbnGIXU222r856g==
+X-Google-Smtp-Source: ABdhPJyd7lafomptCZ7ujKP5O758shT8BUso0xPAsVuMxJDi6WBMT/SqJQvpseht52t2m4Hfz/w/2Q==
+X-Received: by 2002:a63:f958:: with SMTP id q24mr1977355pgk.338.1589529694841;
+        Fri, 15 May 2020 01:01:34 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o7sm1178366pgs.35.2020.05.15.01.01.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2020 01:01:33 -0700 (PDT)
+Date:   Fri, 15 May 2020 01:01:32 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        John Johansen <john.johansen@canonical.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        "Lev R. Oshvang ." <levonshe@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>
+Subject: How about just O_EXEC? (was Re: [PATCH v5 3/6] fs: Enable to enforce
+ noexec mounts or file exec through O_MAYEXEC)
+Message-ID: <202005142343.D580850@keescook>
+References: <20200505153156.925111-1-mic@digikod.net>
+ <20200505153156.925111-4-mic@digikod.net>
+ <CAEjxPJ7y2G5hW0WTH0rSrDZrorzcJ7nrQBjfps2OWV5t1BUYHw@mail.gmail.com>
+ <202005131525.D08BFB3@keescook>
+ <202005132002.91B8B63@keescook>
+ <CAEjxPJ7WjeQAz3XSCtgpYiRtH+Jx-UkSTaEcnVyz_jwXKE3dkw@mail.gmail.com>
+ <202005140830.2475344F86@keescook>
+ <CAEjxPJ4R_juwvRbKiCg5OGuhAi1ZuVytK4fKCDT_kT6VKc8iRg@mail.gmail.com>
+ <b740d658-a2da-5773-7a10-59a0ca52ac6b@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b740d658-a2da-5773-7a10-59a0ca52ac6b@digikod.net>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-05-15 at 05:22 +0300, Jarkko Sakkinen wrote:
-> On Thu, 2020-05-14 at 17:31 +0300, Jarkko Sakkinen wrote:
-> > I'm compiling now kernel with all series included.
+On Thu, May 14, 2020 at 09:16:13PM +0200, Mickaël Salaün wrote:
+> On 14/05/2020 18:10, Stephen Smalley wrote:
+> > On Thu, May 14, 2020 at 11:45 AM Kees Cook <keescook@chromium.org> wrote:
+> >> So, it looks like adding FMODE_EXEC into f_flags in do_open() is needed in
+> >> addition to injecting MAY_EXEC into acc_mode in do_open()? Hmmm
 > > 
-> > Kind of checking if I could just take the whole series. Let see.
-> > 
-> > In all cases I want the style errors in 3/8 to be fixes with a
-> > helper
-> > but maybe better to hold before sending anything. Possibly that is
-> > all
-> > needed I'll just carve that patch myself.
-> > 
-> > Please don't do anything for the moment.
+> > Just do both in build_open_flags() and be done with it? Looks like he
+> > was already setting FMODE_EXEC in patch 1 so we just need to teach
+> > AppArmor/TOMOYO to check for it and perform file execute checking in
+> > that case if !current->in_execve?
 > 
-> This is what I tried first (with the full series applied):
-> 
-> #!/bin/sh
-> 
-> die()
-> {
-> 	keyctl clear @u
-> 	./tpm2-flush --all-transient
-> 	exit $1
-> }
-> 
-> KEYHANDLE=$(./tpm2-root-key || die 1)
-> KEYID=$(keyctl add trusted kmk "new 32 keyhandle=$KEYHANDLE
-> hash=sha256" @u || die 1)
-> 
-> echo "$KEYID ($KEYHANDLE)"
-> 
-> keyctl pipe $KEYID > blob.hex || die 1
-> keyctl clear @u || die 1
-> 
-> echo "Import key from blob"
-> 
-> keyctl add trusted kmk "load `cat blob.hex` keyhandle=$KEYHANDLE" @u
-> || die 1
-> 
-> die 0
-> 
-> Result:
-> 
-> sudo ./keyctl-smoke.sh
-> 566201053 (0x80000000)
-> keyctl_read_alloc: Permission denied
+> I can postpone the file permission check for another series to make this
+> one simpler (i.e. mount noexec only). Because it depends on the sysctl
+> setting, it is OK to add this check later, if needed. In the meantime,
+> AppArmor and Tomoyo could be getting ready for this.
 
-Well, it's clearly failing in keyctl pipe
+So, after playing around with this series, investigating Stephen's
+comments, digging through the existing FMODE_EXEC uses, and spending a
+bit more time thinking about Lev and Aleksa's dislike of the sysctls, I've
+got a much more radically simplified solution that I think could work.
 
-I do confess to never having tested a volatile primary, but I just did
-so and it works for me.  I will also add the keyhandle in the load
-isn't necessary, because it should be in the blob, but there should
-also be no harm (just tested).
+Maybe I've missed some earlier discussion that ruled this out, but I
+couldn't find it: let's just add O_EXEC and be done with it. It actually
+makes the execve() path more like openat2() and is much cleaner after
+a little refactoring. Here are the results, though I haven't emailed it
+yet since I still want to do some more testing:
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=kspp/o_exec/v1
 
-However, I don't have keyctl_read_alloc in my tree, so it may be an
-incompatibility with another patch set.  What's your base and what
-other patches do you have applied?
+I look forward to flames! ;)
 
-James
-
-> Any ideas what I might have done wrong? Have not tried auth value yet
-> but afaik the above should fully test import and export.
-> 
-> Uses tpm2-scripts:
-> 
-> https://github.com/jsakkine-intel/tpm2-scripts
-> 
-> I'll probably move these to git.infradead.org because I don't like
-> really like at all Github and my kernel tree is there anyway.
-> 
-> /Jarkko
-> 
-
+-- 
+Kees Cook
