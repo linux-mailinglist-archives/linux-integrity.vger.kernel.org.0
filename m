@@ -2,87 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 886C21D84FF
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 May 2020 20:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D3C1D87B3
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 May 2020 20:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731945AbgERR6s (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 18 May 2020 13:58:48 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11062 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731953AbgERR6r (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 18 May 2020 13:58:47 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04IHWN5m007797;
-        Mon, 18 May 2020 13:58:46 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 312btudkax-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 May 2020 13:58:45 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04IHuMJv014543;
-        Mon, 18 May 2020 17:58:42 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 313xehg28h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 May 2020 17:58:42 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04IHwedg65339580
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 May 2020 17:58:40 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A97B5204E;
-        Mon, 18 May 2020 17:58:40 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.145.145])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B5FBF52050;
-        Mon, 18 May 2020 17:58:39 +0000 (GMT)
-Message-ID: <1589824719.5111.126.camel@linux.ibm.com>
+        id S1729287AbgERSzD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 18 May 2020 14:55:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58954 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728830AbgERSzD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 18 May 2020 14:55:03 -0400
 Subject: Re: [GIT PULL] integrity subsystem fixes for v5.7
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Mon, 18 May 2020 13:58:39 -0400
-In-Reply-To: <CAHk-=wh_Zw7ug+iMALAKfQkdyVAUWC0UB0bfRRPMOCC7U5uTFQ@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589828102;
+        bh=4btdnUDZKtSjiUjC2dUR+3nLvzFmMXPnFFKB4s9bMeU=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=GQhKT3q01gs40Ze7Y7CtGwZPXPHdWHgi/+inPxrawBHduQuZ547diGa0Y7v6XJ++l
+         BsYAtdBGW4JTzgLS5jIavZeh3cY79jbpdo2lAN5Bn4R223anmRSWTigqc9faQrSRQG
+         PpOOLGzWGHFoMsSnko4dA9YAGW3vxZ/9oQ6IUKZE=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1589816971.5111.113.camel@linux.ibm.com>
 References: <1589816971.5111.113.camel@linux.ibm.com>
-         <CAHk-=wh_Zw7ug+iMALAKfQkdyVAUWC0UB0bfRRPMOCC7U5uTFQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-18_06:2020-05-15,2020-05-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 mlxlogscore=812
- impostorscore=0 spamscore=0 clxscore=1015 cotscore=-2147483648
- lowpriorityscore=0 adultscore=0 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005180143
+X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1589816971.5111.113.camel@linux.ibm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+ next-integrity.fixes
+X-PR-Tracked-Commit-Id: 8433856947217ebb5697a8ff9c4c9cad4639a2cf
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 642b151f45dd54809ea00ecd3976a56c1ec9b53d
+Message-Id: <158982810253.23134.7314950463770880232.pr-tracker-bot@kernel.org>
+Date:   Mon, 18 May 2020 18:55:02 +0000
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-05-18 at 10:47 -0700, Linus Torvalds wrote:
-> On Mon, May 18, 2020 at 8:49 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity.fixes
-> 
-> No such head.
-> 
-> It looks like the plain 'fixes' branch has the same commit ID, but
-> there's no next-integrity.fixes.
+The pull request you sent on Mon, 18 May 2020 11:49:31 -0400:
 
-Ugh, that's the name of my local branch.  The remote branch is "fixes"
-as you figured out.
+> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity.fixes
 
-> 
-> Btw, any chance you could start using signed tags? I've been
-> encouraging people to do that even on kernel.org, and we've got fairly
-> high coverage these days..
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/642b151f45dd54809ea00ecd3976a56c1ec9b53d
 
-Sure, will figure out how in time for the next open window, if that is
-Ok.
+Thank you!
 
-Mimi
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
