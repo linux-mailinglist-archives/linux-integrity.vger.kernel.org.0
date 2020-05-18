@@ -2,54 +2,61 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D3C1D87B3
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 May 2020 20:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F061D884F
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 May 2020 21:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729287AbgERSzD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 18 May 2020 14:55:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58954 "EHLO mail.kernel.org"
+        id S1728294AbgERTiL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 18 May 2020 15:38:11 -0400
+Received: from mga17.intel.com ([192.55.52.151]:29951 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728830AbgERSzD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 18 May 2020 14:55:03 -0400
-Subject: Re: [GIT PULL] integrity subsystem fixes for v5.7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589828102;
-        bh=4btdnUDZKtSjiUjC2dUR+3nLvzFmMXPnFFKB4s9bMeU=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=GQhKT3q01gs40Ze7Y7CtGwZPXPHdWHgi/+inPxrawBHduQuZ547diGa0Y7v6XJ++l
-         BsYAtdBGW4JTzgLS5jIavZeh3cY79jbpdo2lAN5Bn4R223anmRSWTigqc9faQrSRQG
-         PpOOLGzWGHFoMsSnko4dA9YAGW3vxZ/9oQ6IUKZE=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1589816971.5111.113.camel@linux.ibm.com>
-References: <1589816971.5111.113.camel@linux.ibm.com>
-X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1589816971.5111.113.camel@linux.ibm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
- next-integrity.fixes
-X-PR-Tracked-Commit-Id: 8433856947217ebb5697a8ff9c4c9cad4639a2cf
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 642b151f45dd54809ea00ecd3976a56c1ec9b53d
-Message-Id: <158982810253.23134.7314950463770880232.pr-tracker-bot@kernel.org>
-Date:   Mon, 18 May 2020 18:55:02 +0000
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1727987AbgERTiL (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 18 May 2020 15:38:11 -0400
+IronPort-SDR: V6OJC9JfMgtIbgqTZK7di4sWXhGvgo/rQVBVOAgAEDTmbKEu3j3KEIK3ZWd8X5yLWD44fd2Ay9
+ wHNowKF6cLNg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 12:38:10 -0700
+IronPort-SDR: JZGy6sBI2Vjp/UK56cBIPjG9xAIo0dm/8rzzZOU9UkxBvQJfqjury8Gg8UoRXwRVKYRoLQvYyc
+ u/5QWr6Dp++Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
+   d="scan'208";a="299333022"
+Received: from afloress-mobl2.amr.corp.intel.com ([10.252.56.85])
+  by fmsmga002.fm.intel.com with ESMTP; 18 May 2020 12:38:07 -0700
+Message-ID: <e886d85baa24c09a6b571dd993e7450d5b16d48c.camel@linux.intel.com>
+Subject: Re: [PATCH 2/2] tpm_ftpm_tee: register driver on tee bus
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Maxim Uvarov <maxim.uvarov@linaro.org>,
+        linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
+        jens.wiklander@linaro.org, linux-integrity@vger.kernel.org,
+        arnd@linaro.org, sumit.garg@linaro.org
+Date:   Mon, 18 May 2020 22:38:06 +0300
+In-Reply-To: <20200518133459.28019-3-maxim.uvarov@linaro.org>
+References: <20200518133459.28019-1-maxim.uvarov@linaro.org>
+         <20200518133459.28019-3-maxim.uvarov@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Mon, 18 May 2020 11:49:31 -0400:
+On Mon, 2020-05-18 at 16:34 +0300, Maxim Uvarov wrote:
+> Register driver on tee bus. module tee registers bus,
+> and module optee calls optee_enumerate_devices() to scan
+> all devices on the bus. This TA can be Early TA's ( can be
+> compiled into optee-os). In that case it will be on optee
+> bus before linux booting. Also optee-suplicant application
+> is needed to be loaded between optee module and ftpm module to
+> to maintain functionality for ftpm driver.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity.fixes
+Please use proper casing in the commit message e.g. tee to TEE
+and so forth. What is TA?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/642b151f45dd54809ea00ecd3976a56c1ec9b53d
+/Jarkko
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
