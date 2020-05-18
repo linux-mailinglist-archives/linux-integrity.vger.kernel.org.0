@@ -2,118 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A14F1D7CB5
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 May 2020 17:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4832F1D7D49
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 May 2020 17:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728255AbgERPVO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 18 May 2020 11:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728344AbgERPVL (ORCPT
+        id S1728390AbgERPti (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 18 May 2020 11:49:38 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26990 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727007AbgERPti (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 18 May 2020 11:21:11 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CDBC05BD0C
-        for <linux-integrity@vger.kernel.org>; Mon, 18 May 2020 08:21:11 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id r22so4973986pga.12
-        for <linux-integrity@vger.kernel.org>; Mon, 18 May 2020 08:21:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=8eIa0Vhcalrg30hExhgbFyLNmHPU3sV6rgHITb5pZ5w=;
-        b=htaIZ7s8kHdd9JhXfpJr62T+PbcWV0P9HH48JxCHos2qCOwdAffTSsVfouROZN6Mcx
-         OsT1n9x1239rkbG6hdpojAEmxPN0Ini8eKc3MOs0rk/oWTZl1F9JjZbGrWGPiJf+w5zL
-         YtiyZ9HL2YUsIAekksROIFa5+16FSNv2M8/J8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=8eIa0Vhcalrg30hExhgbFyLNmHPU3sV6rgHITb5pZ5w=;
-        b=q0q2X80y35/1uQQi7VOwbPYDEGyDkwq4libJ8r9yXLc63kaIzFTBStWjKMCbuySw/2
-         dpLTp07mUoGBck6Uigi0/q7fEYJBJj99kGXa0xE7cUgWibmN8g8FfpyGGA8nJCNZAhBh
-         I3Ri981hd9slXG0B+lDpVSztWlwXHH686KyMktCI5gZfXqj19IQ4rJ7VhYSR2Sl42niL
-         I6K9iCiCM2RrdVih8TAXMa8zkAGpstmXGCfgLJIp8gD18/saDc/SLvZfSLuN7HXbPsvG
-         1LJvnmDf58OjasgCoxg5IqcToRHFv7kPUfRVsKcepV6wbhCZ4/5lYu0ufgdjr7oOeY5K
-         7W6w==
-X-Gm-Message-State: AOAM530IZxkc5zUmcPMT8AwmNebgrwBl2sYgxXViaFBDRvgDpxv49lWL
-        74qblJqmqQ7Ut1MQqwAHDhK0Sg==
-X-Google-Smtp-Source: ABdhPJzV/8/H/dtCPYbOvT1/Nbv8m+JVx3a0WuH1CfwiIsZx/wce2vLAkKKd/khb6PmDQ5vsnT0fng==
-X-Received: by 2002:a63:1415:: with SMTP id u21mr15114423pgl.366.1589815270596;
-        Mon, 18 May 2020 08:21:10 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h7sm6207978pgg.17.2020.05.18.08.21.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2020 08:21:09 -0700 (PDT)
-Date:   Mon, 18 May 2020 08:21:08 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>, viro@zeniv.linux.org.uk,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        ebiederm@xmission.com, jeyu@kernel.org, jmorris@namei.org,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, nayna@linux.ibm.com,
-        scott.branden@broadcom.com, dan.carpenter@oracle.com,
-        skhan@linuxfoundation.org, geert@linux-m68k.org,
-        tglx@linutronix.de, bauerman@linux.ibm.com, dhowells@redhat.com,
-        linux-integrity@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] fs: reduce export usage of kerne_read*() calls
-Message-ID: <202005180820.46CEF3C2@keescook>
-References: <20200513152108.25669-1-mcgrof@kernel.org>
- <20200513181736.GA24342@infradead.org>
- <20200515212933.GD11244@42.do-not-panic.com>
- <20200518062255.GB15641@infradead.org>
- <1589805462.5111.107.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Mon, 18 May 2020 11:49:38 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04IFXR0E108670;
+        Mon, 18 May 2020 11:49:36 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 312c63f5ue-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 May 2020 11:49:36 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 04IFeoxh021224;
+        Mon, 18 May 2020 15:49:34 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3127t5hthp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 May 2020 15:49:34 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04IFnWRS62324914
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 May 2020 15:49:32 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3829052050;
+        Mon, 18 May 2020 15:49:32 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.145.145])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B351C52052;
+        Mon, 18 May 2020 15:49:31 +0000 (GMT)
+Message-ID: <1589816971.5111.113.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity subsystem fixes for v5.7
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Mon, 18 May 2020 11:49:31 -0400
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1589805462.5111.107.camel@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-18_06:2020-05-15,2020-05-18 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 suspectscore=0 mlxlogscore=999 cotscore=-2147483648
+ spamscore=0 priorityscore=1501 bulkscore=0 adultscore=0 phishscore=0
+ mlxscore=0 lowpriorityscore=0 clxscore=1011 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005180131
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, May 18, 2020 at 08:37:42AM -0400, Mimi Zohar wrote:
-> Hi Christoph,
-> 
-> On Sun, 2020-05-17 at 23:22 -0700, Christoph Hellwig wrote:
-> > On Fri, May 15, 2020 at 09:29:33PM +0000, Luis Chamberlain wrote:
-> > > On Wed, May 13, 2020 at 11:17:36AM -0700, Christoph Hellwig wrote:
-> > > > Can you also move kernel_read_* out of fs.h?  That header gets pulled
-> > > > in just about everywhere and doesn't really need function not related
-> > > > to the general fs interface.
-> > > 
-> > > Sure, where should I dump these?
-> > 
-> > Maybe a new linux/kernel_read_file.h?  Bonus points for a small top
-> > of the file comment explaining the point of the interface, which I
-> > still don't get :)
-> 
-> Instead of rolling your own method of having the kernel read a file,
-> which requires call specific security hooks, this interface provides a
-> single generic set of pre and post security hooks.  The
-> kernel_read_file_id enumeration permits the security hook to
-> differentiate between callers.
-> 
-> To comply with secure and trusted boot concepts, a file cannot be
-> accessible to the caller until after it has been measured and/or the
-> integrity (hash/signature) appraised.
-> 
-> In some cases, the file was previously read twice, first to measure
-> and/or appraise the file and then read again into a buffer for
-> use.  This interface reads the file into a buffer once, calls the
-> generic post security hook, before providing the buffer to the caller.
->  (Note using firmware pre-allocated memory might be an issue.)
-> 
-> Partial reading firmware will result in needing to pre-read the entire
-> file, most likely on the security pre hook.
+Hi Linus,
 
-Well described! :)
+Here are a couple of miscellaneous bug fixes for the integrity
+subsystem:
 
--- 
-Kees Cook
+IMA:
+- Properly modify the open flags in order to calculate the file hash.
+- On systems requiring the IMA policy to be signed, the policy is
+loaded differently. Â Don't differentiate between "enforce" and either
+"log" or "fix" modes how the policy is loaded.
+
+EVM:
+- (2 patches) Fix an EVM race condition, normally the result of
+attempting to load an unsupported hash algorithm.
+- Use the lockless RCU version for walking an append only list.
+
+Mimi
+
+The following changes since commit ae83d0b416db002fe95601e7f97f64b59514d936:
+
+  Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity.fixes
+
+for you to fetch changes up to 8433856947217ebb5697a8ff9c4c9cad4639a2cf:
+
+  evm: Fix a small race in init_desc() (2020-05-14 19:55:54 -0400)
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      evm: Fix a small race in init_desc()
+
+Madhuparna Bhowmik (1):
+      evm: Fix RCU list related warnings
+
+Roberto Sassu (3):
+      ima: Set file->f_mode instead of file->f_flags in ima_calc_file_hash()
+      evm: Check also if *tfm is an error pointer in init_desc()
+      ima: Fix return value of ima_write_policy()
+
+ security/integrity/evm/evm_crypto.c | 46 ++++++++++++++++++-------------------
+ security/integrity/evm/evm_main.c   |  4 ++--
+ security/integrity/evm/evm_secfs.c  |  9 +++++++-
+ security/integrity/ima/ima_crypto.c | 12 +++++-----
+ security/integrity/ima/ima_fs.c     |  3 +--
+ 5 files changed, 40 insertions(+), 34 deletions(-)
