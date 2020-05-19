@@ -2,29 +2,29 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C3A1D9885
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 May 2020 15:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071881DA033
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 May 2020 21:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728609AbgESNsp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 19 May 2020 09:48:45 -0400
-Received: from mga01.intel.com ([192.55.52.88]:11239 "EHLO mga01.intel.com"
+        id S1726502AbgESTAp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 19 May 2020 15:00:45 -0400
+Received: from mga06.intel.com ([134.134.136.31]:62691 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727904AbgESNsp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 19 May 2020 09:48:45 -0400
-IronPort-SDR: DH9iWt0FTcQdz2aCiRimaTvtF4CiSXK9q5NYvxvYbIgtIchL1qzlCSC6KXZhQk+D+2fXRFVxPu
- FhfSkWvsjn3Q==
+        id S1726352AbgESTAp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 19 May 2020 15:00:45 -0400
+IronPort-SDR: vwky50IiyfCMFHsyjHNDpyQF6ffQBzJJo3cGzp8HGLJAQqSg8h/cNVvxzd85wObH2EjGclJMeB
+ Y/XGOHHkqB+g==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2020 06:48:44 -0700
-IronPort-SDR: H/JFjAHMwzZmTTusqpdysvxKXqFJF23mHNOpHPdTHd356dHLXcuk5QvGRbP68bBgYzBfk6LPVq
- nS0/01vIj02w==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2020 12:00:44 -0700
+IronPort-SDR: DPcoO8JWQyzvNdTE+i+NjsSRehFDDEuS8LYC9YUWq1IQeAtof4lmJM2bG07+MnU58PZIh1qInD
+ p/nEVByMNVFQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,410,1583222400"; 
-   d="scan'208";a="343140365"
+   d="scan'208";a="264407484"
 Received: from joelin3-mobl.gar.corp.intel.com (HELO localhost) ([10.249.42.57])
-  by orsmga001.jf.intel.com with ESMTP; 19 May 2020 06:48:39 -0700
-Date:   Tue, 19 May 2020 16:48:38 +0300
+  by orsmga003.jf.intel.com with ESMTP; 19 May 2020 12:00:40 -0700
+Date:   Tue, 19 May 2020 22:00:36 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     Nikita Sobolev <Nikita.Sobolev@synopsys.com>
 Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
@@ -37,90 +37,32 @@ Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
         Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
         linux-snps-arc@lists.infradead.org
-Subject: Re: [PATCH] Kernel selftests: Add check if tpm devices are supported
-Message-ID: <20200519134838.GA17129@linux.intel.com>
-References: <20200518213934.23156-1-Nikita.Sobolev@synopsys.com>
+Subject: Re: [PATCH v2] Kernel selftests: Add check if tpm devices are
+ supported
+Message-ID: <20200519190023.GA22852@linux.intel.com>
+References: <20200519120743.41358-1-Nikita.Sobolev@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200518213934.23156-1-Nikita.Sobolev@synopsys.com>
+In-Reply-To: <20200519120743.41358-1-Nikita.Sobolev@synopsys.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, May 19, 2020 at 12:39:34AM +0300, Nikita Sobolev wrote:
+On Tue, May 19, 2020 at 03:07:43PM +0300, Nikita Sobolev wrote:
 > tpm2 tests set uses /dev/tpm0 and /dev/tpmrm0 without check if they
 > are available. In case, when these devices are not available test
-> fails, but expected behaviour is test to be skipped.
+> fails, but expected behaviour is skipped test.
 > 
 > Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
 
-tpm2 tests set -> TPM2 test suite
+See
 
-Fixes tag is also required.
+https://lore.kernel.org/linux-kselftest/20200519134838.GA17129@linux.intel.com/T/#mf762512a67f0b23db5663d6d67746cb94b812931
 
-There is nothing cool writing acronyms in lower case, so lets
-just always write them correctly.
-
-> ---
->  tools/testing/selftests/tpm2/test_smoke.sh | 11 +++++++++--
->  tools/testing/selftests/tpm2/test_space.sh |  9 ++++++++-
->  2 files changed, 17 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-> index 8155c2ea7ccb..e55d3e400666 100755
-> --- a/tools/testing/selftests/tpm2/test_smoke.sh
-> +++ b/tools/testing/selftests/tpm2/test_smoke.sh
-> @@ -1,8 +1,15 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
->  
-> -python -m unittest -v tpm2_tests.SmokeTest
-> -python -m unittest -v tpm2_tests.AsyncTest
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
-> +if [ -f /dev/tpm0 ] ; then
-> +	python -m unittest -v tpm2_tests.SmokeTest
-> +	python -m unittest -v tpm2_tests.AsyncTest
-> +else
-> +	exit $ksft_skip
-> +fi
->  
->  CLEAR_CMD=$(which tpm2_clear)
->  if [ -n $CLEAR_CMD ]; then
-> diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-> index a6f5e346635e..180b469c53b4 100755
-> --- a/tools/testing/selftests/tpm2/test_space.sh
-> +++ b/tools/testing/selftests/tpm2/test_space.sh
-> @@ -1,4 +1,11 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
->  
-> -python -m unittest -v tpm2_tests.SpaceTest
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
-> +if [ -f /dev/tpmrm0 ] ; then
-> +	python -m unittest -v tpm2_tests.SpaceTest
-> +else
-> +	exit $ksft_skip
-> +fi
-> -- 
-> 2.16.2
-> 
-
-This would make the change more compact:
-
-# Kselftest framework requirement - SKIP code is 4.
-if [ ! -f /dev/tpmrm0 ] ; then
-	exit 4
-fi
-
-python -m unittest -v tpm2_tests.SpaceTest
-
-(also for /dev/tpm0)
+The comments about the fixes tag and acronym spelling were not
+addressed. The code change looks great tho now, thanks.
 
 /Jarkko
