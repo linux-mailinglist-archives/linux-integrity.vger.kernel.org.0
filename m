@@ -2,142 +2,189 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE6C1D8A3F
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 May 2020 23:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B55F1D8DAA
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 May 2020 04:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbgERVuz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 18 May 2020 17:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726502AbgERVuz (ORCPT
+        id S1726958AbgESCfB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 18 May 2020 22:35:01 -0400
+Received: from mout-p-201.mailbox.org ([80.241.56.171]:12868 "EHLO
+        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726957AbgESCfB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 18 May 2020 17:50:55 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43621C061A0C;
-        Mon, 18 May 2020 14:50:55 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id l6so4620931oic.9;
-        Mon, 18 May 2020 14:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cLo/3kZFB2IfzldieQmVsBtxnHTKN/fTsEMRZOFcyOI=;
-        b=as19LkQGmI1zSK7fYj9KVhS9fuRZVfHLqAlIiJjvGTDkzMAnCajfBsZ4i/S0I2c6TU
-         pAqaKDQrDphIZAFQeFXtbqvIUgirEhUgXU9b8akx/rnVlyfM9zMgq/v0iLHVBD3FR/Gb
-         Xp1D7sAGl4xjNwh9BzWihloHKaiWp8TFKkk9CRShgcc2MnpEoRtEENbKB1AZqJwkdUOL
-         UMPGiiItiZ9SZSLdUQId8+vE38c663HlcQrfQCUbF/8+J+FNEIfUbfaFUDe3YopEVWgi
-         UOUoyuy+iLPC5FpXZYDxR4nTcS+E8KFxKnBzAhYhtxcChlBqIMSSPIWDHRMRjABDIBk/
-         tuRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=cLo/3kZFB2IfzldieQmVsBtxnHTKN/fTsEMRZOFcyOI=;
-        b=pREvlxC1cnxP+cmy18s6urK5VLkphsbnxMe8h14Is3oBnqqP2AQrTmvRGmTyVNEw3M
-         XlV5Wtm1sW7o+rIM8eUqfaRvddGq7qx1SB/485e6IgJVG7oav1rcTGhEuSzcNDNxVDiu
-         ptXhHwfNEotw9taLcOUz0lhmdx0ZsJ3wxq5jUSKY9SS2MYVbFzSLWOQ6fNA+tC1jUCzx
-         cTYLq7u5pa0pf8UNdfuNDSGu05dDQdXs2Ywm2ynpXX1+ZXEgSPCLV5BSA/rpym0/EPXe
-         cOl68cWltf8VulophXFAThGC1ZJboNO36oOQZx91feeanbdGF7mN4oBmsPUJor+e1Mz7
-         05Tg==
-X-Gm-Message-State: AOAM532m8uoQ0/BGeBSxaPK8BPGrfBh3EXy3JfDyxFRlLukqyQWzf5sq
-        sY02jwfjSUPqQ8Pt/o8AT7w=
-X-Google-Smtp-Source: ABdhPJy74OqDNUQSrpRQwARHdjf+/FWfEuODWY1lKZ8v7yetEWdOzHSXk8czBw6+skJaN//6fJFziQ==
-X-Received: by 2002:aca:7288:: with SMTP id p130mr1033975oic.15.1589838654537;
-        Mon, 18 May 2020 14:50:54 -0700 (PDT)
-Received: from dell5510 ([62.201.25.198])
-        by smtp.gmail.com with ESMTPSA id s198sm2933600oos.18.2020.05.18.14.50.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2020 14:50:53 -0700 (PDT)
-Date:   Mon, 18 May 2020 23:50:47 +0200
-From:   Petr Vorel <petr.vorel@gmail.com>
-To:     Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        Joey Pabalinas <joeypabalinas@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        linux-snps-arc@lists.infradead.org
-Subject: Re: [PATCH] Kernel selftests: Add check if tpm devices are supported
-Message-ID: <20200518215047.GA23583@dell5510>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-References: <20200518213934.23156-1-Nikita.Sobolev@synopsys.com>
+        Mon, 18 May 2020 22:35:01 -0400
+X-Greylist: delayed 677 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 May 2020 22:35:00 EDT
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 49R0714S3fzQlJp;
+        Tue, 19 May 2020 04:23:41 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117]) (amavisd-new, port 10030)
+        with ESMTP id DZqWh7er1wSe; Tue, 19 May 2020 04:23:34 +0200 (CEST)
+Date:   Tue, 19 May 2020 12:23:07 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Florian Weimer <fweimer@redhat.com>,
+        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        John Johansen <john.johansen@canonical.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        "Lev R. Oshvang ." <levonshe@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Chiang <ericchiang@google.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
+        Philippe =?utf-8?Q?Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>
+Subject: Re: How about just O_EXEC? (was Re: [PATCH v5 3/6] fs: Enable to
+ enforce noexec mounts or file exec through O_MAYEXEC)
+Message-ID: <20200519022307.oqpdb4vzghs3coyi@yavin.dot.cyphar.com>
+References: <202005132002.91B8B63@keescook>
+ <CAEjxPJ7WjeQAz3XSCtgpYiRtH+Jx-UkSTaEcnVyz_jwXKE3dkw@mail.gmail.com>
+ <202005140830.2475344F86@keescook>
+ <CAEjxPJ4R_juwvRbKiCg5OGuhAi1ZuVytK4fKCDT_kT6VKc8iRg@mail.gmail.com>
+ <b740d658-a2da-5773-7a10-59a0ca52ac6b@digikod.net>
+ <202005142343.D580850@keescook>
+ <87a729wpu1.fsf@oldenburg2.str.redhat.com>
+ <202005150732.17C5EE0@keescook>
+ <87r1vluuli.fsf@oldenburg2.str.redhat.com>
+ <202005150847.2B1ED8F81@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nmvvtdsznpppdmip"
 Content-Disposition: inline
-In-Reply-To: <20200518213934.23156-1-Nikita.Sobolev@synopsys.com>
+In-Reply-To: <202005150847.2B1ED8F81@keescook>
+X-Rspamd-Queue-Id: 7E02D177E
+X-Rspamd-Score: -7.06 / 15.00 / 15.00
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Nikita,
 
-> tpm2 tests set uses /dev/tpm0 and /dev/tpmrm0 without check if they
-> are available. In case, when these devices are not available test
-> fails, but expected behaviour is test to be skipped.
+--nmvvtdsznpppdmip
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-Good catch.
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
+On 2020-05-15, Kees Cook <keescook@chromium.org> wrote:
+> On Fri, May 15, 2020 at 04:43:37PM +0200, Florian Weimer wrote:
+> > * Kees Cook:
+> >=20
+> > > On Fri, May 15, 2020 at 10:43:34AM +0200, Florian Weimer wrote:
+> > >> * Kees Cook:
+> > >>=20
+> > >> > Maybe I've missed some earlier discussion that ruled this out, but=
+ I
+> > >> > couldn't find it: let's just add O_EXEC and be done with it. It ac=
+tually
+> > >> > makes the execve() path more like openat2() and is much cleaner af=
+ter
+> > >> > a little refactoring. Here are the results, though I haven't email=
+ed it
+> > >> > yet since I still want to do some more testing:
+> > >> > https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log=
+/?h=3Dkspp/o_exec/v1
+> > >>=20
+> > >> I think POSIX specifies O_EXEC in such a way that it does not confer
+> > >> read permissions.  This seems incompatible with what we are trying to
+> > >> achieve here.
+> > >
+> > > I was trying to retain this behavior, since we already make this
+> > > distinction between execve() and uselib() with the MAY_* flags:
+> > >
+> > > execve():
+> > >         struct open_flags open_exec_flags =3D {
+> > >                 .open_flag =3D O_LARGEFILE | O_RDONLY | __FMODE_EXEC,
+> > >                 .acc_mode =3D MAY_EXEC,
+> > >
+> > > uselib():
+> > >         static const struct open_flags uselib_flags =3D {
+> > >                 .open_flag =3D O_LARGEFILE | O_RDONLY | __FMODE_EXEC,
+> > >                 .acc_mode =3D MAY_READ | MAY_EXEC,
+> > >
+> > > I tried to retain this in my proposal, in the O_EXEC does not imply
+> > > MAY_READ:
+> >=20
+> > That doesn't quite parse for me, sorry.
+> >=20
+> > The point is that the script interpreter actually needs to *read* those
+> > files in order to execute them.
+>=20
+> I think I misunderstood what you meant (Micka=EBl got me sorted out
+> now). If O_EXEC is already meant to be "EXEC and _not_ READ nor WRITE",
+> then yes, this new flag can't be O_EXEC. I was reading the glibc
+> documentation (which treats it as a permission bit flag, not POSIX,
+> which treats it as a complete mode description).
 
-> ---
->  tools/testing/selftests/tpm2/test_smoke.sh | 11 +++++++++--
->  tools/testing/selftests/tpm2/test_space.sh |  9 ++++++++-
->  2 files changed, 17 insertions(+), 3 deletions(-)
+On the other hand, if we had O_EXEC (or O_EXONLY a-la O_RDONLY) then the
+interpreter could re-open the file descriptor as O_RDONLY after O_EXEC
+succeeds. Not ideal, but I don't think it's a deal-breaker.
 
-> diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-> index 8155c2ea7ccb..e55d3e400666 100755
-> --- a/tools/testing/selftests/tpm2/test_smoke.sh
-> +++ b/tools/testing/selftests/tpm2/test_smoke.sh
-> @@ -1,8 +1,15 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+Regarding O_MAYEXEC, I do feel a little conflicted.
 
-> -python -m unittest -v tpm2_tests.SmokeTest
-> -python -m unittest -v tpm2_tests.AsyncTest
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-I hope one day kselftest adds these constants into single file :).
+I do understand that its goal is not to be what O_EXEC was supposed to
+be (which is loosely what O_PATH has effectively become), so I think
+that this is not really a huge problem -- especially since you could
+just do O_MAYEXEC|O_PATH if you wanted to disallow reading explicitly.
+It would be nice to have an O_EXONLY concept, but it's several decades
+too late to make it mandatory (and making it optional has questionable
+utility IMHO).
 
-> +
-> +if [ -f /dev/tpm0 ] ; then
-> +	python -m unittest -v tpm2_tests.SmokeTest
-> +	python -m unittest -v tpm2_tests.AsyncTest
-> +else
-> +	exit $ksft_skip
-> +fi
+However, the thing I still feel mildly conflicted about is the sysctl. I
+do understand the argument for it (ultimately, whether O_MAYEXEC is
+usable on a system depends on the distribution) but it means that any
+program which uses O_MAYEXEC cannot rely on it to provide the security
+guarantees they expect. Even if the program goes and reads the sysctl
+value, it could change underneath them. If this is just meant to be a
+best-effort protection then this doesn't matter too much, but I just
+feel uneasy about these kinds of best-effort protections.
 
-nit: instead of if/else, I'd use shorter form:
-[ -f /dev/tpm0 ] || exit $ksft_skip
+I do wonder if we could require that fexecve(3) can only be done with
+file descriptors that have been opened with O_MAYEXEC (obviously this
+would also need to be a sysctl -- *sigh*). This would tie in to some of
+the magic-link changes I wanted to push (namely, upgrade_mask).
 
-python -m unittest -v tpm2_tests.SmokeTest
-python -m unittest -v tpm2_tests.AsyncTest
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
->  CLEAR_CMD=$(which tpm2_clear)
->  if [ -n $CLEAR_CMD ]; then
-> diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-> index a6f5e346635e..180b469c53b4 100755
-> --- a/tools/testing/selftests/tpm2/test_space.sh
-> +++ b/tools/testing/selftests/tpm2/test_space.sh
-> @@ -1,4 +1,11 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+--nmvvtdsznpppdmip
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> -python -m unittest -v tpm2_tests.SpaceTest
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
-> +if [ -f /dev/tpmrm0 ] ; then
-same here.
+-----BEGIN PGP SIGNATURE-----
 
-> +	python -m unittest -v tpm2_tests.SpaceTest
-> +else
-> +	exit $ksft_skip
-> +fi
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXsNDCAAKCRCdlLljIbnQ
+Ep1qAQCjFv2VG5NQz8tGYkrTeOm2XgvCB0zQ3mmGYhFYEMKpYgD+J4hGIJA2Uqq8
+NSOE5oY1uvmG7wnuYY2/cbJlZVeF/Ao=
+=GDei
+-----END PGP SIGNATURE-----
 
-Kind regards,
-Petr
+--nmvvtdsznpppdmip--
