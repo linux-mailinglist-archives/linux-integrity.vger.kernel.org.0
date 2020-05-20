@@ -2,57 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D00771DB7FE
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 May 2020 17:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4844B1DB951
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 May 2020 18:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbgETPVl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 20 May 2020 11:21:41 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55548 "EHLO
+        id S1726439AbgETQbC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 20 May 2020 12:31:02 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51974 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726443AbgETPVk (ORCPT
+        by vger.kernel.org with ESMTP id S1726436AbgETQbC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 20 May 2020 11:21:40 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04KF236S117475;
-        Wed, 20 May 2020 11:21:36 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 312cb1svdh-1
+        Wed, 20 May 2020 12:31:02 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04KG35TQ126175;
+        Wed, 20 May 2020 12:30:18 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 313x64bxdd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 May 2020 11:21:36 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04KF2bDO120435;
-        Wed, 20 May 2020 11:21:35 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 312cb1svbv-1
+        Wed, 20 May 2020 12:30:18 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04KGQVQC018299;
+        Wed, 20 May 2020 16:30:16 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 313xas400e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 May 2020 11:21:35 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04KFG3Ho031648;
-        Wed, 20 May 2020 15:21:33 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 313xdhsjvv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 May 2020 15:21:33 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04KFLUdZ54854044
+        Wed, 20 May 2020 16:30:16 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04KGUErm61210678
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 May 2020 15:21:31 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BEFA652057;
-        Wed, 20 May 2020 15:21:30 +0000 (GMT)
+        Wed, 20 May 2020 16:30:14 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E3E9FAE072;
+        Wed, 20 May 2020 16:30:13 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 74800AE06E;
+        Wed, 20 May 2020 16:30:13 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.138.181])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 33FAC5204E;
-        Wed, 20 May 2020 15:21:30 +0000 (GMT)
-Message-ID: <1589988089.5111.280.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] ima-evm-utils: Add support for Intel TSS2 for PCR
- reading
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 20 May 2020 16:30:13 +0000 (GMT)
+Message-ID: <1589992212.5111.293.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima-evm-utils: Fix compatibility with LibreSSL
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     patrick@puiterwijk.org, linux-integrity@vger.kernel.org
-Cc:     pbrobinson@redhat.com
-Date:   Wed, 20 May 2020 11:21:29 -0400
-In-Reply-To: <CAJweMda2DC+L10v5T7G_FCF5LZxwQMp4x4LYdAdi4kTO2bFAiw@mail.gmail.com>
-References: <CAJweMdarWZ7j5XrHbPqcp3ZV-XfzVBfeva5tMiuHMkd4M5HxMg@mail.gmail.com>
-         <CAJweMda2DC+L10v5T7G_FCF5LZxwQMp4x4LYdAdi4kTO2bFAiw@mail.gmail.com>
+To:     Mikhail Novosyolov <m.novosyolov@rosalinux.ru>,
+        linux-integrity@vger.kernel.org
+Cc:     Vitaly Chikunov <vt@altlinux.org>
+Date:   Wed, 20 May 2020 12:30:12 -0400
+In-Reply-To: <85a96cad-dc04-a617-abfa-fb9427412e52@rosalinux.ru>
+References: <85a96cad-dc04-a617-abfa-fb9427412e52@rosalinux.ru>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
@@ -60,54 +55,95 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-20_10:2020-05-20,2020-05-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 spamscore=0 impostorscore=0
- malwarescore=0 adultscore=0 bulkscore=0 clxscore=1011 mlxlogscore=999
- priorityscore=1501 cotscore=-2147483648 classifier=spam adjust=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 impostorscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
+ suspectscore=52 cotscore=-2147483648 malwarescore=0 clxscore=1011
+ lowpriorityscore=0 adultscore=0 bulkscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005200120
+ definitions=main-2005200131
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-02-24 at 15:04 -0800, patrick@puiterwijk.org wrote:
-> From: Patrick Uiterwijk <patrick@puiterwijk.org>
+Hi Mikhail,
+
+On Wed, 2019-12-04 at 01:41 +0300, Mikhail Novosyolov wrote:
+> From 4ae52f3cfb459c59e2e48f0d30c20c3763c8a0e7 Mon Sep 17 00:00:00 2001
+> From: Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
+> Date: Wed, 4 Dec 2019 01:07:50 +0300
+> Subject: [PATCH] ima-evm-utils: Fix compatibility with LibreSSL
 > 
-> This patch makes it possible to use the Intel TSS2 for getting
-> PCR values from the SHA1/SHA256 banks on a TPM2.
-> It is somewhat naive as it doesn't use the multi-PCR selection
-> that TSS2 is capable of, that is for a future patch.
+> LibreSSL in most cases can be used as a drop-in replacement of OpenSSL.
+> Commit 07d799cb6c37 "ima-evm-utils: Preload OpenSSL engine via '--engine' option"
+> added OpenSSL-specific functions: "engines" were removed from LibreSSL long ago.
+> Instead of requiring to attach GOST support via an external library ("engine"),
+> LibreSSL has build-in implementation of GOST.
 > 
-> Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
+> Commit ebbfc41ad6ba "ima-evm-utils: try to load digest by its alias" is also not OK
+> for LibreSSL because LibreSSL uses different digest names:
+> md_gost12_256 -> streebog256
+> md_gost12_512 -> streebog512
+> 
+> Example how it works when linked with LibreSSL:
+> $ libressl dgst -streebog256 testfile
+> streebog256(a)= 04123f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
+> $ evmctl -v ima_hash -a streebog256 testfile
+> hash(streebog256): 04123f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
+> $ evmctl -v ima_hash -a md_gost12_256 testfile
+> EVP_get_digestbyname(md_gost12_256) failed
+> 
+> TODO: it would be nice to map
+> md_gost12_256 <-> streebog256
+> md_gost12_512 <-> streebog512
+> in evmctl CLI arguements to make the same commands work on systems both
+> where evmctl is linked with LibreSSL and with OpenSSL.
+> 
+> Fixes: 07d799cb6c37 ("ima-evm-utils: Preload OpenSSL engine via '--engine' option")
+> Fixes: ebbfc41ad6ba ("ima-evm-utils: try to load digest by its alias")
+> Signed-off-by: Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
 
-Thanks, Patrick.  There was a missing include in pcr_tsspcrread.c,
-which I've included.  This patch is now in the ima-evm-utils next-
-testing branch.  I'd appreciate some Review/Test tags for at least the
-pcr_tss.c aspect.
+Since you posted this patch, I've added support for calculating the
+boot_aggregate.  Could you verify that this patch still works?
 
-IMA support for extending the TPM 2.0 banks with the hash appropriate
-algorithm will, hopefully, be upstreamed in Linux 5.8  The new
-"boot_aggregate" test calculates a per TPM bank "boot_aggregate"
-value.  One of which should match the "boot_aggregate" value in the
-IMA measurement list.
+As I mentioned in response to Patrick Uiterwijk's support for Intel's
+TSS2, "testing ima-evm-utils support for multiple crypto and TSS
+packages requires building a matrix.  As I'm new to travis, the travis
+code is in the next-testing-travis branch, but will not be upstreamed
+at this point."
 
-Please note that the new "boot_aggregate" test[1] can be run as root,
-which accesses the exported TPM securityfs event log, or as a user,
-which uses the sample TPM 2.0 sample event log and associated IMA
-measurement list.  To calculate the "boot_aggregate" based on the
-sample TPM 2.0 event log, requires starting a software TPM and
-initializing it based on the TPM event log.  The code currently
-initializes the TPM using tsseventextend.
+From .travis.yml:
+matrix:
+   include:
+     - env: TSS=ibmtss SSL=openssl
+     - env: TSS=ibmtss SSL=libressl;
+     - env: TSS=tpm2-tss SSL=openssl
 
-Testing ima-evm-utils support for multiple crypto and TSS packages
-requires building a matrix.  As I'm new to travis, the travis code is
-in the next-testing-travis branch, but will not be upstreamed at this
-point.  To prevent running the "boot_aggregate" test when using the
-tpm2-tss, the software TPM is not installed.
+I might have set up libressl incorrectly. (Refer to tests/install-
+libressl.sh).  Here's the report:
+
+libtool: link: ranlib .libs/libimaevm.a
+libtool: link: ( cd ".libs" && rm -f "libimaevm.la" && ln -s "../libimaevm.la" "libimaevm.la" )
+/bin/bash ../libtool  --tag=CC   --mode=link gcc  -g -O2 -g -O1 -Wall -Wstrict-prototypes -pipe   -o evmctl evmctl-evmctl.o evmctl-utils.o  evmctl-pcr_tsspcrread.o  -lcrypto -lkeyutils libimaevm.la 
+libtool: link: gcc -g -O2 -g -O1 -Wall -Wstrict-prototypes -pipe -o .libs/evmctl evmctl-evmctl.o evmctl-utils.o evmctl-pcr_tsspcrread.o  -lcrypto -lkeyutils ./.libs/libimaevm.so
+evmctl-evmctl.o: In function `main':
+/home/travis/build/linux-integrity/ima-evm-utils/src/evmctl.c:2353: undefined reference to `ERR_free_strings'
+/home/travis/build/linux-integrity/ima-evm-utils/src/evmctl.c:2354: undefined reference to `EVP_cleanup'
+./.libs/libimaevm.so: undefined reference to `ERR_load_crypto_strings'
+collect2: error: ld returned 1 exit status
+Makefile:500: recipe for target 'evmctl' failed
+make[3]: Leaving directory '/home/travis/build/linux-integrity/ima-evm-utils/src'
+Makefile:378: recipe for target 'all' failed
+make[2]: Leaving directory '/home/travis/build/linux-integrity/ima-evm-utils/src'
+make[3]: *** [evmctl] Error 1
+make[2]: *** [all] Error 2
+Makefile:515: recipe for target 'all-recursive' failed
+make[1]: Leaving directory '/home/travis/build/linux-integrity/ima-evm-utils'
+make[1]: *** [all-recursive] Error 1
+Makefile:381: recipe for target 'all' failed
+make: *** [all] Error 2
+The command "autoreconf -i && ./configure && make -j$(nproc) && sudo make install && VERBOSE=1 make check;" exited with 2.
+
+thank,
 
 Mimi
-
-[1] VERBOSE=1 make check TESTS=boot_aggregate.test
-[2] tsseventextend" -tpm -if "${BINARY_BIOS_MEASUREMENTS}" -v
-
