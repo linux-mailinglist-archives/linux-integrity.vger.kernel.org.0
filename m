@@ -2,81 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C048E1DF049
-	for <lists+linux-integrity@lfdr.de>; Fri, 22 May 2020 22:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17CE1DF04F
+	for <lists+linux-integrity@lfdr.de>; Fri, 22 May 2020 22:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730933AbgEVUAk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 22 May 2020 16:00:40 -0400
-Received: from mga12.intel.com ([192.55.52.136]:57415 "EHLO mga12.intel.com"
+        id S1730948AbgEVUDw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 22 May 2020 16:03:52 -0400
+Received: from mga06.intel.com ([134.134.136.31]:20425 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730893AbgEVUAk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 22 May 2020 16:00:40 -0400
-IronPort-SDR: XtHVxYyAf5vEH49cUWyYQ0PD1nBHlna6PIBolyMBl7EkaS22LNt9ZXGsmjWwldcBaK/HC1JOT/
- 3JcgFNZpndZw==
+        id S1730893AbgEVUDw (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 22 May 2020 16:03:52 -0400
+IronPort-SDR: +gDlE+e81/whp9+O3/bQlgy1q1MIJTOAcC8JCP1Hz0FOwK0yv/RguEYre6KPyuzRDWDVV2fGID
+ F/kxuBhFVlFg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 13:00:31 -0700
-IronPort-SDR: Bn+s5kEeq3xJ/DxUaKFS56sEC5ThKILViF5ryIBv8HF8o4U+Pd6FqEFkCsxFQFXiXuboE64Tfx
- YkRHJDkDDurQ==
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 13:03:48 -0700
+IronPort-SDR: UMxqP361Z5IU1SbIPlTOY0/kGZzClrkRm2tcgFjt2ftgo2VBoWiQ/jJLxFFMgoU5ThQTW2lPDS
+ V1wHC6cYp+Sg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,422,1583222400"; 
-   d="scan'208";a="300771018"
+   d="scan'208";a="412856691"
 Received: from rpurrx-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.58.10])
-  by fmsmga002.fm.intel.com with ESMTP; 22 May 2020 13:00:28 -0700
-Date:   Fri, 22 May 2020 23:00:29 +0300
+  by orsmga004.jf.intel.com with ESMTP; 22 May 2020 13:03:45 -0700
+Date:   Fri, 22 May 2020 23:03:46 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     shuah <shuah@kernel.org>
-Cc:     Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
-        linux-kselftest@vger.kernel.org,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        Joey Pabalinas <joeypabalinas@gmail.com>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        linux-snps-arc@lists.infradead.org
-Subject: Re: [PATCH v3] Kernel selftests: Add check if TPM devices are
- supported
-Message-ID: <20200522200029.GA150221@linux.intel.com>
-References: <20200521144344.1886-1-Nikita.Sobolev@synopsys.com>
- <20200522163714.GA10319@linux.intel.com>
- <20200522163745.GB10319@linux.intel.com>
- <b433d7c7-38a2-098a-55c9-6f8cc13f7230@kernel.org>
+To:     Maxim Uvarov <maxim.uvarov@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
+        peterhuewe@gmx.de, jgg@ziepe.ca,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>
+Subject: Re: [PATCHv2 2/2] tpm_ftpm_tee: register driver on TEE bus
+Message-ID: <20200522200346.GB150221@linux.intel.com>
+References: <20200521064743.4769-1-maxim.uvarov@linaro.org>
+ <20200521064743.4769-4-maxim.uvarov@linaro.org>
+ <20200522171451.GD10319@linux.intel.com>
+ <CAD8XO3bA0oTqwQOU9byb-Vk73S4uP7dTUaOZyEmUJmj6rk3UuQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b433d7c7-38a2-098a-55c9-6f8cc13f7230@kernel.org>
+In-Reply-To: <CAD8XO3bA0oTqwQOU9byb-Vk73S4uP7dTUaOZyEmUJmj6rk3UuQ@mail.gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, May 22, 2020 at 01:23:26PM -0600, shuah wrote:
-> On 5/22/20 10:37 AM, Jarkko Sakkinen wrote:
-> > On Fri, May 22, 2020 at 07:37:17PM +0300, Jarkko Sakkinen wrote:
-> > > On Thu, May 21, 2020 at 05:43:44PM +0300, Nikita Sobolev wrote:
-> > > > TPM2 tests set uses /dev/tpm0 and /dev/tpmrm0 without check if they
-> > > > are available. In case, when these devices are not available test
-> > > > fails, but expected behaviour is skipped test.
-> > > > 
-> > > > Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-> > > 
-> > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > 
-> > Shuah, can you pick this up?
-> > 
-> > /Jarkko
-> > 
+On Fri, May 22, 2020 at 10:29:44PM +0300, Maxim Uvarov wrote:
+> On Fri, 22 May 2020 at 20:15, Jarkko Sakkinen
+> <jarkko.sakkinen@linux.intel.com> wrote:
+> >
+> > On Thu, May 21, 2020 at 09:47:43AM +0300, Maxim Uvarov wrote:
+> > > Register driver on TEE bus. module tee registers bus,
+> >
+> > "on the TEE bus"
+> >
+> > "The module tee"
+> >
+> > > and module optee calls optee_enumerate_devices() to scan
+> > > all devices on the bus. Trusted Application for this driver
+> >
+> > Looking at drivers/tee, it shows that tee and optee are in fact the same
+> > module as opposed to what your commit message says.
+> >
 > 
-> Done. Applied to linux-kselftest next for Linux 5.8-rc1.
+> In the current kernel it's 2 different modules.
 > 
-> thanks,
-> -- Shuah
+> > > can be Early TA's (can be compiled into optee-os). In that
+> > > case it will be on OPTEE bus before linux booting. Also
+> > > optee-suplicant application is needed to be loaded between
+> > > OPTEE module and ftpm module to maintain functionality
+> > > for fTPM driver.
+> >
+> > Why is this needed and why things worked before having this?
+> >
+> 
+> Before these changes user space has to drive boot sequence. I.e.  tee
+> and optee modules loads, then application tee-supplicant has to start
+> and only then module ftpm can be loaded. The reason for that is
+> storage services are implemented in userspace and driver needs them.
 
-Thank you.
+Is the TPM implementation uploaded to TEE from user space and or what
+storage are we talking about? Not sure how these storage services
+connect to the TPM.
 
 /Jarkko
