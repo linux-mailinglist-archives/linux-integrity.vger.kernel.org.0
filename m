@@ -2,157 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C421DF480
-	for <lists+linux-integrity@lfdr.de>; Sat, 23 May 2020 06:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32691DF9EE
+	for <lists+linux-integrity@lfdr.de>; Sat, 23 May 2020 20:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725320AbgEWEJg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 23 May 2020 00:09:36 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12254 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725294AbgEWEJg (ORCPT
+        id S2388267AbgEWSAm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 23 May 2020 14:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388244AbgEWSAl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 23 May 2020 00:09:36 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04N42942159920;
-        Sat, 23 May 2020 00:08:31 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3160mk2mpc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 23 May 2020 00:08:30 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04N48U8L175628;
-        Sat, 23 May 2020 00:08:30 -0400
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3160mk2mnw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 23 May 2020 00:08:30 -0400
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04N45RWH012073;
-        Sat, 23 May 2020 04:08:28 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma02wdc.us.ibm.com with ESMTP id 316uf9084h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 23 May 2020 04:08:28 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04N48SdY14025224
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 23 May 2020 04:08:28 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 536E2AC05B;
-        Sat, 23 May 2020 04:08:28 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B1ABCAC059;
-        Sat, 23 May 2020 04:08:17 +0000 (GMT)
-Received: from morokweng.localdomain (unknown [9.163.49.7])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Sat, 23 May 2020 04:08:17 +0000 (GMT)
-References: <20200504203829.6330-1-prsriva@linux.microsoft.com> <20200505095620.GA82424@C02TD0UTHF1T.local> <e8c7d74e-74bf-caa3-452d-23faa649e825@linux.microsoft.com> <20200512230509.GA2654@bogus> <7701df90-a68b-b710-4279-9d64e45ee792@linux.microsoft.com>
-User-agent: mu4e 1.2.0; emacs 26.3
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Prakhar Srivastava <prsriva@linux.microsoft.com>
-Cc:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, frowand.list@gmail.com, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        pasha.tatashin@soleen.com, allison@lohutok.net,
-        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
-        tglx@linutronix.de, vincenzo.frascino@arm.com,
-        masahiroy@kernel.org, james.morse@arm.com, bhsharma@redhat.com,
-        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
-        christophe.leroy@c-s.fr, gregkh@linuxfoundation.org,
-        nramas@linux.microsoft.com, tusharsu@linux.microsoft.com,
-        balajib@linux.microsoft.com
-Subject: Re: [RFC][PATCH 0/2] Add support for using reserved memory for ima buffer pass
-In-reply-to: <7701df90-a68b-b710-4279-9d64e45ee792@linux.microsoft.com>
-Date:   Sat, 23 May 2020 01:08:13 -0300
-Message-ID: <87v9knpa36.fsf@morokweng.localdomain>
+        Sat, 23 May 2020 14:00:41 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3B2C08C5CA
+        for <linux-integrity@vger.kernel.org>; Sat, 23 May 2020 11:00:39 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id a23so10988270qto.1
+        for <linux-integrity@vger.kernel.org>; Sat, 23 May 2020 11:00:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=vhvRG4iP0p/cCM0/gHqK0xx0MaMNF3/azTtn5P0fCT1b4XLjGRAoR85FXgvwYtowP6
+         J1ev3dPiedOMtPyOzUYmKFEqsj6BkIi2lR8s0YRNLylOZ8MbeWQpwNTWDXPX57LUrKeO
+         FLL54WToKnc9WyFCTQNZdn8yjuqVF61dsdwJrbIWn1f8+mXNgwQXd1Xox425XdFJLCTr
+         UNYtD5Mkr7J8HytQpl125rrGiBWdOVTtdeDic18s2v1Ex5H4EMrCDseWe8z8QJUA2DPl
+         pMcmWf9nM5lni1dYRbVMyTKtLHSFCzrJM5oRvB7Hp9K31CMWsqtaG47ZQbJG6ZEre6uU
+         kwNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=k1hzKvGvwLXG16VcfbssFBN+OwFD1vfL+tHZ9RCxJR1JfYaTe/CcWsNllmJp3doGqV
+         qfbhNTVHbQbB8CKC0JpLzEW8oy3Mp5ewabThFTREGdrbG0IUwj+EOprGDfSbxGsQO12V
+         GMFCGzQNsUesDvtJcR65Kn+wdBgXmcjq46/P8tcCTs/QyD2Fe6n4UvZ2Foj7rINJAhSu
+         zq6zY+2ZxXgiluJA7jEbTyWR+gJ/YJmPakdfzrGHZgr2rDcEtLwTo3HwC/TMPqIYnjRO
+         qWV12J893l+DzGTuKWMYZnOBB1gVqx6ivO6ewWovLTeHp5W1Nap0vsjm739/vMLeBoJq
+         rmXQ==
+X-Gm-Message-State: AOAM5337OCLNVn/l+DtzgMpoBfdfO5+PKSLKLsPRvsyQJpIkZHtzeLy6
+        ySTRl0sD4wEeuCxWxKyD5xmEAppI8hx9Ns/std0=
+X-Google-Smtp-Source: ABdhPJw4JSLl4s8hKmdikxPHOZTjp7LuShJQWo5DKJXfhdyHNpRWrWLXX1iWw/azZwGF2Nz0kU5bTrWvyq5YmK6naS0=
+X-Received: by 2002:ac8:1e16:: with SMTP id n22mr21502226qtl.78.1590256838401;
+ Sat, 23 May 2020 11:00:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-22_12:2020-05-22,2020-05-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 bulkscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
- suspectscore=0 cotscore=-2147483648 impostorscore=0 phishscore=0
- mlxscore=0 malwarescore=0 clxscore=1011 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005230027
+Received: by 2002:a37:9fd3:0:0:0:0:0 with HTTP; Sat, 23 May 2020 11:00:37
+ -0700 (PDT)
+Reply-To: mrs.chantala2055@gmail.com
+From:   mrs chantal <mrs.chantalas1@gmail.com>
+Date:   Sat, 23 May 2020 18:00:37 +0000
+Message-ID: <CAMdkyyDY_0O7YgysHCjgRTJ=8-B7XurK7o1razRHDVOjgr2V2g@mail.gmail.com>
+Subject: jjCompliment
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-Hello Prakhar,
-
-Prakhar Srivastava <prsriva@linux.microsoft.com> writes:
-
-> On 5/12/20 4:05 PM, Rob Herring wrote:
->> On Wed, May 06, 2020 at 10:50:04PM -0700, Prakhar Srivastava wrote:
->>> Hi Mark,
->>
->> Please don't top post.
->>
->>> This patch set currently only address the Pure DT implementation.
->>> EFI and ACPI implementations will be posted in subsequent patchsets.
->>>
->>> The logs are intended to be carried over the kexec and once read the
->>> logs are no longer needed and in prior conversation with James(
->>> https://lore.kernel.org/linux-arm-kernel/0053eb68-0905-4679-c97a-00c5cb6f1abb@arm.com/)
->>> the apporach of using a chosen node doesn't
->>> support the case.
->>>
->>> The DT entries make the reservation permanent and thus doesnt need kernel
->>> segments to be used for this, however using a chosen-node with
->>> reserved memory only changes the node information but memory still is
->>> reserved via reserved-memory section.
->>
->> I think Mark's point was whether it needs to be permanent. We don't
->> hardcode the initrd address for example.
->>
-> Thankyou for clarifying my misunderstanding, i am modelling this keeping to the
-> TPM log implementation that uses a reserved memory. I will rev up the version
-> with chosen-node support.
-> That will make the memory reservation free after use.
-
-Nice. Do you intend to use the same property that powerpc uses
-(linux,ima-kexec-buffer)?
-
->>> On 5/5/20 2:59 AM, Mark Rutland wrote:
->>>> Hi Prakhar,
->>>>
->>>> On Mon, May 04, 2020 at 01:38:27PM -0700, Prakhar Srivastava wrote:
->>>>> IMA during kexec(kexec file load) verifies the kernel signature and measures
->>
->> What's IMAIMA is a LSM attempting to detect if files have been accidentally or
-> maliciously altered, both remotely and locally, it can also be used
-> to appraise a file's measurement against a "good" value stored as an extended
-> attribute, and enforce local file integrity.
->
-> IMA also validates and measures the signers of the kernel and initrd
-> during kexec. The measurements are extended to PCR 10(configurable) and the logs
-> stored in memory, however once kexec'd the logs are lost. Kexec is used as
-> secondary boot loader in may use cases and loosing the signer
-> creates a security hole.
->
-> This patch is an implementation to carry over the logs and making it
-> possible to remotely validate the signers of the kernel and initrd. Such a
-> support exits only in powerpc.
-> This patch makes the carry over of logs architecture independent and puts the
-> complexity in a driver.
-
-If I'm not mistaken, the code at arch/powerpc/kexec/ima.c isn't actually
-powerpc-specific. It could be moved to an arch-independent directory and
-used by any other architecture which supports device trees.
-
-I think that's the simplest way forward. And to be honest I'm still
-trying to understand why you didn't take that approach. Did you try it
-and hit some obstacle or noticed a disadvantage for your use case?
-
---
-Thiago Jung Bauermann
-IBM Linux Technology Center
+     Compliment of the day to you. I am Mrs.CHANTAL I am sending this brief
+    letter to solicit your partnership to transfer $13.5 Million US
+    Dollars.I shall send you more information and procedures when I receive
+    positive response From you. Please send me a message in My private
+    email address is ( mrschantal066@gmail.com  )
+    Best Regards
+    MrS.Chantal
