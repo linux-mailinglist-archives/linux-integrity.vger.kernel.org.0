@@ -2,173 +2,157 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F00271DF2F4
-	for <lists+linux-integrity@lfdr.de>; Sat, 23 May 2020 01:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C421DF480
+	for <lists+linux-integrity@lfdr.de>; Sat, 23 May 2020 06:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387438AbgEVXZS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 22 May 2020 19:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387449AbgEVXZR (ORCPT
+        id S1725320AbgEWEJg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 23 May 2020 00:09:36 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12254 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725294AbgEWEJg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 22 May 2020 19:25:17 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF34C08C5C0
-        for <linux-integrity@vger.kernel.org>; Fri, 22 May 2020 16:25:16 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id v2so810902pfv.7
-        for <linux-integrity@vger.kernel.org>; Fri, 22 May 2020 16:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=xcdARewyTG4POyZ7ltQhfJJu9Qv+Bxm+E+lkKjlpIsE=;
-        b=fTK4N1uv4Kn/dR2zzPbD0jHTR52W93tW49eGy+Fa0Hl+4Be6712kZ/QI6oxwFpFI/a
-         ZHU1PWctlZrqE3qr5XCDpuTkl3C2l7HVsfv5S3tv6i6eNIa81bBVA7dSqbl/5Pq6FUZs
-         ABEWWzVogKKhogjSPk2sGmAiiVj+evSbq4uJE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=xcdARewyTG4POyZ7ltQhfJJu9Qv+Bxm+E+lkKjlpIsE=;
-        b=SzfZylWYBUnm/o97+TX2srcqdhor6hk7ImlVfCXbRIwyHZVmd4iE//SWP+442xsEY4
-         dvK4aEtS4N61O/Gf6c3LldTPAnAkCIPGnaTIQ2yb6HCeiwHnRByQf5v//8D/WgytUUYH
-         qGzWIzH5mInGANJi8k6mxAjR8ESTsIV/E4S1Gr7fTjVFRmF/08gOkcJ5A+e90hV5UDRv
-         pLvHqI6nbATH+iXEBc429wHJJLvVD6zylEg18obv6MIeGCeqKl5lJtutkQnYwYKD87D2
-         K+TUvepAb5EUg51fG6+6diTHGfz5XO8xiBnxnoNJFDYmF0Yi0TLUKkhbeqY9Mb3ZJKsk
-         EW1Q==
-X-Gm-Message-State: AOAM530ZlibICmQYYpiAY/eIrri/kYp6jzdcyVASprO22wWYnTia9c++
-        V6IF7FTQmVLLOACu9aiYtgNC9g==
-X-Google-Smtp-Source: ABdhPJxYA3M7TqBzRS04SzG465as6Jpo33/yu9zFOYOedvseWiYUZylkj5NdgSLEDNI/UVu5rIrHaw==
-X-Received: by 2002:a62:2f45:: with SMTP id v66mr6455014pfv.45.1590189916382;
-        Fri, 22 May 2020 16:25:16 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id m12sm7637602pjs.41.2020.05.22.16.25.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 May 2020 16:25:15 -0700 (PDT)
-Subject: Re: [PATCH 0/3] fs: reduce export usage of kerne_read*() calls
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>, viro@zeniv.linux.org.uk,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        ebiederm@xmission.com, jeyu@kernel.org, jmorris@namei.org,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, nayna@linux.ibm.com,
-        dan.carpenter@oracle.com, skhan@linuxfoundation.org,
-        geert@linux-m68k.org, tglx@linutronix.de, bauerman@linux.ibm.com,
-        dhowells@redhat.com, linux-integrity@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kexec@lists.infradead.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200513152108.25669-1-mcgrof@kernel.org>
- <20200513181736.GA24342@infradead.org>
- <20200515212933.GD11244@42.do-not-panic.com>
- <20200518062255.GB15641@infradead.org>
- <1589805462.5111.107.camel@linux.ibm.com>
- <7525ca03-def7-dfe2-80a9-25270cb0ae05@broadcom.com>
- <202005221551.5CA1372@keescook>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <c48a80f5-a09c-6747-3db8-be23a260a0cb@broadcom.com>
-Date:   Fri, 22 May 2020 16:25:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sat, 23 May 2020 00:09:36 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04N42942159920;
+        Sat, 23 May 2020 00:08:31 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3160mk2mpc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 23 May 2020 00:08:30 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04N48U8L175628;
+        Sat, 23 May 2020 00:08:30 -0400
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3160mk2mnw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 23 May 2020 00:08:30 -0400
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04N45RWH012073;
+        Sat, 23 May 2020 04:08:28 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma02wdc.us.ibm.com with ESMTP id 316uf9084h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 23 May 2020 04:08:28 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04N48SdY14025224
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 23 May 2020 04:08:28 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 536E2AC05B;
+        Sat, 23 May 2020 04:08:28 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B1ABCAC059;
+        Sat, 23 May 2020 04:08:17 +0000 (GMT)
+Received: from morokweng.localdomain (unknown [9.163.49.7])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Sat, 23 May 2020 04:08:17 +0000 (GMT)
+References: <20200504203829.6330-1-prsriva@linux.microsoft.com> <20200505095620.GA82424@C02TD0UTHF1T.local> <e8c7d74e-74bf-caa3-452d-23faa649e825@linux.microsoft.com> <20200512230509.GA2654@bogus> <7701df90-a68b-b710-4279-9d64e45ee792@linux.microsoft.com>
+User-agent: mu4e 1.2.0; emacs 26.3
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Prakhar Srivastava <prsriva@linux.microsoft.com>
+Cc:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, frowand.list@gmail.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, vincenzo.frascino@arm.com,
+        masahiroy@kernel.org, james.morse@arm.com, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr, gregkh@linuxfoundation.org,
+        nramas@linux.microsoft.com, tusharsu@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: Re: [RFC][PATCH 0/2] Add support for using reserved memory for ima buffer pass
+In-reply-to: <7701df90-a68b-b710-4279-9d64e45ee792@linux.microsoft.com>
+Date:   Sat, 23 May 2020 01:08:13 -0300
+Message-ID: <87v9knpa36.fsf@morokweng.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <202005221551.5CA1372@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-22_12:2020-05-22,2020-05-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 bulkscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 cotscore=-2147483648 impostorscore=0 phishscore=0
+ mlxscore=0 malwarescore=0 clxscore=1011 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005230027
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Kees,
 
-On 2020-05-22 4:04 p.m., Kees Cook wrote:
-> On Fri, May 22, 2020 at 03:24:32PM -0700, Scott Branden wrote:
->> On 2020-05-18 5:37 a.m., Mimi Zohar wrote:
->>> On Sun, 2020-05-17 at 23:22 -0700, Christoph Hellwig wrote:
->>>> On Fri, May 15, 2020 at 09:29:33PM +0000, Luis Chamberlain wrote:
->>>>> On Wed, May 13, 2020 at 11:17:36AM -0700, Christoph Hellwig wrote:
->>>>>> Can you also move kernel_read_* out of fs.h?  That header gets pulled
->>>>>> in just about everywhere and doesn't really need function not related
->>>>>> to the general fs interface.
->>>>> Sure, where should I dump these?
->>>> Maybe a new linux/kernel_read_file.h?  Bonus points for a small top
->>>> of the file comment explaining the point of the interface, which I
->>>> still don't get :)
->>> Instead of rolling your own method of having the kernel read a file,
->>> which requires call specific security hooks, this interface provides a
->>> single generic set of pre and post security hooks.  The
->>> kernel_read_file_id enumeration permits the security hook to
->>> differentiate between callers.
+Hello Prakhar,
+
+Prakhar Srivastava <prsriva@linux.microsoft.com> writes:
+
+> On 5/12/20 4:05 PM, Rob Herring wrote:
+>> On Wed, May 06, 2020 at 10:50:04PM -0700, Prakhar Srivastava wrote:
+>>> Hi Mark,
+>>
+>> Please don't top post.
+>>
+>>> This patch set currently only address the Pure DT implementation.
+>>> EFI and ACPI implementations will be posted in subsequent patchsets.
 >>>
->>> To comply with secure and trusted boot concepts, a file cannot be
->>> accessible to the caller until after it has been measured and/or the
->>> integrity (hash/signature) appraised.
+>>> The logs are intended to be carried over the kexec and once read the
+>>> logs are no longer needed and in prior conversation with James(
+>>> https://lore.kernel.org/linux-arm-kernel/0053eb68-0905-4679-c97a-00c5cb6f1abb@arm.com/)
+>>> the apporach of using a chosen node doesn't
+>>> support the case.
 >>>
->>> In some cases, the file was previously read twice, first to measure
->>> and/or appraise the file and then read again into a buffer for
->>> use.  This interface reads the file into a buffer once, calls the
->>> generic post security hook, before providing the buffer to the caller.
->>>    (Note using firmware pre-allocated memory might be an issue.)
->>>
->>> Partial reading firmware will result in needing to pre-read the entire
->>> file, most likely on the security pre hook.
->> The entire file may be very large and not fit into a buffer.
->> Hence one of the reasons for a partial read of the file.
->> For security purposes, you need to change your code to limit the amount
->> of data it reads into a buffer at one time to not consume or run out of much
->> memory.
-> Hm? That's not how whole-file hashing works. :)
+>>> The DT entries make the reservation permanent and thus doesnt need kernel
+>>> segments to be used for this, however using a chosen-node with
+>>> reserved memory only changes the node information but memory still is
+>>> reserved via reserved-memory section.
+>>
+>> I think Mark's point was whether it needs to be permanent. We don't
+>> hardcode the initrd address for example.
+>>
+> Thankyou for clarifying my misunderstanding, i am modelling this keeping to the
+> TPM log implementation that uses a reserved memory. I will rev up the version
+> with chosen-node support.
+> That will make the memory reservation free after use.
 
->
-> These hooks need to finish their hashing and policy checking before they
-> can allow the rest of the code to move forward. (That's why it's a
-> security hook.) If kernel memory utilization is the primary concern,
-> then sure, things could be rearranged to do partial read and update the
-> hash incrementally, but the entire file still needs to be locked,
-> entirely hashed by hook, then read by the caller, then unlocked and
-> released.
->
-> So, if you want to have partial file reads work, you'll need to
-> rearchitect the way this works to avoid regressing the security coverage
-> of these operations.
-I am not familiar with how the security handling code works at all.
-Is the same security check run on files opened from user space?
-A file could be huge.
+Nice. Do you intend to use the same property that powerpc uses
+(linux,ima-kexec-buffer)?
 
-If it assumes there is there is enough memory available to read the 
-entire file into kernel space
-then the improvement below can be left as a memory optimization to be 
-done in
-an independent (or future) patch series.
+>>> On 5/5/20 2:59 AM, Mark Rutland wrote:
+>>>> Hi Prakhar,
+>>>>
+>>>> On Mon, May 04, 2020 at 01:38:27PM -0700, Prakhar Srivastava wrote:
+>>>>> IMA during kexec(kexec file load) verifies the kernel signature and measures
+>>
+>> What's IMAIMA is a LSM attempting to detect if files have been accidentally or
+> maliciously altered, both remotely and locally, it can also be used
+> to appraise a file's measurement against a "good" value stored as an extended
+> attribute, and enforce local file integrity.
+>
+> IMA also validates and measures the signers of the kernel and initrd
+> during kexec. The measurements are extended to PCR 10(configurable) and the logs
+> stored in memory, however once kexec'd the logs are lost. Kexec is used as
+> secondary boot loader in may use cases and loosing the signer
+> creates a security hole.
+>
+> This patch is an implementation to carry over the logs and making it
+> possible to remotely validate the signers of the kernel and initrd. Such a
+> support exits only in powerpc.
+> This patch makes the carry over of logs architecture independent and puts the
+> complexity in a driver.
 
-> So, probably, the code will look something like:
->
->
-> file = kernel_open_file_for_reading(...)
-> 	file = open...
-> 	disallow_writes(file);
-> 	while (processed < size-of-file) {
-> 		buf = read(file, size...)
-> 		security_file_read_partial(buf)
-> 	}
-> 	ret = security_file_read_finished(file);
-> 	if (ret < 0) {
-> 		allow_writes(file);
-> 		return PTR_ERR(ret);
-> 	}
-> 	return file;
->
-> while (processed < size-of-file) {
-> 	buf = read(file, size...)
-> 	firmware_send_partial(buf);
-> }
->
-> kernel_close_file_for_reading(file)
-> 	allow_writes(file);
->
->
+If I'm not mistaken, the code at arch/powerpc/kexec/ima.c isn't actually
+powerpc-specific. It could be moved to an arch-independent directory and
+used by any other architecture which supports device trees.
 
+I think that's the simplest way forward. And to be honest I'm still
+trying to understand why you didn't take that approach. Did you try it
+and hit some obstacle or noticed a disadvantage for your use case?
+
+--
+Thiago Jung Bauermann
+IBM Linux Technology Center
