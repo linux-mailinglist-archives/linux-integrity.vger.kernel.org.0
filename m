@@ -2,101 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE6C1E0F8E
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2020 15:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795831E0F9B
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2020 15:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390807AbgEYNdz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 25 May 2020 09:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S2403855AbgEYNgy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 25 May 2020 09:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390802AbgEYNdy (ORCPT
+        with ESMTP id S2403843AbgEYNgy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 25 May 2020 09:33:54 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82544C05BD43
-        for <linux-integrity@vger.kernel.org>; Mon, 25 May 2020 06:33:54 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id r128so8359701ybc.6
-        for <linux-integrity@vger.kernel.org>; Mon, 25 May 2020 06:33:54 -0700 (PDT)
+        Mon, 25 May 2020 09:36:54 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A562C05BD43
+        for <linux-integrity@vger.kernel.org>; Mon, 25 May 2020 06:36:54 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id n10so8362080ybn.8
+        for <linux-integrity@vger.kernel.org>; Mon, 25 May 2020 06:36:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xqk0bIefrw2vrIZWbzj16crB43IedLWQvwRJlQvaA9c=;
-        b=TlUGNB3o2IkqFANinGJ4SF9BF23MV1OzUqvIAlYVssnHiOkJLgD+ffpmo76rGWwPFN
-         G3+EW5xsxAsXWBDaNYx84Ees2f97TtFaAXjD3Smn0Ue5VgvubIsYLn5w2+/lxNR3VRvj
-         /w/qrDLCMmbJ2xjXg5qXiZld7SPYkppeFX12mD9mkiDomh1hKYa0dQdsjZVRJgK8l5lH
-         7T7SNCCXaC//rhbu8pviX4qu5c9bkWaHxZf9RbBrOI+JX8Pn1+cepnZ6zfGaVKr5YRr+
-         EHVEWjH9Bgr5LqPRbgS5fjlSBj8qMt8v/MXAxbUdNMKAaQWwjrofLZpd0gAHEXtdmYBe
-         hj8g==
+        bh=jcSOKq/rHuR2xKP/geses1NMEAx6OusfI/F+nRB6n20=;
+        b=BKJ+vT23rQPh5/rXBGS0njdwZQY77KFgROhvzOdQQuGJnaH6eFK29yxLsfxm03OtAW
+         mJmSCaKASE1ZekZXA/No4IFpT+nYZO2elldidGTfsy09faIl1kXz34zL0s7pai8BGtcs
+         XrIVhkbHi3gC3fhX29bLkL7e4CHSKFR46KHC5RNtflO4SqsnHePgGohyxhfBEXBgcZ4U
+         tpe+bz4UJL/TGvYsCvJeYfJpjS0r8Wru75WUMO7bLJ0l+CV1xGIQa3kdrKHN1mH6TX/u
+         r8NVe4qpwKljXiDkLIr0VVGzfy+3SZHHau0TA4GeIYGQJPb7DYawu/X/pPkYOjMVfTbV
+         khMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xqk0bIefrw2vrIZWbzj16crB43IedLWQvwRJlQvaA9c=;
-        b=Ldq8etyD7zgS0Eu6VdWiShbWQ68CqXJKxV/JIgTxnb9rZRSLZ6sSzJrmCR8jPYc+tq
-         H71J9SVET55hKpwBvoK/UFKrqO2BdOgIwkk/fS5MizV3/eexkBb1eYiK1sYvKbGFl7wV
-         p2FSyuG7L6x0gUtCs2HJ1gCT5zukPWQcnvB0nzB+Ys5hlQkPd+xO4/LCulLwQ5FeUCuy
-         YZdzDB8wBde9KZTJP8qz93UdrMjdzfUpiiRmHzSO3xFpfdU7mRJpHtZNLf5IOxZSbp23
-         IZ0Hb5GW7m0zreWLsonuXXG7AjZrJ1/Q6TvYszdJzO5iRkcM+p+dfOmOppfmhwoACLsB
-         BJUQ==
-X-Gm-Message-State: AOAM533NCOcc28U6ZinLGl3orOvBn+wOvFnUUfeyFGiLPSASsZwVu+EL
-        bpO90501zRfSAXXvzMfj1eWorbQkUYOTgNOOEY2blg==
-X-Google-Smtp-Source: ABdhPJwDKforc+9M9yVo4pMMOxCDDVaBSg9Mmj8MRXwgkKD3wKlS43421pLmS6F4n5e6h0CCLqm5fY5bIHD4XPZICPw=
-X-Received: by 2002:a25:8202:: with SMTP id q2mr42946369ybk.243.1590413633559;
- Mon, 25 May 2020 06:33:53 -0700 (PDT)
+        bh=jcSOKq/rHuR2xKP/geses1NMEAx6OusfI/F+nRB6n20=;
+        b=Bvu26AdrIt5HwlRpbFgoiWW/xBiJ4raE64ZRHYVkvZhunrV3zUta9XdcWTDkhACrCt
+         w9iqMAXkBvF0BkL2EhxRWEB4/caUyiiQ11FpNyp21CnM6DSuf8qtvy4kuipuuFAY9IZJ
+         71xGBYfNFxErYq8vkMcXcrUzcwqcLPUIfONbvd/lEI0M1yync7P51HL7IVXR5MEuVvmS
+         zcOAmoGKvfodLuU0JR2i0goJZdTyqg2aHh4aKhW4QRIfip3zWGI+QkyCz2NhO97yDcC6
+         7i+OlsK4YcR1/vK1wBPIW67nBMuVC0oWx0SOhvbvu5Zyok6P31NEVCEAS6r+3HGMd5da
+         pO5A==
+X-Gm-Message-State: AOAM532aI1m7s3PmPj+OTo2BiprWeiSrzfA0HW80B4jlsYNmTDs98kar
+        or9oNTXDYxwylREJcXRuq3JmakoWeuaV0EUmw4OnhaDR
+X-Google-Smtp-Source: ABdhPJxHivkwWr92vIcWVAPmxdHI21UBD0f6kmFnhPInoYjQuzZMpD316VmCFypVA2DEq0sqTEZTIvRbnSo3Vys20vs=
+X-Received: by 2002:a25:209:: with SMTP id 9mr31936236ybc.153.1590413813384;
+ Mon, 25 May 2020 06:36:53 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200525115235.5405-1-maxim.uvarov@linaro.org>
- <20200525115235.5405-3-maxim.uvarov@linaro.org> <20200525124753.GA797117@kroah.com>
-In-Reply-To: <20200525124753.GA797117@kroah.com>
+ <20200525115235.5405-3-maxim.uvarov@linaro.org> <7de3fea9-cd88-4dbf-aa27-3cb188fd6e85@forissier.org>
+In-Reply-To: <7de3fea9-cd88-4dbf-aa27-3cb188fd6e85@forissier.org>
 From:   Maxim Uvarov <maxim.uvarov@linaro.org>
-Date:   Mon, 25 May 2020 16:33:42 +0300
-Message-ID: <CAD8XO3ach_G31vkqbVoio2H2yosdoLicu4SLk6nKdGmihUukgw@mail.gmail.com>
-Subject: Re: [PATCHv3 2/3] optee: use uuid for sysfs driver entry
-To:     Greg KH <gregkh@linuxfoundation.org>
+Date:   Mon, 25 May 2020 16:36:42 +0300
+Message-ID: <CAD8XO3amGVeyn9qsWE-AyGM=e36ubwxC4tiwGMVHYBL6E46ZhQ@mail.gmail.com>
+Subject: Re: [Tee-dev] [PATCHv3 2/3] optee: use uuid for sysfs driver entry
+To:     Jerome Forissier <jerome@forissier.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        peterhuewe@gmx.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>
+        Arnd Bergmann <arnd@linaro.org>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 25 May 2020 at 15:47, Greg KH <gregkh@linuxfoundation.org> wrote:
+On Mon, 25 May 2020 at 15:10, Jerome Forissier <jerome@forissier.org> wrote:
 >
-> On Mon, May 25, 2020 at 02:52:34PM +0300, Maxim Uvarov wrote:
+>
+>
+> On 5/25/20 1:52 PM, Maxim Uvarov wrote:
 > > Optee device names for sysfs needed to be unique
+>
+> s/Optee/OP-TEE/
+> s/needed/need/
+>
 > > and it's better if they will mean something. UUID for name
 > > looks like good solution:
 > > /sys/bus/tee/devices/optee-clnt-<uuid>
 >
-> Can you document that in Documentation/ABI/ ?
->
-yes, sure if we agree to go with uuid.
-
-> And why UUID?  Those are usually huge, is that easier than just a unique
-> number?
+> How about mentioning it is the UUID of the Trusted Application on the
+> TEE side?
 >
 
-UUID here is connected to Trusted Application (TA) in a secure world.
-If you need to 'find'  sysfs entry for the corresponding driver
-becomes very easy.
-Also UUID here are not really huge, like:
-/sys/bus/tee/devices/optee-clnt-71d950bc-c9d4-c442-82cb-343fb7f37896
-/sys/bus/tee/devices/optee-clnt-ba3ac5b6-6996-6846-a7f2-205629d00f86
+Jerome, do you think optee-ta-<uuid> is more suitable here?
 
-I think that is better then optee-clnt-0, optee-clnt-1.. which can be
-reordered on each boot and does not carry any information. And on
-module unload there will be missing numbers.
 
-Regards,
-Maxim.
-
-> thanks,
+> >
+> > Signed-off-by: Maxim Uvarov <maxim.uvarov@linaro.org>
+> > ---
+> >  drivers/tee/optee/device.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> greg k-h
+> Thanks,
+> --
+> Jerome
