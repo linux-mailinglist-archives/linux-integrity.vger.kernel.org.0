@@ -2,108 +2,165 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C06151E1220
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2020 17:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BCC1E1E6A
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2020 11:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391123AbgEYPxq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 25 May 2020 11:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S2388425AbgEZJW5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 May 2020 05:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391101AbgEYPxo (ORCPT
+        with ESMTP id S2388634AbgEZJWx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 25 May 2020 11:53:44 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640F5C05BD43
-        for <linux-integrity@vger.kernel.org>; Mon, 25 May 2020 08:53:43 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id u188so426827wmu.1
-        for <linux-integrity@vger.kernel.org>; Mon, 25 May 2020 08:53:43 -0700 (PDT)
+        Tue, 26 May 2020 05:22:53 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9FBC03E97E
+        for <linux-integrity@vger.kernel.org>; Tue, 26 May 2020 02:22:53 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id m18so23604789ljo.5
+        for <linux-integrity@vger.kernel.org>; Tue, 26 May 2020 02:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=forissier-org.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sVa828/t+od9i6K0iwiT5/ErQ2zAZnhakYd2b2nYPJI=;
-        b=XW0qdficRIZ4bWGRTkLECw9GWuN8I0mLbnKyDd1yVmlumgakhmdxHFS8P6Z6KHCJm/
-         fbEJ/7NeD+3xrNc+dSE+dAxb+iup/hIm7VFsHdpO8xf+QyEAwRe7+JpLZfRM9vZyFJvO
-         Es8sW8HRzROR89xwRNGRNGjfso2oiazQZKwkOWZZtIx234cC+zVDjXga+iH2E8UEfx/d
-         SSmwQ+wB5cZqJ89t1YNsSfBErw+LSeC9U7k8yXCDqnEwtcbe8UZAaNAadycxqRr3zQh/
-         sSnoG+1d4sK84a8vau4dwp7g8uR4Jui0aNqwC9jYxQPOFYDZ27vXJn2UGWoB/b6O1ByN
-         swPg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kHtMUTjIpKGUVpTGb6eXqa1GBMsHXSe04tQOYQTSzwk=;
+        b=oEtC9JqLK6JUL+a09fup+E3zmswBCXWI3NHfhAeye40YMT/bZyDqHtuU4TEwB9FFaA
+         PQyMqRt1usaUnx4ouAZuqxXbnvHXqIwQQQPVDsiNGWmZMtk4/0BiERce+XhIUzzEIG9f
+         7YLBwF5B3zkUWkw0rrxo1FMolJJWsHiFs581btuKT1U/A1xmOuhWyS/10UwH/J8G5VrU
+         lUN+3WznXNQ1n7yqOWXLAfW6fjDVbaBVuSMErOAUqdmMV3ykZ12gG3B5FLQ1VSVGngjQ
+         WLz1ev/VKjH5X8ibPWTK8CEfNUv8+zvKU/GaOOYg9qOZxC+vlFi0QQ36SuGx+ZrpOifC
+         njFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sVa828/t+od9i6K0iwiT5/ErQ2zAZnhakYd2b2nYPJI=;
-        b=Jb+3QsKtwxUqPI4PqySy3VJ78kF242EDyOBKWDk72XjJ1zzxSDzOuylhE7KBqxVUvm
-         nQuNqce8YRzX11bsp+7anOZ5fLkMhUL+7vssDpWaAiXkfL4maoBDIUZrW8wlvfvJm34L
-         su9uiXhh5uY19vKgvXZ0XMvvjJKjj0vwulsUSfQSSISnbWx/tvAKbQQEf1CqZvXG5cWe
-         mFzMID5k3yNxxTp1rPg1L92E5Gl/ybUYqxG6PursJ0vnyG0EpA507q4pJlC2ubYoE82k
-         ND4qSHDxOy7byQse8nfdQyf9KvKdCAxwHZYpSk0tMJfH9LV6RhC3AhNYKgTUnnR9F/rF
-         rERA==
-X-Gm-Message-State: AOAM530dqUWTr/TLYcvi5ezfPMBGpvKqXANQSJonC+O2wc6J3DDYeOBS
-        JYDbvOofCjNopZFuBPWBroMkQg==
-X-Google-Smtp-Source: ABdhPJx+cDjqy1SxHuN5QiXUeIyaA921alq/Bru+pnZuLjvbBBabk2j5F7gdzjYzOwbTU0gbqBDPCA==
-X-Received: by 2002:a05:600c:22d3:: with SMTP id 19mr27746065wmg.161.1590422021693;
-        Mon, 25 May 2020 08:53:41 -0700 (PDT)
-Received: from ?IPv6:2a01:e0a:269:e210:80:e64c:847d:b568? ([2a01:e0a:269:e210:80:e64c:847d:b568])
-        by smtp.gmail.com with ESMTPSA id r5sm14589510wrq.0.2020.05.25.08.53.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2020 08:53:40 -0700 (PDT)
-Subject: Re: [Tee-dev] [PATCHv3 2/3] optee: use uuid for sysfs driver entry
-To:     Maxim Uvarov <maxim.uvarov@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Arnd Bergmann <arnd@linaro.org>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de
-References: <20200525115235.5405-1-maxim.uvarov@linaro.org>
- <20200525115235.5405-3-maxim.uvarov@linaro.org>
- <7de3fea9-cd88-4dbf-aa27-3cb188fd6e85@forissier.org>
- <CAD8XO3amGVeyn9qsWE-AyGM=e36ubwxC4tiwGMVHYBL6E46ZhQ@mail.gmail.com>
-From:   Jerome Forissier <jerome@forissier.org>
-Message-ID: <4be64892-e027-a58d-09f5-0450088292f6@forissier.org>
-Date:   Mon, 25 May 2020 17:53:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kHtMUTjIpKGUVpTGb6eXqa1GBMsHXSe04tQOYQTSzwk=;
+        b=gRx4g655uBVyQ0UuUXakWZbfxuYAtJrT0KiM7S4NylT48NWL2CKn+0mUr3BBW7Qc/A
+         LBZh6r/mKB2fAOKhJNkA2gJ04dwACvUz61/wdDZoILkJcyKRykJoXLfZECVqw2cUqpN1
+         iRYAk89k7eX42uJsgPA+Y0HG0Q7iaoGWgkqEqFjEMr6XPkuqHc6Fdk43gZhAa3Ai3A/6
+         v9a4RRmtRrUGd9Yw8reqAEkJq3jgGjITRVXONlI5L09c+LIyfsjDBWBKWOcMCtraIoAC
+         B0VFAnrlDhRIRR6rz5SIkuf/DRV0iwueOG79zDry6ujYgLE2+Rfd0LwgvxZuEj2IjxlO
+         zmrw==
+X-Gm-Message-State: AOAM530wKZhBND+UtcgF/DvKjTjvMI3Cz/W306yoc/zPRFOmgy6hBiAK
+        NKqRIydeoE1E1Dl6HXL/hmoMBYiMp1cq0l140gL6+g==
+X-Google-Smtp-Source: ABdhPJym48nO1qx6Xam2hpUVXTrGYHOl37dIdmsOtBDTKVNSlX2HngDefNjA8Df4YLq2vZMNOewwm8FZbTbAdvC9Nb4=
+X-Received: by 2002:a2e:1451:: with SMTP id 17mr188903lju.30.1590484971486;
+ Tue, 26 May 2020 02:22:51 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAD8XO3amGVeyn9qsWE-AyGM=e36ubwxC4tiwGMVHYBL6E46ZhQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200521064743.4769-1-maxim.uvarov@linaro.org>
+ <20200521064743.4769-4-maxim.uvarov@linaro.org> <20200522171451.GD10319@linux.intel.com>
+ <CAD8XO3bA0oTqwQOU9byb-Vk73S4uP7dTUaOZyEmUJmj6rk3UuQ@mail.gmail.com>
+ <20200522200346.GB150221@linux.intel.com> <CAD8XO3bmorhde9YaEUrd07U__01NC9wAE1O6ALijASbbJudHPQ@mail.gmail.com>
+In-Reply-To: <CAD8XO3bmorhde9YaEUrd07U__01NC9wAE1O6ALijASbbJudHPQ@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Tue, 26 May 2020 14:52:39 +0530
+Message-ID: <CAFA6WYMe8xOPwsBuxoKb0e4kAhXfTjwYGVd7fNUR07hgQ_9TJg@mail.gmail.com>
+Subject: Re: [PATCHv2 2/2] tpm_ftpm_tee: register driver on TEE bus
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Maxim Uvarov <maxim.uvarov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
+        peterhuewe@gmx.de, jgg@ziepe.ca,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Joakim Bech <joakim.bech@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
++ Thiru (original author), Ilias, Joakim
 
+Hi Jarkko,
 
-On 5/25/20 3:36 PM, Maxim Uvarov wrote:
-> On Mon, 25 May 2020 at 15:10, Jerome Forissier <jerome@forissier.org> wrote:
->>
->>
->>
->> On 5/25/20 1:52 PM, Maxim Uvarov wrote:
->>> Optee device names for sysfs needed to be unique
->>
->> s/Optee/OP-TEE/
->> s/needed/need/
->>
->>> and it's better if they will mean something. UUID for name
->>> looks like good solution:
->>> /sys/bus/tee/devices/optee-clnt-<uuid>
->>
->> How about mentioning it is the UUID of the Trusted Application on the
->> TEE side?
->>
-> 
-> Jerome, do you think optee-ta-<uuid> is more suitable here?
+On Mon, 25 May 2020 at 12:20, Maxim Uvarov <maxim.uvarov@linaro.org> wrote:
+>
+> On Fri, 22 May 2020 at 23:03, Jarkko Sakkinen
+> <jarkko.sakkinen@linux.intel.com> wrote:
+> >
+> > On Fri, May 22, 2020 at 10:29:44PM +0300, Maxim Uvarov wrote:
+> > > On Fri, 22 May 2020 at 20:15, Jarkko Sakkinen
+> > > <jarkko.sakkinen@linux.intel.com> wrote:
+> > > >
+> > > > On Thu, May 21, 2020 at 09:47:43AM +0300, Maxim Uvarov wrote:
+> > > > > Register driver on TEE bus. module tee registers bus,
+> > > >
+> > > > "on the TEE bus"
+> > > >
+> > > > "The module tee"
+> > > >
+> > > > > and module optee calls optee_enumerate_devices() to scan
+> > > > > all devices on the bus. Trusted Application for this driver
+> > > >
+> > > > Looking at drivers/tee, it shows that tee and optee are in fact the same
+> > > > module as opposed to what your commit message says.
+> > > >
+> > >
+> > > In the current kernel it's 2 different modules.
+> > >
+> > > > > can be Early TA's (can be compiled into optee-os). In that
+> > > > > case it will be on OPTEE bus before linux booting. Also
+> > > > > optee-suplicant application is needed to be loaded between
+> > > > > OPTEE module and ftpm module to maintain functionality
+> > > > > for fTPM driver.
+> > > >
+> > > > Why is this needed and why things worked before having this?
 
-Yes, a bit better I think. More "self explanatory"... kind of :)
+If you remembered earlier discussions when this driver was added,
+tee-supplicant dependency concern was raised at that time too. But the
+response from author [1] was to use a workaround in firmware to
+overcome the initialization issue of fTPM driver.
 
-Is it possible to have several devices bound to the same TA? I think
-nothing forbids this although we may not have any use case for now...
+Basically while using upstream OP-TEE, fTPM NV RAM is implemented via
+RPMB secure storage [2]. So any fTPM operation dependent on NV RAM may
+fail without access to RPMB secure storage.
 
--- 
-Jerome
+And during kernel boot, RPMB access isn't available (there were some
+prior efforts [3] around this but unfortunately didn't land in
+upstream) due to which we need to rely on user mode tee-supplicant for
+corresponding access.
+
+So we should only register fTPM device when the underlying
+infrastructure is working, which is something this patch-set addresses
+via registering fTPM device only when the tee-supplicant is up and
+running.
+
+[1] https://lkml.org/lkml/2019/7/4/779
+[2] https://optee.readthedocs.io/en/latest/architecture/secure_storage.html#rpmb-secure-storage
+[3] https://lwn.net/Articles/682276/
+
+> > > >
+> > >
+> > > Before these changes user space has to drive boot sequence. I.e.  tee
+> > > and optee modules loads, then application tee-supplicant has to start
+> > > and only then module ftpm can be loaded. The reason for that is
+> > > storage services are implemented in userspace and driver needs them.
+> >
+> > Is the TPM implementation uploaded to TEE from user space and or what
+> > storage are we talking about? Not sure how these storage services
+> > connect to the TPM.
+
+Please see my response above.
+
+-Sumit
+
+> >
+> > /Jarkko
+>
+> Jakko,
+> tee-supplicant application provides state machine over callbacks with
+> RPC messages.
+> https://github.com/OP-TEE/optee_client/blob/master/tee-supplicant/src/tee_supplicant.c#L614
+> It also allocates shm. Without running tee-supplicant
+> tee_client_open_session() will fail.
+> optee_open_session()->get_msg_arg()->tee_shm_alloc()->...
+> Optee team wanted to remove some dependencies from tee-supplicant with
+> moving code
+> to the kernel. But for now I think that should be out of the scope of
+> current patches due to
+> they fix driver initialization on tee bus without breaking current
+> functionality.
+>
+> Maxim.
