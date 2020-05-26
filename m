@@ -2,181 +2,135 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5ADD1E2F31
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2020 21:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391DA1E2F38
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2020 21:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389155AbgEZTir (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 May 2020 15:38:47 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:39852 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388900AbgEZTir (ORCPT
+        id S2389582AbgEZTjk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 May 2020 15:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389382AbgEZTjk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 26 May 2020 15:38:47 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6E6578EE181;
-        Tue, 26 May 2020 12:38:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1590521926;
-        bh=BI1XnFy6GiuDGMxE6lgdz47UyvtRyqP9U2h3jmKsqVo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=PdeECWvKdZ1EFs0jEhQBBF+XSOYThIOu1hN4ZtRv9/Oep67nilQ9mrufZG54k60qE
-         KPKS+3b9CkDJ+ZNiqr5xhCRcanxFJcEG2nwT8xov6YwhnFFZrOdNBfnK5Tv+luMWWt
-         kbJfUdy+uF5mRU4+nQx6rqq5RpYDyVgn3eKUs6dg=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8vkt1A1W0LmP; Tue, 26 May 2020 12:38:46 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 91C988EE0D4;
-        Tue, 26 May 2020 12:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1590521926;
-        bh=BI1XnFy6GiuDGMxE6lgdz47UyvtRyqP9U2h3jmKsqVo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=PdeECWvKdZ1EFs0jEhQBBF+XSOYThIOu1hN4ZtRv9/Oep67nilQ9mrufZG54k60qE
-         KPKS+3b9CkDJ+ZNiqr5xhCRcanxFJcEG2nwT8xov6YwhnFFZrOdNBfnK5Tv+luMWWt
-         kbJfUdy+uF5mRU4+nQx6rqq5RpYDyVgn3eKUs6dg=
-Message-ID: <1590521924.15108.1.camel@HansenPartnership.com>
+        Tue, 26 May 2020 15:39:40 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706DAC03E96D;
+        Tue, 26 May 2020 12:39:39 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id s10so10555085pgm.0;
+        Tue, 26 May 2020 12:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=P1S/jJWjfuAnrLOcm+BjO/Ac53iAJs4aKRGes1JuJOQ=;
+        b=bdChZ6x5vP4WGqb/pLthvuv4yhSeP3uHUJoeY8eZchxnVrHzFKs1XM9otGP3DrUXt7
+         gIgFsfZ/fZMYAYpSerFf4Y5HN3EpwAyNm4GDN5vUpsU7UOILV0bAB4k5tLNKRW/6ZUsp
+         F4CFwRI1uMome8fNI9Mzx5Swqnly3HpOVBXJu6zknAKuJzaRvBE+CxsIEywzfkKdPBRD
+         z5mhvn0b3PTeMPFldXQw3Oy/nbAhixN11mSqMMetv6oxPjzzg4bxfkA/EMuxYqegEnUa
+         hsTyteUmmFvLqwMYhNyar66RSfYmVeiGT9QsfPTDnffO/yROVUByeiJsDZeMtt29ucHe
+         56pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=P1S/jJWjfuAnrLOcm+BjO/Ac53iAJs4aKRGes1JuJOQ=;
+        b=R4ZnqoLgBAxtCSL9wcvdIPVq/Z1tMk1YA8R0uEaF0haTIpj4McvEPzL88lEZQVpzJ2
+         OEAhMfghovQizAnbkfGrBchlSVMUmM3mlbxdDa9kX5IIkmiwI+WBiYrWqQjZ9OigAVQ/
+         gbFr4PGv3tntcqLTODA2wdzl2dAEeTkys5yAwoGnV7ncbElPv/UXUVvWiKexc0gv7RF/
+         3vFpOGhHh/oZUs2WLdGGDC7LiabmNJ4LqJlVCKR3LA7Xjl1cr6HX6tAcGlOTYNAHDBfq
+         CD7C/rwr6YRxh5VB/KyhbzFxxydibdPspdq5F+DzzXA9NO8BKskyydMPEtCz4B8bj4On
+         Ft6g==
+X-Gm-Message-State: AOAM531t3SmUsEJZRcAxW+5tXOzwbb7xJ2n52P013O/RYvdRHMSsb5LV
+        OR1eB/1PT0XsylGv1ll8tQs=
+X-Google-Smtp-Source: ABdhPJykdTdNMsCELn+zIRMoBr9UDlp1E8q53qGWqxtvYj9CWtZOTVW85D0Vxj3wfqCtFjshTakNJg==
+X-Received: by 2002:a65:67d3:: with SMTP id b19mr430032pgs.431.1590521978781;
+        Tue, 26 May 2020 12:39:38 -0700 (PDT)
+Received: from [192.168.1.5] ([75.164.7.205])
+        by smtp.gmail.com with ESMTPSA id gv4sm245687pjb.6.2020.05.26.12.39.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2020 12:39:38 -0700 (PDT)
 Subject: Re: [PATCH] tpm: Revert "tpm: fix invalid locking in NONBLOCKING
  mode"
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Mario.Limonciello@dell.com, peterhuewe@gmx.de,
-        jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jeffrin@rajagiritech.edu.in, alex@guzman.io
-Date:   Tue, 26 May 2020 12:38:44 -0700
-In-Reply-To: <ccf055cbf1a14f28bc95a6b02e29a2f6@AUSX13MPC105.AMER.DELL.COM>
+        Jeffrin Jose T <jeffrin@rajagiritech.edu.in>,
+        Alex Guzman <alex@guzman.io>
 References: <20200526183213.20720-1-mario.limonciello@dell.com>
-         <1590520454.11810.40.camel@HansenPartnership.com>
-         <ccf055cbf1a14f28bc95a6b02e29a2f6@AUSX13MPC105.AMER.DELL.COM>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+ <1590520454.11810.40.camel@HansenPartnership.com>
+From:   Tadeusz Struk <tstruk@gmail.com>
+Message-ID: <f63afdc1-6c40-dc0d-bb9a-154bc51d3b95@gmail.com>
+Date:   Tue, 26 May 2020 12:39:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <1590520454.11810.40.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-05-26 at 19:23 +0000, Mario.Limonciello@dell.com wrote:
-> > On Tue, 2020-05-26 at 13:32 -0500, Mario Limonciello wrote:
-> > > This reverts commit d23d12484307b40eea549b8a858f5fffad913897.
-> > > 
-> > > This commit has caused regressions for the XPS 9560 containing
-> > > a Nuvoton TPM.
-> > 
-> > Presumably this is using the tis driver?
-> 
-> Correct.
-> 
-> > 
-> > > As mentioned by the reporter all TPM2 commands are failing with:
-> > >   ERROR:tcti:src/tss2-tcti/tcti-
-> > > device.c:290:tcti_device_receive()
-> > >   Failed to read response from fd 3, got errno 1: Operation not
-> > > permitted
-> > > 
-> > > The reporter bisected this issue back to this commit which was
-> > > backported to stable as commit 4d6ebc4.
-> > 
-> > I think the problem is request_locality ... for some inexplicable
-> > reason a failure there returns -1, which is EPERM to user space.
-> > 
-> > That seems to be a bug in the async code since everything else
-> > gives a ESPIPE error if tpm_try_get_ops fails ... at least no-one
-> > assumes it gives back a sensible return code.
-> > 
-> > What I think is happening is that with the patch the TPM goes
-> > through a quick sequence of request, relinquish, request,
-> > relinquish and it's the third request which is failing (likely
-> > timing out).  Without the patch, the patch there's only one
-> > request,relinquish cycle because the ops are held while the async
-> > work is executed.  I have a vague recollection that there is a
-> > problem with too many locality request in quick succession, but
-> > I'll defer to Jason, who I think understands the intricacies of
-> > localities better than I do.
-> 
-> Thanks, I don't pretend to understand the nuances of this particular
-> code, but I was hoping that the request to revert got some attention
-> since Alex's kernel Bugzilla and message a few months ago to linux
-> integrity weren't.
-> 
-> > 
-> > If that's the problem, the solution looks simple enough: just move
-> > the ops get down because the priv state is already protected by the
-> > buffer mutex
-> 
-> Yeah, if that works for Alex's situation it certainly sounds like a
-> better solution than reverting this patch as this patch actually does
-> fix a problem reported by Jeffrin originally.
-> 
-> Could you propose a specific patch that Alex and Jeffrin can perhaps
-> both try?
+On 5/26/20 12:14 PM, James Bottomley wrote:
+> +	/* atomic tpm command send and result receive. We only hold the ops
+> +	 * lock during this period so that the tpm can be unregistered even if
+> +	 * the char dev is held open.
+> +	 */
+> +	if (tpm_try_get_ops(priv->chip)) {
+> +		ret = -EPIPE;
+> +		goto out;
+> +	}
+> +
+Hi James,
+This won't help if the message is read by an async tcti. If the problem lies
+in the chip get locality code, perhaps this could help to debug the root-cause
+instead of masking it out in the upper layer code:
 
-Um, what's wrong with the one I originally attached and which you quote
-below?  It's only compile tested, but I think it will work, if the
-theory is correct.
-
-James
-
-> > 
-> > James
-> > 
-> > ---
-> > 
-> > diff --git a/drivers/char/tpm/tpm-dev-common.c
-> > b/drivers/char/tpm/tpm-dev-
-> > common.c
-> > index 87f449340202..1784530b8387 100644
-> > --- a/drivers/char/tpm/tpm-dev-common.c
-> > +++ b/drivers/char/tpm/tpm-dev-common.c
-> > @@ -189,15 +189,6 @@ ssize_t tpm_common_write(struct file *file,
-> > const char
-> > __user *buf,
-> >  		goto out;
-> >  	}
-> > 
-> > -	/* atomic tpm command send and result receive. We only
-> > hold the ops
-> > -	 * lock during this period so that the tpm can be
-> > unregistered even if
-> > -	 * the char dev is held open.
-> > -	 */
-> > -	if (tpm_try_get_ops(priv->chip)) {
-> > -		ret = -EPIPE;
-> > -		goto out;
-> > -	}
-> > -
-> >  	priv->response_length = 0;
-> >  	priv->response_read = false;
-> >  	*off = 0;
-> > @@ -211,11 +202,19 @@ ssize_t tpm_common_write(struct file *file,
-> > const char
-> > __user *buf,
-> >  	if (file->f_flags & O_NONBLOCK) {
-> >  		priv->command_enqueued = true;
-> >  		queue_work(tpm_dev_wq, &priv->async_work);
-> > -		tpm_put_ops(priv->chip);
-> >  		mutex_unlock(&priv->buffer_mutex);
-> >  		return size;
-> >  	}
-> > 
-> > +	/* atomic tpm command send and result receive. We only
-> > hold the ops
-> > +	 * lock during this period so that the tpm can be
-> > unregistered even if
-> > +	 * the char dev is held open.
-> > +	 */
-> > +	if (tpm_try_get_ops(priv->chip)) {
-> > +		ret = -EPIPE;
-> > +		goto out;
-> > +	}
-> > +
-> >  	ret = tpm_dev_transmit(priv->chip, priv->space, priv-
-> > > data_buffer,
-> > 
-> >  			       sizeof(priv->data_buffer));
-> >  	tpm_put_ops(priv->chip);
-
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 2435216bd10a..da5ecd0376bf 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -202,20 +202,22 @@ static int request_locality(struct tpm_chip *chip, int l)
+ 		return rc;
+ 
+ 	stop = jiffies + chip->timeout_a;
++	timeout = stop - jiffies;
+ 
+ 	if (chip->flags & TPM_CHIP_FLAG_IRQ) {
+ again:
+ 		timeout = stop - jiffies;
+ 		if ((long)timeout <= 0)
+-			return -1;
++			goto out;
++
+ 		rc = wait_event_interruptible_timeout(priv->int_queue,
+-						      (check_locality
+-						       (chip, l)),
++						      check_locality(chip, l),
+ 						      timeout);
+ 		if (rc > 0)
+ 			return l;
+ 		if (rc == -ERESTARTSYS && freezing(current)) {
+ 			clear_thread_flag(TIF_SIGPENDING);
++			timeout = stop - jiffies;
+ 			goto again;
+ 		}
+ 	} else {
+@@ -226,6 +228,10 @@ static int request_locality(struct tpm_chip *chip, int l)
+ 			tpm_msleep(TPM_TIMEOUT);
+ 		} while (time_before(jiffies, stop));
+ 	}
++out:
++	dev_warn(&chip->dev, "%s: failed to request locality %d after %lu ms\n",
++			 __func__, l, timeout * HZ / 1000);
++
+ 	return -1;
+ }
+ 
