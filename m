@@ -2,144 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 303511E2C5B
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2020 21:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA011E2D35
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2020 21:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403979AbgEZTOS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 May 2020 15:14:18 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:39442 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392156AbgEZTOR (ORCPT
+        id S2392143AbgEZTUh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 May 2020 15:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391720AbgEZTUg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 26 May 2020 15:14:17 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D8AB78EE181;
-        Tue, 26 May 2020 12:14:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1590520455;
-        bh=1riJEDBNgSCVf7jkch7dm+3/1NkeVaflehjozpLPb3c=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=H4T37HFKxn8vwLL4D3+Az25gwQT6IArhj41gqGeEa/k1UFw37FlmFg7rUafbj95pH
-         1iJPGDeiWKMFNBzedpGMKDzGwNaKSSP1f7PfLcn8t3/pwnlIolh902LzzhtVl+j+56
-         PoyqPuoiBInHBAlZQ0UcHMsbWM7jQGXNYoWqjJ8c=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id czvt4mIAJ9Lv; Tue, 26 May 2020 12:14:15 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2A9948EE0D4;
-        Tue, 26 May 2020 12:14:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1590520455;
-        bh=1riJEDBNgSCVf7jkch7dm+3/1NkeVaflehjozpLPb3c=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=H4T37HFKxn8vwLL4D3+Az25gwQT6IArhj41gqGeEa/k1UFw37FlmFg7rUafbj95pH
-         1iJPGDeiWKMFNBzedpGMKDzGwNaKSSP1f7PfLcn8t3/pwnlIolh902LzzhtVl+j+56
-         PoyqPuoiBInHBAlZQ0UcHMsbWM7jQGXNYoWqjJ8c=
-Message-ID: <1590520454.11810.40.camel@HansenPartnership.com>
-Subject: Re: [PATCH] tpm: Revert "tpm: fix invalid locking in NONBLOCKING
- mode"
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Mario Limonciello <mario.limonciello@dell.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeffrin Jose T <jeffrin@rajagiritech.edu.in>,
-        Alex Guzman <alex@guzman.io>
-Date:   Tue, 26 May 2020 12:14:14 -0700
-In-Reply-To: <20200526183213.20720-1-mario.limonciello@dell.com>
-References: <20200526183213.20720-1-mario.limonciello@dell.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Tue, 26 May 2020 15:20:36 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1BEC03E96D
+        for <linux-integrity@vger.kernel.org>; Tue, 26 May 2020 12:20:35 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id z13so16277995ljn.7
+        for <linux-integrity@vger.kernel.org>; Tue, 26 May 2020 12:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=JfF6l7LMx459ERvdO2nN2IW/+d2ZQx/5sEZb/9TJPe4=;
+        b=gsPtEcFyaZ2rKhAoYUQ6j60QBCgFTXEiJEAUvn6qAIaSzREiIsPnFBLajsfwmrMLDo
+         nxMGvK23w72VOgMobqIQk9bZ8LKvoCWGeUrmjFpyXjQJ8yP/UpQy5dDHwWKXXqWpAi/s
+         Ywk6oawv1Pf58xHRhPLJiT9ciOw2Hq1yrbqh7ze/AQF805r4TIpw5kKn5R/aFnWbaRY/
+         JO5EHJXnga7X2q5ipf0v/QGA+75vcNty9uLqyjLVcBe3F0td8Rw9uyeG9DzfB9q09IDI
+         4EEFt3FyUfteoAnyM7Tisk8CuiMuWUudyEJpwDy5+kisRbsqcmNokxeV1nletpSoFEm/
+         r8mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=JfF6l7LMx459ERvdO2nN2IW/+d2ZQx/5sEZb/9TJPe4=;
+        b=mIWYc7ABHiCsPzABm/640I77ao1HJsv0POKQ6MxK+G9HrZ0+yPd6ycO0FYWEsT4H9T
+         RISJEBPS3PSIwSraKWkAv3ZgLfKibAhIryTbtnWwU4NS2XXWlKUw6VNlKbg2RMGQV0CF
+         JmqQT++qo7bKtZlo3pSOXl3V3ci8i71XQJLuP6qCF2Om3EVIF7wmpCUxita+zNl+S9UE
+         BW9tJpPlLAHKe8vK4/binBdpmuKR2dChiagfH0u4uBWAlrAdtVwM0puSLhxI81H2LYDZ
+         21ESYoRi6HR8WZxiS4zD+QdZPfQ776NYYKIQ3OIM+iJS90F3+GvAMiTfy1xVJ1Xzl3q9
+         JBWA==
+X-Gm-Message-State: AOAM532xiLwXHz0WgZ8y4YVv+y54u/dyyeje9pE5eBzKTzJm94tWfBX6
+        dRqDThFH4r/QgCDF8vlU/RbJVw==
+X-Google-Smtp-Source: ABdhPJzBG2M9RQOiO6jFCVOTGmhqxnYhcD27yu9YfRo3sjWafwiiyZ9QsdRlW49fl7rDD4rQ5Q3gxA==
+X-Received: by 2002:a2e:b5cf:: with SMTP id g15mr1210420ljn.212.1590520834156;
+        Tue, 26 May 2020 12:20:34 -0700 (PDT)
+Received: from localhost.localdomain ([176.59.41.83])
+        by smtp.gmail.com with ESMTPSA id i8sm180483lfo.62.2020.05.26.12.20.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 12:20:33 -0700 (PDT)
+From:   Maxim Uvarov <maxim.uvarov@linaro.org>
+To:     linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org
+Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
+        gregkh@linuxfoundation.org, jens.wiklander@linaro.org,
+        linux-integrity@vger.kernel.org, arnd@linaro.org,
+        sumit.garg@linaro.org, Maxim Uvarov <maxim.uvarov@linaro.org>
+Subject: [PATCHv4 0/3] optee: register drivers on optee bus
+Date:   Tue, 26 May 2020 22:20:26 +0300
+Message-Id: <20200526192029.863-1-maxim.uvarov@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-05-26 at 13:32 -0500, Mario Limonciello wrote:
-> This reverts commit d23d12484307b40eea549b8a858f5fffad913897.
-> 
-> This commit has caused regressions for the XPS 9560 containing
-> a Nuvoton TPM.
+v4: - sysfs entry is optee-ta-uuid (Jerome Forissier, Sumit Garg)
+    - added Documentation/ABI/testing/sysfs-bus-optee-devices (Greg Kroah-Hartman)
+v3: - support tee-suppicant restart (Jens Wiklander)
+    - description and comments (Jarkko Sakkinen)
+    - do not name optee drivers by index in sysfs (Sumit Garg)
+v2: - write TEE with capital letters.
+    - declare __optee_enumerate_device() as static.
 
-Presumably this is using the tis driver?
+Maxim Uvarov (3):
+  optee: do drivers initialization before and after tee-supplicant run
+  optee: use uuid for sysfs driver entry
+  tpm_ftpm_tee: register driver on TEE bus
 
-> As mentioned by the reporter all TPM2 commands are failing with:
->   ERROR:tcti:src/tss2-tcti/tcti-device.c:290:tcti_device_receive()
->   Failed to read response from fd 3, got errno 1: Operation not
-> permitted
-> 
-> The reporter bisected this issue back to this commit which was
-> backported to stable as commit 4d6ebc4.
+ .../ABI/testing/sysfs-bus-optee-devices       |  8 +++
+ MAINTAINERS                                   |  2 +
+ drivers/char/tpm/tpm_ftpm_tee.c               | 70 ++++++++++++++++---
+ drivers/tee/optee/core.c                      | 28 +++++++-
+ drivers/tee/optee/device.c                    | 23 +++---
+ drivers/tee/optee/optee_private.h             | 10 ++-
+ 6 files changed, 118 insertions(+), 23 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-optee-devices
 
-I think the problem is request_locality ... for some inexplicable
-reason a failure there returns -1, which is EPERM to user space.
+-- 
+2.17.1
 
-That seems to be a bug in the async code since everything else gives a
-ESPIPE error if tpm_try_get_ops fails ... at least no-one assumes it
-gives back a sensible return code.
-
-What I think is happening is that with the patch the TPM goes through a
-quick sequence of request, relinquish, request, relinquish and it's the
-third request which is failing (likely timing out).  Without the patch,
-the patch there's only one request,relinquish cycle because the ops are
-held while the async work is executed.  I have a vague recollection
-that there is a problem with too many locality request in quick
-succession, but I'll defer to Jason, who I think understands the
-intricacies of localities better than I do.
-
-If that's the problem, the solution looks simple enough: just move the
-ops get down because the priv state is already protected by the buffer
-mutex
-
-James
-
----
-
-diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-index 87f449340202..1784530b8387 100644
---- a/drivers/char/tpm/tpm-dev-common.c
-+++ b/drivers/char/tpm/tpm-dev-common.c
-@@ -189,15 +189,6 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
- 		goto out;
- 	}
- 
--	/* atomic tpm command send and result receive. We only hold the ops
--	 * lock during this period so that the tpm can be unregistered even if
--	 * the char dev is held open.
--	 */
--	if (tpm_try_get_ops(priv->chip)) {
--		ret = -EPIPE;
--		goto out;
--	}
--
- 	priv->response_length = 0;
- 	priv->response_read = false;
- 	*off = 0;
-@@ -211,11 +202,19 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
- 	if (file->f_flags & O_NONBLOCK) {
- 		priv->command_enqueued = true;
- 		queue_work(tpm_dev_wq, &priv->async_work);
--		tpm_put_ops(priv->chip);
- 		mutex_unlock(&priv->buffer_mutex);
- 		return size;
- 	}
- 
-+	/* atomic tpm command send and result receive. We only hold the ops
-+	 * lock during this period so that the tpm can be unregistered even if
-+	 * the char dev is held open.
-+	 */
-+	if (tpm_try_get_ops(priv->chip)) {
-+		ret = -EPIPE;
-+		goto out;
-+	}
-+
- 	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
- 			       sizeof(priv->data_buffer));
- 	tpm_put_ops(priv->chip);
