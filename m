@@ -2,96 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CF81E32B9
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2020 00:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE681E3362
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2020 01:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404417AbgEZWfA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 May 2020 18:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404414AbgEZWfA (ORCPT
+        id S2389989AbgEZXGO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 May 2020 19:06:14 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42266 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389802AbgEZXGN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 26 May 2020 18:35:00 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCD4C03E96D
-        for <linux-integrity@vger.kernel.org>; Tue, 26 May 2020 15:34:59 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id x13so10821508pfn.11
-        for <linux-integrity@vger.kernel.org>; Tue, 26 May 2020 15:34:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=guzman.io; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=rc0ztywtDtdFivmaKBhxTDL3VYNzhzekzPPhJ2NZpLY=;
-        b=K1w2VEUJFRCNmdKIEN6fzcAz45I8IqIXhkYy7dZoZ9CqByVri0wJpgw6ppL0Vf6shS
-         E4VaBNm/EXE17Xdh/XAts/vxCFDPtf80lqfWWmKDhXo6uMUdbnnykRrEBYka1DMDoJxW
-         Kne0gM4h8M9f1d/SLaE05gxVF4ETTfdya61DE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=rc0ztywtDtdFivmaKBhxTDL3VYNzhzekzPPhJ2NZpLY=;
-        b=i9fWqLCq4Skl/t3b//UEBcjpefy8sNEKBA3s8fqb9y1MYZ7B+LIDkFCuPdp2O5kLw1
-         LBuNa6KS6AsRNLhd/BNmlh+IhgMut3rnQbwObAqSP9DmwmPcZXrUzqqTUzyHQbbRvYVr
-         kUK/pnC8Y2wqW5fGRRZ/C56b0cll6HbeNNKHtLo4ncUbWi5gZVDIY1f4G/24b9LgZol+
-         03YDjSSVqMSJaEOfDcah8Pr6hmPJ/Zxa6B0wVGF/MMKBe5xn4G4pqHm2PeFlC/3phqzv
-         6Hu65ePtgJhW7V7wmQ4AYl9QJK+Yc03JRuptc82u/PHwh3fqhu+QI8XKcjhjJx0/UM53
-         jKUg==
-X-Gm-Message-State: AOAM5320hXRQV4oFxgXFi0Qtg2w5W5zPUVVjkN8JIhwSdiP8MUliukdo
-        9dfrSccOWSTYBrKdXsJOJCaK7Q==
-X-Google-Smtp-Source: ABdhPJxIlsZhEzNp6s/vSULhJkeORRxVKjicky1gfALAqUj9Gulp50o+6Cqs0SfnDwlQt9iAfHNpzA==
-X-Received: by 2002:aa7:9a96:: with SMTP id w22mr980505pfi.199.1590532498863;
-        Tue, 26 May 2020 15:34:58 -0700 (PDT)
-Received: from ?IPv6:2601:645:4000:ba:30d8:f462:8a0e:6cae? ([2601:645:4000:ba:30d8:f462:8a0e:6cae])
-        by smtp.gmail.com with ESMTPSA id s94sm507942pjb.20.2020.05.26.15.34.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 15:34:57 -0700 (PDT)
-Message-ID: <1fc66c1b942e5c0855cea3445bfe33fc3a1c1ad2.camel@guzman.io>
+        Tue, 26 May 2020 19:06:13 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id E73BC8EE181;
+        Tue, 26 May 2020 16:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1590534372;
+        bh=UIJxxdcolMNBV1F2tHlacd/GA5Gqhl4Il9Tm33AYAaQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=DiLoaq8fmnx68F+zW+NvPjpBkda+KC3ETTX4xGdOxk06zVmgscgPQCibtLWnUO0fI
+         TrgPDUtYdszzo7Jzqvc1MyVusz629oB29QWSpsnIlVu6BiWsBV2g5ZFbOs16Q3qcQc
+         +KFR+4/dX92dbBoqbQBi6OxEQQFaLODVUR4cB9N4=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KLmpmuVFYzlj; Tue, 26 May 2020 16:06:12 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 8D8B18EE0D4;
+        Tue, 26 May 2020 16:06:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1590534372;
+        bh=UIJxxdcolMNBV1F2tHlacd/GA5Gqhl4Il9Tm33AYAaQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=DiLoaq8fmnx68F+zW+NvPjpBkda+KC3ETTX4xGdOxk06zVmgscgPQCibtLWnUO0fI
+         TrgPDUtYdszzo7Jzqvc1MyVusz629oB29QWSpsnIlVu6BiWsBV2g5ZFbOs16Q3qcQc
+         +KFR+4/dX92dbBoqbQBi6OxEQQFaLODVUR4cB9N4=
+Message-ID: <1590534370.15108.17.camel@HansenPartnership.com>
 Subject: Re: [PATCH] tpm: Revert "tpm: fix invalid locking in NONBLOCKING
  mode"
-From:   Alex Guzman <alex@guzman.io>
-To:     Tadeusz Struk <tstruk@gmail.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Alex Guzman <alex@guzman.io>, Mario.Limonciello@dell.com,
+        peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-Date:   Tue, 26 May 2020 15:34:56 -0700
-In-Reply-To: <705c9df6-e8cd-2829-c579-2bf039360eec@gmail.com>
+        jeffrin@rajagiritech.edu.in
+Date:   Tue, 26 May 2020 16:06:10 -0700
+In-Reply-To: <da3027a2aa9d1b7110a65de919e88f42ef2e13bb.camel@guzman.io>
 References: <20200526183213.20720-1-mario.limonciello@dell.com>
          <1590520454.11810.40.camel@HansenPartnership.com>
-         <f63afdc1-6c40-dc0d-bb9a-154bc51d3b95@gmail.com>
-         <1590523214.15108.4.camel@HansenPartnership.com>
-         <705c9df6-e8cd-2829-c579-2bf039360eec@gmail.com>
+         <ccf055cbf1a14f28bc95a6b02e29a2f6@AUSX13MPC105.AMER.DELL.COM>
+         <1590521924.15108.1.camel@HansenPartnership.com>
+         <da3027a2aa9d1b7110a65de919e88f42ef2e13bb.camel@guzman.io>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.2 
-MIME-Version: 1.0
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-05-26 at 14:33 -0700, Tadeusz Struk wrote:
-> On 5/26/20 1:00 PM, James Bottomley wrote:
-> > I don't think there is a root cause other than a TIS TPM is getting
-> > annoyed by us cycling localities too rapidly because we don't do an
-> > actual TPM operation between request and relinquish.  Since the
-> > first
-> > request/relinquish seems unnecessary for the async case, moving the
-> > ops
-> > get eliminates the problem.
-> 
-> Could be, so maybe we could try both patches.
-> More debug info on the error path won't hurt.
-> Thanks,
-> Tadeusz
+On Tue, 2020-05-26 at 15:19 -0700, Alex Guzman wrote:
+[...]
+> When using your patch, I get a hang when trying to use tpm2_getcap,
+> and dmesg shows some info.
 
-With your logging patch, I consistently see this message in dmesg when
-tpm2_getcap fails:
+Are you sure it's all applied?  This
 
-tpm tpm0: request_locality: failed to request locality 0 after 750 ms
+> [  570.913803]  tpm_tcg_write_bytes+0x2f/0x40
+> [  570.913805]  release_locality+0x49/0x220
+> [  570.913807]  tpm_relinquish_locality+0x1f/0x40
+> [  570.913808]  tpm_chip_stop+0x21/0x40
+> [  570.913810]  tpm_put_ops+0x9/0x30
+> [  570.913811]  tpm_common_write+0x179/0x190
+> [  570.913813]  vfs_write+0xb1/0x1a0
+
+Implies an unmatched tpm_put_ops() in the async write path, as though
+this hunk:
+
+> @@ -211,11 +202,19 @@ ssize_t tpm_common_write(struct file *file,
+> const char __user *buf,
+>         if (file->f_flags & O_NONBLOCK) {
+>                 priv->command_enqueued = true;
+>                 queue_work(tpm_dev_wq, &priv->async_work);
+> -               tpm_put_ops(priv->chip);
+>                 mutex_unlock(&priv->buffer_mutex);
+>                 return size;
+>         }
+
+Is missing.  I actually booted the patch in my TPM based VM and it all
+seems to work OK when I execute tpm2_getcap (I verified it's using
+O_NONBLOCK) and tssgetcapability in sync mode.
+
+James
 
