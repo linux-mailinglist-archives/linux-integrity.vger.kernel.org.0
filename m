@@ -2,41 +2,43 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3B41E4EAC
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2020 21:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2571E4ED9
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2020 22:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728356AbgE0T4B (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 May 2020 15:56:01 -0400
-Received: from mga14.intel.com ([192.55.52.115]:54808 "EHLO mga14.intel.com"
+        id S1726887AbgE0UJh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 May 2020 16:09:37 -0400
+Received: from mga07.intel.com ([134.134.136.100]:52878 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728346AbgE0T4A (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 May 2020 15:56:00 -0400
-IronPort-SDR: OLiFCzD0QNUl3GKHgKPnZYawLoAxjQkm1hMFhbX6hBnRy2CnbLBZ4MbMFPZu2cejM7U6oiSIb5
- yL+nW34FkmQA==
+        id S1726798AbgE0UJg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 27 May 2020 16:09:36 -0400
+IronPort-SDR: TaMRkLinzWzGr3EtcyDBzxPV47kU3Rcsrf2v6gVDD7H/mDbf4OyHMauQe+Z1VyYQFAaZfqQ8KA
+ W6DEFsFpsk+Q==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 12:56:00 -0700
-IronPort-SDR: MC8ILC1TC7Qhwe+8pdr6GxO9hKgIuvS2YOS6VReHKjsjVAlr06/UORj6Qi8OHXLPyyzwV8wRNo
- 7DrqrPMqwPLQ==
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 13:09:35 -0700
+IronPort-SDR: Uae7lhmeinT5YiWWmiUkt6Tj7A1nsDizky35Cl75Rv3tTZYtdmqBDkYOzeLGMAeuc2tnKOfKQF
+ EofL5u+UPwLQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,442,1583222400"; 
-   d="scan'208";a="256854105"
+   d="scan'208";a="376137006"
 Received: from lkakolx-mobl.ger.corp.intel.com ([10.249.43.73])
-  by fmsmga008.fm.intel.com with ESMTP; 27 May 2020 12:55:56 -0700
-Message-ID: <096698e5493ffe714357b0d6926b900418f71dd0.camel@linux.intel.com>
-Subject: Re: [PATCHv3 1/3] optee: do drivers initialization before and after
- tee-supplicant run
+  by fmsmga001.fm.intel.com with ESMTP; 27 May 2020 13:09:30 -0700
+Message-ID: <37da2695fe6de09d69e27b77f3e29e068596205f.camel@linux.intel.com>
+Subject: Re: [PATCH] tpm: Revert "tpm: fix invalid locking in NONBLOCKING
+ mode"
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Maxim Uvarov <maxim.uvarov@linaro.org>,
-        linux-kernel@vger.kernel.org, tee-dev@lists.linaro.org
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
-        jens.wiklander@linaro.org, linux-integrity@vger.kernel.org,
-        arnd@linaro.org, sumit.garg@linaro.org
-Date:   Wed, 27 May 2020 22:55:54 +0300
-In-Reply-To: <20200525115235.5405-2-maxim.uvarov@linaro.org>
-References: <20200525115235.5405-1-maxim.uvarov@linaro.org>
-         <20200525115235.5405-2-maxim.uvarov@linaro.org>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Mario.Limonciello@dell.com, peterhuewe@gmx.de, jgg@ziepe.ca
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jeffrin@rajagiritech.edu.in, alex@guzman.io
+Date:   Wed, 27 May 2020 23:09:28 +0300
+In-Reply-To: <1590521924.15108.1.camel@HansenPartnership.com>
+References: <20200526183213.20720-1-mario.limonciello@dell.com>
+         <1590520454.11810.40.camel@HansenPartnership.com>
+         <ccf055cbf1a14f28bc95a6b02e29a2f6@AUSX13MPC105.AMER.DELL.COM>
+         <1590521924.15108.1.camel@HansenPartnership.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.2-0ubuntu1 
@@ -47,210 +49,65 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-05-25 at 14:52 +0300, Maxim Uvarov wrote:
-> Some drivers (like ftpm) can operate only after tee-supplicant
-> runs becase of tee-supplicant provides things like storage
-> services.  This patch splits probe of non tee-supplicant dependable
-> drivers to early stage, and after tee-supplicant run probe other
-> drivers.
-
-Fix the typos and remove extra spaces (one space after '.').
-
-Why "tee-supplicant" and not "TEE-supplicant"?
-
+On Tue, 2020-05-26 at 12:38 -0700, James Bottomley wrote:
+> On Tue, 2020-05-26 at 19:23 +0000, Mario.Limonciello@dell.com wrote:
+> > > On Tue, 2020-05-26 at 13:32 -0500, Mario Limonciello wrote:
+> > > > This reverts commit d23d12484307b40eea549b8a858f5fffad913897.
+> > > > 
+> > > > This commit has caused regressions for the XPS 9560 containing
+> > > > a Nuvoton TPM.
+> > > 
+> > > Presumably this is using the tis driver?
+> > 
+> > Correct.
+> > 
+> > > > As mentioned by the reporter all TPM2 commands are failing with:
+> > > >   ERROR:tcti:src/tss2-tcti/tcti-
+> > > > device.c:290:tcti_device_receive()
+> > > >   Failed to read response from fd 3, got errno 1: Operation not
+> > > > permitted
+> > > > 
+> > > > The reporter bisected this issue back to this commit which was
+> > > > backported to stable as commit 4d6ebc4.
+> > > 
+> > > I think the problem is request_locality ... for some inexplicable
+> > > reason a failure there returns -1, which is EPERM to user space.
+> > > 
+> > > That seems to be a bug in the async code since everything else
+> > > gives a ESPIPE error if tpm_try_get_ops fails ... at least no-one
+> > > assumes it gives back a sensible return code.
+> > > 
+> > > What I think is happening is that with the patch the TPM goes
+> > > through a quick sequence of request, relinquish, request,
+> > > relinquish and it's the third request which is failing (likely
+> > > timing out).  Without the patch, the patch there's only one
+> > > request,relinquish cycle because the ops are held while the async
+> > > work is executed.  I have a vague recollection that there is a
+> > > problem with too many locality request in quick succession, but
+> > > I'll defer to Jason, who I think understands the intricacies of
+> > > localities better than I do.
+> > 
+> > Thanks, I don't pretend to understand the nuances of this particular
+> > code, but I was hoping that the request to revert got some attention
+> > since Alex's kernel Bugzilla and message a few months ago to linux
+> > integrity weren't.
+> > 
+> > > If that's the problem, the solution looks simple enough: just move
+> > > the ops get down because the priv state is already protected by the
+> > > buffer mutex
+> > 
+> > Yeah, if that works for Alex's situation it certainly sounds like a
+> > better solution than reverting this patch as this patch actually does
+> > fix a problem reported by Jeffrin originally.
+> > 
+> > Could you propose a specific patch that Alex and Jeffrin can perhaps
+> > both try?
 > 
-> Signed-off-by: Maxim Uvarov <maxim.uvarov@linaro.org>
-> Suggested-by: Sumit Garg <sumit.garg@linaro.org>
-> Suggested-by: Arnd Bergmann <arnd@linaro.org>
-> ---
->  drivers/tee/optee/core.c          | 28 +++++++++++++++++++++++++---
->  drivers/tee/optee/device.c        | 17 +++++++++++------
->  drivers/tee/optee/optee_private.h | 10 +++++++++-
->  3 files changed, 45 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
-> index 99698b8a3a74..d059e3ac491c 100644
-> --- a/drivers/tee/optee/core.c
-> +++ b/drivers/tee/optee/core.c
-> @@ -17,6 +17,7 @@
->  #include <linux/tee_drv.h>
->  #include <linux/types.h>
->  #include <linux/uaccess.h>
-> +#include <linux/workqueue.h>
->  #include "optee_private.h"
->  #include "optee_smc.h"
->  #include "shm_pool.h"
-> @@ -218,6 +219,15 @@ static void optee_get_version(struct tee_device *teedev,
->  	*vers = v;
->  }
->  
-> +static void optee_bus_scan(struct work_struct *work)
-> +{
-> +	int rc;
-> +
-> +	rc = optee_enumerate_devices(PTA_CMD_GET_DEVICES_SUPP);
-> +	if (rc)
-> +		pr_err("optee_enumerate_devices failed %d\n", rc);
-> +}
+> Um, what's wrong with the one I originally attached and which you quote
+> below?  It's only compile tested, but I think it will work, if the
+> theory is correct.
 
-Is pr_err() required really here? Why not just pr_info()?
-
-Why have it all and not just ftrace when needed? There is series going
-on to add CONFIG_FTRACE_FUNC_PROTOTYPE to that to get return values and
-arguments.
-
-> +
->  static int optee_open(struct tee_context *ctx)
->  {
->  	struct optee_context_data *ctxdata;
-> @@ -241,8 +251,18 @@ static int optee_open(struct tee_context *ctx)
->  			kfree(ctxdata);
->  			return -EBUSY;
->  		}
-> -	}
->  
-> +		if (!optee->scan_bus_done) {
-> +			INIT_WORK(&optee->scan_bus_work, optee_bus_scan);
-> +			optee->scan_bus_wq = create_workqueue("optee_bus_scan");
-> +			if (!optee->scan_bus_wq) {
-> +				pr_err("optee: couldn't create workqueue\n");
-
-Neither get pr_err() here. Please remove this one completely.
-
-> +				return -ECHILD;
-> +			}
-> +			queue_work(optee->scan_bus_wq, &optee->scan_bus_work);
-> +			optee->scan_bus_done = true;
-> +		}
-> +	}
->  	mutex_init(&ctxdata->mutex);
->  	INIT_LIST_HEAD(&ctxdata->sess_list);
->  
-> @@ -296,8 +316,10 @@ static void optee_release(struct tee_context *ctx)
->  
->  	ctx->data = NULL;
->  
-> -	if (teedev == optee->supp_teedev)
-> +	if (teedev == optee->supp_teedev) {
-> +		destroy_workqueue(optee->scan_bus_wq);
->  		optee_supp_release(&optee->supp);
-> +	}
->  }
->  
->  static const struct tee_driver_ops optee_ops = {
-> @@ -675,7 +697,7 @@ static int optee_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, optee);
->  
-> -	rc = optee_enumerate_devices();
-> +	rc = optee_enumerate_devices(PTA_CMD_GET_DEVICES);
->  	if (rc) {
->  		optee_remove(pdev);
->  		return rc;
-> diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
-> index e3a148521ec1..d4931dad07aa 100644
-> --- a/drivers/tee/optee/device.c
-> +++ b/drivers/tee/optee/device.c
-> @@ -21,7 +21,6 @@
->   * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
->   * TEE_ERROR_SHORT_BUFFER - Output buffer size less than required
->   */
-> -#define PTA_CMD_GET_DEVICES		0x0
->  
->  static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
->  {
-> @@ -32,7 +31,8 @@ static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
->  }
->  
->  static int get_devices(struct tee_context *ctx, u32 session,
-> -		       struct tee_shm *device_shm, u32 *shm_size)
-> +		       struct tee_shm *device_shm, u32 *shm_size,
-> +		       u32 func)
->  {
->  	int ret = 0;
->  	struct tee_ioctl_invoke_arg inv_arg;
-> @@ -42,7 +42,7 @@ static int get_devices(struct tee_context *ctx, u32 session,
->  	memset(&param, 0, sizeof(param));
->  
->  	/* Invoke PTA_CMD_GET_DEVICES function */
-> -	inv_arg.func = PTA_CMD_GET_DEVICES;
-> +	inv_arg.func = func;
->  	inv_arg.session = session;
->  	inv_arg.num_params = 4;
->  
-> @@ -87,7 +87,7 @@ static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
->  	return rc;
->  }
->  
-> -int optee_enumerate_devices(void)
-> +static int __optee_enumerate_devices(u32 func)
->  {
->  	const uuid_t pta_uuid =
->  		UUID_INIT(0x7011a688, 0xddde, 0x4053,
-> @@ -118,7 +118,7 @@ int optee_enumerate_devices(void)
->  		goto out_ctx;
->  	}
->  
-> -	rc = get_devices(ctx, sess_arg.session, NULL, &shm_size);
-> +	rc = get_devices(ctx, sess_arg.session, NULL, &shm_size, func);
->  	if (rc < 0 || !shm_size)
->  		goto out_sess;
->  
-> @@ -130,7 +130,7 @@ int optee_enumerate_devices(void)
->  		goto out_sess;
->  	}
->  
-> -	rc = get_devices(ctx, sess_arg.session, device_shm, &shm_size);
-> +	rc = get_devices(ctx, sess_arg.session, device_shm, &shm_size, func);
->  	if (rc < 0)
->  		goto out_shm;
->  
-> @@ -158,3 +158,8 @@ int optee_enumerate_devices(void)
->  
->  	return rc;
->  }
-> +
-> +int optee_enumerate_devices(u32 func)
-> +{
-> +	return  __optee_enumerate_devices(func);
-> +}
-> diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-> index d9c5037b4e03..8b71839a357e 100644
-> --- a/drivers/tee/optee/optee_private.h
-> +++ b/drivers/tee/optee/optee_private.h
-> @@ -78,6 +78,9 @@ struct optee_supp {
->   * @memremaped_shm	virtual address of memory in shared memory pool
->   * @sec_caps:		secure world capabilities defined by
->   *			OPTEE_SMC_SEC_CAP_* in optee_smc.h
-> + * @scan_bus_done	flag if device registation was already done.
-> + * @scan_bus_wq		workqueue to scan optee bus and register optee drivers
-> + * @scan_bus_work	workq to scan optee bus and register optee drivers
->   */
->  struct optee {
->  	struct tee_device *supp_teedev;
-> @@ -89,6 +92,9 @@ struct optee {
->  	struct tee_shm_pool *pool;
->  	void *memremaped_shm;
->  	u32 sec_caps;
-> +	bool   scan_bus_done;
-> +	struct workqueue_struct *scan_bus_wq;
-> +	struct work_struct scan_bus_work;
->  };
->  
->  struct optee_session {
-> @@ -173,7 +179,9 @@ void optee_free_pages_list(void *array, size_t num_entries);
->  void optee_fill_pages_list(u64 *dst, struct page **pages, int num_pages,
->  			   size_t page_offset);
->  
-> -int optee_enumerate_devices(void);
-> +#define PTA_CMD_GET_DEVICES		0x0
-> +#define PTA_CMD_GET_DEVICES_SUPP	0x1
-> +int optee_enumerate_devices(u32 func);
->  
->  /*
->   * Small helpers
-
-No exalanation of "scan bus" neither in the comments nor in the code.
+Please send a legit patch, thanks.
 
 /Jarkko
 
