@@ -2,136 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF9B1E6E81
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2020 00:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CB91E6F1A
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2020 00:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436908AbgE1WTp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 28 May 2020 18:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436859AbgE1WTn (ORCPT
+        id S2436990AbgE1WdY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 28 May 2020 18:33:24 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:41250 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2436867AbgE1WdX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 28 May 2020 18:19:43 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66013C08C5C6
-        for <linux-integrity@vger.kernel.org>; Thu, 28 May 2020 15:19:43 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id c75so281791pga.3
-        for <linux-integrity@vger.kernel.org>; Thu, 28 May 2020 15:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xRqzS5lxFaKDdGCCXOJrFWYOqXqiEcAWVVaJIo0Jl50=;
-        b=UilgVzE9ZezWKY0kXWB2q+H7dCWUW03PUc17aswnj1HPCVlY2v3gx57GpJ+CeIuzi1
-         Z5d0Nl/fxgKP8F61EAbwoCr7VHMTvII4Rf32C6jrjyn0DKBL3bvvjjfp9/YKjOZLLcX7
-         IlnTTNK8ckDhC7+WElyX/zLCPKUlxW4dOEjFM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xRqzS5lxFaKDdGCCXOJrFWYOqXqiEcAWVVaJIo0Jl50=;
-        b=qgfAbj/7p3MkcE9JISMKe8EwUT2/oPxxexT0TIYbSXa9ddBVFLZZU6te7qFOx4d5Tr
-         eH/6l14erwcaOcNsBe0GZJMWDuFc80n94J7jYAwhqiaKcOALgc7q2v8XVhPLUpYN8LWE
-         mVjCHxQSPK58uT5mbSOODn7XzGTo30rkEGvzo/EYk9zXxKVdK0XSdPQUNU07wK07i9XM
-         XVEnESugZawO8O6SD1iQxUMgquBaCQXr4cQ4cEcE2n2yCISExwA1YU+0EtVzLVJ1842K
-         GIDU9ikjZ0u6jdMuaUMrKzm/9F5inQO4qnEXbAItRFiC0qALOttgG3g44d66tSb+kDUv
-         z1Nw==
-X-Gm-Message-State: AOAM530vk4m3kh0P7RTJRaTZEsvgRSPwbZ14dniTvu2iIpwTCvsYx2d/
-        ShDRgGQid0zU0yY5HaaHgMNh5w==
-X-Google-Smtp-Source: ABdhPJw0aZ7PN9WkqkwNrHB2k+9F8JoZ/MIUXuARtR77z0m1Bs0DwKFDd7/AJ5T5zmuaAa4kDPVNrg==
-X-Received: by 2002:a63:d148:: with SMTP id c8mr5093834pgj.51.1590704382905;
-        Thu, 28 May 2020 15:19:42 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id b23sm5143337pgs.33.2020.05.28.15.19.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 15:19:42 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Andrey Pronin <apronin@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm_tis_spi: Don't send anything during flow control
-Date:   Thu, 28 May 2020 15:19:30 -0700
-Message-Id: <20200528151912.1.Id689a39ce8d1ec6f29f4287277ad977ff4f57d7d@changeid>
-X-Mailer: git-send-email 2.27.0.rc0.183.gde8f92d652-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 28 May 2020 18:33:23 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CAFB28EE10F;
+        Thu, 28 May 2020 15:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1590705200;
+        bh=VTyQq/KBhT0N+ixGd7R8XxmuxZO1qhfTdyYZV+Q0q7Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ADPqEy1pN21jrENbQUjKS1nW9Qr+ZGLB8+zCF6VnqqaK50INeWAI0GwHXD81J+3+E
+         EQSx6M8MHAF4Aa5N9q6RhyBfyFpFQVBKvfw4BbeMZ9rN5sjoPT3cZjM9m/Z/4v5ljz
+         ieaR2YMFZJCcQ6OpqVp2/Am+LOcp4JuF2HRnpwLc=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Yasy8jzLJuaj; Thu, 28 May 2020 15:33:20 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 98C058EE0F8;
+        Thu, 28 May 2020 15:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1590705200;
+        bh=VTyQq/KBhT0N+ixGd7R8XxmuxZO1qhfTdyYZV+Q0q7Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ADPqEy1pN21jrENbQUjKS1nW9Qr+ZGLB8+zCF6VnqqaK50INeWAI0GwHXD81J+3+E
+         EQSx6M8MHAF4Aa5N9q6RhyBfyFpFQVBKvfw4BbeMZ9rN5sjoPT3cZjM9m/Z/4v5ljz
+         ieaR2YMFZJCcQ6OpqVp2/Am+LOcp4JuF2HRnpwLc=
+Message-ID: <1590705198.3515.11.camel@HansenPartnership.com>
+Subject: Re: [PATCH] tpm: Revert "tpm: fix invalid locking in NONBLOCKING
+ mode"
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Alex Guzman <alex@guzman.io>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mario.Limonciello@dell.com, peterhuewe@gmx.de, jgg@ziepe.ca
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-integrity@vger.kernel.org, jeffrin@rajagiritech.edu.in
+Date:   Thu, 28 May 2020 15:33:18 -0700
+In-Reply-To: <a5e2a176faa272a0edc8737c1ef1bf5b3c278f63.camel@guzman.io>
+References: <20200526183213.20720-1-mario.limonciello@dell.com>
+         <1590520454.11810.40.camel@HansenPartnership.com>
+         <ccf055cbf1a14f28bc95a6b02e29a2f6@AUSX13MPC105.AMER.DELL.COM>
+         <d6b4591c49f01f24b0dbfd25c8792a3f506d6cae.camel@linux.intel.com>
+         <a5e2a176faa272a0edc8737c1ef1bf5b3c278f63.camel@guzman.io>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-During flow control we are just reading from the TPM, yet our spi_xfer
-has the tx_buf and rx_buf both non-NULL which means we're requesting a
-full duplex transfer.
+On Wed, 2020-05-27 at 18:10 -0700, Alex Guzman wrote:
+> On Wed, 2020-05-27 at 23:15 +0300, Jarkko Sakkinen wrote:
+> > On Tue, 2020-05-26 at 19:23 +0000, Mario.Limonciello@dell.com
+> > wrote:
+> > > Thanks, I don't pretend to understand the nuances of this
+> > > particular code, but I was hoping that the request to revert got
+> > > some attention since Alex's kernel Bugzilla and message a few
+> > > months ago to linux integrity weren't.
+> > 
+> > Removing linux-kernel from CC since this subsystem internal
+> > discussion.
+> > 
+> > Seeing the whole thing first time today.
+> > 
+> > Bugzilla is the first thing to ignore when busy. It is good as
+> > place holder for bugs, but all discussions should happen only in
+> > LKML. There's no official requirement to proactively use Bugzilla
+> > for anything.
+> > 
+> > That said I'm happy that people put stuff there so that it gets
+> > logged.
+> > 
+> > For follow-up's use only LKML if it is important to you. Those will
+> > get processed.
+> > 
+> > As far as this goes, if nothing is heard from me, check that you
+> > put me as CC to the original email. Otherwise, I might have missed
+> > it (by mistake, not by purpose).
+> > 
+> > Honestly, I'm not sure what point was this patch when there was
+> > time to wait for months without response. Why the passivity for all
+> > this time?
+> > 
+> > /Jarkko
+> > 
+> 
+> It largely went quiet because I didn't raise the issue in the mailing
+> list again. I pinged back in February (
+> https://lore.kernel.org/linux-integrity/CAJ7-
+> PMbujee92N1f9xVF8vtXgS49qpe7qHkeWh1Z0R-Rk-Jkaw@mail.gmail.com/) but
+> the conversation died out and I was content to simply use the
+> last working kernel version and see if the bug was resolved on its
+> own.
 
-SPI is always somewhat of a full duplex protocol anyway and in theory
-the other side shouldn't really be looking at what we're sending it
-during flow control, but it's still a bit ugly to be sending some
-"random" data when we shouldn't.
+I think its just a state of knowledge problem: back in February I
+didn't know how unusual EPERM errors are in the TPM so the issue just
+flew by as a "this is a curious issue with an O_NONBLOCK path" thing,
+but thanks to some key stuff I've been doing I now do.  So this time
+your EPERM struck me as "that's impossible surely" which is why I dug
+into the code to find out where it was coming from ... and sure enough,
+it was impossible: it was an untranslated failure return, but at least
+it accidentally told me exactly what the real error was.
 
-The default tpm_tis_spi_flow_control() tries to address this by
-setting 'phy->iobuf[0] = 0'.  This partially avoids the problem of
-sending "random" data, but since our tx_buf and rx_buf both point to
-the same place I believe there is the potential of us sending the
-TPM's previous byte back to it if we hit the retry loop.
+So the upshot is you got lucky this time around ...
 
-Another flow control implementation, cr50_spi_flow_control(), doesn't
-address this at all.
+James
 
-Let's clean this up and just make the tx_buf NULL before we call
-flow_control().  Not only does this ensure that we're not sending any
-"random" bytes but it also possibly could make the SPI controller
-behave in a slightly more optimal way.
-
-NOTE: no actual observed problems are fixed by this patch--it's was
-just made based on code inspection.
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
- drivers/char/tpm/tpm_tis_spi_main.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-index d96755935529..8d2c581a93c6 100644
---- a/drivers/char/tpm/tpm_tis_spi_main.c
-+++ b/drivers/char/tpm/tpm_tis_spi_main.c
-@@ -53,8 +53,6 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi_phy *phy,
- 
- 	if ((phy->iobuf[3] & 0x01) == 0) {
- 		// handle SPI wait states
--		phy->iobuf[0] = 0;
--
- 		for (i = 0; i < TPM_RETRY; i++) {
- 			spi_xfer->len = 1;
- 			spi_message_init(&m);
-@@ -104,6 +102,8 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
- 		if (ret < 0)
- 			goto exit;
- 
-+		/* Flow control transfers are receive only */
-+		spi_xfer.tx_buf = NULL;
- 		ret = phy->flow_control(phy, &spi_xfer);
- 		if (ret < 0)
- 			goto exit;
-@@ -113,9 +113,8 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
- 		spi_xfer.delay.value = 5;
- 		spi_xfer.delay.unit = SPI_DELAY_UNIT_USECS;
- 
--		if (in) {
--			spi_xfer.tx_buf = NULL;
--		} else if (out) {
-+		if (out) {
-+			spi_xfer.tx_buf = phy->iobuf;
- 			spi_xfer.rx_buf = NULL;
- 			memcpy(phy->iobuf, out, transfer_len);
- 			out += transfer_len;
--- 
-2.27.0.rc0.183.gde8f92d652-goog
-
+> I raised the issue again on the bugtracker a few days ago, leading to
+> this follow up here. :)
