@@ -2,140 +2,205 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF6E1E5CBE
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 May 2020 12:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897291E6357
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 May 2020 16:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387726AbgE1KL7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 28 May 2020 06:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387597AbgE1KL5 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 28 May 2020 06:11:57 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B188C08C5C5
-        for <linux-integrity@vger.kernel.org>; Thu, 28 May 2020 03:11:56 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id c12so16243272lfc.10
-        for <linux-integrity@vger.kernel.org>; Thu, 28 May 2020 03:11:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=GvfntBARHGj9tyZqdVS0AkSrdT6KC+PYhROqxRjCMSI=;
-        b=dciROLJOVOVwViZNuh26Z/D+bUVPDpn5YJh8ZZttPxszTWryj9rOVEeufhdM5e1xGy
-         YfDBZ2KvD8mWzVKTPn0h3ANgfslgu9bpKn18ygjJqto1jKZsOENRKNzj6CrLLZITeSFj
-         trh4CDPfzYRDnG0qguZAHiADbM8kCqoVHKX4ZjtCOsBqVJtc+YNUYhVbMa93BMeGbkZ0
-         6D3AOy7TVkze0Pud/A/q8VCuE9+HD05/39pszecnFngXZx3Lg97kpBJ9VEFu/+yathLE
-         3+LeS904+pW0/zHStBygu1Wx/d6DKguY0APiH7LGNsmguPhm6uRoY5aHq/A432qDSH7n
-         P/JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GvfntBARHGj9tyZqdVS0AkSrdT6KC+PYhROqxRjCMSI=;
-        b=WC5PKXiPxzP/RcJswNMyAfUBvZiewsTVcQNn5Rlf4L3bmoB3rkNmqWgWnnykDhd7nD
-         bK1llpmR1kPjmSqDNDaRwXncAKtoy+oQYsgOmIcFuEsSvLmyVcres0mR5HkU6jEgzlQN
-         6hb8k8KP9hZp17YKPlaFsyTS39FN+MyDzRoLz11twU7XRHgrsLtywKO7iJ1uha9yA4F6
-         hdk+djhzhQ+rp8z6ONoo88hM+Vzt7zQbA0b1qKGoSIslynuD5y2pRCaL6CuGd1wQZIj6
-         xXxP1UedpAP/GyMHu6BeD45qX5Eo7VhJHHTXz9NUQMjuB/tx53oLpCEwnT2YFxDmJgYZ
-         kLkg==
-X-Gm-Message-State: AOAM530t9GcdoMJK6qwrbYnTFil8kb+C+4HdAITR5LLpa1dX/Nip2Y2a
-        Gejyykgxw8wKB/+ESRx84fVpxQ==
-X-Google-Smtp-Source: ABdhPJwJPxDKqS8mBjb4QtN2KNtIstmDRs+NseXg6dzSjdWdbXvIn1CwDgUyIkAE0AkSO7B3dm5mgA==
-X-Received: by 2002:a05:6512:3082:: with SMTP id z2mr1350303lfd.32.1590660713685;
-        Thu, 28 May 2020 03:11:53 -0700 (PDT)
-Received: from jade (h-249-223.A175.priv.bahnhof.se. [98.128.249.223])
-        by smtp.gmail.com with ESMTPSA id m11sm567347lji.51.2020.05.28.03.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 03:11:53 -0700 (PDT)
-Date:   Thu, 28 May 2020 12:11:50 +0200
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     Maxim Uvarov <maxim.uvarov@linaro.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        peterhuewe@gmx.de, Jason Gunthorpe <jgg@ziepe.ca>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>
-Subject: Re: [PATCHv2 2/2] tpm_ftpm_tee: register driver on TEE bus
-Message-ID: <20200528101150.GA156014@jade>
-References: <20200521064743.4769-1-maxim.uvarov@linaro.org>
- <20200521064743.4769-4-maxim.uvarov@linaro.org>
- <20200522171451.GD10319@linux.intel.com>
- <CAD8XO3bA0oTqwQOU9byb-Vk73S4uP7dTUaOZyEmUJmj6rk3UuQ@mail.gmail.com>
- <20200522200346.GB150221@linux.intel.com>
- <CAD8XO3bmorhde9YaEUrd07U__01NC9wAE1O6ALijASbbJudHPQ@mail.gmail.com>
- <81c59da1dc2a255c58e7e338f30285e68b4664d6.camel@linux.intel.com>
- <CAD8XO3a5Xqw3oDAn=VH25Fb0j-_GSripEgQjwurhqGQRW_mq5g@mail.gmail.com>
+        id S2390838AbgE1OHw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 28 May 2020 10:07:52 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41852 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390658AbgE1OHv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 28 May 2020 10:07:51 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 3E5FAAC52;
+        Thu, 28 May 2020 14:07:49 +0000 (UTC)
+Date:   Thu, 28 May 2020 16:07:47 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     ltp@lists.linux.it, Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Petr Cervinka <pcervinka@suse.com>,
+        Cyril Hrubis <chrubis@suse.cz>, linux-integrity@vger.kernel.org
+Subject: Re: [LTP v2 1/1] ima_tpm.sh: Fix for calculating boot aggregate
+Message-ID: <20200528140747.GA8401@dell5510>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20200527071434.28574-1-pvorel@suse.cz>
+ <1590601280.16219.1.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-2
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD8XO3a5Xqw3oDAn=VH25Fb0j-_GSripEgQjwurhqGQRW_mq5g@mail.gmail.com>
+In-Reply-To: <1590601280.16219.1.camel@linux.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 28, 2020 at 11:08:18AM +0300, Maxim Uvarov wrote:
-> On Wed, 27 May 2020 at 22:42, Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Mon, 2020-05-25 at 09:50 +0300, Maxim Uvarov wrote:
-> > > Jakko,
-> > > tee-supplicant application provides state machine over callbacks with
-> > > RPC messages.
-> > > https://github.com/OP-TEE/optee_client/blob/master/tee-supplicant/src/tee_supplicant.c#L614
-> > > It also allocates shm. Without running tee-supplicant
-> > > tee_client_open_session() will fail.
-> > > optee_open_session()->get_msg_arg()->tee_shm_alloc()->...
-> > > Optee team wanted to remove some dependencies from tee-supplicant with
-> > > moving code
-> > > to the kernel. But for now I think that should be out of the scope of
-> > > current patches due to
-> > > they fix driver initialization on tee bus without breaking current
-> > > functionality.
-> >
-> > So what is the role in high-level for tee-supplicant? Why does it
-> > exist? No time to dive into code unfortunately.
-> >
-> 
-> Original implementation for tee-supplicant does several things:
-> 1. allocate shm
-> 2. load ta from user space (fs file)
-> 3. emulate rpmb
-> 4. also there are some ftrace and socket functions which I did not use.
-> 
-> As I I understand, current implementation uses tee-supplicant and it's
-> library as
-> API from user land to Trusted OS.
-> 
-> Some docs can be found here:
-> https://optee.readthedocs.io/en/latest/architecture/index.html
-> 
-> 
-> 
-> > These kernel commits do not explain in simple terms enough how all
-> > of these entities connect with each other, if you don't have that
-> > understanding beforehand.
-> >
-> 
-> Yes, that is true. But I think it's something new and good docs will
-> be some time later.
+Hi Mimi,
 
-There's already some in Documentation/tee.txt, but it will get outdated
-if we don't update it when we architectural changes likeÂ this. It's a
-pity we missed updating it with the introduction of the bus. It seems a
-good time to do it now so it easier to follow what's done.
+thanks a lot for testing!
 
-Cheers,
-Jens
+> On Wed, 2020-05-27 at 09:14 +0200, Petr Vorel wrote:
+> > Fixes test for kernel commit: 6f1a1d103b48 ima: ("Switch to
+> > ima_hash_algo for boot aggregate") from current linux-integrity tree.
 
-> 
-> > /Jarkko
-> >
-> 
-> Regards,
-> Maxim.
+> > Tests was failing, because it expect SHA1 hash, but for TPM 2.0 is
+> > now used IMA default hash algorithm (by default default SHA256).
+> > This is similar for entries in IMA measurement list so we can reuse
+> > already existing code.
+
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > ---
+> > changes v1->v2:
+> > * removing global variables from get_algorithm_digest (hopefully it's
+> > less ugly)
+
+> > Tested only on VM. Can anybody test it on real HW?
+
+> With just this change, the ima_tpm.sh test is failing.  I assume it is
+> failing because it is reading the SHA1 TPM bank, not the SHA256 bank
+> to calculate the boot_aggregate hash.
+First question: is it correct to take sha256? Because on my test below it's
+reading sha1, because that's the content of /sys/kernel/security/ima/ascii_runtime_measurements
+
+I thought just kernel commit: 6f1a1d103b48 ima: ("Switch to ima_hash_algo for
+boot aggregate") from current linux-integrity tree is needed, but I tested it on
+b59fda449cf0 ("ima: Set again build_ima_appraise variable") (i.e. having all
+Robeto's ima patches,  missing just last 2 commits from next-integrity head).
+What is needed to get your setup?
+We both have CONFIG_IMA_DEFAULT_HASH_SHA256=y and CONFIG_IMA_DEFAULT_HASH="sha256".
+
+> ima_tpm 1 TINFO: timeout per run is 0h 5m 0s
+> ima_tpm 1 TINFO: IMA kernel config:
+> ima_tpm 1 TINFO: CONFIG_IMA=y
+> ima_tpm 1 TINFO: CONFIG_IMA_MEASURE_PCR_IDX=10
+> ima_tpm 1 TINFO: CONFIG_IMA_LSM_RULES=y
+> ima_tpm 1 TINFO: CONFIG_IMA_NG_TEMPLATE=y
+> ima_tpm 1 TINFO: CONFIG_IMA_DEFAULT_TEMPLATE="ima-ng"
+> ima_tpm 1 TINFO: CONFIG_IMA_DEFAULT_HASH_SHA256=y
+> ima_tpm 1 TINFO: CONFIG_IMA_DEFAULT_HASH="sha256"
+> ima_tpm 1 TINFO: CONFIG_IMA_WRITE_POLICY=y
+> ima_tpm 1 TINFO: CONFIG_IMA_READ_POLICY=y
+> ima_tpm 1 TINFO: CONFIG_IMA_APPRAISE=y
+> ima_tpm 1 TINFO: CONFIG_IMA_ARCH_POLICY=y
+> ima_tpm 1 TINFO: CONFIG_IMA_TRUSTED_KEYRING=y
+> ima_tpm 1 TINFO: CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS=y
+> ima_tpm 1 TINFO: CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS=y
+> ima_tpm 1 TINFO: CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=y
+> ima_tpm 1 TINFO: /proc/cmdline: BOOT_IMAGE=/boot/vmlinuz-5.6.0-rc3+.signed root=UUID=119f1a79-c391-4e37-905d-3a503284cadb ro quiet splash ima-policy=tcb
+> ima_tpm 1 TINFO: verify boot aggregate
+> ima_tpm 1 TINFO: used algorithm: sha256
+> ima_tpm 1 TINFO: IMA boot aggregate: 'b2341e4ccea25be7fa750830fb5fdf4bef1c44a4'
+> ima_tpm 1 TFAIL: bios boot aggregate does not match IMA boot aggregate (3fd5dc717f886ff7182526efc5edc3abb179a5aac1ab589c8ec888398233ae5b)
+> ima_tpm 2 TINFO: verify PCR values
+> ima_tpm 2 TINFO: evmctl version: evmctl 1.2
+> ima_tpm 2 TCONF: TPM Hardware Support not enabled in kernel or no TPM chip found
+> ima_tpm 3 TINFO: AppArmor enabled, this may affect test results
+> ima_tpm 3 TINFO: it can be disabled with TST_DISABLE_APPARMOR=1 (requires super/root)
+> ima_tpm 3 TINFO: loaded AppArmor profiles: none
+
+> Summary:
+> passed   0
+> failed   1
+> skipped  1
+> warnings 0
+
+
+BTW my results on custom kernel:
+ima_tpm 1 TINFO: timeout per run is 0h 5m 0s
+ima_tpm 1 TINFO: IMA kernel config:
+ima_tpm 1 TINFO: CONFIG_IMA=y
+ima_tpm 1 TINFO: CONFIG_IMA_MEASURE_PCR_IDX=10
+ima_tpm 1 TINFO: CONFIG_IMA_LSM_RULES=y
+ima_tpm 1 TINFO: CONFIG_IMA_NG_TEMPLATE=y
+ima_tpm 1 TINFO: CONFIG_IMA_DEFAULT_TEMPLATE="ima-ng"
+ima_tpm 1 TINFO: CONFIG_IMA_DEFAULT_HASH_SHA256=y
+ima_tpm 1 TINFO: CONFIG_IMA_DEFAULT_HASH="sha256"
+ima_tpm 1 TINFO: CONFIG_IMA_APPRAISE=y
+ima_tpm 1 TINFO: CONFIG_IMA_APPRAISE_BOOTPARAM=y
+ima_tpm 1 TINFO: CONFIG_IMA_APPRAISE_MODSIG=y
+ima_tpm 1 TINFO: CONFIG_IMA_TRUSTED_KEYRING=y
+ima_tpm 1 TINFO: CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY=y
+ima_tpm 1 TINFO: /proc/cmdline: BOOT_IMAGE=/boot/vmlinuz-5.3.18-20-default root=/dev/mapper/system-root crashkernel=121M,high crashkernel=72M,low isofrom=/dev/disk/by-uuid/3271-1AD6:/openSUSE-Tumbleweed-NET-x86_64-Snapshot20161222-Media.iso isofrom_device=/dev/disk/by-uuid/3271-1AD6 isofrom_system=/openSUSE-Tumbleweed-NET-x86_64-Snapshot20161222-Media.iso loader=syslinux quiet resume=/dev/system/swap splash=silent quiet showopts
+ima_tpm 1 TINFO: IMA kernel config:
+ima_tpm 1 TINFO: CONFIG_IMA=y
+ima_tpm 1 TINFO: CONFIG_IMA_MEASURE_PCR_IDX=10
+ima_tpm 1 TINFO: CONFIG_IMA_LSM_RULES=y
+ima_tpm 1 TINFO: CONFIG_IMA_NG_TEMPLATE=y
+ima_tpm 1 TINFO: CONFIG_IMA_DEFAULT_TEMPLATE="ima-ng"
+ima_tpm 1 TINFO: CONFIG_IMA_DEFAULT_HASH_SHA256=y
+ima_tpm 1 TINFO: CONFIG_IMA_DEFAULT_HASH="sha256"
+ima_tpm 1 TINFO: CONFIG_IMA_APPRAISE=y
+ima_tpm 1 TINFO: CONFIG_IMA_APPRAISE_BOOTPARAM=y
+ima_tpm 1 TINFO: CONFIG_IMA_APPRAISE_MODSIG=y
+ima_tpm 1 TINFO: CONFIG_IMA_TRUSTED_KEYRING=y
+ima_tpm 1 TINFO: CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY=y
+ima_tpm 1 TINFO: /proc/cmdline: BOOT_IMAGE=/boot/vmlinuz-5.3.18-20-default root=/dev/mapper/system-root crashkernel=121M,high crashkernel=72M,low isofrom=/dev/disk/by-uuid/3271-1AD6:/openSUSE-Tumbleweed-NET-x86_64-Snapshot20161222-Media.iso isofrom_device=/dev/disk/by-uuid/3271-1AD6 isofrom_system=/openSUSE-Tumbleweed-NET-x86_64-Snapshot20161222-Media.iso loader=syslinux quiet resume=/dev/system/swap splash=silent quiet showopts
+ima_tpm 1 TINFO: verify boot aggregate
+ima_tpm 1 TINFO: used algorithm: sha1
+ima_tpm 1 TINFO: IMA boot aggregate: '1172f0990296510ed39403b4f1de83c82e093aae'
+ima_tpm 1 TPASS: bios boot aggregate matches IMA boot aggregate (1172f0990296510ed39403b4f1de83c82e093aae)
+ima_tpm 2 TINFO: verify PCR values
+ima_tpm 2 TINFO: evmctl version: evmctl 1.2.1
+ima_tpm 2 TINFO: new PCRS path, evmctl >= 1.1 required
+ima_tpm 2 TINFO: verify PCR (Process Control Register)
+ima_tpm 2 TPASS: aggregate PCR value matches real PCR value
+
+Summary:
+passed   2
+failed   0
+skipped  0
+warnings 0
+
+
+> # head -1 /sys/kernel/security/ima/ascii_runtime_measurements
+
+> 10 a3132d2501128ff527171658d40d8deb61e2292b ima-ng
+> sha256:3fd5dc717f886ff7182526efc5edc3abb179a5aac1ab589c8ec888398233ae5
+> b boot_aggregate
+
+mine:
+10 c125a1d3684a9737f20f6c1bc880782fae60fb28 ima-ng sha1:1172f0990296510ed39403b4f1de83c82e093aae boot_aggregate
+
+> The ima-evm-utils next-testing branch has code to calculate the
+> boot_aggregate based on multiple banks.
+I see, 696bf0b ("ima-evm-utils: calculate the digests for multiple TPM banks")
+I wonder whether it's reasonable trying to port that to ima_boot_aggregate.c or
+just depend on evmctl. External dependencies are sometimes complicated, but for
+IMA I incline to just require evmctl.
+
+> # evmctl ima_boot_aggregate
+
+> sha1:4cf3d105b1a1a41b951cc6431f0801c01fe50b24
+> sha256:3fd5dc717f886ff7182526efc5edc3abb179a5aac1ab589c8ec888398233ae5b
+
+Thus obviously evmctl (from next-testing) also gets only sha1
+./src/evmctl ima_boot_aggregate
+sha1:1172f0990296510ed39403b4f1de83c82e093aae
+
+> There's also a new test to verify the boot_aggregate.
+
+> $ VERBOSE=1 make check TESTS=boog_aggregate.test
+BTW I got some errors
+...
+make  check-TESTS
+make[2]: Entering directory '/home/foo/ima-evm-utils/tests'
+make[3]: Entering directory '/home/foo/ima-evm-utils/tests'
+make[4]: Entering directory '/home/foo/ima-evm-utils/tests'
+make[4]: Nothing to be done for 'boog_aggregate.log'.
+make[4]: Leaving directory '/home/foo/ima-evm-utils/tests'
+fatal: making test-suite.log: failed to create boog_aggregate.trs
+fatal: making test-suite.log: failed to create boog_aggregate.log
+make[3]: *** [Makefile:516: test-suite.log] Error 1
+make[3]: Leaving directory '/home/foo/ima-evm-utils/tests'
+make[2]: *** [Makefile:625: check-TESTS] Error 2
+make[2]: Leaving directory '/home/foo/ima-evm-utils/tests'
+make[1]: *** [Makefile:692: check-am] Error 2
+make[1]: Leaving directory '/home/foo/ima-evm-utils/tests'
+make: *** [Makefile:514: check-recursive] Error 1
+
+> Both need some review and testing before being released.
+Any estimation when code is released?
+
+Kind regards,
+Petr
