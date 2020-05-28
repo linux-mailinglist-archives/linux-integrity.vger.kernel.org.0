@@ -2,68 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C51CE1E6A20
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 May 2020 21:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF9B1E6E81
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2020 00:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406183AbgE1TKZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 28 May 2020 15:10:25 -0400
-Received: from mga07.intel.com ([134.134.136.100]:22208 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406129AbgE1TKY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 28 May 2020 15:10:24 -0400
-IronPort-SDR: fVVSCS3j6dBFtCGtclrb0JGtFZoq/RKxk+RVnY8SVZGazVMrIdh1hKO7T18SZRAtYRxDf9eaoH
- er+Bpto7Sscw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2020 12:10:23 -0700
-IronPort-SDR: lfCxX18BigE0qmNfQKYWRA9KnhGelelDH/RpP0+t4IY/awrHmgmzRhvv6n4H3rkmkQs+mz7Euu
- bWlikEEaSY9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,445,1583222400"; 
-   d="scan'208";a="292101076"
-Received: from jtitox-mobl.ger.corp.intel.com (HELO localhost) ([10.252.56.171])
-  by fmsmga004.fm.intel.com with ESMTP; 28 May 2020 12:10:20 -0700
-Date:   Thu, 28 May 2020 22:10:18 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Alex Guzman <alex@guzman.io>
-Subject: Re: [PATCH v2] tpm: fix TIS locality timeout problems
-Message-ID: <20200528191018.GB2147934@linux.intel.com>
-References: <1590689457.3449.7.camel@HansenPartnership.com>
+        id S2436908AbgE1WTp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 28 May 2020 18:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436859AbgE1WTn (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 28 May 2020 18:19:43 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66013C08C5C6
+        for <linux-integrity@vger.kernel.org>; Thu, 28 May 2020 15:19:43 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id c75so281791pga.3
+        for <linux-integrity@vger.kernel.org>; Thu, 28 May 2020 15:19:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xRqzS5lxFaKDdGCCXOJrFWYOqXqiEcAWVVaJIo0Jl50=;
+        b=UilgVzE9ZezWKY0kXWB2q+H7dCWUW03PUc17aswnj1HPCVlY2v3gx57GpJ+CeIuzi1
+         Z5d0Nl/fxgKP8F61EAbwoCr7VHMTvII4Rf32C6jrjyn0DKBL3bvvjjfp9/YKjOZLLcX7
+         IlnTTNK8ckDhC7+WElyX/zLCPKUlxW4dOEjFM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xRqzS5lxFaKDdGCCXOJrFWYOqXqiEcAWVVaJIo0Jl50=;
+        b=qgfAbj/7p3MkcE9JISMKe8EwUT2/oPxxexT0TIYbSXa9ddBVFLZZU6te7qFOx4d5Tr
+         eH/6l14erwcaOcNsBe0GZJMWDuFc80n94J7jYAwhqiaKcOALgc7q2v8XVhPLUpYN8LWE
+         mVjCHxQSPK58uT5mbSOODn7XzGTo30rkEGvzo/EYk9zXxKVdK0XSdPQUNU07wK07i9XM
+         XVEnESugZawO8O6SD1iQxUMgquBaCQXr4cQ4cEcE2n2yCISExwA1YU+0EtVzLVJ1842K
+         GIDU9ikjZ0u6jdMuaUMrKzm/9F5inQO4qnEXbAItRFiC0qALOttgG3g44d66tSb+kDUv
+         z1Nw==
+X-Gm-Message-State: AOAM530vk4m3kh0P7RTJRaTZEsvgRSPwbZ14dniTvu2iIpwTCvsYx2d/
+        ShDRgGQid0zU0yY5HaaHgMNh5w==
+X-Google-Smtp-Source: ABdhPJw0aZ7PN9WkqkwNrHB2k+9F8JoZ/MIUXuARtR77z0m1Bs0DwKFDd7/AJ5T5zmuaAa4kDPVNrg==
+X-Received: by 2002:a63:d148:: with SMTP id c8mr5093834pgj.51.1590704382905;
+        Thu, 28 May 2020 15:19:42 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
+        by smtp.gmail.com with ESMTPSA id b23sm5143337pgs.33.2020.05.28.15.19.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2020 15:19:42 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Andrey Pronin <apronin@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm_tis_spi: Don't send anything during flow control
+Date:   Thu, 28 May 2020 15:19:30 -0700
+Message-Id: <20200528151912.1.Id689a39ce8d1ec6f29f4287277ad977ff4f57d7d@changeid>
+X-Mailer: git-send-email 2.27.0.rc0.183.gde8f92d652-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1590689457.3449.7.camel@HansenPartnership.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 28, 2020 at 11:10:57AM -0700, James Bottomley wrote:
-> It has been reported that some TIS based TPMs are giving unexpected
-> errors when using the O_NONBLOCK path of the TPM device. The problem
-> is that some TPMs don't like it when you get and then relinquish a
-> locality (as the tpm_try_get_ops()/tpm_put_ops() pair does) without
-> sending a command.  This currently happens all the time in the
-> O_NONBLOCK write path. Fix this by moving the tpm_try_get_ops()
-> further down the code to after the O_NONBLOCK determination is made.
-> This is safe because the priv->buffer_mutex still protects the priv
-> state being modified.
-> 
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206275
-> Fixes: d23d12484307 ("tpm: fix invalid locking in NONBLOCKING mode")
-> Reported-by: Mario Limonciello <Mario.Limonciello@dell.com>
-> Tested-by: Alex Guzman <alex@guzman.io>
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+During flow control we are just reading from the TPM, yet our spi_xfer
+has the tx_buf and rx_buf both non-NULL which means we're requesting a
+full duplex transfer.
 
-Thanks a lot! Merging this soon.
+SPI is always somewhat of a full duplex protocol anyway and in theory
+the other side shouldn't really be looking at what we're sending it
+during flow control, but it's still a bit ugly to be sending some
+"random" data when we shouldn't.
 
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+The default tpm_tis_spi_flow_control() tries to address this by
+setting 'phy->iobuf[0] = 0'.  This partially avoids the problem of
+sending "random" data, but since our tx_buf and rx_buf both point to
+the same place I believe there is the potential of us sending the
+TPM's previous byte back to it if we hit the retry loop.
 
-/Jarko
+Another flow control implementation, cr50_spi_flow_control(), doesn't
+address this at all.
+
+Let's clean this up and just make the tx_buf NULL before we call
+flow_control().  Not only does this ensure that we're not sending any
+"random" bytes but it also possibly could make the SPI controller
+behave in a slightly more optimal way.
+
+NOTE: no actual observed problems are fixed by this patch--it's was
+just made based on code inspection.
+
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/char/tpm/tpm_tis_spi_main.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+index d96755935529..8d2c581a93c6 100644
+--- a/drivers/char/tpm/tpm_tis_spi_main.c
++++ b/drivers/char/tpm/tpm_tis_spi_main.c
+@@ -53,8 +53,6 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi_phy *phy,
+ 
+ 	if ((phy->iobuf[3] & 0x01) == 0) {
+ 		// handle SPI wait states
+-		phy->iobuf[0] = 0;
+-
+ 		for (i = 0; i < TPM_RETRY; i++) {
+ 			spi_xfer->len = 1;
+ 			spi_message_init(&m);
+@@ -104,6 +102,8 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+ 		if (ret < 0)
+ 			goto exit;
+ 
++		/* Flow control transfers are receive only */
++		spi_xfer.tx_buf = NULL;
+ 		ret = phy->flow_control(phy, &spi_xfer);
+ 		if (ret < 0)
+ 			goto exit;
+@@ -113,9 +113,8 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+ 		spi_xfer.delay.value = 5;
+ 		spi_xfer.delay.unit = SPI_DELAY_UNIT_USECS;
+ 
+-		if (in) {
+-			spi_xfer.tx_buf = NULL;
+-		} else if (out) {
++		if (out) {
++			spi_xfer.tx_buf = phy->iobuf;
+ 			spi_xfer.rx_buf = NULL;
+ 			memcpy(phy->iobuf, out, transfer_len);
+ 			out += transfer_len;
+-- 
+2.27.0.rc0.183.gde8f92d652-goog
+
