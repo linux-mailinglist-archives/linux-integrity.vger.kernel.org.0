@@ -2,139 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0F51E755D
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2020 07:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B8C1E76B5
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2020 09:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbgE2F2v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 29 May 2020 01:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725308AbgE2F2u (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 29 May 2020 01:28:50 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA7AC08C5C6
-        for <linux-integrity@vger.kernel.org>; Thu, 28 May 2020 22:28:49 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id a25so1044735ljp.3
-        for <linux-integrity@vger.kernel.org>; Thu, 28 May 2020 22:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BtB2LFCwGlcL1VaxzIrehfNf8TpYkOn5N85lj//StkI=;
-        b=tfdUS3VW/pKmUDBp2mr5coRHksBW07+ShUkPGrNp5uPuYE8H1H/xc8uNd4p8tvycPE
-         bIydIJWamMeEoiCsJ5Q8qNS0xC+M8kKtaqWoMI4gzV+x9w9fIIPFkS/VvEB9rCj/SBMq
-         1KVHWLWqc71LcusNdMXyr+XwiXcs4S+RdsvIGl4i+9oIEvL9wsLiJuPC/rS4upckvWAy
-         pI/HDpJpiO2qdojnN7208WImc3NKD1tgKWWI8lIftxFMu1BcrYlDWrQ6KRvtP43xO5jz
-         tn6a0bz7zI+guhFvX3YeP5icO6TIilBHLsnDeOSSPP/fUqNmOrDWSRCouZrFuBkqOj7U
-         IQfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BtB2LFCwGlcL1VaxzIrehfNf8TpYkOn5N85lj//StkI=;
-        b=XkGaVemkfToj3f9GuXN6uRhxX1nAeV0CzmM/cL1gzvxC/87Wqvl0uUeNR41S3Og6yw
-         rZVTJTdLWPsRI0VpRDxEzGHztL9KnuBJAAtGrqy0kNn7A1bb0VXJzhZ9/jjV+yPgZgYR
-         bhQAosbkFt9TIlTq6skMuRsNNRFBoMSc6q6oFJesqKHqY3rI5/gRafN+S8lhGnxejjp4
-         ysXNn07lJY0g8UEwp/5Zyy8s116MWrUg5jhx3CgdipWcisRJTSom3sYOOiLUizYwz0dV
-         hUQEAzHsz0DpPZIMlT6SxE9GTxsxkhZ8fWDRWX/mGe+dQQ54GVVCcng+GVDh4LpHywEp
-         /UbQ==
-X-Gm-Message-State: AOAM530aGn4fnHVySDoTnghBAheCKY3TffEd2Eu6fI0HBoTl/i8DVLqc
-        geTxQljcg338bDFdKgeO3Q+oP5Eo17+zUJjk8nsf/eWZ
-X-Google-Smtp-Source: ABdhPJx9ZUCfMHdnNeGqUsyohC4SXQK+0g6QaR7+1+b7DZGWVE4x65Qhuw6/B+CXOsfNRdpEg/2e3VAOb05D2w+0S/U=
-X-Received: by 2002:a2e:8006:: with SMTP id j6mr2931003ljg.256.1590730127309;
- Thu, 28 May 2020 22:28:47 -0700 (PDT)
+        id S1725601AbgE2Hdh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 29 May 2020 03:33:37 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2257 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725355AbgE2Hdh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 29 May 2020 03:33:37 -0400
+Received: from lhreml714-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id BC01CA0D3522520D419B;
+        Fri, 29 May 2020 08:33:35 +0100 (IST)
+Received: from fraeml701-chm.china.huawei.com (10.206.15.50) by
+ lhreml714-chm.china.huawei.com (10.201.108.65) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Fri, 29 May 2020 08:33:35 +0100
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Fri, 29 May 2020 09:33:34 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Fri, 29 May 2020 09:33:34 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Takashi Iwai <tiwai@suse.de>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Silviu Vlasceanu" <Silviu.Vlasceanu@huawei.com>
+Subject: RE: Oops at boot with linux-next kernel with IMA boot options
+Thread-Topic: Oops at boot with linux-next kernel with IMA boot options
+Thread-Index: AQHWNQWdtGASKXj1EUeXcoX7+5fwg6i9kOcAgAAmYdD///FwgIABAtrA
+Date:   Fri, 29 May 2020 07:33:34 +0000
+Message-ID: <22f1132ebc9d4c2e8fc354efb1845984@huawei.com>
+References: <s5htv00m5sb.wl-tiwai@suse.de>      <s5hk10wm2x3.wl-tiwai@suse.de>
+        <4de686af78e94893b3578f6970d783d5@huawei.com> <s5hblm8lyz0.wl-tiwai@suse.de>
+In-Reply-To: <s5hblm8lyz0.wl-tiwai@suse.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.22.111]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20200521064743.4769-1-maxim.uvarov@linaro.org>
- <20200521064743.4769-4-maxim.uvarov@linaro.org> <20200522171451.GD10319@linux.intel.com>
- <CAD8XO3bA0oTqwQOU9byb-Vk73S4uP7dTUaOZyEmUJmj6rk3UuQ@mail.gmail.com>
- <20200522200346.GB150221@linux.intel.com> <CAD8XO3bmorhde9YaEUrd07U__01NC9wAE1O6ALijASbbJudHPQ@mail.gmail.com>
- <81c59da1dc2a255c58e7e338f30285e68b4664d6.camel@linux.intel.com>
- <CAD8XO3a5Xqw3oDAn=VH25Fb0j-_GSripEgQjwurhqGQRW_mq5g@mail.gmail.com> <20200528101150.GA156014@jade>
-In-Reply-To: <20200528101150.GA156014@jade>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 29 May 2020 10:58:35 +0530
-Message-ID: <CAFA6WYOJ1-Hy38hg3ALU3Uzjh8J4Mo8H3k1pFz3G_7h-N=+W9w@mail.gmail.com>
-Subject: Re: [PATCHv2 2/2] tpm_ftpm_tee: register driver on TEE bus
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     Maxim Uvarov <maxim.uvarov@linaro.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        peterhuewe@gmx.de, Jason Gunthorpe <jgg@ziepe.ca>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 28 May 2020 at 15:41, Jens Wiklander <jens.wiklander@linaro.org> wrote:
->
-> On Thu, May 28, 2020 at 11:08:18AM +0300, Maxim Uvarov wrote:
-> > On Wed, 27 May 2020 at 22:42, Jarkko Sakkinen
-> > <jarkko.sakkinen@linux.intel.com> wrote:
+> From: Takashi Iwai [mailto:tiwai@suse.de]
+> On Thu, 28 May 2020 19:36:55 +0200,
+> Roberto Sassu wrote:
+> >
+> > > From: linux-integrity-owner@vger.kernel.org [mailto:linux-integrity-
+> > > owner@vger.kernel.org] On Behalf Of Takashi Iwai
+> > > On Thu, 28 May 2020 17:35:16 +0200,
+> > > Takashi Iwai wrote:
+> > > >
+> > > > Hi Roberto,
+> > > >
+> > > > it seems that the recent changes in IMA in linux-next caused a
+> > > > regression: namely it triggers an Oops when booting with the options
+> > > >   ima_policy=tcb ima_template_fmt='d-ng|n-ng|d|ng'
 > > >
-> > > On Mon, 2020-05-25 at 09:50 +0300, Maxim Uvarov wrote:
-> > > > Jakko,
-> > > > tee-supplicant application provides state machine over callbacks with
-> > > > RPC messages.
-> > > > https://github.com/OP-TEE/optee_client/blob/master/tee-supplicant/src/tee_supplicant.c#L614
-> > > > It also allocates shm. Without running tee-supplicant
-> > > > tee_client_open_session() will fail.
-> > > > optee_open_session()->get_msg_arg()->tee_shm_alloc()->...
-> > > > Optee team wanted to remove some dependencies from tee-supplicant with
-> > > > moving code
-> > > > to the kernel. But for now I think that should be out of the scope of
-> > > > current patches due to
-> > > > they fix driver initialization on tee bus without breaking current
-> > > > functionality.
+> > > And further experiment revealed that passing only
+> ima_template_fmt=d
+> > > is enough for triggering the bug.  Other formats don't matter.
 > > >
-> > > So what is the role in high-level for tee-supplicant? Why does it
-> > > exist? No time to dive into code unfortunately.
+> > > (snip)
+> > > > It's a KVM instance without any TPM stuff, just passed the options
+> > > > above.  I could trigger the same bug on a bare metal, too.
+> > > >
+> > > > Then I performed bisection and it spotted the commit:
+> > > > 6f1a1d103b48b1533a9c804e7a069e2c8e937ce7
+> > > >   ima: Switch to ima_hash_algo for boot aggregate
+> > > >
+> > > > Actually reverting this commit fixed the Oops again.
 > > >
-> >
-> > Original implementation for tee-supplicant does several things:
-> > 1. allocate shm
-> > 2. load ta from user space (fs file)
-> > 3. emulate rpmb
-> > 4. also there are some ftrace and socket functions which I did not use.
-> >
-> > As I I understand, current implementation uses tee-supplicant and it's
-> > library as
-> > API from user land to Trusted OS.
-> >
-> > Some docs can be found here:
-> > https://optee.readthedocs.io/en/latest/architecture/index.html
-> >
-> >
-> >
-> > > These kernel commits do not explain in simple terms enough how all
-> > > of these entities connect with each other, if you don't have that
-> > > understanding beforehand.
+> > > So, looking at the fact above (triggered by "d") and this bisection
+> > > result, it seems that the issue is specific to ima_eventdigest_init().
+> > > The difference from others is that this has a check by
+> > > ima_template_hash_algo_allowed(), and currently the check allows only
+> > > SHA1 and MD5, while now SHA256 is assigned as default.  So I tested
+> > > adding SHA256 there like below, and it seems working.
 > > >
+> > > Hopefully I'm heading to a right direction...
 > >
-> > Yes, that is true. But I think it's something new and good docs will
-> > be some time later.
->
-> There's already some in Documentation/tee.txt, but it will get outdated
-> if we don't update it when we architectural changes like this. It's a
-> pity we missed updating it with the introduction of the bus. It seems a
-> good time to do it now so it easier to follow what's done.
+> > Hi Takashi
+> >
+> > boot_aggregate is the only entry for which there is no file descriptor.
+> > The file descriptor is used to recalculate the digest if it is not SHA1
+> > or MD5. For boot_aggregate, we should use instead
+> > ima_calc_boot_aggregate(). I will provide a patch.
+> >
+> > I see that the .file member of event_data in
+> > ima_add_boot_aggregate() is not initialized. Can you please try
+> > to set .file to NULL?
+> 
+> Tested and it didn't help.  The field was already zero-initialized via
+> C99-style initialization, I believe.
 
-Agree, let me try to update documentation for TEE bus. Will share it
-as a separate patch.
+Found the issue.
 
--Sumit
+ima_evendigest_init() returns an error and after that IMA is not
+initialized. Unfortunately, ima_must_appraise() does not check
+ima_policy_flag, so the kernel crashes when ima_match_policy()
+tries to evaluate the policy which is not loaded (ima_rules = NULL).
 
->
-> Cheers,
-> Jens
->
+if you add at the beginning of ima_must_appraise()
+
+if (!ima_policy_flag)
+	return 0;
+
+the kernel should not crash.
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
+
+> thanks,
+> 
+> Takashi
+> 
 > >
-> > > /Jarkko
+> > Thanks
+> >
+> > Roberto
+> >
+> > HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> > Managing Director: Li Peng, Li Jian, Shi Yanli
+> >
+> > > thanks,
 > > >
+> > > Takashi
+> > >
+> > > --- a/security/integrity/ima/ima_template_lib.c
+> > > +++ b/security/integrity/ima/ima_template_lib.c
+> > > @@ -13,7 +13,8 @@
+> > >
+> > >  static bool ima_template_hash_algo_allowed(u8 algo)
+> > >  {
+> > > -	if (algo == HASH_ALGO_SHA1 || algo == HASH_ALGO_MD5)
+> > > +	if (algo == HASH_ALGO_SHA1 || algo == HASH_ALGO_SHA256 ||
+> > > +	    algo == HASH_ALGO_MD5)
+> > >  		return true;
+> > >
+> > >  	return false;
 > >
-> > Regards,
-> > Maxim.
