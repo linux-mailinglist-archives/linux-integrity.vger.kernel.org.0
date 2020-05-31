@@ -2,199 +2,159 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E1D1E81F6
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2020 17:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B961E99ED
+	for <lists+linux-integrity@lfdr.de>; Sun, 31 May 2020 20:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726940AbgE2PiO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 29 May 2020 11:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726838AbgE2PiO (ORCPT
+        id S1726081AbgEaSvJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 31 May 2020 14:51:09 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27312 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726008AbgEaSvJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 29 May 2020 11:38:14 -0400
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592A9C03E969
-        for <linux-integrity@vger.kernel.org>; Fri, 29 May 2020 08:38:14 -0700 (PDT)
-Received: by mail-ua1-x943.google.com with SMTP id w20so949590uaa.2
-        for <linux-integrity@vger.kernel.org>; Fri, 29 May 2020 08:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GHRa10u7oS+985JdG3r13wXGy+KoMCxBZOBtMkLgO5w=;
-        b=EXGnSgfAZgMSOPLDsgH6z5alUcJbMuuWJR2nK38GGilVPHRIhMh3ruWLUzVdrkw9Tk
-         UuNffrIsHiJLTgYvAW67yY/cGM8h38MsBMM4PfxkNNhuYkliLnML+JUPnO1U4G7wMuMu
-         XckNK2FkI/9EjnWpAg3Pg7aVM5UydpT66ZxwE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GHRa10u7oS+985JdG3r13wXGy+KoMCxBZOBtMkLgO5w=;
-        b=nEIFwjF31y1FPwg3fjdnnWWpDSi+M1JK5NkqoYm2U73xraBE3gXql/cqikMRtFkhSb
-         L2+ot6NGUn6uPq6QZYIJgqoSXWVrFlsbK5Ndwu0MYzUy3aEiLachvYmSNqKEI7997UR7
-         2cEnOMMYVYNp8j6+1+XBGdunsH0CdFovbJ4HPQ1bQuJFKdIbubkWw1TyU2pfWttbk62Y
-         KQaAFoUGwmTuH2P4ZuAJcE8ke+A4CDlj5zY7HT1f5+2p/g4+9B4oek/pBnbofheNpVzV
-         OTLO2I1FPi0DX2WKX3LrNzx2L1m88t5wkoXCyQiIAN+Ueik5R/XL2HMe7jg3v1/sB5Ml
-         fCwQ==
-X-Gm-Message-State: AOAM532mMWjUGwAXEUDwh6feY1uZIDVZt1H+3E5VIX72Z4ltpCaEg3J5
-        ugzljO0bKcOGXQi5rSfoSLOsf43jlbs=
-X-Google-Smtp-Source: ABdhPJytxDDsemWNzum8sS0eHSUP9VyQh7L+5nIu0HyE4sx9vhT5ITHoYzDm7OvPUiZPt5pcfNtwVQ==
-X-Received: by 2002:ab0:1a1:: with SMTP id 30mr6298788ual.4.1590766693060;
-        Fri, 29 May 2020 08:38:13 -0700 (PDT)
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
-        by smtp.gmail.com with ESMTPSA id v84sm1229227vkv.4.2020.05.29.08.38.12
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2020 08:38:12 -0700 (PDT)
-Received: by mail-vs1-f45.google.com with SMTP id g129so1745169vsc.4
-        for <linux-integrity@vger.kernel.org>; Fri, 29 May 2020 08:38:12 -0700 (PDT)
-X-Received: by 2002:a67:e884:: with SMTP id x4mr6330934vsn.106.1590766691432;
- Fri, 29 May 2020 08:38:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200528151912.1.Id689a39ce8d1ec6f29f4287277ad977ff4f57d7d@changeid>
- <c628b545-f883-3c2e-cabf-944f6a313bf2@molgen.mpg.de>
-In-Reply-To: <c628b545-f883-3c2e-cabf-944f6a313bf2@molgen.mpg.de>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 29 May 2020 08:37:59 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XwQ9jo4kCFeunvBed2r1m0u-0-sKozhpmU6sbpYEotDA@mail.gmail.com>
-Message-ID: <CAD=FV=XwQ9jo4kCFeunvBed2r1m0u-0-sKozhpmU6sbpYEotDA@mail.gmail.com>
-Subject: Re: [PATCH] tpm_tis_spi: Don't send anything during flow control
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Andrey Pronin <apronin@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+        Sun, 31 May 2020 14:51:09 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04VIWdjG092282;
+        Sun, 31 May 2020 14:51:02 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31bkjk94fy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 31 May 2020 14:51:01 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04VIjfIw014617;
+        Sun, 31 May 2020 18:50:59 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 31bf47tq3n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 31 May 2020 18:50:59 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04VIovKt63635696
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 31 May 2020 18:50:57 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6CB5A11C050;
+        Sun, 31 May 2020 18:50:57 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AFA3B11C04C;
+        Sun, 31 May 2020 18:50:56 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.218.60])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 31 May 2020 18:50:56 +0000 (GMT)
+Message-ID: <1590951055.4457.104.camel@linux.ibm.com>
+Subject: Re: Oops at boot with linux-next kernel with IMA boot options
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Takashi Iwai <tiwai@suse.de>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Date:   Sun, 31 May 2020 14:50:55 -0400
+In-Reply-To: <s5h367jmbfe.wl-tiwai@suse.de>
+References: <s5htv00m5sb.wl-tiwai@suse.de> <s5hk10wm2x3.wl-tiwai@suse.de>
+         <4de686af78e94893b3578f6970d783d5@huawei.com>
+         <s5hblm8lyz0.wl-tiwai@suse.de>
+         <22f1132ebc9d4c2e8fc354efb1845984@huawei.com>
+         <s5h367jmbfe.wl-tiwai@suse.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-05-31_11:2020-05-28,2020-05-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
+ suspectscore=0 cotscore=-2147483648 clxscore=1011 priorityscore=1501
+ malwarescore=0 mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005310150
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+On Fri, 2020-05-29 at 09:45 +0200, Takashi Iwai wrote:
+> On Fri, 29 May 2020 09:33:34 +0200,
+> Roberto Sassu wrote:
+> > 
+> > > From: Takashi Iwai [mailto:tiwai@suse.de]
+> > > On Thu, 28 May 2020 19:36:55 +0200,
+> > > Roberto Sassu wrote:
+> > > >
+> > > > > From: linux-integrity-owner@vger.kernel.org [mailto:linux-integrity-
+> > > > > owner@vger.kernel.org] On Behalf Of Takashi Iwai
+> > > > > On Thu, 28 May 2020 17:35:16 +0200,
+> > > > > Takashi Iwai wrote:
+> > > > > >
+> > > > > > Hi Roberto,
+> > > > > >
+> > > > > > it seems that the recent changes in IMA in linux-next caused a
+> > > > > > regression: namely it triggers an Oops when booting with the options
+> > > > > >   ima_policy=tcb ima_template_fmt='d-ng|n-ng|d|ng'
+> > > > >
+> > > > > And further experiment revealed that passing only
+> > > ima_template_fmt=d
+> > > > > is enough for triggering the bug.  Other formats don't matter.
+> > > > >
+> > > > > (snip)
+> > > > > > It's a KVM instance without any TPM stuff, just passed the options
+> > > > > > above.  I could trigger the same bug on a bare metal, too.
+> > > > > >
+> > > > > > Then I performed bisection and it spotted the commit:
+> > > > > > 6f1a1d103b48b1533a9c804e7a069e2c8e937ce7
+> > > > > >   ima: Switch to ima_hash_algo for boot aggregate
+> > > > > >
+> > > > > > Actually reverting this commit fixed the Oops again.
+> > > > >
+> > > > > So, looking at the fact above (triggered by "d") and this bisection
+> > > > > result, it seems that the issue is specific to ima_eventdigest_init().
+> > > > > The difference from others is that this has a check by
+> > > > > ima_template_hash_algo_allowed(), and currently the check allows only
+> > > > > SHA1 and MD5, while now SHA256 is assigned as default.  So I tested
+> > > > > adding SHA256 there like below, and it seems working.
+> > > > >
+> > > > > Hopefully I'm heading to a right direction...
+> > > >
+> > > > Hi Takashi
+> > > >
+> > > > boot_aggregate is the only entry for which there is no file descriptor.
+> > > > The file descriptor is used to recalculate the digest if it is not SHA1
+> > > > or MD5. For boot_aggregate, we should use instead
+> > > > ima_calc_boot_aggregate(). I will provide a patch.
+> > > >
+> > > > I see that the .file member of event_data in
+> > > > ima_add_boot_aggregate() is not initialized. Can you please try
+> > > > to set .file to NULL?
+> > > 
+> > > Tested and it didn't help.  The field was already zero-initialized via
+> > > C99-style initialization, I believe.
+> > 
+> > Found the issue.
+> > 
+> > ima_evendigest_init() returns an error and after that IMA is not
+> > initialized.  Unfortunately, ima_must_appraise() does not check
+> > ima_policy_flag, so the kernel crashes when ima_match_policy()
+> > tries to evaluate the policy which is not loaded (ima_rules = NULL).
+> > 
+> > if you add at the beginning of ima_must_appraise()
+> > 
+> > if (!ima_policy_flag)
+> > 	return 0;
+> > 
+> > the kernel should not crash.
+> 
+> Confirmed.  The patch below fixed the Oops.
+> When you cook up a proper patch with that change, feel free to put my
+> tested-by tag
+>   Reported-and-tested-by: Takashi Iwai <tiwai@suse.de>
 
-On Fri, May 29, 2020 at 1:33 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Dear Douglas,
->
->
-> Thank you for the patch.
->
-> Am 29.05.20 um 00:19 schrieb Douglas Anderson:
-> > During flow control we are just reading from the TPM, yet our spi_xfer
-> > has the tx_buf and rx_buf both non-NULL which means we're requesting a
-> > full duplex transfer.
-> >
-> > SPI is always somewhat of a full duplex protocol anyway and in theory
-> > the other side shouldn't really be looking at what we're sending it
-> > during flow control, but it's still a bit ugly to be sending some
-> > "random" data when we shouldn't.
-> >
-> > The default tpm_tis_spi_flow_control() tries to address this by
-> > setting 'phy->iobuf[0] =3D 0'.  This partially avoids the problem of
-> > sending "random" data, but since our tx_buf and rx_buf both point to
-> > the same place I believe there is the potential of us sending the
-> > TPM's previous byte back to it if we hit the retry loop.
-> >
-> > Another flow control implementation, cr50_spi_flow_control(), doesn't
-> > address this at all.
-> >
-> > Let's clean this up and just make the tx_buf NULL before we call
-> > flow_control().  Not only does this ensure that we're not sending any
-> > "random" bytes but it also possibly could make the SPI controller
-> > behave in a slightly more optimal way.
-> >
-> > NOTE: no actual observed problems are fixed by this patch--it's was
-> > just made based on code inspection.
->
-> s/it's was/it was/
+Thank you for finding this bug.  In this case, the "d" field has to be
+limited to md5 or sha1 as the field is not large enough for other
+algorithms.  Just as the IMA Kconfig and the "ima_template=" boot
+command line option prevent enabling a sha256 hash with the original
+"ima" template, the "ima_template_fmt=" boot command line option
+similarly needs to prevent a 'd' field being defined with a larger
+digest.  Failing to set the new template format should revert to using
+the builtin default definition.
 
-I'll assume this is easier to get fixed up when applying the patch,
-but happy to send a v2 if requested.
+thanks,
 
-
-> Were you able to test this? Maybe in the =E2=80=9CChromebook QA arsenal=
-=E2=80=9D? Are
-> you already running it in production on Google Chrome OS devices?
-
-I've tested it locally but not much more than that.  As far as I can
-tell it doesn't break anything or fix anything but still seems like a
-good change to make.  ;-)
-
-Generally Chrome OS tries to work with an "upstream first" philosophy.
-That has lots of benefits, but one downside is it means that patches
-get sent upstream before they've actually landed anywhere.  That being
-said, even if we landed this today we'd get limited testing because of
-the Chrome OS kernel trees only the Chrome OS 5.4 tree uses the
-upstream driver for Cr50 (the one SPI-connected security chip that
-Chromebooks use).  Cr50 originally did not get developed as "upstream
-first", so all the old codebases have the old downstream driver.  This
-problem doesn't affect the old downstream driver which had its own
-"struct spi_transfer".  If anything it makes the upstream code behave
-more like the old downstream driver.  If you want to see the old
-downstream driver:
-
-https://chromium.googlesource.com/chromiumos/third_party/kernel/+/chromeos-=
-4.19/drivers/char/tpm/cr50_spi.c#172
-
-
-Another note is that I don't have access to any SPI-connected chips
-that are _not_ Cr50.  That means that half of this change is totally
-untested but looks sane.  If anyone can test it that'd be great.  :-)
-
-
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> >   drivers/char/tpm/tpm_tis_spi_main.c | 9 ++++-----
-> >   1 file changed, 4 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm=
-_tis_spi_main.c
-> > index d96755935529..8d2c581a93c6 100644
-> > --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> > +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> > @@ -53,8 +53,6 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_sp=
-i_phy *phy,
-> >
-> >       if ((phy->iobuf[3] & 0x01) =3D=3D 0) {
-> >               // handle SPI wait states
-> > -             phy->iobuf[0] =3D 0;
-> > -
-> >               for (i =3D 0; i < TPM_RETRY; i++) {
-> >                       spi_xfer->len =3D 1;
-> >                       spi_message_init(&m);
-> > @@ -104,6 +102,8 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data,=
- u32 addr, u16 len,
-> >               if (ret < 0)
-> >                       goto exit;
-> >
-> > +             /* Flow control transfers are receive only */
-> > +             spi_xfer.tx_buf =3D NULL;
-> >               ret =3D phy->flow_control(phy, &spi_xfer);
-> >               if (ret < 0)
-> >                       goto exit;
-> > @@ -113,9 +113,8 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data,=
- u32 addr, u16 len,
-> >               spi_xfer.delay.value =3D 5;
-> >               spi_xfer.delay.unit =3D SPI_DELAY_UNIT_USECS;
-> >
-> > -             if (in) {
-> > -                     spi_xfer.tx_buf =3D NULL;
-> > -             } else if (out) {
-> > +             if (out) {
-> > +                     spi_xfer.tx_buf =3D phy->iobuf;
-> >                       spi_xfer.rx_buf =3D NULL;
-> >                       memcpy(phy->iobuf, out, transfer_len);
-> >                       out +=3D transfer_len;
->
-> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-
-Thanks for reviewing!  :-)
-
--Doug
+Mimi
