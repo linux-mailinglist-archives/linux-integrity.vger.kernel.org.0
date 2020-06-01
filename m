@@ -2,56 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26351EA21A
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Jun 2020 12:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CA41EA274
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Jun 2020 13:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725925AbgFAKqT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Jun 2020 06:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S1725847AbgFALMG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Jun 2020 07:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbgFAKqH (ORCPT
+        with ESMTP id S1725788AbgFALMG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Jun 2020 06:46:07 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE60C061A0E
-        for <linux-integrity@vger.kernel.org>; Mon,  1 Jun 2020 03:46:07 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id r125so3611825lff.13
-        for <linux-integrity@vger.kernel.org>; Mon, 01 Jun 2020 03:46:07 -0700 (PDT)
+        Mon, 1 Jun 2020 07:12:06 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49BDC03E96F
+        for <linux-integrity@vger.kernel.org>; Mon,  1 Jun 2020 04:12:05 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id s1so7641179ljo.0
+        for <linux-integrity@vger.kernel.org>; Mon, 01 Jun 2020 04:12:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JjhmAPEKNow7E1vW8s3ASEs0uGQtIO9UoGk5GAxoJ48=;
-        b=Mod4ncWfP0u3c9DVUfv0x5U7NxZj4ctI1Zutm0PEe9JCAjok93XNX1N88SQ20xWLU+
-         2ZJilDZ7kW/91hV4FSWulFzF2TuqLJznMbjcOYqp6GJf/Na9gcftf8IX8u5ZJgWMxJAY
-         2sfh1CDLU+mbGuMUW15FOy224F8LEHACUOS4wsw6O1HJN+nb0TDh2ZvshdVuB4+MnOCK
-         dkoWnL1CSx882omRa1xxe85IalpJgZm3tuczHlG8kjtX8Zx+LsTLxxDu7ByVyrxg9ovU
-         qHudTXnjrLU4IXgBWuf1t1Tutif0lZZxEFXQ9LmpXl81aK+yoA/MD0KoGettgDxPi1FE
-         PANg==
+        bh=K2/0YsNA83Geikdg8xSFtPuXls8VUpH1woVTNt2k/XQ=;
+        b=rDNeF1PmlxvWMhdfbZKW1PZGqHjTG7y5cui4e7iPNLi/OXCOtkGeoy2MjsEofQd1DN
+         6Qpzk3rrq8wO6B6cLiLlTyQdphyPVcYF+rAAyqiVO9rxtwGB5SP5SAktv6Imy/zbIyrz
+         eishvUB9UYR2zobnj65m/YAsIvBco0GiXsR4e9c1XhE0l7dV5vljP+mpGWrjooS8w/8Z
+         SQ2faxkxBc7YeY+qqs1n/dOo9f7ftMeORBus7WvbdCU3TkCwaUE5XOPY6sFV/DwsZcKU
+         1Irsohtk49cWrvi9wDTB3x7Uj3bwiAegCN9vhaqLBScviAsyrLx7DtnYellshrWE1bQh
+         vVdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JjhmAPEKNow7E1vW8s3ASEs0uGQtIO9UoGk5GAxoJ48=;
-        b=BeuH6qImJqt8Bw8QWlu80AT+KABv625oZdFTmarjffcklduWHnBv5SRv1bJP2UTIYn
-         XJw2ZRG/CH+7ahk8s3IhuhTiCclp9SDf+SKLusoFoSBEqY1jKm+MjrpwG9OVw0aOqLgk
-         P9NKSljQsVnrxbsn3VHYGuFXi67hOCL+LsZ8tpNQ93jl/QahQ+6P21kheZ51PhY0tfT9
-         gnfefEITjhaNqzFmsUktmqlmwv6rkPXUg3bnWuywXqtylCrCTj7aHltDOsSeXWViD4tG
-         rxttDeK1le3q5N2MIBm54vHfaepOqjhtOuziK9hlJomP0S+J9FANxBeJz83CA+fVyHM/
-         Y96w==
-X-Gm-Message-State: AOAM530YF+638G9mwNr0BGvO5SnPfNwtAjriXndN8uIhzlJXijaqK3BG
-        /FIbmMZszLdav3kSZ/ByfAfrkddW++2IGoEYN6QrHsfLBbc=
-X-Google-Smtp-Source: ABdhPJzC8ARUtRKcCeGMzGx9R8piBFDgHvxT1yEWYNe6pCqFfY5ck8AQhTqj2ZcKnel00mrL2z1oZBjL1EaaY6rE7Wc=
-X-Received: by 2002:ac2:44bb:: with SMTP id c27mr11290775lfm.59.1591008365696;
- Mon, 01 Jun 2020 03:46:05 -0700 (PDT)
+        bh=K2/0YsNA83Geikdg8xSFtPuXls8VUpH1woVTNt2k/XQ=;
+        b=S5UMiavS7BlTz1hPPyAT8i4vqI7keJr+7SZsac1MWZSfVuHV5dhTq4nu7uUXSiysw/
+         dQgcvnTwL3hdssnu8+jajCUBUbsYv/L4CrA36nGo4nJZlbezCCoro/U9Dvh+72V8tKXJ
+         D1bjXUf3wgurHC9ggowOn/X+th9/5B5svrg3cscB2+DMy7kPkcvJ67rcGfhGxZRuJoLG
+         XQQpYLqaBDWQBM5+E1yMgqTXUrgi9ejn6MCiDmR4cy5KYKfPCrW3gO43cmbvzY8whx80
+         qq++QMjsZ+Pb1wvhYIGoMC6IYRFZheiCREtKvZilFRVlBaE3pD4Rjr1RUB3YGraOGpR8
+         VXAw==
+X-Gm-Message-State: AOAM533VgfaGPdxPIsmORhSrqTtrSdZAySkspEWQyMPwSG1MWtIaaUXr
+        h76tvsTB496F/mgzPpFH8uZrWyMCCO6pNSF04fmu6g==
+X-Google-Smtp-Source: ABdhPJxLsB373tBnVYRgJ1vn7dn1tWlACfXtQ9stWrdwoQ4Gydq3ce5Qc0OlbTI8U2eXMzT08WfqhvRWLDvFRIaosSw=
+X-Received: by 2002:a2e:7504:: with SMTP id q4mr9613507ljc.339.1591009923893;
+ Mon, 01 Jun 2020 04:12:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200529082701.13457-1-maxim.uvarov@linaro.org> <20200529082701.13457-2-maxim.uvarov@linaro.org>
-In-Reply-To: <20200529082701.13457-2-maxim.uvarov@linaro.org>
+References: <20200529082701.13457-1-maxim.uvarov@linaro.org> <20200529082701.13457-4-maxim.uvarov@linaro.org>
+In-Reply-To: <20200529082701.13457-4-maxim.uvarov@linaro.org>
 From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Mon, 1 Jun 2020 16:15:53 +0530
-Message-ID: <CAFA6WYOoZMUMVJbUrxRyYZKPPD-tfaioWqaCkuFs4+g7jmhY5Q@mail.gmail.com>
-Subject: Re: [PATCHv5 1/3] optee: do drivers initialization before and after
- tee-supplicant run
+Date:   Mon, 1 Jun 2020 16:41:51 +0530
+Message-ID: <CAFA6WYM56ec-V0vv=4pVcu02FhR==1B+jMMDkU5WSjLdbP4kTw@mail.gmail.com>
+Subject: Re: [PATCHv5 3/3] tpm_ftpm_tee: register driver on TEE bus
 To:     Maxim Uvarov <maxim.uvarov@linaro.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
@@ -69,209 +68,167 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 On Fri, 29 May 2020 at 13:57, Maxim Uvarov <maxim.uvarov@linaro.org> wrote:
 >
-> Some drivers (like ftpm) can operate only after tee-supplicant
-> runs because of tee-supplicant provides things like storage
-> services.  This patch splits probe of non tee-supplicant dependable
-> drivers to the early stage, and after tee-supplicant run probe other
-> drivers.
+> Register driver on the TEE bus. The module tee registers bus,
+> and module optee calls optee_enumerate_devices() to scan
+> all devices on the bus. Trusted Application for this driver
+> can be Early TA's (can be compiled into optee-os). In that
+> case it will be on OPTEE bus before linux booting. Also
+> optee-suplicant application is needed to be loaded between
+> OPTEE module and ftpm module to maintain functionality
+> for fTPM driver.
+
+I think this description merely describes the functioning of TEE bus
+and misses what value add does TEE bus provide compared to platform
+bus.
+
+Consider:
+
+====
+OP-TEE based fTPM Trusted Application depends on tee-supplicant to
+provide NV RAM implementation based on RPMB secure storage. So this
+dependency can be resolved via TEE bus where we only invoke fTPM
+driver probe once fTPM device is registered on the bus which is only
+true after the tee-supplicant is up and running. Additionally, TEE bus
+provides auto device enumeration.
+====
+
+With that, implementation looks good to me. So feel free to add:
+
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+
+-Sumit
+
 >
 > Signed-off-by: Maxim Uvarov <maxim.uvarov@linaro.org>
 > Suggested-by: Sumit Garg <sumit.garg@linaro.org>
 > Suggested-by: Arnd Bergmann <arnd@linaro.org>
 > ---
->  drivers/tee/optee/core.c          | 24 +++++++++++++++++++++---
->  drivers/tee/optee/device.c        | 17 +++++++++++------
->  drivers/tee/optee/optee_private.h | 10 +++++++++-
->  3 files changed, 41 insertions(+), 10 deletions(-)
+>  drivers/char/tpm/tpm_ftpm_tee.c | 70 ++++++++++++++++++++++++++++-----
+>  1 file changed, 60 insertions(+), 10 deletions(-)
 >
-
-Commit subject sounds a little vague, so how about:
-
-====
-optee: enable support for multi-stage bus enumeration
-====
-
-Then in the commit description, you can elaborate on what it actually means.
-
-> diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
-> index 99698b8a3a74..bf0851fdf108 100644
-> --- a/drivers/tee/optee/core.c
-> +++ b/drivers/tee/optee/core.c
-> @@ -17,6 +17,7 @@
->  #include <linux/tee_drv.h>
->  #include <linux/types.h>
->  #include <linux/uaccess.h>
-> +#include <linux/workqueue.h>
->  #include "optee_private.h"
->  #include "optee_smc.h"
->  #include "shm_pool.h"
-> @@ -218,6 +219,11 @@ static void optee_get_version(struct tee_device *teedev,
->         *vers = v;
->  }
->
-> +static void optee_bus_scan(struct work_struct *work)
-> +{
-> +       WARN_ON(optee_enumerate_devices(PTA_CMD_GET_DEVICES_SUPP));
-> +}
-> +
->  static int optee_open(struct tee_context *ctx)
->  {
->         struct optee_context_data *ctxdata;
-> @@ -241,8 +247,18 @@ static int optee_open(struct tee_context *ctx)
->                         kfree(ctxdata);
->                         return -EBUSY;
->                 }
-> -       }
->
-> +               if (!optee->scan_bus_done) {
-> +                       INIT_WORK(&optee->scan_bus_work, optee_bus_scan);
-> +                       optee->scan_bus_wq = create_workqueue("optee_bus_scan");
-> +                       if (!optee->scan_bus_wq) {
-> +                               kfree(ctxdata);
-> +                               return -ECHILD;
-> +                       }
-> +                       queue_work(optee->scan_bus_wq, &optee->scan_bus_work);
-> +                       optee->scan_bus_done = true;
-> +               }
-> +       }
->         mutex_init(&ctxdata->mutex);
->         INIT_LIST_HEAD(&ctxdata->sess_list);
->
-> @@ -296,8 +312,10 @@ static void optee_release(struct tee_context *ctx)
->
->         ctx->data = NULL;
->
-> -       if (teedev == optee->supp_teedev)
-> +       if (teedev == optee->supp_teedev) {
-> +               destroy_workqueue(optee->scan_bus_wq);
-
-Doesn't it deserve a prior check "if(optee->scan_bus_wq)" as we only
-allocate it once during multiple tee-supplicant instances?
-
->                 optee_supp_release(&optee->supp);
-> +       }
->  }
->
->  static const struct tee_driver_ops optee_ops = {
-> @@ -675,7 +693,7 @@ static int optee_probe(struct platform_device *pdev)
->
->         platform_set_drvdata(pdev, optee);
->
-> -       rc = optee_enumerate_devices();
-> +       rc = optee_enumerate_devices(PTA_CMD_GET_DEVICES);
->         if (rc) {
->                 optee_remove(pdev);
->                 return rc;
-> diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
-> index e3a148521ec1..d4931dad07aa 100644
-> --- a/drivers/tee/optee/device.c
-> +++ b/drivers/tee/optee/device.c
-> @@ -21,7 +21,6 @@
->   * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
->   * TEE_ERROR_SHORT_BUFFER - Output buffer size less than required
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> index 22bf553ccf9d..28da638360d8 100644
+> --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -214,11 +214,10 @@ static int ftpm_tee_match(struct tee_ioctl_version_data *ver, const void *data)
+>   * Return:
+>   *     On success, 0. On failure, -errno.
 >   */
-
-This comment needs to be moved as well.
-
-> -#define PTA_CMD_GET_DEVICES            0x0
->
->  static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
+> -static int ftpm_tee_probe(struct platform_device *pdev)
+> +static int ftpm_tee_probe(struct device *dev)
 >  {
-> @@ -32,7 +31,8 @@ static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
->  }
+>         int rc;
+>         struct tpm_chip *chip;
+> -       struct device *dev = &pdev->dev;
+>         struct ftpm_tee_private *pvt_data = NULL;
+>         struct tee_ioctl_open_session_arg sess_arg;
 >
->  static int get_devices(struct tee_context *ctx, u32 session,
-> -                      struct tee_shm *device_shm, u32 *shm_size)
-> +                      struct tee_shm *device_shm, u32 *shm_size,
-> +                      u32 func)
->  {
->         int ret = 0;
->         struct tee_ioctl_invoke_arg inv_arg;
-> @@ -42,7 +42,7 @@ static int get_devices(struct tee_context *ctx, u32 session,
->         memset(&param, 0, sizeof(param));
->
->         /* Invoke PTA_CMD_GET_DEVICES function */
-
-You can get rid of this comment.
-
--Sumit
-
-> -       inv_arg.func = PTA_CMD_GET_DEVICES;
-> +       inv_arg.func = func;
->         inv_arg.session = session;
->         inv_arg.num_params = 4;
->
-> @@ -87,7 +87,7 @@ static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
+> @@ -297,6 +296,13 @@ static int ftpm_tee_probe(struct platform_device *pdev)
 >         return rc;
 >  }
 >
-> -int optee_enumerate_devices(void)
-> +static int __optee_enumerate_devices(u32 func)
->  {
->         const uuid_t pta_uuid =
->                 UUID_INIT(0x7011a688, 0xddde, 0x4053,
-> @@ -118,7 +118,7 @@ int optee_enumerate_devices(void)
->                 goto out_ctx;
->         }
->
-> -       rc = get_devices(ctx, sess_arg.session, NULL, &shm_size);
-> +       rc = get_devices(ctx, sess_arg.session, NULL, &shm_size, func);
->         if (rc < 0 || !shm_size)
->                 goto out_sess;
->
-> @@ -130,7 +130,7 @@ int optee_enumerate_devices(void)
->                 goto out_sess;
->         }
->
-> -       rc = get_devices(ctx, sess_arg.session, device_shm, &shm_size);
-> +       rc = get_devices(ctx, sess_arg.session, device_shm, &shm_size, func);
->         if (rc < 0)
->                 goto out_shm;
->
-> @@ -158,3 +158,8 @@ int optee_enumerate_devices(void)
->
->         return rc;
->  }
-> +
-> +int optee_enumerate_devices(u32 func)
+> +static int ftpm_plat_tee_probe(struct platform_device *pdev)
 > +{
-> +       return  __optee_enumerate_devices(func);
+> +       struct device *dev = &pdev->dev;
+> +
+> +       return ftpm_tee_probe(dev);
 > +}
-> diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-> index d9c5037b4e03..8b71839a357e 100644
-> --- a/drivers/tee/optee/optee_private.h
-> +++ b/drivers/tee/optee/optee_private.h
-> @@ -78,6 +78,9 @@ struct optee_supp {
->   * @memremaped_shm     virtual address of memory in shared memory pool
->   * @sec_caps:          secure world capabilities defined by
->   *                     OPTEE_SMC_SEC_CAP_* in optee_smc.h
-> + * @scan_bus_done      flag if device registation was already done.
-> + * @scan_bus_wq                workqueue to scan optee bus and register optee drivers
-> + * @scan_bus_work      workq to scan optee bus and register optee drivers
+> +
+>  /**
+>   * ftpm_tee_remove() - remove the TPM device
+>   * @pdev: the platform_device description.
+> @@ -304,9 +310,9 @@ static int ftpm_tee_probe(struct platform_device *pdev)
+>   * Return:
+>   *     0 always.
 >   */
->  struct optee {
->         struct tee_device *supp_teedev;
-> @@ -89,6 +92,9 @@ struct optee {
->         struct tee_shm_pool *pool;
->         void *memremaped_shm;
->         u32 sec_caps;
-> +       bool   scan_bus_done;
-> +       struct workqueue_struct *scan_bus_wq;
-> +       struct work_struct scan_bus_work;
+> -static int ftpm_tee_remove(struct platform_device *pdev)
+> +static int ftpm_tee_remove(struct device *dev)
+>  {
+> -       struct ftpm_tee_private *pvt_data = dev_get_drvdata(&pdev->dev);
+> +       struct ftpm_tee_private *pvt_data = dev_get_drvdata(dev);
+>
+>         /* Release the chip */
+>         tpm_chip_unregister(pvt_data->chip);
+> @@ -328,11 +334,18 @@ static int ftpm_tee_remove(struct platform_device *pdev)
+>         return 0;
+>  }
+>
+> +static int ftpm_plat_tee_remove(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +
+> +       return ftpm_tee_remove(dev);
+> +}
+> +
+>  /**
+>   * ftpm_tee_shutdown() - shutdown the TPM device
+>   * @pdev: the platform_device description.
+>   */
+> -static void ftpm_tee_shutdown(struct platform_device *pdev)
+> +static void ftpm_plat_tee_shutdown(struct platform_device *pdev)
+>  {
+>         struct ftpm_tee_private *pvt_data = dev_get_drvdata(&pdev->dev);
+>
+> @@ -347,17 +360,54 @@ static const struct of_device_id of_ftpm_tee_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, of_ftpm_tee_ids);
+>
+> -static struct platform_driver ftpm_tee_driver = {
+> +static struct platform_driver ftpm_tee_plat_driver = {
+>         .driver = {
+>                 .name = "ftpm-tee",
+>                 .of_match_table = of_match_ptr(of_ftpm_tee_ids),
+>         },
+> -       .probe = ftpm_tee_probe,
+> -       .remove = ftpm_tee_remove,
+> -       .shutdown = ftpm_tee_shutdown,
+> +       .shutdown = ftpm_plat_tee_shutdown,
+> +       .probe = ftpm_plat_tee_probe,
+> +       .remove = ftpm_plat_tee_remove,
+> +};
+> +
+> +/* UUID of the fTPM TA */
+> +static const struct tee_client_device_id optee_ftpm_id_table[] = {
+> +       {UUID_INIT(0xbc50d971, 0xd4c9, 0x42c4,
+> +                  0x82, 0xcb, 0x34, 0x3f, 0xb7, 0xf3, 0x78, 0x96)},
+> +       {}
 >  };
 >
->  struct optee_session {
-> @@ -173,7 +179,9 @@ void optee_free_pages_list(void *array, size_t num_entries);
->  void optee_fill_pages_list(u64 *dst, struct page **pages, int num_pages,
->                            size_t page_offset);
+> -module_platform_driver(ftpm_tee_driver);
+> +MODULE_DEVICE_TABLE(tee, optee_ftpm_id_table);
+> +
+> +static struct tee_client_driver ftpm_tee_driver = {
+> +       .id_table       = optee_ftpm_id_table,
+> +       .driver         = {
+> +               .name           = "optee-ftpm",
+> +               .bus            = &tee_bus_type,
+> +               .probe          = ftpm_tee_probe,
+> +               .remove         = ftpm_tee_remove,
+> +       },
+> +};
+> +
+> +static int __init ftpm_mod_init(void)
+> +{
+> +       int rc;
+> +
+> +       rc = platform_driver_register(&ftpm_tee_plat_driver);
+> +       if (rc)
+> +               return rc;
+> +
+> +       return driver_register(&ftpm_tee_driver.driver);
+> +}
+> +
+> +static void __exit ftpm_mod_exit(void)
+> +{
+> +       platform_driver_unregister(&ftpm_tee_plat_driver);
+> +       driver_unregister(&ftpm_tee_driver.driver);
+> +}
+> +
+> +module_init(ftpm_mod_init);
+> +module_exit(ftpm_mod_exit);
 >
-> -int optee_enumerate_devices(void);
-> +#define PTA_CMD_GET_DEVICES            0x0
-> +#define PTA_CMD_GET_DEVICES_SUPP       0x1
-> +int optee_enumerate_devices(u32 func);
->
->  /*
->   * Small helpers
+>  MODULE_AUTHOR("Thirupathaiah Annapureddy <thiruan@microsoft.com>");
+>  MODULE_DESCRIPTION("TPM Driver for fTPM TA in TEE");
 > --
 > 2.17.1
 >
