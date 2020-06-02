@@ -2,51 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 483CE1EBDF1
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2020 16:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA9E1EBDF7
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2020 16:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728314AbgFBOTQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Jun 2020 10:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
+        id S1728337AbgFBOTY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Jun 2020 10:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728280AbgFBOTQ (ORCPT
+        with ESMTP id S1726647AbgFBOTY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Jun 2020 10:19:16 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16E1C08C5C0
-        for <linux-integrity@vger.kernel.org>; Tue,  2 Jun 2020 07:19:14 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id y11so1385173plt.12
-        for <linux-integrity@vger.kernel.org>; Tue, 02 Jun 2020 07:19:14 -0700 (PDT)
+        Tue, 2 Jun 2020 10:19:24 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B901DC08C5C1
+        for <linux-integrity@vger.kernel.org>; Tue,  2 Jun 2020 07:19:23 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id g5so5109235pfm.10
+        for <linux-integrity@vger.kernel.org>; Tue, 02 Jun 2020 07:19:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=35Pkqp8XmHYtG77xmdc/rRwZ+Fhbnl13O+ZdPgA6u+8=;
-        b=rJYlqHQGFvFNJpScMfhQjIw+lUfu18645UiEPnApUuKfHZRjvriaS+V8gtJQUxmC3Y
-         /kkexdDLostWxb2LFSWd1LlLLNWvL7Krel5UMOVWKXsJu+d+6PrwvUTNwiOdN5G8P5MM
-         V1F26HgCluau9sQszuR/lSEB+b/9ftEb8zlOBSz7fArv0/h9KNVNlZmJJDnGzFIQY+nM
-         RKWV9gdl8h4qISlF9vy3HCZLoZwjiFEs9Fl8AR8U63A7C9psohityHiYT+4AHpjdVDZI
-         BHkpOWTizOPUDwWN53CMwjNy6vrs3BO5dYrE1VH06tI8hbKd/D4Y5P6nh6vKXQthV/OJ
-         KLVg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=49E1AYEq7VVuGCMuPIgz3gRL4F9NJSEdjwQqKdvZbL0=;
+        b=zlk4n+qTiUrundVqYH05juNvTRVEaWqUu+Bbw27kmEjh+k8pNmuqc/+CjWRRoe7tni
+         ZdW9A37EoqjyqkGQb1kapREQIErFKc2fWwpW3E7s38uzu8x2LIHNFE1DIw2B6yha+Hdd
+         VINcdOUvLIAxxzNfq7780ig8oKx0joewua6JLWfsWt91kSaeH/B0UXdqj4e3AHyNcMLg
+         wHdOF96b+Owl9H/MLyLRw/IPwsTDjig5x4AG/2OEFWr4p8lJpgE2Da3+qQmM7Yj0xiP3
+         QmIrXds+A2i9MKkPGFvp9a0BRGw2Iu1GnmZcd8GuWWNAPjUBLlPteL8o/ro/vGM3Bz29
+         S79Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=35Pkqp8XmHYtG77xmdc/rRwZ+Fhbnl13O+ZdPgA6u+8=;
-        b=EyuSphgPnr76CqJxNWWQ5jQm+a28jsv3uaYcc+oRNFy7hTJ4vZ0bQT8lolI/Th51SR
-         6aJ8v2+MJmOrGeVuo8y2s8JQyfX3Fk03LWAqctIi4DPLMlu/sbnCJp+IinoEhcbwbGpX
-         HuindR1+/Da/BIS4fpHRgrL2g7/FIaMMAHnd21YwRTOvSMhKcT/Pez5K5emyZH3enZAI
-         /WSi6kwlg6oC9fwtyfMcHEc/5DUflxp0e3Vpv/gUna2XuzjBKcbP5rpU6LRXxzCVAPyJ
-         rXe2cAaLZR27CZzJYkCrX7LK8Hj8liCpkK2LKPrYihX1ErqHxEqUjMNg2J/IfvoWhrBW
-         06JA==
-X-Gm-Message-State: AOAM5338faAgOjDyXlwPpuAIt+ApTzxT1y/IsWW48mwlFUNRitcX0kuw
-        y1eIsKQdj+1ZljDEHPdTFHnbGA==
-X-Google-Smtp-Source: ABdhPJx3UkAIMicn0KzPrEzlhm6WMMM0eaU2pp8I1PcYK4CFaChzAu9/kZ+Zek7+T7Jsl17l7CRngw==
-X-Received: by 2002:a17:90b:344d:: with SMTP id lj13mr6047572pjb.160.1591107554264;
-        Tue, 02 Jun 2020 07:19:14 -0700 (PDT)
+         :references:mime-version:content-transfer-encoding;
+        bh=49E1AYEq7VVuGCMuPIgz3gRL4F9NJSEdjwQqKdvZbL0=;
+        b=Q2ImIOvBRkc5Rui/fZmZydfTeQY+MsVCsLbLRH1+vG/49RwTNDwfBpCYUnGE1+PwD8
+         29YDjkd9IXhtTuuX2L2Y54UM4PJwc+tYzkKUSemIUYxOZjsnRDTDoa/kJIeAZ3mP72JG
+         SmwSKmi93tym2cwyHdmxuYPCIkuJhFlxNdMhdreM4vZt2APg7zu8W29iJ2DthfDcYu+V
+         O8Z1w92ONeMCAu9USwYdsdcMN2vR0o283kBBmgHLy3+yKSohrxJG36dMv4ZWlwjDcZAk
+         Oa8ZjdEHJrgREjJTTz4DMunPajJ5cGyFb4jvGdE09rSc6fAvkCJ21vYO43OnCnK+Amch
+         IMhw==
+X-Gm-Message-State: AOAM532g0pySdc1Ygyby7FcyKCE1uUuDDhFfyjwD5edJvHW93X51JtDS
+        e8HQCnZpEQNf6MGslwIGaxqhfw==
+X-Google-Smtp-Source: ABdhPJy23KIRnKYWW6ULt/cRF71QmWvN8WFY4ulqQoE7KF9eFzf7h7IJdbGQQYaBgBF+dxMO3K/8ng==
+X-Received: by 2002:a62:1b01:: with SMTP id b1mr9904253pfb.14.1591107563040;
+        Tue, 02 Jun 2020 07:19:23 -0700 (PDT)
 Received: from localhost.localdomain ([117.252.66.248])
-        by smtp.gmail.com with ESMTPSA id 141sm2529670pfz.171.2020.06.02.07.19.05
+        by smtp.gmail.com with ESMTPSA id 141sm2529670pfz.171.2020.06.02.07.19.14
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Jun 2020 07:19:13 -0700 (PDT)
+        Tue, 02 Jun 2020 07:19:22 -0700 (PDT)
 From:   Sumit Garg <sumit.garg@linaro.org>
 To:     jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
         jejb@linux.ibm.com
@@ -59,449 +60,285 @@ Cc:     dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         op-tee@lists.trustedfirmware.org, tee-dev@lists.linaro.org,
         Sumit Garg <sumit.garg@linaro.org>
-Subject: [PATCH v5 2/4] KEYS: trusted: Introduce TEE based Trusted Keys
-Date:   Tue,  2 Jun 2020 19:48:23 +0530
-Message-Id: <1591107505-6030-3-git-send-email-sumit.garg@linaro.org>
+Subject: [PATCH v5 3/4] doc: trusted-encrypted: updates with TEE as a new trust source
+Date:   Tue,  2 Jun 2020 19:48:24 +0530
+Message-Id: <1591107505-6030-4-git-send-email-sumit.garg@linaro.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1591107505-6030-1-git-send-email-sumit.garg@linaro.org>
 References: <1591107505-6030-1-git-send-email-sumit.garg@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add support for TEE based trusted keys where TEE provides the functionality
-to seal and unseal trusted keys using hardware unique key.
+Update documentation for Trusted and Encrypted Keys with TEE as a new
+trust source. Following is brief description of updates:
 
-Refer to Documentation/tee.txt for detailed information about TEE.
+- Add a section to demostrate a list of supported devices along with
+  their security properties/guarantees.
+- Add a key generation section.
+- Updates for usage section including differences specific to a trust
+  source.
 
 Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 ---
- include/keys/trusted-type.h               |   3 +
- include/keys/trusted_tee.h                |  66 +++++++
- security/keys/Kconfig                     |  10 ++
- security/keys/trusted-keys/Makefile       |   1 +
- security/keys/trusted-keys/trusted_core.c |   2 +
- security/keys/trusted-keys/trusted_tee.c  | 280 ++++++++++++++++++++++++++++++
- 6 files changed, 362 insertions(+)
- create mode 100644 include/keys/trusted_tee.h
- create mode 100644 security/keys/trusted-keys/trusted_tee.c
+ Documentation/security/keys/trusted-encrypted.rst | 203 ++++++++++++++++++----
+ 1 file changed, 171 insertions(+), 32 deletions(-)
 
-diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-index 819a102..a1101ac 100644
---- a/include/keys/trusted-type.h
-+++ b/include/keys/trusted-type.h
-@@ -67,6 +67,9 @@ extern struct key_type key_type_trusted;
- #if defined(CONFIG_TRUSTED_TPM)
- extern struct trusted_key_ops tpm_trusted_key_ops;
- #endif
-+#if defined(CONFIG_TRUSTED_TEE)
-+extern struct trusted_key_ops tee_trusted_key_ops;
-+#endif
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index 50ac8bc..4764a6d 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -6,30 +6,161 @@ Trusted and Encrypted Keys are two new key types added to the existing kernel
+ key ring service.  Both of these new types are variable length symmetric keys,
+ and in both cases all keys are created in the kernel, and user space sees,
+ stores, and loads only encrypted blobs.  Trusted Keys require the availability
+-of a Trusted Platform Module (TPM) chip for greater security, while Encrypted
+-Keys can be used on any system.  All user level blobs, are displayed and loaded
+-in hex ascii for convenience, and are integrity verified.
++of a Trust Source for greater security, while Encrypted Keys can be used on any
++system. All user level blobs, are displayed and loaded in hex ascii for
++convenience, and are integrity verified.
  
- #define TRUSTED_DEBUG 0
+-Trusted Keys use a TPM both to generate and to seal the keys.  Keys are sealed
+-under a 2048 bit RSA key in the TPM, and optionally sealed to specified PCR
+-(integrity measurement) values, and only unsealed by the TPM, if PCRs and blob
+-integrity verifications match.  A loaded Trusted Key can be updated with new
+-(future) PCR values, so keys are easily migrated to new pcr values, such as
+-when the kernel and initramfs are updated.  The same key can have many saved
+-blobs under different PCR values, so multiple boots are easily supported.
  
-diff --git a/include/keys/trusted_tee.h b/include/keys/trusted_tee.h
-new file mode 100644
-index 0000000..ab58ffd
---- /dev/null
-+++ b/include/keys/trusted_tee.h
-@@ -0,0 +1,66 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2019 Linaro Ltd.
-+ *
-+ * Author:
-+ * Sumit Garg <sumit.garg@linaro.org>
-+ */
-+
-+#ifndef __TEE_TRUSTED_KEY_H
-+#define __TEE_TRUSTED_KEY_H
-+
-+#include <linux/tee_drv.h>
-+
-+#define DRIVER_NAME "tee-trusted-key"
-+
-+/*
-+ * Get random data for symmetric key
-+ *
-+ * [out]     memref[0]        Random data
-+ *
-+ * Result:
-+ * TEE_SUCCESS - Invoke command success
-+ * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
-+ */
-+#define TA_CMD_GET_RANDOM	0x0
-+
-+/*
-+ * Seal trusted key using hardware unique key
-+ *
-+ * [in]      memref[0]        Plain key
-+ * [out]     memref[1]        Sealed key datablob
-+ *
-+ * Result:
-+ * TEE_SUCCESS - Invoke command success
-+ * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
-+ */
-+#define TA_CMD_SEAL		0x1
-+
-+/*
-+ * Unseal trusted key using hardware unique key
-+ *
-+ * [in]      memref[0]        Sealed key datablob
-+ * [out]     memref[1]        Plain key
-+ *
-+ * Result:
-+ * TEE_SUCCESS - Invoke command success
-+ * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
-+ */
-+#define TA_CMD_UNSEAL		0x2
-+
-+/**
-+ * struct trusted_key_private - TEE Trusted key private data
-+ * @dev:		TEE based Trusted key device.
-+ * @ctx:		TEE context handler.
-+ * @session_id:		Trusted key TA session identifier.
-+ * @shm_pool:		Memory pool shared with TEE device.
-+ */
-+struct trusted_key_private {
-+	struct device *dev;
-+	struct tee_context *ctx;
-+	u32 session_id;
-+	u32 data_rate;
-+	struct tee_shm *shm_pool;
-+};
-+
-+#endif
-diff --git a/security/keys/Kconfig b/security/keys/Kconfig
-index 22632c6..4c374f4 100644
---- a/security/keys/Kconfig
-+++ b/security/keys/Kconfig
-@@ -95,6 +95,16 @@ config TRUSTED_TPM
+-TPM 1.2
+--------
++Trust Source
++============
  
- 	  If you are unsure as to whether this is required, answer N.
+-By default, trusted keys are sealed under the SRK, which has the default
+-authorization value (20 zeros).  This can be set at takeownership time with the
+-trouser's utility: "tpm_takeownership -u -z".
++Trust Source provides the source of security for the Trusted Keys, on which
++basis Trusted Keys establishes a Trust model with its user. A Trust Source could
++differ from one system to another depending on its security requirements. It
++could be either an off-chip device or an on-chip device. Following section
++demostrates a list of supported devices along with their security properties/
++guarantees:
  
-+config TRUSTED_TEE
-+	bool "TEE based TRUSTED KEYS"
-+	depends on TRUSTED_KEYS && TEE
-+	help
-+	  This option provides support for TEE based trusted keys where TEE acts
-+	  as the trust source. The keys are sealed to Hardware Unique Key (HUK)
-+	  accessible to TEE only.
-+
-+	  If you are unsure as to whether this is required, answer N.
-+
- config ENCRYPTED_KEYS
- 	tristate "ENCRYPTED KEYS"
- 	depends on KEYS
-diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
-index 03c3ad4..1818b7d 100644
---- a/security/keys/trusted-keys/Makefile
-+++ b/security/keys/trusted-keys/Makefile
-@@ -7,3 +7,4 @@ obj-$(CONFIG_TRUSTED_KEYS) += trusted.o
- trusted-y += trusted_core.o
- trusted-$(CONFIG_TRUSTED_TPM) += trusted_tpm1.o
- trusted-$(CONFIG_TRUSTED_TPM) += trusted_tpm2.o
-+trusted-$(CONFIG_TRUSTED_TEE) += trusted_tee.o
-diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-index 3d07d27..3f37dcb 100644
---- a/security/keys/trusted-keys/trusted_core.c
-+++ b/security/keys/trusted-keys/trusted_core.c
-@@ -25,6 +25,8 @@
+-TPM 2.0
+--------
++  *  Root of trust for storage
  
- #if defined(CONFIG_TRUSTED_TPM)
- static struct trusted_key_ops *trusted_key_ops = &tpm_trusted_key_ops;
-+#elif defined(CONFIG_TRUSTED_TEE)
-+static struct trusted_key_ops *trusted_key_ops = &tee_trusted_key_ops;
- #else
- static struct trusted_key_ops *trusted_key_ops;
- #endif
-diff --git a/security/keys/trusted-keys/trusted_tee.c b/security/keys/trusted-keys/trusted_tee.c
-new file mode 100644
-index 0000000..91075b1
---- /dev/null
-+++ b/security/keys/trusted-keys/trusted_tee.c
-@@ -0,0 +1,280 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 Linaro Ltd.
-+ *
-+ * Author:
-+ * Sumit Garg <sumit.garg@linaro.org>
-+ */
+-The user must first create a storage key and make it persistent, so the key is
+-available after reboot. This can be done using the following commands.
++     (1) TPM (Trusted Platform Module: hardware device)
 +
-+#include <linux/err.h>
-+#include <linux/key-type.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+#include <linux/uuid.h>
++         Rooted to Storage Root Key (SRK) which never leaves the TPM that
++         provides crypto operation to establish root of trust for storage.
 +
-+#include <keys/trusted-type.h>
-+#include <keys/trusted_tee.h>
++     (2) TEE (Trusted Execution Environment: OP-TEE based on Arm TrustZone)
 +
-+static struct trusted_key_private pvt_data;
++         Rooted to Hardware Unique Key (HUK) which is generally burnt in on-chip
++         fuses and is accessible to TEE only.
 +
-+/*
-+ * Have the TEE seal(encrypt) the symmetric key
-+ */
-+static int tee_trusted_seal(struct trusted_key_payload *p, char *datablob)
-+{
-+	int ret = 0;
-+	struct tee_ioctl_invoke_arg inv_arg;
-+	struct tee_param param[4];
-+	struct tee_shm *reg_shm_in = NULL, *reg_shm_out = NULL;
++  *  Execution isolation
 +
-+	memset(&inv_arg, 0, sizeof(inv_arg));
-+	memset(&param, 0, sizeof(param));
++     (1) TPM
 +
-+	reg_shm_in = tee_shm_register(pvt_data.ctx, (unsigned long)p->key,
-+				      p->key_len, TEE_SHM_DMA_BUF |
-+				      TEE_SHM_KERNEL_MAPPED);
-+	if (IS_ERR(reg_shm_in)) {
-+		dev_err(pvt_data.dev, "key shm register failed\n");
-+		return PTR_ERR(reg_shm_in);
-+	}
++         Fixed set of operations running in isolated execution environment.
 +
-+	reg_shm_out = tee_shm_register(pvt_data.ctx, (unsigned long)p->blob,
-+				       sizeof(p->blob), TEE_SHM_DMA_BUF |
-+				       TEE_SHM_KERNEL_MAPPED);
-+	if (IS_ERR(reg_shm_out)) {
-+		dev_err(pvt_data.dev, "blob shm register failed\n");
-+		ret = PTR_ERR(reg_shm_out);
-+		goto out;
-+	}
++     (2) TEE
 +
-+	inv_arg.func = TA_CMD_SEAL;
-+	inv_arg.session = pvt_data.session_id;
-+	inv_arg.num_params = 4;
++         Customizable set of operations running in isolated execution
++         environment verified via Secure/Trusted boot process.
 +
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
-+	param[0].u.memref.shm = reg_shm_in;
-+	param[0].u.memref.size = p->key_len;
-+	param[0].u.memref.shm_offs = 0;
-+	param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-+	param[1].u.memref.shm = reg_shm_out;
-+	param[1].u.memref.size = sizeof(p->blob);
-+	param[1].u.memref.shm_offs = 0;
++  * Optional binding to platform integrity state
 +
-+	ret = tee_client_invoke_func(pvt_data.ctx, &inv_arg, param);
-+	if ((ret < 0) || (inv_arg.ret != 0)) {
-+		dev_err(pvt_data.dev, "TA_CMD_SEAL invoke err: %x\n",
-+			inv_arg.ret);
-+		ret = -EFAULT;
-+	} else {
-+		p->blob_len = param[1].u.memref.size;
-+	}
++     (1) TPM
 +
-+out:
-+	if (reg_shm_out)
-+		tee_shm_free(reg_shm_out);
-+	if (reg_shm_in)
-+		tee_shm_free(reg_shm_in);
++         Keys can be optionally sealed to specified PCR (integrity measurement)
++         values, and only unsealed by the TPM, if PCRs and blob integrity
++         verifications match. A loaded Trusted Key can be updated with new
++         (future) PCR values, so keys are easily migrated to new PCR values,
++         such as when the kernel and initramfs are updated. The same key can
++         have many saved blobs under different PCR values, so multiple boots are
++         easily supported.
 +
-+	return ret;
-+}
++     (2) TEE
 +
-+/*
-+ * Have the TEE unseal(decrypt) the symmetric key
-+ */
-+static int tee_trusted_unseal(struct trusted_key_payload *p, char *datablob)
-+{
-+	int ret = 0;
-+	struct tee_ioctl_invoke_arg inv_arg;
-+	struct tee_param param[4];
-+	struct tee_shm *reg_shm_in = NULL, *reg_shm_out = NULL;
++         Relies on Secure/Trusted boot process for platform integrity. It can
++         be extended with TEE based measured boot process.
 +
-+	memset(&inv_arg, 0, sizeof(inv_arg));
-+	memset(&param, 0, sizeof(param));
++  *  On-chip versus off-chip
 +
-+	reg_shm_in = tee_shm_register(pvt_data.ctx, (unsigned long)p->blob,
-+				      p->blob_len, TEE_SHM_DMA_BUF |
-+				      TEE_SHM_KERNEL_MAPPED);
-+	if (IS_ERR(reg_shm_in)) {
-+		dev_err(pvt_data.dev, "blob shm register failed\n");
-+		return PTR_ERR(reg_shm_in);
-+	}
++     (1) TPM
 +
-+	reg_shm_out = tee_shm_register(pvt_data.ctx, (unsigned long)p->key,
-+				       sizeof(p->key), TEE_SHM_DMA_BUF |
-+				       TEE_SHM_KERNEL_MAPPED);
-+	if (IS_ERR(reg_shm_out)) {
-+		dev_err(pvt_data.dev, "key shm register failed\n");
-+		ret = PTR_ERR(reg_shm_out);
-+		goto out;
-+	}
++         Off-chip device connected via serial bus (like I2C, SPI etc.) exposing
++         physical access which represents an attack surface that can be
++         mitigated via tamper detection.
 +
-+	inv_arg.func = TA_CMD_UNSEAL;
-+	inv_arg.session = pvt_data.session_id;
-+	inv_arg.num_params = 4;
++     (2) TEE
 +
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
-+	param[0].u.memref.shm = reg_shm_in;
-+	param[0].u.memref.size = p->blob_len;
-+	param[0].u.memref.shm_offs = 0;
-+	param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-+	param[1].u.memref.shm = reg_shm_out;
-+	param[1].u.memref.size = sizeof(p->key);
-+	param[1].u.memref.shm_offs = 0;
++         On-chip functionality, immune to this attack surface.
 +
-+	ret = tee_client_invoke_func(pvt_data.ctx, &inv_arg, param);
-+	if ((ret < 0) || (inv_arg.ret != 0)) {
-+		dev_err(pvt_data.dev, "TA_CMD_UNSEAL invoke err: %x\n",
-+			inv_arg.ret);
-+		ret = -EFAULT;
-+	} else {
-+		p->key_len = param[1].u.memref.size;
-+	}
++  *  Memory attacks (DRAM based like attaching a bus monitor etc.)
 +
-+out:
-+	if (reg_shm_out)
-+		tee_shm_free(reg_shm_out);
-+	if (reg_shm_in)
-+		tee_shm_free(reg_shm_in);
++     (1) TPM
 +
-+	return ret;
-+}
++         Immune to these attacks as it doesn’t make use of system DRAM.
 +
-+/*
-+ * Have the TEE generate random symmetric key
-+ */
-+static int tee_trusted_get_random(unsigned char *key, size_t key_len)
-+{
-+	int ret = 0;
-+	struct tee_ioctl_invoke_arg inv_arg;
-+	struct tee_param param[4];
-+	struct tee_shm *reg_shm = NULL;
++     (2) TEE
 +
-+	memset(&inv_arg, 0, sizeof(inv_arg));
-+	memset(&param, 0, sizeof(param));
++         An implementation based on TrustZone protected DRAM is susceptible to
++         such attacks. In order to mitigate these attacks one needs to rely on
++         on-chip secure RAM to store secrets or have the entire TEE
++         implementation based on on-chip secure RAM. An alternative mitigation
++         would be to use encrypted DRAM.
 +
-+	reg_shm = tee_shm_register(pvt_data.ctx, (unsigned long)key, key_len,
-+				   TEE_SHM_DMA_BUF | TEE_SHM_KERNEL_MAPPED);
-+	if (IS_ERR(reg_shm)) {
-+		dev_err(pvt_data.dev, "random key shm register failed\n");
-+		return PTR_ERR(reg_shm);
-+	}
++  *  Side-channel attacks (cache, memory, CPU or time based)
 +
-+	inv_arg.func = TA_CMD_GET_RANDOM;
-+	inv_arg.session = pvt_data.session_id;
-+	inv_arg.num_params = 4;
++     (1) TPM
 +
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-+	param[0].u.memref.shm = reg_shm;
-+	param[0].u.memref.size = key_len;
-+	param[0].u.memref.shm_offs = 0;
++         Immune to side-channel attacks as its resources are isolated from the
++         main OS.
 +
-+	ret = tee_client_invoke_func(pvt_data.ctx, &inv_arg, param);
-+	if ((ret < 0) || (inv_arg.ret != 0)) {
-+		dev_err(pvt_data.dev, "TA_CMD_GET_RANDOM invoke err: %x\n",
-+			inv_arg.ret);
-+		ret = -EFAULT;
-+	} else {
-+		ret = param[0].u.memref.size;
-+	}
++     (2) TEE
 +
-+	tee_shm_free(reg_shm);
++         A careful implementation is required to mitigate against these attacks
++         for resources which are shared (eg. shared memory) with the main OS.
++         Cache and CPU based side-channel attacks can be mitigated via
++         invalidating caches and CPU registers during context switch to and from
++         the secure world.
++         To mitigate against time based attacks, one needs to have time
++         invariant implementations (like crypto algorithms etc.).
 +
-+	return ret;
-+}
++  *  Resistance to physical attacks (power analysis, electromagnetic emanation,
++     probes etc.)
 +
-+static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
-+{
-+	if (ver->impl_id == TEE_IMPL_ID_OPTEE)
-+		return 1;
-+	else
-+		return 0;
-+}
++     (1) TPM
 +
-+static int trusted_key_probe(struct device *dev)
-+{
-+	struct tee_client_device *rng_device = to_tee_client_device(dev);
-+	int ret = 0, err = -ENODEV;
-+	struct tee_ioctl_open_session_arg sess_arg;
++         Provides limited protection utilizing tamper resistance.
 +
-+	memset(&sess_arg, 0, sizeof(sess_arg));
++     (2) TEE
 +
-+	pvt_data.ctx = tee_client_open_context(NULL, optee_ctx_match, NULL,
-+					       NULL);
-+	if (IS_ERR(pvt_data.ctx))
-+		return -ENODEV;
++         Provides no protection by itself, relies on the underlying platform for
++         features such as tamper resistance.
 +
-+	memcpy(sess_arg.uuid, rng_device->id.uuid.b, TEE_IOCTL_UUID_LEN);
-+	sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
-+	sess_arg.num_params = 0;
 +
-+	ret = tee_client_open_session(pvt_data.ctx, &sess_arg, NULL);
-+	if ((ret < 0) || (sess_arg.ret != 0)) {
-+		dev_err(dev, "tee_client_open_session failed, err: %x\n",
-+			sess_arg.ret);
-+		err = -EINVAL;
-+		goto out_ctx;
-+	}
-+	pvt_data.session_id = sess_arg.session;
++Key Generation
++==============
 +
-+	ret = register_key_type(&key_type_trusted);
-+	if (ret < 0)
-+		goto out_sess;
++Trusted Keys
++------------
 +
-+	pvt_data.dev = dev;
++New keys are created from trust source generated random numbers, and are
++encrypted/decrypted using trust source storage root key.
 +
-+	return 0;
++  *  TPM (hardware device) based RNG
 +
-+out_sess:
-+	tee_client_close_session(pvt_data.ctx, pvt_data.session_id);
-+out_ctx:
-+	tee_client_close_context(pvt_data.ctx);
++     Strength of random numbers may vary from one device manufacturer to
++     another.
 +
-+	return err;
-+}
++  *  TEE (OP-TEE based on Arm TrustZone) based RNG
 +
-+static int trusted_key_remove(struct device *dev)
-+{
-+	unregister_key_type(&key_type_trusted);
-+	tee_client_close_session(pvt_data.ctx, pvt_data.session_id);
-+	tee_client_close_context(pvt_data.ctx);
++     RNG is customizable as per platform needs. It can either be direct output
++     from platform specific hardware RNG or a software based Fortuna CSPRNG
++     which can be seeded via multiple entropy sources.
 +
-+	return 0;
-+}
++Encrypted Keys
++--------------
 +
-+static const struct tee_client_device_id trusted_key_id_table[] = {
-+	{UUID_INIT(0xf04a0fe7, 0x1f5d, 0x4b9b,
-+		   0xab, 0xf7, 0x61, 0x9b, 0x85, 0xb4, 0xce, 0x8c)},
-+	{}
-+};
++Encrypted keys do not depend on a trust source, and are faster, as they use AES
++for encryption/decryption. New keys are created from kernel generated random
++numbers, and are encrypted/decrypted using a specified ‘master’ key. The
++‘master’ key can either be a trusted-key or user-key type. The main disadvantage
++of encrypted keys is that if they are not rooted in a trusted key, they are only
++as secure as the user key encrypting them. The master user key should therefore
++be loaded in as secure a way as possible, preferably early in boot.
 +
-+MODULE_DEVICE_TABLE(tee, trusted_key_id_table);
 +
-+static struct tee_client_driver trusted_key_driver = {
-+	.id_table	= trusted_key_id_table,
-+	.driver		= {
-+		.name		= DRIVER_NAME,
-+		.bus		= &tee_bus_type,
-+		.probe		= trusted_key_probe,
-+		.remove		= trusted_key_remove,
-+	},
-+};
++Usage
++=====
 +
-+static int __init init_tee_trusted(void)
-+{
-+	return driver_register(&trusted_key_driver.driver);
-+}
++Trusted Keys usage: TPM
++-----------------------
 +
-+static void __exit exit_tee_trusted(void)
-+{
-+	driver_unregister(&trusted_key_driver.driver);
-+}
++TPM 1.2: By default, trusted keys are sealed under the SRK, which has the
++default authorization value (20 zeros).  This can be set at takeownership time
++with the TrouSerS utility: "tpm_takeownership -u -z".
 +
-+struct trusted_key_ops tee_trusted_key_ops = {
-+	.migratable = 0, /* non-migratable */
-+	.init = init_tee_trusted,
-+	.seal = tee_trusted_seal,
-+	.unseal = tee_trusted_unseal,
-+	.get_random = tee_trusted_get_random,
-+	.exit = exit_tee_trusted,
-+};
-+EXPORT_SYMBOL_GPL(tee_trusted_key_ops);
++TPM 2.0: The user must first create a storage key and make it persistent, so the
++key is available after reboot. This can be done using the following commands.
+ 
+ With the IBM TSS 2 stack::
+ 
+@@ -79,14 +210,21 @@ TPM_STORED_DATA format.  The key length for new keys are always in bytes.
+ Trusted Keys can be 32 - 128 bytes (256 - 1024 bits), the upper limit is to fit
+ within the 2048 bit SRK (RSA) keylength, with all necessary structure/padding.
+ 
+-Encrypted keys do not depend on a TPM, and are faster, as they use AES for
+-encryption/decryption.  New keys are created from kernel generated random
+-numbers, and are encrypted/decrypted using a specified 'master' key.  The
+-'master' key can either be a trusted-key or user-key type.  The main
+-disadvantage of encrypted keys is that if they are not rooted in a trusted key,
+-they are only as secure as the user key encrypting them.  The master user key
+-should therefore be loaded in as secure a way as possible, preferably early in
+-boot.
++Trusted Keys usage: TEE
++-----------------------
++
++Usage::
++
++    keyctl add trusted name "new keylen" ring
++    keyctl add trusted name "load hex_blob" ring
++    keyctl print keyid
++
++"keyctl print" returns an ascii hex copy of the sealed key, which is in format
++specific to TEE device implementation.  The key length for new keys are always
++in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
++
++Encrypted Keys usage
++--------------------
+ 
+ The decrypted portion of encrypted keys can contain either a simple symmetric
+ key or a more complex structure. The format of the more complex structure is
+@@ -104,8 +242,8 @@ Where::
+ 	format:= 'default | ecryptfs | enc32'
+ 	key-type:= 'trusted' | 'user'
+ 
+-
+ Examples of trusted and encrypted key usage:
++--------------------------------------------
+ 
+ Create and save a trusted key named "kmk" of length 32 bytes.
+ 
+@@ -151,7 +289,7 @@ Load a trusted key from the saved blob::
+     f1f8fff03ad0acb083725535636addb08d73dedb9832da198081e5deae84bfaf0409c22b
+     e4a8aea2b607ec96931e6f4d4fe563ba
+ 
+-Reseal a trusted key under new pcr values::
++Reseal (TPM specific) a trusted key under new PCR values::
+ 
+     $ keyctl update 268728824 "update pcrinfo=`cat pcr.blob`"
+     $ keyctl print 268728824
+@@ -165,11 +303,12 @@ Reseal a trusted key under new pcr values::
+     7ef6a24defe4846104209bf0c3eced7fa1a672ed5b125fc9d8cd88b476a658a4434644ef
+     df8ae9a178e9f83ba9f08d10fa47e4226b98b0702f06b3b8
+ 
++
+ The initial consumer of trusted keys is EVM, which at boot time needs a high
+-quality symmetric key for HMAC protection of file metadata.  The use of a
++quality symmetric key for HMAC protection of file metadata. The use of a
+ trusted key provides strong guarantees that the EVM key has not been
+-compromised by a user level problem, and when sealed to specific boot PCR
+-values, protects against boot and offline attacks.  Create and save an
++compromised by a user level problem, and when sealed to a platform integrity
++state, protects against boot and offline attacks. Create and save an
+ encrypted key "evm" using the above trusted key "kmk":
+ 
+ option 1: omitting 'format'::
 -- 
 2.7.4
 
