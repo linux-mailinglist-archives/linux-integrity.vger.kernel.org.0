@@ -2,54 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 907921EBDFC
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2020 16:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCBD1EBE61
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2020 16:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728397AbgFBOTe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Jun 2020 10:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728263AbgFBOTd (ORCPT
+        id S1728087AbgFBOox (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Jun 2020 10:44:53 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48872 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726217AbgFBOow (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Jun 2020 10:19:33 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B57DC08C5C4
-        for <linux-integrity@vger.kernel.org>; Tue,  2 Jun 2020 07:19:32 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id t16so1397048plo.7
-        for <linux-integrity@vger.kernel.org>; Tue, 02 Jun 2020 07:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=xCxdAYBVIrnVoprqZ3jc+GoVPrFZj6YiVt4v2J1Jy+c=;
-        b=xY0giUdNw9UJ2TjpJyNqI4efCSRpXtJ7KKCsoCmsl7Kdk1y5wXcoLznAn3lxWsl7gE
-         P0N0oaJKpEO4QHz3289dxJouCe3Ss924AcbddVxgz1ZBpwNu5NS4AF4iFgefY/XZ8haj
-         l4e8qU+Gj+HDdPTtQ74oTHfApphH057dmr7/8WJkrtiz1zee+wHNNpWa6CQSTSsNJ0QW
-         t8dbUyNW200HiMjzM+5w4tm+98SjEEiqF3pxh3PgDrsNWoEa4+EvBCH6vYkUhZ9gI0KK
-         HfGbwzfPPfQI0pksrCWAmbeyOwCSGGdcTUuoPgkYbDKl6nKl1VzWOAuzCnv92EzERP3s
-         xc9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=xCxdAYBVIrnVoprqZ3jc+GoVPrFZj6YiVt4v2J1Jy+c=;
-        b=a/hiXlRBwT7Rb+kNsKa0QAY8CcrC6rcg0MqDDFPGDnWridHX4e7M1z4IbRYjuaAqLg
-         kz0i3H/2tsCPYTyifs8HtHBXWEFZfvz6FA7cN6QKI+nAEbsNUH9qx6HopeRTcPzqOTh/
-         avmoFkXr4jcSFNVOo5EtnqV+hb0OzOZ+FKtp45jPlTgR6tOIS8kbRMqo+qt5BUjOBqva
-         WgzKQ+QG955TpacDXLBp4Tz+e3IRVHdHTKW89a72O2/twdxuUE0bcPP0tJqwPZds2juv
-         a7mIOEwXc1FB9e0pJnxTnS+xUrphgG+aZkaSv1AnhtFGaOfmcKRnMQcrWhVenjwT3lON
-         u0Cw==
-X-Gm-Message-State: AOAM533j0D+PlKrrdJMSjQy6I5i3W+JVNw5gUeYUtech6b1d3mZ93z38
-        ITmmhYVEN44G7cyNff0i6Ql0pw==
-X-Google-Smtp-Source: ABdhPJxG830cH55AExGhe6B55/Arou3ybH7xW+GyhjWQJsAYEmUijypwo8iXX6XtFsQd8+bFbMS8dg==
-X-Received: by 2002:a17:902:a9c1:: with SMTP id b1mr24928855plr.8.1591107571910;
-        Tue, 02 Jun 2020 07:19:31 -0700 (PDT)
-Received: from localhost.localdomain ([117.252.66.248])
-        by smtp.gmail.com with ESMTPSA id 141sm2529670pfz.171.2020.06.02.07.19.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Jun 2020 07:19:31 -0700 (PDT)
-From:   Sumit Garg <sumit.garg@linaro.org>
-To:     jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
-        jejb@linux.ibm.com
+        Tue, 2 Jun 2020 10:44:52 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 052EWRur014054;
+        Tue, 2 Jun 2020 10:44:10 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31dq2jbw81-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Jun 2020 10:44:10 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 052EWj6U015700;
+        Tue, 2 Jun 2020 10:44:09 -0400
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31dq2jbw73-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Jun 2020 10:44:09 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 052EehHc010574;
+        Tue, 2 Jun 2020 14:44:07 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma04dal.us.ibm.com with ESMTP id 31bf4a15bw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Jun 2020 14:44:07 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 052Eh6LO48300354
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 Jun 2020 14:43:06 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 532DB7805E;
+        Tue,  2 Jun 2020 14:43:06 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30AEC78064;
+        Tue,  2 Jun 2020 14:43:03 +0000 (GMT)
+Received: from [153.66.254.194] (unknown [9.85.147.245])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  2 Jun 2020 14:43:02 +0000 (GMT)
+Message-ID: <1591108981.4253.17.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 0/4] Introduce TEE based Trusted Keys support
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Sumit Garg <sumit.garg@linaro.org>,
+        jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com
 Cc:     dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
         jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
         janne.karhunen@gmail.com, daniel.thompson@linaro.org,
@@ -57,46 +59,62 @@ Cc:     dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org, tee-dev@lists.linaro.org,
-        Sumit Garg <sumit.garg@linaro.org>
-Subject: [PATCH v5 4/4] MAINTAINERS: Add entry for TEE based Trusted Keys
-Date:   Tue,  2 Jun 2020 19:48:25 +0530
-Message-Id: <1591107505-6030-5-git-send-email-sumit.garg@linaro.org>
-X-Mailer: git-send-email 2.7.4
+        op-tee@lists.trustedfirmware.org, tee-dev@lists.linaro.org
+Date:   Tue, 02 Jun 2020 07:43:01 -0700
 In-Reply-To: <1591107505-6030-1-git-send-email-sumit.garg@linaro.org>
 References: <1591107505-6030-1-git-send-email-sumit.garg@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-02_13:2020-06-02,2020-06-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1011 impostorscore=0 suspectscore=0
+ priorityscore=1501 adultscore=0 cotscore=-2147483648 lowpriorityscore=0
+ phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006020104
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add MAINTAINERS entry for TEE based Trusted Keys framework.
+On Tue, 2020-06-02 at 19:48 +0530, Sumit Garg wrote:
+> Add support for TEE based trusted keys where TEE provides the
+> functionality to seal and unseal trusted keys using hardware unique
+> key. Also, this is an alternative in case platform doesn't possess a
+> TPM device.
 
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+So here's a meta problem: in the case when the platform possesses both
+TEE and TPM  what should it do?  Things like this:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7b58ca2..50d0502 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9396,6 +9396,14 @@ F:	include/keys/trusted-type.h
- F:	include/keys/trusted_tpm.h
- F:	security/keys/trusted-keys/
- 
-+KEYS-TRUSTED-TEE
-+M:	Sumit Garg <sumit.garg@linaro.org>
-+L:	linux-integrity@vger.kernel.org
-+L:	keyrings@vger.kernel.org
-+S:	Supported
-+F:	include/keys/trusted_tee.h
-+F:	security/keys/trusted-keys/trusted_tee.c
-+
- KEYS/KEYRINGS
- M:	David Howells <dhowells@redhat.com>
- M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
--- 
-2.7.4
+> --- a/security/keys/trusted-keys/trusted_core.c
+> +++ b/security/keys/trusted-keys/trusted_core.c
+> @@ -25,6 +25,8 @@
+>  
+>  #if defined(CONFIG_TRUSTED_TPM)
+>  static struct trusted_key_ops *trusted_key_ops =
+> &tpm_trusted_key_ops;
+> +#elif defined(CONFIG_TRUSTED_TEE)
+> +static struct trusted_key_ops *trusted_key_ops =
+> &tee_trusted_key_ops;
+>  #else
+
+Say it's either/or at a Kconfig level: so if you select both TEE and
+TPM based trusted keys at compile time, we intall the TPM ops and
+ignore the TEE ops, is that right?  Surely this should be runtime
+selectable based on what the platform has ... perhaps it should even be
+selectable per key?
+
+Once it is runtime selectable, what should be selected in the both
+case?  Or should we allow the user to decide, if so, how?
+
+when you pipe a trusted key, I think the subtype (TEE or TPM) should be
+part of the piped information, so it loads again seamlessly.  This
+would actually be fixed by something like the ASN.1 scheme I'm trying
+to upstream, at least for TPM keys, but do TEE keys have a recognized
+ASN.1 format?
+
+James
 
