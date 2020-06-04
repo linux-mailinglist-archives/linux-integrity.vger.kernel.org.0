@@ -2,131 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4DE1EEAF2
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jun 2020 21:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9071EEB38
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jun 2020 21:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726446AbgFDTMS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Jun 2020 15:12:18 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:46187 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727984AbgFDTMR (ORCPT
+        id S1728982AbgFDTfy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Jun 2020 15:35:54 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23274 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728420AbgFDTfy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Jun 2020 15:12:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591297936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t26H1FhBTAEpRrmN8caMlOthl/eu2irMbt7QQDhOhB8=;
-        b=O6L1UZ6NTvTJoMXGZOKYUdkiGrzZwORU8EhrvWqS9fBnClp7WrYET0iOYlGnL/Nx0jbTjJ
-        Ss4DmMnNT6yo94YqKfLoXI1Fo6OaepWMtlyocsvwQiWEQQgNGSgQfwnoEa/hZoWIA2Y0iw
-        dECsFPovbk2SlVT4cPtw/CMaS6sN0Hg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-75-PVgD82seO1ybcW8gYaZkvg-1; Thu, 04 Jun 2020 15:12:11 -0400
-X-MC-Unique: PVgD82seO1ybcW8gYaZkvg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED54C18A8223;
-        Thu,  4 Jun 2020 19:12:09 +0000 (UTC)
-Received: from localhost (ovpn-116-137.gru2.redhat.com [10.97.116.137])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 23B5C5D9D5;
-        Thu,  4 Jun 2020 19:12:08 +0000 (UTC)
-Date:   Thu, 4 Jun 2020 16:12:07 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
+        Thu, 4 Jun 2020 15:35:54 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 054JZcWQ180917;
+        Thu, 4 Jun 2020 15:35:46 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31c542sjs7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Jun 2020 15:35:46 -0400
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 054JZcEd181711;
+        Thu, 4 Jun 2020 15:35:38 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31c542sjj2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Jun 2020 15:35:38 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 054JWcf1012568;
+        Thu, 4 Jun 2020 19:35:24 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 31bf482mxp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Jun 2020 19:35:24 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 054JZMnY54395258
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 4 Jun 2020 19:35:22 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF48811C052;
+        Thu,  4 Jun 2020 19:35:21 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E915C11C04A;
+        Thu,  4 Jun 2020 19:35:20 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.133.34])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  4 Jun 2020 19:35:20 +0000 (GMT)
+Message-ID: <1591299320.5146.53.camel@linux.ibm.com>
+Subject: Re: [PATCH 2/2] ima: Call ima_calc_boot_aggregate() in
+ ima_eventdigest_init()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Bruno Meneguele <bmeneg@redhat.com>
 Cc:     Roberto Sassu <roberto.sassu@huawei.com>, tiwai@suse.de,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
         stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] ima: Call ima_calc_boot_aggregate() in
- ima_eventdigest_init()
-Message-ID: <20200604191207.GR2970@glitch>
+Date:   Thu, 04 Jun 2020 15:35:20 -0400
+In-Reply-To: <20200604191207.GR2970@glitch>
 References: <20200603150821.8607-1-roberto.sassu@huawei.com>
- <20200603150821.8607-2-roberto.sassu@huawei.com>
- <1591221815.5146.31.camel@linux.ibm.com>
-MIME-Version: 1.0
-In-Reply-To: <1591221815.5146.31.camel@linux.ibm.com>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uRjmd8ppyyws0Tml"
-Content-Disposition: inline
+         <20200603150821.8607-2-roberto.sassu@huawei.com>
+         <1591221815.5146.31.camel@linux.ibm.com> <20200604191207.GR2970@glitch>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-04_12:2020-06-04,2020-06-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ mlxlogscore=999 cotscore=-2147483648 mlxscore=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006040132
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---uRjmd8ppyyws0Tml
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2020-06-04 at 16:12 -0300, Bruno Meneguele wrote:
+> On Wed, Jun 03, 2020 at 06:03:35PM -0400, Mimi Zohar wrote:
+> > Hi Roberto,
+> > 
+> > On Wed, 2020-06-03 at 17:08 +0200, Roberto Sassu wrote:
+> > > If the template field 'd' is chosen and the digest to be added to the
+> > > measurement entry was not calculated with SHA1 or MD5, it is
+> > > recalculated with SHA1, by using the passed file descriptor. However, this
+> > > cannot be done for boot_aggregate, because there is no file descriptor.
+> > > 
+> > > This patch adds a call to ima_calc_boot_aggregate() in
+> > > ima_eventdigest_init(), so that the digest can be recalculated also for the
+> > > boot_aggregate entry.
+> > > 
+> > > Cc: stable@vger.kernel.org # 3.13.x
+> > > Fixes: 3ce1217d6cd5d ("ima: define template fields library and new helpers")
+> > > Reported-by: Takashi Iwai <tiwai@suse.de>
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Thanks, Roberto.
+> > 
+> > I've pushed both patches out to the next-integrity branch and would
+> > appreciate some additional testing.
+> > 
+> > thanks,
+> > 
+> > Mimi
+> > 
+> 
+> Hi Mimi and Roberto,
+> 
+> FWIW, I've tested this patch manually and things went fine, with no
+> unexpected behavior or results. 
 
-On Wed, Jun 03, 2020 at 06:03:35PM -0400, Mimi Zohar wrote:
-> Hi Roberto,
->=20
-> On Wed, 2020-06-03 at 17:08 +0200, Roberto Sassu wrote:
-> > If the template field 'd' is chosen and the digest to be added to the
-> > measurement entry was not calculated with SHA1 or MD5, it is
-> > recalculated with SHA1, by using the passed file descriptor. However, t=
-his
-> > cannot be done for boot_aggregate, because there is no file descriptor.
-> >=20
-> > This patch adds a call to ima_calc_boot_aggregate() in
-> > ima_eventdigest_init(), so that the digest can be recalculated also for=
- the
-> > boot_aggregate entry.
-> >=20
-> > Cc: stable@vger.kernel.org # 3.13.x
-> > Fixes: 3ce1217d6cd5d ("ima: define template fields library and new help=
-ers")
-> > Reported-by: Takashi Iwai <tiwai@suse.de>
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->=20
-> Thanks, Roberto.
->=20
-> I've pushed both patches out to the next-integrity branch and would
-> appreciate some additional testing.
->=20
-> thanks,
->=20
-> Mimi
->=20
+Thanks, Bruno!
 
-Hi Mimi and Roberto,
+> However, wouldn't it be worth add a note in kmsg about the
+> ima_calc_boot_aggregate() being called with an algo different from the
+> system's default? Just to let the user know he won't find a sha256 when
+> check the measurement. But that's something we can add later too.
 
-FWIW, I've tested this patch manually and things went fine, with no
-unexpected behavior or results.=20
+There's no guarantees that the IMA default crypto algorithm will be
+used for calculating the boot_aggregate.  The algorithm is dependent
+on the TPM.  For example, the default IMA algorithm could be sha256,
+but on a system with TPM 1.2, the boot_aggregate would have to be
+sha1.
 
-However, wouldn't it be worth add a note in kmsg about the
-ima_calc_boot_aggregate() being called with an algo different from the
-system's default? Just to let the user know he won't find a sha256 when
-check the measurement. But that's something we can add later too.
+This patch addresses a mismatch between the template format field ('d'
+field) and the larger digest.  We could require the "ima_template_fmt"
+specified on the boot command line define an appropriate format, but
+Roberto decided to support the situation where both "d" and "d-ng" are
+defined.
 
-Thanks.
-
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
-
---uRjmd8ppyyws0Tml
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl7ZR4cACgkQYdRkFR+R
-okPv+gf8DgXvxo4KWoJAItxE9kGVy1gfkC+UMthV9x2KPxkqo/6z4raVsZEs9KuG
-rX4dy8/WPi7ddz9pfagsZ2d8mzruEmNSxnvm658tFQRbno+SyiOAMpafkRHXK928
-jsxO53HYwe6nmW21ix+ZKSKc3Q1hKDwlxjNr+gvOCkt44LJ1bOTV0IDUzQ+mxmlV
-a1IJVBMN2+mwkmUjj8B10E/HHlzM4Ai8i9UNrwe2Lj6wpQeWzkckdTor3IZe8W6O
-cdow1P8bqES3n4/5A1tM/2lzRcl1tnIi9bX4E14YbYiAW3oOj39JMZr77D5AD4Vs
-Z8O3ba0++rFejZ0TDCwACE72Wjalrw==
-=e59Z
------END PGP SIGNATURE-----
-
---uRjmd8ppyyws0Tml--
-
+Mimi
