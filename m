@@ -2,168 +2,160 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 208DE1EE100
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jun 2020 11:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9772F1EE121
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jun 2020 11:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728050AbgFDJRV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Jun 2020 05:17:21 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:20253 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727925AbgFDJRU (ORCPT
+        id S1726990AbgFDJVR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Jun 2020 05:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726465AbgFDJVR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Jun 2020 05:17:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591262238;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=+uzpgu8ggc0aWRwLEplmpN5UqevLP5ylXrIMt1zK2MY=;
-        b=DsPJLs/DgUiyfD4XmsJWlTZ9XMqzIezftI9p5wDFtnK1XJ746QMqT2blOUTToGeGZ9Hfcv
-        ry//SWwsHVykAEjwWtsv4+fw1X4QRSKMM+EEFfDKxZRQWj1TieM7opFYR/Fyg418oq0r3t
-        Yv8GJzonsRTdRO0ndLY3V/SbXUTwYFA=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-324-Sg8l6y-jP8eFcIYQQXZr3Q-1; Thu, 04 Jun 2020 05:17:15 -0400
-X-MC-Unique: Sg8l6y-jP8eFcIYQQXZr3Q-1
-Received: by mail-qv1-f72.google.com with SMTP id h4so3878368qvr.21
-        for <linux-integrity@vger.kernel.org>; Thu, 04 Jun 2020 02:17:15 -0700 (PDT)
+        Thu, 4 Jun 2020 05:21:17 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F59C03E96E
+        for <linux-integrity@vger.kernel.org>; Thu,  4 Jun 2020 02:21:17 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id c17so6337131lji.11
+        for <linux-integrity@vger.kernel.org>; Thu, 04 Jun 2020 02:21:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yyJR1MYehwBUt0YyExV80dxcZRy0+suSSvHSpdzdsAU=;
+        b=ge1P9U3b40ro4By+8hHm6GTS1SMbrieAZjWbp/5K+pDJajjes5lTSjJ0+SRUz9S12P
+         rkAqjRGvx7YXRNu45zhu7OIDDMdBCsWvg7iBRWAZbmash6YcMA1wfZrO50oXoinhLry3
+         8ourmKYOqO+UGXphdqushaKcDEi8j0I/JRah1H0JkiS0eK7QLNqPOOqMFpgdeB1pS0GF
+         QfJzZYUkBdAWqxC6ZiKTeUTvfhezJ+593WeVyQ46v9gSnQ0cE82Mjj11GUKPgK+UNnxc
+         /S9MM0EXpd+sEQhjOrAXcLL45Hk8kzDMrvgM58FdQvEhshHnfQd0Knh7UUbe8OYmWNan
+         MgQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=+uzpgu8ggc0aWRwLEplmpN5UqevLP5ylXrIMt1zK2MY=;
-        b=DF/4aCYcZ12PMEl+7YMtC0tSaJNEDvksawk8MsDwGgo0Iy1ZRYdYWhlftKoHjzZ9/W
-         jBIyArPwbp6lTe901zTuK0Zllxpyd7u2frrfqG4XzpUrwPv0B19YyLdSyRdFNPWlPiDT
-         xG1UEIyQ8J+UWlb6xiR2seUg7hxOnndM2LomabiNZEibLVhq2xzzOPgTRKKVBWTeyf2l
-         4dHXmded2MwR4HQsQNGWglrygZ1M5RDPqNFl4vDku5mX3eNPDMxiwkv3ncarjTuf5T9J
-         +wB+XdxO/5vjboSUzEx0MW4WRNhY9RK1U4rN3Tzt3z5ZfJJu3Xc+QHlrwErcrqAEhv9q
-         ipdg==
-X-Gm-Message-State: AOAM530CBiYGzR7dT5iMSqas6/hadlNye24Tu1td4fsFwfwh4/alolF/
-        j6QdQB+0x+MmvF5M/7JFhKZpI1mFbZRtU6I4qeTcz0puD56OoGILSlxvxa8NebLpfL00MrcQs8I
-        Oxh4UCsitFsViEFWGItWLNV3k+5Y/
-X-Received: by 2002:ac8:36c2:: with SMTP id b2mr3396137qtc.257.1591262235057;
-        Thu, 04 Jun 2020 02:17:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzsAnZijIV5CEgmKtWzfFl14be8Jr+zG4/czknyTHhWvzTNu4nT8Hwq2Y5ltH4IAybM7SBO6A==
-X-Received: by 2002:ac8:36c2:: with SMTP id b2mr3396118qtc.257.1591262234779;
-        Thu, 04 Jun 2020 02:17:14 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id m53sm4568122qtb.64.2020.06.04.02.17.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2020 02:17:13 -0700 (PDT)
-Date:   Thu, 4 Jun 2020 02:17:12 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity@vger.kernel.org, Mark Pearson <mpearson@lenovo.com>
-Subject: Re: [PATCH] tpm_tis_core: Disable broken IRQ handling code
-Message-ID: <20200604091712.qvcqkkhhtcqoorpd@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-References: <20200409211044.21625-1-hdegoede@redhat.com>
- <20200410210652.GA16905@linux.intel.com>
- <b8865c10-3733-7179-c524-afa4c4386de6@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yyJR1MYehwBUt0YyExV80dxcZRy0+suSSvHSpdzdsAU=;
+        b=F2a/nOKLktPX8ZfR5upPsgY/OzaF3pdef4cbi7TFTwz87wTcCnE1zVdHAH91/sWmPy
+         MFeYs7QXIxldJW2Pwjn0x/63rg/uD6YIVA548gZ28j05izUcpLIdSFd/IH9jbOmSK6MJ
+         bP4jiBJIcKXEIzbCTC+l4PYLaIA9ef8niFEkEyTmJsK9AMuj2cJ+UPhqDtLzA4aL60fT
+         xiogyOoHu0fHNelHX5f0JKjJEAZLad8JhdoW544kYirWamRdIM8IBLb1l1d1s3aqHHI6
+         Ijx/299HPfdFsAKFUek+yuOoQIQxUPnPYaf9CFBudcVxorlyS6QhqK7y30Oi9TEU18nQ
+         dbrg==
+X-Gm-Message-State: AOAM531+cw/FzPSHH3ooCSnu/Q6P8lqEMI6fK00QoHz3BaJja35p4JcV
+        IdZPk4Ftl4vTk64TSPNQ2fmrOmqZf5fFjOoiS69HFw==
+X-Google-Smtp-Source: ABdhPJyj/mcnooeJF5BciINSiXrorGxe0C3sLWapnPp74fQH2EvEPMjaYihJoGTqLF6YnVBy/ESZi9x4IAQnHCyXVkM=
+X-Received: by 2002:a2e:81c5:: with SMTP id s5mr1609658ljg.372.1591262475238;
+ Thu, 04 Jun 2020 02:21:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <b8865c10-3733-7179-c524-afa4c4386de6@redhat.com>
+References: <20200601150645.13412-1-maxim.uvarov@linaro.org>
+ <20200601150645.13412-2-maxim.uvarov@linaro.org> <20200604083655.GA4026@linux.intel.com>
+In-Reply-To: <20200604083655.GA4026@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 4 Jun 2020 14:51:03 +0530
+Message-ID: <CAFA6WYMZx9goq4+yNH5UtrO-nO+R9ohE1dH6jTvKwvME+kKwoQ@mail.gmail.com>
+Subject: Re: [PATCHv6 1/3] optee: use uuid for sysfs driver entry
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Maxim Uvarov <maxim.uvarov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
+        peterhuewe@gmx.de, Jason Gunthorpe <jgg@ziepe.ca>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu May 07 20, Hans de Goede wrote:
->Hi All,
+On Thu, 4 Jun 2020 at 14:07, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
 >
->On 4/10/20 11:06 PM, Jarkko Sakkinen wrote:
->>On Thu, Apr 09, 2020 at 11:10:44PM +0200, Hans de Goede wrote:
->>>Since commit dda8b2af395b ("tpm: Revert "tpm_tis_core: Set
->>>TPM_CHIP_FLAG_IRQ before probing for interrupts"") we no longer set
->>>the TPM_CHIP_FLAG_IRQ ever.
->>>
->>>So the whole IRQ probing code is not useful, worse we rely on the
->>>IRQ-test path of tpm_tis_send() to call disable_interrupts() if
->>>interrupts do not work, but that path never gets entered because we
->>>never set the TPM_CHIP_FLAG_IRQ.
->>>
->>>So the remaining IRQ probe code calls request_irq() and never calls
->>>free_irq() even when the interrupt is not working.
->>>
->>>On some systems, e.g. the Lenovo X1 8th gen,  the interrupt we try
->>>to use and never free creates an interrupt storm followed by
->>>an "irq XX: nobody cared" oops.
->>>
->>>Since it is non-functional at the moment anyways, lets just completely
->>>disable the IRQ code in tpm_tis_core for now.
->>>
->>>Fixes: dda8b2af395b ("tpm: Revert "tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts"")
->>>Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->>>---
->>>Note I'm working with Lenovo to try and get to the bottom of this.
->>>---
->>
->>OK if I recall correctly the reason for reverting was that the fixes
->>Stefan was sending were broken and no access to hardware were the
->>issues would be visible. The reason for not doing anything til this
->>day is that we don't have T490 available.
+> On Mon, Jun 01, 2020 at 06:06:43PM +0300, Maxim Uvarov wrote:
+> > With the evolving use-cases for TEE bus, now it's required to support
+> > multi-stage enumeration process. But using a simple index doesn't
+> > suffice this requirement and instead leads to duplicate sysfs entries.
+> > So instead switch to use more informative device UUID for sysfs entry
+> > like:
+> > /sys/bus/tee/devices/optee-ta-<uuid>
+> >
+> > Signed-off-by: Maxim Uvarov <maxim.uvarov@linaro.org>
+> > Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
 >
->So as promised I have been in contact with Lenovo about this.
->
->Specifically I have been in contact with Lenovo about seeing an
->IRQ storm when the tpm_tis code tries to use the IRQ on a X1 carbon
->8th gen (X1C8), because of the now public plan that Lenovo will
->offer ordering this model with Fedora pre-installed:
->https://lwn.net/Articles/818595/
->
->On the X1C8 the problem has been diagnosed to be a misconfigured
->GPIO pin on the CPU (the SoC). The X1C8 uses an SPI connected
->TPM chip with its IRQ connected to a GPIO on the SoC which is
->configured in Direct IRQ mode, so that it directly asserts
->IRQs on one of the APIC IRQs.  The problem is that due to the
->misconfiguration as soon as the IRQ is enabled it fires
->continuously.
->
->For the X1C8 this should be fixed in the BIOS of the first
->batch which gets shipped out to customers so there we should
->not have to worry about this.
->
->It is likely (but not yet confirmed) that the issue on the T490
->is the same, although on my test X1C8 device I got an IRQ storm,
->followed by the kernel disabling the IRQ, not a non booting system.
->I guess this might be due to kernel configuration differences.
->
->Assuming that the issue on the T490 is the same, we might see a
->BIOS update fixing this, but given that non-booting is
->'not good ("tm")' even if there will be a BIOS fix we should
->still do something at the kernel level to also work with the
->older unfixed BIOS which is already out there.
->
->I've been thinking about this and I'm afraid that the only thing
->what we can do is add a DMI product-name (product-version for Lenovo)
->string based blacklist for IRQ usage to drivers/char/tpm/tpm_tis.c
->and set tpm_info.irq = -1 for devices on that list.
->
->My plan is to prepare a RFC patch of such a blacklist, while we
->wait for confirmation that the root cause on the T490 is the same
->as on the X1C8, but before I work on that I'm wondering if
->people agree that that is the best approach, or if there are
->other suggestions for dealing with this ?
->
->Regards,
->
->Hans
+> Why do you mean by duplicate sysfs entries?
 >
 
-Jarrko,
+It's just about the device being added with the same name as of the
+device which is already present on the TEE bus. So this leads to
+duplicate sysfs entry error for device node which is created during
+device_register() execution flow.
 
-Any thoughts about how we should move forward on dealing with this?
-I've got a report about the original problem Stefan was dealing with,
-where the tpm isn't powered on when it tries to send a command to
-generate an interrupt. The tpm is functioning so it isn't urgent,
-but it would be good to get this cleaned up so users aren't getting
-transmit errors and firmware bug messages. Hans did you make any
-progress on the blacklist patch?
+> > ---
+> >  Documentation/ABI/testing/sysfs-bus-optee-devices | 8 ++++++++
+> >  MAINTAINERS                                       | 1 +
+> >  drivers/tee/optee/device.c                        | 6 +++---
+> >  3 files changed, 12 insertions(+), 3 deletions(-)
+> >  create mode 100644 Documentation/ABI/testing/sysfs-bus-optee-devices
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-bus-optee-devices b/Documentation/ABI/testing/sysfs-bus-optee-devices
+> > new file mode 100644
+> > index 000000000000..0ae04ae5374a
+> > --- /dev/null
+> > +++ b/Documentation/ABI/testing/sysfs-bus-optee-devices
+> > @@ -0,0 +1,8 @@
+> > +What:                /sys/bus/tee/devices/optee-ta-<uuid>/
+> > +Date:           May 2020
+> > +KernelVersion   5.7
+> > +Contact:        tee-dev@lists.linaro.org
+> > +Description:
+> > +             OP-TEE bus provides reference to registered drivers under this directory. The <uuid>
+> > +             matches Trusted Application (TA) driver and corresponding TA in secure OS. Drivers
+> > +             are free to create needed API under optee-ta-<uuid> directory.
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index ecc0749810b0..6717afef2de3 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -12516,6 +12516,7 @@ OP-TEE DRIVER
+> >  M:   Jens Wiklander <jens.wiklander@linaro.org>
+> >  L:   tee-dev@lists.linaro.org
+> >  S:   Maintained
+> > +F:   Documentation/ABI/testing/sysfs-bus-optee-devices
+> >  F:   drivers/tee/optee/
+> >
+> >  OP-TEE RANDOM NUMBER GENERATOR (RNG) DRIVER
+> > diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
+> > index e3a148521ec1..ed3d1ddfa52b 100644
+> > --- a/drivers/tee/optee/device.c
+> > +++ b/drivers/tee/optee/device.c
+> > @@ -65,7 +65,7 @@ static int get_devices(struct tee_context *ctx, u32 session,
+> >       return 0;
+> >  }
+> >
+> > -static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
+> > +static int optee_register_device(const uuid_t *device_uuid)
+> >  {
+> >       struct tee_client_device *optee_device = NULL;
+> >       int rc;
+> > @@ -75,7 +75,7 @@ static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
+> >               return -ENOMEM;
+> >
+> >       optee_device->dev.bus = &tee_bus_type;
+> > -     dev_set_name(&optee_device->dev, "optee-clnt%u", device_id);
+> > +     dev_set_name(&optee_device->dev, "optee-ta-%pUl", device_uuid);
+>
+> This code is and already was broken. If dev_set_name() returns -ENOMEM,
+> the name will be a null pointer.
 
+Is this an expected error scenario? dev_set_name() is invoked at
+numerous places in the kernel without any error check.
+
+>
+> Also, I don't get how you can just swap the name without potentially
+> breaking the backwards compatiblity towards the user space.
+
+As of now, there isn't any compatibility concerns with user space as
+these TEE devices are meant to be used by kernel drivers only. TEE
+user-space interface is quite separate (see: Documentation/tee.txt).
+
+-Sumit
+
+>
+> /Jarkko
