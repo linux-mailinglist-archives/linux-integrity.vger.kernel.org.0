@@ -2,70 +2,160 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3B41F01D4
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2020 23:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFB11F0336
+	for <lists+linux-integrity@lfdr.de>; Sat,  6 Jun 2020 01:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728227AbgFEVgY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Jun 2020 17:36:24 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37904 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728196AbgFEVgY (ORCPT
+        id S1728363AbgFEXAL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Jun 2020 19:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728310AbgFEXAK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Jun 2020 17:36:24 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B08E720B7185;
-        Fri,  5 Jun 2020 14:36:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B08E720B7185
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1591392984;
-        bh=tSnjZ9WzP0jd/9ONy9pB1uG8pmrZd7Nd6pMK3U8G3C4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=j58jeBpR0kcXUseKBLySEsy/s0CJ1AEVdtyeq8dwUJfDag8iMV00cQQpuKNVK3hWm
-         gqDAM1S60XXnP0C/nlk2mYm1BlE/kJkm3jqgUIiro1n3zvsDwjcORxRMRRlHnmqPcX
-         Tq54+lS9SoIkglIxBY6Jj+W+/XqXZBleQ5iMo1cM=
-Subject: Re: [PATCH] IMA: Add log statements for failure conditions
-To:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>
-Cc:     linux-integrity@vger.kernel.org, tusharsu@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, linux-audit@redhat.com
-References: <20200604163243.2575-1-nramas@linux.microsoft.com>
- <1591382782.5816.36.camel@linux.ibm.com>
- <CAHC9VhS-EP=Kk3GKRzAGAYa5mqupkLQCHz_m_DgoAKRWcSTgLA@mail.gmail.com>
- <8dfb3fa6-5c1f-d644-7d21-72a9448c52cc@linux.microsoft.com>
- <CAHC9VhS8gmrWxt75aHAE16PWAay7sUrffZiT0A8VLugwexK4Uw@mail.gmail.com>
- <48ff60f1-df93-5ce7-a254-8bfd1dba2ade@linux.microsoft.com>
- <1591392867.4615.20.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <755741f8-7f55-e40d-bb05-c05be2e02e9e@linux.microsoft.com>
-Date:   Fri, 5 Jun 2020 14:36:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <1591392867.4615.20.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Fri, 5 Jun 2020 19:00:10 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCA6C08C5C4
+        for <linux-integrity@vger.kernel.org>; Fri,  5 Jun 2020 16:00:10 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id s10so5889566pgm.0
+        for <linux-integrity@vger.kernel.org>; Fri, 05 Jun 2020 16:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=aFt/anDS7nzNEkZvhj5E9jn5B6aPNRUTEUXG6gw+rMw=;
+        b=Py6p74DfoglbZqlPUm+YTvpOKViQG5W31OSdRj5ooXbxZ7v9F5LHL7MtsfOWDDDU9c
+         1esc8ikGjD2AI5glOmFX+wit2+4KpFX+kgu15NT5UPlYNYjQAsZu1PjPC6igT5y2TO5y
+         B7EDpj9FWNU37TDEyMNM6XGZU8GVHZZgD7Qvk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=aFt/anDS7nzNEkZvhj5E9jn5B6aPNRUTEUXG6gw+rMw=;
+        b=AjqibOirqTtEcVlQk3r9hFltYjJyxg1592f5G7cpsCRIgbqXB+D3FefZkD5EvHbC5T
+         bcywHsvsNPXMi2QpftmU/FRuYWPGOmC3AFiwIOefPtOPRTVUTSuh1nIz905cfjHSDb4r
+         uHFfwK6bQZPYIBAJyfL9pwL/sIg6sMpzaDajXVewsAX9k4Cdx5//X8oKF++Gw7/uqkPw
+         z1bFqqGfo75Pk1UUFeSfLD7pigPA1eY7H7q/xbAT9sBdWTDF7YYHRU8Ntcem+IHso6Hb
+         0vtfeO8OOjZEyEjO2eE2Xek3bi9FAHRxIcuLcRRo/SVIWKDGPJFYlF0xkg9J4Qmloak4
+         qt3A==
+X-Gm-Message-State: AOAM530z52/m60LMe68MCfkoMZjx1uMmh+yu1Lm+xjJqTcCcp35QUoEv
+        YHmEcaBdCYvHPSPTWKJOsIlw+w==
+X-Google-Smtp-Source: ABdhPJx5c+3Xg5qF+vGQ769wR5tgBUCXJFBzPtw7IvPiy2SjtCdYHnvg1mO9ySVZ+HFM95K2Zb1MqQ==
+X-Received: by 2002:a63:1c42:: with SMTP id c2mr10937728pgm.296.1591398009780;
+        Fri, 05 Jun 2020 16:00:09 -0700 (PDT)
+Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id b140sm568974pfb.119.2020.06.05.16.00.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2020 16:00:08 -0700 (PDT)
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: [PATCH v6 0/8] firmware: add partial read support in request_firmware_into_buf
+Date:   Fri,  5 Jun 2020 15:59:51 -0700
+Message-Id: <20200605225959.12424-1-scott.branden@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/5/20 2:34 PM, Mimi Zohar wrote:
+This patch series adds partial read support in request_firmware_into_buf.
+In order to accept the enhanced API it has been requested that kernel
+selftests and upstreamed driver utilize the API enhancement and so
+are included in this patch series.
 
->>
->> Maybe I can use the audit_msgno "AUDIT_INTEGRITY_PCR" with appropriate
->> strings for "op" and "cause".
->>
->> Mimi - please let me know if you think this audit_msgno would be ok to
->> use. I see this code used, for instance, for boot aggregate measurement.
->>
->> integrity_audit_msg(AUDIT_INTEGRITY_PCR, NULL, boot_aggregate_name, op,
->> 		    audit_cause, result, 0);
-> 
-> Yes, AUDIT_INTEGRITY_PCR is also used for failures to add to the
-> measurement list.
-> 
+Also in this patch series is the addition of a new Broadcom VK driver
+utilizing the new request_firmware_into_buf enhanced API.
 
-thanks - i'll post an updated patch shortly.
+Further comment followed to add IMA support of the partial reads
+originating from request_firmware_into_buf calls.
 
-  -lakshmi
+Changes from v5:
+ - add IMA FIRMWARE_PARTIAL_READ support
+ - change kernel pread flags to enum
+ - removed legacy support from driver
+ - driver fixes
+Changes from v4:
+ - handle reset issues if card crashes
+ - allow driver to have min required msix
+ - add card utilization information
+Changes from v3:
+ - fix sparse warnings
+ - fix printf format specifiers for size_t
+ - fix 32-bit cross-compiling reports 32-bit shifts
+ - use readl/writel,_relaxed to access pci ioremap memory,
+  removed memory barriers and volatile keyword with such change
+ - driver optimizations for interrupt/poll functionalities
+Changes from v2:
+ - remove unnecessary code and mutex locks in lib/test_firmware.c
+ - remove VK_IOCTL_ACCESS_BAR support from driver and use pci sysfs instead
+ - remove bitfields
+ - remove Kconfig default m
+ - adjust formatting and some naming based on feedback
+ - fix error handling conditions
+ - use appropriate return codes
+ - use memcpy_toio instead of direct access to PCIE bar
+
+Scott Branden (8):
+  fs: introduce kernel_pread_file* support
+  firmware: add offset to request_firmware_into_buf
+  test_firmware: add partial read support for request_firmware_into_buf
+  firmware: test partial file reads of request_firmware_into_buf
+  bcm-vk: add bcm_vk UAPI
+  misc: bcm-vk: add Broadcom VK driver
+  MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
+  ima: add FIRMWARE_PARTIAL_READ support
+
+ MAINTAINERS                                   |    7 +
+ drivers/base/firmware_loader/firmware.h       |    5 +
+ drivers/base/firmware_loader/main.c           |   59 +-
+ drivers/misc/Kconfig                          |    1 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/bcm-vk/Kconfig                   |   29 +
+ drivers/misc/bcm-vk/Makefile                  |   11 +
+ drivers/misc/bcm-vk/bcm_vk.h                  |  408 +++++
+ drivers/misc/bcm-vk/bcm_vk_dev.c              | 1312 +++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_msg.c              | 1438 +++++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_msg.h              |  201 +++
+ drivers/misc/bcm-vk/bcm_vk_sg.c               |  271 ++++
+ drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
+ drivers/misc/bcm-vk/bcm_vk_tty.c              |  352 ++++
+ drivers/soc/qcom/mdt_loader.c                 |    7 +-
+ fs/exec.c                                     |  101 +-
+ include/linux/firmware.h                      |    8 +-
+ include/linux/fs.h                            |   30 +
+ include/uapi/linux/misc/bcm_vk.h              |   99 ++
+ lib/test_firmware.c                           |  144 +-
+ security/integrity/ima/ima_main.c             |   24 +-
+ .../selftests/firmware/fw_filesystem.sh       |   80 +
+ 22 files changed, 4595 insertions(+), 53 deletions(-)
+ create mode 100644 drivers/misc/bcm-vk/Kconfig
+ create mode 100644 drivers/misc/bcm-vk/Makefile
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_tty.c
+ create mode 100644 include/uapi/linux/misc/bcm_vk.h
+
+-- 
+2.17.1
 
