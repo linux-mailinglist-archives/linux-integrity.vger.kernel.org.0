@@ -2,111 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 270E61EF010
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2020 05:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D371EF174
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2020 08:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgFEDmE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Jun 2020 23:42:04 -0400
-Received: from lucky1.263xmail.com ([211.157.147.132]:37558 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726186AbgFEDmE (ORCPT
+        id S1725986AbgFEGly (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Jun 2020 02:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725280AbgFEGly (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Jun 2020 23:42:04 -0400
-X-Greylist: delayed 444 seconds by postgrey-1.27 at vger.kernel.org; Thu, 04 Jun 2020 23:42:02 EDT
-Received: from localhost (unknown [192.168.167.209])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 78CC7D7811;
-        Fri,  5 Jun 2020 11:34:33 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED: 0
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.246.122.242])
-        by smtp.263.net (postfix) whith ESMTP id P4798T139788501907200S1591328065994292_;
-        Fri, 05 Jun 2020 11:34:33 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <38c0c9d58f19c9a7ab9db7b0a70504c9>
-X-RL-SENDER: zhoubinbin@uniontech.com
-X-SENDER: zhoubinbin@uniontech.com
-X-LOGIN-NAME: zhoubinbin@uniontech.com
-X-FST-TO: peterhuewe@gmx.de
-X-SENDER-IP: 58.246.122.242
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-X-System-Flag: 0
-From:   Binbin Zhou <zhoubinbin@uniontech.com>
-To:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca
-Cc:     linux-integrity@vger.kernel.org, christophe.ricard@gmail.com,
-        zhoubb.aaron@gmail.com, Binbin Zhou <zhoubinbin@uniontech.com>
-Subject: [PATCH] tpm/st33zp24: fix spelling mistake "drescription" -> "description"
-Date:   Fri,  5 Jun 2020 11:34:15 +0800
-Message-Id: <20200605033415.8586-1-zhoubinbin@uniontech.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 5 Jun 2020 02:41:54 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D249C08C5C2;
+        Thu,  4 Jun 2020 23:41:54 -0700 (PDT)
+Received: by ozlabs.org (Postfix, from userid 1007)
+        id 49dY336tn3z9sT8; Fri,  5 Jun 2020 16:41:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=gibson.dropbear.id.au; s=201602; t=1591339311;
+        bh=4xfwcfWg3fYDkvoSshyHr3xzme+hp4xxgCEBnrJPiQA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IrxIHTOtq36n7hL5oemlz8t7GEAZpF+h8mTGZWroOBqSOJhlOm51dSAX5GS8JjdQw
+         WHPJOGd2sMRNJx6TszW1g1u49Df8BhbVSg50aDEDD0Kr11VDFLFtDyVVb6LQh/IizZ
+         9MyDft/8Rp9JAU6KU9KeE06jCzBBToAxZF9pO1V4=
+From:   David Gibson <david@gibson.dropbear.id.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>
+Cc:     Paul Mackerras <paulus@samba.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Gibson <david@gibson.dropbear.id.au>
+Subject: [PATCH] tpm: ibmvtpm: Wait for ready buffer before probing for TPM2 attributes
+Date:   Fri,  5 Jun 2020 16:37:19 +1000
+Message-Id: <20200605063719.456277-1-david@gibson.dropbear.id.au>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Trivial fix, the spelling of "drescription" is incorrect in function comment.
-Fix this.
+The tpm2_get_cc_attrs_tbl() call will result in TPM commands being issued,
+which will need the use of the internal command/response buffer.  But,
+we're issuing this *before* we've waited to make sure that buffer is
+allocated.
 
-Signed-off-by: Binbin Zhou <zhoubinbin@uniontech.com>
+This can result in intermittent failures to probe if the hypervisor / TPM
+implementation doesn't respond quickly enough.  I find it fails almost
+every time with an 8 vcpu guest under KVM with software emulated TPM.
+
+Fixes: 18b3670d79ae9 "tpm: ibmvtpm: Add support for TPM2"
+Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
 ---
- drivers/char/tpm/st33zp24/i2c.c      | 2 +-
- drivers/char/tpm/st33zp24/spi.c      | 4 ++--
- drivers/char/tpm/st33zp24/st33zp24.c | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/char/tpm/tpm_ibmvtpm.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-index 35333b65acd1..7c617edff4ca 100644
---- a/drivers/char/tpm/st33zp24/i2c.c
-+++ b/drivers/char/tpm/st33zp24/i2c.c
-@@ -210,7 +210,7 @@ static int st33zp24_i2c_request_resources(struct i2c_client *client)
+diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+index 09fe45246b8c..994385bf37c0 100644
+--- a/drivers/char/tpm/tpm_ibmvtpm.c
++++ b/drivers/char/tpm/tpm_ibmvtpm.c
+@@ -683,13 +683,6 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+ 	if (rc)
+ 		goto init_irq_cleanup;
  
- /*
-  * st33zp24_i2c_probe initialize the TPM device
-- * @param: client, the i2c_client drescription (TPM I2C description).
-+ * @param: client, the i2c_client description (TPM I2C description).
-  * @param: id, the i2c_device_id struct.
-  * @return: 0 in case of success.
-  *	 -1 in other case.
-diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-index 26e09de50f1e..a75dafd39445 100644
---- a/drivers/char/tpm/st33zp24/spi.c
-+++ b/drivers/char/tpm/st33zp24/spi.c
-@@ -329,7 +329,7 @@ static int st33zp24_spi_request_resources(struct spi_device *dev)
+-	if (!strcmp(id->compat, "IBM,vtpm20")) {
+-		chip->flags |= TPM_CHIP_FLAG_TPM2;
+-		rc = tpm2_get_cc_attrs_tbl(chip);
+-		if (rc)
+-			goto init_irq_cleanup;
+-	}
+-
+ 	if (!wait_event_timeout(ibmvtpm->crq_queue.wq,
+ 				ibmvtpm->rtce_buf != NULL,
+ 				HZ)) {
+@@ -697,6 +690,13 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+ 		goto init_irq_cleanup;
+ 	}
  
- /*
-  * st33zp24_spi_probe initialize the TPM device
-- * @param: dev, the spi_device drescription (TPM SPI description).
-+ * @param: dev, the spi_device description (TPM SPI description).
-  * @return: 0 in case of success.
-  *	 or a negative value describing the error.
-  */
-@@ -378,7 +378,7 @@ static int st33zp24_spi_probe(struct spi_device *dev)
- 
- /*
-  * st33zp24_spi_remove remove the TPM device
-- * @param: client, the spi_device drescription (TPM SPI description).
-+ * @param: client, the spi_device description (TPM SPI description).
-  * @return: 0 in case of success.
-  */
- static int st33zp24_spi_remove(struct spi_device *dev)
-diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
-index 37bb13f516be..4ec10ab5e576 100644
---- a/drivers/char/tpm/st33zp24/st33zp24.c
-+++ b/drivers/char/tpm/st33zp24/st33zp24.c
-@@ -502,7 +502,7 @@ static const struct tpm_class_ops st33zp24_tpm = {
- 
- /*
-  * st33zp24_probe initialize the TPM device
-- * @param: client, the i2c_client drescription (TPM I2C description).
-+ * @param: client, the i2c_client description (TPM I2C description).
-  * @param: id, the i2c_device_id struct.
-  * @return: 0 in case of success.
-  *	 -1 in other case.
++	if (!strcmp(id->compat, "IBM,vtpm20")) {
++		chip->flags |= TPM_CHIP_FLAG_TPM2;
++		rc = tpm2_get_cc_attrs_tbl(chip);
++		if (rc)
++			goto init_irq_cleanup;
++	}
++
+ 	return tpm_chip_register(chip);
+ init_irq_cleanup:
+ 	do {
 -- 
-2.17.1
-
-
+2.26.2
 
