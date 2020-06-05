@@ -2,79 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A4D1EFFEE
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2020 20:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F22E1F000E
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2020 20:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727002AbgFEShx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Jun 2020 14:37:53 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45536 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726294AbgFEShw (ORCPT
+        id S1728175AbgFESqc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Jun 2020 14:46:32 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:62166 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728129AbgFESqb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Jun 2020 14:37:52 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 055IW5Gv123119;
-        Fri, 5 Jun 2020 14:37:27 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31f9dfg0s5-1
+        Fri, 5 Jun 2020 14:46:31 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 055IWlAX122783;
+        Fri, 5 Jun 2020 14:46:29 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31fjmfj308-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Jun 2020 14:37:27 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 055IZdZb142400;
-        Fri, 5 Jun 2020 14:37:26 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31f9dfg0rc-1
+        Fri, 05 Jun 2020 14:46:28 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 055IjoFO022049;
+        Fri, 5 Jun 2020 18:46:25 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 31f2q411bj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Jun 2020 14:37:26 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 055IZoGE002136;
-        Fri, 5 Jun 2020 18:37:24 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 31bf47d60d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Jun 2020 18:37:24 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 055IbLk263242476
+        Fri, 05 Jun 2020 18:46:25 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 055Ij8xN62390710
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 5 Jun 2020 18:37:21 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D0E074C044;
-        Fri,  5 Jun 2020 18:37:21 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CDBF64C04A;
-        Fri,  5 Jun 2020 18:37:18 +0000 (GMT)
+        Fri, 5 Jun 2020 18:45:08 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E1E442041;
+        Fri,  5 Jun 2020 18:46:23 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9F1EE4204C;
+        Fri,  5 Jun 2020 18:46:22 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.181.45])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  5 Jun 2020 18:37:18 +0000 (GMT)
-Message-ID: <1591382238.5816.27.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/3] fs: reduce export usage of kerne_read*() calls
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  5 Jun 2020 18:46:22 +0000 (GMT)
+Message-ID: <1591382782.5816.36.camel@linux.ibm.com>
+Subject: Re: [PATCH] IMA: Add log statements for failure conditions
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Scott Branden <scott.branden@broadcom.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>, viro@zeniv.linux.org.uk,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        ebiederm@xmission.com, jeyu@kernel.org, jmorris@namei.org,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, nayna@linux.ibm.com,
-        dan.carpenter@oracle.com, skhan@linuxfoundation.org,
-        geert@linux-m68k.org, tglx@linutronix.de, bauerman@linux.ibm.com,
-        dhowells@redhat.com, linux-integrity@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kexec@lists.infradead.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 05 Jun 2020 14:37:18 -0400
-In-Reply-To: <1c68c0c7-1b0a-dfec-0e50-1b65eedc3dc7@broadcom.com>
-References: <20200513152108.25669-1-mcgrof@kernel.org>
-         <20200513181736.GA24342@infradead.org>
-         <20200515212933.GD11244@42.do-not-panic.com>
-         <20200518062255.GB15641@infradead.org>
-         <1589805462.5111.107.camel@linux.ibm.com>
-         <7525ca03-def7-dfe2-80a9-25270cb0ae05@broadcom.com>
-         <202005221551.5CA1372@keescook>
-         <c48a80f5-a09c-6747-3db8-be23a260a0cb@broadcom.com>
-         <1590288736.5111.431.camel@linux.ibm.com>
-         <1c68c0c7-1b0a-dfec-0e50-1b65eedc3dc7@broadcom.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org
+Cc:     tusharsu@linux.microsoft.com, linux-kernel@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>
+Date:   Fri, 05 Jun 2020 14:46:22 -0400
+In-Reply-To: <20200604163243.2575-1-nramas@linux.microsoft.com>
+References: <20200604163243.2575-1-nramas@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
@@ -82,56 +56,68 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-05_05:2020-06-04,2020-06-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- adultscore=0 impostorscore=0 phishscore=0 malwarescore=0 clxscore=1011
- suspectscore=0 cotscore=-2147483648 priorityscore=1501 mlxlogscore=984
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006050134
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=2
+ cotscore=-2147483648 priorityscore=1501 spamscore=0 mlxlogscore=999
+ phishscore=0 clxscore=1011 malwarescore=0 adultscore=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006050137
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-06-05 at 11:15 -0700, Scott Branden wrote:
-> Hi Mimi,
+[Cc'ing Paul Moore]
+
+Hi Lakshmi,
+
+On Thu, 2020-06-04 at 09:32 -0700, Lakshmi Ramasubramanian wrote:
+> The final log statement in process_buffer_measurement() for failure
+> condition is at debug level. This does not log the message unless
+> the system log level is raised which would significantly increase
+> the messages in the system log. Change this log message to error level,
+> and add eventname and ima_hooks enum to the message for better triaging
+> failures in the function.
 > 
-> On 2020-05-23 7:52 p.m., Mimi Zohar wrote:
-> > Scott, the change should be straight forward.  The additional patch
-> > needs to:
-> > - define a new kernel_read_file_id enumeration, like
-> > FIRMWARE_PARTIAL_READ.
-> > - Currently ima_read_file() has a comment about pre-allocated firmware
-> > buffers.  Update ima_read_file() to call process_measurement() for the
-> > new enumeration FIRMWARE_PARTIAL_READ and update ima_post_read_file()
-> > to return immediately.
-> Should this be what is in ima_read_file?
-> {
->      enum ima_hooks func;
->      u32 secid;
-
-Please don't remove the existing comment.
-
->      if (read_id != READING_FIRMWARE_PARTIAL_READ)
->          return 0;
+> ima_alloc_key_entry() does not log a message for failure condition.
+> Add an error message for failure condition in this function.
 > 
->      if (!file) { /* should never happen */
->          if (ima_appraise & IMA_APPRAISE_ENFORCE)
->              return -EACCES;
->          return 0;
->      }
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
-This checks for any IMA appraise rule.  You want to enforce firmware
-signature checking only if there is a firmware appraise rule.  Refer
-to ima_post_read_file().
-
->      security_task_getsecid(current, &secid);
->      return process_measurement(file, current_cred(), secid, NULL,
->                     0, MAY_READ, FILE_CHECK);
-
-The read_idmap enumeration should be updated similar to the other
-firmware.  Keep the code generic.  Refer to ima_post_read_file().
- func will be defined as FIRMWARE_CHECK.
-
-thanks,
+These messages should probably be turned into audit messages.  Look at
+integerity_audit_msg().
 
 Mimi
+
+> ---
+>  security/integrity/ima/ima_main.c       | 3 ++-
+>  security/integrity/ima/ima_queue_keys.c | 2 ++
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 9d0abedeae77..3b371f31597b 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -756,7 +756,8 @@ void process_buffer_measurement(const void *buf, int size,
+>  
+>  out:
+>  	if (ret < 0)
+> -		pr_devel("%s: failed, result: %d\n", __func__, ret);
+> +		pr_err("%s failed. eventname: %s, func: %d, result: %d\n",
+> +		       __func__, eventname, func, ret);
+>  
+>  	return;
+>  }
+> diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
+> index cb3e3f501593..e51d0eb08d8a 100644
+> --- a/security/integrity/ima/ima_queue_keys.c
+> +++ b/security/integrity/ima/ima_queue_keys.c
+> @@ -88,6 +88,8 @@ static struct ima_key_entry *ima_alloc_key_entry(struct key *keyring,
+>  
+>  out:
+>  	if (rc) {
+> +		pr_err("%s failed. keyring: %s, result: %d\n",
+> +		       __func__, keyring->description, rc);
+>  		ima_free_key_entry(entry);
+>  		entry = NULL;
+>  	}
+
