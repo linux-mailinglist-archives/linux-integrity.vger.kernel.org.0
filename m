@@ -2,70 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBB51EFA19
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2020 16:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241AA1EFBBF
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2020 16:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbgFEOLB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Jun 2020 10:11:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728066AbgFEOK6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Jun 2020 10:10:58 -0400
-Received: from localhost (unknown [137.135.114.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D1F7A2086A;
-        Fri,  5 Jun 2020 14:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591366258;
-        bh=bwcOqHPdwKm0azdKeMl+I6C0kfcEZX9lWuHKAHqXtXo=;
-        h=Date:From:To:To:To:CC:Cc:Subject:In-Reply-To:References:From;
-        b=SuvqyscqF4nilAShW2pvIv6GkFCid5QA7Ux6WRR/16JBaxzhVV6s9Ugc/ZFxtkj/U
-         +hdwQm9nMGbgwleVa8oQ85wdnbTvS3tNZhq8ltoNpg5N+eSakXl+UQaqJ6eeLVanVJ
-         zfcAkMO+Qv1xy9JisXk3GJVk2AKByNlkDP3AgwUM=
-Date:   Fri, 05 Jun 2020 14:10:57 +0000
-From:   Sasha Levin <sashal@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <tiwai@suse.de>
-CC:     <linux-integrity@vger.kernel.org>
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] ima: Directly assign the ima_default_policy pointer to ima_rules
-In-Reply-To: <20200603150821.8607-1-roberto.sassu@huawei.com>
-References: <20200603150821.8607-1-roberto.sassu@huawei.com>
-Message-Id: <20200605141057.D1F7A2086A@mail.kernel.org>
+        id S1727839AbgFEOqf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Jun 2020 10:46:35 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34886 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727113AbgFEOqf (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 5 Jun 2020 10:46:35 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 055EW5tV073719
+        for <linux-integrity@vger.kernel.org>; Fri, 5 Jun 2020 10:46:34 -0400
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31fk7dsg8a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 05 Jun 2020 10:46:34 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 055Eiq1S023972
+        for <linux-integrity@vger.kernel.org>; Fri, 5 Jun 2020 14:46:33 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma03dal.us.ibm.com with ESMTP id 31bf4ax85v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 05 Jun 2020 14:46:33 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 055EjW0Y46006708
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-integrity@vger.kernel.org>; Fri, 5 Jun 2020 14:45:32 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 53DD2112064
+        for <linux-integrity@vger.kernel.org>; Fri,  5 Jun 2020 14:45:32 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B868112062
+        for <linux-integrity@vger.kernel.org>; Fri,  5 Jun 2020 14:45:32 +0000 (GMT)
+Received: from [9.80.238.131] (unknown [9.80.238.131])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP
+        for <linux-integrity@vger.kernel.org>; Fri,  5 Jun 2020 14:45:32 +0000 (GMT)
+To:     linux-integrity@vger.kernel.org
+From:   Ken Goldman <kgold@linux.ibm.com>
+Subject: TPM resource manager separation
+Message-ID: <6693966c-132e-c35a-af08-7513cab33fc3@linux.ibm.com>
+Date:   Fri, 5 Jun 2020 10:45:30 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-05_04:2020-06-04,2020-06-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ suspectscore=1 mlxlogscore=686 bulkscore=0 spamscore=0 priorityscore=1501
+ cotscore=-2147483648 phishscore=0 impostorscore=0 lowpriorityscore=0
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006050107
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi
+Low level question:
 
-[This is an automated email]
+Does the RM keep track of which handle / object belongs to which process?
 
-This commit has been processed because it contains a "Fixes:" tag
-fixing commit: 07f6a79415d7 ("ima: add appraise action keywords and default rules").
+E.g., process A loads a key and gets handle 80ffffff.  Process B then 
+tries to do an operation using handle 80ffffff.  Will the RM reject it?
 
-The bot has tested the following trees: v5.6.15, v5.4.43, v4.19.125, v4.14.182, v4.9.225, v4.4.225.
+High level question:
 
-v5.6.15: Build OK!
-v5.4.43: Build OK!
-v4.19.125: Build OK!
-v4.14.182: Failed to apply! Possible dependencies:
-    Unable to calculate
-
-v4.9.225: Failed to apply! Possible dependencies:
-    Unable to calculate
-
-v4.4.225: Failed to apply! Possible dependencies:
-    38d859f991f3 ("IMA: policy can now be updated multiple times")
-    95ee08fa373b ("ima: require signed IMA policy")
-
-
-NOTE: The patch will not be queued to stable trees until it is upstream.
-
-How should we proceed with this patch?
-
--- 
-Thanks
-Sasha
+Does the RM have any design or capability documentation?  Is there a 
+place to get answers other than this mailing list.
