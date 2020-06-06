@@ -2,67 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F36AD1F045D
-	for <lists+linux-integrity@lfdr.de>; Sat,  6 Jun 2020 05:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14F01F0465
+	for <lists+linux-integrity@lfdr.de>; Sat,  6 Jun 2020 05:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728515AbgFFDOB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Jun 2020 23:14:01 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:33698 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728506AbgFFDOA (ORCPT
+        id S1728527AbgFFDUS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Jun 2020 23:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728523AbgFFDUR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Jun 2020 23:14:00 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4A97520B7185;
-        Fri,  5 Jun 2020 20:14:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4A97520B7185
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1591413240;
-        bh=Y31Z41DsqlncijtP1cG3/HsNjUnFLOxU3PHh2sW5648=;
-        h=To:Cc:From:Subject:Date:From;
-        b=jyRSPsqG7nH5YeTTvHYszbNMgkadok1PC0sMmbZU62jXZ2pMzFDqApkmDh7mrCiE1
-         VES2dd7jqV+uZxO+XL1IbwVwTWQDgo7BtoB2gu7saC/mgVzdszc1l0jkViLizllbli
-         2Ns6OolL4FsC1rYfygUDiikNm7YbwPEZ1GPblhcU=
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-audit@redhat.com
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Subject: result logged in integrity audit message
-Message-ID: <4c41ce1e-3f97-5b14-8152-5411a3debb57@linux.microsoft.com>
-Date:   Fri, 5 Jun 2020 20:13:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Fri, 5 Jun 2020 23:20:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CE4C08C5C2;
+        Fri,  5 Jun 2020 20:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QCHbUkMYkrQJAPIqPlZ6VLNz3QmvlT+5Bsoz5d+kZkc=; b=HrDnOjP8lxTV2gp0+5S/V/+6Fe
+        TJRoS3b62IqjQPH+Zb5/opZi+c4jc1QX24zhotF/L58RfchUFUuIGkNIlD9CbsM98qcbucS/ae8bB
+        wMiWijV5Dl1Cpo3BzYy6ptUO5/P8TVIg7LXzYl7GTSLgsP9bSReADMpSbfCCf+8sFx/j92lJhM870
+        +2YkvOm2FukwHVomLONhTQdt7rzMaK8wCbonT+O+IbtaVvC9HBtlRbGpCskkxDG+iR6N7fKSJzAfa
+        Df6OTAVzzn2VTbeklQUgl8LO6FiQPsUBExeD1fuZHBrmv8RRRxtKy7MUbpguf6N/UtXwTMlkil0lB
+        B59V0GAQ==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jhPNT-0001pB-IT; Sat, 06 Jun 2020 03:20:11 +0000
+Date:   Fri, 5 Jun 2020 20:20:11 -0700
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v6 1/8] fs: introduce kernel_pread_file* support
+Message-ID: <20200606032011.GM19604@bombadil.infradead.org>
+References: <20200605225959.12424-1-scott.branden@broadcom.com>
+ <20200605225959.12424-2-scott.branden@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200605225959.12424-2-scott.branden@broadcom.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+On Fri, Jun 05, 2020 at 03:59:52PM -0700, Scott Branden wrote:
+> -int kernel_read_file(struct file *file, void **buf, loff_t *size,
+> -		     loff_t max_size, enum kernel_read_file_id id)
+> -{
+> -	loff_t i_size, pos;
+> +int kernel_pread_file(struct file *file, void **buf, loff_t *size,
+> +		      loff_t pos, loff_t max_size,
+> +		      enum kernel_pread_opt opt,
+> +		      enum kernel_read_file_id id)
 
-In integrity audit message function the inverse of "result" is being 
-logged for "res=". Please see below. Is this intentional?
+What is this 'kernel_pread_opt' foolishness?  Why not just pass in
+~0UL as max_size if you want the entire file?
 
-void integrity_audit_msg(int audit_msgno, struct inode *inode,
-			 const unsigned char *fname, const char *op,
-			 const char *cause, int result, int audit_info)
-{
+> -int kernel_read_file_from_path_initns(const char *path, void **buf,
+> -				      loff_t *size, loff_t max_size,
+> -				      enum kernel_read_file_id id)
+> +extern int kernel_pread_file_from_path_initns(const char *path, void **buf,
 
-  ...
-  audit_log_format(ab, " res=%d", !result);
-}
+extern?  really?  i'm shocked gcc doesn't vomit on that.
 
-The callers of this function are passing an error code (-ENOMEM, 
--EINVAL, etc.) in the "result" parameter. But that error code is lost - 
-instead "res" is set to 0.
-
-For example,
-
-audit: type=1804 audit(1591411737.631:3): pid=1 uid=0 auid=4294967295 
-ses=4294967295 subj=kernel op=ima_alloc_key_entry cause=ENOMEM 
-comm="swapper/0" name=".builtin_trusted_keys" res=0
-
-thanks,
-  -lakshmi
