@@ -2,114 +2,95 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A387B1F1056
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2020 01:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10D81F106C
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2020 01:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727916AbgFGXLX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 7 Jun 2020 19:11:23 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:56981 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727804AbgFGXLV (ORCPT
+        id S1727877AbgFGXde (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 7 Jun 2020 19:33:34 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:34008 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727786AbgFGXdd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 7 Jun 2020 19:11:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591571479;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=KSlntCbluVS76b3g/z4HXEV6a3OnchHRiFcS+IdPIFA=;
-        b=Jhdt8UIxqkUiOaRxrumbSpK928uwx3w/XU1AQd+xOSkimRFBEiuDsDRfW7ILNdSzYdOf6I
-        5tiEMuilmuLsJ990C9RF1qoQQZrcUNN944wTCI+xiaoBpDllPl2UZFbNT0mfjO936lKRCk
-        lf9AeX1gX6UgVYVtjKq7WdFV0HM2OuE=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-71--c84XtniPZ2zJNW4D26ITA-1; Sun, 07 Jun 2020 19:11:16 -0400
-X-MC-Unique: -c84XtniPZ2zJNW4D26ITA-1
-Received: by mail-qk1-f200.google.com with SMTP id x68so12917653qkd.1
-        for <linux-integrity@vger.kernel.org>; Sun, 07 Jun 2020 16:11:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=KSlntCbluVS76b3g/z4HXEV6a3OnchHRiFcS+IdPIFA=;
-        b=BuVRdjG3osEGJiRsseCPXisDA7NswUNFS3fq6E3ChzYocjP/kuwYKradPjKZBYrF2l
-         2uWkLZ6xdVB0mJ6CN8jVsRqi0ik/Ve+Pc75uon1jEXd3Wk8G42pAUrqNr1YHSbUUhD1h
-         PHo4tYyBWDcWVUimrhXoWqB1QaeJkrVbFd/TMPq5VU5n8pazdU+ylKU48dApb1qR0m5e
-         gvjPiY/jZsQBnvUzHW49WKavdIm9JYpi6eyjNxfKteNpPP/JPB4AJKeRArDdd2oBD1Y+
-         dh7Q6BF8hzcJyBDbsF4djpvQDLkA6KDOYG+PEjzAxGh2A2mdokQ8/c86s5iRf6l/7bjp
-         lalw==
-X-Gm-Message-State: AOAM530qAVOFVofmWrH2t1be5QJjD4tmyTDQqMd+aShwi0ijpQ+OqiA6
-        3RMhz33yQ9SHKGSr8wa5oCaBx6yzCaL1+X1VdtSq5MRH/ZFDoGj7a/93gvOdi2k+f9B0eq74Xx6
-        ZWSwGTzdWVMQA4qhxu5vFub13lf8l
-X-Received: by 2002:ac8:5648:: with SMTP id 8mr20542604qtt.280.1591571475456;
-        Sun, 07 Jun 2020 16:11:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwpekLdyoLa9wr0qytkS/wYSsoLBrj0PEk8/q8fKvEGGc7LPHx1/CyhX1FGA6tWiJ6toLo+tQ==
-X-Received: by 2002:ac8:5648:: with SMTP id 8mr20542575qtt.280.1591571475209;
-        Sun, 07 Jun 2020 16:11:15 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id b4sm5249646qka.133.2020.06.07.16.11.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2020 16:11:14 -0700 (PDT)
-Date:   Sun, 7 Jun 2020 16:11:13 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     torvalds@linux-foundation.org, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        silviu.vlasceanu@huawei.com, stable@vger.kernel.org
-Subject: Re: [PATCH] ima: Remove __init annotation from ima_pcrread()
-Message-ID: <20200607231113.mocsa7wphkpleh7a@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: Roberto Sassu <roberto.sassu@huawei.com>,
-        torvalds@linux-foundation.org, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        silviu.vlasceanu@huawei.com, stable@vger.kernel.org
-References: <20200607210029.30601-1-roberto.sassu@huawei.com>
+        Sun, 7 Jun 2020 19:33:33 -0400
+Received: from prsriva-linux.hsd1.wa.comcast.net (c-24-19-135-168.hsd1.wa.comcast.net [24.19.135.168])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C1D9520B717B;
+        Sun,  7 Jun 2020 16:33:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C1D9520B717B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1591572812;
+        bh=DB6Cl6RHr8cekVcsDZkbuYBtSszswuXLUSqvQUhO2ps=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jf58nVlwSpSms4FyBpvdpS5L/b68k74OADgHL6/JRsKRN65DEQGu08m5Y9vgZjXz7
+         UMgDudDCE1Jx4rfifAEkUog31G9m/W1iUpE4SjPKR7or5h81nOg9rOO66POwl4ho6b
+         Q+6FdMlHCNX3RzSGQ7tuKYlzVzkT1RmxfjrADR0Y=
+From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, robh+dt@kernel.org,
+        frowand.list@gmail.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, vincenzo.frascino@arm.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, james.morse@arm.com,
+        bhsharma@redhat.com, mbrugger@suse.com, hsinyi@chromium.org,
+        tao.li@vivo.com, christophe.leroy@c-s.fr,
+        gregkh@linuxfoundation.org, nramas@linux.microsoft.com,
+        prsriva@linux.microsoft.com, tusharsu@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: [v1 PATCH 0/2] Adding support to carry IMA measurement logs
+Date:   Sun,  7 Jun 2020 16:33:21 -0700
+Message-Id: <20200607233323.22375-1-prsriva@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200607210029.30601-1-roberto.sassu@huawei.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun Jun 07 20, Roberto Sassu wrote:
->Commit 6cc7c266e5b4 ("ima: Call ima_calc_boot_aggregate() in
->ima_eventdigest_init()") added a call to ima_calc_boot_aggregate() so that
->the digest can be recalculated for the boot_aggregate measurement entry if
->the 'd' template field has been requested. For the 'd' field, only SHA1 and
->MD5 digests are accepted.
->
->Given that ima_eventdigest_init() does not have the __init annotation, all
->functions called should not have it. This patch removes __init from
->ima_pcrread().
->
->Cc: stable@vger.kernel.org
->Fixes:  6cc7c266e5b4 ("ima: Call ima_calc_boot_aggregate() in ima_eventdigest_init()")
->Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
->Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+IMA during kexec(kexec file load) verifies the kernel signature and measures
+the signature of the kernel. The signature in the logs can be used to verfiy the 
+authenticity of the kernel. The logs don not get carried over kexec and thus
+remote attesation cannot verify the signature of the running kernel.
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Add a new chosen node entry linux,ima-kexec-buffer to hold the address and
+the size of the memory reserved to carry the IMA measurement log.
 
->---
-> security/integrity/ima/ima_crypto.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
->index ba5cc3264240..220b14920c37 100644
->--- a/security/integrity/ima/ima_crypto.c
->+++ b/security/integrity/ima/ima_crypto.c
->@@ -786,7 +786,7 @@ int ima_calc_buffer_hash(const void *buf, loff_t len,
-> 	return calc_buffer_shash(buf, len, hash);
-> }
->
->-static void __init ima_pcrread(u32 idx, struct tpm_digest *d)
->+static void ima_pcrread(u32 idx, struct tpm_digest *d)
-> {
-> 	if (!ima_tpm_chip)
-> 		return;
->-- 
->2.17.1
->
+Tested on:
+  arm64 with Uboot
+
+Changelog:
+
+v1:
+  Refactoring carrying over IMA measuremnet logs over Kexec. This patch
+    moves the non-architecture specific code out of powerpc and adds to
+    security/ima.(Suggested by Thiago)
+  Add Documentation regarding the ima-kexec-buffer node in the chosen
+    node documentation
+
+v0:
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
+
+ Documentation/devicetree/bindings/chosen.txt |  17 +++
+ arch/arm64/Kconfig                           |   1 +
+ arch/arm64/include/asm/ima.h                 |  24 +++
+ arch/arm64/include/asm/kexec.h               |   3 +
+ arch/arm64/kernel/machine_kexec_file.c       |  47 +++++-
+ arch/powerpc/include/asm/ima.h               |   9 --
+ arch/powerpc/kexec/ima.c                     | 117 +-------------
+ security/integrity/ima/ima_kexec.c           | 151 +++++++++++++++++++
+ 8 files changed, 236 insertions(+), 133 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+
+-- 
+2.25.1
 
