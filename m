@@ -2,38 +2,39 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AB81F2354
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jun 2020 01:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EA51F2362
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jun 2020 01:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729627AbgFHXNw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Jun 2020 19:13:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33780 "EHLO mail.kernel.org"
+        id S1729718AbgFHXOI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Jun 2020 19:14:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729615AbgFHXNv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:13:51 -0400
+        id S1729706AbgFHXOH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:14:07 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5673821527;
-        Mon,  8 Jun 2020 23:13:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D6772212CC;
+        Mon,  8 Jun 2020 23:14:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658031;
-        bh=PEqJ5eyUtSxJhYnhnCrIAr5eo6UL8Kd/34b2Bw2Fusg=;
+        s=default; t=1591658046;
+        bh=BJ0tO64MAidki1KuaMNtI00MVaxBlWf8j4Gm2u/+cZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TOPdiM5vRSJossSVMACGCX9VTNDMH+7/XUPzb539+Ba+IVj2bGzQnwtiC9cTU8xWS
-         gUC5AJ2Ho4smMKaw5XFoYcID9OzSups7AdBLKv+9nNbH/QHmLwB/xEyH1mS1RYE7Xm
-         Qg0s6Y5MU1kXS06qF0/4WrGRjJCxwkMQ21kBWPFc=
+        b=Keqv0rS70tvJzYTwWANaKiPmi54Ypdya445tlYFcciOTLJH6xRaaWqYs5MqJPbWsC
+         gEBkMZVmczSQ4iPxRWiPghrXnZSJmHkqQieUTGRyXSnkGNWe6u+mvNaUNGfQJxEwdD
+         n4OHRa5oPP4RyvzmVfbrb0mYy9WFBfihFWdKz6Zs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 082/606] ima: Set file->f_mode instead of file->f_flags in ima_calc_file_hash()
-Date:   Mon,  8 Jun 2020 19:03:27 -0400
-Message-Id: <20200608231211.3363633-82-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 095/606] evm: Fix a small race in init_desc()
+Date:   Mon,  8 Jun 2020 19:03:40 -0400
+Message-Id: <20200608231211.3363633-95-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -46,70 +47,96 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 0014cc04e8ec077dc482f00c87dfd949cfe2b98f ]
+[ Upstream commit 8433856947217ebb5697a8ff9c4c9cad4639a2cf ]
 
-Commit a408e4a86b36 ("ima: open a new file instance if no read
-permissions") tries to create a new file descriptor to calculate a file
-digest if the file has not been opened with O_RDONLY flag. However, if a
-new file descriptor cannot be obtained, it sets the FMODE_READ flag to
-file->f_flags instead of file->f_mode.
+The IS_ERR_OR_NULL() function has two conditions and if we got really
+unlucky we could hit a race where "ptr" started as an error pointer and
+then was set to NULL.  Both conditions would be false even though the
+pointer at the end was NULL.
 
-This patch fixes this issue by replacing f_flags with f_mode as it was
-before that commit.
+This patch fixes the problem by ensuring that "*tfm" can only be NULL
+or valid.  I have introduced a "tmp_tfm" variable to make that work.  I
+also reversed a condition and pulled the code in one tab.
 
-Cc: stable@vger.kernel.org # 4.20.x
-Fixes: a408e4a86b36 ("ima: open a new file instance if no read permissions")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reviewed-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
+Reported-by: Roberto Sassu <roberto.sassu@huawei.com>
+Fixes: 53de3b080d5e ("evm: Check also if *tfm is an error pointer in init_desc()")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
+Acked-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/integrity/ima/ima_crypto.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ security/integrity/evm/evm_crypto.c | 44 ++++++++++++++---------------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 7967a6904851..e8fa23cd4a6c 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -413,7 +413,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
- 	loff_t i_size;
- 	int rc;
- 	struct file *f = file;
--	bool new_file_instance = false, modified_flags = false;
-+	bool new_file_instance = false, modified_mode = false;
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index 302adeb2d37b..cc826c2767a3 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -75,7 +75,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+ {
+ 	long rc;
+ 	const char *algo;
+-	struct crypto_shash **tfm;
++	struct crypto_shash **tfm, *tmp_tfm;
+ 	struct shash_desc *desc;
  
- 	/*
- 	 * For consistency, fail file's opened with the O_DIRECT flag on
-@@ -433,13 +433,13 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
- 		f = dentry_open(&file->f_path, flags, file->f_cred);
- 		if (IS_ERR(f)) {
- 			/*
--			 * Cannot open the file again, lets modify f_flags
-+			 * Cannot open the file again, lets modify f_mode
- 			 * of original and continue
- 			 */
- 			pr_info_ratelimited("Unable to reopen file for reading.\n");
- 			f = file;
--			f->f_flags |= FMODE_READ;
--			modified_flags = true;
-+			f->f_mode |= FMODE_READ;
-+			modified_mode = true;
- 		} else {
- 			new_file_instance = true;
+ 	if (type == EVM_XATTR_HMAC) {
+@@ -93,31 +93,31 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+ 		algo = hash_algo_name[hash_algo];
+ 	}
+ 
+-	if (IS_ERR_OR_NULL(*tfm)) {
+-		mutex_lock(&mutex);
+-		if (*tfm)
+-			goto out;
+-		*tfm = crypto_alloc_shash(algo, 0, CRYPTO_NOLOAD);
+-		if (IS_ERR(*tfm)) {
+-			rc = PTR_ERR(*tfm);
+-			pr_err("Can not allocate %s (reason: %ld)\n", algo, rc);
+-			*tfm = NULL;
++	if (*tfm)
++		goto alloc;
++	mutex_lock(&mutex);
++	if (*tfm)
++		goto unlock;
++
++	tmp_tfm = crypto_alloc_shash(algo, 0, CRYPTO_NOLOAD);
++	if (IS_ERR(tmp_tfm)) {
++		pr_err("Can not allocate %s (reason: %ld)\n", algo,
++		       PTR_ERR(tmp_tfm));
++		mutex_unlock(&mutex);
++		return ERR_CAST(tmp_tfm);
++	}
++	if (type == EVM_XATTR_HMAC) {
++		rc = crypto_shash_setkey(tmp_tfm, evmkey, evmkey_len);
++		if (rc) {
++			crypto_free_shash(tmp_tfm);
+ 			mutex_unlock(&mutex);
+ 			return ERR_PTR(rc);
  		}
-@@ -457,8 +457,8 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
- out:
- 	if (new_file_instance)
- 		fput(f);
--	else if (modified_flags)
--		f->f_flags &= ~FMODE_READ;
-+	else if (modified_mode)
-+		f->f_mode &= ~FMODE_READ;
- 	return rc;
- }
- 
+-		if (type == EVM_XATTR_HMAC) {
+-			rc = crypto_shash_setkey(*tfm, evmkey, evmkey_len);
+-			if (rc) {
+-				crypto_free_shash(*tfm);
+-				*tfm = NULL;
+-				mutex_unlock(&mutex);
+-				return ERR_PTR(rc);
+-			}
+-		}
+-out:
+-		mutex_unlock(&mutex);
+ 	}
+-
++	*tfm = tmp_tfm;
++unlock:
++	mutex_unlock(&mutex);
++alloc:
+ 	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
+ 			GFP_KERNEL);
+ 	if (!desc)
 -- 
 2.25.1
 
