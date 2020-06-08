@@ -2,129 +2,164 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4581F198B
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2020 15:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDFA1F199A
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2020 15:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729051AbgFHNAz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Jun 2020 09:00:55 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:22455 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729027AbgFHNAy (ORCPT
+        id S1729109AbgFHNER (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Jun 2020 09:04:17 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5900 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728245AbgFHNEQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Jun 2020 09:00:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591621253;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=smClL9MNx5dmbsURmN/I6y5n/kHtT+SYrTqz4fFY4K8=;
-        b=SK9eoMVzvmAe/mxFA/lEfPrpO3V6KWoGKkW9lZ7wUvXz41RkHD6uirJ/RqdPnmPdRnfE9B
-        NVoBUt2kv74Co0qeaND2uGcsskjB1Rll66QLbj4SoygDyNp+V05f2/P+pnCH7lGW+oEVDd
-        V4QFYnXNSH71fR6z9WZaDYkEWXEYONM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-369-WNG0CMDFPKGz4ZMvXG_1Kg-1; Mon, 08 Jun 2020 09:00:25 -0400
-X-MC-Unique: WNG0CMDFPKGz4ZMvXG_1Kg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A0040102CC32;
-        Mon,  8 Jun 2020 13:00:23 +0000 (UTC)
-Received: from localhost (ovpn-116-92.gru2.redhat.com [10.97.116.92])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A14E4768B4;
-        Mon,  8 Jun 2020 13:00:21 +0000 (UTC)
-Date:   Mon, 8 Jun 2020 10:00:20 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     torvalds@linux-foundation.org, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        silviu.vlasceanu@huawei.com, stable@vger.kernel.org
-Subject: Re: [PATCH] ima: Remove __init annotation from ima_pcrread()
-Message-ID: <20200608130020.GA655567@glitch>
-References: <20200607210029.30601-1-roberto.sassu@huawei.com>
-MIME-Version: 1.0
-In-Reply-To: <20200607210029.30601-1-roberto.sassu@huawei.com>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="h31gzZEtNLTqOjlF"
-Content-Disposition: inline
+        Mon, 8 Jun 2020 09:04:16 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 058D2YcI132229;
+        Mon, 8 Jun 2020 09:03:31 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31g74t587m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Jun 2020 09:03:31 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 058D0A9Z031429;
+        Mon, 8 Jun 2020 13:03:28 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 31g2s7smar-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Jun 2020 13:03:28 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 058D3P2666584966
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 8 Jun 2020 13:03:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CFE7FAE055;
+        Mon,  8 Jun 2020 13:03:25 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 80897AE051;
+        Mon,  8 Jun 2020 13:03:22 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.178.150])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  8 Jun 2020 13:03:22 +0000 (GMT)
+Message-ID: <1591621401.4638.59.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 1/8] fs: introduce kernel_pread_file* support
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Scott Branden <scott.branden@broadcom.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>
+Date:   Mon, 08 Jun 2020 09:03:21 -0400
+In-Reply-To: <20200606155216.GP19604@bombadil.infradead.org>
+References: <20200606050458.17281-1-scott.branden@broadcom.com>
+         <20200606050458.17281-2-scott.branden@broadcom.com>
+         <20200606155216.GP19604@bombadil.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-08_12:2020-06-08,2020-06-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 spamscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0
+ cotscore=-2147483648 adultscore=0 priorityscore=1501 suspectscore=0
+ bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006080094
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---h31gzZEtNLTqOjlF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, 2020-06-06 at 08:52 -0700, Matthew Wilcox wrote:
+> On Fri, Jun 05, 2020 at 10:04:51PM -0700, Scott Branden wrote:
+> > -int kernel_read_file(struct file *file, void **buf, loff_t *size,
+> > -		     loff_t max_size, enum kernel_read_file_id id)
+> > -{
+> > -	loff_t i_size, pos;
+> > +int kernel_pread_file(struct file *file, void **buf, loff_t *size,
+> > +		      loff_t pos, loff_t max_size,
+> > +		      enum kernel_pread_opt opt,
+> > +		      enum kernel_read_file_id id)
+> > +{
+> > +	loff_t alloc_size;
+> > +	loff_t buf_pos;
+> > +	loff_t read_end;
+> > +	loff_t i_size;
+> >  	ssize_t bytes = 0;
+> >  	int ret;
+> >  
+> 
+> Look, it's not your fault, but this is a great example of how we end
+> up with atrocious interfaces.  Someone comes along and implements a
+> simple DWIM interface that solves their problem.  Then somebody else
+> adds a slight variant that solves their problem, and so on and so on,
+> and we end up with this bonkers API where the arguments literally change
+> meaning depending on other arguments.
+> 
+> > @@ -950,21 +955,31 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+> >  		ret = -EINVAL;
+> >  		goto out;
+> >  	}
+> > -	if (i_size > SIZE_MAX || (max_size > 0 && i_size > max_size)) {
+> > +
+> > +	/* Default read to end of file */
+> > +	read_end = i_size;
+> > +
+> > +	/* Allow reading partial portion of file */
+> > +	if ((opt == KERNEL_PREAD_PART) &&
+> > +	    (i_size > (pos + max_size)))
+> > +		read_end = pos + max_size;
+> > +
+> > +	alloc_size = read_end - pos;
+> > +	if (i_size > SIZE_MAX || (max_size > 0 && alloc_size > max_size)) {
+> >  		ret = -EFBIG;
+> >  		goto out;
+> 
+> ... like that.
+> 
+> I think what we actually want is:
+> 
+> ssize_t vmap_file_range(struct file *, loff_t start, loff_t end, void **bufp);
+> void vunmap_file_range(struct file *, void *buf);
+> 
+> If end > i_size, limit the allocation to i_size.  Returns the number
+> of bytes allocated, or a negative errno.  Writes the pointer allocated
+> to *bufp.  Internally, it should use the page cache to read in the pages
+> (taking appropriate reference counts).  Then it maps them using vmap()
+> instead of copying them to a private vmalloc() array.
+> 
+> kernel_read_file() can be converted to use this API.  The users will
+> need to be changed to call kernel_read_end(struct file *file, void *buf)
+> instead of vfree() so it can call allow_write_access() for them.
+> 
+> vmap_file_range() has a lot of potential uses.  I'm surprised we don't
+> have it already, to be honest.
 
-On Sun, Jun 07, 2020 at 11:00:29PM +0200, Roberto Sassu wrote:
-> Commit 6cc7c266e5b4 ("ima: Call ima_calc_boot_aggregate() in
-> ima_eventdigest_init()") added a call to ima_calc_boot_aggregate() so tha=
-t
-> the digest can be recalculated for the boot_aggregate measurement entry i=
-f
-> the 'd' template field has been requested. For the 'd' field, only SHA1 a=
-nd
-> MD5 digests are accepted.
->=20
-> Given that ima_eventdigest_init() does not have the __init annotation, al=
-l
-> functions called should not have it. This patch removes __init from
-> ima_pcrread().
->=20
-> Cc: stable@vger.kernel.org
-> Fixes:  6cc7c266e5b4 ("ima: Call ima_calc_boot_aggregate() in ima_eventdi=
-gest_init()")
-> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/integrity/ima/ima_crypto.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima=
-/ima_crypto.c
-> index ba5cc3264240..220b14920c37 100644
-> --- a/security/integrity/ima/ima_crypto.c
-> +++ b/security/integrity/ima/ima_crypto.c
-> @@ -786,7 +786,7 @@ int ima_calc_buffer_hash(const void *buf, loff_t len,
->  =09return calc_buffer_shash(buf, len, hash);
->  }
-> =20
-> -static void __init ima_pcrread(u32 idx, struct tpm_digest *d)
-> +static void ima_pcrread(u32 idx, struct tpm_digest *d)
->  {
->  =09if (!ima_tpm_chip)
->  =09=09return;
-> --=20
-> 2.17.1
->=20
+Prior to kernel_read_file() the same or verify similar code existed in
+multiple places in the kernel.  The kernel_read_file() API
+consolidated the existing code adding the pre and post security hooks.
 
-Reviewed-by: Bruno Meneguele <bmeneg@redhat.com>
+With this new design of not using a private vmalloc, will the file
+data be accessible prior to the post security hooks?  From an IMA
+perspective, the hooks are used for measuring and/or verifying the
+integrity of the file.
 
-thanks Roberto.
-
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
-
---h31gzZEtNLTqOjlF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl7eNmQACgkQYdRkFR+R
-okN8Xwf/e4bCIbSvzmJh44G85XHrB+tA9X0A070MnWKQ5Bksf6v4kZPmxy4eZ39+
-nknWp1a8QMTjS08aNfibFGJbjPROPgXX909VaIOwr18K5GcdTbQLVYF8qhWkDn2E
-Z8GW9bDLd7wIct3O1JQIIwaSEUVyReKiclYsITbznjoPnt+RExChTNG2NhkEki+d
-yhXXkhaNXpr+EbUHKs/WZFPFX6dK0FsoYD/QA2xnDaPlRvDKjiIE01ojeCOg/hXz
-e4tgAWWan1w4Ak8tJeNWBhf7E9Qf+vMEHOCB0uPtnQ8VJRYpxJCkVyQEQ9Ys2LHX
-Hh+1816UmnycrQd4Ez8EgOjhpB1ZHQ==
-=7AaN
------END PGP SIGNATURE-----
-
---h31gzZEtNLTqOjlF--
-
+Mimi
