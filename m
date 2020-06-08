@@ -2,100 +2,95 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEA31F1A20
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2020 15:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AF71F2193
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2020 23:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729854AbgFHNcy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Jun 2020 09:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
+        id S1726814AbgFHVpU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Jun 2020 17:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729179AbgFHNcx (ORCPT
+        with ESMTP id S1726612AbgFHVpT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Jun 2020 09:32:53 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF981C08C5C2;
-        Mon,  8 Jun 2020 06:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Transfer-Encoding
-        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=ObZ22oOgYNGbVd4Cp8pB6DVUyibIVTQNw5PapcI68nk=; b=a5taWeGUX4HtnKc/RAOz5WhgUz
-        q6JBnbH3JTiA0cXFU9kiCQWCXW/ILe82YRWyyJCFX/BccSHPnnjG1RJ6fzG56MfIi0KikIvn0P9nf
-        mSUvR/7yJhmJEjL6YHLbAviatSAnH4qTUW0bZBTaepq+d1h02hdnqQwrHGin2OYMxi/uH2q6I2CFE
-        Bmf2dgwgtuy4ue+pK94M55DxD5NmhDOJiqDCKv4agDJrK2TlRU50paxHDYtrUgdGEJVwJptb7wL36
-        BMBtG7PyeI/lJRa1zCDx0cj4FHW1VWU83+4CkoMg/YVIb/7CHlo624nM17uJ2flQPUeEY+5R/1ZIc
-        7xPFI5/w==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jiHtR-0001E9-NY; Mon, 08 Jun 2020 13:32:49 +0000
-Date:   Mon, 8 Jun 2020 06:32:49 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Scott Branden <scott.branden@broadcom.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v7 1/8] fs: introduce kernel_pread_file* support
-Message-ID: <20200608133249.GW19604@bombadil.infradead.org>
-References: <20200606050458.17281-1-scott.branden@broadcom.com>
- <20200606050458.17281-2-scott.branden@broadcom.com>
- <20200606155216.GP19604@bombadil.infradead.org>
- <1591621401.4638.59.camel@linux.ibm.com>
- <20200608131630.GV19604@bombadil.infradead.org>
- <1591622526.4638.71.camel@linux.ibm.com>
+        Mon, 8 Jun 2020 17:45:19 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D198C08C5C3
+        for <linux-integrity@vger.kernel.org>; Mon,  8 Jun 2020 14:45:17 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id l27so20065295ejc.1
+        for <linux-integrity@vger.kernel.org>; Mon, 08 Jun 2020 14:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Igh1IwPinYOHclngfiWXcdsSPSUfVMy900DjvDtZXdE=;
+        b=LOXuySGWu6oAFpGSLwRnURotT4T7GHHSY8T9C0/cwfQxalBA7tF1N8cu7f0k4Vd7je
+         2No1nZdIXfZBnRgD9v81wSb36UQ5bjRNEbUXERvVtplQxTrxs8dvo4A6Mtj+6t6MuDzi
+         ZPhVp9z/CE+pLdK4Zo5eEp5VKji/83r2UQmLRNH/pOJxDdHWL1lEtlYwDBnmwE22ei2e
+         VQq4KTiFCLaSadosS5Zvc+cH8vt4rjRvXGRHit6il9pQWF2iKmhaynrEo6pO8pp/HJ+s
+         B/pvew9eTKduP1472XSQBRUT6f8V9ztWio0h6GyyWcS+SWRPCE8iWR/zDxiCEZPGa39s
+         A/RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Igh1IwPinYOHclngfiWXcdsSPSUfVMy900DjvDtZXdE=;
+        b=Jh1jA/rW/weGZK6ANB6wtMzt86RIqVjC3TRvdFImbxXSOUgQs7gioeFspPg2qb6Zn1
+         fDDjvXRdUX8J5ELvdDITgRX7TSMh8k2TCXQoVCfBeF/dUUrAvZQF+dRM5bVNFbm2wwFH
+         S8r1iVcPHt4T6UWVc3vZ0NJEGx0U3g9tK5kIu4wwm3Xonjv/6MyuR7bHGoZl4wrGVRM2
+         eDC+c7b78Nb+FZf9OX/a/D1zpYK7yPpWF03vjKLmgVZ1aL3tr0smMPX/k42oCGeCVCHT
+         fAX6mP2NrD9E38LtBdkcVKlVK2aPEA5xSE++Sw/shIVSRBWIaabYl06iwCTLlQGQxML0
+         aH8A==
+X-Gm-Message-State: AOAM532DqLiyfw9/YN+0RmJYeZMcQ74maZPX7MIkQnBdt9syzCrKmxPB
+        BhlbODy9EyP8C2a3NeluEwd6PHuydaXJoNWJ4IbTCyg=
+X-Google-Smtp-Source: ABdhPJzM1blhuSfAtHWQKHod1napq/wyiCDkQzMZK14COSUGFvoq3xTJ7+bH9cmWhMvSg5A2bYc3wf0KPT0tdU0HpE0=
+X-Received: by 2002:a17:906:2b81:: with SMTP id m1mr21816983ejg.488.1591652716065;
+ Mon, 08 Jun 2020 14:45:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1591622526.4638.71.camel@linux.ibm.com>
+References: <20200607221449.2837-1-nramas@linux.microsoft.com> <1591617171.4638.33.camel@linux.ibm.com>
+In-Reply-To: <1591617171.4638.33.camel@linux.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 8 Jun 2020 17:45:05 -0400
+Message-ID: <CAHC9VhQpK+Shy2b2tv+vrTS+a8+zZbsrRG=pjzoMK0LApJg1Sg@mail.gmail.com>
+Subject: Re: [PATCH v2] IMA: Add audit log for failure conditions
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jun 08, 2020 at 09:22:06AM -0400, Mimi Zohar wrote:
-> On Mon, 2020-06-08 at 06:16 -0700, Matthew Wilcox wrote:
-> > On Mon, Jun 08, 2020 at 09:03:21AM -0400, Mimi Zohar wrote:
-> > > With this new design of not using a private vmalloc, will the file
-> > > data be accessible prior to the post security hooks?  From an IMA
-> > > perspective, the hooks are used for measuring and/or verifying the
-> > > integrity of the file.
-> > 
-> > File data is already accessible prior to the post security hooks.
-> > Look how kernel_read_file works:
-> > 
-> >         ret = deny_write_access(file);
-> >         ret = security_kernel_read_file(file, id);
-> >                 *buf = vmalloc(i_size);
-> >                 bytes = kernel_read(file, *buf + pos, i_size - pos, &pos);
-> >         ret = security_kernel_post_read_file(file, *buf, i_size, id);
-> > 
-> > kernel_read() will read the data into the page cache and then copy it
-> > into the vmalloc'd buffer.  There's nothing here to prevent read accesses
-> > to the file.
-> 
-> The post security hook needs to access to the file data in order to
-> calculate the file hash.  The question is whether prior to returning
-> from kernel_read_file() the caller can access the file data.
+On Mon, Jun 8, 2020 at 7:52 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> Hi Lakshmi,
+>
+> On Sun, 2020-06-07 at 15:14 -0700, Lakshmi Ramasubramanian wrote:
+> > The final log statement in process_buffer_measurement() for failure
+> > condition is at debug level. This does not log the message unless
+> > the system log level is raised which would significantly increase
+> > the messages in the system log. Change this log message to an audit
+> > message for better triaging failures in the function.
+> >
+> > ima_alloc_key_entry() does not log a message for failure condition.
+> > Add an audit message for failure condition in this function.
+> >
+> > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>
+> Audit messages should be at a higher level.  For example,
+> "hashing_error", "collect_data", "invalid_pcr".  In the "invalid_pcr"
+> case, the audit log contains the reason - "ToMToU" or "open_writers" -
+> as to why the measurement list doesn't match the PCR.
+>
+> Here you would want "measuring_keys", "measuring_boot_cmdline" with
+> the reason it failed, not the function name
+> "process_buffer_measurement".
+>
+> Userspace needs to be aware of the new audit messages.  Maybe include
+> samples of them in the cover letter.
 
-Whether you copy the data (as today) or map it (as I'm proposing),
-the data goes into the page cache.  It's up to the security system to
-block access to the page cache until it's been verified.
+Yes, examples of the audit record in the commit description (the cover
+letter isn't recorded in the git log), are encouraged.
+
+-- 
+paul moore
+www.paul-moore.com
