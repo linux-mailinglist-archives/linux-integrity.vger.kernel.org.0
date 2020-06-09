@@ -2,93 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FC21F4266
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jun 2020 19:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 478911F426D
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jun 2020 19:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728803AbgFIReK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 9 Jun 2020 13:34:10 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51748 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726848AbgFIReJ (ORCPT
+        id S1731827AbgFIRf2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 9 Jun 2020 13:35:28 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:39041 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726848AbgFIRf1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 9 Jun 2020 13:34:09 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 059HCGDP073608;
-        Tue, 9 Jun 2020 13:34:06 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31jemaghff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Jun 2020 13:34:05 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 059HNvaN109837;
-        Tue, 9 Jun 2020 13:34:05 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31jemaghey-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Jun 2020 13:34:05 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 059HUKOh013946;
-        Tue, 9 Jun 2020 17:34:03 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 31g2s7tk3h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Jun 2020 17:34:03 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 059HY1Rf61472978
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 9 Jun 2020 17:34:01 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 21F9442042;
-        Tue,  9 Jun 2020 17:34:01 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C1AA42045;
-        Tue,  9 Jun 2020 17:34:00 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.146.136])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  9 Jun 2020 17:34:00 +0000 (GMT)
-Message-ID: <1591724039.5567.33.camel@linux.ibm.com>
+        Tue, 9 Jun 2020 13:35:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591724126;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d8NE7paHe8S13knpYfX/RMXrdocBZKzMgPI9WeSOxdc=;
+        b=XTzixvZfFYtKUL1Oe2VlyDKZf06IOZNPiE5eDXaCk1QwcA8dPDh0whb8cAP1b2+p2Dve05
+        8dm9n7icRZ0wiNt6Eayn2glSZwYeqrkJz+shhPiXDHWjGsTP02WxtB5ma0H3UZFDJZ3CtE
+        /043Q5Cd7Y96S5rDnbtt0/ny/RstZlY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-268-XsHm8cFQNcqrth7mXB8Wzw-1; Tue, 09 Jun 2020 13:35:22 -0400
+X-MC-Unique: XsHm8cFQNcqrth7mXB8Wzw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E4CB8107ACF2;
+        Tue,  9 Jun 2020 17:35:20 +0000 (UTC)
+Received: from x2.localnet (ovpn-113-152.phx2.redhat.com [10.3.113.152])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B92F19D71;
+        Tue,  9 Jun 2020 17:35:14 +0000 (UTC)
+From:   Steve Grubb <sgrubb@redhat.com>
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, linux-audit@redhat.com,
+        zohar@linux.ibm.com, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3] IMA: Add audit log for failure conditions
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Richard Guy Briggs <rgb@redhat.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Steve Grubb <sgrubb@redhat.com>, linux-integrity@vger.kernel.org,
-        linux-audit@redhat.com, linux-kernel@vger.kernel.org
-Date:   Tue, 09 Jun 2020 13:33:59 -0400
+Date:   Tue, 09 Jun 2020 13:35:14 -0400
+Message-ID: <2006844.2enhIMKrvE@x2>
+Organization: Red Hat
 In-Reply-To: <20200609171555.itbllvtgjdanbbk7@madcap2.tricolour.ca>
-References: <20200608215343.4491-1-nramas@linux.microsoft.com>
-         <27448076.Og45N0Lxmj@x2>
-         <ada45440-aefd-a4b2-2a3b-c012872e86cb@linux.microsoft.com>
-         <3776526.Vj75JV9fuy@x2>
-         <518a51b7-6c8d-f55f-c73a-b15abae8e0af@linux.microsoft.com>
-         <20200609171555.itbllvtgjdanbbk7@madcap2.tricolour.ca>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-09_10:2020-06-09,2020-06-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 spamscore=0 priorityscore=1501 cotscore=-2147483648
- bulkscore=0 mlxscore=0 clxscore=1015 suspectscore=0 adultscore=0
- phishscore=0 mlxlogscore=854 impostorscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006090130
+References: <20200608215343.4491-1-nramas@linux.microsoft.com> <518a51b7-6c8d-f55f-c73a-b15abae8e0af@linux.microsoft.com> <20200609171555.itbllvtgjdanbbk7@madcap2.tricolour.ca>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Richard,
-
-On Tue, 2020-06-09 at 13:15 -0400, Richard Guy Briggs wrote:
+On Tuesday, June 9, 2020 1:15:55 PM EDT Richard Guy Briggs wrote:
 > On 2020-06-09 10:00, Lakshmi Ramasubramanian wrote:
+> > On 6/9/20 9:43 AM, Steve Grubb wrote:
+> > > > The number in parenthesis is the error code (such as ENOMEM, EINVAL,
+> > > > etc.) IMA uses this format for reporting TPM errors in one of the
+> > > > audit
+> > > > messages (In ima_add_template_entry()). I followed the same pattern.
+> > > > 
+> > > > Would it be better if the value for "cause" is formatted as
+> > > > 
+> > > > cause=hashing_error_-22
+> > > > 
+> > > > cause=alloc_entry_-12
+> > > 
+> > > Neither fit the name=value style that all other events follow. What
+> > > would fit the style is something like this:
+> > > 
+> > > cause=hashing_error  errno=-22
+> > > cause=alloc_entry errno=-12
+> > > 
+> > > Would this be OK? Also, errno is only to illustrate. You can name it
+> > > something else as long as there are no use case collisions with our
+> > > dictionary of field names.
+> > > 
+> > > https://github.com/linux-audit/audit-documentation/blob/master/specs/fi
+> > > elds/ field-dictionary.csv
+> > 
+> > I am fine with this.
 
+Thanks, this makes interpreting it a couple lines of code.
+
+> > "errno" is currently not listed in the dictionary of audit message field
+> > names (Thanks for the pointer to this one Steve)
+
+It can be easily added.
+
+> > Mimi - please let me know if you have any concerns with adding the
+> > "result" code in "errno" field in integrity_audit_msg().
+> 
 > If it is added, it should be appended to the end of the record since it
 > is an existing record format, then in the case of res=1, errno= should
 > still be present (not swing in and out) and just contain zero.  (Or
 > another value if there is a non-fatal warning?)
 
-Thank you for the clarification.
+This is not a searchable field, so it can go anywhere. If it is searchable, 
+ausearch expects ordering of other searchable fields.
 
-Mimi
+-Steve
+
+
