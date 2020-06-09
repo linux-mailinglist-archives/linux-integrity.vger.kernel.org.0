@@ -2,70 +2,201 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FEB1F4455
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jun 2020 20:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F721F49A6
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jun 2020 00:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387732AbgFISDc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 9 Jun 2020 14:03:32 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37326 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733193AbgFISDb (ORCPT
+        id S1728878AbgFIWza (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 9 Jun 2020 18:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728855AbgFIWz1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 9 Jun 2020 14:03:31 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1AE4320B717B;
-        Tue,  9 Jun 2020 11:03:29 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1AE4320B717B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1591725809;
-        bh=RcRx8d20bjJpLdKxUmDt/7K3aLBKNzYGLcu36Ac8y94=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=HZqrRLQRrYDntNP1Jtw4oEaypC9lkwLUlI9j6+1PzvhOjT1Qc5LXxONmka95SLTCn
-         3XUFK/fUKZXRBC9WtrfrgBuaRLu7C85Q64Vzi4k01hbp+a9ZcOYepI2+zI368Z2U07
-         WLCodQHxPAE6p/ZbRNCcEjr8ia3didJ0LTwcNoQo=
-Subject: Re: [PATCH v3] IMA: Add audit log for failure conditions
-To:     Steve Grubb <sgrubb@redhat.com>,
-        Richard Guy Briggs <rgb@redhat.com>
-Cc:     linux-integrity@vger.kernel.org, linux-audit@redhat.com,
-        zohar@linux.ibm.com, linux-kernel@vger.kernel.org
-References: <20200608215343.4491-1-nramas@linux.microsoft.com>
- <518a51b7-6c8d-f55f-c73a-b15abae8e0af@linux.microsoft.com>
- <20200609171555.itbllvtgjdanbbk7@madcap2.tricolour.ca>
- <2006844.2enhIMKrvE@x2>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <2e3bc793-0d29-5434-1da3-2bcc34ed9012@linux.microsoft.com>
-Date:   Tue, 9 Jun 2020 11:03:28 -0700
+        Tue, 9 Jun 2020 18:55:27 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061C7C08C5C6
+        for <linux-integrity@vger.kernel.org>; Tue,  9 Jun 2020 15:55:25 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id gl26so371049ejb.11
+        for <linux-integrity@vger.kernel.org>; Tue, 09 Jun 2020 15:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=LYBqerZassKlqNTxy3as16L4QGqXx7iCtOa8miVjhI8=;
+        b=AaHx/ZOa9ijt0PdstPCqR8gBnbdFESmopPjGBDGxffkQDRZL90jPY01sy1MWqGcObY
+         87HwROzIZQ1L2Q8YQ484vcTEd7UOjhD9Mh94qQSIgwWMA2uHWRbBLDUTAa5IfouA/y67
+         bTJJY6ohZDhx97w2+JHLpCjKB9x/XZi6Tvn/0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=LYBqerZassKlqNTxy3as16L4QGqXx7iCtOa8miVjhI8=;
+        b=gj1mZrqf21CdFC5C5Wstr+oYzFXRIZMJx3vqZ8FF+vdkHS6uqxYM3Qwa8xbkKtaDhh
+         CQX4gcqEmJ3IIQgK4PLAj1KydD5iFrNNu+9FuEDufmTnmMO1zJjyvAW3bvpOZVTviTgO
+         p555KAZuvjuh7afxJVOpkQL4LVvfOfTb/pulqOpB6Lukog/rw3czwJQi8F1MSv7R9j9d
+         TweBZdREsBHlosoPVodcegVkzF7CCqfDblRglrNP6RJpg03Nm3S4osO3uV0CTXk7XwKh
+         cp4XhxXJzguT5qGFUqXmncGsPPAkZOB8g0vFJEhybgTLG8DQ9qIEqviSMEHFcz6MvtaU
+         g7zQ==
+X-Gm-Message-State: AOAM532FPFprix5bH54trhViyTVrGLdFwvcmuyRME3VdIpGzggR6Z3Ah
+        etMUEPzd4WWnxni+B37odlYvdP5MIHfTOHWw
+X-Google-Smtp-Source: ABdhPJwjSrIRSIC7d+hmQ2dLRib2BwauXuZ6u2RlliwND0Gn7sBoGqarx5XYRfMDchpEAnJnjtTpgg==
+X-Received: by 2002:a17:906:1c02:: with SMTP id k2mr592170ejg.37.1591743323900;
+        Tue, 09 Jun 2020 15:55:23 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id ck11sm14207643ejb.41.2020.06.09.15.55.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2020 15:55:23 -0700 (PDT)
+Subject: Re: [PATCH v7 1/8] fs: introduce kernel_pread_file* support
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>
+References: <20200606050458.17281-1-scott.branden@broadcom.com>
+ <20200606050458.17281-2-scott.branden@broadcom.com>
+ <20200606155216.GP19604@bombadil.infradead.org>
+ <ea16c19e-bd60-82ec-4825-05e233667f9f@broadcom.com>
+ <20200609132151.GC19604@bombadil.infradead.org>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <c983b910-d216-559a-60b5-dc8b4b2435a2@broadcom.com>
+Date:   Tue, 9 Jun 2020 15:55:15 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <2006844.2enhIMKrvE@x2>
+In-Reply-To: <20200609132151.GC19604@bombadil.infradead.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/9/20 10:35 AM, Steve Grubb wrote:
+Hi Matthew,
+
+On 2020-06-09 6:21 a.m., Matthew Wilcox wrote:
+> On Mon, Jun 08, 2020 at 03:29:22PM -0700, Scott Branden wrote:
+>> Hi Matthew,
 >>
->> If it is added, it should be appended to the end of the record since it
->> is an existing record format, then in the case of res=1, errno= should
->> still be present (not swing in and out) and just contain zero.  (Or
->> another value if there is a non-fatal warning?)
-> 
-> This is not a searchable field, so it can go anywhere. If it is searchable,
-> ausearch expects ordering of other searchable fields.
-> 
+>> I am requesting the experts in the filesystem subsystem to come to a
+>> consensus here.
+>> This is not my area of expertise at all but every time I have addressed all
+>> of the
+>> outstanding concerns someone else comes along and raises another one.
+> I appreciate it's frustrating for you, but this is the nature of
+> patch review.  I haven't even read the first five or so submissions.
+> I can see them in my inbox and they look like long threads.  I'm not
+> particularly inclined to read them.  I happened to read v6, and reacted
+> to the API being ugly.
+Thanks for the review.  Yes, I do see the enum being ugly now
+and have removed it in v8 of the patch.  Hopefully it addresses
+your concerns.  More comments below.
+>
+>> Please see me comments below.
+>>
+>> On 2020-06-06 8:52 a.m., Matthew Wilcox wrote:
+>>> On Fri, Jun 05, 2020 at 10:04:51PM -0700, Scott Branden wrote:
+>>>> -int kernel_read_file(struct file *file, void **buf, loff_t *size,
+>>>> -		     loff_t max_size, enum kernel_read_file_id id)
+>>>> -{
+>>>> -	loff_t i_size, pos;
+>> Please note that how checkpatch generated the diff here.  The code
+>> modifications
+>> below are for a new function kernel_pread_file, they do not modify the
+>> existing API
+>> kernel_read_file.  kernel_read_file requests the ENTIRE file is read.  So we
+>> need to be
+>> able to differentiate whether it is ok to read just a portion of the file or
+>> not.
+> You've gone about this in entirely the wrong way though.  This enum to
+> read the entire file or a partial is just bad design.
+Your point on the enum is valid.
+I've removed it from design.  Hopefully it is cleaner now.
+>
+>>>> +int kernel_pread_file(struct file *file, void **buf, loff_t *size,
+>>>> +		      loff_t pos, loff_t max_size,
+>>>> +		      enum kernel_pread_opt opt,
+>>>> +		      enum kernel_read_file_id id)
+>> So, to share common code a new kernel_pread_opt needed to be added in order
+>> to specify whether
+>> it was ok to read a partial file or not, and provide an offset into the file
+>> where to begin reading.
+>> The meaning of parameters doesn't change in the bonkers API. max_size still
+>> means max size, etc.
+>> These options are needed so common code can be shared with kernel_read_file
+>> api.
+> Does pread() in userspace take seven parameters?  No.  It takes four.
+> What you're doing is taking all the complexity of all of the interfaces
+> and stuffing it all down into the bottom function instead of handling
+> some of the complexity in the wrapper functions.  For example, you
+> could support the functionality of 'max_size' in kernel_read_file()
+> and leave it out of the kernel_pread_file() interface.
+I have removed the enum necessary in the kernel pread call now,
+so it is down to 6.
+The other 2 parameters are necessary as they are in kernel read.
 
-Thank you for the clarification Steve.
+max_size makes no sense to remove - it serves the same purpose
+as in userspace pread and read functions.  To specify the max size
+to read.
+>>> I think what we actually want is:
+>>>
+>>> ssize_t vmap_file_range(struct file *, loff_t start, loff_t end, void **bufp);
+>>> void vunmap_file_range(struct file *, void *buf);
+>>>
+>>> If end > i_size, limit the allocation to i_size.  Returns the number
+>>> of bytes allocated, or a negative errno.  Writes the pointer allocated
+>>> to *bufp.  Internally, it should use the page cache to read in the pages
+>>> (taking appropriate reference counts).  Then it maps them using vmap()
+>>> instead of copying them to a private vmalloc() array.
+>>> kernel_read_file() can be converted to use this API.  The users will
+>>> need to be changed to call kernel_read_end(struct file *file, void *buf)
+>>> instead of vfree() so it can call allow_write_access() for them.
+>>>
+>>> vmap_file_range() has a lot of potential uses.  I'm surprised we don't
+>>> have it already, to be honest.
+>> Such a change sounds like it could be done in a later patch series.
+>> It's an incomplete solution.  It would work for some of the needed
+>> operations but not others.
+>> For kernel_read_file, I don't see how in your new API it indicates if the
+>> end of the file was reached or not.
+> That's the point.  It doesn't.  If a caller needs that, then they can
+> figure that out themselves.
+No, they can't.  The caller only calls kernel_read_file once and expects
+the whole file to be read.  The kernel_read_file doesn't work like 
+userspace.
+There is no tracking like userspace of where in the file you read?
+>
+>> Also, please note that buffers may be preallocated  and shouldn't be freed
+>> by the kernel in some cases and
+>> allocated and freed by the kernel in others.
+> You're trying to build the swiss army knife of functions.  Swiss army
+> knives are useful, but they're no good for carving a steak.
+Hopefully I'm carving steak now.
+>> I would like the experts here to decide on what needs to be done so we can
+>> move forward
+>> and get kernel_pread_file support added soon.
+> You know, you haven't even said _why_ you want this.  The cover letter
+> just says "I want this", and doesn't say why it's needed.
+Cover letter updated.
 
-I'll add "errno=" right after "cause=".
-
-Also, "errno" will always be present - will be set to 0 if status is 
-"success" (res=1) and a non-zero value for failure (res=0)
-
-thanks,
-  -lakshmi
-
-
+Thanks,
+Scott
