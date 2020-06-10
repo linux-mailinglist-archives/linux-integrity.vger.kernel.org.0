@@ -2,144 +2,251 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 737161F49C4
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jun 2020 00:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B161F5999
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jun 2020 19:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728947AbgFIW6U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 9 Jun 2020 18:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729031AbgFIW5q (ORCPT
+        id S1728121AbgFJRBl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Jun 2020 13:01:41 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:57110 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726992AbgFJRBk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 9 Jun 2020 18:57:46 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D8CC00862C
-        for <linux-integrity@vger.kernel.org>; Tue,  9 Jun 2020 15:57:36 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id h185so226127pfg.2
-        for <linux-integrity@vger.kernel.org>; Tue, 09 Jun 2020 15:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=cM+rCpZobNDrkDN9s+cJ/Q1XgGFeWXzm3UzYtFYpyy4=;
-        b=ByJPGZ0fwC+pHYx4+jr86EPnUJT03kDN80FFAKD7I5rX+wsF2f7csCPEgbu0Vv5JXD
-         ZyLWQTOAA/02+ZV08uuMrd6LxZHpZq8t+zpNoZQcJEL4vViRm5Z4Qrylf4XzyxMH9i+e
-         6RPwx+6tj/r3KDMiIgbqsv1cvcx5htVk6ttBo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=cM+rCpZobNDrkDN9s+cJ/Q1XgGFeWXzm3UzYtFYpyy4=;
-        b=tU4gPYWu28PEg3ZttC8YXBdIrfracZravbUk2M/N3uATeWQUF8nZwsiAyQns1Jnr5x
-         PLTqHlRJKOJy+wpPgY7rUZzkMfKXH0X69D1cKAGDtpve0RhuJW3MNTYP7RZUrX3jScLi
-         II3uAAhUF3CZFuZ4m4yBxhOguK/2b2J0MSnqudaWL979Vz1nT6NwCiHWlfO/tegJCqWW
-         1fRyWrx5G26Ft+bjHAJQXdJ3jh2z0GUbtAnqKfIM1XhSMrWDv7tc2HYOXDDCdu5+3hYu
-         LW4w6Wu/LYDf7SrbhUoaBl8BX/wl+N86vC6GFeDoi+xb+DTlDHQH7YT+OtEsLux7Vexu
-         uESA==
-X-Gm-Message-State: AOAM532B1nztxSz8gH9JuypGUUc6y8OVilYX3ZyguNvbTRlrM5vzh+xZ
-        erlo2Ax8v9HE5LLpL+jyPsDEmg==
-X-Google-Smtp-Source: ABdhPJzt2on8TT/VRipqTfFNR4O9ShRqcpSzbecmhCO8fd5EePg4uWMnzAa84LqTYB4Rh0Gh65kwjA==
-X-Received: by 2002:a63:145f:: with SMTP id 31mr212923pgu.383.1591743455670;
-        Tue, 09 Jun 2020 15:57:35 -0700 (PDT)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id p8sm9104978pgs.29.2020.06.09.15.57.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 15:57:34 -0700 (PDT)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
+        Wed, 10 Jun 2020 13:01:40 -0400
+Received: by linux.microsoft.com (Postfix, from userid 1066)
+        id A9CCC20B717B; Wed, 10 Jun 2020 10:01:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A9CCC20B717B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1591808498;
+        bh=WMQaTFjsDys7H+llhCW8y8ZAuZgeIZ+2G1N2e811lF0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rK7OW27tRzg5Zz9HSSKaHQfWUVKDHt/IehW4IAh8t7j4fLKUX1wRUWmKOrC9FocCs
+         NS7fcPiD66XEtSLQh/vPBqzLF1rm7jaSL/gA/n727GzXwhpPd2b9jAUN8XWtuGuXzb
+         zFPvRW/Kt41h9DilM8oagvzybglHUoL3eyXH0dvA=
+From:   Lachlan Sneff <t-josne@linux.microsoft.com>
+To:     ltp@lists.linux.it, pvorel@suse.cz, zohar@linux.ibm.com
+Cc:     nramas@linux.microsoft.com, balajib@linux.microsoft.com,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v8 8/8] ima: add FIRMWARE_PARTIAL_READ support
-Date:   Tue,  9 Jun 2020 15:56:56 -0700
-Message-Id: <20200609225656.18663-9-scott.branden@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200609225656.18663-1-scott.branden@broadcom.com>
-References: <20200609225656.18663-1-scott.branden@broadcom.com>
+        Lachlan Sneff <t-josne@linux.microsoft.com>
+Subject: [PATCH 1/2] IMA: Add a test to verify measurment of keys
+Date:   Wed, 10 Jun 2020 10:01:22 -0700
+Message-Id: <1591808483-22040-1-git-send-email-t-josne@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add FIRMWARE_PARTIAL_READ support for integrity
-measurement on partial reads of firmware files.
+Add a testcase that verifies that the IMA subsystem has correctly
+measured keys added to keyrings specified in the IMA policy file.
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+Additionally, add support for handling a new IMA template descriptor,
+namely ima-buf[1], in the IMA measurement tests.
+
+[1]: https://www.kernel.org/doc/html/latest/security/IMA-templates.html#use
+
+Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
 ---
- security/integrity/ima/ima_main.c | 24 +++++++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
+ runtest/ima                                   |  1 +
+ .../integrity/ima/tests/compute_digest.sh     | 38 ++++++++++
+ .../security/integrity/ima/tests/ima_keys.sh  | 72 +++++++++++++++++++
+ .../integrity/ima/tests/ima_measurements.sh   | 37 +---------
+ 4 files changed, 113 insertions(+), 35 deletions(-)
+ create mode 100644 testcases/kernel/security/integrity/ima/tests/compute_digest.sh
+ create mode 100644 testcases/kernel/security/integrity/ima/tests/ima_keys.sh
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 800fb3bba418..fc5134807acf 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -609,6 +609,9 @@ void ima_post_path_mknod(struct dentry *dentry)
-  */
- int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
+diff --git a/runtest/ima b/runtest/ima
+index f3ea88cf0..939fb40f0 100644
+--- a/runtest/ima
++++ b/runtest/ima
+@@ -4,3 +4,4 @@ ima_policy ima_policy.sh
+ ima_tpm ima_tpm.sh
+ ima_violations ima_violations.sh
+ evm_overlay evm_overlay.sh
++ima_keys ima_keys.sh
+diff --git a/testcases/kernel/security/integrity/ima/tests/compute_digest.sh b/testcases/kernel/security/integrity/ima/tests/compute_digest.sh
+new file mode 100644
+index 000000000..85f6bf3da
+--- /dev/null
++++ b/testcases/kernel/security/integrity/ima/tests/compute_digest.sh
+@@ -0,0 +1,38 @@
++# SPDX-License-Identifier: GPL-2.0-or-later
++# Copyright (c) 2009 IBM Corporation
++# Copyright (c) 2018-2020 Petr Vorel <pvorel@suse.cz>
++# Author: Mimi Zohar <zohar@linux.ibm.com>
++
++# TODO: find support for rmd128 rmd256 rmd320 wp256 wp384 tgr128 tgr160
++compute_digest()
++{
++	local algorithm="$1"
++	local file="$2"
++	local digest
++
++	digest="$(${algorithm}sum $file 2>/dev/null | cut -f1 -d ' ')"
++	if [ -n "$digest" ]; then
++		echo "$digest"
++		return 0
++	fi
++
++	digest="$(openssl $algorithm $file 2>/dev/null | cut -f2 -d ' ')"
++	if [ -n "$digest" ]; then
++		echo "$digest"
++		return 0
++	fi
++
++	# uncommon ciphers
++	local arg="$algorithm"
++	case "$algorithm" in
++	tgr192) arg="tiger" ;;
++	wp512) arg="whirlpool" ;;
++	esac
++
++	digest="$(rdigest --$arg $file 2>/dev/null | cut -f1 -d ' ')"
++	if [ -n "$digest" ]; then
++		echo "$digest"
++		return 0
++	fi
++	return 1
++}
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+new file mode 100644
+index 000000000..1b0dd0aed
+--- /dev/null
++++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+@@ -0,0 +1,72 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-or-later
++# Copyright (c) 2020 Microsoft Corporation
++# Author: Lachlan Sneff <t-josne@linux.microsoft.com>
++#
++# Verify that keys are measured correctly based on policy.
++
++TST_NEEDS_CMDS="awk cut"
++TST_SETUP="setup"
++TST_CNT=1
++TST_NEEDS_DEVICE=1
++
++. ima_setup.sh
++. compute_digest.sh
++
++setup()
++{
++    TEST_FILE="$PWD/test.txt"
++}
++
++# Based on https://lkml.org/lkml/2019/12/13/564.
++test1()
++{
++	local keyrings keycheck_line templates
++
++	tst_res TINFO "verifying key measurement for keyrings and \
++templates specified in ima policy file"
++
++	IMA_POLICY="$IMA_DIR/policy"
++	[ -f $IMA_POLICY ] || tst_brk TCONF "missing $IMA_POLICY"
++
++	keycheck_line=$(grep "func=KEY_CHECK" $IMA_POLICY)
++	if [ -z "$keycheck_line" ]; then
++		tst_brk TCONF "ima policy does not specify \"func=KEY_CHECK\""
++	fi
++
++	if echo "$keycheck_line" | grep -q "*keyrings*"; then
++		tst_brk TCONF "ima policy does not specify a keyrings to check"
++	fi
++
++	keyrings=$(echo "$keycheck_line" | tr " " "\n" | grep "keyrings" | \
++		sed "s/\./\\\./g" | cut -d'=' -f2)
++	if [ -z "$keyrings" ]; then
++		tst_brk TCONF "ima policy has a keyring key-value specifier, \
++but no specified keyrings"
++	fi
++
++	templates=$(echo "$keycheck_line" | tr " " "\n" | grep "template" | \
++		cut -d'=' -f2)
++
++	grep -E "($templates)*($keyrings)" $ASCII_MEASUREMENTS | while read line
++	do
++		local digest expected_digest algorithm
++
++		digest=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f2)
++		algorithm=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f1)
++
++		echo "$line" | cut -d' ' -f6 | xxd -r -p > $TEST_FILE
++
++		expected_digest="$(compute_digest $algorithm $TEST_FILE)" || \
++			tst_brk TCONF "cannot compute digest for $algorithm"
++
++		if [ "$digest" != "$expected_digest" ]; then
++			tst_res TFAIL "incorrect digest was found for the \
++$(echo "$line" | cut -d' ' -f5) keyring"
++		fi
++	done
++
++	tst_res TPASS "specified keyrings were measured correctly"
++}
++
++tst_run
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
+index 54237d688..0a58d021d 100755
+--- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
+@@ -12,6 +12,7 @@ TST_CNT=3
+ TST_NEEDS_DEVICE=1
+ 
+ . ima_setup.sh
++. compute_digest.sh
+ 
+ setup()
  {
-+	enum ima_hooks func;
-+	u32 secid;
-+
- 	/*
- 	 * READING_FIRMWARE_PREALLOC_BUFFER
- 	 *
-@@ -617,11 +620,27 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
- 	 * of IMA's signature verification any more than when using two
- 	 * buffers?
- 	 */
--	return 0;
-+	if (read_id != READING_FIRMWARE_PARTIAL_READ)
-+		return 0;
-+
-+	if (!file) {
-+		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
-+		    (ima_appraise & IMA_APPRAISE_ENFORCE)) {
-+			pr_err("Prevent firmware loading_store.\n");
-+			return -EACCES;	/* INTEGRITY_UNKNOWN */
-+		}
-+		return 0;
-+	}
-+
-+	func = read_idmap[read_id] ?: FILE_CHECK;
-+	security_task_getsecid(current, &secid);
-+	return process_measurement(file, current_cred(), secid, NULL,
-+				   0, MAY_READ, func);
+@@ -28,7 +29,7 @@ setup()
+ 	# parse digest index
+ 	# https://www.kernel.org/doc/html/latest/security/IMA-templates.html#use
+ 	case "$template" in
+-	ima|ima-ng|ima-sig) DIGEST_INDEX=4 ;;
++	ima|ima-ng|ima-sig|ima-buf) DIGEST_INDEX=4 ;;
+ 	*)
+ 		# using ima_template_fmt kernel parameter
+ 		local IFS="|"
+@@ -46,40 +47,6 @@ setup()
+ 		"Cannot find digest index (template: '$template')"
  }
  
- const int read_idmap[READING_MAX_ID] = {
- 	[READING_FIRMWARE] = FIRMWARE_CHECK,
-+	[READING_FIRMWARE_PARTIAL_READ] = FIRMWARE_CHECK,
- 	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
- 	[READING_MODULE] = MODULE_CHECK,
- 	[READING_KEXEC_IMAGE] = KEXEC_KERNEL_CHECK,
-@@ -648,6 +667,9 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 	enum ima_hooks func;
- 	u32 secid;
- 
-+	if (read_id == READING_FIRMWARE_PARTIAL_READ)
-+		return 0;
-+
- 	if (!file && read_id == READING_FIRMWARE) {
- 		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
- 		    (ima_appraise & IMA_APPRAISE_ENFORCE)) {
+-# TODO: find support for rmd128 rmd256 rmd320 wp256 wp384 tgr128 tgr160
+-compute_digest()
+-{
+-	local algorithm="$1"
+-	local file="$2"
+-	local digest
+-
+-	digest="$(${algorithm}sum $file 2>/dev/null | cut -f1 -d ' ')"
+-	if [ -n "$digest" ]; then
+-		echo "$digest"
+-		return 0
+-	fi
+-
+-	digest="$(openssl $algorithm $file 2>/dev/null | cut -f2 -d ' ')"
+-	if [ -n "$digest" ]; then
+-		echo "$digest"
+-		return 0
+-	fi
+-
+-	# uncommon ciphers
+-	local arg="$algorithm"
+-	case "$algorithm" in
+-	tgr192) arg="tiger" ;;
+-	wp512) arg="whirlpool" ;;
+-	esac
+-
+-	digest="$(rdigest --$arg $file 2>/dev/null | cut -f1 -d ' ')"
+-	if [ -n "$digest" ]; then
+-		echo "$digest"
+-		return 0
+-	fi
+-	return 1
+-}
+-
+ ima_check()
+ {
+ 	local delimiter=':'
 -- 
-2.17.1
+2.25.1
 
