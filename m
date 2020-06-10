@@ -2,251 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B161F5999
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jun 2020 19:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE5C1F599A
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jun 2020 19:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728121AbgFJRBl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Jun 2020 13:01:41 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:57110 "EHLO
+        id S1729271AbgFJRBm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Jun 2020 13:01:42 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:57138 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726992AbgFJRBk (ORCPT
+        with ESMTP id S1726992AbgFJRBm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Jun 2020 13:01:40 -0400
+        Wed, 10 Jun 2020 13:01:42 -0400
 Received: by linux.microsoft.com (Postfix, from userid 1066)
-        id A9CCC20B717B; Wed, 10 Jun 2020 10:01:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A9CCC20B717B
+        id 88CF620B71CC; Wed, 10 Jun 2020 10:01:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 88CF620B71CC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1591808498;
-        bh=WMQaTFjsDys7H+llhCW8y8ZAuZgeIZ+2G1N2e811lF0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rK7OW27tRzg5Zz9HSSKaHQfWUVKDHt/IehW4IAh8t7j4fLKUX1wRUWmKOrC9FocCs
-         NS7fcPiD66XEtSLQh/vPBqzLF1rm7jaSL/gA/n727GzXwhpPd2b9jAUN8XWtuGuXzb
-         zFPvRW/Kt41h9DilM8oagvzybglHUoL3eyXH0dvA=
+        s=default; t=1591808501;
+        bh=D1wH1dK8bNPhiuEReUqysKhlwE/xussjWlR2j7MN71c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Qm/JAsjiOas+sAhE/RT9H1QcoyBm6nm/IECJpdCRiIoBJhdS/S6Dlo6U7dRmYde6O
+         zaR46+fy/fmLB67LTtkt0w31dhdpvkVIL1Zy28guFYgNV9szayJVDUM4a9VAp7fNaC
+         9pWvb3kW64IRRhF0V1JSE7lqSltgth6yrMajaIgc=
 From:   Lachlan Sneff <t-josne@linux.microsoft.com>
 To:     ltp@lists.linux.it, pvorel@suse.cz, zohar@linux.ibm.com
 Cc:     nramas@linux.microsoft.com, balajib@linux.microsoft.com,
         linux-integrity@vger.kernel.org,
         Lachlan Sneff <t-josne@linux.microsoft.com>
-Subject: [PATCH 1/2] IMA: Add a test to verify measurment of keys
-Date:   Wed, 10 Jun 2020 10:01:22 -0700
-Message-Id: <1591808483-22040-1-git-send-email-t-josne@linux.microsoft.com>
+Subject: [PATCH 2/2] IMA: Add a test to verify importing a certificate into keyring
+Date:   Wed, 10 Jun 2020 10:01:23 -0700
+Message-Id: <1591808483-22040-2-git-send-email-t-josne@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1591808483-22040-1-git-send-email-t-josne@linux.microsoft.com>
+References: <1591808483-22040-1-git-send-email-t-josne@linux.microsoft.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add a testcase that verifies that the IMA subsystem has correctly
-measured keys added to keyrings specified in the IMA policy file.
-
-Additionally, add support for handling a new IMA template descriptor,
-namely ima-buf[1], in the IMA measurement tests.
-
-[1]: https://www.kernel.org/doc/html/latest/security/IMA-templates.html#use
+Add an IMA measurement test that verifies that an x509 certificate
+can be imported into the .ima keyring and measured correctly.
 
 Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
 ---
- runtest/ima                                   |  1 +
- .../integrity/ima/tests/compute_digest.sh     | 38 ++++++++++
- .../security/integrity/ima/tests/ima_keys.sh  | 72 +++++++++++++++++++
- .../integrity/ima/tests/ima_measurements.sh   | 37 +---------
- 4 files changed, 113 insertions(+), 35 deletions(-)
- create mode 100644 testcases/kernel/security/integrity/ima/tests/compute_digest.sh
- create mode 100644 testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+ .../security/integrity/ima/tests/ima_keys.sh  | 44 ++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
 
-diff --git a/runtest/ima b/runtest/ima
-index f3ea88cf0..939fb40f0 100644
---- a/runtest/ima
-+++ b/runtest/ima
-@@ -4,3 +4,4 @@ ima_policy ima_policy.sh
- ima_tpm ima_tpm.sh
- ima_violations ima_violations.sh
- evm_overlay evm_overlay.sh
-+ima_keys ima_keys.sh
-diff --git a/testcases/kernel/security/integrity/ima/tests/compute_digest.sh b/testcases/kernel/security/integrity/ima/tests/compute_digest.sh
-new file mode 100644
-index 000000000..85f6bf3da
---- /dev/null
-+++ b/testcases/kernel/security/integrity/ima/tests/compute_digest.sh
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (c) 2009 IBM Corporation
-+# Copyright (c) 2018-2020 Petr Vorel <pvorel@suse.cz>
-+# Author: Mimi Zohar <zohar@linux.ibm.com>
-+
-+# TODO: find support for rmd128 rmd256 rmd320 wp256 wp384 tgr128 tgr160
-+compute_digest()
-+{
-+	local algorithm="$1"
-+	local file="$2"
-+	local digest
-+
-+	digest="$(${algorithm}sum $file 2>/dev/null | cut -f1 -d ' ')"
-+	if [ -n "$digest" ]; then
-+		echo "$digest"
-+		return 0
-+	fi
-+
-+	digest="$(openssl $algorithm $file 2>/dev/null | cut -f2 -d ' ')"
-+	if [ -n "$digest" ]; then
-+		echo "$digest"
-+		return 0
-+	fi
-+
-+	# uncommon ciphers
-+	local arg="$algorithm"
-+	case "$algorithm" in
-+	tgr192) arg="tiger" ;;
-+	wp512) arg="whirlpool" ;;
-+	esac
-+
-+	digest="$(rdigest --$arg $file 2>/dev/null | cut -f1 -d ' ')"
-+	if [ -n "$digest" ]; then
-+		echo "$digest"
-+		return 0
-+	fi
-+	return 1
-+}
 diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-new file mode 100644
-index 000000000..1b0dd0aed
---- /dev/null
+index 1b0dd0aed..6904fabfa 100644
+--- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
 +++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-@@ -0,0 +1,72 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (c) 2020 Microsoft Corporation
-+# Author: Lachlan Sneff <t-josne@linux.microsoft.com>
-+#
-+# Verify that keys are measured correctly based on policy.
-+
-+TST_NEEDS_CMDS="awk cut"
-+TST_SETUP="setup"
-+TST_CNT=1
-+TST_NEEDS_DEVICE=1
-+
-+. ima_setup.sh
-+. compute_digest.sh
-+
-+setup()
-+{
-+    TEST_FILE="$PWD/test.txt"
-+}
-+
-+# Based on https://lkml.org/lkml/2019/12/13/564.
-+test1()
-+{
-+	local keyrings keycheck_line templates
-+
-+	tst_res TINFO "verifying key measurement for keyrings and \
-+templates specified in ima policy file"
-+
-+	IMA_POLICY="$IMA_DIR/policy"
-+	[ -f $IMA_POLICY ] || tst_brk TCONF "missing $IMA_POLICY"
-+
-+	keycheck_line=$(grep "func=KEY_CHECK" $IMA_POLICY)
-+	if [ -z "$keycheck_line" ]; then
-+		tst_brk TCONF "ima policy does not specify \"func=KEY_CHECK\""
-+	fi
-+
-+	if echo "$keycheck_line" | grep -q "*keyrings*"; then
-+		tst_brk TCONF "ima policy does not specify a keyrings to check"
-+	fi
-+
-+	keyrings=$(echo "$keycheck_line" | tr " " "\n" | grep "keyrings" | \
-+		sed "s/\./\\\./g" | cut -d'=' -f2)
-+	if [ -z "$keyrings" ]; then
-+		tst_brk TCONF "ima policy has a keyring key-value specifier, \
-+but no specified keyrings"
-+	fi
-+
-+	templates=$(echo "$keycheck_line" | tr " " "\n" | grep "template" | \
-+		cut -d'=' -f2)
-+
-+	grep -E "($templates)*($keyrings)" $ASCII_MEASUREMENTS | while read line
-+	do
-+		local digest expected_digest algorithm
-+
-+		digest=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f2)
-+		algorithm=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f1)
-+
-+		echo "$line" | cut -d' ' -f6 | xxd -r -p > $TEST_FILE
-+
-+		expected_digest="$(compute_digest $algorithm $TEST_FILE)" || \
-+			tst_brk TCONF "cannot compute digest for $algorithm"
-+
-+		if [ "$digest" != "$expected_digest" ]; then
-+			tst_res TFAIL "incorrect digest was found for the \
-+$(echo "$line" | cut -d' ' -f5) keyring"
-+		fi
-+	done
-+
-+	tst_res TPASS "specified keyrings were measured correctly"
-+}
-+
-+tst_run
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-index 54237d688..0a58d021d 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-@@ -12,6 +12,7 @@ TST_CNT=3
+@@ -7,7 +7,7 @@
+ 
+ TST_NEEDS_CMDS="awk cut"
+ TST_SETUP="setup"
+-TST_CNT=1
++TST_CNT=2
  TST_NEEDS_DEVICE=1
  
  . ima_setup.sh
-+. compute_digest.sh
- 
- setup()
- {
-@@ -28,7 +29,7 @@ setup()
- 	# parse digest index
- 	# https://www.kernel.org/doc/html/latest/security/IMA-templates.html#use
- 	case "$template" in
--	ima|ima-ng|ima-sig) DIGEST_INDEX=4 ;;
-+	ima|ima-ng|ima-sig|ima-buf) DIGEST_INDEX=4 ;;
- 	*)
- 		# using ima_template_fmt kernel parameter
- 		local IFS="|"
-@@ -46,40 +47,6 @@ setup()
- 		"Cannot find digest index (template: '$template')"
+@@ -69,4 +69,46 @@ $(echo "$line" | cut -d' ' -f5) keyring"
+ 	tst_res TPASS "specified keyrings were measured correctly"
  }
  
--# TODO: find support for rmd128 rmd256 rmd320 wp256 wp384 tgr128 tgr160
--compute_digest()
--{
--	local algorithm="$1"
--	local file="$2"
--	local digest
--
--	digest="$(${algorithm}sum $file 2>/dev/null | cut -f1 -d ' ')"
--	if [ -n "$digest" ]; then
--		echo "$digest"
--		return 0
--	fi
--
--	digest="$(openssl $algorithm $file 2>/dev/null | cut -f2 -d ' ')"
--	if [ -n "$digest" ]; then
--		echo "$digest"
--		return 0
--	fi
--
--	# uncommon ciphers
--	local arg="$algorithm"
--	case "$algorithm" in
--	tgr192) arg="tiger" ;;
--	wp512) arg="whirlpool" ;;
--	esac
--
--	digest="$(rdigest --$arg $file 2>/dev/null | cut -f1 -d ' ')"
--	if [ -n "$digest" ]; then
--		echo "$digest"
--		return 0
--	fi
--	return 1
--}
--
- ima_check()
- {
- 	local delimiter=':'
++
++# Test that a cert can be imported into the ".ima" keyring correctly.
++test2() {
++	local keyring_id key_id
++	CERT_FILE="/etc/keys/x509_ima.der" # Default
++
++	[ -f $CERT_FILE ] || tst_brk TCONF "missing $CERT_FILE"
++
++	if ! openssl x509 -in $CERT_FILE -inform der > /dev/null; then
++		tst_brk TCONF "The suppled cert file ($CERT_FILE) is not \
++a valid x509 certificate"
++	fi
++
++	tst_res TINFO "adding a cert to the \".ima\" keyring ($CERT_FILE)"
++
++	keyring_id=$(sudo keyctl show %:.ima | sed -n 2p | \
++		sed 's/^[[:space:]]*//' | cut -d' ' -f1) || \
++		tst_btk TCONF "unable to retrieve .ima keyring id"
++
++	if ! tst_is_num	"$keyring_id"; then
++		tst_brk TCONF "unable to parse keyring id from keyring"
++	fi
++
++	sudo evmctl import $CERT_FILE "$keyring_id" > /dev/null || \
++		tst_brk TCONF "unable to import a cert into the .ima keyring"
++
++	grep -F ".ima" "$ASCII_MEASUREMENTS" | tail -n1 | cut -d' ' -f6 | \
++		xxd -r -p > $TEST_FILE || \
++		tst_brk TCONF "cert not found in ascii_runtime_measurements log"
++
++	if ! openssl x509 -in $TEST_FILE -inform der > /dev/null; then
++		tst_brk TCONF "The cert logged in ascii_runtime_measurements \
++($CERT_FILE) is not a valid x509 certificate"
++	fi
++
++	if cmp -s "$TEST_FILE" $CERT_FILE; then
++		tst_res TPASS "logged cert matches original cert"
++	else
++		tst_res TFAIL "logged cert does not match original cert"
++	fi
++}
++
+ tst_run
 -- 
 2.25.1
 
