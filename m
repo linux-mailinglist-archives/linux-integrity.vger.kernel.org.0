@@ -2,95 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 295151F5FEC
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jun 2020 04:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9AC1F6681
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jun 2020 13:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726441AbgFKCTY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Jun 2020 22:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726163AbgFKCTY (ORCPT
+        id S1727994AbgFKLVG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 Jun 2020 07:21:06 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10500 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727907AbgFKLVG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Jun 2020 22:19:24 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68239C08C5C1
-        for <linux-integrity@vger.kernel.org>; Wed, 10 Jun 2020 19:19:22 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id d15so2807573edm.10
-        for <linux-integrity@vger.kernel.org>; Wed, 10 Jun 2020 19:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YLqWW0R38/Z8PvUhsNci04vzswKiWQOvW+gGqv0nQGo=;
-        b=ERxOC+8sNWQJskSMx3stg22jmrva1f8keD8J09i7UzdOcEXkK0n6mndH+NiPAXfX5X
-         yS0VoaPH8YMLbq9FcNPiSsFhrFp+tj8uzFBz6tjX+fORNNgCgwmopXdBlP0f12QSBe18
-         FR272BnybQ6mzTw2hCoeJRbP5xTRc1Fs2SoBRDWHed+ViHVPh+bHeJ/iBweWRHuiztJT
-         XoJYGxvP5vRVRakFdb1s+TGZjhSItRlGZki3i1+AO6lX1WsWN5/IbEkvKYSGRSfntlXx
-         u5Bs/HwUMt0ArlKTRqVOxh0+ZxBtzUe+ysUFf+COPUeQOCzOpsjmoUUquqBtg7u+v24o
-         pVbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YLqWW0R38/Z8PvUhsNci04vzswKiWQOvW+gGqv0nQGo=;
-        b=Gj2U/AH7ZpuXtuCL5E+bi26PsRkzLbPCdr2Ck5QCumkUp7bkqb9zoMn5Og4gImK9lp
-         cKLatPBfmH9JDjKm5umzg7eT+mdxMFdUddyYK3/A24y3MIHerNqxzvEEGBeWNLDYpSzM
-         KEr5+m+OPyMHOrkvNuRNnf+kob7J/HhBuYNFbUIM9E2GT6scC8NZYBif7zMT4O2pcfe1
-         gdP55Zdbu/hNYcG2y4EuOl7B8SKsa+L15EPy8Ow9a1weNZXoJb3GtSJ4i6UBXfqK7n/m
-         +BrtdHte9wAyo2A+OUmv8p+B93tzC4Xhab2oe2UV9I/uU79Vbho8xxwdZeR066acE6vk
-         IGrw==
-X-Gm-Message-State: AOAM533yB/fG36gDfXxspPeXmKwjbIqGDnwjk8BmkSUs6erPuagFCOW9
-        LTMpLQrid5Qj5moFp+BINXWOlo1YY/SP/DN6jTwH
-X-Google-Smtp-Source: ABdhPJx4K3nSbSZ4Yqt038h06TxmyoVYplISHIXhvrr/n3PL3cOiKIIx0iPc+IzcO+GSCsswHksOCSDbxryz5RDEjVg=
-X-Received: by 2002:a05:6402:3ca:: with SMTP id t10mr5177275edw.128.1591841961040;
- Wed, 10 Jun 2020 19:19:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200611000400.3771-1-nramas@linux.microsoft.com>
- <CAHC9VhTZb_evUcdygs6MHP73Bi_r3esxV6+Ko6VDpncfmLYEZw@mail.gmail.com> <5cc042be-a3cf-ae39-c4f5-e474d02c0613@linux.microsoft.com>
-In-Reply-To: <5cc042be-a3cf-ae39-c4f5-e474d02c0613@linux.microsoft.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 10 Jun 2020 22:19:10 -0400
-Message-ID: <CAHC9VhRAc3oCUhZmwbup6ivN3A_AMiBDxgjME_Ly75qY_doLVw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] integrity: Add errno field in audit message
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, sgrubb@redhat.com, rgb@redhat.com,
-        linux-integrity@vger.kernel.org, linux-audit@redhat.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 11 Jun 2020 07:21:06 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05BB3s5G029997;
+        Thu, 11 Jun 2020 07:20:03 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31khbym853-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Jun 2020 07:20:03 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05BBFXcp001911;
+        Thu, 11 Jun 2020 11:20:01 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 31g2s81gh8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Jun 2020 11:20:01 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05BBJwBt63897802
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 Jun 2020 11:19:59 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D4FE3A4069;
+        Thu, 11 Jun 2020 11:19:58 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 056FAA405C;
+        Thu, 11 Jun 2020 11:19:58 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.183.79])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 11 Jun 2020 11:19:57 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org
+Subject: [PATCH] ima: fix mprotect checking
+Date:   Thu, 11 Jun 2020 07:19:23 -0400
+Message-Id: <1591874363-28939-1-git-send-email-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.7.5
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-11_10:2020-06-10,2020-06-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 clxscore=1015 cotscore=-2147483648 mlxlogscore=999
+ mlxscore=0 malwarescore=0 bulkscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 suspectscore=1 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006110086
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jun 10, 2020 at 9:58 PM Lakshmi Ramasubramanian
-<nramas@linux.microsoft.com> wrote:
-> On 6/10/20 6:45 PM, Paul Moore wrote:
->
-> Hi Paul,
->
-> > I'm sorry I didn't get a chance to mention this before you posted this
-> > patch, but for the past several years we have been sticking with a
-> > policy of only adding new fields to the end of existing records;
-> > please adjust this patch accordingly.  Otherwise, this looks fine to
-> > me.
-> >
-> >>          audit_log_untrustedstring(ab, get_task_comm(name, current));
-> >>          if (fname) {
-> >>                  audit_log_format(ab, " name=");
-> >> --
->
-> Steve mentioned that since this new field "errno" is not a searchable
-> entry, it can be added anywhere in the audit log message.
+Make sure IMA is enabled before checking mprotect change.  Addresses
+report of a 3.7% regression of boot-time.dhcp.
 
-Steve and I have a different opinion on this issue.  I won't rehash
-the long argument or drag you into it, but I will just say that the
-*kernel* has had a policy of only adding fields to the end of existing
-records unless under extreme cases (this is not an extreme case).
+Fixes: 8eb613c0b8f1 ("ima: verify mprotect change is consistent with mmap policy")
+Reported-by: kernel test robot <rong.a.chen@intel.com>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/ima/ima_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> But I have no problem moving this to the end of the audit record.
-
-Great, please do that.  Thank you.
-
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 800fb3bba418..c1583d98c5e5 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -419,7 +419,8 @@ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
+ 	int pcr;
+ 
+ 	/* Is mprotect making an mmap'ed file executable? */
+-	if (!vma->vm_file || !(prot & PROT_EXEC) || (vma->vm_flags & VM_EXEC))
++	if (!(ima_policy_flag & IMA_APPRAISE) || !vma->vm_file ||
++	    !(prot & PROT_EXEC) || (vma->vm_flags & VM_EXEC))
+ 		return 0;
+ 
+ 	security_task_getsecid(current, &secid);
 -- 
-paul moore
-www.paul-moore.com
+2.7.5
+
