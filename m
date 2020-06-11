@@ -2,110 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE5C1F599A
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jun 2020 19:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699771F5F04
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jun 2020 02:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729271AbgFJRBm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Jun 2020 13:01:42 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:57138 "EHLO
+        id S1726948AbgFKAEG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Jun 2020 20:04:06 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:52018 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726992AbgFJRBm (ORCPT
+        with ESMTP id S1726781AbgFKAEG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Jun 2020 13:01:42 -0400
-Received: by linux.microsoft.com (Postfix, from userid 1066)
-        id 88CF620B71CC; Wed, 10 Jun 2020 10:01:41 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 88CF620B71CC
+        Wed, 10 Jun 2020 20:04:06 -0400
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 48C3620B4778;
+        Wed, 10 Jun 2020 17:04:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 48C3620B4778
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1591808501;
-        bh=D1wH1dK8bNPhiuEReUqysKhlwE/xussjWlR2j7MN71c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qm/JAsjiOas+sAhE/RT9H1QcoyBm6nm/IECJpdCRiIoBJhdS/S6Dlo6U7dRmYde6O
-         zaR46+fy/fmLB67LTtkt0w31dhdpvkVIL1Zy28guFYgNV9szayJVDUM4a9VAp7fNaC
-         9pWvb3kW64IRRhF0V1JSE7lqSltgth6yrMajaIgc=
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-To:     ltp@lists.linux.it, pvorel@suse.cz, zohar@linux.ibm.com
-Cc:     nramas@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org,
-        Lachlan Sneff <t-josne@linux.microsoft.com>
-Subject: [PATCH 2/2] IMA: Add a test to verify importing a certificate into keyring
-Date:   Wed, 10 Jun 2020 10:01:23 -0700
-Message-Id: <1591808483-22040-2-git-send-email-t-josne@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1591808483-22040-1-git-send-email-t-josne@linux.microsoft.com>
-References: <1591808483-22040-1-git-send-email-t-josne@linux.microsoft.com>
+        s=default; t=1591833845;
+        bh=Jg1D9fyRRgF71SKb0UGGuUXLQN77lsoxtU1UUIl2BWQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XrTM444nDjhTHOBImXLhSueVbU2Wzy4Ggy0tUSa/Jo4xjTjBuw0H3D1bFzMevPYbU
+         OrcfT6jIOtz1sIQuPPiRIvAZOGdsi22R19zyQrl5PIjqzyxVOswrslcVD607ykDXWt
+         Hrrsyo/cjwNW2cjMPHGKazsHroclASjfTipPXb3A=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, sgrubb@redhat.com, paul@paul-moore.com
+Cc:     rgb@redhat.com, linux-integrity@vger.kernel.org,
+        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] integrity: Add errno field in audit message
+Date:   Wed, 10 Jun 2020 17:03:59 -0700
+Message-Id: <20200611000400.3771-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add an IMA measurement test that verifies that an x509 certificate
-can be imported into the .ima keyring and measured correctly.
+Error code is not included in the audit messages logged by
+the integrity subsystem. Add a new field namely "errno" in
+the audit message and set the value to the error code passed
+to integrity_audit_msg() in the "result" parameter.
 
-Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
+Sample audit message:
+
+[    6.284329] audit: type=1804 audit(1591756723.627:2): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=kernel op=add_boot_aggregate cause=alloc_entry errno=-12 comm="swapper/0" name="boot_aggregate" res=0
+
+Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Suggested-by: Steve Grubb <sgrubb@redhat.com>
 ---
- .../security/integrity/ima/tests/ima_keys.sh  | 44 ++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
+ security/integrity/integrity_audit.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-index 1b0dd0aed..6904fabfa 100644
---- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-@@ -7,7 +7,7 @@
- 
- TST_NEEDS_CMDS="awk cut"
- TST_SETUP="setup"
--TST_CNT=1
-+TST_CNT=2
- TST_NEEDS_DEVICE=1
- 
- . ima_setup.sh
-@@ -69,4 +69,46 @@ $(echo "$line" | cut -d' ' -f5) keyring"
- 	tst_res TPASS "specified keyrings were measured correctly"
- }
- 
-+
-+# Test that a cert can be imported into the ".ima" keyring correctly.
-+test2() {
-+	local keyring_id key_id
-+	CERT_FILE="/etc/keys/x509_ima.der" # Default
-+
-+	[ -f $CERT_FILE ] || tst_brk TCONF "missing $CERT_FILE"
-+
-+	if ! openssl x509 -in $CERT_FILE -inform der > /dev/null; then
-+		tst_brk TCONF "The suppled cert file ($CERT_FILE) is not \
-+a valid x509 certificate"
-+	fi
-+
-+	tst_res TINFO "adding a cert to the \".ima\" keyring ($CERT_FILE)"
-+
-+	keyring_id=$(sudo keyctl show %:.ima | sed -n 2p | \
-+		sed 's/^[[:space:]]*//' | cut -d' ' -f1) || \
-+		tst_btk TCONF "unable to retrieve .ima keyring id"
-+
-+	if ! tst_is_num	"$keyring_id"; then
-+		tst_brk TCONF "unable to parse keyring id from keyring"
-+	fi
-+
-+	sudo evmctl import $CERT_FILE "$keyring_id" > /dev/null || \
-+		tst_brk TCONF "unable to import a cert into the .ima keyring"
-+
-+	grep -F ".ima" "$ASCII_MEASUREMENTS" | tail -n1 | cut -d' ' -f6 | \
-+		xxd -r -p > $TEST_FILE || \
-+		tst_brk TCONF "cert not found in ascii_runtime_measurements log"
-+
-+	if ! openssl x509 -in $TEST_FILE -inform der > /dev/null; then
-+		tst_brk TCONF "The cert logged in ascii_runtime_measurements \
-+($CERT_FILE) is not a valid x509 certificate"
-+	fi
-+
-+	if cmp -s "$TEST_FILE" $CERT_FILE; then
-+		tst_res TPASS "logged cert matches original cert"
-+	else
-+		tst_res TFAIL "logged cert does not match original cert"
-+	fi
-+}
-+
- tst_run
+diff --git a/security/integrity/integrity_audit.c b/security/integrity/integrity_audit.c
+index 5109173839cc..8cbf415bb977 100644
+--- a/security/integrity/integrity_audit.c
++++ b/security/integrity/integrity_audit.c
+@@ -42,7 +42,8 @@ void integrity_audit_msg(int audit_msgno, struct inode *inode,
+ 			 from_kuid(&init_user_ns, audit_get_loginuid(current)),
+ 			 audit_get_sessionid(current));
+ 	audit_log_task_context(ab);
+-	audit_log_format(ab, " op=%s cause=%s comm=", op, cause);
++	audit_log_format(ab, " op=%s cause=%s errno=%d comm=",
++			 op, cause, result);
+ 	audit_log_untrustedstring(ab, get_task_comm(name, current));
+ 	if (fname) {
+ 		audit_log_format(ab, " name=");
 -- 
-2.25.1
+2.27.0
 
