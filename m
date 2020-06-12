@@ -2,116 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D392F1F7C48
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jun 2020 19:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9648E1F7D91
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jun 2020 21:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbgFLROm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Jun 2020 13:14:42 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1480 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726573AbgFLROk (ORCPT
+        id S1726444AbgFLTZb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Jun 2020 15:25:31 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58216 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726417AbgFLTZ3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Jun 2020 13:14:40 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05CH3xXg028194;
-        Fri, 12 Jun 2020 13:14:25 -0400
+        Fri, 12 Jun 2020 15:25:29 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05CIXtr5115011;
+        Fri, 12 Jun 2020 15:25:26 -0400
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31mdmf8hrg-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31m1vc0ptv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Jun 2020 13:14:25 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05CH433Z028513;
-        Fri, 12 Jun 2020 13:14:25 -0400
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31mdmf8hr3-1
+        Fri, 12 Jun 2020 15:25:26 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05CIg3gu142032;
+        Fri, 12 Jun 2020 15:25:26 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31m1vc0pth-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Jun 2020 13:14:25 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05CH0k5F032402;
-        Fri, 12 Jun 2020 17:14:24 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02dal.us.ibm.com with ESMTP id 31jqymc0q6-1
+        Fri, 12 Jun 2020 15:25:26 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05CJLhMt029152;
+        Fri, 12 Jun 2020 19:25:24 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 31g2s83t5x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Jun 2020 17:14:24 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05CHELGP22675936
+        Fri, 12 Jun 2020 19:25:24 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05CJPMuI63373472
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Jun 2020 17:14:21 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AED4B7805E;
-        Fri, 12 Jun 2020 17:14:22 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5BFDE78064;
-        Fri, 12 Jun 2020 17:14:20 +0000 (GMT)
-Received: from [153.66.254.194] (unknown [9.85.161.109])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 12 Jun 2020 17:14:20 +0000 (GMT)
-Message-ID: <1591982059.7235.29.camel@linux.ibm.com>
-Subject: Re: [PATCH] extend IMA boot_aggregate with kernel measurements
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Maurizio Drocco <maurizio.drocco@ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Fri, 12 Jun 2020 10:14:19 -0700
-In-Reply-To: <380af929b2d2440a9dc35ba0b374247d@huawei.com>
-References: <1591921795.11061.12.camel@linux.ibm.com>
-         <20200612143812.1609-1-maurizio.drocco@ibm.com>
-         <380af929b2d2440a9dc35ba0b374247d@huawei.com>
+        Fri, 12 Jun 2020 19:25:22 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0B6B652051;
+        Fri, 12 Jun 2020 19:25:22 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.133.187])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 3569F5204F;
+        Fri, 12 Jun 2020 19:25:21 +0000 (GMT)
+Message-ID: <1591989920.11061.90.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/2] integrity: Add errno field in audit message
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        sgrubb@redhat.com, paul@paul-moore.com
+Cc:     rgb@redhat.com, linux-integrity@vger.kernel.org,
+        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Date:   Fri, 12 Jun 2020 15:25:20 -0400
+In-Reply-To: <20200611000400.3771-1-nramas@linux.microsoft.com>
+References: <20200611000400.3771-1-nramas@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-11_23:2020-06-11,2020-06-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- impostorscore=0 suspectscore=0 phishscore=0 priorityscore=1501 spamscore=0
- lowpriorityscore=0 adultscore=0 mlxscore=0 malwarescore=0 clxscore=1011
- cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006110174
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 clxscore=1015 phishscore=0
+ mlxlogscore=999 cotscore=-2147483648 adultscore=0 spamscore=0
+ suspectscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006110174
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-06-12 at 15:11 +0000, Roberto Sassu wrote:
-> with recent patches, boot_aggregate can be calculated from non-SHA1
-> PCR banks. I would replace with:
+On Wed, 2020-06-10 at 17:03 -0700, Lakshmi Ramasubramanian wrote:
+> Error code is not included in the audit messages logged by
+> the integrity subsystem. Add a new field namely "errno" in
+> the audit message and set the value to the error code passed
+> to integrity_audit_msg() in the "result" parameter.
 > 
-> Extend cumulative digest over ...
+> Sample audit message:
 > 
-> Given that with this patch boot_aggregate is calculated differently,
-> shouldn't we call it boot_aggregate_v2 and enable it with a new
-> option?
+> [    6.284329] audit: type=1804 audit(1591756723.627:2): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=kernel op=add_boot_aggregate cause=alloc_entry errno=-12 comm="swapper/0" name="boot_aggregate" res=0
+> 
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Suggested-by: Steve Grubb <sgrubb@redhat.com>
+---
+>  security/integrity/integrity_audit.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/integrity_audit.c b/security/integrity/integrity_audit.c
+> index 5109173839cc..8cbf415bb977 100644
+> --- a/security/integrity/integrity_audit.c
+> +++ b/security/integrity/integrity_audit.c
+> @@ -42,7 +42,8 @@ void integrity_audit_msg(int audit_msgno, struct inode *inode,
+>  			 from_kuid(&init_user_ns, audit_get_loginuid(current)),
+>  			 audit_get_sessionid(current));
+>  	audit_log_task_context(ab);
+> -	audit_log_format(ab, " op=%s cause=%s comm=", op, cause);
+> +	audit_log_format(ab, " op=%s cause=%s errno=%d comm=",
+> +			 op, cause, result);
 
-So here's the problem: if your current grub doesn't do any TPM
-extensions (as most don't), then the two boot aggregates are the same
-because PCRs 8 and 9 are zero and there's a test that doesn't add them
-to the aggregate if they are zero.  For these people its a nop so we
-shouldn't force them to choose a different version of the same thing.
+The idea is a good idea, but you're assuming that "result" is always
+errno.  That was probably true originally, but isn't now.  For
+example, ima_appraise_measurement() calls xattr_verify(), which
+compares the security.ima hash with the calculated file hash.  On
+failure, it returns the result of memcmp().  Each and every code path
+will need to be checked.
 
-If, however, you're on a distribution where grub is automatically
-measuring the kernel and command line into PCRs 8 and 9 (I think Fedora
-32 does this), your boot aggregate will change.  It strikes me in that
-case we can call this a bug fix, since the boot aggregate isn't
-properly binding to the previous measurements without PCRs 8 and 9.  In
-this case, do we want to allow people to select an option which doesn't
-properly bind the IMA log to the boot measurements?  That sounds like a
-security hole to me.
-
-However, since it causes a user visible difference in the grub already
-measures case, do you have a current use case that would be affected? 
-As in are lots of people already running a distro with the TPM grub
-updates and relying on the old boot aggregate?
-
-James
+>  	audit_log_untrustedstring(ab, get_task_comm(name, current));
+>  	if (fname) {
+>  		audit_log_format(ab, " name=");
 
