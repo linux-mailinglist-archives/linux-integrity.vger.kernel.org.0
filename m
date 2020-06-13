@@ -2,35 +2,35 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CB11F805D
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jun 2020 04:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561001F806E
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jun 2020 04:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726404AbgFMClh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Jun 2020 22:41:37 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:54106 "EHLO
+        id S1726445AbgFMCl6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Jun 2020 22:41:58 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:54118 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726397AbgFMClh (ORCPT
+        with ESMTP id S1726398AbgFMClh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 12 Jun 2020 22:41:37 -0400
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 783EF20B4781;
+        by linux.microsoft.com (Postfix) with ESMTPSA id C47BB20B4782;
         Fri, 12 Jun 2020 19:41:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 783EF20B4781
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C47BB20B4782
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1592016096;
-        bh=h/7e7zImKiPAs9gLjjN0MWOthBgeaRk9JTCgA2PStTY=;
+        s=default; t=1592016097;
+        bh=F0KUrRtb3r8N9EtpYLjSg6CNnVGLSPMem/gwYtUR/WI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TsbozQNPeiFK7RNK/QjbJhy9+Sw4DCK3i1rNYqVyO9gH5Pnm/R+fiNzWpAZFesotY
-         X0SJaSzez0aBKNTXipAEHX7UbI90sNLdSNcyTATW0PbizY75B2OvQZ48hnS1rPSPxp
-         3BAUF/TZdi39bQ9iR/Tb0Oy+nVS0LMIjDcjD0nMo=
+        b=m2gr/iG2sDvLPc/au9Hl+dRZpsiOGNRoPgChg3DgH5M9LMgbYfilZPeZEcM4JpVZ6
+         /iz8aU+FgTF+u7tCebedOxCYTqJJtxLshjrkxpKEJ0TPmw0xae3bllzXw2gHUG9xKM
+         uGAJ7iahyFf+mawyGmdkyNeaPH9Bo/2RK5mRSF+0=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, stephen.smalley@gmail.com,
         casey@schaufler-ca.com
 Cc:     jmorris@namei.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] IMA: Define an IMA hook to measure LSM data
-Date:   Fri, 12 Jun 2020 19:41:27 -0700
-Message-Id: <20200613024130.3356-3-nramas@linux.microsoft.com>
+Subject: [PATCH 3/5] LSM: Add security_state function pointer in lsm_info struct
+Date:   Fri, 12 Jun 2020 19:41:28 -0700
+Message-Id: <20200613024130.3356-4-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200613024130.3356-1-nramas@linux.microsoft.com>
 References: <20200613024130.3356-1-nramas@linux.microsoft.com>
@@ -41,85 +41,118 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-LSM requires an IMA hook to be defined by the IMA subsystem to measure
-the data gathered from the security modules.
+The security modules that require their data to be measured need to
+define a function that the LSM can call to gather the data.
 
-Define a new IMA hook, namely ima_lsm_state(), that the LSM will call
-to measure the data gathered from the security modules.
-
-Sample IMA log entry for LSM measurement:
-
-10 47eed9... ima-buf sha256:402f6b... lsm-state:selinux 656e61626c65643d313b656e666f7263696e673d30
+Add a function pointer field namely security_state in lsm_info structure.
+Update LSM to call this security module function, if defined, to gather
+data and measure it by calling the IMA hook ima_lsm_state().
 
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 ---
- include/linux/ima.h               |  4 ++++
- security/integrity/ima/ima_main.c | 30 ++++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
+ include/linux/lsm_hooks.h |  2 ++
+ security/security.c       | 60 ++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 61 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 9164e1534ec9..56681a648b3d 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -26,6 +26,7 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- extern void ima_post_path_mknod(struct dentry *dentry);
- extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
- extern void ima_kexec_cmdline(const void *buf, int size);
-+extern void ima_lsm_state(const char *lsm_name, const void *buf, int size);
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index 3e62dab77699..da248c3fd4ac 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -1568,6 +1568,8 @@ struct lsm_info {
+ 	int *enabled;		/* Optional: controlled by CONFIG_LSM */
+ 	int (*init)(void);	/* Required. */
+ 	struct lsm_blob_sizes *blobs; /* Optional: for blob sharing. */
++	int (*security_state)(char **lsm_name, void **state,
++			      int *state_len); /*Optional */
+ };
  
- #ifdef CONFIG_IMA_KEXEC
- extern void ima_add_kexec_buffer(struct kimage *image);
-@@ -104,6 +105,9 @@ static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
- }
+ extern struct lsm_info __start_lsm_info[], __end_lsm_info[];
+diff --git a/security/security.c b/security/security.c
+index e0290b7e6a08..a6e2d1cd95af 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -86,6 +86,9 @@ static __initconst const char * const builtin_lsm_order = CONFIG_LSM;
+ static __initdata struct lsm_info **ordered_lsms;
+ static __initdata struct lsm_info *exclusive;
  
- static inline void ima_kexec_cmdline(const void *buf, int size) {}
++static struct lsm_info *security_state_lsms;
++static int security_state_lsms_count;
 +
-+static inline void ima_lsm_state(const char *lsm_name,
-+				 const void *buf, int size) {}
- #endif /* CONFIG_IMA */
- 
- #ifndef CONFIG_IMA_KEXEC
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index c1583d98c5e5..34be962054fb 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -827,6 +827,36 @@ void ima_kexec_cmdline(const void *buf, int size)
- 					   KEXEC_CMDLINE, 0, NULL);
+ static __initdata bool debug;
+ #define init_debug(...)						\
+ 	do {							\
+@@ -235,6 +238,57 @@ static void __init initialize_lsm(struct lsm_info *lsm)
+ 	}
  }
  
-+/**
-+ * ima_lsm_state - measure LSM specific state
-+ * @lsm_name: Name of the LSM
-+ * @buf: pointer to buffer containing LSM specific state
-+ * @size: Number of bytes in buf
-+ *
-+ * Buffers can only be measured, not appraised.
-+ */
-+void ima_lsm_state(const char *lsm_name, const void *buf, int size)
++static int measure_security_state(struct lsm_info *lsm)
 +{
-+	const char *eventname = "lsm-state:";
-+	char *lsmstatestring;
-+	int lsmstatelen;
++	char *lsm_name = NULL;
++	void *state = NULL;
++	int state_len = 0;
++	int rc;
 +
-+	if (!lsm_name || !buf || !size)
-+		return;
++	if (!lsm->security_state)
++		return 0;
 +
-+	lsmstatelen = strlen(eventname) + strlen(lsm_name) + 1;
-+	lsmstatestring = kzalloc(lsmstatelen, GFP_KERNEL);
-+	if (!lsmstatestring)
-+		return;
++	rc = lsm->security_state(&lsm_name, &state, &state_len);
++	if ((rc == 0) && (state_len > 0)) {
++		ima_lsm_state(lsm_name, state, state_len);
++		kfree(state);
++		kfree(lsm_name);
++	}
 +
-+	strcpy(lsmstatestring, eventname);
-+	strcat(lsmstatestring, lsm_name);
-+
-+	process_buffer_measurement(buf, size, lsmstatestring,
-+				   LSM_STATE, 0, NULL);
-+	kfree(lsmstatestring);
++	return rc;
 +}
 +
- static int __init init_ima(void)
++static void __init initialize_security_state_lsms(void)
++{
++	struct lsm_info **lsm;
++	int count = 0;
++	int inx;
++
++	for (lsm = ordered_lsms; *lsm; lsm++) {
++		if ((*lsm)->security_state)
++			count++;
++	}
++
++	if (count == 0)
++		return;
++
++	security_state_lsms = kcalloc(count, sizeof(struct lsm_info),
++				      GFP_KERNEL);
++	if (!security_state_lsms)
++		return;
++
++	inx = 0;
++	for (lsm = ordered_lsms; *lsm; lsm++) {
++		if ((*lsm)->security_state) {
++			security_state_lsms[inx].security_state =
++				(*lsm)->security_state;
++			inx++;
++		}
++	}
++
++	security_state_lsms_count = count;
++}
++
+ /* Populate ordered LSMs list from comma-separated LSM name list. */
+ static void __init ordered_lsm_parse(const char *order, const char *origin)
  {
- 	int error;
+@@ -352,8 +406,12 @@ static void __init ordered_lsm_init(void)
+ 
+ 	lsm_early_cred((struct cred *) current->cred);
+ 	lsm_early_task(current);
+-	for (lsm = ordered_lsms; *lsm; lsm++)
++	for (lsm = ordered_lsms; *lsm; lsm++) {
+ 		initialize_lsm(*lsm);
++		measure_security_state(*lsm);
++	}
++
++	initialize_security_state_lsms();
+ 
+ 	kfree(ordered_lsms);
+ }
 -- 
 2.27.0
 
