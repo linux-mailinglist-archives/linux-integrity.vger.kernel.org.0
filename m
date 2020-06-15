@@ -2,113 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AED8B1F9CAB
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2020 18:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DF31F9DC6
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2020 18:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730135AbgFOQKe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 15 Jun 2020 12:10:34 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40832 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728585AbgFOQKd (ORCPT
+        id S1730713AbgFOQpu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 15 Jun 2020 12:45:50 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55090 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728585AbgFOQpt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 15 Jun 2020 12:10:33 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05FG3jdq097237;
-        Mon, 15 Jun 2020 12:10:28 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31mtxf3krh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Jun 2020 12:10:28 -0400
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05FG45MO099034;
-        Mon, 15 Jun 2020 12:10:27 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31mtxf3kpf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Jun 2020 12:10:27 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05FG14Ek001730;
-        Mon, 15 Jun 2020 16:10:24 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 31mpe81jcr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Jun 2020 16:10:24 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05FGAMPT3080502
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Jun 2020 16:10:22 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6687311C054;
-        Mon, 15 Jun 2020 16:10:22 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 54C5311C069;
-        Mon, 15 Jun 2020 16:10:21 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.184.11])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 15 Jun 2020 16:10:21 +0000 (GMT)
-Message-ID: <1592237420.11061.144.camel@linux.ibm.com>
-Subject: Re: [PATCH 5/5] LSM: Define workqueue for measuring security module
+        Mon, 15 Jun 2020 12:45:49 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A5BB520B4780;
+        Mon, 15 Jun 2020 09:45:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A5BB520B4780
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1592239548;
+        bh=XWqIoID6oSJi5sFAyDXKdR658vGMUI/XhOZPL0DsKnA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=aUYzJCzFeQs+E1ArnYzFlomMA/IssGZNCua/12Ubl8cVtJJPgf1aW8IEd6Hb54Zuv
+         6iWDu3Nyl7+Q6Nu4kCWvt/q8Yq6G05vX28voSp3QubdOutU2hmwJ6pOurhIk+bCe0D
+         ScAH/mqlpvnydpdE9sHA5BOsIkhYeyDjbuQ/DqpY=
+Subject: Re: [PATCH 4/5] LSM: Define SELinux function to measure security
  state
-From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Stephen Smalley <stephen.smalley@gmail.com>,
         Casey Schaufler <casey@schaufler-ca.com>,
         James Morris <jmorris@namei.org>,
         linux-integrity@vger.kernel.org,
         LSM List <linux-security-module@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Mon, 15 Jun 2020 12:10:20 -0400
-In-Reply-To: <CAEjxPJ61dup9HDQny_TAb7we-vcN-sM17y4x0Pos3d7ERaab9g@mail.gmail.com>
 References: <20200613024130.3356-1-nramas@linux.microsoft.com>
-         <20200613024130.3356-6-nramas@linux.microsoft.com>
-         <CAEjxPJ7v5Lu-vzqg0ZVh8zJ9uZ=odN3jt_5+9d9x+RydsNWK0g@mail.gmail.com>
-         <1592233145.11061.129.camel@linux.ibm.com>
-         <CAEjxPJ61dup9HDQny_TAb7we-vcN-sM17y4x0Pos3d7ERaab9g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-15_03:2020-06-15,2020-06-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 suspectscore=0
- phishscore=0 lowpriorityscore=0 mlxscore=0 cotscore=-2147483648
- bulkscore=0 adultscore=0 mlxlogscore=999 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006150111
+ <20200613024130.3356-5-nramas@linux.microsoft.com>
+ <CAEjxPJ49UaZc9pc-+VN8Cx8rcdrjD6NMoLOO_zqENezobmfwVA@mail.gmail.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <a9a20aa5-963e-5f49-9391-0673fdda378e@linux.microsoft.com>
+Date:   Mon, 15 Jun 2020 09:45:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <CAEjxPJ49UaZc9pc-+VN8Cx8rcdrjD6NMoLOO_zqENezobmfwVA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-06-15 at 11:47 -0400, Stephen Smalley wrote:
-> On Mon, Jun 15, 2020 at 10:59 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >
-> > On Mon, 2020-06-15 at 09:33 -0400, Stephen Smalley wrote:
-> > > On Fri, Jun 12, 2020 at 10:42 PM Lakshmi Ramasubramanian
-> > > <nramas@linux.microsoft.com> wrote:
-> > > >
-> > > > The data maintained by the security modules could be tampered with by
-> > > > malware. The LSM needs to periodically query the state of
-> > > > the security modules and measure the data when the state is changed.
-> > > >
-> > > > Define a workqueue for handling this periodic query and measurement.
-> > >
-> > > Won't this make it difficult/impossible to predict the IMA PCR value?
-> > > Unless I missed it, you are going to end up measuring every N minutes
-> > > even if there was no change and therefore constantly be extending the
-> > > PCR.  That will break attestation or sealing against the IMA PCR.
-> >
-> > Even if it attempts to add the same measurement to the list multiple
-> > times, unless something changed, there should only be one measurement
-> > in the list.
+On 6/15/20 4:57 AM, Stephen Smalley wrote:
+
+Hi Stephen,
+
+Thanks for reviewing the patches.
+
+>> +void security_state_change(char *lsm_name, void *state, int state_len)
+>> +{
+>> +       ima_lsm_state(lsm_name, state, state_len);
+>> +}
+>> +
 > 
-> Is the PCR only extended once?
+> What's the benefit of this trivial function instead of just calling
+> ima_lsm_state() directly?
 
-Yes, otherwise you wouldn't be able to verify a quote.
- ima_lookup_digest_entry() first verifies the hash isn't in the cache,
-before adding it to the measurement list and then extending the TPM.
+One of the feedback Casey Schaufler had given earlier was that calling 
+an IMA function directly from SELinux (or, any of the Security Modules) 
+would be a layering violation.
 
-Mimi
+LSM framework (security/security.c) already calls IMA functions now (for 
+example, ima_bprm_check() is called from security_bprm_check()). I 
+followed the same pattern for measuring LSM data as well.
+
+Please let me know if I misunderstood Casey's comment.
+
+>> +static int selinux_security_state(char **lsm_name, void **state,
+>> +                                 int *state_len)
+>> +{
+>> +       int rc = 0;
+>> +       char *new_state;
+>> +       static char *security_state_string = "enabled=%d;enforcing=%d";
+>> +
+>> +       *lsm_name = kstrdup("selinux", GFP_KERNEL);
+>> +       if (!*lsm_name)
+>> +               return -ENOMEM;
+>> +
+>> +       new_state = kzalloc(strlen(security_state_string) + 1, GFP_KERNEL);
+>> +       if (!new_state) {
+>> +               kfree(*lsm_name);
+>> +               *lsm_name = NULL;
+>> +               rc = -ENOMEM;
+>> +               goto out;
+>> +       }
+>> +
+>> +       *state_len = sprintf(new_state, security_state_string,
+>> +                            !selinux_disabled(&selinux_state),
+>> +                            enforcing_enabled(&selinux_state));
+> 
+> I think I mentioned this on a previous version of these patches, but I
+> would recommend including more than just the enabled and enforcing
+> states in your measurement.  Other low-hanging fruit would be the
+> other selinux_state booleans (checkreqprot, initialized,
+> policycap[0..__POLICYDB_CAPABILITY_MAX]).  Going a bit further one
+> could take a hash of the loaded policy by using security_read_policy()
+> and then computing a hash using whatever hash ima prefers over the
+> returned data,len pair.  You likely also need to think about how to
+> allow future extensibility of the state in a backward-compatible
+> manner, so that future additions do not immediately break systems
+> relying on older measurements.
+> 
+
+Sure - I will address this one in the next update.
+
+thanks,
+  -lakshmi
