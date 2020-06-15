@@ -2,107 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB951F9A4B
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2020 16:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778FA1F9B2B
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2020 16:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730615AbgFOOcx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 15 Jun 2020 10:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730279AbgFOOcx (ORCPT
+        id S1730830AbgFOO7S (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 15 Jun 2020 10:59:18 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15810 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730793AbgFOO7S (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 15 Jun 2020 10:32:53 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE348C05BD43
-        for <linux-integrity@vger.kernel.org>; Mon, 15 Jun 2020 07:32:52 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id o4so9121086ybp.0
-        for <linux-integrity@vger.kernel.org>; Mon, 15 Jun 2020 07:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mBHfWvG1RIV80Qm0vTG/TJJq/QXnEHlxY8x/LtZQxME=;
-        b=LA7C8lBEqsjQ76Nh70y54JiN/24onh1bYawDbjiH/G/EwIusxgbI0a0dOIWOlzLRB6
-         hwM+CQpIM1prkKYIi8vsGCpZIePsov3HDZyL5+SO5TSLqzFps/Hl1R6hEbrumk0UFAwc
-         fRVDxPFoxyxYpDwB7x6slFZMGg+UwqLMDdJqkCaFgdlklrvDBq2S12u5dxb+5O56QdE6
-         hQVCyCmlMd8spyhDzpDr9Hbdf85lCcweQKsScofiyB85ACDa+CWRonZLNaDC4bRVJw2H
-         uNfBIGqE9CmcqB0p1VBH5yPcev5QvWWmhWAFY4AlFStAH5N37vWrt7LVwfPF/xVMmrBQ
-         pigA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mBHfWvG1RIV80Qm0vTG/TJJq/QXnEHlxY8x/LtZQxME=;
-        b=Ye+ZVXDEEoVGGUKlyDTwC5LFeErCEZiR2gWPorpiJYPbl5fJ+p/rZmR4cIHktXH2Sj
-         I1GoRpGYpt9jb+oN3oM+R/YkZub3XGoqwutC7KKq8HrEFQOo6vFJycMawHULzo81l6+I
-         l03OCNsj7zrg3ZzhvCy3YfWZQUJJd9gKshQyxVXdet/FJcQQzn14BY3BFgze35qb/08o
-         bhwwlP72aVx67rBcTPoO1a/WJChuTA09eumn/0PEFhDZwPePcM2UmRYuAeMOPjqPMU7d
-         Ue8kbqqP1iTFcLeBrhAgw0cvbhseG+DTdrr/u5wWw5nwcMoTjf4b6XyRwhOrmKaBaO2t
-         Jflw==
-X-Gm-Message-State: AOAM532jXjs2YYxFJ7itqDKNdR1x/K5lQa2h5L4FlJ9rg4CHQzvBklTB
-        HFwseyW5tgn8NmBv9NJfLROPMFQW4HyHZCbagS/xbQ==
-X-Google-Smtp-Source: ABdhPJwGrXXWQd2EBc9axDU5/+8oIbuJL0wMB+/DzxWcoQO3VSHyYp1eMYpDhLUUD3J+xgtnBmXccm30c6WCmAKQZmk=
-X-Received: by 2002:a25:da96:: with SMTP id n144mr43789713ybf.291.1592231571611;
- Mon, 15 Jun 2020 07:32:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200604175851.758-1-maxim.uvarov@linaro.org>
-In-Reply-To: <20200604175851.758-1-maxim.uvarov@linaro.org>
-From:   Maxim Uvarov <maxim.uvarov@linaro.org>
-Date:   Mon, 15 Jun 2020 17:32:40 +0300
-Message-ID: <CAD8XO3YTz=xN2k5h8HsrYsLUgmC6dD57XbBj63e+3_xFF1H0rw@mail.gmail.com>
-Subject: Re: [PATCHv8 0/3] optee: register drivers on optee bus
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>
-Cc:     peterhuewe@gmx.de,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>
+        Mon, 15 Jun 2020 10:59:18 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05FE2flF024089;
+        Mon, 15 Jun 2020 10:59:12 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31mseymq8m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Jun 2020 10:59:11 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05FElM6M019905;
+        Mon, 15 Jun 2020 10:59:11 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31mseymq79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Jun 2020 10:59:11 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05FEu0qZ023477;
+        Mon, 15 Jun 2020 14:59:09 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 31mpe83sv2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Jun 2020 14:59:09 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05FEvnCs61931950
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Jun 2020 14:57:49 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CA3AF42049;
+        Mon, 15 Jun 2020 14:59:06 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D4E724207A;
+        Mon, 15 Jun 2020 14:59:05 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.184.11])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 15 Jun 2020 14:59:05 +0000 (GMT)
+Message-ID: <1592233145.11061.129.camel@linux.ibm.com>
+Subject: Re: [PATCH 5/5] LSM: Define workqueue for measuring security module
+ state
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Stephen Smalley <stephen.smalley@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>,
+        linux-integrity@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Mon, 15 Jun 2020 10:59:05 -0400
+In-Reply-To: <CAEjxPJ7v5Lu-vzqg0ZVh8zJ9uZ=odN3jt_5+9d9x+RydsNWK0g@mail.gmail.com>
+References: <20200613024130.3356-1-nramas@linux.microsoft.com>
+         <20200613024130.3356-6-nramas@linux.microsoft.com>
+         <CAEjxPJ7v5Lu-vzqg0ZVh8zJ9uZ=odN3jt_5+9d9x+RydsNWK0g@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-15_03:2020-06-15,2020-06-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 impostorscore=0 priorityscore=1501 adultscore=0
+ suspectscore=0 malwarescore=0 mlxscore=0 clxscore=1015
+ cotscore=-2147483648 phishscore=0 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006150111
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-ping.
-Patchset was reviewed and all comments are codeverd. Optee-os patches
-were merged. These kernel patches look like they are hanging
-somewhere...
+On Mon, 2020-06-15 at 09:33 -0400, Stephen Smalley wrote:
+> On Fri, Jun 12, 2020 at 10:42 PM Lakshmi Ramasubramanian
+> <nramas@linux.microsoft.com> wrote:
+> >
+> > The data maintained by the security modules could be tampered with by
+> > malware. The LSM needs to periodically query the state of
+> > the security modules and measure the data when the state is changed.
+> >
+> > Define a workqueue for handling this periodic query and measurement.
+> 
+> Won't this make it difficult/impossible to predict the IMA PCR value?
+> Unless I missed it, you are going to end up measuring every N minutes
+> even if there was no change and therefore constantly be extending the
+> PCR.  That will break attestation or sealing against the IMA PCR.
 
-Thanks,
-Maxim.
+Even if it attempts to add the same measurement to the list multiple
+times, unless something changed, there should only be one measurement
+in the list.
 
-On Thu, 4 Jun 2020 at 20:58, Maxim Uvarov <maxim.uvarov@linaro.org> wrote:
->
-> v8: - fix v7 check.
-> v7: - check return value of dev_set_name() (Jarkko Sakkinen)
-> v6: - description, comments, patches reorder and destroy workqueue (Sumit Garg)
-> v5: - removed pr_err and fix typos in description (Jarkko Sakkinen)
->     - added missed kfree in optee_open()
-> v4: - sysfs entry is optee-ta-uuid (Jerome Forissier, Sumit Garg)
->     - added Documentation/ABI/testing/sysfs-bus-optee-devices (Greg Kroah-Hartman)
-> v3: - support tee-suppicant restart (Jens Wiklander)
->     - description and comments (Jarkko Sakkinen)
->     - do not name optee drivers by index in sysfs (Sumit Garg)
-> v2: - write TEE with capital letters.
->     - declare __optee_enumerate_device() as static.
->
-> Maxim Uvarov (3):
->   optee: use uuid for sysfs driver entry
->   optee: enable support for multi-stage bus enumeration
->   tpm_ftpm_tee: register driver on TEE bus
->
->  .../ABI/testing/sysfs-bus-optee-devices       |  8 +++
->  MAINTAINERS                                   |  1 +
->  drivers/char/tpm/tpm_ftpm_tee.c               | 70 ++++++++++++++++---
->  drivers/tee/optee/core.c                      | 27 ++++++-
->  drivers/tee/optee/device.c                    | 38 +++++-----
->  drivers/tee/optee/optee_private.h             | 10 ++-
->  6 files changed, 119 insertions(+), 35 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-optee-devices
->
-> --
-> 2.17.1
->
+Mimi
