@@ -2,161 +2,144 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 138791F9EEC
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2020 19:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDC91F9F2A
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2020 20:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731249AbgFOR6x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 15 Jun 2020 13:58:53 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37072 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728585AbgFOR6u (ORCPT
+        id S1731316AbgFOSJn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 15 Jun 2020 14:09:43 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:55738 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728585AbgFOSJm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 15 Jun 2020 13:58:50 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05FHoTnD071497;
-        Mon, 15 Jun 2020 13:58:47 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31n0mmu5yw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Jun 2020 13:58:47 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05FHu84K024963;
-        Mon, 15 Jun 2020 17:58:45 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma01fra.de.ibm.com with ESMTP id 31mpe7hmgp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Jun 2020 17:58:45 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05FHvPBU51708248
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Jun 2020 17:57:25 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E7728AE053;
-        Mon, 15 Jun 2020 17:58:42 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2CC27AE045;
-        Mon, 15 Jun 2020 17:58:42 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.184.11])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 15 Jun 2020 17:58:42 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
-        Maurizio Drocco <maurizio.drocco@ibm.com>
-Subject: [PATCH] ima_evm_utils: emit the per TPM PCR bank "boot_aggregate" values
-Date:   Mon, 15 Jun 2020 13:58:39 -0400
-Message-Id: <1592243919-29915-1-git-send-email-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.7.5
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-15_07:2020-06-15,2020-06-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- cotscore=-2147483648 suspectscore=3 clxscore=1015 mlxscore=0 phishscore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006150131
+        Mon, 15 Jun 2020 14:09:42 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05FI7hca026496;
+        Mon, 15 Jun 2020 18:08:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=EdV85x/l0ZQB7qs/RGol05XelTO/TGwy+i5Nwcf8gRM=;
+ b=ksIm2T40o14OrDnPOVl41oLfXflESyB3DKHmSrY07W8hiE/Z7QLC5o1aUTaHPRbSwzbu
+ 9c0NwLH9cAIIrEop8mGTFh8G1XGbz9PddITo/iGjFqouwLRZRmyMPkuv312Tprpn0qqE
+ vsgCBz56dXPpSbVxKCQXClzuApbPztWVszZo40Z9/pDvMf5EwgQrvvf51uoX9UnrZp3o
+ w/4xkBk0XXZDlc2YcrCzTOExgRGYIv3Y4giKzpy8SzyD0DJs8FkiFKoy2usbln1dH7C7
+ /e2gagyqK7O847BIeVNSzHbKNPgl/68telPWwh1LacJqZVCnTiRrQlKn7a2GbDXIJ48j 0Q== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 31p6s22cke-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 15 Jun 2020 18:08:31 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05FHwvkZ051587;
+        Mon, 15 Jun 2020 18:08:30 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 31p6de1e1n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Jun 2020 18:08:30 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05FI8G7g031730;
+        Mon, 15 Jun 2020 18:08:17 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 15 Jun 2020 11:08:15 -0700
+Date:   Mon, 15 Jun 2020 21:07:53 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        samba-technical@lists.samba.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+        linux-sctp@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        devel@driverdev.osuosl.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, x86@kernel.org,
+        kasan-dev@googlegroups.com, cocci@systeme.lip6.fr,
+        linux-wpan@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        ecryptfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, wireguard@lists.zx2c4.com,
+        linux-ppp@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+Message-ID: <20200615180753.GJ4151@kadam>
+References: <20200413211550.8307-1-longman@redhat.com>
+ <20200413211550.8307-2-longman@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 adultscore=0 bulkscore=0
+ phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=930 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006150134
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
+ clxscore=1011 mlxscore=0 mlxlogscore=944 priorityscore=1501 phishscore=0
+ malwarescore=0 suspectscore=2 spamscore=0 cotscore=-2147483648 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006150135
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Instead of emitting the per TPM PCR bank "boot_aggregate" values one
-at a time, store them in a buffer and emit them all at once.
+On Mon, Apr 13, 2020 at 05:15:49PM -0400, Waiman Long wrote:
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 23c7500eea7d..c08bc7eb20bd 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -1707,17 +1707,17 @@ void *krealloc(const void *p, size_t new_size, gfp_t flags)
+>  EXPORT_SYMBOL(krealloc);
+>  
+>  /**
+> - * kzfree - like kfree but zero memory
+> + * kfree_sensitive - Clear sensitive information in memory before freeing
+>   * @p: object to free memory of
+>   *
+>   * The memory of the object @p points to is zeroed before freed.
+> - * If @p is %NULL, kzfree() does nothing.
+> + * If @p is %NULL, kfree_sensitive() does nothing.
+>   *
+>   * Note: this function zeroes the whole allocated buffer which can be a good
+>   * deal bigger than the requested buffer size passed to kmalloc(). So be
+>   * careful when using this function in performance sensitive code.
+>   */
+> -void kzfree(const void *p)
+> +void kfree_sensitive(const void *p)
+>  {
+>  	size_t ks;
+>  	void *mem = (void *)p;
+> @@ -1725,10 +1725,10 @@ void kzfree(const void *p)
+>  	if (unlikely(ZERO_OR_NULL_PTR(mem)))
+>  		return;
+>  	ks = ksize(mem);
+> -	memset(mem, 0, ks);
+> +	memzero_explicit(mem, ks);
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+This is an unrelated bug fix.  It really needs to be pulled into a
+separate patch by itself and back ported to stable kernels.
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- src/evmctl.c | 55 +++++++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 53 insertions(+), 2 deletions(-)
+>  	kfree(mem);
+>  }
+> -EXPORT_SYMBOL(kzfree);
+> +EXPORT_SYMBOL(kfree_sensitive);
+>  
+>  /**
+>   * ksize - get the actual amount of memory allocated for a given object
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 675980823636..1d065ceed886 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -1937,11 +1937,36 @@ static void calc_bootaggr(struct tpm_bank_info *bank)
- 	}
- 
- out:
--	printf("%s:", bank->algo_name);
--	imaevm_hexdump(bank->digest, bank->digest_size);
- #if OPENSSL_VERSION_NUMBER >= 0x10100000
- 	EVP_MD_CTX_free(pctx);
- #endif
-+
-+}
-+
-+/*
-+ * The "boot_aggregate" format is the TPM PCR bank algorithm, a colon
-+ * separator, followed by a per bank TPM PCR bank specific digest.
-+ * Store the TPM PCR bank specific "boot_aggregate" value as a newline
-+ * terminated string in the provided buffer.
-+ */
-+static int append_bootaggr(char *bootaggr, struct tpm_bank_info *tpm_banks)
-+{
-+	uint8_t *buf;
-+	int j;
-+
-+	strcpy(bootaggr, tpm_banks->algo_name);
-+	j = strlen(tpm_banks->algo_name);
-+	bootaggr[j++] = ':';
-+
-+	for (buf = tpm_banks->digest;
-+	     buf < (tpm_banks->digest + tpm_banks->digest_size);
-+	     buf++) {
-+		bootaggr[j++] = hex_asc_hi(*buf);
-+		bootaggr[j++] = hex_asc_lo(*buf);
-+	}
-+
-+	bootaggr[j++] = '\n';
-+	return j;
- }
- 
- /*
-@@ -1953,7 +1978,10 @@ out:
- static int cmd_ima_bootaggr(struct command *cmd)
- {
- 	struct tpm_bank_info *tpm_banks;
-+	int bootaggr_len = 0;
-+	char *bootaggr;
- 	int num_banks = 0;
-+	int offset = 0;
- 	int i;
- 
- 	tpm_banks = init_tpm_banks(&num_banks);
-@@ -1963,11 +1991,34 @@ static int cmd_ima_bootaggr(struct command *cmd)
- 		return -1;
- 	}
- 
-+	/*
-+	 * Allocate enough memory for the per TPM 2.0 PCR bank algorithm,
-+	 * the colon separator, the boot_aggregate digest and newline.
-+	 *
-+	 * Format: <hash algorithm name>:<boot_aggregate digest>\n ...
-+	 */
-+	for (i = 0; i < num_banks; i++) {
-+		if (!tpm_banks[i].supported)
-+			continue;
-+		bootaggr_len += strlen(tpm_banks[i].algo_name) + 1;
-+		bootaggr_len += (tpm_banks[i].digest_size * 2) + 1;
-+	}
-+	bootaggr = malloc(bootaggr_len);
-+
-+	/*
-+	 * Calculate and convert the per TPM 2.0 PCR bank algorithm
-+	 * "boot_aggregate" digest from binary to asciihex.  Store the
-+	 * "boot_aggregate" values as a list of newline terminated
-+	 * strings.
-+	 */
- 	for (i = 0; i < num_banks; i++) {
- 		if (!tpm_banks[i].supported)
- 			continue;
- 		calc_bootaggr(&tpm_banks[i]);
-+		offset += append_bootaggr(bootaggr + offset, tpm_banks + i);
- 	}
-+	printf("%s", bootaggr);
-+	free(bootaggr);
- 	return 0;
- }
- 
--- 
-2.7.5
-
+regards,
+dan carpenter
