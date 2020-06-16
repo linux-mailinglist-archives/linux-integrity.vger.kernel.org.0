@@ -2,125 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3561FAC0C
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 11:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B381FABE7
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 11:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727914AbgFPJMc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 05:12:32 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:48598 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725901AbgFPJMb (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 05:12:31 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G93Vcj108652;
-        Tue, 16 Jun 2020 09:10:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=vHFhOuRLkm8vQDg8Dof4S5HKAiKznh8tBQ+Mr1OID/Q=;
- b=cVx0KE5h1EIzH/Nv6xjfZ5nTWCPzlMev+meeNe8ig/R6zGb1hcI4zPyrerRBxYg+mmc+
- qKwemscmFpcbtZudgCHIJKFWU2+MEqUR3sjHNYzDUDCSWPx5pmD4LBuQpWhngStPV5H0
- 4QQ1w6PiSDdHFWQ+ndzL39yxLvqknoA5VRhKUkk0TCj0AiX8q664S4ecxGUJH34dsTgv
- f9QhZLAjaVCh+OyWTAfnAqTx90cKQuDChSnHHM+F7Utt0PRApBfU8iMActdQhiOLrCqP
- +xx+YuMkqnBp9yLLOcyvwHAC7rCtpaJ69Rrf1s2Xt7AKk0laObtgJ3Pt4+o8dQUQESCt bA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 31p6e5wptp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 Jun 2020 09:10:36 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G933ih037660;
-        Tue, 16 Jun 2020 09:08:35 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 31p6s6w4s2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Jun 2020 09:08:35 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05G98O1L002227;
-        Tue, 16 Jun 2020 09:08:25 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 16 Jun 2020 02:08:24 -0700
-Date:   Tue, 16 Jun 2020 12:08:07 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        linux-btrfs@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Sterba <dsterba@suse.cz>,
-        David Howells <dhowells@redhat.com>, linux-mm@kvack.org,
-        linux-sctp@vger.kernel.org, keyrings@vger.kernel.org,
-        kasan-dev@googlegroups.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        linux-scsi@vger.kernel.org, James Morris <jmorris@namei.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-wpan@vger.kernel.org, David Rientjes <rientjes@google.com>,
-        linux-pm@vger.kernel.org, ecryptfs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        virtualization@lists.linux-foundation.org,
-        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Joe Perches <joe@perches.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-ppp@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] mm/slab: Use memzero_explicit() in kzfree()
-Message-ID: <20200616090807.GK4151@kadam>
-References: <20200616015718.7812-1-longman@redhat.com>
- <20200616015718.7812-2-longman@redhat.com>
- <20200616064208.GA9499@dhcp22.suse.cz>
+        id S1727819AbgFPJIv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 05:08:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40766 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727804AbgFPJIu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Jun 2020 05:08:50 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C272A207DD;
+        Tue, 16 Jun 2020 09:08:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592298529;
+        bh=mMcZbBKDIEf5QDbJvhcjb8NySIKsPG7Fhgc8LiSbKCo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QAbJhmj34S2Fh7X92lHNNV0g9TgINhpbE+Xi01XOpZGNnKr1JQOzc8zJFa/Q/IWIE
+         KUXLzFRoNnTDPXxxfw5nMVDVRRo5OGfYUCr1Uu+PHiRMjg+ihC/RhWsE2s9n/dd3g0
+         4HFqrjPh5o76I0Mk0irL6v+qQWIW1zQYLLpbow1A=
+Received: by mail-oi1-f176.google.com with SMTP id a137so18611837oii.3;
+        Tue, 16 Jun 2020 02:08:49 -0700 (PDT)
+X-Gm-Message-State: AOAM532iBcwy8DQnU/c6AeEDsaRJC0okNSv1M7hOKPjTmTBuLeg5FPR0
+        tulR5SBG+4hKCDmeyhe9hKWIAUAr0/AYstUiE8M=
+X-Google-Smtp-Source: ABdhPJwa1K5xO9vLA3j1dAI/megl1vvVrIUpuNpiiEU3U5egWn6I8rCdX4OdQEugsG4Pg25O6pqrL++03BNz9mew+r8=
+X-Received: by 2002:aca:ba03:: with SMTP id k3mr2525490oif.33.1592298529095;
+ Tue, 16 Jun 2020 02:08:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200616064208.GA9499@dhcp22.suse.cz>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 mlxlogscore=781 phishscore=0 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006160066
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 adultscore=0
- mlxscore=0 phishscore=0 mlxlogscore=814 lowpriorityscore=0 clxscore=1011
- suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006160066
+References: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
+In-Reply-To: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 16 Jun 2020 11:08:38 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
+Message-ID: <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
+Subject: Re: [PATCH] tpm: Require that all digests are present in
+ TCG_PCR_EVENT2 structures
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Peter Jones <pjones@redhat.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Petr Vandrovec <petr@vmware.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 08:42:08AM +0200, Michal Hocko wrote:
-> On Mon 15-06-20 21:57:16, Waiman Long wrote:
-> > The kzfree() function is normally used to clear some sensitive
-> > information, like encryption keys, in the buffer before freeing it back
-> > to the pool. Memset() is currently used for the buffer clearing. However,
-> > it is entirely possible that the compiler may choose to optimize away the
-> > memory clearing especially if LTO is being used. To make sure that this
-> > optimization will not happen, memzero_explicit(), which is introduced
-> > in v3.18, is now used in kzfree() to do the clearing.
-> > 
-> > Fixes: 3ef0e5ba4673 ("slab: introduce kzfree()")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Waiman Long <longman@redhat.com>
-> 
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> 
-> Although I am not really sure this is a stable material. Is there any
-> known instance where the memset was optimized out from kzfree?
+(cc Matthew and Peter)
 
-I told him to add the stable.  Otherwise it will just get reported to
-me again.  It's a just safer to backport it before we forget.
+On Tue, 16 Jun 2020 at 01:28, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
+>
+> Require that the TCG_PCR_EVENT2.digests.count value strictly matches the
+> value of TCG_EfiSpecIdEvent.numberOfAlgorithms in the event field of the
+> TCG_PCClientPCREvent event log header. Also require that
+> TCG_EfiSpecIdEvent.numberOfAlgorithms is non-zero.
+>
+> The TCG PC Client Platform Firmware Profile Specification section 9.1
+> (Family "2.0", Level 00 Revision 1.04) states:
+>
+>  For each Hash algorithm enumerated in the TCG_PCClientPCREvent entry,
+>  there SHALL be a corresponding digest in all TCG_PCR_EVENT2 structures.
+>  Note: This includes EV_NO_ACTION events which do not extend the PCR.
+>
+> Section 9.4.5.1 provides this description of
+> TCG_EfiSpecIdEvent.numberOfAlgorithms:
+>
+>  The number of Hash algorithms in the digestSizes field. This field MUST
+>  be set to a value of 0x01 or greater.
+>
+> Enforce these restrictions, as required by the above specification, in
+> order to better identify and ignore invalid sequences of bytes at the
+> end of an otherwise valid TPM2 event log. Firmware doesn't always have
+> the means necessary to inform the kernel of the actual event log size so
+> the kernel's event log parsing code should be stringent when parsing the
+> event log for resiliency against firmware bugs. This is true, for
+> example, when firmware passes the event log to the kernel via a reserved
+> memory region described in device tree.
+>
 
-regards,
-dan carpenter
+When does this happen? Do we have code in mainline that does this?
 
+> Prior to this patch, a single bit set in the offset corresponding to
+> either the TCG_PCR_EVENT2.eventType or TCG_PCR_EVENT2.eventSize fields,
+> after the last valid event log entry, could confuse the parser into
+> thinking that an additional entry is present in the event log. This
+> patch raises the bar on how difficult it is for stale memory to confuse
+> the kernel's event log parser but there's still a reliance on firmware
+> to properly initialize the remainder of the memory region reserved for
+> the event log as the parser cannot be expected to detect a stale but
+> otherwise properly formatted firmware event log entry.
+>
+> Fixes: fd5c78694f3f ("tpm: fix handling of the TPM 2.0 event logs")
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> ---
+
+I am all for stringent checks, but this could potentially break
+measured boot on systems that are working fine today, right?
+
+>  include/linux/tpm_eventlog.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
+> index 4f8c90c93c29..d83eb9fd5614 100644
+> --- a/include/linux/tpm_eventlog.h
+> +++ b/include/linux/tpm_eventlog.h
+> @@ -201,7 +201,7 @@ static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+>         efispecid = (struct tcg_efi_specid_event_head *)event_header->event;
+>
+>         /* Check if event is malformed. */
+> -       if (count > efispecid->num_algs) {
+> +       if (!efispecid->num_algs || count != efispecid->num_algs) {
+>                 size = 0;
+>                 goto out;
+>         }
+> --
+> 2.25.1
+>
