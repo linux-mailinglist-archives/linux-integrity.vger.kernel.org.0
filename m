@@ -2,103 +2,174 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 727FD1FB593
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 17:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D671FB5FF
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 17:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729903AbgFPPGS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 11:06:18 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:37896 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729880AbgFPPGR (ORCPT
+        id S1729167AbgFPPWk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 11:22:40 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:47596 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728919AbgFPPWk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 11:06:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592319976;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zMJwLzxJj7q5lIXa5apx7u6nKtBFyLcKdF8jh3rUT7U=;
-        b=GGqVzPSXrUFyy1cmwGjVyPsA4PT6Q8j6QvkLWvU7xsriVXHuy0g9f7wub6gedGmL2OL9Na
-        zANZV/JADlTpPkcCD6QYsB6FsXahq0h4xu9+mq4aEqPRn5JJojppQZx5xkA/b+anPtZ+3L
-        cDumYwiMCEcmWjWw5Ta5gQkAu+24qgg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-443-zoZVocg1PeKVqdkZgJCjfg-1; Tue, 16 Jun 2020 11:06:11 -0400
-X-MC-Unique: zoZVocg1PeKVqdkZgJCjfg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ECA125AED8;
-        Tue, 16 Jun 2020 15:06:06 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-114-156.rdu2.redhat.com [10.10.114.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 41DFF5C1D4;
-        Tue, 16 Jun 2020 15:06:00 +0000 (UTC)
-Subject: Re: [PATCH v4 2/3] mm, treewide: Rename kzfree() to kfree_sensitive()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
+        Tue, 16 Jun 2020 11:22:40 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7571620B4780;
+        Tue, 16 Jun 2020 08:22:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7571620B4780
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1592320959;
+        bh=bYENIh5GedrqWYBC1j3ZP9ozD3HNqpdatcHseK3/Bhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BquU+tpQEmnqTALGYHLqisl8YefG8C6psRehVL+11NSxeC/A+i+j/KRlONbn42HyY
+         S8zxr2Sg1B4Ckll8k8yTThERyNooYDF7lEiDulR4/3JiIMzOBAo5HIyUgfOSBCWK/L
+         0xyZbVWkbDN0oiDppCGPKDblFxZ7zLFCwpnyETOU=
+Date:   Tue, 16 Jun 2020 10:22:28 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Matthew Garrett <mjg59@google.com>,
+        Peter Jones <pjones@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        David Sterba <dsterba@suse.cz>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-References: <20200616015718.7812-1-longman@redhat.com>
- <20200616015718.7812-3-longman@redhat.com> <20200616142624.GO4282@kadam>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <72aa954d-4933-333c-b784-f8df14e407e6@redhat.com>
-Date:   Tue, 16 Jun 2020 11:05:59 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Petr Vandrovec <petr@vmware.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm: Require that all digests are present in
+ TCG_PCR_EVENT2 structures
+Message-ID: <20200616152228.GA1409697@sequoia>
+References: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
+ <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200616142624.GO4282@kadam>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/16/20 10:26 AM, Dan Carpenter wrote:
-> Last time you sent this we couldn't decide which tree it should go
-> through.  Either the crypto tree or through Andrew seems like the right
-> thing to me.
->
-> Also the other issue is that it risks breaking things if people add
-> new kzfree() instances while we are doing the transition.  Could you
-> just add a "#define kzfree kfree_sensitive" so that things continue to
-> compile and we can remove it in the next kernel release?
->
-> regards,
-> dan carpenter
->
-Yes, that make sure sense. Will send out v5 later today.
+On 2020-06-16 11:08:38, Ard Biesheuvel wrote:
+> (cc Matthew and Peter)
 
-Cheers,
-Longman
+Thanks!
 
+> On Tue, 16 Jun 2020 at 01:28, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
+> >
+> > Require that the TCG_PCR_EVENT2.digests.count value strictly matches the
+> > value of TCG_EfiSpecIdEvent.numberOfAlgorithms in the event field of the
+> > TCG_PCClientPCREvent event log header. Also require that
+> > TCG_EfiSpecIdEvent.numberOfAlgorithms is non-zero.
+> >
+> > The TCG PC Client Platform Firmware Profile Specification section 9.1
+> > (Family "2.0", Level 00 Revision 1.04) states:
+> >
+> >  For each Hash algorithm enumerated in the TCG_PCClientPCREvent entry,
+> >  there SHALL be a corresponding digest in all TCG_PCR_EVENT2 structures.
+> >  Note: This includes EV_NO_ACTION events which do not extend the PCR.
+> >
+> > Section 9.4.5.1 provides this description of
+> > TCG_EfiSpecIdEvent.numberOfAlgorithms:
+> >
+> >  The number of Hash algorithms in the digestSizes field. This field MUST
+> >  be set to a value of 0x01 or greater.
+> >
+> > Enforce these restrictions, as required by the above specification, in
+> > order to better identify and ignore invalid sequences of bytes at the
+> > end of an otherwise valid TPM2 event log. Firmware doesn't always have
+> > the means necessary to inform the kernel of the actual event log size so
+> > the kernel's event log parsing code should be stringent when parsing the
+> > event log for resiliency against firmware bugs. This is true, for
+> > example, when firmware passes the event log to the kernel via a reserved
+> > memory region described in device tree.
+> >
+> 
+> When does this happen? Do we have code in mainline that does this?
+
+We do. POWER and some ARM firmware that pass the firmware event log via
+"linux,sml-base" and "linux,sml-size" properties:
+
+ https://open-power.github.io/skiboot/doc/device-tree/tpm.html
+
+The "linux,sml-size" property is the size of the memory region dedicated
+to the firmware event log and not the size of the firmware event log
+itself.
+
+tpm_read_log_of() in drivers/char/tpm/eventlog/of.c is where this
+property is used. At the end of that function, log->bios_event_log_end
+is pointing at the end of the reserved memory region. That's typically
+0x10000 bytes offset from "linux,sml-base", depending on what's defined
+in the device tree source.
+
+I suspect that ACPI event log support may be implemented similarly, from
+skimming tpm_read_log_acpi() and the TCG ACPI Specification, but I don't
+know for sure.
+
+
+Anyways, you wouldn't know from reading __calc_tpm2_event_size() but the
+only thing allowing the kernel's event log parser to work on these
+systems that don't inform the kernel of the actual firmware event log
+size is the following conditional and assignment in
+__calc_tpm2_event_size():
+
+	if (event_type == 0 && event_field->event_size == 0)
+		size = 0;
+
+If that wasn't there, __calc_tpm2_event_size() would think that a 16
+byte sequence of zeroes was a valid event.
+
+> > Prior to this patch, a single bit set in the offset corresponding to
+> > either the TCG_PCR_EVENT2.eventType or TCG_PCR_EVENT2.eventSize fields,
+> > after the last valid event log entry, could confuse the parser into
+> > thinking that an additional entry is present in the event log. This
+> > patch raises the bar on how difficult it is for stale memory to confuse
+> > the kernel's event log parser but there's still a reliance on firmware
+> > to properly initialize the remainder of the memory region reserved for
+> > the event log as the parser cannot be expected to detect a stale but
+> > otherwise properly formatted firmware event log entry.
+> >
+> > Fixes: fd5c78694f3f ("tpm: fix handling of the TPM 2.0 event logs")
+> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> > ---
+> 
+> I am all for stringent checks, but this could potentially break
+> measured boot on systems that are working fine today, right?
+
+Yes, I think there is some risk in breaking existing systems that aren't
+conforming to the spec. I'm no expert in this area so I can't say how
+high the risk is. I think __calc_tpm2_event_size() is only used for
+exposing the TPM2 firmware event log to userspace and then attestation
+services make use of it from there. Breakage would cause the kernel to
+not fully expose the firmware event log to userspace via
+/sys/kernel/security/tpm*/binary_bios_measurements and that could result
+in attestation failures that cause these systems to be marked as
+untrusted.
+
+I'm not in a hurry to get this merged and welcome as much feedback as
+possible on the risks involved as well as my understanding of the TCG PC
+Client Platform Firmware Profile Specification.
+
+Tyler
+
+> 
+> >  include/linux/tpm_eventlog.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
+> > index 4f8c90c93c29..d83eb9fd5614 100644
+> > --- a/include/linux/tpm_eventlog.h
+> > +++ b/include/linux/tpm_eventlog.h
+> > @@ -201,7 +201,7 @@ static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+> >         efispecid = (struct tcg_efi_specid_event_head *)event_header->event;
+> >
+> >         /* Check if event is malformed. */
+> > -       if (count > efispecid->num_algs) {
+> > +       if (!efispecid->num_algs || count != efispecid->num_algs) {
+> >                 size = 0;
+> >                 goto out;
+> >         }
+> > --
+> > 2.25.1
+> >
