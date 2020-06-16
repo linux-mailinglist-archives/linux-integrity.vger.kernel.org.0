@@ -2,124 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D331FBAA8
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 18:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C941FBAAE
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 18:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731835AbgFPPnn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 11:43:43 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:21384 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730711AbgFPPnl (ORCPT
+        id S1731125AbgFPPnf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 11:43:35 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:54540 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731812AbgFPPnc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 11:43:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592322220;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oKDGWEKwqPpKFVbswFpUDNbyYl/9csGc/AghQtdbXr0=;
-        b=aLzflMdMtY2qr77jmbXU9qPhQwOuTGCbCs1V36CF/wnrZYMoJa9lMlAjYVEGBo/VnYeUwa
-        5C+8U0FGeZzckm8h4ieOnEq68tPMV8vpm+ysMAmzCnodxFU8s87yAqKEUWv5fRHKNrmQjB
-        c1UcmVNVBQPlrZhAV3X0BiRtlPjqob8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-205-18RYIHL_PyO2hLSMA5unqA-1; Tue, 16 Jun 2020 11:43:36 -0400
-X-MC-Unique: 18RYIHL_PyO2hLSMA5unqA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C5B1910AEA20;
-        Tue, 16 Jun 2020 15:43:34 +0000 (UTC)
-Received: from x2.localnet (ovpn-113-82.phx2.redhat.com [10.3.113.82])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 777BE1001B07;
-        Tue, 16 Jun 2020 15:43:28 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        zohar@linux.ibm.com, rgb@redhat.com,
+        Tue, 16 Jun 2020 11:43:32 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C084620B4780;
+        Tue, 16 Jun 2020 08:43:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C084620B4780
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1592322211;
+        bh=RynDn+a/ofKU7OdV/8LbyELxOuKAdSPTNjMGDzeL//0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=UHO6ZtVxj39eqvlVM44GPhHNLb5TrHlvXCgGPBbLz/yR2e0oli1hzCERttTv4pLZG
+         uNRmbxDkaMjDoGJUVqiKyWCeGuNs3whJthdOoaC+Iz8bdBslIpnJIAteXKKgrkY1H3
+         OeL14WdFa3WSwXF68arcCq2glFGGQDE9Mm/LqXq0=
+Subject: Re: [PATCH 1/2] integrity: Add errno field in audit message
+To:     Steve Grubb <sgrubb@redhat.com>, Paul Moore <paul@paul-moore.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, rgb@redhat.com,
         linux-integrity@vger.kernel.org, linux-audit@redhat.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] integrity: Add result field in audit message
-Date:   Tue, 16 Jun 2020 11:43:26 -0400
-Message-ID: <41911815.FMGa2a4QOz@x2>
-Organization: Red Hat
-In-Reply-To: <CAHC9VhTmShh8ggdjLKf_ciL6fDt3ZH59BXaXMAgd8LFzqVj6rQ@mail.gmail.com>
-References: <20200613022633.3129-1-nramas@linux.microsoft.com> <CAHC9VhTmShh8ggdjLKf_ciL6fDt3ZH59BXaXMAgd8LFzqVj6rQ@mail.gmail.com>
+References: <20200611000400.3771-1-nramas@linux.microsoft.com>
+ <8800031.dr63W5FlUW@x2>
+ <CAHC9VhT6JSLBD-JMfQbn9eUsUg=juznRz41DTOaia-=WhrAAuA@mail.gmail.com>
+ <6643272.rC52FQZPYE@x2>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <958966b6-9972-051f-a7d5-cd6d1beb3244@linux.microsoft.com>
+Date:   Tue, 16 Jun 2020 08:43:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <6643272.rC52FQZPYE@x2>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Monday, June 15, 2020 6:51:22 PM EDT Paul Moore wrote:
-> On Fri, Jun 12, 2020 at 10:26 PM Lakshmi Ramasubramanian
+On 6/16/20 8:29 AM, Steve Grubb wrote:
+
+>>>>> The idea is a good idea, but you're assuming that "result" is always
+>>>>> errno.  That was probably true originally, but isn't now.  For
+>>>>> example, ima_appraise_measurement() calls xattr_verify(), which
+>>>>> compares the security.ima hash with the calculated file hash.  On
+>>>>> failure, it returns the result of memcmp().  Each and every code path
+>>>>> will need to be checked.
+>>>>
+>>>> Good catch Mimi.
+>>>>
+>>>> Instead of "errno" should we just use "result" and log the value given
+>>>> in the result parameter?
+>>>
+>>> That would likely collide with another field of the same name which is
+>>> the
+>>> operation's results. If it really is errno, the name is fine. It's
+>>> generic
+>>> enough that it can be reused on other events if that mattered.
+>>
+>> Steve, what is the historical reason why we have both "res" and
+>> "result" for indicating a boolean success/fail?  I'm just curious how
+>> we ended up this way, and who may still be using "result".
 > 
-> <nramas@linux.microsoft.com> wrote:
-> > Result code is not included in the audit messages logged by
-> > the integrity subsystem. Add "result" field in the audit messages
-> > logged by the integrity subsystem and set the value to the result code
-> > passed to integrity_audit_msg() in the "result" parameter.
-> > 
-> > Sample audit message:
-> > 
-> > [    6.284329] audit: type=1804 audit(1591756723.627:2): pid=1 uid=0
-> > auid=4294967295 ses=4294967295 subj=kernel op=add_boot_aggregate
-> > cause=alloc_entry comm="swapper/0" name="boot_aggregate" res=0
-> > result=-12
-> > 
-> > [    8.085456] audit: type=1802 audit(1592005947.297:9): pid=1 uid=0
-> > auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0
-> > op=policy_update cause=completed comm="systemd" res=1 result=0
-> > 
-> > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> > Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> > ---
-> > 
-> >  security/integrity/integrity_audit.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> If we can't use "res=" to carry more than 0/1 then this seems reasonable.
+> I think its pam and some other user space things did this. But because of
+> mixed machines in datacenters supporting multiple versions of OS, we have to
+> leave result alone. It has to be 0,1 or success/fail. We cannot use it for
+> errno.
 
-Paul,
+As Mimi had pointed out, since the value passed in result parameter is 
+not always an error code, "errno" is not an appropriate name.
 
-But we can't do this. The field name dictionary says this is used to convey 
-success/fail. It is hard coded in the field interpretation table to look for 
-0/1 and interpret that. Interpeting this field will now produce an error 
-message. And "result" is a searchable field.
+Can we add a new field, say, "op_result" to report the result of the 
+specified operation?
 
-As I suggested a few emails back, let's just use errno or something not 
-already taken in the dictionary. NACK.
-
--Steve
-
-> Acked-by: Paul Moore <paul@paul-moore.com>
-> 
-> > diff --git a/security/integrity/integrity_audit.c
-> > b/security/integrity/integrity_audit.c index 5109173839cc..84002d3d5a95
-> > 100644
-> > --- a/security/integrity/integrity_audit.c
-> > +++ b/security/integrity/integrity_audit.c
-> > @@ -53,6 +53,6 @@ void integrity_audit_msg(int audit_msgno, struct inode
-> > *inode,> 
-> >                 audit_log_untrustedstring(ab, inode->i_sb->s_id);
-> >                 audit_log_format(ab, " ino=%lu", inode->i_ino);
-> >         
-> >         }
-> > 
-> > -       audit_log_format(ab, " res=%d", !result);
-> > +       audit_log_format(ab, " res=%d result=%d", !result, result);
-> > 
-> >         audit_log_end(ab);
-> >  
-> >  }
-> > 
-> > --
-> > 2.27.0
-
-
+thanks,
+  -lakshmi
 
 
