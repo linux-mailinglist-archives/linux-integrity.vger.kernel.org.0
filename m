@@ -2,111 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB441FB44D
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 16:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0941FB4AA
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 16:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728984AbgFPO2C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 10:28:02 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:44784 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726405AbgFPO2B (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 10:28:01 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05GELOZQ057447;
-        Tue, 16 Jun 2020 14:26:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=UepsmQC/DlQFZ6+UxfaNjoC9RmBOSxOKZ2W1AkmRQd8=;
- b=WvEeJyFmKL8HM4eLekulNPcOb25Sw7YajmFzrepd+1TsQe+PNe2o6it9fFwXghV3FsHv
- QdrFGubdjTeCc6kAWKTDSEoqMv3it70YtNHwfwRr3qSfXcxJVIBcqm6X7SGsetYqkHWx
- H7ruRtQFUVaMSNzeIOu+jnB9ul0qpA74I5CLeOsjFOWmZFGD+qOJ1lRDn7UN2JHhoajF
- f/9ecfn6gkdb7upj+cJi6IY4VZZEPZcXh9vvLg7+i5e+33eQa6zJ2K1MWUsjTMUYhONT
- ZCDycK9k04JLa7cAHqpl868otcTeoTLOGNWMgNDyB7bEprwRuViNVIe1IhKb+72uVtQ1 Lw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 31p6e5y3y1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 Jun 2020 14:26:56 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05GEODoW027404;
-        Tue, 16 Jun 2020 14:26:56 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 31p6s7kbhq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Jun 2020 14:26:56 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05GEQfNL026862;
-        Tue, 16 Jun 2020 14:26:42 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 16 Jun 2020 07:26:41 -0700
-Date:   Tue, 16 Jun 2020 17:26:24 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        David Sterba <dsterba@suse.cz>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] mm, treewide: Rename kzfree() to kfree_sensitive()
-Message-ID: <20200616142624.GO4282@kadam>
-References: <20200616015718.7812-1-longman@redhat.com>
- <20200616015718.7812-3-longman@redhat.com>
+        id S1729439AbgFPOlk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 10:41:40 -0400
+Received: from mga12.intel.com ([192.55.52.136]:9766 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727804AbgFPOli (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Jun 2020 10:41:38 -0400
+IronPort-SDR: sNfv+pD7Y/yZ8CfyI8oISdoUaawoVVbUbM9dUZy6bnwJT6C130G/GrL1KKi7yQZAHwUY39D5vi
+ HChtkpoo033Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 07:41:37 -0700
+IronPort-SDR: g/OsKLJymTggqELw1zclcd2caGgYQJUvEYCR4q6L0j4bwy1dCq4nUqdenbyav1b+OEFIK3R4jG
+ DZISc/Xf/EjQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,518,1583222400"; 
+   d="scan'208";a="309130605"
+Received: from fmsmsx106.amr.corp.intel.com ([10.18.124.204])
+  by fmsmga002.fm.intel.com with ESMTP; 16 Jun 2020 07:41:36 -0700
+Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
+ FMSMSX106.amr.corp.intel.com (10.18.124.204) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Tue, 16 Jun 2020 07:41:36 -0700
+Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 16 Jun 2020 07:41:35 -0700
+Received: from FMSEDG001.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Tue, 16 Jun 2020 07:41:35 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server (TLS) id
+ 14.3.439.0; Tue, 16 Jun 2020 07:41:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QSjsWmi3c4UlrWUpiITw9OlVjNKGqRaPyhQog8nhkBtO5DRi6kKLCKwoIjKBfDjXTYPhpaT6K6lr2gFI1cib0DWbLJAEuPcq2I1XWSkzn7jxtrRaYcCn2rEn5CsW6Iem1my4zkgEIbVdJUyyNOyPvq8CoyFz7FH6Hzk8Q+0pTHT+0CEJO0yeCA16V/24EsBSfpIfhX6TErH61JnhMd7oT64+VSOGQXALg0wj8TVwynsKHL1nDx/UHpUlTxkEykcBfqgpoAmbSkL6RSMnkiDuyTBisQ4AlULNZDZfAGEl1rcLNA+kC3EmtXBwklT1sRteHR4vQ8p9DAMTlZAvg9XwSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aQDa0GO6mxgVLUSaUULEZQcmK1BOqZvaCj6Pv7Hd5vg=;
+ b=R2FhAusXsyiFIHuwXiepC4kw3+GsAiWsT6H63SUXGvRg6sVm0QVmyp8/m3CfxGYnZtcVMlGCabcURr0QKqv8udAgnBmx2QxS5v5rtD68gNYR9a59w9FdEPtU1ArzfAz+C79XEMATRQOnJnqWK/twlN/NG3Xrpdl0bDAX+b+h5v5+9a0ThIAtyJP5IeNJ1mkBVnfd61T0fdylM2g8Sj1P01Z1qkM/RkrMdcwNknmbh/pAhec895zbm79ayw0ROoB8Ac3IOgRcdMF+ZDaQXLE1IQ3BhdajIuNUNJFamYMDB3uKjHtUFJiNHin+dnhdAKRRf6/CjNJj9MmpQZJHKCpb6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aQDa0GO6mxgVLUSaUULEZQcmK1BOqZvaCj6Pv7Hd5vg=;
+ b=YDTJVCT5jGUJ72kA1uNv2JEJUVigldhuY/Ly3wUffdJxTIXD7eA5iArH7a67V4NkE153wrvYLiNN/eVYhdMpSer5otJdmVNx5Bm7ffzLtn9anOUj4KzcWvcrupLK+nwGQKC/5qaAJEMN3tkWDdJ6An7VSXuRUDwntrr0/etX634=
+Received: from BL0PR11MB3252.namprd11.prod.outlook.com (2603:10b6:208:6e::18)
+ by BL0PR11MB3411.namprd11.prod.outlook.com (2603:10b6:208:32::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.21; Tue, 16 Jun
+ 2020 14:41:33 +0000
+Received: from BL0PR11MB3252.namprd11.prod.outlook.com
+ ([fe80::7d75:5039:3841:943d]) by BL0PR11MB3252.namprd11.prod.outlook.com
+ ([fe80::7d75:5039:3841:943d%3]) with mapi id 15.20.3088.029; Tue, 16 Jun 2020
+ 14:41:33 +0000
+From:   "Zhao, Shirley" <shirley.zhao@intel.com>
+To:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "LSM List" <linux-security-module@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Two questions about IMA
+Thread-Topic: Two questions about IMA
+Thread-Index: AdZD7Cuj8qgPLpy/Qw2vOJwAmSsd8Q==
+Date:   Tue, 16 Jun 2020 14:41:33 +0000
+Message-ID: <BL0PR11MB3252AC76F135A7546554BDF88D9D0@BL0PR11MB3252.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMDAyOGIxYzEtYmRhZi00NzM2LTg2YmUtYjk4MTRkZDRhZjdiIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoickJ2eVhraDFvVVNUaGVjWnZiSXpIMlwvck5xcWRveVRDQ2I5OGFLcWNNVDZoXC9XQllVZXgrUEVtajhqemNndURZIn0=
+dlp-reaction: no-action
+dlp-version: 11.2.0.6
+dlp-product: dlpe-windows
+x-ctpclassification: CTP_NT
+authentication-results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [192.198.147.218]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cfe07939-83d1-48d1-cc62-08d812035d80
+x-ms-traffictypediagnostic: BL0PR11MB3411:
+x-microsoft-antispam-prvs: <BL0PR11MB3411C527A1BD80379C154E7F8D9D0@BL0PR11MB3411.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 04362AC73B
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qBBdeI5a0G2c+rdeaSUGW+jGO67/SwS3+JN6X9bHW37rFbkEy615xMEjy02aIEc8/01P4rzGryssfrbqj37zbiY1rqueIutRZyROGJe7lZ49u2pFdTcMYLR7MgPEobobBiDucQWgURz/3niSac0YgdFnXP0moYni2bqoukGE5E9QpIvM6uvBrE10h5cHCogPbNnv6EQIUzArxhbZz0OjhQbPmLeSyX+icVpBtTpN1NEkT3HDdNggEZsx3Fmsr8KxwAiDYvKxtAn9bsuLzyYVMXc3u/Txhr+2MOy2Ss5BdEz5Aes8I2z4EpbbzoPvm8Y6ZA4ZKoAx2M/3TSopnrpd9ITYwMTTUqW6ZV0sDfBzWLEyAELW7Zj39SjrJrhRWvQTzfjMpZXmNHt7ilMGvSdsGQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB3252.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(396003)(346002)(136003)(366004)(39860400002)(64756008)(66476007)(33656002)(66556008)(66446008)(7696005)(76116006)(55016002)(8676002)(66946007)(9686003)(6506007)(71200400001)(4744005)(450100002)(966005)(8936002)(110136005)(2906002)(52536014)(83380400001)(3480700007)(26005)(86362001)(5660300002)(478600001)(316002)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: HHo0HJ2XkhkxxFVm96khPVI3hWtxEY8Gu0TC17YTbsP8brx194dW6gWDs+ObpTOnJB+mJIbNQz+5M5Za31FbklGkp8I7n5v4Dej/hRvwtkjN2DxUJWuFKzLAqpz2PJHtM/OeABoXzlR6VtRIAgK9DORRQFPUgjhcjsGD5EP6qUIJZXI8QbuU1BWMNPikoN/lP9Nv4uJjX6eK33Xuat2+kc0/0CECPPHGgjI/c9oey9NY3AhtzqfbArd+VtdYnOtD9/pcaeQJMy2IwKd4r8YZ/6qaPgadAWoIcWGIxzhbuwNXMnh4YBKCAetNUsbUm3w32xXvNHRzK7v2p0MMjIlSw/rZh1jPPm6u9at+TqTD6q3XEwUUudl1zTLC0PhhJr6zo0D5L/HHytuVtFEpLSWzRMpmXJoJxrrAIvQlUJJE7VmkqjM39KtnhxBrhx/rUeQP3BncGkkRkcylMAZaH6IaY2lCbSwWjUwdLtS6VDAPe8lvZ1CCCM7hlxto5syFvxD9
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200616015718.7812-3-longman@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- mlxlogscore=886 adultscore=0 phishscore=0 bulkscore=0 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006160106
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 adultscore=0
- mlxscore=0 phishscore=0 mlxlogscore=893 lowpriorityscore=0 clxscore=1011
- suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006160106
+X-MS-Exchange-CrossTenant-Network-Message-Id: cfe07939-83d1-48d1-cc62-08d812035d80
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2020 14:41:33.4080
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YlM7o18kj1WEqu508s8x1ZUzO5pdNWn5rb5LrTW11gGa7o3DmsFzZjYjmxf85XdWYMfxT19Zudy8wwdBOAZZTQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3411
+X-OriginatorOrg: intel.com
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Last time you sent this we couldn't decide which tree it should go
-through.  Either the crypto tree or through Andrew seems like the right
-thing to me.
-
-Also the other issue is that it risks breaking things if people add
-new kzfree() instances while we are doing the transition.  Could you
-just add a "#define kzfree kfree_sensitive" so that things continue to
-compile and we can remove it in the next kernel release?
-
-regards,
-dan carpenter
-
+SGksIGFsbCwgDQoNClRoaXMgaXMgU2hpcmxleSBmcm9tLCBJIGFtIGEgbmV3ZXIgb2YgSU1BLiAN
+CkkgaGF2ZSBzb21lIHF1ZXN0aW9ucy4gQ2FuIHlvdSBoZWxwPw0KDQpBY2NvcmRpbmcgdG8gdGhl
+IGd1aWRlOiBodHRwczovL3NvdXJjZWZvcmdlLm5ldC9wL2xpbnV4LWltYS93aWtpL0hvbWUvI2xp
+bnV4LWV4dGVuZGVkLXZlcmlmaWNhdGlvbi1tb2R1bGUtZXZtLiANCjEuCUhvdyB0byBjYWxjdWxh
+dGUgdGhlIHRlbXBsYXRlIGhhc2ggaW4gL3N5cy9rZXJuZWwvc2VjdXJpdHkvaW1hL2FzY2lpX3J1
+bnRpbWVfbWVhc3VyZW1lbnRzPyBMaWtlIGJlbG93Og0KUENSICAgICB0ZW1wbGF0ZS1oYXNoICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgZmlsZWRhdGEtaGFzaCAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIGZpbGVuYW1lLWhpbnQNCjEwIDkxZjM0YjVjNjcxZDczNTA0YjI3NGE5MTk2NjFjZjgw
+ZGFiMWUxMjcgaW1hLW5nIHNoYTE6MTgwMWUxYmUzZTY1ZWYxZWFhNWMxNjYxN2JlYzhmMTI3NGVh
+ZjZiMyBib290X2FnZ3JlZ2F0ZSANCjEwIDhiMTY4MzI4N2Y2MWY5NmU1NDQ4ZjQwYmRlZjZkZjMy
+YmU4NjQ4NmEgaW1hLW5nIHNoYTI1NjplZmRkMjQ5ZWRlYzk3Y2FmOTMyOGE0YTAxYmFhOTliN2Q2
+NjBkMWFmYzJlMTE4YjY5MTM3MDgxYzliNjg5OTU0IC9pbml0IA0KMi4JVWJ1bnR1IDIwLjA0IGlz
+IGluc3RhbGxlZCBvbiBteSBtYWNoaW5lLCBidXQgYXNjaWlfYmlvc19tZWFzdXJlbWVudHMgY2Fu
+4oCZdCBiZSBmb3VuZCB1bmRlciAvc3lzL2tlcm5lbC9zZWN1cml0eS90cG0wLy4gDQpUaGVyZSBp
+cyBvbmx5IGJpbmFyeV9iaW9zX21lYXN1cmVtZW50cyB1bmRlciB0cG0wLy4gDQpTbyB3aGVyZSB0
+byBmaW5kIHRoZSBiaW9zIG1lYXN1cmUgbGlzdCBvbiBVYnVudHUgMjAuMDQ/DQoNClRoYW5rcy4g
+DQoNCi0JU2hpcmxleSAgDQo=
