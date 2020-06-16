@@ -2,145 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED461FBFC5
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 22:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EC51FC001
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 22:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730725AbgFPUPX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 16:15:23 -0400
-Received: from mga06.intel.com ([134.134.136.31]:29391 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729167AbgFPUPW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 16:15:22 -0400
-IronPort-SDR: ro/oPz5sfyYuL1jgtLaBvYJ3STGcZcfYLP828TODfAiJQAgf47KXB3SdoP0WHwLoOCTpbPvqB5
- N+9gyyduBLeA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 13:15:22 -0700
-IronPort-SDR: zO86BPN8dVZzX2AotBiXjLH8J1RX/cKdcwl78D/SOYO2HKS/TQ44iSrP4wLU+02s8jtfis94Mu
- rCFFsjpeKCOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,519,1583222400"; 
-   d="scan'208";a="299035233"
-Received: from gosinald-mobl2.ger.corp.intel.com (HELO localhost) ([10.249.36.106])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Jun 2020 13:15:17 -0700
-Date:   Tue, 16 Jun 2020 23:15:16 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Maxim Uvarov <maxim.uvarov@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        peterhuewe@gmx.de, Jason Gunthorpe <jgg@ziepe.ca>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>
-Subject: Re: [PATCHv6 1/3] optee: use uuid for sysfs driver entry
-Message-ID: <20200616201516.GF10412@linux.intel.com>
-References: <20200601150645.13412-1-maxim.uvarov@linaro.org>
- <20200601150645.13412-2-maxim.uvarov@linaro.org>
- <20200604083655.GA4026@linux.intel.com>
- <CAFA6WYMZx9goq4+yNH5UtrO-nO+R9ohE1dH6jTvKwvME+kKwoQ@mail.gmail.com>
+        id S1731758AbgFPU3E (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 16:29:04 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:35123 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731425AbgFPU3D (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Jun 2020 16:29:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592339341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PuFuQg6K4e8+oPcKh4HKkSbhQEN3+Z7Dt+MuhnK0tiM=;
+        b=QVwD5v87tlgcmO4H0p8qZurzxWvn6QmqBeyqbDRtKeXm4tFXkyLPpjZ3XnAY9riho2g2cp
+        nF3rdHH9bQwamlM3P9ob1KD/fre+Xt33qE1T+xfJOXz78e13yiEvjGwRE1jemMW6TJ29ev
+        Aruavogdm7ehUHavpB5yqulk0Tp6Q2Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-396-g5CUkErUN0yKgA33gmgSYw-1; Tue, 16 Jun 2020 16:28:59 -0400
+X-MC-Unique: g5CUkErUN0yKgA33gmgSYw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F1AF58AB398;
+        Tue, 16 Jun 2020 20:28:52 +0000 (UTC)
+Received: from x2.localnet (ovpn-113-201.phx2.redhat.com [10.3.113.201])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 06D8D6C1A0;
+        Tue, 16 Jun 2020 20:28:51 +0000 (UTC)
+From:   Steve Grubb <sgrubb@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Paul Moore <paul@paul-moore.com>, rgb@redhat.com,
+        linux-integrity@vger.kernel.org, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] integrity: Add errno field in audit message
+Date:   Tue, 16 Jun 2020 16:28:47 -0400
+Message-ID: <2644117.Ritcz3IfYv@x2>
+Organization: Red Hat
+In-Reply-To: <1592337220.11061.239.camel@linux.ibm.com>
+References: <20200611000400.3771-1-nramas@linux.microsoft.com> <1717101.NiBDiG0Zly@x2> <1592337220.11061.239.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYMZx9goq4+yNH5UtrO-nO+R9ohE1dH6jTvKwvME+kKwoQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 04, 2020 at 02:51:03PM +0530, Sumit Garg wrote:
-> On Thu, 4 Jun 2020 at 14:07, Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Mon, Jun 01, 2020 at 06:06:43PM +0300, Maxim Uvarov wrote:
-> > > With the evolving use-cases for TEE bus, now it's required to support
-> > > multi-stage enumeration process. But using a simple index doesn't
-> > > suffice this requirement and instead leads to duplicate sysfs entries.
-> > > So instead switch to use more informative device UUID for sysfs entry
-> > > like:
-> > > /sys/bus/tee/devices/optee-ta-<uuid>
-> > >
-> > > Signed-off-by: Maxim Uvarov <maxim.uvarov@linaro.org>
-> > > Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-> >
-> > Why do you mean by duplicate sysfs entries?
-> >
+On Tuesday, June 16, 2020 3:53:40 PM EDT Mimi Zohar wrote:
+> On Tue, 2020-06-16 at 11:55 -0400, Steve Grubb wrote:
+> > On Tuesday, June 16, 2020 11:43:31 AM EDT Lakshmi Ramasubramanian wrote:
+> > > On 6/16/20 8:29 AM, Steve Grubb wrote:
+> > > >>>>> The idea is a good idea, but you're assuming that "result" is
+> > > >>>>> always errno.  That was probably true originally, but isn't now. 
+> > > >>>>> For example, ima_appraise_measurement() calls xattr_verify(),
+> > > >>>>> which compares the security.ima hash with the calculated file
+> > > >>>>> hash.  On failure, it returns the result of memcmp().  Each and
+> > > >>>>> every code path will need to be checked.
+> > > >>>> 
+> > > >>>> Good catch Mimi.
+> > > >>>> 
+> > > >>>> Instead of "errno" should we just use "result" and log the value
+> > > >>>> given in the result parameter?
+> > > >>> 
+> > > >>> That would likely collide with another field of the same name which
+> > > >>> is the operation's results. If it really is errno, the name is fine.
+> > > >>> It's generic enough that it can be reused on other events if that
+> > > >>> mattered.
+> > > >> 
+> > > >> Steve, what is the historical reason why we have both "res" and
+> > > >> "result" for indicating a boolean success/fail?  I'm just curious
+> > > >> how we ended up this way, and who may still be using "result".
+> > > > 
+> > > > I think its pam and some other user space things did this. But
+> > > > because of mixed machines in datacenters supporting multiple versions
+> > > > of OS, we have to leave result alone. It has to be 0,1 or success/
+> > > > fail. We cannot use it for errno.
+> > > 
+> > > As Mimi had pointed out, since the value passed in result parameter is
+> > > not always an error code, "errno" is not an appropriate name.
+> > > 
+> > > Can we add a new field, say, "op_result" to report the result of the
+> > > specified operation?
+> > 
+> > Sure. But since it is errno sometimes, how would we know when to
+> > translate it?
 > 
-> It's just about the device being added with the same name as of the
-> device which is already present on the TEE bus. So this leads to
-> duplicate sysfs entry error for device node which is created during
-> device_register() execution flow.
-> 
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-bus-optee-devices | 8 ++++++++
-> > >  MAINTAINERS                                       | 1 +
-> > >  drivers/tee/optee/device.c                        | 6 +++---
-> > >  3 files changed, 12 insertions(+), 3 deletions(-)
-> > >  create mode 100644 Documentation/ABI/testing/sysfs-bus-optee-devices
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-bus-optee-devices b/Documentation/ABI/testing/sysfs-bus-optee-devices
-> > > new file mode 100644
-> > > index 000000000000..0ae04ae5374a
-> > > --- /dev/null
-> > > +++ b/Documentation/ABI/testing/sysfs-bus-optee-devices
-> > > @@ -0,0 +1,8 @@
-> > > +What:                /sys/bus/tee/devices/optee-ta-<uuid>/
-> > > +Date:           May 2020
-> > > +KernelVersion   5.7
-> > > +Contact:        tee-dev@lists.linaro.org
-> > > +Description:
-> > > +             OP-TEE bus provides reference to registered drivers under this directory. The <uuid>
-> > > +             matches Trusted Application (TA) driver and corresponding TA in secure OS. Drivers
-> > > +             are free to create needed API under optee-ta-<uuid> directory.
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index ecc0749810b0..6717afef2de3 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -12516,6 +12516,7 @@ OP-TEE DRIVER
-> > >  M:   Jens Wiklander <jens.wiklander@linaro.org>
-> > >  L:   tee-dev@lists.linaro.org
-> > >  S:   Maintained
-> > > +F:   Documentation/ABI/testing/sysfs-bus-optee-devices
-> > >  F:   drivers/tee/optee/
-> > >
-> > >  OP-TEE RANDOM NUMBER GENERATOR (RNG) DRIVER
-> > > diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
-> > > index e3a148521ec1..ed3d1ddfa52b 100644
-> > > --- a/drivers/tee/optee/device.c
-> > > +++ b/drivers/tee/optee/device.c
-> > > @@ -65,7 +65,7 @@ static int get_devices(struct tee_context *ctx, u32 session,
-> > >       return 0;
-> > >  }
-> > >
-> > > -static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
-> > > +static int optee_register_device(const uuid_t *device_uuid)
-> > >  {
-> > >       struct tee_client_device *optee_device = NULL;
-> > >       int rc;
-> > > @@ -75,7 +75,7 @@ static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
-> > >               return -ENOMEM;
-> > >
-> > >       optee_device->dev.bus = &tee_bus_type;
-> > > -     dev_set_name(&optee_device->dev, "optee-clnt%u", device_id);
-> > > +     dev_set_name(&optee_device->dev, "optee-ta-%pUl", device_uuid);
-> >
-> > This code is and already was broken. If dev_set_name() returns -ENOMEM,
-> > the name will be a null pointer.
-> 
-> Is this an expected error scenario? dev_set_name() is invoked at
-> numerous places in the kernel without any error check.
-> 
-> >
-> > Also, I don't get how you can just swap the name without potentially
-> > breaking the backwards compatiblity towards the user space.
-> 
-> As of now, there isn't any compatibility concerns with user space as
-> these TEE devices are meant to be used by kernel drivers only. TEE
-> user-space interface is quite separate (see: Documentation/tee.txt).
+> Perhaps the solution is not to imply "res" is "errno", but pass it as
+> a separate "errno" field.
 
-OK, probably would make sense to have this in the commit message as a
-remark.
+That's what is done on syscalls. There is success and exit where they both 
+have different meaning sometimes but otherwise they agree.
 
-/Jarkko
+> Then only include "errno" in the audit message when it isn't zero.  This
+> assumes that some audit messages for the same audit number include errno,
+> while others do not.
+
+We normally do not like to have fields that swing in and out because then its 
+hard to know exactly what's in the event. When an event has different fields 
+under special conditions, then we just say call it a new event. Split it into 
+2 or 3 instead forcing it all into 1. And we also do not like fields that 
+change meaning. Because then intepretation becomes hard. Or other people 
+wishing to record the same info in another event have to follow the same 
+pattern.
+
+So, if you really need this field, the give some name like err_code or errno 
+or anything not taken. And just fill it out every time. Its OK to be 0. If 
+this only happens under some special operation, then make it a new event and 
+fill it out only for that operation/event.
+
+Best Regards,
+-Steve
+
+
+> With this solution, the existing integrity_audit_msg() could become a
+> wrapper for the new function.
+> 
+> Mimi
+
+
+
+
