@@ -2,87 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C941FBAAE
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 18:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F5D1FB9ED
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 18:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731125AbgFPPnf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 11:43:35 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:54540 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731812AbgFPPnc (ORCPT
+        id S1732633AbgFPQHY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 12:07:24 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:50629 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732269AbgFPPrE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 11:43:32 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C084620B4780;
-        Tue, 16 Jun 2020 08:43:31 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C084620B4780
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1592322211;
-        bh=RynDn+a/ofKU7OdV/8LbyELxOuKAdSPTNjMGDzeL//0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=UHO6ZtVxj39eqvlVM44GPhHNLb5TrHlvXCgGPBbLz/yR2e0oli1hzCERttTv4pLZG
-         uNRmbxDkaMjDoGJUVqiKyWCeGuNs3whJthdOoaC+Iz8bdBslIpnJIAteXKKgrkY1H3
-         OeL14WdFa3WSwXF68arcCq2glFGGQDE9Mm/LqXq0=
-Subject: Re: [PATCH 1/2] integrity: Add errno field in audit message
-To:     Steve Grubb <sgrubb@redhat.com>, Paul Moore <paul@paul-moore.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, rgb@redhat.com,
-        linux-integrity@vger.kernel.org, linux-audit@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <20200611000400.3771-1-nramas@linux.microsoft.com>
- <8800031.dr63W5FlUW@x2>
- <CAHC9VhT6JSLBD-JMfQbn9eUsUg=juznRz41DTOaia-=WhrAAuA@mail.gmail.com>
- <6643272.rC52FQZPYE@x2>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <958966b6-9972-051f-a7d5-cd6d1beb3244@linux.microsoft.com>
-Date:   Tue, 16 Jun 2020 08:43:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Tue, 16 Jun 2020 11:47:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592322422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=djkgmBs6vxKrnF2svfHTCwO6iJZv0MD8YpKSjFl2MGs=;
+        b=anxZyJvaFpuLChSMwUR/a7qLSGGcT0Nzy4aiSkqCpI/xVk6zVIcE9J7iV1341dFYQpdAwe
+        QNobub7hXN4Ms1OW18fOfvph9zqDj6d3Es9xcqmAm7V7WWOGLDbJFRK2rhytEAPFfTLrAb
+        z8prG6hZN2mOJEmSXgQ9/SksTn2gcSw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-218-nWeeH7oNN9eY6skcHYs3nQ-1; Tue, 16 Jun 2020 11:46:56 -0400
+X-MC-Unique: nWeeH7oNN9eY6skcHYs3nQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B3678DEEE2;
+        Tue, 16 Jun 2020 15:46:51 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-114-66.rdu2.redhat.com [10.10.114.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3EC3B60C05;
+        Tue, 16 Jun 2020 15:46:41 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <56c2304c-73cc-8f48-d8d0-5dd6c39f33f3@redhat.com>
+References: <56c2304c-73cc-8f48-d8d0-5dd6c39f33f3@redhat.com> <20200616015718.7812-1-longman@redhat.com> <20200616015718.7812-2-longman@redhat.com> <20200616033035.GB902@sol.localdomain>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, ebiggers@kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        David Sterba <dsterba@suse.cz>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] mm/slab: Use memzero_explicit() in kzfree()
 MIME-Version: 1.0
-In-Reply-To: <6643272.rC52FQZPYE@x2>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <879078.1592322400.1@warthog.procyon.org.uk>
+Date:   Tue, 16 Jun 2020 16:46:40 +0100
+Message-ID: <879079.1592322400@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/16/20 8:29 AM, Steve Grubb wrote:
+Waiman Long <longman@redhat.com> wrote:
 
->>>>> The idea is a good idea, but you're assuming that "result" is always
->>>>> errno.  That was probably true originally, but isn't now.  For
->>>>> example, ima_appraise_measurement() calls xattr_verify(), which
->>>>> compares the security.ima hash with the calculated file hash.  On
->>>>> failure, it returns the result of memcmp().  Each and every code path
->>>>> will need to be checked.
->>>>
->>>> Good catch Mimi.
->>>>
->>>> Instead of "errno" should we just use "result" and log the value given
->>>> in the result parameter?
->>>
->>> That would likely collide with another field of the same name which is
->>> the
->>> operation's results. If it really is errno, the name is fine. It's
->>> generic
->>> enough that it can be reused on other events if that mattered.
->>
->> Steve, what is the historical reason why we have both "res" and
->> "result" for indicating a boolean success/fail?  I'm just curious how
->> we ended up this way, and who may still be using "result".
-> 
-> I think its pam and some other user space things did this. But because of
-> mixed machines in datacenters supporting multiple versions of OS, we have to
-> leave result alone. It has to be 0,1 or success/fail. We cannot use it for
-> errno.
+> The kzfree() function is normally used to clear some sensitive
+> information, like encryption keys, in the buffer before freeing it back
+> to the pool. Memset()
 
-As Mimi had pointed out, since the value passed in result parameter is 
-not always an error code, "errno" is not an appropriate name.
+"memset()" is all lowercase.
 
-Can we add a new field, say, "op_result" to report the result of the 
-specified operation?
+> is currently used for buffer clearing. However unlikely, there is still a
+> non-zero probability
 
-thanks,
-  -lakshmi
+I'd say "a possibility".
 
+> that
+
+and I'd move "in [the] future" here.
+
+> the compiler may choose to optimize away the
+> memory clearing especially if LTO is being used in the future. To make sure
+> that this optimization will never happen
+
+"in these cases"
+
+> , memzero_explicit(), which is introduced in v3.18, is now used in
+
+"instead of"?
+
+> kzfree() to future-proof it.
+
+Davod
 
