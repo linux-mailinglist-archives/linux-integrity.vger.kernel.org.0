@@ -2,103 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CCF1FBA38
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 18:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AFD1FBCAD
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 19:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732062AbgFPQJk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 12:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732840AbgFPQJd (ORCPT
+        id S1728067AbgFPRT5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 13:19:57 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46452 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727859AbgFPRT5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 12:09:33 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41759C0613EF
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 09:09:32 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id x207so9725152pfc.5
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 09:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=Qr6LU5AJyvXIew1juXMAoqiI4cF7kmvmZdA39adClnc=;
-        b=Rkw9rZaVLXXtIQ0m20+mYgJQ4gcuayp8YvWp0pVNnyS2Ud5bvdUdx69IRXMW08dI+y
-         pzV/H7bWfkwsJ9crKNCDPM1q0WUffbNtBokPP+PZDWzzEdUIZWHq9M86Wqe0z1bOibJL
-         0kj7zDc/gs1pT2s4SL4bLi137RE65s/ZSVNpo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Qr6LU5AJyvXIew1juXMAoqiI4cF7kmvmZdA39adClnc=;
-        b=OBmtzKDCw9Om0yW4H4AF5DiwQqkBAaWsf68keawsIl8jKgJfDuaH2q1VWKVht6u5Wu
-         zBNdD74KdolVoTkRx7ELAJVPAMMWROjR3FNXTAWlHA+HCyFao6Zd0N0gk2+HWoC7i02c
-         qE6cv65HYWHFe1ZRtF008Z/Greeq3YE2xmammge4FUPk4SaKpe4cJ8BH9TFD+iFNR/G0
-         V1TY3X0PDQ/V+QD3uIdoGSOfHg7rkCU39XsDXZOpAwzPqiUypd41mTuEbA3b1KMDbokQ
-         6LmpD324Xtr3TKQ5OaXPktaEd06OvFbLwIIPZ4HSNq89Z1TOQswoeTu9bG6vu6G+TLxz
-         hwXA==
-X-Gm-Message-State: AOAM530xE8Q6vElhEw35XM9UAOpxRHSuWpd7FGdTk403r8Z6XMdb5isn
-        M7Kscy1N8wf+iPMW49cQtyDM8A==
-X-Google-Smtp-Source: ABdhPJw0IGP4wrEgB7iuDlwGXE4MMae76XZ2NoGZ/467ZGcMrf6sY2DenPwGzgjt24xH+kDh+E9WqA==
-X-Received: by 2002:a62:9242:: with SMTP id o63mr2821188pfd.310.1592323771469;
-        Tue, 16 Jun 2020 09:09:31 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id p8sm14999992pgs.29.2020.06.16.09.09.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2020 09:09:30 -0700 (PDT)
-Subject: Re: [PATCH v9 1/8] fs: introduce kernel_pread_file* support
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20200615194151.7011-1-scott.branden@broadcom.com>
- <20200615194151.7011-2-scott.branden@broadcom.com>
- <20200616073423.GC30385@infradead.org>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <b89a3f0f-51b9-7705-3a23-26196ae7716e@broadcom.com>
-Date:   Tue, 16 Jun 2020 09:09:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200616073423.GC30385@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 16 Jun 2020 13:19:57 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05GH3Jv1173842
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 13:19:56 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31q23srjcx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 13:19:56 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05GHG7h2005506
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 17:19:54 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 31mpe85qha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 17:19:54 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05GHJq7921626884
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Jun 2020 17:19:52 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4E01542041;
+        Tue, 16 Jun 2020 17:19:52 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8928842047;
+        Tue, 16 Jun 2020 17:19:51 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.158.198])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 16 Jun 2020 17:19:51 +0000 (GMT)
+Message-ID: <1592327991.11061.205.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima_evm_utils: extended calc_bootaggr to PCRs 8 - 9
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Maurizio Drocco <maurizio.drocco@ibm.com>,
+        linux-integrity@vger.kernel.org
+Date:   Tue, 16 Jun 2020 13:19:51 -0400
+In-Reply-To: <20200616120228.16068-1-maurizio.drocco@ibm.com>
+References: <20200616120228.16068-1-maurizio.drocco@ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-16_10:2020-06-16,2020-06-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ cotscore=-2147483648 bulkscore=0 adultscore=0 mlxlogscore=922
+ lowpriorityscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 clxscore=1015 phishscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006160120
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Christoph,
+Hi Maurizio,
 
-On 2020-06-16 12:34 a.m., Christoph Hellwig wrote:
-> Seriously, no more additions to fs.h for this interface please.  As
-> requested before as the very first thing move it out of this header
-> used by just about every file in the kernel.  That is in addition
-> to all the other issues with the interface.
-I can add such to the start of this patch series. I'm guessing from:
-#define __kernel_read_file_id(id) \
-to
-extern int kernel_read_file_from_fd(int, void **, loff_t *, loff_t,
-                     enum kernel_read_file_id);
+On Tue, 2020-06-16 at 08:02 -0400, Maurizio Drocco wrote:
+> From: Maurizio <maurizio.drocco@ibm.com>
+> 
+> If PCRs 8 - 9 are set (i.e. not all-zeros), cal_bootaggr should include
+> them into the digest.
+> 
+> Signed-off-by: Maurizio Drocco <maurizio.drocco@ibm.com>
 
+Thank you, this patch seems to be working properly.  As a separate
+patch, could you fix the tests/boot_aggregate.test comments "PCRs 0
+-7" and other things, like displaying just PCRs 0 - 7?
 
+thanks,
+
+Mimi
