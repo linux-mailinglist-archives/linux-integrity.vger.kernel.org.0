@@ -2,103 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B06E11FC1C5
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 00:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A831FC20F
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 01:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725941AbgFPWk0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 18:40:26 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64776 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725901AbgFPWk0 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 18:40:26 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05GMX8hp025786;
-        Tue, 16 Jun 2020 18:40:17 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31q6j4grn2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Jun 2020 18:40:17 -0400
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05GMb6sB040484;
-        Tue, 16 Jun 2020 18:40:16 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31q6j4grmh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Jun 2020 18:40:16 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05GMeF2k032083;
-        Tue, 16 Jun 2020 22:40:15 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 31q6bs81kx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Jun 2020 22:40:14 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05GMeCeI983414
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Jun 2020 22:40:12 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C60CA52097;
-        Tue, 16 Jun 2020 22:40:12 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.158.198])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 94F5E52096;
-        Tue, 16 Jun 2020 22:40:11 +0000 (GMT)
-Message-ID: <1592347211.11061.250.camel@linux.ibm.com>
-Subject: Re: [LTP v2 1/1] ima_tpm.sh: Fix for calculating boot aggregate
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Bruno Meneguele <bmeneg@redhat.com>, Petr Vorel <pvorel@suse.cz>
-Cc:     ltp@lists.linux.it, Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Petr Cervinka <pcervinka@suse.com>,
-        Cyril Hrubis <chrubis@suse.cz>,
-        linux-integrity@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>
-Date:   Tue, 16 Jun 2020 18:40:11 -0400
-In-Reply-To: <20200615200121.GG129694@glitch>
-References: <20200527071434.28574-1-pvorel@suse.cz>
-         <1590601280.16219.1.camel@linux.ibm.com> <20200528140747.GA8401@dell5510>
-         <1590679145.4457.39.camel@linux.ibm.com> <20200528160527.GA27243@dell5510>
-         <20200615194134.GF129694@glitch> <20200615200121.GG129694@glitch>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-16_13:2020-06-16,2020-06-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 bulkscore=0 impostorscore=0
- adultscore=0 mlxscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
- cotscore=-2147483648 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006160154
+        id S1726407AbgFPXBt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 19:01:49 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39104 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725849AbgFPXBs (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Jun 2020 19:01:48 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 6CB7AADA8;
+        Tue, 16 Jun 2020 23:01:45 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 1AC8EDA7C3; Wed, 17 Jun 2020 01:01:30 +0200 (CEST)
+Date:   Wed, 17 Jun 2020 01:01:30 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Joe Perches <joe@perches.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        David Sterba <dsterba@suse.cz>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to kfree_sensitive()
+Message-ID: <20200616230130.GJ27795@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Joe Perches <joe@perches.com>,
+        Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+References: <20200616015718.7812-1-longman@redhat.com>
+ <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-06-15 at 17:01 -0300, Bruno Meneguele wrote:
-> On Mon, Jun 15, 2020 at 04:41:34PM -0300, Bruno Meneguele wrote:
-> > On Thu, May 28, 2020 at 06:05:27PM +0200, Petr Vorel wrote:
+On Tue, Jun 16, 2020 at 11:53:50AM -0700, Joe Perches wrote:
+> On Mon, 2020-06-15 at 21:57 -0400, Waiman Long wrote:
+> >  v4:
+> >   - Break out the memzero_explicit() change as suggested by Dan Carpenter
+> >     so that it can be backported to stable.
+> >   - Drop the "crypto: Remove unnecessary memzero_explicit()" patch for
+> >     now as there can be a bit more discussion on what is best. It will be
+> >     introduced as a separate patch later on after this one is merged.
+> 
+> To this larger audience and last week without reply:
+> https://lore.kernel.org/lkml/573b3fbd5927c643920e1364230c296b23e7584d.camel@perches.com/
+> 
+> Are there _any_ fastpath uses of kfree or vfree?
 
-> > > > The boot_aggregate.trs and boot_aggregate.log files are being created
-> > > > in the tests/ directory.  Is that directory read-only?
-> > > Yes, drwxr-xr-x. Testing on fresh clone and issue persists.
-> > > 
-> > 
-> > Yes, same thing here.. but didn't really check the reason for that. Will
-> > take a time later to see what's happening.
-
-Cloning as root will cause that to happen.
-
-$ sudo git clone git://git.code.sf.net/p/linux-ima/ima-evm-utils --branch next-testing
-Cloning into 'ima-evm-utils'...
-remote: Enumerating objects: 1154, done.
-remote: Counting objects: 100% (1154/1154), done.
-remote: Compressing objects: 100% (1052/1052), done.
-remote: Total 1154 (delta 736), reused 182 (delta 96)
-Receiving objects: 100% (1154/1154), 335.12 KiB | 0 bytes/s, done.
-Resolving deltas: 100% (736/736), done.
-Checking connectivity... done.
-
-$ ls -lat ima-evm-utils/ | grep tests
-drwxr-xr-x.  2 root root   220 Jun 16 18:28 tests
-
-Mimi
+I'd consider kfree performance critical for cases where it is called
+under locks. If possible the kfree is moved outside of the critical
+section, but we have rbtrees or lists that get deleted under locks and
+restructuring the code to do eg. splice and free it outside of the lock
+is not always possible.
