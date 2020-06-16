@@ -2,41 +2,41 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7741FB957
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 18:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C1F1FB96D
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 18:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731773AbgFPQDM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 12:03:12 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42556 "EHLO
+        id S1731436AbgFPQDr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 12:03:47 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42636 "EHLO
         bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731902AbgFPQDJ (ORCPT
+        by vger.kernel.org with ESMTP id S1732375AbgFPQDq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 12:03:09 -0400
+        Tue, 16 Jun 2020 12:03:46 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id E1ADD8EE304;
-        Tue, 16 Jun 2020 09:03:09 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 496AF8EE2BD;
+        Tue, 16 Jun 2020 09:03:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1592323389;
-        bh=dcTYm2eDo/Rli3g8QsLQKfc66TqV7Wxpckdl2s1XiEo=;
+        s=20151216; t=1592323426;
+        bh=fJrc5Zu0ZDA63RNTWPQ6Ozl1ulKLDbS8g3KE1rD0cXQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N17m6tTgmetCUk8aN9iaqg79Ph3mrRcvyJ20yPZNBTX1LDeijbW74WS5YwFJ8QXrx
-         vHwClBV/mVauielwCgHt/hx88uj0oKmVc5A6xmCP+NPsD/wX4xzFQTjWhgtKpj+Fth
-         R9x8HNjGPljr199OgbltgsgG7ttWsIxza+IPxoHM=
+        b=Sk3aCbH/I9Kr2rAp+Igqz+sE8k0lqVckSk3XwrlNAavel4UwrjNSUZbLYZtzZla8w
+         T9S0u8bQqq0xbT0B6jE6FHBbHJ3jFJ8hAu2wVzAmzJhm8JbQ/p/pYVRyRFVYkf3DiA
+         Iub4a4VWh1Kta2g71/O4SHfCyWIFJglZCivubMho=
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4iCFIUBSouUd; Tue, 16 Jun 2020 09:03:09 -0700 (PDT)
+        with ESMTP id LWX-V5WczM10; Tue, 16 Jun 2020 09:03:46 -0700 (PDT)
 Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 20EF38EE2CA;
-        Tue, 16 Jun 2020 09:03:09 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 8A4DF8EE188;
+        Tue, 16 Jun 2020 09:03:45 -0700 (PDT)
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         David Woodhouse <dwmw2@infradead.org>,
         keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: [PATCH v10 3/8] security: keys: trusted: fix TPM2 authorizations
-Date:   Tue, 16 Jun 2020 09:02:24 -0700
-Message-Id: <20200616160229.8018-4-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v10 4/8] security: keys: trusted: use ASN.1 TPM2 key format for the blobs
+Date:   Tue, 16 Jun 2020 09:02:25 -0700
+Message-Id: <20200616160229.8018-5-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200616160229.8018-1-James.Bottomley@HansenPartnership.com>
 References: <20200616160229.8018-1-James.Bottomley@HansenPartnership.com>
@@ -47,138 +47,396 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-In TPM 1.2 an authorization was a 20 byte number.  The spec actually
-recommended you to hash variable length passwords and use the sha1
-hash as the authorization.  Because the spec doesn't require this
-hashing, the current authorization for trusted keys is a 40 digit hex
-number.  For TPM 2.0 the spec allows the passing in of variable length
-passwords and passphrases directly, so we should allow that in trusted
-keys for ease of use.  Update the 'blobauth' parameter to take this
-into account, so we can now use plain text passwords for the keys.
+Modify the TPM2 key format blob output to export and import in the
+ASN.1 form for TPM2 sealed object keys.  For compatibility with prior
+trusted keys, the importer will also accept two TPM2B quantities
+representing the public and private parts of the key.  However, the
+export via keyctl pipe will only output the ASN.1 format.
 
-so before
+The benefit of the ASN.1 format is that it's a standard and thus the
+exported key can be used by userspace tools (openssl_tpm2_engine,
+openconnect and tpm2-tss-engine).  The format includes policy
+specifications, thus it gets us out of having to construct policy
+handles in userspace and the format includes the parent meaning you
+don't have to keep passing it in each time.
 
-keyctl add trusted kmk "new 32
- blobauth=f572d396fae9206628714fb2ce00f72e94f2258f
- keyhandle=81000001" @u
+This patch only implements basic handling for the ASN.1 format, so
+keys with passwords but no policy.
 
-after we will accept both the old hex sha1 form as well as a new
-directly supplied password:
-
-keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001" @u
-
-Since a sha1 hex code must be exactly 40 bytes long and a direct
-password must be 20 or less, we use the length as the discriminator
-for which form is input.
-
-Note this is both and enhancement and a potential bug fix.  The TPM
-2.0 spec requires us to strip leading zeros, meaning empyty
-authorization is a zero length HMAC whereas we're currently passing in
-20 bytes of zeros.  A lot of TPMs simply accept this as OK, but the
-Microsoft TPM emulator rejects it with TPM_RC_BAD_AUTH, so this patch
-makes the Microsoft TPM emulator work with trusted keys.
-
-Fixes: 0fe5480303a1 ("keys, trusted: seal/unseal with TPM 2.0 chips")
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
 ---
-
-v6: change comment, eliminate else clauses and add fixes tag
-v7: fixes before signoff
-v10: wrap some lines
+v2: Updated encode API, added length checks
+v5: correct export format after doing interoperability checks
+v7: use prefix tpm2_key_ instead of tpmkey_ for functions
+v8: resplit commit
+v9: select ASN1_ENCODER
+v10: add reviw/tested tags
 ---
- include/keys/trusted-type.h               |  1 +
- security/keys/trusted-keys/trusted_tpm1.c | 33 ++++++++++++++++++-----
- security/keys/trusted-keys/trusted_tpm2.c | 11 +++++---
- 3 files changed, 35 insertions(+), 10 deletions(-)
+ include/keys/trusted-type.h               |   1 +
+ security/keys/Kconfig                     |   1 +
+ security/keys/trusted-keys/Makefile       |   2 +-
+ security/keys/trusted-keys/tpm2key.asn1   |  23 +++
+ security/keys/trusted-keys/trusted_tpm1.c |   2 +-
+ security/keys/trusted-keys/trusted_tpm2.c | 207 +++++++++++++++++++++-
+ 6 files changed, 228 insertions(+), 8 deletions(-)
+ create mode 100644 security/keys/trusted-keys/tpm2key.asn1
 
 diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-index a94c03a61d8f..b2ed3481c6a0 100644
+index b2ed3481c6a0..b2d87ad21714 100644
 --- a/include/keys/trusted-type.h
 +++ b/include/keys/trusted-type.h
-@@ -30,6 +30,7 @@ struct trusted_key_options {
- 	uint16_t keytype;
- 	uint32_t keyhandle;
- 	unsigned char keyauth[TPM_DIGEST_SIZE];
-+	uint32_t blobauth_len;
- 	unsigned char blobauth[TPM_DIGEST_SIZE];
- 	uint32_t pcrinfo_len;
- 	unsigned char pcrinfo[MAX_PCRINFO_SIZE];
+@@ -22,6 +22,7 @@ struct trusted_key_payload {
+ 	unsigned int key_len;
+ 	unsigned int blob_len;
+ 	unsigned char migratable;
++	unsigned char old_format;
+ 	unsigned char key[MAX_KEY_SIZE + 1];
+ 	unsigned char blob[MAX_BLOB_SIZE];
+ };
+diff --git a/security/keys/Kconfig b/security/keys/Kconfig
+index 83bc23409164..8fbfedf6d1cc 100644
+--- a/security/keys/Kconfig
++++ b/security/keys/Kconfig
+@@ -75,6 +75,7 @@ config TRUSTED_KEYS
+ 	select CRYPTO_HMAC
+ 	select CRYPTO_SHA1
+ 	select CRYPTO_HASH_INFO
++	select ASN1_ENCODER
+ 	help
+ 	  This option provides support for creating, sealing, and unsealing
+ 	  keys in the kernel. Trusted keys are random number symmetric keys,
+diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
+index 7b73cebbb378..e0198641eff2 100644
+--- a/security/keys/trusted-keys/Makefile
++++ b/security/keys/trusted-keys/Makefile
+@@ -5,4 +5,4 @@
+ 
+ obj-$(CONFIG_TRUSTED_KEYS) += trusted.o
+ trusted-y += trusted_tpm1.o
+-trusted-y += trusted_tpm2.o
++trusted-y += trusted_tpm2.o tpm2key.asn1.o
+diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trusted-keys/tpm2key.asn1
+new file mode 100644
+index 000000000000..660b3fa917ae
+--- /dev/null
++++ b/security/keys/trusted-keys/tpm2key.asn1
+@@ -0,0 +1,23 @@
++---
++--- Note: This isn't quite the definition in the standard
++---       However, the Linux asn.1 parser doesn't understand
++---       [2] EXPLICIT SEQUENCE OF OPTIONAL
++---       So there's an extra intermediate TPMPolicySequence
++---       definition to work around this
++
++TPMKey ::= SEQUENCE {
++	type		OBJECT IDENTIFIER ({tpm2_key_type}),
++	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
++	policy		[1] EXPLICIT TPMPolicySequence OPTIONAL,
++	secret		[2] EXPLICIT OCTET STRING OPTIONAL,
++	parent		INTEGER ({tpm2_key_parent}),
++	pubkey		OCTET STRING ({tpm2_key_pub}),
++	privkey		OCTET STRING ({tpm2_key_priv})
++	}
++
++TPMPolicySequence ::= SEQUENCE OF TPMPolicy
++
++TPMPolicy ::= SEQUENCE {
++	commandCode		[0] EXPLICIT INTEGER,
++	commandPolicy		[1] EXPLICIT OCTET STRING
++	}
 diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index 8001ab07e63b..594c9ebb47d5 100644
+index 594c9ebb47d5..d35ec16f5b4e 100644
 --- a/security/keys/trusted-keys/trusted_tpm1.c
 +++ b/security/keys/trusted-keys/trusted_tpm1.c
-@@ -781,13 +781,34 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 				return -EINVAL;
- 			break;
- 		case Opt_blobauth:
--			if (strlen(args[0].from) != 2 * SHA1_DIGEST_SIZE)
--				return -EINVAL;
--			res = hex2bin(opt->blobauth, args[0].from,
--				      SHA1_DIGEST_SIZE);
--			if (res < 0)
--				return -EINVAL;
-+			/*
-+			 * TPM 1.2 authorizations are sha1 hashes passed in as
-+			 * hex strings.  TPM 2.0 authorizations are simple
-+			 * passwords (although it can take a hash as well)
-+			 */
-+			opt->blobauth_len = strlen(args[0].from);
-+
-+			if (opt->blobauth_len == 2 * TPM_DIGEST_SIZE) {
-+				res = hex2bin(opt->blobauth, args[0].from,
-+					      TPM_DIGEST_SIZE);
-+				if (res < 0)
-+					return -EINVAL;
-+
-+				opt->blobauth_len = TPM_DIGEST_SIZE;
-+				return 0;
-+			}
-+
-+			if (tpm2 &&
-+			    opt->blobauth_len <= sizeof(opt->blobauth)) {
-+				memcpy(opt->blobauth, args[0].from,
-+				       opt->blobauth_len);
-+				return 0;
-+			}
-+
-+			return -EINVAL;
-+
- 			break;
-+
- 		case Opt_migratable:
- 			if (*args[0].from == '0')
- 				pay->migratable = 0;
+@@ -1012,7 +1012,7 @@ static int trusted_instantiate(struct key *key,
+ 		goto out;
+ 	}
+ 
+-	if (!options->keyhandle) {
++	if (!options->keyhandle && !tpm2) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
 diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 08ec7f48f01d..e65a11d3efd3 100644
+index e65a11d3efd3..51d845da8728 100644
 --- a/security/keys/trusted-keys/trusted_tpm2.c
 +++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -91,10 +91,13 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+@@ -4,6 +4,8 @@
+  * Copyright (C) 2014 Intel Corporation
+  */
+ 
++#include <linux/asn1_encoder.h>
++#include <linux/oid_registry.h>
+ #include <linux/string.h>
+ #include <linux/err.h>
+ #include <linux/tpm.h>
+@@ -12,6 +14,10 @@
+ #include <keys/trusted-type.h>
+ #include <keys/trusted_tpm.h>
+ 
++#include <asm/unaligned.h>
++
++#include "tpm2key.asn1.h"
++
+ static struct tpm2_hash tpm2_hash_map[] = {
+ 	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+ 	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+@@ -20,6 +26,165 @@ static struct tpm2_hash tpm2_hash_map[] = {
+ 	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+ };
+ 
++static u32 tpm2key_oid[] = { 2,23,133,10,1,5 };
++
++static int tpm2_key_encode(struct trusted_key_payload *payload,
++			   struct trusted_key_options *options,
++			   u8 *src, u32 len)
++{
++	const int SCRATCH_SIZE = PAGE_SIZE;
++	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
++	u8 *work = scratch, *work1;
++	u8 *end_work = scratch + SCRATCH_SIZE;
++	u8 *priv, *pub;
++	u16 priv_len, pub_len;
++
++	priv_len = get_unaligned_be16(src) + 2;
++	priv = src;
++
++	src += priv_len;
++
++	pub_len = get_unaligned_be16(src) + 2;
++	pub = src;
++
++	if (!scratch)
++		return -ENOMEM;
++
++	work = asn1_encode_oid(work, end_work, tpm2key_oid,
++			       asn1_oid_len(tpm2key_oid));
++
++	if (options->blobauth_len == 0) {
++		unsigned char bool[3], *w = bool;
++		/* tag 0 is emptyAuth */
++		w = asn1_encode_boolean(w, w + sizeof(bool), true);
++		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
++			return PTR_ERR(w);
++		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
++	}
++
++	/*
++	 * Assume both octet strings will encode to a 2 byte definite length
++	 *
++	 * Note: For a well behaved TPM, this warning should never
++	 * trigger, so if it does there's something nefarious going on
++	 */
++	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
++		 "BUG: scratch buffer is too small"))
++		return -EINVAL;
++
++	work = asn1_encode_integer(work, end_work, options->keyhandle);
++	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
++	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
++
++	work1 = payload->blob;
++	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
++				     scratch, work - scratch);
++	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
++		return PTR_ERR(work1);
++
++	return work1 - payload->blob;
++}
++
++struct tpm2_key_context {
++	u32 parent;
++	const u8 *pub;
++	u32 pub_len;
++	const u8 *priv;
++	u32 priv_len;
++};
++
++static int tpm2_key_decode(struct trusted_key_payload *payload,
++			   struct trusted_key_options *options,
++			   u8 **buf)
++{
++	int ret;
++	struct tpm2_key_context ctx;
++	u8 *blob;
++
++	memset(&ctx, 0, sizeof(ctx));
++
++	ret = asn1_ber_decoder(&tpm2key_decoder, &ctx, payload->blob,
++			       payload->blob_len);
++	if (ret < 0)
++		return ret;
++
++	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
++		return -EINVAL;
++
++	blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
++	if (!blob)
++		return -ENOMEM;
++
++	*buf = blob;
++	options->keyhandle = ctx.parent;
++
++	memcpy(blob, ctx.priv, ctx.priv_len);
++	blob += ctx.priv_len;
++
++	memcpy(blob, ctx.pub, ctx.pub_len);
++
++	return 0;
++}
++
++int tpm2_key_parent(void *context, size_t hdrlen,
++		  unsigned char tag,
++		  const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++	const u8 *v = value;
++	int i;
++
++	ctx->parent = 0;
++	for (i = 0; i < vlen; i++) {
++		ctx->parent <<= 8;
++		ctx->parent |= v[i];
++	}
++
++	return 0;
++}
++
++int tpm2_key_type(void *context, size_t hdrlen,
++		unsigned char tag,
++		const void *value, size_t vlen)
++{
++	enum OID oid = look_up_OID(value, vlen);
++
++	if (oid != OID_TPMSealedData) {
++		char buffer[50];
++
++		sprint_oid(value, vlen, buffer, sizeof(buffer));
++		pr_debug("OID is \"%s\" which is not TPMSealedData\n",
++			 buffer);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++int tpm2_key_pub(void *context, size_t hdrlen,
++	       unsigned char tag,
++	       const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++
++	ctx->pub = value;
++	ctx->pub_len = vlen;
++
++	return 0;
++}
++
++int tpm2_key_priv(void *context, size_t hdrlen,
++		unsigned char tag,
++		const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++
++	ctx->priv = value;
++	ctx->priv_len = vlen;
++
++	return 0;
++}
++
+ /**
+  * tpm_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+  *
+@@ -79,6 +244,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 	if (i == ARRAY_SIZE(tpm2_hash_map))
+ 		return -EINVAL;
+ 
++	if (!options->keyhandle)
++		return -EINVAL;
++
+ 	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
+ 	if (rc)
+ 		return rc;
+@@ -147,8 +315,10 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 		goto out;
+ 	}
+ 
+-	memcpy(payload->blob, &buf.data[TPM_HEADER_SIZE + 4], blob_len);
+-	payload->blob_len = blob_len;
++	payload->blob_len =
++		tpm2_key_encode(payload, options,
++				&buf.data[TPM_HEADER_SIZE + 4],
++				blob_len);
+ 
+ out:
+ 	tpm_buf_destroy(&buf);
+@@ -159,6 +329,8 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 		else
+ 			rc = -EPERM;
+ 	}
++	if (payload->blob_len < 0)
++		return payload->blob_len;
+ 
+ 	return rc;
+ }
+@@ -185,13 +357,34 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 	unsigned int private_len;
+ 	unsigned int public_len;
+ 	unsigned int blob_len;
++	u8 *blob;
+ 	int rc;
+ 
+-	private_len = be16_to_cpup((__be16 *) &payload->blob[0]);
+-	if (private_len > (payload->blob_len - 2))
++	rc = tpm2_key_decode(payload, options, &blob);
++	if (rc) {
++		/* old form */
++		blob = payload->blob;
++		payload->old_format = 1;
++	}
++
++	/* new format carries keyhandle but old format doesn't */
++	if (!options->keyhandle)
++		return -EINVAL;
++
++	/* must be big enough for at least the two be16 size counts */
++	if (payload->blob_len < 4)
++		return -EINVAL;
++
++	private_len = get_unaligned_be16(blob);
++
++	/* must be big enough for following public_len */
++	if (private_len + 2 + 2 > (payload->blob_len))
++		return -E2BIG;
++
++	public_len = get_unaligned_be16(blob + 2 + private_len);
++	if (private_len + 2 + public_len + 2 > payload->blob_len)
+ 		return -E2BIG;
+ 
+-	public_len = be16_to_cpup((__be16 *) &payload->blob[2 + private_len]);
+ 	blob_len = private_len + public_len + 4;
+ 	if (blob_len > payload->blob_len)
+ 		return -E2BIG;
+@@ -207,7 +400,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 			     options->keyauth /* hmac */,
  			     TPM_DIGEST_SIZE);
  
- 	/* sensitive */
--	tpm_buf_append_u16(&buf, 4 + TPM_DIGEST_SIZE + payload->key_len + 1);
-+	tpm_buf_append_u16(&buf, 4 + options->blobauth_len +
-+			   payload->key_len + 1);
-+
-+	tpm_buf_append_u16(&buf, options->blobauth_len);
-+	if (options->blobauth_len)
-+		tpm_buf_append(&buf, options->blobauth, options->blobauth_len);
+-	tpm_buf_append(&buf, payload->blob, blob_len);
++	tpm_buf_append(&buf, blob, blob_len);
  
--	tpm_buf_append_u16(&buf, TPM_DIGEST_SIZE);
--	tpm_buf_append(&buf, options->blobauth, TPM_DIGEST_SIZE);
- 	tpm_buf_append_u16(&buf, payload->key_len + 1);
- 	tpm_buf_append(&buf, payload->key, payload->key_len);
- 	tpm_buf_append_u8(&buf, payload->migratable);
-@@ -258,7 +261,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
- 			     NULL /* nonce */, 0,
- 			     TPM2_SA_CONTINUE_SESSION,
- 			     options->blobauth /* hmac */,
--			     TPM_DIGEST_SIZE);
-+			     options->blobauth_len);
+ 	if (buf.flags & TPM_BUF_OVERFLOW) {
+ 		rc = -E2BIG;
+@@ -220,6 +413,8 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
  
- 	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
+ out:
++	if (blob != payload->blob)
++		kfree(blob);
+ 	tpm_buf_destroy(&buf);
+ 
  	if (rc > 0)
 -- 
 2.26.2
