@@ -2,102 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F2F1FBD92
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 20:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6898E1FBDA2
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 20:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731239AbgFPSI4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 14:08:56 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9356 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727083AbgFPSIz (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 14:08:55 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05GI3N3C020675
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 14:08:54 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31q15gkxtu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 14:08:54 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05GI5chf026611
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 18:08:53 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma03dal.us.ibm.com with ESMTP id 31nbyukeux-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 18:08:53 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05GI8o0A16974290
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Jun 2020 18:08:50 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AF97F6A04D;
-        Tue, 16 Jun 2020 18:08:50 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3441E6A04F;
-        Tue, 16 Jun 2020 18:08:50 +0000 (GMT)
-Received: from DESKTOP-AV6EVPG.localdomain (unknown [9.160.15.214])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 16 Jun 2020 18:08:49 +0000 (GMT)
-From:   Maurizio Drocco <maurizio.drocco@ibm.com>
-To:     zohar@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org, maurizio.drocco@ibm.com
-Subject: [PATCH] ima_evm_utils: tests: boot_aggregate.test spans PCRs 0-9
-Date:   Tue, 16 Jun 2020 10:28:30 -0400
-Message-Id: <20200616142830.16781-1-maurizio.drocco@ibm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <1592327991.11061.205.camel@linux.ibm.com>
-References: <1592327991.11061.205.camel@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-16_10:2020-06-16,2020-06-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- cotscore=-2147483648 lowpriorityscore=0 clxscore=1015 suspectscore=1
- adultscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 phishscore=0
- mlxlogscore=742 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006160127
+        id S1731622AbgFPSJr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 14:09:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44416 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727083AbgFPSJq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Jun 2020 14:09:46 -0400
+Received: from X1 (nat-ab2241.sltdut.senawave.net [162.218.216.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B1C752082F;
+        Tue, 16 Jun 2020 18:09:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592330985;
+        bh=EsakDvGUztRiSNfngaRB05ekQqGnOvB3NF6mY788udI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IhpS1taEKqV/HMmc2XrgBi59GfE8vYAI/pSBHLIEb5BHt2RggHWNsr0WFiFcGuzEE
+         26ygFhe/LhgEOm51069QA1LMXoAUoV3VgfH3hA2EmK0pi7/AYapihuVVI1Xsu8eHU8
+         MrJlU2uhSFUs9V1K5UBwvjYjOiJtcqNT5s8lHh0I=
+Date:   Tue, 16 Jun 2020 11:09:44 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        ecryptfs@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-bluetooth@vger.kernel.org, linux-wpan@vger.kernel.org,
+        linux-sctp@vger.kernel.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] mm, treewide: Rename kzfree() to
+ kfree_sensitive()
+Message-Id: <20200616110944.c13f221e5c3f54e775190afe@linux-foundation.org>
+In-Reply-To: <20200616154311.12314-3-longman@redhat.com>
+References: <20200616154311.12314-1-longman@redhat.com>
+        <20200616154311.12314-3-longman@redhat.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-display_pcrs() should include PCRS 8 - 9 as they are non-zeros on some
-systems. boot_aggregate may span PCRs 0 - 9 so check()'s info message
-should be fixed accordingly.
+On Tue, 16 Jun 2020 11:43:11 -0400 Waiman Long <longman@redhat.com> wrote:
 
-Signed-off-by: Maurizio Drocco <maurizio.drocco@ibm.com>
----
- tests/boot_aggregate.test | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> As said by Linus:
+> 
+>   A symmetric naming is only helpful if it implies symmetries in use.
+>   Otherwise it's actively misleading.
+> 
+>   In "kzalloc()", the z is meaningful and an important part of what the
+>   caller wants.
+> 
+>   In "kzfree()", the z is actively detrimental, because maybe in the
+>   future we really _might_ want to use that "memfill(0xdeadbeef)" or
+>   something. The "zero" part of the interface isn't even _relevant_.
+> 
+> The main reason that kzfree() exists is to clear sensitive information
+> that should not be leaked to other future users of the same memory
+> objects.
+> 
+> Rename kzfree() to kfree_sensitive() to follow the example of the
+> recently added kvfree_sensitive() and make the intention of the API
+> more explicit. In addition, memzero_explicit() is used to clear the
+> memory to make sure that it won't get optimized away by the compiler.
+> 
+> The renaming is done by using the command sequence:
+> 
+>   git grep -w --name-only kzfree |\
+>   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
+> 
+> followed by some editing of the kfree_sensitive() kerneldoc and adding
+> a kzfree backward compatibility macro in slab.h.
+> 
+> ...
+>
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -186,10 +186,12 @@ void memcg_deactivate_kmem_caches(struct mem_cgroup *, struct mem_cgroup *);
+>   */
+>  void * __must_check krealloc(const void *, size_t, gfp_t);
+>  void kfree(const void *);
+> -void kzfree(const void *);
+> +void kfree_sensitive(const void *);
+>  size_t __ksize(const void *);
+>  size_t ksize(const void *);
+>  
+> +#define kzfree(x)	kfree_sensitive(x)	/* For backward compatibility */
+> +
 
-diff --git a/tests/boot_aggregate.test b/tests/boot_aggregate.test
-index 39bd058..8a5581f 100755
---- a/tests/boot_aggregate.test
-+++ b/tests/boot_aggregate.test
-@@ -81,12 +81,12 @@ swtpm_init() {
- 
- # In VERBOSE mode, display the calculated TPM PCRs for the different banks.
- display_pcrs() {
--	local PCRMAX=7
-+	local PCRMAX=9
- 	local banks=("sha1" "sha256")
- 	local i;
- 
- 	for bank in "${banks[@]}"; do
--		echo "INFO: Displaying ${bank} TPM bank (PCRs 0 - 7)"
-+		echo "INFO: Displaying ${bank} TPM bank (PCRs 0 - 9)"
- 		for i in $(seq 0 $PCRMAX); do
- 			rc=0
- 			pcr=$("${TSSDIR}/tsspcrread" -halg "${bank}" -ha "${i}" -ns)
-@@ -107,7 +107,7 @@ display_pcrs() {
- # Verify that the last "boot_aggregate" record in the IMA measurement
- # list matches.
- check() {
--	echo "INFO: Calculating the boot_aggregate (PCRs 0 - 7) for multiple banks"
-+	echo "INFO: Calculating the boot_aggregate (PCRs 0 - 9) for multiple banks"
- 	bootaggr=$(evmctl ima_boot_aggregate)
- 	if [ $? -ne 0 ]; then
- 		echo "${CYAN}SKIP: evmctl ima_boot_aggregate: $bootaggr${NORM}"
--- 
-2.17.1
+What was the thinking here?  Is this really necessary?
 
+I suppose we could keep this around for a while to ease migration.  But
+not for too long, please.
