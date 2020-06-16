@@ -2,90 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D25571FB625
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 17:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811421FB71B
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 17:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729161AbgFPP33 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 11:29:29 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:30366 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728917AbgFPP33 (ORCPT
+        id S1730786AbgFPPnt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 11:43:49 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20160 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731853AbgFPPns (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 11:29:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592321368;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=prvuib5zQmcv0KtPefPihKfecw6gAeEldQvoe7ZUcw8=;
-        b=J+t3P92GsJPs/zExJ6s+CfijxJR0RLrt6yaR56z8cu9vT96ucZPnNQ3oWLliluuLhCT2zG
-        tJzEEn4Yu8+gKVAGpwWN21y68xIyHTH9dwlyqCe1CLqJ/qEeRVKwffZCMMquObkUt/awcP
-        oy+94OlFb20Q5hDA8pAIZxLLR/2jYS8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-277-mImIVvnyOWiBzs4mNEtzcw-1; Tue, 16 Jun 2020 11:29:26 -0400
-X-MC-Unique: mImIVvnyOWiBzs4mNEtzcw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1C6FA150562;
-        Tue, 16 Jun 2020 15:29:25 +0000 (UTC)
-Received: from x2.localnet (ovpn-113-82.phx2.redhat.com [10.3.113.82])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5559110013D6;
-        Tue, 16 Jun 2020 15:29:24 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, rgb@redhat.com,
-        linux-integrity@vger.kernel.org, linux-audit@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] integrity: Add errno field in audit message
-Date:   Tue, 16 Jun 2020 11:29:22 -0400
-Message-ID: <6643272.rC52FQZPYE@x2>
-Organization: Red Hat
-In-Reply-To: <CAHC9VhT6JSLBD-JMfQbn9eUsUg=juznRz41DTOaia-=WhrAAuA@mail.gmail.com>
-References: <20200611000400.3771-1-nramas@linux.microsoft.com> <8800031.dr63W5FlUW@x2> <CAHC9VhT6JSLBD-JMfQbn9eUsUg=juznRz41DTOaia-=WhrAAuA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        Tue, 16 Jun 2020 11:43:48 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05GF40A6193988
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 11:43:47 -0400
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31phf5uw1w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 11:43:47 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05GFJHEm022988
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 15:43:46 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma02dal.us.ibm.com with ESMTP id 31pe8p4nes-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 15:43:46 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05GFgjqk37880298
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Jun 2020 15:42:45 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6EE3AAC05F;
+        Tue, 16 Jun 2020 15:42:45 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B56AAC05B;
+        Tue, 16 Jun 2020 15:42:45 +0000 (GMT)
+Received: from DESKTOP-AV6EVPG.localdomain (unknown [9.160.15.214])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 16 Jun 2020 15:42:45 +0000 (GMT)
+From:   Maurizio Drocco <maurizio.drocco@ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, Maurizio <maurizio.drocco@ibm.com>
+Subject: [PATCH] ima_evm_utils: extended calc_bootaggr to PCRs 8 - 9
+Date:   Tue, 16 Jun 2020 08:02:28 -0400
+Message-Id: <20200616120228.16068-1-maurizio.drocco@ibm.com>
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-16_04:2020-06-16,2020-06-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ cotscore=-2147483648 impostorscore=0 lowpriorityscore=0 suspectscore=1
+ clxscore=1015 mlxscore=0 spamscore=0 bulkscore=0 adultscore=0
+ priorityscore=1501 mlxlogscore=784 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006160108
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Monday, June 15, 2020 6:58:13 PM EDT Paul Moore wrote:
-> On Mon, Jun 15, 2020 at 6:23 PM Steve Grubb <sgrubb@redhat.com> wrote:
-> > On Friday, June 12, 2020 3:50:14 PM EDT Lakshmi Ramasubramanian wrote:
-> > > On 6/12/20 12:25 PM, Mimi Zohar wrote:
-> > > > The idea is a good idea, but you're assuming that "result" is always
-> > > > errno.  That was probably true originally, but isn't now.  For
-> > > > example, ima_appraise_measurement() calls xattr_verify(), which
-> > > > compares the security.ima hash with the calculated file hash.  On
-> > > > failure, it returns the result of memcmp().  Each and every code path
-> > > > will need to be checked.
-> > > 
-> > > Good catch Mimi.
-> > > 
-> > > Instead of "errno" should we just use "result" and log the value given
-> > > in the result parameter?
-> > 
-> > That would likely collide with another field of the same name which is
-> > the
-> > operation's results. If it really is errno, the name is fine. It's
-> > generic
-> > enough that it can be reused on other events if that mattered.
-> 
-> Steve, what is the historical reason why we have both "res" and
-> "result" for indicating a boolean success/fail?  I'm just curious how
-> we ended up this way, and who may still be using "result".
+From: Maurizio <maurizio.drocco@ibm.com>
 
-I think its pam and some other user space things did this. But because of 
-mixed machines in datacenters supporting multiple versions of OS, we have to 
-leave result alone. It has to be 0,1 or success/fail. We cannot use it for 
-errno.
+If PCRs 8 - 9 are set (i.e. not all-zeros), cal_bootaggr should include
+them into the digest.
 
--Steve
+Signed-off-by: Maurizio Drocco <maurizio.drocco@ibm.com>
+---
+ src/evmctl.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 1d065ce..701d643 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -1930,6 +1930,16 @@ static void calc_bootaggr(struct tpm_bank_info *bank)
+ 		}
+ 	}
+ 
++	for (i = 8; i < 10; i++) {
++		if (memcmp(bank->pcr[i], zero, bank->digest_size) != 0) {
++			err = EVP_DigestUpdate(pctx, bank->pcr[i], bank->digest_size);
++			if (!err) {
++				log_err("EVP_DigestUpdate() failed\n");
++				return;
++			}
++		}
++	}
++
+ 	err = EVP_DigestFinal(pctx, bank->digest, &mdlen);
+ 	if (!err) {
+ 		log_err("EVP_DigestFinal() failed\n");
+@@ -1973,7 +1983,8 @@ static int append_bootaggr(char *bootaggr, struct tpm_bank_info *tpm_banks)
+  * The IMA measurement list boot_aggregate is the link between the preboot
+  * event log and the IMA measurement list.  Read and calculate all the
+  * possible per TPM bank boot_aggregate digests based on the existing
+- * PCRs 0 - 7 to validate against the IMA boot_aggregate record.
++ * PCRs 0 - 9 to validate against the IMA boot_aggregate record. If PCRs
++ * 8 - 9 are not set (i.e. all-zeros), only PCRs 0 - 7 are considered.
+  */
+ static int cmd_ima_bootaggr(struct command *cmd)
+ {
+-- 
+2.17.1
 
