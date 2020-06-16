@@ -2,83 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AFD1FBCAD
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 19:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29471FBCF6
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 19:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728067AbgFPRT5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 13:19:57 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46452 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727859AbgFPRT5 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 13:19:57 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05GH3Jv1173842
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 13:19:56 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31q23srjcx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 13:19:56 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05GHG7h2005506
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 17:19:54 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 31mpe85qha-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 17:19:54 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05GHJq7921626884
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Jun 2020 17:19:52 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4E01542041;
-        Tue, 16 Jun 2020 17:19:52 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8928842047;
-        Tue, 16 Jun 2020 17:19:51 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.158.198])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 16 Jun 2020 17:19:51 +0000 (GMT)
-Message-ID: <1592327991.11061.205.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima_evm_utils: extended calc_bootaggr to PCRs 8 - 9
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Maurizio Drocco <maurizio.drocco@ibm.com>,
-        linux-integrity@vger.kernel.org
-Date:   Tue, 16 Jun 2020 13:19:51 -0400
-In-Reply-To: <20200616120228.16068-1-maurizio.drocco@ibm.com>
-References: <20200616120228.16068-1-maurizio.drocco@ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-16_10:2020-06-16,2020-06-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- cotscore=-2147483648 bulkscore=0 adultscore=0 mlxlogscore=922
- lowpriorityscore=0 spamscore=0 malwarescore=0 mlxscore=0
- priorityscore=1501 clxscore=1015 phishscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006160120
+        id S1730196AbgFPR3Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 13:29:25 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2316 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729272AbgFPR3Z (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Jun 2020 13:29:25 -0400
+Received: from lhreml743-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id A3232E4DF5FCCA6C7633;
+        Tue, 16 Jun 2020 18:29:22 +0100 (IST)
+Received: from fraeml701-chm.china.huawei.com (10.206.15.50) by
+ lhreml743-chm.china.huawei.com (10.201.108.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Tue, 16 Jun 2020 18:29:22 +0100
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Tue, 16 Jun 2020 19:29:21 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Tue, 16 Jun 2020 19:29:21 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        Maurizio Drocco <maurizio.drocco@ibm.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+CC:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
+Subject: RE: [PATCH] extend IMA boot_aggregate with kernel measurements
+Thread-Topic: [PATCH] extend IMA boot_aggregate with kernel measurements
+Thread-Index: AQHWQCo8nqt7HKCznkGnNWX+y9c+NajT/1SAgADtAgCAACbgMIAABL+AgAZlbjA=
+Date:   Tue, 16 Jun 2020 17:29:21 +0000
+Message-ID: <8c44ed75fb884cad9f33c86c2d4e8a27@huawei.com>
+References: <1591921795.11061.12.camel@linux.ibm.com>
+         <20200612143812.1609-1-maurizio.drocco@ibm.com>
+         <380af929b2d2440a9dc35ba0b374247d@huawei.com>
+ <1591982059.7235.29.camel@linux.ibm.com>
+In-Reply-To: <1591982059.7235.29.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.220.96.108]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Maurizio,
-
-On Tue, 2020-06-16 at 08:02 -0400, Maurizio Drocco wrote:
-> From: Maurizio <maurizio.drocco@ibm.com>
-> 
-> If PCRs 8 - 9 are set (i.e. not all-zeros), cal_bootaggr should include
-> them into the digest.
-> 
-> Signed-off-by: Maurizio Drocco <maurizio.drocco@ibm.com>
-
-Thank you, this patch seems to be working properly.  As a separate
-patch, could you fix the tests/boot_aggregate.test comments "PCRs 0
--7" and other things, like displaying just PCRs 0 - 7?
-
-thanks,
-
-Mimi
+PiBGcm9tOiBKYW1lcyBCb3R0b21sZXkgW21haWx0bzpqZWpiQGxpbnV4LmlibS5jb21dDQo+IFNl
+bnQ6IEZyaWRheSwgSnVuZSAxMiwgMjAyMCA3OjE0IFBNDQo+IE9uIEZyaSwgMjAyMC0wNi0xMiBh
+dCAxNToxMSArMDAwMCwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gPiB3aXRoIHJlY2VudCBwYXRj
+aGVzLCBib290X2FnZ3JlZ2F0ZSBjYW4gYmUgY2FsY3VsYXRlZCBmcm9tIG5vbi1TSEExDQo+ID4g
+UENSIGJhbmtzLiBJIHdvdWxkIHJlcGxhY2Ugd2l0aDoNCj4gPg0KPiA+IEV4dGVuZCBjdW11bGF0
+aXZlIGRpZ2VzdCBvdmVyIC4uLg0KPiA+DQo+ID4gR2l2ZW4gdGhhdCB3aXRoIHRoaXMgcGF0Y2gg
+Ym9vdF9hZ2dyZWdhdGUgaXMgY2FsY3VsYXRlZCBkaWZmZXJlbnRseSwNCj4gPiBzaG91bGRuJ3Qg
+d2UgY2FsbCBpdCBib290X2FnZ3JlZ2F0ZV92MiBhbmQgZW5hYmxlIGl0IHdpdGggYSBuZXcNCj4g
+PiBvcHRpb24/DQo+IA0KPiBTbyBoZXJlJ3MgdGhlIHByb2JsZW06IGlmIHlvdXIgY3VycmVudCBn
+cnViIGRvZXNuJ3QgZG8gYW55IFRQTQ0KPiBleHRlbnNpb25zIChhcyBtb3N0IGRvbid0KSwgdGhl
+biB0aGUgdHdvIGJvb3QgYWdncmVnYXRlcyBhcmUgdGhlIHNhbWUNCj4gYmVjYXVzZSBQQ1JzIDgg
+YW5kIDkgYXJlIHplcm8gYW5kIHRoZXJlJ3MgYSB0ZXN0IHRoYXQgZG9lc24ndCBhZGQgdGhlbQ0K
+PiB0byB0aGUgYWdncmVnYXRlIGlmIHRoZXkgYXJlIHplcm8uICBGb3IgdGhlc2UgcGVvcGxlIGl0
+cyBhIG5vcCBzbyB3ZQ0KPiBzaG91bGRuJ3QgZm9yY2UgdGhlbSB0byBjaG9vc2UgYSBkaWZmZXJl
+bnQgdmVyc2lvbiBvZiB0aGUgc2FtZSB0aGluZy4NCj4gDQo+IElmLCBob3dldmVyLCB5b3UncmUg
+b24gYSBkaXN0cmlidXRpb24gd2hlcmUgZ3J1YiBpcyBhdXRvbWF0aWNhbGx5DQo+IG1lYXN1cmlu
+ZyB0aGUga2VybmVsIGFuZCBjb21tYW5kIGxpbmUgaW50byBQQ1JzIDggYW5kIDkgKEkgdGhpbmsg
+RmVkb3JhDQo+IDMyIGRvZXMgdGhpcyksIHlvdXIgYm9vdCBhZ2dyZWdhdGUgd2lsbCBjaGFuZ2Uu
+ICBJdCBzdHJpa2VzIG1lIGluIHRoYXQNCj4gY2FzZSB3ZSBjYW4gY2FsbCB0aGlzIGEgYnVnIGZp
+eCwgc2luY2UgdGhlIGJvb3QgYWdncmVnYXRlIGlzbid0DQo+IHByb3Blcmx5IGJpbmRpbmcgdG8g
+dGhlIHByZXZpb3VzIG1lYXN1cmVtZW50cyB3aXRob3V0IFBDUnMgOCBhbmQgOS4gIEluDQo+IHRo
+aXMgY2FzZSwgZG8gd2Ugd2FudCB0byBhbGxvdyBwZW9wbGUgdG8gc2VsZWN0IGFuIG9wdGlvbiB3
+aGljaCBkb2Vzbid0DQo+IHByb3Blcmx5IGJpbmQgdGhlIElNQSBsb2cgdG8gdGhlIGJvb3QgbWVh
+c3VyZW1lbnRzPyAgVGhhdCBzb3VuZHMgbGlrZSBhDQo+IHNlY3VyaXR5IGhvbGUgdG8gbWUuDQo+
+IA0KPiBIb3dldmVyLCBzaW5jZSBpdCBjYXVzZXMgYSB1c2VyIHZpc2libGUgZGlmZmVyZW5jZSBp
+biB0aGUgZ3J1YiBhbHJlYWR5DQo+IG1lYXN1cmVzIGNhc2UsIGRvIHlvdSBoYXZlIGEgY3VycmVu
+dCB1c2UgY2FzZSB0aGF0IHdvdWxkIGJlIGFmZmVjdGVkPw0KPiBBcyBpbiBhcmUgbG90cyBvZiBw
+ZW9wbGUgYWxyZWFkeSBydW5uaW5nIGEgZGlzdHJvIHdpdGggdGhlIFRQTSBncnViDQo+IHVwZGF0
+ZXMgYW5kIHJlbHlpbmcgb24gdGhlIG9sZCBib290IGFnZ3JlZ2F0ZT8NCg0KSSBkb24ndCBrbm93
+IGhvdyBtYW55IHBlb3BsZSB3b3VsZCBiZSBhZmZlY3RlZC4gSG93ZXZlciwgaWYgYW4NCmF0dGVz
+dGF0aW9uIHRvb2wgcHJvY2Vzc2VzIGJvdGggbWVhc3VyZW1lbnQgbGlzdHMgZnJvbSB1bnBhdGNo
+ZWQga2VybmVscw0KYW5kIHBhdGNoZWQga2VybmVscywga2VlcGluZyB0aGUgc2FtZSBuYW1lIHdv
+dWxkIGJlIGEgcHJvYmxlbSBhcyBpdA0KY2Fubm90IGJlIGRldGVybWluZWQgZnJvbSB0aGUgbWVh
+c3VyZW1lbnQgbGlzdCBob3cgYm9vdF9hZ2dyZWdhdGUNCndhcyBjYWxjdWxhdGVkLg0KDQpBbnl3
+YXksIEkgYWdyZWUgdGhpcyBzaG91bGQgYmUgZml4ZWQuIEF0IGxlYXN0LCBJIHN1Z2dlc3QgdG8g
+YWRkIGEgRml4ZXMgdGFnLA0KdG8gZW5zdXJlIHRoYXQgdGhpcyBwYXRjaCBpcyBhcHBsaWVkIHRv
+IGFsbCBzdGFibGUga2VybmVscy4NCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1
+ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIExp
+IEppYW4sIFNoaSBZYW5saQ0K
