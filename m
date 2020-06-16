@@ -2,128 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B381FABE7
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 11:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32631FB189
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2020 15:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727819AbgFPJIv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 05:08:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40766 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727804AbgFPJIu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 05:08:50 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726452AbgFPNFS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 09:05:18 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:35494 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728740AbgFPNFS (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Jun 2020 09:05:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592312717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7nZX/JZoMn+I5qsocsgLqRgQUtpNpbf+EHIybmwJtOc=;
+        b=Kb1ntucIH/6101JMcJj/Quohma8qEmcmMwFqnZXJaANFqcO993o0plTYecMTky9PEKK8E+
+        FdsLdLUt8n/cP0JxjVNUiJKLD+G9+oc4hb+mic1vrT33io221HtRHjVQJVHfTNTWgh1fQf
+        +D0yScY7r1lA5CagffHtuiymwFSRh80=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-395-9xOyBG-QPzmPq6osX1JXvA-1; Tue, 16 Jun 2020 09:05:14 -0400
+X-MC-Unique: 9xOyBG-QPzmPq6osX1JXvA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C272A207DD;
-        Tue, 16 Jun 2020 09:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592298529;
-        bh=mMcZbBKDIEf5QDbJvhcjb8NySIKsPG7Fhgc8LiSbKCo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QAbJhmj34S2Fh7X92lHNNV0g9TgINhpbE+Xi01XOpZGNnKr1JQOzc8zJFa/Q/IWIE
-         KUXLzFRoNnTDPXxxfw5nMVDVRRo5OGfYUCr1Uu+PHiRMjg+ihC/RhWsE2s9n/dd3g0
-         4HFqrjPh5o76I0Mk0irL6v+qQWIW1zQYLLpbow1A=
-Received: by mail-oi1-f176.google.com with SMTP id a137so18611837oii.3;
-        Tue, 16 Jun 2020 02:08:49 -0700 (PDT)
-X-Gm-Message-State: AOAM532iBcwy8DQnU/c6AeEDsaRJC0okNSv1M7hOKPjTmTBuLeg5FPR0
-        tulR5SBG+4hKCDmeyhe9hKWIAUAr0/AYstUiE8M=
-X-Google-Smtp-Source: ABdhPJwa1K5xO9vLA3j1dAI/megl1vvVrIUpuNpiiEU3U5egWn6I8rCdX4OdQEugsG4Pg25O6pqrL++03BNz9mew+r8=
-X-Received: by 2002:aca:ba03:: with SMTP id k3mr2525490oif.33.1592298529095;
- Tue, 16 Jun 2020 02:08:49 -0700 (PDT)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 108C8107B7CB;
+        Tue, 16 Jun 2020 13:05:07 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-114-156.rdu2.redhat.com [10.10.114.156])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3337D5D9E4;
+        Tue, 16 Jun 2020 13:05:01 +0000 (UTC)
+Subject: Re: [PATCH v4 1/3] mm/slab: Use memzero_explicit() in kzfree()
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        David Sterba <dsterba@suse.cz>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org
+References: <20200616015718.7812-1-longman@redhat.com>
+ <20200616015718.7812-2-longman@redhat.com>
+ <20200616033035.GB902@sol.localdomain>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <56c2304c-73cc-8f48-d8d0-5dd6c39f33f3@redhat.com>
+Date:   Tue, 16 Jun 2020 09:05:00 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
-In-Reply-To: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 16 Jun 2020 11:08:38 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
-Message-ID: <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
-Subject: Re: [PATCH] tpm: Require that all digests are present in
- TCG_PCR_EVENT2 structures
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Peter Jones <pjones@redhat.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Petr Vandrovec <petr@vmware.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200616033035.GB902@sol.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-(cc Matthew and Peter)
+On 6/15/20 11:30 PM, Eric Biggers wrote:
+> On Mon, Jun 15, 2020 at 09:57:16PM -0400, Waiman Long wrote:
+>> The kzfree() function is normally used to clear some sensitive
+>> information, like encryption keys, in the buffer before freeing it back
+>> to the pool. Memset() is currently used for the buffer clearing. However,
+>> it is entirely possible that the compiler may choose to optimize away the
+>> memory clearing especially if LTO is being used. To make sure that this
+>> optimization will not happen, memzero_explicit(), which is introduced
+>> in v3.18, is now used in kzfree() to do the clearing.
+>>
+>> Fixes: 3ef0e5ba4673 ("slab: introduce kzfree()")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   mm/slab_common.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/mm/slab_common.c b/mm/slab_common.c
+>> index 9e72ba224175..37d48a56431d 100644
+>> --- a/mm/slab_common.c
+>> +++ b/mm/slab_common.c
+>> @@ -1726,7 +1726,7 @@ void kzfree(const void *p)
+>>   	if (unlikely(ZERO_OR_NULL_PTR(mem)))
+>>   		return;
+>>   	ks = ksize(mem);
+>> -	memset(mem, 0, ks);
+>> +	memzero_explicit(mem, ks);
+>>   	kfree(mem);
+>>   }
+>>   EXPORT_SYMBOL(kzfree);
+> This is a good change, but the commit message isn't really accurate.  AFAIK, no
+> one has found any case where this memset() gets optimized out.  And even with
+> LTO, it would be virtually impossible due to all the synchronization and global
+> data structures that kfree() uses.  (Remember that this isn't the C standard
+> function "free()", so the compiler can't assign it any special meaning.)
+> Not to mention that LTO support isn't actually upstream yet.
+>
+> I still agree with the change, but it might be helpful if the commit message
+> were honest that this is really a hardening measure and about properly conveying
+> the intent.  As-is this sounds like a critical fix, which might confuse people.
 
-On Tue, 16 Jun 2020 at 01:28, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
->
-> Require that the TCG_PCR_EVENT2.digests.count value strictly matches the
-> value of TCG_EfiSpecIdEvent.numberOfAlgorithms in the event field of the
-> TCG_PCClientPCREvent event log header. Also require that
-> TCG_EfiSpecIdEvent.numberOfAlgorithms is non-zero.
->
-> The TCG PC Client Platform Firmware Profile Specification section 9.1
-> (Family "2.0", Level 00 Revision 1.04) states:
->
->  For each Hash algorithm enumerated in the TCG_PCClientPCREvent entry,
->  there SHALL be a corresponding digest in all TCG_PCR_EVENT2 structures.
->  Note: This includes EV_NO_ACTION events which do not extend the PCR.
->
-> Section 9.4.5.1 provides this description of
-> TCG_EfiSpecIdEvent.numberOfAlgorithms:
->
->  The number of Hash algorithms in the digestSizes field. This field MUST
->  be set to a value of 0x01 or greater.
->
-> Enforce these restrictions, as required by the above specification, in
-> order to better identify and ignore invalid sequences of bytes at the
-> end of an otherwise valid TPM2 event log. Firmware doesn't always have
-> the means necessary to inform the kernel of the actual event log size so
-> the kernel's event log parsing code should be stringent when parsing the
-> event log for resiliency against firmware bugs. This is true, for
-> example, when firmware passes the event log to the kernel via a reserved
-> memory region described in device tree.
->
+Yes, I agree that the commit log may look a bit scary. How about the 
+following:
 
-When does this happen? Do we have code in mainline that does this?
+The kzfree() function is normally used to clear some sensitive
+information, like encryption keys, in the buffer before freeing it back
+to the pool. Memset() is currently used for buffer clearing. However
+unlikely, there is still a non-zero probability that the compiler may
+choose to optimize away the memory clearing especially if LTO is being
+used in the future. To make sure that this optimization will never
+happen, memzero_explicit(), which is introduced in v3.18, is now used
+in kzfree() to future-proof it.
 
-> Prior to this patch, a single bit set in the offset corresponding to
-> either the TCG_PCR_EVENT2.eventType or TCG_PCR_EVENT2.eventSize fields,
-> after the last valid event log entry, could confuse the parser into
-> thinking that an additional entry is present in the event log. This
-> patch raises the bar on how difficult it is for stale memory to confuse
-> the kernel's event log parser but there's still a reliance on firmware
-> to properly initialize the remainder of the memory region reserved for
-> the event log as the parser cannot be expected to detect a stale but
-> otherwise properly formatted firmware event log entry.
->
-> Fixes: fd5c78694f3f ("tpm: fix handling of the TPM 2.0 event logs")
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> ---
+Cheers,
+Longman
 
-I am all for stringent checks, but this could potentially break
-measured boot on systems that are working fine today, right?
-
->  include/linux/tpm_eventlog.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
-> index 4f8c90c93c29..d83eb9fd5614 100644
-> --- a/include/linux/tpm_eventlog.h
-> +++ b/include/linux/tpm_eventlog.h
-> @@ -201,7 +201,7 @@ static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
->         efispecid = (struct tcg_efi_specid_event_head *)event_header->event;
->
->         /* Check if event is malformed. */
-> -       if (count > efispecid->num_algs) {
-> +       if (!efispecid->num_algs || count != efispecid->num_algs) {
->                 size = 0;
->                 goto out;
->         }
-> --
-> 2.25.1
->
