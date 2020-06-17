@@ -2,102 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E3B1FD6D9
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 23:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19F01FD77C
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 23:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbgFQVP2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jun 2020 17:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726912AbgFQVP1 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jun 2020 17:15:27 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD06C06174E
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 14:15:26 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id y13so4143866eju.2
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 14:15:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aF2QFHszBUveBEYuZ4El0wMTZ2oyuOvfLY0YCwJErgY=;
-        b=WlXbj9ju55dGjHRzLb5C+A8WJ5rU77z376DVpc11si+Mfk0mgl/SUv0GjXDMTXTPU8
-         fkUT4YuEl24pt0ed8H2rwHxZmwl+0En+63ihMhy6iz1uo1YOJOvbn2kgp6I+oeDe0cL+
-         vrKCnZo8IFvhrHmrIOp3beUH7vYfUsZg+zPRk/xHGsG5Ltlg73jB9l3leAp6Gazgra1G
-         Q1l8GejBcNKrpCet0IlhxN5hE1ntYGvElCeF9qBiPymC/Yyp7XGcu+jhviej5TLXWwTK
-         bCtFSc518u83smtBb6UwaDe8klytUX6DaGAmo/MTPVi3nU+F3w9WqyVROlmEw7jPu7/b
-         VCgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aF2QFHszBUveBEYuZ4El0wMTZ2oyuOvfLY0YCwJErgY=;
-        b=iixUBjZ4+SDXal1ssBrKDu33v/mXuCfXxwL6pbs77GUwKYCORVYJLjQo+XXYw57pGu
-         eHT703cDUaGAUoVPnfhXeZg9bDyK7E88ICLY2b1Tg/GUt4oEhZ+0Vp0X5+0Upq6HmsuT
-         0tuc6u55BiA/o9q7OpZrzR95nwVn8dw2ZIUxv9h54i+0pjJNQ1eVAmi5FZc0X4yuJ8fn
-         XVFmJ2qNOo9tlcGh5vn2qSre+MyV7I3uyIs8dJsa7u+zwLa22FC9queywZGLiI9ygBqg
-         pHZtDzny5S0bOFSQMVNRvVr11bbnhMzzbdXQC1UIUaVBUbL4ypLzSU4mVJVO4083JtRQ
-         cOeA==
-X-Gm-Message-State: AOAM530DYWflJD7rNHgh34Ux6IbUt87mdXq3Q5GS8HHbGsu07/mKOuNU
-        ciRyS96cvfQtItGBH2Uo27r9icbII2o6ETKkd26p
-X-Google-Smtp-Source: ABdhPJwpQGCuUs9iFPAHM5LwSxMut1A4ihpgUz0qV9wJycHjByfPFJfNofYDt/VmT8F/+Bwr1wIS1cgTIhYY6STDwXU=
-X-Received: by 2002:a17:906:ecef:: with SMTP id qt15mr1003538ejb.91.1592428525325;
- Wed, 17 Jun 2020 14:15:25 -0700 (PDT)
+        id S1727063AbgFQVhK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jun 2020 17:37:10 -0400
+Received: from mail.ispras.ru ([83.149.199.45]:42916 "EHLO mail.ispras.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726758AbgFQVhI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 17 Jun 2020 17:37:08 -0400
+X-Greylist: delayed 346 seconds by postgrey-1.27 at vger.kernel.org; Wed, 17 Jun 2020 17:37:02 EDT
+Received: from [192.168.1.8] (unknown [213.87.137.195])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 54355BFD1E;
+        Thu, 18 Jun 2020 00:31:03 +0300 (MSK)
+To:     Joe Perches <joe@perches.com>, Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        David Sterba <dsterba@suse.cz>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+References: <20200616015718.7812-1-longman@redhat.com>
+ <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
+From:   Denis Efremov <efremov@ispras.ru>
+Autocrypt: addr=efremov@ispras.ru; keydata=
+ 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
+Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to kfree_sensitive()
+Message-ID: <17e4fede-bab0-d93c-6964-69decc889d7d@ispras.ru>
+Date:   Thu, 18 Jun 2020 00:31:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-References: <20200617204436.2226-1-nramas@linux.microsoft.com> <20200617204436.2226-2-nramas@linux.microsoft.com>
-In-Reply-To: <20200617204436.2226-2-nramas@linux.microsoft.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 17 Jun 2020 17:15:14 -0400
-Message-ID: <CAHC9VhTUd1N_W3Axr4PRt2qe56YfxeRiX17hqTnGJrJPVYNRWw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] integrity: Add errno field in audit message
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, bauerman@linux.ibm.com, nayna@linux.ibm.com,
-        sgrubb@redhat.com, rgb@redhat.com, linux-integrity@vger.kernel.org,
-        linux-audit@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 4:44 PM Lakshmi Ramasubramanian
-<nramas@linux.microsoft.com> wrote:
->
-> Error code is not included in the audit messages logged by
-> the integrity subsystem. Add "errno" field in the audit messages
-> logged by the integrity subsystem and set the value to the error code
-> passed to integrity_audit_msg() in the "result" parameter.
->
-> Sample audit messages:
->
-> [    6.284329] audit: type=1804 audit(1591756723.627:2): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=kernel op=add_boot_aggregate cause=alloc_entry comm="swapper/0" name="boot_aggregate" res=0 errno=-12
->
-> [    8.085456] audit: type=1802 audit(1592005947.297:9): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 op=policy_update cause=completed comm="systemd" res=1 errno=0
->
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> ---
->  security/integrity/integrity_audit.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Paul Moore <paul@paul-moore.com>
 
-> diff --git a/security/integrity/integrity_audit.c b/security/integrity/integrity_audit.c
-> index 5109173839cc..a265024f82f3 100644
-> --- a/security/integrity/integrity_audit.c
-> +++ b/security/integrity/integrity_audit.c
-> @@ -53,6 +53,6 @@ void integrity_audit_msg(int audit_msgno, struct inode *inode,
->                 audit_log_untrustedstring(ab, inode->i_sb->s_id);
->                 audit_log_format(ab, " ino=%lu", inode->i_ino);
->         }
-> -       audit_log_format(ab, " res=%d", !result);
-> +       audit_log_format(ab, " res=%d errno=%d", !result, result);
->         audit_log_end(ab);
->  }
-> --
-> 2.27.0
+On 6/16/20 9:53 PM, Joe Perches wrote:
+> On Mon, 2020-06-15 at 21:57 -0400, Waiman Long wrote:
+>>  v4:
+>>   - Break out the memzero_explicit() change as suggested by Dan Carpenter
+>>     so that it can be backported to stable.
+>>   - Drop the "crypto: Remove unnecessary memzero_explicit()" patch for
+>>     now as there can be a bit more discussion on what is best. It will be
+>>     introduced as a separate patch later on after this one is merged.
+> 
+> To this larger audience and last week without reply:
+> https://lore.kernel.org/lkml/573b3fbd5927c643920e1364230c296b23e7584d.camel@perches.com/
+> 
+> Are there _any_ fastpath uses of kfree or vfree?
+> 
+> Many patches have been posted recently to fix mispairings
+> of specific types of alloc and free functions.
 
--- 
-paul moore
-www.paul-moore.com
+I've prepared a coccinelle script to highlight these mispairings in a function
+a couple of days ago: https://lkml.org/lkml/2020/6/5/953
+I've listed all the fixes in the commit message. 
+
+Not so many mispairings actually, and most of them are harmless like:
+kmalloc(E) -> kvfree(E)
+
+However, coccinelle script can't detect cross-functions mispairings, i.e.
+allocation in one function, free in another funtion.
+
+Thanks,
+Denis
