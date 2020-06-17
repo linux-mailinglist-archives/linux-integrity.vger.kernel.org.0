@@ -2,115 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9590A1FC32D
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 03:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5131C1FC321
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 03:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726601AbgFQBFH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 21:05:07 -0400
-Received: from lucky1.263xmail.com ([211.157.147.131]:55838 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726275AbgFQBFH (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 21:05:07 -0400
-Received: from localhost (unknown [192.168.167.70])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 4AE05B00CF;
-        Wed, 17 Jun 2020 09:00:47 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED: 0
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.246.122.242])
-        by smtp.263.net (postfix) whith ESMTP id P9955T140607548782336S1592355640986958_;
-        Wed, 17 Jun 2020 09:00:46 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <9f3c78971883cd7b636e8bbecb83ec40>
-X-RL-SENDER: zhoubinbin@uniontech.com
-X-SENDER: zhoubinbin@uniontech.com
-X-LOGIN-NAME: zhoubinbin@uniontech.com
-X-FST-TO: peterhuewe@gmx.de
-X-SENDER-IP: 58.246.122.242
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-X-System-Flag: 0
-From:   Binbin Zhou <zhoubinbin@uniontech.com>
-To:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca
-Cc:     linux-integrity@vger.kernel.org, christophe.ricard@gmail.com,
-        zhoubb.aaron@gmail.com, Binbin Zhou <zhoubinbin@uniontech.com>
-Subject: [PATCH v2] tpm/st33zp24: fix spelling mistake "drescription" -> "description"
-Date:   Wed, 17 Jun 2020 09:00:38 +0800
-Message-Id: <20200617010038.32493-1-zhoubinbin@uniontech.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726620AbgFQBBP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 21:01:15 -0400
+Received: from mga17.intel.com ([192.55.52.151]:27658 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726600AbgFQBBO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Jun 2020 21:01:14 -0400
+IronPort-SDR: 7zCaFnrtO1zmJR5K9faS7qk/pUE0gHExivuPc+SsW5fnE6L6BcHjzvIOSxPDZ/n8/iVt3tdwD2
+ ueJUAHK+7JLA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 18:01:12 -0700
+IronPort-SDR: tYvItSxVa5vDgDLWIUJSj5xJUFsh7xyAL+jXQk9M76uVpbPTgE7boUdpPWPRIEj6Ks1Oo/JLiG
+ HoAumagWExOA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,520,1583222400"; 
+   d="scan'208";a="291253132"
+Received: from carusoal-mobl.ger.corp.intel.com (HELO localhost) ([10.252.48.130])
+  by orsmga002.jf.intel.com with ESMTP; 16 Jun 2020 18:01:04 -0700
+Date:   Wed, 17 Jun 2020 04:01:03 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     amirmizi6@gmail.com
+Cc:     Eyal.Cohen@nuvoton.com, oshrialkoby85@gmail.com,
+        alexander.steffen@infineon.com, robh+dt@kernel.org,
+        peterhuewe@gmx.de, christophe-h.richard@st.com, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
+        Benoit Houyere <benoit.houyere@st.com>
+Subject: Re: [PATCH v10 2/8] tpm: tpm_tis: Fix expected bit handling and send
+ all bytes in one shot without last byte in exception
+Message-ID: <20200617010050.GA5100@linux.intel.com>
+References: <20200604134713.157951-1-amirmizi6@gmail.com>
+ <20200604134713.157951-3-amirmizi6@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200604134713.157951-3-amirmizi6@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Trivial fix, the spelling of "drescription" is incorrect
-in function comment.
+On Thu, Jun 04, 2020 at 04:47:07PM +0300, amirmizi6@gmail.com wrote:
+> From: Amir Mizinski <amirmizi6@gmail.com>
+> 
+> Detected the following incorrect implementation of the send command:
+> polling on the TPM_STS.stsValid field followed by checking the
+> TPM_STS.expect field only once. Since TPM_STS.stsValid represents the
+> TPM_STS.expect validity, both fields should be polled at the same time.
+> 
+> This fix modifies the signature of wait_for_tpm_stat(), adding an
+> additional "mask_result" parameter to its call. wait_for_tpm_stat() is now
+> polling the TPM_STS with a mask and waits for the value in mask_result.
+> The fix adds the ability to check if certain TPM_STS bits have been
+> cleared.
+> 
+> This change is also aligned to verifying the CRC on I2C TPM. The CRC
+> verification should be done after the TPM_STS.expect field is cleared
+> (TPM received all expected command bytes and set the calculated CRC value
+> in the register).
+> 
+> In addition, the send command was changed to comply with
+> TCG_DesignPrinciples_TPM2p0Driver_vp24_pubrev.pdf as follows:
+> - send all command bytes in one loop
+> - remove special handling of the last byte
+> 
+> Suggested-by: Benoit Houyere <benoit.houyere@st.com>
+> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
 
-Fix this.
+Just wondering how did you come up with that name since you are not
+masking anything with 'mask_result'?
 
-Signed-off-by: Binbin Zhou <zhoubinbin@uniontech.com>
----
-v2:
-   Fix the checkpatch issue.
-
- drivers/char/tpm/st33zp24/i2c.c      | 2 +-
- drivers/char/tpm/st33zp24/spi.c      | 4 ++--
- drivers/char/tpm/st33zp24/st33zp24.c | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-index 35333b65acd1..7c617edff4ca 100644
---- a/drivers/char/tpm/st33zp24/i2c.c
-+++ b/drivers/char/tpm/st33zp24/i2c.c
-@@ -210,7 +210,7 @@ static int st33zp24_i2c_request_resources(struct i2c_client *client)
- 
- /*
-  * st33zp24_i2c_probe initialize the TPM device
-- * @param: client, the i2c_client drescription (TPM I2C description).
-+ * @param: client, the i2c_client description (TPM I2C description).
-  * @param: id, the i2c_device_id struct.
-  * @return: 0 in case of success.
-  *	 -1 in other case.
-diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-index 26e09de50f1e..a75dafd39445 100644
---- a/drivers/char/tpm/st33zp24/spi.c
-+++ b/drivers/char/tpm/st33zp24/spi.c
-@@ -329,7 +329,7 @@ static int st33zp24_spi_request_resources(struct spi_device *dev)
- 
- /*
-  * st33zp24_spi_probe initialize the TPM device
-- * @param: dev, the spi_device drescription (TPM SPI description).
-+ * @param: dev, the spi_device description (TPM SPI description).
-  * @return: 0 in case of success.
-  *	 or a negative value describing the error.
-  */
-@@ -378,7 +378,7 @@ static int st33zp24_spi_probe(struct spi_device *dev)
- 
- /*
-  * st33zp24_spi_remove remove the TPM device
-- * @param: client, the spi_device drescription (TPM SPI description).
-+ * @param: client, the spi_device description (TPM SPI description).
-  * @return: 0 in case of success.
-  */
- static int st33zp24_spi_remove(struct spi_device *dev)
-diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
-index 37bb13f516be..4ec10ab5e576 100644
---- a/drivers/char/tpm/st33zp24/st33zp24.c
-+++ b/drivers/char/tpm/st33zp24/st33zp24.c
-@@ -502,7 +502,7 @@ static const struct tpm_class_ops st33zp24_tpm = {
- 
- /*
-  * st33zp24_probe initialize the TPM device
-- * @param: client, the i2c_client drescription (TPM I2C description).
-+ * @param: client, the i2c_client description (TPM I2C description).
-  * @param: id, the i2c_device_id struct.
-  * @return: 0 in case of success.
-  *	 -1 in other case.
--- 
-2.17.1
-
-
-
+/Jarkko
