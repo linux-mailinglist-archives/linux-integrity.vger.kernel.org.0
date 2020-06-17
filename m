@@ -2,136 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 508B01FD7BD
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 23:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FD41FD89A
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jun 2020 00:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726763AbgFQVmr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jun 2020 17:42:47 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:20555 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726987AbgFQVmq (ORCPT
+        id S1726920AbgFQWVv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jun 2020 18:21:51 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46832 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726868AbgFQWVu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jun 2020 17:42:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592430162;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=ziGeZkLSk9E0BTm8y7vUR/zQZg7qRoz5nH/H2o7ywpo=;
-        b=BEQuIuMD41BM2FXdZod5ChcZxzfAeWbr3/ueB/1IGOun7FqeRNkrMMtyV4kznjnfeTk5F3
-        TrS2MCVYxD63EQ0UlDivAJSGWldCOXH7ILCA7kHLsECaSGh6NmgoPwYKRiFUWmJmU7kDHR
-        kat5HvFsaaVPappb0Hxu/4xA1i3Nycs=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-426-8SwFwzexMySFugsJhM6PpQ-1; Wed, 17 Jun 2020 17:42:40 -0400
-X-MC-Unique: 8SwFwzexMySFugsJhM6PpQ-1
-Received: by mail-qt1-f200.google.com with SMTP id e8so2771652qtq.22
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 14:42:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ziGeZkLSk9E0BTm8y7vUR/zQZg7qRoz5nH/H2o7ywpo=;
-        b=qE8VC31d3nc+7eCtt3U7e0K2JzhHrsaiAss+xEKULKYNDicT0lRDIqtSAZNypJjJsr
-         HAuK6tR35iZ2uYNVgwIR2ASCXQo60Ucg0Sx0jUMJFDu4dazp+ojI8NQspDwU2aO68vGl
-         7bSKi1Htir4ld2VcIRoYRxdWlWgf1ZQKnJ2Q3hlvkyKlwAApSKy9XWEqyt1RrMyVZJh5
-         0/U2WoDwlANe2hjnrSjlU64lF1QzQQFMbRrnJ3KllYtriWmIjUvGLBsLRDyaS/APnEnr
-         PWfU6ylupT/p31lxWINIBWGdBLeN3tQ9X5XfY75Px4ORkD1V7j9LVZ86yQnO63DsUM38
-         NdlA==
-X-Gm-Message-State: AOAM5308etZ0sEWT/jRoyRhzUD6z3In8gPm2DXDPhnHvo3bA9U2+ORgo
-        +0ZtetZwuYKrJcdA+ZEQLbsc/XFqjhFFBxuqjSw1XGLajZJoDmiJHzfXGrJKlk7zHUq5Vrt8jB0
-        L83u005tbKCAY0B6QVbOCDo7dUKD2
-X-Received: by 2002:aed:2a67:: with SMTP id k36mr1274725qtf.359.1592430160519;
-        Wed, 17 Jun 2020 14:42:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy2bbP1YY8oRqBLRJKk1O2Q+kPjLjdrsw0NkCYdnMEgqf+vfB9Irncji1qGx0MVsMoR6psqtw==
-X-Received: by 2002:aed:2a67:: with SMTP id k36mr1274697qtf.359.1592430160226;
-        Wed, 17 Jun 2020 14:42:40 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id k17sm1225973qtb.5.2020.06.17.14.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 14:42:39 -0700 (PDT)
-Date:   Wed, 17 Jun 2020 14:42:37 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH v10 2/8] oid_registry: Add TCG defined OIDS for TPM keys
-Message-ID: <20200617214237.dlvfnx2s7aw4sfng@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-References: <20200616160229.8018-1-James.Bottomley@HansenPartnership.com>
- <20200616160229.8018-3-James.Bottomley@HansenPartnership.com>
+        Wed, 17 Jun 2020 18:21:50 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HM3JlH034319;
+        Wed, 17 Jun 2020 18:21:38 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31q6j5mavf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Jun 2020 18:21:37 -0400
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05HMLbSH087570;
+        Wed, 17 Jun 2020 18:21:37 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31q6j5ma3a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Jun 2020 18:20:07 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05HMFeDA020268;
+        Wed, 17 Jun 2020 22:19:07 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04wdc.us.ibm.com with ESMTP id 31q8rye3mf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Jun 2020 22:19:07 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05HMJ40x24969576
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 Jun 2020 22:19:04 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A5D1C13604F;
+        Wed, 17 Jun 2020 22:19:06 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9FEA213605D;
+        Wed, 17 Jun 2020 22:19:05 +0000 (GMT)
+Received: from [9.65.216.166] (unknown [9.65.216.166])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 17 Jun 2020 22:19:05 +0000 (GMT)
+Subject: Re: [LTP v2 1/1] ima_tpm.sh: Fix for calculating boot aggregate
+To:     Bruno Meneguele <bmeneg@redhat.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
+        ltp@lists.linux.it, Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Petr Cervinka <pcervinka@suse.com>,
+        Cyril Hrubis <chrubis@suse.cz>,
+        linux-integrity@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
+        Maurizio Drocco <maurizio.drocco@ibm.com>
+References: <20200527071434.28574-1-pvorel@suse.cz>
+ <1590601280.16219.1.camel@linux.ibm.com> <20200528140747.GA8401@dell5510>
+ <1590679145.4457.39.camel@linux.ibm.com> <20200528160527.GA27243@dell5510>
+ <20200615194134.GF129694@glitch> <1592252491.11061.181.camel@linux.ibm.com>
+ <20200617012148.hhpvxqov2py7fvvc@cantor> <20200617204500.GB40831@glitch>
+From:   Maurizio Drocco <mdrocco@linux.vnet.ibm.com>
+Message-ID: <8b9bfe78-86ce-77aa-c84e-821ea69b4c86@linux.vnet.ibm.com>
+Date:   Wed, 17 Jun 2020 18:19:05 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200616160229.8018-3-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20200617204500.GB40831@glitch>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-17_12:2020-06-17,2020-06-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 bulkscore=0 impostorscore=0
+ adultscore=0 mlxscore=0 suspectscore=0 clxscore=1011 priorityscore=1501
+ cotscore=-2147483648 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006170164
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Jun 16 20, James Bottomley wrote:
->The TCG has defined an OID prefix "2.23.133.10.1" for the various TPM
->key uses.  We've defined three of the available numbers:
->
->2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key (Usually
->		RSA2048 or Elliptic Curve) which can be imported by a
->		TPM2_Load() operation.
->
->2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key (Usually
->		RSA2048 or Elliptic Curve) which can be imported by a
->		TPM2_Import() operation.
->
->Both loadable and importable keys are specific to a given TPM, the
->difference is that a loadable key is wrapped with the symmetric
->secret, so must have been created by the TPM itself.  An importable
->key is wrapped with a DH shared secret, and may be created without
->access to the TPM provided you know the public part of the parent key.
->
->2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to 128
->		bytes) which is sealed by the TPM.  It usually
->		represents a symmetric key and must be unsealed before
->		use.
->
 
-James, which document are these defined in? I was searching last night,
-and couldn't find it.
+On 6/17/2020 4:45 PM, Bruno Meneguele wrote:
+> On Tue, Jun 16, 2020 at 06:21:48PM -0700, Jerry Snitselaar wrote:
+>> On Mon Jun 15 20, Mimi Zohar wrote:
+>>> On Mon, 2020-06-15 at 16:41 -0300, Bruno Meneguele wrote:
+>>>> On Thu, May 28, 2020 at 06:05:27PM +0200, Petr Vorel wrote:
+>>>>> Hi Mimi,
+>>>>> ...
+>>>>>>>> With just this change, the ima_tpm.sh test is failing.  I assume it is
+>>>>>>>> failing because it is reading the SHA1 TPM bank, not the SHA256 bank
+>>>>>>>> to calculate the boot_aggregate hash.
+>>>>>>> First question: is it correct to take sha256? Because on my test below it's
+>>>>>>> reading sha1, because that's the content of /sys/kernel/security/ima/ascii_runtime_measurements
+>>>>>>> I thought just kernel commit: 6f1a1d103b48 ima: ("Switch to ima_hash_algo for
+>>>>>>> boot aggregate") from current linux-integrity tree is needed, but I tested it on
+>>>>>>> b59fda449cf0 ("ima: Set again build_ima_appraise variable") (i.e. having all
+>>>>>>> Robeto's ima patches,  missing just last 2 commits from next-integrity head).
+>>>>>>> What is needed to get your setup?
+>>>>>> This isn't a configuration problem, but an issue of reading PCRs and
+>>>>>> calculating the TPM bank appropriate boot_aggregate.  If you're
+>>>>>> calculating a sha256 boot_aggregate, then the test needs to read and
+>>>>>> calculate the boot_aggregate by reading the SHA256 TPM bank.
+>>>>> OK, I tested it on TPM 1.2 (no TPM 2.0 available atm).
+>>>>> I guess you have TPM 2.0, that's why I didn't spot this issue.
+>>>>>
+>>>>> To sum that: my patch is required for any system without physical TPM with with
+>>>>> kernel with b59fda449cf0 + it also works for TPM 1.2 (regardless kernel
+>>>>> version), because TPM 1.2 supports sha1 only boot aggregate.
+>>>>>
+>>>>> But testing on kernel with b59fda449cf0 with TPM 2.0 is not only broken with
+>>>>> this patch, but also on current version in master, right? As you have
+>>>>> sha256:3fd5dc717f886ff7182526efc5edc3abb179a5aac1ab589c8ec888398233ae5 anyway.
+>>>>> So this patch would help at least testing on VM without vTPM.
+>>>>>
+>>>> If we consider to delay this change until we have the ima-evm-utils
+>>>> released with the ima_boot_aggregate + make this test dependent on
+>>>> both ima-evm-utils and tsspcrread, would it be worth to SKIP the test in
+>>>> case a TPM2.0 sha256 bank is detected instead of FAIL? Thus we could
+>>>> have the test fixed for TPM1.2 && no-TPM cases until we get the full
+>>>> support for multiple banks?
+>>> As long as we're dealing with the "boot_aggregate", Maurizio just
+>>> posted a kernel patch for including PCR 8 & 9 in the boot_aggregate.
+>>>   The existing IMA LTP "boot_aggregate" test is going to need to
+>>> support this change.
+>>>
+>>> I'd appreciate if someone could send me a TPM event log, the PCRs, and
+>>> the associated IMA ascii_runtime_measurements "boot_aggregate" from a
+>>> system with a discrete TPM 2.0 with PCRs 8 & 9 events.
+>>>
+> Maybe Maurizio already have it at hand?
+> I can try to setup a system with grub2+tpm to get the log with pcr 8 and
+> 9 filled.
 
->The ASN.1 binary key form starts of with this OID as the first element
->of a sequence, giving the binary form a unique recognizable identity
->marker regardless of encoding.
->
->Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
->Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->Reviewed-by: David Howells <dhowells@redhat.com>
->
->---
->
->v3: correct OID_TPMImportableKey name
->v7: add ack
->v9: add review
->---
-> include/linux/oid_registry.h | 5 +++++
-> 1 file changed, 5 insertions(+)
->
->diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
->index 657d6bf2c064..f6e2276e5f30 100644
->--- a/include/linux/oid_registry.h
->+++ b/include/linux/oid_registry.h
->@@ -107,6 +107,11 @@ enum OID {
-> 	OID_gostTC26Sign512B,		/* 1.2.643.7.1.2.1.2.2 */
-> 	OID_gostTC26Sign512C,		/* 1.2.643.7.1.2.1.2.3 */
->
->+	/* TCG defined OIDS for TPM based keys */
->+	OID_TPMLoadableKey,		/* 2.23.133.10.1.3 */
->+	OID_TPMImportableKey,		/* 2.23.133.10.1.4 */
->+	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
->+
-> 	OID__NR
-> };
->
->-- 
->2.26.2
->
+Hi Bruno, I confirm I have a couple of systems on where 8 & 9 and the 
+IMA list are filled at boot (already shared with Mimi), now I am 
+figuring out how to produce TPM event logs as well.
 
