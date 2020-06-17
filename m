@@ -2,181 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 508021FCF32
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 16:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B1D1FCF7D
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 16:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbgFQONK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jun 2020 10:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
+        id S1726594AbgFQO1A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jun 2020 10:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726708AbgFQONJ (ORCPT
+        with ESMTP id S1726491AbgFQO07 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jun 2020 10:13:09 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90FAC061755
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 07:13:08 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id t9so1332883ybk.9
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 07:13:08 -0700 (PDT)
+        Wed, 17 Jun 2020 10:26:59 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A3BC061755
+        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 07:26:59 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id s1so1365092ybo.7
+        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 07:26:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=w7Sk4BmGiurLqmgxw2Dzz1OAQhCbcvIbUaVFjs9AqkE=;
-        b=Awadm/m6rOqaV6Y5mlaX9Gfsg4s6zvEHdiKJzd33cFxAGPhfc6fxVxk9vji8B76pwn
-         WI6WLVUJuJer03q0E2LmtIdQ8qom8Bpcu4BUFhOGFqkZALehT38njMGF6IkdOKPIhpV+
-         FXkzC77+bRqUllloHbP2B9aNgjd6kT3yq/C+LJcQKBgJ+3WbFgloQetLZa2Hy4C3hTui
-         1L6MC/UioAkNRtWg0mFoBwH0sfwbY69FC/wS6CfAO6hivd0RhfyRVQyaN8FPYD55ruzx
-         D1uGYEMQKSp0QnHfz4ehko8OIfs71dlk/238m6xXPl/bytH0wg00cHZQcat8+7VINud1
-         Ke+Q==
+        bh=XzX4v+oLBf5O8lqgpF5zRd7IjiEGVcBy7Vd71Z957zk=;
+        b=cGH0gIzTXuejB/jeDvKhr629HHkj0ZieSOhk/hOZ2BKybZ0Ip6wHkYRvlzL3dPMdcm
+         C/d5YD627mr8jOLE62FtNy5UnaVR3XWNNGNDCCok4TZSmznYyoi2thyWgn7XnbOSZ5UB
+         b+rqR5tRJu2Umc1iODhPi6vS5mHYXJCNbth5eIcEajqYZpbb6EJX/zQj7jSB1XigQTXR
+         jKHg6v6rXhEFXKlqPXEkCxGxisXCLXBggkSwJtbdqfHw1OGBrN5xVCQSln92mEaktp18
+         +0hbp1yLy8ywCg9ZYy8puUDqW0FlhglFDj35BlVt9oQ8fsXyfgJz37qc4sd3jUuaJ0MF
+         d6hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=w7Sk4BmGiurLqmgxw2Dzz1OAQhCbcvIbUaVFjs9AqkE=;
-        b=tldEVbc5LxwZ/59MA97t8PfHjfhIRpGkQ+BU3Ym7lZfW3j5H8oe0GCw/29YaySQDNe
-         cl5aIVUBHCcsHS3IS4qCco+Hwsw5/b3OTajU6WGMSKsrjZttxf+dsZ89rsqs111tZP9V
-         XL/PqYKF3CsLy7auqZDO5IOBM49FLMRKOFbTWWLacbECPoxIN3P9ABmjN6lfajHsMxhp
-         YYLGAwZKy2Slg0ChfWsFDklESdgx0QIPE4wyKG4iupspbops7K0vgY8yRwwRBZhSmiaS
-         sN4dsOncdY9prSdQcbo+CYL/9m5qBnawzq7NNV7kBuQ+G1/XjEVB3uzvrYsucBbjdqZ6
-         hrMQ==
-X-Gm-Message-State: AOAM532YPKDTFSG0GNsk/AoDiQMc/+IkmRSnxU7n0THy+mhzAbtsbtfN
-        L12zDVdi4KcjTZcDzL6ygp61i5QBy3oyNFgazFm0aQ==
-X-Google-Smtp-Source: ABdhPJxR5WKL9bWfdzNlZuOGFZs0xv21TnQVWWVSPRx/9BSk+4es74k7/DHIIHxLcqG0kL7DixeloEZGAQDnq/R0wsQ=
-X-Received: by 2002:a25:be81:: with SMTP id i1mr12981047ybk.243.1592403187417;
- Wed, 17 Jun 2020 07:13:07 -0700 (PDT)
+        bh=XzX4v+oLBf5O8lqgpF5zRd7IjiEGVcBy7Vd71Z957zk=;
+        b=CSSdobl2KlVjwt+RhaJitYUzZJhRfw8jJqY5MkKyUSlEp0a3qCFmsbq2fdBOBiJd48
+         Hhybdpo2ijT49flIWDwr0IsDOjSca/QY8GfsPAmP+ExMVI7hS4h8nAiBI490QmXEEPib
+         Dayt3md9Oj3WHmiiQjb/lBh0cd0ipXPKvXGqE9ose4GZvs2M1JaQ4VcSv5rmw5PJPDus
+         6tD2fVMACttmycrFVOnt6OC2giFjBAOVvBRUR/eSctlDa4eqV0sv4B4g7JNBW7apgEOG
+         fuewUHzOC/TEHxrUhHClIO1rGQBxZcLxt4HT5FJYdZzuKw9bnMlgCfrcBSBH713afFIM
+         45bA==
+X-Gm-Message-State: AOAM532s1lZNb5ggwcw/meE/tDXAlz7jrVLJi4xBopUyPVNB5ZXbZZvQ
+        +LjAesnff6Sa2y7kXbKm6wOFaNYFD9qMni9884lR2A==
+X-Google-Smtp-Source: ABdhPJzQpgG/KQ+DcWyygGI+nO0hw6gCf4p0NLEZm9PPUcYggYA+9WRDPaE2kWKOx2s2CC4E412fj7Q8QiZaN7nynuI=
+X-Received: by 2002:a25:4cc6:: with SMTP id z189mr12449365yba.153.1592404018729;
+ Wed, 17 Jun 2020 07:26:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200604175851.758-1-maxim.uvarov@linaro.org> <20200604175851.758-2-maxim.uvarov@linaro.org>
- <CAFA6WYNVk1RcaqnL0FGyYkB+hGkgyqeOMsSKyySL=zfCdNUZXA@mail.gmail.com>
-In-Reply-To: <CAFA6WYNVk1RcaqnL0FGyYkB+hGkgyqeOMsSKyySL=zfCdNUZXA@mail.gmail.com>
+References: <20200604175851.758-1-maxim.uvarov@linaro.org> <CAD8XO3YTz=xN2k5h8HsrYsLUgmC6dD57XbBj63e+3_xFF1H0rw@mail.gmail.com>
+ <20200616082907.GA2305431@jade>
+In-Reply-To: <20200616082907.GA2305431@jade>
 From:   Maxim Uvarov <maxim.uvarov@linaro.org>
-Date:   Wed, 17 Jun 2020 17:12:56 +0300
-Message-ID: <CAD8XO3axk-_BP1Nk_vT=u08OSuLmuEzXoSnmdB8pHKR_G2A1dw@mail.gmail.com>
-Subject: Re: [PATCHv8 1/3] optee: use uuid for sysfs driver entry
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Date:   Wed, 17 Jun 2020 17:26:42 +0300
+Message-ID: <CAD8XO3bY7tsEF29AoXtREQ=tYyAL34s2uHke5LiRaKPBx8Xm2A@mail.gmail.com>
+Subject: Re: [PATCHv8 0/3] optee: register drivers on optee bus
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        peterhuewe@gmx.de,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
+        peterhuewe@gmx.de, Jason Gunthorpe <jgg@ziepe.ca>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>
+        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 17 Jun 2020 at 16:58, Sumit Garg <sumit.garg@linaro.org> wrote:
+On Tue, 16 Jun 2020 at 11:29, Jens Wiklander <jens.wiklander@linaro.org> wrote:
 >
-> Hi Maxim,
+> Hi Maxim and Jarkko,
 >
-> On Thu, 4 Jun 2020 at 23:28, Maxim Uvarov <maxim.uvarov@linaro.org> wrote:
-> >
-> > With the evolving use-cases for TEE bus, now it's required to support
-> > multi-stage enumeration process. But using a simple index doesn't
-> > suffice this requirement and instead leads to duplicate sysfs entries.
-> > So instead switch to use more informative device UUID for sysfs entry
-> > like:
-> > /sys/bus/tee/devices/optee-ta-<uuid>
-> >
-> > Signed-off-by: Maxim Uvarov <maxim.uvarov@linaro.org>
-> > Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-> > ---
-> >  Documentation/ABI/testing/sysfs-bus-optee-devices | 8 ++++++++
-> >  MAINTAINERS                                       | 1 +
-> >  drivers/tee/optee/device.c                        | 9 ++++++---
-> >  3 files changed, 15 insertions(+), 3 deletions(-)
-> >  create mode 100644 Documentation/ABI/testing/sysfs-bus-optee-devices
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-bus-optee-devices b/Documentation/ABI/testing/sysfs-bus-optee-devices
-> > new file mode 100644
-> > index 000000000000..0ae04ae5374a
-> > --- /dev/null
-> > +++ b/Documentation/ABI/testing/sysfs-bus-optee-devices
-> > @@ -0,0 +1,8 @@
-> > +What:          /sys/bus/tee/devices/optee-ta-<uuid>/
-> > +Date:           May 2020
-> > +KernelVersion   5.7
-> > +Contact:        tee-dev@lists.linaro.org
-> > +Description:
-> > +               OP-TEE bus provides reference to registered drivers under this directory. The <uuid>
-> > +               matches Trusted Application (TA) driver and corresponding TA in secure OS. Drivers
-> > +               are free to create needed API under optee-ta-<uuid> directory.
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index ecc0749810b0..6717afef2de3 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -12516,6 +12516,7 @@ OP-TEE DRIVER
-> >  M:     Jens Wiklander <jens.wiklander@linaro.org>
-> >  L:     tee-dev@lists.linaro.org
-> >  S:     Maintained
-> > +F:     Documentation/ABI/testing/sysfs-bus-optee-devices
-> >  F:     drivers/tee/optee/
-> >
-> >  OP-TEE RANDOM NUMBER GENERATOR (RNG) DRIVER
-> > diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
-> > index e3a148521ec1..23d264c8146e 100644
-> > --- a/drivers/tee/optee/device.c
-> > +++ b/drivers/tee/optee/device.c
-> > @@ -65,7 +65,7 @@ static int get_devices(struct tee_context *ctx, u32 session,
-> >         return 0;
-> >  }
-> >
-> > -static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
-> > +static int optee_register_device(const uuid_t *device_uuid)
-> >  {
-> >         struct tee_client_device *optee_device = NULL;
-> >         int rc;
-> > @@ -75,7 +75,10 @@ static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
-> >                 return -ENOMEM;
-> >
-> >         optee_device->dev.bus = &tee_bus_type;
-> > -       dev_set_name(&optee_device->dev, "optee-clnt%u", device_id);
-> > +       if (dev_set_name(&optee_device->dev, "optee-ta-%pUl", device_uuid)) {
+> On Mon, Jun 15, 2020 at 05:32:40PM +0300, Maxim Uvarov wrote:
+> > ping.
+> > Patchset was reviewed and all comments are codeverd. Optee-os patches
+> > were merged. These kernel patches look like they are hanging
+> > somewhere...
 >
-> You should be using format specifier as: "%pUb" instead of "%pUl" as
-> UUID representation for TAs is in big endian format. See below:
+> I'm almost OK with this patchset, except that
+> Documentation/ABI/testing/sysfs-bus-optee-devices needs to be updated
+> for the new kernel version and TEE mailing list which we're changing right
+> now.
 >
-> # ls /sys/bus/tee/devices/
-> optee-ta-405b6ad9-e5c3-e321-8794-1002a5d5c61b
-> optee-ta-71d950bc-c9d4-c442-82cb-343fb7f37896
-> optee-ta-e70f4af0-5d1f-9b4b-abf7-619b85b4ce8c
->
-> While UUID for fTPM TA is in big endian format:
-> bc50d971-d4c9-42c4-82cb-343fb7f37896
->
-> Sorry that I missed it during review and noticed this while testing.
->
-> With the above fix included, I tested this series using fTPM early TA
-> on Qemu for aarch64 and used basic random number generation test using
-> tpm2-tools. So feel free to add:
->
-> Tested-by: Sumit Garg <sumit.garg@linaro.org>
->
-> -Sumit
->
-Oh, thanks. I will do v9 with this change and mailing list change.
-Probalby you also need to check which prints are inside optee-os. I
-think I copypasted this print from somewhere.
+
+What is the new mailing list address? I did git pull the latest
+master and get_maintainer.pl still points to
+tee-dev@lists.linaro.org.
 
 Maxim.
 
-> > +               kfree(optee_device);
-> > +               return -ENOMEM;
-> > +       }
-> >         uuid_copy(&optee_device->id.uuid, device_uuid);
+> The last patch touches files I'm not maintainer of. That patch depends
+> on the previous patches so it makes sense to keep them together.  If a
+> TPM device driver maintainer would ack that patch I can take it via my
+> tree. Or we can do it the other way around (with a v9 patchset),
+> whichever is preferred.
+>
+> Cheers,
+> Jens
+>
 > >
-> >         rc = device_register(&optee_device->dev);
-> > @@ -144,7 +147,7 @@ int optee_enumerate_devices(void)
-> >         num_devices = shm_size / sizeof(uuid_t);
+> > Thanks,
+> > Maxim.
 > >
-> >         for (idx = 0; idx < num_devices; idx++) {
-> > -               rc = optee_register_device(&device_uuid[idx], idx);
-> > +               rc = optee_register_device(&device_uuid[idx]);
-> >                 if (rc)
-> >                         goto out_shm;
-> >         }
-> > --
-> > 2.17.1
-> >
+> > On Thu, 4 Jun 2020 at 20:58, Maxim Uvarov <maxim.uvarov@linaro.org> wrote:
+> > >
+> > > v8: - fix v7 check.
+> > > v7: - check return value of dev_set_name() (Jarkko Sakkinen)
+> > > v6: - description, comments, patches reorder and destroy workqueue (Sumit Garg)
+> > > v5: - removed pr_err and fix typos in description (Jarkko Sakkinen)
+> > >     - added missed kfree in optee_open()
+> > > v4: - sysfs entry is optee-ta-uuid (Jerome Forissier, Sumit Garg)
+> > >     - added Documentation/ABI/testing/sysfs-bus-optee-devices (Greg Kroah-Hartman)
+> > > v3: - support tee-suppicant restart (Jens Wiklander)
+> > >     - description and comments (Jarkko Sakkinen)
+> > >     - do not name optee drivers by index in sysfs (Sumit Garg)
+> > > v2: - write TEE with capital letters.
+> > >     - declare __optee_enumerate_device() as static.
+> > >
+> > > Maxim Uvarov (3):
+> > >   optee: use uuid for sysfs driver entry
+> > >   optee: enable support for multi-stage bus enumeration
+> > >   tpm_ftpm_tee: register driver on TEE bus
+> > >
+> > >  .../ABI/testing/sysfs-bus-optee-devices       |  8 +++
+> > >  MAINTAINERS                                   |  1 +
+> > >  drivers/char/tpm/tpm_ftpm_tee.c               | 70 ++++++++++++++++---
+> > >  drivers/tee/optee/core.c                      | 27 ++++++-
+> > >  drivers/tee/optee/device.c                    | 38 +++++-----
+> > >  drivers/tee/optee/optee_private.h             | 10 ++-
+> > >  6 files changed, 119 insertions(+), 35 deletions(-)
+> > >  create mode 100644 Documentation/ABI/testing/sysfs-bus-optee-devices
+> > >
+> > > --
+> > > 2.17.1
+> > >
