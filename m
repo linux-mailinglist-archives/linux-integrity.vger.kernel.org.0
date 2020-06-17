@@ -2,100 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AFA1FC64F
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 08:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1651FC6DF
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 09:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726816AbgFQGpx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jun 2020 02:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726805AbgFQGpx (ORCPT
+        id S1726308AbgFQHMU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jun 2020 03:12:20 -0400
+Received: from mail-ej1-f65.google.com ([209.85.218.65]:34229 "EHLO
+        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725860AbgFQHMT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jun 2020 02:45:53 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255BFC06174E
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 23:45:53 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id r18so737744ybl.5
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2020 23:45:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6VYHd5h0CrKt/2yr6GObm6CaI8Wbrm7EKPsSDWfxLXY=;
-        b=iLzUGqrkPbLXAoEnWcSVHgCY+LGh7gOt3ou7QDXKY/NSR5BMmuoOvemoFSYsNHGgqe
-         kR54Xb69bK4eljpJJhPDM440/EFxcg63kh3B0bSVQug7j9UV2Css/Fl9O8ZtLOxb/kPa
-         SdcrGk7tDY0aMMN81vBAfOMWZGIZWnB9e6Y89rI+VGSuoUqE60Wzy4/y1QPSsx7XZSj7
-         B7ZDafvUqwQ6yzyT0ZFRGueYzwOAju7CQ7h6eocZaqoAgEzz5O+UZyjMaA4lWlgA7aVI
-         yVyX8G0rTxA5c1fCyT+rXlOxRNJtOS+cVFj6SHFBF1vnMgv/99cFMOhJa426Ae2Sgaka
-         4KvA==
+        Wed, 17 Jun 2020 03:12:19 -0400
+Received: by mail-ej1-f65.google.com with SMTP id l27so1176601ejc.1;
+        Wed, 17 Jun 2020 00:12:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6VYHd5h0CrKt/2yr6GObm6CaI8Wbrm7EKPsSDWfxLXY=;
-        b=MTLBgfPH6zgPMVuu5AB5UibbTGGwLhjmh6LFftLQRPKOvNJgo9ELgvQsGp+5dxfVmg
-         OvyiLuVEPdM4L7DYoyyPR4PviT6jkihR8pCmDs+yOop3Jet5138UWqLyzT84lRuobF8D
-         f9Mro1GJ+f+24Nvdf2KcibWQIvPngrFE3N4MPpDev28+bhQFqtc+W3qs4Il/U5gAuk0n
-         +J+qgJOMUzgYP3ofX08ZgNbYVcIgsvJdcSKIZ4Zjbv6SifWRjY9vE+IcSp+eUF3g+POz
-         WBEd7BnhWuIg+42OVev3NnRW/Lw/lnB7jzDPch7fkgwxhd5nwj6zxxN4oJoWvkQwTA8w
-         5/DQ==
-X-Gm-Message-State: AOAM533KR9zfOE8Pz24vTi5eCLTSNmsEKmBB92G9GGh4bgwP2zX7TX3u
-        lpa/XM9+aPzFlLk/JO9B81bac+2Ke/jDG3W5bmWSdw==
-X-Google-Smtp-Source: ABdhPJznH4F+WsSad9UYdRlV+0Nnoj5+CjP9UaQ+8p3tl8M9ir3hb0SP+7jMIH9NUsgjiA/Bv/k1zv2AOBfmDRGlPg4=
-X-Received: by 2002:a25:4cc6:: with SMTP id z189mr9833280yba.153.1592376352141;
- Tue, 16 Jun 2020 23:45:52 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E5EcWVbc+7tsS+GAmjqiwsU8zuC9ZQ4KDsXaJSfWulo=;
+        b=hpp62K4a8CwZm2UreL6e+o7U64jJN0cGZO64x4/KaxFcj3JVTRwtGgvvphlWOGIwmB
+         mKDjFk36BUKL84X0A9sBPYLln2swyjTrxBpOKfntaidgraTsEqWSInVYjR+f229KLn86
+         JQgPgDrHQKjlcGt4G5FRUs/LnXp6LNLqNd3mRfMJQtEv721UDpyA2floMIWMSRRU63gC
+         qmC2URd5guep9hGNbmRJS4tl3WdSME9dwc9fVWomUGjNxDBIdLQAdimTtHyDG+qL4Z/x
+         N3yZtL4KoRdctI+kyJccwtPMuNdYqp+mPDxIX3roHMzcx6zoabwiEq+N3FeX8asH5wbJ
+         BPbw==
+X-Gm-Message-State: AOAM532QhxsCV6VV0nmw55nyn7fUqk+2MaOyho+lUa6ubnTkcAd2T2f0
+        jAq+dwgSw/eEUQy0iHHJ2nc=
+X-Google-Smtp-Source: ABdhPJzxXEZ/32Vk1uutSgWgDm/2Kml+FRFv6q/oUOzaHXvM3d9a7wcEm5DrSyb0iZ8v3ZPtZ+pKKg==
+X-Received: by 2002:a17:906:2581:: with SMTP id m1mr6681797ejb.89.1592377934427;
+        Wed, 17 Jun 2020 00:12:14 -0700 (PDT)
+Received: from localhost (ip-37-188-158-19.eurotel.cz. [37.188.158.19])
+        by smtp.gmail.com with ESMTPSA id g22sm12516138ejo.1.2020.06.17.00.12.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 00:12:13 -0700 (PDT)
+Date:   Wed, 17 Jun 2020 09:12:12 +0200
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dsterba@suse.cz, Joe Perches <joe@perches.com>,
+        Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to kfree_sensitive()
+Message-ID: <20200617071212.GJ9499@dhcp22.suse.cz>
+References: <20200616015718.7812-1-longman@redhat.com>
+ <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
+ <20200616230130.GJ27795@twin.jikos.cz>
+ <20200617003711.GD8681@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20200604175851.758-1-maxim.uvarov@linaro.org> <20200604175851.758-2-maxim.uvarov@linaro.org>
- <20200616205017.GC20943@linux.intel.com> <CAFA6WYO1X3zdOMgVnHvKm7MAWWyE=dhbLpCcU5zJG7R2fCuycg@mail.gmail.com>
-In-Reply-To: <CAFA6WYO1X3zdOMgVnHvKm7MAWWyE=dhbLpCcU5zJG7R2fCuycg@mail.gmail.com>
-From:   Maxim Uvarov <maxim.uvarov@linaro.org>
-Date:   Wed, 17 Jun 2020 09:45:41 +0300
-Message-ID: <CAD8XO3Y2b5SDfyjUtQWA+nVSSTUABZX603UZynxbgztTcN-9iw@mail.gmail.com>
-Subject: Re: [PATCHv8 1/3] optee: use uuid for sysfs driver entry
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        peterhuewe@gmx.de, Jason Gunthorpe <jgg@ziepe.ca>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200617003711.GD8681@bombadil.infradead.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 17 Jun 2020 at 09:07, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> On Wed, 17 Jun 2020 at 02:20, Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Thu, Jun 04, 2020 at 08:58:49PM +0300, Maxim Uvarov wrote:
-> > > With the evolving use-cases for TEE bus, now it's required to support
-> > > multi-stage enumeration process. But using a simple index doesn't
-> > > suffice this requirement and instead leads to duplicate sysfs entries.
-> > > So instead switch to use more informative device UUID for sysfs entry
-> > > like:
-> > > /sys/bus/tee/devices/optee-ta-<uuid>
-> > >
-> > > Signed-off-by: Maxim Uvarov <maxim.uvarov@linaro.org>
-> > > Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-> >
-> > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> >
-> > Sumit, are you able to test these easily?
->
-> Yes, I could give them a try.
->
-> Maxim,
->
-> Could you share fTPM TA tree which I should use for testing?
->
-> -Sumit
+On Tue 16-06-20 17:37:11, Matthew Wilcox wrote:
+> On Wed, Jun 17, 2020 at 01:01:30AM +0200, David Sterba wrote:
+> > On Tue, Jun 16, 2020 at 11:53:50AM -0700, Joe Perches wrote:
+> > > On Mon, 2020-06-15 at 21:57 -0400, Waiman Long wrote:
+> > > >  v4:
+> > > >   - Break out the memzero_explicit() change as suggested by Dan Carpenter
+> > > >     so that it can be backported to stable.
+> > > >   - Drop the "crypto: Remove unnecessary memzero_explicit()" patch for
+> > > >     now as there can be a bit more discussion on what is best. It will be
+> > > >     introduced as a separate patch later on after this one is merged.
+> > > 
+> > > To this larger audience and last week without reply:
+> > > https://lore.kernel.org/lkml/573b3fbd5927c643920e1364230c296b23e7584d.camel@perches.com/
+> > > 
+> > > Are there _any_ fastpath uses of kfree or vfree?
+> > 
+> > I'd consider kfree performance critical for cases where it is called
+> > under locks. If possible the kfree is moved outside of the critical
+> > section, but we have rbtrees or lists that get deleted under locks and
+> > restructuring the code to do eg. splice and free it outside of the lock
+> > is not always possible.
+> 
+> Not just performance critical, but correctness critical.  Since kvfree()
+> may allocate from the vmalloc allocator, I really think that kvfree()
+> should assert that it's !in_atomic().  Otherwise we can get into trouble
+> if we end up calling vfree() and have to take the mutex.
 
-Yes, I will send you an email.
+FWIW __vfree already checks for atomic context and put the work into a
+deferred context. So this should be safe. It should be used as a last
+resort, though.
 
->
-> >
-> > /Jarkko
+-- 
+Michal Hocko
+SUSE Labs
