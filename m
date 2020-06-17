@@ -2,129 +2,165 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E21161FD635
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 22:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D37D1FD647
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 22:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726909AbgFQUn2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jun 2020 16:43:28 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:34760 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726845AbgFQUn1 (ORCPT
+        id S1726986AbgFQUon (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jun 2020 16:44:43 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55572 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726879AbgFQUom (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jun 2020 16:43:27 -0400
-Received: by mail-io1-f65.google.com with SMTP id m81so4574840ioa.1;
-        Wed, 17 Jun 2020 13:43:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=emJpJjtrMEqB2UXVQWJGyVmpIt4i0tBG2sjF9wqyg6s=;
-        b=lc5B7tRhJGDdbMFm2QSG6dnzrjGuD5l5poYtmeh4CTduzLGiS0dUmdEGdgO8hsbtb9
-         fzRq00NP2OJzklCvpfvqvyiMmfWfu7RxnADUMobKwEhkMsrN70RJb668ZieH8FIApKZ1
-         CZicwgJqPUGEUnMSeAtH01IsgPmsaq/IZWmDTtCDJaMRr2DuGeHt/RVbfmGnD0rmIYFq
-         EMAAv7q+xjnstOCZMkVBUsoDwpj8P+7enirg0nMy/Zcl6HpG/KXEvzScRKwN8BadeEdI
-         eh2sS7OmXh+W0IjdeaVb/wM9xwcIS9n7zhWJOmB9qyXWMXf8dt/IhEMCnfU/1Rly98lA
-         sucA==
-X-Gm-Message-State: AOAM530MkJpdLqYVEObwVd0h+0kABxEPhVoPbbubliH+GeA1jMxhkROx
-        4MzP9xkR6CozOL1Ln2tU+Q==
-X-Google-Smtp-Source: ABdhPJx6D38aHYbkc7/7zEd9UCiEIZ/iKJdovV7uWe+2O6ZR5TDlocKXFkMaZH8WNeCz6fnzzMumHw==
-X-Received: by 2002:a5d:9d03:: with SMTP id j3mr1328409ioj.176.1592426606820;
-        Wed, 17 Jun 2020 13:43:26 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id c20sm499812iot.33.2020.06.17.13.43.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 13:43:26 -0700 (PDT)
-Received: (nullmailer pid 2766741 invoked by uid 1000);
-        Wed, 17 Jun 2020 20:43:24 -0000
-Date:   Wed, 17 Jun 2020 14:43:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Prakhar Srivastava <prsriva@linux.microsoft.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, frowand.list@gmail.com, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        pasha.tatashin@soleen.com, allison@lohutok.net,
-        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
-        tglx@linutronix.de, vincenzo.frascino@arm.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, james.morse@arm.com,
-        bhsharma@redhat.com, mbrugger@suse.com, hsinyi@chromium.org,
-        tao.li@vivo.com, christophe.leroy@c-s.fr,
-        gregkh@linuxfoundation.org, nramas@linux.microsoft.com,
-        tusharsu@linux.microsoft.com, balajib@linux.microsoft.com
-Subject: Re: [v1 PATCH 2/2] Add Documentation regarding the ima-kexec-buffer
- node in the chosen node documentation
-Message-ID: <20200617204324.GA2740878@bogus>
-References: <20200607233323.22375-1-prsriva@linux.microsoft.com>
- <20200607233323.22375-3-prsriva@linux.microsoft.com>
+        Wed, 17 Jun 2020 16:44:42 -0400
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 682C020B7192;
+        Wed, 17 Jun 2020 13:44:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 682C020B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1592426681;
+        bh=FRjnd7LzSpMwTJfbQgmfF6wTlowj4c4FlZqqooRPOZw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AhZzI1uo2qTNlEeTeEHm+zXRk94Bf5ivB9RgYOv/HTgtRTYPEb3pwRDgtSPsjyz7W
+         phKXTQfCBPQqwj0DLleE6Ce02H1fDJjlfqr+ZlX3Tapaf5S9QPhb3eSGqDVK3RlUrh
+         VSTxFUii3BPoUy+bfaocSOB/QBJOfVtwvZbLKKt0=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, nayna@linux.ibm.com,
+        sgrubb@redhat.com, paul@paul-moore.com
+Cc:     rgb@redhat.com, linux-integrity@vger.kernel.org,
+        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] IMA: pass error code in result parameter to integrity_audit_msg()
+Date:   Wed, 17 Jun 2020 13:44:35 -0700
+Message-Id: <20200617204436.2226-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200607233323.22375-3-prsriva@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Jun 07, 2020 at 04:33:23PM -0700, Prakhar Srivastava wrote:
-> Add Documentation regarding the ima-kexec-buffer node in
->  the chosen node documentation
+The value passed in "result" parameter to integrity_audit_msg() is
+not an error code in some instances. Update these instances so that
+"result" parameter always contains an error code.
 
-Run 'git log --oneline Documentation/devicetree/bindings/chosen.txt' and 
-write $subject using the dominate format used.
+Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+---
+ security/integrity/ima/ima_appraise.c | 20 ++++++++++++--------
+ security/integrity/ima/ima_fs.c       |  8 +++++---
+ 2 files changed, 17 insertions(+), 11 deletions(-)
 
-For the commit message, answer why you need the change, not what the 
-change is. I can read the diff for that.
-
->  
-> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> ---
->  Documentation/devicetree/bindings/chosen.txt | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-
-This file has moved to a schema here[1]. You need to update it.
-
-> 
-> diff --git a/Documentation/devicetree/bindings/chosen.txt b/Documentation/devicetree/bindings/chosen.txt
-> index 45e79172a646..a15f70c007ef 100644
-> --- a/Documentation/devicetree/bindings/chosen.txt
-> +++ b/Documentation/devicetree/bindings/chosen.txt
-> @@ -135,3 +135,20 @@ e.g.
->  		linux,initrd-end = <0x82800000>;
->  	};
->  };
-> +
-> +linux,ima-kexec-buffer
-> +----------------------
-> +
-> +This property(currently used by powerpc, arm64) holds the memory range,
-> +the address and the size, of the IMA measurement logs that are being carried
-> +over to the kexec session.
-
-What's IMA? 
-
-> +
-> +/ {
-> +	chosen {
-> +		linux,ima-kexec-buffer = <0x9 0x82000000 0x0 0x00008000>;
-> +	};
-> +};
-> +
-> +This porperty does not represent real hardware, but the memory allocated for
-
-typo
-
-> +carrying the IMA measurement logs. The address and the suze are expressed in
-
-typo
-
-> +#address-cells and #size-cells, respectively of the root node.
-> -- 
-> 2.25.1
-> 
-
-
-[1] https://github.com/devicetree-org/dt-schema/blob/master/schemas/chosen.yaml
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index a9649b04b9f1..253dcb331249 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -226,7 +226,7 @@ static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
+ 		}
+ 		clear_bit(IMA_DIGSIG, &iint->atomic_flags);
+ 		if (xattr_len - sizeof(xattr_value->type) - hash_start >=
+-				iint->ima_hash->length)
++				iint->ima_hash->length) {
+ 			/*
+ 			 * xattr length may be longer. md5 hash in previous
+ 			 * version occupied 20 bytes in xattr, instead of 16
+@@ -234,6 +234,9 @@ static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
+ 			rc = memcmp(&xattr_value->data[hash_start],
+ 				    iint->ima_hash->digest,
+ 				    iint->ima_hash->length);
++			if (rc)
++				rc = -EINVAL;
++		}
+ 		else
+ 			rc = -EINVAL;
+ 		if (rc) {
+@@ -355,7 +358,7 @@ int ima_appraise_measurement(enum ima_hooks func,
+ 	struct dentry *dentry = file_dentry(file);
+ 	struct inode *inode = d_backing_inode(dentry);
+ 	enum integrity_status status = INTEGRITY_UNKNOWN;
+-	int rc = xattr_len;
++	int rc = -EACCES;
+ 	bool try_modsig = iint->flags & IMA_MODSIG_ALLOWED && modsig;
+ 
+ 	/* If not appraising a modsig, we need an xattr. */
+@@ -363,10 +366,7 @@ int ima_appraise_measurement(enum ima_hooks func,
+ 		return INTEGRITY_UNKNOWN;
+ 
+ 	/* If reading the xattr failed and there's no modsig, error out. */
+-	if (rc <= 0 && !try_modsig) {
+-		if (rc && rc != -ENODATA)
+-			goto out;
+-
++	if (xattr_len <= 0 && !try_modsig) {
+ 		cause = iint->flags & IMA_DIGSIG_REQUIRED ?
+ 				"IMA-signature-required" : "missing-hash";
+ 		status = INTEGRITY_NOLABEL;
+@@ -379,7 +379,8 @@ int ima_appraise_measurement(enum ima_hooks func,
+ 		goto out;
+ 	}
+ 
+-	status = evm_verifyxattr(dentry, XATTR_NAME_IMA, xattr_value, rc, iint);
++	status = evm_verifyxattr(dentry, XATTR_NAME_IMA,
++				 xattr_value, xattr_len, iint);
+ 	switch (status) {
+ 	case INTEGRITY_PASS:
+ 	case INTEGRITY_PASS_IMMUTABLE:
+@@ -432,14 +433,17 @@ int ima_appraise_measurement(enum ima_hooks func,
+ 		if ((ima_appraise & IMA_APPRAISE_FIX) && !try_modsig &&
+ 		    (!xattr_value ||
+ 		     xattr_value->type != EVM_IMA_XATTR_DIGSIG)) {
+-			if (!ima_fix_xattr(dentry, iint))
++			if (!ima_fix_xattr(dentry, iint)) {
+ 				status = INTEGRITY_PASS;
++				rc = 0;
++			}
+ 		}
+ 
+ 		/* Permit new files with file signatures, but without data. */
+ 		if (inode->i_size == 0 && iint->flags & IMA_NEW_FILE &&
+ 		    xattr_value && xattr_value->type == EVM_IMA_XATTR_DIGSIG) {
+ 			status = INTEGRITY_PASS;
++			rc = 0;
+ 		}
+ 
+ 		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index e3fcad871861..a3a270cff94f 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -335,10 +335,10 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
+ 		result = ima_read_policy(data);
+ 	} else if (ima_appraise & IMA_APPRAISE_POLICY) {
+ 		pr_err("signed policy file (specified as an absolute pathname) required\n");
++		result = -EACCES;
+ 		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
+ 				    "policy_update", "signed policy required",
+-				    1, 0);
+-		result = -EACCES;
++				    result, 0);
+ 	} else {
+ 		result = ima_parse_add_rule(data);
+ 	}
+@@ -406,6 +406,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
+ static int ima_release_policy(struct inode *inode, struct file *file)
+ {
+ 	const char *cause = valid_policy ? "completed" : "failed";
++	int result = 0;
+ 
+ 	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
+ 		return seq_release(inode, file);
+@@ -413,11 +414,12 @@ static int ima_release_policy(struct inode *inode, struct file *file)
+ 	if (valid_policy && ima_check_policy() < 0) {
+ 		cause = "failed";
+ 		valid_policy = 0;
++		result = -EINVAL;
+ 	}
+ 
+ 	pr_info("policy update %s\n", cause);
+ 	integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
+-			    "policy_update", cause, !valid_policy, 0);
++			    "policy_update", cause, result, 0);
+ 
+ 	if (!valid_policy) {
+ 		ima_delete_rules();
+-- 
+2.27.0
 
