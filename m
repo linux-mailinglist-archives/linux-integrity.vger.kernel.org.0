@@ -2,78 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF381FC2E6
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 02:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9590A1FC32D
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 03:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726570AbgFQAhj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Jun 2020 20:37:39 -0400
-Received: from mga01.intel.com ([192.55.52.88]:35560 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725894AbgFQAhi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Jun 2020 20:37:38 -0400
-IronPort-SDR: 6btyEopYtcWhQIIfwVIMkuBwT0xT1Xt3erNtWipWo7a+2XBgHYk4xefjBwHFOLrP0gUmqkU/54
- 5g0L3LU3TqSQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 17:37:37 -0700
-IronPort-SDR: lODsoQHi8rVMcS8JBOZM22ZQFpr+o4U38aSiRKsTumXaHJosXss88z+9i8pLOq+lgsd28ULTQN
- e1b3CvWqFPDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,520,1583222400"; 
-   d="scan'208";a="351914039"
-Received: from mjlewis-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.33.151])
-  by orsmga001.jf.intel.com with ESMTP; 16 Jun 2020 17:37:27 -0700
-Date:   Wed, 17 Jun 2020 03:37:26 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     amirmizi6@gmail.com
-Cc:     Eyal.Cohen@nuvoton.com, oshrialkoby85@gmail.com,
-        alexander.steffen@infineon.com, robh+dt@kernel.org,
-        peterhuewe@gmx.de, christophe-h.richard@st.com, jgg@ziepe.ca,
-        arnd@arndb.de, gregkh@linuxfoundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
-        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
-        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
-        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
-Subject: Re: [PATCH v10 1/8] tpm: Make read{16, 32}() and write32() in
- tpm_tis_phy_ops optional
-Message-ID: <20200617003726.GA3646@linux.intel.com>
-References: <20200604134713.157951-1-amirmizi6@gmail.com>
- <20200604134713.157951-2-amirmizi6@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200604134713.157951-2-amirmizi6@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1726601AbgFQBFH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Jun 2020 21:05:07 -0400
+Received: from lucky1.263xmail.com ([211.157.147.131]:55838 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726275AbgFQBFH (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Jun 2020 21:05:07 -0400
+Received: from localhost (unknown [192.168.167.70])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 4AE05B00CF;
+        Wed, 17 Jun 2020 09:00:47 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED: 0
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.246.122.242])
+        by smtp.263.net (postfix) whith ESMTP id P9955T140607548782336S1592355640986958_;
+        Wed, 17 Jun 2020 09:00:46 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <9f3c78971883cd7b636e8bbecb83ec40>
+X-RL-SENDER: zhoubinbin@uniontech.com
+X-SENDER: zhoubinbin@uniontech.com
+X-LOGIN-NAME: zhoubinbin@uniontech.com
+X-FST-TO: peterhuewe@gmx.de
+X-SENDER-IP: 58.246.122.242
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+X-System-Flag: 0
+From:   Binbin Zhou <zhoubinbin@uniontech.com>
+To:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca
+Cc:     linux-integrity@vger.kernel.org, christophe.ricard@gmail.com,
+        zhoubb.aaron@gmail.com, Binbin Zhou <zhoubinbin@uniontech.com>
+Subject: [PATCH v2] tpm/st33zp24: fix spelling mistake "drescription" -> "description"
+Date:   Wed, 17 Jun 2020 09:00:38 +0800
+Message-Id: <20200617010038.32493-1-zhoubinbin@uniontech.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 04, 2020 at 04:47:06PM +0300, amirmizi6@gmail.com wrote:
-> From: Amir Mizinski <amirmizi6@gmail.com>
-> 
-> Only tpm_tis can use memory-mapped I/O, which is truly mapped into
-> the kernel's memory space. Therefore, using ioread16/ioread32/iowrite32
-> turns into a straightforward pointer dereference.
-> Every other driver requires more complicated operations to read more than
-> one byte at a time and will just fall back to read_bytes/write_bytes.
-> Therefore, move this common code out of tpm_tis_spi and into tpm_tis_core
-> so that it is used automatically when low-level drivers do not implement
-> the specialized methods.
-> 
-> Co-developed-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+Trivial fix, the spelling of "drescription" is incorrect
+in function comment.
 
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Fix this.
 
-I tested this with my T480 ThinkPad, which has Infineon SLB 9670 TPM
-chip according to TPM_PT_VENDOR_STRING_* [*]
+Signed-off-by: Binbin Zhou <zhoubinbin@uniontech.com>
+---
+v2:
+   Fix the checkpatch issue.
 
-[*] tpm2_getcap properties-fixed from tpm2-tools package to fetch this
-    information.
+ drivers/char/tpm/st33zp24/i2c.c      | 2 +-
+ drivers/char/tpm/st33zp24/spi.c      | 4 ++--
+ drivers/char/tpm/st33zp24/st33zp24.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-/Jarkko
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index 35333b65acd1..7c617edff4ca 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -210,7 +210,7 @@ static int st33zp24_i2c_request_resources(struct i2c_client *client)
+ 
+ /*
+  * st33zp24_i2c_probe initialize the TPM device
+- * @param: client, the i2c_client drescription (TPM I2C description).
++ * @param: client, the i2c_client description (TPM I2C description).
+  * @param: id, the i2c_device_id struct.
+  * @return: 0 in case of success.
+  *	 -1 in other case.
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index 26e09de50f1e..a75dafd39445 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -329,7 +329,7 @@ static int st33zp24_spi_request_resources(struct spi_device *dev)
+ 
+ /*
+  * st33zp24_spi_probe initialize the TPM device
+- * @param: dev, the spi_device drescription (TPM SPI description).
++ * @param: dev, the spi_device description (TPM SPI description).
+  * @return: 0 in case of success.
+  *	 or a negative value describing the error.
+  */
+@@ -378,7 +378,7 @@ static int st33zp24_spi_probe(struct spi_device *dev)
+ 
+ /*
+  * st33zp24_spi_remove remove the TPM device
+- * @param: client, the spi_device drescription (TPM SPI description).
++ * @param: client, the spi_device description (TPM SPI description).
+  * @return: 0 in case of success.
+  */
+ static int st33zp24_spi_remove(struct spi_device *dev)
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
+index 37bb13f516be..4ec10ab5e576 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.c
++++ b/drivers/char/tpm/st33zp24/st33zp24.c
+@@ -502,7 +502,7 @@ static const struct tpm_class_ops st33zp24_tpm = {
+ 
+ /*
+  * st33zp24_probe initialize the TPM device
+- * @param: client, the i2c_client drescription (TPM I2C description).
++ * @param: client, the i2c_client description (TPM I2C description).
+  * @param: id, the i2c_device_id struct.
+  * @return: 0 in case of success.
+  *	 -1 in other case.
+-- 
+2.17.1
+
+
+
