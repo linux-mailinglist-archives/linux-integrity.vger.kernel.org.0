@@ -2,112 +2,172 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CFC1FCDD8
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 14:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94601FCEEF
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 15:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbgFQM4D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jun 2020 08:56:03 -0400
-Received: from mail-ej1-f67.google.com ([209.85.218.67]:46289 "EHLO
-        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgFQM4B (ORCPT
+        id S1726758AbgFQN6a (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jun 2020 09:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbgFQN63 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jun 2020 08:56:01 -0400
-Received: by mail-ej1-f67.google.com with SMTP id p20so2155867ejd.13;
-        Wed, 17 Jun 2020 05:55:56 -0700 (PDT)
+        Wed, 17 Jun 2020 09:58:29 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46673C06174E
+        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 06:58:29 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id c17so2953308lji.11
+        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 06:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MLDiEuuNfJhWVK1I22iFWyRL9tqHD8cVwzgyE91Mz3s=;
+        b=pX61bJji52z48r7wt+tWy3rQ+DH7PbhTwh06jxsDGu+mRiyZ3DZtqcDG+frmoxZt4c
+         p/Rdh5X9077wQFDpuru7e8LbuLvGeZwGDlzoc2CWVwYwC+qj0MpehNyaz/kO6wu9FQwR
+         pndgcwWzYmMSn0oMbVqTN1yG9ytkJmw2Lk+HT3hsfx0Sy3RWSE5wGAOLh/Sgj0ChQWPD
+         qXJsd5G0osmuvnEZ+IfchDQZQ5FQfH7kCWSKT7nM5chmmyEoAdMNCUjE9LLKqGuvXue1
+         cwD1xmTFnZElTyBAEqtNUnDvcbULj2cXsAUDmLECz2ke07KqZ23MEmVwqwVjNLUd2wSR
+         wZUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fOVgSeVqTVqWvUfLoOdj4nt+48hh42lucWZp1VWswtg=;
-        b=dH49tmuZwIi2AW45bvCm3iTsdIn3uF71ykSn9PsnXeadpR8w4CiekLmYpZM958HwJD
-         ibgE+xf/ARAeXcjze6WrTSv5kWz7b8jTpIZP8lCgh3Ylunh3gjcMdzhvwrFj+vqHznwg
-         rXWDmWvWLvm2e4k8WV0pN2mW4Bnb86WB17lGi1mJqvxtygd7za3zqTFaYjfZJY22Zxhx
-         82tjvjiERWaV0Yt8ZqtypoDKflVAblaEOMwz6De3hPO1oN+J4thsHfe7IhMjPM4f9vzY
-         7KAKmVbgfZKj2sH/BeUJ6fCaZrsjP79n5Sfl/vPFusfBPpcILYmSLk3eh1Dy43dOJL87
-         2WTw==
-X-Gm-Message-State: AOAM530bhtu6+RkmEZpogtJgUxdROzQTUK2XsEI7R0YXnSFuAtjx2e2X
-        yl1V8OEEuJPvrEpbgOi6IDA=
-X-Google-Smtp-Source: ABdhPJz5smjYQcDGdXsq8Ug+fgHwHPeIMnfqM9kX0E57nHrzErZZpyVOrifVPC/iAZURBZCGoIl/9Q==
-X-Received: by 2002:a17:906:aad8:: with SMTP id kt24mr7265073ejb.527.1592398555771;
-        Wed, 17 Jun 2020 05:55:55 -0700 (PDT)
-Received: from localhost (ip-37-188-158-19.eurotel.cz. [37.188.158.19])
-        by smtp.gmail.com with ESMTPSA id mh14sm13501385ejb.116.2020.06.17.05.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 05:55:54 -0700 (PDT)
-Date:   Wed, 17 Jun 2020 14:55:53 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dsterba@suse.cz, Joe Perches <joe@perches.com>,
-        Waiman Long <longman@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to kfree_sensitive()
-Message-ID: <20200617125553.GO9499@dhcp22.suse.cz>
-References: <20200616015718.7812-1-longman@redhat.com>
- <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
- <20200616230130.GJ27795@twin.jikos.cz>
- <20200617003711.GD8681@bombadil.infradead.org>
- <20200617071212.GJ9499@dhcp22.suse.cz>
- <20200617110820.GG8681@bombadil.infradead.org>
- <20200617113157.GM9499@dhcp22.suse.cz>
- <20200617122321.GJ8681@bombadil.infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MLDiEuuNfJhWVK1I22iFWyRL9tqHD8cVwzgyE91Mz3s=;
+        b=HYGZG4yBHfXKOuduU1FF6MzeMzm5xCqdPAEMR9KSyFAo+q/zNh33snpmjpSq/jt725
+         VXmiahMyAQ9zz3g1AED4pgPaTWqHNyCNiCj8VDsACwCO1U1NjMbM2WxRBz1ERffeAOFQ
+         XNd47U1adqyQBlvBTzHb1aBDiQWLuz3hByXLFhLrt2ksL2YRpPlCSmz8rcFtAmzhHgF6
+         SCF/KZS9dXGwA0uqs0SWcIMdCVJO/gwKk+arAFJ7Ch3uxzWBXUEYJb3inin3Ry5VVA4e
+         kcSBxCQmbE4PtW8Sz5wmirIBIzpI1R9vrrBC0FTd7X6Uuo695gmOApP+4CGx427JlnMS
+         +LwQ==
+X-Gm-Message-State: AOAM53050PNATmMEY8OvcwgYbhlDMRDrEGtBRCGUy73zAk7CJsWRKFqw
+        fv18zvqAst3X1cXtwnFAUbf7N2MQW8hVuW13pQTB+w==
+X-Google-Smtp-Source: ABdhPJxZbnVS7dm8L9M8mgWbiYnE/qRK7G9n0TXltwJD9k3GVyoHe4++Q8DEIUTVAf5MSBMRAhHi+ho6FdlkYcVm+Ak=
+X-Received: by 2002:a2e:7e08:: with SMTP id z8mr3803277ljc.339.1592402307692;
+ Wed, 17 Jun 2020 06:58:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617122321.GJ8681@bombadil.infradead.org>
+References: <20200604175851.758-1-maxim.uvarov@linaro.org> <20200604175851.758-2-maxim.uvarov@linaro.org>
+In-Reply-To: <20200604175851.758-2-maxim.uvarov@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 17 Jun 2020 19:28:16 +0530
+Message-ID: <CAFA6WYNVk1RcaqnL0FGyYkB+hGkgyqeOMsSKyySL=zfCdNUZXA@mail.gmail.com>
+Subject: Re: [PATCHv8 1/3] optee: use uuid for sysfs driver entry
+To:     Maxim Uvarov <maxim.uvarov@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
+        peterhuewe@gmx.de,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-integrity@vger.kernel.org, Arnd Bergmann <arnd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed 17-06-20 05:23:21, Matthew Wilcox wrote:
-> On Wed, Jun 17, 2020 at 01:31:57PM +0200, Michal Hocko wrote:
-> > On Wed 17-06-20 04:08:20, Matthew Wilcox wrote:
-> > > If you call vfree() under
-> > > a spinlock, you're in trouble.  in_atomic() only knows if we hold a
-> > > spinlock for CONFIG_PREEMPT, so it's not safe to check for in_atomic()
-> > > in __vfree().  So we need the warning in order that preempt people can
-> > > tell those without that there is a bug here.
-> > 
-> > ... Unless I am missing something in_interrupt depends on preempt_count() as
-> > well so neither of the two is reliable without PREEMPT_COUNT configured.
-> 
-> preempt_count() always tracks whether we're in interrupt context,
-> regardless of CONFIG_PREEMPT.  The difference is that CONFIG_PREEMPT
-> will track spinlock acquisitions as well.
+Hi Maxim,
 
-Right you are! Thanks for the clarification. I find the situation
-around preempt_count quite confusing TBH. Looking at existing users
-of in_atomic() (e.g. a random one zd_usb_iowrite16v_async which check
-in_atomic and then does GFP_KERNEL allocation which would be obviously
-broken on !PREEMPT if the function can be called from an atomic
-context), I am wondering whether it would make sense to track atomic
-context also for !PREEMPT. This check is just terribly error prone.
+On Thu, 4 Jun 2020 at 23:28, Maxim Uvarov <maxim.uvarov@linaro.org> wrote:
+>
+> With the evolving use-cases for TEE bus, now it's required to support
+> multi-stage enumeration process. But using a simple index doesn't
+> suffice this requirement and instead leads to duplicate sysfs entries.
+> So instead switch to use more informative device UUID for sysfs entry
+> like:
+> /sys/bus/tee/devices/optee-ta-<uuid>
+>
+> Signed-off-by: Maxim Uvarov <maxim.uvarov@linaro.org>
+> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+> ---
+>  Documentation/ABI/testing/sysfs-bus-optee-devices | 8 ++++++++
+>  MAINTAINERS                                       | 1 +
+>  drivers/tee/optee/device.c                        | 9 ++++++---
+>  3 files changed, 15 insertions(+), 3 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-optee-devices
+>
+> diff --git a/Documentation/ABI/testing/sysfs-bus-optee-devices b/Documentation/ABI/testing/sysfs-bus-optee-devices
+> new file mode 100644
+> index 000000000000..0ae04ae5374a
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-optee-devices
+> @@ -0,0 +1,8 @@
+> +What:          /sys/bus/tee/devices/optee-ta-<uuid>/
+> +Date:           May 2020
+> +KernelVersion   5.7
+> +Contact:        tee-dev@lists.linaro.org
+> +Description:
+> +               OP-TEE bus provides reference to registered drivers under this directory. The <uuid>
+> +               matches Trusted Application (TA) driver and corresponding TA in secure OS. Drivers
+> +               are free to create needed API under optee-ta-<uuid> directory.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ecc0749810b0..6717afef2de3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12516,6 +12516,7 @@ OP-TEE DRIVER
+>  M:     Jens Wiklander <jens.wiklander@linaro.org>
+>  L:     tee-dev@lists.linaro.org
+>  S:     Maintained
+> +F:     Documentation/ABI/testing/sysfs-bus-optee-devices
+>  F:     drivers/tee/optee/
+>
+>  OP-TEE RANDOM NUMBER GENERATOR (RNG) DRIVER
+> diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
+> index e3a148521ec1..23d264c8146e 100644
+> --- a/drivers/tee/optee/device.c
+> +++ b/drivers/tee/optee/device.c
+> @@ -65,7 +65,7 @@ static int get_devices(struct tee_context *ctx, u32 session,
+>         return 0;
+>  }
+>
+> -static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
+> +static int optee_register_device(const uuid_t *device_uuid)
+>  {
+>         struct tee_client_device *optee_device = NULL;
+>         int rc;
+> @@ -75,7 +75,10 @@ static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
+>                 return -ENOMEM;
+>
+>         optee_device->dev.bus = &tee_bus_type;
+> -       dev_set_name(&optee_device->dev, "optee-clnt%u", device_id);
+> +       if (dev_set_name(&optee_device->dev, "optee-ta-%pUl", device_uuid)) {
 
--- 
-Michal Hocko
-SUSE Labs
+You should be using format specifier as: "%pUb" instead of "%pUl" as
+UUID representation for TAs is in big endian format. See below:
+
+# ls /sys/bus/tee/devices/
+optee-ta-405b6ad9-e5c3-e321-8794-1002a5d5c61b
+optee-ta-71d950bc-c9d4-c442-82cb-343fb7f37896
+optee-ta-e70f4af0-5d1f-9b4b-abf7-619b85b4ce8c
+
+While UUID for fTPM TA is in big endian format:
+bc50d971-d4c9-42c4-82cb-343fb7f37896
+
+Sorry that I missed it during review and noticed this while testing.
+
+With the above fix included, I tested this series using fTPM early TA
+on Qemu for aarch64 and used basic random number generation test using
+tpm2-tools. So feel free to add:
+
+Tested-by: Sumit Garg <sumit.garg@linaro.org>
+
+-Sumit
+
+> +               kfree(optee_device);
+> +               return -ENOMEM;
+> +       }
+>         uuid_copy(&optee_device->id.uuid, device_uuid);
+>
+>         rc = device_register(&optee_device->dev);
+> @@ -144,7 +147,7 @@ int optee_enumerate_devices(void)
+>         num_devices = shm_size / sizeof(uuid_t);
+>
+>         for (idx = 0; idx < num_devices; idx++) {
+> -               rc = optee_register_device(&device_uuid[idx], idx);
+> +               rc = optee_register_device(&device_uuid[idx]);
+>                 if (rc)
+>                         goto out_shm;
+>         }
+> --
+> 2.17.1
+>
