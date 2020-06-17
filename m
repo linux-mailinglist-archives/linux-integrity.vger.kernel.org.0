@@ -2,36 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D37D1FD647
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 22:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133F91FD645
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2020 22:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbgFQUon (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jun 2020 16:44:43 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55572 "EHLO
+        id S1726987AbgFQUom (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jun 2020 16:44:42 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55578 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726879AbgFQUom (ORCPT
+        with ESMTP id S1726986AbgFQUom (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Wed, 17 Jun 2020 16:44:42 -0400
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 682C020B7192;
+        by linux.microsoft.com (Postfix) with ESMTPSA id B038B20B711C;
         Wed, 17 Jun 2020 13:44:41 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 682C020B7192
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B038B20B711C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1592426681;
-        bh=FRjnd7LzSpMwTJfbQgmfF6wTlowj4c4FlZqqooRPOZw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AhZzI1uo2qTNlEeTeEHm+zXRk94Bf5ivB9RgYOv/HTgtRTYPEb3pwRDgtSPsjyz7W
-         phKXTQfCBPQqwj0DLleE6Ce02H1fDJjlfqr+ZlX3Tapaf5S9QPhb3eSGqDVK3RlUrh
-         VSTxFUii3BPoUy+bfaocSOB/QBJOfVtwvZbLKKt0=
+        bh=sd/3a2ymDFt3eq7MlVb5ASMA/r4IGCb1y6MMEDUE1Vk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CJqbx0vsRC0+FJXa8A6paq6Cf2UfPWNLuf5ceC5mQx6Bu+X6o2cryjI/0jhPbWr7n
+         BUW6dYx4Ykbi9JY252skHMw1TyxCPsZcX9B3NMFmEBl4NPapTa0zlvfEjVIFWFt9D1
+         uBxCLj2zMq/ti0idqGfzqF8qqnB+ACrYJeZ6P0GI=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, nayna@linux.ibm.com,
         sgrubb@redhat.com, paul@paul-moore.com
 Cc:     rgb@redhat.com, linux-integrity@vger.kernel.org,
         linux-audit@redhat.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] IMA: pass error code in result parameter to integrity_audit_msg()
-Date:   Wed, 17 Jun 2020 13:44:35 -0700
-Message-Id: <20200617204436.2226-1-nramas@linux.microsoft.com>
+Subject: [PATCH 2/2] integrity: Add errno field in audit message
+Date:   Wed, 17 Jun 2020 13:44:36 -0700
+Message-Id: <20200617204436.2226-2-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200617204436.2226-1-nramas@linux.microsoft.com>
+References: <20200617204436.2226-1-nramas@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
@@ -39,128 +41,35 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The value passed in "result" parameter to integrity_audit_msg() is
-not an error code in some instances. Update these instances so that
-"result" parameter always contains an error code.
+Error code is not included in the audit messages logged by
+the integrity subsystem. Add "errno" field in the audit messages
+logged by the integrity subsystem and set the value to the error code
+passed to integrity_audit_msg() in the "result" parameter.
+
+Sample audit messages:
+
+[    6.284329] audit: type=1804 audit(1591756723.627:2): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=kernel op=add_boot_aggregate cause=alloc_entry comm="swapper/0" name="boot_aggregate" res=0 errno=-12
+
+[    8.085456] audit: type=1802 audit(1592005947.297:9): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 op=policy_update cause=completed comm="systemd" res=1 errno=0
 
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Suggested-by: Steve Grubb <sgrubb@redhat.com>
 ---
- security/integrity/ima/ima_appraise.c | 20 ++++++++++++--------
- security/integrity/ima/ima_fs.c       |  8 +++++---
- 2 files changed, 17 insertions(+), 11 deletions(-)
+ security/integrity/integrity_audit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index a9649b04b9f1..253dcb331249 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -226,7 +226,7 @@ static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
- 		}
- 		clear_bit(IMA_DIGSIG, &iint->atomic_flags);
- 		if (xattr_len - sizeof(xattr_value->type) - hash_start >=
--				iint->ima_hash->length)
-+				iint->ima_hash->length) {
- 			/*
- 			 * xattr length may be longer. md5 hash in previous
- 			 * version occupied 20 bytes in xattr, instead of 16
-@@ -234,6 +234,9 @@ static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
- 			rc = memcmp(&xattr_value->data[hash_start],
- 				    iint->ima_hash->digest,
- 				    iint->ima_hash->length);
-+			if (rc)
-+				rc = -EINVAL;
-+		}
- 		else
- 			rc = -EINVAL;
- 		if (rc) {
-@@ -355,7 +358,7 @@ int ima_appraise_measurement(enum ima_hooks func,
- 	struct dentry *dentry = file_dentry(file);
- 	struct inode *inode = d_backing_inode(dentry);
- 	enum integrity_status status = INTEGRITY_UNKNOWN;
--	int rc = xattr_len;
-+	int rc = -EACCES;
- 	bool try_modsig = iint->flags & IMA_MODSIG_ALLOWED && modsig;
- 
- 	/* If not appraising a modsig, we need an xattr. */
-@@ -363,10 +366,7 @@ int ima_appraise_measurement(enum ima_hooks func,
- 		return INTEGRITY_UNKNOWN;
- 
- 	/* If reading the xattr failed and there's no modsig, error out. */
--	if (rc <= 0 && !try_modsig) {
--		if (rc && rc != -ENODATA)
--			goto out;
--
-+	if (xattr_len <= 0 && !try_modsig) {
- 		cause = iint->flags & IMA_DIGSIG_REQUIRED ?
- 				"IMA-signature-required" : "missing-hash";
- 		status = INTEGRITY_NOLABEL;
-@@ -379,7 +379,8 @@ int ima_appraise_measurement(enum ima_hooks func,
- 		goto out;
+diff --git a/security/integrity/integrity_audit.c b/security/integrity/integrity_audit.c
+index 5109173839cc..a265024f82f3 100644
+--- a/security/integrity/integrity_audit.c
++++ b/security/integrity/integrity_audit.c
+@@ -53,6 +53,6 @@ void integrity_audit_msg(int audit_msgno, struct inode *inode,
+ 		audit_log_untrustedstring(ab, inode->i_sb->s_id);
+ 		audit_log_format(ab, " ino=%lu", inode->i_ino);
  	}
- 
--	status = evm_verifyxattr(dentry, XATTR_NAME_IMA, xattr_value, rc, iint);
-+	status = evm_verifyxattr(dentry, XATTR_NAME_IMA,
-+				 xattr_value, xattr_len, iint);
- 	switch (status) {
- 	case INTEGRITY_PASS:
- 	case INTEGRITY_PASS_IMMUTABLE:
-@@ -432,14 +433,17 @@ int ima_appraise_measurement(enum ima_hooks func,
- 		if ((ima_appraise & IMA_APPRAISE_FIX) && !try_modsig &&
- 		    (!xattr_value ||
- 		     xattr_value->type != EVM_IMA_XATTR_DIGSIG)) {
--			if (!ima_fix_xattr(dentry, iint))
-+			if (!ima_fix_xattr(dentry, iint)) {
- 				status = INTEGRITY_PASS;
-+				rc = 0;
-+			}
- 		}
- 
- 		/* Permit new files with file signatures, but without data. */
- 		if (inode->i_size == 0 && iint->flags & IMA_NEW_FILE &&
- 		    xattr_value && xattr_value->type == EVM_IMA_XATTR_DIGSIG) {
- 			status = INTEGRITY_PASS;
-+			rc = 0;
- 		}
- 
- 		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index e3fcad871861..a3a270cff94f 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -335,10 +335,10 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
- 		result = ima_read_policy(data);
- 	} else if (ima_appraise & IMA_APPRAISE_POLICY) {
- 		pr_err("signed policy file (specified as an absolute pathname) required\n");
-+		result = -EACCES;
- 		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
- 				    "policy_update", "signed policy required",
--				    1, 0);
--		result = -EACCES;
-+				    result, 0);
- 	} else {
- 		result = ima_parse_add_rule(data);
- 	}
-@@ -406,6 +406,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
- static int ima_release_policy(struct inode *inode, struct file *file)
- {
- 	const char *cause = valid_policy ? "completed" : "failed";
-+	int result = 0;
- 
- 	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
- 		return seq_release(inode, file);
-@@ -413,11 +414,12 @@ static int ima_release_policy(struct inode *inode, struct file *file)
- 	if (valid_policy && ima_check_policy() < 0) {
- 		cause = "failed";
- 		valid_policy = 0;
-+		result = -EINVAL;
- 	}
- 
- 	pr_info("policy update %s\n", cause);
- 	integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
--			    "policy_update", cause, !valid_policy, 0);
-+			    "policy_update", cause, result, 0);
- 
- 	if (!valid_policy) {
- 		ima_delete_rules();
+-	audit_log_format(ab, " res=%d", !result);
++	audit_log_format(ab, " res=%d errno=%d", !result, result);
+ 	audit_log_end(ab);
+ }
 -- 
 2.27.0
 
