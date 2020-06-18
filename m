@@ -2,121 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D07951FFC5A
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jun 2020 22:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD09D1FFD2E
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jun 2020 23:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730875AbgFRUMo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 Jun 2020 16:12:44 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5048 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728027AbgFRUMo (ORCPT
+        id S1728141AbgFRVKR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 Jun 2020 17:10:17 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:52548 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726478AbgFRVKR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 Jun 2020 16:12:44 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05IK4KR0179981;
-        Thu, 18 Jun 2020 16:12:23 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31rb6a7jr6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Jun 2020 16:12:22 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05IK5xcs185222;
-        Thu, 18 Jun 2020 16:12:22 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31rb6a7jqn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Jun 2020 16:12:22 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05IKAngT004244;
-        Thu, 18 Jun 2020 20:12:21 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma04dal.us.ibm.com with ESMTP id 31rd958vsa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Jun 2020 20:12:21 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05IKCKG048169234
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Jun 2020 20:12:20 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40352AE05C;
-        Thu, 18 Jun 2020 20:12:20 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F2A8AE060;
-        Thu, 18 Jun 2020 20:12:19 +0000 (GMT)
-Received: from DESKTOP-AV6EVPG.localdomain (unknown [9.160.61.88])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Jun 2020 20:12:19 +0000 (GMT)
-From:   Maurizio Drocco <maurizio.drocco@ibm.com>
-To:     roberto.sassu@huawei.com
-Cc:     Silviu.Vlasceanu@huawei.com, dmitry.kasatkin@gmail.com,
-        jejb@linux.ibm.com, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, maurizio.drocco@ibm.com,
-        serge@hallyn.com, zohar@linux.ibm.com, mdrocco@linux.vnet.ibm.com
-Subject: [PATCH] ima_evm_utils: extended calc_bootaggr to PCRs 8 - 9
-Date:   Thu, 18 Jun 2020 16:11:26 -0400
-Message-Id: <20200618201126.2081-2-maurizio.drocco@ibm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200618201126.2081-1-maurizio.drocco@ibm.com>
-References: <b744c1b79ba14a17a786f5de04c1f3c4@huawei.com>
- <20200618201126.2081-1-maurizio.drocco@ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-18_15:2020-06-18,2020-06-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 cotscore=-2147483648
- priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 adultscore=0 mlxlogscore=937 phishscore=0
- impostorscore=0 suspectscore=1 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006180148
+        Thu, 18 Jun 2020 17:10:17 -0400
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EDA5E207564C;
+        Thu, 18 Jun 2020 14:10:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EDA5E207564C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1592514616;
+        bh=YiCRzEtMqOMRGhK1JB6+uXhuvSs5ixeHO99z/YzrCNw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=b30qOhfFRkmUxWYXsp0tCg1xNoai+tuzhcElGnk6aQqF+sHXn8o9cTZ3DOKkg2yAO
+         nCwRPVzwRoHnBYW3E5flVBJUOwZ+1JrMzNU5fwjf0CB0m9smLxLpMKgSkKF7pk8Cv1
+         12u0C4+Wu/QLKVuHjPBdpSB4IYsxlYm7AINMH764=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, sgrubb@redhat.com, paul@paul-moore.com
+Cc:     rgb@redhat.com, linux-integrity@vger.kernel.org,
+        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] integrity: Add errno field in audit message
+Date:   Thu, 18 Jun 2020 14:10:11 -0700
+Message-Id: <20200618211012.2823-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Maurizio <maurizio.drocco@ibm.com>
+Error code is not included in the audit messages logged by
+the integrity subsystem.
 
-If PCRs 8 - 9 are set (i.e. not all-zeros), cal_bootaggr should include
-them into the digest.
+Define a new function integrity_audit_message() that takes error code
+in the "errno" parameter. Add "errno" field in the audit messages logged
+by the integrity subsystem and set the value passed in the "errno"
+parameter.
 
-Signed-off-by: Maurizio Drocco <maurizio.drocco@ibm.com>
+[    6.303048] audit: type=1804 audit(1592506281.627:2): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=kernel op=measuring_key cause=ENOMEM comm="swapper/0" name=".builtin_trusted_keys" res=0 errno=-12
+
+[    7.987647] audit: type=1802 audit(1592506283.312:9): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 op=policy_update cause=completed comm="systemd" res=1 errno=0
+
+[    8.019432] audit: type=1804 audit(1592506283.344:10): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 op=measuring_kexec_cmdline cause=hashing_error comm="systemd" name="kexec-cmdline" res=0 errno=-22
+
+Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Suggested-by: Steve Grubb <sgrubb@redhat.com>
+Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- src/evmctl.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ security/integrity/integrity.h       | 13 +++++++++++++
+ security/integrity/integrity_audit.c | 11 ++++++++++-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 1d065ce..554571e 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -1930,6 +1930,18 @@ static void calc_bootaggr(struct tpm_bank_info *bank)
- 		}
- 	}
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 16c1894c29bb..413c803c5208 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -239,6 +239,11 @@ void integrity_audit_msg(int audit_msgno, struct inode *inode,
+ 			 const unsigned char *fname, const char *op,
+ 			 const char *cause, int result, int info);
  
-+	if (strcmp(bank->algo_name, "sha1") != 0) {
-+		for (i = 8; i < 10; i++) {
-+			if (memcmp(bank->pcr[i], zero, bank->digest_size) != 0) {
-+				err = EVP_DigestUpdate(pctx, bank->pcr[i], bank->digest_size);
-+				if (!err) {
-+					log_err("EVP_DigestUpdate() failed\n");
-+					return;
-+				}
-+			}
-+		}
-+	}
++void integrity_audit_message(int audit_msgno, struct inode *inode,
++			     const unsigned char *fname, const char *op,
++			     const char *cause, int result, int info,
++			     int errno);
 +
- 	err = EVP_DigestFinal(pctx, bank->digest, &mdlen);
- 	if (!err) {
- 		log_err("EVP_DigestFinal() failed\n");
-@@ -1973,7 +1985,9 @@ static int append_bootaggr(char *bootaggr, struct tpm_bank_info *tpm_banks)
-  * The IMA measurement list boot_aggregate is the link between the preboot
-  * event log and the IMA measurement list.  Read and calculate all the
-  * possible per TPM bank boot_aggregate digests based on the existing
-- * PCRs 0 - 7 to validate against the IMA boot_aggregate record.
-+ * PCRs 0 - 9 to validate against the IMA boot_aggregate record. If PCRs
-+ * 8 - 9 are not set (i.e. all-zeros) or the digest algorithm is SHA1, only
-+ * PCRs 0 - 7 are considered.
-  */
- static int cmd_ima_bootaggr(struct command *cmd)
+ static inline struct audit_buffer *
+ integrity_audit_log_start(struct audit_context *ctx, gfp_t gfp_mask, int type)
  {
+@@ -253,6 +258,14 @@ static inline void integrity_audit_msg(int audit_msgno, struct inode *inode,
+ {
+ }
+ 
++static inline void integrity_audit_message(int audit_msgno,
++					   struct inode *inode,
++					   const unsigned char *fname,
++					   const char *op, const char *cause,
++					   int result, int info, int errno)
++{
++}
++
+ static inline struct audit_buffer *
+ integrity_audit_log_start(struct audit_context *ctx, gfp_t gfp_mask, int type)
+ {
+diff --git a/security/integrity/integrity_audit.c b/security/integrity/integrity_audit.c
+index 5109173839cc..f25e7df099c8 100644
+--- a/security/integrity/integrity_audit.c
++++ b/security/integrity/integrity_audit.c
+@@ -28,6 +28,15 @@ __setup("integrity_audit=", integrity_audit_setup);
+ void integrity_audit_msg(int audit_msgno, struct inode *inode,
+ 			 const unsigned char *fname, const char *op,
+ 			 const char *cause, int result, int audit_info)
++{
++	integrity_audit_message(audit_msgno, inode, fname, op, cause,
++				result, audit_info, 0);
++}
++
++void integrity_audit_message(int audit_msgno, struct inode *inode,
++			     const unsigned char *fname, const char *op,
++			     const char *cause, int result, int audit_info,
++			     int errno)
+ {
+ 	struct audit_buffer *ab;
+ 	char name[TASK_COMM_LEN];
+@@ -53,6 +62,6 @@ void integrity_audit_msg(int audit_msgno, struct inode *inode,
+ 		audit_log_untrustedstring(ab, inode->i_sb->s_id);
+ 		audit_log_format(ab, " ino=%lu", inode->i_ino);
+ 	}
+-	audit_log_format(ab, " res=%d", !result);
++	audit_log_format(ab, " res=%d errno=%d", !result, errno);
+ 	audit_log_end(ab);
+ }
 -- 
-2.17.1
+2.27.0
 
