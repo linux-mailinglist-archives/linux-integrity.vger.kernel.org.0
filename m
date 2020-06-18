@@ -2,66 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 525891FD9EA
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jun 2020 01:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3818F1FDA32
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jun 2020 02:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726854AbgFQXqq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Jun 2020 19:46:46 -0400
-Received: from mga18.intel.com ([134.134.136.126]:33740 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726763AbgFQXqq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Jun 2020 19:46:46 -0400
-IronPort-SDR: e5eRefAmeSExC2GEp4F8tnGGUpYJmquK+SwpDNq3QHBOVaQOAQc0sUi4eC1RCUcaUTn4jdq8JX
- T0Pp0ug1Tttg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 16:46:45 -0700
-IronPort-SDR: SHvwl7zGWfmeRDzUZEqzqBht0T+4qGwFkbFpq9cgLQEWOLtFO4pj1TZmZtZ1YXWxNzUziBmCQZ
- 2msYTaFfhEkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,524,1583222400"; 
-   d="scan'208";a="262737630"
-Received: from kleeve-mobl.ger.corp.intel.com (HELO localhost) ([10.252.50.166])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jun 2020 16:46:42 -0700
-Date:   Thu, 18 Jun 2020 02:46:41 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+        id S1726919AbgFRAZn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Jun 2020 20:25:43 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:33216 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726881AbgFRAZm (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 17 Jun 2020 20:25:42 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7A7AB8EE2CA;
+        Wed, 17 Jun 2020 17:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1592439942;
+        bh=WQ52xyYQk6yW3Dahtuuu2fWlBSS7X5F2XFiAPnINoJY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=INFHiQaylEoBbgir/iXV9DANJJMDZrSdvpjnwfRf/SykjVYVloOT97jFHGzL4dw5c
+         t4unCsEIZRNstN4tshWrM5X6ddGLu1CtaymcCJg38hMVNPlDYAxyDTycLsupixAcaY
+         Heqm5kg58iuGTnIWHgkoOBFMdnxlnJjXYRez/tJE=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id eW5jqt7yZ1Os; Wed, 17 Jun 2020 17:25:42 -0700 (PDT)
+Received: from jarvis (unknown [216.116.10.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id BADC48EE25B;
+        Wed, 17 Jun 2020 17:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1592439942;
+        bh=WQ52xyYQk6yW3Dahtuuu2fWlBSS7X5F2XFiAPnINoJY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=INFHiQaylEoBbgir/iXV9DANJJMDZrSdvpjnwfRf/SykjVYVloOT97jFHGzL4dw5c
+         t4unCsEIZRNstN4tshWrM5X6ddGLu1CtaymcCJg38hMVNPlDYAxyDTycLsupixAcaY
+         Heqm5kg58iuGTnIWHgkoOBFMdnxlnJjXYRez/tJE=
+Message-ID: <1592439940.3515.40.camel@HansenPartnership.com>
+Subject: Re: [PATCH v10 2/8] oid_registry: Add TCG defined OIDS for TPM keys
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
 Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         David Woodhouse <dwmw2@infradead.org>,
         keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH v10 5/8] security: keys: trusted: Make sealed key
- properly interoperable
-Message-ID: <20200617234641.GL62794@linux.intel.com>
+Date:   Wed, 17 Jun 2020 17:25:40 -0700
+In-Reply-To: <20200617214237.dlvfnx2s7aw4sfng@cantor>
 References: <20200616160229.8018-1-James.Bottomley@HansenPartnership.com>
- <20200616160229.8018-6-James.Bottomley@HansenPartnership.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200616160229.8018-6-James.Bottomley@HansenPartnership.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+         <20200616160229.8018-3-James.Bottomley@HansenPartnership.com>
+         <20200617214237.dlvfnx2s7aw4sfng@cantor>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 09:02:26AM -0700, James Bottomley wrote:
-> The current implementation appends a migratable flag to the end of a
-> key, meaning the format isn't exactly interoperable because the using
-> party needs to know to strip this extra byte.  However, all other
-> consumers of TPM sealed blobs expect the unseal to return exactly the
-> key.  Since TPM2 keys have a key property flag that corresponds to
-> migratable, use that flag instead and make the actual key the only
-> sealed quantity.  This is secure because the key properties are bound
-> to a hash in the private part, so if they're altered the key won't
-> load.
+On Wed, 2020-06-17 at 14:42 -0700, Jerry Snitselaar wrote:
+> On Tue Jun 16 20, James Bottomley wrote:
+> > The TCG has defined an OID prefix "2.23.133.10.1" for the various
+> > TPM
+> > key uses.  We've defined three of the available numbers:
+> > 
+> > 2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key
+> > (Usually
+> > 		RSA2048 or Elliptic Curve) which can be imported by a
+> > 		TPM2_Load() operation.
+> > 
+> > 2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key
+> > (Usually
+> > 		RSA2048 or Elliptic Curve) which can be imported by a
+> > 		TPM2_Import() operation.
+> > 
+> > Both loadable and importable keys are specific to a given TPM, the
+> > difference is that a loadable key is wrapped with the symmetric
+> > secret, so must have been created by the TPM itself.  An importable
+> > key is wrapped with a DH shared secret, and may be created without
+> > access to the TPM provided you know the public part of the parent
+> > key.
+> > 
+> > 2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to 128
+> > 		bytes) which is sealed by the TPM.  It usually
+> > 		represents a symmetric key and must be unsealed before
+> > 		use.
+> > 
 > 
-> Backwards compatibility is implemented by detecting whether we're
-> loading a new format key or not and correctly setting migratable from
-> the last byte of old format keys.
-> 
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> James, which document are these defined in? I was searching last
+> night, and couldn't find it.
 
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+It isn't.  It's defined in a TCG spreadsheet that Monty Wiseman keeps,
+but that seems to be as "official" as it gets with the TCG OID
+registry.
 
-/Jarkko
+James
+
