@@ -2,203 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1291FEBCC
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jun 2020 08:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6980A1FEBEE
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jun 2020 09:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727990AbgFRG55 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 Jun 2020 02:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727109AbgFRG5z (ORCPT
+        id S1727987AbgFRHLK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 Jun 2020 03:11:10 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:60552 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727979AbgFRHLK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 Jun 2020 02:57:55 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2615AC061755
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 23:57:55 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id t18so4808797wru.6
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2020 23:57:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=forissier-org.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gjj1nJScgeETVB1sGHCvwVl4garCuwqOg+nannMyhR0=;
-        b=fajwe68DPCqqm1PlI2LvucOr4yFPHF9ov4K/5S8xakCxmEQuVpW+maNukQiC8xz+V2
-         unIfnlpTNlLqUGe+F/vaaciKLp6Q5V1h9e5vX5UqSt0clfLBN3vL+/nMtsdDAoDBh+xv
-         m+/RTTP2nbptgnTsciN+p3NYyffT4qORr78gHzQPFH1cA2VMuAalzzZt2KkdBSuirMnj
-         nBt6V+VU19Pv9kF6RlG76T8eMQM2uk8WvrWwtgevtDZb09oYp982X04k7+J/8+ZD0L5O
-         PGX5ThO7dJy1C94hyfkDRBLAFA4cxKEIGwpvi0aFv61ElCFU9pGsuP8VXwyJznblsyd8
-         xu5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gjj1nJScgeETVB1sGHCvwVl4garCuwqOg+nannMyhR0=;
-        b=rW98+WEz9vgJO1LuHNIj7k2Y718T5QepCKSId96TxyTYd2ajGRJqPzSyQdQ4FwEEE/
-         n7Se25IUAgwvfPwVA+c7A9xafqa8A7x7AVwW0aDY/qn3mJ8U6vU2zWgcumcB52FSh2Jd
-         Kc+LrzrGWY6GLbPSXHT9o9hdhxfum8UR19vprZwokWAwlAWvkN/COGV5QNNzbmRqG/H7
-         WGZUPdxMyR6LbSLCdH+keYbtH0j9Ko7ZcO1Df39eOXpgHN+/XPZF2CXn2BWtJ/ADO/2t
-         BmQqt/8khpel4R0lXAKmbkU13dY5BgOWrgiCb+/Sn/+FAEgpzvUYLrmjkap44G6JwkXO
-         +vJg==
-X-Gm-Message-State: AOAM5324L15DwicsyOSok6C0UVRRhmCrdkAYatir4cTnQIcfc8nzKxcJ
-        s7Pr8wy+vDfsPhqzViGTaq2nxg==
-X-Google-Smtp-Source: ABdhPJw79suYDvUm3Xs8K1QYbjnNDzDmpAY+39aoPvuYtWhJr72UeIpXQMKeJVlzZl77onkFfrcfug==
-X-Received: by 2002:a5d:4dd0:: with SMTP id f16mr3148610wru.117.1592463473721;
-        Wed, 17 Jun 2020 23:57:53 -0700 (PDT)
-Received: from ?IPv6:2a01:e0a:3cb:7bb0:98f8:245a:88c9:f6f4? ([2a01:e0a:3cb:7bb0:98f8:245a:88c9:f6f4])
-        by smtp.gmail.com with ESMTPSA id o10sm2268375wrj.37.2020.06.17.23.57.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jun 2020 23:57:52 -0700 (PDT)
-Subject: Re: [Tee-dev] [PATCHv8 1/3] optee: use uuid for sysfs driver entry
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Maxim Uvarov <maxim.uvarov@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Arnd Bergmann <arnd@linaro.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de
-References: <20200604175851.758-1-maxim.uvarov@linaro.org>
- <20200604175851.758-2-maxim.uvarov@linaro.org>
- <CAFA6WYNVk1RcaqnL0FGyYkB+hGkgyqeOMsSKyySL=zfCdNUZXA@mail.gmail.com>
- <b9960a51-7e00-4992-eed5-bd43e7f27b43@forissier.org>
- <CAFA6WYM6XBduokYOdnWD6m+To=6k2SMbXU=HzK_Enk9h-s7VBQ@mail.gmail.com>
-From:   Jerome Forissier <jerome@forissier.org>
-Message-ID: <6b67cd00-a302-55a1-1e56-d1f1e7a06cef@forissier.org>
-Date:   Thu, 18 Jun 2020 08:57:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Thu, 18 Jun 2020 03:11:10 -0400
+Received: from prsriva-linux.hsd1.wa.comcast.net (c-24-19-135-168.hsd1.wa.comcast.net [24.19.135.168])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8918F20B4781;
+        Thu, 18 Jun 2020 00:11:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8918F20B4781
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1592464269;
+        bh=lDSc0jJUTA/sW6q8KjNuhbmPa1VR7NZJ8pXu5G8PT78=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aG83qxYXRNhqUmLDNYpbm33MDP2wZSL6QKrD2jzlLiNColOuwrb8FqAsVDhwxeIUj
+         F6PyyYZeZsLvmO03Jk+E0IfjD1E+TJlD0wQIkfoT4XYzNzULxLkKcEFezwju6U+yNW
+         CQB9TkUkQuhmLmJNPl9ot4OJOFtVYYPbjejsJWrw=
+From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, robh+dt@kernel.org,
+        frowand.list@gmail.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, vincenzo.frascino@arm.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, james.morse@arm.com,
+        bhsharma@redhat.com, mbrugger@suse.com, hsinyi@chromium.org,
+        tao.li@vivo.com, christophe.leroy@c-s.fr,
+        gregkh@linuxfoundation.org, nramas@linux.microsoft.com,
+        prsriva@linux.microsoft.com, tusharsu@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: [V2 PATCH 0/3] Adding support for carrying IMA measurement logs
+Date:   Thu, 18 Jun 2020 00:10:42 -0700
+Message-Id: <20200618071045.471131-1-prsriva@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAFA6WYM6XBduokYOdnWD6m+To=6k2SMbXU=HzK_Enk9h-s7VBQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/18/20 6:59 AM, Sumit Garg wrote:
-> Hi Jerome,
-> 
-> On Wed, 17 Jun 2020 at 20:46, Jerome Forissier <jerome@forissier.org> wrote:
->>
->>
->>
->> On 6/17/20 3:58 PM, Sumit Garg wrote:
->>> Hi Maxim,
->>>
->>> On Thu, 4 Jun 2020 at 23:28, Maxim Uvarov <maxim.uvarov@linaro.org> wrote:
->>>>
->>>> With the evolving use-cases for TEE bus, now it's required to support
->>>> multi-stage enumeration process. But using a simple index doesn't
->>>> suffice this requirement and instead leads to duplicate sysfs entries.
->>>> So instead switch to use more informative device UUID for sysfs entry
->>>> like:
->>>> /sys/bus/tee/devices/optee-ta-<uuid>
->>>>
->>>> Signed-off-by: Maxim Uvarov <maxim.uvarov@linaro.org>
->>>> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
->>>> ---
->>>>  Documentation/ABI/testing/sysfs-bus-optee-devices | 8 ++++++++
->>>>  MAINTAINERS                                       | 1 +
->>>>  drivers/tee/optee/device.c                        | 9 ++++++---
->>>>  3 files changed, 15 insertions(+), 3 deletions(-)
->>>>  create mode 100644 Documentation/ABI/testing/sysfs-bus-optee-devices
->>>>
->>>> diff --git a/Documentation/ABI/testing/sysfs-bus-optee-devices b/Documentation/ABI/testing/sysfs-bus-optee-devices
->>>> new file mode 100644
->>>> index 000000000000..0ae04ae5374a
->>>> --- /dev/null
->>>> +++ b/Documentation/ABI/testing/sysfs-bus-optee-devices
->>>> @@ -0,0 +1,8 @@
->>>> +What:          /sys/bus/tee/devices/optee-ta-<uuid>/
->>>> +Date:           May 2020
->>>> +KernelVersion   5.7
->>>> +Contact:        tee-dev@lists.linaro.org
->>>> +Description:
->>>> +               OP-TEE bus provides reference to registered drivers under this directory. The <uuid>
->>>> +               matches Trusted Application (TA) driver and corresponding TA in secure OS. Drivers
->>>> +               are free to create needed API under optee-ta-<uuid> directory.
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index ecc0749810b0..6717afef2de3 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -12516,6 +12516,7 @@ OP-TEE DRIVER
->>>>  M:     Jens Wiklander <jens.wiklander@linaro.org>
->>>>  L:     tee-dev@lists.linaro.org
->>>>  S:     Maintained
->>>> +F:     Documentation/ABI/testing/sysfs-bus-optee-devices
->>>>  F:     drivers/tee/optee/
->>>>
->>>>  OP-TEE RANDOM NUMBER GENERATOR (RNG) DRIVER
->>>> diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
->>>> index e3a148521ec1..23d264c8146e 100644
->>>> --- a/drivers/tee/optee/device.c
->>>> +++ b/drivers/tee/optee/device.c
->>>> @@ -65,7 +65,7 @@ static int get_devices(struct tee_context *ctx, u32 session,
->>>>         return 0;
->>>>  }
->>>>
->>>> -static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
->>>> +static int optee_register_device(const uuid_t *device_uuid)
->>>>  {
->>>>         struct tee_client_device *optee_device = NULL;
->>>>         int rc;
->>>> @@ -75,7 +75,10 @@ static int optee_register_device(const uuid_t *device_uuid, u32 device_id)
->>>>                 return -ENOMEM;
->>>>
->>>>         optee_device->dev.bus = &tee_bus_type;
->>>> -       dev_set_name(&optee_device->dev, "optee-clnt%u", device_id);
->>>> +       if (dev_set_name(&optee_device->dev, "optee-ta-%pUl", device_uuid)) {
->>>
->>> You should be using format specifier as: "%pUb" instead of "%pUl" as
->>> UUID representation for TAs is in big endian format. See below:
->>
->> Where does device_uuid come from? If it comes directly from OP-TEE, then
->> it should be a pointer to the following struct:
->>
->> typedef struct
->> {
->>         uint32_t timeLow;
->>         uint16_t timeMid;
->>         uint16_t timeHiAndVersion;
->>         uint8_t clockSeqAndNode[8];
->> } TEE_UUID;
->>
->> (GlobalPlatform TEE Internal Core API spec v1.2.1 section 3.2.4)
->>
->> - The spec does not mandate any particular endianness and simply warns
->> about possible issues if secure and non-secure worlds differ in endianness.
->> - OP-TEE uses %pUl assuming that host order is little endian (that is
->> true for the Arm platforms that run OP-TEE currently). By the same logic
->> %pUl should be fine in the kernel.
->> - On the other hand, the UUID in a Trusted App header is always encoded
->> big endian by the Python script that signs and optionally encrypts the
->> TA. This should not have any visible impact on UUIDs exchanged between
->> the secure and non-secure world though.
->>
->> So I am wondering why you had to use %pUb. There must be some
->> inconsistency somewhere :-/
-> 
-> Yes there is. Linux stores UUID in big endian format (16 byte octets)
-> and OP-TEE stores UUID in little endian format (in form of struct you
-> referenced above).
-> 
-> And format conversion APIs [1] in OP-TEE OS are used while passing
-> UUID among Linux and OP-TEE.
-> 
-> So we need to use %pUb in case of Linux and %pUl in case of OP-TEE.
-> 
-> [1] https://github.com/OP-TEE/optee_os/blob/master/core/tee/uuid.c
+Integrgity Measurement Architecture(IMA) during kexec(kexec file load)
+verifies the kernel signature and measures the signature of the kernel.
 
+The signature in the measuremnt logs is used to verfiy the 
+authenticity of the kernel in the subsequent kexec'd session, however in
+the current implementation IMA measurement logs are not carried over thus
+remote attesation cannot verify the signature of the running kernel.
 
-Got it now. The TA enumeration function in OP-TEE performs  the
-conversion here:
-https://github.com/OP-TEE/optee_os/blob/3.9.0/core/pta/device.c#L34
+Adding support to arm64 to carry over the IMA measurement logs over kexec.
 
-Thanks for clarifying.
+Add a new chosen node entry linux,ima-kexec-buffer to hold the address and
+the size of the memory reserved to carry the IMA measurement log.
+Refactor existing powerpc code to be used by amr64 as well.  
+
+Changelog:
+
+v2:
+  Break patches into separate patches.
+  - Powerpc related Refactoring
+  - Updating the docuemntation for chosen node
+  - Updating arm64 to support IMA buffer pass
+
+v1:
+  Refactoring carrying over IMA measuremnet logs over Kexec. This patch
+    moves the non-architecture specific code out of powerpc and adds to
+    security/ima.(Suggested by Thiago)
+  Add Documentation regarding the ima-kexec-buffer node in the chosen
+    node documentation
+
+v0:
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
+
+Prakhar Srivastava (3):
+  Refactoring powerpc code for carrying over IMA measurement logs, to
+    move non architecture specific code to security/ima.
+  dt-bindings: chosen: Document ima-kexec-buffer carrying over IMA
+    measuremnt logs over kexec.
+  Add support for arm64 to carry over IMA measurement logs
+
+ Documentation/devicetree/bindings/chosen.txt |  17 +++
+ arch/arm64/Kconfig                           |   1 +
+ arch/arm64/include/asm/ima.h                 |  17 +++
+ arch/arm64/include/asm/kexec.h               |   3 +
+ arch/arm64/kernel/machine_kexec_file.c       |  47 +++++--
+ arch/powerpc/include/asm/ima.h               |  10 --
+ arch/powerpc/kexec/ima.c                     | 126 ++-----------------
+ security/integrity/ima/ima_kexec.c           | 116 +++++++++++++++++
+ 8 files changed, 201 insertions(+), 136 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
 
 -- 
-Jerome
+2.25.1
+
