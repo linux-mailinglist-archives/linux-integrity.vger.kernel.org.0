@@ -2,91 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB46D200605
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2020 12:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBFD2008EF
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2020 14:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732225AbgFSKHl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Jun 2020 06:07:41 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53236 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732048AbgFSKHl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Jun 2020 06:07:41 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 9AE8FB048;
-        Fri, 19 Jun 2020 10:07:38 +0000 (UTC)
-Date:   Fri, 19 Jun 2020 12:07:37 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Bruno Meneguele <bmeneg@redhat.com>, ltp@lists.linux.it,
+        id S1730785AbgFSMoO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Jun 2020 08:44:14 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12174 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729367AbgFSMoN (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 19 Jun 2020 08:44:13 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05JCXiEx051063;
+        Fri, 19 Jun 2020 08:44:04 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31runckdpt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Jun 2020 08:44:04 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05JCYDCj053630;
+        Fri, 19 Jun 2020 08:44:04 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31runckdp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Jun 2020 08:44:03 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05JCZ54g012883;
+        Fri, 19 Jun 2020 12:44:02 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 31r0dvs272-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Jun 2020 12:44:01 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05JCgfxb60358958
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Jun 2020 12:42:41 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C4B874203F;
+        Fri, 19 Jun 2020 12:43:59 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A172B42045;
+        Fri, 19 Jun 2020 12:43:58 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.188.214])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 19 Jun 2020 12:43:58 +0000 (GMT)
+Message-ID: <1592570638.17802.8.camel@linux.ibm.com>
+Subject: Re: [LTP v2 1/1] ima_tpm.sh: Fix for calculating boot aggregate
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>, Bruno Meneguele <bmeneg@redhat.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>, ltp@lists.linux.it,
         Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Petr Cervinka <pcervinka@suse.com>,
         Cyril Hrubis <chrubis@suse.cz>,
         linux-integrity@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
         Maurizio Drocco <maurizio.drocco@ibm.com>
-Subject: Re: [LTP v2 1/1] ima_tpm.sh: Fix for calculating boot aggregate
-Message-ID: <20200619100737.GB18704@dell5510>
-Reply-To: Petr Vorel <pvorel@suse.cz>
+Date:   Fri, 19 Jun 2020 08:43:58 -0400
+In-Reply-To: <20200619082134.GB23036@dell5510>
 References: <20200527071434.28574-1-pvorel@suse.cz>
- <1590601280.16219.1.camel@linux.ibm.com>
- <20200528140747.GA8401@dell5510>
- <1590679145.4457.39.camel@linux.ibm.com>
- <20200528160527.GA27243@dell5510>
- <20200615194134.GF129694@glitch>
- <1592252491.11061.181.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
+         <1590601280.16219.1.camel@linux.ibm.com> <20200528140747.GA8401@dell5510>
+         <1590679145.4457.39.camel@linux.ibm.com> <20200528160527.GA27243@dell5510>
+         <20200615194134.GF129694@glitch> <1592252491.11061.181.camel@linux.ibm.com>
+         <20200617012148.hhpvxqov2py7fvvc@cantor> <20200617204500.GB40831@glitch>
+         <20200619082134.GB23036@dell5510>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1592252491.11061.181.camel@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-19_11:2020-06-19,2020-06-19 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=909
+ impostorscore=0 priorityscore=1501 mlxscore=0 spamscore=0 adultscore=0
+ malwarescore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ clxscore=1015 bulkscore=0 cotscore=-2147483648 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006190089
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi all,
+On Fri, 2020-06-19 at 10:21 +0200, Petr Vorel wrote:
+> Hi all,
+> 
+> ...
+> > > > I'd appreciate if someone could send me a TPM event log, the PCRs, and
+> > > > the associated IMA ascii_runtime_measurements "boot_aggregate" from a
+> > > > system with a discrete TPM 2.0 with PCRs 8 & 9 events.
+> 
+> 
+> > Maybe Maurizio already have it at hand?
+> I'd appreciate to have these files as well.
+> 
+> > I can try to setup a system with grub2+tpm to get the log with pcr 8 and
+> > 9 filled.
 
-> On Mon, 2020-06-15 at 16:41 -0300, Bruno Meneguele wrote:
-> > On Thu, May 28, 2020 at 06:05:27PM +0200, Petr Vorel wrote:
-> > > Hi Mimi,
-...
-> > > To sum that: my patch is required for any system without physical TPM with with
-> > > kernel with b59fda449cf0 + it also works for TPM 1.2 (regardless kernel
-> > > version), because TPM 1.2 supports sha1 only boot aggregate.
+Both RHEL 8 and Ubuntu 20.04 LTS have PCRs 8 & 9. Â I'll include one as
+another example for the tests/boot_aggregate.test.
 
-> > > But testing on kernel with b59fda449cf0 with TPM 2.0 is not only broken with
-> > > this patch, but also on current version in master, right? As you have
-> > > sha256:3fd5dc717f886ff7182526efc5edc3abb179a5aac1ab589c8ec888398233ae5 anyway.
-> > > So this patch would help at least testing on VM without vTPM.
+Mimi
 
-
-> > If we consider to delay this change until we have the ima-evm-utils
-> > released with the ima_boot_aggregate + make this test dependent on
-> > both ima-evm-utils and tsspcrread, would it be worth to SKIP the test in
-> > case a TPM2.0 sha256 bank is detected instead of FAIL? Thus we could
-> > have the test fixed for TPM1.2 && no-TPM cases until we get the full
-> > support for multiple banks?
-+1
-
-> As long as we're dealing with the "boot_aggregate", Maurizio just
-> posted a kernel patch for including PCR 8 & 9 in the boot_aggregate.
->  The existing IMA LTP "boot_aggregate" test is going to need to
-> support this change.
-I'm not sure if I did something wrong, but it looks to me that 'evmctl
-ima_boot_aggregate' does not provide backward compatibility with TPM 1.2.
-Or am I wrong?
-
-And given the fact that new evmctl is not released, I'd adapt the test just for
-TPM 1.2 && no-TPM as Bruno suggested (TCONF if
-/sys/class/tpm/tpm0/tpm_version_major presented and not 1, print info about TPM
-2.0 not yet supported otherwise).
-
-BTW what is the correct way for systems with more TPM (is there any? It looks
-it's possible [1]). Which of them is used? Should I loop over
-/sys/class/tpm/tpm*/tpm_version_major or just use
-/sys/class/tpm/tpm0/tpm_version_major?
-
-Kind regards,
-Petr
-
-[1] https://letstrust.de/archives/29-New-fun-fact!.html
