@@ -2,31 +2,30 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8891620039B
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2020 10:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB46D200605
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2020 12:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731206AbgFSIWg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Jun 2020 04:22:36 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46716 "EHLO mx2.suse.de"
+        id S1732225AbgFSKHl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Jun 2020 06:07:41 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53236 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731295AbgFSIVq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Jun 2020 04:21:46 -0400
+        id S1732048AbgFSKHl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 19 Jun 2020 06:07:41 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 652A7AC85;
-        Fri, 19 Jun 2020 08:21:35 +0000 (UTC)
-Date:   Fri, 19 Jun 2020 10:21:34 +0200
+        by mx2.suse.de (Postfix) with ESMTP id 9AE8FB048;
+        Fri, 19 Jun 2020 10:07:38 +0000 (UTC)
+Date:   Fri, 19 Jun 2020 12:07:37 +0200
 From:   Petr Vorel <pvorel@suse.cz>
-To:     Bruno Meneguele <bmeneg@redhat.com>
-Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, ltp@lists.linux.it,
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Bruno Meneguele <bmeneg@redhat.com>, ltp@lists.linux.it,
         Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Petr Cervinka <pcervinka@suse.com>,
         Cyril Hrubis <chrubis@suse.cz>,
         linux-integrity@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
         Maurizio Drocco <maurizio.drocco@ibm.com>
 Subject: Re: [LTP v2 1/1] ima_tpm.sh: Fix for calculating boot aggregate
-Message-ID: <20200619082134.GB23036@dell5510>
+Message-ID: <20200619100737.GB18704@dell5510>
 Reply-To: Petr Vorel <pvorel@suse.cz>
 References: <20200527071434.28574-1-pvorel@suse.cz>
  <1590601280.16219.1.camel@linux.ibm.com>
@@ -35,13 +34,11 @@ References: <20200527071434.28574-1-pvorel@suse.cz>
  <20200528160527.GA27243@dell5510>
  <20200615194134.GF129694@glitch>
  <1592252491.11061.181.camel@linux.ibm.com>
- <20200617012148.hhpvxqov2py7fvvc@cantor>
- <20200617204500.GB40831@glitch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-2
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200617204500.GB40831@glitch>
+In-Reply-To: <1592252491.11061.181.camel@linux.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
@@ -49,48 +46,47 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Hi all,
 
+> On Mon, 2020-06-15 at 16:41 -0300, Bruno Meneguele wrote:
+> > On Thu, May 28, 2020 at 06:05:27PM +0200, Petr Vorel wrote:
+> > > Hi Mimi,
 ...
-> > > I'd appreciate if someone could send me a TPM event log, the PCRs, and
-> > > the associated IMA ascii_runtime_measurements "boot_aggregate" from a
-> > > system with a discrete TPM 2.0 with PCRs 8 & 9 events.
+> > > To sum that: my patch is required for any system without physical TPM with with
+> > > kernel with b59fda449cf0 + it also works for TPM 1.2 (regardless kernel
+> > > version), because TPM 1.2 supports sha1 only boot aggregate.
+
+> > > But testing on kernel with b59fda449cf0 with TPM 2.0 is not only broken with
+> > > this patch, but also on current version in master, right? As you have
+> > > sha256:3fd5dc717f886ff7182526efc5edc3abb179a5aac1ab589c8ec888398233ae5 anyway.
+> > > So this patch would help at least testing on VM without vTPM.
 
 
-> Maybe Maurizio already have it at hand?
-I'd appreciate to have these files as well.
+> > If we consider to delay this change until we have the ima-evm-utils
+> > released with the ima_boot_aggregate + make this test dependent on
+> > both ima-evm-utils and tsspcrread, would it be worth to SKIP the test in
+> > case a TPM2.0 sha256 bank is detected instead of FAIL? Thus we could
+> > have the test fixed for TPM1.2 && no-TPM cases until we get the full
+> > support for multiple banks?
++1
 
-> I can try to setup a system with grub2+tpm to get the log with pcr 8 and
-> 9 filled.
+> As long as we're dealing with the "boot_aggregate", Maurizio just
+> posted a kernel patch for including PCR 8 & 9 in the boot_aggregate.
+>  The existing IMA LTP "boot_aggregate" test is going to need to
+> support this change.
+I'm not sure if I did something wrong, but it looks to me that 'evmctl
+ima_boot_aggregate' does not provide backward compatibility with TPM 1.2.
+Or am I wrong?
 
+And given the fact that new evmctl is not released, I'd adapt the test just for
+TPM 1.2 && no-TPM as Bruno suggested (TCONF if
+/sys/class/tpm/tpm0/tpm_version_major presented and not 1, print info about TPM
+2.0 not yet supported otherwise).
 
-> > > > > ...
-> > > > > > > > The ima-evm-utils next-testing branch has code to calculate the
-> > > > > > > > boot_aggregate based on multiple banks.
-> > > > > > > I see, 696bf0b ("ima-evm-utils: calculate the digests for multiple TPM banks")
-> > > > > > > I wonder whether it's reasonable trying to port that to ima_boot_aggregate.c or
-> > > > > > > just depend on evmctl. External dependencies are sometimes complicated, but for
-> > > > > > > IMA I incline to just require evmctl.
-
-> > > > > > Unlike TPM 1.2, the TPM 2.0 device driver doesn't export the TPM PCRs.
-> > > > > >  Not only would you have a dependency on ima-evm-utils, but also on a
-> > > > > > userspace application(s) for reading the TPM PCRs.  That dependency
-> > > > > > exists whether you're using evmctl to calculate the boot_aggregate or
-> > > > > > doing it yourself.
-> > > > > Hm, things get complicated.
-> > > > > Yep I remember your patch to skip verifying TPM 2.0 PCR values
-> > > > > https://patchwork.ozlabs.org/project/ltp/patch/1558041162.3971.2.camel@linux.ibm.com/
-> > > > > At least thanks to Jerry Snitselaar since v5.6 we have
-> > > > > /sys/class/tpm/tpm*/tpm_version_major. We could check this (+ try also
-> > > > > /sys/class/tpm/tpm0/device/description for older kernels).
-
-> > > > > BTW on my system there is also /sys/class/tpm/tpm0/ppi/version, which has 1.2,
-> > > > > not sure if it indicate TPM 1.2, but I wouldn't rely on that.
-
-
-> Missed this last paragraph.. but /sys/class/tpm/tpm0/ppi/version has
-> relation to the Physical Presence Interface version, which is the
-> communication interface between firmware and OS afaik, and doesn't
-> points to the TPM version: TPM2.0 may have PPI version 1.2 or 1.3.
-
+BTW what is the correct way for systems with more TPM (is there any? It looks
+it's possible [1]). Which of them is used? Should I loop over
+/sys/class/tpm/tpm*/tpm_version_major or just use
+/sys/class/tpm/tpm0/tpm_version_major?
 
 Kind regards,
 Petr
+
+[1] https://letstrust.de/archives/29-New-fun-fact!.html
