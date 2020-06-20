@@ -2,178 +2,363 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A4A201E3A
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Jun 2020 00:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA35C201F1E
+	for <lists+linux-integrity@lfdr.de>; Sat, 20 Jun 2020 02:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729612AbgFSWub (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Jun 2020 18:50:31 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:27090 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729577AbgFSWua (ORCPT
+        id S1730662AbgFTAUN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Jun 2020 20:20:13 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52280 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730500AbgFTAUN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Jun 2020 18:50:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592607028;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=asajOs/B7wU/35zztVXUrU53aHo3MNVOYGFjzslgDxI=;
-        b=UEoB+z2BfTWwKJwkR18pW00xwp8HCp699zIrTWcXZVkHwz29kfuxu6evRnu9hWs9IpUyBe
-        Baz6vlMoRIH1LRusG+OS/+cO560yRrR2Vuk7pGLQHm0tGjqexVtu0DsOjLrwYHpJ46zx5t
-        6c+f80A4QjkF7q/scMbw8rK4HMpp6Tg=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-418-IoklGAchN--zASFUOYVpqg-1; Fri, 19 Jun 2020 18:50:27 -0400
-X-MC-Unique: IoklGAchN--zASFUOYVpqg-1
-Received: by mail-qt1-f200.google.com with SMTP id c22so8314276qtp.9
-        for <linux-integrity@vger.kernel.org>; Fri, 19 Jun 2020 15:50:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=asajOs/B7wU/35zztVXUrU53aHo3MNVOYGFjzslgDxI=;
-        b=RlHE/dzNGJWXRPb+BE7a+W7TGw3OzSYyPIV4CiIDXbKBHTBjp01szNltPlcmvg/0G6
-         MfcmME01eK/dfZMW6SSlOPAj/7PRmaymu5UwPLp4cfoVOWwKlqxAQOFA8tgCnOXe7xWx
-         XTiAN7Ew9OQfmmYVx7k0h7NQJ9SVV2Q30c53b407f8T4tiGBVi8Vw91bEbYiKFMdmBI+
-         V1OVfrNE5a7ntcbI3pP0sEonGhM+6UnnHHmQu+fc6DOIDTeRuPVVyjrNZlEoUMLF0eQO
-         Rqwr843OZZW4Xd31RFnbr1aiFO+87UlyyCK2aORGGpoN1VlHButA1LzIY9F+HaW5wpV/
-         1d+g==
-X-Gm-Message-State: AOAM532Fkyli4EsRTQ91zZ5jk09ICsfQCl4iaGhA07ecV/8KUGF5vfCv
-        OKLPUp3oSOgDjAej2ZuM6cl3w5hfT94NEBsZAY0M/NVneUbfpDLkK/Y7q5MBWoazvV/zyCGiajv
-        xBjDVA20iwN4z7VQMnXfHJyEiBy+6
-X-Received: by 2002:aed:3768:: with SMTP id i95mr5787902qtb.58.1592607026521;
-        Fri, 19 Jun 2020 15:50:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzekmtu/p8vlcbNmM6YAFuhRMVIDjgvJysKokyrmv893YX5RrDch70n9+ZFcWXQ05B0XCMxpw==
-X-Received: by 2002:aed:3768:: with SMTP id i95mr5787886qtb.58.1592607026271;
-        Fri, 19 Jun 2020 15:50:26 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id h19sm7929507qkj.109.2020.06.19.15.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2020 15:50:25 -0700 (PDT)
-Date:   Fri, 19 Jun 2020 15:50:24 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     "Wiseman, Monty (GE Research, US)" <monty.wiseman@ge.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS for TPM keys
-Message-ID: <20200619225024.kmhdqe25cmgaq5e4@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-References: <1575781600.14069.8.camel@HansenPartnership.com>
- <1575781746.14069.11.camel@HansenPartnership.com>
- <194d8ba601b9ecb43e812445729c6270e9f32162.camel@infradead.org>
- <26ED11907FC0F446BB0296B5357EEF0E316CDBB0@CINMBCNA02.e2k.ad.ge.com>
+        Fri, 19 Jun 2020 20:20:13 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05K01mlt030498;
+        Fri, 19 Jun 2020 20:19:17 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31s7et0f4w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Jun 2020 20:19:17 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05K02P9F031972;
+        Fri, 19 Jun 2020 20:19:16 -0400
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31s7et0f4f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Jun 2020 20:19:16 -0400
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05K05xH6024571;
+        Sat, 20 Jun 2020 00:19:15 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03wdc.us.ibm.com with ESMTP id 31q8km6tqy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 20 Jun 2020 00:19:15 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05K0JEFi52363692
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 20 Jun 2020 00:19:14 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB268C6055;
+        Sat, 20 Jun 2020 00:19:14 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B47AC6057;
+        Sat, 20 Jun 2020 00:19:07 +0000 (GMT)
+Received: from morokweng.localdomain (unknown [9.163.93.234])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Sat, 20 Jun 2020 00:19:06 +0000 (GMT)
+References: <20200618071045.471131-1-prsriva@linux.microsoft.com> <20200618071045.471131-2-prsriva@linux.microsoft.com>
+User-agent: mu4e 1.2.0; emacs 26.3
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Prakhar Srivastava <prsriva@linux.microsoft.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, robh+dt@kernel.org, frowand.list@gmail.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, vincenzo.frascino@arm.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, james.morse@arm.com,
+        bhsharma@redhat.com, mbrugger@suse.com, hsinyi@chromium.org,
+        tao.li@vivo.com, christophe.leroy@c-s.fr,
+        gregkh@linuxfoundation.org, nramas@linux.microsoft.com,
+        tusharsu@linux.microsoft.com, balajib@linux.microsoft.com
+Subject: Re: [V2 PATCH 1/3] Refactoring powerpc code for carrying over IMA measurement logs, to move non architecture specific code to security/ima.
+In-reply-to: <20200618071045.471131-2-prsriva@linux.microsoft.com>
+Date:   Fri, 19 Jun 2020 21:19:03 -0300
+Message-ID: <87o8per3m0.fsf@morokweng.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <26ED11907FC0F446BB0296B5357EEF0E316CDBB0@CINMBCNA02.e2k.ad.ge.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-19_22:2020-06-19,2020-06-19 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ clxscore=1011 adultscore=0 priorityscore=1501 phishscore=0 mlxscore=0
+ suspectscore=2 mlxlogscore=999 cotscore=-2147483648 impostorscore=0
+ malwarescore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006190166
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Jun 19 20, Wiseman, Monty (GE Research, US) wrote:
->James,
->
->> -----Original Message-----
->> From: David Woodhouse <dwmw2@infradead.org>
->> Sent: December 9, 2019 03:56 AM
->> To: James Bottomley <James.Bottomley@HansenPartnership.com>; linux-
->> integrity@vger.kernel.org; Wiseman, Monty (GE Global Research, US)
->> <monty.wiseman@ge.com>
->> Cc: Mimi Zohar <zohar@linux.ibm.com>; Jarkko Sakkinen
->> <jarkko.sakkinen@linux.intel.com>
->> Subject: EXT: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS for TPM
->> keys
->>
->> On Sat, 2019-12-07 at 21:09 -0800, James Bottomley wrote:
->> > The TCG has defined an OID prefix "2.23.133.10.1" for the various TPM
->> > key uses.  We've defined three of the available numbers:
->> >
->> > 2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key (Usually
->> > 		RSA2048 or Elliptic Curve) which can be imported by a
->> > 		TPM2_Load() operation.
->> >
->> > 2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key (Usually
->> > 		RSA2048 or Elliptic Curve) which can be imported by a
->> > 		TPM2_Import() operation.
->> >
->> > Both loadable and importable keys are specific to a given TPM, the
->> > difference is that a loadable key is wrapped with the symmetric
->> > secret, so must have been created by the TPM itself.  An importable
->> > key is wrapped with a DH shared secret, and may be created without
->> > access to the TPM provided you know the public part of the parent key.
->> >
->> > 2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to 128
->> > 		bytes) which is sealed by the TPM.  It usually
->> > 		represents a symmetric key and must be unsealed before
->> > 		use.
->>
->> Do we still not have an official reference for these that you can
->> provide in the commit or the file itself?
->>
->> It would be very nice to have something more than a verbal assurance
->> that they're in Monty's spreadsheet.
->>
->>
->> > Signed-off-by: James Bottomley
->> <James.Bottomley@HansenPartnership.com>
->> > ---
->> >  include/linux/oid_registry.h | 5 +++++
->> >  1 file changed, 5 insertions(+)
->> >
->> > diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
->> > index 657d6bf2c064..a4cee888f9b0 100644
->> > --- a/include/linux/oid_registry.h
->> > +++ b/include/linux/oid_registry.h
->> > @@ -107,6 +107,11 @@ enum OID {
->> >  	OID_gostTC26Sign512B,		/* 1.2.643.7.1.2.1.2.2 */
->> >  	OID_gostTC26Sign512C,		/* 1.2.643.7.1.2.1.2.3 */
->> >
->> > +	/* TCG defined OIDS for TPM based keys */
->> > +	OID_TPMLoadableKey,		/* 2.23.133.10.1.3 */
->> > +	OID_TPMImporableKey,		/* 2.23.133.10.1.4 */
->> > +	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
->> > +
->> >  	OID__NR
->> >  };
->> >
->Bring back an old thread.  We are finally getting the TCG OID registry ready
->to publish and wanted to verifier the OIDs you requested and we assigned
->above.
->
->I can find 2.23.133.10.1.3 TPM Loadable key in the tpm2-tss-engine project.
->
->I do not see this one, nor the others list above in the kernel source. Did
->these ever
->get used? If so, where and can you provide a use case for a relying party?
->
->Also, I have in my local spreadsheet the following which I believe were just
->drafts and never assigned. Please confirm.
->2.23.133.10.1.1.2
->Secondary Identifier: tcg-wellKnownAuthValue
->
->This in intended to be bitmap of well-known authValues. This is not intended
->to contain an actual authValue. For example. Bit 1 means and authValue of
->hashsize all zeros, Bit 2 means an authValue of hashsize all NULLs, etc.
->[Note: Bit 1 is lsb in this notation]
->
->2.23.133.10.1.1.3
->No secondary identifier or description
->
->2.23.133.10.1.1.4
->No secondary identifier or description
->
->
->Monty Wiseman
->Principal Engineer, Security Architecture
->Controls & Optimization
 
-Hi Monty,
+Prakhar Srivastava <prsriva@linux.microsoft.com> writes:
 
-The patchset is still being reviewed and discussed:
+> Powerpc has support to carry over the IMA measurement logs. Refatoring the
+> non-architecture specific code out of arch/powerpc and into security/ima.
+>
+> The code adds support for reserving and freeing up of memory for IMA measurement
+> logs.
 
-https://lore.kernel.org/linux-integrity/20200616160229.8018-3-James.Bottomley@HansenPartnership.com/
+Last week, Mimi provided this feedback:
 
+"From your patch description, this patch should be broken up.  Moving
+the non-architecture specific code out of powerpc should be one patch.
+ Additional support should be in another patch.  After each patch, the
+code should work properly."
+
+That's not what you do here. You move the code, but you also make other
+changes at the same time. This has two problems:
+
+1. It makes the patch harder to review, because it's very easy to miss a
+   change.
+
+2. If in the future a git bisect later points to this patch, it's not
+   clear whether the problem is because of the code movement, or because
+   of the other changes.
+
+When you move code, ideally the patch should only make the changes
+necessary to make the code work at its new location. The patch which
+does code movement should not cause any change in behavior.
+
+Other changes should go in separate patches, either before or after the
+one moving the code.
+
+More comments below.
+
+>
+> ---
+>  arch/powerpc/include/asm/ima.h     |  10 ---
+>  arch/powerpc/kexec/ima.c           | 126 ++---------------------------
+>  security/integrity/ima/ima_kexec.c | 116 ++++++++++++++++++++++++++
+>  3 files changed, 124 insertions(+), 128 deletions(-)
+>
+> diff --git a/arch/powerpc/include/asm/ima.h b/arch/powerpc/include/asm/ima.h
+> index ead488cf3981..c29ec86498f8 100644
+> --- a/arch/powerpc/include/asm/ima.h
+> +++ b/arch/powerpc/include/asm/ima.h
+> @@ -4,15 +4,6 @@
+>
+>  struct kimage;
+>
+> -int ima_get_kexec_buffer(void **addr, size_t *size);
+> -int ima_free_kexec_buffer(void);
+> -
+> -#ifdef CONFIG_IMA
+> -void remove_ima_buffer(void *fdt, int chosen_node);
+> -#else
+> -static inline void remove_ima_buffer(void *fdt, int chosen_node) {}
+> -#endif
+> -
+>  #ifdef CONFIG_IMA_KEXEC
+>  int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
+>  			      size_t size);
+> @@ -22,7 +13,6 @@ int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node);
+>  static inline int setup_ima_buffer(const struct kimage *image, void *fdt,
+>  				   int chosen_node)
+>  {
+> -	remove_ima_buffer(fdt, chosen_node);
+>  	return 0;
+>  }
+
+This is wrong. Even if the currently running kernel doesn't have
+CONFIG_IMA_KEXEC, it should remove the IMA buffer property and memory
+reservation from the FDT that is being prepared for the next kernel.
+
+This is because the IMA kexec buffer is useless for the next kernel,
+regardless of whether the current kernel supports CONFIG_IMA_KEXEC or
+not. Keeping it around would be a waste of memory.
+
+> @@ -179,13 +64,18 @@ int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node)
+>  	int ret, addr_cells, size_cells, entry_size;
+>  	u8 value[16];
+>
+> -	remove_ima_buffer(fdt, chosen_node);
+
+This is wrong, for the same reason stated above.
+
+>  	if (!image->arch.ima_buffer_size)
+>  		return 0;
+>
+> -	ret = get_addr_size_cells(&addr_cells, &size_cells);
+> -	if (ret)
+> +	ret = fdt_address_cells(fdt, chosen_node);
+> +	if (ret < 0)
+> +		return ret;
+> +	addr_cells = ret;
+> +
+> +	ret = fdt_size_cells(fdt, chosen_node);
+> +	if (ret < 0)
+>  		return ret;
+> +	size_cells = ret;
+>
+>  	entry_size = 4 * (addr_cells + size_cells);
+>
+
+I liked this change. Thanks! I agree it's better to use
+fdt_address_cells() and fdt_size_cells() here.
+
+But it should be in a separate patch. Either before or after the one
+moving the code.
+
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index 121de3e04af2..e1e6d6154015 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -10,8 +10,124 @@
+>  #include <linux/seq_file.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/kexec.h>
+> +#include <linux/of.h>
+> +#include <linux/memblock.h>
+> +#include <linux/libfdt.h>
+>  #include "ima.h"
+>
+> +static int get_addr_size_cells(int *addr_cells, int *size_cells)
+> +{
+> +	struct device_node *root;
+> +
+> +	root = of_find_node_by_path("/");
+> +	if (!root)
+> +		return -EINVAL;
+> +
+> +	*addr_cells = of_n_addr_cells(root);
+> +	*size_cells = of_n_size_cells(root);
+> +
+> +	of_node_put(root);
+> +
+> +	return 0;
+> +}
+> +
+> +static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
+> +			       size_t *size)
+> +{
+> +	int ret, addr_cells, size_cells;
+> +
+> +	ret = get_addr_size_cells(&addr_cells, &size_cells);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (len < 4 * (addr_cells + size_cells))
+> +		return -ENOENT;
+> +
+> +	*addr = of_read_number(prop, addr_cells);
+> +	*size = of_read_number(prop + 4 * addr_cells, size_cells);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+> + * @addr:	On successful return, set to point to the buffer contents.
+> + * @size:	On successful return, set to the buffer size.
+> + *
+> + * Return: 0 on success, negative errno on error.
+> + */
+> +int ima_get_kexec_buffer(void **addr, size_t *size)
+> +{
+> +	int ret, len;
+> +	unsigned long tmp_addr;
+> +	size_t tmp_size;
+> +	const void *prop;
+> +
+> +	prop = of_get_property(of_chosen, "linux,ima-kexec-buffer", &len);
+> +	if (!prop)
+> +		return -ENOENT;
+> +
+> +	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*addr = __va(tmp_addr);
+> +	*size = tmp_size;
+> +
+> +	return 0;
+> +}
+
+The functions above were moved without being changed. Good.
+
+> +/**
+> + * ima_free_kexec_buffer - free memory used by the IMA buffer
+> + */
+> +int ima_free_kexec_buffer(void)
+> +{
+> +	int ret;
+> +	unsigned long addr;
+> +	size_t size;
+> +	struct property *prop;
+> +
+> +	prop = of_find_property(of_chosen, "linux,ima-kexec-buffer", NULL);
+> +	if (!prop)
+> +		return -ENOENT;
+> +
+> +	ret = do_get_kexec_buffer(prop->value, prop->length, &addr, &size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = of_remove_property(of_chosen, prop);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return memblock_free(__pa(addr), size);
+
+Here you added a __pa() call. Do you store a virtual address in
+linux,ima-kexec-buffer property? Doesn't it make more sense to store a
+physical address?
+
+Even if making this change is the correct thing to do, it should be a
+separate patch, unless it can't be avoided. And if that is the case,
+then it should be explained in the commit message.
+
+> +
+> +}
+> +
+> +/**
+> + * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
+> + *
+> + * The IMA measurement buffer is of no use to a subsequent kernel, so we always
+> + * remove it from the device tree.
+> + */
+> +void remove_ima_buffer(void *fdt, int chosen_node)
+> +{
+> +	int ret, len;
+> +	unsigned long addr;
+> +	size_t size;
+> +	const void *prop;
+> +
+> +	prop = fdt_getprop(fdt, chosen_node, "linux,ima-kexec-buffer", &len);
+> +	if (!prop)
+> +		return;
+> +
+> +	do_get_kexec_buffer(prop, len, &addr, &size);
+> +	ret = fdt_delprop(fdt, chosen_node, "linux,ima-kexec-buffer");
+> +	if (ret < 0)
+> +		return;
+> +
+> +	memblock_free(addr, size);
+> +}
+
+Here is another function that changed when moved. This one I know to be
+wrong. You're confusing the purposes of remove_ima_buffer() and
+ima_free_kexec_buffer().
+
+You did send me a question about them nearly three weeks ago which I
+only answered today, so I apologize. Also, their names could more
+clearly reflect their differences, so it's bad naming on my part.
+
+With IMA kexec buffers, there are two kernels (and thus their two
+respective, separate device trees) to be concerned about:
+
+1. the currently running kernel, which uses the live device tree
+(accessed with the of_* functions) and the memblock subsystem;
+
+2. the kernel which is being loaded by kexec, which will use the FDT
+blob being passed around as argument to these functions, and the memory
+reservations in the memory reservation table of the FDT blob.
+
+ima_free_kexec_buffer() is used by IMA in the currently running kernel.
+Therefore the device tree it is concerned about is the live one, and
+thus uses the of_* functions to access it. And uses memblock to change
+the memory reservation.
+
+remove_ima_buffer() on the other hand is used by the kexec code to
+prepare an FDT blob for the kernel that is being loaded. It should not
+make any changes to live device tree, nor to memblock allocations. It
+should only make changes to the FDT blob.
+
+--
+Thiago Jung Bauermann
+IBM Linux Technology Center
