@@ -2,164 +2,205 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9319201F47
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Jun 2020 02:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398CB2024CE
+	for <lists+linux-integrity@lfdr.de>; Sat, 20 Jun 2020 17:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730982AbgFTAm4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Jun 2020 20:42:56 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34846 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730293AbgFTAmz (ORCPT
+        id S1725838AbgFTPgn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 20 Jun 2020 11:36:43 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:33088 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725794AbgFTPgn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Jun 2020 20:42:55 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05K0WSwk183261;
-        Fri, 19 Jun 2020 20:42:09 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31s0pbagqm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Jun 2020 20:42:09 -0400
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05K0WcPq186459;
-        Fri, 19 Jun 2020 20:42:08 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31s0pbagqa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Jun 2020 20:42:08 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05K0VFD0005552;
-        Sat, 20 Jun 2020 00:42:07 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma03dal.us.ibm.com with ESMTP id 31q6c6faep-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 20 Jun 2020 00:42:07 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05K0g61K49938852
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 20 Jun 2020 00:42:06 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A88E7112062;
-        Sat, 20 Jun 2020 00:42:06 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3890A112061;
-        Sat, 20 Jun 2020 00:41:54 +0000 (GMT)
-Received: from morokweng.localdomain (unknown [9.163.93.234])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Sat, 20 Jun 2020 00:41:53 +0000 (GMT)
-References: <20200618071045.471131-1-prsriva@linux.microsoft.com> <20200618071045.471131-3-prsriva@linux.microsoft.com>
-User-agent: mu4e 1.2.0; emacs 26.3
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Prakhar Srivastava <prsriva@linux.microsoft.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, robh+dt@kernel.org, frowand.list@gmail.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, pasha.tatashin@soleen.com, allison@lohutok.net,
-        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
-        tglx@linutronix.de, vincenzo.frascino@arm.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, james.morse@arm.com,
-        bhsharma@redhat.com, mbrugger@suse.com, hsinyi@chromium.org,
-        tao.li@vivo.com, christophe.leroy@c-s.fr,
-        gregkh@linuxfoundation.org, nramas@linux.microsoft.com,
-        tusharsu@linux.microsoft.com, balajib@linux.microsoft.com
-Subject: Re: [V2 PATCH 2/3] dt-bindings: chosen: Document ima-kexec-buffer
-In-reply-to: <20200618071045.471131-3-prsriva@linux.microsoft.com>
-Date:   Fri, 19 Jun 2020 21:41:49 -0300
-Message-ID: <87mu4yr2k2.fsf@morokweng.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-19_22:2020-06-19,2020-06-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- suspectscore=0 priorityscore=1501 cotscore=-2147483648 lowpriorityscore=0
- clxscore=1015 spamscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006200000
+        Sat, 20 Jun 2020 11:36:43 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id ADE648EE0DF;
+        Sat, 20 Jun 2020 08:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1592667402;
+        bh=IAzLA4Nw4byGvLCmmgYTlb4E4SvgBzctr+lJ/WQJsS8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=GQGGDux8RfdyX0JucAoSdjaYW/j1jxROCP2xxLa7qJaNv/wkAf5eLbhxA9N+uRvVG
+         RaybokTnHd0eZMMgYOfGnr43BLWsonTScqR73W+OqCbmaPZuVz5EOyu7JwkywlMYZM
+         SnH0VGymEqbpUl6iBjO5mEeMrhsGEd6kDjB+8xrc=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 57w7gC6kHhlY; Sat, 20 Jun 2020 08:36:42 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 421B48EE079;
+        Sat, 20 Jun 2020 08:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1592667402;
+        bh=IAzLA4Nw4byGvLCmmgYTlb4E4SvgBzctr+lJ/WQJsS8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=GQGGDux8RfdyX0JucAoSdjaYW/j1jxROCP2xxLa7qJaNv/wkAf5eLbhxA9N+uRvVG
+         RaybokTnHd0eZMMgYOfGnr43BLWsonTScqR73W+OqCbmaPZuVz5EOyu7JwkywlMYZM
+         SnH0VGymEqbpUl6iBjO5mEeMrhsGEd6kDjB+8xrc=
+Message-ID: <1592667400.3583.10.camel@HansenPartnership.com>
+Subject: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS for TPM keys
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     "Wiseman, Monty (GE Research, US)" <monty.wiseman@ge.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Date:   Sat, 20 Jun 2020 08:36:40 -0700
+In-Reply-To: <26ED11907FC0F446BB0296B5357EEF0E316CDBB0@CINMBCNA02.e2k.ad.ge.com>
+References: <1575781600.14069.8.camel@HansenPartnership.com>
+         <1575781746.14069.11.camel@HansenPartnership.com>
+         <194d8ba601b9ecb43e812445729c6270e9f32162.camel@infradead.org>
+         <26ED11907FC0F446BB0296B5357EEF0E316CDBB0@CINMBCNA02.e2k.ad.ge.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, 2020-06-19 at 20:45 +0000, Wiseman, Monty (GE Research, US)
+wrote:
+> James,
+> 
+> > -----Original Message-----
+> > From: David Woodhouse <dwmw2@infradead.org>
+> > Sent: December 9, 2019 03:56 AM
+> > To: James Bottomley <James.Bottomley@HansenPartnership.com>; linux-
+> > integrity@vger.kernel.org; Wiseman, Monty (GE Global Research, US)
+> > <monty.wiseman@ge.com>
+> > Cc: Mimi Zohar <zohar@linux.ibm.com>; Jarkko Sakkinen
+> > <jarkko.sakkinen@linux.intel.com>
+> > Subject: EXT: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS
+> > for TPM
+> > keys
+> > 
+> > On Sat, 2019-12-07 at 21:09 -0800, James Bottomley wrote:
+> > > The TCG has defined an OID prefix "2.23.133.10.1" for the various
+> > > TPM
+> > > key uses.  We've defined three of the available numbers:
+> > > 
+> > > 2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key
+> > > (Usually
+> > > 		RSA2048 or Elliptic Curve) which can be imported by a
+> > > 		TPM2_Load() operation.
+> > > 
+> > > 2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key
+> > > (Usually
+> > > 		RSA2048 or Elliptic Curve) which can be imported by a
+> > > 		TPM2_Import() operation.
+> > > 
+> > > Both loadable and importable keys are specific to a given TPM,
+> > > the
+> > > difference is that a loadable key is wrapped with the symmetric
+> > > secret, so must have been created by the TPM itself.  An
+> > > importable
+> > > key is wrapped with a DH shared secret, and may be created
+> > > without
+> > > access to the TPM provided you know the public part of the parent
+> > > key.
+> > > 
+> > > 2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to
+> > > 128
+> > > 		bytes) which is sealed by the TPM.  It usually
+> > > 		represents a symmetric key and must be unsealed before
+> > > 		use.
+> > 
+> > Do we still not have an official reference for these that you can
+> > provide in the commit or the file itself?
+> > 
+> > It would be very nice to have something more than a verbal
+> > assurance
+> > that they're in Monty's spreadsheet.
+> > 
+> > 
+> > > Signed-off-by: James Bottomley
+> > 
+> > <James.Bottomley@HansenPartnership.com>
+> > > ---
+> > >  include/linux/oid_registry.h | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > > 
+> > > diff --git a/include/linux/oid_registry.h
+> > > b/include/linux/oid_registry.h
+> > > index 657d6bf2c064..a4cee888f9b0 100644
+> > > --- a/include/linux/oid_registry.h
+> > > +++ b/include/linux/oid_registry.h
+> > > @@ -107,6 +107,11 @@ enum OID {
+> > >  	OID_gostTC26Sign512B,		/*
+> > > 1.2.643.7.1.2.1.2.2 */
+> > >  	OID_gostTC26Sign512C,		/*
+> > > 1.2.643.7.1.2.1.2.3 */
+> > > 
+> > > +	/* TCG defined OIDS for TPM based keys */
+> > > +	OID_TPMLoadableKey,		/* 2.23.133.10.1.3 */
+> > > +	OID_TPMImporableKey,		/* 2.23.133.10.1.4
+> > > */
+> > > +	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
+> > > +
+> > >  	OID__NR
+> > >  };
+> > > 
+> 
+> Bring back an old thread.  We are finally getting the TCG OID
+> registry ready to publish and wanted to verifier the OIDs you
+> requested and we assigned
+> above.
+> 
+> I can find 2.23.133.10.1.3 TPM Loadable key in the tpm2-tss-engine
+> project.
+> 
+> I do not see this one, nor the others list above in the kernel
+> source. Did these ever get used? If so, where and can you provide a
+> use case for a relying party?
 
-Prakhar Srivastava <prsriva@linux.microsoft.com> writes:
+Yes, the openssl_tpm2_engine project.  It's a more sophisticated
+version of the above:
 
-> Integrity measurement architecture(IMA) validates if files
-> have been accidentally or maliciously altered, both remotely and
-> locally, appraise a file's measurement against a "good" value stored
-> as an extended attribute, and enforce local file integrity.
->
-> IMA also measures singatures of kernel and initrd during kexec along with
-> the command line used for kexec.
-> These measurements are critical to verify the seccurity posture of the OS.
->
-> Resering memory and adding the memory information to a device tree node
-> acts as the mechanism to carry over IMA measurement logs.
->
-> Update devicetree documentation to reflect the addition of new property
-> under the chosen node.
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/
 
-Thank you for writing this documentation patch. It's something I should
-have done when I added the powerpc IMA kexec support.
+The use case is that we can use the same ASN.1 format for data entities
+that respond to different TPM2 commands, so:
 
-You addressed Rob Herring's comments regarding the commit message, but
-not the ones regarding the patch contents.
+2.23.133.10.1.3: Public and Private parts used as input to TPM2_Load
+which produce a keyhandle for public key operations
 
-When posting a new version of the patches, make sure to address all
-comments made so far. Addressing a comment doesn't necessarily mean
-implementing the requested change. If you don't then you should at least
-explain why you chose a different path.
+2.23.133.10.1.4: Public and Private parts used as input to TPM2_Import
+which produce a key handle for public key operations
 
-I mention it because this has occurred before with this patch series,
-and it's hard to make forward progress if review comments get ignored.
+2.23.133.10.1.5: Public and Private parts used as input to TPM2_Load
+which produce a keyandle for TPM2_Unseal
 
-> ---
->  Documentation/devicetree/bindings/chosen.txt | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/chosen.txt b/Documentation/devicetree/bindings/chosen.txt
-> index 45e79172a646..a15f70c007ef 100644
-> --- a/Documentation/devicetree/bindings/chosen.txt
-> +++ b/Documentation/devicetree/bindings/chosen.txt
-> @@ -135,3 +135,20 @@ e.g.
->  		linux,initrd-end = <0x82800000>;
->  	};
->  };
-> +
-> +linux,ima-kexec-buffer
-> +----------------------
-> +
-> +This property(currently used by powerpc, arm64) holds the memory range,
+I believe we discussed the fact that we'd need several OIDs for the
+various key formats which are the same data structure but are used
+differently.  However, the only other use I can think of for the ASN.1
+structure would be importable unsealed data.  I don't think anyone's
+yet implemented that, but I can see there might be a use case and it
+would be convenient to have a published OID for it, say
+2.23.133.10.1.6?
 
-space before the parenthesis.
+> Also, I have in my local spreadsheet the following which I believe
+> were just drafts and never assigned. Please confirm.
+> 2.23.133.10.1.1.2
+> Secondary Identifier: tcg-wellKnownAuthValue
+> 
+> This in intended to be bitmap of well-known authValues. This is not
+> intended to contain an actual authValue. For example. Bit 1 means and
+> authValue of hashsize all zeros, Bit 2 means an authValue of hashsize
+> all NULLs,
+> etc.
+> [Note: Bit 1 is lsb in this notation]
+> 
+> 2.23.133.10.1.1.3
+> No secondary identifier or description
+> 
+> 2.23.133.10.1.1.4
+> No secondary identifier or description
 
-> +the address and the size, of the IMA measurement logs that are being carried
+I don't think they were ever anything to do with the TPM engine
+projects.  They were just something you already had in the spreadsheet
+at the time, which is why you told me to start at ...10.1.3
 
-Maybe it's because English isn't my first language, but IMHO it's
-clearer if "the address and the size" is between parentheses rather than
-commas.
+James
 
-> +over to the kexec session.
-
-I don't think there's a "kexec session", but I'm not sure what a good
-term would be. "linux,booted-from-kexec" uses "new kernel" so perhaps
-that's a good option to use instead of "kexec session".
-
-> +
-> +/ {
-> +	chosen {
-> +		linux,ima-kexec-buffer = <0x9 0x82000000 0x0 0x00008000>;
-> +	};
-> +};
-> +
-> +This porperty does not represent real hardware, but the memory allocated for
-> +carrying the IMA measurement logs. The address and the suze are expressed in
-> +#address-cells and #size-cells, respectively of the root node.
-
-
---
-Thiago Jung Bauermann
-IBM Linux Technology Center
