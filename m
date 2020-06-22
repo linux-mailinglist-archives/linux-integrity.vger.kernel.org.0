@@ -2,88 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 522E8204297
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jun 2020 23:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E185E2042F7
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jun 2020 23:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730609AbgFVVXb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jun 2020 17:23:31 -0400
-Received: from mga12.intel.com ([192.55.52.136]:2469 "EHLO mga12.intel.com"
+        id S1730576AbgFVVtf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jun 2020 17:49:35 -0400
+Received: from mga11.intel.com ([192.55.52.93]:14723 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730460AbgFVVXa (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jun 2020 17:23:30 -0400
-IronPort-SDR: dpFSCi1544XuAKCIGfSov51p5HubZ1RFSF97AyqncOx3jTg3Mhm3x0Mc1afnj6ftv87YqcasMo
- G96M1rx0B1Eg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="123548596"
+        id S1730527AbgFVVtf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 22 Jun 2020 17:49:35 -0400
+IronPort-SDR: JTFxKTYojH5mEBs6RM7CZrfhkJB2rsHfbUOFIJm1KhcIFlFvstOHR+KS/SBsP9Is9Hd+ZIacWU
+ LekfCDhbqnMA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="142147317"
 X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="123548596"
+   d="scan'208";a="142147317"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 14:23:29 -0700
-IronPort-SDR: YU7fP6RdkdXBthLv3FK4h2DNntPCXOCmcZe053PnGOAcQrgdaPS3xyaH4oySFH+lnqaZBSospj
- 70roBrLzBkVw==
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 14:49:33 -0700
+IronPort-SDR: l3+aCNn5cePJQnTRUQM4M2UMmP5EjvVZ6GmDgHmqx1h3pHz2i1GNcq7Fihp7D5jhue8nvCH4Aq
+ 4ZBVhrF46cBw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="278894306"
-Received: from scheller-mobl.ger.corp.intel.com (HELO localhost) ([10.252.33.117])
-  by orsmga006.jf.intel.com with ESMTP; 22 Jun 2020 14:23:25 -0700
+   d="scan'208";a="263119058"
+Received: from jczajka-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.133])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Jun 2020 14:49:24 -0700
+Date:   Tue, 23 Jun 2020 00:49:22 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     pengfei.xu@intel.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        Joey Pabalinas <joeypabalinas@gmail.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] selftests: tpm: Use /bin/sh instead of /bin/bash
-Date:   Tue, 23 Jun 2020 00:20:22 +0300
-Message-Id: <20200622212034.20624-4-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200622212034.20624-1-jarkko.sakkinen@linux.intel.com>
-References: <20200622212034.20624-1-jarkko.sakkinen@linux.intel.com>
+To:     amirmizi6@gmail.com
+Cc:     Eyal.Cohen@nuvoton.com, oshrialkoby85@gmail.com,
+        alexander.steffen@infineon.com, robh+dt@kernel.org,
+        peterhuewe@gmx.de, christophe-h.richard@st.com, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
+Subject: Re: [PATCH v11 0/8] Add tpm i2c ptp driver
+Message-ID: <20200622214922.GC22727@linux.intel.com>
+References: <20200618134344.243537-1-amirmizi6@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200618134344.243537-1-amirmizi6@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-It's better to use /bin/sh instead of /bin/bash in order to run the tests
-in the BusyBox shell.
+On Thu, Jun 18, 2020 at 04:43:35PM +0300, amirmizi6@gmail.com wrote:
+>  - Jarkko Sakkinen:
+>         https://lore.kernel.org/patchwork/patch/1252428/
+>         https://lore.kernel.org/patchwork/patch/1252422/
+>         https://lore.kernel.org/patchwork/patch/1252424/
 
-Fixes: 6ea3dfe1e073 ("selftests: add TPM 2.0 tests")
-Cc: stable@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- tools/testing/selftests/tpm2/test_smoke.sh | 2 +-
- tools/testing/selftests/tpm2/test_space.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for linking these, very helpful.
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 338d6b0272dc..1334e301d2a0 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/bin/sh
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- 
- # Kselftest framework requirement - SKIP code is 4.
-diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-index 847cabb20a5f..00259cb746cf 100755
---- a/tools/testing/selftests/tpm2/test_space.sh
-+++ b/tools/testing/selftests/tpm2/test_space.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/bin/sh
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- 
- # Kselftest framework requirement - SKIP code is 4.
--- 
-2.25.1
-
+/Jarkko
