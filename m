@@ -2,76 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C3A203B9F
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jun 2020 17:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E029B203DE4
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jun 2020 19:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729566AbgFVPz3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jun 2020 11:55:29 -0400
-Received: from mga02.intel.com ([134.134.136.20]:5841 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729349AbgFVPzX (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jun 2020 11:55:23 -0400
-IronPort-SDR: RfBO2i9EZYuCW8pJp2MwGAJVBjIPN9zJZL7tCaE/pezwXnyznS3aje7yUDWm4w7uOCuQCR0SS5
- 0BIasFBTcIgA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9659"; a="132224087"
-X-IronPort-AV: E=Sophos;i="5.75,267,1589266800"; 
-   d="scan'208";a="132224087"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 08:55:21 -0700
-IronPort-SDR: 4HgChV47Qke8GDBpJIPCPeYsPaVaKyrhskmkNzIXJiPJoI25WigxhtmVuRcovyHmJ/2fDndSwz
- U4OUPFRybG1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,267,1589266800"; 
-   d="scan'208";a="318813989"
-Received: from sbugaj-mobl.ger.corp.intel.com (HELO localhost) ([10.252.33.195])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Jun 2020 08:55:18 -0700
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] Revert "tpm: selftest: cleanup after unseal with wrong auth/policy test"
-Date:   Mon, 22 Jun 2020 18:55:02 +0300
-Message-Id: <20200622155502.8014-1-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S1729957AbgFVR2I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jun 2020 13:28:08 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:41128 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729865AbgFVR2I (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 22 Jun 2020 13:28:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592846887;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=of2f8hWxB0T9whMxX/5yPSiVwyh1lT2tIyUWPF6B/bs=;
+        b=iRJukAEsiNoDVzKtKu7sZuDu98AkVLF4dTg/2zwstoKPsUIOGyIw1e+vtT3b+51HpGgYE3
+        TlpTdHAvsRH2meLQmwDpzqDIJud7rj1A+XHG6lZJmjwDuq2CPPyXMj2ltAACQd7KKDWx7j
+        lq1w3zkaKYI3JAxKx8q3IcKSSBB4wnY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-187-OJrb7cknMvmVJ4IluHs5kQ-1; Mon, 22 Jun 2020 13:28:03 -0400
+X-MC-Unique: OJrb7cknMvmVJ4IluHs5kQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F1602809880;
+        Mon, 22 Jun 2020 17:28:01 +0000 (UTC)
+Received: from localhost (ovpn-116-68.gru2.redhat.com [10.97.116.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A2AA85BAEA;
+        Mon, 22 Jun 2020 17:27:57 +0000 (UTC)
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
+        Bruno Meneguele <bmeneg@redhat.com>, stable@vger.kernel.org
+Subject: [PATCH v2] ima: move APPRAISE_BOOTPARAM dependency on ARCH_POLICY to runtime
+Date:   Mon, 22 Jun 2020 14:27:54 -0300
+Message-Id: <20200622172754.10763-1-bmeneg@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The reverted commit illegitly uses tpm2-tools. External dependencies are
-absolutely forbidden from these tests. There is also the problem that
-clearing is not necessarily wanted behavior if the test/target computer is
-not used only solely for testing.
+IMA_APPRAISE_BOOTPARAM has been marked as dependent on !IMA_ARCH_POLICY in
+compile time, enforcing the appraisal whenever the kernel had the arch
+policy option enabled.
 
-Fixes: a9920d3bad40 ("tpm: selftest: cleanup after unseal with wrong auth/policy test")
-Cc: Tadeusz Struk <tadeusz.struk@intel.com>
+However it breaks systems where the option is actually set but the system
+wasn't booted in a "secure boot" platform. In this scenario, anytime the
+an appraisal policy (i.e. ima_policy=appraisal_tcb) is used it will be
+forced, giving no chance to the user set the 'fix' state (ima_appraise=fix)
+to actually measure system's files.
+
+This patch remove this compile time dependency and move it to a runtime
+decision, based on the arch policy loading failure/success.
+
 Cc: stable@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
+Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
 ---
- tools/testing/selftests/tpm2/test_smoke.sh | 5 -----
- 1 file changed, 5 deletions(-)
+changes from v1:
+	- removed "ima:" prefix from pr_info() message
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 663062701d5a..79f8e9da5d21 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -8,8 +8,3 @@ ksft_skip=4
+ security/integrity/ima/Kconfig      | 2 +-
+ security/integrity/ima/ima_policy.c | 8 ++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index edde88dbe576..62dc11a5af01 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -232,7 +232,7 @@ config IMA_APPRAISE_REQUIRE_POLICY_SIGS
  
- python -m unittest -v tpm2_tests.SmokeTest
- python -m unittest -v tpm2_tests.AsyncTest
--
--CLEAR_CMD=$(which tpm2_clear)
--if [ -n $CLEAR_CMD ]; then
--	tpm2_clear -T device
--fi
+ config IMA_APPRAISE_BOOTPARAM
+ 	bool "ima_appraise boot parameter"
+-	depends on IMA_APPRAISE && !IMA_ARCH_POLICY
++	depends on IMA_APPRAISE
+ 	default y
+ 	help
+ 	  This option enables the different "ima_appraise=" modes
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index e493063a3c34..c876617d4210 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -733,11 +733,15 @@ void __init ima_init_policy(void)
+ 	 * (Highest priority)
+ 	 */
+ 	arch_entries = ima_init_arch_policy();
+-	if (!arch_entries)
++	if (!arch_entries) {
+ 		pr_info("No architecture policies found\n");
+-	else
++	} else {
++		/* Force appraisal, preventing runtime xattr changes */
++		pr_info("setting IMA appraisal to enforced\n");
++		ima_appraise = IMA_APPRAISE_ENFORCE;
+ 		add_rules(arch_policy_entry, arch_entries,
+ 			  IMA_DEFAULT_POLICY | IMA_CUSTOM_POLICY);
++	}
+ 
+ 	/*
+ 	 * Insert the builtin "secure_boot" policy rules requiring file
 -- 
-2.25.1
+2.26.2
 
