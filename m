@@ -2,154 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEC920404E
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jun 2020 21:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA3B2041B8
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jun 2020 22:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728131AbgFVT2W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jun 2020 15:28:22 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9776 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728068AbgFVT2W (ORCPT
+        id S1728439AbgFVUOx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jun 2020 16:14:53 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18112 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728363AbgFVUOx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jun 2020 15:28:22 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05MJ3Xte040410;
-        Mon, 22 Jun 2020 15:28:21 -0400
+        Mon, 22 Jun 2020 16:14:53 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05MK276w105648;
+        Mon, 22 Jun 2020 16:14:40 -0400
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31t02gcctq-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31tysqpa8n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Jun 2020 15:28:20 -0400
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05MJ3dEj040633;
-        Mon, 22 Jun 2020 15:28:20 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31t02gcctb-1
+        Mon, 22 Jun 2020 16:14:40 -0400
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05MKDc4M150271;
+        Mon, 22 Jun 2020 16:14:39 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31tysqpa7t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Jun 2020 15:28:20 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05MJKTEs032724;
-        Mon, 22 Jun 2020 19:28:18 GMT
+        Mon, 22 Jun 2020 16:14:39 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05MKBLoJ026964;
+        Mon, 22 Jun 2020 20:14:37 GMT
 Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 31sa37uv0r-1
+        by ppma03fra.de.ibm.com with ESMTP id 31sa381j4u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Jun 2020 19:28:18 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05MJSFg865863762
+        Mon, 22 Jun 2020 20:14:36 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05MKEYPK53411960
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Jun 2020 19:28:15 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8626211C05C;
-        Mon, 22 Jun 2020 19:28:15 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3C21511C058;
-        Mon, 22 Jun 2020 19:28:14 +0000 (GMT)
+        Mon, 22 Jun 2020 20:14:34 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7CE21AE056;
+        Mon, 22 Jun 2020 20:14:34 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B430AE04D;
+        Mon, 22 Jun 2020 20:14:32 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.80.202.125])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 22 Jun 2020 19:28:14 +0000 (GMT)
-Message-ID: <1592854093.4987.15.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] ima: move APPRAISE_BOOTPARAM dependency on
- ARCH_POLICY to runtime
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 22 Jun 2020 20:14:32 +0000 (GMT)
+Message-ID: <1592856871.4987.21.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima_evm_utils: extended calc_bootaggr to PCRs 8 - 9
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Bruno Meneguele <bmeneg@redhat.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     erichte@linux.ibm.com, nayna@linux.ibm.com, stable@vger.kernel.org
-Date:   Mon, 22 Jun 2020 15:28:13 -0400
-In-Reply-To: <20200622172754.10763-1-bmeneg@redhat.com>
-References: <20200622172754.10763-1-bmeneg@redhat.com>
+To:     Maurizio Drocco <maurizio.drocco@ibm.com>, roberto.sassu@huawei.com
+Cc:     Silviu.Vlasceanu@huawei.com, dmitry.kasatkin@gmail.com,
+        jejb@linux.ibm.com, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com,
+        mdrocco@linux.vnet.ibm.com
+Date:   Mon, 22 Jun 2020 16:14:31 -0400
+In-Reply-To: <20200618201126.2081-2-maurizio.drocco@ibm.com>
+References: <b744c1b79ba14a17a786f5de04c1f3c4@huawei.com>
+         <20200618201126.2081-1-maurizio.drocco@ibm.com>
+         <20200618201126.2081-2-maurizio.drocco@ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-22_11:2020-06-22,2020-06-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- phishscore=0 adultscore=0 clxscore=1011 cotscore=-2147483648 mlxscore=0
- bulkscore=0 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
- priorityscore=1501 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006220123
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ mlxscore=0 bulkscore=0 spamscore=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 phishscore=0 mlxlogscore=999
+ cotscore=-2147483648 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006220127
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-06-22 at 14:27 -0300, Bruno Meneguele wrote:
-> IMA_APPRAISE_BOOTPARAM has been marked as dependent on !IMA_ARCH_POLICY in
-> compile time, enforcing the appraisal whenever the kernel had the arch
-> policy option enabled.
+On Thu, 2020-06-18 at 16:11 -0400, Maurizio Drocco wrote:
+> From: Maurizio <maurizio.drocco@ibm.com>
 > 
-> However it breaks systems where the option is actually set but the system
-> wasn't booted in a "secure boot" platform. In this scenario, anytime the
-> an appraisal policy (i.e. ima_policy=appraisal_tcb) is used it will be
-> forced, giving no chance to the user set the 'fix' state (ima_appraise=fix)
-> to actually measure system's files.
+> If PCRs 8 - 9 are set (i.e. not all-zeros), cal_bootaggr should include
+> them into the digest.
 > 
-> This patch remove this compile time dependency and move it to a runtime
-> decision, based on the arch policy loading failure/success.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
-> Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+> Signed-off-by: Maurizio Drocco <maurizio.drocco@ibm.com>
 > ---
-> changes from v1:
-> 	- removed "ima:" prefix from pr_info() message
+>  src/evmctl.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 > 
->  security/integrity/ima/Kconfig      | 2 +-
->  security/integrity/ima/ima_policy.c | 8 ++++++--
->  2 files changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index edde88dbe576..62dc11a5af01 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -232,7 +232,7 @@ config IMA_APPRAISE_REQUIRE_POLICY_SIGS
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index 1d065ce..554571e 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -1930,6 +1930,18 @@ static void calc_bootaggr(struct tpm_bank_info *bank)
+>  		}
+>  	}
 >  
->  config IMA_APPRAISE_BOOTPARAM
->  	bool "ima_appraise boot parameter"
-> -	depends on IMA_APPRAISE && !IMA_ARCH_POLICY
-> +	depends on IMA_APPRAISE
->  	default y
->  	help
->  	  This option enables the different "ima_appraise=" modes
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index e493063a3c34..c876617d4210 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -733,11 +733,15 @@ void __init ima_init_policy(void)
->  	 * (Highest priority)
->  	 */
->  	arch_entries = ima_init_arch_policy();
-> -	if (!arch_entries)
-> +	if (!arch_entries) {
->  		pr_info("No architecture policies found\n");
-> -	else
-> +	} else {
-> +		/* Force appraisal, preventing runtime xattr changes */
-> +		pr_info("setting IMA appraisal to enforced\n");
-> +		ima_appraise = IMA_APPRAISE_ENFORCE;
->  		add_rules(arch_policy_entry, arch_entries,
->  			  IMA_DEFAULT_POLICY | IMA_CUSTOM_POLICY);
+> +	if (strcmp(bank->algo_name, "sha1") != 0) {
+> +		for (i = 8; i < 10; i++) {
+> +			if (memcmp(bank->pcr[i], zero, bank->digest_size) != 0) {
+> +				err = EVP_DigestUpdate(pctx, bank->pcr[i], bank->digest_size);
+> +				if (!err) {
+> +					log_err("EVP_DigestUpdate() failed\n");
+> +					return;
+> +				}
+> +			}
+> +		}
 > +	}
->  
->  	/*
->  	 * Insert the builtin "secure_boot" policy rules requiring file
 
-CONFIG_IMA_APPRAISE_BOOTPARAM controls the "ima_appraise" mode bits.  
-The mode bits are or'ed with the MODULES, FIRMWARE, POLICY, and KEXEC
-bits, which have already been set in ima_init_arch_policy().
+Roberto, now that we're only including the PCRs 8 & 9 in the non-sha1
+"boot_aggregate", they can always be included.
 
-From ima.h:
-/* Appraise integrity measurements */
-#define IMA_APPRAISE_ENFORCE    0x01
-#define IMA_APPRAISE_FIX        0x02
-#define IMA_APPRAISE_LOG        0x04
-#define IMA_APPRAISE_MODULES    0x08
-#define IMA_APPRAISE_FIRMWARE   0x10
-#define IMA_APPRAISE_POLICY     0x20
-#define IMA_APPRAISE_KEXEC      0x40
+Please reflect this change in the patch description and, here, in the
+code.
 
-As Nayna pointed out, only when an architecture specific "secure boot"
-policy is loaded, is this applicable. 
+thanks,
 
 Mimi
-
