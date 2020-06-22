@@ -2,205 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 398CB2024CE
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Jun 2020 17:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E96203A1C
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jun 2020 16:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725838AbgFTPgn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 20 Jun 2020 11:36:43 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:33088 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725794AbgFTPgn (ORCPT
+        id S1729304AbgFVO5J (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jun 2020 10:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728824AbgFVO5J (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 20 Jun 2020 11:36:43 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id ADE648EE0DF;
-        Sat, 20 Jun 2020 08:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1592667402;
-        bh=IAzLA4Nw4byGvLCmmgYTlb4E4SvgBzctr+lJ/WQJsS8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=GQGGDux8RfdyX0JucAoSdjaYW/j1jxROCP2xxLa7qJaNv/wkAf5eLbhxA9N+uRvVG
-         RaybokTnHd0eZMMgYOfGnr43BLWsonTScqR73W+OqCbmaPZuVz5EOyu7JwkywlMYZM
-         SnH0VGymEqbpUl6iBjO5mEeMrhsGEd6kDjB+8xrc=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 57w7gC6kHhlY; Sat, 20 Jun 2020 08:36:42 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 421B48EE079;
-        Sat, 20 Jun 2020 08:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1592667402;
-        bh=IAzLA4Nw4byGvLCmmgYTlb4E4SvgBzctr+lJ/WQJsS8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=GQGGDux8RfdyX0JucAoSdjaYW/j1jxROCP2xxLa7qJaNv/wkAf5eLbhxA9N+uRvVG
-         RaybokTnHd0eZMMgYOfGnr43BLWsonTScqR73W+OqCbmaPZuVz5EOyu7JwkywlMYZM
-         SnH0VGymEqbpUl6iBjO5mEeMrhsGEd6kDjB+8xrc=
-Message-ID: <1592667400.3583.10.camel@HansenPartnership.com>
-Subject: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS for TPM keys
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     "Wiseman, Monty (GE Research, US)" <monty.wiseman@ge.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Mon, 22 Jun 2020 10:57:09 -0400
+Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055B1C061573
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Jun 2020 07:57:09 -0700 (PDT)
+Received: by mail-vk1-xa42.google.com with SMTP id x126so1243533vkb.1
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Jun 2020 07:57:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DaQaRL/n2na4izh2TsmRyDKAg7niGqHtN8UJRlkcUNk=;
+        b=Yh6uQc0Tk44UUcYHHPdxzcHe4JMuPLNwLsMpf1hfB3Jh8Tu5KzLiUZOVxNrSzFNeRC
+         1VX+uZFI62Ls1+BJbg7pP2QF3IogycASPqdpS7cK4qx+8UL3mK0h3koU2KF86qJLyXNp
+         ISsh8AdquX9pm+IhFbc8LzxKYCLQ8dhUJwD7E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DaQaRL/n2na4izh2TsmRyDKAg7niGqHtN8UJRlkcUNk=;
+        b=nPVNpX3zrZK5EFge8CuBfpH1TSwa1EcAMNnJqqqd1JXCkK5rf/r0ckGXyuFn6AVV3g
+         gNKdeqysGXpl9WdDPhl7UoalnyTbuqXq7HcLXpzo/MjVwwZzO63yCNpPorXPSA4nIpQ1
+         IHm8fBFymSKQtkjerIHENv7GRfIbJX0nQxmgnmoVs79AxfJ268TxWN+rzEO74qQTe2RE
+         buhWHAnf8+4GVq+6JJ5IOvY2kCKjbpJKBzVj6uV5czNFK7zO+wA8H5TT650lYWVYieIs
+         3K655xukx6X2ea4SVuvmi6femhSFk18byAUmvyfMUu7FgIi2w3uW+r11URc61qV6erIR
+         Fcmg==
+X-Gm-Message-State: AOAM5304jgzQr47GKwIEG7+lYGYNA7Rh6jOjlyvA6Rl8OPxh5Mk/Roya
+        N8hlVt8kfShgdTVn23Rpnk642ndRCW8=
+X-Google-Smtp-Source: ABdhPJybgLrYtvT2rfDv2AESTTprsLEN0B0LkvjxAHM5G5vcbs0aM0BYZsp4qrB1Go2zAt1OQu5BEg==
+X-Received: by 2002:a1f:2c0d:: with SMTP id s13mr16121590vks.9.1592837827444;
+        Mon, 22 Jun 2020 07:57:07 -0700 (PDT)
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
+        by smtp.gmail.com with ESMTPSA id u4sm1681341uaq.16.2020.06.22.07.57.06
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jun 2020 07:57:06 -0700 (PDT)
+Received: by mail-vk1-f177.google.com with SMTP id n188so4004404vkc.11
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Jun 2020 07:57:06 -0700 (PDT)
+X-Received: by 2002:ac5:ce86:: with SMTP id 6mr16311424vke.75.1592837825897;
+ Mon, 22 Jun 2020 07:57:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200619141958.1.I58d549fded1fd2299543ede6a103fe2bb94c805d@changeid>
+In-Reply-To: <20200619141958.1.I58d549fded1fd2299543ede6a103fe2bb94c805d@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 22 Jun 2020 07:56:54 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VCX27cMs4q+jJ528UdEM93yZ96+kYTQPgU3ZqZ-whgEw@mail.gmail.com>
+Message-ID: <CAD=FV=VCX27cMs4q+jJ528UdEM93yZ96+kYTQPgU3ZqZ-whgEw@mail.gmail.com>
+Subject: Re: [PATCH] tpm_tis_spi: Prefer async probe
+To:     Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Date:   Sat, 20 Jun 2020 08:36:40 -0700
-In-Reply-To: <26ED11907FC0F446BB0296B5357EEF0E316CDBB0@CINMBCNA02.e2k.ad.ge.com>
-References: <1575781600.14069.8.camel@HansenPartnership.com>
-         <1575781746.14069.11.camel@HansenPartnership.com>
-         <194d8ba601b9ecb43e812445729c6270e9f32162.camel@infradead.org>
-         <26ED11907FC0F446BB0296B5357EEF0E316CDBB0@CINMBCNA02.e2k.ad.ge.com>
+Cc:     Nicolas Boichat <drinkcat@chromium.org>,
+        Andrey Pronin <apronin@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-06-19 at 20:45 +0000, Wiseman, Monty (GE Research, US)
-wrote:
-> James,
-> 
-> > -----Original Message-----
-> > From: David Woodhouse <dwmw2@infradead.org>
-> > Sent: December 9, 2019 03:56 AM
-> > To: James Bottomley <James.Bottomley@HansenPartnership.com>; linux-
-> > integrity@vger.kernel.org; Wiseman, Monty (GE Global Research, US)
-> > <monty.wiseman@ge.com>
-> > Cc: Mimi Zohar <zohar@linux.ibm.com>; Jarkko Sakkinen
-> > <jarkko.sakkinen@linux.intel.com>
-> > Subject: EXT: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS
-> > for TPM
-> > keys
-> > 
-> > On Sat, 2019-12-07 at 21:09 -0800, James Bottomley wrote:
-> > > The TCG has defined an OID prefix "2.23.133.10.1" for the various
-> > > TPM
-> > > key uses.  We've defined three of the available numbers:
-> > > 
-> > > 2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key
-> > > (Usually
-> > > 		RSA2048 or Elliptic Curve) which can be imported by a
-> > > 		TPM2_Load() operation.
-> > > 
-> > > 2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key
-> > > (Usually
-> > > 		RSA2048 or Elliptic Curve) which can be imported by a
-> > > 		TPM2_Import() operation.
-> > > 
-> > > Both loadable and importable keys are specific to a given TPM,
-> > > the
-> > > difference is that a loadable key is wrapped with the symmetric
-> > > secret, so must have been created by the TPM itself.  An
-> > > importable
-> > > key is wrapped with a DH shared secret, and may be created
-> > > without
-> > > access to the TPM provided you know the public part of the parent
-> > > key.
-> > > 
-> > > 2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to
-> > > 128
-> > > 		bytes) which is sealed by the TPM.  It usually
-> > > 		represents a symmetric key and must be unsealed before
-> > > 		use.
-> > 
-> > Do we still not have an official reference for these that you can
-> > provide in the commit or the file itself?
-> > 
-> > It would be very nice to have something more than a verbal
-> > assurance
-> > that they're in Monty's spreadsheet.
-> > 
-> > 
-> > > Signed-off-by: James Bottomley
-> > 
-> > <James.Bottomley@HansenPartnership.com>
-> > > ---
-> > >  include/linux/oid_registry.h | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > > 
-> > > diff --git a/include/linux/oid_registry.h
-> > > b/include/linux/oid_registry.h
-> > > index 657d6bf2c064..a4cee888f9b0 100644
-> > > --- a/include/linux/oid_registry.h
-> > > +++ b/include/linux/oid_registry.h
-> > > @@ -107,6 +107,11 @@ enum OID {
-> > >  	OID_gostTC26Sign512B,		/*
-> > > 1.2.643.7.1.2.1.2.2 */
-> > >  	OID_gostTC26Sign512C,		/*
-> > > 1.2.643.7.1.2.1.2.3 */
-> > > 
-> > > +	/* TCG defined OIDS for TPM based keys */
-> > > +	OID_TPMLoadableKey,		/* 2.23.133.10.1.3 */
-> > > +	OID_TPMImporableKey,		/* 2.23.133.10.1.4
-> > > */
-> > > +	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
-> > > +
-> > >  	OID__NR
-> > >  };
-> > > 
-> 
-> Bring back an old thread.  We are finally getting the TCG OID
-> registry ready to publish and wanted to verifier the OIDs you
-> requested and we assigned
-> above.
-> 
-> I can find 2.23.133.10.1.3 TPM Loadable key in the tpm2-tss-engine
-> project.
-> 
-> I do not see this one, nor the others list above in the kernel
-> source. Did these ever get used? If so, where and can you provide a
-> use case for a relying party?
+Hi,
 
-Yes, the openssl_tpm2_engine project.  It's a more sophisticated
-version of the above:
+On Fri, Jun 19, 2020 at 2:20 PM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> On a Chromebook I'm working on I noticed a big (~1 second) delay
+> during bootup where nothing was happening.  Right around this big
+> delay there were messages about the TPM:
+>
+> [    2.311352] tpm_tis_spi spi0.0: TPM ready IRQ confirmed on attempt 2
+> [    3.332790] tpm_tis_spi spi0.0: Cr50 firmware version: ...
+>
+> I put a few printouts in and saw that tpm_tis_spi_init() (specifically
+> tpm_chip_register() in that function) was taking the lion's share of
+> this time, though ~115 ms of the time was in cr50_print_fw_version().
+>
+> Let's make a one-line change to prefer async probe for tpm_tis_spi.
+> There's no reason we need to block other drivers from probing while we
+> load.
+>
+> NOTES:
+> * It's possible that other hardware runs through the init sequence
+>   faster than Cr50 and this isn't such a big problem for them.
+>   However, even if they are faster they are still doing _some_
+>   transfers over a SPI bus so this should benefit everyone even if to
+>   a lesser extent.
+> * It's possible that there are extra delays in the code that could be
+>   optimized out.  I didn't dig since once I enabled async probe they
+>   no longer impacted me.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/
+I will note that I did continue to dig into the delays, actually.  I
+haven't fully resolved all of them, but I'm fairly sure that most of
+them are actually inefficiencies in the SPI driver on my platform,
+which seems to have a lot of overhead in starting a new transfer.
+I'll work on fixing that, but in any case we should still do the async
+probe because it's very safe and gives a perf boost.  Why do I say
+it's safe?
 
-The use case is that we can use the same ASN.1 format for data entities
-that respond to different TPM2 commands, so:
+1. It's not like our probe order was defined by anything anyway.  When
+we probe is at the whim of when the SPI controller probes and that can
+be any time.
 
-2.23.133.10.1.3: Public and Private parts used as input to TPM2_Load
-which produce a keyhandle for public key operations
+2. If someone needs to access the TPM from another driver then they
+have to handle the fact that it might not have probed yet anyway
+because perhaps the SPI controller hasn't probed yet.
 
-2.23.133.10.1.4: Public and Private parts used as input to TPM2_Import
-which produce a key handle for public key operations
+3. There may be other drivers probing at the same time as us anyway
+because _they_ used async probe.
 
-2.23.133.10.1.5: Public and Private parts used as input to TPM2_Load
-which produce a keyandle for TPM2_Unseal
+While I won't say that it's impossible to tickle a bug by turning on
+async probe, I would assert that in almost all cases the bug was
+already there and needed to be fixed anyway.  ;-)
 
-I believe we discussed the fact that we'd need several OIDs for the
-various key formats which are the same data structure but are used
-differently.  However, the only other use I can think of for the ASN.1
-structure would be importable unsealed data.  I don't think anyone's
-yet implemented that, but I can see there might be a use case and it
-would be convenient to have a published OID for it, say
-2.23.133.10.1.6?
 
-> Also, I have in my local spreadsheet the following which I believe
-> were just drafts and never assigned. Please confirm.
-> 2.23.133.10.1.1.2
-> Secondary Identifier: tcg-wellKnownAuthValue
-> 
-> This in intended to be bitmap of well-known authValues. This is not
-> intended to contain an actual authValue. For example. Bit 1 means and
-> authValue of hashsize all zeros, Bit 2 means an authValue of hashsize
-> all NULLs,
-> etc.
-> [Note: Bit 1 is lsb in this notation]
-> 
-> 2.23.133.10.1.1.3
-> No secondary identifier or description
-> 
-> 2.23.133.10.1.1.4
-> No secondary identifier or description
-
-I don't think they were ever anything to do with the TPM engine
-projects.  They were just something you already had in the spreadsheet
-at the time, which is why you told me to start at ...10.1.3
-
-James
-
+-Doug
