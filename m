@@ -2,163 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A03892051BF
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 14:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61802205230
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 14:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732364AbgFWMGm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 23 Jun 2020 08:06:42 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34544 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729552AbgFWMGm (ORCPT
+        id S1732475AbgFWMQe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 23 Jun 2020 08:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732396AbgFWMQe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 23 Jun 2020 08:06:42 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NC6984016333;
-        Tue, 23 Jun 2020 08:06:39 -0400
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31ufgj3sj2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Jun 2020 08:06:38 -0400
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05NC06Nw028394;
-        Tue, 23 Jun 2020 12:06:38 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma05wdc.us.ibm.com with ESMTP id 31sa38q15j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Jun 2020 12:06:38 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05NC6cTt40239612
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 Jun 2020 12:06:38 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EC1E0124052;
-        Tue, 23 Jun 2020 12:06:37 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D416D124054;
-        Tue, 23 Jun 2020 12:06:37 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 23 Jun 2020 12:06:37 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
-To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jarkko.sakkinen@linux.intel.com, linux-acpi@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v5 2/2] tpm: Add support for event log pointer found in TPM2 ACPI table
-Date:   Tue, 23 Jun 2020 08:06:36 -0400
-Message-Id: <20200623120636.1453470-3-stefanb@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200623120636.1453470-1-stefanb@linux.vnet.ibm.com>
-References: <20200623120636.1453470-1-stefanb@linux.vnet.ibm.com>
+        Tue, 23 Jun 2020 08:16:34 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F024C061755
+        for <linux-integrity@vger.kernel.org>; Tue, 23 Jun 2020 05:16:33 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id f18so18554554qkh.1
+        for <linux-integrity@vger.kernel.org>; Tue, 23 Jun 2020 05:16:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
+        b=Ih4JNzjMju9OuAusyh7OnnVaj6cjqAVzbWpIiRhu6QIzhe68yVobGLZ/UhUVfC3V33
+         K6OeH0xwBqG+yKXRBhG1Hce1bnIMBI7VFfPzzSnOBVipzG7M11/IJ55nuy2J54yaiga2
+         P5aPLCQcCBC2Sb5jYjfBQWnnVPN2GkSa7tX6ULB4hc5xbbs6+3eaHE3NEsI5OfLNuTKR
+         cDRvgW5hmfD6XAv8BbeR43oF5+dk9hT7cnjauXCJ5OSwAx9cNSaViXWQIlEdXAcXS51u
+         QDvHG7lGYgfzGrFFk0Sy8vz4x/pbY7nGMsXh2zO9+0ikarJqO1+u3zkUzpsXJmMLOMrZ
+         KkCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
+        b=KNgY4FPiEjA3DqzsoNZgJXgtMnbMYIOY2x92XA4Z53hwqVdPClef6mXj4p5xLZ4yXY
+         33GIS6pMSKZbp7vqLTr5Fm4Jps9lCG46AJZf8/x7GaYDV5VZh4ONrTLXU6SYK/7zuM0O
+         AQlvx7aiVEwzi7zVcjTxKGSjp6meE3ZBCGGtxVQqT4rmjLCQx35uW5c+/ZjUJL4nFUcZ
+         v8YWUshdkFlmjhlrmXKFRlBKJ1c3YzBXRZGQSQ5xn+bPUtUZnDYfSXfZVlJI0f8o9hH7
+         EYXwcdLvrZICffD1691nwLJPlzzSO1PZGZmyFZD5/yRyXZJ5EnVDBtAhkGz4Jtn5dY5L
+         2tyA==
+X-Gm-Message-State: AOAM532MCnrmLRUYcjOmmZYA5+WLdt6C8sFNjVpKjLxj5Yl74bn9iK7+
+        qsjIdnZa3plwjC6h8klhgawdR/Gew+b8No0ZMFc=
+X-Google-Smtp-Source: ABdhPJzajX4vVGZVtp22x+TmwN0rt/m6LuXgODAK0Tu7BtDNq7WTN7F0hhOM6vsIev5mY24LwafYzw63EcIDkAzy+60=
+X-Received: by 2002:a37:7384:: with SMTP id o126mr14131082qkc.333.1592914592398;
+ Tue, 23 Jun 2020 05:16:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-23_06:2020-06-23,2020-06-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 impostorscore=0 spamscore=0
- adultscore=0 cotscore=-2147483648 clxscore=1015 bulkscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006230088
+Received: by 2002:ac8:47c2:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 05:16:32
+ -0700 (PDT)
+Reply-To: bektery@outlook.com
+From:   YAVUZ BEKTER <bakert.jg@gmail.com>
+Date:   Tue, 23 Jun 2020 05:16:32 -0700
+Message-ID: <CAAUSuTWBWJBTar8KmkmJb6qoTDWRFAZuKUhFd5PhCq8MAqGNNA@mail.gmail.com>
+Subject: Hello.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
-
-In case a TPM2 is attached, search for a TPM2 ACPI table when trying
-to get the event log from ACPI. If one is found, use it to get the
-start and length of the log area. This allows non-UEFI systems, such
-as SeaBIOS, to pass an event log when using a TPM2.
-
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- drivers/char/tpm/eventlog/acpi.c | 56 ++++++++++++++++++++------------
- 1 file changed, 35 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-index 63ada5e53f13..e714a2bd0423 100644
---- a/drivers/char/tpm/eventlog/acpi.c
-+++ b/drivers/char/tpm/eventlog/acpi.c
-@@ -49,9 +49,8 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	void __iomem *virt;
- 	u64 len, start;
- 	struct tpm_bios_log *log;
--
--	if (chip->flags & TPM_CHIP_FLAG_TPM2)
--		return -ENODEV;
-+	struct acpi_table_tpm2 *tbl;
-+	int format;
- 
- 	log = &chip->log;
- 
-@@ -61,23 +60,38 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	if (!chip->acpi_dev_handle)
- 		return -ENODEV;
- 
--	/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
--	status = acpi_get_table(ACPI_SIG_TCPA, 1,
--				(struct acpi_table_header **)&buff);
--
--	if (ACPI_FAILURE(status))
--		return -ENODEV;
--
--	switch(buff->platform_class) {
--	case BIOS_SERVER:
--		len = buff->server.log_max_len;
--		start = buff->server.log_start_addr;
--		break;
--	case BIOS_CLIENT:
--	default:
--		len = buff->client.log_max_len;
--		start = buff->client.log_start_addr;
--		break;
-+	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+		status = acpi_get_table("TPM2", 1,
-+					(struct acpi_table_header **)&tbl);
-+		if (ACPI_FAILURE(status))
-+			return -ENODEV;
-+		if (tbl->header.length < sizeof(*tbl))
-+			return -ENODEV;
-+		len = tbl->log_area_minimum_length;
-+		start = tbl->log_area_start_address;
-+		if (!start || !len)
-+			return -ENODEV;
-+		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
-+	} else {
-+		/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
-+		status = acpi_get_table(ACPI_SIG_TCPA, 1,
-+					(struct acpi_table_header **)&buff);
-+
-+		if (ACPI_FAILURE(status))
-+			return -ENODEV;
-+
-+		switch (buff->platform_class) {
-+		case BIOS_SERVER:
-+			len = buff->server.log_max_len;
-+			start = buff->server.log_start_addr;
-+			break;
-+		case BIOS_CLIENT:
-+		default:
-+			len = buff->client.log_max_len;
-+			start = buff->client.log_start_addr;
-+			break;
-+		}
-+		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
- 	}
- 	if (!len) {
- 		dev_warn(&chip->dev, "%s: TCPA log area empty\n", __func__);
-@@ -98,7 +112,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	memcpy_fromio(log->bios_event_log, virt, len);
- 
- 	acpi_os_unmap_iomem(virt, len);
--	return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-+	return format;
- 
- err:
- 	kfree(log->bios_event_log);
--- 
-2.26.2
-
+I am the foreign operations director of Bank of Turkey.
+My name is Mr, Yavuz. I have a sensitive investment project to discuss
+with you, please reply now.
+________________________
+Ik ben de directeur buitenlandse activiteiten van de Bank of Turkey.
+Mijn naam is meneer Yavuz. Ik moet een gevoelig investeringsproject bespreken
+met u, antwoord dan nu.
