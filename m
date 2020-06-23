@@ -2,105 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6676F205068
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 13:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23732050A0
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 13:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732409AbgFWLQc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 23 Jun 2020 07:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732494AbgFWLQ0 (ORCPT
+        id S1732329AbgFWL1w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 23 Jun 2020 07:27:52 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34780 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732189AbgFWL1u (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 23 Jun 2020 07:16:26 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A8BC061796
-        for <linux-integrity@vger.kernel.org>; Tue, 23 Jun 2020 04:16:25 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id h15so135098wrq.8
-        for <linux-integrity@vger.kernel.org>; Tue, 23 Jun 2020 04:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=El7mhPczl6zDV1AJSVGvVhdB3yWX0GV4TdgpKOETgDUDSEQEbTrvvk6vHjFGJyRivD
-         9uFlmmefZSUDsHrNg9jWWsWS8Qc1q9VuBM6EDipBpNt3Zee6QVer295zzr6Lm5mL26+O
-         gzYTGC3UtzbasZTpwVi2tghIkGD8qLJPM/OKzQvopYyr5fNKC7+IXHSy9QywjtAbAE6O
-         eNgmGwVXCwVZD48z5+ZziPkV4LZhbeC3MwWbVhcBwIm/EmmnwA4w2lakJ/Hr7ZCJ4SXH
-         Tv+aqcYTBkQ7XJlgGddwhQpgbhZ5rOwvIQh81TrV9+W5/e58Cm5K/9C5MPtLFZNIrm1t
-         kjKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=dlYWyIVFP7F4nfUNH8JhsvncGdVPRVDgPJ60u6hXo+YgC5VZap7YIn+v3QQmiRo2DO
-         WN54FJ0ASAiCqup8sonv/EKfEpuw8wFTZvjhvk5cIzU7KfGMXP2hVGazwcFuyrnPYw+H
-         umbX6U+xJWKluDtw4fwHqeBju11pS2LXkNV9BsZ0d2Ix+aIbPCdF1c892BrYe3Gu44k8
-         M5H42LTwl7AMXXy4Pq8kADfCGdx7p1nYiXSieojIrOYvEi6kgqDvi8JRypeu0AK0aeGE
-         WQGlScOR99LJTgLxYW+cNqtptpKGR4JXNekRvxQcRXPjhBZh/zkrVqPWllW1bvwNk0p3
-         DvjA==
-X-Gm-Message-State: AOAM532KcDnIyayaMCp9gOJYmYE4BWIM09y2gIB7MB0rmUrrcIQ8jWPU
-        ay870ss5zPHTc2ebMDMaO9B+KXPaQ/apEnQJpI0=
-X-Google-Smtp-Source: ABdhPJzvy9uqLBBT5FD0RyBMgHNNB8JPeL4KZV4DQXiaGd69/J17MXOrDmXuaGztTz9Gbidgke1EGYWXnuCnQthXZdk=
-X-Received: by 2002:a5d:6088:: with SMTP id w8mr9307227wrt.49.1592910984526;
- Tue, 23 Jun 2020 04:16:24 -0700 (PDT)
+        Tue, 23 Jun 2020 07:27:50 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NB6EWM032232;
+        Tue, 23 Jun 2020 07:27:45 -0400
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31uds05fvx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Jun 2020 07:27:45 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05NBQ8ZX015213;
+        Tue, 23 Jun 2020 11:27:44 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma05wdc.us.ibm.com with ESMTP id 31sa38ptxf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Jun 2020 11:27:44 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05NBRgYO10617418
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Jun 2020 11:27:42 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B43586A054;
+        Tue, 23 Jun 2020 11:27:43 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 002E16A047;
+        Tue, 23 Jun 2020 11:27:42 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 23 Jun 2020 11:27:42 +0000 (GMT)
+Subject: Re: [PATCH v3] acpi: Extend TPM2 ACPI table with missing log fields
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-integrity@vger.kernel.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
+References: <20200331214949.883781-1-stefanb@linux.vnet.ibm.com>
+ <20200401083729.GD17325@linux.intel.com>
+ <CAJZ5v0gQ04h1+zN4wHj1vkwPvqu3RPfsY60VJ+GOtgUrvWuxLQ@mail.gmail.com>
+ <20200402192145.GB10314@linux.intel.com>
+ <dfd2d622-90cb-9621-7b7d-5282f5ee7359@linux.ibm.com>
+ <20200623005647.GD28795@linux.intel.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <8d032b3c-650b-b806-3d97-2921341b7f0e@linux.ibm.com>
+Date:   Tue, 23 Jun 2020 07:27:42 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Received: by 2002:a1c:f002:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:16:23
- -0700 (PDT)
-Reply-To: sarahkoffi389@yahoo.co.jp
-From:   Sarah Koffi <paulwiliam782@gmail.com>
-Date:   Tue, 23 Jun 2020 12:16:23 +0100
-Message-ID: <CAHqcnY1jJ+-VY-xgeJUGH3xq3KTX6UpsyNM29CbKAdthK14QOA@mail.gmail.com>
-Subject: Greetings From Mrs. Sarah Koffi
-To:     sarahkoffi389@yahoo.co.jp
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200623005647.GD28795@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-23_06:2020-06-23,2020-06-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
+ cotscore=-2147483648 clxscore=1015 mlxscore=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006230084
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Greetings From Mrs. Sarah Koffi
+On 6/22/20 8:56 PM, Jarkko Sakkinen wrote:
+> On Fri, Jun 19, 2020 at 11:14:20AM -0400, Stefan Berger wrote:
+>> On 4/2/20 3:21 PM, Jarkko Sakkinen wrote:
+>>> On Wed, Apr 01, 2020 at 11:05:36AM +0200, Rafael J. Wysocki wrote:
+>>>> On Wed, Apr 1, 2020 at 10:37 AM Jarkko Sakkinen
+>>>> <jarkko.sakkinen@linux.intel.com> wrote:
+>>>>> On Tue, Mar 31, 2020 at 05:49:49PM -0400, Stefan Berger wrote:
+>>>>>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>>>>>
+>>>>>> Recent extensions of the TPM2 ACPI table added 3 more fields
+>>>>>> including 12 bytes of start method specific parameters and Log Area
+>>>>>> Minimum Length (u32) and Log Area Start Address (u64). So, we extend
+>>>>>> the existing structure with these fields to allow non-UEFI systems
+>>>>>> to access the TPM2's log.
+>>>>>>
+>>>>>> The specification that has the new fields is the following:
+>>>>>>     TCG ACPI Specification
+>>>>>>     Family "1.2" and "2.0"
+>>>>>>     Version 1.2, Revision 8
+>>>>>>
+>>>>>> Adapt all existing table size calculations to use
+>>>>>> offsetof(struct acpi_table_tpm2, start_method_specific)
+>>>>>> [where start_method_specific is a newly added field]
+>>>>>> rather than sizeof(struct acpi_table_tpm2) so that the addition
+>>>>>> of the new fields does not affect current systems that may not
+>>>>>> have them.
+>>>>>>
+>>>>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>>>>> Cc: linux-acpi@vger.kernel.org
+>>>>> I think I'm cool with this but needs an ack from ACPI maintainer.
+>>>>>
+>>>>> Rafael, given that this not an intrusive change in any possible means,
+>>>>> can I pick this patch and put it to my next pull request?
+>>>> Yes, please.
+>>>>
+>>>> Thanks!
+>>> Great, thanks Rafael.
+>>>
+>>> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>>>
+>>> Do you mind if I add your ack to the commit?
+>>
+>> Any chance to get v4 applied?
+> You should split the actbl3.h change to a separate patch and add 'Cc:'
+> tag to Rafael to the commit message.
 
-I'm contacting you based on your good profiles I read and for a good
-reasons, I am in search of a property to buy in your country as I
-intended to come over to your
-country for investment, Though I have not meet with you before but I
-believe that one has to risk confiding in someone to succeed sometimes
-in life.
+I did this in one patch because it seems like a mistake to extend the 
+structure and not modify the size checks.
 
-My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
-Federal Government of Sudan and he has a personal Oil firm in Bentiu
-Oil zone town and Upper
-Nile city. What I have experience physically, I don't wish to
-experience it again in my life due to the recent civil Ethnic war
-cause by our President Mr. Salva Kiir
-and the rebel leader Mr Riek Machar, I have been Under United Nation
-refuge camp in chad to save my life and that of my little daughter.
+   Stefan
 
-Though, I do not know how you will feel to my proposal, but the truth
-is that I sneaked into Chad our neighboring country where I am living
-now as a refugee.
-I escaped with my little daughter when the rebels bust into our house
-and killed my husband as one of the big oil dealers in the country,
-ever since then, I have being on the run.
+>
+> /Jarkko
 
-I left my country and move to Chad our neighboring country with the
-little ceasefire we had, due to the face to face peace meeting accord
-coordinated by the US Secretary of State, Mr John Kerry and United
-Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
-and the rebel leader Mr Riek Machar to stop this war.
 
-I want to solicit for your partnership with trust to invest the $8
-million dollars deposited by my late husband in Bank because my life
-is no longer safe in our country, since the rebels are looking for the
-families of all the oil business men in the country to kill, saying
-that they are they one that is milking the country dry.
-
-I will offer you 20% of the total fund for your help while I will
-partner with you for the investment in your country.
-If I get your reply.
-
-I will wait to hear from you so as to give you details.With love from
-
- i need you to contact me here sarahkoffi389@yahoo.co.jp
-
-Mrs. Sarah Koffi
