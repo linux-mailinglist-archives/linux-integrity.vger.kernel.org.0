@@ -2,103 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A321205C4B
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 21:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EBE205EDC
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 22:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733305AbgFWT6Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 23 Jun 2020 15:58:25 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46946 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733302AbgFWT6Z (ORCPT
+        id S2390722AbgFWU04 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 23 Jun 2020 16:26:56 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:59052 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2390718AbgFWU0y (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 23 Jun 2020 15:58:25 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NJWU5Z167933;
-        Tue, 23 Jun 2020 15:58:22 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31ukknsf55-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Jun 2020 15:58:22 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05NJWYmk168386;
-        Tue, 23 Jun 2020 15:58:21 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31ukknsf4j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Jun 2020 15:58:21 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05NJpGPC015998;
-        Tue, 23 Jun 2020 19:58:19 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 31uk3308nn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Jun 2020 19:58:19 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05NJwHUE64159924
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 Jun 2020 19:58:17 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 900DCA405F;
-        Tue, 23 Jun 2020 19:58:17 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 52A79A405B;
-        Tue, 23 Jun 2020 19:58:16 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.163.175])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 23 Jun 2020 19:58:16 +0000 (GMT)
-Message-ID: <1592942295.5389.9.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/2] IMA: Add audit log for failure conditions
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        sgrubb@redhat.com, paul@paul-moore.com
-Cc:     rgb@redhat.com, linux-integrity@vger.kernel.org,
-        linux-audit@redhat.com, linux-kernel@vger.kernel.org
-Date:   Tue, 23 Jun 2020 15:58:15 -0400
-In-Reply-To: <20200618211012.2823-2-nramas@linux.microsoft.com>
-References: <20200618211012.2823-1-nramas@linux.microsoft.com>
-         <20200618211012.2823-2-nramas@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Tue, 23 Jun 2020 16:26:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592944013;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mnJkRHe4VG45YqV9Mdm7ZoeBg+XZ/Hh78DcdlWBycFE=;
+        b=DSkYI3060yuseWbSi1/q7U0X3nmsnQOz6SZXbvX3rITx4YwSuhKT0DYTi33/jYUO/pzzi2
+        GXt9dIbvl7SdhEtNUd6bPNS4UcNNCpEKjTDp/i2fmiCOUzcbRwb50qG8nqBhYAK84TmMeP
+        UFKBL2+sch8JpXRQQXqnstQPmouOZLU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-159-xCbn5gnGOdykG_wvFVlQpA-1; Tue, 23 Jun 2020 16:26:49 -0400
+X-MC-Unique: xCbn5gnGOdykG_wvFVlQpA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 81A1F106BB8F;
+        Tue, 23 Jun 2020 20:26:48 +0000 (UTC)
+Received: from localhost (ovpn-116-10.gru2.redhat.com [10.97.116.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E7909F63;
+        Tue, 23 Jun 2020 20:26:47 +0000 (UTC)
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
+        Bruno Meneguele <bmeneg@redhat.com>
+Subject: [PATCH v3 1/2] arch/ima: extend secure boot check to include trusted boot
+Date:   Tue, 23 Jun 2020 17:26:39 -0300
+Message-Id: <20200623202640.4936-2-bmeneg@redhat.com>
+In-Reply-To: <20200623202640.4936-1-bmeneg@redhat.com>
+References: <20200623202640.4936-1-bmeneg@redhat.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-23_12:2020-06-23,2020-06-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=999 adultscore=0 phishscore=0 bulkscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006120000 definitions=main-2006230130
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-06-18 at 14:10 -0700, Lakshmi Ramasubramanian wrote:
-> process_buffer_measurement() and ima_alloc_key_entry() functions need to
-> log an audit message for auditing integrity measurement failures.
-> 
-> Add audit message in these two functions. Remove "pr_devel" log message
-> in process_buffer_measurement().
-> 
-> Sample audit messages:
-> 
-> [    6.303048] audit: type=1804 audit(1592506281.627:2): pid=1 uid=0
-> auid=4294967295 ses=4294967295 subj=kernel op=measuring_key
-> cause=ENOMEM comm="swapper/0" name=".builtin_trusted_keys" res=0
-> errno=-12
+ima_get_secureboot() has been used for checking platform's secure boot
+state for enabling different arch specific IMA policies where available.
+However, for powerpc there also is the concept of Trusted Boot, which is
+also relevant to the check code.
 
-My only concern is that auditing -ENOMEM will put additional memory
-pressure on the system.  I'm not sure if this is a concern and, if so,
-how it should be handled.
+This patch extend the code or'ing the Trusted Boot state in PowerPC arch
+while leaving the other arches (x86 and s390) unchanged. The only changes
+performed in the other arches is related to the function name change.
 
-> 
-> [    8.019432] audit: type=1804 audit(1592506283.344:10): pid=1
-> uid=0 auid=4294967295 ses=4294967295
-> subj=system_u:system_r:init_t:s0 op=measuring_kexec_cmdline
-> cause=hashing_error comm="systemd" name="kexec-cmdline" res=0
-> errno=-22
-> 
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+---
+ arch/powerpc/kernel/ima_arch.c    | 5 +++--
+ arch/s390/kernel/ima_arch.c       | 2 +-
+ arch/x86/kernel/ima_arch.c        | 5 +++--
+ include/linux/ima.h               | 4 ++--
+ security/integrity/ima/ima_main.c | 2 +-
+ 5 files changed, 10 insertions(+), 8 deletions(-)
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+diff --git a/arch/powerpc/kernel/ima_arch.c b/arch/powerpc/kernel/ima_arch.c
+index 957abd592075..32b26b491c07 100644
+--- a/arch/powerpc/kernel/ima_arch.c
++++ b/arch/powerpc/kernel/ima_arch.c
+@@ -7,9 +7,10 @@
+ #include <linux/ima.h>
+ #include <asm/secure_boot.h>
+ 
+-bool arch_ima_get_secureboot(void)
++bool arch_ima_secure_or_trusted_boot(void)
+ {
+-	return is_ppc_secureboot_enabled();
++	return (is_ppc_secureboot_enabled() ||
++		is_ppc_trustedboot_enabled());
+ }
+ 
+ /*
+diff --git a/arch/s390/kernel/ima_arch.c b/arch/s390/kernel/ima_arch.c
+index f3c3e6e1c5d3..9cf823cf2b79 100644
+--- a/arch/s390/kernel/ima_arch.c
++++ b/arch/s390/kernel/ima_arch.c
+@@ -3,7 +3,7 @@
+ #include <linux/ima.h>
+ #include <asm/boot_data.h>
+ 
+-bool arch_ima_get_secureboot(void)
++bool arch_ima_secure_or_trusted_boot(void)
+ {
+ 	return ipl_secure_flag;
+ }
+diff --git a/arch/x86/kernel/ima_arch.c b/arch/x86/kernel/ima_arch.c
+index 7dfb1e808928..168393d399ba 100644
+--- a/arch/x86/kernel/ima_arch.c
++++ b/arch/x86/kernel/ima_arch.c
+@@ -51,7 +51,7 @@ static enum efi_secureboot_mode get_sb_mode(void)
+ 	return efi_secureboot_mode_enabled;
+ }
+ 
+-bool arch_ima_get_secureboot(void)
++bool arch_ima_secure_or_trusted_boot(void)
+ {
+ 	static enum efi_secureboot_mode sb_mode;
+ 	static bool initialized;
+@@ -85,7 +85,8 @@ static const char * const sb_arch_rules[] = {
+ 
+ const char * const *arch_get_ima_policy(void)
+ {
+-	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_ima_get_secureboot()) {
++	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) &&
++	    arch_ima_secure_or_tusted_boot()) {
+ 		if (IS_ENABLED(CONFIG_MODULE_SIG))
+ 			set_module_sig_enforced();
+ 		return sb_arch_rules;
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 9164e1534ec9..839b5c376ed6 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -32,10 +32,10 @@ extern void ima_add_kexec_buffer(struct kimage *image);
+ #endif
+ 
+ #ifdef CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
+-extern bool arch_ima_get_secureboot(void);
++extern bool arch_ima_secure_or_trusted_boot(void);
+ extern const char * const *arch_get_ima_policy(void);
+ #else
+-static inline bool arch_ima_get_secureboot(void)
++static inline bool arch_ima_secure_or_trusted_boot(void)
+ {
+ 	return false;
+ }
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index c1583d98c5e5..a760094e8f8d 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -694,7 +694,7 @@ int ima_load_data(enum kernel_load_data_id id)
+ 	switch (id) {
+ 	case LOADING_KEXEC_IMAGE:
+ 		if (IS_ENABLED(CONFIG_KEXEC_SIG)
+-		    && arch_ima_get_secureboot()) {
++		    && arch_ima_secure_or_trusted_boot()) {
+ 			pr_err("impossible to appraise a kernel image without a file descriptor; try using kexec_file_load syscall.\n");
+ 			return -EACCES;
+ 		}
+-- 
+2.26.2
+
