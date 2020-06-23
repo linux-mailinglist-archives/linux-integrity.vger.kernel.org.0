@@ -2,136 +2,144 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3858920444B
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 01:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB4A204581
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 02:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731001AbgFVXOP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jun 2020 19:14:15 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47566 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730985AbgFVXOO (ORCPT
+        id S1731561AbgFWAeG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jun 2020 20:34:06 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:47316 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731467AbgFWAeE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jun 2020 19:14:14 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05MN1AJi056068;
-        Mon, 22 Jun 2020 19:14:00 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31tyrxk9fn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Jun 2020 19:14:00 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05MN1v4N059847;
-        Mon, 22 Jun 2020 19:13:59 -0400
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31tyrxk9ff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Jun 2020 19:13:59 -0400
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05MMk4Zo005614;
-        Mon, 22 Jun 2020 22:49:00 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma05wdc.us.ibm.com with ESMTP id 31sa38jynt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Jun 2020 22:49:00 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05MMmxx528770752
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Jun 2020 22:48:59 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 82C77C6055;
-        Mon, 22 Jun 2020 22:48:59 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A083C6057;
-        Mon, 22 Jun 2020 22:48:58 +0000 (GMT)
-Received: from DESKTOP-AV6EVPG.localdomain (unknown [9.160.111.155])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 22 Jun 2020 22:48:58 +0000 (GMT)
-From:   Maurizio Drocco <maurizio.drocco@ibm.com>
-To:     zohar@linux.ibm.com
-Cc:     Silviu.Vlasceanu@huawei.com, dmitry.kasatkin@gmail.com,
-        jejb@linux.ibm.com, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, maurizio.drocco@ibm.com,
-        mdrocco@linux.vnet.ibm.com, roberto.sassu@huawei.com,
-        serge@hallyn.com
-Subject: [PATCH] ima: extend boot_aggregate with kernel measurements
-Date:   Mon, 22 Jun 2020 00:50:19 -0400
-Message-Id: <20200622045019.1636-1-maurizio.drocco@ibm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <1592856871.4987.21.camel@linux.ibm.com>
-References: <1592856871.4987.21.camel@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-22_15:2020-06-22,2020-06-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 phishscore=0 spamscore=0 mlxscore=0 impostorscore=0
- cotscore=-2147483648 suspectscore=1 mlxlogscore=999 clxscore=1015
- priorityscore=1501 bulkscore=0 malwarescore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006220148
+        Mon, 22 Jun 2020 20:34:04 -0400
+Received: from sequoia.work.tihix.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3690520B7192;
+        Mon, 22 Jun 2020 17:34:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3690520B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1592872443;
+        bh=5SUV1Yb368pVxUvao6vZUdFkJ4ebo8QZjbCUMhuzizE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o4Hmh6p1DIStUoojjTzdpaNqn8kVFzYIQ4+6unQbTrE52s0v0rA4BrMM3kaZE3Htn
+         5eYTkXweSirwCJnuG8gC6OlPQKapvZGgp3napsAKOTVHqg9AMp8H0L9Mk80sKuMj3n
+         re3DYgBWSwNAddSW9SliDwN1qCp1gjcus2zF3A0o=
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org
+Subject: [PATCH 00/12] ima: Fix rule parsing bugs and extend KEXEC_CMDLINE rule support
+Date:   Mon, 22 Jun 2020 19:32:24 -0500
+Message-Id: <20200623003236.830149-1-tyhicks@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA is not considering TPM registers 8-9 when calculating the boot
-aggregate. When registers 8-9 are used to store measurements of the
-kernel and its command line (e.g., grub2 bootloader with tpm module
-enabled), IMA should include them in the boot aggregate. Registers
-8-9 are only included in non-SHA1 boot_aggregate digests to avoid
-ambiguity.
+This series ultimately extends the supported IMA rule conditionals for
+the KEXEC_CMDLINE hook function. As of today, there's an imbalance in
+IMA language conditional support for KEXEC_CMDLINE rules in comparison
+to KEXEC_KERNEL_CHECK and KEXEC_INITRAMFS_CHECK rules. The KEXEC_CMDLINE
+rules do not support *any* conditionals so you cannot have a sequence of
+rules like this:
 
-Signed-off-by: Maurizio Drocco <maurizio.drocco@ibm.com>
----
- security/integrity/ima/ima.h        |  2 +-
- security/integrity/ima/ima_crypto.c | 15 ++++++++++++++-
- 2 files changed, 15 insertions(+), 2 deletions(-)
+ dont_measure func=KEXEC_KERNEL_CHECK obj_type=foo_t
+ dont_measure func=KEXEC_INITRAMFS_CHECK obj_type=foo_t
+ dont_measure func=KEXEC_CMDLINE obj_type=foo_t
+ measure func=KEXEC_KERNEL_CHECK
+ measure func=KEXEC_INITRAMFS_CHECK
+ measure func=KEXEC_CMDLINE
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index df93ac258e01..9d94080bdad8 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -30,7 +30,7 @@
- 
- enum ima_show_type { IMA_SHOW_BINARY, IMA_SHOW_BINARY_NO_FIELD_LEN,
- 		     IMA_SHOW_BINARY_OLD_STRING_FMT, IMA_SHOW_ASCII };
--enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8 };
-+enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
- 
- /* digest size for IMA, fits SHA1 or MD5 */
- #define IMA_DIGEST_SIZE		SHA1_DIGEST_SIZE
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 220b14920c37..d02917d85033 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -823,13 +823,26 @@ static int ima_calc_boot_aggregate_tfm(char *digest, u16 alg_id,
- 	if (rc != 0)
- 		return rc;
- 
--	/* cumulative sha1 over tpm registers 0-7 */
-+	/* cumulative digest over tpm registers 0-7 */
- 	for (i = TPM_PCR0; i < TPM_PCR8; i++) {
- 		ima_pcrread(i, &d);
- 		/* now accumulate with current aggregate */
- 		rc = crypto_shash_update(shash, d.digest,
- 					 crypto_shash_digestsize(tfm));
- 	}
-+	/*
-+	 * extend cumulative digest over tpm registers 8-9, which contain
-+	 * measurement for the kernel command line (reg. 8) and image (reg. 9)
-+	 * in a typical PCR allocation. Registers 8-9 are only included in
-+	 * non-SHA1 boot_aggregate digests to avoid ambiguity.
-+	 */
-+	if (alg_id != TPM_ALG_SHA1) {
-+		for (i = TPM_PCR8; i < TPM_PCR10; i++) {
-+			ima_pcrread(i, &d);
-+			rc = crypto_shash_update(shash, d.digest,
-+						crypto_shash_digestsize(tfm));
-+		}
-+	}
- 	if (!rc)
- 		crypto_shash_final(shash, digest);
- 	return rc;
+Instead, KEXEC_CMDLINE rules can only be measured or not measured and
+there's no additional flexibility in today's implementation of the
+KEXEC_CMDLINE hook function.
+
+With this series, the above sequence of rules becomes valid and any
+calls to kexec_file_load() with a kernel and initramfs inode type of
+foo_t will not be measured (that includes the kernel cmdline buffer)
+while all other objects given to a kexec_file_load() syscall will be
+measured. There's obviously not an inode directly associated with the
+kernel cmdline buffer but this patch series ties the inode based
+decision making for KEXEC_CMDLINE to the kernel's inode. I think this
+will be intuitive to policy authors.
+
+While reading IMA code and preparing to make this change, I realized
+that the buffer based hook functions (KEXEC_CMDLINE and KEY_CHECK) are
+quite special in comparison to longer standing hook functions. These
+buffer based hook functions can only support measure actions and there
+are some restrictions on the conditionals that they support. However,
+the rule parser isn't enforcing any of those restrictions and IMA policy
+authors wouldn't have any immediate way of knowing that the policy that
+they wrote is invalid. For example, the sequence of rules above parses
+successfully in today's kernel but the
+"dont_measure func=KEXEC_CMDLINE ..." rule is incorrectly handled in
+ima_match_rules(). The dont_measure rule is *always* considered to be a
+match so, surprisingly, no KEXEC_CMDLINE measurements are made.
+
+While making the rule parser more strict, I realized that the parser
+does not correctly free all of the allocated memory associated with an
+ima_rule_entry when going down some error paths. Invalid policy loaded
+by the policy administrator could result in small memory leaks.
+
+I envision patches 1-7 going to stable. The series is ordered in a way
+that has all the fixes up front, followed by cleanups, followed by the
+feature patch. The breakdown of patches looks like so:
+
+ Memory leak fixes: 1-4
+ Parser strictness fixes: 5-7
+ Code cleanups made possible by the fixes: 8-11
+ Extend KEXEC_CMDLINE rule support: 12
+
+Perhaps the most logical ordering for code review is:
+
+ 1, 2, 3, 4, 8, 9, 5, 6, 7, 10, 11, 12
+
+If you'd like me to re-order or split up the series, just let me know.
+Thanks for considering these patches!
+
+Tyler
+
+Tyler Hicks (12):
+  ima: Have the LSM free its audit rule
+  ima: Create a function to free a rule entry
+  ima: Free the entire rule when deleting a list of rules
+  ima: Free the entire rule if it fails to parse
+  ima: Fail rule parsing when buffer hook functions have an invalid
+    action
+  ima: Fail rule parsing when the KEXEC_CMDLINE hook is combined with an
+    invalid cond
+  ima: Fail rule parsing when the KEY_CHECK hook is combined with an
+    invalid cond
+  ima: Shallow copy the args_p member of ima_rule_entry.lsm elements
+  ima: Use correct type for the args_p member of ima_rule_entry.lsm
+    elements
+  ima: Move validation of the keyrings conditional into
+    ima_validate_rule()
+  ima: Use the common function to detect LSM conditionals in a rule
+  ima: Support additional conditionals in the KEXEC_CMDLINE hook
+    function
+
+ include/linux/ima.h                          |   4 +-
+ kernel/kexec_file.c                          |   2 +-
+ security/integrity/ima/ima.h                 |   9 +-
+ security/integrity/ima/ima_api.c             |   2 +-
+ security/integrity/ima/ima_appraise.c        |   2 +-
+ security/integrity/ima/ima_asymmetric_keys.c |   2 +-
+ security/integrity/ima/ima_main.c            |  24 ++-
+ security/integrity/ima/ima_policy.c          | 159 ++++++++++++++-----
+ security/integrity/ima/ima_queue_keys.c      |   2 +-
+ 9 files changed, 148 insertions(+), 58 deletions(-)
+
 -- 
-2.17.1
+2.25.1
 
