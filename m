@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0894E20458B
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 02:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C956420458F
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 02:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731921AbgFWAeU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jun 2020 20:34:20 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:47458 "EHLO
+        id S1731998AbgFWAeX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jun 2020 20:34:23 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:47504 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731908AbgFWAeR (ORCPT
+        with ESMTP id S1731927AbgFWAeW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jun 2020 20:34:17 -0400
+        Mon, 22 Jun 2020 20:34:22 -0400
 Received: from sequoia.work.tihix.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 6AF7320B7192;
-        Mon, 22 Jun 2020 17:34:16 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6AF7320B7192
+        by linux.microsoft.com (Postfix) with ESMTPSA id B433620B7192;
+        Mon, 22 Jun 2020 17:34:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B433620B7192
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1592872457;
-        bh=MjvOfyC6Kyxg10ZaMXyzh7KFkvoHbtJZoncaooevfJo=;
+        s=default; t=1592872461;
+        bh=ezz4s3uOPz8Mcn01u6sEHjTUJKKCcNFUFhLQPxlyvX4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZMJQIK5k+SfaBZZH7Dc85cfB2xfcW5vhv9kMZtgIOrFC3fbI7kiTZI8aY5jeTgYWV
-         r5aGhGDwBRHwyCwLooaDvqj8I2M9Mv2VOcjvwfo7nav/A/dD8ftKyJPSpffky6KOKN
-         cuvl5LehN0NUd1D7o1SHs5uvyHlcx5X60fnG8Gyw=
+        b=BayDO+uAqIG1o1otFsdXeto+CR9kn3dWZuJJ9u2WvmB+3LlQU6SaEMdNQHGm//30b
+         bOSPCvK/JLV1Wqr+BYC78CnVaX6Ot1bBkLQ98R1REseKpWF/yahNw/vszo4dZcuyle
+         tqdCnxnPcjBJDEQJanSyhJpEm9ncqAOyD+hocUms=
 From:   Tyler Hicks <tyhicks@linux.microsoft.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
@@ -32,9 +32,9 @@ Cc:     James Morris <jmorris@namei.org>,
         Prakhar Srivastava <prsriva02@gmail.com>,
         linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH 05/12] ima: Fail rule parsing when buffer hook functions have an invalid action
-Date:   Mon, 22 Jun 2020 19:32:29 -0500
-Message-Id: <20200623003236.830149-6-tyhicks@linux.microsoft.com>
+Subject: [PATCH 06/12] ima: Fail rule parsing when the KEXEC_CMDLINE hook is combined with an invalid cond
+Date:   Mon, 22 Jun 2020 19:32:30 -0500
+Message-Id: <20200623003236.830149-7-tyhicks@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200623003236.830149-1-tyhicks@linux.microsoft.com>
 References: <20200623003236.830149-1-tyhicks@linux.microsoft.com>
@@ -45,84 +45,70 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Buffer based hook functions, such as KEXEC_CMDLINE and KEY_CHECK, can
-only measure. The process_buffer_measurement() function quietly ignores
-all actions except measure so make this behavior clear at the time of
+The KEXEC_CMDLINE hook function only supports the pcr conditional. Make
+this clear at policy load so that IMA policy authors don't assume that
+other conditionals are supported.
+
+Since KEXEC_CMDLINE's inception, ima_match_rules() has always returned
+true on any loaded KEXEC_CMDLINE rule without any consideration for
+other conditionals present in the rule. Make it clear that pcr is the
+only supported KEXEC_CMDLINE conditional by returning an error during
 policy load.
 
-The parsing of the keyrings conditional had a check to ensure that it
-was only specified with measure actions but the check should be on the
-hook function and not the keyrings conditional since
-"appraise func=KEY_CHECK" is not a valid rule.
+An example of why this is a problem can be explained with the following
+rule:
+
+ dont_measure func=KEXEC_CMDLINE obj_type=foo_t
+
+An IMA policy author would have assumed that rule is valid because the
+parser accepted it but the result was that measurements for all
+KEXEC_CMDLINE operations would be disabled.
 
 Fixes: b0935123a183 ("IMA: Define a new hook to measure the kexec boot command line arguments")
-Fixes: 5808611cccb2 ("IMA: Add KEY_CHECK func to measure keys")
 Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 ---
- security/integrity/ima/ima_policy.c | 36 +++++++++++++++++++++++++++--
- 1 file changed, 34 insertions(+), 2 deletions(-)
+ security/integrity/ima/ima_policy.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
 diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index ee5152ecd3d9..ecc234b956a2 100644
+index ecc234b956a2..83975ad22907 100644
 --- a/security/integrity/ima/ima_policy.c
 +++ b/security/integrity/ima/ima_policy.c
-@@ -979,6 +979,39 @@ static void check_template_modsig(const struct ima_template_desc *template)
- #undef MSG
+@@ -349,6 +349,17 @@ static int ima_lsm_update_rule(struct ima_rule_entry *entry)
+ 	return 0;
  }
  
-+static bool ima_validate_rule(struct ima_rule_entry *entry)
++static bool ima_rule_contains_lsm_cond(struct ima_rule_entry *entry)
 +{
-+	if (entry->action == UNKNOWN)
-+		return false;
++	int i;
 +
-+	if (entry->flags & IMA_FUNC) {
-+		switch (entry->func) {
-+		case NONE:
-+		case FILE_CHECK:
-+		case MMAP_CHECK:
-+		case BPRM_CHECK:
-+		case CREDS_CHECK:
-+		case POST_SETATTR:
-+		case MODULE_CHECK:
-+		case FIRMWARE_CHECK:
-+		case KEXEC_KERNEL_CHECK:
-+		case KEXEC_INITRAMFS_CHECK:
-+		case POLICY_CHECK:
-+			break;
-+		case KEXEC_CMDLINE:
-+		case KEY_CHECK:
++	for (i = 0; i < MAX_LSM_RULES; i++)
++		if (entry->lsm[i].args_p)
++			return true;
++
++	return false;
++}
++
+ /*
+  * The LSM policy can be reloaded, leaving the IMA LSM based rules referring
+  * to the old, stale LSM policy.  Update the IMA LSM based rules to reflect
+@@ -999,6 +1010,16 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+ 		case POLICY_CHECK:
+ 			break;
+ 		case KEXEC_CMDLINE:
 +			if (entry->action & ~(MEASURE | DONT_MEASURE))
 +				return false;
 +
++			if (entry->flags & ~(IMA_FUNC | IMA_PCR))
++				return false;
++
++			if (ima_rule_contains_lsm_cond(entry))
++				return false;
++
 +			break;
-+		default:
-+			return false;
-+		}
-+	}
-+
-+	return true;
-+}
-+
- static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- {
- 	struct audit_buffer *ab;
-@@ -1156,7 +1189,6 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 			keyrings_len = strlen(args[0].from) + 1;
- 
- 			if ((entry->keyrings) ||
--			    (entry->action != MEASURE) ||
- 			    (entry->func != KEY_CHECK) ||
- 			    (keyrings_len < 2)) {
- 				result = -EINVAL;
-@@ -1362,7 +1394,7 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 			break;
- 		}
- 	}
--	if (!result && (entry->action == UNKNOWN))
-+	if (!result && !ima_validate_rule(entry))
- 		result = -EINVAL;
- 	else if (entry->action == APPRAISE)
- 		temp_ima_appraise |= ima_appraise_flag(entry->func);
+ 		case KEY_CHECK:
+ 			if (entry->action & ~(MEASURE | DONT_MEASURE))
+ 				return false;
 -- 
 2.25.1
 
