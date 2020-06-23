@@ -2,153 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A756204699
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 03:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52572046C7
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 03:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731704AbgFWBR7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jun 2020 21:17:59 -0400
-Received: from mga04.intel.com ([192.55.52.120]:12656 "EHLO mga04.intel.com"
+        id S1731959AbgFWBgW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jun 2020 21:36:22 -0400
+Received: from mga09.intel.com ([134.134.136.24]:27364 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731466AbgFWBR7 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jun 2020 21:17:59 -0400
-IronPort-SDR: Y/T2L06UzLKA3kBPMWrA/HdtXv3lgAEghEkPdoH8ulmkFPqtGUjPQV6Ysa6TdZIgqhS1uZYJ52
- S7uwZZuTPreg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="141426685"
+        id S1731765AbgFWBgW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 22 Jun 2020 21:36:22 -0400
+IronPort-SDR: dlsQy92Mrlab15jQCyjMiF4qFGPTtFKqlZyeTiF6MbudlPHKRKk/cKrlzzdCdIl1xzXTC+nRuB
+ QF3slQC69iTg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="145428328"
 X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="141426685"
+   d="scan'208";a="145428328"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 18:17:57 -0700
-IronPort-SDR: Ka/xdDBzglgnZ7q+EfCYiUripKChDcLPndCKKvApNz8S5a4XbyWXKCtrIvrOUrOezwgBkgF0a8
- fV0ak7TOAZww==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 18:36:20 -0700
+IronPort-SDR: l0hgTZezbicPnpNQTxiqE2o0v0lv/Chi/rXanxIoShOuu8EKeXtf5Qig5J5D7f6EIG2OSBWmQR
+ 4wny8STu2B5g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="319012568"
+   d="scan'208";a="264664177"
 Received: from jczajka-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.133])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Jun 2020 18:17:54 -0700
-Date:   Tue, 23 Jun 2020 04:17:53 +0300
+  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2020 18:36:16 -0700
+Date:   Tue, 23 Jun 2020 04:36:14 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     "Wiseman, Monty (GE Research, US)" <monty.wiseman@ge.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS for TPM keys
-Message-ID: <20200623011753.GH28795@linux.intel.com>
-References: <1575781600.14069.8.camel@HansenPartnership.com>
- <1575781746.14069.11.camel@HansenPartnership.com>
- <194d8ba601b9ecb43e812445729c6270e9f32162.camel@infradead.org>
- <26ED11907FC0F446BB0296B5357EEF0E316CDBB0@CINMBCNA02.e2k.ad.ge.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Andrey Pronin <apronin@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm_tis_spi: Prefer async probe
+Message-ID: <20200623013614.GJ28795@linux.intel.com>
+References: <20200619141958.1.I58d549fded1fd2299543ede6a103fe2bb94c805d@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <26ED11907FC0F446BB0296B5357EEF0E316CDBB0@CINMBCNA02.e2k.ad.ge.com>
+In-Reply-To: <20200619141958.1.I58d549fded1fd2299543ede6a103fe2bb94c805d@changeid>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 08:45:24PM +0000, Wiseman, Monty (GE Research, US) wrote:
-> James,
+On Fri, Jun 19, 2020 at 02:20:01PM -0700, Douglas Anderson wrote:
+> On a Chromebook I'm working on I noticed a big (~1 second) delay
+> during bootup where nothing was happening.  Right around this big
+> delay there were messages about the TPM:
 > 
-> > -----Original Message-----
-> > From: David Woodhouse <dwmw2@infradead.org>
-> > Sent: December 9, 2019 03:56 AM
-> > To: James Bottomley <James.Bottomley@HansenPartnership.com>; linux-
-> > integrity@vger.kernel.org; Wiseman, Monty (GE Global Research, US)
-> > <monty.wiseman@ge.com>
-> > Cc: Mimi Zohar <zohar@linux.ibm.com>; Jarkko Sakkinen
-> > <jarkko.sakkinen@linux.intel.com>
-> > Subject: EXT: Re: [PATCH 3/8] oid_registry: Add TCG defined OIDS for TPM
-> > keys
-> >
-> > On Sat, 2019-12-07 at 21:09 -0800, James Bottomley wrote:
-> > > The TCG has defined an OID prefix "2.23.133.10.1" for the various TPM
-> > > key uses.  We've defined three of the available numbers:
-> > >
-> > > 2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key (Usually
-> > > 		RSA2048 or Elliptic Curve) which can be imported by a
-> > > 		TPM2_Load() operation.
-> > >
-> > > 2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key (Usually
-> > > 		RSA2048 or Elliptic Curve) which can be imported by a
-> > > 		TPM2_Import() operation.
-> > >
-> > > Both loadable and importable keys are specific to a given TPM, the
-> > > difference is that a loadable key is wrapped with the symmetric
-> > > secret, so must have been created by the TPM itself.  An importable
-> > > key is wrapped with a DH shared secret, and may be created without
-> > > access to the TPM provided you know the public part of the parent key.
-> > >
-> > > 2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to 128
-> > > 		bytes) which is sealed by the TPM.  It usually
-> > > 		represents a symmetric key and must be unsealed before
-> > > 		use.
-> >
-> > Do we still not have an official reference for these that you can
-> > provide in the commit or the file itself?
-> >
-> > It would be very nice to have something more than a verbal assurance
-> > that they're in Monty's spreadsheet.
-> >
-> >
-> > > Signed-off-by: James Bottomley
-> > <James.Bottomley@HansenPartnership.com>
-> > > ---
-> > >  include/linux/oid_registry.h | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-> > > index 657d6bf2c064..a4cee888f9b0 100644
-> > > --- a/include/linux/oid_registry.h
-> > > +++ b/include/linux/oid_registry.h
-> > > @@ -107,6 +107,11 @@ enum OID {
-> > >  	OID_gostTC26Sign512B,		/* 1.2.643.7.1.2.1.2.2 */
-> > >  	OID_gostTC26Sign512C,		/* 1.2.643.7.1.2.1.2.3 */
-> > >
-> > > +	/* TCG defined OIDS for TPM based keys */
+> [    2.311352] tpm_tis_spi spi0.0: TPM ready IRQ confirmed on attempt 2
+> [    3.332790] tpm_tis_spi spi0.0: Cr50 firmware version: ...
+> 
+> I put a few printouts in and saw that tpm_tis_spi_init() (specifically
+> tpm_chip_register() in that function) was taking the lion's share of
+> this time, though ~115 ms of the time was in cr50_print_fw_version().
+> 
+> Let's make a one-line change to prefer async probe for tpm_tis_spi.
+> There's no reason we need to block other drivers from probing while we
+> load.
+> 
+> NOTES:
+> * It's possible that other hardware runs through the init sequence
+>   faster than Cr50 and this isn't such a big problem for them.
+>   However, even if they are faster they are still doing _some_
+>   transfers over a SPI bus so this should benefit everyone even if to
+>   a lesser extent.
+> * It's possible that there are extra delays in the code that could be
+>   optimized out.  I didn't dig since once I enabled async probe they
+>   no longer impacted me.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> 
+>  drivers/char/tpm/tpm_tis_spi_main.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+> index d96755935529..422766445373 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -288,6 +288,7 @@ static struct spi_driver tpm_tis_spi_driver = {
+>  		.pm = &tpm_tis_pm,
+>  		.of_match_table = of_match_ptr(of_tis_spi_match),
+>  		.acpi_match_table = ACPI_PTR(acpi_tis_spi_match),
+> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>  	},
+>  	.probe = tpm_tis_spi_driver_probe,
+>  	.remove = tpm_tis_spi_remove,
+> -- 
+> 2.27.0.111.gc72c7da667-goog
+> 
 
-Would be nice to have a link to the TCG OID specification instead of
-this text.
 
-> > > +	OID_TPMLoadableKey,		/* 2.23.133.10.1.3 */
-> > > +	OID_TPMImporableKey,		/* 2.23.133.10.1.4 */
-> > > +	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
-> > > +
-> > >  	OID__NR
-> > >  };
-> > >
-> Bring back an old thread.  We are finally getting the TCG OID registry ready
-> to publish and wanted to verifier the OIDs you requested and we assigned
-> above.
-> 
-> I can find 2.23.133.10.1.3 TPM Loadable key in the tpm2-tss-engine project.
-> 
-> I do not see this one, nor the others list above in the kernel source. Did 
-> these ever
-> get used? If so, where and can you provide a use case for a relying party?
-> 
-> Also, I have in my local spreadsheet the following which I believe were just
-> drafts and never assigned. Please confirm.
-> 2.23.133.10.1.1.2
-> Secondary Identifier: tcg-wellKnownAuthValue
-> 
-> This in intended to be bitmap of well-known authValues. This is not intended
-> to contain an actual authValue. For example. Bit 1 means and authValue of
-> hashsize all zeros, Bit 2 means an authValue of hashsize all NULLs, etc.
-> [Note: Bit 1 is lsb in this notation]
-> 
-> 2.23.133.10.1.1.3
-> No secondary identifier or description
-> 
-> 2.23.133.10.1.1.4
-> No secondary identifier or description
-> 
-> 
-> Monty Wiseman
-> Principal Engineer, Security Architecture
-> Controls & Optimization
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
 /Jarkko
