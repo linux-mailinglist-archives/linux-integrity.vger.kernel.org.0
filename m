@@ -2,104 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A52572046C7
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 03:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA2B2047C5
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jun 2020 05:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731959AbgFWBgW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Jun 2020 21:36:22 -0400
-Received: from mga09.intel.com ([134.134.136.24]:27364 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731765AbgFWBgW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Jun 2020 21:36:22 -0400
-IronPort-SDR: dlsQy92Mrlab15jQCyjMiF4qFGPTtFKqlZyeTiF6MbudlPHKRKk/cKrlzzdCdIl1xzXTC+nRuB
- QF3slQC69iTg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="145428328"
-X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="145428328"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 18:36:20 -0700
-IronPort-SDR: l0hgTZezbicPnpNQTxiqE2o0v0lv/Chi/rXanxIoShOuu8EKeXtf5Qig5J5D7f6EIG2OSBWmQR
- 4wny8STu2B5g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="264664177"
-Received: from jczajka-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.133])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2020 18:36:16 -0700
-Date:   Tue, 23 Jun 2020 04:36:14 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Andrey Pronin <apronin@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tpm_tis_spi: Prefer async probe
-Message-ID: <20200623013614.GJ28795@linux.intel.com>
-References: <20200619141958.1.I58d549fded1fd2299543ede6a103fe2bb94c805d@changeid>
+        id S1731930AbgFWDE3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Jun 2020 23:04:29 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:39466 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731820AbgFWDE2 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 22 Jun 2020 23:04:28 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E02BB20B7192;
+        Mon, 22 Jun 2020 20:04:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E02BB20B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1592881467;
+        bh=381Z41lC2pIuRAjDOd1plbxk7DixDyCGV2sdQrwp2K8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BF7DmQg0pl1+RSkVQ+UHXPhVzA05min9ZtgSAp4sjf9eiEZbWpW37yBlfH4Gs28JW
+         0qObN7Q++fObJG1IT7S2kSL/nQAK+qLRq40yPxUbGqe7qmmxL7F9H+ILgRR4jYoKUY
+         ERX66DrDmXerBOnmTGdDXf4AQUuQjrQQAd71dIPc=
+Date:   Mon, 22 Jun 2020 22:04:10 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Janne Karhunen <janne.karhunen@gmail.com>
+Subject: Re: [PATCH 01/12] ima: Have the LSM free its audit rule
+Message-ID: <20200623030410.GA6048@sequoia>
+References: <20200623003236.830149-1-tyhicks@linux.microsoft.com>
+ <20200623003236.830149-2-tyhicks@linux.microsoft.com>
+ <277dd210-c443-c067-e731-44ac53418fa5@schaufler-ca.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200619141958.1.I58d549fded1fd2299543ede6a103fe2bb94c805d@changeid>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <277dd210-c443-c067-e731-44ac53418fa5@schaufler-ca.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 02:20:01PM -0700, Douglas Anderson wrote:
-> On a Chromebook I'm working on I noticed a big (~1 second) delay
-> during bootup where nothing was happening.  Right around this big
-> delay there were messages about the TPM:
+On 2020-06-22 17:55:59, Casey Schaufler wrote:
+> On 6/22/2020 5:32 PM, Tyler Hicks wrote:
+> > Ask the LSM to free its audit rule rather than directly calling kfree().
+> > Both AppArmor and SELinux do additional work in their audit_rule_free()
+> > hooks. Fix memory leaks by allowing the LSMs to perform necessary work.
+> >
+> > Fixes: b16942455193 ("ima: use the lsm policy update notifier")
+> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> > Cc: Janne Karhunen <janne.karhunen@gmail.com>
+> > ---
+> >  security/integrity/ima/ima.h        | 6 ++++++
+> >  security/integrity/ima/ima_policy.c | 2 +-
+> >  2 files changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> > index df93ac258e01..de05d7f1d3ec 100644
+> > --- a/security/integrity/ima/ima.h
+> > +++ b/security/integrity/ima/ima.h
+> > @@ -404,6 +404,7 @@ static inline void ima_free_modsig(struct modsig *modsig)
+> >  #ifdef CONFIG_IMA_LSM_RULES
+> >  
+> >  #define security_filter_rule_init security_audit_rule_init
+> > +#define security_filter_rule_free security_audit_rule_free
+> >  #define security_filter_rule_match security_audit_rule_match
 > 
-> [    2.311352] tpm_tis_spi spi0.0: TPM ready IRQ confirmed on attempt 2
-> [    3.332790] tpm_tis_spi spi0.0: Cr50 firmware version: ...
+> In context this seems perfectly reasonable. If, however, you're
+> working with the LSM infrastructure this set of #defines is maddening.
+> The existing ones have been driving my nuts for the past few years,
+> so I'd like to discourage adding another. Since the security_filter_rule
+> functions are IMA specific they shouldn't be prefixed security_. I know
+> that it seems to be code churn/bikesheading, but we please change these:
 > 
-> I put a few printouts in and saw that tpm_tis_spi_init() (specifically
-> tpm_chip_register() in that function) was taking the lion's share of
-> this time, though ~115 ms of the time was in cr50_print_fw_version().
+> static inline int ima_filter_rule_init(.....)
+> {
+> 	return security_audit_rule_init(.....);
+> }
 > 
-> Let's make a one-line change to prefer async probe for tpm_tis_spi.
-> There's no reason we need to block other drivers from probing while we
-> load.
-> 
-> NOTES:
-> * It's possible that other hardware runs through the init sequence
->   faster than Cr50 and this isn't such a big problem for them.
->   However, even if they are faster they are still doing _some_
->   transfers over a SPI bus so this should benefit everyone even if to
->   a lesser extent.
-> * It's possible that there are extra delays in the code that could be
->   optimized out.  I didn't dig since once I enabled async probe they
->   no longer impacted me.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
->  drivers/char/tpm/tpm_tis_spi_main.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> index d96755935529..422766445373 100644
-> --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> @@ -288,6 +288,7 @@ static struct spi_driver tpm_tis_spi_driver = {
->  		.pm = &tpm_tis_pm,
->  		.of_match_table = of_match_ptr(of_tis_spi_match),
->  		.acpi_match_table = ACPI_PTR(acpi_tis_spi_match),
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
->  	},
->  	.probe = tpm_tis_spi_driver_probe,
->  	.remove = tpm_tis_spi_remove,
-> -- 
-> 2.27.0.111.gc72c7da667-goog
-> 
+> and so forth. I understand if you don't want to make the change.
+> I have plenty of other things driving me crazy just now, so this
+> doesn't seem likely to push me over the edge.
 
+I'd be happy to take a stab at that as a follow-up or a 13/12 patch. I'd
+like to leave this one as-is for stable kernel reasons since it is
+straightforward and simple.
 
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Tyler
 
-/Jarkko
+> 
+> >  
+> >  #else
+> > @@ -414,6 +415,11 @@ static inline int security_filter_rule_init(u32 field, u32 op, char *rulestr,
+> >  	return -EINVAL;
+> >  }
+> >  
+> > +static inline void security_filter_rule_free(void *lsmrule)
+> > +{
+> > +	return -EINVAL;
+> > +}
+> > +
+> >  static inline int security_filter_rule_match(u32 secid, u32 field, u32 op,
+> >  					     void *lsmrule)
+> >  {
+> > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> > index e493063a3c34..236a731492d1 100644
+> > --- a/security/integrity/ima/ima_policy.c
+> > +++ b/security/integrity/ima/ima_policy.c
+> > @@ -258,7 +258,7 @@ static void ima_lsm_free_rule(struct ima_rule_entry *entry)
+> >  	int i;
+> >  
+> >  	for (i = 0; i < MAX_LSM_RULES; i++) {
+> > -		kfree(entry->lsm[i].rule);
+> > +		security_filter_rule_free(entry->lsm[i].rule);
+> >  		kfree(entry->lsm[i].args_p);
+> >  	}
+> >  	kfree(entry);
