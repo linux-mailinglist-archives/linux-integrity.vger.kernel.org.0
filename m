@@ -2,71 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 666B4207A31
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jun 2020 19:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1C9207E52
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jun 2020 23:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405450AbgFXRZW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Jun 2020 13:25:22 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:47978 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405318AbgFXRZV (ORCPT
+        id S2390317AbgFXVSD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Jun 2020 17:18:03 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40420 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389773AbgFXVSC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Jun 2020 13:25:21 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 362F920B7192;
-        Wed, 24 Jun 2020 10:25:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 362F920B7192
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1593019520;
-        bh=KXE68dak6HAQbc0ivKW2q2uYO1vn/u26qFcxRNMdIGw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=jMY9CIcCXcVXasy+rbNwldyuIKL+RZvgrUPekmS9n7SxjrxGZeZxD3HKVvZgu9aAM
-         DZgaikoIHUiNZ3yNZa7ecTm7TiG8pjbCZ1XfsKNvV3zcP5ZT+n7JY99fH4Q4oLWh1l
-         r0GLdGg3gw6QvVHjpctF4j4hwQgBVLftgZcxfhe8=
-Subject: Re: [PATCH v3 2/2] IMA: Add audit log for failure conditions
-To:     Mimi Zohar <zohar@linux.ibm.com>, sgrubb@redhat.com,
-        paul@paul-moore.com
-Cc:     rgb@redhat.com, linux-integrity@vger.kernel.org,
-        linux-audit@redhat.com, linux-kernel@vger.kernel.org
-References: <20200618211012.2823-1-nramas@linux.microsoft.com>
- <20200618211012.2823-2-nramas@linux.microsoft.com>
- <1592942295.5389.9.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <39d66bdc-55be-984a-42a0-34d0a011e0fb@linux.microsoft.com>
-Date:   Wed, 24 Jun 2020 10:25:16 -0700
+        Wed, 24 Jun 2020 17:18:02 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05OL2eA1069618;
+        Wed, 24 Jun 2020 17:17:55 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31uwymyggj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Jun 2020 17:17:55 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05OLHsef143482;
+        Wed, 24 Jun 2020 17:17:54 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31uwymygg0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Jun 2020 17:17:54 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05OLG6IB020242;
+        Wed, 24 Jun 2020 21:17:53 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma04wdc.us.ibm.com with ESMTP id 31uury6ufj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Jun 2020 21:17:53 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05OLHqs544433764
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Jun 2020 21:17:52 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AD99D112061;
+        Wed, 24 Jun 2020 21:17:52 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 95B4E112064;
+        Wed, 24 Jun 2020 21:17:52 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 24 Jun 2020 21:17:52 +0000 (GMT)
+Subject: Re: [PATCH v2] ima_evm_utils: extended calc_bootaggr to PCRs 8 - 9
+To:     Bruno Meneguele <bmeneg@redhat.com>,
+        Maurizio Drocco <maurizio.drocco@ibm.com>
+Cc:     zohar@linux.ibm.com, Silviu.Vlasceanu@huawei.com,
+        dmitry.kasatkin@gmail.com, jejb@linux.ibm.com, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, mdrocco@linux.vnet.ibm.com,
+        roberto.sassu@huawei.com, serge@hallyn.com
+References: <1592856871.4987.21.camel@linux.ibm.com>
+ <20200623180122.209-1-maurizio.drocco@ibm.com> <20200623181357.GC4983@glitch>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <92a0d170-8157-476b-8083-ae567b11f364@linux.ibm.com>
+Date:   Wed, 24 Jun 2020 17:17:52 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <1592942295.5389.9.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <20200623181357.GC4983@glitch>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-24_16:2020-06-24,2020-06-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ cotscore=-2147483648 spamscore=0 malwarescore=0 adultscore=0
+ impostorscore=0 mlxlogscore=999 clxscore=1011 phishscore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 mlxscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006240133
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/23/20 12:58 PM, Mimi Zohar wrote:
-
-Hi Steve\Paul,
-
->> Sample audit messages:
+On 6/23/20 2:13 PM, Bruno Meneguele wrote:
+> On Tue, Jun 23, 2020 at 02:01:22PM -0400, Maurizio Drocco wrote:
+>> From: Maurizio <maurizio.drocco@ibm.com>
 >>
->> [    6.303048] audit: type=1804 audit(1592506281.627:2): pid=1 uid=0
->> auid=4294967295 ses=4294967295 subj=kernel op=measuring_key
->> cause=ENOMEM comm="swapper/0" name=".builtin_trusted_keys" res=0
->> errno=-12
-> 
-> My only concern is that auditing -ENOMEM will put additional memory
-> pressure on the system. Â I'm not sure if this is a concern and, if so,
-> how it should be handled.
+>> If PCRs 8 - 9 are set (i.e. not all-zeros), cal_bootaggr should include
+>> them into the digest.
 
-Do you have any concerns with respect to adding audit messages in low 
-memory conditions?
 
-> 
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Wouldn't you have to check for not all-zeros in your code?
 
-Thanks Mimi
 
-  -lakshmi
+    Stefan
+
+
+>>
+>> Signed-off-by: Maurizio Drocco <maurizio.drocco@ibm.com>
+>> ---
+>> Changelog:
+>> v2:
+>> - Always include PCRs 8 & 9 to non-sha1 hashes
+>> v1:
+>> - Include non-zero PCRs 8 & 9 to boot aggregates
+>>
+>>   src/evmctl.c | 15 +++++++++++++--
+>>   1 file changed, 13 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/src/evmctl.c b/src/evmctl.c
+>> index 1d065ce..46b7092 100644
+>> --- a/src/evmctl.c
+>> +++ b/src/evmctl.c
+>> @@ -1930,6 +1930,16 @@ static void calc_bootaggr(struct tpm_bank_info *bank)
+>>   		}
+>>   	}
+>>   
+>> +	if (strcmp(bank->algo_name, "sha1") != 0) {
+>> +		for (i = 8; i < 10; i++) {
+>> +			err = EVP_DigestUpdate(pctx, bank->pcr[i], bank->digest_size);
+>> +			if (!err) {
+>> +				log_err("EVP_DigestUpdate() failed\n");
+>> +				return;
+>> +			}
+>> +		}
+>> +	}
+>> +
+>>   	err = EVP_DigestFinal(pctx, bank->digest, &mdlen);
+>>   	if (!err) {
+>>   		log_err("EVP_DigestFinal() failed\n");
+>> @@ -1972,8 +1982,9 @@ static int append_bootaggr(char *bootaggr, struct tpm_bank_info *tpm_banks)
+>>   /*
+>>    * The IMA measurement list boot_aggregate is the link between the preboot
+>>    * event log and the IMA measurement list.  Read and calculate all the
+>> - * possible per TPM bank boot_aggregate digests based on the existing
+>> - * PCRs 0 - 7 to validate against the IMA boot_aggregate record.
+>> + * possible per TPM bank boot_aggregate digests based on the existing PCRs
+>> + * 0 - 9 to validate against the IMA boot_aggregate record. If the digest
+>> + * algorithm is SHA1, only PCRs 0 - 7 are considered to avoid ambiguity.
+>>    */
+>>   static int cmd_ima_bootaggr(struct command *cmd)
+>>   {
+>> -- 
+>> 2.17.1
+>>
+> Reviewed-by: Bruno Meneguele <bmeneg@redhat.com>
+>
+
