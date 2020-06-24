@@ -2,137 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7288C2077D2
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jun 2020 17:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666B4207A31
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jun 2020 19:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404415AbgFXPot (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Jun 2020 11:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404409AbgFXPot (ORCPT
+        id S2405450AbgFXRZW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Jun 2020 13:25:22 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:47978 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405318AbgFXRZV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Jun 2020 11:44:49 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83E8C0613ED
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Jun 2020 08:44:48 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id t194so2980340wmt.4
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Jun 2020 08:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=forissier-org.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RdI5M2Ilrl2+vmVMHIIBNrAs2nh4Sr2me7AQbdHn46E=;
-        b=xd3x1HFCw2Tw5G4YgrI4TEYRwKzSJNBM6wmdSVA59txdEtkxfpSh5Ae8sTkuZv4W29
-         S0A2N+Or30SSf0tpzHGNDqoHW9UdEiI2cTJN+lJUH+s4joj1eMlVveNe2kM5G62ZUJFa
-         lyb33MpXtlCg3IO5J280SNnMcWaTuVokSgsxZ2KDfdWMHhT0sbpTdMV2MQGhQIKZJ2K7
-         rKgfM9909WBaJESSWPDW3XGocUYN2QZPW6legItJmQvjK9f/rqDrUdI4uOEYRHsFmpCE
-         FtfAVUBj3Qpn9SiLDy3nDKQkaaZ92bVzSRyfanSydG8rjZbp5EeTZEklrcrzGVNgqFdp
-         swFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RdI5M2Ilrl2+vmVMHIIBNrAs2nh4Sr2me7AQbdHn46E=;
-        b=uas/e86BTcXTb1HPb5CquP7CnxXwD2S9hXkV7TzrzCkcXKfm3jer8Y0+b/w9uDvTma
-         qo/RaQaaRR1gJRiNX8aYE3RPXgjuB9iqnal2SouU//6Elgrkm3FiiLklhy5lD1ZfjnPV
-         Uat0PI13ldDZ1LvMXGazKVvBYmA61scyS4+ouKG9SmyW/C8bkA6GQYh5L5U+/3occLcZ
-         4Rg9AbbPme3GE6l5Dmm9e7khkvVGqRXZMhlUNouO7YjfyAZj6aSPfPbN00JoXR5oniVh
-         m4YFAXOOstOsfOykCqUgjmsyc6hHnpxTjwioOgRBmAs/7JPPYFyNsUpFnvR3AIyKnx4w
-         vl3Q==
-X-Gm-Message-State: AOAM532KeuSa555zvKKVIXmRYnqOY6HKEYkBs8MERq6OTcYp3y/z8sLj
-        UQQK60F9EhIjiyba1fRdhT3ZOQ==
-X-Google-Smtp-Source: ABdhPJxXnUB7GBcjHzRLLlk+/5eb2yu9/Ebs/uXxHVrBfcmv8vemV/0WlbECWnp7rV+861ObPrN0hw==
-X-Received: by 2002:a1c:9d56:: with SMTP id g83mr15935541wme.130.1593013487525;
-        Wed, 24 Jun 2020 08:44:47 -0700 (PDT)
-Received: from ?IPv6:2a01:e0a:3cb:7bb0:bd12:acc9:5374:bd9b? ([2a01:e0a:3cb:7bb0:bd12:acc9:5374:bd9b])
-        by smtp.gmail.com with ESMTPSA id n189sm8495216wmb.43.2020.06.24.08.44.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Jun 2020 08:44:46 -0700 (PDT)
-Subject: Re: [Tee-dev] [PATCHv8 1/3] optee: use uuid for sysfs driver entry
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Sumit Garg <sumit.garg@linaro.org>
-Cc:     Maxim Uvarov <maxim.uvarov@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Arnd Bergmann <arnd@linaro.org>,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de
-References: <20200604175851.758-1-maxim.uvarov@linaro.org>
- <20200604175851.758-2-maxim.uvarov@linaro.org>
- <CAFA6WYNVk1RcaqnL0FGyYkB+hGkgyqeOMsSKyySL=zfCdNUZXA@mail.gmail.com>
- <b9960a51-7e00-4992-eed5-bd43e7f27b43@forissier.org>
- <CAFA6WYM6XBduokYOdnWD6m+To=6k2SMbXU=HzK_Enk9h-s7VBQ@mail.gmail.com>
- <CAFA6WYNpVvkzgbBfXc1C10mKC6C6q_G1+c-ypg4s1pb0KDPCvg@mail.gmail.com>
- <1592507935.15159.5.camel@HansenPartnership.com>
- <CAFA6WYMqOS+P-c4FznQ5vOKvonnKN4Z6BqTipOkrY3gMENLfeA@mail.gmail.com>
- <1592578844.4369.5.camel@HansenPartnership.com>
- <CAFA6WYPCmZZ1HK-w8fQ2xaNywAZz9W21_fBOnbc35dT30sn7oQ@mail.gmail.com>
- <1593012069.28403.11.camel@HansenPartnership.com>
-From:   Jerome Forissier <jerome@forissier.org>
-Message-ID: <3aa8705a-0342-25ea-00c4-d5370d91ddb4@forissier.org>
-Date:   Wed, 24 Jun 2020 17:44:45 +0200
+        Wed, 24 Jun 2020 13:25:21 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 362F920B7192;
+        Wed, 24 Jun 2020 10:25:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 362F920B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1593019520;
+        bh=KXE68dak6HAQbc0ivKW2q2uYO1vn/u26qFcxRNMdIGw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=jMY9CIcCXcVXasy+rbNwldyuIKL+RZvgrUPekmS9n7SxjrxGZeZxD3HKVvZgu9aAM
+         DZgaikoIHUiNZ3yNZa7ecTm7TiG8pjbCZ1XfsKNvV3zcP5ZT+n7JY99fH4Q4oLWh1l
+         r0GLdGg3gw6QvVHjpctF4j4hwQgBVLftgZcxfhe8=
+Subject: Re: [PATCH v3 2/2] IMA: Add audit log for failure conditions
+To:     Mimi Zohar <zohar@linux.ibm.com>, sgrubb@redhat.com,
+        paul@paul-moore.com
+Cc:     rgb@redhat.com, linux-integrity@vger.kernel.org,
+        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+References: <20200618211012.2823-1-nramas@linux.microsoft.com>
+ <20200618211012.2823-2-nramas@linux.microsoft.com>
+ <1592942295.5389.9.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <39d66bdc-55be-984a-42a0-34d0a011e0fb@linux.microsoft.com>
+Date:   Wed, 24 Jun 2020 10:25:16 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <1593012069.28403.11.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <1592942295.5389.9.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 6/23/20 12:58 PM, Mimi Zohar wrote:
 
+Hi Steve\Paul,
 
-On 6/24/20 5:21 PM, James Bottomley wrote:
-> On Wed, 2020-06-24 at 16:17 +0530, Sumit Garg wrote:
->> Apologies for delay in my reply as I was busy with some other stuff.
+>> Sample audit messages:
 >>
->> On Fri, 19 Jun 2020 at 20:30, James Bottomley
->> <James.Bottomley@hansenpartnership.com> wrote:
-> [...]
->>> it's about consistency with what the kernel types mean.  When some
->>> checker detects your using little endian operations on a big endian
->>> structure (like in the prink for instance) they're going to keep
->>> emailing you about it.
->>
->> As mentioned above, using different terminology is meant to cause
->> more confusion than just difference in endianness which is manageable
->> inside TEE.
->>
->> And I think it's safe to say that the kernel implements UUID in big
->> endian format and thus uses %pUb whereas OP-TEE implements UUID in
->> little endian format and thus uses %pUl.
+>> [    6.303048] audit: type=1804 audit(1592506281.627:2): pid=1 uid=0
+>> auid=4294967295 ses=4294967295 subj=kernel op=measuring_key
+>> cause=ENOMEM comm="swapper/0" name=".builtin_trusted_keys" res=0
+>> errno=-12
 > 
-> So what I think you're saying is that if we still had uuid_be and
-> uuid_le you'd use uuid_le, because that's exactly the structure
-> described in the docs.  But because we renamed
+> My only concern is that auditing -ENOMEM will put additional memory
+> pressure on the system.  I'm not sure if this is a concern and, if so,
+> how it should be handled.
+
+Do you have any concerns with respect to adding audit messages in low 
+memory conditions?
+
 > 
-> uuid_be -> uuid_t
-> uuid_le -> guid_t
-> 
-> You can't use guid_t as a kernel type because it has the wrong name?
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Let me try to clear the confusion that I introduce myself I believe :-/
-IMO:
+Thanks Mimi
 
-- optee_register_device(const uuid_t *device_uuid) *is* the correct
-prototype.
-- device_uuid is *guaranteed* to be BE because OP-TEE makes this
-guarantee (it converts from its internal LE representation to BE when
-enumerating the devices, but it doesn't matter to the kernel).
-- Therefore %pUb is the correct format.
-
-I'm sorry for doubting the BE order initially. I am so used to OP-TEE
-using LE internally, that I missed the fact that we have an explicit
-conversion...
-
-Does this sound good?
-
-Thanks,
--- 
-Jerome
+  -lakshmi
