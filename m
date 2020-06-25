@@ -2,104 +2,250 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A243920A7CF
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 23:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52ADE20A7ED
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 00:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391257AbgFYVyK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jun 2020 17:54:10 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63262 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728381AbgFYVyK (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jun 2020 17:54:10 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05PLVbDG150977;
-        Thu, 25 Jun 2020 17:54:06 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31vtt3kwmj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 17:54:05 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05PLjgrA194423;
-        Thu, 25 Jun 2020 17:54:05 -0400
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31vtt3kwm2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 17:54:05 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05PLjbBt029478;
-        Thu, 25 Jun 2020 21:54:03 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 31uusg13c1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 21:54:03 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05PLs13n3342610
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Jun 2020 21:54:01 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 17ECEA405D;
-        Thu, 25 Jun 2020 21:54:01 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C50EA4051;
-        Thu, 25 Jun 2020 21:53:59 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.142.225])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 25 Jun 2020 21:53:59 +0000 (GMT)
-Message-ID: <1593122039.27152.412.camel@linux.ibm.com>
-Subject: Re: [PATCH 06/12] ima: Fail rule parsing when the KEXEC_CMDLINE
- hook is combined with an invalid cond
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Thu, 25 Jun 2020 17:53:59 -0400
-In-Reply-To: <20200623003236.830149-7-tyhicks@linux.microsoft.com>
-References: <20200623003236.830149-1-tyhicks@linux.microsoft.com>
-         <20200623003236.830149-7-tyhicks@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-25_16:2020-06-25,2020-06-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- adultscore=0 phishscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 impostorscore=0 spamscore=0 cotscore=-2147483648
- clxscore=1015 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006250124
+        id S2405083AbgFYWAk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jun 2020 18:00:40 -0400
+Received: from mga06.intel.com ([134.134.136.31]:59727 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390621AbgFYWAj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 25 Jun 2020 18:00:39 -0400
+IronPort-SDR: AiVQ02Ei4UOsl6ECosMiHVydwCJnm8cnUlnx2ZSUlLsLasoN0mU8qdBR67SBljjAMY2rNcC132
+ 5jXVJ7RfaX6g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="206618487"
+X-IronPort-AV: E=Sophos;i="5.75,280,1589266800"; 
+   d="scan'208";a="206618487"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 15:00:35 -0700
+IronPort-SDR: yCzSdiiLKPj8zl4rdaFKRBUkeCfWTbaRJqt88Q2Y7mnE9nDCCD8VSkLl4xoagm1OzW3Znar/l6
+ TMvZJbUWf19g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,280,1589266800"; 
+   d="scan'208";a="299062276"
+Received: from jproldan-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.123])
+  by orsmga007.jf.intel.com with ESMTP; 25 Jun 2020 15:00:25 -0700
+Date:   Fri, 26 Jun 2020 01:00:23 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     amirmizi6@gmail.com
+Cc:     Eyal.Cohen@nuvoton.com, oshrialkoby85@gmail.com,
+        alexander.steffen@infineon.com, robh+dt@kernel.org,
+        peterhuewe@gmx.de, christophe-h.richard@st.com, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
+        Christophe Ricard <christophe-h.ricard@st.com>
+Subject: Re: [PATCH v12 3/9] tpm: tpm_tis: Add retry in case of protocol
+ failure.
+Message-ID: <20200625220023.GI20341@linux.intel.com>
+References: <20200625144650.269719-1-amirmizi6@gmail.com>
+ <20200625144650.269719-4-amirmizi6@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200625144650.269719-4-amirmizi6@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-06-22 at 19:32 -0500, Tyler Hicks wrote:
-> The KEXEC_CMDLINE hook function only supports the pcr conditional. Make
-> this clear at policy load so that IMA policy authors don't assume that
-> other conditionals are supported.
+On Thu, Jun 25, 2020 at 05:46:43PM +0300, amirmizi6@gmail.com wrote:
+> From: Amir Mizinski <amirmizi6@gmail.com>
 > 
-> Since KEXEC_CMDLINE's inception, ima_match_rules() has always returned
-> true on any loaded KEXEC_CMDLINE rule without any consideration for
-> other conditionals present in the rule. Make it clear that pcr is the
-> only supported KEXEC_CMDLINE conditional by returning an error during
-> policy load.
-> 
-> An example of why this is a problem can be explained with the following
-> rule:
-> 
->  dont_measure func=KEXEC_CMDLINE obj_type=foo_t
-> 
-> An IMA policy author would have assumed that rule is valid because the
-> parser accepted it but the result was that measurements for all
-> KEXEC_CMDLINE operations would be disabled.
-> 
-> Fixes: b0935123a183 ("IMA: Define a new hook to measure the kexec boot command line arguments")
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> Added a retry mechanism on any protocol error when sending a command or
+> receiving a response. This was changed to comply with
+> the TCG PC Client Device Driver Design Principles for TPM 2.0.
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+We don't have to comply with this.
+
+> When sending a command, a loop is added in "tpm_tis_send_main()" that calls
+> "tpm_tis_send_data()" and then issues a retry attempt if any error occurs.
+> When receiving a response, the following new function derived from
+> "tpm_tis_recv()" is added: "__tpm_tis_recv()". "tpm_tis_recv()" is modified
+> to call "__tpm_tis_recv()" in a loop. If any error occurs, a retry is
+> initiated by setting TPM_STS.responseRetry and "__tpm_tis_recv()" is
+> called again.
+> In both cases a retry is attempted up to "TPM_RETRY" times.
+> 
+> Co-developed-by: Christophe Ricard <christophe-h.ricard@st.com>
+> Signed-off-by: Christophe Ricard <christophe-h.ricard@st.com>
+> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 62 ++++++++++++++++++++++++++---------------
+>  drivers/char/tpm/tpm_tis_core.h |  1 +
+>  2 files changed, 41 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 6b33620..e136467 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -305,29 +305,24 @@ static int recv_data(struct tpm_chip *chip, u8 *buf, size_t count)
+>  	return size;
+>  }
+>  
+> -static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+> +static int __tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  	int size = 0;
+>  	int status;
+>  	u32 expected;
+>  
+> -	if (count < TPM_HEADER_SIZE) {
+> -		size = -EIO;
+> -		goto out;
+> -	}
+> -
+>  	size = recv_data(chip, buf, TPM_HEADER_SIZE);
+>  	/* read first 10 bytes, including tag, paramsize, and result */
+>  	if (size < TPM_HEADER_SIZE) {
+>  		dev_err(&chip->dev, "Unable to read header\n");
+> -		goto out;
+> +		return size;
+>  	}
+>  
+>  	expected = be32_to_cpu(*(__be32 *) (buf + 2));
+>  	if (expected > count || expected < TPM_HEADER_SIZE) {
+>  		size = -EIO;
+> -		goto out;
+> +		return size;
+>  	}
+>  
+>  	size += recv_data(chip, &buf[TPM_HEADER_SIZE],
+> @@ -335,22 +330,45 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+>  	if (size < expected) {
+>  		dev_err(&chip->dev, "Unable to read remainder of result\n");
+>  		size = -ETIME;
+> -		goto out;
+> +		return size;
+>  	}
+>  
+>  	if (tpm_tis_wait_for_stat(chip, TPM_STS_VALID, TPM_STS_VALID,
+>  				  chip->timeout_c, &priv->int_queue,
+>  				  false) < 0) {
+>  		size = -ETIME;
+> -		goto out;
+> +		return size;
+>  	}
+> +
+>  	status = tpm_tis_status(chip);
+>  	if (status & TPM_STS_DATA_AVAIL) {	/* retry? */
+>  		dev_err(&chip->dev, "Error left over data\n");
+>  		size = -EIO;
+> +		return size;
+> +	}
+> +
+> +	return size;
+> +}
+> +
+> +static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+> +{
+> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	int size;
+> +	int i;
+> +
+> +	if (count < TPM_HEADER_SIZE) {
+> +		size = -EIO;
+>  		goto out;
+>  	}
+>  
+> +	for (i = 0; i < TPM_RETRY; i++) {
+> +		size = __tpm_tis_recv(chip, buf, count);
+> +		if (size <= 0)
+> +			tpm_tis_write8(priv, TPM_STS(priv->locality),
+> +				       TPM_STS_RESPONSE_RETRY);
+> +		else
+> +			goto out;
+> +	}
+>  out:
+>  	tpm_tis_ready(chip);
+>  	return size;
+> @@ -375,7 +393,7 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+>  					  chip->timeout_b, &priv->int_queue,
+>  					  false) < 0) {
+>  			rc = -ETIME;
+> -			goto out_err;
+> +			return rc;
+>  		}
+>  	}
+>  
+> @@ -384,13 +402,13 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+>  		if (burstcnt < 0) {
+>  			dev_err(&chip->dev, "Unable to read burstcount\n");
+>  			rc = burstcnt;
+> -			goto out_err;
+> +			return rc;
+>  		}
+>  		burstcnt = min_t(int, burstcnt, len - count);
+>  		rc = tpm_tis_write_bytes(priv, TPM_DATA_FIFO(priv->locality),
+>  					 burstcnt, buf + count);
+>  		if (rc < 0)
+> -			goto out_err;
+> +			return rc;
+>  
+>  		count += burstcnt;
+>  	}
+> @@ -398,14 +416,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+>  				  TPM_STS_VALID, chip->timeout_a,
+>  				  &priv->int_queue, false) < 0) {
+>  		rc = -ETIME;
+> -		goto out_err;
+> +		return rc;
+>  	}
+>  
+>  	return 0;
+> -
+> -out_err:
+> -	tpm_tis_ready(chip);
+> -	return rc;
+>  }
+>  
+>  static void disable_interrupts(struct tpm_chip *chip)
+> @@ -434,13 +448,17 @@ static void disable_interrupts(struct tpm_chip *chip)
+>  static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> -	int rc;
+> +	int rc, i;
+>  	u32 ordinal;
+>  	unsigned long dur;
+>  
+> -	rc = tpm_tis_send_data(chip, buf, len);
+> -	if (rc < 0)
+> -		return rc;
+> +	for (i = 0; i < TPM_RETRY; i++) {
+> +		rc = tpm_tis_send_data(chip, buf, len);
+> +		if (rc >= 0)
+> +			break;
+> +	}
+> +	if (i == TPM_RETRY)
+> +		goto out_err;
+>  
+>  	/* go and do it */
+>  	rc = tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index d06c65b..6cc6b76 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -34,6 +34,7 @@ enum tis_status {
+>  	TPM_STS_GO = 0x20,
+>  	TPM_STS_DATA_AVAIL = 0x10,
+>  	TPM_STS_DATA_EXPECT = 0x08,
+> +	TPM_STS_RESPONSE_RETRY = 0x02,
+>  };
+>  
+>  enum tis_int_flags {
+> -- 
+> 2.7.4
+> 
+
+Just based on the explanation this looks like a bunch of unconsidered
+changes. You have explain yourself better.
+
+/Jarkko
