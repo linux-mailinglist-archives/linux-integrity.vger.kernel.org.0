@@ -2,48 +2,48 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E93209EE6
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 14:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDF020A0C4
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 16:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404777AbgFYMwC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jun 2020 08:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        id S2405200AbgFYOYd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jun 2020 10:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404742AbgFYMwC (ORCPT
+        with ESMTP id S2404890AbgFYOYc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jun 2020 08:52:02 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F36C0613ED
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 05:52:02 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id p11so2965166pff.11
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 05:52:02 -0700 (PDT)
+        Thu, 25 Jun 2020 10:24:32 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35E1C08C5C1
+        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 07:24:31 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id 9so6737023ljv.5
+        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 07:24:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yLpKlluK0xCTBNxUab3MgIjNtLTLogp4EiKdanHoPqo=;
-        b=LaVKGeIpgQB6AcB2k7QauLya2rwFxGE0cxGYK8YnyRUcSnTUIt9ac3qq/6Vs8rJZl4
-         pH5/eDXD0qr681ZEAwW1NJIIqUaRyklOsZLzlXoMwQTj6GhuLgHr8/YBlzaB8TmVYxKB
-         AFXKuayvQCPMDgCsswT+soxzKkmojkzz+vK5gy6LuH6dd8wlqh5rvcNWwSCRqAiKyVGp
-         K2mxL62ylVzJxdCTpNvTfiyz1qOQLGNZfUyT3G7WEXbAxTaO811xprhOBLBYff1nydql
-         pxdcd5uSzzg3CtvXyCISy69c+faxyW3QnPOKtIG6vspEUxdbMegp5QoKYj+mrOA4IEgi
-         C6PQ==
+        bh=Y+ZtbKOKX10FRQ/X2SmiDT2iPwxMyGZIFzesaKUw/OU=;
+        b=AIE1va1pK6qjTUIYzsqfq69DSL60n3yRxhhJAUQ4ljo9HbnzGYGmzB06jqCpGnRGvm
+         FLQJbddriT4bUI6Np72Zg2oIRPtdfckb/kWyIydY9842xrPMEFX0UQnMbHtTXcvAdrtM
+         BlhZXKdWCMlaI1hz2Xlpk++uAshiCgzl8eiaDOaKYMb+CRQcclI4/RiD3Xf6oLapJ+eA
+         bKrek8UrYI9Aj0CRgK6umLa2T+wz2NW/4RQw391bTv7Dk2zhamMCVrdOJu3nCCNCkljO
+         ZPpytb0dgLNaupmZGVIt+yFK9OgrMw1vmMrIAtC6KGQEA54sC3qDbX52crKQAWEg0ahU
+         +raQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yLpKlluK0xCTBNxUab3MgIjNtLTLogp4EiKdanHoPqo=;
-        b=WwPYIwDhiTR08b1o5TLB2eg8y5dBoAycRSobguOs+atyDcOF3I6ThbHqBwSzxb6MRX
-         TvXphBwJdAnigD9y6+y29sfLKlmPP5g8p5wikEN1KAxX8zSM2lbksBWIrZa6X+y9YGin
-         fVTq7//irnA62rqbHsQci3adqk8seefMAouenkUSOHiUKSB3oruEpaJZHuAT5NeYbKN0
-         7k8zJ+SwBM3tuaaQDn0oRPRCYpvOr69+jGeu9YkQgYI82vCxpGkgIzXPxnyk9kQb70Yx
-         tHkiIu9M5zYUj/Or2O3gP926QJPPBYFZ/ygDwMCb1dNznGtQtjCR9nCSQ0Pzyb6qtxRV
-         eyXQ==
-X-Gm-Message-State: AOAM532OxxZf4ZZmF1otuX7JWBjOl/qy/G2+UeGUIZ3EQBa/mtATv8e3
-        Taz7le7UgAHluyV/Qu8HZz9+yY5fTxoxQ/Wfb8GYcQ==
-X-Google-Smtp-Source: ABdhPJybZI9FpKDLzQv/5XzuOhZl9DmhSYr8WeJI49d2w+bhzmvrjIAVVUzI8HTMeKWtlHkXDbfw+03v6baP+26QK1w=
-X-Received: by 2002:aa7:9910:: with SMTP id z16mr32601525pff.53.1593089521686;
- Thu, 25 Jun 2020 05:52:01 -0700 (PDT)
+        bh=Y+ZtbKOKX10FRQ/X2SmiDT2iPwxMyGZIFzesaKUw/OU=;
+        b=RCwUnqQY2I8R04jLnUeGXo2LFum/csSjla2GC6uOTDXXUTU+Vg9uDJS0GnJhSM06jC
+         vQf1vPlrh6Pd1G1GXLlTbCX5AHy2zUiQlMNA6LDjeYJ4ex41IqXTlywVZky6lcKFTyAD
+         jJnKMCaMV5P1sdFI1OGH6OZVQlIk3IukQMibr4Mu+SfW4NVZ5dz1JoVJHMP2KhvVHyMS
+         rbPaDWCBtGNbbVxeoWhFbx635eDQu79epHm0UH5GljXyAvvS+2wrjmed92x+XfvTd+jS
+         q0knEXr7unYU+Kr4s89IU1zPixKgezB61kKdvNosJ+zB60Z4673B0M4x/e2+jWiD7mCx
+         oFxw==
+X-Gm-Message-State: AOAM530lNx1KJEE2KQsUeE9fW1d3Ru4xxsDLb64LDRV/7bDOBi+dZC+A
+        i/c4hyoO9ADjrXmBCm5/ZzBUhzVLM/q6iFGhdIpSUg==
+X-Google-Smtp-Source: ABdhPJxPgkRDIQn+rur+DUyyMOCmeL6Rcf7WSslIvGFOV9fp5nQeRVyy4GySaOMLVD53kxrl5RJ1QkbyRQOUst/GZvI=
+X-Received: by 2002:a2e:5c47:: with SMTP id q68mr18010266ljb.30.1593095070064;
+ Thu, 25 Jun 2020 07:24:30 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200604175851.758-1-maxim.uvarov@linaro.org> <20200604175851.758-2-maxim.uvarov@linaro.org>
  <CAFA6WYNVk1RcaqnL0FGyYkB+hGkgyqeOMsSKyySL=zfCdNUZXA@mail.gmail.com>
@@ -51,15 +51,15 @@ References: <20200604175851.758-1-maxim.uvarov@linaro.org> <20200604175851.758-2
  <CAFA6WYNpVvkzgbBfXc1C10mKC6C6q_G1+c-ypg4s1pb0KDPCvg@mail.gmail.com>
  <1592507935.15159.5.camel@HansenPartnership.com> <CAFA6WYMqOS+P-c4FznQ5vOKvonnKN4Z6BqTipOkrY3gMENLfeA@mail.gmail.com>
  <1592578844.4369.5.camel@HansenPartnership.com> <CAFA6WYPCmZZ1HK-w8fQ2xaNywAZz9W21_fBOnbc35dT30sn7oQ@mail.gmail.com>
- <1593012069.28403.11.camel@HansenPartnership.com> <3aa8705a-0342-25ea-00c4-d5370d91ddb4@forissier.org>
-In-Reply-To: <3aa8705a-0342-25ea-00c4-d5370d91ddb4@forissier.org>
-From:   Maxim Uvarov <maxim.uvarov@linaro.org>
-Date:   Thu, 25 Jun 2020 15:51:50 +0300
-Message-ID: <CAD8XO3ZDv-RZ-VPv-AFMRkMD_3uW9XYLeZQf0btGVK8m7GX2Dg@mail.gmail.com>
+ <1593012069.28403.11.camel@HansenPartnership.com>
+In-Reply-To: <1593012069.28403.11.camel@HansenPartnership.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 25 Jun 2020 19:54:18 +0530
+Message-ID: <CAFA6WYMF+JjrB9Cx9TdgDzMeQSvPZfMNapzD-MH4ALVoUoo1sQ@mail.gmail.com>
 Subject: Re: [Tee-dev] [PATCHv8 1/3] optee: use uuid for sysfs driver entry
-To:     Jerome Forissier <jerome@forissier.org>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Jerome Forissier <jerome@forissier.org>,
+        Maxim Uvarov <maxim.uvarov@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
@@ -73,74 +73,71 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 24 Jun 2020 at 18:44, Jerome Forissier <jerome@forissier.org> wrote:
+On Wed, 24 Jun 2020 at 20:51, James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
 >
->
->
-> On 6/24/20 5:21 PM, James Bottomley wrote:
-> > On Wed, 2020-06-24 at 16:17 +0530, Sumit Garg wrote:
-> >> Apologies for delay in my reply as I was busy with some other stuff.
-> >>
-> >> On Fri, 19 Jun 2020 at 20:30, James Bottomley
-> >> <James.Bottomley@hansenpartnership.com> wrote:
-> > [...]
-> >>> it's about consistency with what the kernel types mean.  When some
-> >>> checker detects your using little endian operations on a big endian
-> >>> structure (like in the prink for instance) they're going to keep
-> >>> emailing you about it.
-> >>
-> >> As mentioned above, using different terminology is meant to cause
-> >> more confusion than just difference in endianness which is manageable
-> >> inside TEE.
-> >>
-> >> And I think it's safe to say that the kernel implements UUID in big
-> >> endian format and thus uses %pUb whereas OP-TEE implements UUID in
-> >> little endian format and thus uses %pUl.
+> On Wed, 2020-06-24 at 16:17 +0530, Sumit Garg wrote:
+> > Apologies for delay in my reply as I was busy with some other stuff.
 > >
-> > So what I think you're saying is that if we still had uuid_be and
-> > uuid_le you'd use uuid_le, because that's exactly the structure
-> > described in the docs.  But because we renamed
+> > On Fri, 19 Jun 2020 at 20:30, James Bottomley
+> > <James.Bottomley@hansenpartnership.com> wrote:
+> [...]
+> > > it's about consistency with what the kernel types mean.  When some
+> > > checker detects your using little endian operations on a big endian
+> > > structure (like in the prink for instance) they're going to keep
+> > > emailing you about it.
 > >
-> > uuid_be -> uuid_t
-> > uuid_le -> guid_t
+> > As mentioned above, using different terminology is meant to cause
+> > more confusion than just difference in endianness which is manageable
+> > inside TEE.
 > >
-> > You can't use guid_t as a kernel type because it has the wrong name?
+> > And I think it's safe to say that the kernel implements UUID in big
+> > endian format and thus uses %pUb whereas OP-TEE implements UUID in
+> > little endian format and thus uses %pUl.
 >
-> Let me try to clear the confusion that I introduce myself I believe :-/
-> IMO:
+> So what I think you're saying is that if we still had uuid_be and
+> uuid_le you'd use uuid_le, because that's exactly the structure
+> described in the docs.  But because we renamed
 >
-> - optee_register_device(const uuid_t *device_uuid) *is* the correct
-> prototype.
-> - device_uuid is *guaranteed* to be BE because OP-TEE makes this
-> guarantee (it converts from its internal LE representation to BE when
-> enumerating the devices, but it doesn't matter to the kernel).
-> - Therefore %pUb is the correct format.
+> uuid_be -> uuid_t
+> uuid_le -> guid_t
 >
-> I'm sorry for doubting the BE order initially. I am so used to OP-TEE
-> using LE internally, that I missed the fact that we have an explicit
-> conversion...
->
-> Does this sound good?
->
-> Thanks,
-> --
-> Jerome
+> You can't use guid_t as a kernel type because it has the wrong name?
 
-I think your description is correct. But I think this problem  would
-be solved outside of the current patchset.
-All places should use one single format (LE):
--  internal optee representation;
--  device enumeration pta;
--  this kernel driver which creates sysfs entry and sets
-uid_copy(&optee_device->id.uuid, device_uuid);
--  matching function;
--  drivers use UUID_INIT();
+Isn't the rename commit description [1] pretty clear about which is
+the true UUID type from Linux point of view?
 
-In that way everything will be consistent. But it will require
-changing other pieces, not just the kernel. While
-these patches add functionality to support current device enumeration
-in optee os.
-So I think this version is ok to be applied.
+[1]
+commit f9727a17db9bab71ddae91f74f11a8a2f9a0ece6
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Wed May 17 10:02:48 2017 +0200
 
-Regards,
-Maxim.
+    uuid: rename uuid types
+
+    Our "little endian" UUID really is a Wintel GUID, so rename it and its
+    helpers such (guid_t).  The big endian UUID is the **only true** one, so
+    give it the name uuid_t.  The uuid_le and uuid_be names are retained for
+    now, but will hopefully go away soon.  The exception to that are the _cmp
+    helpers that will be replaced by better primitives ASAP and thus don't
+    get the new names.
+
+    Also the _to_bin helpers are named to match the better named uuid_parse
+    routine in userspace.
+
+    Also remove the existing typedef in XFS that's now been superceeded by
+    the generic type name.
+
+    Signed-off-by: Christoph Hellwig <hch@lst.de>
+    [andy: also update the UUID_LE/UUID_BE macros including fallout]
+    Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+    Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+    Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
+    Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+    Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+-Sumit
+
+>
+> James
+>
