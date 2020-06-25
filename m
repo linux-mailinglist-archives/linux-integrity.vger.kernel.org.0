@@ -2,126 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EC220A759
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 23:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA9920A75A
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 23:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403806AbgFYVTi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jun 2020 17:19:38 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:53137 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2403817AbgFYVTi (ORCPT
+        id S2404089AbgFYVUi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jun 2020 17:20:38 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46974 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2403817AbgFYVUh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jun 2020 17:19:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1593119977;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=2lclZavUqG1NJdj5nMJohBdjSpQQimkahY/d0zlVvwg=;
-        b=DlzhJA/XFNbbwAJBgxdLfvwQFttW5KF6rI8o27a+8Bj639oGH/+Fr8Gx1QPOoH6TWSwIM0
-        hnqRZ5BQ5vDL6B1U26cc8owTo7WASxAby9Lid6b6f1EXYLhiCWEkTOFGy+cKXJTTLx/Kbs
-        vU6nPs4D56AwuBmf4/Rqgr7iLM9SY7E=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-401-WQSGtuXQPHeqzfn3iimAug-1; Thu, 25 Jun 2020 17:19:26 -0400
-X-MC-Unique: WQSGtuXQPHeqzfn3iimAug-1
-Received: by mail-qv1-f72.google.com with SMTP id j6so4955839qvl.13
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 14:19:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=2lclZavUqG1NJdj5nMJohBdjSpQQimkahY/d0zlVvwg=;
-        b=rzNyV+RjrEAMJvW47LISwBG9o8FrA7AzlvEXbzPO0OWTgrt4KYjgH2I/SkRr4Hj0Jr
-         ZyvVtdkGLOHnGov7g6qRl17DHMQAQQ8VWeZXDcz01yk6VWzPbiFB2JIC+uCqcTeVC6eB
-         FU3snFeQ6gLNftwnzMT1bNYNtWIOjUr44wrbiECt1JCgSsE7lFS49EAhAWAfNtLkcThn
-         rfkpwApQnNIMFHOXVmkwg0FKGkXZetoNZlahW4U4+PEQV8fGmm4O7syBaHUtpU7mONIt
-         MHCWDpY/DXQ+NMyRsqhgDAj1CWkfpPQHbkcYjwbNdvf5tqoXoIPHsdOvdoBSLfeNbd+3
-         8w0g==
-X-Gm-Message-State: AOAM531Z7S3GMQXZEZfRZoqU0uVosEn/OEE5KSdYxScqFCcZd5A07Xbk
-        gh1AgiI170/jFlwk5JhWMAbU1FWw0suQxHJMa91aSyrgRLBBrI7c9X4vd9YQdeEFdgDGbOFu75d
-        4zOLcgNySMZf6e1FATYcvQx7JiZ8n
-X-Received: by 2002:ac8:100b:: with SMTP id z11mr35104073qti.157.1593119966253;
-        Thu, 25 Jun 2020 14:19:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyLsblqiQ5p6JQcg9nR90CbIca50stzT8Rss65J3PKeFju/t3M5PIfwaG5G288ynT70MLHDYA==
-X-Received: by 2002:ac8:100b:: with SMTP id z11mr35104052qti.157.1593119965971;
-        Thu, 25 Jun 2020 14:19:25 -0700 (PDT)
-Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
-        by smtp.gmail.com with ESMTPSA id o145sm7078267qke.2.2020.06.25.14.19.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2020 14:19:25 -0700 (PDT)
-Date:   Thu, 25 Jun 2020 14:19:23 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Kylene Jo Hall <kjhall@us.ibm.com>,
-        "Ferry Toth :" <ferry.toth@elsinga.info>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@osdl.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tpm_tis: Remove the HID IFX0102
-Message-ID: <20200625211923.2jirvix6zbrbgj6e@cantor>
-Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
-Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity@vger.kernel.org, Kylene Jo Hall <kjhall@us.ibm.com>,
-        "Ferry Toth :" <ferry.toth@elsinga.info>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@osdl.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
- <20200625062150.idm6j3vm2neyt4sh@cantor>
- <20200625210202.GA20341@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200625210202.GA20341@linux.intel.com>
+        Thu, 25 Jun 2020 17:20:37 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05PL1x5A103989;
+        Thu, 25 Jun 2020 17:20:34 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31vts12r79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 17:20:33 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05PLKXta157749;
+        Thu, 25 Jun 2020 17:20:33 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31vts12r6g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 17:20:33 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05PL5eQ7003898;
+        Thu, 25 Jun 2020 21:20:31 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 31uusgh33s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 21:20:30 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05PLKSB962849460
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 Jun 2020 21:20:28 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 94A5542049;
+        Thu, 25 Jun 2020 21:20:28 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5587F4204C;
+        Thu, 25 Jun 2020 21:20:27 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.142.225])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 25 Jun 2020 21:20:27 +0000 (GMT)
+Message-ID: <1593120026.27152.400.camel@linux.ibm.com>
+Subject: Re: [PATCH 09/12] ima: Use correct type for the args_p member of
+ ima_rule_entry.lsm elements
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Thu, 25 Jun 2020 17:20:26 -0400
+In-Reply-To: <20200623003236.830149-10-tyhicks@linux.microsoft.com>
+References: <20200623003236.830149-1-tyhicks@linux.microsoft.com>
+         <20200623003236.830149-10-tyhicks@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-25_16:2020-06-25,2020-06-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 cotscore=-2147483648
+ adultscore=0 mlxscore=0 malwarescore=0 clxscore=1015 phishscore=0
+ suspectscore=0 spamscore=0 impostorscore=0 priorityscore=1501
+ mlxlogscore=999 lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006250120
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Jun 26 20, Jarkko Sakkinen wrote:
->On Wed, Jun 24, 2020 at 11:21:50PM -0700, Jerry Snitselaar wrote:
->> On Thu Jun 25 20, Jarkko Sakkinen wrote:
->> > Acer C720 running Linux v5.3 reports this in klog:
->> >
->> > tpm_tis: 1.2 TPM (device-id 0xB, rev-id 16)
->> > tpm tpm0: tpm_try_transmit: send(): error -5
->> > tpm tpm0: A TPM error (-5) occurred attempting to determine the timeouts
->> > tpm_tis tpm_tis: Could not get TPM timeouts and durations
->> > tpm_tis 00:08: 1.2 TPM (device-id 0xB, rev-id 16)
->> > tpm tpm0: tpm_try_transmit: send(): error -5
->> > tpm tpm0: A TPM error (-5) occurred attempting to determine the timeouts
->> > tpm_tis 00:08: Could not get TPM timeouts and durations
->> > ima: No TPM chip found, activating TPM-bypass!
->> > tpm_inf_pnp 00:08: Found TPM with ID IFX0102
->> >
->> > % git --no-pager grep IFX0102 drivers/char/tpm
->> > drivers/char/tpm/tpm_infineon.c:	{"IFX0102", 0},
->> > drivers/char/tpm/tpm_tis.c:	{"IFX0102", 0},		/* Infineon */
->> >
->> > Obviously IFX0102 was added to the HID table for the TCG TIS driver by
->> > mistake.
->> >
->> > Fixes: 93e1b7d42e1e ("[PATCH] tpm: add HID module parameter")
->> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203877
->> > Cc: Kylene Jo Hall <kjhall@us.ibm.com>
->> > Reported-by: Ferry Toth: <ferry.toth@elsinga.info>
->> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->>
->> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
->
->Bugzilla has an example of similar behavior with v4.15. I'll apply this
->asap.
->
->/Jarkko
->
+On Mon, 2020-06-22 at 19:32 -0500, Tyler Hicks wrote:
+> Make args_p be of the char pointer type rather than have it be a void
+> pointer that gets casted to char pointer when it is used. It is a simple
+> NUL-terminated string as returned by match_strdup().
+> 
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-Any idea what happened to git.infradead.org? It was offline the other day,
-and at the moment not all repos from before seem to be there.
+Thanks!
 
+Mimi
