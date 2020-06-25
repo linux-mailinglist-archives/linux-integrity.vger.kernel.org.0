@@ -2,165 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2A9209EA2
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 14:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E93209EE6
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 14:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404690AbgFYMm3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jun 2020 08:42:29 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41472 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2404610AbgFYMm3 (ORCPT
+        id S2404777AbgFYMwC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jun 2020 08:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404742AbgFYMwC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jun 2020 08:42:29 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05PCXCcT014274;
-        Thu, 25 Jun 2020 08:42:27 -0400
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31uwyfx3va-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 08:42:26 -0400
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05PCYXPx026608;
-        Thu, 25 Jun 2020 12:42:26 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma02wdc.us.ibm.com with ESMTP id 31uus3ux2n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 12:42:26 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05PCgQAE52625916
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Jun 2020 12:42:26 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 05B2BAE05C;
-        Thu, 25 Jun 2020 12:42:26 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E1A84AE063;
-        Thu, 25 Jun 2020 12:42:25 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 25 Jun 2020 12:42:25 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
-To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jarkko.sakkinen@linux.intel.com, linux-acpi@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v6 2/2] tpm: Add support for event log pointer found in TPM2 ACPI table
-Date:   Thu, 25 Jun 2020 08:42:22 -0400
-Message-Id: <20200625124222.1954580-3-stefanb@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200625124222.1954580-1-stefanb@linux.vnet.ibm.com>
-References: <20200625124222.1954580-1-stefanb@linux.vnet.ibm.com>
+        Thu, 25 Jun 2020 08:52:02 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F36C0613ED
+        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 05:52:02 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id p11so2965166pff.11
+        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 05:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yLpKlluK0xCTBNxUab3MgIjNtLTLogp4EiKdanHoPqo=;
+        b=LaVKGeIpgQB6AcB2k7QauLya2rwFxGE0cxGYK8YnyRUcSnTUIt9ac3qq/6Vs8rJZl4
+         pH5/eDXD0qr681ZEAwW1NJIIqUaRyklOsZLzlXoMwQTj6GhuLgHr8/YBlzaB8TmVYxKB
+         AFXKuayvQCPMDgCsswT+soxzKkmojkzz+vK5gy6LuH6dd8wlqh5rvcNWwSCRqAiKyVGp
+         K2mxL62ylVzJxdCTpNvTfiyz1qOQLGNZfUyT3G7WEXbAxTaO811xprhOBLBYff1nydql
+         pxdcd5uSzzg3CtvXyCISy69c+faxyW3QnPOKtIG6vspEUxdbMegp5QoKYj+mrOA4IEgi
+         C6PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yLpKlluK0xCTBNxUab3MgIjNtLTLogp4EiKdanHoPqo=;
+        b=WwPYIwDhiTR08b1o5TLB2eg8y5dBoAycRSobguOs+atyDcOF3I6ThbHqBwSzxb6MRX
+         TvXphBwJdAnigD9y6+y29sfLKlmPP5g8p5wikEN1KAxX8zSM2lbksBWIrZa6X+y9YGin
+         fVTq7//irnA62rqbHsQci3adqk8seefMAouenkUSOHiUKSB3oruEpaJZHuAT5NeYbKN0
+         7k8zJ+SwBM3tuaaQDn0oRPRCYpvOr69+jGeu9YkQgYI82vCxpGkgIzXPxnyk9kQb70Yx
+         tHkiIu9M5zYUj/Or2O3gP926QJPPBYFZ/ygDwMCb1dNznGtQtjCR9nCSQ0Pzyb6qtxRV
+         eyXQ==
+X-Gm-Message-State: AOAM532OxxZf4ZZmF1otuX7JWBjOl/qy/G2+UeGUIZ3EQBa/mtATv8e3
+        Taz7le7UgAHluyV/Qu8HZz9+yY5fTxoxQ/Wfb8GYcQ==
+X-Google-Smtp-Source: ABdhPJybZI9FpKDLzQv/5XzuOhZl9DmhSYr8WeJI49d2w+bhzmvrjIAVVUzI8HTMeKWtlHkXDbfw+03v6baP+26QK1w=
+X-Received: by 2002:aa7:9910:: with SMTP id z16mr32601525pff.53.1593089521686;
+ Thu, 25 Jun 2020 05:52:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-25_05:2020-06-25,2020-06-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- impostorscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501 phishscore=0
- malwarescore=0 cotscore=-2147483648 lowpriorityscore=0 bulkscore=0
- clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006250078
+References: <20200604175851.758-1-maxim.uvarov@linaro.org> <20200604175851.758-2-maxim.uvarov@linaro.org>
+ <CAFA6WYNVk1RcaqnL0FGyYkB+hGkgyqeOMsSKyySL=zfCdNUZXA@mail.gmail.com>
+ <b9960a51-7e00-4992-eed5-bd43e7f27b43@forissier.org> <CAFA6WYM6XBduokYOdnWD6m+To=6k2SMbXU=HzK_Enk9h-s7VBQ@mail.gmail.com>
+ <CAFA6WYNpVvkzgbBfXc1C10mKC6C6q_G1+c-ypg4s1pb0KDPCvg@mail.gmail.com>
+ <1592507935.15159.5.camel@HansenPartnership.com> <CAFA6WYMqOS+P-c4FznQ5vOKvonnKN4Z6BqTipOkrY3gMENLfeA@mail.gmail.com>
+ <1592578844.4369.5.camel@HansenPartnership.com> <CAFA6WYPCmZZ1HK-w8fQ2xaNywAZz9W21_fBOnbc35dT30sn7oQ@mail.gmail.com>
+ <1593012069.28403.11.camel@HansenPartnership.com> <3aa8705a-0342-25ea-00c4-d5370d91ddb4@forissier.org>
+In-Reply-To: <3aa8705a-0342-25ea-00c4-d5370d91ddb4@forissier.org>
+From:   Maxim Uvarov <maxim.uvarov@linaro.org>
+Date:   Thu, 25 Jun 2020 15:51:50 +0300
+Message-ID: <CAD8XO3ZDv-RZ-VPv-AFMRkMD_3uW9XYLeZQf0btGVK8m7GX2Dg@mail.gmail.com>
+Subject: Re: [Tee-dev] [PATCHv8 1/3] optee: use uuid for sysfs driver entry
+To:     Jerome Forissier <jerome@forissier.org>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Arnd Bergmann <arnd@linaro.org>,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+On Wed, 24 Jun 2020 at 18:44, Jerome Forissier <jerome@forissier.org> wrote:
+>
+>
+>
+> On 6/24/20 5:21 PM, James Bottomley wrote:
+> > On Wed, 2020-06-24 at 16:17 +0530, Sumit Garg wrote:
+> >> Apologies for delay in my reply as I was busy with some other stuff.
+> >>
+> >> On Fri, 19 Jun 2020 at 20:30, James Bottomley
+> >> <James.Bottomley@hansenpartnership.com> wrote:
+> > [...]
+> >>> it's about consistency with what the kernel types mean.  When some
+> >>> checker detects your using little endian operations on a big endian
+> >>> structure (like in the prink for instance) they're going to keep
+> >>> emailing you about it.
+> >>
+> >> As mentioned above, using different terminology is meant to cause
+> >> more confusion than just difference in endianness which is manageable
+> >> inside TEE.
+> >>
+> >> And I think it's safe to say that the kernel implements UUID in big
+> >> endian format and thus uses %pUb whereas OP-TEE implements UUID in
+> >> little endian format and thus uses %pUl.
+> >
+> > So what I think you're saying is that if we still had uuid_be and
+> > uuid_le you'd use uuid_le, because that's exactly the structure
+> > described in the docs.  But because we renamed
+> >
+> > uuid_be -> uuid_t
+> > uuid_le -> guid_t
+> >
+> > You can't use guid_t as a kernel type because it has the wrong name?
+>
+> Let me try to clear the confusion that I introduce myself I believe :-/
+> IMO:
+>
+> - optee_register_device(const uuid_t *device_uuid) *is* the correct
+> prototype.
+> - device_uuid is *guaranteed* to be BE because OP-TEE makes this
+> guarantee (it converts from its internal LE representation to BE when
+> enumerating the devices, but it doesn't matter to the kernel).
+> - Therefore %pUb is the correct format.
+>
+> I'm sorry for doubting the BE order initially. I am so used to OP-TEE
+> using LE internally, that I missed the fact that we have an explicit
+> conversion...
+>
+> Does this sound good?
+>
+> Thanks,
+> --
+> Jerome
 
-In case a TPM2 is attached, search for a TPM2 ACPI table when trying
-to get the event log from ACPI. If one is found, use it to get the
-start and length of the log area. This allows non-UEFI systems, such
-as SeaBIOS, to pass an event log when using a TPM2.
+I think your description is correct. But I think this problem  would
+be solved outside of the current patchset.
+All places should use one single format (LE):
+-  internal optee representation;
+-  device enumeration pta;
+-  this kernel driver which creates sysfs entry and sets
+uid_copy(&optee_device->id.uuid, device_uuid);
+-  matching function;
+-  drivers use UUID_INIT();
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- drivers/char/tpm/eventlog/acpi.c | 59 ++++++++++++++++++++------------
- 1 file changed, 38 insertions(+), 21 deletions(-)
+In that way everything will be consistent. But it will require
+changing other pieces, not just the kernel. While
+these patches add functionality to support current device enumeration
+in optee os.
+So I think this version is ok to be applied.
 
-diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-index 63ada5e53f13..8b9e33d57f70 100644
---- a/drivers/char/tpm/eventlog/acpi.c
-+++ b/drivers/char/tpm/eventlog/acpi.c
-@@ -49,9 +49,9 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	void __iomem *virt;
- 	u64 len, start;
- 	struct tpm_bios_log *log;
--
--	if (chip->flags & TPM_CHIP_FLAG_TPM2)
--		return -ENODEV;
-+	struct acpi_table_tpm2 *tbl;
-+	struct acpi_tpm2_phy *t2phy;
-+	int format;
- 
- 	log = &chip->log;
- 
-@@ -61,23 +61,40 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	if (!chip->acpi_dev_handle)
- 		return -ENODEV;
- 
--	/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
--	status = acpi_get_table(ACPI_SIG_TCPA, 1,
--				(struct acpi_table_header **)&buff);
--
--	if (ACPI_FAILURE(status))
--		return -ENODEV;
--
--	switch(buff->platform_class) {
--	case BIOS_SERVER:
--		len = buff->server.log_max_len;
--		start = buff->server.log_start_addr;
--		break;
--	case BIOS_CLIENT:
--	default:
--		len = buff->client.log_max_len;
--		start = buff->client.log_start_addr;
--		break;
-+	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+		status = acpi_get_table("TPM2", 1,
-+					(struct acpi_table_header **)&tbl);
-+		if (ACPI_FAILURE(status))
-+			return -ENODEV;
-+		if (tbl->header.length <
-+				sizeof(*tbl) + sizeof(struct acpi_tpm2_phy))
-+			return -ENODEV;
-+		t2phy = (void *)tbl + sizeof(*tbl);
-+		len = t2phy->log_area_minimum_length;
-+		start = t2phy->log_area_start_address;
-+		if (!start || !len)
-+			return -ENODEV;
-+		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
-+	} else {
-+		/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
-+		status = acpi_get_table(ACPI_SIG_TCPA, 1,
-+					(struct acpi_table_header **)&buff);
-+
-+		if (ACPI_FAILURE(status))
-+			return -ENODEV;
-+
-+		switch (buff->platform_class) {
-+		case BIOS_SERVER:
-+			len = buff->server.log_max_len;
-+			start = buff->server.log_start_addr;
-+			break;
-+		case BIOS_CLIENT:
-+		default:
-+			len = buff->client.log_max_len;
-+			start = buff->client.log_start_addr;
-+			break;
-+		}
-+		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
- 	}
- 	if (!len) {
- 		dev_warn(&chip->dev, "%s: TCPA log area empty\n", __func__);
-@@ -98,7 +115,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	memcpy_fromio(log->bios_event_log, virt, len);
- 
- 	acpi_os_unmap_iomem(virt, len);
--	return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-+	return format;
- 
- err:
- 	kfree(log->bios_event_log);
--- 
-2.26.2
-
+Regards,
+Maxim.
