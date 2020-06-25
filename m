@@ -2,91 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EE020A601
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 21:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F057820A620
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 21:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406635AbgFYTl4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jun 2020 15:41:56 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40002 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2406069AbgFYTlz (ORCPT
+        id S2406838AbgFYTuj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jun 2020 15:50:39 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:60496 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406679AbgFYTui (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jun 2020 15:41:55 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05PJUuEr101700;
-        Thu, 25 Jun 2020 15:41:51 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31vvkxmgcx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 15:41:51 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05PJUwjO101945;
-        Thu, 25 Jun 2020 15:41:50 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31vvkxmgcd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 15:41:50 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05PJel7w002109;
-        Thu, 25 Jun 2020 19:41:48 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 31uus526bp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 19:41:48 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05PJeR4Z52822498
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Jun 2020 19:40:27 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7837A11C04C;
-        Thu, 25 Jun 2020 19:41:46 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5BB5711C054;
-        Thu, 25 Jun 2020 19:41:44 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.142.225])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 25 Jun 2020 19:41:44 +0000 (GMT)
-Message-ID: <1593114103.27152.346.camel@linux.ibm.com>
-Subject: Re: [PATCH 01/12] ima: Have the LSM free its audit rule
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Thu, 25 Jun 2020 15:50:38 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9E8BB20B7186;
+        Thu, 25 Jun 2020 12:50:37 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9E8BB20B7186
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1593114638;
+        bh=6KdwqIpe+kaP7s5nyTEGYePlbPH1qdRK7aqpZGcTNg4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pDGn5375Fx9daXQyMdPSCn/5L5ekY9T+uvCZlcDIz87wHgvQil7yhFmuztTjzL3Pr
+         0Tdt30/25LtWAC8Cuw0wW/weaAtxC8YgQzvrA3pCd6BR7jqc1iDYyyyWhpWCOLN7Nz
+         SVF9SVqocIUDD1LAAHO0bHyfWUg5PDMjvqCXjSlA=
+Date:   Thu, 25 Jun 2020 14:50:17 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
 Cc:     James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
         Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         Prakhar Srivastava <prsriva02@gmail.com>,
         linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Thu, 25 Jun 2020 15:41:43 -0400
-In-Reply-To: <20200623003236.830149-2-tyhicks@linux.microsoft.com>
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 10/12] ima: Move validation of the keyrings conditional
+ into ima_validate_rule()
+Message-ID: <20200625195017.GA4694@sequoia>
 References: <20200623003236.830149-1-tyhicks@linux.microsoft.com>
-         <20200623003236.830149-2-tyhicks@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-25_15:2020-06-25,2020-06-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 bulkscore=0 malwarescore=0 adultscore=0 impostorscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 cotscore=-2147483648
- spamscore=0 mlxlogscore=999 suspectscore=2 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006250113
+ <20200623003236.830149-11-tyhicks@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200623003236.830149-11-tyhicks@linux.microsoft.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-06-22 at 19:32 -0500, Tyler Hicks wrote:
-> Ask the LSM to free its audit rule rather than directly calling kfree().
-> Both AppArmor and SELinux do additional work in their audit_rule_free()
-> hooks. Fix memory leaks by allowing the LSMs to perform necessary work.
+On 2020-06-22 19:32:34, Tyler Hicks wrote:
+> Use ima_validate_rule() to ensure that the combination of a hook
+> function and the keyrings conditional is valid and that the keyrings
+> conditional is not specified without an explicit KEY_CHECK func
+> conditional. This is a code cleanup and has no user-facing change.
 > 
-> Fixes: b16942455193 ("ima: use the lsm policy update notifier")
 > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> Cc: Janne Karhunen <janne.karhunen@gmail.com>
+> ---
+>  security/integrity/ima/ima_policy.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 514baf24d6a5..ae2ec2a9cdb9 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -999,6 +999,12 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+>  		case KEXEC_KERNEL_CHECK:
+>  		case KEXEC_INITRAMFS_CHECK:
+>  		case POLICY_CHECK:
+> +			if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
+> +					     IMA_UID | IMA_FOWNER | IMA_FSUUID |
+> +					     IMA_INMASK | IMA_EUID | IMA_PCR |
+> +					     IMA_FSNAME))
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+I accidentally left these out:
+
+ (IMA_DIGSIG_REQUIRED | IMA_PERMIT_DIRECTIO | IMA_MODSIG_ALLOWED | IMA_CHECK_BLACKLIST)
+
+I'll add them in v2.
+
+Tyler
+
+> +				return false;
+> +
+>  			break;
+>  		case KEXEC_CMDLINE:
+>  			if (entry->action & ~(MEASURE | DONT_MEASURE))
+> @@ -1026,7 +1032,8 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+>  		default:
+>  			return false;
+>  		}
+> -	}
+> +	} else if (entry->flags & IMA_KEYRINGS)
+> +		return false;
+>  
+>  	return true;
+>  }
+> @@ -1208,7 +1215,6 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>  			keyrings_len = strlen(args[0].from) + 1;
+>  
+>  			if ((entry->keyrings) ||
+> -			    (entry->func != KEY_CHECK) ||
+>  			    (keyrings_len < 2)) {
+>  				result = -EINVAL;
+>  				break;
+> -- 
+> 2.25.1
