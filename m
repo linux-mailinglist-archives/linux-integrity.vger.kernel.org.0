@@ -2,118 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3896D20A75F
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 23:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647E820A762
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 23:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405959AbgFYVYE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jun 2020 17:24:04 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42424 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405932AbgFYVYD (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jun 2020 17:24:03 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5F7198EE2F6;
-        Thu, 25 Jun 2020 14:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1593120242;
-        bh=q5iYVcYIczrHQ6I7vAkgk/OyuxnqDWbAdCwur4CtQ1Y=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=yAe0JFu/odk4cgKR1FaGEEy1MQWKWBxCF2N0YDnZWClREbV/rjDFh46O976PQ70dC
-         +/LKTcE7ownE8qlcpi7w4p+EFtV0kPgZpt/wzWb/kMYrH5vSGSrq7dzY+aGYhFLeUl
-         /8pArzKdEv21FZ3wPdMHy/TCRzU2EjdqOcdMJsZo=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 54TOidBT8hqz; Thu, 25 Jun 2020 14:24:02 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9D2608EE079;
-        Thu, 25 Jun 2020 14:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1593120242;
-        bh=q5iYVcYIczrHQ6I7vAkgk/OyuxnqDWbAdCwur4CtQ1Y=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=yAe0JFu/odk4cgKR1FaGEEy1MQWKWBxCF2N0YDnZWClREbV/rjDFh46O976PQ70dC
-         +/LKTcE7ownE8qlcpi7w4p+EFtV0kPgZpt/wzWb/kMYrH5vSGSrq7dzY+aGYhFLeUl
-         /8pArzKdEv21FZ3wPdMHy/TCRzU2EjdqOcdMJsZo=
-Message-ID: <1593120239.3332.17.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2] tpm_tis: Remove the HID IFX0102
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+        id S2406059AbgFYVZJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jun 2020 17:25:09 -0400
+Received: from mga12.intel.com ([192.55.52.136]:48700 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2403817AbgFYVZJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 25 Jun 2020 17:25:09 -0400
+IronPort-SDR: 9aj0JHzH+46SYZmpY3zgR4ipms0dJKrn3mtpToH3uuSZJkV6ebLblFTTOgW3XqZyXJr0ZhwFHl
+ UWT36zlniaCw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="124731569"
+X-IronPort-AV: E=Sophos;i="5.75,280,1589266800"; 
+   d="scan'208";a="124731569"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 14:25:07 -0700
+IronPort-SDR: JjzDwpV7/tC8ln67VUO2qXVTBl+4LIVaxChS5eHlCy/zuRAKXDUCyNlknQHRYEzQyWbVV0gSlN
+ hSy5cQDguCRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,280,1589266800"; 
+   d="scan'208";a="298925489"
+Received: from gumm-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.49.123])
+  by orsmga007.jf.intel.com with ESMTP; 25 Jun 2020 14:25:01 -0700
+Date:   Fri, 26 Jun 2020 00:24:53 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
 Cc:     linux-integrity@vger.kernel.org,
-        Kylene Jo Hall <kjhall@us.ibm.com>,
-        "Ferry Toth :" <ferry.toth@elsinga.info>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
         Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@osdl.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Alexey Klimov <aklimov@redhat.com>,
         open list <linux-kernel@vger.kernel.org>
-Date:   Thu, 25 Jun 2020 14:23:59 -0700
-In-Reply-To: <20200625211923.2jirvix6zbrbgj6e@cantor>
-References: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
-         <20200625062150.idm6j3vm2neyt4sh@cantor>
-         <20200625210202.GA20341@linux.intel.com>
-         <20200625211923.2jirvix6zbrbgj6e@cantor>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] tpm: tpm2-space: Resize session and context buffers
+ dynamically
+Message-ID: <20200625212453.GB20341@linux.intel.com>
+References: <20200625042424.370072-1-jarkko.sakkinen@linux.intel.com>
+ <2f8a0127-d2ba-21aa-75b3-2dfccfb52eab@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f8a0127-d2ba-21aa-75b3-2dfccfb52eab@linux.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-06-25 at 14:19 -0700, Jerry Snitselaar wrote:
-> On Fri Jun 26 20, Jarkko Sakkinen wrote:
-> > On Wed, Jun 24, 2020 at 11:21:50PM -0700, Jerry Snitselaar wrote:
-> > > On Thu Jun 25 20, Jarkko Sakkinen wrote:
-> > > > Acer C720 running Linux v5.3 reports this in klog:
-> > > > 
-> > > > tpm_tis: 1.2 TPM (device-id 0xB, rev-id 16)
-> > > > tpm tpm0: tpm_try_transmit: send(): error -5
-> > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the
-> > > > timeouts
-> > > > tpm_tis tpm_tis: Could not get TPM timeouts and durations
-> > > > tpm_tis 00:08: 1.2 TPM (device-id 0xB, rev-id 16)
-> > > > tpm tpm0: tpm_try_transmit: send(): error -5
-> > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the
-> > > > timeouts
-> > > > tpm_tis 00:08: Could not get TPM timeouts and durations
-> > > > ima: No TPM chip found, activating TPM-bypass!
-> > > > tpm_inf_pnp 00:08: Found TPM with ID IFX0102
-> > > > 
-> > > > % git --no-pager grep IFX0102 drivers/char/tpm
-> > > > drivers/char/tpm/tpm_infineon.c:	{"IFX0102", 0},
-> > > > drivers/char/tpm/tpm_tis.c:	{"IFX0102", 0},		
-> > > > /* Infineon */
-> > > > 
-> > > > Obviously IFX0102 was added to the HID table for the TCG TIS
-> > > > driver by
-> > > > mistake.
-> > > > 
-> > > > Fixes: 93e1b7d42e1e ("[PATCH] tpm: add HID module parameter")
-> > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203877
-> > > > Cc: Kylene Jo Hall <kjhall@us.ibm.com>
-> > > > Reported-by: Ferry Toth: <ferry.toth@elsinga.info>
-> > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com
-> > > > >
-> > > 
-> > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+On Thu, Jun 25, 2020 at 08:13:09AM -0400, Stefan Berger wrote:
+> On 6/25/20 12:24 AM, Jarkko Sakkinen wrote:
+> > Re-allocate context and session buffers when needed. Scale them in page
+> > increments so that the reallocation is only seldomly required, and thus
+> > causes minimal stress to the system. Add a static maximum limit of four
+> > pages for buffer sizes.
 > > 
-> > Bugzilla has an example of similar behavior with v4.15. I'll apply
-> > this asap.
+> > Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+> > Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > ---
+> > Tested only for compilation.
+> >   drivers/char/tpm/tpm2-space.c | 80 ++++++++++++++++++++++++-----------
+> >   include/linux/tpm.h           |  6 ++-
+> >   2 files changed, 59 insertions(+), 27 deletions(-)
 > > 
-> > /Jarkko
-> > 
+> > diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> > index 982d341d8837..acb9e82bf9e8 100644
+> > --- a/drivers/char/tpm/tpm2-space.c
+> > +++ b/drivers/char/tpm/tpm2-space.c
+> > @@ -15,6 +15,8 @@
+> >   #include <asm/unaligned.h>
+> >   #include "tpm.h"
+> > +#define TPM2_SPACE_MAX_BUFFER_SIZE	(4 * PAGE_SIZE)
 > 
-> Any idea what happened to git.infradead.org? It was offline the other
-> day, and at the moment not all repos from before seem to be there.
+> PAGE_SIZE is 64k on ppc64. Rather use 4 * 4096?
 
-Infradead has been playing up for a while on other things (non git
-services I use).
+Better to then just put it as 16384.
 
-Perhaps it's time to get a kernel.org repository ...
-
-James
+/Jarkko
