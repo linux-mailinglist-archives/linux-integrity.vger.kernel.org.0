@@ -2,91 +2,173 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B845920A57D
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 21:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F309820A5E7
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 21:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405726AbgFYTOr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jun 2020 15:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405492AbgFYTOr (ORCPT
+        id S2406461AbgFYTdv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jun 2020 15:33:51 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48146 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2406068AbgFYTdu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jun 2020 15:14:47 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B22FC08C5C1
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 12:14:46 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id cy7so5082701edb.5
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 12:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pD7cDE1pRowKa97y2ug2GlsIr3bcaoCdNkFbx1fxc3o=;
-        b=kAHhnY0eUb56R4ip4fJPASLy3SH+hwX/PxeFsHJSjGIR00mREk7bx1tJXh56KfJOsY
-         GMl/RMnHXXGehaZ5CBehhPdU+Wn55OnprvZUYlJ4I17H7n7qUfG8yVybz+3U33taaNWw
-         EIBzhGyRuN7wBSJtrXKMiVsKc10CN8EKq4TlQmI/v5SNteIgDIuHKNOWaPeCgCy+bLwC
-         Pc6/6B9Zc/NeeCWrJg35xtp2CNXX4eyrkDvBxqSS7sZjyz+fvQPggy3lGVWq1EJfR88r
-         zz+vF7qI4HvyKTKAwGk2kKfonyPoVRaPU0W2jjF/IO8jLUWaG4owmJXIaAx51zLayYCF
-         IUtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pD7cDE1pRowKa97y2ug2GlsIr3bcaoCdNkFbx1fxc3o=;
-        b=gosIb/bRDQuRdmKaMoYe5zGFZuxPZIgT/7ia/20TfMiYf2IvlXoKMoaUPIJpmB1P7X
-         nQ6gHJrivI9BN3mKtRCCzvPAAYYTbGyMoE62dX+KzTVK6P0YYgNfZ8ClozUR6Qe7wIvT
-         F9jXFMuatqf1zSOA/98urnk6hN2UhRNxdgS13G5Ib7kNOrwvge0nwnjjtM44AArDb9Vh
-         PCnXL5y5wDVoUqfcfY6gzg3HZ30QzaaYDLs2duFeaZohxCQ8he1dRvbRVjYhlmsFy31K
-         b3MrBGQgMXhmdln4rDrf/mbBw6C/jr4kdCyPwKn0rgxcRXf9zqPYSeL9dgCjHw9+3mo0
-         ma1w==
-X-Gm-Message-State: AOAM5309o089k8J/+Flp+ICH3Cc/eQ9XyX8mhzHsWVbtylxwIYZXFk7/
-        aIv76kIpJqWhhK/VSsLVYC5/j8ylJPfXLl98y6aGmJY=
-X-Google-Smtp-Source: ABdhPJwBF+4tgJZEQxIu8g09LpmP3KY3mtsOD8kLQZvMUBINU09oYuesxtYvtDT3DUBp28CQyH/S4RxLZI9OlHqM0Ig=
-X-Received: by 2002:aa7:cd52:: with SMTP id v18mr27675622edw.196.1593112485180;
- Thu, 25 Jun 2020 12:14:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200618211012.2823-1-nramas@linux.microsoft.com>
- <20200618211012.2823-2-nramas@linux.microsoft.com> <1592942295.5389.9.camel@linux.ibm.com>
- <39d66bdc-55be-984a-42a0-34d0a011e0fb@linux.microsoft.com>
-In-Reply-To: <39d66bdc-55be-984a-42a0-34d0a011e0fb@linux.microsoft.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 25 Jun 2020 15:14:34 -0400
-Message-ID: <CAHC9VhRQru30WtA-CMeqq=0GBtZ-Ut20ecHwpYfbEu5qCFqgDg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] IMA: Add audit log for failure conditions
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, sgrubb@redhat.com,
-        rgb@redhat.com, linux-integrity@vger.kernel.org,
-        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+        Thu, 25 Jun 2020 15:33:50 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05PJVZGf096833;
+        Thu, 25 Jun 2020 15:33:40 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31vtt3gg8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 15:33:39 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05PJWncc105143;
+        Thu, 25 Jun 2020 15:33:39 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31vtt3gg8d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 15:33:39 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05PJKmDr020695;
+        Thu, 25 Jun 2020 19:33:37 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 31uus726d2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 19:33:37 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05PJXZHx9830696
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 Jun 2020 19:33:35 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 939C642049;
+        Thu, 25 Jun 2020 19:33:35 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AEFBD42047;
+        Thu, 25 Jun 2020 19:33:33 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.142.225])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 25 Jun 2020 19:33:33 +0000 (GMT)
+Message-ID: <1593113613.27152.345.camel@linux.ibm.com>
+Subject: Re: [PATCH 02/12] ima: Create a function to free a rule entry
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Thu, 25 Jun 2020 15:33:33 -0400
+In-Reply-To: <20200623003236.830149-3-tyhicks@linux.microsoft.com>
+References: <20200623003236.830149-1-tyhicks@linux.microsoft.com>
+         <20200623003236.830149-3-tyhicks@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-25_15:2020-06-25,2020-06-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ adultscore=0 phishscore=0 suspectscore=2 mlxscore=0 mlxlogscore=999
+ lowpriorityscore=0 impostorscore=0 spamscore=0 cotscore=-2147483648
+ clxscore=1011 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006250113
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 1:25 PM Lakshmi Ramasubramanian
-<nramas@linux.microsoft.com> wrote:
->
-> On 6/23/20 12:58 PM, Mimi Zohar wrote:
->
-> Hi Steve\Paul,
->
-> >> Sample audit messages:
-> >>
-> >> [    6.303048] audit: type=1804 audit(1592506281.627:2): pid=1 uid=0
-> >> auid=4294967295 ses=4294967295 subj=kernel op=measuring_key
-> >> cause=ENOMEM comm="swapper/0" name=".builtin_trusted_keys" res=0
-> >> errno=-12
-> >
-> > My only concern is that auditing -ENOMEM will put additional memory
-> > pressure on the system.  I'm not sure if this is a concern and, if so,
-> > how it should be handled.
->
-> Do you have any concerns with respect to adding audit messages in low
-> memory conditions?
+On Mon, 2020-06-22 at 19:32 -0500, Tyler Hicks wrote:
+> There are several possible pieces of allocated memory in a rule entry.
+> Create a function that can free all allocated memory for a given rule
+> entry.
+> 
+> This patch introduces no functional changes but sets the groundwork for
+> some memory leak fixes.
+> 
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-Assuming the system is not completely toast, the allocation failure
-could be a very transient issue; I wouldn't worry too much about it.
+Having a function to release all memory associated with a policy rule
+in general is a good idea.  However, in the case of the shallow copy,
+we're not removing any IMA rules, just updating the LSM info.
 
--- 
-paul moore
-www.paul-moore.com
+There is an opportunity to transition from the builtin policy rules to
+a custom IMA policy.  Afterwards IMA policy rules may only be
+appended.
+
+An IMA custom policy based on LSM info may be loaded prior to the LSM
+policy.  These LSM based rules are inactive until the corresponding
+LSM rule is loaded.  In some environments, LSM policies are loaded and
+removed frequently.  The IMA rules themselves are not removed, just
+the LSM info is updated to reflect the current LSM info.
+
+> ---
+>  security/integrity/ima/ima_policy.c | 33 +++++++++++++++++++++++++++--
+>  1 file changed, 31 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 236a731492d1..1320333201c6 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -261,6 +261,27 @@ static void ima_lsm_free_rule(struct ima_rule_entry *entry)
+>  		security_filter_rule_free(entry->lsm[i].rule);
+>  		kfree(entry->lsm[i].args_p);
+>  	}
+> +}
+> +
+> +static void ima_free_rule(struct ima_rule_entry *entry)
+> +{
+> +	if (!entry)
+> +		return;
+> +
+> +	/*
+> +	 * entry->template->fields may be allocated in ima_parse_rule() but that
+> +	 * reference is owned by the corresponding ima_template_desc element in
+> +	 * the defined_templates list and cannot be freed here
+> +	 */
+> +
+> +	/*
+> +	 * When freeing newly added ima_rule_entry members, consider if you
+> +	 * need to disown any references after the shallow copy in
+> +	 * ima_lsm_copy_rule()
+> +	 */
+> +	kfree(entry->fsname);
+> +	kfree(entry->keyrings);
+> +	ima_lsm_free_rule(entry);
+>  	kfree(entry);
+>  }
+>  
+> @@ -298,10 +319,18 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+>  			pr_warn("rule for LSM \'%s\' is undefined\n",
+>  				(char *)entry->lsm[i].args_p);
+>  	}
+> +
+> +	/* Disown all references that were shallow copied */
+> +	entry->fsname = NULL;
+> +	entry->keyrings = NULL;
+> +	entry->template = NULL;
+>  	return nentry;
+>  
+>  out_err:
+> -	ima_lsm_free_rule(nentry);
+> +	nentry->fsname = NULL;
+> +	nentry->keyrings = NULL;
+> +	nentry->template = NULL;
+> +	ima_free_rule(nentry);
+
+>  	return NULL;
+>  }
+>  
+> @@ -315,7 +344,7 @@ static int ima_lsm_update_rule(struct ima_rule_entry *entry)
+>  
+>  	list_replace_rcu(&entry->list, &nentry->list);
+>  	synchronize_rcu();
+> -	ima_lsm_free_rule(entry);
+> +	ima_free_rule(entry);
+
+This should only update the LSM info, nothing else.
+
+>  
+>  	return 0;
+>  }
+
