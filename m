@@ -2,165 +2,160 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 440ED20A78D
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 23:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2F320A798
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 23:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407220AbgFYVfb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jun 2020 17:35:31 -0400
-Received: from mga01.intel.com ([192.55.52.88]:21158 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403961AbgFYVfb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jun 2020 17:35:31 -0400
-IronPort-SDR: HPmykI6YZnOGrn5sQuoN8thFKQlC5ZHjeg1eDUMSOqMyTFVGhYLSMoPewIAHULdcMpZZwLVIra
- SFL5WZdF+OKg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="163166331"
-X-IronPort-AV: E=Sophos;i="5.75,280,1589266800"; 
-   d="scan'208";a="163166331"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 14:35:30 -0700
-IronPort-SDR: /ij78mFzAEC0wmcngtt+3FRA8yBO6Wxbgay6Vc6+cMMPiGG8kPTfrKU4u8HadKoS2v5AVX81Ml
- 66tH8QOwIjMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,280,1589266800"; 
-   d="scan'208";a="479786598"
-Received: from jproldan-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.123])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Jun 2020 14:35:27 -0700
-Date:   Fri, 26 Jun 2020 00:35:26 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v6 2/2] tpm: Add support for event log pointer found in
- TPM2 ACPI table
-Message-ID: <20200625213526.GE20341@linux.intel.com>
-References: <20200625124222.1954580-1-stefanb@linux.vnet.ibm.com>
- <20200625124222.1954580-3-stefanb@linux.vnet.ibm.com>
+        id S2407280AbgFYViN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jun 2020 17:38:13 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27576 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2403961AbgFYViM (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 25 Jun 2020 17:38:12 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05PLY8Tr176894;
+        Thu, 25 Jun 2020 17:38:06 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31w3a395a4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 17:38:06 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05PLYEGt177555;
+        Thu, 25 Jun 2020 17:38:05 -0400
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31w3a3959p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 17:38:05 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05PLPi7O005601;
+        Thu, 25 Jun 2020 21:38:04 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma02dal.us.ibm.com with ESMTP id 31uurtb0bp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 21:38:04 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05PLc3lR41222630
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 Jun 2020 21:38:03 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8124E112067;
+        Thu, 25 Jun 2020 21:38:03 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 57362112063;
+        Thu, 25 Jun 2020 21:38:03 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 25 Jun 2020 21:38:03 +0000 (GMT)
+Subject: Re: [PATCH v2] tpm: tpm2-space: Resize session and context buffers
+ dynamically
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-integrity@vger.kernel.org
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200625043819.376693-1-jarkko.sakkinen@linux.intel.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <a6444592-234b-d77e-7403-812e19691e72@linux.ibm.com>
+Date:   Thu, 25 Jun 2020 17:38:03 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200625124222.1954580-3-stefanb@linux.vnet.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200625043819.376693-1-jarkko.sakkinen@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-25_16:2020-06-25,2020-06-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ adultscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 malwarescore=0 phishscore=0
+ cotscore=-2147483648 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006250124
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 25, 2020 at 08:42:22AM -0400, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> In case a TPM2 is attached, search for a TPM2 ACPI table when trying
-> to get the event log from ACPI. If one is found, use it to get the
-> start and length of the log area. This allows non-UEFI systems, such
-> as SeaBIOS, to pass an event log when using a TPM2.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+On 6/25/20 12:38 AM, Jarkko Sakkinen wrote:
+> Re-allocate context and session buffers when needed. Scale them in page
+> increments so that the reallocation is only seldomly required, and thus
+> causes minimal stress to the system. Add a static maximum limit of four
+> pages for buffer sizes.
+>
+> Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 > ---
->  drivers/char/tpm/eventlog/acpi.c | 59 ++++++++++++++++++++------------
->  1 file changed, 38 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-> index 63ada5e53f13..8b9e33d57f70 100644
-> --- a/drivers/char/tpm/eventlog/acpi.c
-> +++ b/drivers/char/tpm/eventlog/acpi.c
-> @@ -49,9 +49,9 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	void __iomem *virt;
->  	u64 len, start;
->  	struct tpm_bios_log *log;
-> -
-> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> -		return -ENODEV;
-> +	struct acpi_table_tpm2 *tbl;
-> +	struct acpi_tpm2_phy *t2phy;
-> +	int format;
->  
->  	log = &chip->log;
->  
-> @@ -61,23 +61,40 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	if (!chip->acpi_dev_handle)
->  		return -ENODEV;
->  
-> -	/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
-> -	status = acpi_get_table(ACPI_SIG_TCPA, 1,
-> -				(struct acpi_table_header **)&buff);
-> -
-> -	if (ACPI_FAILURE(status))
-> -		return -ENODEV;
-> -
-> -	switch(buff->platform_class) {
-> -	case BIOS_SERVER:
-> -		len = buff->server.log_max_len;
-> -		start = buff->server.log_start_addr;
-> -		break;
-> -	case BIOS_CLIENT:
-> -	default:
-> -		len = buff->client.log_max_len;
-> -		start = buff->client.log_start_addr;
-> -		break;
-> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> +		status = acpi_get_table("TPM2", 1,
-> +					(struct acpi_table_header **)&tbl);
-> +		if (ACPI_FAILURE(status))
-> +			return -ENODEV;
-
-Add empty line.
-
-> +		if (tbl->header.length <
-> +				sizeof(*tbl) + sizeof(struct acpi_tpm2_phy))
-> +			return -ENODEV;
-
-Ditto.
-
-> +		t2phy = (void *)tbl + sizeof(*tbl);
-> +		len = t2phy->log_area_minimum_length;
-
-Ditto.
-
-> +		start = t2phy->log_area_start_address;
-> +		if (!start || !len)
-> +			return -ENODEV;
-
-Ditto.
-
-> +		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
-> +	} else {
-> +		/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
-> +		status = acpi_get_table(ACPI_SIG_TCPA, 1,
-> +					(struct acpi_table_header **)&buff);
+> Tested only for compilation.
+> v2: TPM2_SPACE_DEFAULT_BUFFER_SIZE
+>   drivers/char/tpm/tpm2-space.c | 87 ++++++++++++++++++++++++-----------
+>   include/linux/tpm.h           |  6 ++-
+>   2 files changed, 64 insertions(+), 29 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> index 982d341d8837..b8ece01d6afb 100644
+> --- a/drivers/char/tpm/tpm2-space.c
+> +++ b/drivers/char/tpm/tpm2-space.c
+> @@ -15,6 +15,9 @@
+>   #include <asm/unaligned.h>
+>   #include "tpm.h"
+>   
+> +#define TPM2_SPACE_DEFAULT_BUFFER_SIZE	PAGE_SIZE
+> +#define TPM2_SPACE_MAX_BUFFER_SIZE	(4 * PAGE_SIZE)
 > +
+>   enum tpm2_handle_types {
+>   	TPM2_HT_HMAC_SESSION	= 0x02000000,
+>   	TPM2_HT_POLICY_SESSION	= 0x03000000,
+> @@ -557,8 +588,10 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space,
+>   	       sizeof(space->context_tbl));
+>   	memcpy(&space->session_tbl, &chip->work_space.session_tbl,
+>   	       sizeof(space->session_tbl));
+> -	memcpy(space->context_buf, chip->work_space.context_buf, PAGE_SIZE);
+> -	memcpy(space->session_buf, chip->work_space.session_buf, PAGE_SIZE);
+> +	memcpy(space->context_buf, chip->work_space.context_buf,
+> +	       space->context_size);
 
-Remove this empty line.
 
-> +		if (ACPI_FAILURE(status))
-> +			return -ENODEV;
-> +
-> +		switch (buff->platform_class) {
-> +		case BIOS_SERVER:
-> +			len = buff->server.log_max_len;
-> +			start = buff->server.log_start_addr;
-> +			break;
-> +		case BIOS_CLIENT:
-> +		default:
-> +			len = buff->client.log_max_len;
-> +			start = buff->client.log_start_addr;
-> +			break;
-> +		}
-> +		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
->  	}
->  	if (!len) {
->  		dev_warn(&chip->dev, "%s: TCPA log area empty\n", __func__);
-> @@ -98,7 +115,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	memcpy_fromio(log->bios_event_log, virt, len);
->  
->  	acpi_os_unmap_iomem(virt, len);
-> -	return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-> +	return format;
->  
->  err:
->  	kfree(log->bios_event_log);
-> -- 
-> 2.26.2
+You have to allocate the max size the in tpm_chip_alloc (tpm-chip.c):
 
-/Jarkko
+    chip->work_space.context_buf = kzalloc(TPM2_SPACE_MAX_BUFFER_SIZE, 
+GFP_KERNEL);
+
+
+> +	memcpy(space->session_buf, chip->work_space.session_buf,
+> +	       space->session_size);
+>   
+
+
+same for this
+
+
+>   	return 0;
+>   out:
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index 03e9b184411b..9ea39e8f7162 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -92,10 +92,12 @@ enum tpm_duration {
+>   #define TPM_PPI_VERSION_LEN		3
+>   
+>   struct tpm_space {
+> +	u8  *context_buf;
+> +	u8  *session_buf;
+> +	u32 context_size;
+> +	u32 session_size;
+>   	u32 context_tbl[3];
+> -	u8 *context_buf;
+>   	u32 session_tbl[3];
+> -	u8 *session_buf;
+>   };
+>   
+>   struct tpm_bios_log {
+
+
