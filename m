@@ -2,91 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA9920A75A
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 23:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3896D20A75F
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2020 23:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404089AbgFYVUi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Jun 2020 17:20:38 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46974 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2403817AbgFYVUh (ORCPT
+        id S2405959AbgFYVYE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Jun 2020 17:24:04 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42424 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405932AbgFYVYD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Jun 2020 17:20:37 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05PL1x5A103989;
-        Thu, 25 Jun 2020 17:20:34 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31vts12r79-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 17:20:33 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05PLKXta157749;
-        Thu, 25 Jun 2020 17:20:33 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31vts12r6g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 17:20:33 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05PL5eQ7003898;
-        Thu, 25 Jun 2020 21:20:31 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 31uusgh33s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Jun 2020 21:20:30 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05PLKSB962849460
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Jun 2020 21:20:28 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 94A5542049;
-        Thu, 25 Jun 2020 21:20:28 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5587F4204C;
-        Thu, 25 Jun 2020 21:20:27 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.142.225])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 25 Jun 2020 21:20:27 +0000 (GMT)
-Message-ID: <1593120026.27152.400.camel@linux.ibm.com>
-Subject: Re: [PATCH 09/12] ima: Use correct type for the args_p member of
- ima_rule_entry.lsm elements
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Thu, 25 Jun 2020 17:20:26 -0400
-In-Reply-To: <20200623003236.830149-10-tyhicks@linux.microsoft.com>
-References: <20200623003236.830149-1-tyhicks@linux.microsoft.com>
-         <20200623003236.830149-10-tyhicks@linux.microsoft.com>
+        Thu, 25 Jun 2020 17:24:03 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5F7198EE2F6;
+        Thu, 25 Jun 2020 14:24:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1593120242;
+        bh=q5iYVcYIczrHQ6I7vAkgk/OyuxnqDWbAdCwur4CtQ1Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=yAe0JFu/odk4cgKR1FaGEEy1MQWKWBxCF2N0YDnZWClREbV/rjDFh46O976PQ70dC
+         +/LKTcE7ownE8qlcpi7w4p+EFtV0kPgZpt/wzWb/kMYrH5vSGSrq7dzY+aGYhFLeUl
+         /8pArzKdEv21FZ3wPdMHy/TCRzU2EjdqOcdMJsZo=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 54TOidBT8hqz; Thu, 25 Jun 2020 14:24:02 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9D2608EE079;
+        Thu, 25 Jun 2020 14:24:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1593120242;
+        bh=q5iYVcYIczrHQ6I7vAkgk/OyuxnqDWbAdCwur4CtQ1Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=yAe0JFu/odk4cgKR1FaGEEy1MQWKWBxCF2N0YDnZWClREbV/rjDFh46O976PQ70dC
+         +/LKTcE7ownE8qlcpi7w4p+EFtV0kPgZpt/wzWb/kMYrH5vSGSrq7dzY+aGYhFLeUl
+         /8pArzKdEv21FZ3wPdMHy/TCRzU2EjdqOcdMJsZo=
+Message-ID: <1593120239.3332.17.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2] tpm_tis: Remove the HID IFX0102
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Kylene Jo Hall <kjhall@us.ibm.com>,
+        "Ferry Toth :" <ferry.toth@elsinga.info>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@osdl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Thu, 25 Jun 2020 14:23:59 -0700
+In-Reply-To: <20200625211923.2jirvix6zbrbgj6e@cantor>
+References: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
+         <20200625062150.idm6j3vm2neyt4sh@cantor>
+         <20200625210202.GA20341@linux.intel.com>
+         <20200625211923.2jirvix6zbrbgj6e@cantor>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-25_16:2020-06-25,2020-06-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 cotscore=-2147483648
- adultscore=0 mlxscore=0 malwarescore=0 clxscore=1015 phishscore=0
- suspectscore=0 spamscore=0 impostorscore=0 priorityscore=1501
- mlxlogscore=999 lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006250120
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-06-22 at 19:32 -0500, Tyler Hicks wrote:
-> Make args_p be of the char pointer type rather than have it be a void
-> pointer that gets casted to char pointer when it is used. It is a simple
-> NUL-terminated string as returned by match_strdup().
+On Thu, 2020-06-25 at 14:19 -0700, Jerry Snitselaar wrote:
+> On Fri Jun 26 20, Jarkko Sakkinen wrote:
+> > On Wed, Jun 24, 2020 at 11:21:50PM -0700, Jerry Snitselaar wrote:
+> > > On Thu Jun 25 20, Jarkko Sakkinen wrote:
+> > > > Acer C720 running Linux v5.3 reports this in klog:
+> > > > 
+> > > > tpm_tis: 1.2 TPM (device-id 0xB, rev-id 16)
+> > > > tpm tpm0: tpm_try_transmit: send(): error -5
+> > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the
+> > > > timeouts
+> > > > tpm_tis tpm_tis: Could not get TPM timeouts and durations
+> > > > tpm_tis 00:08: 1.2 TPM (device-id 0xB, rev-id 16)
+> > > > tpm tpm0: tpm_try_transmit: send(): error -5
+> > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the
+> > > > timeouts
+> > > > tpm_tis 00:08: Could not get TPM timeouts and durations
+> > > > ima: No TPM chip found, activating TPM-bypass!
+> > > > tpm_inf_pnp 00:08: Found TPM with ID IFX0102
+> > > > 
+> > > > % git --no-pager grep IFX0102 drivers/char/tpm
+> > > > drivers/char/tpm/tpm_infineon.c:	{"IFX0102", 0},
+> > > > drivers/char/tpm/tpm_tis.c:	{"IFX0102", 0},		
+> > > > /* Infineon */
+> > > > 
+> > > > Obviously IFX0102 was added to the HID table for the TCG TIS
+> > > > driver by
+> > > > mistake.
+> > > > 
+> > > > Fixes: 93e1b7d42e1e ("[PATCH] tpm: add HID module parameter")
+> > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203877
+> > > > Cc: Kylene Jo Hall <kjhall@us.ibm.com>
+> > > > Reported-by: Ferry Toth: <ferry.toth@elsinga.info>
+> > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com
+> > > > >
+> > > 
+> > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> > 
+> > Bugzilla has an example of similar behavior with v4.15. I'll apply
+> > this asap.
+> > 
+> > /Jarkko
+> > 
 > 
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> Any idea what happened to git.infradead.org? It was offline the other
+> day, and at the moment not all repos from before seem to be there.
 
-Thanks!
+Infradead has been playing up for a while on other things (non git
+services I use).
 
-Mimi
+Perhaps it's time to get a kernel.org repository ...
+
+James
