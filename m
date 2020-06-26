@@ -2,141 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 183BA20B3A3
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 16:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511CC20B3AA
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 16:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbgFZOeo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Jun 2020 10:34:44 -0400
-Received: from mga17.intel.com ([192.55.52.151]:45202 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726393AbgFZOeo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Jun 2020 10:34:44 -0400
-IronPort-SDR: G3DGm09CveZ+FRfIXAQHdLZZ3pE/R1QmJgfjFX440THoGOA01xv2bYBbbbGI3NRwWLy67gkNQf
- O0b5qUnX20/g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="125543201"
-X-IronPort-AV: E=Sophos;i="5.75,284,1589266800"; 
-   d="scan'208";a="125543201"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 07:34:43 -0700
-IronPort-SDR: hvr2GwvSgu67UN13TX3i1cx6xPeuqscnnbTFJUQtLl8I/4XRPZUo8yycMk+bABaIixayDn61GU
- np7qqGSSD24w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,284,1589266800"; 
-   d="scan'208";a="265639847"
-Received: from cgheban-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.199])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jun 2020 07:34:38 -0700
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Stefan Berger <stefanb@linux.ibm.com>, stable@vger.kernel.org,
+        id S1726413AbgFZOgf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Jun 2020 10:36:35 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:51438 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725970AbgFZOgf (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 26 Jun 2020 10:36:35 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id B3E678EE25D;
+        Fri, 26 Jun 2020 07:36:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1593182193;
+        bh=NNjSYoJa2E2i2KfOg27iengig6S5FbChi0NfMaOraSU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=pz4gvXViKqgsBhUOpwcoswSq9g2Wy155Sl/4/GJYyxLPgoNX3WPtS59KK6lfx6kW5
+         X7hAN9psYUkRi19Jr6M+imH1uh08NoR9TfiqMWzhZgtEAcKtSZuKOUAZ54BQNMKNyl
+         bBBj87WHJfEbfnIXcTl3CetdmtqqmLOeD3FbkLGc=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dGrBzAFreGIx; Fri, 26 Jun 2020 07:36:33 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C863D8EE051;
+        Fri, 26 Jun 2020 07:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1593182193;
+        bh=NNjSYoJa2E2i2KfOg27iengig6S5FbChi0NfMaOraSU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=pz4gvXViKqgsBhUOpwcoswSq9g2Wy155Sl/4/GJYyxLPgoNX3WPtS59KK6lfx6kW5
+         X7hAN9psYUkRi19Jr6M+imH1uh08NoR9TfiqMWzhZgtEAcKtSZuKOUAZ54BQNMKNyl
+         bBBj87WHJfEbfnIXcTl3CetdmtqqmLOeD3FbkLGc=
+Message-ID: <1593182191.7381.11.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2] tpm_tis: Remove the HID IFX0102
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        "Ferry Toth :" <ferry.toth@elsinga.info>,
         Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] tpm: Define TPM2_SPACE_BUFFER_SIZE to replace the use of PAGE_SIZE
-Date:   Fri, 26 Jun 2020 17:34:35 +0300
-Message-Id: <20200626143436.396889-1-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Andrew Morton <akpm@osdl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Fri, 26 Jun 2020 07:36:31 -0700
+In-Reply-To: <20200626131523.GB7853@linux.intel.com>
+References: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
+         <20200625062150.idm6j3vm2neyt4sh@cantor>
+         <20200625210202.GA20341@linux.intel.com>
+         <20200625211923.2jirvix6zbrbgj6e@cantor>
+         <1593120239.3332.17.camel@HansenPartnership.com>
+         <20200626131523.GB7853@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The size of the buffers for storing context's and sessions can vary from
-arch to arch as PAGE_SIZE can be anything between 4 kB and 256 kB (the
-maximum for PPC64). Define a fixed buffer size set to 16 kB. This should
-be enough for most use with three handles (that is how many we allow at
-the moment).
+On Fri, 2020-06-26 at 16:15 +0300, Jarkko Sakkinen wrote:
+> I have an obstacle with that.
+> 
+> I lost my previous PGP key a year ago and created a new one, which is
+> not trusted yet by anyone [*]. I've backed this up now and have it
+> stored inside Nitrokey Pro 2 in order to prevent this happening
+> again.
 
-Reported-by: Stefan Berger <stefanb@linux.ibm.com>
-Cc: stable@vger.kernel.org
-Fixes: 745b361e989a ("tpm: infrastructure for TPM spaces")
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- drivers/char/tpm/tpm2-space.c | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+I wouldn't do that.  If the nitro key gets lost or breaks, you'll be in
+the same position.  Best practice is to have your key offline somewhere
+in a secure vault (like an encrypted USB key in a bank vault) so you
+can restore in case of loss and then present inside a token (so I use
+the TPM2 for mine).
 
-diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-index 982d341d8837..9bef646093d1 100644
---- a/drivers/char/tpm/tpm2-space.c
-+++ b/drivers/char/tpm/tpm2-space.c
-@@ -15,6 +15,8 @@
- #include <asm/unaligned.h>
- #include "tpm.h"
- 
-+#define TPM2_SPACE_BUFFER_SIZE		16384 /* 16 kB */
-+
- enum tpm2_handle_types {
- 	TPM2_HT_HMAC_SESSION	= 0x02000000,
- 	TPM2_HT_POLICY_SESSION	= 0x03000000,
-@@ -40,11 +42,11 @@ static void tpm2_flush_sessions(struct tpm_chip *chip, struct tpm_space *space)
- 
- int tpm2_init_space(struct tpm_space *space)
- {
--	space->context_buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
-+	space->context_buf = kzalloc(TPM2_SPACE_BUFFER_SIZE, GFP_KERNEL);
- 	if (!space->context_buf)
- 		return -ENOMEM;
- 
--	space->session_buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
-+	space->session_buf = kzalloc(TPM2_SPACE_BUFFER_SIZE, GFP_KERNEL);
- 	if (space->session_buf == NULL) {
- 		kfree(space->context_buf);
- 		return -ENOMEM;
-@@ -311,8 +313,10 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
- 	       sizeof(space->context_tbl));
- 	memcpy(&chip->work_space.session_tbl, &space->session_tbl,
- 	       sizeof(space->session_tbl));
--	memcpy(chip->work_space.context_buf, space->context_buf, PAGE_SIZE);
--	memcpy(chip->work_space.session_buf, space->session_buf, PAGE_SIZE);
-+	memcpy(chip->work_space.context_buf, space->context_buf,
-+	       TPM2_SPACE_BUFFER_SIZE);
-+	memcpy(chip->work_space.session_buf, space->session_buf,
-+	       TPM2_SPACE_BUFFER_SIZE);
- 
- 	rc = tpm2_load_space(chip);
- 	if (rc) {
-@@ -492,8 +496,8 @@ static int tpm2_save_space(struct tpm_chip *chip)
- 			continue;
- 
- 		rc = tpm2_save_context(chip, space->context_tbl[i],
--				       space->context_buf, PAGE_SIZE,
--				       &offset);
-+				       space->context_buf,
-+				       TPM2_SPACE_BUFFER_SIZE, &offset);
- 		if (rc == -ENOENT) {
- 			space->context_tbl[i] = 0;
- 			continue;
-@@ -509,9 +513,8 @@ static int tpm2_save_space(struct tpm_chip *chip)
- 			continue;
- 
- 		rc = tpm2_save_context(chip, space->session_tbl[i],
--				       space->session_buf, PAGE_SIZE,
--				       &offset);
--
-+				       space->session_buf,
-+				       TPM2_SPACE_BUFFER_SIZE, &offset);
- 		if (rc == -ENOENT) {
- 			/* handle error saving session, just forget it */
- 			space->session_tbl[i] = 0;
-@@ -557,8 +560,10 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space,
- 	       sizeof(space->context_tbl));
- 	memcpy(&space->session_tbl, &chip->work_space.session_tbl,
- 	       sizeof(space->session_tbl));
--	memcpy(space->context_buf, chip->work_space.context_buf, PAGE_SIZE);
--	memcpy(space->session_buf, chip->work_space.session_buf, PAGE_SIZE);
-+	memcpy(space->context_buf, chip->work_space.context_buf,
-+	       TPM2_SPACE_BUFFER_SIZE);
-+	memcpy(space->session_buf, chip->work_space.session_buf,
-+	       TPM2_SPACE_BUFFER_SIZE);
- 
- 	return 0;
- out:
--- 
-2.25.1
+> Now the problem is that in order to get a kernel.org account, I need
+> to be in the web of trust of the kernel maintainers.
+> 
+> I can request an accunt only after I see face to face another kernel
+> maintainers, so that I can proof that I am I.
+> 
+> [*] http://keys.gnupg.net/pks/lookup?op=get&search=0x3AB05486C7752FE1
+
+Well, I would sign this and send it back to you, except I can't.  The
+verification procedures require an encrypted email and you don't have a
+working encryption key:
+
+gpg --export -a 3AB05486C7752FE1 | gpg --encrypt -r 3AB05486C7752FE1 -a --output 3AB05486C7752FE1.gpg 
+gpg: 3AB05486C7752FE1: skipped: Unusable public key
+gpg: [stdin]: encryption failed: Unusable public key
+
+The reason is your main key is certification only (as is should be):
+
+pub  rsa4096/3AB05486C7752FE1
+     created: 2019-06-24  expires: 2023-06-24  usage: C   
+     trust: unknown       validity: full
+
+but your only encryption subkey is revoked:
+
+sub  rsa2048/3A4EC6E56FDD3158
+     created: 2019-06-25  revoked: 2019-10-22  usage: E   
+
+You seem to have only one unrevoked, unexpired subkey which is an
+authentication one, so you wouldn't even be able to sign with that key:
+
+sub  rsa2048/962F0565523E5DC5
+     created: 2019-06-26  expires: 2021-06-25  usage: A   
+
+James
 
