@@ -2,157 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC6320B279
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 15:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183BA20B3A3
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 16:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgFZN1M (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Jun 2020 09:27:12 -0400
-Received: from mga07.intel.com ([134.134.136.100]:34481 "EHLO mga07.intel.com"
+        id S1726397AbgFZOeo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Jun 2020 10:34:44 -0400
+Received: from mga17.intel.com ([192.55.52.151]:45202 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725925AbgFZN1M (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Jun 2020 09:27:12 -0400
-IronPort-SDR: muOj99OIv3E1iveTOt1FOb+gzvkPwVoJVa+E2U7WqPXlMtXe46Ki0CqItzdkJwQM3ROSqPYQJi
- rJ9L9Cypbk7w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="210398005"
-X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="210398005"
+        id S1726393AbgFZOeo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 26 Jun 2020 10:34:44 -0400
+IronPort-SDR: G3DGm09CveZ+FRfIXAQHdLZZ3pE/R1QmJgfjFX440THoGOA01xv2bYBbbbGI3NRwWLy67gkNQf
+ O0b5qUnX20/g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="125543201"
+X-IronPort-AV: E=Sophos;i="5.75,284,1589266800"; 
+   d="scan'208";a="125543201"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 06:27:11 -0700
-IronPort-SDR: +bWsPzrFUhxPzvJ8c//x2qMDHqJqSWA1Z+mVXfaepwU60kPECytauFEsnT5qyQrYzUnd5yydjz
- tAFQcrkdUM9w==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 07:34:43 -0700
+IronPort-SDR: hvr2GwvSgu67UN13TX3i1cx6xPeuqscnnbTFJUQtLl8I/4XRPZUo8yycMk+bABaIixayDn61GU
+ np7qqGSSD24w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="480003202"
+X-IronPort-AV: E=Sophos;i="5.75,284,1589266800"; 
+   d="scan'208";a="265639847"
 Received: from cgheban-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.199])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Jun 2020 06:27:08 -0700
-Date:   Fri, 26 Jun 2020 16:27:06 +0300
+  by fmsmga008.fm.intel.com with ESMTP; 26 Jun 2020 07:34:38 -0700
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v7 2/2] tpm: Add support for event log pointer found in
- TPM2 ACPI table
-Message-ID: <20200626132706.GC7853@linux.intel.com>
-References: <20200625215000.2052086-1-stefanb@linux.vnet.ibm.com>
- <20200625215000.2052086-3-stefanb@linux.vnet.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Stefan Berger <stefanb@linux.ibm.com>, stable@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] tpm: Define TPM2_SPACE_BUFFER_SIZE to replace the use of PAGE_SIZE
+Date:   Fri, 26 Jun 2020 17:34:35 +0300
+Message-Id: <20200626143436.396889-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200625215000.2052086-3-stefanb@linux.vnet.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 25, 2020 at 05:50:00PM -0400, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> In case a TPM2 is attached, search for a TPM2 ACPI table when trying
-> to get the event log from ACPI. If one is found, use it to get the
-> start and length of the log area. This allows non-UEFI systems, such
-> as SeaBIOS, to pass an event log when using a TPM2.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  drivers/char/tpm/eventlog/acpi.c | 62 +++++++++++++++++++++-----------
->  1 file changed, 41 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-> index 63ada5e53f13..e2258cfa6cb1 100644
-> --- a/drivers/char/tpm/eventlog/acpi.c
-> +++ b/drivers/char/tpm/eventlog/acpi.c
-> @@ -49,9 +49,9 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	void __iomem *virt;
->  	u64 len, start;
->  	struct tpm_bios_log *log;
-> -
-> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> -		return -ENODEV;
-> +	struct acpi_table_tpm2 *tbl;
-> +	struct acpi_tpm2_phy *t2phy;
-> +	int format;
->  
->  	log = &chip->log;
->  
-> @@ -61,23 +61,43 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	if (!chip->acpi_dev_handle)
->  		return -ENODEV;
->  
-> -	/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
-> -	status = acpi_get_table(ACPI_SIG_TCPA, 1,
-> -				(struct acpi_table_header **)&buff);
-> -
-> -	if (ACPI_FAILURE(status))
-> -		return -ENODEV;
-> -
-> -	switch(buff->platform_class) {
-> -	case BIOS_SERVER:
-> -		len = buff->server.log_max_len;
-> -		start = buff->server.log_start_addr;
-> -		break;
-> -	case BIOS_CLIENT:
-> -	default:
-> -		len = buff->client.log_max_len;
-> -		start = buff->client.log_start_addr;
-> -		break;
-> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> +		status = acpi_get_table("TPM2", 1,
-> +					(struct acpi_table_header **)&tbl);
-> +		if (ACPI_FAILURE(status))
-> +			return -ENODEV;
-> +
-> +		if (tbl->header.length <
-> +				sizeof(*tbl) + sizeof(struct acpi_tpm2_phy))
-> +			return -ENODEV;
-> +
-> +		t2phy = (void *)tbl + sizeof(*tbl);
-> +		len = t2phy->log_area_minimum_length;
-> +
-> +		start = t2phy->log_area_start_address;
-> +		if (!start || !len)
-> +			return -ENODEV;
-> +
-> +		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
-> +	} else {
-> +		/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
-> +		status = acpi_get_table(ACPI_SIG_TCPA, 1,
-> +					(struct acpi_table_header **)&buff);
-> +		if (ACPI_FAILURE(status))
-> +			return -ENODEV;
-> +
-> +		switch (buff->platform_class) {
-> +		case BIOS_SERVER:
-> +			len = buff->server.log_max_len;
-> +			start = buff->server.log_start_addr;
-> +			break;
-> +		case BIOS_CLIENT:
-> +		default:
-> +			len = buff->client.log_max_len;
-> +			start = buff->client.log_start_addr;
-> +			break;
-> +		}
+The size of the buffers for storing context's and sessions can vary from
+arch to arch as PAGE_SIZE can be anything between 4 kB and 256 kB (the
+maximum for PPC64). Define a fixed buffer size set to 16 kB. This should
+be enough for most use with three handles (that is how many we allow at
+the moment).
 
-Empty line as in the first branch after the conditional statement.
+Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+Cc: stable@vger.kernel.org
+Fixes: 745b361e989a ("tpm: infrastructure for TPM spaces")
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+ drivers/char/tpm/tpm2-space.c | 27 ++++++++++++++++-----------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
 
-> +		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
->  	}
->  	if (!len) {
->  		dev_warn(&chip->dev, "%s: TCPA log area empty\n", __func__);
-> @@ -98,7 +118,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	memcpy_fromio(log->bios_event_log, virt, len);
->  
->  	acpi_os_unmap_iomem(virt, len);
-> -	return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-> +	return format;
->  
->  err:
->  	kfree(log->bios_event_log);
-> -- 
-> 2.26.2
-> 
+diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+index 982d341d8837..9bef646093d1 100644
+--- a/drivers/char/tpm/tpm2-space.c
++++ b/drivers/char/tpm/tpm2-space.c
+@@ -15,6 +15,8 @@
+ #include <asm/unaligned.h>
+ #include "tpm.h"
+ 
++#define TPM2_SPACE_BUFFER_SIZE		16384 /* 16 kB */
++
+ enum tpm2_handle_types {
+ 	TPM2_HT_HMAC_SESSION	= 0x02000000,
+ 	TPM2_HT_POLICY_SESSION	= 0x03000000,
+@@ -40,11 +42,11 @@ static void tpm2_flush_sessions(struct tpm_chip *chip, struct tpm_space *space)
+ 
+ int tpm2_init_space(struct tpm_space *space)
+ {
+-	space->context_buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
++	space->context_buf = kzalloc(TPM2_SPACE_BUFFER_SIZE, GFP_KERNEL);
+ 	if (!space->context_buf)
+ 		return -ENOMEM;
+ 
+-	space->session_buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
++	space->session_buf = kzalloc(TPM2_SPACE_BUFFER_SIZE, GFP_KERNEL);
+ 	if (space->session_buf == NULL) {
+ 		kfree(space->context_buf);
+ 		return -ENOMEM;
+@@ -311,8 +313,10 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
+ 	       sizeof(space->context_tbl));
+ 	memcpy(&chip->work_space.session_tbl, &space->session_tbl,
+ 	       sizeof(space->session_tbl));
+-	memcpy(chip->work_space.context_buf, space->context_buf, PAGE_SIZE);
+-	memcpy(chip->work_space.session_buf, space->session_buf, PAGE_SIZE);
++	memcpy(chip->work_space.context_buf, space->context_buf,
++	       TPM2_SPACE_BUFFER_SIZE);
++	memcpy(chip->work_space.session_buf, space->session_buf,
++	       TPM2_SPACE_BUFFER_SIZE);
+ 
+ 	rc = tpm2_load_space(chip);
+ 	if (rc) {
+@@ -492,8 +496,8 @@ static int tpm2_save_space(struct tpm_chip *chip)
+ 			continue;
+ 
+ 		rc = tpm2_save_context(chip, space->context_tbl[i],
+-				       space->context_buf, PAGE_SIZE,
+-				       &offset);
++				       space->context_buf,
++				       TPM2_SPACE_BUFFER_SIZE, &offset);
+ 		if (rc == -ENOENT) {
+ 			space->context_tbl[i] = 0;
+ 			continue;
+@@ -509,9 +513,8 @@ static int tpm2_save_space(struct tpm_chip *chip)
+ 			continue;
+ 
+ 		rc = tpm2_save_context(chip, space->session_tbl[i],
+-				       space->session_buf, PAGE_SIZE,
+-				       &offset);
+-
++				       space->session_buf,
++				       TPM2_SPACE_BUFFER_SIZE, &offset);
+ 		if (rc == -ENOENT) {
+ 			/* handle error saving session, just forget it */
+ 			space->session_tbl[i] = 0;
+@@ -557,8 +560,10 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space,
+ 	       sizeof(space->context_tbl));
+ 	memcpy(&space->session_tbl, &chip->work_space.session_tbl,
+ 	       sizeof(space->session_tbl));
+-	memcpy(space->context_buf, chip->work_space.context_buf, PAGE_SIZE);
+-	memcpy(space->session_buf, chip->work_space.session_buf, PAGE_SIZE);
++	memcpy(space->context_buf, chip->work_space.context_buf,
++	       TPM2_SPACE_BUFFER_SIZE);
++	memcpy(space->session_buf, chip->work_space.session_buf,
++	       TPM2_SPACE_BUFFER_SIZE);
+ 
+ 	return 0;
+ out:
+-- 
+2.25.1
 
-/Jarkko
