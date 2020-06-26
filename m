@@ -2,48 +2,48 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6867120ABBE
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 07:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E7020ABD2
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 07:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726916AbgFZFN3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Jun 2020 01:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
+        id S1726796AbgFZF1E (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Jun 2020 01:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbgFZFN3 (ORCPT
+        with ESMTP id S1725306AbgFZF1E (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Jun 2020 01:13:29 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD74BC08C5C1
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 22:13:28 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id c11so4444832lfh.8
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 22:13:28 -0700 (PDT)
+        Fri, 26 Jun 2020 01:27:04 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F37C08C5C1
+        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 22:27:04 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id t25so4423649lji.12
+        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2020 22:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=QlzbbRoUsiNgCT+vaniYsWp4jyroliVG1Gc8oOdbYFc=;
-        b=ovzR0esJWDDdDFb0jyp9YafS2plBJiJOi/tQHePW6RnDCVpGvwaXPT2LuDIrUgc3q2
-         19hx1drG3bg59u5lR7vRrAY6Nc3AUcx+SA/aJCuaCCFTu6aQdtWyThAj08WHnhyRw9Wh
-         djgKIGc1yRDJDXqra3ydGeqbRZMcEZFebg+jyQ4oWw0einDd3cg+CJMMY2689VPNftDy
-         KY4yrmpnhxAj1bfFechr6cP9x/fFBTtyBayKVePsUXqf/2OZ4PJ67B1KUbE2mAg7BxfK
-         mB/Qg0/3cqSxnvejiVmmjeA9fcct413ZTfYjwUWRtxtT6icZvCUAo4HVFq7TgeRGMsn9
-         7Cgw==
+        bh=jWSmhFAjgCJ/4MERZDdmV3HHdWRMsmmhbC6NHwQFBlg=;
+        b=rb8Q+1dSzwKbczJC5klufjbDjum1q93zdZOH735pHh1ahl0p0Wjlgwz7/o0lxO2jxs
+         Qf2E5FdecXLm4csarrYSzG97tKlHAZAwikBjrkkB8JyAte0JamXRvT3iIZ/QaXOEN8+x
+         ar+vbtnyb4fgUOCQLQtZ5pcMBOIK9XkrfdELE5kUxx42alUIBef2Ny0mFjlNGcqncndB
+         Y5yCF2b6L6Vany4DXOCVDwXSr/8xuxxXOY9RZRJ++3YlmBaBGq3YmB/enn7n9/NSlBU1
+         tBsRWmOpKPWCoabOLlsc4uDNLq5+ESq6j6476gVUQHGaUFF937Q3kgzUzwGQGXVsYfUa
+         azyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=QlzbbRoUsiNgCT+vaniYsWp4jyroliVG1Gc8oOdbYFc=;
-        b=EbqVnDO1rTTbSc3E/5hUgyft9p0aywOAzH8X1iR1laYfi3HyhKdyA37iBdmQesLVSx
-         2/nrUlaqze5L1i58+0ZQyBVC6uo4Eyr8FnZIcZ+cQBAAY86lsrzBQfdxjcwIxSTIV7MW
-         Yw/218H9/dQtji/YRnmXfEJK5XXKlHEzbBsR7Rm46Esfr+oq+yLgtJhqTjEvUD/TyzaD
-         Xut2jsOLdbkIydNhim0Vcg2ogvg20vtQ2i/Afn/Y25FqcSQyyxx5nkGWDl9WvIN1ySoX
-         m2e1pL17tS2Y+FPZ3PPN5bjV78hWcjQG7yxYBNi9SngqZe+ml1pNREVid1AXxff7mTNe
-         qbJg==
-X-Gm-Message-State: AOAM533fo5AV8sAJQJwRlkN+x76rgJDeov5Aot8F4JDIOBe6BxelWSg5
-        bLUYXZWQOpaZ2ecpVIiOHCNAb9pEGkPT5atlsdS5oA==
-X-Google-Smtp-Source: ABdhPJzS7QYS1nugoTAgxtiZp65oSa+zQBCVvgk1F0KpTPkRj4nd5Gfi/Kfsl7MWSE54t3cG5t/3WfNBT0GZqy1mLws=
-X-Received: by 2002:a19:435b:: with SMTP id m27mr825249lfj.40.1593148407135;
- Thu, 25 Jun 2020 22:13:27 -0700 (PDT)
+        bh=jWSmhFAjgCJ/4MERZDdmV3HHdWRMsmmhbC6NHwQFBlg=;
+        b=hDxTrTfb1J9C7EEvAOHdhENvSVqiCqwlTizAgMeeGiz5RXb7YIbcx5gaT8JUU3PcvN
+         GIEFfwBfRbUqHxEZdyAmjQ8Ya7G9PRHyFHWYgBt75KvPSBeg1kUo+N6VsEy1Z09ObZ4G
+         1xVYhHvTCmUsRu/5srY+3/anMZ3qLF9c1siXgTPaIW56lx7fbcZLLrgDeqLEHZje6K/l
+         roJcMAI1su4O2eUG6Ieo/QSXcDw/zPIp0A9AE/ci8ndPObWUS1C0iWdtcpDWAxtfCv1z
+         0UL9RtvNFqahaonDIRaUsqICjtVCJT91T4iDYLCsvEmGAbkxvlX7Lbb09UVCSuTbaDTA
+         PGxA==
+X-Gm-Message-State: AOAM531ZceAONt0bjNjgoQDnzBnyQYrjv0ZosZ6eP0HJbcPy7qKqLeHM
+        rYM4UHjfiZqBQYfxz7bIBbNASerlt8MCQ4SZC/u9dw==
+X-Google-Smtp-Source: ABdhPJxkDD58JMKImt/kwvHSRCvi2eSoQBTY2+Uvb1xPAxHBhkNbqSdrTW0Xrq6J8pZ/kHZwkeOyw/4CAJReOUqaXu8=
+X-Received: by 2002:a2e:b04c:: with SMTP id d12mr511914ljl.256.1593149222348;
+ Thu, 25 Jun 2020 22:27:02 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200604175851.758-1-maxim.uvarov@linaro.org> <20200604175851.758-2-maxim.uvarov@linaro.org>
  <CAFA6WYNVk1RcaqnL0FGyYkB+hGkgyqeOMsSKyySL=zfCdNUZXA@mail.gmail.com>
@@ -55,8 +55,8 @@ References: <20200604175851.758-1-maxim.uvarov@linaro.org> <20200604175851.758-2
  <CAD8XO3ZDv-RZ-VPv-AFMRkMD_3uW9XYLeZQf0btGVK8m7GX2Dg@mail.gmail.com>
 In-Reply-To: <CAD8XO3ZDv-RZ-VPv-AFMRkMD_3uW9XYLeZQf0btGVK8m7GX2Dg@mail.gmail.com>
 From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 26 Jun 2020 10:43:15 +0530
-Message-ID: <CAFA6WYOiBNQt0ZRyRxfsqW57z+O=aLqi3DTEAfZ7fGjf8UPB3Q@mail.gmail.com>
+Date:   Fri, 26 Jun 2020 10:56:50 +0530
+Message-ID: <CAFA6WYPUzSNYjrktSPdzLDsKeO8Tipi6CuSjjN-MgdsvU2KzOA@mail.gmail.com>
 Subject: Re: [Tee-dev] [PATCHv8 1/3] optee: use uuid for sysfs driver entry
 To:     Maxim Uvarov <maxim.uvarov@linaro.org>
 Cc:     Jerome Forissier <jerome@forissier.org>,
@@ -132,27 +132,23 @@ On Thu, 25 Jun 2020 at 18:22, Maxim Uvarov <maxim.uvarov@linaro.org> wrote:
 > I think your description is correct. But I think this problem  would
 > be solved outside of the current patchset.
 > All places should use one single format (LE):
-
-I guess you missed the point that uuid_t is implemented in BE format
-in the kernel which is compliant as per RFC 4122.
-
 > -  internal optee representation;
 > -  device enumeration pta;
 > -  this kernel driver which creates sysfs entry and sets
 > uid_copy(&optee_device->id.uuid, device_uuid);
 > -  matching function;
 > -  drivers use UUID_INIT();
-
-See carefully the implementation of UUID_INIT() which is in BE format.
-
--Sumit
-
 >
 > In that way everything will be consistent. But it will require
 > changing other pieces, not just the kernel. While
 > these patches add functionality to support current device enumeration
 > in optee os.
 > So I think this version is ok to be applied.
+
+I guess here you meant v9 patch-set. If yes then it's fine with me as well.
+
+-Sumit
+
 >
 > Regards,
 > Maxim.
