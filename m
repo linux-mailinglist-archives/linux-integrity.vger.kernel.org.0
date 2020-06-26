@@ -2,106 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4B120B245
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 15:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AD620B246
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 15:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbgFZNPK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Jun 2020 09:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726738AbgFZNPI (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Jun 2020 09:15:08 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A6CC08C5DB
-        for <linux-integrity@vger.kernel.org>; Fri, 26 Jun 2020 06:15:07 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id d12so4459071qvn.0
-        for <linux-integrity@vger.kernel.org>; Fri, 26 Jun 2020 06:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VhXrfn9rZyyElsl+ixbfQu3b3ECvLdJTiMGy5aiGuwM=;
-        b=fKCcF70RlxM+1whp8dP25qWYRUeKG5PcYnaE0I7RaAFjyuCfSAmFKxpaDT9yWGfTc5
-         4X9l9LDbU+5gqqeLY65zLfIMZkB3OG4+SvYM2Zt3NJPefJ2RFTvQMg7OF3K3XWMCQhNV
-         qber0Wjvf6x4Aud5J4LKq76f4tEFql1M8Axwb13GgnuFXVoK/BNHrVeHnfSIOy7osu32
-         seyberAJXZlzxHqaYiTjQaAglvwA+6qq8hJt0ZS09u3nA3MZJHhkUYgJtuJ6PfcCuPin
-         u7dLzmTx1TsoX+PbcO/5NYK7c07SZJeiIgsuGv8LMCK7Wpq5MmMzJ+7z30si8SipkIch
-         YxwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VhXrfn9rZyyElsl+ixbfQu3b3ECvLdJTiMGy5aiGuwM=;
-        b=Y6FHKndM1q1xiZeU5Fe+dRAT0h7l5q7Of85cUo9G8VBuYuag9uvXrFaFpt/pWeOdEr
-         yI2/xwbn/9fZVcP4CT9OoDrRkaaq4wtCZw968T0ldCIOGiN1MgQbbX6J2xDbD+yWVt+z
-         SZwTVgxLyuYjz5Z8VOTzlJL8O7DLU58k5SbxL/MsaFM9A+YUJXS24j8Fe68bam+Yx59Q
-         WqY7RdIkhGWwDR8dNZSCMxTNINxqZ4RhVXBDdFpo5oH2eziqOjGtnZ6pKJXUVZCS+iTo
-         ElcNz/N3fcJRk/JrgwUyDRIbMe9Nr8BcEDEWsssfEFYOiKEhRzt5+AlU+7oqqTgfkhqr
-         nhiw==
-X-Gm-Message-State: AOAM531p3AEDRoSVKkRdosGwB8/iQ/BfLpAvnRXev7xKAlE2whl2j7oC
-        OCmzZAdXSLMrchAI/cAEY1KpFg==
-X-Google-Smtp-Source: ABdhPJxbRLN+jO7ctS8zXhG0GA1tOBmFddfktHHRgvosynJvPKT1ZHFNzvGilm7pfOY8khugHwvuEQ==
-X-Received: by 2002:a05:6214:942:: with SMTP id dn2mr3083310qvb.161.1593177306525;
-        Fri, 26 Jun 2020 06:15:06 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id 207sm8322790qki.134.2020.06.26.06.15.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 06:15:06 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.93)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1jooC9-0007B9-92; Fri, 26 Jun 2020 10:15:05 -0300
-Date:   Fri, 26 Jun 2020 10:15:05 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Stefan Berger <stefanb@linux.ibm.com>
+        id S1727798AbgFZNPb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Jun 2020 09:15:31 -0400
+Received: from mga14.intel.com ([192.55.52.115]:53142 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727773AbgFZNPb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 26 Jun 2020 09:15:31 -0400
+IronPort-SDR: HxEDOqxTPyTSOdR5I7BL61eMwqdzQvW1iG0wcKIOBOxmNhI5lQbRVoUkzyrDUgiahRaK+nHzRf
+ Rx9kv628Y6Kw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="144397394"
+X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
+   d="scan'208";a="144397394"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 06:15:29 -0700
+IronPort-SDR: DGohzh70JRmED+Bfs3e8Gjz+osHqrEZMPwo0AnSiTY3NaXBWchusvr8qm/WibhkMBmMnOp/o2J
+ tJvgsIP8YSZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
+   d="scan'208";a="311404315"
+Received: from cgheban-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.199])
+  by orsmga008.jf.intel.com with ESMTP; 26 Jun 2020 06:15:24 -0700
+Date:   Fri, 26 Jun 2020 16:15:23 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
 Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Enabling interrupts in QEMU TPM TIS
-Message-ID: <20200626131505.GA25301@ziepe.ca>
-References: <1ca3a53d-2b83-7522-5ce1-83d9cc2f207d@linux.ibm.com>
- <20200625172802.GS6578@ziepe.ca>
- <0a524093-e744-e266-6087-ddc17b5c598c@linux.ibm.com>
- <5b3267b7-57d5-badf-6664-9d47bc9909e7@linux.ibm.com>
- <20200625231934.GU6578@ziepe.ca>
- <a2e38eea-a137-ffea-ecf1-98f1e3ba1036@linux.ibm.com>
+        linux-integrity@vger.kernel.org,
+        Kylene Jo Hall <kjhall@us.ibm.com>,
+        "Ferry Toth :" <ferry.toth@elsinga.info>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@osdl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] tpm_tis: Remove the HID IFX0102
+Message-ID: <20200626131523.GB7853@linux.intel.com>
+References: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
+ <20200625062150.idm6j3vm2neyt4sh@cantor>
+ <20200625210202.GA20341@linux.intel.com>
+ <20200625211923.2jirvix6zbrbgj6e@cantor>
+ <1593120239.3332.17.camel@HansenPartnership.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a2e38eea-a137-ffea-ecf1-98f1e3ba1036@linux.ibm.com>
+In-Reply-To: <1593120239.3332.17.camel@HansenPartnership.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 08:25:57AM -0400, Stefan Berger wrote:
-
-> > I don't think the tpm driver was ever designed for edge, so most
-> > likely the structure and order of the hard irq is not correct.
+On Thu, Jun 25, 2020 at 02:23:59PM -0700, James Bottomley wrote:
+> On Thu, 2020-06-25 at 14:19 -0700, Jerry Snitselaar wrote:
+> > On Fri Jun 26 20, Jarkko Sakkinen wrote:
+> > > On Wed, Jun 24, 2020 at 11:21:50PM -0700, Jerry Snitselaar wrote:
+> > > > On Thu Jun 25 20, Jarkko Sakkinen wrote:
+> > > > > Acer C720 running Linux v5.3 reports this in klog:
+> > > > > 
+> > > > > tpm_tis: 1.2 TPM (device-id 0xB, rev-id 16)
+> > > > > tpm tpm0: tpm_try_transmit: send(): error -5
+> > > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the
+> > > > > timeouts
+> > > > > tpm_tis tpm_tis: Could not get TPM timeouts and durations
+> > > > > tpm_tis 00:08: 1.2 TPM (device-id 0xB, rev-id 16)
+> > > > > tpm tpm0: tpm_try_transmit: send(): error -5
+> > > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the
+> > > > > timeouts
+> > > > > tpm_tis 00:08: Could not get TPM timeouts and durations
+> > > > > ima: No TPM chip found, activating TPM-bypass!
+> > > > > tpm_inf_pnp 00:08: Found TPM with ID IFX0102
+> > > > > 
+> > > > > % git --no-pager grep IFX0102 drivers/char/tpm
+> > > > > drivers/char/tpm/tpm_infineon.c:	{"IFX0102", 0},
+> > > > > drivers/char/tpm/tpm_tis.c:	{"IFX0102", 0},		
+> > > > > /* Infineon */
+> > > > > 
+> > > > > Obviously IFX0102 was added to the HID table for the TCG TIS
+> > > > > driver by
+> > > > > mistake.
+> > > > > 
+> > > > > Fixes: 93e1b7d42e1e ("[PATCH] tpm: add HID module parameter")
+> > > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203877
+> > > > > Cc: Kylene Jo Hall <kjhall@us.ibm.com>
+> > > > > Reported-by: Ferry Toth: <ferry.toth@elsinga.info>
+> > > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com
+> > > > > >
+> > > > 
+> > > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> > > 
+> > > Bugzilla has an example of similar behavior with v4.15. I'll apply
+> > > this asap.
+> > > 
+> > > /Jarkko
+> > > 
+> > 
+> > Any idea what happened to git.infradead.org? It was offline the other
+> > day, and at the moment not all repos from before seem to be there.
 > 
-> Right. For edge support I think we would need to avoid causing another
-> interrupt (like locality change interrupt) before the interrupt handler
-> hasn't finished dealing with an existing interrupt. Considering that Windows
-> works on IRQ 13 (egde) and Linux driver cannot, I guess this is a good
-> reason not to move QEMU TIS to IRQ 13 and try to support interrupts via ACPI
-> table declaration.
+> Infradead has been playing up for a while on other things (non git
+> services I use).
+> 
+> Perhaps it's time to get a kernel.org repository ...
 
-Generaly clearing the IRQ needs to be done before testing for pending
-IRQs - ie as the first thing
+I have an obstacle with that.
 
-Move the write to status up higher:
+I lost my previous PGP key a year ago and created a new one, which is
+not trusted yet by anyone [*]. I've backed this up now and have it
+stored inside Nitrokey Pro 2 in order to prevent this happening again.
 
-	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
-	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
-	
-        [handle 'interrupt']
+Now the problem is that in order to get a kernel.org account, I need
+to be in the web of trust of the kernel maintainers.
 
-Then if new events set a status bit they will generate an edge and
-re-enter here.
+I can request an accunt only after I see face to face another kernel
+maintainers, so that I can proof that I am I.
 
-I don't know why there is an extra read at the end of the handler
-either, seems sketchy.
+[*] http://keys.gnupg.net/pks/lookup?op=get&search=0x3AB05486C7752FE1
 
-Jason
+/Jarkko
