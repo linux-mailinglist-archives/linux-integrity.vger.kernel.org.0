@@ -2,124 +2,157 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6AD620B246
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 15:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC6320B279
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2020 15:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgFZNPb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Jun 2020 09:15:31 -0400
-Received: from mga14.intel.com ([192.55.52.115]:53142 "EHLO mga14.intel.com"
+        id S1727898AbgFZN1M (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Jun 2020 09:27:12 -0400
+Received: from mga07.intel.com ([134.134.136.100]:34481 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727773AbgFZNPb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Jun 2020 09:15:31 -0400
-IronPort-SDR: HxEDOqxTPyTSOdR5I7BL61eMwqdzQvW1iG0wcKIOBOxmNhI5lQbRVoUkzyrDUgiahRaK+nHzRf
- Rx9kv628Y6Kw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="144397394"
+        id S1725925AbgFZN1M (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 26 Jun 2020 09:27:12 -0400
+IronPort-SDR: muOj99OIv3E1iveTOt1FOb+gzvkPwVoJVa+E2U7WqPXlMtXe46Ki0CqItzdkJwQM3ROSqPYQJi
+ rJ9L9Cypbk7w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="210398005"
 X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="144397394"
+   d="scan'208";a="210398005"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 06:15:29 -0700
-IronPort-SDR: DGohzh70JRmED+Bfs3e8Gjz+osHqrEZMPwo0AnSiTY3NaXBWchusvr8qm/WibhkMBmMnOp/o2J
- tJvgsIP8YSZw==
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 06:27:11 -0700
+IronPort-SDR: +bWsPzrFUhxPzvJ8c//x2qMDHqJqSWA1Z+mVXfaepwU60kPECytauFEsnT5qyQrYzUnd5yydjz
+ tAFQcrkdUM9w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="311404315"
+   d="scan'208";a="480003202"
 Received: from cgheban-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.199])
-  by orsmga008.jf.intel.com with ESMTP; 26 Jun 2020 06:15:24 -0700
-Date:   Fri, 26 Jun 2020 16:15:23 +0300
+  by fmsmga005.fm.intel.com with ESMTP; 26 Jun 2020 06:27:08 -0700
+Date:   Fri, 26 Jun 2020 16:27:06 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-integrity@vger.kernel.org,
-        Kylene Jo Hall <kjhall@us.ibm.com>,
-        "Ferry Toth :" <ferry.toth@elsinga.info>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@osdl.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tpm_tis: Remove the HID IFX0102
-Message-ID: <20200626131523.GB7853@linux.intel.com>
-References: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
- <20200625062150.idm6j3vm2neyt4sh@cantor>
- <20200625210202.GA20341@linux.intel.com>
- <20200625211923.2jirvix6zbrbgj6e@cantor>
- <1593120239.3332.17.camel@HansenPartnership.com>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v7 2/2] tpm: Add support for event log pointer found in
+ TPM2 ACPI table
+Message-ID: <20200626132706.GC7853@linux.intel.com>
+References: <20200625215000.2052086-1-stefanb@linux.vnet.ibm.com>
+ <20200625215000.2052086-3-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1593120239.3332.17.camel@HansenPartnership.com>
+In-Reply-To: <20200625215000.2052086-3-stefanb@linux.vnet.ibm.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 25, 2020 at 02:23:59PM -0700, James Bottomley wrote:
-> On Thu, 2020-06-25 at 14:19 -0700, Jerry Snitselaar wrote:
-> > On Fri Jun 26 20, Jarkko Sakkinen wrote:
-> > > On Wed, Jun 24, 2020 at 11:21:50PM -0700, Jerry Snitselaar wrote:
-> > > > On Thu Jun 25 20, Jarkko Sakkinen wrote:
-> > > > > Acer C720 running Linux v5.3 reports this in klog:
-> > > > > 
-> > > > > tpm_tis: 1.2 TPM (device-id 0xB, rev-id 16)
-> > > > > tpm tpm0: tpm_try_transmit: send(): error -5
-> > > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the
-> > > > > timeouts
-> > > > > tpm_tis tpm_tis: Could not get TPM timeouts and durations
-> > > > > tpm_tis 00:08: 1.2 TPM (device-id 0xB, rev-id 16)
-> > > > > tpm tpm0: tpm_try_transmit: send(): error -5
-> > > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the
-> > > > > timeouts
-> > > > > tpm_tis 00:08: Could not get TPM timeouts and durations
-> > > > > ima: No TPM chip found, activating TPM-bypass!
-> > > > > tpm_inf_pnp 00:08: Found TPM with ID IFX0102
-> > > > > 
-> > > > > % git --no-pager grep IFX0102 drivers/char/tpm
-> > > > > drivers/char/tpm/tpm_infineon.c:	{"IFX0102", 0},
-> > > > > drivers/char/tpm/tpm_tis.c:	{"IFX0102", 0},		
-> > > > > /* Infineon */
-> > > > > 
-> > > > > Obviously IFX0102 was added to the HID table for the TCG TIS
-> > > > > driver by
-> > > > > mistake.
-> > > > > 
-> > > > > Fixes: 93e1b7d42e1e ("[PATCH] tpm: add HID module parameter")
-> > > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203877
-> > > > > Cc: Kylene Jo Hall <kjhall@us.ibm.com>
-> > > > > Reported-by: Ferry Toth: <ferry.toth@elsinga.info>
-> > > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com
-> > > > > >
-> > > > 
-> > > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > > 
-> > > Bugzilla has an example of similar behavior with v4.15. I'll apply
-> > > this asap.
-> > > 
-> > > /Jarkko
-> > > 
-> > 
-> > Any idea what happened to git.infradead.org? It was offline the other
-> > day, and at the moment not all repos from before seem to be there.
+On Thu, Jun 25, 2020 at 05:50:00PM -0400, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
 > 
-> Infradead has been playing up for a while on other things (non git
-> services I use).
+> In case a TPM2 is attached, search for a TPM2 ACPI table when trying
+> to get the event log from ACPI. If one is found, use it to get the
+> start and length of the log area. This allows non-UEFI systems, such
+> as SeaBIOS, to pass an event log when using a TPM2.
 > 
-> Perhaps it's time to get a kernel.org repository ...
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  drivers/char/tpm/eventlog/acpi.c | 62 +++++++++++++++++++++-----------
+>  1 file changed, 41 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+> index 63ada5e53f13..e2258cfa6cb1 100644
+> --- a/drivers/char/tpm/eventlog/acpi.c
+> +++ b/drivers/char/tpm/eventlog/acpi.c
+> @@ -49,9 +49,9 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+>  	void __iomem *virt;
+>  	u64 len, start;
+>  	struct tpm_bios_log *log;
+> -
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> -		return -ENODEV;
+> +	struct acpi_table_tpm2 *tbl;
+> +	struct acpi_tpm2_phy *t2phy;
+> +	int format;
+>  
+>  	log = &chip->log;
+>  
+> @@ -61,23 +61,43 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+>  	if (!chip->acpi_dev_handle)
+>  		return -ENODEV;
+>  
+> -	/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
+> -	status = acpi_get_table(ACPI_SIG_TCPA, 1,
+> -				(struct acpi_table_header **)&buff);
+> -
+> -	if (ACPI_FAILURE(status))
+> -		return -ENODEV;
+> -
+> -	switch(buff->platform_class) {
+> -	case BIOS_SERVER:
+> -		len = buff->server.log_max_len;
+> -		start = buff->server.log_start_addr;
+> -		break;
+> -	case BIOS_CLIENT:
+> -	default:
+> -		len = buff->client.log_max_len;
+> -		start = buff->client.log_start_addr;
+> -		break;
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +		status = acpi_get_table("TPM2", 1,
+> +					(struct acpi_table_header **)&tbl);
+> +		if (ACPI_FAILURE(status))
+> +			return -ENODEV;
+> +
+> +		if (tbl->header.length <
+> +				sizeof(*tbl) + sizeof(struct acpi_tpm2_phy))
+> +			return -ENODEV;
+> +
+> +		t2phy = (void *)tbl + sizeof(*tbl);
+> +		len = t2phy->log_area_minimum_length;
+> +
+> +		start = t2phy->log_area_start_address;
+> +		if (!start || !len)
+> +			return -ENODEV;
+> +
+> +		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
+> +	} else {
+> +		/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
+> +		status = acpi_get_table(ACPI_SIG_TCPA, 1,
+> +					(struct acpi_table_header **)&buff);
+> +		if (ACPI_FAILURE(status))
+> +			return -ENODEV;
+> +
+> +		switch (buff->platform_class) {
+> +		case BIOS_SERVER:
+> +			len = buff->server.log_max_len;
+> +			start = buff->server.log_start_addr;
+> +			break;
+> +		case BIOS_CLIENT:
+> +		default:
+> +			len = buff->client.log_max_len;
+> +			start = buff->client.log_start_addr;
+> +			break;
+> +		}
 
-I have an obstacle with that.
+Empty line as in the first branch after the conditional statement.
 
-I lost my previous PGP key a year ago and created a new one, which is
-not trusted yet by anyone [*]. I've backed this up now and have it
-stored inside Nitrokey Pro 2 in order to prevent this happening again.
-
-Now the problem is that in order to get a kernel.org account, I need
-to be in the web of trust of the kernel maintainers.
-
-I can request an accunt only after I see face to face another kernel
-maintainers, so that I can proof that I am I.
-
-[*] http://keys.gnupg.net/pks/lookup?op=get&search=0x3AB05486C7752FE1
+> +		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
+>  	}
+>  	if (!len) {
+>  		dev_warn(&chip->dev, "%s: TCPA log area empty\n", __func__);
+> @@ -98,7 +118,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+>  	memcpy_fromio(log->bios_event_log, virt, len);
+>  
+>  	acpi_os_unmap_iomem(virt, len);
+> -	return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
+> +	return format;
+>  
+>  err:
+>  	kfree(log->bios_event_log);
+> -- 
+> 2.26.2
+> 
 
 /Jarkko
