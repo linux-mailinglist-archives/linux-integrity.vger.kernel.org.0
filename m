@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5298E20BCD0
-	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jun 2020 00:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D9820BCC8
+	for <lists+linux-integrity@lfdr.de>; Sat, 27 Jun 2020 00:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbgFZWkK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Jun 2020 18:40:10 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37888 "EHLO
+        id S1726554AbgFZWjt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Jun 2020 18:39:49 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37900 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726509AbgFZWjj (ORCPT
+        with ESMTP id S1726518AbgFZWjk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Jun 2020 18:39:39 -0400
+        Fri, 26 Jun 2020 18:39:40 -0400
 Received: from sequoia.work.tihix.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7AC5520B4904;
-        Fri, 26 Jun 2020 15:39:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7AC5520B4904
+        by linux.microsoft.com (Postfix) with ESMTPSA id B322D20B4905;
+        Fri, 26 Jun 2020 15:39:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B322D20B4905
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1593211179;
-        bh=Wp7vF9KAeROGzIEtToLc6tm4PKDm4WsK82PPSN81ys4=;
+        s=default; t=1593211180;
+        bh=NgaFLRWS7qo3ujL0AXOQBEum655blqojaYopmjuWreY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bsImo1ZEQWJt4PwXGw15yqesVY/C1JgDZ/bAk1AjD0ZO3JMKWVYAFQKfKx5ouM/wu
-         wfLGcadifHWBEGDQnIuEKFnN1fhKVmA7amKhLvxBYSoiEOeAzUUPP56ZU/0+3f281f
-         HzbNwRQJbjbKlwX9oDkufoOAFqWDcnFHcqFqklzA=
+        b=TMlmjXk0FSfUS3DRx2rbvTApQ97nymuEYd2w1SK7TgThP+V41RqmU4Z20wPIc8pkr
+         P/33ku1ExGN/cYx9Kc+qHlM4i5Z5o51b52HkECqtWNR1AL4dhZLJcAygDONh9dzScC
+         RcmcidHdO+Wn0rMw2xLyQSp8mno3Zgb1qBauGVyk=
 From:   Tyler Hicks <tyhicks@linux.microsoft.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
@@ -32,9 +32,9 @@ Cc:     James Morris <jmorris@namei.org>,
         Prakhar Srivastava <prsriva02@gmail.com>,
         linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v2 06/11] ima: Fail rule parsing when the KEY_CHECK hook is combined with an invalid cond
-Date:   Fri, 26 Jun 2020 17:38:55 -0500
-Message-Id: <20200626223900.253615-7-tyhicks@linux.microsoft.com>
+Subject: [PATCH v2 07/11] ima: Shallow copy the args_p member of ima_rule_entry.lsm elements
+Date:   Fri, 26 Jun 2020 17:38:56 -0500
+Message-Id: <20200626223900.253615-8-tyhicks@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200626223900.253615-1-tyhicks@linux.microsoft.com>
 References: <20200626223900.253615-1-tyhicks@linux.microsoft.com>
@@ -45,38 +45,60 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The KEY_CHECK function only supports the uid, pcr, and keyrings
-conditionals. Make this clear at policy load so that IMA policy authors
-don't assume that other conditionals are supported.
+The args_p member is a simple string that is allocated by
+ima_rule_init(). Shallow copy it like other non-LSM references in
+ima_rule_entry structs.
 
-Fixes: 5808611cccb2 ("IMA: Add KEY_CHECK func to measure keys")
+There are no longer any necessary error path cleanups to do in
+ima_lsm_copy_rule().
+
 Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 ---
 
 * v2
-  - No change
+  - Adjusted context to account for ima_lsm_copy_rule() directly calling
+    ima_lsm_free_rule() and the lack of explicit reference ownership
+    transfers
+  - Added comment to ima_lsm_copy_rule() to document the args_p
+    reference ownership transfer
 
- security/integrity/ima/ima_policy.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ security/integrity/ima/ima_policy.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
 diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 676d5557af1a..f9b1bdb897da 100644
+index f9b1bdb897da..ef69c54266c6 100644
 --- a/security/integrity/ima/ima_policy.c
 +++ b/security/integrity/ima/ima_policy.c
-@@ -1018,6 +1018,13 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
- 			if (entry->action & ~(MEASURE | DONT_MEASURE))
- 				return false;
+@@ -300,10 +300,13 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+ 			continue;
  
-+			if (entry->flags & ~(IMA_FUNC | IMA_UID | IMA_PCR |
-+					     IMA_KEYRINGS))
-+				return false;
-+
-+			if (ima_rule_contains_lsm_cond(entry))
-+				return false;
-+
- 			break;
- 		default:
- 			return false;
+ 		nentry->lsm[i].type = entry->lsm[i].type;
+-		nentry->lsm[i].args_p = kstrdup(entry->lsm[i].args_p,
+-						GFP_KERNEL);
+-		if (!nentry->lsm[i].args_p)
+-			goto out_err;
++		nentry->lsm[i].args_p = entry->lsm[i].args_p;
++		/*
++		 * Remove the reference from entry so that the associated
++		 * memory will not be freed during a later call to
++		 * ima_lsm_free_rule(entry).
++		 */
++		entry->lsm[i].args_p = NULL;
+ 
+ 		security_filter_rule_init(nentry->lsm[i].type,
+ 					  Audit_equal,
+@@ -314,11 +317,6 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+ 				(char *)entry->lsm[i].args_p);
+ 	}
+ 	return nentry;
+-
+-out_err:
+-	ima_lsm_free_rule(nentry);
+-	kfree(nentry);
+-	return NULL;
+ }
+ 
+ static int ima_lsm_update_rule(struct ima_rule_entry *entry)
 -- 
 2.25.1
 
