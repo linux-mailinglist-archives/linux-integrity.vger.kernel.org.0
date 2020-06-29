@@ -2,181 +2,247 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7711F20C596
-	for <lists+linux-integrity@lfdr.de>; Sun, 28 Jun 2020 05:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F2A20D0CD
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Jun 2020 20:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725936AbgF1DbO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 27 Jun 2020 23:31:14 -0400
-Received: from mail-il1-f197.google.com ([209.85.166.197]:47614 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725880AbgF1DbO (ORCPT
+        id S1726933AbgF2SgK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 Jun 2020 14:36:10 -0400
+Received: from sonic313-15.consmr.mail.ne1.yahoo.com ([66.163.185.38]:44615
+        "EHLO sonic313-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726907AbgF2SgJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 27 Jun 2020 23:31:14 -0400
-Received: by mail-il1-f197.google.com with SMTP id o2so9629260ilg.14
-        for <linux-integrity@vger.kernel.org>; Sat, 27 Jun 2020 20:31:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=0xNYRJYAIHEjL9wq2M9xDbIQUfYFJfWWGqedzbOS0HA=;
-        b=bt4K6BLxo9Xy5pMi+owu5rQLAexxcOyn9GcNidpFOLfvY81UACODBoKBwxsWIiv2WU
-         TzODWB6tsgBJvrbQFhZgUhaBHyPSX4Y2sE9xBAIy6I+9iKaNcrMEx6hk5/IMt4PYIL9l
-         uAyd5y95PpURQuX4jfljfPuh2zKwqT8WKSJVrmDbIjiKNqKadOH0hW0WUbCF3clly6iM
-         yTiahDjdiW171f+9vSmi1bGjv3G8NXlIWc7L9IEjOF1tqEQojJ98ypMNG4F2lvKLHcjX
-         MX4ieTq+hTuXR9TrhjCtSofFJrm000nVRnfG6KYYX9BjRdZj0EZs7aeUjibqWGyiRR4l
-         NnGQ==
-X-Gm-Message-State: AOAM531A+sAH+q7sioOvOfD2jVik6ajEc+rgjX7LXgq+SgLT5TaPSa1d
-        jY6ZyPUZzUyj9QXWFot9UYybsYgo6GFEuUhB2OPOpCtxNBjf
-X-Google-Smtp-Source: ABdhPJyBHD9qb0wx18+r97n64RX4hsQwqokkX1lem1spwM9037Cwrof9IpNr27CpYGDDTS3nK1qykofr/VxcugC8OrB4eVFlWtqb
+        Mon, 29 Jun 2020 14:36:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1593455767; bh=OuJSaS9Xnbydlb+uxydM0d2cO5uCSpCFE6dx2suBF2U=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=SJQyKLbperAJCLam4x7ndFR2CNf9cA1T1BlpSqC4VWPVIWAbz762Eb5+2slKUNcbxY4tD4F0GiaxqRnvKizuiL+WvKN0gN0KhAgJcrmbsPZ1QOvMxIk7cwO0zw/zv+TWJLoHLK0cZgcQj8JvZ3qGjEs+BQuj6m7EJokYeqiTMZWXi2yfsWero9v2WMYLju8GOkzuaN4DHLyYc6XVolucMKTfaZn1KIJj5LaoLWtjp8ptm8ipXcW+54Kk769ZzPGU4BGXYDuCI0NsQU08Yp3VO+9ntXEPgkaKzP2E1Nk2JmqRngrVCJL1ywFLqNRvSaIo2sQBHkMB1mWTa/q+0OUTXg==
+X-YMail-OSG: 9ebNZ.UVM1n_um2PoRjGpiLzcpb1SWXBQaecD2JTFGrB6XDI61MyaOqnb8xJ_0D
+ We7FFipbj.pKwojpUHk7tHX65vW3C4a6UK9MP3hhmL73a1.a2w25hBL1YCt5cHcsjqjufEWBo2IE
+ oNC_N5ilQkI1XZcStEbdRhqfYbI3ZoqihweuR846B4q5gZOJABKoNw7FP1410z2tlod8SEb9NKcV
+ ZdJaK7Fw2gXLkrbaiBjV_NLn9e.xEA7c4.URnXMItW3lg4qr.yvYDALd.6J5Mk.pvxQvUBhhT_Do
+ F5RTUNa_unEC4Fk9fSL4JNFBEVVZGcN_4sl4h2nZ_i5DojkouJjRRoAtj9UoH4r0TAVeLGT_09T5
+ RAFncVfEvddz81Di6LcYQ4VqpkyCs___UIZR0A5ZLKlsW81.MWcGboc.f2HRs12uJ2DDRsbBdhnN
+ mAPwZpNkhJNEsruMUkSEFV41Ufj3qyhrWtFkXVw2cfHPQWNaytWlXQXt11EQX455D39KRTDMAcU_
+ IYy9HklLh7xGChyiP.nxivPey_4kmTOUSTVeMFFBXjG5aMZnvZN4JPnPOZWvGTxU6Oh9Jrp8i03H
+ 5ML91XoEtarfR0w4w10o0ovZtAhQHbBhjkSFs9if4B2w3JkVZXGrIcFCaKhIA.Yf1sU.CHiUAKjs
+ X7QGKHlIQmqVW6Wrf6AMxyOx.6aNFygy1c1I54w.gbKmGhMFQ.J4QVTlmlmiZnRGUUD09iXx7_7e
+ iurg4AJmz5yT2_z5TETJCoYGVWfrC6XeROXwK0cipkY7.Dhe6zr219yCpRCqA.ys9nO28oNIUcFh
+ aG5Y4BcO926sLNm9tVCTE.zFZuMLhJJPERXe_239rLjL5cE2eFBFFfLun2jyfSB1VGQNPIIWcs3c
+ B5KTheQyYhep0.yb7RNLHeG3q4U5HaE8KGS.Sjc6eFmpsAHAxir1GIMtw.fDTLTJgImDcyvLRq_v
+ BUmahotgMdKddL1nDn3IRqjPKuTrYjc216GChMYq1PXrlZn2.gMLzYEfHxHHWlDT3cotiDBbHGZ_
+ npRbZYnPcZx53xeuaYhu7puFWiXBUMnvBjekpsFIRLkBEP0Hbpi61XeejN9dRxmcA4d892yubxRD
+ 5vUUKWWZDvvSWihdzoLLPU5NDCKD4aCIZaT4Y6cfGKl8o735xx7vckwMaLdrI.n5DLLzzvFg5URM
+ rwCvibhe5Q7jHm3AjvRruI5hTGL3MRPChlOaNCGYE.0k9ytpAgp15MNYU.gV5b5wT7KsWvnQ178i
+ UeCPztRWz6J7QC.XYpcY7wJ4DUa3xa5TGfekMniFmNlAmCUxAJYcehV0P45CQqW64ksuAMi3sKsv
+ Y5d5DxDhYgmcmSiy7w5kVQ_YZMQlx0Yf1hoZuy58ybmgM2OqBaVLNbwDKx5uRPri0P7A4KYkT4zY
+ g7pBK3muJtEffIfEturuhkpaC2OcY5ZBY8yrcDao1fYPTpPj3t9c-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Mon, 29 Jun 2020 18:36:07 +0000
+Received: by smtp420.mail.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID fe3990c2c42a706576896e64c3c5270d;
+          Mon, 29 Jun 2020 16:24:38 +0000 (UTC)
+Subject: Re: [PATCH] ima: Rename internal audit rule functions
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20200629153037.337349-1-tyhicks@linux.microsoft.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Autocrypt: addr=casey@schaufler-ca.com; keydata=
+ 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
+ abzjfg==
+Message-ID: <71e9960a-cc98-a480-d65b-ac40f4de9a9c@schaufler-ca.com>
+Date:   Mon, 29 Jun 2020 09:24:38 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:409a:: with SMTP id d26mr10516321ill.200.1593315073205;
- Sat, 27 Jun 2020 20:31:13 -0700 (PDT)
-Date:   Sat, 27 Jun 2020 20:31:13 -0700
-In-Reply-To: <000000000000880dcc0598bcfac9@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f42b3b05a91c9223@google.com>
-Subject: Re: possible deadlock in process_measurement (2)
-From:   syzbot <syzbot+18a1619cceea30ed45af@syzkaller.appspotmail.com>
-To:     dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200629153037.337349-1-tyhicks@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Mailer: WebService/1.1.16138 hermes_yahoo Apache-HttpAsyncClient/4.1.4 (Java/11.0.7)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+On 6/29/2020 8:30 AM, Tyler Hicks wrote:
+> Rename IMA's internal audit rule functions from security_filter_rule_*()
+> to ima_audit_rule_*(). This avoids polluting the security_* namespace,
+> which is typically reserved for general security subsystem
+> infrastructure, and better aligns the IMA function names with the names
+> of the LSM hooks.
+>
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> Suggested-by: Casey Schaufler <casey@schaufler-ca.com>
 
-HEAD commit:    1590a2e1 Merge tag 'acpi-5.8-rc3' of git://git.kernel.org/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=164b959b100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20c907630cbdbe5
-dashboard link: https://syzkaller.appspot.com/bug?extid=18a1619cceea30ed45af
-compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=117f43c5100000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cbb239100000
+Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+18a1619cceea30ed45af@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-5.8.0-rc2-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor165/6816 is trying to acquire lock:
-ffff888092f48080 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x66d/0x18e0 security/integrity/ima/ima_main.c:247
-
-but task is already holding lock:
-ffff888214040450 (sb_writers#4){.+.+}-{0:0}, at: sb_start_write include/linux/fs.h:1664 [inline]
-ffff888214040450 (sb_writers#4){.+.+}-{0:0}, at: mnt_want_write+0x45/0x90 fs/namespace.c:354
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (sb_writers#4){.+.+}-{0:0}:
-       lock_acquire+0x160/0x720 kernel/locking/lockdep.c:4959
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write+0x14b/0x410 fs/super.c:1672
-       sb_start_write include/linux/fs.h:1664 [inline]
-       mnt_want_write+0x45/0x90 fs/namespace.c:354
-       ovl_maybe_copy_up+0x117/0x180 fs/overlayfs/copy_up.c:961
-       ovl_open+0xa2/0x200 fs/overlayfs/file.c:145
-       do_dentry_open+0x813/0x1070 fs/open.c:828
-       vfs_open fs/open.c:942 [inline]
-       dentry_open+0xc6/0x120 fs/open.c:958
-       ima_calc_file_hash+0xfa/0x1f30 security/integrity/ima/ima_crypto.c:557
-       ima_collect_measurement+0x1fd/0x490 security/integrity/ima/ima_api.c:250
-       process_measurement+0xddf/0x18e0 security/integrity/ima/ima_main.c:324
-       ima_file_check+0x9c/0xe0 security/integrity/ima/ima_main.c:492
-       do_open fs/namei.c:3245 [inline]
-       path_openat+0x27d6/0x37f0 fs/namei.c:3360
-       do_filp_open+0x191/0x3a0 fs/namei.c:3387
-       do_sys_openat2+0x463/0x770 fs/open.c:1179
-       do_sys_open fs/open.c:1195 [inline]
-       ksys_open include/linux/syscalls.h:1388 [inline]
-       __do_sys_open fs/open.c:1201 [inline]
-       __se_sys_open fs/open.c:1199 [inline]
-       __x64_sys_open+0x1af/0x1e0 fs/open.c:1199
-       do_syscall_64+0x73/0xe0 arch/x86/entry/common.c:359
-       entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
--> #0 (&iint->mutex){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:2496 [inline]
-       check_prevs_add kernel/locking/lockdep.c:2601 [inline]
-       validate_chain+0x1b0c/0x8920 kernel/locking/lockdep.c:3218
-       __lock_acquire+0x116c/0x2c30 kernel/locking/lockdep.c:4380
-       lock_acquire+0x160/0x720 kernel/locking/lockdep.c:4959
-       __mutex_lock_common+0x189/0x2fc0 kernel/locking/mutex.c:956
-       __mutex_lock kernel/locking/mutex.c:1103 [inline]
-       mutex_lock_nested+0x1a/0x20 kernel/locking/mutex.c:1118
-       process_measurement+0x66d/0x18e0 security/integrity/ima/ima_main.c:247
-       ima_file_check+0x9c/0xe0 security/integrity/ima/ima_main.c:492
-       do_open fs/namei.c:3245 [inline]
-       path_openat+0x27d6/0x37f0 fs/namei.c:3360
-       do_filp_open+0x191/0x3a0 fs/namei.c:3387
-       do_sys_openat2+0x463/0x770 fs/open.c:1179
-       do_sys_open fs/open.c:1195 [inline]
-       __do_sys_openat fs/open.c:1209 [inline]
-       __se_sys_openat fs/open.c:1204 [inline]
-       __x64_sys_openat+0x1c8/0x1f0 fs/open.c:1204
-       do_syscall_64+0x73/0xe0 arch/x86/entry/common.c:359
-       entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(sb_writers#4);
-                               lock(&iint->mutex);
-                               lock(sb_writers#4);
-  lock(&iint->mutex);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor165/6816:
- #0: ffff888214040450 (sb_writers#4){.+.+}-{0:0}, at: sb_start_write include/linux/fs.h:1664 [inline]
- #0: ffff888214040450 (sb_writers#4){.+.+}-{0:0}, at: mnt_want_write+0x45/0x90 fs/namespace.c:354
-
-stack backtrace:
-CPU: 1 PID: 6816 Comm: syz-executor165 Not tainted 5.8.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x1f0/0x31e lib/dump_stack.c:118
- print_circular_bug+0xc72/0xea0 kernel/locking/lockdep.c:1703
- check_noncircular+0x1fb/0x3a0 kernel/locking/lockdep.c:1827
- check_prev_add kernel/locking/lockdep.c:2496 [inline]
- check_prevs_add kernel/locking/lockdep.c:2601 [inline]
- validate_chain+0x1b0c/0x8920 kernel/locking/lockdep.c:3218
- __lock_acquire+0x116c/0x2c30 kernel/locking/lockdep.c:4380
- lock_acquire+0x160/0x720 kernel/locking/lockdep.c:4959
- __mutex_lock_common+0x189/0x2fc0 kernel/locking/mutex.c:956
- __mutex_lock kernel/locking/mutex.c:1103 [inline]
- mutex_lock_nested+0x1a/0x20 kernel/locking/mutex.c:1118
- process_measurement+0x66d/0x18e0 security/integrity/ima/ima_main.c:247
- ima_file_check+0x9c/0xe0 security/integrity/ima/ima_main.c:492
- do_open fs/namei.c:3245 [inline]
- path_openat+0x27d6/0x37f0 fs/namei.c:3360
- do_filp_open+0x191/0x3a0 fs/namei.c:3387
- do_sys_openat2+0x463/0x770 fs/open.c:1179
- do_sys_open fs/open.c:1195 [inline]
- __do_sys_openat fs/open.c:1209 [inline]
- __se_sys_openat fs/open.c:1204 [inline]
- __x64_sys_openat+0x1c8/0x1f0 fs/open.c:1204
- do_syscall_64+0x73/0xe0 arch/x86/entry/common.c:359
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x446289
-Code: Bad RIP value.
-RSP: 002b:00007fc5eb6ccdb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00000000006dbc48 RCX: 0000000000446289
-RDX: 000000000000275a RSI: 00000000200001c0 RDI: 00000000ffffff9c
-RBP: 00000000006dbc40 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000
-
+> ---
+>
+> Developed on top of next-integrity-testing, commit cd1d8603df60 ("IMA:
+> Add audit log for failure conditions"), plus this patch series:
+>
+>  [PATCH v2 00/11] ima: Fix rule parsing bugs and extend KEXEC_CMDLINE rule support
+>  https://lore.kernel.org/linux-integrity/20200626223900.253615-1-tyhicks@linux.microsoft.com/T/#t
+>
+> This patch has dependencies on the above patch series.
+>
+> Tested with and without CONFIG_IMA_LSM_RULES enabled by attempting to
+> load IMA policy with rules containing the subj_role=foo conditional.
+> Build logs are clean in both configurations. The IMA policy was first
+> loaded without and then with a valid AppArmor profile named "foo". The
+> behavior is the same before and after this patch is applied:
+>
+>                   | CONFIG_IMA_LSM_RULES=n   | CONFIG_IMA_LSM_RULES=y
+> -----------------------------------------------------------------------
+>  Without Profile  |  IMA policy load fails   | IMA policy load fails
+>  With Profile     |  IMA policy load fails   | IMA policy load succeeds
+>
+>  security/integrity/ima/ima.h        | 16 +++++++--------
+>  security/integrity/ima/ima_policy.c | 30 +++++++++++++----------------
+>  2 files changed, 21 insertions(+), 25 deletions(-)
+>
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index ff2bf57ff0c7..5d62ee8319f4 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -419,24 +419,24 @@ static inline void ima_free_modsig(struct modsig *modsig)
+>  /* LSM based policy rules require audit */
+>  #ifdef CONFIG_IMA_LSM_RULES
+>  
+> -#define security_filter_rule_init security_audit_rule_init
+> -#define security_filter_rule_free security_audit_rule_free
+> -#define security_filter_rule_match security_audit_rule_match
+> +#define ima_audit_rule_init security_audit_rule_init
+> +#define ima_audit_rule_free security_audit_rule_free
+> +#define ima_audit_rule_match security_audit_rule_match
+>  
+>  #else
+>  
+> -static inline int security_filter_rule_init(u32 field, u32 op, char *rulestr,
+> -					    void **lsmrule)
+> +static inline int ima_audit_rule_init(u32 field, u32 op, char *rulestr,
+> +				      void **lsmrule)
+>  {
+>  	return -EINVAL;
+>  }
+>  
+> -static inline void security_filter_rule_free(void *lsmrule)
+> +static inline void ima_audit_rule_free(void *lsmrule)
+>  {
+>  }
+>  
+> -static inline int security_filter_rule_match(u32 secid, u32 field, u32 op,
+> -					     void *lsmrule)
+> +static inline int ima_audit_rule_match(u32 secid, u32 field, u32 op,
+> +				       void *lsmrule)
+>  {
+>  	return -EINVAL;
+>  }
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 294323b36d06..60894656a4b7 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -258,7 +258,7 @@ static void ima_lsm_free_rule(struct ima_rule_entry *entry)
+>  	int i;
+>  
+>  	for (i = 0; i < MAX_LSM_RULES; i++) {
+> -		security_filter_rule_free(entry->lsm[i].rule);
+> +		ima_audit_rule_free(entry->lsm[i].rule);
+>  		kfree(entry->lsm[i].args_p);
+>  	}
+>  }
+> @@ -308,10 +308,9 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+>  		 */
+>  		entry->lsm[i].args_p = NULL;
+>  
+> -		security_filter_rule_init(nentry->lsm[i].type,
+> -					  Audit_equal,
+> -					  nentry->lsm[i].args_p,
+> -					  &nentry->lsm[i].rule);
+> +		ima_audit_rule_init(nentry->lsm[i].type, Audit_equal,
+> +				    nentry->lsm[i].args_p,
+> +				    &nentry->lsm[i].rule);
+>  		if (!nentry->lsm[i].rule)
+>  			pr_warn("rule for LSM \'%s\' is undefined\n",
+>  				entry->lsm[i].args_p);
+> @@ -495,18 +494,16 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
+>  		case LSM_OBJ_ROLE:
+>  		case LSM_OBJ_TYPE:
+>  			security_inode_getsecid(inode, &osid);
+> -			rc = security_filter_rule_match(osid,
+> -							rule->lsm[i].type,
+> -							Audit_equal,
+> -							rule->lsm[i].rule);
+> +			rc = ima_audit_rule_match(osid, rule->lsm[i].type,
+> +						  Audit_equal,
+> +						  rule->lsm[i].rule);
+>  			break;
+>  		case LSM_SUBJ_USER:
+>  		case LSM_SUBJ_ROLE:
+>  		case LSM_SUBJ_TYPE:
+> -			rc = security_filter_rule_match(secid,
+> -							rule->lsm[i].type,
+> -							Audit_equal,
+> -							rule->lsm[i].rule);
+> +			rc = ima_audit_rule_match(secid, rule->lsm[i].type,
+> +						  Audit_equal,
+> +						  rule->lsm[i].rule);
+>  		default:
+>  			break;
+>  		}
+> @@ -901,10 +898,9 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
+>  		return -ENOMEM;
+>  
+>  	entry->lsm[lsm_rule].type = audit_type;
+> -	result = security_filter_rule_init(entry->lsm[lsm_rule].type,
+> -					   Audit_equal,
+> -					   entry->lsm[lsm_rule].args_p,
+> -					   &entry->lsm[lsm_rule].rule);
+> +	result = ima_audit_rule_init(entry->lsm[lsm_rule].type, Audit_equal,
+> +				     entry->lsm[lsm_rule].args_p,
+> +				     &entry->lsm[lsm_rule].rule);
+>  	if (!entry->lsm[lsm_rule].rule) {
+>  		pr_warn("rule for LSM \'%s\' is undefined\n",
+>  			entry->lsm[lsm_rule].args_p);
