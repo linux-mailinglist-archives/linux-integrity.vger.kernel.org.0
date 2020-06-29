@@ -2,107 +2,182 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1460420D2CD
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Jun 2020 21:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7D220D497
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Jun 2020 21:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729716AbgF2SwQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 Jun 2020 14:52:16 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40828 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727854AbgF2SwP (ORCPT
+        id S1730935AbgF2TJ4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 Jun 2020 15:09:56 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:50382 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730932AbgF2TJy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:52:15 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05TF3Y9n183022;
-        Mon, 29 Jun 2020 11:27:19 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31ycj95mkv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Jun 2020 11:27:18 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05TFG1Mf006442;
-        Mon, 29 Jun 2020 15:27:17 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 31wwr7s67s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Jun 2020 15:27:16 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05TFRE9647186124
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Jun 2020 15:27:14 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BEEE7A4055;
-        Mon, 29 Jun 2020 15:27:14 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07673A4040;
-        Mon, 29 Jun 2020 15:27:14 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.137.220])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 29 Jun 2020 15:27:13 +0000 (GMT)
-Message-ID: <1593444433.5085.15.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity additional change v5.8 (#2)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Maurizio Drocco <maurizio.drocco@ibm.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Date:   Mon, 29 Jun 2020 11:27:13 -0400
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Mon, 29 Jun 2020 15:09:54 -0400
+Received: from sequoia.work.tihix.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 328C820B4904;
+        Mon, 29 Jun 2020 08:31:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 328C820B4904
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1593444672;
+        bh=6ZAZLRdiVmhJSotXumflMugZiteYC6hE4wK0N2IMWYQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iE6FwL5pkqNJ+D5EKPLuBSJ6t2EamXVQtIgimYH3NTz+/m6iAqvPMKibVX9huKOhS
+         bwF9HbBeqw6gTxc45Xiy6vfBhPGmjSnqofkv6Un+Q5APCtuUITSWlzpD5dFSbCvb5s
+         51vbIlpPIX5UoiCkEcK7RGLA88jityVKynrVKvbg=
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: [PATCH] ima: Rename internal audit rule functions
+Date:   Mon, 29 Jun 2020 10:30:37 -0500
+Message-Id: <20200629153037.337349-1-tyhicks@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-06-29_15:2020-06-29,2020-06-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
- priorityscore=1501 phishscore=0 suspectscore=0 adultscore=0
- cotscore=-2147483648 bulkscore=0 clxscore=1011 mlxscore=0 classifier=spam
- adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006290103
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
+Rename IMA's internal audit rule functions from security_filter_rule_*()
+to ima_audit_rule_*(). This avoids polluting the security_* namespace,
+which is typically reserved for general security subsystem
+infrastructure, and better aligns the IMA function names with the names
+of the LSM hooks.
 
-Prior to Linux 5.8 the SHA1 "boot_aggregate" value was padded with 0's
-and extended into the other TPM 2.0 banks.  Included in the Linux 5.8
-open window, TPM 2.0 PCR bank specific "boot_aggregate" values (PCRs 0
-- 7) are calculated and extended into the TPM banks.
+Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Suggested-by: Casey Schaufler <casey@schaufler-ca.com>
+---
 
-Distro releases are now shipping grub2 with TPM support, which extend
-PCRs 8 & 9.  I'd like for PCRs 8 & 9 to be included in the new
-"boot_aggregate" calculations.  For backwards compatibility, PCRs 8 &
-9 are not included in the SHA1 TPM bank "boot_aggregate" calculation.
+Developed on top of next-integrity-testing, commit cd1d8603df60 ("IMA:
+Add audit log for failure conditions"), plus this patch series:
 
-I'd appreciate your merging this additional change.
+ [PATCH v2 00/11] ima: Fix rule parsing bugs and extend KEXEC_CMDLINE rule support
+ https://lore.kernel.org/linux-integrity/20200626223900.253615-1-tyhicks@linux.microsoft.com/T/#t
 
-thanks,
+This patch has dependencies on the above patch series.
 
-Mimi
+Tested with and without CONFIG_IMA_LSM_RULES enabled by attempting to
+load IMA policy with rules containing the subj_role=foo conditional.
+Build logs are clean in both configurations. The IMA policy was first
+loaded without and then with a valid AppArmor profile named "foo". The
+behavior is the same before and after this patch is applied:
 
-The following changes since commit 48778464bb7d346b47157d21ffde2af6b2d39110:
+                  | CONFIG_IMA_LSM_RULES=n   | CONFIG_IMA_LSM_RULES=y
+-----------------------------------------------------------------------
+ Without Profile  |  IMA policy load fails   | IMA policy load fails
+ With Profile     |  IMA policy load fails   | IMA policy load succeeds
 
-  Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
+ security/integrity/ima/ima.h        | 16 +++++++--------
+ security/integrity/ima/ima_policy.c | 30 +++++++++++++----------------
+ 2 files changed, 21 insertions(+), 25 deletions(-)
 
-are available in the git repository at:
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index ff2bf57ff0c7..5d62ee8319f4 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -419,24 +419,24 @@ static inline void ima_free_modsig(struct modsig *modsig)
+ /* LSM based policy rules require audit */
+ #ifdef CONFIG_IMA_LSM_RULES
+ 
+-#define security_filter_rule_init security_audit_rule_init
+-#define security_filter_rule_free security_audit_rule_free
+-#define security_filter_rule_match security_audit_rule_match
++#define ima_audit_rule_init security_audit_rule_init
++#define ima_audit_rule_free security_audit_rule_free
++#define ima_audit_rule_match security_audit_rule_match
+ 
+ #else
+ 
+-static inline int security_filter_rule_init(u32 field, u32 op, char *rulestr,
+-					    void **lsmrule)
++static inline int ima_audit_rule_init(u32 field, u32 op, char *rulestr,
++				      void **lsmrule)
+ {
+ 	return -EINVAL;
+ }
+ 
+-static inline void security_filter_rule_free(void *lsmrule)
++static inline void ima_audit_rule_free(void *lsmrule)
+ {
+ }
+ 
+-static inline int security_filter_rule_match(u32 secid, u32 field, u32 op,
+-					     void *lsmrule)
++static inline int ima_audit_rule_match(u32 secid, u32 field, u32 op,
++				       void *lsmrule)
+ {
+ 	return -EINVAL;
+ }
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 294323b36d06..60894656a4b7 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -258,7 +258,7 @@ static void ima_lsm_free_rule(struct ima_rule_entry *entry)
+ 	int i;
+ 
+ 	for (i = 0; i < MAX_LSM_RULES; i++) {
+-		security_filter_rule_free(entry->lsm[i].rule);
++		ima_audit_rule_free(entry->lsm[i].rule);
+ 		kfree(entry->lsm[i].args_p);
+ 	}
+ }
+@@ -308,10 +308,9 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+ 		 */
+ 		entry->lsm[i].args_p = NULL;
+ 
+-		security_filter_rule_init(nentry->lsm[i].type,
+-					  Audit_equal,
+-					  nentry->lsm[i].args_p,
+-					  &nentry->lsm[i].rule);
++		ima_audit_rule_init(nentry->lsm[i].type, Audit_equal,
++				    nentry->lsm[i].args_p,
++				    &nentry->lsm[i].rule);
+ 		if (!nentry->lsm[i].rule)
+ 			pr_warn("rule for LSM \'%s\' is undefined\n",
+ 				entry->lsm[i].args_p);
+@@ -495,18 +494,16 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
+ 		case LSM_OBJ_ROLE:
+ 		case LSM_OBJ_TYPE:
+ 			security_inode_getsecid(inode, &osid);
+-			rc = security_filter_rule_match(osid,
+-							rule->lsm[i].type,
+-							Audit_equal,
+-							rule->lsm[i].rule);
++			rc = ima_audit_rule_match(osid, rule->lsm[i].type,
++						  Audit_equal,
++						  rule->lsm[i].rule);
+ 			break;
+ 		case LSM_SUBJ_USER:
+ 		case LSM_SUBJ_ROLE:
+ 		case LSM_SUBJ_TYPE:
+-			rc = security_filter_rule_match(secid,
+-							rule->lsm[i].type,
+-							Audit_equal,
+-							rule->lsm[i].rule);
++			rc = ima_audit_rule_match(secid, rule->lsm[i].type,
++						  Audit_equal,
++						  rule->lsm[i].rule);
+ 		default:
+ 			break;
+ 		}
+@@ -901,10 +898,9 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
+ 		return -ENOMEM;
+ 
+ 	entry->lsm[lsm_rule].type = audit_type;
+-	result = security_filter_rule_init(entry->lsm[lsm_rule].type,
+-					   Audit_equal,
+-					   entry->lsm[lsm_rule].args_p,
+-					   &entry->lsm[lsm_rule].rule);
++	result = ima_audit_rule_init(entry->lsm[lsm_rule].type, Audit_equal,
++				     entry->lsm[lsm_rule].args_p,
++				     &entry->lsm[lsm_rule].rule);
+ 	if (!entry->lsm[lsm_rule].rule) {
+ 		pr_warn("rule for LSM \'%s\' is undefined\n",
+ 			entry->lsm[lsm_rule].args_p);
+-- 
+2.25.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.8-fix-2
-
-for you to fetch changes up to 20c59ce010f84300f6c655d32db2610d3433f85c:
-
-  ima: extend boot_aggregate with kernel measurements (2020-06-24 20:47:24 -0400)
-
-----------------------------------------------------------------
-Include PCRs 8 & 9 in per TPM 2.0 bank boot_aggregate calculation
-
-----------------------------------------------------------------
-Maurizio Drocco (1):
-      ima: extend boot_aggregate with kernel measurements
-
- security/integrity/ima/ima.h        |  2 +-
- security/integrity/ima/ima_crypto.c | 15 ++++++++++++++-
- 2 files changed, 15 insertions(+), 2 deletions(-)
