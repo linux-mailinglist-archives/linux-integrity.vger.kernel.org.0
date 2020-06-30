@@ -2,101 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2762820FCFE
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jun 2020 21:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804A5210052
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Jul 2020 01:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728528AbgF3TtI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Jun 2020 15:49:08 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:30373 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728608AbgF3TtI (ORCPT
+        id S1726142AbgF3XHr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Jun 2020 19:07:47 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:13602 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725791AbgF3XHr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Jun 2020 15:49:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1593546546;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ta3QiFyXugeuA+urmixcQfRxGdpjyq1pxJZ1EMys5Xg=;
-        b=GXtiJxFz9lsfS+qKnCi0yFr4oU0qkz6Denot0e8FGZaADGg8qWKaViCxeVjGHKOR5mIGvC
-        Hih8LQeeffEl6IKxgqeexIkEbImM+3GLJ2UvDyNSX+IDYax+0F7xR54tUVJZ63iBWJ7AXN
-        J5VR6fRLCe4eu2XyeqglEbM54XOI29o=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-72-3ZEdmMQOM5yrPXoOwZ7Sxg-1; Tue, 30 Jun 2020 15:49:02 -0400
-X-MC-Unique: 3ZEdmMQOM5yrPXoOwZ7Sxg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 95981BFC3;
-        Tue, 30 Jun 2020 19:49:00 +0000 (UTC)
-Received: from redhat.com (ovpn-113-167.phx2.redhat.com [10.3.113.167])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A8D7F7BEDE;
-        Tue, 30 Jun 2020 19:48:58 +0000 (UTC)
-Date:   Tue, 30 Jun 2020 15:48:56 -0400
-From:   Peter Jones <pjones@redhat.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Petr Vandrovec <petr@vmware.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Require that all digests are present in
- TCG_PCR_EVENT2 structures
-Message-ID: <20200630194855.mfctxgveltvphgnc@redhat.com>
-References: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
- <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
- <20200630185327.pasrylg7og7rlno3@redhat.com>
- <20200630192322.GF4694@sequoia>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200630192322.GF4694@sequoia>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        Tue, 30 Jun 2020 19:07:47 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05UN3KfM018224;
+        Tue, 30 Jun 2020 19:07:36 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3204s1bj33-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Jun 2020 19:07:36 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05UN7ZPj033337;
+        Tue, 30 Jun 2020 19:07:35 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3204s1bj26-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Jun 2020 19:07:35 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05UN5YoD022861;
+        Tue, 30 Jun 2020 23:07:33 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 31wwr8c7ka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Jun 2020 23:07:33 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05UN7UGr42139754
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Jun 2020 23:07:31 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF3334203F;
+        Tue, 30 Jun 2020 23:07:30 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D19BD4204C;
+        Tue, 30 Jun 2020 23:07:29 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.162.223])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 30 Jun 2020 23:07:29 +0000 (GMT)
+Message-ID: <1593558449.5057.12.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 09/11] ima: Move validation of the keyrings
+ conditional into ima_validate_rule()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Tue, 30 Jun 2020 19:07:29 -0400
+In-Reply-To: <20200626223900.253615-10-tyhicks@linux.microsoft.com>
+References: <20200626223900.253615-1-tyhicks@linux.microsoft.com>
+         <20200626223900.253615-10-tyhicks@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-06-30_06:2020-06-30,2020-06-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 cotscore=-2147483648 suspectscore=0
+ priorityscore=1501 bulkscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 clxscore=1015 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006300159
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 02:23:22PM -0500, Tyler Hicks wrote:
-> > > I am all for stringent checks, but this could potentially break
-> > > measured boot on systems that are working fine today, right?
-> > 
-> > Seems like in that case our measurement is unreliable and can't really
-> > be trusted.  That said, having things that were using the measurements
-> > before this suddenly stop being able to access sealed secrets is not a
-> > great experience for the user who unwittingly bought the junk hardware.
+On Fri, 2020-06-26 at 17:38 -0500, Tyler Hicks wrote:
+> Use ima_validate_rule() to ensure that the combination of a hook
+> function and the keyrings conditional is valid and that the keyrings
+> conditional is not specified without an explicit KEY_CHECK func
+> conditional. This is a code cleanup and has no user-facing change.
 > 
-> I haven't seen where anyone has suggested that such junk hardware
-> exists. Do you know of or expect any firmware that has mismatched
-> TCG_PCR_EVENT2.digests.count and TCG_EfiSpecIdEvent.numberOfAlgorithms
-> values?
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> ---
+> 
+> * v2
+>   - Allowed IMA_DIGSIG_REQUIRED, IMA_PERMIT_DIRECTIO,
+>     IMA_MODSIG_ALLOWED, and IMA_CHECK_BLACKLIST conditionals to be
+>     present in the rule entry flags for non-buffer hook functions.
+> 
+>  security/integrity/ima/ima_policy.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 8cdca2399d59..43d49ad958fb 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -1000,6 +1000,15 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+>  		case KEXEC_KERNEL_CHECK:
+>  		case KEXEC_INITRAMFS_CHECK:
+>  		case POLICY_CHECK:
+> +			if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
+> +					     IMA_UID | IMA_FOWNER | IMA_FSUUID |
+> +					     IMA_INMASK | IMA_EUID | IMA_PCR |
+> +					     IMA_FSNAME | IMA_DIGSIG_REQUIRED |
+> +					     IMA_PERMIT_DIRECTIO |
+> +					     IMA_MODSIG_ALLOWED |
+> +					     IMA_CHECK_BLACKLIST))
 
-If nobody has seen any hardware that actually produces the values you're
-excluding, then I don't have a strong objection.
- 
-> I would think that the userspace code that's parsing
-> /sys/kernel/security/tpm0/binary_bios_measurements would also have
-> issues with such an event log.
-> 
-> > Same with the zero-supported-hashes case.
-> 
-> Small but important correction: it is a zero-hashes case, not a
-> zero-supported-hashes case
-> 
-> There's no handshake involved or anything like that. This would only
-> cause problems if the firmware provided no hashes, which means the
-> firmware event log is unusable, anyways.
+Other than KEYRINGS, this patch should continue to behave the same.
+ However, this list gives the impressions that all of these flags are
+permitted on all of the above flags, which isn't true.
 
-Indeed.
+For example, both IMA_MODSIG_ALLOWED & IMA_CHECK_BLACKLIST are limited
+to appended signatures, meaning KERNEL_CHECK and KEXEC_KERNEL_CHECK.
+ Both should only be allowed on APPRAISE action rules.
 
--- 
-        Peter
+IMA_PCR should be limited to MEASURE action rules.
+
+IMA_DIGSIG_REQUIRED should be limited to APPRAISE action rules.
+
+> +				return false;
+> +
+>  			break;
+>  		case KEXEC_CMDLINE:
+>  			if (entry->action & ~(MEASURE | DONT_MEASURE))
+> @@ -1027,7 +1036,8 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+>  		default:
+>  			return false;
+>  		}
+> -	}
+> +	} else if (entry->flags & IMA_KEYRINGS)
+> +		return false;
+
+IMA_MODSIG_ALLOWED and IMA_CHECK_BLACKLIST need to be added here as
+well.
+
+Mimi
+
+>  
+>  	return true;
+>  }
+> @@ -1209,7 +1219,6 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>  			keyrings_len = strlen(args[0].from) + 1;
+>  
+>  			if ((entry->keyrings) ||
+> -			    (entry->func != KEY_CHECK) ||
+>  			    (keyrings_len < 2)) {
+>  				result = -EINVAL;
+>  				break;
 
