@@ -2,125 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EDA20FC7A
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jun 2020 21:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F4C20FC8B
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jun 2020 21:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbgF3TKY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Jun 2020 15:10:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57008 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726347AbgF3TKY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Jun 2020 15:10:24 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 82CF4206A1;
-        Tue, 30 Jun 2020 19:10:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593544223;
-        bh=bvlrBIfobkJqYUwxFksgp5a8Mp33hFTvnGQJoruLeuY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ydWGPy5P0M/MOtzOb7cUumHcgEcBKEz3HcrctoB7EZjLFRYWjETnvQegJG24Fg8zO
-         xdATpa8ivXsc6/01zIHIA/AoOIV2O+3HuDASjsb0d3HqK5nNymjAeV/55d0zIGRmBR
-         vKzo0Veies9WvUU+irZ5vR96h9P95/xMpmqmR+oQ=
-Received: by mail-ot1-f52.google.com with SMTP id t18so6510720otq.5;
-        Tue, 30 Jun 2020 12:10:23 -0700 (PDT)
-X-Gm-Message-State: AOAM530xR4yAenqF71g56/6apwLmanOn1fvEmNcQQsOvPM+50Cx0My/k
-        KlxUIXiA5sxaAwv3kDgkbwzt52xQwEuYzFbkTI8=
-X-Google-Smtp-Source: ABdhPJxyBSIMgPHRikk+QNpo1LzL2zQLLth65d1YiWHuRfZ5Bbyrei2mNQsDdeewN/53+vnvUBS3wNYrt0lG66uBKBo=
-X-Received: by 2002:a9d:4a8f:: with SMTP id i15mr20375352otf.77.1593544222958;
- Tue, 30 Jun 2020 12:10:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
- <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com> <20200630185327.pasrylg7og7rlno3@redhat.com>
-In-Reply-To: <20200630185327.pasrylg7og7rlno3@redhat.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 30 Jun 2020 21:10:11 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFtC+2VQxg8nqZL3+88nC5CT+smhibB8KgvMMTOhgtU3A@mail.gmail.com>
-Message-ID: <CAMj1kXFtC+2VQxg8nqZL3+88nC5CT+smhibB8KgvMMTOhgtU3A@mail.gmail.com>
-Subject: Re: [PATCH] tpm: Require that all digests are present in
- TCG_PCR_EVENT2 structures
-To:     Peter Jones <pjones@redhat.com>
-Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        id S1726759AbgF3TQD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Jun 2020 15:16:03 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:54823 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726217AbgF3TQC (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 30 Jun 2020 15:16:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1593544559;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=Mwn+YbY3lCFD0nRhYZ0J/9ZQb28iUEBrVkjj0x5okkw=;
+        b=S4kS9GEDXWpysACLSp06FFblqZ52CiItj52UM0SX5OriG5qpo3eYdLWwXzEZ2ED9ZMnnrY
+        /Xt0XrCXOhgL5fFLZUmlfXPVDLavKu3vdhRU238udNg3mFuVuf1rKgRlwGKmcphb46u0TV
+        yyO3iEYfe0ikz7UjRscHGHoCkWHlK+o=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-412-AwdhpFmPN1uAZU3jxYc8Xw-1; Tue, 30 Jun 2020 15:15:20 -0400
+X-MC-Unique: AwdhpFmPN1uAZU3jxYc8Xw-1
+Received: by mail-qt1-f198.google.com with SMTP id c26so15107562qtq.6
+        for <linux-integrity@vger.kernel.org>; Tue, 30 Jun 2020 12:15:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=Mwn+YbY3lCFD0nRhYZ0J/9ZQb28iUEBrVkjj0x5okkw=;
+        b=TRsq0WZKo/rd1+yUh5zSGlai5AakK8JQhMtjWjyVqzV0HWmHQuPIiP6wLSCBEqIWct
+         whhejerP7djyUZ9RoBheugGH3xEBM+kU8P7AVsnEpFs8hAcOCQYnMWqw0V2NByPRWP0Z
+         e1BHneuwcgET51oDm+Lzkv8Cp/Uuawo9/4ldgmrCDQw6gkjw0adKFQ71bWWb7sSKROSV
+         /EgoNb/S7mjT9IzG82JU0slQnBTtlUWSvriHg76oIjrtlmzh7uSDmOXC/6akv9VQWqnu
+         NsOtAnGnPwAp/2dpdVCHjOEscaZ6tpp7/WVRNHv/P4ulgNxBu3had2WfN/Tbe0yG0JPE
+         V5Kg==
+X-Gm-Message-State: AOAM531pRbSpLkWEG2ukTWYo3+AwCpb7D+mX1hMGvVjosNLxGSA7OqzA
+        ilE49ux+2bz9gFxQnW6D3tA3yejAvLuwg//pfdNIqo0YFI1X1llSHLpFf0ypEiPAk2Fq96NiDNB
+        73j9wOKHZkgB3fmoWTTgzXVFQMx0k
+X-Received: by 2002:ac8:b4c:: with SMTP id m12mr1796488qti.321.1593544517989;
+        Tue, 30 Jun 2020 12:15:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwHjEeEV/Zp7eB4dHo6T90utCK96FWHB2uNZoUKDQzH4ehEwW36m6TcSOBtvR80+MWgIMg8vw==
+X-Received: by 2002:ac8:b4c:: with SMTP id m12mr1796465qti.321.1593544517659;
+        Tue, 30 Jun 2020 12:15:17 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id u6sm3840440qtc.34.2020.06.30.12.15.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2020 12:15:16 -0700 (PDT)
+Date:   Tue, 30 Jun 2020 12:15:15 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Kylene Jo Hall <kjhall@us.ibm.com>,
+        "Ferry Toth :" <ferry.toth@elsinga.info>,
         Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Petr Vandrovec <petr@vmware.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@osdl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] tpm_tis: Remove the HID IFX0102
+Message-ID: <20200630191515.m3hi6gmn4ya7hvji@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-integrity@vger.kernel.org, Kylene Jo Hall <kjhall@us.ibm.com>,
+        "Ferry Toth :" <ferry.toth@elsinga.info>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@osdl.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
+ <20200625062150.idm6j3vm2neyt4sh@cantor>
+ <20200625210202.GA20341@linux.intel.com>
+ <20200625211923.2jirvix6zbrbgj6e@cantor>
+ <20200626130851.GA7853@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20200626130851.GA7853@linux.intel.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 30 Jun 2020 at 20:53, Peter Jones <pjones@redhat.com> wrote:
+On Fri Jun 26 20, Jarkko Sakkinen wrote:
+>On Thu, Jun 25, 2020 at 02:19:23PM -0700, Jerry Snitselaar wrote:
+>> On Fri Jun 26 20, Jarkko Sakkinen wrote:
+>> > On Wed, Jun 24, 2020 at 11:21:50PM -0700, Jerry Snitselaar wrote:
+>> > > On Thu Jun 25 20, Jarkko Sakkinen wrote:
+>> > > > Acer C720 running Linux v5.3 reports this in klog:
+>> > > >
+>> > > > tpm_tis: 1.2 TPM (device-id 0xB, rev-id 16)
+>> > > > tpm tpm0: tpm_try_transmit: send(): error -5
+>> > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the timeouts
+>> > > > tpm_tis tpm_tis: Could not get TPM timeouts and durations
+>> > > > tpm_tis 00:08: 1.2 TPM (device-id 0xB, rev-id 16)
+>> > > > tpm tpm0: tpm_try_transmit: send(): error -5
+>> > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the timeouts
+>> > > > tpm_tis 00:08: Could not get TPM timeouts and durations
+>> > > > ima: No TPM chip found, activating TPM-bypass!
+>> > > > tpm_inf_pnp 00:08: Found TPM with ID IFX0102
+>> > > >
+>> > > > % git --no-pager grep IFX0102 drivers/char/tpm
+>> > > > drivers/char/tpm/tpm_infineon.c:	{"IFX0102", 0},
+>> > > > drivers/char/tpm/tpm_tis.c:	{"IFX0102", 0},		/* Infineon */
+>> > > >
+>> > > > Obviously IFX0102 was added to the HID table for the TCG TIS driver by
+>> > > > mistake.
+>> > > >
+>> > > > Fixes: 93e1b7d42e1e ("[PATCH] tpm: add HID module parameter")
+>> > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203877
+>> > > > Cc: Kylene Jo Hall <kjhall@us.ibm.com>
+>> > > > Reported-by: Ferry Toth: <ferry.toth@elsinga.info>
+>> > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+>> > >
+>> > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+>> >
+>> > Bugzilla has an example of similar behavior with v4.15. I'll apply this
+>> > asap.
+>> >
+>> > /Jarkko
+>> >
+>>
+>> Any idea what happened to git.infradead.org? It was offline the other day,
+>> and at the moment not all repos from before seem to be there.
 >
-> On Tue, Jun 16, 2020 at 11:08:38AM +0200, Ard Biesheuvel wrote:
-> > (cc Matthew and Peter)
-> >
-> > On Tue, 16 Jun 2020 at 01:28, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
-> > >
-> > > Require that the TCG_PCR_EVENT2.digests.count value strictly matches the
-> > > value of TCG_EfiSpecIdEvent.numberOfAlgorithms in the event field of the
-> > > TCG_PCClientPCREvent event log header. Also require that
-> > > TCG_EfiSpecIdEvent.numberOfAlgorithms is non-zero.
-> > >
-> > > The TCG PC Client Platform Firmware Profile Specification section 9.1
-> > > (Family "2.0", Level 00 Revision 1.04) states:
-> > >
-> > >  For each Hash algorithm enumerated in the TCG_PCClientPCREvent entry,
-> > >  there SHALL be a corresponding digest in all TCG_PCR_EVENT2 structures.
-> > >  Note: This includes EV_NO_ACTION events which do not extend the PCR.
-> > >
-> > > Section 9.4.5.1 provides this description of
-> > > TCG_EfiSpecIdEvent.numberOfAlgorithms:
-> > >
-> > >  The number of Hash algorithms in the digestSizes field. This field MUST
-> > >  be set to a value of 0x01 or greater.
-> > >
-> > > Enforce these restrictions, as required by the above specification, in
-> > > order to better identify and ignore invalid sequences of bytes at the
-> > > end of an otherwise valid TPM2 event log. Firmware doesn't always have
-> > > the means necessary to inform the kernel of the actual event log size so
-> > > the kernel's event log parsing code should be stringent when parsing the
-> > > event log for resiliency against firmware bugs. This is true, for
-> > > example, when firmware passes the event log to the kernel via a reserved
-> > > memory region described in device tree.
-> > >
-> >
-> > When does this happen? Do we have code in mainline that does this?
-> >
-> > > Prior to this patch, a single bit set in the offset corresponding to
-> > > either the TCG_PCR_EVENT2.eventType or TCG_PCR_EVENT2.eventSize fields,
-> > > after the last valid event log entry, could confuse the parser into
-> > > thinking that an additional entry is present in the event log. This
-> > > patch raises the bar on how difficult it is for stale memory to confuse
-> > > the kernel's event log parser but there's still a reliance on firmware
-> > > to properly initialize the remainder of the memory region reserved for
-> > > the event log as the parser cannot be expected to detect a stale but
-> > > otherwise properly formatted firmware event log entry.
-> > >
-> > > Fixes: fd5c78694f3f ("tpm: fix handling of the TPM 2.0 event logs")
-> > > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > > ---
-> >
-> > I am all for stringent checks, but this could potentially break
-> > measured boot on systems that are working fine today, right?
+>Now the kernel tree is back online.
 >
-> Seems like in that case our measurement is unreliable and can't really
-> be trusted.  That said, having things that were using the measurements
-> before this suddenly stop being able to access sealed secrets is not a
-> great experience for the user who unwittingly bought the junk hardware.
-> Same with the zero-supported-hashes case.  It would be nice to at log it
-> and have a way for them to opt-in to allowing the old measurement to go
-> through, so they can recover their data, though I don't know what that
-> method would be if the measured command line is one of their
-> dependencies.
+>/Jarkko
 >
 
-Maybe use a EFI variable?
+Hi Jarkko, I still see your linux-tpmdd repository as not being online:
+
+git remote show tpmdd
+fatal: remote error: access denied or repository not exported: /users/jjs/linux-tpmdd.git
+
+Regards,
+Jerry
+
