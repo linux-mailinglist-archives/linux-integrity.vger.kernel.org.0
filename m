@@ -2,115 +2,264 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7734821302F
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jul 2020 01:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB10D213045
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jul 2020 01:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726029AbgGBXi3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Jul 2020 19:38:29 -0400
-Received: from mga17.intel.com ([192.55.52.151]:23278 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725915AbgGBXi3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Jul 2020 19:38:29 -0400
-IronPort-SDR: 7OHRaxU5/Xcx9PJiew+J/Pt4rvvs6wDY6R04kryZnZS0i0qTfvqC1MWDz2ETkt8720ZToBseMz
- RguqmXQrrEdQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="127143841"
-X-IronPort-AV: E=Sophos;i="5.75,305,1589266800"; 
-   d="scan'208";a="127143841"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 16:38:29 -0700
-IronPort-SDR: R7qtgIdD+8x4AgJAXlJishfVhDQlpMuzDCNzs0lpcUKlpGG0Iqoy50SkIK5OaZgag591grFZjG
- IsMvYSztU5Ig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,305,1589266800"; 
-   d="scan'208";a="267205271"
-Received: from chadjitt-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.41.125])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Jul 2020 16:38:24 -0700
-Date:   Fri, 3 Jul 2020 02:38:23 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-integrity@vger.kernel.org,
-        Kylene Jo Hall <kjhall@us.ibm.com>,
-        "Ferry Toth :" <ferry.toth@elsinga.info>,
+        id S1726015AbgGBXzv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Jul 2020 19:55:51 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:31461 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726017AbgGBXzv (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 2 Jul 2020 19:55:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1593734148;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=+ftIgISrQQoJcDv2R/LS9YcKQ3ZdQs2UrwLyikN4zm0=;
+        b=Y/HLi9aEuqZ+XShaGDkDbSLVTkn5WqOcSzP/G5nREaydwKM9CI+GE6sMsHqBCkV2brrlyg
+        33btNropB1ngFtjROKV9dECXVdZNLVcI1eE7djj11k9ZM7DLxKTQbdW5IfxAREuxjdcOYa
+        WVb3vjE5ai0l+xgC6dcAe6EWz+rnq30=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-147-rCMPOURmMFCPucNw8ku7aw-1; Thu, 02 Jul 2020 19:55:47 -0400
+X-MC-Unique: rCMPOURmMFCPucNw8ku7aw-1
+Received: by mail-qk1-f197.google.com with SMTP id p126so4382050qkf.15
+        for <linux-integrity@vger.kernel.org>; Thu, 02 Jul 2020 16:55:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=+ftIgISrQQoJcDv2R/LS9YcKQ3ZdQs2UrwLyikN4zm0=;
+        b=Q12tc1oqpGEb4pRijDowQtj+45EUiCw+a9FsXplFdvkd84MSP3aoZzHdwDTpmFpu4j
+         lh414KCmAlpBXe2d6bdvDGv15yiCIOYsnN6X48HlhANeSALTB7M5C4iqmLk3259rnaBm
+         h6IKV2uZ2RVEcAVzx0x72iQjPsRnSJrTEJ+e8MZoOjB8YS5JYXpB1KGZBxa2FXqaSt3z
+         kcdv2Hura3Yp86nxmhENwZjU29ulM26M67hOAgk9gdGd5evI6DToH0VCkv0gLs1326fl
+         fey4POyxZ0cjLZn9TwxWlidIDCPFMLCHH2BD8SBBFfGQZUp4or9H4xotpK+BtckIQ/tO
+         eSzw==
+X-Gm-Message-State: AOAM533YzeFgx4H0K/pEOljoTR44l14T1r90pgj6J5CFEs3DkT3MzkVP
+        IbyKi3rQi2Tc2Er66zgi+N/0XOlshjtw4cfvJDGoX6GIfuvEar3Ggb0I+KRmAcw7ug9JNd64T+S
+        ukN9dOM/X+Gemmbpw75ljfNNbg79p
+X-Received: by 2002:aed:3904:: with SMTP id l4mr30326214qte.370.1593734146746;
+        Thu, 02 Jul 2020 16:55:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzye5HUiv8TSz4Fdr0d5NIM9B7qAJXuk34Oq1wxdW9/2ExxHXdthkxzzs7D43ntVNWPMWYFNQ==
+X-Received: by 2002:aed:3904:: with SMTP id l4mr30326201qte.370.1593734146487;
+        Thu, 02 Jul 2020 16:55:46 -0700 (PDT)
+Received: from localhost (ip70-163-223-149.ph.ph.cox.net. [70.163.223.149])
+        by smtp.gmail.com with ESMTPSA id o50sm10214519qtc.64.2020.07.02.16.55.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2020 16:55:45 -0700 (PDT)
+Date:   Thu, 2 Jul 2020 16:55:44 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>, stable@vger.kernel.org,
         Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@osdl.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
         open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tpm_tis: Remove the HID IFX0102
-Message-ID: <20200702233823.GH31291@linux.intel.com>
-References: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
- <20200625062150.idm6j3vm2neyt4sh@cantor>
- <20200625210202.GA20341@linux.intel.com>
- <20200625211923.2jirvix6zbrbgj6e@cantor>
- <20200626130851.GA7853@linux.intel.com>
- <20200630191515.m3hi6gmn4ya7hvji@cantor>
+Subject: Re: [PATCH] tpm: Define TPM2_SPACE_BUFFER_SIZE to replace the use of
+ PAGE_SIZE
+Message-ID: <20200702235544.4o7dbgvlq3br2x7e@cantor>
+Reply-To: Jerry Snitselaar <jsnitsel@redhat.com>
+Mail-Followup-To: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>, stable@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200702225603.293122-1-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20200630191515.m3hi6gmn4ya7hvji@cantor>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200702225603.293122-1-jarkko.sakkinen@linux.intel.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 12:15:15PM -0700, Jerry Snitselaar wrote:
-> On Fri Jun 26 20, Jarkko Sakkinen wrote:
-> > On Thu, Jun 25, 2020 at 02:19:23PM -0700, Jerry Snitselaar wrote:
-> > > On Fri Jun 26 20, Jarkko Sakkinen wrote:
-> > > > On Wed, Jun 24, 2020 at 11:21:50PM -0700, Jerry Snitselaar wrote:
-> > > > > On Thu Jun 25 20, Jarkko Sakkinen wrote:
-> > > > > > Acer C720 running Linux v5.3 reports this in klog:
-> > > > > >
-> > > > > > tpm_tis: 1.2 TPM (device-id 0xB, rev-id 16)
-> > > > > > tpm tpm0: tpm_try_transmit: send(): error -5
-> > > > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the timeouts
-> > > > > > tpm_tis tpm_tis: Could not get TPM timeouts and durations
-> > > > > > tpm_tis 00:08: 1.2 TPM (device-id 0xB, rev-id 16)
-> > > > > > tpm tpm0: tpm_try_transmit: send(): error -5
-> > > > > > tpm tpm0: A TPM error (-5) occurred attempting to determine the timeouts
-> > > > > > tpm_tis 00:08: Could not get TPM timeouts and durations
-> > > > > > ima: No TPM chip found, activating TPM-bypass!
-> > > > > > tpm_inf_pnp 00:08: Found TPM with ID IFX0102
-> > > > > >
-> > > > > > % git --no-pager grep IFX0102 drivers/char/tpm
-> > > > > > drivers/char/tpm/tpm_infineon.c:	{"IFX0102", 0},
-> > > > > > drivers/char/tpm/tpm_tis.c:	{"IFX0102", 0},		/* Infineon */
-> > > > > >
-> > > > > > Obviously IFX0102 was added to the HID table for the TCG TIS driver by
-> > > > > > mistake.
-> > > > > >
-> > > > > > Fixes: 93e1b7d42e1e ("[PATCH] tpm: add HID module parameter")
-> > > > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203877
-> > > > > > Cc: Kylene Jo Hall <kjhall@us.ibm.com>
-> > > > > > Reported-by: Ferry Toth: <ferry.toth@elsinga.info>
-> > > > > > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > > > >
-> > > > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > > >
-> > > > Bugzilla has an example of similar behavior with v4.15. I'll apply this
-> > > > asap.
-> > > >
-> > > > /Jarkko
-> > > >
-> > > 
-> > > Any idea what happened to git.infradead.org? It was offline the other day,
-> > > and at the moment not all repos from before seem to be there.
-> > 
-> > Now the kernel tree is back online.
-> > 
-> > /Jarkko
-> > 
-> 
-> Hi Jarkko, I still see your linux-tpmdd repository as not being online:
-> 
-> git remote show tpmdd
-> fatal: remote error: access denied or repository not exported: /users/jjs/linux-tpmdd.git
-> 
-> Regards,
-> Jerry
+On Fri Jul 03 20, Jarkko Sakkinen wrote:
+>The size of the buffers for storing context's and sessions can vary from
+>arch to arch as PAGE_SIZE can be anything between 4 kB and 256 kB (the
+>maximum for PPC64). Define a fixed buffer size set to 16 kB. This should be
+>enough for most use with three handles (that is how many we allow at the
+>moment). Parametrize the buffer size while doing this, so that it is easier
+>to revisit this later on if required.
+>
+>Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+>Cc: stable@vger.kernel.org
+>Fixes: 745b361e989a ("tpm: infrastructure for TPM spaces")
+>Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-It's now fixed and back online again.
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-/Jarkko
+>---
+>v2: Also use the new buffer size for chip->work_buffer (reported by stefanb)
+> drivers/char/tpm/tpm-chip.c   |  9 ++-------
+> drivers/char/tpm/tpm.h        |  5 ++++-
+> drivers/char/tpm/tpm2-space.c | 26 ++++++++++++++++----------
+> drivers/char/tpm/tpmrm-dev.c  |  2 +-
+> include/linux/tpm.h           |  5 +++--
+> 5 files changed, 26 insertions(+), 21 deletions(-)
+>
+>diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+>index 8c77e88012e9..ddaeceb7e109 100644
+>--- a/drivers/char/tpm/tpm-chip.c
+>+++ b/drivers/char/tpm/tpm-chip.c
+>@@ -386,13 +386,8 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+> 	chip->cdev.owner = THIS_MODULE;
+> 	chip->cdevs.owner = THIS_MODULE;
+>
+>-	chip->work_space.context_buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
+>-	if (!chip->work_space.context_buf) {
+>-		rc = -ENOMEM;
+>-		goto out;
+>-	}
+>-	chip->work_space.session_buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
+>-	if (!chip->work_space.session_buf) {
+>+	rc = tpm2_init_space(&chip->work_space, TPM2_SPACE_BUFFER_SIZE);
+>+	if (rc) {
+> 		rc = -ENOMEM;
+> 		goto out;
+> 	}
+>diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+>index 0fbcede241ea..947d1db0a5cc 100644
+>--- a/drivers/char/tpm/tpm.h
+>+++ b/drivers/char/tpm/tpm.h
+>@@ -59,6 +59,9 @@ enum tpm_addr {
+>
+> #define TPM_TAG_RQU_COMMAND 193
+>
+>+/* TPM2 specific constants. */
+>+#define TPM2_SPACE_BUFFER_SIZE		16384 /* 16 kB */
+>+
+> struct	stclear_flags_t {
+> 	__be16	tag;
+> 	u8	deactivated;
+>@@ -228,7 +231,7 @@ unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+> int tpm2_probe(struct tpm_chip *chip);
+> int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
+> int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
+>-int tpm2_init_space(struct tpm_space *space);
+>+int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
+> void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
+> void tpm2_flush_space(struct tpm_chip *chip);
+> int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
+>diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+>index 982d341d8837..784b8b3cb903 100644
+>--- a/drivers/char/tpm/tpm2-space.c
+>+++ b/drivers/char/tpm/tpm2-space.c
+>@@ -38,18 +38,21 @@ static void tpm2_flush_sessions(struct tpm_chip *chip, struct tpm_space *space)
+> 	}
+> }
+>
+>-int tpm2_init_space(struct tpm_space *space)
+>+int tpm2_init_space(struct tpm_space *space, unsigned int buf_size)
+> {
+>-	space->context_buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
+>+	space->context_buf = kzalloc(buf_size, GFP_KERNEL);
+> 	if (!space->context_buf)
+> 		return -ENOMEM;
+>
+>-	space->session_buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
+>+	space->session_buf = kzalloc(buf_size, GFP_KERNEL);
+> 	if (space->session_buf == NULL) {
+> 		kfree(space->context_buf);
+>+		/* Prevent caller getting a dangling pointer. */
+>+		space->context_buf = NULL;
+> 		return -ENOMEM;
+> 	}
+>
+>+	space->buf_size = buf_size;
+> 	return 0;
+> }
+>
+>@@ -311,8 +314,10 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
+> 	       sizeof(space->context_tbl));
+> 	memcpy(&chip->work_space.session_tbl, &space->session_tbl,
+> 	       sizeof(space->session_tbl));
+>-	memcpy(chip->work_space.context_buf, space->context_buf, PAGE_SIZE);
+>-	memcpy(chip->work_space.session_buf, space->session_buf, PAGE_SIZE);
+>+	memcpy(chip->work_space.context_buf, space->context_buf,
+>+	       space->buf_size);
+>+	memcpy(chip->work_space.session_buf, space->session_buf,
+>+	       space->buf_size);
+>
+> 	rc = tpm2_load_space(chip);
+> 	if (rc) {
+>@@ -492,7 +497,7 @@ static int tpm2_save_space(struct tpm_chip *chip)
+> 			continue;
+>
+> 		rc = tpm2_save_context(chip, space->context_tbl[i],
+>-				       space->context_buf, PAGE_SIZE,
+>+				       space->context_buf, space->buf_size,
+> 				       &offset);
+> 		if (rc == -ENOENT) {
+> 			space->context_tbl[i] = 0;
+>@@ -509,9 +514,8 @@ static int tpm2_save_space(struct tpm_chip *chip)
+> 			continue;
+>
+> 		rc = tpm2_save_context(chip, space->session_tbl[i],
+>-				       space->session_buf, PAGE_SIZE,
+>+				       space->session_buf, space->buf_size,
+> 				       &offset);
+>-
+> 		if (rc == -ENOENT) {
+> 			/* handle error saving session, just forget it */
+> 			space->session_tbl[i] = 0;
+>@@ -557,8 +561,10 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space,
+> 	       sizeof(space->context_tbl));
+> 	memcpy(&space->session_tbl, &chip->work_space.session_tbl,
+> 	       sizeof(space->session_tbl));
+>-	memcpy(space->context_buf, chip->work_space.context_buf, PAGE_SIZE);
+>-	memcpy(space->session_buf, chip->work_space.session_buf, PAGE_SIZE);
+>+	memcpy(space->context_buf, chip->work_space.context_buf,
+>+	       space->buf_size);
+>+	memcpy(space->session_buf, chip->work_space.session_buf,
+>+	       space->buf_size);
+>
+> 	return 0;
+> out:
+>diff --git a/drivers/char/tpm/tpmrm-dev.c b/drivers/char/tpm/tpmrm-dev.c
+>index 7a0a7051a06f..eef0fb06ea83 100644
+>--- a/drivers/char/tpm/tpmrm-dev.c
+>+++ b/drivers/char/tpm/tpmrm-dev.c
+>@@ -21,7 +21,7 @@ static int tpmrm_open(struct inode *inode, struct file *file)
+> 	if (priv == NULL)
+> 		return -ENOMEM;
+>
+>-	rc = tpm2_init_space(&priv->space);
+>+	rc = tpm2_init_space(&priv->space, TPM2_SPACE_BUFFER_SIZE);
+> 	if (rc) {
+> 		kfree(priv);
+> 		return -ENOMEM;
+>diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+>index 03e9b184411b..d501156fedda 100644
+>--- a/include/linux/tpm.h
+>+++ b/include/linux/tpm.h
+>@@ -93,9 +93,10 @@ enum tpm_duration {
+>
+> struct tpm_space {
+> 	u32 context_tbl[3];
+>-	u8 *context_buf;
+>+	u8  *context_buf;
+> 	u32 session_tbl[3];
+>-	u8 *session_buf;
+>+	u8  *session_buf;
+>+	u32 buf_size;
+> };
+>
+> struct tpm_bios_log {
+>-- 
+>2.25.1
+>
+
