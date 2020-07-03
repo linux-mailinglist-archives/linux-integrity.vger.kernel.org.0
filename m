@@ -2,154 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4D8213BAA
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jul 2020 16:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C721213F02
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jul 2020 20:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbgGCOPu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 Jul 2020 10:15:50 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41344 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726035AbgGCOPu (ORCPT
+        id S1726382AbgGCSA5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 Jul 2020 14:00:57 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:41133 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726368AbgGCSA5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 Jul 2020 10:15:50 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 063E2DsI145405;
-        Fri, 3 Jul 2020 10:15:39 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 322144rw0n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jul 2020 10:15:39 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 063E2FJd145553;
-        Fri, 3 Jul 2020 10:15:39 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 322144rvyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jul 2020 10:15:39 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 063E6ksY001304;
-        Fri, 3 Jul 2020 14:15:36 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06fra.de.ibm.com with ESMTP id 31wwcguf0b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jul 2020 14:15:36 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 063EFYpJ52232204
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Jul 2020 14:15:34 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0303B11C04C;
-        Fri,  3 Jul 2020 14:15:34 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EBA3511C050;
-        Fri,  3 Jul 2020 14:15:32 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.174.143])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Jul 2020 14:15:32 +0000 (GMT)
-Message-ID: <1593785732.23056.16.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 09/11] ima: Move validation of the keyrings
- conditional into ima_validate_rule()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Fri, 03 Jul 2020 10:15:32 -0400
-In-Reply-To: <20200702221656.GH4694@sequoia>
-References: <20200626223900.253615-1-tyhicks@linux.microsoft.com>
-         <20200626223900.253615-10-tyhicks@linux.microsoft.com>
-         <1593558449.5057.12.camel@linux.ibm.com> <20200702221656.GH4694@sequoia>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Fri, 3 Jul 2020 14:00:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1593799256;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=W7hX68Id9MrI9Dp1ohSoP6+dFWqqds4yeexuPF5eVaQ=;
+        b=QH2gaCCo1xaJCNGzM8DQT0kZJyvYuq/KddyB50un/cH8lEPZM/seqzJmq4TGbLQgyEW86Z
+        jYihaT6DjXmOJLRTEtBL0JVOkQa5p8gMZUj+HRnETSAKLWexPAwmd/qD2W7zPqw5VCQGqI
+        VDNCLkZ+Uq6VaEWUsQhvlqOGad3ebFE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-262-F_NqQgogODmQd7163_VhmA-1; Fri, 03 Jul 2020 14:00:54 -0400
+X-MC-Unique: F_NqQgogODmQd7163_VhmA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F415B800C64;
+        Fri,  3 Jul 2020 18:00:52 +0000 (UTC)
+Received: from localhost (ovpn-116-12.gru2.redhat.com [10.97.116.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8C28C19D9E;
+        Fri,  3 Jul 2020 18:00:52 +0000 (UTC)
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
+        Bruno Meneguele <bmeneg@redhat.com>, stable@vger.kernel.org
+Subject: [PATCH v4] ima: move APPRAISE_BOOTPARAM dependency on ARCH_POLICY to runtime
+Date:   Fri,  3 Jul 2020 15:00:49 -0300
+Message-Id: <20200703180049.15608-1-bmeneg@redhat.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-03_09:2020-07-02,2020-07-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 mlxscore=0 spamscore=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 bulkscore=0 cotscore=-2147483648
- suspectscore=0 adultscore=0 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007030095
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-07-02 at 17:16 -0500, Tyler Hicks wrote:
-> On 2020-06-30 19:07:29, Mimi Zohar wrote:
-> > On Fri, 2020-06-26 at 17:38 -0500, Tyler Hicks wrote:
-> > > Use ima_validate_rule() to ensure that the combination of a hook
-> > > function and the keyrings conditional is valid and that the keyrings
-> > > conditional is not specified without an explicit KEY_CHECK func
-> > > conditional. This is a code cleanup and has no user-facing change.
-> > > 
-> > > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > > ---
-> > > 
-> > > * v2
-> > >   - Allowed IMA_DIGSIG_REQUIRED, IMA_PERMIT_DIRECTIO,
-> > >     IMA_MODSIG_ALLOWED, and IMA_CHECK_BLACKLIST conditionals to be
-> > >     present in the rule entry flags for non-buffer hook functions.
-> > > 
-> > >  security/integrity/ima/ima_policy.c | 13 +++++++++++--
-> > >  1 file changed, 11 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> > > index 8cdca2399d59..43d49ad958fb 100644
-> > > --- a/security/integrity/ima/ima_policy.c
-> > > +++ b/security/integrity/ima/ima_policy.c
-> > > @@ -1000,6 +1000,15 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
-> > >  		case KEXEC_KERNEL_CHECK:
-> > >  		case KEXEC_INITRAMFS_CHECK:
-> > >  		case POLICY_CHECK:
-> > > +			if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
-> > > +					     IMA_UID | IMA_FOWNER | IMA_FSUUID |
-> > > +					     IMA_INMASK | IMA_EUID | IMA_PCR |
-> > > +					     IMA_FSNAME | IMA_DIGSIG_REQUIRED |
-> > > +					     IMA_PERMIT_DIRECTIO |
-> > > +					     IMA_MODSIG_ALLOWED |
-> > > +					     IMA_CHECK_BLACKLIST))
-> > 
-> > Other than KEYRINGS, this patch should continue to behave the same.
-> >  However, this list gives the impressions that all of these flags are
-> > permitted on all of the above flags, which isn't true.
-> > 
-> > For example, both IMA_MODSIG_ALLOWED & IMA_CHECK_BLACKLIST are limited
-> > to appended signatures, meaning KERNEL_CHECK and KEXEC_KERNEL_CHECK.
-> 
-> Just to clarify, are both IMA_MODSIG_ALLOWED and IMA_CHECK_BLACKLIST
-> limited to KEXEC_KERNEL_CHECK, KEXEC_INITRAMFS_CHECK, and MODULE_CHECK?
-> That's what ima_hook_supports_modsig() suggests.
+APPRAISE_BOOTPARAM has been marked as dependent on !ARCH_POLICY in compile
+time, enforcing the appraisal whenever the kernel had the arch policy option
+enabled.
 
-Theoretically that is true, but I have no idea how you would append a
-signature to the kexec boot command line.  The only users of appended
-signatures are currently kernel modules and the kexec'ed kernel image.
+However it breaks systems where the option is set but the system wasn't
+booted in a "secure boot" platform. In this scenario, anytime an appraisal
+policy (i.e. ima_policy=appraisal_tcb) is used it will be forced, giving no
+chance to the user set the 'fix' state (ima_appraise=fix) to actually
+measure system's files.
 
-> 
-> >  Both should only be allowed on APPRAISE action rules.
-> 
-> For completeness, it looks like DONT_APPRAISE should not be allowed.
+Considering the ARCH_POLICY is only effective when secure boot is actually
+enabled this patch remove the compile time dependency and move it to a
+runtime decision, based on the secure boot state of that platform.
 
-Good point.  
+Cc: stable@vger.kernel.org
+Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
+Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+---
+Changelog:
+	v4:
+	  - instead of change arch_policy loading code, check secure boot state
+		at "ima_appraise=" parameter handler (Mimi)
+	v3:
+	  - extend secure boot arch checker to also consider trusted boot
+	  - enforce IMA appraisal when secure boot is effectively enabled (Nayna)
+	  - fix ima_appraise flag assignment by or'ing it (Mimi)
+	v2:
+	  - pr_info() message prefix correction
 
-> 
-> > IMA_PCR should be limited to MEASURE action rules.
-> 
-> It looks like DONT_MEASURE should not be allowed.
+ security/integrity/ima/Kconfig        |  2 +-
+ security/integrity/ima/ima_appraise.c | 18 ++++++++++--------
+ 2 files changed, 11 insertions(+), 9 deletions(-)
 
-The TPM PCR isn't a file attribute.
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index edde88dbe576..62dc11a5af01 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -232,7 +232,7 @@ config IMA_APPRAISE_REQUIRE_POLICY_SIGS
+ 
+ config IMA_APPRAISE_BOOTPARAM
+ 	bool "ima_appraise boot parameter"
+-	depends on IMA_APPRAISE && !IMA_ARCH_POLICY
++	depends on IMA_APPRAISE
+ 	default y
+ 	help
+ 	  This option enables the different "ima_appraise=" modes
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index a9649b04b9f1..4fc83b3fbd5c 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -18,14 +18,16 @@
+ 
+ static int __init default_appraise_setup(char *str)
+ {
+-#ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
+-	if (strncmp(str, "off", 3) == 0)
+-		ima_appraise = 0;
+-	else if (strncmp(str, "log", 3) == 0)
+-		ima_appraise = IMA_APPRAISE_LOG;
+-	else if (strncmp(str, "fix", 3) == 0)
+-		ima_appraise = IMA_APPRAISE_FIX;
+-#endif
++	if (IS_ENABLED(CONFIG_IMA_APPRAISE_BOOTPARAM) &&
++	    !arch_ima_get_secureboot()) {
++		if (strncmp(str, "off", 3) == 0)
++			ima_appraise = 0;
++		else if (strncmp(str, "log", 3) == 0)
++			ima_appraise = IMA_APPRAISE_LOG;
++		else if (strncmp(str, "fix", 3) == 0)
++			ima_appraise = IMA_APPRAISE_FIX;
++	}
++
+ 	return 1;
+ }
+ 
+-- 
+2.26.2
 
-> 
-> > IMA_DIGSIG_REQUIRED should be limited to APPRAISE action rules.
-> 
-> It looks like DONT_APPRAISE should not be allowed.
-
-Right, in all of these cases the DONT_XXXX isn't applicable.
-
-Mimi
