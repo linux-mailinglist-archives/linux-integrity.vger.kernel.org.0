@@ -2,85 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F93B21304A
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jul 2020 01:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC4D2133E5
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jul 2020 08:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbgGBX5Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Jul 2020 19:57:25 -0400
-Received: from mga04.intel.com ([192.55.52.120]:9519 "EHLO mga04.intel.com"
+        id S1726285AbgGCGKC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 Jul 2020 02:10:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726017AbgGBX5Z (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Jul 2020 19:57:25 -0400
-IronPort-SDR: Writ7GFlqQM+pzM6GUF6l7eWJBklM3+ps9qkTwT+4XXSNg1hA4OEjDhMw0J26ibh+rToVjO73v
- iopcHVZQmPkA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="144572124"
-X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="144572124"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 16:57:24 -0700
-IronPort-SDR: +yYtbwe8ez2z9Sh14NIXVLtojyMdup0jF+My1NFWwh7wOTLutIjw20Pma2hCj90y3iyH19ZONc
- 56aZFZOZH71Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="481859602"
-Received: from chadjitt-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.41.125])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Jul 2020 16:57:19 -0700
-Date:   Fri, 3 Jul 2020 02:57:18 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Peter Jones <pjones@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Petr Vandrovec <petr@vmware.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Require that all digests are present in
- TCG_PCR_EVENT2 structures
-Message-ID: <20200702235718.GI31291@linux.intel.com>
-References: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
- <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
- <20200617230958.GC62794@linux.intel.com>
- <20200630183321.GE4694@sequoia>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200630183321.GE4694@sequoia>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1726272AbgGCGKB (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 3 Jul 2020 02:10:01 -0400
+Subject: Re: [GIT PULL] tpmdd updates for Linux v5.8-rc4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593756601;
+        bh=GgcW1R25V5qO0KwYjA1ihH16TIdTMecUPzPOIVRWyrc=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=Sh5hy5DeyoNUJ05qn5ZY22TYx9uvVvd3VJYdOD8/Dq2d2fulORCeG+zNdzvu418ae
+         Vr+CB6ty1JbDwupRIfxW+eczEPNLKAeG6+6VC4ZnVyy3qAgHkLMCBEquKb88UUAcfx
+         iMHC9863MrF3igGZiqu8b/PZlxBpy/te85F4F8x0=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200702185813.GA25571@linux.intel.com>
+References: <20200702185813.GA25571@linux.intel.com>
+X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200702185813.GA25571@linux.intel.com>
+X-PR-Tracked-Remote: git://git.infradead.org/users/jjs/linux-tpmdd.git
+ tags/tpmdd-next-v5.8-rc4
+X-PR-Tracked-Commit-Id: e918e570415ced9898a51109000a3f39a6e03be5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0c7415c31ea9482c4377287af5f459778bf64d2a
+Message-Id: <159375660136.4799.9936288428262230064.pr-tracker-bot@kernel.org>
+Date:   Fri, 03 Jul 2020 06:10:01 +0000
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, jmorris@namei.org,
+        dhowells@redhat.com
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 01:33:21PM -0500, Tyler Hicks wrote:
-> Jarkko, is this an ack from you?
-> 
-> Is there anything I can do to help along this fix?
-> 
-> I've spoke with two others that have poured through these specs to
-> implement firmware event log parsers and they thought the change made
-> sense.
-> 
-> Tyler
+The pull request you sent on Thu, 2 Jul 2020 21:58:13 +0300:
 
-I revisited the original patch and this stroke into my eye:
+> git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-v5.8-rc4
 
-"This is true, for example, when firmware passes the event log to the
-kernel via a reserved memory region described in device tree."
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0c7415c31ea9482c4377287af5f459778bf64d2a
 
-During this discussion you gave an explanation what can trigger the bug
-but in the commit message nothing anchors to anything.
+Thank you!
 
-Please give a concrete example what can trigger the issue directly in
-the commit message instead. It's obviously needed.
-
-In addition, you could also rewrite the existing inline comment to be
-something more reasonable to the context.
-
-/Jarkko
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
