@@ -2,127 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C721213F02
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jul 2020 20:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846422143E8
+	for <lists+linux-integrity@lfdr.de>; Sat,  4 Jul 2020 05:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbgGCSA5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 Jul 2020 14:00:57 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:41133 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726368AbgGCSA5 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 Jul 2020 14:00:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1593799256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=W7hX68Id9MrI9Dp1ohSoP6+dFWqqds4yeexuPF5eVaQ=;
-        b=QH2gaCCo1xaJCNGzM8DQT0kZJyvYuq/KddyB50un/cH8lEPZM/seqzJmq4TGbLQgyEW86Z
-        jYihaT6DjXmOJLRTEtBL0JVOkQa5p8gMZUj+HRnETSAKLWexPAwmd/qD2W7zPqw5VCQGqI
-        VDNCLkZ+Uq6VaEWUsQhvlqOGad3ebFE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-262-F_NqQgogODmQd7163_VhmA-1; Fri, 03 Jul 2020 14:00:54 -0400
-X-MC-Unique: F_NqQgogODmQd7163_VhmA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F415B800C64;
-        Fri,  3 Jul 2020 18:00:52 +0000 (UTC)
-Received: from localhost (ovpn-116-12.gru2.redhat.com [10.97.116.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8C28C19D9E;
-        Fri,  3 Jul 2020 18:00:52 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
-        Bruno Meneguele <bmeneg@redhat.com>, stable@vger.kernel.org
-Subject: [PATCH v4] ima: move APPRAISE_BOOTPARAM dependency on ARCH_POLICY to runtime
-Date:   Fri,  3 Jul 2020 15:00:49 -0300
-Message-Id: <20200703180049.15608-1-bmeneg@redhat.com>
+        id S1726660AbgGDD4W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 Jul 2020 23:56:22 -0400
+Received: from mga12.intel.com ([192.55.52.136]:33191 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726501AbgGDD4W (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 3 Jul 2020 23:56:22 -0400
+IronPort-SDR: O3p4wEfQzumhmv3KdSmawxJEMBSoq2BcHv8z81y4eFTJwO1WD535GMfivP0J0KwjtPOA0owLX0
+ trit3OUL9/lQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9671"; a="126832378"
+X-IronPort-AV: E=Sophos;i="5.75,310,1589266800"; 
+   d="scan'208";a="126832378"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2020 20:56:22 -0700
+IronPort-SDR: 4PwYMQsrwNKt0BQPWVg2aGZznq/PxOskNpz4IIfdAj5DpKcAAMPW5zB39K6lzbhTOP93kc7JME
+ /buUEOwb4mYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,310,1589266800"; 
+   d="scan'208";a="267454037"
+Received: from winzenbu-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.41.221])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Jul 2020 20:56:17 -0700
+Date:   Sat, 4 Jul 2020 06:56:15 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>, stable@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm: Define TPM2_SPACE_BUFFER_SIZE to replace the use of
+ PAGE_SIZE
+Message-ID: <20200704035615.GA157149@linux.intel.com>
+References: <20200702225603.293122-1-jarkko.sakkinen@linux.intel.com>
+ <20200702235544.4o7dbgvlq3br2x7e@cantor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200702235544.4o7dbgvlq3br2x7e@cantor>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-APPRAISE_BOOTPARAM has been marked as dependent on !ARCH_POLICY in compile
-time, enforcing the appraisal whenever the kernel had the arch policy option
-enabled.
+On Thu, Jul 02, 2020 at 04:55:44PM -0700, Jerry Snitselaar wrote:
+> On Fri Jul 03 20, Jarkko Sakkinen wrote:
+> > The size of the buffers for storing context's and sessions can vary from
+> > arch to arch as PAGE_SIZE can be anything between 4 kB and 256 kB (the
+> > maximum for PPC64). Define a fixed buffer size set to 16 kB. This should be
+> > enough for most use with three handles (that is how many we allow at the
+> > moment). Parametrize the buffer size while doing this, so that it is easier
+> > to revisit this later on if required.
+> > 
+> > Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Cc: stable@vger.kernel.org
+> > Fixes: 745b361e989a ("tpm: infrastructure for TPM spaces")
+> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> 
+> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-However it breaks systems where the option is set but the system wasn't
-booted in a "secure boot" platform. In this scenario, anytime an appraisal
-policy (i.e. ima_policy=appraisal_tcb) is used it will be forced, giving no
-chance to the user set the 'fix' state (ima_appraise=fix) to actually
-measure system's files.
+Thank you.
 
-Considering the ARCH_POLICY is only effective when secure boot is actually
-enabled this patch remove the compile time dependency and move it to a
-runtime decision, based on the secure boot state of that platform.
+Now only needs tested-by from Stefan.
 
-Cc: stable@vger.kernel.org
-Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
-Changelog:
-	v4:
-	  - instead of change arch_policy loading code, check secure boot state
-		at "ima_appraise=" parameter handler (Mimi)
-	v3:
-	  - extend secure boot arch checker to also consider trusted boot
-	  - enforce IMA appraisal when secure boot is effectively enabled (Nayna)
-	  - fix ima_appraise flag assignment by or'ing it (Mimi)
-	v2:
-	  - pr_info() message prefix correction
-
- security/integrity/ima/Kconfig        |  2 +-
- security/integrity/ima/ima_appraise.c | 18 ++++++++++--------
- 2 files changed, 11 insertions(+), 9 deletions(-)
-
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index edde88dbe576..62dc11a5af01 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -232,7 +232,7 @@ config IMA_APPRAISE_REQUIRE_POLICY_SIGS
- 
- config IMA_APPRAISE_BOOTPARAM
- 	bool "ima_appraise boot parameter"
--	depends on IMA_APPRAISE && !IMA_ARCH_POLICY
-+	depends on IMA_APPRAISE
- 	default y
- 	help
- 	  This option enables the different "ima_appraise=" modes
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index a9649b04b9f1..4fc83b3fbd5c 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -18,14 +18,16 @@
- 
- static int __init default_appraise_setup(char *str)
- {
--#ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
--	if (strncmp(str, "off", 3) == 0)
--		ima_appraise = 0;
--	else if (strncmp(str, "log", 3) == 0)
--		ima_appraise = IMA_APPRAISE_LOG;
--	else if (strncmp(str, "fix", 3) == 0)
--		ima_appraise = IMA_APPRAISE_FIX;
--#endif
-+	if (IS_ENABLED(CONFIG_IMA_APPRAISE_BOOTPARAM) &&
-+	    !arch_ima_get_secureboot()) {
-+		if (strncmp(str, "off", 3) == 0)
-+			ima_appraise = 0;
-+		else if (strncmp(str, "log", 3) == 0)
-+			ima_appraise = IMA_APPRAISE_LOG;
-+		else if (strncmp(str, "fix", 3) == 0)
-+			ima_appraise = IMA_APPRAISE_FIX;
-+	}
-+
- 	return 1;
- }
- 
--- 
-2.26.2
-
+/Jarkko
