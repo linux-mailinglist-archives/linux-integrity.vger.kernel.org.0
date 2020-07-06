@@ -2,170 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 259E2215E2D
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Jul 2020 20:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7C82160A6
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Jul 2020 22:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729550AbgGFSUA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Jul 2020 14:20:00 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62126 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729703AbgGFST7 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Jul 2020 14:19:59 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 066I24f4003185;
-        Mon, 6 Jul 2020 14:19:56 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3248udrkqy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jul 2020 14:19:56 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 066IEBZC013337;
-        Mon, 6 Jul 2020 18:19:56 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma04dal.us.ibm.com with ESMTP id 322hd8nvfn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jul 2020 18:19:56 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 066IJtsg36503916
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Jul 2020 18:19:55 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5FA36B2066;
-        Mon,  6 Jul 2020 18:19:55 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4744EB2067;
-        Mon,  6 Jul 2020 18:19:55 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Jul 2020 18:19:55 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
-To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jarkko.sakkinen@linux.intel.com, linux-acpi@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v9 2/2] tpm: Add support for event log pointer found in TPM2 ACPI table
-Date:   Mon,  6 Jul 2020 14:19:53 -0400
-Message-Id: <20200706181953.3592084-3-stefanb@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200706181953.3592084-1-stefanb@linux.vnet.ibm.com>
-References: <20200706181953.3592084-1-stefanb@linux.vnet.ibm.com>
+        id S1727116AbgGFUxw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Jul 2020 16:53:52 -0400
+Received: from mga05.intel.com ([192.55.52.43]:16032 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725941AbgGFUxw (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 6 Jul 2020 16:53:52 -0400
+IronPort-SDR: hwa9+/vKRiCtvKB0/W8a8IxkACnrZdd/8a8zcnMjyPY4nzOtCZOzU0s4X9+poL/+SC+x5yx2xV
+ ylRrrugK/mYw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9674"; a="232362466"
+X-IronPort-AV: E=Sophos;i="5.75,321,1589266800"; 
+   d="scan'208";a="232362466"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2020 13:53:51 -0700
+IronPort-SDR: E0A58mmh5vXpNDErkpyLxbGc8sINyC/s/Ii4eeqVyrD4JHY/4dT2OMtchvkAgBPnOyprVGh4NB
+ 4o/1zfYamshg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,321,1589266800"; 
+   d="scan'208";a="357567436"
+Received: from sarsteda-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.52.124])
+  by orsmga001.jf.intel.com with ESMTP; 06 Jul 2020 13:53:47 -0700
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] Revert commit e918e570415c ("tpm_tis: Remove the HID IFX0102")
+Date:   Mon,  6 Jul 2020 23:53:42 +0300
+Message-Id: <20200706205342.21333-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-06_15:2020-07-06,2020-07-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- adultscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
- malwarescore=0 clxscore=1015 cotscore=-2147483648 mlxscore=0
- impostorscore=0 mlxlogscore=999 bulkscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007060123
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+Removing IFX0102 from tpm_tis was not a right move because both tpm_tis
+and tpm_infineon use the same device ID. Revert the commit and add a
+remark about a bug caused by commit 93e1b7d42e1e ("[PATCH] tpm: add HID
+module parameter").
 
-In case a TPM2 is attached, search for a TPM2 ACPI table when trying
-to get the event log from ACPI. If one is found, use it to get the
-start and length of the log area. This allows non-UEFI systems, such
-as SeaBIOS, to pass an event log when using a TPM2.
-
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Fixes: e918e570415c ("tpm_tis: Remove the HID IFX0102")
+Reported-by: Peter Huewe <peterhuewe@gmx.de>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 ---
- drivers/char/tpm/eventlog/acpi.c | 63 +++++++++++++++++++++-----------
- 1 file changed, 42 insertions(+), 21 deletions(-)
+ drivers/char/tpm/tpm_tis.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-index 63ada5e53f13..3633ed70f48f 100644
---- a/drivers/char/tpm/eventlog/acpi.c
-+++ b/drivers/char/tpm/eventlog/acpi.c
-@@ -49,9 +49,9 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	void __iomem *virt;
- 	u64 len, start;
- 	struct tpm_bios_log *log;
--
--	if (chip->flags & TPM_CHIP_FLAG_TPM2)
--		return -ENODEV;
-+	struct acpi_table_tpm2 *tbl;
-+	struct acpi_tpm2_phy *tpm2_phy;
-+	int format;
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index c58ea10fc92f..0b214963539d 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -235,9 +235,17 @@ static int tpm_tis_pnp_init(struct pnp_dev *pnp_dev,
+ 	return tpm_tis_init(&pnp_dev->dev, &tpm_info);
+ }
  
- 	log = &chip->log;
- 
-@@ -61,23 +61,44 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	if (!chip->acpi_dev_handle)
- 		return -ENODEV;
- 
--	/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
--	status = acpi_get_table(ACPI_SIG_TCPA, 1,
--				(struct acpi_table_header **)&buff);
--
--	if (ACPI_FAILURE(status))
--		return -ENODEV;
--
--	switch(buff->platform_class) {
--	case BIOS_SERVER:
--		len = buff->server.log_max_len;
--		start = buff->server.log_start_addr;
--		break;
--	case BIOS_CLIENT:
--	default:
--		len = buff->client.log_max_len;
--		start = buff->client.log_start_addr;
--		break;
-+	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+		status = acpi_get_table("TPM2", 1,
-+					(struct acpi_table_header **)&tbl);
-+		if (ACPI_FAILURE(status))
-+			return -ENODEV;
++/*
++ * There is a known bug caused by 93e1b7d42e1e ("[PATCH] tpm: add HID module
++ * parameter"). This commit added IFX0102 device ID, which is also used by
++ * tpm_infineon but ignored to add quirks to probe which driver ought to be
++ * used.
++ */
 +
-+		if (tbl->header.length <
-+				sizeof(*tbl) + sizeof(struct acpi_tpm2_phy))
-+			return -ENODEV;
-+
-+		tpm2_phy = (void *)tbl + sizeof(*tbl);
-+		len = tpm2_phy->log_area_minimum_length;
-+
-+		start = tpm2_phy->log_area_start_address;
-+		if (!start || !len)
-+			return -ENODEV;
-+
-+		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
-+	} else {
-+		/* Find TCPA entry in RSDT (ACPI_LOGICAL_ADDRESSING) */
-+		status = acpi_get_table(ACPI_SIG_TCPA, 1,
-+					(struct acpi_table_header **)&buff);
-+		if (ACPI_FAILURE(status))
-+			return -ENODEV;
-+
-+		switch (buff->platform_class) {
-+		case BIOS_SERVER:
-+			len = buff->server.log_max_len;
-+			start = buff->server.log_start_addr;
-+			break;
-+		case BIOS_CLIENT:
-+		default:
-+			len = buff->client.log_max_len;
-+			start = buff->client.log_start_addr;
-+			break;
-+		}
-+
-+		format = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
- 	}
- 	if (!len) {
- 		dev_warn(&chip->dev, "%s: TCPA log area empty\n", __func__);
-@@ -98,7 +119,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
- 	memcpy_fromio(log->bios_event_log, virt, len);
- 
- 	acpi_os_unmap_iomem(virt, len);
--	return EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-+	return format;
- 
- err:
- 	kfree(log->bios_event_log);
+ static struct pnp_device_id tpm_pnp_tbl[] = {
+ 	{"PNP0C31", 0},		/* TPM */
+ 	{"ATM1200", 0},		/* Atmel */
++	{"IFX0102", 0},		/* Infineon */
+ 	{"BCM0101", 0},		/* Broadcom */
+ 	{"BCM0102", 0},		/* Broadcom */
+ 	{"NSC1200", 0},		/* National */
 -- 
-2.26.2
+2.25.1
 
