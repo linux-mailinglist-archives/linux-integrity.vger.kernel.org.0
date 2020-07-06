@@ -2,105 +2,135 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A90A2156AE
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Jul 2020 13:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3477421582B
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Jul 2020 15:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728977AbgGFLr4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Jul 2020 07:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728859AbgGFLr4 (ORCPT
+        id S1729198AbgGFNSs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Jul 2020 09:18:48 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37354 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729072AbgGFNSs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Jul 2020 07:47:56 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Jul 2020 04:47:55 PDT
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20277C061794;
-        Mon,  6 Jul 2020 04:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1594036075; x=1625572075;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=EQDXlk7XMaqXKin66vyJ0DXTGrbiOpBMELrFtZOLmJE=;
-  b=j+GBsSFf+hTQnRrI6PCFaYKYWLBeKJjozxQo5TQ71HjfJqaKqLBL9H1m
-   MCXmglVpqs5T+QLfL5aW1pnFNzFBQu+xWD3RE4ougbF2QzWwc4Ne2G+P4
-   vW5DkvDziJ0ki49foQbY/PaLZMDpiUcOZhDqoyrr50Zk/99RS9AAdNzn5
-   U=;
-IronPort-SDR: wIJhBVfJYbOXelU5nPj89WSh/xhvR86Dvg1D5r1IiYHBH2ZmUWU+YQyHEb0r7PD8QPj3zy7ruZ
- ZSBwymnCYficWCaCkLyc4tX543fHM1LasHZUC+GXxXFvOERbXTibFZVyOB95JixfPosA+YT+OR
- hH8yYY/R9ukADSZjpyhkndoHExwhUa3yY20j+Yg9csCuLit1dx2Fk6lsXXZh2Me01b+G6ioewG
- u2w9F6U6zVDquM6Fl30UCe7ByYp5mf3CzJUs3z7GoG+rjrwJQHvFJ7r/i+AklFHEdkusclp45e
- xZo=
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6000,8403,9673"; a="168624440"
-X-IronPort-AV: E=Sophos;i="5.75,318,1589234400"; 
-   d="scan'208";a="168624440"
-Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2020 13:46:47 +0200
-Received: from MUCSE717.infineon.com (MUCSE717.infineon.com [172.23.7.74])
-        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
-        Mon,  6 Jul 2020 13:46:46 +0200 (CEST)
-Received: from MUCSE711.infineon.com (172.23.7.83) by MUCSE717.infineon.com
- (172.23.7.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1913.5; Mon, 6 Jul
- 2020 13:46:46 +0200
-Received: from MUCSE711.infineon.com ([fe80::cc45:4d1a:3881:a6e5]) by
- MUCSE711.infineon.com ([fe80::cc45:4d1a:3881:a6e5%20]) with mapi id
- 15.01.1913.010; Mon, 6 Jul 2020 13:46:46 +0200
-From:   <Peter.Huewe@infineon.com>
-To:     <jarkko.sakkinen@linux.intel.com>,
-        <linux-integrity@vger.kernel.org>
-CC:     <kjhall@us.ibm.com>, <ferry.toth@elsinga.info>,
-        <peterhuewe@gmx.de>, <jgg@ziepe.ca>, <arnd@arndb.de>,
-        <gregkh@linuxfoundation.org>, <akpm@osdl.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] tpm_tis: Remove the HID IFX0102
-Thread-Topic: [PATCH v2] tpm_tis: Remove the HID IFX0102
-Thread-Index: AQHWSpi7zu+k2ZgGwES2mspmWAztdKj6fvXg
-Date:   Mon, 6 Jul 2020 11:46:46 +0000
-Message-ID: <e9caad58aba44bb3abeac8569a6bd8ed@infineon.com>
-References: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
-In-Reply-To: <20200625023111.270458-1-jarkko.sakkinen@linux.intel.com>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.23.8.247]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 6 Jul 2020 09:18:48 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6913520B717A;
+        Mon,  6 Jul 2020 06:18:47 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6913520B717A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1594041528;
+        bh=f6pqwPgURJsUukw0OzBzkWGxCYgCy9yL+9G336sxsg0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UUT7vs3OB1AfZN8zireRKfp/s6vIG1eklB2XXox3Un1iQ/71CST+p4YPnh/noPO4s
+         qqjf581qVhqHRsmxe/fwt2L4cVrlo16dwpSWSHGaFXHs5qAcpaszsntJYJRQjVL1/w
+         6dTp9HX986whh3++TYJQTJFAi5oE0c+jZIUsiCu4=
+Date:   Mon, 6 Jul 2020 08:18:45 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 09/11] ima: Move validation of the keyrings
+ conditional into ima_validate_rule()
+Message-ID: <20200706131845.GI4694@sequoia>
+References: <20200626223900.253615-1-tyhicks@linux.microsoft.com>
+ <20200626223900.253615-10-tyhicks@linux.microsoft.com>
+ <1593558449.5057.12.camel@linux.ibm.com>
+ <20200702221656.GH4694@sequoia>
+ <1593785732.23056.16.camel@linux.ibm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1593785732.23056.16.camel@linux.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
-NACK
+On 2020-07-03 10:15:32, Mimi Zohar wrote:
+> On Thu, 2020-07-02 at 17:16 -0500, Tyler Hicks wrote:
+> > On 2020-06-30 19:07:29, Mimi Zohar wrote:
+> > > On Fri, 2020-06-26 at 17:38 -0500, Tyler Hicks wrote:
+> > > > Use ima_validate_rule() to ensure that the combination of a hook
+> > > > function and the keyrings conditional is valid and that the keyrings
+> > > > conditional is not specified without an explicit KEY_CHECK func
+> > > > conditional. This is a code cleanup and has no user-facing change.
+> > > > 
+> > > > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> > > > ---
+> > > > 
+> > > > * v2
+> > > >   - Allowed IMA_DIGSIG_REQUIRED, IMA_PERMIT_DIRECTIO,
+> > > >     IMA_MODSIG_ALLOWED, and IMA_CHECK_BLACKLIST conditionals to be
+> > > >     present in the rule entry flags for non-buffer hook functions.
+> > > > 
+> > > >  security/integrity/ima/ima_policy.c | 13 +++++++++++--
+> > > >  1 file changed, 11 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> > > > index 8cdca2399d59..43d49ad958fb 100644
+> > > > --- a/security/integrity/ima/ima_policy.c
+> > > > +++ b/security/integrity/ima/ima_policy.c
+> > > > @@ -1000,6 +1000,15 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+> > > >  		case KEXEC_KERNEL_CHECK:
+> > > >  		case KEXEC_INITRAMFS_CHECK:
+> > > >  		case POLICY_CHECK:
+> > > > +			if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
+> > > > +					     IMA_UID | IMA_FOWNER | IMA_FSUUID |
+> > > > +					     IMA_INMASK | IMA_EUID | IMA_PCR |
+> > > > +					     IMA_FSNAME | IMA_DIGSIG_REQUIRED |
+> > > > +					     IMA_PERMIT_DIRECTIO |
+> > > > +					     IMA_MODSIG_ALLOWED |
+> > > > +					     IMA_CHECK_BLACKLIST))
+> > > 
+> > > Other than KEYRINGS, this patch should continue to behave the same.
+> > >  However, this list gives the impressions that all of these flags are
+> > > permitted on all of the above flags, which isn't true.
+> > > 
+> > > For example, both IMA_MODSIG_ALLOWED & IMA_CHECK_BLACKLIST are limited
+> > > to appended signatures, meaning KERNEL_CHECK and KEXEC_KERNEL_CHECK.
+> > 
+> > Just to clarify, are both IMA_MODSIG_ALLOWED and IMA_CHECK_BLACKLIST
+> > limited to KEXEC_KERNEL_CHECK, KEXEC_INITRAMFS_CHECK, and MODULE_CHECK?
+> > That's what ima_hook_supports_modsig() suggests.
+> 
+> Theoretically that is true, but I have no idea how you would append a
+> signature to the kexec boot command line.  The only users of appended
+> signatures are currently kernel modules and the kexec'ed kernel image.
 
-> % git --no-pager grep IFX0102 drivers/char/tpm
-> drivers/char/tpm/tpm_infineon.c:	{"IFX0102", 0},
-> drivers/char/tpm/tpm_tis.c:	{"IFX0102", 0},		/* Infineon */
-> Obviously IFX0102 was added to the HID table for the TCG TIS driver by mi=
-stake.
+The discrepancy was with KEXEC_INITRAMFS_CHECK, not KEXEC_CMDLINE. I now
+see that there's no support for initramfs signature verification in the
+kexec code so I'll assume that ima_hook_supports_modsig() is wrong and
+limit IMA_MODSIG_ALLOWED and IMA_CHECK_BLACKLIST to the
+KEXEC_KERNEL_CHECK and MODULE_CHECK actions, as you originally
+suggested.
 
-The HID IFX0102 was NOT added by mistake.
-Let me explain the history a bit:
+Tyler
 
-Old SLB 9635 / 9630 TPMs had two ways to interface them
-- proprietary 'io' mapped protocol (tpm_infineon)
-- tis protocol  (tpm_tis)
-
-Both match the same HID.
-However with the emerging of the tis protocol, the io protocol eventually w=
-ent away for newer products.
-So all TPM1.2 by IFX match the HID0102 and the TCG generic ones PNP0C31
-
-So basically you break TPM1.2 support for all (newer) Infineon chips if the=
- platform vendor used the IFX0102 HID as they would speak via tpm_infineon =
-driver.
-The bug must be something different, especially as it only seems to happen =
-after suspend resume.
-
-
-Thanks,
-Peter
+> 
+> > 
+> > >  Both should only be allowed on APPRAISE action rules.
+> > 
+> > For completeness, it looks like DONT_APPRAISE should not be allowed.
+> 
+> Good point.  
+> 
+> > 
+> > > IMA_PCR should be limited to MEASURE action rules.
+> > 
+> > It looks like DONT_MEASURE should not be allowed.
+> 
+> The TPM PCR isn't a file attribute.
+> 
+> > 
+> > > IMA_DIGSIG_REQUIRED should be limited to APPRAISE action rules.
+> > 
+> > It looks like DONT_APPRAISE should not be allowed.
+> 
+> Right, in all of these cases the DONT_XXXX isn't applicable.
+> 
+> Mimi
