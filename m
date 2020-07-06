@@ -2,144 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A17216238
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 01:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0502B21629E
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 01:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728158AbgGFXYf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Jul 2020 19:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728150AbgGFXYe (ORCPT
+        id S1726889AbgGFXz3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Jul 2020 19:55:29 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10104 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726729AbgGFXz3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Jul 2020 19:24:34 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E98EC08C5E0
-        for <linux-integrity@vger.kernel.org>; Mon,  6 Jul 2020 16:24:34 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id d16so30129391edz.12
-        for <linux-integrity@vger.kernel.org>; Mon, 06 Jul 2020 16:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Np0f/K9JCHn9yQ2Y6VtpcddFY7JlGiSYQ3d1AFD5TSY=;
-        b=UOnXE0KOObFP97sC9mOHpQxcLEmx/eRYxGl2jrDRpCpX2Hq4FAVwoYYV3ytL8zRCnS
-         ePvW2++3exFAxbMFaYCn2CAcZSo5FyA8HQ82HH2odvbuBQSsNOS7MX89kR+1INlwOzbX
-         34+9nzRNJnFZDvbK2Bcj9wDw0B6t8FAXVK8nk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Np0f/K9JCHn9yQ2Y6VtpcddFY7JlGiSYQ3d1AFD5TSY=;
-        b=TGnW7oyluaKA56sJx1i6FUEVjs68Pi/t4uacTE9eoRnrRLmzl+XaeFEOWHfMREpuzN
-         dmekQaE8g5b6YmsvxJ35vRjslx1EtLAhMmjbPLXYuRQ1z3mmLZ5mOnj2VTI7/PgVMMcw
-         selKYAD961yOnxNffxXLsagsZwOcY/4u/o0TX+tOF0xKu5vaQe4O+uC40axp8ZZn0nDV
-         gOgiqCJpNJyqKH6vF6zh94pWXjxu0X7WbxrPNryqC/lF9/2g7q1Spd/fAe9bcSwx6+PX
-         fMn8op5AfkwfH6coBUy0WdEJs1Xu+/Grn0hPVYRONmegvCLilL/851f7lqMYc/DC0xTp
-         M99Q==
-X-Gm-Message-State: AOAM530d8M5nyFO9x1t1kSfmR9l4DqOjnDlHOc0rQ4qnwZwrMxoIu53c
-        baeRTkacgLOFMgdXFj48lIceAQ==
-X-Google-Smtp-Source: ABdhPJzmPzlZfsPo2d3fSMfNVxWPo4ni5RTv92j4hAFh5Wn7Uz2cD/fbRT5QGFXvqj8J/fsAlBp/xA==
-X-Received: by 2002:aa7:c54e:: with SMTP id s14mr59139165edr.81.1594077872808;
-        Mon, 06 Jul 2020 16:24:32 -0700 (PDT)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id i2sm4002567ejp.114.2020.07.06.16.24.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 16:24:32 -0700 (PDT)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v10 9/9] ima: add FIRMWARE_PARTIAL_READ support
-Date:   Mon,  6 Jul 2020 16:23:09 -0700
-Message-Id: <20200706232309.12010-10-scott.branden@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200706232309.12010-1-scott.branden@broadcom.com>
-References: <20200706232309.12010-1-scott.branden@broadcom.com>
+        Mon, 6 Jul 2020 19:55:29 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 066NWgxB047932;
+        Mon, 6 Jul 2020 19:55:28 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3249rbxdfn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jul 2020 19:55:28 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 066NsRnQ002711;
+        Mon, 6 Jul 2020 23:55:27 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma01wdc.us.ibm.com with ESMTP id 322hd8bdmx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jul 2020 23:55:27 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 066NtQCU38011226
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jul 2020 23:55:26 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CACC2AC05E;
+        Mon,  6 Jul 2020 23:55:26 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9505CAC05F;
+        Mon,  6 Jul 2020 23:55:26 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Jul 2020 23:55:26 +0000 (GMT)
+Subject: Re: [PATCH v9 2/2] tpm: Add support for event log pointer found in
+ TPM2 ACPI table
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20200706181953.3592084-1-stefanb@linux.vnet.ibm.com>
+ <20200706181953.3592084-3-stefanb@linux.vnet.ibm.com>
+ <20200706230914.GC20770@linux.intel.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <78ec872f-89b3-6464-6ede-bd0a46fe5c4c@linux.ibm.com>
+Date:   Mon, 6 Jul 2020 19:55:26 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20200706230914.GC20770@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-06_20:2020-07-06,2020-07-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 lowpriorityscore=0
+ cotscore=-2147483648 clxscore=1015 phishscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007060163
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add FIRMWARE_PARTIAL_READ support for integrity
-measurement on partial reads of firmware files.
+On 7/6/20 7:09 PM, Jarkko Sakkinen wrote:
+> On Mon, Jul 06, 2020 at 02:19:53PM -0400, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> In case a TPM2 is attached, search for a TPM2 ACPI table when trying
+>> to get the event log from ACPI. If one is found, use it to get the
+>> start and length of the log area. This allows non-UEFI systems, such
+>> as SeaBIOS, to pass an event log when using a TPM2.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Do you think that QEMU with TPM 1.2 emulator turned on would be a viable
+> way to test this?
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
----
- security/integrity/ima/ima_main.c | 24 +++++++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 15f29fed6d9f..04a431924265 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -611,6 +611,9 @@ void ima_post_path_mknod(struct dentry *dentry)
-  */
- int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
- {
-+	enum ima_hooks func;
-+	u32 secid;
-+
- 	/*
- 	 * READING_FIRMWARE_PREALLOC_BUFFER
- 	 *
-@@ -619,11 +622,27 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
- 	 * of IMA's signature verification any more than when using two
- 	 * buffers?
- 	 */
--	return 0;
-+	if (read_id != READING_FIRMWARE_PARTIAL_READ)
-+		return 0;
-+
-+	if (!file) {
-+		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
-+		    (ima_appraise & IMA_APPRAISE_ENFORCE)) {
-+			pr_err("Prevent firmware loading_store.\n");
-+			return -EACCES;	/* INTEGRITY_UNKNOWN */
-+		}
-+		return 0;
-+	}
-+
-+	func = read_idmap[read_id] ?: FILE_CHECK;
-+	security_task_getsecid(current, &secid);
-+	return process_measurement(file, current_cred(), secid, NULL,
-+				   0, MAY_READ, func);
- }
- 
- const int read_idmap[READING_MAX_ID] = {
- 	[READING_FIRMWARE] = FIRMWARE_CHECK,
-+	[READING_FIRMWARE_PARTIAL_READ] = FIRMWARE_CHECK,
- 	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
- 	[READING_MODULE] = MODULE_CHECK,
- 	[READING_KEXEC_IMAGE] = KEXEC_KERNEL_CHECK,
-@@ -650,6 +669,9 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 	enum ima_hooks func;
- 	u32 secid;
- 
-+	if (read_id == READING_FIRMWARE_PARTIAL_READ)
-+		return 0;
-+
- 	if (!file && read_id == READING_FIRMWARE) {
- 		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
- 		    (ima_appraise & IMA_APPRAISE_ENFORCE)) {
--- 
-2.17.1
+Yes.
+
+
+>
+> I'm anyway more worried about breaking existing TPM 1.2 functionality
+> and that requires only QEMU without extras.
+>
+> /Jarkko
+
 
