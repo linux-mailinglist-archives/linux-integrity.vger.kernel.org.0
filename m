@@ -2,118 +2,147 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C9321646D
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 05:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C34B21647E
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 05:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728121AbgGGDIi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Jul 2020 23:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbgGGDIh (ORCPT
+        id S1726933AbgGGDTE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Jul 2020 23:19:04 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42088 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726540AbgGGDTD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Jul 2020 23:08:37 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22CDC061755
-        for <linux-integrity@vger.kernel.org>; Mon,  6 Jul 2020 20:08:37 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id x11so16139627plo.7
-        for <linux-integrity@vger.kernel.org>; Mon, 06 Jul 2020 20:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mAgioibrvE891f5K7HmCJlPOrtHJXNuC1DkC4uszNXM=;
-        b=gP+Wl4DJKDJ3UySQvm6ehWCx/RKB143fnyHUuQ0t9BRhhXM335BMaeWAeNXiPHFS+A
-         yuJXG+rXHT/me7lsV8JRFhJGr0PHF+YCM9CfQH6E2adRJBk43IvCMRwvvBVl3/3Ixm3I
-         fq54xhOeSkABkDAJr2DPslruFRUcT0nLWUjG0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mAgioibrvE891f5K7HmCJlPOrtHJXNuC1DkC4uszNXM=;
-        b=NMl6Kz3cBqpAieHyyksdav7mywJ2GhozXO7xebQ87cF90fbWcECfg+0UOJcqE2d/Hd
-         /DSdWE82mAIVkjXKUR86R9fvK+aJhxDXuspogeEmrvxO9cSdGeVZrDrRQR+ccoZUmqDx
-         esBerobDrQDdvkKdhVcG33+0SUedyHJatWU7ubz2C1xA4ug4JQRUFfLQOVRad/373jJ+
-         OM8vO0MuZC4s4LVnP2WVjXCxSS0VNToM+31GmdRoh/uD/iskW1vStZsioF2809ouVwVC
-         SmS8/uvY0IsKWREq0WiOUQukT6G3vfyoB0BUipBGGFIKSQLjplOyJN8M+J3IHICS25Yp
-         Bo0w==
-X-Gm-Message-State: AOAM532oz4N7DLsnmXQ7P8Ugejv+Pq+oqhvbBfvpeOSUXgf5Y2C73JHU
-        Ad8xXUmd1l1w3wxxdsyouLqgQQ==
-X-Google-Smtp-Source: ABdhPJy83Oe1nEfdDuQGPzOU8w+tiZ5G3NUxNgvI9H4y2E5D1RYyMkaPmU7mTa1I6i1BJx5hBV9wHA==
-X-Received: by 2002:a17:902:b204:: with SMTP id t4mr45161895plr.132.1594091317238;
-        Mon, 06 Jul 2020 20:08:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f14sm20750527pgj.62.2020.07.06.20.08.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 20:08:36 -0700 (PDT)
-Date:   Mon, 6 Jul 2020 20:08:35 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Scott Branden <scott.branden@broadcom.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
+        Mon, 6 Jul 2020 23:19:03 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06734d4W100927;
+        Mon, 6 Jul 2020 23:18:52 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 324f7dj9j2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jul 2020 23:18:52 -0400
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06734lgh101458;
+        Mon, 6 Jul 2020 23:18:52 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 324f7dj9hf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jul 2020 23:18:52 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0673G8uZ023109;
+        Tue, 7 Jul 2020 03:18:49 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 322hd7tx1b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jul 2020 03:18:49 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0673Il293735930
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Jul 2020 03:18:47 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9351911C052;
+        Tue,  7 Jul 2020 03:18:47 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 810DD11C04A;
+        Tue,  7 Jul 2020 03:18:46 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.174.194])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Jul 2020 03:18:46 +0000 (GMT)
+Message-ID: <1594091925.23056.36.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 09/11] ima: Move validation of the keyrings
+ conditional into ima_validate_rule()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v10 9/9] ima: add FIRMWARE_PARTIAL_READ support
-Message-ID: <202007061950.F6B3D9E6A@keescook>
-References: <20200706232309.12010-1-scott.branden@broadcom.com>
- <20200706232309.12010-10-scott.branden@broadcom.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200706232309.12010-10-scott.branden@broadcom.com>
+Date:   Mon, 06 Jul 2020 23:18:45 -0400
+In-Reply-To: <20200706131845.GI4694@sequoia>
+References: <20200626223900.253615-1-tyhicks@linux.microsoft.com>
+         <20200626223900.253615-10-tyhicks@linux.microsoft.com>
+         <1593558449.5057.12.camel@linux.ibm.com> <20200702221656.GH4694@sequoia>
+         <1593785732.23056.16.camel@linux.ibm.com> <20200706131845.GI4694@sequoia>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-07_01:2020-07-06,2020-07-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 impostorscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ cotscore=-2147483648 mlxscore=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007070023
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 04:23:09PM -0700, Scott Branden wrote:
-> Add FIRMWARE_PARTIAL_READ support for integrity
-> measurement on partial reads of firmware files.
+On Mon, 2020-07-06 at 08:18 -0500, Tyler Hicks wrote:
+> On 2020-07-03 10:15:32, Mimi Zohar wrote:
+> > On Thu, 2020-07-02 at 17:16 -0500, Tyler Hicks wrote:
+> > > On 2020-06-30 19:07:29, Mimi Zohar wrote:
+> > > > On Fri, 2020-06-26 at 17:38 -0500, Tyler Hicks wrote:
+> > > > > Use ima_validate_rule() to ensure that the combination of a hook
+> > > > > function and the keyrings conditional is valid and that the keyrings
+> > > > > conditional is not specified without an explicit KEY_CHECK func
+> > > > > conditional. This is a code cleanup and has no user-facing change.
+> > > > > 
+> > > > > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> > > > > ---
+> > > > > 
+> > > > > * v2
+> > > > >   - Allowed IMA_DIGSIG_REQUIRED, IMA_PERMIT_DIRECTIO,
+> > > > >     IMA_MODSIG_ALLOWED, and IMA_CHECK_BLACKLIST conditionals to be
+> > > > >     present in the rule entry flags for non-buffer hook functions.
+> > > > > 
+> > > > >  security/integrity/ima/ima_policy.c | 13 +++++++++++--
+> > > > >  1 file changed, 11 insertions(+), 2 deletions(-)
+> > > > > 
+> > > > > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> > > > > index 8cdca2399d59..43d49ad958fb 100644
+> > > > > --- a/security/integrity/ima/ima_policy.c
+> > > > > +++ b/security/integrity/ima/ima_policy.c
+> > > > > @@ -1000,6 +1000,15 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+> > > > >  		case KEXEC_KERNEL_CHECK:
+> > > > >  		case KEXEC_INITRAMFS_CHECK:
+> > > > >  		case POLICY_CHECK:
+> > > > > +			if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
+> > > > > +					     IMA_UID | IMA_FOWNER | IMA_FSUUID |
+> > > > > +					     IMA_INMASK | IMA_EUID | IMA_PCR |
+> > > > > +					     IMA_FSNAME | IMA_DIGSIG_REQUIRED |
+> > > > > +					     IMA_PERMIT_DIRECTIO |
+> > > > > +					     IMA_MODSIG_ALLOWED |
+> > > > > +					     IMA_CHECK_BLACKLIST))
+> > > > 
+> > > > Other than KEYRINGS, this patch should continue to behave the same.
+> > > >  However, this list gives the impressions that all of these flags are
+> > > > permitted on all of the above flags, which isn't true.
+> > > > 
+> > > > For example, both IMA_MODSIG_ALLOWED & IMA_CHECK_BLACKLIST are limited
+> > > > to appended signatures, meaning KERNEL_CHECK and KEXEC_KERNEL_CHECK.
+> > > 
+> > > Just to clarify, are both IMA_MODSIG_ALLOWED and IMA_CHECK_BLACKLIST
+> > > limited to KEXEC_KERNEL_CHECK, KEXEC_INITRAMFS_CHECK, and MODULE_CHECK?
+> > > That's what ima_hook_supports_modsig() suggests.
+> > 
+> > Theoretically that is true, but I have no idea how you would append a
+> > signature to the kexec boot command line.  The only users of appended
+> > signatures are currently kernel modules and the kexec'ed kernel image.
+> 
+> The discrepancy was with KEXEC_INITRAMFS_CHECK, not KEXEC_CMDLINE. I now
+> see that there's no support for initramfs signature verification in the
+> kexec code so I'll assume that ima_hook_supports_modsig() is wrong and
+> limit IMA_MODSIG_ALLOWED and IMA_CHECK_BLACKLIST to the
+> KEXEC_KERNEL_CHECK and MODULE_CHECK actions, as you originally
+> suggested.
 
-Hi,
+My mistake.  Yes, both the kexec kernel image and the initramfs read
+the respective file into memory and can be signed either with an
+imasig or modsig.  Refer to kernel_read_file_from_fd().
 
-Several versions ago I'd suggested that the LSM infrastructure handle
-the "full read" semantics so that individual LSMs don't need to each
-duplicate the same efforts. As it happens, only IMA is impacted (SELinux
-ignores everything except modules, and LoadPin only cares about origin
-not contents).
-
-Next is the problem that enum kernel_read_file_id is an object
-TYPE enum, not a HOW enum. (And it seems I missed the addition of
-READING_FIRMWARE_PREALLOC_BUFFER, which may share a similar problem.)
-That it's a partial read doesn't change _what_ you're reading: that's an
-internal API detail. What happens when I attempt to do a partial read of
-a kexec image? I'll use kernel_pread_file() and pass READING_KEXEC_IMAGE,
-but the LSMs will have no idea it's a partial read.
-
-Finally, what keeps the contents of the file from changing between the
-first call (which IMA will read the entire file for) and the next reads
-which will bypass IMA? I'd suggested that the open file must have writes
-disabled on it (as execve() does).
-
-So, please redesign this:
-- do not add an enum
-- make the file unwritable for the life of having the handle open
-- make the "full read" happen as part of the first partial read so the
-  LSMs don't have to reimplement everything
-
--Kees
-
--- 
-Kees Cook
+Mimi
