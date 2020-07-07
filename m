@@ -2,64 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C5C21795F
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 22:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BADD217A40
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 23:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728280AbgGGU2v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Jul 2020 16:28:51 -0400
-Received: from namei.org ([65.99.196.166]:44362 "EHLO namei.org"
+        id S1729195AbgGGVZC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Jul 2020 17:25:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34184 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727908AbgGGU2v (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Jul 2020 16:28:51 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 067KSV3f008755;
-        Tue, 7 Jul 2020 20:28:31 GMT
-Date:   Wed, 8 Jul 2020 06:28:31 +1000 (AEST)
-From:   James Morris <jmorris@namei.org>
-To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-cc:     serge@hallyn.com, john.johansen@canonical.com, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, dhowells@redhat.com,
-        jarkko.sakkinen@linux.intel.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org
-Subject: Re: [PATCH] Replace HTTP links with HTTPS ones: security
-In-Reply-To: <20200705214512.28498-1-grandmaster@al2klimov.de>
-Message-ID: <alpine.LRH.2.21.2007080628020.1849@namei.org>
-References: <20200705214512.28498-1-grandmaster@al2klimov.de>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1729085AbgGGVZC (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 7 Jul 2020 17:25:02 -0400
+Subject: Re: [GIT PULL] tpmdd updates for Linux v5.8-rc5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594157101;
+        bh=ezYuCml9YFOZcm7NYpRCW0QkHrIIUL1+qEasWM0Mnqo=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=cm8qajq+j3kYITSvedlMz0dL9zrBaajXGrypXzuLPkM9oy7gItqefNc782KjU1xBq
+         3drHM9FnNhn4NHQtjLscVjw9V4P85HqpRcXlbDmFHEbhWJnDF0PuVxO1ipFnK0IzJK
+         qq+FUr4vo417IXHJgVQbwibOTpcJ/HrH58ynbHnM=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200707022114.GA112019@linux.intel.com>
+References: <20200707022114.GA112019@linux.intel.com>
+X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200707022114.GA112019@linux.intel.com>
+X-PR-Tracked-Remote: git://git.infradead.org/users/jjs/linux-tpmdd.git
+ tags/tpmdd-next-v5.8-rc5
+X-PR-Tracked-Commit-Id: 786a2aa281f4c4ba424ea8b8ea1e85ab62c4a57c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a6bc851ffe0b246ab4f8aa0d01620fbc08d0441f
+Message-Id: <159415710170.29940.15254200557486878529.pr-tracker-bot@kernel.org>
+Date:   Tue, 07 Jul 2020 21:25:01 +0000
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, jmorris@namei.org,
+        dhowells@redhat.com, peterhuewe@gmx.de
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, 5 Jul 2020, Alexander A. Klimov wrote:
+The pull request you sent on Tue, 7 Jul 2020 05:21:14 +0300:
 
-> Rationale:
-> Reduces attack surface on kernel devs opening the links for MITM
-> as HTTPS traffic is much harder to manipulate.
-> 
-> Deterministic algorithm:
-> For each file:
->   If not .svg:
->     For each line:
->       If doesn't contain `\bxmlns\b`:
->         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
->           If both the HTTP and HTTPS versions
->           return 200 OK and serve the same content:
->             Replace HTTP with HTTPS.
-> 
-> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+> git://git.infradead.org/users/jjs/linux-tpmdd.git tags/tpmdd-next-v5.8-rc5
 
-Thanks.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a6bc851ffe0b246ab4f8aa0d01620fbc08d0441f
 
-Applied to 
-git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git next-general
-
+Thank you!
 
 -- 
-James Morris
-<jmorris@namei.org>
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
