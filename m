@@ -2,109 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4AB21651B
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 06:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90977216834
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 10:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgGGEJP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Jul 2020 00:09:15 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:17568 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725766AbgGGEJO (ORCPT
+        id S1728292AbgGGIT5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Jul 2020 04:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727962AbgGGITc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Jul 2020 00:09:14 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06741rt4112843;
-        Tue, 7 Jul 2020 00:09:13 -0400
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32486cdutp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 00:09:13 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0673xPjL028027;
-        Tue, 7 Jul 2020 04:09:12 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma02dal.us.ibm.com with ESMTP id 322hd922tf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 04:09:12 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06749Bs045678944
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Jul 2020 04:09:11 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A57BDAC062;
-        Tue,  7 Jul 2020 04:09:11 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93B8FAC05F;
-        Tue,  7 Jul 2020 04:09:11 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Jul 2020 04:09:11 +0000 (GMT)
-Subject: Re: [PATCH v9 2/2] tpm: Add support for event log pointer found in
- TPM2 ACPI table
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20200706181953.3592084-1-stefanb@linux.vnet.ibm.com>
- <20200706181953.3592084-3-stefanb@linux.vnet.ibm.com>
- <20200706230914.GC20770@linux.intel.com>
- <78ec872f-89b3-6464-6ede-bd0a46fe5c4c@linux.ibm.com>
- <20200707022416.GC112019@linux.intel.com>
- <f3e0fb50-8617-da40-1456-158531a070cb@linux.ibm.com>
- <20200707040325.GB143804@linux.intel.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <85c27199-df55-eecc-855c-dedcea64f89e@linux.ibm.com>
-Date:   Tue, 7 Jul 2020 00:09:11 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 7 Jul 2020 04:19:32 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D07C061755
+        for <linux-integrity@vger.kernel.org>; Tue,  7 Jul 2020 01:19:32 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id k27so3577793pgm.2
+        for <linux-integrity@vger.kernel.org>; Tue, 07 Jul 2020 01:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0pw/almlOM0nvvqI+5nYmAdy2Yj1U7UMDcdD61C+qaQ=;
+        b=LGKeNNtTd/zC9lyBS5S1OkdT3sNaE+OZVMRG3YUkLIM//s1udvtMwGfcRKkICTDfwX
+         ciRh8xDXHRSFwSI2d++7iFZs2KTVOZj83GEv3CXcpx2PnvTMoeW3qj/VyUi3VUXCJMRk
+         BZDk4YDxdLaSu4NokEYhbyiGlmhzlQzseg27I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0pw/almlOM0nvvqI+5nYmAdy2Yj1U7UMDcdD61C+qaQ=;
+        b=Oe02uYdfmVIAQzef1pZyybV14aPosHLugrZSNqYaIHZSwPZDRMf6tsl8QRPFx2c770
+         nlwYm/TOLo9VKvs5owbeYo1WymC4j1ZFFThD/W+MgM1wzekVbG3Iesss0faVoePPgqhA
+         ChSi6qYnMHc1Vy21+4uRBLQtHuuJqySLPqAkyDc+cg6rh9lDetMp96Mj5wG2eEp0NG6I
+         ZEazNj4tu/JNhvO4rUCmhKiiuM36XXqAkrWT822yXO2opXMI0ul+CCF6ZWyKlpP+ZTrL
+         5oNmmsLM3V20cqS2kisdNgK7pLtKm4rqS61Pir78CYLVnoPKCOeFGe3qqpFh3To2bYd8
+         HBwQ==
+X-Gm-Message-State: AOAM5305x48a12eDTxR5B3mtkCA/YBCyerhVoKkBvy5h/JIUr7TKnYDQ
+        zrh4pOWsEyaPbi/uZ0auJNlXAw==
+X-Google-Smtp-Source: ABdhPJxa9aMEUJ/Mjzn5aqtaRqYpVKuj1envkrNds6yTMeT1CX3sElLVK5gBWNoqrM4QS8Ru/kca3w==
+X-Received: by 2002:a63:2d44:: with SMTP id t65mr33902187pgt.257.1594109971610;
+        Tue, 07 Jul 2020 01:19:31 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 186sm15400415pfe.1.2020.07.07.01.19.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2020 01:19:30 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     James Morris <jmorris@namei.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jessica Yu <jeyu@kernel.org>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        KP Singh <kpsingh@google.com>, Dave Olsthoorn <dave@bewaar.me>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Boyd <stephen.boyd@linaro.org>,
+        Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 0/4] Fix misused kernel_read_file() enums
+Date:   Tue,  7 Jul 2020 01:19:22 -0700
+Message-Id: <20200707081926.3688096-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20200707040325.GB143804@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-07_01:2020-07-06,2020-07-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- impostorscore=0 mlxscore=0 clxscore=1015 adultscore=0 priorityscore=1501
- mlxlogscore=999 lowpriorityscore=0 suspectscore=0 bulkscore=0 phishscore=0
- cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007070025
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/7/20 12:03 AM, Jarkko Sakkinen wrote:
-> On Mon, Jul 06, 2020 at 11:08:12PM -0400, Stefan Berger wrote:
->> On 7/6/20 10:24 PM, Jarkko Sakkinen wrote:
->>> On Mon, Jul 06, 2020 at 07:55:26PM -0400, Stefan Berger wrote:
->>>> On 7/6/20 7:09 PM, Jarkko Sakkinen wrote:
->>>>> On Mon, Jul 06, 2020 at 02:19:53PM -0400, Stefan Berger wrote:
->>>>>> From: Stefan Berger <stefanb@linux.ibm.com>
->>>>>>
->>>>>> In case a TPM2 is attached, search for a TPM2 ACPI table when trying
->>>>>> to get the event log from ACPI. If one is found, use it to get the
->>>>>> start and length of the log area. This allows non-UEFI systems, such
->>>>>> as SeaBIOS, to pass an event log when using a TPM2.
->>>>>>
->>>>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->>>>> Do you think that QEMU with TPM 1.2 emulator turned on would be a viable
->>>>> way to test this?
->>>> Yes.
->>> Is the emulator bundled with QEMU or does it have to be installed
->>> separately?
->> It has to be installed separately. On Fedora 31 it would just be a `sudo dnf
->> -y install swtpm-tools` and you should be good to go with libvirt /
->> virt-manager.
-> Is there some packaging for Debian/Ubuntu available?
+Hi,
 
+In looking for closely at the additions that got made to the
+kernel_read_file() enums, I noticed that FIRMWARE_PREALLOC_BUFFER
+and FIRMWARE_EFI_EMBEDDED were added, but they are not appropriate
+*kinds* of files for the LSM to reason about. They are a "how" and
+"where", respectively. Remove these improper aliases and refactor the
+code to adapt to the changes.
 
-So far may not be available yet. I had *experimented* with a PPA once: 
-https://launchpad.net/~stefanberger/+archive/ubuntu/swtpm-focal
+Additionally adds in missing calls to security_kernel_post_read_file()
+in the platform firmware fallback path (to match the sysfs firmware
+fallback path) and in module loading. I considered entirely removing
+security_kernel_post_read_file() hook since it is technically unused,
+but IMA probably wants to be able to measure EFI-stored firmware images,
+so I wired it up and matched it for modules, in case anyone wants to
+move the module signature checks out of the module core and into an LSM
+to avoid the current layering violations.
 
+This touches several trees, and I suspect it would be best to go through
+James's LSM tree.
 
+Thanks!
 
-> /Jarkko
+-Kees
 
+Kees Cook (4):
+  firmware_loader: EFI firmware loader must handle pre-allocated buffer
+  fs: Remove FIRMWARE_PREALLOC_BUFFER from kernel_read_file() enums
+  fs: Remove FIRMWARE_EFI_EMBEDDED from kernel_read_file() enums
+  module: Add hook for security_kernel_post_read_file()
+
+ drivers/base/firmware_loader/fallback_platform.c | 12 ++++++++++--
+ drivers/base/firmware_loader/main.c              |  5 ++---
+ fs/exec.c                                        |  7 ++++---
+ include/linux/fs.h                               |  3 +--
+ include/linux/lsm_hooks.h                        |  6 +++++-
+ kernel/module.c                                  |  7 ++++++-
+ security/integrity/ima/ima_main.c                |  6 ++----
+ 7 files changed, 30 insertions(+), 16 deletions(-)
+
+-- 
+2.25.1
 
