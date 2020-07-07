@@ -2,56 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60933217293
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 17:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6990C217440
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 18:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728328AbgGGPh7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Jul 2020 11:37:59 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63502 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728194AbgGGPh7 (ORCPT
+        id S1727987AbgGGQmU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Jul 2020 12:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726911AbgGGQmU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Jul 2020 11:37:59 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 067FVOBd141554;
-        Tue, 7 Jul 2020 11:37:28 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 324ffe5v90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 11:37:28 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 067FVRd3141899;
-        Tue, 7 Jul 2020 11:37:27 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 324ffe5v7e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 11:37:27 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 067F6pLA031946;
-        Tue, 7 Jul 2020 15:37:25 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma02fra.de.ibm.com with ESMTP id 322hd83nbt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 15:37:25 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 067Fa8Q062390518
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Jul 2020 15:36:08 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9816EA4054;
-        Tue,  7 Jul 2020 15:36:08 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D379A405F;
-        Tue,  7 Jul 2020 15:36:05 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.200.130])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Jul 2020 15:36:04 +0000 (GMT)
-Message-ID: <1594136164.23056.76.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/4] Fix misused kernel_read_file() enums
-From:   Mimi Zohar <zohar@linux.ibm.com>
+        Tue, 7 Jul 2020 12:42:20 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822CC061755
+        for <linux-integrity@vger.kernel.org>; Tue,  7 Jul 2020 09:42:20 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id l63so20238625pge.12
+        for <linux-integrity@vger.kernel.org>; Tue, 07 Jul 2020 09:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=0qMTVTx2oMUOrXFIFdM7C2a26kIggeuoWNl9Jj6kWSc=;
+        b=AJ2740POBQN+J8L+rLdzMt/HO2CL8AgWMqKjZQ2eFTnScvgiY+fjNZQlBfn+t7gQgg
+         lIZmcE0W3wxKbTYW3Ii5MIdLfHANVUgV1WE+boVYskStkOIHbkKsJIT7ngaN7veE/i6e
+         dyyulVok8SWD6RfLNEbJuks1coNC0w5XaKC0g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=0qMTVTx2oMUOrXFIFdM7C2a26kIggeuoWNl9Jj6kWSc=;
+        b=akCuqTNYBCwHd9U0/n21PhJcWKsttFTlvRRUSjCAjiUZtpQ4NVxGr3XzSWCfq2G9XY
+         Yv+/zQyDKxWMEP1tv6LdV0ctthJb/iZmuQQ4QXVxAKAPLOe8tOb/y3crBKU93lSgkmmw
+         I2sPshxtVp5BPpm36IF4ZVT1qwMZWBsCoXYgfv2zDyLJmPPniX4Kmt3uaa7AX8qdFwlu
+         0k9FrWWC0ay9/TxeYdIxyny9wSfOxyLy/VM0Uvjuws3Mql3N+rbsJXN7UsCMTxYsbHJO
+         htRtmVNT3YclodaxgPtfVeHboP/iUVCCAI1/fNRI4QFokUkICBIa+Re0BKko2NO9OzPn
+         x/vQ==
+X-Gm-Message-State: AOAM5308PFI1/DCr6+iX55lA5W2xVyaQnLLQWQlt8KVTzwFBG24FqzwE
+        U51Tbp1w4E8nXaGu0KJWJIVR8g==
+X-Google-Smtp-Source: ABdhPJwATTzEq1uBXUjxEsiTBgA4nu7xuVsLQq8eRH6/xZSkc/o2juX6PrF3O0dVY7WZ17vqBH8jMA==
+X-Received: by 2002:a63:310f:: with SMTP id x15mr46316882pgx.221.1594140139368;
+        Tue, 07 Jul 2020 09:42:19 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id v15sm1523113pgo.15.2020.07.07.09.42.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jul 2020 09:42:18 -0700 (PDT)
+Subject: Re: [PATCH 2/4] fs: Remove FIRMWARE_PREALLOC_BUFFER from
+ kernel_read_file() enums
 To:     Kees Cook <keescook@chromium.org>, James Morris <jmorris@namei.org>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -73,68 +72,156 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Stephen Boyd <stephen.boyd@linaro.org>,
         Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Tue, 07 Jul 2020 11:36:04 -0400
-In-Reply-To: <20200707081926.3688096-1-keescook@chromium.org>
+        linux-security-module@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
 References: <20200707081926.3688096-1-keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-07_08:2020-07-07,2020-07-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
- impostorscore=0 cotscore=-2147483648 malwarescore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501 bulkscore=0
- phishscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2007070113
+ <20200707081926.3688096-3-keescook@chromium.org>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <0a5e2c2e-507c-9114-5328-5943f63d707e@broadcom.com>
+Date:   Tue, 7 Jul 2020 09:42:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <20200707081926.3688096-3-keescook@chromium.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Kees,
 
-On Tue, 2020-07-07 at 01:19 -0700, Kees Cook wrote:
-> Hi,
-> 
-> In looking for closely at the additions that got made to the
-> kernel_read_file() enums, I noticed that FIRMWARE_PREALLOC_BUFFER
-> and FIRMWARE_EFI_EMBEDDED were added, but they are not appropriate
-> *kinds* of files for the LSM to reason about. They are a "how" and
-> "where", respectively. Remove these improper aliases and refactor the
-> code to adapt to the changes.
 
-Thank you for adding the missing calls and the firmware pre allocated
-buffer comment update.
-
-> 
-> Additionally adds in missing calls to security_kernel_post_read_file()
-> in the platform firmware fallback path (to match the sysfs firmware
-> fallback path) and in module loading. I considered entirely removing
-> security_kernel_post_read_file() hook since it is technically unused,
-> but IMA probably wants to be able to measure EFI-stored firmware images,
-> so I wired it up and matched it for modules, in case anyone wants to
-> move the module signature checks out of the module core and into an LSM
-> to avoid the current layering violations.
-
-IMa has always verified kernel module signatures.  Recently appended
-kernel module signature support was added to IMA.  The same appended
-signature format is also being used to sign and verify the kexec
-kernel image.
-
-With IMA's new kernel module appended signature support and patch 4/4
-in this series, IMA won't be limit to the finit_module syscall, but
-could support the init_module syscall as well.
-
-> 
-> This touches several trees, and I suspect it would be best to go through
-> James's LSM tree.
-
-Sure.
-
-thanks!
-
-Mimi
+On 2020-07-07 1:19 a.m., Kees Cook wrote:
+> FIRMWARE_PREALLOC_BUFFER is a "how", not a "what", and confuses the LSMs
+> that are interested in filtering between types of things. The "how"
+> should be an internal detail made uninteresting to the LSMs.
+>
+> Fixes: a098ecd2fa7d ("firmware: support loading into a pre-allocated buffer")
+> Fixes: fd90bc559bfb ("ima: based on policy verify firmware signatures (pre-allocated buffer)")
+> Fixes: 4f0496d8ffa3 ("ima: based on policy warn about loading firmware (pre-allocated buffer)")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>   drivers/base/firmware_loader/main.c | 5 ++---
+>   fs/exec.c                           | 7 ++++---
+>   include/linux/fs.h                  | 2 +-
+>   security/integrity/ima/ima_main.c   | 6 ++----
+>   4 files changed, 9 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+> index ca871b13524e..c2f57cedcd6f 100644
+> --- a/drivers/base/firmware_loader/main.c
+> +++ b/drivers/base/firmware_loader/main.c
+> @@ -465,14 +465,12 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+>   	int i, len;
+>   	int rc = -ENOENT;
+>   	char *path;
+> -	enum kernel_read_file_id id = READING_FIRMWARE;
+>   	size_t msize = INT_MAX;
+>   	void *buffer = NULL;
+>   
+>   	/* Already populated data member means we're loading into a buffer */
+>   	if (!decompress && fw_priv->data) {
+>   		buffer = fw_priv->data;
+> -		id = READING_FIRMWARE_PREALLOC_BUFFER;
+>   		msize = fw_priv->allocated_size;
+>   	}
+>   
+> @@ -496,7 +494,8 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+>   
+>   		/* load firmware files from the mount namespace of init */
+>   		rc = kernel_read_file_from_path_initns(path, &buffer,
+> -						       &size, msize, id);
+> +						       &size, msize,
+> +						       READING_FIRMWARE);
+>   		if (rc) {
+>   			if (rc != -ENOENT)
+>   				dev_warn(device, "loading %s failed with error %d\n",
+> diff --git a/fs/exec.c b/fs/exec.c
+> index e6e8a9a70327..2bf549757ce7 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -927,6 +927,7 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+>   {
+>   	loff_t i_size, pos;
+>   	ssize_t bytes = 0;
+> +	void *allocated = NULL;
+>   	int ret;
+>   
+>   	if (!S_ISREG(file_inode(file)->i_mode) || max_size < 0)
+> @@ -950,8 +951,8 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+>   		goto out;
+>   	}
+>   
+> -	if (id != READING_FIRMWARE_PREALLOC_BUFFER)
+> -		*buf = vmalloc(i_size);
+> +	if (!*buf)
+> +		*buf = allocated = vmalloc(i_size);
+>   	if (!*buf) {
+>   		ret = -ENOMEM;
+>   		goto out;
+> @@ -980,7 +981,7 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+>   
+>   out_free:
+>   	if (ret < 0) {
+> -		if (id != READING_FIRMWARE_PREALLOC_BUFFER) {
+> +		if (allocated) {
+>   			vfree(*buf);
+>   			*buf = NULL;
+>   		}
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 3f881a892ea7..95fc775ed937 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2993,10 +2993,10 @@ static inline void i_readcount_inc(struct inode *inode)
+>   #endif
+>   extern int do_pipe_flags(int *, int);
+>   
+> +/* This is a list of *what* is being read, not *how*. */
+>   #define __kernel_read_file_id(id) \
+>   	id(UNKNOWN, unknown)		\
+>   	id(FIRMWARE, firmware)		\
+With this change, I'm trying to figure out how the partial firmware read 
+is going to work on top of this reachitecture.
+Is it going to be ok to add READING_PARTIAL_FIRMWARE here as that is a 
+"what"?
+> -	id(FIRMWARE_PREALLOC_BUFFER, firmware)	\
+My patch series gets rejected any time I make a change to the 
+kernel_read_file* region in linux/fs.h.
+The requirement is for this api to move to another header file outside 
+of linux/fs.h
+It seems the same should apply to your change.
+Could you please add the following patch to the start of you patch 
+series to move the kernel_read_file* to its own include file?
+https://patchwork.kernel.org/patch/11647063/
+>   	id(FIRMWARE_EFI_EMBEDDED, firmware)	\
+>   	id(MODULE, kernel-module)		\
+>   	id(KEXEC_IMAGE, kexec-image)		\
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index c1583d98c5e5..f80ee4ce4669 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -611,19 +611,17 @@ void ima_post_path_mknod(struct dentry *dentry)
+>   int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
+>   {
+>   	/*
+> -	 * READING_FIRMWARE_PREALLOC_BUFFER
+> -	 *
+>   	 * Do devices using pre-allocated memory run the risk of the
+>   	 * firmware being accessible to the device prior to the completion
+>   	 * of IMA's signature verification any more than when using two
+> -	 * buffers?
+> +	 * buffers? It may be desirable to include the buffer address
+> +	 * in this API and walk all the dma_map_single() mappings to check.
+>   	 */
+>   	return 0;
+>   }
+>   
+>   const int read_idmap[READING_MAX_ID] = {
+>   	[READING_FIRMWARE] = FIRMWARE_CHECK,
+> -	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
+>   	[READING_MODULE] = MODULE_CHECK,
+>   	[READING_KEXEC_IMAGE] = KEXEC_KERNEL_CHECK,
+>   	[READING_KEXEC_INITRAMFS] = KEXEC_INITRAMFS_CHECK,
 
