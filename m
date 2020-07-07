@@ -2,166 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D8F2174DC
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 19:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C5C21795F
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2020 22:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728357AbgGGROB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Jul 2020 13:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728349AbgGGRN7 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Jul 2020 13:13:59 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8263EC08C5DC
-        for <linux-integrity@vger.kernel.org>; Tue,  7 Jul 2020 10:13:59 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id t6so20320455pgq.1
-        for <linux-integrity@vger.kernel.org>; Tue, 07 Jul 2020 10:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=HtwXtpph2OoeeE3uD1Wi+DXJnoAVgPcW38Mw9B+yPaE=;
-        b=dzipK/c+2ZtFsuqwsrTcL/d1Yv8zQfVpnmVDF5jdaKLo4l/L0jd2RP/hL4s3Yr7L39
-         jwBA+QtRbToqLcum6mDVLTCl2kTLhyzMXa5bQLsbtwSfa8Ypv7iELew2HUxgzxRYGmGZ
-         naco+TSnJERTyBinS1dUilsIYM1AfRFHFx/sk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=HtwXtpph2OoeeE3uD1Wi+DXJnoAVgPcW38Mw9B+yPaE=;
-        b=a5XoMal2Mf1TIDptK49DSB4D+XBR0Qzh52fGirD47lcK32/gVvFZoLTpU13qpnIBW1
-         WJJ7kP47OBBBq/3plWWlds562s83W7nuzSU1xEstrGpCU4dBQYCu3WhkHfzWlt25eSyL
-         HjYHWtsjyB12oCbdg33RDD7npayBznDbgAr2H0nKO0kCmF6+DeMqybya2UNLNA4u+mMJ
-         eZzkXM3zwaTcbrXHK4Z8x1q7zdhiiKsgWU4qj286VQAYGr+8hb70It5sKVV4ymqKwgQB
-         7I4N7wIj0O+wCK3bui+Z8SOCChYod8l97qi8P49+imwP+5HuJCShoEGN3U/Hziloj8eL
-         nVtQ==
-X-Gm-Message-State: AOAM533FxbMI/IB4cxjJOYWaUcQNi40dDuTa8Z4iY0kNoSXugnvl3W+V
-        aeKI5xZULIYLdqqdepyJHT9LTcnlWfRo3A==
-X-Google-Smtp-Source: ABdhPJyeSq0J8hJSh8EyLFyNDGaXMs3fPXkpyq9VbmAPXqtEFkmdoQuH8aOIqAG0WttuGA3gnpzq7w==
-X-Received: by 2002:a62:8782:: with SMTP id i124mr49547162pfe.267.1594142038788;
-        Tue, 07 Jul 2020 10:13:58 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id j70sm23482082pfd.208.2020.07.07.10.13.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2020 10:13:58 -0700 (PDT)
-Subject: Re: [PATCH v10 9/9] ima: add FIRMWARE_PARTIAL_READ support
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20200706232309.12010-1-scott.branden@broadcom.com>
- <20200706232309.12010-10-scott.branden@broadcom.com>
- <202007061950.F6B3D9E6A@keescook>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <df45cc5b-62d7-21c7-a852-1433a45b68ef@broadcom.com>
-Date:   Tue, 7 Jul 2020 10:13:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1728280AbgGGU2v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Jul 2020 16:28:51 -0400
+Received: from namei.org ([65.99.196.166]:44362 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727908AbgGGU2v (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 7 Jul 2020 16:28:51 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 067KSV3f008755;
+        Tue, 7 Jul 2020 20:28:31 GMT
+Date:   Wed, 8 Jul 2020 06:28:31 +1000 (AEST)
+From:   James Morris <jmorris@namei.org>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+cc:     serge@hallyn.com, john.johansen@canonical.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, dhowells@redhat.com,
+        jarkko.sakkinen@linux.intel.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org
+Subject: Re: [PATCH] Replace HTTP links with HTTPS ones: security
+In-Reply-To: <20200705214512.28498-1-grandmaster@al2klimov.de>
+Message-ID: <alpine.LRH.2.21.2007080628020.1849@namei.org>
+References: <20200705214512.28498-1-grandmaster@al2klimov.de>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <202007061950.F6B3D9E6A@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Kees,
+On Sun, 5 Jul 2020, Alexander A. Klimov wrote:
 
-You and others are certainly more experts in the filesystem and security
-infrastructure of the kernel.
-What I am trying to accomplish is a simple operation:
-request part of a file into a buffer rather than the whole file.
-If someone could add such support I would be more than happy to use it.
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
+> 
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+>           If both the HTTP and HTTPS versions
+>           return 200 OK and serve the same content:
+>             Replace HTTP with HTTPS.
+> 
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 
-This has now bubbled into many other designs issues in the existing 
-codebase.
-I will need more details on your comments - see below.
+Thanks.
+
+Applied to 
+git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git next-general
 
 
-On 2020-07-06 8:08 p.m., Kees Cook wrote:
-> On Mon, Jul 06, 2020 at 04:23:09PM -0700, Scott Branden wrote:
->> Add FIRMWARE_PARTIAL_READ support for integrity
->> measurement on partial reads of firmware files.
-> Hi,
->
-> Several versions ago I'd suggested that the LSM infrastructure handle
-> the "full read" semantics so that individual LSMs don't need to each
-> duplicate the same efforts. As it happens, only IMA is impacted (SELinux
-> ignores everything except modules, and LoadPin only cares about origin
-> not contents).
-Does your patch series "Fix misused kernel_read_file() enums" handle this
-because this suggestion is outside the scope of my change?
->
-> Next is the problem that enum kernel_read_file_id is an object
-> TYPE enum, not a HOW enum. (And it seems I missed the addition of
-> READING_FIRMWARE_PREALLOC_BUFFER, which may share a similar problem.)
-> That it's a partial read doesn't change _what_ you're reading: that's an
-> internal API detail. What happens when I attempt to do a partial read of
-> a kexec image?
-It does not appear there is any user of partial reads of kexec images?
-I have been informed by Greg K-H to not add apis that are not used so 
-such support
-doesn't make sense to add at this time.
->   I'll use kernel_pread_file() and pass READING_KEXEC_IMAGE,
-> but the LSMs will have no idea it's a partial read.
-The addition I am adding is for request_partial_firmware_into_buf.
-In order to do so it adds internal support for partial reads of firmware 
-files,
-not kexec image.
+-- 
+James Morris
+<jmorris@namei.org>
 
-The above seems outside the scope of my patch?
->
-> Finally, what keeps the contents of the file from changing between the
-> first call (which IMA will read the entire file for) and the next reads
-> which will bypass IMA?
-The request is for a partial read.  IMA ensures the whole file integrity 
-even though I only do a partial read.
-The next partial read will re-read and check integrity of file.
->   I'd suggested that the open file must have writes
-> disabled on it (as execve() does).
-The file will be reopened and integrity checked on the next partial read 
-(if there is one).
-So I don't think there is any change to be made here.
-If writes aren't already disabled for a whole file read then that is 
-something that needs to be fixed in the existing code.
->
-> So, please redesign this:
-> - do not add an enum
-I used existing infrastructure provided by Mimi but now looks like it 
-will have to fit with your patches from yesterday.
-> - make the file unwritable for the life of having the handle open
-It's no different than a full file read so no change to be made here.
-> - make the "full read" happen as part of the first partial read so the
->    LSMs don't have to reimplement everything
-Each partial read is an individual operation so I think a "full read" is 
-performed every time
-if your security IMA is enabled.  If someone wants to add a file lock 
-and then partial reads in the kernel
-then that would be different than what is needed by the kernel driver.
->
-> -Kees
->
-Regards,
-Scott
