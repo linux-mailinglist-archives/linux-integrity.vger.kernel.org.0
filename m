@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33897217C5C
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jul 2020 02:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4ED5217D5F
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jul 2020 05:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728683AbgGHAru (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Jul 2020 20:47:50 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17972 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728184AbgGHArt (ORCPT
+        id S1728753AbgGHDGf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Jul 2020 23:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728769AbgGHDGe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Jul 2020 20:47:49 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0680VUbw086164;
-        Tue, 7 Jul 2020 20:47:29 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3252xwscfn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 20:47:28 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0680fQqY113018;
-        Tue, 7 Jul 2020 20:47:28 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3252xwscf2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 20:47:28 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0680UP1Q012228;
-        Wed, 8 Jul 2020 00:47:26 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 322hd7uy4k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jul 2020 00:47:26 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0680k2dq61211110
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Jul 2020 00:46:02 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EAD32A4040;
-        Wed,  8 Jul 2020 00:47:23 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD9E5A4051;
-        Wed,  8 Jul 2020 00:47:20 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.200.130])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Jul 2020 00:47:20 +0000 (GMT)
-Message-ID: <1594169240.23056.143.camel@linux.ibm.com>
-Subject: Re: [PATCH 4/4] module: Add hook for
- security_kernel_post_read_file()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Kees Cook <keescook@chromium.org>, James Morris <jmorris@namei.org>
-Cc:     Jessica Yu <jeyu@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>,
+        Tue, 7 Jul 2020 23:06:34 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90065C08C5E1
+        for <linux-integrity@vger.kernel.org>; Tue,  7 Jul 2020 20:06:34 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id f139so1377823wmf.5
+        for <linux-integrity@vger.kernel.org>; Tue, 07 Jul 2020 20:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=clG40jEocuU8wd1OMuvgXzRO4UKlf5Hl17E/FM+Odb4=;
+        b=JKld2quKagE5gZ7N0UONxJhyhzqQiCZ7vZJrP/oWaxIhLdQat6EFYBsSXfR1z5xzFR
+         tDEe0PNwSAPdlTgrGPYC65QJ1XEpGrvK9l53W1ipZx7Ps7WFZblPfvXRVXl6SNIO6H59
+         qMuWBigh6gQ2kZDXFV/FnmErnLC8LhAArcCgA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=clG40jEocuU8wd1OMuvgXzRO4UKlf5Hl17E/FM+Odb4=;
+        b=YUp+93k9gfGAZrCc/5z3dnqvEf6e2nRQ/zli3d0a9W/gGAhUUceh7+4fcfFhZA3A06
+         UXJh8xUgE9KWXmNFYE6BZXCgmmzlYCONN7YlPy7qyxgu7Xtj+T3a/NGUq7pxFTARh8ca
+         fVWN60N2j/J1X1Z6vrwlRfADZ2U3rx6944TUdMU/1SekLHv1T8+IysryPTZcjRov7wk8
+         U8n2Y2FCEG16xacfWDTPBscoUbMwAEmwuOR/1uOm8xP45Z1SkEy3EptnBMf4GINn/7uv
+         4LZLXp4XD+U/Evc9gjwkzkx97qus+0RGL+cDa4xb2VsiArVgSnalOcThvluSRQH4R87Z
+         Owjg==
+X-Gm-Message-State: AOAM532bw/Uqp4WGDKff6YRUwBmQKtims8besY5Gq06KGHY5iP4T4Nrv
+        LHFb9D+OhFUBKYSpG5OEgKWXPg==
+X-Google-Smtp-Source: ABdhPJwDURq126yewbHhgEiHcWbVtS6SzLoFi5wd0CcswuGQSAZ8LL58AC9V+QfEVIgEfQYx34dymg==
+X-Received: by 2002:a1c:2402:: with SMTP id k2mr7012367wmk.138.1594177593142;
+        Tue, 07 Jul 2020 20:06:33 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id 92sm3769255wrr.96.2020.07.07.20.06.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jul 2020 20:06:32 -0700 (PDT)
+Subject: Re: [PATCH 2/4] fs: Remove FIRMWARE_PREALLOC_BUFFER from
+ kernel_read_file() enums
+To:     Kees Cook <keescook@chromium.org>
+Cc:     James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jessica Yu <jeyu@kernel.org>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Casey Schaufler <casey@schaufler-ca.com>,
@@ -73,70 +73,90 @@ Cc:     Jessica Yu <jeyu@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
         Stephen Boyd <stephen.boyd@linaro.org>,
         Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Tue, 07 Jul 2020 20:47:20 -0400
-In-Reply-To: <20200707081926.3688096-5-keescook@chromium.org>
+        linux-security-module@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
 References: <20200707081926.3688096-1-keescook@chromium.org>
-         <20200707081926.3688096-5-keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-07_14:2020-07-07,2020-07-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- impostorscore=0 phishscore=0 cotscore=-2147483648 priorityscore=1501
- bulkscore=0 clxscore=1015 mlxlogscore=999 adultscore=0 lowpriorityscore=0
- suspectscore=2 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007070158
+ <20200707081926.3688096-3-keescook@chromium.org>
+ <0a5e2c2e-507c-9114-5328-5943f63d707e@broadcom.com>
+ <202007071447.D96AA42ECE@keescook>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <c2e4f5ae-0a2f-454e-6847-c413ca719abf@broadcom.com>
+Date:   Tue, 7 Jul 2020 20:06:23 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <202007071447.D96AA42ECE@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-07-07 at 01:19 -0700, Kees Cook wrote:
-> Calls to security_kernel_load_data() should be paired with a call to
-> security_kernel_post_read_file() with a NULL file argument. Add the
-> missing call so the module contents are visible to the LSMs interested
-> in measuring the module content. (This also paves the way for moving
-> module signature checking out of the module core and into an LSM.)
-> 
-> Cc: Jessica Yu <jeyu@kernel.org>
-> Fixes: c77b8cdf745d ("module: replace the existing LSM hook in init_module")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  kernel/module.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/module.c b/kernel/module.c
-> index 0c6573b98c36..af9679f8e5c6 100644
-> --- a/kernel/module.c
-> +++ b/kernel/module.c
-> @@ -2980,7 +2980,12 @@ static int copy_module_from_user(const void __user *umod, unsigned long len,
->  		return -EFAULT;
->  	}
->  
-> -	return 0;
-> +	err = security_kernel_post_read_file(NULL, (char *)info->hdr,
-> +					     info->len, READING_MODULE);
+Hi Kees,
 
-There was a lot of push back on calling security_kernel_read_file()
-with a NULL file descriptor here.[1]  The result was defining a new
-security hook - security_kernel_load_data - and enumeration -
-LOADING_MODULE.  I would prefer calling the same pre and post security
-hook.
+Thanks for looking at my patch series to see how it relates.
+I see what you're trying to accomplish in various areas of cleanup.
+I'll comment as I go through your individual emails.
+1 comment below.
 
-Mimi
-
-[1] http://kernsec.org/pipermail/linux-security-module-archive/2018-Ma
-y/007110.html
-
-> +	if (err)
-> +		vfree(info->hdr);
-> +
-> +	return err;
->  }
->  
->  static void free_copy(struct load_info *info)
+On 2020-07-07 2:55 p.m., Kees Cook wrote:
+> On Tue, Jul 07, 2020 at 09:42:02AM -0700, Scott Branden wrote:
+>> On 2020-07-07 1:19 a.m., Kees Cook wrote:
+>>> FIRMWARE_PREALLOC_BUFFER is a "how", not a "what", and confuses the LSMs
+>>> that are interested in filtering between types of things. The "how"
+>>> should be an internal detail made uninteresting to the LSMs.
+>>>
+>>> Fixes: a098ecd2fa7d ("firmware: support loading into a pre-allocated buffer")
+>>> Fixes: fd90bc559bfb ("ima: based on policy verify firmware signatures (pre-allocated buffer)")
+>>> Fixes: 4f0496d8ffa3 ("ima: based on policy warn about loading firmware (pre-allocated buffer)")
+>>> [...]
+>>> diff --git a/include/linux/fs.h b/include/linux/fs.h
+>>> index 3f881a892ea7..95fc775ed937 100644
+>>> --- a/include/linux/fs.h
+>>> +++ b/include/linux/fs.h
+>>> @@ -2993,10 +2993,10 @@ static inline void i_readcount_inc(struct inode *inode)
+>>>    #endif
+>>>    extern int do_pipe_flags(int *, int);
+>>> +/* This is a list of *what* is being read, not *how*. */
+>>>    #define __kernel_read_file_id(id) \
+>>>    	id(UNKNOWN, unknown)		\
+>>>    	id(FIRMWARE, firmware)		\
+>> With this change, I'm trying to figure out how the partial firmware read is
+>> going to work on top of this reachitecture.
+>> Is it going to be ok to add READING_PARTIAL_FIRMWARE here as that is a
+>> "what"?
+> No, that's why I said you need to do the implementation within the API
+> and not expect each LSM to implement their own (as I mentioned both
+> times):
+>
+> https://lore.kernel.org/lkml/202005221551.5CA1372@keescook/
+> https://lore.kernel.org/lkml/202007061950.F6B3D9E6A@keescook/
+>
+> I will reply in the thread above.
+>
+>>> -	id(FIRMWARE_PREALLOC_BUFFER, firmware)	\
+>> My patch series gets rejected any time I make a change to the
+>> kernel_read_file* region in linux/fs.h.
+>> The requirement is for this api to move to another header file outside of
+>> linux/fs.h
+>> It seems the same should apply to your change.
+> Well I'm hardly making the same level of changes, but yeah, sure, if
+> that helps move things along, I can include that here.
+>
+>> Could you please add the following patch to the start of you patch series to
+>> move the kernel_read_file* to its own include file?
+>> https://patchwork.kernel.org/patch/11647063/
+> https://lore.kernel.org/lkml/20200706232309.12010-2-scott.branden@broadcom.com/
+>
+> You've included it in include/linux/security.h and that should be pretty
+> comprehensive, it shouldn't be needed in so many .c files.
+Some people want the header files included in each c file they are used.
+Others want header files not included if they are included in another 
+header file.
+I chose the first approach: every file that uses the api includes the 
+header file.
+I didn't know there was a standard approach to only put it in security.h
+>
 
