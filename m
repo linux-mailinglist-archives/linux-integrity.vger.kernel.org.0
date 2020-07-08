@@ -2,121 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A0E21827C
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jul 2020 10:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE79218568
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jul 2020 13:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728260AbgGHI3C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Jul 2020 04:29:02 -0400
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:35463 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728166AbgGHI2d (ORCPT
+        id S1728601AbgGHLB6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Jul 2020 07:01:58 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:28877 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728385AbgGHLB5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Jul 2020 04:28:33 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0U25oKMU_1594196903;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0U25oKMU_1594196903)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 08 Jul 2020 16:28:23 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dhowells@redhat.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, jmorris@namei.org, serge@hallyn.com,
-        nramas@linux.microsoft.com, tusharsu@linux.microsoft.com,
-        zohar@linux.ibm.com, gilad@benyossef.com, pvanleeuwen@rambus.com
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, zhang.jia@linux.alibaba.com,
-        tianjia.zhang@linux.alibaba.com
-Subject: [PATCH v4 6/8] X.509: support OSCCA certificate parse
-Date:   Wed,  8 Jul 2020 16:28:16 +0800
-Message-Id: <20200708082818.5511-7-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200708082818.5511-1-tianjia.zhang@linux.alibaba.com>
-References: <20200708082818.5511-1-tianjia.zhang@linux.alibaba.com>
+        Wed, 8 Jul 2020 07:01:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594206115;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R5NESMLlssU1+fU+MzHpdMP4ATVfk6Mh7mmKV6aiRHE=;
+        b=YS/Nf+ldhQ6NhSsRWzRqzoakNyW4t/dL1YJlj8oBOLXE2ICG8Ob3suSLBmV0foq/wm36Ap
+        72IKAf1nV0FVsf//3Xl374HcKekFSUOGmcy43OJ91ucFvRykWgnx03NVuTaDd45ShYPEZz
+        I27lDeKIZo4q7+PvRui+o7oCGcR/97w=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-86-tvBPpLZ9M0S1YXhd1yXIJQ-1; Wed, 08 Jul 2020 07:01:54 -0400
+X-MC-Unique: tvBPpLZ9M0S1YXhd1yXIJQ-1
+Received: by mail-ed1-f69.google.com with SMTP id d3so44764499edq.14
+        for <linux-integrity@vger.kernel.org>; Wed, 08 Jul 2020 04:01:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=R5NESMLlssU1+fU+MzHpdMP4ATVfk6Mh7mmKV6aiRHE=;
+        b=G+jZAY8x0z/ImvQDUiMv5XXey3Q9s/DsGHz4WFoE3br+MmfQY2MolnY1e70DkFZg7D
+         bjVzzbkRtcXbDWMxPr2KZRd8RbX1ZcecMH5xuMco5Mfzq2rPkV9qNXvG4IROj181i01U
+         Snzo6FxH4QzIHANqxJ5BVvDkuIoN15R6Mg8w0exrwRqEA5ZWyH98Pwiq5ITVzsH099I6
+         ast22F47pCe8MSEL1O9ECkwkGon7fJXCaxx2KUoi2Vo9Xb5LvVc8LsQIRzT2RmRBS7X7
+         Uk23NWiFL1N4o1CH/Ti9nFMy+fv7uVe/H237Re5UdeH/BlxDnsFJuASbK7G84c44bODH
+         y7Dg==
+X-Gm-Message-State: AOAM531Y+ntdCRZ9gRYLwNZjUkTsNCBDHEVGcpd8yvaagELtar/GmQYx
+        H4lbjzJI82Yjh3CuiEC7eRMI74Xq0QJ7E5MysNgn+6p5ZDogV+pSMmLE3HabHwYqsdvUURFBvWD
+        ohGSbpx53gCj+bw9duW23d5o7vZxy
+X-Received: by 2002:aa7:d297:: with SMTP id w23mr63681844edq.49.1594206112970;
+        Wed, 08 Jul 2020 04:01:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyu3h7uw896uTUPxnA3LkPYXdQN/SwlS39PF0fY2ZywJDOPl8R3ZF8j4DbvajdrArtX/ozobQ==
+X-Received: by 2002:aa7:d297:: with SMTP id w23mr63681803edq.49.1594206112726;
+        Wed, 08 Jul 2020 04:01:52 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id p4sm1776088eja.9.2020.07.08.04.01.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jul 2020 04:01:52 -0700 (PDT)
+Subject: Re: [PATCH 0/4] Fix misused kernel_read_file() enums
+To:     Kees Cook <keescook@chromium.org>, James Morris <jmorris@namei.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jessica Yu <jeyu@kernel.org>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        KP Singh <kpsingh@google.com>, Dave Olsthoorn <dave@bewaar.me>,
+        Peter Jones <pjones@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Boyd <stephen.boyd@linaro.org>,
+        Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20200707081926.3688096-1-keescook@chromium.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <3c01073b-c422-dd97-0677-c16fe1158907@redhat.com>
+Date:   Wed, 8 Jul 2020 13:01:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200707081926.3688096-1-keescook@chromium.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The digital certificate format based on SM2 crypto algorithm as
-specified in GM/T 0015-2012. It was published by State Encryption
-Management Bureau, China.
+Hi,
 
-This patch adds the OID object identifier defined by OSCCA. The
-x509 certificate supports sm2-with-sm3 type certificate parsing.
-It uses the standard elliptic curve public key, and the sm2
-algorithm signs the hash generated by sm3.
+On 7/7/20 10:19 AM, Kees Cook wrote:
+> Hi,
+> 
+> In looking for closely at the additions that got made to the
+> kernel_read_file() enums, I noticed that FIRMWARE_PREALLOC_BUFFER
+> and FIRMWARE_EFI_EMBEDDED were added, but they are not appropriate
+> *kinds* of files for the LSM to reason about. They are a "how" and
+> "where", respectively. Remove these improper aliases and refactor the
+> code to adapt to the changes.
+> 
+> Additionally adds in missing calls to security_kernel_post_read_file()
+> in the platform firmware fallback path (to match the sysfs firmware
+> fallback path) and in module loading. I considered entirely removing
+> security_kernel_post_read_file() hook since it is technically unused,
+> but IMA probably wants to be able to measure EFI-stored firmware images,
+> so I wired it up and matched it for modules, in case anyone wants to
+> move the module signature checks out of the module core and into an LSM
+> to avoid the current layering violations.
+> 
+> This touches several trees, and I suspect it would be best to go through
+> James's LSM tree.
+> 
+> Thanks!
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- crypto/asymmetric_keys/x509_cert_parser.c | 14 +++++++++++++-
- include/linux/oid_registry.h              |  6 ++++++
- 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-index 26ec20ef4899..6a8aee22bfd4 100644
---- a/crypto/asymmetric_keys/x509_cert_parser.c
-+++ b/crypto/asymmetric_keys/x509_cert_parser.c
-@@ -234,6 +234,10 @@ int x509_note_pkey_algo(void *context, size_t hdrlen,
- 	case OID_gost2012Signature512:
- 		ctx->cert->sig->hash_algo = "streebog512";
- 		goto ecrdsa;
-+
-+	case OID_sm2_with_sm3:
-+		ctx->cert->sig->hash_algo = "sm3";
-+		goto sm2;
- 	}
- 
- rsa_pkcs1:
-@@ -246,6 +250,11 @@ int x509_note_pkey_algo(void *context, size_t hdrlen,
- 	ctx->cert->sig->encoding = "raw";
- 	ctx->algo_oid = ctx->last_oid;
- 	return 0;
-+sm2:
-+	ctx->cert->sig->pkey_algo = "sm2";
-+	ctx->cert->sig->encoding = "raw";
-+	ctx->algo_oid = ctx->last_oid;
-+	return 0;
- }
- 
- /*
-@@ -266,7 +275,8 @@ int x509_note_signature(void *context, size_t hdrlen,
- 	}
- 
- 	if (strcmp(ctx->cert->sig->pkey_algo, "rsa") == 0 ||
--	    strcmp(ctx->cert->sig->pkey_algo, "ecrdsa") == 0) {
-+	    strcmp(ctx->cert->sig->pkey_algo, "ecrdsa") == 0 ||
-+	    strcmp(ctx->cert->sig->pkey_algo, "sm2") == 0) {
- 		/* Discard the BIT STRING metadata */
- 		if (vlen < 1 || *(const u8 *)value != 0)
- 			return -EBADMSG;
-@@ -456,6 +466,8 @@ int x509_extract_key_data(void *context, size_t hdrlen,
- 	else if (ctx->last_oid == OID_gost2012PKey256 ||
- 		 ctx->last_oid == OID_gost2012PKey512)
- 		ctx->cert->pub->pkey_algo = "ecrdsa";
-+	else if (ctx->last_oid == OID_id_ecPublicKey)
-+		ctx->cert->pub->pkey_algo = "sm2";
- 	else
- 		return -ENOPKG;
- 
-diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-index 657d6bf2c064..48fe3133ff39 100644
---- a/include/linux/oid_registry.h
-+++ b/include/linux/oid_registry.h
-@@ -107,6 +107,12 @@ enum OID {
- 	OID_gostTC26Sign512B,		/* 1.2.643.7.1.2.1.2.2 */
- 	OID_gostTC26Sign512C,		/* 1.2.643.7.1.2.1.2.3 */
- 
-+	/* OSCCA */
-+	OID_sm2,			/* 1.2.156.10197.1.301 */
-+	OID_sm3,			/* 1.2.156.10197.1.401 */
-+	OID_sm2_with_sm3,		/* 1.2.156.10197.1.501 */
-+	OID_sm3WithRSAEncryption,	/* 1.2.156.10197.1.504 */
-+
- 	OID__NR
- };
- 
--- 
-2.17.1
+I've done some quick tests on this series to make sure that
+the efi embedded-firmware support did not regress.
+That still works fine, so this series is;
+
+Tested-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+
+> 
+> -Kees
+> 
+> Kees Cook (4):
+>    firmware_loader: EFI firmware loader must handle pre-allocated buffer
+>    fs: Remove FIRMWARE_PREALLOC_BUFFER from kernel_read_file() enums
+>    fs: Remove FIRMWARE_EFI_EMBEDDED from kernel_read_file() enums
+>    module: Add hook for security_kernel_post_read_file()
+> 
+>   drivers/base/firmware_loader/fallback_platform.c | 12 ++++++++++--
+>   drivers/base/firmware_loader/main.c              |  5 ++---
+>   fs/exec.c                                        |  7 ++++---
+>   include/linux/fs.h                               |  3 +--
+>   include/linux/lsm_hooks.h                        |  6 +++++-
+>   kernel/module.c                                  |  7 ++++++-
+>   security/integrity/ima/ima_main.c                |  6 ++----
+>   7 files changed, 30 insertions(+), 16 deletions(-)
+> 
 
