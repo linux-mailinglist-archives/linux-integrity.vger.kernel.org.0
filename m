@@ -2,118 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F32C217EA2
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jul 2020 06:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726FA217F6A
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jul 2020 08:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbgGHEwK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Jul 2020 00:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729547AbgGHEvu (ORCPT
+        id S1729741AbgGHGHn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Jul 2020 02:07:43 -0400
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:53487 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729754AbgGHGHn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Jul 2020 00:51:50 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB1CC08C5E3
-        for <linux-integrity@vger.kernel.org>; Tue,  7 Jul 2020 21:51:49 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id o8so1491100wmh.4
-        for <linux-integrity@vger.kernel.org>; Tue, 07 Jul 2020 21:51:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=YM0IzGADgX2tl1Mp5AFtyEMSY+GtGZFBS0TzG37PEVo=;
-        b=WUXj1hnghzt3S3Xl8PkHIhKgc4y1+imaFlRTqYId1bXkQETCFWvksi9OaC5IchDWnN
-         /G3tZ3QPpXYdo0LQXnUBTJmqJT9KSLHL1W0ppqEv0GzEoRLMsgv7oAFu9hXuZV3qNwUU
-         EmbTjiaI3Wsm/bQlCldA6nvGa0OVis92xbh6I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=YM0IzGADgX2tl1Mp5AFtyEMSY+GtGZFBS0TzG37PEVo=;
-        b=LIKf8c2+9C0GgLF/6t3wzw1dnqSok6l2y8BK4cPleF7YxGjuQq5NQfxesqn8AXnCdE
-         jiPi2f0ZANgiXZKT7fb0be8F6TJD3KmGN5bA3Vzcov58CQA6C+8eZ0WFbpsCtlN1XpAR
-         EXgoDq8BuUQUaZBKfq8H7pdfPP+7qo8jRuR24t6WAd+SSnFeuiE7EzR4xcAzGJiHBp5+
-         VarcVVZbB4BYFQc3030T6Ou9Z2+boatja54++YFSBWK2e/n8D1QKuT8uGl8YyEi/8nhk
-         0+zAgPk0X1ALKikLt7xMBkaxxghRQeIy5jXwe5uZwfWDr6sbut9lS4HyxVpYf+7tH0V3
-         5zzg==
-X-Gm-Message-State: AOAM530Y0VCJ6UwEhmJ5ChalaSmHdMgKKaXMRipf4veRqFmhRCGI0YxH
-        15MiTQYUvcAQ34yMZ92HHqPF/g==
-X-Google-Smtp-Source: ABdhPJxCmxanR1p+Zv9NtrwZXxJyNGR3oD42FStMXE5QtLw0GpBvXi6oEnvGhedpl11EqTWK1HD1Eg==
-X-Received: by 2002:a1c:ba0b:: with SMTP id k11mr7135332wmf.140.1594183908367;
-        Tue, 07 Jul 2020 21:51:48 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id y7sm3843597wrt.11.2020.07.07.21.51.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2020 21:51:47 -0700 (PDT)
-Subject: Re: [PATCH v10 0/9] firmware: add request_partial_firmware_into_buf
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20200706232309.12010-1-scott.branden@broadcom.com>
- <c8bbabe6-0b25-a816-f95d-8af63010eaf2@gmail.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <6c6126cc-6572-b341-7808-5e573d0cfad8@broadcom.com>
-Date:   Tue, 7 Jul 2020 21:51:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <c8bbabe6-0b25-a816-f95d-8af63010eaf2@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        Wed, 8 Jul 2020 02:07:43 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0U256rZN_1594188458;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0U256rZN_1594188458)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 08 Jul 2020 14:07:39 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     zohar@linux.ibm.com, vt@altlinux.org,
+        linux-integrity@vger.kernel.org
+Cc:     tianjia.zhang@linux.alibaba.com
+Subject: [PATCH ima-evm-utils 1/3] ima-evm-utils: Fix mismatched type checking
+Date:   Wed,  8 Jul 2020 14:07:36 +0800
+Message-Id: <20200708060738.43558-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Florian,
+Even if imaevm_get_hash_algo() returns an error value of -1, it is
+forced to be converted to uint8_t type here, resulting in this error
+not being checked by the if condition. This patch fixes this error.
 
-On 2020-07-07 9:38 p.m., Florian Fainelli wrote:
->
-> On 7/6/2020 4:23 PM, Scott Branden wrote:
->> This patch series adds partial read support via a new call
->> request_partial_firmware_into_buf.
->> Such support is needed when the whole file is not needed and/or
->> only a smaller portion of the file will fit into allocated memory
->> at any one time.
->> In order to accept the enhanced API it has been requested that kernel
->> selftests and upstreamed driver utilize the API enhancement and so
->> are included in this patch series.
->>
->> Also in this patch series is the addition of a new Broadcom VK driver
->> utilizing the new request_firmware_into_buf enhanced API.
->>
->> Further comment followed to add IMA support of the partial reads
->> originating from request_firmware_into_buf calls.  And another request
->> to move existing kernel_read_file* functions to its own include file.
-> Do you have any way to separate the VK drivers submission from the
-> request_partial_firmware_into_buf() work that you are doing? It looks
-> like it is going to require quite a few iterations of this patch set for
-> the firmware/fs/IMA part to be ironed out, so if you could get your
-> driver separated out, it might help you achieve partial success here.
-Originally I did not submit the driver.
-But Greg K-H rejected the pread support unless there was an actual user 
-in the kernel.
-Hence the need to submit this all in the patch series.
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ src/libimaevm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index e6947d7..a9419ee 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -922,7 +922,7 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+ 	hdr->version = (uint8_t) DIGSIG_VERSION_2;
+ 
+ 	hdr->hash_algo = imaevm_get_hash_algo(algo);
+-	if (hdr->hash_algo == -1) {
++	if (hdr->hash_algo == (uint8_t)-1) {
+ 		log_err("sign_hash_v2: hash algo is unknown: %s\n", algo);
+ 		return -1;
+ 	}
+-- 
+2.17.1
 
