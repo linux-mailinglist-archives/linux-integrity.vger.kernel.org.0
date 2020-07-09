@@ -2,81 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EE3219B3F
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jul 2020 10:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F231F219F36
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jul 2020 13:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbgGIIkd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Jul 2020 04:40:33 -0400
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:42050 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726309AbgGIIka (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Jul 2020 04:40:30 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01355;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0U2BJEwx_1594284023;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0U2BJEwx_1594284023)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 09 Jul 2020 16:40:23 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dhowells@redhat.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, jmorris@namei.org, serge@hallyn.com,
-        nramas@linux.microsoft.com, tusharsu@linux.microsoft.com,
-        zohar@linux.ibm.com, vt@altlinux.org, gilad@benyossef.com,
-        pvanleeuwen@rambus.com, zhang.jia@linux.alibaba.com
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, tianjia.zhang@linux.alibaba.com
-Subject: [PATCH v5 8/8] integrity: Asymmetric digsig supports SM2-with-SM3 algorithm
-Date:   Thu,  9 Jul 2020 16:40:15 +0800
-Message-Id: <20200709084015.21886-9-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200709084015.21886-1-tianjia.zhang@linux.alibaba.com>
-References: <20200709084015.21886-1-tianjia.zhang@linux.alibaba.com>
+        id S1727047AbgGILmU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Jul 2020 07:42:20 -0400
+Received: from mga17.intel.com ([192.55.52.151]:5195 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726433AbgGILmU (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 9 Jul 2020 07:42:20 -0400
+IronPort-SDR: skiGhcDJ0FQz83L6XuKIPDsQbBB8jmZeHqVBIAknAoZxmchflmVeDdRTKjoQHNsQmzMLnYi3XC
+ W4qeCSVQjlQQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9676"; a="128046864"
+X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
+   d="scan'208";a="128046864"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 04:42:19 -0700
+IronPort-SDR: XE0d1mBqu7YGw3U+LrPHZjvrWGV04Jh6iYCGGr5seNBGkinrOOER7Cws5lhVPO97K6NPbKyLsU
+ 3uEAC/sbeqiw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
+   d="scan'208";a="324195429"
+Received: from nk4-mobl1.gar.corp.intel.com (HELO localhost) ([10.252.52.252])
+  by orsmga007.jf.intel.com with ESMTP; 09 Jul 2020 04:42:15 -0700
+Date:   Thu, 9 Jul 2020 14:42:13 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Masahisa Kojima <masahisa.kojima@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        ardb@kernel.org, devicetree <devicetree@vger.kernel.org>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca
+Subject: Re: [PATCH v3 0/2] synquacer: add TPM support
+Message-ID: <20200709114213.GB683620@linux.intel.com>
+References: <20200708131424.18729-1-masahisa.kojima@linaro.org>
+ <20200708162017.GB549022@linux.intel.com>
+ <CADQ0-X9im8yVVVJbJL5Ssaa49UTOw+M=tYrfhNoODUaY723O8A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADQ0-X9im8yVVVJbJL5Ssaa49UTOw+M=tYrfhNoODUaY723O8A@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Asymmetric digsig supports SM2-with-SM3 algorithm combination,
-so that IMA can also verify SM2's signature data.
+On Thu, Jul 09, 2020 at 08:34:27AM +0900, Masahisa Kojima wrote:
+> Hi Jakko,
+> 
+> > Overally the code looks great. You've run it through checkpatch.pl?
+> 
+> Yes, I have run checkpatch.pl and removed errors.
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- security/integrity/digsig_asymmetric.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+OK, cool.
 
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index 4e0d6778277e..9350fcfb9bf2 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -99,14 +99,22 @@ int asymmetric_verify(struct key *keyring, const char *sig,
- 	memset(&pks, 0, sizeof(pks));
- 
- 	pks.hash_algo = hash_algo_name[hdr->hash_algo];
--	if (hdr->hash_algo == HASH_ALGO_STREEBOG_256 ||
--	    hdr->hash_algo == HASH_ALGO_STREEBOG_512) {
-+	switch (hdr->hash_algo) {
-+	case HASH_ALGO_STREEBOG_256:
-+	case HASH_ALGO_STREEBOG_512:
- 		/* EC-RDSA and Streebog should go together. */
- 		pks.pkey_algo = "ecrdsa";
- 		pks.encoding = "raw";
--	} else {
-+		break;
-+	case HASH_ALGO_SM3_256:
-+		/* SM2 and SM3 should go together. */
-+		pks.pkey_algo = "sm2";
-+		pks.encoding = "raw";
-+		break;
-+	default:
- 		pks.pkey_algo = "rsa";
- 		pks.encoding = "pkcs1";
-+		break;
- 	}
- 	pks.digest = (u8 *)data;
- 	pks.digest_size = datalen;
--- 
-2.17.1
-
+/Jarkko
