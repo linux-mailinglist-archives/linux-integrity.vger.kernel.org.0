@@ -2,151 +2,150 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A07321A23F
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jul 2020 16:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1583521A514
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jul 2020 18:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727864AbgGIOg4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Jul 2020 10:36:56 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11704 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726475AbgGIOg4 (ORCPT
+        id S1728267AbgGIQrI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Jul 2020 12:47:08 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:24378 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727992AbgGIQrF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Jul 2020 10:36:56 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 069EWbvp029313;
-        Thu, 9 Jul 2020 10:36:54 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32637wc4sr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jul 2020 10:36:54 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 069EWdXT029426;
-        Thu, 9 Jul 2020 10:36:53 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32637wc4r9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jul 2020 10:36:53 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 069EWbco029964;
-        Thu, 9 Jul 2020 14:36:51 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 325k2qrfs1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jul 2020 14:36:51 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 069EanQu66191798
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Jul 2020 14:36:49 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04219A405B;
-        Thu,  9 Jul 2020 14:36:49 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 51E21A4054;
-        Thu,  9 Jul 2020 14:36:48 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.231.222])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Jul 2020 14:36:48 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH 3/3] ima-evm-utils: support providing the TPM 1.2 PCRs as a file
-Date:   Thu,  9 Jul 2020 10:36:36 -0400
-Message-Id: <1594305396-21280-4-git-send-email-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.7.5
-In-Reply-To: <1594305396-21280-1-git-send-email-zohar@linux.ibm.com>
-References: <1594305396-21280-1-git-send-email-zohar@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-09_08:2020-07-09,2020-07-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 mlxlogscore=999 clxscore=1015 malwarescore=0
- priorityscore=1501 spamscore=0 suspectscore=1 phishscore=0 mlxscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007090104
+        Thu, 9 Jul 2020 12:47:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594313224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UspVOw6XAGLtilKBpYwpbaqQeMaCCmM2aVuZ489RO+o=;
+        b=EIHfNI3xVvIsBRzL2YP/KAU0liOt+LS2U/8JbzzBOw9eQH6SjdHa3vtJbM6nVJ3bzXRq7Y
+        quwn+Yzb9FhS7S872CFUeap8KcH7T/OHW0b1o8fICNX8yb+c1r852AtXzltRLnwKuxpetZ
+        plV0wfbRKCxNSQt/OgZQAzV9ftwujKg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-486-oDlM1zC6Nci7D7IE62glIQ-1; Thu, 09 Jul 2020 12:46:55 -0400
+X-MC-Unique: oDlM1zC6Nci7D7IE62glIQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9C8D5E918;
+        Thu,  9 Jul 2020 16:46:53 +0000 (UTC)
+Received: from localhost (ovpn-116-137.gru2.redhat.com [10.97.116.137])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4B7085BAEA;
+        Thu,  9 Jul 2020 16:46:50 +0000 (UTC)
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
+        stable@vger.kernel.org, Bruno Meneguele <bmeneg@redhat.com>
+Subject: [PATCH v5] ima: move APPRAISE_BOOTPARAM dependency on ARCH_POLICY to runtime
+Date:   Thu,  9 Jul 2020 13:46:47 -0300
+Message-Id: <20200709164647.45153-1-bmeneg@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-"evmctl ima_measurement" walks the IMA measurement list calculating the
-PCRs and verifies the calculated values against the system's PCRs.
-Instead of reading the system's PCRs, provide the PCRs as a file.  For
-TPM 1.2 the PCRs are exported via a securityfs file.
+APPRAISE_BOOTPARAM has been marked as dependent on !ARCH_POLICY in compile
+time, enforcing the appraisal whenever the kernel had the arch policy option
+enabled.
 
-Verifying the IMA measurement list against the exported TPM 1.2 PCRs
-file may be used remotely for regression testing.  If used in a
-production environment, the provided TPM PCRs must be compared with
-those included in the TPM 1.2 quote as well.
+However it breaks systems where the option is set but the system didn't
+boot in a "secure boot" platform. In this scenario, anytime an appraisal
+policy (i.e. ima_policy=appraisal_tcb) is used it will be forced, without
+giving the user the opportunity to label the filesystem, before enforcing
+integrity.
 
-This patch defines an evmctl ima_measurement "--pcrs <filename>" option.
+Considering the ARCH_POLICY is only effective when secure boot is actually
+enabled this patch remove the compile time dependency and move it to a
+runtime decision, based on the secure boot state of that platform.
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+With this patch:
+
+- x86-64 with secure boot enabled
+
+[    0.004305] Secure boot enabled
+...
+[    0.015651] Kernel command line: <...> ima_policy=appraise_tcb ima_appraise=fix
+[    0.015682] ima: appraise boot param ignored: secure boot enabled
+
+- powerpc with secure boot disabled
+
+[    0.000000] Kernel command line: <...> ima_policy=appraise_tcb ima_appraise=fix
+[    0.000000] Secure boot mode disabled
+...
+< nothing about boot param ignored >
+
+System working fine without secure boot and with both options set:
+
+CONFIG_IMA_APPRAISE_BOOTPARAM=y
+CONFIG_IMA_ARCH_POLICY=y
+
+Audit logs pointing to "missing-hash" but still being able to execute due to
+ima_appraise=fix:
+
+type=INTEGRITY_DATA msg=audit(07/09/2020 12:30:27.778:1691) : pid=4976
+uid=root auid=root ses=2
+subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=appraise_data
+cause=missing-hash comm=bash name=/usr/bin/evmctl dev="dm-0" ino=493150
+res=no
+
+Cc: stable@vger.kernel.org
+Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
+Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
 ---
- src/evmctl.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+Changelog:
+v5:
+  - add pr_info() to inform user the ima_appraise= boot param is being
+	ignored due to secure boot enabled (Nayna)
+  - add some testing results to commit log
+v4:
+  - instead of change arch_policy loading code, check secure boot state at
+	"ima_appraise=" parameter handler (Mimi)
+v3:
+  - extend secure boot arch checker to also consider trusted boot
+  - enforce IMA appraisal when secure boot is effectively enabled (Nayna)
+  - fix ima_appraise flag assignment by or'ing it (Mimi)
+v2:
+  - pr_info() message prefix correction
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 814aa6b75571..21ae1c7ca5a7 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -160,6 +160,8 @@ struct tpm_bank_info {
- 	uint8_t pcr[NUM_PCRS][MAX_DIGEST_SIZE];
- };
+ security/integrity/ima/Kconfig        | 2 +-
+ security/integrity/ima/ima_appraise.c | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index edde88dbe576..62dc11a5af01 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -232,7 +232,7 @@ config IMA_APPRAISE_REQUIRE_POLICY_SIGS
  
-+static char *pcrfile;
-+
- static int bin2file(const char *file, const char *ext, const unsigned char *data, int len)
+ config IMA_APPRAISE_BOOTPARAM
+ 	bool "ima_appraise boot parameter"
+-	depends on IMA_APPRAISE && !IMA_ARCH_POLICY
++	depends on IMA_APPRAISE
+ 	default y
+ 	help
+ 	  This option enables the different "ima_appraise=" modes
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index a9649b04b9f1..884de471b38a 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -19,6 +19,11 @@
+ static int __init default_appraise_setup(char *str)
  {
- 	FILE *fp;
-@@ -1377,12 +1379,18 @@ static char *misc_pcrs = "/sys/class/misc/tpm0/device/pcrs";
- /* Read all of the TPM 1.2 PCRs */
- static int tpm_pcr_read(struct tpm_bank_info *tpm_banks, int len)
- {
--	FILE *fp;
-+	FILE *fp = NULL;
- 	char *p, pcr_str[7], buf[70]; /* length of the TPM string */
- 	int result = -1;
- 	int i = 0;
- 
--	fp = fopen(pcrs, "r");
-+	/* Use the provided TPM 1.2 pcrs file */
-+	if (pcrfile)
-+		fp = fopen(pcrfile, "r");
+ #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
++	if (arch_ima_get_secureboot()) {
++		pr_info("appraise boot param ignored: secure boot enabled");
++		return 1;
++	}
 +
-+	if (!fp)
-+		fp = fopen(pcrs, "r");
-+
- 	if (!fp)
- 		fp = fopen(misc_pcrs, "r");
- 
-@@ -2347,7 +2355,7 @@ struct command cmds[] = {
- 	{"ima_verify", cmd_verify_ima, 0, "file", "Verify IMA signature (for debugging).\n"},
- 	{"ima_setxattr", cmd_setxattr_ima, 0, "[--sigfile file]", "Set IMA signature from sigfile\n"},
- 	{"ima_hash", cmd_hash_ima, 0, "file", "Make file content hash.\n"},
--	{"ima_measurement", cmd_ima_measurement, 0, "[--validate] [--verify] file", "Verify measurement list (experimental).\n"},
-+	{"ima_measurement", cmd_ima_measurement, 0, "[--validate] [--verify] [--pcrs file] file", "Verify measurement list (experimental).\n"},
- 	{"ima_boot_aggregate", cmd_ima_bootaggr, 0, "[file]", "Calculate per TPM bank boot_aggregate digests\n"},
- 	{"ima_fix", cmd_ima_fix, 0, "[-t fdsxm] path", "Recursively fix IMA/EVM xattrs in fix mode.\n"},
- 	{"ima_clear", cmd_ima_clear, 0, "[-t fdsxm] path", "Recursively remove IMA/EVM xattrs.\n"},
-@@ -2388,6 +2396,7 @@ static struct option opts[] = {
- 	{"xattr-user", 0, 0, 140},
- 	{"validate", 0, 0, 141},
- 	{"verify", 0, 0, 142},
-+	{"pcrs", 1, 0, 143},
- 	{}
- 
- };
-@@ -2572,6 +2581,9 @@ int main(int argc, char *argv[])
- 		case 142: /* --verify */
- 			verify = 1;
- 			break;
-+		case 143:
-+			pcrfile = optarg;
-+			break;
- 		case '?':
- 			exit(1);
- 			break;
+ 	if (strncmp(str, "off", 3) == 0)
+ 		ima_appraise = 0;
+ 	else if (strncmp(str, "log", 3) == 0)
 -- 
-2.7.5
+2.26.2
 
