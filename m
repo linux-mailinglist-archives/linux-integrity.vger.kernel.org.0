@@ -2,150 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1583521A514
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jul 2020 18:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AAD21AB0C
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 00:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728267AbgGIQrI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Jul 2020 12:47:08 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:24378 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727992AbgGIQrF (ORCPT
+        id S1726908AbgGIW6e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Jul 2020 18:58:34 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55292 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726889AbgGIW6e (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Jul 2020 12:47:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594313224;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UspVOw6XAGLtilKBpYwpbaqQeMaCCmM2aVuZ489RO+o=;
-        b=EIHfNI3xVvIsBRzL2YP/KAU0liOt+LS2U/8JbzzBOw9eQH6SjdHa3vtJbM6nVJ3bzXRq7Y
-        quwn+Yzb9FhS7S872CFUeap8KcH7T/OHW0b1o8fICNX8yb+c1r852AtXzltRLnwKuxpetZ
-        plV0wfbRKCxNSQt/OgZQAzV9ftwujKg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-486-oDlM1zC6Nci7D7IE62glIQ-1; Thu, 09 Jul 2020 12:46:55 -0400
-X-MC-Unique: oDlM1zC6Nci7D7IE62glIQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9C8D5E918;
-        Thu,  9 Jul 2020 16:46:53 +0000 (UTC)
-Received: from localhost (ovpn-116-137.gru2.redhat.com [10.97.116.137])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4B7085BAEA;
-        Thu,  9 Jul 2020 16:46:50 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
-        stable@vger.kernel.org, Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH v5] ima: move APPRAISE_BOOTPARAM dependency on ARCH_POLICY to runtime
-Date:   Thu,  9 Jul 2020 13:46:47 -0300
-Message-Id: <20200709164647.45153-1-bmeneg@redhat.com>
+        Thu, 9 Jul 2020 18:58:34 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7CF3B20B4908;
+        Thu,  9 Jul 2020 15:58:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7CF3B20B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1594335513;
+        bh=hSzJx2wtRzs8tVYEA8JZveVIM1/46jY2Nc6LR+6a8eQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rSk5WGGOxrF25+SM75K/PBmOHPatBSoFi5EA1+37GzkrFox6aXG2W26Y4Rlpu8Szf
+         5yXyDBc3XeLf2DF2jjnRfAGARelF7M2sQA7qCez+gwAoizU4ysAQcEWlaoGkjHGLzo
+         jZk1MKmAQcVBakotL38XMKeFn0+YsOHsbgEn+3SQ=
+Date:   Thu, 9 Jul 2020 17:58:23 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Peter Jones <pjones@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Petr Vandrovec <petr@vmware.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm: Require that all digests are present in
+ TCG_PCR_EVENT2 structures
+Message-ID: <20200709225823.GA4939@sequoia>
+References: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
+ <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
+ <20200617230958.GC62794@linux.intel.com>
+ <20200630183321.GE4694@sequoia>
+ <20200702235718.GI31291@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200702235718.GI31291@linux.intel.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-APPRAISE_BOOTPARAM has been marked as dependent on !ARCH_POLICY in compile
-time, enforcing the appraisal whenever the kernel had the arch policy option
-enabled.
+On 2020-07-03 02:57:18, Jarkko Sakkinen wrote:
+> On Tue, Jun 30, 2020 at 01:33:21PM -0500, Tyler Hicks wrote:
+> > Jarkko, is this an ack from you?
+> > 
+> > Is there anything I can do to help along this fix?
+> > 
+> > I've spoke with two others that have poured through these specs to
+> > implement firmware event log parsers and they thought the change made
+> > sense.
+> > 
+> > Tyler
+> 
+> I revisited the original patch and this stroke into my eye:
+> 
+> "This is true, for example, when firmware passes the event log to the
+> kernel via a reserved memory region described in device tree."
+> 
+> During this discussion you gave an explanation what can trigger the bug
+> but in the commit message nothing anchors to anything.
+> 
+> Please give a concrete example what can trigger the issue directly in
+> the commit message instead. It's obviously needed.
+> 
+> In addition, you could also rewrite the existing inline comment to be
+> something more reasonable to the context.
 
-However it breaks systems where the option is set but the system didn't
-boot in a "secure boot" platform. In this scenario, anytime an appraisal
-policy (i.e. ima_policy=appraisal_tcb) is used it will be forced, without
-giving the user the opportunity to label the filesystem, before enforcing
-integrity.
+These are all fair points and I also see that there's a new conflict
+with the TPM next branch. I'll rebase the patch on the current next
+branch, expand on the commit message, and improve the comment in v2.
 
-Considering the ARCH_POLICY is only effective when secure boot is actually
-enabled this patch remove the compile time dependency and move it to a
-runtime decision, based on the secure boot state of that platform.
+Tyler
 
-With this patch:
-
-- x86-64 with secure boot enabled
-
-[    0.004305] Secure boot enabled
-...
-[    0.015651] Kernel command line: <...> ima_policy=appraise_tcb ima_appraise=fix
-[    0.015682] ima: appraise boot param ignored: secure boot enabled
-
-- powerpc with secure boot disabled
-
-[    0.000000] Kernel command line: <...> ima_policy=appraise_tcb ima_appraise=fix
-[    0.000000] Secure boot mode disabled
-...
-< nothing about boot param ignored >
-
-System working fine without secure boot and with both options set:
-
-CONFIG_IMA_APPRAISE_BOOTPARAM=y
-CONFIG_IMA_ARCH_POLICY=y
-
-Audit logs pointing to "missing-hash" but still being able to execute due to
-ima_appraise=fix:
-
-type=INTEGRITY_DATA msg=audit(07/09/2020 12:30:27.778:1691) : pid=4976
-uid=root auid=root ses=2
-subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=appraise_data
-cause=missing-hash comm=bash name=/usr/bin/evmctl dev="dm-0" ino=493150
-res=no
-
-Cc: stable@vger.kernel.org
-Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
-Changelog:
-v5:
-  - add pr_info() to inform user the ima_appraise= boot param is being
-	ignored due to secure boot enabled (Nayna)
-  - add some testing results to commit log
-v4:
-  - instead of change arch_policy loading code, check secure boot state at
-	"ima_appraise=" parameter handler (Mimi)
-v3:
-  - extend secure boot arch checker to also consider trusted boot
-  - enforce IMA appraisal when secure boot is effectively enabled (Nayna)
-  - fix ima_appraise flag assignment by or'ing it (Mimi)
-v2:
-  - pr_info() message prefix correction
-
- security/integrity/ima/Kconfig        | 2 +-
- security/integrity/ima/ima_appraise.c | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index edde88dbe576..62dc11a5af01 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -232,7 +232,7 @@ config IMA_APPRAISE_REQUIRE_POLICY_SIGS
- 
- config IMA_APPRAISE_BOOTPARAM
- 	bool "ima_appraise boot parameter"
--	depends on IMA_APPRAISE && !IMA_ARCH_POLICY
-+	depends on IMA_APPRAISE
- 	default y
- 	help
- 	  This option enables the different "ima_appraise=" modes
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index a9649b04b9f1..884de471b38a 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -19,6 +19,11 @@
- static int __init default_appraise_setup(char *str)
- {
- #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-+	if (arch_ima_get_secureboot()) {
-+		pr_info("appraise boot param ignored: secure boot enabled");
-+		return 1;
-+	}
-+
- 	if (strncmp(str, "off", 3) == 0)
- 		ima_appraise = 0;
- 	else if (strncmp(str, "log", 3) == 0)
--- 
-2.26.2
-
+> 
+> /Jarkko
