@@ -2,160 +2,187 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3049E21BCBE
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 20:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AD321BCE7
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 20:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728275AbgGJSDv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Jul 2020 14:03:51 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:46254 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728267AbgGJSDv (ORCPT
+        id S1726872AbgGJS0A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Jul 2020 14:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727901AbgGJSZ7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Jul 2020 14:03:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594404230;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XN24PGjpaeX+61Yzd0yY+PTaQgU43gwsWj3Uzow6ocE=;
-        b=dp6yI/x3UrmaZfgYeUDAlAQ7hRYJ80+MxpdO4krIsANx/Kvez0rpE1CjBuE1kDHZud8cgI
-        oFcTSne+GwQdp0ORgT5y28BiwG7d9hcgDVtVvQaEYtmELYx2IHW/UmuBm30SpYgKHnGXxE
-        99n2k7V4IdnMrRbS7B/8SM8NX0xKen0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-90-_VnW-mdIMea6fAcU4Rjghg-1; Fri, 10 Jul 2020 14:03:41 -0400
-X-MC-Unique: _VnW-mdIMea6fAcU4Rjghg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4A628027E4;
-        Fri, 10 Jul 2020 18:03:39 +0000 (UTC)
-Received: from localhost (ovpn-116-13.gru2.redhat.com [10.97.116.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 518907EF89;
-        Fri, 10 Jul 2020 18:03:39 +0000 (UTC)
-Date:   Fri, 10 Jul 2020 15:03:38 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-integrity@vger.kernel.org, erichte@linux.ibm.com,
-        nayna@linux.ibm.com, stable@vger.kernel.org
-Subject: Re: [PATCH v5] ima: move APPRAISE_BOOTPARAM dependency on
- ARCH_POLICY to runtime
-Message-ID: <20200710180338.GA10547@glitch>
-References: <20200709164647.45153-1-bmeneg@redhat.com>
- <1594401804.14405.8.camel@linux.ibm.com>
+        Fri, 10 Jul 2020 14:25:59 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D19C08C5DD
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Jul 2020 11:25:59 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id f12so7097487eja.9
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Jul 2020 11:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mxvJ+Fty4K+1j3Y1eh6Bkx0XaBM+d2fy42IQC4UlRuo=;
+        b=NXWKXJ6GQCKHQi13Z7gjc88eeS0hvvz4tGk2iYMcV5QSgNUJNYTnmS7BTx0yqrNtsz
+         SFUJc1wRLVwL2p3HNbsfUm1WbLedW+TT+PyxxvwRydpPFVDDdOKPgKD0UySUkBqJrz5O
+         bQrGlYWFWDaiujnsTzPboDZpoTdVs7RiQSGNM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mxvJ+Fty4K+1j3Y1eh6Bkx0XaBM+d2fy42IQC4UlRuo=;
+        b=Pij9yS35UmFuLrIfphKh3/706FV5+5YhE2XsZGED3WiwudGtI11kkq+7Yb3duL5ehl
+         NT6bylPX5t+g0oBluS3joVX5HUP/yCXP3vHSKKETeXqWrrDidEjjQe0e49mCcMo+yY8S
+         6g7d4Qti5Ag/nvu7M4B9oMPB2ZZVXMqNrbGCr1OloHyOjWbVLDMuDPpMEEQyeXbowoAl
+         uuB1dx5nlQ/hL5BEewBqB6nKDJiVe5QNogXwF05Nb3eMMBGiaUIlPtl1Ag075vIzu/yO
+         XS72Q1qzccdQ1IxLy7n/Ift2l5TtwflvAExnNjYtR1WiniS+gzUdomd5ogrZQZbl0xLY
+         HUEw==
+X-Gm-Message-State: AOAM530N64LuTwJZVNXDsiHJZFKxVw3OVFTw8iIekd5JIV2LSfnAergr
+        Xg7gKUto1/WzCC88RPKjq/9PGGQK5NI=
+X-Google-Smtp-Source: ABdhPJzfIIDstJBPEvID4kVKelIsRfMBlZ87hRle3hCoQzbfcDP2qOr8vqEUv3bxVdZESJQ8chancw==
+X-Received: by 2002:a17:906:2988:: with SMTP id x8mr55827203eje.141.1594405557717;
+        Fri, 10 Jul 2020 11:25:57 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id i2sm5106928edk.30.2020.07.10.11.25.56
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jul 2020 11:25:56 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id p20so7076863ejd.13
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Jul 2020 11:25:56 -0700 (PDT)
+X-Received: by 2002:a17:906:c04d:: with SMTP id bm13mr53490468ejb.321.1594405555807;
+ Fri, 10 Jul 2020 11:25:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1594401804.14405.8.camel@linux.ibm.com>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=bmeneg@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IS0zKkzwUGydFO0o"
-Content-Disposition: inline
+References: <20200710002209.6757-1-apronin@chromium.org> <20200710114000.GD2614@linux.intel.com>
+In-Reply-To: <20200710114000.GD2614@linux.intel.com>
+From:   Andrey Pronin <apronin@chromium.org>
+Date:   Fri, 10 Jul 2020 11:25:44 -0700
+X-Gmail-Original-Message-ID: <CAP7wa8LfEtEATbENjr18jTXShT+YmrAoDt4k9FK1SLpxVqViog@mail.gmail.com>
+Message-ID: <CAP7wa8LfEtEATbENjr18jTXShT+YmrAoDt4k9FK1SLpxVqViog@mail.gmail.com>
+Subject: Re: [PATCH] tpm: avoid accessing cleared ops during shutdown
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <groeck@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---IS0zKkzwUGydFO0o
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jul 10, 2020 at 4:40 AM Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Thu, Jul 09, 2020 at 05:22:09PM -0700, Andrey Pronin wrote:
+> > This patch prevents NULL dereferencing when using chip->ops while
+> > sending TPM2_Shutdown command if both tpm_class_shutdown handler and
+> > tpm_del_char_device are called during system shutdown.
+> >
+> > Both these handlers set chip->ops to NULL but don't check if it's
+> > already NULL when they are called before using it.
+> >
+> > This issue was revealed in Chrome OS after a recent set of changes
+> > to the unregister order for spi controllers, such as:
+> >   b4c6230bb0ba spi: Fix controller unregister order
+> >   f40913d2dca1 spi: pxa2xx: Fix controller unregister order
+> > and similar for other controllers.
+>
+> I'm not sure I fully understand the scenario. When does thi happen?
 
-On Fri, Jul 10, 2020 at 01:23:24PM -0400, Mimi Zohar wrote:
-> On Thu, 2020-07-09 at 13:46 -0300, Bruno Meneguele wrote:
-> > APPRAISE_BOOTPARAM has been marked as dependent on !ARCH_POLICY in comp=
-ile
-> > time, enforcing the appraisal whenever the kernel had the arch policy o=
-ption
-> > enabled.
->=20
-> > However it breaks systems where the option is set but the system didn't
-> > boot in a "secure boot" platform. In this scenario, anytime an appraisa=
-l
-> > policy (i.e. ima_policy=3Dappraisal_tcb) is used it will be forced, wit=
-hout
-> > giving the user the opportunity to label the filesystem, before enforci=
-ng
-> > integrity.
-> >=20
-> > Considering the ARCH_POLICY is only effective when secure boot is actua=
-lly
-> > enabled this patch remove the compile time dependency and move it to a
-> > runtime decision, based on the secure boot state of that platform.
->=20
-> Perhaps we could simplify this patch description a bit?
->=20
-> The IMA_APPRAISE_BOOTPARAM config allows enabling different
-> "ima_appraise=3D" modes - log, fix, enforce - at run time, but not when
-> IMA architecture specific policies are enabled. =A0This prevents
-> properly labeling the filesystem on systems where secure boot is
-> supported, but not enabled on the platform. =A0Only when secure boot is
-> enabled, should these IMA appraise modes be disabled.
->=20
-> This patch removes the compile time dependency and makes it a runtime
-> decision, based on the secure boot state of that platform.
->=20
+This happens during system shutdown.
+Here a sample stack trace from the panic:
 
-Sounds good to me.
+BUG: unable to handle kernel NULL pointer dereference at 0000000000000058
+...
+Call Trace:
+ tpm_transmit_cmd+0x21/0x7f
+ tpm2_shutdown+0x84/0xc6
+ tpm_chip_unregister+0xa2/0xb9
+ cr50_spi_remove+0x19/0x26
+ spi_drv_remove+0x2a/0x42
+ device_release_driver_internal+0x123/0x1ec
+ bus_remove_device+0xe8/0x111
+ device_del+0x1bf/0x319
+ ? spi_unregister_controller+0xfc/0xfc
+ device_unregister+0x12/0x28
+ __unregister+0xe/0x12
+ device_for_each_child+0x79/0xb8
+ spi_unregister_controller+0x27/0xfc
+ pxa2xx_spi_remove+0x45/0xb4
+ device_shutdown+0x181/0x1d3
+ kernel_restart+0x12/0x56
+ SyS_reboot+0x16a/0x1e7
+ do_syscall_64+0x6b/0xf7
+ entry_SYSCALL_64_after_hwframe+0x41/0xa6
 
-> <snip>
->=20
-> > diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity=
-/ima/ima_appraise.c
-> > index a9649b04b9f1..884de471b38a 100644
-> > --- a/security/integrity/ima/ima_appraise.c
-> > +++ b/security/integrity/ima/ima_appraise.c
-> > @@ -19,6 +19,11 @@
-> >  static int __init default_appraise_setup(c
->=20
-> > har *str)
-> >  {
-> >  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-> > +=09if (arch_ima_get_secureboot()) {
-> > +=09=09pr_info("appraise boot param ignored: secure boot enabled");
->=20
-> Instead of a generic statement, is it possible to include the actual
-> option being denied? =A0Perhaps something like: "Secure boot enabled,
-> ignoring %s boot command line option"
->=20
-> Mimi
->=20
+> Why does not tpm_del_char_device need this?
 
-Yes, sure.
+"Not" is a typo in the sentence above, right? tpm_del_char_device *does*
+need the fix. When tpm_class_shutdown is called it sets chip->ops to
+NULL. If tpm_del_char_device is called after that, it doesn't check if
+chip->ops is NULL (normal kernel API and char device API calls go
+through tpm_try_get_ops, but tpm_del_char_device doesn't) and proceeds to
+call tpm2_shutdown(), which tries sending the command and dereferences
+chip->ops.
 
-Thanks!
+> The changes listed tell
+> me nothing. Why they have this effect?
 
-> > +=09=09return 1;
-> > +=09}
-> > +
-> >  =09if (strncmp(str, "off", 3) =3D=3D 0)
-> >  =09=09ima_appraise =3D 0;
-> >  =09else if (strncmp(str, "log", 3) =3D=3D 0)
->=20
+"spi: pxa2xx: Fix controller unregister order" adds a spi_unregister_controller
+call to pxa2xx_spi_remove, which internally calls tpm_del_char_device, which
+results in the stack trace leading to the panic above.
 
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
+>
+> I'm just trying to understand whether this could be a regression or
+> not.
+>
+> I neither understand what you mean by "and similar for other
+> controllers."
 
---IS0zKkzwUGydFO0o
-Content-Type: application/pgp-signature; name="signature.asc"
+There was a series of spi unregister order changes for various
+spi controllers, including the following:
+1c6221b430a0 spi: bcm2835: Fix controller unregister order
+f40913d2dca1 spi: pxa2xx: Fix controller unregister order
+b4c6230bb0ba spi: Fix controller unregister order
+54000d2e15e9 spi: dw: Fix controller unregister order
+c8f309db490e spi: bcm2835aux: Fix controller unregister order
 
------BEGIN PGP SIGNATURE-----
+>
+> NAK for the reason that I don't understand what I'm merging.
+>
+> /Jarkko
+>
+> >
+> > Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> > ---
+> >  drivers/char/tpm/tpm-chip.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> > index 8c77e88012e9..a410ca40a3c5 100644
+> > --- a/drivers/char/tpm/tpm-chip.c
+> > +++ b/drivers/char/tpm/tpm-chip.c
+> > @@ -296,7 +296,7 @@ static int tpm_class_shutdown(struct device *dev)
+> >       struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
+> >
+> >       down_write(&chip->ops_sem);
+> > -     if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> > +     if (chip->ops && (chip->flags & TPM_CHIP_FLAG_TPM2)) {
+> >               if (!tpm_chip_start(chip)) {
+> >                       tpm2_shutdown(chip, TPM2_SU_CLEAR);
+> >                       tpm_chip_stop(chip);
+> > @@ -479,7 +479,7 @@ static void tpm_del_char_device(struct tpm_chip *chip)
+> >
+> >       /* Make the driver uncallable. */
+> >       down_write(&chip->ops_sem);
+> > -     if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> > +     if (chip->ops && (chip->flags & TPM_CHIP_FLAG_TPM2)) {
+> >               if (!tpm_chip_start(chip)) {
+> >                       tpm2_shutdown(chip, TPM2_SU_CLEAR);
+> >                       tpm_chip_stop(chip);
+> > --
+> > 2.25.1
+> >
 
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8IrXoACgkQYdRkFR+R
-okMw7wf/QLnOgC+jQhpff5dmbxQXCG/rSbdtVKMUjIej817eUaAGovHn4XwicYqn
-xCg2qIqTHuF4e5aYOsVB+kRIVdNZI2GVL27O0SArwFrPgvvOan3CKK5nStQkXRr9
-XsLBEsgLKDV91xaQxBXrxWSslJWln5YFZNZYxvOsrhiRLwt4m7P0eSIForfL4UI2
-OoJhwTCuBBMEi906mhlmOQwFyTi9/NMQluwf2iB+moJzRMo79cfFU6D//rP9RfoP
-yttKBvpWqWUbPQ3cAVHkke+Yqr06Cz8BDYT3hP0oRJaludvY2Q/xVjBIOi3sX0gI
-dx8A3npnWwj0SUi90M+u4rIHQm9vCA==
-=X95t
------END PGP SIGNATURE-----
 
---IS0zKkzwUGydFO0o--
 
+-- 
+Andrey
