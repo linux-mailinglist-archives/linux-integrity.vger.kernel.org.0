@@ -2,97 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DBF21B396
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 13:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA72721B429
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 13:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbgGJLCO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Jul 2020 07:02:14 -0400
-Received: from mga04.intel.com ([192.55.52.120]:55329 "EHLO mga04.intel.com"
+        id S1727078AbgGJLkG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Jul 2020 07:40:06 -0400
+Received: from mga03.intel.com ([134.134.136.65]:53565 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726496AbgGJLCO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Jul 2020 07:02:14 -0400
-IronPort-SDR: nLnRgdh5ImST5W/ShASON5PT3VTho1ukx0vnpwCpNT9oOX3gIzUnWNOCH0742X4WbvuE6dZrwv
- brCd/6joudzg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="145676078"
+        id S1726828AbgGJLkF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 10 Jul 2020 07:40:05 -0400
+IronPort-SDR: aJV7CgbdijTx+fy6IFDRB2UdxlZaj0XJbQw7d9tFBky2fNsj89MzXPeN5nLHtbZibBCOMJ0UKq
+ Ki810C6ww1Dg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="148173814"
 X-IronPort-AV: E=Sophos;i="5.75,335,1589266800"; 
-   d="scan'208";a="145676078"
+   d="scan'208";a="148173814"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2020 04:02:14 -0700
-IronPort-SDR: zjL5GU1QFd3+GeUiZd2R1wjGBNXdoqCECraTtqybSsFhL1uo3+5nmTGArTmVPEIdg7q2i0PaQw
- PXUX+COGvMdA==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2020 04:40:04 -0700
+IronPort-SDR: GgUGeJx380Kb043Ycq+vOjyyyY2kot0/3TdLXU2AGXiqyVLKWd5yRL/sqOaCsjJoPfu0fEcd/O
+ T20s/oE8UqBA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,335,1589266800"; 
-   d="scan'208";a="484146065"
+   d="scan'208";a="324588693"
 Received: from taverna-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.137])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Jul 2020 04:02:09 -0700
-Date:   Fri, 10 Jul 2020 14:02:07 +0300
+  by orsmga007.jf.intel.com with ESMTP; 10 Jul 2020 04:40:01 -0700
+Date:   Fri, 10 Jul 2020 14:40:00 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Peter Jones <pjones@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Petr Vandrovec <petr@vmware.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Require that all digests are present in
- TCG_PCR_EVENT2 structures
-Message-ID: <20200710110207.GC2614@linux.intel.com>
-References: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
- <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
- <20200617230958.GC62794@linux.intel.com>
- <20200630183321.GE4694@sequoia>
- <20200702235718.GI31291@linux.intel.com>
- <20200709225823.GA4939@sequoia>
+To:     Andrey Pronin <apronin@chromium.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, groeck@chromium.org
+Subject: Re: [PATCH] tpm: avoid accessing cleared ops during shutdown
+Message-ID: <20200710114000.GD2614@linux.intel.com>
+References: <20200710002209.6757-1-apronin@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200709225823.GA4939@sequoia>
+In-Reply-To: <20200710002209.6757-1-apronin@chromium.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 09, 2020 at 05:58:23PM -0500, Tyler Hicks wrote:
-> On 2020-07-03 02:57:18, Jarkko Sakkinen wrote:
-> > On Tue, Jun 30, 2020 at 01:33:21PM -0500, Tyler Hicks wrote:
-> > > Jarkko, is this an ack from you?
-> > > 
-> > > Is there anything I can do to help along this fix?
-> > > 
-> > > I've spoke with two others that have poured through these specs to
-> > > implement firmware event log parsers and they thought the change made
-> > > sense.
-> > > 
-> > > Tyler
-> > 
-> > I revisited the original patch and this stroke into my eye:
-> > 
-> > "This is true, for example, when firmware passes the event log to the
-> > kernel via a reserved memory region described in device tree."
-> > 
-> > During this discussion you gave an explanation what can trigger the bug
-> > but in the commit message nothing anchors to anything.
-> > 
-> > Please give a concrete example what can trigger the issue directly in
-> > the commit message instead. It's obviously needed.
-> > 
-> > In addition, you could also rewrite the existing inline comment to be
-> > something more reasonable to the context.
+On Thu, Jul 09, 2020 at 05:22:09PM -0700, Andrey Pronin wrote:
+> This patch prevents NULL dereferencing when using chip->ops while
+> sending TPM2_Shutdown command if both tpm_class_shutdown handler and
+> tpm_del_char_device are called during system shutdown.
 > 
-> These are all fair points and I also see that there's a new conflict
-> with the TPM next branch. I'll rebase the patch on the current next
-> branch, expand on the commit message, and improve the comment in v2.
+> Both these handlers set chip->ops to NULL but don't check if it's
+> already NULL when they are called before using it.
 > 
-> Tyler
+> This issue was revealed in Chrome OS after a recent set of changes
+> to the unregister order for spi controllers, such as:
+>   b4c6230bb0ba spi: Fix controller unregister order
+>   f40913d2dca1 spi: pxa2xx: Fix controller unregister order
+> and similar for other controllers.
 
-Thank you.
+I'm not sure I fully understand the scenario. When does thi happen?
+Why does not tpm_del_char_device need this? The changes listed tell
+me nothing. Why they have this effect?
+
+I'm just trying to understand whether this could be a regression or
+not.
+
+I neither understand what you mean by "and similar for other
+controllers."
+
+NAK for the reason that I don't understand what I'm merging.
 
 /Jarkko
+
+> 
+> Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 8c77e88012e9..a410ca40a3c5 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -296,7 +296,7 @@ static int tpm_class_shutdown(struct device *dev)
+>  	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
+>  
+>  	down_write(&chip->ops_sem);
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +	if (chip->ops && (chip->flags & TPM_CHIP_FLAG_TPM2)) {
+>  		if (!tpm_chip_start(chip)) {
+>  			tpm2_shutdown(chip, TPM2_SU_CLEAR);
+>  			tpm_chip_stop(chip);
+> @@ -479,7 +479,7 @@ static void tpm_del_char_device(struct tpm_chip *chip)
+>  
+>  	/* Make the driver uncallable. */
+>  	down_write(&chip->ops_sem);
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +	if (chip->ops && (chip->flags & TPM_CHIP_FLAG_TPM2)) {
+>  		if (!tpm_chip_start(chip)) {
+>  			tpm2_shutdown(chip, TPM2_SU_CLEAR);
+>  			tpm_chip_stop(chip);
+> -- 
+> 2.25.1
+> 
