@@ -2,189 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF2321BEA4
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 22:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC8521BEB3
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 22:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728200AbgGJUiN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Jul 2020 16:38:13 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:40346 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728040AbgGJUiM (ORCPT
+        id S1726965AbgGJUos (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Jul 2020 16:44:48 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:55946 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726832AbgGJUos (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Jul 2020 16:38:12 -0400
-Received: from sequoia.work.tihix.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B75D220B4908;
-        Fri, 10 Jul 2020 13:38:10 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B75D220B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1594413491;
-        bh=0SK4PPdilwulgPG7L8UmTifG2QAI5iiarEIkym++hEQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FxikLX5X3jSA30gaiOMVOjwn5KRKnXFPTs4kGypha6jg3m66WH93C/Ka2g76Hif9j
-         dnQHkSn+WMIvw4/oigLTtTJTMeNI2aTGPo0cZLWR4XFQv2iUFKg214vyEkkn/Xvbd4
-         YfILkumt3t/QZGhmX0dIqDASIRsqOuAAMh1ByEgA=
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>
-Subject: [PATCH v2] ima: Rename internal audit rule functions
-Date:   Fri, 10 Jul 2020 15:37:50 -0500
-Message-Id: <20200710203750.89323-1-tyhicks@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 10 Jul 2020 16:44:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594413886;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gnz7GJgbmBoMsTvgBLqZK92Ol1iE/eWW4mYLXqwt/5M=;
+        b=Zo67ya7pTADgpo6twUUNxjB5F3NqEw5g53EKMFQlGbRXpC2rV7crl/ZY74P35YZMyM/u73
+        Ar6G7F6gb8++N1NfgDXdaCBTaXkFiMdTnU8DAHwR+VzYXU2JM84G/QKY98LFfVq7QlzWwE
+        h0fpzF8rI1PNoeAvJlMx1r6sC2k9frE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-436-14EznLBLPde4-4q3I_GVhQ-1; Fri, 10 Jul 2020 16:44:43 -0400
+X-MC-Unique: 14EznLBLPde4-4q3I_GVhQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1F269800597;
+        Fri, 10 Jul 2020 20:44:42 +0000 (UTC)
+Received: from localhost (ovpn-116-13.gru2.redhat.com [10.97.116.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9F8DB60E1C;
+        Fri, 10 Jul 2020 20:44:41 +0000 (UTC)
+Date:   Fri, 10 Jul 2020 17:44:40 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Subject: Re: ima-evm-utils: before releasing a new version
+Message-ID: <20200710204440.GA97283@glitch>
+References: <1594405595.14405.32.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1594405595.14405.32.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PNTmBPCT7hxwcZjr"
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Rename IMA's internal audit rule functions from security_filter_rule_*()
-to ima_filter_rule_*(). This avoids polluting the security_* namespace,
-which is typically reserved for general security subsystem
-infrastructure.
+--PNTmBPCT7hxwcZjr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-Suggested-by: Casey Schaufler <casey@schaufler-ca.com>
----
+Hi Mimi,
 
-* v2
-  - Rebased onto v3 of prereq series
-  - Renamed the functions to ima_filter_rule_*(), instead of
-    ima_audit_rule_*(), at Mimi's request
-  - Didn't pick up Casey's Reviewed-by on v1 since nearly every line of
-    the patch changed. Although, I suspect he'll be equally as happy with
-    the new names in v2.
+On Fri, Jul 10, 2020 at 02:26:35PM -0400, Mimi Zohar wrote:
+> Hi -
+>=20
+> Last year I had hoped to release new versions of ima-evm-utils on a
+> more frequent basis. =A0That unfortunately didn't happen. =A0All of the
+> changes posted should be in the "next" branch at this point. =A0The
+> changes I just posted are queued in the "next-testing" branch, waiting
+> for review/testing.
+>=20
 
-Developed on top of next-integrity-testing, commit cd1d8603df60 ("IMA:
-Add audit log for failure conditions"), plus this patch series:
+Thanks for the notice.
+I'm checking it right now. It's likely I have some feedback early next
+week.
 
- [PATCH v3 00/12] ima: Fix rule parsing bugs and extend KEXEC_CMDLINE rule support
- https://lore.kernel.org/linux-integrity/20200709061911.954326-1-tyhicks@linux.microsoft.com/T/#t
+> Please let me know if I've missed any ima-evm-utils patches or if
+> there are still some simple changes needed before the next release.
+>=20
 
-This patch has dependencies on the above patch series.
+Ack.
 
-Tested with and without CONFIG_IMA_LSM_RULES enabled by attempting to
-load IMA policy with rules containing the subj_role=foo conditional.
-Build logs are clean in both configurations. The IMA policy was first
-loaded without and then with a valid AppArmor profile named "foo". The
-behavior is the same before and after this patch is applied:
+> thanks!
+>=20
+> Mimi
+>=20
+>=20
 
-                  | CONFIG_IMA_LSM_RULES=n   | CONFIG_IMA_LSM_RULES=y
------------------------------------------------------------------------
- Without Profile  |  IMA policy load fails   | IMA policy load fails
- With Profile     |  IMA policy load fails   | IMA policy load succeeds
+Thank You.
 
- security/integrity/ima/ima.h        | 16 +++++++--------
- security/integrity/ima/ima_policy.c | 30 +++++++++++++----------------
- 2 files changed, 21 insertions(+), 25 deletions(-)
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 576ae2c6d418..38043074ce5e 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -413,24 +413,24 @@ static inline void ima_free_modsig(struct modsig *modsig)
- /* LSM based policy rules require audit */
- #ifdef CONFIG_IMA_LSM_RULES
- 
--#define security_filter_rule_init security_audit_rule_init
--#define security_filter_rule_free security_audit_rule_free
--#define security_filter_rule_match security_audit_rule_match
-+#define ima_filter_rule_init security_audit_rule_init
-+#define ima_filter_rule_free security_audit_rule_free
-+#define ima_filter_rule_match security_audit_rule_match
- 
- #else
- 
--static inline int security_filter_rule_init(u32 field, u32 op, char *rulestr,
--					    void **lsmrule)
-+static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
-+				       void **lsmrule)
- {
- 	return -EINVAL;
- }
- 
--static inline void security_filter_rule_free(void *lsmrule)
-+static inline void ima_filter_rule_free(void *lsmrule)
- {
- }
- 
--static inline int security_filter_rule_match(u32 secid, u32 field, u32 op,
--					     void *lsmrule)
-+static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
-+					void *lsmrule)
- {
- 	return -EINVAL;
- }
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 2e87154c9296..c5eda02e5f51 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -258,7 +258,7 @@ static void ima_lsm_free_rule(struct ima_rule_entry *entry)
- 	int i;
- 
- 	for (i = 0; i < MAX_LSM_RULES; i++) {
--		security_filter_rule_free(entry->lsm[i].rule);
-+		ima_filter_rule_free(entry->lsm[i].rule);
- 		kfree(entry->lsm[i].args_p);
- 	}
- }
-@@ -308,10 +308,9 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 		 */
- 		entry->lsm[i].args_p = NULL;
- 
--		security_filter_rule_init(nentry->lsm[i].type,
--					  Audit_equal,
--					  nentry->lsm[i].args_p,
--					  &nentry->lsm[i].rule);
-+		ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
-+				     nentry->lsm[i].args_p,
-+				     &nentry->lsm[i].rule);
- 		if (!nentry->lsm[i].rule)
- 			pr_warn("rule for LSM \'%s\' is undefined\n",
- 				entry->lsm[i].args_p);
-@@ -495,18 +494,16 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- 		case LSM_OBJ_ROLE:
- 		case LSM_OBJ_TYPE:
- 			security_inode_getsecid(inode, &osid);
--			rc = security_filter_rule_match(osid,
--							rule->lsm[i].type,
--							Audit_equal,
--							rule->lsm[i].rule);
-+			rc = ima_filter_rule_match(osid, rule->lsm[i].type,
-+						   Audit_equal,
-+						   rule->lsm[i].rule);
- 			break;
- 		case LSM_SUBJ_USER:
- 		case LSM_SUBJ_ROLE:
- 		case LSM_SUBJ_TYPE:
--			rc = security_filter_rule_match(secid,
--							rule->lsm[i].type,
--							Audit_equal,
--							rule->lsm[i].rule);
-+			rc = ima_filter_rule_match(secid, rule->lsm[i].type,
-+						   Audit_equal,
-+						   rule->lsm[i].rule);
- 		default:
- 			break;
- 		}
-@@ -901,10 +898,9 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
- 		return -ENOMEM;
- 
- 	entry->lsm[lsm_rule].type = audit_type;
--	result = security_filter_rule_init(entry->lsm[lsm_rule].type,
--					   Audit_equal,
--					   entry->lsm[lsm_rule].args_p,
--					   &entry->lsm[lsm_rule].rule);
-+	result = ima_filter_rule_init(entry->lsm[lsm_rule].type, Audit_equal,
-+				      entry->lsm[lsm_rule].args_p,
-+				      &entry->lsm[lsm_rule].rule);
- 	if (!entry->lsm[lsm_rule].rule) {
- 		pr_warn("rule for LSM \'%s\' is undefined\n",
- 			entry->lsm[lsm_rule].args_p);
--- 
-2.25.1
+--PNTmBPCT7hxwcZjr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8I0zgACgkQYdRkFR+R
+okMDtAgA2j5EpgurNuTwJXPOY/eohdBLJH+UVMktuiCRWXFsZ6TnKRHOHKhJAaNE
+ClbrTCtss5P3he58NXNuNs98rP76p5g0K0yX1Ej9vFX0s7moi1692JJTWbUfS14V
+ldsAD7LhsGPPUTa/wfligC3OdJFfMPT2uPsVjrD6jKrvfxNQnncdqO/Dfxa8/J9D
++fTKovhm62v9eiSbLrcSQRfSZdQ1lXpPe9e2i3Ga82zD4+H85JYvbiN0uttaEDjv
+enVqi6FuxIImfu39Q4dgKPX/WxkwBcnF2NnXcMPYxq7Bor+oRQbLNH2elikPGwDa
+iilBTrbKgc0KwiMa9wJvu/X5mF861A==
+=91GD
+-----END PGP SIGNATURE-----
+
+--PNTmBPCT7hxwcZjr--
 
