@@ -2,195 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D470121BD3A
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 20:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F32C21BD58
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 21:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728054AbgGJS4R (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Jul 2020 14:56:17 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30936 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726872AbgGJS4Q (ORCPT
+        id S1726908AbgGJTIj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Jul 2020 15:08:39 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:35760 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726725AbgGJTIg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Jul 2020 14:56:16 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06AIY8de004832;
-        Fri, 10 Jul 2020 14:56:09 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 326j81bkjn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jul 2020 14:56:09 -0400
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06AIpWFb056849;
-        Fri, 10 Jul 2020 14:56:09 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 326j81bkhu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jul 2020 14:56:09 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06AIZHcE031343;
-        Fri, 10 Jul 2020 18:56:07 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 326bcf0vu8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jul 2020 18:56:07 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06AIrRae459318
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jul 2020 18:53:27 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F64442045;
-        Fri, 10 Jul 2020 18:54:49 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A0DB442042;
-        Fri, 10 Jul 2020 18:54:48 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.206.93])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Jul 2020 18:54:48 +0000 (GMT)
-Message-ID: <1594407288.14405.36.camel@linux.ibm.com>
-Subject: Re: [PATCH v5] ima: move APPRAISE_BOOTPARAM dependency on
- ARCH_POLICY to runtime
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Bruno Meneguele <bmeneg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-integrity@vger.kernel.org, erichte@linux.ibm.com,
-        nayna@linux.ibm.com, stable@vger.kernel.org
-Date:   Fri, 10 Jul 2020 14:54:48 -0400
-In-Reply-To: <20200710183420.GB10547@glitch>
-References: <20200709164647.45153-1-bmeneg@redhat.com>
-         <1594401804.14405.8.camel@linux.ibm.com> <20200710180338.GA10547@glitch>
-         <20200710183420.GB10547@glitch>
+        Fri, 10 Jul 2020 15:08:36 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 685778EE2AF;
+        Fri, 10 Jul 2020 12:08:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1594408115;
+        bh=TmrAzcBWb/MPHV7bm20MUfqaU7DTBEJLK9IEn4cwOI8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=pYbj89lReMEsopaaRladOY/GMH9VrPwVwE8f3Whq/eWLjAEB/WP+HWEm/p+91iY60
+         0HD4PvlkLB9PP+EC7wfHRpSMdj/BKbcDt933WM4M8gb392vm4YYPcRcYJh/Ptj9l2s
+         ZKc072+6TkJY7RCiNmCfr/2NmQNdk4oKFohT62NM=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FSydHnbl8cqn; Fri, 10 Jul 2020 12:08:35 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id CA52E8EE112;
+        Fri, 10 Jul 2020 12:08:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1594408115;
+        bh=TmrAzcBWb/MPHV7bm20MUfqaU7DTBEJLK9IEn4cwOI8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=pYbj89lReMEsopaaRladOY/GMH9VrPwVwE8f3Whq/eWLjAEB/WP+HWEm/p+91iY60
+         0HD4PvlkLB9PP+EC7wfHRpSMdj/BKbcDt933WM4M8gb392vm4YYPcRcYJh/Ptj9l2s
+         ZKc072+6TkJY7RCiNmCfr/2NmQNdk4oKFohT62NM=
+Message-ID: <1594408113.4494.16.camel@HansenPartnership.com>
+Subject: Re: [PATCH] tpm: avoid accessing cleared ops during shutdown
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrey Pronin <apronin@chromium.org>, peterhuewe@gmx.de,
+        jarkko.sakkinen@linux.intel.com
+Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, groeck@chromium.org
+Date:   Fri, 10 Jul 2020 12:08:33 -0700
+In-Reply-To: <20200710002209.6757-1-apronin@chromium.org>
+References: <20200710002209.6757-1-apronin@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-10_14:2020-07-10,2020-07-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0
- malwarescore=0 mlxscore=0 spamscore=0 phishscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007100121
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-07-10 at 15:34 -0300, Bruno Meneguele wrote:
-> On Fri, Jul 10, 2020 at 03:03:38PM -0300, Bruno Meneguele wrote:
-> > On Fri, Jul 10, 2020 at 01:23:24PM -0400, Mimi Zohar wrote:
-> > > On Thu, 2020-07-09 at 13:46 -0300, Bruno Meneguele wrote:
-> > > > APPRAISE_BOOTPARAM has been marked as dependent on !ARCH_POLICY in compile
-> > > > time, enforcing the appraisal whenever the kernel had the arch policy option
-> > > > enabled.
-> > > 
-> > > > However it breaks systems where the option is set but the system didn't
-> > > > boot in a "secure boot" platform. In this scenario, anytime an appraisal
-> > > > policy (i.e. ima_policy=appraisal_tcb) is used it will be forced, without
-> > > > giving the user the opportunity to label the filesystem, before enforcing
-> > > > integrity.
-> > > > 
-> > > > Considering the ARCH_POLICY is only effective when secure boot is actually
-> > > > enabled this patch remove the compile time dependency and move it to a
-> > > > runtime decision, based on the secure boot state of that platform.
-> > > 
-> > > Perhaps we could simplify this patch description a bit?
-> > > 
-> > > The IMA_APPRAISE_BOOTPARAM config allows enabling different
-> > > "ima_appraise=" modes - log, fix, enforce - at run time, but not when
-> > > IMA architecture specific policies are enabled.  This prevents
-> > > properly labeling the filesystem on systems where secure boot is
-> > > supported, but not enabled on the platform.  Only when secure boot is
-> > > enabled, should these IMA appraise modes be disabled.
-> > > 
-> > > This patch removes the compile time dependency and makes it a runtime
-> > > decision, based on the secure boot state of that platform.
-> > > 
-> > 
-> > Sounds good to me.
-> > 
-> > > <snip>
-> > > 
-> > > > diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> > > > index a9649b04b9f1..884de471b38a 100644
-> > > > --- a/security/integrity/ima/ima_appraise.c
-> > > > +++ b/security/integrity/ima/ima_appraise.c
-> > > > @@ -19,6 +19,11 @@
-> > > >  static int __init default_appraise_setup(c
-> > > 
-> > > > har *str)
-> > > >  {
-> > > >  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-> > > > +	if (arch_ima_get_secureboot()) {
-> > > > +		pr_info("appraise boot param ignored: secure boot enabled");
-> > > 
-> > > Instead of a generic statement, is it possible to include the actual
-> > > option being denied?  Perhaps something like: "Secure boot enabled,
-> > > ignoring %s boot command line option"
-> > > 
-> > > Mimi
-> > > 
-> > 
-> > Yes, sure.
-> > 
+On Thu, 2020-07-09 at 17:22 -0700, Andrey Pronin wrote:
+> This patch prevents NULL dereferencing when using chip->ops while
+> sending TPM2_Shutdown command if both tpm_class_shutdown handler and
+> tpm_del_char_device are called during system shutdown.
 > 
-> Btw, would it make sense to first make sure we have a valid "str"
-> option and not something random to print?
+> Both these handlers set chip->ops to NULL but don't check if it's
+> already NULL when they are called before using it.
+> 
+> This issue was revealed in Chrome OS after a recent set of changes
+> to the unregister order for spi controllers, such as:
+>   b4c6230bb0ba spi: Fix controller unregister order
+>   f40913d2dca1 spi: pxa2xx: Fix controller unregister order
+> and similar for other controllers.
+> 
+> Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-
+> chip.c
+> index 8c77e88012e9..a410ca40a3c5 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -296,7 +296,7 @@ static int tpm_class_shutdown(struct device *dev)
+>  	struct tpm_chip *chip = container_of(dev, struct tpm_chip,
+> dev);
 >  
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index a9649b04b9f1..1f1175531d3e 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -25,6 +25,16 @@ static int __init default_appraise_setup(char *str)
->                 ima_appraise = IMA_APPRAISE_LOG;
->         else if (strncmp(str, "fix", 3) == 0)
->                 ima_appraise = IMA_APPRAISE_FIX;
-> +       else
-> +               pr_info("invalid \"%s\" appraise option");
-> +
-> +       if (arch_ima_get_secureboot()) {
-> +               if (!is_ima_appraise_enabled()) {
-> +                       pr_info("Secure boot enabled: ignoring ima_appraise=%s boot parameter option",
-> +                               str);
-> +                       ima_appraise = IMA_APPRAISE_ENFORCE;
-> +               }
-> +       }
+>  	down_write(&chip->ops_sem);
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +	if (chip->ops && (chip->flags & TPM_CHIP_FLAG_TPM2)) {
+>  		if (!tpm_chip_start(chip)) {
+>  			tpm2_shutdown(chip, TPM2_SU_CLEAR);
+>  			tpm_chip_stop(chip);
+> @@ -479,7 +479,7 @@ static void tpm_del_char_device(struct tpm_chip
+> *chip)
+>  
+>  	/* Make the driver uncallable. */
+>  	down_write(&chip->ops_sem);
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +	if (chip->ops && (chip->flags & TPM_CHIP_FLAG_TPM2)) {
+>  		if (!tpm_chip_start(chip)) {
+>  			tpm2_shutdown(chip, TPM2_SU_CLEAR);
+>  			tpm_chip_stop(chip);
 
-Providing feedback is probably a good idea.  However, the
-"arch_ima_get_secureboot" test can't come after setting
-"ima_appraise."
+I really don't think this is the right fix.  The problem is that these
+two functions are trying to open code tpm_try_get_ops/tpm_put_ops (only
+really for the tpm2 shutdown) because they want to NULL out the ops
+before final mutex unlock.  The problem with the current open coding is
+it doesn't shut down the clock if required (not really a problem for
+shutdown, but might cause issues for simple rmmod).  I think this is
+because no-one noticed the open coding when get/put was updated.
 
-Mimi
+This code should all be abstracted into a single function and shared
+with tpm_try_get_ops/tpm_put_ops so we can't have this happen in
+future.  Possibly there should be a chip shutdown function which is
+only active for TPM2 which does the correct try_get/shutdown/put
+operation and then a separate simple get mutex, null ops, put mutex one
+that's guaranteed to be called last.
 
->  #endif
->         return 1;
->  }
-> 
-> 
-> The "else" there I think would make sense as well, at least to give the
-> user some feedback about a possible mispelling of him (as a separate
-> patch).
-> 
-> And "if(!is_ima_appraise_enabled())" would avoid to print anything about
-> "ignoring the option" to the user in case he explicitly set "enforce",
-> which we know there isn't any real effect but is allowed and shown in
-> kernel-parameters.txt.
-> 
-> > Thanks!
-> > 
-> > > > +		return 1;
-> > > > +	}
-> > > > +
-> > > >  	if (strncmp(str, "off", 3) == 0)
-> > > >  		ima_appraise = 0;
-> > > >  	else if (strncmp(str, "log", 3) == 0)
-> > > 
-> > 
-> > -- 
-> > bmeneg 
-> > PGP Key: http://bmeneg.com/pubkey.txt
-> 
-> 
-> 
+James
 
