@@ -2,241 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB3721BA2D
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 18:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E9D21BA2E
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 18:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727810AbgGJQBP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Jul 2020 12:01:15 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34548 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727901AbgGJQBP (ORCPT
+        id S1727999AbgGJQBQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Jul 2020 12:01:16 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6326 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727952AbgGJQBQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Jul 2020 12:01:15 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06AFXf1a157319;
-        Fri, 10 Jul 2020 12:01:12 -0400
+        Fri, 10 Jul 2020 12:01:16 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06AFWmTe156449;
+        Fri, 10 Jul 2020 12:01:13 -0400
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 326bpc1c5x-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 326bpk8uq2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Jul 2020 12:01:13 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06AFjQ4q013009;
+        Fri, 10 Jul 2020 12:01:12 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 326bpk8una-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 10 Jul 2020 12:01:12 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06AFXpov158421;
-        Fri, 10 Jul 2020 12:01:11 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 326bpc1c3u-1
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06AG0S7p003359;
+        Fri, 10 Jul 2020 16:01:10 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 326bc30rk5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jul 2020 12:01:11 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06AG19HS030328;
-        Fri, 10 Jul 2020 16:01:09 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma02fra.de.ibm.com with ESMTP id 326bcf0sg3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jul 2020 16:01:09 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06AG17vw6226176
+        Fri, 10 Jul 2020 16:01:10 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06AG18hW65077392
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jul 2020 16:01:07 GMT
+        Fri, 10 Jul 2020 16:01:08 GMT
 Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C70F4204D;
+        by IMSVA (Postfix) with ESMTP id E834142047;
         Fri, 10 Jul 2020 16:01:07 +0000 (GMT)
 Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 727EF4203F;
-        Fri, 10 Jul 2020 16:01:06 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 461ED4203F;
+        Fri, 10 Jul 2020 16:01:07 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.158.149])
         by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Jul 2020 16:01:06 +0000 (GMT)
+        Fri, 10 Jul 2020 16:01:07 +0000 (GMT)
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
         Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH v2 2/8] ima_evm_utils: support extending TPM 2.0 banks w/original SHA1 padded digest
-Date:   Fri, 10 Jul 2020 12:00:53 -0400
-Message-Id: <1594396859-9232-3-git-send-email-zohar@linux.ibm.com>
+Subject: [PATCH v2 3/8] ima-evm-utils: support providing the TPM 1.2 PCRs as a file
+Date:   Fri, 10 Jul 2020 12:00:54 -0400
+Message-Id: <1594396859-9232-4-git-send-email-zohar@linux.ibm.com>
 X-Mailer: git-send-email 2.7.5
 In-Reply-To: <1594396859-9232-1-git-send-email-zohar@linux.ibm.com>
 References: <1594396859-9232-1-git-send-email-zohar@linux.ibm.com>
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-10_10:2020-07-10,2020-07-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=3
- impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0 phishscore=0
- clxscore=1015 lowpriorityscore=0 mlxlogscore=999 adultscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007100104
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 spamscore=0 suspectscore=1
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007100104
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Initially the sha1 digest, including violations, was padded with zeroes
-before being extended into the other TPM banks.  Support walking the
-IMA measurement list, calculating the per TPM bank SHA1 padded
-digest(s).
+"evmctl ima_measurement" walks the IMA measurement list calculating the
+PCRs and verifies the calculated values against the system's PCRs.
+Instead of reading the system's PCRs, provide the PCRs as a file.  For
+TPM 1.2 the PCRs are exported via a securityfs file.
+
+Verifying the IMA measurement list against the exported TPM 1.2 PCRs
+file may be used remotely for regression testing.  If used in a
+production environment, the provided TPM PCRs must be compared with
+those included in the TPM 1.2 quote as well.
+
+This patch defines an evmctl ima_measurement "--pcrs <filename>" option.
 
 Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- src/evmctl.c | 73 +++++++++++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 58 insertions(+), 15 deletions(-)
+ src/evmctl.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
 diff --git a/src/evmctl.c b/src/evmctl.c
-index 0e489e2c7ba6..814aa6b75571 100644
+index 814aa6b75571..21ae1c7ca5a7 100644
 --- a/src/evmctl.c
 +++ b/src/evmctl.c
-@@ -1613,6 +1613,10 @@ static struct tpm_bank_info *init_tpm_banks(int *num_banks)
- 	return banks;
- }
+@@ -160,6 +160,8 @@ struct tpm_bank_info {
+ 	uint8_t pcr[NUM_PCRS][MAX_DIGEST_SIZE];
+ };
  
-+/*
-+ * Compare the calculated TPM PCR banks against the PCR values read.
-+ * On failure to match any TPM bank, fail comparison.
-+ */
- static int compare_tpm_banks(int num_banks, struct tpm_bank_info *bank,
- 			     struct tpm_bank_info *tpm_bank)
++static char *pcrfile;
++
+ static int bin2file(const char *file, const char *ext, const unsigned char *data, int len)
  {
-@@ -1632,14 +1636,15 @@ static int compare_tpm_banks(int num_banks, struct tpm_bank_info *bank,
- 			log_info("%s: TPM PCR-%d: ", tpm_bank[i].algo_name, j);
- 			log_dump(tpm_bank[i].pcr[j], tpm_bank[i].digest_size);
- 
--			ret = memcmp(bank[i].pcr[j], tpm_bank[i].pcr[j],
--				     bank[i].digest_size);
--			if (!ret)
-+			if (memcmp(bank[i].pcr[j], tpm_bank[i].pcr[j],
-+				     bank[i].digest_size) == 0) {
- 				log_info("%s PCR-%d: succeed\n",
- 					 bank[i].algo_name, j);
--			else
-+			} else {
-+				ret = 1;
- 				log_info("%s: PCRAgg %d does not match TPM PCR-%d\n",
- 					 bank[i].algo_name, j, j);
-+			}
- 		}
- 	}
- 	return ret;
-@@ -1695,10 +1700,7 @@ static int extend_tpm_bank(EVP_MD_CTX *pctx, const EVP_MD *md,
- 		goto out;
- 	}
- 
--	if (validate && !memcmp(entry->header.digest, zero, SHA_DIGEST_LENGTH))
--		err = EVP_DigestUpdate(pctx, fox, bank->digest_size);
--	else
--		err = EVP_DigestUpdate(pctx, bank->digest, bank->digest_size);
-+	err = EVP_DigestUpdate(pctx, bank->digest, bank->digest_size);
- 	if (!err) {
- 		printf("EVP_DigestUpdate() failed\n");
- 		goto out;
-@@ -1716,7 +1718,8 @@ out:
- 
- /* Calculate and extend the template hash for multiple hash algorithms */
- static void extend_tpm_banks(struct template_entry *entry, int num_banks,
--			     struct tpm_bank_info *bank)
-+			     struct tpm_bank_info *bank,
-+			     struct tpm_bank_info *padded_bank)
+ 	FILE *fp;
+@@ -1377,12 +1379,18 @@ static char *misc_pcrs = "/sys/class/misc/tpm0/device/pcrs";
+ /* Read all of the TPM 1.2 PCRs */
+ static int tpm_pcr_read(struct tpm_bank_info *tpm_banks, int len)
  {
- 	EVP_MD_CTX *pctx;
- 	const EVP_MD *md;
-@@ -1741,24 +1744,53 @@ static void extend_tpm_banks(struct template_entry *entry, int num_banks,
- 		}
+-	FILE *fp;
++	FILE *fp = NULL;
+ 	char *p, pcr_str[7], buf[70]; /* length of the TPM string */
+ 	int result = -1;
+ 	int i = 0;
  
- 		/*
--		 * Measurement violations are 0x00 digests.  No need to
--		 * calculate the per TPM bank template digests.
-+		 * Measurement violations are 0x00 digests, which are extended
-+		 * into the TPM as 0xff.  Verifying the IMA measurement list
-+		 * will fail, unless the 0x00 digests are converted to 0xff's.
-+		 *
-+		 * Initially the sha1 digest, including violations, was padded
-+		 * with zeroes before being extended into the TPM.  With the
-+		 * per TPM bank digest, violations are the full per bank digest
-+		 * size.
- 		 */
--		if (memcmp(entry->header.digest, zero, SHA_DIGEST_LENGTH) == 0)
--			memset(bank[i].digest, 0x00, bank[i].digest_size);
--		else {
-+		if (memcmp(entry->header.digest, zero, SHA_DIGEST_LENGTH) == 0) {
-+			if (!validate) {
-+				memset(bank[i].digest, 0x00, bank[i].digest_size);
-+				memset(padded_bank[i].digest, 0x00, padded_bank[i].digest_size);
-+			} else {
-+				memset(bank[i].digest, 0xff,
-+				       bank[i].digest_size);
+-	fp = fopen(pcrs, "r");
++	/* Use the provided TPM 1.2 pcrs file */
++	if (pcrfile)
++		fp = fopen(pcrfile, "r");
 +
-+				memset(padded_bank[i].digest, 0x00,
-+				       padded_bank[i].digest_size);
-+				memset(padded_bank[i].digest, 0xff,
-+				       SHA_DIGEST_LENGTH);
-+			}
-+		} else {
- 			err = calculate_template_digest(pctx, md, entry,
- 							&bank[i]);
- 			if (!err) {
- 				bank[i].supported = 0;
- 				continue;
- 			}
++	if (!fp)
++		fp = fopen(pcrs, "r");
 +
-+			/*
-+			 * calloc set the memory to zero, so just copy the
-+			 * sha1 digest.
-+			 */
-+			memcpy(padded_bank[i].digest, entry->header.digest,
-+			       SHA_DIGEST_LENGTH);
- 		}
+ 	if (!fp)
+ 		fp = fopen(misc_pcrs, "r");
  
- 		/* extend TPM BANK with template digest */
- 		err = extend_tpm_bank(pctx, md, entry, &bank[i]);
- 		if (!err)
- 			bank[i].supported = 0;
-+
-+		/* extend TPM BANK with zero padded sha1 template digest */
-+		err = extend_tpm_bank(pctx, md, entry, &padded_bank[i]);
-+		if (!err)
-+			padded_bank[i].supported = 0;
- 	}
- #if OPENSSL_VERSION_NUMBER >= 0x10100000
- 	EVP_MD_CTX_free(pctx);
-@@ -1825,6 +1857,7 @@ static int read_tpm_banks(int num_banks, struct tpm_bank_info *bank)
+@@ -2347,7 +2355,7 @@ struct command cmds[] = {
+ 	{"ima_verify", cmd_verify_ima, 0, "file", "Verify IMA signature (for debugging).\n"},
+ 	{"ima_setxattr", cmd_setxattr_ima, 0, "[--sigfile file]", "Set IMA signature from sigfile\n"},
+ 	{"ima_hash", cmd_hash_ima, 0, "file", "Make file content hash.\n"},
+-	{"ima_measurement", cmd_ima_measurement, 0, "[--validate] [--verify] file", "Verify measurement list (experimental).\n"},
++	{"ima_measurement", cmd_ima_measurement, 0, "[--validate] [--verify] [--pcrs file] file", "Verify measurement list (experimental).\n"},
+ 	{"ima_boot_aggregate", cmd_ima_bootaggr, 0, "[file]", "Calculate per TPM bank boot_aggregate digests\n"},
+ 	{"ima_fix", cmd_ima_fix, 0, "[-t fdsxm] path", "Recursively fix IMA/EVM xattrs in fix mode.\n"},
+ 	{"ima_clear", cmd_ima_clear, 0, "[-t fdsxm] path", "Recursively remove IMA/EVM xattrs.\n"},
+@@ -2388,6 +2396,7 @@ static struct option opts[] = {
+ 	{"xattr-user", 0, 0, 140},
+ 	{"validate", 0, 0, 141},
+ 	{"verify", 0, 0, 142},
++	{"pcrs", 1, 0, 143},
+ 	{}
  
- static int ima_measurement(const char *file)
- {
-+	struct tpm_bank_info *pseudo_padded_banks;
- 	struct tpm_bank_info *pseudo_banks;
- 	struct tpm_bank_info *tpm_banks;
- 	int is_ima_template, cur_template_fmt;
-@@ -1839,6 +1872,7 @@ static int ima_measurement(const char *file)
- 	memset(zero, 0, MAX_DIGEST_SIZE);
- 	memset(fox, 0xff, MAX_DIGEST_SIZE);
- 
-+	pseudo_padded_banks = init_tpm_banks(&num_banks);
- 	pseudo_banks = init_tpm_banks(&num_banks);
- 	tpm_banks = init_tpm_banks(&num_banks);
- 
-@@ -1939,7 +1973,8 @@ static int ima_measurement(const char *file)
- 			       entry.template_buf_len - len);
- 		}
- 
--		extend_tpm_banks(&entry, num_banks, pseudo_banks);
-+		extend_tpm_banks(&entry, num_banks, pseudo_banks,
-+				 pseudo_padded_banks);
- 
- 		if (verify)
- 			ima_verify_template_hash(&entry);
-@@ -1954,7 +1989,15 @@ static int ima_measurement(const char *file)
- 		err = 0;
- 		log_info("Failed to read any TPM PCRs\n");
- 	} else {
-+		log_info("Comparing with per TPM digest\n");
- 		err = compare_tpm_banks(num_banks, pseudo_banks, tpm_banks);
-+
-+		/* On failure, check older SHA1 zero padded hashes */
-+		if (err) {
-+			log_info("Comparing with SHA1 padded digest\n");
-+			err = compare_tpm_banks(num_banks, pseudo_padded_banks,
-+						tpm_banks);
-+		}
- 	}
- 
- out:
+ };
+@@ -2572,6 +2581,9 @@ int main(int argc, char *argv[])
+ 		case 142: /* --verify */
+ 			verify = 1;
+ 			break;
++		case 143:
++			pcrfile = optarg;
++			break;
+ 		case '?':
+ 			exit(1);
+ 			break;
 -- 
 2.7.5
 
