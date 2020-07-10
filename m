@@ -2,89 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AAD21AB0C
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 00:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9489B21ABF2
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 02:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbgGIW6e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Jul 2020 18:58:34 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55292 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726889AbgGIW6e (ORCPT
+        id S1726449AbgGJAW1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Jul 2020 20:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbgGJAW1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Jul 2020 18:58:34 -0400
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7CF3B20B4908;
-        Thu,  9 Jul 2020 15:58:32 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7CF3B20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1594335513;
-        bh=hSzJx2wtRzs8tVYEA8JZveVIM1/46jY2Nc6LR+6a8eQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rSk5WGGOxrF25+SM75K/PBmOHPatBSoFi5EA1+37GzkrFox6aXG2W26Y4Rlpu8Szf
-         5yXyDBc3XeLf2DF2jjnRfAGARelF7M2sQA7qCez+gwAoizU4ysAQcEWlaoGkjHGLzo
-         jZk1MKmAQcVBakotL38XMKeFn0+YsOHsbgEn+3SQ=
-Date:   Thu, 9 Jul 2020 17:58:23 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Peter Jones <pjones@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Petr Vandrovec <petr@vmware.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Require that all digests are present in
- TCG_PCR_EVENT2 structures
-Message-ID: <20200709225823.GA4939@sequoia>
-References: <20200615232504.1848159-1-tyhicks@linux.microsoft.com>
- <CAMj1kXHJbsxA2-jqpbLnUeeNfM0oC8Sh70+axOKoBCFMJ8+jKQ@mail.gmail.com>
- <20200617230958.GC62794@linux.intel.com>
- <20200630183321.GE4694@sequoia>
- <20200702235718.GI31291@linux.intel.com>
+        Thu, 9 Jul 2020 20:22:27 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5FBC08C5DC
+        for <linux-integrity@vger.kernel.org>; Thu,  9 Jul 2020 17:22:27 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id d4so1715346pgk.4
+        for <linux-integrity@vger.kernel.org>; Thu, 09 Jul 2020 17:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ckUCzQFimvD7NIA+QWWbpWCLSB8Zqmc22c9Qilpan44=;
+        b=ckgoHMtuW/ok71oWR0jOY1AL7WiG2m/KZ0cSVRSnnNLRJGV4T3oyqnZe4i6+5CiH6T
+         ZUv0jWl8XzBU6YDr5Zat6lHWAaAMqb4UBToJjBPAwJSzaOjfQww1OsjiKl3BAS9eiUKv
+         iWhKmfG3dMoPDC0aGyfFjaEzw5XakcyXRvrLY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ckUCzQFimvD7NIA+QWWbpWCLSB8Zqmc22c9Qilpan44=;
+        b=lj/GMhimBYl3TImoQZ9eEaxbZEzpH9ktO1qtP4ImDZg5eAvOOc0ckhpP9F4Wvk8mI5
+         bj1ixiRplRp5ftVXQKAUO1YzW52y7Fv6XIWVvfdlRSvnlvvU1+jyLiIogRi6Ewk9aImO
+         GVhltauEca77/q7+N61XGlPsYKM5khAv1nJPmSiYBMX+EMGMgVGj3865eal57GipzOK6
+         xEETePJVBbb5G+nF+5wKGXCYQPXaI9xhRDzvqevwIN0eILqsp1jdrDKFVIirieG71Z78
+         EgeibLwCBYwSTUrvSMyMhMlxLHaz43F0dTovzCAW+KEiGalAHwOzRUVRHzCPzXCAPGH6
+         Y0oA==
+X-Gm-Message-State: AOAM533hTQaFm7nk41Y6/gsT3pdtonqXw6v3VoGEljDR67ddzw/7/ZnO
+        ZKg73mo2YTekV83PmUQG/T/kDg==
+X-Google-Smtp-Source: ABdhPJyJ1Zl/XnIDYWubLFLNW5SV+UOx5qKUJXZPfzwDdsESHi5oJ223rZL0TXg/zVt4L12uoNyf4A==
+X-Received: by 2002:a63:4c48:: with SMTP id m8mr57041634pgl.290.1594340546587;
+        Thu, 09 Jul 2020 17:22:26 -0700 (PDT)
+Received: from andrey-Z390.lan (c-67-164-102-32.hsd1.ca.comcast.net. [67.164.102.32])
+        by smtp.gmail.com with ESMTPSA id i63sm3840181pfc.22.2020.07.09.17.22.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2020 17:22:26 -0700 (PDT)
+From:   Andrey Pronin <apronin@chromium.org>
+To:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com
+Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, groeck@chromium.org,
+        Andrey Pronin <apronin@chromium.org>
+Subject: [PATCH] tpm: avoid accessing cleared ops during shutdown
+Date:   Thu,  9 Jul 2020 17:22:09 -0700
+Message-Id: <20200710002209.6757-1-apronin@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200702235718.GI31291@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2020-07-03 02:57:18, Jarkko Sakkinen wrote:
-> On Tue, Jun 30, 2020 at 01:33:21PM -0500, Tyler Hicks wrote:
-> > Jarkko, is this an ack from you?
-> > 
-> > Is there anything I can do to help along this fix?
-> > 
-> > I've spoke with two others that have poured through these specs to
-> > implement firmware event log parsers and they thought the change made
-> > sense.
-> > 
-> > Tyler
-> 
-> I revisited the original patch and this stroke into my eye:
-> 
-> "This is true, for example, when firmware passes the event log to the
-> kernel via a reserved memory region described in device tree."
-> 
-> During this discussion you gave an explanation what can trigger the bug
-> but in the commit message nothing anchors to anything.
-> 
-> Please give a concrete example what can trigger the issue directly in
-> the commit message instead. It's obviously needed.
-> 
-> In addition, you could also rewrite the existing inline comment to be
-> something more reasonable to the context.
+This patch prevents NULL dereferencing when using chip->ops while
+sending TPM2_Shutdown command if both tpm_class_shutdown handler and
+tpm_del_char_device are called during system shutdown.
 
-These are all fair points and I also see that there's a new conflict
-with the TPM next branch. I'll rebase the patch on the current next
-branch, expand on the commit message, and improve the comment in v2.
+Both these handlers set chip->ops to NULL but don't check if it's
+already NULL when they are called before using it.
 
-Tyler
+This issue was revealed in Chrome OS after a recent set of changes
+to the unregister order for spi controllers, such as:
+  b4c6230bb0ba spi: Fix controller unregister order
+  f40913d2dca1 spi: pxa2xx: Fix controller unregister order
+and similar for other controllers.
 
-> 
-> /Jarkko
+Signed-off-by: Andrey Pronin <apronin@chromium.org>
+---
+ drivers/char/tpm/tpm-chip.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 8c77e88012e9..a410ca40a3c5 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -296,7 +296,7 @@ static int tpm_class_shutdown(struct device *dev)
+ 	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
+ 
+ 	down_write(&chip->ops_sem);
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++	if (chip->ops && (chip->flags & TPM_CHIP_FLAG_TPM2)) {
+ 		if (!tpm_chip_start(chip)) {
+ 			tpm2_shutdown(chip, TPM2_SU_CLEAR);
+ 			tpm_chip_stop(chip);
+@@ -479,7 +479,7 @@ static void tpm_del_char_device(struct tpm_chip *chip)
+ 
+ 	/* Make the driver uncallable. */
+ 	down_write(&chip->ops_sem);
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++	if (chip->ops && (chip->flags & TPM_CHIP_FLAG_TPM2)) {
+ 		if (!tpm_chip_start(chip)) {
+ 			tpm2_shutdown(chip, TPM2_SU_CLEAR);
+ 			tpm_chip_stop(chip);
+-- 
+2.25.1
+
