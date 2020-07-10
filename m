@@ -2,130 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 874D121BC24
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 19:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AE921BCA2
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2020 19:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbgGJRXn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Jul 2020 13:23:43 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25512 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726950AbgGJRXm (ORCPT
+        id S1727046AbgGJRys (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Jul 2020 13:54:48 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10338 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726962AbgGJRys (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Jul 2020 13:23:42 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06AGXXIK035408;
-        Fri, 10 Jul 2020 13:23:32 -0400
+        Fri, 10 Jul 2020 13:54:48 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06AHWbwn141353;
+        Fri, 10 Jul 2020 13:54:45 -0400
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 326j83u61m-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 326bpqu93t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jul 2020 13:23:31 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06AGsp6t109873;
-        Fri, 10 Jul 2020 13:23:31 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 326j83u60m-1
+        Fri, 10 Jul 2020 13:54:45 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06AHoJ3C184532;
+        Fri, 10 Jul 2020 13:54:44 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 326bpqu938-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jul 2020 13:23:31 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06AHGIBY017599;
-        Fri, 10 Jul 2020 17:23:29 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 326bc30t54-1
+        Fri, 10 Jul 2020 13:54:44 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06AHl8Uk028804;
+        Fri, 10 Jul 2020 17:54:42 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 326bahrsvu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jul 2020 17:23:28 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06AHNQ2461735024
+        Fri, 10 Jul 2020 17:54:42 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06AHsepD59179126
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jul 2020 17:23:26 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 15FA44C046;
-        Fri, 10 Jul 2020 17:23:26 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9DD254C044;
-        Fri, 10 Jul 2020 17:23:24 +0000 (GMT)
+        Fri, 10 Jul 2020 17:54:40 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 92EB442041;
+        Fri, 10 Jul 2020 17:54:40 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F12A74203F;
+        Fri, 10 Jul 2020 17:54:39 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.80.206.93])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Jul 2020 17:23:24 +0000 (GMT)
-Message-ID: <1594401804.14405.8.camel@linux.ibm.com>
-Subject: Re: [PATCH v5] ima: move APPRAISE_BOOTPARAM dependency on
- ARCH_POLICY to runtime
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Jul 2020 17:54:39 +0000 (GMT)
+Message-ID: <1594403679.14405.13.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils v2 2/2] ima-evm-utils: add SM3 to
+ pkey_hash_algo algorithm list
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Bruno Meneguele <bmeneg@redhat.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     erichte@linux.ibm.com, nayna@linux.ibm.com, stable@vger.kernel.org
-Date:   Fri, 10 Jul 2020 13:23:24 -0400
-In-Reply-To: <20200709164647.45153-1-bmeneg@redhat.com>
-References: <20200709164647.45153-1-bmeneg@redhat.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>, vt@altlinux.org,
+        linux-integrity@vger.kernel.org
+Date:   Fri, 10 Jul 2020 13:54:39 -0400
+In-Reply-To: <20200709033416.16845-2-tianjia.zhang@linux.alibaba.com>
+References: <20200709033416.16845-1-tianjia.zhang@linux.alibaba.com>
+         <20200709033416.16845-2-tianjia.zhang@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-10_10:2020-07-10,2020-07-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 malwarescore=0 phishscore=0 lowpriorityscore=0 bulkscore=0
- mlxlogscore=999 spamscore=0 impostorscore=0 suspectscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007100111
+ definitions=2020-07-10_13:2020-07-10,2020-07-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
+ spamscore=0 suspectscore=0 impostorscore=0 adultscore=0 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007100112
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-07-09 at 13:46 -0300, Bruno Meneguele wrote:
-> APPRAISE_BOOTPARAM has been marked as dependent on !ARCH_POLICY in compile
-> time, enforcing the appraisal whenever the kernel had the arch policy option
-> enabled.
-
-> However it breaks systems where the option is set but the system didn't
-> boot in a "secure boot" platform. In this scenario, anytime an appraisal
-> policy (i.e. ima_policy=appraisal_tcb) is used it will be forced, without
-> giving the user the opportunity to label the filesystem, before enforcing
-> integrity.
+On Thu, 2020-07-09 at 11:34 +0800, Tianjia Zhang wrote:
+> SM3 was published by State Encryption Management Bureau, China.
+> It has been well supported in the kernel and openssl.
+> This patch allows SM3 to be used smoothly by specifying the
+> parameter `-a sm3` or `--hashalgo sm3`.
 > 
-> Considering the ARCH_POLICY is only effective when secure boot is actually
-> enabled this patch remove the compile time dependency and move it to a
-> runtime decision, based on the secure boot state of that platform.
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> ---
+>  src/libimaevm.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/src/libimaevm.c b/src/libimaevm.c
+> index b485171..b8d5769 100644
+> --- a/src/libimaevm.c
+> +++ b/src/libimaevm.c
+> @@ -71,6 +71,7 @@ static const char *const pkey_hash_algo[PKEY_HASH__LAST] = {
+>  	[PKEY_HASH_SHA384]	= "sha384",
+>  	[PKEY_HASH_SHA512]	= "sha512",
+>  	[PKEY_HASH_SHA224]	= "sha224",
+> +	[PKEY_HASH_SM3_256]	= "sm3",
+>  	[PKEY_HASH_STREEBOG_256] = "md_gost12_256",
+>  	[PKEY_HASH_STREEBOG_512] = "md_gost12_512",
+>  };
 
-Perhaps we could simplify this patch description a bit?
+Sorry, I had forgotten the name in hash_info.c was recently changed
+from "sm3-256" to just "sm3".
 
-The IMA_APPRAISE_BOOTPARAM config allows enabling different
-"ima_appraise=" modes - log, fix, enforce - at run time, but not when
-IMA architecture specific policies are enabled.  This prevents
-properly labeling the filesystem on systems where secure boot is
-supported, but not enabled on the platform.  Only when secure boot is
-enabled, should these IMA appraise modes be disabled.
+This patch set patch is now in the "next" branch.
 
-This patch removes the compile time dependency and makes it a runtime
-decision, based on the secure boot state of that platform.
+thanks,
 
-<snip>
-
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index a9649b04b9f1..884de471b38a 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -19,6 +19,11 @@
->  static int __init default_appraise_setup(c
-
-> har *str)
->  {
->  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-> +	if (arch_ima_get_secureboot()) {
-> +		pr_info("appraise boot param ignored: secure boot enabled");
-
-Instead of a generic statement, is it possible to include the actual
-option being denied?  Perhaps something like: "Secure boot enabled,
-ignoring %s boot command line option"
-
-Mimi
-
-> +		return 1;
-> +	}
-> +
->  	if (strncmp(str, "off", 3) == 0)
->  		ima_appraise = 0;
->  	else if (strncmp(str, "log", 3) == 0)
-
+Mimi 
