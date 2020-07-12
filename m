@@ -2,143 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8962E21C031
-	for <lists+linux-integrity@lfdr.de>; Sat, 11 Jul 2020 00:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CF721CB9A
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Jul 2020 23:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbgGJW7J (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Jul 2020 18:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbgGJW7J (ORCPT
+        id S1729398AbgGLVic (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 12 Jul 2020 17:38:32 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17708 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729020AbgGLVic (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Jul 2020 18:59:09 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E1AC08C5DC
-        for <linux-integrity@vger.kernel.org>; Fri, 10 Jul 2020 15:59:09 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id x8so2835674plm.10
-        for <linux-integrity@vger.kernel.org>; Fri, 10 Jul 2020 15:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=zaGr1Nu6GQQp1jxSDJ4yzfhjg6UJvh2w5gtwh4d61xs=;
-        b=E9qYFGE0+l0YCV9UzR+G2McYBQmSQeFznqZAlltk8CGMkkJZfD2cqjwZprvjTv0RQj
-         I4DWrNInpJ8TPQIe7Lu+ifSs3wKZd/lr+U50wrtRKZ7u36Knv6AfL+1+S3qzkkCXXL0Z
-         at6s+kS03qv/c4IAS0rytCM6vNJLQUWIP6MNc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=zaGr1Nu6GQQp1jxSDJ4yzfhjg6UJvh2w5gtwh4d61xs=;
-        b=IW4jYab9d8CGN9zQqYosiq17SMFYlDcRvf1esKy5Ru41lHtje6OP/G8+ECxjpU2M7j
-         lNufMYz1Lh0qFY2+7EOhdwMR69oFUrFkEa5GVwPG0636qBpf+5pde08v0nV75Yk7sXlA
-         /UTPrmuPzMSmvqbvJ6fZkT0c0i2zQEY527AbQOHMfWvTREzHe9zrJWUrOA1/yqtctVKf
-         7fLEVVALJT8sUQ13FNpE6cHOZqOqX8eC6j5ETdL7dFE9WHAOnmlcLakztzsxMsxDrHv4
-         VScb1G+87QfB1Tqegk3piLu8MQuBkJSfln7PvGspPL58NMWLqJk1H2VBAq9yYrV2ZMnw
-         RzsA==
-X-Gm-Message-State: AOAM5322oTrXyUqAQ35lsoTPOIsvBRdvmhTXGGLy8TdzfwtXIbV7XAxT
-        DBhH6Oqm5LdrSDccS0linbz3jQ==
-X-Google-Smtp-Source: ABdhPJxVXjjKeIdD8z8whwzZhkDi/N2YGshqCq7LJeYrNXGgmvDQGyRf1YocX3/vACrswhoSIMiJpA==
-X-Received: by 2002:a17:90a:3aaa:: with SMTP id b39mr3160671pjc.73.1594421948367;
-        Fri, 10 Jul 2020 15:59:08 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id b14sm6861545pfb.186.2020.07.10.15.58.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jul 2020 15:59:07 -0700 (PDT)
-Subject: Re: [PATCH 2/4] fs: Remove FIRMWARE_PREALLOC_BUFFER from
- kernel_read_file() enums
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        James Morris <jmorris@namei.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jessica Yu <jeyu@kernel.org>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        KP Singh <kpsingh@google.com>, Dave Olsthoorn <dave@bewaar.me>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Peter Jones <pjones@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Boyd <stephen.boyd@linaro.org>,
-        Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20200707081926.3688096-1-keescook@chromium.org>
- <20200707081926.3688096-3-keescook@chromium.org>
- <3fdb3c53-7471-14d8-ce6a-251d8b660b8a@broadcom.com>
- <20200710220411.GR12769@casper.infradead.org>
- <128120ca-7465-e041-7481-4c5d53f639dd@broadcom.com>
- <202007101543.912633AA73@keescook>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <989a7560-29bb-a5ea-a03e-e2018c983829@broadcom.com>
-Date:   Fri, 10 Jul 2020 15:58:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 12 Jul 2020 17:38:32 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06CL5n5l173916;
+        Sun, 12 Jul 2020 17:38:21 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3279a9gh3f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 12 Jul 2020 17:38:21 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06CLA2aW183068;
+        Sun, 12 Jul 2020 17:38:20 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3279a9gh3b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 12 Jul 2020 17:38:20 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06CLYVpK002798;
+        Sun, 12 Jul 2020 21:38:20 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma01dal.us.ibm.com with ESMTP id 3275286733-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 12 Jul 2020 21:38:19 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06CLcIQd58065278
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 12 Jul 2020 21:38:18 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A2217136059;
+        Sun, 12 Jul 2020 21:38:18 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C9B413604F;
+        Sun, 12 Jul 2020 21:38:17 +0000 (GMT)
+Received: from [9.85.134.145] (unknown [9.85.134.145])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Sun, 12 Jul 2020 21:38:17 +0000 (GMT)
+Subject: Re: [PATCH v5 4/6] security: keys: trusted: use ASN.1 TPM2 key format
+ for the blobs
+To:     James Prestwood <prestwoj@gmail.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
+References: <20200130101812.6271-1-James.Bottomley@HansenPartnership.com>
+ <20200130101812.6271-5-James.Bottomley@HansenPartnership.com>
+ <5c593b6f23ae41e90e6b3799141ea68944bb4034.camel@gmail.com>
+ <1582761736.4245.12.camel@HansenPartnership.com>
+ <f9b64fe39eb71a1560ca2d1887238d0b4f9f111a.camel@gmail.com>
+ <1582764844.4245.29.camel@HansenPartnership.com>
+ <17e025e222cb6aefb5680d6cdad64a9ecf76fa97.camel@gmail.com>
+ <1582834760.18538.15.camel@HansenPartnership.com>
+ <3feaa7a3265b472bb3694045448fc44368f1fb99.camel@gmail.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+Message-ID: <34d5fef9-1baf-83a8-3e54-5065ea96f412@linux.ibm.com>
+Date:   Sun, 12 Jul 2020 17:38:16 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <202007101543.912633AA73@keescook>
+In-Reply-To: <3feaa7a3265b472bb3694045448fc44368f1fb99.camel@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-12_13:2020-07-10,2020-07-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1011 spamscore=0 malwarescore=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007120169
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Kees,
+On 2/27/2020 3:57 PM, James Prestwood wrote:
+> I am learning lots from this discussion, so thank you. I had assumed
+> that the parent key crypto had to match the child key, RSA vs EC, but
+> sounds like that is not the case. And yes, this sounds like a much
+> better way to go now that I have a bit more info on it.
 
-On 2020-07-10 3:44 p.m., Kees Cook wrote:
-> On Fri, Jul 10, 2020 at 03:10:25PM -0700, Scott Branden wrote:
->>
->> On 2020-07-10 3:04 p.m., Matthew Wilcox wrote:
->>> On Fri, Jul 10, 2020 at 02:00:32PM -0700, Scott Branden wrote:
->>>>> @@ -950,8 +951,8 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
->>>>>     		goto out;
->>>>>     	}
->>>>> -	if (id != READING_FIRMWARE_PREALLOC_BUFFER)
->>>>> -		*buf = vmalloc(i_size);
->>>>> +	if (!*buf)
->>>> The assumption that *buf is always NULL when id !=
->>>> READING_FIRMWARE_PREALLOC_BUFFER doesn't appear to be correct.
->>>> I get unhandled page faults due to this change on boot.
->>> Did it give you a stack backtrace?
->> Yes, but there's no requirement that *buf need to be NULL when calling this
->> function.
->> To fix my particular crash I added the following locally:
->>
->> --- a/kernel/module.c
->> +++ b/kernel/module.c
->> @@ -3989,7 +3989,7 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char
->> __user *, uargs, int, flags)
->>   {
->>       struct load_info info = { };
->>       loff_t size;
->> -    void *hdr;
->> +    void *hdr = NULL;
->>       int err;
->>
->>       err = may_init_module();
-> Thanks for the diagnosis and fix! I haven't had time to cycle back
-> around to this series yet. Hopefully soon. :)
-I don't consider this a complete fix as there may be other callers which 
-do not initialize
-the *buf param to NULL before calling kernel_read_file.
+I know this old.  Just FYI:
 
-But, it does boot my system.  Also, I was able to make modifications for my
-pread changes that pass (and the IMA works with IMA patch in my series 
-is dropped completely with your changes in place).
+The TPM WG debated this for a while, but decided that the TPM should not
+enforce parent / child algorithm matching.  It's for the application to 
+decide.
 
-So your changes work for me other than the hack needed above.
->
+I also note that parent keys wrap their child keys using a symmetric
+key, typically AES, not an RSA or ECC key.  The load time would be the 
+same for an ECC or RSA parent, because it's not using the asymmetric
+key.
+
+This different from TPM 1.2, which always uses parent RSA wrapping.
+
+The asymmetric key is used for:
+
+1 - import (key backup, using externally generated keys)
+2 - Salted sessions
+
+While both are useful, they're not typically used in a
+critical path.
+
+
+
 
