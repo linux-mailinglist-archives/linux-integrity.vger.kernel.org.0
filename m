@@ -2,144 +2,362 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E0E21DDDB
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Jul 2020 18:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0597121E169
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Jul 2020 22:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730325AbgGMQss (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Jul 2020 12:48:48 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:43940 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730265AbgGMQss (ORCPT
+        id S1726506AbgGMUbE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Jul 2020 16:31:04 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:36476 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbgGMUbD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Jul 2020 12:48:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594658927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=84HXSEfmbt0+vn1F/xRQMsKwpXDD6K/wrYokP/216f8=;
-        b=cXV7tsHjNOBWlKwvRD07BpixmAm1xZl/XWBLWo19CebdnsZEoZNXJiZitOOelxTJBIsdhu
-        2wVWDH34gpTXNNYl6bh5x6rcE0wEYefC0ochGaiQZTHkT7smmV6NVrREJZ6+gqLTGwdG5j
-        tRS7rNgN73tjEa+R6FJzGKoLkQTyeLo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-422-taVAPnOMMCiMeU52nuZSZQ-1; Mon, 13 Jul 2020 12:48:45 -0400
-X-MC-Unique: taVAPnOMMCiMeU52nuZSZQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3F831800597;
-        Mon, 13 Jul 2020 16:48:42 +0000 (UTC)
-Received: from localhost (ovpn-116-10.gru2.redhat.com [10.97.116.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0F9791053B31;
-        Mon, 13 Jul 2020 16:48:32 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
-        stable@vger.kernel.org, Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH v6] ima: move APPRAISE_BOOTPARAM dependency on ARCH_POLICY to runtime
-Date:   Mon, 13 Jul 2020 13:48:30 -0300
-Message-Id: <20200713164830.101165-1-bmeneg@redhat.com>
+        Mon, 13 Jul 2020 16:31:03 -0400
+Received: from [10.0.0.249] (c-24-19-135-168.hsd1.wa.comcast.net [24.19.135.168])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3468820B4908;
+        Mon, 13 Jul 2020 13:31:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3468820B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1594672261;
+        bh=/alYulr7TfHdtnQcnR5ksYNOj4rEKwjLZlm8tyeN/ig=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=HKGa5xriPaJtfUMOGKAdDEmNm530YOlnYSEACRiZ3qek6FvrL/gO2JzOlCjjVpaES
+         wr6E6LV/9mSxj+YP7UlkZ8qn3zs9VPhh9ADbVFJKR8LajLESGVLVlMgtnguuVmFup0
+         Kmtw0sgUMtC7d96W9/rPiy8/xnK4YEXPkWFcs8aE=
+Subject: Re: [V2 PATCH 1/3] Refactoring powerpc code for carrying over IMA
+ measurement logs, to move non architecture specific code to security/ima.
+To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, robh+dt@kernel.org, frowand.list@gmail.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, vincenzo.frascino@arm.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, james.morse@arm.com,
+        bhsharma@redhat.com, mbrugger@suse.com, hsinyi@chromium.org,
+        tao.li@vivo.com, christophe.leroy@c-s.fr,
+        gregkh@linuxfoundation.org, nramas@linux.microsoft.com,
+        tusharsu@linux.microsoft.com, balajib@linux.microsoft.com
+References: <20200618071045.471131-1-prsriva@linux.microsoft.com>
+ <20200618071045.471131-2-prsriva@linux.microsoft.com>
+ <87o8per3m0.fsf@morokweng.localdomain>
+From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
+Message-ID: <1385c8bb-cd25-8dc4-7224-8e27135f3356@linux.microsoft.com>
+Date:   Mon, 13 Jul 2020 13:30:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <87o8per3m0.fsf@morokweng.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The IMA_APPRAISE_BOOTPARAM config allows enabling different "ima_appraise="
-modes - log, fix, enforce - at run time, but not when IMA architecture
-specific policies are enabled.  This prevents properly labeling the
-filesystem on systems where secure boot is supported, but not enabled on the
-platform.  Only when secure boot is actually enabled should these IMA
-appraise modes be disabled.
 
-This patch removes the compile time dependency and makes it a runtime
-decision, based on the secure boot state of that platform.
 
-Test results as follows:
+On 6/19/20 5:19 PM, Thiago Jung Bauermann wrote:
+> 
+> Prakhar Srivastava <prsriva@linux.microsoft.com> writes:
+> 
+>> Powerpc has support to carry over the IMA measurement logs. Refatoring the
+>> non-architecture specific code out of arch/powerpc and into security/ima.
+>>
+>> The code adds support for reserving and freeing up of memory for IMA measurement
+>> logs.
+> 
+> Last week, Mimi provided this feedback:
+> 
+> "From your patch description, this patch should be broken up.  Moving
+> the non-architecture specific code out of powerpc should be one patch.
+>   Additional support should be in another patch.  After each patch, the
+> code should work properly."
+> 
+> That's not what you do here. You move the code, but you also make other
+> changes at the same time. This has two problems:
+> 
+> 1. It makes the patch harder to review, because it's very easy to miss a
+>     change.
+> 
+> 2. If in the future a git bisect later points to this patch, it's not
+>     clear whether the problem is because of the code movement, or because
+>     of the other changes.
+> 
+> When you move code, ideally the patch should only make the changes
+> necessary to make the code work at its new location. The patch which
+> does code movement should not cause any change in behavior.
+> 
+> Other changes should go in separate patches, either before or after the
+> one moving the code.
+> 
+> More comments below.
+> 
+Hi Thiago,
 
--> x86-64 with secure boot enabled
+Apologies for the delayed response i was away for a few days.
+I am working on breaking up the changes so that its easier to review and 
+update as well.
 
-[    0.015637] Kernel command line: <...> ima_policy=appraise_tcb ima_appraise=fix
-[    0.015668] ima: Secure boot enabled: ignoring ima_appraise=fix boot parameter option
+Thanks,
+Prakhar Srivastava
 
--> powerpc with secure boot disabled
+>>
+>> ---
+>>   arch/powerpc/include/asm/ima.h     |  10 ---
+>>   arch/powerpc/kexec/ima.c           | 126 ++---------------------------
+>>   security/integrity/ima/ima_kexec.c | 116 ++++++++++++++++++++++++++
+>>   3 files changed, 124 insertions(+), 128 deletions(-)
+>>
+>> diff --git a/arch/powerpc/include/asm/ima.h b/arch/powerpc/include/asm/ima.h
+>> index ead488cf3981..c29ec86498f8 100644
+>> --- a/arch/powerpc/include/asm/ima.h
+>> +++ b/arch/powerpc/include/asm/ima.h
+>> @@ -4,15 +4,6 @@
+>>
+>>   struct kimage;
+>>
+>> -int ima_get_kexec_buffer(void **addr, size_t *size);
+>> -int ima_free_kexec_buffer(void);
+>> -
+>> -#ifdef CONFIG_IMA
+>> -void remove_ima_buffer(void *fdt, int chosen_node);
+>> -#else
+>> -static inline void remove_ima_buffer(void *fdt, int chosen_node) {}
+>> -#endif
+>> -
+>>   #ifdef CONFIG_IMA_KEXEC
+>>   int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
+>>   			      size_t size);
+>> @@ -22,7 +13,6 @@ int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node);
+>>   static inline int setup_ima_buffer(const struct kimage *image, void *fdt,
+>>   				   int chosen_node)
+>>   {
+>> -	remove_ima_buffer(fdt, chosen_node);
+>>   	return 0;
+>>   }
+> 
+> This is wrong. Even if the currently running kernel doesn't have
+> CONFIG_IMA_KEXEC, it should remove the IMA buffer property and memory
+> reservation from the FDT that is being prepared for the next kernel.
+> 
+> This is because the IMA kexec buffer is useless for the next kernel,
+> regardless of whether the current kernel supports CONFIG_IMA_KEXEC or
+> not. Keeping it around would be a waste of memory.
+> 
+I will keep it in my next revision.
+My understanding was the reserved memory is freed and property removed 
+when IMA loads the logs on init. During setup_fdt in kexec, a duplicate 
+copy of the dt is used, but memory still needs to be allocated, thus the 
+property itself indicats presence of reserved memory.
 
-[    0.000000] Kernel command line: <...> ima_policy=appraise_tcb ima_appraise=fix
-[    0.000000] Secure boot mode disabled
 
--> Running the system without secure boot and with both options set:
+>> @@ -179,13 +64,18 @@ int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node)
+>>   	int ret, addr_cells, size_cells, entry_size;
+>>   	u8 value[16];
+>>
+>> -	remove_ima_buffer(fdt, chosen_node);
+> 
+> This is wrong, for the same reason stated above.
+> 
+>>   	if (!image->arch.ima_buffer_size)
+>>   		return 0;
+>>
+>> -	ret = get_addr_size_cells(&addr_cells, &size_cells);
+>> -	if (ret)
+>> +	ret = fdt_address_cells(fdt, chosen_node);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +	addr_cells = ret;
+>> +
+>> +	ret = fdt_size_cells(fdt, chosen_node);
+>> +	if (ret < 0)
+>>   		return ret;
+>> +	size_cells = ret;
+>>
+>>   	entry_size = 4 * (addr_cells + size_cells);
+>>
+> 
+> I liked this change. Thanks! I agree it's better to use
+> fdt_address_cells() and fdt_size_cells() here.
+> 
+> But it should be in a separate patch. Either before or after the one
+> moving the code.
+> 
+>> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+>> index 121de3e04af2..e1e6d6154015 100644
+>> --- a/security/integrity/ima/ima_kexec.c
+>> +++ b/security/integrity/ima/ima_kexec.c
+>> @@ -10,8 +10,124 @@
+>>   #include <linux/seq_file.h>
+>>   #include <linux/vmalloc.h>
+>>   #include <linux/kexec.h>
+>> +#include <linux/of.h>
+>> +#include <linux/memblock.h>
+>> +#include <linux/libfdt.h>
+>>   #include "ima.h"
+>>
+>> +static int get_addr_size_cells(int *addr_cells, int *size_cells)
+>> +{
+>> +	struct device_node *root;
+>> +
+>> +	root = of_find_node_by_path("/");
+>> +	if (!root)
+>> +		return -EINVAL;
+>> +
+>> +	*addr_cells = of_n_addr_cells(root);
+>> +	*size_cells = of_n_size_cells(root);
+>> +
+>> +	of_node_put(root);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
+>> +			       size_t *size)
+>> +{
+>> +	int ret, addr_cells, size_cells;
+>> +
+>> +	ret = get_addr_size_cells(&addr_cells, &size_cells);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (len < 4 * (addr_cells + size_cells))
+>> +		return -ENOENT;
+>> +
+>> +	*addr = of_read_number(prop, addr_cells);
+>> +	*size = of_read_number(prop + 4 * addr_cells, size_cells);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +/**
+>> + * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+>> + * @addr:	On successful return, set to point to the buffer contents.
+>> + * @size:	On successful return, set to the buffer size.
+>> + *
+>> + * Return: 0 on success, negative errno on error.
+>> + */
+>> +int ima_get_kexec_buffer(void **addr, size_t *size)
+>> +{
+>> +	int ret, len;
+>> +	unsigned long tmp_addr;
+>> +	size_t tmp_size;
+>> +	const void *prop;
+>> +
+>> +	prop = of_get_property(of_chosen, "linux,ima-kexec-buffer", &len);
+>> +	if (!prop)
+>> +		return -ENOENT;
+>> +
+>> +	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	*addr = __va(tmp_addr);
+>> +	*size = tmp_size;
+>> +
+>> +	return 0;
+>> +}
+> 
+> The functions above were moved without being changed. Good.
+> 
+>> +/**
+>> + * ima_free_kexec_buffer - free memory used by the IMA buffer
+>> + */
+>> +int ima_free_kexec_buffer(void)
+>> +{
+>> +	int ret;
+>> +	unsigned long addr;
+>> +	size_t size;
+>> +	struct property *prop;
+>> +
+>> +	prop = of_find_property(of_chosen, "linux,ima-kexec-buffer", NULL);
+>> +	if (!prop)
+>> +		return -ENOENT;
+>> +
+>> +	ret = do_get_kexec_buffer(prop->value, prop->length, &addr, &size);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = of_remove_property(of_chosen, prop);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return memblock_free(__pa(addr), size);
+> 
+> Here you added a __pa() call. Do you store a virtual address in
+> linux,ima-kexec-buffer property? Doesn't it make more sense to store a
+> physical address?
+> 
+trying to minimize the changes here as do_get_kexec_buffer return the va.
+I will refactor this to remove the double translation.
 
-CONFIG_IMA_APPRAISE_BOOTPARAM=y
-CONFIG_IMA_ARCH_POLICY=y
-
-Audit prompts "missing-hash" but still allow execution and, consequently,
-filesystem labeling:
-
-type=INTEGRITY_DATA msg=audit(07/09/2020 12:30:27.778:1691) : pid=4976
-uid=root auid=root ses=2
-subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=appraise_data
-cause=missing-hash comm=bash name=/usr/bin/evmctl dev="dm-0" ino=493150
-res=no
-
-Cc: stable@vger.kernel.org
-Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
-v6:
-  - explictly print the bootparam being ignored to the user (Mimi)
-v5:
-  - add pr_info() to inform user the ima_appraise= boot param is being
-	ignored due to secure boot enabled (Nayna)
-  - add some testing results to commit log
-v4:
-  - instead of change arch_policy loading code, check secure boot state at
-	"ima_appraise=" parameter handler (Mimi)
-v3:
-  - extend secure boot arch checker to also consider trusted boot
-  - enforce IMA appraisal when secure boot is effectively enabled (Nayna)
-  - fix ima_appraise flag assignment by or'ing it (Mimi)
-v2:
-  - pr_info() message prefix correction
- security/integrity/ima/Kconfig        | 2 +-
- security/integrity/ima/ima_appraise.c | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index edde88dbe576..62dc11a5af01 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -232,7 +232,7 @@ config IMA_APPRAISE_REQUIRE_POLICY_SIGS
- 
- config IMA_APPRAISE_BOOTPARAM
- 	bool "ima_appraise boot parameter"
--	depends on IMA_APPRAISE && !IMA_ARCH_POLICY
-+	depends on IMA_APPRAISE
- 	default y
- 	help
- 	  This option enables the different "ima_appraise=" modes
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index a9649b04b9f1..28a59508c6bd 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -19,6 +19,12 @@
- static int __init default_appraise_setup(char *str)
- {
- #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-+	if (arch_ima_get_secureboot()) {
-+		pr_info("Secure boot enabled: ignoring ima_appraise=%s boot parameter option",
-+			str);
-+		return 1;
-+	}
-+
- 	if (strncmp(str, "off", 3) == 0)
- 		ima_appraise = 0;
- 	else if (strncmp(str, "log", 3) == 0)
--- 
-2.26.2
-
+> Even if making this change is the correct thing to do, it should be a
+> separate patch, unless it can't be avoided. And if that is the case,
+> then it should be explained in the commit message.
+> 
+>> +
+>> +}
+>> +
+>> +/**
+>> + * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
+>> + *
+>> + * The IMA measurement buffer is of no use to a subsequent kernel, so we always
+>> + * remove it from the device tree.
+>> + */
+>> +void remove_ima_buffer(void *fdt, int chosen_node)
+>> +{
+>> +	int ret, len;
+>> +	unsigned long addr;
+>> +	size_t size;
+>> +	const void *prop;
+>> +
+>> +	prop = fdt_getprop(fdt, chosen_node, "linux,ima-kexec-buffer", &len);
+>> +	if (!prop)
+>> +		return;
+>> +
+>> +	do_get_kexec_buffer(prop, len, &addr, &size);
+>> +	ret = fdt_delprop(fdt, chosen_node, "linux,ima-kexec-buffer");
+>> +	if (ret < 0)
+>> +		return;
+>> +
+>> +	memblock_free(addr, size);
+>> +}
+> 
+> Here is another function that changed when moved. This one I know to be
+> wrong. You're confusing the purposes of remove_ima_buffer() and
+> ima_free_kexec_buffer().
+> 
+> You did send me a question about them nearly three weeks ago which I
+> only answered today, so I apologize. Also, their names could more
+> clearly reflect their differences, so it's bad naming on my part.
+> 
+> With IMA kexec buffers, there are two kernels (and thus their two
+> respective, separate device trees) to be concerned about:
+> 
+> 1. the currently running kernel, which uses the live device tree
+> (accessed with the of_* functions) and the memblock subsystem;
+> 
+> 2. the kernel which is being loaded by kexec, which will use the FDT
+> blob being passed around as argument to these functions, and the memory
+> reservations in the memory reservation table of the FDT blob.
+> 
+> ima_free_kexec_buffer() is used by IMA in the currently running kernel.
+> Therefore the device tree it is concerned about is the live one, and
+> thus uses the of_* functions to access it. And uses memblock to change
+> the memory reservation.
+> 
+> remove_ima_buffer() on the other hand is used by the kexec code to
+> prepare an FDT blob for the kernel that is being loaded. It should not
+> make any changes to live device tree, nor to memblock allocations. It
+> should only make changes to the FDT blob.
+> 
+Thank you for this, greatly appreciate clearing my misunderstandings.
+> --
+> Thiago Jung Bauermann
+> IBM Linux Technology Center
+> 
