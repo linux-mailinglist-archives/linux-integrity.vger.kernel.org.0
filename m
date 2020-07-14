@@ -2,67 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A120121EDE5
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 12:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D0921EF22
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 13:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726332AbgGNKZC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Jul 2020 06:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725884AbgGNKZB (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Jul 2020 06:25:01 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDCCC061755
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Jul 2020 03:25:01 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id w27so12308226qtb.7
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Jul 2020 03:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=vhgY5LPEpxTGfN8PeYcs05WGVIdTQTJjTdgL4qSsPAU=;
-        b=TaRftIf7IgIv/e0NHlLo86EMmxVYSs8g7YyUCQV2y2wkCCpwtqwZfLHebjjNjwobc6
-         Pp/ql7qSqbmZnTJdMetvm5gPqomRKBO034+xonbw3+vtAPrwLMHk3FwlfRICeC9704H0
-         j0PXm/Z0ugvphaAjnSPUehD4V4dRzuMUX9QL4Lo5brZ6nN+vQlGx7CRxmlMBBQXcjhsn
-         RLRg4g5koIYAxr72CZ6vY+zwxeqIBFasDd3JnUkwIyWAGMusz6M84bdF17ptckO9suYz
-         6v8HRfD0tGS574TNKdFIj5GY59tGmvoTahSjCFTPysBdVmkvjn0cSyimHfXSjOaNVGnF
-         7IaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=vhgY5LPEpxTGfN8PeYcs05WGVIdTQTJjTdgL4qSsPAU=;
-        b=fI2biAyjFk6SGNDvtTw8YI8QIbaxN2uYl+mpthAqKmsQIQ+L1OT9f+3h26WAOZ+Y8V
-         Hsge1VjdnAzFCn4o8j/j3DyMUSvBBs8CmfvrxMzv7MpCFJPbz93L7seecDBwnTGWrGBY
-         NF7fqaljcLD5tu10zp+NsrkPlMsjqY3WcZezAfX41qnbkMUvwjK2Dbf8TNZacCBMCHiG
-         FKo6EeUaU0HsfeEmk1BFNx0YBTQqg5csbz9KNUV7Um+8uBXJVhKg3Wuh4AhHXOKHpr7D
-         YGw29Feb7l8/kwEqRioyrym0hhTOD9TdynlThTGg6DcEKyZk4S02xSCYrmNZZQdBIDA8
-         mJVw==
-X-Gm-Message-State: AOAM531qTesFGRq8woymzKf5MgWfNl0YtwXdj+aab+6Yj024KUTKc8LS
-        YMevKyY7X0pNOE9vPJOV1gzMJeUJFOJbX2XWeB+d6w==
-X-Google-Smtp-Source: ABdhPJwe6Q+VBkVWVxRVgE/FfFt0lFOqn2a60/IcRS6ARp8dQoT5xpQNxfVGW+/LG1u9da5rASPnTt27NIaL2MXiFEk=
-X-Received: by 2002:ac8:1b8b:: with SMTP id z11mr3896180qtj.6.1594722299602;
- Tue, 14 Jul 2020 03:24:59 -0700 (PDT)
+        id S1728082AbgGNLUn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Jul 2020 07:20:43 -0400
+Received: from mga04.intel.com ([192.55.52.120]:10830 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726823AbgGNLUg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 Jul 2020 07:20:36 -0400
+IronPort-SDR: lSxUzVJBfFnX+XKu5B9yefceayGdeAP5xO1ELQHL1H/h/3ZjyK8AToDX0vl621t1Y6w6RevuUp
+ PW4lzE9ptVwQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="146349943"
+X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
+   d="scan'208";a="146349943"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 04:20:34 -0700
+IronPort-SDR: B5BSpZgOdkfuAEIuDBr1rtuqVEsHQIemWCTJzzjDQUC8llN9zkJYda/njPIPKbKVCga2E4SBko
+ QYsSxABJp2kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
+   d="scan'208";a="299508857"
+Received: from rmarti11-mobl.ger.corp.intel.com (HELO localhost) ([10.252.54.57])
+  by orsmga002.jf.intel.com with ESMTP; 14 Jul 2020 04:20:32 -0700
+Date:   Tue, 14 Jul 2020 14:20:30 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v9 2/2] tpm: Add support for event log pointer found in
+ TPM2 ACPI table
+Message-ID: <20200714112030.GA1448526@linux.intel.com>
+References: <20200706181953.3592084-1-stefanb@linux.vnet.ibm.com>
+ <20200706181953.3592084-3-stefanb@linux.vnet.ibm.com>
+ <20200706230914.GC20770@linux.intel.com>
+ <78ec872f-89b3-6464-6ede-bd0a46fe5c4c@linux.ibm.com>
+ <20200707022416.GC112019@linux.intel.com>
+ <f3e0fb50-8617-da40-1456-158531a070cb@linux.ibm.com>
+ <20200707040325.GB143804@linux.intel.com>
+ <85c27199-df55-eecc-855c-dedcea64f89e@linux.ibm.com>
+ <20200708140753.GC538949@linux.intel.com>
+ <e42cb59d-6a3d-12be-bb51-88aa8c5dba23@linux.ibm.com>
 MIME-Version: 1.0
-From:   rishi gupta <gupt21@gmail.com>
-Date:   Tue, 14 Jul 2020 15:54:48 +0530
-Message-ID: <CALUj-gu9-0ZKDvTAOFN1jcbYBUXMymPTJmyD=J6C58mVoKi4pQ@mail.gmail.com>
-Subject: Queries regarding portable feature and signing process for EVM
-To:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Matthew Garrett <mjg59@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e42cb59d-6a3d-12be-bb51-88aa8c5dba23@linux.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Matthew,Mimi,
+On Wed, Jul 08, 2020 at 10:17:17AM -0400, Stefan Berger wrote:
+> > ❯ swtpm-mvo.swtpm socket --tpmstate dir=/tmp/mytpm1 \
+> >    --ctrl type=unixio,path=/tmp/mytpm1/swtpm-sock \
+> >    --log level=20
+> > swtpm: Could not open UnixIO socket: No such file or directory
+> 
+> 
+> Did you create the directory '/tmp/mytpm1' ?
 
-Few queries in context of 4.14 kernel:
-- Does it support portable EVM feature.
-- For EVM traditionally we need to sign files on the device itself.
-Can we now use portable EVM as a method to sign files during build
-itself.
+Yes. It's the socket file that it is complain because it does
+not exist beforehand.
 
-Regards,
-Rishi
+/Jarkko
