@@ -2,74 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3833621E369
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 01:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A120121EDE5
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 12:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726376AbgGMXFR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Jul 2020 19:05:17 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:34101 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726352AbgGMXFR (ORCPT
+        id S1726332AbgGNKZC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Jul 2020 06:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725884AbgGNKZB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Jul 2020 19:05:17 -0400
-Received: by mail-il1-f195.google.com with SMTP id t4so12716178iln.1;
-        Mon, 13 Jul 2020 16:05:16 -0700 (PDT)
+        Tue, 14 Jul 2020 06:25:01 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDCCC061755
+        for <linux-integrity@vger.kernel.org>; Tue, 14 Jul 2020 03:25:01 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id w27so12308226qtb.7
+        for <linux-integrity@vger.kernel.org>; Tue, 14 Jul 2020 03:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=vhgY5LPEpxTGfN8PeYcs05WGVIdTQTJjTdgL4qSsPAU=;
+        b=TaRftIf7IgIv/e0NHlLo86EMmxVYSs8g7YyUCQV2y2wkCCpwtqwZfLHebjjNjwobc6
+         Pp/ql7qSqbmZnTJdMetvm5gPqomRKBO034+xonbw3+vtAPrwLMHk3FwlfRICeC9704H0
+         j0PXm/Z0ugvphaAjnSPUehD4V4dRzuMUX9QL4Lo5brZ6nN+vQlGx7CRxmlMBBQXcjhsn
+         RLRg4g5koIYAxr72CZ6vY+zwxeqIBFasDd3JnUkwIyWAGMusz6M84bdF17ptckO9suYz
+         6v8HRfD0tGS574TNKdFIj5GY59tGmvoTahSjCFTPysBdVmkvjn0cSyimHfXSjOaNVGnF
+         7IaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qkXyHnsv68ED4w7McKNKxAN4UpsE/YFqp1JlctBInnU=;
-        b=a9WqWF13sZl/lV00EiMTDDbeZTW1x5BuNPyqRra83jgTSaCyeIQHArKsAQjtUPNtlv
-         zSfy2/Ey0PNIPA5Nd8ITbXvzVAd+/qiJNiWcLIj9ZcH3Bk6ewLlbCoGU5iBdC0BSDqDR
-         tyIUhlEkklEE2b3RQV51h++fG6D0cDhshE+TDdLT48r4/bPu1UQyqPt2oxgaL1DsMtoU
-         0rvzUHG/0cVMehNjQUl5T1p9YAxGPc1nVmEWD79mkSwbYoVaZy+K5IgkTQkvBtTGkRwQ
-         jf57QjXvTARz3g4erspq3t1rDAphPopqa4SLGAUVpd81hoPD+4MwBFHSFg003JeSKAR6
-         9DTQ==
-X-Gm-Message-State: AOAM532kvAXVvVAebvXsO70kfTxGIbl6y9SokiPlb+Ecd3IJbubso4Hq
-        BBFF2kk2a0/Z9MDW/kF42g==
-X-Google-Smtp-Source: ABdhPJxZ9uWIbSzhP3o1StELFModGoY1L4ZSW4KiG7rqg3xYuCfk5q/0OPS7jM/nLh/X7d/OC/Nu8g==
-X-Received: by 2002:a92:c9cb:: with SMTP id k11mr2188434ilq.70.1594681516447;
-        Mon, 13 Jul 2020 16:05:16 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id w5sm8931082ilm.46.2020.07.13.16.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 16:05:15 -0700 (PDT)
-Received: (nullmailer pid 888550 invoked by uid 1000);
-        Mon, 13 Jul 2020 23:05:14 -0000
-Date:   Mon, 13 Jul 2020 17:05:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Masahisa Kojima <masahisa.kojima@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        jgg@ziepe.ca, Rob Herring <robh+dt@kernel.org>,
-        linux-integrity@vger.kernel.org, jarkko.sakkinen@linux.intel.com,
-        ardb@kernel.org, peterhuewe@gmx.de,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 2/2] dt-bindings: Add SynQucer TPM MMIO as a trivial
- device
-Message-ID: <20200713230514.GA888497@bogus>
-References: <20200708131424.18729-1-masahisa.kojima@linaro.org>
- <20200708131424.18729-3-masahisa.kojima@linaro.org>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=vhgY5LPEpxTGfN8PeYcs05WGVIdTQTJjTdgL4qSsPAU=;
+        b=fI2biAyjFk6SGNDvtTw8YI8QIbaxN2uYl+mpthAqKmsQIQ+L1OT9f+3h26WAOZ+Y8V
+         Hsge1VjdnAzFCn4o8j/j3DyMUSvBBs8CmfvrxMzv7MpCFJPbz93L7seecDBwnTGWrGBY
+         NF7fqaljcLD5tu10zp+NsrkPlMsjqY3WcZezAfX41qnbkMUvwjK2Dbf8TNZacCBMCHiG
+         FKo6EeUaU0HsfeEmk1BFNx0YBTQqg5csbz9KNUV7Um+8uBXJVhKg3Wuh4AhHXOKHpr7D
+         YGw29Feb7l8/kwEqRioyrym0hhTOD9TdynlThTGg6DcEKyZk4S02xSCYrmNZZQdBIDA8
+         mJVw==
+X-Gm-Message-State: AOAM531qTesFGRq8woymzKf5MgWfNl0YtwXdj+aab+6Yj024KUTKc8LS
+        YMevKyY7X0pNOE9vPJOV1gzMJeUJFOJbX2XWeB+d6w==
+X-Google-Smtp-Source: ABdhPJwe6Q+VBkVWVxRVgE/FfFt0lFOqn2a60/IcRS6ARp8dQoT5xpQNxfVGW+/LG1u9da5rASPnTt27NIaL2MXiFEk=
+X-Received: by 2002:ac8:1b8b:: with SMTP id z11mr3896180qtj.6.1594722299602;
+ Tue, 14 Jul 2020 03:24:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200708131424.18729-3-masahisa.kojima@linaro.org>
+From:   rishi gupta <gupt21@gmail.com>
+Date:   Tue, 14 Jul 2020 15:54:48 +0530
+Message-ID: <CALUj-gu9-0ZKDvTAOFN1jcbYBUXMymPTJmyD=J6C58mVoKi4pQ@mail.gmail.com>
+Subject: Queries regarding portable feature and signing process for EVM
+To:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Matthew Garrett <mjg59@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 08 Jul 2020 22:14:24 +0900, Masahisa Kojima wrote:
-> Add a compatible string for the SynQuacer TPM to the binding for a
-> TPM exposed via a memory mapped TIS frame. The MMIO window behaves
-> slightly differently on this hardware, so it requires its own
-> identifier.
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+Hi Matthew,Mimi,
 
-Acked-by: Rob Herring <robh@kernel.org>
+Few queries in context of 4.14 kernel:
+- Does it support portable EVM feature.
+- For EVM traditionally we need to sign files on the device itself.
+Can we now use portable EVM as a method to sign files during build
+itself.
+
+Regards,
+Rishi
