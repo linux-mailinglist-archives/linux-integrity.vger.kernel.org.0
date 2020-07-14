@@ -2,148 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C15621F908
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 20:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3809121F9A2
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 20:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729134AbgGNSRS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Jul 2020 14:17:18 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:36926 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729248AbgGNSRR (ORCPT
+        id S1729138AbgGNSk5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Jul 2020 14:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726817AbgGNSk4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Jul 2020 14:17:17 -0400
-Received: from localhost.localdomain (c-73-187-218-229.hsd1.pa.comcast.net [73.187.218.229])
-        by linux.microsoft.com (Postfix) with ESMTPSA id ECA8B20B490A;
-        Tue, 14 Jul 2020 11:17:15 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com ECA8B20B490A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1594750636;
-        bh=eCk7szO70aHIl8QR28yX9xAMF9C0bOdAZP5iZN94a5M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kIUbruTBse3xCgdshieOemNlDe72NlmnDX0dUfTuZKdWJAiI7MOB/h2tzDkf+rUs4
-         aVPn8xnHP6mhSoLp8acLtGat6VRmx2gi388uIPuCHEs2ZEQhrkJgA2J09kTK/pQTWw
-         4ucpMKyv/FBci7XRSvITr1zR/qyY09jClFf1SmjM=
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-To:     zohar@linux.ibm.com, pvorel@suse.cz, ltp@lists.linux.it
-Cc:     nramas@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH v5 2/2] IMA: Add a test to verify importing a certificate into keyring
-Date:   Tue, 14 Jul 2020 14:17:03 -0400
-Message-Id: <20200714181703.6374-3-t-josne@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200714181703.6374-1-t-josne@linux.microsoft.com>
-References: <20200714181703.6374-1-t-josne@linux.microsoft.com>
+        Tue, 14 Jul 2020 14:40:56 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA6BC061755;
+        Tue, 14 Jul 2020 11:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=SimmloHZQtBhOnb9Pbgsw72I1O5VIdL523t/ncOnsgk=; b=W1Yl3XUG9MzYNah9l9+4fRf5F9
+        h49otnq+/660uWOaP2mI+uT0FEtijYl0Z857koqs/q/DNBdtGnEnRubTJQU9UgUwlXeirrE5ICls4
+        DWrWjQzBhwo4RR3cM1LZCT32KQQ+TSv84fz0enXVKcFX7mD/5DI07ID3Gi1BeY4O8NSMW5T9hgsUh
+        KWey6VEaUzKEgOu0f6LrbD4+qQ/Mw0Wgyca6+KZCj9zJxv+Cy/YyUK8bfcv4QUcN1NScLN0PUpkBq
+        t94ot1QTNg7Vknoh/C0CW2OlronpItPtycZ0sCKu8ruViFpHqOiyjMlOgsT2spFr1GtAw56/Llwu/
+        tS4ScVZQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jvPrD-00061s-ES; Tue, 14 Jul 2020 18:40:47 +0000
+Subject: Re: [PATCH v6 5/7] fs,doc: Enable to enforce noexec mounts or file
+ exec through O_MAYEXEC
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20200714181638.45751-1-mic@digikod.net>
+ <20200714181638.45751-6-mic@digikod.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <038639b1-92da-13c1-b3e5-8f13639a815e@infradead.org>
+Date:   Tue, 14 Jul 2020 11:40:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <20200714181638.45751-6-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add an IMA measurement test that verifies that an x509 certificate
-can be imported into the .ima keyring and measured correctly.
+Hi,
 
-Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
----
- .../kernel/security/integrity/ima/README.md   | 22 ++++++++++
- .../security/integrity/ima/tests/ima_keys.sh  | 44 ++++++++++++++++++-
- 2 files changed, 64 insertions(+), 2 deletions(-)
+On 7/14/20 11:16 AM, Mickaël Salaün wrote:
 
-diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
-index 16a1f48c3..9e6790306 100644
---- a/testcases/kernel/security/integrity/ima/README.md
-+++ b/testcases/kernel/security/integrity/ima/README.md
-@@ -16,6 +16,28 @@ CONFIG_INTEGRITY=y
- CONFIG_IMA=y
- ```
- 
-+IMA Key Import test
-+-------------
-+`ima_keys.sh` requires an x509 certificate to be signed by a key on one
-+of the trusted keyrings. The x509 certificate must be placed at
-+`/etc/keys/x509_ima.der` for this test or the path must be passed in
-+the CERT_FILE env var.
-+
-+The x509 public key key must be signed by the private key you generate.
-+Follow these instructions:
-+https://manpages.ubuntu.com/manpages/disco/man1/evmctl.1.html#generate%20trusted%20keys.
-+
-+The test cannot be set-up automatically because the x509 public key must be
-+built into the kernel and loaded onto a trusted keyring.
-+
-+As well as what's required for the IMA tests, the following are also required
-+in the kernel configuration:
-+```
-+CONFIG_IMA_READ_POLICY=y
-+CONFIG_SYSTEM_TRUSTED_KEYRING=y
-+CONFIG_SYSTEM_TRUSTED_KEYS="/etc/keys/ima-local-ca.pem"
-+```
-+
- EVM tests
- ---------
- 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-index 4d53cd04f..c10427481 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-@@ -5,10 +5,12 @@
- #
- # Verify that keys are measured correctly based on policy.
- 
--TST_NEEDS_CMDS="grep mktemp cut sed tr"
--TST_CNT=1
-+TST_NEEDS_CMDS="grep mktemp cut sed tr xxd keyctl evmctl openssl cmp"
-+TST_CNT=2
- TST_NEEDS_DEVICE=1
- 
-+CERT_FILE="${CERT_FILE:-/etc/keys/x509_ima.der}"
-+
- . ima_setup.sh
- 
- # Based on https://lkml.org/lkml/2019/12/13/564.
-@@ -68,4 +70,42 @@ test1()
- 	fi
- }
- 
-+
-+# Test that a cert can be imported into the ".ima" keyring correctly.
-+test2() {
-+	local keyring_id key_id test_file="file.txt"
-+
-+	[ -f $CERT_FILE ] || tst_brk TCONF "missing $CERT_FILE"
-+
-+	if ! openssl x509 -in $CERT_FILE -inform der > /dev/null; then
-+		tst_brk TCONF "The suppled cert file ($CERT_FILE) is not a valid x509 certificate"
-+	fi
-+
-+	tst_res TINFO "adding a cert to the .ima keyring ($CERT_FILE)"
-+	
-+	keyring_id=$(keyctl describe %:.ima | cut -d' ' -f2 | tr -d ':') || \
-+		tst_btk TCONF "unable to retrieve .ima keyring id"
-+
-+	if ! tst_is_num	"$keyring_id"; then
-+		tst_brk TCONF "unable to parse keyring id from keyring"
-+	fi
-+
-+	evmctl import $CERT_FILE "$keyring_id" > /dev/null || \
-+		tst_brk TCONF "unable to import a cert into the .ima keyring"
-+
-+	grep -F ".ima" "$ASCII_MEASUREMENTS" | tail -n1 | cut -d' ' -f6 | \
-+		xxd -r -p > $test_file || \
-+		tst_brk TCONF "cert not found in ascii_runtime_measurements log"
-+
-+	if ! openssl x509 -in $test_file -inform der > /dev/null; then
-+		tst_brk TCONF "The cert logged in ascii_runtime_measurements is not a valid x509 certificate"
-+	fi
-+
-+	if cmp -s "$test_file" $CERT_FILE; then
-+		tst_res TPASS "logged cert matches original cert"
-+	else
-+		tst_res TFAIL "logged cert does not match original cert"
-+	fi
-+}
-+
- tst_run
+> ---
+>  Documentation/admin-guide/sysctl/fs.rst | 45 +++++++++++++++++++++++++
+>  fs/namei.c                              | 29 +++++++++++++---
+>  include/linux/fs.h                      |  1 +
+>  kernel/sysctl.c                         | 12 +++++--
+>  4 files changed, 80 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/sysctl/fs.rst b/Documentation/admin-guide/sysctl/fs.rst
+> index 2a45119e3331..02ec384b8bbf 100644
+> --- a/Documentation/admin-guide/sysctl/fs.rst
+> +++ b/Documentation/admin-guide/sysctl/fs.rst
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+with one tiny nit:
+
+> @@ -165,6 +166,50 @@ system needs to prune the inode list instead of allocating
+> +The ability to restrict code execution must be thought as a system-wide policy,
+> +which first starts by restricting mount points with the ``noexec`` option.
+> +This option is also automatically applied to special filesystems such as /proc
+> +.  This prevents files on such mount points to be directly executed by the
+
+Can you move that period from the beginning of the line to the end of the
+previous line?
+
+> +kernel or mapped as executable memory (e.g. libraries).  With script
+> +interpreters using the ``O_MAYEXEC`` flag, the executable permission can then
+> +be checked before reading commands from files. This makes it possible to
+> +enforce the ``noexec`` at the interpreter level, and thus propagates this
+> +security policy to scripts.  To be fully effective, these interpreters also
+> +need to handle the other ways to execute code: command line parameters (e.g.,
+> +option ``-e`` for Perl), module loading (e.g., option ``-m`` for Python),
+> +stdin, file sourcing, environment variables, configuration files, etc.
+> +According to the threat model, it may be acceptable to allow some script
+> +interpreters (e.g. Bash) to interpret commands from stdin, may it be a TTY or a
+> +pipe, because it may not be enough to (directly) perform syscalls.
+
+thanks.
 -- 
-2.25.1
+~Randy
 
