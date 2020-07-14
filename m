@@ -2,92 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0512B21F588
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 16:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE48721F5A2
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 17:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728561AbgGNO4z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Jul 2020 10:56:55 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36810 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726062AbgGNO4y (ORCPT
+        id S1725955AbgGNPDY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Jul 2020 11:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbgGNPDY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Jul 2020 10:56:54 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06EEWx3l077491
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Jul 2020 10:56:53 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3298wumeq5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Jul 2020 10:56:53 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06EEYTfG087007
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Jul 2020 10:56:53 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3298wumepc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jul 2020 10:56:53 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06EEbm0x000501;
-        Tue, 14 Jul 2020 14:56:51 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06fra.de.ibm.com with ESMTP id 328rbqrjpj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jul 2020 14:56:51 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06EEung247054926
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jul 2020 14:56:49 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12BFA4C04E;
-        Tue, 14 Jul 2020 14:56:49 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7BB1C4C040;
-        Tue, 14 Jul 2020 14:56:48 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.155.184])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Jul 2020 14:56:48 +0000 (GMT)
-Message-ID: <1594738607.12900.159.camel@linux.ibm.com>
-Subject: Re: Queries regarding portable feature and signing process for EVM
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     rishi gupta <gupt21@gmail.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Matthew Garrett <mjg59@google.com>
-Date:   Tue, 14 Jul 2020 10:56:47 -0400
-In-Reply-To: <CALUj-gu9-0ZKDvTAOFN1jcbYBUXMymPTJmyD=J6C58mVoKi4pQ@mail.gmail.com>
+        Tue, 14 Jul 2020 11:03:24 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B374C061755
+        for <linux-integrity@vger.kernel.org>; Tue, 14 Jul 2020 08:03:24 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id dm12so7609523qvb.9
+        for <linux-integrity@vger.kernel.org>; Tue, 14 Jul 2020 08:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e6hx9e4B8fkpL+kza+H0V8Zb+GT7gg8vgu8VGRW6YxA=;
+        b=WMV4wda0ARR/56BJn3bJgv3MqD7AZ2y80Vpo8G8HorP7+N5s+1H8SOplwQKytwj3Qf
+         Cru3uTaZv2YO/2ECrJYu1HBvCnv6H8qtNjEYnZ11WOtzXgbmP80scYM0Shv8nspm7uYF
+         MqP2K+zOIVctfhFvvFE/svsQNUOSG1Ih+zThK5fBrxzPqsDd8NKwDIoO2XyFa1zaGeFn
+         V8vDs1AZQk1fI8jaUcWA8Wvl0rblQrWvsl4QZ1U2U5WxjDmTx3QhJQhamoMWvhhr7xPi
+         rBWaLG7rAglpc968q/4ZkiB1tT/SnLPFJqqMdRERGCIaymfuYaXIjl4KcJ/pEl8v5L3N
+         XJBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e6hx9e4B8fkpL+kza+H0V8Zb+GT7gg8vgu8VGRW6YxA=;
+        b=mKDby8g5lEfj324m8HJFTrJSVYsnCpqFrb+kvcJOLXP6w8Y3xTZCajnH9eNMjKaF1f
+         A5HjUW3a+sfahdkgH7dwqO/QWGpgeVEr42dYkQrEP9nSiTW/xoTWw5RVY/HvfW9T9kSH
+         ECglPUFyBWVp3iMudcxLeNJ1a8O1rkJeZqCUPLnF86c3AWZr0iwHUY11LotN67riXOM6
+         KaHpkVC9tfASZsbj/cKymcU1Jl4tSNTpLy8FjMOADFZzCV+3HudrDWr4sLBJQoBD1nGU
+         tNOYP+/YkgXHq+AkVXOxMn9M6foD1JvMpJvzM4/HPnPSkdeqUHwL/yxYkEGHqw1ErwgF
+         HlRg==
+X-Gm-Message-State: AOAM533+GRbjd7gGdFDHxPABIA7uc29l6gls5dcWkCPJOf0Yq3MnBIzP
+        HgoMpWObr4vNng1UsGnIkPv88y17W7tHs/IL06s=
+X-Google-Smtp-Source: ABdhPJxTZNxq9a05/qA+FOjAfMqb81GE/zzigepxk614AIGlkqRXtRpvmLyPnvXPJr89B+7Ve+jsXIyC0i+/WABnoTs=
+X-Received: by 2002:a0c:dc8c:: with SMTP id n12mr4968632qvk.221.1594739002358;
+ Tue, 14 Jul 2020 08:03:22 -0700 (PDT)
+MIME-Version: 1.0
 References: <CALUj-gu9-0ZKDvTAOFN1jcbYBUXMymPTJmyD=J6C58mVoKi4pQ@mail.gmail.com>
+ <1594738607.12900.159.camel@linux.ibm.com>
+In-Reply-To: <1594738607.12900.159.camel@linux.ibm.com>
+From:   rishi gupta <gupt21@gmail.com>
+Date:   Tue, 14 Jul 2020 20:33:10 +0530
+Message-ID: <CALUj-gsksfmAgCzhk_b1wjsU-k7JDv-Bz-0vg6zgFWuOsfBC7w@mail.gmail.com>
+Subject: Re: Queries regarding portable feature and signing process for EVM
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Matthew Garrett <mjg59@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-14_05:2020-07-14,2020-07-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 adultscore=0
- impostorscore=0 spamscore=0 phishscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007140113
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Rishi,
+Thanks a lot Mimi for this exact info.
 
-On Tue, 2020-07-14 at 15:54 +0530, rishi gupta wrote:
-> Hi Matthew,Mimi,
-> 
-> Few queries in context of 4.14 kernel:
-> - Does it support portable EVM feature.
-> - For EVM traditionally we need to sign files on the device itself.
-> Can we now use portable EVM as a method to sign files during build
-> itself.
+Regards,
+Rishi
 
-Normally new features aren't back ported to stable, but for some
-reason this was back ported to stable linux-4.14.y.
-
-In the future, using "git blame" will identify the patch in which a
-new feature is added.  From there, you can use "git branch -r --
-contains <commit number>" to see in which release it was introduced.
-
-Mimi
+On Tue, Jul 14, 2020 at 8:26 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> Hi Rishi,
+>
+> On Tue, 2020-07-14 at 15:54 +0530, rishi gupta wrote:
+> > Hi Matthew,Mimi,
+> >
+> > Few queries in context of 4.14 kernel:
+> > - Does it support portable EVM feature.
+> > - For EVM traditionally we need to sign files on the device itself.
+> > Can we now use portable EVM as a method to sign files during build
+> > itself.
+>
+> Normally new features aren't back ported to stable, but for some
+> reason this was back ported to stable linux-4.14.y.
+>
+> In the future, using "git blame" will identify the patch in which a
+> new feature is added.  From there, you can use "git branch -r --
+> contains <commit number>" to see in which release it was introduced.
+>
+> Mimi
