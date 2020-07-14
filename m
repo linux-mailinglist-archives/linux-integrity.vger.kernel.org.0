@@ -2,69 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6633C21EF51
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 13:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 374B421F012
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2020 14:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727940AbgGNLcW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Jul 2020 07:32:22 -0400
-Received: from mga04.intel.com ([192.55.52.120]:11815 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726955AbgGNLcW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Jul 2020 07:32:22 -0400
-IronPort-SDR: 9SvU/VmHhj1Bhtqb6bFG3qThfdr2LWmauSqfATvJ5ihOPCU5KOfai+mZamhpaPl+zH6Tstg4Dq
- 5RpzArccsoUw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="146352639"
-X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="146352639"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 04:32:21 -0700
-IronPort-SDR: mzqaSmRQma0PfCQiiYOh4Iz9toWo5pd5Fl6nhTw+7p9UBRrD/4nnN4lO4DkOmsS8o5j2J9QUdn
- PyMpsuYZMV9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="324517854"
-Received: from pipper-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.46.185])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Jul 2020 04:32:19 -0700
-Date:   Tue, 14 Jul 2020 14:32:18 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Andrey Pronin <apronin@chromium.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH] tpm: avoid accessing cleared ops during shutdown
-Message-ID: <20200714113205.GA1461506@linux.intel.com>
-References: <20200710002209.6757-1-apronin@chromium.org>
- <20200710114000.GD2614@linux.intel.com>
- <CAP7wa8LfEtEATbENjr18jTXShT+YmrAoDt4k9FK1SLpxVqViog@mail.gmail.com>
+        id S1727867AbgGNMJH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Jul 2020 08:09:07 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47828 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726748AbgGNMJH (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 14 Jul 2020 08:09:07 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06EC30Te095417;
+        Tue, 14 Jul 2020 08:09:05 -0400
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 327tna8dxx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jul 2020 08:09:04 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06EC11QX017939;
+        Tue, 14 Jul 2020 12:09:04 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma05wdc.us.ibm.com with ESMTP id 327528r30g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jul 2020 12:09:04 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06EC93ZS48300510
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jul 2020 12:09:03 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D985AAC059;
+        Tue, 14 Jul 2020 12:09:03 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0DB9AC05B;
+        Tue, 14 Jul 2020 12:09:03 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Jul 2020 12:09:03 +0000 (GMT)
+Subject: Re: [PATCH v9 2/2] tpm: Add support for event log pointer found in
+ TPM2 ACPI table
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20200706181953.3592084-1-stefanb@linux.vnet.ibm.com>
+ <20200706181953.3592084-3-stefanb@linux.vnet.ibm.com>
+ <20200706230914.GC20770@linux.intel.com>
+ <78ec872f-89b3-6464-6ede-bd0a46fe5c4c@linux.ibm.com>
+ <20200707022416.GC112019@linux.intel.com>
+ <f3e0fb50-8617-da40-1456-158531a070cb@linux.ibm.com>
+ <20200707040325.GB143804@linux.intel.com>
+ <85c27199-df55-eecc-855c-dedcea64f89e@linux.ibm.com>
+ <20200708140753.GC538949@linux.intel.com>
+ <e42cb59d-6a3d-12be-bb51-88aa8c5dba23@linux.ibm.com>
+ <20200714112030.GA1448526@linux.intel.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <69907c30-62c2-b4bd-e84f-11612bba9c95@linux.ibm.com>
+Date:   Tue, 14 Jul 2020 08:09:03 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP7wa8LfEtEATbENjr18jTXShT+YmrAoDt4k9FK1SLpxVqViog@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200714112030.GA1448526@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-14_03:2020-07-14,2020-07-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 spamscore=0 phishscore=0
+ impostorscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007140085
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 11:25:44AM -0700, Andrey Pronin wrote:
-> > Why does not tpm_del_char_device need this?
-> 
-> "Not" is a typo in the sentence above, right? tpm_del_char_device *does*
-> need the fix. When tpm_class_shutdown is called it sets chip->ops to
-> NULL. If tpm_del_char_device is called after that, it doesn't check if
-> chip->ops is NULL (normal kernel API and char device API calls go
-> through tpm_try_get_ops, but tpm_del_char_device doesn't) and proceeds to
-> call tpm2_shutdown(), which tries sending the command and dereferences
-> chip->ops.
+On 7/14/20 7:20 AM, Jarkko Sakkinen wrote:
+> On Wed, Jul 08, 2020 at 10:17:17AM -0400, Stefan Berger wrote:
+>>> ❯ swtpm-mvo.swtpm socket --tpmstate dir=/tmp/mytpm1 \
+>>>     --ctrl type=unixio,path=/tmp/mytpm1/swtpm-sock \
+>>>     --log level=20
+>>> swtpm: Could not open UnixIO socket: No such file or directory
+>>
+>> Did you create the directory '/tmp/mytpm1' ?
+> Yes. It's the socket file that it is complain because it does
+> not exist beforehand.
 
-It's a typo, yes. Sorry about that.
 
-tpm_class_shutdown() is essentially tail of tpm_del_char_device().
+The socket file is created by the swtpm program.
 
-To clean things up, I'd suggest dropping tpm_del_char_device() and
-call tpm_class_shutdown() in tpm_chip_unregisters() along, and open
-coding things that prepend it in tpm_del_char_device().
 
-/Jarkko
+>
+> /Jarkko
+
+
