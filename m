@@ -2,89 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 818E62215D9
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 22:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D593E2215E8
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 22:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727812AbgGOUM1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jul 2020 16:12:27 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20224 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727790AbgGOUM0 (ORCPT
+        id S1725917AbgGOURN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jul 2020 16:17:13 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:56396 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725881AbgGOURN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jul 2020 16:12:26 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06FK2Zl6095261;
-        Wed, 15 Jul 2020 16:12:23 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 329r1j72j2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 16:12:23 -0400
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06FK2eVs095808;
-        Wed, 15 Jul 2020 16:12:23 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 329r1j72hk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 16:12:23 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06FK6g1u012103;
-        Wed, 15 Jul 2020 20:12:21 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 327527vxtk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 20:12:21 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06FKB42R23134470
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jul 2020 20:11:04 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 680CD4C04E;
-        Wed, 15 Jul 2020 20:11:04 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C146B4C044;
-        Wed, 15 Jul 2020 20:11:03 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.155.184])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Jul 2020 20:11:03 +0000 (GMT)
-Message-ID: <1594843863.12900.344.camel@linux.ibm.com>
+        Wed, 15 Jul 2020 16:17:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594844232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ECQpcS75PonDZ7fp90ndKSKSNb5liLIZ+aQ+E0rkQk=;
+        b=DoS4qAc9xoAusLC+WJcv4A9wWD+RVWgnkLAWEF2JTWwYbvMld83TMm6qNltBQeVqWNWpYw
+        TXrY15Xq/2Iv6RGKnQ5wX6VO85ZP99xLMgNP7q6ftav/Iqc73EeyEyj2SWAPFf9uwKEgA9
+        OXMVstJJ160YjsnQDfgB32deb8RXUbw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-398-5HYPn9YANtCYGq4OPAYIeQ-1; Wed, 15 Jul 2020 16:17:07 -0400
+X-MC-Unique: 5HYPn9YANtCYGq4OPAYIeQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5140110059AC;
+        Wed, 15 Jul 2020 20:17:06 +0000 (UTC)
+Received: from localhost (ovpn-116-38.gru2.redhat.com [10.97.116.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DC8E5710A1;
+        Wed, 15 Jul 2020 20:17:05 +0000 (UTC)
+Date:   Wed, 15 Jul 2020 17:17:04 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>
 Subject: Re: [PATCH v2 2/8] ima_evm_utils: support extending TPM 2.0 banks
  w/original SHA1 padded digest
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Bruno Meneguele <bmeneg@redhat.com>
-Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>
-Date:   Wed, 15 Jul 2020 16:11:03 -0400
-In-Reply-To: <1594842468.12900.339.camel@linux.ibm.com>
+Message-ID: <20200715201704.GI3720@glitch>
 References: <1594396859-9232-1-git-send-email-zohar@linux.ibm.com>
-         <1594396859-9232-3-git-send-email-zohar@linux.ibm.com>
-         <20200715184327.GH3720@glitch> <1594842468.12900.339.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-15_12:2020-07-15,2020-07-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- priorityscore=1501 spamscore=0 mlxlogscore=940 lowpriorityscore=0
- impostorscore=0 adultscore=0 mlxscore=0 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007150149
+ <1594396859-9232-3-git-send-email-zohar@linux.ibm.com>
+ <20200715184327.GH3720@glitch>
+ <1594842468.12900.339.camel@linux.ibm.com>
+ <1594843863.12900.344.camel@linux.ibm.com>
+MIME-Version: 1.0
+In-Reply-To: <1594843863.12900.344.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="1E1Oui4vdubnXi3o"
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-07-15 at 15:47 -0400, Mimi Zohar wrote:
-> Hi Bruno,
-> 
-> On Wed, 2020-07-15 at 15:43 -0300, Bruno Meneguele wrote:
-> <snip>
-> 
-> If this patch was in next-testing, I could simply update it.  Please
-> send a new patch to remove fox.
+--1E1Oui4vdubnXi3o
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Oh, it is in next-testing.  I'll fix it up.
+On Wed, Jul 15, 2020 at 04:11:03PM -0400, Mimi Zohar wrote:
+> On Wed, 2020-07-15 at 15:47 -0400, Mimi Zohar wrote:
+> > Hi Bruno,
+> >=20
+> > On Wed, 2020-07-15 at 15:43 -0300, Bruno Meneguele wrote:
+> > <snip>
+> >=20
+> > If this patch was in next-testing, I could simply update it. =A0Please
+> > send a new patch to remove fox.
+>=20
+> Oh, it is in next-testing.  I'll fix it up.
+>=20
 
-thanks!
+Yes :)
 
-Mimi
+Thanks.
+
+> thanks!
+>=20
+> Mimi
+>=20
+
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
+
+--1E1Oui4vdubnXi3o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8PZEAACgkQYdRkFR+R
+okMdJAf/dUrrkfHzimrZyA27P1a2txfkpsNe/kNCD/a0OLxDOOR0Tra/vcyN3q9M
+NsJ/uBVtf8Hahvbud7c3COAyEsnzoyAeFLIyevppmf8lAFQ0pI5mmWCvUsyzobxw
+AukNO2XdKTDuSQT4K9VGorHPgmMP9lIo8CakyKnEHpapfEy8/SOAAuQS970+iefn
+vWRpZiL7aRVcb0JT9r+h73J3rC28ciPiDmxA1gIqFjXQfcOcXWBd5w38QO/yBjoT
+Bek+y9JGxHAiB7fX4BYFg+pJ/cWv15j+sxj2MxUGlcq7bA44hTx7TJzynsPqZV8t
+qzXSBKRFt5MgUTdjb9xwHXTy7lx7cw==
+=zUn7
+-----END PGP SIGNATURE-----
+
+--1E1Oui4vdubnXi3o--
+
