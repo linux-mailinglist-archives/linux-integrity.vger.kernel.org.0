@@ -2,168 +2,223 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AB2221471
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 20:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16172214F4
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 21:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbgGOSny (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jul 2020 14:43:54 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45019 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726465AbgGOSny (ORCPT
+        id S1726479AbgGOTRE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jul 2020 15:17:04 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:44234 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726742AbgGOTQq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jul 2020 14:43:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594838632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i89hkqVgWL1V+wl6F7LIocJU5+Gjef2AacgijnEO3/s=;
-        b=TH5JRCh5iRJnL4r74Q7wPeoTHVzzsESYLcS0d6M/6hxkozg+ti4vnpPuXjH8MT/JAvYMYd
-        863ie+y4cnHk9DBxCrexRjIMRBAHpt0eRJuK1gMKn8nOPJFVLqZSPa2GNwuKzhO6cQYj2z
-        ca0dAMAsroHoPUBJuGE3/vtDpiQ9+Sg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-410-j71MnmlrOfaK0ZOzI2D7CA-1; Wed, 15 Jul 2020 14:43:30 -0400
-X-MC-Unique: j71MnmlrOfaK0ZOzI2D7CA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9F5F5800C64;
-        Wed, 15 Jul 2020 18:43:29 +0000 (UTC)
-Received: from localhost (ovpn-116-38.gru2.redhat.com [10.97.116.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 333E1757DF;
-        Wed, 15 Jul 2020 18:43:29 +0000 (UTC)
-Date:   Wed, 15 Jul 2020 15:43:27 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>
-Subject: Re: [PATCH v2 2/8] ima_evm_utils: support extending TPM 2.0 banks
- w/original SHA1 padded digest
-Message-ID: <20200715184327.GH3720@glitch>
-References: <1594396859-9232-1-git-send-email-zohar@linux.ibm.com>
- <1594396859-9232-3-git-send-email-zohar@linux.ibm.com>
+        Wed, 15 Jul 2020 15:16:46 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 57B7F20B4908;
+        Wed, 15 Jul 2020 12:16:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 57B7F20B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1594840580;
+        bh=UWGs7/duiBxGsOajSPhznATeEZNTIvIT7z0CfurjKPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AtQ4ANyqaj6Uj0YRg8qc9b5pYtQCaff87NoEQAxW5c0zBREGYQuchjVgHQdDCj8oM
+         /GvJb8FSUQuvO/e1TwLqtK8//i2IhlFHexBR2+P58o2riBIsAF4Gvi6F/j2S118bl7
+         +6zBiYPodt/qIGlByb78XSsNS1/Ui3BltYWOBlnY=
+Date:   Wed, 15 Jul 2020 14:16:17 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     deven.desai@linux.microsoft.com
+Cc:     agk@redhat.com, axboe@kernel.dk, snitzer@redhat.com,
+        jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, jannh@google.com,
+        pasha.tatashin@soleen.com, sashal@kernel.org,
+        jaskarankhurana@linux.microsoft.com, nramas@linux.microsoft.com,
+        mdsakib@linux.microsoft.com, linux-kernel@vger.kernel.org,
+        corbet@lwn.net
+Subject: Re: [RFC PATCH v3 03/12] security: add ipe lsm policy parser and
+ policy loading
+Message-ID: <20200715191617.GD3673@sequoia>
+References: <20200415162550.2324-1-deven.desai@linux.microsoft.com>
+ <20200415162550.2324-4-deven.desai@linux.microsoft.com>
 MIME-Version: 1.0
-In-Reply-To: <1594396859-9232-3-git-send-email-zohar@linux.ibm.com>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KscVNZbUup0vZz0f"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20200415162550.2324-4-deven.desai@linux.microsoft.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---KscVNZbUup0vZz0f
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Mimi,
-
-On Fri, Jul 10, 2020 at 12:00:53PM -0400, Mimi Zohar wrote:
-> Initially the sha1 digest, including violations, was padded with zeroes
-> before being extended into the other TPM banks.  Support walking the
-> IMA measurement list, calculating the per TPM bank SHA1 padded
-> digest(s).
->=20
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+On 2020-04-15 09:25:41, deven.desai@linux.microsoft.com wrote:
+> From: Deven Bowers <deven.desai@linux.microsoft.com>
+> 
+> Adds the policy parser and the policy loading to IPE, along with the
+> related sysfs, securityfs entries, and audit events.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 > ---
->  src/evmctl.c | 73 +++++++++++++++++++++++++++++++++++++++++++++++-------=
-------
->  1 file changed, 58 insertions(+), 15 deletions(-)
->=20
-> diff --git a/src/evmctl.c b/src/evmctl.c
-> index 0e489e2c7ba6..814aa6b75571 100644
-> --- a/src/evmctl.c
-> +++ b/src/evmctl.c
-> @@ -1613,6 +1613,10 @@ static struct tpm_bank_info *init_tpm_banks(int *n=
-um_banks)
->  =09return banks;
->  }
-> =20
-> +/*
-> + * Compare the calculated TPM PCR banks against the PCR values read.
-> + * On failure to match any TPM bank, fail comparison.
+
+...
+
+> diff --git a/security/ipe/ipe-sysfs.c b/security/ipe/ipe-sysfs.c
+> index 1c65185c531d..a250da29c3b5 100644
+> --- a/security/ipe/ipe-sysfs.c
+> +++ b/security/ipe/ipe-sysfs.c
+> @@ -5,6 +5,7 @@
+>  
+>  #include "ipe.h"
+>  #include "ipe-audit.h"
+> +#include "ipe-secfs.h"
+>  
+>  #include <linux/sysctl.h>
+>  #include <linux/fs.h>
+> @@ -45,6 +46,79 @@ static int ipe_switch_mode(struct ctl_table *table, int write,
+>  
+>  #endif /* CONFIG_SECURITY_IPE_PERMISSIVE_SWITCH */
+>  
+> +#ifdef CONFIG_SECURITYFS
+> +
+> +/**
+> + * ipe_switch_active_policy: Handler to switch the policy IPE is enforcing.
+> + * @table: Sysctl table entry from the variable, sysctl_table.
+> + * @write: Integer indicating whether this is a write or a read.
+> + * @buffer: Data passed to sysctl. This is the policy id to activate,
+> + *	    for this function.
+> + * @lenp: Pointer to the size of @buffer.
+> + * @ppos: Offset into @buffer.
+> + *
+> + * This wraps proc_dointvec_minmax, and if there's a change, emits an
+> + * audit event.
+> + *
+> + * Return:
+> + * 0 - OK
+> + * -ENOMEM - Out of memory
+> + * -ENOENT - Policy identified by @id does not exist
+> + * Other - See proc_dostring and retrieve_backed_dentry
 > + */
->  static int compare_tpm_banks(int num_banks, struct tpm_bank_info *bank,
->  =09=09=09     struct tpm_bank_info *tpm_bank)
->  {
-> @@ -1632,14 +1636,15 @@ static int compare_tpm_banks(int num_banks, struc=
-t tpm_bank_info *bank,
->  =09=09=09log_info("%s: TPM PCR-%d: ", tpm_bank[i].algo_name, j);
->  =09=09=09log_dump(tpm_bank[i].pcr[j], tpm_bank[i].digest_size);
-> =20
-> -=09=09=09ret =3D memcmp(bank[i].pcr[j], tpm_bank[i].pcr[j],
-> -=09=09=09=09     bank[i].digest_size);
-> -=09=09=09if (!ret)
-> +=09=09=09if (memcmp(bank[i].pcr[j], tpm_bank[i].pcr[j],
-> +=09=09=09=09     bank[i].digest_size) =3D=3D 0) {
->  =09=09=09=09log_info("%s PCR-%d: succeed\n",
->  =09=09=09=09=09 bank[i].algo_name, j);
-> -=09=09=09else
-> +=09=09=09} else {
-> +=09=09=09=09ret =3D 1;
->  =09=09=09=09log_info("%s: PCRAgg %d does not match TPM PCR-%d\n",
->  =09=09=09=09=09 bank[i].algo_name, j, j);
-> +=09=09=09}
->  =09=09}
->  =09}
->  =09return ret;
-> @@ -1695,10 +1700,7 @@ static int extend_tpm_bank(EVP_MD_CTX *pctx, const=
- EVP_MD *md,
->  =09=09goto out;
->  =09}
-> =20
-> -=09if (validate && !memcmp(entry->header.digest, zero, SHA_DIGEST_LENGTH=
-))
-> -=09=09err =3D EVP_DigestUpdate(pctx, fox, bank->digest_size);
+> +static int ipe_switch_active_policy(struct ctl_table *table, int write,
+> +				    void __user *buffer, size_t *lenp,
+> +				    loff_t *ppos)
+> +{
+> +	int rc = 0;
+> +	char *id = NULL;
+> +	size_t size = 0;
+> +
+> +	if (write) {
 
-'fox' is not being used in the code anymore. It could be totally removed
-afaics.
+I see that the policy files in securityfs, such as new_policy, are
+checking for CAP_MAC_ADMIN but there's no check here for CAP_MAC_ADMIN
+when switching the active policy. I think we should enforce that cap
+here, too.
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 90a3eeb..ae513b0 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -1425,7 +1425,6 @@ struct template_entry {
- };
+Thinking about it some more, I find it a little odd that we're spreading
+the files necessary to update a policy across both procfs (sysctl) and
+securityfs. It looks like procfs will have different semantics than
+securityfs after looking at proc_sys_permission(). I suggest moving
+strict_parse and active_policy under securityfs for a unified experience
+and common location when updating policy.
 
- static uint8_t zero[MAX_DIGEST_SIZE];
--static uint8_t fox[MAX_DIGEST_SIZE];
+Tyler
 
- static int validate =3D 0;
- static int verify =3D 0;
-@@ -1886,7 +1885,6 @@ static int ima_measurement(const char *file)
-
-        errno =3D 0;
-        memset(zero, 0, MAX_DIGEST_SIZE);
--       memset(fox, 0xff, MAX_DIGEST_SIZE);
-
-        pseudo_padded_banks =3D init_tpm_banks(&num_banks);
-        pseudo_banks =3D init_tpm_banks(&num_banks);
-
-
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
-
---KscVNZbUup0vZz0f
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8PTk8ACgkQYdRkFR+R
-okPtUAgAoMI2lcEHUMSg0Ip9QPOA7Y/YA0fBgDHCQaJAPyaY8W86+iFdtBx3GFPO
-OdBoyW6Ou3MRWr940y1UIGryEZKd/MvbyHhHWywPi03JTYgXF0SguKl2l0eEXfmI
-3ulAjiwVxieacdeQBjX4nmpAegkSRZO2IoCAM5ZtHY+SC8oYDcxHA2Q0DSsyhScR
-QHcQETU2i3Djrk4K+0PQnaO3AB3BKm3uudGheoTvYB6wN9hgFAxuH1NAsw1klxuL
-CHyy6GJ3wsgPbcdD7Xl+C2WuCF1nIpOt9+gjVgVxzzVM7of4sPJa+q1d3Be5IPcZ
-n/+9YmK0lN8eyX85ry3w6XP4exp6UA==
-=NKh9
------END PGP SIGNATURE-----
-
---KscVNZbUup0vZz0f--
-
+> +		id = kzalloc((*lenp) + 1, GFP_KERNEL);
+> +		if (!id)
+> +			return -ENOMEM;
+> +
+> +		table->data = id;
+> +		table->maxlen = (*lenp) + 1;
+> +
+> +		rc = proc_dostring(table, write, buffer, lenp, ppos);
+> +		if (rc != 0)
+> +			goto out;
+> +
+> +		rc = ipe_set_active_policy(id, strlen(id));
+> +	} else {
+> +		if (!rcu_access_pointer(ipe_active_policy)) {
+> +			table->data = "";
+> +			table->maxlen = 1;
+> +			return proc_dostring(table, write, buffer, lenp, ppos);
+> +		}
+> +
+> +		rcu_read_lock();
+> +		size = strlen(rcu_dereference(ipe_active_policy)->policy_name);
+> +		rcu_read_unlock();
+> +
+> +		id = kzalloc(size + 1, GFP_KERNEL);
+> +		if (!id)
+> +			return -ENOMEM;
+> +
+> +		rcu_read_lock();
+> +		strncpy(id, rcu_dereference(ipe_active_policy)->policy_name,
+> +			size);
+> +		rcu_read_unlock();
+> +
+> +		table->data = id;
+> +		table->maxlen = size;
+> +
+> +		rc = proc_dostring(table, write, buffer, lenp, ppos);
+> +	}
+> +out:
+> +	kfree(id);
+> +	return rc;
+> +}
+> +
+> +#endif /* CONFIG_SECURITYFS */
+> +
+>  static struct ctl_table_header *sysctl_header;
+>  
+>  static const struct ctl_path sysctl_path[] = {
+> @@ -75,6 +149,24 @@ static struct ctl_table sysctl_table[] = {
+>  		.extra1 = SYSCTL_ZERO,
+>  		.extra2 = SYSCTL_ONE,
+>  	},
+> +#ifdef CONFIG_SECURITYFS
+> +	{
+> +		.procname = "strict_parse",
+> +		.data = &ipe_strict_parse,
+> +		.maxlen = sizeof(int),
+> +		.mode = 0644,
+> +		.proc_handler = proc_dointvec_minmax,
+> +		.extra1 = SYSCTL_ZERO,
+> +		.extra2 = SYSCTL_ONE,
+> +	},
+> +	{
+> +		.procname = "active_policy",
+> +		.data = NULL,
+> +		.maxlen = 0,
+> +		.mode = 0644,
+> +		.proc_handler = ipe_switch_active_policy,
+> +	},
+> +#endif /* CONFIG_SECURITYFS */
+>  	{}
+>  };
+>  
+> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> index b6553e370f98..07f855ffb79a 100644
+> --- a/security/ipe/ipe.c
+> +++ b/security/ipe/ipe.c
+> @@ -6,6 +6,7 @@
+>  #include "ipe.h"
+>  #include "ipe-policy.h"
+>  #include "ipe-hooks.h"
+> +#include "ipe-secfs.h"
+>  #include "ipe-sysfs.h"
+>  
+>  #include <linux/module.h>
+> @@ -60,3 +61,4 @@ DEFINE_LSM(ipe) = {
+>  
+>  int ipe_enforce = 1;
+>  int ipe_success_audit;
+> +int ipe_strict_parse;
+> diff --git a/security/ipe/ipe.h b/security/ipe/ipe.h
+> index 6a47f55b05d9..bf6cf7744b0e 100644
+> --- a/security/ipe/ipe.h
+> +++ b/security/ipe/ipe.h
+> @@ -16,5 +16,6 @@
+>  
+>  extern int ipe_enforce;
+>  extern int ipe_success_audit;
+> +extern int ipe_strict_parse;
+>  
+>  #endif /* IPE_H */
+> -- 
+> 2.26.0
