@@ -2,178 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C87220C1E
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 13:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4AB220D89
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 15:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730134AbgGOLr2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jul 2020 07:47:28 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64374 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730066AbgGOLrY (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jul 2020 07:47:24 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06FB3lJ8138149;
-        Wed, 15 Jul 2020 07:47:21 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 329uehb2f0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 07:47:21 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06FBjnd7018747;
-        Wed, 15 Jul 2020 11:47:18 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 327527vfvw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 11:47:18 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06FBlFSR14418114
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jul 2020 11:47:15 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C89B142045;
-        Wed, 15 Jul 2020 11:47:15 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4FB7C4204B;
-        Wed, 15 Jul 2020 11:47:15 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.155.184])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Jul 2020 11:47:15 +0000 (GMT)
-Message-ID: <1594813634.12900.264.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils] Check for tsspcrread in runtime
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     linux-integrity@vger.kernel.org,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>
-Date:   Wed, 15 Jul 2020 07:47:14 -0400
-In-Reply-To: <20200715062125.GA7493@dell5510>
-References: <20200714154659.8080-1-pvorel@suse.cz>
-         <1594757196.12900.191.camel@linux.ibm.com> <20200715062125.GA7493@dell5510>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-15_10:2020-07-15,2020-07-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- malwarescore=0 priorityscore=1501 spamscore=0 phishscore=0 adultscore=0
- suspectscore=0 mlxlogscore=999 clxscore=1015 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007150093
+        id S1729900AbgGONAo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jul 2020 09:00:44 -0400
+Received: from [195.135.220.15] ([195.135.220.15]:59386 "EHLO mx2.suse.de"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1726335AbgGONAo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 15 Jul 2020 09:00:44 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id DBF74B053;
+        Wed, 15 Jul 2020 13:00:45 +0000 (UTC)
+Date:   Wed, 15 Jul 2020 15:00:41 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Lachlan Sneff <t-josne@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, ltp@lists.linux.it,
+        nramas@linux.microsoft.com, balajib@linux.microsoft.com,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] IMA: Add a test to verify measurment of keys
+Message-ID: <20200715130041.GA32414@dell5510>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20200714181703.6374-1-t-josne@linux.microsoft.com>
+ <20200714181703.6374-2-t-josne@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200714181703.6374-2-t-josne@linux.microsoft.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-07-15 at 08:21 +0200, Petr Vorel wrote:
-> > On Tue, 2020-07-14 at 17:46 +0200, Petr Vorel wrote:
-> > > instead of checking in build time as it's runtime dependency.
-> > > Also log when tsspcrread not found to make debugging easier.
-> 
-> > > We search for tsspcrread unless there is tss2-esys with Esys_PCR_Read(),
-> > > thus pcr_none.c was dropped as unneeded.
-> 
-> > > file_exist(), file_exist() and MIN() taken from LTP project.
-> 
-> > One of these "file_exists" I assume is suppose to be "tst_get_path".
-> Yes. I'm sorry, thanks for catching it.
-> 
-> 
-> > > Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> > > ---
-> > > Hi Mimi,
-> 
-> > > small improvement based on the current next-testing branch
-> > > (9638068aff2476b567185d7eb94126449ad89ca7).
-> 
-> > > I'm sorry I don't have the required setup, thus didn't test this patch.
-> 
-> > > Kind regards,
-> > > Petr
-> 
-> > Nice!  It works.
-> Thanks a lot for a testing?
+Hi Lachlan, Mimi,
 
-Yes, reviewed/tested together.
+> Add a testcase that verifies that the IMA subsystem has correctly
+> measured keys added to keyrings specified in the IMA policy file.
 
-diff --git a/src/pcr_tsspcrread.c b/src/pcr_tsspcrread.c
-> > > @@ -47,8 +48,21 @@
-> 
-> > >  #include "utils.h"
-> 
-> > > -int tpm2_pcr_supported(void)
-> > > +#define CMD "tsspcrread"
-> > > +
-> > > +static char path[PATH_MAX];
-> > > +
-> > > +int tpm2_pcr_supported(char **errmsg)
-> > >  {
-> > > +	int ret;
-> > > +
-> > > +	if (get_cmd_path(CMD, path, sizeof(path))) {
-> > > +		ret = asprintf(errmsg, "Couldn't find '%s' in $PATH", CMD);
-> > > +		if (ret == -1)	/* the contents of errmsg is undefined */
-> > > +			*errmsg = NULL;
-> > > +		return 0;
-> > > +	}
-> > > +
-> 
-> > Any chance you could also emit the pathname on success as well?
-> 
-> Do you mean to print it into stderr:
-> 
-> int tpm2_pcr_supported(char **errmsg)
-> {
-> 	int ret;
-> 
-> 	if (get_cmd_path(CMD, path, sizeof(path))) {
-> 		ret = asprintf(errmsg, "Couldn't find '%s' in $PATH", CMD);
-> 		if (ret == -1)	/* the contents of errmsg is undefined */
-> 			*errmsg = NULL;
-> 		return 0;
-> 	}
-> 
-> 	ret = asprintf(errmsg, "Found '%s' in $PATH", CMD);
-> 	if (ret == -1)	/* the contents of errmsg is undefined */
-> 		*errmsg = NULL;
-> 	return 1;
-> }
-> 
+> Additionally, add support for handling a new IMA template descriptor,
+> namely ima-buf[1], in the IMA measurement tests.
 
-When running these tests remotely, it helps to know which method of
-reading the PCRs is used.  How about adding something like this to
-both instances of tpm2_pcr_supported()?
+To speedup things, based on Mimi's comments and review of v4 I pushed this first
+commit with few changes (below diff, only ima_keys.sh part)
+* simplify error handling ($fail is not needed; I used tst_res and return
+  because there will be second test, otherwise I'd use tst_brk)
+* added modified docs into this commit
+* fix commit title
 
-        if (imaevm_params.verbose > LOG_INFO)
-                log_info("Using %s to read PCRs.\n", CMD);
+TODO
+* I'll send a patch to read CONFIG_IMA_X509_PATH (I've amended the commit
+already enough)
 
-> Shell I post v2 or you amend my patch?
+* @Lachlan: expect you send another version for test2.
 
-Either way is fine. 
+* @Lachlan: would you also implement Mimi's suggestion? [1]:
+An additional test might be to verify that only the keys in the
+measurement list are actually on the specified keyring and nothing
+else.
 
-> BTW I was thinking to create custom function / macro for handling errmsg to
-> reduce duplicity.
+Kind regards,
+Petr
 
-Sure, I assume that would be in addition to log_err() and log_errno().
+[1] http://lists.linux.it/pipermail/ltp/2020-July/018018.html
 
-> 
-> + there is minor warning on newer gcc, I'm not sure how to fix that:
-> 
-> evmctl.c: In function ‘read_tpm_banks’:
-> evmctl.c:1404:25: warning: ‘%2.2d’ directive writing between 2 and 10 bytes into a region of size 3 [-Wformat-overflow=]
->  1404 |   sprintf(pcr_str, "PCR-%2.2d", i);
->       |                         ^~~~~
-> evmctl.c:1404:20: note: directive argument in the range [0, 2147483647]
->  1404 |   sprintf(pcr_str, "PCR-%2.2d", i);
->       |                    ^~~~~~~~~~~
-> evmctl.c:1404:3: note: ‘sprintf’ output between 7 and 15 bytes into a destination of size 7
->  1404 |   sprintf(pcr_str, "PCR-%2.2d", i);
->       |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Interesting.  Checking that "i" isn't greater than 99 solves this
-warning.  Changing pcr_str size from 7 to 8 solves the other warning.
-
-Mimi
-
-
+diff --git testcases/kernel/security/integrity/ima/tests/ima_keys.sh testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+index 4d53cd04f..904b7515b 100755
+--- testcases/kernel/security/integrity/ima/tests/ima_keys.sh
++++ testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+@@ -15,7 +15,7 @@ TST_NEEDS_DEVICE=1
+ # (450d0fd51564 - "IMA: Call workqueue functions to measure queued keys")
+ test1()
+ {
+-	local keyrings keycheck_lines keycheck_line templates test_file="file.txt" fail
++	local keyrings keycheck_lines keycheck_line templates test_file="file.txt"
+ 
+ 	tst_res TINFO "verifying key measurement for keyrings and templates specified in IMA policy file"
+ 
+@@ -57,15 +57,12 @@ test1()
+ 			tst_brk TCONF "cannot compute digest for $algorithm"
+ 
+ 		if [ "$digest" != "$expected_digest" ]; then
+-			fail=1
+ 			tst_res TFAIL "incorrect digest was found for the ($keyring) keyring"
+-			break
++			return
+ 		fi
+ 	done
+ 
+-	if [ "$fail" ]; then
+-		tst_res TPASS "specified keyrings were measured correctly"
+-	fi
++	tst_res TPASS "specified keyrings were measured correctly"
+ }
+ 
+ tst_run
