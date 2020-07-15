@@ -2,117 +2,236 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 337BD2215AE
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 22:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364CF2215BA
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 22:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbgGOUCs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jul 2020 16:02:48 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49860 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726491AbgGOUCr (ORCPT
+        id S1726970AbgGOUGa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jul 2020 16:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726941AbgGOUG2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jul 2020 16:02:47 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06FK2elO095892;
-        Wed, 15 Jul 2020 16:02:42 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 329r1j6sht-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 16:02:41 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06FK1ama014866;
-        Wed, 15 Jul 2020 20:02:12 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3274pgvpf1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 20:02:12 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06FK2AFL66715856
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jul 2020 20:02:10 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E93C44C040;
-        Wed, 15 Jul 2020 20:02:09 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3709A4C046;
-        Wed, 15 Jul 2020 20:02:09 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.155.184])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Jul 2020 20:02:09 +0000 (GMT)
-Message-ID: <1594843328.12900.342.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v2] Check for tsspcrread in runtime
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Petr Vorel <pvorel@suse.cz>, linux-integrity@vger.kernel.org,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Patrick Uiterwijk <patrick@puiterwijk.org>
-Date:   Wed, 15 Jul 2020 16:02:08 -0400
-In-Reply-To: <20200715195728.w3nysi73nkeuu3qv@altlinux.org>
-References: <20200715132817.8529-1-pvorel@suse.cz>
-         <20200715133741.GB32201@dell5510>
-         <1594841666.12900.335.camel@linux.ibm.com>
-         <20200715195728.w3nysi73nkeuu3qv@altlinux.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        Wed, 15 Jul 2020 16:06:28 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579A7C08C5DE
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jul 2020 13:06:28 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id p1so2843126pls.4
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jul 2020 13:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=YL19XoL2DCkvrhiZbpXv6h7Rc/+Lwr1rsydviLs8pFc=;
+        b=PCMIvsfXHhRDJz8Khz3VUsUkSsqo3SsGXmW6qozBpfFw4kwRb7k2005MBV/m480XJo
+         UJjjM2/i31FD6kd3JPB8hOvDWYGhWQ2O79+33d3StMVVlrSmwT3Jn2OjikQ0pG18Ox6N
+         0dOa8dwyh4myV41v2K0+FJWi/pMjoCl6QAT6I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=YL19XoL2DCkvrhiZbpXv6h7Rc/+Lwr1rsydviLs8pFc=;
+        b=CsfG4CdyzQnlkAuTwA5Aq6DwLS0LOTobpWjrZ+InALfR+/oEbpaP0PksaQ4Sybk9YN
+         /WyUxOTt0gpXzK0j4KD2Zi5N+PRU0bXsLWV5agAVPaQqIs44mcshJJC/bF0PrnjPdguA
+         PU280TraxrCMUsjzADSJNSDWbccIqNlPi5u/+7jb+xd2ZYSVylAL7cit4MVp6tLDojd0
+         9FkXMq87+oLuzUkKwRGO8nzaVGKmm8vO7SssnEVcGCRrxPkvS3raWLpekbk4mGhbC1UF
+         Oc7dB6uluUvF0Ave4KlBSPRcOiL6Aoyqyi4+EuxNLHzGOefciOmQlkDOqG2Kq19i/GT6
+         YSUg==
+X-Gm-Message-State: AOAM531lQ5QWqlw2VtFBupDv8XZlf5enMYZJ4+Qqe1JBMCmWUc+fvQUn
+        /626LFYwgp2Z4+5Q7v5PBNzcIg==
+X-Google-Smtp-Source: ABdhPJxqPw/byppqYk72FBQJ1XrQVSH3bnxbDXc7/lfw9v75K7lcTOddZ1PpPFhX50QhSgkPHCK9SQ==
+X-Received: by 2002:a17:90a:bc98:: with SMTP id x24mr1196990pjr.63.1594843587647;
+        Wed, 15 Jul 2020 13:06:27 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e20sm2721660pfl.212.2020.07.15.13.06.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2020 13:06:26 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 13:06:25 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v6 4/7] fs: Introduce O_MAYEXEC flag for openat2(2)
+Message-ID: <202007151304.9F48071@keescook>
+References: <20200714181638.45751-1-mic@digikod.net>
+ <20200714181638.45751-5-mic@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-15_12:2020-07-15,2020-07-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- priorityscore=1501 spamscore=0 mlxlogscore=973 lowpriorityscore=0
- impostorscore=0 adultscore=0 mlxscore=0 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007150149
+In-Reply-To: <20200714181638.45751-5-mic@digikod.net>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Cc'ing Patrick Uiterwijk]
-
-On Wed, 2020-07-15 at 22:57 +0300, Vitaly Chikunov wrote:
-> Mimi,
+On Tue, Jul 14, 2020 at 08:16:35PM +0200, Mickaël Salaün wrote:
+> When the O_MAYEXEC flag is passed, openat2(2) may be subject to
+> additional restrictions depending on a security policy managed by the
+> kernel through a sysctl or implemented by an LSM thanks to the
+> inode_permission hook.  This new flag is ignored by open(2) and
+> openat(2) because of their unspecified flags handling.
 > 
-> On Wed, Jul 15, 2020 at 03:34:26PM -0400, Mimi Zohar wrote:
-> > On Wed, 2020-07-15 at 15:37 +0200, Petr Vorel wrote:
-> > > Hi Mimi,
-> > > 
-> > > > instead of checking in build time as it's runtime dependency.
-> > > > Also log when tsspcrread not found to make debugging easier.
-> > > 
-> > > > We search for tsspcrread unless there is tss2-esys with Esys_PCR_Read(),
-> > > > thus pcr_none.c was dropped as unneeded.
-> > > 
-> > > > file_exist(), tst_get_path() and MIN() taken from LTP project.
-> > > BTW these parts holds Cyril's copyright. If you ever add copyright to
-> > > src/utils.[ch], please add it there.
-> > > Copyright (C) 2010 Cyril Hrubis <chrubis@suse.cz>
-> > 
-> > Are you Ok with the following?
-> > 
-> > diff --git a/src/utils.c b/src/utils.c
+> The underlying idea is to be able to restrict scripts interpretation
+> according to a policy defined by the system administrator.  For this to
+> be possible, script interpreters must use the O_MAYEXEC flag
+> appropriately.  To be fully effective, these interpreters also need to
+> handle the other ways to execute code: command line parameters (e.g.,
+> option -e for Perl), module loading (e.g., option -m for Python), stdin,
+> file sourcing, environment variables, configuration files, etc.
+> According to the threat model, it may be acceptable to allow some script
+> interpreters (e.g. Bash) to interpret commands from stdin, may it be a
+> TTY or a pipe, because it may not be enough to (directly) perform
+> syscalls.  Further documentation can be found in a following patch.
 > 
-> I don't remember me authoring anything in src/utils.c
+> Even without enforced security policy, userland interpreters can set it
+> to enforce the system policy at their level, knowing that it will not
+> break anything on running systems which do not care about this feature.
+> However, on systems which want this feature enforced, there will be
+> knowledgeable people (i.e. sysadmins who enforced O_MAYEXEC
+> deliberately) to manage it.  A simple security policy implementation,
+> configured through a dedicated sysctl, is available in a following
+> patch.
+> 
+> O_MAYEXEC should not be confused with the O_EXEC flag which is intended
+> for execute-only, which obviously doesn't work for scripts.  However, a
+> similar behavior could be implemented in userland with O_PATH:
+> https://lore.kernel.org/lkml/1e2f6913-42f2-3578-28ed-567f6a4bdda1@digikod.net/
+> 
+> The implementation of O_MAYEXEC almost duplicates what execve(2) and
+> uselib(2) are already doing: setting MAY_OPENEXEC in acc_mode (which can
+> then be checked as MAY_EXEC, if enforced), and propagating FMODE_EXEC to
+> _fmode via __FMODE_EXEC flag (which can then trigger a
+> fanotify/FAN_OPEN_EXEC event).
+> 
+> This is an updated subset of the patch initially written by Vincent
+> Strubel for CLIP OS 4:
+> https://github.com/clipos-archive/src_platform_clip-patches/blob/f5cb330d6b684752e403b4e41b39f7004d88e561/1901_open_mayexec.patch
+> This patch has been used for more than 12 years with customized script
+> interpreters.  Some examples (with the original name O_MAYEXEC) can be
+> found here:
+> https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+> 
+> Co-developed-by: Vincent Strubel <vincent.strubel@ssi.gouv.fr>
+> Signed-off-by: Vincent Strubel <vincent.strubel@ssi.gouv.fr>
+> Co-developed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
+> Signed-off-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> Reviewed-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Cc: Aleksa Sarai <cyphar@cyphar.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> ---
+> 
+> Changes since v5:
+> * Update commit message.
+> 
+> Changes since v3:
+> * Switch back to O_MAYEXEC, but only handle it with openat2(2) which
+>   checks unknown flags (suggested by Aleksa Sarai). Cf.
+>   https://lore.kernel.org/lkml/20200430015429.wuob7m5ofdewubui@yavin.dot.cyphar.com/
+> 
+> Changes since v2:
+> * Replace O_MAYEXEC with RESOLVE_MAYEXEC from openat2(2).  This change
+>   enables to not break existing application using bogus O_* flags that
+>   may be ignored by current kernels by using a new dedicated flag, only
+>   usable through openat2(2) (suggested by Jeff Layton).  Using this flag
+>   will results in an error if the running kernel does not support it.
+>   User space needs to manage this case, as with other RESOLVE_* flags.
+>   The best effort approach to security (for most common distros) will
+>   simply consists of ignoring such an error and retry without
+>   RESOLVE_MAYEXEC.  However, a fully controlled system may which to
+>   error out if such an inconsistency is detected.
+> 
+> Changes since v1:
+> * Set __FMODE_EXEC when using O_MAYEXEC to make this information
+>   available through the new fanotify/FAN_OPEN_EXEC event (suggested by
+>   Jan Kara and Matthew Bobrowski):
+>   https://lore.kernel.org/lkml/20181213094658.GA996@lithium.mbobrowski.org/
+> ---
+>  fs/fcntl.c                       | 2 +-
+>  fs/open.c                        | 8 ++++++++
+>  include/linux/fcntl.h            | 2 +-
+>  include/linux/fs.h               | 2 ++
+>  include/uapi/asm-generic/fcntl.h | 7 +++++++
+>  5 files changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/fcntl.c b/fs/fcntl.c
+> index 2e4c0fa2074b..0357ad667563 100644
+> --- a/fs/fcntl.c
+> +++ b/fs/fcntl.c
+> @@ -1033,7 +1033,7 @@ static int __init fcntl_init(void)
+>  	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+>  	 * is defined as O_NONBLOCK on some platforms and not on others.
+>  	 */
+> -	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
+> +	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
+>  		HWEIGHT32(
+>  			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+>  			__FMODE_EXEC | __FMODE_NONOTIFY));
+> diff --git a/fs/open.c b/fs/open.c
+> index 623b7506a6db..38e434bdbbb6 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -987,6 +987,8 @@ inline struct open_how build_open_how(int flags, umode_t mode)
+>  		.mode = mode & S_IALLUGO,
+>  	};
+>  
+> +	/* O_MAYEXEC is ignored by syscalls relying on build_open_how(). */
+> +	how.flags &= ~O_MAYEXEC;
+>  	/* O_PATH beats everything else. */
+>  	if (how.flags & O_PATH)
+>  		how.flags &= O_PATH_FLAGS;
+> @@ -1054,6 +1056,12 @@ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
+>  	if (flags & __O_SYNC)
+>  		flags |= O_DSYNC;
+>  
+> +	/* Checks execution permissions on open. */
+> +	if (flags & O_MAYEXEC) {
+> +		acc_mode |= MAY_OPENEXEC;
+> +		flags |= __FMODE_EXEC;
+> +	}
 
-Thank you for catching that! Â The new file came from Patrick.
+Adding __FMODE_EXEC here will immediately change the behaviors of NFS
+and fsnotify. If that's going to happen, I think it needs to be under
+the control of the later patches doing the behavioral controls.
+(specifically, NFS looks like it completely changes its access control
+test when this is set and ignores the read/write checks entirely, which
+is not what's wanted).
 
 
-> > index 416a88c6dbe4..a6ae08fa4d84 100644
-> > --- a/src/utils.c
-> > +++ b/src/utils.c
-> > @@ -1,3 +1,10 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * utils: set of common functions
-> > + *
-> > + * Copyright (C) 2020 Vitaly Chikunov <vt@altlinux.org>
-
-Copyright (C) 2020 Patrick Uiterwijk <patrick@puiterwijk.org>
-
-> > + * Copyright (C) 2010 Cyril Hrubis <chrubis@suse.cz>
-> > + */
-> >  #include <stdint.h>
-> >  #include <stdio.h>
-> >  #include <stdlib.h>
-
+-- 
+Kees Cook
