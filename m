@@ -2,87 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1DA2217CD
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 00:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E844C2217D1
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 00:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgGOWag (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jul 2020 18:30:36 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11782 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726479AbgGOWag (ORCPT
+        id S1726832AbgGOWeL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jul 2020 18:34:11 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:22269 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726356AbgGOWeK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jul 2020 18:30:36 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06FM2dmF010488;
-        Wed, 15 Jul 2020 18:30:32 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32991g5h8p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 18:30:32 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06FMPFrw079074;
-        Wed, 15 Jul 2020 18:30:32 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32991g5h7t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 18:30:31 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06FMTcEn028873;
-        Wed, 15 Jul 2020 22:30:29 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 327527w1u7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jul 2020 22:30:29 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06FMURCx2883868
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jul 2020 22:30:27 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 384034C044;
-        Wed, 15 Jul 2020 22:30:27 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8CF4F4C04E;
-        Wed, 15 Jul 2020 22:30:26 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.155.184])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Jul 2020 22:30:26 +0000 (GMT)
-Message-ID: <1594852226.12900.351.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/3] ima-evm-utils: miscellanous bug fixes
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Bruno Meneguele <bmeneg@redhat.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
-Date:   Wed, 15 Jul 2020 18:30:26 -0400
-In-Reply-To: <20200715213906.194041-1-bmeneg@redhat.com>
+        Wed, 15 Jul 2020 18:34:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594852449;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d61MUL7QpAWnUav5BnCiYuk8Ume6rixQlfeLN3Ca2Dk=;
+        b=Ind7Zmtibp6FjQO79kvCzzy7SQT0p6St63RM8GCNTq4zB6QUnv6Pa5IlQhu9ARFcB0imxc
+        HwkNSCoiZnKh+T6+qfvplQd6Eu7QriZaWAGZPIckjIxxiTx7VGVfwaYFgNTQqqvhDyySkd
+        HtgjUzEXlWtzfX2iKQDPF1hMSOMzdBw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-375-dBmeazu-PE2xWTuxNTBASw-1; Wed, 15 Jul 2020 18:34:01 -0400
+X-MC-Unique: dBmeazu-PE2xWTuxNTBASw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0930E1083;
+        Wed, 15 Jul 2020 22:34:00 +0000 (UTC)
+Received: from localhost (ovpn-116-38.gru2.redhat.com [10.97.116.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9029319C58;
+        Wed, 15 Jul 2020 22:33:59 +0000 (UTC)
+Date:   Wed, 15 Jul 2020 19:33:58 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
+        Vitaly Chikunov <vt@altlinux.org>
+Subject: Re: [PATCH 3/3] ima-evm-utils: fix overflow on printing
+ boot_aggregate
+Message-ID: <20200715223358.GK3720@glitch>
 References: <20200715213906.194041-1-bmeneg@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-15_12:2020-07-15,2020-07-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 spamscore=0 impostorscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
- bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007150161
+ <20200715213906.194041-4-bmeneg@redhat.com>
+ <1594852207.12900.350.camel@linux.ibm.com>
+MIME-Version: 1.0
+In-Reply-To: <1594852207.12900.350.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/0P/MvzTfyTu5j9Q"
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-07-15 at 18:39 -0300, Bruno Meneguele wrote:
-> While testing in RHEL7 the latest 'next-testing' branch changes the build
-> failed due to an "out" label being placed at the end of the function
-> calc_bootaggr() with no instructions for systems with OpenSSL version less
-> then 1.1. Corrected it by putting a simple no-op 'return' there (the
-> function returns nothing).
-> 
-> The other bugs are a simple memory leak, also on calc_bootaggr(), when
-> _DigestUpdate() returns error; and an overflow while reading the
-> boot_aggregate buffer due to the lack of the null char at the end.
+--/0P/MvzTfyTu5j9Q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks!
+On Wed, Jul 15, 2020 at 06:30:07PM -0400, Mimi Zohar wrote:
+> On Wed, 2020-07-15 at 18:39 -0300, Bruno Meneguele wrote:
+> > diff --git a/src/evmctl.c b/src/evmctl.c
+> > index 2f5bd52..2bd37c2 100644
+> > --- a/src/evmctl.c
+> > +++ b/src/evmctl.c
+> > @@ -2252,7 +2252,8 @@ static int cmd_ima_bootaggr(struct command *cmd)
+> >  =09=09bootaggr_len +=3D strlen(tpm_banks[i].algo_name) + 1;
+> >  =09=09bootaggr_len +=3D (tpm_banks[i].digest_size * 2) + 1;
+> >  =09}
+> > -=09bootaggr =3D malloc(bootaggr_len);
+> > +=09/* Make room for the leading \0 */
+>=20
+> ^Trailing null
+>=20
 
-Mimi
+hahah.. of course.
+
+Thanks :)
+
+> Mimi
+>=20
+> > +=09bootaggr =3D malloc(bootaggr_len + 1);
+> > =20
+> >  =09/*
+> >  =09 * Calculate and convert the per TPM 2.0 PCR bank algorithm
+>=20
+
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
+
+--/0P/MvzTfyTu5j9Q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8PhFYACgkQYdRkFR+R
+okPcigf/X7UiavKFcyHvBvYMFD/tsvfBDDeTNVsI4hWl6IlRDCfxgqrWDr50lp7k
+UCA3gVZruGAflGPqg/jzdqxHRxvzt/fireanRa1yuO1sdHMWPlyK1pobfnEqoGSm
+UlfXoVUOcTjGv5mjT+K86pYdUd9+fkmbE103pojbVWdU9k0kvByQUTH28yWZ4VZr
+lQ/5pHhAabU6OTokSjbPg/9KG9jWUNFbmrh/0ifhoQm0gPbB853Pe7CikXmCkvlj
+lYgtAnn2w+zDdmqA8feAzKzUbr5dGkmQI8qeXIP4weJ+hO+YoLv7ezAnsiqyRCCW
+iIHefaeCxRBUac+3Sc92UsrzKcboeQ==
+=0s8D
+-----END PGP SIGNATURE-----
+
+--/0P/MvzTfyTu5j9Q--
+
