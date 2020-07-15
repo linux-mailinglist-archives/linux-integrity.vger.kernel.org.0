@@ -2,135 +2,168 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E5B22144D
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 20:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AB2221471
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 20:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgGOSeJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jul 2020 14:34:09 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:38982 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726034AbgGOSeJ (ORCPT
+        id S1726830AbgGOSny (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jul 2020 14:43:54 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45019 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726465AbgGOSny (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jul 2020 14:34:09 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0456D20B4908;
-        Wed, 15 Jul 2020 11:34:07 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0456D20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1594838048;
-        bh=h/hY55Q0qtm8L3rDWYxgRPeKHyFR7vIM/95MK08uoXY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ENfLP4xnfL87tgV8bYKfz92gup/o0XmaYAr+T2UGIZhJW860xPQ5YxZUznSchJTxn
-         GHmpXHtBTgrY48padhK2h6/aqsJrBj6X9abd+M9RE+9iyXjHt5b43Q/u3EbyiYhWvZ
-         aOX3AM4xbrCHDMgVdUB3IWeUaHkvalD8r3+0cpGg=
-Subject: Re: [PATCH v1 4/5] LSM: Define SELinux function to measure security
- state
-To:     Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20200715154853.23374-1-nramas@linux.microsoft.com>
- <20200715154853.23374-5-nramas@linux.microsoft.com>
- <CAEjxPJ6UsK9QqFTpMKjgSin2Q6D-5NCNDS0enuRNuixVP9H2wQ@mail.gmail.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <fec80278-1306-787d-a8ed-615a3709ae77@linux.microsoft.com>
-Date:   Wed, 15 Jul 2020 11:34:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 15 Jul 2020 14:43:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594838632;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i89hkqVgWL1V+wl6F7LIocJU5+Gjef2AacgijnEO3/s=;
+        b=TH5JRCh5iRJnL4r74Q7wPeoTHVzzsESYLcS0d6M/6hxkozg+ti4vnpPuXjH8MT/JAvYMYd
+        863ie+y4cnHk9DBxCrexRjIMRBAHpt0eRJuK1gMKn8nOPJFVLqZSPa2GNwuKzhO6cQYj2z
+        ca0dAMAsroHoPUBJuGE3/vtDpiQ9+Sg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-410-j71MnmlrOfaK0ZOzI2D7CA-1; Wed, 15 Jul 2020 14:43:30 -0400
+X-MC-Unique: j71MnmlrOfaK0ZOzI2D7CA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9F5F5800C64;
+        Wed, 15 Jul 2020 18:43:29 +0000 (UTC)
+Received: from localhost (ovpn-116-38.gru2.redhat.com [10.97.116.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 333E1757DF;
+        Wed, 15 Jul 2020 18:43:29 +0000 (UTC)
+Date:   Wed, 15 Jul 2020 15:43:27 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>
+Subject: Re: [PATCH v2 2/8] ima_evm_utils: support extending TPM 2.0 banks
+ w/original SHA1 padded digest
+Message-ID: <20200715184327.GH3720@glitch>
+References: <1594396859-9232-1-git-send-email-zohar@linux.ibm.com>
+ <1594396859-9232-3-git-send-email-zohar@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <CAEjxPJ6UsK9QqFTpMKjgSin2Q6D-5NCNDS0enuRNuixVP9H2wQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <1594396859-9232-3-git-send-email-zohar@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KscVNZbUup0vZz0f"
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/15/20 11:04 AM, Stephen Smalley wrote:
+--KscVNZbUup0vZz0f
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> +static inline bool selinux_checkreqprot(void)
->> +{
->> +       struct selinux_state *state = &selinux_state;
->> +
->> +       return state->checkreqprot;
->> +}
-> 
-> Probably should use READ_ONCE().
-Will do.
+Hi Mimi,
 
-> 
->> diff --git a/security/selinux/measure.c b/security/selinux/measure.c
->> new file mode 100644
->> index 000000000000..b909e8e61542
->> --- /dev/null
->> +++ b/security/selinux/measure.c
->> @@ -0,0 +1,122 @@
->> +int selinux_security_state(void)
-> 
-> Let's call this selinux_measure_state() or similar.  Needs a verb. And
-> pass it a struct selinux_state * pointer argument to be measured, even
-> though initially it will always be passed &selinux_state.  The
-> encapsulation of selinux state within selinux_state was to support
-> multiple selinux namespaces in the future, each with their own state.
-Will do.
+On Fri, Jul 10, 2020 at 12:00:53PM -0400, Mimi Zohar wrote:
+> Initially the sha1 digest, including violations, was padded with zeroes
+> before being extended into the other TPM banks.  Support walking the
+> IMA measurement list, calculating the per TPM bank SHA1 padded
+> digest(s).
+>=20
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  src/evmctl.c | 73 +++++++++++++++++++++++++++++++++++++++++++++++-------=
+------
+>  1 file changed, 58 insertions(+), 15 deletions(-)
+>=20
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index 0e489e2c7ba6..814aa6b75571 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -1613,6 +1613,10 @@ static struct tpm_bank_info *init_tpm_banks(int *n=
+um_banks)
+>  =09return banks;
+>  }
+> =20
+> +/*
+> + * Compare the calculated TPM PCR banks against the PCR values read.
+> + * On failure to match any TPM bank, fail comparison.
+> + */
+>  static int compare_tpm_banks(int num_banks, struct tpm_bank_info *bank,
+>  =09=09=09     struct tpm_bank_info *tpm_bank)
+>  {
+> @@ -1632,14 +1636,15 @@ static int compare_tpm_banks(int num_banks, struc=
+t tpm_bank_info *bank,
+>  =09=09=09log_info("%s: TPM PCR-%d: ", tpm_bank[i].algo_name, j);
+>  =09=09=09log_dump(tpm_bank[i].pcr[j], tpm_bank[i].digest_size);
+> =20
+> -=09=09=09ret =3D memcmp(bank[i].pcr[j], tpm_bank[i].pcr[j],
+> -=09=09=09=09     bank[i].digest_size);
+> -=09=09=09if (!ret)
+> +=09=09=09if (memcmp(bank[i].pcr[j], tpm_bank[i].pcr[j],
+> +=09=09=09=09     bank[i].digest_size) =3D=3D 0) {
+>  =09=09=09=09log_info("%s PCR-%d: succeed\n",
+>  =09=09=09=09=09 bank[i].algo_name, j);
+> -=09=09=09else
+> +=09=09=09} else {
+> +=09=09=09=09ret =3D 1;
+>  =09=09=09=09log_info("%s: PCRAgg %d does not match TPM PCR-%d\n",
+>  =09=09=09=09=09 bank[i].algo_name, j, j);
+> +=09=09=09}
+>  =09=09}
+>  =09}
+>  =09return ret;
+> @@ -1695,10 +1700,7 @@ static int extend_tpm_bank(EVP_MD_CTX *pctx, const=
+ EVP_MD *md,
+>  =09=09goto out;
+>  =09}
+> =20
+> -=09if (validate && !memcmp(entry->header.digest, zero, SHA_DIGEST_LENGTH=
+))
+> -=09=09err =3D EVP_DigestUpdate(pctx, fox, bank->digest_size);
 
->> +       static char *security_state_string =
->> +                       "enabled=%d;enforcing=%d;checkreqprot=%d;"        \
->> +                       "netpeer=%d;openperm=%d;extsockclass=%d;"         \
->> +                       "alwaysnetwork=%d;cgroupseclabel=%d;"             \
->> +                       "nnpnosuidtransition=%d;genfsseclabelsymlink=%d;";
-> 
-> Rather than hardcoding policy capability names here, I would recommend
-> using the selinux_policycap_names[] array for the names and the
-> selinux_state.policycap[] array for the values.  Also recommend
-> passing in a struct selinux_state * here to allow for future case
-> where there are multiple selinux states, one per selinux namespace.
-Will do.
+'fox' is not being used in the code anymore. It could be totally removed
+afaics.
 
-> 
->> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
->> index ef0afd878bfc..0c289d13ef6a 100644
->> --- a/security/selinux/ss/services.c
->> +++ b/security/selinux/ss/services.c
->> @@ -3724,10 +3724,11 @@ int security_netlbl_sid_to_secattr(struct selinux_state *state,
->>    * security_read_policy - read the policy.
->>    * @data: binary policy data
->>    * @len: length of data in bytes
->> - *
->> + * @alloc_kernel_memory: flag to indicate memory allocation
->>    */
->> -int security_read_policy(struct selinux_state *state,
->> -                        void **data, size_t *len)
->> +int security_read_selinux_policy(struct selinux_state *state,
->> +                                void **data, size_t *len,
->> +                                bool alloc_kernel_memory)
-> 
-> Instead of passing in a boolean to control how the memory is
-> allocated, split this into a helper function that takes an
-> already-allocated buffer and two
-> different front-end wrappers, one for kernel-internal use and one for
-> userspace use.
-Will do.
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 90a3eeb..ae513b0 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -1425,7 +1425,6 @@ struct template_entry {
+ };
 
-> 
->> @@ -3738,7 +3739,10 @@ int security_read_policy(struct selinux_state *state,
->>
->>          *len = security_policydb_len(state);
->>
->> -       *data = vmalloc_user(*len);
->> +       if (alloc_kernel_memory)
->> +               *data = kzalloc(*len, GFP_KERNEL);
-> 
-> You need vmalloc() since policy image size may exceed kmalloc max (or
-> at least that used to be the case).
-Will do.
+ static uint8_t zero[MAX_DIGEST_SIZE];
+-static uint8_t fox[MAX_DIGEST_SIZE];
 
-thanks,
-  -lakshmi
+ static int validate =3D 0;
+ static int verify =3D 0;
+@@ -1886,7 +1885,6 @@ static int ima_measurement(const char *file)
 
+        errno =3D 0;
+        memset(zero, 0, MAX_DIGEST_SIZE);
+-       memset(fox, 0xff, MAX_DIGEST_SIZE);
+
+        pseudo_padded_banks =3D init_tpm_banks(&num_banks);
+        pseudo_banks =3D init_tpm_banks(&num_banks);
+
+
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
+
+--KscVNZbUup0vZz0f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8PTk8ACgkQYdRkFR+R
+okPtUAgAoMI2lcEHUMSg0Ip9QPOA7Y/YA0fBgDHCQaJAPyaY8W86+iFdtBx3GFPO
+OdBoyW6Ou3MRWr940y1UIGryEZKd/MvbyHhHWywPi03JTYgXF0SguKl2l0eEXfmI
+3ulAjiwVxieacdeQBjX4nmpAegkSRZO2IoCAM5ZtHY+SC8oYDcxHA2Q0DSsyhScR
+QHcQETU2i3Djrk4K+0PQnaO3AB3BKm3uudGheoTvYB6wN9hgFAxuH1NAsw1klxuL
+CHyy6GJ3wsgPbcdD7Xl+C2WuCF1nIpOt9+gjVgVxzzVM7of4sPJa+q1d3Be5IPcZ
+n/+9YmK0lN8eyX85ry3w6XP4exp6UA==
+=NKh9
+-----END PGP SIGNATURE-----
+
+--KscVNZbUup0vZz0f--
 
