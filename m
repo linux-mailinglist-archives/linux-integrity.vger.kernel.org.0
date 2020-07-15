@@ -2,88 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9F9221558
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 21:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9ED22156A
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 21:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727782AbgGOTqk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jul 2020 15:46:40 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:48138 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727810AbgGOTqk (ORCPT
+        id S1728032AbgGOTr4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jul 2020 15:47:56 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20954 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727948AbgGOTr4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jul 2020 15:46:40 -0400
-Received: from [192.168.1.21] (c-73-187-218-229.hsd1.pa.comcast.net [73.187.218.229])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9CE6B20B4909;
-        Wed, 15 Jul 2020 12:46:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9CE6B20B4909
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1594842399;
-        bh=d3CV4BL7ujSFiwhyOnB+HGNOe44sG+z8CNjbDopcBCc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Ip6my/otIOnxnQ0GXpo01z1P/2A9T31qikBqEQf4K4I4UeuiMDHf1crTbQ+cpmwdv
-         5CohA8ZVRhmtwN8sLln9Dft/7GvAzOzEQqVof05OaoQM/mB9OAESNfu8xbbLDE9GbF
-         b89xdFfzqVRPRJ6Z0Dz2JeUjqQSUUqHA44KGtBLA=
-Subject: Re: [PATCH 1/2] IMA: Verify that the kernel cmdline is passed and
- measured correctly through the kexec barrier.
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     zohar@linux.ibm.com, ltp@lists.linux.it,
-        nramas@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org
-References: <20200702153545.3126-1-t-josne@linux.microsoft.com>
- <20200702153545.3126-2-t-josne@linux.microsoft.com>
- <20200715081857.GB10916@dell5510>
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-Message-ID: <3ec443ab-f9ed-a435-2a61-e1b7c8f513dd@linux.microsoft.com>
-Date:   Wed, 15 Jul 2020 15:46:37 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200715081857.GB10916@dell5510>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        Wed, 15 Jul 2020 15:47:56 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06FJWlsT140115;
+        Wed, 15 Jul 2020 15:47:53 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 329apxy774-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jul 2020 15:47:53 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06FJWtHC140906;
+        Wed, 15 Jul 2020 15:47:53 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 329apxy76d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jul 2020 15:47:53 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06FJk8bT009340;
+        Wed, 15 Jul 2020 19:47:51 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03fra.de.ibm.com with ESMTP id 327527jeu4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jul 2020 19:47:51 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06FJln2m57737412
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Jul 2020 19:47:49 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 61A6552051;
+        Wed, 15 Jul 2020 19:47:49 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.155.184])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id D3D345204E;
+        Wed, 15 Jul 2020 19:47:48 +0000 (GMT)
+Message-ID: <1594842468.12900.339.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 2/8] ima_evm_utils: support extending TPM 2.0 banks
+ w/original SHA1 padded digest
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Bruno Meneguele <bmeneg@redhat.com>
+Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>
+Date:   Wed, 15 Jul 2020 15:47:48 -0400
+In-Reply-To: <20200715184327.GH3720@glitch>
+References: <1594396859-9232-1-git-send-email-zohar@linux.ibm.com>
+         <1594396859-9232-3-git-send-email-zohar@linux.ibm.com>
+         <20200715184327.GH3720@glitch>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-15_12:2020-07-15,2020-07-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 spamscore=0 impostorscore=0 adultscore=0 lowpriorityscore=0
+ phishscore=0 suspectscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007150147
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Bruno,
 
-On 7/15/20 4:18 AM, Petr Vorel wrote:
->> +++ b/testcases/kexec/utils.sh
->> @@ -0,0 +1,47 @@
->> +#!/bin/sh
->> +
->> +install() {
->> +    local arg="$1"
->> +
->> +    if [ ! -d "/etc/init.d" ]; then
->> +        mkdir /etc/init.d
->> +    fi
-> I'm not sure if tests like this are suitable for LTP.
-> Ideal LTP test is a normal test, which is able to run with runltp, cleanup after
-> itself and use LTP C or/and shell API. LTP is full of tests which needs special
-> handling and thus not being run, not sure if it's a good idea to introduce yet
-> another one.
->
-> Also test shouldn't not significantly modify SUT to make it unbootable, which
-> I'm not sure in this case. This is a big difference to kselftests which are
-> meant to help during kernel development which somehow expects some system
-> modifications (as you install your custom build kernel).
->
-> I wonder if using QEMU would help to implement this test while not touching SUT
-> (thus be able to run this test with runltp). If you miss something in LTP API
-> just let us know.
-Using qemu is an interesting idea, but would be difficult to generalize.
+On Wed, 2020-07-15 at 15:43 -0300, Bruno Meneguele wrote:
+<snip>
 
-I actually do agree with you that a test like this may not be 
-appropriate for
-LTP since it's so separate and alien to the rest of the LTP suite.
+If this patch was in next-testing, I could simply update it.  Please
+send a new patch to remove fox.
 
-I need to confirm internally before I make a decision here, but is there
-a better place to put a test like this?
+thanks,
 
+Mimi
 
-Thanks for your review,
-
-Lachlan :)
+> 'fox' is not being used in the code anymore. It could be totally removed
+> afaics.
+> 
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index 90a3eeb..ae513b0 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -1425,7 +1425,6 @@ struct template_entry {
+>  };
+> 
+>  static uint8_t zero[MAX_DIGEST_SIZE];
+> -static uint8_t fox[MAX_DIGEST_SIZE];
+> 
+>  static int validate = 0;
+>  static int verify = 0;
+> @@ -1886,7 +1885,6 @@ static int ima_measurement(const char *file)
+> 
+>         errno = 0;
+>         memset(zero, 0, MAX_DIGEST_SIZE);
+> -       memset(fox, 0xff, MAX_DIGEST_SIZE);
+> 
+>         pseudo_padded_banks = init_tpm_banks(&num_banks);
+>         pseudo_banks = init_tpm_banks(&num_banks);
+> 
+> 
 
