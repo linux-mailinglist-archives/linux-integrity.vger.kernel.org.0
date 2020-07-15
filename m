@@ -2,123 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA25221666
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 22:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D993622171C
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jul 2020 23:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727112AbgGOUkR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jul 2020 16:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726670AbgGOUkQ (ORCPT
+        id S1726675AbgGOVjR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jul 2020 17:39:17 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:42265 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726479AbgGOVjR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jul 2020 16:40:16 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3E2C08C5DE
-        for <linux-integrity@vger.kernel.org>; Wed, 15 Jul 2020 13:40:16 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id b9so2878017plx.6
-        for <linux-integrity@vger.kernel.org>; Wed, 15 Jul 2020 13:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=3RdpnHt4YFQNegHM71xCSPo+5hGEKA55j9DzkLX+zEI=;
-        b=W6JWWMnCCKRoZOrZTqxAVNCpWdse7JHrhl955F5ofkWIbY8yj0WiYEYIrzGnCpQmPr
-         nebzAR1cLp77bQPydJtMWmGvGL1DOx/5b1SD2FJ+owpHkt8+SixM1Gqmi5haJ+ZpVK/l
-         ohTNaS/ycfxJ7NhhCYIL+fq/TdpwR9jTHXNUw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3RdpnHt4YFQNegHM71xCSPo+5hGEKA55j9DzkLX+zEI=;
-        b=NWuVICIQTjpvngExXnehHeHPbJWp93EpjTweMJpDilG+xpDs9mIdpj+ZhdRnrhfK0w
-         oUSmJwUVs4CH8WP5cWtbgSBzUfmL+VE+wg9rrECF/VadL/aAFemneG1QOiauIptmxWRy
-         3Zs9KaPmH8i5oopsZDQx4laqfkcpkjHQF0NQoZllqKd29mGqV+29a9oDI3BoJhSW0fRH
-         iLN6UWXGEHWElVB9datNEBEgdDWKICxAOz78Q/jkP6W8968pwsg3BOCXJxvjndvJ4+lp
-         iT3b8iBJ1n9WBGERYWbP1F0D16EZDwc3Ljs3dKnviTbmfJ3u7rX3JRXzZ/AgFqyPaWEB
-         cEpw==
-X-Gm-Message-State: AOAM530slNYfz9L6ehgnR9zaRLiUOKT3fflMOW0Y9DT+gZq8j6FB3pxf
-        YYLOVpaMzWezVQZO5iBgYhPtbw==
-X-Google-Smtp-Source: ABdhPJy0QMC5q+2qYD6o7SHOebREIiw8ISqB8EjezF/XGzbblfIdGbOr3hMolHLPO5Yp/fgvt7Nt3A==
-X-Received: by 2002:a17:90b:8d7:: with SMTP id ds23mr1507273pjb.148.1594845616072;
-        Wed, 15 Jul 2020 13:40:16 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 66sm2720207pfd.93.2020.07.15.13.40.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 13:40:15 -0700 (PDT)
-Date:   Wed, 15 Jul 2020 13:40:14 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v6 7/7] ima: add policy support for the new file open
- MAY_OPENEXEC flag
-Message-ID: <202007151339.283D7CD@keescook>
-References: <20200714181638.45751-1-mic@digikod.net>
- <20200714181638.45751-8-mic@digikod.net>
+        Wed, 15 Jul 2020 17:39:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594849156;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EM6yxRSPKU4x0QOObOuZNirW5SXQQqWbMpXS9w5Yb4k=;
+        b=ZUhZup1Lxp8PDO83353fn2+ON0EfI2E9aGsM2QGLuD7dIfiBT+knnP6Jy3JlM/hr3qdk0H
+        e2RjPVbODnU7ZGEZABfePJs9N2aNi1rgdIduLSScFMAj1NhLXRHiJPZMfliIZOAI6cP2zU
+        /YIgEDPmr0fg/JvsLFEpquAyWNyNq/E=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-120-9yMkxd9HMnKupUE22sNJ_Q-1; Wed, 15 Jul 2020 17:39:13 -0400
+X-MC-Unique: 9yMkxd9HMnKupUE22sNJ_Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6DE038015FB;
+        Wed, 15 Jul 2020 21:39:12 +0000 (UTC)
+Received: from localhost (ovpn-116-38.gru2.redhat.com [10.97.116.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 32D9910013C2;
+        Wed, 15 Jul 2020 21:39:09 +0000 (UTC)
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Bruno Meneguele <bmeneg@redhat.com>
+Subject: [PATCH 0/3] ima-evm-utils: miscellanous bug fixes
+Date:   Wed, 15 Jul 2020 18:39:03 -0300
+Message-Id: <20200715213906.194041-1-bmeneg@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200714181638.45751-8-mic@digikod.net>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 08:16:38PM +0200, Mickaël Salaün wrote:
-> From: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> The kernel has no way of differentiating between a file containing data
-> or code being opened by an interpreter.  The proposed O_MAYEXEC
-> openat2(2) flag bridges this gap by defining and enabling the
-> MAY_OPENEXEC flag.
-> 
-> This patch adds IMA policy support for the new MAY_OPENEXEC flag.
-> 
-> Example:
-> measure func=FILE_CHECK mask=^MAY_OPENEXEC
-> appraise func=FILE_CHECK appraise_type=imasig mask=^MAY_OPENEXEC
-> 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Acked-by: Mickaël Salaün <mic@digikod.net>
+While testing in RHEL7 the latest 'next-testing' branch changes the build
+failed due to an "out" label being placed at the end of the function
+calc_bootaggr() with no instructions for systems with OpenSSL version less
+then 1.1. Corrected it by putting a simple no-op 'return' there (the
+function returns nothing).
 
-(Process nit: if you're sending this on behalf of another author, then
-this should be Signed-off-by rather than Acked-by.)
+The other bugs are a simple memory leak, also on calc_bootaggr(), when
+_DigestUpdate() returns error; and an overflow while reading the
+boot_aggregate buffer due to the lack of the null char at the end.
+
+Bruno Meneguele (3):
+  ima-evm-utils: fix empty label at end of function.
+  ima-evm-utils: fix memory leak in case of error
+  ima-evm-utils: fix overflow on printing boot_aggregate
+
+ src/evmctl.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 -- 
-Kees Cook
+2.26.2
+
