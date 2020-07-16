@@ -2,139 +2,78 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5189022270A
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 17:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C76A2229D6
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 19:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728879AbgGPPbi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Jul 2020 11:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728374AbgGPPbe (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Jul 2020 11:31:34 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823D9C061755
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Jul 2020 08:31:34 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id d1so4022489plr.8
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Jul 2020 08:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jGC0Cma9sD+M6C66CXjEVdr4Gdb8mMF8OboSIxxwdH4=;
-        b=ZCAVB8nsh1reVbsCtXsNpc9/GpvQQzf253bRke2fSht/9fsA2S0zNy7s7Q7zaYprZf
-         XIp3CYeZYUJRxqJWxlw4GYR6Rxfcw9Cy7l7xTQwKslcSPJZlLm/qGcYymwn8C7VPsU+k
-         dDBF3EEYw3UhdPnQHkORD5qj1r8KpyjprM3rc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=jGC0Cma9sD+M6C66CXjEVdr4Gdb8mMF8OboSIxxwdH4=;
-        b=cV5vZd2qtUW/LGVL5aoOipJcJE0LGIa1ahvydps9VepwZT+xEdqcnuZmrYxurFpCcx
-         vDkeYyOhG4hNXEw6R8GpHV/yacDGDRclv5Pr6OJnE/2NsBQdQt/lBu4SUNFDiReVCjyt
-         S1fvEs/zs7rttzqKbY1y2ADnZgn61ARip64HuK8D/Z3yH0QGRrZ2DNIouPDk4gjwIw2l
-         1csASDvMxWNK8uh3poqCyZ/+chnACrteJyvmdg6QQbDAuKrrN2WNJfeNsWfRQOIVPLys
-         OUOAnIVNr5pedH+1iGC/2TXXh3DcCEyIgHKafNAb9sTRjUCxHR4v1iKG2yaqJ0de7ESL
-         D8wQ==
-X-Gm-Message-State: AOAM5325oBzxNQDlTR9Xa/8fqMI51/3UvlYnmbEYobwu4eWFkt2XKo1Y
-        bVMPeXyl9jcJKkBw+w4eG+rKwA==
-X-Google-Smtp-Source: ABdhPJweDZrRnoUX7jCQB/uM+EQPmvMQFRn5PcnR6HDszEBspoWj0c+Kso5Fx/ceySNNzLeNRQX5LA==
-X-Received: by 2002:a17:90b:390e:: with SMTP id ob14mr4976168pjb.221.1594913494019;
-        Thu, 16 Jul 2020 08:31:34 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e195sm5218464pfh.218.2020.07.16.08.31.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 08:31:33 -0700 (PDT)
-Date:   Thu, 16 Jul 2020 08:31:32 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Jan Kara <jack@suse.cz>,
-        Matthew Bobrowski <mbobrowski@mbobrowski.org>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v6 4/7] fs: Introduce O_MAYEXEC flag for openat2(2)
-Message-ID: <202007160822.CCDB5478@keescook>
-References: <20200714181638.45751-1-mic@digikod.net>
- <20200714181638.45751-5-mic@digikod.net>
- <202007151304.9F48071@keescook>
- <b209ea10-5b7f-c40e-5b6a-3da9028403d5@digikod.net>
+        id S1728562AbgGPR07 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Jul 2020 13:26:59 -0400
+Received: from mga01.intel.com ([192.55.52.88]:47165 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726986AbgGPR06 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 16 Jul 2020 13:26:58 -0400
+IronPort-SDR: TT9U2tITExq6glngydUbOW098uKgTrSTt0B0NM5Vk6WsJN0uTeXckBiWpoqUhlKWirDTjvAcPU
+ hAR78bensUoA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9684"; a="167581557"
+X-IronPort-AV: E=Sophos;i="5.75,360,1589266800"; 
+   d="scan'208";a="167581557"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2020 10:26:57 -0700
+IronPort-SDR: 1EgqbbYetW10P22ZL8G4vZYdleHkGnBPhVmHwNUM+4T1k6hUCCSY7nFVgpC1lQcbaMJhbq0ici
+ HLXDoxrUEcMQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,360,1589266800"; 
+   d="scan'208";a="326589129"
+Received: from unknown (HELO localhost) ([10.249.34.156])
+  by orsmga007.jf.intel.com with ESMTP; 16 Jul 2020 10:26:54 -0700
+Date:   Thu, 16 Jul 2020 20:26:52 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v9 2/2] tpm: Add support for event log pointer found in
+ TPM2 ACPI table
+Message-ID: <20200716172652.GA14135@linux.intel.com>
+References: <20200706230914.GC20770@linux.intel.com>
+ <78ec872f-89b3-6464-6ede-bd0a46fe5c4c@linux.ibm.com>
+ <20200707022416.GC112019@linux.intel.com>
+ <f3e0fb50-8617-da40-1456-158531a070cb@linux.ibm.com>
+ <20200707040325.GB143804@linux.intel.com>
+ <85c27199-df55-eecc-855c-dedcea64f89e@linux.ibm.com>
+ <20200708140753.GC538949@linux.intel.com>
+ <e42cb59d-6a3d-12be-bb51-88aa8c5dba23@linux.ibm.com>
+ <20200714112030.GA1448526@linux.intel.com>
+ <69907c30-62c2-b4bd-e84f-11612bba9c95@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b209ea10-5b7f-c40e-5b6a-3da9028403d5@digikod.net>
+In-Reply-To: <69907c30-62c2-b4bd-e84f-11612bba9c95@linux.ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 04:18:27PM +0200, Mickaël Salaün wrote:
-> On 15/07/2020 22:06, Kees Cook wrote:
-> > On Tue, Jul 14, 2020 at 08:16:35PM +0200, Mickaël Salaün wrote:
-> >> The implementation of O_MAYEXEC almost duplicates what execve(2) and
-> >> uselib(2) are already doing: setting MAY_OPENEXEC in acc_mode (which can
-> >> then be checked as MAY_EXEC, if enforced), and propagating FMODE_EXEC to
-> >> _fmode via __FMODE_EXEC flag (which can then trigger a
-> >> fanotify/FAN_OPEN_EXEC event).
-> >> [...]
-> > 
-> > Adding __FMODE_EXEC here will immediately change the behaviors of NFS
-> > and fsnotify. If that's going to happen, I think it needs to be under
-> > the control of the later patches doing the behavioral controls.
-> > (specifically, NFS looks like it completely changes its access control
-> > test when this is set and ignores the read/write checks entirely, which
-> > is not what's wanted).
+On Tue, Jul 14, 2020 at 08:09:03AM -0400, Stefan Berger wrote:
+> On 7/14/20 7:20 AM, Jarkko Sakkinen wrote:
+> > On Wed, Jul 08, 2020 at 10:17:17AM -0400, Stefan Berger wrote:
+> > > > â¯ swtpm-mvo.swtpm socket --tpmstate dir=/tmp/mytpm1 \
+> > > >     --ctrl type=unixio,path=/tmp/mytpm1/swtpm-sock \
+> > > >     --log level=20
+> > > > swtpm: Could not open UnixIO socket: No such file or directory
+> > > 
+> > > Did you create the directory '/tmp/mytpm1' ?
+> > Yes. It's the socket file that it is complain because it does
+> > not exist beforehand.
 > 
-> __FMODE_EXEC was suggested by Jan Kara and Matthew Bobrowski because of
-> fsnotify. However, the NFS handling of SUID binaries [1] indeed leads to
-> an unintended behavior. This also means that uselib(2) shouldn't work
-> properly with NFS. I can remove the __FMODE_EXEC flag for now.
+> 
+> The socket file is created by the swtpm program.
 
-I kind of wonder if we need to more completely fix __FMODE_EXEC?
+I got this tested with real hardware, i.e. tested that TPM 1.2 works.
 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=f8d9a897d4384b77f13781ea813156568f68b83e
+Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-Hmpf, this implies that "fmode" should contain MAY_EXEC? It really looks
-like __FMODE_EXEC is a hack for places where only "flags" were passed
-around, and this only seems to be an issue for NFS at this point? And it
-should be fixable for fsnotify too?
-
-Hmm. (And nothing should use uselib anyway...)
-
--- 
-Kees Cook
+/Jarkko
