@@ -2,91 +2,79 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 758F0222E56
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 00:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E1A222F02
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 01:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbgGPWDe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Jul 2020 18:03:34 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37492 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbgGPWDe (ORCPT
+        id S1726514AbgGPXap (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Jul 2020 19:30:45 -0400
+Received: from smtp-as-01.vtxnet.net ([194.38.175.130]:44802 "EHLO
+        smtp-as-01.vtxnet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726113AbgGPXap (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Jul 2020 18:03:34 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 41FA820B4909;
-        Thu, 16 Jul 2020 15:03:33 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 41FA820B4909
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1594937013;
-        bh=BO4avn92Gom5gc+t7EdSdrx5xcXiDN2axravan300r8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=alO1yY324W0XtvJF3jJ20uUtbfZIxvf5wdeVrVykT/x6h7DAdLUYXLhQmKKM1FSLm
-         QrQ8rV0+7PDptRV66+ZZQExLfZNMxwrenrawEk4eIjI5uVEm2JZhZ7t/gi9fzXKtBb
-         4QLIkDA5LTA6svI/oegPWWMZ2q4ojUcWUeUrjHFg=
-Subject: Re: [PATCH v2 4/5] LSM: Define SELinux function to measure security
- state
-To:     Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20200716174351.20128-1-nramas@linux.microsoft.com>
- <20200716174351.20128-5-nramas@linux.microsoft.com>
- <CAEjxPJ43eXK0xgrE=gDxZVg2SDTz4bkd7N4otjk-cvxf3fKL-g@mail.gmail.com>
- <9478ddca-8298-5170-836d-8cbc7a070df2@linux.microsoft.com>
- <CAEjxPJ5p_T+C1NDz3iF7fvQzQAURpAcipvQfQXLZTfLP4Wiqbg@mail.gmail.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <37d3d380-f4e2-1bdc-88c8-7bb8ffbee612@linux.microsoft.com>
-Date:   Thu, 16 Jul 2020 15:03:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 16 Jul 2020 19:30:45 -0400
+X-Greylist: delayed 1200 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Jul 2020 19:30:44 EDT
+X-Spam-Flag: NO
+X-Spam-Score: 1.2
+X-Spam-Level: *
+X-Spam-Status: No, score=1.2 tagged_above=-999 required=999
+        tests=[FREEMAIL_FORGED_REPLYTO=1.199, LOTS_OF_MONEY=0.001]
+        autolearn=no autolearn_force=no
+Received: from smtp-02.datacomm.ch (smtp-02-5.datacomm.ch [212.40.2.22])
+        by smtp-as-01.vtxnet.net (Postfix) with ESMTP id ECD95406FE;
+        Fri, 17 Jul 2020 00:50:54 +0200 (CEST)
+Received: from webmail.vtx.ch (bas-flu-webmail-01.vtxnet.net [212.40.2.41])
+        by smtp-02.datacomm.ch (VTX Datacomm AG) with ESMTP id 1F78A120051;
+        Fri, 17 Jul 2020 00:50:54 +0200 (CEST)
+Received: from [156.38.89.48]
+ by webmail.vtx.ch
+ with HTTP (HTTP/1.1 POST); Fri, 17 Jul 2020 00:50:54 +0200
 MIME-Version: 1.0
-In-Reply-To: <CAEjxPJ5p_T+C1NDz3iF7fvQzQAURpAcipvQfQXLZTfLP4Wiqbg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Date:   Fri, 17 Jul 2020 00:50:54 +0200
+From:   =?UTF-8?Q?Ocean_Finance=C2=AE?= <hoheneggerbrail@vtxmail.ch>
+To:     undisclosed-recipients:;
+Subject: =?UTF-8?Q?Gl=C3=BCckwunsch_!!?=
+Organization: =?UTF-8?Q?Ocean_Finance=C2=AE?=
+Reply-To: oceanfinance__@hotmail.com
+Mail-Reply-To: oceanfinance__@hotmail.com
+Message-ID: <4727f41278594856d69e0fbcf511c1ad@vtxmail.ch>
+X-Sender: hoheneggerbrail@vtxmail.ch
+User-Agent: Roundcube Webmail/1.2.10
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/16/20 12:45 PM, Stephen Smalley wrote:
-> On Thu, Jul 16, 2020 at 3:13 PM Lakshmi Ramasubramanian
-> <nramas@linux.microsoft.com> wrote:
->>
->> On 7/16/20 11:54 AM, Stephen Smalley wrote:
->>> Not sure about this error handling approach (silent, proceeding as if
->>> the length was zero and then later failing with ENOMEM on every
->>> attempt?). I'd be more inclined to panic/BUG here but I know Linus
->>> doesn't like that.
->> I am not sure if failing (kernel panic/BUG) to "measure" LSM data under
->> memory pressure conditions is the right thing. But I am open to treating
->> this error as a fatal error. Please let me know.
-> 
-> Let's at least log an error message since it otherwise silently
-> disables all measuring of security state.
-Agree - will log error messages as appropriate.
-
-> Also not sure why we bother returning errors from
-> selinux_measure_data() since nothing appears to check or use the
-> result.
-Maybe SELinux can log audit messages on failures, but I guess it may be 
-better to do that closer to where the error occurs.
-
-Will change selinux_measure_data() to void function.
-
-> Don't know if integrity/IMA has any equivalent to the audit
-> subsystem's concept of audit_failure settings to control whether
-> errors that prevent auditing (measuring) are handled silently, with a
-> log message, or via a panic.  If not, I guess that can be explored
-> separately.
-> 
-
-Yes - integrity subsystem logs audit messages for errors\failures.
-
-  -lakshmi
 
 
+-- 
+Sehr geehrter Herr / Frau,
+
+Ich hoffe, Sie sind bei guter Gesundheit durch die Pandemie
+Coronavirus (COVID-19)
+
+Ich bin Herr Heckmann Carl von der Active Lenders Loan Company,
+bekannt als Ocean Finance®. Damit möchten wir Sie darüber informieren,
+dass wir alle Arten von Darlehen zu einem Zinssatz von 2% anbieten.
+Wenn Sie daran interessiert sind, innerhalb von 24 Stunden ein
+Darlehen zu erhalten, genehmigen Sie es und überweisen Sie es auf Ihr
+Bankkonto. Bitte kontaktieren Sie uns mit den folgenden Informationen.
+Unser Kreditangebot reicht von 20.000,00 bis 20.000.000,00 (EUR).
+
+Bitte füllen Sie das unten stehende Formular aus und senden Sie es so
+schnell wie möglich zurück.
+
+Ihr vollständiger Name:
+Erforderlicher Darlehensbetrag:
+Laufzeit des Darlehens:
+Zweck des Kredits:
+Telefonnummer:
+
+In Bestätigung dieser E-Mail können wir mit der Bearbeitung Ihres
+Darlehens beginnen und versprechen, Ihren Herzenswunsch zu erfüllen.
+Freundliche Grüße.
+
+Herr Heckmann Carl
+Finanzberater
