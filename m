@@ -2,174 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14211222B4D
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 20:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487AE222B9B
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 21:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728705AbgGPSyS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Jul 2020 14:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S1729357AbgGPTMw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Jul 2020 15:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726986AbgGPSyR (ORCPT
+        with ESMTP id S1728560AbgGPTMv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Jul 2020 14:54:17 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AC8C061755;
-        Thu, 16 Jul 2020 11:54:17 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id 72so5056875otc.3;
-        Thu, 16 Jul 2020 11:54:17 -0700 (PDT)
+        Thu, 16 Jul 2020 15:12:51 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10F3C08C5DC
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Jul 2020 12:12:50 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id x8so4274478plm.10
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Jul 2020 12:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hh1P2ej3PSRq1WOldPof/pYHoI8ZC8oiK5qvMk9TyR0=;
-        b=bB0GqtkF+m763mQ8H/zjdUE2tmoKXyBj5xknTJ2FjFNHnb9/9Idj5DCQUd2v4bl5lC
-         e2kgL7T8sqTuXor8tyPCn6TNokY/9aPFtNuk2lPm6w7VpwJsa8Yjmk60VE73+9rin7jU
-         POzPrc+m+Bv/pVWWrnKgXQQ7E+6KJ+6xhL453GVN4fiUl2ImlTtcJLG7XkcwZAJVe3mL
-         Gpo+TBbB3DT5XNsVytw94iXWQ2H2pRk+CbxNpWQqh02pxoZ3cbSyNP2z6v8aWezPnOoJ
-         VYViwIuNXNpzfnPOFyOhssvn/9urkUmCMMf/yBgnpeG918Y+JDevULC5dAL4kTrx3h6I
-         KGGg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=reZvnOQ8bijPp6S5yQzmCOTTsMLuDmnyX5N/3GfwHXo=;
+        b=lhX4KRZzVkUSda9R6NyorS54yyDn6hPMA24J3zBk96aHpX1ic/PoqYAe/VIB7Xy9B/
+         HlVJ28tVKHEHHcNCuv/KrJOZBUcoLwz6roC1HJNW31P8tAYmIPcACI0nrMG4j1+ivpMt
+         1Xfyw0pkzrtmnsj0jd8RERq8Fj7NvEgD8QxLc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hh1P2ej3PSRq1WOldPof/pYHoI8ZC8oiK5qvMk9TyR0=;
-        b=WMBW4F66SkOdz7OalaybCD59Zq+pAFUHfXkHIpvIvV1B+QTARR4Xb/LXSGbQCyQtJy
-         trJWJ9ccY3fAyJFeCF6gOMqEt1eUa9y3XZK+AthBvx16o66yb9njnWKU68Uk2MHvbGvP
-         BYgf+T4h2z7OTd+3WcRlHbNguk50rdThl9azZiKC/yAfRt42T6x6gFN/cli4/RcOBxBd
-         YvAqnwffDpqbsQsZ/Z8gP4Tx9/7v6QJw0F3d41z8Rb1IHjbcQYjQSwQzk2DZTfBc2sdg
-         gljzJAo5JrelganH9qrZS5Cn5T2inXAjg4aZ0J+amKBcK2AmV/omPbZRayaOXEt9NYOw
-         RexQ==
-X-Gm-Message-State: AOAM533FEBR0CWJgFDihIcVPSdY/XVkB1T47Fo0yfRNuo9dXOSoIcLTI
-        GwEWmLgUkzRn+66KJF7qt5bla8FPp5GzF6x3mhrgiWfk
-X-Google-Smtp-Source: ABdhPJz5CQk76FM+g6cXhnGWeCEydEOpfKBMJz3HmArpJ07d0bYKBDJdEk7sAkAQSMT2H2LdRmvDZteqI+fIukAa3hI=
-X-Received: by 2002:a9d:6e14:: with SMTP id e20mr5552606otr.89.1594925656968;
- Thu, 16 Jul 2020 11:54:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200716174351.20128-1-nramas@linux.microsoft.com> <20200716174351.20128-5-nramas@linux.microsoft.com>
-In-Reply-To: <20200716174351.20128-5-nramas@linux.microsoft.com>
-From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-Date:   Thu, 16 Jul 2020 14:54:06 -0400
-Message-ID: <CAEjxPJ43eXK0xgrE=gDxZVg2SDTz4bkd7N4otjk-cvxf3fKL-g@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] LSM: Define SELinux function to measure security state
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=reZvnOQ8bijPp6S5yQzmCOTTsMLuDmnyX5N/3GfwHXo=;
+        b=PR/jckyT0oHEEMkqJO9UkWFLuC7xRBf7lrvBO3wfl9wc4rZWytQ9SGSJ2H9oYMGrOI
+         8+IIS74iXA9fENlf6I2Y+bMB+KCvxMAGfFfTqO2u9PCx7tQVgvh5HQ4tXblvFp+9tDCJ
+         Kb70Y21Tsf3A03rEzDSopRRmTXAQkUl9NDzMxHiJHR5rtuVXhTMSjvRXUoMGnIDFv/Ld
+         SkB1ViYFP+15o5tYc/XN1YPdr439pVBjegbVNylVdLJqxrsofpLkajDKMblHdWgp+Wvl
+         cjTdQngK9DGUgTR8HNCs/mzgxMoZQcr4pBGopdzJuxUNwhogjbXmUj4pVvJj4cHtHe9N
+         4Qmg==
+X-Gm-Message-State: AOAM5328ZEH55XSc6j/3QXetB9MOZx7pDrLdPYlSRjBcCfQMhdeCm8Zf
+        PD35r3TGxkJDuOHJPtlI9pp28A==
+X-Google-Smtp-Source: ABdhPJzSOAMegB1OmeJ/PboDzHabSRQP9lhAlD8QVD09gpvRf9fpyvnr8fMJH6cpEeTI0kWvhxJF2g==
+X-Received: by 2002:a17:902:7441:: with SMTP id e1mr4615121plt.23.1594926769952;
+        Thu, 16 Jul 2020 12:12:49 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g22sm5602957pgb.82.2020.07.16.12.12.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 12:12:48 -0700 (PDT)
+Date:   Thu, 16 Jul 2020 12:12:47 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v6 7/7] ima: add policy support for the new file open
+ MAY_OPENEXEC flag
+Message-ID: <202007160957.CABE4CC@keescook>
+References: <20200714181638.45751-1-mic@digikod.net>
+ <20200714181638.45751-8-mic@digikod.net>
+ <202007151339.283D7CD@keescook>
+ <8df69733-0088-3e3c-9c3d-2610414cea2b@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8df69733-0088-3e3c-9c3d-2610414cea2b@digikod.net>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 1:44 PM Lakshmi Ramasubramanian
-<nramas@linux.microsoft.com> wrote:
->
-> SELinux configuration and policy are some of the critical data for this
-> security module that needs to be measured. To enable this measurement
-> SELinux needs to implement the interface function,
-> security_measure_data(), that the LSM can call.
->
-> Define the security_state() function in SELinux to measure SELinux
-> configuration and policy. Call this function to measure SELinux data
-> when there is a change in the security module's state.
->
-> Sample measurement of SELinux state and hash of the policy:
->
-> 10 e32e...5ac3 ima-buf sha256:86e8...4594 selinux-state 656e61626c65643d3=
-13b656e666f7263696e673d303b636865636b72657170726f743d313b6e6574706565723d31=
-3b6f70656e7065726d3d313b657874736f636b636c6173733d313b616c776179736e6574776=
-f726b3d303b6367726f75707365636c6162656c3d313b6e6e706e6f737569647472616e7369=
-74696f6e3d313b67656e66737365636c6162656c73796d6c696e6b3d303b
-> 10 f4a7...9408 ima-buf sha256:4941...68fc selinux-policy-hash 8d1d...1834
->
-> The data for selinux-state in the above measurement is:
-> enabled=3D1;enforcing=3D0;checkreqprot=3D1;network_peer_controls=3D1;open=
-_perms=3D1;extended_socket_class=3D1;always_check_network=3D0;cgroup_seclab=
-el=3D1;nnp_nosuid_transition=3D1;genfs_seclabel_symlinks=3D0;
->
-> The data for selinux-policy-hash in the above measurement is
-> the SHA256 hash of the SELinux policy.
+On Thu, Jul 16, 2020 at 04:40:15PM +0200, Mickaël Salaün wrote:
+> 
+> On 15/07/2020 22:40, Kees Cook wrote:
+> > On Tue, Jul 14, 2020 at 08:16:38PM +0200, Mickaël Salaün wrote:
+> >> From: Mimi Zohar <zohar@linux.ibm.com>
+> >>
+> >> The kernel has no way of differentiating between a file containing data
+> >> or code being opened by an interpreter.  The proposed O_MAYEXEC
+> >> openat2(2) flag bridges this gap by defining and enabling the
+> >> MAY_OPENEXEC flag.
+> >>
+> >> This patch adds IMA policy support for the new MAY_OPENEXEC flag.
+> >>
+> >> Example:
+> >> measure func=FILE_CHECK mask=^MAY_OPENEXEC
+> >> appraise func=FILE_CHECK appraise_type=imasig mask=^MAY_OPENEXEC
+> >>
+> >> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> >> Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> >> Acked-by: Mickaël Salaün <mic@digikod.net>
+> > 
+> > (Process nit: if you're sending this on behalf of another author, then
+> > this should be Signed-off-by rather than Acked-by.)
+> 
+> I'm not a co-author of this patch.
 
-Can you show an example of how to verify that the above measurement
-matches a given state and policy, e.g. the sha256sum commands and
-inputs to reproduce the same from an expected state and policy?
+Correct, but you are part of the delivery path to its entry to the
+tree. If you were co-author, you would include "Co-developed-by" with
+a Signed-off-by. (So my nit stands)
 
->
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-> ---
+For excruciating details:
 
-> diff --git a/security/selinux/measure.c b/security/selinux/measure.c
-> new file mode 100644
-> index 000000000000..27cbb309e926
-> --- /dev/null
-> +++ b/security/selinux/measure.c
-> @@ -0,0 +1,158 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Measure SELinux state using IMA subsystem.
-> + */
-> +#include <linux/ima.h>
-> +#include "security.h"
-> +
-> +/* Pre-allocated buffer used for measuring state */
-> +static char *selinux_state_string;
-> +static size_t selinux_state_string_len;
-> +static char *selinux_state_string_fmt =3D
-> +       "%s=3D%d;%s=3D%d;%s=3D%d;%s=3D%d;%s=3D%d;%s=3D%d;%s=3D%d;%s=3D%d;=
-%s=3D%d;%s=3D%d;";
-> +
-> +void __init selinux_init_measurement(void)
-> +{
-> +       selinux_state_string_len =3D
-> +       snprintf(NULL, 0, selinux_state_string_fmt,
-> +       "enabled", 0,
-> +       "enforcing", 0,
-> +       "checkreqprot", 0,
-> +       selinux_policycap_names[POLICYDB_CAPABILITY_NETPEER], 0,
-> +       selinux_policycap_names[POLICYDB_CAPABILITY_OPENPERM], 0,
-> +       selinux_policycap_names[POLICYDB_CAPABILITY_EXTSOCKCLASS], 0,
-> +       selinux_policycap_names[POLICYDB_CAPABILITY_ALWAYSNETWORK], 0,
-> +       selinux_policycap_names[POLICYDB_CAPABILITY_CGROUPSECLABEL], 0,
-> +       selinux_policycap_names[POLICYDB_CAPABILITY_NNP_NOSUID_TRANSITION=
-], 0,
-> +       selinux_policycap_names[POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLIN=
-KS],
-> +       0);
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
 
-I was thinking you'd dynamically construct the format string with a
-for loop from 0 to POLICYDB_CAPABILITY_MAX
-and likewise for the values so that we wouldn't have to patch this
-code every time we add a new one.
+"The Signed-off-by: tag indicates that the signer was ... in the patch’s
+delivery path."
 
-> +
-> +       if (selinux_state_string_len < 0)
-> +               return;
+"Co-developed-by: ... is a used to give attribution to co-authors ..."
 
-How can this happen legitimately (i.e. as a result of something other
-than a kernel bug)?
-
-> +
-> +       ++selinux_state_string_len;
-> +
-> +       selinux_state_string =3D kzalloc(selinux_state_string_len, GFP_KE=
-RNEL);
-> +       if (!selinux_state_string)
-> +               selinux_state_string_len =3D 0;
-> +}
-
-Not sure about this error handling approach (silent, proceeding as if
-the length was zero and then later failing with ENOMEM on every
-attempt?). I'd be more inclined to panic/BUG here but I know Linus
-doesn't like that.
-
-> +       if (ret)
-> +               pr_err("%s: error %d\n", __func__, ret);
-
-This doesn't seem terribly useful as an error message; I'd be inclined
-to drop it.
+-- 
+Kees Cook
