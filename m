@@ -2,113 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF3F222A0F
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 19:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4A0222A3B
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 19:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728947AbgGPRiN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Jul 2020 13:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727844AbgGPRiN (ORCPT
+        id S1729422AbgGPRoE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Jul 2020 13:44:04 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:54454 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727844AbgGPRoD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Jul 2020 13:38:13 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B25C061755
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Jul 2020 10:38:13 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id a8so5394589edy.1
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Jul 2020 10:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RVT0J9Mnoh6KQFZ+Is1z4W+ElwDxGQDJlUT/PfjxoTs=;
-        b=AkFSpU6dl4IWPv94BJbTRzhClWvrcotA8ft9jlYZBWyqGWGpijHqy3bFvogJ6NBmxp
-         +RrPka0inm9ERTMBaoGlH/pu1QgWwQuEAIOWKVTpxIq5P6FK9n5ipj65Dz3s48V6Shou
-         zXr553DUydsZpqrGw2gItSaEmo2RP0eZ9q0oJtsmHcQkQ8pIOizvzo381PBt4LOMUaDL
-         A2V5F/X82783qDM+zPTBVaR8i1AGNyL19KnjcnJZSD4CuqybOciimS8MtpoPG3N7yXqA
-         +9VVVxU/yRBNqtmbXQ0z+0jgJqH9rOhXgeduogxc0zqPI3sMJ22Vn+I6w/LD7tifHkK4
-         G9Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RVT0J9Mnoh6KQFZ+Is1z4W+ElwDxGQDJlUT/PfjxoTs=;
-        b=eAb6OY5sRKGXqGVejbGLIGQLdS9iN5LtpjFtlfm2J7mLzBZE1S5jtXHGnOvkUeQYLG
-         AAywxKW4WoQKbHNqpDEx7+wOwZ3pkW/of35QfpSh+IYOqHypTW0mg6aiP5AQKhRLI97P
-         +w1UoGpatG7jtTNCFiw7s3PceywVDjZ8Yw2BpojFBEbpOSPMxO+/NN43k8weFEN9Co1L
-         r7hRfig4fS0RKpDfXUvV2JdVpKqR+twcJx0plyPrcw2hGumG6vaeK128N5LVv7O0O9gl
-         H4L1QbuD44ZHw1230X83uYwP/2JjLxznODASKf72Ab6momo6wlPh900oOEnn03yUIVVc
-         qlyQ==
-X-Gm-Message-State: AOAM530SpCvJFhUHfjUvjSwg7BJ90dJ8kHTg44+ZIPHIsfRLR65Ie2XS
-        mn9yhW3yFgrjxUVMHK1Zf95s6nwGQBWQJIo89shj6w==
-X-Google-Smtp-Source: ABdhPJwj1a0ZBWmjixk6X/sNKVRUUadtEYpVwfYwK0ttL1AyGhEOnWi9jW3CgiHzo3CiylWi4K7r2yTb37BMSsAEXNg=
-X-Received: by 2002:a50:ed15:: with SMTP id j21mr5697574eds.246.1594921091453;
- Thu, 16 Jul 2020 10:38:11 -0700 (PDT)
+        Thu, 16 Jul 2020 13:44:03 -0400
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AB67F20B4909;
+        Thu, 16 Jul 2020 10:44:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AB67F20B4909
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1594921442;
+        bh=MdDEgRa6UippolxJcPeM/hQSOUKo4WoMK9t77dGEGj4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Sizm3BjAMdT+PRCjC/4fBmtejMVd9kz3DIU9iy2Q4czaTO87PTmEixfWJ9pEmrdht
+         yqFEEOJb6ZH3+z7G+dVldRusRL+U5fXKxiMoqbrPjyTHVG91aV96s59BavSqRZxUmx
+         MhnjQz01m6B4uHKYOpLg1WqoWO+ODELcOKmUNmXQ=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com
+Cc:     jmorris@namei.org, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] LSM: Measure security module state
+Date:   Thu, 16 Jul 2020 10:43:46 -0700
+Message-Id: <20200716174351.20128-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20200710002209.6757-1-apronin@chromium.org> <20200710114000.GD2614@linux.intel.com>
- <CAP7wa8LfEtEATbENjr18jTXShT+YmrAoDt4k9FK1SLpxVqViog@mail.gmail.com>
- <20200714113205.GA1461506@linux.intel.com> <CABXOdTcAZjG8aQvs+M72CFe9rAdBKZH+6x=C1Ha2aX_w0gXiHw@mail.gmail.com>
- <20200716172811.GB14135@linux.intel.com>
-In-Reply-To: <20200716172811.GB14135@linux.intel.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Thu, 16 Jul 2020 10:38:00 -0700
-Message-ID: <CABXOdTd4oY8TpuE1qZP--dYTJ-czdovsjmhLVbd_tTw=sApHYw@mail.gmail.com>
-Subject: Re: [PATCH] tpm: avoid accessing cleared ops during shutdown
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Andrey Pronin <apronin@chromium.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <groeck@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 10:28 AM Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Tue, Jul 14, 2020 at 08:48:38AM -0700, Guenter Roeck wrote:
-> > On Tue, Jul 14, 2020 at 4:32 AM Jarkko Sakkinen
-> > <jarkko.sakkinen@linux.intel.com> wrote:
-> > >
-> > > On Fri, Jul 10, 2020 at 11:25:44AM -0700, Andrey Pronin wrote:
-> > > > > Why does not tpm_del_char_device need this?
-> > > >
-> > > > "Not" is a typo in the sentence above, right? tpm_del_char_device *does*
-> > > > need the fix. When tpm_class_shutdown is called it sets chip->ops to
-> > > > NULL. If tpm_del_char_device is called after that, it doesn't check if
-> > > > chip->ops is NULL (normal kernel API and char device API calls go
-> > > > through tpm_try_get_ops, but tpm_del_char_device doesn't) and proceeds to
-> > > > call tpm2_shutdown(), which tries sending the command and dereferences
-> > > > chip->ops.
-> > >
-> > > It's a typo, yes. Sorry about that.
-> > >
-> > > tpm_class_shutdown() is essentially tail of tpm_del_char_device().
-> > >
-> > > To clean things up, I'd suggest dropping tpm_del_char_device() and
-> > > call tpm_class_shutdown() in tpm_chip_unregisters() along, and open
-> > > coding things that prepend it in tpm_del_char_device().
-> > >
-> >
-> > Personally I would have preferred two separate patches, one to fix the
-> > immediate problem (with Cc: stable) and one for the cleanup, but I
-> > guess merging both into one is ok as long as it is marked for stable.
-> >
-> > Thanks,
-> > Guenter
->
-> Not sure about stable as this issue does not afaik concern earlier
-> kernel versions?
->
+Critical data structures of security modules are currently not measured.
+Therefore an attestation service, for instance, would not be able to
+attest whether the security modules are always operating with the policies
+and configuration that the system administrator had setup. The policies
+and configuration for the security modules could be tampered with by
+malware by exploiting Kernel vulnerabilities or modified through some
+inadvertent actions on the system. Measuring such critical data would
+enable an attestation service to better assess the state of the system.
 
-I just had a quick look into linux-5.4.y, and it seemed to me that it
-is affected. Maybe I am wrong. Either case, we already applied this
-patch to all affected ChromeOS kernel branches, so from our
-perspective it doesn't really matter.
+IMA subsystem measures system files, command line arguments passed to
+kexec, boot aggregate, keys, etc. It can be used to measure critical
+data structures of security modules as well.
 
-Thanks,
-Guenter
+This change aims to address measuring critical data structures
+of security modules when they are initialized, when they are updated
+at runtime, and also periodically to detect any tampering.
+
+This change set is based off of Linux Kernel version 5.8-rc5.
+
+The following patch needs to be applied first before applying
+the patches in this patch set:
+
+    https://patchwork.kernel.org/patch/11612989/
+
+Change log:
+
+  v2:
+      => Pass selinux_state struct as parameter to the function
+         that measures SELinux data.
+      => Use strings from selinux_policycap_names array for SELinux
+         state measurement.
+      => Refactored security_read_policy() to alloc kernel or user
+         virtual memory and then read the SELinux policy.
+
+  v1:
+      => Per Stephen Smalley's suggestion added selinux_state booleans
+         and hash of SELinux policy in the measured data for SELinux.
+      => Call IMA hook from the security module directly instead of
+         redirecting through the LSM.
+
+Lakshmi Ramasubramanian (5):
+  IMA: Add LSM_STATE func to measure LSM data
+  IMA: Define an IMA hook to measure LSM data
+  LSM: Add security_measure_data in lsm_info struct
+  LSM: Define SELinux function to measure security state
+  LSM: Define workqueue for measuring security module state
+
+ Documentation/ABI/testing/ima_policy |   6 +-
+ include/linux/ima.h                  |   4 +
+ include/linux/lsm_hooks.h            |   3 +
+ security/integrity/ima/ima.h         |   1 +
+ security/integrity/ima/ima_api.c     |   2 +-
+ security/integrity/ima/ima_main.c    |  17 +++
+ security/integrity/ima/ima_policy.c  |  29 ++++-
+ security/security.c                  |  74 ++++++++++++-
+ security/selinux/Makefile            |   2 +
+ security/selinux/hooks.c             |   4 +
+ security/selinux/include/security.h  |  26 +++++
+ security/selinux/measure.c           | 158 +++++++++++++++++++++++++++
+ security/selinux/selinuxfs.c         |   1 +
+ security/selinux/ss/services.c       |  66 +++++++++--
+ 14 files changed, 376 insertions(+), 17 deletions(-)
+ create mode 100644 security/selinux/measure.c
+
+-- 
+2.27.0
+
