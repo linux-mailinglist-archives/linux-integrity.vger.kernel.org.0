@@ -2,26 +2,26 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D07A2225F8
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 16:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7061F2225FF
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 16:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728902AbgGPOkX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Jul 2020 10:40:23 -0400
-Received: from smtp-bc08.mail.infomaniak.ch ([45.157.188.8]:49605 "EHLO
-        smtp-bc08.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728639AbgGPOkX (ORCPT
+        id S1728415AbgGPOlE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Jul 2020 10:41:04 -0400
+Received: from smtp-190c.mail.infomaniak.ch ([185.125.25.12]:50041 "EHLO
+        smtp-190c.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728237AbgGPOlD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Jul 2020 10:40:23 -0400
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4B6xkF2jzzzlhmrL;
-        Thu, 16 Jul 2020 16:40:21 +0200 (CEST)
+        Thu, 16 Jul 2020 10:41:03 -0400
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4B6xl11VDMzlhbhx;
+        Thu, 16 Jul 2020 16:41:01 +0200 (CEST)
 Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4B6xk81XMmzlh8TQ;
-        Thu, 16 Jul 2020 16:40:16 +0200 (CEST)
-Subject: Re: [PATCH v6 7/7] ima: add policy support for the new file open
- MAY_OPENEXEC flag
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4B6xkx3gxBzlh8TS;
+        Thu, 16 Jul 2020 16:40:57 +0200 (CEST)
+Subject: Re: [PATCH v6 5/7] fs,doc: Enable to enforce noexec mounts or file
+ exec through O_MAYEXEC
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -36,6 +36,7 @@ Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
         Florian Weimer <fweimer@redhat.com>,
         James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
         Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
         Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         Matthew Garrett <mjg59@google.com>,
         Matthew Wilcox <willy@infradead.org>,
@@ -57,14 +58,15 @@ Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
         linux-security-module@vger.kernel.org,
         linux-fsdevel@vger.kernel.org
 References: <20200714181638.45751-1-mic@digikod.net>
- <20200714181638.45751-8-mic@digikod.net> <202007151339.283D7CD@keescook>
+ <20200714181638.45751-6-mic@digikod.net>
+ <038639b1-92da-13c1-b3e5-8f13639a815e@infradead.org>
 From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <8df69733-0088-3e3c-9c3d-2610414cea2b@digikod.net>
-Date:   Thu, 16 Jul 2020 16:40:15 +0200
+Message-ID: <67fe6c17-a0b3-5c7e-a7c8-4c2b6e0c0592@digikod.net>
+Date:   Thu, 16 Jul 2020 16:40:56 +0200
 User-Agent: 
 MIME-Version: 1.0
-In-Reply-To: <202007151339.283D7CD@keescook>
-Content-Type: text/plain; charset=iso-8859-15
+In-Reply-To: <038639b1-92da-13c1-b3e5-8f13639a815e@infradead.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: fr
 Content-Transfer-Encoding: 8bit
 X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
@@ -75,26 +77,50 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 15/07/2020 22:40, Kees Cook wrote:
-> On Tue, Jul 14, 2020 at 08:16:38PM +0200, Mickaël Salaün wrote:
->> From: Mimi Zohar <zohar@linux.ibm.com>
->>
->> The kernel has no way of differentiating between a file containing data
->> or code being opened by an interpreter.  The proposed O_MAYEXEC
->> openat2(2) flag bridges this gap by defining and enabling the
->> MAY_OPENEXEC flag.
->>
->> This patch adds IMA policy support for the new MAY_OPENEXEC flag.
->>
->> Example:
->> measure func=FILE_CHECK mask=^MAY_OPENEXEC
->> appraise func=FILE_CHECK appraise_type=imasig mask=^MAY_OPENEXEC
->>
->> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
->> Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
->> Acked-by: Mickaël Salaün <mic@digikod.net>
+On 14/07/2020 20:40, Randy Dunlap wrote:
+> Hi,
 > 
-> (Process nit: if you're sending this on behalf of another author, then
-> this should be Signed-off-by rather than Acked-by.)
+> On 7/14/20 11:16 AM, MickaÃ«l SalaÃ¼n wrote:
+> 
+>> ---
+>>  Documentation/admin-guide/sysctl/fs.rst | 45 +++++++++++++++++++++++++
+>>  fs/namei.c                              | 29 +++++++++++++---
+>>  include/linux/fs.h                      |  1 +
+>>  kernel/sysctl.c                         | 12 +++++--
+>>  4 files changed, 80 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/sysctl/fs.rst b/Documentation/admin-guide/sysctl/fs.rst
+>> index 2a45119e3331..02ec384b8bbf 100644
+>> --- a/Documentation/admin-guide/sysctl/fs.rst
+>> +++ b/Documentation/admin-guide/sysctl/fs.rst
+> 
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> with one tiny nit:
+> 
+>> @@ -165,6 +166,50 @@ system needs to prune the inode list instead of allocating
+>> +The ability to restrict code execution must be thought as a system-wide policy,
+>> +which first starts by restricting mount points with the ``noexec`` option.
+>> +This option is also automatically applied to special filesystems such as /proc
+>> +.  This prevents files on such mount points to be directly executed by the
+> 
+> Can you move that period from the beginning of the line to the end of the
+> previous line?
 
-I'm not a co-author of this patch.
+OK, done. Thanks!
+
+> 
+>> +kernel or mapped as executable memory (e.g. libraries).  With script
+>> +interpreters using the ``O_MAYEXEC`` flag, the executable permission can then
+>> +be checked before reading commands from files. This makes it possible to
+>> +enforce the ``noexec`` at the interpreter level, and thus propagates this
+>> +security policy to scripts.  To be fully effective, these interpreters also
+>> +need to handle the other ways to execute code: command line parameters (e.g.,
+>> +option ``-e`` for Perl), module loading (e.g., option ``-m`` for Python),
+>> +stdin, file sourcing, environment variables, configuration files, etc.
+>> +According to the threat model, it may be acceptable to allow some script
+>> +interpreters (e.g. Bash) to interpret commands from stdin, may it be a TTY or a
+>> +pipe, because it may not be enough to (directly) perform syscalls.
+> 
+> thanks.
+> 
