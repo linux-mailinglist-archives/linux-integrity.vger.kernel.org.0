@@ -2,145 +2,126 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 514C6222AB4
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 20:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234BF222AD7
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jul 2020 20:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbgGPSPC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Jul 2020 14:15:02 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9248 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728182AbgGPSPC (ORCPT
+        id S1729559AbgGPSVB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Jul 2020 14:21:01 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:59484 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729544AbgGPSVA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Jul 2020 14:15:02 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06GI2oeM117021;
-        Thu, 16 Jul 2020 14:14:57 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32autagabg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Jul 2020 14:14:57 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06GI3YIn118461;
-        Thu, 16 Jul 2020 14:14:57 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32autaga9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Jul 2020 14:14:57 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06GI9eOD020742;
-        Thu, 16 Jul 2020 18:14:54 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma02fra.de.ibm.com with ESMTP id 327527x1cf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Jul 2020 18:14:54 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06GIEqI230212406
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Jul 2020 18:14:52 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F33DF11C04C;
-        Thu, 16 Jul 2020 18:14:51 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C20C511C04A;
-        Thu, 16 Jul 2020 18:14:50 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.202.131])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Jul 2020 18:14:50 +0000 (GMT)
-Message-ID: <1594923290.12900.376.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 07/12] ima: Fail rule parsing when
- appraise_flag=blacklist is unsupportable
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     James Morris <jmorris@namei.org>,
+        Thu, 16 Jul 2020 14:21:00 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E7AF320B4909;
+        Thu, 16 Jul 2020 11:20:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E7AF320B4909
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1594923659;
+        bh=EQouyNC75DO1HsNnhD3+10RmroB00VBujwUdao5crR4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AlLWGc9gUvnMB7UwGwCLpIAYfC/XPdwoLPOvLh6rcFv5LPR3FS5XoPECUgTkm7EDV
+         GZFBRU2hU43W3bR8QI6OCDTpA9RJJjsTj3/x9YcZe2qcVfig3fvqBRZS1OyvjsY5n6
+         Ug7JdAKvuWBseNKYHxSWIy8kwFBFxbBs3qjJIVCs=
+Date:   Thu, 16 Jul 2020 13:20:57 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
         Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         Prakhar Srivastava <prsriva02@gmail.com>,
         linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         Nayna Jain <nayna@linux.ibm.com>
-Date:   Thu, 16 Jul 2020 14:14:50 -0400
-In-Reply-To: <20200709061911.954326-8-tyhicks@linux.microsoft.com>
+Subject: Re: [PATCH v3 07/12] ima: Fail rule parsing when
+ appraise_flag=blacklist is unsupportable
+Message-ID: <20200716182057.GE3673@sequoia>
 References: <20200709061911.954326-1-tyhicks@linux.microsoft.com>
-         <20200709061911.954326-8-tyhicks@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+ <20200709061911.954326-8-tyhicks@linux.microsoft.com>
+ <1594923290.12900.376.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-16_08:2020-07-16,2020-07-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 suspectscore=0 mlxscore=0 phishscore=0 bulkscore=0
- impostorscore=0 mlxlogscore=999 clxscore=1015 lowpriorityscore=0
- malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007160128
+In-Reply-To: <1594923290.12900.376.camel@linux.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-07-09 at 01:19 -0500, Tyler Hicks wrote:
-> The "appraise_flag" option is only appropriate for appraise actions
-> and its "blacklist" value is only appropriate when
-> CONFIG_IMA_APPRAISE_MODSIG is enabled and "appraise_flag=blacklist" is
-> only appropriate when "appraise_type=imasig|modsig" is also present.
-> Make this clear at policy load so that IMA policy authors don't assume
-> that other uses of "appraise_flag=blacklist" are supported.
+On 2020-07-16 14:14:50, Mimi Zohar wrote:
+> On Thu, 2020-07-09 at 01:19 -0500, Tyler Hicks wrote:
+> > The "appraise_flag" option is only appropriate for appraise actions
+> > and its "blacklist" value is only appropriate when
+> > CONFIG_IMA_APPRAISE_MODSIG is enabled and "appraise_flag=blacklist" is
+> > only appropriate when "appraise_type=imasig|modsig" is also present.
+> > Make this clear at policy load so that IMA policy authors don't assume
+> > that other uses of "appraise_flag=blacklist" are supported.
+> 
+> The code looks correct, but this patch description could be written at
+> a higher level.  Perhaps it just needs to be prefixed with something
+> like this:
+> 
+> Verifying that a file hash is not blacklisted is currently only
+> supported for files with appended signatures (modsig).  In the future,
+> this might change.  For now, ...
 
-The code looks correct, but this patch description could be written at
-a higher level. Â Perhaps it just needs to be prefixed with something
-like this:
+That makes sense. I'm not up to speed on the intent behind the blacklist
+feature or where it may go in the future so I didn't think to add
+anything along those lines.
 
-Verifying that a file hash is not blacklisted is currently only
-supported for files with appended signatures (modsig). Â In the future,
-this might change. Â For now, ...
+If you are happy with the rest of the series, please feel free to append
+this to the commit message. Otherwise, I can add it if I need to submit
+a new revision of the series.
 
-Mimi
+Tyler
 
 > 
-> Fixes: 273df864cf74 ("ima: Check against blacklisted hashes for files with modsig")
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> Cc: Nayna Jain <nayna@linux.ibm.com>
-
-> ---
+> Mimi
 > 
-> * v3
->   - New patch
+> > 
+> > Fixes: 273df864cf74 ("ima: Check against blacklisted hashes for files with modsig")
+> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> > Cc: Nayna Jain <nayna@linux.ibm.com>
 > 
->  security/integrity/ima/ima_policy.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 81da02071d41..9842e2e0bc6d 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -1035,6 +1035,11 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
->  		return false;
->  	}
->  
-> +	/* Ensure that combinations of flags are compatible with each other */
-> +	if (entry->flags & IMA_CHECK_BLACKLIST &&
-> +	    !(entry->flags & IMA_MODSIG_ALLOWED))
-> +		return false;
-> +
->  	return true;
->  }
->  
-> @@ -1371,8 +1376,14 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
->  				result = -EINVAL;
->  			break;
->  		case Opt_appraise_flag:
-> +			if (entry->action != APPRAISE) {
-> +				result = -EINVAL;
-> +				break;
-> +			}
-> +
->  			ima_log_string(ab, "appraise_flag", args[0].from);
-> -			if (strstr(args[0].from, "blacklist"))
-> +			if (IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG) &&
-> +			    strstr(args[0].from, "blacklist"))
->  				entry->flags |= IMA_CHECK_BLACKLIST;
->  			break;
->  		case Opt_permit_directio:
-
+> > ---
+> > 
+> > * v3
+> >   - New patch
+> > 
+> >  security/integrity/ima/ima_policy.c | 13 ++++++++++++-
+> >  1 file changed, 12 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> > index 81da02071d41..9842e2e0bc6d 100644
+> > --- a/security/integrity/ima/ima_policy.c
+> > +++ b/security/integrity/ima/ima_policy.c
+> > @@ -1035,6 +1035,11 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+> >  		return false;
+> >  	}
+> >  
+> > +	/* Ensure that combinations of flags are compatible with each other */
+> > +	if (entry->flags & IMA_CHECK_BLACKLIST &&
+> > +	    !(entry->flags & IMA_MODSIG_ALLOWED))
+> > +		return false;
+> > +
+> >  	return true;
+> >  }
+> >  
+> > @@ -1371,8 +1376,14 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+> >  				result = -EINVAL;
+> >  			break;
+> >  		case Opt_appraise_flag:
+> > +			if (entry->action != APPRAISE) {
+> > +				result = -EINVAL;
+> > +				break;
+> > +			}
+> > +
+> >  			ima_log_string(ab, "appraise_flag", args[0].from);
+> > -			if (strstr(args[0].from, "blacklist"))
+> > +			if (IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG) &&
+> > +			    strstr(args[0].from, "blacklist"))
+> >  				entry->flags |= IMA_CHECK_BLACKLIST;
+> >  			break;
+> >  		case Opt_permit_directio:
