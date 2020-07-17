@@ -2,169 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C5A22440F
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 21:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361F5224416
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 21:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728202AbgGQTRN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 Jul 2020 15:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727999AbgGQTRN (ORCPT
+        id S1728401AbgGQTTF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Jul 2020 15:19:05 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:44786 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727999AbgGQTTD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 Jul 2020 15:17:13 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE51EC0619D2
-        for <linux-integrity@vger.kernel.org>; Fri, 17 Jul 2020 12:17:12 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id s10so12168742wrw.12
-        for <linux-integrity@vger.kernel.org>; Fri, 17 Jul 2020 12:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=n8O46usBchtSHCfeAGHh+h7YSR1FpLP9i8w8Jhlo/5Y=;
-        b=XDpuU1+Cv3dWz7jVTTP8WHIGTi6YuyjOI3T1FZiEYrnsIlj8mcFQqfDnFTKRRrzH9u
-         TbgxilEMUrpQH10WRSdgftDDsNich8CEV9HlaQGZkMotTF3a63pgDPRx94nodIuu2eGI
-         cWOWVG3LI4mCZv7N7Q78cSbu7w1XxUq5xTA8I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=n8O46usBchtSHCfeAGHh+h7YSR1FpLP9i8w8Jhlo/5Y=;
-        b=WWB1+rKzSeoOhmJKxLSHeKyWO2QGIdUBNRP6SVZkiuXJAkcN/bdXS3YidH9SIvya74
-         QmAnioIcmewn9MGAVyXoDNPSksvg/POUMCCqaTtpMgra4QFHnkhZZPCkWHLIYwV4N/4o
-         bI8k/JE3Z4ImfWTWgqM69igPA+cdvEZhPidwNKsQ9zBeAfq8Zhs/hXkzlZPvdTlZlLrT
-         QD5VHCVux17sdvunjX1Bofp6CeiL90XSyIaCdilOr+VvQh0j0zcd453vOUDyqf4i/ujF
-         SYZp70QvEcPPtBYBkFfO+dCD1yn8tH0hOETIDEmBsPmfLs0VTO7fajwXlp92/8qLeUEy
-         e+Zw==
-X-Gm-Message-State: AOAM530p+d0709CtsFP49l7MeaBswu3IDa72B8RS+v3q3gDcinY90iAb
-        v14Xp9f2tishnuRyo/hPXTclRQ==
-X-Google-Smtp-Source: ABdhPJwW1FFKlIY3h+hSleFLd2aPm6qM91p1On9iePncPUkHySNWgYSJZWiZVpa0Bf+tpYWTd3xKWw==
-X-Received: by 2002:adf:f608:: with SMTP id t8mr11981560wrp.308.1595013431346;
-        Fri, 17 Jul 2020 12:17:11 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id 133sm16372350wme.5.2020.07.17.12.17.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jul 2020 12:17:10 -0700 (PDT)
-Subject: Re: [PATCH 00/13] Introduce partial kernel_read_file() support
-To:     Kees Cook <keescook@chromium.org>
+        Fri, 17 Jul 2020 15:19:03 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 23F0320B4909;
+        Fri, 17 Jul 2020 12:19:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 23F0320B4909
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1595013543;
+        bh=936Ej6PwFgQOfbt701DNQeezvUrKmHxPwTEHqq6hXKU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f3Zr5ZsIOFvcx46qNgCltlwYHhR1HuHpLu7UBhvo7kY++ksbg3hh1nnnporsU+NLW
+         6ZaKBg0zGqm6Z6qYYUvNaKNFOKdve4DjJAdILc5lICYPNZ5BFLjafTv7O9Viqdfmyu
+         fmjlG458XsKqhcWkEZXTvjA1TlIxzc4ebD8SroSg=
+Date:   Fri, 17 Jul 2020 14:18:58 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Nayna <nayna@linux.vnet.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        James Morris <jmorris@namei.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jessica Yu <jeyu@kernel.org>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        KP Singh <kpsingh@google.com>, Dave Olsthoorn <dave@bewaar.me>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Peter Jones <pjones@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Boyd <stephen.boyd@linaro.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20200717174309.1164575-1-keescook@chromium.org>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <8de85fc3-9f31-fc59-abc1-29f43fb90988@broadcom.com>
-Date:   Fri, 17 Jul 2020 12:17:02 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 06/12] ima: Fail rule parsing when the KEY_CHECK hook
+ is combined with an invalid cond
+Message-ID: <20200717191858.GN3673@sequoia>
+References: <20200709061911.954326-1-tyhicks@linux.microsoft.com>
+ <20200709061911.954326-7-tyhicks@linux.microsoft.com>
+ <336cc947-1f70-0286-6506-6df3d1d23a1d@linux.vnet.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200717174309.1164575-1-keescook@chromium.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <336cc947-1f70-0286-6506-6df3d1d23a1d@linux.vnet.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Kees,
+On 2020-07-17 14:56:46, Nayna wrote:
+> 
+> On 7/9/20 2:19 AM, Tyler Hicks wrote:
+> > The KEY_CHECK function only supports the uid, pcr, and keyrings
+> > conditionals. Make this clear at policy load so that IMA policy authors
+> > don't assume that other conditionals are supported.
+> > 
+> > Fixes: 5808611cccb2 ("IMA: Add KEY_CHECK func to measure keys")
+> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> > Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> > ---
+> > 
+> > * v3
+> >    - Added Lakshmi's Reviewed-by
+> >    - Adjust for the indentation change introduced in patch #4
+> > * v2
+> >    - No change
+> > 
+> >   security/integrity/ima/ima_policy.c | 7 +++++++
+> >   1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> > index 1c64bd6f1728..81da02071d41 100644
+> > --- a/security/integrity/ima/ima_policy.c
+> > +++ b/security/integrity/ima/ima_policy.c
+> > @@ -1023,6 +1023,13 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+> >   		if (entry->action & ~(MEASURE | DONT_MEASURE))
+> >   			return false;
+> > 
+> > +		if (entry->flags & ~(IMA_FUNC | IMA_UID | IMA_PCR |
+> > +				     IMA_KEYRINGS))
+> > +			return false;
+> > +
+> > +		if (ima_rule_contains_lsm_cond(entry))
+> > +			return false;
+> > +
+> >   		break;
+> >   	default:
+> >   		return false;
+> 
+> Should there be a check for IMA_MEASURE_ASYMMETRIC_KEYS in Opt_keyrings in
+> ima_parse_rule() to return immediately if not enabled ?
 
-Thanks for sending out.Â  This looks different than your other patch series.
-We should get the first 5 patches accepted now though as they are
-simple cleanups and fixes.Â  That will reduce the number of outstanding
-patches in the series.
+I didn't notice that "keyrings=" could be disabled at build time. I
+think you're right that something like what I have below would be a good idea.
 
-At first glance the issue with the changes after that is the existing
-API assumes it has read the whole file and failed if it did not.
-Now, if the file is larger than the amount requested there is no indication?
+@Lakshmi, do you agree?
 
-On 2020-07-17 10:42 a.m., Kees Cook wrote:
-> Hi,
->
-> Here's my attempt at clearing the path to partial read support in
-> kernel_read_file(), which fixes a number of issues along the way. I'm
-> still fighting with the firmware test suite (it doesn't seem to pass
-> for me even in stock v5.7... ?) But I don't want to block Scott's work[1]
-> any this week, so here's the series as it is currently.
->
-> The primary difference to Scott's approach is to avoid adding a new set of
-> functions and just adapt the existing APIs to deal with "offset". Also,
-> the fixes for the enum are first in the series so they can be backported
-> without the header file relocation.
->
-> I'll keep poking at the firmware tests...
->
-> -Kees
->
-> [1] https://lore.kernel.org/lkml/202007161415.10D015477@keescook/
->
-> Kees Cook (12):
->    firmware_loader: EFI firmware loader must handle pre-allocated buffer
->    fs/kernel_read_file: Remove FIRMWARE_PREALLOC_BUFFER enum
->    fs/kernel_read_file: Remove FIRMWARE_EFI_EMBEDDED enum
->    fs/kernel_read_file: Split into separate source file
->    fs/kernel_read_file: Remove redundant size argument
->    fs/kernel_read_file: Switch buffer size arg to size_t
->    fs/kernel_read_file: Add file_size output argument
->    LSM: Introduce kernel_post_load_data() hook
->    firmware_loader: Use security_post_load_data()
->    module: Call security_kernel_post_load_data()
->    LSM: Add "contents" flag to kernel_read_file hook
->    fs/kernel_file_read: Add "offset" arg for partial reads
->
-> Scott Branden (1):
->    fs/kernel_read_file: Split into separate include file
->
->   drivers/base/firmware_loader/fallback.c       |   8 +-
->   .../base/firmware_loader/fallback_platform.c  |  12 +-
->   drivers/base/firmware_loader/main.c           |  13 +-
->   fs/Makefile                                   |   3 +-
->   fs/exec.c                                     | 132 +-----------
->   fs/kernel_read_file.c                         | 189 ++++++++++++++++++
->   include/linux/fs.h                            |  39 ----
->   include/linux/ima.h                           |  19 +-
->   include/linux/kernel_read_file.h              |  55 +++++
->   include/linux/lsm_hook_defs.h                 |   6 +-
->   include/linux/lsm_hooks.h                     |  12 ++
->   include/linux/security.h                      |  19 +-
->   kernel/kexec.c                                |   2 +-
->   kernel/kexec_file.c                           |  18 +-
->   kernel/module.c                               |  24 ++-
->   security/integrity/digsig.c                   |   8 +-
->   security/integrity/ima/ima_fs.c               |   9 +-
->   security/integrity/ima/ima_main.c             |  58 ++++--
->   security/integrity/ima/ima_policy.c           |   1 +
->   security/loadpin/loadpin.c                    |  17 +-
->   security/security.c                           |  26 ++-
->   security/selinux/hooks.c                      |   8 +-
->   22 files changed, 432 insertions(+), 246 deletions(-)
->   create mode 100644 fs/kernel_read_file.c
->   create mode 100644 include/linux/kernel_read_file.h
->
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 81da02071d41..bd687560f88e 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1212,6 +1212,11 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+ 		case Opt_keyrings:
+ 			ima_log_string(ab, "keyrings", args[0].from);
+ 
++			if (!IS_ENABLED(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS)) {
++				result = -EINVAL;
++				break;
++			}
++
+ 			keyrings_len = strlen(args[0].from) + 1;
+ 
+ 			if ((entry->keyrings) ||
 
+Tyler
+
+> 
+> Thanks & Regards,
+> 
+>      - Nayna
+> 
