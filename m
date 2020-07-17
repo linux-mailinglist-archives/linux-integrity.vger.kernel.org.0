@@ -2,195 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D35D224342
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 20:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90081224385
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 20:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbgGQSkm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 Jul 2020 14:40:42 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:50177 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726205AbgGQSkm (ORCPT
+        id S1728413AbgGQS5A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Jul 2020 14:57:00 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57062 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727821AbgGQS47 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 Jul 2020 14:40:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595011241;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=loX3iNxnC34Mh5q85vIpxAcyIoCVZ/OKd+6NErIYBZY=;
-        b=Hx2jYpobPHoxgsywJd0cNh+bbJ1Ma4JIoX/84aHm4zBf19luxtb63tLWOymi37Is1ccOBc
-        qqCOCh+B43nasPOq5D0wjP2SLM0SH3oFlrj0A0GZB+21yTAo0iZxjiHvGb4FgiSW9GOdnf
-        6FI/Y5850zpFX1MsqVgQnvsc4IQczWM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-276-9d_YNwHZM0KEqKVjKlTnUQ-1; Fri, 17 Jul 2020 14:40:23 -0400
-X-MC-Unique: 9d_YNwHZM0KEqKVjKlTnUQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 535D5800468;
-        Fri, 17 Jul 2020 18:40:21 +0000 (UTC)
-Received: from localhost (ovpn-116-105.gru2.redhat.com [10.97.116.105])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 83F0760E3E;
-        Fri, 17 Jul 2020 18:40:20 +0000 (UTC)
-Date:   Fri, 17 Jul 2020 15:40:19 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v6] ima: move APPRAISE_BOOTPARAM dependency on
- ARCH_POLICY to runtime
-Message-ID: <20200717184019.GI2984@glitch>
-References: <20200713164830.101165-1-bmeneg@redhat.com>
+        Fri, 17 Jul 2020 14:56:59 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06HIWhQw033275;
+        Fri, 17 Jul 2020 14:56:50 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32be11xkgx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jul 2020 14:56:50 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06HIneYf130321;
+        Fri, 17 Jul 2020 14:56:49 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32be11xkgd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jul 2020 14:56:49 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06HIdMA6016127;
+        Fri, 17 Jul 2020 18:56:48 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma04wdc.us.ibm.com with ESMTP id 327529k46e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jul 2020 18:56:48 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06HIulD116318894
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jul 2020 18:56:47 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A45AF28064;
+        Fri, 17 Jul 2020 18:56:47 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C2D7128058;
+        Fri, 17 Jul 2020 18:56:46 +0000 (GMT)
+Received: from swastik.ibm.com (unknown [9.160.101.126])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Jul 2020 18:56:46 +0000 (GMT)
+Subject: Re: [PATCH v3 06/12] ima: Fail rule parsing when the KEY_CHECK hook
+ is combined with an invalid cond
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20200709061911.954326-1-tyhicks@linux.microsoft.com>
+ <20200709061911.954326-7-tyhicks@linux.microsoft.com>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+Message-ID: <336cc947-1f70-0286-6506-6df3d1d23a1d@linux.vnet.ibm.com>
+Date:   Fri, 17 Jul 2020 14:56:46 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200713164830.101165-1-bmeneg@redhat.com>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xQR6quUbZ63TTuTU"
-Content-Disposition: inline
+In-Reply-To: <20200709061911.954326-7-tyhicks@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-17_09:2020-07-17,2020-07-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 clxscore=1015 mlxlogscore=999 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 suspectscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2007170129
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---xQR6quUbZ63TTuTU
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 13, 2020 at 01:48:30PM -0300, Bruno Meneguele wrote:
-> The IMA_APPRAISE_BOOTPARAM config allows enabling different "ima_appraise=
-=3D"
-> modes - log, fix, enforce - at run time, but not when IMA architecture
-> specific policies are enabled. =A0This prevents properly labeling the
-> filesystem on systems where secure boot is supported, but not enabled on =
-the
-> platform. =A0Only when secure boot is actually enabled should these IMA
-> appraise modes be disabled.
->=20
-> This patch removes the compile time dependency and makes it a runtime
-> decision, based on the secure boot state of that platform.
->=20
-> Test results as follows:
->=20
-> -> x86-64 with secure boot enabled
->=20
-> [    0.015637] Kernel command line: <...> ima_policy=3Dappraise_tcb ima_a=
-ppraise=3Dfix
-> [    0.015668] ima: Secure boot enabled: ignoring ima_appraise=3Dfix boot=
- parameter option
->=20
-> -> powerpc with secure boot disabled
->=20
-> [    0.000000] Kernel command line: <...> ima_policy=3Dappraise_tcb ima_a=
-ppraise=3Dfix
-> [    0.000000] Secure boot mode disabled
->=20
-> -> Running the system without secure boot and with both options set:
->=20
-> CONFIG_IMA_APPRAISE_BOOTPARAM=3Dy
-> CONFIG_IMA_ARCH_POLICY=3Dy
->=20
-> Audit prompts "missing-hash" but still allow execution and, consequently,
-> filesystem labeling:
->=20
-> type=3DINTEGRITY_DATA msg=3Daudit(07/09/2020 12:30:27.778:1691) : pid=3D4=
-976
-> uid=3Droot auid=3Droot ses=3D2
-> subj=3Dunconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=3Dapprais=
-e_data
-> cause=3Dmissing-hash comm=3Dbash name=3D/usr/bin/evmctl dev=3D"dm-0" ino=
-=3D493150
-> res=3Dno
->=20
-> Cc: stable@vger.kernel.org
-> Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
-> Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+On 7/9/20 2:19 AM, Tyler Hicks wrote:
+> The KEY_CHECK function only supports the uid, pcr, and keyrings
+> conditionals. Make this clear at policy load so that IMA policy authors
+> don't assume that other conditionals are supported.
+>
+> Fixes: 5808611cccb2 ("IMA: Add KEY_CHECK func to measure keys")
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 > ---
-> v6:
->   - explictly print the bootparam being ignored to the user (Mimi)
-> v5:
->   - add pr_info() to inform user the ima_appraise=3D boot param is being
-> =09ignored due to secure boot enabled (Nayna)
->   - add some testing results to commit log
-> v4:
->   - instead of change arch_policy loading code, check secure boot state a=
-t
-> =09"ima_appraise=3D" parameter handler (Mimi)
-> v3:
->   - extend secure boot arch checker to also consider trusted boot
->   - enforce IMA appraisal when secure boot is effectively enabled (Nayna)
->   - fix ima_appraise flag assignment by or'ing it (Mimi)
-> v2:
->   - pr_info() message prefix correction
->  security/integrity/ima/Kconfig        | 2 +-
->  security/integrity/ima/ima_appraise.c | 6 ++++++
->  2 files changed, 7 insertions(+), 1 deletion(-)
->=20
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kcon=
-fig
-> index edde88dbe576..62dc11a5af01 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -232,7 +232,7 @@ config IMA_APPRAISE_REQUIRE_POLICY_SIGS
-> =20
->  config IMA_APPRAISE_BOOTPARAM
->  =09bool "ima_appraise boot parameter"
-> -=09depends on IMA_APPRAISE && !IMA_ARCH_POLICY
-> +=09depends on IMA_APPRAISE
->  =09default y
->  =09help
->  =09  This option enables the different "ima_appraise=3D" modes
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/i=
-ma/ima_appraise.c
-> index a9649b04b9f1..28a59508c6bd 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -19,6 +19,12 @@
->  static int __init default_appraise_setup(char *str)
->  {
->  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-> +=09if (arch_ima_get_secureboot()) {
-> +=09=09pr_info("Secure boot enabled: ignoring ima_appraise=3D%s boot para=
-meter option",
-> +=09=09=09str);
-> +=09=09return 1;
-> +=09}
+>
+> * v3
+>    - Added Lakshmi's Reviewed-by
+>    - Adjust for the indentation change introduced in patch #4
+> * v2
+>    - No change
+>
+>   security/integrity/ima/ima_policy.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 1c64bd6f1728..81da02071d41 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -1023,6 +1023,13 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+>   		if (entry->action & ~(MEASURE | DONT_MEASURE))
+>   			return false;
+>
+> +		if (entry->flags & ~(IMA_FUNC | IMA_UID | IMA_PCR |
+> +				     IMA_KEYRINGS))
+> +			return false;
 > +
->  =09if (strncmp(str, "off", 3) =3D=3D 0)
->  =09=09ima_appraise =3D 0;
->  =09else if (strncmp(str, "log", 3) =3D=3D 0)
-> --=20
-> 2.26.2
->=20
+> +		if (ima_rule_contains_lsm_cond(entry))
+> +			return false;
+> +
+>   		break;
+>   	default:
+>   		return false;
 
-Ping for review.
+Should there be a check for IMA_MEASURE_ASYMMETRIC_KEYS in Opt_keyrings 
+in ima_parse_rule() to return immediately if not enabled ?
 
-Many thanks.
+Thanks & Regards,
 
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
+      - Nayna
 
---xQR6quUbZ63TTuTU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8R8JMACgkQYdRkFR+R
-okMiPAf+Lawa+3mJ/dDC1Np/eBpA/UCMscxAKYRNlkGVChCpXeeXX1JV4M4CKHzu
-bmfws9NGfx4kw++hn8IeF86ypV3XhdKQyz7zQ6L4Rgmv08a/AE1msMRwwSMky9li
-n/Mh5HcYsfnLmGrLrSYjR/PTNqmz0WPgRCOSpFaTRcqTVKkUMJ8m83cwTe/5Avm9
-SmUyq80QY4AV4bJcedr1U+Ror8it5dHdtgy5bz0TPepRnhk/lE7Ro+mZE0e8N0R+
-3BiyCiYhUMD7E5LODlnMAWvbd/vEf3I0a0rYuQmxcauXs8HVI6j42A9Tmc/7PcDG
-EGRCFOvOOkQz6WddH1svTgptnLyGsA==
-=Ggbe
------END PGP SIGNATURE-----
-
---xQR6quUbZ63TTuTU--
 
