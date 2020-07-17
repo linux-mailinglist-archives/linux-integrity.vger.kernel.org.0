@@ -2,140 +2,195 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA132242F0
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 20:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D35D224342
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 20:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726256AbgGQSLh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 Jul 2020 14:11:37 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:60054 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726205AbgGQSLg (ORCPT
+        id S1726650AbgGQSkm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Jul 2020 14:40:42 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:50177 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726205AbgGQSkm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 Jul 2020 14:11:36 -0400
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1B3F420B4909;
-        Fri, 17 Jul 2020 11:11:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1B3F420B4909
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595009495;
-        bh=2Pzs4CmdDfnklLSKLq/qkdid1cilbcCSYYl7lLHXGe8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mUU+5r9vVToweMQMPxEGv6yqTVSMaTYsYxEx7SRIAnhU+jY0WVAMStyXuuXe5TEWH
-         gBXzbDKupNrVFU9HYirgAi2f+BA6YjG0a17Wfn2UzlHC/ZD6EBWE2FSgWUAqlEoqB/
-         OC5H9KsJwGW8pNp7776zHDJDSZZt4gMWkd0wAckE=
-Date:   Fri, 17 Jul 2020 13:11:33 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Nayna <nayna@linux.vnet.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: Re: [PATCH v3 07/12] ima: Fail rule parsing when
- appraise_flag=blacklist is unsupportable
-Message-ID: <20200717181133.GM3673@sequoia>
-References: <20200709061911.954326-1-tyhicks@linux.microsoft.com>
- <20200709061911.954326-8-tyhicks@linux.microsoft.com>
- <76d2b27b-3b59-1852-046a-b1718c62b167@linux.vnet.ibm.com>
+        Fri, 17 Jul 2020 14:40:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595011241;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=loX3iNxnC34Mh5q85vIpxAcyIoCVZ/OKd+6NErIYBZY=;
+        b=Hx2jYpobPHoxgsywJd0cNh+bbJ1Ma4JIoX/84aHm4zBf19luxtb63tLWOymi37Is1ccOBc
+        qqCOCh+B43nasPOq5D0wjP2SLM0SH3oFlrj0A0GZB+21yTAo0iZxjiHvGb4FgiSW9GOdnf
+        6FI/Y5850zpFX1MsqVgQnvsc4IQczWM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-276-9d_YNwHZM0KEqKVjKlTnUQ-1; Fri, 17 Jul 2020 14:40:23 -0400
+X-MC-Unique: 9d_YNwHZM0KEqKVjKlTnUQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 535D5800468;
+        Fri, 17 Jul 2020 18:40:21 +0000 (UTC)
+Received: from localhost (ovpn-116-105.gru2.redhat.com [10.97.116.105])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 83F0760E3E;
+        Fri, 17 Jul 2020 18:40:20 +0000 (UTC)
+Date:   Fri, 17 Jul 2020 15:40:19 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v6] ima: move APPRAISE_BOOTPARAM dependency on
+ ARCH_POLICY to runtime
+Message-ID: <20200717184019.GI2984@glitch>
+References: <20200713164830.101165-1-bmeneg@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+In-Reply-To: <20200713164830.101165-1-bmeneg@redhat.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xQR6quUbZ63TTuTU"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <76d2b27b-3b59-1852-046a-b1718c62b167@linux.vnet.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2020-07-17 13:40:22, Nayna wrote:
-> 
-> On 7/9/20 2:19 AM, Tyler Hicks wrote:
-> > The "appraise_flag" option is only appropriate for appraise actions
-> > and its "blacklist" value is only appropriate when
-> > CONFIG_IMA_APPRAISE_MODSIG is enabled and "appraise_flag=blacklist" is
-> > only appropriate when "appraise_type=imasig|modsig" is also present.
-> > Make this clear at policy load so that IMA policy authors don't assume
-> > that other uses of "appraise_flag=blacklist" are supported.
-> > 
-> > Fixes: 273df864cf74 ("ima: Check against blacklisted hashes for files with modsig")
-> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > Cc: Nayna Jain <nayna@linux.ibm.com>
-> > ---
-> > 
-> > * v3
-> >    - New patch
-> > 
-> >   security/integrity/ima/ima_policy.c | 13 ++++++++++++-
-> >   1 file changed, 12 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> > index 81da02071d41..9842e2e0bc6d 100644
-> > --- a/security/integrity/ima/ima_policy.c
-> > +++ b/security/integrity/ima/ima_policy.c
-> > @@ -1035,6 +1035,11 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
-> >   		return false;
-> >   	}
-> > +	/* Ensure that combinations of flags are compatible with each other */
-> > +	if (entry->flags & IMA_CHECK_BLACKLIST &&
-> > +	    !(entry->flags & IMA_MODSIG_ALLOWED))
-> > +		return false;
-> > +
-> >   	return true;
-> >   }
-> > @@ -1371,8 +1376,14 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
-> >   				result = -EINVAL;
-> >   			break;
-> >   		case Opt_appraise_flag:
-> > +			if (entry->action != APPRAISE) {
-> > +				result = -EINVAL;
-> > +				break;
-> > +			}
-> > +
-> >   			ima_log_string(ab, "appraise_flag", args[0].from);
-> > -			if (strstr(args[0].from, "blacklist"))
-> > +			if (IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG) &&
-> > +			    strstr(args[0].from, "blacklist"))
-> >   				entry->flags |= IMA_CHECK_BLACKLIST;
-> 
-> If IMA_APPRAISE_MODSIG is disabled, it will allow the following rule to
-> load, which is not as expected.
-> 
-> "appraise func=xxx_CHECK appraise_flag=blacklist appraise_type=imasig"
-> 
-> Missing is the "else" condition to immediately reject the policy rule.
+--xQR6quUbZ63TTuTU
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the review. You're right. This change is needed:
+On Mon, Jul 13, 2020 at 01:48:30PM -0300, Bruno Meneguele wrote:
+> The IMA_APPRAISE_BOOTPARAM config allows enabling different "ima_appraise=
+=3D"
+> modes - log, fix, enforce - at run time, but not when IMA architecture
+> specific policies are enabled. =A0This prevents properly labeling the
+> filesystem on systems where secure boot is supported, but not enabled on =
+the
+> platform. =A0Only when secure boot is actually enabled should these IMA
+> appraise modes be disabled.
+>=20
+> This patch removes the compile time dependency and makes it a runtime
+> decision, based on the secure boot state of that platform.
+>=20
+> Test results as follows:
+>=20
+> -> x86-64 with secure boot enabled
+>=20
+> [    0.015637] Kernel command line: <...> ima_policy=3Dappraise_tcb ima_a=
+ppraise=3Dfix
+> [    0.015668] ima: Secure boot enabled: ignoring ima_appraise=3Dfix boot=
+ parameter option
+>=20
+> -> powerpc with secure boot disabled
+>=20
+> [    0.000000] Kernel command line: <...> ima_policy=3Dappraise_tcb ima_a=
+ppraise=3Dfix
+> [    0.000000] Secure boot mode disabled
+>=20
+> -> Running the system without secure boot and with both options set:
+>=20
+> CONFIG_IMA_APPRAISE_BOOTPARAM=3Dy
+> CONFIG_IMA_ARCH_POLICY=3Dy
+>=20
+> Audit prompts "missing-hash" but still allow execution and, consequently,
+> filesystem labeling:
+>=20
+> type=3DINTEGRITY_DATA msg=3Daudit(07/09/2020 12:30:27.778:1691) : pid=3D4=
+976
+> uid=3Droot auid=3Droot ses=3D2
+> subj=3Dunconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=3Dapprais=
+e_data
+> cause=3Dmissing-hash comm=3Dbash name=3D/usr/bin/evmctl dev=3D"dm-0" ino=
+=3D493150
+> res=3Dno
+>=20
+> Cc: stable@vger.kernel.org
+> Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
+> Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+> ---
+> v6:
+>   - explictly print the bootparam being ignored to the user (Mimi)
+> v5:
+>   - add pr_info() to inform user the ima_appraise=3D boot param is being
+> =09ignored due to secure boot enabled (Nayna)
+>   - add some testing results to commit log
+> v4:
+>   - instead of change arch_policy loading code, check secure boot state a=
+t
+> =09"ima_appraise=3D" parameter handler (Mimi)
+> v3:
+>   - extend secure boot arch checker to also consider trusted boot
+>   - enforce IMA appraisal when secure boot is effectively enabled (Nayna)
+>   - fix ima_appraise flag assignment by or'ing it (Mimi)
+> v2:
+>   - pr_info() message prefix correction
+>  security/integrity/ima/Kconfig        | 2 +-
+>  security/integrity/ima/ima_appraise.c | 6 ++++++
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kcon=
+fig
+> index edde88dbe576..62dc11a5af01 100644
+> --- a/security/integrity/ima/Kconfig
+> +++ b/security/integrity/ima/Kconfig
+> @@ -232,7 +232,7 @@ config IMA_APPRAISE_REQUIRE_POLICY_SIGS
+> =20
+>  config IMA_APPRAISE_BOOTPARAM
+>  =09bool "ima_appraise boot parameter"
+> -=09depends on IMA_APPRAISE && !IMA_ARCH_POLICY
+> +=09depends on IMA_APPRAISE
+>  =09default y
+>  =09help
+>  =09  This option enables the different "ima_appraise=3D" modes
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/i=
+ma/ima_appraise.c
+> index a9649b04b9f1..28a59508c6bd 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -19,6 +19,12 @@
+>  static int __init default_appraise_setup(char *str)
+>  {
+>  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
+> +=09if (arch_ima_get_secureboot()) {
+> +=09=09pr_info("Secure boot enabled: ignoring ima_appraise=3D%s boot para=
+meter option",
+> +=09=09=09str);
+> +=09=09return 1;
+> +=09}
+> +
+>  =09if (strncmp(str, "off", 3) =3D=3D 0)
+>  =09=09ima_appraise =3D 0;
+>  =09else if (strncmp(str, "log", 3) =3D=3D 0)
+> --=20
+> 2.26.2
+>=20
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 9842e2e0bc6d..cf3ddb38dfa8 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1385,6 +1385,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 			if (IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG) &&
- 			    strstr(args[0].from, "blacklist"))
- 				entry->flags |= IMA_CHECK_BLACKLIST;
-+			else
-+				result = -EINVAL;
- 			break;
- 		case Opt_permit_directio:
- 			entry->flags |= IMA_PERMIT_DIRECTIO;
+Ping for review.
 
+Many thanks.
 
-Making this change does not conflict with any later patches in the
-series.
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
 
-Mimi, I've rebased and force pushed to my fixup branch with this change,
-for your comparison:
+--xQR6quUbZ63TTuTU
+Content-Type: application/pgp-signature; name="signature.asc"
 
- https://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/linux.git/log/?h=next-integrity-testing-fixup
+-----BEGIN PGP SIGNATURE-----
 
-Tyler
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8R8JMACgkQYdRkFR+R
+okMiPAf+Lawa+3mJ/dDC1Np/eBpA/UCMscxAKYRNlkGVChCpXeeXX1JV4M4CKHzu
+bmfws9NGfx4kw++hn8IeF86ypV3XhdKQyz7zQ6L4Rgmv08a/AE1msMRwwSMky9li
+n/Mh5HcYsfnLmGrLrSYjR/PTNqmz0WPgRCOSpFaTRcqTVKkUMJ8m83cwTe/5Avm9
+SmUyq80QY4AV4bJcedr1U+Ror8it5dHdtgy5bz0TPepRnhk/lE7Ro+mZE0e8N0R+
+3BiyCiYhUMD7E5LODlnMAWvbd/vEf3I0a0rYuQmxcauXs8HVI6j42A9Tmc/7PcDG
+EGRCFOvOOkQz6WddH1svTgptnLyGsA==
+=Ggbe
+-----END PGP SIGNATURE-----
 
-> 
-> Thanks & Regards,
-> 
->      - Nayna
-> 
+--xQR6quUbZ63TTuTU--
+
