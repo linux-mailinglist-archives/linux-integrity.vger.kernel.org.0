@@ -2,166 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DFA2240CF
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 18:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90F0224222
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jul 2020 19:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbgGQQwC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 Jul 2020 12:52:02 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:50252 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726221AbgGQQwB (ORCPT
+        id S1727952AbgGQRnP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Jul 2020 13:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726256AbgGQRnP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 Jul 2020 12:52:01 -0400
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CDBD820B4909;
-        Fri, 17 Jul 2020 09:51:59 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CDBD820B4909
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595004720;
-        bh=DvmxoacjIGDf6VIRgClmLxCafLoC/7gOChzuge/MVtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EuINBWJbNpWg6k/gjnYp/WbOQPAps/m7HqKNWwVayongOuF+/ZK6lRsFNyxP4WMnW
-         AxhowkF5ihAYf8r94NgcDasSd1Qre9U60xxyNphXuXDgFGLf85kOACuulIuJObgGR7
-         tBacQSIoHH/dh22jKXb0kN9fHxCM4xq+Y6EMAWUE=
-Date:   Fri, 17 Jul 2020 11:51:57 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Konsta Karsisto <konsta.karsisto@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Fri, 17 Jul 2020 13:43:15 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C6EC0619D4
+        for <linux-integrity@vger.kernel.org>; Fri, 17 Jul 2020 10:43:15 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id k71so6900047pje.0
+        for <linux-integrity@vger.kernel.org>; Fri, 17 Jul 2020 10:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wV1gvV23mO4MSWHgMeM+r7999nuQAFQGTkfq3zyvhrU=;
+        b=TkI+hwhyWG7WZvnJTwRRMikLIXphh/PU89bCIE8P6SFs0SaHpCf4VAcMkSYIWejrmC
+         UHjYj/pWqealOdMvuvGnbGyDGiR092Y/coL6eRwohd6FSkw/1x0lTSsWwdlxAmTbJF9z
+         MG+bnlBW3Pz3hPqkiZYjpkgP2T6E3WFs4nd00=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wV1gvV23mO4MSWHgMeM+r7999nuQAFQGTkfq3zyvhrU=;
+        b=n1Bq91Ws7AXE3Ljt9EeenlwxyhbciV1JCiRTMYlFbmSyQbJPWi6Vz2Son2uvA6/BSP
+         SPPv+i3+h5/q1VAZNBCuk7zGos/L6i14LmfbaFJjPUFu9eVORrwbtrrIk1asKFGT0dqv
+         LmKprcpwRmOa4i/gmzupBOA5NbTgUbpTvfzTb1jTbutJ9mvsNkdPy0hWD5Hg9jm0ZNBO
+         AT1VJlnsSwfFqLOuPC+3QteMQ9/ngD0I1iENDXCiNJ09c/nZHqksbj9Go0cfLmXwj6Ex
+         evlt99xDn6ZfvuzP/7sV8e80t3TmbQBxwooInoBytjooH4Gop14nZJ7dkjIxqi8Lkoiw
+         MtQQ==
+X-Gm-Message-State: AOAM530TOUT5uC1mSyiqNqOIRjwjSX07ctfD2IO+lP+GHjX4Lw+DH1x9
+        IWCDyxl6PwgkYnqwX/4neXf6cw==
+X-Google-Smtp-Source: ABdhPJxKZBG7RqgWoCxDb3CWPD97sCGFFzSrqXIIWjriKiDJA4WPNj/7bJe6bdbUYimvfgj8GzzH+g==
+X-Received: by 2002:a17:90b:1386:: with SMTP id hr6mr10767858pjb.93.1595007794310;
+        Fri, 17 Jul 2020 10:43:14 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 21sm8245611pfu.124.2020.07.17.10.43.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2020 10:43:13 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Matthew Wilcox <willy@infradead.org>,
         James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 08/12] ima: Shallow copy the args_p member of
- ima_rule_entry.lsm elements
-Message-ID: <20200717165157.GL3673@sequoia>
-References: <20200709061911.954326-1-tyhicks@linux.microsoft.com>
- <20200709061911.954326-9-tyhicks@linux.microsoft.com>
- <CAAEqDhD-wCGY7ykjSsNgCri4ykWPi9cP3j1zoQPWddB4r92Kqw@mail.gmail.com>
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jessica Yu <jeyu@kernel.org>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        KP Singh <kpsingh@google.com>, Dave Olsthoorn <dave@bewaar.me>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Boyd <stephen.boyd@linaro.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/13] Introduce partial kernel_read_file() support
+Date:   Fri, 17 Jul 2020 10:42:55 -0700
+Message-Id: <20200717174309.1164575-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAEqDhD-wCGY7ykjSsNgCri4ykWPi9cP3j1zoQPWddB4r92Kqw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2020-07-17 18:35:03, Konsta Karsisto wrote:
-> Hi,
-> 
-> Found one glitch with this change, see below:
-> 
-> On Thu, Jul 9, 2020 at 9:22 AM Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
-> >
-> > The args_p member is a simple string that is allocated by
-> > ima_rule_init(). Shallow copy it like other non-LSM references in
-> > ima_rule_entry structs.
-> >
-> > There are no longer any necessary error path cleanups to do in
-> > ima_lsm_copy_rule().
-> >
-> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > ---
-> >
-> > * v3
-> >   - No change
-> > * v2
-> >   - Adjusted context to account for ima_lsm_copy_rule() directly calling
-> >     ima_lsm_free_rule() and the lack of explicit reference ownership
-> >     transfers
-> >   - Added comment to ima_lsm_copy_rule() to document the args_p
-> >     reference ownership transfer
-> >
-> >  security/integrity/ima/ima_policy.c | 16 +++++++---------
-> >  1 file changed, 7 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> > index 9842e2e0bc6d..b02e1ffd10c9 100644
-> > --- a/security/integrity/ima/ima_policy.c
-> > +++ b/security/integrity/ima/ima_policy.c
-> > @@ -300,10 +300,13 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
-> >                         continue;
-> >
-> >                 nentry->lsm[i].type = entry->lsm[i].type;
-> > -               nentry->lsm[i].args_p = kstrdup(entry->lsm[i].args_p,
-> > -                                               GFP_KERNEL);
-> > -               if (!nentry->lsm[i].args_p)
-> > -                       goto out_err;
-> > +               nentry->lsm[i].args_p = entry->lsm[i].args_p;
-> > +               /*
-> > +                * Remove the reference from entry so that the associated
-> > +                * memory will not be freed during a later call to
-> > +                * ima_lsm_free_rule(entry).
-> > +                */
-> > +               entry->lsm[i].args_p = NULL;
-> 
-> This assignment necessitates a change in the code below...
-> 
-> >                 security_filter_rule_init(nentry->lsm[i].type,
-> >                                           Audit_equal,
-> > @@ -314,11 +317,6 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
-> >                                 (char *)entry->lsm[i].args_p);
-> 
-> ... you should refer to nentry->lsm[i].args_p here!
-> 
-> Other than that,
-> 
-> Reviewed-by: Konsta Karsisto <konsta.karsisto@gmail.com>
+Hi,
 
-Thank you, Konsta. You're exactly right about the required change.
-Without it, the pr_warn() in the error path will always attempt to print
-a NULL pointer.
+Here's my attempt at clearing the path to partial read support in
+kernel_read_file(), which fixes a number of issues along the way. I'm
+still fighting with the firmware test suite (it doesn't seem to pass
+for me even in stock v5.7... ?) But I don't want to block Scott's work[1]
+any this week, so here's the series as it is currently.
 
-Mimi, the following change (along with adding Konsta's Reviewed-by)
-needs to be made to this patch in next-integrity-testing:
+The primary difference to Scott's approach is to avoid adding a new set of
+functions and just adapt the existing APIs to deal with "offset". Also,
+the fixes for the enum are first in the series so they can be backported
+without the header file relocation.
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index b02e1ffd10c9..330a4e216349 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -314,7 +314,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 					  &nentry->lsm[i].rule);
- 		if (!nentry->lsm[i].rule)
- 			pr_warn("rule for LSM \'%s\' is undefined\n",
--				(char *)entry->lsm[i].args_p);
-+				(char *)nentry->lsm[i].args_p);
- 	}
- 	return nentry;
- }
+I'll keep poking at the firmware tests...
 
-It will then cause the next patch in the series to not apply but the
-fixup is minor.
+-Kees
 
-Let me know if you are alright with doing these changes yourself or if
-you'd like me to submit a new series revision.
+[1] https://lore.kernel.org/lkml/202007161415.10D015477@keescook/
 
-If you do this rebase work in next-integrity-testing yourself, I've
-prepared a copy branch of next-integrity-testing with all of the
-necessary changes for you to compare against:
+Kees Cook (12):
+  firmware_loader: EFI firmware loader must handle pre-allocated buffer
+  fs/kernel_read_file: Remove FIRMWARE_PREALLOC_BUFFER enum
+  fs/kernel_read_file: Remove FIRMWARE_EFI_EMBEDDED enum
+  fs/kernel_read_file: Split into separate source file
+  fs/kernel_read_file: Remove redundant size argument
+  fs/kernel_read_file: Switch buffer size arg to size_t
+  fs/kernel_read_file: Add file_size output argument
+  LSM: Introduce kernel_post_load_data() hook
+  firmware_loader: Use security_post_load_data()
+  module: Call security_kernel_post_load_data()
+  LSM: Add "contents" flag to kernel_read_file hook
+  fs/kernel_file_read: Add "offset" arg for partial reads
 
- https://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/linux.git/log/?h=next-integrity-testing-fixup
+Scott Branden (1):
+  fs/kernel_read_file: Split into separate include file
 
-My apologies for the trouble.
+ drivers/base/firmware_loader/fallback.c       |   8 +-
+ .../base/firmware_loader/fallback_platform.c  |  12 +-
+ drivers/base/firmware_loader/main.c           |  13 +-
+ fs/Makefile                                   |   3 +-
+ fs/exec.c                                     | 132 +-----------
+ fs/kernel_read_file.c                         | 189 ++++++++++++++++++
+ include/linux/fs.h                            |  39 ----
+ include/linux/ima.h                           |  19 +-
+ include/linux/kernel_read_file.h              |  55 +++++
+ include/linux/lsm_hook_defs.h                 |   6 +-
+ include/linux/lsm_hooks.h                     |  12 ++
+ include/linux/security.h                      |  19 +-
+ kernel/kexec.c                                |   2 +-
+ kernel/kexec_file.c                           |  18 +-
+ kernel/module.c                               |  24 ++-
+ security/integrity/digsig.c                   |   8 +-
+ security/integrity/ima/ima_fs.c               |   9 +-
+ security/integrity/ima/ima_main.c             |  58 ++++--
+ security/integrity/ima/ima_policy.c           |   1 +
+ security/loadpin/loadpin.c                    |  17 +-
+ security/security.c                           |  26 ++-
+ security/selinux/hooks.c                      |   8 +-
+ 22 files changed, 432 insertions(+), 246 deletions(-)
+ create mode 100644 fs/kernel_read_file.c
+ create mode 100644 include/linux/kernel_read_file.h
 
-Tyler
+-- 
+2.25.1
 
-> 
-> 
-> Konsta
-> 
-> >         }
-> >         return nentry;
-> > -
-> > -out_err:
-> > -       ima_lsm_free_rule(nentry);
-> > -       kfree(nentry);
-> > -       return NULL;
-> >  }
-> >
-> >  static int ima_lsm_update_rule(struct ima_rule_entry *entry)
-> > --
-> > 2.25.1
-> >
