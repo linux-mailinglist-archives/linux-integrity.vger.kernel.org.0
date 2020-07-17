@@ -2,50 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A13B224627
-	for <lists+linux-integrity@lfdr.de>; Sat, 18 Jul 2020 00:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F5422462C
+	for <lists+linux-integrity@lfdr.de>; Sat, 18 Jul 2020 00:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728040AbgGQWGR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 Jul 2020 18:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S1727906AbgGQWKb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Jul 2020 18:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727870AbgGQWGP (ORCPT
+        with ESMTP id S1727105AbgGQWKb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 Jul 2020 18:06:15 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EFAC0619D3
-        for <linux-integrity@vger.kernel.org>; Fri, 17 Jul 2020 15:06:15 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id b9so5997669plx.6
-        for <linux-integrity@vger.kernel.org>; Fri, 17 Jul 2020 15:06:15 -0700 (PDT)
+        Fri, 17 Jul 2020 18:10:31 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12402C0619D2
+        for <linux-integrity@vger.kernel.org>; Fri, 17 Jul 2020 15:10:31 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id o1so6007450plk.1
+        for <linux-integrity@vger.kernel.org>; Fri, 17 Jul 2020 15:10:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=q5TCCZgzdfgT0G/6PATrZpLazvHyt7WUQKrX1xrUKLk=;
-        b=EuxBM1YB0vCqSrSBab3wG4+3G4l3LZB0r/Sy24DYkcIknVoRK1vd5FybG7DBoZMGK3
-         /CTYNU5fQj7jzV2LhEHV/rMxebd8TPxLdS/JqIf4QW3G3zlJPlZkenuoPSr3MjLle+Qt
-         xVgyLZ3UJBffb9GcM/W4p9s1nh6pIolmqkWH8=
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=kXPLjDrHtFXbNmet3AnHCGh48BJAIHJk8m3fZv071oc=;
+        b=PpAc1HNYIT+QLMKhWHW1jl69NR1BoJnESjDZGrSJSD8rmjkUEt+Wtl439d/aUbqRFQ
+         FQi3HlJUBrRonE9RjdfjP+55VLF3PgOo7bjCzzwuvZNhV9QGuaV3KdgQexhmz0n06eze
+         dLlPv+vO46p4W2lZrmOGc+zuXZml1lcIQ8UeM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q5TCCZgzdfgT0G/6PATrZpLazvHyt7WUQKrX1xrUKLk=;
-        b=ceV/sk1I66X0MiEMHCLOKqtxQumeBfauKUmbrI18gRrEOWZwaXZkfO23V1w7Ytt+m9
-         Z4zDYmkpFF2/ApUS7UOOCU79bYj+0R0DvbM4D6x2+aFQY1ad4+fEmOcBuOF0mxIAtURz
-         KvBr8YRguFOiHqf5OEnOVG+xFfO1YSuP9k+OTtBa/9FVxFJUZ/XxPs3zHYh7caU/ua5E
-         +u0hxiUuA+QU/Qq4UkZ20NfGYxeB1Ml9jBubl1M/2WBoT1BKbz7TlHmLvt6BCgDPFyPp
-         qogZ/N0y3jLev1gsLIEM0Nm8rtS3hKSvoGMzPMxoSZkibwUbsslGcjkW8JFkB+GEfPon
-         VNpA==
-X-Gm-Message-State: AOAM530FLLorN8IPQOZQzao3fGVxm4stWENBZSEswkbvX5mhUxDatayN
-        XnB7PR/hsCvKJOOiHZFx8JI/AQ==
-X-Google-Smtp-Source: ABdhPJy9/8XCi8iOFM3R8LvinzGsW1RKW4M4ZDH4GQ47QjK1iaaE3UlIgfUhMF6EPqI5aJJtdKAWBw==
-X-Received: by 2002:a17:90a:9381:: with SMTP id q1mr4017193pjo.38.1595023574832;
-        Fri, 17 Jul 2020 15:06:14 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=kXPLjDrHtFXbNmet3AnHCGh48BJAIHJk8m3fZv071oc=;
+        b=N4bfRT2KJ8d6t2cFZCFJdOFiQejyMaXu7GsROo9D4uoyBtmp0i7Fgs+Uoq7lQ8cd75
+         oS21aeVB/zSJDBVPBnvSLKhT0zWiidTeu7ypBBiYbR9mcixCudGYeTj2cYgMAlvO1eoP
+         sdXE7yKhFSDs4+iMSdxNqeMZ+67O30EgtFD8kZrG3vHZg7kdOkWb5xEiOiDYh65uH192
+         yXCTEIbqei6bO/xrZ6TrhWRlv8BmNJzxknw4G09ORvVlSwTWkL5WvdzvBrjt7Kym8sLP
+         ynt/RUN7reCze7cWksJ/J73TJJKCWGKZE1lx7jt7FQdhdTt9DE9oWsii7bsBUiD/CnKe
+         OnZw==
+X-Gm-Message-State: AOAM530qfOM0OIv49DS6UtnZmm4AIckAtE6TQ4ICMBQ9CYZjNi23uVMY
+        UP8qKRi7mDpAnKJClXzIHvPiBQ==
+X-Google-Smtp-Source: ABdhPJxl+/7V6fVqG2R0M/UfwPRNbJnc/viXiuvUuaSeof1VNQLC0wgELrpHCv+61l/+32K9tfMnwA==
+X-Received: by 2002:a17:90a:17e4:: with SMTP id q91mr11673037pja.61.1595023830564;
+        Fri, 17 Jul 2020 15:10:30 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n18sm8896320pfd.99.2020.07.17.15.06.13
+        by smtp.gmail.com with ESMTPSA id n11sm8353780pgm.1.2020.07.17.15.10.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 15:06:13 -0700 (PDT)
-Date:   Fri, 17 Jul 2020 15:06:12 -0700
+        Fri, 17 Jul 2020 15:10:29 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 15:10:28 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Scott Branden <scott.branden@broadcom.com>
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
@@ -77,46 +78,45 @@ Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, kexec@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/13] fs/kernel_read_file: Remove redundant size argument
-Message-ID: <202007171502.22E12A4E9@keescook>
+Subject: Re: [PATCH 00/13] Introduce partial kernel_read_file() support
+Message-ID: <202007171506.CCE3902A9@keescook>
 References: <20200717174309.1164575-1-keescook@chromium.org>
- <20200717174309.1164575-7-keescook@chromium.org>
- <39b2d8af-812f-8c5e-3957-34543add0173@broadcom.com>
+ <8de85fc3-9f31-fc59-abc1-29f43fb90988@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <39b2d8af-812f-8c5e-3957-34543add0173@broadcom.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8de85fc3-9f31-fc59-abc1-29f43fb90988@broadcom.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 12:04:18PM -0700, Scott Branden wrote:
-> On 2020-07-17 10:43 a.m., Kees Cook wrote:
-> > In preparation for refactoring kernel_read_file*(), remove the redundant
-> > "size" argument which is not needed: it can be included in the return
->
-> I don't think the size argument is redundant though.
-> The existing kernel_read_file functions always read the whole file.
-> Now, what happens if the file is bigger than the buffer.
-> How does kernel_read_file know it read the whole file by looking at the
-> return value?
+On Fri, Jul 17, 2020 at 12:17:02PM -0700, Scott Branden wrote:
+> Thanks for sending out.  This looks different than your other patch series.
 
-Yes; an entirely reasonable concern. This is why I add the file_size
-output argument later in the series.
+Yes, it mutated in my head as I considered how all of this should hang
+together, which is why I wanted to get it sent before the weekend. I'm
+still trying to figure out why the fireware testsuite fails for me, etc.
 
-> > code, with callers adjusted. (VFS reads already cannot be larger than
-> > INT_MAX.)
-> > [...]
-> > -	if (i_size > SIZE_MAX || (max_size > 0 && i_size > max_size)) {
-> > +	if (i_size > INT_MAX || (max_size > 0 && i_size > max_size)) {
->
-> Should this be SSIZE_MAX?
+> We should get the first 5 patches accepted now though as they are
+> simple cleanups and fixes.  That will reduce the number of outstanding
+> patches in the series.
 
-No, for two reasons: then we need to change the return value and likely
-the callers need more careful checks, and more importantly, because the
-VFS already limits single read actions to INT_MAX, so limits above this
-make no sense. Win win! :)
+Agreed. I'd like to get some more eyes on it, but I can get it ready for
+-next.
+
+> At first glance the issue with the changes after that is the existing
+> API assumes it has read the whole file and failed if it did not.
+> Now, if the file is larger than the amount requested there is no indication?
+
+The intention is to have old API users unchanged and new users can use
+a pre-allocated buf (with buf_size) along with file_size to examine
+their partial read progress. If I broke the old API, that's a bug and I
+need to fix it, but that's why I wanted to start with the firmware test
+suite (basic things like module loading work fine after this series, but
+I wanted to really exercise the corners that the firmware suite pokes
+at).
 
 -- 
 Kees Cook
