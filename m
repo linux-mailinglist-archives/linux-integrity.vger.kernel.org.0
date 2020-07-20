@@ -2,100 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC66226E9E
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 20:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD91B227153
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 23:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729024AbgGTS7x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Jul 2020 14:59:53 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:48720 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728139AbgGTS7x (ORCPT
+        id S1728102AbgGTVm4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Jul 2020 17:42:56 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:35328 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728236AbgGTVip (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Jul 2020 14:59:53 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3F13620B4909;
-        Mon, 20 Jul 2020 11:59:52 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3F13620B4909
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595271592;
-        bh=TwTCyPsy3rMqXVnjk9ggTK+QxuipwRRnBBIqMLIAfHU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=CsOM1OTASiRenjavduL6Z/OSbM8MSJRuka+oE3SfwFiUtblFWSKQjh5MKwzLlONqQ
-         L9RuvB8oP0n36cCAFMasvJSqJEWnB0peLm1olX3WYO0JyVLF/C+tGQC7wVF/rAxplY
-         +dcGkrf8Uf0UBYjE2diJjx3YEiuc6RRJ0IglDe3Q=
-Subject: Re: [PATCH v3 4/5] LSM: Define SELinux function to measure security
- state
-To:     Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Mon, 20 Jul 2020 17:38:45 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06KKWocY152958;
+        Mon, 20 Jul 2020 17:38:25 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32d5x49up3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jul 2020 17:38:25 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06KKl885030148;
+        Mon, 20 Jul 2020 17:38:25 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32d5x49una-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jul 2020 17:38:24 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06KLZBL4020699;
+        Mon, 20 Jul 2020 21:38:22 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04fra.de.ibm.com with ESMTP id 32dbmn06yb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jul 2020 21:38:22 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06KLcKd744040416
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Jul 2020 21:38:20 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D90BA4054;
+        Mon, 20 Jul 2020 21:38:20 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 856E2A4060;
+        Mon, 20 Jul 2020 21:38:18 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.145.253])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Jul 2020 21:38:18 +0000 (GMT)
+Message-ID: <1595281097.5055.79.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 00/12] ima: Fix rule parsing bugs and extend
+ KEXEC_CMDLINE rule support
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Prakhar Srivastava <prsriva02@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
         Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20200717222819.26198-1-nramas@linux.microsoft.com>
- <20200717222819.26198-5-nramas@linux.microsoft.com>
- <CAEjxPJ7xQtZToF4d2w_o8SXFKG9kPZaWTWTFqyC-7GwBWnQa0A@mail.gmail.com>
- <c0fbfcf3-ec36-872a-c389-b3fea214848c@linux.microsoft.com>
- <CAEjxPJ7VH18bEo6+U1GWrx=tHVGr=6XtF5_ygcfQYgdtZ74J+g@mail.gmail.com>
- <bea0cb52-2e13-fb14-b66c-b57287c23c3f@linux.microsoft.com>
- <CAEjxPJ6Rt7u3shLbxoPRHgr-D=CD9d_eXRB07A9qN7RmJwZAwA@mail.gmail.com>
- <CAEjxPJ6-jHha+CeqSdQ2O0bpyQe_9buj2ENZz6FNj6S87XSSfg@mail.gmail.com>
- <dccfc56b-c3ab-327e-19b2-7a70d15afe5b@linux.microsoft.com>
- <CAEjxPJ6_pxEh6HG9F3r=4B5ZgEpNPkgLHHfJp6ze=F1wKt4wCw@mail.gmail.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <72af0630-dce0-12af-0977-b4e81c2f99ac@linux.microsoft.com>
-Date:   Mon, 20 Jul 2020 11:59:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAEjxPJ6_pxEh6HG9F3r=4B5ZgEpNPkgLHHfJp6ze=F1wKt4wCw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Nayna Jain <nayna@linux.ibm.com>
+Date:   Mon, 20 Jul 2020 17:38:17 -0400
+In-Reply-To: <20200709061911.954326-1-tyhicks@linux.microsoft.com>
+References: <20200709061911.954326-1-tyhicks@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-20_09:2020-07-20,2020-07-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ mlxscore=0 suspectscore=2 malwarescore=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 impostorscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007200136
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/20/20 11:44 AM, Stephen Smalley wrote:
+[Cc'ing Sasha]
 
->>>
->>> Actually, if we used ima-ng template for selinux-policy-hash, then
->>> instead of needing to hash the policy
->>> first and passing the hash to IMA, we could just pass the policy as
->>> the buffer and IMA would take care of the hashing, right?
->>
->> That is correct.
->>
->> The IMA hook I've added to measure LSM structures is a generic one that
->> can be used by any security module (SM). I feel it would be better to
->> not have policy or state or any such SM specific logic in IMA, but leave
->> that to the individual SM to handle.
->>
->> What do you think?
+On Thu, 2020-07-09 at 01:18 -0500, Tyler Hicks wrote:
+
+> I envision patches 1-7 going to stable. The series is ordered in a way
+> that has all the fixes up front, followed by cleanups, followed by the
+> feature patch. The breakdown of patches looks like so:
 > 
-> It is correct to remain security module agnostic.  However, I think
-> you can remain LSM-neutral while still avoiding the double hashing of
-> the policy here.  Can't you just pass in the policy itself as the
-> buffer and let IMA hash it?
+>  Memory leak fixes: 1-3
+>  Parser strictness fixes: 4-7
+>  Code cleanups made possible by the fixes: 8-11
+>  Extend KEXEC_CMDLINE rule support: 12
 
-Yes - that is an option. If I do that then, as you have stated below, 
-we'll need to two funcs -
-one that will only add the hash but not the entire data payload in the 
-IMA log (i.e., "ima-ng")
-and, the other that handles hashing and including date payload (i.e., 
-"ima-buf").
+I agree they should be backported, but they don't apply cleanly before
+linux-5.6.  The changes aren't that major.  Some patch hunks apply
+cleanly, but won't compile, while others patch hunks need to be
+dropped based on when the feature was upstreamed.  For these reasons,
+I'm not Cc'ing stable.
 
-   Then you can let the policy author decide
-> on the template to be used (ima-buf versus ima-ng).  If you want to
-> support the use of different templates for different "kinds" of LSM
-> state (e.g. state versus policy) you could either provide two funcs
-> (LSM_STATE, LSM_POLICY) or otherwise support selection based on some
-> other attribute.
-> 
+Feature upstreamed:
+- LSM policy update: linux 5.3
+- key command line: linux 5.3
+- blacklist: linux 5.5
+- keyrings: linux 5.6
 
-I can do the above.
+For Linux 5.3:
+- Dependency on backporting commit 483ec26eed42 ("ima: ima/lsm policy
+rule loading logic bug fixes") to apply " ima: Free the entire rule if
+it fails to parse".
 
-  -lakshmi
-
+Mimi
