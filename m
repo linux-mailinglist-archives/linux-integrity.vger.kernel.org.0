@@ -2,28 +2,28 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF10D226362
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 17:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9325226364
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 17:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728093AbgGTPeO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Jul 2020 11:34:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54198 "EHLO mail.kernel.org"
+        id S1728435AbgGTPeS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Jul 2020 11:34:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54266 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726012AbgGTPeN (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Jul 2020 11:34:13 -0400
+        id S1726012AbgGTPeQ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 20 Jul 2020 11:34:16 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E0A722CB2;
-        Mon, 20 Jul 2020 15:34:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DE98222C9D;
+        Mon, 20 Jul 2020 15:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595259253;
-        bh=RDQvEVMo9Esg/EJN/JsDQdAebh/9O69cXGy8sr7qtf4=;
+        s=default; t=1595259255;
+        bh=c/hjOojMTg3TNs8kx9IKYYH+HETNBY0OjLn1K7YlN4Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=10CPOQGurSx5h/FlcNSzXyphPYka9pVPfb23owr4m+5VV4OMCQ+286ek39c4dacNE
-         CQv2aWiUgK0BWNSu+DG/AN9JxeZqtyXgA4WBdEjsz/Ueb0Yn+1SAU+olCzXIxbzRN8
-         9LCSgrA6ltGEsoKqfUy6XkxgK49kJiMSf/XXwoeg=
-Date:   Mon, 20 Jul 2020 17:32:17 +0200
+        b=jL3QpF7M/yHNP/7k2IedRR+xDd57JWgIlNQuItFwKeKF0i6B4XZhno5DnLE6v3yS8
+         r8S1AYm/l1voF1muUjyl4sOydD9FZLyHmQ1ZrOTemwhdAv5cp2AbSKf0o6qpngdVb/
+         ZGoa7A2NbW7NYzpRLuXG8hvtITFqu8jI+E2Uuw0A=
+Date:   Mon, 20 Jul 2020 17:34:00 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Prakhar Srivastava <prsriva@linux.microsoft.com>
 Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -40,22 +40,87 @@ Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         nramas@linux.microsoft.com, tusharsu@linux.microsoft.com,
         balajib@linux.microsoft.com, bauerman@linux.ibm.com,
         robh@kernel.org
-Subject: Re: [PATCH V3 5/6] Update the Kconfig to support carrying forward
- the IMA Measurement log and and update the setup_dtb call to add the
- linux,ima-kexec-buffer property to the DTB.
-Message-ID: <20200720153217.GB1481119@kroah.com>
+Subject: Re: [PATCH V3 6/6] Add the property used for carrying forward the
+ IMA measurement logs and update the code to use the defined property string.
+Message-ID: <20200720153400.GC1481119@kroah.com>
 References: <20200720152342.337990-1-prsriva@linux.microsoft.com>
- <20200720152342.337990-6-prsriva@linux.microsoft.com>
+ <20200720152342.337990-7-prsriva@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200720152342.337990-6-prsriva@linux.microsoft.com>
+In-Reply-To: <20200720152342.337990-7-prsriva@linux.microsoft.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jul 20, 2020 at 08:23:41AM -0700, Prakhar Srivastava wrote:
+On Mon, Jul 20, 2020 at 08:23:42AM -0700, Prakhar Srivastava wrote:
 > Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 
-Your subject line is whack.
+Again, subject line, no changelog :(
+
+> ---
+>  arch/arm64/kernel/machine_kexec_file.c | 19 ++++++++++---------
+>  arch/powerpc/kexec/ima.c               |  8 +++++---
+>  2 files changed, 15 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+> index 066670c43626..59058901e641 100644
+> --- a/arch/arm64/kernel/machine_kexec_file.c
+> +++ b/arch/arm64/kernel/machine_kexec_file.c
+> @@ -24,14 +24,15 @@
+>  #include <asm/byteorder.h>
+>  
+>  /* relevant device tree properties */
+> -#define FDT_PROP_KEXEC_ELFHDR	"linux,elfcorehdr"
+> -#define FDT_PROP_MEM_RANGE	"linux,usable-memory-range"
+> -#define FDT_PROP_INITRD_START	"linux,initrd-start"
+> -#define FDT_PROP_INITRD_END	"linux,initrd-end"
+> -#define FDT_PROP_BOOTARGS	"bootargs"
+> -#define FDT_PROP_KASLR_SEED	"kaslr-seed"
+> -#define FDT_PROP_RNG_SEED	"rng-seed"
+> -#define RNG_SEED_SIZE		128
+> +#define FDT_PROP_KEXEC_ELFHDR		"linux,elfcorehdr"
+> +#define FDT_PROP_MEM_RANGE		"linux,usable-memory-range"
+> +#define FDT_PROP_INITRD_START		"linux,initrd-start"
+> +#define FDT_PROP_INITRD_END		"linux,initrd-end"
+> +#define FDT_PROP_BOOTARGS		"bootargs"
+> +#define FDT_PROP_KASLR_SEED		"kaslr-seed"
+> +#define FDT_PROP_RNG_SEED		"rng-seed"
+> +#define FDT_PROP_IMA_KEXEC_BUFFER	"linux,ima-kexec-buffer"
+> +#define RNG_SEED_SIZE			128
+
+Why did you reformat all of these?
+
+>  
+>  const struct kexec_file_ops * const kexec_file_loaders[] = {
+>  	&kexec_image_ops,
+> @@ -157,7 +158,7 @@ static int setup_dtb(struct kimage *image,
+>  	if (image->arch.ima_buffer_size > 0) {
+>  
+>  		ret = fdt_appendprop_addrrange(dtb, 0, off,
+> -				"linux,ima-kexec-buffer",
+> +				FDT_PROP_IMA_KEXEC_BUFFER,
+>  				image->arch.ima_buffer_addr,
+>  				image->arch.ima_buffer_size);
+>  		if (ret)
+> diff --git a/arch/powerpc/kexec/ima.c b/arch/powerpc/kexec/ima.c
+> index a9e4e9f04273..7d6c43b2eacb 100644
+> --- a/arch/powerpc/kexec/ima.c
+> +++ b/arch/powerpc/kexec/ima.c
+> @@ -12,6 +12,8 @@
+>  #include <linux/memblock.h>
+>  #include <linux/libfdt.h>
+>  
+> +#define FDT_PROP_IMA_KEXEC_BUFFER	"linux,ima-kexec-buffer"
+> +
+
+Why are you mixing arm64 and powerpc patches together that do not do the
+same thing???
+
+Shouldn't there be a common place for these strings and not spread out
+all over the kernel in random places?
+
+thanks,
+
+greg k-h
