@@ -2,90 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1487D226D12
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 19:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B30F226D33
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 19:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729431AbgGTR1F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Jul 2020 13:27:05 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22386 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728939AbgGTR1E (ORCPT
+        id S1732744AbgGTReL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Jul 2020 13:34:11 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37202 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726812AbgGTReL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Jul 2020 13:27:04 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06KH0oxJ094313;
-        Mon, 20 Jul 2020 13:26:59 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32bw90ccyu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 13:26:59 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06KH0sYQ094749;
-        Mon, 20 Jul 2020 13:26:58 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32bw90ccy7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 13:26:58 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06KHOd0J028918;
-        Mon, 20 Jul 2020 17:26:56 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 32dbmn0435-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 17:26:56 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06KHQs8K51970208
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jul 2020 17:26:54 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29DE142063;
-        Mon, 20 Jul 2020 17:26:54 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0690F42066;
-        Mon, 20 Jul 2020 17:26:53 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.145.253])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Jul 2020 17:26:52 +0000 (GMT)
-Message-ID: <1595266012.5055.51.camel@linux.ibm.com>
+        Mon, 20 Jul 2020 13:34:11 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7E77B20B4909;
+        Mon, 20 Jul 2020 10:34:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7E77B20B4909
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1595266450;
+        bh=IZbk6/wtyJwvcs8UDH0IEXfn70iZQSY+5CSfF+kU3Rc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=VNdAmeiW7jXcjnKnfNMnaEBf/ezZled7360IOAy1VUzHALwt7jjuWoAkwpSXHpul/
+         4qfljZOmlJYttBy+0X7xXG+shb+uBTxDvlNY08zkr5FvlqeFMYE2GE92azX5ggHui+
+         +DsrMVMna+iBrldPtiweIP24gad0m/PYLoQGCPlg=
 Subject: Re: [PATCH v3 4/5] LSM: Define SELinux function to measure security
  state
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Tyler Hicks <tyhicks@canonical.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+To:     Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
         James Morris <jmorris@namei.org>,
         linux-integrity@vger.kernel.org,
         SElinux list <selinux@vger.kernel.org>,
         LSM List <linux-security-module@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Mon, 20 Jul 2020 13:26:52 -0400
-In-Reply-To: <CAEjxPJ7VH18bEo6+U1GWrx=tHVGr=6XtF5_ygcfQYgdtZ74J+g@mail.gmail.com>
 References: <20200717222819.26198-1-nramas@linux.microsoft.com>
-         <20200717222819.26198-5-nramas@linux.microsoft.com>
-         <CAEjxPJ7xQtZToF4d2w_o8SXFKG9kPZaWTWTFqyC-7GwBWnQa0A@mail.gmail.com>
-         <c0fbfcf3-ec36-872a-c389-b3fea214848c@linux.microsoft.com>
-         <CAEjxPJ7VH18bEo6+U1GWrx=tHVGr=6XtF5_ygcfQYgdtZ74J+g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-20_09:2020-07-20,2020-07-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- impostorscore=0 malwarescore=0 adultscore=0 phishscore=0 mlxscore=0
- suspectscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1011
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007200111
+ <20200717222819.26198-5-nramas@linux.microsoft.com>
+ <CAEjxPJ7xQtZToF4d2w_o8SXFKG9kPZaWTWTFqyC-7GwBWnQa0A@mail.gmail.com>
+ <c0fbfcf3-ec36-872a-c389-b3fea214848c@linux.microsoft.com>
+ <CAEjxPJ7VH18bEo6+U1GWrx=tHVGr=6XtF5_ygcfQYgdtZ74J+g@mail.gmail.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <bea0cb52-2e13-fb14-b66c-b57287c23c3f@linux.microsoft.com>
+Date:   Mon, 20 Jul 2020 10:34:06 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAEjxPJ7VH18bEo6+U1GWrx=tHVGr=6XtF5_ygcfQYgdtZ74J+g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-07-20 at 13:06 -0400, Stephen Smalley wrote:
+On 7/20/20 10:06 AM, Stephen Smalley wrote:
+
+>> The above will ensure the following sequence will be measured:
+>>    #1 State A - Measured
+>>    #2 Change from State A to State B - Measured
+>>    #3 Change from State B back to State A - Since the measured data is
+>> same as in #1, the change will be measured only if the event name is
+>> different between #1 and #3
 > 
+> Perhaps the timestamp / sequence number should be part of the hashed
+> data instead of the event name?
+
+If the timestamp/seqno is part of the hashed data, on every call to 
+measure IMA will add a new entry in the IMA log. This would fill up the 
+IMA log - even when there is no change in the measured data.
+
+To avoid that I keep the last measurement in SELinux and measure only 
+when there is a change with the timestamp in the event name.
+
+> I can see the appraiser wanting to know two things:
+> 1) The current state of the system (e.g. is it enforcing, is the
+> currently loaded policy the expected one?).
+> 2) Has the system ever been in an unexpected state (e.g. was it
+> temporarily switched to permissive or had an unexpected policy
+> loaded?)
+
+Yes - you are right.
+The appraiser will have to look at the entire IMA log (and the 
+corresponding TPM PCR data) to know the above.
+
+Time t0 => State of the system measured
+Time tn => State changed and the new state measured
+Time tm => State changed again and the new state measured.
+
+Say, the measurement at "Time tn" was an illegal change, the appraiser 
+would know.
+
 > 
 > I applied the patch series on top of the next-integrity branch, added
 > measure func=LSM_STATE to ima-policy, and booted that kernel.  I get
@@ -100,17 +104,15 @@ On Mon, 2020-07-20 at 13:06 -0400, Stephen Smalley wrote:
 > selinux-policy-hash
 > 
 > Thus, I cannot verify. What am I missing?
+> 
 
-Missing is "template=ima-buf" on the policy rule.
+Looks like the template used is ima-ng which doesn't include the 
+measured buffer. Please set template to "ima-buf" in the policy.
 
-Tyler's patch set just added some support for verifying the policy.
- Refer to ima_validate_rule().  There are still some things missing.
- For example, nayna noticed that making sure that asymmetric key
-support is enabled.  Another example is requiring "template=" for any
-of the buffer measurements.  Template names can be defined
-dynamically, so it will need to support either format:
+For example,
+measure func=LSM_STATE template=ima-buf
 
-measure func=KEXEC_CMDLINE template=ima-buf 
-measure func=KEXEC_CMDLINE template=d-ng|n-ng|buf
+thanks,
+  -lakshmi
 
-Mimi
+
