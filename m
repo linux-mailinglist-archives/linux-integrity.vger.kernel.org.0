@@ -2,69 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C462255BE
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 04:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19D922598D
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 10:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbgGTCE6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 19 Jul 2020 22:04:58 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55234 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726626AbgGTCE6 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 19 Jul 2020 22:04:58 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 50DB320B4909;
-        Sun, 19 Jul 2020 19:04:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 50DB320B4909
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595210697;
-        bh=zRG1ESiLAHDyNiv0B4tmWGwGfmW3Odsif5Z4IcufgBY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=K+4absWZa2gX4t8pSglBLKmy/9E9YldShr3PWP/443G4ykMhPoClGFe6LPQLlAz1Z
-         7wtteeoDMdm3MhE7YxZUJYW7Vpbnhg56YIBwY3+Url2otVTqvZ8qZUC5zIGh91QDZU
-         zNFBIl6ZDaZDBnk4jkUi8AycwnLUjaJgGD3xypcE=
-Subject: Re: [PATCH v3 4/5] LSM: Define SELinux function to measure security
- state
-To:     kernel test robot <lkp@intel.com>, zohar@linux.ibm.com,
-        stephen.smalley.work@gmail.com, casey@schaufler-ca.com
-Cc:     kbuild-all@lists.01.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200717222819.26198-5-nramas@linux.microsoft.com>
- <202007181027.UwJXCNXk%lkp@intel.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <61a4c849-5cb7-0a58-2bb9-61f55a98657a@linux.microsoft.com>
-Date:   Sun, 19 Jul 2020 19:04:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726666AbgGTIAk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Jul 2020 04:00:40 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37782 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725815AbgGTIAj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 20 Jul 2020 04:00:39 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id C40ACB97A;
+        Mon, 20 Jul 2020 08:00:44 +0000 (UTC)
+Date:   Mon, 20 Jul 2020 10:00:37 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>
+Subject: Re: [PATCH ima-evm-utils] Add sanity check for file parameter of
+ ima_boot_aggregate
+Message-ID: <20200720080037.GB8754@dell5510>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20200717120422.71299-1-pvorel@suse.cz>
+ <1595167054.27397.72.camel@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <202007181027.UwJXCNXk%lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1595167054.27397.72.camel@linux.ibm.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/17/20 8:14 PM, kernel test robot wrote:
-> Hi Lakshmi,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on integrity/next-integrity]
-> [cannot apply to pcmoore-selinux/next security/next-testing linus/master v5.8-rc5 next-20200717]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
+Hi Mimi,
 
-Thank you for catching this.
+...
+> Thanks!  I made minor changes as noted below.  A subsequent patch
+> makes a similar change for the new TPM 1.2 PCRs.
++1 to all the changes. I guess you haven't pushed it yet.
 
-I did not see these failures with the compiler and make options I'd used.
 
-Am able to reproduce the errors with the instructions you'd provided.
-Will post the updated patches shortly.
+Kind regards,
+Petr
 
-thanks,
-  -lakshmi
+> >  src/evmctl.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
 
+> > diff --git a/src/evmctl.c b/src/evmctl.c
+> > index 04dc2ad..3ad5039 100644
+> > --- a/src/evmctl.c
+> > +++ b/src/evmctl.c
+> > @@ -2082,6 +2082,13 @@ static int read_binary_bios_measurements(char *file, struct tpm_bank_info *bank)
+> >  	int len;
+> >  	int i;
+
+> > +	struct stat s;
+> > +	stat(file, &s);
+
+> Checked stat return code.
+
+
+> > +	if (!S_ISREG(s.st_mode)) {
+> > +		log_errno("Not a regular file or link to regular file.\n");
+
+> Prefixed message with "Bios event log: not ..."
+...
