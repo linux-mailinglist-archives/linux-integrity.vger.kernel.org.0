@@ -2,147 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C91322252AD
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Jul 2020 18:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C462255BE
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 04:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbgGSQCZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 19 Jul 2020 12:02:25 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40564 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726131AbgGSQCY (ORCPT
+        id S1726846AbgGTCE6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 19 Jul 2020 22:04:58 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55234 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726626AbgGTCE6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 19 Jul 2020 12:02:24 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06JG1A3w066644;
-        Sun, 19 Jul 2020 12:02:22 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32btpvdhqn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 19 Jul 2020 12:02:22 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06JG1Vx0067756;
-        Sun, 19 Jul 2020 12:02:21 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32btpvdhqa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 19 Jul 2020 12:02:21 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06JG0vKF004255;
-        Sun, 19 Jul 2020 16:02:20 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 32brq7hech-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 19 Jul 2020 16:02:20 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06JG0sEZ49152464
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 19 Jul 2020 16:00:54 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C77C1AE05D;
-        Sun, 19 Jul 2020 16:02:17 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 16395AE053;
-        Sun, 19 Jul 2020 16:02:17 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.150.54])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 19 Jul 2020 16:02:16 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH 3/3] ima_evm_utils: indicate "--verify" template data digest failures
-Date:   Sun, 19 Jul 2020 12:02:04 -0400
-Message-Id: <1595174524-4976-3-git-send-email-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.7.5
-In-Reply-To: <1595174524-4976-1-git-send-email-zohar@linux.ibm.com>
-References: <1595174524-4976-1-git-send-email-zohar@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-19_03:2020-07-17,2020-07-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 mlxlogscore=999 adultscore=0
- malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=1
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007190119
+        Sun, 19 Jul 2020 22:04:58 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 50DB320B4909;
+        Sun, 19 Jul 2020 19:04:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 50DB320B4909
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1595210697;
+        bh=zRG1ESiLAHDyNiv0B4tmWGwGfmW3Odsif5Z4IcufgBY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=K+4absWZa2gX4t8pSglBLKmy/9E9YldShr3PWP/443G4ykMhPoClGFe6LPQLlAz1Z
+         7wtteeoDMdm3MhE7YxZUJYW7Vpbnhg56YIBwY3+Url2otVTqvZ8qZUC5zIGh91QDZU
+         zNFBIl6ZDaZDBnk4jkUi8AycwnLUjaJgGD3xypcE=
+Subject: Re: [PATCH v3 4/5] LSM: Define SELinux function to measure security
+ state
+To:     kernel test robot <lkp@intel.com>, zohar@linux.ibm.com,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com
+Cc:     kbuild-all@lists.01.org, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200717222819.26198-5-nramas@linux.microsoft.com>
+ <202007181027.UwJXCNXk%lkp@intel.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <61a4c849-5cb7-0a58-2bb9-61f55a98657a@linux.microsoft.com>
+Date:   Sun, 19 Jul 2020 19:04:56 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <202007181027.UwJXCNXk%lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Helps to indicate when the template data digest verification fails.
-Indicate the problematic record in the measurement list based on
-log level and fail verification.
+On 7/17/20 8:14 PM, kernel test robot wrote:
+> Hi Lakshmi,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on integrity/next-integrity]
+> [cannot apply to pcmoore-selinux/next security/next-testing linus/master v5.8-rc5 next-20200717]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 
-fixes: ff26f9704ec4 ("ima-evm-utils: calculate and verify the template
-data digest")
+Thank you for catching this.
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- src/evmctl.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+I did not see these failures with the compiler and make options I'd used.
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 06a2ffb879d9..faddc3c361a0 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -1444,14 +1444,21 @@ static int verify = 0;
- static int ima_verify_template_hash(struct template_entry *entry)
- {
- 	uint8_t digest[SHA_DIGEST_LENGTH];
-+	static int line = 0;
-+
-+	line++;
- 
- 	if (!memcmp(zero, entry->header.digest, sizeof(digest)))
- 		return 0;
- 
- 	SHA1(entry->template, entry->template_len, digest);
- 
--	if (memcmp(digest, entry->header.digest, sizeof(digest)))
-+	if (memcmp(digest, entry->header.digest, sizeof(digest))) {
-+		if (imaevm_params.verbose > LOG_INFO)
-+			log_info("Failed to verify template data digest(line %d).\n",
-+				  line);
- 		return 1;
-+	}
- 
- 	return 0;
- }
-@@ -1892,6 +1899,7 @@ static int ima_measurement(const char *file)
- 
- 	struct template_entry entry = { .template = 0 };
- 	FILE *fp;
-+	int verified_template_digest = 0;
- 	int err_padded = -1;
- 	int err = -1;
- 
-@@ -2020,8 +2028,12 @@ static int ima_measurement(const char *file)
- 		extend_tpm_banks(&entry, num_banks, pseudo_banks,
- 				 pseudo_padded_banks);
- 
--		if (verify)
--			ima_verify_template_hash(&entry);
-+		/* Recalculate and verify template data digest */
-+		if (verify) {
-+			err = ima_verify_template_hash(&entry);
-+			if (err)
-+				verified_template_digest = 1;
-+		}
- 
- 		if (is_ima_template)
- 			ima_show(&entry);
-@@ -2058,6 +2070,11 @@ static int ima_measurement(const char *file)
- 			log_info("Failed to match per TPM bank or SHA1 padded TPM digest(s).\n");
- 	}
- 
-+	if (verified_template_digest) {
-+		log_info("Failed to verify template data digest.\n");
-+		err = 1;
-+	}
-+
- out:
- 	fclose(fp);
- 	return err;
--- 
-2.7.5
+Am able to reproduce the errors with the instructions you'd provided.
+Will post the updated patches shortly.
+
+thanks,
+  -lakshmi
 
