@@ -2,280 +2,194 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7462262B1
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 17:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD70226318
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 17:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbgGTPCB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Jul 2020 11:02:01 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:47962 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725934AbgGTPCB (ORCPT
+        id S1726437AbgGTPRa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Jul 2020 11:17:30 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:46812 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbgGTPRa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Jul 2020 11:02:01 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 074158EE266;
-        Mon, 20 Jul 2020 08:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1595257321;
-        bh=Pc4Smw8NRQww0MPv+vURo3dba15pBdPe1luedmCls0o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LZUgSnivJCIrC6EK2FAHlEzYC1Y0uWwjo2SxWJU3fCCGGLXGGmm51CRqLqKvP0vTY
-         eRlD3ZRAdstXGGoNqvUNiqydqI6hV86/x5W6LqAjrCzW2SvhVdpRMLdtZe3VL+o75n
-         5zjV1QPMBpwoTIbFU7Fn6dKv2Wdcepx5Z8lSiz5o=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NvkGxmD3YoDA; Mon, 20 Jul 2020 08:02:00 -0700 (PDT)
-Received: from jarvis.lan (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 9A75C8EE223;
-        Mon, 20 Jul 2020 08:02:00 -0700 (PDT)
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     linux-integrity@vger.kernel.org
+        Mon, 20 Jul 2020 11:17:30 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 42B0D20B4909;
+        Mon, 20 Jul 2020 08:17:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 42B0D20B4909
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1595258249;
+        bh=oi0aM2Sv7g3ee0tu4NKpJk0WcdNS9Jhomo6QUfrwUC8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=j+5Jpthn6qxHKgYEcVruDugKQStaAoSJQ26AuuLLqKa6XO9Itcusw5gWOhY1k1m/B
+         10oiCmTubARNogtNDf4kGp/S7B5rX5bYRPdpA69KRvybYl8UgL8WHPOaucUXXiYjtK
+         E0UESnxt/2jXo9GqTIaFCLnd59Vbq0+XQQHEpISo=
+Subject: Re: [PATCH v3 4/5] LSM: Define SELinux function to measure security
+ state
+To:     Stephen Smalley <stephen.smalley.work@gmail.com>
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH 1/1] tpm: add sysfs exports for all banks of PCR registers
-Date:   Mon, 20 Jul 2020 08:00:38 -0700
-Message-Id: <20200720150038.9082-2-James.Bottomley@HansenPartnership.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200720150038.9082-1-James.Bottomley@HansenPartnership.com>
-References: <20200720150038.9082-1-James.Bottomley@HansenPartnership.com>
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>,
+        linux-integrity@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20200717222819.26198-1-nramas@linux.microsoft.com>
+ <20200717222819.26198-5-nramas@linux.microsoft.com>
+ <CAEjxPJ7xQtZToF4d2w_o8SXFKG9kPZaWTWTFqyC-7GwBWnQa0A@mail.gmail.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <c0fbfcf3-ec36-872a-c389-b3fea214848c@linux.microsoft.com>
+Date:   Mon, 20 Jul 2020 08:17:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEjxPJ7xQtZToF4d2w_o8SXFKG9kPZaWTWTFqyC-7GwBWnQa0A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-use macro magic to create sysfs per hash groups with 24 PCR files in
-them one for each possible agile hash of the TPM.  The files are
-plugged in to a read function which is TPM version agnostic, so this
-works also for TPM 1.2 although the hash is only sha1 in that case.
-For every hash the TPM supports, a group named pcr-<hash> is created
-and each of the PCR read files placed under it.
+On 7/20/20 7:31 AM, Stephen Smalley wrote:
 
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- drivers/char/tpm/tpm-sysfs.c | 178 +++++++++++++++++++++++++++++++++++
- include/linux/tpm.h          |   8 +-
- 2 files changed, 185 insertions(+), 1 deletion(-)
+>> +void __init selinux_init_measurement(void)
+>> +{
+>> +       int i;
+>> +
+>> +       /*
+>> +        * enabled
+>> +        * enforcing
+>> +        * checkreqport
+> 
+> checkreqprot (spelling)
+:( - will fix that.
 
-diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-index d52bf4df0bca..d81ec5e437c1 100644
---- a/drivers/char/tpm/tpm-sysfs.c
-+++ b/drivers/char/tpm/tpm-sysfs.c
-@@ -348,9 +348,187 @@ static const struct attribute_group tpm2_dev_group = {
- 	.attrs = tpm2_dev_attrs,
- };
- 
-+struct tpm_pcr_attr {
-+	int alg_id;
-+	int pcr;
-+	struct device_attribute attr;
-+};
-+
-+#define to_tpm_pcr_attr(a) container_of(a, struct tpm_pcr_attr, attr)
-+
-+static ssize_t pcr_value_show(struct device *dev,
-+			      struct device_attribute *attr,
-+			      char *buf)
-+{
-+	struct tpm_pcr_attr *ha = to_tpm_pcr_attr(attr);
-+	struct tpm_chip *chip = to_tpm_chip(dev);
-+	struct tpm_digest digest;
-+	int i;
-+	int digest_size = 0;
-+	int rc;
-+	char *str = buf;
-+
-+	for (i = 0; i < chip->nr_allocated_banks; i++)
-+		if (ha->alg_id == chip->allocated_banks[i].alg_id)
-+			digest_size = chip->allocated_banks[i].digest_size;
-+	/* should never happen */
-+	if (!digest_size)
-+		return -EINVAL;
-+
-+	digest.alg_id = ha->alg_id;
-+	rc = tpm_pcr_read(chip, ha->pcr, &digest);
-+	if (rc)
-+		return rc;
-+	for (i = 0; i < digest_size; i++)
-+		str += sprintf(str, "%02X", digest.digest[i]);
-+	str += sprintf(str, "\n");
-+
-+	return str - buf;
-+}
-+
-+/*
-+ * The following set of defines represents all the magic to build
-+ * the per hash attribute groups for displaying each bank of PCRs.
-+ * The only slight problem with this approach is that every PCR is
-+ * hard coded to be present, so you don't know if an PCR is missing
-+ * until a cat of the file returns -EINVAL
-+ *
-+ * Also note you must ignore checkpatch warnings in this macro
-+ * code. This is deep macro magic that checkpatch.pl doesn't
-+ * understand.
-+ */
-+
-+/* Note, this must match TPM2_PLATFORM_PCR which is fixed at 24. */
-+#define _TPM_HELPER(_alg, _hash, F) \
-+	F(_alg, _hash, 0)	    \
-+	F(_alg, _hash, 1)	    \
-+	F(_alg, _hash, 2)	    \
-+	F(_alg, _hash, 3)	    \
-+	F(_alg, _hash, 4)	    \
-+	F(_alg, _hash, 5)	    \
-+	F(_alg, _hash, 6)	    \
-+	F(_alg, _hash, 7)	    \
-+	F(_alg, _hash, 8)	    \
-+	F(_alg, _hash, 9)	    \
-+	F(_alg, _hash, 10)	    \
-+	F(_alg, _hash, 11)	    \
-+	F(_alg, _hash, 12)	    \
-+	F(_alg, _hash, 13)	    \
-+	F(_alg, _hash, 14)	    \
-+	F(_alg, _hash, 15)	    \
-+	F(_alg, _hash, 16)	    \
-+	F(_alg, _hash, 17)	    \
-+	F(_alg, _hash, 18)	    \
-+	F(_alg, _hash, 19)	    \
-+	F(_alg, _hash, 20)	    \
-+	F(_alg, _hash, 21)	    \
-+	F(_alg, _hash, 22)	    \
-+	F(_alg, _hash, 23)
-+
-+/* ignore checkpatch warning about trailing ; in macro. */
-+#define PCR_ATTR(_alg, _hash, _pcr)				   \
-+	static struct tpm_pcr_attr dev_attr_pcr_##_hash##_##_pcr = {	\
-+		.alg_id = _alg,					   \
-+		.pcr = _pcr,					   \
-+		.attr = {					   \
-+			.attr = {				   \
-+				.name = __stringify(_pcr),	   \
-+				.mode = 0444			   \
-+			},					   \
-+			.show = pcr_value_show			   \
-+		}						   \
-+	};
-+
-+#define PCR_ATTRS(_alg, _hash)			\
-+	_TPM_HELPER(_alg, _hash, PCR_ATTR)
-+
-+/* ignore checkpatch warning about trailing , in macro. */
-+#define PCR_ATTR_VAL(_alg, _hash, _pcr)		\
-+	&dev_attr_pcr_##_hash##_##_pcr.attr.attr,
-+
-+#define PCR_ATTR_GROUP_ARRAY(_alg, _hash)		       \
-+	static struct attribute *pcr_group_attrs_##_hash[] = { \
-+		_TPM_HELPER(_alg, _hash, PCR_ATTR_VAL)	       \
-+		NULL					       \
-+	}
-+
-+#define PCR_ATTR_GROUP(_alg, _hash)			    \
-+	static struct attribute_group pcr_group_##_hash = { \
-+		.name = "pcr-" __stringify(_hash),	    \
-+		.attrs = pcr_group_attrs_##_hash	    \
-+	}
-+
-+#define PCR_ATTR_BUILD(_alg, _hash)	   \
-+	PCR_ATTRS(_alg, _hash)		   \
-+	PCR_ATTR_GROUP_ARRAY(_alg, _hash); \
-+	PCR_ATTR_GROUP(_alg, _hash)
-+/*
-+ * End of macro structure to build an attribute group containing 24
-+ * PCR value files for each supported hash algorithm
-+ */
-+
-+/*
-+ * The next set of macros implements the cleverness for each hash to
-+ * build a static attribute group called pcr_group_<hash> which can be
-+ * added to chip->groups[].
-+ *
-+ * The first argument is the TPM algorithm id and the second is the
-+ * hash used as both the suffix and the group name.  Note: the group
-+ * name is a directory in the top level tpm class with the name
-+ * pcr-<hash>, so it must not clash with any other names already
-+ * in the sysfs directory.
-+ */
-+PCR_ATTR_BUILD(TPM_ALG_SHA1, sha1);
-+PCR_ATTR_BUILD(TPM_ALG_SHA256, sha256);
-+PCR_ATTR_BUILD(TPM_ALG_SHA384, sha384);
-+PCR_ATTR_BUILD(TPM_ALG_SHA512, sha512);
-+PCR_ATTR_BUILD(TPM_ALG_SM3_256, sm3);
-+
-+
- void tpm_sysfs_add_device(struct tpm_chip *chip)
- {
-+	int i;
-+
- 	WARN_ON(chip->groups_cnt != 0);
-+
-+	/* add one group for each bank hash */
-+	for (i = 0; i < chip->nr_allocated_banks; i++) {
-+		switch (chip->allocated_banks[i].alg_id) {
-+		case TPM_ALG_SHA1:
-+			chip->groups[chip->groups_cnt++] = &pcr_group_sha1;
-+			break;
-+		case TPM_ALG_SHA256:
-+			chip->groups[chip->groups_cnt++] = &pcr_group_sha256;
-+			break;
-+		case TPM_ALG_SHA384:
-+			chip->groups[chip->groups_cnt++] = &pcr_group_sha384;
-+			break;
-+		case TPM_ALG_SHA512:
-+			chip->groups[chip->groups_cnt++] = &pcr_group_sha512;
-+			break;
-+		case TPM_ALG_SM3_256:
-+			chip->groups[chip->groups_cnt++] = &pcr_group_sm3;
-+			break;
-+		default:
-+			/*
-+			 * If this warning triggers, send a patch to
-+			 * add both a PCR_ATTR_BUILD() macro above for
-+			 * the missing algorithm as well as an
-+			 * additional case in this switch statement.
-+			 */
-+			WARN(1, "TPM with unsupported bank algorthm 0x%04x",
-+			     chip->allocated_banks[i].alg_id);
-+			break;
-+		}
-+	}
-+
-+	/*
-+	 * This will only trigger if someone has added an additional
-+	 * hash to the tpm_algorithms enum without incrementing
-+	 * TPM_MAX_HASHES
-+	 */
-+	WARN_ON(chip->groups_cnt >= TPM_MAX_HASHES);
-+
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
- 		chip->groups[chip->groups_cnt++] = &tpm2_dev_group;
- 	else
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 5026a06977e1..f73dc4f9fbf4 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -42,6 +42,12 @@ enum tpm_algorithms {
- 	TPM_ALG_SM3_256		= 0x0012,
- };
- 
-+/*
-+ * maximum number of hashing algorithms a TPM can have.  This is
-+ * basically a count of every hash in tpm_algorithms above
-+ */
-+#define TPM_MAX_HASHES	5
-+
- struct tpm_digest {
- 	u16 alg_id;
- 	u8 digest[TPM_MAX_DIGEST_SIZE];
-@@ -145,7 +151,7 @@ struct tpm_chip {
- 
- 	struct dentry *bios_dir[TPM_NUM_EVENT_LOG_FILES];
- 
--	const struct attribute_group *groups[3];
-+	const struct attribute_group *groups[3 + TPM_MAX_HASHES];
- 	unsigned int groups_cnt;
- 
- 	u32 nr_allocated_banks;
--- 
-2.26.2
+> 
+> What about initialized?  Or do you consider that to be implicitly
+> true/1 else we wouldn't be taking a measurement?  Only caveat there is
+> that it provides one more means of disabling measurements (at the same
+> time as disabling enforcement) by setting it to false/0 via kernel
+> write flaw.
+Yes - I was thinking measuring SELinux state would be meaningful only 
+when initialized is set to true/1.
+
+I can include "initialized" as well in the measurement.
+
+> 
+>> +        * All policy capability flags
+>> +        */
+>> +       selinux_state_count = 3 + __POLICYDB_CAPABILITY_MAX;
+>> +
+>> +       selinux_state_string_len = snprintf(NULL, 0, str_format,
+>> +                                           "enabled", 0);
+>> +       selinux_state_string_len += snprintf(NULL, 0, str_format,
+>> +                                            "enforcing", 0);
+>> +       selinux_state_string_len += snprintf(NULL, 0, str_format,
+>> +                                            "checkreqprot", 0);
+>> +       for (i = 3; i < selinux_state_count; i++) {
+>> +               selinux_state_string_len +=
+>> +                       snprintf(NULL, 0, str_format,
+>> +                                selinux_policycap_names[i-3], 0);
+>> +       }
+> 
+> What's the benefit of this pattern versus just making the loop go from
+> 0 to __POLICYDB_CAPABILITY_MAX and using selinux_policycap_names[i]?
+
+No real benefit - I was just trying to use selinux_state_count.
+I'll change the loop to go from 0 to POLICY_CAP_MAX
+
+> 
+>> +void selinux_measure_state(struct selinux_state *selinux_state)
+>> +{
+>> +       void *policy = NULL;
+>> +       void *policy_hash = NULL;
+>> +       size_t curr, buflen;
+>> +       int i, policy_hash_len, rc = 0;
+>> +
+>> +       if (!selinux_initialized(selinux_state)) {
+>> +               pr_warn("%s: SELinux not yet initialized.\n", __func__);
+>> +               return;
+>> +       }
+> 
+> We could measure the global state variables before full SELinux
+> initialization (i.e. policy load).
+> Only the policy hash depends on having loaded the policy.
+
+Thanks for the information. I'll measure the state variables always and 
+measure policy only if "initialized" is true/1.
+
+> 
+>> +
+>> +       if (!selinux_state_string) {
+>> +               pr_warn("%s: Buffer for state not allocated.\n", __func__);
+>> +               return;
+>> +       }
+>> +
+>> +       curr = snprintf(selinux_state_string, selinux_state_string_len,
+>> +                       str_format, "enabled",
+>> +                       !selinux_disabled(selinux_state));
+>> +       curr += snprintf((selinux_state_string + curr),
+>> +                        (selinux_state_string_len - curr),
+>> +                        str_format, "enforcing",
+>> +                        enforcing_enabled(selinux_state));
+>> +       curr += snprintf((selinux_state_string + curr),
+>> +                        (selinux_state_string_len - curr),
+>> +                        str_format, "checkreqprot",
+>> +                        selinux_checkreqprot(selinux_state));
+>> +
+>> +       for (i = 3; i < selinux_state_count; i++) {
+>> +               curr += snprintf((selinux_state_string + curr),
+>> +                                (selinux_state_string_len - curr),
+>> +                                str_format,
+>> +                                selinux_policycap_names[i - 3],
+>> +                                selinux_state->policycap[i - 3]);
+>> +       }
+> 
+> Same question here as for the previous loop; seems cleaner to go from
+> 0 to __POLICYDB_CAPABILITY_MAX and use [i].
+Will change it.
+
+> 
+> What public git tree / branch would you recommend trying to use your
+> patches against?  Didn't seem to apply to any of the obvious ones.
+> 
+
+Please try it on Mimi's next-integrity branch
+
+https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/log/?h=next-integrity
+
+You can try it on Linus's mainline as well if you apply the following 
+patch first (have mentioned that in the Cover letter as well)
+
+
+     https://patchwork.kernel.org/patch/11612989/
+
+Thanks for trying out the changes. Please let me know the defects you find.
+
+Just to let you know - I am making the following change (will update in 
+the next patch):
+
+  => Save the last policy hash and state string in selinux_state struct.
+  => Measure policy and hash only if it has changed since the last 
+measurement.
+  => Also, suffix the IMA event name used with time stamp. For example,
+
+10 e32e...5ac3 ima-buf sha256:86e8...4594
+selinux-state-1595257807:874963248 
+656e61626c65643d313b656e666f7263696e673d303b636865636b72657170726f743d313b6e6574706565723d313b6f70656e7065726d3d313b657874736f636b636c6173733d313b616c776179736e6574776f726b3d303b6367726f75707365636c6162656c3d313b6e6e706e6f737569647472616e736974696f6e3d313b67656e66737365636c6162656c73796d6c696e6b3d303b
+
+10 f4a7...9408 ima-buf sha256:4941...68fc
+selinux-policy-hash-1595257807:874963248
+8d1d...1834
+
+The above will ensure the following sequence will be measured:
+  #1 State A - Measured
+  #2 Change from State A to State B - Measured
+  #3 Change from State B back to State A - Since the measured data is 
+same as in #1, the change will be measured only if the event name is 
+different between #1 and #3
+
+thanks,
+  -lakshmi
 
