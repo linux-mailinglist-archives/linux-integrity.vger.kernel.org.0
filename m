@@ -2,229 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A5622622B
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 16:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC40E226255
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 16:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726095AbgGTObq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Jul 2020 10:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgGTObq (ORCPT
+        id S1726389AbgGTOko (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Jul 2020 10:40:44 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37768 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725815AbgGTOko (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Jul 2020 10:31:46 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A8AC061794;
-        Mon, 20 Jul 2020 07:31:46 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id 5so12288378oty.11;
-        Mon, 20 Jul 2020 07:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Q3g5qbdmC19gV+NnXyKNCgQ/rTdz9C9y5peqjUosD9s=;
-        b=lT61+N1i6xbgCZrxUx/ahZydAhqURpCPx0Fyz8BDuoTYteem+4vYQJ6DI8J3UJkwiv
-         YntOzmEQicJdm8cXoqEshZGmwh/TG4+Tmm0FhQJ+RkpNZBjY+zpxqeMx2Q8epR2kPkvD
-         kZ697dtgohPa5PRrPc0kJCGpDoEQpDQC2CJKD4rz2lpdNpT404eJrdvtQ0vu1wMIXZxW
-         y6OZV5SJM6hgbQRzwJe8EFKNURGCEuIAO0IUKVk5Wwh++HDagpJSIJK4oWicBYzFd+fq
-         fCTF57QvxmZp1vasmMaXVc09PQbJ2W7KwEsSoGSvMpgmc2YC3YPsiYmjIinYqviy9stE
-         rNFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Q3g5qbdmC19gV+NnXyKNCgQ/rTdz9C9y5peqjUosD9s=;
-        b=p7WjOQ1G4YrLZNwMdqsyL0EYlMn75pwR7gLbeUJ1v6LbRLuJDZ4w6bZdKuAf6MIJAS
-         PPoJI6d32PZpGJhFD1zPBbDp1VaH+m2GHLsaDgvIjR4RpGmvwG+glDgVdRqnqWlVqFOi
-         Va90RXgDc4MTVfz2+8pZ93IvQIfu2RoRkiByHqwhU5cLN/q2nQDo+Cq26oFVtphe7x7u
-         /cT3dMeSQf3TKna0fH8Fp9w3NMfKRVuaV0IwlQw5N72M52LfpvKIXcgtB3wCd2KFpvVV
-         wWkjL9iImZH0INAl/yDSG5Ylw+uKmeuz3q32egZ2sfC915HAhuo1rezPjIxJ5sTPA8kr
-         EJuQ==
-X-Gm-Message-State: AOAM530EOpJLSublnUNLj6TOmDVUp3+n/hRXC6/jacVNxKt8WbqI9t97
-        ipxE2vfjA40iQy5EHbHFmi4WAwUdRw8i88DAXVBd/A==
-X-Google-Smtp-Source: ABdhPJzGd8HYBZ1g5Cuh4cWHg44hrn4tgLZQsYcHeteNz+04u3lDAyMzPQRrObfAyyJ3oc3PfxGOyaNlNfU6RmmZ6sM=
-X-Received: by 2002:a05:6830:10ce:: with SMTP id z14mr20798184oto.135.1595255505584;
- Mon, 20 Jul 2020 07:31:45 -0700 (PDT)
+        Mon, 20 Jul 2020 10:40:44 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06KEYgtu139830;
+        Mon, 20 Jul 2020 10:40:34 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32d5pepkqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jul 2020 10:40:34 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06KEZ5HA141928;
+        Mon, 20 Jul 2020 10:40:33 -0400
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32d5pepkq8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jul 2020 10:40:33 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06KEdKgr018291;
+        Mon, 20 Jul 2020 14:40:33 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma05wdc.us.ibm.com with ESMTP id 32brq89tsb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jul 2020 14:40:33 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06KEeURM39518718
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Jul 2020 14:40:30 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CFDA078077;
+        Mon, 20 Jul 2020 14:40:31 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E51DB78066;
+        Mon, 20 Jul 2020 14:40:29 +0000 (GMT)
+Received: from swastik.ibm.com (unknown [9.160.78.37])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Jul 2020 14:40:29 +0000 (GMT)
+Subject: Re: [PATCH v6] ima: move APPRAISE_BOOTPARAM dependency on ARCH_POLICY
+ to runtime
+To:     Bruno Meneguele <bmeneg@redhat.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-integrity@vger.kernel.org,
+        zohar@linux.ibm.com
+Cc:     erichte@linux.ibm.com, nayna@linux.ibm.com, stable@vger.kernel.org
+References: <20200713164830.101165-1-bmeneg@redhat.com>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+Message-ID: <d337cbba-e996-e898-1e75-9f142d480e5e@linux.vnet.ibm.com>
+Date:   Mon, 20 Jul 2020 10:40:29 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-References: <20200717222819.26198-1-nramas@linux.microsoft.com> <20200717222819.26198-5-nramas@linux.microsoft.com>
-In-Reply-To: <20200717222819.26198-5-nramas@linux.microsoft.com>
-From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-Date:   Mon, 20 Jul 2020 10:31:34 -0400
-Message-ID: <CAEjxPJ7xQtZToF4d2w_o8SXFKG9kPZaWTWTFqyC-7GwBWnQa0A@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] LSM: Define SELinux function to measure security state
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200713164830.101165-1-bmeneg@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-20_09:2020-07-20,2020-07-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 impostorscore=0 spamscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007200101
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 6:28 PM Lakshmi Ramasubramanian
-<nramas@linux.microsoft.com> wrote:
->
-> SELinux configuration and policy are some of the critical data for this
-> security module that needs to be measured. To enable this measurement
-> SELinux needs to implement the interface function,
-> security_measure_data(), that the LSM can call.
->
-> Define the security_measure_data() function in SELinux to measure SELinux
-> configuration and policy. Call this function to measure SELinux data
-> when there is a change in the security module's state.
->
-> Sample measurement of SELinux state and hash of the policy:
->
-> 10 e32e...5ac3 ima-buf sha256:86e8...4594 selinux-state 656e61626c65643d3=
-13b656e666f7263696e673d303b636865636b72657170726f743d313b6e6574706565723d31=
-3b6f70656e7065726d3d313b657874736f636b636c6173733d313b616c776179736e6574776=
-f726b3d303b6367726f75707365636c6162656c3d313b6e6e706e6f737569647472616e7369=
-74696f6e3d313b67656e66737365636c6162656c73796d6c696e6b3d303b
-> 10 f4a7...9408 ima-buf sha256:4941...68fc selinux-policy-hash 8d1d...1834
->
-> To verify the measurement check the following:
->
-> Execute the following command to extract the measured data
-> from the IMA log for SELinux configuration (selinux-state).
->
->   cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements | gre=
-p -m 1 "selinux-state" | cut -d' ' -f 6 | xxd -r -p
->
-> The output should be the list of key-value pairs. For example,
->  enabled=3D1;enforcing=3D0;checkreqprot=3D1;network_peer_controls=3D1;ope=
-n_perms=3D1;extended_socket_class=3D1;always_check_network=3D0;cgroup_secla=
-bel=3D1;nnp_nosuid_transition=3D1;genfs_seclabel_symlinks=3D0;
->
-> To verify the measured data with the current SELinux state:
->
->  =3D> enabled should be set to 1 if /sys/fs/selinux folder exists,
->     0 otherwise
->
-> For other entries, compare the integer value in the files
->  =3D> /sys/fs/selinux/enforce
->  =3D> /sys/fs/selinux/checkreqprot
-> And, each of the policy capabilities files under
->  =3D> /sys/fs/selinux/policy_capabilities
->
-> The data for selinux-policy-hash is the SHA256 hash of SELinux policy.
->
-> To verify the measured data with the current SELinux policy run
-> the following commands and verify the output hash values match.
->
->   sha256sum /sys/fs/selinux/policy | cut -d' ' -f 1
->
->   cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements | gre=
-p -m 1 "selinux-policy-hash" | cut -d' ' -f 6
->
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-> ---
 
-> diff --git a/security/selinux/measure.c b/security/selinux/measure.c
-> new file mode 100644
-> index 000000000000..659011637ae7
-> --- /dev/null
-> +++ b/security/selinux/measure.c
-> @@ -0,0 +1,155 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Measure SELinux state using IMA subsystem.
-> + */
-> +#include <linux/ima.h>
-> +#include "security.h"
-> +
-> +/* Pre-allocated buffer used for measuring state */
-> +static char *selinux_state_string;
-> +static size_t selinux_state_string_len;
-> +static char *str_format =3D "%s=3D%d;";
-> +static int selinux_state_count;
-> +
-> +void __init selinux_init_measurement(void)
-> +{
-> +       int i;
-> +
-> +       /*
-> +        * enabled
-> +        * enforcing
-> +        * checkreqport
+On 7/13/20 12:48 PM, Bruno Meneguele wrote:
+> The IMA_APPRAISE_BOOTPARAM config allows enabling different "ima_appraise="
+> modes - log, fix, enforce - at run time, but not when IMA architecture
+> specific policies are enabled.  This prevents properly labeling the
+> filesystem on systems where secure boot is supported, but not enabled on the
+> platform.  Only when secure boot is actually enabled should these IMA
+> appraise modes be disabled.
+>
+> This patch removes the compile time dependency and makes it a runtime
+> decision, based on the secure boot state of that platform.
+>
+> Test results as follows:
+>
+> -> x86-64 with secure boot enabled
+>
+> [    0.015637] Kernel command line: <...> ima_policy=appraise_tcb ima_appraise=fix
+> [    0.015668] ima: Secure boot enabled: ignoring ima_appraise=fix boot parameter option
+>
+> -> powerpc with secure boot disabled
+>
+> [    0.000000] Kernel command line: <...> ima_policy=appraise_tcb ima_appraise=fix
+> [    0.000000] Secure boot mode disabled
+>
+> -> Running the system without secure boot and with both options set:
+>
+> CONFIG_IMA_APPRAISE_BOOTPARAM=y
+> CONFIG_IMA_ARCH_POLICY=y
+>
+> Audit prompts "missing-hash" but still allow execution and, consequently,
+> filesystem labeling:
+>
+> type=INTEGRITY_DATA msg=audit(07/09/2020 12:30:27.778:1691) : pid=4976
+> uid=root auid=root ses=2
+> subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=appraise_data
+> cause=missing-hash comm=bash name=/usr/bin/evmctl dev="dm-0" ino=493150
+> res=no
+>
+> Cc: stable@vger.kernel.org
+> Fixes: d958083a8f64 ("x86/ima: define arch_get_ima_policy() for x86")
+> Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
 
-checkreqprot (spelling)
 
-What about initialized?  Or do you consider that to be implicitly
-true/1 else we wouldn't be taking a measurement?  Only caveat there is
-that it provides one more means of disabling measurements (at the same
-time as disabling enforcement) by setting it to false/0 via kernel
-write flaw.
+Reviewed-by: Nayna Jain<nayna@linux.ibm.com>
 
-> +        * All policy capability flags
-> +        */
-> +       selinux_state_count =3D 3 + __POLICYDB_CAPABILITY_MAX;
-> +
-> +       selinux_state_string_len =3D snprintf(NULL, 0, str_format,
-> +                                           "enabled", 0);
-> +       selinux_state_string_len +=3D snprintf(NULL, 0, str_format,
-> +                                            "enforcing", 0);
-> +       selinux_state_string_len +=3D snprintf(NULL, 0, str_format,
-> +                                            "checkreqprot", 0);
-> +       for (i =3D 3; i < selinux_state_count; i++) {
-> +               selinux_state_string_len +=3D
-> +                       snprintf(NULL, 0, str_format,
-> +                                selinux_policycap_names[i-3], 0);
-> +       }
+Tested-by: Nayna Jain<nayna@linux.ibm.com>
 
-What's the benefit of this pattern versus just making the loop go from
-0 to __POLICYDB_CAPABILITY_MAX and using selinux_policycap_names[i]?
 
-> +void selinux_measure_state(struct selinux_state *selinux_state)
-> +{
-> +       void *policy =3D NULL;
-> +       void *policy_hash =3D NULL;
-> +       size_t curr, buflen;
-> +       int i, policy_hash_len, rc =3D 0;
-> +
-> +       if (!selinux_initialized(selinux_state)) {
-> +               pr_warn("%s: SELinux not yet initialized.\n", __func__);
-> +               return;
-> +       }
+Thanks & Regards,
 
-We could measure the global state variables before full SELinux
-initialization (i.e. policy load).
-Only the policy hash depends on having loaded the policy.
+         - Nayna
 
-> +
-> +       if (!selinux_state_string) {
-> +               pr_warn("%s: Buffer for state not allocated.\n", __func__=
-);
-> +               return;
-> +       }
-> +
-> +       curr =3D snprintf(selinux_state_string, selinux_state_string_len,
-> +                       str_format, "enabled",
-> +                       !selinux_disabled(selinux_state));
-> +       curr +=3D snprintf((selinux_state_string + curr),
-> +                        (selinux_state_string_len - curr),
-> +                        str_format, "enforcing",
-> +                        enforcing_enabled(selinux_state));
-> +       curr +=3D snprintf((selinux_state_string + curr),
-> +                        (selinux_state_string_len - curr),
-> +                        str_format, "checkreqprot",
-> +                        selinux_checkreqprot(selinux_state));
-> +
-> +       for (i =3D 3; i < selinux_state_count; i++) {
-> +               curr +=3D snprintf((selinux_state_string + curr),
-> +                                (selinux_state_string_len - curr),
-> +                                str_format,
-> +                                selinux_policycap_names[i - 3],
-> +                                selinux_state->policycap[i - 3]);
-> +       }
-
-Same question here as for the previous loop; seems cleaner to go from
-0 to __POLICYDB_CAPABILITY_MAX and use [i].
-
-What public git tree / branch would you recommend trying to use your
-patches against?  Didn't seem to apply to any of the obvious ones.
