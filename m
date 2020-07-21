@@ -2,148 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0C7228952
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jul 2020 21:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98398228B93
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jul 2020 23:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730976AbgGUTik (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Jul 2020 15:38:40 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45796 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730972AbgGUTii (ORCPT
+        id S1731001AbgGUVnT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Jul 2020 17:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731211AbgGUVnS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Jul 2020 15:38:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595360317;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W/5FQTzNceZ8+x82aqOM3eIUsHFNM5pTOLDBmqIIiW0=;
-        b=Qr4rtIFHr9ipbR/dp+trfrx4JQaOET/ALufCzAgzC5dBsYKAvqvIOc7GS/dw3bTSRe5Db0
-        5V9MYiHUGTeVXAu3dsWvRKepMKMDKJsDewnmbiILo1L3vZuESudNl0ht59XKg0qnKHbaRy
-        bIjI2DPnSKoBiP9HXZWo0G0LsVxMd5U=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-192-KyfIS5FeMT-drxH4SXRg7A-1; Tue, 21 Jul 2020 15:38:33 -0400
-X-MC-Unique: KyfIS5FeMT-drxH4SXRg7A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D224680BCAE;
-        Tue, 21 Jul 2020 19:38:31 +0000 (UTC)
-Received: from localhost (ovpn-116-10.gru2.redhat.com [10.97.116.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B898756BE;
-        Tue, 21 Jul 2020 19:38:31 +0000 (UTC)
-Date:   Tue, 21 Jul 2020 16:38:30 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Nayna <nayna@linux.vnet.ibm.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-integrity@vger.kernel.org,
-        erichte@linux.ibm.com, nayna@linux.ibm.com, stable@vger.kernel.org
-Subject: Re: [PATCH v6] ima: move APPRAISE_BOOTPARAM dependency on
- ARCH_POLICY to runtime
-Message-ID: <20200721193830.GE2716@glitch>
-References: <20200713164830.101165-1-bmeneg@redhat.com>
- <d337cbba-e996-e898-1e75-9f142d480e5e@linux.vnet.ibm.com>
- <1595257015.5055.8.camel@linux.ibm.com>
- <20200720153841.GG10323@glitch>
- <1595352376.5311.8.camel@linux.ibm.com>
+        Tue, 21 Jul 2020 17:43:18 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA0DC0619DC
+        for <linux-integrity@vger.kernel.org>; Tue, 21 Jul 2020 14:43:18 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id 184so52533wmb.0
+        for <linux-integrity@vger.kernel.org>; Tue, 21 Jul 2020 14:43:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=xi0hCpRkmcf6gK8tASFxK3aaOMPZtOr07eR1uGQZQ3Q=;
+        b=WyitzgLCPTotTvFyXBjJCUBLv9LTVIGuV0BLXP/t+rNxyFRvxJQhiYjVQxrxFWakWu
+         49H70+HEYP6PnW9KhlJ465HMbNOR6C7Be16Ag+Ttve3BCJ0H/uLHpyc9JTOy696ifuKV
+         FDhgso1RDz81jzni2fNhhGBmN+KDfYXTEOgY4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=xi0hCpRkmcf6gK8tASFxK3aaOMPZtOr07eR1uGQZQ3Q=;
+        b=YKHBPwFJqdGiC0LR2aFu67rALPfMf89irDL9rGXiACFB287duSI6PASmlhYJc3ZRG4
+         yo88ZySTgFXGBW9qC2v3a3RUt9fDSrB+S/oqTJrtWrxY+Dr5upnICVW3r+0hxBCHdHFU
+         iVlBJOuxRdQ5AdKoFBAUEv0XWh0HGL85LbTUxt99T5BSGgBOZTNjC6RNyDqoHSoElkYr
+         Ch64gN4UfGjzQDPBEnaaKUYsWJ/oS3RhySheDW8SANBSw64j76Qfl6xeYPmkNsgwip0r
+         SJTJpY8yIR3fV6NkdumetWPWG/pNlQ1wTLFO/vBl1oHt8JX50Ja+yDMu7NeQdhccxYhm
+         PiQw==
+X-Gm-Message-State: AOAM5333RMVcvK/t1/Tdv+AcXuKnJez64vI7tYqfUY/dfD67IQrDcMrn
+        IU08OMJmQYPyeJHGuxt5Og/XJw==
+X-Google-Smtp-Source: ABdhPJylo9oBD0Nkc2IZhuODZGWhVfU7dT9PhCcECwJI5ehMiPxyWlzltkQd49Y0rX47zJzR6OdmzA==
+X-Received: by 2002:a1c:2402:: with SMTP id k2mr5758664wmk.138.1595367797160;
+        Tue, 21 Jul 2020 14:43:17 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id y11sm23591601wrs.80.2020.07.21.14.43.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jul 2020 14:43:16 -0700 (PDT)
+Subject: Re: [PATCH 06/13] fs/kernel_read_file: Remove redundant size argument
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jessica Yu <jeyu@kernel.org>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        KP Singh <kpsingh@google.com>, Dave Olsthoorn <dave@bewaar.me>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Boyd <stephen.boyd@linaro.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20200717174309.1164575-1-keescook@chromium.org>
+ <20200717174309.1164575-7-keescook@chromium.org>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <ec326654-c43b-259c-409c-63929ad5b217@broadcom.com>
+Date:   Tue, 21 Jul 2020 14:43:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1595352376.5311.8.camel@linux.ibm.com>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="k3qmt+ucFURmlhDS"
-Content-Disposition: inline
+In-Reply-To: <20200717174309.1164575-7-keescook@chromium.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---k3qmt+ucFURmlhDS
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Kees,
 
-On Tue, Jul 21, 2020 at 01:26:16PM -0400, Mimi Zohar wrote:
-> On Mon, 2020-07-20 at 12:38 -0300, Bruno Meneguele wrote:
-> > On Mon, Jul 20, 2020 at 10:56:55AM -0400, Mimi Zohar wrote:
-> > > On Mon, 2020-07-20 at 10:40 -0400, Nayna wrote:
-> > > > On 7/13/20 12:48 PM, Bruno Meneguele wrote:
-> > > > > The IMA_APPRAISE_BOOTPARAM config allows enabling different "ima_=
-appraise=3D"
-> > > > > modes - log, fix, enforce - at run time, but not when IMA archite=
-cture
-> > > > > specific policies are enabled. =A0This prevents properly labeling=
- the
-> > > > > filesystem on systems where secure boot is supported, but not ena=
-bled on the
-> > > > > platform. =A0Only when secure boot is actually enabled should the=
-se IMA
-> > > > > appraise modes be disabled.
-> > > > >
-> > > > > This patch removes the compile time dependency and makes it a run=
-time
-> > > > > decision, based on the secure boot state of that platform.
-> > > > >
-> > > > > Test results as follows:
-> > > > >
-> > > > > -> x86-64 with secure boot enabled
-> > > > >
-> > > > > [    0.015637] Kernel command line: <...> ima_policy=3Dappraise_t=
-cb ima_appraise=3Dfix
-> > > > > [    0.015668] ima: Secure boot enabled: ignoring ima_appraise=3D=
-fix boot parameter option
-> > > > >
-> > >=20
-> > > Is it common to have two colons in the same line? =A0Is the colon bei=
-ng
-> > > used as a delimiter when parsing the kernel logs? =A0Should the secon=
-d
-> > > colon be replaced with a hyphen? =A0(No need to repost. =A0I'll fix i=
-t
-> > > up.)
-> > > =A0
-> >=20
-> > AFAICS it has been used without any limitations, e.g:
-> >=20
-> > PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
-> > clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns=
-: 133484873504 ns
-> > microcode: CPU0: patch_level=3D0x08701013
-> > Lockdown: modprobe: unsigned module loading is restricted; see man kern=
-el_lockdown.7
-> > ...
-> >=20
-> > I'd say we're fine using it.
->=20
-> Ok. =A0FYI, it's now in next-integrity.
->=20
-> Mimi
->=20
-
-Thanks Mimi.
-
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
-
---k3qmt+ucFURmlhDS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8XRDUACgkQYdRkFR+R
-okOv3QgAidrD9B9w904OYqq3pVlZyT8GUdDpbIr0jliOvPKjHKVooNHQemfJhGU+
-HzoVi2pG8ARlFC4elJBAwVXR8S9KWCT/xNL9C6N0VMg8FDik0TjmMJ0DRwh4s3oZ
-oriQmx4vxaS4eNEfh5gBJrG4EwJdH2rCrbWtc4ojOzEhXE06xCsK9SN9PHy4x2Gp
-zMleiQuD/YVOQK5+A3DII5/BQquL5r5zcwmZ82jho8dZGo5Ot/wc0xq6W5dSLdJw
-7EScY58JI/z7H0JbxQuUG3qVmQNa4pVVx9v75cyoTwn5UeZ7XtOvshiO0pRY7M3z
-8xueI7dSvd0gv2/Z6BsTFphHrfjQVw==
-=mPff
------END PGP SIGNATURE-----
-
---k3qmt+ucFURmlhDS--
+On 2020-07-17 10:43 a.m., Kees Cook wrote:
+> In preparation for refactoring kernel_read_file*(), remove the redundant
+> "size" argument which is not needed: it can be included in the return
+> code, with callers adjusted. (VFS reads already cannot be larger than
+> INT_MAX.)
+>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>   drivers/base/firmware_loader/main.c |  8 ++++----
+>   fs/kernel_read_file.c               | 20 +++++++++-----------
+>   include/linux/kernel_read_file.h    |  8 ++++----
+>   kernel/kexec_file.c                 | 13 ++++++-------
+>   kernel/module.c                     |  7 +++----
+>   security/integrity/digsig.c         |  5 +++--
+>   security/integrity/ima/ima_fs.c     |  5 +++--
+>   7 files changed, 32 insertions(+), 34 deletions(-)
+>
+> diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+> index d4a413ea48ce..ea419c7d3d34 100644
+> --- a/drivers/base/firmware_loader/main.c
+> +++ b/drivers/base/firmware_loader/main.c
+> @@ -462,7 +462,7 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+>   					     size_t in_size,
+>   					     const void *in_buffer))
+>   {
+> -	loff_t size;
+> +	size_t size;
+>   	int i, len;
+>   	int rc = -ENOENT;
+>   	char *path;
+> @@ -494,10 +494,9 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+>   		fw_priv->size = 0;
+>   
+>   		/* load firmware files from the mount namespace of init */
+> -		rc = kernel_read_file_from_path_initns(path, &buffer,
+> -						       &size, msize,
+> +		rc = kernel_read_file_from_path_initns(path, &buffer, msize,
+>   						       READING_FIRMWARE);
+> -		if (rc) {
+> +		if (rc < 0) {
+>   			if (rc != -ENOENT)
+>   				dev_warn(device, "loading %s failed with error %d\n",
+>   					 path, rc);
+> @@ -506,6 +505,7 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+>   					 path);
+>   			continue;
+>   		}
+> +		size = rc;
+Change fails to return 0.  Need rc = 0; here.
+>   		dev_dbg(device, "Loading firmware from %s\n", path);
+>   		if (decompress) {
+>   			dev_dbg(device, "f/w decompressing %s\n",
+>
 
