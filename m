@@ -2,85 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFDA228691
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jul 2020 18:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA67922874C
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jul 2020 19:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730120AbgGUQ7W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Jul 2020 12:59:22 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29590 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728468AbgGUQ5y (ORCPT
+        id S1730307AbgGUR0a (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Jul 2020 13:26:30 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48766 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728379AbgGUR03 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Jul 2020 12:57:54 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06LGpAx4116105;
-        Tue, 21 Jul 2020 12:57:47 -0400
+        Tue, 21 Jul 2020 13:26:29 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06LH1Ll9096868;
+        Tue, 21 Jul 2020 13:26:23 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32e1vgp1g2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jul 2020 13:26:23 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06LH2TEk101896;
+        Tue, 21 Jul 2020 13:26:22 -0400
 Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32cdyb4t1w-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32e1vgp1fg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jul 2020 12:57:47 -0400
+        Tue, 21 Jul 2020 13:26:22 -0400
 Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06LGpcj7029221;
-        Tue, 21 Jul 2020 16:57:45 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 32brq7m3q7-1
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06LHP8wV023979;
+        Tue, 21 Jul 2020 17:26:21 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 32brq7m4ch-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jul 2020 16:57:44 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06LGvgJg63832426
+        Tue, 21 Jul 2020 17:26:20 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06LHQIDa58916972
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jul 2020 16:57:42 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA5B64C04A;
-        Tue, 21 Jul 2020 16:57:42 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 39C8A4C04E;
-        Tue, 21 Jul 2020 16:57:42 +0000 (GMT)
+        Tue, 21 Jul 2020 17:26:18 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1380842045;
+        Tue, 21 Jul 2020 17:26:18 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E9DC042041;
+        Tue, 21 Jul 2020 17:26:16 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.80.207.143])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Jul 2020 16:57:42 +0000 (GMT)
-Message-ID: <1595350661.5311.0.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 1/1] tpm: add sysfs exports for all banks of PCR
- registers
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Jul 2020 17:26:16 +0000 (GMT)
+Message-ID: <1595352376.5311.8.camel@linux.ibm.com>
+Subject: Re: [PATCH v6] ima: move APPRAISE_BOOTPARAM dependency on
+ ARCH_POLICY to runtime
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Date:   Tue, 21 Jul 2020 12:57:41 -0400
-In-Reply-To: <20200721155615.12625-2-James.Bottomley@HansenPartnership.com>
-References: <20200721155615.12625-1-James.Bottomley@HansenPartnership.com>
-         <20200721155615.12625-2-James.Bottomley@HansenPartnership.com>
+To:     Bruno Meneguele <bmeneg@redhat.com>
+Cc:     Nayna <nayna@linux.vnet.ibm.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-integrity@vger.kernel.org,
+        erichte@linux.ibm.com, nayna@linux.ibm.com, stable@vger.kernel.org
+Date:   Tue, 21 Jul 2020 13:26:16 -0400
+In-Reply-To: <20200720153841.GG10323@glitch>
+References: <20200713164830.101165-1-bmeneg@redhat.com>
+         <d337cbba-e996-e898-1e75-9f142d480e5e@linux.vnet.ibm.com>
+         <1595257015.5055.8.camel@linux.ibm.com> <20200720153841.GG10323@glitch>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-21_09:2020-07-21,2020-07-21 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- spamscore=0 clxscore=1015 priorityscore=1501 impostorscore=0 phishscore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007210113
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 priorityscore=1501 mlxlogscore=999 suspectscore=0 adultscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 impostorscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007210114
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-07-21 at 08:56 -0700, James Bottomley wrote:
-> use macro magic to create sysfs per hash groups with 24 PCR files in
-> them one for each possible agile hash of the TPM.  The files are
-> plugged in to a read function which is TPM version agnostic, so this
-> works also for TPM 1.2 although the hash is only sha1 in that case.
-> For every hash the TPM supports, a group named pcr-<hash> is created
-> and each of the PCR read files placed under it.
+On Mon, 2020-07-20 at 12:38 -0300, Bruno Meneguele wrote:
+> On Mon, Jul 20, 2020 at 10:56:55AM -0400, Mimi Zohar wrote:
+> > On Mon, 2020-07-20 at 10:40 -0400, Nayna wrote:
+> > > On 7/13/20 12:48 PM, Bruno Meneguele wrote:
+> > > > The IMA_APPRAISE_BOOTPARAM config allows enabling different "ima_appraise="
+> > > > modes - log, fix, enforce - at run time, but not when IMA architecture
+> > > > specific policies are enabled.  This prevents properly labeling the
+> > > > filesystem on systems where secure boot is supported, but not enabled on the
+> > > > platform.  Only when secure boot is actually enabled should these IMA
+> > > > appraise modes be disabled.
+> > > >
+> > > > This patch removes the compile time dependency and makes it a runtime
+> > > > decision, based on the secure boot state of that platform.
+> > > >
+> > > > Test results as follows:
+> > > >
+> > > > -> x86-64 with secure boot enabled
+> > > >
+> > > > [    0.015637] Kernel command line: <...> ima_policy=appraise_tcb ima_appraise=fix
+> > > > [    0.015668] ima: Secure boot enabled: ignoring ima_appraise=fix boot parameter option
+> > > >
+> > 
+> > Is it common to have two colons in the same line?  Is the colon being
+> > used as a delimiter when parsing the kernel logs?  Should the second
+> > colon be replaced with a hyphen?  (No need to repost.  I'll fix it
+> > up.)
+> >  
 > 
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> AFAICS it has been used without any limitations, e.g:
 > 
-> ---
+> PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+> clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 133484873504 ns
+> microcode: CPU0: patch_level=0x08701013
+> Lockdown: modprobe: unsigned module loading is restricted; see man kernel_lockdown.7
+> ...
 > 
-> v2: fix TPM 1.2 legacy links failure
+> I'd say we're fine using it.
 
-Thanks, this version works with TPM 1.2.
+Ok.  FYI, it's now in next-integrity.
 
 Mimi
