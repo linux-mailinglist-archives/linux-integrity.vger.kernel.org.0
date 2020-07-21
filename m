@@ -2,116 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD91B227153
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jul 2020 23:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75401227FF1
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jul 2020 14:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728102AbgGTVm4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Jul 2020 17:42:56 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:35328 "EHLO
+        id S1726904AbgGUMag (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Jul 2020 08:30:36 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36769 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728236AbgGTVip (ORCPT
+        by vger.kernel.org with ESMTP id S1725984AbgGUMag (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Jul 2020 17:38:45 -0400
+        Tue, 21 Jul 2020 08:30:36 -0400
 Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06KKWocY152958;
-        Mon, 20 Jul 2020 17:38:25 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32d5x49up3-1
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06LC31on062319;
+        Tue, 21 Jul 2020 08:30:33 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32dn6xjwnw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 17:38:25 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06KKl885030148;
-        Mon, 20 Jul 2020 17:38:25 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32d5x49una-1
+        Tue, 21 Jul 2020 08:30:33 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06LCG624001233;
+        Tue, 21 Jul 2020 12:30:30 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 32brq7uyex-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 17:38:24 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06KLZBL4020699;
-        Mon, 20 Jul 2020 21:38:22 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 32dbmn06yb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 21:38:22 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06KLcKd744040416
+        Tue, 21 Jul 2020 12:30:30 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06LCUSDd31392000
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jul 2020 21:38:20 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D90BA4054;
-        Mon, 20 Jul 2020 21:38:20 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 856E2A4060;
-        Mon, 20 Jul 2020 21:38:18 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.145.253])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Jul 2020 21:38:18 +0000 (GMT)
-Message-ID: <1595281097.5055.79.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 00/12] ima: Fix rule parsing bugs and extend
- KEXEC_CMDLINE rule support
+        Tue, 21 Jul 2020 12:30:28 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4AB08A4065;
+        Tue, 21 Jul 2020 12:30:28 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7200A4059;
+        Tue, 21 Jul 2020 12:30:27 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.199.44])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Jul 2020 12:30:27 +0000 (GMT)
+Message-ID: <1595334627.5109.23.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/1] tpm: add sysfs exports for all banks of PCR
+ registers
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Nayna Jain <nayna@linux.ibm.com>
-Date:   Mon, 20 Jul 2020 17:38:17 -0400
-In-Reply-To: <20200709061911.954326-1-tyhicks@linux.microsoft.com>
-References: <20200709061911.954326-1-tyhicks@linux.microsoft.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Date:   Tue, 21 Jul 2020 08:30:27 -0400
+In-Reply-To: <20200720150038.9082-2-James.Bottomley@HansenPartnership.com>
+References: <20200720150038.9082-1-James.Bottomley@HansenPartnership.com>
+         <20200720150038.9082-2-James.Bottomley@HansenPartnership.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-20_09:2020-07-20,2020-07-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- mlxscore=0 suspectscore=2 malwarescore=0 mlxlogscore=999
- priorityscore=1501 phishscore=0 impostorscore=0 adultscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007200136
+ definitions=2020-07-21_05:2020-07-21,2020-07-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ impostorscore=0 mlxscore=0 malwarescore=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007210086
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Cc'ing Sasha]
+Hi James,
 
-On Thu, 2020-07-09 at 01:18 -0500, Tyler Hicks wrote:
-
-> I envision patches 1-7 going to stable. The series is ordered in a way
-> that has all the fixes up front, followed by cleanups, followed by the
-> feature patch. The breakdown of patches looks like so:
+On Mon, 2020-07-20 at 08:00 -0700, James Bottomley wrote:
+> use macro magic to create sysfs per hash groups with 24 PCR files in
+> them one for each possible agile hash of the TPM.  The files are
+> plugged in to a read function which is TPM version agnostic, so this
+> works also for TPM 1.2 although the hash is only sha1 in that case.
+> For every hash the TPM supports, a group named pcr-<hash> is created
+> and each of the PCR read files placed under it.
 > 
->  Memory leak fixes: 1-3
->  Parser strictness fixes: 4-7
->  Code cleanups made possible by the fixes: 8-11
->  Extend KEXEC_CMDLINE rule support: 12
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-I agree they should be backported, but they don't apply cleanly before
-linux-5.6.  The changes aren't that major.  Some patch hunks apply
-cleanly, but won't compile, while others patch hunks need to be
-dropped based on when the feature was upstreamed.  For these reasons,
-I'm not Cc'ing stable.
+Nice!  Being able to read the TPM 2.0 PCRs, without requiring a TSS,
+will really simplify regression testing - re-calculating the IMA
+"boot_aggregate" and verifying the IMA measurement list.
 
-Feature upstreamed:
-- LSM policy update: linux 5.3
-- key command line: linux 5.3
-- blacklist: linux 5.5
-- keyrings: linux 5.6
+With the following code snippet all of the PCRs for all the exported
+TPM banks are displayed, but unfortunately the digests are not ordered
+or prefixed with the PCR.
 
-For Linux 5.3:
-- Dependency on backporting commit 483ec26eed42 ("ima: ima/lsm policy
-rule loading logic bug fixes") to apply " ima: Free the entire rule if
-it fails to parse".
+banks=$(echo -n $(ls -d /sys/class/tpm/tpm0/pcr-*))
+
+for bank in ${banks[@]}; do
+        echo "$bank:"
+        find "${bank}/" -type f -exec cat {} \;
+        echo " "
+done
+
+Either this code snippet needs to be fixed or, perhaps, instead of
+returning just the digest, the digest could be prefixed with the PCR
+number (eg. PCR-00:<digest>).
+
+FYI, with this patch on a system with TPM 1.2, IMA goes into TPM-
+bypass mode.
+
+From dmesg (with some extra debugging):
+tpm_chip_register: tpm_add_legacy_sysfs failed
+tpm_tis: probe of 00:05 failed with error -2
 
 Mimi
