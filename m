@@ -2,189 +2,148 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEECA228826
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jul 2020 20:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0C7228952
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jul 2020 21:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728577AbgGUSYr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Jul 2020 14:24:47 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:56832 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726029AbgGUSYr (ORCPT
+        id S1730976AbgGUTik (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Jul 2020 15:38:40 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45796 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730972AbgGUTii (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Jul 2020 14:24:47 -0400
-Received: from localhost.localdomain (c-73-187-218-229.hsd1.pa.comcast.net [73.187.218.229])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 643FF20B4908;
-        Tue, 21 Jul 2020 11:24:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 643FF20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595355886;
-        bh=/VTibjakL9ELXNXCLpaG4W/MeSCeCvg41MnPXUUsxWQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Nu//DrmMWHY65Jxlrp5mBy40V+jzWFWBsy33cgAPkcjRonSWpC0jqeRCG5HGA3U9m
-         5VAe4WI/Hx4mxYqTk7chL9ze6LXi9P8F/SdRVJLv/oaw0OBeVpBkvY/BdN3YLGrcG4
-         yHeQLR2Q3ZsL0UeWL69a3P1fd1Fa+AAcTm4vi6L4=
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-To:     zohar@linux.ibm.com, pvorel@suse.cz, ltp@lists.linux.it
-Cc:     nramas@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH] IMA: Add test for kexec cmdline measurement
-Date:   Tue, 21 Jul 2020 14:24:40 -0400
-Message-Id: <20200721182440.4169-1-t-josne@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 21 Jul 2020 15:38:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595360317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W/5FQTzNceZ8+x82aqOM3eIUsHFNM5pTOLDBmqIIiW0=;
+        b=Qr4rtIFHr9ipbR/dp+trfrx4JQaOET/ALufCzAgzC5dBsYKAvqvIOc7GS/dw3bTSRe5Db0
+        5V9MYiHUGTeVXAu3dsWvRKepMKMDKJsDewnmbiILo1L3vZuESudNl0ht59XKg0qnKHbaRy
+        bIjI2DPnSKoBiP9HXZWo0G0LsVxMd5U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-192-KyfIS5FeMT-drxH4SXRg7A-1; Tue, 21 Jul 2020 15:38:33 -0400
+X-MC-Unique: KyfIS5FeMT-drxH4SXRg7A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D224680BCAE;
+        Tue, 21 Jul 2020 19:38:31 +0000 (UTC)
+Received: from localhost (ovpn-116-10.gru2.redhat.com [10.97.116.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B898756BE;
+        Tue, 21 Jul 2020 19:38:31 +0000 (UTC)
+Date:   Tue, 21 Jul 2020 16:38:30 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Nayna <nayna@linux.vnet.ibm.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-integrity@vger.kernel.org,
+        erichte@linux.ibm.com, nayna@linux.ibm.com, stable@vger.kernel.org
+Subject: Re: [PATCH v6] ima: move APPRAISE_BOOTPARAM dependency on
+ ARCH_POLICY to runtime
+Message-ID: <20200721193830.GE2716@glitch>
+References: <20200713164830.101165-1-bmeneg@redhat.com>
+ <d337cbba-e996-e898-1e75-9f142d480e5e@linux.vnet.ibm.com>
+ <1595257015.5055.8.camel@linux.ibm.com>
+ <20200720153841.GG10323@glitch>
+ <1595352376.5311.8.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1595352376.5311.8.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="k3qmt+ucFURmlhDS"
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA policy can be set to measure the command line passed in the kexec system call.
-There needs to be a test to validate this kexec command line measurement.
+--k3qmt+ucFURmlhDS
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Add a testcase that verifies that the IMA subsystem has correctly
-measured the cmdline specified during a kexec.
+On Tue, Jul 21, 2020 at 01:26:16PM -0400, Mimi Zohar wrote:
+> On Mon, 2020-07-20 at 12:38 -0300, Bruno Meneguele wrote:
+> > On Mon, Jul 20, 2020 at 10:56:55AM -0400, Mimi Zohar wrote:
+> > > On Mon, 2020-07-20 at 10:40 -0400, Nayna wrote:
+> > > > On 7/13/20 12:48 PM, Bruno Meneguele wrote:
+> > > > > The IMA_APPRAISE_BOOTPARAM config allows enabling different "ima_=
+appraise=3D"
+> > > > > modes - log, fix, enforce - at run time, but not when IMA archite=
+cture
+> > > > > specific policies are enabled. =A0This prevents properly labeling=
+ the
+> > > > > filesystem on systems where secure boot is supported, but not ena=
+bled on the
+> > > > > platform. =A0Only when secure boot is actually enabled should the=
+se IMA
+> > > > > appraise modes be disabled.
+> > > > >
+> > > > > This patch removes the compile time dependency and makes it a run=
+time
+> > > > > decision, based on the secure boot state of that platform.
+> > > > >
+> > > > > Test results as follows:
+> > > > >
+> > > > > -> x86-64 with secure boot enabled
+> > > > >
+> > > > > [    0.015637] Kernel command line: <...> ima_policy=3Dappraise_t=
+cb ima_appraise=3Dfix
+> > > > > [    0.015668] ima: Secure boot enabled: ignoring ima_appraise=3D=
+fix boot parameter option
+> > > > >
+> > >=20
+> > > Is it common to have two colons in the same line? =A0Is the colon bei=
+ng
+> > > used as a delimiter when parsing the kernel logs? =A0Should the secon=
+d
+> > > colon be replaced with a hyphen? =A0(No need to repost. =A0I'll fix i=
+t
+> > > up.)
+> > > =A0
+> >=20
+> > AFAICS it has been used without any limitations, e.g:
+> >=20
+> > PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+> > clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns=
+: 133484873504 ns
+> > microcode: CPU0: patch_level=3D0x08701013
+> > Lockdown: modprobe: unsigned module loading is restricted; see man kern=
+el_lockdown.7
+> > ...
+> >=20
+> > I'd say we're fine using it.
+>=20
+> Ok. =A0FYI, it's now in next-integrity.
+>=20
+> Mimi
+>=20
 
-Note that this test does not actually reboot.
+Thanks Mimi.
 
-Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
----
- runtest/ima                                   |  1 +
- .../kernel/security/integrity/ima/README.md   | 11 +++
- .../security/integrity/ima/tests/ima_kexec.sh | 93 +++++++++++++++++++
- 3 files changed, 105 insertions(+)
- create mode 100644 testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
 
-diff --git a/runtest/ima b/runtest/ima
-index 309d47420..5f4b4a7a1 100644
---- a/runtest/ima
-+++ b/runtest/ima
-@@ -4,4 +4,5 @@ ima_policy ima_policy.sh
- ima_tpm ima_tpm.sh
- ima_violations ima_violations.sh
- ima_keys ima_keys.sh
-+ima_kexec ima_kexec.sh
- evm_overlay evm_overlay.sh
-diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
-index db8819a99..926eb8478 100644
---- a/testcases/kernel/security/integrity/ima/README.md
-+++ b/testcases/kernel/security/integrity/ima/README.md
-@@ -30,6 +30,17 @@ measure func=KEY_CHECK keyrings=key_import_test template=ima-buf
- 
- The test also requires loaded policy with `func=KEY_CHECK`, see example in `keycheck.policy`.
- 
-+### IMA kexec test
-+
-+This test requires that the ima policy contains:
-+```
-+measure func=KEXEC_CMDLINE
-+```
-+
-+Even though the test does not actually reboot, it does require a valid,
-+signed kernel image. By default, the test will look in `/boot/vmlinuz-$(uname r)`,
-+but if no image is accessible there, a valid image be must be placed at `/tmp/Image`.
-+
- ## EVM tests
- 
- `evm_overlay.sh` requires a builtin IMA appraise tcb policy (e.g. `ima_policy=appraise_tcb`
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-new file mode 100644
-index 000000000..7d71557ee
---- /dev/null
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-@@ -0,0 +1,93 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (c) 2020 Microsoft Corporation
-+# Author: Lachlan Sneff <t-josne@linux.microsoft.com>
-+#
-+# Verify that kexec cmdline is measured correctly.
-+
-+TST_NEEDS_CMDS="kexec sed xargs printf grep"
-+TST_CNT=1
-+TST_NEEDS_DEVICE=1
-+
-+. ima_setup.sh
-+
-+# Since the test is executed inside some sort of
-+# separate shell, *most* environment variables are
-+# not accessible, so there's no way to set it from
-+# the outside.
-+#
-+# `/boot/vmlinuz-$(uname-r)` is where the image is
-+# located on many systems, but not all. Therefore,
-+# if the image is not located there, require the
-+# user to copy it to `/tmp/Image`.
-+#
-+# Ideally, this test shouldn't even require an image,
-+# since it doesn't actually reboot, but the IMA cmdline
-+# measurement occurs after the image is parsed and verified,
-+# so we must pass a valid kernel image. There is a possiblity of
-+# putting together a "faux" kernel image that has the right headers
-+# and appears to be signed correctly, but doesn't actually contain any
-+# code, but, after investigating that possiblity, it appears to be
-+# quite difficult (and would require a new faux kernel for each arch).
-+IMAGE="/boot/vmlinuz-$(uname -r)"
-+if [ ! -f $IMAGE ]; then
-+    IMAGE="/tmp/Image"
-+fi
-+
-+measure() {
-+    local found temp_file="file.txt" temp_file2="file2.txt" algorithm \
-+        digest expected_digest
-+
-+    echo -n "$1" > $temp_file
-+    grep "kexec-cmdline" $ASCII_MEASUREMENTS > $temp_file2
-+
-+    while read found
-+    do
-+        algorithm=$(echo "$found" | cut -d' ' -f4 | cut -d':' -f1)
-+        digest=$(echo "$found" | cut -d' ' -f4 | cut -d':' -f2)
-+
-+        expected_digest=$(compute_digest $algorithm $temp_file)
-+
-+        if [ "$digest" = "$expected_digest" ]; then
-+            return 0
-+        fi
-+    done < $temp_file2
-+
-+    return 1
-+}
-+
-+# Test that the kexec cmdline is measured correctly.
-+# NOTE: This does *not* actually reboot.
-+test1() {
-+    # Strip the `BOOT_IMAGE=...` part from the cmdline.
-+    local cmdline="$(sed 's/BOOT_IMAGE=[^ ]* //' /proc/cmdline)"
-+    if ! kexec -sl $IMAGE --reuse-cmdline; then
-+        tst_brk TCONF "kexec failed: $?"
-+    fi
-+
-+    if ! measure "$cmdline"; then
-+        tst_brk TFAIL "kexec cmdline was measured incorrectly"
-+    fi
-+
-+    cmdline="foo"
-+    if ! kexec -sl $IMAGE --append=$cmdline; then
-+        tst_brk TCONF "kexec failed: $?"
-+    fi
-+
-+    if ! measure "$cmdline"; then
-+        tst_brk TFAIL "kexec cmdline was measured incorrectly"
-+    fi
-+
-+    cmdline="bar"
-+    if ! kexec -sl $IMAGE --command-line=$cmdline; then
-+        tst_brk TCONF "kexec failed: $?"
-+    fi
-+
-+    if ! measure "$cmdline"; then
-+        tst_brk TFAIL "kexec cmdline was measured incorrectly"
-+    fi
-+
-+    tst_res TPASS "kexec cmldine was measured correctly"
-+}
-+
-+tst_run
--- 
-2.25.1
+--k3qmt+ucFURmlhDS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8XRDUACgkQYdRkFR+R
+okOv3QgAidrD9B9w904OYqq3pVlZyT8GUdDpbIr0jliOvPKjHKVooNHQemfJhGU+
+HzoVi2pG8ARlFC4elJBAwVXR8S9KWCT/xNL9C6N0VMg8FDik0TjmMJ0DRwh4s3oZ
+oriQmx4vxaS4eNEfh5gBJrG4EwJdH2rCrbWtc4ojOzEhXE06xCsK9SN9PHy4x2Gp
+zMleiQuD/YVOQK5+A3DII5/BQquL5r5zcwmZ82jho8dZGo5Ot/wc0xq6W5dSLdJw
+7EScY58JI/z7H0JbxQuUG3qVmQNa4pVVx9v75cyoTwn5UeZ7XtOvshiO0pRY7M3z
+8xueI7dSvd0gv2/Z6BsTFphHrfjQVw==
+=mPff
+-----END PGP SIGNATURE-----
+
+--k3qmt+ucFURmlhDS--
 
