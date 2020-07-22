@@ -2,187 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C42229AEE
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 17:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E74229B13
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 17:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727778AbgGVPDF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Jul 2020 11:03:05 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:36534 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726717AbgGVPDF (ORCPT
+        id S1727985AbgGVPM0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Jul 2020 11:12:26 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:60498 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726717AbgGVPM0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Jul 2020 11:03:05 -0400
-Received: from [192.168.1.21] (c-73-187-218-229.hsd1.pa.comcast.net [73.187.218.229])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 701AC20B4908;
-        Wed, 22 Jul 2020 08:03:03 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 701AC20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595430184;
-        bh=E5dpxHVJbUQQifwFb/48uNvFmC9bkNwvV0fmoWR2OKo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=EdP6rIvPwum83NID5fPaszCP8UWwuZnpy0mCiZ8kiGIFx/h9Dw/kxQQR7RgfmHllj
-         V8axXI4NMy0ILiM5eWoZx2NFdxcqEBTQjWz8cntNku9TdZihnq/5/Qrf+ERfkhmHyV
-         od/U+X8HVWyANx75wJHtkRuHBnf3uV6rueyeWsKw=
-Subject: Re: [PATCH] IMA: Add test for kexec cmdline measurement
-To:     Mimi Zohar <zohar@linux.ibm.com>, pvorel@suse.cz,
-        ltp@lists.linux.it
-Cc:     nramas@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org
-References: <20200721182440.4169-1-t-josne@linux.microsoft.com>
- <1595426682.5311.83.camel@linux.ibm.com>
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-Message-ID: <1d11d0ab-45fc-a006-3594-d01eaed1a1f2@linux.microsoft.com>
-Date:   Wed, 22 Jul 2020 11:03:01 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Wed, 22 Jul 2020 11:12:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595430745;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kDaBPTsjO40EnLoHk3vS2gC5XJcSktRsVlh5DF8fVHU=;
+        b=HUFTS+fyrvaZ/leIPzRNEyP+fEwUrYMIyXLyPyIHeZ5rwCmjtjdpq63HZdlNPd6ed8PXxh
+        mf0Hvl86IZ+/B5XVv1ss7sDIxdgZha6NpjUWg4Rxrh817cZ1Xmv8/Dg9NNszl4stfavq/i
+        5l3UxCw+aW2sEeZthEJ/N5G+UKb/Ejs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-259-6J4AV0XhPgyXu0rzyF-KMA-1; Wed, 22 Jul 2020 11:12:21 -0400
+X-MC-Unique: 6J4AV0XhPgyXu0rzyF-KMA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 78809106B242;
+        Wed, 22 Jul 2020 15:12:19 +0000 (UTC)
+Received: from localhost (ovpn-116-110.gru2.redhat.com [10.97.116.110])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B9F75C1BB;
+        Wed, 22 Jul 2020 15:12:18 +0000 (UTC)
+Date:   Wed, 22 Jul 2020 12:12:17 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
+Subject: Re: ima-evm-utils: version 1.3 released
+Message-ID: <20200722151217.GC3821@glitch>
+References: <1595379262.5311.31.camel@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <1595426682.5311.83.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <1595379262.5311.31.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="96YOpH+ONegL0A3E"
+Content-Disposition: inline
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Thank you for the review, Mimi!
+--96YOpH+ONegL0A3E
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 7/22/20 10:04 AM, Mimi Zohar wrote:
-> On Tue, 2020-07-21 at 14:24 -0400, Lachlan Sneff wrote:
->
-> <snip>
->
->> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
->> new file mode 100644
->> index 000000000..7d71557ee
->> --- /dev/null
->> +++ b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
->> @@ -0,0 +1,93 @@
->> +#!/bin/sh
->> +# SPDX-License-Identifier: GPL-2.0-or-later
->> +# Copyright (c) 2020 Microsoft Corporation
->> +# Author: Lachlan Sneff <t-josne@linux.microsoft.com>
->> +#
->> +# Verify that kexec cmdline is measured correctly.
->> +
->> +TST_NEEDS_CMDS="kexec sed xargs printf grep"
->> +TST_CNT=1
->> +TST_NEEDS_DEVICE=1
->> +
->> +. ima_setup.sh
->> +
->> +# Since the test is executed inside some sort of
->> +# separate shell, *most* environment variables are
->> +# not accessible, so there's no way to set it from
->> +# the outside.
->> +#
->> +# `/boot/vmlinuz-$(uname-r)` is where the image is
->> +# located on many systems, but not all. Therefore,
->> +# if the image is not located there, require the
->> +# user to copy it to `/tmp/Image`.
->> +#
->> +# Ideally, this test shouldn't even require an image,
->> +# since it doesn't actually reboot, but the IMA cmdline
->> +# measurement occurs after the image is parsed and verified,
->> +# so we must pass a valid kernel image. There is a possiblity of
->> +# putting together a "faux" kernel image that has the right headers
->> +# and appears to be signed correctly, but doesn't actually contain any
->> +# code, but, after investigating that possiblity, it appears to be
->> +# quite difficult (and would require a new faux kernel for each arch).
-> The comment formatting is inconsistent.  Please correct.
-Oops, sorry, will fix!
->> +IMAGE="/boot/vmlinuz-$(uname -r)"
->> +if [ ! -f $IMAGE ]; then
->> +    IMAGE="/tmp/Image"
->> +fi
->> +
->> +measure() {
->> +    local found temp_file="file.txt" temp_file2="file2.txt" algorithm \
->> +        digest expected_digest
->> +
->> +    echo -n "$1" > $temp_file
->> +    grep "kexec-cmdline" $ASCII_MEASUREMENTS > $temp_file2
->> +
->> +    while read found
->> +    do
->> +        algorithm=$(echo "$found" | cut -d' ' -f4 | cut -d':' -f1)
->> +        digest=$(echo "$found" | cut -d' ' -f4 | cut -d':' -f2)
->> +
->> +        expected_digest=$(compute_digest $algorithm $temp_file)
->> +
->> +        if [ "$digest" = "$expected_digest" ]; then
->> +            return 0
->> +        fi
->> +    done < $temp_file2
->> +
->> +    return 1
->> +}
->> +
->> +# Test that the kexec cmdline is measured correctly.
->> +# NOTE: This does *not* actually reboot.
->> +test1() {
->> +    # Strip the `BOOT_IMAGE=...` part from the cmdline.
->> +    local cmdline="$(sed 's/BOOT_IMAGE=[^ ]* //' /proc/cmdline)"
->> +    if ! kexec -sl $IMAGE --reuse-cmdline; then
->> +        tst_brk TCONF "kexec failed: $?"
->> +    fi
-> Most likely one of the reasons for the kexec to fail is that the
-> kernel image isn't properly signed.  How about checking the secure-
-> boot status to provide some contextual information.
-Good call, I'll add that check if kexec fails. On some of the systems 
-that this test
-needs to run on, there is no `bootctl` or `mokutil` command, so I'll try 
-running one of those
-if they exist to check.
->
->> +
->> +    if ! measure "$cmdline"; then
->> +        tst_brk TFAIL "kexec cmdline was measured incorrectly"
->> +    fi
-> This assumes that a kexec command line measurement was found.  The
-> output needs to differentiate between no measurement and an invalid
-> measurement.  In the case that the rule doesn't exist, at that point
-> you have a choice of skipping the test or extending the IMA policy.
->
-> The kernel kexec selftests checks both the Kconfig and the IMA runtime
-> policy.  Different testing infrastructures have different policies
-> about basing tests on them.
-Okay, I can check if no measurement was found, or if it occurred 
-incorrectly.
-The kconfig is not available on the systems I need to run this test on, 
-so I will read
-the ima policy to check if the system is, in fact, set up to measure the 
-kexec cmdline.
->> +
->> +    cmdline="foo"
-> Wondering if unknown command line options could cause the kexec to
-> fail.
-I haven't had this fail, what do you suggest?
->
->> +    if ! kexec -sl $IMAGE --append=$cmdline; then
->> +        tst_brk TCONF "kexec failed: $?"
->> +    fi
-> Should the first kernel image be unloaded first?
-Probably a good thing to do, but it hasn't influenced the test so far.
-I assume each kernel is unloaded once another attempts to be loaded.
->
+On Tue, Jul 21, 2020 at 08:54:22PM -0400, Mimi Zohar wrote:
+> The last ima-evm-utils release v1.2.1 was last July, a year ago, way
+> too long ago. =A0Going forward I really would like to have more frequent
+> releases. =A0New to v1.3 is ima-evm-utils regression tests, support for
+> re-calculating the per TPM 2.0 bank template data digest, and much
+> more. =A0For the details refer to the ChangeLog.
+>=20
+> I'd like to take this opportunity to thank you for your contributions,
+> reviews, and testing!
+>=20
+> thanks,
+>=20
 > Mimi
->
->> +
->> +    if ! measure "$cmdline"; then
->> +        tst_brk TFAIL "kexec cmdline was measured incorrectly"
->> +    fi
->> +
->> +    cmdline="bar"
->> +    if ! kexec -sl $IMAGE --command-line=$cmdline; then
->> +        tst_brk TCONF "kexec failed: $?"
->> +    fi
->> +
->> +    if ! measure "$cmdline"; then
->> +        tst_brk TFAIL "kexec cmdline was measured incorrectly"
->> +    fi
->> +
->> +    tst_res TPASS "kexec cmldine was measured correctly"
->> +}
->> +
->> +tst_run
+>=20
+
+Thanks Mimi!
+
+I'm going to update it in Fedora Rawhide soon :)
+
+https://bugzilla.redhat.com/show_bug.cgi?id=3D1859421
+
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
+
+--96YOpH+ONegL0A3E
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8YV1EACgkQYdRkFR+R
+okPYlAgAyd/U/u8Uu/fbTDPACkunZ2T25oDX4kko76DovshhLa8ISDRr5esHO+7q
+rinA9K8nCWMSlcaiGUY7KhS4hxIXeJ89gACOwThEmBIqpoxFkLU2DE8C44ZHotGF
+UFCCOsIRityRyftlS4Dq5abM30yxuS8s3oBc8IxhQdj+XmpHtYgIQP/Rd5R0WqT1
+5vqgpfH1FvRe23fXhBaP0AN7hd4s3IPUiqvouwT5a6UppTzi3PjEBm79qGRbf5DK
+3LE68Cq/oqe13BBz55LeCl89e9zHhNp/tj1woq+96qvEQVe8jEHKuqETnMmEtjuo
+BZtW6QAFifATNgh681oFsp8s9TtOGg==
+=UrUc
+-----END PGP SIGNATURE-----
+
+--96YOpH+ONegL0A3E--
+
