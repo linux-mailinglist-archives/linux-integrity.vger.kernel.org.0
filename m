@@ -2,103 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E74229B13
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 17:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5B5229B5F
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 17:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727985AbgGVPM0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Jul 2020 11:12:26 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:60498 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726717AbgGVPM0 (ORCPT
+        id S1726717AbgGVP32 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Jul 2020 11:29:28 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:50822 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727778AbgGVP31 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Jul 2020 11:12:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595430745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kDaBPTsjO40EnLoHk3vS2gC5XJcSktRsVlh5DF8fVHU=;
-        b=HUFTS+fyrvaZ/leIPzRNEyP+fEwUrYMIyXLyPyIHeZ5rwCmjtjdpq63HZdlNPd6ed8PXxh
-        mf0Hvl86IZ+/B5XVv1ss7sDIxdgZha6NpjUWg4Rxrh817cZ1Xmv8/Dg9NNszl4stfavq/i
-        5l3UxCw+aW2sEeZthEJ/N5G+UKb/Ejs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-259-6J4AV0XhPgyXu0rzyF-KMA-1; Wed, 22 Jul 2020 11:12:21 -0400
-X-MC-Unique: 6J4AV0XhPgyXu0rzyF-KMA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 22 Jul 2020 11:29:27 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CED248EE272;
+        Wed, 22 Jul 2020 08:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1595431767;
+        bh=Q9oLPlxvXqAwdzwHXM+uPL7b/WOFOaTP/2chJaZoA0E=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=W6d+CoklLN+J0n1pvo/VVuWkgJLjqN/me2gY5cMu3j8TYKFEYYWeAUuWKTgqZhppu
+         T3tpvZQtQvmN8i0wKxbOj4g2Df6CQXABiRzof7+r+L8WXViN6JQjZxcvDuI0C2c2iK
+         hNj3p6fMXyf2PUyNjPF2VuQg0BXP9WGw7u5KmEdM=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UVACgXWn6HgR; Wed, 22 Jul 2020 08:29:26 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 78809106B242;
-        Wed, 22 Jul 2020 15:12:19 +0000 (UTC)
-Received: from localhost (ovpn-116-110.gru2.redhat.com [10.97.116.110])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B9F75C1BB;
-        Wed, 22 Jul 2020 15:12:18 +0000 (UTC)
-Date:   Wed, 22 Jul 2020 12:12:17 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
-Subject: Re: ima-evm-utils: version 1.3 released
-Message-ID: <20200722151217.GC3821@glitch>
-References: <1595379262.5311.31.camel@linux.ibm.com>
-MIME-Version: 1.0
-In-Reply-To: <1595379262.5311.31.camel@linux.ibm.com>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="96YOpH+ONegL0A3E"
-Content-Disposition: inline
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id CF0C38EE200;
+        Wed, 22 Jul 2020 08:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1595431766;
+        bh=Q9oLPlxvXqAwdzwHXM+uPL7b/WOFOaTP/2chJaZoA0E=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=fuaVtnYfSOsOKEakhDJBgrro+lYYMIj+RXAxb/ut+e8ZDO+KGxK/u5HrPoRuvtffr
+         z7yi8Y86f+ogC8PCr2t0T2ZyZwej1ZlvU/GXK0BdZggvNE7MnwG18fbfTwBJzBzs/W
+         zMmSBkvyKxfMqbXVY1FVe/QO8Hf4RlsT9zxBqnfI=
+Message-ID: <1595431763.4322.8.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 1/1] tpm: add sysfs exports for all banks of PCR
+ registers
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Date:   Wed, 22 Jul 2020 08:29:23 -0700
+In-Reply-To: <874kq0l6c7.fsf@redhat.com>
+References: <20200721155615.12625-1-James.Bottomley@HansenPartnership.com>
+         <20200721155615.12625-2-James.Bottomley@HansenPartnership.com>
+         <87a6zslar5.fsf@redhat.com>
+         <1595374674.3575.28.camel@HansenPartnership.com>
+         <877duwl8n9.fsf@redhat.com>
+         <1595378385.3575.31.camel@HansenPartnership.com>
+         <874kq0l6c7.fsf@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---96YOpH+ONegL0A3E
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, 2020-07-21 at 17:51 -0700, Jerry Snitselaar wrote:
+> James Bottomley @ 2020-07-21 17:39 MST:
+> 
+> > On Tue, 2020-07-21 at 17:02 -0700, Jerry Snitselaar wrote:
+> > > James Bottomley @ 2020-07-21 16:37 MST:
+> > > 
+> > > > On Tue, 2020-07-21 at 16:16 -0700, Jerry Snitselaar wrote:
+> > > > > James Bottomley @ 2020-07-21 08:56 MST:
+> > > > 
+> > > > [...]
+> > > > > > +	/*
+> > > > > > +	 * This will only trigger if someone has added an
+> > > > > > additional
+> > > > > > +	 * hash to the tpm_algorithms enum without
+> > > > > > incrementing
+> > > > > > +	 * TPM_MAX_HASHES.  This has to be a BUG_ON
+> > > > > > because
+> > > > > > under
+> > > > > > this
+> > > > > > +	 * condition, the chip->groups array will overflow
+> > > > > > corrupting
+> > > > > > +	 * the chips structure.
+> > > > > > +	 */
+> > > > > > +	BUG_ON(chip->groups_cnt > TPM_MAX_HASHES);
+> > > > > 
+> > > > > Should this check be 3 + TPM_MAX_HASHES like below?
+> > > > 
+> > > > No, because at this point only a single additional group has
+> > > > been addedin addition to the hashes groups.  The first line of
+> > > > tpm_sysfs_add_device is
+> > > > 
+> > > > 	WARN_ON(chip->groups_cnt != 0);
+> > > > 
+> > > > And then we add the unnamed group.  This loop over the banks
+> > > > follows it, so chip->groups_cnt should be nr_banks_allocated by
+> > > > the end (it's the index, which is one fewer than the number of
+> > > > entries in chip->groups[]).  We have a problem if
+> > > > nr_banks_allocated > TPM_MAX_HASHES
+> > > > 
+> > > > which is what the BUG_ON checks.
+> > > > 
+> > > > James
+> > > 
+> > > If the chip supported all 5 listed cases wouldn't groups_cnt be 6
+> > > at this point?
+> > 
+> > Actually, yes, I think it would be because it's pointing at the
+> > next free index not the current one.  So it should be BUG_ON (chip-
+> > > groups_cnt > TPM_MAX_HASHES + 1)
+> > 
+> > James
+> 
+> One other thought, should a note be added above tpm_algorithms to
+> note that when that is changed TPM_MAX_HASHES should be changed as
+> well?
 
-On Tue, Jul 21, 2020 at 08:54:22PM -0400, Mimi Zohar wrote:
-> The last ima-evm-utils release v1.2.1 was last July, a year ago, way
-> too long ago. =A0Going forward I really would like to have more frequent
-> releases. =A0New to v1.3 is ima-evm-utils regression tests, support for
-> re-calculating the per TPM 2.0 bank template data digest, and much
-> more. =A0For the details refer to the ChangeLog.
->=20
-> I'd like to take this opportunity to thank you for your contributions,
-> reviews, and testing!
->=20
-> thanks,
->=20
-> Mimi
->=20
+I certainly can ... it's free.
 
-Thanks Mimi!
+> With the above change to the BUG_ON you can add to v3:
 
-I'm going to update it in Fedora Rawhide soon :)
+OK, I also changed the BUG_ON back to a WARN_ON to match the initial
+one (if that one ever tripped, we'd get an overflow in the chip-
+>groups[] as well, so it seems reasonable to keep them matching).
 
-https://bugzilla.redhat.com/show_bug.cgi?id=3D1859421
+James
 
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
 
---96YOpH+ONegL0A3E
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl8YV1EACgkQYdRkFR+R
-okPYlAgAyd/U/u8Uu/fbTDPACkunZ2T25oDX4kko76DovshhLa8ISDRr5esHO+7q
-rinA9K8nCWMSlcaiGUY7KhS4hxIXeJ89gACOwThEmBIqpoxFkLU2DE8C44ZHotGF
-UFCCOsIRityRyftlS4Dq5abM30yxuS8s3oBc8IxhQdj+XmpHtYgIQP/Rd5R0WqT1
-5vqgpfH1FvRe23fXhBaP0AN7hd4s3IPUiqvouwT5a6UppTzi3PjEBm79qGRbf5DK
-3LE68Cq/oqe13BBz55LeCl89e9zHhNp/tj1woq+96qvEQVe8jEHKuqETnMmEtjuo
-BZtW6QAFifATNgh681oFsp8s9TtOGg==
-=UrUc
------END PGP SIGNATURE-----
-
---96YOpH+ONegL0A3E--
+> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> 
 
