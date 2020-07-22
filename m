@@ -2,94 +2,170 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B4B22A02A
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 21:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221B622A031
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 21:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726841AbgGVTc4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Jul 2020 15:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
+        id S1728124AbgGVTkV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Jul 2020 15:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726322AbgGVTc4 (ORCPT
+        with ESMTP id S1726157AbgGVTkV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Jul 2020 15:32:56 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06682C0619DC
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Jul 2020 12:32:55 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id p14so2544367wmg.1
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Jul 2020 12:32:55 -0700 (PDT)
+        Wed, 22 Jul 2020 15:40:21 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C15C0619E3
+        for <linux-integrity@vger.kernel.org>; Wed, 22 Jul 2020 12:40:21 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id f16so1941488pjt.0
+        for <linux-integrity@vger.kernel.org>; Wed, 22 Jul 2020 12:40:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NyxUSj63c6Kh46mnriFnWbO/YaDGvF4n5kBgVRHKNAg=;
-        b=jjA8p40C5uyeenz7U+XJuc/4uTWk7tI5SNNx0AOnxqT3sDSK/ShsZOlAm1SWbApzbZ
-         taaGuSJpYyAoy7FSDgahEw5sxOR24M6T+vcEb3YppOus7E7XSSd0D0lAHb1TZ2bvZeMz
-         0+0uoShaIdxoxt+i2q1GDLi0zHDPNe7dTslgDw4QbtVSmvFshOTnEUecxEYxeOYQKt2a
-         xxny5Uuk4DFaCdGlK/IS0uViasAa4Yo1uldSN0+JQ2fZ8DqpxJIr4fpkYP+p5xXexD9e
-         8X6C8RR1ccfzkz3WyV/ywNfnXUPzTxqfGccpMHYaC8CI9kFW0b9GE4Q7N+51b2Ef3oZ7
-         +MWQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jjUf3A9HubTVaUqe7Zad+MUemnjZyICfz18It9oZSwM=;
+        b=BtZ9Nvf8isLyQCQ50XpXD/ebRCdBjkHCCGnxVM0OZAVUpANRBBMkjIj06Zdw9/XpBn
+         ZFD8aNoO8CrwWK2+N4nmMD0rTFkdF72k74MsJNFZWuktshu5ucg9wp2qUVlDzWfUY4Ja
+         ol6MqQXlLRetbAhUkjy41VWkXgnqEDPN3tA18=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NyxUSj63c6Kh46mnriFnWbO/YaDGvF4n5kBgVRHKNAg=;
-        b=iEA2Try3VIcYaaDbs0E8wS93260BHekj4UyoCO8vMBR2vgc0+5Yt5NJHTVCwsdvCOA
-         mlYfEv5ZkoyQdvgTt2jCHSUAqnnbNUoyT5t1E7p1kSG2zaBrPUV60Sr5Q+cuWAg9WULW
-         wRZrJmXg7JdM5rmTzvU3eue+0c/0F4qsn1SDUs0+LKyCik9vndg+6YBprGXFyBUyOErs
-         dHGAXE4AJ6rqa0OHZhbdM3UADwUjEI+unEw9bu2iKsXTaZsDRZGh+WTh3HFSuVBVv5Qh
-         n+hBQVIb1x+TK7h9ISBQi4mvuRXZ9BTDTN7QW9hgCTJTIetOhb1E7NSWs4u3TJitxzVM
-         wKnA==
-X-Gm-Message-State: AOAM532vjUEHMatu5LbyfPrUb5YtU3RZfn2ZdkYKNFP4uUCyXpX70+qk
-        9ng420Ckz7lWjFa527ZGuIvA6/DIrTw=
-X-Google-Smtp-Source: ABdhPJxm7OqJJf/0uaGXgtD9Dy2IW6mM61h8UQ9LjW0809hZEB+VF46sMlhjOJxJzdG7pJAzKwm4ew==
-X-Received: by 2002:a1c:ac81:: with SMTP id v123mr930556wme.159.1595446374476;
-        Wed, 22 Jul 2020 12:32:54 -0700 (PDT)
-Received: from dell5510.arch.suse.de ([62.201.25.198])
-        by smtp.gmail.com with ESMTPSA id k131sm763993wmb.36.2020.07.22.12.32.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jjUf3A9HubTVaUqe7Zad+MUemnjZyICfz18It9oZSwM=;
+        b=FWBh36+Mwo1ywJOMPkkr+icVA/M4uSFr3dW87DsFvQEkxkJrqXqgvgL7+Pw1j515GG
+         0dQ9MiD7Rv3E0Ld/HpXOEaRVoldL7IebHhkB3L1JH8DgC+pzyZyQ0crpYaZX/3d0A9X4
+         n5HbXDJJYeJCrKO9bzaRMOXLkORbcWEANam5mJpqhOBuCjWqIlZGCtu/jX+RTW39SkbV
+         LizFFHbBNK749VcyBD/WD02kV8MKePaKgYZiQ2K67eoh1Qc8Q+nlhvvL/M5LX6T7AOfz
+         HLTMaB2BWJ+oOWQynDb7QnfBg5z7IfbV14st3ldp4lia7q70Xg6IWPQNoqtzPzRrEVFI
+         4UlQ==
+X-Gm-Message-State: AOAM532Qo/Gu+n/J32O/7gT4v8QxktH7DjXt0JuWlKKE6J6Epb/DXvjA
+        XMUi7fh4PFrZvdhHBf4Rc+HdMA==
+X-Google-Smtp-Source: ABdhPJyT2VSdLIe8tOpWuzfYoIvgn4i+cMVfKxosGUgPymW4NU2ZBedNm+ZTGrz2uSKWm+z7tIxFEg==
+X-Received: by 2002:a17:90b:338d:: with SMTP id ke13mr906409pjb.60.1595446820815;
+        Wed, 22 Jul 2020 12:40:20 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 38sm420287pgu.61.2020.07.22.12.40.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2020 12:32:54 -0700 (PDT)
-From:   Petr Vorel <petr.vorel@gmail.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Petr Vorel <petr.vorel@gmail.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>
-Subject: [PATCH ima-evm-utils] Fix missing {u,g}id_t typedef on musl
-Date:   Wed, 22 Jul 2020 21:32:46 +0200
-Message-Id: <20200722193246.13140-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 22 Jul 2020 12:40:19 -0700 (PDT)
+Date:   Wed, 22 Jul 2020 12:40:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v6 5/7] fs,doc: Enable to enforce noexec mounts or file
+ exec through O_MAYEXEC
+Message-ID: <202007221239.E00125F019@keescook>
+References: <20200714181638.45751-1-mic@digikod.net>
+ <20200714181638.45751-6-mic@digikod.net>
+ <202007151312.C28D112013@keescook>
+ <35ea0914-7360-43ab-e381-9614d18cceba@digikod.net>
+ <20200722161639.GA24129@gandi.net>
+ <efb88aab-f9f9-4b66-e7ab-3aa054eec96e@digikod.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <efb88aab-f9f9-4b66-e7ab-3aa054eec96e@digikod.net>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Fixes: 273701a ("evmctl - IMA/EVM control tool")
+On Wed, Jul 22, 2020 at 09:04:28PM +0200, Mickaël Salaün wrote:
+> 
+> On 22/07/2020 18:16, Thibaut Sautereau wrote:
+> > On Thu, Jul 16, 2020 at 04:39:14PM +0200, Mickaël Salaün wrote:
+> >>
+> >> On 15/07/2020 22:37, Kees Cook wrote:
+> >>> On Tue, Jul 14, 2020 at 08:16:36PM +0200, Mickaël Salaün wrote:
+> >>>> @@ -2849,7 +2855,7 @@ static int may_open(const struct path *path, int acc_mode, int flag)
+> >>>>  	case S_IFLNK:
+> >>>>  		return -ELOOP;
+> >>>>  	case S_IFDIR:
+> >>>> -		if (acc_mode & (MAY_WRITE | MAY_EXEC))
+> >>>> +		if (acc_mode & (MAY_WRITE | MAY_EXEC | MAY_OPENEXEC))
+> >>>>  			return -EISDIR;
+> >>>>  		break;
+> >>>
+> >>> (I need to figure out where "open for reading" rejects S_IFDIR, since
+> >>> it's clearly not here...)
+> > 
+> > Doesn't it come from generic_read_dir() in fs/libfs.c?
+> > 
+> >>>
+> >>>>  	case S_IFBLK:
+> >>>> @@ -2859,13 +2865,26 @@ static int may_open(const struct path *path, int acc_mode, int flag)
+> >>>>  		fallthrough;
+> >>>>  	case S_IFIFO:
+> >>>>  	case S_IFSOCK:
+> >>>> -		if (acc_mode & MAY_EXEC)
+> >>>> +		if (acc_mode & (MAY_EXEC | MAY_OPENEXEC))
+> >>>>  			return -EACCES;
+> >>>>  		flag &= ~O_TRUNC;
+> >>>>  		break;
+> >>>
+> >>> This will immediately break a system that runs code with MAY_OPENEXEC
+> >>> set but reads from a block, char, fifo, or socket, even in the case of
+> >>> a sysadmin leaving the "file" sysctl disabled.
+> >>
+> >> As documented, O_MAYEXEC is for regular files. The only legitimate use
+> >> case seems to be with pipes, which should probably be allowed when
+> >> enforcement is disabled.
+> > 
+> > By the way Kees, while we fix that for the next series, do you think it
+> > would be relevant, at least for the sake of clarity, to add a
+> > WARN_ON_ONCE(acc_mode & MAY_OPENEXEC) for the S_IFSOCK case, since a
+> > socket cannot be open anyway?
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Hi Mimi,
+If it's a state that userspace should never be able to reach, then yes,
+I think a WARN_ON_ONCE() would be nice.
 
-one more fix, musl related this time.
+> We just did some more tests (for the next patch series) and it turns out
+> that may_open() can return EACCES before another part returns ENXIO.
+> 
+> As a reminder, the next series will deny access to block devices,
+> character devices, fifo and socket when opened with O_MAYEXEC *and* if
+> any policy is enforced (via the sysctl).
+> 
+> The question is then: do we prefer to return EACCES when a policy is
+> enforced (on a socket), or do we stick to the ENXIO? The EACCES approach
+> will be more consistent with devices and fifo handling, and seems safer
+> (belt and suspenders) thought.
 
-Kind regards,
-Petr
+I think EACCES is correct for these cases, since it's a new flag, etc.
 
- src/imaevm.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/src/imaevm.h b/src/imaevm.h
-index 30e9730..3f1db97 100644
---- a/src/imaevm.h
-+++ b/src/imaevm.h
-@@ -46,7 +46,7 @@
- #include <syslog.h>
- #include <stdbool.h>
- #include <errno.h>
--
-+#include <sys/types.h>
- #include <openssl/rsa.h>
- 
- #ifdef USE_FPRINTF
 -- 
-2.27.0
-
+Kees Cook
