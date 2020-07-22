@@ -2,133 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5B5229B5F
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 17:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4661D229B63
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 17:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726717AbgGVP32 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Jul 2020 11:29:28 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:50822 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727778AbgGVP31 (ORCPT
+        id S1727985AbgGVPbX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Jul 2020 11:31:23 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37770 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727778AbgGVPbX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Jul 2020 11:29:27 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CED248EE272;
-        Wed, 22 Jul 2020 08:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1595431767;
-        bh=Q9oLPlxvXqAwdzwHXM+uPL7b/WOFOaTP/2chJaZoA0E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=W6d+CoklLN+J0n1pvo/VVuWkgJLjqN/me2gY5cMu3j8TYKFEYYWeAUuWKTgqZhppu
-         T3tpvZQtQvmN8i0wKxbOj4g2Df6CQXABiRzof7+r+L8WXViN6JQjZxcvDuI0C2c2iK
-         hNj3p6fMXyf2PUyNjPF2VuQg0BXP9WGw7u5KmEdM=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UVACgXWn6HgR; Wed, 22 Jul 2020 08:29:26 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id CF0C38EE200;
-        Wed, 22 Jul 2020 08:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1595431766;
-        bh=Q9oLPlxvXqAwdzwHXM+uPL7b/WOFOaTP/2chJaZoA0E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=fuaVtnYfSOsOKEakhDJBgrro+lYYMIj+RXAxb/ut+e8ZDO+KGxK/u5HrPoRuvtffr
-         z7yi8Y86f+ogC8PCr2t0T2ZyZwej1ZlvU/GXK0BdZggvNE7MnwG18fbfTwBJzBzs/W
-         zMmSBkvyKxfMqbXVY1FVe/QO8Hf4RlsT9zxBqnfI=
-Message-ID: <1595431763.4322.8.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 1/1] tpm: add sysfs exports for all banks of PCR
- registers
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Date:   Wed, 22 Jul 2020 08:29:23 -0700
-In-Reply-To: <874kq0l6c7.fsf@redhat.com>
-References: <20200721155615.12625-1-James.Bottomley@HansenPartnership.com>
-         <20200721155615.12625-2-James.Bottomley@HansenPartnership.com>
-         <87a6zslar5.fsf@redhat.com>
-         <1595374674.3575.28.camel@HansenPartnership.com>
-         <877duwl8n9.fsf@redhat.com>
-         <1595378385.3575.31.camel@HansenPartnership.com>
-         <874kq0l6c7.fsf@redhat.com>
+        Wed, 22 Jul 2020 11:31:23 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MF2IaZ130512;
+        Wed, 22 Jul 2020 11:31:17 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32ecpanpge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jul 2020 11:31:17 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06MFCr6B006034;
+        Wed, 22 Jul 2020 15:31:14 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 32brbh53fk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jul 2020 15:31:14 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06MFVCUu22806854
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Jul 2020 15:31:12 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C10142057;
+        Wed, 22 Jul 2020 15:31:12 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2CB4242045;
+        Wed, 22 Jul 2020 15:31:11 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.139.199])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Jul 2020 15:31:11 +0000 (GMT)
+Message-ID: <1595431869.5311.102.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils] Drop empty NEWS file
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>, linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Vitaly Chikunov <vt@altlinux.org>
+Date:   Wed, 22 Jul 2020 11:31:09 -0400
+In-Reply-To: <20200722145047.GB18945@dell5510>
+References: <20200722114729.4210-1-pvorel@suse.cz>
+         <1595428021.5311.93.camel@linux.ibm.com>
+         <20200722144510.l5qwn62dlanbuul4@altlinux.org>
+         <20200722145047.GB18945@dell5510>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-22_08:2020-07-22,2020-07-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 mlxlogscore=999 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007220104
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-07-21 at 17:51 -0700, Jerry Snitselaar wrote:
-> James Bottomley @ 2020-07-21 17:39 MST:
+On Wed, 2020-07-22 at 16:50 +0200, Petr Vorel wrote:
+> Hi,
 > 
-> > On Tue, 2020-07-21 at 17:02 -0700, Jerry Snitselaar wrote:
-> > > James Bottomley @ 2020-07-21 16:37 MST:
-> > > 
-> > > > On Tue, 2020-07-21 at 16:16 -0700, Jerry Snitselaar wrote:
-> > > > > James Bottomley @ 2020-07-21 08:56 MST:
-> > > > 
-> > > > [...]
-> > > > > > +	/*
-> > > > > > +	 * This will only trigger if someone has added an
-> > > > > > additional
-> > > > > > +	 * hash to the tpm_algorithms enum without
-> > > > > > incrementing
-> > > > > > +	 * TPM_MAX_HASHES.  This has to be a BUG_ON
-> > > > > > because
-> > > > > > under
-> > > > > > this
-> > > > > > +	 * condition, the chip->groups array will overflow
-> > > > > > corrupting
-> > > > > > +	 * the chips structure.
-> > > > > > +	 */
-> > > > > > +	BUG_ON(chip->groups_cnt > TPM_MAX_HASHES);
-> > > > > 
-> > > > > Should this check be 3 + TPM_MAX_HASHES like below?
-> > > > 
-> > > > No, because at this point only a single additional group has
-> > > > been addedin addition to the hashes groups.  The first line of
-> > > > tpm_sysfs_add_device is
-> > > > 
-> > > > 	WARN_ON(chip->groups_cnt != 0);
-> > > > 
-> > > > And then we add the unnamed group.  This loop over the banks
-> > > > follows it, so chip->groups_cnt should be nr_banks_allocated by
-> > > > the end (it's the index, which is one fewer than the number of
-> > > > entries in chip->groups[]).  We have a problem if
-> > > > nr_banks_allocated > TPM_MAX_HASHES
-> > > > 
-> > > > which is what the BUG_ON checks.
-> > > > 
-> > > > James
-> > > 
-> > > If the chip supported all 5 listed cases wouldn't groups_cnt be 6
-> > > at this point?
-> > 
-> > Actually, yes, I think it would be because it's pointing at the
-> > next free index not the current one.  So it should be BUG_ON (chip-
-> > > groups_cnt > TPM_MAX_HASHES + 1)
-> > 
-> > James
+> ...
+> > > Really annoying having to include an empty file, but without it,
+> > > autoconf fails with:
 > 
-> One other thought, should a note be added above tpm_algorithms to
-> note that when that is changed TPM_MAX_HASHES should be changed as
-> well?
-
-I certainly can ... it's free.
-
-> With the above change to the BUG_ON you can add to v3:
-
-OK, I also changed the BUG_ON back to a WARN_ON to match the initial
-one (if that one ever tripped, we'd get an overflow in the chip-
->groups[] as well, so it seems reasonable to keep them matching).
-
-James
-
-
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> > > Makefile.am: error: required file './NEWS' not found
+> > > src/Makefile.am: installing './depcomp'
+> > > autoreconf: automake failed with exit status: 1
 > 
+> > Maybe current ChangeLog should be renamed to NEWS?
+> 
+> > git log is better changelog, and ChangeLog is really condensed and
+> > suitable to be NEWS.
+> +1, good idea.
 
+Sure, thank you for the suggestion.  I'll queue this change and any
+other change(s) in the "next" branch for a minor release.
+
+thanks,
+
+Mimi
