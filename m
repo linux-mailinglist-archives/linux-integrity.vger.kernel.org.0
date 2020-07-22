@@ -2,217 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79556229D40
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 18:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267B2229EFB
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jul 2020 20:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbgGVQkw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Jul 2020 12:40:52 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:50898 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726349AbgGVQkv (ORCPT
+        id S1726535AbgGVSKC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Jul 2020 14:10:02 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36912 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726736AbgGVSKB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Jul 2020 12:40:51 -0400
-Received: from localhost.localdomain (c-73-187-218-229.hsd1.pa.comcast.net [73.187.218.229])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5395F20B4908;
-        Wed, 22 Jul 2020 09:40:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5395F20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595436051;
-        bh=EjnRwCGLsRLtETDvlYYXSZwkYO2qFWteZYqR10WW9kc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AnZikJaBdsd4VwdqrkWGc7aR60uan8OCRwwQMusGmFNJZUYjgU/DhnE15pqMCbx6S
-         QEYFmAtPPt9pq1ZXVc0cxMiK0bBSaaCd64C2Mm4AbFfjnKX/yrEdx0vrDA7Vsyc511
-         cjVksZq1kOqf1u/SNYWpiv+q6Jl6tXogW2D6pk2g=
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-To:     zohar@linux.ibm.com, pvorel@suse.cz, ltp@lists.linux.it
+        Wed, 22 Jul 2020 14:10:01 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MI3BvU158881;
+        Wed, 22 Jul 2020 14:09:55 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32e1vs4u1m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jul 2020 14:09:55 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06MI7Dms030353;
+        Wed, 22 Jul 2020 18:09:53 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 32brbgtqn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jul 2020 18:09:53 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06MI9pEW62259306
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Jul 2020 18:09:51 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F089BAE057;
+        Wed, 22 Jul 2020 18:09:50 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EE4EAE053;
+        Wed, 22 Jul 2020 18:09:50 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.219.44])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Jul 2020 18:09:49 +0000 (GMT)
+Message-ID: <1595441389.5211.1.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] IMA: Add test for kexec cmdline measurement
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lachlan Sneff <t-josne@linux.microsoft.com>, pvorel@suse.cz,
+        ltp@lists.linux.it
 Cc:     nramas@linux.microsoft.com, balajib@linux.microsoft.com,
         linux-integrity@vger.kernel.org
-Subject: [PATCH v2] IMA: Add test for kexec cmdline measurement
-Date:   Wed, 22 Jul 2020 12:40:40 -0400
-Message-Id: <20200722164040.23109-1-t-josne@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+Date:   Wed, 22 Jul 2020 14:09:49 -0400
+In-Reply-To: <20200722164040.23109-1-t-josne@linux.microsoft.com>
+References: <20200722164040.23109-1-t-josne@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-22_10:2020-07-22,2020-07-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 priorityscore=1501 adultscore=0 mlxscore=0
+ impostorscore=0 bulkscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007220114
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA policy can be set to measure the command line passed in the kexec system call.
-There needs to be a test to validate this kexec command line measurement.
+On Wed, 2020-07-22 at 12:40 -0400, Lachlan Sneff wrote:
+> IMA policy can be set to measure the command line passed in the kexec system call.
+> There needs to be a test to validate this kexec command line measurement.
+> 
+> Add a testcase that verifies that the IMA subsystem has correctly
+> measured the cmdline specified during a kexec.
+> 
+> Note that this test does not actually reboot.
+> 
+> Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
 
-Add a testcase that verifies that the IMA subsystem has correctly
-measured the cmdline specified during a kexec.
+Other than the patch not applying cleanly and leading blanks, 
 
-Note that this test does not actually reboot.
-
-Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
----
- runtest/ima                                   |   1 +
- .../kernel/security/integrity/ima/README.md   |  11 ++
- .../security/integrity/ima/tests/ima_kexec.sh | 121 ++++++++++++++++++
- 3 files changed, 133 insertions(+)
- create mode 100644 testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-
-diff --git a/runtest/ima b/runtest/ima
-index 309d47420..5f4b4a7a1 100644
---- a/runtest/ima
-+++ b/runtest/ima
-@@ -4,4 +4,5 @@ ima_policy ima_policy.sh
- ima_tpm ima_tpm.sh
- ima_violations ima_violations.sh
- ima_keys ima_keys.sh
-+ima_kexec ima_kexec.sh
- evm_overlay evm_overlay.sh
-diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
-index db8819a99..926eb8478 100644
---- a/testcases/kernel/security/integrity/ima/README.md
-+++ b/testcases/kernel/security/integrity/ima/README.md
-@@ -30,6 +30,17 @@ measure func=KEY_CHECK keyrings=key_import_test template=ima-buf
- 
- The test also requires loaded policy with `func=KEY_CHECK`, see example in `keycheck.policy`.
- 
-+### IMA kexec test
-+
-+This test requires that the ima policy contains:
-+```
-+measure func=KEXEC_CMDLINE
-+```
-+
-+Even though the test does not actually reboot, it does require a valid,
-+signed kernel image. By default, the test will look in `/boot/vmlinuz-$(uname r)`,
-+but if no image is accessible there, a valid image be must be placed at `/tmp/Image`.
-+
- ## EVM tests
- 
- `evm_overlay.sh` requires a builtin IMA appraise tcb policy (e.g. `ima_policy=appraise_tcb`
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-new file mode 100644
-index 000000000..03caba308
---- /dev/null
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-@@ -0,0 +1,121 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (c) 2020 Microsoft Corporation
-+# Author: Lachlan Sneff <t-josne@linux.microsoft.com>
-+#
-+# Verify that kexec cmdline is measured correctly.
-+
-+TST_NEEDS_CMDS="kexec sed xargs printf grep tr"
-+TST_CNT=1
-+TST_NEEDS_DEVICE=1
-+
-+. ima_setup.sh
-+
-+# Since the test is executed inside some sort of
-+# separate shell, *most* environment variables are
-+# not accessible, so there's no way to set it from
-+# the outside.
-+#
-+# `/boot/vmlinuz-$(uname-r)` is where the image is
-+# located on many systems, but not all. Therefore,
-+# if the image is not located there, require the
-+# user to copy it to `/tmp/Image`.
-+#
-+# Ideally, this test shouldn't even require an image,
-+# since it doesn't actually reboot, but the IMA cmdline
-+# measurement occurs after the image is parsed and
-+# verified, so we must pass a valid kernel image. There
-+# is a possiblity of putting together a "faux" kernel
-+# image that has the right headers and appears to be
-+# signed correctly, but doesn't actually contain any
-+# code, but, after investigating that possiblity, it
-+# appears to be quite difficult (and would require a
-+# new faux kernel for each arch).
-+IMAGE="/boot/vmlinuz-$(uname -r)"
-+if [ ! -f $IMAGE ]; then
-+    IMAGE="/tmp/Image"
-+fi
-+
-+measure() {
-+    local found temp_file="file.txt" temp_file2="file2.txt" algorithm \
-+        digest expected_digest
-+
-+    echo -n "$1" > $temp_file
-+    grep "kexec-cmdline" $ASCII_MEASUREMENTS > $temp_file2
-+
-+    while read found
-+    do
-+        algorithm=$(echo "$found" | cut -d' ' -f4 | cut -d':' -f1)
-+        digest=$(echo "$found" | cut -d' ' -f4 | cut -d':' -f2)
-+
-+        expected_digest=$(compute_digest $algorithm $temp_file)
-+
-+        if [ "$digest" = "$expected_digest" ]; then
-+            return 0
-+        fi
-+    done < $temp_file2
-+
-+    return 1
-+}
-+
-+# Test that the kexec cmdline is measured correctly.
-+# NOTE: This does *not* actually reboot.
-+test1() {
-+    # Strip the `BOOT_IMAGE=...` part from the cmdline.
-+    local cmdline="$(sed 's/BOOT_IMAGE=[^ ]* //' /proc/cmdline)"
-+
-+    if ! kexec -sl $IMAGE --reuse-cmdline; then
-+        tst_res TCONF "kexec failed: $?"
-+        
-+        local sb_status="$(bootctl status 2>/dev/null | grep 'Secure Boot' \
-+            | tr -d ' ' | sed 's/SecureBoot:*//')"
-+        
-+        if [ "$sb_status" = "enabled" ]; then
-+            tst_res TINFO "secure boot is enabled, the specified kernel image may not be signed"
-+        fi
-+
-+        return
-+    fi
-+
-+    kexec -u
-+
-+    if ! measure "$cmdline"; then
-+        tst_res TFAIL "unable to find a correct entry in the IMA log"
-+        
-+        if [ ! -r $IMA_POLICY ]; then
-+            tst_brk TCONF "cannot read IMA policy (CONFIG_IMA_READ_POLICY=y required) to give contextual information"
-+        fi
-+
-+        if ! grep "measure func=KEXEC_CMDLINE" $IMA_POLICY >/dev/null; then
-+            tst_brk TCONF "The IMA policy does not specify 'measure func=KEXEC_CMDLINE', see IMA test README"
-+        fi
-+
-+        return
-+    fi
-+
-+    cmdline="foo"cmldine
-+    if ! kexec -sl $IMAGE --append=$cmdline; then
-+        tst_brk TCONF "kexec failed: $?"
-+    fi
-+
-+    kexec -u
-+
-+    if ! measure "$cmdline"; then
-+        tst_brk TFAIL "unable to find a correct entry in the IMA log"
-+    fi
-+
-+    cmdline="bar"
-+    if ! kexec -sl $IMAGE --command-line=$cmdline; then
-+        tst_brk TCONF "kexec failed: $?"
-+    fi
-+    
-+    kexec -u
-+
-+    if ! measure "$cmdline"; then
-+        tst_brk TFAIL "unable to find a correct entry in the IMA log"
-+    fi
-+
-+    tst_res TPASS "kexec cmdline was measured correctly"
-+}
-+
-+tst_run
--- 
-2.25.1
-
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
