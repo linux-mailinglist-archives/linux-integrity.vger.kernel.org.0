@@ -2,109 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5604922A4EF
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Jul 2020 03:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5868B22A4F7
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 Jul 2020 04:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729198AbgGWB4Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Jul 2020 21:56:25 -0400
-Received: from mga06.intel.com ([134.134.136.31]:36270 "EHLO mga06.intel.com"
+        id S1733155AbgGWCB3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Jul 2020 22:01:29 -0400
+Received: from mga04.intel.com ([192.55.52.120]:54427 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387467AbgGWB4Z (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Jul 2020 21:56:25 -0400
-IronPort-SDR: FTd/rG7UyP7yBicbP9seWS8LOcyrM+8t6iOlrOrNy6PO00wfe5qIH6P3gG1AyHh4KcByeN2VWo
- STgvhwKjOW4w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9690"; a="211994944"
-X-IronPort-AV: E=Sophos;i="5.75,383,1589266800"; 
-   d="scan'208";a="211994944"
+        id S1731394AbgGWCB3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 22 Jul 2020 22:01:29 -0400
+IronPort-SDR: LYcSWz3SZYTsF4Sr4G/3h0ZWIKFGpanO4CHUwymgoqbFFTGBZ7F9baRliJYkM/VHlQ+wQg0hAC
+ CEsVD4EvSDNA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9690"; a="147945576"
+X-IronPort-AV: E=Sophos;i="5.75,385,1589266800"; 
+   d="scan'208";a="147945576"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2020 18:56:24 -0700
-IronPort-SDR: eft/LI+Y9JdA91Wr+oeDxOG2Znrbja3Lrbrd7/9hlno2qPW+RUbUgziqzulTUEVwYYkbcjm1xW
- I3GatGhmYf6w==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2020 19:01:20 -0700
+IronPort-SDR: AfB3QoR8dOeXKSTFIzakQUxAEHUMujQi3jKGF0iQjYTddGezShJDyqb54qhIKW8Cu1dgipZN71
+ HnoUpqS2iNjA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,383,1589266800"; 
-   d="scan'208";a="302148581"
+X-IronPort-AV: E=Sophos;i="5.75,385,1589266800"; 
+   d="scan'208";a="302149612"
 Received: from schwings-mobl.ger.corp.intel.com (HELO localhost) ([10.252.33.132])
-  by orsmga002.jf.intel.com with ESMTP; 22 Jul 2020 18:56:21 -0700
-Date:   Thu, 23 Jul 2020 04:56:19 +0300
+  by orsmga002.jf.intel.com with ESMTP; 22 Jul 2020 19:01:16 -0700
+Date:   Thu, 23 Jul 2020 05:01:14 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Guenter Roeck <groeck@google.com>
-Cc:     Andrey Pronin <apronin@chromium.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH] tpm: avoid accessing cleared ops during shutdown
-Message-ID: <20200723015619.GF45081@linux.intel.com>
-References: <20200710002209.6757-1-apronin@chromium.org>
- <20200710114000.GD2614@linux.intel.com>
- <CAP7wa8LfEtEATbENjr18jTXShT+YmrAoDt4k9FK1SLpxVqViog@mail.gmail.com>
- <20200714113205.GA1461506@linux.intel.com>
- <CABXOdTcAZjG8aQvs+M72CFe9rAdBKZH+6x=C1Ha2aX_w0gXiHw@mail.gmail.com>
- <20200716172811.GB14135@linux.intel.com>
- <CABXOdTd4oY8TpuE1qZP--dYTJ-czdovsjmhLVbd_tTw=sApHYw@mail.gmail.com>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     zohar@linux.ibm.com, dhowells@redhat.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] encrypted-keys: Replace HTTP links with HTTPS ones
+Message-ID: <20200723020114.GG45081@linux.intel.com>
+References: <20200716195227.65839-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABXOdTd4oY8TpuE1qZP--dYTJ-czdovsjmhLVbd_tTw=sApHYw@mail.gmail.com>
+In-Reply-To: <20200716195227.65839-1-grandmaster@al2klimov.de>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 10:38:00AM -0700, Guenter Roeck wrote:
-> On Thu, Jul 16, 2020 at 10:28 AM Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Tue, Jul 14, 2020 at 08:48:38AM -0700, Guenter Roeck wrote:
-> > > On Tue, Jul 14, 2020 at 4:32 AM Jarkko Sakkinen
-> > > <jarkko.sakkinen@linux.intel.com> wrote:
-> > > >
-> > > > On Fri, Jul 10, 2020 at 11:25:44AM -0700, Andrey Pronin wrote:
-> > > > > > Why does not tpm_del_char_device need this?
-> > > > >
-> > > > > "Not" is a typo in the sentence above, right? tpm_del_char_device *does*
-> > > > > need the fix. When tpm_class_shutdown is called it sets chip->ops to
-> > > > > NULL. If tpm_del_char_device is called after that, it doesn't check if
-> > > > > chip->ops is NULL (normal kernel API and char device API calls go
-> > > > > through tpm_try_get_ops, but tpm_del_char_device doesn't) and proceeds to
-> > > > > call tpm2_shutdown(), which tries sending the command and dereferences
-> > > > > chip->ops.
-> > > >
-> > > > It's a typo, yes. Sorry about that.
-> > > >
-> > > > tpm_class_shutdown() is essentially tail of tpm_del_char_device().
-> > > >
-> > > > To clean things up, I'd suggest dropping tpm_del_char_device() and
-> > > > call tpm_class_shutdown() in tpm_chip_unregisters() along, and open
-> > > > coding things that prepend it in tpm_del_char_device().
-> > > >
-> > >
-> > > Personally I would have preferred two separate patches, one to fix the
-> > > immediate problem (with Cc: stable) and one for the cleanup, but I
-> > > guess merging both into one is ok as long as it is marked for stable.
-> > >
-> > > Thanks,
-> > > Guenter
-> >
-> > Not sure about stable as this issue does not afaik concern earlier
-> > kernel versions?
-> >
-> 
-> I just had a quick look into linux-5.4.y, and it seemed to me that it
-> is affected. Maybe I am wrong. Either case, we already applied this
-> patch to all affected ChromeOS kernel branches, so from our
-> perspective it doesn't really matter.
-> 
-> Thanks,
-> Guenter
+On Thu, Jul 16, 2020 at 09:52:27PM +0200, Alexander A. Klimov wrote:
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
 
-I'm fine with cc'ing stable after consideration given the benefits.
+A commit message should describe action e.g. "Replace HTTP URL with
+HTTPS URL given the security concerns and the slow deprecation of HTTP."
 
-Given that conclusion, it is better to break this down to two part
-series as you proposed.
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+>             If both the HTTP and HTTPS versions
+>             return 200 OK and serve the same content:
+>               Replace HTTP with HTTPS.
+
+Please remove this. We don't care about it. Git log should only contain
+information either for studying or maintaining the kernel source code.
+
+> 
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 
 /Jarkko
