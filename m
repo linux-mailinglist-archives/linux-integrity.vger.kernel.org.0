@@ -2,186 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A4E22B471
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Jul 2020 19:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02D722B55B
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 Jul 2020 20:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730223AbgGWRM5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 23 Jul 2020 13:12:57 -0400
-Received: from smtp-190f.mail.infomaniak.ch ([185.125.25.15]:36431 "EHLO
-        smtp-190f.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730252AbgGWRMu (ORCPT
+        id S1726349AbgGWSEw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 23 Jul 2020 14:04:52 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4582 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726092AbgGWSEw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 23 Jul 2020 13:12:50 -0400
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BCJms3QbTzlhN1y;
-        Thu, 23 Jul 2020 19:12:45 +0200 (CEST)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4BCJmr6v6jzlh8T5;
-        Thu, 23 Jul 2020 19:12:44 +0200 (CEST)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH v7 7/7] ima: add policy support for the new file open MAY_OPENEXEC flag
-Date:   Thu, 23 Jul 2020 19:12:27 +0200
-Message-Id: <20200723171227.446711-8-mic@digikod.net>
-X-Mailer: git-send-email 2.28.0.rc1
-In-Reply-To: <20200723171227.446711-1-mic@digikod.net>
-References: <20200723171227.446711-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 23 Jul 2020 14:04:52 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06NI3L2c074949;
+        Thu, 23 Jul 2020 14:04:47 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32facj8y5r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 14:04:46 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06NI0Gup014937;
+        Thu, 23 Jul 2020 18:04:43 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 32brq7wqca-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 18:04:43 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06NI3HwK55574952
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jul 2020 18:03:17 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47930A405C;
+        Thu, 23 Jul 2020 18:04:41 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B8653A406E;
+        Thu, 23 Jul 2020 18:04:40 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.150.234])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Jul 2020 18:04:40 +0000 (GMT)
+Message-ID: <1595527480.5211.185.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils] release feature discussion [renamed from
+ Drop empty NEWS file]
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>
+Date:   Thu, 23 Jul 2020 14:04:40 -0400
+In-Reply-To: <20200723170556.GA20782@dell5510>
+References: <1595428021.5311.93.camel@linux.ibm.com>
+         <20200722144510.l5qwn62dlanbuul4@altlinux.org>
+         <20200722145047.GB18945@dell5510> <1595431869.5311.102.camel@linux.ibm.com>
+         <1595503098.5211.85.camel@linux.ibm.com> <20200723115457.GA26679@dell5510>
+         <1595506070.5211.103.camel@linux.ibm.com> <20200723122934.GA30011@dell5510>
+         <20200723140420.jwz6rjwq5j2ouzzt@altlinux.org>
+         <1595514618.5211.131.camel@linux.ibm.com> <20200723170556.GA20782@dell5510>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-23_09:2020-07-23,2020-07-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
+ spamscore=0 priorityscore=1501 clxscore=1015 adultscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007230132
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Mimi Zohar <zohar@linux.ibm.com>
+On Thu, 2020-07-23 at 19:05 +0200, Petr Vorel wrote:
+> Hi Mimi,
+> 
+> ...
+> > > > Also, having docker based travis setup helps to test build against other distros
+> > > > (we have it in LTP).
+> 
+> > The existing travis.yml is a first attempt at using travis.  (Hint:
+> > help with cleaning it up would be much appreciated.)  Should this
+> > travis.yml be included now in 1.3.1 or deferred to 1.3.2?  Let's sync
+> > up on what should be included when.  Additional suggestions are
+> > welcome.
+> 
+> > 1.3.1 release (~1 week):
+> > - minor fixes
+> 
+> > Proposed 1.3.2 features (~3 months):
+> > - Travis integration
+> > - Support providing the TPM 2.0 PCRs as a file (--pcrs option).
+> > - Walking the TPM 2.0 event log as the basis for calculating the
+> > "boot_aggregate".
+> 
+> Thank you for sharing your roadmap. I'd vote for sooner include (it's not set
+> in the stone, it can be changed later :)), but up to you.
+> 
+> Not sure if I have enough time to significantly help with Travis, I'll try.
+> That docker based testing is nice, because it's a testing on real distro.
 
-The kernel has no way of differentiating between a file containing data
-or code being opened by an interpreter.  The proposed O_MAYEXEC
-openat2(2) flag bridges this gap by defining and enabling the
-MAY_OPENEXEC flag.
+Thanks, Petr.  You've provided so much help, support, and guidance
+already.  We know a lot of companies are using the Integrity
+subsystem.  Some are even actively contributing to it.  They should
+realize the more time I need to spend on ima-evm-utils, means the less
+time I have for reviewing and upstreaming kernel patches.  Hopefully
+they're listening and will step up to helping improve ima-evm-utils as
+well.  I can't be any blunter than that.  Let's see what happens. :)
 
-This patch adds IMA policy support for the new MAY_OPENEXEC flag.
-
-Example:
-measure func=FILE_CHECK mask=^MAY_OPENEXEC
-appraise func=FILE_CHECK appraise_type=imasig mask=^MAY_OPENEXEC
-
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Link: https://lore.kernel.org/r/1588167523-7866-3-git-send-email-zohar@linux.ibm.com
----
- Documentation/ABI/testing/ima_policy |  2 +-
- security/integrity/ima/ima_main.c    |  3 ++-
- security/integrity/ima/ima_policy.c  | 15 +++++++++++----
- 3 files changed, 14 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index cd572912c593..caca46125fe0 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -31,7 +31,7 @@ Description:
- 				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
- 				[KEXEC_CMDLINE] [KEY_CHECK]
- 			mask:= [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
--			       [[^]MAY_EXEC]
-+			       [[^]MAY_EXEC] [[^]MAY_OPENEXEC]
- 			fsmagic:= hex value
- 			fsuuid:= file system UUID (e.g 8bcbe394-4f13-4144-be8e-5aa9ea2ce2f6)
- 			uid:= decimal value
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index c1583d98c5e5..59fd1658a203 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -490,7 +490,8 @@ int ima_file_check(struct file *file, int mask)
- 
- 	security_task_getsecid(current, &secid);
- 	return process_measurement(file, current_cred(), secid, NULL, 0,
--				   mask & (MAY_READ | MAY_WRITE | MAY_EXEC |
-+				   mask & (MAY_READ | MAY_WRITE |
-+					   MAY_EXEC | MAY_OPENEXEC |
- 					   MAY_APPEND), FILE_CHECK);
- }
- EXPORT_SYMBOL_GPL(ima_file_check);
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index e493063a3c34..6487f0b2afdd 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -406,7 +406,8 @@ static bool ima_match_keyring(struct ima_rule_entry *rule,
-  * @cred: a pointer to a credentials structure for user validation
-  * @secid: the secid of the task to be validated
-  * @func: LIM hook identifier
-- * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC)
-+ * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC |
-+ *			    MAY_OPENEXEC)
-  * @keyring: keyring name to check in policy for KEY_CHECK func
-  *
-  * Returns true on rule match, false on failure.
-@@ -527,7 +528,8 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
-  *        being made
-  * @secid: LSM secid of the task to be validated
-  * @func: IMA hook identifier
-- * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC)
-+ * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC |
-+ *			    MAY_OPENEXEC)
-  * @pcr: set the pcr to extend
-  * @template_desc: the template that should be used for this rule
-  * @keyring: the keyring name, if given, to be used to check in the policy.
-@@ -1091,6 +1093,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 				entry->mask = MAY_READ;
- 			else if (strcmp(from, "MAY_APPEND") == 0)
- 				entry->mask = MAY_APPEND;
-+			else if (strcmp(from, "MAY_OPENEXEC") == 0)
-+				entry->mask = MAY_OPENEXEC;
- 			else
- 				result = -EINVAL;
- 			if (!result)
-@@ -1422,14 +1426,15 @@ const char *const func_tokens[] = {
- 
- #ifdef	CONFIG_IMA_READ_POLICY
- enum {
--	mask_exec = 0, mask_write, mask_read, mask_append
-+	mask_exec = 0, mask_write, mask_read, mask_append, mask_openexec
- };
- 
- static const char *const mask_tokens[] = {
- 	"^MAY_EXEC",
- 	"^MAY_WRITE",
- 	"^MAY_READ",
--	"^MAY_APPEND"
-+	"^MAY_APPEND",
-+	"^MAY_OPENEXEC"
- };
- 
- void *ima_policy_start(struct seq_file *m, loff_t *pos)
-@@ -1518,6 +1523,8 @@ int ima_policy_show(struct seq_file *m, void *v)
- 			seq_printf(m, pt(Opt_mask), mt(mask_read) + offset);
- 		if (entry->mask & MAY_APPEND)
- 			seq_printf(m, pt(Opt_mask), mt(mask_append) + offset);
-+		if (entry->mask & MAY_OPENEXEC)
-+			seq_printf(m, pt(Opt_mask), mt(mask_openexec) + offset);
- 		seq_puts(m, " ");
- 	}
- 
--- 
-2.27.0
-
+Mimi
