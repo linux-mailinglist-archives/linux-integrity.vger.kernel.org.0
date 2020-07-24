@@ -2,63 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2392422D111
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jul 2020 23:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC2622D110
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jul 2020 23:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbgGXVif (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        id S1726962AbgGXVif (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Fri, 24 Jul 2020 17:38:35 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726862AbgGXVgr (ORCPT
+        with ESMTP id S1726942AbgGXVgs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 24 Jul 2020 17:36:47 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521B8C0619E6
-        for <linux-integrity@vger.kernel.org>; Fri, 24 Jul 2020 14:36:47 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id x9so5307024plr.2
-        for <linux-integrity@vger.kernel.org>; Fri, 24 Jul 2020 14:36:47 -0700 (PDT)
+        Fri, 24 Jul 2020 17:36:48 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7D3C05BD0F
+        for <linux-integrity@vger.kernel.org>; Fri, 24 Jul 2020 14:36:48 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id a9so6114232pjd.3
+        for <linux-integrity@vger.kernel.org>; Fri, 24 Jul 2020 14:36:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JyyC+ze79w5yy/5GZgduMt6jr2+u0ZDeBjstvpXzNxo=;
-        b=YiScMk/XWtUXVqYh5p1sBcHBoq+HKiwfKwQokdA4qc2uFvlvr8ibk4w/rEjwOvKZVY
-         Ef7qg3WQ69UMP03as9mRkf095U8s4WtfJWI565xJLRkXVYze/57p62D37j5EtVpML7qy
-         T0EL2Si3ru8lyGWzqcWFBA8owK3JVx8pMLKUY=
+        bh=2/kBhrQPbzovHh41OSaPnXat9qGyJUFnv0iXtUuMMKE=;
+        b=IghqIwoBfKGdBHowpyxVljQEPV4EvfpdQWYORYH5ljggyOoUB93bDQtlXhE3tkR1xG
+         NqF6JhgR17Y5MKkkypz0qY7Odys1mTMmr5e+6P8C5CnGiggDf6CucxbUm93J2hL0KjhG
+         WQJk6B8gXZFngzLozgAGQtzopAVTs2DRYO93s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JyyC+ze79w5yy/5GZgduMt6jr2+u0ZDeBjstvpXzNxo=;
-        b=d3rbi1pkJUjZPodCN3ZhLtUQGz6sEvTDcvpdcAX1V4DT+Fqf3nh4FyUR9lpYwc2Ei3
-         2bwkzZPrMCL0iHLxy33f9EliMSZy6/7zsJgQ2Jiaur05d0/IQ4wHkWuD0b5acp1mHkPc
-         h0LA+79+zu+Kn4f3wJZR9SLQE44NeSpcK1SA793UOZrsxracB3Zqmb0SQ9u6yH4L00M4
-         M6LJWBUi4yHOR+wiZDf9kh89MbvqP7Y9jyHSRs5QeH/OPNtsj4cvBgKCNpvDY0VO/BIT
-         Lcj5mxE2Je2rhrjxxEM8ZCZjrYOux8Y2I0NE1T5uQVklkcmWjznLT8I3Q6aXY5MPbXdG
-         4k0w==
-X-Gm-Message-State: AOAM533r2hVNs9YMHI0oWiEpwNBjNhL7ALqUgPBx/C/mfNosiK/+7nZm
-        FrxqHyW0wJx+1/1nlAnE3+xZXA==
-X-Google-Smtp-Source: ABdhPJyxsu62BcSNwCFWCj25rWr4izXVmF12tIRkYF1HLqnOMvTdzTKIxsfpP8hZUY20o+rsIAcniA==
-X-Received: by 2002:a17:90b:1b11:: with SMTP id nu17mr7081861pjb.182.1595626606832;
-        Fri, 24 Jul 2020 14:36:46 -0700 (PDT)
+        bh=2/kBhrQPbzovHh41OSaPnXat9qGyJUFnv0iXtUuMMKE=;
+        b=Q3EDO6pbkwU0eKMZQKuocbW9a0A48AVrfYXR0qYyMl52TQwACSAKHBGOF5qb5UpLwm
+         Jt0k72IVlBUsnstGVMSVYYhy8opftE2sXkSDkNA8gVXyb4/GjSlHQILktstGW2SLjDm9
+         fP69+jLrAUv8SAbYBRRZDnRqLlkjexkZ91DMIptJIGwafnNld+u2BFZGsd5J6qahnvRf
+         SuD0tV+U6qsW+LkzVWeIv8Vyzy2sZ9AdGma2CIUQzdJz2td8nY4lu2Fgz8uXDJ6gJQer
+         xFQuqndQU5zgdwa726mlAMbulMctFkPyaxBh7pE+5yU9ap3ikoZ0y5yCY7nTnnOQXMdi
+         mLZw==
+X-Gm-Message-State: AOAM5308BcdYVk1djjGYIv8cYIAkmMY8H8NyncXJU2OeP0zmyc7fEQYP
+        G8w1t/D6A0PFKqZhbTxEN1k9mA==
+X-Google-Smtp-Source: ABdhPJzPJqhzQYIlmFMm0JvuP6Chr0PhV314mA4W5L786J7f7YtpqYDyRBviJfOTvbrBAVr9J0xosQ==
+X-Received: by 2002:a17:90b:338d:: with SMTP id ke13mr7268603pjb.60.1595626607402;
+        Fri, 24 Jul 2020 14:36:47 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s14sm7180427pjl.14.2020.07.24.14.36.43
+        by smtp.gmail.com with ESMTPSA id x10sm7377865pfp.80.2020.07.24.14.36.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 24 Jul 2020 14:36:43 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
+Cc:     Kees Cook <keescook@chromium.org>,
+        SeongJae Park <sjpark@amazon.de>,
         Scott Branden <scott.branden@broadcom.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
+        Jessica Yu <jeyu@kernel.org>, KP Singh <kpsingh@chromium.org>,
+        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 01/19] test_firmware: Test platform fw loading on non-EFI systems
-Date:   Fri, 24 Jul 2020 14:36:22 -0700
-Message-Id: <20200724213640.389191-2-keescook@chromium.org>
+Subject: [PATCH v3 02/19] selftest/firmware: Add selftest timeout in settings
+Date:   Fri, 24 Jul 2020 14:36:23 -0700
+Message-Id: <20200724213640.389191-3-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200724213640.389191-1-keescook@chromium.org>
 References: <20200724213640.389191-1-keescook@chromium.org>
@@ -69,157 +69,58 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On non-EFI systems, it wasn't possible to test the platform firmware
-loader because it will have never set "checked_fw" during __init.
-Instead, allow the test code to override this check. Additionally split
-the declarations into a private header file so it there is greater
-enforcement of the symbol visibility.
+The firmware tests would always time out for me. Add a correct timeout,
+including details on how the value was reached. Additionally allow the
+test harness to skip comments in settings files and report how long a
+given timeout was.
 
-Fixes: 548193cba2a7 ("test_firmware: add support for firmware_request_platform")
-Cc: stable@vger.kernel.org
+Reviewed-by: SeongJae Park <sjpark@amazon.de>
 Acked-by: Scott Branden <scott.branden@broadcom.com>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/firmware/efi/embedded-firmware.c | 21 ++++++++++++++++-----
- drivers/firmware/efi/embedded-firmware.h | 19 +++++++++++++++++++
- include/linux/efi_embedded_fw.h          | 13 -------------
- lib/test_firmware.c                      |  5 +++++
- 4 files changed, 40 insertions(+), 18 deletions(-)
- create mode 100644 drivers/firmware/efi/embedded-firmware.h
+ tools/testing/selftests/firmware/settings   | 8 ++++++++
+ tools/testing/selftests/kselftest/runner.sh | 6 +++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/firmware/settings
 
-diff --git a/drivers/firmware/efi/embedded-firmware.c b/drivers/firmware/efi/embedded-firmware.c
-index a1b199de9006..0fb03cd0a5a2 100644
---- a/drivers/firmware/efi/embedded-firmware.c
-+++ b/drivers/firmware/efi/embedded-firmware.c
-@@ -14,11 +14,22 @@
- #include <linux/vmalloc.h>
- #include <crypto/sha.h>
- 
-+#include "embedded-firmware.h"
-+
-+#ifdef CONFIG_TEST_FIRMWARE
-+# define EFI_EMBEDDED_FW_VISIBILITY
-+#else
-+# define EFI_EMBEDDED_FW_VISIBILITY static
-+#endif
-+
-+EFI_EMBEDDED_FW_VISIBILITY LIST_HEAD(efi_embedded_fw_list);
-+EFI_EMBEDDED_FW_VISIBILITY bool efi_embedded_fw_checked;
-+
- /* Exported for use by lib/test_firmware.c only */
--LIST_HEAD(efi_embedded_fw_list);
-+#ifdef CONFIG_TEST_FIRMWARE
- EXPORT_SYMBOL_GPL(efi_embedded_fw_list);
--
--static bool checked_for_fw;
-+EXPORT_SYMBOL_GPL(efi_embedded_fw_checked);
-+#endif
- 
- static const struct dmi_system_id * const embedded_fw_table[] = {
- #ifdef CONFIG_TOUCHSCREEN_DMI
-@@ -119,14 +130,14 @@ void __init efi_check_for_embedded_firmwares(void)
- 		}
- 	}
- 
--	checked_for_fw = true;
-+	efi_embedded_fw_checked = true;
- }
- 
- int efi_get_embedded_fw(const char *name, const u8 **data, size_t *size)
- {
- 	struct efi_embedded_fw *iter, *fw = NULL;
- 
--	if (!checked_for_fw) {
-+	if (!efi_embedded_fw_checked) {
- 		pr_warn("Warning %s called while we did not check for embedded fw\n",
- 			__func__);
- 		return -ENOENT;
-diff --git a/drivers/firmware/efi/embedded-firmware.h b/drivers/firmware/efi/embedded-firmware.h
+diff --git a/tools/testing/selftests/firmware/settings b/tools/testing/selftests/firmware/settings
 new file mode 100644
-index 000000000000..34113316d068
+index 000000000000..085e664ee093
 --- /dev/null
-+++ b/drivers/firmware/efi/embedded-firmware.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _EFI_EMBEDDED_FW_INTERNAL_H_
-+#define _EFI_EMBEDDED_FW_INTERNAL_H_
-+
-+/*
-+ * This struct and efi_embedded_fw_list are private to the efi-embedded fw
-+ * implementation they only in separate header for use by lib/test_firmware.c.
-+ */
-+struct efi_embedded_fw {
-+	struct list_head list;
-+	const char *name;
-+	const u8 *data;
-+	size_t length;
-+};
-+
-+extern struct list_head efi_embedded_fw_list;
-+extern bool efi_embedded_fw_checked;
-+
-+#endif /* _EFI_EMBEDDED_FW_INTERNAL_H_ */
-diff --git a/include/linux/efi_embedded_fw.h b/include/linux/efi_embedded_fw.h
-index 57eac5241303..4ad5db9f5312 100644
---- a/include/linux/efi_embedded_fw.h
-+++ b/include/linux/efi_embedded_fw.h
-@@ -7,19 +7,6 @@
- 
- #define EFI_EMBEDDED_FW_PREFIX_LEN		8
- 
--/*
-- * This struct and efi_embedded_fw_list are private to the efi-embedded fw
-- * implementation they are in this header for use by lib/test_firmware.c only!
-- */
--struct efi_embedded_fw {
--	struct list_head list;
--	const char *name;
--	const u8 *data;
--	size_t length;
--};
--
--extern struct list_head efi_embedded_fw_list;
--
- /**
-  * struct efi_embedded_fw_desc - This struct is used by the EFI embedded-fw
-  *                               code to search for embedded firmwares.
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 9fee2b93a8d1..62af792e151c 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -489,6 +489,7 @@ static ssize_t trigger_request_store(struct device *dev,
- static DEVICE_ATTR_WO(trigger_request);
- 
- #ifdef CONFIG_EFI_EMBEDDED_FIRMWARE
-+#include "../drivers/firmware/efi/embedded-firmware.h"
- static ssize_t trigger_request_platform_store(struct device *dev,
- 					      struct device_attribute *attr,
- 					      const char *buf, size_t count)
-@@ -501,6 +502,7 @@ static ssize_t trigger_request_platform_store(struct device *dev,
- 	};
- 	struct efi_embedded_fw efi_embedded_fw;
- 	const struct firmware *firmware = NULL;
-+	bool saved_efi_embedded_fw_checked;
- 	char *name;
- 	int rc;
- 
-@@ -513,6 +515,8 @@ static ssize_t trigger_request_platform_store(struct device *dev,
- 	efi_embedded_fw.data = (void *)test_data;
- 	efi_embedded_fw.length = sizeof(test_data);
- 	list_add(&efi_embedded_fw.list, &efi_embedded_fw_list);
-+	saved_efi_embedded_fw_checked = efi_embedded_fw_checked;
-+	efi_embedded_fw_checked = true;
- 
- 	pr_info("loading '%s'\n", name);
- 	rc = firmware_request_platform(&firmware, name, dev);
-@@ -530,6 +534,7 @@ static ssize_t trigger_request_platform_store(struct device *dev,
- 	rc = count;
- 
- out:
-+	efi_embedded_fw_checked = saved_efi_embedded_fw_checked;
- 	release_firmware(firmware);
- 	list_del(&efi_embedded_fw.list);
- 	kfree(name);
++++ b/tools/testing/selftests/firmware/settings
+@@ -0,0 +1,8 @@
++# The async firmware timeout is set to 1 second (but ends up being effectively
++# 2 seconds). There are 3 test configs, each done with and without firmware
++# present, each with 2 "nowait" functions tested 5 times. Expected time for a
++# normal execution should be 2 * 3 * 2 * 2 * 5 = 120 seconds for those alone.
++# Additionally, fw_fallback may take 5 seconds for internal timeouts in each
++# of the 3 configs, so at least another 15 seconds are needed. Add another
++# 10 seconds for each testing config: 120 + 15 + 30
++timeout=165
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 676b3a8b114d..cd5ddf979f15 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -53,6 +53,10 @@ run_one()
+ 	settings="$BASE_DIR/$DIR/settings"
+ 	if [ -r "$settings" ] ; then
+ 		while read line ; do
++			# Skip comments.
++			if echo "$line" | grep -q '^#'; then
++				continue
++			fi
+ 			field=$(echo "$line" | cut -d= -f1)
+ 			value=$(echo "$line" | cut -d= -f2-)
+ 			eval "kselftest_$field"="$value"
+@@ -80,7 +84,7 @@ run_one()
+ 			echo "not ok $test_num $TEST_HDR_MSG # SKIP"
+ 		elif [ $rc -eq $timeout_rc ]; then \
+ 			echo "#"
+-			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT"
++			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
+ 		else
+ 			echo "not ok $test_num $TEST_HDR_MSG # exit=$rc"
+ 		fi)
 -- 
 2.25.1
 
