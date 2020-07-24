@@ -2,84 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE4622CACC
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jul 2020 18:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39B522CB30
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jul 2020 18:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726607AbgGXQTc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 24 Jul 2020 12:19:32 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:39714 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbgGXQTc (ORCPT
+        id S1726841AbgGXQhf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 24 Jul 2020 12:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726783AbgGXQhe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 24 Jul 2020 12:19:32 -0400
-Received: from [192.168.1.22] (c-71-58-88-195.hsd1.pa.comcast.net [71.58.88.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D9A2820B4908;
-        Fri, 24 Jul 2020 09:19:30 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D9A2820B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595607571;
-        bh=TtbKzEWXFrC8pjh8I3QKrliiQRzFkZKrfn4AgUk+fQw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Lznvocsl64E8unwJUhV4vNA16i8fOEYGY4WHiEL3BUK7ZetxXzhgZiaOWjyWDsJCe
-         X+PQ4EbCdRpwcx4DFdmRHL2otjxCTRGBpfqevU8IpJVsci1US/prvFTHmN4El9x9HR
-         6VbyL2wEASoE8TiZS7ze7FaObOtjOFjam5gtP8Ew=
-Subject: Re: [PATCH v4 2/2] IMA: Add test for kexec cmdline measurement
-To:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>
-Cc:     ltp@lists.linux.it,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        balajib@linux.microsoft.com, linux-integrity@vger.kernel.org
-References: <20200724070038.29491-1-pvorel@suse.cz>
- <20200724070038.29491-2-pvorel@suse.cz>
- <1595592111.5211.246.camel@linux.ibm.com> <20200724131845.GB24626@dell5510>
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-Message-ID: <7cec65cc-efc7-045e-e905-07ad18ad24be@linux.microsoft.com>
-Date:   Fri, 24 Jul 2020 12:19:28 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Fri, 24 Jul 2020 12:37:34 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB643C0619E5
+        for <linux-integrity@vger.kernel.org>; Fri, 24 Jul 2020 09:37:33 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id 133so4984834ybu.7
+        for <linux-integrity@vger.kernel.org>; Fri, 24 Jul 2020 09:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=aMVauxKqCcxgAwSnS7kK9nQc5zQwzIAgKfVi/wyY9tI=;
+        b=PpqwyFiaCL+6ERRBKEqqCZhQSK3mgN3BOXDJjCjf0zbq1ir96feP7zQ0QGnyO9pOQt
+         hiIk1jyJbp7Az5/+iTrjFVZ0rcA/UUdILPucnt4KBt1nXlelbXqyc5kRbq0aJqEhcJ7K
+         lAc4Btim+kEaDCzGglrLheKhUMQO4/Pd5SM3OnT3oNWZWhNxN397HsjqRlJTFSY5obMy
+         /7GdE/Y45qEjbxYb82Ww1Hv2730BYZbchq7fygAxnR5tYn1odZueCmRU09uqu8f6ZYOW
+         n2AH5Hhn0VvoTkGCm4IJ6ClzP16WMhIiaWelGV+q4ApuR4TDfvvtN8z0WVqRGeJPyzim
+         6djA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=aMVauxKqCcxgAwSnS7kK9nQc5zQwzIAgKfVi/wyY9tI=;
+        b=MzVTVAhjJ2o7OtFuqaejF+oUpUfM4G6GnJpk/JJYGOqdgnVI2UUnJAMiMys0VSTB+6
+         P6SzDjQitFcAISme+kvby7cF0eKp5Wv32ge6A7USuDWAf0o0iBP07Zcy4YBqHcPxeBhg
+         4bmV/VMIFBv0mn6IE1o5O0nzO4rZ+9ZGNj6t6XqYSDBdQE3o7PbXizojohfF/kQPlmPo
+         6sULuEYxnq1TJ41t09A4q0AJ9hTXy7xllOSbQ4rLy2i6TqB2UllUM1idjp8wdkDWHr+b
+         ecamGG5keCiKSsM/AQf0KzBJTwfp3N0C5umbajHpTg/UOL5eYIIr6yYvQuPYGiTGXWht
+         U9vQ==
+X-Gm-Message-State: AOAM532rUHZZD9D10tuyBnhDycBYW+L2X0B2gg3e/ByGldtI2XCTh/Ei
+        i7IeIIqMaoIwoO8E7CWesHUv6bkSquudye/mHiw=
+X-Google-Smtp-Source: ABdhPJzZAJGHUji7DFXbipQphRNxA8HgKbu0yEEaiqkHEQjqztJs/enWtYvGty2vJzAzRkwHXKeuu9Ny85WQGAUBJfE=
+X-Received: by 2002:a25:8205:: with SMTP id q5mr15460421ybk.228.1595608652304;
+ Fri, 24 Jul 2020 09:37:32 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200724131845.GB24626@dell5510>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Reply-To: oldanjuma1@gmail.com
+Received: by 2002:a25:2088:0:0:0:0:0 with HTTP; Fri, 24 Jul 2020 09:37:31
+ -0700 (PDT)
+From:   Oloufade Danjuma <oldanjuma1@gmail.com>
+Date:   Fri, 24 Jul 2020 16:37:31 +0000
+X-Google-Sender-Auth: dcwg-OJwIEIyM5YNjCn_HFeWCsE
+Message-ID: <CAP1Ar59LX4YzA_is9M68cBju89qUpnTMmV=Kv_kVNGoAxWMhtQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Petr,
-
-On 7/24/20 9:18 AM, Petr Vorel wrote:
-> Hi all,
->
->> On Fri, 2020-07-24 at 09:00 +0200, Petr Vorel wrote:
->>> From: Lachlan Sneff <t-josne@linux.microsoft.com>
->>> IMA policy can be set to measure the command line passed in the kexec
->>> system call. Add a testcase that verifies that the IMA subsystem
->>> correctly measure the cmdline specified during a kexec.
->>> Note that this test does not actually reboot.
->>>
->>>
->>> Reviewed-by: Petr Vorel <pvorel@suse.cz>
->>> Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
->>> Signed-off-by: Petr Vorel <pvorel@suse.cz>
->>> ---
->>> Hi,
->>> sent version with few my fixes.
->>> @Mimi: could you please have a quick look? (I know you reviewed previous
->>> version.)
-> @Mimi, @Lachlan: if you both ack my changes, I can fix the code before merging.
-> If there are more changes needed and thus Lachlan plan new version, please use
-> my patches from https://patchwork.ozlabs.org/project/ltp/list/?series=191990&state=*
-> (download https://patchwork.ozlabs.org/series/191990/mbox/ and import it with "git am")
-> or clone my github fork and use kexec.v3.fixes branch:
-> https://github.com/pevik/ltp/tree/ima/kexec.v3.fixes).
-Hi Petr, these changes look good to me. I'm not exactly sure the 
-convention here,
-since I originally wrote the patch, but feel free to mark me as 
-Signed-off-by.
->
-> Kind regards,
-> Petr
-Thank you for working on this!
-Lachlan
+Dear friend,
+I am Oloufade Danjumaa banker, be informed that,I just sent you a
+business proposal.Did you receive it? Please get back to me very
+inmportant.
