@@ -2,59 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D367422D694
-	for <lists+linux-integrity@lfdr.de>; Sat, 25 Jul 2020 12:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E4D22D700
+	for <lists+linux-integrity@lfdr.de>; Sat, 25 Jul 2020 13:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbgGYKHB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 25 Jul 2020 06:07:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47284 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726572AbgGYKHA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 25 Jul 2020 06:07:00 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F3EA3206D7;
-        Sat, 25 Jul 2020 10:06:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595671620;
-        bh=DXKTp7F9hVX/ZMZ3cMvlM+waZARTWo/ANSvb7sYnEho=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=csoeNhZKhfy/PaKNHDzhb6fewTblIs59HKYmONeMkW7H74jifgwJGAr6lPRX4Vxlw
-         Z7+gvZk8JV6ESWik0r9XZf9nTKM+BHkr7Qjq2D4AQsu3HRqL+SabERQUdkBlDdSpup
-         e4N/tbzlVOUSYcVU4+kHmshhXryc9aBAsUBwgFMM=
-Date:   Sat, 25 Jul 2020 12:07:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     stable@vger.kernel.org, Scott Branden <scott.branden@broadcom.com>,
+        id S1726942AbgGYLSs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 25 Jul 2020 07:18:48 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:38635 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726728AbgGYLSs (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 25 Jul 2020 07:18:48 -0400
+Received: from ip5f5af08c.dynamic.kabel-deutschland.de ([95.90.240.140] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jzI9n-0006EM-Of; Sat, 25 Jul 2020 11:15:59 +0000
+Date:   Sat, 25 Jul 2020 13:15:58 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        Philippe =?utf-8?Q?Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/19] firmware_loader: EFI firmware loader must
- handle pre-allocated buffer
-Message-ID: <20200725100700.GB1073708@kroah.com>
-References: <20200724213640.389191-1-keescook@chromium.org>
- <20200724213640.389191-4-keescook@chromium.org>
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v7 0/7] Add support for O_MAYEXEC
+Message-ID: <20200725111558.sawfxujpsxpzw6fk@wittgenstein>
+References: <20200723171227.446711-1-mic@digikod.net>
+ <202007241205.751EBE7@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200724213640.389191-4-keescook@chromium.org>
+In-Reply-To: <202007241205.751EBE7@keescook>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 02:36:24PM -0700, Kees Cook wrote:
-> The EFI platform firmware fallback would clobber any pre-allocated
-> buffers. Instead, correctly refuse to reallocate when too small (as
-> already done in the sysfs fallback), or perform allocation normally
-> when needed.
+On Fri, Jul 24, 2020 at 12:06:53PM -0700, Kees Cook wrote:
+> I think this looks good now.
 > 
-> Fixes: e4c2c0ff00ec ("firmware: Add new platform fallback mechanism and firm ware_request_platform()")
+> Andrew, since you're already carrying my exec clean-ups (repeated here
+> in patch 1-3), can you pick the rest of this series too?
 
-"firmware_request_platform()" :)
+Al,
 
+Not sure if you have already re-surfaced from your
+csum()/raw_copy_from_user() work completely yet but you had thoughts
+about this series iirc.
+
+Aleksa, thoughts?
+
+Thanks!
+Christian
