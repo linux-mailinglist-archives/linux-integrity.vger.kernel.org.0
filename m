@@ -2,70 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9655E22D8E1
-	for <lists+linux-integrity@lfdr.de>; Sat, 25 Jul 2020 19:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3BB22E41D
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jul 2020 04:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726994AbgGYRUy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 25 Jul 2020 13:20:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59712 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726926AbgGYRUy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 25 Jul 2020 13:20:54 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 62DC9206D8;
-        Sat, 25 Jul 2020 17:20:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595697654;
-        bh=tsXknhVBYEmB2CJYeY9vU2qcrD5B43pPBPyaIHl7sCk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gRrUSykOt9EXcm6iUGecAcMKn8B+gQ2uDu91Esx9bYDK9fpRh7BzoCy5yk/EPvryl
-         PRKAUvqpxHPFfIfqOxCxoTdJ9FNBo7En15jyn746/g/l7ujY6HfgeXyylfYvO7FYU5
-         QHidFPL6+CVaAR5ojKH7ET3hoPO4f16GRUZsz4Hg=
-Date:   Sat, 25 Jul 2020 19:20:50 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     stable@vger.kernel.org, Scott Branden <scott.branden@broadcom.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/19] firmware_loader: EFI firmware loader must
- handle pre-allocated buffer
-Message-ID: <20200725172050.GA405510@kroah.com>
-References: <20200724213640.389191-1-keescook@chromium.org>
- <20200724213640.389191-4-keescook@chromium.org>
- <20200725100700.GB1073708@kroah.com>
- <202007250849.2B58CD3B@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202007250849.2B58CD3B@keescook>
+        id S1727852AbgG0Cx1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 26 Jul 2020 22:53:27 -0400
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:57006 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727050AbgG0Cx1 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 26 Jul 2020 22:53:27 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R791e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0U3rv6BO_1595818403;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0U3rv6BO_1595818403)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 27 Jul 2020 10:53:23 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tianjia.zhang@linux.alibaba.com
+Subject: [PATCH] tpm: Fix the description error of the help information in Kconfig
+Date:   Mon, 27 Jul 2020 10:53:23 +0800
+Message-Id: <20200727025323.26712-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Jul 25, 2020 at 08:50:33AM -0700, Kees Cook wrote:
-> On Sat, Jul 25, 2020 at 12:07:00PM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Jul 24, 2020 at 02:36:24PM -0700, Kees Cook wrote:
-> > > The EFI platform firmware fallback would clobber any pre-allocated
-> > > buffers. Instead, correctly refuse to reallocate when too small (as
-> > > already done in the sysfs fallback), or perform allocation normally
-> > > when needed.
-> > > 
-> > > Fixes: e4c2c0ff00ec ("firmware: Add new platform fallback mechanism and firm ware_request_platform()")
-> > 
-> > "firmware_request_platform()" :)
-> 
-> Weird... I'm not sure where that mangling happened. Perhaps a bad
-> cut/paste at 80 columns? Hmpf; thanks for catching. I've updated it on
-> my end (I assume you fixed this manually, though?)
+Obviously, the TPM version number in the help message is wrong, which
+will cause confusion. This patch fixes it.
 
-Yes, I fixed it up already, no worries.
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ drivers/char/tpm/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+index 58b4c573d176..8eedb3e704f3 100644
+--- a/drivers/char/tpm/Kconfig
++++ b/drivers/char/tpm/Kconfig
+@@ -62,7 +62,7 @@ config TCG_TIS_SPI
+ 	help
+ 	  If you have a TPM security chip which is connected to a regular,
+ 	  non-tcg SPI master (i.e. most embedded platforms) that is compliant with the
+-	  TCG TIS 1.3 TPM specification (TPM1.2) or the TCG PTP FIFO
++	  TCG TIS 1.3 TPM specification (TPM1.3) or the TCG PTP FIFO
+ 	  specification (TPM2.0) say Yes and it will be accessible from
+ 	  within Linux. To compile this driver as a module, choose  M here;
+ 	  the module will be called tpm_tis_spi.
+-- 
+2.17.1
+
