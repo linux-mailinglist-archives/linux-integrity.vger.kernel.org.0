@@ -2,103 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C133C22E462
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jul 2020 05:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E6922E4B6
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jul 2020 06:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbgG0DZm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 26 Jul 2020 23:25:42 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:54872 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726701AbgG0DZm (ORCPT
+        id S1726213AbgG0EVW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Jul 2020 00:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725787AbgG0EVW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 26 Jul 2020 23:25:42 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 261828EE1C8;
-        Sun, 26 Jul 2020 20:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1595820342;
-        bh=PuHjvwi7hSvGUiW0BerOn22ISzd6avHXTFelrVrW3Ug=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=nTfPOunQFdEMZ2J0IRoNG0S348iX8oFkXUgAXs8DKCSgFdX8WLFU3gmapHnNBtCYS
-         Csn7ewbntIAMgcbxx+2RioG2y4IeJJ6ToOT6hCPvF9oUAay0GyG1g9+RxmxDm0BDDH
-         nPD453zBAaTTsud5j15xBFrJjMc7C2mOcSt1C4PY=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5EjXYI853W5F; Sun, 26 Jul 2020 20:25:42 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id B13D08EE1C0;
-        Sun, 26 Jul 2020 20:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1595820341;
-        bh=PuHjvwi7hSvGUiW0BerOn22ISzd6avHXTFelrVrW3Ug=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=nKhbbFsnCntr/UundlZ2H5D55jNLjSdtmiYGyUJHi+e43yEk0lJ6hu0Zkd2hA30Qv
-         fumY26UBhijaUlgymhmBScREgACBeA/srW0O73f+kwKKLRVvQX87kphnvVsrPpI52P
-         MAUx3y8r5mgaI8p+X/hFyhm9/VsicAkn4psPJONU=
-Message-ID: <1595820339.32688.26.camel@HansenPartnership.com>
-Subject: Re: [PATCH v3 1/1] tpm: add sysfs exports for all banks of PCR
- registers
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Date:   Sun, 26 Jul 2020 20:25:39 -0700
-In-Reply-To: <20200724065745.GB1871046@linux.intel.com>
-References: <20200722155739.26957-1-James.Bottomley@HansenPartnership.com>
-         <20200722155739.26957-2-James.Bottomley@HansenPartnership.com>
-         <20200724065745.GB1871046@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Mon, 27 Jul 2020 00:21:22 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50244C0619D2;
+        Sun, 26 Jul 2020 21:21:22 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jzudO-003Pp0-V8; Mon, 27 Jul 2020 04:21:07 +0000
+Date:   Mon, 27 Jul 2020 05:21:06 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
+Subject: Re: [PATCH v7 4/7] fs: Introduce O_MAYEXEC flag for openat2(2)
+Message-ID: <20200727042106.GB794331@ZenIV.linux.org.uk>
+References: <20200723171227.446711-1-mic@digikod.net>
+ <20200723171227.446711-5-mic@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200723171227.446711-5-mic@digikod.net>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-07-24 at 09:57 +0300, Jarkko Sakkinen wrote:
-> On Wed, Jul 22, 2020 at 08:57:39AM -0700, James Bottomley wrote:
-> > use macro magic to create sysfs per hash groups with 24 PCR files
-> > in
-> 
-> 'Use'
-> 
-> Please, just say what the patch does in plain English and dust the
-> magic away.
+On Thu, Jul 23, 2020 at 07:12:24PM +0200, Mickaël Salaün wrote:
+> When the O_MAYEXEC flag is passed, openat2(2) may be subject to
+> additional restrictions depending on a security policy managed by the
+> kernel through a sysctl or implemented by an LSM thanks to the
+> inode_permission hook.  This new flag is ignored by open(2) and
+> openat(2) because of their unspecified flags handling.  When used with
+> openat2(2), the default behavior is only to forbid to open a directory.
 
-The reason for the macro magic comment is that there are 3 checkpatch
-errors and one warning from this, all spurious, because checkpatch
-doesn't understand the syntax of macros that create macros.
+Correct me if I'm wrong, but it looks like you are introducing a magical
+flag that would mean "let the Linux S&M take an extra special whip
+for this open()".
 
-> > them one for each possible agile hash of the TPM.  The files are
->                                                    ~~
-> 
-> I'd prefer a single space.
-
-It's still listed in the style guides as best practice for monospaced
-fonts, but at this point I've lost the will to care about it.
-
-> > plugged in to a read function which is TPM version agnostic, so
-> > this works also for TPM 1.2 although the hash is only sha1 in that
-> > case. For every hash the TPM supports, a group named pcr-<hash> is
-> > created and each of the PCR read files placed under it.
-> 
-> Yeah, the commit message is missing the statement what it does and
-> goes straight away rationalizing "macro magic".
-
-OK so how about
-
----
-Create sysfs per hash groups with 24 PCR files in them one group, named
-pcr-<hash>, for each agile hash of the TPM.  The files are plugged in
-to a PCR read function which is TPM version agnostic, so this works
-also for TPM 1.2 although the hash is only sha1 in that case.
-
-Note: the macros used to create the hashes emit spurious checkpatch
-warnings.  Do not try to "fix" them as checkpatch recommends otherwise
-they'll break.
----
-
-James
-
+Why is it done during open?  If the caller is passing it deliberately,
+why not have an explicit request to apply given torture device to an
+already opened file?  Why not sys_masochism(int fd, char *hurt_flavour),
+for that matter?
