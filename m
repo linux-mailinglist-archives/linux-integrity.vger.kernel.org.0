@@ -2,85 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E144022F379
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jul 2020 17:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D15622F528
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jul 2020 18:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730108AbgG0PI5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 27 Jul 2020 11:08:57 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11666 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729507AbgG0PI5 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 27 Jul 2020 11:08:57 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06RF3Cnl040273;
-        Mon, 27 Jul 2020 11:08:55 -0400
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32j0a1jb26-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jul 2020 11:08:55 -0400
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06REtaUZ026047;
-        Mon, 27 Jul 2020 15:08:53 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma05wdc.us.ibm.com with ESMTP id 32gcy9a0ra-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jul 2020 15:08:53 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06RF8r7Y37683678
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jul 2020 15:08:53 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5E27E112067;
-        Mon, 27 Jul 2020 15:08:53 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B0C9112061;
-        Mon, 27 Jul 2020 15:08:51 +0000 (GMT)
-Received: from morokweng.localdomain (unknown [9.163.8.14])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Mon, 27 Jul 2020 15:08:51 +0000 (GMT)
-References: <20200722155739.26957-1-James.Bottomley@HansenPartnership.com> <20200722155739.26957-2-James.Bottomley@HansenPartnership.com>
-User-agent: mu4e 1.2.0; emacs 26.3
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v3 1/1] tpm: add sysfs exports for all banks of PCR registers
-In-reply-to: <20200722155739.26957-2-James.Bottomley@HansenPartnership.com>
-Date:   Mon, 27 Jul 2020 12:08:44 -0300
-Message-ID: <87y2n50zcz.fsf@morokweng.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-27_08:2020-07-27,2020-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- bulkscore=0 impostorscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
- spamscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007270105
+        id S1731726AbgG0Q3T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Jul 2020 12:29:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57830 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726320AbgG0Q3T (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 27 Jul 2020 12:29:19 -0400
+Received: from localhost.localdomain (pool-96-246-152-186.nycmny.fios.verizon.net [96.246.152.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0896A20719;
+        Mon, 27 Jul 2020 16:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595867358;
+        bh=wVYeaaXiXzUaFNPG+whAj3/nPc4VyY++YQ4OxyWyDH0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ngDbKbTENJLhs/GPlmvy4pP78KGL7NZ38+x8rytOXFcs7gJNeoBT85FCm35m9PKEV
+         ulb8jIW+cwa8buMo4M0O/PxoZywEt0e7/CUcvKzuzbGfW/CsAksMuGPZ5V8SMwwEKM
+         UiNoFjjyjpgYxMb+QACMp6QjAe06aKn1apn7Klhc=
+Message-ID: <1595867355.4841.134.camel@kernel.org>
+Subject: Re: [PATCH v3 08/19] fs/kernel_read_file: Remove redundant size
+ argument
+From:   Mimi Zohar <zohar@kernel.org>
+To:     Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 27 Jul 2020 12:29:15 -0400
+In-Reply-To: <20200724213640.389191-9-keescook@chromium.org>
+References: <20200724213640.389191-1-keescook@chromium.org>
+         <20200724213640.389191-9-keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, 2020-07-24 at 14:36 -0700, Kees Cook wrote:
+> In preparation for refactoring kernel_read_file*(), remove the redundant
+> "size" argument which is not needed: it can be included in the return
+> code, with callers adjusted. (VFS reads already cannot be larger than
+> INT_MAX.)
+> 
+> Acked-by: Scott Branden <scott.branden@broadcom.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-James Bottomley <James.Bottomley@HansenPartnership.com> writes:
-
-> use macro magic to create sysfs per hash groups with 24 PCR files in
-> them one for each possible agile hash of the TPM.  The files are
-> plugged in to a read function which is TPM version agnostic, so this
-> works also for TPM 1.2 although the hash is only sha1 in that case.
-> For every hash the TPM supports, a group named pcr-<hash> is created
-> and each of the PCR read files placed under it.
->
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-
-I tested the patch on ppc64le, on the powernv platform:
-
-Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-
--- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
