@@ -2,93 +2,95 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7B722E7C5
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jul 2020 10:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 702F822EA57
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jul 2020 12:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgG0Ide (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 27 Jul 2020 04:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726227AbgG0Ide (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 27 Jul 2020 04:33:34 -0400
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A7DC061794;
-        Mon, 27 Jul 2020 01:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1595838814; x=1627374814;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=7LaxfNE64L/JQojkBYKPBox9K7OsCJ2QWRkABxmkPjM=;
-  b=mFLKdcFQgQpykAkKnhK5RC8pXW/JiYfP981U2cqVj+ZcGtV4SsfZ5aGX
-   HN40acsAMv55IJnT1gr15lyxvdTBL/Csk9sUFb9sbco5qCWN0baLvOiNR
-   agwyfkiZKhiFFivQfCjNGnkNqMWj1QgpOoaPnOhcaAT27KRsyGiWl6fxr
-   4=;
-IronPort-SDR: PVi5OazAKoPZruS2kF89Nl+QuAH5Cf0zALIf9QHKU/ThpnLejm8exJ/z1MBw42vI0b3Akyc2hp
- Dq7XmJAzcboUW0eLMTyy1Tglo4RwhtBbXkZVAEUDNDUtAY+gUGx/Ctv4iv2eD6/jg1H0L8qSdi
- IyZSJF/fsH6O6nz1QAChwc6DwRRzm2YpLKKJh23670kxOyeTgk2C9HLvJ91ioYcjxh/TLVcK7U
- qmovStrYg6u0tBejJnJLCjX8XqMKKfDM6YfhmMHFnibrtgd5Vi0qsL/tVkucvNVP3gs974afN7
- qCg=
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6000,8403,9694"; a="171356427"
-X-IronPort-AV: E=Sophos;i="5.75,401,1589234400"; 
-   d="scan'208";a="171356427"
-Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2020 10:33:28 +0200
-Received: from MUCSE718.infineon.com (MUCSE718.infineon.com [172.23.7.101])
-        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
-        Mon, 27 Jul 2020 10:33:27 +0200 (CEST)
-Received: from MUCSE701.infineon.com (172.23.7.90) by MUCSE718.infineon.com
- (172.23.7.101) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1913.5; Mon, 27
- Jul 2020 10:33:27 +0200
-Received: from MUCSE711.infineon.com (172.23.7.83) by MUCSE701.infineon.com
- (172.23.7.90) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.1913.5; Mon, 27
- Jul 2020 10:33:27 +0200
-Received: from MUCSE711.infineon.com ([fe80::cc45:4d1a:3881:a6e5]) by
- MUCSE711.infineon.com ([fe80::cc45:4d1a:3881:a6e5%20]) with mapi id
- 15.01.1913.010; Mon, 27 Jul 2020 10:33:27 +0200
-From:   <Peter.Huewe@infineon.com>
-To:     <tianjia.zhang@linux.alibaba.com>, <arnd@arndb.de>
-CC:     <peterhuewe@gmx.de>, <jarkko.sakkinen@linux.intel.com>,
-        <jgg@ziepe.ca>, <gregkh@linuxfoundation.org>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <christophe.ricard@gmail.com>, <Alexander.Steffen@infineon.com>
-Subject: RE: [PATCH] tpm: Fix the description error of the help information in
- Kconfig
-Thread-Topic: [PATCH] tpm: Fix the description error of the help information
- in Kconfig
-Thread-Index: AQHWY8Enxsmh6g9s/kGoV2thptZCGaka4RQAgAAU+ICAACMGkA==
-Date:   Mon, 27 Jul 2020 08:33:26 +0000
-Message-ID: <09571889ac784850a6c5855f2dc0888e@infineon.com>
-References: <20200727025323.26712-1-tianjia.zhang@linux.alibaba.com>
- <CAK8P3a2neQUP2marbRUxpSZE4OTJtf97JKSK5-LC6EzH8rRHDQ@mail.gmail.com>
- <13d8ab17-5cea-3e00-ecdb-87c68d7f2a15@linux.alibaba.com>
-In-Reply-To: <13d8ab17-5cea-3e00-ecdb-87c68d7f2a15@linux.alibaba.com>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.23.8.247]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+        id S1727921AbgG0KtO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Jul 2020 06:49:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60368 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726298AbgG0KtO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 27 Jul 2020 06:49:14 -0400
+Received: from localhost.localdomain (pool-96-246-152-186.nycmny.fios.verizon.net [96.246.152.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7ED78206E7;
+        Mon, 27 Jul 2020 10:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595846953;
+        bh=zNfqzDInDnSp+fKCzpx3F6lQ3q4TBw0M7Av0QoXkGpo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=lhClkxotlesTUV1UDov1RrY64xr/ppyKNwCO0sGj548usN3ExBpqNf1v73lO6qY2x
+         gXrALj4a7FB2QB75LMyX17RGfKrjHGwIko0vBdXAOFq7H637gLacrQYgI1EPBcNl4F
+         WQ3zl8FW26O60MLGh4f1gZbN6TKyE1zhYxL/dUMo=
+Message-ID: <1595846951.4841.61.camel@kernel.org>
+Subject: Re: [PATCH v3 11/19] LSM: Introduce kernel_post_load_data() hook
+From:   Mimi Zohar <zohar@kernel.org>
+To:     Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 27 Jul 2020 06:49:11 -0400
+In-Reply-To: <20200724213640.389191-12-keescook@chromium.org>
+References: <20200724213640.389191-1-keescook@chromium.org>
+         <20200724213640.389191-12-keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SGksDQpPbiAyMDIwLzcvMjcgMTU6MTAsIEFybmQgQmVyZ21hbm4gd3JvdGU6DQo+IE9uIE1vbiwg
-SnVsIDI3LCAyMDIwIGF0IDQ6NTQgQU0gVGlhbmppYSBaaGFuZyANCj4gPHRpYW5qaWEuemhhbmdA
-bGludXguYWxpYmFiYS5jb20+IHdyb3RlOg0KPj4NCj4+IE9idmlvdXNseSwgdGhlIFRQTSB2ZXJz
-aW9uIG51bWJlciBpbiB0aGUgaGVscCBtZXNzYWdlIGlzIHdyb25nLCB3aGljaCANCj4+IHdpbGwg
-Y2F1c2UgY29uZnVzaW9uLiBUaGlzIHBhdGNoIGZpeGVzIGl0Lg0KPiANCj4gSG93IGlzIHRoaXMg
-Im9idmlvdXMiPyBJIHRyaWVkIGZpbmRpbmcgdGhlIHNwZWNpZmljYXRpb24gYW5kIGNvdWxkIG5v
-dCANCj4gc2VlIGFueXRoaW5nIHRvIGJhY2sgdXAgVElTIDEuMyBiZWluZyBvbmx5IHN1cHBvcnRl
-ZCB3aXRoIFRQTSAxLjMsIG9yIA0KPiB0aGUgZXhpc3RlbmNlIG9mIGEgVFBNIDEuMyBzcGVjaWZp
-Y2F0aW9uIGF0IGFsbC4NCj4gDQpUaGVyZSBpcyBubyBUUE0gMS4zLg0KDQpUaGVyZSBpcyBhIFRJ
-UyBTcGVjaWZpY2F0aW9uIDEuMyB3aGljaCBhcHBsaWVzIHRvIFRQTTEuMiANClRoZXNlIGFyZSBk
-aWZmZXJlbnQgc3BlY3MsIHdpdGggZGlmZmVyZW50IHZlcnNpb24gbnVtYmVycy4NClNvIHRoZSBm
-aXggaXMgaW5jb3JyZWN0Lg0KDQpUaGFua3MsDQpQZXRlcg0K
+On Fri, 2020-07-24 at 14:36 -0700, Kees Cook wrote:
+> There are a few places in the kernel where LSMs would like to have
+> visibility into the contents of a kernel buffer that has been loaded or
+> read. While security_kernel_post_read_file() (which includes the
+> buffer) exists as a pairing for security_kernel_read_file(), no such
+> hook exists to pair with security_kernel_load_data().
+> 
+> Earlier proposals for just using security_kernel_post_read_file() with a
+> NULL file argument were rejected (i.e. "file" should always be valid for
+> the security_..._file hooks, but it appears at least one case was
+> left in the kernel during earlier refactoring. (This will be fixed in
+> a subsequent patch.)
+> 
+> Since not all cases of security_kernel_load_data() can have a single
+> contiguous buffer made available to the LSM hook (e.g. kexec image
+> segments are separately loaded), there needs to be a way for the LSM to
+> reason about its expectations of the hook coverage. In order to handle
+> this, add a "contents" argument to the "kernel_load_data" hook that
+> indicates if the newly added "kernel_post_load_data" hook will be called
+> with the full contents once loaded. That way, LSMs requiring full contents
+> can choose to unilaterally reject "kernel_load_data" with contents=false
+> (which is effectively the existing hook coverage), but when contents=true
+> they can allow it and later evaluate the "kernel_post_load_data" hook
+> once the buffer is loaded.
+> 
+> With this change, LSMs can gain coverage over non-file-backed data loads
+> (e.g. init_module(2) and firmware userspace helper), which will happen
+> in subsequent patches.
+> 
+> Additionally prepare IMA to start processing these cases.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+At least from an IMA perspective, the original
+security_kernel_load_data() hook was defined in order to prevent
+certain syscalls - init_module, kexec_load - and loading firmware via
+sysfs.  The resulting error messages were generic.
+  
+Unlike security_kernel_load_data(), security_kernel_post_load_data()
+is meant to be used, but without a file desciptor specific
+information, like the filename associated with the buffer, is missing.
+ Having the filename isn't actually necessary for verifying the
+appended signature, but it is needed for auditing signature
+verification failures and including in the IMA measurement list.
+
+Mimi
