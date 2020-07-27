@@ -2,65 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8255B22ED79
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jul 2020 15:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7650422EF56
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Jul 2020 16:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbgG0NfD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 27 Jul 2020 09:35:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37970 "EHLO mail.kernel.org"
+        id S1730733AbgG0OPk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Jul 2020 10:15:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42168 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726298AbgG0NfD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 27 Jul 2020 09:35:03 -0400
+        id S1730730AbgG0OPj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 27 Jul 2020 10:15:39 -0400
 Received: from localhost.localdomain (pool-96-246-152-186.nycmny.fios.verizon.net [96.246.152.186])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2C2A62083B;
-        Mon, 27 Jul 2020 13:35:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4E1482078E;
+        Mon, 27 Jul 2020 14:15:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595856902;
-        bh=lsb8DwuA8VH82LyNkysVJs9u8cUS6ID7TdHH9rnuG9E=;
+        s=default; t=1595859339;
+        bh=QB92ZsPHfZ21lE0ar6tcoxTyrFlZBD61PJSWmYDo/ek=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=UcMWrZGHef3xmGLz2KuVpjsTc4DIyfyoqvrtijkOjBGNC5pfY8sc+CNGTT4ppkVzm
-         MuHrVj5LSOyuoI/u/aR8bJpLPmTQFiNAi1Zjjjq1/mHJJ0n6l9NoUF1sondP0D6+nF
-         76pshYuPvhHtjLWejlPFBh082rkCH/MoxpsRrNl8=
-Message-ID: <1595856900.4841.88.camel@kernel.org>
-Subject: Re: [PATCH v3 04/19] fs/kernel_read_file: Remove
- FIRMWARE_PREALLOC_BUFFER enum
+        b=WCRhX4nSTI+RLmpCLUBNJZ+RiLJq2+BzG0zHb4XJoAsIZ9uLzJK7GujiP2UC4eVuK
+         qlEJx9TSYUU4SRq9A1hcKzwaWdyruyBVcV+6+MI/nkwaWVS0o7YXpAHxTF5APAe87n
+         wNYWv/nCWaBYBo72B2ZUKmiBxNKpiyyLBXObu1m4=
+Message-ID: <1595859338.4841.116.camel@kernel.org>
+Subject: Re: [PATCH v4 ima-evm-utils] extend ima_measurement --pcrs option
+ to support per-bank pcr files
 From:   Mimi Zohar <zohar@kernel.org>
-To:     Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, Scott Branden <scott.branden@broadcom.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 27 Jul 2020 09:35:00 -0400
-In-Reply-To: <20200724213640.389191-5-keescook@chromium.org>
-References: <20200724213640.389191-1-keescook@chromium.org>
-         <20200724213640.389191-5-keescook@chromium.org>
+To:     Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc:     linux-integrity@vger.kernel.org, bill.c.roberts@gmail.com
+Date:   Mon, 27 Jul 2020 10:15:38 -0400
+In-Reply-To: <20200727132110.5057-1-stephen.smalley.work@gmail.com>
+References: <20200727132110.5057-1-stephen.smalley.work@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-07-24 at 14:36 -0700, Kees Cook wrote:
-> FIRMWARE_PREALLOC_BUFFER is a "how", not a "what", and confuses the LSMs
-> that are interested in filtering between types of things. The "how"
-> should be an internal detail made uninteresting to the LSMs.
+On Mon, 2020-07-27 at 09:21 -0400, Stephen Smalley wrote:
+
+> ---
+> v4 updates the usage in the README and usage message, reduces MAX_NPCRFILE
+> to 2 (for sha1 and sha256) and changes the buffer size to
+> MAX_DIGEST_SIZE * 2 + 8 for the lines read from the pcrs file(s).
 > 
-> Fixes: a098ecd2fa7d ("firmware: support loading into a pre-allocated buffer")
-> Fixes: fd90bc559bfb ("ima: based on policy verify firmware signatures (pre-allocated buffer)")
-> Fixes: 4f0496d8ffa3 ("ima: based on policy warn about loading firmware (pre-allocated buffer)")
-> Cc: stable@vger.kernel.org
-> Acked-by: Scott Branden <scott.branden@broadcom.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> One thing that is unclear to me is correct/expected usage of the
+> --verify and --validate options to evmctl ima_measurement. For an
+> appraisal of a remote attestation, when would one NOT want to use
+> --verify (i.e. doesn't lack of --verify render the result insecure)
+> and when would one want to use --validate (i.e. doesn't use of --validate
+> render the result insecure)? And shouldn't the default in both cases
+> be the more secure case (i.e. verify = 1, validate = 0)?  The naming of
+> --validate is also confusing since one might expect it to mean
+> to validate/check the result as opposed to ignore violations?
 
-Thank you for updating the pre-allocated buffer comment.
+Yes, agreed.  Thank you for reviewing and commenting on the code.
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+While adding support for these features, originally in LTP and the
+standalone version, they should be cleaned up.  Should "--verify" just
+be dropped?  Without a custom policy, with just the builtin
+"ima_policy=tcb" policy, a few files are read while being opened for
+write (e.g. audit, log, print files).  Perhaps rename "validate" to
+something like "force-validate".
+
+I forgot to add "evmctl boot_aggregate" to the README.  The supplied
+pcrs could also be used to calculate the "boot_aggregate" value(s).
+
+Mimi
