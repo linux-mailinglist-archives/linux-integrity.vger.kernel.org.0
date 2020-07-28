@@ -2,67 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E7523107E
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 19:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8012310AD
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 19:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731845AbgG1RIu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Jul 2020 13:08:50 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:41328 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731510AbgG1RIu (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Jul 2020 13:08:50 -0400
-Received: from [192.168.254.32] (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3CB1720B4908;
-        Tue, 28 Jul 2020 10:08:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3CB1720B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595956129;
-        bh=/7IJcSJkmnGhyvhTN0w/k6D0iSgWl3GbtIXdsg8Fv5A=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ZuOaQbdU5uYtFJaEiOblvnFbeGROFNYKRjF3F43kJ1vUkhEErX0fbDaPkJowjRf06
-         4DasCLQblFzecv0eF8w7mUhf1hXAgudt5JEdU8ofWsRvm0zC9iTlBhH+fSyTWj70K7
-         RgZPV6XJ7g6uzFeyOC7P2FKqWtU5gXy/jZ/r8ZHI=
-Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-To:     James Morris <jmorris@namei.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Cc:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, oleg@redhat.com,
-        x86@kernel.org
-References: <aefc85852ea518982e74b233e11e16d2e707bc32>
- <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <3fd22f92-7f45-1b0f-e4fe-857f3bceedd0@schaufler-ca.com>
- <alpine.LRH.2.21.2007290300400.31310@namei.org>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <a909e0b0-0d82-d869-fe49-cc974680ac23@linux.microsoft.com>
-Date:   Tue, 28 Jul 2020 12:08:48 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1731863AbgG1RQp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 Jul 2020 13:16:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37290 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731841AbgG1RQp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 28 Jul 2020 13:16:45 -0400
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7CC6B2177B
+        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 17:16:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595956604;
+        bh=FPl2g9z95O/j9qakMr1cGWs3U8+LQVfszTzNisgkf+I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KPnMEN7iCF/xEO6QsEaxqYO2GzTsDtB7AMcRLK6l/UjK4oIn/F4JOGSXZUvYW44s1
+         jEFlyTCl3P3MEFUQeNfubHYCCc9zG74UqQBTODvN2LzJ4uy4XxTnjTnNBbEJ2yMVj4
+         PZjnIsRaELUQ0yXk6Deqthsuj/8xNzoMTptFK1So=
+Received: by mail-wm1-f44.google.com with SMTP id c80so286231wme.0
+        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 10:16:44 -0700 (PDT)
+X-Gm-Message-State: AOAM530QtBmAA14bvRkrSmm5h6g0TwWpDSyWlczcZKQo7ot2gvcVcQK3
+        FqM1F7WvZy+i1d5rrj+naGJii2SnVSyjh3GthzPL7Q==
+X-Google-Smtp-Source: ABdhPJwu7N9kRRQbUR+VvYTCTVOAiGMuB+0+ywLntE8sEkStNuXDIJbnbwFAt4moiWmwHpSI57u5zJetZtfyZAKrhS8=
+X-Received: by 2002:a1c:de86:: with SMTP id v128mr4734767wmg.36.1595956603047;
+ Tue, 28 Jul 2020 10:16:43 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.21.2007290300400.31310@namei.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
+ <c23de6ec47614f489943e1a89a21dfa3@AcuMS.aculab.com> <f5cfd11b-04fe-9db7-9d67-7ee898636edb@linux.microsoft.com>
+In-Reply-To: <f5cfd11b-04fe-9db7-9d67-7ee898636edb@linux.microsoft.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 28 Jul 2020 10:16:32 -0700
+X-Gmail-Original-Message-ID: <CALCETrUta5-0TLJ9-jfdehpTAp2Efmukk2npYadFzz9ozOrG2w@mail.gmail.com>
+Message-ID: <CALCETrUta5-0TLJ9-jfdehpTAp2Efmukk2npYadFzz9ozOrG2w@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        "kernel-hardening@lists.openwall.com" 
+        <kernel-hardening@lists.openwall.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 7/28/20 12:05 PM, James Morris wrote:
-> On Tue, 28 Jul 2020, Casey Schaufler wrote:
+On Tue, Jul 28, 2020 at 9:32 AM Madhavan T. Venkataraman
+<madvenka@linux.microsoft.com> wrote:
 >
->> You could make a separate LSM to do these checks instead of limiting
->> it to SELinux. Your use case, your call, of course.
-> It's not limited to SELinux. This is hooked via the LSM API and 
-> implementable by any LSM (similar to execmem, execstack etc.)
+> Thanks. See inline..
+>
+> On 7/28/20 10:13 AM, David Laight wrote:
+> > From:  madvenka@linux.microsoft.com
+> >> Sent: 28 July 2020 14:11
+> > ...
+> >> The kernel creates the trampoline mapping without any permissions. When
+> >> the trampoline is executed by user code, a page fault happens and the
+> >> kernel gets control. The kernel recognizes that this is a trampoline
+> >> invocation. It sets up the user registers based on the specified
+> >> register context, and/or pushes values on the user stack based on the
+> >> specified stack context, and sets the user PC to the requested target
+> >> PC. When the kernel returns, execution continues at the target PC.
+> >> So, the kernel does the work of the trampoline on behalf of the
+> >> application.
+> > Isn't the performance of this going to be horrid?
+>
+> It takes about the same amount of time as getpid(). So, it is
+> one quick trip into the kernel. I expect that applications will
+> typically not care about this extra overhead as long as
+> they are able to run.
 
-Yes. I have an implementation that I am testing right now that
-defines the hook for exectramp and implements it for
-SELinux. That is why I mentioned SELinux.
+What did you test this on?  A page fault on any modern x86_64 system
+is much, much, much, much slower than a syscall.
 
-Madhavan
+--Andy
