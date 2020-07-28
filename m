@@ -2,51 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C67EF2312F8
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 21:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993A0231300
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 21:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732950AbgG1Tn7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Jul 2020 15:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        id S1732977AbgG1TpB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 Jul 2020 15:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729673AbgG1Tn6 (ORCPT
+        with ESMTP id S1732974AbgG1Tox (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Jul 2020 15:43:58 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CF3C0619D2
-        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 12:43:58 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id u185so11565976pfu.1
-        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 12:43:58 -0700 (PDT)
+        Tue, 28 Jul 2020 15:44:53 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A9DC0619D4
+        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 12:44:52 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id gc9so475581pjb.2
+        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 12:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=9heSWvK+yRSCWH0FUufTfQBWh+umkfCd2hlFkX04++k=;
-        b=nCLucWk+Dyfu97vMzTeRd0pPVzYtyDNd2u/hsiI1JS+JNzt9OPNMBUUcXoQPSNKzCE
-         sxgq9zXhcvrt/uWcVzsLxXuu99WkVd+E7Uz7NHGi5XPz9/SV0mWz+0D0XANYFXj7lKbh
-         hrtn+MCSjUVEebJjPSWPZJTk2J/1NZ5OuBXbI=
+        bh=NjjWAW6FgXIfls/hqkrF/yquAYJxvalgxXMqC5yfkB8=;
+        b=KIalYCFnh0ooJeOFJkJKg6Aj3ezi1dT2pKr43ERudEvFuNaAJ3+4031cCKI/mpqsHN
+         jPODHusawyatNlhEIpveO4bRm2Qv8DouYUrTDu4x7sAqumvD4p0DaIwI9w47ua+Y+Lm8
+         r5WIEN2ftI2xGaXzPY44IJT2WhYYdppfLz2ds=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=9heSWvK+yRSCWH0FUufTfQBWh+umkfCd2hlFkX04++k=;
-        b=kBUl52EgJlx8GMzEfMNTre/xMqhMQjBn+pEQY+YrlVAxqedvpMv4khnJkxPVGSmpkM
-         hgi+5tRpNTBPrE3LYKqlIs0aMJ/IQzHHht6PUnrgazClPfbQsPeAP1T/EZUxUwXirQ5F
-         Tk8hGr1Ug/KHj3aaRdekGeiHHkAKxRzpQGxuPaX9HVSyZNPjc7c6kFp49XQi1WR9RrjH
-         j6HGYKfJvoBFVNA9Y3PmGOhLjVUKp9xIcoLm/1WjC2CJmfWRaToJZoTQNzwNZ1xDUd4q
-         HaiUFQo1fGaejpmVXmvyQ4K/5el6+E/kcgAAQWH63D4WJzsg9+OFA0UGkG2NllMyP72i
-         wYGQ==
-X-Gm-Message-State: AOAM531DdOpFvdfgUaOZBzxbox/zPpvqlTzX2XJozCZ3t8CPOL6Innft
-        Fcawjer1UuragxJ0GUHLfmGF5A==
-X-Google-Smtp-Source: ABdhPJzcVT5J8m7X1MAMeqes9wtnmVepDmaePDEJZQmpUGLbzYqktl5qY3LrodPx5Xw/lg7qISDOhg==
-X-Received: by 2002:aa7:8801:: with SMTP id c1mr25615711pfo.105.1595965438290;
-        Tue, 28 Jul 2020 12:43:58 -0700 (PDT)
+        bh=NjjWAW6FgXIfls/hqkrF/yquAYJxvalgxXMqC5yfkB8=;
+        b=UsgLlpsfZZndzfSivvcORXyvG3s2q18WSGU2AhgfonO/bIhIxIluqFFAAJXLPDLgTL
+         4YIqeNcUo4gAR4JlO9mBsjBA6MFFoFVR6s7noNRGM8mZViJPdXJuS4ZmvHBy4656idyE
+         xxi0crFZhl+7m5V91P3ZwTaFgbow36PJcB1J6xWutamgG48yawmjmkvWsTn+ojoAncFM
+         n+xUOYkKN5rG6UFgvYKzSJs9Uveama/T0J1faLWPxwralMxj5KVaxRRUg8dUueVXarXO
+         LOfZqpXB+cM6q0EjHnsAGllfggVWtXBpvDO29lxY89rkiaGAzhaxb/9NuAa2yaznLyo3
+         zpTw==
+X-Gm-Message-State: AOAM5300n8o5dO0TxY/udsXGgY5yazqOd08BSwMxccJon41bsBKzmvyV
+        uxhFgYSDxwkYUZKflhqrJiW+Og==
+X-Google-Smtp-Source: ABdhPJzQr9cHayJZPGpWZHni51wQdtSr2aAnxIAMHwScc+g9u8gX4TqJT/xfpoMOHtZMCRUO5O3P+A==
+X-Received: by 2002:a17:902:7446:: with SMTP id e6mr7253416plt.267.1595965492443;
+        Tue, 28 Jul 2020 12:44:52 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m66sm10017751pfd.90.2020.07.28.12.43.57
+        by smtp.gmail.com with ESMTPSA id m31sm4012561pjb.52.2020.07.28.12.44.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2020 12:43:57 -0700 (PDT)
-Date:   Tue, 28 Jul 2020 12:43:56 -0700
+        Tue, 28 Jul 2020 12:44:51 -0700 (PDT)
+Date:   Tue, 28 Jul 2020 12:44:50 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Mimi Zohar <zohar@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -57,69 +57,99 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 12/19] firmware_loader: Use security_post_load_data()
-Message-ID: <202007281242.B6016AE4B@keescook>
+Subject: Re: [PATCH v3 15/19] IMA: Add support for file reads without contents
+Message-ID: <202007281244.2F2681AE9@keescook>
 References: <20200724213640.389191-1-keescook@chromium.org>
- <20200724213640.389191-13-keescook@chromium.org>
- <1595847465.4841.63.camel@kernel.org>
+ <20200724213640.389191-16-keescook@chromium.org>
+ <1595856214.4841.86.camel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1595847465.4841.63.camel@kernel.org>
+In-Reply-To: <1595856214.4841.86.camel@kernel.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 06:57:45AM -0400, Mimi Zohar wrote:
+On Mon, Jul 27, 2020 at 09:23:34AM -0400, Mimi Zohar wrote:
 > On Fri, 2020-07-24 at 14:36 -0700, Kees Cook wrote:
-> > Now that security_post_load_data() is wired up, use it instead
-> > of the NULL file argument style of security_post_read_file(),
-> > and update the security_kernel_load_data() call to indicate that a
-> > security_kernel_post_load_data() call is expected.
+> > From: Scott Branden <scott.branden@broadcom.com>
 > > 
-> > Wire up the IMA check to match earlier logic. Perhaps a generalized
-> > change to ima_post_load_data() might look something like this:
+> > When the kernel_read_file LSM hook is called with contents=false, IMA
+> > can appraise the file directly, without requiring a filled buffer. When
+> > such a buffer is available, though, IMA can continue to use it instead
+> > of forcing a double read here.
 > > 
-> >     return process_buffer_measurement(buf, size,
-> >                                       kernel_load_data_id_str(load_id),
-> >                                       read_idmap[load_id] ?: FILE_CHECK,
-> >                                       0, NULL);
-> > 
+> > Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+> > Link: https://lore.kernel.org/lkml/20200706232309.12010-10-scott.branden@broadcom.com/
 > > Signed-off-by: Kees Cook <keescook@chromium.org>
 > 
-> process_measurement() measures, verifies a file signature -  both
-> signatures stored as an xattr and as an appended buffer signature -
-> and augments audit records with the file hash. (Support for measuring,
-> augmenting audit records, and/or verifying fs-verity signatures has
-> yet to be added.)
+> After adjusting the comment below.
 > 
-> As explained in my response to 11/19, the file descriptor provides the
-> file pathname associated with the buffer data.  In addition, IMA
-> policy rules may be defined in terms of other file descriptor info -
-> uid, euid, uuid, etc.
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
+Sure!
+
+Greg, shall I send a v4 with added Reviews and the comment change or is
+that minor enough that you're able to do it?
+
+Thanks for the reviews Mimi!
+
+-Kees
+
 > 
-> Recently support was added for measuring the kexec boot command line,
-> certificates being loaded onto a keyring, and blacklisted file hashes
-> (limited to appended signatures).  None of these buffers are signed.
->  process_buffer_measurement() was added for this reason and as a
-> result is limited to just measuring the buffer data.
+> > ---
+> >  security/integrity/ima/ima_main.c | 22 ++++++++++++++++------
+> >  1 file changed, 16 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> > index dc4f90660aa6..459e50526a12 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -613,11 +613,8 @@ void ima_post_path_mknod(struct dentry *dentry)
+> >  int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
+> >  		  bool contents)
+> >  {
+> > -	/* Reject all partial reads during appraisal. */
+> > -	if (!contents) {
+> > -		if (ima_appraise & IMA_APPRAISE_ENFORCE)
+> > -			return -EACCES;
+> > -	}
+> > +	enum ima_hooks func;
+> > +	u32 secid;
+> >  
+> >  	/*
+> >  	 * Do devices using pre-allocated memory run the risk of the
+> > @@ -626,7 +623,20 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
+> >  	 * buffers? It may be desirable to include the buffer address
+> >  	 * in this API and walk all the dma_map_single() mappings to check.
+> >  	 */
+> > -	return 0;
+> > +
+> > +	/*
+> > +	 * There will be a call made to ima_post_read_file() with
+> > +	 * a filled buffer, so we don't need to perform an extra
+> > +	 * read early here.
+> > +	 */
+> > +	if (contents)
+> > +		return 0;
+> > +
+> > +	/* Read entire file for all partial reads during appraisal. */
 > 
-> Whether process_measurement() or process_buffer_measurement() should
-> be modified, needs to be determined.  In either case to support the
-> init_module syscall, would at minimum require the associated file
-> pathname.
-
-Right -- I don't intend to make changes to the init_module() syscall
-since it's deprecated, so this hook is more of a "fuller LSM coverage
-for old syscalls" addition.
-
-IMA can happily continue to ignore it, which is what I have here, but I
-thought I'd at least show what it *might* look like. Perhaps BPF LSM is
-a better example.
-
-Does anything need to change for this patch?
+> In addition to verifying the file signature, the file might be
+> included in the IMA measurement list or the file hash may be used to
+> augment the audit record.  Please remove "during appraisal" from the
+> comment.
+> 
+> > +	func = read_idmap[read_id] ?: FILE_CHECK;
+> > +	security_task_getsecid(current, &secid);
+> > +	return process_measurement(file, current_cred(), secid, NULL,
+> > +				   0, MAY_READ, func);
+> >  }
+> >  
+> >  const int read_idmap[READING_MAX_ID] = {
+> 
 
 -- 
 Kees Cook
