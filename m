@@ -2,163 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA3A231216
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 21:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2B82312EC
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 21:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729195AbgG1TBP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Jul 2020 15:01:15 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55922 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728334AbgG1TBO (ORCPT
+        id S1732917AbgG1Tlq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 Jul 2020 15:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732905AbgG1Tlp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Jul 2020 15:01:14 -0400
-Received: from [192.168.254.32] (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4BC4420B4908;
-        Tue, 28 Jul 2020 12:01:13 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4BC4420B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595962873;
-        bh=zjLEFTK4Orgld2wOZdcW94az96+FP6KvaYi2k5aZSPI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=eyOucZIcQn3R6OEntESHtyelkaFVjV2UK/nFkDNLCPLGXdph7ZdzSj8TIdGEPaGtU
-         HNfLQEbH03jQTrCFJfGmYdF0TdR5xD3V/YFVr3NEjScCz38PMbJbBy0OdJ42NGgnrr
-         Ehzo1Gfr/DDSOvCbbINwW1aQjqHKXsQAPhe9ttIA=
-Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
-References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <8b28f4a5-2d9e-0686-40e5-2ea9e37c5933@linux.microsoft.com>
-Date:   Tue, 28 Jul 2020 14:01:12 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 28 Jul 2020 15:41:45 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA82C061794
+        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 12:41:45 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id lx9so532283pjb.2
+        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 12:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=W/yJD4WINhIYjHDSpnZ6fTxiwzLWXNf1PH2+o88F2eI=;
+        b=k5XgwmE9tcOSmpNhY4WIUOwltfP1nOlJSUDS0n99vkcl8B8YnMUbPDxe7YGTs1mMQr
+         76iSMntY5i+fw5H/RDUwlQ0I8nd8NuTI/QS+tkBn1s8zi+fMQktc83D3xj8tuEDdbWc1
+         SPGIc7GDjQULMKCEbKzwKWRabOT0dDEOWSj6w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=W/yJD4WINhIYjHDSpnZ6fTxiwzLWXNf1PH2+o88F2eI=;
+        b=d/blJubP3fAKYJkk/9vlVxiU1wKkk944v/q8yvvLt65xEBj6TFRhAT4m42GP5ADLDu
+         MoKiaY3LjVXWkPU4QeOl5rC2tFjSftv6enk/QGlKMnBhIlFzInmu4RTfw8DtdyZOLzdI
+         JH1m/n5rhXikHPw/yD9Qof1sdFkWZEGvIiIRea5dPKadDZxZpAIDDemNDaXbXalHECkr
+         TgMpWGOPCuaCpeywv+l/56slCrRbQvRIurwfQpskaL/aJRwmSECl4Ulaes4bnSSWw/4/
+         izIZXnm+crZjK3A9SPjJCyg3aXIK1gUoxFFgIcwgLYRlDji/5okG8TsUP1eUkHRdscEK
+         17mA==
+X-Gm-Message-State: AOAM5334fQp5n/hkgqpEHl1Ox59wFXVNnrcWgX0rQK3g/m0hYAF5wPzY
+        Yi6IVr7wgGow3oGL20cRUeiDNg==
+X-Google-Smtp-Source: ABdhPJwA0Ct0Nh8rwlpqpca69OHRybL5jNVCYyJwjUessWHEG/MKS2+KIDWm6SaEJTBcGdmRE084Kg==
+X-Received: by 2002:a17:902:7244:: with SMTP id c4mr2350434pll.277.1595965304901;
+        Tue, 28 Jul 2020 12:41:44 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j36sm19509082pgj.39.2020.07.28.12.41.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2020 12:41:43 -0700 (PDT)
+Date:   Tue, 28 Jul 2020 12:41:42 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Mimi Zohar <zohar@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 11/19] LSM: Introduce kernel_post_load_data() hook
+Message-ID: <202007281240.4EDD6D2E7B@keescook>
+References: <20200724213640.389191-1-keescook@chromium.org>
+ <20200724213640.389191-12-keescook@chromium.org>
+ <1595846951.4841.61.camel@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <1595846951.4841.61.camel@kernel.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-I am working on a response to this. I will send it soon.
+On Mon, Jul 27, 2020 at 06:49:11AM -0400, Mimi Zohar wrote:
+> On Fri, 2020-07-24 at 14:36 -0700, Kees Cook wrote:
+> > There are a few places in the kernel where LSMs would like to have
+> > visibility into the contents of a kernel buffer that has been loaded or
+> > read. While security_kernel_post_read_file() (which includes the
+> > buffer) exists as a pairing for security_kernel_read_file(), no such
+> > hook exists to pair with security_kernel_load_data().
+> > 
+> > Earlier proposals for just using security_kernel_post_read_file() with a
+> > NULL file argument were rejected (i.e. "file" should always be valid for
+> > the security_..._file hooks, but it appears at least one case was
+> > left in the kernel during earlier refactoring. (This will be fixed in
+> > a subsequent patch.)
+> > 
+> > Since not all cases of security_kernel_load_data() can have a single
+> > contiguous buffer made available to the LSM hook (e.g. kexec image
+> > segments are separately loaded), there needs to be a way for the LSM to
+> > reason about its expectations of the hook coverage. In order to handle
+> > this, add a "contents" argument to the "kernel_load_data" hook that
+> > indicates if the newly added "kernel_post_load_data" hook will be called
+> > with the full contents once loaded. That way, LSMs requiring full contents
+> > can choose to unilaterally reject "kernel_load_data" with contents=false
+> > (which is effectively the existing hook coverage), but when contents=true
+> > they can allow it and later evaluate the "kernel_post_load_data" hook
+> > once the buffer is loaded.
+> > 
+> > With this change, LSMs can gain coverage over non-file-backed data loads
+> > (e.g. init_module(2) and firmware userspace helper), which will happen
+> > in subsequent patches.
+> > 
+> > Additionally prepare IMA to start processing these cases.
+> > 
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> At least from an IMA perspective, the original
+> security_kernel_load_data() hook was defined in order to prevent
+> certain syscalls - init_module, kexec_load - and loading firmware via
+> sysfs.  The resulting error messages were generic.
+>   
+> Unlike security_kernel_load_data(), security_kernel_post_load_data()
+> is meant to be used, but without a file desciptor specific
+> information, like the filename associated with the buffer, is missing.
+>  Having the filename isn't actually necessary for verifying the
+> appended signature, but it is needed for auditing signature
+> verification failures and including in the IMA measurement list.
 
-Thanks.
+Right -- I'm open to ideas on this, but as it stands, other LSMs (e.g.
+BPF LSM) can benefit from the security_kernel_post_load_data() to
+examine the contents, etc.
 
-Madhavan
+Is there anything that needs to change in this patch?
 
-On 7/28/20 12:31 PM, Andy Lutomirski wrote:
->> On Jul 28, 2020, at 6:11 AM, madvenka@linux.microsoft.com wrote:
->>
->> ï»¿From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> The kernel creates the trampoline mapping without any permissions. When
->> the trampoline is executed by user code, a page fault happens and the
->> kernel gets control. The kernel recognizes that this is a trampoline
->> invocation. It sets up the user registers based on the specified
->> register context, and/or pushes values on the user stack based on the
->> specified stack context, and sets the user PC to the requested target
->> PC. When the kernel returns, execution continues at the target PC.
->> So, the kernel does the work of the trampoline on behalf of the
->> application.
-> This is quite clever, but now Iâ€™m wondering just how much kernel help
-> is really needed. In your series, the trampoline is an non-executable
-> page.  I can think of at least two alternative approaches, and I'd
-> like to know the pros and cons.
->
-> 1. Entirely userspace: a return trampoline would be something like:
->
-> 1:
-> pushq %rax
-> pushq %rbc
-> pushq %rcx
-> ...
-> pushq %r15
-> movq %rsp, %rdi # pointer to saved regs
-> leaq 1b(%rip), %rsi # pointer to the trampoline itself
-> callq trampoline_handler # see below
->
-> You would fill a page with a bunch of these, possibly compacted to get
-> more per page, and then you would remap as many copies as needed.  The
-> 'callq trampoline_handler' part would need to be a bit clever to make
-> it continue to work despite this remapping.  This will be *much*
-> faster than trampfd. How much of your use case would it cover?  For
-> the inverse, it's not too hard to write a bit of asm to set all
-> registers and jump somewhere.
->
-> 2. Use existing kernel functionality.  Raise a signal, modify the
-> state, and return from the signal.  This is very flexible and may not
-> be all that much slower than trampfd.
->
-> 3. Use a syscall.  Instead of having the kernel handle page faults,
-> have the trampoline code push the syscall nr register, load a special
-> new syscall nr into the syscall nr register, and do a syscall. On
-> x86_64, this would be:
->
-> pushq %rax
-> movq __NR_magic_trampoline, %rax
-> syscall
->
-> with some adjustment if the stack slot you're clobbering is important.
->
->
-> Also, will using trampfd cause issues with various unwinders?  I can
-> easily imagine unwinders expecting code to be readable, although this
-> is slowly going away for other reasons.
->
-> All this being said, I think that the kernel should absolutely add a
-> sensible interface for JITs to use to materialize their code.  This
-> would integrate sanely with LSMs and wouldn't require hacks like using
-> files, etc.  A cleverly designed JIT interface could function without
-> seriailization IPIs, and even lame architectures like x86 could
-> potentially avoid shootdown IPIs if the interface copied code instead
-> of playing virtual memory games.  At its very simplest, this could be:
->
-> void *jit_create_code(const void *source, size_t len);
->
-> and the result would be a new anonymous mapping that contains exactly
-> the code requested.  There could also be:
->
-> int jittfd_create(...);
->
-> that does something similar but creates a memfd.  A nicer
-> implementation for short JIT sequences would allow appending more code
-> to an existing JIT region.  On x86, an appendable JIT region would
-> start filled with 0xCC, and I bet there's a way to materialize new
-> code into a previously 0xcc-filled virtual page wthout any
-> synchronization.  One approach would be to start with:
->
-> <some code>
-> 0xcc
-> 0xcc
-> ...
-> 0xcc
->
-> and to create a whole new page like:
->
-> <some code>
-> <some more code>
-> 0xcc
-> ...
-> 0xcc
->
-> so that the only difference is that some code changed to some more
-> code.  Then replace the PTE to swap from the old page to the new page,
-> and arrange to avoid freeing the old page until we're sure it's gone
-> from all TLBs.  This may not work if <some more code> spans a page
-> boundary.  The #BP fixup would zap the TLB and retry.  Even just
-> directly copying code over some 0xcc bytes almost works, but there's a
-> nasty corner case involving instructions that fetch I$ fetch
-> boundaries.  I'm not sure to what extent I$ snooping helps.
->
-> --Andy
-
+-- 
+Kees Cook
