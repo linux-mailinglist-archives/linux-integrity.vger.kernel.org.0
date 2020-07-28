@@ -2,240 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A74D22FEB2
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 03:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206B622FFF2
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 05:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726194AbgG1BGF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 27 Jul 2020 21:06:05 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:57120 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbgG1BGF (ORCPT
+        id S1726739AbgG1DPD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Jul 2020 23:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726620AbgG1DPC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 27 Jul 2020 21:06:05 -0400
-Received: from [192.168.1.21] (c-73-187-218-229.hsd1.pa.comcast.net [73.187.218.229])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3C27F20B4908;
-        Mon, 27 Jul 2020 18:06:03 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3C27F20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595898364;
-        bh=OKMktzltgqBq+thzV080FxgNHMcJfv52gdWpPOP/Yrk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Rh10ZEzpIJmof3WP7ALwMH7sga3FA84Jh96Hb9pfe9yL2pMDD++M8rx2CjxthLhkV
-         U+MHeIMK1APO4APQzq/WGpMFtJSJAIZYfEjXq2lu9GfVvHFGAI7cEIvVdCx5yw3tCh
-         DJEs1l4RYcEjxOtyBRhb+HSQ68Vqoz6ZnfGsRlqM=
-Subject: Re: [PATCH v6 4/4] IMA: Add test for kexec cmdline measurement
-To:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        balajib@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        Mimi Zohar <zohar@linux.ibm.com>
-References: <20200728001301.31121-1-pvorel@suse.cz>
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-Message-ID: <9b0ee5b1-2d8f-35d8-88ee-da193ad66a0d@linux.microsoft.com>
-Date:   Mon, 27 Jul 2020 21:06:01 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 27 Jul 2020 23:15:02 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE955C061794
+        for <linux-integrity@vger.kernel.org>; Mon, 27 Jul 2020 20:15:01 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id ha11so3387683pjb.1
+        for <linux-integrity@vger.kernel.org>; Mon, 27 Jul 2020 20:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tqvPFptaXrqNLR/xpVd6gqyLWNSPgfU8K5sYlQ8u1qk=;
+        b=MfTig2D+aYwwa+XQpMSjtudJi6GMDOHV1l6mBKV7hAMMghTpxbq478ZNPNMlVsOeWi
+         yLsYPYGtEXOT2mrDzUb6BJx5lUg1V3gn6YdRJKKv1GUHL90KDPfHOfGINlaagEi/0hPC
+         3llxQQkuycFFeX7edCokUFbc5zSCiBKd6eZAYpIxPbCyYoxtGOgHWataeD38y9F14qGQ
+         TNx3jvz+sVvHBP3oT7jwF69qV4NA0tNRv9f7FZnUTKAJqTgSVNlfLdh+R3poOjPBqXzR
+         3BtmMml7SQBYhiG/ZFMCZ4nIZ1kIPOjvT/OAUchfyurXVgTWk856aYaZCf0zYEsHaXnv
+         OLxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tqvPFptaXrqNLR/xpVd6gqyLWNSPgfU8K5sYlQ8u1qk=;
+        b=B4dFIUb+bLqATEOERj71xfEn9ywAUI1uArToepbKGT78nc7GAGZ9C5KGEqiXSYTAQR
+         LOC9FgXnJ0JxpQXmoKfiTH+xJS5/ZXReeKwCAwwDuPGY9ypckCUjf4MzkVQBzjvhA70y
+         Ubf7Rlbzq37s8Y7nhxwLCSTwTEP6VWCFs5ypt8h52xbwEkF/dg42nya591u4UGRaU9hK
+         KQRmebp9Z9duIcQy4h4cCjQG7zNgWlLqJdsLFM+12ZEyntg2EjP0IxNlUmHmGxLF5XBI
+         2HEJDgiYGpPmvJPgEGOCHivtwsDK+PiZqnX/3PmfJa+TwCXIH1+aUpZXeZohaokUkYrl
+         Zv2g==
+X-Gm-Message-State: AOAM533xRc2MUJKK+oFJHso0X1gSFOZXOhrAXhw4Fw5AB0u6p7nSlr9A
+        rjywnwMy/8QLLIy87S+dhuCh1Q==
+X-Google-Smtp-Source: ABdhPJxs1jdMEm+AIUYt11RFJG6KlKTFv/6nraFuHw6vmYq4NWdqisr5zlsOqt5+h+EYMaUvuXwCvQ==
+X-Received: by 2002:a17:902:b18b:: with SMTP id s11mr21796119plr.152.1595906101384;
+        Mon, 27 Jul 2020 20:15:01 -0700 (PDT)
+Received: from debian.flets-east.jp ([2400:2411:502:a100:c84b:19e2:9b53:48bb])
+        by smtp.gmail.com with ESMTPSA id s10sm3895285pjf.3.2020.07.27.20.14.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 Jul 2020 20:15:00 -0700 (PDT)
+From:   Masahisa Kojima <masahisa.kojima@linaro.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     masahisa.kojima@linaro.org, jarkko.sakkinen@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca
+Subject: [PATCH v5 0/2] synquacer: add TPM support
+Date:   Tue, 28 Jul 2020 12:14:30 +0900
+Message-Id: <20200728031433.3370-1-masahisa.kojima@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20200728001301.31121-1-pvorel@suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Looks great, thank you for working on this, Petr!
+This adds support for driving the TPM on Socionext SynQuacer platform
+using the driver for a memory mapped TIS frame.
 
-On 7/27/20 8:13 PM, Petr Vorel wrote:
-> From: Lachlan Sneff <t-josne@linux.microsoft.com>
->
-> IMA policy can be set to measure the command line passed in the kexec
-> system call. Add a testcase that verifies that the IMA subsystem
-> correctly measure the cmdline specified during a kexec.
->
-> Reviewed-by: Petr Vorel <pvorel@suse.cz>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
-> [ pvorel: improved setup, various LTP API cleanup ]
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> ---
-> Changes v5->v6:
-> * move --reuse-cmdline from setup to kexec_test()
->
-> Sorry for the noise.
->
-> Kind regards,
-> Petr
->
->   runtest/ima                                   |   1 +
->   .../kernel/security/integrity/ima/README.md   |   8 ++
->   .../integrity/ima/datafiles/kexec.policy      |   1 +
->   .../security/integrity/ima/tests/ima_kexec.sh | 120 ++++++++++++++++++
->   4 files changed, 130 insertions(+)
->   create mode 100644 testcases/kernel/security/integrity/ima/datafiles/kexec.policy
->   create mode 100755 testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
->
-> diff --git a/runtest/ima b/runtest/ima
-> index 309d47420..5f4b4a7a1 100644
-> --- a/runtest/ima
-> +++ b/runtest/ima
-> @@ -4,4 +4,5 @@ ima_policy ima_policy.sh
->   ima_tpm ima_tpm.sh
->   ima_violations ima_violations.sh
->   ima_keys ima_keys.sh
-> +ima_kexec ima_kexec.sh
->   evm_overlay evm_overlay.sh
-> diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
-> index 732cd912f..d4644ba39 100644
-> --- a/testcases/kernel/security/integrity/ima/README.md
-> +++ b/testcases/kernel/security/integrity/ima/README.md
-> @@ -36,6 +36,14 @@ CONFIG_SYSTEM_TRUSTED_KEYS="/etc/keys/ima-local-ca.pem"
->   
->   Test also requires loaded policy with `func=KEY_CHECK`, see example in `keycheck.policy`.
->   
-> +### IMA kexec test
-> +
-> +`ima_kexec.sh` requires loaded policy which contains `measure func=KEXEC_CMDLINE`,
-> +see example in `kexec.policy`.
-> +
-> +The test attempts to kexec the existing running kernel image.
-> +To kexec a different kernel image export `IMA_KEXEC_IMAGE=<pathname>`.
-> +
->   ## EVM tests
->   
->   `evm_overlay.sh` requires a builtin IMA appraise tcb policy (e.g. `ima_policy=appraise_tcb`
-> diff --git a/testcases/kernel/security/integrity/ima/datafiles/kexec.policy b/testcases/kernel/security/integrity/ima/datafiles/kexec.policy
-> new file mode 100644
-> index 000000000..58d66369e
-> --- /dev/null
-> +++ b/testcases/kernel/security/integrity/ima/datafiles/kexec.policy
-> @@ -0,0 +1 @@
-> +measure func=KEXEC_CMDLINE
-> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-> new file mode 100755
-> index 000000000..30bbd066e
-> --- /dev/null
-> +++ b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-> @@ -0,0 +1,120 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0-or-later
-> +# Copyright (c) 2020 Microsoft Corporation
-> +# Copyright (c) 2020 Petr Vorel <pvorel@suse.cz>
-> +# Author: Lachlan Sneff <t-josne@linux.microsoft.com>
-> +#
-> +# Verify that kexec cmdline is measured correctly.
-> +# Test attempts to kexec the existing running kernel image.
-> +# To kexec a different kernel image export IMA_KEXEC_IMAGE=<pathname>.
-> +
-> +TST_NEEDS_CMDS="grep kexec sed"
-> +TST_CNT=3
-> +TST_NEEDS_DEVICE=1
-> +TST_SETUP="setup"
-> +
-> +. ima_setup.sh
-> +
-> +IMA_KEXEC_IMAGE="${IMA_KEXEC_IMAGE:-/boot/vmlinuz-$(uname -r)}"
-> +REQUIRED_POLICY='^measure.*func=KEXEC_CMDLINE'
-> +
-> +measure()
-> +{
-> +	local cmdline="$1"
-> +	local algorithm digest expected_digest found
-> +
-> +	printf "$cmdline" > file1
-> +	grep "kexec-cmdline" $ASCII_MEASUREMENTS > file2
-> +
-> +	while read found
-> +	do
-> +		algorithm=$(echo "$found" | cut -d' ' -f4 | cut -d':' -f1)
-> +		digest=$(echo "$found" | cut -d' ' -f4 | cut -d':' -f2)
-> +
-> +		expected_digest=$(compute_digest $algorithm file1)
-> +
-> +		if [ "$digest" = "$expected_digest" ]; then
-> +			return 0
-> +		fi
-> +	done < file2
-> +
-> +	return 1
-> +}
-> +
-> +setup()
-> +{
-> +	tst_res TINFO "using kernel $IMA_KEXEC_IMAGE"
-> +
-> +	if [ ! -f "$IMA_KEXEC_IMAGE" ]; then
-> +		tst_brk TCONF "kernel image not found, specify path in \$IMA_KEXEC_IMAGE"
-> +	fi
-> +
-> +	if check_policy_readable; then
-> +		require_ima_policy_content "$REQUIRED_POLICY"
-> +		policy_readable=1
-> +	fi
-> +}
-> +
-> +kexec_failure_hint()
-> +{
-> +	local sb_enabled
-> +
-> +	if tst_cmd_available bootctl; then
-> +		if bootctl status 2>/dev/null | grep -qi 'Secure Boot: enabled'; then
-> +			sb_enabled=1
-> +		fi
-> +	elif tst_cmd_available dmesg; then
-> +		if dmesg | grep -qi 'Secure boot enabled'; then
-> +			sb_enabled=1
-> +		fi
-> +	fi
-> +	if [ "$sb_enabled" ]; then
-> +		tst_res TWARN "secure boot is enabled, kernel image may not be signed"
-> +	fi
-> +
-> +	if check_ima_policy_content '^appraise.*func=KEXEC_KERNEL_CHECK'; then
-> +		tst_res TWARN "'func=KEXEC_KERNEL_CHECK' appraise policy loaded, kernel image may not be signed"
-> +	fi
-> +}
-> +
-> +kexec_test()
-> +{
-> +	local param="$1"
-> +	local cmdline="$2"
-> +	local res=TFAIL
-> +	local kexec_cmd
-> +
-> +	kexec_cmd="$param=$cmdline"
-> +	if [ "$param" = '--reuse-cmdline' ]; then
-> +		cmdline="$(sed 's/BOOT_IMAGE=[^ ]* //' /proc/cmdline)"
-> +		kexec_cmd="$param"
-> +	fi
-> +
-> +	kexec_cmd="kexec -s -l $IMA_KEXEC_IMAGE $kexec_cmd"
-> +	tst_res TINFO "testing $kexec_cmd"
-> +	if ! $kexec_cmd 2>err; then
-> +		kexec_failure_hint
-> +		tst_brk TBROK "kexec failed: $(cat err)"
-> +	fi
-> +
-> +	ROD kexec -su
-> +	if ! measure "$cmdline"; then
-> +		if [ "$policy_readable" != 1 ]; then
-> +			tst_res TWARN "policy not readable, it might not contain required policy '$REQUIRED_POLICY'"
-> +			res=TBROK
-> +		fi
-> +		tst_brk $res "unable to find a correct measurement"
-> +	fi
-> +	tst_res TPASS "kexec cmdline was measured correctly"
-> +}
-> +
-> +test()
-> +{
-> +	case $1 in
-> +	1) kexec_test '--reuse-cmdline';;
-> +	2) kexec_test '--append' 'foo';;
-> +	3) kexec_test '--command-line' 'bar';;
-> +	esac
-> +}
-> +
-> +tst_run
+v5:
+- modify multi-line comment style
+- remove MODULE_AUTHOR() and MODULE_VERSION()
+
+v4:
+- add ACPI support
+- modify function and structure name
+
+v3:
+- prepare new module to handle TPM MMIO access on SynQuacer platform
+
+v2:
+- don't use read/write_bytes() to implement read/write16/32 since that uses
+  the wrong address
+
+Cc: jarkko.sakkinen@linux.intel.com
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: ardb@kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-integrity@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: peterhuewe@gmx.de
+Cc: jgg@ziepe.ca
+
+Masahisa Kojima (2):
+  tpm: tis: add support for MMIO TPM on SynQuacer
+  dt-bindings: Add SynQucer TPM MMIO as a trivial device
+
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ drivers/char/tpm/Kconfig                      |  12 +
+ drivers/char/tpm/Makefile                     |   1 +
+ drivers/char/tpm/tpm_tis_synquacer.c          | 208 ++++++++++++++++++
+ 4 files changed, 223 insertions(+)
+ create mode 100644 drivers/char/tpm/tpm_tis_synquacer.c
+
+-- 
+2.20.1
 
