@@ -2,162 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FA62310F4
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 19:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B2C2311F9
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jul 2020 20:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732002AbgG1RcO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Jul 2020 13:32:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45798 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731980AbgG1RcO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Jul 2020 13:32:14 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8FB621D95
-        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 17:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595957533;
-        bh=9/DO98f4NNb2r87lGlZR0IYODVEjduHFQ1okay382Kw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=00hywb4ZCFn7lczpn0BiOMeOm9xDGiOqlvQj8/th2fDX/IzE1putRyI2doIv2tI36
-         gO4lphP9SFo10v3da6m5h1BH07cHRR/okVnVy90sS8zQtt5pSIghUkUXx0ikOM7Nd0
-         h6O5+kD6MR7Vr5ux5UT9pRxsLHVuGsY6clVQqbF0=
-Received: by mail-wr1-f54.google.com with SMTP id y3so19090283wrl.4
-        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 10:32:12 -0700 (PDT)
-X-Gm-Message-State: AOAM5309jS7nlDDPOFrIMXfcrLFTJrgsfO97NT+JG+MCLsr/I41pTDjc
-        dUb8mw9NRCQIs+LTCJp9DNdxDMYYJD47dhV3ioWNOA==
-X-Google-Smtp-Source: ABdhPJxq1bq+hNP4spnLcyA3rbDMq8utpwpjTxFxTkTrdf+BFedxKdyd+N85+0IDFv89rVq0CIoCx1Y8N9iYBQx1zm4=
-X-Received: by 2002:a5d:5273:: with SMTP id l19mr25476365wrc.257.1595957531409;
- Tue, 28 Jul 2020 10:32:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
-In-Reply-To: <20200728131050.24443-1-madvenka@linux.microsoft.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Tue, 28 Jul 2020 10:31:59 -0700
-X-Gmail-Original-Message-ID: <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
-Message-ID: <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-To:     madvenka@linux.microsoft.com
-Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
+        id S1732475AbgG1Ssj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 Jul 2020 14:48:39 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36088 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729124AbgG1Ssj (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 28 Jul 2020 14:48:39 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06SIX7C6151949;
+        Tue, 28 Jul 2020 14:48:34 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32jj2wnc4d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jul 2020 14:48:34 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06SIkGDU012513;
+        Tue, 28 Jul 2020 18:48:32 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 32gcqgm3ms-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jul 2020 18:48:31 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06SImTHV32178480
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jul 2020 18:48:29 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7884AE04D;
+        Tue, 28 Jul 2020 18:48:29 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB543AE051;
+        Tue, 28 Jul 2020 18:48:26 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.76.171])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Jul 2020 18:48:26 +0000 (GMT)
+Message-ID: <fa96a33641070b1580f21de86fedd5f8da5eff21.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 00/19] Introduce partial kernel_read_file() support
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Scott Branden <scott.branden@broadcom.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 28 Jul 2020 14:48:25 -0400
+In-Reply-To: <1a46db6f-1c8a-3509-6371-7c77999833f2@broadcom.com>
+References: <20200724213640.389191-1-keescook@chromium.org>
+         <1595848589.4841.78.camel@kernel.org>
+         <1a46db6f-1c8a-3509-6371-7c77999833f2@broadcom.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-28_15:2020-07-28,2020-07-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ impostorscore=0 mlxlogscore=999 priorityscore=1501 lowpriorityscore=0
+ clxscore=1011 bulkscore=0 suspectscore=0 adultscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007280131
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> On Jul 28, 2020, at 6:11 AM, madvenka@linux.microsoft.com wrote:
->
-> =EF=BB=BFFrom: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->
+On Mon, 2020-07-27 at 12:18 -0700, Scott Branden wrote:
+> Hi Mimi/Kees,
+> 
+> On 2020-07-27 4:16 a.m., Mimi Zohar wrote:
+> > On Fri, 2020-07-24 at 14:36 -0700, Kees Cook wrote:
+> >> v3:
+> >> - add reviews/acks
+> >> - add "IMA: Add support for file reads without contents" patch
+> >> - trim CC list, in case that's why vger ignored v2
+> >> v2: [missing from lkml archives! (CC list too long?) repeating changes
+> here]
+> >> - fix issues in firmware test suite
+> >> - add firmware partial read patches
+> >> - various bug fixes/cleanups
+> >> v1: 
+> https://lore.kernel.org/lkml/20200717174309.1164575-1-keescook@chromium.org/
+> >>
+> >> Hi,
+> >>
+> >> Here's my tree for adding partial read support in kernel_read_file(),
+> >> which fixes a number of issues along the way. It's got Scott's firmware
+> >> and IMA patches ported and everything tests cleanly for me (even with
+> >> CONFIG_IMA_APPRAISE=y).
+> > Thanks, Kees.  Other than my comments on the new
+> > security_kernel_post_load_data() hook, the patch set is really nice.
+> >
+> > In addition to compiling with CONFIG_IMA_APPRAISE enabled, have you
+> > booted the kernel with the ima_policy=tcb?  The tcb policy will add
+> > measurements to the IMA measurement list and extend the TPM with the
+> > file or buffer data digest.  Are you seeing the firmware measurements,
+> > in particular the partial read measurement?
+> I booted the kernel with ima_policy=tcb.
+> 
+> Unfortunately after enabling the following, fw_run_tests.sh does not run.
+> 
+> mkdir /sys/kernel/security
+> mount -t securityfs securityfs /sys/kernel/security
+> echo "measure func=FIRMWARE_CHECK" > /sys/kernel/security/ima/policy
+> echo "appraise func=FIRMWARE_CHECK appraise_type=imasig" >
+> /sys/kernel/security/ima/policy
+> ./fw_run_tests.sh
+> 
+> [ 1296.258052] test_firmware: loading 'test-firmware.bin'
+> [ 1296.263903] misc test_firmware: loading /lib/firmware/test-firmware.bin
+> failed with error -13
+> [ 1296.263905] audit: type=1800 audit(1595905754.266:9): pid=5696 uid=0
+> auid=4294967295 ses=4294967295 subj=kernel op=appraise_data cause=IMA-
+> signature-required comm="fw_namespace" name="/lib/firmware/test-firmware.bin"
+> dev="tmpfs" ino=4592 res=0
+> [ 1296.297085] misc test_firmware: Direct firmware load for test-firmware.bin
+> failed with error -13
+> [ 1296.305947] test_firmware: load of 'test-firmware.bin' failed: -13
 
-> The kernel creates the trampoline mapping without any permissions. When
-> the trampoline is executed by user code, a page fault happens and the
-> kernel gets control. The kernel recognizes that this is a trampoline
-> invocation. It sets up the user registers based on the specified
-> register context, and/or pushes values on the user stack based on the
-> specified stack context, and sets the user PC to the requested target
-> PC. When the kernel returns, execution continues at the target PC.
-> So, the kernel does the work of the trampoline on behalf of the
-> application.
+The "appraise" rule verifies the IMA signature.  Unless you signed the firmware
+(evmctl) and load the public key on the IMA keyring, that's to be expected.  I
+assume you are seeing firmware measurements in the IMA measuremenet log.
 
-This is quite clever, but now I=E2=80=99m wondering just how much kernel he=
-lp
-is really needed. In your series, the trampoline is an non-executable
-page.  I can think of at least two alternative approaches, and I'd
-like to know the pros and cons.
+Mimi
 
-1. Entirely userspace: a return trampoline would be something like:
-
-1:
-pushq %rax
-pushq %rbc
-pushq %rcx
-...
-pushq %r15
-movq %rsp, %rdi # pointer to saved regs
-leaq 1b(%rip), %rsi # pointer to the trampoline itself
-callq trampoline_handler # see below
-
-You would fill a page with a bunch of these, possibly compacted to get
-more per page, and then you would remap as many copies as needed.  The
-'callq trampoline_handler' part would need to be a bit clever to make
-it continue to work despite this remapping.  This will be *much*
-faster than trampfd. How much of your use case would it cover?  For
-the inverse, it's not too hard to write a bit of asm to set all
-registers and jump somewhere.
-
-2. Use existing kernel functionality.  Raise a signal, modify the
-state, and return from the signal.  This is very flexible and may not
-be all that much slower than trampfd.
-
-3. Use a syscall.  Instead of having the kernel handle page faults,
-have the trampoline code push the syscall nr register, load a special
-new syscall nr into the syscall nr register, and do a syscall. On
-x86_64, this would be:
-
-pushq %rax
-movq __NR_magic_trampoline, %rax
-syscall
-
-with some adjustment if the stack slot you're clobbering is important.
-
-
-Also, will using trampfd cause issues with various unwinders?  I can
-easily imagine unwinders expecting code to be readable, although this
-is slowly going away for other reasons.
-
-All this being said, I think that the kernel should absolutely add a
-sensible interface for JITs to use to materialize their code.  This
-would integrate sanely with LSMs and wouldn't require hacks like using
-files, etc.  A cleverly designed JIT interface could function without
-seriailization IPIs, and even lame architectures like x86 could
-potentially avoid shootdown IPIs if the interface copied code instead
-of playing virtual memory games.  At its very simplest, this could be:
-
-void *jit_create_code(const void *source, size_t len);
-
-and the result would be a new anonymous mapping that contains exactly
-the code requested.  There could also be:
-
-int jittfd_create(...);
-
-that does something similar but creates a memfd.  A nicer
-implementation for short JIT sequences would allow appending more code
-to an existing JIT region.  On x86, an appendable JIT region would
-start filled with 0xCC, and I bet there's a way to materialize new
-code into a previously 0xcc-filled virtual page wthout any
-synchronization.  One approach would be to start with:
-
-<some code>
-0xcc
-0xcc
-...
-0xcc
-
-and to create a whole new page like:
-
-<some code>
-<some more code>
-0xcc
-...
-0xcc
-
-so that the only difference is that some code changed to some more
-code.  Then replace the PTE to swap from the old page to the new page,
-and arrange to avoid freeing the old page until we're sure it's gone
-from all TLBs.  This may not work if <some more code> spans a page
-boundary.  The #BP fixup would zap the TLB and retry.  Even just
-directly copying code over some 0xcc bytes almost works, but there's a
-nasty corner case involving instructions that fetch I$ fetch
-boundaries.  I'm not sure to what extent I$ snooping helps.
-
---Andy
