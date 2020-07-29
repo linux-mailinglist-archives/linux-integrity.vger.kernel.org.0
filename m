@@ -2,104 +2,152 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFD22323CB
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jul 2020 19:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258E7232438
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jul 2020 20:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726804AbgG2Rzx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Jul 2020 13:55:53 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:33132 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbgG2Rzx (ORCPT
+        id S1727817AbgG2SAS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jul 2020 14:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727804AbgG2R65 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Jul 2020 13:55:53 -0400
-Received: from [192.168.254.32] (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id F0E4120B4908;
-        Wed, 29 Jul 2020 10:55:51 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F0E4120B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596045352;
-        bh=Nh1awxv8sYMWjyBdKzptNt/99nJiurbGvK4nLo6gXvU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ET55hxg/DBtDrPqMLvEgwflc/o1gjQ4X7Oa3dCnjuCAMmZs7sULLK5HNN8WxJb0i5
-         0ANYiCsQDqTi6GijyuIZbLq/tNbFUvpAB5eayNWW4/qmE/6W3Ct1DOBfa73pb1uSap
-         kv37tbx4EFhfNrjIQ8YdBDHjoOhsdUZVP47hnYG0=
-Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     "kernel-hardening@lists.openwall.com" 
-        <kernel-hardening@lists.openwall.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>
-References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <c23de6ec47614f489943e1a89a21dfa3@AcuMS.aculab.com>
- <f5cfd11b-04fe-9db7-9d67-7ee898636edb@linux.microsoft.com>
- <CALCETrUta5-0TLJ9-jfdehpTAp2Efmukk2npYadFzz9ozOrG2w@mail.gmail.com>
- <59246260-e535-a9f1-d89e-4e953288b977@linux.microsoft.com>
- <a159f2e8417746fb88f31a97c6f366ba@AcuMS.aculab.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <98aa9d5e-6eb4-de29-2fc2-06f6dc52086f@linux.microsoft.com>
-Date:   Wed, 29 Jul 2020 12:55:51 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 29 Jul 2020 13:58:57 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A20C0619DA
+        for <linux-integrity@vger.kernel.org>; Wed, 29 Jul 2020 10:58:57 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id z5so14684413pgb.6
+        for <linux-integrity@vger.kernel.org>; Wed, 29 Jul 2020 10:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l8qt6NAOeJyvaC4CtbxP5H/W0DvGbou/HHI7SemtTDA=;
+        b=dJ9IJZFAtwa4MwTQF04JKQ82W7CcnprUt/ARSlcv975KRLPZw5QjYP634YQ+iCPFvg
+         Y5ixlGhSCg9q/oaV7QjEd3rfMgokmldpS1nm61sWMNFynYEWVKsNmB85sMNLOTG2O88e
+         Fyyfen0e/BaDate0J313xFGgHUmmA6lX1DmE0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l8qt6NAOeJyvaC4CtbxP5H/W0DvGbou/HHI7SemtTDA=;
+        b=UEKqYhsd6la0LaD3dMSxu8KIgpo7AkBvUffPCAaLDUlZOlkr5TVdl3Bt6Kb5H8cc4p
+         3WFzOa5X/MpUtpnp8Ka/2TUdpSEUT46l7yyRjiMdGI75XGZl+P+3Zoz+Z+8wsSo0MhoC
+         gW1y+Y+5jV6sBzK2gnNHb7XwSTizEEgvvgDnJnfv9ohw1k8HPMtg/ZSo7L09eX0rZm/p
+         vCwhPthTRWTc8WRHHWVNW99+7SgDwfnS3fIiuMKYoCap3x9H+2GcMnaUM3+NQboSRVX1
+         SeF30SuLDqVv1hXjnT88klCFTgQcAu2NwN8o8fcnQAmxdiPcwmi1u0jS0YOQ4g1SVHzo
+         3GLw==
+X-Gm-Message-State: AOAM533ooHM6guK+/xShu+6xa0Z4djFPRJTlCxrZe9SJu+AC8fy+TH55
+        tt7MldymmuGTBMbeT6+klYcT5w==
+X-Google-Smtp-Source: ABdhPJwt43WfKvGpI4vogWMtKRdtxeUwOurnGazObk+rZA1J3axI6ETZEe9ItvQsMYAhNcI6jd8Hkg==
+X-Received: by 2002:a62:3185:: with SMTP id x127mr30031402pfx.290.1596045537240;
+        Wed, 29 Jul 2020 10:58:57 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j10sm3124764pgh.28.2020.07.29.10.58.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2020 10:58:53 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Takashi Iwai <tiwai@suse.de>, Jessica Yu <jeyu@kernel.org>,
+        SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/17] Introduce partial kernel_read_file() support
+Date:   Wed, 29 Jul 2020 10:58:28 -0700
+Message-Id: <20200729175845.1745471-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <a159f2e8417746fb88f31a97c6f366ba@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+v4:
+- add more reviews (mimi, luis)
+- adjusted comment (mimi)
+- fixed build error when not building firmware tests (0day, sfr)
+- fixed needless .xz read (tiwai)
+- rebased to driver-core-next
+v3: https://lore.kernel.org/lkml/20200724213640.389191-1-keescook@chromium.org/
+v2: lost to the ether
+v1: https://lore.kernel.org/lkml/20200717174309.1164575-1-keescook@chromium.org/
 
+Hi,
 
-On 7/29/20 3:36 AM, David Laight wrote:
-> From: Madhavan T. Venkataraman
->> Sent: 28 July 2020 19:52
-> ...
->> trampfd faults are instruction faults that go through a different code path than
->> the one that calls handle_mm_fault(). Perhaps, it is the handle_mm_fault() that
->> is time consuming. Could you clarify?
-> Given that the expectation is a few instructions in userspace
-> (eg to pick up the original arguments for a nested call)
-> the (probable) thousands of clocks taken by entering the
-> kernel (especially with page table separation) is a massive
-> delta.
->
-> If entering the kernel were cheap no one would have added
-> the DSO functions for getting the time of day.
+Here's my tree for adding partial read support in kernel_read_file(),
+which fixes a number of issues along the way. It's got Scott's firmware
+and IMA patches ported and everything tests cleanly for me (even with
+CONFIG_IMA_APPRAISE=y), and now appears to pass 0day. :)
 
-I hear you. BTW, I did not say that the overhead was trivial.
-I only said that in most cases, applications may not mind that
-extra overhead.
+The intention is for this to go via Greg's tree since Scott's driver
+code will depend on it.
 
-However, since multiple people have raised that as an issue,
-I will address it. I mentioned before that the kernel can actually
-supply the code page that sets the context and jumps to
-a PC and map it so the performance issue can be addressed.
-I was planning to do that as a future enhancement.
+Thanks,
 
-If there is a consensus that I must address it immediately, I
-could do that.
+-Kees
 
-I will continue this discussion in my reply to Andy's email. Let
-us pick it up from there.
+Kees Cook (13):
+  test_firmware: Test platform fw loading on non-EFI systems
+  fs/kernel_read_file: Remove FIRMWARE_PREALLOC_BUFFER enum
+  fs/kernel_read_file: Remove FIRMWARE_EFI_EMBEDDED enum
+  fs/kernel_read_file: Split into separate source file
+  fs/kernel_read_file: Remove redundant size argument
+  fs/kernel_read_file: Switch buffer size arg to size_t
+  fs/kernel_read_file: Add file_size output argument
+  LSM: Introduce kernel_post_load_data() hook
+  firmware_loader: Use security_post_load_data()
+  module: Call security_kernel_post_load_data()
+  LSM: Add "contents" flag to kernel_read_file hook
+  fs/kernel_file_read: Add "offset" arg for partial reads
+  firmware: Store opt_flags in fw_priv
 
-Thanks.
+Scott Branden (4):
+  fs/kernel_read_file: Split into separate include file
+  IMA: Add support for file reads without contents
+  firmware: Add request_partial_firmware_into_buf()
+  test_firmware: Test partial read support
 
-Madhavan
->
-> 	David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+ drivers/base/firmware_loader/fallback.c       |  19 +-
+ drivers/base/firmware_loader/fallback.h       |   5 +-
+ .../base/firmware_loader/fallback_platform.c  |  11 +-
+ drivers/base/firmware_loader/firmware.h       |   7 +-
+ drivers/base/firmware_loader/main.c           | 135 ++++++++++---
+ drivers/firmware/efi/embedded-firmware.c      |  21 +-
+ drivers/firmware/efi/embedded-firmware.h      |  21 ++
+ fs/Makefile                                   |   3 +-
+ fs/exec.c                                     | 132 +-----------
+ fs/kernel_read_file.c                         | 189 ++++++++++++++++++
+ include/linux/efi_embedded_fw.h               |  13 --
+ include/linux/firmware.h                      |  12 ++
+ include/linux/fs.h                            |  39 ----
+ include/linux/ima.h                           |  19 +-
+ include/linux/kernel_read_file.h              |  55 +++++
+ include/linux/lsm_hook_defs.h                 |   6 +-
+ include/linux/lsm_hooks.h                     |  12 ++
+ include/linux/security.h                      |  19 +-
+ kernel/kexec.c                                |   2 +-
+ kernel/kexec_file.c                           |  19 +-
+ kernel/module.c                               |  24 ++-
+ lib/test_firmware.c                           | 159 +++++++++++++--
+ security/integrity/digsig.c                   |   8 +-
+ security/integrity/ima/ima_fs.c               |  10 +-
+ security/integrity/ima/ima_main.c             |  70 +++++--
+ security/integrity/ima/ima_policy.c           |   1 +
+ security/loadpin/loadpin.c                    |  17 +-
+ security/security.c                           |  26 ++-
+ security/selinux/hooks.c                      |   8 +-
+ .../selftests/firmware/fw_filesystem.sh       |  91 +++++++++
+ 30 files changed, 839 insertions(+), 314 deletions(-)
+ create mode 100644 drivers/firmware/efi/embedded-firmware.h
+ create mode 100644 fs/kernel_read_file.c
+ create mode 100644 include/linux/kernel_read_file.h
+
+-- 
+2.25.1
 
