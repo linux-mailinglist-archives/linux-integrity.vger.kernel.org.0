@@ -2,82 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 006F7231B4E
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jul 2020 10:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3843E231F56
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jul 2020 15:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726797AbgG2Igi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Jul 2020 04:36:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:24847 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726476AbgG2Igi (ORCPT
+        id S1726872AbgG2N3k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jul 2020 09:29:40 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:37525 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726496AbgG2N3j (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Jul 2020 04:36:38 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-43-2zI0R3XJNsWV7u6ffLfy4w-1; Wed, 29 Jul 2020 09:36:34 +0100
-X-MC-Unique: 2zI0R3XJNsWV7u6ffLfy4w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 29 Jul 2020 09:36:33 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 29 Jul 2020 09:36:33 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Madhavan T. Venkataraman'" <madvenka@linux.microsoft.com>,
-        "Andy Lutomirski" <luto@kernel.org>
-CC:     "kernel-hardening@lists.openwall.com" 
-        <kernel-hardening@lists.openwall.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-Thread-Topic: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-Thread-Index: AQHWZOCQT+e4gDrzGEmP/30MMvDTCqkdFOrwgABBt1CAAORUsA==
-Date:   Wed, 29 Jul 2020 08:36:33 +0000
-Message-ID: <a159f2e8417746fb88f31a97c6f366ba@AcuMS.aculab.com>
+        Wed, 29 Jul 2020 09:29:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596029378;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pHdy6Zb9Xi6Br1uklysJIGNGzShuC9IUN8gmmUSKfJ8=;
+        b=aRWtLfuQT+4jdgoCsYV/8Kohq6UzLvVlKez2chiloW2tblAG/Uy0mBhIe2G+HlU+GcjQLU
+        aLl1rhnwhQDuIxfbAid2URxFc6mkOAYtEIQZt41QiBfFG2vcAEEZa6XqjSyDAcyRINkOb2
+        CJM7c7PBLWnkxot6U5aGSeB2RzQLc8Y=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-185-oUnvNmSeOLyVa6xnjYceCQ-1; Wed, 29 Jul 2020 09:29:36 -0400
+X-MC-Unique: oUnvNmSeOLyVa6xnjYceCQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EE5481902EA0;
+        Wed, 29 Jul 2020 13:29:34 +0000 (UTC)
+Received: from oldenburg2.str.redhat.com (ovpn-113-29.ams2.redhat.com [10.36.113.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B422869327;
+        Wed, 29 Jul 2020 13:29:32 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     madvenka@linux.microsoft.com,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
+Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
 References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <c23de6ec47614f489943e1a89a21dfa3@AcuMS.aculab.com>
- <f5cfd11b-04fe-9db7-9d67-7ee898636edb@linux.microsoft.com>
- <CALCETrUta5-0TLJ9-jfdehpTAp2Efmukk2npYadFzz9ozOrG2w@mail.gmail.com>
- <59246260-e535-a9f1-d89e-4e953288b977@linux.microsoft.com>
-In-Reply-To: <59246260-e535-a9f1-d89e-4e953288b977@linux.microsoft.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
+Date:   Wed, 29 Jul 2020 15:29:31 +0200
+In-Reply-To: <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
+        (Andy Lutomirski's message of "Tue, 28 Jul 2020 10:31:59 -0700")
+Message-ID: <87pn8eo3es.fsf@oldenburg2.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-RnJvbTogTWFkaGF2YW4gVC4gVmVua2F0YXJhbWFuDQo+IFNlbnQ6IDI4IEp1bHkgMjAyMCAxOTo1
-Mg0KLi4uDQo+IHRyYW1wZmQgZmF1bHRzIGFyZSBpbnN0cnVjdGlvbiBmYXVsdHMgdGhhdCBnbyB0
-aHJvdWdoIGEgZGlmZmVyZW50IGNvZGUgcGF0aCB0aGFuDQo+IHRoZSBvbmUgdGhhdCBjYWxscyBo
-YW5kbGVfbW1fZmF1bHQoKS4gUGVyaGFwcywgaXQgaXMgdGhlIGhhbmRsZV9tbV9mYXVsdCgpIHRo
-YXQNCj4gaXMgdGltZSBjb25zdW1pbmcuIENvdWxkIHlvdSBjbGFyaWZ5Pw0KDQpHaXZlbiB0aGF0
-IHRoZSBleHBlY3RhdGlvbiBpcyBhIGZldyBpbnN0cnVjdGlvbnMgaW4gdXNlcnNwYWNlDQooZWcg
-dG8gcGljayB1cCB0aGUgb3JpZ2luYWwgYXJndW1lbnRzIGZvciBhIG5lc3RlZCBjYWxsKQ0KdGhl
-IChwcm9iYWJsZSkgdGhvdXNhbmRzIG9mIGNsb2NrcyB0YWtlbiBieSBlbnRlcmluZyB0aGUNCmtl
-cm5lbCAoZXNwZWNpYWxseSB3aXRoIHBhZ2UgdGFibGUgc2VwYXJhdGlvbikgaXMgYSBtYXNzaXZl
-DQpkZWx0YS4NCg0KSWYgZW50ZXJpbmcgdGhlIGtlcm5lbCB3ZXJlIGNoZWFwIG5vIG9uZSB3b3Vs
-ZCBoYXZlIGFkZGVkDQp0aGUgRFNPIGZ1bmN0aW9ucyBmb3IgZ2V0dGluZyB0aGUgdGltZSBvZiBk
-YXkuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
-Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
-biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+* Andy Lutomirski:
+
+> This is quite clever, but now I=E2=80=99m wondering just how much kernel =
+help
+> is really needed. In your series, the trampoline is an non-executable
+> page.  I can think of at least two alternative approaches, and I'd
+> like to know the pros and cons.
+>
+> 1. Entirely userspace: a return trampoline would be something like:
+>
+> 1:
+> pushq %rax
+> pushq %rbc
+> pushq %rcx
+> ...
+> pushq %r15
+> movq %rsp, %rdi # pointer to saved regs
+> leaq 1b(%rip), %rsi # pointer to the trampoline itself
+> callq trampoline_handler # see below
+>
+> You would fill a page with a bunch of these, possibly compacted to get
+> more per page, and then you would remap as many copies as needed.
+
+libffi does something like this for iOS, I believe.
+
+The only thing you really need is a PC-relative indirect call, with the
+target address loaded from a different page.  The trampoline handler can
+do all the rest because it can identify the trampoline from the stack.
+Having a closure parameter loaded into a register will speed things up,
+of course.
+
+I still hope to transition libffi to this model for most Linux targets.
+It really simplifies things because you don't have to deal with cache
+flushes (on both the data and code aliases for SELinux support).
+
+But the key observation is that efficient trampolines do not need
+run-time code generation at all because their code is so regular.
+
+Thanks,
+Florian
 
