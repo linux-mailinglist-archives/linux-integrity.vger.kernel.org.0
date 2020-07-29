@@ -2,113 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9AD231726
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jul 2020 03:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6586D231904
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jul 2020 07:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729967AbgG2BUn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Jul 2020 21:20:43 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:45221 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728364AbgG2BUn (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Jul 2020 21:20:43 -0400
-Received: by mail-io1-f68.google.com with SMTP id e64so22806868iof.12;
-        Tue, 28 Jul 2020 18:20:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=eDz3jy7eZdANBgDM2Qg5Gfk+gkOF0GMv74gm4dMaCys=;
-        b=DYxIhqM5r1lwQWn/oKu/GHM+beVzgKZcX8IUieyrIqTKyQf4ZOLZF0X9eHy+30/6D+
-         V5b5rXdLxfMYaU4E3ti4rorDvefFn6zX42GgcLZ3rAcKm2OFY0awRai/XHS+t5d/dUB1
-         K1SFjls1NDqpB5XdQUSdLlvEnRu+PQJXBMQ1NPnNCoRI9Xh1d+FvO7mQA8t4UT2zwrEL
-         drWnuKc++9l6s1Hzst8AQyxUWRixeEJU6Enyw5z/RKXELH9cr0wsHcUQsrkPRg9WIQuN
-         1IkMVebhRCBuQP4qRMlyAsEzoTcT+18PwgsAFa4tpT0tmpxvnOdMburq/NaIZnzYSJ4C
-         0jpg==
-X-Gm-Message-State: AOAM5324jdTQZPILmDKynnE9jmhuvKnUWBG1DUFEWfVmGedA9ZnINrFT
-        1Uk6KXrimev8xL3AReTsvC0=
-X-Google-Smtp-Source: ABdhPJxQtP3AbY1ZiLPwFZVneF2AYjP1sXAlks44gZ2Tff0nKrDE4/qcRVa12Or+ht+YuKGf2C1h3A==
-X-Received: by 2002:a05:6602:24d5:: with SMTP id h21mr28941626ioe.108.1595985641893;
-        Tue, 28 Jul 2020 18:20:41 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id x185sm230006iof.41.2020.07.28.18.20.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2020 18:20:40 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id F384D40945; Wed, 29 Jul 2020 01:20:39 +0000 (UTC)
-Date:   Wed, 29 Jul 2020 01:20:39 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Christoph Hellwig <hch@infradead.org>, viro@zeniv.linux.org.uk,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        ebiederm@xmission.com, jeyu@kernel.org, jmorris@namei.org,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, nayna@linux.ibm.com,
-        scott.branden@broadcom.com, dan.carpenter@oracle.com,
-        skhan@linuxfoundation.org, geert@linux-m68k.org,
-        tglx@linutronix.de, bauerman@linux.ibm.com, dhowells@redhat.com,
-        linux-integrity@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] fs: reduce export usage of kerne_read*() calls
-Message-ID: <20200729012039.GN4332@42.do-not-panic.com>
-References: <20200513152108.25669-1-mcgrof@kernel.org>
- <20200513181736.GA24342@infradead.org>
- <20200515212933.GD11244@42.do-not-panic.com>
- <20200518062255.GB15641@infradead.org>
- <1589805462.5111.107.camel@linux.ibm.com>
- <202005180820.46CEF3C2@keescook>
+        id S1726884AbgG2FRA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jul 2020 01:17:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47522 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726872AbgG2FQ7 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 29 Jul 2020 01:16:59 -0400
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E5BEF2084D
+        for <linux-integrity@vger.kernel.org>; Wed, 29 Jul 2020 05:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595999819;
+        bh=qItqwNi4q4ELXpJAVlv3H8dC/ihmulIDrwoa1DDcrFY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k2/ypYf8chH29waA/oS7FzUjhmqJvZsAK5yreLc+JnHHzlqaz9vnEqabE+qyemEMh
+         V59mmT0x99Zz7xAAr4mzDnLpnXyxu10GUK80PkfmZzTfRw0ApQRzkJVmfxPNtOL+Nt
+         orHtR8IzwwnOF1rKVTvLOZzzbUFBmX6T//Qhyjrc=
+Received: by mail-wm1-f41.google.com with SMTP id 184so1647257wmb.0
+        for <linux-integrity@vger.kernel.org>; Tue, 28 Jul 2020 22:16:58 -0700 (PDT)
+X-Gm-Message-State: AOAM533u2j2drRj6BPRvDpvc/7rC3xBo9K27vnxA162ZL43NHnAbO0wU
+        qOkvdMRxfMhBofFyVTvttFrhVbytI0CKzrDX01vDkA==
+X-Google-Smtp-Source: ABdhPJyc8ExWo5/AVhgh7lVVbcBRbBl+yZD/a1oDf2lJ2rOxAoDZo7htpcvpKEGk9rvSh0Xh0NAF4mmPRBSSCBjw09E=
+X-Received: by 2002:a1c:7511:: with SMTP id o17mr7308351wmc.49.1595999817430;
+ Tue, 28 Jul 2020 22:16:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202005180820.46CEF3C2@keescook>
+References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
+ <c23de6ec47614f489943e1a89a21dfa3@AcuMS.aculab.com> <f5cfd11b-04fe-9db7-9d67-7ee898636edb@linux.microsoft.com>
+ <CALCETrUta5-0TLJ9-jfdehpTAp2Efmukk2npYadFzz9ozOrG2w@mail.gmail.com> <81d744c0-923e-35ad-6063-8b186f6a153c@linux.microsoft.com>
+In-Reply-To: <81d744c0-923e-35ad-6063-8b186f6a153c@linux.microsoft.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 28 Jul 2020 22:16:45 -0700
+X-Gmail-Original-Message-ID: <CALCETrUWd4Gogz5EQNbbx7Babct4hGerz7sWiAuu2-Q1KB64yA@mail.gmail.com>
+Message-ID: <CALCETrUWd4Gogz5EQNbbx7Babct4hGerz7sWiAuu2-Q1KB64yA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        David Laight <David.Laight@aculab.com>,
+        "kernel-hardening@lists.openwall.com" 
+        <kernel-hardening@lists.openwall.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, May 18, 2020 at 08:21:08AM -0700, Kees Cook wrote:
-> On Mon, May 18, 2020 at 08:37:42AM -0400, Mimi Zohar wrote:
-> > Hi Christoph,
-> > 
-> > On Sun, 2020-05-17 at 23:22 -0700, Christoph Hellwig wrote:
-> > > On Fri, May 15, 2020 at 09:29:33PM +0000, Luis Chamberlain wrote:
-> > > > On Wed, May 13, 2020 at 11:17:36AM -0700, Christoph Hellwig wrote:
-> > > > > Can you also move kernel_read_* out of fs.h?  That header gets pulled
-> > > > > in just about everywhere and doesn't really need function not related
-> > > > > to the general fs interface.
-> > > > 
-> > > > Sure, where should I dump these?
-> > > 
-> > > Maybe a new linux/kernel_read_file.h?  Bonus points for a small top
-> > > of the file comment explaining the point of the interface, which I
-> > > still don't get :)
-> > 
-> > Instead of rolling your own method of having the kernel read a file,
-> > which requires call specific security hooks, this interface provides a
-> > single generic set of pre and post security hooks.  The
-> > kernel_read_file_id enumeration permits the security hook to
-> > differentiate between callers.
-> > 
-> > To comply with secure and trusted boot concepts, a file cannot be
-> > accessible to the caller until after it has been measured and/or the
-> > integrity (hash/signature) appraised.
-> > 
-> > In some cases, the file was previously read twice, first to measure
-> > and/or appraise the file and then read again into a buffer for
-> > use.  This interface reads the file into a buffer once, calls the
-> > generic post security hook, before providing the buffer to the caller.
-> >  (Note using firmware pre-allocated memory might be an issue.)
-> > 
-> > Partial reading firmware will result in needing to pre-read the entire
-> > file, most likely on the security pre hook.
-> 
-> Well described! :)
+On Tue, Jul 28, 2020 at 10:40 AM Madhavan T. Venkataraman
+<madvenka@linux.microsoft.com> wrote:
+>
+>
+>
+> On 7/28/20 12:16 PM, Andy Lutomirski wrote:
+>
+> On Tue, Jul 28, 2020 at 9:32 AM Madhavan T. Venkataraman
+> <madvenka@linux.microsoft.com> wrote:
+>
+> Thanks. See inline..
+>
+> On 7/28/20 10:13 AM, David Laight wrote:
+>
+> From:  madvenka@linux.microsoft.com
+>
+> Sent: 28 July 2020 14:11
+>
+> ...
+>
+> The kernel creates the trampoline mapping without any permissions. When
+> the trampoline is executed by user code, a page fault happens and the
+> kernel gets control. The kernel recognizes that this is a trampoline
+> invocation. It sets up the user registers based on the specified
+> register context, and/or pushes values on the user stack based on the
+> specified stack context, and sets the user PC to the requested target
+> PC. When the kernel returns, execution continues at the target PC.
+> So, the kernel does the work of the trampoline on behalf of the
+> application.
+>
+> Isn't the performance of this going to be horrid?
+>
+> It takes about the same amount of time as getpid(). So, it is
+> one quick trip into the kernel. I expect that applications will
+> typically not care about this extra overhead as long as
+> they are able to run.
+>
+> What did you test this on?  A page fault on any modern x86_64 system
+> is much, much, much, much slower than a syscall.
+>
+>
+> I tested it in on a KVM guest running Ubuntu. So, when you say
+> that a page fault is much slower, do you mean a regular page
+> fault that is handled through the VM layer? Here is the relevant code
+> in do_user_addr_fault():
 
-Since you're moving all this stuff, it woudl be good if you can add this
-as part of new kdoc as well.
-
-  Luis
+I mean that x86 CPUs have reasonably SYSCALL and SYSRET instructions
+(the former is used for 64-bit system calls on Linux and the latter is
+mostly used to return from system calls), but hardware page fault
+delivery and IRET (used to return from page faults) are very slow.
