@@ -2,53 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB0F233974
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 22:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD4C233982
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 22:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728396AbgG3UDl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Jul 2020 16:03:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51438 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727090AbgG3UDk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Jul 2020 16:03:40 -0400
-Received: from localhost.localdomain (pool-96-246-152-186.nycmny.fios.verizon.net [96.246.152.186])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 009D52074B;
-        Thu, 30 Jul 2020 20:03:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596139420;
-        bh=Nb6NoNnz9vaD/ACyuYzBpeQTihylPtRPWzrvjEv46Pw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=aWxm3EzQyI3R5yKTmhjwCH73q2hIy90aLytGjpQLXawdE3p/szijJ+xH6qwRk7ES7
-         Nnk+IPXe5wOV9+EEdVS4KVpr9DtcCidDFDJgbH8+Dq2neTBHQ++PLo/MW0GhXdXVwC
-         UEjwkTCm/kwaNVH6IV45GrL1Vn0jWJldvUVEemMs=
-Message-ID: <1596139419.25003.16.camel@kernel.org>
-Subject: Re: [PATCH v5 0/4] IMA: kexec cmdline measurement
-From:   Mimi Zohar <zohar@kernel.org>
-To:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
-Cc:     Lachlan Sneff <t-josne@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        balajib@linux.microsoft.com, linux-integrity@vger.kernel.org
-Date:   Thu, 30 Jul 2020 16:03:39 -0400
-In-Reply-To: <20200727223041.13110-1-pvorel@suse.cz>
-References: <20200727223041.13110-1-pvorel@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726978AbgG3UEk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Jul 2020 16:04:40 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:50738 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbgG3UEk (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 30 Jul 2020 16:04:40 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id BA74720B4908;
+        Thu, 30 Jul 2020 13:04:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BA74720B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1596139479;
+        bh=YPE+I9ZEJip/DLdFnXo/Xe1crHLzi3V6ybUliBj4JTs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q48T1W+x1nOBEj0hcOWhn4lqsNeYMH9Myb4bAIILzU8uH1cVuuCYmw5pM7NGiUQtX
+         gYeTWUbYNAbItOcYK8W6eaVT+yajSSHjU5egR40XUoxV2mb0LgSuRcoDrd0jBlmnpR
+         x1rnxdYAClfs/1zgh0MM7ZY61sMnY7o3mZupn4Fs=
+Date:   Thu, 30 Jul 2020 15:04:36 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, sashal@kernel.org, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 4/4] IMA: Handle early boot data measurement
+Message-ID: <20200730200436.GY4181@sequoia>
+References: <20200730034724.3298-1-nramas@linux.microsoft.com>
+ <20200730034724.3298-5-nramas@linux.microsoft.com>
+ <ea3bba66-9b21-b842-990b-2bf1e4ac2179@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea3bba66-9b21-b842-990b-2bf1e4ac2179@linux.microsoft.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-07-28 at 00:30 +0200, Petr Vorel wrote:
-> Hi all,
+On 2020-07-30 11:02:50, Lakshmi Ramasubramanian wrote:
+> On 7/29/20 8:47 PM, Lakshmi Ramasubramanian wrote:
 > 
-> sending hopefully the last version. In the end I did quite few changes,
-> thus sending patchset instead of merging without review.
+> Hi Tyler,
+> 
+> > diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+> > index 080c53545ff0..86cba844f73c 100644
+> > --- a/security/integrity/ima/Kconfig
+> > +++ b/security/integrity/ima/Kconfig
+> > @@ -322,10 +322,9 @@ config IMA_MEASURE_ASYMMETRIC_KEYS
+> >   	depends on ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
+> >   	default y
+> > -config IMA_QUEUE_EARLY_BOOT_KEYS
+> > +config IMA_QUEUE_EARLY_BOOT_DATA
+> >   	bool
+> > -	depends on IMA_MEASURE_ASYMMETRIC_KEYS
+> > -	depends on SYSTEM_TRUSTED_KEYRING
+> > +	depends on SECURITY || (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
+> >   	default y
+> Similar to the change you'd suggested for validating LSM_STATE and
+> LSM_POLICY func, I think IMA_QUEUE_EARLY_BOOT_DATA config should be enabled
+> for SECURITY_SELINUX.
+> 
+> depends on SECURITY_SELINUX ||
+>            (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
+> 
+> And, when more security modules are added update this CONFIG as appropriate.
+> 
+> Does that sound okay?
 
-Nice! Thank you.
+Yes, I think so.
 
-Mimi
+Tyler
+
+> 
+>  -lakshmi
