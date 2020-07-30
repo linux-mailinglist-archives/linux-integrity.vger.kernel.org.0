@@ -2,36 +2,36 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AED232A8D
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 05:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 108BD232A93
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 05:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728550AbgG3Drb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Jul 2020 23:47:31 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:53442 "EHLO
+        id S1728343AbgG3Dri (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jul 2020 23:47:38 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:53460 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728343AbgG3Drb (ORCPT
+        with ESMTP id S1728491AbgG3Drc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Jul 2020 23:47:31 -0400
+        Wed, 29 Jul 2020 23:47:32 -0400
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C8B4D20B490C;
-        Wed, 29 Jul 2020 20:47:29 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C8B4D20B490C
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1E7F920B490D;
+        Wed, 29 Jul 2020 20:47:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1E7F920B490D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1596080850;
-        bh=CfiFqfbw/Bv6iAx0xQEtB6LbwfXGxWUXCDGWnsMT+jk=;
+        bh=yfGubZlNtjI/82phQqsNVjrHC1uPxSZK0j1rcb7s0yY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gY6gnOoMQdTIP85f4Ssu5eyst+5peloqd6claEa04nIKlKYu+ZKzuAiRUyGUO4N//
-         ixfvEglS0c/LsDsGCYVLm/MKT5V9MX6hsdTIECb2Dz/DnFplbzfsUz4/6FySkUbgKX
-         vBi0MZocBJ20CaPha//stPQ3JtOh2teORTxIDutQ=
+        b=FEuKmEAqHlsrOQCZrB43UhK4m1Y+K+uQmqHr7AAvtDfeI01hfw2/ZfVyd8ASSXdeX
+         uXqlmZKLsB7V7qx73biHU7179G9OYfz6rD6xiqcTNhUf1x6i3KRpJG2UOxxvnpZ463
+         TCy0Xc5q6oWxL/d3zEAm8zcbwleuue1Gs1hIQnV4=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
         casey@schaufler-ca.com
 Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/4] LSM: Define SELinux function to measure state and policy
-Date:   Wed, 29 Jul 2020 20:47:23 -0700
-Message-Id: <20200730034724.3298-4-nramas@linux.microsoft.com>
+Subject: [PATCH v5 4/4] IMA: Handle early boot data measurement
+Date:   Wed, 29 Jul 2020 20:47:24 -0700
+Message-Id: <20200730034724.3298-5-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200730034724.3298-1-nramas@linux.microsoft.com>
 References: <20200730034724.3298-1-nramas@linux.microsoft.com>
@@ -42,426 +42,573 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SELinux configuration and policy are some of the critical data for this
-security module that needs to be measured. This measurement can be used
-by an attestation service, for instance, to verify if the configuration
-and policies have been setup correctly and that they haven't been tampered
-with at runtime.
+The current implementation of early boot measurement in
+the IMA subsystem is very specific to asymmetric keys. It does not
+handle measurement of other data such as Linux Security Module (LSM)
+data. Since most security modules are initialized very early in
+the boot cycle, data provided by those modules are not measured
+by IMA. Any other subsystem that initializes early in the boot cycle
+and needs IMA to measure their data would suffer from the same issue.
 
-Measure SELinux configuration, policy capabilities settings, and the
-loaded policy by calling the IMA hooks ima_measure_lsm_state() and
-ima_measure_lsm_policy() respectively.
+Update the early boot key measurement to handle any early boot data.
+Change the kernel configuration CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS to
+CONFIG_IMA_QUEUE_EARLY_BOOT_DATA so it can be used for enabling
+early boot data measurement. Change this new configuration to support
+SECURITY subsystem in addition to KEYS subsystem, which is currently
+supported. This can be extended to include more subsystems in the future
+by updating this kernel configuration.
 
-Sample measurement of SELinux state and hash of the policy:
-
-10 e32e...5ac3 ima-buf sha256:86e8...4594 selinux-state-1595389364:287899386 696e697469616c697a65643d313b656e61626c65643d313b656e666f7263696e673d303b636865636b72657170726f743d313b6e6574776f726b5f706565725f636f6e74726f6c733d313b6f70656e5f7065726d733d313b657874656e6465645f736f636b65745f636c6173733d313b616c776179735f636865636b5f6e6574776f726b3d303b6367726f75705f7365636c6162656c3d313b6e6e705f6e6f737569645f7472616e736974696f6e3d313b67656e66735f7365636c6162656c5f73796d6c696e6b733d303
-10 f4a7...9408 ima-ng sha256:8d1d...1834 selinux-policy-hash-1595389353:863934271
-
-To verify the measurement check the following:
-
-Execute the following command to extract the measured data
-from the IMA log for SELinux configuration (selinux-state).
-
-  grep -m 1 "selinux-state" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | cut -d' ' -f 6 | xxd -r -p
-
-The output should be the list of key-value pairs. For example,
- initialized=1;enabled=1;enforcing=0;checkreqprot=1;network_peer_controls=1;open_perms=1;extended_socket_class=1;always_check_network=0;cgroup_seclabel=1;nnp_nosuid_transition=1;genfs_seclabel_symlinks=0;
-
-To verify the measured data with the current SELinux state:
-
- => enabled should be set to 1 if /sys/fs/selinux folder exists,
-    0 otherwise
-
-For other entries, compare the integer value in the files
- => /sys/fs/selinux/enforce
- => /sys/fs/selinux/checkreqprot
-And, each of the policy capabilities files under
- => /sys/fs/selinux/policy_capabilities
-
-For selinux-policy-hash, the hash of SELinux policy is included
-in the IMA log entry.
-
-To verify the measured data with the current SELinux policy run
-the following commands and verify the output hash values match.
-
-  sha256sum /sys/fs/selinux/policy | cut -d' ' -f 1
-
-  grep -m 1 "selinux-policy-hash" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | cut -d' ' -f 4
+Update LSM hooks namely ima_measure_lsm_state() and ima_measure_lsm_policy
+to utilize early boot measurement support.
 
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com> # error: implicit declaration of function 'vfree'
-Reported-by: kernel test robot <lkp@intel.com> # error: implicit declaration of function 'crypto_alloc_shash'
-Reported-by: kernel test robot <lkp@intel.com> # sparse: symbol 'security_read_selinux_policy' was not declared. Should it be static?
 ---
- security/selinux/Makefile           |   2 +
- security/selinux/hooks.c            |   1 +
- security/selinux/include/security.h |  15 +++
- security/selinux/measure.c          | 150 ++++++++++++++++++++++++++++
- security/selinux/selinuxfs.c        |   3 +
- security/selinux/ss/services.c      |  71 +++++++++++--
- 6 files changed, 233 insertions(+), 9 deletions(-)
- create mode 100644 security/selinux/measure.c
+ security/integrity/ima/Kconfig               |   5 +-
+ security/integrity/ima/Makefile              |   2 +-
+ security/integrity/ima/ima.h                 |  37 ++--
+ security/integrity/ima/ima_asymmetric_keys.c |   6 +-
+ security/integrity/ima/ima_init.c            |   2 +-
+ security/integrity/ima/ima_main.c            |  22 ++-
+ security/integrity/ima/ima_policy.c          |   2 +-
+ security/integrity/ima/ima_queue_data.c      | 175 +++++++++++++++++++
+ security/integrity/ima/ima_queue_keys.c      | 174 ------------------
+ 9 files changed, 223 insertions(+), 202 deletions(-)
+ create mode 100644 security/integrity/ima/ima_queue_data.c
+ delete mode 100644 security/integrity/ima/ima_queue_keys.c
 
-diff --git a/security/selinux/Makefile b/security/selinux/Makefile
-index 4d8e0e8adf0b..83d512116341 100644
---- a/security/selinux/Makefile
-+++ b/security/selinux/Makefile
-@@ -16,6 +16,8 @@ selinux-$(CONFIG_NETLABEL) += netlabel.o
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index 080c53545ff0..86cba844f73c 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -322,10 +322,9 @@ config IMA_MEASURE_ASYMMETRIC_KEYS
+ 	depends on ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
+ 	default y
  
- selinux-$(CONFIG_SECURITY_INFINIBAND) += ibpkey.o
+-config IMA_QUEUE_EARLY_BOOT_KEYS
++config IMA_QUEUE_EARLY_BOOT_DATA
+ 	bool
+-	depends on IMA_MEASURE_ASYMMETRIC_KEYS
+-	depends on SYSTEM_TRUSTED_KEYRING
++	depends on SECURITY || (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
+ 	default y
  
-+selinux-$(CONFIG_IMA) += measure.o
-+
- ccflags-y := -I$(srctree)/security/selinux -I$(srctree)/security/selinux/include
+ config IMA_SECURE_AND_OR_TRUSTED_BOOT
+diff --git a/security/integrity/ima/Makefile b/security/integrity/ima/Makefile
+index 67dabca670e2..cbbbc9848d2f 100644
+--- a/security/integrity/ima/Makefile
++++ b/security/integrity/ima/Makefile
+@@ -13,4 +13,4 @@ ima-$(CONFIG_IMA_APPRAISE_MODSIG) += ima_modsig.o
+ ima-$(CONFIG_HAVE_IMA_KEXEC) += ima_kexec.o
+ ima-$(CONFIG_IMA_BLACKLIST_KEYRING) += ima_mok.o
+ ima-$(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) += ima_asymmetric_keys.o
+-ima-$(CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS) += ima_queue_keys.o
++ima-$(CONFIG_IMA_QUEUE_EARLY_BOOT_DATA) += ima_queue_data.o
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 8ed9f5e1dd40..ebe4d9bb2f2b 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -229,29 +229,34 @@ extern const char *const func_tokens[];
  
- $(addprefix $(obj)/,$(selinux-y)): $(obj)/flask.h
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index efa6108b1ce9..5521dfc1900b 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -7394,6 +7394,7 @@ int selinux_disable(struct selinux_state *state)
- 	}
+ struct modsig;
  
- 	selinux_mark_disabled(state);
-+	selinux_measure_state(state);
+-#ifdef CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS
++#ifdef CONFIG_IMA_QUEUE_EARLY_BOOT_DATA
+ /*
+- * To track keys that need to be measured.
++ * To track data that needs to be measured.
+  */
+-struct ima_key_entry {
++struct ima_data_entry {
+ 	struct list_head list;
+ 	void *payload;
+ 	size_t payload_len;
+-	char *keyring_name;
++	const char *event_name;
++	const char *event_data;
++	enum ima_hooks func;
+ };
+-void ima_init_key_queue(void);
+-bool ima_should_queue_key(void);
+-bool ima_queue_key(struct key *keyring, const void *payload,
+-		   size_t payload_len);
+-void ima_process_queued_keys(void);
++void ima_init_data_queue(void);
++bool ima_should_queue_data(void);
++bool ima_queue_data(const char *event_name, const void *payload,
++		    size_t payload_len, const char *event_data,
++		    enum ima_hooks func);
++void ima_process_queued_data(void);
+ #else
+-static inline void ima_init_key_queue(void) {}
+-static inline bool ima_should_queue_key(void) { return false; }
+-static inline bool ima_queue_key(struct key *keyring,
+-				 const void *payload,
+-				 size_t payload_len) { return false; }
+-static inline void ima_process_queued_keys(void) {}
+-#endif /* CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS */
++static inline void ima_init_data_queue(void) {}
++static inline bool ima_should_queue_data(void) { return false; }
++static inline bool ima_queue_data(const char *event_name,
++				  const void *payload,
++				  size_t payload_len,
++				  const char *event_data,
++				  enum ima_hooks func) { return false; }
++static inline void ima_process_queued_data(void) {}
++#endif /* CONFIG_IMA_QUEUE_EARLY_BOOT_DATA */
  
- 	pr_info("SELinux:  Disabled at runtime.\n");
+ /* LIM API function definitions */
+ int ima_get_action(struct inode *inode, const struct cred *cred, u32 secid,
+diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
+index 1c68c500c26f..8f8431f8b096 100644
+--- a/security/integrity/ima/ima_asymmetric_keys.c
++++ b/security/integrity/ima/ima_asymmetric_keys.c
+@@ -37,8 +37,10 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+ 	if (!payload || (payload_len == 0))
+ 		return;
  
-diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
-index b0e02cfe3ce1..77f42d9b544b 100644
---- a/security/selinux/include/security.h
-+++ b/security/selinux/include/security.h
-@@ -222,16 +222,31 @@ static inline bool selinux_policycap_genfs_seclabel_symlinks(void)
- 	return state->policycap[POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS];
- }
+-	if (ima_should_queue_key())
+-		queued = ima_queue_key(keyring, payload, payload_len);
++	if (ima_should_queue_data())
++		queued = ima_queue_data(keyring->description, payload,
++					payload_len, keyring->description,
++					KEY_CHECK);
  
-+static inline bool selinux_checkreqprot(const struct selinux_state *state)
-+{
-+	return READ_ONCE(state->checkreqprot);
-+}
-+
- int security_mls_enabled(struct selinux_state *state);
- int security_load_policy(struct selinux_state *state,
- 			 void *data, size_t len);
- int security_read_policy(struct selinux_state *state,
- 			 void **data, size_t *len);
-+int security_read_policy_kernel(struct selinux_state *state,
-+				void **data, size_t *len);
- size_t security_policydb_len(struct selinux_state *state);
+ 	if (queued)
+ 		return;
+diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+index 4902fe7bd570..892894bf4af3 100644
+--- a/security/integrity/ima/ima_init.c
++++ b/security/integrity/ima/ima_init.c
+@@ -145,7 +145,7 @@ int __init ima_init(void)
+ 	if (rc != 0)
+ 		return rc;
  
- int security_policycap_supported(struct selinux_state *state,
- 				 unsigned int req_cap);
+-	ima_init_key_queue();
++	ima_init_data_queue();
  
-+#ifdef CONFIG_IMA
-+extern void selinux_measure_state(struct selinux_state *selinux_state);
-+#else
-+static inline void selinux_measure_state(struct selinux_state *selinux_state)
-+{
-+}
-+#endif
-+
- #define SEL_VEC_MAX 32
- struct av_decision {
- 	u32 allowed;
-diff --git a/security/selinux/measure.c b/security/selinux/measure.c
-new file mode 100644
-index 000000000000..1583628d09d1
---- /dev/null
-+++ b/security/selinux/measure.c
-@@ -0,0 +1,150 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Measure SELinux state using IMA subsystem.
-+ */
-+#include <linux/vmalloc.h>
-+#include <linux/ktime.h>
-+#include <linux/ima.h>
-+#include "security.h"
-+
-+/*
-+ * This function creates an unique name by appending the timestamp to
-+ * the given string. This string is passed as "event name" to the IMA
-+ * hook to measure the given SELinux data.
-+ *
-+ * The data provided by SELinux to the IMA subsystem for measuring may have
-+ * already been measured (for instance the same state existed earlier).
-+ * But for SELinux the current data represents a state change and hence
-+ * needs to be measured again. To enable this, pass an unique "Event Name"
-+ * to the IMA hook so that IMA subsystem will always measure the given data.
-+ *
-+ * For example,
-+ * At time T0 SELinux data to be measured is "foo". IMA measures it.
-+ * At time T1 the data is changed to "bar". IMA measures it.
-+ * At time T2 the data is changed to "foo" again. IMA will not measure it
-+ * (since it was already measured) unless the event name, for instance,
-+ * is different in this call.
-+ */
-+static char *selinux_event_name(const char *name_prefix)
-+{
-+	char *event_name = NULL;
-+	struct timespec64 curr_time;
-+	int count;
-+
-+	ktime_get_real_ts64(&curr_time);
-+	count = snprintf(NULL, 0, "%s-%lld:%09ld", name_prefix,
-+			 curr_time.tv_sec, curr_time.tv_nsec);
-+	count++;
-+	event_name = kzalloc(count, GFP_KERNEL);
-+	if (!event_name) {
-+		pr_warn("%s: event name not allocated.\n", __func__);
-+		return NULL;
-+	}
-+
-+	snprintf(event_name, count, "%s-%lld:%09ld", name_prefix,
-+		 curr_time.tv_sec, curr_time.tv_nsec);
-+
-+	return event_name;
-+}
-+
-+static int read_selinux_state(char **state_str, int *state_str_len,
-+			      struct selinux_state *state)
-+{
-+	char *buf, *str_fmt = "%s=%d;";
-+	int i, buf_len, curr;
-+
-+	buf_len = snprintf(NULL, 0, str_fmt, "initialized", 0);
-+	buf_len += snprintf(NULL, 0, str_fmt, "enabled", 0);
-+	buf_len += snprintf(NULL, 0, str_fmt, "enforcing", 0);
-+	buf_len += snprintf(NULL, 0, str_fmt, "checkreqprot", 0);
-+
-+	for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++) {
-+		buf_len += snprintf(NULL, 0, str_fmt,
-+				    selinux_policycap_names[i], 0);
-+	}
-+	++buf_len;
-+
-+	buf = kzalloc(buf_len, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	curr = snprintf(buf, buf_len, str_fmt,
-+			"initialized", selinux_initialized(state));
-+	curr += snprintf((buf + curr), (buf_len - curr), str_fmt,
-+			 "enabled", !selinux_disabled(state));
-+	curr += snprintf((buf + curr), (buf_len - curr), str_fmt,
-+			 "enforcing", enforcing_enabled(state));
-+	curr += snprintf((buf + curr), (buf_len - curr), str_fmt,
-+			 "checkreqprot", selinux_checkreqprot(state));
-+
-+	for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++) {
-+		curr += snprintf((buf + curr), (buf_len - curr), str_fmt,
-+				 selinux_policycap_names[i],
-+				 state->policycap[i]);
-+	}
-+
-+	*state_str = buf;
-+	*state_str_len = curr;
-+
-+	return 0;
-+}
-+
-+void selinux_measure_state(struct selinux_state *state)
-+{
-+	void *policy = NULL;
-+	char *event_name = NULL;
-+	char *state_str = NULL;
-+	size_t policy_len;
-+	int state_str_len, rc = 0;
-+	bool initialized = selinux_initialized(state);
-+
-+	rc = read_selinux_state(&state_str, &state_str_len, state);
-+	if (rc) {
-+		pr_warn("%s: Failed to read selinux state.\n", __func__);
-+		return;
-+	}
-+
-+	/*
-+	 * Get an unique string for measuring the current SELinux state.
-+	 */
-+	event_name = selinux_event_name("selinux-state");
-+	if (!event_name) {
-+		pr_warn("%s: Event name for state not allocated.\n",
-+			__func__);
-+		rc = -ENOMEM;
-+		goto out;
-+	}
-+
-+	rc = ima_measure_lsm_state(event_name, state_str, state_str_len);
-+
-+	kfree(event_name);
-+	event_name = NULL;
-+
-+	if (rc)
-+		goto out;
-+
-+	/*
-+	 * Measure SELinux policy only after initialization is completed.
-+	 */
-+	if (!initialized)
-+		goto out;
-+
-+	rc = security_read_policy_kernel(state, &policy, &policy_len);
-+	if (rc)
-+		goto out;
-+
-+	event_name = selinux_event_name("selinux-policy-hash");
-+	if (!event_name) {
-+		pr_warn("%s: Event name for policy not allocated.\n",
-+			__func__);
-+		rc = -ENOMEM;
-+		goto out;
-+	}
-+
-+	rc = ima_measure_lsm_policy(event_name, policy, policy_len);
-+
-+out:
-+	kfree(event_name);
-+	kfree(state_str);
-+	vfree(policy);
-+}
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index 4781314c2510..6d46eaef5c92 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -173,6 +173,7 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
- 			from_kuid(&init_user_ns, audit_get_loginuid(current)),
- 			audit_get_sessionid(current));
- 		enforcing_set(state, new_value);
-+		selinux_measure_state(state);
- 		if (new_value)
- 			avc_ss_reset(state->avc, 0);
- 		selnl_notify_setenforce(new_value);
-@@ -678,6 +679,8 @@ static ssize_t sel_write_checkreqprot(struct file *file, const char __user *buf,
- 
- 	fsi->state->checkreqprot = new_value ? 1 : 0;
- 	length = count;
-+
-+	selinux_measure_state(fsi->state);
- out:
- 	kfree(page);
- 	return length;
-diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-index ef0afd878bfc..3978c804c361 100644
---- a/security/selinux/ss/services.c
-+++ b/security/selinux/ss/services.c
-@@ -2182,6 +2182,7 @@ int security_load_policy(struct selinux_state *state, void *data, size_t len)
- 		selinux_status_update_policyload(state, seqno);
- 		selinux_netlbl_cache_invalidate();
- 		selinux_xfrm_notify_policyload();
-+		selinux_measure_state(state);
- 		return 0;
- 	}
- 
-@@ -2270,6 +2271,7 @@ int security_load_policy(struct selinux_state *state, void *data, size_t len)
- 	selinux_status_update_policyload(state, seqno);
- 	selinux_netlbl_cache_invalidate();
- 	selinux_xfrm_notify_policyload();
-+	selinux_measure_state(state);
- 
- 	rc = 0;
- 	goto out;
-@@ -2941,6 +2943,7 @@ int security_set_bools(struct selinux_state *state, u32 len, int *values)
- 		selnl_notify_policyload(seqno);
- 		selinux_status_update_policyload(state, seqno);
- 		selinux_xfrm_notify_policyload();
-+		selinux_measure_state(state);
- 	}
  	return rc;
  }
-@@ -3720,14 +3723,23 @@ int security_netlbl_sid_to_secattr(struct selinux_state *state,
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 74d421e40c8f..1c4e140964df 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -846,6 +846,22 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+ 	fdput(f);
  }
- #endif /* CONFIG_NETLABEL */
  
-+static int security_read_policy_len(struct selinux_state *state, size_t *len)
++static int ima_measure_lsm_data(const char *event_name,
++				const void *buf, int size,
++				enum ima_hooks func)
 +{
-+	if (!selinux_initialized(state))
-+		return -EINVAL;
++	bool queued = false;
 +
-+	*len = security_policydb_len(state);
-+	return 0;
++	if (ima_should_queue_data())
++		queued = ima_queue_data(event_name, buf, size, NULL, func);
++
++	if (queued)
++		return 0;
++
++	return process_buffer_measurement(NULL, buf, size, event_name, func,
++					  0, NULL);
 +}
 +
  /**
-- * security_read_policy - read the policy.
-+ * security_read_selinux_policy - read the policy.
-  * @data: binary policy data
-  * @len: length of data in bytes
-  *
-  */
--int security_read_policy(struct selinux_state *state,
--			 void **data, size_t *len)
-+static int security_read_selinux_policy(struct selinux_state *state,
-+					void **data, size_t *len)
- {
- 	struct policydb *policydb = &state->ss->policydb;
- 	int rc;
-@@ -3736,12 +3748,6 @@ int security_read_policy(struct selinux_state *state,
- 	if (!selinux_initialized(state))
+  * ima_measure_lsm_state - measure LSM specific state
+  * @lsm_event_name: LSM event
+@@ -860,8 +876,7 @@ int ima_measure_lsm_state(const char *lsm_event_name, const void *buf,
+ 	if (!lsm_event_name || !buf || !size)
  		return -EINVAL;
  
--	*len = security_policydb_len(state);
--
--	*data = vmalloc_user(*len);
--	if (!*data)
--		return -ENOMEM;
--
- 	fp.data = *data;
- 	fp.len = *len;
- 
-@@ -3754,5 +3760,52 @@ int security_read_policy(struct selinux_state *state,
- 
- 	*len = (unsigned long)fp.data - (unsigned long)*data;
- 	return 0;
-+}
-+
-+/**
-+ * security_read_policy - read the policy.
-+ * @data: binary policy data
-+ * @len: length of data in bytes
-+ *
-+ */
-+int security_read_policy(struct selinux_state *state,
-+			 void **data, size_t *len)
-+{
-+	int rc;
-+
-+	rc = security_read_policy_len(state, len);
-+	if (rc)
-+		return rc;
-+
-+	*data = vmalloc_user(*len);
-+	if (!*data)
-+		return -ENOMEM;
-+
-+	return security_read_selinux_policy(state, data, len);
-+}
-+
-+/**
-+ * security_read_policy_kernel - read the policy.
-+ * @data: binary policy data
-+ * @len: length of data in bytes
-+ *
-+ * Allocates kernel memory for reading SELinux policy.
-+ * This function is for internal use only and should not
-+ * be used for returning data to user space
-+ *
-+ */
-+int security_read_policy_kernel(struct selinux_state *state,
-+				void **data, size_t *len)
-+{
-+	int rc;
-+
-+	rc = security_read_policy_len(state, len);
-+	if (rc)
-+		return rc;
-+
-+	*data = vmalloc(*len);
-+	if (!*data)
-+		return -ENOMEM;
- 
-+	return security_read_selinux_policy(state, data, len);
+-	return process_buffer_measurement(NULL, buf, size, lsm_event_name,
+-					  LSM_STATE, 0, NULL);
++	return ima_measure_lsm_data(lsm_event_name, buf, size, LSM_STATE);
  }
+ 
+ /**
+@@ -878,8 +893,7 @@ int ima_measure_lsm_policy(const char *lsm_event_name, const void *buf,
+ 	if (!lsm_event_name || !buf || !size)
+ 		return -EINVAL;
+ 
+-	return process_buffer_measurement(NULL, buf, size, lsm_event_name,
+-					  LSM_POLICY, 0, NULL);
++	return ima_measure_lsm_data(lsm_event_name, buf, size, LSM_POLICY);
+ }
+ 
+ static int __init init_ima(void)
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index a0f5c39d9084..a8bfbca894ff 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -836,7 +836,7 @@ void ima_update_policy(void)
+ 	ima_update_policy_flag();
+ 
+ 	/* Custom IMA policy has been loaded */
+-	ima_process_queued_keys();
++	ima_process_queued_data();
+ }
+ 
+ /* Keep the enumeration in sync with the policy_tokens! */
+diff --git a/security/integrity/ima/ima_queue_data.c b/security/integrity/ima/ima_queue_data.c
+new file mode 100644
+index 000000000000..5eabd025ac2b
+--- /dev/null
++++ b/security/integrity/ima/ima_queue_data.c
+@@ -0,0 +1,175 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (C) 2019 Microsoft Corporation
++ *
++ * Author: Lakshmi Ramasubramanian (nramas@linux.microsoft.com)
++ *
++ * File: ima_queue_data.c
++ *       Enables deferred processing of data to be measured
++ */
++
++#include <linux/workqueue.h>
++#include "ima.h"
++
++/*
++ * Flag to indicate whether data can be processed
++ * right away or should be queued for processing later.
++ */
++static bool ima_process_data;
++
++/*
++ * To synchronize access to the list of data that need to be measured
++ */
++static DEFINE_MUTEX(ima_data_lock);
++static LIST_HEAD(ima_queued_data);
++
++/*
++ * If custom IMA policy is not loaded then data queued up
++ * for measurement should be freed. This worker is used
++ * for handling this scenario.
++ */
++static long ima_data_queue_timeout = 300000; /* 5 Minutes */
++static void ima_data_handler(struct work_struct *work);
++static DECLARE_DELAYED_WORK(ima_data_delayed_work, ima_data_handler);
++static bool timer_expired;
++
++/*
++ * This worker function frees data that may still be
++ * queued up in case custom IMA policy was not loaded.
++ */
++static void ima_data_handler(struct work_struct *work)
++{
++	timer_expired = true;
++	ima_process_queued_data();
++}
++
++/*
++ * This function sets up a worker to free queued data in case
++ * custom IMA policy was never loaded.
++ */
++void ima_init_data_queue(void)
++{
++	schedule_delayed_work(&ima_data_delayed_work,
++			      msecs_to_jiffies(ima_data_queue_timeout));
++}
++
++static void ima_free_data_entry(struct ima_data_entry *entry)
++{
++	if (!entry)
++		return;
++
++	kfree(entry->payload);
++	kfree(entry->event_name);
++	kfree(entry->event_data);
++	kfree(entry);
++}
++
++static struct ima_data_entry *ima_alloc_data_entry(const char *event_name,
++						   const void *payload,
++						   size_t payload_len,
++						   const char *event_data,
++						   enum ima_hooks func)
++{
++	struct ima_data_entry *entry;
++
++	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
++	if (!entry)
++		goto out;
++
++	entry->payload = kmemdup(payload, payload_len, GFP_KERNEL);
++	entry->event_name = kstrdup(event_name, GFP_KERNEL);
++	if (event_data)
++		entry->event_data = kstrdup(event_data, GFP_KERNEL);
++
++	entry->payload_len = payload_len;
++	entry->func = func;
++
++	if (!entry->payload || !entry->event_name ||
++		(event_data && !entry->event_data))
++		goto out;
++
++	INIT_LIST_HEAD(&entry->list);
++	return entry;
++
++out:
++	integrity_audit_message(AUDIT_INTEGRITY_PCR, NULL,
++				event_name, func_measure_str(func),
++				"ENOMEM", -ENOMEM, 0, -ENOMEM);
++	ima_free_data_entry(entry);
++	return NULL;
++}
++
++bool ima_queue_data(const char *event_name, const void *payload,
++		    size_t payload_len, const char *event_data,
++		    enum ima_hooks func)
++{
++	bool queued = false;
++	struct ima_data_entry *entry;
++
++	entry = ima_alloc_data_entry(event_name, payload, payload_len,
++				     event_data, func);
++	if (!entry)
++		return false;
++
++	mutex_lock(&ima_data_lock);
++	if (!ima_process_data) {
++		list_add_tail(&entry->list, &ima_queued_data);
++		queued = true;
++	}
++	mutex_unlock(&ima_data_lock);
++
++	if (!queued)
++		ima_free_data_entry(entry);
++
++	return queued;
++}
++
++/*
++ * ima_process_queued_data() - process data queued for measurement
++ *
++ * This function sets ima_process_data to true and processes queued data.
++ * From here on data will be processed right away (not queued).
++ */
++void ima_process_queued_data(void)
++{
++	struct ima_data_entry *entry, *tmp;
++	bool process = false;
++
++	if (ima_process_data)
++		return;
++
++	/*
++	 * Since ima_process_data is set to true, any new data will be
++	 * processed immediately and not be queued to ima_queued_data list.
++	 * First one setting the ima_process_data flag to true will
++	 * process the queued data.
++	 */
++	mutex_lock(&ima_data_lock);
++	if (!ima_process_data) {
++		ima_process_data = true;
++		process = true;
++	}
++	mutex_unlock(&ima_data_lock);
++
++	if (!process)
++		return;
++
++	if (!timer_expired)
++		cancel_delayed_work_sync(&ima_data_delayed_work);
++
++	list_for_each_entry_safe(entry, tmp, &ima_queued_data, list) {
++		if (!timer_expired)
++			process_buffer_measurement(NULL, entry->payload,
++						   entry->payload_len,
++						   entry->event_name,
++						   entry->func, 0,
++						   entry->event_data);
++		list_del(&entry->list);
++		ima_free_data_entry(entry);
++	}
++}
++
++inline bool ima_should_queue_data(void)
++{
++	return !ima_process_data;
++}
+diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
+deleted file mode 100644
+index 69a8626a35c0..000000000000
+--- a/security/integrity/ima/ima_queue_keys.c
++++ /dev/null
+@@ -1,174 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-/*
+- * Copyright (C) 2019 Microsoft Corporation
+- *
+- * Author: Lakshmi Ramasubramanian (nramas@linux.microsoft.com)
+- *
+- * File: ima_queue_keys.c
+- *       Enables deferred processing of keys
+- */
+-
+-#include <linux/workqueue.h>
+-#include <keys/asymmetric-type.h>
+-#include "ima.h"
+-
+-/*
+- * Flag to indicate whether a key can be processed
+- * right away or should be queued for processing later.
+- */
+-static bool ima_process_keys;
+-
+-/*
+- * To synchronize access to the list of keys that need to be measured
+- */
+-static DEFINE_MUTEX(ima_keys_lock);
+-static LIST_HEAD(ima_keys);
+-
+-/*
+- * If custom IMA policy is not loaded then keys queued up
+- * for measurement should be freed. This worker is used
+- * for handling this scenario.
+- */
+-static long ima_key_queue_timeout = 300000; /* 5 Minutes */
+-static void ima_keys_handler(struct work_struct *work);
+-static DECLARE_DELAYED_WORK(ima_keys_delayed_work, ima_keys_handler);
+-static bool timer_expired;
+-
+-/*
+- * This worker function frees keys that may still be
+- * queued up in case custom IMA policy was not loaded.
+- */
+-static void ima_keys_handler(struct work_struct *work)
+-{
+-	timer_expired = true;
+-	ima_process_queued_keys();
+-}
+-
+-/*
+- * This function sets up a worker to free queued keys in case
+- * custom IMA policy was never loaded.
+- */
+-void ima_init_key_queue(void)
+-{
+-	schedule_delayed_work(&ima_keys_delayed_work,
+-			      msecs_to_jiffies(ima_key_queue_timeout));
+-}
+-
+-static void ima_free_key_entry(struct ima_key_entry *entry)
+-{
+-	if (entry) {
+-		kfree(entry->payload);
+-		kfree(entry->keyring_name);
+-		kfree(entry);
+-	}
+-}
+-
+-static struct ima_key_entry *ima_alloc_key_entry(struct key *keyring,
+-						 const void *payload,
+-						 size_t payload_len)
+-{
+-	int rc = 0;
+-	const char *audit_cause = "ENOMEM";
+-	struct ima_key_entry *entry;
+-
+-	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
+-	if (entry) {
+-		entry->payload = kmemdup(payload, payload_len, GFP_KERNEL);
+-		entry->keyring_name = kstrdup(keyring->description,
+-					      GFP_KERNEL);
+-		entry->payload_len = payload_len;
+-	}
+-
+-	if ((entry == NULL) || (entry->payload == NULL) ||
+-	    (entry->keyring_name == NULL)) {
+-		rc = -ENOMEM;
+-		goto out;
+-	}
+-
+-	INIT_LIST_HEAD(&entry->list);
+-
+-out:
+-	if (rc) {
+-		integrity_audit_message(AUDIT_INTEGRITY_PCR, NULL,
+-					keyring->description,
+-					func_measure_str(KEY_CHECK),
+-					audit_cause, rc, 0, rc);
+-		ima_free_key_entry(entry);
+-		entry = NULL;
+-	}
+-
+-	return entry;
+-}
+-
+-bool ima_queue_key(struct key *keyring, const void *payload,
+-		   size_t payload_len)
+-{
+-	bool queued = false;
+-	struct ima_key_entry *entry;
+-
+-	entry = ima_alloc_key_entry(keyring, payload, payload_len);
+-	if (!entry)
+-		return false;
+-
+-	mutex_lock(&ima_keys_lock);
+-	if (!ima_process_keys) {
+-		list_add_tail(&entry->list, &ima_keys);
+-		queued = true;
+-	}
+-	mutex_unlock(&ima_keys_lock);
+-
+-	if (!queued)
+-		ima_free_key_entry(entry);
+-
+-	return queued;
+-}
+-
+-/*
+- * ima_process_queued_keys() - process keys queued for measurement
+- *
+- * This function sets ima_process_keys to true and processes queued keys.
+- * From here on keys will be processed right away (not queued).
+- */
+-void ima_process_queued_keys(void)
+-{
+-	struct ima_key_entry *entry, *tmp;
+-	bool process = false;
+-
+-	if (ima_process_keys)
+-		return;
+-
+-	/*
+-	 * Since ima_process_keys is set to true, any new key will be
+-	 * processed immediately and not be queued to ima_keys list.
+-	 * First one setting the ima_process_keys flag to true will
+-	 * process the queued keys.
+-	 */
+-	mutex_lock(&ima_keys_lock);
+-	if (!ima_process_keys) {
+-		ima_process_keys = true;
+-		process = true;
+-	}
+-	mutex_unlock(&ima_keys_lock);
+-
+-	if (!process)
+-		return;
+-
+-	if (!timer_expired)
+-		cancel_delayed_work_sync(&ima_keys_delayed_work);
+-
+-	list_for_each_entry_safe(entry, tmp, &ima_keys, list) {
+-		if (!timer_expired)
+-			process_buffer_measurement(NULL, entry->payload,
+-						   entry->payload_len,
+-						   entry->keyring_name,
+-						   KEY_CHECK, 0,
+-						   entry->keyring_name);
+-		list_del(&entry->list);
+-		ima_free_key_entry(entry);
+-	}
+-}
+-
+-inline bool ima_should_queue_key(void)
+-{
+-	return !ima_process_keys;
+-}
 -- 
 2.27.0
 
