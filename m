@@ -2,91 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A421232A86
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 05:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C819232A98
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 05:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728505AbgG3Dll (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Jul 2020 23:41:41 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:52676 "EHLO
+        id S1728519AbgG3Dra (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jul 2020 23:47:30 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:53410 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726342AbgG3Dlk (ORCPT
+        with ESMTP id S1726194AbgG3Dra (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Jul 2020 23:41:40 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1C56320B4908;
-        Wed, 29 Jul 2020 20:41:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1C56320B4908
+        Wed, 29 Jul 2020 23:47:30 -0400
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E449C20B4908;
+        Wed, 29 Jul 2020 20:47:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E449C20B4908
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596080500;
-        bh=SSgbPP9kDZLovED2Z/+QlPvME41I7wBz0odZxt5w7A0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=bizhjV3Sq57DpB3Dye03VgBufFalczAqpkydQCw+ZC3oKRkxB45Va5icWsSyO27Rd
-         T2L5LmEj7L3o5aWzuYz+6f72EPJ3xWlDY9KjJVGREF+JMLWHZqlFfJBy62uZPBkcPu
-         e/1Byk50QddvVpZMWBvq3KdC1AehYtlhKT3DwXhU=
-Subject: Re: Measure data again even when it has not changed
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>
-References: <8bcf778d-8fa8-9985-43d7-c2b80d8d8445@linux.microsoft.com>
- <59f23e8953c0735695e5679fc7b7021252837874.camel@linux.ibm.com>
+        s=default; t=1596080849;
+        bh=RhrOpojCuE9/gOVGVXBy1xV6cRPsmVE/M6gBMtqivsY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FAVzIPLAjtYZ1w+m2eBdb5C41QQUbyl8NSdxyjhujjmWAa8hgyGvKxKLPJtkdx2Tu
+         +oLFHYzmh2yZWd/TEIIDcfhou0lrEBV5AB+q0yjTJJ3pbflPFT25cRT9IGouwu3HCr
+         vbOLxxQwgfqWm1nu20c86G1ZXK4hJ5CuIecMDDHY=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <a83fdf87-d98e-b5cd-2557-2fae88b09a13@linux.microsoft.com>
-Date:   Wed, 29 Jul 2020 20:41:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/4] LSM: Measure security module data
+Date:   Wed, 29 Jul 2020 20:47:20 -0700
+Message-Id: <20200730034724.3298-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <59f23e8953c0735695e5679fc7b7021252837874.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/29/20 8:23 PM, Mimi Zohar wrote:
+Critical data structures of security modules are currently not measured.
+Therefore an attestation service, for instance, would not be able to
+attest whether the security modules are always operating with the policies
+and configuration that the system administrator had setup. The policies
+and configuration for the security modules could be tampered with by
+malware by exploiting kernel vulnerabilities or modified through some
+inadvertent actions on the system. Measuring such critical data would
+enable an attestation service to better assess the state of the system.
 
-> On Wed, 2020-07-29 at 10:17 -0700, Lakshmi Ramasubramanian wrote:
->> Hi Mimi,
->>
->> I have a query related to measuring data (by IMA subsystem) when that
->> data has been already been measured.
->>
->> Consider the following sequence of events:
->>
->> => At time T0 IMA hook is called by another subsystem to measure data
->> "foo". IMA measures it.
->>
->> => At time T1 data is "bar". IMA measures it.
->>
->> => At time T2 data is "foo" again. But IMA doesn't measure it since it
->> is already in the measured list.
->>
->> But for the subsystem making the call to IMA, the state has changed and
->> "foo" has to be measured again.
->>
->> One way to address the above is to use unique "event name" in each call
->> so that IMA measures the given data every time.
->>
->> Is there a better way to address the above?
-> 
-> Most likely the file is being re-measured, but the new value already exists in
-> the hash table so it isn't being added to the IMA measurement list or extending
-> the TPM.  When IMA was upstreamed, there was concern about TPM performance and
-> the number of measurements being extended.  We've improved TPM performance quite
-> a bit.  If you're not concerned about TPM performance, I would define a new
-> template data field based on i_version.
+IMA subsystem measures system files, command line arguments passed to
+kexec, boot aggregate, keys, etc. It can be used to measure critical
+data structures of security modules as well.
 
-In the use case I am considering the entity being measured is not a 
-file, but a memory buffer - it is for measuring an LSM's data 
-constructs. So i_version is not available in this case.
+This change aims to address measuring critical data structures
+of security modules when they are initialized and when they are
+updated at runtime.
 
-When LSM's data changes from A to B and then back to A, hash(A) already 
-exists in IMA's hash table. So A is not measured again.
+This series is based on commit 3db0d0c276a7 ("integrity: remove
+redundant initialization of variable ret") in next-integrity
 
-Since LSM state change is not expected to be frequent, TPM performance 
-shouldn't be a concern.
+Change log:
 
-thanks,
-  -lakshmi
+  v5:
+      => Append timestamp to "event name" string in the call to
+         the IMA hooks so that LSM data is always measured by IMA.
+      => Removed workqueue patch that was handling periodic checking
+         of the LSM data. This change will be introduced as a separate
+         patch set while keeping this patch set focussed on measuring
+         the LSM data on initialization and on updates at runtime.
+      => Handle early boot measurement of LSM data.
 
+  v4:
+      => Added LSM_POLICY func and IMA hook to measure LSM policy.
+      => Pass SELinux policy data, instead of the hash of the policy,
+         to the IMA hook to measure.
+      => Include "initialized" flag in SELinux measurement.
+         Also, measure SELinux state even when initialization is not yet
+         completed. But measure SELinux policy only after initialization.
+
+  v3:
+      => Loop through policy_capabilities to build the state data
+         to measure instead of hardcoding to current set of
+         policy capabilities.
+      => Added error log messages for failure conditions.
+
+  v2:
+      => Pass selinux_state struct as parameter to the function
+         that measures SELinux data.
+      => Use strings from selinux_policycap_names array for SELinux
+         state measurement.
+      => Refactored security_read_policy() to alloc kernel or user
+         virtual memory and then read the SELinux policy.
+
+  v1:
+      => Per Stephen Smalley's suggestion added selinux_state booleans
+         and hash of SELinux policy in the measured data for SELinux.
+      => Call IMA hook from the security module directly instead of
+         redirecting through the LSM.
+
+Lakshmi Ramasubramanian (4):
+  IMA: Add func to measure LSM state and policy
+  IMA: Define IMA hooks to measure LSM state and policy
+  LSM: Define SELinux function to measure state and policy
+  IMA: Handle early boot data measurement
+
+ Documentation/ABI/testing/ima_policy         |   9 +
+ include/linux/ima.h                          |  14 ++
+ security/integrity/ima/Kconfig               |   5 +-
+ security/integrity/ima/Makefile              |   2 +-
+ security/integrity/ima/ima.h                 |  45 +++--
+ security/integrity/ima/ima_api.c             |   2 +-
+ security/integrity/ima/ima_asymmetric_keys.c |   6 +-
+ security/integrity/ima/ima_init.c            |   2 +-
+ security/integrity/ima/ima_main.c            |  64 ++++++-
+ security/integrity/ima/ima_policy.c          |  33 +++-
+ security/integrity/ima/ima_queue_data.c      | 175 +++++++++++++++++++
+ security/integrity/ima/ima_queue_keys.c      | 174 ------------------
+ security/selinux/Makefile                    |   2 +
+ security/selinux/hooks.c                     |   1 +
+ security/selinux/include/security.h          |  15 ++
+ security/selinux/measure.c                   | 150 ++++++++++++++++
+ security/selinux/selinuxfs.c                 |   3 +
+ security/selinux/ss/services.c               |  71 +++++++-
+ 18 files changed, 551 insertions(+), 222 deletions(-)
+ create mode 100644 security/integrity/ima/ima_queue_data.c
+ delete mode 100644 security/integrity/ima/ima_queue_keys.c
+ create mode 100644 security/selinux/measure.c
+
+-- 
+2.27.0
 
