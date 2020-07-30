@@ -2,93 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5077F2332AE
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 15:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F6A2332C1
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 15:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729003AbgG3NJ3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Jul 2020 09:09:29 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:31250 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726581AbgG3NJ3 (ORCPT
+        id S1726581AbgG3NM2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Jul 2020 09:12:28 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:40630 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726535AbgG3NM2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Jul 2020 09:09:29 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-237-OWiDeMRKNgyfXRUgU29ZSg-1; Thu, 30 Jul 2020 14:09:25 +0100
-X-MC-Unique: OWiDeMRKNgyfXRUgU29ZSg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 30 Jul 2020 14:09:24 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 30 Jul 2020 14:09:24 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Lutomirski' <luto@kernel.org>,
-        "madvenka@linux.microsoft.com" <madvenka@linux.microsoft.com>
-CC:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "LSM List" <linux-security-module@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
-Subject: RE: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-Thread-Topic: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-Thread-Index: AQHWZQT/T+e4gDrzGEmP/30MMvDTCqkgFteg
-Date:   Thu, 30 Jul 2020 13:09:24 +0000
-Message-ID: <b9879beef3e740c0aeb1af73485069a8@AcuMS.aculab.com>
-References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
-In-Reply-To: <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 30 Jul 2020 09:12:28 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C0AC320B4908;
+        Thu, 30 Jul 2020 06:12:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C0AC320B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1596114747;
+        bh=s8mJv9YAJzJCZHgQrTYRSwjw1T2jhFhMQuqnKP9TJMA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=lSya2PEk3bmUQMaWypDCGUZIZIcSyhTcN/lyjbU+HEIQHAmO03LnturBXZkot9wRr
+         nV1CiZi7Lcg1+YLny9Nv6sZpzDY120ixfsNJKTmx/Uj5w/IDEgYcKQH/iBnIDHUVxp
+         ++pKhH9Vpr9aMoNHj47LLi24XxKnT3J2bspn+jxM=
+Subject: Re: Measure data again even when it has not changed
+To:     Mimi Zohar <zohar@kernel.org>, linux-integrity@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>
+References: <8bcf778d-8fa8-9985-43d7-c2b80d8d8445@linux.microsoft.com>
+ <59f23e8953c0735695e5679fc7b7021252837874.camel@linux.ibm.com>
+ <a83fdf87-d98e-b5cd-2557-2fae88b09a13@linux.microsoft.com>
+ <1596110753.25003.3.camel@kernel.org>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <31db3e6f-c877-b359-19fd-cd09a58dbc13@linux.microsoft.com>
+Date:   Thu, 30 Jul 2020 06:12:23 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+In-Reply-To: <1596110753.25003.3.camel@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBUaGlzIGlzIHF1aXRlIGNsZXZlciwgYnV0IG5vdyBJ4oCZbSB3b25kZXJpbmcganVzdCBob3cg
-bXVjaCBrZXJuZWwgaGVscA0KPiBpcyByZWFsbHkgbmVlZGVkLiBJbiB5b3VyIHNlcmllcywgdGhl
-IHRyYW1wb2xpbmUgaXMgYW4gbm9uLWV4ZWN1dGFibGUNCj4gcGFnZS4gIEkgY2FuIHRoaW5rIG9m
-IGF0IGxlYXN0IHR3byBhbHRlcm5hdGl2ZSBhcHByb2FjaGVzLCBhbmQgSSdkDQo+IGxpa2UgdG8g
-a25vdyB0aGUgcHJvcyBhbmQgY29ucy4NCj4gDQo+IDEuIEVudGlyZWx5IHVzZXJzcGFjZTogYSBy
-ZXR1cm4gdHJhbXBvbGluZSB3b3VsZCBiZSBzb21ldGhpbmcgbGlrZToNCj4gDQo+IDE6DQo+IHB1
-c2hxICVyYXgNCj4gcHVzaHEgJXJiYw0KPiBwdXNocSAlcmN4DQo+IC4uLg0KPiBwdXNocSAlcjE1
-DQo+IG1vdnEgJXJzcCwgJXJkaSAjIHBvaW50ZXIgdG8gc2F2ZWQgcmVncw0KPiBsZWFxIDFiKCVy
-aXApLCAlcnNpICMgcG9pbnRlciB0byB0aGUgdHJhbXBvbGluZSBpdHNlbGYNCj4gY2FsbHEgdHJh
-bXBvbGluZV9oYW5kbGVyICMgc2VlIGJlbG93DQoNCkZvciBuZXN0ZWQgY2FsbHMgKHdoZXJlIHRo
-ZSB0cmFtcG9saW5lIG5lZWRzIHRvIHBhc3MgdGhlDQpvcmlnaW5hbCBzdGFjayBmcmFtZSB0byB0
-aGUgbmVzdGVkIGZ1bmN0aW9uKSBJIHRoaW5rIHlvdQ0KanVzdCBuZWVkIGEgcGFnZSBmdWxsIG9m
-Og0KCW1vdgkkMCwgc2NyYXRjaF9yZWc7IGptcCB0cmFtcG9saW5lX2hhbmRsZXINCgltb3YJJDEs
-IHNjcmF0Y2hfcmVnOyBqbXAgdHJhbXBvbGluZV9oYW5kbGVyDQpZb3UgbmVlZCBhbiB1bnVzZWQg
-cmVnaXN0ZXIsIG9uIHg4Ni02NCBJIHRoaW5rIGJvdGgNCnIxMCBhbmQgcjExIGFyZSBhdmFpbGFi
-bGUuDQpPbiBpMzg2IEkgdGhpbmsgZWF4IGNhbiBiZSB1c2VkLg0KSXQgbWlnaHQgZXZlbiBiZSB0
-aGF0IHRoZSBmaXJzdCBhcmd1bWVudCByZWdpc3RlciBpcw0KYXZhaWxhYmxlIC0gaWYgdGhhdCBp
-cyB1c2VkIHRvIHBhc3MgaW4gdGhlIHN0YWNrIGZyYW1lLg0KDQpUaGUgdHJhbXBvbGluZV9oYW5k
-bGVyIHRoZW4gdXNlcyB0aGUgcGFzc2VkIGluIHZhbHVlDQp0byBpbmRleCBhbiBhcnJheSBvZiBz
-dGFjayBmcmFtZSBhbmQgZnVuY3Rpb24gcG9pbnRlcnMNCmFuZCBqdW1wcyB0byB0aGUgcmVhbCBm
-dW5jdGlvbi4NCllvdSBuZWVkIHRvIGhvbGQgZXZlcnl0aGluZyBpbiBfX3RocmVhZCBkYXRhLg0K
-QW5kIG1heWJlIGJlIGFibGUgdG8gYWxsb2NhdGUgYW4gZXh0cmEgcGFnZSBmb3IgZGVlcGx5DQpu
-ZXN0ZWQgY29kZSBwYXRocyAoZWcgcmVjdXJzaXZlIG5lc3RlZCBmdW5jdGlvbnMpLg0KDQpZb3Ug
-bWlnaHQgdGhlbiBuZWVkIGEgZHJpdmVyIHRvIGNyZWF0ZSB5b3UgYSBzdWl0YWJsZQ0KZXhlY3V0
-YWJsZSBwYWdlLiBTb21laG93IHlvdSBuZWVkIHRvIHBhc3MgaW4gdGhlIGFkZHJlc3MNCm9mIHRo
-ZSB0cmFtcG9saW5lX2hhbmRsZXIgYW5kIHRoZSBudW1iZXIgZm9yIHRoZSBmaXJzdCBmYXVsdC4N
-Ckl0IG5lZWQgdG8gcGFzcyBiYWNrIHRoZSAnc3RyaWRlJyBvZiB0aGUgYXJyYXkgYW5kIG51bWJl
-cg0Kb2YgZWxlbWVudHMgY3JlYXRlZC4NCg0KQnV0IGlmIHlvdSBjYW4gdGFrZSB0aGUgY29zdCBv
-ZiB0aGUgcGFnZSBmYXVsdCwgdGhlbg0KeW91IGNhbiBpbnRlcnByZXQgdGhlIGV4aXN0aW5nIHRy
-YW1wb2xpbmUgaW4gdXNlcnNwYWNlDQp3aXRoaW4gdGhlIHNpZ25hbCBoYW5kbGVyLg0KVGhpcyBp
-cyB0d28ga2VybmVsIGVudHJ5L2V4aXRzLg0KDQpBcmJpdHJhcnkgSklUIGlzIGEgZGlmZmVyZW50
-IHByb2JsZW0gZW50aXJlbHkuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFr
-ZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwg
-VUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On 7/30/20 5:05 AM, Mimi Zohar wrote:
+> On Wed, 2020-07-29 at 20:41 -0700, Lakshmi Ramasubramanian wrote:
+>> On 7/29/20 8:23 PM, Mimi Zohar wrote:
+>>
+>>> On Wed, 2020-07-29 at 10:17 -0700, Lakshmi Ramasubramanian wrote:
+>>>> Hi Mimi,
+>>>>
+>>>> I have a query related to measuring data (by IMA subsystem) when that
+>>>> data has been already been measured.
+>>>>
+>>>> Consider the following sequence of events:
+>>>>
+>>>> => At time T0 IMA hook is called by another subsystem to measure data
+>>>> "foo". IMA measures it.
+>>>>
+>>>> => At time T1 data is "bar". IMA measures it.
+>>>>
+>>>> => At time T2 data is "foo" again. But IMA doesn't measure it since it
+>>>> is already in the measured list.
+>>>>
+>>>> But for the subsystem making the call to IMA, the state has changed and
+>>>> "foo" has to be measured again.
+>>>>
+>>>> One way to address the above is to use unique "event name" in each call
+>>>> so that IMA measures the given data every time.
+>>>>
+>>>> Is there a better way to address the above?
+>>>
+>>> Most likely the file is being re-measured, but the new value already exists in
+>>> the hash table so it isn't being added to the IMA measurement list or extending
+>>> the TPM.  When IMA was upstreamed, there was concern about TPM performance and
+>>> the number of measurements being extended.  We've improved TPM performance quite
+>>> a bit.  If you're not concerned about TPM performance, I would define a new
+>>> template data field based on i_version.
+>>
+>> In the use case I am considering the entity being measured is not a
+>> file, but a memory buffer - it is for measuring an LSM's data
+>> constructs. So i_version is not available in this case.
+>>
+>> When LSM's data changes from A to B and then back to A, hash(A) already
+>> exists in IMA's hash table. So A is not measured again.
+>>
+>> Since LSM state change is not expected to be frequent, TPM performance
+>> shouldn't be a concern.
+> 
+> Wouldn't a unique event name result in a new measurement every time?
+> 
+
+Adding Stephen.
+
+Yes - but the LSM would call the IMA hook only when there is a change in 
+the state.
+
+I have posted a patch set for this last night -
+it defines IMA hooks for measuring LSM data and uses that to measure 
+SELinux data constructs. It can be used by other security modules as 
+well. Please take a look.
+
+thanks,
+  -lakshmi
+
+
+
 
