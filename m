@@ -2,79 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA87233815
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 20:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD1F233953
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 21:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730384AbgG3SCx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Jul 2020 14:02:53 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:35040 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730363AbgG3SCw (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Jul 2020 14:02:52 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 508FA20B4908;
-        Thu, 30 Jul 2020 11:02:51 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 508FA20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596132171;
-        bh=Lq00ap7Yu8hoUdPCLVlYdZakWLvY3wTeBBusKqVGKL4=;
-        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
-        b=ZjcMZbIwR/fP3byLrxge5Ao5e6GNyOxy0eX1JNinRJb1DKlygk8vEypRNhuOT3BA8
-         QBSKgVbqSbcijtYHbivDb7NzWH29EtNUIPqz4nmIPjJgvbngaWRjLUKQCQD6CokjSB
-         FA2pANqUEaaDk+qglmoS3yYd6EEKu0thLoDca/n8=
-Subject: Re: [PATCH v5 4/4] IMA: Handle early boot data measurement
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200730034724.3298-1-nramas@linux.microsoft.com>
- <20200730034724.3298-5-nramas@linux.microsoft.com>
-Message-ID: <ea3bba66-9b21-b842-990b-2bf1e4ac2179@linux.microsoft.com>
-Date:   Thu, 30 Jul 2020 11:02:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200730034724.3298-5-nramas@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        id S1726857AbgG3Tun (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Jul 2020 15:50:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46978 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730587AbgG3Tuk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 30 Jul 2020 15:50:40 -0400
+Received: from localhost.localdomain (pool-96-246-152-186.nycmny.fios.verizon.net [96.246.152.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6D1A22074B;
+        Thu, 30 Jul 2020 19:50:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596138640;
+        bh=YvcGbYZEw3vFmip1LWbW7P2dPiKLq+rSoC2yjz9Nw/A=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Xk3mmOsJjzD8KcGkOW+392890YPvEG3jzTlNo/swEFXpPUJzzze0j44g36LLDDIw4
+         uOPtgEqmcONDTlsXzGvluBFv6LYvVXqmcjP47IjT9NFY/TslmutretGymK0f2omBVq
+         QcbAlfBk/LUlzgj6EUJX7DMthm88Ygk2zf33fHQs=
+Message-ID: <1596138638.25003.6.camel@kernel.org>
+Subject: Re: [PATCH v5 2/4] IMA: Add policy related helpers
+From:   Mimi Zohar <zohar@kernel.org>
+To:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
+Cc:     Lachlan Sneff <t-josne@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        balajib@linux.microsoft.com, linux-integrity@vger.kernel.org
+Date:   Thu, 30 Jul 2020 15:50:38 -0400
+In-Reply-To: <20200727223041.13110-3-pvorel@suse.cz>
+References: <20200727223041.13110-1-pvorel@suse.cz>
+         <20200727223041.13110-3-pvorel@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/29/20 8:47 PM, Lakshmi Ramasubramanian wrote:
+On Tue, 2020-07-28 at 00:30 +0200, Petr Vorel wrote:
+> Signed-off-by: Petr Vorel <pvorel@suse.cz>
 
-Hi Tyler,
+Other than inverting the [ -f $IMA_POLICY ] tests.
 
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index 080c53545ff0..86cba844f73c 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -322,10 +322,9 @@ config IMA_MEASURE_ASYMMETRIC_KEYS
->   	depends on ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
->   	default y
->   
-> -config IMA_QUEUE_EARLY_BOOT_KEYS
-> +config IMA_QUEUE_EARLY_BOOT_DATA
->   	bool
-> -	depends on IMA_MEASURE_ASYMMETRIC_KEYS
-> -	depends on SYSTEM_TRUSTED_KEYRING
-> +	depends on SECURITY || (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
->   	default y
->   
-Similar to the change you'd suggested for validating LSM_STATE and 
-LSM_POLICY func, I think IMA_QUEUE_EARLY_BOOT_DATA config should be 
-enabled for SECURITY_SELINUX.
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-depends on SECURITY_SELINUX ||
-            (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
+> ---
+> New in v5.
+> 
+>  .../security/integrity/ima/tests/ima_setup.sh | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> index 975ce9cbb..c46f273ab 100644
+> --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> +++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> @@ -54,6 +54,45 @@ compute_digest()
+>  	return 1
+>  }
+>  
+> +check_policy_readable()
+> +{
+> +	if [ -f $IMA_POLICY ]; then
+> +		tst_res TINFO "missing $IMA_POLICY (reboot or CONFIG_IMA_WRITE_POLICY=y required)"
+> +		return 1
+> +	fi
+> +	cat $IMA_POLICY > /dev/null 2>/dev/null
+> +}
+> +
+> +require_policy_readable()
+> +{
+> +	if [ -f $IMA_POLICY ]; then
+> +		tst_brk TCONF "missing $IMA_POLICY (reboot or CONFIG_IMA_WRITE_POLICY=y required)"
+> +	fi
+> +	if ! check_policy_readable; then
+> +		tst_brk TCONF "cannot read IMA policy (CONFIG_IMA_READ_POLICY=y required)"
+> +	fi
+> +}
+> +
+> +check_ima_policy_content()
+> +{
+> +	local pattern="$1"
+> +	local grep_params="${2--q}"
+> +
+> +	check_policy_readable || return 1
+> +	grep $grep_params "$pattern" $IMA_POLICY
+> +}
+> +
+> +require_ima_policy_content()
+> +{
+> +	local pattern="$1"
+> +	local grep_params="${2--q}"
+> +
+> +	require_policy_readable
+> +	if ! grep $grep_params "$pattern" $IMA_POLICY; then
+> +		tst_brk TCONF "IMA policy does not specify '$pattern'"
+> +	fi
+> +}
+> +
+>  require_ima_policy_cmdline()
+>  {
+>  	local policy="$1"
 
-And, when more security modules are added update this CONFIG as appropriate.
-
-Does that sound okay?
-
-  -lakshmi
