@@ -2,45 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 317062336DE
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 18:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA87233815
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 20:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730051AbgG3QdJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Jul 2020 12:33:09 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:38782 "EHLO
+        id S1730384AbgG3SCx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Jul 2020 14:02:53 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:35040 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726275AbgG3QdJ (ORCPT
+        with ESMTP id S1730363AbgG3SCw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Jul 2020 12:33:09 -0400
+        Thu, 30 Jul 2020 14:02:52 -0400
 Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 24CBE20B4908;
-        Thu, 30 Jul 2020 09:33:08 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 24CBE20B4908
+        by linux.microsoft.com (Postfix) with ESMTPSA id 508FA20B4908;
+        Thu, 30 Jul 2020 11:02:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 508FA20B4908
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596126788;
-        bh=CXrOFE5NrIuJnLNGlIHi4t8xRkLX9SQCgHFckqGA1wQ=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=fap1IyJqn1hH6EVgx2Gkat3pIMfUkd4uIXgLtXsTdICaIFNd6nprt9FUMmozk4pqA
-         AtwgFvr2ILNnBVSVRXFLvD2grw3pn/Whmzxf2UyAXig86VuVN/jJ5/vIwA04uxXMuv
-         Rt3ofhkCgRVqJGV9Y0WwZjfwrQ3MYt84B5p2AzIw=
-Subject: Re: [PATCH v5 1/4] IMA: Add func to measure LSM state and policy
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        sashal@kernel.org, jmorris@namei.org,
+        s=default; t=1596132171;
+        bh=Lq00ap7Yu8hoUdPCLVlYdZakWLvY3wTeBBusKqVGKL4=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=ZjcMZbIwR/fP3byLrxge5Ao5e6GNyOxy0eX1JNinRJb1DKlygk8vEypRNhuOT3BA8
+         QBSKgVbqSbcijtYHbivDb7NzWH29EtNUIPqz4nmIPjJgvbngaWRjLUKQCQD6CokjSB
+         FA2pANqUEaaDk+qglmoS3yYd6EEKu0thLoDca/n8=
+Subject: Re: [PATCH v5 4/4] IMA: Handle early boot data measurement
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20200730034724.3298-1-nramas@linux.microsoft.com>
- <20200730034724.3298-2-nramas@linux.microsoft.com>
- <20200730150228.GV4181@sequoia>
- <b4428195-7a68-365d-a792-2855609c2221@schaufler-ca.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <1819121c-bc76-2414-a8e1-8bfd1c014d6b@linux.microsoft.com>
-Date:   Thu, 30 Jul 2020 09:33:03 -0700
+ <20200730034724.3298-5-nramas@linux.microsoft.com>
+Message-ID: <ea3bba66-9b21-b842-990b-2bf1e4ac2179@linux.microsoft.com>
+Date:   Thu, 30 Jul 2020 11:02:50 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <b4428195-7a68-365d-a792-2855609c2221@schaufler-ca.com>
+In-Reply-To: <20200730034724.3298-5-nramas@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -49,38 +46,35 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/30/20 9:19 AM, Casey Schaufler wrote:
+On 7/29/20 8:47 PM, Lakshmi Ramasubramanian wrote:
 
->>> Critical data structures of security modules need to be measured to
->>> enable an attestation service to verify if the configuration and
->>> policies for the security modules have been setup correctly and
->>> that they haven't been tampered with at runtime. A new IMA policy is
->>> required for handling this measurement.
->>>
->>> Define two new IMA policy func namely LSM_STATE and LSM_POLICY to
->>> measure the state and the policy provided by the security modules.
-> 
-> If, as you suggest below, this is SELinux specific,
-> these should be SELINUX_STATE and SELINUX_POLICY.
-> It makes me very uncomfortable when I see LSM used
-> in cases where SELinux is required. The LSM is supposed
-> to be an agnostic interface, so if you need to throw
-> 
-> 	if (IS_ENABLED(CONFIG_SECURITY_SELINUX) &&
-> 
-> into the IMA code you're clearly not thinking in terms
-> of the LSM layer. I have no problem with seeing SELinux
-> oriented and/or specific code in IMA if that's what you want.
-> Just don't call it LSM.
+Hi Tyler,
 
-The hook defined in IMA is not SELinux specific - it is generic enough 
-to be used by any security module to measure their STATE and POLICY.
+> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+> index 080c53545ff0..86cba844f73c 100644
+> --- a/security/integrity/ima/Kconfig
+> +++ b/security/integrity/ima/Kconfig
+> @@ -322,10 +322,9 @@ config IMA_MEASURE_ASYMMETRIC_KEYS
+>   	depends on ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
+>   	default y
+>   
+> -config IMA_QUEUE_EARLY_BOOT_KEYS
+> +config IMA_QUEUE_EARLY_BOOT_DATA
+>   	bool
+> -	depends on IMA_MEASURE_ASYMMETRIC_KEYS
+> -	depends on SYSTEM_TRUSTED_KEYRING
+> +	depends on SECURITY || (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
+>   	default y
+>   
+Similar to the change you'd suggested for validating LSM_STATE and 
+LSM_POLICY func, I think IMA_QUEUE_EARLY_BOOT_DATA config should be 
+enabled for SECURITY_SELINUX.
 
-I have implemented the measurement for SELinux to illustrate the usage.
+depends on SECURITY_SELINUX ||
+            (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
 
-Tyler's suggestion was to allow this IMA policy only when component(s) 
-that are using it are also enabled.
+And, when more security modules are added update this CONFIG as appropriate.
+
+Does that sound okay?
 
   -lakshmi
-
-
