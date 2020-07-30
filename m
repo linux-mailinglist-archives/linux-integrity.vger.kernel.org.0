@@ -2,118 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA5A2328C8
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 02:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C65832329E4
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jul 2020 04:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728325AbgG3AbZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Jul 2020 20:31:25 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:54214 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726756AbgG3AbX (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Jul 2020 20:31:23 -0400
-Received: from dede-linux-virt.corp.microsoft.com (unknown [131.107.160.54])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B1DD220B4916;
-        Wed, 29 Jul 2020 17:31:21 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B1DD220B4916
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596069081;
-        bh=BO1cenWUnGNayuyBmKqbXIIbsqyXRIWwZdTmlpXz42M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MRq4ebC3OfWPm6Ck/QM0mn4m8rnTgMBtnUzKYKUFL/18OwXkvgZzIiauDU/Im4gQB
-         2Dsh/36xRComRKOg+hJn5xImaAug9DOd4HedWObHDUCgnXOgcouVk6ctacYQH3yxyO
-         0ya6lHYOM7jrzIcB6K8/t2t8ZbNkyYZERZXqsnNM=
-From:   Deven Bowers <deven.desai@linux.microsoft.com>
-To:     agk@redhat.com, axboe@kernel.dk, snitzer@redhat.com,
-        jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
-        viro@zeniv.linux.org.uk, paul@paul-moore.com, eparis@redhat.com,
-        jannh@google.com, dm-devel@redhat.com,
-        linux-integrity@vger.kernel.org,
+        id S1726480AbgG3CXD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jul 2020 22:23:03 -0400
+Received: from namei.org ([65.99.196.166]:56338 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726342AbgG3CXC (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 29 Jul 2020 22:23:02 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 06U2MmBY004068;
+        Thu, 30 Jul 2020 02:22:48 GMT
+Date:   Thu, 30 Jul 2020 12:22:48 +1000 (AEST)
+From:   James Morris <jmorris@namei.org>
+To:     Kees Cook <keescook@chromium.org>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Takashi Iwai <tiwai@suse.de>, Jessica Yu <jeyu@kernel.org>,
+        SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-audit@redhat.com
-Cc:     tyhicks@linux.microsoft.com, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, sashal@kernel.org,
-        jaskarankhurana@linux.microsoft.com, mdsakib@microsoft.com,
-        nramas@linux.microsoft.com, pasha.tatashin@soleen.com
-Subject: [RFC PATCH v6 11/11] cleanup: uapi/linux/audit.h
-Date:   Wed, 29 Jul 2020 17:31:13 -0700
-Message-Id: <20200730003113.2561644-12-deven.desai@linux.microsoft.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200730003113.2561644-1-deven.desai@linux.microsoft.com>
-References: <20200730003113.2561644-1-deven.desai@linux.microsoft.com>
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 04/17] fs/kernel_read_file: Split into separate include
+ file
+In-Reply-To: <20200729175845.1745471-5-keescook@chromium.org>
+Message-ID: <alpine.LRH.2.21.2007301222360.3625@namei.org>
+References: <20200729175845.1745471-1-keescook@chromium.org> <20200729175845.1745471-5-keescook@chromium.org>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Remove trailing whitespaces and align the integrity #defines in
-linux/uapi/audit.h
+On Wed, 29 Jul 2020, Kees Cook wrote:
 
-Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
----
- include/uapi/linux/audit.h | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+> From: Scott Branden <scott.branden@broadcom.com>
+> 
+> Move kernel_read_file* out of linux/fs.h to its own linux/kernel_read_file.h
+> include file. That header gets pulled in just about everywhere
+> and doesn't really need functions not related to the general fs interface.
+> 
+> Suggested-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Link: https://lore.kernel.org/r/20200706232309.12010-2-scott.branden@broadcom.com
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-index 5a634cca1d42..609b4a5e8a80 100644
---- a/include/uapi/linux/audit.h
-+++ b/include/uapi/linux/audit.h
-@@ -48,7 +48,7 @@
-  * 2500 - 2999 future user space (maybe integrity labels and related events)
-  *
-  * Messages from 1000-1199 are bi-directional. 1200-1299 & 2100 - 2999 are
-- * exclusively user space. 1300-2099 is kernel --> user space 
-+ * exclusively user space. 1300-2099 is kernel --> user space
-  * communication.
-  */
- #define AUDIT_GET		1000	/* Get status */
-@@ -78,7 +78,7 @@
- #define AUDIT_LAST_USER_MSG	1199
- #define AUDIT_FIRST_USER_MSG2	2100	/* More user space messages */
- #define AUDIT_LAST_USER_MSG2	2999
-- 
-+
- #define AUDIT_DAEMON_START      1200    /* Daemon startup record */
- #define AUDIT_DAEMON_END        1201    /* Daemon normal stop record */
- #define AUDIT_DAEMON_ABORT      1202    /* Daemon error stop record */
-@@ -140,20 +140,20 @@
- #define AUDIT_MAC_CALIPSO_ADD	1418	/* NetLabel: add CALIPSO DOI entry */
- #define AUDIT_MAC_CALIPSO_DEL	1419	/* NetLabel: del CALIPSO DOI entry */
- 
--#define AUDIT_FIRST_KERN_ANOM_MSG   1700
--#define AUDIT_LAST_KERN_ANOM_MSG    1799
--#define AUDIT_ANOM_PROMISCUOUS      1700 /* Device changed promiscuous mode */
--#define AUDIT_ANOM_ABEND            1701 /* Process ended abnormally */
--#define AUDIT_ANOM_LINK		    1702 /* Suspicious use of file links */
--#define AUDIT_ANOM_CREAT	    1703 /* Suspicious file creation */
--#define AUDIT_INTEGRITY_DATA	    1800 /* Data integrity verification */
--#define AUDIT_INTEGRITY_METADATA    1801 /* Metadata integrity verification */
--#define AUDIT_INTEGRITY_STATUS	    1802 /* Integrity enable status */
--#define AUDIT_INTEGRITY_HASH	    1803 /* Integrity HASH type */
--#define AUDIT_INTEGRITY_PCR	    1804 /* PCR invalidation msgs */
--#define AUDIT_INTEGRITY_RULE	    1805 /* policy rule */
--#define AUDIT_INTEGRITY_EVM_XATTR   1806 /* New EVM-covered xattr */
--#define AUDIT_INTEGRITY_POLICY_RULE 1807 /* IMA policy rules */
-+#define AUDIT_FIRST_KERN_ANOM_MSG	1700
-+#define AUDIT_LAST_KERN_ANOM_MSG	1799
-+#define AUDIT_ANOM_PROMISCUOUS		1700 /* Device changed promiscuous mode */
-+#define AUDIT_ANOM_ABEND		1701 /* Process ended abnormally */
-+#define AUDIT_ANOM_LINK			1702 /* Suspicious use of file links */
-+#define AUDIT_ANOM_CREAT		1703 /* Suspicious file creation */
-+#define AUDIT_INTEGRITY_DATA		1800 /* Data integrity verification */
-+#define AUDIT_INTEGRITY_METADATA	1801 /* Metadata integrity verification */
-+#define AUDIT_INTEGRITY_STATUS		1802 /* Integrity enable status */
-+#define AUDIT_INTEGRITY_HASH		1803 /* Integrity HASH type */
-+#define AUDIT_INTEGRITY_PCR		1804 /* PCR invalidation msgs */
-+#define AUDIT_INTEGRITY_RULE		1805 /* policy rule */
-+#define AUDIT_INTEGRITY_EVM_XATTR	1806 /* New EVM-covered xattr */
-+#define AUDIT_INTEGRITY_POLICY_RULE	1807 /* IMA policy rules */
- #define AUDIT_INTEGRITY_POLICY_LOAD	1808 /* IPE Policy Load */
- #define AUDIT_INTEGRITY_POLICY_ACTIVATE	1809 /* IPE Policy Activation */
- #define AUDIT_INTEGRITY_EVENT		1810 /* IPE Evaluation Event */
+
+Acked-by: James Morris <jamorris@linux.microsoft.com>
+
+
 -- 
-2.27.0
+James Morris
+<jmorris@namei.org>
 
