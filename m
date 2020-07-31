@@ -2,120 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AEA3234B4A
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jul 2020 20:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C0E234B5D
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jul 2020 20:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387693AbgGaSpq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 31 Jul 2020 14:45:46 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54642 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387676AbgGaSpq (ORCPT
+        id S1727786AbgGaS4g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 31 Jul 2020 14:56:36 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:52948 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726964AbgGaS4g (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 31 Jul 2020 14:45:46 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06VIVecD089095;
-        Fri, 31 Jul 2020 14:45:40 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32mqpr9ry8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 14:45:40 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06VIWm2i093128;
-        Fri, 31 Jul 2020 14:45:40 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32mqpr9rxs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 14:45:39 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06VIfLHG014263;
-        Fri, 31 Jul 2020 18:45:38 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 32gcq0vng8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 18:45:38 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06VIjZDH50987326
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Jul 2020 18:45:36 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DDBDFA405B;
-        Fri, 31 Jul 2020 18:45:35 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61E2CA405F;
-        Fri, 31 Jul 2020 18:45:34 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.38.42])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 31 Jul 2020 18:45:34 +0000 (GMT)
-Message-ID: <13c9396fe62c1bf40175897a59ab711f36d626fa.camel@linux.ibm.com>
-Subject: Re: IMA/EVM interfaces
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "efremov@linux.com" <efremov@linux.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Fri, 31 Jul 2020 14:45:30 -0400
-In-Reply-To: <425db984e96241f0a28a0b650aaa0b1d@huawei.com>
-References: <bf04bf15-cddd-ce22-926a-8459c1f92779@linux.com>
-         <ef2745fddaec4f859cf9852028f650df@huawei.com>
-         <b3d93ebd-80a0-4aea-15ef-8bd22241e19f@linux.com>
-         <425db984e96241f0a28a0b650aaa0b1d@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-31_07:2020-07-31,2020-07-31 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- phishscore=0 adultscore=0 impostorscore=0 clxscore=1011 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007310135
+        Fri, 31 Jul 2020 14:56:36 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id F306972CCDC;
+        Fri, 31 Jul 2020 21:56:33 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id D4FDB4A4AE7;
+        Fri, 31 Jul 2020 21:56:33 +0300 (MSK)
+Date:   Fri, 31 Jul 2020 21:56:33 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
+        Bruno Meneguele <bmeneg@redhat.com>
+Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
+ engine
+Message-ID: <20200731185633.kqgcz4dwfa4ruyld@altlinux.org>
+References: <20200731182408.696931-1-zohar@linux.ibm.com>
+ <20200731182408.696931-6-zohar@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20200731182408.696931-6-zohar@linux.ibm.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-07-30 at 06:50 +0000, Roberto Sassu wrote:
-> > From: Denis Efremov [mailto:efremov@linux.com]
-> > Sent: Wednesday, July 29, 2020 11:59 PM
-> > 
-> > 
-> > 
-> > On 7/28/20 6:43 PM, Roberto Sassu wrote:
-> > > > From: linux-integrity-owner@vger.kernel.org [mailto:linux-
-> > > > integrity-
-> > > > owner@vger.kernel.org] On Behalf Of Denis Efremov
-> > > > Sent: Tuesday, July 28, 2020 12:32 PM
-> > > > Hi,
-> > > > 
-> > > > I've started to add integrity interfaces descriptions to
-> > > > syzkaller
-> > > > (https://github.com/google/syzkaller/pull/1970).
-> > > > 
-> > > > I've got a question, if you don't mind:
-> > > > 
-> > > > If I write 2 to /sys/kernel/security/integrity/evm/evm before
-> > > > loading
-> > keys,
-> > > > subsequent fs operations will fail with -ENOKEY.
-> > > > 
-> > > > $ echo 2 > /sys/kernel/security/integrity/evm/evm
-> > > > $ touch test.txt
+Mimi,
+
+On Fri, Jul 31, 2020 at 02:24:08PM -0400, Mimi Zohar wrote:
+> The openssl version on travis doesn't have gost openssl engine support.
+> Download from source, rebuild and install local version.
 > 
-> Looks good. Mimi, could you please take this patch, and if
-> possible, the others in the patch set?
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  .travis.yml                  |  7 +++++++
+>  tests/install-gost-engine.sh | 10 ++++++++++
+>  2 files changed, 17 insertions(+)
+>  create mode 100755 tests/install-gost-engine.sh
+> 
+> diff --git a/.travis.yml b/.travis.yml
+> index 11a827c02f0a..f5fb2c1da448 100644
+> --- a/.travis.yml
+> +++ b/.travis.yml
+> @@ -15,6 +15,13 @@ matrix:
+>     include:
+>       - env: TSS=ibmtss
+>       - env: TSS=tpm2-tss
+> +
+> +before_install:
+> +   - if [ "${SSL}" = "openssl" ]; then
+> +        ./tests/install-gost-engine.sh;
+> +        openssl version;
+> +     fi
+> +
+>  install:
+>     - if [ "${TSS}" = "tpm2-tss" ]; then
+>             sudo apt-get install lcov pandoc autoconf-archive liburiparser-dev;
+> diff --git a/tests/install-gost-engine.sh b/tests/install-gost-engine.sh
+> new file mode 100755
+> index 000000000000..01bcf2c3bc21
+> --- /dev/null
+> +++ b/tests/install-gost-engine.sh
+> @@ -0,0 +1,10 @@
+> +#!/bin/sh
+> +
+> +openssl version
+> +
+> +git clone https://github.com/gost-engine/engine.git
 
- Just needing to finish up the ima-evm-utils release and finish
-reviewing Kees' " Introduce partial kernel_read_file() support" patchset.   Will circle back around to EVM shortly.
+gost-engine master branch corresponds to openssl-3.0 which is probably
+not on Travis systems yet. I think branch `openssl_1_1_0` should be used.
 
-In the meantime, could you take a look at the syzbot "possible deadlock
-in process_measurement" report.   According to Amir Goldstein, this
-isn't a lock order inversion.  It just needs to be properly annotated.
+  git clone --branch openssl_1_1_0 https://github.com/gost-engine/engine.git
 
-thanks,
+Thanks,
 
-Mimi
-
+> +cd engine
+> +#cmake -DOPENSSL_INCLUDE_DIR=/usr/local/include/openssl -DOPENSSL_SSL_LIBRARY=/usr/local/lib64/libss.so -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64/libcrypto.so -DOPENSSL_ENGINES_DIR=/usr/local/lib64/engines-1.1 .
+> +cmake .
+> +sudo make install
+> +cd ..
+> -- 
+> 2.18.4
