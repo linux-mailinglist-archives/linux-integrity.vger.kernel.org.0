@@ -2,115 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4A7234ADD
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jul 2020 20:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9480B234B15
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jul 2020 20:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387705AbgGaSYq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 31 Jul 2020 14:24:46 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39506 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387690AbgGaSYq (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 31 Jul 2020 14:24:46 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06VIJND7023365;
-        Fri, 31 Jul 2020 14:24:42 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32mp9ykj2c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 14:24:42 -0400
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06VIJTpr023615;
-        Fri, 31 Jul 2020 14:24:41 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32mp9ykj1g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 14:24:41 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06VIGUSV019553;
-        Fri, 31 Jul 2020 18:24:39 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 32gcqgqhqh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 18:24:39 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06VIOb4931588750
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Jul 2020 18:24:37 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2725252050;
-        Fri, 31 Jul 2020 18:24:37 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.ibmuc.com (unknown [9.160.38.42])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id BCC465204E;
-        Fri, 31 Jul 2020 18:24:35 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost engine
-Date:   Fri, 31 Jul 2020 14:24:08 -0400
-Message-Id: <20200731182408.696931-6-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <20200731182408.696931-1-zohar@linux.ibm.com>
-References: <20200731182408.696931-1-zohar@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-31_07:2020-07-31,2020-07-31 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 phishscore=0 clxscore=1015
- bulkscore=0 malwarescore=0 suspectscore=0 mlxlogscore=870 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007310135
+        id S2387757AbgGaSbx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 31 Jul 2020 14:31:53 -0400
+Received: from foss.arm.com ([217.140.110.172]:36014 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730040AbgGaSbw (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 31 Jul 2020 14:31:52 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0C9130E;
+        Fri, 31 Jul 2020 11:31:51 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [10.57.4.61])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48D163F71F;
+        Fri, 31 Jul 2020 11:31:49 -0700 (PDT)
+Date:   Fri, 31 Jul 2020 19:31:46 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
+Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+Message-ID: <20200731183146.GD67415@C02TD0UTHF1T.local>
+References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
+ <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
+ <6540b4b7-3f70-adbf-c922-43886599713a@linux.microsoft.com>
+ <CALCETrWnNR5v3ZCLfBVQGYK8M0jAvQMaAc9uuO05kfZuh-4d6w@mail.gmail.com>
+ <46a1adef-65f0-bd5e-0b17-54856fb7e7ee@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46a1adef-65f0-bd5e-0b17-54856fb7e7ee@linux.microsoft.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The openssl version on travis doesn't have gost openssl engine support.
-Download from source, rebuild and install local version.
+On Fri, Jul 31, 2020 at 12:13:49PM -0500, Madhavan T. Venkataraman wrote:
+> On 7/30/20 3:54 PM, Andy Lutomirski wrote:
+> > On Thu, Jul 30, 2020 at 7:24 AM Madhavan T. Venkataraman
+> > <madvenka@linux.microsoft.com> wrote:
+> Dealing with multiple architectures
+> -----------------------------------------------
+> 
+> One good reason to use trampfd is multiple architecture support. The
+> trampoline table in a code page approach is neat. I don't deny that at
+> all. But my question is - can it be used in all cases?
+> 
+> It requires PC-relative data references. I have not worked on all architectures.
+> So, I need to study this. But do all ISAs support PC-relative data references?
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- .travis.yml                  |  7 +++++++
- tests/install-gost-engine.sh | 10 ++++++++++
- 2 files changed, 17 insertions(+)
- create mode 100755 tests/install-gost-engine.sh
+Not all do, but pretty much any recent ISA will as it's a practical
+necessity for fast position-independent code.
 
-diff --git a/.travis.yml b/.travis.yml
-index 11a827c02f0a..f5fb2c1da448 100644
---- a/.travis.yml
-+++ b/.travis.yml
-@@ -15,6 +15,13 @@ matrix:
-    include:
-      - env: TSS=ibmtss
-      - env: TSS=tpm2-tss
-+
-+before_install:
-+   - if [ "${SSL}" = "openssl" ]; then
-+        ./tests/install-gost-engine.sh;
-+        openssl version;
-+     fi
-+
- install:
-    - if [ "${TSS}" = "tpm2-tss" ]; then
-            sudo apt-get install lcov pandoc autoconf-archive liburiparser-dev;
-diff --git a/tests/install-gost-engine.sh b/tests/install-gost-engine.sh
-new file mode 100755
-index 000000000000..01bcf2c3bc21
---- /dev/null
-+++ b/tests/install-gost-engine.sh
-@@ -0,0 +1,10 @@
-+#!/bin/sh
-+
-+openssl version
-+
-+git clone https://github.com/gost-engine/engine.git
-+cd engine
-+#cmake -DOPENSSL_INCLUDE_DIR=/usr/local/include/openssl -DOPENSSL_SSL_LIBRARY=/usr/local/lib64/libss.so -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64/libcrypto.so -DOPENSSL_ENGINES_DIR=/usr/local/lib64/engines-1.1 .
-+cmake .
-+sudo make install
-+cd ..
--- 
-2.18.4
+> Even in an ISA that supports it, there would be a maximum supported offset
+> from the current PC that can be reached for a data reference. That maximum
+> needs to be at least the size of a base page in the architecture. This is because
+> the code page and the data page need to be separate for security reasons.
+> Do all ISAs support a sufficiently large offset?
 
+ISAs with pc-relative addessing can usually generate PC-relative
+addresses into a GPR, from which they can apply an arbitrarily large
+offset.
+
+> When the kernel generates the code for a trampoline, it can hard code data values
+> in the generated code itself so it does not need PC-relative data referencing.
+> 
+> And, for ISAs that do support the large offset, we do have to implement and
+> maintain the code page stuff for different ISAs for each application and library
+> if we did not use trampfd.
+
+Trampoline code is architecture specific today, so I don't see that as a
+major issue. Common structural bits can probably be shared even if the
+specifid machine code cannot.
+
+[...]
+
+> Security
+> -----------
+> 
+> With the user level trampoline table approach, the data part of the trampoline table
+> can be hacked by an attacker if an application has a vulnerability. Specifically, the
+> target PC can be altered to some arbitrary location. Trampfd implements an
+> "Allowed PCS" context. In the libffi changes, I have created a read-only array of
+> all ABI handlers used in closures for each architecture. This read-only array
+> can be used to restrict the PC values for libffi trampolines to prevent hacking.
+> 
+> To generalize, we can implement security rules/features if the trampoline
+> object is in the kernel.
+
+I don't follow this argument. If it's possible to statically define that
+in the kernel, it's also possible to do that in userspace without any
+new kernel support.
+
+[...]
+
+> Trampfd is a framework that can be used to implement multiple things. May be,
+> a few of those things can also be implemented in user land itself. But I think having
+> just one mechanism to execute dynamic code objects is preferable to having
+> multiple mechanisms not standardized across all applications.
+
+In abstract, having a common interface sounds nice, but in practice
+elements of this are always architecture-specific (e.g. interactiosn
+with HW CFI), and that common interface can result in more pain as it
+doesn't fit naturally into the context that ISAs were designed for (e.g. 
+where control-flow instructions are extended with new semantics).
+
+It also meass that you can't share the rough approach across OSs which
+do not implement an identical mechanism, so for code abstracting by ISA
+first, then by platform/ABI, there isn't much saving.
+
+Thanks,
+Mark.
