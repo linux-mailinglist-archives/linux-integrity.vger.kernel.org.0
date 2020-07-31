@@ -2,69 +2,158 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1E2234D04
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jul 2020 23:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767AE234D95
+	for <lists+linux-integrity@lfdr.de>; Sat,  1 Aug 2020 00:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728491AbgGaVbZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 31 Jul 2020 17:31:25 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:41538 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727995AbgGaVbY (ORCPT
+        id S1726804AbgGaWdL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 31 Jul 2020 18:33:11 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58772 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726119AbgGaWdL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 31 Jul 2020 17:31:24 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4A3CB20B4908;
-        Fri, 31 Jul 2020 14:31:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4A3CB20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596231084;
-        bh=S4cTyhHoE+e/ZUW8inxxRdk7qNFQf+4rRLYkoIY0bi0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=XWFKsrXff+XTGjLVr0uyHzTS4nxNB+vGdgDR0Le89hWAKGSMsXDUzUyeeakkeA0WE
-         3gFxaJtt6+MrdgBMhwAgHdGk5VTCa8eGweHT8CEp/6oljeLIUEsJvMDAACH996G+aj
-         lEEkjnlSEyvAuyv7J89ZJB1TUzCgXTHefgzomK8c=
-Subject: Re: [PATCH] IMA: Add a test to verify importing a certificate into
- custom keyring
-To:     Petr Vorel <pvorel@suse.cz>,
-        Lachlan Sneff <t-josne@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, ltp@lists.linux.it,
-        balajib@linux.microsoft.com, linux-integrity@vger.kernel.org
-References: <20200717205721.18173-1-t-josne@linux.microsoft.com>
- <20200731080221.GA14041@dell5510>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <edf26ac1-6378-c632-9e91-5c09141639af@linux.microsoft.com>
-Date:   Fri, 31 Jul 2020 14:31:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200731080221.GA14041@dell5510>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Fri, 31 Jul 2020 18:33:11 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06VMX59Y115341;
+        Fri, 31 Jul 2020 18:33:05 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32mt8j2j8w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Jul 2020 18:33:05 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06VMX46T115293;
+        Fri, 31 Jul 2020 18:33:04 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32mt8j2j5w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Jul 2020 18:33:04 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06VMUhN9010768;
+        Fri, 31 Jul 2020 22:32:47 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 32gcpx7qfw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Jul 2020 22:32:47 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06VMWjP934210186
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Jul 2020 22:32:45 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 25BCA11C075;
+        Fri, 31 Jul 2020 22:32:45 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D330F11C073;
+        Fri, 31 Jul 2020 22:32:43 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.38.42])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 31 Jul 2020 22:32:43 +0000 (GMT)
+Message-ID: <8c9e64a3b461fb20cda761ef0fc0728a55448937.camel@linux.ibm.com>
+Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
+ engine
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>, Petr Vorel <pvorel@suse.cz>
+Cc:     linux-integrity@vger.kernel.org,
+        Bruno Meneguele <bmeneg@redhat.com>
+Date:   Fri, 31 Jul 2020 18:32:42 -0400
+In-Reply-To: <20200731210653.p5m4efy52melqwgs@altlinux.org>
+References: <20200731182408.696931-1-zohar@linux.ibm.com>
+         <20200731182408.696931-6-zohar@linux.ibm.com>
+         <20200731185633.kqgcz4dwfa4ruyld@altlinux.org>
+         <20200731201808.GA27841@dell5510>
+         <20200731202638.x5mnkz7hcpgbveu2@altlinux.org>
+         <20200731204044.GC27841@dell5510>
+         <20200731210653.p5m4efy52melqwgs@altlinux.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-31_09:2020-07-31,2020-07-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ impostorscore=0 priorityscore=1501 spamscore=0 clxscore=1015 adultscore=0
+ mlxlogscore=999 phishscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007310160
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/31/20 1:02 AM, Petr Vorel wrote:
-
-Hi Petr,
-
->> A test for verifying importing an x509 certificate into a keyring and
->> validating the key measurement performed by IMA is needed.
+On Sat, 2020-08-01 at 00:06 +0300, Vitaly Chikunov wrote:
+> On Fri, Jul 31, 2020 at 10:40:44PM +0200, Petr Vorel wrote:
+> > And when using suggested branch openssl_1_1_0, it also fails on
+> > make install
+> > $ ./tests/install-gost-engine.sh
+> > OpenSSL 1.1.1g  21 Apr 2020
+> > Cloning into 'engine'...
+> > remote: Enumerating objects: 63, done.
+> > remote: Counting objects: 100% (63/63), done.
+> > remote: Compressing objects: 100% (40/40), done.
+> > remote: Total 2738 (delta 33), reused 32 (delta 21), pack-reused
+> > 2675
+> > Receiving objects: 100% (2738/2738), 2.48 MiB | 2.09 MiB/s, done.
+> > Resolving deltas: 100% (1735/1735), done.
+> > -- The C compiler identification is GNU 10.1.1
+> > -- Detecting C compiler ABI info
+> > -- Detecting C compiler ABI info - done
+> > -- Check for working C compiler: /usr/bin/cc - skipped
+> > -- Detecting C compile features
+> > -- Detecting C compile features - done
+> > -- Found OpenSSL: /usr/lib64/libcrypto.so (found suitable version
+> > "1.1.1g", minimum required is "1.1")
+> > -- Check if the system is big endian
+> > -- Searching 16 bit integer
+> > -- Looking for sys/types.h
+> > -- Looking for sys/types.h - found
+> > -- Looking for stdint.h
+> > -- Looking for stdint.h - found
+> > -- Looking for stddef.h
+> > -- Looking for stddef.h - found
+> > -- Check size of unsigned short
+> > -- Check size of unsigned short - done
+> > -- Searching 16 bit integer - Using unsigned short
+> > -- Check if the system is big endian - little endian
+> > -- LITTLE_ENDIAN
+> > -- Configuring done
+> > -- Generating done
+> > -- Build files have been written to: /home/pvorel/install/src/ima-
+> > evm-utils.git/engine
+> > make: *** No rule to make target 'install'.  Stop.
 > 
-> I suppose you're going to send new version of this patch (rebased + fix
-> according to Mimi's comments).
+> It seems this branch does not have install target. I think,
 > 
-> IMHO that should be your last not yet merged patch.
+> - `engine/bin/gost.so` should be moved in platform dependent engines
+> dir,
+> for example for debian9 it's `/usr/lib/x86_64-linux-gnu/engines-1.1/`
+> (found with strace).
 > 
-> FYI: I'm planning to fix ima_tpm.sh and then implement autoloading IMA policy
-> (when possible).
+> - Or, just keep it as is, but `OPENSSL_ENGINES` env should be set to
+> `/home/pvorel/install/src/ima-evm-utils.git/engine/bin/`.
 > 
+> - Or even better, Bionic (which is supported by Travis) should have
+>   gost-engine already in the libengine-gost-openssl1.1 package.
+> 
+>   In that case `.travis.yml` should have `dist: bionic`.
+>     https://docs.travis-ci.com/user/reference/bionic/
 
-Yes - Lachlan will send the new version of the patch set (rebased to 
-your latest changes and also addressing Mimi's comments).
+Yes, for the internal git repo I made this change.   The internal
+travis support for bionic is different than the external travis.   I'll
+post what I have as an RFC.
+ 
+> 
+> 
+> > => It'd be good to fix this and add some test with SSL=openssl
+> > variable.
+> > But the branch would have to be updated time to time.
+> > 
+> > BTW do you plan to test other crypto libraries?
 
-thanks,
-  -lakshmi
+Mikhail Novosyolov posted a patch for libressl, but didn't followup
+with v2.   The openssl code version/release sections need to be cleaned
+up for libressl some more for libressl.
+
+For matrix testing, it would be nice for the package names and versions
+to be included in the output.
+
+Mimi
 
