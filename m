@@ -2,113 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A61234ADB
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jul 2020 20:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23458234ADC
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jul 2020 20:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387716AbgGaSYn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 31 Jul 2020 14:24:43 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46832 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387705AbgGaSYn (ORCPT
+        id S2387791AbgGaSYo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 31 Jul 2020 14:24:44 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4158 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387705AbgGaSYo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 31 Jul 2020 14:24:43 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06VILxXr082527;
-        Fri, 31 Jul 2020 14:24:38 -0400
+        Fri, 31 Jul 2020 14:24:44 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06VIJ8Lo055075;
+        Fri, 31 Jul 2020 14:24:40 -0400
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32mr22rpx3-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32mq62j64n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 14:24:38 -0400
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06VIM0IK082573;
-        Fri, 31 Jul 2020 14:24:38 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32mr22rpwm-1
+        Fri, 31 Jul 2020 14:24:40 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06VIJEKO055300;
+        Fri, 31 Jul 2020 14:24:40 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32mq62j641-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 14:24:38 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06VIM1j1028318;
-        Fri, 31 Jul 2020 18:24:36 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06fra.de.ibm.com with ESMTP id 32jgvptnhc-1
+        Fri, 31 Jul 2020 14:24:39 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06VIKe03028933;
+        Fri, 31 Jul 2020 18:24:37 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma02fra.de.ibm.com with ESMTP id 32gcq0vn8k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 18:24:36 +0000
+        Fri, 31 Jul 2020 18:24:37 +0000
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06VIN8Ot57999770
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06VIOZIF11207102
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Jul 2020 18:23:08 GMT
+        Fri, 31 Jul 2020 18:24:35 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED3545204E;
-        Fri, 31 Jul 2020 18:24:33 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 6456E52052;
+        Fri, 31 Jul 2020 18:24:35 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.ibmuc.com (unknown [9.160.38.42])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 1992A52051;
-        Fri, 31 Jul 2020 18:24:32 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 3095352051;
+        Fri, 31 Jul 2020 18:24:34 +0000 (GMT)
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
         Vitaly Chikunov <vt@altlinux.org>,
         Bruno Meneguele <bmeneg@redhat.com>
-Subject: [ima-evm-utils: PATCH 3/5] ima-evm-utils: travis: dependency on TSS for initializing software TPM
-Date:   Fri, 31 Jul 2020 14:24:06 -0400
-Message-Id: <20200731182408.696931-4-zohar@linux.ibm.com>
+Subject: [ima-evm-utils: PATCH 4/5] ima-evm-utils: travis: support tpm2-tss
+Date:   Fri, 31 Jul 2020 14:24:07 -0400
+Message-Id: <20200731182408.696931-5-zohar@linux.ibm.com>
 X-Mailer: git-send-email 2.18.4
 In-Reply-To: <20200731182408.696931-1-zohar@linux.ibm.com>
 References: <20200731182408.696931-1-zohar@linux.ibm.com>
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-31_06:2020-07-31,2020-07-31 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- bulkscore=0 adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=982
- suspectscore=0 lowpriorityscore=0 clxscore=1015 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007310133
+ definitions=2020-07-31_07:2020-07-31,2020-07-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ spamscore=0 suspectscore=0 impostorscore=0 bulkscore=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 lowpriorityscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007310135
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Verifying the "boot_aggregate" requires reading the TPM PCRs for each of
-the TPM banks.  In test environments without a physical TPM, a software
-TPM may be used, but requires initializing the TPM PCRs.  By walking and
-replaying the TPM event log, a software TPM may be properly initialized.
+Running the "boot_aggregate" test without a physical TPM, requires
+installing and initializing a software TPM.  For now, use the same
+method of initializing the TPM, based on the IBM tss, for both the
+IBM and Intel's tss.
+
+Build both the IBM and INTEL's tss.
 
 Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- .travis.yml          | 4 +++-
- tests/install-tss.sh | 8 ++++++++
- 2 files changed, 11 insertions(+), 1 deletion(-)
- create mode 100755 tests/install-tss.sh
+ .travis.yml               | 17 ++++++++++++++++-
+ tests/install-tpm2-tss.sh | 19 +++++++++++++++++++
+ 2 files changed, 35 insertions(+), 1 deletion(-)
+ create mode 100755 tests/install-tpm2-tss.sh
 
 diff --git a/.travis.yml b/.travis.yml
-index fa2a37625d52..0a3476572f74 100644
+index 0a3476572f74..11a827c02f0a 100644
 --- a/.travis.yml
 +++ b/.travis.yml
-@@ -13,8 +13,10 @@ addons:
+@@ -11,12 +11,27 @@ addons:
+    - xsltproc
+    - docbook-xsl
     - docbook-xml
++matrix:
++   include:
++     - env: TSS=ibmtss
++     - env: TSS=tpm2-tss
  install:
++   - if [ "${TSS}" = "tpm2-tss" ]; then
++           sudo apt-get install lcov pandoc autoconf-archive liburiparser-dev;
++           sudo apt-get install libdbus-1-dev libglib2.0-dev dbus-x11 libgcrypt-dev;
++           sudo apt-get install libssl-dev doxygen libjson-c-dev;
++           sudo apt-get install libini-config-dev libltdl-dev;
++           sudo apt-get install uuid-dev libcurl4-openssl-dev;
++          ./tests/install-tpm2-tss.sh;
++     fi
     - ./tests/install-swtpm.sh
-+   - ./tests/install-tss.sh
+    - ./tests/install-tss.sh
++
  script:
--   - autoreconf -i && ./configure && make -j$(nproc) && sudo make install && VERBOSE=1 make check TESTS="ima_hash.test sign_verify.test";
-+   - autoreconf -i && ./configure && make -j$(nproc) && sudo make install && VERBOSE=1 make check;
++   - export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib;
++   - export PATH=$PATH:/usr/local/bin;
+    - autoreconf -i && ./configure && make -j$(nproc) && sudo make install && VERBOSE=1 make check;
  
     - tail -3 tests/ima_hash.log;
     - tail -3 tests/sign_verify.log;
-+   - tail -3 tests/boot_aggregate.log;
-diff --git a/tests/install-tss.sh b/tests/install-tss.sh
+-   - tail -3 tests/boot_aggregate.log;
++   - tail -20 tests/boot_aggregate.log;
+diff --git a/tests/install-tpm2-tss.sh b/tests/install-tpm2-tss.sh
 new file mode 100755
-index 000000000000..c9c179eee6a8
+index 000000000000..7a71b57a8729
 --- /dev/null
-+++ b/tests/install-tss.sh
-@@ -0,0 +1,8 @@
++++ b/tests/install-tpm2-tss.sh
+@@ -0,0 +1,19 @@
 +#!/bin/sh
 +
-+set -ex
-+git clone https://git.code.sf.net/p/ibmtpm20tss/tss
-+cd tss
-+autoreconf -i && ./configure --disable-tpm-1.2 --disable-hwtpm && make -j$(nproc) && sudo make install
++git clone https://github.com/tpm2-software/tpm2-tss.git
++cd tpm2-tss
++./bootstrap
++./configure
++make -j$(nproc)
++sudo make install
++sudo ldconfig
 +cd ..
-+rm -rf tss
++rm -rf tpm2-tss
++
++git clone https://github.com/tpm2-software/tpm2-tools.git
++cd tpm2-tools
++./bootstrap && ./configure --prefix=/usr
++make -j$(nproc)
++sudo make install
++cd ..
++rm -rf tpm2-tools
 -- 
 2.18.4
 
