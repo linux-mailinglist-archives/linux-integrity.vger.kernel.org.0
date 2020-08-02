@@ -2,142 +2,184 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE2F23591B
-	for <lists+linux-integrity@lfdr.de>; Sun,  2 Aug 2020 18:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC462235A0C
+	for <lists+linux-integrity@lfdr.de>; Sun,  2 Aug 2020 20:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726630AbgHBQnc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 2 Aug 2020 12:43:32 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:55478 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725877AbgHBQnb (ORCPT
+        id S1725910AbgHBSyi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 2 Aug 2020 14:54:38 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55680 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725801AbgHBSyi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 2 Aug 2020 12:43:31 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 885DB8EE1D9;
-        Sun,  2 Aug 2020 09:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1596386609;
-        bh=oOhMZH0FB4G6orqdqFAkNZTXeB04XgPNUsm8TD4axsQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FAJShkAZZYyORIkhrqfSw8BqDSP8QlmrngZQFw4ROTqB3PQ+G9V8iksNfVUVn74Xj
-         +x8faujRDzZNkaOa4js3O4QsNJo03gHhpNQ1OkoSSrlN9lKDbK5hALrRjPbs1fIY6m
-         l1nRpnp3y5eFE5YVTo1Os2MZ6mCFp1ZXz0qKGUoI=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bIfAAv72tOKa; Sun,  2 Aug 2020 09:43:29 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2357D8EE16A;
-        Sun,  2 Aug 2020 09:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1596386609;
-        bh=oOhMZH0FB4G6orqdqFAkNZTXeB04XgPNUsm8TD4axsQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FAJShkAZZYyORIkhrqfSw8BqDSP8QlmrngZQFw4ROTqB3PQ+G9V8iksNfVUVn74Xj
-         +x8faujRDzZNkaOa4js3O4QsNJo03gHhpNQ1OkoSSrlN9lKDbK5hALrRjPbs1fIY6m
-         l1nRpnp3y5eFE5YVTo1Os2MZ6mCFp1ZXz0qKGUoI=
-Message-ID: <1596386606.4087.20.camel@HansenPartnership.com>
-Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement
- LSM (IPE)
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>
-Cc:     snitzer@redhat.com, Deven Bowers <deven.desai@linux.microsoft.com>,
-        zohar@linux.ibm.com, dm-devel@redhat.com,
-        tyhicks@linux.microsoft.com, agk@redhat.com, paul@paul-moore.com,
-        mdsakib@microsoft.com, jmorris@namei.org,
-        nramas@linux.microsoft.com, serge@hallyn.com,
-        pasha.tatashin@soleen.com, jannh@google.com,
-        linux-block@vger.kernel.org, viro@zeniv.linux.org.uk,
-        axboe@kernel.dk, corbet@lwn.net, linux-kernel@vger.kernel.org,
-        eparis@redhat.com, linux-security-module@vger.kernel.org,
-        linux-audit@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        jaskarankhurana@linux.microsoft.com
-Date:   Sun, 02 Aug 2020 09:43:26 -0700
-In-Reply-To: <20200802143143.GB20261@amd>
-References: <20200728213614.586312-1-deven.desai@linux.microsoft.com>
-         <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>
-         <20200802143143.GB20261@amd>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-MrVpu3P/x22sFTzai/hX"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        Sun, 2 Aug 2020 14:54:38 -0400
+Received: from [192.168.254.32] (unknown [47.187.206.220])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8B20620B4908;
+        Sun,  2 Aug 2020 11:54:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8B20620B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1596394477;
+        bh=Bi0Avm087nVKLtlYIbtSWKURIDHCpmDKtLVQ5vuWflc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=fHpnzFOJOlzwXKwSY8zPf6k+L+PvjjAKdLTYmh86GcRZ1GlLSdgkG9g2/aH5jJhcq
+         rLnj76Yu6QdnUO6KTpkXFwOCQ9jicshEkSNSDxcUKT9TPhmvEepbEQ05Wq5VephZTP
+         PadVn+hOSExc6VqPzwe7hlZHes7rqpGKqv+UP3nE=
+Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
+References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
+ <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Message-ID: <3b916198-3a98-bd19-9a1c-f2d8d44febe8@linux.microsoft.com>
+Date:   Sun, 2 Aug 2020 13:54:35 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+More responses inline..
 
---=-MrVpu3P/x22sFTzai/hX
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 7/28/20 12:31 PM, Andy Lutomirski wrote:
+>> On Jul 28, 2020, at 6:11 AM, madvenka@linux.microsoft.com wrote:
+>>
+>> ﻿From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>
+> 2. Use existing kernel functionality.  Raise a signal, modify the
+> state, and return from the signal.  This is very flexible and may not
+> be all that much slower than trampfd.
 
-On Sun, 2020-08-02 at 16:31 +0200, Pavel Machek wrote:
-> On Sun 2020-08-02 10:03:00, Sasha Levin wrote:
-> > On Sun, Aug 02, 2020 at 01:55:45PM +0200, Pavel Machek wrote:
-> > > Hi!
-> > >=20
-> > > > IPE is a Linux Security Module which allows for a configurable
-> > > > policy to enforce integrity requirements on the whole system.
-> > > > It attempts to solve the issue of Code Integrity: that any code
-> > > > being executed (or files being read), are identical to the
-> > > > version that was built by a trusted source.
-> > >=20
-> > > How is that different from security/integrity/ima?
-> >=20
-> > Maybe if you would have read the cover letter all the way down to
-> > the 5th paragraph which explains how IPE is different from IMA we
-> > could avoided this mail exchange...
->=20
-> "
-> IPE differs from other LSMs which provide integrity checking (for
-> instance,
-> IMA), as it has no dependency on the filesystem metadata itself. The
-> attributes that IPE checks are deterministic properties that exist
-> solely
-> in the kernel. Additionally, IPE provides no additional mechanisms of
-> verifying these files (e.g. IMA Signatures) - all of the attributes
-> of
-> verifying files are existing features within the kernel, such as
-> dm-verity
-> or fsverity.
-> "
->=20
-> That is not really helpful.
+Let me understand this. You are saying that the trampoline code
+would raise a signal and, in the signal handler, set up the context
+so that when the signal handler returns, we end up in the target
+function with the context correctly set up. And, this trampoline code
+can be generated statically at build time so that there are no
+security issues using it.
 
-I think what the above is trying to to is to expose is an IMA
-limitation that the new LSM fixes.  I think what it meant to say is
-that IMA uses xattrs to store the signature data which is the "metadata
-dependency".  However, it overlooks the fact that IMA can use appended
-signatures as well, which have no metadata dependency, so I'm not sure
-I've helped you understand why this is different from IMA.
+Have I understood your suggestion correctly?
 
-Perhaps a more convincing argument is that IMA hooks into various
-filesystem "gates" to perform integrity checks (file read and file
-execute being the most obvious).  This LSM wants additional gates
-within device mapper itself that IMA currently doesn't hook into.
+So, my argument would be that this would always incur the overhead
+of a trip to the kernel. I think twice the overhead if I am not mistaken.
+With trampfd, we can have the kernel generate the code so that there
+is no performance penalty at all.
 
-Perhaps the big question is: If we used the existing IMA appended
-signature for detached signatures (effectively becoming the
-"properties" referred to in the cover letter) and hooked IMA into
-device mapper using additional policy terms, would that satisfy all the
-requirements this new LSM has?
+Signals have many problems. Which signal number should we use for this
+purpose? If we use an existing one, that might conflict with what the application
+is already handling. Getting a new signal number for this could meet
+with resistance from the community.
 
-James
+Also, signals are asynchronous. So, they are vulnerable to race conditions.
+To prevent other signals from coming in while handling the raised signal,
+we would need to block and unblock signals. This will cause more
+overhead.
 
---=-MrVpu3P/x22sFTzai/hX
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+> 3. Use a syscall.  Instead of having the kernel handle page faults,
+> have the trampoline code push the syscall nr register, load a special
+> new syscall nr into the syscall nr register, and do a syscall. On
+> x86_64, this would be:
+>
+> pushq %rax
+> movq __NR_magic_trampoline, %rax
+> syscall
+>
+> with some adjustment if the stack slot you're clobbering is important.
 
------BEGIN PGP SIGNATURE-----
+How is this better than the kernel handling an address fault?
+The system call still needs to do the same work as the fault handler.
+We do need to specify the register and stack contexts before hand
+so the system call can do its job.
 
-iHUEABMIAB0WIQTnYEDbdso9F2cI+arnQslM7pishQUCXybtLgAKCRDnQslM7pis
-hWimAP9T9I/4sBSeBrGI7NqoyKwG2H+cwtXr/XrBRxwSXraDUgD/TFHreLGqN12U
-JeJ3dF9i/fLU2fxGJpJrexE3/T8J3AQ=
-=Q5Lc
------END PGP SIGNATURE-----
+Also, this always incurs a trip to the kernel. With trampfd, the kernel
+could generate the code to avoid the performance penalty.
 
---=-MrVpu3P/x22sFTzai/hX--
+
+>
+> Also, will using trampfd cause issues with various unwinders?  I can
+> easily imagine unwinders expecting code to be readable, although this
+> is slowly going away for other reasons.
+
+I need to study unwinders a little before I respond to this question.
+So, bear with me.
+
+> All this being said, I think that the kernel should absolutely add a
+> sensible interface for JITs to use to materialize their code.  This
+> would integrate sanely with LSMs and wouldn't require hacks like using
+> files, etc.  A cleverly designed JIT interface could function without
+> seriailization IPIs, and even lame architectures like x86 could
+> potentially avoid shootdown IPIs if the interface copied code instead
+> of playing virtual memory games.  At its very simplest, this could be:
+>
+> void *jit_create_code(const void *source, size_t len);
+>
+> and the result would be a new anonymous mapping that contains exactly
+> the code requested.  There could also be:
+>
+> int jittfd_create(...);
+>
+> that does something similar but creates a memfd.  A nicer
+> implementation for short JIT sequences would allow appending more code
+> to an existing JIT region.  On x86, an appendable JIT region would
+> start filled with 0xCC, and I bet there's a way to materialize new
+> code into a previously 0xcc-filled virtual page wthout any
+> synchronization.  One approach would be to start with:
+>
+> <some code>
+> 0xcc
+> 0xcc
+> ...
+> 0xcc
+>
+> and to create a whole new page like:
+>
+> <some code>
+> <some more code>
+> 0xcc
+> ...
+> 0xcc
+>
+> so that the only difference is that some code changed to some more
+> code.  Then replace the PTE to swap from the old page to the new page,
+> and arrange to avoid freeing the old page until we're sure it's gone
+> from all TLBs.  This may not work if <some more code> spans a page
+> boundary.  The #BP fixup would zap the TLB and retry.  Even just
+> directly copying code over some 0xcc bytes almost works, but there's a
+> nasty corner case involving instructions that fetch I$ fetch
+> boundaries.  I'm not sure to what extent I$ snooping helps.
+
+I am thinking that the trampfd API can be used for addressing JIT
+code as well. I have not yet started thinking about the details. But I
+think the API is sufficient. E.g.,
+
+    struct trampfd_jit {
+        void    *source;
+        size_t    len;
+    };
+
+    struct trampfd_jit    jit;
+    struct trampfd_map    map;
+    void    *addr;
+
+    jit.source = blah;
+    jit.size = blah;
+
+    fd = syscall(440, TRAMPFD_JIT, &jit, flags);
+    pread(fd, &map, sizeof(map), TRAMPFD_MAP_OFFSET);
+    addr = mmap(NULL, map.size, map.prot, map.flags, fd, map.offset);
+
+And addr would be used to invoke the generated JIT code.
+
+Madhavan
 
