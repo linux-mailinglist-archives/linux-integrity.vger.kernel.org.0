@@ -2,158 +2,186 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2F8239CE8
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 00:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065ED239D8F
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 04:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbgHBW7C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 2 Aug 2020 18:59:02 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:57188 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726257AbgHBW7C (ORCPT
+        id S1726944AbgHCCxw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 2 Aug 2020 22:53:52 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15258 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725820AbgHCCxv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 2 Aug 2020 18:59:02 -0400
-Received: from [192.168.254.32] (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2BD5420B4908;
-        Sun,  2 Aug 2020 15:59:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2BD5420B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596409140;
-        bh=Q7q31WyGpO6J3iZ6HoTSTxcyY2RYOO3HoBrVjNyqpPA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=pT2y52UBji3W0nv8oaWqlXsVHl+hqxrTJnSZ5683V0Vq7481OEdHqda3OONYprXUp
-         pUvC7Ja7yH7A7A7PnhVPoN4/nCrqBhOuCsyTs5k8KgsuxVR6rM+c6V/PJxlx37f+KW
-         8krLq5y3aSQx9KIXxSdL4F/U4BEfCPv/l8nRqqTQ=
-Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
-References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
- <3b916198-3a98-bd19-9a1c-f2d8d44febe8@linux.microsoft.com>
- <CALCETrUJ2hBmJujyCtEqx4=pknRvjvi1-Gj9wfRcMMzejjKQsQ@mail.gmail.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <0fa7d888-c4fd-aeb3-db08-151ea648558d@linux.microsoft.com>
-Date:   Sun, 2 Aug 2020 17:58:59 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CALCETrUJ2hBmJujyCtEqx4=pknRvjvi1-Gj9wfRcMMzejjKQsQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        Sun, 2 Aug 2020 22:53:51 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0732VOxP048845;
+        Sun, 2 Aug 2020 22:53:47 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32p0x392cv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 02 Aug 2020 22:53:47 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0732VQVJ049077;
+        Sun, 2 Aug 2020 22:53:46 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32p0x392ck-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 02 Aug 2020 22:53:46 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0732p6QU024810;
+        Mon, 3 Aug 2020 02:53:45 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 32nyyd07xt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Aug 2020 02:53:45 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0732rgvw33030536
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 3 Aug 2020 02:53:43 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BBF954C046;
+        Mon,  3 Aug 2020 02:53:42 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C50B4C04A;
+        Mon,  3 Aug 2020 02:53:41 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.0.172])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Aug 2020 02:53:41 +0000 (GMT)
+Message-ID: <c28c63ca748236c0db4594d2ddc2f5b63cd75528.camel@linux.ibm.com>
+Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
+ engine
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Bruno Meneguele <bmeneg@redhat.com>
+Date:   Sun, 02 Aug 2020 22:53:40 -0400
+In-Reply-To: <20200731204044.GC27841@dell5510>
+References: <20200731182408.696931-1-zohar@linux.ibm.com>
+         <20200731182408.696931-6-zohar@linux.ibm.com>
+         <20200731185633.kqgcz4dwfa4ruyld@altlinux.org>
+         <20200731201808.GA27841@dell5510>
+         <20200731202638.x5mnkz7hcpgbveu2@altlinux.org>
+         <20200731204044.GC27841@dell5510>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-03_01:2020-07-31,2020-08-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ mlxlogscore=946 phishscore=0 adultscore=0 mlxscore=0 clxscore=1015
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008030012
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, 2020-07-31 at 22:40 +0200, Petr Vorel wrote:
+> > Petr,
+> > On Fri, Jul 31, 2020 at 10:18:08PM +0200, Petr Vorel wrote:
+> > > > > +++ b/tests/install-gost-engine.sh
+> > > > > @@ -0,0 +1,10 @@
+> > > > > +#!/bin/sh
+> > > > > +
+> > > > > +openssl version
+> > > > > +
+> > > > > +git clone https://github.com/gost-engine/engine.git
+> > > > gost-engine master branch corresponds to openssl-3.0 which is
+> > > > probably
+> > > > not on Travis systems yet. I think branch `openssl_1_1_0`
+> > > > should be used.
+> > > >   git clone --branch openssl_1_1_0 
+> > > > https://github.com/gost-engine/engine.git
+> > > FYI: it work on current setup.
+> > > https://travis-ci.org/github/pevik/ima-evm-utils/builds/713815774
+> > I think `install-gost-engine.sh` is not executed in this line:
+> >   257 $ if [ "${SSL}" = "openssl" ]; then ./tests/install-gost-
+> > engine.sh; openssl version; fi   0.00s
+> 
+> Good catch!
+> $ ./tests/install-gost-engine.sh
+> OpenSSL 1.1.1g  21 Apr 2020
+> fatal: destination path 'engine' already exists and is not an empty
+> directory.
+> CMake Error at
+> /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:165
+> (message):
+>   Could NOT find OpenSSL, try to set the path to OpenSSL root folder
+> in the
+>   system variable OPENSSL_ROOT_DIR: Found unsuitable version
+> "1.1.1g", but
+>   required is at least "3.0" (found /usr/lib64/libcrypto.so, )
+> Call Stack (most recent call first):
+>   /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:456
+> (_FPHSA_FAILURE_MESSAGE)
+>   /usr/share/cmake/Modules/FindOpenSSL.cmake:486
+> (find_package_handle_standard_args)
+>   CMakeLists.txt:11 (find_package)
+> 
+> -- Configuring incomplete, errors occurred!
+> See also "/home/pvorel/install/src/ima-evm-
+> utils.git/engine/CMakeFiles/CMakeOutput.log".
+> make: *** No rule to make target 'install'.  Stop.
+> 
+> And when using suggested branch openssl_1_1_0, it also fails on make
+> install
+> $ ./tests/install-gost-engine.sh
+> OpenSSL 1.1.1g  21 Apr 2020
+> Cloning into 'engine'...
+> remote: Enumerating objects: 63, done.
+> remote: Counting objects: 100% (63/63), done.
+> remote: Compressing objects: 100% (40/40), done.
+> remote: Total 2738 (delta 33), reused 32 (delta 21), pack-reused 2675
+> Receiving objects: 100% (2738/2738), 2.48 MiB | 2.09 MiB/s, done.
+> Resolving deltas: 100% (1735/1735), done.
+> -- The C compiler identification is GNU 10.1.1
+> -- Detecting C compiler ABI info
+> -- Detecting C compiler ABI info - done
+> -- Check for working C compiler: /usr/bin/cc - skipped
+> -- Detecting C compile features
+> -- Detecting C compile features - done
+> -- Found OpenSSL: /usr/lib64/libcrypto.so (found suitable version
+> "1.1.1g", minimum required is "1.1")
+> -- Check if the system is big endian
+> -- Searching 16 bit integer
+> -- Looking for sys/types.h
+> -- Looking for sys/types.h - found
+> -- Looking for stdint.h
+> -- Looking for stdint.h - found
+> -- Looking for stddef.h
+> -- Looking for stddef.h - found
+> -- Check size of unsigned short
+> -- Check size of unsigned short - done
+> -- Searching 16 bit integer - Using unsigned short
+> -- Check if the system is big endian - little endian
+> -- LITTLE_ENDIAN
+> -- Configuring done
+> -- Generating done
+> -- Build files have been written to: /home/pvorel/install/src/ima-
+> evm-utils.git/engine
+> make: *** No rule to make target 'install'.  Stop.
+> 
+> => It'd be good to fix this and add some test with SSL=openssl
+> variable.
+> But the branch would have to be updated time to time.
+> 
+> BTW do you plan to test other crypto libraries?
 
+Thanks, Vitaly, Petr, for catching this.  SSL isn't define yet.   The
+test should be removed.  If/when libressl is added, it would look like:
 
-On 8/2/20 3:00 PM, Andy Lutomirski wrote:
-> On Sun, Aug 2, 2020 at 11:54 AM Madhavan T. Venkataraman
-> <madvenka@linux.microsoft.com> wrote:
->> More responses inline..
->>
->> On 7/28/20 12:31 PM, Andy Lutomirski wrote:
->>>> On Jul 28, 2020, at 6:11 AM, madvenka@linux.microsoft.com wrote:
->>>>
->>>> ﻿From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>>>
->>> 2. Use existing kernel functionality.  Raise a signal, modify the
->>> state, and return from the signal.  This is very flexible and may not
->>> be all that much slower than trampfd.
->> Let me understand this. You are saying that the trampoline code
->> would raise a signal and, in the signal handler, set up the context
->> so that when the signal handler returns, we end up in the target
->> function with the context correctly set up. And, this trampoline code
->> can be generated statically at build time so that there are no
->> security issues using it.
->>
->> Have I understood your suggestion correctly?
-> yes.
->
->> So, my argument would be that this would always incur the overhead
->> of a trip to the kernel. I think twice the overhead if I am not mistaken.
->> With trampfd, we can have the kernel generate the code so that there
->> is no performance penalty at all.
-> I feel like trampfd is too poorly defined at this point to evaluate.
-> There are three general things it could do.  It could generate actual
-> code that varies by instance.  It could have static code that does not
-> vary.  And it could actually involve a kernel entry.
->
-> If it involves a kernel entry, then it's slow.  Maybe this is okay for
-> some use cases.
+-     - env: TSS=ibmtss
+-     - env: TSS=tpm2-tss
++     - env: TSS=ibmtss SSL=openssl
++     - env: TSS=ibmtss SSL=libressl;
++     - env: TSS=tpm2-tss SSL=openssl
+ 
+ before_install:
++   - if [ "${SSL}" = "libressl" ]; then
++        ./tests/install-libressl.sh;
++     fi
 
-Yes. IMO, it is OK for most cases except where dynamic code
-is used specifically for enhancing performance such as interpreters
-using JIT code for frequently executed sequences and dynamic
-binary translation.
+Mimi
 
-> If it involves only static code, I see no good reason that it should
-> be in the kernel.
-
-It does not involve only static code. This is meant for dynamic code.
-However, see below.
-
-> If it involves dynamic code, then I think it needs a clearly defined
-> use case that actually requires dynamic code.
-
-Fair enough. I will work on this and get back to you. This might take
-a little time. So, bear with me.
-
-But I would like to make one point here. There are many applications
-and libraries out there that use trampolines. They may all require the
-same sort of things:
-
-    - set register context
-    - push stuff on stack
-    - jump to a target PC
-
-But in each case, the context would be different:
-
-    - only register context
-    - only stack context
-    - both register and stack contexts
-    - different registers
-    - different values pushed on the stack
-    - different target PCs
-
-If we had to do this purely at user level, each application/library would
-need to roll its own solution, the solution has to be implemented for
-each supported architecture and maintained. While the code is static
-in each separate case, it is dynamic across all of them.
-
-That is, the kernel will generate the code on the fly for each trampoline
-instance based on its current context. It will not maintain any static
-trampoline code at all.
-
-Basically, it will supply the context to an arch-specific function and say:
-
-    - generate instructions for loading these regs with these values
-    - generate instructions to push these values on the stack
-    - generate an instruction to jump to this target PC
-
-It will place all of those generated instructions on a page and return the address.
-
-So, even with the static case, there is a lot of value in the kernel providing
-this. Plus, it has the framework to handle dynamic code.
-
->> Also, signals are asynchronous. So, they are vulnerable to race conditions.
->> To prevent other signals from coming in while handling the raised signal,
->> we would need to block and unblock signals. This will cause more
->> overhead.
-> If you're worried about raise() racing against signals from out of
-> thread, you have bigger problems to deal with.
-
-Agreed. The signal blocking is just one example of problems related
-to signals. There are other bigger problems as well. So, let us remove
-the signal-based approach from our discussions.
-
-Thanks.
-
-Madhavan
