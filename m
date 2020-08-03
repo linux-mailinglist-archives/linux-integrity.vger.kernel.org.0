@@ -2,83 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 611AD23AAC1
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 18:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B9B23AB08
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 18:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726660AbgHCQqi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Aug 2020 12:46:38 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37566 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725945AbgHCQqi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Aug 2020 12:46:38 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CEC0DAB71;
-        Mon,  3 Aug 2020 16:46:51 +0000 (UTC)
-Date:   Mon, 3 Aug 2020 18:46:35 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
- engine
-Message-ID: <20200803164635.GB4914@dell5510>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20200731182408.696931-6-zohar@linux.ibm.com>
- <20200731185633.kqgcz4dwfa4ruyld@altlinux.org>
- <20200731201808.GA27841@dell5510>
- <20200731202638.x5mnkz7hcpgbveu2@altlinux.org>
- <20200731204044.GC27841@dell5510>
- <20200731210653.p5m4efy52melqwgs@altlinux.org>
- <8c9e64a3b461fb20cda761ef0fc0728a55448937.camel@linux.ibm.com>
- <1157c464d49cb6297fc2f20771d73a4cf7ce6599.camel@linux.ibm.com>
- <20200803130755.GA30440@dell5510>
- <22a744e9520237907312d1f71293df0dd809805f.camel@linux.ibm.com>
+        id S1727880AbgHCQ5v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Aug 2020 12:57:51 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:31906 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726986AbgHCQ5v (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 3 Aug 2020 12:57:51 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-167-AfxWu5hnN66AhufCIfqZ2Q-1; Mon, 03 Aug 2020 17:57:48 +0100
+X-MC-Unique: AfxWu5hnN66AhufCIfqZ2Q-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 3 Aug 2020 17:57:47 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 3 Aug 2020 17:57:47 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Madhavan T. Venkataraman'" <madvenka@linux.microsoft.com>,
+        "'Mark Rutland'" <mark.rutland@arm.com>
+CC:     Andy Lutomirski <luto@kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "LSM List" <linux-security-module@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
+Subject: RE: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+Thread-Topic: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+Thread-Index: AQHWZ2jYT+e4gDrzGEmP/30MMvDTCqkmD9qggABvyICAAB4gEA==
+Date:   Mon, 3 Aug 2020 16:57:47 +0000
+Message-ID: <f87f84e466a041fbabd2bba84f4592a5@AcuMS.aculab.com>
+References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
+ <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
+ <6540b4b7-3f70-adbf-c922-43886599713a@linux.microsoft.com>
+ <CALCETrWnNR5v3ZCLfBVQGYK8M0jAvQMaAc9uuO05kfZuh-4d6w@mail.gmail.com>
+ <46a1adef-65f0-bd5e-0b17-54856fb7e7ee@linux.microsoft.com>
+ <20200731183146.GD67415@C02TD0UTHF1T.local>
+ <a3068e3126a942c7a3e7ac115499deb1@AcuMS.aculab.com>
+ <7fdc102e-75ea-6d91-d2a3-7fe8c91802ce@linux.microsoft.com>
+In-Reply-To: <7fdc102e-75ea-6d91-d2a3-7fe8c91802ce@linux.microsoft.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22a744e9520237907312d1f71293df0dd809805f.camel@linux.ibm.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi all,
+RnJvbTogTWFkaGF2YW4gVC4gVmVua2F0YXJhbWFuDQo+IFNlbnQ6IDAzIEF1Z3VzdCAyMDIwIDE3
+OjAzDQo+IA0KPiBPbiA4LzMvMjAgMzoyNyBBTSwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KPiA+IEZy
+b206IE1hcmsgUnV0bGFuZA0KPiA+PiBTZW50OiAzMSBKdWx5IDIwMjAgMTk6MzINCj4gPiAuLi4N
+Cj4gPj4+IEl0IHJlcXVpcmVzIFBDLXJlbGF0aXZlIGRhdGEgcmVmZXJlbmNlcy4gSSBoYXZlIG5v
+dCB3b3JrZWQgb24gYWxsIGFyY2hpdGVjdHVyZXMuDQo+ID4+PiBTbywgSSBuZWVkIHRvIHN0dWR5
+IHRoaXMuIEJ1dCBkbyBhbGwgSVNBcyBzdXBwb3J0IFBDLXJlbGF0aXZlIGRhdGEgcmVmZXJlbmNl
+cz8NCj4gPj4gTm90IGFsbCBkbywgYnV0IHByZXR0eSBtdWNoIGFueSByZWNlbnQgSVNBIHdpbGwg
+YXMgaXQncyBhIHByYWN0aWNhbA0KPiA+PiBuZWNlc3NpdHkgZm9yIGZhc3QgcG9zaXRpb24taW5k
+ZXBlbmRlbnQgY29kZS4NCj4gPiBpMzg2IGhhcyBuZWl0aGVyIFBDLXJlbGF0aXZlIGFkZHJlc3Np
+bmcgbm9yIG1vdmVzIGZyb20gJXBjLg0KPiA+IFRoZSBjcHUgYXJjaGl0ZWN0dXJlIGtub3dzIHRo
+YXQgdGhlIHNlcXVlbmNlOg0KPiA+IAljYWxsCTFmDQo+ID4gMToJcG9wCSVyZWcNCj4gPiBpcyB1
+c2VkIHRvIGdldCB0aGUgJXBjIHZhbHVlIHNvIGlzIHRyZWF0ZWQgc3BlY2lhbGx5IHNvIHRoYXQN
+Cj4gPiBpdCBkb2Vzbid0ICd0cmFzaCcgdGhlIHJldHVybiBzdGFjay4NCj4gPg0KPiA+IFNvIFBJ
+QyBjb2RlIGlzbid0IHRvbyBiYWQsIGJ1dCB5b3UgaGF2ZSB0byB1c2UgdGhlIGNvcnJlY3QNCj4g
+PiBzZXF1ZW5jZS4NCj4gDQo+IElzIHRoYXQgdHJ1ZSBvbmx5IGZvciAzMi1iaXQgc3lzdGVtcyBv
+bmx5PyBJIHRob3VnaHQgUklQLXJlbGF0aXZlIGFkZHJlc3Npbmcgd2FzDQo+IGludHJvZHVjZWQg
+aW4gNjQtYml0IG1vZGUuIFBsZWFzZSBjb25maXJtLg0KDQpJIHNhaWQgaTM4NiBub3QgYW1kNjQg
+b3IgeDg2LTY0Lg0KDQpTbyB5ZXMsIDY0Yml0IGNvZGUgaGFzIFBDLXJlbGF0aXZlIGFkZHJlc3Np
+bmcuDQpCdXQgSSdtIHByZXR0eSBzdXJlIGl0IGhhcyBubyBvdGhlciB3YXkgdG8gZ2V0IHRoZSBQ
+QyBpdHNlbGYNCmV4Y2VwdCB1c2luZyBjYWxsIC0gY2VydGFpbmx5IG5vdGhpbmcgaW4gdGhlICd1
+c3VhbCcgaW5zdHJ1Y3Rpb25zLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
+a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
+IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-...
-> > @Mimi: As I wrote, I'd suggest moving to docker based travis. I can do it once
-> > other issues are addressed, if this setup work for your internal travis support
-> > as well. See examples .travis.yml [1] [2], builds: [3] [4].
-
-> > Advantages are more realistic builds for distro maintainers (different libc and
-> > libraries versions, you can test old and new distro releases, etc), but maybe
-> > that's not what you want/need.
-
-> > Disadvantage is that sometimes docker releases have temporary packaging related
-> > issues (first build in [3]; failure in first build [4] is a bug in LTP, corner
-> > case, which would be otherwise undiscovered a long time).
-
-> Nice!  I definitely want to move to a docker based travis.   How should
-> we move forward?   Should there be a 1.3.1 release now with just the
-> few changes in the next branch and include the existing travis branch
-> with changes to address Vitaly's comments?
-Yes, that would work for me. Travis changes aren't related to the release
-(it just needs to be published in git), let's give users the fixes.
-
-Docker based setup shouldn't take long It's all about to find the dependencies
-for used distros (I usually keep them in travis/ directory [5] [6]) and agree on the
-variants (which distros, how many jobs are still meaningful, which crypto and
-TPM libraries, whether use also: clang, non-intel archs and cross-compilation).
-
-Kind regards,
-Petr
-
-> Mimi
-
-> > [1] https://github.com/linux-test-project/ltp/blob/master/.travis.yml
-> > [2] https://github.com/iputils/iputils/blob/master/.travis.yml
-> > [3] https://travis-ci.org/github/iputils/iputils/builds/714445071
-> > [4] https://travis-ci.org/github/linux-test-project/ltp/builds/714400199
-
-[5] https://github.com/linux-test-project/ltp/blob/master/travis/
-[6] https://github.com/iputils/iputils/blob/master/travis/
