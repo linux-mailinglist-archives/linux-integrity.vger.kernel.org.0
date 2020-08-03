@@ -2,213 +2,191 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEDF23AC99
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 20:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C4E23ADE2
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 22:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726916AbgHCSrm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Aug 2020 14:47:42 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:35734 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbgHCSrm (ORCPT
+        id S1728739AbgHCUBH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Aug 2020 16:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727091AbgHCUBG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Aug 2020 14:47:42 -0400
-Received: from localhost.localdomain (c-73-187-218-229.hsd1.pa.comcast.net [73.187.218.229])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9E06A20B490A;
-        Mon,  3 Aug 2020 11:47:39 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9E06A20B490A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596480460;
-        bh=DLvQ4C4TeXE4TD6ysUpuenrcARQ84MejV5TONMhUnOQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BImIpOSDGEoR0fM4oMjjP1cUXGJHE3h7Sx2Kh9XnWHrYnc+oHWn9Uk3ROyQwIyCAO
-         7x0rG2St8IzcwwnY9KcvXbm6/x2reYm05Z2NUoR//YD/M5CorNGmuSZ9RIfP3VHMte
-         zw+QfntZXHlhYlCmOeo1Xaqesa2hkgAXId6ONhE4=
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-To:     pvorel@suse.cz, zohar@linux.ibm.com, ltp@lists.linux.it
-Cc:     nramas@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, tyhicks@linux.microsoft.com,
-        yaneurabeya@gmail.com, zhang.jia@linux.alibaba.com
-Subject: [PATCH 3/3] IMA: Add a test to verify measurement of certificate imported into a keyring
-Date:   Mon,  3 Aug 2020 14:47:26 -0400
-Message-Id: <20200803184726.2416-4-t-josne@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200803184726.2416-1-t-josne@linux.microsoft.com>
-References: <20200803184726.2416-1-t-josne@linux.microsoft.com>
+        Mon, 3 Aug 2020 16:01:06 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B3BC06174A;
+        Mon,  3 Aug 2020 13:01:06 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id j7so17957449oij.9;
+        Mon, 03 Aug 2020 13:01:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zP4ncp9vj7JnY4khsRNCiCdbBc6bjRvSCdpaq4/BvzQ=;
+        b=bLoL9bofRI+5WFj9dqLlDqaT7eDcOjGFY5D7e5CSZGKXpALwOyiUuDg0I0lbaxuZgM
+         uHypdAhVhllZ6Avll+IiJa1MhHJ+GwwYphwqajC36MlBo0a/HI253MD5Osa8FblqOpuN
+         oqzRRUBiJJ7xu8exJKnl6tTzCBeUrOBtof1UvPPpt/ZthEANNhiqCUKhfpigWB4XJYF6
+         GDyBuPtZ2re4oUBBdusmmnckLg3SvAt6A+nRHETwFTMP+hZegJuwLA+ZgeoeL7t5Sajz
+         2LFxKNHrGq3AWA+qbU1gBMaGtiOCvPIEVP3CN0TOpQAEKQYtDDflBSW60+3mTCCD+csd
+         IWNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zP4ncp9vj7JnY4khsRNCiCdbBc6bjRvSCdpaq4/BvzQ=;
+        b=lZBIggT0Itt+MfKTrqkv3sK9BPed6bCmflaaRGWLTSzi8VnmUm9TAVSw1UC7bCDnXI
+         5OUWCnQ/VfsVz8+rgCFJO4HN3ZHAMAlNe0myHXJbxykGEcqo3jWy8+Zn5DnfRfFUc6Xz
+         MRbEhuZKtwAlpX+QCcqW8jwxUrm/yhZu6hGHZPC2HasqLFRFu0cHUWLh9S2jcerXQAAT
+         SPXwtSOWTL0yOY3kOBct7iLmkRLJv/BkfPdDz6R9eVbUjMqCI9TDndpVhdGVmeIG1Aar
+         qCQY0RpkKDcG8rBaEcETjGXugVvtqmm+XXTJoVHbtM/azChlKY8c3AgqCfQ3OXSS6Ll/
+         kY1A==
+X-Gm-Message-State: AOAM533j3JCuPVDg+4zxcQxXFMBHvLHW6rqa5JwO9o/RQ+gyvxiIxCMX
+        nC9Lj/o1Z9YsTgsDnxI75lYQDKBawmLuf+efKHI=
+X-Google-Smtp-Source: ABdhPJz013rtE9N9hgX1DuHV1VPgJpyezytKEBb4MeeWb9GWT1rgdugaLTmP/96tLKReIozlrOS9nF/pFY13IxLHFXo=
+X-Received: by 2002:a05:6808:1d9:: with SMTP id x25mr815802oic.92.1596484866057;
+ Mon, 03 Aug 2020 13:01:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200730034724.3298-1-nramas@linux.microsoft.com>
+ <20200730034724.3298-4-nramas@linux.microsoft.com> <dfd6f9c8-d62a-d278-9b0e-6b1f5ad03d3e@gmail.com>
+ <6371efa9-5ae6-05ac-c357-3fbe1a5a93d5@linux.microsoft.com>
+In-Reply-To: <6371efa9-5ae6-05ac-c357-3fbe1a5a93d5@linux.microsoft.com>
+From:   Stephen Smalley <stephen.smalley.work@gmail.com>
+Date:   Mon, 3 Aug 2020 16:00:55 -0400
+Message-ID: <CAEjxPJ789kmdDwy-6RaL7HuMFxKpQ9Hwxj9J-_-f62XDCNJUiA@mail.gmail.com>
+Subject: Re: [PATCH v5 3/4] LSM: Define SELinux function to measure state and policy
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>, sashal@kernel.org,
+        James Morris <jmorris@namei.org>,
+        linux-integrity@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The IMA subsystem supports measuring certificates that have been
-imported into either system built-in or user-defined keyrings.
-A test to verify measurement of a certificate imported
-into a keyring is required.
+On Mon, Aug 3, 2020 at 12:14 PM Lakshmi Ramasubramanian
+<nramas@linux.microsoft.com> wrote:
+>
+> On 8/3/20 8:11 AM, Stephen Smalley wrote:
+> >
+> > Possibly I'm missing something but with these patches applied on top of
+> > next-integrity, and the following lines added to /etc/ima/ima-policy:
+> >
+> > measure func=LSM_STATE template=ima-buf
+> > measure func=LSM_POLICY
+> >
+> > I still don't get the selinux-state or selinux-policy-hash entries in
+> > the ascii_runtime_measurements file.  No errors during loading of the
+> > ima policy as far as I can see.
+> >
+>
+> Could you please check if the following config is set?
+> CONFIG_IMA_QUEUE_EARLY_BOOT_DATA=y
 
-Add an IMA measurement test that verifies that an x509 certificate
-can be imported into a newly-created, user-defined keyring and measured
-correctly by the IMA subsystem.
+Yes, I have that set.
 
-A certificate used by the test is included in the `datafiles/keys`
-directory.
+> Try changing /sys/fs/selinux/checkreqprot and check
+> ascii_runtime_measurements file again?
 
-There can be restrictions on importing a certificate into a builtin
-trusted keyring. For example, the `.ima` keyring requires that
-imported certs be signed by a kernel private key in certain
-kernel configurations. For this reason, this test defines
-a user-defined keyring and imports a certificate into that.
+No change.  Likewise for changing enforce or running load_policy again.
 
-Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
----
- .../kernel/security/integrity/ima/README.md   |  14 ++++++
- .../security/integrity/ima/datafiles/Makefile |   2 +-
- .../integrity/ima/datafiles/keys/Makefile     |  15 ++++++
- .../integrity/ima/datafiles/keys/x509_ima.der | Bin 0 -> 650 bytes
- .../security/integrity/ima/tests/ima_keys.sh  |  44 +++++++++++++++++-
- 5 files changed, 72 insertions(+), 3 deletions(-)
- create mode 100644 testcases/kernel/security/integrity/ima/datafiles/keys/Makefile
- create mode 100644 testcases/kernel/security/integrity/ima/datafiles/keys/x509_ima.der
+> Also, could you please check if
+> /sys/kernel/security/integrity/ima/policy contains LSM_STATE and
+> LSM_POLICY entries?
 
-diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
-index 2956ac7fd..bfa015191 100644
---- a/testcases/kernel/security/integrity/ima/README.md
-+++ b/testcases/kernel/security/integrity/ima/README.md
-@@ -23,6 +23,20 @@ Mandatory kernel configuration for IMA:
- ```
- CONFIG_IMA_READ_POLICY=y
- ```
-+The certificate import test in `ima_keys.sh` also requires that
-+the `key_import_test` keyring is specified in the IMA policy.
-+
-+One way to do this is to modify an existing KEY_CHECK entry
-+in the IMA policy by adding `key_import_test` for keyrings:
-+```
-+measure func=KEY_CHECK keyrings=.ima|.evm|key_import_test template=ima-buf
-+```
-+
-+If KEY_CHECK entry does not exist in the IMA policy then by adding
-+the following line:
-+```
-+measure func=KEY_CHECK keyrings=key_import_test template=ima-buf
-+```
- 
- ### IMA kexec test
- 
-diff --git a/testcases/kernel/security/integrity/ima/datafiles/Makefile b/testcases/kernel/security/integrity/ima/datafiles/Makefile
-index 3772e9a03..4b4c46b82 100644
---- a/testcases/kernel/security/integrity/ima/datafiles/Makefile
-+++ b/testcases/kernel/security/integrity/ima/datafiles/Makefile
-@@ -24,6 +24,6 @@ top_srcdir		?= ../../../../../..
- 
- include	$(top_srcdir)/include/mk/env_pre.mk
- 
--SUBDIRS			:= policy
-+SUBDIRS			:= policy keys
- 
- include $(top_srcdir)/include/mk/generic_trunk_target.mk
-diff --git a/testcases/kernel/security/integrity/ima/datafiles/keys/Makefile b/testcases/kernel/security/integrity/ima/datafiles/keys/Makefile
-new file mode 100644
-index 000000000..a8ab7a1b5
---- /dev/null
-+++ b/testcases/kernel/security/integrity/ima/datafiles/keys/Makefile
-@@ -0,0 +1,15 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (c) 2020 Microsoft Corporation
-+# Author: Lachlan Sneff <t-josne@linux.microsoft.com>
-+#
-+# IMA datafiles/keys Makefile
-+
-+top_srcdir		?= ../../../../../../..
-+
-+include	$(top_srcdir)/include/mk/env_pre.mk
-+
-+INSTALL_DIR		:= testcases/data/ima_keys
-+
-+INSTALL_TARGETS		:= x509_ima.der
-+
-+include $(top_srcdir)/include/mk/generic_leaf_target.mk
-diff --git a/testcases/kernel/security/integrity/ima/datafiles/keys/x509_ima.der b/testcases/kernel/security/integrity/ima/datafiles/keys/x509_ima.der
-new file mode 100644
-index 0000000000000000000000000000000000000000..92be058da22adffa9d6b6e51efa0c737ebbbbdcd
-GIT binary patch
-literal 650
-zcmXqLVrnyJVtl`VnTe5!NhJD#vj69`9|BBf8}FEsx@^_9$Clp>c-c6$+C196^D;7W
-zvoaV27z!HjvoVLVaPe?t<QJFZCFZ6YN*hRmgqV4R$}{p4b2Al+Gt=`j^U@WvQ!5SS
-z3}oO&a59SVLzFncG#ki?^BP(jSQr@@7#Ud_7)6Qm8W{k&hEOgIY;2s5>?=lA2Ij_I
-z27|^<rp88wchfeduxmMW^j9qUxkIugeev4q7u7yrJR_rW$*!>VOo=tim8DK0r^FsU
-zl)K`}`+CO4@4KBkoLmcj?fH`%wbDvU<d=4Z>6-SMf6Eh}{&)1rdsOoNQ-1fgBQ1t{
-zVTqGwuK95LlFE)6i{@=vlP6!2`Y}x<BF&oXU_nlDxy@C+CNp&=W=00a#jys_20XwZ
-zl@(@W{LjK<z+k`);_<VvFf*|?7|4P+d@N!tBCNWX-0#?!UAx9s`mgFmW+nI2#6kmk
-zkhC(3gn?Lt$m4W@56wQ)?QVKW<nOtpT)HJrB?Q^`z&K?FdV8b(y8m)~mOOvswu^9m
-z-o7mOwCAzaT*~`Y4wxFtmNA_89`W;j{r#iww*5OC5vgEziqD_%=ki$*`;s}`Pfwi{
-zbotZ0X`ckHOmaVLm85n@E9hN_K;~PUB>DFAzh(;(UoMln9V>g;W#-LUGS7A`nYQKY
-WBem{7L5JThS+;$vggi%(*E;~nlJ80Y
+Yes, it does.  However, I noticed that if I reduce the policy to only
+contain those entries and no others and reboot, then I get
+measurements.  Whereas if I append them to an existing policy like the
+one below, they seem to be ignored:
+dont_measure fsmagic=0x9fa0
+dont_measure fsmagic=0x62656572
+dont_measure fsmagic=0x64626720
+dont_measure fsmagic=0x1021994
+dont_measure fsmagic=0x858458f6
+dont_measure fsmagic=0x73636673
+measure func=BPRM_CHECK
+measure func=MMAP_CHECK mask=MAY_EXEC
+measure func=MODULE_CHECK uid=0
+measure func=LSM_STATE template=ima-buf
+measure func=LSM_POLICY
 
-literal 0
-HcmV?d00001
-
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-index 3aea26056..f34f40132 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-@@ -6,9 +6,10 @@
- #
- # Verify that keys are measured correctly based on policy.
- 
--TST_NEEDS_CMDS="cut grep sed tr xxd"
--TST_CNT=1
-+TST_NEEDS_CMDS="grep cut sed tr xxd evmctl openssl keyctl"
-+TST_CNT=2
- TST_NEEDS_DEVICE=1
-+TST_NEEDS_ROOT=1
- 
- . ima_setup.sh
- 
-@@ -58,4 +59,43 @@ test1()
- 	tst_res TPASS "specified keyrings were measured correctly"
- }
- 
-+# Create a new keyring, import a certificate into it, and verify
-+# that the certificate is measured correctly by IMA.
-+test2() {
-+	local new_keyring_id temp_file="file.txt" \
-+		cert_file="$TST_DATAROOT/x509_ima.der"
-+
-+	if ! check_ima_policy_content '^measure.*func=KEY_CHECK.*keyrings=.*key_import_test'; then
-+		tst_brk TCONF "the IMA policy does not include the key_import_test keyring. See the LTP IMA README."
-+	fi
-+
-+	# Assuming this test is executed in a separate shell,
-+	# create a new session that will be cleaned up when
-+	# the shell exits.
-+	keyctl new_session > /dev/null
-+
-+	new_keyring_id=$(keyctl newring key_import_test @s) || \
-+		tst_brk TCONF "unable to create a new keyring"
-+
-+	tst_is_num "$new_keyring_id" || \
-+		tst_brk TCONF "unable to parse the new keyring id"
-+
-+	evmctl import "$cert_file" "$new_keyring_id" > /dev/null || \
-+		tst_brk TCONF "unable to import a cert into a the key_import_test keyring"
-+
-+	grep "key_import_test" "$ASCII_MEASUREMENTS" | tail -n1 | cut -d' ' -f6 | \
-+		xxd -r -p > "$temp_file" || \
-+		tst_brk TCONF "keyring not found in $ASCII_MEASUREMENTS"
-+
-+	if ! openssl x509 -in "$temp_file" -inform der > /dev/null; then
-+		tst_brk TCONF "the cert logged in $ASCII_MEASUREMENTS is not a valid x509 certificate"
-+	fi
-+
-+	if cmp -s "$temp_file" "$cert_file"; then
-+		tst_res TPASS "logged cert matches original cert"
-+	else
-+		tst_res TFAIL "logged cert does not match original cert"
-+	fi
-+}
-+
- tst_run
--- 
-2.25.1
-
+Also, I noticed the following in my dmesg output:
+[   68.870715] ------------[ cut here ]------------
+[   68.870715] WARNING: CPU: 2 PID: 1 at mm/page_alloc.c:4826
+__alloc_pages_nodemask+0x627/0x700
+[   68.870715] Modules linked in: 8139too crct10dif_pclmul
+crc32_pclmul crc32c_intel ghash_clmulni_intel qxl serio_raw
+drm_ttm_helper ttm drm_kms_helper virtio_console cec drm 8139cp
+ata_generic mii pata_acpi floppy qemu_fw_cfg fuse
+[   68.870715] CPU: 2 PID: 1 Comm: systemd Not tainted 5.8.0-rc2+ #44
+[   68.870715] RIP: 0010:__alloc_pages_nodemask+0x627/0x700
+[   68.870715] Code: ff ff 75 6c 48 8b 85 48 ff ff ff 4c 89 c2 44 89
+e6 44 89 ff 41 c6 45 d0 00 49 89 45 b8 e8 41 e2 ff ff 49 89 c6 e9 9d
+fc ff ff <0f> 0b e9 d4 fd ff ff 0f 0b e9 bc fc ff ff 0f 0b e9 f9 fd ff
+ff e8
+[   68.870715] RSP: 0000:ffff8881e82a7a18 EFLAGS: 00010246
+[   68.870715] RAX: ffffed103d054f48 RBX: 1ffff1103d054f48 RCX: 0000000000000000
+[   68.870715] RDX: 0000000000000000 RSI: 000000000000000b RDI: 0000000000000000
+[   68.870715] RBP: ffff8881e82a7ae8 R08: ffffffffaa3fe2d5 R09: 0000000000000001
+[   68.870715] R10: fffffbfff5a88f0f R11: 0000000000000001 R12: 00000000007eef6a
+[   68.870715] R13: 0000000000040cc0 R14: 000000000000000b R15: ffffffffadde766b
+[   68.870715] FS:  00007fdeb168c600(0000) GS:ffff8881e9800000(0000)
+knlGS:0000000000000000
+[   68.870715] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   68.870715] CR2: 00007fdeb17dd1d6 CR3: 00000001cc2d2002 CR4: 00000000003606e0
+[   68.870715] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   68.870715] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   68.870715] Call Trace:
+[   68.870715]  ? sched_clock_cpu+0xf5/0x110
+[   68.870715]  ? __alloc_pages_slowpath.constprop.0+0x17a0/0x17a0
+[   68.870715]  ? match_held_lock+0x2e/0x240
+[   68.870715]  ? policy_nodemask+0x1a/0xa0
+[   68.870715]  ? policy_node+0x56/0x60
+[   68.870715]  kmalloc_order+0x25/0xc0
+[   68.870715]  kmalloc_order_trace+0x1d/0x140
+[   68.870715]  kmemdup+0x1a/0x40
+[   68.870715]  ima_queue_data+0x61/0x370
+[   68.870715]  ima_measure_lsm_data+0x32/0x60
+[   68.870715]  selinux_measure_state+0x2b8/0x2bd
+[   68.870715]  ? selinux_event_name+0xe0/0xe0
+[   68.870715]  ? rcu_is_watching+0x39/0x50
+[   68.870715]  security_load_policy+0x44c/0x8e0
+[   68.870715]  ? mark_lock+0xa6/0xbd0
+[   68.870715]  ? security_change_sid+0x90/0x90
+[   68.870715]  ? mark_held_locks+0x3e/0xa0
+[   68.870715]  ? lockdep_hardirqs_on_prepare+0x100/0x260
+[   68.870715]  ? asm_exc_page_fault+0x1e/0x30
+[   68.870715]  ? lockdep_hardirqs_on+0xc5/0x1b0
+[   68.870715]  ? asm_exc_page_fault+0x1e/0x30
+[   68.870715]  ? copy_user_enhanced_fast_string+0xe/0x30
+[   68.870715]  sel_write_load+0x157/0x260
+[   68.870715]  vfs_write+0x135/0x290
+[   68.870715]  ksys_write+0xb1/0x140
+[   68.870715]  ? __ia32_sys_read+0x50/0x50
+[   68.870715]  ? lockdep_hardirqs_on_prepare+0x100/0x260
+[   68.870715]  ? do_syscall_64+0x12/0xb0
+[   68.870715]  do_syscall_64+0x52/0xb0
+[   68.870715]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   68.870715] RIP: 0033:0x7fdeb2539497
+[   68.870715] Code: Bad RIP value.
+[   68.870715] RSP: 002b:00007fff6352b308 EFLAGS: 00000246 ORIG_RAX:
+0000000000000001
+[   68.870715] RAX: ffffffffffffffda RBX: 0000000000000020 RCX: 00007fdeb2539497
+[   68.870715] RDX: 00000000007eef6a RSI: 00007fdeb0de1000 RDI: 0000000000000004
+[   68.870715] RBP: 0000000000000004 R08: 00007fdeb25d0040 R09: 00007fff6352b1a0
+[   68.870715] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdeb0de1000
+[   68.870715] R13: 00000000007eef6a R14: 000000000000000f R15: 0000000000000003
+[   68.870715] irq event stamp: 23486085
+[   68.870715] hardirqs last  enabled at (23486085):
+[<ffffffffaa419406>] _raw_spin_unlock_irqrestore+0x46/0x60
+[   68.870715] hardirqs last disabled at (23486084):
+[<ffffffffaa419443>] _raw_spin_lock_irqsave+0x23/0x90
+[   68.870715] softirqs last  enabled at (23486074):
+[<ffffffffaa8004f3>] __do_softirq+0x4f3/0x662
+[   68.870715] softirqs last disabled at (23486067):
+[<ffffffffaa601072>] asm_call_on_stack+0x12/0x20
+[   68.870715] ---[ end trace fb02740ff6f4d0cd ]---
