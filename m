@@ -2,72 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E5D23AC74
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 20:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A17023AC8D
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 20:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728727AbgHCSgf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Aug 2020 14:36:35 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:34356 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgHCSgf (ORCPT
+        id S1728566AbgHCSmF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Aug 2020 14:42:05 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:47564 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728515AbgHCSmF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Aug 2020 14:36:35 -0400
-Received: from [192.168.254.32] (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5A65A20B4908;
-        Mon,  3 Aug 2020 11:36:34 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5A65A20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596479794;
-        bh=k+NMDSjwm5TFPTN2F24vsuQ9bd+RBG4+Qztk9DA9N5w=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=DNQfd/jCHwvRYMF2gK893vUrxekiycxCw0OhCzNbUMcGiKSE03vK/bnQsLmcTSru/
-         CtasfSm4QG8N9N4kZy69f3Os63Oj8jZa3a7vBD8/vw/IvmURd5dLVfTDYQE1RJ5X5C
-         mMYCQph3slcm10L5a4Kvnyc+0DO+POBFk3obO0wY=
-Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
-References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
- <3b916198-3a98-bd19-9a1c-f2d8d44febe8@linux.microsoft.com>
- <CALCETrUJ2hBmJujyCtEqx4=pknRvjvi1-Gj9wfRcMMzejjKQsQ@mail.gmail.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <dbc3bdcf-170c-4ffd-0efc-69495c8df11e@linux.microsoft.com>
-Date:   Mon, 3 Aug 2020 13:36:33 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 3 Aug 2020 14:42:05 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 099BB72CCE9;
+        Mon,  3 Aug 2020 21:42:03 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id E5C214A4AE7;
+        Mon,  3 Aug 2020 21:42:02 +0300 (MSK)
+Date:   Mon, 3 Aug 2020 21:42:02 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Petr Vorel <pvorel@suse.cz>, linux-integrity@vger.kernel.org,
+        Bruno Meneguele <bmeneg@redhat.com>
+Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
+ engine
+Message-ID: <20200803184202.zosc6gs3h2jpjwgr@altlinux.org>
+References: <20200731182408.696931-1-zohar@linux.ibm.com>
+ <20200731182408.696931-6-zohar@linux.ibm.com>
+ <20200731185633.kqgcz4dwfa4ruyld@altlinux.org>
+ <20200731201808.GA27841@dell5510>
+ <20200731202638.x5mnkz7hcpgbveu2@altlinux.org>
+ <20200731204044.GC27841@dell5510>
+ <20200731210653.p5m4efy52melqwgs@altlinux.org>
+ <01efbe7c9a9cc9624785bcc9085866d8c0f4f4d3.camel@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <CALCETrUJ2hBmJujyCtEqx4=pknRvjvi1-Gj9wfRcMMzejjKQsQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <01efbe7c9a9cc9624785bcc9085866d8c0f4f4d3.camel@linux.ibm.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Mimi,
 
+On Mon, Aug 03, 2020 at 01:26:19PM -0400, Mimi Zohar wrote:
+> On Sat, 2020-08-01 at 00:06 +0300, Vitaly Chikunov wrote:
+> > On Fri, Jul 31, 2020 at 10:40:44PM +0200, Petr Vorel wrote:
+> > - Or even better, Bionic (which is supported by Travis) should have
+> >   gost-engine already in the libengine-gost-openssl1.1 package.
+> > 
+> >   In that case `.travis.yml` should have `dist: bionic`.
+> >     https://docs.travis-ci.com/user/reference/bionic/
+> 
+> Petr, Vitaly, so I should drop  "ima-evm-utils: travis: openssl gost
+> engine" and add "dist: bionic" instead?
 
-On 8/2/20 3:00 PM, Andy Lutomirski wrote:
-> I feel like trampfd is too poorly defined at this point to evaluate.
+I am not sure yet. As I remember, travis have different available ubuntu
+distros for different arches. Thus, for ppc or s490x it may not have bionic.
+It would be easier to fix install of gost-engine. It's small and will
+build quickly.
 
-Point taken. It is because I wanted to start with something small
-and specific and expand it in the future. So, I did not really describe the big
-picture - the overall vision, future work, that sort of thing. In retrospect,
-may be, I should have done that.
-
-I will take all of the input I have received so far and all of the responses
-I have given, refine the definition of trampfd and send it out. Please
-review that and let me know if anything is still missing from the
-definition.
-
-Thanks.
-
-Madhavan
+Thanks,
 
