@@ -2,139 +2,245 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BF523A92C
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 17:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5692023A93A
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 17:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbgHCPLc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Aug 2020 11:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbgHCPLc (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Aug 2020 11:11:32 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3FAC06174A;
-        Mon,  3 Aug 2020 08:11:31 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id g26so35448487qka.3;
-        Mon, 03 Aug 2020 08:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=V9lxBRsOstdXlZkICHBWAGNuwpXB0sWYaxMGJTYpWoI=;
-        b=SW5VZrYNoWIOMx7PSamySgiGwnjoGxhPpOBrUsVR8GSeNi9vcCEI4YFBbMOsPjbnY7
-         0l66Z3h6idmvMlbRksuZkShTuYYzS64viJwKaFEVjB4N9vn2UwSczOxOxIzxNhoM/XCx
-         m1AIbcnPM8NEu7D0d4Ns5LU9yus8/owF8uAL4vSPl2Kg6mOyoA1GeI2ZDkjVRwElyEDT
-         HblOYYY2vnIjSVVg3ogI7ISGhnoDWi4tWxDCrGtlAJOsBP74sd9IUGXM1KZ94GPptX2U
-         U6CpsT0dodTltrHlv55iZVuIYixAWSfdQTnN/nHusIUdh+zXJaHe4Sv3Ganyh7WJ2uJS
-         F9dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=V9lxBRsOstdXlZkICHBWAGNuwpXB0sWYaxMGJTYpWoI=;
-        b=SlTpLqLXhUIubeM2KkH4BjPkBkJ572AwBjj0gfkPd7g9JHp+QUllZ+o8PVMlAmsdn/
-         pZyYLXkp24J0sQzcJ5swKZ4SbnBAAv4Dh4Rjiq+vdh0pNxzQgmJe+A/sWlEQCRuHrkEh
-         V6uahCp72HlfszFJKr9I19/vhSM0axFXNkQ/Nd+fyzW+mTXaXxVJx5o9xw1R42acde/q
-         NCIdCRjUJYM6H41sdzcHonWETKqSDk7rivbRlJe4Rg//Ybnj8BOx9ysQyX2gBeAXyaO2
-         MqkJhx+865KbOlm3w/4kKbDFd1GUu1CsoEtFAK7uBw0v7lIqCT8Q3yozOrcXbjpfHF4x
-         Nz4w==
-X-Gm-Message-State: AOAM531HV5YFSV1UzE+pd+M7Ns6zoc1IkVPl9P5hTAIlt48+ns8YtfUr
-        WgtX6Py1UUeFcszoLadGt/IsFnbEqrU=
-X-Google-Smtp-Source: ABdhPJxL1iKL011VE6qW3zK7vahf9MdK2ozbhfkg0ZZNn6ivaMvrFFJUWH7bu2moOX6zdffQ/UNW9A==
-X-Received: by 2002:a05:620a:1325:: with SMTP id p5mr17017968qkj.357.1596467488193;
-        Mon, 03 Aug 2020 08:11:28 -0700 (PDT)
-Received: from [192.168.1.190] (pool-96-244-118-111.bltmmd.fios.verizon.net. [96.244.118.111])
-        by smtp.gmail.com with ESMTPSA id 65sm18143082qkn.103.2020.08.03.08.11.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Aug 2020 08:11:26 -0700 (PDT)
-Subject: Re: [PATCH v5 3/4] LSM: Define SELinux function to measure state and
- policy
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        zohar@linux.ibm.com, casey@schaufler-ca.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200730034724.3298-1-nramas@linux.microsoft.com>
- <20200730034724.3298-4-nramas@linux.microsoft.com>
-From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-Message-ID: <dfd6f9c8-d62a-d278-9b0e-6b1f5ad03d3e@gmail.com>
-Date:   Mon, 3 Aug 2020 11:11:24 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1725933AbgHCPP5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Aug 2020 11:15:57 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2559 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727928AbgHCPP5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 3 Aug 2020 11:15:57 -0400
+Received: from lhreml721-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id B0F94AD80610FEEC076B;
+        Mon,  3 Aug 2020 16:15:54 +0100 (IST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ lhreml721-chm.china.huawei.com (10.201.108.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Mon, 3 Aug 2020 16:15:54 +0100
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
+ by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Mon, 3 Aug 2020 17:15:53 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>
+CC:     <linux-integrity@vger.kernel.org>, <silviu.vlasceanu@huawei.com>
+Subject: [RFC][PATCH 0/3] ima: Digest Lists extension
+Date:   Mon, 3 Aug 2020 17:13:10 +0200
+Message-ID: <20200803151313.17510-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.27.GIT
 MIME-Version: 1.0
-In-Reply-To: <20200730034724.3298-4-nramas@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.65.160]
+X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/29/20 11:47 PM, Lakshmi Ramasubramanian wrote:
+Hi everyone
 
-> SELinux configuration and policy are some of the critical data for this
-> security module that needs to be measured. This measurement can be used
-> by an attestation service, for instance, to verify if the configuration
-> and policies have been setup correctly and that they haven't been tampered
-> with at runtime.
->
-> Measure SELinux configuration, policy capabilities settings, and the
-> loaded policy by calling the IMA hooks ima_measure_lsm_state() and
-> ima_measure_lsm_policy() respectively.
->
-> Sample measurement of SELinux state and hash of the policy:
->
-> 10 e32e...5ac3 ima-buf sha256:86e8...4594 selinux-state-1595389364:287899386 696e697469616c697a65643d313b656e61626c65643d313b656e666f7263696e673d303b636865636b72657170726f743d313b6e6574776f726b5f706565725f636f6e74726f6c733d313b6f70656e5f7065726d733d313b657874656e6465645f736f636b65745f636c6173733d313b616c776179735f636865636b5f6e6574776f726b3d303b6367726f75705f7365636c6162656c3d313b6e6e705f6e6f737569645f7472616e736974696f6e3d313b67656e66735f7365636c6162656c5f73796d6c696e6b733d303
-> 10 f4a7...9408 ima-ng sha256:8d1d...1834 selinux-policy-hash-1595389353:863934271
->
-> To verify the measurement check the following:
->
-> Execute the following command to extract the measured data
-> from the IMA log for SELinux configuration (selinux-state).
->
->    grep -m 1 "selinux-state" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | cut -d' ' -f 6 | xxd -r -p
->
-> The output should be the list of key-value pairs. For example,
->   initialized=1;enabled=1;enforcing=0;checkreqprot=1;network_peer_controls=1;open_perms=1;extended_socket_class=1;always_check_network=0;cgroup_seclabel=1;nnp_nosuid_transition=1;genfs_seclabel_symlinks=0;
->
-> To verify the measured data with the current SELinux state:
->
->   => enabled should be set to 1 if /sys/fs/selinux folder exists,
->      0 otherwise
->
-> For other entries, compare the integer value in the files
->   => /sys/fs/selinux/enforce
->   => /sys/fs/selinux/checkreqprot
-> And, each of the policy capabilities files under
->   => /sys/fs/selinux/policy_capabilities
->
-> For selinux-policy-hash, the hash of SELinux policy is included
-> in the IMA log entry.
->
-> To verify the measured data with the current SELinux policy run
-> the following commands and verify the output hash values match.
->
->    sha256sum /sys/fs/selinux/policy | cut -d' ' -f 1
->
->    grep -m 1 "selinux-policy-hash" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | cut -d' ' -f 4
->
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-> Reported-by: kernel test robot <lkp@intel.com> # error: implicit declaration of function 'vfree'
-> Reported-by: kernel test robot <lkp@intel.com> # error: implicit declaration of function 'crypto_alloc_shash'
-> Reported-by: kernel test robot <lkp@intel.com> # sparse: symbol 'security_read_selinux_policy' was not declared. Should it be static?
+before sending the full patch set which adds support for digest lists,
+I would like to have an early review of the patches which introduce new
+behavior for measurement, appraisal and EVM, so that we can identify
+potential problems. The patches wouldn't alter existing behavior unless
+explicitly requested by the user with additional kernel options.
 
-Possibly I'm missing something but with these patches applied on top of 
-next-integrity, and the following lines added to /etc/ima/ima-policy:
 
-measure func=LSM_STATE template=ima-buf
-measure func=LSM_POLICY
+========
+Overview
+========
 
-I still don't get the selinux-state or selinux-policy-hash entries in 
-the ascii_runtime_measurements file.  No errors during loading of the 
-ima policy as far as I can see.
+Digest lists are a list of reference values for files and metadata, which
+are preloaded early in the boot process so that can be compared with
+calculated digest of files and metadata, when they are verified. If there
+is a match, and the user enabled the feature, IMA and EVM behaviors are
+modified in the following way:
 
+- Measurement: adding ima_digest_list_pcr=<PCR> will cause the creation of
+  an alternative measurement list, with the PCR specified, which includes
+  only the measurement of the digest lists and of the files for which the
+  digest has not be found among the preloaded ones. Both the standard and
+  the alternative measurement list can be created by adding '+' before PCR.
+
+- Appraisal: adding ima_appraise_digest_list=digest will grant access to
+  the files whose digest is found, until EVM is initialized. Adding
+  ima_appraise_digest_list=digest-nometadata will extend the usability of
+  digest lists also after EVM is initialized. It is the least secure
+  option, as it grants access to files without verifying metadata and would
+  require the user to trust xattr values at first use. These files can be
+  easily distinguished from others, as IMA at file close assigns to them a
+  different security.ima type. Choosing this option might be useful if the
+  only available reference values are for file content.
+
+- EVM: a new type for security.evm has been introduced to calculate the
+  metadata digest in the same way as for portable signatures and to search
+  it in the digest lists. EVM reports successful verification if metadata
+  digest is found.
+
+
+========
+Benefits
+========
+
+The main benefit of this extension is to maintain a stable PCR which can be
+used for sealing of data and keys. The PCR maintained by the extension
+changes, after the initial measurement of digest lists, only if an unknown
+file is measured, and would work as an effective way to revoke access to
+sensitive information protected by the TPM.
+
+If a TPM key is bound to the stable PCR, and that key is used to establish
+a TLS communication, remote peers would know that the system accessed
+unknown files as, after revocation, the TPM would prevent the system from
+performing the TLS protocol.
+
+On the other end, recording only unknown files means losing information
+about those that are in the digest lists. A verifier would not known
+whether or not those files have been accessed. Given that both the standard
+and the alternative measurement list can be created at the same time, one
+can use the latter for normal operation and the former for a more precise
+assessment for example due to suspicious activity.
+
+Compared to the approach of measuring signing keys, digest lists have finer
+granularity. The former represents all files signed with the measured key,
+the latter only the files in a digest list, e.g. those belonging to a
+package, container image, etc. Due to finer granularity, revocation would
+be easier. In the future, a rollback prevention mechanism will prevent
+digest lists of old package versions to be loaded again in the kernel. If
+an old file will be accessed, it will be treated like an unknown file and a
+new measurement entry will be created.
+
+Given that software updates would also change the stable PCR, both
+solutions can be combined together: measure the signing key used to verify
+digest lists, and use digest lists to decide whether files should be added
+to the measurement list. 
+
+For appraisal and metadata verification, having a signed list of many
+digests is more efficient than signing individual files, in terms of space
+required to store the signatures and computation required for verification.
+
+
+=========
+Lifecycle
+=========
+
+From the lifecycle point of view, managing digest lists is feasible and
+could be achieved without modification of existing building
+infrastructures. I created a new project in the SUSE build service:
+
+https://build.opensuse.org/project/show/home:roberto.sassu:branches:openSUSE:Leap:15.2
+
+which automatically generates digest lists every time a package is built.
+To achieve this, I modified some packages, such as rpm and
+pesign-obs-integration, and added new ones, such as digest-list-tools and
+brp-digest-list.
+
+Then, I created a new project to generate an image suitable for execution
+with KVM:
+
+https://build.opensuse.org/project/show/home:roberto.sassu:branches:openSUSE:Templates:Images:15.2
+
+This project generates an openSUSE Leap 15.2 JeOS image, which can be
+downloaded at:
+
+https://download.opensuse.org/repositories/home:/roberto.sassu:/branches:/openSUSE:/Templates:/Images:/15.2/images/
+
+As for IMA signatures, an rpm plugin is responsible to perform additional
+configuration when packages are installed. It extracts the header from the
+package and converts the PGP signature to an IMA signature, so it can be
+verified without additional modification of the kernel.
+
+
+=======
+Testing
+=======
+
+With the image, it is possible to easily evaluate the new functionality.
+The second boot menu entry should be selected to enable usage of digest
+lists for measurement and appraisal.
+
+
+1. Show measurement list with predictable PCR:
+
+# cat /sys/kernel/security/ima/ascii_runtime_measurements
+
+11 <digest> ima-sig sha256:<digest> boot_aggregate
+11 <digest> ima-sig sha256:<digest> .../0-parser_list-compact-libexec <sig>
+11 <digest> ima-sig sha256:<digest> .../0-metadata_list-compact-digest-list-tools-0.3.93-lp152.20.5.x86_64 <sig>
+11 <digest> ima-sig sha256:<digest> .../0-metadata_list-rpm-xz-5.2.3-lp152.6.1.x86_64 <sig>
+...
+
+The filename format is 0-<digest type>-<format>-<dir/package>
+
+Every file is recognized, the measurement list contains only digest lists.
+With appraisal enabled, unknown files cannot be accessed (with a patch) and
+they are not added to the measurement list.
+
+# echo test > script.sh
+# chmod +x script.sh
+# ./script.sh 
+-bash: ./script.sh: Permission denied
+
+# cat /sys/kernel/security/ima/ascii_runtime_measurements
+
+
+2. Show measurement entry creation for unknown files:
+
+Replace ima_appraise=enforce-evm with ima_appraise=log-evm in the kernel
+command line of the second boot menu entry (the -evm suffix means that
+uninitialized EVM is considered as an error).
+
+If the unknown script is executed again, this time a new measurement entry
+is created.
+
+# cat /sys/kernel/security/ima/ascii_runtime_measurements
+...
+11 <digest> ima-sig sha256:<digest> /root/script.sh
+
+
+3. Show file metadata protection
+
+Reboot the system with ima_appraise=enforce-evm in the kernel command line.
+
+A new policy option called 'metadata_immutable' has been introduced to
+ensure that only binaries with verified and immutable metadata are
+executed.
+
+# cat
+^C
+# chmod 777 /bin/cat
+# cat
+-bash: /usr/bin/cat: Permission denied
+# chmod 755 /bin/cat
+# cat
+^C
+
+
+
+Please have a look at the patches or try the image. Any feedback is very
+much appreciated.
+
+Roberto Sassu (3):
+  ima: Add support for measurement with digest lists
+  ima: Add support for appraisal with digest lists
+  evm: Add support for digest lists of metadata
+
+ .../admin-guide/kernel-parameters.txt         | 18 ++++
+ security/integrity/evm/evm_crypto.c           |  9 +-
+ security/integrity/evm/evm_main.c             | 82 +++++++++++++++++--
+ security/integrity/ima/ima.h                  | 15 ++--
+ security/integrity/ima/ima_api.c              | 42 ++++++++--
+ security/integrity/ima/ima_appraise.c         | 74 +++++++++++++++--
+ security/integrity/ima/ima_digest_list.c      | 25 ++++++
+ security/integrity/ima/ima_init.c             |  2 +-
+ security/integrity/ima/ima_main.c             | 24 +++++-
+ security/integrity/ima/ima_policy.c           |  3 +-
+ security/integrity/integrity.h                |  2 +
+ 11 files changed, 263 insertions(+), 33 deletions(-)
+
+-- 
+2.27.GIT
 
