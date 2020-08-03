@@ -2,65 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 065ED239D8F
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 04:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4777E239D9F
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 05:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbgHCCxw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 2 Aug 2020 22:53:52 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15258 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725820AbgHCCxv (ORCPT
+        id S1726534AbgHCDJM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 2 Aug 2020 23:09:12 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:26100 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725820AbgHCDJM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 2 Aug 2020 22:53:51 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0732VOxP048845;
-        Sun, 2 Aug 2020 22:53:47 -0400
+        Sun, 2 Aug 2020 23:09:12 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0733412Z142896;
+        Sun, 2 Aug 2020 23:09:08 -0400
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32p0x392cv-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32p9bn98jc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 02 Aug 2020 22:53:47 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0732VQVJ049077;
-        Sun, 2 Aug 2020 22:53:46 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32p0x392ck-1
+        Sun, 02 Aug 2020 23:09:07 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 073348lU143269;
+        Sun, 2 Aug 2020 23:09:07 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32p9bn98hs-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 02 Aug 2020 22:53:46 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0732p6QU024810;
-        Mon, 3 Aug 2020 02:53:45 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 32nyyd07xt-1
+        Sun, 02 Aug 2020 23:09:07 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07331ZxT015327;
+        Mon, 3 Aug 2020 03:09:04 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 32n017s141-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Aug 2020 02:53:45 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0732rgvw33030536
+        Mon, 03 Aug 2020 03:09:04 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 073392HS25559490
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 Aug 2020 02:53:43 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BBF954C046;
-        Mon,  3 Aug 2020 02:53:42 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C50B4C04A;
-        Mon,  3 Aug 2020 02:53:41 +0000 (GMT)
+        Mon, 3 Aug 2020 03:09:02 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 75A5942042;
+        Mon,  3 Aug 2020 03:09:02 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 395F94203F;
+        Mon,  3 Aug 2020 03:09:01 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.0.172])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  3 Aug 2020 02:53:41 +0000 (GMT)
-Message-ID: <c28c63ca748236c0db4594d2ddc2f5b63cd75528.camel@linux.ibm.com>
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Aug 2020 03:09:01 +0000 (GMT)
+Message-ID: <1157c464d49cb6297fc2f20771d73a4cf7ce6599.camel@linux.ibm.com>
 Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
  engine
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
+To:     Vitaly Chikunov <vt@altlinux.org>, Petr Vorel <pvorel@suse.cz>
 Cc:     linux-integrity@vger.kernel.org,
         Bruno Meneguele <bmeneg@redhat.com>
-Date:   Sun, 02 Aug 2020 22:53:40 -0400
-In-Reply-To: <20200731204044.GC27841@dell5510>
+Date:   Sun, 02 Aug 2020 23:09:00 -0400
+In-Reply-To: <8c9e64a3b461fb20cda761ef0fc0728a55448937.camel@linux.ibm.com>
 References: <20200731182408.696931-1-zohar@linux.ibm.com>
          <20200731182408.696931-6-zohar@linux.ibm.com>
          <20200731185633.kqgcz4dwfa4ruyld@altlinux.org>
          <20200731201808.GA27841@dell5510>
          <20200731202638.x5mnkz7hcpgbveu2@altlinux.org>
          <20200731204044.GC27841@dell5510>
+         <20200731210653.p5m4efy52melqwgs@altlinux.org>
+         <8c9e64a3b461fb20cda761ef0fc0728a55448937.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
 Mime-Version: 1.0
@@ -68,120 +70,35 @@ Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-03_01:2020-07-31,2020-08-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
- mlxlogscore=946 phishscore=0 adultscore=0 mlxscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008030012
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 bulkscore=0 impostorscore=0
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008030021
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-07-31 at 22:40 +0200, Petr Vorel wrote:
-> > Petr,
-> > On Fri, Jul 31, 2020 at 10:18:08PM +0200, Petr Vorel wrote:
-> > > > > +++ b/tests/install-gost-engine.sh
-> > > > > @@ -0,0 +1,10 @@
-> > > > > +#!/bin/sh
-> > > > > +
-> > > > > +openssl version
-> > > > > +
-> > > > > +git clone https://github.com/gost-engine/engine.git
-> > > > gost-engine master branch corresponds to openssl-3.0 which is
-> > > > probably
-> > > > not on Travis systems yet. I think branch `openssl_1_1_0`
-> > > > should be used.
-> > > >   git clone --branch openssl_1_1_0 
-> > > > https://github.com/gost-engine/engine.git
-> > > FYI: it work on current setup.
-> > > https://travis-ci.org/github/pevik/ima-evm-utils/builds/713815774
-> > I think `install-gost-engine.sh` is not executed in this line:
-> >   257 $ if [ "${SSL}" = "openssl" ]; then ./tests/install-gost-
-> > engine.sh; openssl version; fi   0.00s
+On Fri, 2020-07-31 at 18:32 -0400, Mimi Zohar wrote:
 > 
-> Good catch!
-> $ ./tests/install-gost-engine.sh
-> OpenSSL 1.1.1g  21 Apr 2020
-> fatal: destination path 'engine' already exists and is not an empty
-> directory.
-> CMake Error at
-> /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:165
-> (message):
->   Could NOT find OpenSSL, try to set the path to OpenSSL root folder
-> in the
->   system variable OPENSSL_ROOT_DIR: Found unsuitable version
-> "1.1.1g", but
->   required is at least "3.0" (found /usr/lib64/libcrypto.so, )
-> Call Stack (most recent call first):
->   /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:456
-> (_FPHSA_FAILURE_MESSAGE)
->   /usr/share/cmake/Modules/FindOpenSSL.cmake:486
-> (find_package_handle_standard_args)
->   CMakeLists.txt:11 (find_package)
+> > - Or even better, Bionic (which is supported by Travis) should have
+> >   gost-engine already in the libengine-gost-openssl1.1 package.
+> > 
+> >   In that case `.travis.yml` should have `dist: bionic`.
+> >     https://docs.travis-ci.com/user/reference/bionic/
 > 
-> -- Configuring incomplete, errors occurred!
-> See also "/home/pvorel/install/src/ima-evm-
-> utils.git/engine/CMakeFiles/CMakeOutput.log".
-> make: *** No rule to make target 'install'.  Stop.
-> 
-> And when using suggested branch openssl_1_1_0, it also fails on make
-> install
-> $ ./tests/install-gost-engine.sh
-> OpenSSL 1.1.1g  21 Apr 2020
-> Cloning into 'engine'...
-> remote: Enumerating objects: 63, done.
-> remote: Counting objects: 100% (63/63), done.
-> remote: Compressing objects: 100% (40/40), done.
-> remote: Total 2738 (delta 33), reused 32 (delta 21), pack-reused 2675
-> Receiving objects: 100% (2738/2738), 2.48 MiB | 2.09 MiB/s, done.
-> Resolving deltas: 100% (1735/1735), done.
-> -- The C compiler identification is GNU 10.1.1
-> -- Detecting C compiler ABI info
-> -- Detecting C compiler ABI info - done
-> -- Check for working C compiler: /usr/bin/cc - skipped
-> -- Detecting C compile features
-> -- Detecting C compile features - done
-> -- Found OpenSSL: /usr/lib64/libcrypto.so (found suitable version
-> "1.1.1g", minimum required is "1.1")
-> -- Check if the system is big endian
-> -- Searching 16 bit integer
-> -- Looking for sys/types.h
-> -- Looking for sys/types.h - found
-> -- Looking for stdint.h
-> -- Looking for stdint.h - found
-> -- Looking for stddef.h
-> -- Looking for stddef.h - found
-> -- Check size of unsigned short
-> -- Check size of unsigned short - done
-> -- Searching 16 bit integer - Using unsigned short
-> -- Check if the system is big endian - little endian
-> -- LITTLE_ENDIAN
-> -- Configuring done
-> -- Generating done
-> -- Build files have been written to: /home/pvorel/install/src/ima-
-> evm-utils.git/engine
-> make: *** No rule to make target 'install'.  Stop.
-> 
-> => It'd be good to fix this and add some test with SSL=openssl
-> variable.
-> But the branch would have to be updated time to time.
-> 
-> BTW do you plan to test other crypto libraries?
+> Yes, for the internal git repo I made this change.   The internal
+> travis support for bionic is different than the external
+> travis.   I'll post what I have as an RFC.
 
-Thanks, Vitaly, Petr, for catching this.  SSL isn't define yet.   The
-test should be removed.  If/when libressl is added, it would look like:
+The internal travis support on ppc defaults to using Bionic, but the
+way of specifying it is different.
 
--     - env: TSS=ibmtss
--     - env: TSS=tpm2-tss
-+     - env: TSS=ibmtss SSL=openssl
-+     - env: TSS=ibmtss SSL=libressl;
-+     - env: TSS=tpm2-tss SSL=openssl
- 
- before_install:
-+   - if [ "${SSL}" = "libressl" ]; then
-+        ./tests/install-libressl.sh;
-+     fi
++os: linux-ppc64le
+ language: C
+ addons:
+  apt:
 
 Mimi
 
