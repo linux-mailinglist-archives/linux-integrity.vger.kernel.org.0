@@ -2,97 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9EC23AB23
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 19:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8110E23AB79
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Aug 2020 19:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726878AbgHCRAH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Aug 2020 13:00:07 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:50684 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726802AbgHCRAG (ORCPT
+        id S1726878AbgHCRRK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Aug 2020 13:17:10 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22280 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728174AbgHCRRJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Aug 2020 13:00:06 -0400
-Received: from [192.168.254.32] (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 78F6120B4908;
-        Mon,  3 Aug 2020 10:00:05 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 78F6120B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596474006;
-        bh=xPQidYuoj27KLcDBCgI71AQFyVVUOYWMoSSTSHUPbW8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=aFVPc1Gu41xtINHxdFGnzfv2HBq0EGEd0iH8amloyMh8tYfeAU7clLOSMb6TuEJmU
-         hfVT4JzlCTZI9FgI54InEHWWr99xf3Egvr+DSd/z2OzTw7yIg+2Z6TOublxySEu1T5
-         rUlm/3leT/O5FXJfSA+UW2fG5vVktd6bCmKVR4as=
-Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Mark Rutland' <mark.rutland@arm.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
-References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
- <6540b4b7-3f70-adbf-c922-43886599713a@linux.microsoft.com>
- <CALCETrWnNR5v3ZCLfBVQGYK8M0jAvQMaAc9uuO05kfZuh-4d6w@mail.gmail.com>
- <46a1adef-65f0-bd5e-0b17-54856fb7e7ee@linux.microsoft.com>
- <20200731183146.GD67415@C02TD0UTHF1T.local>
- <a3068e3126a942c7a3e7ac115499deb1@AcuMS.aculab.com>
- <7fdc102e-75ea-6d91-d2a3-7fe8c91802ce@linux.microsoft.com>
- <f87f84e466a041fbabd2bba84f4592a5@AcuMS.aculab.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <b28abf39-8b62-f861-1325-aa7ce28fa6d3@linux.microsoft.com>
-Date:   Mon, 3 Aug 2020 12:00:04 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <f87f84e466a041fbabd2bba84f4592a5@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8
+        Mon, 3 Aug 2020 13:17:09 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 073H3Xmg130762;
+        Mon, 3 Aug 2020 13:16:40 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32pnn326rx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Aug 2020 13:16:40 -0400
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 073H3e6c131598;
+        Mon, 3 Aug 2020 13:16:40 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32pnn326ra-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Aug 2020 13:16:39 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 073H6frY002431;
+        Mon, 3 Aug 2020 17:16:38 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04fra.de.ibm.com with ESMTP id 32n0189f41-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Aug 2020 17:16:37 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 073HGZbV26083630
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 3 Aug 2020 17:16:35 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB0094C04A;
+        Mon,  3 Aug 2020 17:16:35 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7F3AF4C046;
+        Mon,  3 Aug 2020 17:16:34 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.52.50])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Aug 2020 17:16:34 +0000 (GMT)
+Message-ID: <bc771e16d4afd3454dea37537f759343452c6446.camel@linux.ibm.com>
+Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
+ engine
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org,
+        Bruno Meneguele <bmeneg@redhat.com>
+Date:   Mon, 03 Aug 2020 13:16:32 -0400
+In-Reply-To: <20200803164635.GB4914@dell5510>
+References: <20200731182408.696931-6-zohar@linux.ibm.com>
+         <20200731185633.kqgcz4dwfa4ruyld@altlinux.org>
+         <20200731201808.GA27841@dell5510>
+         <20200731202638.x5mnkz7hcpgbveu2@altlinux.org>
+         <20200731204044.GC27841@dell5510>
+         <20200731210653.p5m4efy52melqwgs@altlinux.org>
+         <8c9e64a3b461fb20cda761ef0fc0728a55448937.camel@linux.ibm.com>
+         <1157c464d49cb6297fc2f20771d73a4cf7ce6599.camel@linux.ibm.com>
+         <20200803130755.GA30440@dell5510>
+         <22a744e9520237907312d1f71293df0dd809805f.camel@linux.ibm.com>
+         <20200803164635.GB4914@dell5510>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-03_15:2020-08-03,2020-08-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ spamscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=999 bulkscore=0 phishscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008030123
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Mon, 2020-08-03 at 18:46 +0200, Petr Vorel wrote:
+> Hi all,
+> 
+> ...
+> > > @Mimi: As I wrote, I'd suggest moving to docker based travis. I can do it once
+> > > other issues are addressed, if this setup work for your internal travis support
+> > > as well. See examples .travis.yml [1] [2], builds: [3] [4].
+> > > Advantages are more realistic builds for distro maintainers (different libc and
+> > > libraries versions, you can test old and new distro releases, etc), but maybe
+> > > that's not what you want/need.
+> > > Disadvantage is that sometimes docker releases have temporary packaging related
+> > > issues (first build in [3]; failure in first build [4] is a bug in LTP, corner
+> > > case, which would be otherwise undiscovered a long time).
+> > Nice!  I definitely want to move to a docker based travis.   How should
+> > we move forward?   Should there be a 1.3.1 release now with just the
+> > few changes in the next branch and include the existing travis branch
+> > with changes to address Vitaly's comments?
 
+I left off the list TPM 2.0 --pcr support, but the kernel code for
+exporting the sysfs TPM 2.0 pcrs hasn't been upstreamed yet.   I guess
+we should wait for that to be upstreamed or at least queued to be
+upstreamed.
 
-On 8/3/20 11:57 AM, David Laight wrote:
-> From: Madhavan T. Venkataraman
->> Sent: 03 August 2020 17:03
->>
->> On 8/3/20 3:27 AM, David Laight wrote:
->>> From: Mark Rutland
->>>> Sent: 31 July 2020 19:32
->>> ...
->>>>> It requires PC-relative data references. I have not worked on all architectures.
->>>>> So, I need to study this. But do all ISAs support PC-relative data references?
->>>> Not all do, but pretty much any recent ISA will as it's a practical
->>>> necessity for fast position-independent code.
->>> i386 has neither PC-relative addressing nor moves from %pc.
->>> The cpu architecture knows that the sequence:
->>> 	call	1f
->>> 1:	pop	%reg
->>> is used to get the %pc value so is treated specially so that
->>> it doesn't 'trash' the return stack.
->>>
->>> So PIC code isn't too bad, but you have to use the correct
->>> sequence.
->> Is that true only for 32-bit systems only? I thought RIP-relative addressing was
->> introduced in 64-bit mode. Please confirm.
-> I said i386 not amd64 or x86-64.
+> Yes, that would work for me. Travis changes aren't related to the release
+> (it just needs to be published in git), let's give users the fixes.
 
-I am sorry. My bad.
+Ok. 
 
->
-> So yes, 64bit code has PC-relative addressing.
-> But I'm pretty sure it has no other way to get the PC itself
-> except using call - certainly nothing in the 'usual' instructions.
+> 
+> Docker based setup shouldn't take long It's all about to find the dependencies
+> for used distros (I usually keep them in travis/ directory [5] [6]) and agree on the
+> variants (which distros, how many jobs are still meaningful, which crypto and
+> TPM libraries, whether use also: clang, non-intel archs and cross-compilation).
 
-OK.
+Great!
 
-Madhavan
+Mimi
+
