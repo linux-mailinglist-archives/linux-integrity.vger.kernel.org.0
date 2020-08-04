@@ -2,56 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C2123BDA6
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Aug 2020 17:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B2D23BDBD
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Aug 2020 18:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729157AbgHDP5Q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Aug 2020 11:57:16 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:54906 "EHLO
+        id S1729328AbgHDQII (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Aug 2020 12:08:08 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:56274 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729022AbgHDP5H (ORCPT
+        with ESMTP id S1728754AbgHDQHp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Aug 2020 11:57:07 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3CE6520B4908;
-        Tue,  4 Aug 2020 08:57:06 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3CE6520B4908
+        Tue, 4 Aug 2020 12:07:45 -0400
+Received: from [10.137.106.139] (unknown [131.107.174.11])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C947F20B4908;
+        Tue,  4 Aug 2020 09:07:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C947F20B4908
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596556626;
-        bh=VpAp+gwtX80StpLhWTSeWeTMwUZ22EUYNIZ2mT0WBts=;
+        s=default; t=1596557247;
+        bh=4tc7ukCcPyol40cGNCHOnU9JsMLB2DAzg5ZehqWEL3s=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=siiuYorxFApiTutRO1Fq7FQ6URRgVvncZmVb1M/+HCPfxlM1sq1xVO/vR+KyX8BNQ
-         7JSsbMLQy5Oj0jTbSONyrTgqXXo70xkMqsXXTt+G0HS4sTYu2Hvd+zVu5oSwXNpaIY
-         DGOwjAUXj7JHYqoZw00cWBAMJFnxw5OPqArnMdvY=
-Subject: Re: [PATCH v5 3/4] LSM: Define SELinux function to measure state and
- policy
-To:     Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>, sashal@kernel.org,
-        James Morris <jmorris@namei.org>,
+        b=WaO0B9rj2UDzfKn9XUcHQWxCPmx+3QxsciSW+4tdIO3nrwRFCLUnj7n7RpzP7/MAZ
+         Nxtva1f0C43CJNOx/HLk1V8oi8EuAPmpIa6uFwb6ZspRejtdyFxKgCDTfXNobEIbyf
+         i1gXkOdBtGErAnIRoc9Z8BMv+Y/vF6VKZ0axZ1v4=
+Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement LSM
+ (IPE)
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>
+Cc:     snitzer@redhat.com, zohar@linux.ibm.com, dm-devel@redhat.com,
+        tyhicks@linux.microsoft.com, agk@redhat.com, paul@paul-moore.com,
+        mdsakib@microsoft.com, jmorris@namei.org,
+        nramas@linux.microsoft.com, serge@hallyn.com,
+        pasha.tatashin@soleen.com, jannh@google.com,
+        linux-block@vger.kernel.org, viro@zeniv.linux.org.uk,
+        axboe@kernel.dk, corbet@lwn.net, linux-kernel@vger.kernel.org,
+        eparis@redhat.com, linux-security-module@vger.kernel.org,
+        linux-audit@redhat.com, linux-fsdevel@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20200730034724.3298-1-nramas@linux.microsoft.com>
- <20200730034724.3298-4-nramas@linux.microsoft.com>
- <dfd6f9c8-d62a-d278-9b0e-6b1f5ad03d3e@gmail.com>
- <6371efa9-5ae6-05ac-c357-3fbe1a5a93d5@linux.microsoft.com>
- <CAEjxPJ789kmdDwy-6RaL7HuMFxKpQ9Hwxj9J-_-f62XDCNJUiA@mail.gmail.com>
- <f992901f-6dca-7d31-3426-5a74d36c2c8c@gmail.com>
- <d988a6d0-04e0-62f0-2705-4352b268ca55@linux.microsoft.com>
- <5c843a3d-713c-e71f-8d4f-c6e5f51422f1@gmail.com>
- <3e766eed-7a0b-afca-6139-ac43dea053d7@linux.microsoft.com>
- <0fa0b1f3-6226-c307-0f11-8b3a881a070e@gmail.com>
- <32da0a4a-252a-67d8-5dc8-173959f6ddb4@gmail.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <a66155ea-151d-cfd7-01f0-15ed6f18e26b@linux.microsoft.com>
-Date:   Tue, 4 Aug 2020 08:57:02 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        jaskarankhurana@linux.microsoft.com
+References: <20200728213614.586312-1-deven.desai@linux.microsoft.com>
+ <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>
+ <20200802143143.GB20261@amd> <1596386606.4087.20.camel@HansenPartnership.com>
+From:   Deven Bowers <deven.desai@linux.microsoft.com>
+Message-ID: <fb35a1f7-7633-a678-3f0f-17cf83032d2b@linux.microsoft.com>
+Date:   Tue, 4 Aug 2020 09:07:26 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <32da0a4a-252a-67d8-5dc8-173959f6ddb4@gmail.com>
+In-Reply-To: <1596386606.4087.20.camel@HansenPartnership.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -60,31 +56,77 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 8/4/20 8:29 AM, Stephen Smalley wrote:
 
->>> Perhaps vmalloc would be better than using kmalloc? If there are 
->>> better options for such large buffer allocation, please let me know.
+
+On 8/2/2020 9:43 AM, James Bottomley wrote:
+> On Sun, 2020-08-02 at 16:31 +0200, Pavel Machek wrote:
+>> On Sun 2020-08-02 10:03:00, Sasha Levin wrote:
+>>> On Sun, Aug 02, 2020 at 01:55:45PM +0200, Pavel Machek wrote:
+>>>> Hi!
+>>>>
+>>>>> IPE is a Linux Security Module which allows for a configurable
+>>>>> policy to enforce integrity requirements on the whole system.
+>>>>> It attempts to solve the issue of Code Integrity: that any code
+>>>>> being executed (or files being read), are identical to the
+>>>>> version that was built by a trusted source.
+>>>>
+>>>> How is that different from security/integrity/ima?
+>>>
+>>> Maybe if you would have read the cover letter all the way down to
+>>> the 5th paragraph which explains how IPE is different from IMA we
+>>> could avoided this mail exchange...
 >>
->> kvmalloc() can be used to select whichever one is most appropriate.
-> 
-> Other option would be for ima to compute and save the hash(es) of the 
-> payload and not the payload itself for later use.  I guess you won't 
-> know at that point which hash algorithm is desired?
-> 
+>> "
+>> IPE differs from other LSMs which provide integrity checking (for
+>> instance,
+>> IMA), as it has no dependency on the filesystem metadata itself. The
+>> attributes that IPE checks are deterministic properties that exist
+>> solely
+>> in the kernel. Additionally, IPE provides no additional mechanisms of
+>> verifying these files (e.g. IMA Signatures) - all of the attributes
+>> of
+>> verifying files are existing features within the kernel, such as
+>> dm-verity
+>> or fsverity.
+>> "
+>>
+>> That is not really helpful.
 
-I think IMA hash algorithm would be known at that point, but IMA policy 
-is not loaded yet (which is why I need to queue up the buffer and 
-process when policy is loaded).
+Perhaps I can explain (and re-word this paragraph) a bit better.
 
-I tried vmalloc and tested it with upto 16MB buffer (just made up a 
-SELinux policy buffer of size 16MB) - that works fine.
+As James indicates, IPE does try to close the gap of the IMA limitation
+with xattr. I honestly wasn’t familiar with the appended signatures,
+which seems fine.
 
-I will try kvmalloc().
+Regardless, this isn’t the larger benefit that IPE provides. The
+larger benefit of this is how IPE separates _mechanisms_ (properties)
+to enforce integrity requirements, from _policy_. The LSM provides
+policy, while things like dm-verity provide mechanism.
 
-Also, I fixed the issue with LSM data not measured when using the IMA 
-policy you had. Good catch.
+So to speak, IPE acts as the glue for other mechanisms to leverage a
+customizable, system-wide policy to enforce. While this initial
+patchset only onboards dm-verity, there’s also potential for MAC labels,
+fs-verity, authenticated BTRFS, dm-integrity, etc. IPE leverages
+existing systems in the kernel, while IMA uses its own.
 
-Will post the updated patches today.
+Another difference is the general coverage. IMA has some difficulties
+in covering mprotect[1], IPE doesn’t (the MAP_ANONYMOUS indicated by
+Jann in that thread would be denied as the file struct would be null,
+with IPE’s current set of supported mechanisms. mprotect would continue
+to function as expected if you change to PROT_EXEC).
 
-thanks,
-  -lakshmi
+> Perhaps the big question is: If we used the existing IMA appended
+> signature for detached signatures (effectively becoming the
+> "properties" referred to in the cover letter) and hooked IMA into
+> device mapper using additional policy terms, would that satisfy all the
+> requirements this new LSM has?
+
+Well, Mimi, what do you think? Should we integrate all the features of
+IPE into IMA, or do you think they are sufficiently different in
+architecture that it would be worth it to keep the code base in separate
+LSMs?
+
+
+[1] 
+https://lore.kernel.org/linux-integrity/1588688204.5157.5.camel@linux.ibm.com/
+
