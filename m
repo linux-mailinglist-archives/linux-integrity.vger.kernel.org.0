@@ -2,147 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C2423BE4B
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Aug 2020 18:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0476423BF33
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Aug 2020 20:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725971AbgHDQmv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Aug 2020 12:42:51 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:60954 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728678AbgHDQmg (ORCPT
+        id S1725999AbgHDSL5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Aug 2020 14:11:57 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54060 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725826AbgHDSL5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Aug 2020 12:42:36 -0400
-Received: from [192.168.1.21] (c-73-187-218-229.hsd1.pa.comcast.net [73.187.218.229])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0697B20B4908;
-        Tue,  4 Aug 2020 09:42:34 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0697B20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596559355;
-        bh=c2LVH6nQS6RYUl+dAfkdubw/XwcvmvGT2NKU9DyNOSE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=iDENLvWNZenv70hnUoZXrlCLbt029kq9WzRPh2pfG+/8GJsU6lu0L6FA4zl5VzAQv
-         Dzn7sw/Bib8LeNeRLvjj07aM91DaDpz9AKbcshwFhScQbtZZb5T2/do2uNI4n2eekd
-         Z4CmDNAoJ0OKAJDCgA9103yFK0jhXArHcMmaWoEY=
-Subject: Re: [PATCH 1/3] IMA: Update key test documentation
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     zohar@linux.ibm.com, ltp@lists.linux.it,
-        nramas@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, tyhicks@linux.microsoft.com,
-        yaneurabeya@gmail.com, zhang.jia@linux.alibaba.com
-References: <20200803184726.2416-1-t-josne@linux.microsoft.com>
- <20200803184726.2416-2-t-josne@linux.microsoft.com>
- <20200804043504.GA76360@x230>
-From:   Lachlan Sneff <t-josne@linux.microsoft.com>
-Message-ID: <1ccacc7c-392c-ad45-2806-048177953acf@linux.microsoft.com>
-Date:   Tue, 4 Aug 2020 12:42:33 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200804043504.GA76360@x230>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 4 Aug 2020 14:11:57 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 074I3Q19052181;
+        Tue, 4 Aug 2020 14:11:53 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32q9sm5v7m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Aug 2020 14:11:52 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 074I5JOG058694;
+        Tue, 4 Aug 2020 14:11:52 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32q9sm5v72-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Aug 2020 14:11:52 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 074HoMn8016363;
+        Tue, 4 Aug 2020 18:11:50 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 32n0183jeg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Aug 2020 18:11:49 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 074IBlXQ26542426
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Aug 2020 18:11:47 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0FF811C04A;
+        Tue,  4 Aug 2020 18:11:47 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C94211C05C;
+        Tue,  4 Aug 2020 18:11:46 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.44.248])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Aug 2020 18:11:45 +0000 (GMT)
+Message-ID: <e2f9d32846f5fda89b138439b6cbec2c9dcfe643.camel@linux.ibm.com>
+Subject: Re: [ima-evm-utils: PATCH v1 5/5] ima-evm-utils: travis: openssl
+ gost engine
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
+        Bruno Meneguele <bmeneg@redhat.com>
+Date:   Tue, 04 Aug 2020 14:11:44 -0400
+In-Reply-To: <20200804144554.6y3c44popmu6nha7@altlinux.org>
+References: <20200731182408.696931-1-zohar@linux.ibm.com>
+         <20200731182408.696931-6-zohar@linux.ibm.com>
+         <70b421b26c7073dcc7d9b8f210ba2900ecf2b8d3.camel@linux.ibm.com>
+         <20200804144554.6y3c44popmu6nha7@altlinux.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-04_04:2020-08-03,2020-08-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ spamscore=0 malwarescore=0 suspectscore=0 priorityscore=1501 bulkscore=0
+ impostorscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008040131
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Petr,
-Thanks for updating the readme. Should I send a new patch with
-the changes you have proposed?
+On Tue, 2020-08-04 at 17:45 +0300, Vitaly Chikunov wrote:
+> Mimi,
+> 
+> On Tue, Aug 04, 2020 at 08:05:31AM -0400, Mimi Zohar wrote:
+> > The openssl version might not have gost openssl engine support.
+> > Download from source, rebuild and install local version.
+> > 
+> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> > ---
+> >  .travis.yml                  | 10 ++++++++++
+> >  tests/install-gost-engine.sh | 10 ++++++++++
+> >  2 files changed, 20 insertions(+)
+> >  create mode 100755 tests/install-gost-engine.sh
+> > 
+> > diff --git a/.travis.yml b/.travis.yml
+> > index 11a827c02f0a..887f6bbea9b9 100644
+> > --- a/.travis.yml
+> > +++ b/.travis.yml
+> > @@ -15,6 +15,13 @@ matrix:
+> >     include:
+> >       - env: TSS=ibmtss
+> >       - env: TSS=tpm2-tss
+> > +
+> > +before_install:
+> > +   - if [ "${SSL}" = "openssl" ]; then
+> > +        ./tests/install-gost-engine.sh;
+> > +        openssl version;
+> > +     fi
+> > +
+> >  install:
+> >     - if [ "${TSS}" = "tpm2-tss" ]; then
+> >             sudo apt-get install lcov pandoc autoconf-archive liburiparser-dev;
+> > @@ -30,6 +37,9 @@ install:
+> >  script:
+> >     - export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib;
+> >     - export PATH=$PATH:/usr/local/bin;
+> > +   - if [ "${SSL}" = "openssl" ]; then
+> > +        export OPENSSL_ENGINES="$OPENSSL_ENGINES:$PWD/engines/bin";
+> 
+> Should be `export OPENSSL_ENGINES=$PWD/engines/bin` since
+> OPENSSL_ENGINES is not PATH-like variable, but just a path to engines
+> dir.
 
-Thanks,
-Lachlan
+Done, thanks.  Assuming there is nothing else, I'll release v1.3.1
+tomorrow.
 
-On 8/4/20 12:35 AM, Petr Vorel wrote:
-> Hi Lachlan,
->
->> The current documentation for the existing IMA key test was
->> left in by accident by a previous merge. It does not apply
->> to the test that is currently included in the LTP.
->> Update the documentation for the IMA key test.
-> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-> Thanks for fixing this, I propose this changes:
->
-> Fixes: d2768c84e ("IMA: Add a test to verify measurement of keys")
->
->> ---
->>   .../kernel/security/integrity/ima/README.md   | 22 +++++--------------
->>   1 file changed, 5 insertions(+), 17 deletions(-)
->> diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
->> index d4644ba39..2956ac7fd 100644
->> --- a/testcases/kernel/security/integrity/ima/README.md
->> +++ b/testcases/kernel/security/integrity/ima/README.md
->> @@ -15,27 +15,15 @@ Although a custom policy, loaded via dracut, systemd or manually from user
->>   space, may contain equivalent measurement tcb rules, detecting them would
->>   require `IMA_READ_POLICY=y` therefore ignore this option.
->> -### IMA key import test
->> -`ima_keys.sh` requires a x509 public key, by default in `/etc/keys/x509_ima.der`
->> -(defined in `CONFIG_IMA_X509_PATH` kernel config option).
->> -The key must be signed by the private key you generate. Follow these instructions:
->> -https://manpages.ubuntu.com/manpages/disco/man1/evmctl.1.html#generate%20trusted%20keys
->> -
->> -The test cannot be set-up automatically because the x509 public key must be
->> -built into the kernel and loaded onto a trusted keyring
->> -(e.g. `.builtin_trusted_keys`, `.secondary_trusted_keyring`).
->> -
->> -As well as what's required for the IMA tests, the following are also required
->> -in the kernel configuration:
->> +### IMA key test
->> +`ima_keys.sh` requires a readable IMA policy, as well as a loaded policy
->> +with `func=KEY_CHECK keyrings=...`, see example in `keycheck.policy`.
->> +
->> +Mandatory kernel configuration for IMA:
-> This "Mandatory kernel configuration for IMA:" would be in docs twice. The above
-> one (CONFIG_INTEGRITY=y, CONFIG_IMA=y) is required for all tests.
-> Take it that "### IMA key test" is header 3, but ## IMA tests
-> is header 2 (upper level).
->
->>   ```
->>   CONFIG_IMA_READ_POLICY=y
->> -CONFIG_IMA_X509_PATH="/etc/keys/x509_ima.der"
->> -CONFIG_SYSTEM_TRUSTED_KEYRING=y
->> -CONFIG_SYSTEM_TRUSTED_KEYS="/etc/keys/ima-local-ca.pem"
->>   ```
->> -Test also requires loaded policy with `func=KEY_CHECK`, see example in `keycheck.policy`.
->> -
->>   ### IMA kexec test
->>   `ima_kexec.sh` requires loaded policy which contains `measure func=KEXEC_CMDLINE`,
-> I also removed "IMA" from EVM tests header.
->
-> Kind regards,
-> Petr
->
-> diff --git testcases/kernel/security/integrity/ima/README.md testcases/kernel/security/integrity/ima/README.md
-> index 2956ac7fd..392e1e868 100644
-> --- testcases/kernel/security/integrity/ima/README.md
-> +++ testcases/kernel/security/integrity/ima/README.md
-> @@ -19,7 +19,8 @@ require `IMA_READ_POLICY=y` therefore ignore this option.
->   `ima_keys.sh` requires a readable IMA policy, as well as a loaded policy
->   with `func=KEY_CHECK keyrings=...`, see example in `keycheck.policy`.
->   
-> -Mandatory kernel configuration for IMA:
-> +As well as what's required for the IMA tests, the following are also required
-> +-in the kernel configuration:
->   ```
->   CONFIG_IMA_READ_POLICY=y
->   ```
-> @@ -38,7 +39,7 @@ To kexec a different kernel image export `IMA_KEXEC_IMAGE=<pathname>`.
->   kernel parameter) which appraises the integrity of all files owned by root and EVM setup.
->   Again, for simplicity ignore possibility to load requires rules via custom policy.
->   
-> -Mandatory kernel configuration for IMA & EVM:
-> +Mandatory kernel configuration for EVM tests:
->   ```
->   CONFIG_INTEGRITY=y
->   CONFIG_INTEGRITY_SIGNATURE=y
-> @@ -50,7 +51,7 @@ CONFIG_TRUSTED_KEYS=y
->   CONFIG_ENCRYPTED_KEYS=y
->   ```
->   
-> -Example of installing IMA + EVM on openSUSE:
-> +Example of preparing environment on for EVM on openSUSE:
->   
->   * Boot install system with `ima_policy=tcb|appraise_tcb ima_appraise=fix evm=fix` kernel parameters
->     (for IMA measurement, IMA appraisal and EVM protection)
+thanks!
+
+Mimi
 
