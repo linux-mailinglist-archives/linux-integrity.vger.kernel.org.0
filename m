@@ -2,87 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB80123BC7F
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Aug 2020 16:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D5523BC89
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Aug 2020 16:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728586AbgHDOpB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Aug 2020 10:45:01 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:35194 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725932AbgHDOpA (ORCPT
+        id S1729255AbgHDOp7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Aug 2020 10:45:59 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:58806 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728945AbgHDOp6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Aug 2020 10:45:00 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-133-GkYdxktHPX6Hq0f1q8Z5bg-1; Tue, 04 Aug 2020 15:44:55 +0100
-X-MC-Unique: GkYdxktHPX6Hq0f1q8Z5bg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 4 Aug 2020 15:44:55 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 4 Aug 2020 15:44:55 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Mark Rutland' <mark.rutland@arm.com>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-CC:     Andy Lutomirski <luto@kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "LSM List" <linux-security-module@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
-Subject: RE: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-Thread-Topic: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-Thread-Index: AQHWamb6T+e4gDrzGEmP/30MMvDTCqkoApyQgAADJ0A=
-Date:   Tue, 4 Aug 2020 14:44:55 +0000
-Message-ID: <23ded6dfcf284b15a3356c01a94029f8@AcuMS.aculab.com>
-References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
- <6540b4b7-3f70-adbf-c922-43886599713a@linux.microsoft.com>
- <CALCETrWnNR5v3ZCLfBVQGYK8M0jAvQMaAc9uuO05kfZuh-4d6w@mail.gmail.com>
- <46a1adef-65f0-bd5e-0b17-54856fb7e7ee@linux.microsoft.com>
- <20200731183146.GD67415@C02TD0UTHF1T.local>
- <86625441-80f3-2909-2f56-e18e2b60957d@linux.microsoft.com>
- <20200804135558.GA7440@C02TD0UTHF1T.local>
- <c898918d18f34fd5b004cd1549b6a99e@AcuMS.aculab.com>
-In-Reply-To: <c898918d18f34fd5b004cd1549b6a99e@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 4 Aug 2020 10:45:58 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 17FAC72CCE9;
+        Tue,  4 Aug 2020 17:45:55 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 098A14A4AEE;
+        Tue,  4 Aug 2020 17:45:55 +0300 (MSK)
+Date:   Tue, 4 Aug 2020 17:45:54 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
+        Bruno Meneguele <bmeneg@redhat.com>
+Subject: Re: [ima-evm-utils: PATCH v1 5/5] ima-evm-utils: travis: openssl
+ gost engine
+Message-ID: <20200804144554.6y3c44popmu6nha7@altlinux.org>
+References: <20200731182408.696931-1-zohar@linux.ibm.com>
+ <20200731182408.696931-6-zohar@linux.ibm.com>
+ <70b421b26c7073dcc7d9b8f210ba2900ecf2b8d3.camel@linux.ibm.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <70b421b26c7073dcc7d9b8f210ba2900ecf2b8d3.camel@linux.ibm.com>
+User-Agent: NeoMutt/20171215-106-ac61c7
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiA+ID4gSWYgeW91IGxvb2sgYXQgdGhlIGxpYmZmaSByZWZlcmVuY2UgcGF0Y2ggSSBoYXZlIGlu
-Y2x1ZGVkLCB0aGUgYXJjaGl0ZWN0dXJlDQo+ID4gPiBzcGVjaWZpYyBjaGFuZ2VzIHRvIHVzZSB0
-cmFtcGZkIGp1c3QgaW52b2x2ZSBhIHNpbmdsZSBDIGZ1bmN0aW9uIGNhbGwgdG8NCj4gPiA+IGEg
-Y29tbW9uIGNvZGUgZnVuY3Rpb24uDQo+IA0KPiBObyBpZGVhIHdoYXQgbGliZmZpIGlzLCBidXQg
-aXQgbXVzdCBzdXJlbHkgYmUgc2ltcGxlciB0bw0KPiByZXdyaXRlIGl0IHRvIGF2b2lkIG5lc3Rl
-ZCBmdW5jdGlvbiBkZWZpbml0aW9ucy4NCj4gDQo+IE9yIGZpbmQgYSBib29rIGZyb20gdGhlIDE5
-NjBzIG9uIGhvdyB0byBkbyByZWN1cnNpdmUNCj4gY2FsbHMgYW5kIG5lc3RlZCBmdW5jdGlvbnMg
-aW4gRk9SVFJBTi1JVi4NCg0KRldJVyBpdCBpcyBwcm9iYWJseSBhcyBzaW1wbGUgYXM6DQoxKSBQ
-dXQgYWxsIHRoZSAndmFyaWFibGVzJyB0aGUgbmVzdGVkIGZ1bmN0aW9uIGFjY2Vzc2VzIGludG8g
-YSBzdHJ1Y3QuDQoyKSBBZGQgYSBmaWVsZCBmb3IgdGhlIGFkZHJlc3Mgb2YgdGhlICduZXN0ZWQn
-IGZ1bmN0aW9uLg0KMykgUGFzcyB0aGUgYWRkcmVzcyBvZiB0aGUgc3RydWN0dXJlIGRvd24gaW5z
-dGVhZCBvZiB0aGUNCiAgIGFkZHJlc3Mgb2YgdGhlIGZ1bmN0aW9uLg0KDQpJZiB5b3UgYXJlbid0
-IGluIGNvbnRyb2wgb2YgdGhlIGNhbGwgc2l0ZXMgdGhlbiBhZGQgdGhlDQpzdHJ1Y3R1cmUgdG8g
-YSBsaW5rZWQgbGlzdCBvbiBhIHRocmVhZC1sb2NhbCB2YXJpYWJsZS4NCg0KCURhdmlkDQoNCi0N
-ClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBN
-aWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxl
-cykNCg==
+Mimi,
 
+On Tue, Aug 04, 2020 at 08:05:31AM -0400, Mimi Zohar wrote:
+> The openssl version might not have gost openssl engine support.
+> Download from source, rebuild and install local version.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  .travis.yml                  | 10 ++++++++++
+>  tests/install-gost-engine.sh | 10 ++++++++++
+>  2 files changed, 20 insertions(+)
+>  create mode 100755 tests/install-gost-engine.sh
+> 
+> diff --git a/.travis.yml b/.travis.yml
+> index 11a827c02f0a..887f6bbea9b9 100644
+> --- a/.travis.yml
+> +++ b/.travis.yml
+> @@ -15,6 +15,13 @@ matrix:
+>     include:
+>       - env: TSS=ibmtss
+>       - env: TSS=tpm2-tss
+> +
+> +before_install:
+> +   - if [ "${SSL}" = "openssl" ]; then
+> +        ./tests/install-gost-engine.sh;
+> +        openssl version;
+> +     fi
+> +
+>  install:
+>     - if [ "${TSS}" = "tpm2-tss" ]; then
+>             sudo apt-get install lcov pandoc autoconf-archive liburiparser-dev;
+> @@ -30,6 +37,9 @@ install:
+>  script:
+>     - export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib;
+>     - export PATH=$PATH:/usr/local/bin;
+> +   - if [ "${SSL}" = "openssl" ]; then
+> +        export OPENSSL_ENGINES="$OPENSSL_ENGINES:$PWD/engines/bin";
+
+Should be `export OPENSSL_ENGINES=$PWD/engines/bin` since
+OPENSSL_ENGINES is not PATH-like variable, but just a path to engines
+dir.
+
+Thanks,
+
+> +     fi
+>     - autoreconf -i && ./configure && make -j$(nproc) && sudo make install && VERBOSE=1 make check;
+>  
+>     - tail -3 tests/ima_hash.log;
+> diff --git a/tests/install-gost-engine.sh b/tests/install-gost-engine.sh
+> new file mode 100755
+> index 000000000000..2563aa4953f7
+> --- /dev/null
+> +++ b/tests/install-gost-engine.sh
+> @@ -0,0 +1,10 @@
+> +#!/bin/sh
+> +
+> +openssl version
+> +
+> +git clone --branch openssl_1_1_0 https://github.com/gost-engine/engine.git
+> +cd engine
+> +cmake .
+> +cmake --build .
+> +# note: install target is missing, later set the environment variable.
+> +cd ..
+> -- 
+> 2.18.4
+> 
