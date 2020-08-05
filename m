@@ -2,127 +2,140 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0476423BF33
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Aug 2020 20:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F87523C2AE
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Aug 2020 02:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbgHDSL5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Aug 2020 14:11:57 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54060 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725826AbgHDSL5 (ORCPT
+        id S1726515AbgHEAnh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Aug 2020 20:43:37 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:38356 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726166AbgHEAnh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Aug 2020 14:11:57 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 074I3Q19052181;
-        Tue, 4 Aug 2020 14:11:53 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32q9sm5v7m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Aug 2020 14:11:52 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 074I5JOG058694;
-        Tue, 4 Aug 2020 14:11:52 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32q9sm5v72-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Aug 2020 14:11:52 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 074HoMn8016363;
-        Tue, 4 Aug 2020 18:11:50 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 32n0183jeg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Aug 2020 18:11:49 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 074IBlXQ26542426
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Aug 2020 18:11:47 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A0FF811C04A;
-        Tue,  4 Aug 2020 18:11:47 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C94211C05C;
-        Tue,  4 Aug 2020 18:11:46 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.44.248])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Aug 2020 18:11:45 +0000 (GMT)
-Message-ID: <e2f9d32846f5fda89b138439b6cbec2c9dcfe643.camel@linux.ibm.com>
-Subject: Re: [ima-evm-utils: PATCH v1 5/5] ima-evm-utils: travis: openssl
- gost engine
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
-        Bruno Meneguele <bmeneg@redhat.com>
-Date:   Tue, 04 Aug 2020 14:11:44 -0400
-In-Reply-To: <20200804144554.6y3c44popmu6nha7@altlinux.org>
-References: <20200731182408.696931-1-zohar@linux.ibm.com>
-         <20200731182408.696931-6-zohar@linux.ibm.com>
-         <70b421b26c7073dcc7d9b8f210ba2900ecf2b8d3.camel@linux.ibm.com>
-         <20200804144554.6y3c44popmu6nha7@altlinux.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-04_04:2020-08-03,2020-08-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- spamscore=0 malwarescore=0 suspectscore=0 priorityscore=1501 bulkscore=0
- impostorscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008040131
+        Tue, 4 Aug 2020 20:43:37 -0400
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A3C9E20B4908;
+        Tue,  4 Aug 2020 17:43:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A3C9E20B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1596588215;
+        bh=witi/8JgEwCGp4a82OugmSroOHn6fU6ZrDmuPHmc6HA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mbl18OTNOVFV4KGyTveIpOvWT76NAPgnoQTp+HNsvL+V1Wh93+uDm/iPpGQQx4MOP
+         mvnPqk3lk3OLjyRIS86q00dUrKxDoFOJeS4pkvu5Ai18R5SgpHZCWwhZbg9hotxR2x
+         raeuw5fP19jFqOUzgBbpWlpWXXCY0ibLeoVokZ5w=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/4] LSM: Measure security module data
+Date:   Tue,  4 Aug 2020 17:43:27 -0700
+Message-Id: <20200805004331.20652-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-08-04 at 17:45 +0300, Vitaly Chikunov wrote:
-> Mimi,
-> 
-> On Tue, Aug 04, 2020 at 08:05:31AM -0400, Mimi Zohar wrote:
-> > The openssl version might not have gost openssl engine support.
-> > Download from source, rebuild and install local version.
-> > 
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >  .travis.yml                  | 10 ++++++++++
-> >  tests/install-gost-engine.sh | 10 ++++++++++
-> >  2 files changed, 20 insertions(+)
-> >  create mode 100755 tests/install-gost-engine.sh
-> > 
-> > diff --git a/.travis.yml b/.travis.yml
-> > index 11a827c02f0a..887f6bbea9b9 100644
-> > --- a/.travis.yml
-> > +++ b/.travis.yml
-> > @@ -15,6 +15,13 @@ matrix:
-> >     include:
-> >       - env: TSS=ibmtss
-> >       - env: TSS=tpm2-tss
-> > +
-> > +before_install:
-> > +   - if [ "${SSL}" = "openssl" ]; then
-> > +        ./tests/install-gost-engine.sh;
-> > +        openssl version;
-> > +     fi
-> > +
-> >  install:
-> >     - if [ "${TSS}" = "tpm2-tss" ]; then
-> >             sudo apt-get install lcov pandoc autoconf-archive liburiparser-dev;
-> > @@ -30,6 +37,9 @@ install:
-> >  script:
-> >     - export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib;
-> >     - export PATH=$PATH:/usr/local/bin;
-> > +   - if [ "${SSL}" = "openssl" ]; then
-> > +        export OPENSSL_ENGINES="$OPENSSL_ENGINES:$PWD/engines/bin";
-> 
-> Should be `export OPENSSL_ENGINES=$PWD/engines/bin` since
-> OPENSSL_ENGINES is not PATH-like variable, but just a path to engines
-> dir.
+Critical data structures of security modules are currently not measured.
+Therefore an attestation service, for instance, would not be able to
+attest whether the security modules are always operating with the policies
+and configuration that the system administrator had setup. The policies
+and configuration for the security modules could be tampered with by
+malware by exploiting kernel vulnerabilities or modified through some
+inadvertent actions on the system. Measuring such critical data would
+enable an attestation service to better assess the state of the system.
 
-Done, thanks.  Assuming there is nothing else, I'll release v1.3.1
-tomorrow.
+IMA subsystem measures system files, command line arguments passed to
+kexec, boot aggregate, keys, etc. It can be used to measure critical
+data structures of security modules as well.
 
-thanks!
+This change aims to address measuring critical data structures
+of security modules when they are initialized and when they are
+updated at runtime.
 
-Mimi
+This series is based on commit 3db0d0c276a7 ("integrity: remove
+redundant initialization of variable ret") in next-integrity
+
+Change log:
+
+  v6:
+      => Use kvmalloc for payload data for early boot data measurement
+         since payload size may exceed the limit supported by kmalloc.
+      => Fixed IMA policy rule match error when checking for IMA hook
+         func LSM_STATE and LSM_POLICY.
+      => Enable early boot data measurement and IMA hook func
+         LSM_STATE and LSM_POLICY when SELinux is enabled.
+
+  v5:
+      => Append timestamp to "event name" string in the call to
+         the IMA hooks so that LSM data is always measured by IMA.
+      => Removed workqueue patch that was handling periodic checking
+         of the LSM data. This change will be introduced as a separate
+         patch set while keeping this patch set focussed on measuring
+         the LSM data on initialization and on updates at runtime.
+      => Handle early boot measurement of LSM data.
+
+  v4:
+      => Added LSM_POLICY func and IMA hook to measure LSM policy.
+      => Pass SELinux policy data, instead of the hash of the policy,
+         to the IMA hook to measure.
+      => Include "initialized" flag in SELinux measurement.
+         Also, measure SELinux state even when initialization is not yet
+         completed. But measure SELinux policy only after initialization.
+
+  v3:
+      => Loop through policy_capabilities to build the state data
+         to measure instead of hardcoding to current set of
+         policy capabilities.
+      => Added error log messages for failure conditions.
+
+  v2:
+      => Pass selinux_state struct as parameter to the function
+         that measures SELinux data.
+      => Use strings from selinux_policycap_names array for SELinux
+         state measurement.
+      => Refactored security_read_policy() to alloc kernel or user
+         virtual memory and then read the SELinux policy.
+
+  v1:
+      => Per Stephen Smalley's suggestion added selinux_state booleans
+         and hash of SELinux policy in the measured data for SELinux.
+      => Call IMA hook from the security module directly instead of
+         redirecting through the LSM.
+
+Lakshmi Ramasubramanian (4):
+  IMA: Add func to measure LSM state and policy
+  IMA: Define IMA hooks to measure LSM state and policy
+  LSM: Define SELinux function to measure state and policy
+  IMA: Handle early boot data measurement
+
+ Documentation/ABI/testing/ima_policy         |   9 +
+ include/linux/ima.h                          |  14 ++
+ security/integrity/ima/Kconfig               |   5 +-
+ security/integrity/ima/Makefile              |   2 +-
+ security/integrity/ima/ima.h                 |  45 +++--
+ security/integrity/ima/ima_api.c             |   2 +-
+ security/integrity/ima/ima_asymmetric_keys.c |   6 +-
+ security/integrity/ima/ima_init.c            |   2 +-
+ security/integrity/ima/ima_main.c            |  64 ++++++-
+ security/integrity/ima/ima_policy.c          |  36 +++-
+ security/integrity/ima/ima_queue_data.c      | 190 +++++++++++++++++++
+ security/integrity/ima/ima_queue_keys.c      | 174 -----------------
+ security/selinux/Makefile                    |   2 +
+ security/selinux/hooks.c                     |   1 +
+ security/selinux/include/security.h          |  15 ++
+ security/selinux/measure.c                   | 150 +++++++++++++++
+ security/selinux/selinuxfs.c                 |   3 +
+ security/selinux/ss/services.c               |  71 ++++++-
+ 18 files changed, 569 insertions(+), 222 deletions(-)
+ create mode 100644 security/integrity/ima/ima_queue_data.c
+ delete mode 100644 security/integrity/ima/ima_queue_keys.c
+ create mode 100644 security/selinux/measure.c
+
+-- 
+2.27.0
 
