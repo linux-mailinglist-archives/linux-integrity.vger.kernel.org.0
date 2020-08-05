@@ -2,628 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B55223C2B3
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Aug 2020 02:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FFF23C2DE
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Aug 2020 03:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbgHEAnn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Aug 2020 20:43:43 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:38396 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726233AbgHEAnj (ORCPT
+        id S1726762AbgHEBEh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Aug 2020 21:04:37 -0400
+Received: from sonic314-27.consmr.mail.ne1.yahoo.com ([66.163.189.153]:39423
+        "EHLO sonic314-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726721AbgHEBEh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Aug 2020 20:43:39 -0400
-Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CA44320B4913;
-        Tue,  4 Aug 2020 17:43:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CA44320B4913
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596588217;
-        bh=e9qb3yiuuplBvrGVBCdozGy4KXNH45mvKhd+aCdT3q0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JLthUTDEWJF1nwYpSoJUDL/edI+721m0Q2hjCWzZjiyElqYl1XK25EITPzwi9gAlN
-         N9gk65trF7Qmvp9zCo1diHNwr5CNmpSLLvNSLFX1K5LMkVghwxdyXw8pfzma3hnpCD
-         uvPg0zLCpVK3SGKPJKeRc9YEraR4ysrUbvAEinIc=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com
+        Tue, 4 Aug 2020 21:04:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1596589475; bh=15yyDM3bVAWECgKz7oLx+I/ZvqZiZU4J8rThZ2JKCCs=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=r4WFgesdP5gl/Rbe38EMe5736cYNZXnOEf02AIMJOAl6q56puEMVvpxd+h20+KNNeoBRoCoMYqqrPH1TnC4d0rP8120dKGC4QTIsS0xZQZzNhT4MDHIggo9jgrYBAs3P5ghMFOABP4pCvi4xXNkSIlBENgzYfmY108RW+w0zdGfOF6x7X8g/P7vrm5lrnlROhJkxy0Ap/WJb6ERsMCAEckgECWe7qEcN9tiDxhXTvBv6ujS92jDj+VA1VVN28xO/tMrW4aQw6GR08HYzS8L0cwpu5FRj1HykZ05PUf2pcEFrWL8OHZu5cTrLjUIlI9ppsuTCxykYwadV4fPPEU47Hw==
+X-YMail-OSG: zA7gwXAVM1k8jezbi.SsnhgWqQcQ0L8EljVIEVzgzTKlnyxWgJXTMD88rtoAkyN
+ hxX8K2pKGVFRl6x06onco_or1m.dIJExyO6Rs0eS3R7E8bam9GSJGebEoOovc1JmYk_oMmSRYboi
+ 0Oo.kpgsTEcyGWaOAvVeIoLNQwhMzlwHS6oCjQ7sGb80Z1yjgQww_AL0kOZBDfzQidpj_vbtlWLh
+ pz4zeGPL8T0PK.CTMca4K9okeZoltMiZYkTvRAot3oCo5LZVikYJ7ImMfg9hvjJZ689Bj_6AulBc
+ KEI2GbQQXkcAXIdhaoGJBVEbUEYfe.E5NMTzbpsOoRMZp8CqKMAj44kTDzpvu4ydniD0XcXvpK07
+ lhV3328lNCpwwbzW1fcktjIJeUKs8QIvfn3B3vjS1pWa18lDdSyXBwfP_UOTjCxYdTeaPJ00s6Dq
+ qO17JRo5elAYuWpvxwCnWzOKrRNk7of_hHpbekTTx71EG9vz3fdHgPWWfMAOojtbEdAK2wiHDLRw
+ p0_dAbqR5_VfTQpvKrJ5kut5nHQ.J_5FZ9ZeAjRvUs2hAoGS36NU87miFlnHbrq3ryjwoK3TUixu
+ or806SAR95qOP3HsH38iTJeKEhoEx7rsLmi2Ek8_BB1Ul4Tz4KyKXq7QKOMLjChH8j3VjgfGgWoe
+ JJlTuXO0N3jziK73PZGqb7duirK64CQBfGtPoikLMRyF47ki7iFenv7gkUdutabp0guUq7kppcFj
+ zahHSeqUaIO3YEWaDbhJYnG8.QlVtqg1NBYxWMZJTvfUZEB93M8GoHmZxep1e0e6ghfBMv26k3Gn
+ jAr8gtL3aoyVYrzoc01W1oazWGOH_OHn4cntu3_NQjrdFacHcPaWVSCigFtvFVGPDnIOHCsPaNyS
+ tKaORpP4c3a9JzEwOXmKq31ugsW5Rk4Wr_AWcl5lJXxZ5GCAtjsfaC6ATJoev.Y8PwyqUZ7wm8l1
+ 0L.pCU1aL36c51pbuskKO3F6ejHn_Gln9.PI_M2m9wYK_iV8XF3srPIeTgAzXiEjpExmBU9zJzXw
+ 8BxYSgsqIT9DTYaJHGUOEp.AQHIkyP3oc29KnwUTQLkYrElTtgD2YPPwq9LcL2aB0Uu9gj4a8kly
+ Cdzs3eXmXI4x0lcPm_j1r0H7Mr40BD8uy7TzCZoLdXpqlQoLnIbGY4RWgKncOa9urFrD8xfoa6T8
+ COcX32qRUDMtXdcTHAqcunJ825yiwe77Zd9NhekhZFoNfTyvd8Gl1RTghPaSeZVZ7JDmsbe6R5Rd
+ OIruT99L5t3xpIXim1cfm9p7snp9p79vmh.0cDDEVhgD9323lSa_ZMwTsdG1mbcnSf7KUgjwaIoI
+ Bx9K8ag1ybsFnaPtGA217CyJByrwirXFmU5_k8eyDNGb2D_LV4_h25wYw8SsejBKD
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Wed, 5 Aug 2020 01:04:35 +0000
+Received: by smtp428.mail.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 7f4333369d465d186f6d9a97b53e0a06;
+          Wed, 05 Aug 2020 01:04:31 +0000 (UTC)
+Subject: Re: [PATCH v6 0/4] LSM: Measure security module data
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        zohar@linux.ibm.com, stephen.smalley.work@gmail.com
 Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 4/4] IMA: Handle early boot data measurement
-Date:   Tue,  4 Aug 2020 17:43:31 -0700
-Message-Id: <20200805004331.20652-5-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200805004331.20652-1-nramas@linux.microsoft.com>
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
 References: <20200805004331.20652-1-nramas@linux.microsoft.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Message-ID: <f3971f35-309d-c3e5-9126-69add7ad4c11@schaufler-ca.com>
+Date:   Tue, 4 Aug 2020 18:04:30 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
+In-Reply-To: <20200805004331.20652-1-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Mailer: WebService/1.1.16436 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/11.0.7)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The current implementation of early boot measurement in
-the IMA subsystem is very specific to asymmetric keys. It does not
-handle measurement of other data such as Linux Security Module (LSM)
-data. Since most security modules are initialized very early in
-the boot cycle, data provided by those modules are not measured
-by IMA. Any other subsystem that initializes early in the boot cycle
-and needs IMA to measure their data would suffer from the same issue.
+On 8/4/2020 5:43 PM, Lakshmi Ramasubramanian wrote:
+> Critical data structures of security modules are currently not measured.
+> Therefore an attestation service, for instance, would not be able to
+> attest whether the security modules are always operating with the policies
+> and configuration that the system administrator had setup. The policies
+> and configuration for the security modules could be tampered with by
+> malware by exploiting kernel vulnerabilities or modified through some
+> inadvertent actions on the system. Measuring such critical data would
+> enable an attestation service to better assess the state of the system.
 
-Update the early boot key measurement to handle any early boot data.
-Change the kernel configuration CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS to
-CONFIG_IMA_QUEUE_EARLY_BOOT_DATA so it can be used for enabling
-early boot data measurement. Change this new configuration to support
-SECURITY_SELINUX subsystem in addition to KEYS subsystem, which is
-currently supported. This can be extended to include more subsystems
-in the future by updating this kernel configuration.
+I still wonder why you're calling this an LSM change/feature when
+all the change is in IMA and SELinux. You're not putting anything
+into the LSM infrastructure, not are you using the LSM infrastructure
+to achieve your ends. Sure, you *could* support other security modules
+using this scheme, but you have a configuration dependency on
+SELinux, so that's at best going to be messy. If you want this to
+be an LSM "feature" you need to use the LSM hooking mechanism.
 
-Update LSM hooks namely ima_measure_lsm_state() and ima_measure_lsm_policy
-to utilize early boot measurement support.
-
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
----
- security/integrity/ima/Kconfig               |   5 +-
- security/integrity/ima/Makefile              |   2 +-
- security/integrity/ima/ima.h                 |  37 ++--
- security/integrity/ima/ima_asymmetric_keys.c |   6 +-
- security/integrity/ima/ima_init.c            |   2 +-
- security/integrity/ima/ima_main.c            |  22 ++-
- security/integrity/ima/ima_policy.c          |   2 +-
- security/integrity/ima/ima_queue_data.c      | 190 +++++++++++++++++++
- security/integrity/ima/ima_queue_keys.c      | 174 -----------------
- 9 files changed, 238 insertions(+), 202 deletions(-)
- create mode 100644 security/integrity/ima/ima_queue_data.c
- delete mode 100644 security/integrity/ima/ima_queue_keys.c
-
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 080c53545ff0..e4fb1761d64a 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -322,10 +322,9 @@ config IMA_MEASURE_ASYMMETRIC_KEYS
- 	depends on ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
- 	default y
- 
--config IMA_QUEUE_EARLY_BOOT_KEYS
-+config IMA_QUEUE_EARLY_BOOT_DATA
- 	bool
--	depends on IMA_MEASURE_ASYMMETRIC_KEYS
--	depends on SYSTEM_TRUSTED_KEYRING
-+	depends on SECURITY_SELINUX || (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
- 	default y
- 
- config IMA_SECURE_AND_OR_TRUSTED_BOOT
-diff --git a/security/integrity/ima/Makefile b/security/integrity/ima/Makefile
-index 67dabca670e2..cbbbc9848d2f 100644
---- a/security/integrity/ima/Makefile
-+++ b/security/integrity/ima/Makefile
-@@ -13,4 +13,4 @@ ima-$(CONFIG_IMA_APPRAISE_MODSIG) += ima_modsig.o
- ima-$(CONFIG_HAVE_IMA_KEXEC) += ima_kexec.o
- ima-$(CONFIG_IMA_BLACKLIST_KEYRING) += ima_mok.o
- ima-$(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) += ima_asymmetric_keys.o
--ima-$(CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS) += ima_queue_keys.o
-+ima-$(CONFIG_IMA_QUEUE_EARLY_BOOT_DATA) += ima_queue_data.o
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 8ed9f5e1dd40..ebe4d9bb2f2b 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -229,29 +229,34 @@ extern const char *const func_tokens[];
- 
- struct modsig;
- 
--#ifdef CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS
-+#ifdef CONFIG_IMA_QUEUE_EARLY_BOOT_DATA
- /*
-- * To track keys that need to be measured.
-+ * To track data that needs to be measured.
-  */
--struct ima_key_entry {
-+struct ima_data_entry {
- 	struct list_head list;
- 	void *payload;
- 	size_t payload_len;
--	char *keyring_name;
-+	const char *event_name;
-+	const char *event_data;
-+	enum ima_hooks func;
- };
--void ima_init_key_queue(void);
--bool ima_should_queue_key(void);
--bool ima_queue_key(struct key *keyring, const void *payload,
--		   size_t payload_len);
--void ima_process_queued_keys(void);
-+void ima_init_data_queue(void);
-+bool ima_should_queue_data(void);
-+bool ima_queue_data(const char *event_name, const void *payload,
-+		    size_t payload_len, const char *event_data,
-+		    enum ima_hooks func);
-+void ima_process_queued_data(void);
- #else
--static inline void ima_init_key_queue(void) {}
--static inline bool ima_should_queue_key(void) { return false; }
--static inline bool ima_queue_key(struct key *keyring,
--				 const void *payload,
--				 size_t payload_len) { return false; }
--static inline void ima_process_queued_keys(void) {}
--#endif /* CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS */
-+static inline void ima_init_data_queue(void) {}
-+static inline bool ima_should_queue_data(void) { return false; }
-+static inline bool ima_queue_data(const char *event_name,
-+				  const void *payload,
-+				  size_t payload_len,
-+				  const char *event_data,
-+				  enum ima_hooks func) { return false; }
-+static inline void ima_process_queued_data(void) {}
-+#endif /* CONFIG_IMA_QUEUE_EARLY_BOOT_DATA */
- 
- /* LIM API function definitions */
- int ima_get_action(struct inode *inode, const struct cred *cred, u32 secid,
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-index 1c68c500c26f..8f8431f8b096 100644
---- a/security/integrity/ima/ima_asymmetric_keys.c
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -37,8 +37,10 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
- 	if (!payload || (payload_len == 0))
- 		return;
- 
--	if (ima_should_queue_key())
--		queued = ima_queue_key(keyring, payload, payload_len);
-+	if (ima_should_queue_data())
-+		queued = ima_queue_data(keyring->description, payload,
-+					payload_len, keyring->description,
-+					KEY_CHECK);
- 
- 	if (queued)
- 		return;
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 4902fe7bd570..892894bf4af3 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -145,7 +145,7 @@ int __init ima_init(void)
- 	if (rc != 0)
- 		return rc;
- 
--	ima_init_key_queue();
-+	ima_init_data_queue();
- 
- 	return rc;
- }
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 74d421e40c8f..1c4e140964df 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -846,6 +846,22 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
- 	fdput(f);
- }
- 
-+static int ima_measure_lsm_data(const char *event_name,
-+				const void *buf, int size,
-+				enum ima_hooks func)
-+{
-+	bool queued = false;
-+
-+	if (ima_should_queue_data())
-+		queued = ima_queue_data(event_name, buf, size, NULL, func);
-+
-+	if (queued)
-+		return 0;
-+
-+	return process_buffer_measurement(NULL, buf, size, event_name, func,
-+					  0, NULL);
-+}
-+
- /**
-  * ima_measure_lsm_state - measure LSM specific state
-  * @lsm_event_name: LSM event
-@@ -860,8 +876,7 @@ int ima_measure_lsm_state(const char *lsm_event_name, const void *buf,
- 	if (!lsm_event_name || !buf || !size)
- 		return -EINVAL;
- 
--	return process_buffer_measurement(NULL, buf, size, lsm_event_name,
--					  LSM_STATE, 0, NULL);
-+	return ima_measure_lsm_data(lsm_event_name, buf, size, LSM_STATE);
- }
- 
- /**
-@@ -878,8 +893,7 @@ int ima_measure_lsm_policy(const char *lsm_event_name, const void *buf,
- 	if (!lsm_event_name || !buf || !size)
- 		return -EINVAL;
- 
--	return process_buffer_measurement(NULL, buf, size, lsm_event_name,
--					  LSM_POLICY, 0, NULL);
-+	return ima_measure_lsm_data(lsm_event_name, buf, size, LSM_POLICY);
- }
- 
- static int __init init_ima(void)
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index e4de581442d5..196c427a79d1 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -837,7 +837,7 @@ void ima_update_policy(void)
- 	ima_update_policy_flag();
- 
- 	/* Custom IMA policy has been loaded */
--	ima_process_queued_keys();
-+	ima_process_queued_data();
- }
- 
- /* Keep the enumeration in sync with the policy_tokens! */
-diff --git a/security/integrity/ima/ima_queue_data.c b/security/integrity/ima/ima_queue_data.c
-new file mode 100644
-index 000000000000..93420e7670b9
---- /dev/null
-+++ b/security/integrity/ima/ima_queue_data.c
-@@ -0,0 +1,190 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2019 Microsoft Corporation
-+ *
-+ * Author: Lakshmi Ramasubramanian (nramas@linux.microsoft.com)
-+ *
-+ * File: ima_queue_data.c
-+ *       Enables deferred processing of data to be measured
-+ */
-+
-+#include <linux/mm.h>
-+#include <linux/vmalloc.h>
-+#include <linux/workqueue.h>
-+#include "ima.h"
-+
-+/*
-+ * Flag to indicate whether data can be processed
-+ * right away or should be queued for processing later.
-+ */
-+static bool ima_process_data;
-+
-+/*
-+ * To synchronize access to the list of data that need to be measured
-+ */
-+static DEFINE_MUTEX(ima_data_lock);
-+static LIST_HEAD(ima_queued_data);
-+
-+/*
-+ * If custom IMA policy is not loaded then data queued up
-+ * for measurement should be freed. This worker is used
-+ * for handling this scenario.
-+ */
-+static long ima_data_queue_timeout = 300000; /* 5 Minutes */
-+static void ima_data_handler(struct work_struct *work);
-+static DECLARE_DELAYED_WORK(ima_data_delayed_work, ima_data_handler);
-+static bool timer_expired;
-+
-+/*
-+ * This worker function frees data that may still be
-+ * queued up in case custom IMA policy was not loaded.
-+ */
-+static void ima_data_handler(struct work_struct *work)
-+{
-+	timer_expired = true;
-+	ima_process_queued_data();
-+}
-+
-+/*
-+ * This function sets up a worker to free queued data in case
-+ * custom IMA policy was never loaded.
-+ */
-+void ima_init_data_queue(void)
-+{
-+	schedule_delayed_work(&ima_data_delayed_work,
-+			      msecs_to_jiffies(ima_data_queue_timeout));
-+}
-+
-+static void ima_free_data_entry(struct ima_data_entry *entry)
-+{
-+	if (!entry)
-+		return;
-+
-+	kvfree(entry->payload);
-+	kfree(entry->event_name);
-+	kfree(entry->event_data);
-+	kfree(entry);
-+}
-+
-+static void *ima_kvmemdup(const void *src, size_t len)
-+{
-+	void *p = kvmalloc(len, GFP_KERNEL);
-+
-+	if (p)
-+		memcpy(p, src, len);
-+	return p;
-+}
-+
-+static struct ima_data_entry *ima_alloc_data_entry(const char *event_name,
-+						   const void *payload,
-+						   size_t payload_len,
-+						   const char *event_data,
-+						   enum ima_hooks func)
-+{
-+	struct ima_data_entry *entry;
-+
-+	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		goto out;
-+
-+	/*
-+	 * Payload size may exceed the limit supported by kmalloc.
-+	 * So use kvmalloc instead.
-+	 */
-+	entry->payload = ima_kvmemdup(payload, payload_len);
-+	entry->event_name = kstrdup(event_name, GFP_KERNEL);
-+	if (event_data)
-+		entry->event_data = kstrdup(event_data, GFP_KERNEL);
-+
-+	entry->payload_len = payload_len;
-+	entry->func = func;
-+
-+	if (!entry->payload || !entry->event_name ||
-+		(event_data && !entry->event_data))
-+		goto out;
-+
-+	INIT_LIST_HEAD(&entry->list);
-+	return entry;
-+
-+out:
-+	integrity_audit_message(AUDIT_INTEGRITY_PCR, NULL,
-+				event_name, func_measure_str(func),
-+				"ENOMEM", -ENOMEM, 0, -ENOMEM);
-+	ima_free_data_entry(entry);
-+	return NULL;
-+}
-+
-+bool ima_queue_data(const char *event_name, const void *payload,
-+		    size_t payload_len, const char *event_data,
-+		    enum ima_hooks func)
-+{
-+	bool queued = false;
-+	struct ima_data_entry *entry;
-+
-+	entry = ima_alloc_data_entry(event_name, payload, payload_len,
-+				     event_data, func);
-+	if (!entry)
-+		return false;
-+
-+	mutex_lock(&ima_data_lock);
-+	if (!ima_process_data) {
-+		list_add_tail(&entry->list, &ima_queued_data);
-+		queued = true;
-+	}
-+	mutex_unlock(&ima_data_lock);
-+
-+	if (!queued)
-+		ima_free_data_entry(entry);
-+
-+	return queued;
-+}
-+
-+/*
-+ * ima_process_queued_data() - process data queued for measurement
-+ *
-+ * This function sets ima_process_data to true and processes queued data.
-+ * From here on data will be processed right away (not queued).
-+ */
-+void ima_process_queued_data(void)
-+{
-+	struct ima_data_entry *entry, *tmp;
-+	bool process = false;
-+
-+	if (ima_process_data)
-+		return;
-+
-+	/*
-+	 * Since ima_process_data is set to true, any new data will be
-+	 * processed immediately and not be queued to ima_queued_data list.
-+	 * First one setting the ima_process_data flag to true will
-+	 * process the queued data.
-+	 */
-+	mutex_lock(&ima_data_lock);
-+	if (!ima_process_data) {
-+		ima_process_data = true;
-+		process = true;
-+	}
-+	mutex_unlock(&ima_data_lock);
-+
-+	if (!process)
-+		return;
-+
-+	if (!timer_expired)
-+		cancel_delayed_work_sync(&ima_data_delayed_work);
-+
-+	list_for_each_entry_safe(entry, tmp, &ima_queued_data, list) {
-+		if (!timer_expired)
-+			process_buffer_measurement(NULL, entry->payload,
-+						   entry->payload_len,
-+						   entry->event_name,
-+						   entry->func, 0,
-+						   entry->event_data);
-+		list_del(&entry->list);
-+		ima_free_data_entry(entry);
-+	}
-+}
-+
-+inline bool ima_should_queue_data(void)
-+{
-+	return !ima_process_data;
-+}
-diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
-deleted file mode 100644
-index 69a8626a35c0..000000000000
---- a/security/integrity/ima/ima_queue_keys.c
-+++ /dev/null
-@@ -1,174 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0+
--/*
-- * Copyright (C) 2019 Microsoft Corporation
-- *
-- * Author: Lakshmi Ramasubramanian (nramas@linux.microsoft.com)
-- *
-- * File: ima_queue_keys.c
-- *       Enables deferred processing of keys
-- */
--
--#include <linux/workqueue.h>
--#include <keys/asymmetric-type.h>
--#include "ima.h"
--
--/*
-- * Flag to indicate whether a key can be processed
-- * right away or should be queued for processing later.
-- */
--static bool ima_process_keys;
--
--/*
-- * To synchronize access to the list of keys that need to be measured
-- */
--static DEFINE_MUTEX(ima_keys_lock);
--static LIST_HEAD(ima_keys);
--
--/*
-- * If custom IMA policy is not loaded then keys queued up
-- * for measurement should be freed. This worker is used
-- * for handling this scenario.
-- */
--static long ima_key_queue_timeout = 300000; /* 5 Minutes */
--static void ima_keys_handler(struct work_struct *work);
--static DECLARE_DELAYED_WORK(ima_keys_delayed_work, ima_keys_handler);
--static bool timer_expired;
--
--/*
-- * This worker function frees keys that may still be
-- * queued up in case custom IMA policy was not loaded.
-- */
--static void ima_keys_handler(struct work_struct *work)
--{
--	timer_expired = true;
--	ima_process_queued_keys();
--}
--
--/*
-- * This function sets up a worker to free queued keys in case
-- * custom IMA policy was never loaded.
-- */
--void ima_init_key_queue(void)
--{
--	schedule_delayed_work(&ima_keys_delayed_work,
--			      msecs_to_jiffies(ima_key_queue_timeout));
--}
--
--static void ima_free_key_entry(struct ima_key_entry *entry)
--{
--	if (entry) {
--		kfree(entry->payload);
--		kfree(entry->keyring_name);
--		kfree(entry);
--	}
--}
--
--static struct ima_key_entry *ima_alloc_key_entry(struct key *keyring,
--						 const void *payload,
--						 size_t payload_len)
--{
--	int rc = 0;
--	const char *audit_cause = "ENOMEM";
--	struct ima_key_entry *entry;
--
--	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
--	if (entry) {
--		entry->payload = kmemdup(payload, payload_len, GFP_KERNEL);
--		entry->keyring_name = kstrdup(keyring->description,
--					      GFP_KERNEL);
--		entry->payload_len = payload_len;
--	}
--
--	if ((entry == NULL) || (entry->payload == NULL) ||
--	    (entry->keyring_name == NULL)) {
--		rc = -ENOMEM;
--		goto out;
--	}
--
--	INIT_LIST_HEAD(&entry->list);
--
--out:
--	if (rc) {
--		integrity_audit_message(AUDIT_INTEGRITY_PCR, NULL,
--					keyring->description,
--					func_measure_str(KEY_CHECK),
--					audit_cause, rc, 0, rc);
--		ima_free_key_entry(entry);
--		entry = NULL;
--	}
--
--	return entry;
--}
--
--bool ima_queue_key(struct key *keyring, const void *payload,
--		   size_t payload_len)
--{
--	bool queued = false;
--	struct ima_key_entry *entry;
--
--	entry = ima_alloc_key_entry(keyring, payload, payload_len);
--	if (!entry)
--		return false;
--
--	mutex_lock(&ima_keys_lock);
--	if (!ima_process_keys) {
--		list_add_tail(&entry->list, &ima_keys);
--		queued = true;
--	}
--	mutex_unlock(&ima_keys_lock);
--
--	if (!queued)
--		ima_free_key_entry(entry);
--
--	return queued;
--}
--
--/*
-- * ima_process_queued_keys() - process keys queued for measurement
-- *
-- * This function sets ima_process_keys to true and processes queued keys.
-- * From here on keys will be processed right away (not queued).
-- */
--void ima_process_queued_keys(void)
--{
--	struct ima_key_entry *entry, *tmp;
--	bool process = false;
--
--	if (ima_process_keys)
--		return;
--
--	/*
--	 * Since ima_process_keys is set to true, any new key will be
--	 * processed immediately and not be queued to ima_keys list.
--	 * First one setting the ima_process_keys flag to true will
--	 * process the queued keys.
--	 */
--	mutex_lock(&ima_keys_lock);
--	if (!ima_process_keys) {
--		ima_process_keys = true;
--		process = true;
--	}
--	mutex_unlock(&ima_keys_lock);
--
--	if (!process)
--		return;
--
--	if (!timer_expired)
--		cancel_delayed_work_sync(&ima_keys_delayed_work);
--
--	list_for_each_entry_safe(entry, tmp, &ima_keys, list) {
--		if (!timer_expired)
--			process_buffer_measurement(NULL, entry->payload,
--						   entry->payload_len,
--						   entry->keyring_name,
--						   KEY_CHECK, 0,
--						   entry->keyring_name);
--		list_del(&entry->list);
--		ima_free_key_entry(entry);
--	}
--}
--
--inline bool ima_should_queue_key(void)
--{
--	return !ima_process_keys;
--}
--- 
-2.27.0
+I'm not objecting to the feature. It adds value. But as you've
+implemented it it is either an IMA extension to SELinux, or an
+SELiux extension to IMA. Could AppArmor add hooks for this without
+changing the IMA code? It doesn't look like it to me.
+ 
 
