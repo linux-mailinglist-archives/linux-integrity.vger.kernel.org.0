@@ -2,75 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC6123F164
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Aug 2020 18:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DD823F17F
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Aug 2020 18:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726166AbgHGQli (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Aug 2020 12:41:38 -0400
-Received: from namei.org ([65.99.196.166]:57952 "EHLO namei.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725936AbgHGQli (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Aug 2020 12:41:38 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 077Gf5ki013063;
-        Fri, 7 Aug 2020 16:41:05 GMT
-Date:   Sat, 8 Aug 2020 02:41:05 +1000 (AEST)
-From:   James Morris <jmorris@namei.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>,
-        snitzer@redhat.com, dm-devel@redhat.com,
-        tyhicks@linux.microsoft.com, agk@redhat.com, paul@paul-moore.com,
-        corbet@lwn.net, nramas@linux.microsoft.com, serge@hallyn.com,
-        pasha.tatashin@soleen.com, jannh@google.com,
-        linux-block@vger.kernel.org, viro@zeniv.linux.org.uk,
-        axboe@kernel.dk, mdsakib@microsoft.com,
-        linux-kernel@vger.kernel.org, eparis@redhat.com,
-        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        jaskarankhurana@linux.microsoft.com
-Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement
- LSM (IPE)
-In-Reply-To: <eb7a2f5b5cd22cf9231aa0fd8fdb77c729a83428.camel@linux.ibm.com>
-Message-ID: <alpine.LRH.2.21.2008080240350.13040@namei.org>
-References: <20200728213614.586312-1-deven.desai@linux.microsoft.com>           <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>           <20200802143143.GB20261@amd>           <1596386606.4087.20.camel@HansenPartnership.com>          
- <fb35a1f7-7633-a678-3f0f-17cf83032d2b@linux.microsoft.com>         <1596639689.3457.17.camel@HansenPartnership.com>          <alpine.LRH.2.21.2008050934060.28225@namei.org>         <b08ae82102f35936427bf138085484f75532cff1.camel@linux.ibm.com>        
- <alpine.LRH.2.21.2008060949410.20084@namei.org> <eb7a2f5b5cd22cf9231aa0fd8fdb77c729a83428.camel@linux.ibm.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        id S1726722AbgHGQvP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Aug 2020 12:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725893AbgHGQvP (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 7 Aug 2020 12:51:15 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A54C061756;
+        Fri,  7 Aug 2020 09:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=6UugUgEElgv8wyP2hA9PnQaXqq5icyYCf5spyffiXKw=; b=F7lDqC3MU1GawLQXO5Pj9MQCHg
+        ncRIGejFqJlY52LxQuJbl4faqUOt0e8niTIFje/egtoaB+fjKTNejKRRyyNDuV4RaeWTF+UOmy5HO
+        32YswRnEb0LDi3XT/ovxkPQj4FlwlwVvxw1em0godFkl/Qu8McUzbIrYBxkAa2PJX94M+W4JfiOY7
+        0+hZNyJ2TnAOqJhdc1MGxNyh/ircKoGxm+Gv0JttIszmOCxPdm+rnM/NGUSDiA21p4S+CyXaHykJP
+        VufNjJJh9D2CTuDWY8+fKB7MH8+fsnjQWhF28tiYu/WtiquuWHtGsKFyIYYV7dfSoqvtE4gKNZ9zz
+        oLJ+bZTA==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k45aL-0004Ez-40; Fri, 07 Aug 2020 16:51:13 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH] security: ima: delete a repeated word in comments
+Date:   Fri,  7 Aug 2020 09:51:09 -0700
+Message-Id: <20200807165109.3811-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 6 Aug 2020, Mimi Zohar wrote:
+Drop a repeated word in comments.
+{the}
 
-> On Thu, 2020-08-06 at 09:51 +1000, James Morris wrote:
-> > On Wed, 5 Aug 2020, Mimi Zohar wrote:
-> > 
-> > > If block layer integrity was enough, there wouldn't have been a need
-> > > for fs-verity.   Even fs-verity is limited to read only filesystems,
-> > > which makes validating file integrity so much easier.  From the
-> > > beginning, we've said that fs-verity signatures should be included in
-> > > the measurement list.  (I thought someone signed on to add that support
-> > > to IMA, but have not yet seen anything.)
-> > > 
-> > > Going forward I see a lot of what we've accomplished being incorporated
-> > > into the filesystems.  When IMA will be limited to defining a system
-> > > wide policy, I'll have completed my job.
-> > 
-> > What are your thoughts on IPE being a standalone LSM? Would you prefer to 
-> > see its functionality integrated into IMA?
-> 
-> Improving the integrity subsystem would be preferred.
-> 
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: linux-integrity@vger.kernel.org
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: linux-security-module@vger.kernel.org
+---
+ security/integrity/ima/ima_policy.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Are you planning to attend Plumbers? Perhaps we could propose a BoF 
-session on this topic.
-
--- 
-James Morris
-<jmorris@namei.org>
-
+--- linux-next-20200731.orig/security/integrity/ima/ima_policy.c
++++ linux-next-20200731/security/integrity/ima/ima_policy.c
+@@ -719,7 +719,7 @@ static int __init ima_init_arch_policy(v
+  * ima_init_policy - initialize the default measure rules.
+  *
+  * ima_rules points to either the ima_default_rules or the
+- * the new ima_policy_rules.
++ * new ima_policy_rules.
+  */
+ void __init ima_init_policy(void)
+ {
