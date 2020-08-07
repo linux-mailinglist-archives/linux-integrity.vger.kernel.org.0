@@ -2,104 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AA523EC80
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Aug 2020 13:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EAC23ED4B
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Aug 2020 14:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728019AbgHGL3j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Aug 2020 07:29:39 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36720 "EHLO mx2.suse.de"
+        id S1728207AbgHGM10 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Aug 2020 08:27:26 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58096 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726798AbgHGL3j (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Aug 2020 07:29:39 -0400
+        id S1727783AbgHGM10 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 7 Aug 2020 08:27:26 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C6B0EAFCF;
-        Fri,  7 Aug 2020 11:29:55 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id A46FAAC5E;
+        Fri,  7 Aug 2020 12:27:43 +0000 (UTC)
+Date:   Fri, 7 Aug 2020 14:27:23 +0200
 From:   Petr Vorel <pvorel@suse.cz>
-To:     ltp@lists.linux.it
-Cc:     Petr Vorel <pvorel@suse.cz>,
-        Lachlan Sneff <t-josne@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, Cyril Hrubis <chrubis@suse.cz>
-Subject: [PATCH 1/1] IMA/ima_keys.sh Fix policy content check usage
-Date:   Fri,  7 Aug 2020 13:29:29 +0200
-Message-Id: <20200807112929.8984-1-pvorel@suse.cz>
-X-Mailer: git-send-email 2.28.0
+To:     Lachlan Sneff <t-josne@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, ltp@lists.linux.it,
+        nramas@linux.microsoft.com, balajib@linux.microsoft.com,
+        linux-integrity@vger.kernel.org, tyhicks@linux.microsoft.com,
+        yaneurabeya@gmail.com, zhang.jia@linux.alibaba.com
+Subject: Re: [PATCH 2/3] IMA: Refactor datafiles directory
+Message-ID: <20200807122723.GB11014@dell5510>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20200803184726.2416-1-t-josne@linux.microsoft.com>
+ <20200803184726.2416-3-t-josne@linux.microsoft.com>
+ <20200807071754.GA9748@dell5510>
+ <20200807090147.GB21400@dell5510>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200807090147.GB21400@dell5510>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-require_ima_policy_content cannot be used in subshell $() evaluation,
-because tst_brk does not quit the test. It calls cleanup for the
-subshell process and main process then continue:
+Hi Lachlan,
 
-ima_keys 1 TCONF: IMA policy does not specify 'func=KEY_CHECK'
-=> Here it's running first cleanup. umount errors are because parent
-shell process still has $PWD in directory to be unmounted:
-umount: /tmp/LTP_ima_keys.0dIVrwJKIG/mntpoint: target is busy.
-ima_keys 1 TINFO: umount(/dev/loop0) failed, try 1 ...
-ima_keys 1 TINFO: Likely gvfsd-trash is probing newly mounted  fs, kill it to speed up tests.
-umount: /tmp/LTP_ima_keys.0dIVrwJKIG/mntpoint: target is busy.
-...
-ima_keys 1 TINFO: umount(/dev/loop0) failed, try 50 ...
-ima_keys 1 TINFO: Likely gvfsd-trash is probing newly mounted  fs, kill it to speed up tests.
-ima_keys 1 TWARN: Failed to umount(/dev/loop0) after 50 retries
-tst_device.c:222: WARN: ioctl(/dev/loop0, LOOP_CLR_FD, 0) no ENXIO for too long
+> > > The IMA datafiles directory is structured so that it cannot be directly
+> > > expanded to include datafiles for tests other than `ima_policy.sh`.
 
-Usage: tst_device acquire [size [filename]]
-   or: tst_device release /path/to/device
+> > > Move the contents of the IMA datafiles directory into an IMA
+> > > datafiles/policy directory.
 
-ima_keys 1 TWARN: Failed to release device '/dev/loop0'
-rm: cannot remove '/tmp/LTP_ima_keys.0dIVrwJKIG/mntpoint': Device or resource busy
-ima_keys 1 TINFO: AppArmor enabled, this may affect test results
-ima_keys 1 TINFO: it can be disabled with TST_DISABLE_APPARMOR=1 (requires super/root)
-ima_keys 1 TINFO: loaded AppArmor profiles: none
-/opt/ltp/testcases/bin/ima_keys.sh: line 25:  6166 Terminated              sleep $sec && tst_res TBROK "test killed, timeout! If you are running on slow machine, try exporting LTP_TIMEOUT_MUL > 1" && kill -9 -$pid  (wd: ~)
+> > Why it's required? Can't you use glob for inclusion?
 
-=> Here it should quit after running cleanup, but instead continue running:
-ima_keys 1 TCONF: ima policy does not specify a keyrings to check
+> > *.policy for valid policies
+> > *.policy-invalid for invalid policies
+> > *.policy* for all policies
 
-Fixes: f20f44d72 ("IMA/ima_keys.sh: Fix policy readability check")
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
-Hi,
+> > BTW I plan to use policies for other tests than just ima_policy.sh
 
-do I miss some obvious way how to fix either the test,
-require_ima_policy_content or LTP shell API to be able to run just
-require_ima_policy_content in the previous form? (i.e. using subshell
-assigment)
+> > I don't refuse this patch, I just simply don't understand why it's required.
+
+> OK, I got that. Looking into $TST_DATAROOT is self explanatory.
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+
+> And I plan to use IMA policy as well for more tests will require some trick,
+> but that's another story.
+
+Thinking about it twice, keycheck.policy and kexec.policy should not be in
+/opt/ltp/testcases/data/ima_policy/ as they belong to the their tests
+(ima_keys.sh resp. ima_kexec.sh). I forget where are installed due "policy"
+(the name of the directory).
+
+I'll send v2 (altogether with fixes for the test) to speedup the things.
 
 Kind regards,
 Petr
-
- testcases/kernel/security/integrity/ima/tests/ima_keys.sh | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-index 3aea26056..b5c5c0542 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-@@ -16,11 +16,14 @@ TST_NEEDS_DEVICE=1
- # (450d0fd51564 - "IMA: Call workqueue functions to measure queued keys")
- test1()
- {
--	local keyrings keycheck_lines keycheck_line templates test_file="file.txt"
-+	local keyrings keycheck_lines keycheck_line templates
-+	local policy="func=KEY_CHECK"
-+	local test_file="file.txt"
- 
- 	tst_res TINFO "verifying key measurement for keyrings and templates specified in IMA policy file"
- 
--	keycheck_lines=$(require_ima_policy_content "func=KEY_CHECK" "")
-+	require_ima_policy_content $policy
-+	keycheck_lines=$(check_ima_policy_content $policy "")
- 	keycheck_line=$(echo "$keycheck_lines" | grep "keyrings" | head -n1)
- 
- 	if [ -z "$keycheck_line" ]; then
--- 
-2.28.0
-
