@@ -2,272 +2,227 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB3023F426
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Aug 2020 23:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F7423F85F
+	for <lists+linux-integrity@lfdr.de>; Sat,  8 Aug 2020 19:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725934AbgHGVMR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Aug 2020 17:12:17 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:58456 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726067AbgHGVMQ (ORCPT
+        id S1726293AbgHHRrx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 8 Aug 2020 13:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726212AbgHHRrw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Aug 2020 17:12:16 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8BF9720B4908;
-        Fri,  7 Aug 2020 14:12:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8BF9720B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1596834734;
-        bh=Sy9TTYhS/706YXpBmc/pTUl7FcVCyhKEuXK1ETFx33Q=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=oOkQ6Jc1sqXCyEpZQzZZcoGG5an/KKb5Fixj4qpgtT2NRU40pRLMvpfknRoDXSs5E
-         Jv8QQ3cdIuo/MmdG/qef0639x3OA/1EHjmsWn2E+ZxY3Hb3iY/7+V3cBfep86lO4lr
-         fpHKSgJOMFw8vCylaqCYQ6m7wrFNEMoSiqY7RSi0=
-Subject: Re: [PATCH v2 3/4] IMA: Add a test to verify measurement of
- certificate imported into a keyring
-To:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
-Cc:     Lachlan Sneff <t-josne@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-References: <20200807204652.5928-1-pvorel@suse.cz>
- <20200807204652.5928-4-pvorel@suse.cz>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <b9059e60-40da-d6ef-632e-ad958cddbb0d@linux.microsoft.com>
-Date:   Fri, 7 Aug 2020 14:12:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200807204652.5928-4-pvorel@suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Sat, 8 Aug 2020 13:47:52 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A52C061756;
+        Sat,  8 Aug 2020 10:47:52 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id l15so4411118ils.2;
+        Sat, 08 Aug 2020 10:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=iAERPz4z58eGuOuIGzzCzTvYKP+G7EsrZYPNaIwIkBM=;
+        b=P0gAuPQ47Tu14WAl0b/RnZ8e7XM1gkyf7C4ycQ3E8cmslLdc3NaUeP+dXiFtRrz/tw
+         prwwEJtevGzqTEWjf4vI39cXT2gtu7vDdjMmD64XXE61xen1gO/P5uzWTUhsAYhvnSSH
+         n3VQ0DabWJifz+ldMjW0lSq9ZP7B56sv1BSPTOTqvRHDneZGtU4fqqANw/9Hc8nMezRz
+         w5CcLd112m/n6WBgMMnOMghbhEJ3l3E3gzRyt4m1SScrD5JBzjr0kJSzFwL+2zpvvtDq
+         72oVdPWv6C75Eh8Q2xRKLhI0Dpazk07OGYNqNyCXwDvP5wzs9vQ+S/i/hMEdXoe0YLIc
+         NHUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=iAERPz4z58eGuOuIGzzCzTvYKP+G7EsrZYPNaIwIkBM=;
+        b=CUeZ3VAaMX0JH67jIK++diZ/CFgXwPEcQnJx60WCrV6YDFJOpc58hg1OAT6mLiz/Hv
+         Somi3yWm7XzWqwlhtHOXIi0asdNUO2dx+akfoZVBIXmP4FThykLrQfgDMzGABnDn3Px7
+         2kW1lfYnFHSThlnTjnY19likAGl9g9aOYMnnBDGYheyMvWRvYft5U7yQBPOuQMHYUGXQ
+         CBO/10QrrJgHXb8pQRlq41mLGjrMWbww4rgYt14lx+PD+emp/iM2pig30zdooD0v1KQV
+         4I0a/UfdosF/mKezys1p9TIlJo3zhL6KP+EzOUMPaDx70saGzmdC2chpUBZFIEv6TaUc
+         arkQ==
+X-Gm-Message-State: AOAM5309rAX1LMfzvCL10ZOkD2hdyoIpLcnybcNUZomxtw7PvXXgtvnt
+        233hA24mWOkKzyu6pTQUEac=
+X-Google-Smtp-Source: ABdhPJydDmiI01T5SSyOAkJmMCCoQ+jGkp7ojV9L+HpzqptYX/IPDvH/2YIt/u9cOo0zm++buEz1sw==
+X-Received: by 2002:a92:340d:: with SMTP id b13mr10699165ila.78.1596908871622;
+        Sat, 08 Aug 2020 10:47:51 -0700 (PDT)
+Received: from anon-dhcp-152.1015granger.net (c-68-61-232-219.hsd1.mi.comcast.net. [68.61.232.219])
+        by smtp.gmail.com with ESMTPSA id o74sm1908900ilb.40.2020.08.08.10.47.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 08 Aug 2020 10:47:50 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement LSM
+ (IPE)
+From:   Chuck Lever <chucklever@gmail.com>
+In-Reply-To: <b08ae82102f35936427bf138085484f75532cff1.camel@linux.ibm.com>
+Date:   Sat, 8 Aug 2020 13:47:48 -0400
+Cc:     Deven Bowers <deven.desai@linux.microsoft.com>,
+        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>,
+        snitzer@redhat.com, dm-devel@redhat.com,
+        tyhicks@linux.microsoft.com, agk@redhat.com,
+        Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>, nramas@linux.microsoft.com,
+        serge@hallyn.com, pasha.tatashin@soleen.com,
+        Jann Horn <jannh@google.com>, linux-block@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, mdsakib@microsoft.com,
+        open list <linux-kernel@vger.kernel.org>, eparis@redhat.com,
+        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        jaskarankhurana@linux.microsoft.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <329E8DBA-049E-4959-AFD4-9D118DEB176E@gmail.com>
+References: <20200728213614.586312-1-deven.desai@linux.microsoft.com>
+ <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>
+ <20200802143143.GB20261@amd> <1596386606.4087.20.camel@HansenPartnership.com>
+ <fb35a1f7-7633-a678-3f0f-17cf83032d2b@linux.microsoft.com>
+ <1596639689.3457.17.camel@HansenPartnership.com>
+ <alpine.LRH.2.21.2008050934060.28225@namei.org>
+ <b08ae82102f35936427bf138085484f75532cff1.camel@linux.ibm.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, James Morris <jmorris@namei.org>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+X-Mailer: Apple Mail (2.3608.80.23.2.2)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 8/7/20 1:46 PM, Petr Vorel wrote:
 
-Hi Petr,
 
-> From: Lachlan Sneff <t-josne@linux.microsoft.com>
-> 
-> The IMA subsystem supports measuring certificates that have been
-> imported into either system built-in or user-defined keyrings.
-> A test to verify measurement of a certificate imported
-> into a keyring is required.
-> 
-> Add an IMA measurement test that verifies that an x509 certificate
-> can be imported into a newly-created, user-defined keyring and measured
-> correctly by the IMA subsystem.
-> 
-> A certificate used by the test is included in the `datafiles/keys`
-> directory.
-> 
-> There can be restrictions on importing a certificate into a builtin
-> trusted keyring. For example, the `.ima` keyring requires that
-> imported certs be signed by a kernel private key in certain
-> kernel configurations. For this reason, this test defines
-> a user-defined keyring and imports a certificate into that.
-> 
-> Reviewed-by: Petr Vorel <pvorel@suse.cz>
-> Signed-off-by: Lachlan Sneff <t-josne@linux.microsoft.com>
-> [ pvorel: Added key_import_test into keycheck.policy, reword
-> instructions in README.md, LTP API related fixes ]
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> ---
-> I did various changes:
-> * fix error check in pipe command (grep $keyring_name
->    $ASCII_MEASUREMENTS ...) $? contains exit code just of last command
->    (xxd) => check for empty file.
-> * use more propriate error flags (TCONF => TFAIL, but some of them could
->    be also TBROK)
-> * tst_brk => tst_res && return in test1 (to give chance test2 to be run)
-> * add TINFO message about test
-> * remove obvious comment
+> On Aug 5, 2020, at 2:15 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+>=20
+> On Wed, 2020-08-05 at 09:59 -0700, James Morris wrote:
+>> On Wed, 5 Aug 2020, James Bottomley wrote:
+>>=20
+>>> I'll leave Mimi to answer, but really this is exactly the question =
+that
+>>> should have been asked before writing IPE.  However, since we have =
+the
+>>> cart before the horse, let me break the above down into two specific
+>>> questions.
+>>=20
+>> The question is valid and it was asked. We decided to first prototype =
+what=20
+>> we needed and then evaluate if it should be integrated with IMA. We=20=
 
-Thanks for updating the patches.
+>> discussed this plan in person with Mimi (at LSS-NA in 2019), and =
+presented=20
+>> a more mature version of IPE to LSS-NA in 2020, with the expectation =
+that=20
+>> such a discussion may come up (it did not).
+>=20
+> When we first spoke the concepts weren't fully formulated, at least to
+> me.
+>>=20
+>> These patches are still part of this process and 'RFC' status.
+>>=20
+>>>   1. Could we implement IPE in IMA (as in would extensions to IMA =
+cover
+>>>      everything).  I think the answers above indicate this is a =
+"yes".
+>>=20
+>> It could be done, if needed.
+>>=20
+>>>   2. Should we extend IMA to implement it?  This is really whether =
+from a
+>>>      usability standpoint two seperate LSMs would make sense to =
+cover the
+>>>      different use cases.
+>>=20
+>> One issue here is that IMA is fundamentally a measurement & appraisal=20=
 
-In testcases/kernel/security/integrity/ima/datafiles/ima_keys/Makefile
-the following change (include x509_ima.der) needed to be made to run 
-ima_keys.sh tests
+>> scheme which has been extended to include integrity enforcement. IPE =
+was=20
+>> designed from scratch to only perform integrity enforcement. As such, =
+it=20
+>> is a cleaner design -- "do one thing and do it well" is a good design=20=
 
-INSTALL_TARGETS := *.policy x509_ima.der
+>> pattern.
+>>=20
+>> In our use-case, we utilize _both_ IMA and IPE, for attestation and =
+code=20
+>> integrity respectively. It is useful to be able to separate these=20
+>> concepts. They really are different:
+>>=20
+>> - Code integrity enforcement ensures that code running locally is of =
+known=20
+>> provenance and has not been modified prior to execution.
 
-Other than that the patches look good.
+My interest is in code integrity enforcement for executables stored
+in NFS files.
 
-thanks,
-  -lakshmi
+My struggle with IPE is that due to its dependence on dm-verity, it
+does not seem to able to protect content that is stored separately
+from its execution environment and accessed via a file access
+protocol (FUSE, SMB, NFS, etc).
 
-> 
->   .../kernel/security/integrity/ima/README.md   |  12 ++--
->   .../ima/datafiles/ima_keys/keycheck.policy    |   2 +-
->   .../ima/datafiles/ima_keys/x509_ima.der       | Bin 0 -> 650 bytes
->   .../security/integrity/ima/tests/ima_keys.sh  |  68 +++++++++++++++---
->   4 files changed, 69 insertions(+), 13 deletions(-)
->   create mode 100644 testcases/kernel/security/integrity/ima/datafiles/ima_keys/x509_ima.der
-> 
-> diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
-> index 392e1e868..68d046678 100644
-> --- a/testcases/kernel/security/integrity/ima/README.md
-> +++ b/testcases/kernel/security/integrity/ima/README.md
-> @@ -16,11 +16,15 @@ space, may contain equivalent measurement tcb rules, detecting them would
->   require `IMA_READ_POLICY=y` therefore ignore this option.
->   
->   ### IMA key test
-> -`ima_keys.sh` requires a readable IMA policy, as well as a loaded policy
-> -with `func=KEY_CHECK keyrings=...`, see example in `keycheck.policy`.
-> +The measuring keys test (first test) in `ima_keys.sh` requires a readable IMA
-> +policy, as well as a loaded measure policy with `func=KEY_CHECK keyrings=...`.
->   
-> -As well as what's required for the IMA tests, the following are also required
-> --in the kernel configuration:
-> +The certificate import test (second test) require measure policy with
-> +`func=KEY_CHECK keyrings=key_import_test`. Valid policy for both is in
-> +`keycheck.policy`.
-> +
-> +As well as what's required for the IMA tests, key tests require reading the IMA
-> +policy allowed in the kernel configuration:
->   ```
->   CONFIG_IMA_READ_POLICY=y
->   ```
-> diff --git a/testcases/kernel/security/integrity/ima/datafiles/ima_keys/keycheck.policy b/testcases/kernel/security/integrity/ima/datafiles/ima_keys/keycheck.policy
-> index 3f1934a3d..623162002 100644
-> --- a/testcases/kernel/security/integrity/ima/datafiles/ima_keys/keycheck.policy
-> +++ b/testcases/kernel/security/integrity/ima/datafiles/ima_keys/keycheck.policy
-> @@ -1 +1 @@
-> -measure func=KEY_CHECK keyrings=.ima|.evm|.builtin_trusted_keys|.blacklist template=ima-buf
-> +measure func=KEY_CHECK keyrings=.ima|.evm|.builtin_trusted_keys|.blacklist|key_import_test template=ima-buf
-> diff --git a/testcases/kernel/security/integrity/ima/datafiles/ima_keys/x509_ima.der b/testcases/kernel/security/integrity/ima/datafiles/ima_keys/x509_ima.der
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..92be058da22adffa9d6b6e51efa0c737ebbbbdcd
-> GIT binary patch
-> literal 650
-> zcmXqLVrnyJVtl`VnTe5!NhJD#vj69`9|BBf8}FEsx@^_9$Clp>c-c6$+C196^D;7W
-> zvoaV27z!HjvoVLVaPe?t<QJFZCFZ6YN*hRmgqV4R$}{p4b2Al+Gt=`j^U@WvQ!5SS
-> z3}oO&a59SVLzFncG#ki?^BP(jSQr@@7#Ud_7)6Qm8W{k&hEOgIY;2s5>?=lA2Ij_I
-> z27|^<rp88wchfeduxmMW^j9qUxkIugeev4q7u7yrJR_rW$*!>VOo=tim8DK0r^FsU
-> zl)K`}`+CO4@4KBkoLmcj?fH`%wbDvU<d=4Z>6-SMf6Eh}{&)1rdsOoNQ-1fgBQ1t{
-> zVTqGwuK95LlFE)6i{@=vlP6!2`Y}x<BF&oXU_nlDxy@C+CNp&=W=00a#jys_20XwZ
-> zl@(@W{LjK<z+k`);_<VvFf*|?7|4P+d@N!tBCNWX-0#?!UAx9s`mgFmW+nI2#6kmk
-> zkhC(3gn?Lt$m4W@56wQ)?QVKW<nOtpT)HJrB?Q^`z&K?FdV8b(y8m)~mOOvswu^9m
-> z-o7mOwCAzaT*~`Y4wxFtmNA_89`W;j{r#iww*5OC5vgEziqD_%=ki$*`;s}`Pfwi{
-> zbotZ0X`ckHOmaVLm85n@E9hN_K;~PUB>DFAzh(;(UoMln9V>g;W#-LUGS7A`nYQKY
-> WBem{7L5JThS+;$vggi%(*E;~nlJ80Y
-> 
-> literal 0
-> HcmV?d00001
-> 
-> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-> index 53c289054..30950904e 100755
-> --- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-> +++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-> @@ -6,8 +6,8 @@
->   #
->   # Verify that keys are measured correctly based on policy.
->   
-> -TST_NEEDS_CMDS="cut grep sed tr xxd"
-> -TST_CNT=1
-> +TST_NEEDS_CMDS="cmp cut grep sed tr xxd"
-> +TST_CNT=2
->   TST_NEEDS_DEVICE=1
->   
->   . ima_setup.sh
-> @@ -20,20 +20,22 @@ test1()
->   	local pattern="func=KEY_CHECK"
->   	local test_file="file.txt"
->   
-> -	tst_res TINFO "verifying key measurement for keyrings and templates specified in IMA policy file"
-> +	tst_res TINFO "verify key measurement for keyrings and templates specified in IMA policy"
->   
->   	require_ima_policy_content "$pattern"
->   	keycheck_lines=$(check_ima_policy_content "$pattern" "")
->   	keycheck_line=$(echo "$keycheck_lines" | grep "keyrings" | head -n1)
->   
->   	if [ -z "$keycheck_line" ]; then
-> -		tst_brk TCONF "ima policy does not specify a keyrings to check"
-> +		tst_res TCONF "IMA policy does not specify a keyrings to check"
-> +		return
->   	fi
->   
->   	keyrings=$(echo "$keycheck_line" | tr " " "\n" | grep "keyrings" | \
->   		sed "s/\./\\\./g" | cut -d'=' -f2)
->   	if [ -z "$keyrings" ]; then
-> -		tst_brk TCONF "ima policy has a keyring key-value specifier, but no specified keyrings"
-> +		tst_res TCONF "IMA policy has a keyring key-value specifier, but no specified keyrings"
-> +		return
->   	fi
->   
->   	templates=$(echo "$keycheck_line" | tr " " "\n" | grep "template" | \
-> @@ -49,11 +51,13 @@ test1()
->   
->   		echo "$line" | cut -d' ' -f6 | xxd -r -p > $test_file
->   
-> -		expected_digest="$(compute_digest $algorithm $test_file)" || \
-> -			tst_brk TCONF "cannot compute digest for $algorithm"
-> +		if ! expected_digest="$(compute_digest $algorithm $test_file)"; then
-> +			tst_res TCONF "cannot compute digest for $algorithm"
-> +			return
-> +		fi
->   
->   		if [ "$digest" != "$expected_digest" ]; then
-> -			tst_res TFAIL "incorrect digest was found for the ($keyring) keyring"
-> +			tst_res TFAIL "incorrect digest was found for $keyring keyring"
->   			return
->   		fi
->   	done
-> @@ -61,4 +65,52 @@ test1()
->   	tst_res TPASS "specified keyrings were measured correctly"
->   }
->   
-> +# Create a new keyring, import a certificate into it, and verify
-> +# that the certificate is measured correctly by IMA.
-> +test2()
-> +{
-> +	tst_require_cmds evmctl keyctl openssl
-> +
-> +	local cert_file="$TST_DATAROOT/x509_ima.der"
-> +	local keyring_name="key_import_test"
-> +	local temp_file="file.txt"
-> +	local keyring_id
-> +
-> +	tst_res TINFO "verify measurement of certificate imported into a keyring"
-> +
-> +	if ! check_ima_policy_content "^measure.*func=KEY_CHECK.*keyrings=.*$keyring_name"; then
-> +		tst_brk TCONF "IMA policy does not contain $keyring_name keyring"
-> +	fi
-> +
-> +	keyctl new_session > /dev/null
-> +
-> +	keyring_id=$(keyctl newring $keyring_name @s) || \
-> +		tst_brk TBROK "unable to create a new keyring"
-> +
-> +	tst_is_num $keyring_id || \
-> +		tst_brk TBROK "unable to parse the new keyring id"
-> +
-> +	evmctl import $cert_file $keyring_id > /dev/null || \
-> +		tst_brk TBROK "unable to import a certificate into $keyring_name keyring"
-> +
-> +	grep $keyring_name $ASCII_MEASUREMENTS | tail -n1 | cut -d' ' -f6 | \
-> +		xxd -r -p > $temp_file
-> +
-> +	if [ ! -s $temp_file ]; then
-> +		tst_res TFAIL "keyring $keyring_name not found in $ASCII_MEASUREMENTS"
-> +		return
-> +	fi
-> +
-> +	if ! openssl x509 -in $temp_file -inform der > /dev/null; then
-> +		tst_res TFAIL "logged certificate is not a valid x509 certificate"
-> +		return
-> +	fi
-> +
-> +	if cmp -s $temp_file $cert_file; then
-> +		tst_res TPASS "logged certificate matches the original"
-> +	else
-> +		tst_res TFAIL "logged certificate does not match original"
-> +	fi
-> +}
-> +
->   tst_run
-> 
+
+>> - Attestation is about measuring the health of a system and having =
+that=20
+>> measurement validated by a remote system. (Local attestation is =
+useless).
+>>=20
+>> I'm not sure there is value in continuing to shoe-horn both of these =
+into=20
+>> IMA.
+>=20
+> True, IMA was originally limited to measurement and attestation, but
+> most of the original EVM concepts were subsequently included in IMA.=20=
+
+> (Remember, Reiner Sailer wrote the original IMA, which I inherited.  I
+> was originially working on EVM code integrity.)  =46rom a naming
+> perspective including EVM code integrity in IMA was a mistake.  My
+> thinking at the time was that as IMA was already calculating the file
+> hash, instead of re-calculating the file hash for integrity, calculate
+> the file hash once and re-use it for multiple things - measurement,=20
+> integrity, and audit.   At the same time define a single system wide
+> policy.
+>=20
+> When we first started working on IMA, EVM, trusted, and encrypted =
+keys,
+> the general kernel community didn't see a need for any of it.  Thus, a
+> lot of what was accomplished has been accomplished without the backing
+> of the real core filesystem people.
+>=20
+> If block layer integrity was enough, there wouldn't have been a need
+> for fs-verity.   Even fs-verity is limited to read only filesystems,
+> which makes validating file integrity so much easier.  =46rom the
+> beginning, we've said that fs-verity signatures should be included in
+> the measurement list.  (I thought someone signed on to add that =
+support
+> to IMA, but have not yet seen anything.)
+
+Mimi, when you and I discussed this during LSS NA 2019, I didn't fully
+understand that you expected me to implement signed Merkle trees for all
+filesystems. At the time, it sounded to me like you wanted signed Merkle
+trees only for NFS files. Is that still the case?
+
+The first priority (for me, anyway) therefore is getting the ability to
+move IMA metadata between NFS clients and servers shoveled into the NFS
+protocol, but that's been blocked for various legal reasons.
+
+IMO we need agreement from everyone (integrity developers, FS
+implementers, and Linux distributors) that a signed Merkle tree IMA
+metadata format, stored in either an xattr or appended to an executable
+file, will be the way forward for IMA in all filesystems.
+
+
+> Going forward I see a lot of what we've accomplished being =
+incorporated
+> into the filesystems.  When IMA will be limited to defining a system
+> wide policy, I'll have completed my job.
+>=20
+> Mimi
+>=20
+>>=20
+>>> I've got to say the least attractive thing
+>>>      about separation is the fact that you now both have a policy =
+parser.
+>>>       You've tried to differentiate yours by making it more Kconfig
+>>>      based, but policy has a way of becoming user space supplied =
+because
+>>>      the distros hate config options, so I think you're going to end =
+up
+>>>      with a policy parser very like IMAs.
 
