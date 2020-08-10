@@ -2,201 +2,219 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E23240C7F
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Aug 2020 19:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B57241178
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Aug 2020 22:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbgHJR6H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Aug 2020 13:58:07 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1606 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726820AbgHJR6H (ORCPT
+        id S1726632AbgHJUME (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Aug 2020 16:12:04 -0400
+Received: from smtp-42aa.mail.infomaniak.ch ([84.16.66.170]:54831 "EHLO
+        smtp-42aa.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726595AbgHJUMD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Aug 2020 13:58:07 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07AHXinG131454;
-        Mon, 10 Aug 2020 13:57:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=r63m5wPatlVGKXEVci7ekmXKuv/hOL947q5faQjq6d0=;
- b=aKMxF9VaYwBEUx++kNulk45CXmo5nFHZhP216H5AMH+kT9qR1elHYXlnc93zuKW0/5MZ
- ARceEHihTQplOjWEuNeJ8Toi6i4uu07vD/Q2icmqMUsA+4yjkqEw9bySuY1CsK+D4kdT
- Smlqo7y3/rIzbkDbmIHFczCzKK5ISOJFxzUyro6ruIkRVFZNI6o27fwDjK+mCo2a42OW
- 684c37R6TmviOefDaZiviwHAPVOvJ5/+BDuzhdYR7WZBL/eXFbzjEz1eoZALwrNa8fpN
- EKHoKmxXB8d4iuPZx0BeJRRBbmWvH0znKaM+nSbJzZHu+GwLbWHIU/7FMwrI4a1PsRqC 9A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32sr8kkcaq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Aug 2020 13:57:52 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07AHsL8R028934;
-        Mon, 10 Aug 2020 13:57:51 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32sr8kkc9v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Aug 2020 13:57:51 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07AHtPub026448;
-        Mon, 10 Aug 2020 17:57:48 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 32skp8agfg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Aug 2020 17:57:48 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07AHvkLX30736720
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Aug 2020 17:57:46 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5633E11C052;
-        Mon, 10 Aug 2020 17:57:46 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3BFA511C04C;
-        Mon, 10 Aug 2020 17:57:41 +0000 (GMT)
-Received: from sig-9-65-241-154.ibm.com (unknown [9.65.241.154])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Aug 2020 17:57:41 +0000 (GMT)
-Message-ID: <8565b1430d5244eba95fc1fe0ed470b886747aaa.camel@linux.ibm.com>
-Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement
- LSM (IPE)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Chuck Lever <chucklever@gmail.com>,
-        James Morris <jmorris@namei.org>
-Cc:     Deven Bowers <deven.desai@linux.microsoft.com>,
-        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>,
-        snitzer@redhat.com, dm-devel@redhat.com,
-        tyhicks@linux.microsoft.com, agk@redhat.com,
-        Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>, nramas@linux.microsoft.com,
-        serge@hallyn.com, pasha.tatashin@soleen.com,
-        Jann Horn <jannh@google.com>, linux-block@vger.kernel.org,
+        Mon, 10 Aug 2020 16:12:03 -0400
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BQRvN075bzlhWhs;
+        Mon, 10 Aug 2020 22:12:00 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4BQRvG2BJvzlh8TS;
+        Mon, 10 Aug 2020 22:11:54 +0200 (CEST)
+Subject: Re: [PATCH v7 0/7] Add support for O_MAYEXEC
+To:     Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, mdsakib@microsoft.com,
-        open list <linux-kernel@vger.kernel.org>, eparis@redhat.com,
-        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        jaskarankhurana@linux.microsoft.com
-Date:   Mon, 10 Aug 2020 13:57:40 -0400
-In-Reply-To: <1597079586.3966.34.camel@HansenPartnership.com>
-References: <20200728213614.586312-1-deven.desai@linux.microsoft.com>
-         <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>
-         <20200802143143.GB20261@amd>
-         <1596386606.4087.20.camel@HansenPartnership.com>
-         <fb35a1f7-7633-a678-3f0f-17cf83032d2b@linux.microsoft.com>
-         <1596639689.3457.17.camel@HansenPartnership.com>
-         <alpine.LRH.2.21.2008050934060.28225@namei.org>
-         <b08ae82102f35936427bf138085484f75532cff1.camel@linux.ibm.com>
-         <329E8DBA-049E-4959-AFD4-9D118DEB176E@gmail.com>
-         <da6f54d0438ee3d3903b2c75fcfbeb0afdf92dc2.camel@linux.ibm.com>
-         <1597073737.3966.12.camel@HansenPartnership.com>
-         <4664ab7dc3b324084df323bfa4670d5bfde76e66.camel@linux.ibm.com>
-         <1597079586.3966.34.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-10_14:2020-08-06,2020-08-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- mlxlogscore=999 priorityscore=1501 bulkscore=0 suspectscore=3
- lowpriorityscore=0 phishscore=0 malwarescore=0 clxscore=1015
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008100122
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20200723171227.446711-1-mic@digikod.net>
+ <202007241205.751EBE7@keescook>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <0733fbed-cc73-027b-13c7-c368c2d67fb3@digikod.net>
+Date:   Mon, 10 Aug 2020 22:11:53 +0200
+User-Agent: 
+MIME-Version: 1.0
+In-Reply-To: <202007241205.751EBE7@keescook>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-08-10 at 10:13 -0700, James Bottomley wrote:
-> On Mon, 2020-08-10 at 12:35 -0400, Mimi Zohar wrote:
-> > On Mon, 2020-08-10 at 08:35 -0700, James Bottomley wrote:
-> [...]
-> > > > Up to now, verifying remote filesystem file integrity has been
-> > > > out of scope for IMA.   With fs-verity file signatures I can at
-> > > > least grasp how remote file integrity could possibly work.  I
-> > > > don't understand how remote file integrity with existing IMA
-> > > > formats could be supported. You might want to consider writing a
-> > > > whitepaper, which could later be used as the basis for a patch
-> > > > set cover letter.
-> > > 
-> > > I think, before this, we can help with the basics (and perhaps we
-> > > should sort them out before we start documenting what we'll do).
-> > 
-> > I'm not opposed to doing that, but you're taking this discussion in a
-> > totally different direction.  The current discussion is about NFSv4
-> > supporting the existing IMA signatures, not only fs-verity
-> > signatures. I'd like to understand how that is possible and for the
-> > community to weigh in on whether it makes sense.
-> 
-> Well, I see the NFS problem as being chunk at a time, right, which is
-> merkle tree, or is there a different chunk at a time mechanism we want
-> to use?  IMA currently verifies signature on open/exec and then
-> controls updates.  Since for NFS we only control the client, we can't
-> do that on an NFS server, so we really do need verification at read
-> time ... unless we're threading IMA back to the NFS server?
+It seems that there is no more complains nor questions. Do you want me
+to send another series to fix the order of the S-o-b in patch 7?
 
-Yes.  I still don't see how we can support the existing IMA signatures,
-which is based on the file data hash, unless the "chunk at a time
-mechanism" is not a tree, but linear.
 
-Mimi
-
+On 24/07/2020 21:06, Kees Cook wrote:
+> I think this looks good now.
 > 
-> > > The first basic is that a merkle tree allows unit at a time
-> > > verification. First of all we should agree on the unit.  Since we
-> > > always fault a page at a time, I think our merkle tree unit should
-> > > be a page not a block. Next, we should agree where the check gates
-> > > for the per page accesses should be ... definitely somewhere in
-> > > readpage, I suspect and finally we should agree how the merkle tree
-> > > is presented at the gate.  I think there are three ways:
-> > > 
-> > >    1. Ahead of time transfer:  The merkle tree is transferred and
-> > > verified
-> > >       at some time before the accesses begin, so we already have a
-> > >       verified copy and can compare against the lower leaf.
-> > >    2. Async transfer:  We provide an async mechanism to transfer
-> > > the
-> > >       necessary components, so when presented with a unit, we check
-> > > the
-> > >       log n components required to get to the root
-> > >    3. The protocol actually provides the capability of 2 (like the
-> > > SCSI
-> > >       DIF/DIX), so to IMA all the pieces get presented instead of
-> > > IMA
-> > >       having to manage the tree
-> > > 
-> > > There are also a load of minor things like how we get the head
-> > > hash, which must be presented and verified ahead of time for each
-> > > of the above 3.
-> > 
-> >  
-> > I was under the impression that IMA support for fs-verity signatures
-> > would be limited to including the fs-verity signature in the
-> > measurement list and verifying the fs-verity signature.   As fs-
-> > verity is limited to immutable files, this could be done on file
-> > open.  fs-verity would be responsible for enforcing the block/page
-> > data integrity.   From a local filesystem perspective, I think that
-> > is all that is necessary.
+> Andrew, since you're already carrying my exec clean-ups (repeated here
+> in patch 1-3), can you pick the rest of this series too?
 > 
-> The fs-verity use case is a bit of a crippled one because it's
-> immutable.  I think NFS represents more the general case where you
-> can't rely on immutability and have to verify at chunk read time.  If
-> we get chunk at a time working for NFS, it should work also for fs-
-> verity and we wouldn't need to have two special paths.
+> Thanks!
 > 
-> I think, even for NFS we would only really need to log the open, so
-> same as you imagine for fs-verity.  As long as the chunk read hashes
-> match, we can be silent because everything is going OK, so we only need
-> to determine what to do and log on mismatch (which isn't expected to
-> happen for fs-verity).
+> -Kees
 > 
-> > In terms of remote file systems,  the main issue is transporting and
-> > storing the Merkle tree.  As fs-verity is limited to immutable files,
-> > this could still be done on file open.
+> On Thu, Jul 23, 2020 at 07:12:20PM +0200, Mickaël Salaün wrote:
+>> Hi,
+>>
+>> This seventh patch series do not set __FMODE_EXEC for the sake of
+>> simplicity.  A notification feature could be added later if needed.  The
+>> handling of all file types is now well defined and tested: by default,
+>> when opening a path, access to a directory is denied (with EISDIR),
+>> access to a regular file depends on the sysctl policy, and access to
+>> other file types (i.e. fifo, device, socket) is denied if there is any
+>> enforced policy.  There is new tests covering all these cases (cf.
+>> test_file_types() ).
+>>
+>> As requested by Mimi Zohar, I completed the series with one of her
+>> patches for IMA.  I also picked Kees Cook's patches to consolidate exec
+>> permission checking into do_filp_open()'s flow.
+>>
+>>
+>> # Goal of O_MAYEXEC
+>>
+>> The goal of this patch series is to enable to control script execution
+>> with interpreters help.  A new O_MAYEXEC flag, usable through
+>> openat2(2), is added to enable userspace script interpreters to delegate
+>> to the kernel (and thus the system security policy) the permission to
+>> interpret/execute scripts or other files containing what can be seen as
+>> commands.
+>>
+>> A simple system-wide security policy can be enforced by the system
+>> administrator through a sysctl configuration consistent with the mount
+>> points or the file access rights.  The documentation patch explains the
+>> prerequisites.
+>>
+>> Furthermore, the security policy can also be delegated to an LSM, either
+>> a MAC system or an integrity system.  For instance, the new kernel
+>> MAY_OPENEXEC flag closes a major IMA measurement/appraisal interpreter
+>> integrity gap by bringing the ability to check the use of scripts [1].
+>> Other uses are expected, such as for magic-links [2], SGX integration
+>> [3], bpffs [4] or IPE [5].
+>>
+>>
+>> # Prerequisite of its use
+>>
+>> Userspace needs to adapt to take advantage of this new feature.  For
+>> example, the PEP 578 [6] (Runtime Audit Hooks) enables Python 3.8 to be
+>> extended with policy enforcement points related to code interpretation,
+>> which can be used to align with the PowerShell audit features.
+>> Additional Python security improvements (e.g. a limited interpreter
+>> withou -c, stdin piping of code) are on their way [7].
+>>
+>>
+>> # Examples
+>>
+>> The initial idea comes from CLIP OS 4 and the original implementation
+>> has been used for more than 12 years:
+>> https://github.com/clipos-archive/clipos4_doc
+>> Chrome OS has a similar approach:
+>> https://chromium.googlesource.com/chromiumos/docs/+/master/security/noexec_shell_scripts.md
+>>
+>> Userland patches can be found here:
+>> https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+>> Actually, there is more than the O_MAYEXEC changes (which matches this search)
+>> e.g., to prevent Python interactive execution. There are patches for
+>> Bash, Wine, Java (Icedtea), Busybox's ash, Perl and Python. There are
+>> also some related patches which do not directly rely on O_MAYEXEC but
+>> which restrict the use of browser plugins and extensions, which may be
+>> seen as scripts too:
+>> https://github.com/clipos-archive/clipos4_portage-overlay/tree/master/www-client
+>>
+>> An introduction to O_MAYEXEC was given at the Linux Security Summit
+>> Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+>> https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+>> The "write xor execute" principle was explained at Kernel Recipes 2018 -
+>> CLIP OS: a defense-in-depth OS:
+>> https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+>> See also an overview article: https://lwn.net/Articles/820000/
+>>
+>>
+>> This patch series can be applied on top of v5.8-rc5 .  This can be tested
+>> with CONFIG_SYSCTL.  I would really appreciate constructive comments on
+>> this patch series.
+>>
+>> Previous version:
+>> https://lore.kernel.org/lkml/20200505153156.925111-1-mic@digikod.net/
+>>
+>>
+>> [1] https://lore.kernel.org/lkml/1544647356.4028.105.camel@linux.ibm.com/
+>> [2] https://lore.kernel.org/lkml/20190904201933.10736-6-cyphar@cyphar.com/
+>> [3] https://lore.kernel.org/lkml/CALCETrVovr8XNZSroey7pHF46O=kj_c5D9K8h=z2T_cNrpvMig@mail.gmail.com/
+>> [4] https://lore.kernel.org/lkml/CALCETrVeZ0eufFXwfhtaG_j+AdvbzEWE0M3wjXMWVEO7pj+xkw@mail.gmail.com/
+>> [5] https://lore.kernel.org/lkml/20200406221439.1469862-12-deven.desai@linux.microsoft.com/
+>> [6] https://www.python.org/dev/peps/pep-0578/
+>> [7] https://lore.kernel.org/lkml/0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org/
+>>
+>> Regards,
+>>
+>> Kees Cook (3):
+>>   exec: Change uselib(2) IS_SREG() failure to EACCES
+>>   exec: Move S_ISREG() check earlier
+>>   exec: Move path_noexec() check earlier
+>>
+>> Mickaël Salaün (3):
+>>   fs: Introduce O_MAYEXEC flag for openat2(2)
+>>   fs,doc: Enable to enforce noexec mounts or file exec through O_MAYEXEC
+>>   selftest/openat2: Add tests for O_MAYEXEC enforcing
+>>
+>> Mimi Zohar (1):
+>>   ima: add policy support for the new file open MAY_OPENEXEC flag
+>>
+>>  Documentation/ABI/testing/ima_policy          |   2 +-
+>>  Documentation/admin-guide/sysctl/fs.rst       |  49 +++
+>>  fs/exec.c                                     |  23 +-
+>>  fs/fcntl.c                                    |   2 +-
+>>  fs/namei.c                                    |  36 +-
+>>  fs/open.c                                     |  12 +-
+>>  include/linux/fcntl.h                         |   2 +-
+>>  include/linux/fs.h                            |   3 +
+>>  include/uapi/asm-generic/fcntl.h              |   7 +
+>>  kernel/sysctl.c                               |  12 +-
+>>  security/integrity/ima/ima_main.c             |   3 +-
+>>  security/integrity/ima/ima_policy.c           |  15 +-
+>>  tools/testing/selftests/kselftest_harness.h   |   3 +
+>>  tools/testing/selftests/openat2/Makefile      |   3 +-
+>>  tools/testing/selftests/openat2/config        |   1 +
+>>  tools/testing/selftests/openat2/helpers.h     |   1 +
+>>  .../testing/selftests/openat2/omayexec_test.c | 325 ++++++++++++++++++
+>>  17 files changed, 470 insertions(+), 29 deletions(-)
+>>  create mode 100644 tools/testing/selftests/openat2/config
+>>  create mode 100644 tools/testing/selftests/openat2/omayexec_test.c
+>>
+>> -- 
+>> 2.27.0
+>>
 > 
-> Right, I mentioned that in my options ... we need some "supply
-> integrity" hook ... or possibly multiple hooks for a variety of
-> possible methods.
-
