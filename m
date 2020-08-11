@@ -2,73 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BDA241F4A
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Aug 2020 19:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181B0241FAC
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Aug 2020 20:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729151AbgHKRdK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Aug 2020 13:33:10 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39192 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729117AbgHKRdI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Aug 2020 13:33:08 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id EDA0FAD46;
-        Tue, 11 Aug 2020 17:33:25 +0000 (UTC)
-Date:   Tue, 11 Aug 2020 19:33:03 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org
-Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
- engine
-Message-ID: <20200811173303.GA31322@dell5510>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <8c9e64a3b461fb20cda761ef0fc0728a55448937.camel@linux.ibm.com>
- <1157c464d49cb6297fc2f20771d73a4cf7ce6599.camel@linux.ibm.com>
- <20200803130755.GA30440@dell5510>
- <22a744e9520237907312d1f71293df0dd809805f.camel@linux.ibm.com>
- <20200803164635.GB4914@dell5510>
- <bc771e16d4afd3454dea37537f759343452c6446.camel@linux.ibm.com>
- <20200804072234.GA4337@dell5510>
- <20200804075453.GA7285@dell5510>
- <980a1c491dcc03606635cdddce8b19e7a2e041c5.camel@linux.ibm.com>
- <20200805094215.GA32709@dell5510>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200805094215.GA32709@dell5510>
+        id S1726089AbgHKS2e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Aug 2020 14:28:34 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:43170 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725889AbgHKS2d (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 11 Aug 2020 14:28:33 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 12B4B8EE19D;
+        Tue, 11 Aug 2020 11:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1597170512;
+        bh=3WEnw6QUJlA/ul3OQNUWXjoU13+yLZLQS09srF5MAho=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=f8kSFMTUDNJBODH89PuFjILL2FIdhsJg734xkqUR/cnDMS0KoMreMUczSAhnUyPMA
+         FTeH0AYqaAUb8S0lZlH/2MKXOBNx4BiGB+ITLubur3uSRnr1jBTuyfUMErztSAvCOK
+         o6mPwANArB0pQb+2/z1bhs18+blmHF0lRNFSsct0=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zuQo8S5FYJFD; Tue, 11 Aug 2020 11:28:31 -0700 (PDT)
+Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 7EF748EE149;
+        Tue, 11 Aug 2020 11:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1597170511;
+        bh=3WEnw6QUJlA/ul3OQNUWXjoU13+yLZLQS09srF5MAho=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=OSDLkaQVZ4KRYf4a0s5X94LSMaapheTMG3B7iv1TDO9dOQ2MOULwugwtLeHe6qdeF
+         qJgkWRBhCi9y0UIGoySKjkb+RHhMP2bUFkZ9nJkEdlUyNr1yc428zvmYrJhUC4gJZu
+         kZoLKW8vwf99sZFDKUvV19sDo8EBD6kP0uULOtBM=
+Message-ID: <1597170509.4325.55.camel@HansenPartnership.com>
+Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement
+ LSM (IPE)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Chuck Lever <chucklever@gmail.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, James Morris <jmorris@namei.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>,
+        snitzer@redhat.com, dm-devel@redhat.com,
+        tyhicks@linux.microsoft.com, agk@redhat.com,
+        Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>, nramas@linux.microsoft.com,
+        serge@hallyn.com, pasha.tatashin@soleen.com,
+        Jann Horn <jannh@google.com>, linux-block@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, mdsakib@microsoft.com,
+        open list <linux-kernel@vger.kernel.org>, eparis@redhat.com,
+        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        jaskarankhurana@linux.microsoft.com
+Date:   Tue, 11 Aug 2020 11:28:29 -0700
+In-Reply-To: <16C3BF97-A7D3-488A-9D26-7C9B18AD2084@gmail.com>
+References: <20200728213614.586312-1-deven.desai@linux.microsoft.com>
+         <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>
+         <20200802143143.GB20261@amd>
+         <1596386606.4087.20.camel@HansenPartnership.com>
+         <fb35a1f7-7633-a678-3f0f-17cf83032d2b@linux.microsoft.com>
+         <1596639689.3457.17.camel@HansenPartnership.com>
+         <alpine.LRH.2.21.2008050934060.28225@namei.org>
+         <b08ae82102f35936427bf138085484f75532cff1.camel@linux.ibm.com>
+         <329E8DBA-049E-4959-AFD4-9D118DEB176E@gmail.com>
+         <da6f54d0438ee3d3903b2c75fcfbeb0afdf92dc2.camel@linux.ibm.com>
+         <1597073737.3966.12.camel@HansenPartnership.com>
+         <6E907A22-02CC-42DD-B3CD-11D304F3A1A8@gmail.com>
+         <1597124623.30793.14.camel@HansenPartnership.com>
+         <16C3BF97-A7D3-488A-9D26-7C9B18AD2084@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi, Vitaly,
+On Tue, 2020-08-11 at 10:48 -0400, Chuck Lever wrote:
+> Mimi's earlier point is that any IMA metadata format that involves
+> unsigned digests is exposed to an alteration attack at rest or in
+> transit, thus will not provide a robust end-to-end integrity
+> guarantee.
 
-> > Everything, including this change, should now be in the next-testing
-> > branch.
-> Nice, thanks! Tested:
-> https://travis-ci.org/github/pevik/ima-evm-utils
+I don't believe that is Mimi's point, because it's mostly not correct:
+the xattr mechanism does provide this today.  The point is the
+mechanism we use for storing IMA hashes and signatures today is xattrs
+because they have robust security properties for local filesystems that
+the kernel enforces.  This use goes beyond IMA, selinux labels for
+instance use this property as well.
 
-> I hope I'll have time for docker based travis patch next week.
+What I think you're saying is that NFS can't provide the robust
+security for xattrs we've been relying on, so you need some other
+mechanism for storing them.
 
-I prototype docker based Travis [1] (still WIP). It tests various distros,
-including cross-compilation, using also clang, even one build with musl (Alpine
-distro). But there are many failures.
+I think Mimi's other point is actually that IMA uses a flat hash which
+we derive by reading the entire file and then watching for mutations. 
+Since you cannot guarantee we get notice of mutation with NFS, the
+entire IMA mechanism can't really be applied in its current form and we
+have to resort to chunk at a time verifications that a Merkel tree
+would provide.  Doesn't this make moot any thinking about
+standardisation in NFS for the current IMA flat hash mechanism because
+we simply can't use it ... If I were to construct a prototype I'd have
+to work out and securely cache the hash of ever chunk when verifying
+the flat hash so I could recheck on every chunk read.  I think that's
+infeasible for large files.
 
-The biggest problem is with ibmswtpm2 [2], which contain tpm_server binary. This
-project is not packaged in distros, compiles only with gcc (no clang, I tested
-versions 1332 and 1637) and ignore CFLAGS and LDFLAGS settings. It doesn't even
-have git repository (the one on sourceforge is empty).
-We could simply patch this file, but I'm not going to do it.
-I guess I just skip tpm_server dependency for all non-native projects.
-I also need always install gcc even clang is going to be used due tpm_server.
-
-It also find bug in m4/manpage-docbook-xsl.m4 for Alpine, found custom xml
-catalog, but value is not redirected into the variable.
-
-Kind regards,
-Petr
-
-[1] https://travis-ci.org/github/pevik/ima-evm-utils/builds/716990585
-[2] https://sourceforge.net/projects/ibmswtpm2/
+James
 
