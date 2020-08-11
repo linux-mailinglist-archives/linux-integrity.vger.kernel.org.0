@@ -2,91 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B47BC24203F
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Aug 2020 21:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F92524204B
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Aug 2020 21:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbgHKT0s (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Aug 2020 15:26:48 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:44148 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725987AbgHKT0s (ORCPT
+        id S1726068AbgHKTaV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Aug 2020 15:30:21 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:55228 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725889AbgHKTaU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Aug 2020 15:26:48 -0400
-Received: from sequoia.work.tihix.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 277AD20B4908;
-        Tue, 11 Aug 2020 12:26:47 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 277AD20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1597174007;
-        bh=jJ2rgICpl7Ac8oj5RgbaV+jcSTEuj2wOFf50Lb2rAUs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l51wiNdGi8pI/2ncryg66PgtYZzWL2/t5aAvy/pkofTt061C9sCIth86D0pAWX2mU
-         dWd5TtUkYfs2QSCz6naMLnNfPILoREyX9UptZPz+XzwqO9SorxiW9V8vbO3FpnRk3D
-         hgA5sqkOogvZEy1gfNUNzK7kAkv1PLBiUuIEvR00=
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        Nayna Jain <nayna@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        Tue, 11 Aug 2020 15:30:20 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id B4DE61C0BDD; Tue, 11 Aug 2020 21:30:16 +0200 (CEST)
+Date:   Tue, 11 Aug 2020 21:30:16 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Chuck Lever <chucklever@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Sasha Levin <sashal@kernel.org>, snitzer@redhat.com,
+        dm-devel@redhat.com, tyhicks@linux.microsoft.com, agk@redhat.com,
+        Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>, nramas@linux.microsoft.com,
+        serge@hallyn.com, pasha.tatashin@soleen.com,
+        Jann Horn <jannh@google.com>, linux-block@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, mdsakib@microsoft.com,
+        open list <linux-kernel@vger.kernel.org>, eparis@redhat.com,
+        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v2 2/2] ima: Fail rule parsing when asymmetric key measurement isn't supportable
-Date:   Tue, 11 Aug 2020 14:26:21 -0500
-Message-Id: <20200811192621.281675-3-tyhicks@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200811192621.281675-1-tyhicks@linux.microsoft.com>
-References: <20200811192621.281675-1-tyhicks@linux.microsoft.com>
+        jaskarankhurana@linux.microsoft.com
+Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement LSM
+ (IPE)
+Message-ID: <20200811193016.bdwh5kq7ci3yeme4@duo.ucw.cz>
+References: <1596639689.3457.17.camel@HansenPartnership.com>
+ <alpine.LRH.2.21.2008050934060.28225@namei.org>
+ <b08ae82102f35936427bf138085484f75532cff1.camel@linux.ibm.com>
+ <329E8DBA-049E-4959-AFD4-9D118DEB176E@gmail.com>
+ <da6f54d0438ee3d3903b2c75fcfbeb0afdf92dc2.camel@linux.ibm.com>
+ <1597073737.3966.12.camel@HansenPartnership.com>
+ <6E907A22-02CC-42DD-B3CD-11D304F3A1A8@gmail.com>
+ <1597124623.30793.14.camel@HansenPartnership.com>
+ <16C3BF97-A7D3-488A-9D26-7C9B18AD2084@gmail.com>
+ <1597159969.4325.21.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="x335q3ph5liujtc7"
+Content-Disposition: inline
+In-Reply-To: <1597159969.4325.21.camel@HansenPartnership.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Measuring keys is currently only supported for asymmetric keys. In the
-future, this might change.
 
-For now, the "func=KEY_CHECK" and "keyrings=" options are only
-appropriate when CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS is enabled. Make
-this clear at policy load so that IMA policy authors don't assume that
-these policy language constructs are supported.
+--x335q3ph5liujtc7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 2b60c0ecedf8 ("IMA: Read keyrings= option from the IMA policy")
-Fixes: 5808611cccb2 ("IMA: Add KEY_CHECK func to measure keys")
-Suggested-by: Nayna Jain <nayna@linux.ibm.com>
-Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
----
- security/integrity/ima/ima_policy.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Hi!
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index ea224f00b305..fe1df373c113 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1233,7 +1233,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 				entry->func = POLICY_CHECK;
- 			else if (strcmp(args[0].from, "KEXEC_CMDLINE") == 0)
- 				entry->func = KEXEC_CMDLINE;
--			else if (strcmp(args[0].from, "KEY_CHECK") == 0)
-+			else if (IS_ENABLED(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) &&
-+				 strcmp(args[0].from, "KEY_CHECK") == 0)
- 				entry->func = KEY_CHECK;
- 			else
- 				result = -EINVAL;
-@@ -1290,7 +1291,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 		case Opt_keyrings:
- 			ima_log_string(ab, "keyrings", args[0].from);
- 
--			if (entry->keyrings) {
-+			if (!IS_ENABLED(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) ||
-+			    entry->keyrings) {
- 				result = -EINVAL;
- 				break;
- 			}
--- 
-2.25.1
+> > > > (eg, a specification) will be critical for remote filesystems.
+> > > >=20
+> > > > If any of this is to be supported by a remote filesystem, then we
+> > > > need an unencumbered description of the new metadata format
+> > > > rather than code. GPL-encumbered formats cannot be contributed to
+> > > > the NFS standard, and are probably difficult for other
+> > > > filesystems that are not Linux-native, like SMB, as well.
+> > >=20
+> > > I don't understand what you mean by GPL encumbered formats.  The
+> > > GPL is a code licence not a data or document licence.
+> >=20
+> > IETF contributions occur under a BSD-style license incompatible
+> > with the GPL.
+> >=20
+> > https://trustee.ietf.org/trust-legal-provisions.html
+> >=20
+> > Non-Linux implementers (of OEM storage devices) rely on such
+> > standards processes to indemnify them against licensing claims.
+>=20
+> Well, that simply means we won't be contributing the Linux
+> implementation, right? However, IETF doesn't require BSD for all
+> implementations, so that's OK.
+>=20
+> > Today, there is no specification for existing IMA metadata formats,
+> > there is only code. My lawyer tells me that because the code that
+> > implements these formats is under GPL, the formats themselves cannot
+> > be contributed to, say, the IETF without express permission from the
+> > authors of that code. There are a lot of authors of the Linux IMA
+> > code, so this is proving to be an impediment to contribution. That
+> > blocks the ability to provide a fully-specified NFS protocol
+> > extension to support IMA metadata formats.
+>=20
+> Well, let me put the counterpoint: I can write a book about how
+> linux
 
+You should probably talk to your lawyer.
+
+> device drivers work (which includes describing the data formats), for
+> instance, without having to get permission from all the authors ... or
+> is your lawyer taking the view we should be suing Jonathan Corbet,
+> Alessandro Rubini, and Greg Kroah-Hartman for licence infringement?  In
+> fact do they think we now have a huge class action possibility against
+> O'Reilly  and a host of other publishers ...
+
+Because yes, you can reverse engineer for compatibility reasons --
+doing clean room re-implementation (BIOS binary -> BIOS documentation
+-> BIOS sources under different license), but that was only tested in
+the US, is expensive, and I understand people might be uncomfortable
+doing that.
+
+Best regards,
+									Pavel
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--x335q3ph5liujtc7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EARECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCXzLxyAAKCRAw5/Bqldv6
+8vgbAKCHpxkUI3bT9Vn41Tp5GJNZ+nv/SQCfRg4xUwALTQzmhch9Ig1sF0gdvc0=
+=c2f+
+-----END PGP SIGNATURE-----
+
+--x335q3ph5liujtc7--
