@@ -2,122 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7320241881
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Aug 2020 10:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7E0241B0A
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Aug 2020 14:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728355AbgHKIu6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Aug 2020 04:50:58 -0400
-Received: from smtp-42ac.mail.infomaniak.ch ([84.16.66.172]:60013 "EHLO
-        smtp-42ac.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728321AbgHKIu6 (ORCPT
+        id S1728555AbgHKMlS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Aug 2020 08:41:18 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:52328 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726829AbgHKMlR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Aug 2020 04:50:58 -0400
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BQml41VTWzlhkjB;
-        Tue, 11 Aug 2020 10:50:56 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4BQml140TQzlh8Tv;
-        Tue, 11 Aug 2020 10:50:53 +0200 (CEST)
-Subject: Re: [PATCH v7 0/7] Add support for O_MAYEXEC
-To:     David Laight <David.Laight@aculab.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        "kernel-hardening@lists.openwall.com" 
-        <kernel-hardening@lists.openwall.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-References: <20200723171227.446711-1-mic@digikod.net>
- <202007241205.751EBE7@keescook>
- <0733fbed-cc73-027b-13c7-c368c2d67fb3@digikod.net>
- <20200810202123.GC1236603@ZenIV.linux.org.uk>
- <30b8c003f49d4280be5215f634ca2c06@AcuMS.aculab.com>
- <20200810222838.GF1236603@ZenIV.linux.org.uk>
- <2531a0e8-5122-867c-ba06-5d2e623a3834@digikod.net>
- <26a4a8378f3b4ad28eaa476853092716@AcuMS.aculab.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <c0224c08-f669-168e-3bb4-35eceec96a8b@digikod.net>
-Date:   Tue, 11 Aug 2020 10:50:53 +0200
-User-Agent: 
+        Tue, 11 Aug 2020 08:41:17 -0400
+Received: from [192.168.254.32] (unknown [47.187.206.220])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7A2A120B4908;
+        Tue, 11 Aug 2020 05:41:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A2A120B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1597149677;
+        bh=/01YYim8UON1WnW57/jtTiKZ9zMxYZQ09Mw9cbuIu4A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=PFQNuX5mWMquO2HGENEzafqUyJUE7/be/jyBGj5BPS+LLzBuKDCp8oxu/gpMGiuzS
+         6nmE9EJ+VCIZo4ZznNZO0l1rypST2o/WGeVSn+KjlmzrdKh1od3CFRwpGX0UIvppY1
+         +3sGwRwS/5aecpkyVSZ45vXgzNz/7thzHMTdnYOE=
+Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, oleg@redhat.com,
+        x86@kernel.org
+References: <aefc85852ea518982e74b233e11e16d2e707bc32>
+ <20200728131050.24443-1-madvenka@linux.microsoft.com>
+ <20200731180955.GC67415@C02TD0UTHF1T.local>
+ <6236adf7-4bed-534e-0956-fddab4fd96b6@linux.microsoft.com>
+ <20200804143018.GB7440@C02TD0UTHF1T.local>
+ <b3368692-afe6-89b5-d634-12f4f0a601f8@linux.microsoft.com>
+ <20200808221748.GA1020@bug>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Message-ID: <6cca8eac-f767-b891-dc92-eaa7504a0e8b@linux.microsoft.com>
+Date:   Tue, 11 Aug 2020 07:41:15 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <26a4a8378f3b4ad28eaa476853092716@AcuMS.aculab.com>
+In-Reply-To: <20200808221748.GA1020@bug>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 11/08/2020 10:09, David Laight wrote:
->> On 11/08/2020 00:28, Al Viro wrote:
->>> On Mon, Aug 10, 2020 at 10:09:09PM +0000, David Laight wrote:
->>>>> On Mon, Aug 10, 2020 at 10:11:53PM +0200, Mickaël Salaün wrote:
->>>>>> It seems that there is no more complains nor questions. Do you want me
->>>>>> to send another series to fix the order of the S-o-b in patch 7?
->>>>>
->>>>> There is a major question regarding the API design and the choice of
->>>>> hooking that stuff on open().  And I have not heard anything resembling
->>>>> a coherent answer.
->>>>
->>>> To me O_MAYEXEC is just the wrong name.
->>>> The bit would be (something like) O_INTERPRET to indicate
->>>> what you want to do with the contents.
+
+On 8/8/20 5:17 PM, Pavel Machek wrote:
+> Hi!
+> 
+>> Thanks for the lively discussion. I have tried to answer some of the
+>> comments below.
+> 
+>>> There are options today, e.g.
+>>>
+>>> a) If the restriction is only per-alias, you can have distinct aliases
+>>>    where one is writable and another is executable, and you can make it
+>>>    hard to find the relationship between the two.
+>>>
+>>> b) If the restriction is only temporal, you can write instructions into
+>>>    an RW- buffer, transition the buffer to R--, verify the buffer
+>>>    contents, then transition it to --X.
+>>>
+>>> c) You can have two processes A and B where A generates instrucitons into
+>>>    a buffer that (only) B can execute (where B may be restricted from
+>>>    making syscalls like write, mprotect, etc).
 >>
->> The properties is "execute permission". This can then be checked by
->> interpreters or other applications, then the generic O_MAYEXEC name.
+>> The general principle of the mitigation is W^X. I would argue that
+>> the above options are violations of the W^X principle. If they are
+>> allowed today, they must be fixed. And they will be. So, we cannot
+>> rely on them.
 > 
-> The english sense of MAYEXEC is just wrong for what you are trying
-> to check.
+> Would you mind describing your threat model?
+> 
+> Because I believe you are using model different from everyone else.
+> 
+> In particular, I don't believe b) is a problem or should be fixed.
 
-We think it reflects exactly what it's purpose is.
+It is a problem because a kernel that implements W^X properly
+will not allow it. It has no idea what has been done in userland.
+It has no idea that the user has checked and verified the buffer
+contents after transitioning the page to R--.
+
 
 > 
->>> ... which does not answer the question - name of constant is the least of
->>> the worries here.  Why the hell is "apply some unspecified checks to
->>> file" combined with opening it, rather than being an independent primitive
->>> you apply to an already opened file?  Just in case - "'cuz that's how we'd
->>> done it" does not make a good answer...
+> I'll add d), application mmaps a file(R--), and uses write syscall to change
+> trampolines in it.
 > 
-> Maybe an access_ok() that acts on an open fd would be more
-> appropriate.
-> Which might end up being an fcntrl() action.
-> That would give you a full 32bit mask of options.
 
-I previously talk about fcntl(2):
-https://lore.kernel.org/lkml/eaf5bc42-e086-740b-a90c-93e67c535eee@digikod.net/
+No matter how you do it, these are all user-level methods that can be
+hacked. The kernel cannot be sure that an attacker's code has
+not found its way into the file.
+
+>> b) This is again a violation. The kernel should refuse to give execute
+>> ???????? permission to a page that was writeable in the past and refuse to
+>> ???????? give write permission to a page that was executable in the past.
+> 
+> Why?
+
+I don't know about the latter part. I guess I need to think about it.
+But the former is valid. When a page is RW-, a hacker could hack the
+page. Then it does not matter that the page is transitioned to R--.
+Again, the kernel cannot be sure that the user has verified the contents
+after R--.
+
+IMO, W^X needs to be enforced temporally as well.
+
+Madhavan
