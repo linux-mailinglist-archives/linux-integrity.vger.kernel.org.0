@@ -2,73 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B392428E8
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Aug 2020 13:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500E2242A0F
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Aug 2020 15:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbgHLLxH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Aug 2020 07:53:07 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:49484 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726453AbgHLLxG (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Aug 2020 07:53:06 -0400
-Received: by mail-io1-f70.google.com with SMTP id c1so1332400ioh.16
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Aug 2020 04:53:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=B2XBYhisqp6tEPr1SWV7r0qTPPRBG8RGgFOkZIhiErs=;
-        b=R90Wcw+bfxUMSuWItSpKRp5tomaXv/3lPGiUyo4lsyVm2GuEtdiTEshMxD8tQH3oBP
-         qsqonm0ADTH621+yOfwXuuj9HelOU43tvYYJiZvgJcBDnvmVa2UEjvO4iMUpVbKLVWo0
-         AjYeQSjZjNhAviArJ95f4fa63kf4UwWPkO+KSJjh/bi6m5h13f07VWKKtwVXxbzvFEOK
-         eXRPr7YbZFzaSGfHZZJa+QGaSPkbPfeybOzG19icJgfQh6JEyLEwbjbQeezXbEsC5Mui
-         JjFDDW1eUbmX/5fNH4VDgxyYUWafP8k5yJvfOkYDKhYpClzpIpUgWiqvKwMzAYAwsrl1
-         VHVA==
-X-Gm-Message-State: AOAM532yoS6ctlBcFfNj/NgU4NmThOMpiYvYMIFdlcCj1hSjkdr4QJkE
-        FvPv4AOMDUToJ/k6R312exSFxB+OMz+3442u/4qdaa73kK1/
-X-Google-Smtp-Source: ABdhPJwSPrkgCaup1SjOCAR16Fo+u9HMyTY31ucZoFvU9HtaLXAhs87kgh1Bhqar1P+Xvom82jDtrsssjIXd6DO1+zkiyXhX5nt2
+        id S1727115AbgHLNHh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Aug 2020 09:07:37 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48712 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726946AbgHLNHh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 12 Aug 2020 09:07:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 80C47B149;
+        Wed, 12 Aug 2020 13:07:57 +0000 (UTC)
+Date:   Wed, 12 Aug 2020 15:05:48 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org
+Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
+ engine
+Message-ID: <20200812130548.GB4994@gacrux.arch.suse.de>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20200803130755.GA30440@dell5510>
+ <22a744e9520237907312d1f71293df0dd809805f.camel@linux.ibm.com>
+ <20200803164635.GB4914@dell5510>
+ <bc771e16d4afd3454dea37537f759343452c6446.camel@linux.ibm.com>
+ <20200804072234.GA4337@dell5510>
+ <20200804075453.GA7285@dell5510>
+ <980a1c491dcc03606635cdddce8b19e7a2e041c5.camel@linux.ibm.com>
+ <20200805094215.GA32709@dell5510>
+ <20200811173303.GA31322@dell5510>
+ <146ee0acc5d5f619b6b19ae2a3bcb6a66cacce32.camel@linux.ibm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:13c7:: with SMTP id i7mr32115461jaj.52.1597233185871;
- Wed, 12 Aug 2020 04:53:05 -0700 (PDT)
-Date:   Wed, 12 Aug 2020 04:53:05 -0700
-In-Reply-To: <000000000000d411cf05a8ffc4a6@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aae24a05acacd485@google.com>
-Subject: Re: WARNING: suspicious RCU usage in tipc_l2_send_msg
-From:   syzbot <syzbot+47bbc6b678d317cccbe0@syzkaller.appspotmail.com>
-To:     arnd@arndb.de, davem@davemloft.net, gregkh@linuxfoundation.org,
-        jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca, jmaloy@redhat.com,
-        jsnitsel@redhat.com, kuba@kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, peterhuewe@gmx.de,
-        syzkaller-bugs@googlegroups.com,
-        tipc-discussion@lists.sourceforge.net, ying.xue@windriver.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <146ee0acc5d5f619b6b19ae2a3bcb6a66cacce32.camel@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-syzbot has bisected this issue to:
+Hi Mimi, Vitaly,
 
-commit 786a2aa281f4c4ba424ea8b8ea1e85ab62c4a57c
-Author: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Date:   Mon Jul 6 20:53:42 2020 +0000
+...
+> > I prototype docker based Travis [1] (still WIP). It tests various distros,
+> > including cross-compilation, using also clang, even one build with musl (Alpine
+> > distro). But there are many failures.
 
-    Revert commit e918e570415c ("tpm_tis: Remove the HID IFX0102")
+> > The biggest problem is with ibmswtpm2 [2], which contain tpm_server binary. This
+> > project is not packaged in distros, compiles only with gcc (no clang, I tested
+> > versions 1332 and 1637) and ignore CFLAGS and LDFLAGS settings. It doesn't even
+> > have git repository (the one on sourceforge is empty).
+> > We could simply patch this file, but I'm not going to do it.
+> > I guess I just skip tpm_server dependency for all non-native projects.
+> > I also need always install gcc even clang is going to be used due tpm_server.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12fc36d6900000
-start commit:   4437dd6e Merge tag 'io_uring-5.8-2020-07-12' of git://git...
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11fc36d6900000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16fc36d6900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=66ad203c2bb6d8b
-dashboard link: https://syzkaller.appspot.com/bug?extid=47bbc6b678d317cccbe0
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c005af100000
+> Agreed, getting docker/travis working is independent of tpm_server. 
+> Without a software TPM, the boot_aggregate test will be skipped.  For
+> now, until we can straighten this out,  I would modify "make check" to
+> run the other tests (e.g. make check TESTS="ima_hash.test
+> sign_verify.test").
+Yes, specifying tests to be tested is an option. But if skipping the compilation
+for non-native builds works (e.g. tests which don't specify $VARIANT), I'd go
+this way. That help us not having to remember to update tests for non-native
+builds (once the new ones are added).
 
-Reported-by: syzbot+47bbc6b678d317cccbe0@syzkaller.appspotmail.com
-Fixes: 786a2aa281f4 ("Revert commit e918e570415c ("tpm_tis: Remove the HID IFX0102")")
+Gost: I just installed it for Debian / Ubuntu, which have a package. Not sure if
+it's enough.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Any objections to distros used or anything else?
+I'll have look on during this week and hopefully send v1 patchset.
+
+> thanks,
+
+> Mimi
+
+
+> > It also find bug in m4/manpage-docbook-xsl.m4 for Alpine, found custom xml
+> > catalog, but value is not redirected into the variable.
+This is not a priority. I'll have look into this sometime in my non-work time
+(Alpine doesn't have ima-evm-utils package).
+
+Kind regards,
+Petr
+
+> > [1] https://travis-ci.org/github/pevik/ima-evm-utils/builds/716990585
+> > [2] https://sourceforge.net/projects/ibmswtpm2/
