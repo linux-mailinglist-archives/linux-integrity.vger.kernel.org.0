@@ -2,165 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AF5242806
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Aug 2020 12:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B392428E8
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Aug 2020 13:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726946AbgHLKG5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Aug 2020 06:06:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:43570 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726722AbgHLKG5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Aug 2020 06:06:57 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AAB2AD6E;
-        Wed, 12 Aug 2020 03:06:55 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.41.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 521E23F22E;
-        Wed, 12 Aug 2020 03:06:53 -0700 (PDT)
-Date:   Wed, 12 Aug 2020 11:06:50 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, oleg@redhat.com,
-        x86@kernel.org
-Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-Message-ID: <20200812100650.GB28154@C02TD0UTHF1T.local>
-References: <aefc85852ea518982e74b233e11e16d2e707bc32>
- <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <20200731180955.GC67415@C02TD0UTHF1T.local>
- <6236adf7-4bed-534e-0956-fddab4fd96b6@linux.microsoft.com>
- <20200804143018.GB7440@C02TD0UTHF1T.local>
- <b3368692-afe6-89b5-d634-12f4f0a601f8@linux.microsoft.com>
+        id S1727000AbgHLLxH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Aug 2020 07:53:07 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:49484 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726453AbgHLLxG (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 12 Aug 2020 07:53:06 -0400
+Received: by mail-io1-f70.google.com with SMTP id c1so1332400ioh.16
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Aug 2020 04:53:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=B2XBYhisqp6tEPr1SWV7r0qTPPRBG8RGgFOkZIhiErs=;
+        b=R90Wcw+bfxUMSuWItSpKRp5tomaXv/3lPGiUyo4lsyVm2GuEtdiTEshMxD8tQH3oBP
+         qsqonm0ADTH621+yOfwXuuj9HelOU43tvYYJiZvgJcBDnvmVa2UEjvO4iMUpVbKLVWo0
+         AjYeQSjZjNhAviArJ95f4fa63kf4UwWPkO+KSJjh/bi6m5h13f07VWKKtwVXxbzvFEOK
+         eXRPr7YbZFzaSGfHZZJa+QGaSPkbPfeybOzG19icJgfQh6JEyLEwbjbQeezXbEsC5Mui
+         JjFDDW1eUbmX/5fNH4VDgxyYUWafP8k5yJvfOkYDKhYpClzpIpUgWiqvKwMzAYAwsrl1
+         VHVA==
+X-Gm-Message-State: AOAM532yoS6ctlBcFfNj/NgU4NmThOMpiYvYMIFdlcCj1hSjkdr4QJkE
+        FvPv4AOMDUToJ/k6R312exSFxB+OMz+3442u/4qdaa73kK1/
+X-Google-Smtp-Source: ABdhPJwSPrkgCaup1SjOCAR16Fo+u9HMyTY31ucZoFvU9HtaLXAhs87kgh1Bhqar1P+Xvom82jDtrsssjIXd6DO1+zkiyXhX5nt2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b3368692-afe6-89b5-d634-12f4f0a601f8@linux.microsoft.com>
+X-Received: by 2002:a05:6638:13c7:: with SMTP id i7mr32115461jaj.52.1597233185871;
+ Wed, 12 Aug 2020 04:53:05 -0700 (PDT)
+Date:   Wed, 12 Aug 2020 04:53:05 -0700
+In-Reply-To: <000000000000d411cf05a8ffc4a6@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000aae24a05acacd485@google.com>
+Subject: Re: WARNING: suspicious RCU usage in tipc_l2_send_msg
+From:   syzbot <syzbot+47bbc6b678d317cccbe0@syzkaller.appspotmail.com>
+To:     arnd@arndb.de, davem@davemloft.net, gregkh@linuxfoundation.org,
+        jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca, jmaloy@redhat.com,
+        jsnitsel@redhat.com, kuba@kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, peterhuewe@gmx.de,
+        syzkaller-bugs@googlegroups.com,
+        tipc-discussion@lists.sourceforge.net, ying.xue@windriver.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 06, 2020 at 12:26:02PM -0500, Madhavan T. Venkataraman wrote:
-> Thanks for the lively discussion. I have tried to answer some of the
-> comments below.
-> 
-> On 8/4/20 9:30 AM, Mark Rutland wrote:
-> >
-> >> So, the context is - if security settings in a system disallow a page to have
-> >> both write and execute permissions, how do you allow the execution of
-> >> genuine trampolines that are runtime generated and placed in a data
-> >> page or a stack page?
-> > There are options today, e.g.
-> >
-> > a) If the restriction is only per-alias, you can have distinct aliases
-> >    where one is writable and another is executable, and you can make it
-> >    hard to find the relationship between the two.
-> >
-> > b) If the restriction is only temporal, you can write instructions into
-> >    an RW- buffer, transition the buffer to R--, verify the buffer
-> >    contents, then transition it to --X.
-> >
-> > c) You can have two processes A and B where A generates instrucitons into
-> >    a buffer that (only) B can execute (where B may be restricted from
-> >    making syscalls like write, mprotect, etc).
-> 
-> The general principle of the mitigation is W^X. I would argue that
-> the above options are violations of the W^X principle. If they are
-> allowed today, they must be fixed. And they will be. So, we cannot
-> rely on them.
+syzbot has bisected this issue to:
 
-Hold on.
+commit 786a2aa281f4c4ba424ea8b8ea1e85ab62c4a57c
+Author: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Date:   Mon Jul 6 20:53:42 2020 +0000
 
-Contemporary W^X means that a given virtual alias cannot be writeable
-and executeable simultaneously, permitting (a) and (b). If you read the
-references on the Wikipedia page for W^X you'll see the OpenBSD 3.3
-release notes and related presentation make this clear, and further they
-expect (b) to occur with JITS flipping W/X with mprotect().
+    Revert commit e918e570415c ("tpm_tis: Remove the HID IFX0102")
 
-Please don't conflate your assumed stronger semantics with the general
-principle. It not matching you expectations does not necessarily mean
-that it is wrong.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12fc36d6900000
+start commit:   4437dd6e Merge tag 'io_uring-5.8-2020-07-12' of git://git...
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11fc36d6900000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16fc36d6900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=66ad203c2bb6d8b
+dashboard link: https://syzkaller.appspot.com/bug?extid=47bbc6b678d317cccbe0
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c005af100000
 
-If you want a stronger W^X semantics, please refer to this specifically
-with a distinct name.
+Reported-by: syzbot+47bbc6b678d317cccbe0@syzkaller.appspotmail.com
+Fixes: 786a2aa281f4 ("Revert commit e918e570415c ("tpm_tis: Remove the HID IFX0102")")
 
-> a) This requires a remap operation. Two mappings point to the same
->      physical page. One mapping has W and the other one has X. This
->      is a violation of W^X.
-> 
-> b) This is again a violation. The kernel should refuse to give execute
->      permission to a page that was writeable in the past and refuse to
->      give write permission to a page that was executable in the past.
-> 
-> c) This is just a variation of (a).
-
-As above, this is not true.
-
-If you have a rationale for why this is desirable or necessary, please
-justify that before using this as justification for additional features.
-
-> In general, the problem with user-level methods to map and execute
-> dynamic code is that the kernel cannot tell if a genuine application is
-> using them or an attacker is using them or piggy-backing on them.
-
-Yes, and as I pointed out the same is true for trampfd unless you can
-somehow authenticate the calls are legitimate (in both callsite and the
-set of arguments), and I don't see any reasonable way of doing that.
-
-If you relax your threat model to an attacker not being able to make
-arbitrary syscalls, then your suggestion that userspace can perorm
-chceks between syscalls may be sufficient, but as I pointed out that's
-equally true for a sealed memfd or similar.
-
-> Off the top of my head, I have tried to identify some examples
-> where we can have more trust on dynamic code and have the kernel
-> permit its execution.
-> 
-> 1. If the kernel can do the job, then that is one safe way. Here, the kernel
->     is the code. There is no code generation involved. This is what I
->     have presented in the patch series as the first cut.
-
-This is sleight-of-hand; it doesn't matter where the logic is performed
-if the power is identical. Practically speaking this is equivalent to
-some dynamic code generation.
-
-I think that it's misleading to say that because the kernel emulates
-something it is safe when the provenance of the syscall arguments cannot
-be verified.
-
-[...]
-
-> Anyway, these are just examples. The principle is - if we can identify
-> dynamic code that has a certain measure of trust, can the kernel
-> permit their execution?
-
-My point generally is that the kernel cannot identify this, and if
-usrspace code is trusted to dynamically generate trampfd arguments it
-can equally be trusted to dyncamilly generate code.
-
-[...]
-
-> As I have mentioned above, I intend to have the kernel generate code
-> only if the code generation is simple enough. For more complicated cases,
-> I plan to use a user-level code generator that is for exclusive kernel use.
-> I have yet to work out the details on how this would work. Need time.
-
-This reads to me like trampfd is only dealing with a few special cases
-and we know that we need a more general solution.
-
-I hope I am mistaken, but I get the strong impression that you're trying
-to justify your existing solution rather than trying to understand the
-problem space.
-
-To be clear, my strong opinion is that we should not be trying to do
-this sort of emulation or code generation within the kernel. I do think
-it's worthwhile to look at mechanisms to make it harder to subvert
-dynamic userspace code generation, but I think the code generation
-itself needs to live in userspace (e.g. for ABI reasons I previously
-mentioned).
-
-Mark.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
