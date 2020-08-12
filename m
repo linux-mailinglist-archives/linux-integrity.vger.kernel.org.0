@@ -2,90 +2,165 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 303D6242385
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Aug 2020 02:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AF5242806
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Aug 2020 12:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726355AbgHLAx1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Aug 2020 20:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726333AbgHLAx1 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Aug 2020 20:53:27 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7235C06174A
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Aug 2020 17:53:26 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id o18so394965eje.7
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Aug 2020 17:53:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RYh/gNBc0o62B+oTjwV1g3IEJqvln2YW1WJDmtXO1HE=;
-        b=PG9gY58CFea4VSMtltenSEP95M5MBKhRh2gFYLaOpm+MskB4pQWL0hNvRyZ2EMGkEd
-         Vz0WjI2gCGXLg6yz1AUCMcjC1s88b+QC4GlyFKHjdcicv4gQ2mdy/q0KfmdeoWaKkFXu
-         SvTMC8uuoZHWc9OjVzQzrfjrjdVQkctGapf/2fN7+BjOY6xQD2FYxot9bB7l3nMRbHGY
-         U/etiTEakwpMIFGG+9/pz4s57C50R9IZEezJskYSXHBKEilv3DXs7ryl227tk0kvP+9K
-         /h9hPBrHyVW36reL2uvEm0dAx4jPOGRBymdMpR0L2PUldHbOJtVIHLp8AQP2dAXfuRV3
-         qALQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RYh/gNBc0o62B+oTjwV1g3IEJqvln2YW1WJDmtXO1HE=;
-        b=J8XNtLzQ838QTYtRqbXEoLwo9akYQOUXnonad4u9AXoStjKONbyVAr7COkRyffrku9
-         snZrAezdF5Iw1WYAsl4AWWQOhtqOQ1rCVeNtiWfTaFBQhNmTo/ALg8ARBZoNgJw8bsL4
-         zd8s1tmtNnuty1vdbH1w0TlXVWEfrzvPV/nIksBKa8hGJ/cuaQ+4rr0KHduUgj9T6UaF
-         qunBVFnEGqZLD9pJb0VJutERPY35V/+6beqUvzJ4rfZtqH4m7MRdzv25iH0q5ecdqk+O
-         9eZ6I/gkkSV+WVrXQNAjk946bkh1RONvaaz35Aoa85Ga7vanItx2UOhf1YSeKOJrNTn2
-         Hx8w==
-X-Gm-Message-State: AOAM5326uCP4Zt5xfyy0isKU+y4qBWhjCtg9UrR7Nk/EOiRfZLq2o1Ft
-        hxERRKD4xlfp9vyIbJlEh99HJ6w6m1Pdy3HClYaX
-X-Google-Smtp-Source: ABdhPJxeMY1HlD6iT+SQUDbDeq84zSwUZBHhGdLVNnTttrJ7OyviDIdNfvSgQF8XcLz1IAoqzLv1PXtEwmms30oF5bc=
-X-Received: by 2002:a17:907:20e1:: with SMTP id rh1mr10469427ejb.106.1597193605390;
- Tue, 11 Aug 2020 17:53:25 -0700 (PDT)
+        id S1726946AbgHLKG5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Aug 2020 06:06:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:43570 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726722AbgHLKG5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 12 Aug 2020 06:06:57 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AAB2AD6E;
+        Wed, 12 Aug 2020 03:06:55 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [10.57.41.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 521E23F22E;
+        Wed, 12 Aug 2020 03:06:53 -0700 (PDT)
+Date:   Wed, 12 Aug 2020 11:06:50 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, oleg@redhat.com,
+        x86@kernel.org
+Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+Message-ID: <20200812100650.GB28154@C02TD0UTHF1T.local>
+References: <aefc85852ea518982e74b233e11e16d2e707bc32>
+ <20200728131050.24443-1-madvenka@linux.microsoft.com>
+ <20200731180955.GC67415@C02TD0UTHF1T.local>
+ <6236adf7-4bed-534e-0956-fddab4fd96b6@linux.microsoft.com>
+ <20200804143018.GB7440@C02TD0UTHF1T.local>
+ <b3368692-afe6-89b5-d634-12f4f0a601f8@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20200810010210.4037-1-nramas@linux.microsoft.com>
-In-Reply-To: <20200810010210.4037-1-nramas@linux.microsoft.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 11 Aug 2020 20:53:14 -0400
-Message-ID: <CAHC9VhQFPF_+Eo7P7xbEQkvWG8afb1NT71hKBc2HUKs8jFhCkQ@mail.gmail.com>
-Subject: Re: [PATCH] field-dictionary.csv: Add errno to audit message field dictionary
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, sgrubb@redhat.com,
-        linux-integrity@vger.kernel.org, linux-audit@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b3368692-afe6-89b5-d634-12f4f0a601f8@linux.microsoft.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Aug 9, 2020 at 9:02 PM Lakshmi Ramasubramanian
-<nramas@linux.microsoft.com> wrote:
->
-> Error code was not included in the audit messages logged by
-> the integrity subsystem in the Linux kernel.
->
-> commit 2f845882ecd2 in https://github.com/torvalds/linux tree added
-> "errno" field in the audit messages logged by the integrity subsystem.
-> The "errno" field will be set to 0 when the operation was completed
-> successfully, and on failure a non-zero error code is set in this field
-> in the audit message.
->
-> Add the documentation for the "errno" field in the audit message
-> field dictionary.
->
-> Sample audit message from the integrity subsystem with errno field:
->
->     [    6.303048] audit: type=1804 audit(1592506281.627:2): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=kernel op=measuring_key cause=ENOMEM comm="swapper/0" name=".builtin_trusted_keys" res=0 errno=-12
->
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> ---
->  specs/fields/field-dictionary.csv | 1 +
->  1 file changed, 1 insertion(+)
+On Thu, Aug 06, 2020 at 12:26:02PM -0500, Madhavan T. Venkataraman wrote:
+> Thanks for the lively discussion. I have tried to answer some of the
+> comments below.
+> 
+> On 8/4/20 9:30 AM, Mark Rutland wrote:
+> >
+> >> So, the context is - if security settings in a system disallow a page to have
+> >> both write and execute permissions, how do you allow the execution of
+> >> genuine trampolines that are runtime generated and placed in a data
+> >> page or a stack page?
+> > There are options today, e.g.
+> >
+> > a) If the restriction is only per-alias, you can have distinct aliases
+> >    where one is writable and another is executable, and you can make it
+> >    hard to find the relationship between the two.
+> >
+> > b) If the restriction is only temporal, you can write instructions into
+> >    an RW- buffer, transition the buffer to R--, verify the buffer
+> >    contents, then transition it to --X.
+> >
+> > c) You can have two processes A and B where A generates instrucitons into
+> >    a buffer that (only) B can execute (where B may be restricted from
+> >    making syscalls like write, mprotect, etc).
+> 
+> The general principle of the mitigation is W^X. I would argue that
+> the above options are violations of the W^X principle. If they are
+> allowed today, they must be fixed. And they will be. So, we cannot
+> rely on them.
 
-Merged.  Thanks for following up with this.
+Hold on.
 
--- 
-paul moore
-www.paul-moore.com
+Contemporary W^X means that a given virtual alias cannot be writeable
+and executeable simultaneously, permitting (a) and (b). If you read the
+references on the Wikipedia page for W^X you'll see the OpenBSD 3.3
+release notes and related presentation make this clear, and further they
+expect (b) to occur with JITS flipping W/X with mprotect().
+
+Please don't conflate your assumed stronger semantics with the general
+principle. It not matching you expectations does not necessarily mean
+that it is wrong.
+
+If you want a stronger W^X semantics, please refer to this specifically
+with a distinct name.
+
+> a) This requires a remap operation. Two mappings point to the same
+>      physical page. One mapping has W and the other one has X. This
+>      is a violation of W^X.
+> 
+> b) This is again a violation. The kernel should refuse to give execute
+>      permission to a page that was writeable in the past and refuse to
+>      give write permission to a page that was executable in the past.
+> 
+> c) This is just a variation of (a).
+
+As above, this is not true.
+
+If you have a rationale for why this is desirable or necessary, please
+justify that before using this as justification for additional features.
+
+> In general, the problem with user-level methods to map and execute
+> dynamic code is that the kernel cannot tell if a genuine application is
+> using them or an attacker is using them or piggy-backing on them.
+
+Yes, and as I pointed out the same is true for trampfd unless you can
+somehow authenticate the calls are legitimate (in both callsite and the
+set of arguments), and I don't see any reasonable way of doing that.
+
+If you relax your threat model to an attacker not being able to make
+arbitrary syscalls, then your suggestion that userspace can perorm
+chceks between syscalls may be sufficient, but as I pointed out that's
+equally true for a sealed memfd or similar.
+
+> Off the top of my head, I have tried to identify some examples
+> where we can have more trust on dynamic code and have the kernel
+> permit its execution.
+> 
+> 1. If the kernel can do the job, then that is one safe way. Here, the kernel
+>     is the code. There is no code generation involved. This is what I
+>     have presented in the patch series as the first cut.
+
+This is sleight-of-hand; it doesn't matter where the logic is performed
+if the power is identical. Practically speaking this is equivalent to
+some dynamic code generation.
+
+I think that it's misleading to say that because the kernel emulates
+something it is safe when the provenance of the syscall arguments cannot
+be verified.
+
+[...]
+
+> Anyway, these are just examples. The principle is - if we can identify
+> dynamic code that has a certain measure of trust, can the kernel
+> permit their execution?
+
+My point generally is that the kernel cannot identify this, and if
+usrspace code is trusted to dynamically generate trampfd arguments it
+can equally be trusted to dyncamilly generate code.
+
+[...]
+
+> As I have mentioned above, I intend to have the kernel generate code
+> only if the code generation is simple enough. For more complicated cases,
+> I plan to use a user-level code generator that is for exclusive kernel use.
+> I have yet to work out the details on how this would work. Need time.
+
+This reads to me like trampfd is only dealing with a few special cases
+and we know that we need a more general solution.
+
+I hope I am mistaken, but I get the strong impression that you're trying
+to justify your existing solution rather than trying to understand the
+problem space.
+
+To be clear, my strong opinion is that we should not be trying to do
+this sort of emulation or code generation within the kernel. I do think
+it's worthwhile to look at mechanisms to make it harder to subvert
+dynamic userspace code generation, but I think the code generation
+itself needs to live in userspace (e.g. for ABI reasons I previously
+mentioned).
+
+Mark.
