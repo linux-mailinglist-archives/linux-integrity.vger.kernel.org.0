@@ -2,60 +2,46 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F37242B8E
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Aug 2020 16:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DB7242C40
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Aug 2020 17:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbgHLOqB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Aug 2020 10:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbgHLOqB (ORCPT
+        id S1726568AbgHLPmc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Aug 2020 11:42:32 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:56520 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726477AbgHLPmb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Aug 2020 10:46:01 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3492C061383;
-        Wed, 12 Aug 2020 07:46:00 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id p13so1858958ilh.4;
-        Wed, 12 Aug 2020 07:46:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=kQOJV8hQKKWi1Q4IBwonjxI4nlnYdAyxL48CghY2b34=;
-        b=HGQFwkMBI0qZO7MrD0rp1rh/DwuatULSWC/TiTjc9FpR639vDt8wLod16lHEAgWVXH
-         XY/Olcv9YPJYu5mbQ//6e/+4DgrFb2uQNUoGS3NSOjDW3Z+GX1guEJ8A5V/+WuogzmwZ
-         qKc9hbiTlyrh/T0KKY6Y9dDr4uMbK6x4uLivHygeyGF1RnzfICFM6Jk8oc+wvWnk+Xjc
-         2yv81izp0yfN4CzEpLu8fNlunwIjjUt2c7fono233rGNqbuOlrCVp/N8zDYXr/Ob99Jm
-         eUwgbm0s0S5ZhVeIpen7HznxUNNDmhXFS1QDH9omiN2bvck9akJvRUz2WQEpMvLM1v0S
-         B8wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=kQOJV8hQKKWi1Q4IBwonjxI4nlnYdAyxL48CghY2b34=;
-        b=D8wUSmkNZBxuObflQKSY2ViJdaFvyC4PJTzq7KHd58X7fgXUNyWukWM3fcV5KvNUVO
-         mopMHZPCFVxumKI0i8shEBsY1BX3Wjn6kV+0rDxEHXbCzFuV+NhHihjNwKAgho+3J7iv
-         6US6gTMsTKBamXTqfPoCB92YUMHtZFgjGOYkll/lSQjWNrPb44f3tPEoCGWiKgdKNM1l
-         feTGsWSRKqcCgD3Sx25TrXtI02/8QAHbLVfp4F3VW2zRmZWuK1JScA0FLqZWoUy1kCNK
-         tdOnZ5rJr8xW85KX9axb22EGe+U2tuPuFwCYo1R9NYisG4H/4Q+rOGuCMhhprGTlSrZf
-         so4w==
-X-Gm-Message-State: AOAM530tDB9lArvmlVVkc5LxQI7Grm74UttCcwlOHEA1tH0Py1Poc6Z4
-        5rI92Mj0qTvS4QtA/rmpSyw=
-X-Google-Smtp-Source: ABdhPJwhgRbaRRSqe0vcGsrFV97VYVYstE/PFYHOorVWwg7UGiBOlCHPQtwmMYxo8Rf89OCc3e2t5w==
-X-Received: by 2002:a92:6d0c:: with SMTP id i12mr8272ilc.37.1597243558796;
-        Wed, 12 Aug 2020 07:45:58 -0700 (PDT)
-Received: from anon-dhcp-152.1015granger.net (c-68-61-232-219.hsd1.mi.comcast.net. [68.61.232.219])
-        by smtp.gmail.com with ESMTPSA id k14sm1089731ion.17.2020.08.12.07.45.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 Aug 2020 07:45:57 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
-Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement LSM
- (IPE)
-From:   Chuck Lever <chucklever@gmail.com>
-In-Reply-To: <1597159969.4325.21.camel@HansenPartnership.com>
-Date:   Wed, 12 Aug 2020 10:45:56 -0400
+        Wed, 12 Aug 2020 11:42:31 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7E6238EE1DD;
+        Wed, 12 Aug 2020 08:42:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1597246949;
+        bh=UjcYuUcmKYlnECOJFMR+GyD6MJoGsB5ezQg+t/+kKdI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=xLII+0kf/CLesZ7RqkPnkP+Fi4qQBxjTcyKa3nw9i0v76X4wMu6tIwBu45r/cU0W7
+         1Beb11EPHhciApYzYgOQ6sEj99EQbPGD3oV61R8/MQXG7oUlYQDHk/eZqy7KQ55Fy0
+         AF4BvQON0u+g5WlLRCFyFqSz4f1mzP57IVdksLgM=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AHFsU6pG-8oB; Wed, 12 Aug 2020 08:42:29 -0700 (PDT)
+Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 11FF68EE0C7;
+        Wed, 12 Aug 2020 08:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1597246949;
+        bh=UjcYuUcmKYlnECOJFMR+GyD6MJoGsB5ezQg+t/+kKdI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=xLII+0kf/CLesZ7RqkPnkP+Fi4qQBxjTcyKa3nw9i0v76X4wMu6tIwBu45r/cU0W7
+         1Beb11EPHhciApYzYgOQ6sEj99EQbPGD3oV61R8/MQXG7oUlYQDHk/eZqy7KQ55Fy0
+         AF4BvQON0u+g5WlLRCFyFqSz4f1mzP57IVdksLgM=
+Message-ID: <1597246946.7293.9.camel@HansenPartnership.com>
+Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement
+ LSM (IPE)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Chuck Lever <chucklever@gmail.com>
 Cc:     Mimi Zohar <zohar@linux.ibm.com>, James Morris <jmorris@namei.org>,
         Deven Bowers <deven.desai@linux.microsoft.com>,
         Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>,
@@ -72,106 +58,110 @@ Cc:     Mimi Zohar <zohar@linux.ibm.com>, James Morris <jmorris@namei.org>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         linux-integrity@vger.kernel.org,
         jaskarankhurana@linux.microsoft.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <20F82AFA-D0AC-479B-AB1D-0D354AE19498@gmail.com>
+Date:   Wed, 12 Aug 2020 08:42:26 -0700
+In-Reply-To: <2CA41152-6445-4716-B5EE-2D14E5C59368@gmail.com>
 References: <20200728213614.586312-1-deven.desai@linux.microsoft.com>
- <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>
- <20200802143143.GB20261@amd> <1596386606.4087.20.camel@HansenPartnership.com>
- <fb35a1f7-7633-a678-3f0f-17cf83032d2b@linux.microsoft.com>
- <1596639689.3457.17.camel@HansenPartnership.com>
- <alpine.LRH.2.21.2008050934060.28225@namei.org>
- <b08ae82102f35936427bf138085484f75532cff1.camel@linux.ibm.com>
- <329E8DBA-049E-4959-AFD4-9D118DEB176E@gmail.com>
- <da6f54d0438ee3d3903b2c75fcfbeb0afdf92dc2.camel@linux.ibm.com>
- <1597073737.3966.12.camel@HansenPartnership.com>
- <6E907A22-02CC-42DD-B3CD-11D304F3A1A8@gmail.com>
- <1597124623.30793.14.camel@HansenPartnership.com>
- <16C3BF97-A7D3-488A-9D26-7C9B18AD2084@gmail.com>
- <1597159969.4325.21.camel@HansenPartnership.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-X-Mailer: Apple Mail (2.3608.80.23.2.2)
+         <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>
+         <20200802143143.GB20261@amd>
+         <1596386606.4087.20.camel@HansenPartnership.com>
+         <fb35a1f7-7633-a678-3f0f-17cf83032d2b@linux.microsoft.com>
+         <1596639689.3457.17.camel@HansenPartnership.com>
+         <alpine.LRH.2.21.2008050934060.28225@namei.org>
+         <b08ae82102f35936427bf138085484f75532cff1.camel@linux.ibm.com>
+         <329E8DBA-049E-4959-AFD4-9D118DEB176E@gmail.com>
+         <da6f54d0438ee3d3903b2c75fcfbeb0afdf92dc2.camel@linux.ibm.com>
+         <1597073737.3966.12.camel@HansenPartnership.com>
+         <6E907A22-02CC-42DD-B3CD-11D304F3A1A8@gmail.com>
+         <1597124623.30793.14.camel@HansenPartnership.com>
+         <16C3BF97-A7D3-488A-9D26-7C9B18AD2084@gmail.com>
+         <1597170509.4325.55.camel@HansenPartnership.com>
+         <2CA41152-6445-4716-B5EE-2D14E5C59368@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Wed, 2020-08-12 at 09:56 -0400, Chuck Lever wrote:
+> > On Aug 11, 2020, at 2:28 PM, James Bottomley <James.Bottomley@Hanse
+> > nPartnership.com> wrote:
+> > 
+> > On Tue, 2020-08-11 at 10:48 -0400, Chuck Lever wrote:
+> > > Mimi's earlier point is that any IMA metadata format that
+> > > involves unsigned digests is exposed to an alteration attack at
+> > > rest or in transit, thus will not provide a robust end-to-end
+> > > integrity guarantee.
+> > 
+> > I don't believe that is Mimi's point, because it's mostly not
+> > correct: the xattr mechanism does provide this today.  The point is
+> > the mechanism we use for storing IMA hashes and signatures today is
+> > xattrs because they have robust security properties for local
+> > filesystems that the kernel enforces.  This use goes beyond IMA,
+> > selinux labels for instance use this property as well.
+> 
+> I don't buy this for a second. If storing a security label in a
+> local xattr is so secure, we wouldn't have any need for EVM.
 
+What don't you buy?  Security xattrs can only be updated by local root.
+ If you trust local root, the xattr mechanism is fine ... it's the only
+one a lot of LSMs use, for instance.  If you don't trust local root or
+worry about offline backups, you use EVM.  A thing isn't secure or
+insecure, it depends on the threat model.  However, if you don't trust
+the NFS server it doesn't matter whether you do or don't trust local
+root, you can't believe the contents of the xattr.
 
-> On Aug 11, 2020, at 11:32 AM, James Bottomley =
-<James.Bottomley@HansenPartnership.com> wrote:
->=20
-> On Tue, 2020-08-11 at 10:48 -0400, Chuck Lever wrote:
->>> On Aug 11, 2020, at 1:43 AM, James Bottomley
->>> <James.Bottomley@HansenPartnership.com> wrote:
->>> On Mon, 2020-08-10 at 19:36 -0400, Chuck Lever wrote:
-> [...]
->>>> Thanks for the help! I just want to emphasize that documentation
->>>> (eg, a specification) will be critical for remote filesystems.
->>>>=20
->>>> If any of this is to be supported by a remote filesystem, then we
->>>> need an unencumbered description of the new metadata format
->>>> rather than code. GPL-encumbered formats cannot be contributed to
->>>> the NFS standard, and are probably difficult for other
->>>> filesystems that are not Linux-native, like SMB, as well.
->>>=20
->>> I don't understand what you mean by GPL encumbered formats.  The
->>> GPL is a code licence not a data or document licence.
->>=20
->> IETF contributions occur under a BSD-style license incompatible
->> with the GPL.
->>=20
->> https://trustee.ietf.org/trust-legal-provisions.html
->>=20
->> Non-Linux implementers (of OEM storage devices) rely on such
->> standards processes to indemnify them against licensing claims.
->=20
-> Well, that simply means we won't be contributing the Linux
-> implementation, right?
+> > What I think you're saying is that NFS can't provide the robust
+> > security for xattrs we've been relying on, so you need some other
+> > mechanism for storing them.
+> 
+> For NFS, there's a network traversal which is an attack surface.
+> 
+> A local xattr can be attacked as well: a device or bus malfunction
+> can corrupt the content of an xattr, or a privileged user can modify
+> it.
+> 
+> How does that metadata get from the software provider to the end
+> user? It's got to go over a network, stored in various ways, some
+> of which will not be trusted. To attain an unbroken chain of
+> provenance, that metadata has to be signed.
+> 
+> I don't think the question is the storage mechanism, but rather the
+> protection mechanism. Signing the metadata protects it in all of
+> these cases.
 
-At the present time, there is nothing but the Linux implementation.
-There's no English description, there's no specification of the
-formats, the format is described only by source code.
+I think we're saying about the same thing.  For most people the
+security mechanism of local xattrs is sufficient.  If you're paranoid,
+you don't believe it is and you use EVM.
 
-The only way to contribute current IMA metadata formats to an open
-standards body like the IETF is to look at encumbered code first.
-We would effectively be contributing an implementation in this case.
+> > I think Mimi's other point is actually that IMA uses a flat hash
+> > which we derive by reading the entire file and then watching for
+> > mutations. Since you cannot guarantee we get notice of mutation
+> > with NFS, the entire IMA mechanism can't really be applied in its
+> > current form and we have to resort to chunk at a time verifications
+> > that a Merkel tree would provide.
+> 
+> I'm not sure what you mean by this. An NFS client relies on
+> notification of mutation to maintain the integrity of its cache of
+> NFS file content, and it's done that since the 1980s.
 
-(I'm not saying the current formats should or should not be
-contributed; merely that there is a legal stumbling block to doing
-so that can be avoided for newly defined formats).
+Mutation detection is part of the current IMA security model.  If IMA
+sees a file mutate it has to be rehashed the next time it passes the
+gate.  If we can't trust the NFS server, we can't trust the NFS
+mutation notification and we have to have a different mechanism to
+check the file.
 
+> In addition to examining a file's mtime and ctime as maintained by
+> the NFS server, a client can rely on the file's NFSv4 change
+> attribute or an NFSv4 delegation.
 
-> Well, let me put the counterpoint: I can write a book about how linux
-> device drivers work (which includes describing the data formats)
+And that's secure in the face of a malicious or compromised server?
 
+The bottom line is still, I think we can't use linear hashes with an
+open/exec/mmap gate with NFS and we have to move to chunk at a time
+verification like that provided by a merkel tree.
 
-Our position is that someone who reads that book and implements those
-formats under a non-GPL-compatible license would be in breach of the
-GPL.
-
-The point of the standards process is to indemnify implementing
-and distributing under _any_ license what has been published by the
-standards body. That legally enables everyone to use the published
-protocol/format in their own code no matter how it happens to be
-licensed.
-
-
-> Fine, good grief, people who take a sensible view of this can write =
-the
-> data format down and publish it under any licence you like then you =
-can
-> pick it up again safely.
-
-
-That's what I proposed. Write it down under the IETF Trust legal
-provisions license. And I volunteered to do that.
-
-All I'm saying is that description needs to come before code.
-
-
---
-Chuck Lever
-chucklever@gmail.com
-
-
+James
 
