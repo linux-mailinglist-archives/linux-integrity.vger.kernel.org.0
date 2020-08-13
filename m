@@ -2,123 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F719243EB6
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Aug 2020 20:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8F8243EB7
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Aug 2020 20:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726253AbgHMSN4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Aug 2020 14:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726167AbgHMSN4 (ORCPT
+        id S1726244AbgHMSP4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Aug 2020 14:15:56 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27280 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726167AbgHMSP4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Aug 2020 14:13:56 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A336C061757;
-        Thu, 13 Aug 2020 11:13:56 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id v6so5515320ota.13;
-        Thu, 13 Aug 2020 11:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dhX3aJX3q4KBRZHuwYhUlB8a3PTx5z3GZT2mRKIefQc=;
-        b=O70/K86V7BRLmfBGJE0TH9C17/lVqUl4Lgy4S0kS11tInrJK2MOBahhZD2luu4L8QQ
-         +mFX9nukGFqBDAURjkNYl9uME9J8fpbZ0loY5lzHCGEiu29BMFoeGSoYuDPxjQBFmsTv
-         TraI5M07RpmktvbsMNmwNKLaXXs1ir5UoqkrQZIjR/DeBEfvPqV19C1r3/oSU0SmNTkM
-         3z8gWjAlkB76ZE0s69wJUEZNwLCPb9rhlJfeywQ/wKQlyZip1VjzrhM8DHSp6d5mAUE2
-         XJwMJx0dkfmqgLk6Rd+sl4QPO/hPHSfXENlg9CM7nFxXgUxI96OjqBdbLI/IjjJcH3eQ
-         ut7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dhX3aJX3q4KBRZHuwYhUlB8a3PTx5z3GZT2mRKIefQc=;
-        b=HCoLhQS/WJCOiitamNUFnfGZt15r7ZSGP60kn8Z3xzDKjZDkH3IFBPl8sG37GNr/Ub
-         /4DwCMym1LZCqaeS+Y0pX0vgXww0l26Iuk/aFStj9pYkNxET2bekxLsWtLAaX4ELn7lt
-         EVtLRlyc/x+VN0QaIoILHJmatISVBw0laDrKqabDYl9ieNQZH0RGom+KozAqG3HSPxhM
-         9tjH6BAMYOZUsijG4UKtCl2e3OQanA/mWosoPVmP0/WcYWXcXMrDKRHFStwGbev1H8ro
-         ofKZ+K9WZKczddx0SaNMt8cgYwib8ISs2ZgROQ3O8gF2ZL2IC4Y6kzzqo3ljEf8zrVOv
-         mfLA==
-X-Gm-Message-State: AOAM532bwXiiH7S9cOzbzQ45BHfgRv7QD/MxrpiRTuxPTt5LaHxgJpQ+
-        ZsyItQoRptFrDSRY+BpZeof2X1jZ01T8aCp/WIQ=
-X-Google-Smtp-Source: ABdhPJx2bvI3Rcu75oszf3a1VUhxpWcU0mTJSg09XxObt4VR5yVboneZks0z+JwshzLZrQqB8p8Tq/1r4jOxjCUOnY0=
-X-Received: by 2002:a05:6830:16d8:: with SMTP id l24mr5198130otr.89.1597342435667;
- Thu, 13 Aug 2020 11:13:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200813170707.2659-1-nramas@linux.microsoft.com>
- <20200813170707.2659-3-nramas@linux.microsoft.com> <5f738fd8-fe28-5358-b3d8-b671b45caa7f@gmail.com>
- <7315b7e8-2c53-2555-bc2e-aae42e16aaa2@linux.microsoft.com>
- <CAEjxPJ6sZdm2w=bbkL0uJyEkHw0gCT_y812WQBZPtLCJzO6r3A@mail.gmail.com> <e935c06f-09e2-a2f7-f97f-768bc017f477@linux.microsoft.com>
-In-Reply-To: <e935c06f-09e2-a2f7-f97f-768bc017f477@linux.microsoft.com>
-From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-Date:   Thu, 13 Aug 2020 14:13:44 -0400
-Message-ID: <CAEjxPJ7uWee5jjALtQ3azMvKRMk8pxFiYByWmYVhjgJiMNZ8ww@mail.gmail.com>
-Subject: Re: [PATCH 2/2] SELinux: Measure state and hash of policy using IMA
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        tusharsu@linux.microsoft.com, sashal@kernel.org,
-        James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        paul Moore <paul@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 13 Aug 2020 14:15:56 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07DI3TkK149415;
+        Thu, 13 Aug 2020 14:15:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=f3d7L3Z8TozRrHr7LlsJHO/eZY3dSbjtP9JU2XR9TIc=;
+ b=exHGkGZ0DyHm9tGd7fQL7KZ9KD3EPUxljnv3ULC1gcPlgmpuVoVHsFJXa8ANykPivaCu
+ slK2f2TNVdgrHYaraYVQf83Kp1cayJTbfv0PtVIdulUlRdHAc16HcvmGqBn172zexyuf
+ pXVgKV51cfQnPvjor7OJbx7HHx3ua7zbbVwZBFviqebfKNtbtmfC9ECXVa75gV2skVNc
+ eJ56jurnTS1owKC/8YdQUoxyiwFJ6qi/GUIX7/DoP3AZ6vmUJ0iOVetZDbKZcDcj4UO1
+ 2fgzQbUuJJhUyN71nuOzHEP9AYQQrVmg8ASXs02syTRrZgHZBxqP9lTLQpeHyPIkI4v7 Dg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32t93tgt2y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Aug 2020 14:15:51 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07DIC7q4002770;
+        Thu, 13 Aug 2020 18:15:49 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03fra.de.ibm.com with ESMTP id 32skp83jwu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Aug 2020 18:15:49 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07DIEJ7N60031342
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Aug 2020 18:14:19 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3ECB5A4040;
+        Thu, 13 Aug 2020 18:15:47 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3748AA404D;
+        Thu, 13 Aug 2020 18:15:46 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.122.169])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 13 Aug 2020 18:15:45 +0000 (GMT)
+Message-ID: <93793b105fc2945435e3c26a6f74eee28ae03e0f.camel@linux.ibm.com>
+Subject: Re: [ima-evm-utils: PATCH 5/5] ima-evm-utils: travis: openssl gost
+ engine
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org
+Date:   Thu, 13 Aug 2020 14:15:45 -0400
+In-Reply-To: <20200812130548.GB4994@gacrux.arch.suse.de>
+References: <20200803130755.GA30440@dell5510>
+         <22a744e9520237907312d1f71293df0dd809805f.camel@linux.ibm.com>
+         <20200803164635.GB4914@dell5510>
+         <bc771e16d4afd3454dea37537f759343452c6446.camel@linux.ibm.com>
+         <20200804072234.GA4337@dell5510> <20200804075453.GA7285@dell5510>
+         <980a1c491dcc03606635cdddce8b19e7a2e041c5.camel@linux.ibm.com>
+         <20200805094215.GA32709@dell5510> <20200811173303.GA31322@dell5510>
+         <146ee0acc5d5f619b6b19ae2a3bcb6a66cacce32.camel@linux.ibm.com>
+         <20200812130548.GB4994@gacrux.arch.suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-13_15:2020-08-13,2020-08-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 bulkscore=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=999 impostorscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008130129
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 13, 2020 at 2:03 PM Lakshmi Ramasubramanian
-<nramas@linux.microsoft.com> wrote:
->
-> On 8/13/20 10:58 AM, Stephen Smalley wrote:
-> > On Thu, Aug 13, 2020 at 1:52 PM Lakshmi Ramasubramanian
-> > <nramas@linux.microsoft.com> wrote:
-> >>
-> >> On 8/13/20 10:42 AM, Stephen Smalley wrote:
-> >>
-> >>>> diff --git a/security/selinux/measure.c b/security/selinux/measure.c
-> >>>> new file mode 100644
-> >>>> index 000000000000..f21b7de4e2ae
-> >>>> --- /dev/null
-> >>>> +++ b/security/selinux/measure.c
-> >>>> @@ -0,0 +1,204 @@
-> >>>> +static int selinux_hash_buffer(void *buf, size_t buf_len,
-> >>>> +                   void **buf_hash, int *buf_hash_len)
-> >>>> +{
-> >>>> +    struct crypto_shash *tfm;
-> >>>> +    struct shash_desc *desc = NULL;
-> >>>> +    void *digest = NULL;
-> >>>> +    int desc_size;
-> >>>> +    int digest_size;
-> >>>> +    int ret = 0;
-> >>>> +
-> >>>> +    tfm = crypto_alloc_shash("sha256", 0, 0);
-> >>>> +    if (IS_ERR(tfm))
-> >>>> +        return PTR_ERR(tfm);
-> >>> Can we make the algorithm selectable via kernel parameter and/or writing
-> >>> to a new selinuxfs node?
-> >>
-> >> I can add a kernel parameter to select this hash algorithm.
-> >
-> > Also can we provide a Kconfig option for the default value like IMA does?
-> >
->
-> Would we need both - Kconfig and kernel param?
->
-> The other option is to provide an IMA function to return the current
-> hash algorithm used for measurement. That way a consistent hash
-> algorithm can be employed by both IMA and the callers. Would that be better?
+On Wed, 2020-08-12 at 15:05 +0200, Petr Vorel wrote:
+> Hi Mimi, Vitaly,
+> 
+> ...
+> > > I prototype docker based Travis [1] (still WIP). It tests various distros,
+> > > including cross-compilation, using also clang, even one build with musl (Alpine
+> > > distro). But there are many failures.
+> > > The biggest problem is with ibmswtpm2 [2], which contain tpm_server binary. This
+> > > project is not packaged in distros, compiles only with gcc (no clang, I tested
+> > > versions 1332 and 1637) and ignore CFLAGS and LDFLAGS settings. It doesn't even
+> > > have git repository (the one on sourceforge is empty).
+> > > We could simply patch this file, but I'm not going to do it.
+> > > I guess I just skip tpm_server dependency for all non-native projects.
+> > > I also need always install gcc even clang is going to be used due tpm_server.
+> > Agreed, getting docker/travis working is independent of tpm_server. 
+> > Without a software TPM, the boot_aggregate test will be skipped.  For
+> > now, until we can straighten this out,  I would modify "make check" to
+> > run the other tests (e.g. make check TESTS="ima_hash.test
+> > sign_verify.test").
+> Yes, specifying tests to be tested is an option. But if skipping the compilation
+> for non-native builds works (e.g. tests which don't specify $VARIANT), I'd go
+> this way. That help us not having to remember to update tests for non-native
+> builds (once the new ones are added).
 
-This is why I preferred just passing the serialized policy buffer to
-IMA and letting it handle the hashing.  But apparently that approach
-wouldn't fly.  IMA appears to support both a Kconfig option for
-selecting a default algorithm and a kernel parameter for overriding
-it.  I assume the idea is that the distros can pick a reasonable
-default and then the end users can override that if they have specific
-requirements.  I'd want the same for SELinux.  If IMA is willing to
-export its hash algorithm to external components, then I'm willing to
-reuse that but not sure if that's a layering violation.
+Sure.  libtmps/swtpm could be installed in lieu of the ibmswtpm2. 
+Sample directions for using it are here: 
+https://github.com/stefanberger/swtpm/wiki/Using-the-IBM-TSS-with-swtpm
+.
+
+thanks,
+
+Mimi
+
