@@ -2,170 +2,266 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C04024463E
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Aug 2020 10:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F54244B29
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Aug 2020 16:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726728AbgHNIOB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Aug 2020 04:14:01 -0400
-Received: from mail1.bemta24.messagelabs.com ([67.219.250.2]:39017 "EHLO
-        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726050AbgHNIOB (ORCPT
+        id S1727964AbgHNOVd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Aug 2020 10:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbgHNOVd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Aug 2020 04:14:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=harman.com;
-        s=harman2020; t=1597392838; i=@harman.com;
-        bh=XjNzQgYHnj5AbPTb6t48hQtzDyaXNCi9P2fFLdemfgY=;
-        h=From:To:CC:Subject:Date:Message-ID:Content-Type:
-         Content-Transfer-Encoding:MIME-Version;
-        b=hdI4vxZD5ZqWRbkA9ZqZBIKPeGz8uChO+dcgfZFdi9+HxXZGBX56eVLzikn3ttx90
-         K4lDO0Te58GX9s01dmqjDbf4geUDDpp4/WWeIbAk8mlc1klq7F+OGd7oF3b8poD62X
-         tthK4O3wbxWg1VG5b3+Cn7kMEDRscG3+QVe8cKPJuC09n6Q8MIIKqH0JtQLtZ7hQzR
-         38mFA0YOEiooCxykdIYwiJK9fzI7/hOFsBmtrQsgMNB1rBjCB1YVtb+0HGvKTD4xPk
-         5CLoTYLNM8kKnWhA+ZQwACWBAKMuORaR5SCwPZQHY2sNxXBOC68ps9+92e7GtrwBjM
-         GDAZf6loNd4xg==
-Received: from [100.112.130.0] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-2.bemta.az-a.us-west-2.aws.symcld.net id 2F/B2-01971-6C7463F5; Fri, 14 Aug 2020 08:13:58 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAKsWRWlGSWpSXmKPExsVyqPAOq+4xd7N
-  4g09nGC1OnDvGbnF51xw2ByaPz5vkAhijWDPzkvIrElgzJp/6wl7wV7qidUFIA+NUiS5GLg4h
-  gS2MEj/OT2OGc+b0T2WHcA4ySuw7dQIow8nBJmAusWtPCzuILSLgLnHtcS8jiM0s4Chxe+9bJ
-  hBbWMBV4v/2lSxdjBxANV4SH+4HQpTrSVy5cACsnEVAVWLTz81gNi/QmP+PF4LZjAJiEt9PrW
-  GCGCkucevJfDBbQkBAYsme88wQtqjEy8f/WCFsA4mtS/exQNhyEsu2P4fq1ZO4MXUKG4StLbF
-  s4WtmiF2CEidnPgGrFxLQkLh2aCXrBEbRWUjWzULSPgtJ+ywk7QsYWVYxmicVZaZnlOQmZubo
-  GhoY6BoaGukaGlnqmhroJVbpJuqVFuuWpxaX6BrpJZYX6xVX5ibnpOjlpZZsYgRGVUpBo9EOx
-  r+vP+gdYpTkYFIS5bU2N4sX4kvKT6nMSCzOiC8qzUktPsQow8GhJMGb7QaUEyxKTU+tSMvMAU
-  Y4TFqCg0dJhHeFK1Cat7ggMbc4Mx0idYrRnmPj07mLmDkmvASRB4/OA5KXrwNJIZa8/LxUKXH
-  enSBTBUDaMkrz4IbCEtIlRlkpYV5GBgYGIZ6C1KLczBJU+VeM4hyMSsK8MiBTeDLzSuB2vwI6
-  iwnoLL1mU5CzShIRUlINTBFCv0+sCDRN+OS0OdTr9oYLGY7T2LRlHrAVB3p+yrtu218w71naR
-  /WGU21/bE4JV/oaMapozq487T7bVch9nVvhDZPP4Vv/1Pl6Cq/qnnU8ZbPvkjPiouo2nbvNJx
-  2xf/d/7ez/fAICXnnLelc+zt3aoenJMmHmvic/OY/Ei7TyKlsIyOXuY1k8/3BVYMuy19/Py7a
-  YMi5cyZHzdxe3qE6CwPcrrZOVFnPYulzrNjAzi5+36HDNC6k5of8bZpZ0N1gsTnih+EPoze1T
-  4rd5JBOy509jWneOtWCDJfeiSyJiW3ecl1i6I6X7aMwf16S4ZP2DW5mvHnla2fXM8PqngraHM
-  8XzpQ3YOXXKOrx2KrEUZyQaajEXFScCAHthy/DDAwAA
-X-Env-Sender: Vladut.Vranceanu@harman.com
-X-Msg-Ref: server-21.tower-322.messagelabs.com!1597392832!48855!2
-X-Originating-IP: [194.113.220.5]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.50.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 22423 invoked from network); 14 Aug 2020 08:13:57 -0000
-Received: from unknown (HELO HIMDWSMB10.ad.harman.com) (194.113.220.5)
-  by server-21.tower-322.messagelabs.com with ECDHE-RSA-AES256-SHA384 encrypted SMTP; 14 Aug 2020 08:13:57 -0000
-Received: from HIMDWSMB08.ad.harman.com (10.70.50.118) by
- HIMDWSMB10.ad.harman.com (10.70.50.215) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 14 Aug 2020 10:13:52 +0200
-Received: from HIMDWSMB07.ad.harman.com (10.70.50.117) by
- HIMDWSMB08.ad.harman.com (10.70.50.118) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 14 Aug 2020 10:13:52 +0200
-Received: from HIMDWSMB07.ad.harman.com ([fe80::4cf8:5ebd:53f7:f6c4]) by
- HIMDWSMB07.ad.harman.com ([fe80::4cf8:5ebd:53f7:f6c4%16]) with mapi id
- 15.00.1497.000; Fri, 14 Aug 2020 10:13:52 +0200
-From:   "Vranceanu, Vladut" <Vladut.Vranceanu@harman.com>
-To:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [linux-ima-user]Systemd cgroups freezes after activating EVM
-Thread-Topic: [linux-ima-user]Systemd cgroups freezes after activating EVM
-Thread-Index: AdZyEsnJR1w89j+xSzSLGGMu//7ukA==
-Date:   Fri, 14 Aug 2020 08:13:52 +0000
-Message-ID: <d7a7b26117dc4129b9750130ba59b93e@HIMDWSMB07.ad.harman.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.70.50.4]
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 14 Aug 2020 10:21:33 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E149FC061384;
+        Fri, 14 Aug 2020 07:21:32 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id h4so10926543ioe.5;
+        Fri, 14 Aug 2020 07:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=ceuzR87451Cc6ZPbAaw/Ws6GJIlBw8/7uWYzi3GVwJA=;
+        b=C5OHUt9hkrJlft1M32KFKYTyDqxhz82XwvNEyxU/08xkdhL8x2QV8l/0TPiGZYMDuX
+         E5OqS6P3mai/ZNmOTipfn0aw5I/0T/f03dt8iu2Z/RwQZ0K1yokX/8J66TvPLawOhabj
+         7CMGvUcmCnlXl4qLbkHcGTqMo0sE8RKFEGMVxjd7wwN3C1/NN/1Hd7fG5ktpMrNNVWsF
+         nET2RKC6Ijlx4bUbXnQVFrO1NwVR6Rso9e1R2b8hlH0IuK0L9Kgu3cNMhrBSzB7jjSNd
+         Og6a6Xp1G22BiKLdIxIg7iGSMhTUbG7mQo4NPHgpzUuVE42qnZqN0KFkyMfFclNcIbpM
+         krhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=ceuzR87451Cc6ZPbAaw/Ws6GJIlBw8/7uWYzi3GVwJA=;
+        b=crRlRDseBo8b+xuowjQJmmTGdDFChnYTVvS0dKPN0sdpwdsmWfpVSZ3l4TOM23/rit
+         1tsOVhXaA8I26gYBweFjni3PqCKB4A1s8JVV4AH/buo8bfq0QyiZDdyEAVULvEqsomXT
+         kZn96UviRzE4YvBGL3aF0a3qtBHHvX9WOmRNNCNsZhbklA//s1MkdlD+Avknjnxe0ibk
+         f3IsbmZjkRSwrp6+sr0agJsDyl1lPI+nMIvHUzUav6bQp2F/t0iFweyOix3BJMq+5Vqc
+         6Rl+k7lqLv2bJFlV5mF/nNIFR09mDVP3nIRM3QoSKysCkJXJFc0bSG37r3Y+LmOBcLQR
+         7+mw==
+X-Gm-Message-State: AOAM5330TXlvyBsYW87lY6pqA/tJyBi1b91kEUYi+YQY+BEMhRzsHW/r
+        GvAZO6W9bs5Rnl9HmGePUGg=
+X-Google-Smtp-Source: ABdhPJweSZedFvqsUMFWyIpazr8WaDF573/xdtkmOjFpEuaDTmOAqcznkxDaJ7yyQKrPSVkkZ6yu+w==
+X-Received: by 2002:a6b:b74b:: with SMTP id h72mr2392562iof.52.1597414892064;
+        Fri, 14 Aug 2020 07:21:32 -0700 (PDT)
+Received: from anon-dhcp-152.1015granger.net (c-68-61-232-219.hsd1.mi.comcast.net. [68.61.232.219])
+        by smtp.gmail.com with ESMTPSA id c4sm118316ioi.44.2020.08.14.07.21.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 14 Aug 2020 07:21:30 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement LSM
+ (IPE)
+From:   Chuck Lever <chucklever@gmail.com>
+In-Reply-To: <1597331416.3708.26.camel@HansenPartnership.com>
+Date:   Fri, 14 Aug 2020 10:21:26 -0400
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, James Morris <jmorris@namei.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>,
+        snitzer@redhat.com, dm-devel@redhat.com,
+        tyhicks@linux.microsoft.com, agk@redhat.com,
+        Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>, nramas@linux.microsoft.com,
+        serge@hallyn.com, pasha.tatashin@soleen.com,
+        Jann Horn <jannh@google.com>, linux-block@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, mdsakib@microsoft.com,
+        open list <linux-kernel@vger.kernel.org>, eparis@redhat.com,
+        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        jaskarankhurana@linux.microsoft.com
 Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
+Message-Id: <5A966AA7-9E39-4F59-A9B7-4308AF6F3333@gmail.com>
+References: <20200728213614.586312-1-deven.desai@linux.microsoft.com>
+ <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>
+ <20200802143143.GB20261@amd> <1596386606.4087.20.camel@HansenPartnership.com>
+ <fb35a1f7-7633-a678-3f0f-17cf83032d2b@linux.microsoft.com>
+ <1596639689.3457.17.camel@HansenPartnership.com>
+ <alpine.LRH.2.21.2008050934060.28225@namei.org>
+ <b08ae82102f35936427bf138085484f75532cff1.camel@linux.ibm.com>
+ <329E8DBA-049E-4959-AFD4-9D118DEB176E@gmail.com>
+ <da6f54d0438ee3d3903b2c75fcfbeb0afdf92dc2.camel@linux.ibm.com>
+ <1597073737.3966.12.camel@HansenPartnership.com>
+ <6E907A22-02CC-42DD-B3CD-11D304F3A1A8@gmail.com>
+ <1597124623.30793.14.camel@HansenPartnership.com>
+ <16C3BF97-A7D3-488A-9D26-7C9B18AD2084@gmail.com>
+ <1597161218.4325.38.camel@HansenPartnership.com>
+ <02D551EF-C975-4B91-86CA-356FA0FF515C@gmail.com>
+ <1597247482.7293.18.camel@HansenPartnership.com>
+ <D470BA4B-EF1A-49CA-AFB9-0F7FFC4C6001@gmail.com>
+ <1597331416.3708.26.camel@HansenPartnership.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+X-Mailer: Apple Mail (2.3608.80.23.2.2)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello,
 
-I have some questions regarding system freezing at boot after activating EV=
-M. I receive this error message:
 
-=A0=A0=A0=A0=A0 systemd[1]: Failed to mount cgroup at /sys/fs/cgroup/system=
-: No such file of device.
-=A0=A0=A0=A0=A0 [!!!!!] Failed to mount API filesystems, freezing.
+> On Aug 13, 2020, at 11:10 AM, James Bottomley =
+<James.Bottomley@HansenPartnership.com> wrote:
+>=20
+> On Thu, 2020-08-13 at 10:42 -0400, Chuck Lever wrote:
+>>> On Aug 12, 2020, at 11:51 AM, James Bottomley <James.Bottomley@Hans
+>>> enPartnership.com> wrote:
+>>> On Wed, 2020-08-12 at 10:15 -0400, Chuck Lever wrote:
+>>>>> On Aug 11, 2020, at 11:53 AM, James Bottomley
+>>>>> <James.Bottomley@HansenPartnership.com> wrote:
+>>>>> On Tue, 2020-08-11 at 10:48 -0400, Chuck Lever wrote:
+> [...]
+>>>>>>>> The client would have to reconstruct that tree again if
+>>>>>>>> memory pressure caused some or all of the tree to be
+>>>>>>>> evicted, so perhaps an on-demand mechanism is preferable.
+>>>>>>>=20
+>>>>>>> Right, but I think that's implementation detail.  Probably
+>>>>>>> what we need is a way to get the log(N) verification hashes
+>>>>>>> from the server and it's up to the client whether it caches
+>>>>>>> them or not.
+>>>>>>=20
+>>>>>> Agreed, these are implementation details. But see above about
+>>>>>> the trustworthiness of the intermediate hashes. If they are
+>>>>>> conveyed on an untrusted network, then they can't be trusted
+>>>>>> either.
+>>>>>=20
+>>>>> Yes, they can, provided enough of them are asked for to
+>>>>> verify.  If you look at the simple example above, suppose I
+>>>>> have cached H11 and H12, but I've lost the entire H2X layer.  I
+>>>>> want to verify B3 so I also ask you for your copy of H24.  Then
+>>>>> I generate H23 from B3 and Hash H23 and H24.  If this doesn't
+>>>>> hash to H12 I know either you supplied me the wrong block or
+>>>>> lied about H24.  However, if it all hashes correctly I know you
+>>>>> supplied me with both the correct B3 and the correct H24.
+>>>>=20
+>>>> My point is there is a difference between a trusted cache and an
+>>>> untrusted cache. I argue there is not much value in a cache where
+>>>> the hashes have to be verified again.
+>>>=20
+>>> And my point isn't about caching, it's about where the tree comes
+>>> from. I claim and you agree the client can get the tree from the
+>>> server a piece at a time (because it can path verify it) and
+>>> doesn't have to generate it itself.
+>>=20
+>> OK, let's focus on where the tree comes from. It is certainly
+>> possible to build protocol to exchange parts of a Merkle tree.
+>=20
+> Which is what I think we need to extend IMA to do.
+>=20
+>> The question is how it might be stored on the server.
+>=20
+> I think the only thing the server has to guarantee to store is the =
+head
+> hash, possibly signed.
+>=20
+>> There are some underlying assumptions about the metadata storage
+>> mechanism that should be stated up front.
+>>=20
+>> Current forms of IMA metadata are limited in size and stored in a
+>> container that is read and written in a single operation. If we stick
+>> with that container format, I don't see a way to store a Merkle tree
+>> in there for all file sizes.
+>=20
+> Well, I don't think you need to.  The only thing that needs to be
+> stored is the head hash.  Everything else can be reconstructed.  If =
+you
+> asked me to implement it locally, I'd probably put the head hash in an
+> xattr but use a CAM based cache for the merkel trees and construct the
+> tree on first access if it weren't already in the cache.
 
-I am using Linux kernel 4.19.78 and system v2.34. My aim is to activate IMA=
-/EVM with EVM in mode 0x80000006, as per https://www.kernel.org/doc/Documen=
-tation/ABI/testing/evm. I have a script running from an initramFS, which do=
-es the IMA/EVM setup like the following:
+The contents of the security.ima xattr might be modeled after
+EVM_IMA_DIGSIG:
 
-=A0=A0=A0=A0=A0=A0 mount -n -t securityfs securityfs /sys/kernel/security
+- a format enumerator (used by all IMA metadata formats)
+- the tree's unit size
+- a fingerprint of the signer's certificate
+  - digest algorithm name and full digest
+- the root hash, always signed
+  - signing algorithm name and signature
 
-=A0=A0=A0=A0=A0=A0 (set -e; while read i; do echo $i >&2; echo $i; done) </=
-etc/keys/policy >/sys/kernel/security/ima/policy
+The rest of the hash tree is always stored somewhere else or
+constructed on-demand.
 
-=A0=A0=A0=A0=A0=A0 ima_id=3D"`awk '/\.ima/ { printf "%d", "0x"$1; }' /proc/=
-keys`"
-=A0=A0=A0=A0=A0=A0 evmctl import /etc/keys/x509_ima_1.der $ima_id
+My experience of security communities both within and outside the
+IETF is that they would insist on always having a signature.
 
-=A0=A0=A0=A0=A0=A0 evm_id=3D"`awk '/\.evm/ { printf "%d", "0x"$1; }' /proc/=
-keys`"
-=A0=A0=A0=A0=A0=A0 evmctl import /etc/keys/x509_ima_1.der $evm_id
+If one doesn't care about signing, a self-signed certificate can be
+automatically provisioned when ima-evm-utils is installed that can
+be used for those cases. That would make the signature process
+invisible to any administrator who doesn't care about signed
+metadata.
 
-=A0=A0=A0=A0=A0=A0 cat /etc/keys/kmk | keyctl padd user kmk @u
-=A0=A0=A0=A0=A0=A0 keyctl add encrypted evm-key "load `cat /etc/keys/evm-ke=
-y`" @u
+Because storage in NFS would cross trust boundaries, it would have
+to require the use of a signed root hash. I don't want to be in the
+position where copying a file with an unsigned root hash into NFS
+makes it unreadable because of a change in policy.
 
-=A0=A0=A0=A0=A0=A0 echo -2147483642 > /sys/kernel/security/evm
 
-, where the policy is:=20
+> However, the above isn't what fs-verity does: it stores the tree in a
+> hidden section of the file.  That's why I don't think we'd mandate
+> anything about tree storage.  Just describe the partial retrieval
+> properties we'd like and leave the rest as an implementation detail.
 
-=A0 =A0=A0=A0dont_appraise fsmagic=3D0x9fa0
-=A0=A0=A0=A0 dont_appraise fsmagic=3D0x62656572
-=A0=A0=A0=A0 dont_appraise fsmagic=3D0x64626720
-=A0=A0=A0=A0 dont_appraise fsmagic=3D0x01021994
-=A0=A0=A0=A0 dont_appraise fsmagic=3D0x858458f6
-=A0=A0=A0=A0 dont_appraise fsmagic=3D0x1cd1=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=20
-=A0=A0=A0=A0 dont_appraise fsmagic=3D0x42494e4d
-=A0=A0=A0=A0 dont_appraise fsmagic=3D0x73636673
-=A0=A0=A0=A0 dont_appraise fsmagic=3D0xf97cff8c
+I'm starting to consider how much compatibility with fs-verity is
+required. There are several forms of hash-tree, and a specification
+of the IMA metadata format would need to describe exactly how to
+form the tree root. If we want compatibility with fs-verity, then
+it is reasonable to assume that this IMA metadata format might be
+required to use the same hash tree construction algorithm that
+fs-verity uses.
 
-This would be a dummy policy, with which I could still reproduce the issue.
+The original Merkle tree concept was patented 40 years ago. I'm not
+clear yet on whether the patent encumbers the use of Merkle trees
+in any way, but since their usage seems pretty widespread in P2P
+and BitCoin applications, I'm guessing the answer to that is
+favorable. More research needed.
 
-Kernel command line parameters are:
+There is an implementation used by several GNU utilities that is
+available as a piece of GPL code. It could be a potential blocker
+if that was the tree algorithm that fs-verity uses -- as discussed
+in the other thread.
 
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =A0 bootargs =3D "console=3Dt=
-tyS0,921600n1 \
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 debugshell=3D1 printk.disable=
-_uart=3D0 rootwait mem=3D1024m \
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 loglevel=3D8 earlycon=3Duart8=
-250,mmio32,0x11002000 rootfstype=3Dext4 ima_appraise=3Dlog evm=3Dfix cgroup=
-_no_v1=3Dall quiet ";
+Apparently there are some known weaknesses in older hash tree
+algorithms, including at least one CVE. We could choose a recent
+algorithm, but perhaps there needs to be a degree of extensibility
+in case that algorithm needs to be updated due to a subsequent
+security issue.
 
-, where ima_appraise=3Dlog evm=3Dfix should ensure that boot freeze does no=
-t occur cause of missing signatures and cgroup_no_v1=3Dall is one of my att=
-empts at solving the issue(not needed).
+Tree construction could include a few items besides file content to
+help secure the hash further. For instance the file's size and mtime,
+as well as the depth of the tree, could be included in the signature.
+But that depends on whether it can be done while maintaining
+compatibility with fs-verity.
 
-The problem occurs specifically only when running this instruction "echo -2=
-147483642 > /sys/kernel/security/evm", of activating EVM. The same setup go=
-es through boot fine when leaving that out. Moreover, when doing the instru=
-ction in user-space, that also works(though I get some EVM-related kernel m=
-essages which, at this point, I'm not sure whether are normal or not).
+I would feel better if someone with more domain expertise chimed in.
 
-I would much appreciate any lead to what I could be doing wrong, as it is d=
-ifficult for me to trace the problem both for my lack of expertise and the =
-way the image is formed. I am not subscribed to this mailing list, as advis=
-ed by the FAQ, so please reply to my email individually as well, if you do.
 
-Thank you,
-Vlad
+>> Thus it seems to me that we cannot begin to consider the tree-on-the-
+>> server model unless there is a proposed storage mechanism for that
+>> whole tree. Otherwise, the client must have the primary role in
+>> unpacking and verifying the tree.
+>=20
+> Well, as I said,  I don't think you need to store the tree.
 
-P.S.: Already messaged systemd community and the answer was:
+We basically agree there.
 
-systemd is just the messenger here. It tries to mount cgroupfs and that's d=
-enied due to some permission problem. We don't know IMA/EVM here. Please co=
-ntact the IMA community instead, they might be able to tell you why the ker=
-nel would refuse cgroupfs mounts.
 
-cgroupfs is required to be mountable for systemd to work. There's no way ar=
-ound that.
+> You certainly could decide to store the entire tree (as fs-verity =
+does) if
+> it fitted your use case, but it's not required.  Perhaps even in my
+> case I'd make the CAM based cache persistent, like android's dalvik
+> cache.
+>=20
+> James
+>=20
+>=20
+>> Storing only the tree root in the metadata means the metadata format
+>> is nicely bounded in size.
+
+--
+Chuck Lever
+chucklever@gmail.com
+
 
 
