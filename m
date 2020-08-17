@@ -2,66 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 230F3247887
-	for <lists+linux-integrity@lfdr.de>; Mon, 17 Aug 2020 23:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247242478D4
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Aug 2020 23:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727839AbgHQVOo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 17 Aug 2020 17:14:44 -0400
-Received: from mga18.intel.com ([134.134.136.126]:7106 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727789AbgHQVOo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 17 Aug 2020 17:14:44 -0400
-IronPort-SDR: rQZOcFoOZwbex413NN+bfzTJnTaKtUILB1WSoUdaRDMLnEPdZ+Uq266RPUgZjzL/vraxJYFm4f
- nMj1hCe2B8iQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="142418315"
-X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
-   d="scan'208";a="142418315"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 14:14:43 -0700
-IronPort-SDR: 93bBxgHVUdBFDBPXTqCH049KLd5f1W+pOOV9QvsaqTtXyXjP231jxgbapnbPPCOTem2pKWeG3j
- 1lQEZarRN7QQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
-   d="scan'208";a="296609612"
-Received: from bbartede-mobl.ger.corp.intel.com (HELO localhost) ([10.249.32.24])
-  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2020 14:14:40 -0700
-Date:   Tue, 18 Aug 2020 00:14:40 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Masahisa Kojima <masahisa.kojima@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        ardb@kernel.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v5 2/2] dt-bindings: Add SynQucer TPM MMIO as a trivial
- device
-Message-ID: <20200817211440.GB44714@linux.intel.com>
-References: <20200728031433.3370-1-masahisa.kojima@linaro.org>
- <20200728031433.3370-3-masahisa.kojima@linaro.org>
+        id S1728358AbgHQVaM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 17 Aug 2020 17:30:12 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:43890 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726634AbgHQVaL (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 17 Aug 2020 17:30:11 -0400
+Received: from [192.168.1.12] (c-24-16-6-251.hsd1.wa.comcast.net [24.16.6.251])
+        by linux.microsoft.com (Postfix) with ESMTPSA id F269320B4908;
+        Mon, 17 Aug 2020 14:30:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F269320B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1597699811;
+        bh=gwtlXOGLNOEhS8feeMsiU+VHB5OcE0A5+MQhHlaV/4o=;
+        h=Subject:References:To:Cc:From:Date:In-Reply-To:From;
+        b=lT5Pf3Y40XH1JJrct769/dcWiEIY/wRv4dGO/eOyiRJN7QJAuFHxaNTo2vlsb6XnD
+         DwDjvi3afambMbTrx+SPVlCNuiAqIEuZ3CISkYTrb0TjSIF88jcZOvDQaGjfCdr/87
+         gQMYJQt57oXEf8mKa07cC67QfA/EbNEQuC9t6yFg=
+Subject: Re: [RFC] ima: export the measurement list when needed
+References: <436e3951-d6d5-014a-dde1-8a6398dfe7a1@linux.microsoft.com>
+To:     janne.karhunen@gmail.com, linux-integrity@vger.kernel.org,
+        zohar@linux.ibm.com
+Cc:     kgold@linux.ibm.com, david.safford@gmail.com, monty.wiseman@ge.com
+From:   Raphael Gianotti <raphgi@linux.microsoft.com>
+X-Forwarded-Message-Id: <436e3951-d6d5-014a-dde1-8a6398dfe7a1@linux.microsoft.com>
+Message-ID: <57e0095a-ff6f-e5dc-6250-1320bd6518cb@linux.microsoft.com>
+Date:   Mon, 17 Aug 2020 14:30:11 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200728031433.3370-3-masahisa.kojima@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <436e3951-d6d5-014a-dde1-8a6398dfe7a1@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 12:14:32PM +0900, Masahisa Kojima wrote:
-> Add a compatible string for the SynQuacer TPM to the binding for a
-> TPM exposed via a memory mapped TIS frame. The MMIO window behaves
-> slightly differently on this hardware, so it requires its own
-> identifier.
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
 
-I applied these patches:
+Hi Janne,
 
-http://git.infradead.org/users/jjs/linux-tpmdd.git/log/refs/heads/master
+Subject: Re: [RFC] ima: export the measurement list when needed
+> Date: Wed, 18 Dec 2019 17:11:22 +0200
+> From: Janne Karhunen <janne.karhunen@gmail.com>
+> To: linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+> CC: Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com, 
+> monty.wiseman@ge.com
+>
+> Hi,
+>
+> Have in mind that below is the first trial draft that booted and
+> seemingly accomplished the task once, it was not really tested at all
+> yet. I will make a polished and tested version if people like the
+> concept.
+>
+> Note that the code (almost) supports pushing and pulling of the
+> entries. This variant is a simple pull given that the list size is
+> above the defined limits. Pushing can be put in place if the recursion
+> with the list extend_list_mutex is cleared, maybe this could be done
+> via another patch later on when we have a workqueue for the export
+> task? The workqueue might be the best context for the export job since
+> clearing the list is a heavy operation (and it's not entirely correct
+> here AFAIK, there is no rcu sync before the template free).
+>
+>
+> -- Janne
+>
+> On Wed, Dec 18, 2019 at 2:53 PM Janne Karhunen 
+> <janne.karhunen@gmail.com> wrote:
+>>
+>> Some systems can end up carrying lots of entries in the ima
+>> measurement list. Since every entry is using a bit of kernel
+>> memory, add a new Kconfig variable to allow the sysadmin to
+>> define the maximum measurement list size and the location
+>> of the exported list.
+>>
+>> The list is written out in append mode, so the system will
+>> keep writing new entries as long as it stays running or runs
+>> out of space. File is also automatically truncated on startup.
+>>
+>> Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
+>> ---
+>>  security/integrity/ima/Kconfig     |  10 ++
+>>  security/integrity/ima/ima.h       |   7 +-
+>>  security/integrity/ima/ima_fs.c    | 178 +++++++++++++++++++++++++++++
+>>  security/integrity/ima/ima_queue.c |   2 +-
+>>  4 files changed, 192 insertions(+), 5 deletions(-)
 
-/Jarkko
+I've been looking into a solution to this same issue you started some 
+work on. I was wondering if you are still working on it. I was 
+considering taking your initial prototyping on this and extending it 
+into a final solution, but I wanted to reply here first and check if you 
+are currently working on this.
+
