@@ -2,148 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 104C5245BD1
-	for <lists+linux-integrity@lfdr.de>; Mon, 17 Aug 2020 07:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 550D8245DD4
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Aug 2020 09:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbgHQFNZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 17 Aug 2020 01:13:25 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:35462 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgHQFNY (ORCPT
+        id S1726496AbgHQHUg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 17 Aug 2020 03:20:36 -0400
+Received: from sonic316-55.consmr.mail.ne1.yahoo.com ([66.163.187.181]:36708
+        "EHLO sonic316-55.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726089AbgHQHUg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 17 Aug 2020 01:13:24 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id F409220B4908;
-        Sun, 16 Aug 2020 22:13:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F409220B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1597641204;
-        bh=qbuxvMsPJpMYhSJpirTpZzrEV8fYC5SSNw37I5HFHHY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Z8tv+g4/pKX1o9EyE6X0xPnN6q/VBNBXBopoovxStJs7AiLf7QnsBJuWUdyTlIy8h
-         ihi4AeaXL6OT/irxHIJ8b6S8glbDsq/TWl0XtlwTp/FhtXinA6uUARkEYOTlhDHVFB
-         fapN1aM5QAq5/AIkT1mYozAT0NcDt17bSmgJaXRk=
-Subject: Re: [PATCH v2 3/4] IMA: Add a test to verify measurement of
- certificate imported into a keyring
-To:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
-        ltp@lists.linux.it
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-References: <20200807204652.5928-1-pvorel@suse.cz>
- <20200807204652.5928-4-pvorel@suse.cz>
- <25a78f42d15dcb3312a59de587cb9f4e31ccd5b5.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <a537bbdb-1383-48f4-99a5-42ce6d082ddf@linux.microsoft.com>
-Date:   Sun, 16 Aug 2020 22:13:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 17 Aug 2020 03:20:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1597648835; bh=wQR2TNpnSC5+pl+9xCwBDdU8shZ+1jYIhLI8TGcKGS0=; h=Date:From:Reply-To:Subject:References:From:Subject; b=rj/Ao4sSjyOH0l9IiWgqJn+hlur38woztj3WnZU+bYPaWFK087gNg25sCy0yH1SPnn8hQ8KXjBULFKtfh5BclmAxxbzelhRhDm/3ZbM6hekGyaYc4C5ISiQg+K+7mUpDmrlxu8+thKhFzuzqMlCDTtgPvlyAMvoEL6FMVMwPPjPvHSzyOP854ep5fJS/MoM+SIxT0vjL28YB3T3qNr6p2hDhXMrX4+Dg3OT+NyUZxIvI3dyXiBEzakAk4DkZcFjHQnqgJBU1ZVGjGfiSU5vJx5PAYygxkOnm0NjBjrxQnZiQS1Spd0NFMAmZfFrTqCnwJZUutACAAxJmkMDn69wktA==
+X-YMail-OSG: xG5Dy8UVM1lXH5YD2PpeZel9PqZYKWHci4QL49Na4g9s_cv3TmGs0SdmABXapPA
+ .4.FFUWcGzQ4wA4uQBA0Le.4If3Hz_krhZo1BqtABk6_98E0mKeuHHcR9kfaUfWkL0R6a0jFa6px
+ KUXlmptsbIlqRAiN3BUnspi_UbLS.mVs9g.HiC8B1j1lIq.U2mO9yuIBq0iiu1MoxLCcT0fSpVnD
+ 3Gsr_IzNymuvWJTqlTdA2EumV.9_s21BAYh0SlaL5a_iRBg3H6YJAO7WE1Fqjv8WjCALCBq8iyZ_
+ OGHvv81.GYgBearLG3PlkiRrhwd47w0CoQTwXzTtiDc_.A5JR9_NLx8zvu6wuUydChKdB_uusoeh
+ 95YXi7bQXazVggiHbeBfG1Z10XOwclSKtm3dh6r79mCX45Bk1xdJzsqiRO9ANTxix_r0zP4jqrDD
+ 2MnRvoR6zknfdGfZakYhmKGKWK7atgf9Ax64MobFOg3owElxrJU3szmSFD2xi2X1PymR0XYOJDND
+ ask.GMhMh7.kjCCIY3LgCW93deLBCrPnsLzGdPaLgytkAad0J1nWjjizdpzfFJ.qWFd9HA.UHsHM
+ UI17dci2LpvMlTs3PErAZaz799ckvzNJDHwgiWwiSzhVjJK3VcvbxMtW9X_QEd9Kgl2O3.woXnm.
+ zb1NyjGcSpLuR_82VSwWuCVCWQOT6Tu5C.xq2uWcPnt3ncJHB.SwT2x3IPFBf82lmt36p.Yajgqr
+ ejbOQekDevuwAjj9N7iQuuwlW8AZpfd3l3IhrZ7vywdUQefGWMcA4DDUTb7mBK0VPgLhFsXc1.Fz
+ zji9mhwmX71rfvSzq2s10J1gty1O4xXeavjeMssvfIcySlOmXcTLb466wRa2VjZteV_ausMdnJ3v
+ BTjpKUeSZaH06qs7kc_rYcdAj.W06LoiCdsyrNY0T_fRa71TrZ1wXWsy2Hm0Y4ExRRgbsHayq584
+ rNx2NWLQMjYt3.Rnh1ZE6C1e09snD7E2vweBN15JB6ypUkKyfPjXl6uo.gAGhAZiMCIBy7Kf413E
+ lULJ5Wd5M9hiKXWFSmRtBJWRQUg2JBZwTeBoZqozYMiE65e3GQWpRAwIyQfLihXnkjGZVlwS.lYT
+ kkGihBKE3cewVJk9wea.N7KhDyfpart0W7u7QGjnV.MMi39CMt53D9sF4p7mhUHo56vPZfezgjw5
+ 6l2M7pqnCksq8vc30rNeTEoFH2fgDW.9pIbtHnRKeVHm9Op9xEIxixpshes.UvSE..4248eUSzy7
+ JougUGC2St0msgGwM_.ssOzSGjNzPx1kAX_ZnZEVUF5Yn9IOL9FG3_TLs4nqo9wwx2WtEQky8.D6
+ 2IF4zu_pheYw6JkKs02bvScupE3s24DRr9KsqTD1OeLyMKCyGXJWQIXwp_aVmo1BEFsL5OsL9O7E
+ -
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Mon, 17 Aug 2020 07:20:35 +0000
+Date:   Mon, 17 Aug 2020 07:18:35 +0000 (UTC)
+From:   "Mrs. Maureen Hinckley" <mua39@gvsao.in>
+Reply-To: maurhinck2@gmail.com
+Message-ID: <240010608.3000878.1597648715121@mail.yahoo.com>
+Subject: RE
 MIME-Version: 1.0
-In-Reply-To: <25a78f42d15dcb3312a59de587cb9f4e31ccd5b5.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+References: <240010608.3000878.1597648715121.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16455 YMailNodin Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 8/16/20 8:21 PM, Mimi Zohar wrote:
 
-Hi Mimi,
 
->> +# Create a new keyring, import a certificate into it, and verify
->> +# that the certificate is measured correctly by IMA.
->> +test2()
->> +{
->> +	tst_require_cmds evmctl keyctl openssl
->> +
->> +	local cert_file="$TST_DATAROOT/x509_ima.der"
->> +	local keyring_name="key_import_test"
->> +	local temp_file="file.txt"
->> +	local keyring_id
->> +
->> +	tst_res TINFO "verify measurement of certificate imported into a keyring"
->> +
->> +	if ! check_ima_policy_content "^measure.*func=KEY_CHECK.*keyrings=.*$keyring_name"; then
->> +		tst_brk TCONF "IMA policy does not contain $keyring_name keyring"
->> +	fi
->> +
-> 
-> If the IMA policy contains multiple KEY_CHECK measurement policy rules
-> it complains about "grep: Unmatched ( or \(".
-> 
-> Sample rules:
-> measure func=KEY_CHECK template=ima-buf
-> keyrings=.ima|.builtin_trusted_keys
-> measure func=KEY_CHECK template=ima-buf keyrings=key_import_test
-> 
+I am Maureen Hinckley and my foundation is donating (Five hundred and fifty=
+ thousand USD) to you. Contact us via my email at (maurhinck2@gmail.com) fo=
+r further details.
 
-I tried with the above policy entries, but am unable to reproduce the 
-error you are seeing.
-
-ima_keys 1 TINFO: verifying key measurement for keyrings and templates 
-specified in IMA policy file
-ima_keys 1 TPASS: specified keyrings were measured correctly
-ima_keys 2 TPASS: logged cert matches original cert
-
->> +	keyctl new_session > /dev/null
->> +
->> +	keyring_id=$(keyctl newring $keyring_name @s) || \
->> +		tst_brk TBROK "unable to create a new keyring"
->> +
->> +	tst_is_num $keyring_id || \
->> +		tst_brk TBROK "unable to parse the new keyring id"
->> +
->> +	evmctl import $cert_file $keyring_id > /dev/null || \
->> +		tst_brk TBROK "unable to import a certificate into $keyring_name keyring"
-> 
-> "cert_file" needs to be updated from
-> "ltp/testcases/kernel/security/integrity/ima/tests/datafiles/x509_ima.d
-> er" to
-> "ltp/testcases/kernel/security/integrity/ima/tests/../datafiles/ima_key
-> s/x509_ima.der".
-> 
-
-The problem is actually due to missing "x509_ima.der" in 
-"INSTALL_TARGETS" in datafiles/keys/Makefile
-
-Adding the following line in the Makefile fixes the problem
-
-INSTALL_TARGETS		:= x509_ima.der
-
-  -lakshmi
-
-> On failure to open the file,
-> errno: No such file or directory (2)
-> ima_keys 2 TBROK: unable to import a certificate into key_import_test keyring
-> ima_keys 2 TINFO: SELinux enabled in enforcing mode, this may affect test results
-> ima_keys 2 TINFO: it can be disabled with TST_DISABLE_SELINUX=1 (requires super/root)
-> ima_keys 2 TINFO: install seinfo to find used SELinux profiles
-> ima_keys 2 TINFO: loaded SELinux profiles: none
-> 
-> Mimi
-> 
->> +
->> +	grep $keyring_name $ASCII_MEASUREMENTS | tail -n1 | cut -d' ' -f6 | \
->> +		xxd -r -p > $temp_file
->> +
->> +	if [ ! -s $temp_file ]; then
->> +		tst_res TFAIL "keyring $keyring_name not found in $ASCII_MEASUREMENTS"
->> +		return
->> +	fi
->> +
->> +	if ! openssl x509 -in $temp_file -inform der > /dev/null; then
->> +		tst_res TFAIL "logged certificate is not a valid x509 certificate"
->> +		return
->> +	fi
->> +
->> +	if cmp -s $temp_file $cert_file; then
->> +		tst_res TPASS "logged certificate matches the original"
->> +	else
->> +		tst_res TFAIL "logged certificate does not match original"
->> +	fi
->> +}
->> +
->>   tst_run
-> 
-
+Best Regards,
+Mrs. Maureen Hinckley,
+Copyright =C2=A92020 The Maureen Hinckley Foundation All Rights Reserved.
