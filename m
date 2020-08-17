@@ -2,337 +2,170 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B32F245995
-	for <lists+linux-integrity@lfdr.de>; Sun, 16 Aug 2020 23:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1660245B05
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Aug 2020 05:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729284AbgHPVDL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 16 Aug 2020 17:03:11 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:33746 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728651AbgHPVDB (ORCPT
+        id S1726631AbgHQDWI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 16 Aug 2020 23:22:08 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16204 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726420AbgHQDWG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 16 Aug 2020 17:03:01 -0400
-Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 078F220B490D;
-        Sun, 16 Aug 2020 14:02:59 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 078F220B490D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1597611779;
-        bh=NuFmESyJGNFBP58x+U/isopuX3DzXmJqPKW36Wj4jK8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uq3neAOGRaSfweNqt0NjcRjqp75MrXbX+ty+g82RmGIGUN4dz8MPsvwYSaTAU2B74
-         5LfU0CBJppWFPMzc3bRF8GdACyGMRo0fcSuGrLNARsndX6PkURkR3Xi6czgGAYg0OE
-         YorcRViSVRU/cDwqGlGD+5J6CbnNgXRQeRm4rkcs=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: [PATCH 2/2] dm-crypt: collect data and submit to DM to measure
-Date:   Sun, 16 Aug 2020 14:02:50 -0700
-Message-Id: <20200816210250.11506-3-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200816210250.11506-1-tusharsu@linux.microsoft.com>
-References: <20200816210250.11506-1-tusharsu@linux.microsoft.com>
+        Sun, 16 Aug 2020 23:22:06 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07H32GsA093708;
+        Sun, 16 Aug 2020 23:21:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=yrcGAZMTCbkxu8Rob8TJehQr1Z1+pPhPAUdmMReok2k=;
+ b=n/YqSKfQjUygObrbMrnJJpneGSa1fbwHNG7CN2oU2x/+7/BqWf1PTx9F2NdJnG73AclT
+ JVDiSfI6OXb/LfTBPNlPDIPKXFG2pJmMc7LzGHxvd5WWHmZ+941Yfg5hunKp8skynYoT
+ OElC46JKAyVLAjxF5N0Zy0BMpy7uSoLXQS6vNC3ZVhsqdhGM0LaxXlQAE3r2cv9rrJQq
+ hMwFpOPA1+W1/3MbZ9RVefywwwl1wJK7+37O4VpJnu1zQvIVWXPbJmvyAVKzgp9+xFYI
+ js1UUdtXSCNpScR1J17U9Txyred07b4Y+WIOSlhS44tWCYR+YsgZMQZURpTElnizwvPy 5Q== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32y4f3e9sx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 16 Aug 2020 23:21:58 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07H3B5jI020046;
+        Mon, 17 Aug 2020 03:21:56 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 32x7b81rxy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Aug 2020 03:21:56 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07H3LssB25428338
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Aug 2020 03:21:54 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C9F911C04C;
+        Mon, 17 Aug 2020 03:21:54 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8350011C050;
+        Mon, 17 Aug 2020 03:21:52 +0000 (GMT)
+Received: from sig-9-65-237-100.ibm.com (unknown [9.65.237.100])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 17 Aug 2020 03:21:52 +0000 (GMT)
+Message-ID: <25a78f42d15dcb3312a59de587cb9f4e31ccd5b5.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 3/4] IMA: Add a test to verify measurement of
+ certificate imported into a keyring
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
+Cc:     Lachlan Sneff <t-josne@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Date:   Sun, 16 Aug 2020 23:21:51 -0400
+In-Reply-To: <20200807204652.5928-4-pvorel@suse.cz>
+References: <20200807204652.5928-1-pvorel@suse.cz>
+         <20200807204652.5928-4-pvorel@suse.cz>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-17_01:2020-08-14,2020-08-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=4
+ clxscore=1015 priorityscore=1501 phishscore=0 adultscore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008170020
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Currently, dm-crypt does not take advantage of IMA measuring
-capabilities, and ultimately the benefits of remote attestation.
+Hi Petr, Lachlan,
 
-Measure various dm-crypt constructs by calling various device-mapper
-functions - dm_ima_*() that use IMA measuring capabilities. Implement
-ima_measure_dm_crypt_data() to measure various dm-crypt constructs.
+On Fri, 2020-08-07 at 22:46 +0200, Petr Vorel wrote:
+> From: Lachlan Sneff <t-josne@linux.microsoft.com>
 
-Ensure that ima_measure_dm_crypt_data() is non intrusive, i.e. failures
-in this function and the call-stack below should not affect the core
-functionality of dm-crypt.
+> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+> index 53c289054..30950904e 100755
+> --- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+> +++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+> 
+> @@ -61,4 +65,52 @@ test1()
+>  	tst_res TPASS "specified keyrings were measured correctly"
+>  }
+> 
+> +# Create a new keyring, import a certificate into it, and verify
+> +# that the certificate is measured correctly by IMA.
+> +test2()
+> +{
+> +	tst_require_cmds evmctl keyctl openssl
+> +
+> +	local cert_file="$TST_DATAROOT/x509_ima.der"
+> +	local keyring_name="key_import_test"
+> +	local temp_file="file.txt"
+> +	local keyring_id
+> +
+> +	tst_res TINFO "verify measurement of certificate imported into a keyring"
+> +
+> +	if ! check_ima_policy_content "^measure.*func=KEY_CHECK.*keyrings=.*$keyring_name"; then
+> +		tst_brk TCONF "IMA policy does not contain $keyring_name keyring"
+> +	fi
+> +
 
-A demonstrative usage of above functionality on a system:
+If the IMA policy contains multiple KEY_CHECK measurement policy rules
+it complains about "grep: Unmatched ( or \(".
 
-If the IMA policy contains the following rule:
+Sample rules:
+measure func=KEY_CHECK template=ima-buf
+keyrings=.ima|.builtin_trusted_keys
+measure func=KEY_CHECK template=ima-buf keyrings=key_import_test
 
-    measure func=CRITICAL_DATA data_sources=dm-crypt template=ima-buf
+> +	keyctl new_session > /dev/null
+> +
+> +	keyring_id=$(keyctl newring $keyring_name @s) || \
+> +		tst_brk TBROK "unable to create a new keyring"
+> +
+> +	tst_is_num $keyring_id || \
+> +		tst_brk TBROK "unable to parse the new keyring id"
+> +
+> +	evmctl import $cert_file $keyring_id > /dev/null || \
+> +		tst_brk TBROK "unable to import a certificate into $keyring_name keyring"
 
-and, the following commands are used to setup a crypt target:
+"cert_file" needs to be updated from 
+"ltp/testcases/kernel/security/integrity/ima/tests/datafiles/x509_ima.d
+er" to
+"ltp/testcases/kernel/security/integrity/ima/tests/../datafiles/ima_key
+s/x509_ima.der".
 
- #key="faf453b4ee938cff2f0d2c869a0b743f59125c0a37f5bcd8f1dbbd911a78abaa"
- #arg="'0 1953125 crypt aes-xts-plain64 "
- #arg="$arg $key 0 "
- #arg="$arg /dev/loop0 0 1 allow_discards'"
- #tgt_name="test-crypt"
- #cmd="dmsetup create $tgt_name --table $arg"
- #eval $cmd
+On failure to open the file, 
+errno: No such file or directory (2)
+ima_keys 2 TBROK: unable to import a certificate into key_import_test keyring
+ima_keys 2 TINFO: SELinux enabled in enforcing mode, this may affect test results
+ima_keys 2 TINFO: it can be disabled with TST_DISABLE_SELINUX=1 (requires super/root)
+ima_keys 2 TINFO: install seinfo to find used SELinux profiles
+ima_keys 2 TINFO: loaded SELinux profiles: none
 
-then, the IMA log at
-/sys/kernel/security/integrity/ima/ascii_runtime_measurements should
-contain the dm-crypt measurements. And, the following IMA log entry
-should be added in the IMA log,
+Mimi
 
- ima-buf sha1:4cbca71967d6b48e13ff5283d8e657899b005f70 
- 1597518359:539244018:dm-crypt:add_target
- 74695f6e756d5f646973636172645f62696f733d313b7065725f62696f5f646
- 174615f73697a653d3830383b646d7265715f73746172743d3136383b74666d
- 735f636f756e743d313b6f6e5f6469736b5f7461675f73697a653d303b696e7
- 46567726974795f69765f73697a653d303b696e746567726974795f7461675f
- 73697a653d303b69765f73697a653d31363b69765f6f66667365743d303b736
- 563746f725f73686966743d303b736563746f725f73697a653d3531323b666c
- 6167733d323b6369706865725f666c6167733d303b73746172743d303b6b657
- 95f6d61635f73697a653d303b6b65795f65787472615f73697a653d303b6b65
- 795f70617274733d313b6b65795f73697a653d33323b6369706865725f73747
- 2696e673d6165732d7874732d706c61696e36343b6465766963655f6e616d65
- 3d3235333a303b
+> +
+> +	grep $keyring_name $ASCII_MEASUREMENTS | tail -n1 | cut -d' ' -f6 | \
+> +		xxd -r -p > $temp_file
+> +
+> +	if [ ! -s $temp_file ]; then
+> +		tst_res TFAIL "keyring $keyring_name not found in $ASCII_MEASUREMENTS"
+> +		return
+> +	fi
+> +
+> +	if ! openssl x509 -in $temp_file -inform der > /dev/null; then
+> +		tst_res TFAIL "logged certificate is not a valid x509 certificate"
+> +		return
+> +	fi
+> +
+> +	if cmp -s $temp_file $cert_file; then
+> +		tst_res TPASS "logged certificate matches the original"
+> +	else
+> +		tst_res TFAIL "logged certificate does not match original"
+> +	fi
+> +}
+> +
+>  tst_run
 
-where, the ascii representation of the above data is:
-
- ti_num_discard_bios=1;per_bio_data_size=808;dmreq_start=168;
- tfms_count=1;on_disk_tag_size=0;integrity_iv_size=0;
- integrity_tag_size=0;iv_size=16;iv_offset=0;sector_shift=0;
- sector_size=512;flags=2;cipher_flags=0;start=0;key_mac_size=0;
- key_extra_size=0;key_parts=1;key_size=32;
- cipher_string=aes-xts-plain64;device_name=253:0;
-
-Some of the above values can be verified using:
-
- #dmsetup table --showkeys
-
-where, the output of the command should be similar to:
-
- test-crypt: 0 1953125 crypt aes-xts-plain64
- faf453b4ee938cff2f0d2c869a0b743f59125c0a37f5bcd8f1dbbd911a78abaa
- 0 7:0 0 1 allow_discards
-
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
----
- drivers/md/dm-crypt.c          | 170 +++++++++++++++++++++++++++++++++
- security/integrity/ima/Kconfig |   2 +-
- 2 files changed, 171 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index 000ddfab5ba0..cf78628c984b 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -2465,6 +2465,8 @@ static void crypt_dtr(struct dm_target *ti)
- 
- 	ti->private = NULL;
- 
-+	dm_ima_exit_measurements(ti->type);
-+
- 	if (!cc)
- 		return;
- 
-@@ -2908,6 +2910,166 @@ static int crypt_ctr_optional(struct dm_target *ti, unsigned int argc, char **ar
- 	return 0;
- }
- 
-+#ifdef CONFIG_IMA
-+/*
-+ * append integer values to dm-crypt specific data
-+ * to be measured through IMA
-+ */
-+static int ima_append_num_values(struct dm_target *ti,
-+				 const char *key,
-+				 long long num_val)
-+{
-+	char *num_str = NULL;
-+	int length = 0;
-+	int r = 0;
-+
-+	if (!ti || !key) {
-+		r = -EINVAL;
-+		goto error;
-+	}
-+
-+	length = snprintf(NULL, 0, "%lld", num_val);
-+	num_str = kzalloc(length + 1, GFP_KERNEL);
-+	if (!num_str) {
-+		r = -ENOMEM;
-+		goto error;
-+	}
-+	snprintf(num_str, length + 1, "%lld", num_val);
-+	dm_ima_append_measurement_list(ti->type,
-+				       key,
-+				       (const void *)num_str,
-+				       length);
-+	kzfree(num_str);
-+	return r;
-+error:
-+	DMERR("appending num values to IMA measurement list failed %d", r);
-+	return r;
-+}
-+/*
-+ * Measure dm-crypt specific data through IMA.
-+ * It appends all the needed data to the list as a key-val pair using
-+ * dm_ima_append_measurement_list() and internal ima_append_num_values(),
-+ * and finally measures the list using dm_ima_finalize_and_measure().
-+ */
-+static void ima_measure_dm_crypt_data(struct dm_target *ti, const char *desc)
-+{
-+	int r = 0;
-+	struct crypt_config *cc = NULL;
-+	const char *devname = dm_table_device_name(ti->table);
-+
-+	if (!ti) {
-+		r = -EINVAL;
-+		goto out;
-+	}
-+
-+	cc = ti->private;
-+
-+	if (devname) {
-+		dm_ima_append_measurement_list(ti->type,
-+					       "device_name",
-+					       (const void *)devname,
-+					       strlen(devname));
-+	}
-+
-+	if (cc->cipher_string) {
-+		dm_ima_append_measurement_list(ti->type,
-+					       "cipher_string",
-+					       (const void *)cc->cipher_string,
-+					       strlen(cc->cipher_string));
-+	}
-+
-+	if (cc->cipher_auth) {
-+		dm_ima_append_measurement_list(ti->type,
-+					       "cipher_auth",
-+					       (const void *)cc->cipher_auth,
-+					       strlen(cc->cipher_auth));
-+	}
-+
-+	r = ima_append_num_values(ti, "key_size", cc->key_size);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "key_parts", cc->key_parts);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "key_extra_size", cc->key_extra_size);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "key_mac_size", cc->key_mac_size);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "start", cc->start);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "cipher_flags", cc->cipher_flags);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "flags", cc->flags);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "sector_size", cc->sector_size);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "sector_shift", cc->sector_shift);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "iv_offset", cc->iv_offset);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "iv_size", cc->iv_size);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "integrity_tag_size", cc->integrity_tag_size);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "integrity_iv_size", cc->integrity_iv_size);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "on_disk_tag_size", cc->on_disk_tag_size);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "tfms_count", cc->tfms_count);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "dmreq_start", cc->dmreq_start);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "per_bio_data_size", cc->per_bio_data_size);
-+	if (r)
-+		goto out;
-+
-+	r = ima_append_num_values(ti, "ti_num_discard_bios",
-+			      ti->num_discard_bios);
-+	if (r)
-+		goto out;
-+
-+	dm_ima_finalize_and_measure(ti->type, desc);
-+	return;
-+
-+out:
-+	DMERR("IMA measurement of dm-crypt data failed %d", r);
-+
-+}
-+#else
-+static inline void ima_measure_dm_crypt_data(struct dm_target *ti,
-+					     const char *desc) {}
-+#endif /* CONFIG_IMA */
-+
- /*
-  * Construct an encryption mapping:
-  * <cipher> [<key>|:<key_size>:<user|logon>:<key_description>] <iv_offset> <dev_path> <start>
-@@ -3093,6 +3255,10 @@ static int crypt_ctr(struct dm_target *ti, unsigned int argc, char **argv)
- 
- 	ti->num_flush_bios = 1;
- 
-+	dm_ima_init_measurements(ti->type);
-+
-+	ima_measure_dm_crypt_data(ti, "add_target");
-+
- 	return 0;
- 
- bad:
-@@ -3225,6 +3391,8 @@ static void crypt_postsuspend(struct dm_target *ti)
- 	struct crypt_config *cc = ti->private;
- 
- 	set_bit(DM_CRYPT_SUSPENDED, &cc->flags);
-+
-+	ima_measure_dm_crypt_data(ti, "post_suspend");
- }
- 
- static int crypt_preresume(struct dm_target *ti)
-@@ -3244,6 +3412,8 @@ static void crypt_resume(struct dm_target *ti)
- 	struct crypt_config *cc = ti->private;
- 
- 	clear_bit(DM_CRYPT_SUSPENDED, &cc->flags);
-+
-+	ima_measure_dm_crypt_data(ti, "resume");
- }
- 
- /* Message interface
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index e4fb1761d64a..ac6708daeaac 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -324,7 +324,7 @@ config IMA_MEASURE_ASYMMETRIC_KEYS
- 
- config IMA_QUEUE_EARLY_BOOT_DATA
- 	bool
--	depends on SECURITY_SELINUX || (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
-+	depends on SECURITY_SELINUX || (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING) || DM_CRYPT
- 	default y
- 
- config IMA_SECURE_AND_OR_TRUSTED_BOOT
--- 
-2.17.1
 
