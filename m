@@ -2,23 +2,23 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7F8248AAF
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 17:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AB4248A88
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 17:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728071AbgHRPve (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        id S1726754AbgHRPve (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Tue, 18 Aug 2020 11:51:34 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2650 "EHLO huawei.com"
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2651 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728236AbgHRPsF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Aug 2020 11:48:05 -0400
-Received: from lhreml722-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 9C8BD5D5C87FB618FA08;
-        Tue, 18 Aug 2020 16:48:03 +0100 (IST)
+        id S1728239AbgHRPsH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 18 Aug 2020 11:48:07 -0400
+Received: from lhreml722-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id C18A762DD92823577DEB;
+        Tue, 18 Aug 2020 16:48:05 +0100 (IST)
 Received: from kstruczy-linux-box (10.204.65.138) by
  lhreml722-chm.china.huawei.com (10.201.108.73) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Tue, 18 Aug 2020 16:48:01 +0100
-Received: by kstruczy-linux-box (sSMTP sendmail emulation); Tue, 18 Aug 2020 17:48:04 +0200
+ 15.1.1913.5; Tue, 18 Aug 2020 16:48:04 +0100
+Received: by kstruczy-linux-box (sSMTP sendmail emulation); Tue, 18 Aug 2020 17:48:06 +0200
 From:   <krzysztof.struczynski@huawei.com>
 To:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <containers@lists.linux-foundation.org>,
@@ -29,9 +29,9 @@ CC:     <zohar@linux.ibm.com>, <stefanb@linux.vnet.ibm.com>,
         <jmorris@namei.org>, <christian@brauner.io>,
         <silviu.vlasceanu@huawei.com>, <roberto.sassu@huawei.com>,
         Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-Subject: [RFC PATCH 27/30] integrity: Add key domain tag to the search criteria
-Date:   Tue, 18 Aug 2020 17:42:27 +0200
-Message-ID: <20200818154230.14016-18-krzysztof.struczynski@huawei.com>
+Subject: [RFC PATCH 28/30] ima: Load per ima namespace x509 certificate
+Date:   Tue, 18 Aug 2020 17:42:28 +0200
+Message-ID: <20200818154230.14016-19-krzysztof.struczynski@huawei.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200818154230.14016-1-krzysztof.struczynski@huawei.com>
 References: <20200818154230.14016-1-krzysztof.struczynski@huawei.com>
@@ -49,255 +49,176 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 
-Add key domain tag to the search criteria in digsig module. If the
-domain tag is not set for the keys from the given keyring, it is set to
-NULL and the behaviour is unchanged.
-
-The key domain tag is added to the ima appraisal keys loaded to the
-system ima keyring.
+If configured, load the x509 certificate when the first process is
+born into the new ima namespace. User can set the path to the
+certificate by writing to the x509_for_children entry in the ima
+securityfs.
 
 Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 ---
- include/linux/digsig.h                 | 11 ++++---
- lib/digsig.c                           | 11 +++----
- security/integrity/digsig.c            | 40 ++++++++++++++++++++++----
- security/integrity/digsig_asymmetric.c | 20 ++++++++-----
- security/integrity/integrity.h         | 11 ++++---
- 5 files changed, 67 insertions(+), 26 deletions(-)
+ security/integrity/digsig.c     |  6 +--
+ security/integrity/ima/ima_ns.c | 69 ++++++++++++++++++++++++++++-----
+ security/integrity/integrity.h  |  2 +-
+ 3 files changed, 63 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/digsig.h b/include/linux/digsig.h
-index 2ace69e41088..9e4121253899 100644
---- a/include/linux/digsig.h
-+++ b/include/linux/digsig.h
-@@ -44,13 +44,16 @@ struct signature_hdr {
- 
- #if defined(CONFIG_SIGNATURE) || defined(CONFIG_SIGNATURE_MODULE)
- 
--int digsig_verify(struct key *keyring, const char *sig, int siglen,
--					const char *digest, int digestlen);
-+int digsig_verify(struct key *keyring, struct key_tag *domain_tag,
-+		  const char *sig, int siglen, const char *digest,
-+		  int digestlen);
- 
- #else
- 
--static inline int digsig_verify(struct key *keyring, const char *sig,
--				int siglen, const char *digest, int digestlen)
-+static inline int digsig_verify(struct key *keyring,
-+				struct key_tag *domain_tag,
-+				const char *sig, int siglen, const char *digest,
-+				int digestlen)
- {
- 	return -EOPNOTSUPP;
- }
-diff --git a/lib/digsig.c b/lib/digsig.c
-index e0627c3e53b2..bd234b1abb4f 100644
---- a/lib/digsig.c
-+++ b/lib/digsig.c
-@@ -196,8 +196,8 @@ static int digsig_verify_rsa(struct key *key,
-  * Normally hash of the content is used as a data for this function.
-  *
-  */
--int digsig_verify(struct key *keyring, const char *sig, int siglen,
--						const char *data, int datalen)
-+int digsig_verify(struct key *keyring, struct key_tag *domain_tag,
-+		  const char *sig, int siglen, const char *data, int datalen)
- {
- 	int err = -ENOMEM;
- 	struct signature_hdr *sh = (struct signature_hdr *)sig;
-@@ -217,14 +217,15 @@ int digsig_verify(struct key *keyring, const char *sig, int siglen,
- 	if (keyring) {
- 		/* search in specific keyring */
- 		key_ref_t kref;
--		kref = keyring_search(make_key_ref(keyring, 1UL),
--				      &key_type_user, name, true);
-+		kref = keyring_search_tag(make_key_ref(keyring, 1UL),
-+					  &key_type_user, name,
-+					  domain_tag, true);
- 		if (IS_ERR(kref))
- 			key = ERR_CAST(kref);
- 		else
- 			key = key_ref_to_ptr(kref);
- 	} else {
--		key = request_key(&key_type_user, name, NULL);
-+		key = request_key_tag(&key_type_user, name, domain_tag, NULL);
- 	}
- 	if (IS_ERR(key)) {
- 		pr_err("key not found, id: %s\n", name);
 diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index e9cbadade74b..523fc786c4d7 100644
+index 523fc786c4d7..8cd54bc83892 100644
 --- a/security/integrity/digsig.c
 +++ b/security/integrity/digsig.c
-@@ -15,6 +15,7 @@
- #include <linux/vmalloc.h>
- #include <crypto/public_key.h>
- #include <keys/system_keyring.h>
-+#include <linux/ima.h>
- 
- #include "integrity.h"
- 
-@@ -31,6 +32,16 @@ static const char * const keyring_name[INTEGRITY_KEYRING_MAX] = {
- 	".platform",
- };
- 
-+static unsigned long keyring_alloc_flags[INTEGRITY_KEYRING_MAX] = {
-+	KEY_ALLOC_NOT_IN_QUOTA,
-+#ifdef CONFIG_IMA_NS
-+	KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_DOMAIN_IMA,
-+#else
-+	KEY_ALLOC_NOT_IN_QUOTA,
-+#endif
-+	KEY_ALLOC_NOT_IN_QUOTA,
-+};
-+
- #ifdef CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
- #define restrict_link_to_ima restrict_link_by_builtin_and_secondary_trusted
- #else
-@@ -56,10 +67,22 @@ static struct key *integrity_keyring_from_id(const unsigned int id)
- 	return keyring[id];
+@@ -170,8 +170,8 @@ int __init integrity_init_keyring(const unsigned int id)
+ 	return __integrity_init_keyring(id, perm, restriction);
  }
  
-+static struct key_tag *domain_tag_from_id(const unsigned int id)
+-int __init integrity_add_key(const unsigned int id, const void *data,
+-			     off_t size, key_perm_t perm)
++int integrity_add_key(const unsigned int id, const void *data,
++		      off_t size, key_perm_t perm)
+ {
+ 	key_ref_t key;
+ 	int rc = 0;
+@@ -195,7 +195,7 @@ int __init integrity_add_key(const unsigned int id, const void *data,
+ 
+ }
+ 
+-int __init integrity_load_x509(const unsigned int id, const char *path)
++int integrity_load_x509(const unsigned int id, const char *path)
+ {
+ 	void *data;
+ 	loff_t size;
+diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
+index 872dc6a96a96..11e1d896f603 100644
+--- a/security/integrity/ima/ima_ns.c
++++ b/security/integrity/ima/ima_ns.c
+@@ -48,6 +48,30 @@ static void dec_ima_namespaces(struct ucounts *ucounts)
+ 	return dec_ucount(ucounts, UCOUNT_IMA_NAMESPACES);
+ }
+ 
++#ifdef CONFIG_IMA_LOAD_X509
++static int ima_ns_load_x509(struct ima_namespace *ima_ns)
 +{
-+	if (id >= INTEGRITY_KEYRING_MAX)
-+		return ERR_PTR(-EINVAL);
++	int res = 0;
++	int unset_flags =
++		ima_ns->policy_data->ima_policy_flag & IMA_APPRAISE;
 +
-+	if (id == INTEGRITY_KEYRING_IMA)
-+		return current->nsproxy->ima_ns->key_domain;
++	if (!ima_ns->x509_path_for_children)
++		return res;
 +
-+	return NULL;
++	ima_ns->policy_data->ima_policy_flag &= ~unset_flags;
++	res = integrity_load_x509(INTEGRITY_KEYRING_IMA,
++				  ima_ns->x509_path_for_children);
++	ima_ns->policy_data->ima_policy_flag |= unset_flags;
++
++	return res;
 +}
++#else
++static inline int ima_ns_load_x509(struct ima_namespace *ima_ns)
++{
++	return 0;
++}
++#endif
 +
- int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
- 			    const char *digest, int digestlen)
+ static struct ima_namespace *ima_ns_alloc(void)
  {
- 	struct key *keyring;
-+	struct key_tag *domain_tag;
+ 	struct ima_namespace *ima_ns;
+@@ -365,6 +389,10 @@ static int imans_activate(struct ima_namespace *ima_ns)
+ 	if (res < 0)
+ 		goto out;
  
- 	if (siglen < 2)
- 		return -EINVAL;
-@@ -68,14 +91,18 @@ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
- 	if (IS_ERR(keyring))
- 		return PTR_ERR(keyring);
- 
-+	domain_tag = domain_tag_from_id(id);
-+	if (IS_ERR(domain_tag))
-+		return PTR_ERR(domain_tag);
++	res = ima_ns_load_x509(ima_ns);
++	if (res < 0)
++		goto out;
 +
- 	switch (sig[1]) {
- 	case 1:
- 		/* v1 API expect signature without xattr type */
--		return digsig_verify(keyring, sig + 1, siglen - 1, digest,
--				     digestlen);
-+		return digsig_verify(keyring, domain_tag,
-+				     sig + 1, siglen - 1, digest, digestlen);
- 	case 2:
--		return asymmetric_verify(keyring, sig, siglen, digest,
--					 digestlen);
-+		return asymmetric_verify(keyring, domain_tag, sig, siglen,
-+					 digest, digestlen);
+ 	ima_ns->frozen = true;
+ 
+ 	/* Set current last element as list's head */
+@@ -388,6 +416,7 @@ static int imans_install(struct nsset *nsset, struct ns_common *new)
+ 	int res;
+ 	struct nsproxy *nsproxy = nsset->nsproxy;
+ 	struct ima_namespace *ns = to_ima_ns(new);
++	struct ima_namespace *old_ns = nsproxy->ima_ns;
+ 
+ 	if (!current_is_single_threaded())
+ 		return -EUSERS;
+@@ -396,14 +425,24 @@ static int imans_install(struct nsset *nsset, struct ns_common *new)
+ 	    !ns_capable(nsset->cred->user_ns, CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+-	res = imans_activate(ns);
+-	if (res)
+-		return res;
+-
+ 	get_ima_ns(ns);
+-	put_ima_ns(nsproxy->ima_ns);
++	put_ima_ns(old_ns);
+ 	nsproxy->ima_ns = ns;
+ 
++	/* The activation has to take place, after attaching the new namespace
++	 * to the nsproxy. This is because one part of the activation process,
++	 * is loading the appraisal keys, which temporary disables appraisal in
++	 * the current ima namespace, and it must not happen for the "old" ima
++	 * namespace.
++	 */
++	res = imans_activate(ns);
++	if (res) {
++		get_ima_ns(old_ns);
++		put_ima_ns(ns);
++		nsproxy->ima_ns = old_ns;
++		return res;
++	}
++
+ 	get_ima_ns(ns);
+ 	put_ima_ns(nsproxy->ima_ns_for_children);
+ 	nsproxy->ima_ns_for_children = ns;
+@@ -416,6 +455,7 @@ int imans_on_fork(struct nsproxy *nsproxy, struct task_struct *tsk,
+ {
+ 	int res;
+ 	struct ima_namespace *ima_ns = nsproxy->ima_ns_for_children;
++	struct ima_namespace *old_ima_ns = nsproxy->ima_ns;
+ 
+ 	/* create_new_namespaces() already incremented the ref counter */
+ 	if (nsproxy->ima_ns == ima_ns)
+@@ -431,14 +471,23 @@ int imans_on_fork(struct nsproxy *nsproxy, struct task_struct *tsk,
+ 			return res;
  	}
  
- 	return -EOPNOTSUPP;
-@@ -101,7 +128,8 @@ static int __init __integrity_init_keyring(const unsigned int id,
+-	res = imans_activate(ima_ns);
+-	if (res)
+-		return res;
+-
+ 	get_ima_ns(ima_ns);
+-	put_ima_ns(nsproxy->ima_ns);
++	put_ima_ns(old_ima_ns);
+ 	nsproxy->ima_ns = ima_ns;
  
- 	keyring[id] = keyring_alloc(keyring_name[id], KUIDT_INIT(0),
- 				    KGIDT_INIT(0), cred, perm,
--				    KEY_ALLOC_NOT_IN_QUOTA, restriction, NULL);
-+				    keyring_alloc_flags[id],
-+				    restriction, NULL);
- 	if (IS_ERR(keyring[id])) {
- 		err = PTR_ERR(keyring[id]);
- 		pr_info("Can't allocate %s keyring (%d)\n",
-@@ -153,7 +181,7 @@ int __init integrity_add_key(const unsigned int id, const void *data,
- 
- 	key = key_create_or_update(make_key_ref(keyring[id], 1), "asymmetric",
- 				   NULL, data, size, perm,
--				   KEY_ALLOC_NOT_IN_QUOTA);
-+				   keyring_alloc_flags[id]);
- 	if (IS_ERR(key)) {
- 		rc = PTR_ERR(key);
- 		pr_err("Problem loading X.509 certificate %d\n", rc);
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index cfa4127d0518..4994a9773247 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -19,7 +19,9 @@
- /*
-  * Request an asymmetric key.
-  */
--static struct key *request_asymmetric_key(struct key *keyring, uint32_t keyid)
-+static struct key *request_asymmetric_key(struct key *keyring,
-+					  struct key_tag *domain_tag,
-+					  uint32_t keyid)
- {
- 	struct key *key;
- 	char name[12];
-@@ -44,14 +46,16 @@ static struct key *request_asymmetric_key(struct key *keyring, uint32_t keyid)
- 		/* search in specific keyring */
- 		key_ref_t kref;
- 
--		kref = keyring_search(make_key_ref(keyring, 1),
--				      &key_type_asymmetric, name, true);
-+		kref = keyring_search_tag(make_key_ref(keyring, 1),
-+					  &key_type_asymmetric, name,
-+					  domain_tag, true);
- 		if (IS_ERR(kref))
- 			key = ERR_CAST(kref);
- 		else
- 			key = key_ref_to_ptr(kref);
- 	} else {
--		key = request_key(&key_type_asymmetric, name, NULL);
-+		key = request_key_tag(&key_type_asymmetric,
-+				      name, domain_tag, NULL);
- 	}
- 
- 	if (IS_ERR(key)) {
-@@ -73,8 +77,9 @@ static struct key *request_asymmetric_key(struct key *keyring, uint32_t keyid)
- 	return key;
++	/* The activation has to take place, after attaching the new namespace
++	 * to the nsproxy. This is because one part of the activation process,
++	 * is loading the appraisal keys, which temporary disables appraisal in
++	 * the current ima namespace, and it must not happen for the "old" ima
++	 * namespace.
++	 */
++	res = imans_activate(ima_ns);
++	if (res) {
++		get_ima_ns(old_ima_ns);
++		put_ima_ns(ima_ns);
++		nsproxy->ima_ns = old_ima_ns;
++	}
++
+ 	return res;
  }
- 
--int asymmetric_verify(struct key *keyring, const char *sig,
--		      int siglen, const char *data, int datalen)
-+int asymmetric_verify(struct key *keyring, struct key_tag *domain_tag,
-+		      const char *sig, int siglen,
-+		      const char *data, int datalen)
- {
- 	struct public_key_signature pks;
- 	struct signature_v2_hdr *hdr = (struct signature_v2_hdr *)sig;
-@@ -92,7 +97,8 @@ int asymmetric_verify(struct key *keyring, const char *sig,
- 	if (hdr->hash_algo >= HASH_ALGO__LAST)
- 		return -ENOPKG;
- 
--	key = request_asymmetric_key(keyring, be32_to_cpu(hdr->keyid));
-+	key = request_asymmetric_key(keyring, domain_tag,
-+				     be32_to_cpu(hdr->keyid));
- 	if (IS_ERR(key))
- 		return PTR_ERR(key);
  
 diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index c2981a98547e..207a1aef28e4 100644
+index 207a1aef28e4..9b080b9fe242 100644
 --- a/security/integrity/integrity.h
 +++ b/security/integrity/integrity.h
-@@ -212,11 +212,14 @@ static inline int __init integrity_load_cert(const unsigned int id,
- #endif /* CONFIG_INTEGRITY_SIGNATURE */
+@@ -179,7 +179,7 @@ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
+ int integrity_modsig_verify(unsigned int id, const struct modsig *modsig);
  
- #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
--int asymmetric_verify(struct key *keyring, const char *sig,
--		      int siglen, const char *data, int datalen);
-+int asymmetric_verify(struct key *keyring, struct key_tag *domain_tag,
-+		      const char *sig, int siglen,
-+		      const char *data, int datalen);
+ int __init integrity_init_keyring(const unsigned int id);
+-int __init integrity_load_x509(const unsigned int id, const char *path);
++int integrity_load_x509(const unsigned int id, const char *path);
+ int __init integrity_load_cert(const unsigned int id, const char *source,
+ 			       const void *data, size_t len, key_perm_t perm);
  #else
--static inline int asymmetric_verify(struct key *keyring, const char *sig,
--				    int siglen, const char *data, int datalen)
-+static inline int asymmetric_verify(struct key *keyring,
-+				    struct key_tag *domain_tag,
-+				    const char *sig, int siglen,
-+				    const char *data, int datalen)
- {
- 	return -EOPNOTSUPP;
- }
 -- 
 2.20.1
 
