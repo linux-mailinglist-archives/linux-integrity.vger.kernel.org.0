@@ -2,23 +2,23 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E2A248A43
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 17:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434BF248A4A
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 17:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727770AbgHRPoi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Aug 2020 11:44:38 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2636 "EHLO huawei.com"
+        id S1727868AbgHRPov (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Aug 2020 11:44:51 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2637 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726685AbgHRPob (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Aug 2020 11:44:31 -0400
-Received: from lhreml722-chm.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 87348B7096922947690A;
-        Tue, 18 Aug 2020 16:44:30 +0100 (IST)
+        id S1726971AbgHRPoe (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 18 Aug 2020 11:44:34 -0400
+Received: from lhreml722-chm.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id F38319593CBDEE2F0A10;
+        Tue, 18 Aug 2020 16:44:32 +0100 (IST)
 Received: from kstruczy-linux-box (10.204.65.138) by
  lhreml722-chm.china.huawei.com (10.201.108.73) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Tue, 18 Aug 2020 16:44:28 +0100
-Received: by kstruczy-linux-box (sSMTP sendmail emulation); Tue, 18 Aug 2020 17:44:31 +0200
+ 15.1.1913.5; Tue, 18 Aug 2020 16:44:31 +0100
+Received: by kstruczy-linux-box (sSMTP sendmail emulation); Tue, 18 Aug 2020 17:44:33 +0200
 From:   <krzysztof.struczynski@huawei.com>
 To:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <containers@lists.linux-foundation.org>,
@@ -29,9 +29,9 @@ CC:     <zohar@linux.ibm.com>, <stefanb@linux.vnet.ibm.com>,
         <jmorris@namei.org>, <christian@brauner.io>,
         <silviu.vlasceanu@huawei.com>, <roberto.sassu@huawei.com>,
         Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-Subject: [RFC PATCH 13/30] ima: Add a new ima template that includes namespace ID
-Date:   Tue, 18 Aug 2020 17:42:13 +0200
-Message-ID: <20200818154230.14016-4-krzysztof.struczynski@huawei.com>
+Subject: [RFC PATCH 14/30] ima: Add per namespace view of the measurement list
+Date:   Tue, 18 Aug 2020 17:42:14 +0200
+Message-ID: <20200818154230.14016-5-krzysztof.struczynski@huawei.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200818154230.14016-1-krzysztof.struczynski@huawei.com>
 References: <20200818154230.14016-1-krzysztof.struczynski@huawei.com>
@@ -49,78 +49,161 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 
-Add a new ima-ns template:
-"d-ng|n-ng|ns"
+Modify ima securityfs interface, so that only measurement list entries
+that belong to the given ima namespace are visible/counted. The initial
+ima namespace is an exception, its processes have access to all
+measurement list entries.
 
 Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 ---
- security/integrity/ima/ima_template.c     |  5 ++++-
- security/integrity/ima/ima_template_lib.c | 13 +++++++++++++
- security/integrity/ima/ima_template_lib.h |  2 ++
- 3 files changed, 19 insertions(+), 1 deletion(-)
+ include/linux/ima.h                |  1 +
+ security/integrity/ima/ima_fs.c    | 57 ++++++++++++++++++++++++++----
+ security/integrity/ima/ima_init.c  |  1 +
+ security/integrity/ima/ima_ns.c    |  1 +
+ security/integrity/ima/ima_queue.c |  8 +++++
+ 5 files changed, 61 insertions(+), 7 deletions(-)
 
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 945e70fafd2e..2020bd5176a4 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -22,6 +22,7 @@ static struct ima_template_desc builtin_templates[] = {
- 	{.name = "ima-sig", .fmt = "d-ng|n-ng|sig"},
- 	{.name = "ima-buf", .fmt = "d-ng|n-ng|buf"},
- 	{.name = "ima-modsig", .fmt = "d-ng|n-ng|sig|d-modsig|modsig"},
-+	{.name = "ima-ns", .fmt = "d-ng|n-ng|ns"},
- 	{.name = "", .fmt = ""},	/* placeholder for a custom format */
- };
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index df22143ffe30..d59ed38a4305 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -203,6 +203,7 @@ struct ima_namespace {
+ 	struct ima_policy_data *policy_data;
+ 	struct integrity_iint_tree *iint_tree;
+ 	struct list_head *measurements;
++	atomic_long_t ml_len; /* number of stored measurements in the list */
+ } __randomize_layout;
  
-@@ -45,6 +46,8 @@ static const struct ima_template_field supported_fields[] = {
- 	 .field_show = ima_show_template_digest_ng},
- 	{.field_id = "modsig", .field_init = ima_eventmodsig_init,
- 	 .field_show = ima_show_template_sig},
-+	{.field_id = "ns", .field_init = ima_eventns_init,
-+	 .field_show = ima_show_template_buf},
- };
- 
- /*
-@@ -52,7 +55,7 @@ static const struct ima_template_field supported_fields[] = {
-  * need to be accounted for since they shouldn't be defined in the same template
-  * description as 'd-ng' and 'n-ng' respectively.
-  */
--#define MAX_TEMPLATE_NAME_LEN sizeof("d-ng|n-ng|sig|buf|d-modisg|modsig")
-+#define MAX_TEMPLATE_NAME_LEN sizeof("d-ng|n-ng|sig|buf|d-modisg|modsig|ns")
- 
- static struct ima_template_desc *ima_template;
- 
-diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-index 635c6ac05050..cda5374dbbc4 100644
---- a/security/integrity/ima/ima_template_lib.c
-+++ b/security/integrity/ima/ima_template_lib.c
-@@ -484,3 +484,16 @@ int ima_eventmodsig_init(struct ima_event_data *event_data,
- 	return ima_write_template_field_data(data, data_len, DATA_FMT_HEX,
- 					     field_data);
- }
+ extern struct ima_namespace init_ima_ns;
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index 4758e14c4a7b..e2893f0b0f31 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -63,7 +63,9 @@ static ssize_t ima_show_measurements_count(struct file *filp,
+ 					   char __user *buf,
+ 					   size_t count, loff_t *ppos)
+ {
+-	return ima_show_htable_value(buf, count, ppos, &ima_htable.len);
++	struct ima_namespace *ima_ns = get_current_ns();
 +
-+/*
-+ *  ima_eventns_init - include the ima namespace id as part of the
-+ *  template data
-+ */
-+int ima_eventns_init(struct ima_event_data *event_data,
-+		     struct ima_field_data *field_data)
-+{
-+	return ima_write_template_field_data(&(event_data->ns_id),
-+					     sizeof(event_data->ns_id),
-+					     DATA_FMT_HEX,
-+					     field_data);
-+}
-diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
-index 9a88c79a7a61..7e67d1402192 100644
---- a/security/integrity/ima/ima_template_lib.h
-+++ b/security/integrity/ima/ima_template_lib.h
-@@ -46,4 +46,6 @@ int ima_eventbuf_init(struct ima_event_data *event_data,
- 		      struct ima_field_data *field_data);
- int ima_eventmodsig_init(struct ima_event_data *event_data,
- 			 struct ima_field_data *field_data);
-+int ima_eventns_init(struct ima_event_data *event_data,
-+		     struct ima_field_data *field_data);
- #endif /* __LINUX_IMA_TEMPLATE_LIB_H */
++	return ima_show_htable_value(buf, count, ppos, &ima_ns->ml_len);
+ 
+ }
+ 
+@@ -77,10 +79,36 @@ static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
+ {
+ 	loff_t l = *pos;
+ 	struct ima_queue_entry *qe;
++	struct ima_namespace *ima_ns = get_current_ns();
++	unsigned int ns_id = get_ns_id(ima_ns);
++
++	if (ima_ns == &init_ima_ns) {
++		/* we need a lock since pos could point beyond last element */
++		rcu_read_lock();
++		list_for_each_entry_rcu(qe, &ima_measurements, later) {
++			if (!l--) {
++				rcu_read_unlock();
++				return qe;
++			}
++		}
++		rcu_read_unlock();
++		return NULL;
++	}
+ 
+-	/* we need a lock since pos could point beyond last element */
+ 	rcu_read_lock();
+-	list_for_each_entry_rcu(qe, &ima_measurements, later) {
++	qe = list_next_or_null_rcu(&ima_measurements,
++				   ima_ns->measurements,
++				   struct ima_queue_entry,
++				   later);
++	if (!qe) {
++		rcu_read_unlock();
++		return NULL;
++	}
++
++	list_for_each_entry_from_rcu(qe, &ima_measurements, later) {
++		if (ns_id != qe->entry->ns_id)
++			continue;
++
+ 		if (!l--) {
+ 			rcu_read_unlock();
+ 			return qe;
+@@ -93,12 +121,27 @@ static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
+ static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
+ {
+ 	struct ima_queue_entry *qe = v;
++	struct ima_namespace *ima_ns = get_current_ns();
++	unsigned int ns_id = get_ns_id(ima_ns);
++
++	if (ima_ns == &init_ima_ns) {
++		/* lock protects when reading beyond last element
++		 * against concurrent list-extension
++		 */
++		rcu_read_lock();
++		qe = list_entry_rcu(qe->later.next, struct ima_queue_entry,
++				    later);
++		rcu_read_unlock();
++		(*pos)++;
++
++		return (&qe->later == &ima_measurements) ? NULL : qe;
++	}
+ 
+-	/* lock protects when reading beyond last element
+-	 * against concurrent list-extension
+-	 */
+ 	rcu_read_lock();
+-	qe = list_entry_rcu(qe->later.next, struct ima_queue_entry, later);
++	list_for_each_entry_continue_rcu(qe, &ima_measurements, later) {
++		if (ns_id == qe->entry->ns_id)
++			break;
++	}
+ 	rcu_read_unlock();
+ 	(*pos)++;
+ 
+diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+index 2100ee341dfc..ac9509d8c0f0 100644
+--- a/security/integrity/ima/ima_init.c
++++ b/security/integrity/ima/ima_init.c
+@@ -36,6 +36,7 @@ struct ima_namespace init_ima_ns = {
+ 	.policy_data = &init_policy_data,
+ 	.iint_tree = &init_iint_tree,
+ 	.measurements = &ima_measurements,
++	.ml_len = ATOMIC_LONG_INIT(0),
+ };
+ EXPORT_SYMBOL(init_ima_ns);
+ 
+diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
+index f331187a4d3c..81de492baa99 100644
+--- a/security/integrity/ima/ima_ns.c
++++ b/security/integrity/ima/ima_ns.c
+@@ -126,6 +126,7 @@ static struct ima_namespace *clone_ima_ns(struct user_namespace *user_ns,
+ 	ns->user_ns = get_user_ns(user_ns);
+ 	ns->ucounts = ucounts;
+ 	ns->frozen = false;
++	atomic_long_set(&ns->ml_len, 0);
+ 
+ 	rwlock_init(&ns->iint_tree->lock);
+ 	ns->iint_tree->root = RB_ROOT;
+diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
+index bd890778c5be..ec5b3ca3ef92 100644
+--- a/security/integrity/ima/ima_queue.c
++++ b/security/integrity/ima/ima_queue.c
+@@ -227,6 +227,14 @@ int ima_add_template_entry(struct ima_template_entry *entry, int violation,
+ 		goto out;
+ 	}
+ 
++	/* Initial ima namespace has access to all measurement list entries,
++	 * therefore always increment its measurement list length. Other
++	 * namespaces can see only their own entries.
++	 */
++	if (ima_ns != &init_ima_ns)
++		atomic_long_inc(&ima_ns->ml_len);
++	atomic_long_inc(&init_ima_ns.ml_len);
++
+ 	if (violation)		/* invalidate pcr */
+ 		digests_arg = digests;
+ 
 -- 
 2.20.1
 
