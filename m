@@ -2,66 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E77D248B37
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 18:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F19A248B5C
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 18:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726699AbgHRQMK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Aug 2020 12:12:10 -0400
-Received: from mga02.intel.com ([134.134.136.20]:20942 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726670AbgHRQMJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Aug 2020 12:12:09 -0400
-IronPort-SDR: R2XtF7xogiBmN5UbxsK0EMyj/b1nuzyvzrjgI1edWyteDd12bI/3Y8S6eY5LBlcqCekem/oyyY
- 20ZM+N40HBdQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="142768464"
-X-IronPort-AV: E=Sophos;i="5.76,328,1592895600"; 
-   d="scan'208";a="142768464"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2020 09:12:09 -0700
-IronPort-SDR: Oi3LCOc5TrniOMApmNvSRoa7EFwER8gWsvDlvpChkzgg44vEZhR13Htx9b9KLkU/yWfphiQ3ds
- EcAXEJAY3PZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,328,1592895600"; 
-   d="scan'208";a="296896059"
-Received: from ribnhajh-mobl.ger.corp.intel.com (HELO localhost) ([10.249.47.113])
-  by orsmga006.jf.intel.com with ESMTP; 18 Aug 2020 09:12:07 -0700
-Date:   Tue, 18 Aug 2020 19:12:07 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v4 1/1] tpm: add sysfs exports for all banks of PCR
- registers
-Message-ID: <20200818161207.GC137138@linux.intel.com>
-References: <20200817213506.4474-1-James.Bottomley@HansenPartnership.com>
- <20200817213506.4474-2-James.Bottomley@HansenPartnership.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200817213506.4474-2-James.Bottomley@HansenPartnership.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1726983AbgHRQTx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Aug 2020 12:19:53 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:51336 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726482AbgHRQTj (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 18 Aug 2020 12:19:39 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5F2EA8EE1A9;
+        Tue, 18 Aug 2020 09:19:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1597767575;
+        bh=L/MN+lxn8x8KGJbs1vAEkdW/rjO9wlNxW0FetUNgKJE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=F3TJolfs2dnkOc99Rj/5Zn8QU8AwiBtf/PoD+Ybd46WQYFKE47TMO4K9Rse9ySnha
+         K8EiUDemagYiEcnjDJ3wb7TRylgGNWzB4SBFLklBk+HUeu6VYP1lI7fBVPerHFKl2G
+         4AG081qyKmoSiPoq1FuBRwnepFJ2OsaN6DveGoOc=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 5V37A5Z9zYZ5; Tue, 18 Aug 2020 09:19:34 -0700 (PDT)
+Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1EEAE8EE17F;
+        Tue, 18 Aug 2020 09:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1597767574;
+        bh=L/MN+lxn8x8KGJbs1vAEkdW/rjO9wlNxW0FetUNgKJE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=S1ijLZW5ep+iwtdY2BSLm5T+ZmNajMO7m+g+9JVex4iRAXkSI2+oCoXpb2vIS3IKS
+         SC1rbcuo8t6pBK5PPcflRruDFKgZ7qdmGNInHRGVS68Dq7jZisFZrfRFusbJqEojj1
+         BioijcDNFNk01kzf/xCm0lQWStYSXsperJU1UIBc=
+Message-ID: <1597767571.3898.15.camel@HansenPartnership.com>
+Subject: Re: [RFC PATCH 00/30] ima: Introduce IMA namespace
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     krzysztof.struczynski@huawei.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org
+Cc:     zohar@linux.ibm.com, stefanb@linux.vnet.ibm.com,
+        sunyuqiong1988@gmail.com, mkayaalp@cs.binghamton.edu,
+        dmitry.kasatkin@gmail.com, serge@hallyn.com, jmorris@namei.org,
+        christian@brauner.io, silviu.vlasceanu@huawei.com,
+        roberto.sassu@huawei.com
+Date:   Tue, 18 Aug 2020 09:19:31 -0700
+In-Reply-To: <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
+References: <N> <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Aug 17, 2020 at 02:35:06PM -0700, James Bottomley wrote:
-> Create sysfs per hash groups with 24 PCR files in them one group,
-> named pcr-<hash>, for each agile hash of the TPM.  The files are
-> plugged in to a PCR read function which is TPM version agnostic, so
-> this works also for TPM 1.2 but the hash is only sha1 in that case.
-> 
-> Note: the macros used to create the hashes emit spurious checkpatch
-> warnings.  Do not try to "fix" them as checkpatch recommends, otherwise
-> they'll break.
-> 
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+On Tue, 2020-08-18 at 17:20 +0200, krzysztof.struczynski@huawei.com
+wrote:
+> The measurement list remains global, with the assumption that there
+> is only one TPM in the system. Each IMA namespace has a unique ID,
+> that allows to track measurements per IMA namespace. Processes in one
+> namespace, have access only to the measurements from that namespace.
+> The exception is made for the initial IMA namespace, whose processes
+> have access to all entries.
 
-I have hard time understanding why this is required.
+So I think this can work in the use case where the system owner is
+responsible for doing the logging and attestation and the tenants just
+trust the owner without requiring an attestation.  However, in a multi-
+tenant system you need a way for the attestation to be per-container
+(because the combined list of who executed what would be a security
+leak between tenants).  Since we can't virtualise the PCRs without
+introducing a vtpm this is going to require a vtpm infrastructure like
+that used for virtual machines and then we can do IMA logging per
+container.
 
-You can grab the information through /dev/tpm0 just fine.
+I don't think the above has to be in your first patch set, we just have
+to have an idea of how it could be done to show that nothing in this
+patch set precludes a follow on from doing this.
 
-/Jarkko
+James
+
