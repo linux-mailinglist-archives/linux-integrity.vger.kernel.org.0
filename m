@@ -2,23 +2,23 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A20248AE1
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 17:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBF8248ACA
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 17:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728372AbgHRP5y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Aug 2020 11:57:54 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2643 "EHLO huawei.com"
+        id S1728122AbgHRPrG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Aug 2020 11:47:06 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2644 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726896AbgHRPqs (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Aug 2020 11:46:48 -0400
-Received: from lhreml722-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 4971565230692438BF5F;
-        Tue, 18 Aug 2020 16:46:47 +0100 (IST)
+        id S1727108AbgHRPqx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 18 Aug 2020 11:46:53 -0400
+Received: from lhreml722-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 72D5DD3BE118E0003501;
+        Tue, 18 Aug 2020 16:46:49 +0100 (IST)
 Received: from kstruczy-linux-box (10.204.65.138) by
  lhreml722-chm.china.huawei.com (10.201.108.73) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Tue, 18 Aug 2020 16:46:45 +0100
-Received: by kstruczy-linux-box (sSMTP sendmail emulation); Tue, 18 Aug 2020 17:46:48 +0200
+ 15.1.1913.5; Tue, 18 Aug 2020 16:46:47 +0100
+Received: by kstruczy-linux-box (sSMTP sendmail emulation); Tue, 18 Aug 2020 17:46:50 +0200
 From:   <krzysztof.struczynski@huawei.com>
 To:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <containers@lists.linux-foundation.org>,
@@ -29,9 +29,9 @@ CC:     <zohar@linux.ibm.com>, <stefanb@linux.vnet.ibm.com>,
         <jmorris@namei.org>, <christian@brauner.io>,
         <silviu.vlasceanu@huawei.com>, <roberto.sassu@huawei.com>,
         Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-Subject: [RFC PATCH 20/30] ima: Parse per ima namespace policy file
-Date:   Tue, 18 Aug 2020 17:42:20 +0200
-Message-ID: <20200818154230.14016-11-krzysztof.struczynski@huawei.com>
+Subject: [RFC PATCH 21/30] user namespace: Add function that checks if the UID map is defined
+Date:   Tue, 18 Aug 2020 17:42:21 +0200
+Message-ID: <20200818154230.14016-12-krzysztof.struczynski@huawei.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200818154230.14016-1-krzysztof.struczynski@huawei.com>
 References: <20200818154230.14016-1-krzysztof.struczynski@huawei.com>
@@ -49,238 +49,61 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 
-Parse per ima namespace policy file if the file path is set.
+Add function that checks if the UID map is defined. It will be used by
+ima to check if ID remapping in subject-based rules is necessary.
 
 Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 ---
- security/integrity/ima/ima.h        |  7 ++++---
- security/integrity/ima/ima_fs.c     | 17 +++++++++++------
- security/integrity/ima/ima_ns.c     | 18 ++++++++++++++++--
- security/integrity/ima/ima_policy.c | 25 +++++++++++--------------
- 4 files changed, 42 insertions(+), 25 deletions(-)
+ include/linux/user_namespace.h |  6 ++++++
+ kernel/user_namespace.c        | 11 +++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 48d09efaffbe..b55d25c2bf63 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -309,10 +309,10 @@ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
- void ima_init_policy(void);
- void ima_init_ns_policy(struct ima_namespace *ima_ns,
- 			const struct ima_policy_setup_data *policy_setup_data);
--void ima_update_policy(void);
-+void ima_update_policy(struct ima_namespace *ima_ns);
- void ima_update_policy_flag(struct ima_namespace *ima_ns);
--ssize_t ima_parse_add_rule(char *);
--void ima_delete_rules(void);
-+ssize_t ima_parse_add_rule(char *rule, struct ima_namespace *ima_ns);
-+void ima_delete_rules(struct ima_namespace *ima_ns);
- int ima_check_policy(const struct ima_namespace *ima_ns);
- void *ima_policy_start(struct seq_file *m, loff_t *pos);
- void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos);
-@@ -439,6 +439,7 @@ static inline struct ima_namespace *get_current_ns(void)
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index d9759c54fead..bcb21c41c910 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -138,6 +138,7 @@ extern bool in_userns(const struct user_namespace *ancestor,
+ 		       const struct user_namespace *child);
+ extern bool current_in_userns(const struct user_namespace *target_ns);
+ struct ns_common *ns_get_owner(struct ns_common *ns);
++extern bool userns_set_uidmap(const struct user_namespace *ns);
+ #else
  
- void ima_delete_ns_rules(struct ima_policy_data *policy_data,
- 			 bool is_root_ns);
-+ssize_t ima_read_ns_policy(char *path, struct ima_namespace *ima_ns);
- 
- ssize_t ima_ns_write_policy_for_children(struct ima_namespace *ima_ns,
- 					 char *policy_path);
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 6c033857f521..7b93c338a478 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -343,7 +343,7 @@ static const struct file_operations ima_ascii_measurements_ops = {
- 	.release = seq_release,
- };
- 
--static ssize_t ima_read_policy(char *path)
-+static ssize_t ima_read_policy(char *path, struct ima_namespace *ima_ns)
+ static inline struct user_namespace *get_user_ns(struct user_namespace *ns)
+@@ -182,6 +183,11 @@ static inline struct ns_common *ns_get_owner(struct ns_common *ns)
  {
- 	void *data;
- 	char *datap;
-@@ -365,7 +365,7 @@ static ssize_t ima_read_policy(char *path)
- 	datap = data;
- 	while (size > 0 && (p = strsep(&datap, "\n"))) {
- 		pr_debug("rule: %s\n", p);
--		rc = ima_parse_add_rule(p);
-+		rc = ima_parse_add_rule(p, ima_ns);
- 		if (rc < 0)
- 			break;
- 		size -= rc;
-@@ -406,7 +406,7 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
- 		goto out_free;
- 
- 	if (data[0] == '/') {
--		result = ima_read_policy(data);
-+		result = ima_read_policy(data, ima_ns);
- 	} else if (ima_ns->policy_data->ima_appraise & IMA_APPRAISE_POLICY) {
- 		pr_err("signed policy file (specified as an absolute pathname) required\n");
- 		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
-@@ -414,7 +414,7 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
- 				    1, 0);
- 		result = -EACCES;
- 	} else {
--		result = ima_parse_add_rule(data);
-+		result = ima_parse_add_rule(data, ima_ns);
- 	}
- 	mutex_unlock(&ima_write_mutex);
- out_free:
-@@ -502,13 +502,13 @@ static int ima_release_policy(struct inode *inode, struct file *file)
- 			    "policy_update", cause, !valid_policy, 0);
- 
- 	if (!valid_policy) {
--		ima_delete_rules();
-+		ima_delete_rules(ima_ns);
- 		valid_policy = 1;
- 		clear_bit(IMA_FS_BUSY, &ima_fs_flags);
- 		return 0;
- 	}
- 
--	ima_update_policy();
-+	ima_update_policy(ima_ns);
- #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
- 	securityfs_remove(ima_policy);
- 	ima_policy = NULL;
-@@ -629,6 +629,11 @@ static const struct file_operations ima_kcmd_for_children_ops = {
- 	.open = ima_open_for_children,
- 	.write = ima_write_kcmd_for_children,
- };
+ 	return ERR_PTR(-EPERM);
+ }
 +
-+ssize_t ima_read_ns_policy(char *path, struct ima_namespace *ima_ns)
++static inline bool userns_set_uidmap(const struct user_namespace *ns)
 +{
-+	return ima_read_policy(path, ima_ns);
++	return true;
 +}
- #endif /* CONFIG_IMA_NS */
- 
- int __init ima_fs_init(void)
-diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
-index dd0328ee715f..ec3abc803c82 100644
---- a/security/integrity/ima/ima_ns.c
-+++ b/security/integrity/ima/ima_ns.c
-@@ -91,10 +91,24 @@ static int ima_set_ns_policy(struct ima_namespace *ima_ns)
- 		setup_data.ima_appraise = IMA_APPRAISE_ENFORCE;
  #endif
- 		ima_init_ns_policy(ima_ns, &setup_data);
--		return result;
-+	} else {
-+		ima_init_ns_policy(ima_ns, ima_ns->policy_setup_for_children);
- 	}
  
--	ima_init_ns_policy(ima_ns, ima_ns->policy_setup_for_children);
-+	if (ima_ns->policy_path_for_children) {
-+		result = ima_read_ns_policy(ima_ns->policy_path_for_children,
-+					    ima_ns);
-+		if ((result >= 0) && !ima_check_policy(ima_ns)) {
-+			integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
-+					    "policy_update", "completed", 0, 0);
-+			ima_update_policy(ima_ns);
-+		} else {
-+			ima_delete_rules(ima_ns);
-+			ima_delete_ns_rules(ima_ns->policy_data, false);
-+			integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
-+					    "policy_update", "failed", 1, 0);
-+		}
-+	}
- 
- 	return result;
+ #endif /* _LINUX_USER_H */
+diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+index 87804e0371fe..e38f9f11a589 100644
+--- a/kernel/user_namespace.c
++++ b/kernel/user_namespace.c
+@@ -1232,6 +1232,17 @@ bool current_in_userns(const struct user_namespace *target_ns)
  }
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 3d712c062ed0..d4774eab6a98 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -735,7 +735,8 @@ static void add_rules(struct ima_namespace *ima_ns,
- 	}
- }
+ EXPORT_SYMBOL(current_in_userns);
  
--static int ima_parse_rule(char *rule, struct ima_rule_entry *entry);
-+static int ima_parse_rule(char *rule, struct ima_rule_entry *entry,
-+			  struct ima_namespace *ima_ns);
- 
- static int __init ima_init_arch_policy(void)
++bool userns_set_uidmap(const struct user_namespace *ns)
++{
++	bool mapping_defined;
++
++	mutex_lock(&userns_state_mutex);
++	mapping_defined = ns->uid_map.nr_extents != 0;
++	mutex_unlock(&userns_state_mutex);
++
++	return mapping_defined;
++}
++
+ static inline struct user_namespace *to_user_ns(struct ns_common *ns)
  {
-@@ -765,7 +766,8 @@ static int __init ima_init_arch_policy(void)
- 		result = strlcpy(rule, *rules, sizeof(rule));
- 
- 		INIT_LIST_HEAD(&arch_policy_entry[i].list);
--		result = ima_parse_rule(rule, &arch_policy_entry[i]);
-+		result = ima_parse_rule(rule, &arch_policy_entry[i],
-+					&init_ima_ns);
- 		if (result) {
- 			pr_warn("Skipping unknown architecture policy rule: %s\n",
- 				rule);
-@@ -895,10 +897,8 @@ int ima_check_policy(const struct ima_namespace *ima_ns)
-  * Policy rules are never deleted so ima_policy_flag gets zeroed only once when
-  * we switch from the default policy to user defined.
-  */
--void ima_update_policy(void)
-+void ima_update_policy(struct ima_namespace *ima_ns)
- {
--	/* Update only the current ima namespace */
--	struct ima_namespace *ima_ns = get_current_ns();
- 	struct list_head *policy = &ima_ns->policy_data->ima_policy_rules;
- 
- 	list_splice_tail_init_rcu(&ima_ns->policy_data->ima_temp_rules,
-@@ -1151,7 +1151,8 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
- 	return true;
- }
- 
--static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
-+static int ima_parse_rule(char *rule, struct ima_rule_entry *entry,
-+			  struct ima_namespace *ima_ns)
- {
- 	struct audit_buffer *ab;
- 	char *from;
-@@ -1160,7 +1161,6 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 	struct ima_template_desc *template_desc;
- 	int result = 0;
- 	size_t keyrings_len;
--	struct ima_namespace *ima_ns = get_current_ns();
- 
- 	ab = integrity_audit_log_start(audit_context(), GFP_KERNEL,
- 				       AUDIT_INTEGRITY_POLICY_RULE);
-@@ -1547,19 +1547,18 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- /**
-  * ima_parse_add_rule - add a rule to ima_policy_rules
-  * @rule - ima measurement policy rule
-+ * @ima_ns - pointer to the ima namespace the rule will be added to
-  *
-  * Avoid locking by allowing just one writer at a time in ima_write_policy()
-  * Returns the length of the rule parsed, an error code on failure
-  */
--ssize_t ima_parse_add_rule(char *rule)
-+ssize_t ima_parse_add_rule(char *rule, struct ima_namespace *ima_ns)
- {
- 	static const char op[] = "update_policy";
- 	char *p;
- 	struct ima_rule_entry *entry;
- 	ssize_t result, len;
- 	int audit_info = 0;
--	/* Add rules only to the current ima namespace */
--	struct ima_namespace *ima_ns = get_current_ns();
- 
- 	p = strsep(&rule, "\n");
- 	len = strlen(p) + 1;
-@@ -1577,7 +1576,7 @@ ssize_t ima_parse_add_rule(char *rule)
- 
- 	INIT_LIST_HEAD(&entry->list);
- 
--	result = ima_parse_rule(p, entry);
-+	result = ima_parse_rule(p, entry, ima_ns);
- 	if (result) {
- 		ima_free_rule(entry);
- 		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL,
-@@ -1597,10 +1596,8 @@ ssize_t ima_parse_add_rule(char *rule)
-  * different from the active one.  There is also only one user of
-  * ima_delete_rules() at a time.
-  */
--void ima_delete_rules(void)
-+void ima_delete_rules(struct ima_namespace *ima_ns)
- {
--	/* Delete rules only from the current ima namespace */
--	struct ima_namespace *ima_ns = get_current_ns();
- 	struct ima_rule_entry *entry, *tmp;
- 
- 	ima_ns->policy_data->temp_ima_appraise = 0;
+ 	return container_of(ns, struct user_namespace, ns);
 -- 
 2.20.1
 
