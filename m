@@ -2,70 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBE4247B39
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 01:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8E2247C84
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 05:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726530AbgHQXph (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 17 Aug 2020 19:45:37 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:35252 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726328AbgHQXph (ORCPT
+        id S1726638AbgHRDMz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 17 Aug 2020 23:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726697AbgHRDMy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 17 Aug 2020 19:45:37 -0400
-Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 34CB320B4908;
-        Mon, 17 Aug 2020 16:45:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 34CB320B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1597707936;
-        bh=ODLtHxuph/xu3RT5nAzZUsfuC4XcphwPvbtr8zOIZzg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=e0vOwyRUKbxX3Qa2qnnDFomljqdWRcOMXJPHRiWMnZTHllxiWh7XdZHsR51MPESsz
-         8HUgrN9PAhKC8Yj5RJtVtgv7vnWHio9/5Ue4vDH5+fbyQVHwIwmf8p+ehE7g0DYOXT
-         R4YjmXC7WNa68PrUnwHBKoiWNHEZBHEiDOdB6Bj8=
-Subject: Re: [PATCH 2/3] IMA: add policy to support measuring critical data
- from kernel components
-To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        nramas@linux.microsoft.com
-References: <20200812193102.18636-1-tusharsu@linux.microsoft.com>
- <20200812193102.18636-3-tusharsu@linux.microsoft.com>
- <591b5f09c7df8ef0378866eaf3afde7a7cb4e82f.camel@linux.ibm.com>
- <5275268e-2ce8-0129-b11d-8419ac384262@linux.microsoft.com>
- <97d25609b6a87f104cc88a2ff8ae52d3f2e4e387.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <0d3a1cbc-9c11-37f3-6316-01f5b43909c1@linux.microsoft.com>
-Date:   Mon, 17 Aug 2020 16:45:35 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 17 Aug 2020 23:12:54 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0187C061342
+        for <linux-integrity@vger.kernel.org>; Mon, 17 Aug 2020 20:12:52 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id w14so19782103ljj.4
+        for <linux-integrity@vger.kernel.org>; Mon, 17 Aug 2020 20:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=NihYtCIO6WhZzTHul6qtL1AUFh4fMNj8uqbg43NcLX0NG8fM83sghw38jS2K/yhzO1
+         R77Hg9lawLT86fZGAHjZgvCuwXnX1vUEA4+ECoWIAO+qhSAJjGXbE07GVgMZlO/G89I1
+         F+NBshZNA7TkfUgronAhsRqyDEpnP6FDIQgdu3wYW1R6A9O+MKrkIa2L1Mlxi9AbgiRP
+         p/L2m57K4VaJDA50uW3AFeVBkRXCcKabYag+3zTZjWiBa3/BekhjHl3WADOKonOtGvY6
+         ahoe4r2/AiRxkAPgMQ1UULnccxo0/XJfOZw++U2aOHFJP+wxK/yjyzWv5UUwRVudKoWm
+         4TQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=nWSlrNr7KAJEQsKTPcHj4dywlDCFBt0ZYZj949ka5P1zsRi2/oO4Q9RLZU5n524Ovg
+         LJach6qjxqDHzCftkAuX63bldkLMXwZgUp0UzF8aa29cCDDSq0Q5B7oEyMPbtskm1Uw0
+         PZI8GhYYFY+qnPrNO7MpDRnw9gYD05/cDN6CG9Eowihkh0ODyZxuze/S6Jl7nfNsJjOa
+         7SKb8bz3byV3DpwujBijrgV3rraRcqicfUTvidZ3gb3v9k3j9JBEX4crfNr8BIl2BrXy
+         gzrRC18KcWMtC2Bp/ekuwywyoYUbpN4171cZ98ZjUR11kT1clutyDStC/XtNR0oz8P03
+         QDtw==
+X-Gm-Message-State: AOAM531/zxJtazs0/VfI9+WZtYhh1nb/1bXg3Fm/ZSgU0aIwnw2eiN6C
+        b41X1eahOLPbxWMbsFIF9Fp9HutO9yXx+nsz+pc=
+X-Google-Smtp-Source: ABdhPJwfnBdyP0mURiW0GSdI/nmSRMX3zKESUs/aL2mgAj2s6vIUs2yl/IXxJuMVFodiqyqWOFmwwXUQ+Qq7VSJzK2s=
+X-Received: by 2002:a05:651c:1051:: with SMTP id x17mr9646291ljm.141.1597720370736;
+ Mon, 17 Aug 2020 20:12:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <97d25609b6a87f104cc88a2ff8ae52d3f2e4e387.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ab3:5702:0:0:0:0:0 with HTTP; Mon, 17 Aug 2020 20:12:49
+ -0700 (PDT)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <mrs.rose1972@gmail.com>
+Date:   Mon, 17 Aug 2020 20:12:49 -0700
+Message-ID: <CAMZpd4rMD26sc9Ao1NZ94bstHxXzW=AEv5d0p37FvuKaq3Htiw@mail.gmail.com>
+Subject: Lieber Freund (Assalamu Alaikum),?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+--=20
+Lieber Freund (Assalamu Alaikum),
 
+Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
+Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
+Mutter und eine Witwe
+mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
+hen
+Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
 
-On 2020-08-17 4:43 p.m., Mimi Zohar wrote:
-> On Mon, 2020-08-17 at 15:27 -0700, Tushar Sugandhi wrote:
-> 
->>> scripts/Lindent isn't as prevalent as it used to be, but it's still
->>> included in Documentation/process/coding-style.rst.  Use it as a guide.
->> Thanks for the pointer. We'll use scripts/Lindent going forward
-> 
-> Please don't change existing code to conform to it.  Use it as a
-> guide/suggestion for new code.
-> 
-> Mimi
-> 
-> 
-Will do.
-Again, appreciate your feedback.
+Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
+f=C3=BCnfhunderttausend
+United State Dollar ($ 27.500.000.00) und ich brauche eine
+vertrauensw=C3=BCrdige Investition
+Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
+jedoch
+M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
+von
+Investitionsprojekten in Ihrem Land
+Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
+bauen.
+
+Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
+n und
+Unternehmensgewinn zu verhandeln
+Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
+
+Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
+antworten Sie bitte dringend
+Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
+.
+
+Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
+esse (
+ayishagddafio@mail.ru ) zur weiteren Diskussion.
+
+Freundliche Gr=C3=BC=C3=9Fe
+Frau Aisha Al-Qaddafi
