@@ -2,23 +2,23 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C2D2489B3
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 17:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7387F2489BA
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Aug 2020 17:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbgHRPZX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Aug 2020 11:25:23 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2623 "EHLO huawei.com"
+        id S1726685AbgHRP0M (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Aug 2020 11:26:12 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2624 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728042AbgHRPZK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Aug 2020 11:25:10 -0400
-Received: from lhreml722-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 8C0AB1C8B9E25EB60BAC;
-        Tue, 18 Aug 2020 16:25:07 +0100 (IST)
+        id S1726904AbgHRP0J (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 18 Aug 2020 11:26:09 -0400
+Received: from lhreml722-chm.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id B0BC75F02A3A752483C0;
+        Tue, 18 Aug 2020 16:26:07 +0100 (IST)
 Received: from kstruczy-linux-box (10.204.65.138) by
  lhreml722-chm.china.huawei.com (10.201.108.73) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Tue, 18 Aug 2020 16:25:05 +0100
-Received: by kstruczy-linux-box (sSMTP sendmail emulation); Tue, 18 Aug 2020 17:25:08 +0200
+ 15.1.1913.5; Tue, 18 Aug 2020 16:26:06 +0100
+Received: by kstruczy-linux-box (sSMTP sendmail emulation); Tue, 18 Aug 2020 17:26:08 +0200
 From:   <krzysztof.struczynski@huawei.com>
 To:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <containers@lists.linux-foundation.org>,
@@ -29,12 +29,13 @@ CC:     Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
         <dmitry.kasatkin@gmail.com>, <serge@hallyn.com>,
         <jmorris@namei.org>, <christian@brauner.io>,
         <silviu.vlasceanu@huawei.com>, <roberto.sassu@huawei.com>
-Subject: [RFC PATCH 00/30] ima: Introduce IMA namespace
-Date:   Tue, 18 Aug 2020 17:20:07 +0200
-Message-ID: <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
+Subject: [RFC PATCH 01/30] ima: Introduce ima namespace
+Date:   Tue, 18 Aug 2020 17:20:08 +0200
+Message-ID: <20200818152037.11869-2-krzysztof.struczynski@huawei.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <N>
+In-Reply-To: <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
 References: <N>
+ <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -49,217 +50,700 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
 
-IMA has not been designed to work with containers. It handles every
-process in the same way, and it cannot distinguish if a process belongs to
-a container or not.
+IMA namespace wraps global ima resources in an abstraction, to enable ima
+to work with the containers. Currently, ima namespace contains no useful
+data but a dummy interface. IMA resources related to different aspects of
+IMA, namely IMA-audit, IMA-measurement, IMA-appraisal will be added in the
+following patches.
 
-Containers use namespaces to make it appear to the processes in the
-containers that they have their own isolated instance of the global
-resource. For IMA as well, it is desirable to let processes in the
-containers have IMA functionality independent from other containers:
-separate policy rules, measurement list, additional appraisal keys to
-verify the container image, separate audit logs.
+The way how ima namespace is created is analogous to the time namespace:
+unshare(CLONE_NEWIMA) system call creates a new ima namespace but doesn't
+assign it to the current process. All children of the process will be born
+in the new ima namespace, or a process can use setns() system call to join
+the new ima namespace. Call to clone3(CLONE_NEWIMA) system call creates a
+new namespace, which the new process joins instantly.
 
-As previous work done in this area, this patch series introduces the IMA
-namespace, which is a separate instance of IMA to handle a subset of
-processes that belong to a container.
+This scheme, allows to configure the new ima namespace before any process
+appears in it. If user initially unshares the new ima namespace, ima can
+be configured using ima entries in the securityfs. If user calls clone3()
+system call directly, the new ima namespace can be configured using clone
+arguments. To allow this, new securityfs entries have to be added, and
+structures clone_args and kernel_clone_args have to be extended.
 
-The IMA namespace is created using clone3() or unshare() system calls. It
-is important to configure the namespace before any process appears in it,
-so that the new policy rules apply to the very first process in the
-namespace. To achieve that, the intermediate namespace ima_ns_for_children
-is used. It stores the configuration and becomes active on the next fork
-or when the first process enters it using the setns() system call. The
-similar process is used for the time namespace.
+Early configuration is crucial. The new ima polices must apply to the
+first process in the new namespace, and the appraisal key has to be loaded
+beforehand.
 
-The IMA namespace can be configured using the new securityfs directory
-entries that allow the user to set the policy rules, x509 certificate for
-appraisal and pass IMA configuration parameters normally included in the
-kernel command line parameters. It is intended to extend the clone_args to
-allow configuration from clone3() syscall.
+Add a new CONFIG_IMA_NS option to the kernel configuration, that enables
+one to create a new IMA namespace. IMA namespace functionality is disabled
+by default.
 
-To inform other containers about an action made by a given container, a
-linked list of IMA namespaces has been implemented. The state/policy of
-those containers is evaluated to see if read-write violations (ToMToU,
-open-writer) should be recorded in the respective measurement list. Any
-change to the files shared across containers is recorded in the namespaced
-inode's integrity cache when the file is freed.
-
-To isolate the measurement list and the appraisal keys, the following
-decisions were made:
-
-The measurement list remains global, with the assumption that there is
-only one TPM in the system. Each IMA namespace has a unique ID, that
-allows to track measurements per IMA namespace. Processes in one
-namespace, have access only to the measurements from that namespace. The
-exception is made for the initial IMA namespace, whose processes have
-access to all entries.
-
-The appraisal keys of all IMA namespaces are stored in the IMA system
-keyring. Each key is linked to the respective IMA namespace using the key
-domain tag. The process that belongs to one IMA namespace, cannot
-add/replace/modify a key that belongs to another IMA namespace.
-
-To give access to the IMA securityfs directory entries to the container's
-owner, read and write (when needed) permissions are given to the "other"
-users not in the file's group 'o'. The access to the files is controlled
-by IMA, and given only to the user that has SYS_ADMIN capabilities in the
-user namespace owning the IMA namespace. The processes from one IMA
-namespace have access to the data from that namespace only. This mechanism
-can be changed in the future. The one alternative is to create per IMA
-namespace entries, similar to the AppArmour file system.
-
-This work is inspired by Stefan Berger's, Mehmet Kayaalp's, Yuqiong Sun's
-and Mimi Zohar's series of patches:
-https://lore.kernel.org/patchwork/cover/899419/
-
-Patches are logically divided into 5 groups. That order is not yet
-reflected in the commit order. This will be fixed as soon as possible.
-
-1. Base mechanism for the IMA namespace; patches: 1-3, 6-8, 15
-
-   Add a new IMA namespace. Add a new CLONE_NEWIMA flag. Create and
-   configure IMA analogously to the time namespace, using the intermediate
-   ima_ns_for_children. Add the IMA namespace to the IMA subsystem API.
-
-   Create a list of active IMA namespaces.
-
-   Add a reader counter to the integrity inode data to detect violations
-   correctly.
-
-2. Policy; patches: 4, 5, 9, 18, 20-22
-
-   Replace global policy data with the per IMA namespace policies.
-
-   Record read-write violations (ToMToU, open-writer) across namespaces.
-   Record modifications to the files shared across containers when the
-   files are freed.
-
-   Set the owning user namespace of the IMA namespace, to the user
-   namespace of the first process born into the new IMA namespace.
-
-   Remap IDs in the policy rules, if the rules were loaded before the user
-   namespace mapping was defined.
-
-3. IMA-measurement; patches: 10-14, 17, 29
-
-   Link measurement list entries to the respective IMA namespaces using
-   the IMA namespace ID. Include the namespace ID in the digest entry
-   lookup.
-
-   Add a new measurement list template that includes IMA namespace ID.
-
-   Add a dummy boot aggregate entry for non-root IMA namespaces.
-
-   Show the measurement list data only for the IMA namespace the process
-   belongs to, unless it is the root IMA namespace.
-
-4. IMA-appraisal; patches: 23-28
-
-   Modify keyring search mechanism to include the key domain tag in the
-   search criteria for both, direct lookup and the iterative search. Allow
-   to set the key domain tag separately from the key type using the
-   KEY_ALLOC* flags.
-
-   Add the key domain to the IMA namespace, so that the key is linked to
-   the namespace.
-
-   Add the key domain tag to the integrity module's API. Use the new API
-   to load the IMA namespace's key to the system IMA keyring.
-
-5. Configuration; patches: 16, 19, 30
-
-   Add the new entries in the IMA securityfs directory. Parse and validate
-   configuration data. Apply the new configuration when the first process
-   is born in the new IMA namespace.
-
-   Extend read/write permissions to the IMA securityfs entries to the
-   other users not in the file's group 'o'. Allow access only to the users
-   that have the SYS_ADMIN caps in the user namespace owning the given IMA
-   namespace.
-
-Krzysztof Struczynski (30):
-  ima: Introduce ima namespace
-  ima: Add a list of the installed ima namespaces
-  ima: Bind ima namespace to the file descriptor
-  ima: Add ima policy related data to the ima namespace
-  ima: Add methods for parsing ima policy configuration string
-  ima: Add ima namespace to the ima subsystem APIs
-  ima: Extend the APIs in the integrity subsystem
-  ima: Add integrity inode related data to the ima namespace
-  ima: Enable per ima namespace policy settings
-  ima: Add ima namespace ID to the ima ML related structures
-  ima: Keep track of the measurment list per ima namespace
-  ima: Check ima namespace ID during digest entry lookup
-  ima: Add a new ima template that includes namespace ID
-  ima: Add per namespace view of the measurement list
-  ima: Add a reader counter to the integrity inode data
-  ima: Extend permissions to the ima securityfs entries
-  ima: Add the violation counter to the namespace
-  ima: Change the owning user namespace of the ima namespace if
-    necessary
-  ima: Configure the new ima namespace from securityfs
-  ima: Parse per ima namespace policy file
-  user namespace: Add function that checks if the UID map is defined
-  ima: Remap IDs of subject based rules if necessary
-  keys: Add domain tag to the keyring search criteria
-  keys: Include key domain tag in the iterative search
-  keys: Allow to set key domain tag separately from the key type
-  ima: Add key domain to the ima namespace
-  integrity: Add key domain tag to the search criteria
-  ima: Load per ima namespace x509 certificate
-  ima: Add dummy boot aggregate to per ima namespace measurement list
-  ima: Set ML template per ima namespace
-
- crypto/asymmetric_keys/asymmetric_type.c     |  20 +-
- fs/file_table.c                              |   6 +-
- fs/proc/namespaces.c                         |   4 +
- include/linux/digsig.h                       |  11 +-
- include/linux/fs.h                           |   3 +
- include/linux/ima.h                          |  99 ++-
- include/linux/integrity.h                    |  31 +
- include/linux/key-type.h                     |   1 +
- include/linux/key.h                          |  27 +-
- include/linux/nsproxy.h                      |   3 +
- include/linux/proc_ns.h                      |   5 +-
- include/linux/user_namespace.h               |   7 +
- include/uapi/linux/sched.h                   |   1 +
- init/Kconfig                                 |  12 +
- kernel/fork.c                                |  24 +-
- kernel/kexec_file.c                          |   7 +
- kernel/nsproxy.c                             |  34 +-
- kernel/ucount.c                              |   1 +
- kernel/user_namespace.c                      |  11 +
- lib/digsig.c                                 |  11 +-
- security/integrity/digsig.c                  |  46 +-
- security/integrity/digsig_asymmetric.c       |  20 +-
- security/integrity/iint.c                    | 126 +++-
- security/integrity/ima/Makefile              |   1 +
- security/integrity/ima/ima.h                 | 134 +++-
- security/integrity/ima/ima_api.c             |  31 +-
- security/integrity/ima/ima_appraise.c        | 105 ++-
- security/integrity/ima/ima_asymmetric_keys.c |  12 +-
- security/integrity/ima/ima_fs.c              | 272 ++++++-
- security/integrity/ima/ima_init.c            |  47 +-
- security/integrity/ima/ima_kexec.c           |   4 +-
- security/integrity/ima/ima_main.c            | 323 +++++++--
- security/integrity/ima/ima_ns.c              | 718 +++++++++++++++++++
- security/integrity/ima/ima_policy.c          | 397 +++++++---
- security/integrity/ima/ima_queue.c           |  69 +-
- security/integrity/ima/ima_queue_keys.c      |  11 +-
- security/integrity/ima/ima_template.c        |  44 +-
- security/integrity/ima/ima_template_lib.c    |  13 +
- security/integrity/ima/ima_template_lib.h    |   2 +
- security/integrity/integrity.h               |  42 +-
- security/keys/key.c                          |  20 +
- security/keys/keyring.c                      |  25 +-
- security/security.c                          |   2 +-
- 43 files changed, 2405 insertions(+), 377 deletions(-)
+Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
+---
+ fs/proc/namespaces.c              |   4 +
+ include/linux/ima.h               |  57 ++++++++
+ include/linux/nsproxy.h           |   3 +
+ include/linux/proc_ns.h           |   5 +-
+ include/linux/user_namespace.h    |   1 +
+ include/uapi/linux/sched.h        |   1 +
+ init/Kconfig                      |  12 ++
+ kernel/fork.c                     |  24 +++-
+ kernel/nsproxy.c                  |  34 ++++-
+ kernel/ucount.c                   |   1 +
+ security/integrity/ima/Makefile   |   1 +
+ security/integrity/ima/ima.h      |  13 ++
+ security/integrity/ima/ima_init.c |  13 ++
+ security/integrity/ima/ima_ns.c   | 232 ++++++++++++++++++++++++++++++
+ 14 files changed, 392 insertions(+), 9 deletions(-)
  create mode 100644 security/integrity/ima/ima_ns.c
 
-
-base-commit: fc80c51fd4b23ec007e88d4c688f2cac1b8648e7
-prerequisite-patch-id: 409c4abf4ee18e7d43eda995ff0db7879d3d0f5c
+diff --git a/fs/proc/namespaces.c b/fs/proc/namespaces.c
+index 8e159fc78c0a..117812a59e5d 100644
+--- a/fs/proc/namespaces.c
++++ b/fs/proc/namespaces.c
+@@ -37,6 +37,10 @@ static const struct proc_ns_operations *ns_entries[] = {
+ 	&timens_operations,
+ 	&timens_for_children_operations,
+ #endif
++#ifdef CONFIG_IMA_NS
++	&imans_operations,
++	&imans_for_children_operations,
++#endif
+ };
+ 
+ static const char *proc_ns_get_link(struct dentry *dentry,
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index d15100de6cdd..4a9c29d4d056 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -12,6 +12,9 @@
+ #include <linux/kexec.h>
+ struct linux_binprm;
+ 
++struct nsproxy;
++struct task_struct;
++
+ #ifdef CONFIG_IMA
+ extern int ima_bprm_check(struct linux_binprm *bprm);
+ extern int ima_file_check(struct file *file, int mask);
+@@ -167,4 +170,58 @@ static inline bool ima_appraise_signature(enum kernel_read_file_id func)
+ 	return false;
+ }
+ #endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
++
++struct ima_namespace {
++	struct kref kref;
++	struct ns_common ns;
++	struct ucounts *ucounts;
++	struct user_namespace *user_ns;
++} __randomize_layout;
++
++extern struct ima_namespace init_ima_ns;
++
++#ifdef CONFIG_IMA_NS
++struct ima_namespace *copy_ima_ns(unsigned long flags,
++				  struct user_namespace *user_ns,
++				  struct ima_namespace *old_ns);
++
++void free_ima_ns(struct kref *kref);
++
++int imans_on_fork(struct nsproxy *nsproxy, struct task_struct *tsk);
++
++static inline struct ima_namespace *get_ima_ns(struct ima_namespace *ns)
++{
++	if (ns)
++		kref_get(&ns->kref);
++	return ns;
++}
++static inline void put_ima_ns(struct ima_namespace *ns)
++{
++	if (ns)
++		kref_put(&ns->kref, free_ima_ns);
++}
++
++#else
++static inline struct ima_namespace *copy_ima_ns(unsigned long flags,
++						struct user_namespace *user_ns,
++						struct ima_namespace *old_ns)
++{
++	return old_ns;
++}
++
++static inline int imans_on_fork(struct nsproxy *nsproxy,
++				struct task_struct *tsk)
++{
++	return 0;
++}
++
++static inline struct ima_namespace *get_ima_ns(struct ima_namespace *ns)
++{
++	return ns;
++}
++
++static inline void put_ima_ns(struct ima_namespace *ns)
++{
++}
++#endif /* CONFIG_IMA_NS */
+ #endif /* _LINUX_IMA_H */
+diff --git a/include/linux/nsproxy.h b/include/linux/nsproxy.h
+index cdb171efc7cb..56216a94009d 100644
+--- a/include/linux/nsproxy.h
++++ b/include/linux/nsproxy.h
+@@ -10,6 +10,7 @@ struct uts_namespace;
+ struct ipc_namespace;
+ struct pid_namespace;
+ struct cgroup_namespace;
++struct ima_namespace;
+ struct fs_struct;
+ 
+ /*
+@@ -38,6 +39,8 @@ struct nsproxy {
+ 	struct time_namespace *time_ns;
+ 	struct time_namespace *time_ns_for_children;
+ 	struct cgroup_namespace *cgroup_ns;
++	struct ima_namespace *ima_ns;
++	struct ima_namespace *ima_ns_for_children;
+ };
+ extern struct nsproxy init_nsproxy;
+ 
+diff --git a/include/linux/proc_ns.h b/include/linux/proc_ns.h
+index 75807ecef880..93735b7bbb65 100644
+--- a/include/linux/proc_ns.h
++++ b/include/linux/proc_ns.h
+@@ -16,7 +16,7 @@ struct inode;
+ struct proc_ns_operations {
+ 	const char *name;
+ 	const char *real_ns_name;
+-	int type;
++	unsigned long type;
+ 	struct ns_common *(*get)(struct task_struct *task);
+ 	void (*put)(struct ns_common *ns);
+ 	int (*install)(struct nsset *nsset, struct ns_common *ns);
+@@ -34,6 +34,8 @@ extern const struct proc_ns_operations mntns_operations;
+ extern const struct proc_ns_operations cgroupns_operations;
+ extern const struct proc_ns_operations timens_operations;
+ extern const struct proc_ns_operations timens_for_children_operations;
++extern const struct proc_ns_operations imans_operations;
++extern const struct proc_ns_operations imans_for_children_operations;
+ 
+ /*
+  * We always define these enumerators
+@@ -46,6 +48,7 @@ enum {
+ 	PROC_PID_INIT_INO	= 0xEFFFFFFCU,
+ 	PROC_CGROUP_INIT_INO	= 0xEFFFFFFBU,
+ 	PROC_TIME_INIT_INO	= 0xEFFFFFFAU,
++	PROC_IMA_INIT_INO	= 0xEFFFFFF9U,
+ };
+ 
+ #ifdef CONFIG_PROC_FS
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index 6ef1c7109fc4..d9759c54fead 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -46,6 +46,7 @@ enum ucount_type {
+ 	UCOUNT_MNT_NAMESPACES,
+ 	UCOUNT_CGROUP_NAMESPACES,
+ 	UCOUNT_TIME_NAMESPACES,
++	UCOUNT_IMA_NAMESPACES,
+ #ifdef CONFIG_INOTIFY_USER
+ 	UCOUNT_INOTIFY_INSTANCES,
+ 	UCOUNT_INOTIFY_WATCHES,
+diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
+index 3bac0a8ceab2..b30e27efee92 100644
+--- a/include/uapi/linux/sched.h
++++ b/include/uapi/linux/sched.h
+@@ -36,6 +36,7 @@
+ /* Flags for the clone3() syscall. */
+ #define CLONE_CLEAR_SIGHAND 0x100000000ULL /* Clear any signal handler and reset to SIG_DFL. */
+ #define CLONE_INTO_CGROUP 0x200000000ULL /* Clone into a specific cgroup given the right permissions. */
++#define CLONE_NEWIMA 0x400000000ULL /* New IMA namespace. */
+ 
+ /*
+  * cloning flags intersect with CSIGNAL so can be used with unshare and clone3
+diff --git a/init/Kconfig b/init/Kconfig
+index d6a0b31b13dc..f188b33588a2 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1184,6 +1184,18 @@ config NET_NS
+ 	  Allow user space to create what appear to be multiple instances
+ 	  of the network stack.
+ 
++config IMA_NS
++	bool "IMA namespace"
++	depends on IMA
++	default n
++	help
++	  This allows container engines to use ima namespaces to provide
++	  different IMA policy rules for different containers. Also, it allows
++	  to create what appear to be multiple instances of the IMA measurement
++	  list and other IMA related resources.
++
++	  If unsure, say N.
++
+ endif # NAMESPACES
+ 
+ config CHECKPOINT_RESTORE
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 35e9894d394c..b977fd92fe3f 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1876,11 +1876,24 @@ static __latent_entropy struct task_struct *copy_process(
+ 	}
+ 
+ 	/*
+-	 * If the new process will be in a different time namespace
+-	 * do not allow it to share VM or a thread group with the forking task.
++	 * If the new process will be in a different time namespace or a
++	 * different ima namespace, do not allow it to share VM or a thread
++	 * group with the forking task.
+ 	 */
+ 	if (clone_flags & (CLONE_THREAD | CLONE_VM)) {
+-		if (nsp->time_ns != nsp->time_ns_for_children)
++		if ((nsp->time_ns != nsp->time_ns_for_children) ||
++		    ((clone_flags & CLONE_NEWIMA) ||
++		     (nsp->ima_ns != nsp->ima_ns_for_children)))
++			return ERR_PTR(-EINVAL);
++	}
++
++	/*
++	 * If the new process will be in a different ima namespace
++	 * do not allow it to share the same file descriptor table.
++	 */
++	if (clone_flags & CLONE_FILES) {
++		if ((clone_flags & CLONE_NEWIMA) ||
++		    (nsp->ima_ns != nsp->ima_ns_for_children))
+ 			return ERR_PTR(-EINVAL);
+ 	}
+ 
+@@ -2649,7 +2662,8 @@ static bool clone3_args_valid(struct kernel_clone_args *kargs)
+ {
+ 	/* Verify that no unknown flags are passed along. */
+ 	if (kargs->flags &
+-	    ~(CLONE_LEGACY_FLAGS | CLONE_CLEAR_SIGHAND | CLONE_INTO_CGROUP))
++	    ~(CLONE_LEGACY_FLAGS |
++	      CLONE_CLEAR_SIGHAND | CLONE_INTO_CGROUP | CLONE_NEWIMA))
+ 		return false;
+ 
+ 	/*
+@@ -2796,7 +2810,7 @@ static int check_unshare_flags(unsigned long unshare_flags)
+ 				CLONE_VM|CLONE_FILES|CLONE_SYSVSEM|
+ 				CLONE_NEWUTS|CLONE_NEWIPC|CLONE_NEWNET|
+ 				CLONE_NEWUSER|CLONE_NEWPID|CLONE_NEWCGROUP|
+-				CLONE_NEWTIME))
++				CLONE_NEWTIME|CLONE_NEWIMA))
+ 		return -EINVAL;
+ 	/*
+ 	 * Not implemented, but pretend it works if there is nothing
+diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
+index 12dd41b39a7f..791efffd7a03 100644
+--- a/kernel/nsproxy.c
++++ b/kernel/nsproxy.c
+@@ -19,6 +19,7 @@
+ #include <net/net_namespace.h>
+ #include <linux/ipc_namespace.h>
+ #include <linux/time_namespace.h>
++#include <linux/ima.h>
+ #include <linux/fs_struct.h>
+ #include <linux/proc_fs.h>
+ #include <linux/proc_ns.h>
+@@ -47,6 +48,10 @@ struct nsproxy init_nsproxy = {
+ 	.time_ns		= &init_time_ns,
+ 	.time_ns_for_children	= &init_time_ns,
+ #endif
++#ifdef CONFIG_IMA_NS
++	.ima_ns			= &init_ima_ns,
++	.ima_ns_for_children	= &init_ima_ns,
++#endif
+ };
+ 
+ static inline struct nsproxy *create_nsproxy(void)
+@@ -121,8 +126,19 @@ static struct nsproxy *create_new_namespaces(unsigned long flags,
+ 	}
+ 	new_nsp->time_ns = get_time_ns(tsk->nsproxy->time_ns);
+ 
++	new_nsp->ima_ns_for_children = copy_ima_ns(flags, user_ns,
++					tsk->nsproxy->ima_ns_for_children);
++	if (IS_ERR(new_nsp->ima_ns_for_children)) {
++		err = PTR_ERR(new_nsp->ima_ns_for_children);
++		goto out_ima;
++	}
++	new_nsp->ima_ns = get_ima_ns(tsk->nsproxy->ima_ns);
++
+ 	return new_nsp;
+ 
++out_ima:
++	put_time_ns(new_nsp->time_ns);
++	put_time_ns(new_nsp->time_ns_for_children);
+ out_time:
+ 	put_net(new_nsp->net_ns);
+ out_net:
+@@ -157,8 +173,10 @@ int copy_namespaces(unsigned long flags, struct task_struct *tsk)
+ 
+ 	if (likely(!(flags & (CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC |
+ 			      CLONE_NEWPID | CLONE_NEWNET |
+-			      CLONE_NEWCGROUP | CLONE_NEWTIME)))) {
+-		if (likely(old_ns->time_ns_for_children == old_ns->time_ns)) {
++			      CLONE_NEWCGROUP | CLONE_NEWTIME |
++			      CLONE_NEWIMA)))) {
++		if (likely((old_ns->time_ns_for_children == old_ns->time_ns) &&
++			   (old_ns->ima_ns_for_children == old_ns->ima_ns))) {
+ 			get_nsproxy(old_ns);
+ 			return 0;
+ 		}
+@@ -186,6 +204,12 @@ int copy_namespaces(unsigned long flags, struct task_struct *tsk)
+ 		return ret;
+ 	}
+ 
++	ret = imans_on_fork(new_ns, tsk);
++	if (ret) {
++		free_nsproxy(new_ns);
++		return ret;
++	}
++
+ 	tsk->nsproxy = new_ns;
+ 	return 0;
+ }
+@@ -204,6 +228,10 @@ void free_nsproxy(struct nsproxy *ns)
+ 		put_time_ns(ns->time_ns);
+ 	if (ns->time_ns_for_children)
+ 		put_time_ns(ns->time_ns_for_children);
++	if (ns->ima_ns)
++		put_ima_ns(ns->ima_ns);
++	if (ns->ima_ns_for_children)
++		put_ima_ns(ns->ima_ns_for_children);
+ 	put_cgroup_ns(ns->cgroup_ns);
+ 	put_net(ns->net_ns);
+ 	kmem_cache_free(nsproxy_cachep, ns);
+@@ -221,7 +249,7 @@ int unshare_nsproxy_namespaces(unsigned long unshare_flags,
+ 
+ 	if (!(unshare_flags & (CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC |
+ 			       CLONE_NEWNET | CLONE_NEWPID | CLONE_NEWCGROUP |
+-			       CLONE_NEWTIME)))
++			       CLONE_NEWTIME | CLONE_NEWIMA)))
+ 		return 0;
+ 
+ 	user_ns = new_cred ? new_cred->user_ns : current_user_ns();
+diff --git a/kernel/ucount.c b/kernel/ucount.c
+index 11b1596e2542..3f4768d62b8f 100644
+--- a/kernel/ucount.c
++++ b/kernel/ucount.c
+@@ -70,6 +70,7 @@ static struct ctl_table user_table[] = {
+ 	UCOUNT_ENTRY("max_mnt_namespaces"),
+ 	UCOUNT_ENTRY("max_cgroup_namespaces"),
+ 	UCOUNT_ENTRY("max_time_namespaces"),
++	UCOUNT_ENTRY("max_ima_namespaces"),
+ #ifdef CONFIG_INOTIFY_USER
+ 	UCOUNT_ENTRY("max_inotify_instances"),
+ 	UCOUNT_ENTRY("max_inotify_watches"),
+diff --git a/security/integrity/ima/Makefile b/security/integrity/ima/Makefile
+index 67dabca670e2..d804d93f1a99 100644
+--- a/security/integrity/ima/Makefile
++++ b/security/integrity/ima/Makefile
+@@ -14,3 +14,4 @@ ima-$(CONFIG_HAVE_IMA_KEXEC) += ima_kexec.o
+ ima-$(CONFIG_IMA_BLACKLIST_KEYRING) += ima_mok.o
+ ima-$(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) += ima_asymmetric_keys.o
+ ima-$(CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS) += ima_queue_keys.o
++ima-$(CONFIG_IMA_NS) += ima_ns.o
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 38043074ce5e..603da5b2db08 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -20,6 +20,7 @@
+ #include <linux/hash.h>
+ #include <linux/tpm.h>
+ #include <linux/audit.h>
++#include <linux/ima.h>
+ #include <crypto/hash_info.h>
+ 
+ #include "../integrity.h"
+@@ -371,6 +372,18 @@ static inline int ima_read_xattr(struct dentry *dentry,
+ 
+ #endif /* CONFIG_IMA_APPRAISE */
+ 
++#ifdef CONFIG_IMA_NS
++static inline struct ima_namespace *get_current_ns(void)
++{
++	return current->nsproxy->ima_ns;
++}
++#else
++static inline struct ima_namespace *get_current_ns(void)
++{
++	return &init_ima_ns;
++}
++#endif /* CONFIG_IMA_NS */
++
+ #ifdef CONFIG_IMA_APPRAISE_MODSIG
+ int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
+ 		    struct modsig **modsig);
+diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+index 4902fe7bd570..013bbec16849 100644
+--- a/security/integrity/ima/ima_init.c
++++ b/security/integrity/ima/ima_init.c
+@@ -15,6 +15,9 @@
+ #include <linux/scatterlist.h>
+ #include <linux/slab.h>
+ #include <linux/err.h>
++#include <linux/kref.h>
++#include <linux/proc_ns.h>
++#include <linux/user_namespace.h>
+ 
+ #include "ima.h"
+ 
+@@ -22,6 +25,16 @@
+ const char boot_aggregate_name[] = "boot_aggregate";
+ struct tpm_chip *ima_tpm_chip;
+ 
++struct ima_namespace init_ima_ns = {
++	.kref = KREF_INIT(2),
++	.user_ns = &init_user_ns,
++	.ns.inum = PROC_IMA_INIT_INO,
++#ifdef CONFIG_IMA_NS
++	.ns.ops = &imans_operations,
++#endif
++};
++EXPORT_SYMBOL(init_ima_ns);
++
+ /* Add the boot aggregate to the IMA measurement list and extend
+  * the PCR register.
+  *
+diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
+new file mode 100644
+index 000000000000..8f5f301406a2
+--- /dev/null
++++ b/security/integrity/ima/ima_ns.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2019-2020 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License as
++ * published by the Free Software Foundation, version 2 of the
++ * License.
++ *
++ * File: ima_ns.c
++ *      Functions to manage the IMA namespace.
++ */
++
++#include <linux/export.h>
++#include <linux/ima.h>
++#include <linux/kref.h>
++#include <linux/proc_ns.h>
++#include <linux/slab.h>
++#include <linux/user_namespace.h>
++#include <linux/nsproxy.h>
++#include <linux/sched.h>
++
++#include "ima.h"
++
++static struct ucounts *inc_ima_namespaces(struct user_namespace *ns)
++{
++	return inc_ucount(ns, current_euid(), UCOUNT_IMA_NAMESPACES);
++}
++
++static void dec_ima_namespaces(struct ucounts *ucounts)
++{
++	return dec_ucount(ucounts, UCOUNT_IMA_NAMESPACES);
++}
++
++static struct ima_namespace *ima_ns_alloc(void)
++{
++	struct ima_namespace *ima_ns;
++
++	ima_ns = kzalloc(sizeof(*ima_ns), GFP_KERNEL);
++	if (!ima_ns)
++		return NULL;
++
++	return ima_ns;
++}
++
++/**
++ * Clone a new ns copying an original ima namespace, setting refcount to 1
++ *
++ * @user_ns:	User namespace that current task runs in
++ * @old_ns:	Old ima namespace to clone
++ * Return:	ERR_PTR(-ENOMEM) on error (failure to kmalloc), new ns otherwise
++ */
++static struct ima_namespace *clone_ima_ns(struct user_namespace *user_ns,
++					   struct ima_namespace *old_ns)
++{
++	struct ima_namespace *ns;
++	struct ucounts *ucounts;
++	int err;
++
++	err = -ENOSPC;
++	ucounts = inc_ima_namespaces(user_ns);
++	if (!ucounts)
++		goto fail;
++
++	err = -ENOMEM;
++	ns = ima_ns_alloc();
++	if (!ns)
++		goto fail_dec;
++
++	kref_init(&ns->kref);
++
++	err = ns_alloc_inum(&ns->ns);
++	if (err)
++		goto fail_free;
++
++	ns->ns.ops = &imans_operations;
++	ns->user_ns = get_user_ns(user_ns);
++	ns->ucounts = ucounts;
++
++	return ns;
++
++fail_free:
++	kfree(ns);
++fail_dec:
++	dec_ima_namespaces(ucounts);
++fail:
++	return ERR_PTR(err);
++}
++
++/**
++ * Copy task's ima namespace, or clone it if flags specifies CLONE_NEWNS.
++ *
++ * @flags:      Cloning flags
++ * @user_ns:	User namespace that current task runs in
++ * @old_ns:	Old ima namespace to clone
++ *
++ * Return: IMA namespace or ERR_PTR.
++ */
++
++struct ima_namespace *copy_ima_ns(unsigned long flags,
++				  struct user_namespace *user_ns,
++				  struct ima_namespace *old_ns)
++{
++	if (!(flags & CLONE_NEWIMA))
++		return get_ima_ns(old_ns);
++
++	return clone_ima_ns(user_ns, old_ns);
++}
++
++static void destroy_ima_ns(struct ima_namespace *ns)
++{
++	dec_ima_namespaces(ns->ucounts);
++	put_user_ns(ns->user_ns);
++	ns_free_inum(&ns->ns);
++	kfree(ns);
++}
++
++void free_ima_ns(struct kref *kref)
++{
++	struct ima_namespace *ns;
++
++	ns = container_of(kref, struct ima_namespace, kref);
++
++	destroy_ima_ns(ns);
++}
++
++static inline struct ima_namespace *to_ima_ns(struct ns_common *ns)
++{
++	return container_of(ns, struct ima_namespace, ns);
++}
++
++static struct ns_common *imans_get(struct task_struct *task)
++{
++	struct ima_namespace *ns = NULL;
++	struct nsproxy *nsproxy;
++
++	task_lock(task);
++	nsproxy = task->nsproxy;
++	if (nsproxy) {
++		ns = nsproxy->ima_ns;
++		get_ima_ns(ns);
++	}
++	task_unlock(task);
++
++	return ns ? &ns->ns : NULL;
++}
++
++static struct ns_common *imans_for_children_get(struct task_struct *task)
++{
++	struct ima_namespace *ns = NULL;
++	struct nsproxy *nsproxy;
++
++	task_lock(task);
++	nsproxy = task->nsproxy;
++	if (nsproxy) {
++		ns = nsproxy->ima_ns_for_children;
++		get_ima_ns(ns);
++	}
++	task_unlock(task);
++
++	return ns ? &ns->ns : NULL;
++}
++
++static void imans_put(struct ns_common *ns)
++{
++	put_ima_ns(to_ima_ns(ns));
++}
++
++static int imans_install(struct nsset *nsset, struct ns_common *new)
++{
++	struct nsproxy *nsproxy = nsset->nsproxy;
++	struct ima_namespace *ns = to_ima_ns(new);
++
++	if (!current_is_single_threaded())
++		return -EUSERS;
++
++	if (!ns_capable(ns->user_ns, CAP_SYS_ADMIN) ||
++	    !ns_capable(nsset->cred->user_ns, CAP_SYS_ADMIN))
++		return -EPERM;
++
++	get_ima_ns(ns);
++	put_ima_ns(nsproxy->ima_ns);
++	nsproxy->ima_ns = ns;
++
++	get_ima_ns(ns);
++	put_ima_ns(nsproxy->ima_ns_for_children);
++	nsproxy->ima_ns_for_children = ns;
++
++	return 0;
++}
++
++int imans_on_fork(struct nsproxy *nsproxy, struct task_struct *tsk)
++{
++	struct ns_common *nsc = &nsproxy->ima_ns_for_children->ns;
++	struct ima_namespace *ns = to_ima_ns(nsc);
++
++	/* create_new_namespaces() already incremented the ref counter */
++	if (nsproxy->ima_ns == nsproxy->ima_ns_for_children)
++		return 0;
++
++	get_ima_ns(ns);
++	put_ima_ns(nsproxy->ima_ns);
++	nsproxy->ima_ns = ns;
++
++	return 0;
++}
++
++static struct user_namespace *imans_owner(struct ns_common *ns)
++{
++	return to_ima_ns(ns)->user_ns;
++}
++
++const struct proc_ns_operations imans_operations = {
++	.name = "ima",
++	.type = CLONE_NEWIMA,
++	.get = imans_get,
++	.put = imans_put,
++	.install = imans_install,
++	.owner = imans_owner,
++};
++
++const struct proc_ns_operations imans_for_children_operations = {
++	.name = "ima_for_children",
++	.type = CLONE_NEWIMA,
++	.get = imans_for_children_get,
++	.put = imans_put,
++	.install = imans_install,
++	.owner = imans_owner,
++};
++
 -- 
 2.20.1
 
