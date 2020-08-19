@@ -2,154 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A26724A4C6
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Aug 2020 19:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC3924A4CA
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Aug 2020 19:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725997AbgHSRTb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Aug 2020 13:19:31 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20184 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726715AbgHSRT3 (ORCPT
+        id S1726466AbgHSRVm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Aug 2020 13:21:42 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:44272 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725939AbgHSRVl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Aug 2020 13:19:29 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07JH1tE6096237;
-        Wed, 19 Aug 2020 13:19:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=ETl1k4PkNPUUDtug5qEoPpaWTzLOA0df1Hj+KXmXxkg=;
- b=QD4HqGhbzXuSF+t4D17p7V9brMfnoxpHh83Os2TdwfWN6z6lxZoapxaOUr35FrKSDODO
- iCvruZRgOwohMYHSR2ZHGFPSl+TEDpfOL4+u+ClqRnUOdI4BNSFFWExF/fSxss2i8sx6
- tw/8Jw96k/XhzE4StAUqQrBOI2pKT8cBpKM54CzpYQ0vXar7uobfySFI9RhBR2m8erbo
- lN+o2VaAiAKfsFhMb8AccYBJksEmy+XRJg66TqKem6SuLt24V8uTnpAbiR2LeQlVOPOQ
- bD4PCrqwO7UGovXq9abMvKvlx0gBIbfZlltlKb2j/udc8GV8LzrSrZrvuPxiIvPGVt65 2Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3313kxtf2v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Aug 2020 13:19:21 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07JH1tNG096211;
-        Wed, 19 Aug 2020 13:19:21 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3313kxtf2b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Aug 2020 13:19:21 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07JHBU1d023077;
-        Wed, 19 Aug 2020 17:19:20 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma04dal.us.ibm.com with ESMTP id 3304uqrxjn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Aug 2020 17:19:20 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07JHJJ8T42271008
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Aug 2020 17:19:19 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 721CD124054;
-        Wed, 19 Aug 2020 17:19:19 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B4CC124052;
-        Wed, 19 Aug 2020 17:19:19 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.65.228.167])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Wed, 19 Aug 2020 17:19:19 +0000 (GMT)
-Received: (from gcwilson@localhost)
-        by localhost.localdomain (8.15.2/8.15.2/Submit) id 07JHJG4G039024;
-        Wed, 19 Aug 2020 13:19:16 -0400
-X-Authentication-Warning: localhost.localdomain: gcwilson set sender to gcwilson@linux.ibm.com using -f
-Date:   Wed, 19 Aug 2020 13:19:16 -0400
-From:   George Wilson <gcwilson@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     linux-integrity@vger.kernel.org,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        "Bruno E . O . Meneguele" <bmeneg@redhat.com>
-Subject: Re: [PATCH ima-evm-utils 0/9] Docker based Travis CI builds
-Message-ID: <20200819165043.GA4717@us.ibm.com>
-References: <20200813182532.6931-1-pvorel@suse.cz>
- <4f205c34d7b41325c3c46e485f07bc716c917d83.camel@linux.ibm.com>
- <20200819051420.GA4455@dell5510>
- <1d6df12128a37ae6ae15b430ebd21edc372ee174.camel@linux.ibm.com>
+        Wed, 19 Aug 2020 13:21:41 -0400
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 078BA20B4908;
+        Wed, 19 Aug 2020 10:21:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 078BA20B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1597857699;
+        bh=UpCfcaHQrahaE2T3GHBLtMjY0drv+g0vhF7DKb3WEmo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YLP9CsoM9+5i4nPMXgM3TcscEWd4is442Fgao4Fs+4kG9BhBi5x8a4k4rDP/u0ObV
+         4DVtI3R8Lo+DGxV9xvdnTYzDf18hiqq0tY5jFiu0HWKeYMzzSQUZ0LOnckdcSq2Uo6
+         jmC2VNXMLvOTfqYu7iTck1JiGCglBJ1KAgoTOZm0=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
+        gregkh@linuxfoundation.org, james.morse@arm.com,
+        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: [PATCH v4 0/5] Carry forward IMA measurement log on kexec on ARM64
+Date:   Wed, 19 Aug 2020 10:21:29 -0700
+Message-Id: <20200819172134.11243-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1d6df12128a37ae6ae15b430ebd21edc372ee174.camel@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-19_09:2020-08-19,2020-08-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0 clxscore=1011
- mlxlogscore=999 malwarescore=0 suspectscore=2 phishscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008190138
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 10:37:23AM -0400, Mimi Zohar wrote:
-> On Wed, 2020-08-19 at 07:14 +0200, Petr Vorel wrote:
-> > Hi Mimi,
-> > 
-> > > Hi Petr,
-> > > On Thu, 2020-08-13 at 20:25 +0200, Petr Vorel wrote:
-> > > > Hi,
-> > > > we talked about Docker based Travis CI builds.
-> > > > Here they are [1]. Working on it revealed few bugs, that's why they're
-> > > > included.
-> > > > I've resent 2 commits ("man:" prefix).
-> > > > I haven't addressed Mimi's suggestion to replace ibmswtpm2 with libtmps/swtpm [2].
-> > > To summarize:
-> > > - Add libtpms/swtpm support
-> > > - Remove debugging from travis/fedora.sh 
-> > > - CentOS tss & tss2-devel issues
-> > > - Petr todo's comment:
-> > >   * add pgrep and pkill to _require (fix of a different commit)
-> > >   * add magic constant 114 to exit codes (in tests/functions.sh)
-> > >   * I'd like reuse exit codes in build.sh. I could source tests/functions.sh (they
-> > >     look to be general enough, just I didn't like script in root directory depending
-> > >     on it, as it's general enough for build without testing) have these constants in
-> > >     separate file.
-> > > swtpm: patch was posted, reviewed, and fixed.
-> > Great.
-> > 
-> > > CentOS: Our internal Travis on ppc64 is installing both tpm2-tss-2.0.0-
-> > > 4.el8.x86_64.rpm and tpm2-tss-devel-2.0.0-4.el8.x86_64.rpm on CentOS. 
-> > > In general, the "boot_aggregate.test" is only run if both a software
-> > > TPM and the tsseventextend exist.  If either one of them are missing,
-> > > the test is skipped.  For CentOS on x86, the "boot_aggregate" would be
-> > > skipped.
-> > Great. BTW it'd be nice to have native non-intel builds instead of
-> > cross-compilation. But, they're constantly broken on Travis CI, that's why I
-> > didn't implement it (I've been testing ppc64le and s390x for several months).
-> 
-> Thank you!
+On kexec file load Integrgity Measurement Architecture(IMA) subsystem
+may verify the IMA signature of the kernel and initramfs, and measure
+it. The command line parameters passed to the kernel in the kexec call
+may also be measured by IMA. A remote attestation service can verify
+the measurement through the IMA log and the TPM PCR data. This can be
+achieved only if the IMA measurement log is carried over from
+the current kernel to the next kernel across the kexec call.
+However in the current implementation the IMA measurement logs are not
+carried over on ARM64 platforms. Therefore a remote attestation service
+cannot verify the authenticity of the running kernel on ARM64 platforms
+when the kernel is updated through the kexec system call.
 
-Hi Petr,
+This patch series adds support for carrying forward the IMA measurement
+log on kexec on ARM64. powerpc already supports carrying forward
+the IMA measurement log on kexec.
 
-Being under the IBM Power organization, I'd like to add my thanks for testing on
-ppc64!
+This series refactors the platform independent code such that it can be
+reused for ARM64 as well. A chosen node namely
+"linux,ima-kexec-buffer" is added to the DTB for ARM64 to hold
+the address and the size of the memory reserved to carry
+the IMA measurement log.
 
-> 
-> > 
-> > > Left is Petr's "todo's" comment.  Petr, would these be additional
-> > > patches on top of the existing ones or were you planning on re-posting
-> > > them?   If these are additional patches, I can remove the debugging
-> > > from travis/fedora.sh in patch 9/9.  Please let me know how you want to
-> > > go forward.
-> > Please, remove the debugging from travis/fedora.sh, I'll send additional patch.
-> 
-> Done.  The travis branch is now in next-testing.
-> 
-> thanks!
-> 
-> Mimi
-> 
-> 
-> 
+This patch series has been tested for ARM64 platform using QEMU.
+I would like help from the community for testing this change on powerpc.
+Thanks.
+
+This series is based on commit 18445bf405cb ("Merge tag 'spi-fix-v5.9-rc1'
+of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi") in
+https://github.com/torvalds/linux "master" branch.
+
+Changelog:
+
+v4:
+  - Submitting the patch series on behalf of the original author
+    Prakhar Srivastava <prsriva@linux.microsoft.com>
+  - Moved FDT_PROP_IMA_KEXEC_BUFFER ("linux,ima-kexec-buffer") to
+    libfdt.h so that it can be shared by multiple platforms.
+
+v3:
+Breakup patches further into separate patches.
+  - Refactoring non architecture specific code out of powerpc
+  - Update powerpc related code to use fdt functions
+  - Update IMA buffer read related code to use of functions
+  - Add support to store the memory information of the IMA
+    measurement logs to be carried forward.
+  - Update the property strings to align with documented nodes
+    https://github.com/devicetree-org/dt-schema/pull/46
+
+v2:
+  Break patches into separate patches.
+  - Powerpc related Refactoring
+  - Updating the docuemntation for chosen node
+  - Updating arm64 to support IMA buffer pass
+
+v1:
+  Refactoring carrying over IMA measuremnet logs over Kexec. This patch
+    moves the non-architecture specific code out of powerpc and adds to
+    security/ima.(Suggested by Thiago)
+  Add Documentation regarding the ima-kexec-buffer node in the chosen
+    node documentation
+
+v0:
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
+
+Lakshmi Ramasubramanian (5):
+  powerpc: Refactor kexec functions to move arch independent code to IMA
+  powerpc: Use libfdt functions to fetch IMA buffer properties
+  IMA: Refactor do_get_kexec_buffer() to call of_ functions directly
+  arm64: Store IMA log information in kimage used for kexec
+  arm64: Add IMA kexec buffer to DTB
+
+ arch/arm64/Kconfig                     |   1 +
+ arch/arm64/include/asm/ima.h           |  17 ++++
+ arch/arm64/include/asm/kexec.h         |   3 +
+ arch/arm64/kernel/machine_kexec_file.c |  28 ++++++
+ arch/powerpc/include/asm/ima.h         |   3 -
+ arch/powerpc/kexec/ima.c               | 123 ++++++-------------------
+ include/linux/libfdt.h                 |   3 +
+ security/integrity/ima/ima_kexec.c     |  81 ++++++++++++++++
+ 8 files changed, 161 insertions(+), 98 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
 
 -- 
-George Wilson
-IBM Linux Technology Center
-Security Development
+2.28.0
+
