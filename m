@@ -2,32 +2,32 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2372624A8EE
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Aug 2020 00:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8751324A8F2
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Aug 2020 00:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726435AbgHSWOf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Aug 2020 18:14:35 -0400
-Received: from mga18.intel.com ([134.134.136.126]:19788 "EHLO mga18.intel.com"
+        id S1726754AbgHSWPs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Aug 2020 18:15:48 -0400
+Received: from mga17.intel.com ([192.55.52.151]:32544 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726482AbgHSWOf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Aug 2020 18:14:35 -0400
-IronPort-SDR: P3XzOK5j7ws4/9YCKdmm0f7RMMDO4bvQtITMwhYk5XlvWmVWQFrzLUD85vyEsZelIss5eZF9i2
- cRGTaIFdmSFg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="142837406"
+        id S1726435AbgHSWPr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 19 Aug 2020 18:15:47 -0400
+IronPort-SDR: 9F7HC0n50dofNJEBLpIEN7s5n3HsCAOS8vQIYeFG9LsG8qhSf1rPE2kEnGCKlWnCDoUTsX1dS6
+ M9waSi8Wva3Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="135273900"
 X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="142837406"
+   d="scan'208";a="135273900"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 15:14:33 -0700
-IronPort-SDR: 3jUGC3uvmT1r8eBt7gcEwPuGT2EFyBJsUguZOOBrGo48C7VqDlB7kmc1h0BKLYkmmHuQsGX4eH
- e0lAIVfuuZ3A==
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 15:15:46 -0700
+IronPort-SDR: RA0K3fI6AgJT1LHdoG/ExZDHEKs0gn7L5aVEG2ImD7wbljrmNN+Hhoww056OcbPJPmB2yr+xmR
+ O9Gn1eO1miGw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="472401311"
+   d="scan'208";a="310916764"
 Received: from pbooyens-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.52.107])
-  by orsmga005.jf.intel.com with ESMTP; 19 Aug 2020 15:14:31 -0700
-Date:   Thu, 20 Aug 2020 01:14:31 +0300
+  by orsmga002.jf.intel.com with ESMTP; 19 Aug 2020 15:15:45 -0700
+Date:   Thu, 20 Aug 2020 01:15:44 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>
 Cc:     Jason Gunthorpe <jgg@nvidia.com>,
@@ -35,9 +35,8 @@ Cc:     Jason Gunthorpe <jgg@nvidia.com>,
         linux-integrity@vger.kernel.org
 Subject: Re: [PATCH v4 1/1] tpm: add sysfs exports for all banks of PCR
  registers
-Message-ID: <20200819221431.GL9942@linux.intel.com>
-References: <20200817213506.4474-1-James.Bottomley@HansenPartnership.com>
- <20200817213506.4474-2-James.Bottomley@HansenPartnership.com>
+Message-ID: <20200819221544.GM9942@linux.intel.com>
+References: <20200817213506.4474-2-James.Bottomley@HansenPartnership.com>
  <20200818161207.GC137138@linux.intel.com>
  <20200818161955.GD137138@linux.intel.com>
  <20200818162630.GE137138@linux.intel.com>
@@ -45,89 +44,45 @@ References: <20200817213506.4474-1-James.Bottomley@HansenPartnership.com>
  <39eb6b408e7f060ab241954102d06f97d1f99611.camel@linux.ibm.com>
  <20200818183603.GC1152540@nvidia.com>
  <14eaf21a808e333ca414c954d8f3a2f7b6dbf2ca.camel@linux.ibm.com>
+ <20200819120238.GD1152540@nvidia.com>
+ <59f983156fed466d568c324de72ef733c1a15d76.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <14eaf21a808e333ca414c954d8f3a2f7b6dbf2ca.camel@linux.ibm.com>
+In-Reply-To: <59f983156fed466d568c324de72ef733c1a15d76.camel@linux.ibm.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 02:55:50PM -0400, Mimi Zohar wrote:
-> On Tue, 2020-08-18 at 15:36 -0300, Jason Gunthorpe wrote:
-> > On Tue, Aug 18, 2020 at 02:26:04PM -0400, Mimi Zohar wrote:
-> > > On Tue, 2020-08-18 at 13:46 -0300, Jason Gunthorpe wrote:
-> > > > On Tue, Aug 18, 2020 at 07:26:30PM +0300, Jarkko Sakkinen wrote:
-> > > > > On Tue, Aug 18, 2020 at 07:19:57PM +0300, Jarkko Sakkinen wrote:
-> > > > > > On Tue, Aug 18, 2020 at 07:12:09PM +0300, Jarkko Sakkinen wrote:
-> > > > > > > On Mon, Aug 17, 2020 at 02:35:06PM -0700, James Bottomley wrote:
-> > > > > > > > Create sysfs per hash groups with 24 PCR files in them one group,
-> > > > > > > > named pcr-<hash>, for each agile hash of the TPM.  The files are
-> > > > > > > > plugged in to a PCR read function which is TPM version agnostic, so
-> > > > > > > > this works also for TPM 1.2 but the hash is only sha1 in that case.
-> > > > > > > > 
-> > > > > > > > Note: the macros used to create the hashes emit spurious checkpatch
-> > > > > > > > warnings.  Do not try to "fix" them as checkpatch recommends, otherwise
-> > > > > > > > they'll break.
-> > > > > > > > 
-> > > > > > > > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > > > > > > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > > > > > > > Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-> > > > > > > 
-> > > > > > > I have hard time understanding why this is required.
-> > > > > > > 
-> > > > > > > You can grab the information through /dev/tpm0 just fine.
-> > > > > > 
-> > > > > > I just think it is principally wrong to add sysfs files if they don't
-> > > > > > have any measurable value other than perhaps some convenience.
-> > > > > > 
-> > > > > > It is trival to write only a libc dependent program that outputs PCRs.
-> > > > > > 
-> > > > > > I think this is essentially an user space problem that is getting sorted
-> > > > > > out with kernel code.
-> > > > > 
-> > > > > Jason, what do you make of this? I recall that it was you who I
-> > > > > discussed with about this topic when TPM 2.0 support was first
-> > > > > upstreamed.
-> > > > 
-> > > > TPM 2.0 broke all the userspace so it made sense to get rid of the
-> > > > non-conforming sysfs files from TPM v1.x time as part of the userspace
-> > > > API. That was the main reason to not continue forward with PCR in
-> > > > userspace.
-> > > > 
-> > > > As far as doing it properly as this patch does.. I agree with you that
-> > > > sysfs files should have some reason to be added, espcially if it
-> > > > causes quite big code cost as this does. eg to drive a udev rule
-> > > > decision.
-> > > > 
-> > > > Why is PCRs so special it needs to be in sysfs? What is userspace
-> > > > going to do with this information?
-> > > 
-> > > The original IMA LTP "boot_aggregate" regression test is dependent on
-> > > the exported TPM event log and PCRs.  Similar support is needed for TPM
-> > > 2.0.  There isn't just a single userspace application for reading
-> > > PCRs.  As soon as we add support for one userspace
-> > > application,  support for the other applications is requested.  So
-> > > instead of a having a simple regression test with a single method of
-> > > reading PCRs, we're now required to support multiple userspace
-> > > applications.
+On Wed, Aug 19, 2020 at 09:27:33AM -0400, Mimi Zohar wrote:
+> On Wed, 2020-08-19 at 09:02 -0300, Jason Gunthorpe wrote:
+> > On Tue, Aug 18, 2020 at 02:55:50PM -0400, Mimi Zohar wrote:
 > > 
-> > But this test already has a C program as part of the boot aggregate
-> > test, why is it such a problem to use a C program to also read the
-> > PCRs?
+> > > The problem is that there isn't just one single userspace library or
+> > > application for reading PCRs.  So now not only is there the kernel
+> > > "boot_aggregate" regression testing, but regression testing of the tool
+> > > itself to support multiple methods of reading the PCRs.
 > > 
-> > As Jarkko says it is not so hard
+> > I was thinking just open code 
+> >   open("/dev/tpm")
+> >   write(read_pcrs_cmd)
+> >   read(read_pcrs_cmd)
+> >  
+> > It isn't particularly hard to retrive the PCRs, don't really need to
+> > depend on a library.
 > 
-> The problem is that there isn't just one single userspace library or
-> application for reading PCRs.  So now not only is there the kernel
-> "boot_aggregate" regression testing, but regression testing of the tool
-> itself to support multiple methods of reading the PCRs.
+> Ok, do you want to contribute it to ima-evm-utils?  While you're at it,
+> do you also have code to parse the TPM 2.0 event log that you could
+> contribute?
+> 
+> Seriously, we shouldn't be (re-)writing code to do this.
 > 
 > Mimi
+> 
 
-It's not hard to write a program to read PCRs with just libc. Takes
-about one afternoon.
+I'm puzzled why go the trouble of submitting this to LKML and not use
+that time to do the whatever changes ima-evm-utils requires?
 
 /Jarkko
