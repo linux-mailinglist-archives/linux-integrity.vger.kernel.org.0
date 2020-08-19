@@ -2,119 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1236624A782
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Aug 2020 22:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A6F24A835
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Aug 2020 23:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726646AbgHSUJT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Aug 2020 16:09:19 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:46048 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725275AbgHSUJT (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Aug 2020 16:09:19 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 472348EE1F3;
-        Wed, 19 Aug 2020 13:09:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1597867758;
-        bh=1mRi1aW/FI3TIVe600lFM8mtVRkaSLyOgF6/Rp8g1Yo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Wdk8akQ+ov21+5VmYYoaY22LFx7Ws2AmiOZwFJtK8LfX9WKURHz2ogKaE6w44jyeN
-         o5/kvfu96O+glcraH7fxQgwo5H6fbE0Ftlvc1xKlmoxrpK61DSyMCmUKMK48PXDA7S
-         Xgb3UXdzjMmawYVe7gDUcMQDDUOJxAbzXUeO6Ja8=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4eKjEAt_BrC2; Wed, 19 Aug 2020 13:09:18 -0700 (PDT)
-Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9C6BD8EE0E9;
-        Wed, 19 Aug 2020 13:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1597867757;
-        bh=1mRi1aW/FI3TIVe600lFM8mtVRkaSLyOgF6/Rp8g1Yo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=p2pwf+HhfSZhBwIf7XcKhsQ5o6ki8Kh6pF6YHZkthUAAjcVN9Nl6ROTxb2B++D5y2
-         MMZ+eK5pDk6+2utt5cjhyVwoDmlQf3va4ptb9iX5wxLNJjvmh6xUovUkaxcyRwyrHs
-         sbe+KF4OVL5tk148EHe67CqagoDHFzTMaJSEzLnY=
-Message-ID: <1597867756.3875.39.camel@HansenPartnership.com>
-Subject: Re: [PATCH v4 1/1] tpm: add sysfs exports for all banks of PCR
- registers
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>, Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity@vger.kernel.org
-Date:   Wed, 19 Aug 2020 13:09:16 -0700
-In-Reply-To: <20200819171709.GN1152540@nvidia.com>
-References: <20200818161955.GD137138@linux.intel.com>
-         <20200818162630.GE137138@linux.intel.com>
-         <20200818164602.GZ1152540@nvidia.com>
-         <39eb6b408e7f060ab241954102d06f97d1f99611.camel@linux.ibm.com>
-         <20200818183603.GC1152540@nvidia.com>
-         <14eaf21a808e333ca414c954d8f3a2f7b6dbf2ca.camel@linux.ibm.com>
-         <20200819120238.GD1152540@nvidia.com>
-         <1597850231.3875.13.camel@HansenPartnership.com>
-         <20200819161845.GK1152540@nvidia.com>
-         <78bc28a573f6660ee5b00d5965984fef2e1de167.camel@linux.ibm.com>
-         <20200819171709.GN1152540@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726923AbgHSVJb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Aug 2020 17:09:31 -0400
+Received: from mga14.intel.com ([192.55.52.115]:30132 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727107AbgHSVJa (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 19 Aug 2020 17:09:30 -0400
+IronPort-SDR: sAGR8TTRwhVSeCwFOpz4X1iNgpNghWkk7bwytvltvMsH4CMNNHGqMaj35QLXkkVcBwPPtewcWT
+ jQAYhT9Ot+5Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="154460928"
+X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
+   d="scan'208";a="154460928"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 14:09:30 -0700
+IronPort-SDR: 5cndTTZ4xWxk+PWXpH3ISKClr+XpZCZ8FvZ0yYib9YUt7SijssSWQhjDU7bAbvZdWB0or30SXt
+ NAhYutfpCumg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
+   d="scan'208";a="320622515"
+Received: from abojanow-mobl4.ger.corp.intel.com (HELO localhost) ([10.252.52.107])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Aug 2020 14:09:27 -0700
+Date:   Thu, 20 Aug 2020 00:09:27 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 2/2] dt-bindings: Add SynQucer TPM MMIO as a trivial
+ device
+Message-ID: <20200819210927.GF9942@linux.intel.com>
+References: <20200728031433.3370-1-masahisa.kojima@linaro.org>
+ <20200728031433.3370-3-masahisa.kojima@linaro.org>
+ <20200817211440.GB44714@linux.intel.com>
+ <CAMj1kXG2h-yk_hw-HZvhAPfYRVHq=LgNp5FB1J4SmnN82Zm9jA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXG2h-yk_hw-HZvhAPfYRVHq=LgNp5FB1J4SmnN82Zm9jA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-08-19 at 14:17 -0300, Jason Gunthorpe wrote:
-> On Wed, Aug 19, 2020 at 12:57:42PM -0400, Mimi Zohar wrote:
-> > On Wed, 2020-08-19 at 13:18 -0300, Jason Gunthorpe wrote:
-> > > Yes - it was dropped because TPM 2 was a *complete ABI break* for
-> > > everything. The kernel was reset to a uABI that matches current
-> > > uABI standards starting TPM 2.
-> > > 
-> > > The whole userspace needed to be redone anyhow, and certainly
-> > > nobody objected at the time.
-> > > 
-> > > At least my expecation was that a sensible userspace for TPM (for
-> > > administrator user) would be built, like we see in other
-> > > subsystems eg 'ip' for netdev.
-> > 
-> > "Because TPM 2 was a complete ABI break for everything" could be
-> > reason for upstreaming a minimal subset of functionality initially,
-> > which could be expanded over time.  I don't recall a discussion
-> > about limting features in the future.
+On Wed, Aug 19, 2020 at 12:22:52PM +0200, Ard Biesheuvel wrote:
+> On Mon, 17 Aug 2020 at 23:14, Jarkko Sakkinen
+> <jarkko.sakkinen@linux.intel.com> wrote:
+> >
+> > On Tue, Jul 28, 2020 at 12:14:32PM +0900, Masahisa Kojima wrote:
+> > > Add a compatible string for the SynQuacer TPM to the binding for a
+> > > TPM exposed via a memory mapped TIS frame. The MMIO window behaves
+> > > slightly differently on this hardware, so it requires its own
+> > > identifier.
+> > >
+> > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > > Acked-by: Rob Herring <robh@kernel.org>
+> > > Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+> >
+> > I applied these patches:
+> >
+> > http://git.infradead.org/users/jjs/linux-tpmdd.git/log/refs/heads/master
+> >
 > 
-> All new uAPI additions need to pass the usual uAPI hurdles.
-> 
-> As James outlined, justify why the kernel must present a duplicated
-> uAPI between sysfs and /dev/tpm. 
-> 
-> There have been good reasons in the past, eg SCSI inquiry.
+> Thanks Jarkko
 
-First, can we please agree /dev/tpm does not substitute as a "duplicate
-API".  I can now clarify the objection into "it's a binary marshalled
-interface and Linus doesn't think we should force users to use them":
+Yeah, sorry for taking this long. I was on vacation for couple of weeks.
 
-https://lore.kernel.org/linux-api/CAHk-=wh5YifP7hzKSbwJj94+DZ2czjrZsczy6GBimiogZws=rg@mail.gmail.com/
-
-So the question boils down to whether we're providing a simple
-interface that allows preboot and other use cases or should we require
-the complexity of a TSS installation to get the necessary tools. 
-Perhaps we should also simply copy linux-api and accept the judgment of
-the experts on whether we should expose PCRs via sysfs.
-
-> But there are also bad reasons like "our userpsace is dysfunctional
-> and can't make a library or tool".
-
-The reason we provide a kernel interface instead of a library or tool
-is that libraries and tools tend to be domain specific and the
-information needs to be provided across domains.  So: both the current
-TPM 2.0 TSSs are written in C.  This means they can just about be
-plugged into python but not easily into Go because of its abhorrence of
-ffis.  Providing the PCRs from sysfs allows Go attestation easy access
-that the TSS tools don't because of the language domain problem.
-
-James
-
-
+/Jarkko
