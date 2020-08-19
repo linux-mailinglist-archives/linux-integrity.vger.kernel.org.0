@@ -2,107 +2,135 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 335D424A8F4
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Aug 2020 00:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B602624A9AD
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Aug 2020 00:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbgHSWQv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Aug 2020 18:16:51 -0400
-Received: from mga14.intel.com ([192.55.52.115]:35875 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726435AbgHSWQv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Aug 2020 18:16:51 -0400
-IronPort-SDR: m4xxAnn+MXDKunUe5bodsBXUOQFAIFxmF18s1LrGuLTzyZCa2GmZ9TpW9iKHOYZbJzKGV9pA2Q
- vvDex19TatQw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="154469567"
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="154469567"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 15:16:50 -0700
-IronPort-SDR: xm8OUNH4NwefxDYADY7tKsmMPN4Ip8eXZipL5qvI/+9wJgdS6Hx56cBYsqOdWNzMPFzOcBXRCg
- U8fXTry2N7Pg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="297363996"
-Received: from pbooyens-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.52.107])
-  by orsmga006.jf.intel.com with ESMTP; 19 Aug 2020 15:16:48 -0700
-Date:   Thu, 20 Aug 2020 01:16:47 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org
+        id S1726342AbgHSWqT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Aug 2020 18:46:19 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:48402 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726209AbgHSWqS (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 19 Aug 2020 18:46:18 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id B3B0C8EE3F2;
+        Wed, 19 Aug 2020 15:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1597877177;
+        bh=pl69dwTZhrluzJRMEI8LbDHyiudH5aG5J3QmfvvGlQk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Y5azcYBtWOVnUAycUK+g0r8PFOlxufHEzJrqJN3GhmDtP9cjZcVaS4INSfhHR7aBW
+         esebfZ/TCccxvEFHmzeKwfcUaNQa+Sfxlin8ghDAMEnIgg+o/Ku+YkeQDalFfombFF
+         V9NjyPqw/ThHqtYCPu+6P1Fv+J7jn/tNiNgldmqg=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WHc5sf2K0TlF; Wed, 19 Aug 2020 15:46:17 -0700 (PDT)
+Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 44C1F8EE0E9;
+        Wed, 19 Aug 2020 15:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1597877177;
+        bh=pl69dwTZhrluzJRMEI8LbDHyiudH5aG5J3QmfvvGlQk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Y5azcYBtWOVnUAycUK+g0r8PFOlxufHEzJrqJN3GhmDtP9cjZcVaS4INSfhHR7aBW
+         esebfZ/TCccxvEFHmzeKwfcUaNQa+Sfxlin8ghDAMEnIgg+o/Ku+YkeQDalFfombFF
+         V9NjyPqw/ThHqtYCPu+6P1Fv+J7jn/tNiNgldmqg=
+Message-ID: <1597877175.4030.17.camel@HansenPartnership.com>
 Subject: Re: [PATCH v4 1/1] tpm: add sysfs exports for all banks of PCR
  registers
-Message-ID: <20200819221647.GN9942@linux.intel.com>
-References: <20200818161955.GD137138@linux.intel.com>
- <20200818162630.GE137138@linux.intel.com>
- <20200818164602.GZ1152540@nvidia.com>
- <39eb6b408e7f060ab241954102d06f97d1f99611.camel@linux.ibm.com>
- <20200818183603.GC1152540@nvidia.com>
- <14eaf21a808e333ca414c954d8f3a2f7b6dbf2ca.camel@linux.ibm.com>
- <20200819120238.GD1152540@nvidia.com>
- <59f983156fed466d568c324de72ef733c1a15d76.camel@linux.ibm.com>
- <20200819140943.GH1152540@nvidia.com>
- <e33cca9a33a151cf35f12aca9dfd42378d632322.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e33cca9a33a151cf35f12aca9dfd42378d632322.camel@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>
+Date:   Wed, 19 Aug 2020 15:46:15 -0700
+In-Reply-To: <20200819215332.GI9942@linux.intel.com>
+References: <20200817213506.4474-1-James.Bottomley@HansenPartnership.com>
+         <20200817213506.4474-2-James.Bottomley@HansenPartnership.com>
+         <20200818161207.GC137138@linux.intel.com>
+         <20200818161955.GD137138@linux.intel.com>
+         <1597769070.3898.36.camel@HansenPartnership.com>
+         <20200818171712.GZ24045@ziepe.ca>
+         <1597776566.3898.52.camel@HansenPartnership.com>
+         <20200819215332.GI9942@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 10:53:38AM -0400, Mimi Zohar wrote:
-> On Wed, 2020-08-19 at 11:09 -0300, Jason Gunthorpe wrote:
-> > On Wed, Aug 19, 2020 at 09:27:33AM -0400, Mimi Zohar wrote:
-> > > On Wed, 2020-08-19 at 09:02 -0300, Jason Gunthorpe wrote:
-> > > > On Tue, Aug 18, 2020 at 02:55:50PM -0400, Mimi Zohar wrote:
-> > > > 
-> > > > > The problem is that there isn't just one single userspace library or
-> > > > > application for reading PCRs.  So now not only is there the kernel
-> > > > > "boot_aggregate" regression testing, but regression testing of the tool
-> > > > > itself to support multiple methods of reading the PCRs.
-> > > > 
-> > > > I was thinking just open code 
-> > > >   open("/dev/tpm")
-> > > >   write(read_pcrs_cmd)
-> > > >   read(read_pcrs_cmd)
-> > > >  
-> > > > It isn't particularly hard to retrive the PCRs, don't really need to
-> > > > depend on a library.
+On Thu, 2020-08-20 at 00:53 +0300, Jarkko Sakkinen wrote:
+> > On Tue, 2020-08-18 at 14:17 -0300, Jason Gunthorpe wrote:
+> > > On Tue, Aug 18, 2020 at 09:44:30AM -0700, James Bottomley wrote:
 > > > 
-> > > Ok, do you want to contribute it to ima-evm-utils?  While you're at it,
-> > > do you also have code to parse the TPM 2.0 event log that you could
-> > > contribute?
+> > > > The question you should be asking isn't whether the information
+> > > > *could* be obtained by other means, but whether providing it in
+> > > > this form facilitates current operations and whether the
+> > > > interface would have users.
 > > > 
-> > > Seriously, we shouldn't be (re-)writing code to do this.
+> > > Sure. What are the use cases that need PCRs but no other TPM
+> > > operations?
+> > > 
+> > > The cover letter didn't say. As PCR is really only useful in the
+> > > context of the local TPM I'm not thinking of anything..
 > > 
-> > The kernel should not be used a dumping ground to work around a
-> > dysfunctional userspace either. :(
+> > The three use cases I picked up at the Boot and Security MC were:
 > > 
-> > You've basicaly said you can't rely on a sane userspace library
-> > because *reasons* so we need to dump stuff in the kernel instead.
+> >    1. local log verification: a script can run through the IMA
+> > ascii log
+> >       and construct the PCR 10 hash which can then be verified
+> >    2. Knowing what the PCR values actually are for sealed
+> > keys.  With the
+> >       current trusted key infrastructure you have to calculate and
+> > supply
+> >       the hash yourself.  With the new proposed infrastructure, the
+> > hash
+> >       would be calculated by the seal operation, but you're still
+> > going to
+> >       need the actual PCR values to debug unseal failures.
+> >    3. As a stability check for log shipping: you read the PCR take
+> > the log
+> >       then read the PCR: if the two reads are the same the PCR
+> > backing the
+> >       log is stable for quoting.
 > > 
-> > It is not a good justification to add new uAPI.
-> > 
-> > James seems to have the same basic conclusion too, unfortunately.
+> > James
 > 
-> "dysfunctional" is dropping existing TPM 1.2 sysfs support, which was
-> done without consideration about existing applications/tools (e.g. ima-
-> evm-utils, ltp) and without community input.  It's not only James that
-> is advocating for exporting the TPM PCRs, but Jerry Snitselaar, who
-> reviewed this patch and exported the TPM version, and Nayna Jain, who
-> exported the TPM 2.0 event log.  I'm pretty sure there are a number of
-> other people who would agree.
-> 
-> Mimi
+> The proposed sysfs attributes are racy in the sense that PCRs could
+> change in-between reading different hashes.
 
-This is not true. TPM 1.2 sysfs was not dropped.
+That's not really a problem, is it?  For use case 2. we expect them to
+be stable otherwise you're doing the wrong thing sealing to them. For
+the IMA PCR you use the stability protocol in 3.
 
-Not adding something does not mean technically dropping something.
+> A blob containing all the hashes would make more sense as it does not
+> have this issue.
 
-/Jarkko
+It doesn't really buy anything though.  If you're verifying the log you
+always have the problem that the PCR and the log are at different
+points, so you follow the protocol in 3. or read PCR then log and
+unwind the log until it matches or you've gone too far.
+
+> If this is for scripts to further process, it is also more efficient
+> than printable ASCII text.
+
+I'm not fundamentally opposed to binary attributes, but realistically
+if I want the hash of PCRs 1 4 and 6 it's not fundamentally different
+to me whether I do
+
+cat /sys/class/tpm/tpm0/pcr-sha256/1 /sys/class/tpm/tpm0/pcr-sha256/4 /sys/class/tpm/tpm0/pcr-sha256/6|sha256sum
+
+or
+
+cat /sys/class/tpm/tpm0/pcr-sha256/1 /sys/class/tpm/tpm0/pcr-sha256/4 /sys/class/tpm/tpm0/pcr-sha256/6|xxd -r -p|sha256sum
+
+The point being the tool to convert the hex output back to binary
+already exists and is well known ... and binary attributes have nasty
+console properties if you accidentally cat them directly.
+
+James
+
