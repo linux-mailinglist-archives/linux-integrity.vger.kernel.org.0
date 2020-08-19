@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 126C524A4D1
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Aug 2020 19:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A0624A4DA
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Aug 2020 19:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbgHSRVs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Aug 2020 13:21:48 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:44410 "EHLO
+        id S1726681AbgHSRWB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Aug 2020 13:22:01 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:44472 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726461AbgHSRVm (ORCPT
+        with ESMTP id S1726673AbgHSRVn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Aug 2020 13:21:42 -0400
+        Wed, 19 Aug 2020 13:21:43 -0400
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2F96920B490F;
+        by linux.microsoft.com (Postfix) with ESMTPSA id D9C8C20B4913;
         Wed, 19 Aug 2020 10:21:41 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2F96920B490F
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D9C8C20B4913
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1597857701;
-        bh=dyVJPjIPeKuDvPutEebyYsHKnrEeEtP1po8wjqtmprQ=;
+        s=default; t=1597857702;
+        bh=OzA1wt657J8K1fRz3mM1+Q3QJpRNkDsk6uWr9LgFJ0w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=exTof0A5i2tmM9Z/hvphRiahvZ8BQ7eipXw3KtWZDbjQdRNFREyjfke3waK+W0bLy
-         qpcUVEqTIx/o9rTGqL9vwXaqIiPyUwx7M4WxoOGtKuGegnzm/tsM5eyTfcdZyJldWr
-         EWC53cc8RF4bvONZbEF1EIR9+YJmGnat9FTWN9xI=
+        b=PFFO+PLyyXDIM5WXgoMJgih3qkaEJ6Suxlze+I46Wa0ZktrnfgxKNjqbmE4ntWz4t
+         swUAst02l99B5QQy6Ko9BYnPWcfxNySkAFCTi3G2Bh+op26moGhWbOZg3PtKGSFySe
+         yPO51VV+Dq0O5H0069KTsiR6ztn4uzH2+RAxnhqc=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
         gregkh@linuxfoundation.org, james.morse@arm.com,
@@ -39,9 +39,9 @@ To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
 Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
         balajib@linux.microsoft.com
-Subject: [PATCH v4 3/5] IMA: Refactor do_get_kexec_buffer() to call of_ functions directly
-Date:   Wed, 19 Aug 2020 10:21:32 -0700
-Message-Id: <20200819172134.11243-4-nramas@linux.microsoft.com>
+Subject: [PATCH v4 4/5] arm64: Store IMA log information in kimage used for kexec
+Date:   Wed, 19 Aug 2020 10:21:33 -0700
+Message-Id: <20200819172134.11243-5-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200819172134.11243-1-nramas@linux.microsoft.com>
 References: <20200819172134.11243-1-nramas@linux.microsoft.com>
@@ -52,62 +52,90 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-do_get_kexec_buffer() calls another local function get_addr_size_cells()
-to get the address and size of the IMA measurement log buffer stored in
-the device tree. get_addr_size_cells() is small enough that it can be
-merged into do_get_kexec_buffer() and a function call can be avoided.
+Address and size of the buffer containing the IMA measurement log need
+to be passed from the current kernel to the next kernel on kexec.
 
-Refactor do_get_kexec_buffer() to call of_ functions directly instead
-of calling get_addr_size_cells() and remove get_addr_size_cells().
+Add address and size fields to "struct kimage_arch" for ARM64 platform
+to hold the address and size of the IMA measurement log buffer.
+Define an architecture specific function for ARM64 namely
+arch_ima_add_kexec_buffer() that will set the address and size of
+the current kernel's IMA buffer to be passed to the next kernel on kexec.
 
 Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 ---
- security/integrity/ima/ima_kexec.c | 20 +++++---------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
+ arch/arm64/include/asm/ima.h           | 17 +++++++++++++++++
+ arch/arm64/include/asm/kexec.h         |  3 +++
+ arch/arm64/kernel/machine_kexec_file.c | 17 +++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 arch/arm64/include/asm/ima.h
 
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 25d79d521597..283631098b48 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -15,31 +15,21 @@
- #include <linux/libfdt.h>
- #include "ima.h"
+diff --git a/arch/arm64/include/asm/ima.h b/arch/arm64/include/asm/ima.h
+new file mode 100644
+index 000000000000..70ac39b74607
+--- /dev/null
++++ b/arch/arm64/include/asm/ima.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_ARCH_IMA_H
++#define _ASM_ARCH_IMA_H
++
++struct kimage;
++
++#ifdef CONFIG_IMA_KEXEC
++int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
++			      size_t size);
++#else
++static inline int arch_ima_add_kexec_buffer(struct kimage *image,
++			unsigned long load_addr, size_t size)
++{
++	return 0;
++}
++#endif /* CONFIG_IMA_KEXEC */
++#endif /* _ASM_ARCH_IMA_H */
+diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
+index d24b527e8c00..7bd60c185ad3 100644
+--- a/arch/arm64/include/asm/kexec.h
++++ b/arch/arm64/include/asm/kexec.h
+@@ -100,6 +100,9 @@ struct kimage_arch {
+ 	void *elf_headers;
+ 	unsigned long elf_headers_mem;
+ 	unsigned long elf_headers_sz;
++
++	phys_addr_t ima_buffer_addr;
++	size_t ima_buffer_size;
+ };
  
--static int get_addr_size_cells(int *addr_cells, int *size_cells)
-+static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
-+			       size_t *size)
+ extern const struct kexec_file_ops kexec_image_ops;
+diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+index 361a1143e09e..4c54723e7a04 100644
+--- a/arch/arm64/kernel/machine_kexec_file.c
++++ b/arch/arm64/kernel/machine_kexec_file.c
+@@ -38,6 +38,23 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
+ 	NULL
+ };
+ 
++/**
++ * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA buffer
++ *
++ * Architectures should use this function to pass on the IMA buffer
++ * information to the next kernel.
++ *
++ * Return: 0 on success, negative errno on error.
++ */
++int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
++			      size_t size)
++{
++	image->arch.ima_buffer_addr = load_addr;
++	image->arch.ima_buffer_size = size;
++	return 0;
++}
++
++
+ int arch_kimage_file_post_load_cleanup(struct kimage *image)
  {
-+	int addr_cells, size_cells;
- 	struct device_node *root;
- 
- 	root = of_find_node_by_path("/");
- 	if (!root)
- 		return -EINVAL;
- 
--	*addr_cells = of_n_addr_cells(root);
--	*size_cells = of_n_size_cells(root);
-+	addr_cells = of_n_addr_cells(root);
-+	size_cells = of_n_size_cells(root);
- 
- 	of_node_put(root);
- 
--	return 0;
--}
--
--static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
--			       size_t *size)
--{
--	int ret, addr_cells, size_cells;
--
--	ret = get_addr_size_cells(&addr_cells, &size_cells);
--	if (ret)
--		return ret;
--
- 	if (len < 4 * (addr_cells + size_cells))
- 		return -ENOENT;
- 
+ 	vfree(image->arch.dtb);
 -- 
 2.28.0
 
