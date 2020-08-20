@@ -2,172 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D3824B1B4
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Aug 2020 11:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1176624C20E
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Aug 2020 17:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725885AbgHTJIr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 Aug 2020 05:08:47 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39628 "EHLO mx2.suse.de"
+        id S1729215AbgHTPWi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 Aug 2020 11:22:38 -0400
+Received: from mga07.intel.com ([134.134.136.100]:46206 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726215AbgHTJIn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 Aug 2020 05:08:43 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7A79CB761;
-        Thu, 20 Aug 2020 09:09:05 +0000 (UTC)
-From:   Petr Vorel <pvorel@suse.cz>
-To:     ltp@lists.linux.it
-Cc:     Petr Vorel <pvorel@suse.cz>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Subject: [LTP v4 5/5] IMA/ima_keys.sh: Enhance policy checks
-Date:   Thu, 20 Aug 2020 11:08:24 +0200
-Message-Id: <20200820090824.3033-6-pvorel@suse.cz>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200820090824.3033-1-pvorel@suse.cz>
-References: <20200820090824.3033-1-pvorel@suse.cz>
+        id S1728369AbgHTPWh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 20 Aug 2020 11:22:37 -0400
+IronPort-SDR: zqti3doL8LMcm8QdlX6y6LQxHhXNZ6L5+1Mjmy0x2v7m/Y19gPM1E2+Eyiv5xkawgFSGG9VUw/
+ YzQ26ivmfzBQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="219625024"
+X-IronPort-AV: E=Sophos;i="5.76,333,1592895600"; 
+   d="scan'208";a="219625024"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2020 08:22:37 -0700
+IronPort-SDR: H5CfAfQRZMcNLjVFWh2EkS9QAaSYVF75jouccqLLIZiJOFaPz5CiZxTg6TuG7+ncfVGjWbRBND
+ RnuBwk9XpVHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,333,1592895600"; 
+   d="scan'208";a="401189863"
+Received: from mkidd-mobl.ger.corp.intel.com (HELO localhost) ([10.249.33.244])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Aug 2020 08:22:35 -0700
+Date:   Thu, 20 Aug 2020 18:22:34 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [PATCH v4 1/1] tpm: add sysfs exports for all banks of PCR
+ registers
+Message-ID: <20200820152234.GA5462@linux.intel.com>
+References: <20200817213506.4474-1-James.Bottomley@HansenPartnership.com>
+ <20200817213506.4474-2-James.Bottomley@HansenPartnership.com>
+ <20200818161207.GC137138@linux.intel.com>
+ <20200818161955.GD137138@linux.intel.com>
+ <1597769070.3898.36.camel@HansenPartnership.com>
+ <20200818171712.GZ24045@ziepe.ca>
+ <1597776566.3898.52.camel@HansenPartnership.com>
+ <20200819215332.GI9942@linux.intel.com>
+ <1597877175.4030.17.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1597877175.4030.17.camel@HansenPartnership.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add check_keys_policy helper to check for all policy's keyrings and
-templates (removed head) and reuse policy check code.
+On Wed, Aug 19, 2020 at 03:46:15PM -0700, James Bottomley wrote:
+> On Thu, 2020-08-20 at 00:53 +0300, Jarkko Sakkinen wrote:
+> > > On Tue, 2020-08-18 at 14:17 -0300, Jason Gunthorpe wrote:
+> > > > On Tue, Aug 18, 2020 at 09:44:30AM -0700, James Bottomley wrote:
+> > > > 
+> > > > > The question you should be asking isn't whether the information
+> > > > > *could* be obtained by other means, but whether providing it in
+> > > > > this form facilitates current operations and whether the
+> > > > > interface would have users.
+> > > > 
+> > > > Sure. What are the use cases that need PCRs but no other TPM
+> > > > operations?
+> > > > 
+> > > > The cover letter didn't say. As PCR is really only useful in the
+> > > > context of the local TPM I'm not thinking of anything..
+> > > 
+> > > The three use cases I picked up at the Boot and Security MC were:
+> > > 
+> > >    1. local log verification: a script can run through the IMA
+> > > ascii log
+> > >       and construct the PCR 10 hash which can then be verified
+> > >    2. Knowing what the PCR values actually are for sealed
+> > > keys.  With the
+> > >       current trusted key infrastructure you have to calculate and
+> > > supply
+> > >       the hash yourself.  With the new proposed infrastructure, the
+> > > hash
+> > >       would be calculated by the seal operation, but you're still
+> > > going to
+> > >       need the actual PCR values to debug unseal failures.
+> > >    3. As a stability check for log shipping: you read the PCR take
+> > > the log
+> > >       then read the PCR: if the two reads are the same the PCR
+> > > backing the
+> > >       log is stable for quoting.
+> > > 
+> > > James
+> > 
+> > The proposed sysfs attributes are racy in the sense that PCRs could
+> > change in-between reading different hashes.
+> 
+> That's not really a problem, is it?  For use case 2. we expect them to
+> be stable otherwise you're doing the wrong thing sealing to them. For
+> the IMA PCR you use the stability protocol in 3.
+> 
+> > A blob containing all the hashes would make more sense as it does not
+> > have this issue.
+> 
+> It doesn't really buy anything though.  If you're verifying the log you
+> always have the problem that the PCR and the log are at different
+> points, so you follow the protocol in 3. or read PCR then log and
+> unwind the log until it matches or you've gone too far.
+> 
+> > If this is for scripts to further process, it is also more efficient
+> > than printable ASCII text.
+> 
+> I'm not fundamentally opposed to binary attributes, but realistically
+> if I want the hash of PCRs 1 4 and 6 it's not fundamentally different
+> to me whether I do
+> 
+> cat /sys/class/tpm/tpm0/pcr-sha256/1 /sys/class/tpm/tpm0/pcr-sha256/4 /sys/class/tpm/tpm0/pcr-sha256/6|sha256sum
+> 
+> or
+> 
+> cat /sys/class/tpm/tpm0/pcr-sha256/1 /sys/class/tpm/tpm0/pcr-sha256/4 /sys/class/tpm/tpm0/pcr-sha256/6|xxd -r -p|sha256sum
+> 
+> The point being the tool to convert the hex output back to binary
+> already exists and is well known ... and binary attributes have nasty
+> console properties if you accidentally cat them directly.
+> 
+> James
 
-Replaced tr with sed to cut down the dependencies.
+This does not look like a kind of framework of things that we want
+to maintain. Especially given that it is easy to get all the data
+through /dev/tpm0 easily. It is an enormous addition to uapi with
+a questionable value.
 
-Log keyrings and templates for easier debugging.
-
-NOTE: check_keys_policy cannot be used with subhell $() redirection
-(unless previously checked with other helpers), thus use redirection to
-the file.
-
-Tested on 2 policies with more lines than example policy
-in keycheck.policy:
-
-measure func=KEY_CHECK keyrings=.ima|.evm|.builtin_trusted_keys|.blacklist|key_import_test template=ima-buf
-measure func=KEY_CHECK keyrings=key_import_test template=ima-buf
-
-measure func=KEY_CHECK template=ima-buf keyrings=.ima|.builtin_trusted_keys
-measure func=KEY_CHECK template=ima-buf keyrings=key_import_test
-
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
-changes v3->v4:
-* update check_keys_policy() and checking the policy in general
-* remove new line when working policy to find keyrings and templates
-* replace tr with sed
-
- .../security/integrity/ima/tests/ima_keys.sh  | 60 ++++++++++++-------
- 1 file changed, 37 insertions(+), 23 deletions(-)
-
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-index ad3cbbdc7..c5a6d2591 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-@@ -6,48 +6,63 @@
- #
- # Verify that keys are measured correctly based on policy.
- 
--TST_NEEDS_CMDS="cmp cut grep sed tr xxd"
-+TST_NEEDS_CMDS="cmp cut grep sed xxd"
- TST_CNT=2
- TST_NEEDS_DEVICE=1
-+TST_SETUP=setup
- TST_CLEANUP=cleanup
- 
- . ima_setup.sh
- 
-+FUNC_KEYCHECK='func=KEY_CHECK'
-+TEMPLATE_BUF='template=ima-buf'
-+REQUIRED_POLICY="^measure.*($FUNC_KEYCHECK.*$TEMPLATE_BUF|$TEMPLATE_BUF.*$FUNC_KEYCHECK)"
-+
-+setup()
-+{
-+	require_ima_policy_content "$REQUIRED_POLICY" '-E' > policy.txt
-+}
-+
- cleanup()
- {
- 	tst_is_num $KEYRING_ID && keyctl clear $KEYRING_ID
- }
- 
-+check_keys_policy()
-+{
-+	local pattern="$1"
-+
-+	if ! grep -E "$pattern" policy.txt; then
-+		tst_res TCONF "IMA policy must specify $pattern, $FUNC_KEYCHECK, $TEMPLATE_BUF"
-+		return 1
-+	fi
-+	return 0
-+}
-+
- # Based on https://lkml.org/lkml/2019/12/13/564.
- # (450d0fd51564 - "IMA: Call workqueue functions to measure queued keys")
- test1()
- {
--	local keyrings keycheck_lines keycheck_line templates
--	local func='func=KEY_CHECK'
--	local buf='template=ima-buf'
--	local pattern="($func.*$buf|$buf.*$func)"
--	local test_file="file.txt"
--
--	tst_res TINFO "verifying key measurement for keyrings and templates specified in IMA policy file"
-+	local keycheck_lines i keyrings templates
-+	local pattern='keyrings=[^[:space:]]+'
-+	local test_file="file.txt" tmp_file="file2.txt"
- 
--	require_ima_policy_content "$pattern" '-Eq'
--	keycheck_lines=$(check_ima_policy_content "$pattern" '-E')
--	keycheck_line=$(echo "$keycheck_lines" | grep "keyrings" | head -n1)
-+	tst_res TINFO "verify key measurement for keyrings and templates specified in IMA policy"
- 
--	if [ -z "$keycheck_line" ]; then
--		tst_res TCONF "IMA policy does not specify a keyrings to check"
--		return
--	fi
--
--	keyrings=$(echo "$keycheck_line" | tr " " "\n" | grep "keyrings" | \
--		sed "s/\./\\\./g" | cut -d'=' -f2)
-+	check_keys_policy "$pattern" > $tmp_file || return
-+	keycheck_lines=$(cat $tmp_file)
-+	keyrings=$(for i in $keycheck_lines; do echo "$i" | grep "keyrings" | \
-+		sed "s/\./\\\./g" | cut -d'=' -f2; done | sed ':a;N;$!ba;s/\n/|/g')
- 	if [ -z "$keyrings" ]; then
- 		tst_res TCONF "IMA policy has a keyring key-value specifier, but no specified keyrings"
- 		return
- 	fi
- 
--	templates=$(echo "$keycheck_line" | tr " " "\n" | grep "template" | \
--		cut -d'=' -f2)
-+	templates=$(for i in $keycheck_lines; do echo "$i" | grep "template" | \
-+		cut -d'=' -f2; done | sed ':a;N;$!ba;s/\n/|/g')
-+
-+	tst_res TINFO "keyrings: '$keyrings'"
-+	tst_res TINFO "templates: '$templates'"
- 
- 	grep -E "($templates).*($keyrings)" $ASCII_MEASUREMENTS | while read line
- 	do
-@@ -81,13 +96,12 @@ test2()
- 
- 	local cert_file="$TST_DATAROOT/x509_ima.der"
- 	local keyring_name="key_import_test"
-+	local pattern="keyrings=[^[:space:]]*$keyring_name"
- 	local temp_file="file.txt"
- 
- 	tst_res TINFO "verify measurement of certificate imported into a keyring"
- 
--	if ! check_ima_policy_content "^measure.*func=KEY_CHECK.*keyrings=.*$keyring_name"; then
--		tst_brk TCONF "IMA policy does not contain $keyring_name keyring"
--	fi
-+	check_keys_policy "$pattern" >/dev/null || return
- 
- 	KEYRING_ID=$(keyctl newring $keyring_name @s) || \
- 		tst_brk TBROK "unable to create a new keyring"
--- 
-2.28.0
-
+/Jarkko
