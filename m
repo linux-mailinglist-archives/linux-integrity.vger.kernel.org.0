@@ -2,107 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E46C24D8C5
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Aug 2020 17:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0094624DEB7
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Aug 2020 19:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728060AbgHUPhk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 21 Aug 2020 11:37:40 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2686 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728020AbgHUPhi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 21 Aug 2020 11:37:38 -0400
-Received: from lhreml715-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 98A7062CF7245DA15360;
-        Fri, 21 Aug 2020 16:37:34 +0100 (IST)
-Received: from fraeml711-chm.china.huawei.com (10.206.15.60) by
- lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Fri, 21 Aug 2020 16:37:34 +0100
-Received: from lhreml722-chm.china.huawei.com (10.201.108.73) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Fri, 21 Aug 2020 17:37:33 +0200
-Received: from lhreml722-chm.china.huawei.com ([10.201.108.73]) by
- lhreml722-chm.china.huawei.com ([10.201.108.73]) with mapi id 15.01.1913.007;
- Fri, 21 Aug 2020 16:37:33 +0100
-From:   Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "containers@lists.linux-foundation.org" 
-        <containers@lists.linux-foundation.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "stefanb@linux.vnet.ibm.com" <stefanb@linux.vnet.ibm.com>,
-        "sunyuqiong1988@gmail.com" <sunyuqiong1988@gmail.com>,
-        "mkayaalp@cs.binghamton.edu" <mkayaalp@cs.binghamton.edu>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "christian@brauner.io" <christian@brauner.io>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "luto@amacapital.net" <luto@amacapital.net>,
-        "jannh@google.com" <jannh@google.com>
-Subject: RE: [RFC PATCH 00/30] ima: Introduce IMA namespace
-Thread-Topic: [RFC PATCH 00/30] ima: Introduce IMA namespace
-Thread-Index: AQHWdXPBkpeRDLdh20+fyp1BiEOjYak+A3mAgASuOEA=
-Date:   Fri, 21 Aug 2020 15:37:33 +0000
-Message-ID: <1b706f78375f472988702f77d607f8f7@huawei.com>
-References: <N> <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
- <20200818164943.va3um7toztazcfud@wittgenstein>
-In-Reply-To: <20200818164943.va3um7toztazcfud@wittgenstein>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.48.215.114]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726737AbgHURlV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 21 Aug 2020 13:41:21 -0400
+Received: from mga12.intel.com ([192.55.52.136]:3170 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725885AbgHURlU (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 21 Aug 2020 13:41:20 -0400
+IronPort-SDR: qpab+ffKENeoygcZ2DRrSqIMNSBsdgJHTyaRESH0Fq86v7mO1yPxsq8HyKPsX0PH4+/kF+FgEB
+ RenKslaWHq6w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9720"; a="135132397"
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="135132397"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 10:41:20 -0700
+IronPort-SDR: 1g3nJGIzfe+9EqbuZDAUXiWDGjNtLcb8Rvh8uEdHmr++L8Y1xcgtL70Vt9Ze55jzu9ZL2UKXxU
+ CO4EokIV77mg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="473126768"
+Received: from jjakacki-mobl.ger.corp.intel.com (HELO localhost) ([10.252.52.112])
+  by orsmga005.jf.intel.com with ESMTP; 21 Aug 2020 10:41:18 -0700
+Date:   Fri, 21 Aug 2020 20:41:17 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 1/1] tpm: add sysfs exports for all banks of PCR
+ registers
+Message-ID: <20200821174117.GB3559@linux.intel.com>
+References: <20200818183603.GC1152540@nvidia.com>
+ <14eaf21a808e333ca414c954d8f3a2f7b6dbf2ca.camel@linux.ibm.com>
+ <20200819120238.GD1152540@nvidia.com>
+ <1597850231.3875.13.camel@HansenPartnership.com>
+ <20200819161845.GK1152540@nvidia.com>
+ <78bc28a573f6660ee5b00d5965984fef2e1de167.camel@linux.ibm.com>
+ <20200819171709.GN1152540@nvidia.com>
+ <1597867756.3875.39.camel@HansenPartnership.com>
+ <20200819232132.GT1152540@nvidia.com>
+ <1597940084.3864.35.camel@HansenPartnership.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1597940084.3864.35.camel@HansenPartnership.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBDaHJpc3RpYW4gQnJhdW5lciBbbWFpbHRvOmNocmlzdGlhbi5icmF1bmVyQHVidW50
-dS5jb21dDQo+IE9uIFR1ZSwgQXVnIDE4LCAyMDIwIGF0IDA1OjIwOjA3UE0gKzAyMDAsIGtyenlz
-enRvZi5zdHJ1Y3p5bnNraUBodWF3ZWkuY29tDQo+IHdyb3RlOg0KPiA+IEZyb206IEtyenlzenRv
-ZiBTdHJ1Y3p5bnNraSA8a3J6eXN6dG9mLnN0cnVjenluc2tpQGh1YXdlaS5jb20+DQo+ID4NCj4g
-PiBJTUEgaGFzIG5vdCBiZWVuIGRlc2lnbmVkIHRvIHdvcmsgd2l0aCBjb250YWluZXJzLiBJdCBo
-YW5kbGVzIGV2ZXJ5DQo+ID4gcHJvY2VzcyBpbiB0aGUgc2FtZSB3YXksIGFuZCBpdCBjYW5ub3Qg
-ZGlzdGluZ3Vpc2ggaWYgYSBwcm9jZXNzIGJlbG9uZ3MgdG8NCj4gPiBhIGNvbnRhaW5lciBvciBu
-b3QuDQo+ID4NCj4gPiBDb250YWluZXJzIHVzZSBuYW1lc3BhY2VzIHRvIG1ha2UgaXQgYXBwZWFy
-IHRvIHRoZSBwcm9jZXNzZXMgaW4gdGhlDQo+ID4gY29udGFpbmVycyB0aGF0IHRoZXkgaGF2ZSB0
-aGVpciBvd24gaXNvbGF0ZWQgaW5zdGFuY2Ugb2YgdGhlIGdsb2JhbA0KPiA+IHJlc291cmNlLiBG
-b3IgSU1BIGFzIHdlbGwsIGl0IGlzIGRlc2lyYWJsZSB0byBsZXQgcHJvY2Vzc2VzIGluIHRoZQ0K
-PiANCj4gSU1BIGlzIGJyb3VnaHQgdXAgb24gYSByZWd1bGFyIGJhc2lzIHdpdGggIndlIHdhbnQg
-dG8gaGF2ZSB0aGlzIiBmb3INCj4geWVhcnMgYW5kIHRoZW4gbm9uLW9uZSBzZWVtcyB0byByZWFs
-bHkgY2FyZSBlbm91Z2guDQo+IA0KPiBJJ20gaGlnaGx5IHNrZXB0aWNhbCBvZiB0aGUgdmFsdWUg
-b2YgfjI1MDAgbGluZXMgb2YgY29kZSBldmVuIGlmIGl0DQo+IGluY2x1ZGVzIGEgYnVuY2ggb2Yg
-bmFtZXNwYWNlIGJvaWxlcnBsYXRlLiBJdCdzIHlldCBhbm90aGVyIG5hbWVzcGFjZSwNCj4gYW5k
-IHlldCBhbm90aGVyIHNlY3VyaXR5IGZyYW1ld29yay4NCj4gV2h5IGRvZXMgSU1BIG5lZWQgdG8g
-YmUgYSBzZXBhcmF0ZSBuYW1lc3BhY2U/IEtleXJpbmdzIGFyZSB0aWVkIHRvIHVzZXINCj4gbmFt
-ZXNwYWNlcyB3aHkgY2FuJ3QgSU1BIGJlPyBJIGJlbGlldmUgRXJpYyBoYXMgZXZlbiBwb2ludGVk
-IHRoYXQgb3V0DQo+IGJlZm9yZS4NCg0KVGhlIHVzZXIgbmFtZXNwYWNlIGhhcyBpdHMgd2VsbCBk
-ZWZpbmVkIHB1cnBvc2UgdG8gaXNvbGF0ZQ0Kc2VjdXJpdHktcmVsYXRlZCBpZGVudGlmaWVycyBh
-bmQgYXR0cmlidXRlcywgcGFydGljdWxhcmx5IFVJRHMgYW5kIEdJRHMuDQpJIHRoaW5rIHRoYXQg
-SU1BIGdvYWxzIGFyZSBkaWZmZXJlbnQuDQoNCkEgdXNlciBtYXkgd2FudCB0byBpc29sYXRlIGUu
-Zy4gVUlEcyBidXQgbm90IHRvIGNyZWF0ZSBhIHNlcGFyYXRlIElNTCBvcg0KZGVmaW5lIHRoZSBu
-ZXcgSU1BIHBvbGljaWVzLiBPbiB0aGUgb3RoZXIgaGFuZCwgZXNwZWNpYWxseSBpbiB0aGUNCnNp
-bmdsZS10ZW5hbnQgZW52aXJvbm1lbnQsIHRoZSB1c2VyIG1heSB3YW50IHRvIGhhdmUgYSBwZXIg
-Y29udGFpbmVyIElNTCwNCmJ1dCBubyBVSUQvR0lEIG1hcHBpbmcgaXMgcmVxdWlyZWQuIElNQSBw
-b2xpY3kgZGVmaW5lcyBzdWJqZWN0LWJhc2VkDQpydWxlcyAodWlkLCBldWlkLCBzdWJqXyosIC4u
-LiksIGJ1dCBhbHNvIG9iamVjdC1iYXNlZCBydWxlcy4NCg0KSU1BIGhhcyB0byBiZSBwcmUtY29u
-ZmlndXJlZCwgZS5nLiBhbGwgYWN0aW9ucyBvZiB0aGUgcHJvY2VzcyBoYXZlIHRvIGJlDQphcHBy
-YWlzZWQvbWVhc3VyZWQvYXVkaXRlZCBhY2NvcmRpbmcgdG8gdGhlIHByZS1kZWZpbmVkIHBvbGlj
-eSwgYXBwcmFpc2FsDQprZXkgaGFzIHRvIGJlIGF2YWlsYWJsZSBiZWZvcmUgdGhlIHByb2Nlc3Mg
-aXMgY3JlYXRlZCwgZXRjLiBJZiBJTUEgaXMgdGllZA0KdG8gdGhlIHVzZXIgbmFtZXNwYWNlLCB3
-aGVuIGlzIGEgZ29vZCBtb21lbnQgdG8gZG8gaXQ/DQoNCldoYXQncyB0aGUgYXJndW1lbnQgYWdh
-aW5zdCBhZGRpbmcgYSBuZXcgbmFtZXNwYWNlPw0KDQo+IA0KPiBFcmljLCB0aG91Z2h0cz8NCj4g
-DQo+IENocmlzdGlhbg0K
+On Thu, Aug 20, 2020 at 09:14:44AM -0700, James Bottomley wrote:
+> On Wed, 2020-08-19 at 20:21 -0300, Jason Gunthorpe wrote:
+> > On Wed, Aug 19, 2020 at 01:09:16PM -0700, James Bottomley wrote:
+> > > On Wed, 2020-08-19 at 14:17 -0300, Jason Gunthorpe wrote:
+> > > > On Wed, Aug 19, 2020 at 12:57:42PM -0400, Mimi Zohar wrote:
+> > > > > On Wed, 2020-08-19 at 13:18 -0300, Jason Gunthorpe wrote:
+> > > > > > Yes - it was dropped because TPM 2 was a *complete ABI break*
+> > > > > > for everything. The kernel was reset to a uABI that matches
+> > > > > > current uABI standards starting TPM 2.
+> > > > > > 
+> > > > > > The whole userspace needed to be redone anyhow, and certainly
+> > > > > > nobody objected at the time.
+> > > > > > 
+> > > > > > At least my expecation was that a sensible userspace for TPM
+> > > > > > (for administrator user) would be built, like we see in other
+> > > > > > subsystems eg 'ip' for netdev.
+> > > > > 
+> > > > > "Because TPM 2 was a complete ABI break for everything" could
+> > > > > be reason for upstreaming a minimal subset of functionality
+> > > > > initially, which could be expanded over time.  I don't recall a
+> > > > > discussion about limting features in the future.
+> > > > 
+> > > > All new uAPI additions need to pass the usual uAPI hurdles.
+> > > > 
+> > > > As James outlined, justify why the kernel must present a
+> > > > duplicated uAPI between sysfs and /dev/tpm. 
+> > > > 
+> > > > There have been good reasons in the past, eg SCSI inquiry.
+> > > 
+> > > First, can we please agree /dev/tpm does not substitute as a
+> > > "duplicate API". 
+> > 
+> > Er? Huh? How so?
+> 
+> Because like the SCSI command interface it's a binary marshalled
+> protocol we want to abstract for users.  We can still argue whether the
+> kernel or a toolkit should do the abstraction but it's not one we want
+> to dump on users and say "this is it, what do you mean you don't like
+> it?"
+
+No we don't. On the contrary, we expose the protocol through /dev/tpm0.
+
+/Jarkko
