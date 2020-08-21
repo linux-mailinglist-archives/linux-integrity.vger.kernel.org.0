@@ -2,292 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 374D324DF65
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Aug 2020 20:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0727D24DF9C
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Aug 2020 20:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbgHUSVo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 21 Aug 2020 14:21:44 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:42958 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725831AbgHUSVV (ORCPT
+        id S1726664AbgHUSaV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 21 Aug 2020 14:30:21 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3790 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725821AbgHUSaT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 21 Aug 2020 14:21:21 -0400
-Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7A7D020B490F;
-        Fri, 21 Aug 2020 11:21:18 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A7D020B490F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1598034079;
-        bh=uWkHzR0ZcqR9l/na6Wym14QYTHMQuhcrOfLOMA/iGiQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EMHAgV5IDY/3C0x3ia5Y0d2ylArOVJMHBaUlGWXWEhro5sJboXYUje3LtFyw00XjO
-         dbHk02UU4JnJMtjcCe34K9mMC9SiwDjR+a3lU38Topi7SEQAq0cpTeAG/UQ5sJepsM
-         INKitX4QfjSO3IF/t4+VvsC46+8eABshRtl9YYdw=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: [PATCH v2 3/3] IMA: define IMA hook to measure critical data from kernel components
-Date:   Fri, 21 Aug 2020 11:21:07 -0700
-Message-Id: <20200821182107.5328-4-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200821182107.5328-1-tusharsu@linux.microsoft.com>
-References: <20200821182107.5328-1-tusharsu@linux.microsoft.com>
+        Fri, 21 Aug 2020 14:30:19 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07LI3UuM029711;
+        Fri, 21 Aug 2020 14:30:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=UdI+uESx+0ouwqK+UkkXRC5jVNonEHLLFlFBL4bsdZc=;
+ b=MPICVs9/96Ubrco6QijwGI2grU0C+tAwYz2xEMYb9dlpTCaC7bqlLEjCRl307R4aXvbm
+ wSRsCVVYICyLAEVMPaN2l8RHG6lvIMHrz+xMHhjY5YQNO4dCAN3Dq8aFTAfBSkBjaX63
+ RUckNaX2pirU9jf73ic+CE9ZTUu91DEPgcaQ/l86H+PE0f4myVUn1MmBlqWc2E6RD+bc
+ Zg6AplL/8rlL+Eecj4mzYrtXVBIeXwcw/Qq3i3I7AdiKld2W+ubG6lKnQ2TiW6jly1Ea
+ I3w+VMzkJnj8w5SHNkyjWdE9RD1K5SoPg2Y5rOcl/bgUzkhCBpd+n4eRGSBOLwFNyoDe Yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3327mvc9pg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Aug 2020 14:30:09 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07LIU9ZE143948;
+        Fri, 21 Aug 2020 14:30:09 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3327mvc9nc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Aug 2020 14:30:09 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07LIG935021179;
+        Fri, 21 Aug 2020 18:30:06 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3304ujtu51-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Aug 2020 18:30:06 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07LIU4FP62128528
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Aug 2020 18:30:04 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B99852052;
+        Fri, 21 Aug 2020 18:30:04 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.65.240])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A8DBC5204E;
+        Fri, 21 Aug 2020 18:30:02 +0000 (GMT)
+Message-ID: <2b204e31d21e93c0167d154c2397cd5d11be6e7f.camel@linux.ibm.com>
+Subject: Re: [PATCH 01/11] evm: Execute evm_inode_init_security() only when
+ the HMAC key is loaded
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date:   Fri, 21 Aug 2020 14:30:01 -0400
+In-Reply-To: <20200618160133.937-1-roberto.sassu@huawei.com>
+References: <20200618160133.937-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-21_08:2020-08-21,2020-08-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=999 adultscore=0
+ impostorscore=0 lowpriorityscore=0 phishscore=0 clxscore=1011 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008210166
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Currently, IMA does not provide a generic function to kernel components
-to measure their data. A generic function provided by IMA would
-enable various parts of the kernel with easier and faster on-boarding to
-use IMA infrastructure, would avoid code duplication, and consistent
-usage of IMA policy CRITICAL_DATA+data_sources across the kernel.
+Hi Roberto,
 
-Define a generic IMA function ima_measure_critical_data() to measure
-data from various kernel components. Limit the measurement to the
-components that are specified in the IMA policy - 
-CRITICAL_DATA+data_sources.
-Update process_buffer_measurement() to return the status code of the
-operation.
-Introduce a boolean parameter measure_buf_hash to support measuring
-hash of a buffer, instead of the buffer itself. This is useful when
-the buffer being measured is too large, which may result in bloated
-IMA logs.
+Sorry for the delay in reviewing these patches.   Missing from this
+patch set is a cover letter with an explanation for grouping these
+patches into a patch set, other than for convenience.  In this case, it
+would be along the lines that the original use case for EVM portable
+and immutable keys support was for a few critical files, not combined
+with an EVM encrypted key type.   This patch set more fully integrates
+the initial EVM portable and immutable signature support.
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
----
- include/linux/ima.h                          | 11 ++++
- security/integrity/ima/ima.h                 |  7 ++-
- security/integrity/ima/ima_appraise.c        |  2 +-
- security/integrity/ima/ima_asymmetric_keys.c |  2 +-
- security/integrity/ima/ima_main.c            | 65 +++++++++++++++++---
- security/integrity/ima/ima_queue_keys.c      |  3 +-
- 6 files changed, 75 insertions(+), 15 deletions(-)
+On Thu, 2020-06-18 at 18:01 +0200, Roberto Sassu wrote:
+> evm_inode_init_security() requires the HMAC key to calculate the HMAC on
+> initial xattrs provided by LSMs. Unfortunately, with the evm_key_loaded()
+> check, the function continues even if the HMAC key is not loaded
+> (evm_key_loaded() returns true also if EVM has been initialized only with a
+> public key). If the HMAC key is not loaded, evm_inode_init_security()
+> returns an error later when it calls evm_init_hmac().
+> 
+> Thus, this patch replaces the evm_key_loaded() check with a check of the
+> EVM_INIT_HMAC flag in evm_initialized, so that evm_inode_init_security()
+> returns 0 instead of an error.
+> 
+> Cc: stable@vger.kernel.org # 4.5.x
+> Fixes: 26ddabfe96b ("evm: enable EVM when X509 certificate is loaded")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index d15100de6cdd..136fc02580db 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -26,6 +26,10 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- extern void ima_post_path_mknod(struct dentry *dentry);
- extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
- extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
-+extern int ima_measure_critical_data(const char *event_name,
-+				     const char *event_data_source,
-+				     const void *buf, int buf_len,
-+				     bool measure_buf_hash);
- 
- #ifdef CONFIG_IMA_KEXEC
- extern void ima_add_kexec_buffer(struct kimage *image);
-@@ -104,6 +108,13 @@ static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
- }
- 
- static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
-+static inline int ima_measure_critical_data(const char *event_name,
-+					    const char *event_data_source,
-+					    const void *buf, int buf_len,
-+					    bool measure_buf_hash)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif /* CONFIG_IMA */
- 
- #ifndef CONFIG_IMA_KEXEC
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 0f4209a92bfb..00b84052c8f1 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -266,9 +266,10 @@ void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
- 			   struct evm_ima_xattr_data *xattr_value,
- 			   int xattr_len, const struct modsig *modsig, int pcr,
- 			   struct ima_template_desc *template_desc);
--void process_buffer_measurement(struct inode *inode, const void *buf, int size,
--				const char *eventname, enum ima_hooks func,
--				int pcr, const char *func_data);
-+int process_buffer_measurement(struct inode *inode, const void *buf, int size,
-+			       const char *eventname, enum ima_hooks func,
-+			       int pcr, const char *func_data,
-+			       bool measure_buf_hash);
- void ima_audit_measurement(struct integrity_iint_cache *iint,
- 			   const unsigned char *filename);
- int ima_alloc_init_template(struct ima_event_data *event_data,
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index 372d16382960..20adffe5bf58 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -336,7 +336,7 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
- 		if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
- 			process_buffer_measurement(NULL, digest, digestsize,
- 						   "blacklisted-hash", NONE,
--						   pcr, NULL);
-+						   pcr, NULL, false);
- 	}
- 
- 	return rc;
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-index 1c68c500c26f..a74095793936 100644
---- a/security/integrity/ima/ima_asymmetric_keys.c
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -60,5 +60,5 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
- 	 */
- 	process_buffer_measurement(NULL, payload, payload_len,
- 				   keyring->description, KEY_CHECK, 0,
--				   keyring->description);
-+				   keyring->description, false);
- }
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index c870fd6d2f83..a889bf40cb7e 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -733,17 +733,21 @@ int ima_load_data(enum kernel_load_data_id id)
-  * @func: IMA hook
-  * @pcr: pcr to extend the measurement
-  * @func_data: private data specific to @func, can be NULL.
-+ * @measure_buf_hash: if set to true - will measure hash of the buf,
-+ *                    instead of buf
-  *
-  * Based on policy, the buffer is measured into the ima log.
-  */
--void process_buffer_measurement(struct inode *inode, const void *buf, int size,
--				const char *eventname, enum ima_hooks func,
--				int pcr, const char *func_data)
-+int process_buffer_measurement(struct inode *inode, const void *buf, int size,
-+			       const char *eventname, enum ima_hooks func,
-+			       int pcr, const char *func_data,
-+			       bool measure_buf_hash)
- {
- 	int ret = 0;
- 	const char *audit_cause = "ENOMEM";
- 	struct ima_template_entry *entry = NULL;
- 	struct integrity_iint_cache iint = {};
-+	struct integrity_iint_cache digest_iint = {};
- 	struct ima_event_data event_data = {.iint = &iint,
- 					    .filename = eventname,
- 					    .buf = buf,
-@@ -752,13 +756,13 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
- 	struct {
- 		struct ima_digest_data hdr;
- 		char digest[IMA_MAX_DIGEST_SIZE];
--	} hash = {};
-+	} hash = {}, digest_hash = {};
- 	int violation = 0;
- 	int action = 0;
- 	u32 secid;
- 
- 	if (!ima_policy_flag)
--		return;
-+		return 0;
- 
- 	/*
- 	 * Both LSM hooks and auxilary based buffer measurements are
-@@ -772,7 +776,7 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
- 		action = ima_get_action(inode, current_cred(), secid, 0, func,
- 					&pcr, &template, func_data);
- 		if (!(action & IMA_MEASURE))
--			return;
-+			return 0;
- 	}
- 
- 	if (!pcr)
-@@ -787,7 +791,7 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
- 			pr_err("template %s init failed, result: %d\n",
- 			       (strlen(template->name) ?
- 				template->name : template->fmt), ret);
--			return;
-+			return ret;
- 		}
- 	}
- 
-@@ -801,6 +805,24 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
- 		goto out;
- 	}
- 
-+	if (measure_buf_hash) {
-+		digest_iint.ima_hash = &digest_hash.hdr;
-+		digest_iint.ima_hash->algo = ima_hash_algo;
-+		digest_iint.ima_hash->length = hash_digest_size[ima_hash_algo];
-+
-+		ret = ima_calc_buffer_hash(hash.hdr.digest,
-+					   iint.ima_hash->length,
-+					   digest_iint.ima_hash);
-+		if (ret < 0) {
-+			audit_cause = "digest_hashing_error";
-+			goto out;
-+		}
-+
-+		event_data.iint = &digest_iint;
-+		event_data.buf = hash.hdr.digest;
-+		event_data.buf_len = iint.ima_hash->length;
-+	}
-+
- 	ret = ima_alloc_init_template(&event_data, &entry, template);
- 	if (ret < 0) {
- 		audit_cause = "alloc_entry";
-@@ -819,7 +841,7 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
- 					func_measure_str(func),
- 					audit_cause, ret, 0, ret);
- 
--	return;
-+	return ret;
- }
- 
- /**
-@@ -842,10 +864,35 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
- 		return;
- 
- 	process_buffer_measurement(file_inode(f.file), buf, size,
--				   "kexec-cmdline", KEXEC_CMDLINE, 0, NULL);
-+				   "kexec-cmdline", KEXEC_CMDLINE, 0, NULL,
-+				   false);
- 	fdput(f);
- }
- 
-+/**
-+ * ima_measure_critical_data - measure critical data
-+ * @event_name: name for the given data
-+ * @event_data_source: name of the event data source
-+ * @buf: pointer to buffer containing data to measure
-+ * @buf_len: length of buffer(in bytes)
-+ * @measure_buf_hash: if set to true - will measure hash of the buf,
-+ *                    instead of buf
-+ *
-+ * Buffers can only be measured, not appraised.
-+ */
-+int ima_measure_critical_data(const char *event_name,
-+			      const char *event_data_source,
-+			      const void *buf, int buf_len,
-+			      bool measure_buf_hash)
-+{
-+	if (!event_name || !event_data_source || !buf || !buf_len)
-+		return -EINVAL;
-+
-+	return process_buffer_measurement(NULL, buf, buf_len, event_name,
-+					  CRITICAL_DATA, 0, event_data_source,
-+					  measure_buf_hash);
-+}
-+
- static int __init init_ima(void)
- {
- 	int error;
-diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
-index 69a8626a35c0..c2f2ad34f9b7 100644
---- a/security/integrity/ima/ima_queue_keys.c
-+++ b/security/integrity/ima/ima_queue_keys.c
-@@ -162,7 +162,8 @@ void ima_process_queued_keys(void)
- 						   entry->payload_len,
- 						   entry->keyring_name,
- 						   KEY_CHECK, 0,
--						   entry->keyring_name);
-+						   entry->keyring_name,
-+						   false);
- 		list_del(&entry->list);
- 		ima_free_key_entry(entry);
- 	}
--- 
-2.17.1
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
+> ---
+>  security/integrity/evm/evm_main.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> index 0d36259b690d..744c105b48d1 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -521,7 +521,8 @@ int evm_inode_init_security(struct inode *inode,
+>  	struct evm_xattr *xattr_data;
+>  	int rc;
+>  
+> -	if (!evm_key_loaded() || !evm_protected_xattr(lsm_xattr->name))
+> +	if (!(evm_initialized & EVM_INIT_HMAC) ||
+> +	    !evm_protected_xattr(lsm_xattr->name))
+>  		return 0;
+>  
+>  	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
+
 
