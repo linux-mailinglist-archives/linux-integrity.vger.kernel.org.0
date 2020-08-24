@@ -2,129 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 176B42509B9
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Aug 2020 22:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFED2509CD
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Aug 2020 22:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbgHXUBf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Aug 2020 16:01:35 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:21764 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726225AbgHXUBd (ORCPT
+        id S1725963AbgHXULb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Aug 2020 16:11:31 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62422 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725946AbgHXULb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Aug 2020 16:01:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1598299291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uscrMvCrVpuzBs8CCqTlviFEzNB9Ka9n9LSLMNlONOY=;
-        b=aW1gbBVcqVCzvpcGarXB2wzf8AKhuqvkFcHVXgh1TlkEXhVWUCt4jBa8izb0etDlQBm5Qw
-        CS5v+tzjnzDszkdSwLTtn5c3pbrWAYgBtMHg4pptJanvmdiXgagJIAyImT0QJ7EM8pGcwI
-        Ti3eWQNT4gIQmPw9ezRLOl7lOuLWRjE=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-211-n2uTcLIoPbCtuMaYLzdGrQ-1; Mon, 24 Aug 2020 16:01:29 -0400
-X-MC-Unique: n2uTcLIoPbCtuMaYLzdGrQ-1
-Received: by mail-lj1-f197.google.com with SMTP id a20so3118399lji.17
-        for <linux-integrity@vger.kernel.org>; Mon, 24 Aug 2020 13:01:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uscrMvCrVpuzBs8CCqTlviFEzNB9Ka9n9LSLMNlONOY=;
-        b=ESRBkkg5+sXDCfbWWooWrGEIAAMguvYUdCdYiyD1vjvEqWhAtI+S+EQeoCOkzPLdCN
-         LTFUw5t7jAxhdoRo6AqcRjHXrKfYZVlVRJlsvjWto90byeVgfrr9qv2/KHzWxuph5nGm
-         4kPt+e0HmreG+xO27nGPWx2lT+h3AG46UOXlQmz/wg5FFiPkadgzG2Sgn1H0PW+URu14
-         hWEBZ4+O+LkTvVJY9t5HRwXkt5ATDpY4ugSXGAJ0gVrw2bBxEyYwu3k26VlOGVjsud/J
-         FUJIs7TPPMaxUKzU53NiHwTJNoQKGRCUljkr5TYvv1M+29XeehIiwAEPzj8c552ZOkbR
-         JOvQ==
-X-Gm-Message-State: AOAM533KQzHhXn317yfDYcjWNAxJIGOfv6630BY6d5G5lX8kXAZChojm
-        NiX9oka3uqSSXVOckDspPgM/OaTm8he42h1PJZQU4l9yVv3+fdHWRNTyX8Rd9X37u6viju6DsZn
-        Vf62P0HggZddt+dUiVak9H9K8zbDJ3u9lwN8CzlrcvjmC
-X-Received: by 2002:a2e:7010:: with SMTP id l16mr3180382ljc.38.1598299288296;
-        Mon, 24 Aug 2020 13:01:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzlH+auARhq7SWPbHEI59342ZMN+shTt3ocQ8lwjHmShhNGjby6clQhLnKc2Mg8F5+NM25k106HjhZgrKaoXJ0=
-X-Received: by 2002:a2e:7010:: with SMTP id l16mr3180369ljc.38.1598299288036;
- Mon, 24 Aug 2020 13:01:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200822010018.19453-1-nramas@linux.microsoft.com>
- <CAEjxPJ5Kok-TBfS=XQ+NUC5tuaZRkyLBOawG4UDky51_bsMnGw@mail.gmail.com>
- <418618c4-a0c6-6b28-6718-2726a29b83c5@linux.microsoft.com> <CAEjxPJ6-8WnZRJnADsn=RVakzJiESjEjK-f8nSkscpT7dnricQ@mail.gmail.com>
-In-Reply-To: <CAEjxPJ6-8WnZRJnADsn=RVakzJiESjEjK-f8nSkscpT7dnricQ@mail.gmail.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Mon, 24 Aug 2020 22:01:17 +0200
-Message-ID: <CAFqZXNvVQ5U6Ea3gT32Z0hfWbu7GPR-mTF2z6-JZZJT57Heuuw@mail.gmail.com>
-Subject: Re: [PATCH] SELinux: Measure state and hash of policy using IMA
-To:     Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        tusharsu@linux.microsoft.com, Sasha Levin <sashal@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 24 Aug 2020 16:11:31 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07OK2QLj170470
+        for <linux-integrity@vger.kernel.org>; Mon, 24 Aug 2020 16:11:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=CKfANHzRDOfLHw2sCNaooh2UtoJf1sAdqQhfgYgzP1s=;
+ b=eS2pb58U6t6Ez0BkKsKTiF66jXHAEtdNRX9qmK5kamrvJFPuE6gEggnQTQ5ntL+husQv
+ z4a03u+hdlkoVY/XUWEXDGlLq4CpVjHS1AO9BVpE2NpAb615tb0xKPM4injb0LFk29kX
+ J2kU0r/6YALDKZ0Drpz1n9hlOp5LXzSXN6rbc9wuWvTieetLv+XJdLEY5FPN9zDB7vSj
+ rIPGX1eVPsbnM1wK6P8lknKo8FhDVPiHBcgeEtOUZNvG5CIaspDaVI0WVvWDBDRdI42v
+ o1SxGz2QCYH3G46awBClEDl+VTaq+FlwH0gPRxPBq0Cq0UirVksCXDM8zi3vv1+TNUpT hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 334kvygx1h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 24 Aug 2020 16:11:28 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07OK2nfI172860
+        for <linux-integrity@vger.kernel.org>; Mon, 24 Aug 2020 16:11:28 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 334kvygx10-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Aug 2020 16:11:28 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07OK97OZ011954;
+        Mon, 24 Aug 2020 20:11:26 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 332ujrsn18-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Aug 2020 20:11:26 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07OK9s0W59965722
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Aug 2020 20:09:54 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1932C11C04A;
+        Mon, 24 Aug 2020 20:11:24 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4935511C04C;
+        Mon, 24 Aug 2020 20:11:23 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.122.56])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Aug 2020 20:11:23 +0000 (GMT)
+Message-ID: <25a0912802168cf104ffc7d8ac4f1b2ec12e054d.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/4] ima: limit secure boot feedback scope for appraise
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Bruno Meneguele <bmeneg@redhat.com>,
+        linux-integrity@vger.kernel.org
+Date:   Mon, 24 Aug 2020 16:11:22 -0400
+In-Reply-To: <20200817215233.95319-4-bmeneg@redhat.com>
+References: <20200817215233.95319-1-bmeneg@redhat.com>
+         <20200817215233.95319-4-bmeneg@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-24_12:2020-08-24,2020-08-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ malwarescore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
+ suspectscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008240155
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 9:30 PM Stephen Smalley
-<stephen.smalley.work@gmail.com> wrote:
-> On Mon, Aug 24, 2020 at 2:13 PM Lakshmi Ramasubramanian
-> <nramas@linux.microsoft.com> wrote:
-> >
-> > On 8/24/20 7:00 AM, Stephen Smalley wrote:
-> >
-> > >> +int security_read_policy_kernel(struct selinux_state *state,
-> > >> +                               void **data, size_t *len)
-> > >> +{
-> > >> +       int rc;
-> > >> +
-> > >> +       rc = security_read_policy_len(state, len);
-> > >> +       if (rc)
-> > >> +               return rc;
-> > >> +
-> > >> +       *data = vmalloc(*len);
-> > >> +       if (!*data)
-> > >> +               return -ENOMEM;
-> > >>
-> > >> +       return security_read_selinux_policy(state, data, len);
-> > >>   }
-> > >
-> > > See the discussion here:
-> > > https://lore.kernel.org/selinux/20200824113015.1375857-1-omosnace@redhat.com/T/#t
-> > >
-> > > In order for this to be safe, you need to ensure that all callers of
-> > > security_read_policy_kernel() have taken fsi->mutex in selinuxfs and
-> > > any use of security_read_policy_len() occurs while holding the mutex.
-> > > Otherwise, the length can change between security_read_policy_len()
-> > > and security_read_selinux_policy() if policy is reloaded.
-> > >
-> >
-> > "struct selinux_fs_info" is available when calling
-> > security_read_policy_kernel() - currently in measure.c.
-> > Only "struct selinux_state" is.
-> >
-> > Is Ondrej's re-try approach I need to use to workaround policy reload issue?
->
-> No, I think perhaps we should move the mutex to selinux_state instead
-> of selinux_fs_info.  selinux_fs_info has a pointer to selinux_state so
-> it can then use it indirectly.  Note that your patches are going to
-> conflict with other ongoing work in the selinux next branch that is
-> refactoring policy load and converting the policy rwlock to RCU.
+On Mon, 2020-08-17 at 18:52 -0300, Bruno Meneguele wrote:
+> Instead of print to kmsg any ima_appraise= option passed by the user in case
+> of secure boot being enabled, first check if the state was really changed
+> from its original "enforce" state, otherwise don't print anything.
 
-Yeah, and I'm experimenting with a patch on top of Stephen's RCU work
-that would allow you to do this in a straightforward way without even
-messing with the fsi->mutex. My patch may or may not be eventually
-committed, but either way I'd recommend holding off on this for a
-while until the dust settles around the RCU conversion.
+Please reword this patch description, removing "Instead of print to
+kmsg".
 
--- 
-Ondrej Mosnacek
-Software Engineer, Platform Security - SELinux kernel
-Red Hat, Inc.
+> 
+> Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+> ---
+>  security/integrity/ima/ima_appraise.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index 2193b51c2743..000df14f198a 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -19,11 +19,7 @@
+>  static int __init default_appraise_setup(char *str)
+>  {
+>  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
+> -	if (arch_ima_get_secureboot()) {
+> -		pr_info("Secure boot enabled: ignoring ima_appraise=%s boot parameter option",
+> -			str);
+> -		return 1;
+> -	}
+> +	bool sb_state = arch_ima_get_secureboot();
+>  
+>  	if (strncmp(str, "off", 3) == 0)
+>  		ima_appraise = 0;
+> @@ -35,6 +31,16 @@ static int __init default_appraise_setup(char *str)
+>  		ima_appraise = IMA_APPRAISE_ENFORCE;
+>  	else
+>  		pr_err("invalid \"%s\" appraise option", str);
+> +
+> +	/* If appraisal state was changed, but secure boot is enabled,
+> +	 * reset it to enforced */
+> +	if (sb_state) {
+> +		if (!is_ima_appraise_enabled()) {
+> +			pr_info("Secure boot enabled: ignoring ima_appraise=%s option",
+> +				str);
+> +			ima_appraise = IMA_APPRAISE_ENFORCE;
+> +		}
+> +	}
+
+Instead of changing ima_appraise and then resetting it back to
+enforcing, how about using a temporary variable instead?  Maybe
+something like:
+
+if (!is_ima_appraise_enabled())
+	pr_info( ...)
+else
+   ima_appraise = temporary value
+
+>  #endif
+>  	return 1;
+>  }
+
 
