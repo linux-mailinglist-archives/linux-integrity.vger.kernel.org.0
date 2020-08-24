@@ -2,94 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1742509D5
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Aug 2020 22:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D22B2509E9
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Aug 2020 22:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726257AbgHXUNi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Aug 2020 16:13:38 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40798 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725904AbgHXUNd (ORCPT
+        id S1725963AbgHXUUs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Aug 2020 16:20:48 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42938 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725904AbgHXUUs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Aug 2020 16:13:33 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07OK5hcA109734
-        for <linux-integrity@vger.kernel.org>; Mon, 24 Aug 2020 16:13:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=J9shjfh59k8x/JWzUouCS++inwrKhfKdSvldjmglypo=;
- b=BOalqv5vD6mHNieL8wzpKC19vdwH71oW2xm+4qPx77UwV2lCjZ2r4865exeHCtdlOHDw
- ZwCistopQ8zWXNy2aHagja5WCZvfjmA/jgv8kCWKfems/iP/cbJkiL+u7YgJHUx+N/ds
- P7WIFuFESD40gJkxcE6jfS9OnBST1LAHNbs3xADNym9TzDZsaR2A84QR7Q0BUARhYg5E
- u78y7spQl/0QT57Os70zF6iQZ+oTiSS8Ti3tpZIV6gF9FlgyUWekl7HE3/S/eTrEiJYU
- siJCCq1Zox96hAVMQUycs9WKv7e/JLhLr22hO6nVTpEWMFHj3dAHcWf0vuUHGoQmCfKY 3Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 334kvbgvwh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 24 Aug 2020 16:13:32 -0400
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07OK6oDa113663
-        for <linux-integrity@vger.kernel.org>; Mon, 24 Aug 2020 16:13:32 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 334kvbgvw1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Aug 2020 16:13:32 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07OK705g003213;
-        Mon, 24 Aug 2020 20:13:30 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03fra.de.ibm.com with ESMTP id 332utq1mq2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Aug 2020 20:13:30 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07OKDSSx27459936
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Aug 2020 20:13:28 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 004EC11C058;
-        Mon, 24 Aug 2020 20:13:28 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C4DE11C054;
-        Mon, 24 Aug 2020 20:13:27 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.122.56])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Aug 2020 20:13:26 +0000 (GMT)
-Message-ID: <9a554241140d9807d61f802275b8af35d6f28ee9.camel@linux.ibm.com>
-Subject: Re: [PATCH 4/4] integrity: prompt keyring name for unknown key
- request
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Bruno Meneguele <bmeneg@redhat.com>,
-        linux-integrity@vger.kernel.org
-Date:   Mon, 24 Aug 2020 16:13:26 -0400
-In-Reply-To: <20200817215233.95319-5-bmeneg@redhat.com>
-References: <20200817215233.95319-1-bmeneg@redhat.com>
-         <20200817215233.95319-5-bmeneg@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+        Mon, 24 Aug 2020 16:20:48 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id B06968EE17F;
+        Mon, 24 Aug 2020 13:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1598300447;
+        bh=h9IQ4yBT3+6FdH/X5N+2jUKDrCov+AzM1M/4z1LFGhk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=APrUbGtQ3g921ouuJIR0nSRfu3aLaUmGP5KdeVmMLyfPtMzzmaKVn04dIWdUxMKoR
+         m6NuzCA1SJ+HNzYFfdGtUEJ5/QRweA7gB7jgdipB+XYoXAPRTh3b7rSfB9O23sFzjj
+         6vaIWVMPW+qzpokrXwHzbN1exqHrKjiwWtxNTKTo=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Q_hNWT-_2JUY; Mon, 24 Aug 2020 13:20:47 -0700 (PDT)
+Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2404B8EE116;
+        Mon, 24 Aug 2020 13:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1598300447;
+        bh=h9IQ4yBT3+6FdH/X5N+2jUKDrCov+AzM1M/4z1LFGhk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=APrUbGtQ3g921ouuJIR0nSRfu3aLaUmGP5KdeVmMLyfPtMzzmaKVn04dIWdUxMKoR
+         m6NuzCA1SJ+HNzYFfdGtUEJ5/QRweA7gB7jgdipB+XYoXAPRTh3b7rSfB9O23sFzjj
+         6vaIWVMPW+qzpokrXwHzbN1exqHrKjiwWtxNTKTo=
+Message-ID: <1598300446.4034.5.camel@HansenPartnership.com>
+Subject: Re: [PATCH v4 1/1] tpm: add sysfs exports for all banks of PCR
+ registers
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Date:   Mon, 24 Aug 2020 13:20:46 -0700
+In-Reply-To: <20200824194457.GA7391@linux.intel.com>
+References: <14eaf21a808e333ca414c954d8f3a2f7b6dbf2ca.camel@linux.ibm.com>
+         <20200819120238.GD1152540@nvidia.com>
+         <1597850231.3875.13.camel@HansenPartnership.com>
+         <20200819161845.GK1152540@nvidia.com>
+         <78bc28a573f6660ee5b00d5965984fef2e1de167.camel@linux.ibm.com>
+         <20200819171709.GN1152540@nvidia.com>
+         <1597867756.3875.39.camel@HansenPartnership.com>
+         <20200819232132.GT1152540@nvidia.com>
+         <1597940084.3864.35.camel@HansenPartnership.com>
+         <20200821193847.GA2811093@nvidia.com>
+         <20200824194457.GA7391@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-24_12:2020-08-24,2020-08-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- phishscore=0 mlxlogscore=999 priorityscore=1501 suspectscore=0 mlxscore=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008240155
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-08-17 at 18:52 -0300, Bruno Meneguele wrote:
-> Depending on the IMA policy a key can be searched in multiple keyrings (e.g.
-> .ima and .platform) and possibly failing for both. However, for the user not
-> aware of the searching order it's not clear what's the keyring the kernel
-> didn't find the key. With this patch we improve this feedback by printing
-> the keyring "description" (name).
+On Mon, 2020-08-24 at 22:44 +0300, Jarkko Sakkinen wrote:
+> On Fri, Aug 21, 2020 at 04:38:47PM -0300, Jason Gunthorpe wrote:
+> > On Thu, Aug 20, 2020 at 09:14:44AM -0700, James Bottomley wrote:
+> > 
+> > > > eg we can't do it because we can't access /dev/tpm for
+> > > > permissions or
+> > > > something.
+> > > 
+> > > I already said that: we can't it's root.root 0600 currently.  All
+> > > the TSSs seem to change at least /dev/tpmrm to tpm.tpm 0660 but
+> > > we can't do that in the kernel because there's no fixed tpm
+> > > uid/gid.
+> > 
+> > Permissions is a pretty good reason to add a sysfs file.
+> > 
+> > Jason
 > 
-> Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+> I'm not sure why suid/sgid utility to read pcrs would be worse.
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+We don't do root running or suid/sgid binaries any more because they're
+exceptional security risks.  That's why both TSSs for TPM 2.0 change
+the device ownership.  For Trousers and TPM 1.2 we used to run the
+daemon as root until we started getting CVEs about it.
+
+James
 
