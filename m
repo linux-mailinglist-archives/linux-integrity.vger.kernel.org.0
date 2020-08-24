@@ -2,111 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C092506C6
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Aug 2020 19:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415C1250731
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Aug 2020 20:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbgHXRpM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Aug 2020 13:45:12 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31306 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725601AbgHXRpM (ORCPT
+        id S1726504AbgHXSN4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Aug 2020 14:13:56 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:35444 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbgHXSNz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Aug 2020 13:45:12 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07OHVwsT169379;
-        Mon, 24 Aug 2020 13:45:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=LLSRJbnN1rzlyk5a9nLMVRUtWdyFeR8aOd9giiaAzjg=;
- b=sOX5dqt/fm60iVUH5jNLH6ljv0F/G3N41XlagB2QNV8IYDVPUq4yHHP+Ls+Iq93Ukmsk
- 8GEnX+oSAkGhiTe4hgEhll4a2qMlEK6gMQu7GWSPcIERC5chPuRkc4P0V3O8k9B+xF9D
- nvfV34tXGLOtj3txCcecfrutXTQJO7K9qyF9PG6UIDAQhF9CimrzIcV1/i8AEyVOkazu
- 1cNRnP+eoyQOok68F+phTeDBOjqJTYNsIsraVLoGOCCqX3FjpImS0B3BJ4i8oQGa6zSC
- /UARsq9dzsz7A3HZRiuVxoRMaHlDmaSMOy2TAniP9+vdu0Erj0HXBh/ivNNjpP47SL8+ gw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 334gxn2h6c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Aug 2020 13:45:07 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07OHWoCN174371;
-        Mon, 24 Aug 2020 13:45:07 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 334gxn2h54-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Aug 2020 13:45:06 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07OHh2B6017626;
-        Mon, 24 Aug 2020 17:45:04 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 332uk6akxg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Aug 2020 17:45:04 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07OHj2JA60817720
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Aug 2020 17:45:02 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5D93E4C04A;
-        Mon, 24 Aug 2020 17:45:02 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 520F94C046;
-        Mon, 24 Aug 2020 17:45:01 +0000 (GMT)
-Received: from sig-9-65-254-31.ibm.com (unknown [9.65.254.31])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Aug 2020 17:45:01 +0000 (GMT)
-Message-ID: <d4c9d5333256b17acdbe41729dd680f534266130.camel@linux.ibm.com>
-Subject: Re: [PATCH 01/11] evm: Execute evm_inode_init_security() only when
- the HMAC key is loaded
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Date:   Mon, 24 Aug 2020 13:45:00 -0400
-In-Reply-To: <2b204e31d21e93c0167d154c2397cd5d11be6e7f.camel@linux.ibm.com>
-References: <20200618160133.937-1-roberto.sassu@huawei.com>
-         <2b204e31d21e93c0167d154c2397cd5d11be6e7f.camel@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
+        Mon, 24 Aug 2020 14:13:55 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9A34520B4908;
+        Mon, 24 Aug 2020 11:13:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9A34520B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1598292834;
+        bh=I33zGzGKrY5OD+f93g2K2Tof22XbwMMm4oJvhkCRjyQ=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=nkEbESeIREk6peaARbVfOFLHskhh+FVeAgvpLv49vmfLWN8dF5+vMlZrPt3vBqnrS
+         jDK32p1NdgaRUBU5GkDKFUhWfoYYqlIYDTsvI7Etl3dx623IDvcpcw2udkvJAy8B+S
+         JKO3wTUBhq66QhbGuui2GKpS9B5E0Yu7/oC7XdXA=
+Subject: Re: [PATCH] SELinux: Measure state and hash of policy using IMA
+To:     Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        tusharsu@linux.microsoft.com, sashal@kernel.org,
+        James Morris <jmorris@namei.org>,
+        linux-integrity@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20200822010018.19453-1-nramas@linux.microsoft.com>
+ <CAEjxPJ5Kok-TBfS=XQ+NUC5tuaZRkyLBOawG4UDky51_bsMnGw@mail.gmail.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <418618c4-a0c6-6b28-6718-2726a29b83c5@linux.microsoft.com>
+Date:   Mon, 24 Aug 2020 11:13:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAEjxPJ5Kok-TBfS=XQ+NUC5tuaZRkyLBOawG4UDky51_bsMnGw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-24_12:2020-08-24,2020-08-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
- bulkscore=0 impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0
- lowpriorityscore=0 adultscore=0 phishscore=0 mlxscore=0 suspectscore=3
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008240138
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
+On 8/24/20 7:00 AM, Stephen Smalley wrote:
 
-On Fri, 2020-08-21 at 14:30 -0400, Mimi Zohar wrote:
-> Sorry for the delay in reviewing these patches.   Missing from this
-> patch set is a cover letter with an explanation for grouping these
-> patches into a patch set, other than for convenience.  In this case, it
-> would be along the lines that the original use case for EVM portable
-> and immutable keys support was for a few critical files, not combined
-> with an EVM encrypted key type.   This patch set more fully integrates
-> the initial EVM portable and immutable signature support.
+>> +int security_read_policy_kernel(struct selinux_state *state,
+>> +                               void **data, size_t *len)
+>> +{
+>> +       int rc;
+>> +
+>> +       rc = security_read_policy_len(state, len);
+>> +       if (rc)
+>> +               return rc;
+>> +
+>> +       *data = vmalloc(*len);
+>> +       if (!*data)
+>> +               return -ENOMEM;
+>>
+>> +       return security_read_selinux_policy(state, data, len);
+>>   }
+> 
+> See the discussion here:
+> https://lore.kernel.org/selinux/20200824113015.1375857-1-omosnace@redhat.com/T/#t
+> 
+> In order for this to be safe, you need to ensure that all callers of
+> security_read_policy_kernel() have taken fsi->mutex in selinuxfs and
+> any use of security_read_policy_len() occurs while holding the mutex.
+> Otherwise, the length can change between security_read_policy_len()
+> and security_read_selinux_policy() if policy is reloaded.
+> 
 
-Thank you for more fully integrating the EVM portable signatures into
-IMA.
+"struct selinux_fs_info" is available when calling 
+security_read_policy_kernel() - currently in measure.c.
+Only "struct selinux_state" is.
 
-" [PATCH 08/11] ima: Allow imasig requirement to be satisfied by EVM
-portable signatures" equates an IMA signature to having a portable and
-immutable EVM signature.  That is true in terms of signature
-verification, but from an attestation perspective the "ima-sig"
-template will not contain a signature.  If not the EVM signature, then
-at least some other indication should be included in the measurement
-list.
+Is Ondrej's re-try approach I need to use to workaround policy reload issue?
 
-Are you planning on posting the associated IMA/EVM regression tests?
-
-Mimi
-
+thanks,
+  -lakshmi
