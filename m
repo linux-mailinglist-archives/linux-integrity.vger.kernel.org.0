@@ -2,173 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52FE253961
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Aug 2020 22:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F62253A2C
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Aug 2020 00:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgHZUvq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Aug 2020 16:51:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726740AbgHZUvq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Aug 2020 16:51:46 -0400
-Received: from gmail.com (unknown [104.132.1.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 375AF2078D;
-        Wed, 26 Aug 2020 20:51:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598475105;
-        bh=wE0T2s3H9QjfKz3VvdOk93oK3T4iAQ3TJs7Wxfj57aU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CPe5SbaKdMpHqG/Bt8xSc+ElnRZvWllXsK1cX/oOcnOnRGKfDQASbXolorGoEzmO2
-         fx29fLHEfmUGobyElTgWiZe9DFV+HQytGWu5/3nEnkzd7UhKyyxt6cjJiIX/Ul8VPv
-         mKIS5/9Gzsl88pFk9NocCG5lpqrhK5HiveP9SQxc=
-Date:   Wed, 26 Aug 2020 13:51:43 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     linux-fscrypt@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
-Subject: Re: IMA metadata format to support fs-verity
-Message-ID: <20200826205143.GE2239109@gmail.com>
-References: <760DF127-CA5F-4E86-9703-596E95CEF12F@oracle.com>
- <20200826183116.GC2239109@gmail.com>
- <6C2D16FB-C098-43F3-A7D3-D8AC783D1AB5@oracle.com>
- <20200826192403.GD2239109@gmail.com>
- <E7A87987-AF41-42AC-8244-0D07AA68A6E7@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E7A87987-AF41-42AC-8244-0D07AA68A6E7@oracle.com>
+        id S1726765AbgHZWP5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Aug 2020 18:15:57 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50870 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726753AbgHZWP4 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 26 Aug 2020 18:15:56 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07QM2Tdp009433;
+        Wed, 26 Aug 2020 18:15:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=nNPbnCetM8DJY93wEqN5qBmsHN/Kc8f0y0wqAxveMYM=;
+ b=lr8055hdX63jt8oVvHSlch3OJPsPxt+yl8uIoQHl8xKY2lMNOv9sxXRSD+Sy8lU/4cVn
+ t0rV1o6MEWNviKULF4RWIl+CrxUZTE1x7t9LyQzhIAGm+oG0IWqHOFoEYJsqAnz0yyGb
+ 14q+H4CZzhnsi01wa49rYrV9Hs2XDU6knWtdMCS8Oen+WHm0M15Ov8iCVCbiGhGAgoyF
+ 2jW1yyI/Eveco8qfZnqwSFgq8fx44uXeqAULYTCf2GuDKjlXzE7sa8ibJ6YPLWDf7y2+
+ PY4dRAXZVWxRVqxeSmuorwTt27IFMCKzHxNoxgGJFEU0wq90wLk7sSLI5IXYohx0yvcF Jw== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 335y7rj155-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Aug 2020 18:15:48 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07QMC69O025859;
+        Wed, 26 Aug 2020 22:15:47 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 332ujkw0f8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Aug 2020 22:15:47 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07QMFiq113959424
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Aug 2020 22:15:45 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E23EAAE04D;
+        Wed, 26 Aug 2020 22:15:44 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47387AE045;
+        Wed, 26 Aug 2020 22:15:43 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.94.210])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Aug 2020 22:15:43 +0000 (GMT)
+Message-ID: <b58057275ecdc06bb512d39ea46118197f33c33f.camel@linux.ibm.com>
+Subject: Re: [LTP v4 4/5] IMA: Add a test to verify measurement of
+ certificate imported into a keyring
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
+Cc:     Lachlan Sneff <t-josne@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Date:   Wed, 26 Aug 2020 18:15:42 -0400
+In-Reply-To: <20200820090824.3033-5-pvorel@suse.cz>
+References: <20200820090824.3033-1-pvorel@suse.cz>
+         <20200820090824.3033-5-pvorel@suse.cz>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-26_14:2020-08-26,2020-08-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
+ malwarescore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 spamscore=0
+ mlxlogscore=833 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008260165
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 03:51:48PM -0400, Chuck Lever wrote:
-> 
-> 
-> > On Aug 26, 2020, at 3:24 PM, Eric Biggers <ebiggers@kernel.org> wrote:
-> > 
-> > On Wed, Aug 26, 2020 at 02:56:45PM -0400, Chuck Lever wrote:
-> >> 
-> >>> On Aug 26, 2020, at 2:31 PM, Eric Biggers <ebiggers@kernel.org> wrote:
-> >>> 
-> >>> On Wed, Aug 26, 2020 at 10:13:43AM -0700, Chuck Lever wrote:
-> >>>> Hi Eric-
-> >>>> 
-> >>>> I'm trying to construct a viable IMA metadata format (ie, what
-> >>>> goes into security.ima) to support Merkle trees.
-> >>>> 
-> >>>> Rather than storing an entire Merkle tree per file, Mimi would
-> >>>> like to have a metadata format that can store the root hash of
-> >>>> a Merkle tree. Instead of reading the whole tree, an NFS client
-> >>>> (for example) would generate the parts of the file's fs-verity
-> >>>> Merkle tree on-demand. The tree itself would not be exposed or
-> >>>> transported by the NFS protocol.
-> >>> 
-> >>> This won't work because you'd need to reconstruct the whole Merkle tree when
-> >>> reading the first byte from the file.  Check the fs-verity FAQ
-> >>> (https://www.kernel.org/doc/html/latest/filesystems/fsverity.html#faq) where I
-> >>> explained this in more detail (fourth question).
-> >> 
-> >> We agree there are inefficiencies with the proposed scheme. The
-> >> Merkle tree would be rehydrated at measurement time, and used at
-> >> read time to verify the results of each subsequent NFS READ.
-> >> 
-> >> We assume that parts of the tree and parts of the file content
-> >> can be evicted from the client's memory at any time. So verifying
-> >> READ results may require rehydration of some or all of the Merkle
-> >> tree. If we're careful, eviction might avoid the higher levels of
-> >> the tree to prevent the need to read the whole file again.
-> >> 
-> >> So, maybe we want to store the first level or two of the tree as
-> >> well? Obviously there is a limit to how much can be stored in an
-> >> extended attribute.
-> > 
-> > That's going to be very inefficient, and difficult to handle the caching,
-> > preferential eviction, and constant tree rebuilding.
-> 
-> My focus is code signing. I'm expecting individual executables to
-> be under a few dozen megabytes in size, on average, and to change
-> infrequently or never (immutable). Configuration files, shell
-> scripts, and symlinks will be even smaller on average.
-> 
-> Thus I anticipate that the frequency of eviction should be pretty
-> small, and the client should be able to read the files in their
-> entirety quickly. Efficiency comes from reading each file as few
-> times as possible to maintain its Merkle tree. The cost of
-> measuring the file is amortized well if the file is used
-> frequently enough to keep its tree in the client's memory.
-> 
-> The inefficient case is a file that is large and used infrequently,
-> IIUC.
-> 
-> 
-> > IMO, the only model that really makes sense is one where the full tree is stored
-> > persistently.
-> 
-> Can you say more about why you believe that?
+On Thu, 2020-08-20 at 11:08 +0200, Petr Vorel wrote:
 
-Because if the full tree isn't stored, it defeats most of the point of doing a
-Merkle tree based hash.  The filesystem would have to read and hash the full
-file up-front, which by itself defeats the main benefit.  Then later, reads from
-the file can result in having to rebuild large parts of the tree --- unless the
-entire tree is kept pinned in memory, which isn't feasible for large files.
+> @@ -63,4 +73,50 @@ test1()
+>  	tst_res TPASS "specified keyrings were measured correctly"
+>  }
+> 
+> +# Create a new keyring, import a certificate into it, and verify
+> +# that the certificate is measured correctly by IMA.
+> +test2()
+> +{
+> +	tst_require_cmds evmctl keyctl openssl
+> +
+> +	local cert_file="$TST_DATAROOT/x509_ima.der"
+> +	local keyring_name="key_import_test"
+> +	local temp_file="file.txt"
+> +
+> +	tst_res TINFO "verify measurement of certificate imported into a keyring"
+> +
+> +	if ! check_ima_policy_content "^measure.*func=KEY_CHECK.*keyrings=.*$keyring_name"; then
+> +		tst_brk TCONF "IMA policy does not contain $keyring_name keyring"
+> +	fi
+> +
+> +	KEYRING_ID=$(keyctl newring $keyring_name @s) || \
+> +		tst_brk TBROK "unable to create a new keyring"
+> +
+> +	if ! tst_is_num $KEYRING_ID; then
+> +		tst_brk TBROK "unable to parse the new keyring id ('$KEYRING_ID')"
+> +	fi
+> +
 
-> > Have you considered options for how that could be done in NFS?
-> 
-> We have.
-> 
-> 
-> > What NFS protocol modifications (if any) are in scope?
-> 
-> There are two ways to pull data via NFS. One is READ, which assumes
-> an arbitrarily large byte stream and the ability to seek in it. The
-> byte stream content is read in sections no larger than "rsize"
-> (typically 1MB or less). The client has various mechanisms to
-> detect when the file content has changed on the server, and can use
-> them to cache the file's content aggressively.
-> 
-> The other is attribute data, which is pulled in a single operation and
-> is therefore limited in size. There is no cache consistency scheme
-> for this type of data, so clients typically read it every time there
-> is an application request for it.
-> 
-> - We could define a named attribute that is a secondary byte stream
-> associated with a filehandle. It can be arbitrarily large and is
-> read piecemeal via NFS READ.
+Instead of using TST_DATAROOT, which is defined as
+"$LTPROOT/datafiles", use LTPROOT directly to define the path to the
+cert.  Adding the following will allow the test to run from the build
+directory.
+ 
+      if [ ! -f $cert_file ]; then
+              cert_file="$LTPROOT/../datafiles/ima_keys/x509_ima.der"
+      fi
 
-If it's possible, a secondary byte stream associated with the file would be a
-good option.  The fs-verity implementation in ext4 and f2fs has been criticized
-because the Merkle tree is stored past the end of the file rather than in a
-separate file stream, which in theory would be a cleaner solution.
+Mimi
 
-> > fs-verity is mostly just a way of hashing a file.  Can't IMA just continue to do
-> > its signatures in the same way, and just swap out the traditional full file hash
-> > with the fs-verity file hash (when it's enabled)?
-> 
-> Essentially that's what we're doing: inventing a new IMA metadata
-> format that stores a Merkle root hash instead of a linear hash.
-> 
-> The current IMA formats take a single parameter: which hash algo
-> to use. Merkle tree construction requires a larger set of parameters,
-> which is why we think a new metadata format is necessary.
+> +	evmctl import $cert_file $KEYRING_ID > /dev/null || \
+> +		tst_brk TBROK "unable to import a certificate into $keyring_name keyring"
+> +
 
-Well, you'll need to store the fsverity_descriptor or something equivalent.  Not
-because it would be signed directly (it would be hashed first, as per
-https://www.kernel.org/doc/html/latest/filesystems/fsverity.html#file-measurement-computation),
-but because it's needed to understand the Merkle tree.
-
-Of course, the bytes that are actually signed need to include not just the hash
-itself, but also the type of hash algorithm that was used.  Else it's ambiguous
-what the signer intended to sign.
-
-Unfortunately, currently EVM appears to sign a raw hash, which means it is
-broken, as the hash algorithm is not authenticated.  I.e. if the bytes
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 are signed,
-there's no way to prove that the signer meant to sign a SHA-256 hash, as opposed
-to, say, a Streebog hash.  So that will need to be fixed anyway.  While doing
-so, you should reserve some fields so that there's also a flag available to
-indicate whether the hash is a traditional full file hash or a fs-verity hash.
-
-- Eric
