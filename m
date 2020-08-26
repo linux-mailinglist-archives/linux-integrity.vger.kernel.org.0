@@ -2,159 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0565D25342A
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Aug 2020 17:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46D92535D1
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Aug 2020 19:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727786AbgHZP57 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Aug 2020 11:57:59 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:13026 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727882AbgHZP54 (ORCPT
+        id S1726853AbgHZROZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Aug 2020 13:14:25 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:38642 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726802AbgHZROY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Aug 2020 11:57:56 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07QFW2UE189368;
-        Wed, 26 Aug 2020 11:57:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=HccGIv1kXZpAh+2ptA3ZwBl+YCt3qQZHYAt/DHYIo6A=;
- b=ANtUBcFPSlnyCBhe5XzhRefOY2CgJjUqIOmxh1eIBlq0ufnA9irIv25sJwTzxLxVs4p6
- C0HUMNg7YT8OzXYjH5hIeUu/5kiVVPv4P3U3s9g1YYkVPhkLsbGnmhKXeNamTTYZ3+yy
- I3kaShD2c3D67HVwlSDeTlPyRNX+noqw9Zc9kqrsvjOPRppGshX74HTFT5RTBSwnkTYy
- dZFQIrHOO/Kl3gRRd+uW946QfWb9U3SjWwc91o7JuimsHddlbM5xvNygwBK+sX8GIRNy
- Kcl+Eo386LY5WQvXv/iU2gA/3W0PWt6RNsjdyQhFNLpBjsmaWT0SCZelxQwa5dpgsULv qA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 335t9v8x77-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Aug 2020 11:57:49 -0400
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07QFW54D189756;
-        Wed, 26 Aug 2020 11:57:48 -0400
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 335t9v8x5r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Aug 2020 11:57:48 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07QFVqnL020411;
-        Wed, 26 Aug 2020 15:57:46 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma02dal.us.ibm.com with ESMTP id 335kvcbp2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Aug 2020 15:57:46 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07QFvjWl56099296
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Aug 2020 15:57:45 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9E942124055;
-        Wed, 26 Aug 2020 15:57:45 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB9CD124052;
-        Wed, 26 Aug 2020 15:57:44 +0000 (GMT)
-Received: from swastik.ibm.com (unknown [9.160.97.86])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 26 Aug 2020 15:57:44 +0000 (GMT)
-Subject: Re: [PATCH v2 0/2] ima: Fix keyrings race condition and other key
- related bugs
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        Nayna Jain <nayna@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20200811192621.281675-1-tyhicks@linux.microsoft.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-Message-ID: <48c98a62-01f0-825b-7648-7d8fa9f13b40@linux.vnet.ibm.com>
-Date:   Wed, 26 Aug 2020 11:57:44 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 26 Aug 2020 13:14:24 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07QH9ZFS043527;
+        Wed, 26 Aug 2020 17:14:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
+ message-id : date : from : to : cc : subject : content-type :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=yUholIYi4UuEZe2vEuDL0z0NaSsrkG/uF1JQxdoBfxc=;
+ b=NQHlKlK4hj6ks6gaCHfRtFoL1bZ81ZeiTDCnXVNKQUaqivnm9kwpkiP5lVzOOSIVuG5z
+ LKZ3TBMH0ssTQRmsTCCVRJLXa+8V8N4fbIh1MoYl4BdW3oVc0YREQ/LUG8IzY1Yp/Okm
+ AM7VaZ3pdnZDJQEk3ndZupQ49wdCY70CvD787GJnXCa3qO6WHod55pNQDqdG4OmO+761
+ e8Ub9UYvQ4zsu28/3g2BJv/jZdXO0za3vrZP7m4P/zzi+L7229kFuOIUcmm6rOubXDtB
+ nyquYVn9myLil7ljqozqU6f3yrHgbEx1rhdLdKr1b7B8EW38vOq7ueTTVPbqKLybPfxv 0w== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 333w6u0add-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Aug 2020 17:14:22 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07QHAG10105299;
+        Wed, 26 Aug 2020 17:14:22 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 333ruas1mb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Aug 2020 17:14:22 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 07QHEKQt010997;
+        Wed, 26 Aug 2020 17:14:20 GMT
+Received: from anon-dhcp-152.1015granger.net (/68.61.232.219) by default
+ (Oracle Beehive Gateway v4.0) with ESMTP ; Wed, 26 Aug 2020 10:13:44 -0700
 MIME-Version: 1.0
-In-Reply-To: <20200811192621.281675-1-tyhicks@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-26_09:2020-08-26,2020-08-26 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 phishscore=0
- mlxscore=0 clxscore=1015 bulkscore=0 impostorscore=0 suspectscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008260114
+Message-ID: <760DF127-CA5F-4E86-9703-596E95CEF12F@oracle.com>
+Date:   Wed, 26 Aug 2020 10:13:43 -0700 (PDT)
+From:   Chuck Lever <chuck.lever@oracle.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fscrypt@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: IMA metadata format to support fs-verity
+X-Mailer: Apple Mail (2.3608.120.23.2.1)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9725 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ bulkscore=0 suspectscore=0 spamscore=0 mlxscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008260128
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9725 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 impostorscore=0
+ mlxlogscore=999 suspectscore=0 phishscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008260128
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Eric-
 
-On 8/11/20 3:26 PM, Tyler Hicks wrote:
-> v2:
->   - Always return an ERR_PTR from ima_alloc_rule_opt_list() (Nayna)
->   - Add Lakshmi's Reviewed-by to both patches
->   - Rebased on commit 3db0d0c276a7 ("integrity: remove redundant
->     initialization of variable ret") of next-integrity
-> v1: https://lore.kernel.org/lkml/20200727140831.64251-1-tyhicks@linux.microsoft.com/
->
-> Nayna pointed out that the "keyrings=" option in an IMA policy rule
-> should only be accepted when CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS is
-> enabled:
->
->   https://lore.kernel.org/linux-integrity/336cc947-1f70-0286-6506-6df3d1d23a1d@linux.vnet.ibm.com/
->
-> While fixing this, the compiler warned me about the potential for the
-> ima_keyrings pointer to be NULL despite it being used, without a check
-> for NULL, as the destination address for the strcpy() in
-> ima_match_keyring().
->
-> It also became apparent that there was not adequate locking around the
-> use of the pre-allocated buffer that ima_keyrings points to. The kernel
-> keyring has a lock (.sem member of struct key) that ensures only one key
-> can be added to a given keyring at a time but there's no protection
-> against adding multiple keys to different keyrings at the same time.
->
-> The first patch in this series fixes both ima_keyrings related issues by
-> parsing the list of keyrings in a KEY_CHECK rule at policy load time
-> rather than deferring the parsing to policy check time. Once that fix is
-> in place, the second patch can enforce that
-> CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS must be enabled in order to use
-> "func=KEY_CHECK" or "keyrings=" options in IMA policy.
->
-> The new "keyrings=" value handling is done in a generic manner that can
-> be reused by other options in the future. This seems to make sense as
-> "appraise_type=" has similar style (though it doesn't need to be fully
-> parsed at this time) and using "|" as an alternation delimiter is
-> becoming the norm in IMA policy.
->
-> This series is based on commit 311aa6aafea4 ("ima: move
-> APPRAISE_BOOTPARAM dependency on ARCH_POLICY to runtime") in
-> next-integrity.
->
-> Tyler
->
-> Tyler Hicks (2):
->    ima: Pre-parse the list of keyrings in a KEY_CHECK rule
->    ima: Fail rule parsing when asymmetric key measurement isn't
->      supportable
->
->   security/integrity/ima/ima_policy.c | 142 +++++++++++++++++++---------
->   1 file changed, 96 insertions(+), 46 deletions(-)
->
+I'm trying to construct a viable IMA metadata format (ie, what
+goes into security.ima) to support Merkle trees.
 
-Sorry for delay in responding.
+Rather than storing an entire Merkle tree per file, Mimi would
+like to have a metadata format that can store the root hash of
+a Merkle tree. Instead of reading the whole tree, an NFS client
+(for example) would generate the parts of the file's fs-verity
+Merkle tree on-demand. The tree itself would not be exposed or
+transported by the NFS protocol.
 
-The patches look good. Feel free to add my tag
+Following up with the recent thread on linux-integrity, starting
+here:
 
-Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
+  =
+https://lore.kernel.org/linux-integrity/1597079586.3966.34.camel@HansenPar=
+tnership.com/t/#u
 
-Thanks & Regards,
+I think the following will be needed.
 
-     - Nayna
+1. The parameters for (re)constructing the Merkle tree:
+- The name of the digest algorithm
+- The unit size represented by each leaf in the tree
+- The depth of the finished tree
+- The size of the file
+- Perhaps a salt value
+- Perhaps the file's mtime at the time the hash was computed
+- The root hash
 
+2. A fingerprint of the signer:
+- The name of the digest algorithm
+- The digest of the signer's certificate
+
+3. The signature
+- The name of the signature algorithm
+- The signature, computed over 1.
+
+Does this seem right to you?
+
+There has been some controversy about whether to allow the
+metadata to be unsigned. It can't ever be unsigned for NFS files,
+but some feel that on a physically secure local-only set up,
+signatures could be unnecessary overhead. I'm not convinced, and
+believe the metadata should always be signed: that's the only
+way to guarantee end-to-end integrity, which includes protection
+of the content's provenance, no matter how it is stored.
+
+--
+Chuck Lever
 
 
 
