@@ -2,86 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE2C255E57
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Aug 2020 18:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BB0255FE2
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Aug 2020 19:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbgH1QAq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Aug 2020 12:00:46 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:44760 "EHLO
+        id S1726654AbgH1RlF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Aug 2020 13:41:05 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:56974 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728358AbgH1QAe (ORCPT
+        with ESMTP id S1725979AbgH1RlE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Aug 2020 12:00:34 -0400
-Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2023D20B36E7;
-        Fri, 28 Aug 2020 09:00:33 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2023D20B36E7
+        Fri, 28 Aug 2020 13:41:04 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C868220B7178;
+        Fri, 28 Aug 2020 10:41:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C868220B7178
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1598630433;
-        bh=rFS7E9EDFK2NArtUO3BlDUuIRiMcxaSWtbaQ0LSrhHI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KzpF/wd+aA6rwHO+q6X+ytLf4Zit/tOWra0KBylE8WuFSrDJsCGifaBLh+1RUbbTl
-         FBPLmMJ/ckkMURFTfM3isJnTZi4vEDBjKHrjqiNxN13CtDifFool7ToFXkHLE1kKlS
-         c46W67h1IpWckpArWJXeeeHxMcFXc7L8tLQCqu1U=
+        s=default; t=1598636463;
+        bh=B5UrEdKDUH9jR7Ae1rEu3ipYxtxUO5TupJFw9Ld6H34=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=kJxyjpGZXpgz/YZTr4JpGPULSjbavcGe/BP8zJO2pLyO2Txe97CE+o9uT928hiyDo
+         pt/EplTowulkW7Ooj+R7raJMvQCOK/ecQqBfj1LEsCddVsCTZZE4mYAtlvfFNjb6OY
+         hSmGdxieqHZcIN0Q11pWLHcqs8mvm2PWdYu8rwCw=
+Subject: Re: [PATCH v4 1/5] powerpc: Refactor kexec functions to move arch
+ independent code to IMA
+To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
+        james.morse@arm.com, catalin.marinas@arm.com, sashal@kernel.org,
+        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com
+References: <20200819172134.11243-1-nramas@linux.microsoft.com>
+ <20200819172134.11243-2-nramas@linux.microsoft.com>
+ <875z938xwy.fsf@morokweng.localdomain>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com
-Cc:     tyhicks@linux.microsoft.com, tusharsu@linux.microsoft.com,
-        sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] IMA: Support early boot measurement of critical data
-Date:   Fri, 28 Aug 2020 09:00:21 -0700
-Message-Id: <20200828160021.11537-4-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200828160021.11537-1-nramas@linux.microsoft.com>
-References: <20200828160021.11537-1-nramas@linux.microsoft.com>
+Message-ID: <3897c55e-11d2-113a-5cef-db750b33772f@linux.microsoft.com>
+Date:   Fri, 28 Aug 2020 10:40:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <875z938xwy.fsf@morokweng.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The IMA hook, namely ima_measure_critical_data(), to measure kernel
-critical data requires a custom IMA policy to be loaded.
+On 8/27/20 4:35 PM, Thiago Jung Bauermann wrote:
+> 
+> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+> 
+>> The functions ima_get_kexec_buffer() and ima_free_kexec_buffer() that
+>> handle carrying forward the IMA measurement logs on kexec for powerpc
+>> do not have architecture specific code, but they are currently defined
+>> for powerpc only.
+>>
+>> Move these functions to IMA subsystem so that it can be used for other
+>> architectures as well. A later patch in this series will use these
+>> functions for carrying forward the IMA measurement log for ARM64.
+>>
+>> Define FDT_PROP_IMA_KEXEC_BUFFER for the chosen node, namely
+>> "linux,ima-kexec-buffer", that is added to the DTB to hold
+>> the address and the size of the memory reserved to carry
+>> the IMA measurement log.
+>>
+>> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> 
+> This patch removes two functions from arch/powerpc/kexec/ima.c, but adds
+> four to security/integrity/ima/ima_kexec.c. The extra ones are
+> get_addr_size_cells() and do_get_kexec_buffer(), which are being copied
+> from the powerpc code but can't be removed yet because they're still
+> used there by remove_ima_buffer() and setup_ima_buffer().
+> 
+> On the next patch you remove the need for these functions in powerpc
+> code and therefore delete them. This confused me at first, so I think it
+> would be cleared if you put patch 2 first in the series and then on this
+> patch you can simply move the four functions and delete them from
+> arch/powerpc/kexec/ima.c.
+> 
+> If you prefer to keep the current order, it's worth mentioning on the
+> commit log where get_addr_size_cells() and do_get_kexec_buffer() are
+> coming from.
+> 
+> Regardless:
+> 
+> Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> 
 
-Update ima_measure_critical_data() to utilize early boot measurement
-support to defer processing data if a custom IMA policy is not yet
-loaded.
+Thanks for reviewing the changes Thiago.
 
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
----
- security/integrity/ima/ima_main.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+I'll update the commit log to describe the changes related to 
+get_addr_size_cells() and do_get_kexec_buffer().
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 41be4d1d839e..ce0ef310c575 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -885,12 +885,22 @@ int ima_measure_critical_data(const char *event_name,
- 			      const void *buf, int buf_len,
- 			      bool measure_buf_hash)
- {
-+	bool queued = false;
-+
- 	if (!event_name || !event_data_source || !buf || !buf_len)
- 		return -EINVAL;
- 
- 	if (!ima_kernel_data_source_is_supported(event_data_source))
- 		return -EPERM;
- 
-+	if (ima_should_queue_data())
-+		queued = ima_queue_data(event_name, buf, buf_len,
-+					event_data_source, CRITICAL_DATA,
-+					measure_buf_hash);
-+
-+	if (queued)
-+		return 0;
-+
- 	return process_buffer_measurement(NULL, buf, buf_len, event_name,
- 					  CRITICAL_DATA, 0, event_data_source,
- 					  measure_buf_hash);
--- 
-2.28.0
+  -lakshmi
 
