@@ -2,29 +2,29 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17417255FEB
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Aug 2020 19:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B1B255FF7
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Aug 2020 19:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726947AbgH1RnF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Aug 2020 13:43:05 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:57268 "EHLO
+        id S1726851AbgH1RqP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Aug 2020 13:46:15 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:57694 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725814AbgH1RnE (ORCPT
+        with ESMTP id S1725979AbgH1RqO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Aug 2020 13:43:04 -0400
+        Fri, 28 Aug 2020 13:46:14 -0400
 Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D77FF20B7178;
-        Fri, 28 Aug 2020 10:43:02 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D77FF20B7178
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9706920B7178;
+        Fri, 28 Aug 2020 10:46:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9706920B7178
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1598636583;
-        bh=R1teKYMBu8vqBarNApY+0V5H5gqlUpnadI+DlmuIfsE=;
+        s=default; t=1598636773;
+        bh=m37BaxWxUXh3A97LPLILcR9FmKnNZX9n5ZLW8ZhgKzA=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Eb1mFosaUNV1b7GJ+N7ycdSRcKkXRNZk2TPFWumkuIBTMLHmYXvUsakCrI/APb6NE
-         1BQJx48cUzUhwM1mYG3IbKLdRaHjhSTU/JppL9Gzg4Q14y9xprUO3hD+u8blF6P7QG
-         5yyVKJuMIRIxHE848wVLyijPOwOmJHyyNfxRENWU=
-Subject: Re: [PATCH v4 1/5] powerpc: Refactor kexec functions to move arch
- independent code to IMA
+        b=DxLnbNzw0LBuLnBudQJkFay0TVSMAkA5Yfunem0PmWAqYVz3/cqwFwnhU3nC7DRpo
+         z/f4oaZ4BZcwekMW5SNIARBu3FkcG/5NgHAS6kjA2roHwpV8XreNzuXEJixg7i7nE3
+         4pThmLJOor1xMgZ1Ul0ziOdPp2z/vn4B4lu9KPG8=
+Subject: Re: [PATCH v4 2/5] powerpc: Use libfdt functions to fetch IMA buffer
+ properties
 To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
 Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
         james.morse@arm.com, catalin.marinas@arm.com, sashal@kernel.org,
@@ -40,15 +40,15 @@ Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com
 References: <20200819172134.11243-1-nramas@linux.microsoft.com>
- <20200819172134.11243-2-nramas@linux.microsoft.com>
- <87wo1j7ed0.fsf@morokweng.localdomain>
+ <20200819172134.11243-3-nramas@linux.microsoft.com>
+ <8736478x7l.fsf@morokweng.localdomain>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <80c4ee1b-6bab-237e-503d-556f344f7df9@linux.microsoft.com>
-Date:   Fri, 28 Aug 2020 10:43:02 -0700
+Message-ID: <53685243-60b6-b21b-7f48-827bb296aa72@linux.microsoft.com>
+Date:   Fri, 28 Aug 2020 10:46:12 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <87wo1j7ed0.fsf@morokweng.localdomain>
+In-Reply-To: <8736478x7l.fsf@morokweng.localdomain>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,82 +57,76 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 8/27/20 6:23 PM, Thiago Jung Bauermann wrote:
+On 8/27/20 4:50 PM, Thiago Jung Bauermann wrote:
 > 
 > Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 > 
->> +/**
->> + * ima_get_kexec_buffer - get IMA buffer from the previous kernel
->> + * @addr:	On successful return, set to point to the buffer contents.
->> + * @size:	On successful return, set to the buffer size.
->> + *
->> + * Return: 0 on success, negative errno on error.
->> + */
->> +int ima_get_kexec_buffer(void **addr, size_t *size)
+>> @@ -63,7 +29,22 @@ void remove_ima_buffer(void *fdt, int chosen_node)
+>>   	if (!prop)
+>>   		return;
+>>   
+>> -	ret = do_get_kexec_buffer(prop, len, &addr, &size);
+>> +	ret = fdt_address_cells(fdt, chosen_node);
 > 
-> I just noticed that this function is only called from within
-> ima_kexec.c, so it can be made static.
+> This change was already present in the previous version of the patch but
+> it was just today that I noticed a problem: there's no #address-cells
+> property in /chosen. This code will still work though because if there's
+> no property this function returns 2 which is the correct value for
+> ppc64. But it's conceptually wrong. You need to pass the node offset for
+> / so that it gets the #address-cells property from there.
 
-Will do.
+Thanks for the info.
+Will fix this.
 
 > 
->> +{
->> +	int ret, len;
->> +	unsigned long tmp_addr;
->> +	size_t tmp_size;
->> +	const void *prop;
+>> +	if (ret < 0)
+>> +		return;
+>> +	addr_cells = ret;
 >> +
->> +	prop = of_get_property(of_chosen, FDT_PROP_IMA_KEXEC_BUFFER, &len);
->> +	if (!prop)
->> +		return -ENOENT;
+>> +	ret = fdt_size_cells(fdt, chosen_node);
+> 
+> Here we're not so lucky. The default value returned when no #size-cells
+> property is present is 1, which is wrong for ppc64 so this change
+> introduces a bug. You also need to pass the node offset for / here.
+
+Will fix this.
+
+> 
+>> +	if (ret < 0)
+>> +		return;
+>> +	size_cells = ret;
 >> +
->> +	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
->> +	if (ret)
+>> +	if (len < 4 * (addr_cells + size_cells))
+>> +		return;
+>> +
+>> +	addr = of_read_number(prop, addr_cells);
+>> +	size = of_read_number(prop + 4 * addr_cells, size_cells);
+>> +
+>>   	fdt_delprop(fdt, chosen_node, FDT_PROP_IMA_KEXEC_BUFFER);
+>>   	if (ret)
+>>   		return;
+>> @@ -129,9 +110,15 @@ int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node)
+>>   	if (!image->arch.ima_buffer_size)
+>>   		return 0;
+>>   
+>> -	ret = get_addr_size_cells(&addr_cells, &size_cells);
+>> -	if (ret)
+>> +	ret = fdt_address_cells(fdt, chosen_node);
+>> +	if (ret < 0)
 >> +		return ret;
+>> +	addr_cells = ret;
 >> +
->> +	*addr = __va(tmp_addr);
->> +	*size = tmp_size;
->> +
->> +	return 0;
->> +}
->> +
->> +/**
->> + * ima_free_kexec_buffer - free memory used by the IMA buffer
->> + */
->> +int ima_free_kexec_buffer(void)
+>> +	ret = fdt_size_cells(fdt, chosen_node);
+>> +	if (ret < 0)
+>>   		return ret;
+>> +	size_cells = ret;
+>>   
+>>   	entry_size = 4 * (addr_cells + size_cells);
 > 
-> This one can be static as well.
+> Ditto here.
+> 
 
-Will do.
+Will fix this.
 
+thanks,
   -lakshmi
-
-> 
->> +{
->> +	int ret;
->> +	unsigned long addr;
->> +	size_t size;
->> +	struct property *prop;
->> +
->> +	prop = of_find_property(of_chosen, FDT_PROP_IMA_KEXEC_BUFFER, NULL);
->> +	if (!prop)
->> +		return -ENOENT;
->> +
->> +	ret = do_get_kexec_buffer(prop->value, prop->length, &addr, &size);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = of_remove_property(of_chosen, prop);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return memblock_free(addr, size);
->> +
->> +}
->> +
->>   #ifdef CONFIG_IMA_KEXEC
->>   static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
->>   				     unsigned long segment_size)
-> 
-> 
-
